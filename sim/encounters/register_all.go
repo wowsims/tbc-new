@@ -13,6 +13,7 @@ import (
 func init() {
 	AddDefaultPresetEncounter()
 	addMovementAI()
+	addDynamicAddsAI()
 	msv.Register()
 	hof.Register()
 	toes.Register()
