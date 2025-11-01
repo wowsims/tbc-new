@@ -322,6 +322,9 @@ func (value *APLValueDotPercentIncrease) GetFloat(sim *Simulation) float64 {
 	if expectedDamage == 0 {
 		return 1
 	}
+	// if value.spell.ActionID.SpellID == 86121 && value.spell.ActionID.Tag == 1 && sim.CurrentTime > 60*time.Second && sim.CurrentTime < 80*time.Second {
+	// 	fmt.Println(sim.CurrentTime, math.Round((value.spell.ExpectedTickDamage(sim, target)/expectedDamage)*100000)/100000-1)
+	// }
 
 	// Rounding this to effectively 3 decimal places as a percentage to avoid floating point errors
 	return math.Round((value.spell.ExpectedTickDamage(sim, target)/expectedDamage)*100000)/100000 - 1
@@ -404,95 +407,3 @@ func (value *APLValueDotTickRatePercentIncrease) getTickRate(useSnapshot bool) f
 	}
 	return TernaryFloat64(value.useBaseValue, value.baseValue, dot.CalcTickPeriod().Round(time.Millisecond).Seconds())
 }
-
-// type APLValueCurrentSnapshot struct {
-// 	DefaultAPLValueImpl
-// 	spell              *Spell
-// 	targetRef          UnitReference
-// 	ignoreHaste        bool // if true, ignore haste in the comparison of new dots to snapshotted dots (only look at damage, not frequency)
-// 	baseValueHasted    float64
-// 	baseValueUnhasted  float64
-// 	baseValueDummyAura *Aura // Used to get the base value at encounter start
-// }
-
-// func (rot *APLRotation) newDotCurrentSnapshot(config *proto.APLValueCurrentSnapshot, _ *proto.UUID) *APLValueCurrentSnapshot {
-// 	spell := rot.GetAPLSpell(config.SpellId)
-// 	if spell == nil || spell.expectedTickDamageInternal == nil {
-// 		return nil
-// 	}
-// 	targetRef := rot.GetTargetUnit(config.TargetUnit)
-
-// 	baseValueDummyAura := MakePermanent(rot.unit.GetOrRegisterAura(Aura{
-// 		Label:    "Dummy Aura - APL Current Snapshot Base Value",
-// 		Duration: NeverExpires,
-// 	}))
-
-// 	return &APLValueCurrentSnapshot{
-// 		spell:              spell,
-// 		targetRef:          targetRef,
-// 		ignoreHaste:        config.IgnoreHaste,
-// 		baseValueDummyAura: baseValueDummyAura,
-// 	}
-// }
-
-// func (value *APLValueCurrentSnapshot) Finalize(rot *APLRotation) {
-// 	if value.baseValueDummyAura != nil {
-// 		var sbssDotRefs []*Spell
-// 		sbssDotRefs = []*Spell{rot.unit.GetSpell(ActionID{SpellID: 172}), rot.unit.GetSpell(ActionID{SpellID: 980}), rot.unit.GetSpell(ActionID{SpellID: 30108})}
-// 		value.baseValueDummyAura.ApplyOnInit(func(aura *Aura, sim *Simulation) {
-// 			//check for soulburn: soulswap
-// 			if value.spell.ActionID.SpellID == 86121 && value.spell.ActionID.Tag == 1 {
-// 				totalUnhasted := 0.0
-// 				totalHasted := 0.0
-// 				target := value.targetRef.Get()
-
-// 				for _, spellRef := range sbssDotRefs {
-// 					dot := spellRef.Dot(target)
-// 					totalHasted += dot.Spell.ExpectedTickDamage(sim, target)
-// 					totalUnhasted += dot.Spell.ExpectedTickDamage(sim, target) * dot.CalcTickPeriod().Seconds()
-// 				}
-// 				value.baseValueHasted = totalHasted
-// 				value.baseValueUnhasted = totalUnhasted
-
-// 			} else {
-// 				target := value.targetRef.Get()
-// 				value.baseValueHasted = value.spell.ExpectedTickDamage(sim, target)
-// 				value.baseValueUnhasted = value.baseValueHasted * value.spell.Dot(target).CalcTickPeriod().Seconds()
-// 			}
-// 		})
-// 	}
-// }
-
-// func (value *APLValueCurrentSnapshot) Type() proto.APLValueType {
-// 	return proto.APLValueType_ValueTypeFloat
-// }
-
-// func (value *APLValueCurrentSnapshot) String() string {
-// 	return fmt.Sprintf("Current Snapshot on %s", value.spell.ActionID)
-// }
-
-// func (value *APLValueCurrentSnapshot) GetFloat(sim *Simulation) float64 {
-// 	target := value.targetRef.Get()
-// 	baseDamage := TernaryFloat64(value.ignoreHaste, value.baseValueUnhasted, value.baseValueHasted)
-// 	existingDamage := 0.0
-// 	if value.spell.ActionID.SpellID == 86121 && value.spell.ActionID.Tag == 1 {
-// 		sbssDotRefs := []*Spell{value.spell.Unit.GetSpell(ActionID{SpellID: 172}), value.spell.Unit.GetSpell(ActionID{SpellID: 980}), value.spell.Unit.GetSpell(ActionID{SpellID: 30108})}
-// 		target := value.targetRef.Get()
-
-// 		for _, spellRef := range sbssDotRefs {
-// 			dot := spellRef.Dot(target)
-
-// 			existingDamage += TernaryFloat64(value.ignoreHaste, dot.Spell.ExpectedTickDamageFromCurrentSnapshot(sim, target)*dot.tickPeriod.Seconds(), dot.Spell.ExpectedTickDamageFromCurrentSnapshot(sim, target))
-// 		}
-// 	} else {
-// 		existingDamage = TernaryFloat64(value.ignoreHaste, value.spell.Dot(target).tickPeriod.Seconds()*value.spell.ExpectedTickDamageFromCurrentSnapshot(sim, target), value.spell.ExpectedTickDamageFromCurrentSnapshot(sim, target))
-// 	}
-
-// 	if existingDamage == 0 {
-// 		//fmt.Println(sim.CurrentTime, -1)
-// 		return -1
-// 	}
-
-// 	// Rounding this to effectively 3 decimal places as a percentage to avoid floating point errors
-// 	return math.Round((existingDamage/baseDamage)*100000)/100000 - 1
-// }
