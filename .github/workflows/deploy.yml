@@ -55,8 +55,9 @@ jobs:
                       git checkout -b github-actions
                       git add .deployedprotoversion
                       git commit -m "Auto-update .deployedprotoversion file due to API version increase"
-                      git push https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git
-                      gh pr create --repo wowsims/mop --base wowsims/mop:master --fill
+                      git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git
+                      git push --set-upstream origin github-actions
+                      gh pr create --repo ${{ github.repository }} --base ${{ github.repository }}:master --fill
                       gh pr merge --merge --delete-branch
                   fi
               env:
