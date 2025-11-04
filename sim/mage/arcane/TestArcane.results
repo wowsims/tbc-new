@@ -173,15 +173,15 @@ dps_results: {
 dps_results: {
  key: "TestArcane-AllItems-EvilEyeofGalakras-105491"
  value: {
-  dps: 142983.41598
-  tps: 139462.20481
+  dps: 142987.175
+  tps: 139466.15294
  }
 }
 dps_results: {
  key: "TestArcane-AllItems-FabledFeatherofJi-Kun-96842"
  value: {
-  dps: 143071.36998
-  tps: 139550.48136
+  dps: 142983.41598
+  tps: 139462.20481
  }
 }
 dps_results: {
@@ -208,8 +208,8 @@ dps_results: {
 dps_results: {
  key: "TestArcane-AllItems-GazeoftheTwins-96915"
  value: {
-  dps: 142540.08443
-  tps: 139995.67199
+  dps: 141896.13504
+  tps: 139353.56624
  }
 }
 dps_results: {
@@ -292,15 +292,15 @@ dps_results: {
 dps_results: {
  key: "TestArcane-AllItems-Primordius'TalismanofRage-96873"
  value: {
-  dps: 146473.24375
+  dps: 146473.0901
   tps: 142838.21508
  }
 }
 dps_results: {
  key: "TestArcane-AllItems-PurifiedBindingsofImmerseus-105422"
  value: {
-  dps: 169529.15803
-  tps: 164449.60239
+  dps: 168232.81529
+  tps: 163817.88429
  }
 }
 dps_results: {
@@ -334,8 +334,8 @@ dps_results: {
 dps_results: {
  key: "TestArcane-AllItems-Renataki'sSoulCharm-96741"
  value: {
-  dps: 143025.45673
-  tps: 139503.97839
+  dps: 142983.41598
+  tps: 139462.20481
  }
 }
 dps_results: {
@@ -397,8 +397,8 @@ dps_results: {
 dps_results: {
  key: "TestArcane-AllItems-TalismanofBloodlust-96864"
  value: {
-  dps: 144350.52203
-  tps: 141865.1493
+  dps: 144183.77599
+  tps: 141673.13784
  }
 }
 dps_results: {
@@ -418,15 +418,15 @@ dps_results: {
 dps_results: {
  key: "TestArcane-AllItems-UnerringVisionofLeiShen-96930"
  value: {
-  dps: 160491.23979
-  tps: 156776.88652
+  dps: 149567.80075
+  tps: 146960.89949
  }
 }
 dps_results: {
  key: "TestArcane-AllItems-Wushoolay'sFinalChoice-96785"
  value: {
-  dps: 153764.59054
-  tps: 150501.98896
+  dps: 139722.6889
+  tps: 137260.68189
  }
 }
 dps_results: {

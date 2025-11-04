@@ -52,7 +52,7 @@ func init() {
 				)
 
 				triggerAura := character.MakeProcTriggerAura(core.ProcTrigger{
-					Name:       config.baseTrinketLabel,
+					Name:       fmt.Sprintf("%s %s", config.baseTrinketLabel, versionLabel),
 					ProcChance: 0.15,
 					ICD:        config.icd,
 					ProcMask:   core.ProcMaskDirect | core.ProcMaskProc,
@@ -206,7 +206,7 @@ func init() {
 			)
 
 			triggerAura := character.MakeProcTriggerAura(core.ProcTrigger{
-				Name:       label,
+				Name:       fmt.Sprintf("%s %s", label, versionLabel),
 				ICD:        time.Second * 115,
 				ProcChance: 0.15,
 				Outcome:    core.OutcomeLanded,

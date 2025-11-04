@@ -42,7 +42,7 @@ func init() {
 			})
 
 			triggerAura := character.MakeProcTriggerAura(core.ProcTrigger{
-				Name: label,
+				Name: fmt.Sprintf("%s %s", label, versionLabel),
 				ICD:  time.Second * 10,
 				DPM: character.NewRPPMProcManager(itemID, false, false, core.ProcMaskDirect|core.ProcMaskProc, core.RPPMConfig{
 					PPM: 1.21000003815,
@@ -107,7 +107,7 @@ func init() {
 			})
 
 			triggerAura := character.MakeProcTriggerAura(core.ProcTrigger{
-				Name: label,
+				Name: fmt.Sprintf("%s %s", label, versionLabel),
 				ICD:  time.Second * 3,
 				DPM: character.NewRPPMProcManager(itemID, false, false, core.ProcMaskSpellHealing, core.RPPMConfig{
 					PPM: 0.95999997854,
@@ -156,7 +156,7 @@ func init() {
 			})
 
 			triggerAura := character.MakeProcTriggerAura(core.ProcTrigger{
-				Name: label,
+				Name: fmt.Sprintf("%s %s", label, versionLabel),
 				ICD:  time.Second * 10,
 				DPM: character.NewRPPMProcManager(itemID, false, false, core.ProcMaskSpellOrSpellProc, core.RPPMConfig{
 					PPM: 1.21000003815,
@@ -203,7 +203,7 @@ func init() {
 			})
 
 			triggerAura := character.MakeProcTriggerAura(core.ProcTrigger{
-				Name: label,
+				Name: fmt.Sprintf("%s %s", label, versionLabel),
 				ICD:  time.Second * 10,
 				DPM: character.NewRPPMProcManager(itemID, false, false, core.ProcMaskDirect|core.ProcMaskProc, core.RPPMConfig{
 					PPM: 1.21000003815,
@@ -286,7 +286,7 @@ func init() {
 			})
 
 			triggerAura := character.MakeProcTriggerAura(core.ProcTrigger{
-				Name: label,
+				Name: fmt.Sprintf("%s %s", label, versionLabel),
 				DPM: character.NewRPPMProcManager(itemID, false, false, core.ProcMaskDirect|core.ProcMaskProc, core.RPPMConfig{
 					PPM: 3.5,
 				}),
@@ -334,7 +334,7 @@ func init() {
 			})
 
 			triggerAura := character.MakeProcTriggerAura(core.ProcTrigger{
-				Name: label,
+				Name: fmt.Sprintf("%s %s", label, versionLabel),
 				ICD:  time.Second * 17,
 				DPM: character.NewRPPMProcManager(itemID, false, false, core.ProcMaskSpellHealing, core.RPPMConfig{
 					PPM: 1.63999998569,
@@ -426,7 +426,7 @@ func init() {
 			})
 
 			triggerAura := character.MakeProcTriggerAura(core.ProcTrigger{
-				Name: label,
+				Name: fmt.Sprintf("%s %s", label, versionLabel),
 				DPM: character.NewRPPMProcManager(itemID, false, false, core.ProcMaskDirect|core.ProcMaskProc, core.RPPMConfig{
 					PPM: 3.5,
 				}),
@@ -470,7 +470,7 @@ func init() {
 			})
 
 			triggerAura := character.MakeProcTriggerAura(core.ProcTrigger{
-				Name: label,
+				Name: fmt.Sprintf("%s %s", label, versionLabel),
 				DPM: character.NewRPPMProcManager(itemID, false, false, core.ProcMaskDirect|core.ProcMaskProc, core.RPPMConfig{
 					PPM: 0.72000002861,
 				}.WithCritMod()),
@@ -526,7 +526,7 @@ func init() {
 			statBuffAura.BuffedStatTypes = []stats.Stat{stats.CritRating}
 
 			triggerAura := character.MakeProcTriggerAura(core.ProcTrigger{
-				Name: label,
+				Name: fmt.Sprintf("%s %s", label, versionLabel),
 				DPM: character.NewRPPMProcManager(itemID, false, false, core.ProcMaskSpellOrSpellProc, core.RPPMConfig{
 					PPM: 0.57999998331,
 				}.WithApproximateIlvlMod(1.0, 528).
@@ -583,8 +583,8 @@ func init() {
 
 			createStatBuffAura := func(label string, spellID int32) *core.StatBuffAura {
 				return &core.StatBuffAura{
-					Aura: character.RegisterAura(core.Aura{
-						Label:    fmt.Sprintf("Re-Origination (%s) - %s", versionLabel, label),
+					Aura: character.GetOrRegisterAura(core.Aura{
+						Label:    fmt.Sprintf("Re-Origination (%s) %s", versionLabel, label),
 						ActionID: core.ActionID{SpellID: spellID},
 						Duration: duration,
 						OnGain: func(aura *core.Aura, sim *core.Simulation) {
@@ -613,7 +613,7 @@ func init() {
 			buffAuras[stats.MasteryRating] = createStatBuffAura("Mastery", 139120)
 
 			triggerAura := character.MakeProcTriggerAura(core.ProcTrigger{
-				Name: label,
+				Name: fmt.Sprintf("%s %s", label, versionLabel),
 				DPM: character.NewRPPMProcManager(itemID, false, false, core.ProcMaskDirect|core.ProcMaskProc, core.RPPMConfig{
 					PPM: 1.10000002384,
 				}.WithApproximateIlvlMod(1.0, 528)),

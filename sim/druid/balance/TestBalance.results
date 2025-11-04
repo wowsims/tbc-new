@@ -249,9 +249,9 @@ dps_results: {
 dps_results: {
  key: "TestBalance-AllItems-GazeoftheTwins-96915"
  value: {
-  dps: 92636.99253
-  tps: 94468.51718
-  hps: 14684.85233
+  dps: 91752.80864
+  tps: 93577.76829
+  hps: 14729.00311
  }
 }
 dps_results: {
@@ -274,7 +274,7 @@ dps_results: {
  key: "TestBalance-AllItems-Horridon'sLastGasp-96757"
  value: {
   dps: 97442.53247
-  tps: 99243.90581
+  tps: 99238.80197
   hps: 15048.47997
  }
 }
@@ -353,9 +353,9 @@ dps_results: {
 dps_results: {
  key: "TestBalance-AllItems-PurifiedBindingsofImmerseus-105422"
  value: {
-  dps: 108033.24441
-  tps: 109645.05465
-  hps: 15635.47539
+  dps: 108510.11051
+  tps: 110136.83572
+  hps: 15503.71583
  }
 }
 dps_results: {
@@ -473,9 +473,9 @@ dps_results: {
 dps_results: {
  key: "TestBalance-AllItems-TalismanofBloodlust-96864"
  value: {
-  dps: 92871.19961
-  tps: 94561.70986
-  hps: 14583.56975
+  dps: 92098.73597
+  tps: 93792.23122
+  hps: 14571.19425
  }
 }
 dps_results: {
@@ -497,17 +497,17 @@ dps_results: {
 dps_results: {
  key: "TestBalance-AllItems-UnerringVisionofLeiShen-96930"
  value: {
-  dps: 104126.63764
-  tps: 105727.17111
-  hps: 15672.72873
+  dps: 97442.53247
+  tps: 99238.80197
+  hps: 15048.47997
  }
 }
 dps_results: {
  key: "TestBalance-AllItems-Wushoolay'sFinalChoice-96785"
  value: {
-  dps: 101379.80174
-  tps: 103032.64064
-  hps: 15531.37087
+  dps: 88806.95452
+  tps: 90623.02417
+  hps: 14587.29235
  }
 }
 dps_results: {

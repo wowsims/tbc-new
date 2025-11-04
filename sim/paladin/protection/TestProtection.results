@@ -69,8 +69,8 @@ dps_results: {
 dps_results: {
  key: "TestProtection-AllItems-AssuranceofConsequence-105472"
  value: {
-  dps: 114026.7436
-  tps: 746947.16071
+  dps: 113992.47216
+  tps: 746707.26066
   dtps: 13772.96108
   hps: 19260.51435
  }
@@ -861,19 +861,19 @@ dps_results: {
 dps_results: {
  key: "TestProtection-AllItems-EvilEyeofGalakras-105491"
  value: {
-  dps: 117978.59495
-  tps: 772856.65275
-  dtps: 13319.7293
-  hps: 20081.63525
+  dps: 118356.5014
+  tps: 775793.80801
+  dtps: 13175.26219
+  hps: 20089.63083
  }
 }
 dps_results: {
  key: "TestProtection-AllItems-FabledFeatherofJi-Kun-96842"
  value: {
-  dps: 118915.99707
-  tps: 778970.92794
-  dtps: 13229.37336
-  hps: 20183.72422
+  dps: 113862.81146
+  tps: 745799.63574
+  dtps: 13772.96108
+  hps: 19260.51435
  }
 }
 dps_results: {
@@ -1014,8 +1014,8 @@ dps_results: {
 dps_results: {
  key: "TestProtection-AllItems-GazeoftheTwins-96915"
  value: {
-  dps: 119767.6762
-  tps: 784260.60537
+  dps: 119570.36297
+  tps: 782991.59611
   dtps: 13031.36307
   hps: 20021.66856
  }
@@ -2094,17 +2094,17 @@ dps_results: {
 dps_results: {
  key: "TestProtection-AllItems-Primordius'TalismanofRage-96873"
  value: {
-  dps: 121233.77877
-  tps: 793566.4247
-  dtps: 13073.7407
-  hps: 20062.1334
+  dps: 121442.03995
+  tps: 795308.61667
+  dtps: 13344.52061
+  hps: 20066.56058
  }
 }
 dps_results: {
  key: "TestProtection-AllItems-PurifiedBindingsofImmerseus-105422"
  value: {
-  dps: 117062.88994
-  tps: 765796.10694
+  dps: 117110.94947
+  tps: 766230.20006
   dtps: 13100.55127
   hps: 19508.73585
  }
@@ -2193,10 +2193,10 @@ dps_results: {
 dps_results: {
  key: "TestProtection-AllItems-Renataki'sSoulCharm-96741"
  value: {
-  dps: 116134.70028
-  tps: 760716.48559
-  dtps: 13473.34595
-  hps: 19830.2998
+  dps: 116050.30971
+  tps: 760116.7817
+  dtps: 13471.15643
+  hps: 19837.27647
  }
 }
 dps_results: {
@@ -2598,10 +2598,10 @@ dps_results: {
 dps_results: {
  key: "TestProtection-AllItems-TalismanofBloodlust-96864"
  value: {
-  dps: 115837.26097
-  tps: 758725.0128
-  dtps: 13472.85816
-  hps: 20034.61737
+  dps: 115603.89236
+  tps: 756406.85753
+  dtps: 13532.85578
+  hps: 20133.3128
  }
 }
 dps_results: {
@@ -3030,8 +3030,8 @@ dps_results: {
 dps_results: {
  key: "TestProtection-AllItems-Wushoolay'sFinalChoice-96785"
  value: {
-  dps: 114189.0938
-  tps: 747331.43125
+  dps: 113862.81146
+  tps: 745799.63574
   dtps: 13772.96108
   hps: 19260.51435
  }

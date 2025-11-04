@@ -61,8 +61,8 @@ dps_results: {
 dps_results: {
  key: "TestRetribution-AllItems-AssuranceofConsequence-105472"
  value: {
-  dps: 161325.03539
-  tps: 152509.9804
+  dps: 161294.92311
+  tps: 152489.98994
  }
 }
 dps_results: {
@@ -670,15 +670,15 @@ dps_results: {
 dps_results: {
  key: "TestRetribution-AllItems-EvilEyeofGalakras-105491"
  value: {
-  dps: 171639.1995
-  tps: 162668.11745
+  dps: 171734.78736
+  tps: 162744.90611
  }
 }
 dps_results: {
  key: "TestRetribution-AllItems-FabledFeatherofJi-Kun-96842"
  value: {
-  dps: 173818.12219
-  tps: 163767.4485
+  dps: 161100.64804
+  tps: 152296.44061
  }
 }
 dps_results: {
@@ -789,8 +789,8 @@ dps_results: {
 dps_results: {
  key: "TestRetribution-AllItems-GazeoftheTwins-96915"
  value: {
-  dps: 173263.88733
-  tps: 163591.33155
+  dps: 173270.21514
+  tps: 163609.86755
  }
 }
 dps_results: {
@@ -1629,15 +1629,15 @@ dps_results: {
 dps_results: {
  key: "TestRetribution-AllItems-Primordius'TalismanofRage-96873"
  value: {
-  dps: 173274.2896
-  tps: 163644.11493
+  dps: 173329.50463
+  tps: 163649.43581
  }
 }
 dps_results: {
  key: "TestRetribution-AllItems-PurifiedBindingsofImmerseus-105422"
  value: {
-  dps: 166370.92407
-  tps: 157382.77145
+  dps: 166389.72074
+  tps: 157397.55953
  }
 }
 dps_results: {
@@ -1706,8 +1706,8 @@ dps_results: {
 dps_results: {
  key: "TestRetribution-AllItems-Renataki'sSoulCharm-96741"
  value: {
-  dps: 161370.39138
-  tps: 152548.56574
+  dps: 161100.64804
+  tps: 152296.44061
  }
 }
 dps_results: {
@@ -2021,8 +2021,8 @@ dps_results: {
 dps_results: {
  key: "TestRetribution-AllItems-TalismanofBloodlust-96864"
  value: {
-  dps: 164520.09421
-  tps: 155287.68658
+  dps: 165212.23199
+  tps: 156115.73229
  }
 }
 dps_results: {
@@ -2357,8 +2357,8 @@ dps_results: {
 dps_results: {
  key: "TestRetribution-AllItems-Wushoolay'sFinalChoice-96785"
  value: {
-  dps: 161218.05138
-  tps: 152406.03695
+  dps: 161100.64804
+  tps: 152296.44061
  }
 }
 dps_results: {

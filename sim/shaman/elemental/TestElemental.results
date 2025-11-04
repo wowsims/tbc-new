@@ -61,7 +61,7 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-AssuranceofConsequence-105472"
  value: {
-  dps: 141177.55386
+  dps: 141157.11603
   tps: 102913.23677
  }
 }
@@ -691,7 +691,7 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-FabledFeatherofJi-Kun-96842"
  value: {
-  dps: 141166.20172
+  dps: 141167.87464
   tps: 102913.23677
  }
 }
@@ -803,8 +803,8 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-GazeoftheTwins-96915"
  value: {
-  dps: 143976.61951
-  tps: 104973.5206
+  dps: 143638.75724
+  tps: 104685.47884
  }
 }
 dps_results: {
@@ -1643,15 +1643,15 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-Primordius'TalismanofRage-96873"
  value: {
-  dps: 144901.44458
-  tps: 105842.19464
+  dps: 144923.90202
+  tps: 105865.95333
  }
 }
 dps_results: {
  key: "TestElemental-AllItems-PurifiedBindingsofImmerseus-105422"
  value: {
-  dps: 167609.84622
-  tps: 120435.52784
+  dps: 167409.69766
+  tps: 120294.19161
  }
 }
 dps_results: {
@@ -1727,7 +1727,7 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-Renataki'sSoulCharm-96741"
  value: {
-  dps: 141161.69468
+  dps: 141167.87464
   tps: 102913.23677
  }
 }
@@ -2042,8 +2042,8 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-TalismanofBloodlust-96864"
  value: {
-  dps: 144510.81579
-  tps: 105658.61237
+  dps: 143261.57636
+  tps: 104578.14445
  }
 }
 dps_results: {
@@ -2280,8 +2280,8 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-UnerringVisionofLeiShen-96930"
  value: {
-  dps: 156771.0883
-  tps: 113818.06603
+  dps: 150875.43478
+  tps: 110022.33853
  }
 }
 dps_results: {
@@ -2350,8 +2350,8 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-Wushoolay'sFinalChoice-96785"
  value: {
-  dps: 155850.70793
-  tps: 113186.25288
+  dps: 141167.87464
+  tps: 102913.23677
  }
 }
 dps_results: {

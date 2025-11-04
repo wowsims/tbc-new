@@ -65,8 +65,8 @@ dps_results: {
 dps_results: {
  key: "TestFrostTwoHand-AllItems-AssuranceofConsequence-105472"
  value: {
-  dps: 169495.74854
-  tps: 154689.89273
+  dps: 169478.70704
+  tps: 154675.86996
   hps: 2763.36242
  }
 }
@@ -769,16 +769,16 @@ dps_results: {
 dps_results: {
  key: "TestFrostTwoHand-AllItems-EvilEyeofGalakras-105491"
  value: {
-  dps: 176715.8453
-  tps: 160983.4065
+  dps: 176717.93495
+  tps: 160986.09427
   hps: 2769.25279
  }
 }
 dps_results: {
  key: "TestFrostTwoHand-AllItems-FabledFeatherofJi-Kun-96842"
  value: {
-  dps: 180594.64113
-  tps: 163509.78029
+  dps: 169362.24336
+  tps: 154599.34427
   hps: 2763.36242
  }
 }
@@ -905,9 +905,9 @@ dps_results: {
 dps_results: {
  key: "TestFrostTwoHand-AllItems-GazeoftheTwins-96915"
  value: {
-  dps: 179821.80716
-  tps: 163517.2862
-  hps: 2832.67922
+  dps: 179535.26943
+  tps: 163319.88708
+  hps: 2809.38151
  }
 }
 dps_results: {
@@ -1879,8 +1879,8 @@ dps_results: {
 dps_results: {
  key: "TestFrostTwoHand-AllItems-Primordius'TalismanofRage-96873"
  value: {
-  dps: 180648.03265
-  tps: 164460.49941
+  dps: 180670.55335
+  tps: 164411.71449
   hps: 2844.0399
  }
 }
@@ -1967,8 +1967,8 @@ dps_results: {
 dps_results: {
  key: "TestFrostTwoHand-AllItems-Renataki'sSoulCharm-96741"
  value: {
-  dps: 169607.44969
-  tps: 154799.75788
+  dps: 169362.24336
+  tps: 154599.34427
   hps: 2763.36242
  }
 }
@@ -2383,9 +2383,9 @@ dps_results: {
 dps_results: {
  key: "TestFrostTwoHand-AllItems-TalismanofBloodlust-96864"
  value: {
-  dps: 172927.76148
-  tps: 157550.01311
-  hps: 2822.26607
+  dps: 173304.89379
+  tps: 157947.27064
+  hps: 2812.35111
  }
 }
 dps_results: {

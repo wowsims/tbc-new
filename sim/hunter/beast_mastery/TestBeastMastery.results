@@ -61,8 +61,8 @@ dps_results: {
 dps_results: {
  key: "TestBeastMastery-AllItems-AssuranceofConsequence-105472"
  value: {
-  dps: 169115.11508
-  tps: 83744.15375
+  dps: 169312.21702
+  tps: 83810.7255
  }
 }
 dps_results: {
@@ -677,14 +677,14 @@ dps_results: {
 dps_results: {
  key: "TestBeastMastery-AllItems-EvilEyeofGalakras-105491"
  value: {
-  dps: 150699.49204
+  dps: 150702.9959
   tps: 76360.68096
  }
 }
 dps_results: {
  key: "TestBeastMastery-AllItems-FabledFeatherofJi-Kun-96842"
  value: {
-  dps: 150695.09322
+  dps: 150702.89435
   tps: 76360.57942
  }
 }
@@ -796,8 +796,8 @@ dps_results: {
 dps_results: {
  key: "TestBeastMastery-AllItems-GazeoftheTwins-96915"
  value: {
-  dps: 153861.98123
-  tps: 78282.94284
+  dps: 154387.38223
+  tps: 78157.64861
  }
 }
 dps_results: {
@@ -1636,8 +1636,8 @@ dps_results: {
 dps_results: {
  key: "TestBeastMastery-AllItems-Primordius'TalismanofRage-96873"
  value: {
-  dps: 154693.75009
-  tps: 78371.03903
+  dps: 154693.65729
+  tps: 78370.94624
  }
 }
 dps_results: {
@@ -1713,8 +1713,8 @@ dps_results: {
 dps_results: {
  key: "TestBeastMastery-AllItems-Renataki'sSoulCharm-96741"
  value: {
-  dps: 168290.92818
-  tps: 83184.38201
+  dps: 150702.89435
+  tps: 76360.57942
  }
 }
 dps_results: {
@@ -1748,8 +1748,8 @@ dps_results: {
 dps_results: {
  key: "TestBeastMastery-AllItems-RuneofRe-Origination-96918"
  value: {
-  dps: 164664.85448
-  tps: 83589.4326
+  dps: 164843.94898
+  tps: 83608.18785
  }
 }
 dps_results: {
@@ -2028,8 +2028,8 @@ dps_results: {
 dps_results: {
  key: "TestBeastMastery-AllItems-TalismanofBloodlust-96864"
  value: {
-  dps: 165466.99116
-  tps: 82691.0477
+  dps: 164748.82118
+  tps: 82400.67698
  }
 }
 dps_results: {
@@ -2329,8 +2329,8 @@ dps_results: {
 dps_results: {
  key: "TestBeastMastery-AllItems-Wushoolay'sFinalChoice-96785"
  value: {
-  dps: 150703.84391
-  tps: 76352.24791
+  dps: 150702.89435
+  tps: 76360.57942
  }
 }
 dps_results: {
