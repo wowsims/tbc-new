@@ -942,10 +942,10 @@ dps_results: {
 dps_results: {
  key: "TestBrewmaster-AllItems-Fire-CharmArmor"
  value: {
-  dps: 251925.00472
-  tps: 1.08514654636e+06
-  dtps: 17255.14243
-  hps: 28690.91866
+  dps: 252001.42836
+  tps: 1.08577261222e+06
+  dtps: 17227.81644
+  hps: 28493.78362
  }
 }
 dps_results: {
