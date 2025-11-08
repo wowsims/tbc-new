@@ -14,10 +14,11 @@ const horridonID int32 = 68476
 const jalakID int32 = 69374
 
 func addHorridon(raidPrefix string) {
-	createHorridonPreset(raidPrefix, 25, true, 1_962_616_500, 512_867, 78_504_660, 389_785)
+	createHorridonPreset(raidPrefix, 25, true, 1_962_616_500, 512_867, 78_504_660, 485_334)
+	createHorridonPreset(raidPrefix, 10, true, 654_205_500, 491_480, 26_168_220, 423_170)
 }
 
-func createHorridonPreset(raidPrefix string, raidSize int32, isHeroic bool, horridonHealth float64, horridonMinBaseDamage float64, jalakHealth  float64, jalakMinBaseDamage float64) {
+func createHorridonPreset(raidPrefix string, raidSize int32, isHeroic bool, horridonHealth float64, horridonMinBaseDamage float64, jalakHealth float64, jalakMinBaseDamage float64) {
 	bossName := fmt.Sprintf("Horridon %d", raidSize)
 	addName := fmt.Sprintf("War-God Jalak %d", raidSize)
 
@@ -71,7 +72,7 @@ func createHorridonPreset(raidPrefix string, raidSize int32, isHeroic bool, horr
 			SpellSchool:   proto.SpellSchool_SpellSchoolPhysical,
 			SwingSpeed:    2.0,
 			MinBaseDamage: jalakMinBaseDamage,
-			DamageSpread:  0.8264,
+			DamageSpread:  0.4668,
 			TargetInputs:  []*proto.TargetInput{},
 		},
 
@@ -238,11 +239,10 @@ func (ai *HorridonAI) registerTriplePuncture() {
 				}
 			}
 
-			if ai.tankSwap && !ai.AddUnit.IsEnabled() && (sim.CurrentTime - ai.lastTankSwap > time.Second * 20) {
+			if ai.tankSwap && !ai.AddUnit.IsEnabled() && (sim.CurrentTime-ai.lastTankSwap > time.Second*20) {
 				ai.tauntSwap(sim)
 			}
 		},
-
 	})
 }
 

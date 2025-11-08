@@ -157,8 +157,8 @@
         "level": 93,
         "mobType": "MobTypeHumanoid",
         "stats": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,24835,0,78504660,0,0],
-        "minBaseDamage": 389785,
-        "damageSpread": 0.8264,
+        "minBaseDamage": 485334,
+        "damageSpread": 0.4668,
         "swingSpeed": 2,
         "tankIndex": 1
       }

@@ -3075,10 +3075,10 @@ dps_results: {
 dps_results: {
  key: "TestGuardian-Average-Default"
  value: {
-  dps: 384486.50427
-  tps: 2.36799560366e+06
-  dtps: 55186.86671
-  hps: 32467.72166
+  dps: 392055.14229
+  tps: 2.40974953841e+06
+  dtps: 56368.62227
+  hps: 33113.85343
  }
 }
 dps_results: {
@@ -3462,9 +3462,9 @@ dps_results: {
 dps_results: {
  key: "TestGuardian-SwitchInFrontOfTarget-Default"
  value: {
-  dps: 400430.4982
-  tps: 2.44858051553e+06
-  dtps: 54092.78831
-  hps: 33197.95524
+  dps: 408711.01631
+  tps: 2.49552088387e+06
+  dtps: 55186.68737
+  hps: 33505.03948
  }
 }
