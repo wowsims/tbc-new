@@ -1,6 +1,7 @@
 package monk
 
 import (
+	"math"
 	"time"
 
 	"github.com/wowsims/mop/sim/core"
@@ -75,21 +76,84 @@ var ItemSetFireCharmBattlegear = core.NewItemSet(core.ItemSet{
 		2: func(agent core.Agent, setBonusAura *core.Aura) {
 			monk := agent.(MonkAgent).GetMonk()
 
-			actionId := core.ActionID{SpellID: 138177}
-			energyMetrics := monk.NewEnergyMetrics(actionId)
+			triggerActionId := core.ActionID{SpellID: 138177}
+			spellActionId := core.ActionID{SpellID: 138310}
+			auraActionId := core.ActionID{SpellID: 138311}
+			energyMetrics := monk.NewEnergyMetrics(spellActionId)
+			sphereDuration := time.Minute * 2
+			energyGain := 10.0
+
+			pendingSpheres := make([]*core.PendingAction, 0)
+			monk.T15Windwalker2PSphereAura = monk.RegisterAura(core.Aura{
+				Label:     "Energy Sphere" + monk.Label,
+				ActionID:  auraActionId,
+				Duration:  sphereDuration,
+				MaxStacks: math.MaxInt32,
+			})
+
+			monk.T15Windwalker2PSphereSpell = monk.RegisterSpell(core.SpellConfig{
+				ActionID:    spellActionId,
+				SpellSchool: core.SpellSchoolNature,
+				Flags:       core.SpellFlagPassiveSpell | core.SpellFlagNoOnCastComplete | core.SpellFlagAPL,
+				ProcMask:    core.ProcMaskSpellHealing,
+
+				DamageMultiplier: 1,
+				CritMultiplier:   1,
+				ThreatMultiplier: 1,
+
+				Cast: core.CastConfig{
+					DefaultCast: core.Cast{
+						NonEmpty: true,
+					},
+				},
+
+				ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
+					return (monk.CurrentEnergy()+energyGain) < monk.MaximumEnergy() && monk.T15Windwalker2PSphereAura.IsActive() && monk.T15Windwalker2PSphereAura.GetStacks() > 0
+				},
+
+				ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+					monk.AddEnergy(sim, 10, energyMetrics)
+					monk.T15Windwalker2PSphereAura.RemoveStack(sim)
+					pendingSphere := pendingSpheres[0]
+					if pendingSphere != nil {
+						pendingSphere.Cancel(sim)
+					}
+				},
+				RelatedSelfBuff: monk.T15Windwalker2PSphereAura,
+			})
 
 			setBonusAura.AttachProcTrigger(core.ProcTrigger{
 				Name:       "Item - Monk T15 Windwalker 2P Bonus",
-				ActionID:   actionId,
+				ActionID:   triggerActionId,
 				ProcChance: 0.15,
 				ICD:        100 * time.Millisecond,
 				SpellFlags: SpellFlagBuilder,
 				Callback:   core.CallbackOnSpellHitDealt,
 				Outcome:    core.OutcomeLanded,
 				Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-					monk.AddEnergy(sim, 10, energyMetrics)
+					monk.T15Windwalker2PSphereAura.Activate(sim)
+					monk.T15Windwalker2PSphereAura.AddStack(sim)
+
+					pa := sim.GetConsumedPendingActionFromPool()
+					pa.NextActionAt = sim.CurrentTime + sphereDuration
+					pa.Priority = core.ActionPriorityDOT
+
+					pa.OnAction = func(sim *core.Simulation) {
+						monk.T15Windwalker2PSphereAura.RemoveStack(sim)
+						pendingSpheres = pendingSpheres[:1]
+					}
+					pa.CleanUp = func(sim *core.Simulation) {
+						pendingSpheres = pendingSpheres[:1]
+					}
+
+					sim.AddPendingAction(pa)
+					pendingSpheres = append(pendingSpheres, pa)
 				},
-			}).ExposeToAPL(actionId.SpellID)
+			}).ExposeToAPL(triggerActionId.SpellID)
+
+			monk.RegisterResetEffect(func(s *core.Simulation) {
+				pendingSpheres = make([]*core.PendingAction, 0)
+			})
 		},
 		4: func(agent core.Agent, setBonusAura *core.Aura) {
 			// Implemented in windwalker/tigereye_brew.go
@@ -133,22 +197,13 @@ var ItemSetFireCharmArmor = core.NewItemSet(core.ItemSet{
 		4: func(agent core.Agent, setBonusAura *core.Aura) {
 			monk := agent.(MonkAgent).GetMonk()
 
-			monk.T15Brewmaster4P = monk.RegisterAura(core.Aura{
+			monk.T15Brewmaster4PProcEffect = monk.RegisterAura(core.Aura{
 				Label:    "Purifier" + monk.Label,
 				ActionID: core.ActionID{SpellID: 138237},
 				Duration: 15 * time.Second,
 			})
 
-			setBonusAura.AttachProcTrigger(core.ProcTrigger{
-				Name:           "Item - Monk T15 Brewmaster 4P Bonus",
-				ActionID:       core.ActionID{SpellID: 138236},
-				ClassSpellMask: MonkSpellStagger,
-				ProcChance:     0.1,
-				Callback:       core.CallbackOnPeriodicHealDealt,
-				Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-					monk.T15Brewmaster4P.Activate(sim)
-				},
-			})
+			monk.T15Brewmaster4P = setBonusAura
 
 			setBonusAura.ExposeToAPL(138236)
 		},

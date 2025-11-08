@@ -7,10 +7,8 @@ import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
 import { APLRotation } from '../../core/proto/apl';
 import { Debuffs, Faction, IndividualBuffs, PartyBuffs, PseudoStat, Race, RaidBuffs, Spec, Stat } from '../../core/proto/common';
-import { StatCapType } from '../../core/proto/ui';
-import { StatCap, Stats, UnitStat } from '../../core/proto_utils/stats';
+import { Stats, UnitStat } from '../../core/proto_utils/stats';
 import { defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
-import { Sim } from '../../core/sim';
 import * as MonkUtils from '../utils';
 import * as Presets from './presets';
 
@@ -80,7 +78,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecBrewmasterMonk, {
 		// Default equipped gear.
 		gear: Presets.P2_BIS_DW_GEAR_PRESET.gear,
 		// Default EP weights for sorting gear in the gear picker.
-		epWeights: Presets.P1_BALANCED_EP_PRESET.epWeights,
+		epWeights: Presets.P2_BALANCED_EP_PRESET.epWeights,
 		// Stat caps for reforge optimizer
 		statCaps: (() => {
 			const hitCap = new Stats().withPseudoStat(PseudoStat.PseudoStatPhysicalHitPercent, 7.5);
@@ -140,19 +138,27 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecBrewmasterMonk, {
 	},
 
 	presets: {
-		epWeights: [Presets.P1_BALANCED_EP_PRESET, Presets.P2_OFFENSIVE_EP_PRESET],
+		epWeights: [Presets.P2_BALANCED_EP_PRESET, Presets.P2_OFFENSIVE_EP_PRESET, Presets.P3_BALANCED_EP_PRESET, Presets.P3_OFFENSIVE_EP_PRESET],
 		// Preset talents that the user can quickly select.
 		talents: [Presets.DefaultTalents, Presets.DungeonTalents],
 		// Preset rotations that the user can quickly select.
-		rotations: [Presets.ROTATION_PRESET, Presets.ROTATION_OFFENSIVE_PRESET, Presets.ROTATION_GARAJAL_PRESET, Presets.ROTATION_SHA_PRESET],
+		rotations: [
+			Presets.ROTATION_PRESET,
+			Presets.ROTATION_OFFENSIVE_PRESET,
+			Presets.ROTATION_GARAJAL_PRESET,
+			Presets.ROTATION_SHA_PRESET,
+			Presets.ROTATION_HORRIDON_PRESET,
+		],
 		// Preset gear configurations that the user can quickly select.
 		gear: [
-			Presets.P1_BIS_DW_GEAR_PRESET,
 			Presets.P2_BIS_DW_GEAR_PRESET,
 			Presets.P2_BIS_OFFENSIVE_DW_GEAR_PRESET,
 			Presets.P2_BIS_OFFENSIVE_TIERLESS_DW_GEAR_PRESET,
+			Presets.P3_PROG_DW_GEAR_PRESET,
+			Presets.P3_BIS_DW_GEAR_PRESET,
+			Presets.P3_BIS_OFFENSIVE_DW_GEAR_PRESET,
 		],
-		builds: [Presets.PRESET_BUILD_GARAJAL, Presets.PRESET_BUILD_SHA],
+		builds: [Presets.PRESET_BUILD_GARAJAL, Presets.PRESET_BUILD_SHA, Presets.PRESET_BUILD_HORRIDON],
 	},
 
 	autoRotation: (_: Player<Spec.SpecBrewmasterMonk>): APLRotation => {

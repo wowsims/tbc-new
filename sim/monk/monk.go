@@ -77,12 +77,15 @@ type Monk struct {
 	PowerStrikesChiMetrics *core.ResourceMetrics
 
 	// Set Bonuses
-	T14Brewmaster4P *core.Aura
-	T15Windwalker4P *core.Aura
-	T15Brewmaster2P *core.Aura
-	T15Brewmaster4P *core.Aura
-	T16Windwalker4P *core.Aura
-	T16Brewmaster4P *core.Aura
+	T14Brewmaster4P            *core.Aura
+	T15Windwalker2PSphereAura  *core.Aura
+	T15Windwalker2PSphereSpell *core.Spell
+	T15Windwalker4P            *core.Aura
+	T15Brewmaster2P            *core.Aura
+	T15Brewmaster4P            *core.Aura
+	T15Brewmaster4PProcEffect  *core.Aura
+	T16Windwalker4P            *core.Aura
+	T16Brewmaster4P            *core.Aura
 }
 
 func (monk *Monk) ChangeStance(sim *core.Simulation, newStance Stance) {

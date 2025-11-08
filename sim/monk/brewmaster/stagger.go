@@ -39,6 +39,10 @@ func (bm *BrewmasterMonk) registerStagger() {
 				damage := max(0, dot.SnapshotBaseDamage)
 				target.RemoveHealth(sim, damage)
 
+				if bm.T15Brewmaster4P != nil && bm.T15Brewmaster4P.IsActive() && sim.Proc(0.1, "Purifier") {
+					bm.T15Brewmaster4PProcEffect.Activate(sim)
+				}
+
 				if sim.Log != nil && dot.Aura.IsActive() {
 					bm.Log(sim, "[DEBUG] Stagger ticked for %0.0f Damage", damage)
 				}

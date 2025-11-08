@@ -411,7 +411,7 @@ export class ReforgeOptimizer {
 		if (!this.useCustomEPValues) {
 			if (this.getEPDefaults) {
 				weights = this.getEPDefaults?.(this.player);
-			} else if (!this.player.hasCustomEPWeights()) {
+			} else if (this.player.hasCustomEPWeights()) {
 				weights = this.defaults.epWeights;
 			}
 		}
