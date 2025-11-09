@@ -125,14 +125,8 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecWindwalkerMonk, {
 		// Preset rotations that the user can quickly select.
 		rotations: [Presets.ROTATION_PRESET],
 		// Preset gear configurations that the user can quickly select.
-		gear: [
-			Presets.P1_PREBIS_GEAR_PRESET,
-			Presets.P1_PREHOF_GEAR_PRESET,
-			Presets.P1_PRETOES_GEAR_PRESET,
-			Presets.P1_BIS_GEAR_PRESET,
-			Presets.P2_BIS_GEAR_PRESET,
-			Presets.P3_BIS_GEAR_PRESET,
-		],
+		gear: [Presets.P1_PREBIS_GEAR_PRESET, Presets.P2_BIS_GEAR_PRESET, Presets.P3_BIS_GEAR_PRESET],
+		builds: [Presets.P2_BUILD_PRESET, Presets.P3_BUILD_PRESET],
 	},
 
 	autoRotation: (_: Player<Spec.SpecWindwalkerMonk>): APLRotation => {
@@ -182,30 +176,28 @@ export class WindwalkerMonkSimUI extends IndividualSimUI<Spec.SpecWindwalkerMonk
 			MonkUtils.setTalentBasedSettings(player);
 		});
 
-		player.sim.waitForInit().then(() => {
-			this.reforger = new ReforgeOptimizer(this, {
-				defaultRelativeStatCap: Stat.StatMasteryRating,
-				getEPDefaults: (player: Player<Spec.SpecWindwalkerMonk>) => {
-					if (RelativeStatCap.hasRoRo(player)) {
-						player.sim.setUseSoftCapBreakpoints(TypedEvent.nextEventID(), false);
-						return Presets.RORO_BIS_EP_PRESET.epWeights;
+		this.reforger = new ReforgeOptimizer(this, {
+			defaultRelativeStatCap: Stat.StatMasteryRating,
+			getEPDefaults: (player: Player<Spec.SpecWindwalkerMonk>) => {
+				if (RelativeStatCap.hasRoRo(player)) {
+					this.reforger?.setUseSoftCapBreakpoints(TypedEvent.nextEventID(), false);
+					return Presets.RORO_BIS_EP_PRESET.epWeights;
+				}
+				return Presets.P1_BIS_EP_PRESET.epWeights;
+			},
+			updateSoftCaps: (softCaps: StatCap[]) => {
+				if (RelativeStatCap.hasRoRo(player)) {
+					return [];
+				}
+				if (hasTwoHandMainHand(player)) {
+					const hasteSoftCap = softCaps.find(v => v.unitStat.equalsPseudoStat(PseudoStat.PseudoStatMeleeHastePercent));
+					if (hasteSoftCap) {
+						// Two-Handed Windwalkers need to adjust for Way of the Monk 40% Melee Haste
+						hasteSoftCap.breakpoints = hasteSoftCap.breakpoints.map(v => v + 40);
 					}
-					return Presets.P1_BIS_EP_PRESET.epWeights;
-				},
-				updateSoftCaps: (softCaps: StatCap[]) => {
-					if (RelativeStatCap.hasRoRo(player)) {
-						return [];
-					}
-					if (hasTwoHandMainHand(player)) {
-						const hasteSoftCap = softCaps.find(v => v.unitStat.equalsPseudoStat(PseudoStat.PseudoStatMeleeHastePercent));
-						if (hasteSoftCap) {
-							// Two-Handed Windwalkers need to adjust for Way of the Monk 40% Melee Haste
-							hasteSoftCap.breakpoints = hasteSoftCap.breakpoints.map(v => v + 40);
-						}
-					}
-					return softCaps;
-				},
-			});
+				}
+				return softCaps;
+			},
 		});
 	}
 }

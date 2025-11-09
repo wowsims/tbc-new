@@ -7,10 +7,16 @@ import DefaultApl from './apls/default.apl.json';
 import GarajalApl from './apls/garajal.apl.json';
 import OffensiveApl from './apls/offensive.apl.json';
 import ShaApl from './apls/sha.apl.json';
-import GarajalBuild from './builds/garajal_default.build.json';
-import ShaBuild from './builds/sha_default.build.json';
+import HorridonApl from './apls/horridon.apl.json';
+import GarajalBuild from './builds/garajal_encounter_only.build.json';
+import ShaBuild from './builds/sha_encounter_only.build.json';
+import HorridonBuild from './builds/horridon_encounter_only.build.json';
 import P1BISDWGear from './gear_sets/p1_bis_dw.gear.json';
 import P2BISDWGear from './gear_sets/p2_bis_dw.gear.json';
+import P3ProgDWGear from './gear_sets/p3_prog_dw.gear.json';
+import P3BISDWGear from './gear_sets/p3_bis_dw.gear.json';
+import P3OffensiveDWGear from './gear_sets/p3_bis_offensive_dw.gear.json';
+import P3OffensiveRoRoDWGear from './gear_sets/p3_bis_offensive_dw_roro.default.json';
 import P2BISOffensiveDWGear from './gear_sets/p2_bis_offensive_dw.gear.json';
 import P2BISOffensiveTierlessDWGear from './gear_sets/p2_bis_offensive_tierless_dw.gear.json';
 
@@ -22,15 +28,20 @@ export const P1_BIS_DW_GEAR_PRESET = PresetUtils.makePresetGear('P1 - BIS (Balan
 export const P2_BIS_DW_GEAR_PRESET = PresetUtils.makePresetGear('P2 - BIS (Balanced)', P2BISDWGear);
 export const P2_BIS_OFFENSIVE_DW_GEAR_PRESET = PresetUtils.makePresetGear('P2 - BIS (Offensive - 2PC)', P2BISOffensiveDWGear);
 export const P2_BIS_OFFENSIVE_TIERLESS_DW_GEAR_PRESET = PresetUtils.makePresetGear('P2 - BIS (Offensive - No Tier)', P2BISOffensiveTierlessDWGear);
+export const P3_PROG_DW_GEAR_PRESET = PresetUtils.makePresetGear('Tentative - P3 - Prog (Balanced)', P3ProgDWGear);
+export const P3_BIS_DW_GEAR_PRESET = PresetUtils.makePresetGear('Tentative - P3 - BIS (Balanced)', P3BISDWGear);
+export const P3_BIS_OFFENSIVE_DW_GEAR_PRESET = PresetUtils.makePresetGear('Tentative - P3 - BIS (Offensive)', P3OffensiveDWGear);
+export const P3_BIS_OFFENSIVE_DW_RORO_GEAR_PRESET = PresetUtils.makePresetGear('Tentative - P3 - BIS (Offensive - RoRo)', P3OffensiveRoRoDWGear);
 
 export const ROTATION_PRESET = PresetUtils.makePresetAPLRotation('Generic', DefaultApl);
 export const ROTATION_GARAJAL_PRESET = PresetUtils.makePresetAPLRotation("Gara'jal", GarajalApl);
 export const ROTATION_OFFENSIVE_PRESET = PresetUtils.makePresetAPLRotation('Offensive', OffensiveApl);
 export const ROTATION_SHA_PRESET = PresetUtils.makePresetAPLRotation('Sha of Fear', ShaApl);
+export const ROTATION_HORRIDON_PRESET = PresetUtils.makePresetAPLRotation('Horridon', HorridonApl);
 
 // Preset options for EP weights
-export const P1_BALANCED_EP_PRESET = PresetUtils.makePresetEpWeights(
-	'Balanced',
+export const P2_BALANCED_EP_PRESET = PresetUtils.makePresetEpWeights(
+	'P2 - Balanced',
 	Stats.fromMap(
 		{
 			[Stat.StatAgility]: 1,
@@ -54,7 +65,7 @@ export const P1_BALANCED_EP_PRESET = PresetUtils.makePresetEpWeights(
 );
 
 export const P2_OFFENSIVE_EP_PRESET = PresetUtils.makePresetEpWeights(
-	'Offensive',
+	'P2 - Offensive',
 	Stats.fromMap(
 		{
 			[Stat.StatAgility]: 1,
@@ -73,6 +84,54 @@ export const P2_OFFENSIVE_EP_PRESET = PresetUtils.makePresetEpWeights(
 		{
 			[PseudoStat.PseudoStatMainHandDps]: 1.96,
 			[PseudoStat.PseudoStatOffHandDps]: 0.97,
+		},
+	),
+);
+
+export const P3_BALANCED_EP_PRESET = PresetUtils.makePresetEpWeights(
+	'P3 - Balanced',
+	Stats.fromMap(
+		{
+			[Stat.StatAgility]: 1,
+			[Stat.StatStamina]: 0.44,
+			[Stat.StatHitRating]: 1.27,
+			[Stat.StatCritRating]: 0.67,
+			[Stat.StatHasteRating]: 0.57,
+			[Stat.StatExpertiseRating]: 0.92,
+			[Stat.StatDodgeRating]: 0.27,
+			[Stat.StatParryRating]: 0.37,
+			[Stat.StatMasteryRating]: 0.65,
+			[Stat.StatAttackPower]: 0.18,
+			[Stat.StatArmor]: 0.34,
+			[Stat.StatBonusArmor]: 0.34,
+		},
+		{
+			[PseudoStat.PseudoStatMainHandDps]: 1.13,
+			[PseudoStat.PseudoStatOffHandDps]: 0.68,
+		},
+	),
+);
+
+export const P3_OFFENSIVE_EP_PRESET = PresetUtils.makePresetEpWeights(
+	'P3 - Offensive',
+	Stats.fromMap(
+		{
+			[Stat.StatAgility]: 1,
+			[Stat.StatStamina]: 0.37,
+			[Stat.StatHitRating]: 1.38,
+			[Stat.StatCritRating]: 0.71,
+			[Stat.StatHasteRating]: 0.59,
+			[Stat.StatExpertiseRating]: 0.98,
+			[Stat.StatDodgeRating]: 0.22,
+			[Stat.StatParryRating]: 0.32,
+			[Stat.StatMasteryRating]: 0.52,
+			[Stat.StatAttackPower]: 0.2,
+			[Stat.StatArmor]: 0.28,
+			[Stat.StatBonusArmor]: 0.28,
+		},
+		{
+			[PseudoStat.PseudoStatMainHandDps]: 1.21,
+			[PseudoStat.PseudoStatOffHandDps]: 0.72,
 		},
 	),
 );
@@ -136,4 +195,5 @@ export const OtherDefaults = {
 };
 
 export const PRESET_BUILD_GARAJAL = PresetUtils.makePresetBuildFromJSON("Gara'jal", Spec.SpecBrewmasterMonk, GarajalBuild);
-export const PRESET_BUILD_SHA = PresetUtils.makePresetBuildFromJSON('Sha of Fear', Spec.SpecBrewmasterMonk, ShaBuild);
+export const PRESET_BUILD_SHA = PresetUtils.makePresetBuildFromJSON('Sha of Fear P2', Spec.SpecBrewmasterMonk, ShaBuild);
+export const PRESET_BUILD_HORRIDON = PresetUtils.makePresetBuildFromJSON('Horridon P2', Spec.SpecBrewmasterMonk, HorridonBuild);

@@ -596,6 +596,14 @@
 					"label": "Fréquence d'Etreinte spirituelle",
 					"tooltip": "Temps moyen (en secondes) entre les coups d'Etreinte spirituelle, suivant une distribution exponentielle"
 				},
+				"jalak_death_time": {
+					"label": "Temps de mort de Jalak",
+					"tooltip": "Temps de simulation (en secondes) auquel désactiver War-God Jalak et déclencher le buff Rampage sur Horridon. Si défini plus longtemps que la durée de combat simulée, alors Jalak sera tanké tout le temps et Rampage ne sera jamais déclenché."
+				},
+				"taunt_swap_for_triple_puncture": {
+					"label": "Échange de provocation pour Triple perforation",
+					"tooltip": "Si coché, échange de provocation à la mort de Jalak et à chaque autre application de Triple perforation par la suite afin de limiter l'accumulation de charges sur un seul tank."
+				},
 				"movement_interval": {
 					"label": "Intervalle de mouvement",
 					"tooltip": "À quelle fréquence le joueur se déplacera en secondes"
@@ -964,7 +972,7 @@
 				"channel": {
 					"label": "Canaliser",
 					"tooltip": "Canalise le sort si possible.",
-					"full": "\n\t\t\t<p>La différence entre canaliser un sort et lancer le sort est que les canalisations peuvent être interrompues. Si le paramètre <b>Interrompre si</b> est vide, cette action est équivalente à <b>Lancer</b>.</p>\n\t\t\t<p>La canalisation sera interrompue seulement si toutes les conditions suivantes sont vraies :</p>\n\t\t\t<ul>\n\t\t\t\t<li>Immédiatement après un tick de la canalisation</li>\n\t\t\t\t<li>La condition <b>Interrompre si</b> s'évalue à <b>Vrai</b></li>\n\t\t\t\t<li>Une autre action dans la liste APL est disponible</li>\n\t\t\t</ul>\n\t\t\t<p>Notez que si vous voulez simplement permettre à d'autres actions d'interrompre la canalisation, définissez <b>Interrompre si</b> à <b>Vrai</b>.</p>\n\t\t\t",
+					"full_description": "<p>La différence entre canaliser un sort et lancer le sort est que les canalisations peuvent être interrompues. Si le paramètre <b>Interrompre si</b> est vide, cette action est équivalente à <b>Lancer</b>.</p><p>La canalisation sera interrompue seulement si toutes les conditions suivantes sont vraies :</p><ul><li>Immédiatement après un tick de la canalisation</li><li>La condition <b>Interrompre si</b> s'évalue à <b>Vrai</b></li><li>Une autre action dans la liste APL est disponible</li></ul><p>Notez que si vous voulez simplement permettre à d'autres actions d'interrompre la canalisation, définissez <b>Interrompre si</b> à <b>Vrai</b>.</p>",
 					"interrupt_if": {
 						"label": "Interrompre si",
 						"tooltip": "Interrompre la canalisation si la condition est vraie."
@@ -977,12 +985,12 @@
 				"cast_all_stat_buff_cooldowns": {
 					"label": "Lancer tous les CDs de Buff de stats",
 					"tooltip": "Lance tous les cooldowns de buff de stats disponibles.",
-					"full": "\n\t\t\t<ul>\n\t\t\t\t<li>Ne lance pas les cooldowns qui sont déjà contrôlés par d'autres actions dans la liste de priorité.</li>\n\t\t\t\t<li>Par défaut, cette action lancera ces cooldowns de manière avide dès qu'ils deviennent disponibles. Cependant, lorsqu'elle est intégrée dans une séquence, l'action ne se déclenchera que lorsque TOUS les cooldowns correspondant au(x) type(s) de buff spécifié(s) sont prêts.</li>\n\t\t\t</ul>\n\t\t\t"
+					"full_description": "<ul><li>Ne lance pas les cooldowns qui sont déjà contrôlés par d'autres actions dans la liste de priorité.</li><li>Par défaut, cette action lancera ces cooldowns de manière avide dès qu'ils deviennent disponibles. Cependant, lorsqu'elle est intégrée dans une séquence, l'action ne se déclenchera que lorsque TOUS les cooldowns correspondant au(x) type(s) de buff spécifié(s) sont prêts.</li></ul>"
 				},
 				"autocast_other_cooldowns": {
 					"label": "Auto-lancer autres CDs",
 					"tooltip": "Lance automatiquement d'autres cooldowns quand disponibles.",
-					"full": "\n\t\t\t<ul>\n\t\t\t\t<li>Ne lance pas automatiquement les cooldowns qui sont déjà contrôlés par d'autres actions dans la liste de priorité.</li>\n\t\t\t\t<li>Les cooldowns sont généralement lancés immédiatement dès qu'ils sont prêts, mais il y a quelques vérifications intelligentes de base en place, par ex. ne pas utiliser les CDs de Mana quand près du mana plein.</li>\n\t\t\t</ul>\n\t\t\t"
+					"full_description": "<ul><li>Ne lance pas automatiquement les cooldowns qui sont déjà contrôlés par d'autres actions dans la liste de priorité.</li><li>Les cooldowns sont généralement lancés immédiatement dès qu'ils sont prêts, mais il y a quelques vérifications intelligentes de base en place, par ex. ne pas utiliser les CDs de Mana quand près du mana plein.</li></ul>"
 				},
 				"wait": {
 					"label": "Attendre",
@@ -1007,17 +1015,17 @@
 				"sequence": {
 					"label": "Séquence",
 					"tooltip": "Une liste de sous-actions à exécuter dans l'ordre spécifié.",
-					"full": "\n\t\t\t<p>Une fois qu'une des sous-actions a été effectuée, la prochaine sous-action ne sera pas nécessairement exécutée immédiatement après. Le système redémarrera au début de toute la liste d'actions (pas la séquence). Si la séquence est exécutée à nouveau, elle effectuera la prochaine sous-action.</p>\n\t\t\t<p>Quand toutes les actions ont été effectuées, la séquence ne se réinitialise PAS automatiquement ; au lieu de cela, elle sera ignorée à partir de maintenant. Utilisez l'action <b>Réinitialiser séquence</b> pour la réinitialiser, si désiré.</p>\n\t\t\t"
+					"full_description": "<p>Une fois qu'une des sous-actions a été effectuée, la prochaine sous-action ne sera pas nécessairement exécutée immédiatement après. Le système redémarrera au début de toute la liste d'actions (pas la séquence). Si la séquence est exécutée à nouveau, elle effectuera la prochaine sous-action.</p><p>Quand toutes les actions ont été effectuées, la séquence ne se réinitialise PAS automatiquement ; au lieu de cela, elle sera ignorée à partir de maintenant. Utilisez l'action <b>Réinitialiser séquence</b> pour la réinitialiser, si désiré.</p>"
 				},
 				"reset_sequence": {
 					"label": "Réinitialiser séquence",
 					"tooltip": "Redémarre une séquence, de sorte que la prochaine fois qu'elle s'exécute, elle effectuera sa première sous-action.",
-					"full": "\n\t\t\t<p>Utilisez le champ <b>nom</b> pour faire référence à la séquence à réinitialiser. La séquence désirée doit avoir la même valeur (non vide) pour son <b>nom</b>.</p>\n\t\t\t"
+					"full_description": "<p>Utilisez le champ <b>nom</b> pour faire référence à la séquence à réinitialiser. La séquence désirée doit avoir la même valeur (non vide) pour son <b>nom</b>.</p>"
 				},
 				"strict_sequence": {
 					"label": "Séquence stricte",
 					"tooltip": "Comme une séquence régulière, sauf que toutes les sous-actions sont exécutées immédiatement l'une après l'autre et la séquence se réinitialise automatiquement à la fin.",
-					"full": "\n\t\t\t<p>Les séquences strictes ne commencent pas à moins que TOUTES les sous-actions soient prêtes.</p>\n\t\t\t"
+					"full_description": "<p>Les séquences strictes ne commencent pas à moins que TOUTES les sous-actions soient prêtes.</p>"
 				},
 				"change_target": {
 					"label": "Changer de cible",
@@ -1323,7 +1331,8 @@
 				},
 				"can_cast": {
 					"label": "Peut lancer",
-					"tooltip": "<b>Vrai</b> si toutes les exigences pour lancer le sort sont actuellement remplies, sinon <b>Faux</b>."
+					"tooltip": "<b>Vrai</b> si toutes les exigences pour lancer le sort sont actuellement remplies, sinon <b>Faux</b>.",
+					"full_description": "<p>The <b>Cast Spell</b> action does not need to be conditioned on this, because it applies this check automatically.</p>"
 				},
 				"is_ready": {
 					"label": "Est prêt",
@@ -1411,15 +1420,18 @@
 				},
 				"aura_should_refresh": {
 					"label": "Aura à rafraichir",
-					"tooltip": "Si cette aura devrait être rafraîchie, par ex. dans le but de maintenir un debuff."
+					"tooltip": "Si cette aura devrait être rafraîchie, par ex. dans le but de maintenir un debuff.",
+					"full_description": "<p>This condition checks not only the specified aura but also any other auras on the same unit, including auras applied by other raid members, which apply the same debuff category.</p><p>For example, 'Should Refresh Debuff(Sunder Armor)' will return <b>False</b> if the unit has an active Expose Armor aura.</p>"
 				},
 				"all_trinket_stat_procs_active": {
 					"label": "Tous les buffs procs d'objets actifs",
-					"tooltip": "<b>Vrai</b> si tous les procs d'objet/enchantement qui buffent le(s) type(s) de stat spécifié(s) sont actuellement actifs, sinon <b>Faux</b>."
+					"tooltip": "<b>Vrai</b> si tous les procs d'objet/enchantement qui buffent le(s) type(s) de stat spécifié(s) sont actuellement actifs, sinon <b>Faux</b>.",
+					"full_description": "<p>For stacking proc buffs, this condition also checks that the buff has been stacked to its maximum possible strength.</p>"
 				},
 				"any_trinket_stat_procs_active": {
 					"label": "N'importe quel buff proc d'objet actif",
-					"tooltip": "<b>Vrai</b> si n'importe quel proc d'objet/enchantement qui buffe le(s) type(s) de stat spécifié(s) est actuellement actif, sinon <b>Faux</b>."
+					"tooltip": "<b>Vrai</b> si n'importe quel proc d'objet/enchantement qui buffe le(s) type(s) de stat spécifié(s) est actuellement actif, sinon <b>Faux</b>.",
+					"full_description": "<p>For stacking proc buffs, this condition also checks that the buff has been stacked to its maximum possible strength.</p>"
 				},
 				"any_trinket_stat_procs_available": {
 					"label": "N'importe quel buff de procédure d'objet disponible",
@@ -1439,11 +1451,13 @@
 				},
 				"num_stat_buff_cooldowns": {
 					"label": "Nombre de CDs de buff de stats",
-					"tooltip": "Nombre de Cooldowns Majeurs enregistrés qui buffent le(s) type(s) de stat spécifié(s) quand ils sont lancés."
+					"tooltip": "Nombre de Cooldowns Majeurs enregistrés qui buffent le(s) type(s) de stat spécifié(s) quand ils sont lancés.",
+					"full_description": "<p>Both manually casted cooldowns as well as cooldowns controlled by \"Cast All Stat Buff Cooldowns\" and \"Autocast Other Cooldowns\" actions are included in the total count returned by this value.</p>"
 				},
 				"any_stat_buff_cooldowns_active": {
 					"label": "N'importe quel CD de buff de stat actif",
-					"tooltip": "<b>Vrai</b> si n'importe quel Cooldown Majeur enregistré qui buffe le(s) type(s) de stat spécifié(s) est actuellement actif, sinon <b>Faux</b>."
+					"tooltip": "<b>Vrai</b> si n'importe quel Cooldown Majeur enregistré qui buffe le(s) type(s) de stat spécifié(s) est actuellement actif, sinon <b>Faux</b>.",
+					"full_description": "<p>For stacking buffs, this condition also checks that the buff has been stacked to its maximum possible strength after the cooldown is activated.</p><p>Both manually casted cooldowns as well as cooldowns controlled by \"Cast All Stat Buff Cooldowns\" and \"Autocast Other Cooldowns\" actions are checked.</p>"
 				},
 				"any_stat_buff_cooldowns_min_duration": {
 					"label": "Temps de recharge des bonus de statistiques Temps restant minimum",

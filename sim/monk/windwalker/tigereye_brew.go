@@ -40,9 +40,10 @@ func (ww *WindwalkerMonk) registerTigereyeBrew() {
 
 	var damageMultiplier float64
 	buffAura := core.BlockPrepull(ww.RegisterAura(core.Aura{
-		Label:    "Tigereye Brew Buff" + ww.Label,
-		ActionID: buffActionID,
-		Duration: time.Second * 15,
+		Label:     "Tigereye Brew Buff" + ww.Label,
+		ActionID:  buffActionID,
+		Duration:  time.Second * 15,
+		MaxStacks: 10,
 
 		OnGain: func(aura *core.Aura, sim *core.Simulation) {
 			stacksToConsume := min(10, ww.TigereyeBrewStackAura.GetStacks())
@@ -53,6 +54,7 @@ func (ww *WindwalkerMonk) registerTigereyeBrew() {
 			ww.PseudoStats.DamageDealtMultiplier *= damageMultiplier
 			ww.SefController.UpdateCloneDamageMultiplier(damageMultiplier)
 
+			aura.SetStacks(sim, stacksToConsume)
 			ww.TigereyeBrewStackAura.SetStacks(sim, ww.TigereyeBrewStackAura.GetStacks()-stacksToConsume)
 
 			if ww.T16Windwalker4P != nil {

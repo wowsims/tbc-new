@@ -225,16 +225,16 @@ func (bm *BrewmasterMonk) registerGiftOfTheOx() {
 				giftOfTheOxStackingAura.Activate(sim)
 				giftOfTheOxStackingAura.AddStack(sim)
 
-				pa := core.NewDelayedAction(core.DelayedActionOptions{
-					DoAt: sim.CurrentTime + sphereDuration,
-					OnAction: func(sim *core.Simulation) {
-						giftOfTheOxStackingAura.RemoveStack(sim)
-						pendingSpheres = pendingSpheres[:1]
-					},
-					CleanUp: func(sim *core.Simulation) {
-						pendingSpheres = pendingSpheres[:1]
-					},
-				})
+				pa := sim.GetConsumedPendingActionFromPool()
+				pa.NextActionAt = sim.CurrentTime + sphereDuration
+				pa.Priority = core.ActionPriorityDOT
+				pa.OnAction = func(sim *core.Simulation) {
+					giftOfTheOxStackingAura.RemoveStack(sim)
+					pendingSpheres = pendingSpheres[:1]
+				}
+				pa.CleanUp = func(sim *core.Simulation) {
+					pendingSpheres = pendingSpheres[:1]
+				}
 
 				sim.AddPendingAction(pa)
 				pendingSpheres = append(pendingSpheres, pa)
@@ -245,7 +245,6 @@ func (bm *BrewmasterMonk) registerGiftOfTheOx() {
 	bm.RegisterResetEffect(func(s *core.Simulation) {
 		pendingSpheres = make([]*core.PendingAction, 0)
 	})
-
 }
 
 func (bm *BrewmasterMonk) registerDesperateMeasures() {

@@ -61,8 +61,8 @@ dps_results: {
 dps_results: {
  key: "TestEnhancement-AllItems-AssuranceofConsequence-105472"
  value: {
-  dps: 151660.14139
-  tps: 122373.1199
+  dps: 151977.74579
+  tps: 122606.25933
  }
 }
 dps_results: {
@@ -684,15 +684,15 @@ dps_results: {
 dps_results: {
  key: "TestEnhancement-AllItems-EvilEyeofGalakras-105491"
  value: {
-  dps: 140648.07197
-  tps: 119765.80359
+  dps: 140572.99549
+  tps: 119711.93365
  }
 }
 dps_results: {
  key: "TestEnhancement-AllItems-FabledFeatherofJi-Kun-96842"
  value: {
-  dps: 145134.74308
-  tps: 123366.45671
+  dps: 145527.50329
+  tps: 123714.71619
  }
 }
 dps_results: {
@@ -803,8 +803,8 @@ dps_results: {
 dps_results: {
  key: "TestEnhancement-AllItems-GazeoftheTwins-96915"
  value: {
-  dps: 146060.92666
-  tps: 124176.36728
+  dps: 146201.29259
+  tps: 124359.43067
  }
 }
 dps_results: {
@@ -1650,15 +1650,15 @@ dps_results: {
 dps_results: {
  key: "TestEnhancement-AllItems-Primordius'TalismanofRage-96873"
  value: {
-  dps: 146496.53804
-  tps: 124802.9179
+  dps: 146855.60432
+  tps: 125074.37831
  }
 }
 dps_results: {
  key: "TestEnhancement-AllItems-PurifiedBindingsofImmerseus-105422"
  value: {
-  dps: 144450.89292
-  tps: 123415.01419
+  dps: 144450.60324
+  tps: 123400.70921
  }
 }
 dps_results: {
@@ -1692,8 +1692,8 @@ dps_results: {
 dps_results: {
  key: "TestEnhancement-AllItems-RegaliaoftheWitchDoctor"
  value: {
-  dps: 93098.64299
-  tps: 79311.08274
+  dps: 93796.45509
+  tps: 80008.89485
  }
 }
 dps_results: {
@@ -1741,8 +1741,8 @@ dps_results: {
 dps_results: {
  key: "TestEnhancement-AllItems-Renataki'sSoulCharm-96741"
  value: {
-  dps: 151416.04144
-  tps: 128000.29737
+  dps: 150381.28963
+  tps: 127263.88735
  }
 }
 dps_results: {
@@ -1776,8 +1776,8 @@ dps_results: {
 dps_results: {
  key: "TestEnhancement-AllItems-RuneofRe-Origination-96918"
  value: {
-  dps: 152357.03576
-  tps: 130281.81737
+  dps: 151867.61741
+  tps: 129657.21915
  }
 }
 dps_results: {
@@ -1888,8 +1888,8 @@ dps_results: {
 dps_results: {
  key: "TestEnhancement-AllItems-SparkofZandalar-96770"
  value: {
-  dps: 144449.03299
-  tps: 123440.91659
+  dps: 144432.15871
+  tps: 123477.10354
  }
 }
 dps_results: {
@@ -2049,8 +2049,8 @@ dps_results: {
 dps_results: {
  key: "TestEnhancement-AllItems-TalismanofBloodlust-96864"
  value: {
-  dps: 150976.71679
-  tps: 128175.50421
+  dps: 150387.90052
+  tps: 127881.70014
  }
 }
 dps_results: {
@@ -2350,8 +2350,8 @@ dps_results: {
 dps_results: {
  key: "TestEnhancement-AllItems-Wushoolay'sFinalChoice-96785"
  value: {
-  dps: 140502.35887
-  tps: 119838.8937
+  dps: 140378.51474
+  tps: 119728.27981
  }
 }
 dps_results: {

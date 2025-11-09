@@ -61,8 +61,8 @@ dps_results: {
 dps_results: {
  key: "TestBeastMastery-AllItems-AssuranceofConsequence-105472"
  value: {
-  dps: 169115.11508
-  tps: 83744.15375
+  dps: 169122.28753
+  tps: 83684.67795
  }
 }
 dps_results: {
@@ -677,15 +677,15 @@ dps_results: {
 dps_results: {
  key: "TestBeastMastery-AllItems-EvilEyeofGalakras-105491"
  value: {
-  dps: 150699.49204
+  dps: 150702.9959
   tps: 76360.68096
  }
 }
 dps_results: {
  key: "TestBeastMastery-AllItems-FabledFeatherofJi-Kun-96842"
  value: {
-  dps: 150695.09322
-  tps: 76360.57942
+  dps: 150702.9959
+  tps: 76360.68096
  }
 }
 dps_results: {
@@ -796,8 +796,8 @@ dps_results: {
 dps_results: {
  key: "TestBeastMastery-AllItems-GazeoftheTwins-96915"
  value: {
-  dps: 153861.98123
-  tps: 78282.94284
+  dps: 154318.17534
+  tps: 78322.96972
  }
 }
 dps_results: {
@@ -1636,15 +1636,15 @@ dps_results: {
 dps_results: {
  key: "TestBeastMastery-AllItems-Primordius'TalismanofRage-96873"
  value: {
-  dps: 154693.75009
+  dps: 154688.62443
   tps: 78371.03903
  }
 }
 dps_results: {
  key: "TestBeastMastery-AllItems-PurifiedBindingsofImmerseus-105422"
  value: {
-  dps: 153735.597
-  tps: 78235.4633
+  dps: 153735.54801
+  tps: 78235.41431
  }
 }
 dps_results: {
@@ -1713,8 +1713,8 @@ dps_results: {
 dps_results: {
  key: "TestBeastMastery-AllItems-Renataki'sSoulCharm-96741"
  value: {
-  dps: 168290.92818
-  tps: 83184.38201
+  dps: 166400.1244
+  tps: 82753.86304
  }
 }
 dps_results: {
@@ -1748,8 +1748,8 @@ dps_results: {
 dps_results: {
  key: "TestBeastMastery-AllItems-RuneofRe-Origination-96918"
  value: {
-  dps: 164664.85448
-  tps: 83589.4326
+  dps: 165203.46054
+  tps: 83898.68005
  }
 }
 dps_results: {
@@ -1860,8 +1860,8 @@ dps_results: {
 dps_results: {
  key: "TestBeastMastery-AllItems-SparkofZandalar-96770"
  value: {
-  dps: 153301.74552
-  tps: 77829.67454
+  dps: 153308.18001
+  tps: 77829.573
  }
 }
 dps_results: {
@@ -2028,8 +2028,8 @@ dps_results: {
 dps_results: {
  key: "TestBeastMastery-AllItems-TalismanofBloodlust-96864"
  value: {
-  dps: 165466.99116
-  tps: 82691.0477
+  dps: 164939.72676
+  tps: 82498.33406
  }
 }
 dps_results: {
@@ -2329,8 +2329,8 @@ dps_results: {
 dps_results: {
  key: "TestBeastMastery-AllItems-Wushoolay'sFinalChoice-96785"
  value: {
-  dps: 150703.84391
-  tps: 76352.24791
+  dps: 150699.3905
+  tps: 76360.57942
  }
 }
 dps_results: {

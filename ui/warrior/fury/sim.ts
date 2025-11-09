@@ -176,20 +176,18 @@ export class FuryWarriorSimUI extends IndividualSimUI<Spec.SpecFuryWarrior> {
 	constructor(parentElem: HTMLElement, player: Player<Spec.SpecFuryWarrior>) {
 		super(parentElem, player, SPEC_CONFIG);
 
-		player.sim.waitForInit().then(() => {
-			this.reforger = new ReforgeOptimizer(this, {
-				getEPDefaults: (player: Player<Spec.SpecFuryWarrior>) => {
-					const hasP1Setup = player
-						.getGear()
-						.getEquippedItems()
-						.some(item => (item?.item.phase || 0) >= 3);
+		this.reforger = new ReforgeOptimizer(this, {
+			getEPDefaults: (player: Player<Spec.SpecFuryWarrior>) => {
+				const hasP1Setup = player
+					.getGear()
+					.getEquippedItems()
+					.some(item => (item?.item.phase || 0) >= 3);
 
-					// if (player.getEquippedItem(ItemSlot.ItemSlotMainHand)?.item.handType === HandType.HandTypeOneHand || !player.getTalents().titansGrip) {
-					// 	return hasP1Setup ? Presets.P1_FURY_SMF_EP_PRESET.epWeights : Presets.P1_FURY_SMF_EP_PRESET.epWeights;
-					// }
-					return hasP1Setup ? Presets.P1_FURY_TG_EP_PRESET.epWeights : Presets.P1_FURY_TG_EP_PRESET.epWeights;
-				},
-			});
+				// if (player.getEquippedItem(ItemSlot.ItemSlotMainHand)?.item.handType === HandType.HandTypeOneHand || !player.getTalents().titansGrip) {
+				// 	return hasP1Setup ? Presets.P1_FURY_SMF_EP_PRESET.epWeights : Presets.P1_FURY_SMF_EP_PRESET.epWeights;
+				// }
+				return hasP1Setup ? Presets.P1_FURY_TG_EP_PRESET.epWeights : Presets.P1_FURY_TG_EP_PRESET.epWeights;
+			},
 		});
 	}
 }

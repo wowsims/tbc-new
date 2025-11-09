@@ -153,8 +153,6 @@ export class MarksmanshipHunterSimUI extends IndividualSimUI<Spec.SpecMarksmansh
 	constructor(parentElem: HTMLElement, player: Player<Spec.SpecMarksmanshipHunter>) {
 		super(parentElem, player, SPEC_CONFIG);
 
-		player.sim.waitForInit().then(() => {
-			this.reforger = new ReforgeOptimizer(this);
-		});
+		this.reforger = new ReforgeOptimizer(this);
 	}
 }

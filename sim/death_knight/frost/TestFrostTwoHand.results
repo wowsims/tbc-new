@@ -65,8 +65,8 @@ dps_results: {
 dps_results: {
  key: "TestFrostTwoHand-AllItems-AssuranceofConsequence-105472"
  value: {
-  dps: 169495.74854
-  tps: 154689.89273
+  dps: 169446.03209
+  tps: 154641.64604
   hps: 2763.36242
  }
 }
@@ -769,16 +769,16 @@ dps_results: {
 dps_results: {
  key: "TestFrostTwoHand-AllItems-EvilEyeofGalakras-105491"
  value: {
-  dps: 176715.8453
-  tps: 160983.4065
+  dps: 176735.5614
+  tps: 160981.81011
   hps: 2769.25279
  }
 }
 dps_results: {
  key: "TestFrostTwoHand-AllItems-FabledFeatherofJi-Kun-96842"
  value: {
-  dps: 180594.64113
-  tps: 163509.78029
+  dps: 180439.14413
+  tps: 163396.82232
   hps: 2763.36242
  }
 }
@@ -905,9 +905,9 @@ dps_results: {
 dps_results: {
  key: "TestFrostTwoHand-AllItems-GazeoftheTwins-96915"
  value: {
-  dps: 179821.80716
-  tps: 163517.2862
-  hps: 2832.67922
+  dps: 180151.57323
+  tps: 163848.32663
+  hps: 2828.5081
  }
 }
 dps_results: {
@@ -1879,8 +1879,8 @@ dps_results: {
 dps_results: {
  key: "TestFrostTwoHand-AllItems-Primordius'TalismanofRage-96873"
  value: {
-  dps: 180648.03265
-  tps: 164460.49941
+  dps: 180987.67787
+  tps: 164663.47264
   hps: 2844.0399
  }
 }
@@ -1967,8 +1967,8 @@ dps_results: {
 dps_results: {
  key: "TestFrostTwoHand-AllItems-Renataki'sSoulCharm-96741"
  value: {
-  dps: 169607.44969
-  tps: 154799.75788
+  dps: 169596.81762
+  tps: 154784.22086
   hps: 2763.36242
  }
 }
@@ -2191,8 +2191,8 @@ dps_results: {
 dps_results: {
  key: "TestFrostTwoHand-AllItems-SparkofZandalar-96770"
  value: {
-  dps: 179939.39505
-  tps: 164274.03821
+  dps: 179404.99433
+  tps: 163833.68513
   hps: 2819.82396
  }
 }
@@ -2383,9 +2383,9 @@ dps_results: {
 dps_results: {
  key: "TestFrostTwoHand-AllItems-TalismanofBloodlust-96864"
  value: {
-  dps: 172927.76148
-  tps: 157550.01311
-  hps: 2822.26607
+  dps: 173136.88111
+  tps: 157886.37836
+  hps: 2809.909
  }
 }
 dps_results: {
@@ -2727,8 +2727,8 @@ dps_results: {
 dps_results: {
  key: "TestFrostTwoHand-AllItems-Wushoolay'sFinalChoice-96785"
  value: {
-  dps: 169362.24336
-  tps: 154599.34427
+  dps: 169339.91067
+  tps: 154575.89383
   hps: 2763.36242
  }
 }

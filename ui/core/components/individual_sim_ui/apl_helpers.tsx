@@ -277,18 +277,16 @@ const actionIdSets: Record<
 	spells_with_travelTime: {
 		defaultLabel: i18n.t('rotation_tab.apl.helpers.action_id_sets.spells_with_travelTime'),
 		getActionIDs: async metadata => {
-			return (
-				metadata
-					.getSpells()
-					.filter(spell => spell.data.hasMissileSpeed)
-					.map(actionId => {
-						return {
-							value: actionId.id,
-						};
-					})
-			);
+			return metadata
+				.getSpells()
+				.filter(spell => spell.data.hasMissileSpeed)
+				.map(actionId => {
+					return {
+						value: actionId.id,
+					};
+				});
 		},
-	}
+	},
 };
 
 export type DEFAULT_UNIT_REF = 'self' | 'currentTarget';
@@ -843,7 +841,6 @@ export function groupReferenceVariablesFieldConfig(
 			// Create a simple container
 			const container = document.createElement('div');
 			container.classList.add('group-reference-variables-container');
-			container.style.marginTop = '8px';
 			parent.appendChild(container);
 
 			// Create a ListPicker for the variables
@@ -889,7 +886,7 @@ export function groupReferenceVariablesFieldConfig(
 
 				if (!selectedGroupName) {
 					listPicker.setInputValue([]);
-					container.style.display = 'none';
+					container.classList.add('d-none');
 					return;
 				}
 
@@ -899,7 +896,7 @@ export function groupReferenceVariablesFieldConfig(
 
 				if (!selectedGroup) {
 					listPicker.setInputValue([]);
-					container.style.display = 'none';
+					container.classList.add('d-none');
 					return;
 				}
 
@@ -927,13 +924,13 @@ export function groupReferenceVariablesFieldConfig(
 
 				// Hide the container if no placeholder variables found
 				if (placeholderVariables.size === 0) {
-					container.style.display = 'none';
+					container.classList.add('d-none');
 					listPicker.setInputValue([]);
 					return;
 				}
 
 				// Show the container and populate variables
-				container.style.display = 'block';
+				container.classList.remove('d-none');
 
 				parentValue.variables = Array.from(placeholderVariables).map(varName => {
 					// Find existing variable or create new one
@@ -1001,10 +998,7 @@ class APLGroupVariablePicker extends Input<Player<any>, any> {
 		// Create label for the variable name
 		const label = document.createElement('label');
 		label.textContent = `${this.variableName}:`;
-		label.classList.add('group-variable-label');
-		label.style.fontWeight = 'bold';
-		label.style.marginBottom = '8px';
-		label.style.display = 'block';
+		label.classList.add('group-variable-label', 'fw-bold', 'd-block');
 		this.rootElem.appendChild(label);
 
 		// Variable value picker

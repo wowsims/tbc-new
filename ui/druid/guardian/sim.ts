@@ -73,7 +73,10 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecGuardianDruid, {
 		epWeights: Presets.BALANCED_EP_PRESET.epWeights,
 		// Default stat caps for the Reforge Optimizer
 		statCaps: (() => {
-			return new Stats().withStat(Stat.StatExpertiseRating, 15 * 4 * Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION).withPseudoStat(PseudoStat.PseudoStatPhysicalHitPercent, 7.5).withPseudoStat(PseudoStat.PseudoStatSpellHitPercent, 15);
+			return new Stats()
+				.withStat(Stat.StatExpertiseRating, 15 * 4 * Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION)
+				.withPseudoStat(PseudoStat.PseudoStatPhysicalHitPercent, 7.5)
+				.withPseudoStat(PseudoStat.PseudoStatSpellHitPercent, 15);
 		})(),
 		other: Presets.OtherDefaults,
 		// Default consumes settings.
@@ -139,16 +142,11 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecGuardianDruid, {
 		// Preset talents that the user can quickly select.
 		talents: [Presets.DefaultTalents],
 		// Preset rotations that the user can quickly select.
-		rotations: [Presets.ROTATION_DEFAULT, Presets.ROTATION_HOTW, Presets.ROTATION_EMPRESS, Presets.ROTATION_SHA],
+		rotations: [Presets.ROTATION_DEFAULT, Presets.ROTATION_HOTW, Presets.ROTATION_EMPRESS, Presets.ROTATION_SHA, Presets.ROTATION_HORRIDON],
 		// Preset gear configurations that the user can quickly select.
-		gear: [Presets.PRERAID_PRESET, Presets.MSV_PRESET, Presets.HOF_PRESET, Presets.P2_PRESET, Presets.P2_OFFENSIVE_PRESET],
+		gear: [Presets.PRERAID_PRESET, Presets.MSV_PRESET, Presets.HOF_PRESET, Presets.P2_PRESET, Presets.P2_OFFENSIVE_PRESET, Presets.P3_PRESET],
 		itemSwaps: [Presets.ITEM_SWAP_PRESET],
-		builds: [
-			Presets.PRESET_BUILD_DEFAULT,
-			Presets.PRESET_BUILD_GARAJAL,
-			Presets.PRESET_BUILD_EMPRESS,
-			Presets.PRESET_BUILD_SHA,
-		],
+		builds: [Presets.PRESET_BUILD_DEFAULT, Presets.PRESET_BUILD_GARAJAL, Presets.PRESET_BUILD_EMPRESS, Presets.PRESET_BUILD_SHA, Presets.PRESET_BUILD_HORRIDON],
 	},
 
 	autoRotation: (_player: Player<Spec.SpecGuardianDruid>): APLRotation => {
@@ -266,8 +264,6 @@ export class GuardianDruidSimUI extends IndividualSimUI<Spec.SpecGuardianDruid> 
 	constructor(parentElem: HTMLElement, player: Player<Spec.SpecGuardianDruid>) {
 		super(parentElem, player, SPEC_CONFIG);
 
-		player.sim.waitForInit().then(() => {
-			this.reforger = new ReforgeOptimizer(this);
-		});
+		this.reforger = new ReforgeOptimizer(this);
 	}
 }

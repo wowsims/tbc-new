@@ -117,7 +117,9 @@ func (character *Character) trackChanceOfDeath(healingModel *proto.HealingModel)
 		OnSpellHitTaken: func(aura *Aura, sim *Simulation, spell *Spell, result *SpellResult) {
 			if result.Damage > 0 {
 				aura.Unit.RemoveHealth(sim, result.Damage)
-				aura.Unit.ReactToEvent(sim, false)
+				if aura.Unit.Rotation != nil {
+					aura.Unit.ReactToEvent(sim, false)
+				}
 
 				if (aura.Unit.CurrentHealth() <= 0) && !aura.Unit.Metrics.Died {
 					// Queue a pending action to let shield effects give health

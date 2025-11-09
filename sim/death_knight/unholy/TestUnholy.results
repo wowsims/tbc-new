@@ -41,8 +41,8 @@ dps_results: {
 dps_results: {
  key: "TestUnholy-AllItems-AssuranceofConsequence-105472"
  value: {
-  dps: 145400.00648
-  tps: 104906.88982
+  dps: 145518.99774
+  tps: 105081.96937
   hps: 2033.20693
  }
 }
@@ -209,17 +209,17 @@ dps_results: {
 dps_results: {
  key: "TestUnholy-AllItems-EvilEyeofGalakras-105491"
  value: {
-  dps: 152432.20376
-  tps: 109779.5343
-  hps: 1990.53707
+  dps: 152411.08553
+  tps: 109747.8411
+  hps: 1988.09489
  }
 }
 dps_results: {
  key: "TestUnholy-AllItems-FabledFeatherofJi-Kun-96842"
  value: {
-  dps: 169680.10123
-  tps: 122107.19071
-  hps: 1983.21052
+  dps: 168590.73111
+  tps: 121457.83537
+  hps: 1984.2167
  }
 }
 dps_results: {
@@ -249,9 +249,9 @@ dps_results: {
 dps_results: {
  key: "TestUnholy-AllItems-GazeoftheTwins-96915"
  value: {
-  dps: 158269.91606
-  tps: 113637.48264
-  hps: 2084.99102
+  dps: 158098.27905
+  tps: 113632.47418
+  hps: 2077.07834
  }
 }
 dps_results: {
@@ -361,9 +361,9 @@ dps_results: {
 dps_results: {
  key: "TestUnholy-AllItems-Primordius'TalismanofRage-96873"
  value: {
-  dps: 159297.96006
-  tps: 114616.36782
-  hps: 2096.35207
+  dps: 159626.74387
+  tps: 115277.74793
+  hps: 2092.32735
  }
 }
 dps_results: {
@@ -393,9 +393,9 @@ dps_results: {
 dps_results: {
  key: "TestUnholy-AllItems-Renataki'sSoulCharm-96741"
  value: {
-  dps: 144977.59874
-  tps: 104602.20554
-  hps: 2028.32256
+  dps: 145338.27252
+  tps: 104812.9012
+  hps: 2030.76475
  }
 }
 dps_results: {
@@ -505,9 +505,9 @@ dps_results: {
 dps_results: {
  key: "TestUnholy-AllItems-SparkofZandalar-96770"
  value: {
-  dps: 159030.59489
-  tps: 115343.80879
-  hps: 2063.95892
+  dps: 159534.02231
+  tps: 116012.8405
+  hps: 2061.6535
  }
 }
 dps_results: {
@@ -521,9 +521,9 @@ dps_results: {
 dps_results: {
  key: "TestUnholy-AllItems-TalismanofBloodlust-96864"
  value: {
-  dps: 148963.59641
-  tps: 106887.25215
-  hps: 2092.4055
+  dps: 148884.03008
+  tps: 107185.45384
+  hps: 2075.87679
  }
 }
 dps_results: {

@@ -159,9 +159,7 @@ export class CombatRogueSimUI extends IndividualSimUI<Spec.SpecCombatRogue> {
 	constructor(parentElem: HTMLElement, player: Player<Spec.SpecCombatRogue>) {
 		super(parentElem, player, SPEC_CONFIG);
 
-		player.sim.waitForInit().then(() => {
-			this.reforger = new ReforgeOptimizer(this, {});
-		});
+		this.reforger = new ReforgeOptimizer(this, {});
 
 		this.player.changeEmitter.on(c => {
 			const options = this.player.getSpecOptions();

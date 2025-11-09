@@ -61,8 +61,8 @@ dps_results: {
 dps_results: {
  key: "TestSurvival-AllItems-AssuranceofConsequence-105472"
  value: {
-  dps: 177070.39442
-  tps: 143144.89409
+  dps: 176939.6619
+  tps: 143019.31912
  }
 }
 dps_results: {
@@ -684,8 +684,8 @@ dps_results: {
 dps_results: {
  key: "TestSurvival-AllItems-FabledFeatherofJi-Kun-96842"
  value: {
-  dps: 162266.79879
-  tps: 133742.16762
+  dps: 162270.22617
+  tps: 133743.19088
  }
 }
 dps_results: {
@@ -796,8 +796,8 @@ dps_results: {
 dps_results: {
  key: "TestSurvival-AllItems-GazeoftheTwins-96915"
  value: {
-  dps: 165618.61858
-  tps: 136355.44985
+  dps: 166075.68498
+  tps: 136704.6041
  }
 }
 dps_results: {
@@ -1636,14 +1636,14 @@ dps_results: {
 dps_results: {
  key: "TestSurvival-AllItems-Primordius'TalismanofRage-96873"
  value: {
-  dps: 165794.52354
-  tps: 136705.56859
+  dps: 165803.77206
+  tps: 136707.29856
  }
 }
 dps_results: {
  key: "TestSurvival-AllItems-PurifiedBindingsofImmerseus-105422"
  value: {
-  dps: 165783.53174
+  dps: 165776.51595
   tps: 136889.34029
  }
 }
@@ -1713,8 +1713,8 @@ dps_results: {
 dps_results: {
  key: "TestSurvival-AllItems-Renataki'sSoulCharm-96741"
  value: {
-  dps: 180842.74009
-  tps: 147811.3075
+  dps: 179983.34529
+  tps: 147174.18648
  }
 }
 dps_results: {
@@ -1748,8 +1748,8 @@ dps_results: {
 dps_results: {
  key: "TestSurvival-AllItems-RuneofRe-Origination-96918"
  value: {
-  dps: 178755.5596
-  tps: 147468.21936
+  dps: 178341.56039
+  tps: 146980.29473
  }
 }
 dps_results: {
@@ -1860,7 +1860,7 @@ dps_results: {
 dps_results: {
  key: "TestSurvival-AllItems-SparkofZandalar-96770"
  value: {
-  dps: 164658.02965
+  dps: 164656.42412
   tps: 134949.1007
  }
 }
@@ -2028,8 +2028,8 @@ dps_results: {
 dps_results: {
  key: "TestSurvival-AllItems-TalismanofBloodlust-96864"
  value: {
-  dps: 176445.6972
-  tps: 144334.8528
+  dps: 176577.1354
+  tps: 144645.06177
  }
 }
 dps_results: {

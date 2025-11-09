@@ -1,16 +1,15 @@
-package elemental
+package shaman
 
 import (
 	"time"
 
 	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/shaman"
 )
 
-func (ele *ElementalShaman) registerShamanisticRageSpell() {
+func (shaman *Shaman) registerShamanisticRageSpell() {
 
 	actionID := core.ActionID{SpellID: 30823}
-	srAura := ele.RegisterAura(core.Aura{
+	srAura := shaman.RegisterAura(core.Aura{
 		Label:    "Shamanistic Rage",
 		ActionID: actionID,
 		Duration: time.Second * 15,
@@ -19,14 +18,14 @@ func (ele *ElementalShaman) registerShamanisticRageSpell() {
 		FloatValue: -2,
 	})
 
-	spell := ele.RegisterSpell(core.SpellConfig{
+	spell := shaman.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
-		ClassSpellMask: shaman.SpellMaskShamanisticRage,
+		ClassSpellMask: SpellMaskShamanisticRage,
 		Flags:          core.SpellFlagReadinessTrinket,
 		Cast: core.CastConfig{
 			IgnoreHaste: true,
 			CD: core.Cooldown{
-				Timer:    ele.NewTimer(),
+				Timer:    shaman.NewTimer(),
 				Duration: time.Minute * 1,
 			},
 		},
@@ -36,11 +35,11 @@ func (ele *ElementalShaman) registerShamanisticRageSpell() {
 		RelatedSelfBuff: srAura,
 	})
 
-	ele.AddMajorCooldown(core.MajorCooldown{
+	shaman.AddMajorCooldown(core.MajorCooldown{
 		Spell: spell,
 		Type:  core.CooldownTypeMana,
 		ShouldActivate: func(s *core.Simulation, c *core.Character) bool {
-			return ele.CurrentManaPercent() < 0.05
+			return shaman.CurrentManaPercent() < 0.05
 		},
 	})
 }

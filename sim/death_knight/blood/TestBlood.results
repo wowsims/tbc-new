@@ -69,10 +69,10 @@ dps_results: {
 dps_results: {
  key: "TestBlood-AllItems-AssuranceofConsequence-105472"
  value: {
-  dps: 98526.33309
-  tps: 554388.07155
-  dtps: 35751.67061
-  hps: 37508.03327
+  dps: 98193.7205
+  tps: 551869.51636
+  dtps: 35707.34537
+  hps: 37560.40303
  }
 }
 dps_results: {
@@ -879,19 +879,19 @@ dps_results: {
 dps_results: {
  key: "TestBlood-AllItems-EvilEyeofGalakras-105491"
  value: {
-  dps: 100812.22008
-  tps: 555274.3021
-  dtps: 34346.6004
-  hps: 36940.4602
+  dps: 101656.02049
+  tps: 556528.24517
+  dtps: 34415.74885
+  hps: 36728.73191
  }
 }
 dps_results: {
  key: "TestBlood-AllItems-FabledFeatherofJi-Kun-96842"
  value: {
-  dps: 102213.92912
-  tps: 574998.70823
-  dtps: 34677.92044
-  hps: 37330.38995
+  dps: 102021.15915
+  tps: 576823.12655
+  dtps: 34608.06609
+  hps: 37540.22063
  }
 }
 dps_results: {
@@ -1032,10 +1032,10 @@ dps_results: {
 dps_results: {
  key: "TestBlood-AllItems-GazeoftheTwins-96915"
  value: {
-  dps: 102963.78383
-  tps: 579058.38964
-  dtps: 34618.38208
-  hps: 37259.61124
+  dps: 103168.37547
+  tps: 579595.69435
+  dtps: 34682.42332
+  hps: 37315.52212
  }
 }
 dps_results: {
@@ -1374,7 +1374,7 @@ dps_results: {
 dps_results: {
  key: "TestBlood-AllItems-Horridon'sLastGasp-96757"
  value: {
-  dps: 98594.04797
+  dps: 98593.99341
   tps: 554089.36589
   dtps: 35720.72303
   hps: 37634.15409
@@ -1401,10 +1401,10 @@ dps_results: {
 dps_results: {
  key: "TestBlood-AllItems-InscribedBagofHydra-Spawn-96828"
  value: {
-  dps: 98148.20414
-  tps: 550774.29673
-  dtps: 35363.51565
-  hps: 37415.02354
+  dps: 98285.00227
+  tps: 552234.44457
+  dtps: 35344.72304
+  hps: 37408.62494
  }
 }
 dps_results: {
@@ -2121,17 +2121,17 @@ dps_results: {
 dps_results: {
  key: "TestBlood-AllItems-Primordius'TalismanofRage-96873"
  value: {
-  dps: 102605.83864
-  tps: 577868.12579
-  dtps: 34706.19315
-  hps: 37154.26787
+  dps: 103377.46226
+  tps: 582692.19354
+  dtps: 34702.1987
+  hps: 37401.5251
  }
 }
 dps_results: {
  key: "TestBlood-AllItems-PurifiedBindingsofImmerseus-105422"
  value: {
-  dps: 99273.09509
-  tps: 562091.22089
+  dps: 99274.77072
+  tps: 562096.52449
   dtps: 36033.22782
   hps: 38383.02964
  }
@@ -2220,10 +2220,10 @@ dps_results: {
 dps_results: {
  key: "TestBlood-AllItems-Renataki'sSoulCharm-96741"
  value: {
-  dps: 99391.76238
-  tps: 558810.63868
-  dtps: 35819.23246
-  hps: 38149.35044
+  dps: 99204.36804
+  tps: 558757.06061
+  dtps: 35749.50264
+  hps: 38203.4153
  }
 }
 dps_results: {
@@ -2481,10 +2481,10 @@ dps_results: {
 dps_results: {
  key: "TestBlood-AllItems-SparkofZandalar-96770"
  value: {
-  dps: 104555.38008
-  tps: 588208.06782
-  dtps: 34821.51094
-  hps: 38350.39861
+  dps: 103395.67545
+  tps: 583445.94377
+  dtps: 34884.51291
+  hps: 38642.27607
  }
 }
 dps_results: {
@@ -2697,10 +2697,10 @@ dps_results: {
 dps_results: {
  key: "TestBlood-AllItems-TalismanofBloodlust-96864"
  value: {
-  dps: 101102.92135
-  tps: 569711.51495
-  dtps: 35838.20197
-  hps: 38760.32302
+  dps: 101550.32296
+  tps: 577042.33526
+  dtps: 35840.47438
+  hps: 38964.11515
  }
 }
 dps_results: {

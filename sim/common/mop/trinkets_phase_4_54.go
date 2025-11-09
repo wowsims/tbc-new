@@ -32,7 +32,7 @@ func init() {
 				if exists {
 					cdr := 1.0 / (1.0 + core.GetItemEffectScaling(itemID, 0.00989999995, state)/100)
 					cdrAura = core.MakePermanent(character.RegisterAura(core.Aura{
-						Label:    fmt.Sprintf("Readiness %s", versionLabel),
+						Label:    fmt.Sprintf("Readiness (%s)", versionLabel),
 						ActionID: core.ActionID{SpellID: auraID},
 					}).AttachSpellMod(core.SpellModConfig{
 						Kind:       core.SpellMod_Cooldown_Multiplier,
@@ -45,14 +45,14 @@ func init() {
 				stats[config.buffedStat] = core.GetItemEffectScaling(itemID, 0.96799999475, state)
 
 				aura := character.NewTemporaryStatsAura(
-					fmt.Sprintf("%s %s", config.buffAuraLabel, versionLabel),
+					fmt.Sprintf("%s (%s)", config.buffAuraLabel, versionLabel),
 					core.ActionID{SpellID: config.buffAuraID},
 					stats,
 					config.buffDuration,
 				)
 
 				triggerAura := character.MakeProcTriggerAura(core.ProcTrigger{
-					Name:       config.baseTrinketLabel,
+					Name:       fmt.Sprintf("%s (%s) - Trigger", config.baseTrinketLabel, versionLabel),
 					ProcChance: 0.15,
 					ICD:        config.icd,
 					ProcMask:   core.ProcMaskDirect | core.ProcMaskProc,
@@ -189,7 +189,7 @@ func init() {
 			spiritValue := 1 + core.GetItemEffectScaling(itemID, 0.00176999997, state)/100
 
 			statAura := core.MakePermanent(character.RegisterAura(core.Aura{
-				Label:      fmt.Sprintf("Amplification %s", versionLabel),
+				Label:      fmt.Sprintf("Amplification (%s)", versionLabel),
 				ActionID:   core.ActionID{SpellID: 146051},
 				BuildPhase: core.CharacterBuildPhaseGear,
 			})).
@@ -199,14 +199,14 @@ func init() {
 				AttachMultiplicativePseudoStatBuff(&character.PseudoStats.CritDamageMultiplier, critDamageValue)
 
 			aura := character.NewTemporaryStatsAura(
-				fmt.Sprintf("Expanded Mind %s", versionLabel),
+				fmt.Sprintf("Expanded Mind (%s)", versionLabel),
 				core.ActionID{SpellID: 146046},
 				stats.Stats{stats.Intellect: statValue},
 				time.Second*20,
 			)
 
 			triggerAura := character.MakeProcTriggerAura(core.ProcTrigger{
-				Name:       label,
+				Name:       fmt.Sprintf("%s (%s)", label, versionLabel),
 				ICD:        time.Second * 115,
 				ProcChance: 0.15,
 				Outcome:    core.OutcomeLanded,

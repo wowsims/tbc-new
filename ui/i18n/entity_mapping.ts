@@ -421,3 +421,9 @@ export const getSlotNameI18nKey = (slot: ItemSlot): string => slotNamesI18nKeys[
 
 export const getPresetConfigurationCategoryI18nKey = (category: PresetConfigurationCategory): string =>
 	presetConfigurationCategoryI18nKeys[category] || category.toLowerCase();
+
+export const classNameToClassKey = (className: string): string => {
+	const normalizedClassName = className.toLowerCase().replace(/_/g, '');
+	const classKey = normalizedClassName === 'deathknight' ? 'death_knight' : normalizedClassName;
+	return classKey;
+};

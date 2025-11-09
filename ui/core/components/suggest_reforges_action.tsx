@@ -7,8 +7,8 @@ import i18n from '../../i18n/config.js';
 import * as Mechanics from '../constants/mechanics.js';
 import { IndividualSimUI } from '../individual_sim_ui';
 import { Player } from '../player';
-import { Class, GemColor, ItemSlot, Profession, PseudoStat, Race, ReforgeStat, Spec, Stat } from '../proto/common';
-import { UIGem as Gem, IndividualSimSettings, StatCapType } from '../proto/ui';
+import { Class, GemColor, ItemSlot, Profession, PseudoStat, Race, ReforgeStat, Spec, Stat, UnitStats } from '../proto/common';
+import { UIGem as Gem, IndividualSimSettings, ReforgeSettings, StatCapType } from '../proto/ui';
 import { isShaTouchedWeapon, isThroneOfThunderWeapon, ReforgeData } from '../proto_utils/equipped_item';
 import { Gear } from '../proto_utils/gear';
 import { gemMatchesSocket, gemMatchesStats } from '../proto_utils/gems';
@@ -192,7 +192,7 @@ export class RelativeStatCap {
 	}
 
 	updateWeights(statWeights: Stats) {
-		const smallestConstrainedEP = Math.min(statWeights.getUnitStat(this.constrainedStats[0]), statWeights.getUnitStat(this.constrainedStats[1]))
+		const smallestConstrainedEP = Math.min(statWeights.getUnitStat(this.constrainedStats[0]), statWeights.getUnitStat(this.constrainedStats[1]));
 		return statWeights.withUnitStat(this.forcedHighestStat, Math.min(statWeights.getUnitStat(this.forcedHighestStat), smallestConstrainedEP - 0.01));
 	}
 }
@@ -207,30 +207,44 @@ export class ReforgeOptimizer {
 	protected readonly sim: Sim;
 	protected readonly defaults: IndividualSimUI<any>['individualConfig']['defaults'];
 	protected getEPDefaults: ReforgeOptimizerOptions['getEPDefaults'];
-	protected _statCaps: Stats;
+	protected _statCaps: Stats = new Stats();
+	protected breakpointLimits: Stats = new Stats();
 	protected updateGearStatsModifier: ReforgeOptimizerOptions['updateGearStatsModifier'];
 	protected _softCapsConfig: StatCap[];
+	private useCustomEPValues = false;
+	private useSoftCapBreakpoints = true;
+	protected softCapBreakpoints: StatCap[] = [];
 	protected updateSoftCaps: ReforgeOptimizerOptions['updateSoftCaps'];
 	protected enableBreakpointLimits: ReforgeOptimizerOptions['enableBreakpointLimits'];
 	protected statTooltips: StatTooltipContent = {};
 	protected additionalSoftCapTooltipInformation: StatTooltipContent = {};
 	protected statSelectionPresets: ReforgeOptimizerOptions['statSelectionPresets'];
-	readonly includeGemsChangeEmitter = new TypedEvent<void>();
 	protected includeGems = false;
-	readonly includeEOTBPGemSocketChangeEmitter = new TypedEvent<void>();
 	protected includeEOTBPGemSocket = false;
-	readonly freezeItemSlotsChangeEmitter = new TypedEvent<void>();
 	protected freezeItemSlots = false;
-	protected frozenItemSlots = new Map<ItemSlot, boolean>();
-	readonly includeTimeoutChangeEmitter = new TypedEvent<void>();
+	protected frozenItemSlots = new Set<ItemSlot>();
 	protected includeTimeout = true;
-	readonly undershootCapsChangeEmitter = new TypedEvent<void>();
 	protected undershootCaps = new Stats();
 	protected previousGear: Gear | null = null;
 	protected previousReforges = new Map<ItemSlot, ReforgeData>();
 	protected currentReforges = new Map<ItemSlot, ReforgeData>();
-	defaultRelativeStatCap: Stat | null = null;
+	relativeStatCapStat: number = -1;
 	relativeStatCap: RelativeStatCap | null = null;
+
+	readonly includeGemsChangeEmitter = new TypedEvent<void>('IncludeGems');
+	readonly includeEOTBPGemSocketChangeEmitter = new TypedEvent<void>('IncludeEOTBPGemSocket');
+	readonly includeTimeoutChangeEmitter = new TypedEvent<void>('IncludeTimeout');
+	readonly statCapsChangeEmitter = new TypedEvent<void>('StatCaps');
+	readonly useCustomEPValuesChangeEmitter = new TypedEvent<void>('UseCustomEPValues');
+	readonly useSoftCapBreakpointsChangeEmitter = new TypedEvent<void>('UseSoftCapBreakpoints');
+	readonly softCapBreakpointsChangeEmitter = new TypedEvent<void>('SoftCapBreakpoints');
+	readonly breakpointLimitsChangeEmitter = new TypedEvent<void>('BreakpointLimits');
+	readonly freezeItemSlotsChangeEmitter = new TypedEvent<void>('FreezeItemSlots');
+	readonly undershootCapsChangeEmitter = new TypedEvent<void>('UndershootCaps');
+	readonly relativeStatCapStatChangeEmitter = new TypedEvent<void>('RelativeStatCapStat');
+
+	// Emits when any of the above emitters emit.
+	readonly changeEmitter: TypedEvent<void>;
 
 	constructor(simUI: IndividualSimUI<any>, options?: ReforgeOptimizerOptions) {
 		this.simUI = simUI;
@@ -248,9 +262,9 @@ export class ReforgeOptimizer {
 		this.statTooltips = { ...STAT_TOOLTIPS, ...options?.statTooltips };
 		this.additionalSoftCapTooltipInformation = { ...options?.additionalSoftCapTooltipInformation };
 		this.statSelectionPresets = options?.statSelectionPresets;
-		this._statCaps = this.statCaps;
+		this._statCaps = this.defaults.statCaps || new Stats();
 		this.enableBreakpointLimits = !!options?.enableBreakpointLimits;
-		this.defaultRelativeStatCap = options?.defaultRelativeStatCap ?? null;
+		this.relativeStatCapStat = options?.defaultRelativeStatCap ?? -1;
 
 		const startReforgeOptimizationEntry: ActionGroupItem = {
 			label: i18n.t('sidebar.buttons.suggest_reforges.title'),
@@ -321,7 +335,7 @@ export class ReforgeOptimizer {
 
 		this.bindToggleExperimental(group);
 
-		if (!!this.softCapsConfig?.length)
+		if (this.softCapsConfig?.length)
 			tippy(startReforgeOptimizationButton, {
 				theme: 'suggest-reforges-softcaps',
 				placement: 'bottom',
@@ -336,6 +350,29 @@ export class ReforgeOptimizer {
 		});
 
 		this.buildContextMenu(contextMenuButton);
+
+		this.changeEmitter = TypedEvent.onAny(
+			[
+				this.includeGemsChangeEmitter,
+				this.includeEOTBPGemSocketChangeEmitter,
+				this.includeTimeoutChangeEmitter,
+				this.statCapsChangeEmitter,
+				this.useCustomEPValuesChangeEmitter,
+				this.useSoftCapBreakpointsChangeEmitter,
+				this.softCapBreakpointsChangeEmitter,
+				this.breakpointLimitsChangeEmitter,
+				this.freezeItemSlotsChangeEmitter,
+				this.undershootCapsChangeEmitter,
+				this.relativeStatCapStatChangeEmitter,
+			],
+			'ReforgeSettingsChange',
+		);
+
+		TypedEvent.onAny([this.useCustomEPValuesChangeEmitter, this.player.epWeightsChangeEmitter, this.statCapsChangeEmitter]).on(eventID => {
+			if (this.useCustomEPValues && (this.player.hasCustomEPWeights() || !this._statCaps.equals(this.defaults.statCaps || new Stats()))) {
+				this.setUseSoftCapBreakpoints(eventID, false);
+			}
+		});
 	}
 
 	private bindToggleExperimental(element: Element) {
@@ -351,10 +388,10 @@ export class ReforgeOptimizer {
 	}
 
 	get softCapsConfigWithLimits() {
-		if (!this.enableBreakpointLimits) return this.softCapsConfig;
+		if (!this.enableBreakpointLimits || !this.useSoftCapBreakpoints) return this.softCapsConfig;
 
 		const softCaps = StatCap.cloneSoftCaps(this.softCapsConfig);
-		for (const [unitStat, limit] of this.player.getBreakpointLimits().asUnitStatArray()) {
+		for (const [unitStat, limit] of this.breakpointLimits.asUnitStatArray()) {
 			if (!limit) continue;
 			const config = softCaps.find(config => config.unitStat.equals(unitStat));
 			const breakpointLimitExists = config?.breakpoints.some(breakpoint => breakpoint == limit);
@@ -368,29 +405,13 @@ export class ReforgeOptimizer {
 		return softCaps;
 	}
 
-	get statCaps() {
-		return this.sim.getUseCustomEPValues() ? this.player.getStatCaps() : this.defaults.statCaps || new Stats();
-	}
-	setStatCap(unitStat: UnitStat, value: number) {
-		this._statCaps = this._statCaps.withUnitStat(unitStat, value);
-		if (this.sim.getUseCustomEPValues()) {
-			this.player.setStatCaps(TypedEvent.nextEventID(), this._statCaps);
-		}
-		return this.statCaps;
-	}
-	setDefaultStatCaps() {
-		this._statCaps = this.defaults.statCaps || new Stats();
-		this.player.setStatCaps(TypedEvent.nextEventID(), this._statCaps);
-		return this.statCaps;
-	}
-
 	get preCapEPs(): Stats {
 		let weights = this.player.getEpWeights();
 
-		if (!this.player.sim.getUseCustomEPValues()) {
+		if (!this.useCustomEPValues) {
 			if (this.getEPDefaults) {
 				weights = this.getEPDefaults?.(this.player);
-			} else if (!this.player.getSpecConfig().presets.epWeights.some(epw => epw.epWeights.equals(weights))) {
+			} else if (this.player.hasCustomEPWeights()) {
 				weights = this.defaults.epWeights;
 			}
 		}
@@ -540,6 +561,49 @@ export class ReforgeOptimizer {
 		);
 	}
 
+	setStatCaps(eventID: EventID, newStatCaps: Stats) {
+		this._statCaps = newStatCaps;
+		this.statCapsChangeEmitter.emit(eventID);
+	}
+
+	get statCaps() {
+		return this.useCustomEPValues ? this._statCaps : this.defaults.statCaps || new Stats();
+	}
+
+	setUseCustomEPValues(eventID: EventID, newUseCustomEPValues: boolean) {
+		if (newUseCustomEPValues !== this.useCustomEPValues) {
+			this.useCustomEPValues = newUseCustomEPValues;
+			this.useCustomEPValuesChangeEmitter.emit(eventID);
+		}
+	}
+
+	setUseSoftCapBreakpoints(eventID: EventID, newUseSoftCapBreakpoints: boolean) {
+		if (newUseSoftCapBreakpoints !== this.useSoftCapBreakpoints) {
+			this.useSoftCapBreakpoints = newUseSoftCapBreakpoints;
+			this.useSoftCapBreakpointsChangeEmitter.emit(eventID);
+		}
+	}
+
+	setBreakpointLimits(eventID: EventID, newLimits: Stats) {
+		this.breakpointLimits = newLimits;
+		this.breakpointLimitsChangeEmitter.emit(eventID);
+	}
+
+	setSoftCapBreakpoints(eventID: EventID, newSoftCapBreakpoints: StatCap[]) {
+		this.softCapBreakpoints = newSoftCapBreakpoints;
+		this.softCapBreakpointsChangeEmitter.emit(eventID);
+	}
+	setRelativeStatCap(eventID: EventID, newValue: number) {
+		this.relativeStatCapStat = newValue;
+		if (this.relativeStatCapStat === -1) {
+			this.relativeStatCap = null;
+		} else {
+			this.relativeStatCap = new RelativeStatCap(this.relativeStatCapStat, this.player, this.playerClass);
+		}
+
+		this.relativeStatCapStatChangeEmitter.emit(eventID);
+	}
+
 	setIncludeGems(eventID: EventID, newValue: boolean) {
 		if (this.includeGems !== newValue) {
 			this.includeGems = newValue;
@@ -567,6 +631,24 @@ export class ReforgeOptimizer {
 		}
 	}
 
+	setFrozenItemSlot(eventID: EventID, slot: ItemSlot, frozen: boolean) {
+		if (this.getFrozenItemSlot(slot) !== frozen) {
+			this.frozenItemSlots[frozen ? 'add' : 'delete'](slot);
+			this.freezeItemSlotsChangeEmitter.emit(eventID);
+		}
+	}
+
+	// Sets all frozen item slots at once
+	setFrozenItemSlots(eventID: EventID, slots: ItemSlot[]) {
+		this.frozenItemSlots.clear();
+		slots.forEach(slot => this.frozenItemSlots.add(slot));
+		this.freezeItemSlotsChangeEmitter.emit(eventID);
+	}
+
+	getFrozenItemSlot(slot: ItemSlot): boolean {
+		return this.frozenItemSlots.has(slot);
+	}
+
 	setIncludeTimeout(eventID: EventID, newValue: boolean) {
 		if (this.includeTimeout !== newValue) {
 			this.includeTimeout = newValue;
@@ -588,8 +670,8 @@ export class ReforgeOptimizer {
 					id: 'reforge-optimizer-enable-custom-ep-weights',
 					label: i18n.t('sidebar.buttons.suggest_reforges.use_custom'),
 					inline: true,
-					changedEvent: () => this.sim.useCustomEPValuesChangeEmitter,
-					getValue: () => this.sim.getUseCustomEPValues(),
+					changedEvent: () => this.useCustomEPValuesChangeEmitter,
+					getValue: () => this.useCustomEPValues,
 					setValue: (eventID, _player, newValue) => {
 						trackEvent({
 							action: 'settings',
@@ -597,7 +679,7 @@ export class ReforgeOptimizer {
 							label: 'use_custom_ep',
 							value: newValue,
 						});
-						this.sim.setUseCustomEPValues(eventID, newValue);
+						this.setUseCustomEPValues(eventID, newValue);
 					},
 				});
 				let useSoftCapBreakpointsInput: BooleanPicker<Player<any>> | null = null;
@@ -607,8 +689,8 @@ export class ReforgeOptimizer {
 						id: 'reforge-optimizer-enable-soft-cap-breakpoints',
 						label: i18n.t('sidebar.buttons.suggest_reforges.use_soft_cap_breakpoints'),
 						inline: true,
-						changedEvent: () => this.sim.useSoftCapBreakpointsChangeEmitter,
-						getValue: () => this.sim.getUseSoftCapBreakpoints(),
+						changedEvent: () => this.useSoftCapBreakpointsChangeEmitter,
+						getValue: () => this.useSoftCapBreakpoints,
 						setValue: (eventID, _player, newValue) => {
 							trackEvent({
 								action: 'settings',
@@ -616,7 +698,7 @@ export class ReforgeOptimizer {
 								label: 'softcap_breakpoints',
 								value: newValue,
 							});
-							this.sim.setUseSoftCapBreakpoints(eventID, newValue);
+							this.setUseSoftCapBreakpoints(eventID, newValue);
 						},
 					});
 				}
@@ -625,7 +707,7 @@ export class ReforgeOptimizer {
 					extraCssClasses: ['mb-2'],
 					id: 'reforge-optimizer-force-stat-proc',
 					label: i18n.t('sidebar.buttons.suggest_reforges.force_stat_proc'),
-					defaultValue: this.relativeStatCap?.forcedHighestStat.getStat() ?? this.defaultRelativeStatCap ?? -1,
+					defaultValue: this.relativeStatCapStat,
 					values: [
 						{ name: i18n.t('sidebar.buttons.suggest_reforges.any'), value: -1 },
 						...[...RelativeStatCap.relevantStats].map(stat => {
@@ -635,28 +717,20 @@ export class ReforgeOptimizer {
 							};
 						}),
 					],
-					changedEvent: () => this.player.gearChangeEmitter,
+					changedEvent: () => TypedEvent.onAny([this.relativeStatCapStatChangeEmitter, this.player.gearChangeEmitter]),
 					getValue: () => {
-						if (!this.relativeStatCap) {
-							return -1;
-						} else {
-							return this.relativeStatCap!.forcedHighestStat.getStat();
-						}
+						return this.relativeStatCapStat;
 					},
 					setValue: (_eventID, _player, newValue) => {
-						if (newValue == -1) {
-							this.relativeStatCap = null;
-						} else {
-							this.relativeStatCap = new RelativeStatCap(newValue, this.player, this.playerClass);
-						}
+						this.setRelativeStatCap(TypedEvent.nextEventID(), newValue);
 					},
 					showWhen: () => {
 						const canEnable = RelativeStatCap.hasRoRo(this.player);
 
-						if (!canEnable) {
+						if (!canEnable || this.relativeStatCapStat === -1) {
 							this.relativeStatCap = null;
-						} else if (!this.relativeStatCap && this.defaultRelativeStatCap) {
-							this.relativeStatCap = new RelativeStatCap(this.defaultRelativeStatCap, this.player, this.playerClass);
+						} else if (!this.relativeStatCap && this.relativeStatCapStat) {
+							this.relativeStatCap = new RelativeStatCap(this.relativeStatCapStat, this.player, this.playerClass);
 						}
 
 						return canEnable;
@@ -736,7 +810,7 @@ export class ReforgeOptimizer {
 				instance.setContent(
 					<>
 						{useCustomEPValuesInput.rootElem}
-						<div ref={descriptionRef} className={clsx('mb-0', this.sim.getUseCustomEPValues() && 'hide')}>
+						<div ref={descriptionRef} className={clsx('mb-0', this.useCustomEPValues && 'hide')}>
 							<p>{i18n.t('sidebar.buttons.suggest_reforges.enable_modification')}</p>
 							<p>{i18n.t('sidebar.buttons.suggest_reforges.modify_in_editor')}</p>
 							<p>{i18n.t('sidebar.buttons.suggest_reforges.hard_cap_info')}</p>
@@ -785,9 +859,9 @@ export class ReforgeOptimizer {
 									label: translateSlotName(slot),
 									inline: true,
 									changedEvent: () => this.freezeItemSlotsChangeEmitter,
-									getValue: () => this.frozenItemSlots.get(slot) || false,
-									setValue: (_eventID, _player, newValue) => {
-										this.frozenItemSlots.set(slot, newValue);
+									getValue: () => this.getFrozenItemSlot(slot) || false,
+									setValue: (eventID, _player, newValue) => {
+										this.setFrozenItemSlot(eventID, slot, newValue);
 									},
 								});
 								const column = <td>{picker.rootElem}</td>;
@@ -809,7 +883,7 @@ export class ReforgeOptimizer {
 
 	buildCapsList({ useCustomEPValuesInput, description }: { useCustomEPValuesInput: BooleanPicker<Player<any>>; description: HTMLElement }) {
 		const sharedInputConfig: Pick<NumberPickerConfig<Player<any>>, 'changedEvent'> = {
-			changedEvent: _ => TypedEvent.onAny([this.sim.useSoftCapBreakpointsChangeEmitter, this.player.statCapsChangeEmitter]),
+			changedEvent: _ => TypedEvent.onAny([this.useSoftCapBreakpointsChangeEmitter, this.statCapsChangeEmitter]),
 		};
 
 		const tableRef = ref<HTMLTableElement>();
@@ -817,7 +891,7 @@ export class ReforgeOptimizer {
 		const defaultStatCapsButtonRef = ref<HTMLButtonElement>();
 
 		const content = (
-			<table ref={tableRef} className={clsx('reforge-optimizer-stat-cap-table mb-2', !this.sim.getUseCustomEPValues() && 'hide')}>
+			<table ref={tableRef} className={clsx('reforge-optimizer-stat-cap-table mb-2', !this.useCustomEPValues && 'hide')}>
 				<thead>
 					<tr>
 						<th colSpan={4} className="pb-3">
@@ -826,7 +900,10 @@ export class ReforgeOptimizer {
 								<button ref={statCapTooltipRef} className="d-inline">
 									<i className="fa-regular fa-circle-question" />
 								</button>
-								<button ref={defaultStatCapsButtonRef} className="d-inline ms-auto" onclick={() => this.setDefaultStatCaps()}>
+								<button
+									ref={defaultStatCapsButtonRef}
+									className="d-inline ms-auto"
+									onclick={() => this.setStatCaps(TypedEvent.nextEventID(), this.defaults.statCaps || new Stats())}>
 									<i className="fas fa-arrow-rotate-left" />
 								</button>
 							</div>
@@ -856,7 +933,10 @@ export class ReforgeOptimizer {
 								return this.toVisualUnitStatPercentage(this.statCaps.getUnitStat(unitStat), unitStat);
 							},
 							setValue: (_eventID, _player, newValue) => {
-								this.setStatCap(unitStat, this.toDefaultUnitStatValue(newValue, unitStat));
+								this.setStatCaps(
+									TypedEvent.nextEventID(),
+									this.statCaps.withUnitStat(unitStat, this.toDefaultUnitStatValue(newValue, unitStat)),
+								);
 							},
 						};
 
@@ -964,10 +1044,9 @@ export class ReforgeOptimizer {
 			useCustomEPValuesInput.addOnDisposeCallback(() => tooltip.destroy());
 		}
 
-		const event = this.sim.useCustomEPValuesChangeEmitter.on(() => {
-			const isUsingCustomEPValues = this.sim.getUseCustomEPValues();
-			tableRef.value?.classList[isUsingCustomEPValues ? 'remove' : 'add']('hide');
-			description?.classList[!isUsingCustomEPValues ? 'remove' : 'add']('hide');
+		const event = this.useCustomEPValuesChangeEmitter.on(() => {
+			tableRef.value?.classList[this.useCustomEPValues ? 'remove' : 'add']('hide');
+			description?.classList[!this.useCustomEPValues ? 'remove' : 'add']('hide');
 		});
 
 		useCustomEPValuesInput.addOnDisposeCallback(() => {
@@ -981,10 +1060,10 @@ export class ReforgeOptimizer {
 
 	buildEPWeightsToggle({ useCustomEPValuesInput }: { useCustomEPValuesInput: BooleanPicker<Player<any>> }) {
 		const extraCssClasses = ['mt-3'];
-		if (!this.sim.getUseCustomEPValues()) extraCssClasses.push('hide');
+		if (!this.useCustomEPValues) extraCssClasses.push('hide');
 		const savedEpWeights = renderSavedEPWeights(null, this.simUI, { extraCssClasses, loadOnly: true });
-		const event = this.sim.useCustomEPValuesChangeEmitter.on(() => {
-			const isUsingCustomEPValues = this.sim.getUseCustomEPValues();
+		const event = this.useCustomEPValuesChangeEmitter.on(() => {
+			const isUsingCustomEPValues = this.useCustomEPValues;
 			savedEpWeights.rootElem?.classList[isUsingCustomEPValues ? 'remove' : 'add']('hide');
 		});
 
@@ -1018,7 +1097,7 @@ export class ReforgeOptimizer {
 		const breakpointsLimitTooltipRef = ref<HTMLButtonElement>();
 
 		const content = (
-			<table ref={tableRef} className={clsx('reforge-optimizer-stat-cap-table mb-2', !this.sim.getUseSoftCapBreakpoints() && 'hide')}>
+			<table ref={tableRef} className={clsx('reforge-optimizer-stat-cap-table mb-2', !this.useSoftCapBreakpoints && 'hide')}>
 				<thead>
 					<tr>
 						<th colSpan={3} className="pb-3">
@@ -1056,9 +1135,9 @@ export class ReforgeOptimizer {
 												value: breakpoint,
 											})),
 										].sort((a, b) => a.value - b.value),
-										changedEvent: _ => TypedEvent.onAny([this.sim.useSoftCapBreakpointsChangeEmitter]),
+										changedEvent: _ => TypedEvent.onAny([this.useSoftCapBreakpointsChangeEmitter]),
 										getValue: () => {
-											const breakpointLimits = this.player.getBreakpointLimits();
+											const breakpointLimits = this.breakpointLimits;
 											let limit = breakpointLimits.getUnitStat(unitStat);
 											if (!breakpoints.some(breakpoint => breakpoint == limit)) {
 												limit = 0;
@@ -1067,7 +1146,7 @@ export class ReforgeOptimizer {
 											return limit;
 										},
 										setValue: (eventID, _player, newValue) => {
-											this.player.setBreakpointLimits(eventID, this.player.getBreakpointLimits().withUnitStat(unitStat, newValue));
+											this.setBreakpointLimits(eventID, this.breakpointLimits.withUnitStat(unitStat, newValue));
 										},
 									})
 								: null;
@@ -1098,8 +1177,8 @@ export class ReforgeOptimizer {
 			useSoftCapBreakpointsInput.addOnDisposeCallback(() => tooltip.destroy());
 		}
 
-		const event = this.sim.useSoftCapBreakpointsChangeEmitter.on(() => {
-			const isUsingBreakpoints = this.sim.getUseSoftCapBreakpoints();
+		const event = this.useSoftCapBreakpointsChangeEmitter.on(() => {
+			const isUsingBreakpoints = this.useSoftCapBreakpoints;
 			tableRef.value?.classList[isUsingBreakpoints ? 'remove' : 'add']('hide');
 		});
 
@@ -1112,7 +1191,7 @@ export class ReforgeOptimizer {
 	}
 
 	get isAllowedToOverrideStatCaps() {
-		return !(this.sim.getUseSoftCapBreakpoints() && this.softCapsConfig);
+		return !(this.useSoftCapBreakpoints && this.softCapsConfig);
 	}
 
 	get processedStatCaps() {
@@ -1132,7 +1211,7 @@ export class ReforgeOptimizer {
 		if (isDevMode()) {
 			console.log('Clearing existing Reforges...');
 			console.log('The following slots will not be cleared:');
-			console.log(Array.from(this.frozenItemSlots.keys()).filter(key => this.frozenItemSlots.get(key)));
+			console.log(Array.from(this.frozenItemSlots.keys()).filter(key => this.getFrozenItemSlot(key)));
 		}
 		this.previousGear = this.player.getGear();
 		this.previousReforges = this.previousGear.getAllReforges();
@@ -1234,7 +1313,7 @@ export class ReforgeOptimizer {
 		for (const slot of gear.getItemSlots()) {
 			const item = gear.getEquippedItem(slot);
 
-			if (!item || this.frozenItemSlots.get(slot)) {
+			if (!item || this.getFrozenItemSlot(slot)) {
 				continue;
 			}
 
@@ -1884,7 +1963,7 @@ export class ReforgeOptimizer {
 				}
 
 				for (const [matchedSlot, matchedSocketIdx] of newGear.findGem(originalGems[socketIdx]!, isBlacksmithing)) {
-					if (this.frozenItemSlots.get(matchedSlot)) {
+					if (this.frozenItemSlots.has(matchedSlot)) {
 						continue;
 					}
 
@@ -2030,6 +2109,51 @@ export class ReforgeOptimizer {
 				</>
 			),
 			delay: 10000,
+		});
+	}
+
+	fromProto(eventID: EventID, proto: ReforgeSettings) {
+		TypedEvent.freezeAllAndDo(() => {
+			this.setUseCustomEPValues(eventID, proto.useCustomEpValues);
+			this.setStatCaps(eventID, Stats.fromProto(proto.statCaps));
+			this.setUseSoftCapBreakpoints(eventID, proto.useSoftCapBreakpoints);
+			this.setIncludeTimeout(eventID, proto.includeTimeout);
+			this.setIncludeGems(eventID, proto.includeGems);
+			this.setIncludeEOTBPGemSocket(eventID, proto.includeEotbGemSocket);
+			this.setFreezeItemSlots(eventID, proto.freezeItemSlots);
+			this.setFrozenItemSlots(eventID, proto.frozenItemSlots);
+			this.setBreakpointLimits(eventID, Stats.fromProto(proto.breakpointLimits));
+			if (proto.relativeStatCapStat) {
+				this.setRelativeStatCap(eventID, UnitStat.fromProto(proto.relativeStatCapStat).getStat());
+			}
+		});
+	}
+	toProto(): ReforgeSettings {
+		return ReforgeSettings.create({
+			useCustomEpValues: this.useCustomEPValues,
+			useSoftCapBreakpoints: this.useSoftCapBreakpoints,
+			includeTimeout: this.includeTimeout,
+			includeGems: this.includeGems,
+			includeEotbGemSocket: this.includeEOTBPGemSocket,
+			freezeItemSlots: this.freezeItemSlots,
+			frozenItemSlots: [...this.frozenItemSlots],
+			breakpointLimits: this.breakpointLimits.toProto(),
+			relativeStatCapStat: this.relativeStatCap?.forcedHighestStat.toProto(),
+			statCaps: this.statCaps.toProto(),
+		});
+	}
+	applyDefaults(eventID: EventID) {
+		TypedEvent.freezeAllAndDo(() => {
+			this.setUseCustomEPValues(eventID, false);
+			this.setUseSoftCapBreakpoints(eventID, !!this.simUI.individualConfig.defaults.softCapBreakpoints?.length);
+			this.setIncludeTimeout(eventID, true);
+			this.setIncludeGems(eventID, false);
+			this.setIncludeEOTBPGemSocket(eventID, false);
+			this.setFreezeItemSlots(eventID, false);
+			this.setStatCaps(eventID, this.simUI.individualConfig.defaults.statCaps || new Stats());
+			this.setBreakpointLimits(eventID, this.simUI.individualConfig.defaults.breakpointLimits || new Stats());
+			this.setSoftCapBreakpoints(eventID, this.simUI.individualConfig.defaults.softCapBreakpoints || []);
+			this.setRelativeStatCap(eventID, this.relativeStatCapStat);
 		});
 	}
 }

@@ -134,6 +134,10 @@ func main() {
 	if err != nil {
 		panic(fmt.Sprintf("Error loading DBC data %v", err))
 	}
+	upgradePath, err := database.LoadItemUpgradePath(helper)
+	if err != nil {
+		panic(fmt.Sprintf("Error loading DBC data %v", err))
+	}
 	craftingSources := database.LoadCraftedItems(helper)
 	repSources := database.LoadRepItems(helper)
 	//Todo: See if we cant get rid of these as well
@@ -155,7 +159,7 @@ func main() {
 	instance.LoadSpellScaling()
 	database.GenerateProtos(instance, db)
 
-	processItems(instance, iconsMap, names, dropSources, craftingSources, repSources, db)
+	processItems(instance, iconsMap, names, dropSources, craftingSources, repSources, upgradePath, db)
 
 	for _, gem := range instance.Gems {
 		parsed := gem.ToProto()
@@ -340,7 +344,14 @@ func main() {
 	db.WriteBinaryAndJson(fmt.Sprintf("%s/db.bin", dbDir), fmt.Sprintf("%s/db.json", dbDir))
 }
 
-func processItems(instance *dbc.DBC, iconsMap map[int]string, names map[int]string, dropSources map[int][]*proto.DropSource, craftingSources map[int][]*proto.CraftedSource, repSources map[int][]*proto.RepSource, db *database.WowDatabase) {
+func processItems(instance *dbc.DBC,
+	iconsMap map[int]string,
+	names map[int]string,
+	dropSources map[int][]*proto.DropSource,
+	craftingSources map[int][]*proto.CraftedSource,
+	repSources map[int][]*proto.RepSource,
+	upgradePath map[int][]int,
+	db *database.WowDatabase) {
 	sourceMap := make(map[string][]*proto.UIItemSource, len(instance.Items))
 	parsedItems := make([]*proto.UIItem, 0, len(instance.Items))
 
@@ -354,6 +365,7 @@ func processItems(instance *dbc.DBC, iconsMap map[int]string, names map[int]stri
 		if item.Flags2&0x10 != 0 && (item.StatAlloc[0] > 0 && item.StatAlloc[0] < 600) {
 			continue
 		}
+		item.UpgradePath = upgradePath[item.UpgradeID]
 		parsed := item.ToUIItem()
 		if parsed.Icon == "" {
 			parsed.Icon = strings.ToLower(database.GetIconName(iconsMap, item.FDID))

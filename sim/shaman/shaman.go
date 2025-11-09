@@ -240,6 +240,7 @@ func (shaman *Shaman) Initialize() {
 	shaman.registerShocks()
 	shaman.registerUnleashElements()
 	shaman.registerAscendanceSpell()
+	shaman.registerShamanisticRageSpell()
 
 	shaman.registerBloodlustCD()
 	shaman.registerStormlashCD()

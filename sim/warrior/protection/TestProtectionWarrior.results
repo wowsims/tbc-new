@@ -65,8 +65,8 @@ dps_results: {
 dps_results: {
  key: "TestProtectionWarrior-AllItems-AssuranceofConsequence-105472"
  value: {
-  dps: 117586.66969
-  tps: 736482.29886
+  dps: 117580.5194
+  tps: 736444.78647
   dtps: 13028.75044
  }
 }
@@ -513,9 +513,9 @@ dps_results: {
 dps_results: {
  key: "TestProtectionWarrior-AllItems-DelicateVialoftheSanguinaire-96895"
  value: {
-  dps: 120047.63367
-  tps: 753000.09666
-  dtps: 12711.53025
+  dps: 119928.54925
+  tps: 752176.07325
+  dtps: 12714.36635
  }
 }
 dps_results: {
@@ -777,17 +777,17 @@ dps_results: {
 dps_results: {
  key: "TestProtectionWarrior-AllItems-EvilEyeofGalakras-105491"
  value: {
-  dps: 124371.74306
-  tps: 766722.2523
-  dtps: 11979.54615
+  dps: 120499.92369
+  tps: 755150.38537
+  dtps: 11721.8032
  }
 }
 dps_results: {
  key: "TestProtectionWarrior-AllItems-FabledFeatherofJi-Kun-96842"
  value: {
-  dps: 122045.83799
-  tps: 762798.98028
-  dtps: 12358.19837
+  dps: 122017.0728
+  tps: 764114.90576
+  dtps: 12717.08118
  }
 }
 dps_results: {
@@ -913,9 +913,9 @@ dps_results: {
 dps_results: {
  key: "TestProtectionWarrior-AllItems-GazeoftheTwins-96915"
  value: {
-  dps: 124950.70357
-  tps: 783675.01759
-  dtps: 12426.99281
+  dps: 125333.9941
+  tps: 785211.05316
+  dtps: 12484.05914
  }
 }
 dps_results: {
@@ -1890,9 +1890,9 @@ dps_results: {
 dps_results: {
  key: "TestProtectionWarrior-AllItems-Primordius'TalismanofRage-96873"
  value: {
-  dps: 125927.21796
-  tps: 790047.06965
-  dtps: 12313.1701
+  dps: 125269.44651
+  tps: 785688.35453
+  dtps: 12417.33903
  }
 }
 dps_results: {
@@ -1970,9 +1970,9 @@ dps_results: {
 dps_results: {
  key: "TestProtectionWarrior-AllItems-Renataki'sSoulCharm-96741"
  value: {
-  dps: 117696.54311
-  tps: 737552.3558
-  dtps: 12994.38591
+  dps: 118239.17091
+  tps: 741276.08191
+  dtps: 13093.37589
  }
 }
 dps_results: {
@@ -2138,9 +2138,9 @@ dps_results: {
 dps_results: {
  key: "TestProtectionWarrior-AllItems-SparkofZandalar-96770"
  value: {
-  dps: 122150.58323
-  tps: 765019.03318
-  dtps: 12399.29453
+  dps: 121983.95119
+  tps: 764345.53147
+  dtps: 12557.31865
  }
 }
 dps_results: {
@@ -2330,9 +2330,9 @@ dps_results: {
 dps_results: {
  key: "TestProtectionWarrior-AllItems-TalismanofBloodlust-96864"
  value: {
-  dps: 118667.71926
-  tps: 744105.60128
-  dtps: 12944.96617
+  dps: 118961.42784
+  tps: 745666.32734
+  dtps: 12890.60942
  }
 }
 dps_results: {

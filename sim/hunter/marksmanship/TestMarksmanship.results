@@ -61,8 +61,8 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-AssuranceofConsequence-105472"
  value: {
-  dps: 171534.98311
-  tps: 138252.78949
+  dps: 171472.57545
+  tps: 138194.35017
  }
 }
 dps_results: {
@@ -796,8 +796,8 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-GazeoftheTwins-96915"
  value: {
-  dps: 163856.13333
-  tps: 134890.76415
+  dps: 163429.54945
+  tps: 134495.56252
  }
 }
 dps_results: {
@@ -1636,7 +1636,7 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-Primordius'TalismanofRage-96873"
  value: {
-  dps: 163582.76642
+  dps: 163582.15321
   tps: 134789.84301
  }
 }
@@ -1713,8 +1713,8 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-Renataki'sSoulCharm-96741"
  value: {
-  dps: 171987.52361
-  tps: 139922.7324
+  dps: 173314.01505
+  tps: 141008.66894
  }
 }
 dps_results: {
@@ -1748,8 +1748,8 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-RuneofRe-Origination-96918"
  value: {
-  dps: 173519.2391
-  tps: 142159.5778
+  dps: 172646.25301
+  tps: 141318.35227
  }
 }
 dps_results: {
@@ -1860,7 +1860,7 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-SparkofZandalar-96770"
  value: {
-  dps: 164038.39853
+  dps: 164040.85797
   tps: 135042.80645
  }
 }
@@ -2028,8 +2028,8 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-TalismanofBloodlust-96864"
  value: {
-  dps: 173658.49892
-  tps: 142098.91301
+  dps: 172018.63178
+  tps: 140769.12341
  }
 }
 dps_results: {

@@ -19,19 +19,24 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecEnhancementShaman, {
 	cssScheme: PlayerClasses.getCssClass(PlayerClasses.Shaman),
 	// List any known bugs / issues here and they'll be shown on the site.
 	knownIssues: [],
-	warnings: [(simUI) => {
-		return {
-			updateOn : TypedEvent.onAny([simUI.player.specOptionsChangeEmitter, simUI.player.talentsChangeEmitter]),
-			getContent: () => {
-				const autocast = simUI.player.getClassOptions().feleAutocast;
-				if(simUI.player.getTalents().primalElementalist && (autocast?.autocastEmpower || !(autocast?.autocastFireblast && autocast.autocastFirenova && autocast.autocastImmolate))){
-					return i18n.t('sidebar.warnings.shaman_fele_autocast');
-				} else {
-					return '';
-				}
-			}
-		}
-	}],
+	warnings: [
+		simUI => {
+			return {
+				updateOn: TypedEvent.onAny([simUI.player.specOptionsChangeEmitter, simUI.player.talentsChangeEmitter]),
+				getContent: () => {
+					const autocast = simUI.player.getClassOptions().feleAutocast;
+					if (
+						simUI.player.getTalents().primalElementalist &&
+						(autocast?.autocastEmpower || !(autocast?.autocastFireblast && autocast.autocastFirenova && autocast.autocastImmolate))
+					) {
+						return i18n.t('sidebar.warnings.shaman_fele_autocast');
+					} else {
+						return '';
+					}
+				},
+			};
+		},
+	],
 
 	overwriteDisplayStats: (player: Player<Spec.SpecEnhancementShaman>) => {
 		const playerStats = player.getCurrentStats();
@@ -129,7 +134,13 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecEnhancementShaman, {
 	},
 
 	// IconInputs to include in the 'Player' section on the settings tab.
-	playerIconInputs: [ShamanInputs.ShamanShieldInput(), ShamanInputs.ShamanImbueMH(), EnhancementInputs.ShamanImbueOH, ShamanInputs.ShamanImbueMHSwap(), EnhancementInputs.ShamanImbueOHSwap],
+	playerIconInputs: [
+		ShamanInputs.ShamanShieldInput(),
+		ShamanInputs.ShamanImbueMH(),
+		EnhancementInputs.ShamanImbueOH,
+		ShamanInputs.ShamanImbueMHSwap(),
+		EnhancementInputs.ShamanImbueOHSwap,
+	],
 	// Buff and Debuff inputs to include/exclude, overriding the EP-based defaults.
 	includeBuffDebuffInputs: [],
 	excludeBuffDebuffInputs: [BuffDebuffInputs.SpellPowerBuff],
@@ -187,8 +198,6 @@ export class EnhancementShamanSimUI extends IndividualSimUI<Spec.SpecEnhancement
 	constructor(parentElem: HTMLElement, player: Player<Spec.SpecEnhancementShaman>) {
 		super(parentElem, player, SPEC_CONFIG);
 
-		player.sim.waitForInit().then(() => {
-			this.reforger = new ReforgeOptimizer(this);
-		});
+		this.reforger = new ReforgeOptimizer(this);
 	}
 }

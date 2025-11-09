@@ -40,8 +40,8 @@ dps_results: {
 dps_results: {
  key: "TestArms-AllItems-AssuranceofConsequence-105472"
  value: {
-  dps: 150547.31297
-  tps: 98912.4195
+  dps: 150567.64177
+  tps: 98904.95145
  }
 }
 dps_results: {
@@ -187,15 +187,15 @@ dps_results: {
 dps_results: {
  key: "TestArms-AllItems-EvilEyeofGalakras-105491"
  value: {
-  dps: 157444.24319
-  tps: 105253.64179
+  dps: 158615.62732
+  tps: 104035.28344
  }
 }
 dps_results: {
  key: "TestArms-AllItems-FabledFeatherofJi-Kun-96842"
  value: {
-  dps: 160453.28382
-  tps: 104855.58335
+  dps: 159591.82794
+  tps: 104250.47695
  }
 }
 dps_results: {
@@ -222,8 +222,8 @@ dps_results: {
 dps_results: {
  key: "TestArms-AllItems-GazeoftheTwins-96915"
  value: {
-  dps: 161184.1088
-  tps: 105705.59919
+  dps: 160040.85471
+  tps: 105653.3025
  }
 }
 dps_results: {
@@ -313,8 +313,8 @@ dps_results: {
 dps_results: {
  key: "TestArms-AllItems-Primordius'TalismanofRage-96873"
  value: {
-  dps: 160924.578
-  tps: 105955.66221
+  dps: 161540.86252
+  tps: 106182.33267
  }
 }
 dps_results: {
@@ -341,8 +341,8 @@ dps_results: {
 dps_results: {
  key: "TestArms-AllItems-Renataki'sSoulCharm-96741"
  value: {
-  dps: 150540.00566
-  tps: 99072.5154
+  dps: 150745.408
+  tps: 99047.05521
  }
 }
 dps_results: {
@@ -390,8 +390,8 @@ dps_results: {
 dps_results: {
  key: "TestArms-AllItems-SparkofZandalar-96770"
  value: {
-  dps: 158846.67012
-  tps: 104814.0926
+  dps: 158570.64296
+  tps: 104587.14324
  }
 }
 dps_results: {
@@ -404,8 +404,8 @@ dps_results: {
 dps_results: {
  key: "TestArms-AllItems-TalismanofBloodlust-96864"
  value: {
-  dps: 152690.74843
-  tps: 100454.88816
+  dps: 152605.41994
+  tps: 100153.00238
  }
 }
 dps_results: {

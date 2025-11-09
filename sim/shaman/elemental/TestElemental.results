@@ -61,7 +61,7 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-AssuranceofConsequence-105472"
  value: {
-  dps: 141177.55386
+  dps: 141180.16593
   tps: 102913.23677
  }
 }
@@ -684,15 +684,15 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-EvilEyeofGalakras-105491"
  value: {
-  dps: 141167.87464
+  dps: 141166.30777
   tps: 102913.23677
  }
 }
 dps_results: {
  key: "TestElemental-AllItems-FabledFeatherofJi-Kun-96842"
  value: {
-  dps: 141166.20172
-  tps: 102913.23677
+  dps: 141146.71688
+  tps: 102890.86653
  }
 }
 dps_results: {
@@ -803,8 +803,8 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-GazeoftheTwins-96915"
  value: {
-  dps: 143976.61951
-  tps: 104973.5206
+  dps: 144094.04064
+  tps: 105091.36559
  }
 }
 dps_results: {
@@ -1643,15 +1643,15 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-Primordius'TalismanofRage-96873"
  value: {
-  dps: 144901.44458
+  dps: 144896.24814
   tps: 105842.19464
  }
 }
 dps_results: {
  key: "TestElemental-AllItems-PurifiedBindingsofImmerseus-105422"
  value: {
-  dps: 167609.84622
-  tps: 120435.52784
+  dps: 167288.70395
+  tps: 120345.38855
  }
 }
 dps_results: {
@@ -1685,8 +1685,8 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-RegaliaoftheWitchDoctor"
  value: {
-  dps: 142076.38857
-  tps: 103856.39022
+  dps: 143980.26287
+  tps: 105760.26452
  }
 }
 dps_results: {
@@ -1727,8 +1727,8 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-Renataki'sSoulCharm-96741"
  value: {
-  dps: 141161.69468
-  tps: 102913.23677
+  dps: 141115.96109
+  tps: 102890.86653
  }
 }
 dps_results: {
@@ -2042,8 +2042,8 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-TalismanofBloodlust-96864"
  value: {
-  dps: 144510.81579
-  tps: 105658.61237
+  dps: 144743.9068
+  tps: 105909.89618
  }
 }
 dps_results: {
@@ -2280,8 +2280,8 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-UnerringVisionofLeiShen-96930"
  value: {
-  dps: 156771.0883
-  tps: 113818.06603
+  dps: 156232.82899
+  tps: 113065.14133
  }
 }
 dps_results: {
@@ -2350,8 +2350,8 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-Wushoolay'sFinalChoice-96785"
  value: {
-  dps: 155850.70793
-  tps: 113186.25288
+  dps: 154692.3544
+  tps: 112275.09515
  }
 }
 dps_results: {

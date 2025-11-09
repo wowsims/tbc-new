@@ -69,8 +69,8 @@ dps_results: {
 dps_results: {
  key: "TestProtection-AllItems-AssuranceofConsequence-105472"
  value: {
-  dps: 114026.7436
-  tps: 746947.16071
+  dps: 114015.80572
+  tps: 746870.59557
   dtps: 13772.96108
   hps: 19260.51435
  }
@@ -564,10 +564,10 @@ dps_results: {
 dps_results: {
  key: "TestProtection-AllItems-DelicateVialoftheSanguinaire-96895"
  value: {
-  dps: 114088.31604
-  tps: 746921.34139
-  dtps: 13108.61532
-  hps: 19348.68578
+  dps: 114088.01465
+  tps: 746923.30263
+  dtps: 13050.02494
+  hps: 19347.78507
  }
 }
 dps_results: {
@@ -861,19 +861,19 @@ dps_results: {
 dps_results: {
  key: "TestProtection-AllItems-EvilEyeofGalakras-105491"
  value: {
-  dps: 117978.59495
-  tps: 772856.65275
-  dtps: 13319.7293
-  hps: 20081.63525
+  dps: 117909.20148
+  tps: 772418.7106
+  dtps: 13282.19674
+  hps: 20080.00285
  }
 }
 dps_results: {
  key: "TestProtection-AllItems-FabledFeatherofJi-Kun-96842"
  value: {
-  dps: 118915.99707
-  tps: 778970.92794
-  dtps: 13229.37336
-  hps: 20183.72422
+  dps: 118903.97011
+  tps: 779302.90362
+  dtps: 13108.38133
+  hps: 20226.39083
  }
 }
 dps_results: {
@@ -1014,8 +1014,8 @@ dps_results: {
 dps_results: {
  key: "TestProtection-AllItems-GazeoftheTwins-96915"
  value: {
-  dps: 119767.6762
-  tps: 784260.60537
+  dps: 119695.84978
+  tps: 783291.53442
   dtps: 13031.36307
   hps: 20021.66856
  }
@@ -2094,17 +2094,17 @@ dps_results: {
 dps_results: {
  key: "TestProtection-AllItems-Primordius'TalismanofRage-96873"
  value: {
-  dps: 121233.77877
-  tps: 793566.4247
-  dtps: 13073.7407
-  hps: 20062.1334
+  dps: 121019.07352
+  tps: 792630.31208
+  dtps: 13037.76569
+  hps: 20067.87325
  }
 }
 dps_results: {
  key: "TestProtection-AllItems-PurifiedBindingsofImmerseus-105422"
  value: {
-  dps: 117062.88994
-  tps: 765796.10694
+  dps: 117059.77482
+  tps: 765816.50051
   dtps: 13100.55127
   hps: 19508.73585
  }
@@ -2193,10 +2193,10 @@ dps_results: {
 dps_results: {
  key: "TestProtection-AllItems-Renataki'sSoulCharm-96741"
  value: {
-  dps: 116134.70028
-  tps: 760716.48559
-  dtps: 13473.34595
-  hps: 19830.2998
+  dps: 116166.67247
+  tps: 760931.32099
+  dtps: 13472.97411
+  hps: 19832.39274
  }
 }
 dps_results: {
@@ -2382,10 +2382,10 @@ dps_results: {
 dps_results: {
  key: "TestProtection-AllItems-SparkofZandalar-96770"
  value: {
-  dps: 118749.15687
-  tps: 779127.7548
-  dtps: 13100.11564
-  hps: 20799.65708
+  dps: 118742.77856
+  tps: 779613.36246
+  dtps: 13299.24228
+  hps: 20798.29878
  }
 }
 dps_results: {
@@ -2598,10 +2598,10 @@ dps_results: {
 dps_results: {
  key: "TestProtection-AllItems-TalismanofBloodlust-96864"
  value: {
-  dps: 115837.26097
-  tps: 758725.0128
-  dtps: 13472.85816
-  hps: 20034.61737
+  dps: 116133.61734
+  tps: 760777.80496
+  dtps: 13395.74077
+  hps: 19997.32548
  }
 }
 dps_results: {
@@ -3030,8 +3030,8 @@ dps_results: {
 dps_results: {
  key: "TestProtection-AllItems-Wushoolay'sFinalChoice-96785"
  value: {
-  dps: 114189.0938
-  tps: 747331.43125
+  dps: 114139.49461
+  tps: 747308.61674
   dtps: 13772.96108
   hps: 19260.51435
  }

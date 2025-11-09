@@ -761,7 +761,7 @@ dps_results: {
 dps_results: {
  key: "TestDemonology-AllItems-FabledFeatherofJi-Kun-96842"
  value: {
-  dps: 91488.17536
+  dps: 91485.80044
   tps: 56334.59901
   hps: 1259.82572
  }
@@ -881,9 +881,9 @@ dps_results: {
 dps_results: {
  key: "TestDemonology-AllItems-GazeoftheTwins-96915"
  value: {
-  dps: 93583.59833
-  tps: 57275.68177
-  hps: 1262.05616
+  dps: 92466.06853
+  tps: 56655.90781
+  hps: 1261.31268
  }
 }
 dps_results: {
@@ -1185,9 +1185,9 @@ dps_results: {
 dps_results: {
  key: "TestDemonology-AllItems-Horridon'sLastGasp-96757"
  value: {
-  dps: 97974.03094
-  tps: 60448.77183
-  hps: 1257.59529
+  dps: 97929.75693
+  tps: 60220.05175
+  hps: 1256.48007
  }
 }
 dps_results: {
@@ -1841,9 +1841,9 @@ dps_results: {
 dps_results: {
  key: "TestDemonology-AllItems-PurifiedBindingsofImmerseus-105422"
  value: {
-  dps: 113830.81039
-  tps: 69714.38435
-  hps: 1255.73659
+  dps: 114677.51102
+  tps: 70626.13264
+  hps: 1260.5692
  }
 }
 dps_results: {
@@ -1929,7 +1929,7 @@ dps_results: {
 dps_results: {
  key: "TestDemonology-AllItems-Renataki'sSoulCharm-96741"
  value: {
-  dps: 91488.17536
+  dps: 91489.24393
   tps: 56334.59901
   hps: 1259.82572
  }
@@ -2305,9 +2305,9 @@ dps_results: {
 dps_results: {
  key: "TestDemonology-AllItems-TalismanofBloodlust-96864"
  value: {
-  dps: 93622.8851
-  tps: 57853.72038
-  hps: 1302.20405
+  dps: 93102.02915
+  tps: 57460.94086
+  hps: 1295.14099
  }
 }
 dps_results: {
@@ -2569,9 +2569,9 @@ dps_results: {
 dps_results: {
  key: "TestDemonology-AllItems-UnerringVisionofLeiShen-96930"
  value: {
-  dps: 110085.88657
-  tps: 65577.61629
-  hps: 1265.77356
+  dps: 110437.69132
+  tps: 65677.59716
+  hps: 1261.31268
  }
 }
 dps_results: {
@@ -2649,9 +2649,9 @@ dps_results: {
 dps_results: {
  key: "TestDemonology-AllItems-Wushoolay'sFinalChoice-96785"
  value: {
-  dps: 103570.64398
-  tps: 62722.8695
-  hps: 1266.1453
+  dps: 102282.82133
+  tps: 62196.99452
+  hps: 1264.65834
  }
 }
 dps_results: {

@@ -836,9 +836,9 @@ export class BulkTab extends SimTab {
 						this.simUI.reforger.setIncludeGems(TypedEvent.nextEventID(), true);
 						this.simUI.reforger.setIncludeEOTBPGemSocket(TypedEvent.nextEventID(), playerPhase);
 
-						if (RelativeStatCap.hasRoRo(this.simUI.player) && this.simUI.reforger.defaultRelativeStatCap) {
+						if (RelativeStatCap.hasRoRo(this.simUI.player) && this.simUI.reforger.relativeStatCapStat !== -1) {
 							this.simUI.reforger.relativeStatCap = new RelativeStatCap(
-								this.simUI.reforger.defaultRelativeStatCap,
+								this.simUI.reforger.relativeStatCapStat,
 								this.simUI.player,
 								this.simUI.player.getClass(),
 							);
@@ -849,9 +849,9 @@ export class BulkTab extends SimTab {
 						} catch (error) {
 							await this.simUI.player.setGearAsync(TypedEvent.nextEventID(), updatedGear);
 							this.simUI.reforger.setIncludeGems(TypedEvent.nextEventID(), false);
-							if (RelativeStatCap.hasRoRo(this.simUI.player) && this.simUI.reforger.defaultRelativeStatCap) {
+							if (RelativeStatCap.hasRoRo(this.simUI.player) && this.simUI.reforger.relativeStatCapStat !== -1) {
 								this.simUI.reforger.relativeStatCap = new RelativeStatCap(
-									this.simUI.reforger.defaultRelativeStatCap,
+									this.simUI.reforger.relativeStatCapStat,
 									this.simUI.player,
 									this.simUI.player.getClass(),
 								);

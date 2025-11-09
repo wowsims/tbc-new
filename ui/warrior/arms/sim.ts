@@ -151,16 +151,14 @@ export class ArmsWarriorSimUI extends IndividualSimUI<Spec.SpecArmsWarrior> {
 	constructor(parentElem: HTMLElement, player: Player<Spec.SpecArmsWarrior>) {
 		super(parentElem, player, SPEC_CONFIG);
 
-		player.sim.waitForInit().then(() => {
-			this.reforger = new ReforgeOptimizer(this, {
-				getEPDefaults: player => {
-					const avgIlvl = player.getGear().getAverageItemLevel(false);
-					if (avgIlvl >= 500) {
-						return Presets.P2_EP_PRESET.epWeights;
-					}
-					return Presets.P1_EP_PRESET.epWeights;
-				},
-			});
+		this.reforger = new ReforgeOptimizer(this, {
+			getEPDefaults: player => {
+				const avgIlvl = player.getGear().getAverageItemLevel(false);
+				if (avgIlvl >= 500) {
+					return Presets.P2_EP_PRESET.epWeights;
+				}
+				return Presets.P1_EP_PRESET.epWeights;
+			},
 		});
 	}
 }

@@ -761,7 +761,7 @@ dps_results: {
 dps_results: {
  key: "TestDestruction-AllItems-FabledFeatherofJi-Kun-96842"
  value: {
-  dps: 91474.05059
+  dps: 91474.43935
   tps: 67211.85811
   hps: 801.47072
  }
@@ -889,9 +889,9 @@ dps_results: {
 dps_results: {
  key: "TestDestruction-AllItems-GazeoftheTwins-96915"
  value: {
-  dps: 93829.94893
-  tps: 69049.4384
-  hps: 799.61202
+  dps: 94227.90366
+  tps: 69455.04947
+  hps: 798.86854
  }
 }
 dps_results: {
@@ -1193,9 +1193,9 @@ dps_results: {
 dps_results: {
  key: "TestDestruction-AllItems-Horridon'sLastGasp-96757"
  value: {
-  dps: 99540.66107
-  tps: 73328.35594
-  hps: 802.2142
+  dps: 99695.51148
+  tps: 73426.28009
+  hps: 802.58594
  }
 }
 dps_results: {
@@ -1849,9 +1849,9 @@ dps_results: {
 dps_results: {
  key: "TestDestruction-AllItems-PurifiedBindingsofImmerseus-105422"
  value: {
-  dps: 110429.00421
-  tps: 81705.77973
-  hps: 801.47072
+  dps: 110806.04789
+  tps: 81957.52045
+  hps: 799.98376
  }
 }
 dps_results: {
@@ -2121,7 +2121,7 @@ dps_results: {
 dps_results: {
  key: "TestDestruction-AllItems-SparkofZandalar-96770"
  value: {
-  dps: 94285.28216
+  dps: 94285.99536
   tps: 69106.86487
   hps: 835.29903
  }
@@ -2313,9 +2313,9 @@ dps_results: {
 dps_results: {
  key: "TestDestruction-AllItems-TalismanofBloodlust-96864"
  value: {
-  dps: 94302.06658
-  tps: 69011.98405
-  hps: 837.52947
+  dps: 94479.41173
+  tps: 69446.53864
+  hps: 830.09467
  }
 }
 dps_results: {
@@ -2577,9 +2577,9 @@ dps_results: {
 dps_results: {
  key: "TestDestruction-AllItems-UnerringVisionofLeiShen-96930"
  value: {
-  dps: 104742.53744
-  tps: 77461.01441
-  hps: 802.95768
+  dps: 105422.25783
+  tps: 78270.06436
+  hps: 798.86854
  }
 }
 dps_results: {
@@ -2649,9 +2649,9 @@ dps_results: {
 dps_results: {
  key: "TestDestruction-AllItems-Wushoolay'sFinalChoice-96785"
  value: {
-  dps: 103491.58236
-  tps: 76198.42041
-  hps: 801.09898
+  dps: 102681.59787
+  tps: 75677.79949
+  hps: 802.95768
  }
 }
 dps_results: {

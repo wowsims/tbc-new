@@ -40,11 +40,13 @@ var ItemSetRegaliaOfTheWitchDoctor = core.NewItemSet(core.ItemSet{
 			shaman := agent.(ShamanAgent).GetShaman()
 
 			lightningStrike := shaman.RegisterSpell(core.SpellConfig{
-				ActionID:       core.ActionID{SpellID: 138146},
-				SpellSchool:    core.SpellSchoolNature,
-				ProcMask:       core.ProcMaskSpellProc,
-				CritMultiplier: shaman.DefaultCritMultiplier(),
-				MissileSpeed:   20,
+				ActionID:         core.ActionID{SpellID: 138146},
+				SpellSchool:      core.SpellSchoolNature,
+				ProcMask:         core.ProcMaskSpellProc,
+				CritMultiplier:   shaman.DefaultCritMultiplier(),
+				MissileSpeed:     20,
+				DamageMultiplier: 1,
+				ThreatMultiplier: 1,
 				ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 					baseDamage := sim.RollWithLabel(32375, 37625, "Lighting Strike 2pT14")
 					nTargets := shaman.Env.ActiveTargetCount()

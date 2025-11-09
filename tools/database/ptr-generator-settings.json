@@ -4,7 +4,7 @@
 		"BuildConfig": "buildConfig",
 		"CDNConfig": "cdnConfig",
 		"Region": "us",
-		"Product": "wow_classic_beta"
+		"Product": "wow_classic_ptr"
 	},
 	"TargetDirectory": "dbfilesclient",
 	"DatabaseFile": "wowsims.db",
@@ -48,6 +48,7 @@
 		"ItemDamageWand",
 		"ItemNameDescription",
 		"ItemSparse",
+		"ItemUpgrade",
 		"ArmorLocation",
 		"ItemArmorTotal",
 		"ItemArmorShield",

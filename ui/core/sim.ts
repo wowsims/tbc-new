@@ -78,8 +78,6 @@ export class Sim {
 	private wasmConcurrency = 0;
 	private showQuickSwap = true;
 	private showEPValues = false;
-	private useCustomEPValues = false;
-	private useSoftCapBreakpoints = true;
 	private language = '';
 
 	readonly type: SimType;
@@ -101,8 +99,6 @@ export class Sim {
 	readonly wasmConcurrencyChangeEmitter = new TypedEvent<void>();
 	readonly showQuickSwapChangeEmitter = new TypedEvent<void>();
 	readonly showEPValuesChangeEmitter = new TypedEvent<void>();
-	readonly useCustomEPValuesChangeEmitter = new TypedEvent<void>();
-	readonly useSoftCapBreakpointsChangeEmitter = new TypedEvent<void>();
 	readonly languageChangeEmitter = new TypedEvent<void>();
 	readonly crashEmitter = new TypedEvent<SimError>();
 
@@ -170,8 +166,6 @@ export class Sim {
 			this.wasmConcurrencyChangeEmitter,
 			this.showQuickSwapChangeEmitter,
 			this.showEPValuesChangeEmitter,
-			this.useCustomEPValuesChangeEmitter,
-			this.useSoftCapBreakpointsChangeEmitter,
 			this.languageChangeEmitter,
 		]);
 
@@ -638,26 +632,6 @@ export class Sim {
 		}
 	}
 
-	getUseCustomEPValues(): boolean {
-		return this.useCustomEPValues;
-	}
-	setUseCustomEPValues(eventID: EventID, newUseCustomEPValues: boolean) {
-		if (newUseCustomEPValues !== this.useCustomEPValues) {
-			this.useCustomEPValues = newUseCustomEPValues;
-			this.useCustomEPValuesChangeEmitter.emit(eventID);
-		}
-	}
-
-	getUseSoftCapBreakpoints(): boolean {
-		return this.useSoftCapBreakpoints;
-	}
-	setUseSoftCapBreakpoints(eventID: EventID, newUseSoftCapBreakpoints: boolean) {
-		if (newUseSoftCapBreakpoints !== this.useSoftCapBreakpoints) {
-			this.useSoftCapBreakpoints = newUseSoftCapBreakpoints;
-			this.useSoftCapBreakpointsChangeEmitter.emit(eventID);
-		}
-	}
-
 	getLanguage(): string {
 		return this.language;
 	}
@@ -713,8 +687,6 @@ export class Sim {
 			showExperimental: this.getShowExperimental(),
 			showQuickSwap: this.getShowQuickSwap(),
 			showEpValues: this.getShowEPValues(),
-			useCustomEpValues: this.getUseCustomEPValues(),
-			useSoftCapBreakpoints: this.getUseSoftCapBreakpoints(),
 			language: this.getLanguage(),
 			faction: this.getFaction(),
 			filters: filters,
@@ -732,8 +704,6 @@ export class Sim {
 			this.setShowExperimental(eventID, proto.showExperimental);
 			this.setShowQuickSwap(eventID, proto.showQuickSwap);
 			this.setShowEPValues(eventID, proto.showEpValues);
-			this.setUseCustomEPValues(eventID, proto.useCustomEpValues);
-			this.setUseSoftCapBreakpoints(eventID, proto.useSoftCapBreakpoints);
 			this.setLanguage(eventID, proto.language);
 			this.setFaction(eventID, proto.faction || Faction.Alliance);
 

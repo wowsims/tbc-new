@@ -1,0 +1,136 @@
+{
+  "apiVersion": 2,
+  "raidBuffs": {
+    "trueshotAura": true,
+    "unholyAura": true,
+    "leaderOfThePack": true,
+    "graceOfAir": true,
+    "markOfTheWild": true,
+    "powerWordFortitude": true,
+    "bloodlust": true,
+    "stormlashTotemCount": 4,
+    "skullBannerCount": 2
+  },
+  "debuffs": {
+    "physicalVulnerability": true,
+    "lightningBreath": true
+  },
+  "tanks": [
+    {
+    },
+    {
+      "type": "Player"
+    }
+  ],
+  "partyBuffs": {
+  },
+  "player": {
+    "name": "Player",
+    "race": "RaceTroll",
+    "class": "ClassDruid",
+    "consumables": {
+      "prepotId": 76089,
+      "potId": 76089,
+      "flaskId": 76087,
+      "foodId": 74656,
+      "conjuredId": 5512
+    },
+    "buffs": {
+      "vigilanceCount": 2
+    },
+    "guardianDruid": {
+      "options": {
+        "symbiosisTarget": "ClassMonk"
+      }
+    },
+    "profession1": "Engineering",
+    "profession2": "Blacksmithing",
+    "cooldowns": {
+      "hpPercentForDefensives": 0.3
+    },
+    "rotation": {
+      "type": "TypeAPL",
+      "simple": {
+        "cooldowns": {
+          "hpPercentForDefensives": 0.3
+        }
+      },
+      "priorityList": [
+        {"action":{"condition":{"not":{"val":{"auraIsActive":{"auraId":{"spellId":132402}}}}},"castSpell":{"spellId":{"spellId":62606}}}},
+        {"action":{"condition":{"cmp":{"op":"OpGe","lhs":{"currentTime":{}},"rhs":{"const":{"val":"15s"}}}},"castSpell":{"spellId":{"spellId":22812}}}},
+        {"action":{"condition":{"not":{"val":{"auraIsActive":{"auraId":{"spellId":132402}}}}},"castSpell":{"spellId":{"spellId":5229}}}},
+        {"action":{"schedule":{"schedule":"33s","innerAction":{"castSpell":{"spellId":{"spellId":61336}}}}}},
+        {"action":{"schedule":{"schedule":"93s, 105s","innerAction":{"castSpell":{"spellId":{"spellId":114030,"tag":-1}}}}}},
+        {"action":{"schedule":{"schedule":"33s","innerAction":{"castSpell":{"spellId":{"spellId":102558}}}}}},
+        {"action":{"schedule":{"schedule":"71s","innerAction":{"castSpell":{"spellId":{"spellId":108293}}}}}},
+        {"action":{"autocastOtherCooldowns":{}}},
+        {"action":{"condition":{"not":{"val":{"auraIsActive":{"sourceUnit":{"type":"CurrentTarget"},"auraId":{"spellId":115798}}}}},"castSpell":{"spellId":{"spellId":77758}}}},
+        {"action":{"condition":{"not":{"val":{"auraIsActive":{"sourceUnit":{"type":"CurrentTarget"},"auraId":{"spellId":113746}}}}},"castSpell":{"spellId":{"spellId":770}}}},
+        {"action":{"condition":{"and":{"vals":[{"cmp":{"op":"OpLt","lhs":{"currentHealthPercent":{}},"rhs":{"const":{"val":"50%"}}}}]}},"castSpell":{"spellId":{"spellId":22842}}}},
+        {"action":{"castSpell":{"spellId":{"spellId":33878}}}},
+        {"action":{"castSpell":{"spellId":{"spellId":106952}}}},
+        {"action":{"condition":{"cmp":{"op":"OpLt","lhs":{"currentHealthPercent":{}},"rhs":{"const":{"val":"90%"}}}},"castFriendlySpell":{"spellId":{"spellId":102351},"target":{"type":"Player"}}}},
+        {"action":{"condition":{"and":{"vals":[{"auraIsKnown":{"auraId":{"spellId":108293}}},{"auraIsActiveWithReactionTime":{"auraId":{"spellId":108293}}},{"auraIsInactiveWithReactionTime":{"auraId":{"spellId":774}}}]}},"castFriendlySpell":{"spellId":{"spellId":774},"target":{"type":"Player"}}}},
+        {"action":{"condition":{"and":{"vals":[{"auraIsKnown":{"auraId":{"spellId":145162}}},{"auraIsActiveWithReactionTime":{"auraId":{"spellId":145162}}},{"cmp":{"op":"OpLt","lhs":{"currentHealthPercent":{}},"rhs":{"const":{"val":"70%"}}}}]}},"castFriendlySpell":{"spellId":{"spellId":5185},"target":{"type":"Player"}}}},
+        {"action":{"castSpell":{"spellId":{"spellId":33745}}}},
+        {"action":{"castSpell":{"spellId":{"spellId":77758}}}},
+        {"action":{"castSpell":{"spellId":{"spellId":770}}}},
+        {"action":{"condition":{"cmp":{"op":"OpGt","lhs":{"currentRage":{}},"rhs":{"const":{"val":"90"}}}},"castSpell":{"spellId":{"spellId":6807}}}}
+      ]
+    },
+    "reactionTimeMs": 250,
+    "inFrontOfTarget": true,
+    "healingModel": {
+      "hps": 91787,
+      "cadenceSeconds": 0.37,
+      "cadenceVariation": 1.31,
+      "absorbFrac": 0.14,
+      "burstWindow": 6
+    }
+  },
+  "encounter": {
+    "apiVersion": 2,
+    "duration": 93,
+    "durationVariation": 23,
+    "executeProportion20": 0.2,
+    "executeProportion25": 0.25,
+    "executeProportion35": 0.35,
+    "executeProportion90": 0.9,
+    "targets": [
+      {
+        "id": 68476,
+        "name": "Horridon 25 H",
+        "level": 93,
+        "mobType": "MobTypeBeast",
+        "stats": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,24835,0,1962616500,0,0],
+        "minBaseDamage": 512867,
+        "damageSpread": 0.5508,
+        "swingSpeed": 2,
+        "targetInputs": [
+          {
+            "inputType": "Number",
+            "label": "Jalak death time",
+            "tooltip": "Simulation time (in seconds) at which to disable War-God Jalak and trigger the Rampage buff on Horridon. If set longer than the simulated fight length, then Jalak will be tanked the entire time and Rampage will never be triggered.",
+            "numberValue": 33
+          },
+          {
+            "label": "Taunt swap for Triple Puncture",
+            "tooltip": "If checked, taunt swap upon Jalak's death and on every other Triple Puncture application afterwards in order to limit stack accumulation on a single tank.",
+            "boolValue": true
+          }
+        ]
+      },
+      {
+        "id": 69374,
+        "name": "War-God Jalak 25 H",
+        "level": 93,
+        "mobType": "MobTypeHumanoid",
+        "stats": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,24835,0,78504660,0,0],
+        "minBaseDamage": 485334,
+        "damageSpread": 0.4668,
+        "swingSpeed": 2,
+        "tankIndex": 1
+      }
+    ]
+  }
+}

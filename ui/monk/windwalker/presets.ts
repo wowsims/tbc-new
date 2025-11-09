@@ -1,22 +1,41 @@
 import * as PresetUtils from '../../core/preset_utils';
-import { ConsumesSpec, Glyphs, Profession, PseudoStat, Stat } from '../../core/proto/common';
+import { ConsumesSpec, Glyphs, Profession, PseudoStat, Spec, Stat } from '../../core/proto/common';
 import { MonkMajorGlyph, MonkMinorGlyph, MonkOptions } from '../../core/proto/monk';
 import { SavedTalents } from '../../core/proto/ui';
 import { Stats } from '../../core/proto_utils/stats';
 import DefaultApl from './apls/default.apl.json';
-import DefaultP1BisGear from './gear_sets/p1_bis.gear.json';
 import DefaultP2BisGear from './gear_sets/p2_bis.gear.json';
 import DefaultP3BisGear from './gear_sets/p3_bis.gear.json';
-import DefaultP1PreHofGear from './gear_sets/p1_pre_hof.gear.json';
-import DefaultP1PreToesGear from './gear_sets/p1_pre_toes.gear.json';
 import DefaultP1PrebisGear from './gear_sets/p1_prebis.gear.json';
+import { Player } from '../../core/player';
 
 export const P1_PREBIS_GEAR_PRESET = PresetUtils.makePresetGear('Pre-BIS', DefaultP1PrebisGear);
-export const P1_PREHOF_GEAR_PRESET = PresetUtils.makePresetGear('Pre-HOF', DefaultP1PreHofGear);
-export const P1_PRETOES_GEAR_PRESET = PresetUtils.makePresetGear('Pre-TOES', DefaultP1PreToesGear);
-export const P1_BIS_GEAR_PRESET = PresetUtils.makePresetGear('P1 - BIS', DefaultP1BisGear);
-export const P2_BIS_GEAR_PRESET = PresetUtils.makePresetGear('P2 - BIS', DefaultP2BisGear);
-export const P3_BIS_GEAR_PRESET = PresetUtils.makePresetGear('P3 - BIS', DefaultP3BisGear);
+export const P2_BIS_GEAR_PRESET = PresetUtils.makePresetGear('P2 - BIS', DefaultP2BisGear, {
+	onLoad: (player: Player<Spec.SpecFuryWarrior>) => {
+		PresetUtils.makeSpecChangeWarningToast(
+			[
+				{
+					condition: (player: Player<Spec.SpecFuryWarrior>) => player.getProfessions().includes(Profession.Tailoring) === false,
+					message: 'This preset assumes tailoring. Please reforge/regem for optimal results.',
+				},
+			],
+			player,
+		);
+	},
+});
+export const P3_BIS_GEAR_PRESET = PresetUtils.makePresetGear('P3 - BIS', DefaultP3BisGear, {
+	onLoad: (player: Player<Spec.SpecFuryWarrior>) => {
+		PresetUtils.makeSpecChangeWarningToast(
+			[
+				{
+					condition: (player: Player<Spec.SpecFuryWarrior>) => player.getProfessions().includes(Profession.Blacksmithing) === false,
+					message: 'This preset assumes blacksmithing for the Rune of Re-Origination proc. Please reforge/regem for optimal results.',
+				},
+			],
+			player,
+		);
+	},
+});
 
 export const ROTATION_PRESET = PresetUtils.makePresetAPLRotation('Default', DefaultApl);
 
@@ -45,16 +64,16 @@ export const RORO_BIS_EP_PRESET = PresetUtils.makePresetEpWeights(
 	Stats.fromMap(
 		{
 			[Stat.StatAgility]: 1.0,
-			[Stat.StatHitRating]: 1.66,
-			[Stat.StatCritRating]: 0.69,
-			[Stat.StatHasteRating]: 0.83,
-			[Stat.StatExpertiseRating]: 1.39,
-			[Stat.StatMasteryRating]: 0.32,
+			[Stat.StatHitRating]: 1.79,
+			[Stat.StatCritRating]: 0.74,
+			[Stat.StatHasteRating]: 0.89,
+			[Stat.StatExpertiseRating]: 1.49,
+			[Stat.StatMasteryRating]: 0.34,
 			[Stat.StatAttackPower]: 0.35,
 		},
 		{
-			[PseudoStat.PseudoStatMainHandDps]: 2.35,
-			[PseudoStat.PseudoStatOffHandDps]: 1.18,
+			[PseudoStat.PseudoStatMainHandDps]: 2.33,
+			[PseudoStat.PseudoStatOffHandDps]: 1.17,
 		},
 	),
 );
@@ -91,3 +110,22 @@ export const OtherDefaults = {
 	distanceFromTarget: 5,
 	iterationCount: 25000,
 };
+
+export const P2_BUILD_PRESET = PresetUtils.makePresetBuild('P2 - BIS', {
+	gear: P2_BIS_GEAR_PRESET,
+	settings: {
+		name: 'P2 - BIS',
+		playerOptions: OtherDefaults,
+	},
+});
+export const P3_BUILD_PRESET = PresetUtils.makePresetBuild('P3 - BIS', {
+	gear: P3_BIS_GEAR_PRESET,
+	settings: {
+		name: 'P3 - BIS',
+		playerOptions: {
+			...OtherDefaults,
+			profession1: Profession.Engineering,
+			profession2: Profession.Blacksmithing,
+		},
+	},
+});

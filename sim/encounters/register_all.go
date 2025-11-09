@@ -7,6 +7,7 @@ import (
 	"github.com/wowsims/mop/sim/encounters/hof"
 	"github.com/wowsims/mop/sim/encounters/msv"
 	"github.com/wowsims/mop/sim/encounters/toes"
+	"github.com/wowsims/mop/sim/encounters/tot"
 )
 
 func init() {
@@ -15,6 +16,7 @@ func init() {
 	msv.Register()
 	hof.Register()
 	toes.Register()
+	tot.Register()
 }
 
 func AddSingleTargetBossEncounter(presetTarget *core.PresetTarget) {

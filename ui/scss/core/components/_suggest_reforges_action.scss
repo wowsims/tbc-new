@@ -30,6 +30,7 @@
 	--settings-button-width: 36px;
 	display: grid !important;
 	grid-template-columns: auto var(--settings-button-width);
+	order: 20; // Force button last in the container
 }
 
 .suggest-reforges-action-button {

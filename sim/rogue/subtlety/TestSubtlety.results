@@ -40,8 +40,8 @@ dps_results: {
 dps_results: {
  key: "TestSubtlety-AllItems-AssuranceofConsequence-105472"
  value: {
-  dps: 112788.09385
-  tps: 79448.07441
+  dps: 112914.50755
+  tps: 79537.59446
  }
 }
 dps_results: {
@@ -180,15 +180,15 @@ dps_results: {
 dps_results: {
  key: "TestSubtlety-AllItems-EvilEyeofGalakras-105491"
  value: {
-  dps: 102120.24355
-  tps: 71937.41891
+  dps: 102143.70988
+  tps: 71955.61723
  }
 }
 dps_results: {
  key: "TestSubtlety-AllItems-FabledFeatherofJi-Kun-96842"
  value: {
-  dps: 106116.51641
-  tps: 74737.06542
+  dps: 106139.70702
+  tps: 74755.68011
  }
 }
 dps_results: {
@@ -222,8 +222,8 @@ dps_results: {
 dps_results: {
  key: "TestSubtlety-AllItems-GazeoftheTwins-96915"
  value: {
-  dps: 106545.58997
-  tps: 75071.95958
+  dps: 105878.88425
+  tps: 74600.61491
  }
 }
 dps_results: {
@@ -320,8 +320,8 @@ dps_results: {
 dps_results: {
  key: "TestSubtlety-AllItems-Primordius'TalismanofRage-96873"
  value: {
-  dps: 106710.10943
-  tps: 75190.02505
+  dps: 106663.73909
+  tps: 75154.9616
  }
 }
 dps_results: {
@@ -348,8 +348,8 @@ dps_results: {
 dps_results: {
  key: "TestSubtlety-AllItems-Renataki'sSoulCharm-96741"
  value: {
-  dps: 112903.45515
-  tps: 79424.37204
+  dps: 113945.00213
+  tps: 80164.12136
  }
 }
 dps_results: {
@@ -369,8 +369,8 @@ dps_results: {
 dps_results: {
  key: "TestSubtlety-AllItems-RuneofRe-Origination-96918"
  value: {
-  dps: 113895.72599
-  tps: 80181.00959
+  dps: 113497.22471
+  tps: 79927.63728
  }
 }
 dps_results: {
@@ -397,8 +397,8 @@ dps_results: {
 dps_results: {
  key: "TestSubtlety-AllItems-SparkofZandalar-96770"
  value: {
-  dps: 105065.52336
-  tps: 74088.34959
+  dps: 105098.50883
+  tps: 74111.76928
  }
 }
 dps_results: {
@@ -411,8 +411,8 @@ dps_results: {
 dps_results: {
  key: "TestSubtlety-AllItems-TalismanofBloodlust-96864"
  value: {
-  dps: 113435.41914
-  tps: 79968.55369
+  dps: 112618.4684
+  tps: 79386.61381
  }
 }
 dps_results: {

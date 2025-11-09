@@ -19,7 +19,7 @@ export const P2_PRESET = PresetUtils.makePresetGear('P2 BiS (Balanced)', P2Gear)
 import P2OffensiveGear from './gear_sets/p2_offensive.gear.json';
 export const P2_OFFENSIVE_PRESET = PresetUtils.makePresetGear('P2 BiS (Offensive)', P2OffensiveGear);
 import P3Gear from './gear_sets/p3.gear.json';
-export const P3_PRESET = PresetUtils.makePresetGear('P3', P3Gear);
+export const P3_PRESET = PresetUtils.makePresetGear('P3 BiS (Tentative)', P3Gear);
 import P4Gear from './gear_sets/p4.gear.json';
 export const P4_PRESET = PresetUtils.makePresetGear('P4', P4Gear);
 import ItemSwapGear from './gear_sets/p2_item_swap.gear.json';
@@ -38,14 +38,17 @@ import DefaultApl from './apls/default.apl.json';
 import OffensiveHotwApl from './apls/offensiveHotw.apl.json';
 import EmpressApl from './apls/empress.apl.json';
 import ShaApl from './apls/sha.apl.json';
+import HorridonApl from './apls/horridon.apl.json';
 import DefaultBuild from './builds/sha_default.build.json';
 import GarajalBuild from './builds/garajal_encounter_only.build.json';
 import EmpressBuild from './builds/empress_encounter_only.build.json';
 import ShaBuild from './builds/sha_encounter_only.build.json';
+import HorridonBuild from './builds/horridon_encounter_only.build.json';
 export const ROTATION_DEFAULT = PresetUtils.makePresetAPLRotation("Gara'jal Default", DefaultApl);
 export const ROTATION_HOTW = PresetUtils.makePresetAPLRotation("Gara'jal Offensive HotW", OffensiveHotwApl);
 export const ROTATION_EMPRESS = PresetUtils.makePresetAPLRotation("Empress Adds", EmpressApl);
 export const ROTATION_SHA = PresetUtils.makePresetAPLRotation("Sha Hybrid HotW", ShaApl);
+export const ROTATION_HORRIDON = PresetUtils.makePresetAPLRotation("Horridon Tank 2", HorridonApl);
 
 //export const ROTATION_PRESET_SIMPLE = PresetUtils.makePresetSimpleRotation('Simple Default', Spec.SpecGuardianDruid, DefaultSimpleRotation);
 
@@ -54,24 +57,24 @@ export const SURVIVAL_EP_PRESET = PresetUtils.makePresetEpWeights(
 	'Survival',
 	Stats.fromMap(
 		{
-			[Stat.StatHealth]: 0.11,
-			[Stat.StatStamina]: 2.55,
+			[Stat.StatHealth]: 0.17,
+			[Stat.StatStamina]: 3.93,
 			[Stat.StatAgility]: 1.0,
-			[Stat.StatArmor]: 4.48,
-			[Stat.StatBonusArmor]: 1.02,
-			[Stat.StatDodgeRating]: 0.70,
-			[Stat.StatMasteryRating]: 1.89,
-			[Stat.StatStrength]: 0.03,
-			[Stat.StatAttackPower]: 0.03,
-			[Stat.StatHitRating]: 1.18,
-			[Stat.StatExpertiseRating]: 1.16,
-			[Stat.StatCritRating]: 0.72,
-			[Stat.StatHasteRating]: 0.80,
+			[Stat.StatArmor]: 4.81,
+			[Stat.StatBonusArmor]: 1.10,
+			[Stat.StatDodgeRating]: 0.76,
+			[Stat.StatMasteryRating]: 2.20,
+			[Stat.StatStrength]: 0.02,
+			[Stat.StatAttackPower]: 0.02,
+			[Stat.StatHitRating]: 1.07,
+			[Stat.StatExpertiseRating]: 1.06,
+			[Stat.StatCritRating]: 0.61,
+			[Stat.StatHasteRating]: 0.77,
 		},
 		{
 			[PseudoStat.PseudoStatMainHandDps]: 0.0,
-			[PseudoStat.PseudoStatPhysicalHitPercent]: 1.16 * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT,
-			[PseudoStat.PseudoStatSpellHitPercent]: 0.02 * Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT,
+			[PseudoStat.PseudoStatPhysicalHitPercent]: 1.07 * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT,
+			[PseudoStat.PseudoStatSpellHitPercent]: 0.01 * Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT,
 		},
 	),
 );
@@ -80,24 +83,24 @@ export const BALANCED_EP_PRESET = PresetUtils.makePresetEpWeights(
 	'Balanced',
 	Stats.fromMap(
 		{
-			[Stat.StatHealth]: 0.04,
-			[Stat.StatStamina]: 0.86,
+			[Stat.StatHealth]: 0.06,
+			[Stat.StatStamina]: 1.41,
 			[Stat.StatAgility]: 1.0,
-			[Stat.StatArmor]: 1.51,
-			[Stat.StatBonusArmor]: 0.34,
-			[Stat.StatDodgeRating]: 0.24,
-			[Stat.StatMasteryRating]: 0.64,
-			[Stat.StatStrength]: 0.17,
-			[Stat.StatAttackPower]: 0.16,
-			[Stat.StatHitRating]: 0.86,
-			[Stat.StatExpertiseRating]: 0.85,
-			[Stat.StatCritRating]: 0.65,
-			[Stat.StatHasteRating]: 0.56,
+			[Stat.StatArmor]: 1.70,
+			[Stat.StatBonusArmor]: 0.39,
+			[Stat.StatDodgeRating]: 0.28,
+			[Stat.StatMasteryRating]: 0.78,
+			[Stat.StatStrength]: 0.18,
+			[Stat.StatAttackPower]: 0.18,
+			[Stat.StatHitRating]: 1.50,
+			[Stat.StatExpertiseRating]: 1.50,
+			[Stat.StatCritRating]: 1.07,
+			[Stat.StatHasteRating]: 0.60,
 		},
 		{
-			[PseudoStat.PseudoStatMainHandDps]: 0.70,
-			[PseudoStat.PseudoStatPhysicalHitPercent]: 0.85 * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT,
-			[PseudoStat.PseudoStatSpellHitPercent]: 0.01 * Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT,
+			[PseudoStat.PseudoStatMainHandDps]: 0.84,
+			[PseudoStat.PseudoStatPhysicalHitPercent]: 1.50 * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT,
+			[PseudoStat.PseudoStatSpellHitPercent]: 0.0 * Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT,
 		},
 	),
 );
@@ -106,24 +109,24 @@ export const OFFENSIVE_EP_PRESET = PresetUtils.makePresetEpWeights(
 	'Offensive',
 	Stats.fromMap(
 		{
-			[Stat.StatHealth]: 0.02,
-			[Stat.StatStamina]: 0.51,
+			[Stat.StatHealth]: 0.03,
+			[Stat.StatStamina]: 0.64,
 			[Stat.StatAgility]: 1.0,
-			[Stat.StatArmor]: 0.90,
-			[Stat.StatBonusArmor]: 0.20,
-			[Stat.StatDodgeRating]: 0.14,
-			[Stat.StatMasteryRating]: 0.38,
-			[Stat.StatStrength]: 0.20,
-			[Stat.StatAttackPower]: 0.19,
-			[Stat.StatHitRating]: 0.80,
-			[Stat.StatExpertiseRating]: 0.79,
-			[Stat.StatCritRating]: 0.63,
-			[Stat.StatHasteRating]: 0.51,
+			[Stat.StatArmor]: 0.76,
+			[Stat.StatBonusArmor]: 0.17,
+			[Stat.StatDodgeRating]: 0.13,
+			[Stat.StatMasteryRating]: 0.35,
+			[Stat.StatStrength]: 0.23,
+			[Stat.StatAttackPower]: 0.22,
+			[Stat.StatHitRating]: 1.64,
+			[Stat.StatExpertiseRating]: 1.64,
+			[Stat.StatCritRating]: 1.21,
+			[Stat.StatHasteRating]: 0.54,
 		},
 		{
-			[PseudoStat.PseudoStatMainHandDps]: 0.85,
-			[PseudoStat.PseudoStatPhysicalHitPercent]: 0.79 * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT,
-			[PseudoStat.PseudoStatSpellHitPercent]: 0.01 * Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT,
+			[PseudoStat.PseudoStatMainHandDps]: 1.09,
+			[PseudoStat.PseudoStatPhysicalHitPercent]: 1.64 * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT,
+			[PseudoStat.PseudoStatSpellHitPercent]: 0.0 * Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT,
 		},
 	),
 );
@@ -161,3 +164,4 @@ export const PRESET_BUILD_DEFAULT = PresetUtils.makePresetBuildFromJSON("All Def
 export const PRESET_BUILD_GARAJAL = PresetUtils.makePresetBuildFromJSON("Gara'jal", Spec.SpecGuardianDruid, GarajalBuild);
 export const PRESET_BUILD_EMPRESS = PresetUtils.makePresetBuildFromJSON("Empress P2 Adds", Spec.SpecGuardianDruid, EmpressBuild);
 export const PRESET_BUILD_SHA = PresetUtils.makePresetBuildFromJSON("Sha of Fear P2", Spec.SpecGuardianDruid, ShaBuild);
+export const PRESET_BUILD_HORRIDON = PresetUtils.makePresetBuildFromJSON("Horridon P2", Spec.SpecGuardianDruid, HorridonBuild);

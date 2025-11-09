@@ -61,8 +61,8 @@ dps_results: {
 dps_results: {
  key: "TestRetribution-AllItems-AssuranceofConsequence-105472"
  value: {
-  dps: 161325.03539
-  tps: 152509.9804
+  dps: 161326.23765
+  tps: 152508.99858
  }
 }
 dps_results: {
@@ -670,15 +670,15 @@ dps_results: {
 dps_results: {
  key: "TestRetribution-AllItems-EvilEyeofGalakras-105491"
  value: {
-  dps: 171639.1995
-  tps: 162668.11745
+  dps: 171680.02644
+  tps: 162672.56026
  }
 }
 dps_results: {
  key: "TestRetribution-AllItems-FabledFeatherofJi-Kun-96842"
  value: {
-  dps: 173818.12219
-  tps: 163767.4485
+  dps: 173817.30138
+  tps: 163786.12081
  }
 }
 dps_results: {
@@ -789,8 +789,8 @@ dps_results: {
 dps_results: {
  key: "TestRetribution-AllItems-GazeoftheTwins-96915"
  value: {
-  dps: 173263.88733
-  tps: 163591.33155
+  dps: 174084.19761
+  tps: 164341.76328
  }
 }
 dps_results: {
@@ -1629,15 +1629,15 @@ dps_results: {
 dps_results: {
  key: "TestRetribution-AllItems-Primordius'TalismanofRage-96873"
  value: {
-  dps: 173274.2896
-  tps: 163644.11493
+  dps: 174222.51747
+  tps: 164450.83237
  }
 }
 dps_results: {
  key: "TestRetribution-AllItems-PurifiedBindingsofImmerseus-105422"
  value: {
-  dps: 166370.92407
-  tps: 157382.77145
+  dps: 166393.48884
+  tps: 157399.36997
  }
 }
 dps_results: {
@@ -1706,8 +1706,8 @@ dps_results: {
 dps_results: {
  key: "TestRetribution-AllItems-Renataki'sSoulCharm-96741"
  value: {
-  dps: 161370.39138
-  tps: 152548.56574
+  dps: 161528.83007
+  tps: 152730.95695
  }
 }
 dps_results: {
@@ -1853,8 +1853,8 @@ dps_results: {
 dps_results: {
  key: "TestRetribution-AllItems-SparkofZandalar-96770"
  value: {
-  dps: 171741.59307
-  tps: 162412.64675
+  dps: 172067.07035
+  tps: 162800.58657
  }
 }
 dps_results: {
@@ -2021,8 +2021,8 @@ dps_results: {
 dps_results: {
  key: "TestRetribution-AllItems-TalismanofBloodlust-96864"
  value: {
-  dps: 164520.09421
-  tps: 155287.68658
+  dps: 165298.20407
+  tps: 156265.03729
  }
 }
 dps_results: {
@@ -2357,8 +2357,8 @@ dps_results: {
 dps_results: {
  key: "TestRetribution-AllItems-Wushoolay'sFinalChoice-96785"
  value: {
-  dps: 161218.05138
-  tps: 152406.03695
+  dps: 161193.31153
+  tps: 152362.88833
  }
 }
 dps_results: {

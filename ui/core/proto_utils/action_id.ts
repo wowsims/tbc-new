@@ -92,6 +92,10 @@ export class ActionId {
 					name += ' (Warmaster Blackhorn)';
 				} else if (this.tag == 56781) {
 					name += ' (Goriona)';
+				} else if (this.tag == 68476) {
+					name += ' (Horridon)'
+				} else if (this.tag == 69374) {
+					name += ' (War-God Jalak)'
 				} else if (this.tag > 6445300) {
 					name += ` (Set'thik Windblade ${(this.tag - 6445300).toFixed(0)})`;
 				} else if (this.tag > 4191800) {

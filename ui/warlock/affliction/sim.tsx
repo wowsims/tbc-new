@@ -200,89 +200,83 @@ export class AfflictionWarlockSimUI extends IndividualSimUI<Spec.SpecAfflictionW
 			},
 		];
 
-		player.sim.waitForInit().then(() => {
-			this.reforger = new ReforgeOptimizer(this, {
-				statSelectionPresets,
-				enableBreakpointLimits: true,
-				getEPDefaults: player => {
-					if (this.sim.getUseCustomEPValues()) {
-						return player.getEpWeights();
-					}
+		this.reforger = new ReforgeOptimizer(this, {
+			statSelectionPresets,
+			enableBreakpointLimits: true,
+			getEPDefaults: player => {
+				const avgIlvl = player.getGear().getAverageItemLevel(false);
+				if (avgIlvl >= 512) {
+					return Presets.P2_BIS_EP_PRESET.epWeights;
+				}
+				return Presets.P1_BIS_EP_PRESET.epWeights;
+			},
+			// updateSoftCaps: softCaps => {
+			// 	const raidBuffs = player.getRaid()?.getBuffs();
+			// 	const hasBL = !!raidBuffs?.bloodlust;
+			// 	const hasBerserking = player.getRace() === Race.RaceTroll;
 
-					const avgIlvl = player.getGear().getAverageItemLevel(false);
-					if (avgIlvl >= 512) {
-						return Presets.P2_BIS_EP_PRESET.epWeights;
-					}
-					return Presets.P1_BIS_EP_PRESET.epWeights;
-				},
-				// updateSoftCaps: softCaps => {
-				// 	const raidBuffs = player.getRaid()?.getBuffs();
-				// 	const hasBL = !!raidBuffs?.bloodlust;
-				// 	const hasBerserking = player.getRace() === Race.RaceTroll;
+			// 	const modifyHaste = (oldHastePercent: number, modifier: number) =>
+			// 		Number(formatToNumber(((oldHastePercent / 100 + 1) / modifier - 1) * 100, { maximumFractionDigits: 5 }));
 
-				// 	const modifyHaste = (oldHastePercent: number, modifier: number) =>
-				// 		Number(formatToNumber(((oldHastePercent / 100 + 1) / modifier - 1) * 100, { maximumFractionDigits: 5 }));
+			// 	this.individualConfig.defaults.softCapBreakpoints!.forEach(softCap => {
+			// 		const softCapToModify = softCaps.find(sc => sc.unitStat.equals(softCap.unitStat));
+			// 		if (softCap.unitStat.equalsPseudoStat(PseudoStat.PseudoStatSpellHastePercent) && softCapToModify) {
+			// 			const adjustedHasteBreakpoints = new Set([...softCap.breakpoints]);
+			// 			const hasCloseMatchingValue = (value: number) =>
+			// 				[...adjustedHasteBreakpoints.values()].find(bp => bp.toFixed(2) === value.toFixed(2));
 
-				// 	this.individualConfig.defaults.softCapBreakpoints!.forEach(softCap => {
-				// 		const softCapToModify = softCaps.find(sc => sc.unitStat.equals(softCap.unitStat));
-				// 		if (softCap.unitStat.equalsPseudoStat(PseudoStat.PseudoStatSpellHastePercent) && softCapToModify) {
-				// 			const adjustedHasteBreakpoints = new Set([...softCap.breakpoints]);
-				// 			const hasCloseMatchingValue = (value: number) =>
-				// 				[...adjustedHasteBreakpoints.values()].find(bp => bp.toFixed(2) === value.toFixed(2));
+			// 			softCap.breakpoints.forEach(breakpoint => {
+			// 				const dsMiseryBreakpoint = modifyHaste(breakpoint, 1.3);
+			// 				if (dsMiseryBreakpoint > 0 && !hasCloseMatchingValue(dsMiseryBreakpoint)) {
+			// 					adjustedHasteBreakpoints.add(dsMiseryBreakpoint);
+			// 				}
+			// 				if (hasBL) {
+			// 					const blBreakpoint = modifyHaste(breakpoint, 1.3);
 
-				// 			softCap.breakpoints.forEach(breakpoint => {
-				// 				const dsMiseryBreakpoint = modifyHaste(breakpoint, 1.3);
-				// 				if (dsMiseryBreakpoint > 0 && !hasCloseMatchingValue(dsMiseryBreakpoint)) {
-				// 					adjustedHasteBreakpoints.add(dsMiseryBreakpoint);
-				// 				}
-				// 				if (hasBL) {
-				// 					const blBreakpoint = modifyHaste(breakpoint, 1.3);
+			// 					if (blBreakpoint > 0) {
+			// 						if (!hasCloseMatchingValue(blBreakpoint)) adjustedHasteBreakpoints.add(blBreakpoint);
 
-				// 					if (blBreakpoint > 0) {
-				// 						if (!hasCloseMatchingValue(blBreakpoint)) adjustedHasteBreakpoints.add(blBreakpoint);
+			// 						const dsMiseryBlBreakpoint = modifyHaste(blBreakpoint, 1.3);
+			// 						if (dsMiseryBlBreakpoint > 0 && !hasCloseMatchingValue(dsMiseryBlBreakpoint)) {
+			// 							adjustedHasteBreakpoints.add(dsMiseryBlBreakpoint);
+			// 						}
 
-				// 						const dsMiseryBlBreakpoint = modifyHaste(blBreakpoint, 1.3);
-				// 						if (dsMiseryBlBreakpoint > 0 && !hasCloseMatchingValue(dsMiseryBlBreakpoint)) {
-				// 							adjustedHasteBreakpoints.add(dsMiseryBlBreakpoint);
-				// 						}
+			// 						if (hasBerserking) {
+			// 							const berserkingBreakpoint = modifyHaste(blBreakpoint, 1.2);
+			// 							if (berserkingBreakpoint > 0 && !hasCloseMatchingValue(berserkingBreakpoint)) {
+			// 								adjustedHasteBreakpoints.add(berserkingBreakpoint);
+			// 							}
+			// 						}
+			// 					}
+			// 				}
+			// 			});
+			// 			softCapToModify.breakpoints = [...adjustedHasteBreakpoints].sort((a, b) => a - b);
+			// 		}
+			// 	});
+			// 	return softCaps;
+			// },
+			// additionalSoftCapTooltipInformation: {
+			// 	[Stat.StatHasteRating]: () => {
+			// 		const raidBuffs = player.getRaid()?.getBuffs();
+			// 		const hasBL = !!raidBuffs?.bloodlust;
+			// 		const hasBerserking = player.getRace() === Race.RaceTroll;
 
-				// 						if (hasBerserking) {
-				// 							const berserkingBreakpoint = modifyHaste(blBreakpoint, 1.2);
-				// 							if (berserkingBreakpoint > 0 && !hasCloseMatchingValue(berserkingBreakpoint)) {
-				// 								adjustedHasteBreakpoints.add(berserkingBreakpoint);
-				// 							}
-				// 						}
-				// 					}
-				// 				}
-				// 			});
-				// 			softCapToModify.breakpoints = [...adjustedHasteBreakpoints].sort((a, b) => a - b);
-				// 		}
-				// 	});
-				// 	return softCaps;
-				// },
-				// additionalSoftCapTooltipInformation: {
-				// 	[Stat.StatHasteRating]: () => {
-				// 		const raidBuffs = player.getRaid()?.getBuffs();
-				// 		const hasBL = !!raidBuffs?.bloodlust;
-				// 		const hasBerserking = player.getRace() === Race.RaceTroll;
-
-				// 		return (
-				// 			<>
-				// 				{(hasBL || hasBerserking) && (
-				// 					<>
-				// 						<p className="mb-0">Additional breakpoints have been created using the following cooldowns:</p>
-				// 						<ul className="mb-0">
-				// 							{<li>Dark Soul: Misery</li>}
-				// 							{hasBL && <li>Bloodlust</li>}
-				// 							{hasBerserking && <li>Berserking</li>}
-				// 						</ul>
-				// 					</>
-				// 				)}
-				// 			</>
-				// 		);
-				// 	},
-				// },
-			});
+			// 		return (
+			// 			<>
+			// 				{(hasBL || hasBerserking) && (
+			// 					<>
+			// 						<p className="mb-0">Additional breakpoints have been created using the following cooldowns:</p>
+			// 						<ul className="mb-0">
+			// 							{<li>Dark Soul: Misery</li>}
+			// 							{hasBL && <li>Bloodlust</li>}
+			// 							{hasBerserking && <li>Berserking</li>}
+			// 						</ul>
+			// 					</>
+			// 				)}
+			// 			</>
+			// 		);
+			// 	},
+			// },
 		});
 	}
 }

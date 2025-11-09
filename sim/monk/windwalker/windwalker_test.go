@@ -20,14 +20,14 @@ func TestWindwalker(t *testing.T) {
 			Race:       proto.Race_RaceTroll,
 			OtherRaces: []proto.Race{proto.Race_RaceOrc},
 
-			GearSet: core.GetGearSet("../../../ui/monk/windwalker/gear_sets", "p1_bis"),
+			GearSet: core.GetGearSet("../../../ui/monk/windwalker/gear_sets", "p3_bis"),
 			OtherGearSets: []core.GearSetCombo{
-				core.GetGearSet("../../../ui/monk/windwalker/gear_sets", "p1_prebis"),
+				core.GetGearSet("../../../ui/monk/windwalker/gear_sets", "p2_bis"),
 			},
 			Talents: WindwalkerTalents,
 			OtherTalentSets: []core.TalentsCombo{
-				{Label: "ZenSphere", Talents: ZenSphereTalent, Glyphs: WindwalkerDefaultGlyphs},
-				{Label: "ChiBurstTalent", Talents: ChiBurstTalent, Glyphs: WindwalkerDefaultGlyphs},
+				// {Label: "ZenSphere", Talents: ZenSphereTalent, Glyphs: WindwalkerDefaultGlyphs},
+				// {Label: "ChiBurstTalent", Talents: ChiBurstTalent, Glyphs: WindwalkerDefaultGlyphs},
 				{Label: "RushingJadeWindTalent", Talents: RushingJadeWindTalent, Glyphs: WindwalkerDefaultGlyphs},
 			},
 			Glyphs:      WindwalkerDefaultGlyphs,
@@ -41,8 +41,9 @@ func TestWindwalker(t *testing.T) {
 }
 
 var WindwalkerTalents = "213322"
-var ZenSphereTalent = "223322"
-var ChiBurstTalent = "233322"
+
+// var ZenSphereTalent = "223322"
+// var ChiBurstTalent = "233322"
 var RushingJadeWindTalent = "213321"
 
 var WindwalkerDefaultGlyphs = &proto.Glyphs{

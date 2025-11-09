@@ -926,6 +926,11 @@ export class Timeline extends ResultComponent {
 						{castLog.castTime > 0 && `${castLog.castTime.toFixed(2)}s, `} {castLog.effectiveTime.toFixed(2)}s GCD Time)
 						{travelTimeStr.length > 0 && travelTimeStr}
 					</span>
+					{totalDamage > 0 && (
+						<span>
+							Total: {totalDamage.toFixed(2)} ({(totalDamage / (castLog.effectiveTime || 1)).toFixed(2)} DPET)
+						</span>
+					)}
 					{castLog.damageDealtLogs.length > 0 && (
 						<ul className="rotation-timeline-cast-damage-list">
 							{castLog.damageDealtLogs.map(ddl => (
@@ -934,14 +939,9 @@ export class Timeline extends ResultComponent {
 										{ddl.timestamp.toFixed(2)}s - {ddl.result()}
 									</span>
 																{ddl.source?.isTarget && <span className="threat-metrics"> ({ddl.threat.toFixed(1)} {i18n.t('results_tab.details.timeline.tooltips.threat')})</span>}
-						</li>
-					))}
-				</ul>
-					)}
-					{totalDamage > 0 && (
-						<span>
-							Total: {totalDamage.toFixed(2)} ({(totalDamage / (castLog.effectiveTime || 1)).toFixed(2)} DPET)
-						</span>
+								</li>
+							))}
+						</ul>
 					)}
 				</div>
 			);

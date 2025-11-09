@@ -1,0 +1,168 @@
+{
+  "apiVersion": 2,
+  "raidBuffs": {
+    "trueshotAura": true,
+    "unleashedRage": true,
+    "darkIntent": true,
+    "moonkinAura": true,
+    "legacyOfTheWhiteTiger": true,
+    "blessingOfMight": true,
+"legacyOfTheEmperor": true,
+    "bloodlust": true,
+    "stormlashTotemCount": 4,
+    "skullBannerCount": 2
+  },
+  "debuffs": {
+    "weakenedBlows": true,
+    "physicalVulnerability": true,
+    "weakenedArmor": true,
+    "curseOfElements": true
+  },
+  "tanks": [
+    {
+    },
+    {
+      "type": "Player"
+    }
+  ],
+  "partyBuffs": {
+  },
+  "player": {
+    "name": "Player",
+    "race": "RaceOrc",
+    "class": "ClassMonk",
+    "consumables": {
+      "prepotId": 76090,
+      "potId": 76090,
+      "flaskId": 76087,
+      "foodId": 74656,
+      "conjuredId": 5512
+    },
+    "buffs": {
+      "vigilanceCount": 2
+    },
+    "brewmasterMonk": {
+      "options": {
+        "classOptions": {
+        }
+      }
+    },
+    "talentsString": "213322",
+    "glyphs": {
+      "major1": 87893,
+      "major2": 85689,
+      "major3": 87896,
+      "minor1": 87887,
+      "minor2": 87884,
+      "minor3": 87889
+    },
+    "profession1": "Engineering",
+    "profession2": "Blacksmithing",
+    "cooldowns": {
+      "hpPercentForDefensives": 0.3
+    },
+    "rotation": {
+      "type": "TypeAPL",
+      "simple": {
+        "cooldowns": {
+          "hpPercentForDefensives": 0.3
+        }
+      },
+      "prepullActions": [
+        {"action":{"castSpell":{"spellId":{"spellId":115069}}},"doAtValue":{"const":{"val":"-.1s"}}}
+      ],
+      "priorityList": [
+        {"action":{"autocastOtherCooldowns":{}}},
+        {"action":{"condition":{"and":{"vals":[{"auraIsKnown":{"auraId":{"spellId":138237}}},{"auraIsActive":{"auraId":{"spellId":138237},"includeReactionTime":true}},{"or":{"vals":[{"cmp":{"op":"OpGt","lhs":{"brewmasterMonkCurrentStaggerPercent":{}},"rhs":{"const":{"val":"6%"}}}},{"cmp":{"op":"OpLe","lhs":{"auraRemainingTime":{"auraId":{"spellId":138237}}},"rhs":{"math":{"op":"OpAdd","lhs":{"spellGcdHastedDuration":{"spellId":{"spellId":100780}}},"rhs":{"inputDelay":{}}}}}}]}}]}},"castSpell":{"spellId":{"spellId":119582}}}},
+        {"action":{"condition":{"and":{"vals":[{"auraIsInactive":{"auraId":{"spellId":115308},"includeReactionTime":true}}]}},"castSpell":{"spellId":{"spellId":115308}}}},
+        {"action":{"castSpell":{"spellId":{"spellId":126456}}}},
+        {"action":{"condition":{"auraIsInactive":{"auraId":{"spellId":126456}}},"castSpell":{"spellId":{"spellId":114030,"tag":-1}}}},
+        {"action":{"condition":{"auraIsInactive":{"auraId":{"spellId":114030,"tag":-1}}},"castSpell":{"spellId":{"spellId":33206,"tag":-1}}}},
+        {"action":{"condition":{"and":{"vals":[{"auraIsInactive":{"auraId":{"spellId":115295}}}]}},"castSpell":{"spellId":{"spellId":122278}}}},
+        {"action":{"condition":{"and":{"vals":[{"auraIsInactive":{"auraId":{"spellId":122278,"tag":1}}}]}},"castSpell":{"spellId":{"spellId":115295}}}},
+        {"action":{"condition":{"and":{"vals":[{"auraIsInactive":{"auraId":{"spellId":122278,"tag":1}}},{"auraIsInactive":{"auraId":{"spellId":115295}}}]}},"castSpell":{"spellId":{"itemId":86046}}}},
+        {"action":{"condition":{"and":{"vals":[{"auraIsInactive":{"auraId":{"spellId":122278,"tag":1}}},{"auraIsInactive":{"auraId":{"spellId":115295}}}]}},"castSpell":{"spellId":{"itemId":94507}}}},
+        {"action":{"condition":{"and":{"vals":[{"auraIsInactive":{"auraId":{"spellId":122278,"tag":1}}},{"auraIsInactive":{"auraId":{"spellId":115295}}}]}},"castSpell":{"spellId":{"itemId":76090}}}},
+        {"action":{"condition":{"or":{"vals":[{"cmp":{"op":"OpEq","lhs":{"monkCurrentChi":{}},"rhs":{"const":{"val":"0"}}}},{"and":{"vals":[{"cmp":{"op":"OpLe","lhs":{"monkCurrentChi":{}},"rhs":{"const":{"val":"1"}}}},{"cmp":{"op":"OpGe","lhs":{"spellTimeToReady":{"spellId":{"spellId":121253}}},"rhs":{"const":{"val":"1.5s"}}}}]}}]}},"castSpell":{"spellId":{"spellId":115399}}}},
+        {"hide":true,"action":{"condition":{"and":{"vals":[{"cmp":{"op":"OpGt","lhs":{"auraRemainingTime":{"auraId":{"spellId":115307}}},"rhs":{"const":{"val":"2s"}}}},{"cmp":{"op":"OpGe","lhs":{"monkCurrentChi":{}},"rhs":{"const":{"val":"3"}}}},{"auraIsActive":{"auraId":{"spellId":118636},"includeReactionTime":true}},{"cmp":{"op":"OpGe","lhs":{"auraNumStacks":{"auraId":{"spellId":120267},"includeReactionTime":true}},"rhs":{"const":{"val":"80000"}}}}]}},"castSpell":{"spellId":{"spellId":115295}}}},
+        {"action":{"condition":{"and":{"vals":[{"cmp":{"op":"OpLe","lhs":{"spellTimeToReady":{"spellId":{"spellId":121253}}},"rhs":{"const":{"val":"1.5s"}}}},{"cmp":{"op":"OpGe","lhs":{"monkCurrentChi":{}},"rhs":{"math":{"op":"OpSub","lhs":{"monkMaxChi":{}},"rhs":{"const":{"val":"1"}}}}}}]}},"castSpell":{"spellId":{"spellId":100784,"tag":1}}}},
+        {"hide":true,"action":{"condition":{"and":{"vals":[{"cmp":{"op":"OpLe","lhs":{"spellTimeToReady":{"spellId":{"spellId":121253}}},"rhs":{"const":{"val":".5s"}}}},{"cmp":{"op":"OpGe","lhs":{"monkCurrentChi":{}},"rhs":{"math":{"op":"OpSub","lhs":{"monkMaxChi":{}},"rhs":{"const":{"val":"1"}}}}}}]}},"castSpell":{"spellId":{"spellId":119582}}}},
+        {"action":{"condition":{"or":{"vals":[{"cmp":{"op":"OpLe","lhs":{"currentHealthPercent":{}},"rhs":{"const":{"val":"70%"}}}}]}},"castSpell":{"spellId":{"spellId":124507}}}},
+        {"action":{"condition":{"and":{"vals":[{"auraIsKnown":{"auraId":{"spellId":138177}}},{"cmp":{"op":"OpGt","lhs":{"energyTimeToTarget":{"targetEnergy":{"maxEnergy":{}}}},"rhs":{"gcdTimeToReady":{}}}}]}},"castSpell":{"spellId":{"spellId":138310}}}},
+        {"action":{"castSpell":{"spellId":{"spellId":121253}}}},
+        {"action":{"castSpell":{"spellId":{"spellId":116847}}}},
+        {"action":{"condition":{"and":{"vals":[{"cmp":{"op":"OpLe","lhs":{"auraRemainingTime":{"auraId":{"spellId":115307}}},"rhs":{"const":{"val":"2s"}}}},{"cmp":{"op":"OpLe","lhs":{"monkCurrentChi":{}},"rhs":{"const":{"val":"1"}}}},{"cmp":{"op":"OpLt","lhs":{"currentHealthPercent":{}},"rhs":{"const":{"val":"95%"}}}}]}},"castSpell":{"spellId":{"spellId":115072}}}},
+        {"action":{"condition":{"and":{"vals":[{"cmp":{"op":"OpLe","lhs":{"auraRemainingTime":{"auraId":{"spellId":115307}}},"rhs":{"const":{"val":"2s"}}}},{"cmp":{"op":"OpLe","lhs":{"monkCurrentChi":{}},"rhs":{"const":{"val":"1"}}}}]}},"castSpell":{"spellId":{"spellId":100780}}}},
+        {"action":{"condition":{"or":{"vals":[{"cmp":{"op":"OpLe","lhs":{"auraRemainingTime":{"auraId":{"spellId":115307}}},"rhs":{"const":{"val":"1.5s"}}}},{"and":{"vals":[{"cmp":{"op":"OpLe","lhs":{"spellTimeToReady":{"spellId":{"spellId":121253}}},"rhs":{"const":{"val":"2s"}}}},{"cmp":{"op":"OpGe","lhs":{"monkCurrentChi":{}},"rhs":{"math":{"op":"OpSub","lhs":{"monkMaxChi":{}},"rhs":{"const":{"val":"1"}}}}}}]}}]}},"castSpell":{"spellId":{"spellId":100784,"tag":1}}}},
+        {"action":{"condition":{"cmp":{"op":"OpGe","lhs":{"auraNumStacks":{"auraId":{"spellId":120267},"includeReactionTime":true}},"rhs":{"const":{"val":"70000"}}}},"castSpell":{"spellId":{"spellId":123904}}}},
+        {"action":{"condition":{"cmp":{"op":"OpGe","lhs":{"brewmasterMonkCurrentStaggerPercent":{}},"rhs":{"const":{"val":"6%"}}}},"castSpell":{"spellId":{"spellId":119582}}}},
+        {"action":{"condition":{"and":{"vals":[{"cmp":{"op":"OpGe","lhs":{"currentEnergy":{}},"rhs":{"const":{"val":"80"}}}},{"cmp":{"op":"OpLt","lhs":{"currentHealthPercent":{}},"rhs":{"const":{"val":"95%"}}}}]}},"castSpell":{"spellId":{"spellId":115072}}}},
+        {"action":{"condition":{"cmp":{"op":"OpGe","lhs":{"currentEnergy":{}},"rhs":{"const":{"val":"80"}}}},"castSpell":{"spellId":{"spellId":100780}}}},
+        {"action":{"condition":{"cmp":{"op":"OpLe","lhs":{"auraRemainingTime":{"auraId":{"spellId":125359}}},"rhs":{"const":{"val":"1.5s"}}}},"castSpell":{"spellId":{"spellId":100787}}}},
+        {"action":{"condition":{"cmp":{"op":"OpGe","lhs":{"monkCurrentChi":{}},"rhs":{"const":{"val":"3"}}}},"castSpell":{"spellId":{"spellId":100784,"tag":1}}}},
+        {"action":{"castSpell":{"spellId":{"spellId":115098}}}},
+        {"action":{"castSpell":{"spellId":{"spellId":123986}}}},
+        {"action":{"condition":{"cmp":{"op":"OpLt","lhs":{"auraNumStacks":{"auraId":{"spellId":124081,"tag":1},"includeReactionTime":true}},"rhs":{"const":{"val":"2"}}}},"castSpell":{"spellId":{"spellId":124081}}}},
+        {"hide":true,"action":{"castSpell":{"spellId":{"spellId":124081}}}},
+        {"action":{"castSpell":{"spellId":{"spellId":100787}}}}
+      ]
+    },
+    "reactionTimeMs": 250,
+    "inFrontOfTarget": true,
+    "distanceFromTarget": 5,
+    "healingModel": {
+      "hps": 91787,
+      "cadenceSeconds": 0.37,
+      "cadenceVariation": 1.31,
+      "absorbFrac": 0.14,
+      "burstWindow": 6
+    }
+  },
+  "encounter": {
+    "apiVersion": 2,
+    "duration": 93,
+    "durationVariation": 23,
+    "executeProportion20": 0.2,
+    "executeProportion25": 0.25,
+    "executeProportion35": 0.35,
+    "executeProportion45": 0.45,
+    "executeProportion90": 0.9,
+    "targets": [
+      {
+        "id": 68476,
+        "name": "Horridon 25 H",
+        "level": 93,
+        "mobType": "MobTypeBeast",
+        "stats": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,24835,0,1962616500,0,0],
+        "minBaseDamage": 512867,
+        "damageSpread": 0.5508,
+        "swingSpeed": 2,
+        "targetInputs": [
+          {
+            "inputType": "Number",
+            "label": "Jalak death time",
+            "tooltip": "Simulation time (in seconds) at which to disable War-God Jalak and trigger the Rampage buff on Horridon. If set longer than the simulated fight length, then Jalak will be tanked the entire time and Rampage will never be triggered.",
+            "numberValue": 33
+          },
+          {
+            "label": "Taunt swap for Triple Puncture",
+            "tooltip": "If checked, taunt swap upon Jalak's death and on every other Triple Puncture application afterwards in order to limit stack accumulation on a single tank.",
+            "boolValue": true
+          }
+        ]
+      },
+      {
+        "id": 69374,
+        "name": "War-God Jalak 25 H",
+        "level": 93,
+        "mobType": "MobTypeHumanoid",
+        "stats": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,24835,0,78504660,0,0],
+        "minBaseDamage": 485334,
+        "damageSpread": 0.4668,
+        "swingSpeed": 2,
+        "tankIndex": 1
+      }
+    ]
+  },
+  "targetDummies": 9
+}

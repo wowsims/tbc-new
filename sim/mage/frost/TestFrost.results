@@ -173,15 +173,15 @@ dps_results: {
 dps_results: {
  key: "TestFrost-AllItems-EvilEyeofGalakras-105491"
  value: {
-  dps: 152270.21308
+  dps: 152263.09732
   tps: 105457.64668
  }
 }
 dps_results: {
  key: "TestFrost-AllItems-FabledFeatherofJi-Kun-96842"
  value: {
-  dps: 152240.30745
-  tps: 105424.76425
+  dps: 152269.67702
+  tps: 105457.64668
  }
 }
 dps_results: {
@@ -208,8 +208,8 @@ dps_results: {
 dps_results: {
  key: "TestFrost-AllItems-GazeoftheTwins-96915"
  value: {
-  dps: 155175.93983
-  tps: 107548.62447
+  dps: 155456.19731
+  tps: 107661.41684
  }
 }
 dps_results: {
@@ -292,15 +292,15 @@ dps_results: {
 dps_results: {
  key: "TestFrost-AllItems-Primordius'TalismanofRage-96873"
  value: {
-  dps: 156639.86602
+  dps: 156635.95049
   tps: 108587.47184
  }
 }
 dps_results: {
  key: "TestFrost-AllItems-PurifiedBindingsofImmerseus-105422"
  value: {
-  dps: 180315.78274
-  tps: 124440.10662
+  dps: 178663.70549
+  tps: 123312.53431
  }
 }
 dps_results: {
@@ -334,8 +334,8 @@ dps_results: {
 dps_results: {
  key: "TestFrost-AllItems-Renataki'sSoulCharm-96741"
  value: {
-  dps: 152312.21843
-  tps: 105500.56019
+  dps: 152260.95776
+  tps: 105462.11973
  }
 }
 dps_results: {
@@ -383,7 +383,7 @@ dps_results: {
 dps_results: {
  key: "TestFrost-AllItems-SparkofZandalar-96770"
  value: {
-  dps: 155386.92847
+  dps: 155388.8792
   tps: 107616.66987
  }
 }
@@ -397,8 +397,8 @@ dps_results: {
 dps_results: {
  key: "TestFrost-AllItems-TalismanofBloodlust-96864"
  value: {
-  dps: 156764.94896
-  tps: 108621.86331
+  dps: 156008.18283
+  tps: 108255.21589
  }
 }
 dps_results: {
@@ -418,15 +418,15 @@ dps_results: {
 dps_results: {
  key: "TestFrost-AllItems-UnerringVisionofLeiShen-96930"
  value: {
-  dps: 169081.90158
-  tps: 115964.43839
+  dps: 170106.14742
+  tps: 116676.00837
  }
 }
 dps_results: {
  key: "TestFrost-AllItems-Wushoolay'sFinalChoice-96785"
  value: {
-  dps: 168723.37049
-  tps: 116776.64873
+  dps: 170666.25174
+  tps: 118005.32368
  }
 }
 dps_results: {

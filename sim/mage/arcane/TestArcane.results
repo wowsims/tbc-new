@@ -173,15 +173,15 @@ dps_results: {
 dps_results: {
  key: "TestArcane-AllItems-EvilEyeofGalakras-105491"
  value: {
-  dps: 142983.41598
-  tps: 139462.20481
+  dps: 142913.45581
+  tps: 139392.6292
  }
 }
 dps_results: {
  key: "TestArcane-AllItems-FabledFeatherofJi-Kun-96842"
  value: {
-  dps: 143071.36998
-  tps: 139550.48136
+  dps: 142912.18666
+  tps: 139387.90192
  }
 }
 dps_results: {
@@ -208,8 +208,8 @@ dps_results: {
 dps_results: {
  key: "TestArcane-AllItems-GazeoftheTwins-96915"
  value: {
-  dps: 142540.08443
-  tps: 139995.67199
+  dps: 142232.83858
+  tps: 139699.85521
  }
 }
 dps_results: {
@@ -292,15 +292,15 @@ dps_results: {
 dps_results: {
  key: "TestArcane-AllItems-Primordius'TalismanofRage-96873"
  value: {
-  dps: 146473.24375
-  tps: 142838.21508
+  dps: 146496.98424
+  tps: 142862.2668
  }
 }
 dps_results: {
  key: "TestArcane-AllItems-PurifiedBindingsofImmerseus-105422"
  value: {
-  dps: 169529.15803
-  tps: 164449.60239
+  dps: 168876.19511
+  tps: 164214.84818
  }
 }
 dps_results: {
@@ -327,15 +327,15 @@ dps_results: {
 dps_results: {
  key: "TestArcane-AllItems-RegaliaoftheChromaticHydra"
  value: {
-  dps: 142462.3881
-  tps: 138960.8119
+  dps: 149211.27186
+  tps: 145704.94927
  }
 }
 dps_results: {
  key: "TestArcane-AllItems-Renataki'sSoulCharm-96741"
  value: {
-  dps: 143025.45673
-  tps: 139503.97839
+  dps: 142863.75856
+  tps: 139343.09522
  }
 }
 dps_results: {
@@ -397,8 +397,8 @@ dps_results: {
 dps_results: {
  key: "TestArcane-AllItems-TalismanofBloodlust-96864"
  value: {
-  dps: 144350.52203
-  tps: 141865.1493
+  dps: 143713.89804
+  tps: 141220.82115
  }
 }
 dps_results: {
@@ -418,15 +418,15 @@ dps_results: {
 dps_results: {
  key: "TestArcane-AllItems-UnerringVisionofLeiShen-96930"
  value: {
-  dps: 160491.23979
-  tps: 156776.88652
+  dps: 162957.30603
+  tps: 158359.89329
  }
 }
 dps_results: {
  key: "TestArcane-AllItems-Wushoolay'sFinalChoice-96785"
  value: {
-  dps: 153764.59054
-  tps: 150501.98896
+  dps: 154765.35635
+  tps: 151503.72251
  }
 }
 dps_results: {

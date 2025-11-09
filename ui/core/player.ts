@@ -279,9 +279,6 @@ export class Player<SpecType extends Spec> {
 	private static readonly numEpRatios = 6;
 	private epRatios: Array<number> = new Array<number>(Player.numEpRatios).fill(0);
 	private epWeights: Stats = new Stats();
-	private statCaps: Stats = new Stats();
-	private softCapBreakpoints: StatCap[] = [];
-	private breakpointLimits: Stats = new Stats();
 	private currentStats: PlayerStats = PlayerStats.create();
 	private metadata: UnitMetadata = new UnitMetadata();
 	private petMetadatas: UnitMetadataList = new UnitMetadataList();
@@ -301,9 +298,6 @@ export class Player<SpecType extends Spec> {
 	readonly distanceFromTargetChangeEmitter = new TypedEvent<void>('PlayerDistanceFromTarget');
 	readonly healingModelChangeEmitter = new TypedEvent<void>('PlayerHealingModel');
 	readonly epWeightsChangeEmitter = new TypedEvent<void>('PlayerEpWeights');
-	readonly statCapsChangeEmitter = new TypedEvent<void>('StatCaps');
-	readonly softCapBreakpointsChangeEmitter = new TypedEvent<void>('SoftCapBreakpoints');
-	readonly breakpointLimitsChangeEmitter = new TypedEvent<void>('BreakpointLimits');
 	readonly miscOptionsChangeEmitter = new TypedEvent<void>('PlayerMiscOptions');
 	readonly challengeModeChangeEmitter = new TypedEvent<void>('ChallengeMode');
 
@@ -365,8 +359,6 @@ export class Player<SpecType extends Spec> {
 				this.epWeightsChangeEmitter,
 				this.epRatiosChangeEmitter,
 				this.epRefStatChangeEmitter,
-				this.statCapsChangeEmitter,
-				this.breakpointLimitsChangeEmitter,
 				this.challengeModeChangeEmitter,
 			],
 			'PlayerChange',
@@ -532,32 +524,6 @@ export class Player<SpecType extends Spec> {
 		}
 	}
 
-	getStatCaps(): Stats {
-		return this.statCaps;
-	}
-
-	setStatCaps(eventID: EventID, newStatCaps: Stats) {
-		this.statCaps = newStatCaps;
-		this.statCapsChangeEmitter.emit(eventID);
-	}
-
-	getSoftCapBreakpoints(): StatCap[] {
-		return this.softCapBreakpoints;
-	}
-
-	setSoftCapBreakpoints(eventID: EventID, newSoftCapBreakpoints: StatCap[]) {
-		this.softCapBreakpoints = newSoftCapBreakpoints;
-		this.softCapBreakpointsChangeEmitter.emit(eventID);
-	}
-	getBreakpointLimits(): Stats {
-		return this.breakpointLimits;
-	}
-
-	setBreakpointLimits(eventID: EventID, newLimits: Stats) {
-		this.breakpointLimits = newLimits;
-		this.breakpointLimitsChangeEmitter.emit(eventID);
-	}
-
 	getDefaultEpRatios(isTankSpec: boolean, isHealingSpec: boolean): Array<number> {
 		const defaultRatios = new Array(Player.numEpRatios).fill(0);
 		if (isHealingSpec) {
@@ -586,6 +552,10 @@ export class Player<SpecType extends Spec> {
 	setEpRatios(eventID: EventID, newRatios: Array<number>) {
 		this.epRatios = newRatios;
 		this.epRatiosChangeEmitter.emit(eventID);
+	}
+
+	hasCustomEPWeights(): boolean {
+		return !this.getSpecConfig().presets.epWeights.some(epw => epw.epWeights.equals(this.epWeights));
 	}
 
 	async computeStatWeights(

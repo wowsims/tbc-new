@@ -9,6 +9,7 @@ import (
 	"github.com/wowsims/mop/sim/encounters/hof"
 	"github.com/wowsims/mop/sim/encounters/msv"
 	"github.com/wowsims/mop/sim/encounters/toes"
+	"github.com/wowsims/mop/sim/encounters/tot"
 )
 
 func init() {
@@ -17,10 +18,12 @@ func init() {
 	msv.Register()
 	hof.Register()
 	toes.Register()
+	tot.Register()
 }
 
 func TestGuardian(t *testing.T) {
 	core.RunTestSuite(t, t.Name(), core.FullCharacterTestSuiteGenerator([]core.CharacterSuiteConfig{
+		core.GetTestBuildFromJSON(proto.Class_ClassDruid, "../../../ui/druid/guardian/builds", "horridon_default", ItemFilter, nil, nil),
 		core.GetTestBuildFromJSON(proto.Class_ClassDruid, "../../../ui/druid/guardian/builds", "sha_default", ItemFilter, nil, nil),
 		core.GetTestBuildFromJSON(proto.Class_ClassDruid, "../../../ui/druid/guardian/builds", "empress_default", ItemFilter, nil, nil),
 		core.GetTestBuildFromJSON(proto.Class_ClassDruid, "../../../ui/druid/guardian/builds", "garajal_default", ItemFilter, nil, nil),

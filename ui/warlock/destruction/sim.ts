@@ -155,10 +155,8 @@ export class DestructionWarlockSimUI extends IndividualSimUI<Spec.SpecDestructio
 			},
 		];
 
-		player.sim.waitForInit().then(() => {
-			this.reforger = new ReforgeOptimizer(this, {
-				statSelectionPresets,
-			});
+		this.reforger = new ReforgeOptimizer(this, {
+			statSelectionPresets,
 		});
 	}
 }

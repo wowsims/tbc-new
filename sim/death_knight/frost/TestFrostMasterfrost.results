@@ -65,8 +65,8 @@ dps_results: {
 dps_results: {
  key: "TestFrostMasterfrost-AllItems-AssuranceofConsequence-105472"
  value: {
-  dps: 166722.53775
-  tps: 153472.33628
+  dps: 166724.74494
+  tps: 153471.69299
   hps: 1723.92544
  }
 }
@@ -769,16 +769,16 @@ dps_results: {
 dps_results: {
  key: "TestFrostMasterfrost-AllItems-EvilEyeofGalakras-105491"
  value: {
-  dps: 174837.84231
-  tps: 160690.42008
+  dps: 175226.1621
+  tps: 161095.56304
   hps: 1702.16823
  }
 }
 dps_results: {
  key: "TestFrostMasterfrost-AllItems-FabledFeatherofJi-Kun-96842"
  value: {
-  dps: 182514.77477
-  tps: 166816.91855
+  dps: 182266.92303
+  tps: 166807.94694
   hps: 1778.67626
  }
 }
@@ -905,9 +905,9 @@ dps_results: {
 dps_results: {
  key: "TestFrostMasterfrost-AllItems-GazeoftheTwins-96915"
  value: {
-  dps: 178896.8565
-  tps: 164258.53387
-  hps: 1777.16776
+  dps: 179124.47051
+  tps: 164426.45364
+  hps: 1768.48421
  }
 }
 dps_results: {
@@ -1879,8 +1879,8 @@ dps_results: {
 dps_results: {
  key: "TestFrostMasterfrost-AllItems-Primordius'TalismanofRage-96873"
  value: {
-  dps: 179508.9487
-  tps: 164966.80994
+  dps: 180523.78271
+  tps: 165715.54097
   hps: 1761.37685
  }
 }
@@ -1967,8 +1967,8 @@ dps_results: {
 dps_results: {
  key: "TestFrostMasterfrost-AllItems-Renataki'sSoulCharm-96741"
  value: {
-  dps: 166749.67219
-  tps: 153482.47106
+  dps: 166829.89088
+  tps: 153564.68626
   hps: 1723.92544
  }
 }
@@ -2184,8 +2184,8 @@ dps_results: {
 dps_results: {
  key: "TestFrostMasterfrost-AllItems-SparkofZandalar-96770"
  value: {
-  dps: 178381.03895
-  tps: 164356.56437
+  dps: 178053.06179
+  tps: 164010.10324
   hps: 1755.35252
  }
 }
@@ -2376,9 +2376,9 @@ dps_results: {
 dps_results: {
  key: "TestFrostMasterfrost-AllItems-TalismanofBloodlust-96864"
  value: {
-  dps: 169692.15437
-  tps: 156004.94106
-  hps: 1758.91104
+  dps: 169213.42054
+  tps: 155590.88753
+  hps: 1769.00638
  }
 }
 dps_results: {
@@ -2720,8 +2720,8 @@ dps_results: {
 dps_results: {
  key: "TestFrostMasterfrost-AllItems-Wushoolay'sFinalChoice-96785"
  value: {
-  dps: 169515.71827
-  tps: 156177.78043
+  dps: 169514.69501
+  tps: 156176.75717
   hps: 1778.67626
  }
 }

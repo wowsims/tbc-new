@@ -2,13 +2,12 @@ package dbc
 
 import (
 	"math"
+	"slices"
 
 	"github.com/wowsims/mop/sim/core"
 	"github.com/wowsims/mop/sim/core/proto"
 	"github.com/wowsims/mop/sim/core/stats"
 )
-
-var MAX_UPGRADE_LEVELS = []int{1, 2}
 
 const UPGRADE_SYSTEM_ACTIVE = true
 
@@ -42,6 +41,7 @@ type Item struct {
 	SocketModifier         []float64 // Todo: Figure out if this is socket modifier in disguise or something else - I call it that for now.
 	NameDescription        string    // Contains information for i.E. Thunderforging. Normal = Thunderforged, HC = Heroic Thunderforged
 	UpgradeID              int
+	UpgradePath            []int
 	LimitCategory          int
 }
 
@@ -91,12 +91,11 @@ func (item *Item) ToScaledUIItem(itemLevel int) *proto.UIItem {
 		Ilvl:            int32(item.ItemLevel),
 	}
 
-	// Amount of upgrade steps is defined in MAX_UPGRADE_LEVELS
 	// In P2 of MoP it is expected to be 2 steps
 	if item.CanUpgrade() {
-		for _, upgradeLevel := range item.GetMaxUpgradeCount() {
-			upgradedIlvl := item.ItemLevel + item.UpgradeItemLevelBy(upgradeLevel)
-			upgradeStep := proto.ItemLevelState(upgradeLevel)
+		for step, ilvl := range item.UpgradePath[1:] {
+			upgradedIlvl := item.ItemLevel + ilvl
+			upgradeStep := proto.ItemLevelState(step + 1)
 			scalingProperties[int32(upgradeStep)] = &proto.ScalingItemProperties{
 				WeaponDamageMin: item.WeaponDmgMin(upgradedIlvl),
 				WeaponDamageMax: item.WeaponDmgMax(upgradedIlvl),
@@ -120,14 +119,15 @@ func (item *Item) ToScaledUIItem(itemLevel int) *proto.UIItem {
 	return uiItem
 }
 
+var SetIdExlcudeOverrides = []int{1152, 1172}
+
 func (item *Item) CanUpgrade() bool {
-	return item.ItemLevel >= core.MinUpgradeIlvl && UPGRADE_SYSTEM_ACTIVE && item.Flags2.Has(CAN_BE_UPGRADED) && item.UpgradeID > 0
+	return item.ItemLevel >= core.MinUpgradeIlvl && UPGRADE_SYSTEM_ACTIVE && item.Flags2.Has(CAN_BE_UPGRADED) && item.UpgradeID > 0 && !slices.Contains(SetIdExlcudeOverrides, item.ItemSetId)
 }
 
 func (item *Item) GetMaxIlvl() int {
 	if item.CanUpgrade() {
-		maxUpgradeCount := item.GetMaxUpgradeCount()
-		return item.ItemLevel + item.UpgradeItemLevelBy(maxUpgradeCount[len(maxUpgradeCount)-1])
+		return item.ItemLevel + item.UpgradePath[len(item.UpgradePath)-1]
 	}
 	return item.ItemLevel
 }
@@ -420,29 +420,4 @@ func (item *Item) GetRandomSuffixType() int {
 	default:
 		return -1
 	}
-}
-
-func (item *Item) GetMaxUpgradeCount() []int {
-	switch item.OverallQuality {
-	// Rare items are limited to 1 upgrade level
-	case 3:
-		return MAX_UPGRADE_LEVELS[:1]
-	case 4, 5:
-		return MAX_UPGRADE_LEVELS
-	default:
-		return []int{}
-	}
-}
-
-func (item *Item) UpgradeItemLevelBy(upgradeLevel int) int {
-	if item.OverallQuality == 3 {
-		return upgradeLevel * 8
-	}
-	if item.OverallQuality == 4 {
-		return upgradeLevel * 4
-	}
-	if item.OverallQuality == 5 {
-		return upgradeLevel * 4
-	}
-	return 0
 }

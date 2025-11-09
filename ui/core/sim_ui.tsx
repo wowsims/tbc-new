@@ -15,7 +15,7 @@ import Toast from './components/toast';
 import { REPO_NEW_ISSUE_URL } from './constants/other';
 import { LaunchStatus, SimStatus } from './launched_sims.js';
 import { PlayerSpec } from './player_spec.js';
-import { ErrorOutcome, ErrorOutcomeType } from './proto/api';
+import { ErrorOutcomeType } from './proto/api';
 import { ActionId } from './proto_utils/action_id.js';
 import { SimResult } from './proto_utils/sim_result';
 import { RunSimOptions, Sim, SimError } from './sim.js';

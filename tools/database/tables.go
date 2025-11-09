@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -1572,4 +1573,54 @@ func LoadRepItems(dbHelper *DBHelper) (
 	}
 	fmt.Println("Loaded rep items", len(sourcesByItem))
 	return sourcesByItem
+}
+
+func ScanItemUpgradePath(rows *sql.Rows) (UpgradeID int, upgradePathID int, ilvl int, err error) {
+	err = rows.Scan(
+		&UpgradeID,
+		&upgradePathID,
+		&ilvl,
+	)
+	if err != nil {
+		return 0, 0, 0, fmt.Errorf("scanning rep row: %w", err)
+	}
+	return UpgradeID, upgradePathID, ilvl, nil
+}
+
+func LoadItemUpgradePath(dbHelper *DBHelper) (upgradePath map[int][]int, err error) {
+	const query = `SELECT
+		iu.ID,
+		iu.ItemUpgradePathID,
+		iu.ItemLevelIncrement
+		FROM ItemUpgrade iu
+    `
+	rows, err := dbHelper.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	upgradeIDToPathID := make(map[int]int)
+	pathIDToIlvls := make(map[int][]int)
+
+	for rows.Next() {
+		ID, pathID, ilvl, scanErr := ScanItemUpgradePath(rows)
+		if scanErr != nil {
+			return nil, scanErr
+		}
+		upgradeIDToPathID[ID] = pathID
+		pathIDToIlvls[pathID] = append(pathIDToIlvls[pathID], ilvl)
+	}
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+	upgradePath = make(map[int][]int)
+	for id, upgrade := range upgradeIDToPathID {
+		upgradePath[id] = pathIDToIlvls[upgrade]
+	}
+	for _, ilvls := range upgradePath {
+		slices.Sort(ilvls)
+	}
+	fmt.Println("Loaded Upgrade Path", len(upgradePath))
+	return upgradePath, nil
 }
