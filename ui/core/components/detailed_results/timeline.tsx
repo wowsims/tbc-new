@@ -575,7 +575,11 @@ export class Timeline extends ResultComponent {
 				stringComparator(a[0].actionId!.name, b[0].actionId!.name),
 			),
 		);
-		const buffsAndDebuffsById = buffsById.concat(debuffsByTargetById.flat());
+
+		const buffsAndDebuffsById = buffsById.concat(
+			// Only pick target 0 to prevent overlapping cast rows
+			debuffsByTargetById[0]
+		);
 
 		auraAsResource.forEach(auraId => {
 			const auraIndex = buffsById.findIndex(auraUptimeLogs => auraUptimeLogs?.[0].actionId!.spellId === auraId);
