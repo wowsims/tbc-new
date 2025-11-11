@@ -11,12 +11,6 @@ func (mm *MarksmanshipHunter) ApplySpecialization() {
 	mm.SteadyFocusAura()
 	mm.PiercingShotsAura()
 	mm.MasterMarksmanAura()
-	// Hotfix only applies to MM
-	mm.AddStaticMod(core.SpellModConfig{
-		Kind:       core.SpellMod_DamageDone_Pct,
-		ClassMask:  hunter.HunterSpellBarrage,
-		FloatValue: 0.15,
-	})
 
 	//Careful Aim
 	caCritMod := mm.AddDynamicMod(core.SpellModConfig{

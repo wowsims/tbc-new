@@ -33,7 +33,7 @@ func (mmHunter *MarksmanshipHunter) registerChimeraShotSpell() {
 			},
 		},
 
-		DamageMultiplier: 4.29,
+		DamageMultiplier: 2.65,
 		CritMultiplier:   mmHunter.DefaultCritMultiplier(),
 		ThreatMultiplier: 1,
 
