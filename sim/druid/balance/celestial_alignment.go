@@ -32,7 +32,7 @@ func (moonkin *BalanceDruid) registerCelestialAlignmentSpell() {
 			moonkin.CelestialAlignmentSpellMod.UpdateFloatValue(eclipseMasteryBonus)
 			moonkin.CelestialAlignmentSpellMod.Activate()
 
-			if moonkin.ChosenOfElune.RelatedSelfBuff.IsActive() {
+			if moonkin.ChosenOfElune != nil && moonkin.ChosenOfElune.RelatedSelfBuff.IsActive() {
 				moonkin.IncarnationSpellMod.Activate()
 			}
 		},
