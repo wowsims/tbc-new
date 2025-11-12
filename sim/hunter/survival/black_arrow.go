@@ -53,9 +53,10 @@ func (svHunter *SurvivalHunter) registerBlackArrowSpell() {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			result := spell.CalcOutcome(sim, target, spell.OutcomeRangedHit)
+			result := spell.CalcOutcome(sim, target, spell.OutcomeRangedHitNoHitCounter)
 
 			spell.WaitTravelTime(sim, func(sim *core.Simulation) {
+				spell.DealOutcome(sim, result)
 				if result.Landed() {
 					spell.Dot(target).Apply(sim)
 				}

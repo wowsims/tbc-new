@@ -1367,7 +1367,7 @@ const idToCategoryMap: Record<number, number> = {
 	[34490]: MELEE_ACTION_CATEGORY + 0.29, // Silencing Shot
 	[49001]: MELEE_ACTION_CATEGORY + 0.3, // Serpent Sting
 	[53238]: MELEE_ACTION_CATEGORY + 0.31, // Piercing Shots
-	[63672]: MELEE_ACTION_CATEGORY + 0.32, // Black Arrow
+	[3674]: MELEE_ACTION_CATEGORY + 0.32, // Black Arrow
 	[49067]: MELEE_ACTION_CATEGORY + 0.33, // Explosive Trap
 	[77767]: MELEE_ACTION_CATEGORY + 0.34, // Cobra Shot
 

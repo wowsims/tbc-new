@@ -1059,7 +1059,7 @@ export class CastLog extends SimLog {
 		}
 		if (
 			this.castCompletedLog &&
-			this.damageDealtLogs.length == 1 &&
+			this.damageDealtLogs.length >= 1 &&
 			this.castCompletedLog.timestamp < this.damageDealtLogs[0].timestamp &&
 			!this.damageDealtLogs[0].tick
 		) {
