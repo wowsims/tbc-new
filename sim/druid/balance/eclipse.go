@@ -108,7 +108,7 @@ func (moonkin *BalanceDruid) RegisterEclipseSpellMods() {
 }
 
 func (moonkin *BalanceDruid) RegisterEclipseAuras() {
-	manaMetrics := moonkin.NewManaMetrics(core.ActionID{SpellID: 79577 /* Eclipse */})
+	manaMetrics := moonkin.NewManaMetrics(core.ActionID{SpellID: 81070 /* Eclipse */})
 
 	lunarEclipse := moonkin.RegisterAura(core.Aura{
 		ActionID: core.ActionID{SpellID: 48518},

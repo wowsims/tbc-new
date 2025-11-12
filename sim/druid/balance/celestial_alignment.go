@@ -9,7 +9,7 @@ import (
 
 func (moonkin *BalanceDruid) registerCelestialAlignmentSpell() {
 	actionID := core.ActionID{SpellID: 112071}
-	manaMetrics := moonkin.NewManaMetrics(core.ActionID{SpellID: 79577 /* Eclipse */})
+	manaMetrics := moonkin.NewManaMetrics(core.ActionID{SpellID: 81070 /* Eclipse */})
 
 	celestialAlignmentAura := moonkin.RegisterAura(core.Aura{
 		Label:    "Celestial Alignment",
