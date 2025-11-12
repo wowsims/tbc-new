@@ -361,9 +361,10 @@ func (value *APLValueDotCritPercentIncrease) getCritChance(useSnapshot bool) flo
 	target := value.targetRef.Get()
 	dot := value.spell.Dot(target)
 	if useSnapshot {
-		return dot.SnapshotCritChance
+		return TernaryFloat64(value.useBaseValue, value.baseValue, dot.SnapshotCritChance)
 	}
-	return TernaryFloat64(value.useBaseValue, value.baseValue, dot.Spell.SpellCritChance(target))
+
+	return dot.Spell.SpellCritChance(target)
 }
 
 type APLValueDotTickRatePercentIncrease struct {
@@ -389,18 +390,19 @@ func (value *APLValueDotTickRatePercentIncrease) Finalize(rot *APLRotation) {
 
 func (value *APLValueDotTickRatePercentIncrease) GetFloat(sim *Simulation) float64 {
 	currentTickrate := value.getTickRate(true)
+
 	if currentTickrate == 0 {
 		return 1
 	}
-	val := currentTickrate/value.getTickRate(false) - 1
-	return val
+
+	return currentTickrate/value.getTickRate(false) - 1
 }
 
 func (value *APLValueDotTickRatePercentIncrease) getTickRate(useSnapshot bool) float64 {
 	target := value.targetRef.Get()
 	dot := value.spell.Dot(target)
 	if useSnapshot {
-		return dot.TickPeriod().Seconds()
+		return TernaryFloat64(value.useBaseValue, value.baseValue, TernaryFloat64(dot.IsActive(), dot.TickPeriod().Seconds(), 0))
 	}
-	return TernaryFloat64(value.useBaseValue, value.baseValue, dot.CalcTickPeriod().Round(time.Millisecond).Seconds())
+	return dot.CalcTickPeriod().Round(time.Millisecond).Seconds()
 }
