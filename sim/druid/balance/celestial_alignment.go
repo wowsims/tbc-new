@@ -9,7 +9,6 @@ import (
 
 func (moonkin *BalanceDruid) registerCelestialAlignmentSpell() {
 	actionID := core.ActionID{SpellID: 112071}
-	manaMetrics := moonkin.NewManaMetrics(core.ActionID{SpellID: 81070 /* Eclipse */})
 
 	celestialAlignmentAura := moonkin.RegisterAura(core.Aura{
 		Label:    "Celestial Alignment",
@@ -20,7 +19,7 @@ func (moonkin *BalanceDruid) registerCelestialAlignmentSpell() {
 
 			moonkin.NaturesGrace.Activate(sim)
 			moonkin.Starfall.CD.Reset()
-			moonkin.AddMana(sim, moonkin.MaxMana()*0.5, manaMetrics)
+			moonkin.AddMana(sim, moonkin.MaxMana()*0.5, moonkin.ManaMetric)
 
 			eclipseMasteryBonus := calculateEclipseMasteryBonus(moonkin.GetMasteryPoints(), true)
 

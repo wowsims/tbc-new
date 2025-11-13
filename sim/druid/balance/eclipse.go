@@ -108,8 +108,6 @@ func (moonkin *BalanceDruid) RegisterEclipseSpellMods() {
 }
 
 func (moonkin *BalanceDruid) RegisterEclipseAuras() {
-	manaMetrics := moonkin.NewManaMetrics(core.ActionID{SpellID: 81070 /* Eclipse */})
-
 	lunarEclipse := moonkin.RegisterAura(core.Aura{
 		ActionID: core.ActionID{SpellID: 48518},
 		Label:    "Eclipse (Lunar)",
@@ -153,7 +151,7 @@ func (moonkin *BalanceDruid) RegisterEclipseAuras() {
 	moonkin.AddEclipseCallback(func(eclipse Eclipse, gained bool, sim *core.Simulation) {
 		if gained {
 			// Moonkins are energized for 50% maximum mana every time they enter eclipse.
-			moonkin.AddMana(sim, moonkin.MaxMana()*0.5, manaMetrics)
+			moonkin.AddMana(sim, moonkin.MaxMana()*0.5, moonkin.ManaMetric)
 		}
 
 		if eclipse == LunarEclipse {

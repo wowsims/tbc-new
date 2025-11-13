@@ -62,6 +62,8 @@ type BalanceDruid struct {
 	CelestialAlignmentSpellMod *core.SpellMod
 	IncarnationSpellMod        *core.SpellMod
 
+	ManaMetric *core.ResourceMetrics
+
 	AstralCommunion      *druid.DruidSpell
 	AstralStorm          *druid.DruidSpell
 	AstralStormTickSpell *druid.DruidSpell
@@ -92,6 +94,8 @@ func (moonkin *BalanceDruid) Initialize() {
 
 	moonkin.RegisterBalancePassives()
 	moonkin.RegisterBalanceSpells()
+
+	moonkin.ManaMetric = moonkin.NewManaMetrics(core.ActionID{SpellID: 81070 /* Eclipse */})
 }
 
 func (moonkin *BalanceDruid) ApplyTalents() {
