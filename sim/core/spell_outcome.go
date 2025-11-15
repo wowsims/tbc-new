@@ -56,14 +56,24 @@ func (dot *Dot) OutcomeTickPhysicalCrit(sim *Simulation, result *SpellResult, at
 	}
 }
 
-func (dot *Dot) OutcomeTickMagicCrit(sim *Simulation, result *SpellResult, attackTable *AttackTable) {
+func (dot *Dot) OutcomeTickMagicCrit(sim *Simulation, result *SpellResult, _ *AttackTable) {
+	dot.outcomeTickMagicCrit(sim, result, nil, true)
+}
+func (dot *Dot) OutcomeTickMagicCritNoHitCounter(sim *Simulation, result *SpellResult, _ *AttackTable) {
+	dot.outcomeTickMagicCrit(sim, result, nil, false)
+}
+func (dot *Dot) outcomeTickMagicCrit(sim *Simulation, result *SpellResult, attackTable *AttackTable, countHits bool) {
 	if dot.Spell.MagicCritCheck(sim, result.Target) {
 		result.Outcome = OutcomeCrit
 		result.Damage *= dot.Spell.CritDamageMultiplier()
-		dot.Spell.SpellMetrics[result.Target.UnitIndex].CritTicks++
+		if countHits {
+			dot.Spell.SpellMetrics[result.Target.UnitIndex].CritTicks++
+		}
 	} else {
 		result.Outcome = OutcomeHit
-		dot.Spell.SpellMetrics[result.Target.UnitIndex].Ticks++
+		if countHits {
+			dot.Spell.SpellMetrics[result.Target.UnitIndex].Ticks++
+		}
 	}
 }
 

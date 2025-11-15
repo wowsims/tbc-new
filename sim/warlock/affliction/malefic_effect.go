@@ -10,7 +10,7 @@ func (affliction *AfflictionWarlock) registerMaleficEffect() {
 	buildSpell := func(id int32) *core.Spell {
 		return affliction.RegisterSpell(core.SpellConfig{
 			ActionID:       core.ActionID{SpellID: id}.WithTag(1),
-			Flags:          core.SpellFlagNoOnCastComplete | core.SpellFlagNoSpellMods | core.SpellFlagIgnoreAttackerModifiers,
+			Flags:          core.SpellFlagPassiveSpell | core.SpellFlagNoOnCastComplete | core.SpellFlagNoSpellMods | core.SpellFlagIgnoreAttackerModifiers,
 			SpellSchool:    core.SpellSchoolShadow,
 			ProcMask:       core.ProcMaskSpellDamage,
 			ClassSpellMask: warlock.WarlockSpellMaleficGrasp,
@@ -20,7 +20,7 @@ func (affliction *AfflictionWarlock) registerMaleficEffect() {
 			CritMultiplier:   affliction.DefaultCritMultiplier(),
 			BonusSpellPower:  0, // used to transmit base damage
 			ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-				result := spell.CalcDamage(sim, target, spell.BonusSpellPower, procDot.OutcomeTickMagicCrit)
+				result := spell.CalcDamage(sim, target, spell.BonusSpellPower, procDot.OutcomeTickMagicCritNoHitCounter)
 				spell.DealPeriodicDamage(sim, result)
 
 				// Adjust metrics just for Malefic Effects as it is a edgecase and needs to be handled manually
