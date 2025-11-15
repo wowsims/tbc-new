@@ -14,8 +14,8 @@ import T16Gear from './gear_sets/t16.gear.json';
 export const PreraidPresetGear = PresetUtils.makePresetGear('Pre-raid', PreraidGear);
 export const T14PresetGear = PresetUtils.makePresetGear('T14', T14Gear);
 export const T14UpgradedPresetGear = PresetUtils.makePresetGear('T14 - Upgraded', T14UpgradedGear);
-export const T15PresetGear = PresetUtils.makePresetGear('T15', T15Gear);
-export const T16PresetGear = PresetUtils.makePresetGear('T16', T16Gear);
+export const T15PresetGear = PresetUtils.makePresetGear('T15 (WIP)', T15Gear);
+export const T16PresetGear = PresetUtils.makePresetGear('T16 (WIP)', T16Gear);
 
 export const StandardRotation = PresetUtils.makePresetAPLRotation('Standard', StandardApl);
 

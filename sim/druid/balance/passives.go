@@ -97,6 +97,7 @@ func (moonkin *BalanceDruid) registerNaturesGrace() {
 
 	moonkin.AddEclipseCallback(func(_ Eclipse, gained bool, sim *core.Simulation) {
 		if gained {
+			moonkin.NaturesGrace.Deactivate(sim)
 			moonkin.NaturesGrace.Activate(sim)
 		}
 	})
