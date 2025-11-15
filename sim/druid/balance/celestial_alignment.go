@@ -17,6 +17,7 @@ func (moonkin *BalanceDruid) registerCelestialAlignmentSpell() {
 		OnGain: func(_ *core.Aura, sim *core.Simulation) {
 			moonkin.SuspendEclipseBar()
 
+			moonkin.NaturesGrace.Deactivate(sim)
 			moonkin.NaturesGrace.Activate(sim)
 			moonkin.Starfall.CD.Reset()
 			moonkin.AddMana(sim, moonkin.MaxMana()*0.5, moonkin.ManaMetric)
