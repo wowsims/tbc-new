@@ -15,7 +15,7 @@ func (svHunter *SurvivalHunter) registerBlackArrowSpell() {
 		SpellSchool:    core.SpellSchoolShadow,
 		ProcMask:       core.ProcMaskRangedSpecial,
 		ClassSpellMask: hunter.HunterSpellBlackArrow,
-		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL | core.SpellFlagReadinessTrinket,
+		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL | core.SpellFlagReadinessTrinket | core.SpellFlagRanged,
 		FocusCost: core.FocusCostOptions{
 			Cost: 35,
 		},

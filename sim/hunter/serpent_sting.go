@@ -46,7 +46,7 @@ func (hunter *Hunter) registerSerpentStingSpell() {
 		SpellSchool:    core.SpellSchoolNature,
 		ProcMask:       core.ProcMaskProc,
 		ClassSpellMask: HunterSpellSerpentSting,
-		Flags:          core.SpellFlagAPL,
+		Flags:          core.SpellFlagAPL | core.SpellFlagRanged,
 		MissileSpeed:   40,
 		MinRange:       0,
 		MaxRange:       40,
