@@ -28,7 +28,7 @@ func (prot *ProtectionPaladin) registerAvengersShieldSpell() {
 	prot.AvengersShield = prot.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 31935},
 		SpellSchool:    core.SpellSchoolHoly,
-		ProcMask:       core.ProcMaskMeleeMHSpecial,
+		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
 		ClassSpellMask: paladin.SpellMaskAvengersShield,
 
@@ -58,7 +58,7 @@ func (prot *ProtectionPaladin) registerAvengersShieldSpell() {
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			bonusDamage := 0.31499999762*spell.SpellPower() + 0.81749999523*spell.MeleeAttackPower()
 
-			spell.CalcCleaveDamageWithVariance(sim, target, maxTargets, spell.OutcomeMeleeSpecialHitAndCrit, func(sim *core.Simulation, _ *core.Spell) float64 {
+			spell.CalcCleaveDamageWithVariance(sim, target, maxTargets, spell.OutcomeMagicHitAndCrit, func(sim *core.Simulation, _ *core.Spell) float64 {
 				return prot.CalcAndRollDamageRange(sim, 5.89499998093, 0.20000000298) + bonusDamage
 			})
 
