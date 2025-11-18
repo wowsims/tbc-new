@@ -6,16 +6,18 @@ import { SavedTalents } from '../../core/proto/ui.js';
 import { Stats } from '../../core/proto_utils/stats';
 import DefaultApl from './apls/default.apl.json';
 import P2_Gear from './gear_sets/p2.gear.json';
+import P3_Gear from './gear_sets/p3.gear.json';
 import Preraid_Gear from './gear_sets/preraid.gear.json';
 import P2RetBuild from './builds/p2.build.json';
+import P3RetBuild from './builds/p3.build.json';
 import PreraidRetBuild from './builds/preraid.build.json';
 
 export const P2_GEAR_PRESET = PresetUtils.makePresetGear('P2', P2_Gear);
+export const P3_GEAR_PRESET = PresetUtils.makePresetGear('P3 (WiP)', P3_Gear);
 export const PRERAID_GEAR_PRESET = PresetUtils.makePresetGear('Pre-raid', Preraid_Gear);
 
 export const APL_PRESET = PresetUtils.makePresetAPLRotation('Default', DefaultApl);
 
-// Preset options for EP weights
 export const P1_P2_EP_PRESET = PresetUtils.makePresetEpWeights(
 	'P2',
 	Stats.fromMap(
@@ -30,6 +32,24 @@ export const P1_P2_EP_PRESET = PresetUtils.makePresetEpWeights(
 		},
 		{
 			[PseudoStat.PseudoStatMainHandDps]: 1.91,
+		},
+	),
+);
+
+export const P3_EP_PRESET = PresetUtils.makePresetEpWeights(
+	'P3',
+	Stats.fromMap(
+		{
+			[Stat.StatStrength]: 1.0,
+			[Stat.StatHitRating]: 0.68,
+			[Stat.StatExpertiseRating]: 0.68,
+			[Stat.StatHasteRating]: 0.67,
+			[Stat.StatMasteryRating]: 0.62,
+			[Stat.StatCritRating]: 0.56,
+			[Stat.StatAttackPower]: 0.44,
+		},
+		{
+			[PseudoStat.PseudoStatMainHandDps]: 1.86,
 		},
 	),
 );
@@ -52,8 +72,6 @@ export const PRERAID_EP_PRESET = PresetUtils.makePresetEpWeights(
 	),
 );
 
-// Default talents. Uses the wowhead calculator format, make the talents on
-// https://wowhead.com/mop-classic/talent-calc and copy the numbers in the url.
 export const DefaultTalents = {
 	name: 'Default',
 	data: SavedTalents.create({
@@ -68,6 +86,11 @@ export const DefaultTalents = {
 
 export const P2_BUILD_PRESET = PresetUtils.makePresetBuildFromJSON('P2', Spec.SpecRetributionPaladin, P2RetBuild, {
 	epWeights: P1_P2_EP_PRESET,
+	rotationType: APLRotationType.TypeAuto,
+});
+
+export const P3_BUILD_PRESET = PresetUtils.makePresetBuildFromJSON('P3 (WiP)', Spec.SpecRetributionPaladin, P3RetBuild, {
+	epWeights: P3_EP_PRESET,
 	rotationType: APLRotationType.TypeAuto,
 });
 

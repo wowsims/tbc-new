@@ -61,6 +61,15 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRetributionPaladin, {
 		Stat.StatExpertiseRating,
 		Stat.StatMasteryRating,
 	],
+	gemStats: [
+		Stat.StatStamina,
+		Stat.StatStrength,
+		Stat.StatHitRating,
+		Stat.StatCritRating,
+		Stat.StatHasteRating,
+		Stat.StatExpertiseRating,
+		Stat.StatMasteryRating,
+	],
 	epPseudoStats: [PseudoStat.PseudoStatMainHandDps],
 	// Reference stat against which to calculate EP. I think all classes use either spell power or attack power.
 	epReferenceStat: Stat.StatStrength,
@@ -140,13 +149,13 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRetributionPaladin, {
 	},
 
 	presets: {
-		epWeights: [Presets.P1_P2_EP_PRESET, Presets.PRERAID_EP_PRESET],
+		epWeights: [Presets.P1_P2_EP_PRESET, Presets.P3_EP_PRESET, Presets.PRERAID_EP_PRESET],
 		rotations: [Presets.APL_PRESET],
 		// Preset talents that the user can quickly select.
 		talents: [Presets.DefaultTalents],
 		// Preset gear configurations that the user can quickly select.
-		gear: [Presets.P2_GEAR_PRESET, Presets.PRERAID_GEAR_PRESET],
-		builds: [Presets.P2_BUILD_PRESET, Presets.PRERAID_BUILD_PRESET],
+		gear: [Presets.P2_GEAR_PRESET, Presets.P3_GEAR_PRESET, Presets.PRERAID_GEAR_PRESET],
+		builds: [Presets.P2_BUILD_PRESET, Presets.P3_BUILD_PRESET, Presets.PRERAID_BUILD_PRESET],
 	},
 
 	autoRotation: (_: Player<Spec.SpecRetributionPaladin>): APLRotation => {
@@ -167,10 +176,14 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRetributionPaladin, {
 			defaultGear: {
 				[Faction.Unknown]: {},
 				[Faction.Alliance]: {
-					1: Presets.P2_GEAR_PRESET.gear,
+					1: Presets.PRERAID_GEAR_PRESET.gear,
+					2: Presets.P2_GEAR_PRESET.gear,
+					3: Presets.P3_GEAR_PRESET.gear,
 				},
 				[Faction.Horde]: {
-					1: Presets.P2_GEAR_PRESET.gear,
+					1: Presets.PRERAID_GEAR_PRESET.gear,
+					2: Presets.P2_GEAR_PRESET.gear,
+					3: Presets.P3_GEAR_PRESET.gear,
 				},
 			},
 		},
