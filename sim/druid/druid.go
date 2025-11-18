@@ -137,6 +137,7 @@ const (
 	DruidSpellSwiftmend
 	DruidSpellWildGrowth
 	DruidSpellCenarionWard
+	DruidSpellCelestialAlignment
 
 	DruidSpellLast
 	DruidSpellsAll               = DruidSpellLast<<1 - 1
