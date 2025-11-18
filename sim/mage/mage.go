@@ -53,10 +53,10 @@ type Mage struct {
 	ArcanePowerDamageMod *core.SpellMod
 
 	T15_4PC_FrostboltProcChance float64
+	T15_4PC_ArcaneChargeEffect  float64
 	Icicles                     []float64
 
 	// Item sets
-	T15_4PC *core.Aura
 	T16_4pc *core.Aura
 }
 
@@ -167,6 +167,7 @@ func NewMage(character *core.Character, options *proto.Player, mageOptions *prot
 
 	mage.Icicles = make([]float64, 0)
 	mage.T15_4PC_FrostboltProcChance = 0
+	mage.T15_4PC_ArcaneChargeEffect = 1.0
 
 	return mage
 }
