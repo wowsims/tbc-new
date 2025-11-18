@@ -134,7 +134,7 @@ func (shaman *Shaman) ApplyEnhancementTalents() {
 	shaman.MakeProcTriggerAura(core.ProcTrigger{
 		Name:               "Static Shock",
 		Callback:           core.CallbackOnSpellHitDealt,
-		ClassSpellMask:     SpellMaskStormstrikeDamage | SpellMaskLavaLash,
+		ClassSpellMask:     SpellMaskStormstrikeDamage | SpellMaskStormblastDamage | SpellMaskLavaLash,
 		ProcChance:         0.45,
 		Outcome:            core.OutcomeLanded,
 		TriggerImmediately: true,
@@ -176,7 +176,7 @@ func (shaman *Shaman) ApplyEnhancementTalents() {
 			mwManaCostmod.Deactivate()
 		},
 		OnCastComplete: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell) {
-			if !spell.Matches(mwAffectedSpells) {
+			if !spell.Matches(mwAffectedSpells) || spell.Flags.Matches(SpellFlagIsEcho) {
 				return
 			}
 			//If AS is active and MW < 5 stacks, do not consume MW stacks

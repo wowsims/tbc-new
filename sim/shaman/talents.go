@@ -99,7 +99,7 @@ func (shaman *Shaman) ApplyAncestralSwiftness() {
 		ActionID: core.ActionID{SpellID: 16188},
 		Duration: core.NeverExpires,
 		OnCastComplete: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell) {
-			if !spell.Matches(affectedSpells) {
+			if !spell.Matches(affectedSpells) || spell.Flags.Matches(SpellFlagIsEcho) {
 				return
 			}
 			//If both AS and MW 5 stacks buff are active, only MW gets consumed.
@@ -182,7 +182,7 @@ func (shaman *Shaman) ApplyEchoOfTheElements() {
 					MissileSpeed:             spell.MissileSpeed,
 					ClassSpellMask:           spell.ClassSpellMask,
 					BonusCoefficient:         spell.BonusCoefficient,
-					Flags:                    spell.Flags & ^core.SpellFlagAPL | core.SpellFlagNoOnCastComplete | SpellFlagIsEcho,
+					Flags:                    spell.Flags & ^core.SpellFlagAPL | SpellFlagIsEcho,
 					RelatedDotSpell:          spell.RelatedDotSpell,
 				})
 			}

@@ -153,7 +153,7 @@ func (shaman *Shaman) ApplyElementalTalents() {
 		Duration:  time.Second * 15,
 		MaxStacks: maxStacks,
 		OnCastComplete: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell) {
-			if !spell.Matches(canConsumeSpells) {
+			if !spell.Matches(canConsumeSpells) || spell.Flags.Matches(SpellFlagIsEcho) {
 				return
 			}
 			if spell == triggeringSpell && sim.CurrentTime == triggerTime {
@@ -235,7 +235,7 @@ func (shaman *Shaman) ApplyElementalTalents() {
 			}
 		},
 		OnCastComplete: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell) {
-			if !spell.Matches(SpellMaskLavaBurst) || !procAura.IsActive() {
+			if !spell.Matches(SpellMaskLavaBurst) || spell.Flags.Matches(SpellFlagIsEcho) || !procAura.IsActive() {
 				return
 			}
 			//If lava surge procs during LvB cast time, it is not consumed and lvb does not go on cd

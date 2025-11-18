@@ -1692,8 +1692,8 @@ dps_results: {
 dps_results: {
  key: "TestEnhancement-AllItems-RegaliaoftheWitchDoctor"
  value: {
-  dps: 93796.45509
-  tps: 80008.89485
+  dps: 93782.58228
+  tps: 80032.09365
  }
 }
 dps_results: {

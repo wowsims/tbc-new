@@ -330,6 +330,8 @@ const (
 	SpellMaskPrimalStrike
 	SpellMaskStormstrikeCast
 	SpellMaskStormstrikeDamage
+	SpellMaskStormblastCast
+	SpellMaskStormblastDamage
 	SpellMaskEarthShield
 	SpellMaskFulmination
 	SpellMaskFrostShock
@@ -352,6 +354,7 @@ const (
 	SpellMaskBloodlust
 
 	SpellMaskStormstrike  = SpellMaskStormstrikeCast | SpellMaskStormstrikeDamage
+	SpellMaskStormblast   = SpellMaskStormblastCast | SpellMaskStormblastDamage
 	SpellMaskFlameShock   = SpellMaskFlameShockDirect | SpellMaskFlameShockDot
 	SpellMaskFire         = SpellMaskFlameShock | SpellMaskLavaBurst | SpellMaskLavaBurstOverload | SpellMaskLavaLash | SpellMaskFireNova | SpellMaskUnleashFlame | SpellMaskLavaBeam | SpellMaskLavaBeamOverload | SpellMaskElementalBlast | SpellMaskElementalBlastOverload
 	SpellMaskNature       = SpellMaskLightningBolt | SpellMaskLightningBoltOverload | SpellMaskChainLightning | SpellMaskChainLightningOverload | SpellMaskEarthShock | SpellMaskThunderstorm | SpellMaskFulmination | SpellMaskElementalBlast | SpellMaskElementalBlastOverload
