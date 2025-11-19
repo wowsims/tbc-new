@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/wowsims/mop/sim/common/shared"
 	"github.com/wowsims/mop/sim/core"
 	"github.com/wowsims/mop/sim/core/proto"
 )
@@ -230,6 +231,29 @@ func (warlock *Warlock) registerGrimoireOfSacrifice() {
 			FloatValue: 0.15,
 			ClassMask:  WarlockSpellConflagrate | WarlockSpellShadowBurn | WarlockSpellFelFlame | WarlockSpellIncinerate | WarlockSpellDrainLife,
 		})
+
+		shared.RegisterIgniteEffect(&warlock.Unit, shared.IgniteConfig{
+			ActionID:      core.ActionID{SpellID: 116858}.WithTag(1), // Real SpellID: 1277303
+			SpellSchool:   core.SpellSchoolShadow,
+			DotAuraLabel:  "Chaos Bolt Dot",
+			DotAuraTag:    "ChaosBoltDot",
+			TickLength:    1 * time.Second,
+			NumberOfTicks: 3,
+			ParentAura:    buff,
+
+			ProcTrigger: core.ProcTrigger{
+				Name:               "Chaos Bolt - Trigger",
+				Callback:           core.CallbackOnSpellHitDealt,
+				ClassSpellMask:     WarlockSpellChaosBolt,
+				Outcome:            core.OutcomeLanded,
+				RequireDamageDealt: true,
+			},
+
+			DamageCalculator: func(result *core.SpellResult) float64 {
+				return result.Damage * 0.15
+			},
+		})
+
 	}
 
 	applyPetHook := func(pet *WarlockPet) {

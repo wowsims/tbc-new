@@ -3,7 +3,6 @@ package destruction
 import (
 	"time"
 
-	"github.com/wowsims/mop/sim/common/shared"
 	"github.com/wowsims/mop/sim/core"
 	"github.com/wowsims/mop/sim/core/stats"
 	"github.com/wowsims/mop/sim/warlock"
@@ -14,30 +13,8 @@ var chaosBoltScale = 2.5875
 var chaosBoltCoeff = 2.5875
 
 func (destro *DestructionWarlock) registerChaosBolt() {
-	actionID := core.ActionID{SpellID: 116858}
-	shared.RegisterIgniteEffect(&destro.Unit, shared.IgniteConfig{
-		ActionID:      actionID.WithTag(1), // Real SpellID: 1277303
-		SpellSchool:   core.SpellSchoolShadow,
-		DotAuraLabel:  "Chaos Bolt Dot",
-		DotAuraTag:    "ChaosBoltDot",
-		TickLength:    1 * time.Second,
-		NumberOfTicks: 3,
-
-		ProcTrigger: core.ProcTrigger{
-			Name:               "Chaos Bolt - Trigger",
-			Callback:           core.CallbackOnSpellHitDealt,
-			ClassSpellMask:     warlock.WarlockSpellChaosBolt,
-			Outcome:            core.OutcomeLanded,
-			RequireDamageDealt: true,
-		},
-
-		DamageCalculator: func(result *core.SpellResult) float64 {
-			return result.Damage * 0.15
-		},
-	})
-
 	destro.RegisterSpell(core.SpellConfig{
-		ActionID:       actionID,
+		ActionID:       core.ActionID{SpellID: 116858},
 		SpellSchool:    core.SpellSchoolShadow,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL,
