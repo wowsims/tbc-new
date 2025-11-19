@@ -28,14 +28,9 @@ type ArcaneMage struct {
 
 	Options *proto.ArcaneMage_Options
 
-	arcaneMissilesProcAura *core.Aura
-	arcanePowerAura        *core.Aura
+	arcanePowerAura *core.Aura
 
-	arcaneMissiles          *core.Spell
-	arcaneMissilesTickSpell *core.Spell
-	arcanePower             *core.Spell
-
-	arcaneMissileCritSnapshot float64
+	arcanePower *core.Spell
 }
 
 func NewArcaneMage(character *core.Character, options *proto.Player) *ArcaneMage {
@@ -55,7 +50,6 @@ func (arcaneMage *ArcaneMage) GetMage() *mage.Mage {
 
 func (arcaneMage *ArcaneMage) Reset(sim *core.Simulation) {
 	arcaneMage.Mage.Reset(sim)
-	arcaneMage.arcaneMissileCritSnapshot = 0.0
 }
 
 func (arcane *ArcaneMage) Initialize() {
