@@ -234,6 +234,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestArms-AllItems-Haromm'sTalisman-105527"
+ value: {
+  dps: 157814.84143
+  tps: 105951.72735
+ }
+}
+dps_results: {
  key: "TestArms-AllItems-Horridon'sLastGasp-96757"
  value: {
   dps: 150049.29344
@@ -266,6 +273,13 @@ dps_results: {
  value: {
   dps: 150049.29344
   tps: 98503.78736
+ }
+}
+dps_results: {
+ key: "TestArms-AllItems-Kardris'ToxicTotem-105540"
+ value: {
+  dps: 157391.6004
+  tps: 105727.86756
  }
 }
 dps_results: {

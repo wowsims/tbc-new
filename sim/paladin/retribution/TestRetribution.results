@@ -997,6 +997,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRetribution-AllItems-Haromm'sTalisman-105527"
+ value: {
+  dps: 166907.23561
+  tps: 158072.54995
+ }
+}
+dps_results: {
  key: "TestRetribution-AllItems-Hawkmaster'sTalon-89082"
  value: {
   dps: 163693.2773
@@ -1176,6 +1183,13 @@ dps_results: {
  value: {
   dps: 160425.58631
   tps: 151636.15967
+ }
+}
+dps_results: {
+ key: "TestRetribution-AllItems-Kardris'ToxicTotem-105540"
+ value: {
+  dps: 166427.40928
+  tps: 157614.24976
  }
 }
 dps_results: {

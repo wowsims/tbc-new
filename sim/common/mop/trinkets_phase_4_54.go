@@ -21,6 +21,17 @@ type readinessTrinketConfig struct {
 	cdrAuraIDs       map[proto.Spec]int32
 }
 
+type multistrikeTrinketConfig struct {
+	itemVersionMap   shared.ItemVersionMap
+	baseTrinketLabel string
+	buffAuraLabel    string
+	buffAuraID       int32
+	buffedStat       stats.Stat
+	buffDuration     time.Duration
+	icd              time.Duration
+	rppm             float64
+}
+
 func init() {
 	newReadinessTrinket := func(config *readinessTrinketConfig) {
 		config.itemVersionMap.RegisterAll(func(version shared.ItemVersion, itemID int32, versionLabel string) {
@@ -163,6 +174,184 @@ func init() {
 			proto.Spec_SpecFuryWarrior:       145991,
 			proto.Spec_SpecProtectionWarrior: 145992,
 		},
+	})
+
+	getMultistrikeSpell := func(character *core.Character, spellID int32, spellSchool core.SpellSchool) *core.Spell {
+		return character.GetOrRegisterSpell(core.SpellConfig{
+			ActionID:    core.ActionID{SpellID: spellID},
+			SpellSchool: spellSchool,
+			ProcMask:    core.ProcMaskEmpty,
+			Flags:       core.SpellFlagIgnoreArmor | core.SpellFlagIgnoreModifiers | core.SpellFlagPassiveSpell | core.SpellFlagNoSpellMods,
+
+			DamageMultiplier: 1,
+			ThreatMultiplier: 1,
+		})
+	}
+
+	getMultistrikeSpells := func(character *core.Character) (*core.Spell, *core.Spell) {
+		var physicalSpellID int32
+		if character.Class == proto.Class_ClassHunter {
+			physicalSpellID = 146069
+		} else {
+			physicalSpellID = 146061
+		}
+
+		physicalSpell := getMultistrikeSpell(character, physicalSpellID, core.SpellSchoolPhysical)
+		magicSpell := physicalSpell
+
+		switch character.Class {
+		case proto.Class_ClassDruid:
+			magicSpell = getMultistrikeSpell(character, 146064, core.SpellSchoolArcane)
+		case proto.Class_ClassMage:
+			var magicSpellID int32
+			var school core.SpellSchool
+			if character.Spec == proto.Spec_SpecArcaneMage {
+				magicSpellID = 146070
+				school = core.SpellSchoolArcane
+			} else {
+				magicSpellID = 146067
+				school = core.SpellSchoolFrostfire
+			}
+			magicSpell = getMultistrikeSpell(character, magicSpellID, school)
+		case proto.Class_ClassMonk:
+			magicSpell = getMultistrikeSpell(character, 146075, core.SpellSchoolNature)
+		case proto.Class_ClassPriest:
+			var magicSpellID int32
+			var school core.SpellSchool
+			if character.Spec == proto.Spec_SpecShadowPriest {
+				magicSpellID = 146065
+				school = core.SpellSchoolShadow
+			} else {
+				magicSpellID = 146063
+				school = core.SpellSchoolHoly
+			}
+			magicSpell = getMultistrikeSpell(character, magicSpellID, school)
+		case proto.Class_ClassShaman:
+			magicSpell = getMultistrikeSpell(character, 146071, core.SpellSchoolNature)
+		case proto.Class_ClassWarlock:
+			magicSpell = getMultistrikeSpell(character, 146065, core.SpellSchoolShadow)
+		}
+
+		return physicalSpell, magicSpell
+	}
+
+	blackoutKickTickID := core.ActionID{SpellID: 100784}.WithTag(2)
+	newMultistrikeTrinket := func(config *multistrikeTrinketConfig) {
+		config.itemVersionMap.RegisterAll(func(version shared.ItemVersion, itemID int32, versionLabel string) {
+			core.NewItemEffect(itemID, func(agent core.Agent, state proto.ItemLevelState) {
+				character := agent.GetCharacter()
+
+				var baseDamage float64
+				applyEffects := func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+					spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeAlwaysHit)
+				}
+
+				physicalSpell, magicSpell := getMultistrikeSpells(character)
+
+				multistrikeTriggerAura := character.MakeProcTriggerAura(core.ProcTrigger{
+					Name:               fmt.Sprintf("%s (%s) - Multistrike Trigger", config.baseTrinketLabel, versionLabel),
+					ProcChance:         core.GetItemEffectScaling(itemID, 0.03539999947, state) / 1000,
+					Outcome:            core.OutcomeLanded,
+					Callback:           core.CallbackOnSpellHitDealt | core.CallbackOnPeriodicDamageDealt,
+					RequireDamageDealt: true,
+
+					ExtraCondition: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) bool {
+						return spell.ProcMask != core.ProcMaskEmpty
+					},
+
+					Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+						baseDamage = result.Damage / 3.0
+
+						// Special case for Windwalker Blackout Kick DoTs which does physical damage but procs the nature damage spell
+						if spell.SpellSchool.Matches(core.SpellSchoolPhysical) && !spell.ActionID.SameAction(blackoutKickTickID) {
+							physicalSpell.ApplyEffects = applyEffects
+							physicalSpell.Cast(sim, result.Target)
+						} else {
+							magicSpell.ApplyEffects = applyEffects
+							magicSpell.Cast(sim, result.Target)
+						}
+					},
+				})
+
+				stats := stats.Stats{}
+				stats[config.buffedStat] = core.GetItemEffectScaling(itemID, 2.97300004959, state)
+
+				statBuffAura := character.NewTemporaryStatsAura(
+					fmt.Sprintf("%s (%s)", config.buffAuraLabel, versionLabel),
+					core.ActionID{SpellID: config.buffAuraID},
+					stats,
+					config.buffDuration,
+				)
+
+				statBuffTriggerAura := character.MakeProcTriggerAura(core.ProcTrigger{
+					Name:     fmt.Sprintf("%s (%s) - Stat Trigger", config.baseTrinketLabel, versionLabel),
+					ICD:      config.icd,
+					Outcome:  core.OutcomeLanded,
+					Callback: core.CallbackOnSpellHitDealt,
+
+					DPM: character.NewRPPMProcManager(itemID, false, false, core.ProcMaskDirect|core.ProcMaskProc, core.RPPMConfig{
+						PPM: config.rppm,
+					}),
+
+					Handler: func(sim *core.Simulation, spell *core.Spell, _ *core.SpellResult) {
+						statBuffAura.Activate(sim)
+					},
+				})
+
+				statBuffAura.Icd = statBuffTriggerAura.Icd
+
+				eligibleSlots := character.ItemSwap.EligibleSlotsForItem(itemID)
+				character.AddStatProcBuff(itemID, statBuffAura, false, eligibleSlots)
+				character.ItemSwap.RegisterProcWithSlots(itemID, statBuffTriggerAura, eligibleSlots)
+				character.ItemSwap.RegisterProcWithSlots(itemID, multistrikeTriggerAura, eligibleSlots)
+			})
+		})
+	}
+
+	// Haromm's Talisman
+	// Your attacks have a 16.7% chance to trigger Multistrike, which deals instant additional damage to your target equal to 33% of the original damage dealt.
+	//
+	// Your attacks have a chance to grant you 14039 Agility for 10 sec.
+	// (Approximately 0.92 procs per minute)
+	newMultistrikeTrinket(&multistrikeTrinketConfig{
+		itemVersionMap: shared.ItemVersionMap{
+			shared.ItemVersionLFR:             105029,
+			shared.ItemVersionNormal:          102301,
+			shared.ItemVersionHeroic:          104531,
+			shared.ItemVersionWarforged:       105278,
+			shared.ItemVersionHeroicWarforged: 105527,
+			shared.ItemVersionFlexible:        104780,
+		},
+		baseTrinketLabel: "Haromm's Talisman",
+		buffAuraLabel:    "Vicious",
+		buffAuraID:       148903,
+		buffedStat:       stats.Agility,
+		buffDuration:     time.Second * 10,
+		icd:              time.Second * 10,
+		rppm:             0.92000001669,
+	})
+
+	// Kardris' Toxic Totem
+	// Your attacks have a 16.7% chance to trigger Multistrike, which deals instant additional damage to your target equal to 33% of the original damage dealt.
+	//
+	// Your attacks have a chance to grant 14039 Intellect for 10 sec.
+	// (Approximately 0.92 procs per minute)
+	newMultistrikeTrinket(&multistrikeTrinketConfig{
+		itemVersionMap: shared.ItemVersionMap{
+			shared.ItemVersionLFR:             105042,
+			shared.ItemVersionNormal:          102300,
+			shared.ItemVersionHeroic:          104544,
+			shared.ItemVersionWarforged:       105291,
+			shared.ItemVersionHeroicWarforged: 105540,
+			shared.ItemVersionFlexible:        104793,
+		},
+		baseTrinketLabel: "Kardris' Toxic Totem",
+		buffAuraLabel:    "Toxic Power",
+		buffAuraID:       148906,
+		buffedStat:       stats.Intellect,
+		buffDuration:     time.Second * 10,
+		icd:              time.Second * 10,
+		rppm:             0.92000001669,
 	})
 
 	// Purified Bindings of Immerseus

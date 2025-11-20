@@ -78,7 +78,28 @@ func (spell *Spell) NewResult(target *Unit) *SpellResult {
 
 	return result
 }
+
+func (spell *Spell) CloneResult(result *SpellResult) *SpellResult {
+	if result == nil {
+		return nil
+	}
+
+	newResult := spell.NewResult(result.Target)
+	newResult.Target = result.Target
+	newResult.Damage = result.Damage
+	newResult.Threat = result.Threat
+	newResult.Outcome = result.Outcome
+	newResult.PostArmorDamage = result.PostArmorDamage
+	newResult.PostOutcomeDamage = result.PostOutcomeDamage
+
+	return newResult
+}
+
 func (spell *Spell) DisposeResult(result *SpellResult) {
+	if result == nil {
+		return
+	}
+
 	result.inUse = false
 }
 

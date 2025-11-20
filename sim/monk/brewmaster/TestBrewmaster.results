@@ -1318,6 +1318,15 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestBrewmaster-AllItems-Haromm'sTalisman-105527"
+ value: {
+  dps: 288264.81206
+  tps: 1.25645442884e+06
+  dtps: 15666.47311
+  hps: 31610.36786
+ }
+}
+dps_results: {
  key: "TestBrewmaster-AllItems-Hawkmaster'sTalon-89082"
  value: {
   dps: 265226.35381
@@ -1538,6 +1547,15 @@ dps_results: {
  value: {
   dps: 259577.43435
   tps: 1.11692229315e+06
+  dtps: 16707.66667
+  hps: 30178.93464
+ }
+}
+dps_results: {
+ key: "TestBrewmaster-AllItems-Kardris'ToxicTotem-105540"
+ value: {
+  dps: 268983.30207
+  tps: 1.18179621877e+06
   dtps: 16707.66667
   hps: 30178.93464
  }

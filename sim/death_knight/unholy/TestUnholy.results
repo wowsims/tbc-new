@@ -1143,6 +1143,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestUnholy-AllItems-Haromm'sTalisman-105527"
+ value: {
+  dps: 225116.5428
+  tps: 161592.4092
+  hps: 2540.62046
+ }
+}
+dps_results: {
  key: "TestUnholy-AllItems-Hawkmaster'sTalon-89082"
  value: {
   dps: 221920.15386
@@ -1348,6 +1356,14 @@ dps_results: {
   dps: 222258.10211
   tps: 157346.04337
   hps: 2575.93356
+ }
+}
+dps_results: {
+ key: "TestUnholy-AllItems-Kardris'ToxicTotem-105540"
+ value: {
+  dps: 224855.3809
+  tps: 161172.44563
+  hps: 2541.74391
  }
 }
 dps_results: {

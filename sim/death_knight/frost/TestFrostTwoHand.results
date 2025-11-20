@@ -1143,6 +1143,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestFrostTwoHand-AllItems-Haromm'sTalisman-105527"
+ value: {
+  dps: 177626.17366
+  tps: 162799.35599
+  hps: 2763.36242
+ }
+}
+dps_results: {
  key: "TestFrostTwoHand-AllItems-Hawkmaster'sTalon-89082"
  value: {
   dps: 171326.10017
@@ -1347,6 +1355,14 @@ dps_results: {
  value: {
   dps: 169362.24336
   tps: 154599.34427
+  hps: 2763.36242
+ }
+}
+dps_results: {
+ key: "TestFrostTwoHand-AllItems-Kardris'ToxicTotem-105540"
+ value: {
+  dps: 177270.80477
+  tps: 162507.90568
   hps: 2763.36242
  }
 }

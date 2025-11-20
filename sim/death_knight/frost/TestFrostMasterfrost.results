@@ -1143,6 +1143,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestFrostMasterfrost-AllItems-Haromm'sTalisman-105527"
+ value: {
+  dps: 174768.73892
+  tps: 161488.58148
+  hps: 1723.92544
+ }
+}
+dps_results: {
  key: "TestFrostMasterfrost-AllItems-Hawkmaster'sTalon-89082"
  value: {
   dps: 167972.20541
@@ -1347,6 +1355,14 @@ dps_results: {
  value: {
   dps: 166617.19559
   tps: 153403.83833
+  hps: 1723.92544
+ }
+}
+dps_results: {
+ key: "TestFrostMasterfrost-AllItems-Kardris'ToxicTotem-105540"
+ value: {
+  dps: 174381.63042
+  tps: 161168.27316
   hps: 1723.92544
  }
 }

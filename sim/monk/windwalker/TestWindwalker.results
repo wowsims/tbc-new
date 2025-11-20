@@ -1175,6 +1175,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestWindwalker-AllItems-Haromm'sTalisman-105527"
+ value: {
+  dps: 244181.8881
+  tps: 231491.65874
+  hps: 8592.4879
+ }
+}
+dps_results: {
  key: "TestWindwalker-AllItems-Hawkmaster'sTalon-89082"
  value: {
   dps: 221764.3918
@@ -1380,6 +1388,14 @@ dps_results: {
   dps: 223862.2814
   tps: 212815.49175
   hps: 7741.95989
+ }
+}
+dps_results: {
+ key: "TestWindwalker-AllItems-Kardris'ToxicTotem-105540"
+ value: {
+  dps: 225931.19427
+  tps: 215279.20664
+  hps: 7780.44255
  }
 }
 dps_results: {

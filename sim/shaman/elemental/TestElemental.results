@@ -1018,6 +1018,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestElemental-AllItems-Haromm'sTalisman-105527"
+ value: {
+  dps: 149039.8152
+  tps: 110557.32286
+ }
+}
+dps_results: {
  key: "TestElemental-AllItems-Hawkmaster'sTalon-89082"
  value: {
   dps: 143027.95945
@@ -1197,6 +1204,13 @@ dps_results: {
  value: {
   dps: 141167.87464
   tps: 102913.23677
+ }
+}
+dps_results: {
+ key: "TestElemental-AllItems-Kardris'ToxicTotem-105540"
+ value: {
+  dps: 166605.88605
+  tps: 123220.97026
  }
 }
 dps_results: {

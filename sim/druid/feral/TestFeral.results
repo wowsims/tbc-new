@@ -1159,6 +1159,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestFeral-AllItems-Haromm'sTalisman-105527"
+ value: {
+  dps: 184162.30404
+  tps: 316700.50477
+  hps: 12051.34027
+ }
+}
+dps_results: {
  key: "TestFeral-AllItems-Hawkmaster'sTalon-89082"
  value: {
   dps: 158046.84558
@@ -1364,6 +1372,14 @@ dps_results: {
   dps: 149337.74473
   tps: 253723.21823
   hps: 11021.37163
+ }
+}
+dps_results: {
+ key: "TestFeral-AllItems-Kardris'ToxicTotem-105540"
+ value: {
+  dps: 156710.0657
+  tps: 269014.54583
+  hps: 11826.42255
  }
 }
 dps_results: {

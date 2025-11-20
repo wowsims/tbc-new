@@ -80,8 +80,13 @@ func (procAura *Aura) AttachProcTriggerCallback(unit *Unit, config ProcTrigger) 
 		pa.NextActionAt = sim.CurrentTime + SpellBatchWindow
 		pa.Priority = ActionPriorityDOT
 
+		// Due to the result struct possibly being disposed of after this handler is triggered
+		// we need to clone the result to make sure the values don't get overwritten
+		newResult := spell.CloneResult(result)
+
 		pa.OnAction = func(sim *Simulation) {
-			handler(sim, spell, result)
+			handler(sim, spell, newResult)
+			spell.DisposeResult(newResult)
 		}
 
 		sim.AddPendingAction(pa)

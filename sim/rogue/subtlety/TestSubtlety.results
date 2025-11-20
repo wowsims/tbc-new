@@ -248,6 +248,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestSubtlety-AllItems-Haromm'sTalisman-105527"
+ value: {
+  dps: 127070.17545
+  tps: 89378.6295
+ }
+}
+dps_results: {
  key: "TestSubtlety-AllItems-Horridon'sLastGasp-96757"
  value: {
   dps: 100673.64145
@@ -280,6 +287,13 @@ dps_results: {
  value: {
   dps: 100673.64145
   tps: 70945.85749
+ }
+}
+dps_results: {
+ key: "TestSubtlety-AllItems-Kardris'ToxicTotem-105540"
+ value: {
+  dps: 106221.28479
+  tps: 74884.68425
  }
 }
 dps_results: {
