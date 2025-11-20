@@ -54,10 +54,11 @@ func (priest *Priest) registerShadowWordPainSpell() {
 
 		ThreatMultiplier: 1,
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			result := spell.CalcPeriodicDamage(sim, target, priest.CalcScalingSpellDmg(SwpScaleCoeff), spell.OutcomeMagicHitAndCrit)
+			result := spell.CalcAndDealOutcome(sim, target, spell.OutcomeMagicHit)
 			if result.Landed() {
-				spell.Dot(target).Apply(sim)
-				spell.DealOutcome(sim, result)
+				dot := spell.Dot(target)
+				dot.Apply(sim)
+				dot.TickOnce(sim)
 
 				// Failsave for Unerring Vision custom code for shadow
 				unerringAura := priest.GetAuraByID(core.ActionID{SpellID: mop.UnerringVisionBuffId})
