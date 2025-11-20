@@ -13,6 +13,9 @@ import * as WarriorInputs from '../inputs';
 import * as FuryInputs from './inputs';
 import * as Presets from './presets';
 
+const P2HitPostCapEPs = [0];
+const P3HitPostCapEPs = [0.42 * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT];
+
 const SPEC_CONFIG = registerSpecConfig(Spec.SpecFuryWarrior, {
 	cssClass: 'fury-warrior-sim-ui',
 	cssScheme: PlayerClasses.getCssClass(PlayerClasses.Warrior),
@@ -63,7 +66,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFuryWarrior, {
 			const meleeHitSoftCapConfig = StatCap.fromPseudoStat(PseudoStat.PseudoStatPhysicalHitPercent, {
 				breakpoints: [7.5, 27],
 				capType: StatCapType.TypeSoftCap,
-				postCapEPs: [0, 0],
+				postCapEPs: P2HitPostCapEPs,
 			});
 
 			return [meleeHitSoftCapConfig];
@@ -120,7 +123,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFuryWarrior, {
 	},
 
 	presets: {
-		epWeights: [Presets.P1_FURY_SMF_EP_PRESET, Presets.P1_FURY_TG_EP_PRESET, Presets.P1_FURY_SMF_EP_PRESET, Presets.P1_FURY_TG_EP_PRESET],
+		epWeights: [Presets.P1_FURY_SMF_EP_PRESET, Presets.P1_FURY_TG_EP_PRESET, Presets.P3_FURY_TG_EP_PRESET],
 		// Preset talents that the user can quickly select.
 		talents: [Presets.FurySMFTalents, Presets.FuryTGTalents],
 		// Preset rotations that the user can quickly select.
@@ -133,6 +136,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFuryWarrior, {
 			Presets.P1_BIS_FURY_TG_PRESET,
 			Presets.P2_BIS_FURY_SMF_PRESET,
 			Presets.P2_BIS_FURY_TG_PRESET,
+			Presets.P3_BIS_FURY_TG_PRESET,
 		],
 		builds: [Presets.P1_PRESET_BUILD_SMF, Presets.P1_PRESET_BUILD_TG],
 	},
@@ -177,16 +181,29 @@ export class FuryWarriorSimUI extends IndividualSimUI<Spec.SpecFuryWarrior> {
 		super(parentElem, player, SPEC_CONFIG);
 
 		this.reforger = new ReforgeOptimizer(this, {
-			getEPDefaults: (player: Player<Spec.SpecFuryWarrior>) => {
-				const hasP1Setup = player
-					.getGear()
-					.getEquippedItems()
-					.some(item => (item?.item.phase || 0) >= 3);
+			updateSoftCaps: softCaps => {
+				const avgIlvl = player.getGear().getAverageItemLevel(false);
 
-				// if (player.getEquippedItem(ItemSlot.ItemSlotMainHand)?.item.handType === HandType.HandTypeOneHand || !player.getTalents().titansGrip) {
-				// 	return hasP1Setup ? Presets.P1_FURY_SMF_EP_PRESET.epWeights : Presets.P1_FURY_SMF_EP_PRESET.epWeights;
-				// }
-				return hasP1Setup ? Presets.P1_FURY_TG_EP_PRESET.epWeights : Presets.P1_FURY_TG_EP_PRESET.epWeights;
+				this.individualConfig.defaults.softCapBreakpoints!.forEach(softCap => {
+					const softCapToModify = softCaps.find(sc => sc.unitStat.equals(softCap.unitStat));
+					if (softCap.unitStat.equalsPseudoStat(PseudoStat.PseudoStatPhysicalHitPercent) && softCapToModify) {
+						if (avgIlvl >= 517) {
+							softCapToModify.postCapEPs = P3HitPostCapEPs;
+						} else {
+							softCapToModify.postCapEPs = P2HitPostCapEPs;
+						}
+					}
+
+					// TODO: Setup Crit soft cap for P3
+					// if (softCap.unitStat.equalsPseudoStat(PseudoStat.PseudoStatPhysicalCritPercent) && softCapToModify) {
+					// 	if (avgIlvl >= 517) {
+					// 		softCapToModify.postCapEPs = P3CritPostCapEPs;
+					// 	} else {
+					// 		softCapToModify.postCapEPs = P2CritPostCapEPs;
+					// 	}
+					// }
+				});
+				return softCaps;
 			},
 		});
 	}
