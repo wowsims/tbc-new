@@ -2301,10 +2301,10 @@ dps_results: {
 dps_results: {
  key: "TestBlood-AllItems-RuneofRe-Origination-96918"
  value: {
-  dps: 98082.04083
-  tps: 551244.79239
-  dtps: 35813.95321
-  hps: 38131.50818
+  dps: 100832.26913
+  tps: 568705.33712
+  dtps: 35906.12447
+  hps: 37804.636
  }
 }
 dps_results: {

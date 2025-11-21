@@ -441,9 +441,9 @@ dps_results: {
 dps_results: {
  key: "TestBalance-AllItems-RuneofRe-Origination-96918"
  value: {
-  dps: 87725.36037
-  tps: 89341.30534
-  hps: 14752.65308
+  dps: 87184.14051
+  tps: 88860.28129
+  hps: 14669.63558
  }
 }
 dps_results: {

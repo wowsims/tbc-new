@@ -2041,9 +2041,9 @@ dps_results: {
 dps_results: {
  key: "TestUnholy-AllItems-RuneofRe-Origination-96918"
  value: {
-  dps: 222198.05224
-  tps: 157194.16045
-  hps: 2580.43784
+  dps: 227969.11282
+  tps: 161982.43608
+  hps: 2652.26664
  }
 }
 dps_results: {

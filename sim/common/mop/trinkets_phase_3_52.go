@@ -564,21 +564,19 @@ func init() {
 
 		core.NewItemEffect(itemID, func(agent core.Agent, state proto.ItemLevelState) {
 			character := agent.GetCharacter()
-			// @TODO: Old posts say that only Agility users can proc this effect
-			//For now added the 0.1 coeff which is the reduced proc chance
-			rppmCoeff := 1.0
-			switch {
-			case character.Class == proto.Class_ClassRogue,
-				character.Class == proto.Class_ClassHunter,
-				character.Spec == proto.Spec_SpecFeralDruid,
-				character.Spec == proto.Spec_SpecGuardianDruid,
-				character.Spec == proto.Spec_SpecEnhancementShaman,
-				character.Spec == proto.Spec_SpecWindwalkerMonk,
-				character.Spec == proto.Spec_SpecBrewmasterMonk:
-				// These are valid
-			default:
-				rppmCoeff *= 0.1
-			}
+			// 2025/11/21 - Confirmed
+			// The RRPM is not modified at all however it is implemented as the following:
+			// Non-melee/non-hunters have a 90% chance to proc and consume the buff and trigger the 10s ICD
+			// and resetting the proc chancewithout ever activating the buff
+			isCaster := character.Class == proto.Class_ClassMage ||
+				character.Class == proto.Class_ClassWarlock ||
+				character.Class == proto.Class_ClassPriest ||
+				character.Spec == proto.Spec_SpecBalanceDruid ||
+				character.Spec == proto.Spec_SpecRestorationDruid ||
+				character.Spec == proto.Spec_SpecElementalShaman ||
+				character.Spec == proto.Spec_SpecRestorationShaman ||
+				character.Spec == proto.Spec_SpecHolyPaladin ||
+				character.Spec == proto.Spec_SpecMistweaverMonk
 
 			duration := time.Second * 10
 			masteryRaidBuffs := character.GetExclusiveEffectCategory("MasteryRatingBuff")
@@ -619,11 +617,14 @@ func init() {
 			triggerAura := character.MakeProcTriggerAura(core.ProcTrigger{
 				Name: fmt.Sprintf("%s (%s)", label, versionLabel),
 				DPM: character.NewRPPMProcManager(itemID, false, false, core.ProcMaskDirect|core.ProcMaskProc, core.RPPMConfig{
-					PPM: 1.10000002384 * rppmCoeff,
+					PPM: 1.10000002384,
 				}.WithApproximateIlvlMod(1.0, 528)),
 				ICD:      duration,
 				Callback: core.CallbackOnSpellHitDealt | core.CallbackOnPeriodicDamageDealt,
 				Handler: func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
+					if isCaster && sim.RandomFloat("Rune of Re-Origination - Caster") <= 0.9 {
+						return
+					}
 					for _, buffAura := range buffAuras {
 						buffAura.Deactivate(sim)
 					}

@@ -1993,9 +1993,9 @@ dps_results: {
 dps_results: {
  key: "TestDestruction-AllItems-RuneofRe-Origination-96918"
  value: {
-  dps: 91443.55796
-  tps: 67157.04155
-  hps: 797.75332
+  dps: 91625.05049
+  tps: 67406.69119
+  hps: 801.47072
  }
 }
 dps_results: {

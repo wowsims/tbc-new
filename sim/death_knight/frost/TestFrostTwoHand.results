@@ -2037,9 +2037,9 @@ dps_results: {
 dps_results: {
  key: "TestFrostTwoHand-AllItems-RuneofRe-Origination-96918"
  value: {
-  dps: 171057.48216
-  tps: 155848.68231
-  hps: 2765.20866
+  dps: 173163.70117
+  tps: 157305.56136
+  hps: 2812.00921
  }
 }
 dps_results: {

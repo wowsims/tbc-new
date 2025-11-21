@@ -1755,8 +1755,8 @@ dps_results: {
 dps_results: {
  key: "TestFire-AllItems-RuneofRe-Origination-96918"
  value: {
-  dps: 146066.8961
-  tps: 142494.18195
+  dps: 143695.40774
+  tps: 140357.42298
  }
 }
 dps_results: {
