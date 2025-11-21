@@ -13,8 +13,10 @@ import { SavedTalents } from '../../core/proto/ui.js';
 import { Stats } from '../../core/proto_utils/stats';
 import { defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
 import DefaultApl from './apls/default.apl.json';
+import P3Apl from './apls/p3.apl.json';
 import P1Gear from './gear_sets/p1.gear.json';
 import P2Gear from './gear_sets/p2.gear.json';
+import P3Gear from './gear_sets/p3.gear.json';
 import PreraidGear from './gear_sets/preraid.gear.json';
 
 // Preset options for this spec.
@@ -25,8 +27,10 @@ export const PRERAID_PRESET = PresetUtils.makePresetGear('Pre-raid', PreraidGear
 
 export const P1_PRESET = PresetUtils.makePresetGear('P1', P1Gear);
 export const P2_PRESET = PresetUtils.makePresetGear('P2', P2Gear);
+export const P3_PRESET = PresetUtils.makePresetGear('P3 (WiP)', P3Gear);
 
 export const ROTATION_PRESET_DEFAULT = PresetUtils.makePresetAPLRotation('Default', DefaultApl);
+export const ROTATION_PRESET_P3 = PresetUtils.makePresetAPLRotation('P3 (WiP)', P3Apl);
 
 // Preset options for EP weights
 export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
@@ -35,7 +39,6 @@ export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
 		{
 			[Stat.StatIntellect]: 0.04,
 			[Stat.StatAgility]: 1.0,
-			[Stat.StatSpellPower]: 0,
 			[Stat.StatHitRating]: 0.97,
 			[Stat.StatCritRating]: 0.41,
 			[Stat.StatHasteRating]: 0.42,
@@ -48,6 +51,28 @@ export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
 			[PseudoStat.PseudoStatOffHandDps]: 0.76,
 			[PseudoStat.PseudoStatSpellHitPercent]: 0.57 * Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT,
 			[PseudoStat.PseudoStatPhysicalHitPercent]: 0.39 * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT,
+		},
+	),
+);
+
+export const P3_EP_PRESET = PresetUtils.makePresetEpWeights(
+	'P3 (WiP)',
+	Stats.fromMap(
+		{
+			[Stat.StatIntellect]: 0.04,
+			[Stat.StatAgility]: 1.0,
+			[Stat.StatHitRating]: 0.89,
+			[Stat.StatCritRating]: 0.44,
+			[Stat.StatHasteRating]: 0.52,	
+			[Stat.StatAttackPower]: 0.4,
+			[Stat.StatExpertiseRating]: 1.02,
+			[Stat.StatMasteryRating]: 0.54,
+		},
+		{
+			[PseudoStat.PseudoStatMainHandDps]: 0.67,
+			[PseudoStat.PseudoStatOffHandDps]: 0.52,
+			[PseudoStat.PseudoStatSpellHitPercent]: 0.32 * Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT,
+			[PseudoStat.PseudoStatPhysicalHitPercent]: 0.565 * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT,
 		},
 	),
 );
@@ -65,6 +90,19 @@ export const StandardTalents = {
 		}),
 	}),
 };
+
+export const P3Talents = {
+	name: 'P3 (WiP)',
+	data: SavedTalents.create({
+		talentsString: '313122',
+		glyphs: Glyphs.create({
+			major1: ShamanMajorGlyph.GlyphOfLightningShield,
+			major2: ShamanMajorGlyph.GlyphOfFireElementalTotem,
+			major3: ShamanMajorGlyph.GlyphOfFireNova,
+		}),
+	}),
+};
+
 
 export const DefaultOptions = EnhancementShamanOptions.create({
 	classOptions: {
@@ -88,8 +126,8 @@ export const DefaultOptions = EnhancementShamanOptions.create({
 export const OtherDefaults = {
 	distanceFromTarget: 5,
 	profession1: Profession.Engineering,
-	profession2: Profession.Tailoring,
-	race: Race.RaceOrc,
+	profession2: Profession.Herbalism,
+	race: Race.RaceTroll,
 };
 
 export const DefaultConsumables = ConsumesSpec.create({
