@@ -1881,9 +1881,9 @@ dps_results: {
 dps_results: {
  key: "TestDemonology-AllItems-RegaliaoftheThousandfoldHells"
  value: {
-  dps: 108650.2446
-  tps: 66624.1017
-  hps: 1539.0926
+  dps: 107745.56177
+  tps: 65611.01413
+  hps: 1525.72856
  }
 }
 dps_results: {
