@@ -47,8 +47,8 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-ArcaneBadgeoftheShieldwall-93347"
  value: {
-  dps: 167291.82241
-  tps: 138111.53216
+  dps: 167403.46868
+  tps: 138214.78617
  }
 }
 dps_results: {
@@ -61,8 +61,8 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-AssuranceofConsequence-105472"
  value: {
-  dps: 192954.54114
-  tps: 154466.69204
+  dps: 193050.27269
+  tps: 154552.23398
  }
 }
 dps_results: {
@@ -89,15 +89,15 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-BattlegearoftheSaurokStalker"
  value: {
-  dps: 167868.6065
-  tps: 133826.48237
+  dps: 167755.38788
+  tps: 133705.87266
  }
 }
 dps_results: {
  key: "TestMarksmanship-AllItems-BattlegearoftheUnblinkingVigil"
  value: {
-  dps: 161487.24165
-  tps: 131279.83061
+  dps: 161573.1986
+  tps: 131393.38952
  }
 }
 dps_results: {
@@ -124,8 +124,8 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-BreathoftheHydra-96827"
  value: {
-  dps: 171275.74869
-  tps: 141944.97991
+  dps: 171228.98339
+  tps: 141893.76118
  }
 }
 dps_results: {
@@ -173,8 +173,8 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-CharmofTenSongs-84071"
  value: {
-  dps: 170051.76715
-  tps: 140807.99941
+  dps: 170101.04018
+  tps: 140855.94297
  }
 }
 dps_results: {
@@ -425,8 +425,8 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-DarkmistVortex-87172"
  value: {
-  dps: 168119.98779
-  tps: 138566.57723
+  dps: 167944.89888
+  tps: 138419.36435
  }
 }
 dps_results: {
@@ -460,8 +460,8 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-Dominator'sArcaneBadge-93342"
  value: {
-  dps: 167291.82241
-  tps: 138111.53216
+  dps: 167403.46868
+  tps: 138214.78617
  }
 }
 dps_results: {
@@ -649,8 +649,8 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-EnchantWeapon-Windsong-4441"
  value: {
-  dps: 174037.37982
-  tps: 143692.04158
+  dps: 173925.68822
+  tps: 143559.45786
  }
 }
 dps_results: {
@@ -663,8 +663,8 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-EssenceofTerror-87175"
  value: {
-  dps: 166563.44601
-  tps: 137647.29559
+  dps: 166388.3571
+  tps: 137500.08271
  }
 }
 dps_results: {
@@ -719,8 +719,8 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-Fen-Yu,FuryofXuen-102248"
  value: {
-  dps: 190382.27307
-  tps: 158410.09888
+  dps: 190280.43399
+  tps: 158320.07726
  }
 }
 dps_results: {
@@ -810,15 +810,15 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-Gladiator'sPursuit"
  value: {
-  dps: 168363.99536
-  tps: 136384.19056
+  dps: 168357.86328
+  tps: 136375.79294
  }
 }
 dps_results: {
  key: "TestMarksmanship-AllItems-Gong-Lu,StrengthofXuen-102249"
  value: {
-  dps: 180615.42177
-  tps: 151168.31355
+  dps: 180667.40188
+  tps: 151192.61763
  }
 }
 dps_results: {
@@ -1020,8 +1020,8 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-Hawkmaster'sTalon-89082"
  value: {
-  dps: 174777.2657
-  tps: 144076.49642
+  dps: 175050.57507
+  tps: 144342.5118
  }
 }
 dps_results: {
@@ -1111,8 +1111,8 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-IronBellyWok-89083"
  value: {
-  dps: 168956.02762
-  tps: 139769.01018
+  dps: 169269.80736
+  tps: 140064.96037
  }
 }
 dps_results: {
@@ -1125,29 +1125,29 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-JadeBanditFigurine-86043"
  value: {
-  dps: 174777.2657
-  tps: 144076.49642
+  dps: 175050.57507
+  tps: 144342.5118
  }
 }
 dps_results: {
  key: "TestMarksmanship-AllItems-JadeBanditFigurine-86772"
  value: {
-  dps: 172962.97921
-  tps: 142424.72819
+  dps: 173450.97063
+  tps: 142910.93179
  }
 }
 dps_results: {
  key: "TestMarksmanship-AllItems-JadeCharioteerFigurine-86042"
  value: {
-  dps: 168956.02762
-  tps: 139769.01018
+  dps: 169269.80736
+  tps: 140064.96037
  }
 }
 dps_results: {
  key: "TestMarksmanship-AllItems-JadeCharioteerFigurine-86771"
  value: {
-  dps: 167914.4804
-  tps: 138738.39651
+  dps: 168418.64489
+  tps: 139237.93806
  }
 }
 dps_results: {
@@ -1237,8 +1237,8 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-LeiShen'sFinalOrders-87072"
  value: {
-  dps: 169787.08798
-  tps: 140722.74261
+  dps: 169913.24013
+  tps: 140845.60892
  }
 }
 dps_results: {
@@ -1265,8 +1265,8 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-LightoftheCosmos-87065"
  value: {
-  dps: 169787.08798
-  tps: 140722.74261
+  dps: 169913.24013
+  tps: 140845.60892
  }
 }
 dps_results: {
@@ -1664,15 +1664,15 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-Qian-Le,CourageofNiuzao-102245"
  value: {
-  dps: 179944.98657
-  tps: 148163.65789
+  dps: 179961.02649
+  tps: 148176.42782
  }
 }
 dps_results: {
  key: "TestMarksmanship-AllItems-Qian-Ying,FortitudeofNiuzao-102250"
  value: {
-  dps: 168407.12079
-  tps: 139345.52197
+  dps: 168423.78519
+  tps: 139361.26867
  }
 }
 dps_results: {
@@ -1762,8 +1762,8 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-RuneofRe-Origination-96918"
  value: {
-  dps: 179888.35265
-  tps: 148519.51019
+  dps: 179892.72721
+  tps: 148544.9776
  }
 }
 dps_results: {
@@ -1790,8 +1790,8 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-Shock-ChargerMedallion-93259"
  value: {
-  dps: 168699.52022
-  tps: 139661.10485
+  dps: 168907.32668
+  tps: 139843.43166
  }
 }
 dps_results: {
@@ -1818,8 +1818,8 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-SigilofGrace-83738"
  value: {
-  dps: 168883.49202
-  tps: 140167.20713
+  dps: 168903.58786
+  tps: 140178.21197
  }
 }
 dps_results: {
@@ -1839,8 +1839,8 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-SigiloftheCatacombs-83732"
  value: {
-  dps: 170521.33362
-  tps: 141164.75893
+  dps: 170366.6941
+  tps: 140998.76435
  }
 }
 dps_results: {
@@ -1874,8 +1874,8 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-SparkofZandalar-96770"
  value: {
-  dps: 171275.74869
-  tps: 141944.97991
+  dps: 171228.98339
+  tps: 141893.76118
  }
 }
 dps_results: {
@@ -1923,8 +1923,8 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-Static-Caster'sMedallion-93254"
  value: {
-  dps: 168699.52022
-  tps: 139661.10485
+  dps: 168907.32668
+  tps: 139843.43166
  }
 }
 dps_results: {
@@ -1944,8 +1944,8 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-StreamtalkerIdolofDestruction-101222"
  value: {
-  dps: 167107.82747
-  tps: 138524.49468
+  dps: 167165.86691
+  tps: 138591.64678
  }
 }
 dps_results: {
@@ -2035,8 +2035,8 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-TalismanofBloodlust-96864"
  value: {
-  dps: 179941.7578
-  tps: 148234.24543
+  dps: 179968.47438
+  tps: 148219.79385
  }
 }
 dps_results: {
@@ -2322,8 +2322,8 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-WindsweptPages-81125"
  value: {
-  dps: 174703.26634
-  tps: 144216.98844
+  dps: 174724.23872
+  tps: 144240.70984
  }
 }
 dps_results: {
@@ -2343,8 +2343,8 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-Xing-Ho,BreathofYu'lon-102246"
  value: {
-  dps: 172165.36896
-  tps: 142804.93899
+  dps: 172061.2892
+  tps: 142700.99634
  }
 }
 dps_results: {
@@ -2357,8 +2357,8 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-AllItems-YaungolSlayerBattlegear"
  value: {
-  dps: 155922.79935
-  tps: 129063.63549
+  dps: 156105.46019
+  tps: 129253.97415
  }
 }
 dps_results: {
@@ -2378,8 +2378,8 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-Average-Default"
  value: {
-  dps: 178637.94861
-  tps: 146664.56218
+  dps: 178638.79528
+  tps: 146665.03959
  }
 }
 dps_results: {
@@ -2427,8 +2427,8 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-Settings-Orc-p2-Row5_Talent2-Basic-mm-FullBuffs-24.0yards-LongMultiTarget"
  value: {
-  dps: 182123.79426
-  tps: 145498.50508
+  dps: 182129.16742
+  tps: 145498.27804
  }
 }
 dps_results: {
@@ -2448,15 +2448,15 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-Settings-Orc-p2-Row5_Talent2-Basic-mm-NoBuffs-24.0yards-LongMultiTarget"
  value: {
-  dps: 132122.09741
-  tps: 108473.4694
+  dps: 132025.07632
+  tps: 108384.50266
  }
 }
 dps_results: {
  key: "TestMarksmanship-Settings-Orc-p2-Row5_Talent2-Basic-mm-NoBuffs-24.0yards-LongSingleTarget"
  value: {
-  dps: 126829.79576
-  tps: 103494.14287
+  dps: 126762.0344
+  tps: 103415.70828
  }
 }
 dps_results: {
@@ -2469,36 +2469,36 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-Settings-Orc-p2-Row5_Talent3-Basic-mm-FullBuffs-24.0yards-LongMultiTarget"
  value: {
-  dps: 177842.94995
-  tps: 144137.103
+  dps: 177565.78168
+  tps: 143812.22074
  }
 }
 dps_results: {
  key: "TestMarksmanship-Settings-Orc-p2-Row5_Talent3-Basic-mm-FullBuffs-24.0yards-LongSingleTarget"
  value: {
-  dps: 171991.88266
-  tps: 138273.30982
+  dps: 172203.70539
+  tps: 138507.32953
  }
 }
 dps_results: {
  key: "TestMarksmanship-Settings-Orc-p2-Row5_Talent3-Basic-mm-FullBuffs-24.0yards-ShortSingleTarget"
  value: {
-  dps: 235608.26086
-  tps: 161710.36355
+  dps: 236279.57289
+  tps: 162414.43595
  }
 }
 dps_results: {
  key: "TestMarksmanship-Settings-Orc-p2-Row5_Talent3-Basic-mm-NoBuffs-24.0yards-LongMultiTarget"
  value: {
-  dps: 129635.29244
-  tps: 107640.62662
+  dps: 129687.88677
+  tps: 107669.73131
  }
 }
 dps_results: {
  key: "TestMarksmanship-Settings-Orc-p2-Row5_Talent3-Basic-mm-NoBuffs-24.0yards-LongSingleTarget"
  value: {
-  dps: 125029.07747
-  tps: 103033.96683
+  dps: 125103.47872
+  tps: 103112.00985
  }
 }
 dps_results: {
@@ -2511,15 +2511,15 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-Settings-Orc-p2-Row6_Talent2-Basic-mm-FullBuffs-24.0yards-LongMultiTarget"
  value: {
-  dps: 179392.03763
-  tps: 147299.20059
+  dps: 179378.14375
+  tps: 147258.6707
  }
 }
 dps_results: {
  key: "TestMarksmanship-Settings-Orc-p2-Row6_Talent2-Basic-mm-FullBuffs-24.0yards-LongSingleTarget"
  value: {
-  dps: 174204.26239
-  tps: 142897.97601
+  dps: 174211.24931
+  tps: 142906.31239
  }
 }
 dps_results: {
@@ -2532,15 +2532,15 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-Settings-Orc-p2-Row6_Talent2-Basic-mm-NoBuffs-24.0yards-LongMultiTarget"
  value: {
-  dps: 130034.66793
-  tps: 110015.49679
+  dps: 130119.75359
+  tps: 110109.34929
  }
 }
 dps_results: {
  key: "TestMarksmanship-Settings-Orc-p2-Row6_Talent2-Basic-mm-NoBuffs-24.0yards-LongSingleTarget"
  value: {
-  dps: 126895.19538
-  tps: 107132.76777
+  dps: 126811.92539
+  tps: 107021.3539
  }
 }
 dps_results: {
@@ -2553,15 +2553,15 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-Settings-Orc-p2-Row6_Talent3-Basic-mm-FullBuffs-24.0yards-LongMultiTarget"
  value: {
-  dps: 286627.37514
-  tps: 250458.23901
+  dps: 286557.5165
+  tps: 250390.25317
  }
 }
 dps_results: {
  key: "TestMarksmanship-Settings-Orc-p2-Row6_Talent3-Basic-mm-FullBuffs-24.0yards-LongSingleTarget"
  value: {
-  dps: 178379.76198
-  tps: 144627.01926
+  dps: 178342.67722
+  tps: 144592.52519
  }
 }
 dps_results: {
@@ -2574,15 +2574,15 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-Settings-Orc-p2-Row6_Talent3-Basic-mm-NoBuffs-24.0yards-LongMultiTarget"
  value: {
-  dps: 209022.50104
-  tps: 188117.84025
+  dps: 208949.76848
+  tps: 188072.70547
  }
 }
 dps_results: {
  key: "TestMarksmanship-Settings-Orc-p2-Row6_Talent3-Basic-mm-NoBuffs-24.0yards-LongSingleTarget"
  value: {
-  dps: 129289.82356
-  tps: 108910.4895
+  dps: 129264.43183
+  tps: 108871.03365
  }
 }
 dps_results: {
@@ -2637,8 +2637,8 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-Settings-Worgen-p2-Row5_Talent2-Basic-mm-FullBuffs-24.0yards-LongMultiTarget"
  value: {
-  dps: 180872.39068
-  tps: 145540.00238
+  dps: 180877.65403
+  tps: 145539.77534
  }
 }
 dps_results: {
@@ -2658,15 +2658,15 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-Settings-Worgen-p2-Row5_Talent2-Basic-mm-NoBuffs-24.0yards-LongMultiTarget"
  value: {
-  dps: 131262.63565
-  tps: 108428.81349
+  dps: 131164.92583
+  tps: 108319.75209
  }
 }
 dps_results: {
  key: "TestMarksmanship-Settings-Worgen-p2-Row5_Talent2-Basic-mm-NoBuffs-24.0yards-LongSingleTarget"
  value: {
-  dps: 125971.35578
-  tps: 103447.15675
+  dps: 125793.37806
+  tps: 103245.58418
  }
 }
 dps_results: {
@@ -2679,36 +2679,36 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-Settings-Worgen-p2-Row5_Talent3-Basic-mm-FullBuffs-24.0yards-LongMultiTarget"
  value: {
-  dps: 176450.21229
-  tps: 143941.91687
+  dps: 176214.93912
+  tps: 143701.29157
  }
 }
 dps_results: {
  key: "TestMarksmanship-Settings-Worgen-p2-Row5_Talent3-Basic-mm-FullBuffs-24.0yards-LongSingleTarget"
  value: {
-  dps: 170960.38282
-  tps: 138451.18708
+  dps: 171117.01867
+  tps: 138652.06464
  }
 }
 dps_results: {
  key: "TestMarksmanship-Settings-Worgen-p2-Row5_Talent3-Basic-mm-FullBuffs-24.0yards-ShortSingleTarget"
  value: {
-  dps: 230593.00502
-  tps: 160737.5896
+  dps: 231402.90277
+  tps: 161553.13554
  }
 }
 dps_results: {
  key: "TestMarksmanship-Settings-Worgen-p2-Row5_Talent3-Basic-mm-NoBuffs-24.0yards-LongMultiTarget"
  value: {
-  dps: 128816.33088
-  tps: 107612.94203
+  dps: 128942.14367
+  tps: 107722.67246
  }
 }
 dps_results: {
  key: "TestMarksmanship-Settings-Worgen-p2-Row5_Talent3-Basic-mm-NoBuffs-24.0yards-LongSingleTarget"
  value: {
-  dps: 124401.61524
-  tps: 103257.27135
+  dps: 124391.48245
+  tps: 103253.39804
  }
 }
 dps_results: {
@@ -2721,15 +2721,15 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-Settings-Worgen-p2-Row6_Talent2-Basic-mm-FullBuffs-24.0yards-LongMultiTarget"
  value: {
-  dps: 177707.1365
-  tps: 146770.56872
+  dps: 177691.33114
+  tps: 146733.23408
  }
 }
 dps_results: {
  key: "TestMarksmanship-Settings-Worgen-p2-Row6_Talent2-Basic-mm-FullBuffs-24.0yards-LongSingleTarget"
  value: {
-  dps: 172781.41258
-  tps: 142608.87696
+  dps: 172790.20354
+  tps: 142622.18481
  }
 }
 dps_results: {
@@ -2742,15 +2742,15 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-Settings-Worgen-p2-Row6_Talent2-Basic-mm-NoBuffs-24.0yards-LongMultiTarget"
  value: {
-  dps: 129208.39195
-  tps: 109857.8663
+  dps: 129203.31607
+  tps: 109858.59304
  }
 }
 dps_results: {
  key: "TestMarksmanship-Settings-Worgen-p2-Row6_Talent2-Basic-mm-NoBuffs-24.0yards-LongSingleTarget"
  value: {
-  dps: 126259.93864
-  tps: 107239.71626
+  dps: 126102.17028
+  tps: 107086.72371
  }
 }
 dps_results: {
@@ -2763,15 +2763,15 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-Settings-Worgen-p2-Row6_Talent3-Basic-mm-FullBuffs-24.0yards-LongMultiTarget"
  value: {
-  dps: 285197.19276
-  tps: 250352.87596
+  dps: 285127.36459
+  tps: 250284.88444
  }
 }
 dps_results: {
  key: "TestMarksmanship-Settings-Worgen-p2-Row6_Talent3-Basic-mm-FullBuffs-24.0yards-LongSingleTarget"
  value: {
-  dps: 177078.32914
-  tps: 144596.85798
+  dps: 177041.29243
+  tps: 144562.3617
  }
 }
 dps_results: {
@@ -2784,15 +2784,15 @@ dps_results: {
 dps_results: {
  key: "TestMarksmanship-Settings-Worgen-p2-Row6_Talent3-Basic-mm-NoBuffs-24.0yards-LongMultiTarget"
  value: {
-  dps: 207959.67089
-  tps: 187844.82311
+  dps: 207919.78433
+  tps: 187833.40832
  }
 }
 dps_results: {
  key: "TestMarksmanship-Settings-Worgen-p2-Row6_Talent3-Basic-mm-NoBuffs-24.0yards-LongSingleTarget"
  value: {
-  dps: 128450.98883
-  tps: 108774.17635
+  dps: 128401.73698
+  tps: 108710.27761
  }
 }
 dps_results: {

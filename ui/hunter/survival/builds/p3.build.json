@@ -19,21 +19,21 @@
 	"partyBuffs": {},
 	"player": {
 		"name": "Player",
-		"race": "RaceOrc",
+		"race": "RaceTroll",
 		"class": "ClassHunter",
 		"equipment": {
 			"items": [
-				{ "id": 96628, "gems": [95346, 76658], "reforging": 137 },
+				{ "id": 96788, "gems": [95346, 76658] },
 				{ "id": 96815, "gems": [76692], "reforging": 137 },
-				{ "id": 96630, "enchant": 4804, "gems": [76692, 76692], "reforging": 138 },
-				{ "id": 96833, "enchant": 4894, "gems": [76692], "reforging": 167, "tinker": 4897 },
-				{ "id": 96626, "enchant": 4419, "gems": [76692, 76658, 76680], "reforging": 159 },
+				{ "id": 96630, "enchant": 4804, "gems": [76692, 76658], "reforging": 139 },
+				{ "id": 96833, "enchant": 4894, "gems": [76680], "reforging": 167, "tinker": 4897 },
+				{ "id": 95034, "enchant": 4419, "gems": [76692, 76692, 76692], "reforging": 137 },
 				{ "id": 96797, "randomSuffix": -336, "enchant": 4416, "gems": [76658, 0] },
 				{ "id": 96627, "enchant": 4431, "gems": [76692, 0], "reforging": 160, "tinker": 4898 },
-				{ "id": 96846, "gems": [76692, 76692, 76692], "tinker": 4223 },
+				{ "id": 96846, "gems": [76692, 76658, 76692], "tinker": 4223 },
 				{ "id": 96921, "enchant": 4822, "gems": [76692, 76692, 76692] },
 				{ "id": 95009, "enchant": 4428, "gems": [76658, 76680], "reforging": 165 },
-				{ "id": 95021, "gems": [76692], "reforging": 137 },
+				{ "id": 95021, "gems": [76680], "reforging": 137 },
 				{ "id": 96885, "gems": [76692], "reforging": 153 },
 				{ "id": 96741, "reforging": 159 },
 				{ "id": 96781, "reforging": 166 },
@@ -71,7 +71,7 @@
 				}
 			}
 		},
-		"talentsString": "312113",
+		"talentsString": "312213",
 		"glyphs": {
 			"major1": 42909,
 			"major2": 42903,
