@@ -45,6 +45,7 @@ type DeathKnight struct {
 	PestilenceSpell     *core.Spell
 	SummonGargoyleSpell *core.Spell
 
+	ScentOfBloodAura       *core.Aura
 	BoneShieldAura         *core.Aura
 	BoneWallAura           *core.Aura
 	ConversionAura         *core.Aura

@@ -16,34 +16,18 @@ func (bdk *BloodDeathKnight) registerScentOfBlood() {
 	actionID := core.ActionID{SpellID: 50421}
 	rpMetrics := bdk.NewRunicPowerMetrics(actionID)
 
-	dsMod := bdk.AddDynamicMod(core.SpellModConfig{
-		Kind:      core.SpellMod_DamageDone_Pct,
-		ClassMask: death_knight.DeathKnightSpellDeathStrikeHeal,
-	})
-
-	var scentOfBloodAura *core.Aura
-	scentOfBloodAura = core.BlockPrepull(bdk.RegisterAura(core.Aura{
+	bdk.ScentOfBloodAura = core.BlockPrepull(bdk.RegisterAura(core.Aura{
 		Label:     "Scent of Blood" + bdk.Label,
 		ActionID:  actionID,
 		Duration:  time.Second * 20,
 		MaxStacks: 5,
-
-		OnGain: func(aura *core.Aura, sim *core.Simulation) {
-			dsMod.Activate()
-		},
-		OnStacksChange: func(aura *core.Aura, sim *core.Simulation, oldStacks, newStacks int32) {
-			dsMod.UpdateFloatValue(0.2 * float64(newStacks))
-		},
-		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
-			dsMod.Deactivate()
-		},
 	})).AttachProcTrigger(core.ProcTrigger{
-		Callback:           core.CallbackOnSpellHitDealt,
-		ClassSpellMask:     death_knight.DeathKnightSpellDeathStrike,
+		Callback:           core.CallbackOnHealDealt,
+		ClassSpellMask:     death_knight.DeathKnightSpellDeathStrikeHeal,
 		TriggerImmediately: true,
 
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			scentOfBloodAura.Deactivate(sim)
+			bdk.ScentOfBloodAura.Deactivate(sim)
 		},
 	})
 
@@ -67,8 +51,8 @@ func (bdk *BloodDeathKnight) registerScentOfBlood() {
 			bdk.AddRunicPower(sim, 10.0, rpMetrics)
 		}
 
-		scentOfBloodAura.Activate(sim)
-		scentOfBloodAura.AddStack(sim)
+		bdk.ScentOfBloodAura.Activate(sim)
+		bdk.ScentOfBloodAura.AddStack(sim)
 	}
 
 	bdk.MakeProcTriggerAura(core.ProcTrigger{
