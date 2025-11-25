@@ -1,7 +1,6 @@
 package monk
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/wowsims/mop/sim/core"
@@ -106,7 +105,7 @@ func (controller *StormEarthAndFireController) CastCopySpell(sim *core.Simulatio
 		}
 		petSpellActionID := spell.ActionID.WithTag(SEFSpellID)
 		copySpell := pet.spells[petSpellActionID]
-		fmt.Println(sim.CurrentTime, spell.ActionID, petSpellActionID, copySpell)
+
 		if copySpell == nil {
 			copySpell = pet.GetSpell(petSpellActionID)
 			pet.spells[petSpellActionID] = copySpell
