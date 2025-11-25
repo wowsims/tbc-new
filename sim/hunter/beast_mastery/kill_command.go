@@ -42,6 +42,7 @@ func (bmHunter *BeastMasteryHunter) registerKillCommandSpell() {
 		DamageMultiplierAdditive: 1,
 		CritMultiplier:           bmHunter.DefaultCritMultiplier(),
 		ThreatMultiplier:         1,
+
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			if bmHunter.Pet != nil && bmHunter.Pet.KillCommand != nil {
 				bmHunter.Pet.KillCommand.Cast(sim, target)

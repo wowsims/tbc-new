@@ -4,8 +4,6 @@
 		{ "action": { "castSpell": { "spellId": { "spellId": 13812 } } }, "doAtValue": { "const": { "val": "-5s" } } },
 		{ "action": { "castSpell": { "spellId": { "spellId": 13165 } } }, "doAtValue": { "const": { "val": "-4s" } } },
 		{ "action": { "castSpell": { "spellId": { "spellId": 1130 } } }, "doAtValue": { "const": { "val": "-3s" } } },
-		{ "action": { "castSpell": { "spellId": { "spellId": 109259 } } }, "doAtValue": { "const": { "val": "-1.6s" } } },
-		{ "action": { "castSpell": { "spellId": { "spellId": 117050 } } }, "doAtValue": { "const": { "val": "-1s" } } },
 		{ "action": { "castSpell": { "spellId": { "otherId": "OtherActionPotion" } } }, "doAtValue": { "const": { "val": "-0.5s" } } }
 	],
 	"priorityList": [
@@ -63,6 +61,32 @@
 	],
 	"groups": [
 		{
+			"name": "Opener",
+			"actions": [
+				{ "action": { "castSpell": { "spellId": { "spellId": 34026 } } } },
+				{ "action": { "castSpell": { "spellId": { "spellId": 131894 } } } },
+				{
+					"action": {
+						"condition": {
+							"and": {
+								"vals": [
+									{ "not": { "val": { "dotIsActive": { "spellId": { "spellId": 1978 } } } } },
+									{ "not": { "val": { "spellInFlight": { "spellId": { "spellId": 1978 } } } } }
+								]
+							}
+						},
+						"castSpell": { "spellId": { "spellId": 1978 } }
+					}
+				},
+				{ "action": { "castSpell": { "spellId": { "spellId": 121818 } } } },
+				{ "action": { "groupReference": { "groupName": "Cooldowns" } } },
+				{ "action": { "castSpell": { "spellId": { "spellId": 120679 } } } },
+				{ "action": { "sequence": { "name": "opener", "actions": [{ "castSpell": { "spellId": { "spellId": 109259 } } }] } } },
+				{ "action": { "sequence": { "name": "opener", "actions": [{ "castSpell": { "spellId": { "spellId": 117050 } } }] } } },
+				{ "action": { "sequence": { "name": "opener", "actions": [{ "castSpell": { "spellId": { "spellId": 120360 } } }] } } }
+			]
+		},
+		{
 			"name": "Cooldowns",
 			"actions": [
 				{ "action": { "castSpell": { "spellId": { "spellId": 126734 } } } },
@@ -85,36 +109,33 @@
 			]
 		},
 		{
-			"name": "Opener",
-			"actions": [
-				{ "action": { "castSpell": { "spellId": { "spellId": 131894 } } } },
-				{
-					"action": {
-						"condition": { "not": { "val": { "dotIsActive": { "spellId": { "spellId": 1978 } } } } },
-						"castSpell": { "spellId": { "spellId": 1978 } }
-					}
-				},
-				{ "action": { "castSpell": { "spellId": { "spellId": 121818 } } } },
-				{ "action": { "groupReference": { "groupName": "Cooldowns" } } },
-				{ "action": { "castSpell": { "spellId": { "spellId": 120679 } } } },
-				{ "action": { "castSpell": { "spellId": { "spellId": 109259 } } } },
-				{ "action": { "castSpell": { "spellId": { "spellId": 117050 } } } },
-				{
-					"action": {
-						"condition": { "auraIsActive": { "auraId": { "spellId": 120668, "tag": -1 }, "includeReactionTime": true } },
-						"castSpell": { "spellId": { "spellId": 120360 } }
-					}
-				},
-				{ "action": { "sequence": { "name": "opener", "actions": [{ "castSpell": { "spellId": { "spellId": 34026 } } }] } } }
-			]
-		},
-		{
 			"name": "Potion",
 			"actions": [
 				{
 					"action": {
 						"condition": {
-							"or": { "vals": [{ "isExecutePhase": { "threshold": "E20" } }, { "dotIsActive": { "spellId": { "spellId": 131894 } } }] }
+							"or": {
+								"vals": [
+									{ "isExecutePhase": { "threshold": "E20" } },
+									{ "auraIsActive": { "auraId": { "spellId": 3045 }, "includeReactionTime": true } },
+									{
+										"and": {
+											"vals": [
+												{ "dotIsActive": { "spellId": { "spellId": 131894 } } },
+												{
+													"cmp": {
+														"op": "OpGt",
+														"lhs": { "spellTimeToReady": { "spellId": { "spellId": 3045 } } },
+														"rhs": {
+															"math": { "op": "OpSub", "lhs": { "remainingTime": {} }, "rhs": { "const": { "val": "15s" } } }
+														}
+													}
+												}
+											]
+										}
+									}
+								]
+							}
 						},
 						"castSpell": { "spellId": { "itemId": 76089 } }
 					}

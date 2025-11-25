@@ -647,6 +647,10 @@ restart:
 // Adds a new aura to the simulation. If an aura with the same ID already
 // exists it will be replaced with the new one.
 func (aura *Aura) Activate(sim *Simulation) {
+	if aura == nil {
+		return
+	}
+
 	aura.metrics.Procs++
 	if aura.IsActive() {
 		if sim.Log != nil && !aura.ActionID.IsEmptyAction() {

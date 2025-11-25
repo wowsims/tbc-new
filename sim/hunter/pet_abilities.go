@@ -121,10 +121,25 @@ type PetDebuffSpellConfig struct {
 }
 
 func (hp *HunterPet) RegisterKillCommandSpell() *core.Spell {
-	actionID := core.ActionID{SpellID: 34026}
+	chargeAura := hp.RegisterAura(core.Aura{
+		Label:    "Charge",
+		Duration: 5 * time.Second,
+		OnGain: func(aura *core.Aura, sim *core.Simulation) {
+			hp.MultiplyMovementSpeed(sim, 3.0)
+		},
+		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
+			hp.MultiplyMovementSpeed(sim, 1.0/3.0)
+		},
+	})
+
+	hp.RegisterMovementCallback(func(sim *core.Simulation, position float64, kind core.MovementUpdateType) {
+		if kind == core.MovementEnd && chargeAura.IsActive() {
+			chargeAura.Deactivate(sim)
+		}
+	})
 
 	return hp.RegisterSpell(core.SpellConfig{
-		ActionID:       actionID,
+		ActionID:       core.ActionID{SpellID: 83381},
 		SpellSchool:    core.SpellSchoolPhysical,
 		ProcMask:       core.ProcMaskEmpty,
 		Flags:          core.SpellFlagAPL,
@@ -147,6 +162,11 @@ func (hp *HunterPet) RegisterKillCommandSpell() *core.Spell {
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			baseDamage := 0.938*spell.RangedAttackPower() + 935
 			spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeRangedHitAndCrit)
+
+			if hp.DistanceFromTarget > core.MaxMeleeRange {
+				chargeAura.Activate(sim)
+				hp.MoveTo(core.MaxMeleeRange-1, sim)
+			}
 		},
 	})
 }
@@ -193,14 +213,15 @@ func (hp *HunterPet) newPetDebuff(config PetDebuffSpellConfig) *core.Spell {
 	})
 }
 
-func (hp *HunterPet) newFocusDump(pat PetAbilityType, spellID int32) *core.Spell {
+func (hp *HunterPet) newFocusDump(spellID int32) *core.Spell {
+	blinkStrikes := hp.registerBlinkStrikes()
+
 	return hp.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: spellID},
 		SpellSchool:    core.SpellSchoolPhysical,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
 		ClassSpellMask: HunterPetFocusDump,
 		Flags:          core.SpellFlagMeleeMetrics,
-		MaxRange:       core.MaxMeleeRange,
 
 		FocusCost: core.FocusCostOptions{
 			Cost: 25,
@@ -217,10 +238,27 @@ func (hp *HunterPet) newFocusDump(pat PetAbilityType, spellID int32) *core.Spell
 		},
 
 		DamageMultiplierAdditive: 1,
-		DamageMultiplier:         core.TernaryFloat64(hp.hunterOwner.Talents.BlinkStrikes, 1.5, 1),
+		DamageMultiplier:         1,
 		CritMultiplier:           hp.CritMultiplier(1.0, 0.0),
 		ThreatMultiplier:         1,
+
+		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
+			if !hp.IsEnabled() {
+				return false
+			}
+
+			if hp.DistanceFromTarget <= core.MaxMeleeRange {
+				return true
+			}
+
+			return blinkStrikes.CanCast(sim, target)
+		},
+
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+			if hp.DistanceFromTarget > core.MaxMeleeRange && blinkStrikes.CanCast(sim, target) {
+				blinkStrikes.Cast(sim, target)
+			}
+
 			baseDamage := hp.hunterOwner.CalcAndRollDamageRange(sim, 0.11400000006, 0.34999999404) + (spell.RangedAttackPower() * 0.168)
 
 			spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialHitAndCrit)
@@ -229,76 +267,13 @@ func (hp *HunterPet) newFocusDump(pat PetAbilityType, spellID int32) *core.Spell
 }
 
 func (hp *HunterPet) newBite() *core.Spell {
-	return hp.newFocusDump(Bite, BiteSpellID)
+	return hp.newFocusDump(BiteSpellID)
 }
 func (hp *HunterPet) newClaw() *core.Spell {
-	return hp.newFocusDump(Claw, ClawSpellID)
+	return hp.newFocusDump(ClawSpellID)
 }
 func (hp *HunterPet) newSmack() *core.Spell {
-	return hp.newFocusDump(Smack, SmackSpellID)
-}
-
-type PetSpecialAbilityConfig struct {
-	Type    PetAbilityType
-	SpellID int32
-	School  core.SpellSchool
-	GCD     time.Duration
-	CD      time.Duration
-
-	OnSpellHitDealt func(*core.Simulation, *core.Spell, *core.SpellResult)
-}
-
-func (hp *HunterPet) newSpecialAbility(config PetSpecialAbilityConfig) *core.Spell {
-	var flags core.SpellFlag
-	var applyEffects core.ApplySpellResults
-	var procMask core.ProcMask
-	onSpellHitDealt := config.OnSpellHitDealt
-	if config.School == core.SpellSchoolPhysical {
-		flags = core.SpellFlagMeleeMetrics
-		procMask = core.ProcMaskSpellDamage
-		applyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-
-			result := spell.CalcAndDealOutcome(sim, target, spell.OutcomeMeleeSpecialHitAndCrit)
-			if onSpellHitDealt != nil {
-				onSpellHitDealt(sim, spell, result)
-			}
-
-		}
-	} else {
-		procMask = core.ProcMaskMeleeMHSpecial
-		applyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			result := spell.CalcAndDealOutcome(sim, target, spell.OutcomeMagicHitAndCrit)
-			if onSpellHitDealt != nil {
-				onSpellHitDealt(sim, spell, result)
-			}
-		}
-	}
-
-	return hp.RegisterSpell(core.SpellConfig{
-		ActionID:    core.ActionID{SpellID: config.SpellID},
-		SpellSchool: config.School,
-		ProcMask:    procMask,
-		Flags:       flags,
-
-		DamageMultiplier: 1, //* hp.hunterOwner.markedForDeathMultiplier(),
-		CritMultiplier:   2,
-		ThreatMultiplier: 1,
-
-		FocusCost: core.FocusCostOptions{
-			Cost: 0,
-		},
-		Cast: core.CastConfig{
-			DefaultCast: core.Cast{
-				GCD: config.GCD,
-			},
-			IgnoreHaste: true,
-			CD: core.Cooldown{
-				Timer:    hp.NewTimer(),
-				Duration: config.CD,
-			},
-		},
-		ApplyEffects: applyEffects,
-	})
+	return hp.newFocusDump(SmackSpellID)
 }
 
 func (hp *HunterPet) getFrostStormTickSpell() *core.Spell {
@@ -321,6 +296,7 @@ func (hp *HunterPet) getFrostStormTickSpell() *core.Spell {
 	}
 	return hp.RegisterSpell(config)
 }
+
 func (hp *HunterPet) newFrostStormBreath() *core.Spell {
 	frostStormTickSpell := hp.getFrostStormTickSpell()
 	hp.frostStormBreath = hp.RegisterSpell(core.SpellConfig{
@@ -381,19 +357,14 @@ func (hp *HunterPet) registerRabidCD() {
 	if hunter.Options.PetSpec != proto.PetSpec_Ferocity {
 		return
 	}
+
 	actionID := core.ActionID{SpellID: 53401}
 
 	buffAura := hp.RegisterAura(core.Aura{
 		Label:    "Rabid",
 		ActionID: actionID,
 		Duration: time.Second * 20,
-		OnGain: func(aura *core.Aura, sim *core.Simulation) {
-			hp.MultiplyMeleeSpeed(sim, 1.7)
-		},
-		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
-			hp.MultiplyMeleeSpeed(sim, 1/1.7)
-		},
-	})
+	}).AttachMultiplyMeleeSpeed(1.7)
 
 	rabidSpell := hunter.RegisterSpell(core.SpellConfig{
 		ActionID: actionID,
@@ -407,6 +378,7 @@ func (hp *HunterPet) registerRabidCD() {
 				Duration: time.Second * 90,
 			},
 		},
+
 		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
 			return hp.IsEnabled()
 		},
@@ -419,6 +391,82 @@ func (hp *HunterPet) registerRabidCD() {
 	hunter.AddMajorCooldown(core.MajorCooldown{
 		Spell: rabidSpell,
 		Type:  core.CooldownTypeDPS,
+	})
+}
+
+func (hp *HunterPet) RegisterDash() *core.Spell {
+	if hp.hunterOwner.Options.PetSpec == proto.PetSpec_Tenacity {
+		return nil
+	}
+
+	actionID := core.ActionID{SpellID: 61684}
+
+	dashAura := hp.RegisterAura(core.Aura{
+		Label:    "Dash",
+		ActionID: actionID,
+		Duration: time.Second * 16,
+
+		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
+			hp.BoarsSpeedAura.Activate(sim)
+		},
+	})
+	dashAura.NewActiveMovementSpeedEffect(0.8)
+
+	return hp.RegisterSpell(core.SpellConfig{
+		ActionID: actionID,
+
+		Cast: core.CastConfig{
+			DefaultCast: core.Cast{
+				NonEmpty: true,
+			},
+			CD: core.Cooldown{
+				Timer:    hp.NewTimer(),
+				Duration: time.Second * 32,
+			},
+		},
+
+		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
+			return hp.IsEnabled()
+		},
+
+		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {
+			dashAura.Activate(sim)
+		},
+	})
+}
+
+func (hp *HunterPet) registerBlinkStrikes() *core.Spell {
+	if !hp.hunterOwner.Talents.BlinkStrikes {
+		return nil
+	}
+
+	core.MakePermanent(hp.RegisterAura(core.Aura{
+		Label:    "Blink Strikes",
+		ActionID: core.ActionID{SpellID: 130392},
+	})).AttachSpellMod(core.SpellModConfig{
+		Kind:       core.SpellMod_DamageDone_Pct,
+		ClassMask:  HunterPetFocusDump,
+		FloatValue: 0.5,
+	})
+
+	return hp.RegisterSpell(core.SpellConfig{
+		ActionID: core.ActionID{SpellID: 130393},
+		MaxRange: 30,
+
+		Cast: core.CastConfig{
+			DefaultCast: core.Cast{
+				NonEmpty: true,
+			},
+			CD: core.Cooldown{
+				Timer:    hp.NewTimer(),
+				Duration: time.Second * 20,
+			},
+		},
+
+		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {
+			hp.DistanceFromTarget = core.MaxMeleeRange + 1
+			hp.MoveTo(hp.DistanceFromTarget-1, sim)
+		},
 	})
 }
 
@@ -441,6 +489,10 @@ func (tp *ThunderhawkPet) RegisterLightningBlast() *core.Spell {
 		DamageMultiplier: 1,
 		CritMultiplier:   tp.CritMultiplier(1.0, 0.0),
 		ThreatMultiplier: 1,
+
+		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
+			return tp.IsEnabled()
+		},
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			baseDamage := sim.RollWithLabel(16000, 24000, "Lightning Blast")

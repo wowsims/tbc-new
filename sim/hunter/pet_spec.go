@@ -10,46 +10,36 @@ func (hp *HunterPet) ApplySpikedCollar() {
 		return
 	}
 
-	basicAttackDamageMod := hp.AddDynamicMod(core.SpellModConfig{
-		Kind:       core.SpellMod_DamageDone_Pct,
-		ClassMask:  HunterPetFocusDump,
-		FloatValue: 0.1,
-	})
-
-	critMod := hp.AddDynamicMod(core.SpellModConfig{
-		Kind:       core.SpellMod_BonusCrit_Percent,
-		FloatValue: 10,
-	})
-
 	core.MakePermanent(hp.RegisterAura(core.Aura{
 		Label:    "Spiked Collar",
 		ActionID: core.ActionID{SpellID: 53184},
-		Duration: core.NeverExpires,
-
-		OnGain: func(aura *core.Aura, sim *core.Simulation) {
-			critMod.Activate()
-			basicAttackDamageMod.Activate()
-			hp.MultiplyMeleeSpeed(sim, 1.1)
-		},
-		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
-			critMod.Deactivate()
-			basicAttackDamageMod.Deactivate()
-			hp.MultiplyMeleeSpeed(sim, 1/1.1)
-		},
-	}))
+	})).AttachSpellMod(core.SpellModConfig{
+		Kind:       core.SpellMod_DamageDone_Pct,
+		ClassMask:  HunterPetFocusDump,
+		FloatValue: 0.1,
+	}).AttachSpellMod(core.SpellModConfig{
+		Kind:       core.SpellMod_BonusCrit_Percent,
+		FloatValue: 10,
+	}).AttachMultiplyMeleeSpeed(1.1)
 }
 
 func (hp *HunterPet) ApplyCombatExperience() {
 	core.MakePermanent(hp.RegisterAura(core.Aura{
 		Label:    "Combat Experience",
 		ActionID: core.ActionID{SpellID: 20782},
-		Duration: core.NeverExpires,
+	})).AttachMultiplicativePseudoStatBuff(
+		&hp.PseudoStats.DamageDealtMultiplier, 1.5,
+	)
+}
 
-		OnGain: func(aura *core.Aura, sim *core.Simulation) {
-			hp.PseudoStats.DamageDealtMultiplier *= 1.5
-		},
-		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
-			hp.PseudoStats.DamageDealtMultiplier /= 1.5
-		},
+func (hp *HunterPet) ApplyBoarsSpeed() {
+	if !hp.isPrimary {
+		return
+	}
+
+	hp.BoarsSpeedAura = core.MakePermanent(hp.RegisterAura(core.Aura{
+		Label:    "Boar's Speed",
+		ActionID: core.ActionID{SpellID: 19596},
 	}))
+	hp.BoarsSpeedAura.NewActiveMovementSpeedEffect(0.3)
 }

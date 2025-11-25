@@ -8,7 +8,6 @@ import (
 )
 
 func (hunter *Hunter) registerMultiShotSpell() {
-
 	hunter.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 2643},
 		SpellSchool:    core.SpellSchoolPhysical,
@@ -52,7 +51,6 @@ func (hunter *Hunter) registerMultiShotSpell() {
 					}
 				}
 			})
-
 		},
 	})
 }

@@ -70,6 +70,6 @@ export class AuraMetricsTable extends MetricsTable<AuraMetrics> {
 	}
 
 	filterMetrics(metrics: Array<AuraMetrics>): Array<AuraMetrics> {
-		return metrics.filter(aura => !(aura.unit?.isPet && aura.actionId.otherId === OtherAction.OtherActionMove));
+		return metrics.filter(aura => !aura.unit?.isPet);
 	}
 }

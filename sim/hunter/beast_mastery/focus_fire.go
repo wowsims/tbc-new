@@ -12,12 +12,13 @@ func (bmHunter *BeastMasteryHunter) registerFocusFireSpell() {
 	}
 
 	actionID := core.ActionID{SpellID: 82692}
-	petFocusMetrics := bmHunter.Pet.NewFocusMetrics(actionID)
+	petFocusMetrics := bmHunter.Pet.NewFocusMetrics(core.ActionID{SpellID: 83468})
 	var frenzyStacksSnapshot int32
 	focusFireAura := bmHunter.RegisterAura(core.Aura{
 		Label:    "Focus Fire",
 		ActionID: actionID,
 		Duration: time.Second * 20,
+
 		OnGain: func(aura *core.Aura, sim *core.Simulation) {
 			frenzyStacksSnapshot = bmHunter.Pet.FrenzyAura.GetStacks()
 			if frenzyStacksSnapshot >= 1 {
@@ -63,5 +64,4 @@ func (bmHunter *BeastMasteryHunter) registerFocusFireSpell() {
 		Spell: focusFireSpell,
 		Type:  core.CooldownTypeDPS,
 	})
-
 }
