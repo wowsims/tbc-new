@@ -96,8 +96,8 @@ dps_results: {
 dps_results: {
  key: "TestRetribution-AllItems-BattlegearoftheLightningEmperor"
  value: {
-  dps: 164132.87933
-  tps: 154687.35829
+  dps: 163866.53221
+  tps: 154414.76285
  }
 }
 dps_results: {
