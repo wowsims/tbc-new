@@ -260,9 +260,6 @@ func generateTsFile(data ClassData) error {
 	data.ClassName = strings.ReplaceAll(data.ClassName, "_", "")
 	data.FileName = data.LowerCaseClassName
 	data.LowerCaseClassName = strings.ReplaceAll(data.LowerCaseClassName, "_", "")
-	if data.LowerCaseClassName == "deathknight" {
-		data.LowerCaseClassName = "deathKnight"
-	}
 	if err := tmpl.Execute(file, data); err != nil {
 		return fmt.Errorf("error executing template for %s: %w", data.ClassName, err)
 	}
