@@ -10,7 +10,7 @@ import (
 
 	"github.com/alecthomas/participle/v2"
 	"github.com/alecthomas/participle/v2/lexer"
-	"github.com/wowsims/mop/sim/core"
+	"github.com/wowsims/tbc/sim/core"
 )
 
 type TooltipDataProvider interface {

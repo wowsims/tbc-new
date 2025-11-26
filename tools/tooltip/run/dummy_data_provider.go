@@ -3,7 +3,7 @@ package main
 import (
 	"time"
 
-	"github.com/wowsims/mop/sim/core"
+	"github.com/wowsims/tbc/sim/core"
 )
 
 type DummyTooltipDataProvider struct{}

@@ -17,7 +17,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/wowsims/mop/sim/core"
+	"github.com/wowsims/tbc/sim/core"
 	protojson "google.golang.org/protobuf/encoding/protojson"
 	googleProto "google.golang.org/protobuf/proto"
 )

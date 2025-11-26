@@ -6,7 +6,7 @@ import (
 	"log"
 
 	"github.com/tailscale/hujson"
-	"github.com/wowsims/mop/sim/core/proto"
+	"github.com/wowsims/tbc/sim/core/proto"
 )
 
 func ParseWowheadReforgeStats(contents string) WowheadReforgeStats {
