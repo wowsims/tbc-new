@@ -63,7 +63,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecAssassinationRogue, {
 			blessingOfKings: true,
 			trueshotAura: true,
 			swiftbladesCunning: true,
-			legacyOfTheWhiteTiger: true,
 			blessingOfMight: true,
 			bloodlust: true,
 		}),

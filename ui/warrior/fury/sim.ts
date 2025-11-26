@@ -81,8 +81,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFuryWarrior, {
 		// Default raid/party buffs settings.
 		raidBuffs: RaidBuffs.create({
 			...defaultRaidBuffMajorDamageCooldowns(Class.ClassWarrior),
-			legacyOfTheEmperor: true,
-			legacyOfTheWhiteTiger: true,
 			darkIntent: true,
 			trueshotAura: true,
 			unleashedRage: true,

@@ -23,7 +23,6 @@ export const StatsBuff = InputHelpers.makeMultiIconInput(
 		makeBooleanRaidBuffInput({ actionId: ActionId.fromSpellId(20217), fieldName: 'blessingOfKings' }),
 		makeBooleanRaidBuffInput({ actionId: ActionId.fromSpellId(1126), fieldName: 'markOfTheWild' }),
 		makeBooleanRaidBuffInput({ actionId: ActionId.fromSpellId(90363), fieldName: 'embraceOfTheShaleSpider' }),
-		makeBooleanRaidBuffInput({ actionId: ActionId.fromSpellId(115921), fieldName: 'legacyOfTheEmperor' }),
 	],
 	i18n.t('settings_tab.raid_buffs.stats'),
 );
@@ -31,7 +30,6 @@ export const StatsBuff = InputHelpers.makeMultiIconInput(
 export const AttackPowerBuff = InputHelpers.makeMultiIconInput(
 	[
 		makeBooleanRaidBuffInput({ actionId: ActionId.fromSpellId(19506), fieldName: 'trueshotAura' }),
-		makeBooleanRaidBuffInput({ actionId: ActionId.fromSpellId(57330), fieldName: 'hornOfWinter' }),
 		makeBooleanRaidBuffInput({ actionId: ActionId.fromSpellId(6673), fieldName: 'battleShout' }),
 	],
 	i18n.t('settings_tab.raid_buffs.attack_power'),
@@ -72,7 +70,6 @@ export const CritBuff = InputHelpers.makeMultiIconInput(
 		makeBooleanRaidBuffInput({ actionId: ActionId.fromSpellId(17007), fieldName: 'leaderOfThePack' }),
 		makeBooleanRaidBuffInput({ actionId: ActionId.fromSpellId(24604), fieldName: 'furiousHowl' }),
 		makeBooleanRaidBuffInput({ actionId: ActionId.fromSpellId(90309), fieldName: 'terrifyingRoar' }),
-		makeBooleanRaidBuffInput({ actionId: ActionId.fromSpellId(116781), fieldName: 'legacyOfTheWhiteTiger' }),
 		makeBooleanRaidBuffInput({ actionId: ActionId.fromSpellId(1459), fieldName: 'arcaneBrilliance' }),
 		makeBooleanRaidBuffInput({ actionId: ActionId.fromSpellId(126309), fieldName: 'stillWater' }),
 	],

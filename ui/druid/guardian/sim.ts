@@ -107,8 +107,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecGuardianDruid, {
 		}),
 	},
 
-	defaultBuild: Presets.PRESET_BUILD_DEFAULT,
-
 	// IconInputs to include in the 'Player' section on the settings tab.
 	playerIconInputs: [],
 	// Inputs to include in the 'Rotation' section on the settings tab.
@@ -146,7 +144,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecGuardianDruid, {
 		// Preset gear configurations that the user can quickly select.
 		gear: [Presets.PRERAID_PRESET, Presets.MSV_PRESET, Presets.HOF_PRESET, Presets.P2_PRESET, Presets.P2_OFFENSIVE_PRESET, Presets.P3_PRESET],
 		itemSwaps: [Presets.ITEM_SWAP_PRESET],
-		builds: [Presets.PRESET_BUILD_DEFAULT, Presets.PRESET_BUILD_GARAJAL, Presets.PRESET_BUILD_EMPRESS, Presets.PRESET_BUILD_SHA, Presets.PRESET_BUILD_HORRIDON],
+		builds: [],
 	},
 
 	autoRotation: (_player: Player<Spec.SpecGuardianDruid>): APLRotation => {

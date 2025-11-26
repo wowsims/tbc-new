@@ -221,10 +221,6 @@ func MarkOfTheWildAura(unit *Unit) *Aura {
 	return aura
 }
 
-func LegacyOfTheEmperorAura(unit *Unit) *Aura {
-	return makeExclusiveAllStatPercentBuff(unit, "Legacy of the Emperor", ActionID{SpellID: 115921}, 1.05)
-}
-
 func EmbraceOfTheShaleSpiderAura(u *Unit) *Aura {
 	return makeExclusiveAllStatPercentBuff(u, "Embrace of the Shale Spider", ActionID{SpellID: 90363}, 1.05)
 }
@@ -302,25 +298,6 @@ func TrueShotAura(unit *Unit) *Aura {
 			{stats.AttackPower, 1.1, true},
 			{stats.RangedAttackPower, 1.1, true},
 		}})
-}
-
-func HornOfWinterAura(unit *Unit, asExternal bool) *Aura {
-	baseAura := makeExclusiveBuff(unit, BuffConfig{
-		"Horn of Winter",
-		ActionID{SpellID: 57330},
-		[]StatConfig{
-			{stats.AttackPower, 1.1, true},
-			{stats.RangedAttackPower, 1.1, true},
-		}})
-
-	if asExternal {
-		return baseAura
-	}
-
-	baseAura.OnReset = nil
-	baseAura.Duration = time.Minute * 5
-	baseAura.BuildPhase = CharacterBuildPhaseNone
-	return baseAura
 }
 
 func BattleShoutAura(unit *Unit, asExternal bool) *Aura {
@@ -419,18 +396,6 @@ func FuriousHowl(unit *Unit) *Aura {
 	baseAura := makeExclusiveBuff(unit, BuffConfig{
 		"Furious Howl",
 		ActionID{SpellID: 24604},
-		[]StatConfig{
-			{stats.PhysicalCritPercent, 5, false},
-			{stats.SpellCritPercent, 5, false},
-		}})
-
-	return baseAura
-}
-
-func LegacyOfTheWhiteTiger(unit *Unit) *Aura {
-	baseAura := makeExclusiveBuff(unit, BuffConfig{
-		"Legacy of the White Tiger",
-		ActionID{SpellID: 116781},
 		[]StatConfig{
 			{stats.PhysicalCritPercent, 5, false},
 			{stats.SpellCritPercent, 5, false},
