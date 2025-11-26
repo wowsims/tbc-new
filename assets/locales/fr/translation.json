@@ -1259,14 +1259,6 @@
                     "label": "Points de combo Max",
                     "tooltip": "Quantité de points de combo maximum disponibles."
                 },
-                "current_chi": {
-                    "label": "Chi actuel",
-                    "tooltip": "Quantité de chi actuellement disponible."
-                },
-                "max_chi": {
-                    "label": "Chi Max",
-                    "tooltip": "Quantité de chi maximum disponible."
-                },
                 "solar_energy": {
                     "label": "Énergie solaire",
                     "tooltip": "Quantité d'énergie solaire actuellement disponible."
