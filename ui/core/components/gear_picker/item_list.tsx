@@ -731,10 +731,10 @@ export default class ItemList<T extends ItemListType> {
 				<span>
 					Quest
 					{item.factionRestriction === UIItem_FactionRestriction.ALLIANCE_ONLY && (
-						<img src="/mop/assets/img/alliance.png" className="ms-1" width="15" height="15" />
+						<img src="/tbc/assets/img/alliance.png" className="ms-1" width="15" height="15" />
 					)}
 					{item.factionRestriction === UIItem_FactionRestriction.HORDE_ONLY && (
-						<img src="/mop/assets/img/horde.png" className="ms-1" width="15" height="15" />
+						<img src="/tbc/assets/img/horde.png" className="ms-1" width="15" height="15" />
 					)}
 					<br />
 					{src.name}
@@ -755,10 +755,10 @@ export default class ItemList<T extends ItemListType> {
 						<span>
 							{name}
 							{item.factionRestriction === UIItem_FactionRestriction.ALLIANCE_ONLY && (
-								<img src="/mop/assets/img/alliance.png" className="ms-1" width="15" height="15" />
+								<img src="/tbc/assets/img/alliance.png" className="ms-1" width="15" height="15" />
 							)}
 							{item.factionRestriction === UIItem_FactionRestriction.HORDE_ONLY && (
-								<img src="/mop/assets/img/horde.png" className="ms-1" width="15" height="15" />
+								<img src="/tbc/assets/img/horde.png" className="ms-1" width="15" height="15" />
 							)}
 							<br />
 						</span>

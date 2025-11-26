@@ -3,8 +3,8 @@ package warrior
 import (
 	"time"
 
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/core/proto"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
 )
 
 // Rather than update a variable somewhere for one effect (Fury's Unshackled Fury) just take a callback

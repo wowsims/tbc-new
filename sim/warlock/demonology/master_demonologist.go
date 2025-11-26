@@ -1,8 +1,8 @@
 package demonology
 
 import (
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/warlock"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/warlock"
 )
 
 // Caster Form + Pet Damage = 1% per Masterypoint

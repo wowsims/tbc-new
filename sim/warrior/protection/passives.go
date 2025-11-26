@@ -3,10 +3,10 @@ package protection
 import (
 	"time"
 
-	"github.com/wowsims/mop/sim/common/shared"
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/core/stats"
-	"github.com/wowsims/mop/sim/warrior"
+	"github.com/wowsims/tbc/sim/common/shared"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/stats"
+	"github.com/wowsims/tbc/sim/warrior"
 )
 
 func (war *ProtectionWarrior) registerUnwaveringSentinel() {

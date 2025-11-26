@@ -1,8 +1,8 @@
 package protection
 
 import (
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/paladin"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/paladin"
 )
 
 // Your Judgment hits grant one charge of Holy Power.

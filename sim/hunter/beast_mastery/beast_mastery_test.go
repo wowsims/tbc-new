@@ -3,9 +3,9 @@ package beast_mastery
 import (
 	"testing"
 
-	"github.com/wowsims/mop/sim/common" // imported to get item effects included.
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/core/proto"
+	"github.com/wowsims/tbc/sim/common" // imported to get item effects included.
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
 )
 
 func init() {

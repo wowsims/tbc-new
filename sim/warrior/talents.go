@@ -3,9 +3,9 @@ package warrior
 import (
 	"time"
 
-	"github.com/wowsims/mop/sim/common/shared"
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/core/proto"
+	"github.com/wowsims/tbc/sim/common/shared"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
 )
 
 func (warrior *Warrior) ApplyTalents() {

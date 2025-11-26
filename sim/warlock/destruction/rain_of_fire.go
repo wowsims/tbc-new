@@ -3,8 +3,8 @@ package destruction
 import (
 	"time"
 
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/warlock"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/warlock"
 )
 
 // Rain of Fire does not need to be channeled anymore for destruction warlocks

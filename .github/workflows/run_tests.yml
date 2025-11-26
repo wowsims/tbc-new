@@ -43,7 +43,7 @@ jobs:
 
             - name: Build 🔧
               run: |
-                  make dist/mop/.dirstamp
+                  make dist/tbc/.dirstamp
 
             - name: Test
               run: |

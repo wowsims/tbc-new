@@ -4,8 +4,8 @@ import (
 	"math"
 	"time"
 
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/priest"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/priest"
 )
 
 const haloScale = 19.266

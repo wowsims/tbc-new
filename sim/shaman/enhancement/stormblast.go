@@ -1,8 +1,8 @@
 package enhancement
 
 import (
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/shaman"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/shaman"
 )
 
 func (enh *EnhancementShaman) newStormblastHitSpell(isMh bool) *core.Spell {

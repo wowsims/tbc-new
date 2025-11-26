@@ -3,9 +3,9 @@ package frost
 import (
 	"time"
 
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/core/proto"
-	"github.com/wowsims/mop/sim/mage"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
+	"github.com/wowsims/tbc/sim/mage"
 )
 
 const frostboltVariance = 0.24   // Per https://wago.tools/db2/SpellEffect?build=5.5.0.60802&filter%5BSpellID%5D=exact%253A116 Field: "Variance"

@@ -2,11 +2,11 @@ package common
 
 // Just import other directories, so importing common from elsewhere is enough.
 import (
-	"github.com/wowsims/mop/sim/common/mop"
+	"github.com/wowsims/tbc/sim/common/tbc"
 )
 
 func RegisterAllEffects() {
-	mop.RegisterAllOnUseCds()
-	mop.RegisterAllProcs()
-	mop.RegisterAllEnchants()
+	tbc.RegisterAllOnUseCds()
+	tbc.RegisterAllProcs()
+	tbc.RegisterAllEnchants()
 }

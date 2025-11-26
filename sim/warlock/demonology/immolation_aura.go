@@ -3,8 +3,8 @@ package demonology
 import (
 	"time"
 
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/warlock"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/warlock"
 )
 
 const immolationAuraScale = 0.17499999702

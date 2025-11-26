@@ -1,8 +1,8 @@
 package retribution
 
 import (
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/paladin"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/paladin"
 )
 
 // Your Crusader Strike, Hammer of the Righteous, Hammer of Wrath, Templar's Verdict and Divine Storm deal ((8 + <Mastery Rating> / 600) * 1.85)% additional damage as Holy damage.

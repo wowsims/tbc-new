@@ -1,9 +1,9 @@
 package fire
 
 import (
-	"github.com/wowsims/mop/sim/common/shared"
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/mage"
+	"github.com/wowsims/tbc/sim/common/shared"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/mage"
 )
 
 func (fire *FireMage) registerMastery() {

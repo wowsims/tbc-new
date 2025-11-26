@@ -6,22 +6,22 @@ import { ActionId } from '../../proto_utils/action_id';
 import { getEmptyGemSocketIconUrl } from '../../proto_utils/gems';
 
 const emptySlotIcons: Record<ItemSlot, string> = {
-	[ItemSlot.ItemSlotHead]: '/mop/assets/item_slots/head.jpg',
-	[ItemSlot.ItemSlotNeck]: '/mop/assets/item_slots/neck.jpg',
-	[ItemSlot.ItemSlotShoulder]: '/mop/assets/item_slots/shoulders.jpg',
-	[ItemSlot.ItemSlotBack]: '/mop/assets/item_slots/shirt.jpg',
-	[ItemSlot.ItemSlotChest]: '/mop/assets/item_slots/chest.jpg',
-	[ItemSlot.ItemSlotWrist]: '/mop/assets/item_slots/wrists.jpg',
-	[ItemSlot.ItemSlotHands]: '/mop/assets/item_slots/hands.jpg',
-	[ItemSlot.ItemSlotWaist]: '/mop/assets/item_slots/waist.jpg',
-	[ItemSlot.ItemSlotLegs]: '/mop/assets/item_slots/legs.jpg',
-	[ItemSlot.ItemSlotFeet]: '/mop/assets/item_slots/feet.jpg',
-	[ItemSlot.ItemSlotFinger1]: '/mop/assets/item_slots/finger.jpg',
-	[ItemSlot.ItemSlotFinger2]: '/mop/assets/item_slots/finger.jpg',
-	[ItemSlot.ItemSlotTrinket1]: '/mop/assets/item_slots/trinket.jpg',
-	[ItemSlot.ItemSlotTrinket2]: '/mop/assets/item_slots/trinket.jpg',
-	[ItemSlot.ItemSlotMainHand]: '/mop/assets/item_slots/mainhand.jpg',
-	[ItemSlot.ItemSlotOffHand]: '/mop/assets/item_slots/offhand.jpg',
+	[ItemSlot.ItemSlotHead]: '/tbc/assets/item_slots/head.jpg',
+	[ItemSlot.ItemSlotNeck]: '/tbc/assets/item_slots/neck.jpg',
+	[ItemSlot.ItemSlotShoulder]: '/tbc/assets/item_slots/shoulders.jpg',
+	[ItemSlot.ItemSlotBack]: '/tbc/assets/item_slots/shirt.jpg',
+	[ItemSlot.ItemSlotChest]: '/tbc/assets/item_slots/chest.jpg',
+	[ItemSlot.ItemSlotWrist]: '/tbc/assets/item_slots/wrists.jpg',
+	[ItemSlot.ItemSlotHands]: '/tbc/assets/item_slots/hands.jpg',
+	[ItemSlot.ItemSlotWaist]: '/tbc/assets/item_slots/waist.jpg',
+	[ItemSlot.ItemSlotLegs]: '/tbc/assets/item_slots/legs.jpg',
+	[ItemSlot.ItemSlotFeet]: '/tbc/assets/item_slots/feet.jpg',
+	[ItemSlot.ItemSlotFinger1]: '/tbc/assets/item_slots/finger.jpg',
+	[ItemSlot.ItemSlotFinger2]: '/tbc/assets/item_slots/finger.jpg',
+	[ItemSlot.ItemSlotTrinket1]: '/tbc/assets/item_slots/trinket.jpg',
+	[ItemSlot.ItemSlotTrinket2]: '/tbc/assets/item_slots/trinket.jpg',
+	[ItemSlot.ItemSlotMainHand]: '/tbc/assets/item_slots/mainhand.jpg',
+	[ItemSlot.ItemSlotOffHand]: '/tbc/assets/item_slots/offhand.jpg',
 };
 export function getEmptySlotIconUrl(slot: ItemSlot): string {
 	return emptySlotIcons[slot];

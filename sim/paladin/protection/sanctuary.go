@@ -1,8 +1,8 @@
 package protection
 
 import (
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/core/stats"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/stats"
 )
 
 // Decreases damage taken by 15%, increases armor value from items by 10%, and increases your chance to dodge by 2%.

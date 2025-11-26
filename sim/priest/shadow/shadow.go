@@ -1,10 +1,10 @@
 package shadow
 
 import (
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/core/proto"
-	"github.com/wowsims/mop/sim/core/stats"
-	"github.com/wowsims/mop/sim/priest"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
+	"github.com/wowsims/tbc/sim/core/stats"
+	"github.com/wowsims/tbc/sim/priest"
 )
 
 func RegisterShadowPriest() {

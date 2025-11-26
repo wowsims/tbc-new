@@ -3,9 +3,9 @@ package elemental
 import (
 	"testing"
 
-	"github.com/wowsims/mop/sim/common"
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/core/proto"
+	"github.com/wowsims/tbc/sim/common"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
 )
 
 func init() {

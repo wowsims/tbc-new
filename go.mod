@@ -1,4 +1,4 @@
-module github.com/wowsims/mop
+module github.com/wowsims/tbc
 
 go 1.23.0
 

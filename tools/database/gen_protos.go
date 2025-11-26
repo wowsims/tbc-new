@@ -9,9 +9,9 @@ import (
 	"text/template"
 	"unicode"
 
-	"github.com/wowsims/mop/sim/core/proto"
-	"github.com/wowsims/mop/tools/database/dbc"
-	"github.com/wowsims/mop/tools/tooltip"
+	"github.com/wowsims/tbc/sim/core/proto"
+	"github.com/wowsims/tbc/tools/database/dbc"
+	"github.com/wowsims/tbc/tools/tooltip"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 )

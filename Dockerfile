@@ -2,7 +2,7 @@
 
 FROM golang:1.23
 
-WORKDIR /mop
+WORKDIR /tbc
 
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 

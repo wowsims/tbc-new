@@ -1,13 +1,13 @@
-package mop
+package tbc
 
 import (
 	"fmt"
 	"time"
 
-	"github.com/wowsims/mop/sim/common/shared"
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/core/proto"
-	"github.com/wowsims/mop/sim/core/stats"
+	"github.com/wowsims/tbc/sim/common/shared"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
+	"github.com/wowsims/tbc/sim/core/stats"
 )
 
 const UnerringVisionBuffId = 138963

@@ -3,8 +3,8 @@ package dbc
 import (
 	"slices"
 
-	"github.com/wowsims/mop/sim/core/proto"
-	"github.com/wowsims/mop/sim/core/stats"
+	"github.com/wowsims/tbc/sim/core/proto"
+	"github.com/wowsims/tbc/sim/core/stats"
 )
 
 type Consumable struct {

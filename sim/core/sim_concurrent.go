@@ -9,8 +9,8 @@ import (
 	"runtime/debug"
 	"slices"
 
-	"github.com/wowsims/mop/sim/core/proto"
-	"github.com/wowsims/mop/sim/core/simsignals"
+	"github.com/wowsims/tbc/sim/core/proto"
+	"github.com/wowsims/tbc/sim/core/simsignals"
 	googleProto "google.golang.org/protobuf/proto"
 )
 

@@ -1,13 +1,13 @@
 package encounters
 
 import (
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/core/proto"
-	"github.com/wowsims/mop/sim/core/stats"
-	"github.com/wowsims/mop/sim/encounters/hof"
-	"github.com/wowsims/mop/sim/encounters/msv"
-	"github.com/wowsims/mop/sim/encounters/toes"
-	"github.com/wowsims/mop/sim/encounters/tot"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
+	"github.com/wowsims/tbc/sim/core/stats"
+	"github.com/wowsims/tbc/sim/encounters/hof"
+	"github.com/wowsims/tbc/sim/encounters/msv"
+	"github.com/wowsims/tbc/sim/encounters/toes"
+	"github.com/wowsims/tbc/sim/encounters/tot"
 )
 
 func init() {

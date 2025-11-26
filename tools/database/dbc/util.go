@@ -8,8 +8,8 @@ import (
 	"path/filepath"
 	"slices"
 
-	"github.com/wowsims/mop/sim/core/proto"
-	"github.com/wowsims/mop/sim/core/stats"
+	"github.com/wowsims/tbc/sim/core/proto"
+	"github.com/wowsims/tbc/sim/core/stats"
 )
 
 func GetProfession(id int) proto.Profession {

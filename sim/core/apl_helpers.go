@@ -3,8 +3,8 @@ package core
 import (
 	"time"
 
-	"github.com/wowsims/mop/sim/core/proto"
-	"github.com/wowsims/mop/sim/core/stats"
+	"github.com/wowsims/tbc/sim/core/proto"
+	"github.com/wowsims/tbc/sim/core/stats"
 )
 
 // Struct for handling unit references, to account for values that can

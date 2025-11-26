@@ -10,10 +10,10 @@ import (
 	"log"
 	"unsafe"
 
-	"github.com/wowsims/mop/sim"
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/core/proto"
-	"github.com/wowsims/mop/sim/core/simsignals"
+	"github.com/wowsims/tbc/sim"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
+	"github.com/wowsims/tbc/sim/core/simsignals"
 	"google.golang.org/protobuf/encoding/protojson"
 	goproto "google.golang.org/protobuf/proto"
 )

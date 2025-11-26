@@ -4,10 +4,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/core/proto"
-	"github.com/wowsims/mop/sim/core/simsignals"
-	"github.com/wowsims/mop/sim/warrior/arms"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
+	"github.com/wowsims/tbc/sim/core/simsignals"
+	"github.com/wowsims/tbc/sim/warrior/arms"
 )
 
 func TestAbort(t *testing.T) {

@@ -1,8 +1,8 @@
 package elemental
 
 import (
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/shaman"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/shaman"
 )
 
 func (ele *ElementalShaman) registerLavaBeamSpell() {

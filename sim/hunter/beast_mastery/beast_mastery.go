@@ -1,10 +1,10 @@
 package beast_mastery
 
 import (
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/core/proto"
-	"github.com/wowsims/mop/sim/core/stats"
-	"github.com/wowsims/mop/sim/hunter"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
+	"github.com/wowsims/tbc/sim/core/stats"
+	"github.com/wowsims/tbc/sim/hunter"
 )
 
 func RegisterBeastMasteryHunter() {

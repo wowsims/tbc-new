@@ -12,8 +12,8 @@ make test
 make update-tests
 
 # Host a local version of the UI at http://localhost:8080. Visit it by pointing a browser to
-# http://localhost:8080/mop/YOUR_SPEC_HERE, where YOUR_SPEC_HERE is the directory under ui/ with your custom code.
-# Recompiles the entire client before launching using `make dist/mop`
+# http://localhost:8080/tbc/YOUR_SPEC_HERE, where YOUR_SPEC_HERE is the directory under ui/ with your custom code.
+# Recompiles the entire client before launching using `make dist/tbc`
 npm start
 # Or
 make host
@@ -29,7 +29,7 @@ make clean
 # Recompiles the ts only for the given spec (e.g. make host_elemental_shaman)
 make host_$spec
 
-# Recompiles the `wowsimmop` server binary and runs it, hosting /dist directory at http://localhost:3333/mop.
+# Recompiles the `wowsimtbc` server binary and runs it, hosting /dist directory at http://localhost:3333/tbc.
 # This is the fastest way to iterate on core go simulator code so you don't have to wait for client rebuilds.
 # To rebuild client for a spec just do 'make $spec' and refresh browser.
 make rundevserver
@@ -37,7 +37,7 @@ make rundevserver
 # With file-watching so the server auto-restarts and recompiles on Go or TS changes:
 WATCH=1 make rundevserver
 
-# The same as rundevserver, recompiles  `wowsimmop` binary and runs it on port 3333. Instead of serving content from the dist folder,
+# The same as rundevserver, recompiles  `wowsimtbc` binary and runs it on port 3333. Instead of serving content from the dist folder,
 # this command also runs `vite serve` to start the Vite dev server on port 5173 (or similar) and automatically reloads the page on .ts changes in less than a second.
 # This allows for more rapid development, with sub second reloads on TS changes. This combines the benefits of `WATCH=1 make rundevserver` and `WATCH=1 make host`
 # to create something that allows you to work in any part of the code with ease and speed.
@@ -54,16 +54,16 @@ make webworkers
 # With file watch enabled
 WATCH=1 make webworkers
 
-# Creates the 'wowsimmop' binary that can host the UI and run simulations natively (instead of with wasm).
+# Creates the 'wowsimtbc' binary that can host the UI and run simulations natively (instead of with wasm).
 # Builds the UI and the compiles it into the binary so that you can host the sim as a server instead of wasm on the client.
-# It does this by first doing make dist/mop and then copying all those files to binary_dist/mop and loading all the files in that directory into its binary on compile.
-make wowsimmop
+# It does this by first doing make dist/tbc and then copying all those files to binary_dist/tbc and loading all the files in that directory into its binary on compile.
+make wowsimtbc
 
 # Using the --usefs flag will instead of hosting the client built into the binary, it will host whatever code is found in the /dist directory.
 # Use --wasm to host the client with the wasm simulator.
 # The server also disables all caching so that refreshes should pickup any changed files in dist/. The client will still call to the server to run simulations so you can iterate more quickly on client changes.
-# make dist/mop && ./wowsimmop --usefs would rebuild the whole client and host it. (you would have had to run `make devserver` to build the wowsimmop binary first.)
-./wowsimmop --usefs
+# make dist/tbc && ./wowsimtbc --usefs would rebuild the whole client and host it. (you would have had to run `make devserver` to build the wowsimtbc binary first.)
+./wowsimtbc --usefs
 
 # Generate code for the sim database (db.json). Only necessary if you changed the items generator.
 # Useful only if you're actively working on the generator and have already run make db locally at least once.

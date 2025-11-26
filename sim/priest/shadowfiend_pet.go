@@ -3,8 +3,8 @@ package priest
 import (
 	"time"
 
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/core/stats"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/stats"
 )
 
 // DISCLAIMER: Shadowfiend need some extensive research on Level 85

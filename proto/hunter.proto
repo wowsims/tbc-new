@@ -127,17 +127,6 @@ message HunterOptions {
 		Worm           = 32;
 		ShaleSpider    = 33;
 		Fox            = 34;
-
-		// new additions in MoP
-		Goat           = 35;
-		Porcupine      = 36;
-		Monkey         = 37;
-		Basilisk       = 38;
-		Crane          = 39;
-		Dog            = 40;
-		Beetle         = 41;
-		Quilen         = 42;
-		WaterStrider   = 43;
 	}
 
 	PetType pet_type = 2;
