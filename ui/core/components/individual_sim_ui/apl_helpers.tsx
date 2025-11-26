@@ -7,8 +7,6 @@ import {
 	APLActionGuardianHotwDpsRotation_Strategy as HotwStrategy,
 	APLActionItemSwap_SwapSet as ItemSwapSet,
 	APLValueEclipsePhase,
-	APLValueRuneSlot,
-	APLValueRuneType,
 } from '../../proto/apl.js';
 import { ActionID, OtherAction, Stat, UnitReference, UnitReference_Type as UnitType } from '../../proto/common.js';
 import { FeralDruid_Rotation_AplType } from '../../proto/druid.js';
@@ -1085,7 +1083,7 @@ export function eclipseTypeFieldConfig(field: string): APLPickerBuilderFieldConf
 
 	return {
 		field: field,
-		newValue: () => APLValueRuneType.RuneBlood,
+		newValue: () => APLValueEclipsePhase.LunarPhase,
 		factory: (parent, player, config) =>
 			new TextDropdownPicker(parent, player, {
 				id: randomUUID(),
@@ -1093,53 +1091,6 @@ export function eclipseTypeFieldConfig(field: string): APLPickerBuilderFieldConf
 				defaultLabel: i18n.t('rotation_tab.apl.helpers.eclipse_types.lunar'),
 				equals: (a, b) => a == b,
 				values: values,
-			}),
-	};
-}
-
-export function runeTypeFieldConfig(field: string, includeDeath: boolean): APLPickerBuilderFieldConfig<any, any> {
-	const values = [
-		{ value: APLValueRuneType.RuneBlood, label: i18n.t('rotation_tab.apl.helpers.rune_types.blood') },
-		{ value: APLValueRuneType.RuneFrost, label: i18n.t('rotation_tab.apl.helpers.rune_types.frost') },
-		{ value: APLValueRuneType.RuneUnholy, label: i18n.t('rotation_tab.apl.helpers.rune_types.unholy') },
-	];
-
-	if (includeDeath) {
-		values.push({ value: APLValueRuneType.RuneDeath, label: i18n.t('rotation_tab.apl.helpers.rune_types.death') });
-	}
-
-	return {
-		field: field,
-		newValue: () => APLValueRuneType.RuneBlood,
-		factory: (parent, player, config) =>
-			new TextDropdownPicker(parent, player, {
-				id: randomUUID(),
-				...config,
-				defaultLabel: i18n.t('common.none'),
-				equals: (a, b) => a == b,
-				values: values,
-			}),
-	};
-}
-
-export function runeSlotFieldConfig(field: string): APLPickerBuilderFieldConfig<any, any> {
-	return {
-		field: field,
-		newValue: () => APLValueRuneSlot.SlotLeftBlood,
-		factory: (parent, player, config) =>
-			new TextDropdownPicker(parent, player, {
-				id: randomUUID(),
-				...config,
-				defaultLabel: i18n.t('common.none'),
-				equals: (a, b) => a == b,
-				values: [
-					{ value: APLValueRuneSlot.SlotLeftBlood, label: i18n.t('rotation_tab.apl.helpers.rune_slots.blood_left') },
-					{ value: APLValueRuneSlot.SlotRightBlood, label: i18n.t('rotation_tab.apl.helpers.rune_slots.blood_right') },
-					{ value: APLValueRuneSlot.SlotLeftFrost, label: i18n.t('rotation_tab.apl.helpers.rune_slots.frost_left') },
-					{ value: APLValueRuneSlot.SlotRightFrost, label: i18n.t('rotation_tab.apl.helpers.rune_slots.frost_right') },
-					{ value: APLValueRuneSlot.SlotLeftUnholy, label: i18n.t('rotation_tab.apl.helpers.rune_slots.unholy_left') },
-					{ value: APLValueRuneSlot.SlotRightUnholy, label: i18n.t('rotation_tab.apl.helpers.rune_slots.unholy_right') },
-				],
 			}),
 	};
 }
@@ -1237,12 +1188,6 @@ export function reactionTimeCheckbox(): APLPickerBuilderFieldConfig<any, any> {
 export function useDotBaseValueCheckbox(): APLPickerBuilderFieldConfig<any, any> {
 	return booleanFieldConfig('useBaseValue', i18n.t('rotation_tab.apl.helpers.field_configs.use_base_value'), {
 		labelTooltip: i18n.t('rotation_tab.apl.helpers.field_configs.use_base_value_tooltip'),
-	});
-}
-
-export function useRuneRegenBaseValueCheckbox(): APLPickerBuilderFieldConfig<any, any> {
-	return booleanFieldConfig('useBaseValue', 'Use base value', {
-		labelTooltip: 'If checked, will return your base (unmodified by procs/lust etc) rune regen rate',
 	});
 }
 

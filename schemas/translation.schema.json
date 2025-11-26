@@ -481,12 +481,6 @@
             "focus": {
               "type": "string"
             },
-            "runic_power": {
-              "type": "string"
-            },
-            "chi": {
-              "type": "string"
-            },
             "holy_power": {
               "type": "string"
             },
@@ -513,8 +507,6 @@
             "energy",
             "rage",
             "focus",
-            "runic_power",
-            "chi",
             "holy_power",
             "shadow_orbs",
             "combo_points",
@@ -5232,70 +5224,6 @@
                     "tooltip"
                   ]
                 },
-                "current_chi": {
-                  "type": "object",
-                  "properties": {
-                    "label": {
-                      "type": "string"
-                    },
-                    "tooltip": {
-                      "type": "string"
-                    }
-                  },
-                  "additionalProperties": false,
-                  "required": [
-                    "label",
-                    "tooltip"
-                  ]
-                },
-                "max_chi": {
-                  "type": "object",
-                  "properties": {
-                    "label": {
-                      "type": "string"
-                    },
-                    "tooltip": {
-                      "type": "string"
-                    }
-                  },
-                  "additionalProperties": false,
-                  "required": [
-                    "label",
-                    "tooltip"
-                  ]
-                },
-                "current_runic_power": {
-                  "type": "object",
-                  "properties": {
-                    "label": {
-                      "type": "string"
-                    },
-                    "tooltip": {
-                      "type": "string"
-                    }
-                  },
-                  "additionalProperties": false,
-                  "required": [
-                    "label",
-                    "tooltip"
-                  ]
-                },
-                "max_runic_power": {
-                  "type": "object",
-                  "properties": {
-                    "label": {
-                      "type": "string"
-                    },
-                    "tooltip": {
-                      "type": "string"
-                    }
-                  },
-                  "additionalProperties": false,
-                  "required": [
-                    "label",
-                    "tooltip"
-                  ]
-                },
                 "solar_energy": {
                   "type": "object",
                   "properties": {
@@ -5345,134 +5273,6 @@
                   ]
                 },
                 "generic_resource": {
-                  "type": "object",
-                  "properties": {
-                    "label": {
-                      "type": "string"
-                    },
-                    "tooltip": {
-                      "type": "string"
-                    }
-                  },
-                  "additionalProperties": false,
-                  "required": [
-                    "label",
-                    "tooltip"
-                  ]
-                },
-                "num_runes": {
-                  "type": "object",
-                  "properties": {
-                    "label": {
-                      "type": "string"
-                    },
-                    "tooltip": {
-                      "type": "string"
-                    }
-                  },
-                  "additionalProperties": false,
-                  "required": [
-                    "label",
-                    "tooltip"
-                  ]
-                },
-                "num_non_death_runes": {
-                  "type": "object",
-                  "properties": {
-                    "label": {
-                      "type": "string"
-                    },
-                    "tooltip": {
-                      "type": "string"
-                    }
-                  },
-                  "additionalProperties": false,
-                  "required": [
-                    "label",
-                    "tooltip"
-                  ]
-                },
-                "rune_is_ready": {
-                  "type": "object",
-                  "properties": {
-                    "label": {
-                      "type": "string"
-                    },
-                    "tooltip": {
-                      "type": "string"
-                    }
-                  },
-                  "additionalProperties": false,
-                  "required": [
-                    "label",
-                    "tooltip"
-                  ]
-                },
-                "rune_is_death": {
-                  "type": "object",
-                  "properties": {
-                    "label": {
-                      "type": "string"
-                    },
-                    "tooltip": {
-                      "type": "string"
-                    }
-                  },
-                  "additionalProperties": false,
-                  "required": [
-                    "label",
-                    "tooltip"
-                  ]
-                },
-                "rune_cooldown": {
-                  "type": "object",
-                  "properties": {
-                    "label": {
-                      "type": "string"
-                    },
-                    "tooltip": {
-                      "type": "string"
-                    }
-                  },
-                  "additionalProperties": false,
-                  "required": [
-                    "label",
-                    "tooltip"
-                  ]
-                },
-                "next_rune_cooldown": {
-                  "type": "object",
-                  "properties": {
-                    "label": {
-                      "type": "string"
-                    },
-                    "tooltip": {
-                      "type": "string"
-                    }
-                  },
-                  "additionalProperties": false,
-                  "required": [
-                    "label",
-                    "tooltip"
-                  ]
-                },
-                "rune_slot_cooldown": {
-                  "type": "object",
-                  "properties": {
-                    "label": {
-                      "type": "string"
-                    },
-                    "tooltip": {
-                      "type": "string"
-                    }
-                  },
-                  "additionalProperties": false,
-                  "required": [
-                    "label",
-                    "tooltip"
-                  ]
-                },
-                "full_rune_cooldown": {
                   "type": "object",
                   "properties": {
                     "label": {
@@ -6533,22 +6333,10 @@
                 "estimated_time_to_target_energy",
                 "current_combo_points",
                 "max_combo_points",
-                "current_chi",
-                "max_chi",
-                "current_runic_power",
-                "max_runic_power",
                 "solar_energy",
                 "lunar_energy",
                 "current_eclipse_phase",
                 "generic_resource",
-                "num_runes",
-                "num_non_death_runes",
-                "rune_is_ready",
-                "rune_is_death",
-                "rune_cooldown",
-                "next_rune_cooldown",
-                "rune_slot_cooldown",
-                "full_rune_cooldown",
                 "gcd_is_ready",
                 "gcd_time_to_ready",
                 "time_to_next_auto",
@@ -6799,16 +6587,7 @@
                 "combo_points": {
                   "type": "string"
                 },
-                "chi": {
-                  "type": "string"
-                },
-                "runic_power": {
-                  "type": "string"
-                },
                 "eclipse": {
-                  "type": "string"
-                },
-                "runes": {
                   "type": "string"
                 },
                 "cooldowns": {
@@ -6848,10 +6627,7 @@
                 "focus",
                 "energy",
                 "combo_points",
-                "chi",
-                "runic_power",
                 "eclipse",
-                "runes",
                 "cooldowns",
                 "placeholders"
               ]
@@ -7007,62 +6783,6 @@
                     "neutral"
                   ]
                 },
-                "rune_types": {
-                  "type": "object",
-                  "properties": {
-                    "blood": {
-                      "type": "string"
-                    },
-                    "frost": {
-                      "type": "string"
-                    },
-                    "unholy": {
-                      "type": "string"
-                    },
-                    "death": {
-                      "type": "string"
-                    }
-                  },
-                  "additionalProperties": false,
-                  "required": [
-                    "blood",
-                    "frost",
-                    "unholy",
-                    "death"
-                  ]
-                },
-                "rune_slots": {
-                  "type": "object",
-                  "properties": {
-                    "blood_left": {
-                      "type": "string"
-                    },
-                    "blood_right": {
-                      "type": "string"
-                    },
-                    "frost_left": {
-                      "type": "string"
-                    },
-                    "frost_right": {
-                      "type": "string"
-                    },
-                    "unholy_left": {
-                      "type": "string"
-                    },
-                    "unholy_right": {
-                      "type": "string"
-                    }
-                  },
-                  "additionalProperties": false,
-                  "required": [
-                    "blood_left",
-                    "blood_right",
-                    "frost_left",
-                    "frost_right",
-                    "unholy_left",
-                    "unholy_right"
-                  ]
-                },
                 "rotation_types": {
                   "type": "object",
                   "properties": {
@@ -7176,8 +6896,6 @@
                 "action_id_sets",
                 "field_configs",
                 "eclipse_types",
-                "rune_types",
-                "rune_slots",
                 "rotation_types",
                 "hotw_strategies",
                 "unit_labels",
@@ -8286,18 +8004,6 @@
                 "focus_cost": {
                   "type": "string"
                 },
-                "runic_power_gain": {
-                  "type": "string"
-                },
-                "runic_power_cost": {
-                  "type": "string"
-                },
-                "chi_gain": {
-                  "type": "string"
-                },
-                "chi_cost": {
-                  "type": "string"
-                },
                 "holy_power_gain": {
                   "type": "string"
                 },
@@ -8383,10 +8089,6 @@
                 "energy_cost",
                 "focus_gain",
                 "focus_cost",
-                "runic_power_gain",
-                "runic_power_cost",
-                "chi_gain",
-                "chi_cost",
                 "holy_power_gain",
                 "holy_power_cost",
                 "shadow_orbs_gain",

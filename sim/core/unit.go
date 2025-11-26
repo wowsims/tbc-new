@@ -26,7 +26,6 @@ const (
 	ManaBar PowerBarType = iota
 	EnergyBar
 	RageBar
-	RunicPower
 	FocusBar
 )
 
