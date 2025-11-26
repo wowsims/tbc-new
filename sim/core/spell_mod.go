@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/wowsims/mop/sim/core/proto"
+	"github.com/wowsims/tbc/sim/core/proto"
 )
 
 /*

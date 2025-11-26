@@ -150,7 +150,7 @@ func GenerateEnchantEffects(instance *dbc.DBC, db *WowDatabase) {
 	for _, grp := range groupMapProc {
 		procGroups = append(procGroups, &grp)
 	}
-	GenerateEffectsFile(procGroups, "sim/common/mop/enchants_auto_gen.go", TmplStrEnchant)
+	GenerateEffectsFile(procGroups, "sim/common/tbc/enchants_auto_gen.go", TmplStrEnchant)
 }
 
 func GenerateItemEffects(instance *dbc.DBC, db *WowDatabase, itemSources map[int][]*proto.DropSource) {
@@ -248,8 +248,8 @@ func GenerateItemEffects(instance *dbc.DBC, db *WowDatabase, itemSources map[int
 		updateNames(grp.Entries)
 	}
 
-	GenerateEffectsFile(onUseGroups, "sim/common/mop/stat_bonus_cds_auto_gen.go", TmplStrOnUse)
-	GenerateEffectsFile(procGroups, "sim/common/mop/stat_bonus_procs_auto_gen.go", TmplStrProc)
+	GenerateEffectsFile(onUseGroups, "sim/common/tbc/stat_bonus_cds_auto_gen.go", TmplStrOnUse)
+	GenerateEffectsFile(procGroups, "sim/common/tbc/stat_bonus_procs_auto_gen.go", TmplStrProc)
 }
 
 func GenerateItemEffectRandomPropPoints(instance *dbc.DBC, db *WowDatabase) {

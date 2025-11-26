@@ -3,7 +3,7 @@
 package core
 
 import (
-	"github.com/wowsims/mop/sim/core/proto"
+	"github.com/wowsims/tbc/sim/core/proto"
 )
 
 type OnGainCallback func(sim *Simulation, gain float64, realGain float64, actionID ActionID)

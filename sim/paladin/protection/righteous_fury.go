@@ -1,7 +1,7 @@
 package protection
 
 import (
-	"github.com/wowsims/mop/sim/core"
+	"github.com/wowsims/tbc/sim/core"
 )
 
 // Increases your threat generation while active, making you a more effective tank.

@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/wowsims/mop/sim/core/proto"
+	"github.com/wowsims/tbc/sim/core/proto"
 )
 
 func BenchmarkAPLValueMath_GetFloat(b *testing.B) {

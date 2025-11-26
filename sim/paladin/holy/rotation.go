@@ -3,7 +3,7 @@ package holy
 import (
 	"time"
 
-	"github.com/wowsims/mop/sim/core"
+	"github.com/wowsims/tbc/sim/core"
 )
 
 func (holy *HolyPaladin) OnGCDReady(sim *core.Simulation) {

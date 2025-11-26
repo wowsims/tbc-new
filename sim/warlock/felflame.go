@@ -1,6 +1,6 @@
 package warlock
 
-import "github.com/wowsims/mop/sim/core"
+import "github.com/wowsims/tbc/sim/core"
 
 const felFlameVariance = 0.1
 const felFlameScale = 0.85

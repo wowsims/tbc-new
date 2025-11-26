@@ -1,6 +1,6 @@
 package combat
 
-import "github.com/wowsims/mop/sim/core"
+import "github.com/wowsims/tbc/sim/core"
 
 func (comRogue *CombatRogue) applyCombatPotency() {
 	energyBonus := 15.0

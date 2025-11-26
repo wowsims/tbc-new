@@ -3,7 +3,7 @@ package shadow
 import (
 	"time"
 
-	"github.com/wowsims/mop/sim/core"
+	"github.com/wowsims/tbc/sim/core"
 )
 
 const divineStarScale = 4.495

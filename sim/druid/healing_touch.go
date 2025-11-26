@@ -3,7 +3,7 @@ package druid
 import (
 	"time"
 
-	"github.com/wowsims/mop/sim/core"
+	"github.com/wowsims/tbc/sim/core"
 )
 
 const (
@@ -33,7 +33,7 @@ func (druid *Druid) registerHealingTouchSpell() {
 			},
 
 			ModifyCast: func(sim *core.Simulation, spell *core.Spell, curCast *core.Cast) {
-				if druid.InForm(Cat|Bear) {
+				if druid.InForm(Cat | Bear) {
 					return
 				}
 

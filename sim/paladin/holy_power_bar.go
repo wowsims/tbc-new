@@ -1,7 +1,7 @@
 package paladin
 
 import (
-	"github.com/wowsims/mop/sim/core"
+	"github.com/wowsims/tbc/sim/core"
 )
 
 type HolyPowerBar struct {

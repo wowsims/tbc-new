@@ -1,7 +1,7 @@
 package destruction
 
 import (
-	"github.com/wowsims/mop/sim/core"
+	"github.com/wowsims/tbc/sim/core"
 )
 
 func (destruction DestructionWarlock) registerFelflame() {

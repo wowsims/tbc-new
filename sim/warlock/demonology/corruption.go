@@ -1,6 +1,6 @@
 package demonology
 
-import "github.com/wowsims/mop/sim/core"
+import "github.com/wowsims/tbc/sim/core"
 
 func (demonology *DemonologyWarlock) registerCorruption() {
 	corruption := demonology.RegisterCorruption(nil, func(resultList core.SpellResultSlice, spell *core.Spell, sim *core.Simulation) {

@@ -4,7 +4,7 @@ import (
 	"math"
 	"time"
 
-	"github.com/wowsims/mop/sim/core/stats"
+	"github.com/wowsims/tbc/sim/core/stats"
 )
 
 const VengeanceScaling = 0.018 // Might be reverted to 0.015 in a later patch

@@ -3,7 +3,7 @@ package warlock
 import (
 	"time"
 
-	"github.com/wowsims/mop/sim/core"
+	"github.com/wowsims/tbc/sim/core"
 )
 
 const hellFireScale = 0.20999999344

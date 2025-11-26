@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"slices"
 
-	"github.com/wowsims/mop/sim/core/proto"
+	"github.com/wowsims/tbc/sim/core/proto"
 )
 
 // Function for applying permanent effects to an Agent.

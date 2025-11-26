@@ -3,7 +3,7 @@ package beast_mastery
 import (
 	"time"
 
-	"github.com/wowsims/mop/sim/core"
+	"github.com/wowsims/tbc/sim/core"
 )
 
 func (bmHunter *BeastMasteryHunter) registerFocusFireSpell() {

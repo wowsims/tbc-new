@@ -1,7 +1,7 @@
 package demonology
 
 import (
-	"github.com/wowsims/mop/sim/core"
+	"github.com/wowsims/tbc/sim/core"
 )
 
 func (demonology *DemonologyWarlock) registerHellfire() {

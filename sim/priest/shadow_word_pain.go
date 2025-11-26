@@ -3,7 +3,7 @@ package priest
 import (
 	"time"
 
-	"github.com/wowsims/mop/sim/core"
+	"github.com/wowsims/tbc/sim/core"
 )
 
 const SwpScaleCoeff = 0.629660992297

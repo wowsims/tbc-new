@@ -8,7 +8,7 @@ import (
 
 	"golang.org/x/exp/constraints"
 
-	"github.com/wowsims/mop/sim/core/proto"
+	"github.com/wowsims/tbc/sim/core/proto"
 )
 
 const NeverExpires = time.Duration(math.MaxInt64)

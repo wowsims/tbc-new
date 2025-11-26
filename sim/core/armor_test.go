@@ -3,7 +3,7 @@ package core
 import (
 	"testing"
 
-	"github.com/wowsims/mop/sim/core/stats"
+	"github.com/wowsims/tbc/sim/core/stats"
 )
 
 func TestWeakenedArmorStacks(t *testing.T) {

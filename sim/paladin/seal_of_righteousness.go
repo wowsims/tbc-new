@@ -1,7 +1,7 @@
 package paladin
 
 import (
-	"github.com/wowsims/mop/sim/core"
+	"github.com/wowsims/tbc/sim/core"
 )
 
 // Fills you with Holy Light, causing melee attacks to deal 9% weapon damage to all targets within 8 yards.
