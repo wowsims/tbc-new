@@ -179,8 +179,6 @@ func (priest *Priest) ApplyTalents() {
 
 	// Shadowy Apparition
 	priest.applyShadowyApparition()
-
-	priest.ApplyGlyphs()
 }
 
 // disciplin talents

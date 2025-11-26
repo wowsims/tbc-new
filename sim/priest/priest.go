@@ -98,8 +98,6 @@ func (priest *Priest) Initialize() {
 	priest.registerPowerInfusionSpell()
 	priest.newMindSearSpell()
 
-	priest.ApplyGlyphs()
-
 	priest.T15_2PC_ExtensionTracker = make([]TargetDoTInfo, len(priest.Env.Encounter.AllTargets))
 }
 
@@ -152,13 +150,6 @@ func New(char *core.Character, selfBuffs SelfBuffs, talents string) *Priest {
 // Agent is a generic way to access underlying priest on any of the agents.
 type PriestAgent interface {
 	GetPriest() *Priest
-}
-
-func (priest *Priest) HasMajorGlyph(glyph proto.PriestMajorGlyph) bool {
-	return priest.HasGlyph(int32(glyph))
-}
-func (priest *Priest) HasMinorGlyph(glyph proto.PriestMinorGlyph) bool {
-	return priest.HasGlyph(int32(glyph))
 }
 
 const (

@@ -164,7 +164,6 @@ func (warrior *Warrior) Initialize() {
 	warrior.registerShouts()
 	warrior.registerPassives()
 	warrior.registerBanners()
-	warrior.ApplyGlyphs()
 
 	warrior.registerBerserkerRage()
 	warrior.registerEnragedRegeneration()
@@ -211,7 +210,7 @@ func NewWarrior(character *core.Character, options *proto.WarriorOptions, talent
 	core.FillTalentsProto(warrior.Talents.ProtoReflect(), talents)
 
 	warrior.EnableRageBar(core.RageBarOptions{
-		MaxRage:            core.TernaryFloat64(warrior.HasMajorGlyph(proto.WarriorMajorGlyph_GlyphOfUnendingRage), 120, 100),
+		MaxRage:            100,
 		BaseRageMultiplier: 1,
 	})
 
@@ -248,14 +247,6 @@ func NewWarrior(character *core.Character, options *proto.WarriorOptions, talent
 	})
 
 	return warrior
-}
-
-func (warrior *Warrior) HasMajorGlyph(glyph proto.WarriorMajorGlyph) bool {
-	return warrior.HasGlyph(int32(glyph))
-}
-
-func (warrior *Warrior) HasMinorGlyph(glyph proto.WarriorMinorGlyph) bool {
-	return warrior.HasGlyph(int32(glyph))
 }
 
 func (warrior *Warrior) GetCriticalBlockChance() float64 {

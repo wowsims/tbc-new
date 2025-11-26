@@ -216,13 +216,6 @@ func (shaman *Shaman) GetCharacter() *core.Character {
 	return &shaman.Character
 }
 
-func (shaman *Shaman) HasMajorGlyph(glyph proto.ShamanMajorGlyph) bool {
-	return shaman.HasGlyph(int32(glyph))
-}
-func (shaman *Shaman) HasMinorGlyph(glyph proto.ShamanMinorGlyph) bool {
-	return shaman.HasGlyph(int32(glyph))
-}
-
 func (shaman *Shaman) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
 	raidBuffs.GraceOfAir = true
 	raidBuffs.BurningWrath = true

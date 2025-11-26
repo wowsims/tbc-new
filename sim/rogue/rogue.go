@@ -176,14 +176,6 @@ func (rogue *Rogue) ApplyFinisher(sim *core.Simulation, spell *core.Spell) {
 	}
 }
 
-func (rogue *Rogue) HasMajorGlyph(glyph proto.RogueMajorGlyph) bool {
-	return rogue.HasGlyph(int32(glyph))
-}
-
-func (rogue *Rogue) HasMinorGlyph(glyph proto.RogueMinorGlyph) bool {
-	return rogue.HasGlyph(int32(glyph))
-}
-
 func (rogue *Rogue) GetBaseDamageFromCoefficient(c float64) float64 {
 	return c * rogue.ClassSpellScaling
 }

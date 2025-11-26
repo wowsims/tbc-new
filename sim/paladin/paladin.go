@@ -68,13 +68,6 @@ func (paladin *Paladin) GetCharacter() *core.Character {
 	return &paladin.Character
 }
 
-func (paladin *Paladin) HasMajorGlyph(glyph proto.PaladinMajorGlyph) bool {
-	return paladin.HasGlyph(int32(glyph))
-}
-func (paladin *Paladin) HasMinorGlyph(glyph proto.PaladinMinorGlyph) bool {
-	return paladin.HasGlyph(int32(glyph))
-}
-
 func (paladin *Paladin) GetPaladin() *Paladin {
 	return paladin
 }

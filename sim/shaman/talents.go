@@ -29,8 +29,6 @@ func (shaman *Shaman) ApplyTalents() {
 	shaman.ApplyUnleashedFury()
 	shaman.ApplyPrimalElementalist()
 	shaman.ApplyElementalBlast()
-
-	shaman.ApplyGlyphs()
 }
 
 func (shaman *Shaman) ApplyElementalMastery() {

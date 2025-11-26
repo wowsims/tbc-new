@@ -117,14 +117,6 @@ type WarlockAgent interface {
 	GetWarlock() *Warlock
 }
 
-func (warlock *Warlock) HasMajorGlyph(glyph proto.WarlockMajorGlyph) bool {
-	return warlock.HasGlyph(int32(glyph))
-}
-
-func (warlock *Warlock) HasMinorGlyph(glyph proto.WarlockMinorGlyph) bool {
-	return warlock.HasGlyph(int32(glyph))
-}
-
 const (
 	WarlockSpellFlagNone    int64 = 0
 	WarlockSpellConflagrate int64 = 1 << iota
