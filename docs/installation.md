@@ -15,7 +15,7 @@ echo 'export GOPATH=$HOME/go' >> $HOME/.bashrc
 echo 'export PATH=$PATH:$GOPATH/bin' >> $HOME/.bashrc
 source $HOME/.bashrc
 
-cd mop
+cd tbc
 
 # Install protobuf compiler and Go plugins
 sudo apt update && sudo apt upgrade
@@ -34,29 +34,29 @@ npm install
 ## Docker
 Alternatively, install Docker and your workflow will look something like this:
 ```sh
-git clone https://github.com/wowsims/mop.git
-cd mop
+git clone https://github.com/wowsims/tbc.git
+cd tbc
 
 # Build the docker image and install npm dependencies (only need to run these once).
-docker build --tag wowsims-mop .
-docker run --rm -v $(pwd):/mop wowsims-mop npm install
+docker build --tag wowsims-tbc .
+docker run --rm -v $(pwd):/tbc wowsims-tbc npm install
 
-# Now you can run the commands as shown in the Commands sections, preceding everything with, "docker run --rm -it -p 8080:8080 -v $(pwd):/mop wowsims-mop".
+# Now you can run the commands as shown in the Commands sections, preceding everything with, "docker run --rm -it -p 8080:8080 -v $(pwd):/tbc wowsims-tbc".
 # For convenience, set this as an environment variable:
-MOP_CMD="docker run --rm -it -p 8080:8080 -v $(pwd):/mop wowsims-mop"
+TBC_CMD="docker run --rm -it -p 8080:8080 -v $(pwd):/tbc wowsims-tbc"
 
 #For the watch commands assign this environment variable:
-MOP_WATCH_CMD="docker run --rm -it -p 8080:8080 -p 3333:3333 -p 5173:5173 -e WATCH=1 -v $(pwd):/mop wowsims-mop"
+TBC_WATCH_CMD="docker run --rm -it -p 8080:8080 -p 3333:3333 -p 5173:5173 -e WATCH=1 -v $(pwd):/tbc wowsims-tbc"
 
 # ... do some coding on the sim ...
 
 # Run tests
-$(echo $MOP_CMD) make test
+$(echo $TBC_CMD) make test
 
 # ... do some coding on the UI ...
 
 # Host a local site
-$(echo $MOP_CMD) make host
+$(echo $TBC_CMD) make host
 ```
 
 ## Windows

@@ -14,8 +14,8 @@ export const CURRENT_PHASE = Phase.Phase2;
 
 export const CURRENT_API_VERSION: number = readMessageOption(ProtoVersion, 'proto.current_version_number')! as number;
 
-// Github pages serves our site under the /mop directory (because the repo name is mop)
-export const REPO_NAME = 'mop';
+// Github pages serves our site under the /tbc directory (because the repo name is tbc)
+export const REPO_NAME = 'tbc';
 export const REPO_URL = `https://github.com/wowsims/${REPO_NAME}`;
 export const REPO_RELEASES_URL = `${REPO_URL}/releases`;
 export const REPO_NEW_ISSUE_URL = `${REPO_URL}/issues/new`;
@@ -26,7 +26,7 @@ const pathnameParts = window.location.pathname.split('/');
 const repoPartIdx = pathnameParts.findIndex(part => part == REPO_NAME);
 export const SPEC_DIRECTORY = repoPartIdx == -1 ? '' : pathnameParts[repoPartIdx + 1];
 
-export const LOCAL_STORAGE_PREFIX = '__mop';
+export const LOCAL_STORAGE_PREFIX = '__tbc_new';
 
 export enum SortDirection {
 	ASC,

@@ -148,7 +148,7 @@ import { Stats } from './stats.js';
 
 export const NUM_SPECS = getEnumValues(Spec).length;
 
-export const raidSimIcon = '/mop/assets/img/raid_icon.png';
+export const raidSimIcon = '/tbc/assets/img/raid_icon.png';
 export const raidSimLabel = 'Full Raid Sim';
 
 // Converts '111111' to [1, 1, 1, 1, 1, 1].

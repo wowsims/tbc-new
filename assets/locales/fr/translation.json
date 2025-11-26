@@ -10,13 +10,13 @@
             "full_raid": "Simulation de raid complet"
         },
         "home": {
-            "title": "WoWSims - Mists of Pandaria",
-            "description": "Un puissant outil de simulation pour World of Warcraft: Mists of Pandaria",
-            "welcomeDescription": "Bienvenue sur WoWSims - Mists of Pandaria ! Ce projet communautaire propose des simulations de classes et de raids pour World of Warcraft® Mists of Pandaria Classic, en collaboration avec les meilleurs théoriciens et représentants de classes."
+            "title": "WoWSims - The Burning Crusade",
+            "description": "Un puissant outil de simulation pour World of Warcraft: The Burning Crusade",
+            "welcomeDescription": "Bienvenue sur WoWSims - The Burning Crusade ! Ce projet communautaire propose des simulations de classes et de raids pour World of Warcraft® The Burning Crusade Classic, en collaboration avec les meilleurs théoriciens et représentants de classes."
         },
         "header": {
             "wowsims": "WoWSims",
-            "expansion": "Mists of Pandaria",
+            "expansion": "The Burning Crusade",
             "supportDevs": "Soutenir le projet"
         }
     },
@@ -238,8 +238,8 @@
         }
     },
     "sim": {
-        "title": "Simulateur {{class}} {{spec}} - Mists of Pandaria",
-        "description": "Simulations {{class}} {{spec}} pour World of Warcraft® Mists of Pandaria Classic.",
+        "title": "Simulateur {{class}} {{spec}} - The Burning Crusade",
+        "description": "Simulations {{class}} {{spec}} pour World of Warcraft® The Burning Crusade Classic.",
         "basic_bis_disclaimer": "<p>Les listes d'équipement prédéfinies fournie sont approximatives du meilleur équipement possible, et ne seront souvent pas la configuration optimale pour vous. Votre configuration d'équipement optimale dépendra de nombreux facteurs ; c'est pourquoi nous avons un simulateur !</p><p>Les objets peuvent également être omis des préréglages s'ils sont très contestés et clairement mieux utilisés sur d'autres classes, pour encourager un équipement équitable pour le raid dans son ensemble.</p>",
         "healing_sim_disclaimer": "*** AVERTISSEMENT - UTILISEZ À VOS PROPRES RISQUES ***\n\nLe concept entier d'un simulateur de soins est EXPÉRIMENTAL. Tous les résultats doivent être pris avec un grain de sel EXTREMEMENT important.\n\nCet outil est actuellement plus similaire à une feuille de calcul qu'à un véritable simulateur. Les options pour spécifier les profils de dégâts entrants afin d'avoir des rotations réactives appropriées n'ont pas encore été ajoutées.",
         "notice_local_download": {
@@ -1994,7 +1994,7 @@
                 "title": "Problèmes de bricolage",
                 "message": "Il y a des problèmes connus lors de l'importation des bricolages depuis Wowhead. Assurez-vous toujours de vérifier vos bricolages après l'importation."
             },
-            "error_invalid_url": "URL WCL invalide {{url}}, doit ressembler à \"https://www.wowhead.com/mop-classic/gear-planner/CLASS/RACE/XXXX\"",
+            "error_invalid_url": "URL WCL invalide {{url}}, doit ressembler à \"https://www.wowhead.com/tbc/gear-planner/CLASS/RACE/XXXX\"",
             "error_cannot_parse_class": "Impossible de parser la classe : {{classId}}",
             "error_cannot_parse_race": "Impossible de parser la race : {{raceId}}"
         },
@@ -2258,7 +2258,7 @@
             }
         },
         "header": {
-            "title": "WoWSims - Mists of Pandaria",
+            "title": "WoWSims - The Burning Crusade",
             "phase": "{{phase}} - {{status}}"
         },
         "results": {

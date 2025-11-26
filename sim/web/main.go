@@ -20,11 +20,11 @@ import (
 
 	uuid "github.com/google/uuid"
 	"github.com/pkg/browser"
-	dist "github.com/wowsims/mop/binary_dist"
-	"github.com/wowsims/mop/sim"
-	"github.com/wowsims/mop/sim/core"
-	proto "github.com/wowsims/mop/sim/core/proto"
-	"github.com/wowsims/mop/sim/core/simsignals"
+	dist "github.com/wowsims/tbc/binary_dist"
+	"github.com/wowsims/tbc/sim"
+	"github.com/wowsims/tbc/sim/core"
+	proto "github.com/wowsims/tbc/sim/core/proto"
+	"github.com/wowsims/tbc/sim/core/simsignals"
 
 	googleProto "google.golang.org/protobuf/proto"
 )

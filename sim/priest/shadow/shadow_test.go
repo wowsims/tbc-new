@@ -3,7 +3,7 @@ package shadow
 import (
 	"testing"
 
-	"github.com/wowsims/mop/sim/common" // imported to get caster sets included.
+	"github.com/wowsims/tbc/sim/common" // imported to get caster sets included.
 )
 
 func init() {

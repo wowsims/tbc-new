@@ -3,8 +3,8 @@ package protection
 import (
 	"time"
 
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/warrior"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/warrior"
 )
 
 func (war *ProtectionWarrior) registerShieldBlock() {

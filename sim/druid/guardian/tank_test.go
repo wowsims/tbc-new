@@ -3,7 +3,7 @@ package guardian
 import (
 	"testing"
 
-	"github.com/wowsims/mop/sim/common"
+	"github.com/wowsims/tbc/sim/common"
 )
 
 func init() {

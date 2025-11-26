@@ -3,7 +3,7 @@ package arcane
 import (
 	"testing"
 
-	_ "github.com/wowsims/mop/sim/common"
+	_ "github.com/wowsims/tbc/sim/common"
 )
 
 func init() {

@@ -14,7 +14,7 @@ dist
 binary_dist
 sim/web/__debug_bin
 /wowsimcli*
-/wowsimmop*
+/wowsimtbc*
 
 # temporary files
 *.results.tmp
@@ -22,9 +22,9 @@ package.json.tmp
 .stylelintcache
 
 #.dockerignore
-/mop/
+/tbc/
 *.code-workspace
-wowsimmop
+wowsimtbc
 
 # old result file
 TestAPL.results
@@ -36,9 +36,9 @@ TestAPL.results
 tmp/
 
 # lib
-wowsimmop*.so
-wowsimmop*.dll
-wowsimmop*.h
+wowsimtbc*.so
+wowsimtbc*.dll
+wowsimtbc*.h
 wowsims.db
 assets/db_inputs/dbc/
-mop.sln
+tbc.sln

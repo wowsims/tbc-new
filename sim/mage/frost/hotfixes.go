@@ -1,8 +1,8 @@
 package frost
 
 import (
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/mage"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/mage"
 )
 
 func (frost *FrostMage) registerHotfixes() {

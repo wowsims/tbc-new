@@ -3,8 +3,8 @@ package protection
 import (
 	"fmt"
 
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/core/proto"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
 )
 
 func (prot *ProtectionPaladin) NewAPLValue(_ *core.APLRotation, config *proto.APLValue) core.APLValue {

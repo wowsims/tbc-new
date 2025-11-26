@@ -4,10 +4,10 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/core/proto"
-	"github.com/wowsims/mop/sim/druid/feral"
-	"github.com/wowsims/mop/sim/hunter/marksmanship"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
+	"github.com/wowsims/tbc/sim/druid/feral"
+	"github.com/wowsims/tbc/sim/hunter/marksmanship"
 )
 
 func getTestPlayerMM() *proto.Player {

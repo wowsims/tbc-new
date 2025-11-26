@@ -2,7 +2,7 @@ package common
 
 // Just import other directories, so importing common from elsewhere is enough.
 import (
-	"github.com/wowsims/mop/sim/common/mop"
+	"github.com/wowsims/tbc/sim/common/mop"
 )
 
 func RegisterAllEffects() {

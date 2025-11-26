@@ -6,8 +6,8 @@ import (
 	"os"
 	"slices"
 
-	"github.com/wowsims/mop/sim/core/proto"
-	"github.com/wowsims/mop/tools"
+	"github.com/wowsims/tbc/sim/core/proto"
+	"github.com/wowsims/tbc/tools"
 	"golang.org/x/exp/maps"
 	"google.golang.org/protobuf/encoding/protojson"
 	googleProto "google.golang.org/protobuf/proto"

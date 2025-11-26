@@ -5,7 +5,7 @@
 		"moduleResolution": "bundler",
 		"strict": true,
 		"lib": ["DOM", "es2021", "DOM.Iterable"],
-		"outDir": "dist/mop",
+		"outDir": "dist/tbc",
 		"pretty": false,
 		"allowJs": true,
 		"resolveJsonModule": true,

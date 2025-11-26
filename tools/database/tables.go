@@ -10,9 +10,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/wowsims/mop/sim/core/proto"
-	"github.com/wowsims/mop/tools/database/dbc"
-	"github.com/wowsims/mop/tools/tooltip"
+	"github.com/wowsims/tbc/sim/core/proto"
+	"github.com/wowsims/tbc/tools/database/dbc"
+	"github.com/wowsims/tbc/tools/tooltip"
 )
 
 // Loading tables

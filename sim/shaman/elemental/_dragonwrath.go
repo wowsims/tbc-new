@@ -1,10 +1,10 @@
 package elemental
 
 import (
-	cata "github.com/wowsims/mop/sim/common/cata"
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/core/proto"
-	"github.com/wowsims/mop/sim/shaman"
+	cata "github.com/wowsims/tbc/sim/common/cata"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
+	"github.com/wowsims/tbc/sim/shaman"
 )
 
 func init() {

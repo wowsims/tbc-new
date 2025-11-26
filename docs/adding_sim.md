@@ -26,7 +26,7 @@ The UI and sim can be done in either order, but it is generally recommended to b
 
 No .html is needed, it will be generated based on `ui/index_template.html` and the `$SPEC` name.
 
-When you're ready to try out the site, run `make host` and navigate to `http://localhost:8080/mop/$SPEC`.
+When you're ready to try out the site, run `make host` and navigate to `http://localhost:8080/tbc/$SPEC`.
 
 ## Implement the Sim
 This step is where most of the magic happens. A few highlights to start understanding the sim code:

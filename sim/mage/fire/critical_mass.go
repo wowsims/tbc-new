@@ -1,9 +1,9 @@
 package fire
 
 import (
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/core/stats"
-	"github.com/wowsims/mop/sim/mage"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/stats"
+	"github.com/wowsims/tbc/sim/mage"
 )
 
 func (fire *FireMage) registerCriticalMass() {

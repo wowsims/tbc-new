@@ -68,7 +68,7 @@ jobs:
                       wowsimcli-amd64-linux.zip
                       wowsimcli-windows.exe.zip
                       wowsimcli-arm64-darwin.zip
-                      wowsimmop-amd64-darwin.zip
-                      wowsimmop-arm64-darwin.zip
-                      wowsimmop-amd64-linux.zip
-                      wowsimmop-windows.exe.zip
+                      wowsitbc-amd64-darwin.zip
+                      wowsitbc-arm64-darwin.zip
+                      wowsitbc-amd64-linux.zip
+                      wowsitbc-windows.exe.zip

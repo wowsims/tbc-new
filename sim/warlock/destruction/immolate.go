@@ -3,8 +3,8 @@ package destruction
 import (
 	"time"
 
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/warlock"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/warlock"
 )
 
 const immolateScale = 0.47 * 1.3 // Hotfix

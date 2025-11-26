@@ -1,4 +1,4 @@
-OUT_DIR := dist/mop
+OUT_DIR := dist/tbc
 TS_CORE_SRC := $(shell find ui/core -name '*.ts' -type f)
 ASSETS_INPUT := $(shell find assets/ -type f)
 ASSETS := $(patsubst assets/%,$(OUT_DIR)/assets/%,$(ASSETS_INPUT))
@@ -67,11 +67,11 @@ ui/core/index.ts: $(TS_CORE_SRC)
 clean:
 	rm -rf ui/core/proto/*.ts \
 	  sim/core/proto/*.pb.go \
-	  wowsimmop \
-	  wowsimmop-windows.exe \
-	  wowsimmop-amd64-darwin \
-	  wowsimmop-arm64-darwin \
-	  wowsimmop-amd64-linux \
+	  wowsimtbc \
+	  wowsimtbc-windows.exe \
+	  wowsimtbc-amd64-darwin \
+	  wowsimtbc-arm64-darwin \
+	  wowsimtbc-amd64-linux \
 	  dist \
 	  binary_dist \
 	  ui/core/index.ts \
@@ -145,31 +145,31 @@ $(OUT_DIR)/assets/%: assets/%
 
 
 binary_dist/dist.go: sim/web/dist.go.tmpl
-	mkdir -p binary_dist/mop
-	touch binary_dist/mop/embedded
+	mkdir -p binary_dist/tbc
+	touch binary_dist/tbc/embedded
 	cp sim/web/dist.go.tmpl binary_dist/dist.go
 
 binary_dist: $(OUT_DIR)/.dirstamp
 	rm -rf binary_dist
 	mkdir -p binary_dist
 	cp -r $(OUT_DIR) binary_dist/
-	rm binary_dist/mop/lib.wasm
-	rm -rf binary_dist/mop/assets/db_inputs
-	rm binary_dist/mop/assets/database/db.bin
-	rm binary_dist/mop/assets/database/leftover_db.bin
+	rm binary_dist/tbc/lib.wasm
+	rm -rf binary_dist/tbc/assets/db_inputs
+	rm binary_dist/tbc/assets/database/db.bin
+	rm binary_dist/tbc/assets/database/leftover_db.bin
 
 # Rebuild the protobuf generated code.
 .PHONY: proto
 proto: sim/core/proto/api.pb.go ui/core/proto/api.ts
 
 # Builds the web server with the compiled client.
-.PHONY: wowsimmop
-wowsimmop: binary_dist devserver
+.PHONY: wowsimtbc
+wowsimtbc: binary_dist devserver
 
 .PHONY: devserver
 devserver: sim/core/proto/api.pb.go sim/web/main.go binary_dist/dist.go
 	@echo "Starting server compile now..."
-	@if go build -o wowsimmop ./sim/web/main.go ; then \
+	@if go build -o wowsimtbc ./sim/web/main.go ; then \
 		printf "\033[1;32mBuild Completed Successfully\033[0m\n"; \
 	else \
 		printf "\033[1;31mBUILD FAILED\033[0m\n"; \
@@ -188,31 +188,31 @@ endif
 rundevserver: air devserver
 ifeq ($(WATCH), 1)
 	npx tsx vite.build-workers.mts & npx vite build -m development --watch &
-	ulimit -n 10240 && air -tmp_dir "/tmp" -build.include_ext "go,proto" -build.args_bin "--usefs=true --launch=false" -build.bin "./wowsimmop" -build.cmd "make devserver" -build.exclude_dir "assets,dist,node_modules,ui,tools"
+	ulimit -n 10240 && air -tmp_dir "/tmp" -build.include_ext "go,proto" -build.args_bin "--usefs=true --launch=false" -build.bin "./wowsimtbc" -build.cmd "make devserver" -build.exclude_dir "assets,dist,node_modules,ui,tools"
 else
-	./wowsimmop --usefs=true --launch=false --host=":3333"
+	./wowsimtbc --usefs=true --launch=false --host=":3333"
 endif
 
-wowsimmop-windows.exe: wowsimmop
+wowsimtbc-windows.exe: wowsimtbc
 # go build only considers syso files when invoked without specifying .go files: https://github.com/golang/go/issues/16090
 	cp ./assets/favicon_io/icon-windows_amd64.syso ./sim/web/icon-windows_amd64.syso
-	cd ./sim/web/ && GOOS=windows GOARCH=amd64 GOAMD64=v2 go build -o wowsimmop-windows.exe -ldflags="-X 'main.Version=$(VERSION)' -s -w"
+	cd ./sim/web/ && GOOS=windows GOARCH=amd64 GOAMD64=v2 go build -o wowsimtbc-windows.exe -ldflags="-X 'main.Version=$(VERSION)' -s -w"
 	cd ./cmd/wowsimcli && GOOS=windows GOARCH=amd64 GOAMD64=v2 go build -o wowsimcli-windows.exe --tags=with_db -ldflags="-X 'main.Version=$(VERSION)' -s -w"
 	rm ./sim/web/icon-windows_amd64.syso
-	mv ./sim/web/wowsimmop-windows.exe ./wowsimmop-windows.exe
+	mv ./sim/web/wowsimtbc-windows.exe ./wowsimtbc-windows.exe
 	mv ./cmd/wowsimcli/wowsimcli-windows.exe ./wowsimcli-windows.exe
 
-release: wowsimmop wowsimmop-windows.exe
-	GOOS=darwin GOARCH=amd64 GOAMD64=v2 go build -o wowsimmop-amd64-darwin -ldflags="-X 'main.Version=$(VERSION)' -s -w" ./sim/web/main.go
-	GOOS=darwin GOARCH=arm64 go build -o wowsimmop-arm64-darwin -ldflags="-X 'main.Version=$(VERSION)' -s -w" ./sim/web/main.go
+release: wowsimtbc wowsimtbc-windows.exe
+	GOOS=darwin GOARCH=amd64 GOAMD64=v2 go build -o wowsimtbc-amd64-darwin -ldflags="-X 'main.Version=$(VERSION)' -s -w" ./sim/web/main.go
+	GOOS=darwin GOARCH=arm64 go build -o wowsimtbc-arm64-darwin -ldflags="-X 'main.Version=$(VERSION)' -s -w" ./sim/web/main.go
 	GOOS=darwin GOARCH=arm64 go build -o wowsimcli-arm64-darwin --tags=with_db -ldflags="-X 'main.Version=$(VERSION)' -s -w" ./cmd/wowsimcli/cli_main.go
-	GOOS=linux GOARCH=amd64 GOAMD64=v2 go build -o wowsimmop-amd64-linux   -ldflags="-X 'main.Version=$(VERSION)' -s -w" ./sim/web/main.go
+	GOOS=linux GOARCH=amd64 GOAMD64=v2 go build -o wowsimtbc-amd64-linux   -ldflags="-X 'main.Version=$(VERSION)' -s -w" ./sim/web/main.go
 	GOOS=linux GOARCH=amd64 GOAMD64=v2 go build -o wowsimcli-amd64-linux --tags=with_db -ldflags="-X 'main.Version=$(VERSION)' -s -w" ./cmd/wowsimcli/cli_main.go
 # Now compress into a zip because the files are getting large.
-	zip wowsimmop-windows.exe.zip wowsimmop-windows.exe
-	zip wowsimmop-amd64-darwin.zip wowsimmop-amd64-darwin
-	zip wowsimmop-arm64-darwin.zip wowsimmop-arm64-darwin
-	zip wowsimmop-amd64-linux.zip wowsimmop-amd64-linux
+	zip wowsimtbc-windows.exe.zip wowsimtbc-windows.exe
+	zip wowsimtbc-amd64-darwin.zip wowsimtbc-amd64-darwin
+	zip wowsimtbc-arm64-darwin.zip wowsimtbc-arm64-darwin
+	zip wowsimtbc-amd64-linux.zip wowsimtbc-amd64-linux
 	zip wowsimcli-amd64-linux.zip wowsimcli-amd64-linux
 	zip wowsimcli-arm64-darwin.zip wowsimcli-arm64-darwin
 	zip wowsimcli-windows.exe.zip wowsimcli-windows.exe
@@ -223,15 +223,15 @@ sim/core/proto/api.pb.go: proto/*.proto
 # Only useful for building the lib on a host platform that matches the target platform
 .PHONY: locallib
 locallib: sim/core/proto/api.pb.go
-	go build -buildmode=c-shared -o wowsimmop.so --tags=with_db ./sim/lib/library.go
+	go build -buildmode=c-shared -o wowsimtbc.so --tags=with_db ./sim/lib/library.go
 
 .PHONY: nixlib
 nixlib: sim/core/proto/api.pb.go
-	GOOS=linux GOARCH=amd64 GOAMD64=v2 go build -buildmode=c-shared -o wowsimmop-linux.so --tags=with_db ./sim/lib/library.go
+	GOOS=linux GOARCH=amd64 GOAMD64=v2 go build -buildmode=c-shared -o wowsimtbc-linux.so --tags=with_db ./sim/lib/library.go
 
 .PHONY: winlib
 winlib: sim/core/proto/api.pb.go
-	GOOS=windows GOARCH=amd64 GOAMD64=v2 CGO_ENABLED=1 CC=x86_64-w64-mingw32-gcc go build -buildmode=c-shared -o wowsimmop-windows.dll --tags=with_db ./sim/lib/library.go
+	GOOS=windows GOARCH=amd64 GOAMD64=v2 CGO_ENABLED=1 CC=x86_64-w64-mingw32-gcc go build -buildmode=c-shared -o wowsimtbc-windows.dll --tags=with_db ./sim/lib/library.go
 
 .PHONY: simdb
 simdb: sim/core/items/all_items.go sim/core/proto/api.pb.go
@@ -290,7 +290,7 @@ host: air $(OUT_DIR)/.dirstamp node_modules
 ifeq ($(WATCH), 1)
 	ulimit -n 10240 && air -tmp_dir "/tmp" -build.include_ext "go,ts,js,html" -build.bin "npx" -build.args_bin "http-server $(OUT_DIR)/.." -build.cmd "make" -build.exclude_dir "dist,node_modules,tools"
 else
-	# Intentionally serve one level up, so the local site has 'mop' as the first
+	# Intentionally serve one level up, so the local site has 'tbc' as the first
 	# directory just like github pages.
 	npx http-server $(OUT_DIR)/..
 endif
@@ -298,9 +298,9 @@ endif
 devmode: air devserver
 ifeq ($(WATCH), 1)
 	npx tsx vite.build-workers.mts & npx vite serve --host &
-	air -tmp_dir "/tmp" -build.include_ext "go,proto" -build.args_bin "--usefs=true --launch=false --wasm=false" -build.bin "./wowsimmop" -build.cmd "make devserver" -build.exclude_dir "assets,dist,node_modules,ui,tools"
+	air -tmp_dir "/tmp" -build.include_ext "go,proto" -build.args_bin "--usefs=true --launch=false --wasm=false" -build.bin "./wowsimtbc" -build.cmd "make devserver" -build.exclude_dir "assets,dist,node_modules,ui,tools"
 else
-	./wowsimmop --usefs=true --launch=false --host=":3333"
+	./wowsimtbc --usefs=true --launch=false --host=":3333"
 endif
 
 webworkers:

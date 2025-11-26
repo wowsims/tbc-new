@@ -3,7 +3,7 @@ package holy
 import (
 	"testing"
 
-	_ "github.com/wowsims/mop/sim/common" // imported to get caster sets included.
+	_ "github.com/wowsims/tbc/sim/common" // imported to get caster sets included.
 )
 
 func init() {

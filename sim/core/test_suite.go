@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/wowsims/mop/sim/core/proto"
-	"github.com/wowsims/mop/sim/core/stats"
+	"github.com/wowsims/tbc/sim/core/proto"
+	"github.com/wowsims/tbc/sim/core/stats"
 	"google.golang.org/protobuf/encoding/prototext"
 )
 

@@ -3,8 +3,8 @@ package affliction
 import (
 	"time"
 
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/warlock"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/warlock"
 )
 
 const uaCoeff = 0.29

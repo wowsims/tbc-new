@@ -3,8 +3,8 @@ package marksmanship
 import (
 	"time"
 
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/hunter"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/hunter"
 )
 
 func (mm *MarksmanshipHunter) registerSteadyShotSpell() {

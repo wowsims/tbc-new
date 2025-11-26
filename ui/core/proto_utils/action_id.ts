@@ -166,7 +166,7 @@ export class ActionId {
 
 	static makeItemUrl(id: number, randomSuffixId?: number, reforgeId?: number, upgradeStep?: ItemLevelState): string {
 		const langPrefix = getWowheadLanguagePrefix();
-		const url = new URL(`https://wowhead.com/mop-classic/${langPrefix}item=${id}`);
+		const url = new URL(`https://wowhead.com/tbc/${langPrefix}item=${id}`);
 		url.searchParams.set('level', String(CHARACTER_LEVEL));
 		url.searchParams.set('rand', String(randomSuffixId || 0));
 		if (reforgeId) url.searchParams.set('forg', String(reforgeId));
@@ -182,7 +182,7 @@ export class ActionId {
 		if (USE_WOTLK_DB) {
 			return `https://wotlkdb.com/?spell=${id}`;
 		} else {
-			return `https://wowhead.com/mop-classic/${langPrefix}spell=${id}`;
+			return `https://wowhead.com/tbc/${langPrefix}spell=${id}`;
 		}
 	}
 	static async makeItemTooltipData(id: number, params?: Omit<WowheadTooltipItemParams, 'itemId'>) {
@@ -196,7 +196,7 @@ export class ActionId {
 		if (USE_WOTLK_DB) {
 			return 'https://wotlkdb.com/?quest=' + id;
 		} else {
-			return `https://wowhead.com/mop-classic/${langPrefix}quest=${id}`;
+			return `https://wowhead.com/tbc/${langPrefix}quest=${id}`;
 		}
 	}
 	static makeNpcUrl(id: number): string {
@@ -204,7 +204,7 @@ export class ActionId {
 		if (USE_WOTLK_DB) {
 			return 'https://wotlkdb.com/?npc=' + id;
 		} else {
-			return `https://wowhead.com/mop-classic/${langPrefix}npc=${id}`;
+			return `https://wowhead.com/tbc/${langPrefix}npc=${id}`;
 		}
 	}
 	static makeZoneUrl(id: number): string {
@@ -212,7 +212,7 @@ export class ActionId {
 		if (USE_WOTLK_DB) {
 			return 'https://wotlkdb.com/?zone=' + id;
 		} else {
-			return `https://wowhead.com/mop-classic/${langPrefix}zone=${id}`;
+			return `https://wowhead.com/tbc/${langPrefix}zone=${id}`;
 		}
 	}
 
@@ -1155,7 +1155,7 @@ const petNameToActionId: Record<string, ActionId> = {
 	'Fire Spirit': ActionId.fromSpellId(138123),
 };
 
-// https://wowhead.com/mop-classic/hunter-pets
+// https://wowhead.com/tbc/hunter-pets
 const petNameToIcon: Record<string, string> = {
 	Bat: 'https://wow.zamimg.com/images/wow/icons/medium/ability_hunter_pet_bat.jpg',
 	Bear: 'https://wow.zamimg.com/images/wow/icons/medium/ability_hunter_pet_bear.jpg',

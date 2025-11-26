@@ -9,11 +9,11 @@ import (
 	"strings"
 	"text/template"
 
-	_ "github.com/wowsims/mop/sim/common"
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/core/proto"
-	"github.com/wowsims/mop/tools/database/dbc"
-	"github.com/wowsims/mop/tools/tooltip"
+	_ "github.com/wowsims/tbc/sim/common"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
+	"github.com/wowsims/tbc/tools/database/dbc"
+	"github.com/wowsims/tbc/tools/tooltip"
 )
 
 // Sets the minimum itemlevel that should be considered for this expansions

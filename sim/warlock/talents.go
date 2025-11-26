@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/core/proto"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
 )
 
 func (warlock *Warlock) registerHarvestLife() {

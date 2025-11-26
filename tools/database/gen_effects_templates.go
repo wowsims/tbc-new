@@ -1,9 +1,9 @@
 package database
 
-const TmplStrOnUse = `package mop
+const TmplStrOnUse = `package tbc
 
 import (
-	"github.com/wowsims/mop/sim/common/shared"
+	"github.com/wowsims/tbc/sim/common/shared"
 )
 
 func RegisterAllOnUseCds() {
@@ -18,11 +18,11 @@ func RegisterAllOnUseCds() {
 
 {{- end }}
 }`
-const TmplStrProc = `package mop
+const TmplStrProc = `package tbc
 
 import (
-	"github.com/wowsims/mop/sim/core"
- 	"github.com/wowsims/mop/sim/common/shared"
+	"github.com/wowsims/tbc/sim/core"
+ 	"github.com/wowsims/tbc/sim/common/shared"
 )
 
 func RegisterAllProcs() {
@@ -93,11 +93,11 @@ func RegisterAllProcs() {
 {{- end }}
 }`
 
-const TmplStrEnchant = `package mop
+const TmplStrEnchant = `package tbc
 
 import (
-	"github.com/wowsims/mop/sim/core"
- 	"github.com/wowsims/mop/sim/common/shared"
+	"github.com/wowsims/tbc/sim/core"
+ 	"github.com/wowsims/tbc/sim/common/shared"
 )
 
 func RegisterAllEnchants() {

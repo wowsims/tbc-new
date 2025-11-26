@@ -14,13 +14,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export const BASE_PATH = path.resolve(__dirname, 'ui');
-export const OUT_DIR = path.join(__dirname, 'dist', 'mop');
+export const OUT_DIR = path.join(__dirname, 'dist', 'tbc');
 
 function serveExternalAssets() {
 	const workerMappings = {
-		'/mop/sim_worker.js': '/mop/local_worker.js',
-		'/mop/net_worker.js': '/mop/net_worker.js',
-		'/mop/lib.wasm': '/mop/lib.wasm',
+		'/tbc/sim_worker.js': '/tbc/local_worker.js',
+		'/tbc/net_worker.js': '/tbc/net_worker.js',
+		'/tbc/lib.wasm': '/tbc/lib.wasm',
 	};
 
 	return {
@@ -31,16 +31,16 @@ function serveExternalAssets() {
 
 				if (Object.keys(workerMappings).includes(url)) {
 					const targetPath = workerMappings[url as keyof typeof workerMappings];
-					const assetsPath = path.resolve(__dirname, './dist/mop');
-					const requestedPath = path.join(assetsPath, targetPath.replace('/mop/', ''));
+					const assetsPath = path.resolve(__dirname, './dist/tbc');
+					const requestedPath = path.join(assetsPath, targetPath.replace('/tbc/', ''));
 
 					serveFile(res, requestedPath);
 					return;
 				}
 
-				if (url.includes('/mop/assets')) {
+				if (url.includes('/tbc/assets')) {
 					const assetsPath = path.resolve(__dirname, './assets');
-					const assetRelativePath = url.split('/mop/assets')[1];
+					const assetRelativePath = url.split('/tbc/assets')[1];
 					const requestedPath = path.join(assetsPath, assetRelativePath);
 
 					serveFile(res, requestedPath);
@@ -94,7 +94,7 @@ function determineContentType(filePath: string) {
 
 export const getBaseConfig = ({ command, mode }: ConfigEnv) =>
 	({
-		base: '/mop/',
+		base: '/tbc/',
 		root: BASE_PATH,
 		build: {
 			outDir: OUT_DIR,

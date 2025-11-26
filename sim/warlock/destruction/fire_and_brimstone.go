@@ -1,8 +1,8 @@
 package destruction
 
 import (
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/warlock"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/warlock"
 )
 
 func (destruction *DestructionWarlock) registerFireAndBrimstone() {

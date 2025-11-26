@@ -3,7 +3,7 @@ package survival
 import (
 	"testing"
 
-	"github.com/wowsims/mop/sim/common" // imported to get item effects included.
+	"github.com/wowsims/tbc/sim/common" // imported to get item effects included.
 )
 
 func init() {

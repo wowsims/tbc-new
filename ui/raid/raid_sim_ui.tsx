@@ -25,7 +25,7 @@ export interface RaidSimConfig {
 }
 
 const extraKnownIssues: Array<string> = [
-	//'We\'re still missing implementations for many specs. If you\'d like to help us out, check out our <a href="https://github.com/wowsims/mop">Github project</a> or <a href="https://discord.gg/jJMPr9JWwx">join our discord</a>!',
+	//'We\'re still missing implementations for many specs. If you\'d like to help us out, check out our <a href="https://github.com/wowsims/tbc">Github project</a> or <a href="https://discord.gg/jJMPr9JWwx">join our discord</a>!',
 ];
 
 export class RaidSimUI extends SimUI {
@@ -230,7 +230,7 @@ export class RaidSimUI extends SimUI {
 
 	// Returns the actual key to use for local storage, based on the given key part and the site context.
 	getStorageKey(keyPart: string): string {
-		return '__mop_raid__' + keyPart;
+		return '__tbc_new_raid__' + keyPart;
 	}
 
 	getSavedRaidStorageKey(): string {

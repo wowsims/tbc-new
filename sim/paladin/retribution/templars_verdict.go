@@ -1,8 +1,8 @@
 package retribution
 
 import (
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/paladin"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/paladin"
 )
 
 // A powerful weapon strike that consumes 3 charges of Holy Power to deal 275% weapon damage plus 628.

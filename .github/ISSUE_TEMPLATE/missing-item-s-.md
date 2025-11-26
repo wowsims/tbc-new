@@ -7,4 +7,4 @@ assignees: ''
 
 ---
 
-Links to [Mists of Pandaria Wowhead](https://wowhead.com/mop-classic/items "https://wowhead.com/mop-classic/items") for each item:
+Links to [The Burning Crusade Wowhead](https://wowhead.com/tbc/items "https://wowhead.com/tbc/items") for each item:

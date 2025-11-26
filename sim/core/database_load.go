@@ -5,8 +5,8 @@
 package core
 
 import (
-	"github.com/wowsims/mop/assets/database"
-	"github.com/wowsims/mop/sim/core/proto"
+	"github.com/wowsims/tbc/assets/database"
+	"github.com/wowsims/tbc/sim/core/proto"
 )
 
 func init() {

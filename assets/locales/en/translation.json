@@ -10,13 +10,13 @@
 			"full_raid": "Full Raid Sim"
 		},
 		"home": {
-			"title": "WoWSims - Mists of Pandaria",
-			"description": "A powerful simulation tool for World of Warcraft: Mists of Pandaria",
-			"welcomeDescription": "Welcome to WoWSims - Mists of Pandaria! This is a community-driven project to provide class and raid simulations for World of Warcraft® Mists of Pandaria Classic together with the leading theorycrafters and class representatives."
+			"title": "WoWSims - The Burning Crusade",
+			"description": "A powerful simulation tool for World of Warcraft: The Burning Crusade",
+			"welcomeDescription": "Welcome to WoWSims - The Burning Crusade! This is a community-driven project to provide class and raid simulations for World of Warcraft® The Burning Crusade Classic together with the leading theorycrafters and class representatives."
 		},
 		"header": {
 			"wowsims": "WoWSims",
-			"expansion": "Mists of Pandaria",
+			"expansion": "The Burning Crusade",
 			"supportDevs": "Support our devs"
 		}
 	},
@@ -238,8 +238,8 @@
 		}
 	},
 	"sim": {
-		"title": "Mists of Pandaria {{spec}} {{class}} simulator",
-		"description": "{{spec}} {{class}} simulations for World of Warcraft® Mists of Pandaria Classic.",
+		"title": "The Burning Crusade {{spec}} {{class}} simulator",
+		"description": "{{spec}} {{class}} simulations for World of Warcraft® The Burning Crusade Classic.",
 		"basic_bis_disclaimer": "<p>Preset gear lists are intended as rough approximations of BIS, and will often not be the absolute highest-DPS setup for you. Your optimal gear setup will depend on many factors; that's why we have a sim!</p><p>Items may also be omitted from the presets if they are highly contested and clearly better utilized on other classes, to encourage equitable gearing for the raid as a whole.</p>",
 		"healing_sim_disclaimer": "*** WARNING - USE AT YOUR OWN RISK ***\n\nThe entire concept of a healing sim is EXPERIMENTAL. All results should be taken with an EXTREMELY large grain of salt.\n\nThis tool is currently more similar to a spreadsheet than a true sim. Options for specifying incoming damage profiles in order to have proper reactive rotations have not yet been added.",
 		"notice_local_download": {
@@ -1994,7 +1994,7 @@
 				"title": "Tinker issues",
 				"message": "There are known issues importing tinkers from Wowhead. Always make sure to double check your tinkers after importing."
 			},
-			"error_invalid_url": "Invalid WCL URL {{url}}, must look like \"https://www.wowhead.com/mop-classic/gear-planner/CLASS/RACE/XXXX\"",
+			"error_invalid_url": "Invalid WCL URL {{url}}, must look like \"https://www.wowhead.com/tbc/gear-planner/CLASS/RACE/XXXX\"",
 			"error_cannot_parse_class": "Could not parse Class: {{classId}}",
 			"error_cannot_parse_race": "Could not parse Race: {{raceId}}"
 		},
@@ -2258,7 +2258,7 @@
 			}
 		},
 		"header": {
-			"title": "WoWSims - Mists of Pandaria",
+			"title": "WoWSims - The Burning Crusade",
 			"phase": "{{phase}} - {{status}}"
 		},
 		"results": {

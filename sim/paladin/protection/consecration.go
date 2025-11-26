@@ -3,8 +3,8 @@ package protection
 import (
 	"time"
 
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/paladin"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/paladin"
 )
 
 // Consecrates the land beneath you, causing 8222 Holy damage over 9 sec to enemies who enter the area.

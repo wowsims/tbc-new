@@ -11,13 +11,13 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/wowsims/mop/sim"
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/core/proto"
-	_ "github.com/wowsims/mop/sim/encounters" // Needed for preset encounters.
-	"github.com/wowsims/mop/tools"
-	"github.com/wowsims/mop/tools/database"
-	"github.com/wowsims/mop/tools/database/dbc"
+	"github.com/wowsims/tbc/sim"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
+	_ "github.com/wowsims/tbc/sim/encounters" // Needed for preset encounters.
+	"github.com/wowsims/tbc/tools"
+	"github.com/wowsims/tbc/tools/database"
+	"github.com/wowsims/tbc/tools/database/dbc"
 )
 
 // To do a full re-scrape, delete the previous output file first.

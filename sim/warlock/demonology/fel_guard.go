@@ -5,9 +5,9 @@ import (
 	"slices"
 	"time"
 
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/core/proto"
-	"github.com/wowsims/mop/sim/warlock"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
+	"github.com/wowsims/tbc/sim/warlock"
 )
 
 func (demo *DemonologyWarlock) registerFelguard() *warlock.WarlockPet {

@@ -1,8 +1,8 @@
 package holy
 
 import (
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/paladin"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/paladin"
 )
 
 func (holy *HolyPaladin) registerHotfixPassive() {

@@ -41,7 +41,7 @@
 
 #             - name: Build 🔧
 #               run: |
-#                   make dist/mop/.dirstamp
+#                   make dist/tbc/.dirstamp
 
 #             - name: Update proto version file
 #               run: |
@@ -72,7 +72,7 @@
 #               with:
 #                   repository-name: wowsims/pages-deploy
 #                   branch: main
-#                   folder: dist/mop
-#                   target-folder: mop
+#                   folder: dist/tbc
+#                   target-folder: tbc
 #                   single-commit: true
 #                   token: ${{ secrets.DEPLOY_REPO_TOKEN }}

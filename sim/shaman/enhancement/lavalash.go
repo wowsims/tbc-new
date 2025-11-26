@@ -4,9 +4,9 @@ import (
 	"slices"
 	"time"
 
-	"github.com/wowsims/mop/sim/core"
-	"github.com/wowsims/mop/sim/core/proto"
-	"github.com/wowsims/mop/sim/shaman"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
+	"github.com/wowsims/tbc/sim/shaman"
 )
 
 func (enh *EnhancementShaman) registerLavaLashSpell() {

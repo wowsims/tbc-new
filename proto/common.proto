@@ -426,7 +426,7 @@ enum TristateEffect {
 }
 
 // Buffs that affect the entire raid.
-// Reindexed to Mists of Pandaria raid buffs.
+// Reindexed to The Burning Crusade raid buffs.
 // Next index: 36
 message RaidBuffs {
 	// +10% Attack Power
