@@ -52,13 +52,10 @@ func NewElementalShaman(character *core.Character, options *proto.Player) *Eleme
 func (eleShaman *ElementalShaman) Initialize() {
 	eleShaman.Shaman.Initialize()
 
-	eleShaman.RegisterFlametongueImbue(eleShaman.GetImbueProcMask(proto.ShamanImbue_FlametongueWeapon))
-	eleShaman.RegisterWindfuryImbue(eleShaman.GetImbueProcMask(proto.ShamanImbue_WindfuryWeapon))
+	// eleShaman.RegisterFlametongueImbue(eleShaman.GetImbueProcMask(proto.ShamanImbue_FlametongueWeapon))
+	// eleShaman.RegisterWindfuryImbue(eleShaman.GetImbueProcMask(proto.ShamanImbue_WindfuryWeapon))
 
-	eleShaman.registerThunderstormSpell()
-	eleShaman.registerLavaBurstSpell()
-	eleShaman.registerEarthquakeSpell()
-	eleShaman.registerLavaBeamSpell()
+	// eleShaman.registerThunderstormSpell()
 }
 
 func (ele *ElementalShaman) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
@@ -67,7 +64,7 @@ func (ele *ElementalShaman) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
 }
 
 func (ele *ElementalShaman) ApplyTalents() {
-	ele.ApplyElementalTalents()
+	// ele.ApplyElementalTalents()
 	ele.Shaman.ApplyTalents()
 	ele.ApplyArmorSpecializationEffect(stats.Intellect, proto.ArmorType_ArmorTypeMail, 86529)
 }

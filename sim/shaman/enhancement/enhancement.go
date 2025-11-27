@@ -58,11 +58,6 @@ func NewEnhancementShaman(character *core.Character, options *proto.Player) *Enh
 		enh.SelfBuffs.ImbueOH = proto.ShamanImbue_NoImbue
 	}
 
-	enh.SpiritWolves = &SpiritWolves{
-		SpiritWolf1: enh.NewSpiritWolf(1),
-		SpiritWolf2: enh.NewSpiritWolf(2),
-	}
-
 	enh.PseudoStats.CanParry = true
 
 	return enh
@@ -70,8 +65,6 @@ func NewEnhancementShaman(character *core.Character, options *proto.Player) *Enh
 
 type EnhancementShaman struct {
 	*shaman.Shaman
-
-	SpiritWolves *SpiritWolves
 
 	StormStrikeDebuffAuras core.AuraArray
 }
@@ -86,7 +79,7 @@ func (enh *EnhancementShaman) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
 }
 
 func (enh *EnhancementShaman) ApplyTalents() {
-	enh.ApplyEnhancementTalents()
+	// enh.ApplyEnhancementTalents()
 	enh.Shaman.ApplyTalents()
 	enh.ApplyArmorSpecializationEffect(stats.Agility, proto.ArmorType_ArmorTypeMail, 86529)
 }
@@ -94,9 +87,9 @@ func (enh *EnhancementShaman) ApplyTalents() {
 func (enh *EnhancementShaman) Initialize() {
 	enh.Shaman.Initialize()
 	// In the Initialize due to frost brand adding the aura to the enemy
-	enh.RegisterFrostbrandImbue(enh.GetImbueProcMask(proto.ShamanImbue_FrostbrandWeapon))
-	enh.RegisterFlametongueImbue(enh.GetImbueProcMask(proto.ShamanImbue_FlametongueWeapon))
-	enh.RegisterWindfuryImbue(enh.GetImbueProcMask(proto.ShamanImbue_WindfuryWeapon))
+	// enh.RegisterFrostbrandImbue(enh.GetImbueProcMask(proto.ShamanImbue_FrostbrandWeapon))
+	// enh.RegisterFlametongueImbue(enh.GetImbueProcMask(proto.ShamanImbue_FlametongueWeapon))
+	// enh.RegisterWindfuryImbue(enh.GetImbueProcMask(proto.ShamanImbue_WindfuryWeapon))
 
 	if enh.ItemSwap.IsEnabled() {
 		enh.RegisterItemSwapCallback(core.AllWeaponSlots(), func(_ *core.Simulation, slot proto.ItemSlot) {
@@ -113,38 +106,7 @@ func (enh *EnhancementShaman) Initialize() {
 		return spell.MeleeAttackPower() * 0.65
 	}
 
-	// Mastery: Enhanced Elements
-	masteryMod := enh.AddDynamicMod(core.SpellModConfig{
-		Kind:              core.SpellMod_DamageDone_Pct,
-		School:            core.SpellSchoolElemental,
-		ShouldApplyToPets: true,
-	})
-
-	enh.AddOnMasteryStatChanged(func(sim *core.Simulation, oldMastery float64, newMastery float64) {
-		masteryMod.UpdateFloatValue(enh.getMasteryBonus())
-	})
-
-	core.MakePermanent(enh.GetOrRegisterAura(core.Aura{
-		Label:    "Mastery: Enhanced Elements",
-		ActionID: core.ActionID{SpellID: 77223},
-		OnGain: func(aura *core.Aura, sim *core.Simulation) {
-			masteryMod.UpdateFloatValue(enh.getMasteryBonus())
-			masteryMod.Activate()
-		},
-		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
-			masteryMod.Deactivate()
-		},
-	}))
-
-	enh.registerLavaLashSpell()
-	enh.registerFireNovaSpell()
-	enh.registerStormstrikeSpell()
-	enh.registerStormblastSpell()
-	enh.registerFeralSpirit()
-}
-
-func (enh EnhancementShaman) getMasteryBonus() float64 {
-	return 0.16 + 0.02*enh.GetMasteryPoints()
+	// enh.registerStormstrikeSpell()
 }
 
 func (enh *EnhancementShaman) Reset(sim *core.Simulation) {
