@@ -101,10 +101,6 @@ enum Race {
 	RaceTauren = 8;
 	RaceTroll = 9;
 	RaceUndead = 10;
-	RaceWorgen = 11;
-	RaceGoblin = 12;
-	RaceAlliancePandaren = 13;
-	RaceHordePandaren = 14;
 }
 
 enum Faction {
@@ -147,7 +143,6 @@ enum Profession {
 	Mining = 9;
 	Skinning = 10;
 	Tailoring = 11;
-	Archeology = 12;
 }
 
 // General rules for Stats vs. PseudoStats at the proto level:
@@ -197,31 +192,60 @@ enum Stat {
 	StatStamina = 2;
 	StatIntellect = 3;
 
-	// Reforge-able secondary stats
-	StatSpirit = 4;
-	StatHitRating = 5;
-	StatCritRating = 6;
-	StatHasteRating = 7;
-	StatExpertiseRating = 8;
-	StatDodgeRating = 9;
-	StatParryRating = 10;
-	StatMasteryRating = 11;
+	// Spell Power and Spell Power derivatives
+	StatSpellPower = 5;
+	StatHealingPower = 6;
+	StatSpellDamage = 7;
+	StatArcanePower = 8;
+	StatFirePower = 9;
+	StatFrostPower = 10;
+	StatHolyPower = 11;
+	StatNaturePower = 12;
+	StatShadowPower = 13;
 
-	// Non-reforge-able secondary stats found on gear
-	StatAttackPower = 12;
-	StatRangedAttackPower = 13;
-	StatSpellPower = 14;
-	StatPvpResilienceRating = 15;
-	StatPvpPowerRating = 16;
-	StatArmor = 17; // "white armor" that fully scales with all multipliers
-	StatBonusArmor = 18; // "green armor" that does not scale
+	// Caster Secondaries
+	StatMP5 = 14;
+	StatSpellHit = 15;
+	StatSpellCrit = 16;
+	StatSpellHaste = 17;
+	StatSpellPenetration = 18;
+
+	// Physical Secondaries
+	StatAttackPower = 19;
+	StatRangedAttackPower = 20;
+	StatFeralAttackPower = 21;
+	StatMeleeHit = 22;
+	StatMeleeCrit = 23;
+	StatMeleeHaste = 24;
+	StatArmorPenetration = 25;
+	StatExpertise = 26;
+
+	// Tank Secondaries
+	StatDefense = 27;
+	StatBlock = 28;
+	StatBlockValue = 29;
+	StatDodge = 30;
+	StatParry = 31;
+	StatResilience = 32;
+	StatArmor = 33;
+	StatBonusArmor = 34;
 
 	// Composite stats that are built up from the above gear stats + buffs.
 	// These still belong in the Stat enum because they can be present on
 	// some enchants and because the base values need to be stored for NPCs.
-	StatHealth = 19;
-	StatMana = 20;
-	StatMP5 = 21;
+	StatHealth = 35;
+	StatMana = 36;
+	StatMP5 = 37;
+
+	// Resistances
+	StatArcaneResistance = 38;
+	StatFireResistance = 39;
+	StatFrostResistance = 40;
+	StatNatureResistance = 41;
+	StatShadowResistance = 42;
+
+	// Unsure if this will be used but including just in case
+	StatRage = 43;
 
 	// DO NOT add new stats here without discussing it first; new stats come
 	// with a performance penalty.
@@ -258,30 +282,23 @@ enum PseudoStat {
 	PseudoStatMainHandDps = 0;
 	PseudoStatOffHandDps = 1;
 	PseudoStatRangedDps = 2;
+	PseudoStatBlockValueMultiplier = 3;
+	PseudoStatDodge = 4;
+	PseudoStatParry = 5;
+	BonusPhysicalDamage = 6;
 
-	// Final buffed values including DR, represented as percentages (0-100)
-	PseudoStatDodgePercent = 3;
-	PseudoStatParryPercent = 4;
-	PseudoStatBlockPercent = 5;
+	// Spell School Hit
+	PseudoStatSchoolHitArcane = 7;
+	PseudoStatSchoolHitFire = 8;
+	PseudoStatSchoolHitFrost = 9;
+	PseudoStatSchoolHitHoly = 10;
+	PseudoStatSchoolHitNature = 11;
+	PseudoStatSchoolHitShadow = 12;
 
-	// Net impact of all multiplicative Haste buffs (Bloodlust etc.)
-	PseudoStatMeleeSpeedMultiplier = 6;
-	PseudoStatRangedSpeedMultiplier = 7;
-	PseudoStatCastSpeedMultiplier = 8;
-
-	// Final buffed Haste values after combining the above multipliers with
-	// Haste Rating from gear. Expressed in percentage units (0-100).
-	PseudoStatMeleeHastePercent = 9;
-	PseudoStatRangedHastePercent = 10;
-	PseudoStatSpellHastePercent = 11;
-
-	// School-specific fully buffed Hit/Crit stats, also in percentage
-	// units. These are modeled as proper Stats in the back-end due to stat
-	// dependencies, but do not need to be stored in any database files.
-	PseudoStatPhysicalHitPercent = 12;
-	PseudoStatSpellHitPercent = 13;
-	PseudoStatPhysicalCritPercent = 14;
-	PseudoStatSpellCritPercent = 15;
+	PseudoStatMeleeSpeedMultiplier = 13;
+	PseudoStatRangedSpeedMultiplier = 14;
+	PseudoStatCastSpeedMultiplier = 15;
+	PseudoStatBlockValuePerStrength = 16;
 }
 
 message UnitStats {
@@ -299,13 +316,6 @@ message UnitStats {
 
 	repeated double stats = 1;
 	repeated double pseudo_stats = 2;
-}
-
-message ReforgeStat {
-	int32 id = 1;
-	Stat fromStat = 2;
-	Stat toStat = 3;
-	double multiplier = 4;
 }
 
 enum ItemType {
@@ -382,6 +392,7 @@ enum ItemSlot {
 	ItemSlotTrinket2 = 13;
 	ItemSlotMainHand = 14; // can be 1h or 2h
 	ItemSlotOffHand = 15;
+	ItemSlotRanged = 16;
 }
 
 enum ItemQuality {
@@ -405,8 +416,6 @@ enum GemColor {
 	GemColorOrange = 6;
 	GemColorPurple = 7;
 	GemColorPrismatic = 8;
-	GemColorCogwheel = 9;
-	GemColorShaTouched = 10;
 }
 
 enum SpellSchool {
@@ -429,61 +438,62 @@ enum TristateEffect {
 // Reindexed to The Burning Crusade raid buffs.
 // Next index: 36
 message RaidBuffs {
-	// +10% Attack Power
-	bool trueshot_aura            = 2;  // Hunters
-	bool battle_shout             = 3;  // Warriors
-
-	// +10% Melee and Ranged Attack Speed
-	bool unholy_aura              = 5;  // Frost/Unholy DKs
-	bool cackling_howl            = 6;  // Hyena Pets
-	bool serpents_swiftness       = 7;  // Serpent Pets
-	bool swiftblades_cunning      = 8;  // Rogues
-	bool unleashed_rage           = 9;  // Enhancement Shamans
-
-	// +10% Spell Power
-	bool still_water              = 10; // Exotic Water Strider Pets
-	bool arcane_brilliance        = 11; // Mages
-	bool burning_wrath            = 12; // Shamans
-	bool dark_intent              = 13; // Warlocks
-
-	// +5% Spell Haste
-	bool moonkin_aura             = 14; // Balance Druids
-	bool mind_quickening          = 15; // Sporebat Pets
-	bool shadow_form              = 16; // Shadow Priests
-	bool elemental_oath           = 17; // Elemental Shamans
-
-	// +5% Critical Strike Chance
-	bool leader_of_the_pack       = 18; // Feral/Guardian Druids
-	bool terrifying_roar          = 19; // Devilsaur Pets
-	bool furious_howl             = 20; // Wolf Pets
-
-	// +3000 Mastery Rating
-	bool roar_of_courage          = 22; // Cat Pets
-	bool spirit_beast_blessing    = 23; // Spirit Beast Pets
-	bool blessing_of_might        = 24; // Paladins
-	bool grace_of_air             = 25; // Shamans
-
-	// +5% Strength, Agility, Intellect
-	bool mark_of_the_wild         = 26; // Druids
-	bool embrace_of_the_shale_spider = 27; // Shale Spider Pets
-	bool blessing_of_kings        = 29; // Paladins
-
-	// +10% Stamina
-	bool qiraji_fortitude         = 30; // Silithid Pets
-	bool power_word_fortitude     = 31; // Priests
-	bool commanding_shout         = 4;  // Warriors
-
-	// Major Haste
-	bool bloodlust                = 32;
-
-	// Raid Cooldowns
-	int32 mana_tide_totem_count   = 33;
-	int32 stormlash_totem_count = 34;
-	int32 skull_banner_count = 35;
+	bool arcane_brilliance = 1;
+	TristateEffect power_word_fortitude = 2;
+	bool shadow_protection = 3;
+	TristateEffect divine_spirit = 4;
+	TristateEffect gift_of_the_wild = 5;
+	TristateEffect thorns = 6;
+	bool bloodlust = 7; // TBC ANNI - Lust is now raid wide
   }
 
 // Buffs that affect a single party.
 message PartyBuffs {
+	int32 ferocious_inspiration = 1; // Number of BM hunters in party.
+
+	TristateEffect blood_pact = 2;
+	TristateEffect moonkin_aura = 3;
+	TristateEffect leader_of_the_pack = 4;
+	TristateEffect sanctity_aura = 5;
+	TristateEffect devotion_aura = 6;
+	TristateEffect retribution_aura = 7;
+	bool trueshot_aura = 8;
+	bool draenei_racial_melee = 9;
+	bool draenei_racial_caster = 10;
+
+	// Drums
+	Drums drums = 11;
+
+	// Item Buffs
+	int32 atiesh_mage = 12;
+	int32 atiesh_warlock = 13;
+	bool braided_eternium_chain = 14;
+	bool eye_of_the_night = 15;
+	bool chain_of_the_twilight_owl = 16;
+	bool jade_pendant_of_blasting = 17;
+
+	// Totems
+	TristateEffect mana_spring_totem = 18;
+	int32 mana_tide_totems = 19;
+	int32 totem_of_wrath = 20;
+	TristateEffect wrath_of_air_totem = 21;
+	bool snapshot_improved_wrath_of_air_totem = 22;
+	TristateEffect grace_of_air_totem = 23;
+	StrengthOfEarthType strength_of_earth_totem = 24;
+	bool snapshot_improved_strength_of_earth_totem = 25;
+	bool tranquil_air_totem = 26;
+
+	int32 windfury_totem_rank = 27; // 0 if none, otherwise rank of the ability (1-5).
+	int32 windfury_totem_iwt = 28;
+
+	TristateEffect battle_shout = 29;
+	bool bs_solarian_sapphire = 30;
+	bool snapshot_bs_solarian_sapphire = 31;
+	bool snapshot_bs_t2 = 32;
+	int32 snapshot_bs_booming_voice_rank = 33;
+
+	// Mitigation buffs
+	TristateEffect commanding_shout = 34;
 }
 
 // These are usually individual actions taken by other Characters.
@@ -491,56 +501,55 @@ message IndividualBuffs {
 	// Only used in individual sims
 	// as the class that provides these would cast them in raid sim
 
-	// Major Mana Replenishment
-	// How many of each of these buffs the player will be receiving.
-	int32 innervate_count = 10;
-	int32 hymn_of_hope_count = 7;
+	bool blessing_of_kings = 1;
+	bool blessing_of_salvation = 2;
+	bool blessing_of_sanctuary = 3;
+	TristateEffect blessing_of_wisdom = 4;
+	TristateEffect blessing_of_might = 5;
 
-	// Other Buffs
-	int32 unholy_frenzy_count = 12;
-	bool tricks_of_the_trade = 101;
-	int32 devotion_aura_count = 23;
-	int32 pain_suppression_count = 24;
-	int32 vigilance_count = 25;
-	int32 guardian_spirit_count = 26;
-	int32 rallying_cry_count = 102;
-	int32 shattering_throw_count = 103;
+	int32 shadow_priest_dps = 6;
+
+	bool unleashed_rage = 7;
+
+	// How many of each of these buffs the player will be receiving.
+	int32 innervates = 8;
+	int32 power_infusions = 9;
+
+	double inspiration_uptime = 10;
 }
 
 message Debuffs {
+	bool judgement_of_wisdom = 1;
+	bool judgement_of_light = 2;
+	bool improved_seal_of_the_crusader = 3;
+	bool misery = 4;
+	TristateEffect curse_of_elements = 5;
+	double isb_uptime = 6;
+	bool shadow_weaving = 7;
 
-	// –10% Physical damage dealt for 30s
-	// Physical‐damage‐dealt sources:
-	// Scarlet Fever, Thrash, Demoralizing Roar, Demoralizing Screech, Keg Smash,
-	//   Hammer of the Righteous, Earth Shock, Curse of Enfeeblement, Thunder Clap
-	bool weakened_blows = 1;
+	bool improved_scorch = 8;
+	bool winters_chill = 9;
 
-	// +4% Physical damage taken for 30s
-	// Gore, Stampede, Acid Spit, Ravage, Judgments of the Bold, Colossus Smash
-	bool physical_vulnerability = 2;
+	bool blood_frenzy = 10;
+	bool gift_of_arthas = 11;
+	bool mangle = 12;
+	TristateEffect expose_armor = 13;
+	TristateEffect faerie_fire = 14;
+	bool sunder_armor = 15;
+	bool curse_of_recklessness = 16;
 
-	// –4% Armor for 30s, stacks 3 times
-	// Faerie Fire, Tear Armor, Dust Cloud, Expose Armor, Sunder Armor
-	bool weakened_armor = 3;
+	TristateEffect hunters_mark = 17;
+	double expose_weakness_uptime = 18;
+	double expose_weakness_hunter_agility = 19;
 
-	//Healing reduction
-	//Widow Venom, Monstrous Bite, Rising Sun Kick, Wound Poison, Mortal Strike, Wild Strike
-	bool mortal_wounds = 4;
-
-	// Spell‐damage‐taken sources:
-	bool fire_breath              = 5;
-	bool lightning_breath         = 6;
-	bool master_poisoner          = 7;
-	bool curse_of_elements        = 8;
-
-	// Casting‐speed‐reduction sources:
-	bool necrotic_strike          = 9;
-	bool lava_breath              = 10;
-	bool spore_cloud              = 11;
-	bool slow                     = 12;
-	bool mind_numbing_poison      = 13;
-	bool curse_of_enfeeblement	  = 14;
-  }
+	TristateEffect demoralizing_roar = 20;
+	TristateEffect demoralizing_shout = 21;
+	TristateEffect thunder_clap = 22;
+	bool insect_swarm = 23;
+	bool scorpid_sting = 24;
+	bool shadow_embrace = 25;
+	bool screech = 26;
+}
 
 message ConsumesSpec {
 	int32 prepot_id = 1;
@@ -769,6 +778,15 @@ message ActionID {
 	// Distinguishes between different versions of the same action.
 	// Currently the only use for this is Shaman Lightning Overload.
 	int32 tag = 4;
+}
+
+message Glyphs {
+	int32 major1 = 1;
+	int32 major2 = 2;
+	int32 major3 = 3;
+	int32 minor1 = 4;
+	int32 minor2 = 5;
+	int32 minor3 = 6;
 }
 
 // Custom options for a particular cooldown.
