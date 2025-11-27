@@ -204,48 +204,47 @@ enum Stat {
 	StatShadowPower = 13;
 
 	// Caster Secondaries
-	StatMP5 = 14;
-	StatSpellHit = 15;
-	StatSpellCrit = 16;
-	StatSpellHaste = 17;
-	StatSpellPenetration = 18;
+	StatSpellHit = 14;
+	StatSpellCrit = 15;
+	StatSpellHaste = 16;
+	StatSpellPenetration = 17;
 
 	// Physical Secondaries
-	StatAttackPower = 19;
-	StatRangedAttackPower = 20;
-	StatFeralAttackPower = 21;
-	StatMeleeHit = 22;
-	StatMeleeCrit = 23;
-	StatMeleeHaste = 24;
-	StatArmorPenetration = 25;
-	StatExpertise = 26;
+	StatAttackPower = 18;
+	StatRangedAttackPower = 19;
+	StatFeralAttackPower = 20;
+	StatMeleeHit = 21;
+	StatMeleeCrit = 22;
+	StatMeleeHaste = 23;
+	StatArmorPenetration = 24;
+	StatExpertise = 25;
 
 	// Tank Secondaries
-	StatDefense = 27;
-	StatBlock = 28;
-	StatBlockValue = 29;
-	StatDodge = 30;
-	StatParry = 31;
-	StatResilience = 32;
-	StatArmor = 33;
-	StatBonusArmor = 34;
+	StatDefense = 26;
+	StatBlock = 27;
+	StatBlockValue = 28;
+	StatDodge = 29;
+	StatParry = 30;
+	StatResilience = 31;
+	StatArmor = 32;
+	StatBonusArmor = 33;
 
 	// Composite stats that are built up from the above gear stats + buffs.
 	// These still belong in the Stat enum because they can be present on
 	// some enchants and because the base values need to be stored for NPCs.
-	StatHealth = 35;
-	StatMana = 36;
-	StatMP5 = 37;
+	StatHealth = 34;
+	StatMana = 35;
+	StatMP5 = 36;
 
 	// Resistances
-	StatArcaneResistance = 38;
-	StatFireResistance = 39;
-	StatFrostResistance = 40;
-	StatNatureResistance = 41;
-	StatShadowResistance = 42;
+	StatArcaneResistance = 37;
+	StatFireResistance = 38;
+	StatFrostResistance = 39;
+	StatNatureResistance = 40;
+	StatShadowResistance = 41;
 
 	// Unsure if this will be used but including just in case
-	StatRage = 43;
+	StatRage = 42;
 
 	// DO NOT add new stats here without discussing it first; new stats come
 	// with a performance penalty.
@@ -432,6 +431,21 @@ enum TristateEffect {
 	TristateEffectMissing = 0;
 	TristateEffectRegular = 1;
 	TristateEffectImproved = 2;
+}
+
+enum Drums {
+	DrumsUnknown = 0;
+	DrumsOfBattle = 1;
+	DrumsOfRestoration = 2;
+	DrumsOfWar = 3;
+}
+
+enum StrengthOfEarthType {
+	None = 0;
+	Basic = 1;
+	CycloneBonus = 2;
+	EnhancingTotems = 3;
+	EnhancingAndCyclone = 4;
 }
 
 // Buffs that affect the entire raid.
