@@ -25,7 +25,6 @@ message UIDatabase {
 	repeated IconData item_icons = 4;
 	repeated IconData spell_icons = 5;
 
-	repeated ReforgeStat reforge_stats = 12;
 	repeated ItemEffectRandPropPoints item_effect_rand_prop_points = 15;
 
 	repeated Consumable consumables = 13;

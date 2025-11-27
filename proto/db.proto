@@ -10,7 +10,6 @@ message SimDatabase {
 	repeated ItemRandomSuffix random_suffixes = 5;
 	repeated SimEnchant enchants = 2;
 	repeated SimGem gems = 3;
-	repeated ReforgeStat reforge_stats = 6;
 	repeated ItemEffectRandPropPoints item_effect_rand_prop_points = 9;
 
 	repeated Consumable consumables = 7;

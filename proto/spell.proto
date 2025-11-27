@@ -23,17 +23,11 @@ message ScalingItemEffectProperties {
 	}
   }
 
-  message RppmProc {
-	double rate = 1;
-	repeated RppmMod mods = 4;
-  }
-
   message ProcEffect {
 	int32       icd_ms         = 1;  // internal cooldown in milliseconds
 	oneof procRate {
 		double proc_chance = 2;  // e.g. 0.20 = 20%
 		double ppm = 3;
-		RppmProc rppm = 4;
 	}
   }
 
@@ -71,30 +65,6 @@ enum ResourceType {
 	ResourceTypeEnergy = 2;
 	ResourceTypeRage = 3;
 	ResourceTypeComboPoints = 4;
-	ResourceTypeFocus = 5;
-	ResourceTypeHealth = 6;
-	ResourceTypeSolarEnergy = 12;
-	ResourceTypeLunarEnergy = 13;
-	ResourceTypeGenericResource = 15;
-}
-
-enum SecondaryResourceType {
-	SecondaryResourceTypeNone          = 0;
-	SecondaryResourceTypeArcaneCharges  = 36032;
-	SecondaryResourceTypeShadowOrbs     = 95740;
-	SecondaryResourceTypeDemonicFury    = 104315;
-	SecondaryResourceTypeBurningEmbers  = 108647;
-	SecondaryResourceTypeSoulShards     = 117198;
-	SecondaryResourceTypeHolyPower      = 138248;
-}
-
-message RppmMod {
-    double coefficient = 1;
-    oneof mod_type {
-        bool haste = 2;
-        bool crit = 3;
-        Spec spec = 4;
-        int32 class_mask = 5;
-		int32 ilvl = 6;
-    }
+	ResourceTypeHealth = 5;
+	ResourceTypeGenericResource = 6;
 }
