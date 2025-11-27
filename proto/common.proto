@@ -294,10 +294,16 @@ enum PseudoStat {
 	PseudoStatSchoolHitNature = 11;
 	PseudoStatSchoolHitShadow = 12;
 
-	PseudoStatMeleeSpeedMultiplier = 13;
-	PseudoStatRangedSpeedMultiplier = 14;
-	PseudoStatCastSpeedMultiplier = 15;
-	PseudoStatBlockValuePerStrength = 16;
+	PseudoStatPhysicalHitPercent = 13
+	PseudoStatSpellHitPercent = 14;
+	PseudoStatPhysicalCritPercent = 15;
+	PseudoStatSpellCritPercent = 16;
+	PseudoStatBlockPercent = 17;
+
+	PseudoStatMeleeSpeedMultiplier = 18;
+	PseudoStatRangedSpeedMultiplier = 19;
+	PseudoStatCastSpeedMultiplier = 20;
+	PseudoStatBlockValuePerStrength = 21;
 }
 
 message UnitStats {
