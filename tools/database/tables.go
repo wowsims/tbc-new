@@ -896,7 +896,7 @@ func LoadAndWriteConsumables(dbHelper *DBHelper, inputsDir string) ([]dbc.Consum
 			LEFT JOIN Spell sp ON ie.SpellID = sp.ID
 			LEFT JOIN SpellMisc sm ON ie.SpellId = sm.SpellID
 			LEFT JOIN SpellDuration sd ON sm.DurationIndex = sd.ID
-			WHERE ((i.ClassID = 0 AND i.SubclassID IS NOT 0 AND i.SubclassID IS NOT 8 AND i.SubclassID IS NOT 6) OR (i.ClassID = 7 AND i.SubclassID = 2)) AND ItemEffects is not null AND (s.RequiredLevel >= 85 OR i.ID = 22788 OR i.ID = 13442) OR i.ID = 86125
+			WHERE ((i.ClassID = 0 AND i.SubclassID IS NOT 0 AND i.SubclassID IS NOT 8 AND i.SubclassID IS NOT 6) OR (i.ClassID = 7 AND i.SubclassID = 2)) AND ItemEffects is not null AND (s.RequiredLevel >= 50 OR i.ID = 22788 OR i.ID = 13442) OR i.ID = 86125
 			AND s.Display_lang != ''
 			AND s.Display_lang NOT LIKE '%Test%'
 			AND s.Display_lang NOT LIKE 'QA%'
@@ -968,11 +968,17 @@ func LoadAndWriteItemEffects(dbHelper *DBHelper, inputsDir string) ([]dbc.ItemEf
 }
 
 type RawTalent struct {
-	TierID      int
-	TalentName  string
-	ColumnIndex int
-	ClassMask   int
-	SpellID     int
+	TierID         int
+	TalentName     string
+	ColumnIndex    int
+	ClassMask      int
+	SpellRank      string
+	PrereqRank     string
+	PrereqTalent   string
+	TabName        string
+	BackgroundFile string
+	PrereqRow      sql.NullInt64
+	PrereqCol      sql.NullInt64
 }
 
 func ScanTalent(rows *sql.Rows) (RawTalent, error) {
@@ -983,7 +989,13 @@ func ScanTalent(rows *sql.Rows) (RawTalent, error) {
 		&talent.TalentName,
 		&talent.ColumnIndex,
 		&talent.ClassMask,
-		&talent.SpellID,
+		&talent.SpellRank,
+		&talent.PrereqRank,
+		&talent.PrereqTalent,
+		&talent.TabName,
+		&talent.BackgroundFile,
+		&talent.PrereqRow,
+		&talent.PrereqCol,
 	)
 	if err != nil {
 		return talent, fmt.Errorf("scanning talent data: %w", err)
@@ -998,12 +1010,34 @@ SELECT
   t.TierID,
   sn.Name_lang,
   t.ColumnIndex,
-  t.ClassID,
-  t.SpellID
+  tb.ClassMask,
+  t.SpellRank,
+  t.PrereqRank,
+  t.PrereqTalent,
+  tb.Name_lang AS TabName,
+  tb.ID as BackgroundFile,
+  (SELECT t2.TierID
+     FROM Talent t2
+     WHERE t2.ID = (
+         SELECT value
+         FROM json_each(t.PrereqTalent)
+         WHERE value <> 0
+         LIMIT 1
+     )
+  ) AS PrereqRow,
+  (SELECT t2.ColumnIndex
+     FROM Talent t2
+     WHERE t2.ID = (
+         SELECT value
+         FROM json_each(t.PrereqTalent)
+         WHERE value <> 0
+         LIMIT 1
+     )
+  ) AS PrereqCol
 FROM Talent t
-JOIN SpellName sn ON sn.ID = t.SpellID
-WHERE sn.Name_lang IS NOT "Dummy 5.0 Talent"
-ORDER BY t.ClassID
+JOIN TalentTab tb ON t.TabID = tb.ID
+JOIN SpellName sn ON sn.ID = t.SpellRank_0
+ORDER BY tb.Name_lang;
 `
 
 	talents, err := LoadRows(dbHelper.db, query, ScanTalent)

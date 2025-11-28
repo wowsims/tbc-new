@@ -286,9 +286,9 @@ enum PseudoStat {
 	PseudoStatSchoolHitNature = 11;
 	PseudoStatSchoolHitShadow = 12;
 
-	PseudoStatPhysicalHitPercent = 13;
+	PseudoStatMeleeHitPercent = 13;
 	PseudoStatSpellHitPercent = 14;
-	PseudoStatPhysicalCritPercent = 15;
+	PseudoStatMeleeCritPercent = 15;
 	PseudoStatSpellCritPercent = 16;
 	PseudoStatBlockPercent = 17;
 
@@ -299,6 +299,9 @@ enum PseudoStat {
 	PseudoStatRangedHastePercent = 22;
 	PseudoStatSpellHastePercent = 23;
 	PseudoStatBlockValuePerStrength = 24;
+
+	PseudoStatRangedHitPercent = 25;
+	PseudoStatRangedCritPercent = 26;
 }
 
 message UnitStats {

@@ -73,6 +73,8 @@ const (
 	PhysicalCritPercent
 	SpellCritPercent
 	BlockPercent
+	RangedHitPercent
+	RangedCritPercent
 	// DO NOT add new stats here without discussing it first; new stats come
 	// with a performance penalty.
 
@@ -212,11 +214,13 @@ func FromUnitStatsProto(unitStatsMessage *proto.UnitStats) Stats {
 
 	if unitStatsMessage.PseudoStats != nil {
 		pseudoStatsMessage := unitStatsMessage.PseudoStats
-		simStats[PhysicalHitPercent] = pseudoStatsMessage[proto.PseudoStat_PseudoStatPhysicalHitPercent]
+		simStats[PhysicalHitPercent] = pseudoStatsMessage[proto.PseudoStat_PseudoStatMeleeHitPercent]
 		simStats[SpellHitPercent] = pseudoStatsMessage[proto.PseudoStat_PseudoStatSpellHitPercent]
-		simStats[PhysicalCritPercent] = pseudoStatsMessage[proto.PseudoStat_PseudoStatPhysicalCritPercent]
+		simStats[PhysicalCritPercent] = pseudoStatsMessage[proto.PseudoStat_PseudoStatMeleeCritPercent]
 		simStats[SpellCritPercent] = pseudoStatsMessage[proto.PseudoStat_PseudoStatSpellCritPercent]
 		simStats[BlockPercent] = pseudoStatsMessage[proto.PseudoStat_PseudoStatBlockPercent]
+		simStats[RangedHitPercent] = pseudoStatsMessage[proto.PseudoStat_PseudoStatRangedHitPercent]
+		simStats[RangedCritPercent] = pseudoStatsMessage[proto.PseudoStat_PseudoStatRangedCritPercent]
 	}
 
 	return simStats
