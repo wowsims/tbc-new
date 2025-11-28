@@ -11,8 +11,6 @@ import (
 	"unicode"
 
 	"github.com/wowsims/tbc/tools/database/dbc"
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
 )
 
 func convertTalentClassID(raw int) int {
@@ -362,7 +360,6 @@ func transformRawTalentsToConfigsForClass(rawTalents []RawTalent, classID int) (
 			}
 
 			maxPoints := len(filtered)
-
 			fieldName := strings.ToLower(rt.TalentName[:1]) + rt.TalentName[1:]
 			talent := TalentConfig{
 				FieldName: fieldName,
@@ -406,7 +403,8 @@ func GenerateTalentJsonFromDB(dbHelper *DBHelper) error {
 
 		classTalents := []RawTalent{}
 		for _, rt := range rawTalents {
-			if dbcClass.ID == rt.ClassMask {
+			converted := convertTalentClassID(dbcClass.ID)
+			if converted == rt.ClassMask {
 				classTalents = append(classTalents, rt)
 			}
 		}
@@ -423,11 +421,6 @@ func GenerateTalentJsonFromDB(dbHelper *DBHelper) error {
 	}
 
 	return nil
-}
-
-func properTitle(s string) string {
-	caser := cases.Title(language.English)
-	return caser.String(s)
 }
 
 func GenerateProtos(dbcData *dbc.DBC, db *WowDatabase) {
@@ -456,7 +449,8 @@ func GenerateProtos(dbcData *dbc.DBC, db *WowDatabase) {
 
 		classTalents := []RawTalent{}
 		for _, rt := range rawTalents {
-			if dbcClass.ID == rt.ClassMask {
+			converted := convertTalentClassID(dbcClass.ID)
+			if converted == rt.ClassMask {
 				classTalents = append(classTalents, rt)
 			}
 		}

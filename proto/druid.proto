@@ -8,6 +8,71 @@ import "common.proto";
 // BEGIN GENERATED
 // DruidTalents message.
 message DruidTalents {
+    // Balance
+    int32 starlight_wrath = 1;
+    bool natures_grasp = 2;
+    int32 improved_natures_grasp = 3;
+    int32 control_of_nature = 4;
+    int32 focused_starlight = 5;
+    int32 improved_moonfire = 6;
+    int32 brambles = 7;
+    bool insect_swarm = 8;
+    int32 natures_reach = 9;
+    int32 vengeance = 10;
+    int32 celestial_focus = 11;
+    int32 lunar_guidance = 12;
+    bool natures_grace = 13;
+    int32 moonglow = 14;
+    int32 moonfury = 15;
+    int32 balance_of_power = 16;
+    int32 dreamstate = 17;
+    bool moonkin_form = 18;
+    int32 improved_faerie_fire = 19;
+    int32 wrath_of_cenarius = 20;
+    bool force_of_nature = 21;
+    // Feral Combat
+    int32 ferocity = 22;
+    int32 feral_aggression = 23;
+    int32 feral_instinct = 24;
+    int32 brutal_impact = 25;
+    int32 thick_hide = 26;
+    int32 feral_swiftness = 27;
+    bool feral_charge = 28;
+    int32 sharpened_claws = 29;
+    int32 shredding_attacks = 30;
+    int32 predatory_strikes = 31;
+    int32 primal_fury = 32;
+    int32 savage_fury = 33;
+    bool faerie_fire_feral = 34;
+    int32 nurturing_instinct = 35;
+    int32 heart_of_the_wild = 36;
+    int32 survival_of_the_fittest = 37;
+    int32 primal_tenacity = 38;
+    bool leader_of_the_pack = 39;
+    int32 improved_leader_of_the_pack = 40;
+    int32 predatory_instincts = 41;
+    bool mangle = 42;
+    // Restoration
+    int32 improved_mark_of_the_wild = 43;
+    int32 furor = 44;
+    int32 naturalist = 45;
+    int32 natures_focus = 46;
+    int32 natural_shapeshifter = 47;
+    int32 intensity = 48;
+    int32 subtlety = 49;
+    bool omen_of_clarity = 50;
+    int32 tranquil_spirit = 51;
+    int32 improved_rejuvenation = 52;
+    bool natures_swiftness = 53;
+    int32 gift_of_nature = 54;
+    int32 improved_tranquility = 55;
+    int32 empowered_touch = 56;
+    int32 improved_regrowth = 57;
+    int32 living_spirit = 58;
+    bool swiftmend = 59;
+    int32 natural_perfection = 60;
+    int32 empowered_rejuvenation = 61;
+    bool tree_of_life = 62;
 }
 
 // END GENERATED
