@@ -41,6 +41,7 @@ func ScanRawItemData(rows *sql.Rows) (dbc.Item, error) {
 		&statValue,
 		&bonusStatString,
 		&statPercentEditor,
+		&raw.ArmorValue,
 		&socketTypes,
 		&raw.SocketEnchantmentId,
 		&raw.Flags0,
@@ -58,7 +59,6 @@ func ScanRawItemData(rows *sql.Rows) (dbc.Item, error) {
 		&raw.ItemClass,
 		&raw.ItemSubClass,
 		&raw.NameDescription,
-		&raw.UpgradeID,
 		&raw.LimitCategory,
 	)
 	if err != nil {
@@ -110,6 +110,7 @@ func LoadAndWriteRawItems(dbHelper *DBHelper, filter string, inputsDir string) (
 			s.Field_1_15_3_55112_014 as StatValue,
 			s.StatModifier_bonusStat as bonusStat,
 			s.StatPercentEditor as StatPercentEditor,
+			i.Resistances_0 as ArmorValue,
 			s.SocketType as SocketTypes,
 			s.Socket_match_enchantment_ID as SocketEnchantmentId,
 			s.Flags_0 as Flags_0,
@@ -131,7 +132,6 @@ func LoadAndWriteRawItems(dbHelper *DBHelper, filter string, inputsDir string) (
 			 i.ClassID,
 			 i.SubClassID,
 			 COALESCE(ind.Description_lang, ''),
-			 COALESCE(riu.ItemUpgradeID, 0),
 			s.LimitCategory
 		FROM Item i
 		JOIN ItemSparse s ON i.ID = s.ID
@@ -143,7 +143,6 @@ func LoadAndWriteRawItems(dbHelper *DBHelper, filter string, inputsDir string) (
 		LEFT JOIN ItemArmorQuality iaq ON s.ItemLevel = iaq.ID
 		LEFT JOIN ItemNameDescription as ind ON s.ItemNameDescriptionID = ind.ID
 		JOIN ItemArmorTotal at ON s.ItemLevel = at.ItemLevel
-		LEFT JOIN RulesetItemUpgrade as riu ON riu.ItemID = i.ID
 		`
 
 	if strings.TrimSpace(filter) != "" {
@@ -1077,7 +1076,6 @@ func ScanSpells(rows *sql.Rows) (dbc.Spell, error) {
 	var stringChannelInterruptFlags string // 2
 	var stringShapeShift string            //2
 	var iconId int                         //
-	var rppmModsJSON string
 	err := rows.Scan(
 		&spell.NameLang,
 		&spell.ID,
@@ -1107,7 +1105,6 @@ func ScanSpells(rows *sql.Rows) (dbc.Spell, error) {
 		&spell.ProcCharges,
 		&stringProcType,
 		&spell.ProcCategoryRecovery,
-		&spell.SpellProcsPerMinute,
 		&spell.EquippedItemClass,
 		&spell.EquippedItemInvTypes,
 		&spell.EquippedItemSubclass,
@@ -1122,7 +1119,6 @@ func ScanSpells(rows *sql.Rows) (dbc.Spell, error) {
 		&spell.MaxCumulativeStacks,
 		&spell.MaxTargets,
 		&iconId,
-		&rppmModsJSON,
 	)
 	if err != nil {
 		return spell, fmt.Errorf("scanning spell data: %w", err)
@@ -1152,12 +1148,6 @@ func ScanSpells(rows *sql.Rows) (dbc.Spell, error) {
 	spell.ShapeshiftMask, err = parseIntArrayField(stringShapeShift, 2)
 	if err != nil {
 		return spell, fmt.Errorf("parsing stringShapeShift args for spell %d (%s): %w", spell.ID, stringShapeShift, err)
-	}
-	if err := json.Unmarshal([]byte(rppmModsJSON), &spell.RppmModifiers); err != nil {
-		return spell, fmt.Errorf(
-			"parsing RPPM modifiers for spell %d (%s): %w",
-			spell.ID, rppmModsJSON, err,
-		)
 	}
 	spell.IconPath = iconsMap[iconId]
 	return spell, nil
@@ -1194,7 +1184,6 @@ func LoadAndWriteSpells(dbHelper *DBHelper, inputsDir string) ([]dbc.Spell, erro
 	COALESCE(sao.ProcCharges, 0),
 	COALESCE(sao.ProcTypeMask, ""),
 	COALESCE(sao.ProcCategoryRecovery, 0),
-	COALESCE(spm.BaseProcRate, 0),
 	COALESCE(sei.EquippedItemClass, 0),
 	COALESCE(sei.EquippedItemInvTypes, 0),
 	COALESCE(sei.EquippedItemSubclass, 0),
@@ -1208,20 +1197,7 @@ func LoadAndWriteSpells(dbHelper *DBHelper, inputsDir string) ([]dbc.Spell, erro
 	COALESCE(sdv.Variables, ""),
 	COALESCE(sao.CumulativeAura, 0),
 	COALESCE(str.MaxTargets, 0),
-	COALESCE(sm.SpellIconFileDataID, 0),
-	COALESCE(
-		json_group_array (
-			json_object (
-				'ModifierType',
-				sppmm.Type,
-				'Coeff',
-				sppmm.Coeff,
-				'Param',
-				sppmm.Param
-			)
-		),
-		'[]'
-	) AS RppmModifiersJson
+	COALESCE(sm.SpellIconFileDataID, 0)
 FROM
     Spell as s
 	LEFT JOIN SpellName sn ON s.ID = sn.ID
@@ -1293,8 +1269,6 @@ FROM
 			SpellID
 	) str ON s.ID = str.SpellID
 	LEFT JOIN SpellRange sr ON sr.ID = sm.RangeIndex
-	LEFT JOIN SpellProcsPerMinute spm ON spm.ID = sao.SpellProcsPerMinuteID
-	LEFT JOIN SpellProcsPerMinuteMod sppmm ON sppmm.SpellProcsPerMinuteID = sao.SpellProcsPerMinuteID
 	GROUP BY s.ID
 	ORDER BY s.ID asc
 `
@@ -1385,7 +1359,6 @@ func LoadAndWriteDropSources(dbHelper *DBHelper, inputsDir string) (
 		FROM JournalEncounterItem AS jei
 		INNER JOIN JournalEncounter AS je
 		ON je.ID = jei.JournalEncounterID
-		INNER JOIN JournalInstance AS ji
 		ON ji.ID = je.JournalInstanceID
 		LEFT JOIN AreaTable AS at
 		ON (
@@ -1396,26 +1369,26 @@ func LoadAndWriteDropSources(dbHelper *DBHelper, inputsDir string) (
 		GROUP BY jei.ItemID
     `
 
-	rows, err := dbHelper.db.Query(query)
-	if err != nil {
-		return nil, nil, fmt.Errorf("querying drop sources: %w", err)
-	}
-	defer rows.Close()
+	//rows, err := dbHelper.db.Query(query)
+	// if err != nil {
+	// 	return nil, nil, fmt.Errorf("querying drop sources: %w", err)
+	// }
+	// defer rows.Close()
 
 	sourcesByItem = make(map[int][]*proto.DropSource)
 	namesByZone = make(map[int]string)
 
-	for rows.Next() {
-		itemID, ds, jiName, scanErr := ScanDropRow(rows)
-		if scanErr != nil {
-			return nil, nil, scanErr
-		}
-		sourcesByItem[itemID] = append(sourcesByItem[itemID], ds)
-		namesByZone[int(ds.ZoneId)] = jiName
-	}
-	if err = rows.Err(); err != nil {
-		return nil, nil, fmt.Errorf("iterating drop rows: %w", err)
-	}
+	// for rows.Next() {
+	// 	itemID, ds, jiName, scanErr := ScanDropRow(rows)
+	// 	if scanErr != nil {
+	// 		return nil, nil, scanErr
+	// 	}
+	// 	sourcesByItem[itemID] = append(sourcesByItem[itemID], ds)
+	// 	namesByZone[int(ds.ZoneId)] = jiName
+	// }
+	// if err = rows.Err(); err != nil {
+	// 	return nil, nil, fmt.Errorf("iterating drop rows: %w", err)
+	// }
 	json, _ := json.Marshal(sourcesByItem)
 	if err := dbc.WriteGzipFile(fmt.Sprintf("%s/dbc/dropSources.json", inputsDir), json); err != nil {
 		log.Fatalf("Error writing file: %v", err)

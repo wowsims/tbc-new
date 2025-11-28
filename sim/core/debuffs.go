@@ -9,68 +9,68 @@ import (
 
 // applyRaidDebuffEffects applies all raid-level debuffs based on the provided Debuffs proto.
 func applyDebuffEffects(target *Unit, targetIdx int, debuffs *proto.Debuffs, raid *proto.Raid) {
-	// –10% Physical damage dealt for 30s
-	if debuffs.WeakenedBlows {
-		MakePermanent(WeakenedBlowsAura(target))
-	}
+	// // –10% Physical damage dealt for 30s
+	// if debuffs.WeakenedBlows {
+	// 	MakePermanent(WeakenedBlowsAura(target))
+	// }
 
-	// +4% Physical damage taken for 30s
-	if debuffs.PhysicalVulnerability {
-		MakePermanent(PhysVulnerabilityAura(target))
-	}
+	// // +4% Physical damage taken for 30s
+	// if debuffs.PhysicalVulnerability {
+	// 	MakePermanent(PhysVulnerabilityAura(target))
+	// }
 
-	// –4% Armor for 30s, stacks 3 times
-	if debuffs.WeakenedArmor {
-		aura := MakePermanent(WeakenedArmorAura(target))
+	// // –4% Armor for 30s, stacks 3 times
+	// if debuffs.WeakenedArmor {
+	// 	aura := MakePermanent(WeakenedArmorAura(target))
 
-		aura.OnReset = func(aura *Aura, sim *Simulation) {
-			// Ferals can require a global to put this up on pull.
-			pa := sim.GetConsumedPendingActionFromPool()
-			pa.NextActionAt = sim.CurrentTime + GCDMin
-			pa.Priority = ActionPriorityDOT
+	// 	aura.OnReset = func(aura *Aura, sim *Simulation) {
+	// 		// Ferals can require a global to put this up on pull.
+	// 		pa := sim.GetConsumedPendingActionFromPool()
+	// 		pa.NextActionAt = sim.CurrentTime + GCDMin
+	// 		pa.Priority = ActionPriorityDOT
 
-			pa.OnAction = func(sim *Simulation) {
-				aura.Activate(sim)
-				aura.SetStacks(sim, 3)
-			}
+	// 		pa.OnAction = func(sim *Simulation) {
+	// 			aura.Activate(sim)
+	// 			aura.SetStacks(sim, 3)
+	// 		}
 
-			sim.AddPendingAction(pa)
-		}
-	}
+	// 		sim.AddPendingAction(pa)
+	// 	}
+	// }
 
-	// Spell‐damage‐taken sources
-	if debuffs.FireBreath {
-		MakePermanent(FireBreathDebuff(target))
-	}
-	if debuffs.LightningBreath {
-		MakePermanent(LightningBreathDebuff(target))
-	}
-	if debuffs.MasterPoisoner {
-		MakePermanent(MasterPoisonerDebuff(target))
-	}
-	if debuffs.CurseOfElements {
-		MakePermanent(CurseOfElementsAura(target))
-	}
+	// // Spell‐damage‐taken sources
+	// if debuffs.FireBreath {
+	// 	MakePermanent(FireBreathDebuff(target))
+	// }
+	// if debuffs.LightningBreath {
+	// 	MakePermanent(LightningBreathDebuff(target))
+	// }
+	// if debuffs.MasterPoisoner {
+	// 	MakePermanent(MasterPoisonerDebuff(target))
+	// }
+	// if debuffs.CurseOfElements {
+	// 	MakePermanent(CurseOfElementsAura(target))
+	// }
 
-	// Casting‐speed‐reduction sources
-	if debuffs.NecroticStrike {
-		MakePermanent(NecroticStrikeAura(target))
-	}
-	if debuffs.LavaBreath {
-		MakePermanent(LavaBreathAura(target))
-	}
-	if debuffs.SporeCloud {
-		MakePermanent(SporeCloud(target))
-	}
-	if debuffs.Slow {
-		MakePermanent(SlowAura(target))
-	}
-	if debuffs.MindNumbingPoison {
-		MakePermanent(MindNumbingPoisonAura(target))
-	}
-	if debuffs.CurseOfEnfeeblement {
-		MakePermanent(CurseOfEnfeeblement(target))
-	}
+	// // Casting‐speed‐reduction sources
+	// if debuffs.NecroticStrike {
+	// 	MakePermanent(NecroticStrikeAura(target))
+	// }
+	// if debuffs.LavaBreath {
+	// 	MakePermanent(LavaBreathAura(target))
+	// }
+	// if debuffs.SporeCloud {
+	// 	MakePermanent(SporeCloud(target))
+	// }
+	// if debuffs.Slow {
+	// 	MakePermanent(SlowAura(target))
+	// }
+	// if debuffs.MindNumbingPoison {
+	// 	MakePermanent(MindNumbingPoisonAura(target))
+	// }
+	// if debuffs.CurseOfEnfeeblement {
+	// 	MakePermanent(CurseOfEnfeeblement(target))
+	// }
 }
 
 const WeakenedBlowsDuration = time.Second * 30

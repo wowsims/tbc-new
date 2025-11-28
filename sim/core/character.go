@@ -323,9 +323,6 @@ func (character *Character) clearBuildPhaseAuras(phase CharacterBuildPhase) {
 	}
 	character.Env.MeasuringStats = false
 }
-func (character *Character) CalculateMasteryPoints() float64 {
-	return character.GetStat(stats.MasteryRating) / MasteryRatingPerMasteryPoint
-}
 
 // Apply effects from all equipped core.
 func (character *Character) applyItemEffects(agent Agent) {
@@ -353,7 +350,7 @@ func (character *Character) GetBaseStats() stats.Stats {
 }
 
 func (character *Character) GetParryRatingWithoutStrength() float64 {
-	parryRating := character.GetStat(stats.ParryRating)
+	parryRating := character.GetStat(stats.Parry)
 	strength := character.GetStat(stats.Strength)
 	baseStrength := character.GetBaseStats()[stats.Strength]
 

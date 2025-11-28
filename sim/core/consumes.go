@@ -34,14 +34,20 @@ func applyConsumeEffects(agent Agent) {
 
 	if consumables.BattleElixirId != 0 {
 		elixir := ConsumablesByID[consumables.BattleElixirId]
-		if elixir.Stats[stats.MasteryRating] > 0 {
-			elixir.Stats[stats.MasteryRating] += alchemyBattleElixirBonus
-		} else if elixir.Stats[stats.HasteRating] > 0 {
-			elixir.Stats[stats.HasteRating] += alchemyBattleElixirBonus
-		} else if elixir.Stats[stats.CritRating] > 0 {
-			elixir.Stats[stats.CritRating] += alchemyBattleElixirBonus
-		} else if elixir.Stats[stats.ExpertiseRating] > 0 {
-			elixir.Stats[stats.ExpertiseRating] += alchemyBattleElixirBonus
+		if elixir.Stats[stats.MeleeHaste] > 0 {
+			elixir.Stats[stats.MeleeHaste] += alchemyBattleElixirBonus
+		} else if elixir.Stats[stats.MeleeCrit] > 0 {
+			elixir.Stats[stats.MeleeCrit] += alchemyBattleElixirBonus
+		} else if elixir.Stats[stats.MeleeHit] > 0 {
+			elixir.Stats[stats.MeleeHit] += alchemyBattleElixirBonus
+		} else if elixir.Stats[stats.SpellHit] > 0 {
+			elixir.Stats[stats.SpellHit] += alchemyBattleElixirBonus
+		} else if elixir.Stats[stats.SpellCrit] > 0 {
+			elixir.Stats[stats.SpellCrit] += alchemyBattleElixirBonus
+		} else if elixir.Stats[stats.SpellHaste] > 0 {
+			elixir.Stats[stats.SpellHaste] += alchemyBattleElixirBonus
+		} else if elixir.Stats[stats.Expertise] > 0 {
+			elixir.Stats[stats.Expertise] += alchemyBattleElixirBonus
 		} else if elixir.Stats[stats.Spirit] > 0 {
 			elixir.Stats[stats.Spirit] += alchemyBattleElixirBonus
 		}
@@ -57,18 +63,12 @@ func applyConsumeEffects(agent Agent) {
 	}
 	if consumables.FoodId != 0 {
 		food := ConsumablesByID[consumables.FoodId]
-		isPanda := character.Race == proto.Race_RaceHordePandaren || character.Race == proto.Race_RaceAlliancePandaren
 		var foodBuffStats stats.Stats
 		if food.BuffsMainStat {
-			buffAmount := TernaryFloat64(isPanda, food.Stats[stats.Stamina]*2, food.Stats[stats.Stamina])
+			buffAmount := food.Stats[stats.Stamina]
 			foodBuffStats[stats.Stamina] = buffAmount
 			foodBuffStats[character.GetHighestStatType([]stats.Stat{stats.Strength, stats.Agility, stats.Intellect})] = buffAmount
 		} else {
-			if isPanda {
-				for stat, amount := range food.Stats {
-					food.Stats[stat] = amount * 2
-				}
-			}
 			foodBuffStats = food.Stats
 		}
 		character.AddStats(foodBuffStats)

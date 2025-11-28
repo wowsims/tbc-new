@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core/proto"
-	"github.com/wowsims/tbc/sim/core/stats"
 )
 
 type OnFocusGain func(*Simulation, float64)
@@ -142,19 +141,6 @@ func (fb *focusBar) ResetFocusTick(sim *Simulation) {
 	sim.RescheduleTask(fb.nextFocusTick)
 }
 
-func (fb *focusBar) processDynamicHasteRatingChange(sim *Simulation) {
-	if fb.unit == nil {
-		return
-	}
-
-	if !fb.hasHasteRatingScaling {
-		return
-	}
-
-	fb.ResetFocusTick(sim)
-	fb.hasteRatingMultiplier = 1.0 + fb.unit.GetStat(stats.HasteRating)/(100*HasteRatingPerHastePercent)
-}
-
 func (fb *focusBar) RunTask(sim *Simulation) time.Duration {
 	if sim.CurrentTime < fb.nextFocusTick {
 		return fb.nextFocusTick
@@ -171,12 +157,7 @@ func (fb *focusBar) reset(sim *Simulation) {
 
 	fb.currentFocus = fb.maxFocus
 	fb.focusRegenMultiplier = 1.0
-
-	if fb.hasHasteRatingScaling {
-		fb.hasteRatingMultiplier = 1.0 + fb.unit.GetStat(stats.HasteRating)/(100*HasteRatingPerHastePercent)
-	} else {
-		fb.hasteRatingMultiplier = 1.0
-	}
+	fb.hasteRatingMultiplier = 1.0
 
 	if fb.unit.Type != PetUnit {
 		fb.enable(sim, sim.Environment.PrepullStartTime())

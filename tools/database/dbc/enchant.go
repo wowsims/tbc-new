@@ -64,7 +64,7 @@ func (enchant *Enchant) ToProto() *proto.UIEnchant {
 
 	if enchant.HasEnchantEffect() {
 		eff := ItemEffect{TriggerType: 2, SpellID: enchant.SpellId}
-		parsedEffect, hasStats := eff.ToProto(0, 0)
+		parsedEffect, hasStats := eff.ToProto(0)
 		if hasStats {
 			uiEnchant.EnchantEffect = parsedEffect
 		}

@@ -37,12 +37,9 @@ func GetEffectByIndex(effects map[int]dbc.SpellEffect, index int) *dbc.SpellEffe
 
 // GetSpellPPM implements TooltipDataProvider.
 func (d DBCTooltipDataProvider) GetSpellPPM(spellId int64) float64 {
-	spell, ok := d.DBC.Spells[int(spellId)]
-	if !ok {
-		return 1
-	}
+	// Table does not exist in TBC
 
-	return float64(spell.SpellProcsPerMinute)
+	return float64(0)
 }
 
 // GetSpellProcCooldown implements TooltipDataProvider.

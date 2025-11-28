@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core/proto"
-	"github.com/wowsims/tbc/sim/core/stats"
 )
 
 type energyBar struct {
@@ -48,22 +47,16 @@ func (unit *Unit) EnableEnergyBar(options EnergyBarOptions) {
 		unit:                  unit,
 		maxEnergy:             max(10, options.MaxEnergy),
 		maxComboPoints:        options.MaxComboPoints,
-		EnergyTickDuration:    unit.ReactionTime,
-		EnergyPerTick:         10.0 * unit.ReactionTime.Seconds(),
+		EnergyTickDuration:    time.Second * 2,
+		EnergyPerTick:         20.0,
 		energyRegenMultiplier: 1,
 		hasteRatingMultiplier: 1,
 		regenMetrics:          unit.NewEnergyMetrics(ActionID{OtherID: proto.OtherAction_OtherActionEnergyRegen}),
-		EncounterStartMetrics: unit.getEncounterStartComboMetrics(options.UnitClass),
 		EnergyRefundMetrics:   unit.NewEnergyMetrics(ActionID{OtherID: proto.OtherAction_OtherActionRefund}),
 		ownerClass:            options.UnitClass,
 		hasNoRegen:            options.HasNoRegen,
-		hasHasteRatingScaling: options.HasHasteRatingScaling,
 	}
 
-}
-
-func (unit *Unit) getEncounterStartComboMetrics(unitClass proto.Class) *ResourceMetrics {
-	return unit.NewComboPointMetrics(encounterStartActionID)
 }
 
 func (unit *Unit) HasEnergyBar() bool {
@@ -169,19 +162,6 @@ func (eb *energyBar) ResetEnergyTick(sim *Simulation) {
 	sim.RescheduleTask(eb.nextEnergyTick)
 }
 
-func (eb *energyBar) processDynamicHasteRatingChange(sim *Simulation) {
-	if eb.unit == nil {
-		return
-	}
-
-	if !eb.hasHasteRatingScaling {
-		return
-	}
-
-	eb.ResetEnergyTick(sim)
-	eb.hasteRatingMultiplier = 1.0 + eb.unit.GetStat(stats.HasteRating)/(100*HasteRatingPerHastePercent)
-}
-
 // Used for dynamic updates to maximum Energy, such as from the Druid Primal Madness talent
 func (eb *energyBar) UpdateMaxEnergy(sim *Simulation, bonusEnergy float64, metrics *ResourceMetrics) {
 	if !eb.IsReset(sim) {
@@ -259,12 +239,7 @@ func (eb *energyBar) reset(sim *Simulation) {
 
 	eb.currentEnergy = eb.maxEnergy
 	eb.comboPoints = 0
-
-	if eb.hasHasteRatingScaling {
-		eb.hasteRatingMultiplier = 1.0 + eb.unit.GetStat(stats.HasteRating)/(100*HasteRatingPerHastePercent)
-	} else {
-		eb.hasteRatingMultiplier = 1
-	}
+	eb.hasteRatingMultiplier = 1.0
 
 	eb.energyRegenMultiplier = 1.0
 

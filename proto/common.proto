@@ -31,15 +31,6 @@ message ProtoVersion {
 	int32 saved_version_number = 1;
 }
 
-enum ItemLevelState {
-    Base = 0;
-    ChallengeMode = -1;
-    UpgradeStepOne = 1;
-    UpgradeStepTwo = 2;
-    UpgradeStepThree = 3;
-    UpgradeStepFour = 4;
-}
-
 message ScalingItemProperties {
     int32 rand_prop_points = 1;
     double weapon_damage_min = 2;
@@ -208,43 +199,44 @@ enum Stat {
 	StatSpellCrit = 15;
 	StatSpellHaste = 16;
 	StatSpellPenetration = 17;
+	StatSpirit = 18;
 
 	// Physical Secondaries
-	StatAttackPower = 18;
-	StatRangedAttackPower = 19;
-	StatFeralAttackPower = 20;
-	StatMeleeHit = 21;
-	StatMeleeCrit = 22;
-	StatMeleeHaste = 23;
-	StatArmorPenetration = 24;
-	StatExpertise = 25;
+	StatAttackPower = 19;
+	StatRangedAttackPower = 20;
+	StatFeralAttackPower = 21;
+	StatMeleeHit = 22;
+	StatMeleeCrit = 23;
+	StatMeleeHaste = 24;
+	StatArmorPenetration = 25;
+	StatExpertise = 26;
 
 	// Tank Secondaries
-	StatDefense = 26;
-	StatBlock = 27;
-	StatBlockValue = 28;
-	StatDodge = 29;
-	StatParry = 30;
-	StatResilience = 31;
-	StatArmor = 32;
-	StatBonusArmor = 33;
+	StatDefense = 27;
+	StatBlock = 28;
+	StatBlockValue = 29;
+	StatDodge = 30;
+	StatParry = 31;
+	StatResilience = 32;
+	StatArmor = 33;
+	StatBonusArmor = 34;
 
 	// Composite stats that are built up from the above gear stats + buffs.
 	// These still belong in the Stat enum because they can be present on
 	// some enchants and because the base values need to be stored for NPCs.
-	StatHealth = 34;
-	StatMana = 35;
-	StatMP5 = 36;
+	StatHealth = 35;
+	StatMana = 36;
+	StatMP5 = 37;
 
 	// Resistances
-	StatArcaneResistance = 37;
-	StatFireResistance = 38;
-	StatFrostResistance = 39;
-	StatNatureResistance = 40;
-	StatShadowResistance = 41;
+	StatArcaneResistance = 38;
+	StatFireResistance = 39;
+	StatFrostResistance = 40;
+	StatNatureResistance = 41;
+	StatShadowResistance = 42;
 
 	// Unsure if this will be used but including just in case
-	StatRage = 42;
+	StatRage = 43;
 
 	// DO NOT add new stats here without discussing it first; new stats come
 	// with a performance penalty.
@@ -282,8 +274,8 @@ enum PseudoStat {
 	PseudoStatOffHandDps = 1;
 	PseudoStatRangedDps = 2;
 	PseudoStatBlockValueMultiplier = 3;
-	PseudoStatDodge = 4;
-	PseudoStatParry = 5;
+	PseudoStatDodgePercent = 4;
+	PseudoStatParryPercent = 5;
 	BonusPhysicalDamage = 6;
 
 	// Spell School Hit
@@ -303,7 +295,10 @@ enum PseudoStat {
 	PseudoStatMeleeSpeedMultiplier = 18;
 	PseudoStatRangedSpeedMultiplier = 19;
 	PseudoStatCastSpeedMultiplier = 20;
-	PseudoStatBlockValuePerStrength = 21;
+	PseudoStatMeleeHastePercent = 21;
+	PseudoStatRangedHastePercent = 22;
+	PseudoStatSpellHastePercent = 23;
+	PseudoStatBlockValuePerStrength = 24;
 }
 
 message UnitStats {
@@ -375,8 +370,12 @@ enum RangedWeaponType {
 	RangedWeaponTypeBow = 1;
 	RangedWeaponTypeCrossbow = 2;
 	RangedWeaponTypeGun = 3;
-	RangedWeaponTypeThrown = 5;
-	RangedWeaponTypeWand = 6;
+	RangedWeaponTypeThrown = 4;
+	RangedWeaponTypeWand = 5;
+	RangedWeaponTypeIdol = 6;
+	RangedWeaponTypeLibram = 7;
+	RangedWeaponTypeTotem = 8;
+	RangedWeaponTypeSigil = 9;
 }
 
 // All slots on the gear menu where a single item can be worn.
@@ -700,14 +699,10 @@ message ItemRandomSuffix {
 }
 
 message ItemSpec {
-	int32 id = 2;
-	int32 random_suffix = 6;
+	int32 id = 1;
+	int32 random_suffix = 2;
 	int32 enchant = 3;
 	repeated int32 gems = 4;
-	int32 reforging = 5; //reforging id
-	ItemLevelState upgrade_step = 7;
-	bool challenge_mode = 8;
-	int32 tinker = 9;
 }
 
 
@@ -780,8 +775,6 @@ enum OtherAction {
 	OtherActionDamageTaken = 9; // Indicates damage taken; used for rage gen.
 	OtherActionHealingModel = 12; // Indicates healing received from healing model.
 	OtherActionPotion = 17; // Used by APL to generically refer to either the prepull or combat potion.
-	OtherActionSolarEnergyGain = 18; // For balance druid solar energy
-	OtherActionLunarEnergyGain = 19; // For balance druid lunar energy
 	OtherActionMove = 20; // Used by movement to be able to show it in timeline
 	OtherActionPrepull = 21; // Indicated prepull specific action
 	OtherActionEncounterStart = 22; // Indicated resources gained or lost at the start of an encounter
@@ -798,15 +791,6 @@ message ActionID {
 	// Distinguishes between different versions of the same action.
 	// Currently the only use for this is Shaman Lightning Overload.
 	int32 tag = 4;
-}
-
-message Glyphs {
-	int32 major1 = 1;
-	int32 major2 = 2;
-	int32 major3 = 3;
-	int32 minor1 = 4;
-	int32 minor2 = 5;
-	int32 minor3 = 6;
 }
 
 // Custom options for a particular cooldown.

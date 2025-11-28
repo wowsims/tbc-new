@@ -24,7 +24,6 @@ type WowDatabase struct {
 
 	ItemIcons                map[int32]*proto.IconData
 	SpellIcons               map[int32]*proto.IconData
-	ReforgeStats             map[int32]*proto.ReforgeStat
 	ItemEffectRandPropPoints map[int32]*proto.ItemEffectRandPropPoints
 
 	Encounters []*proto.PresetEncounter
@@ -44,7 +43,6 @@ func NewWowDatabase() *WowDatabase {
 
 		ItemIcons:                make(map[int32]*proto.IconData),
 		SpellIcons:               make(map[int32]*proto.IconData),
-		ReforgeStats:             make(map[int32]*proto.ReforgeStat),
 		ItemEffectRandPropPoints: make(map[int32]*proto.ItemEffectRandPropPoints),
 
 		Consumables: make(map[int32]*proto.Consumable),
@@ -63,7 +61,6 @@ func (db *WowDatabase) Clone() *WowDatabase {
 
 		ItemIcons:                maps.Clone(db.ItemIcons),
 		SpellIcons:               maps.Clone(db.SpellIcons),
-		ReforgeStats:             maps.Clone(db.ReforgeStats),
 		ItemEffectRandPropPoints: maps.Clone(db.ItemEffectRandPropPoints),
 
 		Consumables: maps.Clone(db.Consumables),
@@ -246,7 +243,6 @@ func (db *WowDatabase) ToUIProto() *proto.UIDatabase {
 		Npcs:                     mapToSlice(db.Npcs),
 		ItemIcons:                mapToSlice(db.ItemIcons),
 		SpellIcons:               mapToSlice(db.SpellIcons),
-		ReforgeStats:             mapToSlice(db.ReforgeStats),
 		ItemEffectRandPropPoints: mapToSliceByIlvl(db.ItemEffectRandPropPoints),
 		Consumables:              mapToSlice(db.Consumables),
 		SpellEffects:             mapToSlice(db.Effects),
@@ -287,7 +283,6 @@ func ReadDatabaseFromJson(jsonStr string) *WowDatabase {
 		Npcs:                     sliceToMap(dbProto.Npcs),
 		ItemIcons:                sliceToMap(dbProto.ItemIcons),
 		SpellIcons:               sliceToMap(dbProto.SpellIcons),
-		ReforgeStats:             sliceToMap(dbProto.ReforgeStats),
 		ItemEffectRandPropPoints: iLvlKeyedSliceToMap(dbProto.ItemEffectRandPropPoints),
 		Consumables:              sliceToMap(dbProto.Consumables),
 		Effects:                  sliceToMap(dbProto.SpellEffects),
@@ -329,8 +324,6 @@ func (db *WowDatabase) WriteJson(jsonFilePath string) {
 	tools.WriteProtoArrayToBuffer(uidb.Zones, buffer, "zones")
 	buffer.WriteString(",\n")
 	tools.WriteProtoArrayToBuffer(uidb.Npcs, buffer, "npcs")
-	buffer.WriteString(",\n")
-	tools.WriteProtoArrayToBuffer(uidb.ReforgeStats, buffer, "reforgeStats")
 	buffer.WriteString(",\n")
 	tools.WriteProtoArrayToBuffer(uidb.ItemEffectRandPropPoints, buffer, "itemEffectRandPropPoints")
 	buffer.WriteString(",\n")

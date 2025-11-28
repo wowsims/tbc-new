@@ -17,7 +17,7 @@ SPELL_CRIT_BASE = "chancetospellcritbase.txt"
 COMBAT_RATINGS = "combatratings.txt"
 RATING_SCALAR = "octclasscombatratingscalar.txt"
 
-BASE_LEVEL = 90
+BASE_LEVEL = 70
 
 Offs = {
     "Warrior": 0,
@@ -71,27 +71,31 @@ package core
 // **************************************
 
 import (
-	"github.com/wowsims/tbc/sim/core/proto"
-	"github.com/wowsims/tbc/sim/core/stats"
+    "github.com/wowsims/tbc/sim/core/proto"
+    "github.com/wowsims/tbc/sim/core/stats"
 )
 
 '''
+# weapon skill	defense skill	dodge	parry	block	hit melee	hit ranged		hit spell	crit melee		crit ranged		crit spell		hit taken melee		hit taken ranged	hit taken spell		crit taken melee	crit taken ranged	crit taken spell	haste melee		haste ranged	haste spell
     output = header
-    output += f"const ExpertisePerQuarterPercentReduction = {float(cs.CombatRatings['expertise'][BASE_LEVEL-1])/4}\n"
-    output += f"const HasteRatingPerHastePercent = {cs.CombatRatings['haste melee'][BASE_LEVEL-1]}\n"
-    output += f"const CritRatingPerCritPercent = {cs.CombatRatings['crit melee'][BASE_LEVEL-1]}\n"
-    output += f"const PhysicalHitRatingPerHitPercent = {cs.CombatRatings['hit melee'][BASE_LEVEL-1]}\n"
-    output += f"const SpellHitRatingPerHitPercent = {cs.CombatRatings['hit spell'][BASE_LEVEL-1]}\n"
+    output += f"const ExpertisePerQuarterPercentReduction = {float(cs.CombatRatings['weapon skill'][BASE_LEVEL-1])}\n"
+    output += f"const DefenseRatingPerDefenseLevel = {cs.CombatRatings['defense skill'][BASE_LEVEL-1]}\n"
     output += f"const DodgeRatingPerDodgePercent = {cs.CombatRatings['dodge'][BASE_LEVEL-1]}\n"
     output += f"const ParryRatingPerParryPercent = {cs.CombatRatings['parry'][BASE_LEVEL-1]}\n"
-    output += f"const MasteryRatingPerMasteryPoint = {cs.CombatRatings['mastery'][BASE_LEVEL-1]}\n"
+    output += f"const BlockRatingPerBlockPercent = {cs.CombatRatings['block'][BASE_LEVEL-1]}\n"
+    output += f"const PhysicalHitRatingPerHitPercent = {cs.CombatRatings['hit melee'][BASE_LEVEL-1]}\n"
+    output += f"const SpellHitRatingPerHitPercent = {cs.CombatRatings['hit spell'][BASE_LEVEL-1]}\n"
+    output += f"const PhysicalCritRatingPerCritPercent = {cs.CombatRatings['crit melee'][BASE_LEVEL-1]}\n"
+    output += f"const SpellCritRatingPerCritPercent = {cs.CombatRatings['crit spell'][BASE_LEVEL-1]}\n"
+    output += f"const PhysicalHasteRatingPerHastePercent = {cs.CombatRatings['haste melee'][BASE_LEVEL-1]}\n"
+    output += f"const SpellHasteRatingPerHastePercent = {cs.CombatRatings['haste spell'][BASE_LEVEL-1]}\n"
 
     output += '''var CritPerAgiMaxLevel = map[proto.Class]float64{
 proto.Class_ClassUnknown: 0.0,'''
     for c in ["Warrior", "Paladin", "Hunter", "Rogue", "Priest", "Shaman", "Mage", "Warlock", "Druid"]:
         cName = c.split()
         cName = ''.join(cName)
-        mc = 1/float(cs.MCrit[str(BASE_LEVEL)][Offs[c]])
+        mc = float(cs.MCrit[str(BASE_LEVEL)][Offs[c]])*100
         output += f"\nproto.Class_Class{cName}: {mc:.8f},"
     output += "\n}\n"
 
@@ -100,7 +104,7 @@ proto.Class_ClassUnknown: 0.0,'''
     for c in ["Warrior", "Paladin", "Hunter", "Rogue", "Priest", "Shaman", "Mage", "Warlock", "Druid"]:
         cName = c.split()
         cName = ''.join(cName)
-        mc = 1/float(cs.SCrit[str(BASE_LEVEL)][Offs[c]])
+        mc = float(cs.SCrit[str(BASE_LEVEL)][Offs[c]])*100
         output += f"\nproto.Class_Class{cName}: {mc:.8f},"
     output += "\n}\n"
 

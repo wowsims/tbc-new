@@ -3,15 +3,13 @@ package core
 import (
 	"fmt"
 	"slices"
-
-	"github.com/wowsims/tbc/sim/core/proto"
 )
 
 // Function for applying permanent effects to an Agent.
 //
 // Passing Character instead of Agent would work for almost all cases,
 // but there are occasionally class-specific item effects.
-type ApplyEffect func(Agent, proto.ItemLevelState)
+type ApplyEffect func(Agent)
 
 var itemEffects = map[int32]ApplyEffect{}
 var enchantEffects = map[int32]ApplyEffect{}
@@ -77,32 +75,27 @@ func NewEnchantEffect(id int32, enchantEffect ApplyEffect) {
 func (equipment *Equipment) applyItemEffects(agent Agent, registeredItemEffects map[int32]bool, registeredItemEnchantEffects map[int32]bool, includeGemEffects bool) {
 	for _, eq := range equipment {
 		if applyItemEffect, ok := itemEffects[eq.ID]; ok && !registeredItemEffects[eq.ID] {
-			applyItemEffect(agent, eq.GetScalingState())
+			applyItemEffect(agent)
 			registeredItemEffects[eq.ID] = true
 		}
 
 		if includeGemEffects {
 			for _, g := range eq.Gems {
 				if applyGemEffect, ok := itemEffects[g.ID]; ok {
-					applyGemEffect(agent, proto.ItemLevelState_Base)
+					applyGemEffect(agent)
 				}
 			}
 		}
 
 		if applyEnchantEffect, ok := enchantEffects[eq.Enchant.EffectID]; ok && !registeredItemEnchantEffects[eq.Enchant.EffectID] {
-			applyEnchantEffect(agent, proto.ItemLevelState_Base)
+			applyEnchantEffect(agent)
 			registeredItemEnchantEffects[eq.Enchant.EffectID] = true
-		}
-
-		if applyTinkerEffects, ok := enchantEffects[eq.Tinker.EffectID]; ok && !registeredItemEnchantEffects[eq.Tinker.EffectID] {
-			applyTinkerEffects(agent, proto.ItemLevelState_Base)
-			registeredItemEnchantEffects[eq.Tinker.EffectID] = true
 		}
 	}
 }
 
 // Applies 3% Crit Damage effect
 // https://www.wowhead.com/mop-classic/spell=44797/3-increased-critical-effect
-func ApplyMetaGemCriticalDamageEffect(agent Agent, _ proto.ItemLevelState) {
+func ApplyMetaGemCriticalDamageEffect(agent Agent) {
 	agent.GetCharacter().PseudoStats.CritDamageMultiplier *= 1.03
 }

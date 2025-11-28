@@ -206,7 +206,7 @@ func GetEffectStatString(item *proto.UIItem) string {
 		return ""
 	}
 
-	stats := item.ItemEffect.ScalingOptions[int32(proto.ItemLevelState_Base)].Stats
+	stats := item.ItemEffect.ScalingOptions[int32(0)].Stats
 	var firstStat proto.Stat = proto.Stat_StatStrength
 	found := false
 	for k := range stats {

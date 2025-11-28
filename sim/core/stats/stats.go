@@ -22,24 +22,45 @@ const (
 	Agility
 	Stamina
 	Intellect
+	SpellPower
+	HealingPower
+	SpellDamage
+	ArcanePower
+	FirePower
+	FrostPower
+	HolyPower
+	NaturePower
+	ShadowPower
+	SpellHit
+	SpellCrit
+	SpellHaste
+	SpellPenetration
 	Spirit
-	HitRating
-	CritRating
-	HasteRating
-	ExpertiseRating
-	DodgeRating
-	ParryRating
-	MasteryRating
 	AttackPower
 	RangedAttackPower
-	SpellPower
-	PvpResilienceRating
-	PvpPowerRating
+	FeralAttackPower
+	MeleeHit
+	MeleeCrit
+	MeleeHaste
+	ArmorPenetration
+	Expertise
+	Defense
+	Block
+	BlockValue
+	Dodge
+	Parry
+	Resilience
 	Armor
 	BonusArmor
 	Health
 	Mana
 	MP5
+	ArcaneResistance
+	FireResistance
+	FrostResistance
+	NatureResistance
+	ShadowResistance
+	Rage
 	// end of Stat enum in proto/common.proto
 
 	// The remaining stats below are stored as PseudoStats rather than as
@@ -115,30 +136,38 @@ func (s Stat) StatName() string {
 		return "Intellect"
 	case Spirit:
 		return "Spirit"
-	case HitRating:
-		return "HitRating"
-	case CritRating:
-		return "CritRating"
-	case HasteRating:
-		return "HasteRating"
-	case ExpertiseRating:
+	case SpellHit:
+		return "SpellHitRating"
+	case SpellCrit:
+		return "SpellCritRating"
+	case SpellHaste:
+		return "SpellHasteRating"
+	case SpellPenetration:
+		return "SpellPenetration"
+	case MeleeHit:
+		return "MeleeHitRating"
+	case MeleeCrit:
+		return "MeleeCritRating"
+	case MeleeHaste:
+		return "MeleeHasteRating"
+	case Expertise:
 		return "ExpertiseRating"
-	case DodgeRating:
+	case ArmorPenetration:
+		return "ArmorPenetration"
+	case Dodge:
 		return "DodgeRating"
-	case ParryRating:
+	case Parry:
 		return "ParryRating"
-	case MasteryRating:
-		return "MasteryRating"
 	case AttackPower:
 		return "AttackPower"
 	case RangedAttackPower:
 		return "RangedAttackPower"
+	case FeralAttackPower:
+		return "FeralAttackPower"
 	case SpellPower:
 		return "SpellPower"
-	case PvpResilienceRating:
+	case Resilience:
 		return "PvpResilienceRating"
-	case PvpPowerRating:
-		return "PvpPowerRating"
 	case Armor:
 		return "Armor"
 	case BonusArmor:

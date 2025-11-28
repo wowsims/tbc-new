@@ -8,24 +8,6 @@ import "common.proto";
 // BEGIN GENERATED
 // HunterTalents message.
 message HunterTalents {
-    bool posthaste = 1;
-    bool narrow_escape = 2;
-    bool crouching_tiger_hidden_chimera = 3;
-    bool binding_shot = 4;
-    bool wyvern_sting = 5;
-    bool intimidation = 6;
-    bool exhilaration = 7;
-    bool aspect_of_the_iron_hawk = 8;
-    bool spirit_bond = 9;
-    bool fervor = 10;
-    bool dire_beast = 11;
-    bool thrill_of_the_hunt = 12;
-    bool a_murder_of_crows = 13;
-    bool blink_strikes = 14;
-    bool lynx_rush = 15;
-    bool glaive_toss = 16;
-    bool powershot = 17;
-    bool barrage = 18;
 }
 
 // END GENERATED

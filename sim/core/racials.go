@@ -27,9 +27,6 @@ func applyRaceEffects(agent Agent) {
 			} else if character.HasRageBar() {
 				actionID = ActionID{SpellID: 69179}
 				resourceMetrics = character.NewRageMetrics(actionID)
-			} else if character.HasFocusBar() {
-				actionID = ActionID{SpellID: 80483}
-				resourceMetrics = character.NewFocusMetrics(actionID)
 			}
 		}
 
@@ -71,7 +68,8 @@ func applyRaceEffects(agent Agent) {
 			},
 		})
 	case proto.Race_RaceDraenei:
-		character.AddStat(stats.HitRating, PhysicalHitRatingPerHitPercent)
+		// TODO: Distinct based on class (Phys/Spell); Aura instead of just stat mod
+		//character.AddStat(stats.HitRating, PhysicalHitRatingPerHitPercent)
 		character.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexShadow] *= 0.99
 
 		classSpellIDs := map[proto.Class]ActionID{
@@ -132,12 +130,10 @@ func applyRaceEffects(agent Agent) {
 	case proto.Race_RaceDwarf:
 		character.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexFrost] *= 0.99
 
-		// Crack Shot: 1% Expertise with Ranged Weapons
+		// Crack Shot: 1% Crit with Guns
 		ranged := character.Ranged()
-		if ranged != nil && (ranged.RangedWeaponType == proto.RangedWeaponType_RangedWeaponTypeBow ||
-			ranged.RangedWeaponType == proto.RangedWeaponType_RangedWeaponTypeGun ||
-			ranged.RangedWeaponType == proto.RangedWeaponType_RangedWeaponTypeCrossbow) {
-			character.AddStat(stats.ExpertiseRating, ExpertisePerQuarterPercentReduction*4)
+		if ranged != nil && ranged.RangedWeaponType == proto.RangedWeaponType_RangedWeaponTypeGun {
+			character.AddStat(stats.MeleeCrit, PhysicalCritRatingPerCritPercent)
 		}
 
 		if ranged == nil {
@@ -276,12 +272,12 @@ func applyRaceEffects(agent Agent) {
 		character.AddStat(stats.Health, character.GetBaseStats()[stats.Health]*0.05)
 	case proto.Race_RaceTroll:
 		// Dead Eye: 1% Expertise with Guns, Bows or Crossbows.
-		ranged := character.Ranged()
-		if ranged != nil && (ranged.RangedWeaponType == proto.RangedWeaponType_RangedWeaponTypeBow ||
-			ranged.RangedWeaponType == proto.RangedWeaponType_RangedWeaponTypeGun ||
-			ranged.RangedWeaponType == proto.RangedWeaponType_RangedWeaponTypeCrossbow) {
-			character.AddStat(stats.ExpertiseRating, ExpertisePerQuarterPercentReduction*4)
-		}
+		// ranged := character.Ranged()
+		// if ranged != nil && (ranged.RangedWeaponType == proto.RangedWeaponType_RangedWeaponTypeBow ||
+		// 	ranged.RangedWeaponType == proto.RangedWeaponType_RangedWeaponTypeGun ||
+		// 	ranged.RangedWeaponType == proto.RangedWeaponType_RangedWeaponTypeCrossbow) {
+		// 	character.AddStat(stats.ExpertiseRating, ExpertisePerQuarterPercentReduction*4)
+		// }
 
 		// Beast Slaying (+5% damage to beasts)
 		if character.CurrentTarget.MobType == proto.MobType_MobTypeBeast {
@@ -359,18 +355,6 @@ func applyRaceEffects(agent Agent) {
 				touchOfTheGraveDamageSpell.Cast(sim, result.Target)
 			},
 		})
-	case proto.Race_RaceWorgen:
-		character.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexNature] *= 0.99
-		character.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexShadow] *= 0.99
-		character.AddStat(stats.PhysicalCritPercent, 1)
-		character.AddStat(stats.SpellCritPercent, 1)
-	case proto.Race_RaceGoblin:
-		character.PseudoStats.MeleeSpeedMultiplier *= 1.01
-		character.PseudoStats.RangedSpeedMultiplier *= 1.01
-		character.PseudoStats.CastSpeedMultiplier *= 1.01
-	case proto.Race_RaceAlliancePandaren:
-	case proto.Race_RaceHordePandaren:
-		//Epicurean in consumes.go
 	}
 }
 
@@ -393,10 +377,10 @@ func applyWeaponSpecialization(character *Character, label string, spellID int32
 		FloatValue: expertiseBonus,
 	})
 
-	expStatAura := character.RegisterAura(Aura{
-		Label:    "ExpertiseStatAura",
-		Duration: NeverExpires,
-	}).AttachStatBuff(stats.ExpertiseRating, expertiseBonus)
+	// expStatAura := character.RegisterAura(Aura{
+	// 	Label:    "ExpertiseStatAura",
+	// 	Duration: NeverExpires,
+	// }).AttachStatBuff(stats.ExpertiseRating, expertiseBonus)
 
 	aura := character.RegisterAura(Aura{
 		Label:      label,
@@ -413,7 +397,7 @@ func applyWeaponSpecialization(character *Character, label string, spellID int32
 		OnGain: func(aura *Aura, sim *Simulation) {
 			// Always add if main-hand matches
 			if mask.Matches(ProcMaskMeleeMH) {
-				expStatAura.Activate(sim)
+				//expStatAura.Activate(sim)
 				if *mask == ProcMaskMeleeMH {
 					// Remove from off-hand attacks if only main-hand matches
 					expSpellMod.UpdateFloatValue(-expertiseBonus)
@@ -427,7 +411,7 @@ func applyWeaponSpecialization(character *Character, label string, spellID int32
 		},
 
 		OnExpire: func(aura *Aura, sim *Simulation) {
-			expStatAura.Deactivate(sim)
+			//expStatAura.Deactivate(sim)
 			expSpellMod.Deactivate()
 		},
 	})

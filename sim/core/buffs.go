@@ -90,122 +90,122 @@ func makeExclusiveBuff(unit *Unit, config BuffConfig) *Aura {
 
 // Applies buffs that affect individual players.
 func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, _ *proto.PartyBuffs, individual *proto.IndividualBuffs) {
-	char := agent.GetCharacter()
-	u := &char.Unit
+	//char := agent.GetCharacter()
+	//u := &char.Unit
 
-	// +10% Attack Power
-	if raidBuffs.TrueshotAura {
-		TrueShotAura(u)
-	}
-	if raidBuffs.BattleShout {
-		BattleShoutAura(u, true)
-	}
+	// // +10% Attack Power
+	// if raidBuffs.TrueshotAura {
+	// 	TrueShotAura(u)
+	// }
+	// if raidBuffs.BattleShout {
+	// 	BattleShoutAura(u, true)
+	// }
 
-	// +10% Melee and Ranged Attack Speed
-	if raidBuffs.UnholyAura {
-		UnholyAura(u)
-	}
-	if raidBuffs.CacklingHowl {
-		CacklingHowlAura(u)
-	}
-	if raidBuffs.SerpentsSwiftness {
-		SerpentsSwiftnessAura(u)
-	}
-	if raidBuffs.SwiftbladesCunning {
-		SwiftbladesCunningAura(u)
-	}
-	if raidBuffs.UnleashedRage {
-		UnleashedRageAura(u)
-	}
+	// // +10% Melee and Ranged Attack Speed
+	// if raidBuffs.UnholyAura {
+	// 	UnholyAura(u)
+	// }
+	// if raidBuffs.CacklingHowl {
+	// 	CacklingHowlAura(u)
+	// }
+	// if raidBuffs.SerpentsSwiftness {
+	// 	SerpentsSwiftnessAura(u)
+	// }
+	// if raidBuffs.SwiftbladesCunning {
+	// 	SwiftbladesCunningAura(u)
+	// }
+	// if raidBuffs.UnleashedRage {
+	// 	UnleashedRageAura(u)
+	// }
 
-	// +10% Spell Power
-	if raidBuffs.StillWater {
-		StillWaterAura(u)
-	}
-	if raidBuffs.ArcaneBrilliance {
-		ArcaneBrilliance(u)
-	}
-	if raidBuffs.BurningWrath {
-		BurningWrathAura(u)
-	}
-	if raidBuffs.DarkIntent {
-		MakePermanent(DarkIntentAura(u))
-	}
+	// // +10% Spell Power
+	// if raidBuffs.StillWater {
+	// 	StillWaterAura(u)
+	// }
+	// if raidBuffs.ArcaneBrilliance {
+	// 	ArcaneBrilliance(u)
+	// }
+	// if raidBuffs.BurningWrath {
+	// 	BurningWrathAura(u)
+	// }
+	// if raidBuffs.DarkIntent {
+	// 	MakePermanent(DarkIntentAura(u))
+	// }
 
-	// +5% Spell Haste
-	if raidBuffs.MoonkinAura {
-		MoonkinAura(u)
-	}
-	if raidBuffs.MindQuickening {
-		MindQuickeningAura(u)
-	}
+	// // +5% Spell Haste
+	// if raidBuffs.MoonkinAura {
+	// 	MoonkinAura(u)
+	// }
+	// if raidBuffs.MindQuickening {
+	// 	MindQuickeningAura(u)
+	// }
 
-	if raidBuffs.ElementalOath {
-		ElementalOath(u)
-	}
+	// if raidBuffs.ElementalOath {
+	// 	ElementalOath(u)
+	// }
 
-	// +5% Critical Strike Chance
-	if raidBuffs.LeaderOfThePack {
-		LeaderOfThePack(u)
-	}
-	if raidBuffs.TerrifyingRoar {
-		TerrifyingRoar(u)
-	}
-	if raidBuffs.FuriousHowl {
-		FuriousHowl(u)
-	}
+	// // +5% Critical Strike Chance
+	// if raidBuffs.LeaderOfThePack {
+	// 	LeaderOfThePack(u)
+	// }
+	// if raidBuffs.TerrifyingRoar {
+	// 	TerrifyingRoar(u)
+	// }
+	// if raidBuffs.FuriousHowl {
+	// 	FuriousHowl(u)
+	// }
 
-	// +3000 Mastery Rating
-	if raidBuffs.RoarOfCourage {
-		RoarOfCourageAura(u)
-	}
-	if raidBuffs.SpiritBeastBlessing {
-		SpiritBeastBlessingAura(u)
-	}
-	if raidBuffs.BlessingOfMight {
-		BlessingOfMightAura(u)
-	}
-	if raidBuffs.GraceOfAir {
-		GraceOfAirAura(u)
-	}
+	// // +3000 Mastery Rating
+	// if raidBuffs.RoarOfCourage {
+	// 	RoarOfCourageAura(u)
+	// }
+	// if raidBuffs.SpiritBeastBlessing {
+	// 	SpiritBeastBlessingAura(u)
+	// }
+	// if raidBuffs.BlessingOfMight {
+	// 	BlessingOfMightAura(u)
+	// }
+	// if raidBuffs.GraceOfAir {
+	// 	GraceOfAirAura(u)
+	// }
 
-	// +5% Strength, Agility, Intellect
-	if raidBuffs.MarkOfTheWild {
-		MarkOfTheWildAura(u)
-	}
-	if raidBuffs.EmbraceOfTheShaleSpider {
-		EmbraceOfTheShaleSpiderAura(u)
-	}
-	if raidBuffs.BlessingOfKings {
-		BlessingOfKingsAura(u)
-	}
+	// // +5% Strength, Agility, Intellect
+	// if raidBuffs.MarkOfTheWild {
+	// 	MarkOfTheWildAura(u)
+	// }
+	// if raidBuffs.EmbraceOfTheShaleSpider {
+	// 	EmbraceOfTheShaleSpiderAura(u)
+	// }
+	// if raidBuffs.BlessingOfKings {
+	// 	BlessingOfKingsAura(u)
+	// }
 
-	// Stamina & Strength/Agility secondary grouping
-	applyStaminaBuffs(u, raidBuffs)
+	// // Stamina & Strength/Agility secondary grouping
+	// applyStaminaBuffs(u, raidBuffs)
 
-	registerManaTideTotemCD(agent, raidBuffs.ManaTideTotemCount)
-	registerSkullBannerCD(agent, raidBuffs.SkullBannerCount)
-	registerStormLashCD(agent, raidBuffs.StormlashTotemCount)
+	// registerManaTideTotemCD(agent, raidBuffs.ManaTideTotemCount)
+	// registerSkullBannerCD(agent, raidBuffs.SkullBannerCount)
+	// registerStormLashCD(agent, raidBuffs.StormlashTotemCount)
 
-	// Individual cooldowns and major buffs
-	if len(char.Env.Raid.AllPlayerUnits)-char.Env.Raid.NumTargetDummies == 1 {
-		// Major Haste
-		if raidBuffs.Bloodlust {
-			registerBloodlustCD(agent, 2825)
-		}
+	// // Individual cooldowns and major buffs
+	// if len(char.Env.Raid.AllPlayerUnits)-char.Env.Raid.NumTargetDummies == 1 {
+	// 	// Major Haste
+	// 	if raidBuffs.Bloodlust {
+	// 		registerBloodlustCD(agent, 2825)
+	// 	}
 
-		// Other individual CDs
-		registerUnholyFrenzyCD(agent, individual.UnholyFrenzyCount)
-		if individual.TricksOfTheTrade {
-			registerTricksOfTheTradeCD(agent)
-		}
-		registerDevotionAuraCD(agent, individual.DevotionAuraCount)
-		registerVigilanceCD(agent, individual.VigilanceCount)
-		registerPainSuppressionCD(agent, individual.PainSuppressionCount)
-		registerGuardianSpiritCD(agent, individual.GuardianSpiritCount)
-		registerRallyingCryCD(agent, individual.RallyingCryCount)
-		registerShatteringThrowCD(agent, individual.ShatteringThrowCount)
-	}
+	// 	// Other individual CDs
+	// 	registerUnholyFrenzyCD(agent, individual.UnholyFrenzyCount)
+	// 	if individual.TricksOfTheTrade {
+	// 		registerTricksOfTheTradeCD(agent)
+	// 	}
+	// 	registerDevotionAuraCD(agent, individual.DevotionAuraCount)
+	// 	registerVigilanceCD(agent, individual.VigilanceCount)
+	// 	registerPainSuppressionCD(agent, individual.PainSuppressionCount)
+	// 	registerGuardianSpiritCD(agent, individual.GuardianSpiritCount)
+	// 	registerRallyingCryCD(agent, individual.RallyingCryCount)
+	// 	registerShatteringThrowCD(agent, individual.ShatteringThrowCount)
+	// }
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -257,33 +257,6 @@ func CommandingShoutAura(unit *Unit, asExternal bool) *Aura {
 	baseAura.OnReset = nil
 	baseAura.Duration = time.Minute * 5
 	return baseAura
-}
-func applyStaminaBuffs(u *Unit, raidBuffs *proto.RaidBuffs) {
-	// +10% Stamina buffs
-	if raidBuffs.PowerWordFortitude {
-		PowerWordFortitudeAura(u)
-	}
-	if raidBuffs.QirajiFortitude {
-		QirajiFortitudeAura(u)
-	}
-	if raidBuffs.CommandingShout {
-		CommandingShoutAura(u, true)
-	}
-}
-
-//////// 3000 Mastery Rating
-
-func RoarOfCourageAura(u *Unit) *Aura {
-	return makeExclusiveBuff(u, BuffConfig{"Roar of Courage", ActionID{SpellID: 93435}, []StatConfig{{stats.MasteryRating, MasteryRaidBuffStrength, false}}})
-}
-func SpiritBeastBlessingAura(u *Unit) *Aura {
-	return makeExclusiveBuff(u, BuffConfig{"Spirit Beast Blessing", ActionID{SpellID: 128997}, []StatConfig{{stats.MasteryRating, MasteryRaidBuffStrength, false}}})
-}
-func BlessingOfMightAura(u *Unit) *Aura {
-	return makeExclusiveBuff(u, BuffConfig{"Blessing of Might", ActionID{SpellID: 19740}, []StatConfig{{stats.MasteryRating, MasteryRaidBuffStrength, false}}})
-}
-func GraceOfAirAura(u *Unit) *Aura {
-	return makeExclusiveBuff(u, BuffConfig{"Grace of Air", ActionID{SpellID: 116956}, []StatConfig{{stats.MasteryRating, MasteryRaidBuffStrength, false}}})
 }
 
 ///////////////////////////////////////////////////////////////////////////

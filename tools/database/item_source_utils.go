@@ -8,7 +8,7 @@ import (
 )
 
 func InferPhase(item *proto.UIItem) int32 {
-	ilvl := item.ScalingOptions[int32(proto.ItemLevelState_Base)].Ilvl
+	ilvl := item.ScalingOptions[int32(0)].Ilvl
 	hasRandomSuffixOptions := len(item.RandomSuffixOptions) > 0
 	name := item.Name
 	description := item.NameDescription

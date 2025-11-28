@@ -2,7 +2,6 @@ package core
 
 import (
 	"fmt"
-	"math"
 	"slices"
 	"sync"
 	"time"
@@ -18,7 +17,6 @@ var ItemsByID = map[int32]Item{}
 var GemsByID = map[int32]Gem{}
 var RandomSuffixesByID = map[int32]RandomSuffix{}
 var EnchantsByEffectID = map[int32]Enchant{}
-var ReforgeStatsByID = map[int32]ReforgeStat{}
 var ItemEffectRandPropPointsByIlvl = map[int32]ItemEffectRandPropPoints{}
 var ConsumablesByID = map[int32]Consumable{}
 var SpellEffectsById = map[int32]*proto.SpellEffect{}
@@ -54,12 +52,6 @@ func addToDatabase(newDB *proto.SimDatabase) {
 			GemsByID[v.Id] = GemFromProto(v)
 		}
 	}
-
-	for _, v := range newDB.ReforgeStats {
-		if _, ok := ReforgeStatsByID[v.Id]; !ok {
-			ReforgeStatsByID[v.Id] = ReforgeStatFromProto(v)
-		}
-	}
 	for _, v := range newDB.ItemEffectRandPropPoints {
 		if _, ok := ItemEffectRandPropPointsByIlvl[v.Ilvl]; !ok {
 			ItemEffectRandPropPointsByIlvl[v.Ilvl] = ItemEffectRandPropPointsFromProto(v)
@@ -74,33 +66,6 @@ func addToDatabase(newDB *proto.SimDatabase) {
 		if _, ok := SpellEffectsById[v.Id]; !ok {
 			SpellEffectsById[v.Id] = v
 		}
-	}
-}
-
-type ReforgeStat struct {
-	ID         int32
-	FromStat   proto.Stat
-	ToStat     proto.Stat
-	Multiplier float64
-}
-
-// ReforgeStatFromProto converts a protobuf ReforgeStat to a Go ReforgeStat
-func ReforgeStatFromProto(protoStat *proto.ReforgeStat) ReforgeStat {
-	return ReforgeStat{
-		ID:         protoStat.GetId(),
-		FromStat:   protoStat.GetFromStat(),
-		ToStat:     protoStat.GetToStat(),
-		Multiplier: protoStat.GetMultiplier(),
-	}
-}
-
-// ReforgeStatToProto converts a Go ReforgeStat to a protobuf ReforgeStat
-func ReforgeStatToProto(stat ReforgeStat) *proto.ReforgeStat {
-	return &proto.ReforgeStat{
-		Id:         stat.ID,
-		FromStat:   stat.FromStat,
-		ToStat:     stat.ToStat,
-		Multiplier: stat.Multiplier,
 	}
 }
 
@@ -176,16 +141,12 @@ type Item struct {
 	RandomSuffix RandomSuffix
 	Gems         []Gem
 	Enchant      Enchant
-	Tinker       Enchant
-	Reforging    *ReforgeStat
 
 	//Internal use
 	TempEnchant    int32
 	ScalingOptions map[int32]*proto.ScalingItemProperties
 	RandPropPoints int32
-	UpgradeStep    proto.ItemLevelState
 	ItemEffect     *proto.ItemEffect
-	ChallengeMode  bool
 }
 
 func ItemFromProto(pData *proto.SimItem) Item {
@@ -209,20 +170,10 @@ func ItemFromProto(pData *proto.SimItem) Item {
 
 func (item *Item) ToItemSpecProto() *proto.ItemSpec {
 	itemSpec := &proto.ItemSpec{
-		Id:            item.ID,
-		RandomSuffix:  item.RandomSuffix.ID,
-		Enchant:       item.Enchant.EffectID,
-		Gems:          MapSlice(item.Gems, func(gem Gem) int32 { return gem.ID }),
-		UpgradeStep:   item.UpgradeStep,
-		ChallengeMode: item.ChallengeMode,
-	}
-
-	// Check if Reforging is not nil before accessing ID
-	// The idea here is to convert a reforging ID to sim stats
-	if item.Reforging != nil {
-		itemSpec.Reforging = item.Reforging.ID
-	} else {
-		itemSpec.Reforging = 0
+		Id:           item.ID,
+		RandomSuffix: item.RandomSuffix.ID,
+		Enchant:      item.Enchant.EffectID,
+		Gems:         MapSlice(item.Gems, func(gem Gem) int32 { return gem.ID }),
 	}
 
 	return itemSpec
@@ -279,14 +230,10 @@ func GemFromProto(pData *proto.SimGem) Gem {
 }
 
 type ItemSpec struct {
-	ID            int32
-	RandomSuffix  int32
-	Enchant       int32
-	Tinker        int32
-	Gems          []int32
-	Reforging     int32
-	UpgradeStep   proto.ItemLevelState
-	ChallengeMode bool
+	ID           int32
+	RandomSuffix int32
+	Enchant      int32
+	Gems         []int32
 }
 
 type Equipment [NumItemSlots]Item
@@ -415,7 +362,7 @@ func (equipment *Equipment) EquipEnchant(enchant Enchant) {
 }
 
 func (equipment *Equipment) containsEnchantInSlot(effectID int32, slot proto.ItemSlot) bool {
-	return (equipment[slot].Enchant.EffectID == effectID) || (equipment[slot].TempEnchant == effectID) || (equipment[slot].Tinker.EffectID == effectID)
+	return (equipment[slot].Enchant.EffectID == effectID) || (equipment[slot].TempEnchant == effectID)
 }
 
 func (equipment *Equipment) containsEnchantInSlots(effectID int32, possibleSlots []proto.ItemSlot) bool {
@@ -458,30 +405,13 @@ func ProtoToEquipmentSpec(es *proto.EquipmentSpec) EquipmentSpec {
 	var coreEquip EquipmentSpec
 	for i, item := range es.Items {
 		coreEquip[i] = ItemSpec{
-			ID:            item.Id,
-			RandomSuffix:  item.RandomSuffix,
-			Tinker:        item.Tinker,
-			Enchant:       item.Enchant,
-			Gems:          item.Gems,
-			Reforging:     item.Reforging,
-			UpgradeStep:   item.UpgradeStep,
-			ChallengeMode: item.ChallengeMode,
+			ID:           item.Id,
+			RandomSuffix: item.RandomSuffix,
+			Enchant:      item.Enchant,
+			Gems:         item.Gems,
 		}
 	}
 	return coreEquip
-}
-
-func (item *Item) GetScalingState() proto.ItemLevelState {
-	if !item.ChallengeMode || item.ScalingOptions[int32(item.UpgradeStep)].Ilvl <= MaxChallengeModeIlvl {
-		return item.UpgradeStep
-	} else {
-		return proto.ItemLevelState_ChallengeMode
-	}
-}
-
-// Returns the current scaling options for the item based on challenge mode and upgrade level
-func (item *Item) GetEffectiveScalingOptions() *proto.ScalingItemProperties {
-	return item.ScalingOptions[int32(item.GetScalingState())]
 }
 
 func NewItem(itemSpec ItemSpec) Item {
@@ -492,14 +422,12 @@ func NewItem(itemSpec ItemSpec) Item {
 		panic(fmt.Sprintf("No item with id: %d", itemSpec.ID))
 	}
 
-	item.UpgradeStep = itemSpec.UpgradeStep
-	item.ChallengeMode = itemSpec.ChallengeMode
-	scalingOptions := item.GetEffectiveScalingOptions()
-	item.Stats = stats.FromProtoMap(scalingOptions.Stats)
+	// TODO: Pull the direct stats
+	// item.Stats = stats.FromProtoMap(scalingOptions.Stats)
 
-	item.WeaponDamageMax = scalingOptions.WeaponDamageMax
-	item.WeaponDamageMin = scalingOptions.WeaponDamageMin
-	item.RandPropPoints = scalingOptions.RandPropPoints
+	// item.WeaponDamageMax = scalingOptions.WeaponDamageMax
+	// item.WeaponDamageMin = scalingOptions.WeaponDamageMin
+	// item.RandPropPoints = scalingOptions.RandPropPoints
 
 	if itemSpec.RandomSuffix != 0 {
 		if randomSuffix, ok := RandomSuffixesByID[itemSpec.RandomSuffix]; ok {
@@ -516,21 +444,6 @@ func NewItem(itemSpec ItemSpec) Item {
 		// else {
 		// 	panic(fmt.Sprintf("No enchant with id: %d", itemSpec.Enchant))
 		// }
-	}
-	if itemSpec.Tinker != 0 {
-		if tinker, ok := EnchantsByEffectID[itemSpec.Tinker]; ok {
-			item.Tinker = tinker
-		}
-	}
-
-	if itemSpec.Reforging > 112 { // There is no id below 113
-		reforge := ReforgeStatsByID[itemSpec.Reforging]
-
-		if validateReforging(&item, reforge) {
-			item.Reforging = &reforge
-		} else {
-			panic(fmt.Sprintf("When validating reforging for item %d, the reforging could not be validated. %d", itemSpec.ID, itemSpec.Reforging))
-		}
 	}
 
 	if len(itemSpec.Gems) > 0 {
@@ -552,18 +465,6 @@ func NewItem(itemSpec ItemSpec) Item {
 		}
 	}
 	return item
-}
-
-func validateReforging(item *Item, reforging ReforgeStat) bool {
-	// Validate that the item can reforge these to stats
-	reforgeableStats := stats.Stats{}
-	if item.RandomSuffix.ID != 0 {
-		reforgeableStats = reforgeableStats.Add(item.RandomSuffix.Stats.Multiply(float64(item.RandPropPoints) / 10000.).Floor())
-	} else {
-		reforgeableStats = reforgeableStats.Add(item.Stats)
-	}
-
-	return (reforgeableStats[reforging.FromStat] > 0) && (reforgeableStats[reforging.ToStat] == 0)
 }
 
 func NewEquipmentSet(equipSpec EquipmentSpec) Equipment {
@@ -612,61 +513,8 @@ func ItemSwapFromJsonString(jsonString string) *proto.ItemSwap {
 func (equipment *Equipment) Stats(spec proto.Spec) stats.Stats {
 	equipStats := stats.Stats{}
 
-	statsGained := 0.0
-	divisor := 0.0
-	secondaries := []stats.Stat{stats.CritRating, stats.HasteRating, stats.MasteryRating, stats.DodgeRating, stats.ParryRating}
-
-	fixedStats := []stats.Stat{stats.HitRating, stats.ExpertiseRating}
-	switch spec {
-	case proto.Spec_SpecElementalShaman,
-		proto.Spec_SpecShadowPriest,
-		proto.Spec_SpecBalanceDruid:
-		fixedStats = append(fixedStats, stats.Spirit)
-	}
-
-	isChallengeMode := false
-	fixedStatOverwrite := make([]float64, len(fixedStats))
 	for _, item := range equipment {
-		scaledBaseStats := ItemEquipmentBaseStats(item)
-
-		if item.ChallengeMode && item.ScalingOptions != nil {
-			isChallengeMode = true
-			baseItem := item
-			baseItem.ChallengeMode = false
-			baseItem.Stats = stats.FromProtoMap(baseItem.GetEffectiveScalingOptions().Stats)
-			baseItemStats := ItemEquipmentBaseStats(baseItem)
-			for idx, stat := range fixedStats {
-				statsGained += baseItemStats[stat] - scaledBaseStats[stat]
-				fixedStatOverwrite[idx] += baseItemStats[stat]
-			}
-
-			// sum up secondaries
-			for _, stat := range secondaries {
-				divisor += scaledBaseStats[stat]
-			}
-		}
-
-		equipStats = equipStats.Add(scaledBaseStats)
-	}
-
-	if isChallengeMode {
-
-		// scale
-		dividend := divisor - statsGained
-		factor := dividend / divisor
-
-		// apply scaling
-		for _, stat := range secondaries {
-			equipStats[stat] = math.Round(equipStats[stat] * factor)
-		}
-
-		for idx := range fixedStatOverwrite {
-			equipStats[fixedStats[idx]] = fixedStatOverwrite[idx]
-		}
-	}
-
-	// Add Enchants and Gems at the end as they're not scaled
-	for _, item := range equipment {
+		equipStats = equipStats.Add(ItemEquipmentBaseStats(item))
 		equipStats = equipStats.Add(ItemEquipmentGemAndEnchantStats(item))
 	}
 
@@ -687,21 +535,6 @@ func ItemEquipmentBaseStats(item Item) stats.Stats {
 	rawSuffixStats := item.RandomSuffix.Stats
 	equipStats = equipStats.Add(rawSuffixStats.Multiply(float64(item.RandPropPoints) / 10000.).Floor())
 
-	// Apply reforging
-	if item.Reforging != nil {
-		itemStats := item.Stats.Add(rawSuffixStats.Multiply(float64(item.RandPropPoints) / 10000.).Floor())
-		reforgingChanges := stats.Stats{}
-		fromStat := item.Reforging.FromStat
-
-		if itemStats[fromStat] > 0 {
-			reduction := math.Floor(itemStats[fromStat] * item.Reforging.Multiplier)
-			reforgingChanges[fromStat] = -reduction
-			reforgingChanges[item.Reforging.ToStat] = reduction
-		}
-
-		equipStats = equipStats.Add(reforgingChanges)
-	}
-
 	return equipStats
 }
 
@@ -714,10 +547,6 @@ func ItemEquipmentGemAndEnchantStats(item Item) stats.Stats {
 	equipStats = equipStats.Add(item.Enchant.Stats)
 
 	for _, gem := range item.Gems {
-		if gem.DisabledInChallengeMode && item.ChallengeMode {
-			continue
-		}
-
 		equipStats = equipStats.Add(gem.Stats)
 	}
 

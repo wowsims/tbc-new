@@ -18,6 +18,7 @@ var MapArmorSubclassToArmorType = map[int]proto.ArmorType{
 	0:                           proto.ArmorType_ArmorTypeUnknown,
 }
 
+// Ref: https://wowdev.wiki/Stat_Types
 func MapMainStatToStat(index int) (proto.Stat, bool) {
 	switch index {
 	case 0:
@@ -50,35 +51,51 @@ func MapBonusStatIndexToStat(index int) (proto.Stat, bool) {
 	case 6: // Spirit
 		return proto.Stat_StatSpirit, true
 
-	// Secondary ratings (reforge-able)
-	case 16, 17, 18, 31: // MeleeHitRating, RangedHitRating, SpellHitRating, or generic HitRating
-		return proto.Stat_StatHitRating, true
-	case 19, 20, 21, 32: // MeleeCritRating, RangedCritRating, SpellCritRating, or generic CritRating
-		return proto.Stat_StatCritRating, true
-	case 36: // HasteRating (non-obsolete)
-		return proto.Stat_StatHasteRating, true
-	case 37: // ExpertiseRating
-		return proto.Stat_StatExpertiseRating, true
-	case 13: // DodgeRating
-		return proto.Stat_StatDodgeRating, true
-	case 14: // ParryRating
-		return proto.Stat_StatParryRating, true
-	case 49: // Mastery
-		return proto.Stat_StatMasteryRating, true
+	case 12:
+		return proto.Stat_StatDefense, true
+	case 13:
+		return proto.Stat_StatDodge, true
+	case 14:
+		return proto.Stat_StatParry, true
+	case 15:
+		return proto.Stat_StatBlock, true
+
+	// Secondary ratings
+	case 16, 17:
+		return proto.Stat_StatMeleeHit, true
+	case 18:
+		return proto.Stat_StatSpellHit, true
+	case 19, 20:
+		return proto.Stat_StatMeleeCrit, true
+	case 21:
+		return proto.Stat_StatSpellCrit, true
+	case 28, 29:
+		return proto.Stat_StatMeleeHaste, true
+	case 30:
+		return proto.Stat_StatSpellHaste, true
+	case 37:
+		return proto.Stat_StatExpertise, true
+
 	case 38: // AttackPower
 		return proto.Stat_StatAttackPower, true
 	case 39: // RangedAttackPower
 		return proto.Stat_StatRangedAttackPower, true
-	case 41, 42, 45: // SpellHealing, SpellDamage, or SpellPower
+	case 40:
+		return proto.Stat_StatFeralAttackPower, true
+	case 41:
+		return proto.Stat_StatHealingPower, true
+	case 42:
+		return proto.Stat_StatSpellDamage, true
+	case 45:
 		return proto.Stat_StatSpellPower, true
-	case 57: // PvPPowerRating
-		return proto.Stat_StatPvpPowerRating, true
-	case 35: // ResilienceRating
-		return proto.Stat_StatPvpResilienceRating, true
 	case 50: // ExtraArmor maps to BonusArmor (green armor)
 		return proto.Stat_StatBonusArmor, true
 	case 43: // ManaRegeneration
 		return proto.Stat_StatMP5, true
+	case 47:
+		return proto.Stat_StatSpellPenetration, true
+	case 48:
+		return proto.Stat_StatBlockValue, true
 	default:
 		return 0, false
 	}
@@ -97,7 +114,6 @@ var MapProfessionIdToProfession = map[int]proto.Profession{
 	393: proto.Profession_Skinning,
 	755: proto.Profession_Jewelcrafting,
 	773: proto.Profession_Inscription,
-	794: proto.Profession_Archeology,
 }
 
 var MapItemSubclassNames = map[ItemSubClass]string{
@@ -123,8 +139,6 @@ var MapSocketTypeToGemColor = map[int]proto.GemColor{
 	2: proto.GemColor_GemColorRed,
 	3: proto.GemColor_GemColorYellow,
 	4: proto.GemColor_GemColorBlue,
-	5: proto.GemColor_GemColorShaTouched,
-	6: proto.GemColor_GemColorCogwheel,
 	7: proto.GemColor_GemColorPrismatic,
 }
 
@@ -272,9 +286,6 @@ var MapPowerTypeEnumToResourceType = map[int32]proto.ResourceType{
 	2: proto.ResourceType_ResourceTypeFocus,
 	3: proto.ResourceType_ResourceTypeEnergy,
 	4: proto.ResourceType_ResourceTypeComboPoints,
-	7: proto.ResourceType_ResourceTypeNone, // Soulshards
-	8: proto.ResourceType_ResourceTypeLunarEnergy,
-	9: proto.ResourceType_ResourceTypeNone, // Holy Power
 }
 
 func ClassNameFromDBC(dbc DbcClass) string {
@@ -338,26 +349,26 @@ func getMatchingRatingMods(value int) []RatingModType {
 }
 
 var RatingModToStat = map[RatingModType]proto.Stat{
-	RATING_MOD_DODGE:        proto.Stat_StatDodgeRating,
-	RATING_MOD_PARRY:        proto.Stat_StatParryRating,
-	RATING_MOD_HIT_MELEE:    proto.Stat_StatHitRating,
-	RATING_MOD_HIT_RANGED:   proto.Stat_StatHitRating,
-	RATING_MOD_HIT_SPELL:    proto.Stat_StatHitRating,
-	RATING_MOD_CRIT_MELEE:   proto.Stat_StatCritRating,
-	RATING_MOD_CRIT_RANGED:  proto.Stat_StatCritRating,
-	RATING_MOD_CRIT_SPELL:   proto.Stat_StatCritRating,
+	RATING_MOD_DODGE:        proto.Stat_StatDodge,
+	RATING_MOD_PARRY:        proto.Stat_StatParry,
+	RATING_MOD_HIT_MELEE:    proto.Stat_StatMeleeHit,
+	RATING_MOD_HIT_RANGED:   proto.Stat_StatMeleeHit,
+	RATING_MOD_HIT_SPELL:    proto.Stat_StatSpellHit,
+	RATING_MOD_CRIT_MELEE:   proto.Stat_StatMeleeCrit,
+	RATING_MOD_CRIT_RANGED:  proto.Stat_StatMeleeCrit,
+	RATING_MOD_CRIT_SPELL:   proto.Stat_StatSpellCrit,
 	RATING_MOD_MULTISTRIKE:  -1,
 	RATING_MOD_READINESS:    -1,
 	RATING_MOD_SPEED:        -1,
-	RATING_MOD_RESILIENCE:   proto.Stat_StatPvpResilienceRating,
+	RATING_MOD_RESILIENCE:   proto.Stat_StatResilience,
 	RATING_MOD_LEECH:        -1,
-	RATING_MOD_HASTE_MELEE:  proto.Stat_StatHasteRating,
-	RATING_MOD_HASTE_RANGED: proto.Stat_StatHasteRating,
-	RATING_MOD_HASTE_SPELL:  proto.Stat_StatHasteRating,
+	RATING_MOD_HASTE_MELEE:  proto.Stat_StatMeleeHaste,
+	RATING_MOD_HASTE_RANGED: proto.Stat_StatMeleeHaste,
+	RATING_MOD_HASTE_SPELL:  proto.Stat_StatSpellHaste,
 	RATING_MOD_AVOIDANCE:    -1,
-	RATING_MOD_EXPERTISE:    proto.Stat_StatExpertiseRating,
-	RATING_MOD_MASTERY:      proto.Stat_StatMasteryRating,
-	RATING_MOD_PVP_POWER:    proto.Stat_StatPvpPowerRating,
+	RATING_MOD_EXPERTISE:    proto.Stat_StatExpertise,
+	RATING_MOD_MASTERY:      -1,
+	RATING_MOD_PVP_POWER:    -1,
 
 	RATING_MOD_VERS_DAMAGE: -1,
 	RATING_MOD_VERS_HEAL:   -1,

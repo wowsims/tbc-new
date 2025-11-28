@@ -1,9 +1,7 @@
 package core
 
 import (
-	"fmt"
 	"math"
-	"strings"
 	"time"
 
 	"github.com/wowsims/tbc/sim/core/proto"
@@ -47,19 +45,19 @@ func (s *UnitStats) ToProto() *proto.UnitStats {
 	}
 }
 
-// Infer missing stat weight values for HitRating and CritRating if school-specific components were calculated, then call ToProto(). Kept as a separate method in case we want to use the UnitStats struct for other applications
-// than just stat weights.
-func (s *UnitStats) ExportWeights() *proto.UnitStats {
-	if s.Stats[stats.HitRating] == 0 {
-		s.Stats[stats.HitRating] = s.PseudoStats[proto.PseudoStat_PseudoStatPhysicalHitPercent]/PhysicalHitRatingPerHitPercent + s.PseudoStats[proto.PseudoStat_PseudoStatSpellHitPercent]/SpellHitRatingPerHitPercent
-	}
+// // Infer missing stat weight values for HitRating and CritRating if school-specific components were calculated, then call ToProto(). Kept as a separate method in case we want to use the UnitStats struct for other applications
+// // than just stat weights.
+// func (s *UnitStats) ExportWeights() *proto.UnitStats {
+// 	if s.Stats[stats.HitRating] == 0 {
+// 		s.Stats[stats.HitRating] = s.PseudoStats[proto.PseudoStat_PseudoStatPhysicalHitPercent]/PhysicalHitRatingPerHitPercent + s.PseudoStats[proto.PseudoStat_PseudoStatSpellHitPercent]/SpellHitRatingPerHitPercent
+// 	}
 
-	if s.Stats[stats.CritRating] == 0 {
-		s.Stats[stats.CritRating] = (s.PseudoStats[proto.PseudoStat_PseudoStatPhysicalCritPercent] + s.PseudoStats[proto.PseudoStat_PseudoStatSpellCritPercent]) / CritRatingPerCritPercent
-	}
+// 	if s.Stats[stats.CritRating] == 0 {
+// 		s.Stats[stats.CritRating] = (s.PseudoStats[proto.PseudoStat_PseudoStatPhysicalCritPercent] + s.PseudoStats[proto.PseudoStat_PseudoStatSpellCritPercent]) / CritRatingPerCritPercent
+// 	}
 
-	return s.ToProto()
-}
+// 	return s.ToProto()
+// }
 
 type StatWeightValues struct {
 	Weights       UnitStats
@@ -79,10 +77,10 @@ func NewStatWeightValues() StatWeightValues {
 
 func (swv *StatWeightValues) ToProto() *proto.StatWeightValues {
 	return &proto.StatWeightValues{
-		Weights:       swv.Weights.ExportWeights(),
-		WeightsStdev:  swv.WeightsStdev.ExportWeights(),
-		EpValues:      swv.EpValues.ExportWeights(),
-		EpValuesStdev: swv.EpValuesStdev.ExportWeights(),
+		Weights:       swv.Weights.ToProto(),
+		WeightsStdev:  swv.WeightsStdev.ToProto(),
+		EpValues:      swv.EpValues.ToProto(),
+		EpValuesStdev: swv.EpValuesStdev.ToProto(),
 	}
 }
 
@@ -158,7 +156,7 @@ func buildStatWeightRequests(swr *proto.StatWeightsRequest) *proto.StatWeightReq
 	}
 
 	// Do half the iterations with a positive, and half with a negative value for better accuracy.
-	const defaultStatMod = 320.0 // match to the impact of a single gem for secondaries
+	const defaultStatMod = 10.0 // match to the impact of a single gem for secondaries
 	statModsLow := make([]float64, stats.UnitStatsLen)
 	statModsHigh := make([]float64, stats.UnitStatsLen)
 
@@ -181,21 +179,21 @@ func buildStatWeightRequests(swr *proto.StatWeightsRequest) *proto.StatWeightReq
 	}
 	for _, s := range swr.PseudoStatsToWeigh {
 		stat := stats.UnitStatFromPseudoStat(s)
-		statName := proto.PseudoStat_name[int32(s)]
+		// statName := proto.PseudoStat_name[int32(s)]
 		// Scale down the stat increment depending on the type of PseudoStat
 		statMod := defaultStatMod
 
-		if stat.EqualsPseudoStat(proto.PseudoStat_PseudoStatPhysicalHitPercent) {
-			statMod /= PhysicalHitRatingPerHitPercent
-		} else if stat.EqualsPseudoStat(proto.PseudoStat_PseudoStatSpellHitPercent) {
-			statMod /= SpellHitRatingPerHitPercent
-		} else if strings.Contains(statName, "Crit") {
-			statMod /= CritRatingPerCritPercent
-		} else if strings.Contains(statName, "Dps") {
-			statMod *= 0.5
-		} else {
-			panic(fmt.Sprintf("Unsupported PseudoStat in stat weights request: %s", statName))
-		}
+		// if stat.EqualsPseudoStat(proto.PseudoStat_PseudoStatPhysicalHitPercent) {
+		// 	statMod /= PhysicalHitRatingPerHitPercent
+		// } else if stat.EqualsPseudoStat(proto.PseudoStat_PseudoStatSpellHitPercent) {
+		// 	statMod /= SpellHitRatingPerHitPercent
+		// } else if strings.Contains(statName, "Crit") {
+		// 	statMod /= CritRatingPerCritPercent
+		// } else if strings.Contains(statName, "Dps") {
+		// 	statMod *= 0.5
+		// } else {
+		// 	panic(fmt.Sprintf("Unsupported PseudoStat in stat weights request: %s", statName))
+		// }
 
 		statModsHigh[stat] = statMod
 		statModsLow[stat] = -statMod
@@ -205,13 +203,13 @@ func buildStatWeightRequests(swr *proto.StatWeightsRequest) *proto.StatWeightReq
 		// avoid unnecessary computations. The base Rating EP will be
 		// reconstructed from the PseudoStat EPs when writing the final
 		// results.
-		if strings.Contains(statName, "Hit") {
-			statModsLow[stats.HitRating] = 0
-			statModsHigh[stats.HitRating] = 0
-		} else if strings.Contains(statName, "Crit") {
-			statModsLow[stats.CritRating] = 0
-			statModsHigh[stats.CritRating] = 0
-		}
+		// if strings.Contains(statName, "Hit") {
+		// 	statModsLow[stats.HitRating] = 0
+		// 	statModsHigh[stats.HitRating] = 0
+		// } else if strings.Contains(statName, "Crit") {
+		// 	statModsLow[stats.CritRating] = 0
+		// 	statModsHigh[stats.CritRating] = 0
+		// }
 
 	}
 

@@ -17,7 +17,6 @@ func init() {
 		Items:                    make([]*proto.SimItem, len(db.Items)),
 		Enchants:                 make([]*proto.SimEnchant, len(db.Enchants)),
 		Gems:                     make([]*proto.SimGem, len(db.Gems)),
-		ReforgeStats:             make([]*proto.ReforgeStat, len(db.ReforgeStats)),
 		ItemEffectRandPropPoints: make([]*proto.ItemEffectRandPropPoints, len(db.ItemEffectRandPropPoints)),
 		RandomSuffixes:           make([]*proto.ItemRandomSuffix, len(db.RandomSuffixes)),
 		Consumables:              make([]*proto.Consumable, len(db.Consumables)),
@@ -68,15 +67,6 @@ func init() {
 			Color:                   gem.Color,
 			Stats:                   gem.Stats,
 			DisabledInChallengeMode: gem.DisabledInChallengeMode,
-		}
-	}
-
-	for i, reforgeStat := range db.ReforgeStats {
-		simDB.ReforgeStats[i] = &proto.ReforgeStat{
-			Id:         reforgeStat.Id,
-			FromStat:   reforgeStat.FromStat,
-			ToStat:     reforgeStat.ToStat,
-			Multiplier: reforgeStat.Multiplier,
 		}
 	}
 

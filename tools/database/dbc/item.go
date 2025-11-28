@@ -22,6 +22,7 @@ type Item struct {
 	ItemSubClass           int
 	StatAlloc              []float64
 	BonusStat              []int
+	ArmorValue             int
 	SocketEnchantmentId    int
 	Flags0                 ItemStaticFlags0
 	Flags1                 ItemStaticFlags1
@@ -82,7 +83,7 @@ func (item *Item) ToScaledUIItem(itemLevel int) *proto.UIItem {
 	}
 
 	// Append base itemlevel stats
-	scalingProperties[int32(proto.ItemLevelState_Base)] = &proto.ScalingItemProperties{
+	scalingProperties[int32(0)] = &proto.ScalingItemProperties{
 		WeaponDamageMin: item.WeaponDmgMin(item.ItemLevel),
 		WeaponDamageMax: item.WeaponDmgMax(item.ItemLevel),
 		Stats:           item.GetStats(item.ItemLevel).ToProtoMap(),
@@ -90,30 +91,6 @@ func (item *Item) ToScaledUIItem(itemLevel int) *proto.UIItem {
 		Ilvl:            int32(item.ItemLevel),
 	}
 
-	// In P2 of MoP it is expected to be 2 steps
-	if item.CanUpgrade() {
-		for step, ilvl := range item.UpgradePath[1:] {
-			upgradedIlvl := item.ItemLevel + ilvl
-			upgradeStep := proto.ItemLevelState(step + 1)
-			scalingProperties[int32(upgradeStep)] = &proto.ScalingItemProperties{
-				WeaponDamageMin: item.WeaponDmgMin(upgradedIlvl),
-				WeaponDamageMax: item.WeaponDmgMax(upgradedIlvl),
-				Stats:           item.GetStats(upgradedIlvl).ToProtoMap(),
-				RandPropPoints:  item.GetRandPropPoints(upgradedIlvl),
-				Ilvl:            int32(upgradedIlvl),
-			}
-		}
-	}
-
-	if item.GetMaxIlvl() > core.MaxChallengeModeIlvl {
-		scalingProperties[int32(proto.ItemLevelState_ChallengeMode)] = &proto.ScalingItemProperties{
-			WeaponDamageMin: item.WeaponDmgMin(core.MaxChallengeModeIlvl),
-			WeaponDamageMax: item.WeaponDmgMax(core.MaxChallengeModeIlvl),
-			Stats:           item.GetStats(core.MaxChallengeModeIlvl).ToProtoMap(),
-			RandPropPoints:  item.GetRandPropPoints(core.MaxChallengeModeIlvl),
-			Ilvl:            core.MaxChallengeModeIlvl,
-		}
-	}
 	uiItem.ScalingOptions = scalingProperties
 	return uiItem
 }
@@ -276,47 +253,50 @@ func (item *Item) ApproximateScaleCoeff(currIlvl int, newIlvl int) float64 {
 }
 
 func (item *Item) GetArmorValue(itemLevel int) int {
-	if item.Id == 0 || item.OverallQuality > 5 {
-		return 0
-	}
-	ilvl := 0
-	if itemLevel > 0 {
-		ilvl = itemLevel
-	} else {
-		ilvl = item.ItemLevel
-	}
+	// TBC Stores ArmorValue in the Resistance_0 item column
+	return item.ArmorValue
 
-	if item.ItemClass == ITEM_CLASS_ARMOR && item.ItemSubClass == ITEM_SUBCLASS_ARMOR_SHIELD {
-		return int(math.Floor(GetDBC().ItemArmorShield[ilvl].Quality[item.OverallQuality] + 0.5))
-	}
+	// if item.Id == 0 || item.OverallQuality > 5 {
+	// 	return 0
+	// }
+	// ilvl := 0
+	// if itemLevel > 0 {
+	// 	ilvl = itemLevel
+	// } else {
+	// 	ilvl = item.ItemLevel
+	// }
 
-	if item.ItemSubClass == ITEM_SUBCLASS_ARMOR_MISC || item.ItemSubClass > ITEM_SUBCLASS_ARMOR_PLATE {
-		return 0
-	}
-	total_armor := 0.0
-	quality := 0.0
-	//	3688.5300292969 * 1.37000000477 * 0.15999999642
-	armorModifier := GetDBC().ArmorLocation[item.InventoryType] //	0.15999999642 	3688.5300292969 	1.37000000477
-	if item.InventoryType == INVTYPE_ROBE {
-		armorModifier = GetDBC().ArmorLocation[INVTYPE_CHEST]
-	}
-	switch item.InventoryType {
-	case INVTYPE_HEAD, INVTYPE_SHOULDERS, INVTYPE_CHEST, INVTYPE_WAIST, INVTYPE_LEGS, INVTYPE_FEET, INVTYPE_WRISTS, INVTYPE_HANDS, INVTYPE_CLOAK, INVTYPE_ROBE:
-		switch item.ItemSubClass {
-		case ITEM_SUBCLASS_ARMOR_CLOTH:
-			total_armor = GetDBC().ItemArmorTotal[ilvl].Cloth
-		case ITEM_SUBCLASS_ARMOR_LEATHER:
-			total_armor = GetDBC().ItemArmorTotal[ilvl].Leather
-		case ITEM_SUBCLASS_ARMOR_MAIL:
-			total_armor = GetDBC().ItemArmorTotal[ilvl].Mail
-		case ITEM_SUBCLASS_ARMOR_PLATE:
-			total_armor = GetDBC().ItemArmorTotal[ilvl].Plate
-		}
-		quality = GetDBC().ItemArmorQuality[ilvl].Quality[item.OverallQuality]
-	default:
-		return 0
-	}
-	return int(math.Floor(total_armor*quality*armorModifier.Modifier[item.ItemSubClass-1] + 0.5))
+	// if item.ItemClass == ITEM_CLASS_ARMOR && item.ItemSubClass == ITEM_SUBCLASS_ARMOR_SHIELD {
+	// 	return item.ArmorValue
+	// }
+
+	// if item.ItemSubClass == ITEM_SUBCLASS_ARMOR_MISC || item.ItemSubClass > ITEM_SUBCLASS_ARMOR_PLATE {
+	// 	return 0
+	// }
+	// total_armor := 0.0
+	// quality := 0.0
+	// //	3688.5300292969 * 1.37000000477 * 0.15999999642
+	// armorModifier := GetDBC().ArmorLocation[item.InventoryType] //	0.15999999642 	3688.5300292969 	1.37000000477
+	// if item.InventoryType == INVTYPE_ROBE {
+	// 	armorModifier = GetDBC().ArmorLocation[INVTYPE_CHEST]
+	// }
+	// switch item.InventoryType {
+	// case INVTYPE_HEAD, INVTYPE_SHOULDERS, INVTYPE_CHEST, INVTYPE_WAIST, INVTYPE_LEGS, INVTYPE_FEET, INVTYPE_WRISTS, INVTYPE_HANDS, INVTYPE_CLOAK, INVTYPE_ROBE:
+	// 	switch item.ItemSubClass {
+	// 	case ITEM_SUBCLASS_ARMOR_CLOTH:
+	// 		total_armor = GetDBC().ItemArmorTotal[ilvl].Cloth
+	// 	case ITEM_SUBCLASS_ARMOR_LEATHER:
+	// 		total_armor = GetDBC().ItemArmorTotal[ilvl].Leather
+	// 	case ITEM_SUBCLASS_ARMOR_MAIL:
+	// 		total_armor = GetDBC().ItemArmorTotal[ilvl].Mail
+	// 	case ITEM_SUBCLASS_ARMOR_PLATE:
+	// 		total_armor = GetDBC().ItemArmorTotal[ilvl].Plate
+	// 	}
+	// 	quality = GetDBC().ItemArmorQuality[ilvl].Quality[item.OverallQuality]
+	// default:
+	// 	return 0
+	// }
+	// return int(math.Floor(total_armor*quality*armorModifier.Modifier[item.ItemSubClass-1] + 0.5))
 }
 
 func (item *Item) GetWeaponTypes() (proto.WeaponType, proto.HandType, proto.RangedWeaponType) {

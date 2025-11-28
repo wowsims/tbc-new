@@ -144,8 +144,6 @@ func (rot *APLRotation) newAPLValueWithContext(config *proto.APLValue, groupVari
 		value = rot.newValueEnergyTimeToTarget(config.GetEnergyTimeToTarget(), config.Uuid)
 	case *proto.APLValue_FocusTimeToTarget:
 		value = rot.newValueFocusTimeToTarget(config.GetFocusTimeToTarget(), config.Uuid)
-	case *proto.APLValue_CurrentGenericResource:
-		value = rot.newValueCurrentGenericResource(config.GetCurrentGenericResource(), config.Uuid)
 
 	// Unit
 	case *proto.APLValue_UnitIsMoving:

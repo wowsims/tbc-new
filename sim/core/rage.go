@@ -83,12 +83,11 @@ func (unit *Unit) EnableRageBar(options RageBarOptions) {
 	maxRage := max(100.0, options.MaxRage)
 
 	unit.rageBar = rageBar{
-		unit:                  unit,
-		maxRage:               maxRage,
-		totalRageMultiplier:   1.0,
-		startingHitFactor:     BaseRageHitFactor * options.BaseRageMultiplier,
-		RageRefundMetrics:     unit.NewRageMetrics(ActionID{OtherID: proto.OtherAction_OtherActionRefund}),
-		EncounterStartMetrics: unit.NewRageMetrics(encounterStartActionID),
+		unit:                unit,
+		maxRage:             maxRage,
+		totalRageMultiplier: 1.0,
+		startingHitFactor:   BaseRageHitFactor * options.BaseRageMultiplier,
+		RageRefundMetrics:   unit.NewRageMetrics(ActionID{OtherID: proto.OtherAction_OtherActionRefund}),
 	}
 }
 

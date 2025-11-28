@@ -142,12 +142,13 @@ func makeStatInheritanceFunc(nonHitExpStatInheritance PetStatInheritance) PetSta
 	return func(ownerStats stats.Stats) stats.Stats {
 		inheritedStats := nonHitExpStatInheritance(ownerStats)
 
-		hitRating := ownerStats[stats.HitRating]
-		expertiseRating := ownerStats[stats.ExpertiseRating]
-		combined := (hitRating + expertiseRating) * 0.5
+		// TODO: I dunno how this works in TBC
+		// hitRating := ownerStats[stats.HitRating]
+		// expertiseRating := ownerStats[stats.ExpertiseRating]
+		// combined := (hitRating + expertiseRating) * 0.5
 
-		inheritedStats[stats.HitRating] = combined
-		inheritedStats[stats.ExpertiseRating] = combined
+		// inheritedStats[stats.HitRating] = combined
+		// inheritedStats[stats.ExpertiseRating] = combined
 
 		return inheritedStats
 	}

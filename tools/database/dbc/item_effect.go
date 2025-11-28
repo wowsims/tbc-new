@@ -69,50 +69,13 @@ func assignTrigger(e *ItemEffect, statsSpellID int, pe *proto.ItemEffect) {
 			IcdMs: spTop.ProcCategoryRecovery,
 		}
 
-		// if we have a PPM value given, that must be RPPM
-		// There is no item with both a Haste and a Crit modifier
-		if spTop.SpellProcsPerMinute > 0 {
-			mods := []*proto.RppmMod{}
-			for _, mod := range spTop.RppmModifiers {
-				switch mod.ModifierType {
-				case RPPMModifierHaste:
-					mods = append(mods, &proto.RppmMod{ModType: &proto.RppmMod_Haste{}, Coefficient: mod.Coeff})
-				case RPPMModifierCrit:
-					mods = append(mods, &proto.RppmMod{ModType: &proto.RppmMod_Crit{}, Coefficient: mod.Coeff})
-				case RPPMModifierSpec:
-					mods = append(mods, &proto.RppmMod{ModType: &proto.RppmMod_Spec{Spec: SpecFromID(mod.Param)}, Coefficient: mod.Coeff})
-				case RPPMModifierClass:
-					mods = append(mods, &proto.RppmMod{ModType: &proto.RppmMod_ClassMask{ClassMask: mod.Param}, Coefficient: mod.Coeff})
-				case RPPMModifierIlevel:
-					mods = append(mods, &proto.RppmMod{ModType: &proto.RppmMod_Ilvl{Ilvl: mod.Param}, Coefficient: mod.Coeff})
-				}
-			}
-
-			proc.ProcRate = &proto.ProcEffect_Rppm{
-				Rppm: &proto.RppmProc{
-					Rate: float64(spTop.SpellProcsPerMinute),
-					Mods: mods,
-				},
-			}
-
-			// If proc chance is above 100 something weird is happening so we set ppm to 1 since we cant accurately proc it 100% of the time
-		} else if spTop.ProcChance == 0 || spTop.ProcChance > 100 {
-			proc.ProcRate = &proto.ProcEffect_Ppm{
-				Ppm: 1,
-			}
-		} else {
-			proc.ProcRate = &proto.ProcEffect_ProcChance{
-				ProcChance: float64(spTop.ProcChance) / 100,
-			}
-		}
-
 		pe.BuffId = statsSP.ID
 		pe.BuffName = statsSP.NameLang
 		pe.Effect = &proto.ItemEffect_Proc{Proc: proc}
 	}
 }
 
-func (e *ItemEffect) ToProto(itemLevel int, levelState proto.ItemLevelState) (*proto.ItemEffect, bool) {
+func (e *ItemEffect) ToProto(itemLevel int) (*proto.ItemEffect, bool) {
 	statsSpellID := resolveStatsSpell(e.SpellID)
 
 	pe := makeBaseProto(e, statsSpellID)
@@ -125,7 +88,7 @@ func (e *ItemEffect) ToProto(itemLevel int, levelState proto.ItemLevelState) (*p
 		return nil, false
 	}
 
-	pe.ScalingOptions[int32(levelState)] = props
+	pe.ScalingOptions[int32(0)] = props
 
 	return pe, true
 }
@@ -210,11 +173,11 @@ func collectStats(spellID, itemLevel int) stats.Stats {
 	return total
 }
 
-func ParseItemEffects(itemID, itemLevel int, levelState proto.ItemLevelState) []*proto.ItemEffect {
+func ParseItemEffects(itemID, itemLevel int) []*proto.ItemEffect {
 	raw := dbcInstance.ItemEffectsByParentID[itemID]
 	out := make([]*proto.ItemEffect, 0, len(raw))
 	for _, ie := range raw {
-		if pe, ok := ie.ToProto(itemLevel, levelState); ok {
+		if pe, ok := ie.ToProto(itemLevel); ok {
 			out = append(out, pe)
 		}
 	}
@@ -237,7 +200,7 @@ func MergeItemEffectsForAllStates(parsed *proto.UIItem) *proto.ItemEffect {
 	for i := range dbcInstance.ItemEffectsByParentID[int(parsed.Id)] {
 
 		e := &dbcInstance.ItemEffectsByParentID[int(parsed.Id)][i]
-		props := buildScalingProps(resolveStatsSpell(e.SpellID), int(parsed.ScalingOptions[int32(proto.ItemLevelState_Base)].Ilvl), e.SpellID)
+		props := buildScalingProps(resolveStatsSpell(e.SpellID), int(parsed.ScalingOptions[int32(0)].Ilvl), e.SpellID)
 		if len(props.Stats) > 0 {
 			baseEff = e
 			break

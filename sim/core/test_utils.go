@@ -52,41 +52,41 @@ func FreshDefaultTargetConfig() *proto.Target {
 var DefaultTargetProto = FreshDefaultTargetConfig()
 
 var FullRaidBuffs = &proto.RaidBuffs{
-	// +10% Attack Power
-	TrueshotAura: true, // Hunters
+	// // +10% Attack Power
+	// TrueshotAura: true, // Hunters
 
-	// +10% Melee & Ranged Attack Speed
-	UnholyAura: true, // Frost/Unholy DKs
+	// // +10% Melee & Ranged Attack Speed
+	// UnholyAura: true, // Frost/Unholy DKs
 
-	// +10% Spell Power
-	ArcaneBrilliance: true, // Mages
+	// // +10% Spell Power
+	// ArcaneBrilliance: true, // Mages
 
-	// +5% Spell Haste
-	ShadowForm: true, // Shadow Priests
+	// // +5% Spell Haste
+	// ShadowForm: true, // Shadow Priests
 
-	// +5% Critical Strike Chance
-	LeaderOfThePack: true, // Feral/Guardian Druids
+	// // +5% Critical Strike Chance
+	// LeaderOfThePack: true, // Feral/Guardian Druids
 
-	// +3000 Mastery Rating
-	BlessingOfMight: true, // Paladins
+	// // +3000 Mastery Rating
+	// BlessingOfMight: true, // Paladins
 
-	// +5% Strength, Agility, Intellect
-	BlessingOfKings: true, // Paladins
+	// // +5% Strength, Agility, Intellect
+	// BlessingOfKings: true, // Paladins
 
-	// +10% Stamina
-	PowerWordFortitude: true, // Priests
+	// // +10% Stamina
+	// PowerWordFortitude: true, // Priests
 
-	// Major Haste
-	Bloodlust: true,
+	// // Major Haste
+	// Bloodlust: true,
 
-	// Major Mana Replenishment
-	ManaTideTotemCount: 1, // Shamans
+	// // Major Mana Replenishment
+	// ManaTideTotemCount: 1, // Shamans
 
-	// Crit Damage %
-	SkullBannerCount: 1, // Warrior
+	// // Crit Damage %
+	// SkullBannerCount: 1, // Warrior
 
-	// Additional Nature Damage Proc
-	StormlashTotemCount: 1, // Shaman
+	// // Additional Nature Damage Proc
+	// StormlashTotemCount: 1, // Shaman
 }
 
 var FullPartyBuffs = &proto.PartyBuffs{}
@@ -94,20 +94,20 @@ var FullPartyBuffs = &proto.PartyBuffs{}
 var FullIndividualBuffs = &proto.IndividualBuffs{}
 
 var FullDebuffs = &proto.Debuffs{
-	WeakenedBlows:         true,
-	PhysicalVulnerability: true,
-	WeakenedArmor:         true,
-	MortalWounds:          true,
-	FireBreath:            true,
-	LightningBreath:       true,
-	MasterPoisoner:        true,
-	CurseOfElements:       true,
-	NecroticStrike:        true,
-	LavaBreath:            true,
-	SporeCloud:            true,
-	Slow:                  true,
-	MindNumbingPoison:     true,
-	CurseOfEnfeeblement:   true,
+	// WeakenedBlows:         true,
+	// PhysicalVulnerability: true,
+	// WeakenedArmor:         true,
+	// MortalWounds:          true,
+	// FireBreath:            true,
+	// LightningBreath:       true,
+	// MasterPoisoner:        true,
+	// CurseOfElements:       true,
+	// NecroticStrike:        true,
+	// LavaBreath:            true,
+	// SporeCloud:            true,
+	// Slow:                  true,
+	// MindNumbingPoison:     true,
+	// CurseOfEnfeeblement:   true,
 }
 
 func NewDefaultTarget() *proto.Target {

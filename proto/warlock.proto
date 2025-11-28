@@ -6,24 +6,6 @@ option go_package = "./proto";
 // BEGIN GENERATED
 // WarlockTalents message.
 message WarlockTalents {
-    bool dark_regeneration = 1;
-    bool soul_leech = 2;
-    bool harvest_life = 3;
-    bool demonic_breath = 4;
-    bool mortal_coil = 5;
-    bool shadowfury = 6;
-    bool soul_link = 7;
-    bool sacrificial_pact = 8;
-    bool dark_bargain = 9;
-    bool blood_horror = 10;
-    bool burning_rush = 11;
-    bool unbound_will = 12;
-    bool grimoire_of_supremacy = 13;
-    bool grimoire_of_service = 14;
-    bool grimoire_of_sacrifice = 15;
-    bool archimondes_darkness = 16;
-    bool kiljaedens_cunning = 17;
-    bool mannoroths_fury = 18;
 }
 
 // END GENERATED

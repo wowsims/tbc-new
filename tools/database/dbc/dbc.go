@@ -19,13 +19,13 @@ type DBC struct {
 	ItemDamageTable        map[string]map[int]ItemDamageTable // By Table name and item level
 	RandomPropertiesByIlvl map[int]RandomPropAllocationMap
 	ItemArmorQuality       map[int]ItemArmorQuality
-	ItemArmorShield        map[int]ItemArmorShield
-	ItemArmorTotal         map[int]ItemArmorTotal
-	ArmorLocation          map[int]ArmorLocation
-	SpellScalings          map[int]SpellScaling
-	Consumables            map[int]Consumable   // Item ID
-	ItemEffects            map[int]ItemEffect   // Effect ID
-	ItemEffectsByParentID  map[int][]ItemEffect // ParentItemID
+	//ItemArmorShield        map[int]ItemArmorShield
+	ItemArmorTotal        map[int]ItemArmorTotal
+	ArmorLocation         map[int]ArmorLocation
+	SpellScalings         map[int]SpellScaling
+	Consumables           map[int]Consumable   // Item ID
+	ItemEffects           map[int]ItemEffect   // Effect ID
+	ItemEffectsByParentID map[int][]ItemEffect // ParentItemID
 }
 
 func NewDBC() *DBC {
@@ -41,13 +41,13 @@ func NewDBC() *DBC {
 		ItemDamageTable:        make(map[string]map[int]ItemDamageTable),
 		RandomPropertiesByIlvl: make(map[int]RandomPropAllocationMap),
 		ItemArmorQuality:       make(map[int]ItemArmorQuality),
-		ItemArmorShield:        make(map[int]ItemArmorShield),
-		ItemArmorTotal:         make(map[int]ItemArmorTotal),
-		ArmorLocation:          make(map[int]ArmorLocation),
-		Consumables:            make(map[int]Consumable),
-		ItemEffects:            make(map[int]ItemEffect),
-		SpellScalings:          make(map[int]SpellScaling),
-		ItemEffectsByParentID:  make(map[int][]ItemEffect),
+		//ItemArmorShield:        make(map[int]ItemArmorShield),
+		ItemArmorTotal:        make(map[int]ItemArmorTotal),
+		ArmorLocation:         make(map[int]ArmorLocation),
+		Consumables:           make(map[int]Consumable),
+		ItemEffects:           make(map[int]ItemEffect),
+		SpellScalings:         make(map[int]SpellScaling),
+		ItemEffectsByParentID: make(map[int][]ItemEffect),
 	}
 }
 
@@ -89,9 +89,9 @@ func InitDBC() error {
 	if err := dbcInstance.LoadItemArmorTotal("./assets/db_inputs/dbc/item_armor_total.json"); err != nil {
 		return fmt.Errorf("loading item armor total: %w", err)
 	}
-	if err := dbcInstance.LoadItemArmorShield("./assets/db_inputs/dbc/item_armor_shield.json"); err != nil {
-		return fmt.Errorf("loading item armor shield: %w", err)
-	}
+	// if err := dbcInstance.LoadItemArmorShield("./assets/db_inputs/dbc/item_armor_shield.json"); err != nil {
+	// 	return fmt.Errorf("loading item armor shield: %w", err)
+	// }
 	if err := dbcInstance.LoadArmorLocation("./assets/db_inputs/dbc/armor_location.json"); err != nil {
 		return fmt.Errorf("loading armor location: %w", err)
 	}
@@ -378,24 +378,25 @@ func (d *DBC) LoadArmorLocation(filename string) error {
 	d.ArmorLocation = tables
 	return nil
 }
-func (d *DBC) LoadItemArmorShield(filename string) error {
-	data, err := ReadGzipFile(filename)
-	if err != nil {
-		return err
-	}
 
-	var tables map[int]ItemArmorShield
-	if err = json.Unmarshal(data, &tables); err != nil {
-		return ParseError{
-			Source: filename,
-			Field:  "ItemArmorShield",
-			Reason: err.Error(),
-		}
-	}
+// func (d *DBC) LoadItemArmorShield(filename string) error {
+// 	data, err := ReadGzipFile(filename)
+// 	if err != nil {
+// 		return err
+// 	}
 
-	d.ItemArmorShield = tables
-	return nil
-}
+// 	var tables map[int]ItemArmorShield
+// 	if err = json.Unmarshal(data, &tables); err != nil {
+// 		return ParseError{
+// 			Source: filename,
+// 			Field:  "ItemArmorShield",
+// 			Reason: err.Error(),
+// 		}
+// 	}
+
+// 	d.ItemArmorShield = tables
+// 	return nil
+// }
 
 func (d *DBC) LoadItemArmorTotal(filename string) error {
 	data, err := ReadGzipFile(filename)

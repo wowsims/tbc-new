@@ -64,7 +64,8 @@ enum ResourceType {
 	ResourceTypeMana = 1;
 	ResourceTypeEnergy = 2;
 	ResourceTypeRage = 3;
-	ResourceTypeComboPoints = 4;
-	ResourceTypeHealth = 5;
-	ResourceTypeGenericResource = 6;
+	ResourceTypeFocus = 4;
+	ResourceTypeComboPoints = 5;
+	ResourceTypeHealth = 6;
+	ResourceTypeGenericResource = 7;
 }

@@ -119,8 +119,6 @@ type Unit struct {
 	energyBar
 	focusBar
 
-	secondaryResourceBar SecondaryResourceBar
-
 	// All spells that can be cast by this unit.
 	Spellbook                 []*Spell
 	spellRegistrationHandlers []SpellRegisteredHandler
@@ -265,9 +263,6 @@ func (unit *Unit) GetHighestStatType(statTypeOptions []stats.Stat) stats.Stat {
 func (unit *Unit) GetStat(stat stats.Stat) float64 {
 	return unit.stats[stat]
 }
-func (unit *Unit) GetMasteryPoints() float64 {
-	return MasteryRatingToMasteryPoints(unit.GetStat(stats.MasteryRating))
-}
 func (unit *Unit) AddStats(stat stats.Stats) {
 	if unit.Env != nil && unit.Env.IsFinalized() {
 		panic("Already finalized, use AddStatsDynamic instead!")
@@ -373,21 +368,13 @@ func (unit *Unit) processDynamicBonus(sim *Simulation, bonus stats.Stats) {
 			unit.currentMana = unit.MaxMana()
 		}
 	}
-	if bonus[stats.HasteRating] != 0 {
+	if bonus[stats.MeleeHaste] != 0 {
 		unit.updateAttackSpeed()
 		unit.updateMeleeAndRangedHaste()
 		unit.AutoAttacks.UpdateSwingTimers(sim)
-		unit.energyBar.processDynamicHasteRatingChange(sim)
-		unit.focusBar.processDynamicHasteRatingChange(sim)
-		unit.updateCastSpeed()
 	}
-	if bonus[stats.MasteryRating] != 0 {
-		newMasteryRating := unit.stats[stats.MasteryRating]
-		oldMasteryRating := newMasteryRating - bonus[stats.MasteryRating]
-
-		for i := range unit.OnMasteryStatChanged {
-			unit.OnMasteryStatChanged[i](sim, oldMasteryRating, newMasteryRating)
-		}
+	if bonus[stats.SpellHaste] != 0 {
+		unit.updateCastSpeed()
 	}
 
 	// Higher performance than calling TriggerDelayedPetInheritance()
@@ -497,7 +484,7 @@ func (unit *Unit) SpellGCD() time.Duration {
 }
 
 func (unit *Unit) TotalSpellHasteMultiplier() float64 {
-	return unit.PseudoStats.CastSpeedMultiplier * (1 + unit.stats[stats.HasteRating]/(HasteRatingPerHastePercent*100))
+	return unit.PseudoStats.CastSpeedMultiplier * (1 + unit.stats[stats.SpellHaste]/(SpellHasteRatingPerHastePercent*100))
 }
 
 func (unit *Unit) updateCastSpeed() {
@@ -539,17 +526,17 @@ func (unit *Unit) ApplyRealRangedHaste(dur time.Duration) time.Duration {
 	return time.Duration(float64(dur) / unit.TotalRealRangedHasteMultiplier())
 }
 func (unit *Unit) TotalMeleeHasteMultiplier() float64 {
-	return unit.PseudoStats.AttackSpeedMultiplier * unit.PseudoStats.MeleeSpeedMultiplier * (1 + (unit.stats[stats.HasteRating] / (HasteRatingPerHastePercent * 100)))
+	return unit.PseudoStats.AttackSpeedMultiplier * unit.PseudoStats.MeleeSpeedMultiplier * (1 + (unit.stats[stats.MeleeHaste] / (PhysicalHasteRatingPerHastePercent * 100)))
 }
 
 // Returns the melee haste multiplier only including equip haste and real haste modifiers like lust
 // Same value for ranged and melee
 func (unit *Unit) TotalRealHasteMultiplier() float64 {
-	return unit.PseudoStats.AttackSpeedMultiplier * (1 + (unit.stats[stats.HasteRating] / (HasteRatingPerHastePercent * 100)))
+	return unit.PseudoStats.AttackSpeedMultiplier * (1 + (unit.stats[stats.MeleeHaste] / (PhysicalHasteRatingPerHastePercent * 100)))
 }
 
 func (unit *Unit) TotalRealRangedHasteMultiplier() float64 {
-	return unit.PseudoStats.AttackSpeedMultiplier * unit.PseudoStats.RangedHasteMultiplier * (1 + (unit.stats[stats.HasteRating] / (HasteRatingPerHastePercent * 100)))
+	return unit.PseudoStats.AttackSpeedMultiplier * unit.PseudoStats.RangedHasteMultiplier * (1 + (unit.stats[stats.MeleeHaste] / (PhysicalHasteRatingPerHastePercent * 100)))
 }
 
 func (unit *Unit) Armor() float64 {
@@ -561,7 +548,7 @@ func (unit *Unit) BlockDamageReduction() float64 {
 }
 
 func (unit *Unit) TotalRangedHasteMultiplier() float64 {
-	return unit.PseudoStats.AttackSpeedMultiplier * unit.PseudoStats.RangedSpeedMultiplier * (1 + (unit.stats[stats.HasteRating] / (HasteRatingPerHastePercent * 100)))
+	return unit.PseudoStats.AttackSpeedMultiplier * unit.PseudoStats.RangedSpeedMultiplier * (1 + (unit.stats[stats.MeleeHaste] / (PhysicalHasteRatingPerHastePercent * 100)))
 }
 
 func (unit *Unit) updateMeleeAttackSpeed() {
@@ -688,11 +675,11 @@ func (unit *Unit) GetCurrentPowerBar() PowerBarType {
 // Stat dependencies that apply both to players/pets (represented as Character
 // structs) and to NPCs (represented as Target structs).
 func (unit *Unit) addUniversalStatDependencies() {
-	unit.AddStatDependency(stats.HitRating, stats.PhysicalHitPercent, 1/PhysicalHitRatingPerHitPercent)
-	unit.AddStatDependency(stats.HitRating, stats.SpellHitPercent, 1/SpellHitRatingPerHitPercent)
-	unit.AddStatDependency(stats.ExpertiseRating, stats.SpellHitPercent, 1/SpellHitRatingPerHitPercent)
-	unit.AddStatDependency(stats.CritRating, stats.PhysicalCritPercent, 1/CritRatingPerCritPercent)
-	unit.AddStatDependency(stats.CritRating, stats.SpellCritPercent, 1/CritRatingPerCritPercent)
+	// unit.AddStatDependency(stats.HitRating, stats.PhysicalHitPercent, 1/PhysicalHitRatingPerHitPercent)
+	// unit.AddStatDependency(stats.HitRating, stats.SpellHitPercent, 1/SpellHitRatingPerHitPercent)
+	// unit.AddStatDependency(stats.ExpertiseRating, stats.SpellHitPercent, 1/SpellHitRatingPerHitPercent)
+	// unit.AddStatDependency(stats.CritRating, stats.PhysicalCritPercent, 1/CritRatingPerCritPercent)
+	// unit.AddStatDependency(stats.CritRating, stats.SpellCritPercent, 1/CritRatingPerCritPercent)
 }
 
 func (unit *Unit) finalize() {
@@ -770,10 +757,6 @@ func (unit *Unit) reset(sim *Simulation, _ Agent) {
 
 	unit.energyBar.reset(sim)
 	unit.rageBar.reset(sim)
-
-	if unit.secondaryResourceBar != nil {
-		unit.secondaryResourceBar.Reset(sim)
-	}
 
 	unit.AutoAttacks.reset(sim)
 
