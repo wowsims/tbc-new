@@ -6,6 +6,70 @@ option go_package = "./proto";
 // BEGIN GENERATED
 // ShamanTalents message.
 message ShamanTalents {
+    // Elemental
+    int32 convection = 1;
+    int32 concussion = 2;
+    int32 earths_grasp = 3;
+    int32 elemental_warding = 4;
+    int32 call_of_flame = 5;
+    bool elemental_focus = 6;
+    int32 reverberation = 7;
+    int32 call_of_thunder = 8;
+    int32 improved_fire_totems = 9;
+    int32 eye_of_the_storm = 10;
+    int32 elemental_devastation = 11;
+    int32 storm_reach = 12;
+    bool elemental_fury = 13;
+    int32 unrelenting_storm = 14;
+    int32 elemental_precision = 15;
+    int32 lightning_mastery = 16;
+    bool elemental_mastery = 17;
+    int32 elemental_shields = 18;
+    int32 lightning_overload = 19;
+    bool totem_of_wrath = 20;
+    // Enhancement
+    int32 ancestral_knowledge = 21;
+    int32 shield_specialization = 22;
+    int32 guardian_totems = 23;
+    int32 thundering_strikes = 24;
+    int32 improved_ghost_wolf = 25;
+    int32 improved_lightning_shield = 26;
+    int32 enhancing_totems = 27;
+    bool shamanistic_focus = 28;
+    int32 anticipation = 29;
+    int32 flurry = 30;
+    int32 toughness = 31;
+    int32 improved_weapon_totems = 32;
+    bool spirit_weapons = 33;
+    int32 elemental_weapons = 34;
+    int32 mental_quickness = 35;
+    int32 weapon_mastery = 36;
+    int32 dual_wield_specialization = 37;
+    bool dual_wield = 38;
+    bool stormstrike = 39;
+    int32 unleashed_rage = 40;
+    bool shamanistic_rage = 41;
+    // Restoration
+    int32 improved_healing_wave = 42;
+    int32 tidal_focus = 43;
+    int32 improved_reincarnation = 44;
+    int32 ancestral_healing = 45;
+    int32 totemic_focus = 46;
+    int32 natures_guidance = 47;
+    int32 healing_focus = 48;
+    bool totemic_mastery = 49;
+    int32 healing_grace = 50;
+    int32 restorative_totems = 51;
+    int32 tidal_mastery = 52;
+    int32 healing_way = 53;
+    bool natures_swiftness = 54;
+    int32 focused_mind = 55;
+    int32 purification = 56;
+    bool mana_tide_totem = 57;
+    int32 natures_guardian = 58;
+    int32 natures_blessing = 59;
+    int32 improved_chain_heal = 60;
+    bool earth_shield = 61;
 }
 
 // END GENERATED

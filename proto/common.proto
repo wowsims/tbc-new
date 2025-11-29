@@ -195,9 +195,9 @@ enum Stat {
 	StatShadowPower = 13;
 
 	// Caster Secondaries
-	StatSpellHit = 14;
-	StatSpellCrit = 15;
-	StatSpellHaste = 16;
+	StatSpellHitRating = 14;
+	StatSpellCritRating = 15;
+	StatSpellHasteRating = 16;
 	StatSpellPenetration = 17;
 	StatSpirit = 18;
 
@@ -205,38 +205,43 @@ enum Stat {
 	StatAttackPower = 19;
 	StatRangedAttackPower = 20;
 	StatFeralAttackPower = 21;
-	StatMeleeHit = 22;
-	StatMeleeCrit = 23;
-	StatMeleeHaste = 24;
+	StatMeleeHitRating = 22;
+	StatMeleeCritRating = 23;
+	StatMeleeHasteRating = 24;
 	StatArmorPenetration = 25;
-	StatExpertise = 26;
+	StatExpertiseRating = 26;
+
+	// All-School Secondaries
+	StatAllHitRating = 27;
+	StatAllCritRating = 28;
+	StatAllHasteRating = 29;
 
 	// Tank Secondaries
-	StatDefense = 27;
-	StatBlock = 28;
-	StatBlockValue = 29;
-	StatDodge = 30;
-	StatParry = 31;
-	StatResilience = 32;
-	StatArmor = 33;
-	StatBonusArmor = 34;
+	StatDefenseRating = 30;
+	StatBlockRating = 31;
+	StatBlockValue = 32;
+	StatDodgeRating = 33;
+	StatParryRating = 34;
+	StatResilience = 35;
+	StatArmor = 36;
+	StatBonusArmor = 37;
 
 	// Composite stats that are built up from the above gear stats + buffs.
 	// These still belong in the Stat enum because they can be present on
 	// some enchants and because the base values need to be stored for NPCs.
-	StatHealth = 35;
-	StatMana = 36;
-	StatMP5 = 37;
+	StatHealth = 38;
+	StatMana = 39;
+	StatMP5 = 40;
 
 	// Resistances
-	StatArcaneResistance = 38;
-	StatFireResistance = 39;
-	StatFrostResistance = 40;
-	StatNatureResistance = 41;
-	StatShadowResistance = 42;
+	StatArcaneResistance = 41;
+	StatFireResistance = 42;
+	StatFrostResistance = 43;
+	StatNatureResistance = 44;
+	StatShadowResistance = 45;
 
 	// Unsure if this will be used but including just in case
-	StatRage = 43;
+	StatRage = 46;
 
 	// DO NOT add new stats here without discussing it first; new stats come
 	// with a performance penalty.
@@ -286,9 +291,9 @@ enum PseudoStat {
 	PseudoStatSchoolHitNature = 11;
 	PseudoStatSchoolHitShadow = 12;
 
-	PseudoStatPhysicalHitPercent = 13;
+	PseudoStatMeleeHitPercent = 13;
 	PseudoStatSpellHitPercent = 14;
-	PseudoStatPhysicalCritPercent = 15;
+	PseudoStatMeleeCritPercent = 15;
 	PseudoStatSpellCritPercent = 16;
 	PseudoStatBlockPercent = 17;
 
@@ -299,6 +304,9 @@ enum PseudoStat {
 	PseudoStatRangedHastePercent = 22;
 	PseudoStatSpellHastePercent = 23;
 	PseudoStatBlockValuePerStrength = 24;
+
+	PseudoStatRangedHitPercent = 25;
+	PseudoStatRangedCritPercent = 26;
 }
 
 message UnitStats {

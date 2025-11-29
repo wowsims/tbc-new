@@ -350,7 +350,7 @@ func (character *Character) GetBaseStats() stats.Stats {
 }
 
 func (character *Character) GetParryRatingWithoutStrength() float64 {
-	parryRating := character.GetStat(stats.Parry)
+	parryRating := character.GetStat(stats.ParryRating)
 	strength := character.GetStat(stats.Strength)
 	baseStrength := character.GetBaseStats()[stats.Strength]
 
@@ -661,10 +661,12 @@ func (character *Character) GetPseudoStatsProto() []float64 {
 		// that stat dependencies will work correctly, but are stored as PseudoStats in proto
 		// messages. This is done so that the stats arrays embedded in database files and saved
 		// Encounter settings can omit these extraneous fields.
-		proto.PseudoStat_PseudoStatPhysicalHitPercent:  character.GetStat(stats.PhysicalHitPercent),
-		proto.PseudoStat_PseudoStatSpellHitPercent:     character.GetStat(stats.SpellHitPercent),
-		proto.PseudoStat_PseudoStatPhysicalCritPercent: character.GetStat(stats.PhysicalCritPercent),
-		proto.PseudoStat_PseudoStatSpellCritPercent:    character.GetStat(stats.SpellCritPercent),
+		proto.PseudoStat_PseudoStatMeleeHitPercent:   character.GetStat(stats.PhysicalHitPercent),
+		proto.PseudoStat_PseudoStatSpellHitPercent:   character.GetStat(stats.SpellHitPercent),
+		proto.PseudoStat_PseudoStatRangedHitPercent:  character.GetStat(stats.RangedHitPercent),
+		proto.PseudoStat_PseudoStatMeleeCritPercent:  character.GetStat(stats.PhysicalCritPercent),
+		proto.PseudoStat_PseudoStatSpellCritPercent:  character.GetStat(stats.SpellCritPercent),
+		proto.PseudoStat_PseudoStatRangedCritPercent: character.GetStat(stats.RangedCritPercent),
 	}
 }
 

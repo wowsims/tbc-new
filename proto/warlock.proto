@@ -6,6 +6,73 @@ option go_package = "./proto";
 // BEGIN GENERATED
 // WarlockTalents message.
 message WarlockTalents {
+    // Affliction
+    int32 suppression = 1;
+    int32 improved_corruption = 2;
+    int32 improved_curse_of_weakness = 3;
+    int32 improved_drain_soul = 4;
+    int32 improved_life_tap = 5;
+    int32 soul_siphon = 6;
+    int32 improved_curse_of_agony = 7;
+    int32 fel_concentration = 8;
+    bool amplify_curse = 9;
+    int32 grim_reach = 10;
+    int32 nightfall = 11;
+    int32 empowered_corruption = 12;
+    int32 shadow_embrace = 13;
+    bool siphon_life = 14;
+    bool curse_of_exhaustion = 15;
+    int32 shadow_mastery = 16;
+    int32 contagion = 17;
+    bool dark_pact = 18;
+    int32 improved_howl_of_terror = 19;
+    int32 malediction = 20;
+    bool unstable_affliction = 21;
+    // Demonology
+    int32 improved_healthstone = 22;
+    int32 improved_imp = 23;
+    int32 demonic_embrace = 24;
+    int32 improved_health_funnel = 25;
+    int32 improved_voidwalker = 26;
+    int32 fel_intellect = 27;
+    int32 improved_sayaad = 28;
+    bool fel_domination = 29;
+    int32 fel_stamina = 30;
+    int32 demonic_aegis = 31;
+    int32 master_summoner = 32;
+    int32 unholy_power = 33;
+    int32 improved_subjugate_demon = 34;
+    bool demonic_sacrifice = 35;
+    int32 master_conjuror = 36;
+    int32 mana_feed = 37;
+    int32 master_demonologist = 38;
+    int32 demonic_resilience = 39;
+    bool soul_link = 40;
+    int32 demonic_knowledge = 41;
+    int32 demonic_tactics = 42;
+    bool summon_felguard = 43;
+    // Destruction
+    int32 improved_shadow_bolt = 44;
+    int32 cataclysm = 45;
+    int32 bane = 46;
+    int32 aftermath = 47;
+    int32 improved_firebolt = 48;
+    int32 improved_lash_of_pain = 49;
+    int32 devastation = 50;
+    bool shadowburn = 51;
+    int32 intensity = 52;
+    int32 destructive_reach = 53;
+    int32 improved_searing_pain = 54;
+    int32 pyroclasm = 55;
+    int32 improved_immolate = 56;
+    bool ruin = 57;
+    int32 nether_protection = 58;
+    int32 emberstorm = 59;
+    int32 backlash = 60;
+    bool conflagrate = 61;
+    int32 soul_leech = 62;
+    int32 shadow_and_flame = 63;
+    bool shadowfury = 64;
 }
 
 // END GENERATED

@@ -6,6 +6,75 @@ option go_package = "./proto";
 // BEGIN GENERATED
 // WarriorTalents message.
 message WarriorTalents {
+    // Arms
+    int32 improved_heroic_strike = 1;
+    int32 deflection = 2;
+    int32 improved_rend = 3;
+    int32 improved_charge = 4;
+    int32 iron_will = 5;
+    int32 improved_thunder_clap = 6;
+    int32 improved_overpower = 7;
+    bool anger_management = 8;
+    int32 deep_wounds = 9;
+    int32 two_handed_weapon_specialization = 10;
+    int32 impale = 11;
+    int32 poleaxe_specialization = 12;
+    bool death_wish = 13;
+    int32 mace_specialization = 14;
+    int32 sword_specialization = 15;
+    int32 improved_intercept = 16;
+    int32 improved_hamstring = 17;
+    int32 improved_disciplines = 18;
+    int32 blood_frenzy = 19;
+    bool mortal_strike = 20;
+    int32 second_wind = 21;
+    int32 improved_mortal_strike = 22;
+    bool endless_rage = 23;
+    // Fury
+    int32 booming_voice = 24;
+    int32 cruelty = 25;
+    int32 improved_demoralizing_shout = 26;
+    int32 unbridled_wrath = 27;
+    int32 improved_cleave = 28;
+    bool piercing_howl = 29;
+    int32 blood_craze = 30;
+    int32 commanding_presence = 31;
+    int32 dual_wield_specialization = 32;
+    int32 improved_execute = 33;
+    int32 enrage = 34;
+    int32 improved_slam = 35;
+    bool sweeping_strikes = 36;
+    int32 weapon_mastery = 37;
+    int32 improved_berserker_rage = 38;
+    int32 flurry = 39;
+    int32 precision = 40;
+    bool bloodthirst = 41;
+    int32 improved_whirlwind = 42;
+    int32 improved_berserker_stance = 43;
+    bool rampage = 44;
+    // Protection
+    int32 improved_bloodrage = 45;
+    int32 tactical_mastery = 46;
+    int32 anticipation = 47;
+    int32 shield_specialization = 48;
+    int32 toughness = 49;
+    bool last_stand = 50;
+    bool improved_shield_block = 51;
+    int32 improved_revenge = 52;
+    int32 defiance = 53;
+    int32 improved_sunder_armor = 54;
+    int32 improved_disarm = 55;
+    int32 improved_taunt = 56;
+    int32 improved_shield_wall = 57;
+    bool concussion_blow = 58;
+    int32 improved_shield_bash = 59;
+    int32 shield_mastery = 60;
+    int32 one_handed_weapon_specialization = 61;
+    int32 improved_defensive_stance = 62;
+    bool shield_slam = 63;
+    int32 focused_rage = 64;
+    int32 vitality = 65;
+    bool devastate = 66;
 }
 
 // END GENERATED

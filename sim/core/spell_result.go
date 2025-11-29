@@ -157,7 +157,7 @@ func (spell *Spell) RangedAttackPower() float64 {
 }
 
 func (spell *Spell) DodgeSuppression() float64 {
-	expertiseRating := spell.Unit.stats[stats.Expertise] + spell.BonusExpertiseRating
+	expertiseRating := spell.Unit.stats[stats.ExpertiseRating] + spell.BonusExpertiseRating
 	return expertiseRating / ExpertisePerQuarterPercentReduction / 400
 }
 

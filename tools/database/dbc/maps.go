@@ -52,29 +52,35 @@ func MapBonusStatIndexToStat(index int) (proto.Stat, bool) {
 		return proto.Stat_StatSpirit, true
 
 	case 12:
-		return proto.Stat_StatDefense, true
+		return proto.Stat_StatDefenseRating, true
 	case 13:
-		return proto.Stat_StatDodge, true
+		return proto.Stat_StatDodgeRating, true
 	case 14:
-		return proto.Stat_StatParry, true
+		return proto.Stat_StatParryRating, true
 	case 15:
-		return proto.Stat_StatBlock, true
+		return proto.Stat_StatBlockRating, true
 
 	// Secondary ratings
 	case 16, 17:
-		return proto.Stat_StatMeleeHit, true
+		return proto.Stat_StatMeleeHitRating, true
 	case 18:
-		return proto.Stat_StatSpellHit, true
+		return proto.Stat_StatSpellHitRating, true
+	case 31:
+		return proto.Stat_StatAllHitRating, true
 	case 19, 20:
-		return proto.Stat_StatMeleeCrit, true
+		return proto.Stat_StatMeleeCritRating, true
 	case 21:
-		return proto.Stat_StatSpellCrit, true
+		return proto.Stat_StatSpellCritRating, true
+	case 32:
+		return proto.Stat_StatAllCritRating, true
 	case 28, 29:
-		return proto.Stat_StatMeleeHaste, true
+		return proto.Stat_StatMeleeHasteRating, true
 	case 30:
-		return proto.Stat_StatSpellHaste, true
+		return proto.Stat_StatSpellHasteRating, true
+	case 36:
+		return proto.Stat_StatAllHasteRating, true
 	case 37:
-		return proto.Stat_StatExpertise, true
+		return proto.Stat_StatExpertiseRating, true
 
 	case 38: // AttackPower
 		return proto.Stat_StatAttackPower, true
@@ -349,24 +355,24 @@ func getMatchingRatingMods(value int) []RatingModType {
 }
 
 var RatingModToStat = map[RatingModType]proto.Stat{
-	RATING_MOD_DODGE:        proto.Stat_StatDodge,
-	RATING_MOD_PARRY:        proto.Stat_StatParry,
-	RATING_MOD_HIT_MELEE:    proto.Stat_StatMeleeHit,
-	RATING_MOD_HIT_RANGED:   proto.Stat_StatMeleeHit,
-	RATING_MOD_HIT_SPELL:    proto.Stat_StatSpellHit,
-	RATING_MOD_CRIT_MELEE:   proto.Stat_StatMeleeCrit,
-	RATING_MOD_CRIT_RANGED:  proto.Stat_StatMeleeCrit,
-	RATING_MOD_CRIT_SPELL:   proto.Stat_StatSpellCrit,
+	RATING_MOD_DODGE:        proto.Stat_StatDodgeRating,
+	RATING_MOD_PARRY:        proto.Stat_StatParryRating,
+	RATING_MOD_HIT_MELEE:    proto.Stat_StatMeleeHitRating,
+	RATING_MOD_HIT_RANGED:   proto.Stat_StatMeleeHitRating,
+	RATING_MOD_HIT_SPELL:    proto.Stat_StatSpellHitRating,
+	RATING_MOD_CRIT_MELEE:   proto.Stat_StatMeleeCritRating,
+	RATING_MOD_CRIT_RANGED:  proto.Stat_StatMeleeCritRating,
+	RATING_MOD_CRIT_SPELL:   proto.Stat_StatSpellCritRating,
 	RATING_MOD_MULTISTRIKE:  -1,
 	RATING_MOD_READINESS:    -1,
 	RATING_MOD_SPEED:        -1,
 	RATING_MOD_RESILIENCE:   proto.Stat_StatResilience,
 	RATING_MOD_LEECH:        -1,
-	RATING_MOD_HASTE_MELEE:  proto.Stat_StatMeleeHaste,
-	RATING_MOD_HASTE_RANGED: proto.Stat_StatMeleeHaste,
-	RATING_MOD_HASTE_SPELL:  proto.Stat_StatSpellHaste,
+	RATING_MOD_HASTE_MELEE:  proto.Stat_StatMeleeHasteRating,
+	RATING_MOD_HASTE_RANGED: proto.Stat_StatMeleeHasteRating,
+	RATING_MOD_HASTE_SPELL:  proto.Stat_StatSpellHasteRating,
 	RATING_MOD_AVOIDANCE:    -1,
-	RATING_MOD_EXPERTISE:    proto.Stat_StatExpertise,
+	RATING_MOD_EXPERTISE:    proto.Stat_StatExpertiseRating,
 	RATING_MOD_MASTERY:      -1,
 	RATING_MOD_PVP_POWER:    -1,
 

@@ -17,7 +17,7 @@ import (
 )
 
 // Sets the minimum itemlevel that should be considered for this expansions
-const MIN_EFFECT_ILVL = 416
+const MIN_EFFECT_ILVL = 50
 
 type ProcInfo struct {
 	Outcome            core.HitOutcome
@@ -150,7 +150,7 @@ func GenerateEnchantEffects(instance *dbc.DBC, db *WowDatabase) {
 	for _, grp := range groupMapProc {
 		procGroups = append(procGroups, &grp)
 	}
-	GenerateEffectsFile(procGroups, "sim/common/tbc/enchants_auto_gen.go", TmplStrEnchant)
+	//GenerateEffectsFile(procGroups, "sim/common/tbc/enchants_auto_gen.go", TmplStrEnchant)
 }
 
 func GenerateItemEffects(instance *dbc.DBC, db *WowDatabase, itemSources map[int][]*proto.DropSource) {
@@ -159,6 +159,18 @@ func GenerateItemEffects(instance *dbc.DBC, db *WowDatabase, itemSources map[int
 
 	// Example loop over your items
 	for _, parsed := range db.Items {
+		// TBC ANNI: Items can have "static" ItemEffects that don't have a duration.
+		// We need to parse these into stats just as is done for ItemSparse data.
+		for _, itemEffect := range dbc.GetAllStaticItemEffects(parsed) {
+			spellEffects := instance.SpellEffects[itemEffect.SpellID]
+			for _, spellEffect := range spellEffects {
+				stat := dbc.ConvertEffectAuraToStatIndex(int(spellEffect.EffectAura))
+				if stat >= 0 {
+					parsed.ScalingOptions[0].Stats[int32(stat)] += float64(spellEffect.EffectBasePoints)
+				}
+			}
+		}
+
 		parsed.ItemEffect = dbc.MergeItemEffectsForAllStates(parsed)
 
 		result := TryParseOnUseEffect(parsed, groupMapOnUse)
@@ -306,17 +318,21 @@ func TryParseProcEffect(parsed *proto.UIItem, instance *dbc.DBC, groupMapProc ma
 			grp = Group{Name: "Procs"}
 		}
 
-		renderedTooltip := tooltip.String()
-		entry := Entry{Tooltip: strings.Split(renderedTooltip, "\n"), Variants: []*Variant{{ID: int(parsed.Id), Name: parsed.Name}}}
-		entry.ProcInfo, entry.Supported = BuildProcInfo(parsed, instance, renderedTooltip)
-		grp.Entries = append(grp.Entries, &entry)
-		groupMapProc["Procs"] = grp
+		if tooltip != nil {
+			renderedTooltip := tooltip.String()
+			entry := Entry{Tooltip: strings.Split(renderedTooltip, "\n"), Variants: []*Variant{{ID: int(parsed.Id), Name: parsed.Name}}}
+			entry.ProcInfo, entry.Supported = BuildProcInfo(parsed, instance, renderedTooltip)
+			grp.Entries = append(grp.Entries, &entry)
+			groupMapProc["Procs"] = grp
 
-		if !entry.Supported {
+			if !entry.Supported {
+				return EffectParseResultUnsupported
+			}
+
+			return EffectParseResultSuccess
+		} else {
 			return EffectParseResultUnsupported
 		}
-
-		return EffectParseResultSuccess
 	}
 
 	// check if the item has any kind of proc as we only support stat proc parsing right now
@@ -337,7 +353,7 @@ func TryParseOnUseEffect(parsed *proto.UIItem, groupMap map[string]Group) Effect
 		return EffectParseResultSuccess
 	}
 
-	if parsed.ItemEffect.GetOnUse() != nil && parsed.ScalingOptions[0].Ilvl > MIN_EFFECT_ILVL { // MoP constraints
+	if parsed.ItemEffect.GetOnUse() != nil && parsed.ScalingOptions[0].Ilvl > MIN_EFFECT_ILVL {
 
 		if parsed.ItemEffect.GetOnUse().CooldownMs < 0 && parsed.ItemEffect.GetOnUse().CategoryCooldownMs < 0 {
 			return EffectParseResultUnsupported

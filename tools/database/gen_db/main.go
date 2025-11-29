@@ -610,10 +610,12 @@ type TalentConfig struct {
 	FieldName string `json:"fieldName"`
 	// Spell ID for each rank of this talent.
 	// Omitted ranks will be inferred by incrementing from the last provided rank.
-	SpellId int32 `json:"spellId"`
+	SpellIds  []int32 `json:"spellIds"`
+	MaxPoints int32   `json:"maxPoints"`
 }
 
 type TalentTreeConfig struct {
+	Name          string         `json:"name"`
 	BackgroundUrl string         `json:"backgroundUrl"`
 	Talents       []TalentConfig `json:"talents"`
 }
@@ -632,18 +634,28 @@ func getSpellIdsFromTalentJson(infile *string) []int32 {
 		log.Fatalf("failed to compact json: %s", err)
 	}
 
-	var talentTree TalentTreeConfig
+	var talents []TalentTreeConfig
 
-	err = json.Unmarshal(buf.Bytes(), &talentTree)
+	err = json.Unmarshal(buf.Bytes(), &talents)
 	if err != nil {
 		log.Fatalf("failed to parse talent to json %s", err)
 	}
 	spellIds := make([]int32, 0)
 
-	for _, talent := range talentTree.Talents {
-		spellIds = append(spellIds, talent.SpellId)
-	}
+	for _, tree := range talents {
+		for _, talent := range tree.Talents {
+			spellIds = append(spellIds, talent.SpellIds...)
 
+			// Infer omitted spell IDs.
+			if len(talent.SpellIds) < int(talent.MaxPoints) {
+				curSpellId := talent.SpellIds[len(talent.SpellIds)-1]
+				for i := len(talent.SpellIds); i < int(talent.MaxPoints); i++ {
+					curSpellId++
+					spellIds = append(spellIds, curSpellId)
+				}
+			}
+		}
+	}
 	return spellIds
 }
 

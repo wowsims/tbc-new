@@ -7,6 +7,76 @@ option go_package = "./proto";
 // BEGIN GENERATED
 // MageTalents message.
 message MageTalents {
+    // Arcane
+    int32 arcane_subtlety = 1;
+    int32 arcane_focus = 2;
+    int32 improved_arcane_missiles = 3;
+    int32 wand_specialization = 4;
+    int32 magic_absorption = 5;
+    int32 arcane_concentration = 6;
+    int32 magic_attunement = 7;
+    int32 arcane_impact = 8;
+    bool arcane_fortitude = 9;
+    int32 improved_mana_shield = 10;
+    int32 improved_counterspell = 11;
+    int32 arcane_meditation = 12;
+    int32 improved_blink = 13;
+    bool presence_of_mind = 14;
+    int32 arcane_mind = 15;
+    int32 prismatic_cloak = 16;
+    int32 arcane_instability = 17;
+    int32 arcane_potency = 18;
+    int32 empowered_arcane_missiles = 19;
+    bool arcane_power = 20;
+    int32 spell_power = 21;
+    int32 mind_mastery = 22;
+    bool slow = 23;
+    // Fire
+    int32 improved_fireball = 24;
+    int32 impact = 25;
+    int32 ignite = 26;
+    int32 flame_throwing = 27;
+    int32 improved_fire_blast = 28;
+    int32 incineration = 29;
+    int32 improved_flamestrike = 30;
+    bool pyroblast = 31;
+    int32 burning_soul = 32;
+    int32 improved_scorch = 33;
+    int32 molten_shields = 34;
+    int32 master_of_elements = 35;
+    int32 playing_with_fire = 36;
+    int32 critical_mass = 37;
+    bool blast_wave = 38;
+    int32 blazing_speed = 39;
+    int32 fire_power = 40;
+    int32 pyromaniac = 41;
+    bool combustion = 42;
+    int32 molten_fury = 43;
+    int32 empowered_fireball = 44;
+    bool dragons_breath = 45;
+    // Frost
+    int32 frost_warding = 46;
+    int32 improved_frostbolt = 47;
+    int32 elemental_precision = 48;
+    int32 ice_shards = 49;
+    int32 frostbite = 50;
+    int32 improved_frost_nova = 51;
+    int32 permafrost = 52;
+    int32 piercing_ice = 53;
+    bool icy_veins = 54;
+    int32 improved_blizzard = 55;
+    int32 arctic_reach = 56;
+    int32 frost_channeling = 57;
+    int32 shatter = 58;
+    int32 frozen_core = 59;
+    bool cold_snap = 60;
+    int32 improved_cone_of_cold = 61;
+    int32 ice_floes = 62;
+    int32 winters_chill = 63;
+    bool ice_barrier = 64;
+    int32 arctic_winds = 65;
+    int32 empowered_frostbolt = 66;
+    bool summon_water_elemental = 67;
 }
 
 // END GENERATED

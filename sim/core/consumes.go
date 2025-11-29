@@ -34,20 +34,20 @@ func applyConsumeEffects(agent Agent) {
 
 	if consumables.BattleElixirId != 0 {
 		elixir := ConsumablesByID[consumables.BattleElixirId]
-		if elixir.Stats[stats.MeleeHaste] > 0 {
-			elixir.Stats[stats.MeleeHaste] += alchemyBattleElixirBonus
-		} else if elixir.Stats[stats.MeleeCrit] > 0 {
-			elixir.Stats[stats.MeleeCrit] += alchemyBattleElixirBonus
-		} else if elixir.Stats[stats.MeleeHit] > 0 {
-			elixir.Stats[stats.MeleeHit] += alchemyBattleElixirBonus
-		} else if elixir.Stats[stats.SpellHit] > 0 {
-			elixir.Stats[stats.SpellHit] += alchemyBattleElixirBonus
-		} else if elixir.Stats[stats.SpellCrit] > 0 {
-			elixir.Stats[stats.SpellCrit] += alchemyBattleElixirBonus
-		} else if elixir.Stats[stats.SpellHaste] > 0 {
-			elixir.Stats[stats.SpellHaste] += alchemyBattleElixirBonus
-		} else if elixir.Stats[stats.Expertise] > 0 {
-			elixir.Stats[stats.Expertise] += alchemyBattleElixirBonus
+		if elixir.Stats[stats.MeleeHasteRating] > 0 {
+			elixir.Stats[stats.MeleeHasteRating] += alchemyBattleElixirBonus
+		} else if elixir.Stats[stats.MeleeCritRating] > 0 {
+			elixir.Stats[stats.MeleeCritRating] += alchemyBattleElixirBonus
+		} else if elixir.Stats[stats.MeleeHitRating] > 0 {
+			elixir.Stats[stats.MeleeHitRating] += alchemyBattleElixirBonus
+		} else if elixir.Stats[stats.SpellHitRating] > 0 {
+			elixir.Stats[stats.SpellHitRating] += alchemyBattleElixirBonus
+		} else if elixir.Stats[stats.SpellCritRating] > 0 {
+			elixir.Stats[stats.SpellCritRating] += alchemyBattleElixirBonus
+		} else if elixir.Stats[stats.SpellHasteRating] > 0 {
+			elixir.Stats[stats.SpellHasteRating] += alchemyBattleElixirBonus
+		} else if elixir.Stats[stats.ExpertiseRating] > 0 {
+			elixir.Stats[stats.ExpertiseRating] += alchemyBattleElixirBonus
 		} else if elixir.Stats[stats.Spirit] > 0 {
 			elixir.Stats[stats.Spirit] += alchemyBattleElixirBonus
 		}

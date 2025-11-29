@@ -16,6 +16,7 @@ type Enchant struct {
 	ProfessionId       int
 	Effects            []int
 	EffectPoints       []int
+	SpellEffectPoints  []int
 	EffectArgs         []int
 	IsWeaponEnchant    bool
 	InventoryType      InventoryTypeFlag
@@ -123,7 +124,7 @@ func (enchant *Enchant) ToProto() *proto.UIEnchant {
 		slices.Sort(uiEnchant.ExtraTypes)
 	}
 	stats := stats.Stats{}
-	processEnchantmentEffects(enchant.Effects, enchant.EffectArgs, enchant.EffectPoints, &stats, true)
+	processEnchantmentEffects(enchant.Effects, enchant.EffectArgs, enchant.EffectPoints, enchant.SpellEffectPoints, &stats, true)
 	uiEnchant.Stats = stats.ToProtoArray()
 	return uiEnchant
 }

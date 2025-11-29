@@ -8,6 +8,73 @@ import "common.proto";
 // BEGIN GENERATED
 // HunterTalents message.
 message HunterTalents {
+    // Beast Mastery
+    int32 improved_aspect_of_the_hawk = 1;
+    int32 endurance_training = 2;
+    int32 focused_fire = 3;
+    int32 improved_aspect_of_the_monkey = 4;
+    int32 thick_hide = 5;
+    int32 improved_revive_pet = 6;
+    int32 pathfinding = 7;
+    bool bestial_swiftness = 8;
+    int32 unleashed_fury = 9;
+    int32 improved_mend_pet = 10;
+    int32 ferocity = 11;
+    int32 spirit_bond = 12;
+    bool intimidation = 13;
+    int32 bestial_discipline = 14;
+    int32 animal_handler = 15;
+    int32 frenzy = 16;
+    int32 ferocious_inspiration = 17;
+    bool bestial_wrath = 18;
+    int32 catlike_reflexes = 19;
+    int32 serpents_swiftness = 20;
+    bool the_beast_within = 21;
+    // Marksmanship
+    int32 improved_concussive_shot = 22;
+    int32 lethal_shots = 23;
+    int32 improved_hunters_mark = 24;
+    int32 efficiency = 25;
+    int32 go_for_the_throat = 26;
+    int32 improved_arcane_shot = 27;
+    bool aimed_shot = 28;
+    int32 rapid_killing = 29;
+    int32 improved_stings = 30;
+    int32 mortal_shots = 31;
+    int32 concussive_barrage = 32;
+    bool scatter_shot = 33;
+    int32 barrage = 34;
+    int32 combat_experience = 35;
+    int32 ranged_weapon_specialization = 36;
+    int32 careful_aim = 37;
+    bool trueshot_aura = 38;
+    int32 improved_barrage = 39;
+    int32 master_marksman = 40;
+    bool silencing_shot = 41;
+    // Survival
+    int32 monster_slaying = 42;
+    int32 humanoid_slaying = 43;
+    int32 hawk_eye = 44;
+    int32 savage_strikes = 45;
+    int32 entrapment = 46;
+    int32 deflection = 47;
+    int32 improved_wing_clip = 48;
+    int32 clever_traps = 49;
+    int32 survivalist = 50;
+    bool deterrence = 51;
+    int32 trap_mastery = 52;
+    int32 surefooted = 53;
+    int32 improved_feign_death = 54;
+    int32 survival_instincts = 55;
+    int32 killer_instinct = 56;
+    bool counterattack = 57;
+    int32 resourcefulness = 58;
+    int32 lightning_reflexes = 59;
+    int32 thrill_of_the_hunt = 60;
+    bool wyvern_sting = 61;
+    int32 expose_weakness = 62;
+    int32 master_tactician = 63;
+    bool readiness = 64;
 }
 
 // END GENERATED

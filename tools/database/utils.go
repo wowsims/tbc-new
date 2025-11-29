@@ -66,6 +66,36 @@ func ParseRandomSuffixOptions(optionsString sql.NullString) ([]int32, error) {
 	return opts, nil
 }
 
+func PraseEnchantEffectPoints(optionsString sql.NullString) ([]int, error) {
+	if !optionsString.Valid || optionsString.String == "" {
+		return []int{}, nil
+	}
+
+	parts := strings.Split(optionsString.String, ",")
+	var opts []int
+	var parseErrors []string
+
+	for i, part := range parts {
+		part = strings.TrimSpace(part)
+		if part == "" {
+			continue
+		}
+
+		num, err := strconv.Atoi(part)
+		if err != nil {
+			parseErrors = append(parseErrors, fmt.Sprintf("part %d (%s): %v", i, part, err))
+			continue
+		}
+		opts = append(opts, int(num))
+	}
+
+	if len(parseErrors) > 0 {
+		return opts, fmt.Errorf("some values couldn't be parsed: %s", strings.Join(parseErrors, "; "))
+	}
+
+	return opts, nil
+}
+
 // Formats the input string so that it does not use more than maxLength characters
 // as soon a whole word exceeds the character limit a new line will be created
 func formatStrings(maxLength int, input []string) []string {

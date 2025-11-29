@@ -28,14 +28,14 @@ var AvoidanceDRByClass = map[proto.Class]DiminishingReturnsConstants{
 func (unit *Unit) GetDiminishedDodgeChance() float64 {
 	// undiminished Dodge % = D
 	// diminished Dodge % = (D * Cd)/((k*Cd) + D)
-	dodgePercent := unit.stats[stats.Dodge] / DodgeRatingPerDodgePercent
+	dodgePercent := unit.stats[stats.DodgeRating] / DodgeRatingPerDodgePercent
 	return (dodgePercent * unit.avoidanceParams.c_d) / (unit.avoidanceParams.k*unit.avoidanceParams.c_d + dodgePercent) / 100
 }
 
 func (unit *Unit) GetDiminishedParryChance() float64 {
 	// undiminished Parry % = P
 	// diminished Parry % = (P * Cp)/((k*Cp) + P)
-	parryPercent := unit.stats[stats.Parry] / ParryRatingPerParryPercent
+	parryPercent := unit.stats[stats.ParryRating] / ParryRatingPerParryPercent
 	return (parryPercent * unit.avoidanceParams.c_p) / (unit.avoidanceParams.k*unit.avoidanceParams.c_p + parryPercent) / 100
 }
 
