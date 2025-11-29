@@ -526,8 +526,9 @@ WHERE se.Effect = 53
 	return items, nil
 }
 
-//RandPropPoints
-
+// RandPropPoints
+// TBC ANNI: This table exists and contains data, so removing it seems bad, BUT item stats do not match MoP+.
+// Stats come from two places - ItemSparse inside of StatModifier, and ItemEffect as Static (effectDuration = -1) and Proc/On-Use (effectDuration > 0)
 type RandPropAllocationRow struct {
 	Ilvl       int32
 	Allocation dbc.RandomPropAllocation

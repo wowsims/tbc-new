@@ -350,7 +350,7 @@ func (character *Character) GetBaseStats() stats.Stats {
 }
 
 func (character *Character) GetParryRatingWithoutStrength() float64 {
-	parryRating := character.GetStat(stats.Parry)
+	parryRating := character.GetStat(stats.ParryRating)
 	strength := character.GetStat(stats.Strength)
 	baseStrength := character.GetBaseStats()[stats.Strength]
 

@@ -133,7 +133,7 @@ func applyRaceEffects(agent Agent) {
 		// Crack Shot: 1% Crit with Guns
 		ranged := character.Ranged()
 		if ranged != nil && ranged.RangedWeaponType == proto.RangedWeaponType_RangedWeaponTypeGun {
-			character.AddStat(stats.MeleeCrit, PhysicalCritRatingPerCritPercent)
+			character.AddStat(stats.RangedCritPercent, 1)
 		}
 
 		if ranged == nil {

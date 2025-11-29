@@ -31,24 +31,27 @@ const (
 	HolyPower
 	NaturePower
 	ShadowPower
-	SpellHit
-	SpellCrit
-	SpellHaste
+	SpellHitRating
+	SpellCritRating
+	SpellHasteRating
 	SpellPenetration
 	Spirit
 	AttackPower
 	RangedAttackPower
 	FeralAttackPower
-	MeleeHit
-	MeleeCrit
-	MeleeHaste
+	MeleeHitRating
+	MeleeCritRating
+	MeleeHasteRating
 	ArmorPenetration
-	Expertise
-	Defense
-	Block
+	ExpertiseRating
+	AllHitRating
+	AllCritRating
+	AllHasteRating
+	DefenseRating
+	BlockRating
 	BlockValue
-	Dodge
-	Parry
+	DodgeRating
+	ParryRating
 	Resilience
 	Armor
 	BonusArmor
@@ -138,27 +141,27 @@ func (s Stat) StatName() string {
 		return "Intellect"
 	case Spirit:
 		return "Spirit"
-	case SpellHit:
+	case SpellHitRating:
 		return "SpellHitRating"
-	case SpellCrit:
+	case SpellCritRating:
 		return "SpellCritRating"
-	case SpellHaste:
+	case SpellHasteRating:
 		return "SpellHasteRating"
 	case SpellPenetration:
 		return "SpellPenetration"
-	case MeleeHit:
+	case MeleeHitRating:
 		return "MeleeHitRating"
-	case MeleeCrit:
+	case MeleeCritRating:
 		return "MeleeCritRating"
-	case MeleeHaste:
+	case MeleeHasteRating:
 		return "MeleeHasteRating"
-	case Expertise:
+	case ExpertiseRating:
 		return "ExpertiseRating"
 	case ArmorPenetration:
 		return "ArmorPenetration"
-	case Dodge:
+	case DodgeRating:
 		return "DodgeRating"
-	case Parry:
+	case ParryRating:
 		return "ParryRating"
 	case AttackPower:
 		return "AttackPower"
