@@ -221,3 +221,15 @@ func MergeItemEffectsForAllStates(parsed *proto.UIItem) *proto.ItemEffect {
 
 	return pe
 }
+
+// Finds and returns all ItemEffects that are "static" (-1 duration) for a given item
+func GetAllStaticItemEffects(parsed *proto.UIItem) []*ItemEffect {
+	var effects []*ItemEffect
+	for i := range dbcInstance.ItemEffectsByParentID[int(parsed.Id)] {
+		e := &dbcInstance.ItemEffectsByParentID[int(parsed.Id)][i]
+		if e.CoolDownMSec < 0 {
+			effects = append(effects, e)
+		}
+	}
+	return effects
+}

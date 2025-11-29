@@ -159,6 +159,20 @@ func GenerateItemEffects(instance *dbc.DBC, db *WowDatabase, itemSources map[int
 
 	// Example loop over your items
 	for _, parsed := range db.Items {
+		// TBC ANNI: Items can have "static" ItemEffects that don't have a duration.
+		// We need to parse these into stats just as is done for ItemSparse data.
+		for _, itemEffect := range dbc.GetAllStaticItemEffects(parsed) {
+			spellEffects := instance.SpellEffects[itemEffect.SpellID]
+			for _, spellEffect := range spellEffects {
+				switch spellEffect.EffectAura {
+				case 99: // MOD_ATTACK_POWER
+					parsed.ScalingOptions[0].Stats[int32(proto.Stat_StatAttackPower)] = float64(spellEffect.EffectBasePoints)
+				case 124: // MOD_RANGED_ATTACK_POWER
+					parsed.ScalingOptions[0].Stats[int32(proto.Stat_StatRangedAttackPower)] = float64(spellEffect.EffectBasePoints)
+				}
+			}
+		}
+
 		parsed.ItemEffect = dbc.MergeItemEffectsForAllStates(parsed)
 
 		result := TryParseOnUseEffect(parsed, groupMapOnUse)
