@@ -126,7 +126,7 @@ func processEnchantmentEffects(
 			}
 			if effectPoints[i] == 0 && spellEffectPoints != nil {
 				// This might be stored in a SpellEffect row
-				outStats[stat] = float64(spellEffectPoints[i])
+				outStats[stat] = float64(spellEffectPoints[i] + 1)
 			} else {
 				outStats[stat] = float64(effectPoints[i])
 			}
@@ -141,19 +141,19 @@ func processEnchantmentEffects(
 					spellEffect.EffectType == E_APPLY_AURA &&
 					spellEffect.EffectAura == A_MOD_STAT {
 					// Apply bonus to all stats
-					outStats[proto.Stat_StatAgility] += float64(spellEffect.EffectBasePoints)
-					outStats[proto.Stat_StatIntellect] += float64(spellEffect.EffectBasePoints)
-					outStats[proto.Stat_StatSpirit] += float64(spellEffect.EffectBasePoints)
-					outStats[proto.Stat_StatStamina] += float64(spellEffect.EffectBasePoints)
-					outStats[proto.Stat_StatStrength] += float64(spellEffect.EffectBasePoints)
+					outStats[proto.Stat_StatAgility] += float64(spellEffect.EffectBasePoints + 1)
+					outStats[proto.Stat_StatIntellect] += float64(spellEffect.EffectBasePoints + 1)
+					outStats[proto.Stat_StatSpirit] += float64(spellEffect.EffectBasePoints + 1)
+					outStats[proto.Stat_StatStamina] += float64(spellEffect.EffectBasePoints + 1)
+					outStats[proto.Stat_StatStrength] += float64(spellEffect.EffectBasePoints + 1)
 					continue
 				}
 				if spellEffect.EffectType == E_APPLY_AURA && spellEffect.EffectAura == A_MOD_STAT {
-					outStats[spellEffect.EffectMiscValues[0]] += float64(spellEffect.EffectBasePoints)
+					outStats[spellEffect.EffectMiscValues[0]] += float64(spellEffect.EffectBasePoints + 1)
 				} else {
 					stat := ConvertEffectAuraToStatIndex(int(spellEffect.EffectAura))
 					if stat >= 0 {
-						outStats[stat] += float64(spellEffect.EffectBasePoints)
+						outStats[stat] += float64(spellEffect.EffectBasePoints + 1)
 					}
 				}
 			}
