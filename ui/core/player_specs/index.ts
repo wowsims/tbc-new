@@ -19,17 +19,13 @@ const specToPlayerSpec: Record<Spec, PlayerSpec<any> | undefined> = {
 	[Spec.SpecUnknown]: undefined,
 	// Druid
 	[Spec.SpecBalanceDruid]: DruidSpecs.BalanceDruid,
-	[Spec.SpecFeralDruid]: DruidSpecs.FeralDruid,
-	[Spec.SpecGuardianDruid]: DruidSpecs.GuardianDruid,
+	[Spec.SpecFeralCatDruid]: DruidSpecs.FeralCatDruid,
+	[Spec.SpecFeralBearDruid]: DruidSpecs.FeralBearDruid,
 	[Spec.SpecRestorationDruid]: DruidSpecs.RestorationDruid,
 	// Hunter
-	[Spec.SpecBeastMasteryHunter]: HunterSpecs.BeastMasteryHunter,
-	[Spec.SpecMarksmanshipHunter]: HunterSpecs.MarksmanshipHunter,
-	[Spec.SpecSurvivalHunter]: HunterSpecs.SurvivalHunter,
+	[Spec.SpecHunter]: HunterSpecs.Hunter,
 	// Mage
-	[Spec.SpecArcaneMage]: MageSpecs.ArcaneMage,
-	[Spec.SpecFireMage]: MageSpecs.FireMage,
-	[Spec.SpecFrostMage]: MageSpecs.FrostMage,
+	[Spec.SpecMage]: MageSpecs.Mage,
 	// Paladin
 	[Spec.SpecHolyPaladin]: PaladinSpecs.HolyPaladin,
 	[Spec.SpecProtectionPaladin]: PaladinSpecs.ProtectionPaladin,
@@ -39,20 +35,15 @@ const specToPlayerSpec: Record<Spec, PlayerSpec<any> | undefined> = {
 	[Spec.SpecHolyPriest]: PriestSpecs.HolyPriest,
 	[Spec.SpecShadowPriest]: PriestSpecs.ShadowPriest,
 	// Rogue
-	[Spec.SpecAssassinationRogue]: RogueSpecs.AssassinationRogue,
-	[Spec.SpecCombatRogue]: RogueSpecs.CombatRogue,
-	[Spec.SpecSubtletyRogue]: RogueSpecs.SubtletyRogue,
+	[Spec.SpecRogue]: RogueSpecs.Rogue,
 	// Shaman
 	[Spec.SpecElementalShaman]: ShamanSpecs.ElementalShaman,
 	[Spec.SpecEnhancementShaman]: ShamanSpecs.EnhancementShaman,
 	[Spec.SpecRestorationShaman]: ShamanSpecs.RestorationShaman,
 	// Warlock
-	[Spec.SpecAfflictionWarlock]: WarlockSpecs.AfflictionWarlock,
-	[Spec.SpecDemonologyWarlock]: WarlockSpecs.DemonologyWarlock,
-	[Spec.SpecDestructionWarlock]: WarlockSpecs.DestructionWarlock,
+	[Spec.SpecWarlock]: WarlockSpecs.Warlock,
 	// Warrior
-	[Spec.SpecArmsWarrior]: WarriorSpecs.ArmsWarrior,
-	[Spec.SpecFuryWarrior]: WarriorSpecs.FuryWarrior,
+	[Spec.SpecDPSWarrior]: WarriorSpecs.DPSWarrior,
 	[Spec.SpecProtectionWarrior]: WarriorSpecs.ProtectionWarrior,
 };
 
