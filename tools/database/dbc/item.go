@@ -128,10 +128,7 @@ func (item *Item) GetStats(itemLevel int) *stats.Stats {
 			// Skip this stat then
 			continue
 		}
-		stats[stat] = item.GetScaledStat(i, itemLevel)
-		if stat == proto.Stat_StatAttackPower {
-			stats[proto.Stat_StatRangedAttackPower] = item.GetScaledStat(i, itemLevel) // Apply RAP as well. Might not be true for 1.12 idk
-		}
+		stats[stat] = item.BonusAmountCalculated[i]
 	}
 
 	armor := item.GetArmorValue(itemLevel)

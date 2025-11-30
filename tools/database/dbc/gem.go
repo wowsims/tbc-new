@@ -52,6 +52,6 @@ func (gem *Gem) IsDisabledInChallengeMode() bool {
 }
 func (gem *Gem) GetItemEnchantmentStats() stats.Stats {
 	stats := stats.Stats{}
-	processEnchantmentEffects(gem.Effects, gem.EffectArgs, gem.EffectPoints, &stats, false)
+	processEnchantmentEffects(gem.Effects, gem.EffectArgs, gem.EffectPoints, nil, &stats, false)
 	return stats
 }

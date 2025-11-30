@@ -1,6 +1,712 @@
-
-{
-	"backgroundUrl": "https://wow.zamimg.com/images/wow/talents/backgrounds/cata/TODO.jpg",
-	"talents": [
-	]
-}
+[
+  {
+    "name": "Arms",
+    "backgroundUrl": "https://wow.zamimg.com/images/wow/talents/backgrounds/tbc/161.jpg",
+    "talents": [
+      {
+        "fieldName": "improvedHeroicStrike",
+        "fancyName": "Improved Heroic Strike",
+        "location": {
+          "rowIdx": 0,
+          "colIdx": 0
+        },
+        "spellIds": [12282, 12663, 12664],
+        "maxPoints": 3
+      },
+      {
+        "fieldName": "deflection",
+        "fancyName": "Deflection",
+        "location": {
+          "rowIdx": 0,
+          "colIdx": 1
+        },
+        "spellIds": [16462, 16463, 16464, 16465, 16466],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "improvedRend",
+        "fancyName": "Improved Rend",
+        "location": {
+          "rowIdx": 0,
+          "colIdx": 2
+        },
+        "spellIds": [12286, 12658, 12659],
+        "maxPoints": 3
+      },
+      {
+        "fieldName": "improvedCharge",
+        "fancyName": "Improved Charge",
+        "location": {
+          "rowIdx": 1,
+          "colIdx": 0
+        },
+        "spellIds": [12285, 12697],
+        "maxPoints": 2
+      },
+      {
+        "fieldName": "ironWill",
+        "fancyName": "Iron Will",
+        "location": {
+          "rowIdx": 1,
+          "colIdx": 1
+        },
+        "spellIds": [12300, 12959, 12960, 12961, 12962],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "improvedThunderClap",
+        "fancyName": "Improved Thunder Clap",
+        "location": {
+          "rowIdx": 1,
+          "colIdx": 2
+        },
+        "spellIds": [12287, 12665, 12666],
+        "maxPoints": 3
+      },
+      {
+        "fieldName": "improvedOverpower",
+        "fancyName": "Improved Overpower",
+        "location": {
+          "rowIdx": 2,
+          "colIdx": 0
+        },
+        "spellIds": [12290, 12963],
+        "maxPoints": 2
+      },
+      {
+        "fieldName": "angerManagement",
+        "fancyName": "Anger Management",
+        "location": {
+          "rowIdx": 2,
+          "colIdx": 1
+        },
+        "spellIds": [12296],
+        "maxPoints": 1
+      },
+      {
+        "fieldName": "deepWounds",
+        "fancyName": "Deep Wounds",
+        "location": {
+          "rowIdx": 2,
+          "colIdx": 2
+        },
+        "spellIds": [12834, 12849, 12867],
+        "maxPoints": 3
+      },
+      {
+        "fieldName": "twohandedWeaponSpecialization",
+        "fancyName": "Two-Handed Weapon Specialization",
+        "location": {
+          "rowIdx": 3,
+          "colIdx": 1
+        },
+        "spellIds": [12163, 12711, 12712, 12713, 12714],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "impale",
+        "fancyName": "Impale",
+        "location": {
+          "rowIdx": 3,
+          "colIdx": 2
+        },
+        "spellIds": [16493, 16494],
+        "maxPoints": 2,
+        "prereqLocation": {
+          "rowIdx": 2,
+          "colIdx": 2
+        }
+      },
+      {
+        "fieldName": "poleaxeSpecialization",
+        "fancyName": "Poleaxe Specialization",
+        "location": {
+          "rowIdx": 4,
+          "colIdx": 0
+        },
+        "spellIds": [12700, 12781, 12783, 12784, 12785],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "deathWish",
+        "fancyName": "Death Wish",
+        "location": {
+          "rowIdx": 4,
+          "colIdx": 1
+        },
+        "spellIds": [12292],
+        "maxPoints": 1
+      },
+      {
+        "fieldName": "maceSpecialization",
+        "fancyName": "Mace Specialization",
+        "location": {
+          "rowIdx": 4,
+          "colIdx": 2
+        },
+        "spellIds": [12284, 12701, 12702, 12703, 12704],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "swordSpecialization",
+        "fancyName": "Sword Specialization",
+        "location": {
+          "rowIdx": 4,
+          "colIdx": 3
+        },
+        "spellIds": [12281, 12812, 12813, 12814, 12815],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "improvedIntercept",
+        "fancyName": "Improved Intercept",
+        "location": {
+          "rowIdx": 5,
+          "colIdx": 0
+        },
+        "spellIds": [29888, 29889],
+        "maxPoints": 2
+      },
+      {
+        "fieldName": "improvedHamstring",
+        "fancyName": "Improved Hamstring",
+        "location": {
+          "rowIdx": 5,
+          "colIdx": 2
+        },
+        "spellIds": [12289, 12668, 23695],
+        "maxPoints": 3
+      },
+      {
+        "fieldName": "improvedDisciplines",
+        "fancyName": "Improved Disciplines",
+        "location": {
+          "rowIdx": 5,
+          "colIdx": 3
+        },
+        "spellIds": [29723, 29724, 29725],
+        "maxPoints": 3
+      },
+      {
+        "fieldName": "bloodFrenzy",
+        "fancyName": "Blood Frenzy",
+        "location": {
+          "rowIdx": 6,
+          "colIdx": 0
+        },
+        "spellIds": [29836, 29859],
+        "maxPoints": 2
+      },
+      {
+        "fieldName": "mortalStrike",
+        "fancyName": "Mortal Strike",
+        "location": {
+          "rowIdx": 6,
+          "colIdx": 1
+        },
+        "spellIds": [12294],
+        "maxPoints": 1,
+        "prereqLocation": {
+          "rowIdx": 4,
+          "colIdx": 1
+        }
+      },
+      {
+        "fieldName": "secondWind",
+        "fancyName": "Second Wind",
+        "location": {
+          "rowIdx": 6,
+          "colIdx": 2
+        },
+        "spellIds": [29834, 29838],
+        "maxPoints": 2
+      },
+      {
+        "fieldName": "improvedMortalStrike",
+        "fancyName": "Improved Mortal Strike",
+        "location": {
+          "rowIdx": 7,
+          "colIdx": 1
+        },
+        "spellIds": [35446, 35448, 35449, 35450, 35451],
+        "maxPoints": 5,
+        "prereqLocation": {
+          "rowIdx": 6,
+          "colIdx": 1
+        }
+      },
+      {
+        "fieldName": "endlessRage",
+        "fancyName": "Endless Rage",
+        "location": {
+          "rowIdx": 8,
+          "colIdx": 1
+        },
+        "spellIds": [29623],
+        "maxPoints": 1
+      }
+    ]
+  },
+  {
+    "name": "Fury",
+    "backgroundUrl": "https://wow.zamimg.com/images/wow/talents/backgrounds/tbc/164.jpg",
+    "talents": [
+      {
+        "fieldName": "boomingVoice",
+        "fancyName": "Booming Voice",
+        "location": {
+          "rowIdx": 0,
+          "colIdx": 1
+        },
+        "spellIds": [12321, 12835, 12836, 12837, 12838],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "cruelty",
+        "fancyName": "Cruelty",
+        "location": {
+          "rowIdx": 0,
+          "colIdx": 2
+        },
+        "spellIds": [12320, 12852, 12853, 12855, 12856],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "improvedDemoralizingShout",
+        "fancyName": "Improved Demoralizing Shout",
+        "location": {
+          "rowIdx": 1,
+          "colIdx": 1
+        },
+        "spellIds": [12324, 12876, 12877, 12878, 12879],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "unbridledWrath",
+        "fancyName": "Unbridled Wrath",
+        "location": {
+          "rowIdx": 1,
+          "colIdx": 2
+        },
+        "spellIds": [12322, 12999, 13000, 13001, 13002],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "improvedCleave",
+        "fancyName": "Improved Cleave",
+        "location": {
+          "rowIdx": 2,
+          "colIdx": 0
+        },
+        "spellIds": [12329, 12950, 20496],
+        "maxPoints": 3
+      },
+      {
+        "fieldName": "piercingHowl",
+        "fancyName": "Piercing Howl",
+        "location": {
+          "rowIdx": 2,
+          "colIdx": 1
+        },
+        "spellIds": [12323],
+        "maxPoints": 1
+      },
+      {
+        "fieldName": "bloodCraze",
+        "fancyName": "Blood Craze",
+        "location": {
+          "rowIdx": 2,
+          "colIdx": 2
+        },
+        "spellIds": [16487, 16489, 16492],
+        "maxPoints": 3
+      },
+      {
+        "fieldName": "commandingPresence",
+        "fancyName": "Commanding Presence",
+        "location": {
+          "rowIdx": 2,
+          "colIdx": 3
+        },
+        "spellIds": [12318, 12857, 12858, 12860, 12861],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "dualWieldSpecialization",
+        "fancyName": "Dual Wield Specialization",
+        "location": {
+          "rowIdx": 3,
+          "colIdx": 0
+        },
+        "spellIds": [23584, 23585, 23586, 23587, 23588],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "improvedExecute",
+        "fancyName": "Improved Execute",
+        "location": {
+          "rowIdx": 3,
+          "colIdx": 1
+        },
+        "spellIds": [20502, 20503],
+        "maxPoints": 2
+      },
+      {
+        "fieldName": "enrage",
+        "fancyName": "Enrage",
+        "location": {
+          "rowIdx": 3,
+          "colIdx": 2
+        },
+        "spellIds": [12317, 13045, 13046, 13047, 13048],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "improvedSlam",
+        "fancyName": "Improved Slam",
+        "location": {
+          "rowIdx": 4,
+          "colIdx": 0
+        },
+        "spellIds": [12862, 12330],
+        "maxPoints": 2
+      },
+      {
+        "fieldName": "sweepingStrikes",
+        "fancyName": "Sweeping Strikes",
+        "location": {
+          "rowIdx": 4,
+          "colIdx": 1
+        },
+        "spellIds": [12328],
+        "maxPoints": 1
+      },
+      {
+        "fieldName": "weaponMastery",
+        "fancyName": "Weapon Mastery",
+        "location": {
+          "rowIdx": 4,
+          "colIdx": 3
+        },
+        "spellIds": [20504, 20505],
+        "maxPoints": 2
+      },
+      {
+        "fieldName": "improvedBerserkerRage",
+        "fancyName": "Improved Berserker Rage",
+        "location": {
+          "rowIdx": 5,
+          "colIdx": 0
+        },
+        "spellIds": [20500, 20501],
+        "maxPoints": 2
+      },
+      {
+        "fieldName": "flurry",
+        "fancyName": "Flurry",
+        "location": {
+          "rowIdx": 5,
+          "colIdx": 2
+        },
+        "spellIds": [12319, 12971, 12972, 12973, 12974],
+        "maxPoints": 5,
+        "prereqLocation": {
+          "rowIdx": 3,
+          "colIdx": 2
+        }
+      },
+      {
+        "fieldName": "precision",
+        "fancyName": "Precision",
+        "location": {
+          "rowIdx": 6,
+          "colIdx": 0
+        },
+        "spellIds": [29590, 29591, 29592],
+        "maxPoints": 3
+      },
+      {
+        "fieldName": "bloodthirst",
+        "fancyName": "Bloodthirst",
+        "location": {
+          "rowIdx": 6,
+          "colIdx": 1
+        },
+        "spellIds": [23881],
+        "maxPoints": 1,
+        "prereqLocation": {
+          "rowIdx": 4,
+          "colIdx": 1
+        }
+      },
+      {
+        "fieldName": "improvedWhirlwind",
+        "fancyName": "Improved Whirlwind",
+        "location": {
+          "rowIdx": 6,
+          "colIdx": 2
+        },
+        "spellIds": [29721, 29776],
+        "maxPoints": 2
+      },
+      {
+        "fieldName": "improvedBerserkerStance",
+        "fancyName": "Improved Berserker Stance",
+        "location": {
+          "rowIdx": 7,
+          "colIdx": 2
+        },
+        "spellIds": [29759, 29760, 29761, 29762, 29763],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "rampage",
+        "fancyName": "Rampage",
+        "location": {
+          "rowIdx": 8,
+          "colIdx": 1
+        },
+        "spellIds": [29801],
+        "maxPoints": 1,
+        "prereqLocation": {
+          "rowIdx": 6,
+          "colIdx": 1
+        }
+      }
+    ]
+  },
+  {
+    "name": "Protection",
+    "backgroundUrl": "https://wow.zamimg.com/images/wow/talents/backgrounds/tbc/163.jpg",
+    "talents": [
+      {
+        "fieldName": "improvedBloodrage",
+        "fancyName": "Improved Bloodrage",
+        "location": {
+          "rowIdx": 0,
+          "colIdx": 0
+        },
+        "spellIds": [12301, 12818],
+        "maxPoints": 2
+      },
+      {
+        "fieldName": "tacticalMastery",
+        "fancyName": "Tactical Mastery",
+        "location": {
+          "rowIdx": 0,
+          "colIdx": 1
+        },
+        "spellIds": [12295, 12676, 12677],
+        "maxPoints": 3
+      },
+      {
+        "fieldName": "anticipation",
+        "fancyName": "Anticipation",
+        "location": {
+          "rowIdx": 0,
+          "colIdx": 2
+        },
+        "spellIds": [12297, 12750, 12751, 12752, 12753],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "shieldSpecialization",
+        "fancyName": "Shield Specialization",
+        "location": {
+          "rowIdx": 1,
+          "colIdx": 1
+        },
+        "spellIds": [12298, 12724, 12725, 12726, 12727],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "toughness",
+        "fancyName": "Toughness",
+        "location": {
+          "rowIdx": 1,
+          "colIdx": 2
+        },
+        "spellIds": [12299, 12761, 12762, 12763, 12764],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "lastStand",
+        "fancyName": "Last Stand",
+        "location": {
+          "rowIdx": 2,
+          "colIdx": 0
+        },
+        "spellIds": [12975],
+        "maxPoints": 1
+      },
+      {
+        "fieldName": "improvedShieldBlock",
+        "fancyName": "Improved Shield Block",
+        "location": {
+          "rowIdx": 2,
+          "colIdx": 1
+        },
+        "spellIds": [12945],
+        "maxPoints": 1,
+        "prereqLocation": {
+          "rowIdx": 1,
+          "colIdx": 1
+        }
+      },
+      {
+        "fieldName": "improvedRevenge",
+        "fancyName": "Improved Revenge",
+        "location": {
+          "rowIdx": 2,
+          "colIdx": 2
+        },
+        "spellIds": [12797, 12799, 12800],
+        "maxPoints": 3
+      },
+      {
+        "fieldName": "defiance",
+        "fancyName": "Defiance",
+        "location": {
+          "rowIdx": 2,
+          "colIdx": 3
+        },
+        "spellIds": [12303, 12788, 12789],
+        "maxPoints": 3
+      },
+      {
+        "fieldName": "improvedSunderArmor",
+        "fancyName": "Improved Sunder Armor",
+        "location": {
+          "rowIdx": 3,
+          "colIdx": 0
+        },
+        "spellIds": [12308, 12810, 12811],
+        "maxPoints": 3
+      },
+      {
+        "fieldName": "improvedDisarm",
+        "fancyName": "Improved Disarm",
+        "location": {
+          "rowIdx": 3,
+          "colIdx": 1
+        },
+        "spellIds": [12313, 12804, 12807],
+        "maxPoints": 3
+      },
+      {
+        "fieldName": "improvedTaunt",
+        "fancyName": "Improved Taunt",
+        "location": {
+          "rowIdx": 3,
+          "colIdx": 2
+        },
+        "spellIds": [12302, 12765],
+        "maxPoints": 2
+      },
+      {
+        "fieldName": "improvedShieldWall",
+        "fancyName": "Improved Shield Wall",
+        "location": {
+          "rowIdx": 4,
+          "colIdx": 0
+        },
+        "spellIds": [12312, 12803],
+        "maxPoints": 2
+      },
+      {
+        "fieldName": "concussionBlow",
+        "fancyName": "Concussion Blow",
+        "location": {
+          "rowIdx": 4,
+          "colIdx": 1
+        },
+        "spellIds": [12809],
+        "maxPoints": 1
+      },
+      {
+        "fieldName": "improvedShieldBash",
+        "fancyName": "Improved Shield Bash",
+        "location": {
+          "rowIdx": 4,
+          "colIdx": 2
+        },
+        "spellIds": [12311, 12958],
+        "maxPoints": 2
+      },
+      {
+        "fieldName": "shieldMastery",
+        "fancyName": "Shield Mastery",
+        "location": {
+          "rowIdx": 5,
+          "colIdx": 0
+        },
+        "spellIds": [29598, 29599, 29600],
+        "maxPoints": 3
+      },
+      {
+        "fieldName": "onehandedWeaponSpecialization",
+        "fancyName": "One-Handed Weapon Specialization",
+        "location": {
+          "rowIdx": 5,
+          "colIdx": 2
+        },
+        "spellIds": [16538, 16539, 16540, 16541, 16542],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "improvedDefensiveStance",
+        "fancyName": "Improved Defensive Stance",
+        "location": {
+          "rowIdx": 6,
+          "colIdx": 0
+        },
+        "spellIds": [29593, 29594, 29595],
+        "maxPoints": 3
+      },
+      {
+        "fieldName": "shieldSlam",
+        "fancyName": "Shield Slam",
+        "location": {
+          "rowIdx": 6,
+          "colIdx": 1
+        },
+        "spellIds": [23922],
+        "maxPoints": 1,
+        "prereqLocation": {
+          "rowIdx": 4,
+          "colIdx": 1
+        }
+      },
+      {
+        "fieldName": "focusedRage",
+        "fancyName": "Focused Rage",
+        "location": {
+          "rowIdx": 6,
+          "colIdx": 2
+        },
+        "spellIds": [29787, 29790, 29792],
+        "maxPoints": 3
+      },
+      {
+        "fieldName": "vitality",
+        "fancyName": "Vitality",
+        "location": {
+          "rowIdx": 7,
+          "colIdx": 1
+        },
+        "spellIds": [29140, 29143, 29144, 29145, 29146],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "devastate",
+        "fancyName": "Devastate",
+        "location": {
+          "rowIdx": 8,
+          "colIdx": 1
+        },
+        "spellIds": [20243],
+        "maxPoints": 1
+      }
+    ]
+  }
+]

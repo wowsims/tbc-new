@@ -6,6 +6,73 @@ option go_package = "./proto";
 // BEGIN GENERATED
 // PaladinTalents message.
 message PaladinTalents {
+    // Holy
+    int32 divine_strength = 1;
+    int32 divine_intellect = 2;
+    int32 spiritual_focus = 3;
+    int32 improved_seal_of_righteousness = 4;
+    int32 healing_light = 5;
+    bool aura_mastery = 6;
+    int32 improved_lay_on_hands = 7;
+    int32 unyielding_faith = 8;
+    int32 illumination = 9;
+    int32 improved_blessing_of_wisdom = 10;
+    int32 pure_of_heart = 11;
+    bool divine_favor = 12;
+    int32 sanctified_light = 13;
+    int32 purifying_power = 14;
+    int32 holy_power = 15;
+    int32 lights_grace = 16;
+    bool holy_shock = 17;
+    int32 blessed_life = 18;
+    int32 holy_guidance = 19;
+    bool divine_illumination = 20;
+    // Protection
+    int32 improved_devotion_aura = 21;
+    int32 redoubt = 22;
+    int32 precision = 23;
+    int32 guardians_favor = 24;
+    int32 toughness = 25;
+    bool blessing_of_kings = 26;
+    int32 improved_righteous_fury = 27;
+    int32 shield_specialization = 28;
+    int32 anticipation = 29;
+    int32 stoicism = 30;
+    int32 improved_hammer_of_justice = 31;
+    int32 improved_concentration_aura = 32;
+    int32 spell_warding = 33;
+    bool blessing_of_sanctuary = 34;
+    int32 reckoning = 35;
+    int32 sacred_duty = 36;
+    int32 one_handed_weapon_specialization = 37;
+    int32 improved_holy_shield = 38;
+    bool holy_shield = 39;
+    int32 ardent_defender = 40;
+    int32 combat_expertise = 41;
+    bool avengers_shield = 42;
+    // Retribution
+    int32 improved_blessing_of_might = 43;
+    int32 benediction = 44;
+    int32 improved_judgement = 45;
+    int32 improved_seal_of_the_crusader = 46;
+    int32 deflection = 47;
+    int32 vindication = 48;
+    int32 conviction = 49;
+    bool seal_of_command = 50;
+    int32 pursuit_of_justice = 51;
+    int32 eye_for_an_eye = 52;
+    int32 improved_retribution_aura = 53;
+    int32 crusade = 54;
+    int32 two_handed_weapon_specialization = 55;
+    bool sanctity_aura = 56;
+    int32 improved_sanctity_aura = 57;
+    int32 vengeance = 58;
+    int32 sanctified_judgement = 59;
+    int32 sanctified_seals = 60;
+    bool repentance = 61;
+    int32 divine_purpose = 62;
+    int32 fanaticism = 63;
+    bool crusader_strike = 64;
 }
 
 // END GENERATED

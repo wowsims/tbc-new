@@ -8,6 +8,76 @@ import "common.proto";
 // BEGIN GENERATED
 // RogueTalents message.
 message RogueTalents {
+    // Assassination
+    int32 improved_eviscerate = 1;
+    int32 remorseless_attacks = 2;
+    int32 malice = 3;
+    int32 ruthlessness = 4;
+    int32 murder = 5;
+    int32 puncturing_wounds = 6;
+    bool relentless_strikes = 7;
+    int32 improved_expose_armor = 8;
+    int32 lethality = 9;
+    int32 vile_poisons = 10;
+    int32 improved_poisons = 11;
+    int32 fleet_footed = 12;
+    bool cold_blood = 13;
+    int32 improved_kidney_shot = 14;
+    int32 quick_recovery = 15;
+    int32 seal_fate = 16;
+    int32 master_poisoner = 17;
+    bool vigor = 18;
+    int32 deadened_nerves = 19;
+    int32 find_weakness = 20;
+    bool mutilate = 21;
+    // Combat
+    int32 improved_gouge = 22;
+    int32 improved_sinister_strike = 23;
+    int32 lightning_reflexes = 24;
+    int32 improved_slice_and_dice = 25;
+    int32 deflection = 26;
+    int32 precision = 27;
+    int32 endurance = 28;
+    bool riposte = 29;
+    int32 improved_sprint = 30;
+    int32 improved_kick = 31;
+    int32 dagger_specialization = 32;
+    int32 dual_wield_specialization = 33;
+    int32 mace_specialization = 34;
+    bool blade_flurry = 35;
+    int32 sword_specialization = 36;
+    int32 fist_weapon_specialization = 37;
+    int32 blade_twisting = 38;
+    int32 weapon_expertise = 39;
+    int32 aggression = 40;
+    int32 vitality = 41;
+    bool adrenaline_rush = 42;
+    int32 nerves_of_steel = 43;
+    int32 combat_potency = 44;
+    bool surprise_attacks = 45;
+    // Subtlety
+    int32 master_of_deception = 46;
+    int32 opportunity = 47;
+    int32 sleight_of_hand = 48;
+    int32 dirty_tricks = 49;
+    int32 camouflage = 50;
+    int32 initiative = 51;
+    bool ghostly_strike = 52;
+    int32 improved_ambush = 53;
+    int32 setup = 54;
+    int32 elusiveness = 55;
+    int32 serrated_blades = 56;
+    int32 heightened_senses = 57;
+    bool preparation = 58;
+    int32 dirty_deeds = 59;
+    bool hemorrhage = 60;
+    int32 master_of_subtlety = 61;
+    int32 deadliness = 62;
+    int32 enveloping_shadows = 63;
+    bool premeditation = 64;
+    int32 cheat_death = 65;
+    int32 sinister_calling = 66;
+    bool shadowstep = 67;
 }
 
 // END GENERATED

@@ -1,6 +1,700 @@
-
-{
-	"backgroundUrl": "https://wow.zamimg.com/images/wow/talents/backgrounds/cata/TODO.jpg",
-	"talents": [
-	]
-}
+[
+  {
+    "name": "Affliction",
+    "backgroundUrl": "https://wow.zamimg.com/images/wow/talents/backgrounds/tbc/302.jpg",
+    "talents": [
+      {
+        "fieldName": "suppression",
+        "fancyName": "Suppression",
+        "location": {
+          "rowIdx": 0,
+          "colIdx": 1
+        },
+        "spellIds": [18174, 18175, 18176, 18177, 18178],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "improvedCorruption",
+        "fancyName": "Improved Corruption",
+        "location": {
+          "rowIdx": 0,
+          "colIdx": 2
+        },
+        "spellIds": [17810, 17811, 17812, 17813, 17814],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "improvedCurseOfWeakness",
+        "fancyName": "Improved Curse of Weakness",
+        "location": {
+          "rowIdx": 1,
+          "colIdx": 0
+        },
+        "spellIds": [18179, 18180],
+        "maxPoints": 2
+      },
+      {
+        "fieldName": "improvedDrainSoul",
+        "fancyName": "Improved Drain Soul",
+        "location": {
+          "rowIdx": 1,
+          "colIdx": 1
+        },
+        "spellIds": [18213, 18372],
+        "maxPoints": 2
+      },
+      {
+        "fieldName": "improvedLifeTap",
+        "fancyName": "Improved Life Tap",
+        "location": {
+          "rowIdx": 1,
+          "colIdx": 2
+        },
+        "spellIds": [18182, 18183],
+        "maxPoints": 2
+      },
+      {
+        "fieldName": "soulSiphon",
+        "fancyName": "Soul Siphon",
+        "location": {
+          "rowIdx": 1,
+          "colIdx": 3
+        },
+        "spellIds": [17804, 17805],
+        "maxPoints": 2
+      },
+      {
+        "fieldName": "improvedCurseOfAgony",
+        "fancyName": "Improved Curse of Agony",
+        "location": {
+          "rowIdx": 2,
+          "colIdx": 0
+        },
+        "spellIds": [18827, 18829],
+        "maxPoints": 2
+      },
+      {
+        "fieldName": "felConcentration",
+        "fancyName": "Fel Concentration",
+        "location": {
+          "rowIdx": 2,
+          "colIdx": 1
+        },
+        "spellIds": [17783, 17784, 17785, 17786, 17787],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "amplifyCurse",
+        "fancyName": "Amplify Curse",
+        "location": {
+          "rowIdx": 2,
+          "colIdx": 2
+        },
+        "spellIds": [18288],
+        "maxPoints": 1
+      },
+      {
+        "fieldName": "grimReach",
+        "fancyName": "Grim Reach",
+        "location": {
+          "rowIdx": 3,
+          "colIdx": 0
+        },
+        "spellIds": [18218, 18219],
+        "maxPoints": 2
+      },
+      {
+        "fieldName": "nightfall",
+        "fancyName": "Nightfall",
+        "location": {
+          "rowIdx": 3,
+          "colIdx": 1
+        },
+        "spellIds": [18094, 18095],
+        "maxPoints": 2
+      },
+      {
+        "fieldName": "empoweredCorruption",
+        "fancyName": "Empowered Corruption",
+        "location": {
+          "rowIdx": 3,
+          "colIdx": 3
+        },
+        "spellIds": [32381, 32382, 32383],
+        "maxPoints": 3
+      },
+      {
+        "fieldName": "shadowEmbrace",
+        "fancyName": "Shadow Embrace",
+        "location": {
+          "rowIdx": 4,
+          "colIdx": 0
+        },
+        "spellIds": [32385, 32387, 32392, 32393, 32394],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "siphonLife",
+        "fancyName": "Siphon Life",
+        "location": {
+          "rowIdx": 4,
+          "colIdx": 1
+        },
+        "spellIds": [18265],
+        "maxPoints": 1
+      },
+      {
+        "fieldName": "curseOfExhaustion",
+        "fancyName": "Curse of Exhaustion",
+        "location": {
+          "rowIdx": 4,
+          "colIdx": 2
+        },
+        "spellIds": [18223],
+        "maxPoints": 1,
+        "prereqLocation": {
+          "rowIdx": 2,
+          "colIdx": 2
+        }
+      },
+      {
+        "fieldName": "shadowMastery",
+        "fancyName": "Shadow Mastery",
+        "location": {
+          "rowIdx": 5,
+          "colIdx": 1
+        },
+        "spellIds": [18271, 18272, 18273, 18274, 18275],
+        "maxPoints": 5,
+        "prereqLocation": {
+          "rowIdx": 4,
+          "colIdx": 1
+        }
+      },
+      {
+        "fieldName": "contagion",
+        "fancyName": "Contagion",
+        "location": {
+          "rowIdx": 6,
+          "colIdx": 1
+        },
+        "spellIds": [30060, 30061, 30062, 30063, 30064],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "darkPact",
+        "fancyName": "Dark Pact",
+        "location": {
+          "rowIdx": 6,
+          "colIdx": 2
+        },
+        "spellIds": [18220],
+        "maxPoints": 1
+      },
+      {
+        "fieldName": "improvedHowlOfTerror",
+        "fancyName": "Improved Howl of Terror",
+        "location": {
+          "rowIdx": 7,
+          "colIdx": 0
+        },
+        "spellIds": [30054, 30057],
+        "maxPoints": 2
+      },
+      {
+        "fieldName": "malediction",
+        "fancyName": "Malediction",
+        "location": {
+          "rowIdx": 7,
+          "colIdx": 2
+        },
+        "spellIds": [32477, 32483, 32484],
+        "maxPoints": 3
+      },
+      {
+        "fieldName": "unstableAffliction",
+        "fancyName": "Unstable Affliction",
+        "location": {
+          "rowIdx": 8,
+          "colIdx": 1
+        },
+        "spellIds": [30108],
+        "maxPoints": 1,
+        "prereqLocation": {
+          "rowIdx": 6,
+          "colIdx": 1
+        }
+      }
+    ]
+  },
+  {
+    "name": "Demonology",
+    "backgroundUrl": "https://wow.zamimg.com/images/wow/talents/backgrounds/tbc/303.jpg",
+    "talents": [
+      {
+        "fieldName": "improvedHealthstone",
+        "fancyName": "Improved Healthstone",
+        "location": {
+          "rowIdx": 0,
+          "colIdx": 0
+        },
+        "spellIds": [18692, 18693],
+        "maxPoints": 2
+      },
+      {
+        "fieldName": "improvedImp",
+        "fancyName": "Improved Imp",
+        "location": {
+          "rowIdx": 0,
+          "colIdx": 1
+        },
+        "spellIds": [18694, 18695, 18696],
+        "maxPoints": 3
+      },
+      {
+        "fieldName": "demonicEmbrace",
+        "fancyName": "Demonic Embrace",
+        "location": {
+          "rowIdx": 0,
+          "colIdx": 2
+        },
+        "spellIds": [18697, 18698, 18699, 18700, 18701],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "improvedHealthFunnel",
+        "fancyName": "Improved Health Funnel",
+        "location": {
+          "rowIdx": 1,
+          "colIdx": 0
+        },
+        "spellIds": [18703, 18704],
+        "maxPoints": 2
+      },
+      {
+        "fieldName": "improvedVoidwalker",
+        "fancyName": "Improved Voidwalker",
+        "location": {
+          "rowIdx": 1,
+          "colIdx": 1
+        },
+        "spellIds": [18705, 18706, 18707],
+        "maxPoints": 3
+      },
+      {
+        "fieldName": "felIntellect",
+        "fancyName": "Fel Intellect",
+        "location": {
+          "rowIdx": 1,
+          "colIdx": 2
+        },
+        "spellIds": [18731, 18743, 18744],
+        "maxPoints": 3
+      },
+      {
+        "fieldName": "improvedSayaad",
+        "fancyName": "Improved Sayaad",
+        "location": {
+          "rowIdx": 2,
+          "colIdx": 0
+        },
+        "spellIds": [18754, 18755, 18756],
+        "maxPoints": 3
+      },
+      {
+        "fieldName": "felDomination",
+        "fancyName": "Fel Domination",
+        "location": {
+          "rowIdx": 2,
+          "colIdx": 1
+        },
+        "spellIds": [18708],
+        "maxPoints": 1
+      },
+      {
+        "fieldName": "felStamina",
+        "fancyName": "Fel Stamina",
+        "location": {
+          "rowIdx": 2,
+          "colIdx": 2
+        },
+        "spellIds": [18748, 18749, 18750],
+        "maxPoints": 3
+      },
+      {
+        "fieldName": "demonicAegis",
+        "fancyName": "Demonic Aegis",
+        "location": {
+          "rowIdx": 2,
+          "colIdx": 3
+        },
+        "spellIds": [30143, 30144, 30145],
+        "maxPoints": 3
+      },
+      {
+        "fieldName": "masterSummoner",
+        "fancyName": "Master Summoner",
+        "location": {
+          "rowIdx": 3,
+          "colIdx": 1
+        },
+        "spellIds": [18709, 18710],
+        "maxPoints": 2,
+        "prereqLocation": {
+          "rowIdx": 2,
+          "colIdx": 1
+        }
+      },
+      {
+        "fieldName": "unholyPower",
+        "fancyName": "Unholy Power",
+        "location": {
+          "rowIdx": 3,
+          "colIdx": 2
+        },
+        "spellIds": [18769, 18770, 18771, 18772, 18773],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "improvedSubjugateDemon",
+        "fancyName": "Improved Subjugate Demon",
+        "location": {
+          "rowIdx": 4,
+          "colIdx": 0
+        },
+        "spellIds": [18821, 18822],
+        "maxPoints": 2
+      },
+      {
+        "fieldName": "demonicSacrifice",
+        "fancyName": "Demonic Sacrifice",
+        "location": {
+          "rowIdx": 4,
+          "colIdx": 1
+        },
+        "spellIds": [18788],
+        "maxPoints": 1
+      },
+      {
+        "fieldName": "masterConjuror",
+        "fancyName": "Master Conjuror",
+        "location": {
+          "rowIdx": 4,
+          "colIdx": 3
+        },
+        "spellIds": [18767, 18768],
+        "maxPoints": 2
+      },
+      {
+        "fieldName": "manaFeed",
+        "fancyName": "Mana Feed",
+        "location": {
+          "rowIdx": 5,
+          "colIdx": 0
+        },
+        "spellIds": [30326, 30327, 30328],
+        "maxPoints": 3
+      },
+      {
+        "fieldName": "masterDemonologist",
+        "fancyName": "Master Demonologist",
+        "location": {
+          "rowIdx": 5,
+          "colIdx": 2
+        },
+        "spellIds": [23785, 23822, 23823, 23824, 23825],
+        "maxPoints": 5,
+        "prereqLocation": {
+          "rowIdx": 3,
+          "colIdx": 2
+        }
+      },
+      {
+        "fieldName": "demonicResilience",
+        "fancyName": "Demonic Resilience",
+        "location": {
+          "rowIdx": 6,
+          "colIdx": 0
+        },
+        "spellIds": [30319, 30320, 30321],
+        "maxPoints": 3
+      },
+      {
+        "fieldName": "soulLink",
+        "fancyName": "Soul Link",
+        "location": {
+          "rowIdx": 6,
+          "colIdx": 1
+        },
+        "spellIds": [19028],
+        "maxPoints": 1,
+        "prereqLocation": {
+          "rowIdx": 4,
+          "colIdx": 1
+        }
+      },
+      {
+        "fieldName": "demonicKnowledge",
+        "fancyName": "Demonic Knowledge",
+        "location": {
+          "rowIdx": 6,
+          "colIdx": 2
+        },
+        "spellIds": [35691, 35692, 35693],
+        "maxPoints": 3
+      },
+      {
+        "fieldName": "demonicTactics",
+        "fancyName": "Demonic Tactics",
+        "location": {
+          "rowIdx": 7,
+          "colIdx": 1
+        },
+        "spellIds": [30242, 30245, 30246, 30247, 30248],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "summonFelguard",
+        "fancyName": "Summon Felguard",
+        "location": {
+          "rowIdx": 8,
+          "colIdx": 1
+        },
+        "spellIds": [30146],
+        "maxPoints": 1
+      }
+    ]
+  },
+  {
+    "name": "Destruction",
+    "backgroundUrl": "https://wow.zamimg.com/images/wow/talents/backgrounds/tbc/301.jpg",
+    "talents": [
+      {
+        "fieldName": "improvedShadowBolt",
+        "fancyName": "Improved Shadow Bolt",
+        "location": {
+          "rowIdx": 0,
+          "colIdx": 1
+        },
+        "spellIds": [17793, 17796, 17801, 17802, 17803],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "cataclysm",
+        "fancyName": "Cataclysm",
+        "location": {
+          "rowIdx": 0,
+          "colIdx": 2
+        },
+        "spellIds": [17778, 17779, 17780, 17781, 17782],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "bane",
+        "fancyName": "Bane",
+        "location": {
+          "rowIdx": 1,
+          "colIdx": 1
+        },
+        "spellIds": [17788, 17789, 17790, 17791, 17792],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "aftermath",
+        "fancyName": "Aftermath",
+        "location": {
+          "rowIdx": 1,
+          "colIdx": 2
+        },
+        "spellIds": [18119, 18120, 18121, 18122, 18123],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "improvedFirebolt",
+        "fancyName": "Improved Firebolt",
+        "location": {
+          "rowIdx": 2,
+          "colIdx": 0
+        },
+        "spellIds": [18126, 18127],
+        "maxPoints": 2
+      },
+      {
+        "fieldName": "improvedLashOfPain",
+        "fancyName": "Improved Lash of Pain",
+        "location": {
+          "rowIdx": 2,
+          "colIdx": 1
+        },
+        "spellIds": [18128, 18129],
+        "maxPoints": 2
+      },
+      {
+        "fieldName": "devastation",
+        "fancyName": "Devastation",
+        "location": {
+          "rowIdx": 2,
+          "colIdx": 2
+        },
+        "spellIds": [18130, 18131, 18132, 18133, 18134],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "shadowburn",
+        "fancyName": "Shadowburn",
+        "location": {
+          "rowIdx": 2,
+          "colIdx": 3
+        },
+        "spellIds": [17877],
+        "maxPoints": 1
+      },
+      {
+        "fieldName": "intensity",
+        "fancyName": "Intensity",
+        "location": {
+          "rowIdx": 3,
+          "colIdx": 0
+        },
+        "spellIds": [18135, 18136],
+        "maxPoints": 2
+      },
+      {
+        "fieldName": "destructiveReach",
+        "fancyName": "Destructive Reach",
+        "location": {
+          "rowIdx": 3,
+          "colIdx": 1
+        },
+        "spellIds": [17917, 17918],
+        "maxPoints": 2
+      },
+      {
+        "fieldName": "improvedSearingPain",
+        "fancyName": "Improved Searing Pain",
+        "location": {
+          "rowIdx": 3,
+          "colIdx": 3
+        },
+        "spellIds": [17927, 17929, 17930],
+        "maxPoints": 3
+      },
+      {
+        "fieldName": "pyroclasm",
+        "fancyName": "Pyroclasm",
+        "location": {
+          "rowIdx": 4,
+          "colIdx": 0
+        },
+        "spellIds": [18096, 18073],
+        "maxPoints": 2,
+        "prereqLocation": {
+          "rowIdx": 3,
+          "colIdx": 0
+        }
+      },
+      {
+        "fieldName": "improvedImmolate",
+        "fancyName": "Improved Immolate",
+        "location": {
+          "rowIdx": 4,
+          "colIdx": 1
+        },
+        "spellIds": [17815, 17833, 17834, 17835, 17836],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "ruin",
+        "fancyName": "Ruin",
+        "location": {
+          "rowIdx": 4,
+          "colIdx": 2
+        },
+        "spellIds": [17959],
+        "maxPoints": 1,
+        "prereqLocation": {
+          "rowIdx": 2,
+          "colIdx": 2
+        }
+      },
+      {
+        "fieldName": "netherProtection",
+        "fancyName": "Nether Protection",
+        "location": {
+          "rowIdx": 5,
+          "colIdx": 0
+        },
+        "spellIds": [30299, 30301, 30302],
+        "maxPoints": 3
+      },
+      {
+        "fieldName": "emberstorm",
+        "fancyName": "Emberstorm",
+        "location": {
+          "rowIdx": 5,
+          "colIdx": 2
+        },
+        "spellIds": [17954, 17955, 17956, 17957, 17958],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "backlash",
+        "fancyName": "Backlash",
+        "location": {
+          "rowIdx": 6,
+          "colIdx": 0
+        },
+        "spellIds": [34935, 34938, 34939],
+        "maxPoints": 3
+      },
+      {
+        "fieldName": "conflagrate",
+        "fancyName": "Conflagrate",
+        "location": {
+          "rowIdx": 6,
+          "colIdx": 1
+        },
+        "spellIds": [17962],
+        "maxPoints": 1,
+        "prereqLocation": {
+          "rowIdx": 4,
+          "colIdx": 1
+        }
+      },
+      {
+        "fieldName": "soulLeech",
+        "fancyName": "Soul Leech",
+        "location": {
+          "rowIdx": 6,
+          "colIdx": 2
+        },
+        "spellIds": [30293, 30295, 30296],
+        "maxPoints": 3
+      },
+      {
+        "fieldName": "shadowAndFlame",
+        "fancyName": "Shadow and Flame",
+        "location": {
+          "rowIdx": 7,
+          "colIdx": 1
+        },
+        "spellIds": [30288, 30289, 30290, 30291, 30292],
+        "maxPoints": 5
+      },
+      {
+        "fieldName": "shadowfury",
+        "fancyName": "Shadowfury",
+        "location": {
+          "rowIdx": 8,
+          "colIdx": 1
+        },
+        "spellIds": [30283],
+        "maxPoints": 1,
+        "prereqLocation": {
+          "rowIdx": 7,
+          "colIdx": 1
+        }
+      }
+    ]
+  }
+]

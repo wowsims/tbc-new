@@ -2,6 +2,7 @@ package database
 
 import (
 	"cmp"
+	"encoding/json"
 	"fmt"
 	"os"
 	"slices"
@@ -10,8 +11,6 @@ import (
 	"unicode"
 
 	"github.com/wowsims/tbc/tools/database/dbc"
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
 )
 
 func convertTalentClassID(raw int) int {
@@ -19,10 +18,13 @@ func convertTalentClassID(raw int) int {
 }
 
 type TalentConfig struct {
-	FieldName        string         `json:"fieldName"`
-	FancyName        string         `json:"fancyName"`
-	Location         TalentLocation `json:"location"`
-	SpellId          int            `json:"spellId"`
+	FieldName        string          `json:"fieldName"`
+	FancyName        string          `json:"fancyName"`
+	Location         TalentLocation  `json:"location"`
+	SpellIds         []int           `json:"spellIds"`
+	MaxPoints        int             `json:"maxPoints"`
+	PrereqLocation   *TalentLocation `json:"prereqLocation,omitempty"`
+	TabName          string          `json:"tabName"`
 	ProtoFieldNumber int
 }
 
@@ -36,7 +38,7 @@ type ClassData struct {
 	LowerCaseClassName string
 	FileName           string
 	Talents            []TalentConfig
-	TalentTab          TalentTabConfig
+	TalentTabs         []TalentTabConfig
 }
 
 const staticHeader = `syntax = "proto3";
@@ -48,8 +50,15 @@ const protoTemplateStr = `
 {{- $class := .ClassName -}}
 // {{.ClassName}}Talents message.
 message {{$class}}Talents {
-{{- range $talent := .TalentTab.Talents }}
+{{- range $tab := .TalentTabs }}
+    // {{$tab.Name}}
+{{- range $talent := $tab.Talents }}
+    {{- if eq $talent.MaxPoints 1 }}
     bool {{ final $talent.FancyName $class }} = {{ $talent.ProtoFieldNumber }};
+    {{- else }}
+    int32 {{ final $talent.FancyName $class }} = {{ $talent.ProtoFieldNumber }};
+    {{- end }}
+{{- end }}
 {{- end }}
 }
 `
@@ -61,24 +70,34 @@ import {{.ClassName}}TalentJson from './trees/{{.FileName}}.json';
 export const {{.LowerCaseClassName}}TalentsConfig: TalentsConfig<{{.ClassName}}Talents> = newTalentsConfig({{.ClassName}}TalentJson);
 `
 
-const talentJsonTemplate = `
-{
-	"backgroundUrl": "{{ .BackgroundUrl }}",
-	"talents": [
-	{{- $m := len .Talents }}
-	{{- range $j, $talent := .Talents }}
-		{
-			"fieldName": "{{ toCamelCase $talent.FancyName }}",
-			"fancyName": "{{ $talent.FancyName }}",
-			"location": {
-				"rowIdx": {{ $talent.Location.RowIdx }},
-				"colIdx": {{ $talent.Location.ColIdx }}
-			},
-			"spellId": {{ $talent.SpellId }}
-		}{{ if ne (add $j 1) $m }},{{ end }}
-	{{- end }}
-	]
-}
+const talentJsonTemplate = `[
+{{- $n := len . }}
+{{- range $i, $tab := . }}
+  {
+    "name": "{{ $tab.Name }}",
+    "backgroundUrl": "{{ $tab.BackgroundUrl }}",
+    "talents": [
+    {{- $m := len $tab.Talents }}
+    {{- range $j, $talent := $tab.Talents }}
+      {
+        "fieldName": "{{ toCamelCase $talent.FancyName }}",
+        "fancyName": "{{ $talent.FancyName }}",
+        "location": {
+          "rowIdx": {{ $talent.Location.RowIdx }},
+          "colIdx": {{ $talent.Location.ColIdx }}
+        },
+        "spellIds": [{{- range $k, $id := $talent.SpellIds }}{{if $k}}, {{end}}{{ $id }}{{- end }}],
+        "maxPoints": {{ $talent.MaxPoints }}{{ if $talent.PrereqLocation }},
+        "prereqLocation": {
+          "rowIdx": {{ $talent.PrereqLocation.RowIdx }},
+          "colIdx": {{ $talent.PrereqLocation.ColIdx }}
+        }{{ end }}
+      }{{ if ne (add $j 1) $m }},{{ end }}
+    {{- end }}
+    ]
+  }{{ if ne (add $i 1) $n }},{{ end }}
+{{- end }}
+]
 `
 
 func generateProtoFile(data ClassData) error {
@@ -211,11 +230,12 @@ func finalFieldName(fancyName, className string) string {
 }
 
 type TalentTabConfig struct {
+	Name          string         `json:"name"`
 	BackgroundUrl string         `json:"backgroundUrl"`
 	Talents       []TalentConfig `json:"talents"`
 }
 
-func generateTalentJson(tab TalentTabConfig, className string) error {
+func generateTalentJson(tabs []TalentTabConfig, className string) error {
 	// Create the directory if it doesn't exist
 	dirPath := "ui/core/talents/trees"
 	if err := os.MkdirAll(dirPath, 0755); err != nil {
@@ -241,7 +261,7 @@ func generateTalentJson(tab TalentTabConfig, className string) error {
 		return err
 	}
 
-	if err := tmpl.Execute(file, tab); err != nil {
+	if err := tmpl.Execute(file, tabs); err != nil {
 		return fmt.Errorf("error executing template for %s: %w", className, err)
 	}
 
@@ -249,13 +269,32 @@ func generateTalentJson(tab TalentTabConfig, className string) error {
 	return nil
 }
 
-func transformRawTalentsToTab(rawTalents []RawTalent) (TalentTabConfig, error) {
-	tab := TalentTabConfig{
-		BackgroundUrl: fmt.Sprintf("https://wow.zamimg.com/images/wow/talents/backgrounds/cata/%s.jpg", "TODO"),
-		Talents:       []TalentConfig{},
-	}
-
+func transformRawTalentsToTab(rawTalents []RawTalent) ([]TalentTabConfig, error) {
+	tabsMap := make(map[string]*TalentTabConfig)
 	for _, rt := range rawTalents {
+		tab, exists := tabsMap[rt.TabName]
+		if !exists {
+			tab = &TalentTabConfig{
+				Name:          rt.TabName,
+				BackgroundUrl: fmt.Sprintf("https://wow.zamimg.com/images/wow/talents/backgrounds/tbc/%s.jpg", rt.BackgroundFile),
+				Talents:       []TalentConfig{},
+			}
+			tabsMap[rt.TabName] = tab
+		}
+
+		var spellIds []int
+		if err := json.Unmarshal([]byte(rt.SpellRank), &spellIds); err != nil {
+			return nil, fmt.Errorf("parsing SpellRank for talent %s: %w", rt.TalentName, err)
+		}
+
+		filtered := []int{}
+		for _, id := range spellIds {
+			if id != 0 {
+				filtered = append(filtered, id)
+			}
+		}
+
+		maxPoints := len(filtered)
 		fieldName := strings.ToLower(rt.TalentName[:1]) + rt.TalentName[1:]
 		talent := TalentConfig{
 			FieldName: fieldName,
@@ -264,7 +303,15 @@ func transformRawTalentsToTab(rawTalents []RawTalent) (TalentTabConfig, error) {
 				RowIdx: rt.TierID,
 				ColIdx: rt.ColumnIndex,
 			},
-			SpellId: rt.SpellID,
+			SpellIds:  filtered,
+			MaxPoints: maxPoints,
+		}
+
+		if (rt.PrereqRow.Valid && rt.PrereqRow.Int64 != 0) || (rt.PrereqCol.Valid && rt.PrereqCol.Int64 != 0) {
+			talent.PrereqLocation = &TalentLocation{
+				RowIdx: int(rt.PrereqRow.Int64),
+				ColIdx: int(rt.PrereqCol.Int64),
+			}
 		}
 
 		tab.Talents = append(tab.Talents, talent)
@@ -276,20 +323,43 @@ func transformRawTalentsToTab(rawTalents []RawTalent) (TalentTabConfig, error) {
 		})
 	}
 
-	fieldNum := 1
-	for i := range tab.Talents {
-		tab.Talents[i].ProtoFieldNumber = fieldNum
-		fieldNum++
-	}
+	var tabs []TalentTabConfig
 
-	return tab, nil
+	for _, t := range tabsMap {
+		tabs = append(tabs, *t)
+	}
+	slices.SortFunc(tabs, func(a, b TalentTabConfig) int {
+		return cmp.Compare(a.Name, b.Name)
+	})
+	fieldNum := 1
+	for i := range tabs {
+		for j := range tabs[i].Talents {
+			tabs[i].Talents[j].ProtoFieldNumber = fieldNum
+			fieldNum++
+		}
+	}
+	return tabs, nil
 }
 
 func transformRawTalentsToConfigsForClass(rawTalents []RawTalent, classID int) ([]TalentConfig, error) {
 	var talents []TalentConfig
-
 	for _, rt := range rawTalents {
-		if classID == rt.ClassMask {
+
+		converted := convertTalentClassID(classID)
+		if converted == rt.ClassMask {
+			var spellIds []int
+			if err := json.Unmarshal([]byte(rt.SpellRank), &spellIds); err != nil {
+				return nil, fmt.Errorf("parsing SpellRank for talent %s: %w", rt.TalentName, err)
+			}
+
+			filtered := []int{}
+			for _, id := range spellIds {
+				if id != 0 {
+					filtered = append(filtered, id)
+				}
+			}
+
+			maxPoints := len(filtered)
 			fieldName := strings.ToLower(rt.TalentName[:1]) + rt.TalentName[1:]
 			talent := TalentConfig{
 				FieldName: fieldName,
@@ -298,7 +368,15 @@ func transformRawTalentsToConfigsForClass(rawTalents []RawTalent, classID int) (
 					RowIdx: rt.TierID,
 					ColIdx: rt.ColumnIndex,
 				},
-				SpellId: rt.SpellID,
+				SpellIds:  filtered,
+				MaxPoints: maxPoints,
+			}
+
+			if (rt.PrereqRow.Valid && rt.PrereqRow.Int64 != 0) || (rt.PrereqCol.Valid && rt.PrereqCol.Int64 != 0) {
+				talent.PrereqLocation = &TalentLocation{
+					RowIdx: int(rt.PrereqRow.Int64),
+					ColIdx: int(rt.PrereqCol.Int64),
+				}
 			}
 
 			talents = append(talents, talent)
@@ -325,7 +403,8 @@ func GenerateTalentJsonFromDB(dbHelper *DBHelper) error {
 
 		classTalents := []RawTalent{}
 		for _, rt := range rawTalents {
-			if dbcClass.ID == rt.ClassMask {
+			converted := convertTalentClassID(dbcClass.ID)
+			if converted == rt.ClassMask {
 				classTalents = append(classTalents, rt)
 			}
 		}
@@ -342,11 +421,6 @@ func GenerateTalentJsonFromDB(dbHelper *DBHelper) error {
 	}
 
 	return nil
-}
-
-func properTitle(s string) string {
-	caser := cases.Title(language.English)
-	return caser.String(s)
 }
 
 func GenerateProtos(dbcData *dbc.DBC, db *WowDatabase) {
@@ -370,12 +444,13 @@ func GenerateProtos(dbcData *dbc.DBC, db *WowDatabase) {
 			ClassName:          className,
 			LowerCaseClassName: strings.ToLower(className),
 			Talents:            []TalentConfig{},
-			TalentTab:          TalentTabConfig{},
+			TalentTabs:         []TalentTabConfig{},
 		}
 
 		classTalents := []RawTalent{}
 		for _, rt := range rawTalents {
-			if dbcClass.ID == rt.ClassMask {
+			converted := convertTalentClassID(dbcClass.ID)
+			if converted == rt.ClassMask {
 				classTalents = append(classTalents, rt)
 			}
 		}
@@ -383,14 +458,28 @@ func GenerateProtos(dbcData *dbc.DBC, db *WowDatabase) {
 		if err != nil {
 			fmt.Printf("Error processing talents for %s: %v\n", className, err)
 		}
-		talentTab, err := transformRawTalentsToTab(classTalents)
-
+		talentTabs, err := transformRawTalentsToTab(classTalents)
+		slices.SortFunc(talentTabs, func(a, b TalentTabConfig) int {
+			return cmp.Compare(a.Name, b.Name)
+		})
 		if err != nil {
 			fmt.Printf("Error grouping talents for %s: %v\n", className, err)
 		}
-
+		var filteredTabs []TalentTabConfig
+		for _, tab := range talentTabs {
+			var filteredTalents []TalentConfig
+			for _, t := range tab.Talents {
+				if convertTalentClassID(t.MaxPoints) == convertTalentClassID(dbcClass.ID) {
+					filteredTalents = append(filteredTalents, t)
+				}
+			}
+			if len(filteredTalents) > 0 {
+				tab.Talents = filteredTalents
+				filteredTabs = append(filteredTabs, tab)
+			}
+		}
 		data.Talents = talents
-		data.TalentTab = talentTab
+		data.TalentTabs = talentTabs
 
 		classesData = append(classesData, data)
 	}
