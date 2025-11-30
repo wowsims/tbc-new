@@ -1,18 +1,17 @@
-package destruction
+package warlock
 
 import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
-	"github.com/wowsims/tbc/sim/warlock"
 )
 
 const incinerateVariance = 0.1
 const incinerateScale = 1.54 * 1.15 // Hotfix
 const incinerateCoeff = 1.54 * 1.15
 
-func (destro *DestructionWarlock) registerIncinerate() {
-	destro.RegisterSpell(core.SpellConfig{
+func (warlock *Warlock) registerIncinerate() {
+	warlock.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 29722},
 		SpellSchool:    core.SpellSchoolFire,
 		ProcMask:       core.ProcMaskSpellDamage,
@@ -29,19 +28,19 @@ func (destro *DestructionWarlock) registerIncinerate() {
 		},
 
 		DamageMultiplierAdditive: 1,
-		CritMultiplier:           destro.DefaultCritMultiplier(),
+		CritMultiplier:           warlock.DefaultCritMultiplier(),
 		ThreatMultiplier:         1,
 		BonusCoefficient:         incinerateCoeff,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			if destro.FABAura.IsActive() {
-				destro.FABAura.Deactivate(sim)
+			if warlock.FABAura.IsActive() {
+				warlock.FABAura.Deactivate(sim)
 			}
 
-			baseDamage := destro.CalcAndRollDamageRange(sim, incinerateScale, incinerateVariance)
+			baseDamage := warlock.CalcAndRollDamageRange(sim, incinerateScale, incinerateVariance)
 			result := spell.CalcDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
 			var emberGain int32 = 1
-			if destro.T15_4pc.IsActive() && sim.Proc(0.08, "T15 4p") {
+			if warlock.T15_4pc.IsActive() && sim.Proc(0.08, "T15 4p") {
 				emberGain += 1
 			}
 
@@ -54,7 +53,7 @@ func (destro *DestructionWarlock) registerIncinerate() {
 				emberGain += 1
 			}
 
-			destro.BurningEmbers.Gain(sim, float64(emberGain), spell.ActionID)
+			warlock.BurningEmbers.Gain(sim, float64(emberGain), spell.ActionID)
 			spell.WaitTravelTime(sim, func(sim *core.Simulation) {
 				spell.DealDamage(sim, result)
 			})

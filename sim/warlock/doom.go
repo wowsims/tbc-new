@@ -1,17 +1,16 @@
-package demonology
+package warlock
 
 import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
-	"github.com/wowsims/tbc/sim/warlock"
 )
 
 const doomScale = 0.9375
 const doomCoeff = 0.9375
 
-func (demonology *DemonologyWarlock) registerDoom() {
-	demonology.RegisterSpell(core.SpellConfig{
+func (warlock *Warlock) registerDoom() {
+	warlock.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 603},
 		SpellSchool:    core.SpellSchoolShadow,
 		ProcMask:       core.ProcMaskSpellDamage,
@@ -21,7 +20,7 @@ func (demonology *DemonologyWarlock) registerDoom() {
 		Cast: core.CastConfig{DefaultCast: core.Cast{GCD: core.GCDDefault}},
 
 		DamageMultiplierAdditive: 1,
-		CritMultiplier:           demonology.DefaultCritMultiplier(),
+		CritMultiplier:           warlock.DefaultCritMultiplier(),
 		ThreatMultiplier:         1,
 
 		Dot: core.DotConfig{
@@ -34,7 +33,7 @@ func (demonology *DemonologyWarlock) registerDoom() {
 			BonusCoefficient:    doomCoeff,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, isRollover bool) {
-				dot.Snapshot(target, demonology.CalcScalingSpellDmg(doomScale))
+				dot.Snapshot(target, warlock.CalcScalingSpellDmg(doomScale))
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeSnapshotCrit)
@@ -42,14 +41,14 @@ func (demonology *DemonologyWarlock) registerDoom() {
 		},
 
 		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
-			return demonology.IsInMeta() && demonology.CanSpendDemonicFury(60)
+			return warlock.IsInMeta() && warlock.CanSpendDemonicFury(60)
 		},
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			result := spell.CalcOutcome(sim, target, spell.OutcomeMagicHitNoHitCounter)
 			if result.Landed() {
-				demonology.SpendDemonicFury(sim, 60, spell.ActionID)
-				demonology.ApplyDotWithPandemic(spell.Dot(target), sim)
+				warlock.SpendDemonicFury(sim, 60, spell.ActionID)
+				warlock.ApplyDotWithPandemic(spell.Dot(target), sim)
 			}
 			spell.DealOutcome(sim, result)
 		},
@@ -61,7 +60,7 @@ func (demonology *DemonologyWarlock) registerDoom() {
 				result.Damage /= dot.TickPeriod().Seconds()
 				return result
 			} else {
-				result := spell.CalcPeriodicDamage(sim, target, demonology.CalcScalingSpellDmg(doomScale), spell.OutcomeExpectedMagicCrit)
+				result := spell.CalcPeriodicDamage(sim, target, warlock.CalcScalingSpellDmg(doomScale), spell.OutcomeExpectedMagicCrit)
 				result.Damage /= dot.CalcTickPeriod().Round(time.Millisecond).Seconds()
 				return result
 			}

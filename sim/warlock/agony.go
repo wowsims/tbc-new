@@ -1,17 +1,16 @@
-package affliction
+package warlock
 
 import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
-	"github.com/wowsims/tbc/sim/warlock"
 )
 
 const agonyScale = 0.0255
 const agonyCoeff = 0.0255
 
-func (affliction *AfflictionWarlock) registerAgony() {
-	affliction.Agony = affliction.RegisterSpell(core.SpellConfig{
+func (warlock *Warlock) registerAgony() {
+	warlock.Agony = warlock.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 980},
 		Flags:          core.SpellFlagAPL,
 		ProcMask:       core.ProcMaskSpellDamage,
@@ -21,7 +20,7 @@ func (affliction *AfflictionWarlock) registerAgony() {
 		ThreatMultiplier: 1,
 		DamageMultiplier: 1,
 		BonusCoefficient: agonyCoeff,
-		CritMultiplier:   affliction.DefaultCritMultiplier(),
+		CritMultiplier:   warlock.DefaultCritMultiplier(),
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
@@ -44,7 +43,7 @@ func (affliction *AfflictionWarlock) registerAgony() {
 			AffectedByCastSpeed: true,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, isRollover bool) {
-				dot.Snapshot(target, affliction.CalcScalingSpellDmg(agonyScale))
+				dot.Snapshot(target, warlock.CalcScalingSpellDmg(agonyScale))
 			},
 
 			BonusCoefficient: agonyCoeff,
@@ -65,7 +64,7 @@ func (affliction *AfflictionWarlock) registerAgony() {
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			if spell.CalcAndDealOutcome(sim, target, spell.OutcomeMagicHit).Landed() {
-				affliction.ApplyDotWithPandemic(spell.Dot(target), sim)
+				warlock.ApplyDotWithPandemic(spell.Dot(target), sim)
 				spell.Dot(target).AddStack(sim)
 			}
 		},
@@ -80,7 +79,7 @@ func (affliction *AfflictionWarlock) registerAgony() {
 				result.Damage /= dot.TickPeriod().Seconds()
 				return result
 			} else {
-				result := spell.CalcPeriodicDamage(sim, target, affliction.CalcScalingSpellDmg(agonyScale), spell.OutcomeExpectedMagicCrit)
+				result := spell.CalcPeriodicDamage(sim, target, warlock.CalcScalingSpellDmg(agonyScale), spell.OutcomeExpectedMagicCrit)
 				result.Damage *= 10
 				result.Damage /= dot.CalcTickPeriod().Round(time.Millisecond).Seconds()
 				return result

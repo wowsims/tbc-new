@@ -1,22 +1,21 @@
-package affliction
+package warlock
 
 import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
-	"github.com/wowsims/tbc/sim/warlock"
 )
 
-const maleficGraspScale = 0.132
-const maleficGraspCoeff = 0.132
+const drainSoulScale = 0.257
+const drainSoulCoeff = 0.257
 
-func (affliction *AfflictionWarlock) registerMaleficGrasp() {
-	affliction.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 103103},
+func (warlock *Warlock) registerDrainSoul() {
+	warlock.RegisterSpell(core.SpellConfig{
+		ActionID:       core.ActionID{SpellID: 1120},
 		SpellSchool:    core.SpellSchoolShadow,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL | core.SpellFlagChanneled,
-		ClassSpellMask: warlock.WarlockSpellMaleficGrasp,
+		ClassSpellMask: warlock.WarlockSpellDrainSoul,
 
 		ManaCost: core.ManaCostOptions{BaseCostPercent: 1.5},
 		Cast: core.CastConfig{
@@ -26,27 +25,33 @@ func (affliction *AfflictionWarlock) registerMaleficGrasp() {
 		},
 
 		DamageMultiplierAdditive: 1,
-		CritMultiplier:           affliction.DefaultCritMultiplier(),
+		CritMultiplier:           warlock.DefaultCritMultiplier(),
 		ThreatMultiplier:         1,
 
 		Dot: core.DotConfig{
-			Aura:                 core.Aura{Label: "MaleficGrasp"},
-			NumberOfTicks:        4,
-			TickLength:           1 * time.Second,
+			Aura:                 core.Aura{Label: "DrainSoul"},
+			NumberOfTicks:        6,
+			TickLength:           2 * time.Second,
 			AffectedByCastSpeed:  true,
 			HasteReducesDuration: true,
-			BonusCoefficient:     maleficGraspCoeff,
+			BonusCoefficient:     drainSoulCoeff,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, _ bool) {
-				dot.Snapshot(target, affliction.CalcScalingSpellDmg(maleficGraspScale))
+				dot.Snapshot(target, warlock.CalcScalingSpellDmg(drainSoulScale))
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				result := dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeSnapshotCrit)
-				if !result.Landed() {
+
+				// Every 2nd tick grants 1 soul shard
+				if dot.TickCount()%2 == 0 {
+					warlock.SoulShards.Gain(sim, 1, dot.Spell.ActionID)
+				}
+
+				if !result.Landed() || !sim.IsExecutePhase20() {
 					return
 				}
 
-				affliction.ProcMaleficEffect(target, affliction.MaleficGraspMaleficEffectMultiplier, sim)
+				warlock.ProcMaleficEffect(target, warlock.DrainSoulMaleficEffectMultiplier, sim)
 			},
 		},
 
@@ -65,10 +70,27 @@ func (affliction *AfflictionWarlock) registerMaleficGrasp() {
 				result.Damage /= dot.TickPeriod().Seconds()
 				return result
 			} else {
-				result := spell.CalcPeriodicDamage(sim, target, affliction.CalcScalingSpellDmg(maleficGraspScale), spell.OutcomeExpectedMagicCrit)
+				result := spell.CalcPeriodicDamage(sim, target, warlock.CalcScalingSpellDmg(drainSoulScale), spell.OutcomeExpectedMagicCrit)
 				result.Damage /= dot.CalcTickPeriod().Round(time.Millisecond).Seconds()
 				return result
 			}
 		},
+	})
+
+	dmgMode := warlock.AddDynamicMod(core.SpellModConfig{
+		Kind:       core.SpellMod_DamageDone_Pct,
+		FloatValue: 1,
+		ClassMask:  warlock.WarlockSpellDrainSoul,
+	})
+
+	warlock.RegisterResetEffect(func(s *core.Simulation) {
+		dmgMode.Deactivate()
+		s.RegisterExecutePhaseCallback(func(sim *core.Simulation, isExecute int32) {
+			if isExecute > 20 {
+				return
+			}
+
+			dmgMode.Activate()
+		})
 	})
 }
