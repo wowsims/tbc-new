@@ -45,7 +45,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecShadowPriest, {
 
 		return {
 			talents: new Stats().withStat(
-				Stat.StatSpellHit,
+				Stat.StatSpellHitRating,
 				talentsDelta.getPseudoStat(PseudoStat.PseudoStatSpellHitPercent) * Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT,
 			),
 		};

@@ -72,7 +72,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecEnhancementShaman, {
 	epPseudoStats: [
 		PseudoStat.PseudoStatMainHandDps,
 		PseudoStat.PseudoStatOffHandDps,
-		PseudoStat.PseudoStatPhysicalHitPercent,
+		PseudoStat.PseudoStatMeleeHitPercent,
 		PseudoStat.PseudoStatSpellHitPercent,
 	],
 	// Reference stat against which to calculate EP.
@@ -89,8 +89,8 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecEnhancementShaman, {
 			Stat.StatSpellPower,
 		],
 		[
-			PseudoStat.PseudoStatPhysicalHitPercent,
-			PseudoStat.PseudoStatPhysicalCritPercent,
+			PseudoStat.PseudoStatMeleeHitPercent,
+			PseudoStat.PseudoStatMeleeCritPercent,
 			PseudoStat.PseudoStatMeleeHastePercent,
 			PseudoStat.PseudoStatSpellHitPercent,
 			PseudoStat.PseudoStatSpellCritPercent,

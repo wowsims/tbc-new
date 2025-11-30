@@ -67,8 +67,8 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRetributionPaladin, {
 			Stat.StatStamina,
 		],
 		[
-			PseudoStat.PseudoStatPhysicalHitPercent,
-			PseudoStat.PseudoStatPhysicalCritPercent,
+			PseudoStat.PseudoStatMeleeHitPercent,
+			PseudoStat.PseudoStatMeleeCritPercent,
 			PseudoStat.PseudoStatMeleeHastePercent,
 			PseudoStat.PseudoStatSpellHastePercent,
 			PseudoStat.PseudoStatSpellCritPercent,

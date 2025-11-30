@@ -32,7 +32,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralBearDruid, {
 		Stat.StatStrength,
 		Stat.StatAttackPower
 	],
-	epPseudoStats: [PseudoStat.PseudoStatMainHandDps, PseudoStat.PseudoStatPhysicalHitPercent, PseudoStat.PseudoStatSpellHitPercent],
+	epPseudoStats: [PseudoStat.PseudoStatMainHandDps, PseudoStat.PseudoStatMeleeHitPercent, PseudoStat.PseudoStatSpellHitPercent],
 	// Reference stat against which to calculate EP. I think all classes use either spell power or attack power.
 	epReferenceStat: Stat.StatAgility,
 	// Which stats to display in the Character Stats section, at the bottom of the left-hand sidebar.
@@ -48,8 +48,8 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralBearDruid, {
 		],
 		[
 			PseudoStat.PseudoStatDodgePercent,
-			PseudoStat.PseudoStatPhysicalHitPercent,
-			PseudoStat.PseudoStatPhysicalCritPercent,
+			PseudoStat.PseudoStatMeleeHitPercent,
+			PseudoStat.PseudoStatMeleeCritPercent,
 			PseudoStat.PseudoStatMeleeHastePercent,
 			PseudoStat.PseudoStatSpellHitPercent,
 			PseudoStat.PseudoStatSpellCritPercent,

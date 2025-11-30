@@ -62,7 +62,7 @@ export const SURVIVAL_EP_PRESET = PresetUtils.makePresetEpWeights(
 		},
 		{
 			[PseudoStat.PseudoStatMainHandDps]: 0.0,
-			[PseudoStat.PseudoStatPhysicalHitPercent]: 1.07 * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT,
+			[PseudoStat.PseudoStatMeleeHitPercent]: 1.07 * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT,
 			[PseudoStat.PseudoStatSpellHitPercent]: 0.01 * Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT,
 		},
 	),
@@ -82,7 +82,7 @@ export const BALANCED_EP_PRESET = PresetUtils.makePresetEpWeights(
 		},
 		{
 			[PseudoStat.PseudoStatMainHandDps]: 0.84,
-			[PseudoStat.PseudoStatPhysicalHitPercent]: 1.50 * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT,
+			[PseudoStat.PseudoStatMeleeHitPercent]: 1.50 * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT,
 			[PseudoStat.PseudoStatSpellHitPercent]: 0.0 * Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT,
 		},
 	),
@@ -102,7 +102,7 @@ export const OFFENSIVE_EP_PRESET = PresetUtils.makePresetEpWeights(
 		},
 		{
 			[PseudoStat.PseudoStatMainHandDps]: 1.09,
-			[PseudoStat.PseudoStatPhysicalHitPercent]: 1.64 * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT,
+			[PseudoStat.PseudoStatMeleeHitPercent]: 1.64 * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT,
 			[PseudoStat.PseudoStatSpellHitPercent]: 0.0 * Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT,
 		},
 	),

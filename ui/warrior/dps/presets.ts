@@ -65,7 +65,7 @@ export const P1_FURY_SMF_EP_PRESET = PresetUtils.makePresetEpWeights(
 			[Stat.StatStrength]: 1.0,
 			[Stat.StatAgility]: 0.06,
 			[Stat.StatAttackPower]: 0.45,
-			[Stat.StatExpertise]: 1.19,
+			[Stat.StatExpertiseRating]: 1.19,
 		},
 		{
 			[PseudoStat.PseudoStatMainHandDps]: 2.15,
@@ -82,7 +82,7 @@ export const P1_FURY_TG_EP_PRESET = PresetUtils.makePresetEpWeights(
 			[Stat.StatStrength]: 1.0,
 			[Stat.StatAgility]: 0.07,
 			[Stat.StatAttackPower]: 0.45,
-			[Stat.StatExpertise]: 1.42,
+			[Stat.StatExpertiseRating]: 1.42,
 		},
 		{
 			[PseudoStat.PseudoStatMainHandDps]: 2.59,
@@ -99,7 +99,7 @@ export const P3_FURY_TG_EP_PRESET = PresetUtils.makePresetEpWeights(
 			[Stat.StatStrength]: 1.0,
 			[Stat.StatAgility]: 0.07,
 			[Stat.StatAttackPower]: 0.45,
-			[Stat.StatExpertise]: 1.89,
+			[Stat.StatExpertiseRating]: 1.89,
 		},
 		{
 			[PseudoStat.PseudoStatMainHandDps]: 2.56,

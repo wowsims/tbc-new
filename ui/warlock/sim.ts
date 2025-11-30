@@ -22,7 +22,7 @@ const modifyDisplayStats = (player: Player<Spec.SpecWarlock>) => {
 			return {};
 		}
 
-		stats = stats.addStat(Stat.StatMP5, (currentStats[Stat.StatMP5] * currentStats[Stat.StatSpellHaste]) / HASTE_RATING_PER_HASTE_PERCENT / 100);
+		stats = stats.addStat(Stat.StatMP5, (currentStats[Stat.StatMP5] * currentStats[Stat.StatSpellHasteRating]) / HASTE_RATING_PER_HASTE_PERCENT / 100);
 	});
 
 	return {

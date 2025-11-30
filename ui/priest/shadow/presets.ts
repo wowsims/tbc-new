@@ -24,10 +24,6 @@ export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
 		[Stat.StatIntellect]: 1.0,
 		[Stat.StatSpirit]: 0.9,
 		[Stat.StatSpellPower]: 0.98,
-		[Stat.StatHitRating]: 0.85,
-		[Stat.StatCritRating]: 0.46,
-		[Stat.StatHasteRating]: 0.49,
-		[Stat.StatMasteryRating]: 0.44,
 	}),
 );
 export const P2_EP_PRESET = PresetUtils.makePresetEpWeights(
@@ -36,10 +32,6 @@ export const P2_EP_PRESET = PresetUtils.makePresetEpWeights(
 		[Stat.StatIntellect]: 1.0,
 		[Stat.StatSpirit]: 0.9,
 		[Stat.StatSpellPower]: 0.98,
-		[Stat.StatHitRating]: 0.85,
-		[Stat.StatCritRating]: 0.46,
-		[Stat.StatHasteRating]: 0.59,
-		[Stat.StatMasteryRating]: 0.44,
 	}),
 );
 
@@ -144,19 +136,12 @@ export const DefaultConsumables = ConsumesSpec.create({
 
 export const DefaultRaidBuffs = RaidBuffs.create({
 	...defaultRaidBuffMajorDamageCooldowns(),
-	arcaneBrilliance: true,
-	blessingOfKings: true,
-	mindQuickening: true,
-	leaderOfThePack: true,
-	blessingOfMight: true,
-	unholyAura: true,
-	bloodlust: true,
 });
 
 export const DefaultIndividualBuffs = IndividualBuffs.create({});
 
 export const DefaultDebuffs = Debuffs.create({
-	curseOfElements: true,
+
 });
 
 export const OtherDefaults = {
