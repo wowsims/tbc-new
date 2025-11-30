@@ -61,7 +61,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralBearDruid, {
 		gear: Presets.PRERAID_PRESET.gear,
 		// Default EP weights for sorting gear in the gear picker.
 		epWeights: Presets.BALANCED_EP_PRESET.epWeights,
-		// Default stat caps for the Reforge Optimizer
 		other: Presets.OtherDefaults,
 		// Default consumes settings.
 		consumables: Presets.DefaultConsumables,
@@ -241,7 +240,5 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralBearDruid, {
 export class FeralBearDruidSimUI extends IndividualSimUI<Spec.SpecFeralBearDruid> {
 	constructor(parentElem: HTMLElement, player: Player<Spec.SpecFeralBearDruid>) {
 		super(parentElem, player, SPEC_CONFIG);
-
-		this.reforger = new ReforgeOptimizer(this);
 	}
 }

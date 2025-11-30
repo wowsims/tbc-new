@@ -43,13 +43,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecMage, {
 		gear: Presets.BLANK_GEARSET.gear,
 		// Default EP weights for sorting gear in the gear picker.
 		epWeights: Presets.P1_EP_PRESET.epWeights,
-		// Default stat caps for the Reforge Optimizer
-		statCaps: (() => {
-			const hitCap = new Stats().withPseudoStat(PseudoStat.PseudoStatSpellHitPercent, 15);
-			const hasteCap = new Stats().withPseudoStat(PseudoStat.PseudoStatSpellHastePercent, 53.32);
-
-			return hitCap.add(hasteCap);
-		})(),
 		// Default consumes settings.
 		consumables: Presets.DefaultConsumables,
 		// Default talents.

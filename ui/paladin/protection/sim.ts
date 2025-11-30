@@ -171,12 +171,5 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 export class ProtectionPaladinSimUI extends IndividualSimUI<Spec.SpecProtectionPaladin> {
 	constructor(parentElem: HTMLElement, player: Player<Spec.SpecProtectionPaladin>) {
 		super(parentElem, player, SPEC_CONFIG);
-
-		this.reforger = new ReforgeOptimizer(this, {
-			updateSoftCaps: softCaps => {
-				softCaps[0].postCapEPs[0] = player.getEpWeights().getStat(Stat.StatExpertiseRating) * 0.9;
-				return softCaps;
-			},
-		});
 	}
 }
