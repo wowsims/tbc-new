@@ -1,4 +1,4 @@
-package feral
+package feralcat
 
 import (
 	"time"
@@ -16,9 +16,6 @@ func (cat *FeralDruid) applySpecTalents() {
 }
 
 func (cat *FeralDruid) registerSoulOfTheForest() {
-	if !cat.Talents.SoulOfTheForest {
-		return
-	}
 
 	energyMetrics := cat.NewEnergyMetrics(core.ActionID{SpellID: 114113})
 
@@ -60,9 +57,6 @@ func (cat *FeralDruid) registerSoulOfTheForest() {
 }
 
 func (cat *FeralDruid) registerIncarnation() {
-	if !cat.Talents.Incarnation {
-		return
-	}
 
 	actionID := core.ActionID{SpellID: 102543}
 
@@ -122,15 +116,12 @@ func (cat *FeralDruid) registerIncarnation() {
 
 func (cat *FeralDruid) registerHeartOfTheWild() {
 	// Passive stat buffs handled in class-level talents code.
-	if !cat.Talents.HeartOfTheWild {
-		return
-	}
 
 	actionID := core.ActionID{SpellID: 108292}
 	healingMod, damageMod, costMod := cat.RegisterSharedFeralHotwMods()
 	bearFormDep := cat.NewDynamicMultiplyStat(stats.Agility, 1.5)
 	bearFormStatBuff := stats.Stats{
-		stats.HitRating:       7.5 * core.PhysicalHitRatingPerHitPercent,
+		//stats.HitRating:       7.5 * core.PhysicalHitRatingPerHitPercent,
 		stats.ExpertiseRating: 7.5 * 4 * core.ExpertisePerQuarterPercentReduction,
 	}
 
@@ -210,9 +201,6 @@ func (cat *FeralDruid) registerHeartOfTheWild() {
 }
 
 func (cat *FeralDruid) registerDreamOfCenarius() {
-	if !cat.Talents.DreamOfCenarius {
-		return
-	}
 
 	cat.AddStaticMod(core.SpellModConfig{
 		ClassMask:  druid.DruidSpellHealingTouch,

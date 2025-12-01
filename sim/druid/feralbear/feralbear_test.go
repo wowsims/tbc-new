@@ -1,4 +1,4 @@
-package guardian
+package feralbear
 
 import (
 	"testing"
@@ -7,9 +7,9 @@ import (
 )
 
 func init() {
-	RegisterGuardianDruid()
+	RegisterFeralBearDruid()
 	common.RegisterAllEffects()
 }
 
-func TestGuardian(t *testing.T) {
+func TestFeralBear(t *testing.T) {
 }

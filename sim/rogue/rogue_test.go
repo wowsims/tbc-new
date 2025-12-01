@@ -1,4 +1,4 @@
-package assassination
+package rogue
 
 import (
 	"testing"
@@ -7,8 +7,8 @@ import (
 )
 
 func init() {
-	RegisterAssassinationRogue()
+	RegisterRogue()
 }
 
-func TestAssassination(t *testing.T) {
+func TestRogue(t *testing.T) {
 }

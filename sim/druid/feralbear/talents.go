@@ -1,4 +1,4 @@
-package guardian
+package feralbear
 
 import (
 	"time"
@@ -15,9 +15,6 @@ func (bear *GuardianDruid) applySpecTalents() {
 }
 
 func (bear *GuardianDruid) registerIncarnation() {
-	if !bear.Talents.Incarnation {
-		return
-	}
 
 	actionID := core.ActionID{SpellID: 102558}
 
@@ -87,15 +84,12 @@ func (bear *GuardianDruid) registerIncarnation() {
 
 func (bear *GuardianDruid) registerHeartOfTheWild() {
 	// Passive stat buffs handled in class-level talents code.
-	if !bear.Talents.HeartOfTheWild {
-		return
-	}
 
 	actionID := core.ActionID{SpellID: 108293}
 	healingMod, damageMod, costMod := bear.RegisterSharedFeralHotwMods()
 	catFormDep := bear.NewDynamicMultiplyStat(stats.Agility, 2.1)
 	catFormStatBuff := stats.Stats{
-		stats.HitRating:       7.5 * core.PhysicalHitRatingPerHitPercent,
+		//stats.HitRating:       7.5 * core.PhysicalHitRatingPerHitPercent,
 		stats.ExpertiseRating: 7.5 * 4 * core.ExpertisePerQuarterPercentReduction,
 	}
 
@@ -173,9 +167,6 @@ func (bear *GuardianDruid) registerHeartOfTheWild() {
 }
 
 func (bear *GuardianDruid) registerDreamOfCenarius() {
-	if !bear.Talents.DreamOfCenarius {
-		return
-	}
 
 	bear.AddStaticMod(core.SpellModConfig{
 		ClassMask:  druid.DruidSpellHealingTouch,

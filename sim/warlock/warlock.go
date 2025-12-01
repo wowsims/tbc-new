@@ -1,7 +1,6 @@
 package warlock
 
 import (
-	"fmt"
 	"math"
 	"time"
 
@@ -26,15 +25,15 @@ type Warlock struct {
 	DrainLife            *core.Spell
 	SiphonLife           *core.Spell
 
-	ActivePet *WarlockPet
-	Felhunter *WarlockPet
-	// Felguard  *WarlockPet
-	Imp        *WarlockPet
-	Succubus   *WarlockPet
-	Voidwalker *WarlockPet
+	// ActivePet *WarlockPet
+	// Felhunter *WarlockPet
+	// // Felguard  *WarlockPet
+	// Imp        *WarlockPet
+	// Succubus   *WarlockPet
+	// Voidwalker *WarlockPet
 
-	Doomguard *DoomguardPet
-	Infernal  *InfernalPet
+	// Doomguard *DoomguardPet
+	// Infernal  *InfernalPet
 
 	serviceTimer *core.Timer
 
@@ -53,20 +52,20 @@ func (warlock *Warlock) GetWarlock() *Warlock {
 }
 
 func (warlock *Warlock) ApplyTalents() {
-	warlock.registerHarvestLife()
-	warlock.registerArchimondesDarkness()
-	warlock.registerKilJaedensCunning()
-	warlock.registerMannarothsFury()
-	warlock.registerGrimoireOfSupremacy()
-	warlock.registerGrimoireOfSacrifice()
+	// warlock.registerHarvestLife()
+	// warlock.registerArchimondesDarkness()
+	// warlock.registerKilJaedensCunning()
+	// warlock.registerMannarothsFury()
+	// warlock.registerGrimoireOfSupremacy()
+	// warlock.registerGrimoireOfSacrifice()
 }
 
 func (warlock *Warlock) Initialize() {
 
 	warlock.registerCurseOfElements()
-	doomguardInfernalTimer := warlock.NewTimer()
-	warlock.registerSummonDoomguard(doomguardInfernalTimer)
-	warlock.registerSummonInfernal(doomguardInfernalTimer)
+	// doomguardInfernalTimer := warlock.NewTimer()
+	// warlock.registerSummonDoomguard(doomguardInfernalTimer)
+	// warlock.registerSummonInfernal(doomguardInfernalTimer)
 	warlock.registerLifeTap()
 
 	// Fel Armor 10% Stamina
@@ -102,12 +101,12 @@ func NewWarlock(character *core.Character, options *proto.Player, warlockOptions
 	warlock.EnableManaBar()
 	warlock.AddStatDependency(stats.Strength, stats.AttackPower, 1)
 
-	warlock.Infernal = warlock.NewInfernalPet()
-	warlock.Doomguard = warlock.NewDoomguardPet()
+	// warlock.Infernal = warlock.NewInfernalPet()
+	// warlock.Doomguard = warlock.NewDoomguardPet()
 
-	warlock.serviceTimer = character.NewTimer()
-	warlock.registerPets()
-	warlock.registerGrimoireOfService()
+	// warlock.serviceTimer = character.NewTimer()
+	// warlock.registerPets()
+	// warlock.registerGrimoireOfService()
 
 	return warlock
 }
@@ -238,35 +237,35 @@ type SecondaryResourceCost struct {
 	Name          string
 }
 
-// CostFailureReason implements core.ResourceCostImpl.
-func (s *SecondaryResourceCost) CostFailureReason(_ *core.Simulation, spell *core.Spell) string {
-	return fmt.Sprintf(
-		"Not enough %s (Current %s = %0.03f, %s Cost = %0.03f)",
-		s.Name,
-		s.Name,
-		spell.Unit.GetSecondaryResourceBar(),
-		s.Name,
-		spell.CurCast.Cost,
-	)
-}
+// // CostFailureReason implements core.ResourceCostImpl.
+// func (s *SecondaryResourceCost) CostFailureReason(_ *core.Simulation, spell *core.Spell) string {
+// 	return fmt.Sprintf(
+// 		"Not enough %s (Current %s = %0.03f, %s Cost = %0.03f)",
+// 		s.Name,
+// 		s.Name,
+// 		spell.Unit.GetSecondaryResourceBar(),
+// 		s.Name,
+// 		spell.CurCast.Cost,
+// 	)
+// }
 
-// IssueRefund implements core.ResourceCostImpl.
-func (s *SecondaryResourceCost) IssueRefund(sim *core.Simulation, spell *core.Spell) {
-	curCost := spell.Cost.PercentModifier * float64(s.SecondaryCost)
-	spell.Unit.GetSecondaryResourceBar().Gain(sim, curCost, spell.ActionID)
-}
+// // IssueRefund implements core.ResourceCostImpl.
+// func (s *SecondaryResourceCost) IssueRefund(sim *core.Simulation, spell *core.Spell) {
+// 	curCost := spell.Cost.PercentModifier * float64(s.SecondaryCost)
+// 	spell.Unit.GetSecondaryResourceBar().Gain(sim, curCost, spell.ActionID)
+// }
 
-// MeetsRequirement implements core.ResourceCostImpl.
-func (s *SecondaryResourceCost) MeetsRequirement(_ *core.Simulation, spell *core.Spell) bool {
-	spell.CurCast.Cost = spell.Cost.PercentModifier * float64(s.SecondaryCost)
-	return spell.Unit.GetSecondaryResourceBar().CanSpend(spell.CurCast.Cost)
-}
+// // MeetsRequirement implements core.ResourceCostImpl.
+// func (s *SecondaryResourceCost) MeetsRequirement(_ *core.Simulation, spell *core.Spell) bool {
+// 	spell.CurCast.Cost = spell.Cost.PercentModifier * float64(s.SecondaryCost)
+// 	return spell.Unit.GetSecondaryResourceBar().CanSpend(spell.CurCast.Cost)
+// }
 
-// SpendCost implements core.ResourceCostImpl.
-func (s *SecondaryResourceCost) SpendCost(sim *core.Simulation, spell *core.Spell) {
+// // SpendCost implements core.ResourceCostImpl.
+// func (s *SecondaryResourceCost) SpendCost(sim *core.Simulation, spell *core.Spell) {
 
-	// during some hard casts resourc might tick down, make sure spells don't execute on exhaustion
-	if spell.Unit.GetSecondaryResourceBar().CanSpend(spell.CurCast.Cost) {
-		spell.Unit.GetSecondaryResourceBar().Spend(sim, spell.CurCast.Cost, spell.ActionID)
-	}
-}
+// 	// during some hard casts resourc might tick down, make sure spells don't execute on exhaustion
+// 	if spell.Unit.GetSecondaryResourceBar().CanSpend(spell.CurCast.Cost) {
+// 		spell.Unit.GetSecondaryResourceBar().Spend(sim, spell.CurCast.Cost, spell.ActionID)
+// 	}
+// }

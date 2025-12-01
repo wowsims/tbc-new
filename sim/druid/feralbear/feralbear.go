@@ -1,4 +1,4 @@
-package guardian
+package feralbear
 
 import (
 	"github.com/wowsims/tbc/sim/core"
@@ -7,12 +7,12 @@ import (
 	"github.com/wowsims/tbc/sim/druid"
 )
 
-func RegisterGuardianDruid() {
+func RegisterFeralBearDruid() {
 	core.RegisterAgentFactory(
 		proto.Player_GuardianDruid{},
-		proto.Spec_SpecGuardianDruid,
+		proto.Spec_SpecFeralBearDruid,
 		func(character *core.Character, options *proto.Player) core.Agent {
-			return NewGuardianDruid(character, options)
+			return NewFeralBearDruid(character, options)
 		},
 		func(player *proto.Player, spec interface{}) {
 			playerSpec, ok := spec.(*proto.Player_GuardianDruid)
@@ -24,7 +24,7 @@ func RegisterGuardianDruid() {
 	)
 }
 
-func NewGuardianDruid(character *core.Character, options *proto.Player) *GuardianDruid {
+func NewFeralBearDruid(character *core.Character, options *proto.Player) *GuardianDruid {
 	tankOptions := options.GetGuardianDruid()
 	selfBuffs := druid.SelfBuffs{}
 
@@ -33,7 +33,7 @@ func NewGuardianDruid(character *core.Character, options *proto.Player) *Guardia
 		Options: tankOptions.Options,
 	}
 
-	bear.registerTreants()
+	//bear.registerTreants()
 
 	bear.EnableEnergyBar(core.EnergyBarOptions{
 		MaxComboPoints:        5,
@@ -59,7 +59,7 @@ func NewGuardianDruid(character *core.Character, options *proto.Player) *Guardia
 type GuardianDruid struct {
 	*druid.Druid
 
-	Options *proto.GuardianDruid_Options
+	Options *proto.FeralBearDruid_Options
 
 	// Aura references
 	DreamOfCenariusAura      *core.Aura
@@ -83,31 +83,17 @@ func (bear *GuardianDruid) GetDruid() *druid.Druid {
 }
 
 func (bear *GuardianDruid) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
-	raidBuffs.LeaderOfThePack = true
 }
 
 func (bear *GuardianDruid) ApplyTalents() {
 	bear.Druid.ApplyTalents()
 	bear.applySpecTalents()
-	bear.applyMastery()
+	//bear.applyMastery()
 	bear.applyThickHide()
 	bear.applyLeatherSpecialization()
 
 	// MoP Classic balancing
 	bear.BearFormAura.AttachMultiplicativePseudoStatBuff(&bear.PseudoStats.DamageDealtMultiplier, 1.15)
-}
-
-func (bear *GuardianDruid) applyMastery() {
-	const baseMasteryMod = 1.16
-	const masteryModPerPoint = 0.02
-
-	armorMultiplierDep := bear.NewDynamicMultiplyStat(stats.Armor, baseMasteryMod+masteryModPerPoint*bear.GetMasteryPoints())
-
-	bear.AddOnMasteryStatChanged(func(sim *core.Simulation, _ float64, newMasteryRating float64) {
-		bear.UpdateDynamicStatDep(sim, armorMultiplierDep, baseMasteryMod+masteryModPerPoint*core.MasteryRatingToMasteryPoints(newMasteryRating))
-	})
-
-	bear.BearFormAura.AttachStatDependency(armorMultiplierDep)
 }
 
 func (bear *GuardianDruid) applyThickHide() {
@@ -158,13 +144,13 @@ func (bear *GuardianDruid) applyLeatherSpecialization() {
 func (bear *GuardianDruid) Initialize() {
 	bear.Druid.Initialize()
 	bear.RegisterFeralTankSpells()
-	bear.registerEnrageSpell()
-	bear.registerSavageDefenseSpell()
-	bear.registerToothAndClawPassive()
-	bear.ApplyPrimalFury()
-	bear.ApplyLeaderOfThePack()
-	bear.ApplyNurturingInstinct()
-	bear.registerSymbiosis()
+	// bear.registerEnrageSpell()
+	// bear.registerSavageDefenseSpell()
+	// bear.registerToothAndClawPassive()
+	// bear.ApplyPrimalFury()
+	// bear.ApplyLeaderOfThePack()
+	// bear.ApplyNurturingInstinct()
+	// bear.registerSymbiosis()
 }
 
 func (bear *GuardianDruid) registerSymbiosis() {

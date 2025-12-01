@@ -374,22 +374,10 @@ func getPlayerSpecOptions(player *proto.Player) interface{} {
 	if playerSpec, ok := player.Spec.(*proto.Player_RestorationDruid); ok {
 		return playerSpec
 	}
-	if playerSpec, ok := player.Spec.(*proto.Player_BeastMasteryHunter); ok {
+	if playerSpec, ok := player.Spec.(*proto.Player_Hunter); ok {
 		return playerSpec
 	}
-	if playerSpec, ok := player.Spec.(*proto.Player_MarksmanshipHunter); ok {
-		return playerSpec
-	}
-	if playerSpec, ok := player.Spec.(*proto.Player_SurvivalHunter); ok {
-		return playerSpec
-	}
-	if playerSpec, ok := player.Spec.(*proto.Player_ArcaneMage); ok {
-		return playerSpec
-	}
-	if playerSpec, ok := player.Spec.(*proto.Player_FireMage); ok {
-		return playerSpec
-	}
-	if playerSpec, ok := player.Spec.(*proto.Player_FrostMage); ok {
+	if playerSpec, ok := player.Spec.(*proto.Player_Mage); ok {
 		return playerSpec
 	}
 	if playerSpec, ok := player.Spec.(*proto.Player_HolyPaladin); ok {
@@ -410,13 +398,7 @@ func getPlayerSpecOptions(player *proto.Player) interface{} {
 	if playerSpec, ok := player.Spec.(*proto.Player_ShadowPriest); ok {
 		return playerSpec
 	}
-	if playerSpec, ok := player.Spec.(*proto.Player_AssassinationRogue); ok {
-		return playerSpec
-	}
-	if playerSpec, ok := player.Spec.(*proto.Player_CombatRogue); ok {
-		return playerSpec
-	}
-	if playerSpec, ok := player.Spec.(*proto.Player_SubtletyRogue); ok {
+	if playerSpec, ok := player.Spec.(*proto.Player_Rogue); ok {
 		return playerSpec
 	}
 	if playerSpec, ok := player.Spec.(*proto.Player_ElementalShaman); ok {
@@ -428,19 +410,10 @@ func getPlayerSpecOptions(player *proto.Player) interface{} {
 	if playerSpec, ok := player.Spec.(*proto.Player_RestorationShaman); ok {
 		return playerSpec
 	}
-	if playerSpec, ok := player.Spec.(*proto.Player_AfflictionWarlock); ok {
+	if playerSpec, ok := player.Spec.(*proto.Player_Warlock); ok {
 		return playerSpec
 	}
-	if playerSpec, ok := player.Spec.(*proto.Player_DemonologyWarlock); ok {
-		return playerSpec
-	}
-	if playerSpec, ok := player.Spec.(*proto.Player_DestructionWarlock); ok {
-		return playerSpec
-	}
-	if playerSpec, ok := player.Spec.(*proto.Player_ArmsWarrior); ok {
-		return playerSpec
-	}
-	if playerSpec, ok := player.Spec.(*proto.Player_FuryWarrior); ok {
+	if playerSpec, ok := player.Spec.(*proto.Player_DpsWarrior); ok {
 		return playerSpec
 	}
 	if playerSpec, ok := player.Spec.(*proto.Player_ProtectionWarrior); ok {
