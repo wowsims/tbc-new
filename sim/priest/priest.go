@@ -8,6 +8,8 @@ import (
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
+var TalentTreeSizes = [3]int{22, 21, 21}
+
 type Priest struct {
 	core.Character
 	SelfBuffs
@@ -18,9 +20,9 @@ type Priest struct {
 	Latency float64
 
 	ShadowfiendAura *core.Aura
-	ShadowfiendPet  *Shadowfiend
-	MindbenderPet   *MindBender
-	MindbenderAura  *core.Aura
+	// ShadowfiendPet  *Shadowfiend
+	// MindbenderPet   *MindBender
+	MindbenderAura *core.Aura
 
 	ShadowOrbsAura      *core.Aura
 	EmpoweredShadowAura *core.Aura
@@ -89,14 +91,14 @@ func (priest *Priest) Initialize() {
 	}
 
 	priest.MultiplyStat(stats.Intellect, 1.05)
-	priest.registerShadowWordPainSpell()
-	priest.registerShadowfiendSpell()
-	priest.registerVampiricTouchSpell()
+	// priest.registerShadowWordPainSpell()
+	// priest.registerShadowfiendSpell()
+	// priest.registerVampiricTouchSpell()
 
 	// priest.registerDispersionSpell()
 
-	priest.registerPowerInfusionSpell()
-	priest.newMindSearSpell()
+	// priest.registerPowerInfusionSpell()
+	// priest.newMindSearSpell()
 
 	priest.T15_2PC_ExtensionTracker = make([]TargetDoTInfo, len(priest.Env.Encounter.AllTargets))
 }
@@ -116,7 +118,7 @@ func (priest *Priest) AddDarkEvangelismStack(sim *core.Simulation) {
 }
 
 func (priest *Priest) ApplyTalents() {
-	priest.registerMindbenderSpell()
+	// priest.registerMindbenderSpell()
 }
 
 func (priest *Priest) Reset(_ *core.Simulation) {
@@ -136,13 +138,13 @@ func New(char *core.Character, selfBuffs SelfBuffs, talents string) *Priest {
 		Talents:   &proto.PriestTalents{},
 	}
 
-	core.FillTalentsProto(priest.Talents.ProtoReflect(), talents)
+	core.FillTalentsProto(priest.Talents.ProtoReflect(), talents, TalentTreeSizes)
 	priest.EnableManaBar()
-	priest.ShadowfiendPet = priest.NewShadowfiend()
+	// priest.ShadowfiendPet = priest.NewShadowfiend()
 
-	if priest.Talents.Mindbender {
-		priest.MindbenderPet = priest.NewMindBender()
-	}
+	// if priest.Talents.Mindbender {
+	// 	priest.MindbenderPet = priest.NewMindBender()
+	// }
 
 	return priest
 }

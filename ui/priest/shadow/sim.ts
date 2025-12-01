@@ -1,6 +1,5 @@
 import * as BuffDebuffInputs from '../../core/components/inputs/buffs_debuffs';
 import * as OtherInputs from '../../core/components/inputs/other_inputs';
-import { ReforgeOptimizer } from '../../core/components/suggest_reforges_action';
 import * as Mechanics from '../../core/constants/mechanics';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui';
 import { Player } from '../../core/player';
@@ -21,7 +20,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecShadowPriest, {
 	],
 
 	// All stats for which EP should be calculated.
-	epStats: [Stat.StatIntellect, Stat.StatSpirit, Stat.StatSpellPower, Stat.StatHitRating, Stat.StatCritRating, Stat.StatHasteRating, Stat.StatMasteryRating],
+	epStats: [Stat.StatIntellect, Stat.StatSpirit, Stat.StatSpellPower],
 	// Reference stat against which to calculate EP. I think all classes use either spell power or attack power.
 	epReferenceStat: Stat.StatIntellect,
 	// Which stats to display in the Character Stats section, at the bottom of the left-hand sidebar.
@@ -33,8 +32,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecShadowPriest, {
 			Stat.StatIntellect,
 			Stat.StatSpirit,
 			Stat.StatSpellPower,
-			Stat.StatMasteryRating,
-			Stat.StatExpertiseRating,
 		],
 		[PseudoStat.PseudoStatSpellHitPercent, PseudoStat.PseudoStatSpellCritPercent, PseudoStat.PseudoStatSpellHastePercent],
 	),
@@ -47,7 +44,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecShadowPriest, {
 
 		return {
 			talents: new Stats().withStat(
-				Stat.StatHitRating,
+				Stat.StatSpellHitRating,
 				talentsDelta.getPseudoStat(PseudoStat.PseudoStatSpellHitPercent) * Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT,
 			),
 		};
@@ -118,7 +115,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecShadowPriest, {
 			otherDefaults: Presets.OtherDefaults,
 			defaultFactionRaces: {
 				[Faction.Unknown]: Race.RaceUnknown,
-				[Faction.Alliance]: Race.RaceWorgen,
+				[Faction.Alliance]: Race.RaceDraenei,
 				[Faction.Horde]: Race.RaceTroll,
 			},
 			defaultGear: {
@@ -139,16 +136,5 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecShadowPriest, {
 export class ShadowPriestSimUI extends IndividualSimUI<Spec.SpecShadowPriest> {
 	constructor(parentElem: HTMLElement, player: Player<Spec.SpecShadowPriest>) {
 		super(parentElem, player, SPEC_CONFIG);
-
-		this.reforger = new ReforgeOptimizer(this, {
-			statSelectionPresets: [Presets.SHADOW_BREAKPOINTS],
-			getEPDefaults: player => {
-				const avgIlvl = player.getGear().getAverageItemLevel(false);
-				if (avgIlvl >= 500) {
-					return Presets.P2_EP_PRESET.epWeights;
-				}
-				return Presets.P1_EP_PRESET.epWeights;
-			},
-		});
 	}
 }

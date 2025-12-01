@@ -14,6 +14,8 @@ const (
 	SpellFlagSealFate = core.SpellFlagAgentReserved4
 )
 
+var TalentTreeSizes = [3]int{21, 24, 22}
+
 const RogueBleedTag = "RogueBleed"
 
 type Rogue struct {
@@ -23,9 +25,7 @@ type Rogue struct {
 
 	Talents              *proto.RogueTalents
 	Options              *proto.RogueOptions
-	AssassinationOptions *proto.AssassinationRogue_Options
-	CombatOptions        *proto.CombatRogue_Options
-	SubtletyOptions      *proto.SubtletyRogue_Options
+	AssassinationOptions *proto.Rogue_Options
 
 	MasteryBaseValue  float64
 	MasteryMultiplier float64
@@ -111,6 +111,10 @@ type Rogue struct {
 	relentlessStrikesMetrics *core.ResourceMetrics
 }
 
+// ApplyTalents implements core.Agent.
+func (rogue *Rogue) ApplyTalents() {
+}
+
 func (rogue *Rogue) GetCharacter() *core.Character {
 	return &rogue.Character
 }
@@ -122,57 +126,19 @@ func (rogue *Rogue) GetRogue() *Rogue {
 func (rogue *Rogue) AddRaidBuffs(_ *proto.RaidBuffs)   {}
 func (rogue *Rogue) AddPartyBuffs(_ *proto.PartyBuffs) {}
 
-func (rogue *Rogue) AddComboPointsOrAnticipation(sim *core.Simulation, numPoints int32, metric *core.ResourceMetrics) {
-	if rogue.Talents.Anticipation && rogue.ComboPoints()+numPoints > 5 {
-		realPoints := 5 - rogue.ComboPoints()
-		antiPoints := rogue.AnticipationAura.GetStacks() + numPoints - realPoints
-
-		rogue.AddComboPoints(sim, realPoints, metric)
-
-		rogue.AnticipationAura.Activate(sim)
-		rogue.AnticipationAura.Refresh(sim)
-		rogue.AnticipationAura.SetStacks(sim, antiPoints)
-		if antiPoints > 5 {
-			// run AddComboPoints again to report the overcapping into UI
-			rogue.AddComboPoints(sim, antiPoints-5, metric)
-		}
-	} else {
-		rogue.AddComboPoints(sim, numPoints, metric)
-	}
-}
-
 // Apply the effect of successfully casting a finisher to combo points
 func (rogue *Rogue) ApplyFinisher(sim *core.Simulation, spell *core.Spell) {
 	numPoints := rogue.ComboPoints()
 	rogue.SpendComboPoints(sim, spell.ComboPointMetrics())
 
-	if rogue.Spec == proto.Spec_SpecCombatRogue {
-		// Ruthlessness
-		if sim.Proc(0.2*float64(numPoints), "Ruthlessness") {
-			rogue.AddComboPoints(sim, 1, rogue.ruthlessnessMetrics)
-		}
-
-		// Restless Blades
-		if !spell.Matches(RogueSpellSliceAndDice) {
-			cdReduction := 2 * time.Second * time.Duration(numPoints)
-			if rogue.KillingSpree != nil {
-				ksNewTime := rogue.KillingSpree.CD.Timer.ReadyAt() - cdReduction
-				rogue.KillingSpree.CD.Timer.Set(ksNewTime)
-			}
-			if rogue.AdrenalineRush != nil {
-				arNewTime := rogue.AdrenalineRush.CD.Timer.ReadyAt() - cdReduction
-				rogue.AdrenalineRush.CD.Timer.Set(arNewTime)
-			}
-			if rogue.ShadowBlades != nil {
-				sbNewTime := rogue.ShadowBlades.CD.Timer.ReadyAt() - cdReduction
-				rogue.ShadowBlades.CD.Timer.Set(sbNewTime)
-			}
-		}
+	// Relentless Strikes
+	if rogue.Talents.RelentlessStrikes && sim.Proc(0.2*float64(numPoints), "Relentless Strikes") {
+		rogue.AddEnergy(sim, 25, rogue.relentlessStrikesMetrics)
 	}
 
-	// Relentless Strikes
-	if sim.Proc(0.2*float64(numPoints), "Relentless Strikes") {
-		rogue.AddEnergy(sim, 25, rogue.relentlessStrikesMetrics)
+	// Ruthlessness
+	if rogue.Talents.Ruthlessness > 0 && sim.Proc(0.2*float64(rogue.Talents.Ruthlessness), "Ruthlessness") {
+		rogue.AddComboPoints(sim, 1, rogue.ruthlessnessMetrics)
 	}
 }
 
@@ -186,22 +152,22 @@ func (rogue *Rogue) Initialize() {
 	rogue.AutoAttacks.OHConfig().CritMultiplier = rogue.CritMultiplier(false)
 	rogue.AutoAttacks.RangedConfig().CritMultiplier = rogue.CritMultiplier(false)
 
-	rogue.registerStealthAura()
-	rogue.registerVanishSpell()
-	rogue.registerAmbushSpell()
-	rogue.registerGarrote()
-	rogue.registerRupture()
-	rogue.registerSliceAndDice()
-	rogue.registerEviscerate()
-	rogue.registerExposeArmorSpell()
-	rogue.registerFanOfKnives()
-	rogue.registerTricksOfTheTradeSpell()
-	rogue.registerDeadlyPoisonSpell()
-	rogue.registerWoundPoisonSpell()
-	rogue.registerPoisonAuras()
-	rogue.registerShadowBladesCD()
-	rogue.registerCrimsonTempest()
-	rogue.registerPreparationCD()
+	// rogue.registerStealthAura()
+	// rogue.registerVanishSpell()
+	// rogue.registerAmbushSpell()
+	// rogue.registerGarrote()
+	// rogue.registerRupture()
+	// rogue.registerSliceAndDice()
+	// rogue.registerEviscerate()
+	// rogue.registerExposeArmorSpell()
+	// rogue.registerFanOfKnives()
+	// rogue.registerTricksOfTheTradeSpell()
+	// rogue.registerDeadlyPoisonSpell()
+	// rogue.registerWoundPoisonSpell()
+	// rogue.registerPoisonAuras()
+	// rogue.registerShadowBladesCD()
+	// rogue.registerCrimsonTempest()
+	// rogue.registerPreparationCD()
 
 	rogue.ruthlessnessMetrics = rogue.NewComboPointMetrics(core.ActionID{SpellID: 14161})
 	rogue.relentlessStrikesMetrics = rogue.NewEnergyMetrics(core.ActionID{SpellID: 58423})
@@ -230,15 +196,16 @@ func (rogue *Rogue) CritMultiplier(applyLethality bool) float64 {
 	return rogue.GetCharacter().CritMultiplier(1.0, secondaryModifier)
 }
 
-func NewRogue(character *core.Character, options *proto.RogueOptions, talents string) *Rogue {
+func NewRogue(character *core.Character, options *proto.Player, talents string) *Rogue {
+	rogueOptions := options.GetRogue()
 	rogue := &Rogue{
 		Character:         *character,
 		Talents:           &proto.RogueTalents{},
-		Options:           options,
+		Options:           rogueOptions.Options.ClassOptions,
 		ClassSpellScaling: core.GetClassSpellScalingCoefficient(proto.Class_ClassRogue),
 	}
 
-	core.FillTalentsProto(rogue.Talents.ProtoReflect(), talents)
+	core.FillTalentsProto(rogue.Talents.ProtoReflect(), talents, TalentTreeSizes)
 
 	// Passive rogue threat reduction: https://wotlk.wowhead.com/spell=21184/rogue-passive-dnd
 	rogue.PseudoStats.ThreatMultiplier *= 0.71
@@ -246,8 +213,8 @@ func NewRogue(character *core.Character, options *proto.RogueOptions, talents st
 
 	maxEnergy := 100.0
 
-	if rogue.Spec == proto.Spec_SpecAssassinationRogue && (rogue.HasDagger(core.MainHand) || rogue.HasDagger(core.OffHand)) {
-		maxEnergy += 20
+	if rogue.Talents.Vigor {
+		maxEnergy += 10
 	}
 
 	rogue.EnableEnergyBar(core.EnergyBarOptions{
@@ -263,7 +230,8 @@ func NewRogue(character *core.Character, options *proto.RogueOptions, talents st
 		Ranged:         rogue.WeaponFromRanged(0),
 		AutoSwingMelee: true,
 	})
-	rogue.applyPoisons()
+
+	//rogue.applyPoisons()
 
 	rogue.AddStatDependency(stats.Strength, stats.AttackPower, 1)
 	rogue.AddStatDependency(stats.Agility, stats.AttackPower, 2)
@@ -301,16 +269,24 @@ func (rogue *Rogue) HasThrown() bool {
 
 // Check if the rogue is considered in "stealth" for the purpose of casting abilities
 func (rogue *Rogue) IsStealthed() bool {
-	return rogue.StealthAura.IsActive() ||
-		(rogue.ShadowDanceAura != nil && rogue.ShadowDanceAura.IsActive()) ||
-		(rogue.Talents.Subterfuge && rogue.SubterfugeAura.IsActive())
+	return rogue.StealthAura.IsActive()
 }
 
-func (rogue *Rogue) GetMasteryBonus() float64 {
-	return rogue.GetMasteryBonusFromRating(rogue.GetStat(stats.MasteryRating))
-}
-func (rogue *Rogue) GetMasteryBonusFromRating(masteryRating float64) float64 {
-	return rogue.MasteryBaseValue + core.MasteryRatingToMasteryPoints(masteryRating)*rogue.MasteryMultiplier
+func RegisterRogue() {
+	core.RegisterAgentFactory(
+		proto.Player_Rogue{},
+		proto.Spec_SpecRogue,
+		func(character *core.Character, options *proto.Player) core.Agent {
+			return NewRogue(character, options, options.TalentsString)
+		},
+		func(player *proto.Player, spec interface{}) {
+			playerSpec, ok := spec.(*proto.Player_Rogue)
+			if !ok {
+				panic("Invalid spec value for Combat Rogue!")
+			}
+			player.Spec = playerSpec
+		},
+	)
 }
 
 // Agent is a generic way to access underlying rogue on any of the agents.

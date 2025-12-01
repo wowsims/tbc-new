@@ -92,33 +92,13 @@ message WarlockOptions {
 	bool use_item_swap_bonus_stats = 3;
 }
 
-message AfflictionWarlock {
+message Warlock {
 	message Rotation {
 	}
 
 	message Options {
 		WarlockOptions class_options = 1;
 		int32 exhale_window = 6;
-	}
-	Options options = 1;
-}
-
-message DemonologyWarlock {
-	message Rotation {
-	}
-
-	message Options {
-		WarlockOptions class_options = 1;
-	}
-	Options options = 1;
-}
-
-message DestructionWarlock {
-	message Rotation {
-	}
-
-	message Options {
-		WarlockOptions class_options = 1;
 	}
 	Options options = 1;
 }

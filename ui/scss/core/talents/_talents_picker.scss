@@ -50,7 +50,7 @@
 	}
 }
 
-.talents-picker-list {
+#talents-carousel {
 	flex: 1;
 
 	@include media-breakpoint-down(lg) {
@@ -59,6 +59,53 @@
 		overflow-x: hidden;
 		margin-left: calc(-1 * var(--container-padding));
 		margin-right: calc(-1 * var(--container-padding));
+	}
+
+	.carousel-inner {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		overflow: unset;
+		transform: unset;
+
+		@include media-breakpoint-down(lg) {
+			width: unset;
+			min-width: unset;
+			// transition: transform 0.15s ease-in-out;
+		}
+	}
+
+	.carousel-item {
+		display: block;
+		width: unset;
+		margin-right: unset;
+		float: unset;
+
+		@include media-breakpoint-down(xxxl) {
+			flex: 1;
+		}
+
+		@include media-breakpoint-down(lg) {
+			opacity: 0.5;
+			transition: opacity 0.15s ease-in-out;
+		}
+
+		&.active {
+			@include media-breakpoint-down(lg) {
+				opacity: 1;
+			}
+		}
+
+		// Offset to keep the border sizes consistent
+		&:not(:first-child) {
+			margin-left: -1px;
+		}
+	}
+
+	.carousel-control-prev,
+	.carousel-control-next {
+		@include media-breakpoint-up(lg) {
+			display: none;
+		}
 	}
 }
 
@@ -76,105 +123,107 @@
 	&:not(:first-child) {
 		margin-left: -1px;
 	}
-}
 
-.talent-tree-header {
-	padding: var(--talent-tree-header-padding-y) var(--talent-tree-header-padding-x);
-	display: flex;
-	align-items: center;
-	color: var(--bs-white);
-	background: var(--bs-black);
-	font-size: 1rem;
-	z-index: 1;
+	.talent-tree-header {
+		padding: var(--talent-tree-header-padding-y) var(--talent-tree-header-padding-x);
+		display: flex;
+		align-items: center;
+		color: var(--bs-white);
+		background: var(--bs-black);
+		font-size: 1rem;
+		z-index: 1;
 
-	.talent-tree-icon {
-		width: var(--talent-tree-header-icon-size);
-		height: var(--talent-tree-header-icon-size);
-		margin-right: var(--talent-tree-header-padding-x);
-		border-radius: 100%;
+		.talent-tree-icon {
+			width: var(--talent-tree-header-icon-size);
+			height: var(--talent-tree-header-icon-size);
+			margin-right: var(--talent-tree-header-padding-x);
+			border-radius: 100%;
+		}
+
+		.talent-tree-title {
+			margin-right: var(--talent-tree-header-padding-x);
+			flex: 1;
+			font-weight: bold;
+			white-space: nowrap;
+		}
+
+		.talent-tree-reset {
+			line-height: 1;
+			margin-right: calc(-1 * var(--btn-padding-x));
+		}
 	}
 
-	.talent-tree-title {
-		margin-right: var(--talent-tree-header-padding-x);
-		flex: 1;
-		font-weight: bold;
-		white-space: nowrap;
+	.talent-tree-background {
+		position: absolute;
+		inset: var(--talent-tree-header-size) 0 0 0;
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
+		box-shadow: inset 0 0 var(--talent-tree-header-size) 1rem var(--bs-black);
+		z-index: 0;
 	}
 
-	.talent-tree-reset {
-		line-height: 1;
-		margin-right: calc(-1 * var(--btn-padding-x));
+	.talent-tree-main {
+		display: grid;
+		margin: var(--block-spacer) 2vw;
+		z-index: 1;
+
+		@include media-breakpoint-down(xxxl) {
+			margin: var(--block-spacer) auto;
+		}
+
+		@include media-breakpoint-down(lg) {
+			margin: var(--block-spacer) var(--talent-icon-size);
+		}
 	}
-}
-
-.talent-tree-background {
-	position: absolute;
-	inset: var(--talent-tree-header-size) 0 0 0;
-	background-repeat: no-repeat;
-	background-size: 100% 100%;
-	box-shadow: inset 0 0 var(--talent-tree-header-size) 1rem var(--bs-black);
-	z-index: 0;
-}
-
-.talent-tree-main {
-	margin: var(--block-spacer) 2vw;
-	z-index: 1;
-
-	@include media-breakpoint-down(xxxl) {
-		margin: var(--block-spacer) auto;
-	}
-
-	@include media-breakpoint-down(lg) {
-		margin: var(--block-spacer) var(--talent-icon-size);
-	}
-}
-
-.talent-tree-row {
-	display: grid;
-	grid-template-columns: 4rem repeat(3, 1fr);
-}
-
-.talent-tree-level {
-	padding: calc(var(--talent-icon-size) / 5);
-	align-content: center;
-	justify-self: center;
 }
 
 .talent-picker-root {
-	--talent-border-color: var(--bs-gray-600);
-	display: flex;
-	align-items: center;
-	gap: var(--spacer-2);
-	padding: calc(var(--talent-icon-size) / 5);
-	border: 2px solid transparent;
+	@include wowhead-background-icon;
+	width: var(--talent-icon-size);
+	height: var(--talent-icon-size);
+	margin: calc(var(--talent-icon-size) / 5);
+	border: 1px solid var(--bs-talent-partial);
+	border-radius: 4px;
 
-	.talent-tree-row:has([data-selected='true']) & {
-		&:not([data-selected='true']) {
+	&[data-points='0']:not(.talent-picker-can-add) {
+		filter: grayscale(100%);
+
+		.talent-picker-points {
 			filter: grayscale(100%);
 		}
 	}
 
-	&[data-selected='true'] {
-		--talent-border-color: color-mix(in srgb, var(--bs-talent-full) 40%, transparent);
-		border-color: var(--talent-border-color);
+	&.talent-full {
+		border-color: var(--bs-talent-full);
+
+		.talent-picker-points {
+			color: var(--bs-talent-full);
+		}
 	}
 }
 
-.talent-picker-icon {
-	@include wowhead-background-icon;
-	width: var(--talent-icon-size);
-	height: var(--talent-icon-size);
-	border-radius: 4px;
-	border: 1px solid var(--talent-border-color);
+.talent-picker-points {
+	margin: 0;
+	color: var(--bs-talent-partial);
+	background-color: var(--bs-black);
+	position: absolute;
+	bottom: -8px;
+	right: -8px;
+	padding: 0px 2px;
+	border-radius: 2px;
+	font-size: 11px;
 
-	[data-selected='true'] & {
-		border-color: var(--talent-border-color);
+	.talent-picker-root[data-points='0']:not(.talent-picker-can-add) & {
+		filter: grayscale(100%);
 	}
-}
 
-.talent-picker-label {
-	font-size: var(--btn-font-size);
-	color: var(--bs-white);
+	.talent-picker-root.talent-full & {
+		color: var(--bs-talent-full);
+	}
+
+	.talents-picker-root.talents-full .talent-picker-root[data-points='0'] & {
+		display: none;
+	}
 }
 
 .icon-input:not(.active),
@@ -190,7 +239,7 @@
 }
 
 .talent-picker-req-arrow-down {
-	background-image: url('/tbc/assets/talent_calc/down.png');
+	background-image: url('/cata/assets/talent_calc/down.png');
 	background-position: bottom center;
 	top: 3rem;
 	height: 1.3rem;
@@ -204,19 +253,19 @@
 	}
 
 	&[data-req-active] {
-		background-image: url('/tbc/assets/talent_calc/down2.png');
+		background-image: url('/cata/assets/talent_calc/down2.png');
 	}
 }
 
 .talent-picker-req-arrow-rightdown {
-	background-image: url('/tbc/assets/talent_calc/rightdown.png');
+	background-image: url('/cata/assets/talent_calc/rightdown.png');
 	background-position: right top;
 	left: 3rem;
 	top: 1.4rem;
 	width: 2.7rem;
 
 	div:first-child {
-		background-image: url('/tbc/assets/talent_calc/down.png');
+		background-image: url('/cata/assets/talent_calc/down.png');
 		background-repeat: no-repeat;
 		background-position: bottom right;
 		position: relative;
@@ -231,23 +280,23 @@
 	}
 
 	&[data-req-active] {
-		background-image: url('/tbc/assets/talent_calc/rightdown2.png');
+		background-image: url('/cata/assets/talent_calc/rightdown2.png');
 
 		div:first-child {
-			background-image: url('/tbc/assets/talent_calc/down2.png');
+			background-image: url('/cata/assets/talent_calc/down2.png');
 		}
 	}
 }
 
 .talent-picker-req-arrow-leftdown {
-	background-image: url('/tbc/assets/talent_calc/leftdown.png');
+	background-image: url('/cata/assets/talent_calc/leftdown.png');
 	background-position: left top;
 	top: 1.4rem;
 	left: 1.3rem;
 	width: 3rem;
 
 	div:first-child {
-		background-image: url('/tbc/assets/talent_calc/down.png');
+		background-image: url('/cata/assets/talent_calc/down.png');
 		background-repeat: no-repeat;
 		background-position: bottom left;
 		position: relative;
@@ -262,112 +311,32 @@
 	}
 
 	&[data-req-active] {
-		background-image: url('/tbc/assets/talent_calc/leftdown2.png');
+		background-image: url('/cata/assets/talent_calc/leftdown2.png');
 
 		div:first-child {
-			background-image: url('/tbc/assets/talent_calc/down2.png');
+			background-image: url('/cata/assets/talent_calc/down2.png');
 		}
 	}
 }
 
 .talent-picker-req-arrow-left {
-	background-image: url('/tbc/assets/talent_calc/left.png');
+	background-image: url('/cata/assets/talent_calc/left.png');
 	background-position: left center;
 	right: 0.9rem;
 	width: 2rem;
 
 	&[data-req-active] {
-		background-image: url('/tbc/assets/talent_calc/left2.png');
+		background-image: url('/cata/assets/talent_calc/left2.png');
 	}
 }
 
 .talent-picker-req-arrow-right {
-	background-image: url('/tbc/assets/talent_calc/right.png');
+	background-image: url('/cata/assets/talent_calc/right.png');
 	background-position: right center;
 	left: 3rem;
 	width: 1.3rem;
 
 	&[data-req-active] {
-		background-image: url('/tbc/assets/talent_calc/right2.png');
+		background-image: url('/cata/assets/talent_calc/right2.png');
 	}
-}
-
-.talents-tab-left .pet-spec-picker {
-	grid-column: 1 / -1;
-	// margin-top: 1rem;
-}
-
-.talents-tab-left > .talents-picker-root {
-	grid-column: 1 / -1;
-}
-
-.pet-spec-picker {
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-	gap: var(--spacer-1);
-}
-
-.pet-spec-picker .talent-tree-header {
-	padding: var(--talent-tree-header-padding-y) var(--talent-tree-header-padding-x);
-	display: flex;
-	align-items: center;
-	border-bottom: var(--border-default);
-	background: none;
-	color: var(--bs-white);
-}
-
-.pet-spec-list {
-	display: flex;
-	flex-wrap: wrap;
-	gap: var(--spacer-1);
-	margin: var(--block-spacer) 0;
-
-	@include media-breakpoint-down(md) {
-		flex-direction: column;
-	}
-
-	@include media-breakpoint-up(md) {
-		flex-direction: row;
-	}
-}
-
-.pet-spec-item {
-	display: flex;
-	align-items: center;
-	gap: var(--spacer-2);
-	padding: calc(var(--talent-icon-size) / 5);
-	border: 2px solid transparent;
-	border-radius: 4px;
-	cursor: pointer;
-	transition:
-		border-color 150ms ease,
-		background 150ms ease;
-}
-
-.pet-spec-item:hover {
-	background: rgba(255, 255, 255, 0.05);
-}
-
-.pet-spec-item .talent-picker-icon {
-	width: var(--talent-icon-size);
-	height: var(--talent-icon-size);
-	background-position: center;
-	background-size: cover;
-	border: 1px solid var(--bs-gray-600);
-	border-radius: 4px;
-}
-
-.pet-spec-item .talent-picker-label {
-	font-size: var(--btn-font-size);
-	color: var(--bs-white);
-}
-
-.pet-spec-item.selected {
-	border-color: var(--bs-talent-full);
-	background: rgba(0, 0, 0, 0.2);
-}
-
-.pet-spec-item.selected .talent-picker-icon {
-	border-color: var(--bs-talent-full);
 }

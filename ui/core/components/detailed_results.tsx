@@ -237,7 +237,6 @@ export class DetailedResults extends Component {
 		new ResourceMetricsTable({
 			parent: this.rootElem.querySelector('.resource-metrics')!,
 			resultsEmitter: this.resultsEmitter,
-			secondaryResource: (simUI as IndividualSimUI<any>)?.player?.secondaryResource,
 		});
 		new PlayerDamageMetricsTable(
 			{ parent: this.rootElem.querySelector('.player-damage-metrics')!, resultsEmitter: this.resultsEmitter },
@@ -275,7 +274,6 @@ export class DetailedResults extends Component {
 		const timeline = new Timeline({
 			parent: this.rootElem.querySelector('.timeline')!,
 			resultsEmitter: this.resultsEmitter,
-			secondaryResource: (simUI as IndividualSimUI<any>)?.player?.secondaryResource,
 		});
 
 		const tabEl = document.querySelector('button[data-bs-target="#timelineTab"]');

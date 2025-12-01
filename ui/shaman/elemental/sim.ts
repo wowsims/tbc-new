@@ -1,6 +1,5 @@
 import { AttackSpeedBuff } from '../../core/components/inputs/buffs_debuffs';
 import * as OtherInputs from '../../core/components/inputs/other_inputs.js';
-import { ReforgeOptimizer } from '../../core/components/suggest_reforges_action';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui.js';
 import { Player } from '../../core/player.js';
 import { PlayerClasses } from '../../core/player_classes';
@@ -18,27 +17,10 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecElementalShaman, {
 	cssScheme: PlayerClasses.getCssClass(PlayerClasses.Shaman),
 	// List any known bugs / issues here and they'll be shown on the site.
 	knownIssues: [],
-	warnings: [
-		simUI => {
-			return {
-				updateOn: TypedEvent.onAny([simUI.player.specOptionsChangeEmitter, simUI.player.talentsChangeEmitter]),
-				getContent: () => {
-					const autocast = simUI.player.getClassOptions().feleAutocast;
-					if (
-						simUI.player.getTalents().primalElementalist &&
-						(autocast?.autocastEmpower || !(autocast?.autocastFireblast && autocast.autocastFirenova && autocast.autocastImmolate))
-					) {
-						return i18n.t('sidebar.warnings.shaman_fele_autocast');
-					} else {
-						return '';
-					}
-				},
-			};
-		},
-	],
+	warnings: [],
 
 	// All stats for which EP should be calculated.
-	epStats: [Stat.StatIntellect, Stat.StatSpirit, Stat.StatSpellPower, Stat.StatHitRating, Stat.StatCritRating, Stat.StatHasteRating, Stat.StatMasteryRating],
+	epStats: [Stat.StatIntellect, Stat.StatSpirit, Stat.StatSpellPower],
 	// Reference stat against which to calculate EP.
 	epReferenceStat: Stat.StatIntellect,
 	// Which stats to display in the Character Stats section, at the bottom of the left-hand sidebar.
@@ -50,8 +32,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecElementalShaman, {
 			Stat.StatIntellect,
 			Stat.StatSpirit,
 			Stat.StatSpellPower,
-			Stat.StatExpertiseRating,
-			Stat.StatMasteryRating,
 		],
 		[PseudoStat.PseudoStatSpellHitPercent, PseudoStat.PseudoStatSpellCritPercent, PseudoStat.PseudoStatSpellHastePercent],
 	),
@@ -61,10 +41,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecElementalShaman, {
 		gear: Presets.P3_PRESET.gear,
 		// Default EP weights for sorting gear in the gear picker.
 		epWeights: Presets.EP_PRESET_P3.epWeights,
-		// Default stat caps for the Reforge optimizer
-		statCaps: (() => {
-			return new Stats().withPseudoStat(PseudoStat.PseudoStatSpellHitPercent, 15);
-		})(),
 		// Default consumes settings.
 		consumables: Presets.DefaultConsumables,
 		// Default talents.
@@ -143,6 +119,5 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecElementalShaman, {
 export class ElementalShamanSimUI extends IndividualSimUI<Spec.SpecElementalShaman> {
 	constructor(parentElem: HTMLElement, player: Player<Spec.SpecElementalShaman>) {
 		super(parentElem, player, SPEC_CONFIG);
-		this.reforger = new ReforgeOptimizer(this);
 	}
 }

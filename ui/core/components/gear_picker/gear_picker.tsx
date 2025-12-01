@@ -3,7 +3,7 @@ import { ref } from 'tsx-vanilla';
 import { MISSING_RANDOM_SUFFIX_WARNING } from '../../constants/item_notices';
 import { setItemQualityCssClass } from '../../css_utils';
 import { Player } from '../../player';
-import { ItemLevelState, ItemSlot, ItemType } from '../../proto/common';
+import { ItemSlot, ItemType } from '../../proto/common';
 import { UIEnchant as Enchant, UIGem as Gem } from '../../proto/ui';
 import { ActionId } from '../../proto_utils/action_id';
 import { getEnchantDescription } from '../../proto_utils/enchants';
@@ -165,9 +165,9 @@ export class ItemRenderer extends Component {
 		this.ilvlElem.replaceChildren(
 			<>
 				{newItem.ilvl.toString()}
-				{!!(newItem.upgrade !== ItemLevelState.ChallengeMode && newItem.ilvlFromBase) && (
+				{/* {!!(newItem.ilvlFromBase) && (
 					<span className="item-quality-uncommon">+{newItem.ilvlFromBase}</span>
-				)}
+				)} */}
 			</>,
 		);
 
@@ -188,21 +188,8 @@ export class ItemRenderer extends Component {
 			this.nameContainerElem.appendChild(this.notice.rootElem);
 		}
 
-		const reforgeData = newItem.withDynamicStats().getReforgeData();
-		if (reforgeData) {
-			const fromText = translateStat(reforgeData.reforge?.fromStat);
-			const toText = translateStat(reforgeData.reforge?.toStat);
-			this.reforgeElem.innerText = i18n.t('gear_tab.gear_picker.reforge_text', {
-				fromAmount: Math.abs(reforgeData.fromAmount),
-				fromStat: fromText,
-				toAmount: reforgeData.toAmount,
-				toStat: toText,
-			});
-			this.reforgeElem.classList.remove('hide');
-		} else {
-			this.reforgeElem.innerText = '';
-			this.reforgeElem.classList.add('hide');
-		}
+		this.reforgeElem.innerText = '';
+		this.reforgeElem.classList.add('hide');
 
 		setItemQualityCssClass(this.nameElem, newItem.item.quality);
 
@@ -240,27 +227,7 @@ export class ItemRenderer extends Component {
 			this.enchantElem.classList.add('hide');
 		}
 
-		if (newItem.tinker) {
-			getEnchantDescription(newItem.tinker).then(description => {
-				this.tinkerElem.textContent = description;
-			});
-			// Make enchant text hover have a tooltip.
-			if (newItem.tinker.spellId) {
-				this.tinkerElem.href = ActionId.makeSpellUrl(newItem.tinker.spellId);
-				ActionId.makeSpellTooltipData(newItem.tinker.spellId).then(url => {
-					this.tinkerElem.dataset.wowhead = url;
-				});
-			} else {
-				this.enchantElem.href = ActionId.makeItemUrl(newItem.tinker.itemId);
-				ActionId.makeItemTooltipData(newItem.tinker.itemId).then(url => {
-					this.tinkerElem.dataset.wowhead = url;
-				});
-			}
-			this.tinkerElem.dataset.whtticon = 'false';
-			this.tinkerElem.classList.remove('hide');
-		} else {
-			this.tinkerElem.classList.add('hide');
-		}
+		this.tinkerElem.classList.add('hide');
 
 		newItem.allSocketColors().forEach((socketColor, gemIdx) => {
 			const gemContainer = createGemContainer(socketColor, newItem.gems[gemIdx], gemIdx);
@@ -360,7 +327,7 @@ export class ItemPicker extends Component {
 			equipItem: (eventID: EventID, equippedItem: EquippedItem | null) => {
 				this.player.equipItem(eventID, this.slot, equippedItem);
 			},
-			getEquippedItem: () => this.player.getEquippedItem(this.slot)?.withChallengeMode(this.player.getChallengeModeEnabled()).withDynamicStats() || null,
+			getEquippedItem: () => this.player.getEquippedItem(this.slot)?.withDynamicStats() || null,
 			changeEvent: this.player.gearChangeEmitter,
 		};
 	}

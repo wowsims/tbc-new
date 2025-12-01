@@ -6,6 +6,8 @@ import (
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
+var TalentTreeSizes = [3]int{21, 21, 20}
+
 type Druid struct {
 	core.Character
 	SelfBuffs
@@ -230,56 +232,56 @@ func (druid *Druid) Initialize() {
 }
 
 func (druid *Druid) RegisterBaselineSpells() {
-	druid.registerMoonfireSpell()
-	druid.registerWrathSpell()
-	druid.registerHealingTouchSpell()
-	druid.registerHurricaneSpell()
-	druid.registerNaturesSwiftness()
-	druid.registerFaerieFireSpell()
-	druid.registerTranquilityCD()
-	druid.registerRejuvenationSpell()
+	// druid.registerMoonfireSpell()
+	// druid.registerWrathSpell()
+	// druid.registerHealingTouchSpell()
+	// druid.registerHurricaneSpell()
+	// druid.registerNaturesSwiftness()
+	// druid.registerFaerieFireSpell()
+	// druid.registerTranquilityCD()
+	// druid.registerRejuvenationSpell()
 
 	// druid.registerRebirthSpell()
 	// druid.registerInnervateCD()
 }
 
 func (druid *Druid) RegisterFeralCatSpells() {
-	druid.registerBearFormSpell()
-	druid.registerBerserkCD()
-	// druid.registerCatCharge()
-	druid.registerCatFormSpell()
-	druid.registerDashCD()
-	druid.registerFerociousBiteSpell()
-	druid.registerLacerateSpell()
-	druid.registerMangleBearSpell()
-	druid.registerMangleCatSpell()
-	druid.registerMaulSpell()
-	druid.registerProwlSpell()
-	druid.registerRakeSpell()
-	druid.registerRavageSpell()
-	druid.registerRipSpell()
-	druid.registerSwipeBearSpell()
-	druid.registerSwipeCatSpell()
-	druid.registerThrashBearSpell()
-	druid.registerThrashCatSpell()
+	// druid.registerBearFormSpell()
+	// druid.registerBerserkCD()
+	// // druid.registerCatCharge()
+	// druid.registerCatFormSpell()
+	// druid.registerDashCD()
+	// druid.registerFerociousBiteSpell()
+	// druid.registerLacerateSpell()
+	// druid.registerMangleBearSpell()
+	// druid.registerMangleCatSpell()
+	// druid.registerMaulSpell()
+	// druid.registerProwlSpell()
+	// druid.registerRakeSpell()
+	// druid.registerRavageSpell()
+	// druid.registerRipSpell()
+	// druid.registerSwipeBearSpell()
+	// druid.registerSwipeCatSpell()
+	// druid.registerThrashBearSpell()
+	// druid.registerThrashCatSpell()
 }
 
 func (druid *Druid) RegisterFeralTankSpells() {
-	druid.registerBarkskinCD()
-	druid.registerBearFormSpell()
-	druid.registerBerserkCD()
-	druid.registerCatFormSpell()
-	druid.registerFrenziedRegenerationSpell()
-	druid.registerMangleBearSpell()
-	druid.registerMangleCatSpell()
-	druid.registerMaulSpell()
-	druid.registerMightOfUrsocCD()
-	druid.registerLacerateSpell()
-	druid.registerRakeSpell()
-	druid.registerRipSpell()
-	druid.registerSurvivalInstinctsCD()
-	druid.registerSwipeBearSpell()
-	druid.registerThrashBearSpell()
+	// druid.registerBarkskinCD()
+	// druid.registerBearFormSpell()
+	// druid.registerBerserkCD()
+	// druid.registerCatFormSpell()
+	// druid.registerFrenziedRegenerationSpell()
+	// druid.registerMangleBearSpell()
+	// druid.registerMangleCatSpell()
+	// druid.registerMaulSpell()
+	// druid.registerMightOfUrsocCD()
+	// druid.registerLacerateSpell()
+	// druid.registerRakeSpell()
+	// druid.registerRipSpell()
+	// druid.registerSurvivalInstinctsCD()
+	// druid.registerSwipeBearSpell()
+	// druid.registerThrashBearSpell()
 }
 
 func (druid *Druid) Reset(_ *core.Simulation) {
@@ -307,7 +309,7 @@ func New(char *core.Character, form DruidForm, selfBuffs SelfBuffs, talents stri
 
 	druid.RipMaxNumTicks = druid.RipBaseNumTicks + 3
 
-	core.FillTalentsProto(druid.Talents.ProtoReflect(), talents)
+	core.FillTalentsProto(druid.Talents.ProtoReflect(), talents, TalentTreeSizes)
 	druid.EnableManaBar()
 
 	druid.AddStatDependency(stats.Strength, stats.AttackPower, 1)

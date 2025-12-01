@@ -25,10 +25,6 @@ export const StandardEPWeights = PresetUtils.makePresetEpWeights(
 		[Stat.StatIntellect]: 1,
 		[Stat.StatSpirit]: 0.88,
 		[Stat.StatSpellPower]: 0.80,
-		[Stat.StatHitRating]: 0.88,
-		[Stat.StatCritRating]: 0.54,
-		[Stat.StatHasteRating]: 0.55,
-		[Stat.StatMasteryRating]: 0.46,
 	}),
 );
 
@@ -56,12 +52,6 @@ export const DefaultConsumables = ConsumesSpec.create({
 
 export const DefaultRaidBuffs = RaidBuffs.create({
 	...defaultRaidBuffMajorDamageCooldowns(),
-	markOfTheWild: true, // stats
-	darkIntent: true, // spell power
-	moonkinAura: true, // spell haste
-	leaderOfThePack: true, // crit %
-	blessingOfMight: true, // mastery
-	bloodlust: true, // major haste
 });
 
 export const DefaultIndividualBuffs = IndividualBuffs.create({});
@@ -69,7 +59,7 @@ export const DefaultIndividualBuffs = IndividualBuffs.create({});
 export const DefaultPartyBuffs = PartyBuffs.create({});
 
 export const DefaultDebuffs = Debuffs.create({
-	curseOfElements: true, // spell dmg taken
+
 });
 
 export const OtherDefaults = {

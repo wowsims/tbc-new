@@ -18,13 +18,8 @@ export class Shaman extends PlayerClass<Class.ClassShaman> {
 		Race.RaceTroll,
 		Race.RaceOrc,
 		Race.RaceTauren,
-		Race.RaceGoblin,
-		Race.RaceHordePandaren,
 		// [A]
-		Race.RaceDwarf,
 		Race.RaceDraenei,
-		Race.RaceAlliancePandaren,
-
 	];
 	static armorTypes: ArmorType[] = [ArmorType.ArmorTypeMail, ArmorType.ArmorTypeLeather, ArmorType.ArmorTypeCloth];
 	static weaponTypes: EligibleWeaponType[] = [

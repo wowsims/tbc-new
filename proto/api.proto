@@ -44,17 +44,13 @@ message Player {
 
 	oneof spec {
 		BalanceDruid balance_druid = 12;
-		FeralDruid feral_druid = 13;
-		GuardianDruid guardian_druid = 53;
+		FeralCatDruid feral_druid = 13;
+		FeralBearDruid guardian_druid = 53;
 		RestorationDruid restoration_druid = 14;
 
-		BeastMasteryHunter beast_mastery_hunter = 15;
-		MarksmanshipHunter marksmanship_hunter = 16;
-		SurvivalHunter survival_hunter = 17;
+		Hunter hunter = 17;
 
-		ArcaneMage arcane_mage = 18;
-		FireMage fire_mage = 19;
-		FrostMage frost_mage = 20;
+		Mage mage = 20;
 
 		HolyPaladin holy_paladin = 21;
 		ProtectionPaladin protection_paladin = 22;
@@ -64,20 +60,15 @@ message Player {
 		HolyPriest holy_priest = 25;
 		ShadowPriest shadow_priest = 26;
 
-		AssassinationRogue assassination_rogue = 27;
-		CombatRogue combat_rogue = 28;
-		SubtletyRogue subtlety_rogue = 29;
+		Rogue rogue = 29;
 
 		ElementalShaman elemental_shaman = 30;
 		EnhancementShaman enhancement_shaman = 31;
 		RestorationShaman restoration_shaman = 32;
 
-		AfflictionWarlock affliction_warlock = 33;
-		DemonologyWarlock demonology_warlock = 34;
-		DestructionWarlock destruction_warlock = 35;
+		Warlock warlock = 35;
 
-		ArmsWarrior arms_warrior = 36;
-		FuryWarrior fury_warrior = 37;
+		DPSWarrior dps_warrior = 37;
 		ProtectionWarrior protection_warrior = 38;
 	}
 

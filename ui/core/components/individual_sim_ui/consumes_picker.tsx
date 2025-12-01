@@ -56,7 +56,7 @@ export class ConsumesPicker extends Component {
 		const potionsElem = potionsRef.value!;
 
 		let pots = this.getConsumables(ConsumableType.ConsumableTypePotion);
-		if (this.simUI.player.getClass() !== Class.ClassWarrior && this.simUI.player.getSpec() !== Spec.SpecGuardianDruid) {
+		if (this.simUI.player.getClass() !== Class.ClassWarrior && this.simUI.player.getSpec() !== Spec.SpecFeralBearDruid) {
 			pots = pots.filter(pot => pot.id !== 13442);
 		}
 		const prePotOptions = ConsumablesInputs.makeConsumableInput(pots, { consumesFieldName: 'prepotId' }, i18n.t('settings_tab.consumables.potions.prepop'));

@@ -47,28 +47,28 @@ func (prot *ProtectionPaladin) GetPaladin() *paladin.Paladin {
 func (prot *ProtectionPaladin) Initialize() {
 	prot.Paladin.Initialize()
 
-	prot.registerMastery()
+	// prot.registerMastery()
 
-	prot.registerArdentDefender()
-	prot.registerAvengersShieldSpell()
-	prot.registerConsecrationSpell()
-	prot.registerGrandCrusader()
-	prot.registerGuardedByTheLight()
-	prot.registerHolyWrath()
-	prot.registerJudgmentsOfTheWise()
-	prot.registerRighteousFury()
-	prot.registerSanctuary()
-	prot.registerShieldOfTheRighteous()
+	// prot.registerArdentDefender()
+	// prot.registerAvengersShieldSpell()
+	// prot.registerConsecrationSpell()
+	// prot.registerGrandCrusader()
+	// prot.registerGuardedByTheLight()
+	// prot.registerHolyWrath()
+	// prot.registerJudgmentsOfTheWise()
+	// prot.registerRighteousFury()
+	// prot.registerSanctuary()
+	// prot.registerShieldOfTheRighteous()
 
-	prot.AddStaticMod(core.SpellModConfig{
-		Kind:       core.SpellMod_DamageDone_Pct,
-		ClassMask:  paladin.SpellMaskSealOfTruth | paladin.SpellMaskCensure,
-		FloatValue: -0.8,
-	})
+	// prot.AddStaticMod(core.SpellModConfig{
+	// 	Kind:       core.SpellMod_DamageDone_Pct,
+	// 	ClassMask:  paladin.SpellMaskSealOfTruth | paladin.SpellMaskCensure,
+	// 	FloatValue: -0.8,
+	// })
 
 	prot.trackDamageTakenLastGlobal()
 
-	prot.registerHotfixPassive()
+	// prot.registerHotfixPassive()
 }
 
 func (prot *ProtectionPaladin) trackDamageTakenLastGlobal() {
@@ -112,9 +112,4 @@ func (prot *ProtectionPaladin) ApplyTalents() {
 
 func (prot *ProtectionPaladin) Reset(sim *core.Simulation) {
 	prot.Paladin.Reset(sim)
-}
-
-func (prot *ProtectionPaladin) OnEncounterStart(sim *core.Simulation) {
-	prot.HolyPower.ResetBarTo(sim, 1)
-	prot.Paladin.OnEncounterStart(sim)
 }

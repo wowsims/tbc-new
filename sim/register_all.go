@@ -3,33 +3,24 @@ package sim
 import (
 	"github.com/wowsims/tbc/sim/common"
 	"github.com/wowsims/tbc/sim/druid/balance"
-	"github.com/wowsims/tbc/sim/druid/feral"
-	"github.com/wowsims/tbc/sim/druid/guardian"
+	"github.com/wowsims/tbc/sim/druid/feralbear"
+	"github.com/wowsims/tbc/sim/druid/feralcat"
 	restoDruid "github.com/wowsims/tbc/sim/druid/restoration"
 	_ "github.com/wowsims/tbc/sim/encounters"
-	"github.com/wowsims/tbc/sim/hunter/beast_mastery"
-	"github.com/wowsims/tbc/sim/hunter/marksmanship"
-	"github.com/wowsims/tbc/sim/hunter/survival"
-	"github.com/wowsims/tbc/sim/mage/arcane"
-	"github.com/wowsims/tbc/sim/mage/fire"
-	frostMage "github.com/wowsims/tbc/sim/mage/frost"
+	"github.com/wowsims/tbc/sim/hunter"
+	"github.com/wowsims/tbc/sim/mage"
 	holyPaladin "github.com/wowsims/tbc/sim/paladin/holy"
 	protPaladin "github.com/wowsims/tbc/sim/paladin/protection"
 	"github.com/wowsims/tbc/sim/paladin/retribution"
 	"github.com/wowsims/tbc/sim/priest/discipline"
 	holyPriest "github.com/wowsims/tbc/sim/priest/holy"
 	"github.com/wowsims/tbc/sim/priest/shadow"
-	"github.com/wowsims/tbc/sim/rogue/assassination"
-	"github.com/wowsims/tbc/sim/rogue/combat"
-	"github.com/wowsims/tbc/sim/rogue/subtlety"
+	"github.com/wowsims/tbc/sim/rogue"
 	"github.com/wowsims/tbc/sim/shaman/elemental"
 	"github.com/wowsims/tbc/sim/shaman/enhancement"
 	restoShaman "github.com/wowsims/tbc/sim/shaman/restoration"
-	"github.com/wowsims/tbc/sim/warlock/affliction"
-	"github.com/wowsims/tbc/sim/warlock/demonology"
-	"github.com/wowsims/tbc/sim/warlock/destruction"
-	"github.com/wowsims/tbc/sim/warrior/arms"
-	"github.com/wowsims/tbc/sim/warrior/fury"
+	"github.com/wowsims/tbc/sim/warlock"
+	dpswarrior "github.com/wowsims/tbc/sim/warrior/dps"
 	protWarrior "github.com/wowsims/tbc/sim/warrior/protection"
 )
 
@@ -42,17 +33,13 @@ func RegisterAll() {
 	registered = true
 
 	balance.RegisterBalanceDruid()
-	feral.RegisterFeralDruid()
-	guardian.RegisterGuardianDruid()
+	feralcat.RegisterFeralCatDruid()
+	feralbear.RegisterFeralBearDruid()
 	restoDruid.RegisterRestorationDruid()
 
-	beast_mastery.RegisterBeastMasteryHunter()
-	marksmanship.RegisterMarksmanshipHunter()
-	survival.RegisterSurvivalHunter()
+	hunter.RegisterHunter()
 
-	arcane.RegisterArcaneMage()
-	fire.RegisterFireMage()
-	frostMage.RegisterFrostMage()
+	mage.RegisterMage()
 
 	holyPaladin.RegisterHolyPaladin()
 	protPaladin.RegisterProtectionPaladin()
@@ -62,20 +49,15 @@ func RegisterAll() {
 	holyPriest.RegisterHolyPriest()
 	shadow.RegisterShadowPriest()
 
-	assassination.RegisterAssassinationRogue()
-	combat.RegisterCombatRogue()
-	subtlety.RegisterSubtletyRogue()
+	rogue.RegisterRogue()
 
 	elemental.RegisterElementalShaman()
 	enhancement.RegisterEnhancementShaman()
 	restoShaman.RegisterRestorationShaman()
 
-	affliction.RegisterAfflictionWarlock()
-	demonology.RegisterDemonologyWarlock()
-	destruction.RegisterDestructionWarlock()
+	warlock.RegisterWarlock()
 
-	arms.RegisterArmsWarrior()
-	fury.RegisterFuryWarrior()
+	dpswarrior.RegisterDpsWarrior()
 	protWarrior.RegisterProtectionWarrior()
 
 	common.RegisterAllEffects()

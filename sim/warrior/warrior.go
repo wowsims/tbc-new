@@ -6,6 +6,8 @@ import (
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
+var TalentTreeSizes = [3]int{23, 21, 22}
+
 type WarriorInputs struct {
 	StanceSnapshot bool
 }
@@ -173,7 +175,7 @@ func NewWarrior(character *core.Character, options *proto.WarriorOptions, talent
 		WarriorInputs:     inputs,
 		ClassSpellScaling: core.GetClassSpellScalingCoefficient(proto.Class_ClassWarrior),
 	}
-	core.FillTalentsProto(warrior.Talents.ProtoReflect(), talents)
+	core.FillTalentsProto(warrior.Talents.ProtoReflect(), talents, TalentTreeSizes)
 
 	warrior.EnableRageBar(core.RageBarOptions{
 		MaxRage:            100,
@@ -198,7 +200,7 @@ func NewWarrior(character *core.Character, options *proto.WarriorOptions, talent
 	warrior.AddStatDependency(stats.Strength, stats.ParryRating, core.StrengthToParryRating)
 	warrior.AddStatDependency(stats.Agility, stats.DodgeRating, 0.1/10000.0/100.0)
 	warrior.AddStatDependency(stats.BonusArmor, stats.Armor, 1)
-	warrior.MultiplyStat(stats.HasteRating, 1.5)
+	// warrior.MultiplyStat(stats.HasteRating, 1.5)
 
 	// Base dodge unaffected by Diminishing Returns
 	warrior.PseudoStats.BaseDodgeChance += 0.03

@@ -91,7 +91,7 @@ message BalanceDruid {
   Options options = 3;
 }
 
-message FeralDruid {
+message FeralCatDruid {
   message Rotation {
     enum AplType {
 	SingleTarget = 0;
@@ -127,7 +127,7 @@ message FeralDruid {
   Options options = 3;
 }
 
-message GuardianDruid {
+message FeralBearDruid {
   message Rotation {
 		bool maintain_faerie_fire = 1;
 		bool maintain_demoralizing_roar = 2;

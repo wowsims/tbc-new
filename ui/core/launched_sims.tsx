@@ -30,46 +30,30 @@ export const simLaunchStatuses: Record<Spec, SimStatus> = {
 	},
 	// Druid
 	[Spec.SpecBalanceDruid]: {
-		phase: Phase.Phase2,
-		status: LaunchStatus.Launched,
+		phase: Phase.Phase1,
+		status: LaunchStatus.Unlaunched,
 	},
-	[Spec.SpecFeralDruid]: {
-		phase: Phase.Phase2,
-		status: LaunchStatus.Launched,
+	[Spec.SpecFeralCatDruid]: {
+		phase: Phase.Phase1,
+		status: LaunchStatus.Unlaunched,
 	},
-	[Spec.SpecGuardianDruid]: {
-		phase: Phase.Phase2,
-		status: LaunchStatus.Launched,
+	[Spec.SpecFeralBearDruid]: {
+		phase: Phase.Phase1,
+		status: LaunchStatus.Unlaunched,
 	},
 	[Spec.SpecRestorationDruid]: {
 		phase: Phase.Phase1,
 		status: LaunchStatus.Unlaunched,
 	},
 	// Hunter
-	[Spec.SpecBeastMasteryHunter]: {
-		phase: Phase.Phase2,
-		status: LaunchStatus.Launched,
-	},
-	[Spec.SpecMarksmanshipHunter]: {
-		phase: Phase.Phase2,
-		status: LaunchStatus.Launched,
-	},
-	[Spec.SpecSurvivalHunter]: {
-		phase: Phase.Phase2,
-		status: LaunchStatus.Launched,
+	[Spec.SpecHunter]: {
+		phase: Phase.Phase1,
+		status: LaunchStatus.Unlaunched,
 	},
 	// Mage
-	[Spec.SpecArcaneMage]: {
-		phase: Phase.Phase2,
-		status: LaunchStatus.Launched,
-	},
-	[Spec.SpecFireMage]: {
-		phase: Phase.Phase2,
-		status: LaunchStatus.Launched,
-	},
-	[Spec.SpecFrostMage]: {
-		phase: Phase.Phase2,
-		status: LaunchStatus.Launched,
+	[Spec.SpecMage]: {
+		phase: Phase.Phase1,
+		status: LaunchStatus.Unlaunched,
 	},
 	// Paladin
 	[Spec.SpecHolyPaladin]: {
@@ -78,11 +62,11 @@ export const simLaunchStatuses: Record<Spec, SimStatus> = {
 	},
 	[Spec.SpecProtectionPaladin]: {
 		phase: Phase.Phase1,
-		status: LaunchStatus.Beta,
+		status: LaunchStatus.Unlaunched,
 	},
 	[Spec.SpecRetributionPaladin]: {
-		phase: Phase.Phase2,
-		status: LaunchStatus.Launched,
+		phase: Phase.Phase1,
+		status: LaunchStatus.Unlaunched,
 	},
 	// Priest
 	[Spec.SpecDisciplinePriest]: {
@@ -94,60 +78,40 @@ export const simLaunchStatuses: Record<Spec, SimStatus> = {
 		status: LaunchStatus.Unlaunched,
 	},
 	[Spec.SpecShadowPriest]: {
-		phase: Phase.Phase2,
-		status: LaunchStatus.Beta,
+		phase: Phase.Phase1,
+		status: LaunchStatus.Unlaunched,
 	},
 	// Rogue
-	[Spec.SpecAssassinationRogue]: {
-		phase: Phase.Phase2,
-		status: LaunchStatus.Launched,
-	},
-	[Spec.SpecCombatRogue]: {
-		phase: Phase.Phase2,
-		status: LaunchStatus.Launched,
-	},
-	[Spec.SpecSubtletyRogue]: {
-		phase: Phase.Phase2,
-		status: LaunchStatus.Launched,
+	[Spec.SpecRogue]: {
+		phase: Phase.Phase1,
+		status: LaunchStatus.Alpha,
 	},
 	// Shaman
 	[Spec.SpecElementalShaman]: {
-		phase: Phase.Phase2,
-		status: LaunchStatus.Alpha,
+		phase: Phase.Phase1,
+		status: LaunchStatus.Unlaunched,
 	},
 	[Spec.SpecEnhancementShaman]: {
 		phase: Phase.Phase1,
-		status: LaunchStatus.Alpha,
+		status: LaunchStatus.Unlaunched,
 	},
 	[Spec.SpecRestorationShaman]: {
 		phase: Phase.Phase1,
 		status: LaunchStatus.Unlaunched,
 	},
 	// Warlock
-	[Spec.SpecAfflictionWarlock]: {
-		phase: Phase.Phase2,
-		status: LaunchStatus.Launched,
-	},
-	[Spec.SpecDemonologyWarlock]: {
-		phase: Phase.Phase2,
-		status: LaunchStatus.Beta,
-	},
-	[Spec.SpecDestructionWarlock]: {
-		phase: Phase.Phase2,
-		status: LaunchStatus.Beta,
+	[Spec.SpecWarlock]: {
+		phase: Phase.Phase1,
+		status: LaunchStatus.Unlaunched,
 	},
 	// Warrior
-	[Spec.SpecArmsWarrior]: {
-		phase: Phase.Phase2,
-		status: LaunchStatus.Launched,
-	},
-	[Spec.SpecFuryWarrior]: {
-		phase: Phase.Phase2,
-		status: LaunchStatus.Launched,
+	[Spec.SpecDPSWarrior]: {
+		phase: Phase.Phase1,
+		status: LaunchStatus.Unlaunched,
 	},
 	[Spec.SpecProtectionWarrior]: {
-		phase: Phase.Phase2,
-		status: LaunchStatus.Beta,
+		phase: Phase.Phase1,
+		status: LaunchStatus.Unlaunched,
 	},
 };
 

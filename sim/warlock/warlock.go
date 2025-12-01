@@ -6,6 +6,8 @@ import (
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
+var TalentTreeSizes = [3]int{21, 22, 21}
+
 type Warlock struct {
 	core.Character
 	Talents *proto.WarlockTalents
@@ -45,15 +47,15 @@ type Warlock struct {
 	ImpShadowboltAura *core.Aura
 
 	// Pets
-	ActivePet  *WarlockPet
-	Felhunter  *WarlockPet
-	Felguard   *WarlockPet
-	Imp        *WarlockPet
-	Succubus   *WarlockPet
-	Voidwalker *WarlockPet
+	// ActivePet  *WarlockPet
+	// Felhunter  *WarlockPet
+	// Felguard   *WarlockPet
+	// Imp        *WarlockPet
+	// Succubus   *WarlockPet
+	// Voidwalker *WarlockPet
 
-	Doomguard *DoomguardPet
-	Infernal  *InfernalPet
+	// Doomguard *DoomguardPet
+	// Infernal  *InfernalPet
 
 	serviceTimer *core.Timer
 }
@@ -66,21 +68,25 @@ func (warlock *Warlock) GetWarlock() *Warlock {
 	return warlock
 }
 
+func RegisterWarlock() {
+
+}
+
 func (warlock *Warlock) ApplyTalents() {
-	warlock.registerHarvestLife()
-	warlock.registerArchimondesDarkness()
-	warlock.registerKilJaedensCunning()
-	warlock.registerMannarothsFury()
-	warlock.registerGrimoireOfSupremacy()
-	warlock.registerGrimoireOfSacrifice()
+	// warlock.registerHarvestLife()
+	// warlock.registerArchimondesDarkness()
+	// warlock.registerKilJaedensCunning()
+	// warlock.registerMannarothsFury()
+	// warlock.registerGrimoireOfSupremacy()
+	// warlock.registerGrimoireOfSacrifice()
 }
 
 func (warlock *Warlock) Initialize() {
 
 	warlock.registerCurseOfElements()
-	doomguardInfernalTimer := warlock.NewTimer()
-	warlock.registerSummonDoomguard(doomguardInfernalTimer)
-	warlock.registerSummonInfernal(doomguardInfernalTimer)
+	// doomguardInfernalTimer := warlock.NewTimer()
+	// warlock.registerSummonDoomguard(doomguardInfernalTimer)
+	// warlock.registerSummonInfernal(doomguardInfernalTimer)
 	warlock.registerLifeTap()
 
 	// Fel Armor 10% Stamina
@@ -116,16 +122,16 @@ func NewWarlock(character *core.Character, options *proto.Player, warlockOptions
 		Talents:   &proto.WarlockTalents{},
 		Options:   warlockOptions,
 	}
-	core.FillTalentsProto(warlock.Talents.ProtoReflect(), options.TalentsString)
+	core.FillTalentsProto(warlock.Talents.ProtoReflect(), options.TalentsString, TalentTreeSizes)
 	warlock.EnableManaBar()
 	warlock.AddStatDependency(stats.Strength, stats.AttackPower, 1)
 
-	warlock.Infernal = warlock.NewInfernalPet()
-	warlock.Doomguard = warlock.NewDoomguardPet()
+	// warlock.Infernal = warlock.NewInfernalPet()
+	// warlock.Doomguard = warlock.NewDoomguardPet()
 
-	warlock.serviceTimer = character.NewTimer()
-	warlock.registerPets()
-	warlock.registerGrimoireOfService()
+	// warlock.serviceTimer = character.NewTimer()
+	// warlock.registerPets()
+	// warlock.registerGrimoireOfService()
 
 	return warlock
 }

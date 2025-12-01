@@ -6,11 +6,13 @@ import (
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
+var TalentTreeSizes = [3]int{20, 23, 22}
+
 type Paladin struct {
 	core.Character
 
-	Seal      proto.PaladinSeal
-	HolyPower HolyPowerBar
+	Seal proto.PaladinSeal
+	// HolyPower HolyPowerBar
 
 	Talents *proto.PaladinTalents
 
@@ -20,7 +22,7 @@ type Paladin struct {
 	CurrentSeal *core.Aura
 
 	// Pets
-	AncientGuardian *AncientGuardianPet
+	// AncientGuardian *AncientGuardianPet
 
 	AvengersShield *core.Spell
 	Exorcism       *core.Spell
@@ -80,26 +82,26 @@ func (paladin *Paladin) AddPartyBuffs(_ *proto.PartyBuffs) {
 
 func (paladin *Paladin) Initialize() {
 	paladin.registerSpells()
-	paladin.addMistsPvpGloves()
+	// paladin.addMistsPvpGloves()
 }
 
 func (paladin *Paladin) registerSpells() {
-	paladin.registerAvengingWrath()
-	paladin.registerCrusaderStrike()
-	paladin.registerDevotionAura()
-	paladin.registerDivineProtection()
-	paladin.registerFlashOfLight()
-	paladin.registerForbearance()
-	paladin.registerGuardianOfAncientKings()
-	paladin.registerHammerOfTheRighteous()
-	paladin.registerHammerOfWrath()
-	paladin.registerJudgment()
-	paladin.registerLayOnHands()
-	paladin.registerSanctityOfBattle()
-	paladin.registerSealOfInsight()
-	paladin.registerSealOfRighteousness()
-	paladin.registerSealOfTruth()
-	paladin.registerWordOfGlory()
+	// paladin.registerAvengingWrath()
+	// paladin.registerCrusaderStrike()
+	// paladin.registerDevotionAura()
+	// paladin.registerDivineProtection()
+	// paladin.registerFlashOfLight()
+	// paladin.registerForbearance()
+	// paladin.registerGuardianOfAncientKings()
+	// paladin.registerHammerOfTheRighteous()
+	// paladin.registerHammerOfWrath()
+	// paladin.registerJudgment()
+	// paladin.registerLayOnHands()
+	// paladin.registerSanctityOfBattle()
+	// paladin.registerSealOfInsight()
+	// paladin.registerSealOfRighteousness()
+	// paladin.registerSealOfTruth()
+	// paladin.registerWordOfGlory()
 }
 
 func (paladin *Paladin) Reset(sim *core.Simulation) {
@@ -129,24 +131,16 @@ func NewPaladin(character *core.Character, talentsStr string, options *proto.Pal
 		Seal:      options.Seal,
 	}
 
-	core.FillTalentsProto(paladin.Talents.ProtoReflect(), talentsStr)
+	core.FillTalentsProto(paladin.Talents.ProtoReflect(), talentsStr, TalentTreeSizes)
 
 	paladin.PseudoStats.CanParry = true
 
 	paladin.EnableManaBar()
-	paladin.HolyPower = HolyPowerBar{
-		DefaultSecondaryResourceBarImpl: paladin.NewDefaultSecondaryResourceBar(core.SecondaryResourceConfig{
-			Type: proto.SecondaryResourceType_SecondaryResourceTypeHolyPower,
-			Max:  5,
-		}),
-		paladin: paladin,
-	}
-	paladin.RegisterSecondaryResourceBar(paladin.HolyPower)
 
 	// Only retribution and holy are actually pets performing some kind of action
-	if paladin.Spec != proto.Spec_SpecProtectionPaladin {
-		paladin.AncientGuardian = paladin.NewAncientGuardian()
-	}
+	// if paladin.Spec != proto.Spec_SpecProtectionPaladin {
+	// 	paladin.AncientGuardian = paladin.NewAncientGuardian()
+	// }
 
 	paladin.EnableAutoAttacks(paladin, core.AutoAttackOptions{
 		MainHand:       paladin.WeaponFromMainHand(paladin.DefaultCritMultiplier()),
@@ -180,10 +174,6 @@ func (paladin *Paladin) CanTriggerHolyAvengerHpGain(actionID core.ActionID) {
 // Shared cooldown for CS and HotR
 func (paladin *Paladin) BuilderCooldown() *core.Timer {
 	return paladin.Character.GetOrInitTimer(&paladin.sharedBuilderTimer)
-}
-
-func (paladin *Paladin) SpendableHolyPower() float64 {
-	return min(paladin.HolyPower.Value(), 3)
 }
 
 func (paladin *Paladin) AddDefensiveCooldownAura(aura *core.Aura) {

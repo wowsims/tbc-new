@@ -8,12 +8,11 @@ import { IndividualSimUI } from '../individual_sim_ui';
 import { Player } from '../player.js';
 import { ItemSlot, PseudoStat, Race, Spec, Stat, WeaponType } from '../proto/common.js';
 import { ActionId } from '../proto_utils/action_id';
-import { getStatName, masterySpellIDs } from '../proto_utils/names.js';
+import { getStatName } from '../proto_utils/names.js';
 import { Stats, UnitStat } from '../proto_utils/stats.js';
 import { EventID, TypedEvent } from '../typed_event.js';
 import { Component } from './component.js';
 import { NumberPicker } from './pickers/number_picker.js';
-import { translateMasterySpellName } from '../../i18n/localization.js';
 
 export type StatMods = { base?: Stats; gear?: Stats; talents?: Stats; buffs?: Stats; consumes?: Stats; final?: Stats; stats?: Array<Stat> };
 export type StatWrites = { base: Stats; gear: Stats; talents: Stats; buffs: Stats; consumes: Stats; final: Stats; stats: Array<Stat> };
@@ -92,8 +91,10 @@ export class CharacterStats extends Component {
 					UnitStat.fromStat(Stat.StatRangedAttackPower),
 					UnitStat.fromPseudoStat(PseudoStat.PseudoStatMeleeHastePercent),
 					UnitStat.fromPseudoStat(PseudoStat.PseudoStatRangedHastePercent),
-					UnitStat.fromPseudoStat(PseudoStat.PseudoStatPhysicalHitPercent),
-					UnitStat.fromPseudoStat(PseudoStat.PseudoStatPhysicalCritPercent),
+					UnitStat.fromPseudoStat(PseudoStat.PseudoStatMeleeHitPercent),
+					UnitStat.fromPseudoStat(PseudoStat.PseudoStatMeleeCritPercent),
+					UnitStat.fromPseudoStat(PseudoStat.PseudoStatRangedHitPercent),
+					UnitStat.fromPseudoStat(PseudoStat.PseudoStatRangedCritPercent),
 				],
 			],
 			[
@@ -107,19 +108,19 @@ export class CharacterStats extends Component {
 			],
 		]);
 
-		if (this.player.getPlayerSpec().isTankSpec) {
-			const hitIndex = statGroups.get(StatGroup.Physical)!.findIndex(stat => stat.equalsPseudoStat(PseudoStat.PseudoStatPhysicalHitPercent));
-			statGroups.get(StatGroup.Physical)!.splice(hitIndex+1, 0, UnitStat.fromStat(Stat.StatExpertiseRating));
-			statGroups.get(StatGroup.Defense)!.push(UnitStat.fromStat(Stat.StatMasteryRating));
-		} else if ([Stat.StatIntellect, Stat.StatSpellPower].includes(simUI.individualConfig.epReferenceStat)) {
-			const hitIndex = statGroups.get(StatGroup.Spell)!.findIndex(stat => stat.equalsPseudoStat(PseudoStat.PseudoStatSpellHitPercent));
-			statGroups.get(StatGroup.Spell)!.splice(hitIndex+1, 0, UnitStat.fromStat(Stat.StatExpertiseRating));
-			statGroups.get(StatGroup.Spell)!.push(UnitStat.fromStat(Stat.StatMasteryRating));
-		} else {
-			const hitIndex = statGroups.get(StatGroup.Physical)!.findIndex(stat => stat.equalsPseudoStat(PseudoStat.PseudoStatPhysicalHitPercent));
-			statGroups.get(StatGroup.Physical)!.splice(hitIndex+1, 0, UnitStat.fromStat(Stat.StatExpertiseRating));
-			statGroups.get(StatGroup.Physical)!.push(UnitStat.fromStat(Stat.StatMasteryRating));
-		}
+		// if (this.player.getPlayerSpec().isTankSpec) {
+		// 	const hitIndex = statGroups.get(StatGroup.Physical)!.findIndex(stat => stat.equalsPseudoStat(PseudoStat.PseudoStatPhysicalHitPercent));
+		// 	statGroups.get(StatGroup.Physical)!.splice(hitIndex+1, 0, UnitStat.fromStat(Stat.StatExpertiseRating));
+		// 	statGroups.get(StatGroup.Defense)!.push(UnitStat.fromStat(Stat.StatMasteryRating));
+		// } else if ([Stat.StatIntellect, Stat.StatSpellPower].includes(simUI.individualConfig.epReferenceStat)) {
+		// 	const hitIndex = statGroups.get(StatGroup.Spell)!.findIndex(stat => stat.equalsPseudoStat(PseudoStat.PseudoStatSpellHitPercent));
+		// 	statGroups.get(StatGroup.Spell)!.splice(hitIndex+1, 0, UnitStat.fromStat(Stat.StatExpertiseRating));
+		// 	statGroups.get(StatGroup.Spell)!.push(UnitStat.fromStat(Stat.StatMasteryRating));
+		// } else {
+		// 	const hitIndex = statGroups.get(StatGroup.Physical)!.findIndex(stat => stat.equalsPseudoStat(PseudoStat.PseudoStatPhysicalHitPercent));
+		// 	statGroups.get(StatGroup.Physical)!.splice(hitIndex+1, 0, UnitStat.fromStat(Stat.StatExpertiseRating));
+		// 	statGroups.get(StatGroup.Physical)!.push(UnitStat.fromStat(Stat.StatMasteryRating));
+		// }
 
 		statGroups.forEach((groupedStats, key) => {
 			const filteredStats = groupedStats.filter(stat => statList.find(listStat => listStat.equals(stat)));
@@ -139,11 +140,6 @@ export class CharacterStats extends Component {
 					<tr className="character-stats-table-row">
 						<td className="character-stats-table-label">
 							{statName}
-							{unitStat.equalsStat(Stat.StatMasteryRating) && (
-								<div>
-									{translateMasterySpellName(this.player.getSpec())}
-								</div>
-							)}
 						</td>
 						<td ref={valueRef} className="character-stats-table-value">
 							{unitStat.hasRootStat() && this.bonusStatsLink(unitStat)}
@@ -153,7 +149,7 @@ export class CharacterStats extends Component {
 				body.appendChild(row);
 				this.valueElems.push(valueRef.value!);
 
-				if (unitStat.isPseudoStat() && unitStat.getPseudoStat() === PseudoStat.PseudoStatPhysicalCritPercent && this.shouldShowMeleeCritCap(player)) {
+				if (unitStat.isPseudoStat() && (unitStat.getPseudoStat() === PseudoStat.PseudoStatMeleeCritPercent || unitStat.getPseudoStat() === PseudoStat.PseudoStatRangedCritPercent) && this.shouldShowMeleeCritCap(player)) {
 					const critCapRow = (
 						<tr className="character-stats-table-row">
 							<td className="character-stats-table-label">{i18n.t('sidebar.character_stats.melee_crit_cap')}</td>
@@ -223,9 +219,6 @@ export class CharacterStats extends Component {
 			}
 		}
 
-		const masteryPoints =
-			this.player.getBaseMastery() + (playerStats.finalStats?.stats[Stat.StatMasteryRating] || 0) / Mechanics.MASTERY_RATING_PER_MASTERY_POINT;
-
 		let idx = 0;
 		this.stats.forEach(unitStat => {
 			const bonusStatValue = unitStat.hasRootStat() ? bonusStats.getStat(unitStat.getRootStat()) : 0;
@@ -240,43 +233,11 @@ export class CharacterStats extends Component {
 
 			const statLinkElemRef = ref<HTMLButtonElement>();
 
-			// Custom "HACK" for Warlock/Protection Warrior..
-			// they have two different mastery scalings
-			// And a different base mastery value..
-			let modifier = [this.player.getMasteryPerPointModifier()];
-			let customBonus = [0];
-			switch (player.getSpec()) {
-				case Spec.SpecDestructionWarlock:
-					customBonus = [1, 0];
-					modifier = [1, ...modifier];
-					break;
-				case Spec.SpecDemonologyWarlock:
-					customBonus = [0, 0];
-					modifier = [1, ...modifier];
-					break;
-				case Spec.SpecProtectionWarrior:
-					customBonus = [0, 0];
-					modifier = [0.5, ...modifier];
-					break;
-				case Spec.SpecBalanceDruid:
-					customBonus = [15.0];
-					break;
-			}
-
 			const valueElem = (
 				<div className="stat-value-link-container">
 					<button ref={statLinkElemRef} className={clsx('stat-value-link', contextualClass)}>
 						{`${this.statDisplayString(finalStats, unitStat, true)} `}
 					</button>
-					{unitStat.equalsStat(Stat.StatMasteryRating) &&
-						modifier.map((modifier, index) => (
-							<a
-								href={ActionId.makeSpellUrl(masterySpellIDs.get(this.player.getSpec()) || 0)}
-								className={clsx('stat-value-link-mastery', contextualClass)}
-								target="_blank">
-								{`${(masteryPoints * modifier + customBonus[index]).toFixed(2)}%`}
-							</a>
-						))}
 				</div>
 			);
 
@@ -330,7 +291,7 @@ export class CharacterStats extends Component {
 				</div>
 			);
 
-			if (unitStat.isPseudoStat() && unitStat.getPseudoStat() === PseudoStat.PseudoStatPhysicalCritPercent && this.shouldShowMeleeCritCap(player)) {
+			if (unitStat.isPseudoStat() && (unitStat.getPseudoStat() === PseudoStat.PseudoStatMeleeCritPercent || unitStat.getPseudoStat() === PseudoStat.PseudoStatRangedCritPercent) && this.shouldShowMeleeCritCap(player)) {
 				idx++;
 
 				const meleeCritCapInfo = player.getMeleeCritCapInfo();
@@ -401,13 +362,13 @@ export class CharacterStats extends Component {
 		const rootStat = unitStat.hasRootStat() ? unitStat.getRootStat() : null;
 		let rootRatingValue = rootStat !== null ? deltaStats.getStat(rootStat) : null;
 		let derivedPercentOrPointsValue = unitStat.convertDefaultUnitsToPercent(deltaStats.getUnitStat(unitStat));
-		const percentOrPointsSuffix = unitStat.equalsStat(Stat.StatMasteryRating)
+		const percentOrPointsSuffix = false
 			? ` ${i18n.t('sidebar.character_stats.points_suffix')}`
 			: i18n.t('sidebar.character_stats.percent_suffix');
 
-		if (unitStat.equalsStat(Stat.StatMasteryRating) && includeBase) {
+		if (false && includeBase) {
 			derivedPercentOrPointsValue = derivedPercentOrPointsValue! + this.player.getBaseMastery();
-		} else if (rootStat === Stat.StatHitRating && includeBase && this.hasRacialHitBonus) {
+		} else if ((rootStat === Stat.StatMeleeHitRating || rootStat === Stat.StatAllHitRating) && includeBase && this.hasRacialHitBonus) {
 			// Remove the rating display and only show %
 			if (rootRatingValue !== null && rootRatingValue > 0) {
 				rootRatingValue -= Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT;

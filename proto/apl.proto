@@ -367,7 +367,7 @@ message APLActionItemSwap {
 }
 
 message APLActionCatOptimalRotationAction {
-    FeralDruid.Rotation.AplType rotation_type = 1;
+    FeralCatDruid.Rotation.AplType rotation_type = 1;
     bool bear_weave = 2;
     bool snek_weave = 3;
     bool allow_aoe_berserk = 4;

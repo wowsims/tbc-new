@@ -1,6 +1,6 @@
 import { EligibleWeaponType, IconSize, PlayerClass } from '../player_class';
 import { PlayerSpec } from '../player_spec';
-import { BeastMasteryHunter, MarksmanshipHunter, SurvivalHunter } from '../player_specs/hunter';
+import { Hunter as HunterSpec } from '../player_specs/hunter';
 import { ArmorType, Class, Race, RangedWeaponType, WeaponType } from '../proto/common';
 import { HunterSpecs } from '../proto_utils/utils';
 
@@ -9,27 +9,19 @@ export class Hunter extends PlayerClass<Class.ClassHunter> {
 	static friendlyName = 'Hunter';
 	static hexColor = '#abd473';
 	static specs: Record<string, PlayerSpec<HunterSpecs>> = {
-		[BeastMasteryHunter.friendlyName]: BeastMasteryHunter,
-		[MarksmanshipHunter.friendlyName]: MarksmanshipHunter,
-		[SurvivalHunter.friendlyName]: SurvivalHunter,
+		[HunterSpec.friendlyName]: HunterSpec,
 	};
 	static races: Race[] = [
 		// [A]
 
-		Race.RaceWorgen,
-		Race.RaceHuman,
 		Race.RaceDwarf,
 		Race.RaceNightElf,
 		Race.RaceDraenei,
-		Race.RaceAlliancePandaren,
 		// [H]
 		Race.RaceOrc,
-		Race.RaceUndead,
 		Race.RaceTauren,
 		Race.RaceTroll,
 		Race.RaceBloodElf,
-		Race.RaceGoblin,
-		Race.RaceHordePandaren,
 	];
 	static armorTypes: ArmorType[] = [ArmorType.ArmorTypeMail];
 	static weaponTypes: EligibleWeaponType[] = []; // hunter cannot wear weapons anymore

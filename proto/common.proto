@@ -42,42 +42,33 @@ message ScalingItemProperties {
 enum Spec {
 	SpecUnknown = 0;
 
-	SpecBalanceDruid = 4;
-	SpecFeralDruid = 5;
-	SpecGuardianDruid = 31;
-	SpecRestorationDruid = 6;
+	SpecBalanceDruid = 1;
+	SpecFeralCatDruid = 2;
+	SpecFeralBearDruid = 3;
+	SpecRestorationDruid = 4;
 
-	SpecBeastMasteryHunter = 7;
-	SpecMarksmanshipHunter = 8;
-	SpecSurvivalHunter = 9;
+	SpecHunter = 5;
 
-	SpecArcaneMage = 10;
-	SpecFireMage = 11;
-	SpecFrostMage = 12;
+	SpecMage = 6;
 
-	SpecHolyPaladin = 13;
-	SpecProtectionPaladin = 14;
-	SpecRetributionPaladin = 15;
+	SpecHolyPaladin = 7;
+	SpecProtectionPaladin = 8;
+	SpecRetributionPaladin = 9;
 
-	SpecDisciplinePriest = 16;
-	SpecHolyPriest = 17;
-	SpecShadowPriest = 18;
+	SpecDisciplinePriest = 10;
+	SpecHolyPriest = 11;
+	SpecShadowPriest = 12;
 
-	SpecAssassinationRogue = 19;
-	SpecCombatRogue = 20;
-	SpecSubtletyRogue = 21;
+	SpecRogue = 13;
 
-	SpecElementalShaman = 22;
-	SpecEnhancementShaman = 23;
-	SpecRestorationShaman = 24;
+	SpecElementalShaman = 14;
+	SpecEnhancementShaman = 15;
+	SpecRestorationShaman = 16;
 
-	SpecAfflictionWarlock = 25;
-	SpecDemonologyWarlock = 26;
-	SpecDestructionWarlock = 27;
+	SpecWarlock = 17;
 
-	SpecArmsWarrior = 28;
-	SpecFuryWarrior = 29;
-	SpecProtectionWarrior = 30;
+	SpecDPSWarrior = 18;
+	SpecProtectionWarrior = 19;
 }
 
 enum Race {

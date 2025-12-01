@@ -1,6 +1,6 @@
 import { EligibleWeaponType, IconSize, PlayerClass } from '../player_class';
 import { PlayerSpec } from '../player_spec';
-import { BalanceDruid, FeralDruid, GuardianDruid, RestorationDruid } from '../player_specs/druid';
+import { BalanceDruid, FeralCatDruid, FeralBearDruid, RestorationDruid } from '../player_specs/druid';
 import { ArmorType, Class, Race, RangedWeaponType, WeaponType } from '../proto/common';
 import { DruidSpecs } from '../proto_utils/utils';
 
@@ -10,17 +10,15 @@ export class Druid extends PlayerClass<Class.ClassDruid> {
 	static hexColor = '#ff7d0a';
 	static specs: Record<string, PlayerSpec<DruidSpecs>> = {
 		[BalanceDruid.friendlyName]: BalanceDruid,
-		[FeralDruid.friendlyName]: FeralDruid,
-		[GuardianDruid.friendlyName]: GuardianDruid,
+		[FeralCatDruid.friendlyName]: FeralCatDruid,
+		[FeralBearDruid.friendlyName]: FeralBearDruid,
 		[RestorationDruid.friendlyName]: RestorationDruid,
 	};
 
 	static races: Race[] = [
 		// [H]
 		Race.RaceTroll,
-		Race.RaceTauren,
 		// [A]
-		Race.RaceWorgen,
 		Race.RaceNightElf,
 	];
 	static armorTypes: ArmorType[] = [ArmorType.ArmorTypeLeather, ArmorType.ArmorTypeCloth];

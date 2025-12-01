@@ -8,18 +8,20 @@ import (
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
+var TalentTreeSizes = [3]int{23, 22, 22}
+
 type Mage struct {
 	core.Character
 
 	ClassSpellScaling float64
 
-	Talents       *proto.MageTalents
-	Options       *proto.MageOptions
-	ArcaneOptions *proto.ArcaneMage_Options
-	FireOptions   *proto.FireMage_Options
-	FrostOptions  *proto.FrostMage_Options
+	Talents *proto.MageTalents
+	Options *proto.MageOptions
+	// ArcaneOptions *proto.ArcaneMage_Options
+	// FireOptions   *proto.FireMage_Options
+	// FrostOptions  *proto.FrostMage_Options
 
-	mirrorImages []*MirrorImage
+	// mirrorImages []*MirrorImage
 
 	AlterTime            *core.Spell
 	Combustion           *core.Spell
@@ -68,15 +70,15 @@ func (mage *Mage) GetMage() *Mage {
 	return mage
 }
 
+func RegisterMage() {
+
+}
+
 func (mage *Mage) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
 	raidBuffs.ArcaneBrilliance = true
 }
 
 func (mage *Mage) AddPartyBuffs(partyBuffs *proto.PartyBuffs) {
-}
-
-func (mage *Mage) GetFrostMasteryBonus() float64 {
-	return (.16 + 0.02*mage.GetMasteryPoints())
 }
 
 func (mage *Mage) ProcFingersOfFrost(sim *core.Simulation, spell *core.Spell) {
@@ -103,34 +105,28 @@ func (mage *Mage) Initialize() {
 
 func (mage *Mage) registerPassives() {
 	mage.ApplyArmorSpecializationEffect(stats.Intellect, proto.ArmorType_ArmorTypeCloth, 89744)
-
-	mage.registerMastery()
 }
 
 func (mage *Mage) registerSpells() {
-	mage.registerArmorSpells()
+	// mage.registerArmorSpells()
 
-	mage.registerArcaneExplosionSpell()
-	mage.registerBlizzardSpell()
-	mage.registerConeOfColdSpell()
-	mage.registerDeepFreezeSpell()
-	mage.registerFlamestrikeSpell()
-	mage.registerIceLanceSpell()
-	mage.registerFrostfireBoltSpell()
-	mage.registerEvocation()
-	mage.registerFireBlastSpell()
-	mage.registerManaGems()
-	mage.registerMirrorImageCD()
-	mage.registerFrostNovaSpell()
-	mage.registerIcyVeinsCD()
-	mage.registerHeatingUp()
-	mage.registerAlterTimeCD()
+	// mage.registerArcaneExplosionSpell()
+	// mage.registerBlizzardSpell()
+	// mage.registerConeOfColdSpell()
+	// mage.registerDeepFreezeSpell()
+	// mage.registerFlamestrikeSpell()
+	// mage.registerIceLanceSpell()
+	// mage.registerFrostfireBoltSpell()
+	// mage.registerEvocation()
+	// mage.registerFireBlastSpell()
+	// mage.registerManaGems()
+	// mage.registerMirrorImageCD()
+	// mage.registerFrostNovaSpell()
+	// mage.registerIcyVeinsCD()
+	// mage.registerHeatingUp()
+	// mage.registerAlterTimeCD()
 
-	mage.registerHotfixes()
-}
-
-func (mage *Mage) registerMastery() {
-	mage.registerFrostMastery()
+	// mage.registerHotfixes()
 }
 
 func (mage *Mage) Reset(sim *core.Simulation) {
@@ -149,9 +145,9 @@ func NewMage(character *core.Character, options *proto.Player, mageOptions *prot
 		ClassSpellScaling: core.GetClassSpellScalingCoefficient(proto.Class_ClassMage),
 	}
 
-	core.FillTalentsProto(mage.Talents.ProtoReflect(), options.TalentsString)
+	core.FillTalentsProto(mage.Talents.ProtoReflect(), options.TalentsString, TalentTreeSizes)
 
-	mage.mirrorImages = []*MirrorImage{mage.NewMirrorImage(), mage.NewMirrorImage(), mage.NewMirrorImage()}
+	//mage.mirrorImages = []*MirrorImage{mage.NewMirrorImage(), mage.NewMirrorImage(), mage.NewMirrorImage()}
 	mage.EnableManaBar()
 	// Nether Attunement
 	// https://www.wowhead.com/mop-classic/spell=117957/nether-attunement

@@ -23,11 +23,6 @@ export const P1_P2_EP_PRESET = PresetUtils.makePresetEpWeights(
 	Stats.fromMap(
 		{
 			[Stat.StatStrength]: 1.0,
-			[Stat.StatHitRating]: 1.0,
-			[Stat.StatExpertiseRating]: 0.87,
-			[Stat.StatHasteRating]: 0.52,
-			[Stat.StatMasteryRating]: 0.51,
-			[Stat.StatCritRating]: 0.5,
 			[Stat.StatAttackPower]: 0.44,
 		},
 		{
@@ -41,11 +36,6 @@ export const P3_EP_PRESET = PresetUtils.makePresetEpWeights(
 	Stats.fromMap(
 		{
 			[Stat.StatStrength]: 1.0,
-			[Stat.StatHitRating]: 0.68,
-			[Stat.StatExpertiseRating]: 0.68,
-			[Stat.StatHasteRating]: 0.67,
-			[Stat.StatMasteryRating]: 0.62,
-			[Stat.StatCritRating]: 0.56,
 			[Stat.StatAttackPower]: 0.44,
 		},
 		{
@@ -59,12 +49,7 @@ export const PRERAID_EP_PRESET = PresetUtils.makePresetEpWeights(
 	Stats.fromMap(
 		{
 			[Stat.StatStrength]: 1.0,
-			[Stat.StatHitRating]: 0.72,
-			[Stat.StatExpertiseRating]: 0.63,
-			[Stat.StatHasteRating]: 0.56,
 			[Stat.StatAttackPower]: 0.44,
-			[Stat.StatMasteryRating]: 0.41,
-			[Stat.StatCritRating]: 0.38,
 		},
 		{
 			[PseudoStat.PseudoStatMainHandDps]: 1.77,

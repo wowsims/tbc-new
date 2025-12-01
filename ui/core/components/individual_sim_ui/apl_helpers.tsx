@@ -9,7 +9,7 @@ import {
 	APLValueEclipsePhase,
 } from '../../proto/apl.js';
 import { ActionID, OtherAction, Stat, UnitReference, UnitReference_Type as UnitType } from '../../proto/common.js';
-import { FeralDruid_Rotation_AplType } from '../../proto/druid.js';
+import { FeralCatDruid_Rotation_AplType } from '../../proto/druid.js';
 import { ActionId, defaultTargetIcon, getPetIconFromName } from '../../proto_utils/action_id.js';
 import { getStatName } from '../../proto_utils/names.js';
 import { translateStat } from '../../../i18n/localization.js';
@@ -1097,14 +1097,14 @@ export function eclipseTypeFieldConfig(field: string): APLPickerBuilderFieldConf
 
 export function rotationTypeFieldConfig(field: string): APLPickerBuilderFieldConfig<any, any> {
 	const values = [
-		{ value: FeralDruid_Rotation_AplType.SingleTarget, label: i18n.t('rotation_tab.apl.helpers.rotation_types.single_target') },
-		{ value: FeralDruid_Rotation_AplType.Aoe, label: i18n.t('rotation_tab.apl.helpers.rotation_types.aoe') },
+		{ value: FeralCatDruid_Rotation_AplType.SingleTarget, label: i18n.t('rotation_tab.apl.helpers.rotation_types.single_target') },
+		{ value: FeralCatDruid_Rotation_AplType.Aoe, label: i18n.t('rotation_tab.apl.helpers.rotation_types.aoe') },
 	];
 
 	return {
 		field: field,
 		label: i18n.t('rotation_tab.apl.helpers.field_configs.type'),
-		newValue: () => FeralDruid_Rotation_AplType.SingleTarget,
+		newValue: () => FeralCatDruid_Rotation_AplType.SingleTarget,
 		factory: (parent, player, config) =>
 			new TextDropdownPicker(parent, player, {
 				id: randomUUID(),

@@ -82,17 +82,7 @@ message WarriorTalents {
 message WarriorOptions {
 }
 
-message ArmsWarrior {
-	message Rotation {}
-
-	message Options {
-		WarriorOptions class_options = 1;
-		bool stance_snapshot = 2;
-	}
-	Options options = 1;
-}
-
-message FuryWarrior {
+message DPSWarrior {
 	message Rotation {}
 
 	message Options {

@@ -1,5 +1,4 @@
 import * as OtherInputs from '../../core/components/inputs/other_inputs.js';
-import { ReforgeOptimizer } from '../../core/components/suggest_reforges_action';
 import * as Mechanics from '../../core/constants/mechanics.js';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui.js';
 import { Player } from '../../core/player.js';
@@ -11,20 +10,11 @@ import { defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/util
 import * as PaladinInputs from '../inputs.js';
 import * as Presets from './presets.js';
 
-const getStatCaps = () => {
-	const hitCap = new Stats().withPseudoStat(PseudoStat.PseudoStatPhysicalHitPercent, 7.5);
-	const expCap = new Stats().withStat(Stat.StatExpertiseRating, 7.5 * 4 * Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION);
-
-	return hitCap.add(expCap);
-};
-
 const SPEC_CONFIG = registerSpecConfig(Spec.SpecRetributionPaladin, {
 	cssClass: 'retribution-paladin-sim-ui',
 	cssScheme: PlayerClasses.getCssClass(PlayerClasses.Paladin),
 	// List any known bugs / issues here and they'll be shown on the site.
-	knownIssues: [
-		'If reforging times out, click the gear icon next to the reforge button, check "Use custom EP weights" and then check Max for the hit cap to undershoot',
-	],
+	knownIssues: [],
 
 	overwriteDisplayStats: (player: Player<Spec.SpecRetributionPaladin>) => {
 		const playerStats = player.getCurrentStats();
@@ -55,20 +45,10 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRetributionPaladin, {
 	epStats: [
 		Stat.StatStrength,
 		Stat.StatAttackPower,
-		Stat.StatHitRating,
-		Stat.StatCritRating,
-		Stat.StatHasteRating,
-		Stat.StatExpertiseRating,
-		Stat.StatMasteryRating,
 	],
 	gemStats: [
 		Stat.StatStamina,
 		Stat.StatStrength,
-		Stat.StatHitRating,
-		Stat.StatCritRating,
-		Stat.StatHasteRating,
-		Stat.StatExpertiseRating,
-		Stat.StatMasteryRating,
 	],
 	epPseudoStats: [PseudoStat.PseudoStatMainHandDps],
 	// Reference stat against which to calculate EP. I think all classes use either spell power or attack power.
@@ -80,16 +60,14 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRetributionPaladin, {
 			Stat.StatAgility,
 			Stat.StatIntellect,
 			Stat.StatAttackPower,
-			Stat.StatExpertiseRating,
 			Stat.StatSpellPower,
 			Stat.StatMana,
 			Stat.StatHealth,
 			Stat.StatStamina,
-			Stat.StatMasteryRating,
 		],
 		[
-			PseudoStat.PseudoStatPhysicalHitPercent,
-			PseudoStat.PseudoStatPhysicalCritPercent,
+			PseudoStat.PseudoStatMeleeHitPercent,
+			PseudoStat.PseudoStatMeleeCritPercent,
 			PseudoStat.PseudoStatMeleeHastePercent,
 			PseudoStat.PseudoStatSpellHastePercent,
 			PseudoStat.PseudoStatSpellCritPercent,
@@ -102,8 +80,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRetributionPaladin, {
 		gear: Presets.P2_GEAR_PRESET.gear,
 		// Default EP weights for sorting gear in the gear picker.
 		epWeights: Presets.P1_P2_EP_PRESET.epWeights,
-		// Default stat caps for the Reforge Optimizer
-		statCaps: getStatCaps(),
 		// Default consumes settings.
 		consumables: Presets.DefaultConsumables,
 		// Default talents.
@@ -114,22 +90,11 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRetributionPaladin, {
 		// Default raid/party buffs settings.
 		raidBuffs: RaidBuffs.create({
 			...defaultRaidBuffMajorDamageCooldowns(),
-			arcaneBrilliance: true,
-			blessingOfKings: true,
-			blessingOfMight: true,
-			bloodlust: true,
-			elementalOath: true,
-			powerWordFortitude: true,
-			serpentsSwiftness: true,
-			trueshotAura: true,
 		}),
 		partyBuffs: PartyBuffs.create({}),
 		individualBuffs: IndividualBuffs.create({}),
 		debuffs: Debuffs.create({
-			curseOfElements: true,
-			physicalVulnerability: true,
-			weakenedArmor: true,
-			weakenedBlows: true,
+
 		}),
 		rotationType: APLRotation_Type.TypeAuto,
 	},
@@ -193,7 +158,5 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRetributionPaladin, {
 export class RetributionPaladinSimUI extends IndividualSimUI<Spec.SpecRetributionPaladin> {
 	constructor(parentElem: HTMLElement, player: Player<Spec.SpecRetributionPaladin>) {
 		super(parentElem, player, SPEC_CONFIG);
-
-		this.reforger = new ReforgeOptimizer(this);
 	}
 }

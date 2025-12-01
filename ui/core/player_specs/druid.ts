@@ -39,12 +39,12 @@ export class BalanceDruid extends PlayerSpec<Spec.SpecBalanceDruid> {
 	};
 }
 
-export class FeralDruid extends PlayerSpec<Spec.SpecFeralDruid> {
+export class FeralCatDruid extends PlayerSpec<Spec.SpecFeralCatDruid> {
 	static specIndex = 1;
-	static specID = Spec.SpecFeralDruid as Spec.SpecFeralDruid;
+	static specID = Spec.SpecFeralCatDruid as Spec.SpecFeralCatDruid;
 	static classID = Class.ClassDruid as Class.ClassDruid;
-	static friendlyName = 'Feral';
-	static simLink = getSpecSiteUrl('druid', 'feral');
+	static friendlyName = 'Feral Cat';
+	static simLink = getSpecSiteUrl('druid', 'feralcat');
 
 	static isTankSpec = false;
 	static isHealingSpec = false;
@@ -53,34 +53,34 @@ export class FeralDruid extends PlayerSpec<Spec.SpecFeralDruid> {
 
 	static canDualWield = false;
 
-	readonly specIndex = FeralDruid.specIndex;
-	readonly specID = FeralDruid.specID;
-	readonly classID = FeralDruid.classID;
-	readonly friendlyName = FeralDruid.friendlyName;
-	readonly simLink = FeralDruid.simLink;
+	readonly specIndex = FeralCatDruid.specIndex;
+	readonly specID = FeralCatDruid.specID;
+	readonly classID = FeralCatDruid.classID;
+	readonly friendlyName = FeralCatDruid.friendlyName;
+	readonly simLink = FeralCatDruid.simLink;
 
-	readonly isTankSpec = FeralDruid.isTankSpec;
-	readonly isHealingSpec = FeralDruid.isHealingSpec;
-	readonly isRangedDpsSpec = FeralDruid.isRangedDpsSpec;
-	readonly isMeleeDpsSpec = FeralDruid.isMeleeDpsSpec;
+	readonly isTankSpec = FeralCatDruid.isTankSpec;
+	readonly isHealingSpec = FeralCatDruid.isHealingSpec;
+	readonly isRangedDpsSpec = FeralCatDruid.isRangedDpsSpec;
+	readonly isMeleeDpsSpec = FeralCatDruid.isMeleeDpsSpec;
 
-	readonly canDualWield = FeralDruid.canDualWield;
+	readonly canDualWield = FeralCatDruid.canDualWield;
 
 	static getIcon = (size: IconSize): string => {
 		return `https://wow.zamimg.com/images/wow/icons/${size}/ability_druid_catform.jpg`;
 	};
 
 	getIcon = (size: IconSize): string => {
-		return FeralDruid.getIcon(size);
+		return FeralCatDruid.getIcon(size);
 	};
 }
 
-export class GuardianDruid extends PlayerSpec<Spec.SpecGuardianDruid> {
+export class FeralBearDruid extends PlayerSpec<Spec.SpecFeralBearDruid> {
 	static specIndex = 2;
-	static specID = Spec.SpecGuardianDruid as Spec.SpecGuardianDruid;
+	static specID = Spec.SpecFeralBearDruid as Spec.SpecFeralBearDruid;
 	static classID = Class.ClassDruid as Class.ClassDruid;
-	static friendlyName = 'Guardian';
-	static simLink = getSpecSiteUrl('druid', 'guardian');
+	static friendlyName = 'Feral Bear';
+	static simLink = getSpecSiteUrl('druid', 'feralbear');
 
 	static isTankSpec = true;
 	static isHealingSpec = false;
@@ -89,25 +89,25 @@ export class GuardianDruid extends PlayerSpec<Spec.SpecGuardianDruid> {
 
 	static canDualWield = false;
 
-	readonly specIndex = GuardianDruid.specIndex;
-	readonly specID = GuardianDruid.specID;
-	readonly classID = GuardianDruid.classID;
-	readonly friendlyName = GuardianDruid.friendlyName;
-	readonly simLink = GuardianDruid.simLink;
+	readonly specIndex = FeralBearDruid.specIndex;
+	readonly specID = FeralBearDruid.specID;
+	readonly classID = FeralBearDruid.classID;
+	readonly friendlyName = FeralBearDruid.friendlyName;
+	readonly simLink = FeralBearDruid.simLink;
 
-	readonly isTankSpec = GuardianDruid.isTankSpec;
-	readonly isHealingSpec = GuardianDruid.isHealingSpec;
-	readonly isRangedDpsSpec = GuardianDruid.isRangedDpsSpec;
-	readonly isMeleeDpsSpec = GuardianDruid.isMeleeDpsSpec;
+	readonly isTankSpec = FeralBearDruid.isTankSpec;
+	readonly isHealingSpec = FeralBearDruid.isHealingSpec;
+	readonly isRangedDpsSpec = FeralBearDruid.isRangedDpsSpec;
+	readonly isMeleeDpsSpec = FeralBearDruid.isMeleeDpsSpec;
 
-	readonly canDualWield = GuardianDruid.canDualWield;
+	readonly canDualWield = FeralBearDruid.canDualWield;
 
 	static getIcon = (size: IconSize): string => {
 		return `https://wow.zamimg.com/images/wow/icons/${size}/ability_racial_bearform.jpg`;
 	};
 
 	getIcon = (size: IconSize): string => {
-		return GuardianDruid.getIcon(size);
+		return FeralBearDruid.getIcon(size);
 	};
 }
 

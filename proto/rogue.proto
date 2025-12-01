@@ -95,30 +95,11 @@ message RogueOptions {
 	float vanish_break_time = 5;
 }
 
-message AssassinationRogue {
+message Rogue {
 	message Rotation {}
 
 	message Options {
 		RogueOptions class_options = 1;
-	}
-	Options options = 1;
-}
-
-message CombatRogue {
-	message Rotation {}
-
-	message Options {
-		RogueOptions class_options = 1;
-	}
-	Options options = 1;
-}
-
-message SubtletyRogue {
-	message Rotation {}
-
-	message Options {
-		RogueOptions class_options = 1;
-		int32 honor_among_thieves_crit_rate = 6;
 	}
 	Options options = 1;
 }

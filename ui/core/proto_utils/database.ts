@@ -5,14 +5,12 @@ import {
 	ConsumableType,
 	EquipmentSpec,
 	GemColor,
-	ItemLevelState,
 	ItemRandomSuffix,
 	ItemSlot,
 	ItemSpec,
 	ItemSwap,
 	PresetEncounter,
 	PresetTarget,
-	ReforgeStat,
 	Stat,
 } from '../proto/common.js';
 import { Consumable, ItemEffectRandPropPoints, SimDatabase } from '../proto/db';
@@ -96,7 +94,6 @@ export class Database {
 
 	private readonly items = new Map<number, Item>();
 	private readonly randomSuffixes = new Map<number, ItemRandomSuffix>();
-	private readonly reforgeStats = new Map<number, ReforgeStat>();
 	private readonly itemEffectRandPropPoints = new Map<number, ItemEffectRandPropPoints>();
 	private readonly enchantsBySlot: Partial<Record<ItemSlot, Enchant[]>> = {};
 	private readonly gems = new Map<number, Gem>();
@@ -131,7 +128,6 @@ export class Database {
 			this.items.set(itemCopy.id, itemCopy);
 		});
 		db.randomSuffixes.forEach(randomSuffix => this.randomSuffixes.set(randomSuffix.id, randomSuffix));
-		db.reforgeStats.forEach(reforgeStat => this.reforgeStats.set(reforgeStat.id, reforgeStat));
 		db.itemEffectRandPropPoints.forEach(ieRpp => this.itemEffectRandPropPoints.set(ieRpp.ilvl, ieRpp));
 		db.enchants.forEach(enchant => {
 			const slots = getEligibleEnchantSlots(enchant);
@@ -211,16 +207,8 @@ export class Database {
 		return this.randomSuffixes.get(id);
 	}
 
-	getReforgeById(id: number): ReforgeStat | undefined {
-		return this.reforgeStats.get(id);
-	}
-
 	getItemEffectRandPropPoints(ilvl: number) {
 		return this.itemEffectRandPropPoints.get(ilvl);
-	}
-
-	getAvailableReforges(item: Item): ReforgeStat[] {
-		return Array.from(this.reforgeStats.values()).filter(reforgeStat => item.stats[reforgeStat.fromStat] > 0 && item.stats[reforgeStat.toStat] == 0);
 	}
 
 	getEnchants(slot: ItemSlot): Array<Enchant> {
@@ -273,17 +261,6 @@ export class Database {
 			}
 		}
 		let tinker: Enchant | null = null;
-		if (itemSpec.tinker) {
-			const slots = getEligibleItemSlots(item);
-			for (let i = 0; i < slots.length; i++) {
-				tinker =
-					(this.enchantsBySlot[slots[i]] || []).find(enchant => [enchant.effectId, enchant.itemId, enchant.spellId].includes(itemSpec.tinker)) ||
-					null;
-				if (tinker) {
-					break;
-				}
-			}
-		}
 
 		const gems = itemSpec.gems.map(gemId => this.lookupGem(gemId));
 
@@ -292,20 +269,12 @@ export class Database {
 			randomSuffix = this.getRandomSuffixById(itemSpec.randomSuffix)!;
 		}
 
-		let reforge: ReforgeStat | null = null;
-		if (itemSpec.reforging) {
-			reforge = this.getReforgeById(itemSpec.reforging) || null;
-		}
-
 		return new EquippedItem({
 			item,
 			enchant,
 			tinker,
 			gems,
-			randomSuffix,
-			reforge,
-			upgrade: itemSpec.upgradeStep ?? ItemLevelState.Base,
-			challengeMode: itemSpec.challengeMode ?? false,
+			randomSuffix
 		});
 	}
 
@@ -414,7 +383,6 @@ export class Database {
 		return SimDatabase.create({
 			items: distinct(db1.items.concat(db2.items), (a, b) => a.id == b.id),
 			randomSuffixes: distinct(db1.randomSuffixes.concat(db2.randomSuffixes), (a, b) => a.id == b.id),
-			reforgeStats: distinct(db1.reforgeStats.concat(db2.reforgeStats), (a, b) => a.id == b.id),
 			itemEffectRandPropPoints: distinct(db1.itemEffectRandPropPoints.concat(db2.itemEffectRandPropPoints), (a, b) => a.ilvl == b.ilvl),
 			enchants: distinct(db1.enchants.concat(db2.enchants), (a, b) => a.effectId == b.effectId),
 			gems: distinct(db1.gems.concat(db2.gems), (a, b) => a.id == b.id),

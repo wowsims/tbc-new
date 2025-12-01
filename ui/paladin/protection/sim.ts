@@ -1,13 +1,10 @@
 import * as OtherInputs from '../../core/components/inputs/other_inputs.js';
-import { ReforgeOptimizer } from '../../core/components/suggest_reforges_action';
-import * as Mechanics from '../../core/constants/mechanics.js';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui.js';
 import { Player } from '../../core/player.js';
 import { PlayerClasses } from '../../core/player_classes';
 import { APLRotation, APLRotation_Type } from '../../core/proto/apl.js';
 import { Debuffs, Faction, IndividualBuffs, PartyBuffs, PseudoStat, Race, RaidBuffs, Spec, Stat, UnitStats } from '../../core/proto/common.js';
-import { StatCapType } from '../../core/proto/ui.js';
-import { StatCap, Stats, UnitStat } from '../../core/proto_utils/stats.js';
+import { Stats, UnitStat } from '../../core/proto_utils/stats.js';
 import { defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
 import * as PaladinInputs from '../inputs.js';
 import * as Presets from './presets.js';
@@ -49,15 +46,8 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 		Stat.StatStrength,
 		Stat.StatAgility,
 		Stat.StatAttackPower,
-		Stat.StatHitRating,
-		Stat.StatCritRating,
-		Stat.StatExpertiseRating,
-		Stat.StatHasteRating,
 		Stat.StatArmor,
 		Stat.StatBonusArmor,
-		Stat.StatDodgeRating,
-		Stat.StatParryRating,
-		Stat.StatMasteryRating,
 	],
 	epPseudoStats: [PseudoStat.PseudoStatMainHandDps],
 	// Reference stat against which to calculate EP. I think all classes use either spell power or attack power.
@@ -72,12 +62,10 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 			Stat.StatStrength,
 			Stat.StatAgility,
 			Stat.StatAttackPower,
-			Stat.StatExpertiseRating,
-			Stat.StatMasteryRating,
 		],
 		[
-			PseudoStat.PseudoStatPhysicalHitPercent,
-			PseudoStat.PseudoStatPhysicalCritPercent,
+			PseudoStat.PseudoStatMeleeHitPercent,
+			PseudoStat.PseudoStatMeleeCritPercent,
 			PseudoStat.PseudoStatMeleeHastePercent,
 			PseudoStat.PseudoStatSpellHitPercent,
 			PseudoStat.PseudoStatSpellCritPercent,
@@ -93,22 +81,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 		// Default EP weights for sorting gear in the gear picker.
 		// Values for now are pre-Cata initial WAG
 		epWeights: Presets.P1_BALANCED_EP_PRESET.epWeights,
-		// Default stat caps for the Reforge Optimizer
-		statCaps: (() => {
-			const hitCap = new Stats().withPseudoStat(PseudoStat.PseudoStatPhysicalHitPercent, 7.5);
-			const expCap = new Stats().withStat(Stat.StatExpertiseRating, 15 * 4 * Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION);
-
-			return hitCap.add(expCap);
-		})(),
-		softCapBreakpoints: (() => {
-			return [
-				StatCap.fromStat(Stat.StatExpertiseRating, {
-					breakpoints: [7.5 * 4 * Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION, 15 * 4 * Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION],
-					capType: StatCapType.TypeSoftCap,
-					postCapEPs: [0.57, 0],
-				}),
-			];
-		})(),
 		// Default consumes settings.
 		consumables: Presets.DefaultConsumables,
 		// Default talents.
@@ -119,22 +91,12 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 		// Default raid/party buffs settings.
 		raidBuffs: RaidBuffs.create({
 			...defaultRaidBuffMajorDamageCooldowns(),
-			arcaneBrilliance: true,
-			blessingOfKings: true,
-			blessingOfMight: true,
-			bloodlust: true,
-			elementalOath: true,
-			powerWordFortitude: true,
-			serpentsSwiftness: true,
-			trueshotAura: true,
+
 		}),
 		partyBuffs: PartyBuffs.create({}),
 		individualBuffs: IndividualBuffs.create({}),
 		debuffs: Debuffs.create({
-			curseOfElements: true,
-			physicalVulnerability: true,
-			weakenedArmor: true,
-			weakenedBlows: true,
+
 		}),
 		rotationType: APLRotation_Type.TypeAuto,
 	},
@@ -206,12 +168,5 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 export class ProtectionPaladinSimUI extends IndividualSimUI<Spec.SpecProtectionPaladin> {
 	constructor(parentElem: HTMLElement, player: Player<Spec.SpecProtectionPaladin>) {
 		super(parentElem, player, SPEC_CONFIG);
-
-		this.reforger = new ReforgeOptimizer(this, {
-			updateSoftCaps: softCaps => {
-				softCaps[0].postCapEPs[0] = player.getEpWeights().getStat(Stat.StatExpertiseRating) * 0.9;
-				return softCaps;
-			},
-		});
 	}
 }

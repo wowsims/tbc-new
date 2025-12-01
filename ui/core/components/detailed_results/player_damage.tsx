@@ -66,7 +66,7 @@ export class PlayerDamageMetricsTable extends MetricsTable<UnitMetrics> {
 			},
 			{
 				name: i18n.t('results_tab.details.columns.dps'),
-				tooltip: i18n.t('results_tab.details.tooltips.dps'),
+				// tooltip: i18n.t('results_tab.details.tooltips.dps'),
 				columnClass: 'dps-cell',
 				sort: ColumnSortType.Descending,
 				getValue: (player: UnitMetrics) => this.getPlayerDps(player),

@@ -25,13 +25,6 @@ export const P1_BALANCED_EP_PRESET = PresetUtils.makePresetEpWeights(
 		{
 			[Stat.StatStrength]: 1.00,
 			[Stat.StatStamina]: 0.91,
-			[Stat.StatHitRating]: 1.30,
-			[Stat.StatCritRating]: 0.44,
-			[Stat.StatHasteRating]: 0.89,
-			[Stat.StatExpertiseRating]: 0.90,
-			[Stat.StatDodgeRating]: 0.40,
-			[Stat.StatParryRating]: 0.35,
-			[Stat.StatMasteryRating]: 0.86,
 			[Stat.StatArmor]: 0.48,
 			[Stat.StatBonusArmor]: 0.48,
 			[Stat.StatAttackPower]: 0.31,

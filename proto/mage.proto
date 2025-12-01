@@ -91,40 +91,12 @@ message MageOptions {
 	MageArmor default_mage_armor = 1;
 }
 
-message ArcaneMage {
+message Mage {
 	message Rotation {
 	}
 
 	message Options {
 		MageOptions class_options = 1;
-	}
-	Options options = 1;
-}
-
-message FireMage {
-	message Rotation {
-		// Minimum Combustion threshold to cast Combustion at during lust
-		int32 combust_always_send = 1;
-		int32 combust_bloodlust = 2;
-		int32 combust_post_alter = 3;
-		int32 combust_no_alter = 4;
-		int32 combust_end_of_combat = 5;
-	}
-
-	message Options {
-		MageOptions class_options = 1;
-	}
-	Options options = 1;
-}
-
-message FrostMage {
-	message Rotation {
-	}
-
-	message Options {
-		MageOptions class_options = 1;
-		// Chance for water elemental to disobey, doing nothing rather than cast.
-		double water_elemental_disobey_chance = 2;
 	}
 	Options options = 1;
 }

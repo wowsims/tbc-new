@@ -38,18 +38,13 @@ export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
 		{
 			[Stat.StatIntellect]: 0.04,
 			[Stat.StatAgility]: 1.0,
-			[Stat.StatHitRating]: 0.97,
-			[Stat.StatCritRating]: 0.41,
-			[Stat.StatHasteRating]: 0.42,
 			[Stat.StatAttackPower]: 0.4,
-			[Stat.StatExpertiseRating]: 0.97,
-			[Stat.StatMasteryRating]: 0.46,
 		},
 		{
 			[PseudoStat.PseudoStatMainHandDps]: 0.88,
 			[PseudoStat.PseudoStatOffHandDps]: 0.76,
 			[PseudoStat.PseudoStatSpellHitPercent]: 0.57 * Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT,
-			[PseudoStat.PseudoStatPhysicalHitPercent]: 0.39 * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT,
+			[PseudoStat.PseudoStatMeleeHitPercent]: 0.39 * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT,
 		},
 	),
 );
@@ -60,18 +55,13 @@ export const P3_EP_PRESET = PresetUtils.makePresetEpWeights(
 		{
 			[Stat.StatIntellect]: 0.04,
 			[Stat.StatAgility]: 1.0,
-			[Stat.StatHitRating]: 0.89,
-			[Stat.StatCritRating]: 0.44,
-			[Stat.StatHasteRating]: 0.52,
 			[Stat.StatAttackPower]: 0.4,
-			[Stat.StatExpertiseRating]: 1.02,
-			[Stat.StatMasteryRating]: 0.54,
 		},
 		{
 			[PseudoStat.PseudoStatMainHandDps]: 0.67,
 			[PseudoStat.PseudoStatOffHandDps]: 0.52,
 			[PseudoStat.PseudoStatSpellHitPercent]: 0.32 * Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT,
-			[PseudoStat.PseudoStatPhysicalHitPercent]: 0.565 * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT,
+			[PseudoStat.PseudoStatMeleeHitPercent]: 0.565 * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT,
 		},
 	),
 );
@@ -127,15 +117,9 @@ export const DefaultConsumables = ConsumesSpec.create({
 
 export const DefaultRaidBuffs = RaidBuffs.create({
 	...defaultRaidBuffMajorDamageCooldowns(Class.ClassShaman),
-	blessingOfKings: true,
-	leaderOfThePack: true,
-	trueshotAura: true,
-	bloodlust: true,
-	elementalOath: true,
+
 });
 
 export const DefaultDebuffs = Debuffs.create({
-	physicalVulnerability: true,
-	weakenedArmor: true,
-	masterPoisoner: true,
+
 });

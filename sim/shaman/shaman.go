@@ -8,6 +8,8 @@ import (
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
+var TalentTreeSizes = [3]int{20, 21, 20}
+
 // Start looking to refresh 5 minute totems at 4:55.
 const TotemRefreshTime5M = time.Second * 295
 
@@ -49,7 +51,7 @@ func NewShaman(character *core.Character, talents string, selfBuffs SelfBuffs, t
 	}
 	// shaman.waterShieldManaMetrics = shaman.NewManaMetrics(core.ActionID{SpellID: 57960})
 
-	core.FillTalentsProto(shaman.Talents.ProtoReflect(), talents)
+	core.FillTalentsProto(shaman.Talents.ProtoReflect(), talents, TalentTreeSizes)
 
 	// Add Shaman stat dependencies
 	shaman.AddStatDependency(stats.BonusArmor, stats.Armor, 1)
@@ -193,8 +195,6 @@ func (shaman *Shaman) GetCharacter() *core.Character {
 }
 
 func (shaman *Shaman) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
-	raidBuffs.GraceOfAir = true
-	raidBuffs.BurningWrath = true
 }
 
 func (shaman *Shaman) Initialize() {

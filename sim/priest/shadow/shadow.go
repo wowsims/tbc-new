@@ -3,7 +3,6 @@ package shadow
 import (
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
-	"github.com/wowsims/tbc/sim/core/stats"
 	"github.com/wowsims/tbc/sim/priest"
 )
 
@@ -41,19 +40,19 @@ func NewShadowPriest(character *core.Character, options *proto.Player) *ShadowPr
 		options: shadowOptions.Options,
 	}
 
-	spriest.ShadowOrbs = spriest.NewDefaultSecondaryResourceBar(core.SecondaryResourceConfig{
-		Type:    proto.SecondaryResourceType_SecondaryResourceTypeShadowOrbs,
-		Default: MaxShadowOrbs, // We now generate 1 orb every 6 seconds out of combat, so should pretty much start with 3 always
-		Max:     MaxShadowOrbs,
-	})
-	spriest.RegisterSecondaryResourceBar(spriest.ShadowOrbs)
+	// spriest.ShadowOrbs = spriest.NewDefaultSecondaryResourceBar(core.SecondaryResourceConfig{
+	// 	Type:    proto.SecondaryResourceType_SecondaryResourceTypeShadowOrbs,
+	// 	Default: MaxShadowOrbs, // We now generate 1 orb every 6 seconds out of combat, so should pretty much start with 3 always
+	// 	Max:     MaxShadowOrbs,
+	// })
+	// spriest.RegisterSecondaryResourceBar(spriest.ShadowOrbs)
 	return spriest
 }
 
 type ShadowPriest struct {
 	*priest.Priest
-	options      *proto.ShadowPriest_Options
-	ShadowOrbs   core.SecondaryResourceBar
+	options *proto.ShadowPriest_Options
+	//ShadowOrbs   core.SecondaryResourceBar
 	orbsConsumed float64 // Number of orbs consumed by the last devouring plague cast
 
 	// Shadow Spells
@@ -70,24 +69,19 @@ func (spriest *ShadowPriest) GetPriest() *priest.Priest {
 func (spriest *ShadowPriest) Initialize() {
 	spriest.Priest.Initialize()
 
-	spriest.AddStat(stats.HitRating, -spriest.GetBaseStats()[stats.Spirit])
-	spriest.AddStatDependency(stats.Spirit, stats.HitRating, 1)
-	spriest.registerMindBlastSpell()
-	spriest.registerDevouringPlagueSpell()
-	spriest.registerMindSpike()
-	spriest.registerShadowWordDeathSpell()
-	spriest.registerMindFlaySpell()
-	spriest.registerShadowyRecall() // Mastery
-	spriest.registerShadowyApparition()
+	// spriest.AddStat(stats.HitRating, -spriest.GetBaseStats()[stats.Spirit])
+	// spriest.AddStatDependency(stats.Spirit, stats.HitRating, 1)
+	// spriest.registerMindBlastSpell()
+	// spriest.registerDevouringPlagueSpell()
+	// spriest.registerMindSpike()
+	// spriest.registerShadowWordDeathSpell()
+	// spriest.registerMindFlaySpell()
+	// spriest.registerShadowyRecall() // Mastery
+	// spriest.registerShadowyApparition()
 }
 
 func (spriest *ShadowPriest) Reset(sim *core.Simulation) {
 	spriest.Priest.Reset(sim)
-}
-
-func (spriest *ShadowPriest) OnEncounterStart(sim *core.Simulation) {
-	spriest.ShadowOrbs.ResetBarTo(sim, MaxShadowOrbs)
-	spriest.Priest.OnEncounterStart(sim)
 }
 
 func (spriest *ShadowPriest) ApplyTalents() {
@@ -109,12 +103,12 @@ func (spriest *ShadowPriest) ApplyTalents() {
 
 	core.MakePermanent(core.MindQuickeningAura(&spriest.Unit))
 
-	spriest.registerTwistOfFate()
-	spriest.registerSolaceAndInstanity()
-	spriest.registerSurgeOfDarkness()
-	spriest.registerDivineInsight()
-	spriest.registerHalo()
-	spriest.registerCascade()
-	spriest.registerDivineStar()
-	spriest.registerHotfixes()
+	// spriest.registerTwistOfFate()
+	// spriest.registerSolaceAndInstanity()
+	// spriest.registerSurgeOfDarkness()
+	// spriest.registerDivineInsight()
+	// spriest.registerHalo()
+	// spriest.registerCascade()
+	// spriest.registerDivineStar()
+	// spriest.registerHotfixes()
 }

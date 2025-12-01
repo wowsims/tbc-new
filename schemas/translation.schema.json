@@ -498,6 +498,9 @@
             },
             "burning_embers": {
               "type": "string"
+            },
+            "generic_resource": {
+              "type": "string"
             }
           },
           "additionalProperties": false,
@@ -512,7 +515,8 @@
             "combo_points",
             "maelstrom",
             "demonic_fury",
-            "burning_embers"
+            "burning_embers",
+            "generic_resource"
           ]
         },
         "stats": {
@@ -625,6 +629,96 @@
             },
             "ranged_haste": {
               "type": "string"
+            },
+            "healing_power": {
+              "type": "string"
+            },
+            "spell_damage": {
+              "type": "string"
+            },
+            "arcane_power": {
+              "type": "string"
+            },
+            "fire_power": {
+              "type": "string"
+            },
+            "frost_power": {
+              "type": "string"
+            },
+            "holy_power": {
+              "type": "string"
+            },
+            "nature_power": {
+              "type": "string"
+            },
+            "shadow_power": {
+              "type": "string"
+            },
+            "spell_hit_rating": {
+              "type": "string"
+            },
+            "spell_crit_rating": {
+              "type": "string"
+            },
+            "spell_haste_rating": {
+              "type": "string"
+            },
+            "spell_penetration": {
+              "type": "string"
+            },
+            "feral_attack_power": {
+              "type": "string"
+            },
+            "melee_hit_rating": {
+              "type": "string"
+            },
+            "melee_crit_rating": {
+              "type": "string"
+            },
+            "melee_haste_rating": {
+              "type": "string"
+            },
+            "armor_penetration": {
+              "type": "string"
+            },
+            "all_hit_rating": {
+              "type": "string"
+            },
+            "all_crit_rating": {
+              "type": "string"
+            },
+            "all_haste_rating": {
+              "type": "string"
+            },
+            "defense_rating": {
+              "type": "string"
+            },
+            "block_rating": {
+              "type": "string"
+            },
+            "block_value": {
+              "type": "string"
+            },
+            "resilience": {
+              "type": "string"
+            },
+            "arcane_resistance": {
+              "type": "string"
+            },
+            "frost_resistance": {
+              "type": "string"
+            },
+            "fire_resistance": {
+              "type": "string"
+            },
+            "nature_resistance": {
+              "type": "string"
+            },
+            "shadow_resistance": {
+              "type": "string"
+            },
+            "rage": {
+              "type": "string"
             }
           },
           "additionalProperties": false,
@@ -664,7 +758,37 @@
             "melee_hit",
             "melee_crit",
             "melee_haste",
-            "ranged_haste"
+            "ranged_haste",
+            "healing_power",
+            "spell_damage",
+            "arcane_power",
+            "fire_power",
+            "frost_power",
+            "holy_power",
+            "nature_power",
+            "shadow_power",
+            "spell_hit_rating",
+            "spell_crit_rating",
+            "spell_haste_rating",
+            "spell_penetration",
+            "feral_attack_power",
+            "melee_hit_rating",
+            "melee_crit_rating",
+            "melee_haste_rating",
+            "armor_penetration",
+            "all_hit_rating",
+            "all_crit_rating",
+            "all_haste_rating",
+            "defense_rating",
+            "block_rating",
+            "block_value",
+            "resilience",
+            "arcane_resistance",
+            "frost_resistance",
+            "fire_resistance",
+            "nature_resistance",
+            "shadow_resistance",
+            "rage"
           ]
         },
         "mastery_spell_names": {

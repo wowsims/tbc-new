@@ -109,7 +109,6 @@ import {
 } from '../../proto/apl.js';
 import { Class, Spec } from '../../proto/common.js';
 import { ShamanTotems_TotemType as TotemType } from '../../proto/shaman.js';
-import SecondaryResource from '../../proto_utils/secondary_resource';
 import { EventID } from '../../typed_event.js';
 import { randomUUID } from '../../utils';
 import { Input, InputConfig } from '../input.js';
@@ -733,7 +732,7 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 		includeIf(player: Player<any>, _isPrepull: boolean) {
 			const clss = player.getClass();
 			const spec = player.getSpec();
-			return spec === Spec.SpecFeralDruid || spec === Spec.SpecGuardianDruid || clss === Class.ClassWarrior;
+			return spec === Spec.SpecFeralCatDruid || spec === Spec.SpecFeralBearDruid || clss === Class.ClassWarrior;
 		},
 		fields: [],
 	}),
@@ -745,7 +744,7 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 		includeIf(player: Player<any>, _isPrepull: boolean) {
 			const clss = player.getClass();
 			const spec = player.getSpec();
-			return spec === Spec.SpecFeralDruid || spec === Spec.SpecGuardianDruid || clss === Class.ClassWarrior;
+			return spec === Spec.SpecFeralCatDruid || spec === Spec.SpecFeralBearDruid || clss === Class.ClassWarrior;
 		},
 		fields: [],
 	}),
@@ -789,7 +788,7 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 		includeIf(player: Player<any>, _isPrepull: boolean) {
 			const clss = player.getClass();
 			const spec = player.getSpec();
-			return spec === Spec.SpecFeralDruid || spec === Spec.SpecGuardianDruid || clss === Class.ClassRogue;
+			return spec === Spec.SpecFeralCatDruid || spec === Spec.SpecFeralBearDruid || clss === Class.ClassRogue;
 		},
 		fields: [],
 	}),
@@ -801,7 +800,7 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 		includeIf(player: Player<any>, _isPrepull: boolean) {
 			const clss = player.getClass();
 			const spec = player.getSpec();
-			return spec === Spec.SpecFeralDruid || spec === Spec.SpecGuardianDruid || clss === Class.ClassRogue;
+			return spec === Spec.SpecFeralCatDruid || spec === Spec.SpecFeralBearDruid || clss === Class.ClassRogue;
 		},
 		fields: [],
 	}),
@@ -813,7 +812,7 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 		includeIf(player: Player<any>, _isPrepull: boolean) {
 			const clss = player.getClass();
 			const spec = player.getSpec();
-			return spec === Spec.SpecFeralDruid || spec === Spec.SpecGuardianDruid || clss === Class.ClassRogue;
+			return spec === Spec.SpecFeralCatDruid || spec === Spec.SpecFeralBearDruid || clss === Class.ClassRogue;
 		},
 		fields: [],
 	}),
@@ -825,7 +824,7 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 		includeIf(player: Player<any>, _isPrepull: boolean) {
 			const clss = player.getClass();
 			const spec = player.getSpec();
-			return spec === Spec.SpecFeralDruid || spec === Spec.SpecGuardianDruid || clss === Class.ClassRogue;
+			return spec === Spec.SpecFeralCatDruid || spec === Spec.SpecFeralBearDruid || clss === Class.ClassRogue;
 		},
 		fields: [valueFieldConfig('targetEnergy')],
 	}),
@@ -837,7 +836,7 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 		includeIf(player: Player<any>, _isPrepull: boolean) {
 			const clss = player.getClass();
 			const spec = player.getSpec();
-			return spec === Spec.SpecFeralDruid || spec === Spec.SpecGuardianDruid || clss === Class.ClassRogue;
+			return spec === Spec.SpecFeralCatDruid || spec === Spec.SpecFeralBearDruid || clss === Class.ClassRogue;
 		},
 		fields: [],
 	}),
@@ -849,7 +848,7 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 		includeIf(player: Player<any>, _isPrepull: boolean) {
 			const clss = player.getClass();
 			const spec = player.getSpec();
-			return spec === Spec.SpecFeralDruid || spec === Spec.SpecGuardianDruid || clss === Class.ClassRogue;
+			return spec === Spec.SpecFeralCatDruid || spec === Spec.SpecFeralBearDruid || clss === Class.ClassRogue;
 		},
 		fields: [],
 	}),
@@ -882,9 +881,8 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 		submenu: ['resources'],
 		shortDescription: i18n.t('rotation_tab.apl.values.generic_resource.tooltip'),
 		newValue: APLValueCurrentGenericResource.create,
-		includeIf: (player: Player<any>, _isPrepull: boolean) => SecondaryResource.hasSecondaryResource(player.getSpec()),
 		fields: [],
-		dynamicStringResolver: (value: string, player: Player<any>) => player.secondaryResource?.replaceResourceName(value) || '',
+		dynamicStringResolver: (value: string, player: Player<any>) => '',
 	}),
 
 	// GCD
@@ -1200,7 +1198,7 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 		label: i18n.t('rotation_tab.apl.values.any_trinket_stat_procs_available.label'),
 		submenu: ['aura_sets'],
 		shortDescription: i18n.t('rotation_tab.apl.values.any_trinket_stat_procs_available.tooltip'),
-		fullDescription: i18n.t('rotation_tab.apl.values.any_trinket_stat_procs_available.full_description'),
+		// fullDescription: i18n.t('rotation_tab.apl.values.any_trinket_stat_procs_available.full_description'),
 		newValue: () =>
 			APLValueAnyTrinketStatProcsAvailable.create({
 				statType1: -1,
@@ -1295,7 +1293,7 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 		label: i18n.t('rotation_tab.apl.values.any_stat_buff_cooldowns_min_duration.label'),
 		submenu: ['aura_sets'],
 		shortDescription: i18n.t('rotation_tab.apl.values.any_stat_buff_cooldowns_min_duration.tooltip'),
-		fullDescription: i18n.t('rotation_tab.apl.values.any_stat_buff_cooldowns_min_duration.full_description'),
+		// fullDescription: i18n.t('rotation_tab.apl.values.any_stat_buff_cooldowns_min_duration.full_description'),
 		newValue: () =>
 			APLValueAnyStatBuffCooldownsMinDuration.create({
 				statType1: -1,
@@ -1432,7 +1430,7 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 		submenu: ['feral_druid'],
 		shortDescription: i18n.t('rotation_tab.apl.values.cat_excess_energy.tooltip'),
 		newValue: APLValueCatExcessEnergy.create,
-		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getSpec() == Spec.SpecFeralDruid,
+		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getSpec() == Spec.SpecFeralCatDruid,
 		fields: [],
 	}),
 	catNewSavageRoarDuration: inputBuilder({
@@ -1440,7 +1438,7 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 		submenu: ['feral_druid'],
 		shortDescription: i18n.t('rotation_tab.apl.values.cat_new_savage_roar_duration.tooltip'),
 		newValue: APLValueCatNewSavageRoarDuration.create,
-		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getSpec() == Spec.SpecFeralDruid,
+		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getSpec() == Spec.SpecFeralCatDruid,
 		fields: [],
 	}),
 	warlockHandOfGuldanInFlight: inputBuilder({
@@ -1448,7 +1446,7 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 		submenu: ['warlock'],
 		shortDescription: i18n.t('rotation_tab.apl.values.warlock_hand_of_guldan_in_flight.tooltip'),
 		newValue: APLValueWarlockHandOfGuldanInFlight.create,
-		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getSpec() == Spec.SpecDemonologyWarlock,
+		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getSpec() == Spec.SpecWarlock,
 		fields: [],
 	}),
 	warlockHauntInFlight: inputBuilder({
@@ -1456,7 +1454,7 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 		submenu: ['warlock'],
 		shortDescription: i18n.t('rotation_tab.apl.values.warlock_haunt_in_flight.tooltip'),
 		newValue: APLValueWarlockHauntInFlight.create,
-		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getSpec() == Spec.SpecAfflictionWarlock,
+		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getSpec() == Spec.SpecWarlock,
 		fields: [],
 	}),
 	afflictionExhaleWindow: inputBuilder({
@@ -1464,7 +1462,7 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 		submenu: ['warlock'],
 		shortDescription: i18n.t('rotation_tab.apl.values.affliction_exhale_window.tooltip'),
 		newValue: APLValueAfflictionExhaleWindow.create,
-		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getSpec() == Spec.SpecAfflictionWarlock,
+		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getSpec() == Spec.SpecWarlock,
 		fields: [],
 	}),
 	afflictionCurrentSnapshot: inputBuilder({
@@ -1472,7 +1470,7 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 		submenu: ['warlock'],
 		shortDescription: i18n.t('rotation_tab.apl.values.affliction_current_snapshot.tooltip'),
 		newValue: APLValueAfflictionCurrentSnapshot.create,
-		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getSpec() == Spec.SpecAfflictionWarlock,
+		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getSpec() == Spec.SpecWarlock,
 		fields: [
 			AplHelpers.unitFieldConfig('targetUnit', 'targets'),
 			AplHelpers.actionIdFieldConfig('spellId', 'expected_dot_spells', ''),
@@ -1483,7 +1481,7 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 		submenu: ['mage'],
 		shortDescription: i18n.t('rotation_tab.apl.values.mage_current_combustion_dot_estimate.tooltip'),
 		newValue: APLValueMageCurrentCombustionDotEstimate.create,
-		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getSpec() == Spec.SpecFireMage,
+		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getSpec() == Spec.SpecMage,
 		fields: [],
 	}),
 	protectionPaladinDamageTakenLastGlobal: inputBuilder({

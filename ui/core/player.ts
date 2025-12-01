@@ -27,14 +27,12 @@ import {
 	HandType,
 	HealingModel,
 	IndividualBuffs,
-	ItemLevelState,
 	ItemRandomSuffix,
 	ItemSlot,
 	Profession,
 	PseudoStat,
 	Race,
 	RangedWeaponType,
-	ReforgeStat,
 	Spec,
 	Stat,
 	UnitReference,
@@ -53,10 +51,9 @@ import {
 } from './proto/ui';
 import { ActionId } from './proto_utils/action_id';
 import { Database } from './proto_utils/database';
-import { EquippedItem, ReforgeData, isShaTouchedWeapon, isThroneOfThunderWeapon } from './proto_utils/equipped_item';
+import { EquippedItem, ReforgeData } from './proto_utils/equipped_item';
 import { Gear, ItemSwapGear } from './proto_utils/gear';
 import { gemMatchesSocket, isUnrestrictedGem } from './proto_utils/gems';
-import SecondaryResource from './proto_utils/secondary_resource';
 import { StatCap, Stats } from './proto_utils/stats';
 import {
 	AL_CATEGORY_HARD_MODE,
@@ -211,7 +208,6 @@ export interface PlayerConfig<SpecType extends Spec> {
 	autoRotation: AutoRotationGenerator<SpecType>;
 	simpleRotation?: SimpleRotationGenerator<SpecType>;
 	hiddenMCDs?: Array<number>; // spell IDs for any MCDs that should be omitted from the Simple Cooldowns UI
-	secondaryResource?: SecondaryResource | null;
 }
 
 const SPEC_CONFIGS: Partial<Record<Spec, PlayerConfig<any>>> = {};
@@ -222,7 +218,6 @@ export function registerSpecConfig<SpecType extends Spec>(spec: SpecType, config
 
 export function getSpecConfig<SpecType extends Spec>(spec: SpecType): PlayerConfig<SpecType> {
 	const config = SPEC_CONFIGS[spec] as PlayerConfig<SpecType>;
-	config.secondaryResource = SecondaryResource.create(spec);
 	if (!config) {
 		throw new Error('No config registered for Spec: ' + spec);
 	}
@@ -237,7 +232,6 @@ export class Player<SpecType extends Spec> {
 
 	readonly playerSpec: PlayerSpec<SpecType>;
 	readonly playerClass: PlayerClass<SpecClasses<SpecType>>;
-	readonly secondaryResource?: SecondaryResource | null;
 
 	private name = '';
 	private buffs: IndividualBuffs = IndividualBuffs.create();
@@ -318,7 +312,6 @@ export class Player<SpecType extends Spec> {
 		this.specOptions = this.specTypeFunctions.optionsCreate();
 
 		this.specConfig = getSpecConfig<SpecType>(this.getSpec()) as IndividualSimUIConfig<SpecType>;
-		this.secondaryResource = this.specConfig.secondaryResource;
 
 		this.autoRotationGenerator = this.specConfig.autoRotation;
 		if (this.specConfig.simpleRotation) {
@@ -475,16 +468,6 @@ export class Player<SpecType extends Spec> {
 		return item.randomSuffixOptions
 			.map(id => this.sim.db.getRandomSuffixById(id))
 			.filter((suffix): suffix is ItemRandomSuffix => !!suffix && this.computeRandomSuffixEP(suffix) > 0);
-	}
-
-	// Returns all reforgings that are valid with a given item
-	getAvailableReforgings(equippedItem: EquippedItem): Array<ReforgeData> {
-		return this.sim.db.getAvailableReforges(equippedItem.item).map(reforge => equippedItem.getReforgeData(reforge)!);
-	}
-
-	// Returns reforge given an id
-	getReforge(id: number): ReforgeStat | undefined {
-		return this.sim.db.getReforgeById(id);
 	}
 
 	// Returns all enchants that this player can wear in the given slot.
@@ -698,7 +681,7 @@ export class Player<SpecType extends Spec> {
 	}
 
 	canDualWield2H(): boolean {
-		return this.getSpec() == Spec.SpecFuryWarrior;
+		return false;
 	}
 
 	equipItem(eventID: EventID, slot: ItemSlot, newItem: EquippedItem | null) {
@@ -719,7 +702,7 @@ export class Player<SpecType extends Spec> {
 
 	setGear(eventID: EventID, newGear: Gear, forceUpdate?: boolean) {
 		if (newGear.equals(this.gear) && !forceUpdate) return;
-		this.gear = newGear.withChallengeMode(this.challengeModeEnabled);
+		this.gear = newGear;
 		this.gearChangeEmitter.emit(eventID);
 	}
 
@@ -742,8 +725,8 @@ export class Player<SpecType extends Spec> {
 	}
 
 	getMeleeCritCapInfo(): MeleeCritCapInfo {
-		const meleeCrit = this.currentStats.finalStats?.pseudoStats[PseudoStat.PseudoStatPhysicalCritPercent] || 0.0;
-		const meleeHit = this.currentStats.finalStats?.pseudoStats[PseudoStat.PseudoStatPhysicalHitPercent] || 0.0;
+		const meleeCrit = this.currentStats.finalStats?.pseudoStats[PseudoStat.PseudoStatMeleeCritPercent] || 0.0;
+		const meleeHit = this.currentStats.finalStats?.pseudoStats[PseudoStat.PseudoStatMeleeHitPercent] || 0.0;
 		const expertise = (this.currentStats.finalStats?.stats[Stat.StatExpertiseRating] || 0.0) / Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION / 4;
 		//const agility = (this.currentStats.finalStats?.stats[Stat.StatAgility] || 0.0) / this.getClass();
 		const suppression = 4.8;
@@ -1079,19 +1062,6 @@ export class Player<SpecType extends Spec> {
 		return this.computeStatsEP(stats);
 	}
 
-	computeUpgradeEP(equippedItem: EquippedItem, upgradeLevel: ItemLevelState, slot: ItemSlot): number {
-		const cacheKey = `${equippedItem.id}-${JSON.stringify(this.epWeights)}-${slot}-${equippedItem.randomSuffix?.id}-${upgradeLevel}`;
-		if (this.upgradeEPCache.has(cacheKey)) {
-			return this.upgradeEPCache.get(cacheKey)!;
-		}
-
-		const stats = equippedItem.withUpgrade(upgradeLevel).withDynamicStats().calcStats(slot);
-		const ep = this.computeStatsEP(stats);
-		this.upgradeEPCache.set(cacheKey, ep);
-
-		return ep;
-	}
-
 	computeItemEP(item: Item, slot: ItemSlot): number {
 		if (item == null) return 0;
 
@@ -1113,13 +1083,7 @@ export class Player<SpecType extends Spec> {
 			maxSuffixEP = (Math.max(...suffixEPs) * equippedItem.item.randPropPoints) / 10000;
 		}
 
-		let maxReforgingEP = 0;
-		if (this.getAvailableReforgings(equippedItem).length) {
-			const reforgingEPs = this.getAvailableReforgings(equippedItem).map(reforging => this.computeReforgingEP(reforging));
-			maxReforgingEP = Math.max(...reforgingEPs);
-		}
-
-		let ep = itemStats.computeEP(this.epWeights) + maxSuffixEP + maxReforgingEP;
+		let ep = itemStats.computeEP(this.epWeights) + maxSuffixEP;
 
 		// unique items are slightly worse than non-unique because you can have only one.
 		if (item.unique) {
@@ -1161,19 +1125,17 @@ export class Player<SpecType extends Spec> {
 	async setWowheadData(equippedItem: EquippedItem, elem: HTMLElement) {
 		const isBlacksmithing = this.hasProfession(Profession.Blacksmithing);
 		const gemIds = equippedItem.gems.length ? equippedItem.curGems(isBlacksmithing).map(gem => (gem ? gem.id : 0)) : [];
-		const enchantIds = [equippedItem.enchant?.effectId, equippedItem.tinker?.effectId].filter((id): id is number => id !== undefined);
+		const enchantIds = [equippedItem.enchant?.effectId].filter((id): id is number => id !== undefined);
 		equippedItem.asActionId().setWowheadDataset(elem, {
 			gemIds,
 			itemLevel: Number(equippedItem.ilvl),
 			enchantIds: enchantIds,
-			reforgeId: equippedItem.reforge?.id,
 			randomEnchantmentId: equippedItem.randomSuffix?.id,
 			setPieceIds: this.gear
 				.asArray()
 				.filter(ei => ei != null)
 				.map(ei => ei!.item.id),
 			hasExtraSocket: equippedItem.hasExtraSocket(isBlacksmithing),
-			upgradeStep: equippedItem.upgrade,
 		});
 
 		elem.dataset.whtticon = 'false';
@@ -1238,13 +1200,6 @@ export class Player<SpecType extends Spec> {
 		});
 	}
 
-	hasEotBPItemEquipped() {
-		return [ItemSlot.ItemSlotMainHand, ItemSlot.ItemSlotOffHand].some(itemSlot => {
-			const item = this.getEquippedItem(itemSlot)?.item;
-			return item && (isShaTouchedWeapon(item) || isThroneOfThunderWeapon(item));
-		});
-	}
-
 	filterItemData<T>(itemData: Array<T>, getItemFunc: (val: T) => Item, slot: ItemSlot): Array<T> {
 		const filters = this.sim.getFilters();
 
@@ -1253,10 +1208,10 @@ export class Player<SpecType extends Spec> {
 		};
 
 		if (filters.minIlvl != 0) {
-			itemData = filterItems(itemData, item => (item.scalingOptions?.[ItemLevelState.Base].ilvl || item.ilvl) >= filters.minIlvl);
+			itemData = filterItems(itemData, item => (item.scalingOptions?.[0].ilvl || item.ilvl) >= filters.minIlvl);
 		}
 		if (filters.maxIlvl != 0) {
-			itemData = filterItems(itemData, item => (item.scalingOptions?.[ItemLevelState.Base].ilvl || item.ilvl) <= filters.maxIlvl);
+			itemData = filterItems(itemData, item => (item.scalingOptions?.[0].ilvl || item.ilvl) <= filters.maxIlvl);
 		}
 
 		if (filters.factionRestriction != UIItem_FactionRestriction.UNSPECIFIED) {
@@ -1565,9 +1520,6 @@ export class Player<SpecType extends Spec> {
 		return 8;
 	}
 
-	getMasteryPerPointModifier(): number {
-		return Mechanics.masteryPercentPerPoint.get(this.getSpec()) || 0;
-	}
 	static updateProtoVersion(proto: PlayerProto) {
 		if (!(proto.apiVersion < CURRENT_API_VERSION)) {
 			return;

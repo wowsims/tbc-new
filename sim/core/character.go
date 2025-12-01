@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"slices"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/wowsims/tbc/sim/core/proto"
@@ -717,19 +718,26 @@ func (character *Character) GetMatchingItemProcAuras(statTypesToMatch []stats.St
 
 // Uses proto reflection to set fields in a talents proto (e.g. MageTalents,
 // WarriorTalents) based on a talentsStr.
-func FillTalentsProto(data protoreflect.Message, talentsStr string) {
+func FillTalentsProto(data protoreflect.Message, talentsStr string, treeSizes [3]int) {
+	treeStrs := strings.Split(talentsStr, "-")
 	fieldDescriptors := data.Descriptor().Fields()
 
-	for talentIdx, talentValStr := range talentsStr {
-		talentVal, _ := strconv.Atoi(string(talentValStr))
-		if talentVal != 0 {
-			talentOffset := talentIdx*3 + talentVal
+	var offset int
+	for treeIdx, treeStr := range treeStrs {
+		for talentIdx, talentValStr := range treeStr {
+			talentVal, _ := strconv.Atoi(string(talentValStr))
+			talentOffset := offset + talentIdx + 1
 			fd := fieldDescriptors.ByNumber(protowire.Number(talentOffset))
 			if fd == nil {
 				panic(fmt.Sprintf("Couldn't find proto field for talent #%d, full string: %s", talentOffset, talentsStr))
 			}
-			data.Set(fd, protoreflect.ValueOfBool(true))
+			if fd.Kind() == protoreflect.BoolKind {
+				data.Set(fd, protoreflect.ValueOfBool(talentVal == 1))
+			} else { // Int32Kind
+				data.Set(fd, protoreflect.ValueOfInt32(int32(talentVal)))
+			}
 		}
+		offset += treeSizes[treeIdx]
 	}
 }
 

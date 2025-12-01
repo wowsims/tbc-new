@@ -1,6 +1,6 @@
 import { EligibleWeaponType, IconSize, PlayerClass } from '../player_class';
 import { PlayerSpec } from '../player_spec';
-import { AssassinationRogue, CombatRogue, SubtletyRogue } from '../player_specs/rogue';
+import { Rogue as RogueSpec } from '../player_specs/rogue';
 import { ArmorType, Class, Race, RangedWeaponType, WeaponType } from '../proto/common';
 import { RogueSpecs } from '../proto_utils/utils';
 
@@ -9,9 +9,7 @@ export class Rogue extends PlayerClass<Class.ClassRogue> {
 	static friendlyName = 'Rogue';
 	static hexColor = '#fff569';
 	static specs: Record<string, PlayerSpec<RogueSpecs>> = {
-		[AssassinationRogue.friendlyName]: AssassinationRogue,
-		[CombatRogue.friendlyName]: CombatRogue,
-		[SubtletyRogue.friendlyName]: SubtletyRogue,
+		[Rogue.friendlyName]: RogueSpec,
 	};
 	static races: Race[] = [
 		// [A]
@@ -19,26 +17,26 @@ export class Rogue extends PlayerClass<Class.ClassRogue> {
 		Race.RaceDwarf,
 		Race.RaceNightElf,
 		Race.RaceGnome,
-		Race.RaceWorgen,
-		Race.RaceAlliancePandaren,
 		// [H]
 		Race.RaceOrc,
 		Race.RaceUndead,
 		Race.RaceTroll,
 		Race.RaceBloodElf,
-		Race.RaceGoblin,
-		Race.RaceHordePandaren
 	];
 	static armorTypes: ArmorType[] = [ArmorType.ArmorTypeLeather, ArmorType.ArmorTypeCloth];
 	static weaponTypes: EligibleWeaponType[] = [
-		{ weaponType: WeaponType.WeaponTypeAxe, canUseTwoHand: false },
 		{ weaponType: WeaponType.WeaponTypeDagger },
 		{ weaponType: WeaponType.WeaponTypeFist },
 		{ weaponType: WeaponType.WeaponTypeMace },
 		{ weaponType: WeaponType.WeaponTypeOffHand },
 		{ weaponType: WeaponType.WeaponTypeSword },
 	];
-	static rangedWeaponTypes: RangedWeaponType[] = [];
+	static rangedWeaponTypes: RangedWeaponType[] = [
+		RangedWeaponType.RangedWeaponTypeGun,
+		RangedWeaponType.RangedWeaponTypeBow,
+		RangedWeaponType.RangedWeaponTypeThrown,
+		RangedWeaponType.RangedWeaponTypeCrossbow,
+	];
 
 	readonly classID = Rogue.classID;
 	readonly friendlyName = Rogue.name;

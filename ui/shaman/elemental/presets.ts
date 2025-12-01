@@ -38,11 +38,7 @@ export const EP_PRESET_DEFAULT = PresetUtils.makePresetEpWeights(
 	Stats.fromMap({
 		[Stat.StatIntellect]: 1.0,
 		[Stat.StatSpellPower]: 0.82,
-		[Stat.StatCritRating]: 0.37,
-		[Stat.StatHasteRating]: 0.47,
-		[Stat.StatHitRating]: 1.1,
 		[Stat.StatSpirit]: 1.1,
-		[Stat.StatMasteryRating]: 0.44,
 	}),
 );
 
@@ -51,11 +47,7 @@ export const EP_PRESET_P3 = PresetUtils.makePresetEpWeights(
 	Stats.fromMap({
 		[Stat.StatIntellect]: 1.0,
 		[Stat.StatSpellPower]: 0.82,
-		[Stat.StatCritRating]: 0.41,
-		[Stat.StatHasteRating]: 0.46,
-		[Stat.StatHitRating]: 1.25,
 		[Stat.StatSpirit]: 1.25,
-		[Stat.StatMasteryRating]: 0.49,
 	}),
 );
 
@@ -64,11 +56,7 @@ export const EP_PRESET_AOE = PresetUtils.makePresetEpWeights(
 	Stats.fromMap({
 		[Stat.StatIntellect]: 1.0,
 		[Stat.StatSpellPower]: 0.74,
-		[Stat.StatCritRating]: 0.71,
-		[Stat.StatHasteRating]: 0.48,
-		[Stat.StatHitRating]: 1.18,
 		[Stat.StatSpirit]: 1.18,
-		[Stat.StatMasteryRating]: 0.73,
 	}),
 );
 
@@ -123,14 +111,10 @@ export const OtherDefaults = {
 
 export const DefaultRaidBuffs = RaidBuffs.create({
 	...defaultRaidBuffMajorDamageCooldowns(Class.ClassShaman),
-	blessingOfKings: true,
-	leaderOfThePack: true,
-	serpentsSwiftness: true,
-	bloodlust: true,
 });
 
 export const DefaultDebuffs = Debuffs.create({
-	curseOfElements: true,
+
 });
 
 export const DefaultConsumables = ConsumesSpec.create({
