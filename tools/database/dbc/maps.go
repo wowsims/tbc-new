@@ -250,11 +250,11 @@ type EnchantMetaType struct {
 }
 
 var SpellSchoolToStat = map[SpellSchool]proto.Stat{
-	FIRE:     -1,
-	ARCANE:   -1,
-	NATURE:   -1,
-	FROST:    -1,
-	SHADOW:   -1,
+	FIRE:     proto.Stat_StatFireResistance,
+	ARCANE:   proto.Stat_StatArcaneResistance,
+	NATURE:   proto.Stat_StatNatureResistance,
+	FROST:    proto.Stat_StatFrostResistance,
+	SHADOW:   proto.Stat_StatShadowResistance,
 	PHYSICAL: proto.Stat_StatArmor,
 }
 var MapInventoryTypeToEnchantMetaType = map[InventoryTypeFlag]EnchantMetaType{
