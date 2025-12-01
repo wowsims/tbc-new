@@ -20,13 +20,20 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 	knownIssues: [],
 
 	// All stats for which EP should be calculated.
-	epStats: [Stat.StatAgility],
+	epStats: [
+		Stat.StatAgility,
+		Stat.StatAllCritRating,
+		Stat.StatAllHasteRating,
+		Stat.StatAllHitRating,
+		Stat.StatArmorPenetration,
+		Stat.StatAttackPower
+	],
 	epPseudoStats: [PseudoStat.PseudoStatMainHandDps, PseudoStat.PseudoStatOffHandDps],
 	// Reference stat against which to calculate EP.
-	epReferenceStat: Stat.StatAgility,
+	epReferenceStat: Stat.StatAttackPower,
 	// Which stats to display in the Character Stats section, at the bottom of the left-hand sidebar.
 	displayStats: UnitStat.createDisplayStatArray(
-		[Stat.StatHealth, Stat.StatStamina, Stat.StatAgility, Stat.StatStrength, Stat.StatAttackPower],
+		[Stat.StatHealth, Stat.StatStamina, Stat.StatAgility, Stat.StatStrength, Stat.StatAttackPower, Stat.StatArmorPenetration],
 		[PseudoStat.PseudoStatMeleeHitPercent, PseudoStat.PseudoStatMeleeCritPercent, PseudoStat.PseudoStatMeleeHastePercent],
 	),
 

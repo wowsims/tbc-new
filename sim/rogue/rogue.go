@@ -111,7 +111,6 @@ type Rogue struct {
 
 // ApplyTalents implements core.Agent.
 func (rogue *Rogue) ApplyTalents() {
-	panic("unimplemented")
 }
 
 func (rogue *Rogue) GetCharacter() *core.Character {

@@ -20,10 +20,15 @@ export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
 	Stats.fromMap(
 		{
 			[Stat.StatAgility]: 1.0,
+			[Stat.StatAllCritRating]: 1.0,
+			[Stat.StatAllHasteRating]: 1.0,
+			[Stat.StatAllHitRating]: 1.0,
+			[Stat.StatArmorPenetration]: 1.0,
+			[Stat.StatAttackPower]: 1.0,
 		},
 		{
-			[PseudoStat.PseudoStatMainHandDps]: 1.43,
-			[PseudoStat.PseudoStatOffHandDps]: 0.26,
+			[PseudoStat.PseudoStatMainHandDps]: 1,
+			[PseudoStat.PseudoStatOffHandDps]: 1,
 		},
 	),
 );

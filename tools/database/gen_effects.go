@@ -166,7 +166,8 @@ func GenerateItemEffects(instance *dbc.DBC, db *WowDatabase, itemSources map[int
 			for _, spellEffect := range spellEffects {
 				stat := dbc.ConvertEffectAuraToStatIndex(int(spellEffect.EffectAura))
 				if stat >= 0 {
-					parsed.ScalingOptions[0].Stats[int32(stat)] += float64(spellEffect.EffectBasePoints)
+					// These are always off by 1...?
+					parsed.ScalingOptions[0].Stats[int32(stat)] += float64(spellEffect.EffectBasePoints + 1)
 				}
 			}
 		}
