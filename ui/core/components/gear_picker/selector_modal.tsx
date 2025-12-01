@@ -3,7 +3,7 @@ import tippy from 'tippy.js';
 import { ref } from 'tsx-vanilla';
 
 import { Player } from '../../player';
-import { GemColor, ItemLevelState, ItemRandomSuffix, ItemSlot, Profession, ItemQuality } from '../../proto/common';
+import { GemColor, ItemRandomSuffix, ItemSlot, Profession, ItemQuality } from '../../proto/common';
 import { UIEnchant as Enchant, UIGem as Gem, UIItem as Item } from '../../proto/ui';
 import { ActionId } from '../../proto_utils/action_id';
 import { EquippedItem, ReforgeData } from '../../proto_utils/equipped_item';
@@ -147,16 +147,12 @@ export default class SelectorModal extends BaseModal {
 		const eligibleItems = this.player.getItems(selectedSlot);
 		const eligibleEnchants = this.player.getEnchants(selectedSlot);
 		const eligibleTinkers = this.player.getTinkers(selectedSlot);
-		const hasEligibleReforges = equippedItem?.item ? !!this.player.getAvailableReforgings(equippedItem).length : false;
-		const hasEligibleUpgrades = !this.player.getChallengeModeEnabled() && equippedItem?.item ? equippedItem.hasUpgradeOptions() : false;
 
 		// If the enchant tab is selected but the item has no eligible enchants, default to items
 		// If the reforge tab is selected but the item has no eligible reforges, default to items
 		// If a gem tab is selected but the item has no eligible sockets, default to items
 		if (
 			(selectedTab === SelectorModalTabs.Enchants && !eligibleEnchants.length) ||
-			(selectedTab === SelectorModalTabs.Reforging && !hasEligibleReforges) ||
-			(selectedTab === SelectorModalTabs.Upgrades && !hasEligibleUpgrades) ||
 			([SelectorModalTabs.Gem1, SelectorModalTabs.Gem2, SelectorModalTabs.Gem3].includes(selectedTab) &&
 				equippedItem?.numSockets(this.player.isBlacksmithing()) === 0)
 		) {
@@ -178,7 +174,7 @@ export default class SelectorModal extends BaseModal {
 						item: item,
 						id: item.id,
 						actionId: equippedItem.asActionId(),
-						ilvl: item.scalingOptions?.[ItemLevelState.Base].ilvl || item.ilvl,
+						ilvl: item.scalingOptions?.[0].ilvl || item.ilvl,
 						name: item.name,
 						quality: item.quality,
 						nameDescription: item.nameDescription,
@@ -242,49 +238,12 @@ export default class SelectorModal extends BaseModal {
 				},
 			});
 
-		const hasTinkerTab = !this.disabledTabs?.includes(SelectorModalTabs.Tinkers);
-		if (hasTinkerTab && this.player.hasProfession(Profession.Engineering)) {
-			this.addTab<Enchant>({
-				id: sanitizeId(`${this.options.id}-${SelectorModalTabs.Tinkers}`),
-				label: SelectorModalTabs.Tinkers,
-				gearData,
-				itemData: eligibleTinkers
-					.sort((itemA, itemB) => {
-						if (itemA.effectId > itemB.effectId) return -1;
-						if (itemA.effectId < itemB.effectId) return 1;
-						return 0;
-					})
-					.map(tinker => {
-						return {
-							item: tinker,
-							id: tinker.effectId,
-							actionId: tinker.itemId ? ActionId.fromItemId(tinker.itemId) : ActionId.fromSpellId(tinker.spellId),
-							name: tinker.name,
-							quality: tinker.quality,
-							phase: tinker.phase || 1,
-							ignoreEPFilter: true,
-							nameDescription: '',
-							onEquip: (eventID, tinker) => {
-								const equippedItem = gearData.getEquippedItem();
-								if (equippedItem) gearData.equipItem(eventID, equippedItem.withTinker(tinker));
-							},
-						};
-					}),
-				computeEP: (tinker: Enchant) => this.player.computeEnchantEP(tinker),
-				equippedToItemFn: (equippedItem: EquippedItem | null) => equippedItem?.tinker,
-				onRemove: (eventID: number) => {
-					const equippedItem = gearData.getEquippedItem();
-					if (equippedItem) gearData.equipItem(eventID, equippedItem.withTinker(null));
-				},
-			});
-		}
-
 		const hasRandomSuffixTab = !this.disabledTabs?.includes(SelectorModalTabs.RandomSuffixes);
 		if (hasRandomSuffixTab) this.addRandomSuffixTab(equippedItem, gearData);
-		const hasUpgradesTab = !this.disabledTabs?.includes(SelectorModalTabs.Upgrades);
-		if (hasUpgradesTab) this.addUpgradesTab(equippedItem, gearData);
-		const hasReforgingTab = !this.disabledTabs?.includes(SelectorModalTabs.Reforging);
-		if (hasReforgingTab) this.addReforgingTab(equippedItem, gearData);
+		//const hasUpgradesTab = !this.disabledTabs?.includes(SelectorModalTabs.Upgrades);
+		//if (hasUpgradesTab) this.addUpgradesTab(equippedItem, gearData);
+		//const hasReforgingTab = !this.disabledTabs?.includes(SelectorModalTabs.Reforging);
+		//if (hasReforgingTab) this.addReforgingTab(equippedItem, gearData);
 		const hasGemsTab = ![SelectorModalTabs.Gem1, SelectorModalTabs.Gem2, SelectorModalTabs.Gem3].some(gem => this.disabledTabs?.includes(gem));
 		if (hasGemsTab) this.addGemTabs(selectedSlot, equippedItem, gearData);
 
@@ -485,105 +444,54 @@ export default class SelectorModal extends BaseModal {
 		});
 	}
 
-	private addReforgingTab(equippedItem: EquippedItem | null, gearData: GearData) {
-		if (!equippedItem || (equippedItem.hasRandomSuffixOptions() && !equippedItem.randomSuffix)) {
-			return;
-		}
+	// private addReforgingTab(equippedItem: EquippedItem | null, gearData: GearData) {
+	// 	if (!equippedItem || (equippedItem.hasRandomSuffixOptions() && !equippedItem.randomSuffix)) {
+	// 		return;
+	// 	}
 
-		const itemProto = equippedItem.item;
+	// 	const itemProto = equippedItem.item;
 
-		this.addTab<ReforgeData>({
-			id: sanitizeId(`${this.options.id}-${SelectorModalTabs.Reforging}`),
-			label: SelectorModalTabs.Reforging,
-			gearData,
-			itemData: this.player.getAvailableReforgings(equippedItem).map(reforgeData => {
-				return {
-					item: reforgeData,
-					id: reforgeData.id,
-					actionId: ActionId.fromReforge(itemProto, reforgeData.reforge),
-					name: (
-						<div>
-							<span className="reforge-value negative">
-								{reforgeData.fromAmount} {translateStat(reforgeData.fromStat)}
-							</span>
-							<span className="reforge-value positive">
-								+{reforgeData.toAmount} {translateStat(reforgeData.toStat)}
-							</span>
-						</div>
-					) as HTMLElement,
-					quality: ItemQuality.ItemQualityCommon,
-					phase: itemProto.phase,
-					nameDescription: '',
-					ignoreEPFilter: true,
-					onEquip: (eventID, reforgeData) => {
-						const equippedItem = gearData.getEquippedItem();
-						if (equippedItem) {
-							gearData.equipItem(eventID, equippedItem.withReforge(reforgeData.reforge));
-						}
-					},
-				};
-			}),
-			computeEP: (reforge: ReforgeData) => this.player.computeReforgingEP(reforge),
-			equippedToItemFn: (equippedItem: EquippedItem | null) => equippedItem?.getReforgeData() || null,
-			onRemove: (eventID: number) => {
-				const equippedItem = gearData.getEquippedItem();
-				if (equippedItem) {
-					gearData.equipItem(eventID, equippedItem.withItem(equippedItem.item).withRandomSuffix(equippedItem._randomSuffix));
-				}
-			},
-		});
-	}
-
-	private addUpgradesTab(equippedItem: EquippedItem | null, gearData: GearData) {
-		if (!equippedItem || !equippedItem.hasUpgradeOptions() || (equippedItem.hasRandomSuffixOptions() && !equippedItem.randomSuffix)) {
-			return;
-		}
-
-		const itemProto = equippedItem.item;
-		const itemUpgrades = equippedItem.getUpgrades();
-		const itemUpgradesAsEntries = Object.entries(itemUpgrades);
-		const numberOfUpgrades = itemUpgradesAsEntries.length - 1;
-
-		this.addTab<ItemLevelState>({
-			id: sanitizeId(`${this.options.id}-${SelectorModalTabs.Upgrades}`),
-			label: SelectorModalTabs.Upgrades,
-			gearData,
-			itemData: itemUpgradesAsEntries.map(([upgradeStepString, upgradeData], index) => {
-				const upgradeStep = Number(upgradeStepString) as ItemLevelState;
-				const upgradeItem = equippedItem.withUpgrade(upgradeStep);
-				return {
-					item: Number(upgradeStep),
-					id: Number(upgradeStep),
-					actionId: ActionId.fromItemId(itemProto.id, 0, equippedItem._randomSuffix?.id, 0, upgradeStep),
-					name: (
-						<>
-							{index > 0 ? <>+ {upgradeItem.ilvlFromPrevious * index}</> : <>Base</>}{' '}
-							<div className="selector-modal-list-item-upgrade-step-container ms-2">{`(${upgradeStep}/${numberOfUpgrades})`}</div>
-						</>
-					) as HTMLElement,
-					ilvl: upgradeData.ilvl,
-					quality: ItemQuality.ItemQualityCommon,
-					phase: itemProto.phase,
-					nameDescription: '',
-					ignoreEPFilter: true,
-					onEquip: (eventID, upgradeStep) => {
-						const equippedItem = gearData.getEquippedItem();
-						if (equippedItem) {
-							gearData.equipItem(eventID, equippedItem.withUpgrade(upgradeStep));
-						}
-					},
-				};
-			}),
-			computeEP: (upgradeStep: ItemLevelState) => this.player.computeUpgradeEP(equippedItem, upgradeStep, this.currentSlot),
-			equippedToItemFn: (equippedItem: EquippedItem | null) => equippedItem?._upgrade,
-			onRemove: (eventID: number) => {
-				const equippedItem = gearData.getEquippedItem();
-				if (equippedItem) {
-					gearData.equipItem(eventID, equippedItem.withUpgrade(ItemLevelState.Base));
-				}
-			},
-		});
-	}
+	// 	this.addTab<ReforgeData>({
+	// 		id: sanitizeId(`${this.options.id}-${SelectorModalTabs.Reforging}`),
+	// 		label: SelectorModalTabs.Reforging,
+	// 		gearData,
+	// 		itemData: this.player.getAvailableReforgings(equippedItem).map(reforgeData => {
+	// 			return {
+	// 				item: reforgeData,
+	// 				id: reforgeData.id,
+	// 				actionId: ActionId.fromReforge(itemProto, reforgeData.reforge),
+	// 				name: (
+	// 					<div>
+	// 						<span className="reforge-value negative">
+	// 							{reforgeData.fromAmount} {translateStat(reforgeData.fromStat)}
+	// 						</span>
+	// 						<span className="reforge-value positive">
+	// 							+{reforgeData.toAmount} {translateStat(reforgeData.toStat)}
+	// 						</span>
+	// 					</div>
+	// 				) as HTMLElement,
+	// 				quality: ItemQuality.ItemQualityCommon,
+	// 				phase: itemProto.phase,
+	// 				nameDescription: '',
+	// 				ignoreEPFilter: true,
+	// 				onEquip: (eventID, reforgeData) => {
+	// 					const equippedItem = gearData.getEquippedItem();
+	// 					if (equippedItem) {
+	// 						gearData.equipItem(eventID, equippedItem.withReforge(reforgeData.reforge));
+	// 					}
+	// 				},
+	// 			};
+	// 		}),
+	// 		computeEP: (reforge: ReforgeData) => this.player.computeReforgingEP(reforge),
+	// 		equippedToItemFn: (equippedItem: EquippedItem | null) => equippedItem?.getReforgeData() || null,
+	// 		onRemove: (eventID: number) => {
+	// 			const equippedItem = gearData.getEquippedItem();
+	// 			if (equippedItem) {
+	// 				gearData.equipItem(eventID, equippedItem.withItem(equippedItem.item).withRandomSuffix(equippedItem._randomSuffix));
+	// 			}
+	// 		},
+	// 	});
+	// }
 
 	/**
 	 * Adds one of the tabs for the item selector menu.
@@ -663,21 +571,16 @@ export default class SelectorModal extends BaseModal {
 				const isItemChange = Item.is(item.item);
 				const newItem = gearData.getEquippedItem() || null;
 				const isRandomSuffixChange = prevItem?._randomSuffix?.id !== newItem?.randomSuffix?.id;
-				const isUpgradeChange = prevItem?.id === newItem?.id && prevItem?.upgrade !== newItem?.upgrade;
 
 				// If the item changes, then gem slots and random suffix options will also change, so remove and recreate these tabs.
-				if (isItemChange || isRandomSuffixChange || isUpgradeChange) {
+				if (isItemChange || isRandomSuffixChange) {
 					if (!isRandomSuffixChange) {
 						this.removeTabs(SelectorModalTabs.RandomSuffixes);
 						this.addRandomSuffixTab(newItem, gearData);
 					}
-					if (!isUpgradeChange) {
-						this.removeTabs(SelectorModalTabs.Upgrades);
-						this.addUpgradesTab(newItem, gearData);
-					}
 
 					this.removeTabs(SelectorModalTabs.Reforging);
-					this.addReforgingTab(newItem, gearData);
+					// this.addReforgingTab(newItem, gearData);
 
 					this.removeTabs('Gem');
 					this.addGemTabs(this.currentSlot, newItem, gearData);

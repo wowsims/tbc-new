@@ -74,7 +74,6 @@ func (enh *EnhancementShaman) GetShaman() *shaman.Shaman {
 }
 
 func (enh *EnhancementShaman) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
-	raidBuffs.UnleashedRage = true
 	enh.Shaman.AddRaidBuffs(raidBuffs)
 }
 

@@ -174,9 +174,6 @@ export class IndividualWowheadGearPlannerExporter<SpecType extends Spec> extends
 				if (item._enchant?.spellId) {
 					itemData.enchantIds.push(item._enchant.spellId);
 				}
-				if (item._tinker?.spellId) {
-					itemData.enchantIds.push(item._tinker.spellId);
-				}
 
 				if (ItemSlot.ItemSlotHands == itemSlot) {
 					//Todo: IF Hands we want to append any tinkers if existing
@@ -186,12 +183,6 @@ export class IndividualWowheadGearPlannerExporter<SpecType extends Spec> extends
 					itemData.gemItemIds = item._gems.map(gem => {
 						return gem?.id ?? 0;
 					});
-				}
-				if (item._reforge) {
-					itemData.reforge = item._reforge.id;
-				}
-				if (item._upgrade > 0) {
-					itemData.upgradeRank = item._upgrade;
 				}
 				data.items.push(itemData);
 			});

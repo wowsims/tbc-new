@@ -1,4 +1,4 @@
-package feral
+package feralcat
 
 import (
 	"testing"
@@ -7,7 +7,7 @@ import (
 )
 
 func init() {
-	RegisterFeralDruid()
+	RegisterFeralCatDruid()
 	common.RegisterAllEffects()
 }
 

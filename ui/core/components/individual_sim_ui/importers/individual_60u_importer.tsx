@@ -72,9 +72,6 @@ export class Individual60UImporter<SpecType extends Spec> extends IndividualImpo
 				}
 				modifiedItemNames.push(itemJson.name);
 			}
-			if (itemJson.reforge?.id) {
-				itemSpec.reforging = itemJson.reforge.id;
-			}
 			equipmentSpec.items.push(itemSpec);
 		});
 

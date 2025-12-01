@@ -17,7 +17,6 @@ export class Paladin extends PlayerClass<Class.ClassPaladin> {
 	static races: Race[] = [
 		// [H]
 		Race.RaceBloodElf,
-		Race.RaceTauren,
 		// [A]
 		Race.RaceHuman,
 		Race.RaceDwarf,

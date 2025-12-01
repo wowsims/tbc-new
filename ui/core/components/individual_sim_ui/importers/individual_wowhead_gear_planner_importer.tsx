@@ -1,7 +1,7 @@
 import { ref } from 'tsx-vanilla';
 
 import { IndividualSimUI } from '../../../individual_sim_ui';
-import { Class, EquipmentSpec, ItemLevelState, ItemSlot, ItemSpec, Profession, Race, Spec } from '../../../proto/common';
+import { Class, EquipmentSpec, ItemSlot, ItemSpec, Profession, Race, Spec } from '../../../proto/common';
 import { nameToClass, nameToRace } from '../../../proto_utils/names';
 import Toast from '../../toast';
 import { IndividualImporter } from './individual_importer';
@@ -236,12 +236,6 @@ export class IndividualWowheadGearPlannerImporter<SpecType extends Spec> extends
 					if (!enchant) {
 						missingEnchants.push(enchantSpellId);
 						return;
-					}
-					if (isTinker) {
-						itemSpec.tinker = enchant.effectId;
-						if (!professions.includes(Profession.Engineering)) {
-							professions.push(Profession.Engineering);
-						}
 					} else {
 						itemSpec.enchant = enchant.effectId;
 					}
@@ -252,15 +246,6 @@ export class IndividualWowheadGearPlannerImporter<SpecType extends Spec> extends
 			}
 			if (item.randomEnchantId) {
 				itemSpec.randomSuffix = item.randomEnchantId;
-			}
-			if (item.reforge) {
-				itemSpec.reforging = item.reforge;
-			}
-			if (item.upgradeRank && dbItem) {
-				// If the upgrade step does not exust assume highest upgrade step.
-				itemSpec.upgradeStep = dbItem.scalingOptions[item.upgradeRank]
-					? (item.upgradeRank as ItemLevelState)
-					: Object.keys(dbItem.scalingOptions).length - 2;
 			}
 			const itemSlotEntry = Object.entries(IndividualWowheadGearPlannerImporter.slotIDs).find(e => e[1] == slotId);
 			if (itemSlotEntry != null) {
@@ -296,5 +281,6 @@ export class IndividualWowheadGearPlannerImporter<SpecType extends Spec> extends
 		[ItemSlot.ItemSlotTrinket2]: 14,
 		[ItemSlot.ItemSlotMainHand]: 16,
 		[ItemSlot.ItemSlotOffHand]: 17,
+		[ItemSlot.ItemSlotRanged]: 18
 	};
 }

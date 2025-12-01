@@ -1,126 +1,126 @@
 package balance
 
-import (
-	"time"
+// import (
+// 	"time"
 
-	"github.com/wowsims/tbc/sim/core"
-	"github.com/wowsims/tbc/sim/druid"
-)
+// 	"github.com/wowsims/tbc/sim/core"
+// 	"github.com/wowsims/tbc/sim/druid"
+// )
 
-func (moonkin *BalanceDruid) ApplyBalanceTalents() {
-	moonkin.registerIncarnation()
-	moonkin.registerDreamOfCenarius()
-	moonkin.registerSoulOfTheForest()
-}
+// func (moonkin *BalanceDruid) ApplyBalanceTalents() {
+// 	moonkin.registerIncarnation()
+// 	moonkin.registerDreamOfCenarius()
+// 	moonkin.registerSoulOfTheForest()
+// }
 
-func (moonkin *BalanceDruid) registerIncarnation() {
-	if !moonkin.Talents.Incarnation {
-		return
-	}
+// func (moonkin *BalanceDruid) registerIncarnation() {
+// 	if !moonkin.Talents.Incarnation {
+// 		return
+// 	}
 
-	actionID := core.ActionID{SpellID: 102560}
+// 	actionID := core.ActionID{SpellID: 102560}
 
-	moonkin.IncarnationSpellMod = moonkin.AddDynamicMod(core.SpellModConfig{
-		School:     core.SpellSchoolArcane | core.SpellSchoolNature,
-		Kind:       core.SpellMod_DamageDone_Pct,
-		FloatValue: 0.25,
-	})
+// 	moonkin.IncarnationSpellMod = moonkin.AddDynamicMod(core.SpellModConfig{
+// 		School:     core.SpellSchoolArcane | core.SpellSchoolNature,
+// 		Kind:       core.SpellMod_DamageDone_Pct,
+// 		FloatValue: 0.25,
+// 	})
 
-	incarnationAura := moonkin.RegisterAura(core.Aura{
-		Label:    "Incarnation: Chosen of Elune",
-		ActionID: actionID,
-		Duration: time.Second * 30,
-		OnGain: func(_ *core.Aura, _ *core.Simulation) {
-			// Only apply the damage bonus when in Eclipse or during Celestial Alignment
-			if moonkin.IsInEclipse() || moonkin.CelestialAlignment.RelatedSelfBuff.IsActive() {
-				moonkin.IncarnationSpellMod.Activate()
-			}
-		},
-		OnExpire: func(_ *core.Aura, _ *core.Simulation) {
-			moonkin.IncarnationSpellMod.Deactivate()
-		},
-	})
+// 	incarnationAura := moonkin.RegisterAura(core.Aura{
+// 		Label:    "Incarnation: Chosen of Elune",
+// 		ActionID: actionID,
+// 		Duration: time.Second * 30,
+// 		OnGain: func(_ *core.Aura, _ *core.Simulation) {
+// 			// Only apply the damage bonus when in Eclipse or during Celestial Alignment
+// 			if moonkin.IsInEclipse() || moonkin.CelestialAlignment.RelatedSelfBuff.IsActive() {
+// 				moonkin.IncarnationSpellMod.Activate()
+// 			}
+// 		},
+// 		OnExpire: func(_ *core.Aura, _ *core.Simulation) {
+// 			moonkin.IncarnationSpellMod.Deactivate()
+// 		},
+// 	})
 
-	// Add Eclipse callback to apply/remove damage bonus when entering/exiting Eclipse
-	moonkin.AddEclipseCallback(func(_ Eclipse, gained bool, _ *core.Simulation) {
-		if incarnationAura.IsActive() {
-			if gained {
-				moonkin.IncarnationSpellMod.Activate()
-			} else {
-				moonkin.IncarnationSpellMod.Deactivate()
-			}
-		}
-	})
+// 	// Add Eclipse callback to apply/remove damage bonus when entering/exiting Eclipse
+// 	moonkin.AddEclipseCallback(func(_ Eclipse, gained bool, _ *core.Simulation) {
+// 		if incarnationAura.IsActive() {
+// 			if gained {
+// 				moonkin.IncarnationSpellMod.Activate()
+// 			} else {
+// 				moonkin.IncarnationSpellMod.Deactivate()
+// 			}
+// 		}
+// 	})
 
-	moonkin.ChosenOfElune = moonkin.RegisterSpell(druid.Humanoid|druid.Moonkin, core.SpellConfig{
-		ActionID:        actionID,
-		Flags:           core.SpellFlagAPL,
-		RelatedSelfBuff: incarnationAura,
+// 	moonkin.ChosenOfElune = moonkin.RegisterSpell(druid.Humanoid|druid.Moonkin, core.SpellConfig{
+// 		ActionID:        actionID,
+// 		Flags:           core.SpellFlagAPL,
+// 		RelatedSelfBuff: incarnationAura,
 
-		Cast: core.CastConfig{
-			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
-			},
-			CD: core.Cooldown{
-				Timer:    moonkin.NewTimer(),
-				Duration: time.Minute * 3,
-			},
-		},
+// 		Cast: core.CastConfig{
+// 			DefaultCast: core.Cast{
+// 				GCD: core.GCDDefault,
+// 			},
+// 			CD: core.Cooldown{
+// 				Timer:    moonkin.NewTimer(),
+// 				Duration: time.Minute * 3,
+// 			},
+// 		},
 
-		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			spell.RelatedSelfBuff.Activate(sim)
-		},
-	})
+// 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
+// 			spell.RelatedSelfBuff.Activate(sim)
+// 		},
+// 	})
 
-	moonkin.AddMajorCooldown(core.MajorCooldown{
-		Spell: moonkin.ChosenOfElune.Spell,
-		Type:  core.CooldownTypeDPS,
-	})
-}
+// 	moonkin.AddMajorCooldown(core.MajorCooldown{
+// 		Spell: moonkin.ChosenOfElune.Spell,
+// 		Type:  core.CooldownTypeDPS,
+// 	})
+// }
 
-func (moonkin *BalanceDruid) registerDreamOfCenarius() {
-	if !moonkin.Talents.DreamOfCenarius {
-		return
-	}
+// func (moonkin *BalanceDruid) registerDreamOfCenarius() {
+// 	if !moonkin.Talents.DreamOfCenarius {
+// 		return
+// 	}
 
-	moonkin.DreamOfCenarius = moonkin.RegisterAura(core.Aura{
-		Label:    "Dream of Cenarius",
-		ActionID: core.ActionID{SpellID: 145151},
-		Duration: time.Second * 30,
-	})
+// 	moonkin.DreamOfCenarius = moonkin.RegisterAura(core.Aura{
+// 		Label:    "Dream of Cenarius",
+// 		ActionID: core.ActionID{SpellID: 145151},
+// 		Duration: time.Second * 30,
+// 	})
 
-	moonkin.MakeProcTriggerAura(core.ProcTrigger{
-		Name:               "Dream of Cenarius Trigger",
-		Callback:           core.CallbackOnCastComplete,
-		ClassSpellMask:     druid.DruidSpellHealingTouch,
-		TriggerImmediately: true,
+// 	moonkin.MakeProcTriggerAura(core.ProcTrigger{
+// 		Name:               "Dream of Cenarius Trigger",
+// 		Callback:           core.CallbackOnCastComplete,
+// 		ClassSpellMask:     druid.DruidSpellHealingTouch,
+// 		TriggerImmediately: true,
 
-		Handler: func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
-			moonkin.DreamOfCenarius.Activate(sim)
-		},
-	})
-}
+// 		Handler: func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
+// 			moonkin.DreamOfCenarius.Activate(sim)
+// 		},
+// 	})
+// }
 
-func (moonkin *BalanceDruid) registerSoulOfTheForest() {
-	if !moonkin.Talents.SoulOfTheForest {
-		return
-	}
+// func (moonkin *BalanceDruid) registerSoulOfTheForest() {
+// 	if !moonkin.Talents.SoulOfTheForest {
+// 		return
+// 	}
 
-	moonkin.AstralInsight = moonkin.RegisterAura(core.Aura{
-		Label:    "Astral Insight (SotF)",
-		ActionID: core.ActionID{SpellID: 145138},
-		Duration: time.Second * 30,
-	})
+// 	moonkin.AstralInsight = moonkin.RegisterAura(core.Aura{
+// 		Label:    "Astral Insight (SotF)",
+// 		ActionID: core.ActionID{SpellID: 145138},
+// 		Duration: time.Second * 30,
+// 	})
 
-	moonkin.MakeProcTriggerAura(core.ProcTrigger{
-		Name:               "Astral Insight (SotF) Trigger",
-		Callback:           core.CallbackOnCastComplete,
-		ClassSpellMask:     druid.DruidSpellWrath | druid.DruidSpellStarfire | druid.DruidSpellStarsurge,
-		ProcChance:         0.08,
-		TriggerImmediately: true,
+// 	moonkin.MakeProcTriggerAura(core.ProcTrigger{
+// 		Name:               "Astral Insight (SotF) Trigger",
+// 		Callback:           core.CallbackOnCastComplete,
+// 		ClassSpellMask:     druid.DruidSpellWrath | druid.DruidSpellStarfire | druid.DruidSpellStarsurge,
+// 		ProcChance:         0.08,
+// 		TriggerImmediately: true,
 
-		Handler: func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
-			moonkin.AstralInsight.Activate(sim)
-		},
-	})
-}
+// 		Handler: func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
+// 			moonkin.AstralInsight.Activate(sim)
+// 		},
+// 	})
+// }

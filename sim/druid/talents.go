@@ -24,17 +24,11 @@ func (druid *Druid) ApplyTalents() {
 }
 
 func (druid *Druid) registerFelineSwiftness() {
-	if !druid.Talents.FelineSwiftness {
-		return
-	}
 
 	druid.PseudoStats.MovementSpeedMultiplier *= 1.15
 }
 
 func (druid *Druid) registerDisplacerBeast() {
-	if !druid.Talents.DisplacerBeast || (druid.CatFormAura == nil) {
-		return
-	}
 
 	druid.DisplacerBeastAura = druid.RegisterAura(core.Aura{
 		Label:    "Displacer Beast",
@@ -102,9 +96,6 @@ func (druid *Druid) registerDisplacerBeast() {
 }
 
 func (druid *Druid) registerWildCharge() {
-	if !druid.Talents.WildCharge {
-		return
-	}
 
 	sharedCD := core.Cooldown{
 		Timer:    druid.NewTimer(),
@@ -168,9 +159,6 @@ func (druid *Druid) registerCatCharge(sharedCD core.Cooldown) {
 }
 
 func (druid *Druid) registerHeartOfTheWild() {
-	if !druid.Talents.HeartOfTheWild {
-		return
-	}
 
 	// Apply 6% increase to Stamina, Agility, and Intellect
 	statMultiplier := 1.06
@@ -208,9 +196,6 @@ func (druid *Druid) RegisterSharedFeralHotwMods() (*core.SpellMod, *core.SpellMo
 }
 
 func (druid *Druid) registerNaturesVigil() {
-	if !druid.Talents.NaturesVigil {
-		return
-	}
 
 	var smartHealStrength float64
 
@@ -303,9 +288,6 @@ func (druid *Druid) registerNaturesVigil() {
 }
 
 func (druid *Druid) registerYserasGift() {
-	if !druid.Talents.YserasGift {
-		return
-	}
 
 	healingSpell := druid.RegisterSpell(Any, core.SpellConfig{
 		ActionID:         core.ActionID{SpellID: 145108},
@@ -334,9 +316,6 @@ func (druid *Druid) registerYserasGift() {
 }
 
 func (druid *Druid) registerRenewal() {
-	if !druid.Talents.Renewal {
-		return
-	}
 
 	renewalSpell := druid.RegisterSpell(Any, core.SpellConfig{
 		ActionID:         core.ActionID{SpellID: 108238},
@@ -365,9 +344,6 @@ func (druid *Druid) registerRenewal() {
 }
 
 func (druid *Druid) registerCenarionWard() {
-	if !druid.Talents.CenarionWard {
-		return
-	}
 
 	// First register the HoT spell that gets triggered when the target takes damage.
 	baseTickDamage := 11.27999973297 * druid.ClassSpellScaling // ~12349

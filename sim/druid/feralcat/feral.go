@@ -1,4 +1,4 @@
-package feral
+package feralcat
 
 import (
 	"time"
@@ -9,12 +9,12 @@ import (
 	"github.com/wowsims/tbc/sim/druid"
 )
 
-func RegisterFeralDruid() {
+func RegisterFeralCatDruid() {
 	core.RegisterAgentFactory(
 		proto.Player_FeralDruid{},
-		proto.Spec_SpecFeralDruid,
+		proto.Spec_SpecFeralCatDruid,
 		func(character *core.Character, options *proto.Player) core.Agent {
-			return NewFeralDruid(character, options)
+			return NewFeralCatDruid(character, options)
 		},
 		func(player *proto.Player, spec interface{}) {
 			playerSpec, ok := spec.(*proto.Player_FeralDruid)
@@ -26,7 +26,7 @@ func RegisterFeralDruid() {
 	)
 }
 
-func NewFeralDruid(character *core.Character, options *proto.Player) *FeralDruid {
+func NewFeralCatDruid(character *core.Character, options *proto.Player) *FeralDruid {
 	feralOptions := options.GetFeralDruid()
 	selfBuffs := druid.SelfBuffs{}
 
@@ -36,7 +36,7 @@ func NewFeralDruid(character *core.Character, options *proto.Player) *FeralDruid
 
 	cat.AssumeBleedActive = feralOptions.Options.AssumeBleedActive
 	cat.CannotShredTarget = feralOptions.Options.CannotShredTarget
-	cat.registerTreants()
+	// cat.registerTreants()
 
 	cat.EnableEnergyBar(core.EnergyBarOptions{
 		MaxComboPoints:        5,
@@ -91,20 +91,19 @@ func (cat *FeralDruid) GetDruid() *druid.Druid {
 }
 
 func (cat *FeralDruid) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
-	raidBuffs.LeaderOfThePack = true
 }
 
 func (cat *FeralDruid) Initialize() {
 	cat.Druid.Initialize()
-	cat.RegisterFeralCatSpells()
-	cat.registerSavageRoarSpell()
-	cat.registerShredSpell()
-	cat.registerTigersFurySpell()
-	cat.ApplyPrimalFury()
-	cat.ApplyLeaderOfThePack()
-	cat.ApplyNurturingInstinct()
-	cat.applyOmenOfClarity()
-	cat.applyPredatorySwiftness()
+	// cat.RegisterFeralCatSpells()
+	// cat.registerSavageRoarSpell()
+	// cat.registerShredSpell()
+	// cat.registerTigersFurySpell()
+	// cat.ApplyPrimalFury()
+	// cat.ApplyLeaderOfThePack()
+	// cat.ApplyNurturingInstinct()
+	// cat.applyOmenOfClarity()
+	// cat.applyPredatorySwiftness()
 
 	snapshotHandler := func(aura *core.Aura, sim *core.Simulation) {
 		previousRipSnapshotPower := cat.Rip.NewSnapshotPower
@@ -147,27 +146,9 @@ func (cat *FeralDruid) Initialize() {
 
 func (cat *FeralDruid) ApplyTalents() {
 	cat.Druid.ApplyTalents()
-	cat.applySpecTalents()
-	cat.ApplyArmorSpecializationEffect(stats.Agility, proto.ArmorType_ArmorTypeLeather, 86097)
-	cat.applyMastery()
-}
-
-const BaseMasteryPoints = 8.0
-const MasteryModPerPoint = 0.0313 // TODO: We expect 0.03125, possibly bugged?
-const BaseMasteryMod = BaseMasteryPoints * MasteryModPerPoint
-
-func (cat *FeralDruid) applyMastery() {
-	razorClaws := cat.AddDynamicMod(core.SpellModConfig{
-		ClassMask:  druid.DruidSpellThrashCat | druid.DruidSpellRake | druid.DruidSpellRip,
-		Kind:       core.SpellMod_DamageDone_Pct,
-		FloatValue: BaseMasteryMod + MasteryModPerPoint*cat.GetMasteryPoints(),
-	})
-
-	cat.AddOnMasteryStatChanged(func(_ *core.Simulation, _ float64, newMasteryRating float64) {
-		razorClaws.UpdateFloatValue(BaseMasteryMod + MasteryModPerPoint*core.MasteryRatingToMasteryPoints(newMasteryRating))
-	})
-
-	razorClaws.Activate()
+	// cat.applySpecTalents()
+	// cat.ApplyArmorSpecializationEffect(stats.Agility, proto.ArmorType_ArmorTypeLeather, 86097)
+	// cat.applyMastery()
 }
 
 func (cat *FeralDruid) Reset(sim *core.Simulation) {

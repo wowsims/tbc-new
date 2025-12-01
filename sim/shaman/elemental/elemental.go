@@ -59,7 +59,6 @@ func (eleShaman *ElementalShaman) Initialize() {
 }
 
 func (ele *ElementalShaman) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
-	raidBuffs.ElementalOath = true
 	ele.Shaman.AddRaidBuffs(raidBuffs)
 }
 

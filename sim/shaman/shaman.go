@@ -193,8 +193,6 @@ func (shaman *Shaman) GetCharacter() *core.Character {
 }
 
 func (shaman *Shaman) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
-	raidBuffs.GraceOfAir = true
-	raidBuffs.BurningWrath = true
 }
 
 func (shaman *Shaman) Initialize() {

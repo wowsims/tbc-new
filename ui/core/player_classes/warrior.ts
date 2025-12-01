@@ -1,6 +1,6 @@
 import { EligibleWeaponType, IconSize, PlayerClass } from '../player_class';
 import { PlayerSpec } from '../player_spec';
-import { ArmsWarrior, FuryWarrior, ProtectionWarrior } from '../player_specs/warrior';
+import { DPSWarrior, ProtectionWarrior } from '../player_specs/warrior';
 import { ArmorType, Class, Race, RangedWeaponType, WeaponType } from '../proto/common';
 import { WarriorSpecs } from '../proto_utils/utils';
 
@@ -9,8 +9,7 @@ export class Warrior extends PlayerClass<Class.ClassWarrior> {
 	static friendlyName = 'Warrior';
 	static hexColor = '#c79c6e';
 	static specs: Record<string, PlayerSpec<WarriorSpecs>> = {
-		[ArmsWarrior.friendlyName]: ArmsWarrior,
-		[FuryWarrior.friendlyName]: FuryWarrior,
+		[DPSWarrior.friendlyName]: DPSWarrior,
 		[ProtectionWarrior.friendlyName]: ProtectionWarrior,
 	};
 	static races: Race[] = [
@@ -20,16 +19,12 @@ export class Warrior extends PlayerClass<Class.ClassWarrior> {
 		Race.RaceNightElf,
 		Race.RaceGnome,
 		Race.RaceDraenei,
-		Race.RaceWorgen,
-		Race.RaceAlliancePandaren,
 		// [H]
 		Race.RaceOrc,
 		Race.RaceUndead,
 		Race.RaceTauren,
 		Race.RaceTroll,
 		Race.RaceBloodElf,
-		Race.RaceGoblin,
-		Race.RaceHordePandaren,
 	];
 	static armorTypes: ArmorType[] = [ArmorType.ArmorTypePlate, ArmorType.ArmorTypeMail, ArmorType.ArmorTypeLeather, ArmorType.ArmorTypeCloth];
 	static weaponTypes: EligibleWeaponType[] = [

@@ -180,7 +180,7 @@ export const makePresetSimpleRotation = <SpecType extends Spec>(
 	options?: PresetRotationOptions,
 ): PresetRotation => {
 	const isTankSpec =
-		spec == Spec.SpecGuardianDruid || spec == Spec.SpecProtectionPaladin || spec == Spec.SpecProtectionWarrior;
+		spec == Spec.SpecFeralBearDruid || spec == Spec.SpecProtectionPaladin || spec == Spec.SpecProtectionWarrior;
 	const rotation = SavedRotation.create({
 		rotation: {
 			type: APLRotationType.TypeSimple,

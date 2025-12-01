@@ -71,15 +71,8 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 		BuffDebuffInputs.AttackSpeedBuff,
 
 		BuffDebuffInputs.MajorHasteBuff,
-		BuffDebuffInputs.StormLashTotem,
-		BuffDebuffInputs.Skullbanner,
-		BuffDebuffInputs.ShatteringThrow,
-		BuffDebuffInputs.TricksOfTheTrade,
-		BuffDebuffInputs.UnholyFrenzy,
 
 		BuffDebuffInputs.SpellDamageDebuff,
-		BuffDebuffInputs.MajorArmorDebuff,
-		BuffDebuffInputs.PhysicalDamageDebuff,
 	],
 	excludeBuffDebuffInputs: [],
 	// Inputs to include in the 'Other' section on the settings tab.

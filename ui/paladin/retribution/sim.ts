@@ -1,5 +1,4 @@
 import * as OtherInputs from '../../core/components/inputs/other_inputs.js';
-import { ReforgeOptimizer } from '../../core/components/suggest_reforges_action';
 import * as Mechanics from '../../core/constants/mechanics.js';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui.js';
 import { Player } from '../../core/player.js';
@@ -159,7 +158,5 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRetributionPaladin, {
 export class RetributionPaladinSimUI extends IndividualSimUI<Spec.SpecRetributionPaladin> {
 	constructor(parentElem: HTMLElement, player: Player<Spec.SpecRetributionPaladin>) {
 		super(parentElem, player, SPEC_CONFIG);
-
-		this.reforger = new ReforgeOptimizer(this);
 	}
 }

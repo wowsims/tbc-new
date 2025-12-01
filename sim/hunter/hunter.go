@@ -15,16 +15,13 @@ type Hunter struct {
 
 	ClassSpellScaling float64
 
-	Talents             *proto.HunterTalents
-	Options             *proto.HunterOptions
-	BeastMasteryOptions *proto.BeastMasteryHunter_Options
-	MarksmanshipOptions *proto.MarksmanshipHunter_Options
-	SurvivalOptions     *proto.SurvivalHunter_Options
+	Talents *proto.HunterTalents
+	Options *proto.HunterOptions
 
-	Pet          *HunterPet
-	StampedePet  []*HunterPet
-	DireBeastPet *HunterPet
-	Thunderhawks []*ThunderhawkPet
+	// Pet          *HunterPet
+	// StampedePet  []*HunterPet
+	// DireBeastPet *HunterPet
+	// Thunderhawks []*ThunderhawkPet
 
 	// The most recent time at which moving could have started, for trap weaving.
 	mayMoveAt time.Duration
@@ -52,6 +49,10 @@ func (hunter *Hunter) GetHunter() *Hunter {
 	return hunter
 }
 
+func RegisterHunter() {
+
+}
+
 func NewHunter(character *core.Character, options *proto.Player, hunterOptions *proto.HunterOptions) *Hunter {
 	hunter := &Hunter{
 		Character:         *character,
@@ -61,10 +62,10 @@ func NewHunter(character *core.Character, options *proto.Player, hunterOptions *
 	}
 
 	core.FillTalentsProto(hunter.Talents.ProtoReflect(), options.TalentsString)
-	focusPerSecond := 4.0
+	// focusPerSecond := 4.0
 
-	kindredSpritsBonusFocus := core.TernaryFloat64(hunter.Spec == proto.Spec_SpecBeastMasteryHunter, 20, 0)
-	hunter.EnableFocusBar(100+kindredSpritsBonusFocus, focusPerSecond, true, nil, true)
+	// kindredSpritsBonusFocus := core.TernaryFloat64(hunter.Spec == proto.Spec_SpecBeastMasteryHunter, 20, 0)
+	//hunter.EnableFocusBar(100+kindredSpritsBonusFocus, focusPerSecond, true, nil, true)
 
 	hunter.PseudoStats.CanParry = true
 
@@ -91,19 +92,19 @@ func NewHunter(character *core.Character, options *proto.Player, hunterOptions *
 
 	hunter.AddStatDependencies()
 
-	hunter.Pet = hunter.NewHunterPet()
-	hunter.StampedePet = make([]*HunterPet, 4)
-	for index := range 4 {
-		hunter.StampedePet[index] = hunter.NewStampedePet(index)
-	}
+	// hunter.Pet = hunter.NewHunterPet()
+	// hunter.StampedePet = make([]*HunterPet, 4)
+	// for index := range 4 {
+	// 	hunter.StampedePet[index] = hunter.NewStampedePet(index)
+	// }
 
-	hunter.DireBeastPet = hunter.NewDireBeastPet()
+	// hunter.DireBeastPet = hunter.NewDireBeastPet()
 
-	// Add 10 just to be protected against weird good luck :)
-	hunter.Thunderhawks = make([]*ThunderhawkPet, 10)
-	for index := range 10 {
-		hunter.Thunderhawks[index] = hunter.NewThunderhawkPet(index)
-	}
+	// // Add 10 just to be protected against weird good luck :)
+	// hunter.Thunderhawks = make([]*ThunderhawkPet, 10)
+	// for index := range 10 {
+	// 	hunter.Thunderhawks[index] = hunter.NewThunderhawkPet(index)
+	// }
 
 	return hunter
 }
@@ -120,36 +121,36 @@ func (hunter *Hunter) GetBaseDamageFromCoeff(coeff float64) float64 {
 }
 
 func (hunter *Hunter) ApplyTalents() {
-	hunter.applyThrillOfTheHunt()
-	hunter.ApplyHotfixes()
-	hunter.addBloodthirstyGloves()
+	// hunter.applyThrillOfTheHunt()
+	// hunter.ApplyHotfixes()
+	// hunter.addBloodthirstyGloves()
 
-	if hunter.Pet != nil {
-		hunter.Pet.ApplyTalents()
-	}
+	// if hunter.Pet != nil {
+	// 	hunter.Pet.ApplyTalents()
+	// }
 
 	hunter.ApplyArmorSpecializationEffect(stats.Agility, proto.ArmorType_ArmorTypeMail, 86538)
 }
 
 func (hunter *Hunter) RegisterSpells() {
-	hunter.registerArcaneShotSpell()
-	hunter.registerKillShotSpell()
-	hunter.registerHawkSpell()
-	hunter.RegisterLynxRushSpell()
-	hunter.registerSerpentStingSpell()
-	hunter.registerMultiShotSpell()
-	hunter.registerExplosiveTrapSpell()
-	hunter.registerCobraShotSpell()
-	hunter.registerRapidFireCD()
-	hunter.registerSilencingShotSpell()
-	hunter.registerHuntersMarkSpell()
-	hunter.registerAMOCSpell()
-	hunter.registerBarrageSpell()
-	hunter.registerGlaiveTossSpell()
-	hunter.registerFervorSpell()
-	hunter.RegisterDireBeastSpell()
-	hunter.RegisterStampedeSpell()
-	hunter.registerPowerShotSpell()
+	// hunter.registerArcaneShotSpell()
+	// hunter.registerKillShotSpell()
+	// hunter.registerHawkSpell()
+	// hunter.RegisterLynxRushSpell()
+	// hunter.registerSerpentStingSpell()
+	// hunter.registerMultiShotSpell()
+	// hunter.registerExplosiveTrapSpell()
+	// hunter.registerCobraShotSpell()
+	// hunter.registerRapidFireCD()
+	// hunter.registerSilencingShotSpell()
+	// hunter.registerHuntersMarkSpell()
+	// hunter.registerAMOCSpell()
+	// hunter.registerBarrageSpell()
+	// hunter.registerGlaiveTossSpell()
+	// hunter.registerFervorSpell()
+	// hunter.RegisterDireBeastSpell()
+	// hunter.RegisterStampedeSpell()
+	// hunter.registerPowerShotSpell()
 }
 
 func (hunter *Hunter) AddStatDependencies() {
@@ -159,39 +160,39 @@ func (hunter *Hunter) AddStatDependencies() {
 }
 
 func (hunter *Hunter) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
-	raidBuffs.TrueshotAura = true
+	// raidBuffs.TrueshotAura = true
 
-	// if hunter.Talents.FerociousInspiration && hunter.Options.PetType != proto.HunterOptions_PetNone {
-	// 	raidBuffs.FerociousInspiration = true
+	// // if hunter.Talents.FerociousInspiration && hunter.Options.PetType != proto.HunterOptions_PetNone {
+	// // 	raidBuffs.FerociousInspiration = true
+	// // }
+
+	// if hunter.Options.PetType == proto.HunterOptions_CoreHound {
+	// 	raidBuffs.Bloodlust = true
 	// }
+	// switch hunter.Options.PetType {
+	// case proto.HunterOptions_CoreHound:
+	// 	raidBuffs.Bloodlust = true
 
-	if hunter.Options.PetType == proto.HunterOptions_CoreHound {
-		raidBuffs.Bloodlust = true
-	}
-	switch hunter.Options.PetType {
-	case proto.HunterOptions_CoreHound:
-		raidBuffs.Bloodlust = true
+	// case proto.HunterOptions_ShaleSpider:
+	// 	raidBuffs.EmbraceOfTheShaleSpider = true
 
-	case proto.HunterOptions_ShaleSpider:
-		raidBuffs.EmbraceOfTheShaleSpider = true
-
-	case proto.HunterOptions_Wolf:
-		raidBuffs.FuriousHowl = true
-	case proto.HunterOptions_Devilsaur:
-		raidBuffs.TerrifyingRoar = true
-	case proto.HunterOptions_WaterStrider:
-		raidBuffs.StillWater = true
-	case proto.HunterOptions_Hyena:
-		raidBuffs.CacklingHowl = true
-	case proto.HunterOptions_Serpent:
-		raidBuffs.SerpentsSwiftness = true
-	case proto.HunterOptions_SporeBat:
-		raidBuffs.MindQuickening = true
-	case proto.HunterOptions_Cat:
-		raidBuffs.RoarOfCourage = true
-	case proto.HunterOptions_SpiritBeast:
-		raidBuffs.SpiritBeastBlessing = true
-	}
+	// case proto.HunterOptions_Wolf:
+	// 	raidBuffs.FuriousHowl = true
+	// case proto.HunterOptions_Devilsaur:
+	// 	raidBuffs.TerrifyingRoar = true
+	// case proto.HunterOptions_WaterStrider:
+	// 	raidBuffs.StillWater = true
+	// case proto.HunterOptions_Hyena:
+	// 	raidBuffs.CacklingHowl = true
+	// case proto.HunterOptions_Serpent:
+	// 	raidBuffs.SerpentsSwiftness = true
+	// case proto.HunterOptions_SporeBat:
+	// 	raidBuffs.MindQuickening = true
+	// case proto.HunterOptions_Cat:
+	// 	raidBuffs.RoarOfCourage = true
+	// case proto.HunterOptions_SpiritBeast:
+	// 	raidBuffs.SpiritBeastBlessing = true
+	// }
 	// if hunter.Options.PetType == proto.HunterOptions_ShaleSpider {
 	// 	raidBuffs.BlessingOfKings = true
 	// }

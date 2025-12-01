@@ -34,12 +34,12 @@ func NewBalanceDruid(character *core.Character, options *proto.Player) *BalanceD
 	selfBuffs := druid.SelfBuffs{}
 
 	moonkin := &BalanceDruid{
-		Druid:            druid.New(character, druid.Moonkin, selfBuffs, options.TalentsString),
-		Options:          balanceOptions.Options,
-		EclipseEnergyMap: make(EclipseEnergyMap),
+		Druid:   druid.New(character, druid.Moonkin, selfBuffs, options.TalentsString),
+		Options: balanceOptions.Options,
+		// EclipseEnergyMap: make(EclipseEnergyMap),
 	}
 
-	moonkin.registerTreants()
+	// moonkin.registerTreants()
 
 	moonkin.SelfBuffs.InnervateTarget = &proto.UnitReference{}
 	if balanceOptions.Options.ClassOptions.InnervateTarget != nil {
@@ -52,10 +52,10 @@ func NewBalanceDruid(character *core.Character, options *proto.Player) *BalanceD
 
 type BalanceDruid struct {
 	*druid.Druid
-	eclipseEnergyBar
+	// eclipseEnergyBar
 	Options *proto.BalanceDruid_Options
 
-	EclipseEnergyMap EclipseEnergyMap
+	// EclipseEnergyMap EclipseEnergyMap
 
 	LunarEclipseSpellMod       *core.SpellMod
 	SolarEclipseSpellMod       *core.SpellMod
@@ -87,36 +87,36 @@ func (moonkin *BalanceDruid) GetDruid() *druid.Druid {
 func (moonkin *BalanceDruid) Initialize() {
 	moonkin.Druid.Initialize()
 
-	moonkin.EnableEclipseBar()
-	moonkin.RegisterEclipseSpellMods()
-	moonkin.RegisterEclipseAuras()
-	moonkin.RegisterEclipseEnergyGainAura()
+	// moonkin.EnableEclipseBar()
+	// moonkin.RegisterEclipseSpellMods()
+	// moonkin.RegisterEclipseAuras()
+	// moonkin.RegisterEclipseEnergyGainAura()
 
-	moonkin.RegisterBalancePassives()
-	moonkin.RegisterBalanceSpells()
+	// moonkin.RegisterBalancePassives()
+	// moonkin.RegisterBalanceSpells()
 
 	moonkin.ManaMetric = moonkin.NewManaMetrics(core.ActionID{SpellID: 81070 /* Eclipse */})
 }
 
 func (moonkin *BalanceDruid) ApplyTalents() {
 	moonkin.Druid.ApplyTalents()
-	moonkin.ApplyBalanceTalents()
+	//moonkin.ApplyBalanceTalents()
 }
 
 func (moonkin *BalanceDruid) RegisterBalanceSpells() {
 	moonkin.RegisterMoonkinFormSpell()
 
-	moonkin.registerSunfireSpell()
-	moonkin.registerStarfireSpell()
-	moonkin.registerStarsurgeSpell()
-	moonkin.registerStarfallSpell()
-	moonkin.registerAstralCommunionSpell()
-	moonkin.registerCelestialAlignmentSpell()
-	moonkin.registerAstralStormSpell()
-	moonkin.registerWildMushrooms()
+	// moonkin.registerSunfireSpell()
+	// moonkin.registerStarfireSpell()
+	// moonkin.registerStarsurgeSpell()
+	// moonkin.registerStarfallSpell()
+	// moonkin.registerAstralCommunionSpell()
+	// moonkin.registerCelestialAlignmentSpell()
+	// moonkin.registerAstralStormSpell()
+	// moonkin.registerWildMushrooms()
 }
 
 func (moonkin *BalanceDruid) Reset(sim *core.Simulation) {
-	moonkin.eclipseEnergyBar.reset()
+	//moonkin.eclipseEnergyBar.reset()
 	moonkin.Druid.Reset(sim)
 }

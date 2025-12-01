@@ -1,5 +1,5 @@
-import { CHARACTER_LEVEL, MAX_CHALLENGE_MODE_ILVL } from '../constants/mechanics';
-import { ActionID as ActionIdProto, ItemLevelState, ItemRandomSuffix, OtherAction, ReforgeStat } from '../proto/common';
+import { CHARACTER_LEVEL } from '../constants/mechanics';
+import { ActionID as ActionIdProto, ItemRandomSuffix, OtherAction } from '../proto/common';
 import { ResourceType } from '../proto/spell';
 import { IconData, UIItem as Item } from '../proto/ui';
 import { buildWowheadTooltipDataset, getWowheadLanguagePrefix, WowheadTooltipItemParams, WowheadTooltipSpellParams } from '../wowhead';
@@ -26,7 +26,6 @@ export class ActionId {
 	readonly itemId: number;
 	readonly randomSuffixId: number;
 	readonly reforgeId: number;
-	readonly upgradeStep: ItemLevelState;
 	readonly spellId: number;
 	readonly otherId: OtherAction;
 	readonly tag: number;
@@ -40,7 +39,6 @@ export class ActionId {
 		this.itemId = itemId ?? 0;
 		this.randomSuffixId = randomSuffixId ?? 0;
 		this.reforgeId = reforgeId ?? 0;
-		this.upgradeStep = upgradeStep ?? 0;
 		this.spellId = spellId ?? 0;
 		this.otherId = otherId ?? OtherAction.OtherActionNone;
 		this.tag = tag ?? 0;
@@ -153,8 +151,7 @@ export class ActionId {
 			this.itemId == other.itemId &&
 			this.randomSuffixId == other.randomSuffixId &&
 			this.spellId == other.spellId &&
-			this.otherId == other.otherId &&
-			this.upgradeStep === other.upgradeStep
+			this.otherId == other.otherId
 		);
 	}
 
@@ -164,17 +161,11 @@ export class ActionId {
 		}
 	}
 
-	static makeItemUrl(id: number, randomSuffixId?: number, reforgeId?: number, upgradeStep?: ItemLevelState): string {
+	static makeItemUrl(id: number, randomSuffixId?: number): string {
 		const langPrefix = getWowheadLanguagePrefix();
 		const url = new URL(`https://wowhead.com/tbc/${langPrefix}item=${id}`);
 		url.searchParams.set('level', String(CHARACTER_LEVEL));
 		url.searchParams.set('rand', String(randomSuffixId || 0));
-		if (reforgeId) url.searchParams.set('forg', String(reforgeId));
-		if (upgradeStep === ItemLevelState.ChallengeMode) {
-			url.searchParams.set('ilvl', String(MAX_CHALLENGE_MODE_ILVL));
-		} else if (upgradeStep) {
-			url.searchParams.set('upgd', String(upgradeStep));
-		}
 		return url.toString();
 	}
 	static makeSpellUrl(id: number): string {
@@ -218,7 +209,7 @@ export class ActionId {
 
 	setWowheadHref(elem: HTMLAnchorElement) {
 		if (this.itemId) {
-			elem.href = ActionId.makeItemUrl(this.itemId, this.randomSuffixId, this.reforgeId, this.upgradeStep);
+			elem.href = ActionId.makeItemUrl(this.itemId, this.randomSuffixId);
 		} else if (this.spellId) {
 			elem.href = ActionId.makeSpellUrl(this.spellIdTooltipOverride || this.spellId);
 		}
@@ -823,8 +814,6 @@ export class ActionId {
 			name,
 			iconUrl,
 			randomSuffixId: this.randomSuffixId,
-			reforgeId: this.reforgeId,
-			upgradeStep: this.upgradeStep,
 		});
 	}
 
@@ -882,8 +871,6 @@ export class ActionId {
 			baseName: this.baseName,
 			iconUrl: this.iconUrl,
 			randomSuffixId: this.randomSuffixId,
-			reforgeId: this.reforgeId,
-			upgradeStep: this.upgradeStep,
 		});
 	}
 
@@ -891,13 +878,11 @@ export class ActionId {
 		return new ActionId();
 	}
 
-	static fromItemId(itemId: number, tag?: number, randomSuffixId?: number, reforgeId?: number, upgradeStep?: ItemLevelState): ActionId {
+	static fromItemId(itemId: number, tag?: number, randomSuffixId?: number): ActionId {
 		return new ActionId({
 			itemId,
 			tag,
-			randomSuffixId,
-			reforgeId,
-			upgradeStep,
+			randomSuffixId
 		});
 	}
 
@@ -925,10 +910,6 @@ export class ActionId {
 
 	static fromRandomSuffix(item: Item, randomSuffix: ItemRandomSuffix): ActionId {
 		return ActionId.fromItemId(item.id, 0, randomSuffix.id);
-	}
-
-	static fromReforge(item: Item, reforge: ReforgeStat): ActionId {
-		return ActionId.fromItemId(item.id, 0, 0, reforge.id);
 	}
 
 	static fromProto(protoId: ActionIdProto): ActionId {
@@ -1201,8 +1182,6 @@ export const resourceTypeToIcon: Record<ResourceType, string> = {
 	[ResourceType.ResourceTypeRage]: 'https://wow.zamimg.com/images/wow/icons/medium/spell_misc_emotionangry.jpg',
 	[ResourceType.ResourceTypeComboPoints]: 'https://wow.zamimg.com/images/wow/icons/medium/inv_mace_2h_pvp410_c_01.jpg',
 	[ResourceType.ResourceTypeFocus]: 'https://wow.zamimg.com/images/wow/icons/medium/ability_hunter_focusfire.jpg',
-	[ResourceType.ResourceTypeSolarEnergy]: 'https://wow.zamimg.com/images/wow/icons/large/ability_druid_eclipseorange.jpg',
-	[ResourceType.ResourceTypeLunarEnergy]: 'https://wow.zamimg.com/images/wow/icons/large/ability_druid_eclipse.jpg',
 	[ResourceType.ResourceTypeGenericResource]: 'https://wow.zamimg.com/images/wow/icons/medium/spell_holy_holybolt.jpg',
 };
 

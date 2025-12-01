@@ -139,11 +139,11 @@ export class RaidSimUI extends SimUI {
 				}
 
 				// TODO: No longer needed per-player
-				if (paladin.blessings[spec] == Blessings.BlessingOfKings) {
-					playerProtos.forEach(() => (raidProto.buffs!.blessingOfKings = true));
-				} else if (paladin.blessings[spec] == Blessings.BlessingOfMight) {
-					playerProtos.forEach(() => (raidProto.buffs!.blessingOfMight = true));
-				}
+				// if (paladin.blessings[spec] == Blessings.BlessingOfKings) {
+				// 	playerProtos.forEach(() => (raidProto.buffs!.blessingOfKings = true));
+				// } else if (paladin.blessings[spec] == Blessings.BlessingOfMight) {
+				// 	playerProtos.forEach(() => (raidProto.buffs!.blessingOfMight = true));
+				// }
 			});
 		});
 	}

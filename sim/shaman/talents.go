@@ -70,9 +70,6 @@ func (shaman *Shaman) ApplyElementalMastery() {
 }
 
 func (shaman *Shaman) ApplyAncestralSwiftness() {
-	if !shaman.Talents.AncestralSwiftness {
-		return
-	}
 
 	core.MakePermanent(shaman.RegisterAura(core.Aura{
 		Label:      "Ancestral Swiftness Passive",

@@ -1,7 +1,5 @@
 import * as BuffDebuffInputs from '../core/components/inputs/buffs_debuffs';
 import * as OtherInputs from '../core/components/inputs/other_inputs';
-import { ReforgeOptimizer } from '../core/components/suggest_reforges_action';
-import { HASTE_RATING_PER_HASTE_PERCENT } from '../core/constants/mechanics';
 import { IndividualSimUI, registerSpecConfig } from '../core/individual_sim_ui';
 import { Player } from '../core/player';
 import { PlayerClasses } from '../core/player_classes';
@@ -22,7 +20,7 @@ const modifyDisplayStats = (player: Player<Spec.SpecWarlock>) => {
 			return {};
 		}
 
-		stats = stats.addStat(Stat.StatMP5, (currentStats[Stat.StatMP5] * currentStats[Stat.StatSpellHasteRating]) / HASTE_RATING_PER_HASTE_PERCENT / 100);
+		// stats = stats.addStat(Stat.StatMP5, (currentStats[Stat.StatMP5] * currentStats[Stat.StatSpellHasteRating]) / HASTE_RATING_PER_HASTE_PERCENT / 100);
 	});
 
 	return {
@@ -90,7 +88,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecWarlock, {
 	playerIconInputs: [WarlockInputs.PetInput()],
 
 	// Buff and Debuff inputs to include/exclude, overriding the EP-based defaults.
-	includeBuffDebuffInputs: [BuffDebuffInputs.AttackSpeedBuff, BuffDebuffInputs.PhysicalDamageDebuff, BuffDebuffInputs.MajorArmorDebuff],
+	includeBuffDebuffInputs: [BuffDebuffInputs.AttackSpeedBuff],
 	excludeBuffDebuffInputs: [],
 	petConsumeInputs: [],
 	// Inputs to include in the 'Other' section on the settings tab.

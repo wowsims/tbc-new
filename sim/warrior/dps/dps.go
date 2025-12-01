@@ -1,4 +1,4 @@
-package fury
+package dps
 
 import (
 	"github.com/wowsims/tbc/sim/core"
@@ -7,58 +7,63 @@ import (
 	"github.com/wowsims/tbc/sim/warrior"
 )
 
-func RegisterFuryWarrior() {
+func RegisterDpsWarrior() {
 	core.RegisterAgentFactory(
-		proto.Player_FuryWarrior{},
-		proto.Spec_SpecFuryWarrior,
+		proto.Player_DpsWarrior{},
+		proto.Spec_SpecDPSWarrior,
 		func(character *core.Character, options *proto.Player) core.Agent {
-			return NewFuryWarrior(character, options)
+			return NewDpsWarrior(character, options)
 		},
 		func(player *proto.Player, spec interface{}) {
-			playerSpec, ok := spec.(*proto.Player_FuryWarrior)
+			playerSpec, ok := spec.(*proto.Player_DpsWarrior)
 			if !ok {
-				panic("Invalid spec value for Fury Warrior!")
+				panic("Invalid spec value for Dps Warrior!")
 			}
 			player.Spec = playerSpec
 		},
 	)
 }
 
-type FuryWarrior struct {
+type DpsWarrior struct {
 	*warrior.Warrior
 
-	Options *proto.FuryWarrior_Options
+	Options *proto.DPSWarrior_Options
 
 	BloodsurgeAura  *core.Aura
 	MeatCleaverAura *core.Aura
 }
 
-func NewFuryWarrior(character *core.Character, options *proto.Player) *FuryWarrior {
-	furyOptions := options.GetFuryWarrior().Options
+// ApplyTalents implements core.Agent.
+func (war *DpsWarrior) ApplyTalents() {
+	panic("unimplemented")
+}
 
-	war := &FuryWarrior{
-		Warrior: warrior.NewWarrior(character, furyOptions.ClassOptions, options.TalentsString, warrior.WarriorInputs{
-			StanceSnapshot: furyOptions.StanceSnapshot,
+func NewDpsWarrior(character *core.Character, options *proto.Player) *DpsWarrior {
+	dpsOptions := options.GetDpsWarrior().Options
+
+	war := &DpsWarrior{
+		Warrior: warrior.NewWarrior(character, dpsOptions.ClassOptions, options.TalentsString, warrior.WarriorInputs{
+			StanceSnapshot: dpsOptions.StanceSnapshot,
 		}),
-		Options: furyOptions,
+		Options: dpsOptions,
 	}
 
-	war.ApplySyncType(furyOptions.SyncType)
+	war.ApplySyncType(dpsOptions.SyncType)
 
 	return war
 }
 
-func (war *FuryWarrior) GetWarrior() *warrior.Warrior {
+func (war *DpsWarrior) GetWarrior() *warrior.Warrior {
 	return war.Warrior
 }
 
-func (war *FuryWarrior) Initialize() {
+func (war *DpsWarrior) Initialize() {
 	war.Warrior.Initialize()
 	war.registerPassives()
 	// war.registerBloodthirst()
 }
 
-func (war *FuryWarrior) registerPassives() {
+func (war *DpsWarrior) registerPassives() {
 	war.ApplyArmorSpecializationEffect(stats.Strength, proto.ArmorType_ArmorTypePlate, 86526)
 
 	// war.registerCrazedBerserker()
@@ -69,16 +74,16 @@ func (war *FuryWarrior) registerPassives() {
 	// war.registerUnshackledFury()
 }
 
-func (war *FuryWarrior) Reset(sim *core.Simulation) {
+func (war *DpsWarrior) Reset(sim *core.Simulation) {
 	war.Warrior.Reset(sim)
 }
 
-func (war *FuryWarrior) OnEncounterStart(sim *core.Simulation) {
+func (war *DpsWarrior) OnEncounterStart(sim *core.Simulation) {
 	war.ResetRageBar(sim, 25+war.PrePullChargeGain)
 	war.Warrior.OnEncounterStart(sim)
 }
 
-func (war *FuryWarrior) ApplySyncType(syncType proto.WarriorSyncType) {
+func (war *DpsWarrior) ApplySyncType(syncType proto.WarriorSyncType) {
 	if syncType == proto.WarriorSyncType_WarriorSyncMainhandOffhandSwings {
 		war.AutoAttacks.SetReplaceMHSwing(func(sim *core.Simulation, mhSwingSpell *core.Spell) *core.Spell {
 			aa := &war.AutoAttacks

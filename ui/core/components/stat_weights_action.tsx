@@ -794,9 +794,9 @@ export class EpWeightsMenu extends BaseModal {
 				PseudoStat.PseudoStatMainHandDps,
 				PseudoStat.PseudoStatOffHandDps,
 				PseudoStat.PseudoStatRangedDps,
-				PseudoStat.PseudoStatPhysicalHitPercent,
+				PseudoStat.PseudoStatMeleeHitPercent,
 				PseudoStat.PseudoStatSpellHitPercent,
-				PseudoStat.PseudoStatPhysicalCritPercent,
+				PseudoStat.PseudoStatMeleeCritPercent,
 				PseudoStat.PseudoStatSpellCritPercent,
 			].includes(stat.getPseudoStat());
 		}

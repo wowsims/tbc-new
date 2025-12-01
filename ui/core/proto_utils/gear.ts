@@ -137,7 +137,6 @@ abstract class BaseGear {
 		const data = {
 			items: distinct(equippedItems.map(ei => BaseGear.itemToDB(ei.item))),
 			randomSuffixes: distinct(equippedItems.filter(ei => ei.randomSuffix).map(ei => ei.randomSuffix!)),
-			reforgeStats: distinct(equippedItems.filter(ei => ei.reforge).map(ei => db.getReforgeById(ei.reforge!.id) ?? {})),
 			itemEffectRandPropPoints: distinct(
 				equippedItems.flatMap(ei => db.getItemEffectRandPropPoints(ei.ilvl)).filter((ieRpp): ieRpp is ItemEffectRandPropPoints => !!ieRpp),
 			),
@@ -145,7 +144,6 @@ abstract class BaseGear {
 				equippedItems.flatMap(ei => {
 					const out: ReturnType<typeof BaseGear.enchantToDB>[] = [];
 					if (ei.enchant) out.push(BaseGear.enchantToDB(ei.enchant));
-					if (ei.tinker) out.push(BaseGear.enchantToDB(ei.tinker));
 					return out;
 				}),
 			),
@@ -238,20 +236,6 @@ export class Gear extends BaseGear {
 			yellow: gems.filter(gem => gemMatchesSocket(gem, GemColor.GemColorYellow)).length,
 			blue: gems.filter(gem => gemMatchesSocket(gem, GemColor.GemColorBlue)).length,
 		};
-	}
-
-	withChallengeMode(enabled: boolean): Gear {
-		let curGear: Gear = this;
-
-		for (const slot of this.getItemSlots()) {
-			const item = this.getEquippedItem(slot);
-
-			if (item) {
-				curGear = curGear.withEquippedItem(slot, item.withChallengeMode(enabled), true);
-			}
-		}
-
-		return curGear;
 	}
 
 	// Returns true if this gear set has a meta gem AND the other gems meet the meta's conditions.
@@ -374,19 +358,6 @@ export class Gear extends BaseGear {
 
 		return curGear;
 	}
-	withoutUpgrades(canDualWield2H: boolean): Gear {
-		let curGear: Gear = this;
-
-		for (const slot of this.getItemSlots()) {
-			const item = this.getEquippedItem(slot);
-
-			if (item) {
-				curGear = curGear.withEquippedItem(slot, item.withUpgrade(0), canDualWield2H);
-			}
-		}
-
-		return curGear;
-	}
 
 	// Removes bonus gems from blacksmith profession bonus.
 	withoutBlacksmithSockets(): Gear {
@@ -439,16 +410,6 @@ export class Gear extends BaseGear {
 		}
 
 		return setItemCount;
-	}
-
-	getAllReforges() {
-		const reforgedItems = new Map<ItemSlot, ReforgeData>();
-		this.getEquippedItems().forEach((item, slot) => {
-			const reforgeData = item?.getReforgeData();
-			if (!reforgeData) return;
-			reforgedItems.set(slot, reforgeData);
-		});
-		return reforgedItems;
 	}
 
 	getAverageItemLevel(canDualWield2H: boolean): number {

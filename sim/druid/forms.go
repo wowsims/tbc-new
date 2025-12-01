@@ -166,8 +166,8 @@ func (druid *Druid) RegisterBearFormAura() {
 
 	agiApDep := druid.NewDynamicStatDependency(stats.Agility, stats.AttackPower, 2)
 	stamDep := druid.NewDynamicMultiplyStat(stats.Stamina, 1.4)
-	critDep := druid.NewDynamicMultiplyStat(stats.CritRating, 1.5)
-	hasteDep := druid.NewDynamicMultiplyStat(stats.HasteRating, 1.5)
+	critDep := druid.NewDynamicMultiplyStat(stats.MeleeCritRating, 1.5)
+	hasteDep := druid.NewDynamicMultiplyStat(stats.MeleeHasteRating, 1.5)
 
 	clawWeapon := druid.GetBearWeapon()
 
