@@ -8,7 +8,7 @@ export class Hunter extends PlayerSpec<Spec.SpecHunter> {
 	static specID = Spec.SpecHunter as Spec.SpecHunter;
 	static classID = Class.ClassHunter as Class.ClassHunter;
 	static friendlyName = 'Hunter';
-	static simLink = getSpecSiteUrl('hunter', 'hunter');
+	static simLink = getSpecSiteUrl('hunter', 'dps');
 
 	static isTankSpec = false;
 	static isHealingSpec = false;

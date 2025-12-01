@@ -1,9 +1,9 @@
-import * as PresetUtils from '../core/preset_utils';
-import { APLRotation_Type as APLRotationType } from '../core/proto/apl.js';
-import { ConsumesSpec, Profession, PseudoStat, Spec, Stat } from '../core/proto/common';
-import { HunterOptions_PetType as PetType, Hunter_Options as HunterOptions } from '../core/proto/hunter';
-import { SavedTalents } from '../core/proto/ui';
-import { Stats } from '../core/proto_utils/stats';
+import * as PresetUtils from '../../core/preset_utils';
+import { APLRotation_Type as APLRotationType } from '../../core/proto/apl.js';
+import { ConsumesSpec, Profession, PseudoStat, Spec, Stat } from '../../core/proto/common';
+import { HunterOptions_PetType as PetType, Hunter_Options as HunterOptions } from '../../core/proto/hunter';
+import { SavedTalents } from '../../core/proto/ui';
+import { Stats } from '../../core/proto_utils/stats';
 import BlankAPL from './apls/blank.apl.json'
 import BlankGear from './gear_sets/blank.gear.json';
 

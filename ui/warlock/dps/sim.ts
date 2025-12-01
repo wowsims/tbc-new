@@ -1,13 +1,13 @@
-import * as BuffDebuffInputs from '../core/components/inputs/buffs_debuffs';
-import * as OtherInputs from '../core/components/inputs/other_inputs';
-import { IndividualSimUI, registerSpecConfig } from '../core/individual_sim_ui';
-import { Player } from '../core/player';
-import { PlayerClasses } from '../core/player_classes';
-import { APLRotation } from '../core/proto/apl';
-import { Debuffs, Faction, IndividualBuffs, ItemSlot, PartyBuffs, PseudoStat, Race, RaidBuffs, Spec, Stat } from '../core/proto/common';
-import { DEFAULT_CASTER_GEM_STATS, Stats, UnitStat } from '../core/proto_utils/stats';
-import { defaultRaidBuffMajorDamageCooldowns } from '../core/proto_utils/utils';
-import { TypedEvent } from '../core/typed_event';
+import * as BuffDebuffInputs from '../../core/components/inputs/buffs_debuffs';
+import * as OtherInputs from '../../core/components/inputs/other_inputs';
+import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui';
+import { Player } from '../../core/player';
+import { PlayerClasses } from '../../core/player_classes';
+import { APLRotation } from '../../core/proto/apl';
+import { Debuffs, Faction, IndividualBuffs, ItemSlot, PartyBuffs, PseudoStat, Race, RaidBuffs, Spec, Stat } from '../../core/proto/common';
+import { DEFAULT_CASTER_GEM_STATS, Stats, UnitStat } from '../../core/proto_utils/stats';
+import { defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
+import { TypedEvent } from '../../core/typed_event';
 import * as WarlockInputs from './inputs';
 import * as Presets from './presets';
 

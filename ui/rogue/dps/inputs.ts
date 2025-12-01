@@ -1,8 +1,8 @@
-import * as InputHelpers from '../core/components/input_helpers.js';
-import { RogueOptions_PoisonOptions as Poison } from '../core/proto/rogue.js';
-import { ActionId } from '../core/proto_utils/action_id.js';
-import { RogueSpecs } from '../core/proto_utils/utils';
-import i18n from '../i18n/config.js';
+import * as InputHelpers from '../../core/components/input_helpers.js';
+import { RogueOptions_PoisonOptions as Poison } from '../../core/proto/rogue.js';
+import { ActionId } from '../../core/proto_utils/action_id.js';
+import { RogueSpecs } from '../../core/proto_utils/utils.js';
+import i18n from '../../i18n/config.js';
 
 // Configuration for class-specific UI elements on the settings tab.
 // These don't need to be in a separate file but it keeps things cleaner.

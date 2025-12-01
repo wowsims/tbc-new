@@ -1,8 +1,9 @@
-import * as PresetUtils from '../core/preset_utils';
-import { ConsumesSpec, PseudoStat, Stat } from '../core/proto/common';
-import { Warlock_Options as WarlockOptions } from '../core/proto/warlock';
-import { SavedTalents } from '../core/proto/ui';
-import { Stats } from '../core/proto_utils/stats';
+import * as PresetUtils from '../../core/preset_utils';
+import { Debuffs, PseudoStat, RaidBuffs, Stat, ConsumesSpec } from '../../core/proto/common';
+import { defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
+import { Stats } from '../../core/proto_utils/stats';
+import { SavedTalents } from '../../core/proto/ui';
+import { Mage_Options as MageOptions } from '../../core/proto/mage';
 import BlankAPL from './apls/blank.apl.json'
 import BlankGear from './gear_sets/blank.gear.json';
 
@@ -16,7 +17,7 @@ export const BLANK_GEARSET = PresetUtils.makePresetGear('Blank', BlankGear);
 
 // Preset options for EP weights
 export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
-	'Sub',
+	'A',
 	Stats.fromMap(
 		{
 			[Stat.StatAgility]: 1.0,
@@ -28,9 +29,6 @@ export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
 	),
 );
 
-// Default talents. Uses the wowhead calculator format, make the talents on
-// https://wowhead.com/wotlk/talent-calc and copy the numbers in the url.
-
 export const Talents = {
 	name: 'A',
 	data: SavedTalents.create({
@@ -38,11 +36,15 @@ export const Talents = {
 	}),
 };
 
-export const DefaultOptions = WarlockOptions.create({
+export const DefaultOptions = MageOptions.create({
 	classOptions: {
 
 	},
 });
+
+export const OtherDefaults = {
+	distanceFromTarget: 20,
+};
 
 export const DefaultConsumables = ConsumesSpec.create({
 	flaskId: 76084, // Flask of the Winds
@@ -51,6 +53,10 @@ export const DefaultConsumables = ConsumesSpec.create({
 	prepotId: 76089, // Potion of the Tol'vir
 });
 
-export const OtherDefaults = {
-	distanceFromTarget: 5,
-};
+export const DefaultRaidBuffs = RaidBuffs.create({
+	...defaultRaidBuffMajorDamageCooldowns(),
+});
+
+export const DefaultDebuffs = Debuffs.create({
+
+});

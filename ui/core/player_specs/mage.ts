@@ -8,7 +8,7 @@ export class Mage extends PlayerSpec<Spec.SpecMage> {
 	static specID = Spec.SpecMage as Spec.SpecMage;
 	static classID = Class.ClassMage as Class.ClassMage;
 	static friendlyName = 'Mage';
-	static simLink = getSpecSiteUrl('mage', 'mage');
+	static simLink = getSpecSiteUrl('mage', 'dps');
 
 	static isTankSpec = false;
 	static isHealingSpec = false;

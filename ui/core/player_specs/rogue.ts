@@ -8,7 +8,7 @@ export class Rogue extends PlayerSpec<Spec.SpecRogue> {
 	static specID = Spec.SpecRogue as Spec.SpecRogue;
 	static classID = Class.ClassRogue as Class.ClassRogue;
 	static friendlyName = 'Rogue';
-	static simLink = getSpecSiteUrl('rogue', 'rogue');
+	static simLink = getSpecSiteUrl('rogue', 'dps');
 
 	static isTankSpec = false;
 	static isHealingSpec = false;

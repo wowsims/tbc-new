@@ -10,19 +10,19 @@ PAGE_INDECES := ui/druid/balance/index.html \
 				ui/druid/feralcat/index.html \
 				ui/druid/feralbear/index.html \
 				ui/druid/restoration/index.html \
-				ui/hunter/index.html \
-				ui/mage/index.html \
+				ui/hunter/dps/index.html \
+				ui/mage/dps/index.html \
 				ui/paladin/holy/index.html \
 				ui/paladin/protection/index.html \
 				ui/paladin/retribution/index.html \
 				ui/priest/discipline/index.html \
 				ui/priest/holy/index.html \
 				ui/priest/shadow/index.html \
-				ui/rogue/index.html \
+				ui/rogue/dps/index.html \
 				ui/shaman/elemental/index.html \
 				ui/shaman/enhancement/index.html \
 				ui/shaman/restoration/index.html \
-				ui/warlock/index.html \
+				ui/warlock/dps/index.html \
 				ui/warrior/dps/index.html \
 				ui/warrior/protection/index.html \
 				ui/raid/full/index.html

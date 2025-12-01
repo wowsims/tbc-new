@@ -8,7 +8,7 @@ export class Warlock extends PlayerSpec<Spec.SpecWarlock> {
 	static specID = Spec.SpecWarlock as Spec.SpecWarlock;
 	static classID = Class.ClassWarlock as Class.ClassWarlock;
 	static friendlyName = 'Warlock';
-	static simLink = getSpecSiteUrl('warlock', 'warlock');
+	static simLink = getSpecSiteUrl('warlock', 'dps');
 
 	static isTankSpec = false;
 	static isHealingSpec = false;
