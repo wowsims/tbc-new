@@ -1,6 +1,5 @@
 import * as BuffDebuffInputs from '../core/components/inputs/buffs_debuffs';
 import * as OtherInputs from '../core/components/inputs/other_inputs';
-import { ReforgeOptimizer } from '../core/components/suggest_reforges_action';
 import * as Mechanics from '../core/constants/mechanics.js';
 import { IndividualSimUI, registerSpecConfig } from '../core/individual_sim_ui';
 import { Player } from '../core/player';
@@ -66,7 +65,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecHunter, {
 	rotationInputs: Inputs.MMRotationConfig,
 	petConsumeInputs: [],
 	// Buff and Debuff inputs to include/exclude, overriding the EP-based defaults.
-	includeBuffDebuffInputs: [BuffDebuffInputs.StaminaBuff, BuffDebuffInputs.SpellDamageDebuff, BuffDebuffInputs.MajorArmorDebuff],
+	includeBuffDebuffInputs: [BuffDebuffInputs.StaminaBuff, BuffDebuffInputs.SpellDamageDebuff],
 	excludeBuffDebuffInputs: [],
 	// Inputs to include in the 'Other' section on the settings tab.
 	otherInputs: {
@@ -121,7 +120,5 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecHunter, {
 export class HunterSimUI extends IndividualSimUI<Spec.SpecHunter> {
 	constructor(parentElem: HTMLElement, player: Player<Spec.SpecHunter>) {
 		super(parentElem, player, SPEC_CONFIG);
-
-		this.reforger = new ReforgeOptimizer(this);
 	}
 }

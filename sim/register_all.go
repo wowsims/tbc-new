@@ -19,7 +19,7 @@ import (
 	"github.com/wowsims/tbc/sim/shaman/elemental"
 	"github.com/wowsims/tbc/sim/shaman/enhancement"
 	restoShaman "github.com/wowsims/tbc/sim/shaman/restoration"
-	affliction "github.com/wowsims/tbc/sim/warlock/_affliction"
+	"github.com/wowsims/tbc/sim/warlock"
 	dpswarrior "github.com/wowsims/tbc/sim/warrior/dps"
 	protWarrior "github.com/wowsims/tbc/sim/warrior/protection"
 )
@@ -55,7 +55,7 @@ func RegisterAll() {
 	enhancement.RegisterEnhancementShaman()
 	restoShaman.RegisterRestorationShaman()
 
-	affliction.RegisterAfflictionWarlock()
+	warlock.RegisterWarlock()
 
 	dpswarrior.RegisterDpsWarrior()
 	protWarrior.RegisterProtectionWarrior()

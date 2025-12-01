@@ -1,5 +1,4 @@
 import * as OtherInputs from '../../core/components/inputs/other_inputs';
-import { ReforgeOptimizer } from '../../core/components/suggest_reforges_action';
 import * as Mechanics from '../../core/constants/mechanics';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui';
 import { Player } from '../../core/player';
@@ -58,19 +57,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecBalanceDruid, {
 		gear: Presets.T14PresetGear.gear,
 		// Default EP weights for sorting gear in the gear picker.
 		epWeights: Presets.StandardEPWeights.epWeights,
-		// Default breakpoint limits - set 12T MF/SF with 4P
-		breakpointLimits: (() => {
-			return new Stats().withPseudoStat(PseudoStat.PseudoStatSpellHastePercent, Presets.BALANCE_T14_4P_BREAKPOINTS!.presets.get('12-tick MF/SF')!);
-		})(),
-		softCapBreakpoints: (() => {
-			const hasteSoftCapConfig = StatCap.fromPseudoStat(PseudoStat.PseudoStatSpellHastePercent, {
-				breakpoints: [...Presets.BALANCE_BREAKPOINTS!.presets].map(([_, value]) => value),
-				capType: StatCapType.TypeThreshold,
-				postCapEPs: [0.47 * Mechanics.HASTE_RATING_PER_HASTE_PERCENT],
-			});
-
-			return [hasteSoftCapConfig];
-		})(),
 		// Default consumes settings.
 		consumables: Presets.DefaultConsumables,
 		// Default talents.
@@ -186,23 +172,5 @@ export class BalanceDruidSimUI extends IndividualSimUI<Spec.SpecBalanceDruid> {
 				statSelectionHastePreset.presets.set(variantName, variantValue);
 			}
 		}
-
-		this.reforger = new ReforgeOptimizer(this, {
-			statSelectionPresets: [statSelectionHastePreset],
-			enableBreakpointLimits: true,
-			updateSoftCaps: softCaps => {
-				const gear = player.getGear();
-				const hasT144P = gear.getItemSetCount('Regalia of the Eternal Blossom') >= 4;
-
-				if (hasT144P) {
-					const softCapToModify = softCaps.find(sc => sc.unitStat.equalsPseudoStat(PseudoStat.PseudoStatSpellHastePercent));
-					if (softCapToModify) {
-						softCapToModify.breakpoints = [...Presets.BALANCE_T14_4P_BREAKPOINTS!.presets].map(([_, value]) => value);
-					}
-				}
-
-				return softCaps;
-			},
-		});
 	}
 }

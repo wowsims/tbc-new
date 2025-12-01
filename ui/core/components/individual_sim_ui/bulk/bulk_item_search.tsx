@@ -4,7 +4,7 @@ import { ref } from 'tsx-vanilla';
 import { setItemQualityCssClass } from '../../../css_utils';
 import i18n from '../../../../i18n/config';
 import { IndividualSimUI } from '../../../individual_sim_ui';
-import { ItemLevelState, ItemSpec } from '../../../proto/common';
+import { ItemSpec } from '../../../proto/common';
 import { UIItem, UIItem_FactionRestriction } from '../../../proto/ui';
 import { ActionId } from '../../../proto_utils/action_id';
 import { canEquipItem, getEligibleItemSlots } from '../../../proto_utils/utils';
@@ -110,8 +110,8 @@ export default class BulkItemSearch extends ContentBlock {
 				.getAllItems()
 				.filter(item => canEquipItem(item, this.simUI.player.getPlayerSpec(), undefined))
 				.sort((a, b) => {
-					const aIlvl = a.scalingOptions?.[ItemLevelState.Base].ilvl || a.ilvl;
-					const bIlvl = b.scalingOptions?.[ItemLevelState.Base].ilvl || b.ilvl;
+					const aIlvl = a.scalingOptions?.[0].ilvl || a.ilvl;
+					const bIlvl = b.scalingOptions?.[0].ilvl || b.ilvl;
 					if (aIlvl < bIlvl) return 1;
 					else if (bIlvl < aIlvl) return -1;
 					else return 0;
@@ -150,7 +150,7 @@ export default class BulkItemSearch extends ContentBlock {
 		let matchCount = 0;
 
 		this.allItems.forEach(item => {
-			const ilvl = item.scalingOptions?.[ItemLevelState.Base].ilvl || item.ilvl;
+			const ilvl = item.scalingOptions?.[0].ilvl || item.ilvl;
 			if (this.maxIlvl != 0 && this.maxIlvl < ilvl) return false;
 			if (this.minIlvl != 0 && this.minIlvl > ilvl) return false;
 

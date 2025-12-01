@@ -7,32 +7,23 @@ rwildcard = $(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(
 GOROOT := $(shell go env GOROOT)
 UI_SRC := $(shell find ui -name '*.ts' -o -name '*.tsx' -o -name '*.scss' -o -name '*.html')
 PAGE_INDECES := ui/druid/balance/index.html \
-				ui/druid/feral/index.html \
-				ui/druid/guardian/index.html \
+				ui/druid/feralcat/index.html \
+				ui/druid/feralbear/index.html \
 				ui/druid/restoration/index.html \
-				ui/hunter/beast_mastery/index.html \
-				ui/hunter/marksmanship/index.html \
-				ui/hunter/survival/index.html \
-				ui/mage/arcane/index.html \
-				ui/mage/fire/index.html \
-				ui/mage/frost/index.html \
+				ui/hunter/index.html \
+				ui/mage/index.html \
 				ui/paladin/holy/index.html \
 				ui/paladin/protection/index.html \
 				ui/paladin/retribution/index.html \
 				ui/priest/discipline/index.html \
 				ui/priest/holy/index.html \
 				ui/priest/shadow/index.html \
-				ui/rogue/assassination/index.html \
-				ui/rogue/combat/index.html \
-				ui/rogue/subtlety/index.html \
+				ui/rogue/index.html \
 				ui/shaman/elemental/index.html \
 				ui/shaman/enhancement/index.html \
 				ui/shaman/restoration/index.html \
-				ui/warlock/affliction/index.html \
-				ui/warlock/demonology/index.html \
-				ui/warlock/destruction/index.html \
-				ui/warrior/arms/index.html \
-				ui/warrior/fury/index.html \
+				ui/warlock/index.html \
+				ui/warrior/dps/index.html \
 				ui/warrior/protection/index.html \
 				ui/raid/full/index.html
 

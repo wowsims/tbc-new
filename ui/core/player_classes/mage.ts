@@ -1,6 +1,6 @@
 import { EligibleWeaponType, IconSize, PlayerClass } from '../player_class';
 import { PlayerSpec } from '../player_spec';
-import { ArcaneMage, FireMage, FrostMage } from '../player_specs/mage';
+import { Mage as MageSpec } from '../player_specs/mage';
 import { ArmorType, Class, Race, RangedWeaponType, WeaponType } from '../proto/common';
 import { MageSpecs } from '../proto_utils/utils';
 
@@ -9,26 +9,19 @@ export class Mage extends PlayerClass<Class.ClassMage> {
 	static friendlyName = 'Mage';
 	static hexColor = '#69ccf0';
 	static specs: Record<string, PlayerSpec<MageSpecs>> = {
-		[ArcaneMage.friendlyName]: ArcaneMage,
-		[FireMage.friendlyName]: FireMage,
-		[FrostMage.friendlyName]: FrostMage,
+		[Mage.friendlyName]: MageSpec,
 	};
 	static races: Race[] = [
 		// [H]
 		Race.RaceTroll,
-		Race.RaceGoblin,
 		Race.RaceOrc,
 		Race.RaceUndead,
 		Race.RaceBloodElf,
-		Race.RaceHordePandaren,
 		// [A]
-		Race.RaceWorgen,
 		Race.RaceGnome,
 		Race.RaceHuman,
 		Race.RaceDwarf,
-		Race.RaceNightElf,
 		Race.RaceDraenei,
-		Race.RaceAlliancePandaren,
 	];
 	static armorTypes: ArmorType[] = [ArmorType.ArmorTypeCloth];
 	static weaponTypes: EligibleWeaponType[] = [

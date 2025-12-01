@@ -35,7 +35,6 @@ import {
 	APLActionWarlockNextExhaleTarget,
 } from '../../proto/apl.js';
 import { Spec } from '../../proto/common.js';
-import { FeralDruid_Rotation_AplType } from '../../proto/druid.js';
 import { EventID } from '../../typed_event.js';
 import { randomUUID } from '../../utils';
 import { Input, InputConfig } from '../input.js';
@@ -351,18 +350,17 @@ const actionKindFactories: { [f in NonNullable<APLActionKind>]: ActionKindConfig
 		submenu: ['casting'],
 		shortDescription: i18n.t('rotation_tab.apl.actions.multi_dot.tooltip'),
 		includeIf: (player: Player<any>, isPrepull: boolean) => !isPrepull,
-		newValue: () =>
-			APLActionMultidot.create({
-				maxDots: 3,
-				maxOverlap: {
-					value: {
-						oneofKind: 'const',
-						const: {
-							val: '0ms',
-						},
+		newValue: () => APLActionMultidot.create({
+			maxDots: 3,
+			maxOverlap: {
+				value: {
+					oneofKind: 'const',
+					const: {
+						val: '0ms',
 					},
 				},
-			}),
+			},
+		}),
 		fields: [
 			AplHelpers.actionIdFieldConfig('spellId', 'castable_dot_spells', ''),
 			AplHelpers.numberFieldConfig('maxDots', false, {
@@ -380,18 +378,17 @@ const actionKindFactories: { [f in NonNullable<APLActionKind>]: ActionKindConfig
 		submenu: ['casting'],
 		shortDescription: i18n.t('rotation_tab.apl.actions.strict_multi_dot.tooltip'),
 		includeIf: (player: Player<any>, isPrepull: boolean) => !isPrepull,
-		newValue: () =>
-			APLActionStrictMultidot.create({
-				maxDots: 3,
-				maxOverlap: {
-					value: {
-						oneofKind: 'const',
-						const: {
-							val: '0ms',
-						},
+		newValue: () => APLActionStrictMultidot.create({
+			maxDots: 3,
+			maxOverlap: {
+				value: {
+					oneofKind: 'const',
+					const: {
+						val: '0ms',
 					},
 				},
-			}),
+			},
+		}),
 		fields: [
 			AplHelpers.actionIdFieldConfig('spellId', 'castable_dot_spells', ''),
 			AplHelpers.numberFieldConfig('maxDots', false, {
@@ -409,18 +406,17 @@ const actionKindFactories: { [f in NonNullable<APLActionKind>]: ActionKindConfig
 		submenu: ['casting'],
 		shortDescription: i18n.t('rotation_tab.apl.actions.multi_shield.tooltip'),
 		includeIf: (player: Player<any>, isPrepull: boolean) => !isPrepull && player.getSpec().isHealingSpec,
-		newValue: () =>
-			APLActionMultishield.create({
-				maxShields: 3,
-				maxOverlap: {
-					value: {
-						oneofKind: 'const',
-						const: {
-							val: '0ms',
-						},
+		newValue: () => APLActionMultishield.create({
+			maxShields: 3,
+			maxOverlap: {
+				value: {
+					oneofKind: 'const',
+					const: {
+						val: '0ms',
 					},
 				},
-			}),
+			},
+		}),
 		fields: [
 			AplHelpers.actionIdFieldConfig('spellId', 'shield_spells', ''),
 			AplHelpers.numberFieldConfig('maxShields', false, {
@@ -438,15 +434,14 @@ const actionKindFactories: { [f in NonNullable<APLActionKind>]: ActionKindConfig
 		submenu: ['casting'],
 		shortDescription: i18n.t('rotation_tab.apl.actions.channel.tooltip'),
 		fullDescription: i18n.t('rotation_tab.apl.actions.channel.full'),
-		newValue: () =>
-			APLActionChannelSpell.create({
-				interruptIf: {
-					value: {
-						oneofKind: 'gcdIsReady',
-						gcdIsReady: {},
-					},
+		newValue: () => APLActionChannelSpell.create({
+			interruptIf: {
+				value: {
+					oneofKind: 'gcdIsReady',
+					gcdIsReady: {},
 				},
-			}),
+			},
+		}),
 		fields: [
 			AplHelpers.actionIdFieldConfig('spellId', 'channel_spells', ''),
 			AplHelpers.unitFieldConfig('target', 'targets'),
@@ -464,12 +459,11 @@ const actionKindFactories: { [f in NonNullable<APLActionKind>]: ActionKindConfig
 		submenu: ['casting'],
 		shortDescription: i18n.t('rotation_tab.apl.actions.cast_all_stat_buff_cooldowns.tooltip'),
 		fullDescription: i18n.t('rotation_tab.apl.actions.cast_all_stat_buff_cooldowns.full'),
-		newValue: () =>
-			APLActionCastAllStatBuffCooldowns.create({
-				statType1: -1,
-				statType2: -1,
-				statType3: -1,
-			}),
+		newValue: () => APLActionCastAllStatBuffCooldowns.create({
+			statType1: -1,
+			statType2: -1,
+			statType3: -1,
+		}),
 		fields: [AplHelpers.statTypeFieldConfig('statType1'), AplHelpers.statTypeFieldConfig('statType2'), AplHelpers.statTypeFieldConfig('statType3')],
 	}),
 	['autocastOtherCooldowns']: inputBuilder({
@@ -486,17 +480,16 @@ const actionKindFactories: { [f in NonNullable<APLActionKind>]: ActionKindConfig
 		submenu: ['timing'],
 		shortDescription: i18n.t('rotation_tab.apl.actions.wait.tooltip'),
 		includeIf: (player: Player<any>, isPrepull: boolean) => !isPrepull,
-		newValue: () =>
-			APLActionWait.create({
-				duration: {
-					value: {
-						oneofKind: 'const',
-						const: {
-							val: '1000ms',
-						},
+		newValue: () => APLActionWait.create({
+			duration: {
+				value: {
+					oneofKind: 'const',
+					const: {
+						val: '1000ms',
 					},
 				},
-			}),
+			},
+		}),
 		fields: [AplValues.valueFieldConfig('duration')],
 	}),
 	['waitUntil']: inputBuilder({
@@ -512,13 +505,12 @@ const actionKindFactories: { [f in NonNullable<APLActionKind>]: ActionKindConfig
 		submenu: ['timing'],
 		shortDescription: i18n.t('rotation_tab.apl.actions.scheduled_action.tooltip'),
 		includeIf: (player: Player<any>, isPrepull: boolean) => !isPrepull,
-		newValue: () =>
-			APLActionSchedule.create({
-				schedule: '0s, 60s',
-				innerAction: {
-					action: { oneofKind: 'castSpell', castSpell: {} },
-				},
-			}),
+		newValue: () => APLActionSchedule.create({
+			schedule: '0s, 60s',
+			innerAction: {
+				action: { oneofKind: 'castSpell', castSpell: {} },
+			},
+		}),
 		fields: [
 			AplHelpers.stringFieldConfig('schedule', {
 				label: i18n.t('rotation_tab.apl.actions.scheduled_action.do_at.label'),
@@ -574,10 +566,9 @@ const actionKindFactories: { [f in NonNullable<APLActionKind>]: ActionKindConfig
 		submenu: ['misc'],
 		shortDescription: i18n.t('rotation_tab.apl.actions.activate_aura_with_stacks.tooltip'),
 		includeIf: (_, isPrepull: boolean) => isPrepull,
-		newValue: () =>
-			APLActionActivateAuraWithStacks.create({
-				numStacks: 1,
-			}),
+		newValue: () => APLActionActivateAuraWithStacks.create({
+			numStacks: 1,
+		}),
 		fields: [
 			AplHelpers.actionIdFieldConfig('auraId', 'stackable_auras'),
 			AplHelpers.numberFieldConfig('numStacks', false, {
@@ -591,13 +582,12 @@ const actionKindFactories: { [f in NonNullable<APLActionKind>]: ActionKindConfig
 		submenu: ['misc'],
 		shortDescription: i18n.t('rotation_tab.apl.actions.activate_all_stat_buff_proc_auras.tooltip'),
 		includeIf: (_, isPrepull: boolean) => isPrepull,
-		newValue: () =>
-			APLActionActivateAllStatBuffProcAuras.create({
-				swapSet: ItemSwapSet.Main,
-				statType1: -1,
-				statType2: -1,
-				statType3: -1,
-			}),
+		newValue: () => APLActionActivateAllStatBuffProcAuras.create({
+			swapSet: ItemSwapSet.Main,
+			statType1: -1,
+			statType2: -1,
+			statType3: -1,
+		}),
 		fields: [
 			itemSwapSetFieldConfig('swapSet'),
 			AplHelpers.statTypeFieldConfig('statType1'),
@@ -669,11 +659,10 @@ const actionKindFactories: { [f in NonNullable<APLActionKind>]: ActionKindConfig
 			<p>Example: If you have a group named "careful_aim" with actions [serpent_sting, chimera_shot, steady_shot],
 			referencing this group will execute those three actions in sequence.</p>
 		`,
-		newValue: () =>
-			APLActionGroupReference.create({
-				groupName: '',
-				variables: [],
-			}),
+		newValue: () => APLActionGroupReference.create({
+			groupName: '',
+			variables: [],
+		}),
 		fields: [
 			AplHelpers.groupNameFieldConfig('groupName', {
 				labelTooltip: 'Name of the group to reference (must match a group defined in the Groups section)',
@@ -684,89 +673,43 @@ const actionKindFactories: { [f in NonNullable<APLActionKind>]: ActionKindConfig
 			}),
 		],
 	}),
-
-	// Class/spec specific actions
-	['catOptimalRotationAction']: inputBuilder({
-		label: i18n.t('rotation_tab.apl.actions.optimal_rotation_action.label'),
-		submenu: ['feral_druid'],
-		shortDescription: i18n.t('rotation_tab.apl.actions.optimal_rotation_action.tooltip'),
-		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getSpec() == Spec.SpecFeralDruid,
-		newValue: () =>
-			APLActionCatOptimalRotationAction.create({
-				rotationType: FeralDruid_Rotation_AplType.SingleTarget,
-				manualParams: true,
-				minRoarOffset: 40,
-				ripLeeway: 4,
-				useBite: true,
-				biteTime: 6,
-				berserkBiteTime: 5,
-				allowAoeBerserk: false,
-				bearWeave: true,
-				snekWeave: true,
-				useNs: true,
-				wrathWeave: false,
-			}),
-		fields: [
-			AplHelpers.rotationTypeFieldConfig('rotationType'),
-			AplHelpers.booleanFieldConfig('bearWeave', i18n.t('rotation_tab.options.druid.feral.bear_weave.label'), {
-				labelTooltip: i18n.t('rotation_tab.options.druid.feral.bear_weave.tooltip'),
-			}),
-			AplHelpers.booleanFieldConfig('snekWeave', i18n.t('rotation_tab.options.druid.feral.snek_weave.label'), {
-				labelTooltip: i18n.t('rotation_tab.options.druid.feral.snek_weave.tooltip'),
-			}),
-			AplHelpers.booleanFieldConfig('useNs', i18n.t('rotation_tab.options.druid.feral.use_ns.label'), {
-				labelTooltip: i18n.t('rotation_tab.options.druid.feral.use_ns.tooltip'),
-			}),
-			AplHelpers.booleanFieldConfig('wrathWeave', i18n.t('rotation_tab.apl.actions.optimal_rotation_action.wrath_weave.label'), {
-				labelTooltip: i18n.t('rotation_tab.apl.actions.optimal_rotation_action.wrath_weave.tooltip'),
-			}),
-			AplHelpers.booleanFieldConfig('allowAoeBerserk', i18n.t('rotation_tab.options.druid.feral.allow_aoe_berserk.label'), {
-				labelTooltip: i18n.t('rotation_tab.options.druid.feral.allow_aoe_berserk.tooltip'),
-			}),
-			AplHelpers.booleanFieldConfig('manualParams', i18n.t('rotation_tab.options.druid.feral.manual_params.label'), {
-				labelTooltip: i18n.t('rotation_tab.options.druid.feral.manual_params.tooltip'),
-			}),
-			AplHelpers.numberFieldConfig('minRoarOffset', true, {
-				label: i18n.t('rotation_tab.options.druid.feral.roar_offset.label'),
-				labelTooltip: i18n.t('rotation_tab.options.druid.feral.roar_offset.tooltip'),
-			}),
-			AplHelpers.numberFieldConfig('ripLeeway', false, {
-				label: i18n.t('rotation_tab.options.druid.feral.rip_leeway.label'),
-				labelTooltip: i18n.t('rotation_tab.options.druid.feral.rip_leeway.tooltip'),
-			}),
-			AplHelpers.booleanFieldConfig('useBite', i18n.t('rotation_tab.options.druid.feral.bite_during_rotation.label'), {
-				labelTooltip: i18n.t('rotation_tab.options.druid.feral.bite_during_rotation.tooltip'),
-			}),
-			AplHelpers.numberFieldConfig('biteTime', true, {
-				label: i18n.t('rotation_tab.options.druid.feral.bite_time.label'),
-				labelTooltip: i18n.t('rotation_tab.options.druid.feral.bite_time.tooltip'),
-			}),
-			AplHelpers.numberFieldConfig('berserkBiteTime', true, {
-				label: i18n.t('rotation_tab.options.druid.feral.berserk_bite_time.label'),
-				labelTooltip: i18n.t('rotation_tab.options.druid.feral.berserk_bite_time.tooltip'),
-			}),
-		],
-	}),
-
-	['guardianHotwDpsRotation']: inputBuilder({
-		label: i18n.t('rotation_tab.apl.actions.guardian_hotw_dps_rotation.label'),
-		submenu: ['guardian_druid'],
-		shortDescription: i18n.t('rotation_tab.apl.actions.guardian_hotw_dps_rotation.tooltip'),
-		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getSpec() == Spec.SpecGuardianDruid,
-		newValue: () =>
-			APLActionGuardianHotwDpsRotation.create({
-				strategy: HotwStrategy.Caster,
-			}),
-		fields: [AplHelpers.hotwStrategyFieldConfig('strategy')],
-	}),
-
-	['warlockNextExhaleTarget']: inputBuilder({
-		label: i18n.t('rotation_tab.apl.actions.warlock_next_exhale_target.label'),
-		submenu: ['warlock'],
-		shortDescription: i18n.t('rotation_tab.apl.actions.warlock_next_exhale_target.tooltip'),
-		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getSpec() == Spec.SpecAfflictionWarlock,
-		newValue: () =>
-			APLActionWarlockNextExhaleTarget.create({}),
-		fields: [],
-	}),
+	catOptimalRotationAction: {
+		label: '',
+		submenu: undefined,
+		shortDescription: '',
+		fullDescription: undefined,
+		includeIf: undefined,
+		newValue: function (): APLActionCatOptimalRotationAction {
+			throw new Error('Function not implemented.');
+		},
+		factory: function (parent: HTMLElement, player: Player<any>, config: InputConfig<Player<any>, APLActionCatOptimalRotationAction, APLActionCatOptimalRotationAction>): Input<Player<any>, APLActionCatOptimalRotationAction, APLActionCatOptimalRotationAction> {
+			throw new Error('Function not implemented.');
+		}
+	},
+	guardianHotwDpsRotation: {
+		label: '',
+		submenu: undefined,
+		shortDescription: '',
+		fullDescription: undefined,
+		includeIf: undefined,
+		newValue: function (): APLActionGuardianHotwDpsRotation {
+			throw new Error('Function not implemented.');
+		},
+		factory: function (parent: HTMLElement, player: Player<any>, config: InputConfig<Player<any>, APLActionGuardianHotwDpsRotation, APLActionGuardianHotwDpsRotation>): Input<Player<any>, APLActionGuardianHotwDpsRotation, APLActionGuardianHotwDpsRotation> {
+			throw new Error('Function not implemented.');
+		}
+	},
+	warlockNextExhaleTarget: {
+		label: '',
+		submenu: undefined,
+		shortDescription: '',
+		fullDescription: undefined,
+		includeIf: undefined,
+		newValue: function (): APLActionWarlockNextExhaleTarget {
+			throw new Error('Function not implemented.');
+		},
+		factory: function (parent: HTMLElement, player: Player<any>, config: InputConfig<Player<any>, APLActionWarlockNextExhaleTarget, APLActionWarlockNextExhaleTarget>): Input<Player<any>, APLActionWarlockNextExhaleTarget, APLActionWarlockNextExhaleTarget> {
+			throw new Error('Function not implemented.');
+		}
+	}
 };

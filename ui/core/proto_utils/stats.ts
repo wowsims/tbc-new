@@ -93,19 +93,21 @@ export class UnitStat {
 	// (Strength for example), then null is returned. Mastery is special cased to return
 	// Mastery points rather than %.
 	convertRatingToPercent(ratingValue: number): number | null {
-		if (this.linkedToStat(Stat.StatCritRating)) {
-			return ratingValue / Mechanics.CRIT_RATING_PER_CRIT_PERCENT;
-		} else if (this.linkedToStat(Stat.StatHasteRating)) {
-			return ratingValue / Mechanics.HASTE_RATING_PER_HASTE_PERCENT;
+		if (this.linkedToStat(Stat.StatSpellCritRating)) {
+			return ratingValue / Mechanics.SPELL_CRIT_RATING_PER_CRIT_PERCENT;
+		} else if (this.linkedToStat(Stat.StatSpellHasteRating)) {
+			return ratingValue / Mechanics.SPELL_HASTE_RATING_PER_HASTE_PERCENT;
+		} else if (this.linkedToStat(Stat.StatMeleeCritRating)) {
+			return ratingValue / Mechanics.PHYSICAL_CRIT_RATING_PER_CRIT_PERCENT;
+		} else if (this.linkedToStat(Stat.StatMeleeHasteRating)) {
+			return ratingValue / Mechanics.PHYSICAL_HASTE_RATING_PER_HASTE_PERCENT;
 		} else if (this.equalsStat(Stat.StatExpertiseRating)) {
 			return ratingValue / Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION / 4;
 		} else if (this.linkedToStat(Stat.StatDodgeRating)) {
 			return ratingValue / Mechanics.DODGE_RATING_PER_DODGE_PERCENT;
 		} else if (this.linkedToStat(Stat.StatParryRating)) {
 			return ratingValue / Mechanics.PARRY_RATING_PER_PARRY_PERCENT;
-		} else if (this.equalsStat(Stat.StatMasteryRating)) {
-			return ratingValue / Mechanics.MASTERY_RATING_PER_MASTERY_POINT;
-		} else if (this.equalsPseudoStat(PseudoStat.PseudoStatPhysicalHitPercent)) {
+		} else if (this.equalsPseudoStat(PseudoStat.PseudoStatMeleeHitPercent) || this.equalsPseudoStat(PseudoStat.PseudoStatRangedHitPercent)) {
 			return ratingValue / Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT;
 		} else if (this.equalsPseudoStat(PseudoStat.PseudoStatSpellHitPercent)) {
 			return ratingValue / Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT;
@@ -119,19 +121,21 @@ export class UnitStat {
 	// for example), then null is returned. Mastery is special cased to assume a Mastery points input
 	// rather than a percentage.
 	convertPercentToRating(percentOrPointsValue: number): number | null {
-		if (this.linkedToStat(Stat.StatCritRating)) {
-			return percentOrPointsValue * Mechanics.CRIT_RATING_PER_CRIT_PERCENT;
-		} else if (this.linkedToStat(Stat.StatHasteRating)) {
-			return percentOrPointsValue * Mechanics.HASTE_RATING_PER_HASTE_PERCENT;
+		if (this.linkedToStat(Stat.StatSpellCritRating)) {
+			return percentOrPointsValue * Mechanics.SPELL_CRIT_RATING_PER_CRIT_PERCENT;
+		} else if (this.linkedToStat(Stat.StatSpellHasteRating)) {
+			return percentOrPointsValue * Mechanics.SPELL_HASTE_RATING_PER_HASTE_PERCENT;
+		} else if (this.linkedToStat(Stat.StatMeleeCritRating)) {
+			return percentOrPointsValue * Mechanics.PHYSICAL_CRIT_RATING_PER_CRIT_PERCENT;
+		} else if (this.linkedToStat(Stat.StatMeleeHasteRating)) {
+			return percentOrPointsValue * Mechanics.PHYSICAL_HASTE_RATING_PER_HASTE_PERCENT;
 		} else if (this.equalsStat(Stat.StatExpertiseRating)) {
 			return percentOrPointsValue * Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION * 4;
 		} else if (this.linkedToStat(Stat.StatDodgeRating)) {
 			return percentOrPointsValue * Mechanics.DODGE_RATING_PER_DODGE_PERCENT;
 		} else if (this.linkedToStat(Stat.StatParryRating)) {
 			return percentOrPointsValue * Mechanics.PARRY_RATING_PER_PARRY_PERCENT;
-		} else if (this.equalsStat(Stat.StatMasteryRating)) {
-			return percentOrPointsValue * Mechanics.MASTERY_RATING_PER_MASTERY_POINT;
-		} else if (this.equalsPseudoStat(PseudoStat.PseudoStatPhysicalHitPercent)) {
+		} else if (this.equalsPseudoStat(PseudoStat.PseudoStatMeleeHitPercent) || this.equalsPseudoStat(PseudoStat.PseudoStatRangedHitPercent)) {
 			return percentOrPointsValue * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT;
 		} else if (this.equalsPseudoStat(PseudoStat.PseudoStatSpellHitPercent)) {
 			return percentOrPointsValue * Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT;
@@ -290,12 +294,24 @@ export class UnitStat {
 			return Stat.StatDodgeRating;
 		} else if (pseudoStatName.includes('Parry')) {
 			return Stat.StatParryRating;
+		} else if (pseudoStatName.includes('SpellHaste')) {
+			return Stat.StatSpellHasteRating;
+		} else if (pseudoStatName.includes('SpellHit')) {
+			return Stat.StatSpellHitRating;
+		} else if (pseudoStatName.includes('SpellCrit')) {
+			return Stat.StatSpellCritRating;
+		} else if (pseudoStatName.includes('MeleeHaste')) {
+			return Stat.StatMeleeHasteRating;
+		} else if (pseudoStatName.includes('MeleeHit')) {
+			return Stat.StatMeleeHitRating;
+		} else if (pseudoStatName.includes('MeleeCrit')) {
+			return Stat.StatMeleeCritRating;
 		} else if (pseudoStatName.includes('Haste')) {
-			return Stat.StatHasteRating;
+			return Stat.StatAllHasteRating;
 		} else if (pseudoStatName.includes('Hit')) {
-			return Stat.StatHitRating;
+			return Stat.StatAllHitRating;
 		} else if (pseudoStatName.includes('Crit')) {
-			return Stat.StatCritRating;
+			return Stat.StatAllCritRating;
 		} else {
 			return null;
 		}
@@ -304,12 +320,24 @@ export class UnitStat {
 	// Inverse of the above
 	static getChildren(parentStat: Stat): PseudoStat[] {
 		switch (parentStat) {
-			case Stat.StatHitRating:
-				return [PseudoStat.PseudoStatPhysicalHitPercent, PseudoStat.PseudoStatSpellHitPercent];
-			case Stat.StatCritRating:
-				return [PseudoStat.PseudoStatPhysicalCritPercent, PseudoStat.PseudoStatSpellCritPercent];
-			case Stat.StatHasteRating:
+			case Stat.StatAllHitRating:
+				return [PseudoStat.PseudoStatMeleeHitPercent, PseudoStat.PseudoStatRangedHitPercent, PseudoStat.PseudoStatSpellHitPercent];
+			case Stat.StatAllCritRating:
+				return [PseudoStat.PseudoStatMeleeCritPercent, PseudoStat.PseudoStatRangedCritPercent, PseudoStat.PseudoStatSpellCritPercent];
+			case Stat.StatAllHasteRating:
 				return [PseudoStat.PseudoStatMeleeHastePercent, PseudoStat.PseudoStatRangedHastePercent, PseudoStat.PseudoStatSpellHastePercent];
+			case Stat.StatMeleeHitRating:
+				return [PseudoStat.PseudoStatMeleeHastePercent, PseudoStat.PseudoStatRangedHastePercent];
+			case Stat.StatMeleeCritRating:
+				return [PseudoStat.PseudoStatMeleeCritPercent, PseudoStat.PseudoStatRangedCritPercent];
+			case Stat.StatMeleeHasteRating:
+				return [PseudoStat.PseudoStatMeleeHastePercent, PseudoStat.PseudoStatRangedHastePercent];
+				case Stat.StatSpellHitRating:
+				return [PseudoStat.PseudoStatSpellHitPercent];
+			case Stat.StatSpellCritRating:
+				return [PseudoStat.PseudoStatSpellCritPercent];
+			case Stat.StatSpellHasteRating:
+				return [PseudoStat.PseudoStatSpellHastePercent];
 			default:
 				return [];
 		}
@@ -319,14 +347,14 @@ export class UnitStat {
 	// null if not applicable.
 	static getSiblingPseudoStat(pseudoStat: PseudoStat): PseudoStat | null {
 		switch (pseudoStat) {
-			case PseudoStat.PseudoStatPhysicalHitPercent:
+			case PseudoStat.PseudoStatMeleeHitPercent, PseudoStat.PseudoStatRangedHitPercent:
 				return PseudoStat.PseudoStatSpellHitPercent;
-			case PseudoStat.PseudoStatSpellHitPercent:
-				return PseudoStat.PseudoStatPhysicalHitPercent;
-			case PseudoStat.PseudoStatPhysicalCritPercent:
+			case PseudoStat.PseudoStatSpellHitPercent: // Unlikely to care about Ranged here...
+				return PseudoStat.PseudoStatMeleeHitPercent;
+			case PseudoStat.PseudoStatMeleeCritPercent, PseudoStat.PseudoStatRangedCritPercent:
 				return PseudoStat.PseudoStatSpellCritPercent;
 			case PseudoStat.PseudoStatSpellCritPercent:
-				return PseudoStat.PseudoStatPhysicalHitPercent;
+				return PseudoStat.PseudoStatMeleeHitPercent;
 			default:
 				return null;
 		}
@@ -358,12 +386,13 @@ export const displayStatOrder: Array<UnitStat> = [
 	UnitStat.fromStat(Stat.StatMP5),
 	UnitStat.fromStat(Stat.StatAttackPower),
 	UnitStat.fromStat(Stat.StatRangedAttackPower),
-	UnitStat.fromPseudoStat(PseudoStat.PseudoStatPhysicalHitPercent),
-	UnitStat.fromPseudoStat(PseudoStat.PseudoStatPhysicalCritPercent),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatMeleeHitPercent),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatMeleeCritPercent),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatMeleeHastePercent),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatRangedHitPercent),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatRangedCritPercent),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatRangedHastePercent),
 	UnitStat.fromStat(Stat.StatExpertiseRating),
-	UnitStat.fromStat(Stat.StatMasteryRating),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatBlockPercent),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatDodgePercent),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatParryPercent),
@@ -651,11 +680,12 @@ export class StatCap {
 	}
 }
 
+// TBC ANNI: Need to determine what this is used for...
 export function convertHastePresetBreakpointsToPercent(ratingPresets: Map<string, number>): Map<string, number> {
 	const convertedPresets = new Map<string, number>();
 
 	for (const [presetName, ratingValue] of ratingPresets.entries()) {
-		convertedPresets.set(presetName, ratingValue / Mechanics.HASTE_RATING_PER_HASTE_PERCENT);
+		convertedPresets.set(presetName, ratingValue / Mechanics.PHYSICAL_HASTE_RATING_PER_HASTE_PERCENT);
 	}
 
 	return convertedPresets;
@@ -692,13 +722,11 @@ export function statIsCapped(stat: Stat, hardCaps: Stats, softCaps: StatCap[]): 
 }
 
 export const DEFAULT_GEM_STATS = [
-	Stat.StatHitRating,
-	Stat.StatCritRating,
-	Stat.StatHasteRating,
-	Stat.StatMasteryRating,
+	Stat.StatAllHitRating,
+	Stat.StatAllCritRating,
+	Stat.StatAllHasteRating,
 	Stat.StatExpertiseRating,
-	Stat.StatPvpPowerRating,
-	Stat.StatPvpResilienceRating,
+	Stat.StatResilience,
 ];
 export const DEFAULT_CASTER_GEM_STATS = [...DEFAULT_GEM_STATS, Stat.StatIntellect, Stat.StatSpellPower];
 export const DEFAULT_HYBRID_CASTER_GEM_STATS = [...DEFAULT_CASTER_GEM_STATS, Stat.StatSpirit];

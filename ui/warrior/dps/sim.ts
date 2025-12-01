@@ -1,5 +1,4 @@
 import * as OtherInputs from '../../core/components/inputs/other_inputs';
-import { ReforgeOptimizer } from '../../core/components/suggest_reforges_action';
 import * as Mechanics from '../../core/constants/mechanics';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui';
 import { Player } from '../../core/player';
@@ -84,7 +83,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecDPSWarrior, {
 	otherInputs: {
 		inputs: [
 			FuryInputs.SyncTypeInput,
-			WarriorInputs.StanceSnapshot(),
+			//WarriorInputs.StanceSnapshot(),
 			OtherInputs.DistanceFromTarget,
 			OtherInputs.InputDelay,
 			OtherInputs.TankAssignment,

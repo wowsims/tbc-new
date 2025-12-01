@@ -3,11 +3,10 @@ import clsx from 'clsx';
 import { CacheHandler } from '../cache_handler';
 import { RaidSimResult } from '../proto/api.js';
 import { SpellSchool } from '../proto/common';
-import { ResourceType, SecondaryResourceType } from '../proto/spell';
+import { ResourceType } from '../proto/spell';
 import { bucket, getEnumValues, stringComparator, sum } from '../utils.js';
 import { ActionId } from './action_id.js';
 import { resourceNames, spellSchoolNames, stringToResourceType } from './names.js';
-import { SECONDARY_RESOURCES } from './secondary_resource';
 
 export class Entity {
 	readonly name: string;
@@ -789,7 +788,6 @@ export class ResourceChangedLog extends SimLog {
 	readonly valueAfter: number;
 	readonly isSpend: boolean;
 	readonly total: number;
-	readonly secondaryResourceType?: SecondaryResourceType;
 
 	constructor(
 		params: SimLogParams,
@@ -798,7 +796,6 @@ export class ResourceChangedLog extends SimLog {
 		valueAfter: number,
 		isSpend: boolean,
 		total: number,
-		secondaryType?: SecondaryResourceType,
 	) {
 		super(params);
 		this.resourceType = resourceType;
@@ -806,7 +803,6 @@ export class ResourceChangedLog extends SimLog {
 		this.valueAfter = valueAfter;
 		this.isSpend = isSpend;
 		this.total = total;
-		this.secondaryResourceType = secondaryType;
 	}
 
 	toHTML(includeTimestamp = true) {
@@ -814,8 +810,7 @@ export class ResourceChangedLog extends SimLog {
 			const signedDiff = (this.valueAfter - this.valueBefore) * (this.isSpend ? -1 : 1);
 			const isHealth = this.resourceType == ResourceType.ResourceTypeHealth;
 			const verb = isHealth ? (this.isSpend ? 'Lost' : 'Recovered') : this.isSpend ? 'Spent' : 'Gained';
-			const resourceName =
-				this.secondaryResourceType !== undefined ? SECONDARY_RESOURCES.get(this.secondaryResourceType)!.name : resourceNames.get(this.resourceType)!;
+			const resourceName = resourceNames.get(this.resourceType)!;
 			const resourceClass = `resource-${resourceName.replace(/\s/g, '-').toLowerCase()}`;
 
 			return (
@@ -843,13 +838,13 @@ export class ResourceChangedLog extends SimLog {
 	static parse(params: SimLogParams): Promise<ResourceChangedLog> | null {
 		const match = params.raw.match(/(Gained|Spent) (\d+\.?\d*) (\S.+?\S) from (.*?) \((\d+\.?\d*) --> (\d+\.?\d*)\)( of (\d+\.?\d*) total)?/);
 		if (match) {
-			const [resourceType, secondaryType] = stringToResourceType(match[3]);
+			const [resourceType] = stringToResourceType(match[3]);
 			const total = match[8] !== undefined ? parseFloat(match[8]) : 0;
 			return ActionId.fromLogString(match[4])
 				.fill(params.source?.index)
 				.then(cause => {
 					params.actionId = cause;
-					return new ResourceChangedLog(params, resourceType, parseFloat(match[5]), parseFloat(match[6]), match[1] == 'Spent', total, secondaryType);
+					return new ResourceChangedLog(params, resourceType, parseFloat(match[5]), parseFloat(match[6]), match[1] == 'Spent', total);
 				});
 		} else {
 			return null;

@@ -579,7 +579,7 @@ export class Sim {
 		return (
 			this.showHealingMetrics ||
 			(this.showThreatMetrics &&
-				[Spec.SpecGuardianDruid, Spec.SpecProtectionPaladin].includes(
+				[Spec.SpecFeralBearDruid, Spec.SpecProtectionPaladin].includes(
 					this.raid.getPlayer(0)?.playerSpec.specID,
 				))
 		);

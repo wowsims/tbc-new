@@ -597,7 +597,7 @@ const RAID_STATS_OPTIONS: RaidStatsOptions = {
 						{
 							label: 'Mangle',
 							actionId: ActionId.fromSpellId(33878),
-							playerData: playerClass(Class.ClassDruid, player => player.isSpec(Spec.SpecFeralDruid)),
+							playerData: playerClass(Class.ClassDruid, player => player.isSpec(Spec.SpecFeralCatDruid)),
 						},
 						// {
 						// 	label: 'Hemorrhage',
@@ -674,7 +674,7 @@ const RAID_STATS_OPTIONS: RaidStatsOptions = {
 						{
 							label: 'Demoralizing Roar',
 							actionId: ActionId.fromSpellId(99),
-							playerData: playerClass(Class.ClassDruid, player => player.isSpec(Spec.SpecFeralDruid)),
+							playerData: playerClass(Class.ClassDruid, player => player.isSpec(Spec.SpecFeralBearDruid)),
 						},
 						{
 							label: 'Demoralizing Shout',

@@ -1,6 +1,5 @@
 import * as OtherInputs from '../../core/components/inputs/other_inputs';
 import * as BuffDebuffInputs from '../../core/components/inputs/buffs_debuffs';
-import { ReforgeOptimizer, RelativeStatCap } from '../../core/components/suggest_reforges_action';
 import * as Mechanics from '../../core/constants/mechanics';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui';
 import { Player } from '../../core/player';
@@ -164,8 +163,8 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralCatDruid, {
 
 		prepullActions.push(
 			...([
-				player.getTalents().dreamOfCenarius ? healingTouch : null,
-				player.getTalents().dreamOfCenarius ? shiftCat : null,
+				// player.getTalents().dreamOfCenarius ? healingTouch : null,
+				// player.getTalents().dreamOfCenarius ? shiftCat : null,
 			].filter(a => a) as Array<APLPrepullAction>),
 		);
 

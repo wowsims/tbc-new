@@ -6,7 +6,7 @@ import { setItemQualityCssClass } from '../../css_utils';
 import { IndividualSimUI } from '../../individual_sim_ui';
 import { Player } from '../../player';
 import i18n from '../../../i18n/config';
-import { Class, GemColor, ItemLevelState, ItemQuality, ItemRandomSuffix, ItemSlot, ItemSpec } from '../../proto/common';
+import { Class, GemColor, ItemQuality, ItemRandomSuffix, ItemSlot, ItemSpec } from '../../proto/common';
 import { DatabaseFilters, RepFaction, UIEnchant as Enchant, UIGem as Gem, UIItem as Item, UIItem_FactionRestriction } from '../../proto/ui';
 import { ActionId } from '../../proto_utils/action_id';
 import { getUniqueEnchantString } from '../../proto_utils/enchants';
@@ -55,7 +55,7 @@ export interface GearData {
 	changeEvent: TypedEvent<any>;
 }
 
-export type ItemListType = Item | Enchant | Gem | ReforgeData | ItemRandomSuffix | ItemLevelState;
+export type ItemListType = Item | Enchant | Gem | ReforgeData | ItemRandomSuffix;
 enum ItemListSortBy {
 	EP,
 	ILVL,
@@ -311,15 +311,15 @@ export default class ItemList<T extends ItemListType> {
 			case SelectorModalTabs.Tinkers:
 				return (item as Enchant)?.effectId;
 			case SelectorModalTabs.Reforging:
-				return (item as ReforgeData)?.reforge!.id;
+				return (item as ReforgeData)?.id;
 			case SelectorModalTabs.Items:
 			case SelectorModalTabs.Gem1:
 			case SelectorModalTabs.Gem2:
 			case SelectorModalTabs.Gem3:
 			case SelectorModalTabs.RandomSuffixes:
 				return (item as Item | Gem | ItemRandomSuffix)?.id;
-			case SelectorModalTabs.Upgrades:
-				return item as ItemLevelState;
+			// case SelectorModalTabs.Upgrades:
+			// 	return item as ItemLevelState;
 			default:
 				return null;
 		}
@@ -426,7 +426,7 @@ export default class ItemList<T extends ItemListType> {
 			const diff = this.computeEP(first as T) - this.computeEP(second as T);
 			// if EP is same, sort by ilvl
 			if (Math.abs(diff) < 0.01)
-				return (first.scalingOptions?.[ItemLevelState.Base].ilvl || first.ilvl) - (second.scalingOptions?.[ItemLevelState.Base].ilvl || second.ilvl);
+				return (first.scalingOptions?.[0].ilvl || first.ilvl) - (second.scalingOptions?.[0].ilvl || second.ilvl);
 			return diff;
 		};
 		switch (this.sortBy) {
@@ -435,7 +435,7 @@ export default class ItemList<T extends ItemListType> {
 					const first = (this.sortDirection === SortDirection.DESC ? itemB : itemA) as unknown as Item;
 					const second = (this.sortDirection === SortDirection.DESC ? itemA : itemB) as unknown as Item;
 					return (
-						(first.scalingOptions?.[ItemLevelState.Base].ilvl || first.ilvl) - (second.scalingOptions?.[ItemLevelState.Base].ilvl || second.ilvl)
+						(first.scalingOptions?.[0].ilvl || first.ilvl) - (second.scalingOptions?.[0].ilvl || second.ilvl)
 					);
 				};
 				break;

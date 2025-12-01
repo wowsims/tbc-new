@@ -1,5 +1,5 @@
 import { ArmorType, Class, Profession, Race, Spec, Stat } from '../proto/common';
-import { ResourceType, SecondaryResourceType } from '../proto/spell';
+import { ResourceType } from '../proto/spell';
 import { DungeonDifficulty, RepFaction, RepLevel, StatCapType } from '../proto/ui';
 
 export const armorTypeNames: Map<ArmorType, string> = new Map([
@@ -16,16 +16,12 @@ export const raceNames: Map<Race, string> = new Map([
 	[Race.RaceDraenei, 'Draenei'],
 	[Race.RaceDwarf, 'Dwarf'],
 	[Race.RaceGnome, 'Gnome'],
-	[Race.RaceGoblin, 'Goblin'],
 	[Race.RaceHuman, 'Human'],
 	[Race.RaceNightElf, 'Night Elf'],
 	[Race.RaceOrc, 'Orc'],
-	[Race.RaceAlliancePandaren, 'Pandaren (A)'],
-	[Race.RaceHordePandaren, 'Pandaren (H)'],
 	[Race.RaceTauren, 'Tauren'],
 	[Race.RaceTroll, 'Troll'],
 	[Race.RaceUndead, 'Undead'],
-	[Race.RaceWorgen, 'Worgen'],
 ]);
 
 export function nameToRace(name: string): Race {
@@ -74,7 +70,6 @@ export const professionNames: Map<Profession, string> = new Map([
 	[Profession.Mining, 'Mining'],
 	[Profession.Skinning, 'Skinning'],
 	[Profession.Tailoring, 'Tailoring'],
-	[Profession.Archeology, 'Archeology'],
 ]);
 
 export function nameToProfession(name: string): Profession {
@@ -137,8 +132,6 @@ export const resourceNames: Map<ResourceType, string> = new Map([
 	[ResourceType.ResourceTypeRage, 'Rage'],
 	[ResourceType.ResourceTypeComboPoints, 'Combo Points'],
 	[ResourceType.ResourceTypeFocus, 'Focus'],
-	[ResourceType.ResourceTypeSolarEnergy, 'Solar Energy'],
-	[ResourceType.ResourceTypeLunarEnergy, 'Lunar Energy'],
 	[ResourceType.ResourceTypeGenericResource, 'Generic Resource'],
 ]);
 
@@ -150,25 +143,17 @@ export const resourceColors: Map<ResourceType, string> = new Map([
 	[ResourceType.ResourceTypeRage, '#ff0000'],
 	[ResourceType.ResourceTypeComboPoints, '#ffa07a'],
 	[ResourceType.ResourceTypeFocus, '#cd853f'],
-	[ResourceType.ResourceTypeSolarEnergy, '#d2952b'],
-	[ResourceType.ResourceTypeLunarEnergy, '#2c4f8f'],
 	[ResourceType.ResourceTypeGenericResource, '#ffffff'],
 ]);
 
-export function stringToResourceType(str: string): [ResourceType, SecondaryResourceType | undefined] {
+export function stringToResourceType(str: string): [ResourceType] {
 	for (const [key, val] of resourceNames) {
 		if (val.toLowerCase() == str.toLowerCase()) {
-			return [key, undefined];
+			return [key];
 		}
 	}
 
-	for (const val of Object.keys(SecondaryResourceType).filter(key => isNaN(Number(key)))) {
-		if (val.toLowerCase() == str.toLowerCase()) {
-			return [ResourceType.ResourceTypeGenericResource, (<any>SecondaryResourceType)[val]];
-		}
-	}
-
-	return [ResourceType.ResourceTypeNone, undefined];
+	return [ResourceType.ResourceTypeNone];
 }
 
 export const difficultyNames: Map<DungeonDifficulty, string> = new Map([
@@ -264,36 +249,6 @@ export const REP_FACTION_QUARTERMASTERS: Record<RepFaction, number> = {
 	[RepFaction.RepFactionOperationShieldwall]: 69059,
 };
 
-export const masterySpellIDs: Map<Spec, number> = new Map([
-	[Spec.SpecAssassinationRogue, 76803],
-	[Spec.SpecCombatRogue, 76806],
-	[Spec.SpecSubtletyRogue, 76808],
-	[Spec.SpecBalanceDruid, 77492],
-	[Spec.SpecFeralDruid, 77493],
-	[Spec.SpecGuardianDruid, 77494],
-	[Spec.SpecRestorationDruid, 77495],
-	[Spec.SpecHolyPaladin, 76669],
-	[Spec.SpecProtectionPaladin, 76671],
-	[Spec.SpecRetributionPaladin, 76672],
-	[Spec.SpecElementalShaman, 77222],
-	[Spec.SpecEnhancementShaman, 77223],
-	[Spec.SpecRestorationShaman, 77226],
-	[Spec.SpecBeastMasteryHunter, 76657],
-	[Spec.SpecMarksmanshipHunter, 76659],
-	[Spec.SpecSurvivalHunter, 76658],
-	[Spec.SpecArmsWarrior, 76838],
-	[Spec.SpecFuryWarrior, 76856],
-	[Spec.SpecProtectionWarrior, 76857],
-	[Spec.SpecArcaneMage, 76547],
-	[Spec.SpecFireMage, 12846],
-	[Spec.SpecFrostMage, 76613],
-	[Spec.SpecDisciplinePriest, 77484],
-	[Spec.SpecHolyPriest, 77485],
-	[Spec.SpecShadowPriest, 77486],
-	[Spec.SpecAfflictionWarlock, 77215],
-	[Spec.SpecDemonologyWarlock, 77219],
-	[Spec.SpecDestructionWarlock, 77220],
-]);
 export const statCapTypeNames = new Map<StatCapType, string>([
 	[StatCapType.TypeHardCap, 'Hard cap'],
 	[StatCapType.TypeSoftCap, 'Soft cap'],

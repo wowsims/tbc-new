@@ -31,7 +31,6 @@ import { ItemNotice } from './components/item_notice/item_notice';
 import { addRaidSimAction, RaidSimResultsManager } from './components/raid_sim_action';
 import { SavedDataConfig } from './components/saved_data_manager';
 import { addStatWeightsAction, EpWeightsMenu, StatWeightActionSettings } from './components/stat_weights_action';
-import { ReforgeOptimizer } from './components/suggest_reforges_action';
 import { SimSettingCategories } from './constants/sim_settings';
 import { simLaunchStatuses } from './launched_sims';
 import { Player, PlayerConfig, registerSpecConfig as registerPlayerConfig } from './player';
@@ -234,7 +233,6 @@ export abstract class IndividualSimUI<SpecType extends Spec> extends SimUI {
 	tankRefStat?: Stat;
 
 	readonly bt: BulkTab | null = null;
-	reforger: ReforgeOptimizer | null = null;
 
 	constructor(parentElem: HTMLElement, player: Player<SpecType>, config: IndividualSimUIConfig<SpecType>) {
 		super(parentElem, player.sim, {
@@ -419,7 +417,6 @@ export abstract class IndividualSimUI<SpecType extends Spec> extends SimUI {
 
 			// This needs to go last so it doesn't re-store things as they are initialized.
 			const events = [this.changeEmitter];
-			if (this.reforger?.changeEmitter) events.push(this.reforger.changeEmitter);
 			TypedEvent.onAny(events).on(_eventID => {
 				const jsonStr = IndividualSimSettings.toJsonString(this.toProto());
 				window.localStorage.setItem(this.getSettingsStorageKey(), jsonStr);
@@ -596,8 +593,6 @@ export abstract class IndividualSimUI<SpecType extends Spec> extends SimUI {
 			this.player.setChannelClipDelay(eventID, this.individualConfig.defaults.other?.channelClipDelay || 0);
 			this.player.setReactionTime(eventID, this.individualConfig.defaults.other?.reactionTime || 100);
 
-			this.reforger?.applyDefaults(eventID);
-
 			if (this.isWithinRaidSim) {
 				this.sim.raid.setTargetDummies(eventID, 0);
 			} else {
@@ -660,7 +655,6 @@ export abstract class IndividualSimUI<SpecType extends Spec> extends SimUI {
 				dpsRefStat: this.dpsRefStat,
 				healRefStat: this.healRefStat,
 				tankRefStat: this.tankRefStat,
-				reforgeSettings: this.reforger?.toProto(),
 			});
 		}
 
@@ -716,10 +710,6 @@ export abstract class IndividualSimUI<SpecType extends Spec> extends SimUI {
 					this.player.setEpRatios(eventID, defaultRatios);
 				}
 
-				if (settings.reforgeSettings && this.reforger) {
-					this.reforger.fromProto(eventID, settings.reforgeSettings);
-				}
-
 				if (settings.dpsRefStat) {
 					this.dpsRefStat = settings.dpsRefStat;
 				}
@@ -742,16 +732,16 @@ export abstract class IndividualSimUI<SpecType extends Spec> extends SimUI {
 	// Determines whether this sim has either a hard cap or soft cap configured for a particular
 	// PseudoStat. Used by the stat weights code to ensure that school-specific EPs are calculated for
 	// Rating stats whenever school-specific caps are present.
-	hasCapForPseudoStat(pseudoStat: PseudoStat): boolean {
-		// Check both default and currently stored hard caps.
-		const defaultHardCaps = this.individualConfig.defaults.statCaps || new Stats();
-		const currentHardCaps = this.reforger?.statCaps || new Stats();
+	// hasCapForPseudoStat(pseudoStat: PseudoStat): boolean {
+	// 	// Check both default and currently stored hard caps.
+	// 	const defaultHardCaps = this.individualConfig.defaults.statCaps || new Stats();
+	// 	const currentHardCaps = this.reforger?.statCaps || new Stats();
 
-		// Also check all configured soft caps
-		const defaultSoftCaps: StatCap[] = this.individualConfig.defaults.softCapBreakpoints || [];
+	// 	// Also check all configured soft caps
+	// 	const defaultSoftCaps: StatCap[] = this.individualConfig.defaults.softCapBreakpoints || [];
 
-		return pseudoStatIsCapped(pseudoStat, currentHardCaps.add(defaultHardCaps), defaultSoftCaps);
-	}
+	// 	return pseudoStatIsCapped(pseudoStat, currentHardCaps.add(defaultHardCaps), defaultSoftCaps);
+	// }
 
 	// Determines whether a particular PseudoStat has been configured as a
 	// display stat for this sim UI.

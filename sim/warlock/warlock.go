@@ -51,6 +51,10 @@ func (warlock *Warlock) GetWarlock() *Warlock {
 	return warlock
 }
 
+func RegisterWarlock() {
+
+}
+
 func (warlock *Warlock) ApplyTalents() {
 	// warlock.registerHarvestLife()
 	// warlock.registerArchimondesDarkness()

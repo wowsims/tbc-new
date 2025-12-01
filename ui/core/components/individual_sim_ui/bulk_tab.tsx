@@ -7,7 +7,7 @@ import { REPO_RELEASES_URL } from '../../constants/other';
 import { IndividualSimUI } from '../../individual_sim_ui';
 import i18n from '../../../i18n/config';
 import { BulkSettings, DistributionMetrics, ProgressMetrics } from '../../proto/api';
-import { Class, GemColor, HandType, ItemRandomSuffix, ItemSlot, ItemSpec, RangedWeaponType, ReforgeStat, Spec } from '../../proto/common';
+import { Class, GemColor, HandType, ItemRandomSuffix, ItemSlot, ItemSpec, RangedWeaponType, Spec } from '../../proto/common';
 import { ItemEffectRandPropPoints, SimDatabase, SimEnchant, SimGem, SimItem } from '../../proto/db';
 import { UIEnchant, UIGem, UIItem } from '../../proto/ui';
 import { ActionId } from '../../proto_utils/action_id';
@@ -16,7 +16,6 @@ import { Gear } from '../../proto_utils/gear';
 import { getEmptyGemSocketIconUrl } from '../../proto_utils/gems';
 import { canEquipItem, getEligibleItemSlots, isSecondaryItemSlot } from '../../proto_utils/utils';
 import { RequestTypes } from '../../sim_signal_manager';
-import { RelativeStatCap } from '../suggest_reforges_action';
 import { TypedEvent } from '../../typed_event';
 import { getEnumValues, isExternal } from '../../utils';
 import { ItemData } from '../gear_picker/item_list';
@@ -98,7 +97,7 @@ export class BulkTab extends SimTab {
 
 		this.simUI = simUI;
 		this.playerCanDualWield = this.simUI.player.getPlayerSpec().canDualWield && this.simUI.player.getClass() !== Class.ClassHunter;
-		this.playerIsFuryWarrior = this.simUI.player.getSpec() === Spec.SpecFuryWarrior;
+		this.playerIsFuryWarrior = this.simUI.player.getSpec() === Spec.SpecDPSWarrior;
 
 		const setupTabBtnRef = ref<HTMLButtonElement>();
 		const setupTabRef = ref<HTMLDivElement>();
@@ -324,13 +323,6 @@ export class BulkTab extends SimTab {
 					}),
 				);
 			}
-			if (item.reforge) {
-				itemsDb.reforgeStats.push(
-					ReforgeStat.fromJson(ReforgeStat.toJson(item.reforge), {
-						ignoreUnknownFields: true,
-					}),
-				);
-			}
 			for (const gem of item.gems) {
 				if (gem) {
 					itemsDb.gems.push(SimGem.fromJson(UIGem.toJson(gem), { ignoreUnknownFields: true }));
@@ -352,7 +344,7 @@ export class BulkTab extends SimTab {
 	// Add items to their eligible bulk sim item slot(s). Mainly used for importing and search
 	addItems(items: ItemSpec[], silent = false) {
 		items.forEach(item => {
-			const equippedItem = this.simUI.sim.db.lookupItemSpec(item)?.withChallengeMode(this.simUI.player.getChallengeModeEnabled()).withDynamicStats();
+			const equippedItem = this.simUI.sim.db.lookupItemSpec(item)?.withDynamicStats();
 			if (equippedItem) {
 				getEligibleItemSlots(equippedItem.item, this.playerIsFuryWarrior).forEach(slot => {
 					// Avoid duplicating rings/trinkets/weapons
@@ -370,7 +362,7 @@ export class BulkTab extends SimTab {
 	}
 	// Add an item to a particular bulk sim item slot
 	addItemToSlot(item: ItemSpec, bulkSlot: BulkSimItemSlot) {
-		const equippedItem = this.simUI.sim.db.lookupItemSpec(item)?.withChallengeMode(this.simUI.player.getChallengeModeEnabled()).withDynamicStats();
+		const equippedItem = this.simUI.sim.db.lookupItemSpec(item)?.withDynamicStats();
 		if (equippedItem) {
 			const eligibleItemSlots = getEligibleItemSlots(equippedItem.item, this.playerIsFuryWarrior);
 			if (!canEquipItem(equippedItem.item, this.simUI.player.getPlayerSpec(), eligibleItemSlots[0])) return;
@@ -383,7 +375,7 @@ export class BulkTab extends SimTab {
 	}
 
 	updateItem(idx: number, newItem: ItemSpec) {
-		const equippedItem = this.simUI.sim.db.lookupItemSpec(newItem)?.withChallengeMode(this.simUI.player.getChallengeModeEnabled()).withDynamicStats();
+		const equippedItem = this.simUI.sim.db.lookupItemSpec(newItem)?.withDynamicStats();
 		if (equippedItem) {
 			this.items[idx] = newItem;
 
@@ -812,13 +804,10 @@ export class BulkTab extends SimTab {
 						const equippedItemInSlot = this.originalGear.getEquippedItem(itemSlot);
 						let updatedItem = equippedItemInSlot
 							? equippedItemInSlot.withItem(equippedItem.item)
-							: equippedItem.withChallengeMode(challengeModeEnabled);
+							: equippedItem;
 
 						if (equippedItem._randomSuffix) {
 							updatedItem = updatedItem.withRandomSuffix(equippedItem._randomSuffix);
-						}
-						if (!this.inheritUpgrades) {
-							updatedItem = updatedItem.withUpgrade(equippedItem._upgrade);
 						}
 
 						updatedGear = updatedGear.withEquippedItem(itemSlot, updatedItem, this.playerIsFuryWarrior);
@@ -831,39 +820,6 @@ export class BulkTab extends SimTab {
 					}
 
 					await this.simUI.player.setGearAsync(TypedEvent.nextEventID(), updatedGear);
-
-					if (this.simUI.reforger) {
-						this.simUI.reforger.setIncludeGems(TypedEvent.nextEventID(), true);
-						this.simUI.reforger.setIncludeEOTBPGemSocket(TypedEvent.nextEventID(), playerPhase);
-
-						if (RelativeStatCap.hasRoRo(this.simUI.player) && this.simUI.reforger.relativeStatCapStat !== -1) {
-							this.simUI.reforger.relativeStatCap = new RelativeStatCap(
-								this.simUI.reforger.relativeStatCapStat,
-								this.simUI.player,
-								this.simUI.player.getClass(),
-							);
-						}
-
-						try {
-							await this.simUI.reforger.optimizeReforges(true);
-						} catch (error) {
-							await this.simUI.player.setGearAsync(TypedEvent.nextEventID(), updatedGear);
-							this.simUI.reforger.setIncludeGems(TypedEvent.nextEventID(), false);
-							if (RelativeStatCap.hasRoRo(this.simUI.player) && this.simUI.reforger.relativeStatCapStat !== -1) {
-								this.simUI.reforger.relativeStatCap = new RelativeStatCap(
-									this.simUI.reforger.relativeStatCapStat,
-									this.simUI.player,
-									this.simUI.player.getClass(),
-								);
-							}
-
-							try {
-								await this.simUI.reforger.optimizeReforges(true);
-							} catch (error) {
-								continue;
-							}
-						}
-					}
 
 					const result = await this.simUI.runSim(
 						(progressMetrics: ProgressMetrics) => {

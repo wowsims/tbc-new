@@ -466,7 +466,7 @@ export class RaidSimResultsManager {
 
 		if (players.length === 1) {
 			const playerMetrics = players[0];
-			const showHPSMetricsForTanks = [Spec.SpecGuardianDruid, Spec.SpecProtectionPaladin].includes(
+			const showHPSMetricsForTanks = [Spec.SpecFeralBearDruid, Spec.SpecProtectionPaladin].includes(
 				players[0].spec?.specID,
 			);
 			if (playerMetrics.getTargetIndex(filter) === null) {
