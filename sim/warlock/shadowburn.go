@@ -1,0 +1,34 @@
+package warlock
+
+import (
+	"time"
+
+	"github.com/wowsims/tbc/sim/core"
+)
+
+var shadowBurnCoeff = 0.429
+
+func (warlock *Warlock) registerShadowBurnSpell() {
+
+	warlock.Shadowburn = warlock.RegisterSpell(core.SpellConfig{
+		ActionID:       core.ActionID{SpellID: 30546},
+		SpellSchool:    core.SpellSchoolShadow,
+		ProcMask:       core.ProcMaskSpellDamage,
+		Flags:          core.SpellFlagAPL,
+		ClassSpellMask: WarlockSpellShadowBurn,
+
+		Cast: core.CastConfig{
+			DefaultCast: core.Cast{
+				GCD: core.GCDDefault,
+			},
+			CD: core.Cooldown{
+				Duration: time.Second * 15,
+			},
+		},
+
+		DamageMultiplier: 1,
+		CritMultiplier:   warlock.DefaultCritMultiplier(),
+		ThreatMultiplier: 1,
+		BonusCoefficient: shadowBurnCoeff,
+	})
+}

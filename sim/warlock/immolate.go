@@ -1,4 +1,4 @@
-package destruction
+package warlock
 
 import (
 	"time"
@@ -7,8 +7,7 @@ import (
 	"github.com/wowsims/tbc/sim/warlock"
 )
 
-const immolateScale = 0.47 * 1.3 // Hotfix
-const immolateCoeff = 0.47 * 1.3
+const immolateCoeff = 0.13
 
 // Damage Done By Caster setup
 const (
@@ -16,14 +15,14 @@ const (
 	DDBC_Total
 )
 
-func (destruction *DestructionWarlock) registerImmolate() {
-	actionID := core.ActionID{SpellID: 348}
-	destruction.Immolate = destruction.RegisterSpell(core.SpellConfig{
+func (warlock *Warlock) registerImmolate() {
+	actionID := core.ActionID{SpellID: 27215}
+	warlock.Immolate = warlock.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
 		SpellSchool:    core.SpellSchoolFire,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL,
-		ClassSpellMask: warlock.WarlockSpellImmolate,
+		ClassSpellMask: WarlockSpellImmolate,
 
 		ManaCost: core.ManaCostOptions{BaseCostPercent: 3},
 		Cast: core.CastConfig{
@@ -34,69 +33,46 @@ func (destruction *DestructionWarlock) registerImmolate() {
 		},
 
 		DamageMultiplier: 1,
-		CritMultiplier:   destruction.DefaultCritMultiplier(),
+		CritMultiplier:   warlock.DefaultCritMultiplier(),
 		ThreatMultiplier: 1,
 		BonusCoefficient: immolateCoeff,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			if destruction.FABAura.IsActive() {
-				destruction.FABAura.Deactivate(sim)
-			}
-
-			result := spell.CalcDamage(sim, target, destruction.CalcScalingSpellDmg(immolateScale), spell.OutcomeMagicHitAndCrit)
+			result := spell.CalcDamage(sim, target, warlock.CalcScalingSpellDmg(immolateCoeff), spell.OutcomeMagicHitAndCrit)
 			if result.Landed() {
 				spell.RelatedDotSpell.Cast(sim, target)
-			}
-
-			if result.DidCrit() {
-				destruction.BurningEmbers.Gain(sim, 1, spell.ActionID)
 			}
 
 			spell.DealDamage(sim, result)
 		},
 	})
 
-	destruction.Immolate.RelatedDotSpell = destruction.RegisterSpell(core.SpellConfig{
+	warlock.Immolate.RelatedDotSpell = warlock.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 348}.WithTag(1),
 		SpellSchool:    core.SpellSchoolFire,
 		ProcMask:       core.ProcMaskSpellDamage,
-		ClassSpellMask: warlock.WarlockSpellImmolateDot,
+		ClassSpellMask: WarlockSpellImmolateDot,
 		Flags:          core.SpellFlagPassiveSpell,
 
 		DamageMultiplier: 1,
-		CritMultiplier:   destruction.DefaultCritMultiplier(),
+		CritMultiplier:   warlock.DefaultCritMultiplier(),
 
 		Dot: core.DotConfig{
 			Aura: core.Aura{
 				Label: "Immolate (DoT)",
 				OnGain: func(aura *core.Aura, sim *core.Simulation) {
-					core.EnableDamageDoneByCaster(DDBC_Immolate, DDBC_Total, destruction.AttackTables[aura.Unit.UnitIndex], immolateDamageDoneByCasterHandler)
+					core.EnableDamageDoneByCaster(DDBC_Immolate, DDBC_Total, warlock.AttackTables[aura.Unit.UnitIndex], immolateDamageDoneByCasterHandler)
 				},
 				OnExpire: func(aura *core.Aura, sim *core.Simulation) {
-					core.DisableDamageDoneByCaster(DDBC_Immolate, destruction.AttackTables[aura.Unit.UnitIndex])
+					core.DisableDamageDoneByCaster(DDBC_Immolate, warlock.AttackTables[aura.Unit.UnitIndex])
 				},
 			},
-			NumberOfTicks:       5,
-			TickLength:          3 * time.Second,
-			AffectedByCastSpeed: true,
-			BonusCoefficient:    immolateCoeff,
+			NumberOfTicks:    5,
+			TickLength:       3 * time.Second,
+			BonusCoefficient: immolateCoeff,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, isRollover bool) {
-				dot.Snapshot(target, destruction.CalcScalingSpellDmg(immolateScale))
+				dot.Snapshot(target, warlock.CalcScalingSpellDmg(immolateCoeff))
 			},
-			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				result := dot.CalcSnapshotDamage(sim, target, dot.OutcomeSnapshotCrit)
-				if result.DidCrit() {
-					destruction.BurningEmbers.Gain(sim, 1, dot.Spell.ActionID)
-				}
-				if destruction.SiphonLife != nil {
-					destruction.SiphonLife.Cast(sim, &destruction.Unit)
-				}
-				dot.Spell.DealPeriodicDamage(sim, result)
-			},
-		},
-
-		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			destruction.ApplyDotWithPandemic(spell.Dot(target), sim)
 		},
 
 		ExpectedTickDamage: func(sim *core.Simulation, target *core.Unit, spell *core.Spell, useSnapshot bool) *core.SpellResult {
@@ -106,7 +82,7 @@ func (destruction *DestructionWarlock) registerImmolate() {
 				result.Damage /= dot.TickPeriod().Seconds()
 				return result
 			} else {
-				result := spell.CalcPeriodicDamage(sim, target, destruction.CalcScalingSpellDmg(immolateCoeff), spell.OutcomeExpectedMagicCrit)
+				result := spell.CalcPeriodicDamage(sim, target, warlock.CalcScalingSpellDmg(immolateCoeff), spell.OutcomeExpectedMagicCrit)
 				result.Damage /= dot.CalcTickPeriod().Round(time.Millisecond).Seconds()
 				return result
 			}

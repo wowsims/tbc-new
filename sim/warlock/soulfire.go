@@ -1,91 +1,39 @@
-package demonology
+package warlock
 
 import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
-	"github.com/wowsims/tbc/sim/core/stats"
-	"github.com/wowsims/tbc/sim/warlock"
 )
 
-const soulfireScale = 0.854
-const soulfireCoeff = 0.854
+const soulfireCoeff = 1.15
 const soulfireVariance = 0.2
 
-func (demonology *DemonologyWarlock) registerSoulfire() {
-	getSoulFireConfig := func(config *core.SpellConfig, extraApplyEffect core.ApplySpellResults) core.SpellConfig {
-		return core.SpellConfig{
-			ActionID:       config.ActionID,
-			SpellSchool:    core.SpellSchoolFire,
-			ProcMask:       core.ProcMaskSpellDamage,
-			Flags:          core.SpellFlagAPL,
-			ClassSpellMask: warlock.WarlockSpellSoulFire,
-			MissileSpeed:   24,
+func (warlock *Warlock) registerSoulfire() {
+	warlock.Soulfire = warlock.RegisterSpell(core.SpellConfig{
+		ActionID:       core.ActionID{SpellID: 30545},
+		SpellSchool:    core.SpellSchoolFire,
+		ProcMask:       core.ProcMaskSpellDamage,
+		Flags:          core.SpellFlagAPL,
+		ClassSpellMask: WarlockSpellSoulFire,
+		MissileSpeed:   21,
 
-			ManaCost: config.ManaCost,
+		ManaCost: core.ManaCostOptions{FlatCost: 250},
 
-			Cast: core.CastConfig{
-				DefaultCast: core.Cast{
-					GCD:      core.GCDDefault,
-					CastTime: 4 * time.Second,
-				},
+		Cast: core.CastConfig{
+			DefaultCast: core.Cast{
+				GCD:      core.GCDDefault,
+				CastTime: time.Millisecond*6000 - (time.Millisecond * 400 * time.Duration(warlock.Talents.Bane)),
 			},
-
-			DamageMultiplierAdditive: 1,
-			CritMultiplier:           demonology.DefaultCritMultiplier(),
-			ThreatMultiplier:         1,
-			BonusCoefficient:         soulfireCoeff,
-			BonusCritPercent:         100,
-
-			ExtraCastCondition: config.ExtraCastCondition,
-
-			ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-				baseDamage := demonology.CalcAndRollDamageRange(sim, soulfireScale, soulfireVariance)
-
-				// Damage is increased by crit chance
-				spell.DamageMultiplier *= (1 + demonology.GetStat(stats.SpellCritPercent)/100)
-				result := spell.CalcDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
-				spell.DamageMultiplier /= (1 + demonology.GetStat(stats.SpellCritPercent)/100)
-
-				if extraApplyEffect != nil {
-					extraApplyEffect(sim, target, spell)
-				}
-
-				spell.WaitTravelTime(sim, func(sim *core.Simulation) {
-					spell.DealDamage(sim, result)
-				})
+			CD: core.Cooldown{
+				Duration: 1 * time.Minute,
 			},
-		}
-	}
-
-	getSoulFireCost := func() float64 {
-		baseCost := 160.0
-		if demonology.MoltenCore.IsActive() {
-			baseCost /= 2
-		}
-		return baseCost
-	}
-
-	demonology.RegisterSpell(getSoulFireConfig(&core.SpellConfig{
-		ActionID: core.ActionID{SpellID: 6353},
-		ManaCost: core.ManaCostOptions{
-			BaseCostPercent: 15,
-			PercentModifier: 1,
 		},
-		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
-			return !demonology.IsInMeta()
-		},
-	}, func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		demonology.GainDemonicFury(sim, 30, spell.ActionID)
-	}))
 
-	demonology.RegisterSpell(getSoulFireConfig(&core.SpellConfig{
-		ActionID: core.ActionID{SpellID: 104027},
-		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
-			return demonology.IsInMeta() && demonology.CanSpendDemonicFury(getSoulFireCost())
-		},
-	}, func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		demonology.SpendDemonicFury(sim, getSoulFireCost(), spell.ActionID)
-	}))
+		DamageMultiplier: 1,
+		CritMultiplier:   warlock.DefaultCritMultiplier(),
+		ThreatMultiplier: 1,
+		BonusCoefficient: soulfireCoeff,
+	})
 
 }

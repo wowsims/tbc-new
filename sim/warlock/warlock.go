@@ -1,10 +1,6 @@
 package warlock
 
 import (
-	"fmt"
-	"math"
-	"time"
-
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
@@ -15,20 +11,43 @@ type Warlock struct {
 	Talents *proto.WarlockTalents
 	Options *proto.WarlockOptions
 
-	Corruption           *core.Spell
-	CurseOfElementsAuras core.AuraArray
-	Immolate             *core.Spell
-	Metamorphosis        *core.Spell
-	Seed                 *core.Spell
-	ShadowEmbraceAuras   core.AuraArray
-	Shadowburn           *core.Spell
-	Hellfire             *core.Spell
-	DrainLife            *core.Spell
-	SiphonLife           *core.Spell
+	// Base Spells
+	Corruption  *core.Spell
+	DrainLife   *core.Spell
+	Hellfire    *core.Spell
+	Immolate    *core.Spell
+	Incinerate  *core.Spell
+	SearingPain *core.Spell
+	Seeds       []*core.Spell
+	ShadowBolt  *core.Spell
+	Soulfire    *core.Spell
 
-	ActivePet *WarlockPet
-	Felhunter *WarlockPet
-	// Felguard  *WarlockPet
+	LifeTap *core.Spell
+
+	// Curses
+	CurseOfAgony         *core.Spell
+	CurseOfDoom          *core.Spell
+	CurseOfElements      *core.Spell
+	CurseOfElementsAuras core.AuraArray
+	CurseOfRecklessness  *core.Spell
+	CurseOfTongues       *core.Spell
+
+	// Talent Tree Spells
+	AmplifyCurse       *core.Spell
+	Conflagrate        *core.Spell
+	Shadowburn         *core.Spell
+	SiphonLife         *core.Spell
+	UnstableAffliction *core.Spell
+
+	// Auras
+	AmplifyCurseAura  *core.Aura
+	NightfallProcAura *core.Aura
+	ImpShadowboltAura *core.Aura
+
+	// Pets
+	ActivePet  *WarlockPet
+	Felhunter  *WarlockPet
+	Felguard   *WarlockPet
 	Imp        *WarlockPet
 	Succubus   *WarlockPet
 	Voidwalker *WarlockPet
@@ -37,11 +56,6 @@ type Warlock struct {
 	Infernal  *InfernalPet
 
 	serviceTimer *core.Timer
-
-	// Item sets
-	T15_2pc      *core.Aura
-	T15_4pc      *core.Aura
-	T16_2pc_buff *core.Aura
 }
 
 func (warlock *Warlock) GetCharacter() *core.Character {
@@ -86,6 +100,10 @@ func (warlock *Warlock) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
 
 }
 
+func (warlock *Warlock) AddPartyBuffs(partyBuffs *proto.PartyBuffs) {
+
+}
+
 func (warlock *Warlock) Reset(sim *core.Simulation) {
 }
 
@@ -120,27 +138,21 @@ type WarlockAgent interface {
 const (
 	WarlockSpellFlagNone    int64 = 0
 	WarlockSpellConflagrate int64 = 1 << iota
-	WarlockSpellFaBConflagrate
 	WarlockSpellShadowBolt
-	WarlockSpellChaosBolt
 	WarlockSpellImmolate
 	WarlockSpellImmolateDot
 	WarlockSpellIncinerate
-	WarlockSpellFaBIncinerate
 	WarlockSpellSoulFire
 	WarlockSpellShadowBurn
 	WarlockSpellLifeTap
 	WarlockSpellCorruption
-	WarlockSpellHaunt
 	WarlockSpellUnstableAffliction
+	WarlockSpellCurseOfAgony
 	WarlockSpellCurseOfElements
 	WarlockSpellAgony
-	WarlockSpellDrainSoul
 	WarlockSpellDrainLife
-	WarlockSpellMetamorphosis
 	WarlockSpellSeedOfCorruption
 	WarlockSpellSeedOfCorruptionExposion
-	WarlockSpellHandOfGuldan
 	WarlockSpellHellfire
 	WarlockSpellImmolationAura
 	WarlockSpellSearingPain
@@ -157,116 +169,43 @@ const (
 	WarlockSpellSuccubusLashOfPain
 	WarlockSpellVoidwalkerTorment
 	WarlockSpellSummonInfernal
-	WarlockSpellDemonSoul
-	WarlockSpellShadowflame
-	WarlockSpellShadowflameDot
-	WarlockSpellSoulBurn
-	WarlockSpellFelFlame
-	WarlockSpellBurningEmbers
-	WarlockSpellEmberTap
 	WarlockSpellRainOfFire
-	WarlockSpellFireAndBrimstone
-	WarlockSpellDarkSoulInsanity
-	WarlockSpellDarkSoulKnowledge
-	WarlockSpellDarkSoulMisery
-	WarlockSpellMaleficGrasp
-	WarlockSpellDemonicSlash
-	WarlockSpellTouchOfChaos
-	WarlockSpellChaosWave
-	WarlockSpellCarrionSwarm
-	WarlockSpellDoom
-	WarlockSpellVoidray
+	WarlockSpellCurseOfDoom
+	WarlockSpellCurseOfRecklessness
+	WarlockSpellCurseOfWeakness
+	WarlockSpellCurseOfTongues
 	WarlockSpellSiphonLife
-	WarlockSpellHavoc
 	WarlockSpellAll int64 = 1<<iota - 1
 
-	WarlockShadowDamage = WarlockSpellCorruption | WarlockSpellUnstableAffliction | WarlockSpellHaunt |
-		WarlockSpellDrainSoul | WarlockSpellDrainLife | WarlockSpellAgony |
-		WarlockSpellShadowBolt | WarlockSpellSeedOfCorruptionExposion | WarlockSpellHandOfGuldan |
-		WarlockSpellShadowflame | WarlockSpellFelFlame | WarlockSpellChaosBolt | WarlockSpellShadowBurn | WarlockSpellHavoc
+	WarlockShadowDamage = WarlockSpellCorruption | WarlockSpellUnstableAffliction | WarlockSpellDrainLife | WarlockSpellAgony |
+		WarlockSpellShadowBolt | WarlockSpellSeedOfCorruptionExposion | WarlockSpellShadowBurn
 
-	WarlockPeriodicShadowDamage = WarlockSpellCorruption | WarlockSpellUnstableAffliction | WarlockSpellDrainSoul |
+	WarlockPeriodicShadowDamage = WarlockSpellCorruption | WarlockSpellUnstableAffliction |
 		WarlockSpellDrainLife | WarlockSpellAgony
 
 	WarlockFireDamage = WarlockSpellConflagrate | WarlockSpellImmolate | WarlockSpellIncinerate | WarlockSpellSoulFire |
-		WarlockSpellHandOfGuldan | WarlockSpellSearingPain | WarlockSpellImmolateDot |
-		WarlockSpellShadowflameDot | WarlockSpellFelFlame | WarlockSpellChaosBolt | WarlockSpellShadowBurn | WarlockSpellFaBConflagrate |
-		WarlockSpellFaBIncinerate
+		WarlockSpellSearingPain | WarlockSpellImmolateDot | WarlockSpellShadowBurn
 
-	WarlockDoT = WarlockSpellCorruption | WarlockSpellUnstableAffliction | WarlockSpellDrainSoul |
-		WarlockSpellDrainLife | WarlockSpellAgony | WarlockSpellImmolateDot |
-		WarlockSpellShadowflameDot | WarlockSpellBurningEmbers
+	WarlockDoT = WarlockSpellCorruption | WarlockSpellUnstableAffliction |
+		WarlockSpellDrainLife | WarlockSpellAgony | WarlockSpellImmolateDot
 
 	WarlockSummonSpells = WarlockSpellSummonImp | WarlockSpellSummonSuccubus | WarlockSpellSummonFelhunter |
 		WarlockSpellSummonFelguard
 
-	WarlockDarkSoulSpell             = WarlockSpellDarkSoulInsanity | WarlockSpellDarkSoulKnowledge | WarlockSpellDarkSoulMisery
-	WarlockAllSummons                = WarlockSummonSpells | WarlockSpellSummonInfernal | WarlockSpellSummonDoomguard
-	WarlockSpellsChaoticEnergyDestro = WarlockSpellAll &^ WarlockAllSummons &^ WarlockSpellDrainLife
+	WarlockAllSummons = WarlockSummonSpells | WarlockSpellSummonInfernal | WarlockSpellSummonDoomguard
+
+	WarlockCurses = WarlockSpellCurseOfAgony | WarlockSpellCurseOfDoom | WarlockSpellCurseOfElements |
+		WarlockSpellCurseOfRecklessness | WarlockSpellCurseOfTongues | WarlockSpellCurseOfWeakness
+
+	WarlockAfflictionSpells = WarlockSpellCorruption | WarlockSpellCurseOfAgony | WarlockSpellCurseOfDoom | WarlockSpellCurseOfRecklessness | WarlockSpellCurseOfElements |
+		WarlockSpellCurseOfTongues | WarlockSpellCurseOfWeakness | WarlockSpellDrainLife |
+		WarlockSpellSeedOfCorruption
+
+	WarlockDemonologySpells = WarlockAllSummons
+
+	WarlockDestructionSpells = WarlockSpellHellfire | WarlockSpellImmolate | WarlockSpellIncinerate | WarlockSpellRainOfFire | WarlockSpellSearingPain |
+		WarlockSpellShadowBolt | WarlockSpellSoulFire
 )
-
-// Pandemic - For now a Warlock only ability. Might be moved into core support in late expansions
-func (warlock *Warlock) ApplyDotWithPandemic(dot *core.Dot, sim *core.Simulation) {
-
-	// if DoT was not active before, there is nothing we need to do for pandemic
-	if !dot.IsActive() {
-		dot.Apply(sim)
-		return
-	}
-
-	// MoP Pandemic is a warlock only ability
-	// It allows for the extension of up to 50% of the unhasted base duration
-	// So we need to determine which is shorter base + remaining or base + maxExtend
-	remaining := dot.RemainingDuration(sim)
-	extend := time.Duration(math.Min(
-		float64(dot.BaseDuration()+remaining),
-		float64(dot.BaseDuration()+dot.BaseDuration()/2),
-	))
-
-	// First do usual dot carry over
-	dot.Apply(sim)
-	for dot.RemainingDuration(sim)-dot.TimeUntilNextTick(sim)+dot.TickPeriod() <= extend {
-		dot.AddTick()
-	}
-}
 
 // Called to handle custom resources
 type WarlockSpellCastedCallback func(resultList core.SpellResultSlice, spell *core.Spell, sim *core.Simulation)
-
-type SecondaryResourceCost struct {
-	SecondaryCost int
-	Name          string
-}
-
-// CostFailureReason implements core.ResourceCostImpl.
-func (s *SecondaryResourceCost) CostFailureReason(_ *core.Simulation, spell *core.Spell) string {
-	return fmt.Sprintf(
-		"Not enough %s (Current %s = %0.03f, %s Cost = %0.03f)",
-		s.Name,
-		s.Name,
-		spell.Unit.GetSecondaryResourceBar(),
-		s.Name,
-		spell.CurCast.Cost,
-	)
-}
-
-// IssueRefund implements core.ResourceCostImpl.
-func (s *SecondaryResourceCost) IssueRefund(sim *core.Simulation, spell *core.Spell) {
-	curCost := spell.Cost.PercentModifier * float64(s.SecondaryCost)
-	spell.Unit.GetSecondaryResourceBar().Gain(sim, curCost, spell.ActionID)
-}
-
-// MeetsRequirement implements core.ResourceCostImpl.
-func (s *SecondaryResourceCost) MeetsRequirement(_ *core.Simulation, spell *core.Spell) bool {
-	spell.CurCast.Cost = spell.Cost.PercentModifier * float64(s.SecondaryCost)
-	return spell.Unit.GetSecondaryResourceBar().CanSpend(spell.CurCast.Cost)
-}
-
-// SpendCost implements core.ResourceCostImpl.
-func (s *SecondaryResourceCost) SpendCost(sim *core.Simulation, spell *core.Spell) {
-
-	// during some hard casts resourc might tick down, make sure spells don't execute on exhaustion
-	if spell.Unit.GetSecondaryResourceBar().CanSpend(spell.CurCast.Cost) {
-		spell.Unit.GetSecondaryResourceBar().Spend(sim, spell.CurCast.Cost, spell.ActionID)
-	}
-}

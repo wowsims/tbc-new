@@ -10,12 +10,12 @@ const agonyScale = 0.0255
 const agonyCoeff = 0.0255
 
 func (warlock *Warlock) registerAgony() {
-	warlock.Agony = warlock.RegisterSpell(core.SpellConfig{
+	warlock.CurseOfAgony = warlock.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 980},
 		Flags:          core.SpellFlagAPL,
 		ProcMask:       core.ProcMaskSpellDamage,
 		SpellSchool:    core.SpellSchoolShadow,
-		ClassSpellMask: warlock.WarlockSpellAgony,
+		ClassSpellMask: WarlockSpellCurseOfAgony,
 
 		ThreatMultiplier: 1,
 		DamageMultiplier: 1,
@@ -60,13 +60,6 @@ func (warlock *Warlock) registerAgony() {
 				result.Damage *= float64(stacks)
 				dot.Spell.DealPeriodicDamage(sim, result)
 			},
-		},
-
-		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			if spell.CalcAndDealOutcome(sim, target, spell.OutcomeMagicHit).Landed() {
-				warlock.ApplyDotWithPandemic(spell.Dot(target), sim)
-				spell.Dot(target).AddStack(sim)
-			}
 		},
 
 		ExpectedTickDamage: func(sim *core.Simulation, target *core.Unit, spell *core.Spell, useSnapshot bool) *core.SpellResult {

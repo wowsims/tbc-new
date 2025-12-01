@@ -6,44 +6,43 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
-const corruptionScale = 0.165
-const corruptionCoeff = 0.165
+const corruptionScale = 0.156
+const corruptionCoeff = 0.156
 
 func (warlock *Warlock) RegisterCorruption(onApplyCallback WarlockSpellCastedCallback, onTickCallback WarlockSpellCastedCallback) *core.Spell {
 	resultSlice := make(core.SpellResultSlice, 1)
 
 	warlock.Corruption = warlock.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 172},
+		ActionID:       core.ActionID{SpellID: 27216},
 		SpellSchool:    core.SpellSchoolShadow,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: WarlockSpellCorruption,
 
-		ManaCost: core.ManaCostOptions{BaseCostPercent: 1.25},
-		Cast:     core.CastConfig{DefaultCast: core.Cast{GCD: core.GCDDefault}},
-
-		DamageMultiplierAdditive: 1,
-		CritMultiplier:           warlock.DefaultCritMultiplier(),
-		ThreatMultiplier:         1,
+		ManaCost: core.ManaCostOptions{FlatCost: 370},
+		Cast: core.CastConfig{
+			DefaultCast: core.Cast{
+				GCD:      core.GCDDefault,
+				CastTime: time.Millisecond*2000 - (time.Millisecond * 400 * time.Duration(warlock.Talents.ImprovedCorruption)),
+			},
+		},
 
 		Dot: core.DotConfig{
 			Aura: core.Aura{
-				Label: "Corruption",
+				Label:    "Corruption",
+				Tag:      "Affliction",
+				ActionID: core.ActionID{SpellID: 27216},
 			},
-			NumberOfTicks:       9,
-			TickLength:          2 * time.Second,
-			AffectedByCastSpeed: true,
-			BonusCoefficient:    corruptionCoeff,
+			NumberOfTicks:       6,
+			TickLength:          3 * time.Second,
+			AffectedByCastSpeed: false,
+			BonusCoefficient:    corruptionCoeff + ((0.12 * float64(warlock.Talents.EmpoweredCorruption)) / 6),
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, isRollover bool) {
 				dot.Snapshot(target, warlock.CalcScalingSpellDmg(corruptionScale))
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				resultSlice[0] = dot.CalcSnapshotDamage(sim, target, dot.OutcomeSnapshotCrit)
-
-				if warlock.SiphonLife != nil {
-					warlock.SiphonLife.Cast(sim, &warlock.Unit)
-				}
 
 				if onTickCallback != nil {
 					onTickCallback(resultSlice, dot.Spell, sim)
@@ -55,10 +54,6 @@ func (warlock *Warlock) RegisterCorruption(onApplyCallback WarlockSpellCastedCal
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			result := spell.CalcOutcome(sim, target, spell.OutcomeMagicHitNoHitCounter)
-			dot := spell.Dot(target)
-			if result.Landed() {
-				warlock.ApplyDotWithPandemic(dot, sim)
-			}
 			if onApplyCallback != nil {
 				resultSlice[0] = result
 				onApplyCallback(resultSlice, spell, sim)

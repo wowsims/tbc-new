@@ -1,22 +1,21 @@
-package demonology
+package warlock
 
 import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
-	"github.com/wowsims/tbc/sim/warlock"
 )
 
 const shadowBoltScale = 1.38
 const shadowBoltCoeff = 1.38
 
-func (demonology *DemonologyWarlock) registerShadowBolt() {
-	demonology.RegisterSpell(core.SpellConfig{
+func (warlock *Warlock) registerShadowBolt() {
+	warlock.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 686},
 		SpellSchool:    core.SpellSchoolShadow,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL,
-		ClassSpellMask: warlock.WarlockSpellShadowBolt,
+		ClassSpellMask: WarlockSpellShadowBolt,
 		MissileSpeed:   20,
 
 		ManaCost: core.ManaCostOptions{BaseCostPercent: 5.5},
@@ -28,23 +27,14 @@ func (demonology *DemonologyWarlock) registerShadowBolt() {
 		},
 
 		DamageMultiplierAdditive: 1,
-		CritMultiplier:           demonology.DefaultCritMultiplier(),
+		CritMultiplier:           warlock.DefaultCritMultiplier(),
 		ThreatMultiplier:         1,
-		BonusCoefficient:         shadowBoltCoeff,
-
-		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
-			return !demonology.IsInMeta()
-		},
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			result := spell.CalcDamage(sim, target, demonology.CalcScalingSpellDmg(shadowBoltScale), spell.OutcomeMagicHitAndCrit)
+			result := spell.CalcDamage(sim, target, warlock.CalcScalingSpellDmg(shadowBoltScale), spell.OutcomeMagicHitAndCrit)
 			spell.WaitTravelTime(sim, func(sim *core.Simulation) {
 				spell.DealDamage(sim, result)
 			})
-
-			if result.Landed() {
-				demonology.GainDemonicFury(sim, 25, core.ActionID{SpellID: 686})
-			}
 		},
 	})
 }

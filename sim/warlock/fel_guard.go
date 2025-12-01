@@ -1,4 +1,4 @@
-package demonology
+package warlock
 
 import (
 	"math"
@@ -10,20 +10,20 @@ import (
 	"github.com/wowsims/tbc/sim/warlock"
 )
 
-func (demo *DemonologyWarlock) registerFelguard() *warlock.WarlockPet {
+func (warlock *Warlock) registerFelguard() *warlock.WarlockPet {
 	name := proto.WarlockOptions_Summon_name[int32(proto.WarlockOptions_Felguard)]
-	enabledOnStart := proto.WarlockOptions_Felguard == demo.Options.Summon
-	return demo.registerFelguardWithName(name, enabledOnStart, false, false)
+	enabledOnStart := proto.WarlockOptions_Felguard == warlock.Options.Summon
+	return warlock.registerFelguardWithName(name, enabledOnStart, false, false)
 }
 
-func (demo *DemonologyWarlock) registerFelguardWithName(name string, enabledOnStart bool, autoCastFelstorm bool, isGuardian bool) *warlock.WarlockPet {
-	pet := demo.RegisterPet(proto.WarlockOptions_Felguard, 2, 3.5, name, enabledOnStart, isGuardian)
-	felStorm := registerFelstorm(pet, demo, autoCastFelstorm)
-	legionStrike := registerLegionStrikeSpell(pet, demo)
+func (warlock *Warlock) registerFelguardWithName(name string, enabledOnStart bool, autoCastFelstorm bool, isGuardian bool) *warlock.WarlockPet {
+	pet := warlock.RegisterPet(proto.WarlockOptions_Felguard, 2, 3.5, name, enabledOnStart, isGuardian)
+	felStorm := registerFelstorm(pet, warlock, autoCastFelstorm)
+	legionStrike := registerLegionStrikeSpell(pet, warlock)
 	pet.MinEnergy = 120
 
 	if !isGuardian {
-		demo.RegisterSpell(core.SpellConfig{
+		warlock.RegisterSpell(core.SpellConfig{
 			ActionID:    core.ActionID{SpellID: 89751},
 			SpellSchool: core.SpellSchoolPhysical,
 			ProcMask:    core.ProcMaskEmpty,
@@ -31,7 +31,7 @@ func (demo *DemonologyWarlock) registerFelguardWithName(name string, enabledOnSt
 
 			Cast: core.CastConfig{
 				CD: core.Cooldown{
-					Timer:    demo.NewTimer(),
+					Timer:    warlock.NewTimer(),
 					Duration: time.Second * 45,
 				},
 			},
@@ -66,7 +66,7 @@ func (demo *DemonologyWarlock) registerFelguardWithName(name string, enabledOnSt
 
 var legionStrikePetAction = core.ActionID{SpellID: 30213}
 
-func registerLegionStrikeSpell(pet *warlock.WarlockPet, demo *DemonologyWarlock) *core.Spell {
+func registerLegionStrikeSpell(pet *warlock.WarlockPet, warlock *Warlock) *core.Spell {
 	legionStrike := pet.RegisterSpell(core.SpellConfig{
 		ActionID:       legionStrikePetAction,
 		SpellSchool:    core.SpellSchoolPhysical,
@@ -98,7 +98,7 @@ func registerLegionStrikeSpell(pet *warlock.WarlockPet, demo *DemonologyWarlock)
 			baseDmg /= float64(sim.Environment.ActiveTargetCount())
 			spell.CalcAndDealAoeDamage(sim, baseDmg, spell.OutcomeMeleeWeaponSpecialHitAndCrit)
 			// Pets are not affected by Fury gain modifiers
-			demo.DemonicFury.Gain(sim, 12, core.ActionID{SpellID: 30213})
+			warlock.warlocknicFury.Gain(sim, 12, core.ActionID{SpellID: 30213})
 		},
 	})
 
@@ -107,7 +107,7 @@ func registerLegionStrikeSpell(pet *warlock.WarlockPet, demo *DemonologyWarlock)
 	return legionStrike
 }
 
-func registerFelstorm(pet *warlock.WarlockPet, _ *DemonologyWarlock, autoCast bool) *core.Spell {
+func registerFelstorm(pet *warlock.WarlockPet, _ *Warlock, autoCast bool) *core.Spell {
 	felStorm := pet.RegisterSpell(core.SpellConfig{
 		ActionID:    core.ActionID{SpellID: 89751},
 		SpellSchool: core.SpellSchoolPhysical,
