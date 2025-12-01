@@ -13,19 +13,15 @@
 	"specs": {
 		"druid": {
 			"balance": "Balance",
-			"feral": "Feral",
-			"guardian": "Guardian",
+			"feralcat": "Feral",
+			"feralbear": "Guardian",
 			"restoration": "Restoration"
 		},
 		"hunter": {
-			"beast_mastery": "Beast Mastery",
-			"marksmanship": "Marksmanship",
-			"survival": "Survival"
+			"hunter": "Hunter"
 		},
 		"mage": {
-			"arcane": "Arcane",
-			"fire": "Fire",
-			"frost": "Frost"
+			"mage": "Mage"
 		},
 		"paladin": {
 			"holy": "Holy",
@@ -38,9 +34,7 @@
 			"shadow": "Shadow"
 		},
 		"rogue": {
-			"assassination": "Assassination",
-			"combat": "Combat",
-			"subtlety": "Subtlety"
+			"rogue": "Rogue"
 		},
 		"shaman": {
 			"elemental": "Elemental",
@@ -48,13 +42,10 @@
 			"restoration": "Restoration"
 		},
 		"warlock": {
-			"affliction": "Affliction",
-			"demonology": "Demonology",
-			"destruction": "Destruction"
+			"warlock": "Warlock"
 		},
 		"warrior": {
-			"arms": "Arms",
-			"fury": "Fury",
+			"dps": "DPS",
 			"protection": "Protection"
 		}
 	},

@@ -11,23 +11,47 @@ export const statI18nKeys: Record<Stat, string> = {
 	[Stat.StatStamina]: 'stamina',
 	[Stat.StatIntellect]: 'intellect',
 	[Stat.StatSpirit]: 'spirit',
-	[Stat.StatHitRating]: 'hit',
-	[Stat.StatCritRating]: 'crit',
-	[Stat.StatHasteRating]: 'haste',
 	[Stat.StatExpertiseRating]: 'expertise',
 	[Stat.StatDodgeRating]: 'dodge',
 	[Stat.StatParryRating]: 'parry',
-	[Stat.StatMasteryRating]: 'mastery',
 	[Stat.StatAttackPower]: 'attack_power',
 	[Stat.StatRangedAttackPower]: 'ranged_attack_power',
 	[Stat.StatSpellPower]: 'spell_power',
-	[Stat.StatPvpResilienceRating]: 'pvp_resilience',
-	[Stat.StatPvpPowerRating]: 'pvp_power',
 	[Stat.StatArmor]: 'armor',
 	[Stat.StatBonusArmor]: 'bonus_armor',
 	[Stat.StatHealth]: 'health',
 	[Stat.StatMana]: 'mana',
 	[Stat.StatMP5]: 'mp5',
+	[Stat.StatHealingPower]: 'healing_power',
+	[Stat.StatSpellDamage]: 'spell_damage',
+	[Stat.StatArcanePower]: 'arcane_power',
+	[Stat.StatFirePower]: 'fire_power',
+	[Stat.StatFrostPower]: 'frost_power',
+	[Stat.StatHolyPower]: 'holy_power',
+	[Stat.StatNaturePower]: 'nature_power',
+	[Stat.StatShadowPower]: 'shadow_power',
+	[Stat.StatSpellHitRating]: 'spell_hit_rating',
+	[Stat.StatSpellCritRating]: 'spell_crit_rating',
+	[Stat.StatSpellHasteRating]: 'spell_haste_rating',
+	[Stat.StatSpellPenetration]: 'spell_penetration',
+	[Stat.StatFeralAttackPower]: 'feral_attack_power',
+	[Stat.StatMeleeHitRating]: 'melee_hit_rating',
+	[Stat.StatMeleeCritRating]: 'melee_crit_rating',
+	[Stat.StatMeleeHasteRating]: 'melee_haste_rating',
+	[Stat.StatArmorPenetration]: 'armor_penetration',
+	[Stat.StatAllHitRating]: 'all_hit_rating',
+	[Stat.StatAllCritRating]: 'all_crit_rating',
+	[Stat.StatAllHasteRating]: 'all_haste_rating',
+	[Stat.StatDefenseRating]: 'defense_rating',
+	[Stat.StatBlockRating]: 'block_rating',
+	[Stat.StatBlockValue]: 'block_value',
+	[Stat.StatResilience]: 'resilience',
+	[Stat.StatArcaneResistance]: 'arcane_resistance',
+	[Stat.StatFireResistance]: 'fire_resistance',
+	[Stat.StatFrostResistance]: 'frost_resistance',
+	[Stat.StatNatureResistance]: 'nature_resistance',
+	[Stat.StatShadowResistance]: 'shadow_resistance',
+	[Stat.StatRage]: 'rage'
 };
 
 export const protoStatNameI18nKeys: Record<string, string> = {
@@ -68,10 +92,21 @@ export const pseudoStatI18nKeys: Record<PseudoStat, string> = {
 	[PseudoStat.PseudoStatMeleeHastePercent]: 'melee_haste',
 	[PseudoStat.PseudoStatRangedHastePercent]: 'ranged_haste',
 	[PseudoStat.PseudoStatSpellHastePercent]: 'spell_haste',
-	[PseudoStat.PseudoStatPhysicalHitPercent]: 'melee_hit',
+	[PseudoStat.PseudoStatMeleeHitPercent]: 'melee_hit',
 	[PseudoStat.PseudoStatSpellHitPercent]: 'spell_hit',
-	[PseudoStat.PseudoStatPhysicalCritPercent]: 'melee_crit',
+	[PseudoStat.PseudoStatMeleeCritPercent]: 'melee_crit',
 	[PseudoStat.PseudoStatSpellCritPercent]: 'spell_crit',
+	[PseudoStat.PseudoStatBlockValueMultiplier]: 'block_value_multiplier',
+	[PseudoStat.BonusPhysicalDamage]: 'bonus_physical_damage',
+	[PseudoStat.PseudoStatSchoolHitArcane]: 'arcane_hit',
+	[PseudoStat.PseudoStatSchoolHitFire]: 'fire_hit',
+	[PseudoStat.PseudoStatSchoolHitFrost]: 'frost_hit',
+	[PseudoStat.PseudoStatSchoolHitHoly]: 'holy_hit',
+	[PseudoStat.PseudoStatSchoolHitNature]: 'nature_hit',
+	[PseudoStat.PseudoStatSchoolHitShadow]: 'shadow_hit',
+	[PseudoStat.PseudoStatBlockValuePerStrength]: 'block_per_strength',
+	[PseudoStat.PseudoStatRangedHitPercent]: 'ranged_hit',
+	[PseudoStat.PseudoStatRangedCritPercent]: 'ranged_crit'
 };
 
 export const spellSchoolI18nKeys: Record<SpellSchool, string> = {
@@ -117,8 +152,6 @@ export const resourceTypeI18nKeys: Record<ResourceType, string> = {
 	[ResourceType.ResourceTypeRage]: 'rage',
 	[ResourceType.ResourceTypeComboPoints]: 'combo_points',
 	[ResourceType.ResourceTypeFocus]: 'focus',
-	[ResourceType.ResourceTypeSolarEnergy]: 'solar_energy',
-	[ResourceType.ResourceTypeLunarEnergy]: 'lunar_energy',
 	[ResourceType.ResourceTypeGenericResource]: 'generic_resource',
 };
 
@@ -139,17 +172,13 @@ export const specI18nKeys: Record<Spec, string> = {
 	[Spec.SpecUnknown]: 'unknown',
 	// Druid
 	[Spec.SpecBalanceDruid]: 'balance',
-	[Spec.SpecFeralDruid]: 'feral',
-	[Spec.SpecGuardianDruid]: 'guardian',
+	[Spec.SpecFeralCatDruid]: 'feralcat',
+	[Spec.SpecFeralBearDruid]: 'feralbear',
 	[Spec.SpecRestorationDruid]: 'restoration',
 	// Hunter
-	[Spec.SpecBeastMasteryHunter]: 'beast_mastery',
-	[Spec.SpecMarksmanshipHunter]: 'marksmanship',
-	[Spec.SpecSurvivalHunter]: 'survival',
+	[Spec.SpecHunter]: 'hunter',
 	// Mage
-	[Spec.SpecArcaneMage]: 'arcane',
-	[Spec.SpecFireMage]: 'fire',
-	[Spec.SpecFrostMage]: 'frost',
+	[Spec.SpecMage]: 'mage',
 	// Paladin
 	[Spec.SpecHolyPaladin]: 'holy',
 	[Spec.SpecProtectionPaladin]: 'protection',
@@ -159,20 +188,15 @@ export const specI18nKeys: Record<Spec, string> = {
 	[Spec.SpecHolyPriest]: 'holy',
 	[Spec.SpecShadowPriest]: 'shadow',
 	// Rogue
-	[Spec.SpecAssassinationRogue]: 'assassination',
-	[Spec.SpecCombatRogue]: 'combat',
-	[Spec.SpecSubtletyRogue]: 'subtlety',
+	[Spec.SpecRogue]: 'rogue',
 	// Shaman
 	[Spec.SpecElementalShaman]: 'elemental',
 	[Spec.SpecEnhancementShaman]: 'enhancement',
 	[Spec.SpecRestorationShaman]: 'restoration',
 	// Warlock
-	[Spec.SpecAfflictionWarlock]: 'affliction',
-	[Spec.SpecDemonologyWarlock]: 'demonology',
-	[Spec.SpecDestructionWarlock]: 'destruction',
+	[Spec.SpecWarlock]: 'warlock',
 	// Warrior
-	[Spec.SpecArmsWarrior]: 'arms',
-	[Spec.SpecFuryWarrior]: 'fury',
+	[Spec.SpecDPSWarrior]: 'dps',
 	[Spec.SpecProtectionWarrior]: 'protection',
 };
 
@@ -206,16 +230,12 @@ export const raceI18nKeys: Record<Race, string> = {
 	[Race.RaceDraenei]: 'draenei',
 	[Race.RaceDwarf]: 'dwarf',
 	[Race.RaceGnome]: 'gnome',
-	[Race.RaceGoblin]: 'goblin',
 	[Race.RaceHuman]: 'human',
 	[Race.RaceNightElf]: 'night_elf',
 	[Race.RaceOrc]: 'orc',
-	[Race.RaceAlliancePandaren]: 'alliance_pandaren',
-	[Race.RaceHordePandaren]: 'horde_pandaren',
 	[Race.RaceTauren]: 'tauren',
 	[Race.RaceTroll]: 'troll',
 	[Race.RaceUndead]: 'undead',
-	[Race.RaceWorgen]: 'worgen',
 };
 
 export const professionI18nKeys: Record<Profession, string> = {
@@ -231,7 +251,6 @@ export const professionI18nKeys: Record<Profession, string> = {
 	[Profession.Mining]: 'mining',
 	[Profession.Skinning]: 'skinning',
 	[Profession.Tailoring]: 'tailoring',
-	[Profession.Archeology]: 'archeology',
 };
 
 export const sourceFilterI18nKeys: Record<SourceFilterOption, string> = {
@@ -286,38 +305,10 @@ export const rangedWeaponTypeI18nKeys: Record<RangedWeaponType, string> = {
 	[RangedWeaponType.RangedWeaponTypeGun]: 'gun',
 	[RangedWeaponType.RangedWeaponTypeThrown]: 'thrown',
 	[RangedWeaponType.RangedWeaponTypeWand]: 'wand',
-};
-
-export const masterySpellNamesI18nKeys: Record<Spec, string> = {
-	[Spec.SpecUnknown]: 'unknown',
-	[Spec.SpecAssassinationRogue]: 'potent_poisons',
-	[Spec.SpecCombatRogue]: 'main_gauche',
-	[Spec.SpecSubtletyRogue]: 'executioner',
-	[Spec.SpecBalanceDruid]: 'total_eclipse',
-	[Spec.SpecFeralDruid]: 'razor_claws',
-	[Spec.SpecGuardianDruid]: 'natures_guardian',
-	[Spec.SpecRestorationDruid]: 'harmony',
-	[Spec.SpecHolyPaladin]: 'illuminated_healing',
-	[Spec.SpecProtectionPaladin]: 'divine_bulwark',
-	[Spec.SpecRetributionPaladin]: 'hand_of_light',
-	[Spec.SpecElementalShaman]: 'elemental_overload',
-	[Spec.SpecEnhancementShaman]: 'enhanced_elements',
-	[Spec.SpecRestorationShaman]: 'deep_healing',
-	[Spec.SpecBeastMasteryHunter]: 'master_of_beasts',
-	[Spec.SpecMarksmanshipHunter]: 'wild_quiver',
-	[Spec.SpecSurvivalHunter]: 'essence_of_the_viper',
-	[Spec.SpecArmsWarrior]: 'strikes_of_opportunity',
-	[Spec.SpecFuryWarrior]: 'unshackled_fury',
-	[Spec.SpecProtectionWarrior]: 'critical_block',
-	[Spec.SpecArcaneMage]: 'mana_adept',
-	[Spec.SpecFireMage]: 'ignite',
-	[Spec.SpecFrostMage]: 'icicles',
-	[Spec.SpecDisciplinePriest]: 'shield_discipline',
-	[Spec.SpecHolyPriest]: 'echo_of_light',
-	[Spec.SpecShadowPriest]: 'shadow_orb_power',
-	[Spec.SpecAfflictionWarlock]: 'potent_afflictions',
-	[Spec.SpecDemonologyWarlock]: 'master_demonologist',
-	[Spec.SpecDestructionWarlock]: 'emberstorm',
+	[RangedWeaponType.RangedWeaponTypeIdol]: 'idol',
+	[RangedWeaponType.RangedWeaponTypeLibram]: 'libram',
+	[RangedWeaponType.RangedWeaponTypeTotem]: 'totem',
+	[RangedWeaponType.RangedWeaponTypeSigil]: 'sigil',
 };
 
 export const slotNamesI18nKeys: Record<ItemSlot, string> = {
@@ -337,6 +328,7 @@ export const slotNamesI18nKeys: Record<ItemSlot, string> = {
 	[ItemSlot.ItemSlotTrinket2]: 'trinket_2',
 	[ItemSlot.ItemSlotMainHand]: 'main_hand',
 	[ItemSlot.ItemSlotOffHand]: 'off_hand',
+	[ItemSlot.ItemSlotRanged]: 'ranged',
 };
 
 export const bulkSlotNamesI18nKeys: Record<BulkSimItemSlot, string> = {
@@ -392,8 +384,6 @@ export const getWeaponTypeI18nKey = (weaponType: WeaponType): string => weaponTy
 
 export const getRangedWeaponTypeI18nKey = (rangedWeaponType: RangedWeaponType): string =>
 	rangedWeaponTypeI18nKeys[rangedWeaponType] || RangedWeaponType[rangedWeaponType].toLowerCase();
-
-export const getMasterySpellNameI18nKey = (spec: Spec): string => masterySpellNamesI18nKeys[spec] || Spec[spec].toLowerCase();
 
 export const getSlotNameI18nKey = (slot: ItemSlot): string => slotNamesI18nKeys[slot] || ItemSlot[slot].toLowerCase();
 

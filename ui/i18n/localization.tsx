@@ -22,7 +22,6 @@ import {
 	getArmorTypeI18nKey,
 	getWeaponTypeI18nKey,
 	getRangedWeaponTypeI18nKey,
-	getMasterySpellNameI18nKey,
 	aplItemLabelI18nKeys,
 	backendMetricI18nKeys as resultMetricI18nKeys,
 	resourceTypeI18nKeys,
@@ -124,12 +123,6 @@ export const translateRangedWeaponType = (rangedWeaponType: RangedWeaponType): s
 export const translateResourceType = (resourceType: ResourceType): string => {
 	return i18n.t(`common.resource_types.${resourceTypeI18nKeys[resourceType] || ResourceType[resourceType].toLowerCase()}`, {
 		defaultValue: ResourceType[resourceType],
-	});
-};
-
-export const translateMasterySpellName = (spec: Spec): string => {
-	return i18n.t(`common.mastery_spell_names.${getMasterySpellNameI18nKey(spec)}`, {
-		defaultValue: Spec[spec],
 	});
 };
 

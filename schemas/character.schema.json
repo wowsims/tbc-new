@@ -54,10 +54,10 @@
             "balance": {
               "type": "string"
             },
-            "feral": {
+            "feralcat": {
               "type": "string"
             },
-            "guardian": {
+            "feralbear": {
               "type": "string"
             },
             "restoration": {
@@ -67,49 +67,33 @@
           "additionalProperties": false,
           "required": [
             "balance",
-            "feral",
-            "guardian",
+            "feralcat",
+            "feralbear",
             "restoration"
           ]
         },
         "hunter": {
           "type": "object",
           "properties": {
-            "beast_mastery": {
-              "type": "string"
-            },
-            "marksmanship": {
-              "type": "string"
-            },
-            "survival": {
+            "hunter": {
               "type": "string"
             }
           },
           "additionalProperties": false,
           "required": [
-            "beast_mastery",
-            "marksmanship",
-            "survival"
+            "hunter"
           ]
         },
         "mage": {
           "type": "object",
           "properties": {
-            "arcane": {
-              "type": "string"
-            },
-            "fire": {
-              "type": "string"
-            },
-            "frost": {
+            "mage": {
               "type": "string"
             }
           },
           "additionalProperties": false,
           "required": [
-            "arcane",
-            "fire",
-            "frost"
+            "mage"
           ]
         },
         "paladin": {
@@ -155,21 +139,13 @@
         "rogue": {
           "type": "object",
           "properties": {
-            "assassination": {
-              "type": "string"
-            },
-            "combat": {
-              "type": "string"
-            },
-            "subtlety": {
+            "rogue": {
               "type": "string"
             }
           },
           "additionalProperties": false,
           "required": [
-            "assassination",
-            "combat",
-            "subtlety"
+            "rogue"
           ]
         },
         "shaman": {
@@ -195,30 +171,19 @@
         "warlock": {
           "type": "object",
           "properties": {
-            "affliction": {
-              "type": "string"
-            },
-            "demonology": {
-              "type": "string"
-            },
-            "destruction": {
+            "warlock": {
               "type": "string"
             }
           },
           "additionalProperties": false,
           "required": [
-            "affliction",
-            "demonology",
-            "destruction"
+            "warlock"
           ]
         },
         "warrior": {
           "type": "object",
           "properties": {
-            "arms": {
-              "type": "string"
-            },
-            "fury": {
+            "dps": {
               "type": "string"
             },
             "protection": {
@@ -227,8 +192,7 @@
           },
           "additionalProperties": false,
           "required": [
-            "arms",
-            "fury",
+            "dps",
             "protection"
           ]
         }
