@@ -402,7 +402,7 @@ func LoadAndWriteRawGems(dbHelper *DBHelper, inputsDir string) ([]dbc.Gem, error
 		FROM ItemSparse s
 		JOIN Item i ON s.ID = i.ID
 		JOIN GemProperties gp ON s.Gem_properties = gp.ID
-		JOIN SpellItemEnchantment sie ON i.ID = sie.Field_1_15_3_55112_012
+		JOIN SpellItemEnchantment sie ON gp.Enchant_ID = sie.ID
 		WHERE i.ClassID = 3`
 	items, err := LoadRows(dbHelper.db, query, ScanGemTable)
 	if err != nil {

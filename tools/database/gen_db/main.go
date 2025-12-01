@@ -304,15 +304,15 @@ func main() {
 		// 	item.Sources = database.InferFlexibleRaidItemSource(item)
 		// }
 
-		// for _, source := range item.Sources {
-		// 	if crafted := source.GetCrafted(); crafted != nil {
-		// 		craftedSpellIds = append(craftedSpellIds, crafted.SpellId)
-		// 	}
-		// 	// Add Eye Of The Black Prince gem socket to Throne of Thunder weapons.
-		// 	if drop := source.GetDrop(); drop != nil && (item.Type == proto.ItemType_ItemTypeWeapon || item.Type == proto.ItemType_ItemTypeRanged) && (item.WeaponType != proto.WeaponType_WeaponTypeOffHand && item.WeaponType != proto.WeaponType_WeaponTypeShield) && drop.ZoneId == 6622 {
-		// 		item.GemSockets = append(item.GemSockets, proto.GemColor_GemColorPrismatic)
-		// 	}
-		// }
+		for _, source := range item.Sources {
+			if crafted := source.GetCrafted(); crafted != nil {
+				craftedSpellIds = append(craftedSpellIds, crafted.SpellId)
+			}
+			// Add Eye Of The Black Prince gem socket to Throne of Thunder weapons.
+			if drop := source.GetDrop(); drop != nil && (item.Type == proto.ItemType_ItemTypeWeapon || item.Type == proto.ItemType_ItemTypeRanged) && (item.WeaponType != proto.WeaponType_WeaponTypeOffHand && item.WeaponType != proto.WeaponType_WeaponTypeShield) && drop.ZoneId == 6622 {
+				item.GemSockets = append(item.GemSockets, proto.GemColor_GemColorPrismatic)
+			}
+		}
 
 		if item.Phase < 2 {
 			item.Phase = database.InferPhase(item)
@@ -596,11 +596,6 @@ func simmableItemFilter(_ int32, item *proto.UIItem) bool {
 func simmableGemFilter(_ int32, gem *proto.UIGem) bool {
 	if _, ok := database.GemAllowList[gem.Id]; ok {
 		return true
-	}
-
-	// Arbitrary to filter out old gems
-	if gem.Id < 46000 {
-		return false
 	}
 
 	return gem.Quality >= proto.ItemQuality_ItemQualityUncommon
