@@ -321,7 +321,7 @@ export class Player<SpecType extends Spec> {
 		}
 		this.hiddenMCDs = this.specConfig.hiddenMCDs || new Array<number>();
 
-		for (let i = 0; i < ItemSlot.ItemSlotOffHand + 1; ++i) {
+		for (let i = 0; i < ItemSlot.ItemSlotRanged + 1; ++i) {
 			this.itemEPCache[i] = new Map();
 		}
 
@@ -498,7 +498,7 @@ export class Player<SpecType extends Spec> {
 		this.enchantEPCache = new Map();
 		this.randomSuffixEPCache = new Map();
 		this.upgradeEPCache = new Map();
-		for (let i = 0; i < ItemSlot.ItemSlotOffHand + 1; ++i) {
+		for (let i = 0; i < ItemSlot.ItemSlotRanged + 1; ++i) {
 			this.itemEPCache[i] = new Map();
 		}
 	}
@@ -568,6 +568,9 @@ export class Player<SpecType extends Spec> {
 	}
 
 	setCurrentStats(eventID: EventID, newStats: PlayerStats) {
+		newStats.finalStats?.stats.forEach((element, index) => {
+			console.log("Stat %d - %d", index, element)
+		});
 		this.currentStats = newStats;
 		this.currentStatsEmitter.emit(eventID);
 	}
@@ -1282,14 +1285,9 @@ export class Player<SpecType extends Spec> {
 			});
 		} else if (Player.WEAPON_SLOTS.includes(slot)) {
 			itemData = filterItems(itemData, item => {
-				if (item.handType == HandType.HandTypeUnknown && item.rangedWeaponType == RangedWeaponType.RangedWeaponTypeUnknown) {
+				if (!filters.weaponTypes.includes(item.weaponType)) {
 					return false;
 				}
-
-				if (!filters.weaponTypes.includes(item.weaponType) && item.handType > HandType.HandTypeUnknown) {
-					return false;
-				}
-
 				if (!filters.oneHandedWeapons && item.handType != HandType.HandTypeTwoHand) {
 					return false;
 				}
@@ -1297,18 +1295,25 @@ export class Player<SpecType extends Spec> {
 					return false;
 				}
 
-				// Ranged weapons are equiped in MH slot from MoP onwards
-				if (!filters.rangedWeaponTypes.includes(item.rangedWeaponType) && item.rangedWeaponType > RangedWeaponType.RangedWeaponTypeUnknown) {
+				const minSpeed = slot == ItemSlot.ItemSlotMainHand ? filters.minMhWeaponSpeed : filters.minOhWeaponSpeed;
+				const maxSpeed = slot == ItemSlot.ItemSlotMainHand ? filters.maxMhWeaponSpeed : filters.maxOhWeaponSpeed;
+				if (minSpeed > 0 && item.weaponSpeed < minSpeed) {
+					return false;
+				}
+				if (maxSpeed > 0 && item.weaponSpeed > maxSpeed) {
 					return false;
 				}
 
-				let minSpeed = slot == ItemSlot.ItemSlotMainHand ? filters.minMhWeaponSpeed : filters.minOhWeaponSpeed;
-				let maxSpeed = slot == ItemSlot.ItemSlotMainHand ? filters.maxMhWeaponSpeed : filters.maxOhWeaponSpeed;
-				if (item.rangedWeaponType > 0) {
-					minSpeed = filters.minRangedWeaponSpeed;
-					maxSpeed = filters.maxRangedWeaponSpeed;
+				return true;
+			});
+		} else if (slot == ItemSlot.ItemSlotRanged) {
+			itemData = filterItems(itemData, item => {
+				if (!filters.rangedWeaponTypes.includes(item.rangedWeaponType)) {
+					return false;
 				}
 
+				const minSpeed = filters.minRangedWeaponSpeed;
+				const maxSpeed = filters.maxRangedWeaponSpeed;
 				if (minSpeed > 0 && item.weaponSpeed < minSpeed) {
 					return false;
 				}

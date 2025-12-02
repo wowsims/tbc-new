@@ -519,6 +519,20 @@ func (character *Character) HasOH() bool {
 	return character.OffHand().ID != 0
 }
 
+// Returns the ranged weapon if one is equipped, and null otherwise.
+func (character *Character) GetRangedWeapon() *Item {
+	weapon := character.Ranged()
+	if weapon.ID == 0 ||
+		weapon.RangedWeaponType == proto.RangedWeaponType_RangedWeaponTypeIdol ||
+		weapon.RangedWeaponType == proto.RangedWeaponType_RangedWeaponTypeLibram ||
+		weapon.RangedWeaponType == proto.RangedWeaponType_RangedWeaponTypeTotem ||
+		weapon.RangedWeaponType == proto.RangedWeaponType_RangedWeaponTypeSigil {
+		return nil
+	} else {
+		return weapon
+	}
+}
+
 func (character *Character) HasRangedWeapon() bool {
 	return character.Ranged() != nil
 }

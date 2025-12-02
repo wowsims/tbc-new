@@ -45,19 +45,19 @@ func (s *UnitStats) ToProto() *proto.UnitStats {
 	}
 }
 
-// // Infer missing stat weight values for HitRating and CritRating if school-specific components were calculated, then call ToProto(). Kept as a separate method in case we want to use the UnitStats struct for other applications
-// // than just stat weights.
-// func (s *UnitStats) ExportWeights() *proto.UnitStats {
-// 	if s.Stats[stats.HitRating] == 0 {
-// 		s.Stats[stats.HitRating] = s.PseudoStats[proto.PseudoStat_PseudoStatPhysicalHitPercent]/PhysicalHitRatingPerHitPercent + s.PseudoStats[proto.PseudoStat_PseudoStatSpellHitPercent]/SpellHitRatingPerHitPercent
-// 	}
+// Infer missing stat weight values for HitRating and CritRating if school-specific components were calculated, then call ToProto(). Kept as a separate method in case we want to use the UnitStats struct for other applications
+// than just stat weights.
+func (s *UnitStats) ExportWeights() *proto.UnitStats {
+	if s.Stats[stats.AllHitRating] == 0 {
+		s.Stats[stats.AllHitRating] = s.PseudoStats[proto.PseudoStat_PseudoStatMeleeHitPercent]/PhysicalHitRatingPerHitPercent + s.PseudoStats[proto.PseudoStat_PseudoStatSpellHitPercent]/SpellHitRatingPerHitPercent
+	}
 
-// 	if s.Stats[stats.CritRating] == 0 {
-// 		s.Stats[stats.CritRating] = (s.PseudoStats[proto.PseudoStat_PseudoStatPhysicalCritPercent] + s.PseudoStats[proto.PseudoStat_PseudoStatSpellCritPercent]) / CritRatingPerCritPercent
-// 	}
+	if s.Stats[stats.AllCritRating] == 0 {
+		s.Stats[stats.AllCritRating] = (s.PseudoStats[proto.PseudoStat_PseudoStatMeleeCritPercent] + s.PseudoStats[proto.PseudoStat_PseudoStatSpellCritPercent]) / SpellCritRatingPerCritPercent
+	}
 
-// 	return s.ToProto()
-// }
+	return s.ToProto()
+}
 
 type StatWeightValues struct {
 	Weights       UnitStats

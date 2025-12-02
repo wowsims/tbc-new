@@ -346,6 +346,7 @@ export const bulkSlotNamesI18nKeys: Record<BulkSimItemSlot, string> = {
 	[BulkSimItemSlot.ItemSlotTrinket]: 'trinkets',
 	[BulkSimItemSlot.ItemSlotMainHand]: 'main_hand',
 	[BulkSimItemSlot.ItemSlotOffHand]: 'off_hand',
+	[BulkSimItemSlot.ItemSlotRanged]: 'ranged',
 	[BulkSimItemSlot.ItemSlotHandWeapon]: 'weapons',
 };
 

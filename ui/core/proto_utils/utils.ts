@@ -1236,7 +1236,7 @@ const itemTypeToSlotsMap: Partial<Record<ItemType, Array<ItemSlot>>> = {
 	[ItemType.ItemTypeFeet]: [ItemSlot.ItemSlotFeet],
 	[ItemType.ItemTypeFinger]: [ItemSlot.ItemSlotFinger1, ItemSlot.ItemSlotFinger2],
 	[ItemType.ItemTypeTrinket]: [ItemSlot.ItemSlotTrinket1, ItemSlot.ItemSlotTrinket2],
-	[ItemType.ItemTypeRanged]: [ItemSlot.ItemSlotMainHand],
+	[ItemType.ItemTypeRanged]: [ItemSlot.ItemSlotRanged],
 };
 
 export function getEligibleItemSlots(item: Item, isFuryWarrior?: boolean): Array<ItemSlot> {

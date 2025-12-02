@@ -100,6 +100,7 @@
 		"trinkets": "Trinkets",
 		"main_hand": "Main Hand",
 		"off_hand": "Off Hand",
+		"ranged": "Ranged",
 		"weapons": "Weapons"
 	}
 }

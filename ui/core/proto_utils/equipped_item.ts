@@ -28,13 +28,11 @@ export const getWeaponStatsBySlot = (item: Item, slot: ItemSlot, upgradeStep: 0)
 	if (item.weaponSpeed > 0) {
 		const weaponDps = getWeaponDPS(item, upgradeStep);
 		if (slot === ItemSlot.ItemSlotMainHand) {
-			if (item.rangedWeaponType > RangedWeaponType.RangedWeaponTypeUnknown) {
-				itemStats = itemStats.withPseudoStat(PseudoStat.PseudoStatRangedDps, weaponDps);
-			} else {
-				itemStats = itemStats.withPseudoStat(PseudoStat.PseudoStatMainHandDps, weaponDps);
-			}
+			itemStats = itemStats.withPseudoStat(PseudoStat.PseudoStatMainHandDps, weaponDps);
 		} else if (slot === ItemSlot.ItemSlotOffHand) {
 			itemStats = itemStats.withPseudoStat(PseudoStat.PseudoStatOffHandDps, weaponDps);
+		} else if (slot === ItemSlot.ItemSlotRanged) {
+			itemStats = itemStats.withPseudoStat(PseudoStat.PseudoStatRangedDps, weaponDps);
 		}
 	}
 	return itemStats;
@@ -263,7 +261,9 @@ export class EquippedItem {
 
 	withDynamicStats() {
 		const item = this.item;
+		console.log("ASDF")
 		const scalingOptions = item.scalingOptions[0];
+
 		item.stats = new Stats().asProtoArray().map((_, index) => scalingOptions.stats[index] || 0);
 		item.weaponDamageMin = scalingOptions.weaponDamageMin;
 		item.weaponDamageMax = scalingOptions.weaponDamageMax;

@@ -60,6 +60,20 @@ func getWeaponMaxRange(item *Item) float64 {
 	return 40
 }
 
+func getWeaponMinRange(item *Item) float64 {
+	// TBC ANNI: Deadzone will disable MH swings right now
+	// switch item.RangedWeaponType {
+	// case proto.RangedWeaponType_RangedWeaponTypeThrown:
+	// case proto.RangedWeaponType_RangedWeaponTypeUnknown:
+	// case proto.RangedWeaponType_RangedWeaponTypeWand:
+	// 	return 0.
+	// default:
+	// 	return 5
+	// }
+
+	return 0
+}
+
 func newWeaponFromItem(item *Item, critMultiplier float64, bonusDps float64) Weapon {
 	normalizedWeaponSpeed := 2.4
 	if item.WeaponType == proto.WeaponType_WeaponTypeDagger {
@@ -77,7 +91,7 @@ func newWeaponFromItem(item *Item, critMultiplier float64, bonusDps float64) Wea
 		NormalizedSwingSpeed: normalizedWeaponSpeed,
 		CritMultiplier:       critMultiplier,
 		AttackPowerPerDPS:    DefaultAttackPowerPerDPS,
-		MinRange:             0, // no more deadzone in MoP
+		MinRange:             getWeaponMinRange(item),
 		MaxRange:             getWeaponMaxRange(item),
 	}
 }
