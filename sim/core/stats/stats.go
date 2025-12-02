@@ -22,6 +22,7 @@ const (
 	Agility
 	Stamina
 	Intellect
+	Rage
 	SpellPower
 	HealingPower
 	SpellDamage
@@ -63,7 +64,6 @@ const (
 	FrostResistance
 	NatureResistance
 	ShadowResistance
-	Rage
 	// end of Stat enum in proto/common.proto
 
 	// The remaining stats below are stored as PseudoStats rather than as

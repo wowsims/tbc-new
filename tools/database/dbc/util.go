@@ -136,10 +136,18 @@ func processEnchantmentEffects(
 					outStats[proto.Stat_StatRangedAttackPower] = float64(effectPoints[i])
 				}
 				// If it's All Hit then boost both
-				if stat == proto.Stat_StatAllHitRating {
-					outStats[proto.Stat_StatMeleeHitRating] = float64(effectPoints[i])
-					outStats[proto.Stat_StatSpellHitRating] = float64(effectPoints[i])
-				}
+				// if stat == proto.Stat_StatAllHitRating {
+				// 	outStats[proto.Stat_StatMeleeHitRating] = float64(effectPoints[i])
+				// 	outStats[proto.Stat_StatSpellHitRating] = float64(effectPoints[i])
+				// }
+				// if stat == proto.Stat_StatAllCritRating {
+				// 	outStats[proto.Stat_StatMeleeCritRating] = float64(effectPoints[i])
+				// 	outStats[proto.Stat_StatSpellCritRating] = float64(effectPoints[i])
+				// }
+				// if stat == proto.Stat_StatAllHasteRating {
+				// 	outStats[proto.Stat_StatMeleeHasteRating] = float64(effectPoints[i])
+				// 	outStats[proto.Stat_StatSpellHasteRating] = float64(effectPoints[i])
+				// }
 			}
 		case ITEM_ENCHANTMENT_EQUIP_SPELL: //Buff
 			spellEffects := dbcInstance.SpellEffects[effectArgs[i]]

@@ -173,6 +173,8 @@ enum Stat {
 	StatAgility = 1;
 	StatStamina = 2;
 	StatIntellect = 3;
+	// Unsure if this will be used but including just in case
+	StatRage = 4;
 
 	// Spell Power and Spell Power derivatives
 	StatSpellPower = 5;
@@ -230,9 +232,6 @@ enum Stat {
 	StatFrostResistance = 43;
 	StatNatureResistance = 44;
 	StatShadowResistance = 45;
-
-	// Unsure if this will be used but including just in case
-	StatRage = 46;
 
 	// DO NOT add new stats here without discussing it first; new stats come
 	// with a performance penalty.
