@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"slices"
+	"strconv"
 
 	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
@@ -129,10 +130,16 @@ func processEnchantmentEffects(
 				outStats[stat] = float64(spellEffectPoints[i] + 1)
 			} else {
 				outStats[stat] = float64(effectPoints[i])
-			}
-			// If the bonus stat is attack power, copy it to ranged attack power
-			if addRanged && stat == proto.Stat_StatAttackPower {
-				outStats[proto.Stat_StatRangedAttackPower] = float64(effectPoints[i])
+
+				// If the bonus stat is attack power, copy it to ranged attack power
+				if addRanged && stat == proto.Stat_StatAttackPower {
+					outStats[proto.Stat_StatRangedAttackPower] = float64(effectPoints[i])
+				}
+				// If it's All Hit then boost both
+				if stat == proto.Stat_StatAllHitRating {
+					outStats[proto.Stat_StatMeleeHitRating] = float64(effectPoints[i])
+					outStats[proto.Stat_StatSpellHitRating] = float64(effectPoints[i])
+				}
 			}
 		case ITEM_ENCHANTMENT_EQUIP_SPELL: //Buff
 			spellEffects := dbcInstance.SpellEffects[effectArgs[i]]
@@ -151,7 +158,7 @@ func processEnchantmentEffects(
 				if spellEffect.EffectType == E_APPLY_AURA && spellEffect.EffectAura == A_MOD_STAT {
 					outStats[spellEffect.EffectMiscValues[0]] += float64(spellEffect.EffectBasePoints + 1)
 				} else {
-					stat := ConvertEffectAuraToStatIndex(int(spellEffect.EffectAura))
+					stat := ConvertEffectAuraToStatIndex(int(spellEffect.EffectAura), spellEffect.EffectMiscValues[0])
 					if stat >= 0 {
 						outStats[stat] += float64(spellEffect.EffectBasePoints + 1)
 					}
@@ -165,7 +172,7 @@ func processEnchantmentEffects(
 	}
 }
 
-func ConvertEffectAuraToStatIndex(effectAura int) proto.Stat {
+func ConvertEffectAuraToStatIndex(effectAura int, effectMisc int) proto.Stat {
 	switch effectAura {
 	case 99: // MOD_ATTACK_POWER
 		return proto.Stat_StatAttackPower
@@ -177,7 +184,56 @@ func ConvertEffectAuraToStatIndex(effectAura int) proto.Stat {
 		return proto.Stat_StatHealingPower
 	case 34: // MOD_INCREASE_HEALTH
 		return proto.Stat_StatHealth
+	case 123: // MOD_TARGET_RESISTANCE
+		return ConvertTargetResistanceFlagToPenetrationStat(effectMisc)
+	case 189: // MOD_RATING (Stat Ratings but as Auras; includes mostly Vanilla items, but also some socket bonuses and random one-offs)
+		return ConvertModRatingFlagToRatingStat(effectMisc)
 	default:
 		return -1
+	}
+}
+
+func ConvertTargetResistanceFlagToPenetrationStat(flag int) proto.Stat {
+	switch flag {
+	case 1:
+		return proto.Stat_StatArmorPenetration
+	default:
+		return proto.Stat_StatSpellPenetration
+	}
+}
+
+func ConvertModRatingFlagToRatingStat(flag int) proto.Stat {
+	switch flag {
+	case 2:
+		return proto.Stat_StatDefenseRating
+	case 4:
+		return proto.Stat_StatDodgeRating
+	case 8:
+		return proto.Stat_StatParryRating
+	case 16:
+		return proto.Stat_StatBlockRating
+	case 64:
+		// The forbidden "Only Ranged Hit". There's a single instance of this (Enchant 2523, SpellID 22780).
+		return proto.Stat_StatRage
+	case 96:
+		return proto.Stat_StatAllHitRating
+	case 128:
+		return proto.Stat_StatSpellHitRating
+	case 512:
+		// The forbidden "Only Ranged Crit". Only two of these exist, and they're not valid sim items.
+		return proto.Stat_StatRage
+	case 768:
+		return proto.Stat_StatMeleeCritRating
+	case 1024:
+		return proto.Stat_StatSpellCritRating
+	case 131072:
+		return proto.Stat_StatMeleeHasteRating
+	case 393216:
+		return proto.Stat_StatMeleeHasteRating
+	case 49152:
+		return proto.Stat_StatResilience
+	default:
+		println("UNHANDLED RATING FLAG: " + strconv.Itoa(flag))
+		return proto.Stat_StatRage
 	}
 }

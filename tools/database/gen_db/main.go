@@ -245,10 +245,7 @@ func main() {
 	database.GenerateMissingEffectsFile()
 	database.GenerateItemEffectRandomPropPoints(instance, db)
 
-	for _, key := range slices.SortedFunc(maps.Keys(db.Enchants), func(l int32, r int32) int {
-		return int(l) - int(r)
-	}) {
-		enchant := db.Enchants[key]
+	for _, enchant := range db.Enchants {
 		if enchant.ItemId != 0 {
 			db.AddItemIcon(enchant.ItemId, enchant.Icon, enchant.Name)
 		}
@@ -352,6 +349,25 @@ func processItems(instance *dbc.DBC,
 		parsed := item.ToUIItem()
 		if parsed.Icon == "" {
 			parsed.Icon = strings.ToLower(database.GetIconName(iconsMap, item.FDID))
+		}
+
+		// If an item has any "All" ratings, add it to Melee and Spell
+		if len(parsed.ScalingOptions[0].Stats) > 0 {
+			value := parsed.ScalingOptions[0].Stats[int32(proto.Stat_StatAllHitRating)]
+			if value > 0 {
+				parsed.ScalingOptions[0].Stats[int32(proto.Stat_StatMeleeHitRating)] = value
+				parsed.ScalingOptions[0].Stats[int32(proto.Stat_StatSpellHitRating)] = value
+			}
+			value = parsed.ScalingOptions[0].Stats[int32(proto.Stat_StatAllCritRating)]
+			if value > 0 {
+				parsed.ScalingOptions[0].Stats[int32(proto.Stat_StatMeleeCritRating)] = value
+				parsed.ScalingOptions[0].Stats[int32(proto.Stat_StatSpellCritRating)] = value
+			}
+			value = parsed.ScalingOptions[0].Stats[int32(proto.Stat_StatAllHasteRating)]
+			if value > 0 {
+				parsed.ScalingOptions[0].Stats[int32(proto.Stat_StatMeleeHasteRating)] = value
+				parsed.ScalingOptions[0].Stats[int32(proto.Stat_StatSpellHasteRating)] = value
+			}
 		}
 
 		drops := dropSources[int(item.Id)]
@@ -503,23 +519,15 @@ func ApplyGlobalFilters(db *database.WowDatabase) {
 		return icon.Name != "" && icon.Icon != "" && icon.Id != 0
 	})
 
-	db.Enchants = core.FilterMap(db.Enchants, func(_ int32, enchant *proto.UIEnchant) bool {
-		if _, ok := database.EnchantDenyListSpells[enchant.SpellId]; ok {
-			return false
-		}
-		if _, ok := database.EnchantDenyListItems[enchant.ItemId]; ok {
-			return false
-		}
+	db.Enchants = core.FilterMap(db.Enchants, func(_ database.EnchantDBKey, enchant *proto.UIEnchant) bool {
 		for _, pattern := range database.DenyListNameRegexes {
 			if pattern.MatchString(enchant.Name) {
 				return false
 			}
 		}
-
-		if _, ok := database.EnchantDenyList[enchant.EffectId]; ok {
+		if strings.Contains(enchant.Name, "Template") {
 			return false
 		}
-
 		return !strings.HasPrefix(enchant.Name, "QA") && !strings.HasPrefix(enchant.Name, "Test") && !strings.HasPrefix(enchant.Name, "TEST")
 	})
 

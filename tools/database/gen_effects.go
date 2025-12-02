@@ -137,7 +137,7 @@ func GenerateEnchantEffects(instance *dbc.DBC, db *WowDatabase) {
 
 	for _, enchant := range instance.Enchants {
 		parsed := enchant.ToProto()
-		if _, ok := db.Enchants[parsed.EffectId]; !ok {
+		if _, ok := db.Enchants[EnchantToDBKey(parsed)]; !ok {
 			continue
 		}
 
@@ -164,7 +164,7 @@ func GenerateItemEffects(instance *dbc.DBC, db *WowDatabase, itemSources map[int
 		for _, itemEffect := range dbc.GetAllStaticItemEffects(parsed) {
 			spellEffects := instance.SpellEffects[itemEffect.SpellID]
 			for _, spellEffect := range spellEffects {
-				stat := dbc.ConvertEffectAuraToStatIndex(int(spellEffect.EffectAura))
+				stat := dbc.ConvertEffectAuraToStatIndex(int(spellEffect.EffectAura), spellEffect.EffectMiscValues[0])
 				if stat >= 0 {
 					// These are always off by 1...?
 					parsed.ScalingOptions[0].Stats[int32(stat)] += float64(spellEffect.EffectBasePoints + 1)

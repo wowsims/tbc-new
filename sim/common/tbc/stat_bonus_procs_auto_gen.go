@@ -13,20 +13,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Increases healing done by up to 43 and damage done by up to 14 for all magical spells and effects.
-	// shared.NewProcStatBonusEffect(shared.ProcStatBonusEffect{
-	//	Name:               "Eye of Gruul",
-	//	ItemID:             28823,
-	//	Callback:           core.CallbackOnHealDealt,
-	//	ProcMask:           core.ProcMaskSpellHealing,
-	//	Outcome:            core.OutcomeLanded,
-	//	RequireDamageDealt: false
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Increases your pet's resistances by 129 and increases your spell damage by up to 47.
 	// shared.NewProcStatBonusEffect(shared.ProcStatBonusEffect{
 	//	Name:               "Void Star Talisman",
@@ -43,26 +29,6 @@ func RegisterAllProcs() {
 		ItemID:             30447,
 		Callback:           core.CallbackOnSpellHitDealt | core.CallbackOnHealDealt,
 		ProcMask:           core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial | core.ProcMaskRangedSpecial | core.ProcMaskSpellDamage | core.ProcMaskSpellHealing | core.ProcMaskMeleeProc | core.ProcMaskRangedProc | core.ProcMaskSpellDamageProc,
-		Outcome:            core.OutcomeLanded,
-		RequireDamageDealt: false,
-	})
-
-	// Your special attacks have a chance to give you 1001 armor penetration for 15s.
-	shared.NewProcStatBonusEffect(shared.ProcStatBonusEffect{
-		Name:               "Warp-Spring Coil",
-		ItemID:             30450,
-		Callback:           core.CallbackOnSpellHitDealt,
-		ProcMask:           core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial | core.ProcMaskMeleeProc,
-		Outcome:            core.OutcomeLanded,
-		RequireDamageDealt: true,
-	})
-
-	// Your Nature spells have a chance to restore 334 mana.
-	shared.NewProcStatBonusEffect(shared.ProcStatBonusEffect{
-		Name:               "Fathom-Brooch of the Tidewalker",
-		ItemID:             30663,
-		Callback:           core.CallbackOnSpellHitDealt,
-		ProcMask:           core.ProcMaskSpellDamage,
 		Outcome:            core.OutcomeLanded,
 		RequireDamageDealt: false,
 	})

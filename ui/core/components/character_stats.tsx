@@ -95,6 +95,9 @@ export class CharacterStats extends Component {
 					UnitStat.fromPseudoStat(PseudoStat.PseudoStatMeleeCritPercent),
 					UnitStat.fromPseudoStat(PseudoStat.PseudoStatRangedHitPercent),
 					UnitStat.fromPseudoStat(PseudoStat.PseudoStatRangedCritPercent),
+					UnitStat.fromStat(Stat.StatExpertiseRating),
+					UnitStat.fromStat(Stat.StatArmorPenetration),
+
 				],
 			],
 			[

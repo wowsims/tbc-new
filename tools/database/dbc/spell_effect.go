@@ -245,13 +245,13 @@ func (effect *SpellEffect) ParseStatEffect(scalesWithIlvl bool, ilvl int) *stats
 			effectStats[proto.Stat_StatRangedAttackPower] = effect.CalcCoefficientStatValue(ilvl)
 			break
 		}
-		effectStats[proto.Stat_StatRangedAttackPower] = float64(effect.EffectBasePoints)
+		effectStats[proto.Stat_StatRangedAttackPower] = float64(effect.EffectBasePoints + 1)
 	case effect.EffectAura == A_MOD_ATTACK_POWER:
 		if effect.Coefficient != 0 && scalesWithIlvl {
 			effectStats[proto.Stat_StatAttackPower] = effect.CalcCoefficientStatValue(ilvl)
 			break
 		}
-		effectStats[proto.Stat_StatAttackPower] = float64(effect.EffectBasePoints)
+		effectStats[proto.Stat_StatAttackPower] = float64(effect.EffectBasePoints + 1)
 	case effect.EffectMiscValues[0] == -1 && effect.EffectAura == A_MOD_STAT && effect.EffectType == E_APPLY_AURA:
 		// -1 represents ALL STATS if present in MiscValue 0
 		for _, s := range []proto.Stat{
@@ -262,7 +262,7 @@ func (effect *SpellEffect) ParseStatEffect(scalesWithIlvl bool, ilvl int) *stats
 				effectStats[s] = effect.CalcCoefficientStatValue(core.TernaryInt(scalesWithIlvl, ilvl, 0))
 				continue
 			}
-			effectStats[s] = float64(effect.EffectBasePoints)
+			effectStats[s] = float64(effect.EffectBasePoints + 1)
 		}
 	case effect.EffectAura == A_MOD_STAT && effect.EffectType == E_APPLY_AURA:
 		if effect.Coefficient != 0 && effect.ScalingType != 0 {
@@ -271,14 +271,21 @@ func (effect *SpellEffect) ParseStatEffect(scalesWithIlvl bool, ilvl int) *stats
 		}
 
 		// if Coefficient is not set, we fall back to EffectBasePoints
-		effectStats[stat] = float64(effect.EffectBasePoints)
+		effectStats[stat] = float64(effect.EffectBasePoints + 1)
 	case effect.EffectAura == A_MOD_DAMAGE_DONE && effect.EffectType == E_APPLY_AURA:
 		if effect.Coefficient != 0 && effect.ScalingType != 0 {
-			effectStats[proto.Stat_StatSpellPower] = effect.CalcCoefficientStatValue(core.TernaryInt(scalesWithIlvl, ilvl, 0))
+			effectStats[proto.Stat_StatSpellDamage] = effect.CalcCoefficientStatValue(core.TernaryInt(scalesWithIlvl, ilvl, 0))
 			break
 		}
 		// Apply spell power, A_MOD_HEALING_DONE is also a possibility for healing power
-		effectStats[proto.Stat_StatSpellPower] = float64(effect.EffectBasePoints)
+		effectStats[proto.Stat_StatSpellDamage] = float64(effect.EffectBasePoints + 1)
+	case effect.EffectAura == A_MOD_HEALING_DONE && effect.EffectType == E_APPLY_AURA:
+		if effect.Coefficient != 0 && effect.ScalingType != 0 {
+			effectStats[proto.Stat_StatHealingPower] = effect.CalcCoefficientStatValue(core.TernaryInt(scalesWithIlvl, ilvl, 0))
+			break
+		}
+		// Apply spell power, A_MOD_HEALING_DONE is also a possibility for healing power
+		effectStats[proto.Stat_StatHealingPower] = float64(effect.EffectBasePoints + 1)
 	case effect.EffectAura == A_MOD_RESISTANCE:
 		school := SpellSchool(effect.EffectMiscValues[0])
 		for schoolType, stat := range SpellSchoolToStat {
@@ -287,7 +294,7 @@ func (effect *SpellEffect) ParseStatEffect(scalesWithIlvl bool, ilvl int) *stats
 					effectStats[stat] = effect.CalcCoefficientStatValue(ilvl)
 					break
 				}
-				effectStats[stat] += float64(effect.EffectBasePoints)
+				effectStats[stat] += float64(effect.EffectBasePoints + 1)
 			}
 		}
 
@@ -298,13 +305,13 @@ func (effect *SpellEffect) ParseStatEffect(scalesWithIlvl bool, ilvl int) *stats
 					effectStats[statMod] = effect.CalcCoefficientStatValue(ilvl)
 					break
 				}
-				effectStats[statMod] = float64(effect.EffectBasePoints)
+				effectStats[statMod] = float64(effect.EffectBasePoints + 1)
 			}
 		}
 	case effect.EffectAura == A_MOD_INCREASE_ENERGY:
-		effectStats[proto.Stat_StatMana] = float64(effect.EffectBasePoints)
+		effectStats[proto.Stat_StatMana] = float64(effect.EffectBasePoints + 1)
 	case effect.EffectAura == A_MOD_INCREASE_HEALTH_2:
-		effectStats[proto.Stat_StatHealth] = float64(effect.EffectBasePoints)
+		effectStats[proto.Stat_StatHealth] = float64(effect.EffectBasePoints + 1)
 	case effect.EffectAura == A_PERIODIC_TRIGGER_SPELL && effect.EffectAuraPeriod == 10000:
 		for _, sub := range dbcInstance.SpellEffects[effect.EffectTriggerSpell] {
 			effectStats.AddInplace(sub.ParseStatEffect(false, 0))

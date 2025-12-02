@@ -16,11 +16,17 @@ export const MISSING_ITEM_EFFECTS = [
     19287, // Darkmoon Card: Heroism
     19288, // Darkmoon Card: Blue Dragon
     19289, // Darkmoon Card: Maelstrom
+    19336, // Arcane Infused Gem
     19874, // Halberd of Smiting
+    19948, // Zandalarian Hero Badge
     19968, // Fiery Retributer
     21128, // Staff of the Qiraji Prophets
     21190, // Wrath of Cenarius
+    21625, // Scarab Brooch
+    21670, // Badge of the Swarmguard
+    21685, // Petrified Scarab
     21780, // Blood Crown
+    21789, // Figurine - Dark Iron Scorpid
     22194, // Black Grasp of the Destroyer
     22198, // Jagged Obsidian Shield
     22321, // Heart of Wyrmthalak
@@ -33,6 +39,7 @@ export const MISSING_ITEM_EFFECTS = [
     26055, // Oculus of the Hidden Eye
     27416, // Fetish of the Fallen
     27484, // Libram of Avengement
+    27529, // Figurine of the Colossus
     27683, // Quagmirran's Eye
     27896, // Alembic of Infernal Power
     27920, // Mark of Conquest
@@ -50,7 +57,9 @@ export const MISSING_ITEM_EFFECTS = [
     28418, // Shiffar's Nexus-Horn
     28578, // Masquerade Gown
     28579, // Romulo's Poison Vial
+    28590, // Ribbon of Sacrifice
     28602, // Robe of the Elder Scribes
+    28727, // Pendant of the Violet Eye
     28785, // The Lightning Capacitor
     28789, // Eye of Magtheridon
     28823, // Eye of Gruul
@@ -63,10 +72,12 @@ export const MISSING_ITEM_EFFECTS = [
     29309, // Band of the Eternal Restorer
     30317, // Cosmic Infuser
     30449, // Void Star Talisman
+    30450, // Warp-Spring Coil
     30619, // Fel Reaver's Piston
     30621, // Prism of Inner Calm
     30626, // Sextant of Unstable Currents
     30627, // Tsunami Talisman
+    30663, // Fathom-Brooch of the Tidewalker
     30664, // Living Root of the Wildheart
     31323, // Don Santos' Famous Hunting Rifle
     31328, // Leggings of Beast Mastery
@@ -94,6 +105,7 @@ export const MISSING_ITEM_EFFECTS = [
     33843, // Vengeful Gladiator's Totem of the Third Wind
     34427, // Blackened Naaru Sliver
     34470, // Timbal's Focusing Crystal
+    34471, // Vial of the Sunwell
     34472, // Shard of Contempt
     34473, // Commendation of Kael'thas
     35040, // Brutal Gladiator's Libram of Justice
