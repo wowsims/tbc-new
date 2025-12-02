@@ -33,6 +33,16 @@ func RegisterAllProcs() {
 		RequireDamageDealt: false,
 	})
 
+	// Your special attacks have a chance to give you 1001 armor penetration for 15s.
+	shared.NewProcStatBonusEffect(shared.ProcStatBonusEffect{
+		Name:               "Warp-Spring Coil",
+		ItemID:             30450,
+		Callback:           core.CallbackOnSpellHitDealt,
+		ProcMask:           core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial | core.ProcMaskMeleeProc,
+		Outcome:            core.OutcomeLanded,
+		RequireDamageDealt: true,
+	})
+
 	// Your Mortal Strike, Bloodthirst, and Shield Slam attacks have a 25% chance to heal you for 329 and grant
 	// 54 Strength for 12s.
 	shared.NewProcStatBonusEffect(shared.ProcStatBonusEffect{

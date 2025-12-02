@@ -18,6 +18,10 @@ func RegisterAllOnUseCds() {
 	shared.NewSimpleStatActive(27891) // Adamantine Figurine
 	shared.NewSimpleStatActive(33830) // Ancient Aqir Artifact
 
+	// ArmorPenetration
+	shared.NewSimpleStatActive(21670) // Badge of the Swarmguard
+	shared.NewSimpleStatActive(28121) // Icon of Unyielding Courage
+
 	// AttackPower
 	shared.NewSimpleStatActive(14554) // Cloudkeeper Legplates
 	shared.NewSimpleStatActive(21180) // Earthstrike

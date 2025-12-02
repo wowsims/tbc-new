@@ -23,7 +23,6 @@ export const MISSING_ITEM_EFFECTS = [
     21128, // Staff of the Qiraji Prophets
     21190, // Wrath of Cenarius
     21625, // Scarab Brooch
-    21670, // Badge of the Swarmguard
     21685, // Petrified Scarab
     21780, // Blood Crown
     21789, // Figurine - Dark Iron Scorpid
@@ -72,7 +71,6 @@ export const MISSING_ITEM_EFFECTS = [
     29309, // Band of the Eternal Restorer
     30317, // Cosmic Infuser
     30449, // Void Star Talisman
-    30450, // Warp-Spring Coil
     30619, // Fel Reaver's Piston
     30621, // Prism of Inner Calm
     30626, // Sextant of Unstable Currents
