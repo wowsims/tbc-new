@@ -4,16 +4,9 @@ import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
-	"github.com/wowsims/tbc/sim/warlock"
 )
 
 const immolateCoeff = 0.13
-
-// Damage Done By Caster setup
-const (
-	DDBC_Immolate int = iota
-	DDBC_Total
-)
 
 func (warlock *Warlock) registerImmolate() {
 	actionID := core.ActionID{SpellID: 27215}
@@ -60,12 +53,12 @@ func (warlock *Warlock) registerImmolate() {
 		Dot: core.DotConfig{
 			Aura: core.Aura{
 				Label: "Immolate (DoT)",
-				OnGain: func(aura *core.Aura, sim *core.Simulation) {
-					core.EnableDamageDoneByCaster(DDBC_Immolate, DDBC_Total, warlock.AttackTables[aura.Unit.UnitIndex], immolateDamageDoneByCasterHandler)
-				},
-				OnExpire: func(aura *core.Aura, sim *core.Simulation) {
-					core.DisableDamageDoneByCaster(DDBC_Immolate, warlock.AttackTables[aura.Unit.UnitIndex])
-				},
+				// OnGain: func(aura *core.Aura, sim *core.Simulation) {
+				// 	core.EnableDamageDoneByCaster(DDBC_Immolate, DDBC_Total, warlock.AttackTables[aura.Unit.UnitIndex], immolateDamageDoneByCasterHandler)
+				// },
+				// OnExpire: func(aura *core.Aura, sim *core.Simulation) {
+				// 	core.DisableDamageDoneByCaster(DDBC_Immolate, warlock.AttackTables[aura.Unit.UnitIndex])
+				// },
 			},
 			NumberOfTicks:    5,
 			TickLength:       3 * time.Second,
@@ -88,12 +81,4 @@ func (warlock *Warlock) registerImmolate() {
 			}
 		},
 	})
-}
-
-func immolateDamageDoneByCasterHandler(sim *core.Simulation, spell *core.Spell, attackTable *core.AttackTable) float64 {
-	if spell.Matches(warlock.WarlockSpellRainOfFire) {
-		return 1.5
-	}
-
-	return 1
 }

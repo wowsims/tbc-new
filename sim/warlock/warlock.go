@@ -200,6 +200,8 @@ const (
 
 	WarlockAllSummons = WarlockSummonSpells | WarlockSpellSummonInfernal | WarlockSpellSummonDoomguard
 
+	WarlockContagionSpells = WarlockSpellCurseOfAgony | WarlockSpellCorruption | WarlockSpellSeedOfCorruption
+
 	WarlockCurses = WarlockSpellCurseOfAgony | WarlockSpellCurseOfDoom | WarlockSpellCurseOfElements |
 		WarlockSpellCurseOfRecklessness | WarlockSpellCurseOfTongues | WarlockSpellCurseOfWeakness
 

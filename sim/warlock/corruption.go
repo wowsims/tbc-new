@@ -23,7 +23,7 @@ func (warlock *Warlock) RegisterCorruption(onApplyCallback WarlockSpellCastedCal
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD:      core.GCDDefault,
-				CastTime: time.Millisecond*2000 - (time.Millisecond * 400 * time.Duration(warlock.Talents.ImprovedCorruption)),
+				CastTime: time.Millisecond * 2000,
 			},
 		},
 
@@ -36,7 +36,6 @@ func (warlock *Warlock) RegisterCorruption(onApplyCallback WarlockSpellCastedCal
 			NumberOfTicks:       6,
 			TickLength:          3 * time.Second,
 			AffectedByCastSpeed: false,
-			BonusCoefficient:    corruptionCoeff + ((0.12 * float64(warlock.Talents.EmpoweredCorruption)) / 6),
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, isRollover bool) {
 				dot.Snapshot(target, warlock.CalcScalingSpellDmg(corruptionScale))
