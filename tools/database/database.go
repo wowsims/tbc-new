@@ -14,16 +14,18 @@ import (
 )
 
 type EnchantDBKey struct {
-	EffectID int32
-	ItemID   int32
-	SpellID  int32
+	EffectID   int32
+	ItemID     int32
+	SpellID    int32
+	EffectName string
 }
 
 func EnchantToDBKey(enchant *proto.UIEnchant) EnchantDBKey {
 	return EnchantDBKey{
-		EffectID: enchant.EffectId,
-		ItemID:   enchant.ItemId,
-		SpellID:  enchant.SpellId,
+		EffectID:   enchant.EffectId,
+		ItemID:     enchant.ItemId,
+		SpellID:    enchant.SpellId,
+		EffectName: enchant.Name,
 	}
 }
 
