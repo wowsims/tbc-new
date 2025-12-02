@@ -7,7 +7,7 @@ import (
 )
 
 const CharacterLevel = 90
-const MinIlvl = 100
+const MinIlvl = 60
 const MaxIlvl = 600
 const MinUpgradeIlvl = 458
 const MaxChallengeModeIlvl = 463

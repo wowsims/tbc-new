@@ -13,20 +13,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Increases healing done by up to 43 and damage done by up to 14 for all magical spells and effects.
-	// shared.NewProcStatBonusEffect(shared.ProcStatBonusEffect{
-	//	Name:               "Eye of Gruul",
-	//	ItemID:             28823,
-	//	Callback:           core.CallbackOnHealDealt,
-	//	ProcMask:           core.ProcMaskSpellHealing,
-	//	Outcome:            core.OutcomeLanded,
-	//	RequireDamageDealt: false
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Increases your pet's resistances by 129 and increases your spell damage by up to 47.
 	// shared.NewProcStatBonusEffect(shared.ProcStatBonusEffect{
 	//	Name:               "Void Star Talisman",
@@ -55,16 +41,6 @@ func RegisterAllProcs() {
 		ProcMask:           core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial | core.ProcMaskMeleeProc,
 		Outcome:            core.OutcomeLanded,
 		RequireDamageDealt: true,
-	})
-
-	// Your Nature spells have a chance to restore 334 mana.
-	shared.NewProcStatBonusEffect(shared.ProcStatBonusEffect{
-		Name:               "Fathom-Brooch of the Tidewalker",
-		ItemID:             30663,
-		Callback:           core.CallbackOnSpellHitDealt,
-		ProcMask:           core.ProcMaskSpellDamage,
-		Outcome:            core.OutcomeLanded,
-		RequireDamageDealt: false,
 	})
 
 	// Your Mortal Strike, Bloodthirst, and Shield Slam attacks have a 25% chance to heal you for 329 and grant

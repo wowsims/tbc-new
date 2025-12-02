@@ -36,71 +36,73 @@ func MapMainStatToStat(index int) (proto.Stat, bool) {
 }
 func MapBonusStatIndexToStat(index int) (proto.Stat, bool) {
 	switch index {
-	case 0: // Mana
+	case ITEM_MOD_MANA: // Mana
 		return proto.Stat_StatMana, true
-	case 1: // Health
+	case ITEM_MOD_HEALTH: // Health
 		return proto.Stat_StatHealth, true
-	case 7: // Stamina
+	case ITEM_MOD_STAMINA: // Stamina
 		return proto.Stat_StatStamina, true
-	case 3: // Agility
+	case ITEM_MOD_AGILITY: // Agility
 		return proto.Stat_StatAgility, true
-	case 4: // Strength
+	case ITEM_MOD_STRENGTH: // Strength
 		return proto.Stat_StatStrength, true
-	case 5: // Intellect
+	case ITEM_MOD_INTELLECT: // Intellect
 		return proto.Stat_StatIntellect, true
-	case 6: // Spirit
+	case ITEM_MOD_SPIRIT: // Spirit
 		return proto.Stat_StatSpirit, true
 
-	case 12:
+	case ITEM_MOD_DEFENSE_SKILL_RATING:
 		return proto.Stat_StatDefenseRating, true
-	case 13:
+	case ITEM_MOD_DODGE_RATING:
 		return proto.Stat_StatDodgeRating, true
-	case 14:
+	case ITEM_MOD_PARRY_RATING:
 		return proto.Stat_StatParryRating, true
-	case 15:
+	case ITEM_MOD_BLOCK_RATING:
 		return proto.Stat_StatBlockRating, true
 
 	// Secondary ratings
-	case 16, 17:
+	case ITEM_MOD_HIT_MELEE_RATING, ITEM_MOD_HIT_RANGED_RATING:
 		return proto.Stat_StatMeleeHitRating, true
-	case 18:
+	case ITEM_MOD_HIT_SPELL_RATING:
 		return proto.Stat_StatSpellHitRating, true
-	case 31:
+	case ITEM_MOD_HIT_RATING:
 		return proto.Stat_StatAllHitRating, true
-	case 19, 20:
+	case ITEM_MOD_CRIT_MELEE_RATING, ITEM_MOD_CRIT_RANGED_RATING:
 		return proto.Stat_StatMeleeCritRating, true
-	case 21:
+	case ITEM_MOD_CRIT_SPELL_RATING:
 		return proto.Stat_StatSpellCritRating, true
-	case 32:
+	case ITEM_MOD_CRIT_RATING:
 		return proto.Stat_StatAllCritRating, true
-	case 28, 29:
+	case ITEM_MOD_HASTE_MELEE_RATING, ITEM_MOD_HASTE_RANGED_RATING:
 		return proto.Stat_StatMeleeHasteRating, true
-	case 30:
+	case ITEM_MOD_HASTE_SPELL_RATING:
 		return proto.Stat_StatSpellHasteRating, true
-	case 36:
+	case ITEM_MOD_HASTE_RATING:
 		return proto.Stat_StatAllHasteRating, true
-	case 37:
+	case ITEM_MOD_EXPERTISE_RATING:
 		return proto.Stat_StatExpertiseRating, true
+	case ITEM_MOD_ARMOR_PENETRATION_RATING:
+		return proto.Stat_StatArmorPenetration, true
 
-	case 38: // AttackPower
+	case ITEM_MOD_ATTACK_POWER: // AttackPower
 		return proto.Stat_StatAttackPower, true
-	case 39: // RangedAttackPower
+	case ITEM_MOD_RANGED_ATTACK_POWER: // RangedAttackPower
 		return proto.Stat_StatRangedAttackPower, true
-	case 40:
+	case ITEM_MOD_FERAL_ATTACK_POWER:
 		return proto.Stat_StatFeralAttackPower, true
-	case 41:
+	case ITEM_MOD_SPELL_HEALING_DONE:
 		return proto.Stat_StatHealingPower, true
-	case 42:
+	case ITEM_MOD_SPELL_DAMAGE_DONE:
 		return proto.Stat_StatSpellDamage, true
-	case 45:
+	case ITEM_MOD_SPELL_POWER:
 		return proto.Stat_StatSpellPower, true
 	case 50: // ExtraArmor maps to BonusArmor (green armor)
 		return proto.Stat_StatBonusArmor, true
-	case 43: // ManaRegeneration
+	case ITEM_MOD_MANA_REGENERATION: // ManaRegeneration
 		return proto.Stat_StatMP5, true
-	case 47:
+	case ITEM_MOD_SPELL_PENETRATION:
 		return proto.Stat_StatSpellPenetration, true
-	case 48:
+	case ITEM_MOD_BLOCK_VALUE:
 		return proto.Stat_StatBlockValue, true
 	default:
 		return 0, false

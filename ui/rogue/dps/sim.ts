@@ -21,10 +21,14 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 
 	// All stats for which EP should be calculated.
 	epStats: [
+		Stat.StatStamina,
 		Stat.StatAgility,
 		Stat.StatAllCritRating,
 		Stat.StatAllHasteRating,
 		Stat.StatAllHitRating,
+		Stat.StatMeleeCritRating,
+		Stat.StatMeleeHasteRating,
+		Stat.StatMeleeHitRating,
 		Stat.StatArmorPenetration,
 		Stat.StatAttackPower
 	],

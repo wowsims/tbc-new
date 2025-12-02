@@ -200,8 +200,8 @@ func MergeItemEffectsForAllStates(parsed *proto.UIItem) *proto.ItemEffect {
 	for i := range dbcInstance.ItemEffectsByParentID[int(parsed.Id)] {
 
 		e := &dbcInstance.ItemEffectsByParentID[int(parsed.Id)][i]
-		// props := buildScalingProps(resolveStatsSpell(e.SpellID), int(parsed.ScalingOptions[int32(0)].Ilvl), e.SpellID)
-		if e.CoolDownMSec > 0 {
+		props := buildScalingProps(resolveStatsSpell(e.SpellID), int(parsed.ScalingOptions[int32(0)].Ilvl), e.SpellID)
+		if e.CoolDownMSec > 0 && len(props.Stats) > 0 {
 			baseEff = e
 			break
 		}
@@ -227,7 +227,7 @@ func GetAllStaticItemEffects(parsed *proto.UIItem) []*ItemEffect {
 	var effects []*ItemEffect
 	for i := range dbcInstance.ItemEffectsByParentID[int(parsed.Id)] {
 		e := &dbcInstance.ItemEffectsByParentID[int(parsed.Id)][i]
-		if e.CoolDownMSec < 0 {
+		if e.TriggerType == 1 && e.CoolDownMSec <= 0 {
 			effects = append(effects, e)
 		}
 	}

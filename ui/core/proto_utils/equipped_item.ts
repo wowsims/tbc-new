@@ -319,7 +319,7 @@ export class EquippedItem {
 
 	// Whether this item could have an extra socket
 	couldHaveExtraSocket(): boolean {
-		return [ItemType.ItemTypeWrist, ItemType.ItemTypeHands].includes(this.item.type);
+		return false; //[ItemType.ItemTypeWrist, ItemType.ItemTypeHands].includes(this.item.type);
 	}
 
 	requiresExtraSocket(): boolean {

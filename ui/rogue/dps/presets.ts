@@ -25,6 +25,7 @@ export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
 			[Stat.StatAllHitRating]: 1.0,
 			[Stat.StatArmorPenetration]: 1.0,
 			[Stat.StatAttackPower]: 1.0,
+			[Stat.StatMeleeCritRating]: 1.0,
 		},
 		{
 			[PseudoStat.PseudoStatMainHandDps]: 1,
