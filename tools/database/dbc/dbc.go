@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"strings"
 	"sync"
 )
 
@@ -267,9 +268,11 @@ func (d *DBC) loadEnchants(filename string) error {
 		}
 	}
 
-	for i := range enchants {
-		enchant := enchants[i]
-		d.Enchants[enchant.EffectId] = enchant
+	for i, ench := range enchants {
+		if strings.Contains(ench.Name, "QASpell") {
+			continue
+		}
+		d.Enchants[i] = ench
 	}
 	return nil
 }
