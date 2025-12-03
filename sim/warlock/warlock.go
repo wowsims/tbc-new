@@ -69,16 +69,26 @@ func (warlock *Warlock) GetWarlock() *Warlock {
 }
 
 func RegisterWarlock() {
-
+	core.RegisterAgentFactory(
+		proto.Player_Warlock{},
+		proto.Spec_SpecWarlock,
+		func(character *core.Character, options *proto.Player) core.Agent {
+			return NewWarlock(character, options, options.GetWarlock().Options.ClassOptions)
+		},
+		func(player *proto.Player, spec interface{}) {
+			playerSpec, ok := spec.(*proto.Player_Warlock)
+			if !ok {
+				panic("Invalid spec value for Warlock!")
+			}
+			player.Spec = playerSpec
+		},
+	)
 }
 
 func (warlock *Warlock) ApplyTalents() {
-	// warlock.registerHarvestLife()
-	// warlock.registerArchimondesDarkness()
-	// warlock.registerKilJaedensCunning()
-	// warlock.registerMannarothsFury()
-	// warlock.registerGrimoireOfSupremacy()
-	// warlock.registerGrimoireOfSacrifice()
+	warlock.applyAfflictionTalents()
+	warlock.applyDemonologyTalents()
+	warlock.applyDestructionTalents()
 }
 
 func (warlock *Warlock) Initialize() {

@@ -7,6 +7,40 @@ import (
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
+func (warlock *Warlock) applyAfflictionTalents() {
+	warlock.applySuppression()
+	warlock.applyImprovedCorruption()
+	warlock.registerAmplifyCurse()
+	warlock.applyImprovedCurseOfAgony()
+	warlock.applyNightfall()
+	warlock.applyEmpoweredCorruption()
+	warlock.applyShadowEmbrace()
+	warlock.applyShadowMastery()
+	warlock.applyContagion()
+	warlock.applyUnstableAffliction()
+}
+
+func (warlock *Warlock) applyDemonologyTalents() {
+	warlock.applyDemonicEmbrace()
+	warlock.applyFelIntellect()
+	warlock.applyFelStamina()
+	warlock.applySoulLink()
+	warlock.applyDemonicTactics()
+
+}
+
+func (warlock *Warlock) applyDestructionTalents() {
+	warlock.applyCataclysm()
+	warlock.applyBane()
+	warlock.applyDestructiveReach()
+	warlock.applyImprovedSearingPain()
+	warlock.applyRuin()
+	warlock.applyEmberstorm()
+	warlock.applyBacklash()
+	warlock.applySoulLeech()
+	warlock.applyShadowAndFlame()
+}
+
 /*
 Affliction
 Skipping the following (for now)
@@ -94,7 +128,7 @@ func (warlock *Warlock) applyImprovedCurseOfAgony() {
 	})
 }
 
-func (warlock *Warlock) applyNighfall() {
+func (warlock *Warlock) applyNightfall() {
 	if warlock.Talents.Nightfall == 0 {
 		return
 	}
@@ -118,7 +152,7 @@ func (warlock *Warlock) applyNighfall() {
 		OnReset: func(aura *core.Aura, sim *core.Simulation) {
 			aura.Activate(sim)
 		},
-		OnPeriodicDamageDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, spellEffect *core.SpellEffect) {
+		OnPeriodicDamageDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, spellEffect *core.SpellResult) {
 			if spell != warlock.Corruption && spell != warlock.DrainLife {
 				return
 			}
@@ -148,24 +182,19 @@ func (warlock *Warlock) applyShadowEmbrace() {
 		return
 	}
 
-	var debuffAuras []*core.Aura
-	for _, target := range warlock.Env.Encounter.Targets {
-		debuffAuras = append(debuffAuras, core.ShadowEmbraceAura(&target.Unit, warlock.Talents.ShadowEmbrace))
-	}
-
 	warlock.RegisterAura(core.Aura{
 		Label:    "Shadow Embrace Talent",
 		Duration: core.NeverExpires,
 		OnReset: func(aura *core.Aura, sim *core.Simulation) {
 			aura.Activate(sim)
 		},
-		OnSpellHitDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, spellEffect *core.SpellEffect) {
+		OnSpellHitDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, spellEffect *core.SpellResult) {
 			if !spellEffect.Landed() {
 				return
 			}
 
 			if spell == warlock.Corruption || spell == warlock.SiphonLife || spell == warlock.CurseOfAgony || spell.SameAction(warlock.Seeds[0].ActionID) {
-				debuffAuras[spellEffect.Target.Index].Activate(sim)
+				core.ShadowEmbraceAura(spellEffect.Target, warlock.Talents.ShadowEmbrace, spell.Dot(spellEffect.Target).Duration).Activate(sim)
 			}
 		},
 	})
@@ -210,8 +239,10 @@ func (warlock *Warlock) applyDemonicEmbrace() {
 		return
 	}
 
-	warlock.AddStatDependency(stats.Stamina, stats.Stamina, (0.03)*float64(warlock.Talents.DemonicEmbrace))
-	warlock.AddStatDependency(stats.Spirit, stats.Spirit, (0.03)*float64(warlock.Talents.DemonicEmbrace))
+	warlock.MultiplyStat(stats.Stamina, 1.0+(0.03)*float64(warlock.Talents.DemonicEmbrace))
+	warlock.MultiplyStat(stats.Spirit, 1.0+(0.03)*float64(warlock.Talents.DemonicEmbrace))
+	// warlock.AddStatDependency(stats.Stamina, stats.Stamina, (0.03)*float64(warlock.Talents.DemonicEmbrace))
+	// warlock.AddStatDependency(stats.Spirit, stats.Spirit, (0.03)*float64(warlock.Talents.DemonicEmbrace))
 }
 
 // TODO - Add pet part
@@ -229,7 +260,7 @@ func (warlock *Warlock) applyFelStamina() {
 		return
 	}
 
-	warlock.AddStatDependency(stats.Health, stats.Health, 1+0.01*float64(warlock.Talents.FelStamina))
+	warlock.MultiplyStat(stats.Health, 1.0+0.01*float64(warlock.Talents.FelStamina))
 }
 
 // Placeholder for Unholy Power
