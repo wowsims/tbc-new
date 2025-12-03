@@ -294,6 +294,7 @@ func (effect *SpellEffect) ParseStatEffect(scalesWithIlvl bool, ilvl int) *stats
 					effectStats[stat] = effect.CalcCoefficientStatValue(ilvl)
 					break
 				}
+				// Armor/Spell Pen is negative in the DB, so Subtract it
 				effectStats[stat] += float64(effect.EffectBasePoints + effect.EffectDieSides)
 			}
 		}

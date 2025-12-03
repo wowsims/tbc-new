@@ -2,6 +2,7 @@ package core
 
 import (
 	"github.com/wowsims/tbc/sim/core/proto"
+	"github.com/wowsims/tbc/sim/core/stats"
 )
 
 //go:generate stringer -type=ProcMask
@@ -114,10 +115,16 @@ const (
 	// These bits are set by the crit and damage rolls.
 	OutcomeCrit
 	OutcomeCrush
+
+	OutcomePartial1
+	OutcomePartial2
+	OutcomePartial4
+	OutcomePartial8
 )
 
 const (
-	OutcomeLanded = OutcomeHit | OutcomeCrit | OutcomeCrush | OutcomeGlance | OutcomeBlock
+	OutcomePartial = OutcomePartial1 | OutcomePartial2 | OutcomePartial4 | OutcomePartial8
+	OutcomeLanded  = OutcomeHit | OutcomeCrit | OutcomeCrush | OutcomeGlance | OutcomeBlock
 )
 
 func (ho HitOutcome) String() string {
@@ -148,6 +155,18 @@ func (ho HitOutcome) String() string {
 	}
 }
 
+func (ho HitOutcome) PartialResistString() string {
+	if ho.Matches(OutcomePartial1) {
+		return " (30% Resist)"
+	} else if ho.Matches(OutcomePartial2) {
+		return " (20% Resist)"
+	} else if ho.Matches(OutcomePartial4) {
+		return " (10% Resist)"
+	} else {
+		return ""
+	}
+}
+
 // Other flags
 type SpellFlag uint64
 
@@ -157,39 +176,36 @@ func (se SpellFlag) Matches(other SpellFlag) bool {
 }
 
 const (
-	SpellFlagNone                    SpellFlag = 0
-	SpellFlagIgnoreArmor             SpellFlag = 1 << iota // skip armor
-	SpellFlagIgnoreTargetModifiers                         // skip target damage modifiers
-	SpellFlagIgnoreAttackerModifiers                       // skip attacker damage modifiers
-	SpellFlagApplyArmorReduction                           // Forces damage reduction from armor to apply, even if it otherwise wouldn't.
-	SpellFlagCannotBeDodged                                // Ignores dodge in physical hit rolls
-	SpellFlagBinary                                        // Does not do partial resists and could need a different hit roll.
-	SpellFlagBypassAbsorbs                                 // Prevents any active DamageAbsorptionAuras from applying their damage reduction effects.
-	SpellFlagChanneled                                     // Spell is channeled
-	SpellFlagCastWhileChanneling                           // Spell can be cast while channeling. If SpellFlagChanneled and SpellFlagCastWhileChanneling are both set, it means that other spells with the SpellFlagCastWhileChanneling flag can be cast without interrupting the channeled spell.
-	SpellFlagDisease                                       // Spell is categorized as disease
-	SpellFlagHelpful                                       // For healing spells / buffs.
-	SpellFlagMeleeMetrics                                  // Marks a spell as a melee ability for metrics.
-	SpellFlagNoOnCastComplete                              // Disables the OnCastComplete callback.
-	SpellFlagNoMetrics                                     // Disables metrics for a spell.
-	SpellFlagNoLogs                                        // Disables logs for a spell.
-	SpellFlagAPL                                           // Indicates this spell can be used from an APL rotation.
-	SpellFlagMCD                                           // Indicates this spell is a MajorCooldown.
-	SpellFlagReactive                                      // Allows a spell flagged as an MCD to be cast off-GCD. Used for instant cast defensive CDs.
-	SpellFlagNoOnDamageDealt                               // Disables OnSpellHitDealt and OnPeriodicDamageDealt aura callbacks for this spell.
-	SpellFlagPrepullOnly                                   // Indicates this spell should only be used during prepull. Not enforced, just a signal for the APL UI.
-	SpellFlagEncounterOnly                                 // Indicates this spell should only be used during the encounter (not prepull). Not enforced, just a signal for the APL UI.
-	SpellFlagPotion                                        // Indicates this spell is a potion spell.
-	SpellFlagPrepullPotion                                 // Indicates this spell is the prepull potion.
-	SpellFlagCombatPotion                                  // Indicates this spell is the combat potion.
-	SpellFlagNoSpellMods                                   // Indicates that no spell mods should be applied to this spell
-	SpellFlagCanCastWhileMoving                            // Allows the cast to be casted while moving
-	SpellFlagPassiveSpell                                  // Indicates this spell is applied/cast as a result of another spell
-	SpellFlagSupressDoTApply                               // If present this spell will not apply dots (Used for DTR dot supression)
-	SpellFlagSwapped                                       // Indicates that this spell is not useable because it is from a currently swapped item
-	SpellFlagAoE                                           // Indicates that this spell is an AoE spell. Spells flagged with this will use the AoE Cap multiplier when calculating damage.
-	SpellFlagRanged                                        // Indicates that this spell is a ranged spell. Spells flagged with this will have increased damage when Hunters Mark is active.
-	SpellFlagReadinessTrinket                              // Indicates that this spell part of Readiness. Used by Siege of Orgrimmar CDR trinkets.
+	SpellFlagNone                     SpellFlag = 0
+	SpellFlagIgnoreResists            SpellFlag = 1 << iota // skip spell resist/armor
+	SpellFlagIgnoreTargetModifiers                          // skip target damage modifiers
+	SpellFlagIgnoreAttackerModifiers                        // skip attacker damage modifiers
+	SpellFlagApplyArmorReduction                            // Forces damage reduction from armor to apply, even if it otherwise wouldn't.
+	SpellFlagCannotBeDodged                                 // Ignores dodge in physical hit rolls
+	SpellFlagIncludeTargetBonusDamage                       // Spell benefits from Gift of Arthas and Hemorrhage.
+	SpellFlagBinary                                         // Does not do partial resists and could need a different hit roll.
+	SpellFlagChanneled                                      // Spell is channeled
+	SpellFlagDisease                                        // Spell is categorized as disease
+	SpellFlagHauntSE                                        // Spell benefits from haunt/SE effects
+	SpellFlagHelpful                                        // For healing spells / buffs.
+	SpellFlagMeleeMetrics                                   // Marks a spell as a melee ability for metrics.
+	SpellFlagNoOnCastComplete                               // Disables the OnCastComplete callback.
+	SpellFlagNoMetrics                                      // Disables metrics for a spell.
+	SpellFlagNoLogs                                         // Disables logs for a spell.
+	SpellFlagAPL                                            // Indicates this spell can be used from an APL rotation.
+	SpellFlagMCD                                            // Indicates this spell is a MajorCooldown.
+	SpellFlagReactive                                       // Allows a spell flagged as an MCD to be cast off-GCD. Used for instant cast defensive CDs.
+	SpellFlagNoOnDamageDealt                                // Disables OnSpellHitDealt and OnPeriodicDamageDealt aura callbacks for this spell.
+	SpellFlagPrepullOnly                                    // Indicates this spell should only be used during prepull. Not enforced, just a signal for the APL UI.
+	SpellFlagEncounterOnly                                  // Indicates this spell should only be used during the encounter (not prepull). Not enforced, just a signal for the APL UI.
+	SpellFlagPotion                                         // Indicates this spell is a potion spell.
+	SpellFlagPrepullPotion                                  // Indicates this spell is the prepull potion.
+	SpellFlagCombatPotion                                   // Indicates this spell is the combat potion.
+	SpellFlagNoSpellMods                                    // Indicates that no spell mods should be applied to this spell
+	SpellFlagCanCastWhileMoving                             // Allows the cast to be casted while moving
+	SpellFlagPassiveSpell                                   // Indicates this spell is applied/cast as a result of another spell
+	SpellFlagSupressDoTApply                                // If present this spell will not apply dots (Used for DTR dot supression)
+	SpellFlagSwapped                                        // Indicates that this spell is not useable because it is from a currently swapped item
 
 	// Used to let agents categorize their spells.
 	SpellFlagAgentReserved1
@@ -223,6 +239,27 @@ const (
 // Returns whether there is any overlap between the given masks.
 func (ss SpellSchool) Matches(other SpellSchool) bool {
 	return (ss & other) != 0
+}
+
+func (ss SpellSchool) ResistanceStat() stats.Stat {
+	switch ss {
+	case SpellSchoolPhysical:
+		return stats.ArmorPenetration
+	case SpellSchoolArcane:
+		return stats.ArcaneResistance
+	case SpellSchoolFire:
+		return stats.FireResistance
+	case SpellSchoolFrost:
+		return stats.FrostResistance
+	case SpellSchoolHoly:
+		return 0 // Holy resistance doesn't exist.
+	case SpellSchoolNature:
+		return stats.NatureResistance
+	case SpellSchoolShadow:
+		return stats.ShadowResistance
+	default:
+		return 0 // This applies to spell school combinations, which supposedly use the "path of the least resistance", so 0 is a good fit.
+	}
 }
 
 func SpellSchoolFromProto(p proto.SpellSchool) SpellSchool {

@@ -397,8 +397,11 @@ func (stats Stats) ToProtoMap() map[int32]float64 {
 func FromProtoMap(m map[int32]float64) Stats {
 	var stats Stats
 	for k, v := range m {
+		if k == int32(proto.Stat_StatArmorPenetration) || k == int32(proto.Stat_StatSpellPenetration) {
+			stats[k] = -v
+			continue
+		}
 		stats[k] = v
-
 	}
 	return stats
 }
@@ -435,6 +438,12 @@ type PseudoStats struct {
 
 	DisableDWMissPenalty bool // Used by Heroic Strike and Cleave
 
+	IncreasedMissChance float64 // Insect Swarm and Scorpid Sting
+	DodgeReduction      float64 // Used by Warrior talent 'Weapon Mastery' and SWP boss auras.
+
+	MobTypeAttackPower float64 // Bonus AP against mobs of the current type.
+	MobTypeSpellPower  float64 // Bonus SP against mobs of the current type.
+
 	ThreatMultiplier float64 // Modulates the threat generated. Affected by things like salv.
 
 	DamageDealtMultiplier          float64            // All damage
@@ -468,7 +477,10 @@ type PseudoStats struct {
 
 	ReducedCritTakenChance float64 // Reduces chance to be crit.
 
-	BonusHealingTaken float64 // Talisman of Troll Divinity
+	BonusHealingTaken           float64 // Talisman of Troll Divinity
+	BonusRangedAttackPowerTaken float64 // Hunters mark
+	BonusSpellCritPercentTaken  float64 // Imp Shadow Bolt / Imp Scorch / Winter's Chill debuff
+	BonusPhysicalDamageTaken    float64 // Hemo, Gift of Arthas, etc
 
 	DamageTakenMultiplier       float64            // All damage
 	SchoolDamageTakenMultiplier [SchoolLen]float64 // For specific spell schools (arcane, fire, shadow, etc.)

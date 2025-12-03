@@ -593,7 +593,7 @@ func (spell *Spell) CanCast(sim *Simulation, target *Unit) bool {
 	}
 
 	// While casting or channeling, no other action is possible
-	if (spell.Unit.Hardcast.Expires > sim.CurrentTime) || (spell.Unit.IsCastingDuringChannel() && !spell.CanCastDuringChannel(sim)) {
+	if (spell.Unit.Hardcast.Expires > sim.CurrentTime) || !spell.CanCastDuringChannel(sim) {
 		//if sim.Log != nil {
 		//	sim.Log("Cant cast because already casting/channeling")
 		//}
@@ -673,15 +673,6 @@ func (spell *Spell) CanCompleteCast(sim *Simulation, target *Unit, logCastFailur
 }
 
 func (spell *Spell) CanCastDuringChannel(sim *Simulation) bool {
-	// Don't allow bypassing of channel clip logic for re-casts of the same channel
-	if spell == spell.Unit.ChanneledDot.Spell {
-		return false
-	}
-
-	if spell.Flags.Matches(SpellFlagCastWhileChanneling) {
-		return true
-	}
-
 	return false
 }
 
