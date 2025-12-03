@@ -9,7 +9,7 @@ import (
 const agonyScale = 0.0255
 const agonyCoeff = 0.0255
 
-func (warlock *Warlock) registerAgony() {
+func (warlock *Warlock) registerCurseOfAgony() {
 	warlock.CurseOfAgony = warlock.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 980},
 		Flags:          core.SpellFlagAPL,

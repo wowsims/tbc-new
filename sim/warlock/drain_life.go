@@ -8,12 +8,12 @@ import (
 
 const drainLifeCoeff = 0.143
 
-func (warlock *Warlock) RegisterDrainLife(callback WarlockSpellCastedCallback) {
-	healthMetric := warlock.NewHealthMetrics(core.ActionID{SpellID: 27220})
+func (warlock *Warlock) registerDrainLife() {
+	healthMetric := warlock.NewHealthMetrics(core.ActionID{SpellID: 689})
 	resultSlice := make(core.SpellResultSlice, 1)
 
 	warlock.DrainLife = warlock.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 27220},
+		ActionID:       core.ActionID{SpellID: 689},
 		SpellSchool:    core.SpellSchoolShadow,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagChanneled | core.SpellFlagAPL,
@@ -40,9 +40,9 @@ func (warlock *Warlock) RegisterDrainLife(callback WarlockSpellCastedCallback) {
 
 				warlock.GainHealth(sim, warlock.MaxHealth()*0.02, healthMetric)
 
-				if callback != nil {
-					callback(resultSlice, dot.Spell, sim)
-				}
+				// if callback != nil {
+				// 	callback(resultSlice, dot.Spell, sim)
+				// }
 			},
 		},
 

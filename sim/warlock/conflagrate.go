@@ -10,7 +10,7 @@ const conflagrateCoeff = 0.429
 
 func (warlock *Warlock) registerConflagrate() {
 	warlock.Conflagrate = warlock.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 30912},
+		ActionID:       core.ActionID{SpellID: 17962},
 		SpellSchool:    core.SpellSchoolFire,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL,

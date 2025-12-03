@@ -11,7 +11,7 @@ const incinerateCoeff = 1.54 * 1.15
 
 func (warlock *Warlock) registerIncinerate() {
 	warlock.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 32231},
+		ActionID:       core.ActionID{SpellID: 29722},
 		SpellSchool:    core.SpellSchoolFire,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL,

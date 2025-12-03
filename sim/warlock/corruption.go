@@ -6,14 +6,13 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
-const corruptionScale = 0.156
 const corruptionCoeff = 0.156
 
-func (warlock *Warlock) RegisterCorruption(onApplyCallback WarlockSpellCastedCallback, onTickCallback WarlockSpellCastedCallback) *core.Spell {
+func (warlock *Warlock) registerCorruption() *core.Spell {
 	resultSlice := make(core.SpellResultSlice, 1)
 
 	warlock.Corruption = warlock.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 27216},
+		ActionID:       core.ActionID{SpellID: 172},
 		SpellSchool:    core.SpellSchoolShadow,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL,
@@ -31,34 +30,34 @@ func (warlock *Warlock) RegisterCorruption(onApplyCallback WarlockSpellCastedCal
 			Aura: core.Aura{
 				Label:    "Corruption",
 				Tag:      "Affliction",
-				ActionID: core.ActionID{SpellID: 27216},
+				ActionID: core.ActionID{SpellID: 172},
 			},
 			NumberOfTicks:       6,
 			TickLength:          3 * time.Second,
 			AffectedByCastSpeed: false,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, isRollover bool) {
-				dot.Snapshot(target, warlock.CalcScalingSpellDmg(corruptionScale))
+				dot.Snapshot(target, warlock.CalcScalingSpellDmg(corruptionCoeff))
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				resultSlice[0] = dot.CalcSnapshotDamage(sim, target, dot.OutcomeSnapshotCrit)
 
-				if onTickCallback != nil {
-					onTickCallback(resultSlice, dot.Spell, sim)
-				}
+				// if onTickCallback != nil {
+				// 	onTickCallback(resultSlice, dot.Spell, sim)
+				// // }
 
 				dot.Spell.DealPeriodicDamage(sim, resultSlice[0])
 			},
 		},
 
-		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			result := spell.CalcOutcome(sim, target, spell.OutcomeMagicHitNoHitCounter)
-			if onApplyCallback != nil {
-				resultSlice[0] = result
-				onApplyCallback(resultSlice, spell, sim)
-			}
-			spell.DealOutcome(sim, result)
-		},
+		// ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+		// 	result := spell.CalcOutcome(sim, target, spell.OutcomeMagicHitNoHitCounter)
+		// 	if onApplyCallback != nil {
+		// 		resultSlice[0] = result
+		// 		onApplyCallback(resultSlice, spell, sim)
+		// 	}
+		// 	spell.DealOutcome(sim, result)
+		// },
 		ExpectedTickDamage: func(sim *core.Simulation, target *core.Unit, spell *core.Spell, useSnapshot bool) *core.SpellResult {
 			dot := spell.Dot(target)
 			if useSnapshot {
@@ -66,7 +65,7 @@ func (warlock *Warlock) RegisterCorruption(onApplyCallback WarlockSpellCastedCal
 				result.Damage /= dot.TickPeriod().Seconds()
 				return result
 			} else {
-				result := spell.CalcPeriodicDamage(sim, target, warlock.CalcScalingSpellDmg(corruptionScale), spell.OutcomeExpectedMagicCrit)
+				result := spell.CalcPeriodicDamage(sim, target, warlock.CalcScalingSpellDmg(corruptionCoeff), spell.OutcomeExpectedMagicCrit)
 				result.Damage /= dot.CalcTickPeriod().Round(time.Millisecond).Seconds()
 				return result
 			}

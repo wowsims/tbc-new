@@ -87,10 +87,6 @@ func (warlock *Warlock) registerSeed() {
 				},
 				OnGain: func(aura *core.Aura, sim *core.Simulation) {
 					seedPropertyTracker[aura.Unit.UnitIndex].damageTaken = 0
-					if warlock.SoulBurnAura.IsActive() {
-						seedPropertyTracker[aura.Unit.UnitIndex].isSoulBurn = true
-						warlock.SoulBurnAura.Deactivate(sim)
-					}
 				},
 				OnExpire: func(aura *core.Aura, sim *core.Simulation) {
 					seedPropertyTracker[aura.Unit.UnitIndex].damageTaken = 0

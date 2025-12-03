@@ -11,7 +11,7 @@ const soulfireVariance = 0.2
 
 func (warlock *Warlock) registerSoulfire() {
 	warlock.Soulfire = warlock.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 30545},
+		ActionID:       core.ActionID{SpellID: 6353},
 		SpellSchool:    core.SpellSchoolFire,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL,

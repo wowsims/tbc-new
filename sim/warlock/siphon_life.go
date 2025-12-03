@@ -8,8 +8,8 @@ import (
 
 const siphonLifeCoeff = 0.1
 
-func (warlock *Warlock) registerSiphonLifeSpell(onApplyCallback WarlockSpellCastedCallback, onTickCallback WarlockSpellCastedCallback) {
-	actionID := core.ActionID{SpellID: 30911}
+func (warlock *Warlock) registerSiphonLifeSpell() {
+	actionID := core.ActionID{SpellID: 6353}
 	baseCost := 410.0
 	resultSlice := make(core.SpellResultSlice, 1)
 	healthMetrics := warlock.NewHealthMetrics(actionID)
@@ -29,21 +29,21 @@ func (warlock *Warlock) registerSiphonLifeSpell(onApplyCallback WarlockSpellCast
 			Aura: core.Aura{
 				Label:    "Corruption",
 				Tag:      "Affliction",
-				ActionID: core.ActionID{SpellID: 27216},
+				ActionID: core.ActionID{SpellID: 6353},
 			},
 			NumberOfTicks:       6,
 			TickLength:          3 * time.Second,
 			AffectedByCastSpeed: false,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, isRollover bool) {
-				dot.Snapshot(target, warlock.CalcScalingSpellDmg(corruptionScale))
+				dot.Snapshot(target, warlock.CalcScalingSpellDmg(siphonLifeCoeff))
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				resultSlice[0] = dot.CalcSnapshotDamage(sim, target, dot.OutcomeSnapshotCrit)
 
-				if onTickCallback != nil {
-					onTickCallback(resultSlice, dot.Spell, sim)
-				}
+				// if onTickCallback != nil {
+				// 	onTickCallback(resultSlice, dot.Spell, sim)
+				// }
 
 				dot.Spell.DealPeriodicDamage(sim, resultSlice[0])
 

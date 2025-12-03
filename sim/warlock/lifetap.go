@@ -8,7 +8,7 @@ import (
 )
 
 func (warlock *Warlock) registerLifeTap() {
-	actionID := core.ActionID{SpellID: 27222}
+	actionID := core.ActionID{SpellID: 1454}
 	manaMetrics := warlock.NewManaMetrics(actionID)
 	healthCost := 582.0
 	baseRestore := healthCost * (1.0 + 0.1*float64(warlock.Talents.ImprovedLifeTap))

@@ -9,7 +9,7 @@ import (
 const immolateCoeff = 0.13
 
 func (warlock *Warlock) registerImmolate() {
-	actionID := core.ActionID{SpellID: 27215}
+	actionID := core.ActionID{SpellID: 348}
 	warlock.Immolate = warlock.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
 		SpellSchool:    core.SpellSchoolFire,

@@ -193,7 +193,7 @@ func (warlock *Warlock) applyShadowEmbrace() {
 				return
 			}
 
-			if spell == warlock.Corruption || spell == warlock.SiphonLife || spell == warlock.CurseOfAgony || spell.SameAction(warlock.Seeds[0].ActionID) {
+			if spell == warlock.Corruption || spell == warlock.SiphonLife || spell == warlock.CurseOfAgony || spell.SameAction(warlock.Seed.ActionID) {
 				core.ShadowEmbraceAura(spellEffect.Target, warlock.Talents.ShadowEmbrace, spell.Dot(spellEffect.Target).Duration).Activate(sim)
 			}
 		},

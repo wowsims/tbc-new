@@ -8,10 +8,10 @@ import (
 
 var shadowBurnCoeff = 0.429
 
-func (warlock *Warlock) registerShadowBurnSpell() {
+func (warlock *Warlock) registerShadowBurn() {
 
 	warlock.Shadowburn = warlock.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 30546},
+		ActionID:       core.ActionID{SpellID: 17877},
 		SpellSchool:    core.SpellSchoolShadow,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL,

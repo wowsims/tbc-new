@@ -20,7 +20,7 @@ type Warlock struct {
 	Immolate    *core.Spell
 	Incinerate  *core.Spell
 	SearingPain *core.Spell
-	Seeds       []*core.Spell
+	Seed        *core.Spell
 	ShadowBolt  *core.Spell
 	Soulfire    *core.Spell
 
@@ -93,11 +93,26 @@ func (warlock *Warlock) ApplyTalents() {
 
 func (warlock *Warlock) Initialize() {
 
+	// Curses
 	warlock.registerCurseOfElements()
+	warlock.registerCurseOfDoom()
+	warlock.registerCurseOfAgony()
+
+	warlock.registerCorruption()
+	warlock.registerSeed()
+	warlock.registerConflagrate()
+	warlock.registerDrainLife()
+	warlock.registerImmolate()
+	warlock.registerIncinerate()
+	warlock.registerLifeTap()
+	warlock.registerShadowBolt()
+	warlock.registerShadowBurn()
+	warlock.registerSiphonLifeSpell()
+	warlock.registerSoulfire()
+
 	// doomguardInfernalTimer := warlock.NewTimer()
 	// warlock.registerSummonDoomguard(doomguardInfernalTimer)
 	// warlock.registerSummonInfernal(doomguardInfernalTimer)
-	warlock.registerLifeTap()
 
 	// Fel Armor 10% Stamina
 	core.MakePermanent(
