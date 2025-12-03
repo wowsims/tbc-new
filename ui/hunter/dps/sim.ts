@@ -13,7 +13,7 @@ import * as Inputs from './inputs';
 import * as Presets from './presets';
 
 const SPEC_CONFIG = registerSpecConfig(Spec.SpecHunter, {
-	cssClass: 'marksmanship-hunter-sim-ui',
+	cssClass: 'hunter-sim-ui',
 	cssScheme: PlayerClasses.getCssClass(PlayerClasses.Hunter),
 	// List any known bugs / issues here and they'll be shown on the site.
 	knownIssues: ['Glaive Toss hits AoE targets only once.'],

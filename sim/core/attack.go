@@ -60,6 +60,19 @@ func getWeaponMaxRange(item *Item) float64 {
 	return 40
 }
 
+func getWeaponMinRange(item *Item) float64 {
+	switch item.RangedWeaponType {
+	case proto.RangedWeaponType_RangedWeaponTypeThrown:
+	case proto.RangedWeaponType_RangedWeaponTypeUnknown:
+	case proto.RangedWeaponType_RangedWeaponTypeWand:
+		return 0.
+	default:
+		return 8
+	}
+
+	return 0
+}
+
 func newWeaponFromItem(item *Item, critMultiplier float64, bonusDps float64) Weapon {
 	normalizedWeaponSpeed := 2.4
 	if item.WeaponType == proto.WeaponType_WeaponTypeDagger {
@@ -77,7 +90,7 @@ func newWeaponFromItem(item *Item, critMultiplier float64, bonusDps float64) Wea
 		NormalizedSwingSpeed: normalizedWeaponSpeed,
 		CritMultiplier:       critMultiplier,
 		AttackPowerPerDPS:    DefaultAttackPowerPerDPS,
-		MinRange:             0, // no more deadzone in MoP
+		MinRange:             getWeaponMinRange(item),
 		MaxRange:             getWeaponMaxRange(item),
 	}
 }
@@ -102,8 +115,7 @@ func (character *Character) WeaponFromOffHand(critMultiplier float64) Weapon {
 
 // Returns weapon stats using the ranged equipped weapon.
 func (character *Character) WeaponFromRanged(critMultiplier float64) Weapon {
-	weapon := character.Ranged()
-	if weapon != nil {
+	if weapon := character.GetRangedWeapon(); weapon != nil {
 		return newWeaponFromItem(weapon, critMultiplier, character.PseudoStats.BonusRangedDps)
 	} else {
 		return Weapon{}
@@ -404,7 +416,7 @@ func (unit *Unit) EnableAutoAttacks(agent Agent, options AutoAttackOptions) {
 		ActionID:    ActionID{OtherID: proto.OtherAction_OtherActionAttack, Tag: 1},
 		SpellSchool: options.MainHand.GetSpellSchool(),
 		ProcMask:    Ternary(options.ProcMask == ProcMaskUnknown, ProcMaskMeleeMHAuto, options.ProcMask),
-		Flags:       SpellFlagMeleeMetrics | SpellFlagNoOnCastComplete,
+		Flags:       SpellFlagMeleeMetrics | SpellFlagIncludeTargetBonusDamage | SpellFlagNoOnCastComplete,
 
 		DamageMultiplier:         1,
 		DamageMultiplierAdditive: 1,
@@ -429,7 +441,7 @@ func (unit *Unit) EnableAutoAttacks(agent Agent, options AutoAttackOptions) {
 		ActionID:    ActionID{OtherID: proto.OtherAction_OtherActionAttack, Tag: 2},
 		SpellSchool: options.OffHand.GetSpellSchool(),
 		ProcMask:    Ternary(options.ProcMask == ProcMaskUnknown, ProcMaskMeleeOHAuto, options.ProcMask),
-		Flags:       SpellFlagMeleeMetrics | SpellFlagNoOnCastComplete,
+		Flags:       SpellFlagMeleeMetrics | SpellFlagIncludeTargetBonusDamage | SpellFlagNoOnCastComplete,
 
 		DamageMultiplier:         1,
 		DamageMultiplierAdditive: 1,
@@ -449,7 +461,7 @@ func (unit *Unit) EnableAutoAttacks(agent Agent, options AutoAttackOptions) {
 		ActionID:     ActionID{OtherID: proto.OtherAction_OtherActionShoot},
 		SpellSchool:  options.Ranged.GetSpellSchool(),
 		ProcMask:     Ternary(options.ProcMask == ProcMaskUnknown, ProcMaskRangedAuto, options.ProcMask),
-		Flags:        SpellFlagMeleeMetrics | SpellFlagRanged,
+		Flags:        SpellFlagMeleeMetrics | SpellFlagIncludeTargetBonusDamage,
 		MissileSpeed: 40,
 
 		DamageMultiplier:         1,

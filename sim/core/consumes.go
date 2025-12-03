@@ -323,86 +323,86 @@ func registerExplosivesCD(agent Agent, consumes *proto.ConsumesSpec) {
 		return
 	}
 	switch consumes.ExplosiveId {
-	case 89637:
-		bomb := character.GetOrRegisterSpell(SpellConfig{
-			ActionID:    BigDaddyActionID,
-			SpellSchool: SpellSchoolFire,
-			ProcMask:    ProcMaskEmpty,
-			Flags:       SpellFlagAoE,
+	// case 89637:
+	// 	bomb := character.GetOrRegisterSpell(SpellConfig{
+	// 		ActionID:    BigDaddyActionID,
+	// 		SpellSchool: SpellSchoolFire,
+	// 		ProcMask:    ProcMaskEmpty,
+	// 		Flags:       SpellFlagAoE,
 
-			Cast: CastConfig{
-				CD: Cooldown{
-					Timer:    character.NewTimer(),
-					Duration: time.Minute,
-				},
+	// 		Cast: CastConfig{
+	// 			CD: Cooldown{
+	// 				Timer:    character.NewTimer(),
+	// 				Duration: time.Minute,
+	// 			},
 
-				DefaultCast: Cast{
-					CastTime: time.Millisecond * 500,
-				},
+	// 			DefaultCast: Cast{
+	// 				CastTime: time.Millisecond * 500,
+	// 			},
 
-				ModifyCast: func(sim *Simulation, spell *Spell, cast *Cast) {
-					spell.Unit.AutoAttacks.StopMeleeUntil(sim, sim.CurrentTime)
-					spell.Unit.AutoAttacks.StopRangedUntil(sim, sim.CurrentTime)
-				},
-			},
+	// 			ModifyCast: func(sim *Simulation, spell *Spell, cast *Cast) {
+	// 				spell.Unit.AutoAttacks.StopMeleeUntil(sim, sim.CurrentTime)
+	// 				spell.Unit.AutoAttacks.StopRangedUntil(sim, sim.CurrentTime)
+	// 			},
+	// 		},
 
-			// Explosives always have 1% resist chance, so just give them hit cap.
-			BonusHitPercent:  100,
-			DamageMultiplier: 1,
-			CritMultiplier:   2,
-			ThreatMultiplier: 1,
+	// 		// Explosives always have 1% resist chance, so just give them hit cap.
+	// 		BonusHitPercent:  100,
+	// 		DamageMultiplier: 1,
+	// 		CritMultiplier:   2,
+	// 		ThreatMultiplier: 1,
 
-			ApplyEffects: func(sim *Simulation, _ *Unit, spell *Spell) {
-				spell.CalcAndDealAoeDamage(sim, 5006, spell.OutcomeMagicHitAndCrit)
-			},
-		})
+	// 		ApplyEffects: func(sim *Simulation, _ *Unit, spell *Spell) {
+	// 			spell.CalcAndDealAoeDamage(sim, 5006, spell.OutcomeMagicHitAndCrit)
+	// 		},
+	// 	})
 
-		character.AddMajorCooldown(MajorCooldown{
-			Spell:    bomb,
-			Type:     CooldownTypeDPS | CooldownTypeExplosive,
-			Priority: CooldownPriorityLow + 10,
-		})
-	case 40771:
-		boltGun := character.GetOrRegisterSpell(SpellConfig{
-			ActionID:    ActionID{SpellID: 82207},
-			SpellSchool: SpellSchoolFire,
-			ProcMask:    ProcMaskEmpty,
-			Flags:       SpellFlagNoOnCastComplete | SpellFlagCanCastWhileMoving,
+	// 	character.AddMajorCooldown(MajorCooldown{
+	// 		Spell:    bomb,
+	// 		Type:     CooldownTypeDPS | CooldownTypeExplosive,
+	// 		Priority: CooldownPriorityLow + 10,
+	// 	})
+	// case 40771:
+	// 	boltGun := character.GetOrRegisterSpell(SpellConfig{
+	// 		ActionID:    ActionID{SpellID: 82207},
+	// 		SpellSchool: SpellSchoolFire,
+	// 		ProcMask:    ProcMaskEmpty,
+	// 		Flags:       SpellFlagNoOnCastComplete | SpellFlagCanCastWhileMoving,
 
-			Cast: CastConfig{
-				DefaultCast: Cast{
-					GCD:      GCDDefault,
-					CastTime: time.Second,
-				},
-				IgnoreHaste: true,
-				CD: Cooldown{
-					Timer:    character.NewTimer(),
-					Duration: time.Minute * 2,
-				},
-				SharedCD: Cooldown{
-					Timer:    character.GetOffensiveTrinketCD(),
-					Duration: time.Second * 15,
-				},
-			},
+	// 		Cast: CastConfig{
+	// 			DefaultCast: Cast{
+	// 				GCD:      GCDDefault,
+	// 				CastTime: time.Second,
+	// 			},
+	// 			IgnoreHaste: true,
+	// 			CD: Cooldown{
+	// 				Timer:    character.NewTimer(),
+	// 				Duration: time.Minute * 2,
+	// 			},
+	// 			SharedCD: Cooldown{
+	// 				Timer:    character.GetOffensiveTrinketCD(),
+	// 				Duration: time.Second * 15,
+	// 			},
+	// 		},
 
-			// Explosives always have 1% resist chance, so just give them hit cap.
-			BonusHitPercent:  100,
-			DamageMultiplier: 1,
-			CritMultiplier:   2,
-			ThreatMultiplier: 1,
+	// 		// Explosives always have 1% resist chance, so just give them hit cap.
+	// 		BonusHitPercent:  100,
+	// 		DamageMultiplier: 1,
+	// 		CritMultiplier:   2,
+	// 		ThreatMultiplier: 1,
 
-			ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
-				spell.CalcAndDealDamage(sim, target, 8860, spell.OutcomeMagicHitAndCrit)
-			},
-		})
+	// 		ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
+	// 			spell.CalcAndDealDamage(sim, target, 8860, spell.OutcomeMagicHitAndCrit)
+	// 		},
+	// 	})
 
-		character.AddMajorCooldown(MajorCooldown{
-			Spell:    boltGun,
-			Type:     CooldownTypeDPS | CooldownTypeExplosive,
-			Priority: CooldownPriorityLow + 10,
-			ShouldActivate: func(s *Simulation, c *Character) bool {
-				return false // Intentionally not automatically used
-			},
-		})
+	// 	character.AddMajorCooldown(MajorCooldown{
+	// 		Spell:    boltGun,
+	// 		Type:     CooldownTypeDPS | CooldownTypeExplosive,
+	// 		Priority: CooldownPriorityLow + 10,
+	// 		ShouldActivate: func(s *Simulation, c *Character) bool {
+	// 			return false // Intentionally not automatically used
+	// 		},
+	// 	})
 	}
 }

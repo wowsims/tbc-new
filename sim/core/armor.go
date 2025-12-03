@@ -5,13 +5,13 @@ func (result *SpellResult) applyArmor(spell *Spell, isPeriodic bool, attackTable
 
 	result.Damage *= armorMitigationMultiplier
 
-	result.ArmorMultiplier = armorMitigationMultiplier
-	result.PostArmorDamage = result.Damage
+	result.ArmorAndResistanceMultiplier = armorMitigationMultiplier
+	result.PostArmorAndResistanceMultiplier = result.Damage
 }
 
 // Returns Armor mitigation fraction for the spell
 func (spell *Spell) armorMultiplier(isPeriodic bool, attackTable *AttackTable) float64 {
-	if spell.Flags.Matches(SpellFlagIgnoreArmor) {
+	if spell.Flags.Matches(SpellFlagIgnoreResists) {
 		return 1
 	}
 

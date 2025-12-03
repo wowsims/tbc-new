@@ -234,9 +234,9 @@ export class FiltersMenu extends BaseModal {
 					});
 				}
 			}
-
+		} else if (slot == ItemSlot.ItemSlotRanged) {
 			const rangedweapontypes = player.getPlayerClass().rangedWeaponTypes;
-			if (rangedweapontypes.length < 1) {
+			if (rangedweapontypes.length <= 1) {
 				return;
 			}
 			const rangedWeaponTypeSection = this.newSection(i18n.t('gear_tab.gear_picker.filters.ranged_weapon_type'));

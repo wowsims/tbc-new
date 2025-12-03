@@ -239,7 +239,7 @@ func ConvertModRatingFlagToRatingStat(flag int) proto.Stat {
 	case 393216:
 		return proto.Stat_StatMeleeHasteRating
 	case 49152:
-		return proto.Stat_StatResilience
+		return proto.Stat_StatResilienceRating
 	default:
 		println("UNHANDLED RATING FLAG: " + strconv.Itoa(flag))
 		return proto.Stat_StatRage

@@ -8,7 +8,7 @@ export class DPSWarrior extends PlayerSpec<Spec.SpecDPSWarrior> {
 	static specID = Spec.SpecDPSWarrior as Spec.SpecDPSWarrior;
 	static classID = Class.ClassWarrior as Class.ClassWarrior;
 	static friendlyName = 'DPS Warrior';
-	static simLink = getSpecSiteUrl('warrior', 'dpswarrior');
+	static simLink = getSpecSiteUrl('warrior', 'dps');
 
 	static isTankSpec = false;
 	static isHealingSpec = false;

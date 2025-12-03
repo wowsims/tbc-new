@@ -166,8 +166,15 @@ func GenerateItemEffects(instance *dbc.DBC, db *WowDatabase, itemSources map[int
 			for _, spellEffect := range spellEffects {
 				stat := dbc.ConvertEffectAuraToStatIndex(int(spellEffect.EffectAura), spellEffect.EffectMiscValues[0])
 				if stat >= 0 {
+					// TBC ANNI: Some socket bonuses are auras too. Need to find them here and either ignore or find how to add to socket bonuses
+
+					value := float64(spellEffect.EffectBasePoints + 1)
+					if stat == proto.Stat_StatArmorPenetration || stat == proto.Stat_StatSpellPenetration {
+						// Make these not negative
+						value = -value
+					}
 					// These are always off by 1...?
-					parsed.ScalingOptions[0].Stats[int32(stat)] += float64(spellEffect.EffectBasePoints + 1)
+					parsed.ScalingOptions[0].Stats[int32(stat)] += value
 				}
 			}
 		}

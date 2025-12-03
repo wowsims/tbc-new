@@ -227,7 +227,6 @@ func NewRogue(character *core.Character, options *proto.Player, talents string) 
 	rogue.EnableAutoAttacks(rogue, core.AutoAttackOptions{
 		MainHand:       rogue.WeaponFromMainHand(0), // Set crit multiplier later when we have targets.
 		OffHand:        rogue.WeaponFromOffHand(0),  // Set crit multiplier later when we have targets.
-		Ranged:         rogue.WeaponFromRanged(0),
 		AutoSwingMelee: true,
 	})
 

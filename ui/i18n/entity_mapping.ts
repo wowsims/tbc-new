@@ -45,7 +45,7 @@ export const statI18nKeys: Record<Stat, string> = {
 	[Stat.StatDefenseRating]: 'defense_rating',
 	[Stat.StatBlockRating]: 'block_rating',
 	[Stat.StatBlockValue]: 'block_value',
-	[Stat.StatResilience]: 'resilience',
+	[Stat.StatResilienceRating]: 'resilience',
 	[Stat.StatArcaneResistance]: 'arcane_resistance',
 	[Stat.StatFireResistance]: 'fire_resistance',
 	[Stat.StatFrostResistance]: 'frost_resistance',
@@ -346,6 +346,7 @@ export const bulkSlotNamesI18nKeys: Record<BulkSimItemSlot, string> = {
 	[BulkSimItemSlot.ItemSlotTrinket]: 'trinkets',
 	[BulkSimItemSlot.ItemSlotMainHand]: 'main_hand',
 	[BulkSimItemSlot.ItemSlotOffHand]: 'off_hand',
+	[BulkSimItemSlot.ItemSlotRanged]: 'ranged',
 	[BulkSimItemSlot.ItemSlotHandWeapon]: 'weapons',
 };
 

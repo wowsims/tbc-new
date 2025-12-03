@@ -29,7 +29,7 @@ const modifyDisplayStats = (player: Player<Spec.SpecWarlock>) => {
 };
 
 const SPEC_CONFIG = registerSpecConfig(Spec.SpecWarlock, {
-	cssClass: 'destruction-warlock-sim-ui',
+	cssClass: 'warlock-sim-ui',
 	cssScheme: PlayerClasses.getCssClass(PlayerClasses.Warlock),
 	// List any known bugs / issues here and they'll be shown on the site.
 	knownIssues: [],

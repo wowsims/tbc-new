@@ -1,7 +1,9 @@
 package core
 
 import (
+	"fmt"
 	"math"
+	"strings"
 	"time"
 
 	"github.com/wowsims/tbc/sim/core/proto"
@@ -45,19 +47,19 @@ func (s *UnitStats) ToProto() *proto.UnitStats {
 	}
 }
 
-// // Infer missing stat weight values for HitRating and CritRating if school-specific components were calculated, then call ToProto(). Kept as a separate method in case we want to use the UnitStats struct for other applications
-// // than just stat weights.
-// func (s *UnitStats) ExportWeights() *proto.UnitStats {
-// 	if s.Stats[stats.HitRating] == 0 {
-// 		s.Stats[stats.HitRating] = s.PseudoStats[proto.PseudoStat_PseudoStatPhysicalHitPercent]/PhysicalHitRatingPerHitPercent + s.PseudoStats[proto.PseudoStat_PseudoStatSpellHitPercent]/SpellHitRatingPerHitPercent
-// 	}
+// Infer missing stat weight values for HitRating and CritRating if school-specific components were calculated, then call ToProto(). Kept as a separate method in case we want to use the UnitStats struct for other applications
+// than just stat weights.
+func (s *UnitStats) ExportWeights() *proto.UnitStats {
+	if s.Stats[stats.AllHitRating] == 0 {
+		s.Stats[stats.AllHitRating] = (s.PseudoStats[proto.PseudoStat_PseudoStatMeleeHitPercent] + +s.PseudoStats[proto.PseudoStat_PseudoStatRangedHitPercent]) / PhysicalHitRatingPerHitPercent
+	}
 
-// 	if s.Stats[stats.CritRating] == 0 {
-// 		s.Stats[stats.CritRating] = (s.PseudoStats[proto.PseudoStat_PseudoStatPhysicalCritPercent] + s.PseudoStats[proto.PseudoStat_PseudoStatSpellCritPercent]) / CritRatingPerCritPercent
-// 	}
+	if s.Stats[stats.AllCritRating] == 0 {
+		s.Stats[stats.AllCritRating] = (s.PseudoStats[proto.PseudoStat_PseudoStatMeleeCritPercent] + s.PseudoStats[proto.PseudoStat_PseudoStatRangedCritPercent]) / SpellCritRatingPerCritPercent
+	}
 
-// 	return s.ToProto()
-// }
+	return s.ToProto()
+}
 
 type StatWeightValues struct {
 	Weights       UnitStats
@@ -77,10 +79,10 @@ func NewStatWeightValues() StatWeightValues {
 
 func (swv *StatWeightValues) ToProto() *proto.StatWeightValues {
 	return &proto.StatWeightValues{
-		Weights:       swv.Weights.ToProto(),
-		WeightsStdev:  swv.WeightsStdev.ToProto(),
-		EpValues:      swv.EpValues.ToProto(),
-		EpValuesStdev: swv.EpValuesStdev.ToProto(),
+		Weights:       swv.Weights.ExportWeights(),
+		WeightsStdev:  swv.WeightsStdev.ExportWeights(),
+		EpValues:      swv.EpValues.ExportWeights(),
+		EpValuesStdev: swv.EpValuesStdev.ExportWeights(),
 	}
 }
 
@@ -168,10 +170,7 @@ func buildStatWeightRequests(swr *proto.StatWeightsRequest) *proto.StatWeightReq
 	for _, s := range statsToWeigh {
 		stat := stats.UnitStatFromStat(s)
 		statMod := defaultStatMod
-		// Primary stats have half the value of a secondary stat
-		if s <= stats.Intellect {
-			statMod /= 2
-		} else if stat.EqualsStat(stats.Armor) || stat.EqualsStat(stats.BonusArmor) {
+		if stat.EqualsStat(stats.Armor) || stat.EqualsStat(stats.BonusArmor) {
 			statMod = defaultStatMod * 10
 		}
 		statModsHigh[stat] = statMod
@@ -179,21 +178,22 @@ func buildStatWeightRequests(swr *proto.StatWeightsRequest) *proto.StatWeightReq
 	}
 	for _, s := range swr.PseudoStatsToWeigh {
 		stat := stats.UnitStatFromPseudoStat(s)
-		// statName := proto.PseudoStat_name[int32(s)]
+		statName := proto.PseudoStat_name[int32(s)]
 		// Scale down the stat increment depending on the type of PseudoStat
 		statMod := defaultStatMod
 
-		// if stat.EqualsPseudoStat(proto.PseudoStat_PseudoStatPhysicalHitPercent) {
-		// 	statMod /= PhysicalHitRatingPerHitPercent
-		// } else if stat.EqualsPseudoStat(proto.PseudoStat_PseudoStatSpellHitPercent) {
-		// 	statMod /= SpellHitRatingPerHitPercent
-		// } else if strings.Contains(statName, "Crit") {
-		// 	statMod /= CritRatingPerCritPercent
-		// } else if strings.Contains(statName, "Dps") {
-		// 	statMod *= 0.5
-		// } else {
-		// 	panic(fmt.Sprintf("Unsupported PseudoStat in stat weights request: %s", statName))
-		// }
+		if stat.EqualsPseudoStat(proto.PseudoStat_PseudoStatMeleeHitPercent) ||
+			stat.EqualsPseudoStat(proto.PseudoStat_PseudoStatRangedHitPercent) {
+			statMod /= PhysicalHitRatingPerHitPercent
+		} else if stat.EqualsPseudoStat(proto.PseudoStat_PseudoStatSpellHitPercent) {
+			statMod /= SpellHitRatingPerHitPercent
+		} else if strings.Contains(statName, "Crit") {
+			statMod /= PhysicalCritRatingPerCritPercent // These are the same
+		} else if strings.Contains(statName, "Dps") {
+			statMod *= 0.5
+		} else {
+			panic(fmt.Sprintf("Unsupported PseudoStat in stat weights request: %s", statName))
+		}
 
 		statModsHigh[stat] = statMod
 		statModsLow[stat] = -statMod
@@ -203,13 +203,20 @@ func buildStatWeightRequests(swr *proto.StatWeightsRequest) *proto.StatWeightReq
 		// avoid unnecessary computations. The base Rating EP will be
 		// reconstructed from the PseudoStat EPs when writing the final
 		// results.
-		// if strings.Contains(statName, "Hit") {
-		// 	statModsLow[stats.HitRating] = 0
-		// 	statModsHigh[stats.HitRating] = 0
-		// } else if strings.Contains(statName, "Crit") {
-		// 	statModsLow[stats.CritRating] = 0
-		// 	statModsHigh[stats.CritRating] = 0
-		// }
+		if strings.Contains(statName, "MeleeHit") ||
+			strings.Contains(statName, "RangedHit") {
+			statModsLow[stats.MeleeHitRating] = 0
+			statModsHigh[stats.MeleeHitRating] = 0
+		} else if strings.Contains(statName, "Hit") {
+			statModsLow[stats.SpellHitRating] = 0
+			statModsLow[stats.SpellHitRating] = 0
+		} else if strings.Contains(statName, "MeleeCrit") {
+			statModsLow[stats.MeleeCritRating] = 0
+			statModsHigh[stats.MeleeCritRating] = 0
+		} else if strings.Contains(statName, "Crit") {
+			statModsLow[stats.SpellCritRating] = 0
+			statModsHigh[stats.SpellCritRating] = 0
+		}
 
 	}
 
@@ -304,8 +311,8 @@ func computeStatWeights(swcr *proto.StatWeightsCalcRequest) *proto.StatWeightsRe
 			}
 			mean := weightResults.Weights.Get(stat) / weightResults.Weights.Stats[refStat]
 			stdev := weightResults.WeightsStdev.Get(stat) / math.Abs(weightResults.Weights.Stats[refStat])
-			weightResults.EpValues.AddStat(stat, mean)
-			weightResults.EpValuesStdev.AddStat(stat, stdev)
+			weightResults.EpValues.AddStat(stat, math.Abs(mean))
+			weightResults.EpValuesStdev.AddStat(stat, math.Abs(stdev))
 		}
 
 		calcEpResults(&result.Dps, referenceStat)

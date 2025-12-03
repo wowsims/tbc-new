@@ -351,25 +351,6 @@ func processItems(instance *dbc.DBC,
 			parsed.Icon = strings.ToLower(database.GetIconName(iconsMap, item.FDID))
 		}
 
-		// If an item has any "All" ratings, add it to Melee and Spell
-		// if len(parsed.ScalingOptions[0].Stats) > 0 {
-		// 	value := parsed.ScalingOptions[0].Stats[int32(proto.Stat_StatAllHitRating)]
-		// 	if value > 0 {
-		// 		parsed.ScalingOptions[0].Stats[int32(proto.Stat_StatMeleeHitRating)] = value
-		// 		parsed.ScalingOptions[0].Stats[int32(proto.Stat_StatSpellHitRating)] = value
-		// 	}
-		// 	value = parsed.ScalingOptions[0].Stats[int32(proto.Stat_StatAllCritRating)]
-		// 	if value > 0 {
-		// 		parsed.ScalingOptions[0].Stats[int32(proto.Stat_StatMeleeCritRating)] = value
-		// 		parsed.ScalingOptions[0].Stats[int32(proto.Stat_StatSpellCritRating)] = value
-		// 	}
-		// 	value = parsed.ScalingOptions[0].Stats[int32(proto.Stat_StatAllHasteRating)]
-		// 	if value > 0 {
-		// 		parsed.ScalingOptions[0].Stats[int32(proto.Stat_StatMeleeHasteRating)] = value
-		// 		parsed.ScalingOptions[0].Stats[int32(proto.Stat_StatSpellHasteRating)] = value
-		// 	}
-		// }
-
 		drops := dropSources[int(item.Id)]
 		if drops != nil {
 			sources := make([]*proto.UIItemSource, 0, len(drops))

@@ -8,7 +8,7 @@ import (
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
-const UPGRADE_SYSTEM_ACTIVE = true
+const UPGRADE_SYSTEM_ACTIVE = false
 
 type Item struct {
 	Id                     int
@@ -128,7 +128,10 @@ func (item *Item) GetStats(itemLevel int) *stats.Stats {
 			// Skip this stat then
 			continue
 		}
-		stats[stat] = item.BonusAmountCalculated[i]
+		stats[stat] = item.GetScaledStat(i, itemLevel)
+		if stat == proto.Stat_StatArmorPenetration {
+			stats[stat] = -stats[stat]
+		}
 	}
 
 	armor := item.GetArmorValue(itemLevel)
@@ -209,9 +212,9 @@ func (item *Item) GetGemBonus() stats.Stats {
 		value := bonus.EffectPointsMin[i]
 		stats[stat] = float64(value)
 		//Todo: check if this is always true
-		if stat == proto.Stat_StatAttackPower {
-			stats[proto.Stat_StatRangedAttackPower] = float64(value)
-		}
+		// if stat == proto.Stat_StatAttackPower {
+		// 	stats[proto.Stat_StatRangedAttackPower] = float64(value)
+		// }
 	}
 	return stats
 }

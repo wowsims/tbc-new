@@ -254,9 +254,9 @@ func (druid *Druid) registerNaturesVigil() {
 		},
 
 		OnSpellHitDealt: func(_ *core.Aura, _ *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			if !spell.Flags.Matches(core.SpellFlagAoE) {
-				smartHealStrength = max(smartHealStrength, result.Damage)
-			}
+			// if !spell.Flags.Matches(core.SpellFlagAoE) {
+			// 	smartHealStrength = max(smartHealStrength, result.Damage)
+			// }
 		},
 	})
 

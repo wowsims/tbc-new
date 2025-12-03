@@ -386,15 +386,15 @@ export const displayStatOrder: Array<UnitStat> = [
 	UnitStat.fromStat(Stat.StatMP5),
 	UnitStat.fromStat(Stat.StatAttackPower),
 	UnitStat.fromStat(Stat.StatRangedAttackPower),
+	UnitStat.fromStat(Stat.StatExpertiseRating),
+	UnitStat.fromStat(Stat.StatArmorPenetration),
+	UnitStat.fromStat(Stat.StatSpellPenetration),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatMeleeHitPercent),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatMeleeCritPercent),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatMeleeHastePercent),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatRangedHitPercent),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatRangedCritPercent),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatRangedHastePercent),
-	UnitStat.fromStat(Stat.StatExpertiseRating),
-	UnitStat.fromStat(Stat.StatArmorPenetration),
-	UnitStat.fromStat(Stat.StatSpellPenetration),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatBlockPercent),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatDodgePercent),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatParryPercent),
@@ -435,6 +435,9 @@ export class Stats {
 	}
 
 	getStat(stat: Stat): number {
+		if (stat === Stat.StatMeleeHitRating || stat === Stat.StatSpellHitRating) {
+			return this.stats[stat] + this.stats[Stat.StatAllHitRating]
+		}
 		return this.stats[stat];
 	}
 	getPseudoStat(stat: PseudoStat): number {
@@ -727,8 +730,6 @@ export const DEFAULT_GEM_STATS = [
 	Stat.StatAllHitRating,
 	Stat.StatAllCritRating,
 	Stat.StatAllHasteRating,
-	Stat.StatExpertiseRating,
-	Stat.StatResilience,
 ];
 export const DEFAULT_CASTER_GEM_STATS = [...DEFAULT_GEM_STATS, Stat.StatIntellect, Stat.StatSpellPower];
 export const DEFAULT_HYBRID_CASTER_GEM_STATS = [...DEFAULT_CASTER_GEM_STATS, Stat.StatSpirit];

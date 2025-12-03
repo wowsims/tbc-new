@@ -28,13 +28,11 @@ export const getWeaponStatsBySlot = (item: Item, slot: ItemSlot, upgradeStep: 0)
 	if (item.weaponSpeed > 0) {
 		const weaponDps = getWeaponDPS(item, upgradeStep);
 		if (slot === ItemSlot.ItemSlotMainHand) {
-			if (item.rangedWeaponType > RangedWeaponType.RangedWeaponTypeUnknown) {
-				itemStats = itemStats.withPseudoStat(PseudoStat.PseudoStatRangedDps, weaponDps);
-			} else {
-				itemStats = itemStats.withPseudoStat(PseudoStat.PseudoStatMainHandDps, weaponDps);
-			}
+			itemStats = itemStats.withPseudoStat(PseudoStat.PseudoStatMainHandDps, weaponDps);
 		} else if (slot === ItemSlot.ItemSlotOffHand) {
 			itemStats = itemStats.withPseudoStat(PseudoStat.PseudoStatOffHandDps, weaponDps);
+		} else if (slot === ItemSlot.ItemSlotRanged) {
+			itemStats = itemStats.withPseudoStat(PseudoStat.PseudoStatRangedDps, weaponDps);
 		}
 	}
 	return itemStats;
@@ -170,9 +168,9 @@ export class EquippedItem {
 			});
 
 		// Copy the extra socket gem directly.
-		if (this.couldHaveExtraSocket()) {
-			newGems.push(this._gems[this._gems.length - 1]);
-		}
+		// if (this.couldHaveExtraSocket()) {
+		// 	newGems.push(this._gems[this._gems.length - 1]);
+		// }
 
 		return new EquippedItem({
 			item,
@@ -264,6 +262,7 @@ export class EquippedItem {
 	withDynamicStats() {
 		const item = this.item;
 		const scalingOptions = item.scalingOptions[0];
+
 		item.stats = new Stats().asProtoArray().map((_, index) => scalingOptions.stats[index] || 0);
 		item.weaponDamageMin = scalingOptions.weaponDamageMin;
 		item.weaponDamageMax = scalingOptions.weaponDamageMax;
@@ -323,15 +322,15 @@ export class EquippedItem {
 	}
 
 	requiresExtraSocket(): boolean {
-		return this.couldHaveExtraSocket() && this.hasExtraGem() && this._gems[this._gems.length - 1] != null;
+		return false; //this.couldHaveExtraSocket() && this.hasExtraGem() && this._gems[this._gems.length - 1] != null;
 	}
 
 	hasExtraSocket(isBlacksmithing: boolean): boolean {
-		return isBlacksmithing && this.couldHaveExtraSocket();
+		return false; //isBlacksmithing && this.couldHaveExtraSocket();
 	}
 
 	numSockets(isBlacksmithing: boolean): number {
-		return this._item.gemSockets.length + (this.hasExtraSocket(isBlacksmithing) ? 1 : 0);
+		return this._item.gemSockets.length;
 	}
 
 	numSocketsOfColor(color: GemColor | null): number {
@@ -357,7 +356,7 @@ export class EquippedItem {
 	}
 
 	hasExtraGem(): boolean {
-		return this._gems.length > this.item.gemSockets.length;
+		return false; this._gems.length > this.item.gemSockets.length;
 	}
 
 	hasSocketedGem(socketIdx: number): boolean {
@@ -365,17 +364,17 @@ export class EquippedItem {
 	}
 
 	allSocketColors(): Array<GemColor> {
-		return this.couldHaveExtraSocket() ? this.gemSockets.concat([GemColor.GemColorPrismatic]) : this.gemSockets;
+		return this._item.gemSockets;
 	}
 	curSocketColors(isBlacksmithing: boolean): Array<GemColor> {
-		return this.hasExtraSocket(isBlacksmithing) ? this.gemSockets.concat([GemColor.GemColorPrismatic]) : this.gemSockets;
+		return this._item.gemSockets;
 	}
 
 	curGems(isBlacksmithing: boolean): Array<Gem | null> {
-		return this._gems.slice(0, this.numSockets(isBlacksmithing));
+		return this._gems;//.slice(0, this.numSockets(isBlacksmithing));
 	}
 	curEquippedGems(isBlacksmithing: boolean): Array<Gem> {
-		return this.curGems(isBlacksmithing).filter(g => g != null) as Array<Gem>;
+		return this.curGems(true).filter(g => g != null) as Array<Gem>;
 	}
 
 	getProfessionRequirements(): Array<Profession> {
@@ -391,9 +390,6 @@ export class EquippedItem {
 				profs.push(gem.requiredProfession);
 			}
 		});
-		if (this.requiresExtraSocket()) {
-			profs.push(Profession.Blacksmithing);
-		}
 		return distinct(profs);
 	}
 	getFailedProfessionRequirements(professions: Array<Profession>): Array<Item | Gem | Enchant> {

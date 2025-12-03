@@ -6,7 +6,7 @@ import (
 	"github.com/wowsims/tbc/sim/core/proto"
 )
 
-const CharacterLevel = 90
+const CharacterLevel = 70
 const MinIlvl = 60
 const MaxIlvl = 600
 const MinUpgradeIlvl = 458
