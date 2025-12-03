@@ -435,6 +435,9 @@ export class Stats {
 	}
 
 	getStat(stat: Stat): number {
+		if (stat === Stat.StatMeleeHitRating || stat === Stat.StatSpellHitRating) {
+			return this.stats[stat] + this.stats[Stat.StatAllHitRating]
+		}
 		return this.stats[stat];
 	}
 	getPseudoStat(stat: PseudoStat): number {
