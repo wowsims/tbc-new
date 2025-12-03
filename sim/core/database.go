@@ -239,7 +239,6 @@ type ItemSpec struct {
 type Equipment [NumItemSlots]Item
 
 func (equipment *Equipment) MainHand() *Item {
-	println(equipment[proto.ItemSlot_ItemSlotMainHand].Name)
 	return &equipment[proto.ItemSlot_ItemSlotMainHand]
 }
 
