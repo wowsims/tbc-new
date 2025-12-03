@@ -368,7 +368,7 @@ var RatingModToStat = map[RatingModType]proto.Stat{
 	RATING_MOD_MULTISTRIKE:  -1,
 	RATING_MOD_READINESS:    -1,
 	RATING_MOD_SPEED:        -1,
-	RATING_MOD_RESILIENCE:   proto.Stat_StatResilience,
+	RATING_MOD_RESILIENCE:   proto.Stat_StatResilienceRating,
 	RATING_MOD_LEECH:        -1,
 	RATING_MOD_HASTE_MELEE:  proto.Stat_StatMeleeHasteRating,
 	RATING_MOD_HASTE_RANGED: proto.Stat_StatMeleeHasteRating,

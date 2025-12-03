@@ -422,12 +422,12 @@ func NewItem(itemSpec ItemSpec) Item {
 		panic(fmt.Sprintf("No item with id: %d", itemSpec.ID))
 	}
 
-	// TODO: Pull the direct stats
-	// item.Stats = stats.FromProtoMap(scalingOptions.Stats)
+	scalingOptions := item.ScalingOptions[0]
+	item.Stats = stats.FromProtoMap(scalingOptions.Stats)
 
-	// item.WeaponDamageMax = scalingOptions.WeaponDamageMax
-	// item.WeaponDamageMin = scalingOptions.WeaponDamageMin
-	// item.RandPropPoints = scalingOptions.RandPropPoints
+	item.WeaponDamageMax = scalingOptions.WeaponDamageMax
+	item.WeaponDamageMin = scalingOptions.WeaponDamageMin
+	item.RandPropPoints = scalingOptions.RandPropPoints
 
 	if itemSpec.RandomSuffix != 0 {
 		if randomSuffix, ok := RandomSuffixesByID[itemSpec.RandomSuffix]; ok {

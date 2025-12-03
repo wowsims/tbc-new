@@ -727,8 +727,6 @@ export const DEFAULT_GEM_STATS = [
 	Stat.StatAllHitRating,
 	Stat.StatAllCritRating,
 	Stat.StatAllHasteRating,
-	Stat.StatExpertiseRating,
-	Stat.StatResilience,
 ];
 export const DEFAULT_CASTER_GEM_STATS = [...DEFAULT_GEM_STATS, Stat.StatIntellect, Stat.StatSpellPower];
 export const DEFAULT_HYBRID_CASTER_GEM_STATS = [...DEFAULT_CASTER_GEM_STATS, Stat.StatSpirit];

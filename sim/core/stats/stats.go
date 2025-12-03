@@ -53,7 +53,7 @@ const (
 	BlockValue
 	DodgeRating
 	ParryRating
-	Resilience
+	ResilienceRating
 	Armor
 	BonusArmor
 	Health
@@ -157,6 +157,12 @@ func (s Stat) StatName() string {
 		return "MeleeHasteRating"
 	case ExpertiseRating:
 		return "ExpertiseRating"
+	case AllHitRating:
+		return "HitRating"
+	case AllCritRating:
+		return "CritRating"
+	case AllHasteRating:
+		return "HasteRating"
 	case ArmorPenetration:
 		return "ArmorPenetration"
 	case DodgeRating:
@@ -171,8 +177,8 @@ func (s Stat) StatName() string {
 		return "FeralAttackPower"
 	case SpellPower:
 		return "SpellPower"
-	case Resilience:
-		return "PvpResilienceRating"
+	case ResilienceRating:
+		return "ResilienceRating"
 	case Armor:
 		return "Armor"
 	case BonusArmor:

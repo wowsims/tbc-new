@@ -373,15 +373,15 @@ export class Gear extends BaseGear {
 	withoutBlacksmithSockets(): Gear {
 		let curGear: Gear = this;
 
-		const wristItem = this.getEquippedItem(ItemSlot.ItemSlotWrist);
-		if (wristItem) {
-			curGear = curGear.withEquippedItem(ItemSlot.ItemSlotWrist, wristItem.withGem(null, wristItem.numPossibleSockets - 1), true);
-		}
+		// const wristItem = this.getEquippedItem(ItemSlot.ItemSlotWrist);
+		// if (wristItem) {
+		// 	curGear = curGear.withEquippedItem(ItemSlot.ItemSlotWrist, wristItem.withGem(null, wristItem.numPossibleSockets - 1), true);
+		// }
 
-		const handsItem = this.getEquippedItem(ItemSlot.ItemSlotHands);
-		if (handsItem) {
-			curGear = curGear.withEquippedItem(ItemSlot.ItemSlotHands, handsItem.withGem(null, handsItem.numPossibleSockets - 1), true);
-		}
+		// const handsItem = this.getEquippedItem(ItemSlot.ItemSlotHands);
+		// if (handsItem) {
+		// 	curGear = curGear.withEquippedItem(ItemSlot.ItemSlotHands, handsItem.withGem(null, handsItem.numPossibleSockets - 1), true);
+		// }
 
 		return curGear;
 	}

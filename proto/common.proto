@@ -215,7 +215,7 @@ enum Stat {
 	StatBlockValue = 32;
 	StatDodgeRating = 33;
 	StatParryRating = 34;
-	StatResilience = 35;
+	StatResilienceRating = 35;
 	StatArmor = 36;
 	StatBonusArmor = 37;
 

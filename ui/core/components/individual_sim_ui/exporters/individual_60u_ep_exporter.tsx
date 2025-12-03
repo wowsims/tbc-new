@@ -86,7 +86,7 @@ export class Individual60UEPExporter<SpecType extends Spec> extends IndividualEx
 		[Stat.StatDefenseRating]: '',
 		[Stat.StatBlockRating]: '',
 		[Stat.StatBlockValue]: '',
-		[Stat.StatResilience]: '',
+		[Stat.StatResilienceRating]: '',
 		[Stat.StatArcaneResistance]: '',
 		[Stat.StatFireResistance]: '',
 		[Stat.StatFrostResistance]: '',

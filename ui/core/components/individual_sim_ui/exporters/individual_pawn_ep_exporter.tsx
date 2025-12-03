@@ -88,7 +88,7 @@ export class IndividualPawnEPExporter<SpecType extends Spec> extends IndividualE
 		[Stat.StatDefenseRating]: '',
 		[Stat.StatBlockRating]: '',
 		[Stat.StatBlockValue]: '',
-		[Stat.StatResilience]: '',
+		[Stat.StatResilienceRating]: '',
 		[Stat.StatArcaneResistance]: '',
 		[Stat.StatFireResistance]: '',
 		[Stat.StatFrostResistance]: '',

@@ -30,6 +30,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 		Stat.StatMeleeHasteRating,
 		Stat.StatMeleeHitRating,
 		Stat.StatArmorPenetration,
+		Stat.StatExpertiseRating,
 		Stat.StatAttackPower
 	],
 	epPseudoStats: [PseudoStat.PseudoStatMainHandDps, PseudoStat.PseudoStatOffHandDps],
@@ -37,7 +38,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 	epReferenceStat: Stat.StatAttackPower,
 	// Which stats to display in the Character Stats section, at the bottom of the left-hand sidebar.
 	displayStats: UnitStat.createDisplayStatArray(
-		[Stat.StatHealth, Stat.StatStamina, Stat.StatAgility, Stat.StatStrength, Stat.StatAttackPower, Stat.StatArmorPenetration],
+		[Stat.StatHealth, Stat.StatStamina, Stat.StatAgility, Stat.StatStrength, Stat.StatAttackPower, Stat.StatArmorPenetration, Stat.StatExpertiseRating],
 		[PseudoStat.PseudoStatMeleeHitPercent, PseudoStat.PseudoStatMeleeCritPercent, PseudoStat.PseudoStatMeleeHastePercent],
 	),
 
