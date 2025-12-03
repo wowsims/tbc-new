@@ -443,7 +443,7 @@ func (unit *Unit) EnableAutoAttacks(agent Agent, options AutoAttackOptions) {
 		ActionID:    ActionID{OtherID: proto.OtherAction_OtherActionAttack, Tag: 2},
 		SpellSchool: options.OffHand.GetSpellSchool(),
 		ProcMask:    Ternary(options.ProcMask == ProcMaskUnknown, ProcMaskMeleeOHAuto, options.ProcMask),
-		Flags:       SpellFlagMeleeMetrics | SpellFlagNoOnCastComplete,
+		Flags:       SpellFlagMeleeMetrics | SpellFlagIncludeTargetBonusDamage | SpellFlagNoOnCastComplete,
 
 		DamageMultiplier:         1,
 		DamageMultiplierAdditive: 1,
@@ -463,7 +463,7 @@ func (unit *Unit) EnableAutoAttacks(agent Agent, options AutoAttackOptions) {
 		ActionID:     ActionID{OtherID: proto.OtherAction_OtherActionShoot},
 		SpellSchool:  options.Ranged.GetSpellSchool(),
 		ProcMask:     Ternary(options.ProcMask == ProcMaskUnknown, ProcMaskRangedAuto, options.ProcMask),
-		Flags:        SpellFlagMeleeMetrics | SpellFlagRanged,
+		Flags:        SpellFlagMeleeMetrics | SpellFlagIncludeTargetBonusDamage,
 		MissileSpeed: 40,
 
 		DamageMultiplier:         1,

@@ -659,7 +659,7 @@ func (unit *Unit) NewDamageAbsorptionAura(config AbsorptionAuraConfig) *DamageAb
 	})
 
 	extraSpellCheck := func(sim *Simulation, spell *Spell, result *SpellResult, isPeriodic bool) bool {
-		return !spell.Flags.Matches(SpellFlagBypassAbsorbs) && ((config.ShouldApplyToResult == nil) || config.ShouldApplyToResult(sim, spell, result, isPeriodic))
+		return ((config.ShouldApplyToResult == nil) || config.ShouldApplyToResult(sim, spell, result, isPeriodic))
 	}
 
 	unit.AddDynamicDamageTakenModifier(func(sim *Simulation, spell *Spell, result *SpellResult, isPeriodic bool) {

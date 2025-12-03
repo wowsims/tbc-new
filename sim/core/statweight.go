@@ -170,11 +170,12 @@ func buildStatWeightRequests(swr *proto.StatWeightsRequest) *proto.StatWeightReq
 	for _, s := range statsToWeigh {
 		stat := stats.UnitStatFromStat(s)
 		statMod := defaultStatMod
-		// Primary stats have half the value of a secondary stat
-		if s <= stats.Intellect {
-			statMod /= 2
-		} else if stat.EqualsStat(stats.Armor) || stat.EqualsStat(stats.BonusArmor) {
+		if stat.EqualsStat(stats.Armor) || stat.EqualsStat(stats.BonusArmor) {
 			statMod = defaultStatMod * 10
+		} else if stat.EqualsStat(stats.ArmorPenetration) || stat.EqualsStat(stats.SpellPenetration) {
+			// Pen stats are stored as negatives
+			statMod = -defaultStatMod
+			println("ASDF")
 		}
 		statModsHigh[stat] = statMod
 		statModsLow[stat] = -statMod
@@ -314,8 +315,8 @@ func computeStatWeights(swcr *proto.StatWeightsCalcRequest) *proto.StatWeightsRe
 			}
 			mean := weightResults.Weights.Get(stat) / weightResults.Weights.Stats[refStat]
 			stdev := weightResults.WeightsStdev.Get(stat) / math.Abs(weightResults.Weights.Stats[refStat])
-			weightResults.EpValues.AddStat(stat, mean)
-			weightResults.EpValuesStdev.AddStat(stat, stdev)
+			weightResults.EpValues.AddStat(stat, math.Abs(mean))
+			weightResults.EpValuesStdev.AddStat(stat, math.Abs(stdev))
 		}
 
 		calcEpResults(&result.Dps, referenceStat)
