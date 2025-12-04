@@ -140,4 +140,8 @@ func init() {
 			},
 		})
 	})
+
+	// Scopes
+	// The ratings for these don't exist, so just apply a spellmod for Ranged-flagged things
+
 }
