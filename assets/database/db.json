@@ -9662,10 +9662,10 @@
 {"id":8647,"name":"Expose Armor","icon":"ability_warrior_riposte","hasBuff":true},
 {"id":9102,"name":"Enchant Cloak - Greater Agility","icon":"trade_engraving"},
 {"id":9316,"name":"Inscription of Faith","icon":"spell_holy_sealofsalvation"},
-{"id":9318,"name":"Greater Inscription of Faith","icon":"spell_holy_greaterblessingofsalvation"},
+{"id":9318,"name":"Zandalar Signet of Serenity","icon":"spell_holy_powerwordshield"},
 {"id":9331,"name":"Greater Inscription of the Blade","icon":"spell_holy_weaponmastery"},
 {"id":9334,"name":"Inscription of Vengeance","icon":"spell_holy_fistofjustice"},
-{"id":9336,"name":"Greater Inscription of Vengeance","icon":"spell_holy_greaterblessingofkings"},
+{"id":9336,"name":"Zandalar Signet of Might","icon":"inv_misc_armorkit_08"},
 {"id":9344,"name":"Inscription of Discipline","icon":"spell_holy_sealofwisdom"},
 {"id":9346,"name":"Greater Inscription of Discipline","icon":"spell_holy_sealofwisdom"},
 {"id":9408,"name":"Greater Inscription of the Oracle","icon":"spell_holy_powerinfusion"},
@@ -10519,7 +10519,7 @@
 {"id":17958,"name":"Emberstorm","icon":"spell_fire_selfdestruct"},
 {"id":17959,"name":"Ruin","icon":"spell_shadow_shadowwordpain"},
 {"id":17962,"name":"Conflagrate","icon":"spell_fire_fireball"},
-{"id":18029,"name":"Glyph of Renewal","icon":"spell_holy_healingaura"},
+{"id":18029,"name":"Enchant Gloves - Major Healing","icon":"inv_misc_note_01"},
 {"id":18048,"name":"Enchant Weapon - Major Healing","icon":"inv_misc_note_01"},
 {"id":18073,"name":"Pyroclasm","icon":"spell_fire_volcano"},
 {"id":18094,"name":"Nightfall","icon":"spell_shadow_twilight"},
@@ -11037,7 +11037,7 @@
 {"id":25064,"name":"Enchant Gloves - Shadow Power","icon":"inv_misc_note_01"},
 {"id":25065,"name":"Enchant Gloves - Fire Power","icon":"inv_misc_note_01"},
 {"id":25066,"name":"Enchant Gloves - Frost Power","icon":"inv_misc_note_01"},
-{"id":25067,"name":"Enchant Gloves - Healing Power","icon":"inv_misc_note_01"},
+{"id":25067,"name":"Enchant Bracer - Superior Healing","icon":"inv_misc_note_01"},
 {"id":25068,"name":"Enchant Cloak - Greater Fire Resistance","icon":"inv_misc_note_01"},
 {"id":25069,"name":"Enchant Cloak - Greater Nature Resistance","icon":"inv_misc_note_01"},
 {"id":25070,"name":"Enchant Cloak - Subtlety","icon":"inv_misc_note_01"},
@@ -11110,7 +11110,7 @@
 {"id":27902,"name":"Spell Warding","icon":"spell_holy_spellwarding"},
 {"id":27903,"name":"Spell Warding","icon":"spell_holy_spellwarding"},
 {"id":27904,"name":"Spell Warding","icon":"spell_holy_spellwarding"},
-{"id":27908,"name":"Enchant Bracer - Major Defense","icon":"inv_misc_note_01"},
+{"id":27908,"name":"Enchant Cloak - Steelweave","icon":"inv_misc_note_01"},
 {"id":27912,"name":"Enchant Bracer - Restore Mana Prime","icon":"inv_misc_note_01"},
 {"id":27916,"name":"Enchant Bracer - Fortitude","icon":"inv_misc_note_01"},
 {"id":27918,"name":"Enchant Bracer - Spellpower","icon":"inv_misc_note_01"},
@@ -12064,9 +12064,9 @@
 {"id":357403,"name":"Enchant Ring - Stats","icon":"inv_misc_note_01"}
 ],
 "encounters":[
-{"path":"Default/Raid Target","targets":[{"path":"Default/Raid Target","target":{"id":31146,"name":"Raid Target","level":93,"mobType":7,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,24835,0,120016403,0,0,0,0,0,0,0],"minBaseDamage":550000,"damageSpread":0.4,"swingSpeed":2}}]},
-{"path":"Default/Movement","targets":[{"path":"Default/Movement","target":{"id":31147,"name":"Movement","level":93,"mobType":7,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,24835,0,120016403,0,0,0,0,0,0,0],"minBaseDamage":550000,"damageSpread":0.4,"swingSpeed":2,"targetInputs":[{"inputType":1,"label":"Movement Interval","tooltip":"How often the player will move in seconds","numberValue":10},{"inputType":1,"label":"Reaction Time","tooltip":"How long the player can wait for casts to finish before moving in seconds","numberValue":1.5},{"inputType":1,"label":"Yards","tooltip":"How many yards the player moves","numberValue":5}]}}]},
-{"path":"Default/Dynamic Adds","targets":[{"path":"Default/Dynamic Boss","target":{"id":99999,"name":"Dynamic Boss","level":93,"mobType":7,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,24835,0,0,0,0,0,0,0,0,0],"minBaseDamage":900000,"damageSpread":0.5,"swingSpeed":2,"targetInputs":[{"inputType":1,"label":"Add(s) respawn Time","tooltip":"Time for add(s) to respawn after previous died (in seconds)","numberValue":10},{"inputType":1,"label":"Add(s) lifetime","tooltip":"How long the add(s) stay alive (in seconds)","numberValue":20},{"inputType":1,"label":"Add(s) spawn delay","tooltip":"Initial delay before the add(s) spawn (in seconds)","numberValue":10}]}},{"path":"Default/Dynamic Add","target":{"id":99998,"name":"Dynamic Add","level":92,"mobType":7,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,23115,0,0,0,0,0,0,0,0,0],"minBaseDamage":300000,"damageSpread":0.4,"swingSpeed":1.5,"tankIndex":1}}]}
+{"path":"Default/Raid Target","targets":[{"path":"Default/Raid Target","target":{"id":31146,"name":"Raid Target","level":73,"mobType":7,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7700,0,4552800,0,0,0,0,0,0,0],"minBaseDamage":3000,"damageSpread":0.4,"swingSpeed":2}}]},
+{"path":"Default/Movement","targets":[{"path":"Default/Movement","target":{"id":31147,"name":"Movement","level":73,"mobType":7,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7700,0,4552800,0,0,0,0,0,0,0],"minBaseDamage":3000,"damageSpread":0.4,"swingSpeed":2,"targetInputs":[{"inputType":1,"label":"Movement Interval","tooltip":"How often the player will move in seconds","numberValue":10},{"inputType":1,"label":"Reaction Time","tooltip":"How long the player can wait for casts to finish before moving in seconds","numberValue":1.5},{"inputType":1,"label":"Yards","tooltip":"How many yards the player moves","numberValue":5}]}}]},
+{"path":"Default/Dynamic Adds","targets":[{"path":"Default/Dynamic Boss","target":{"id":99999,"name":"Dynamic Boss","level":73,"mobType":7,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7700,0,0,0,0,0,0,0,0,0],"minBaseDamage":3000,"damageSpread":0.5,"swingSpeed":2,"targetInputs":[{"inputType":1,"label":"Add(s) respawn Time","tooltip":"Time for add(s) to respawn after previous died (in seconds)","numberValue":10},{"inputType":1,"label":"Add(s) lifetime","tooltip":"How long the add(s) stay alive (in seconds)","numberValue":20},{"inputType":1,"label":"Add(s) spawn delay","tooltip":"Initial delay before the add(s) spawn (in seconds)","numberValue":10}]}},{"path":"Default/Dynamic Add","target":{"id":99998,"name":"Dynamic Add","level":72,"mobType":7,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7700,0,0,0,0,0,0,0,0,0],"minBaseDamage":700,"damageSpread":0.4,"swingSpeed":1.5,"tankIndex":1}}]}
 ],
 "consumables":[
 {"id":13442,"type":1,"stats":[60,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"name":"Mighty Rage Potion","icon":"inv_potion_41","buffDuration":20,"categoryCooldownDuration":120,"effectIds":[696085]},

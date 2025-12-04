@@ -49,7 +49,7 @@ func (d DummyTooltipDataProvider) GetSpellStacks(spellId int64) int64 {
 }
 
 func (d DummyTooltipDataProvider) GetPlayerLevel() float64 {
-	return 90
+	return 70
 }
 
 func (d DummyTooltipDataProvider) GetSpellProcChance(spellId int64) float64 {
