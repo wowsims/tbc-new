@@ -22,7 +22,6 @@ const (
 	Agility
 	Stamina
 	Intellect
-	Rage
 	SpellPower
 	HealingPower
 	SpellDamage
@@ -45,9 +44,9 @@ const (
 	MeleeHasteRating
 	ArmorPenetration
 	ExpertiseRating
-	AllHitRating
-	AllCritRating
-	AllHasteRating
+	AllPhysHitRating
+	AllPhysCritRating
+	AllPhysHasteRating
 	DefenseRating
 	BlockRating
 	BlockValue
@@ -157,11 +156,11 @@ func (s Stat) StatName() string {
 		return "MeleeHasteRating"
 	case ExpertiseRating:
 		return "ExpertiseRating"
-	case AllHitRating:
+	case AllPhysHitRating:
 		return "HitRating"
-	case AllCritRating:
+	case AllPhysCritRating:
 		return "CritRating"
-	case AllHasteRating:
+	case AllPhysHasteRating:
 		return "HasteRating"
 	case ArmorPenetration:
 		return "ArmorPenetration"

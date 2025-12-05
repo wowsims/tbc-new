@@ -222,14 +222,14 @@ func ConvertModRatingFlagToRatingStat(flag int) proto.Stat {
 		return proto.Stat_StatBlockRating
 	case 64:
 		// The forbidden "Only Ranged Hit". There's a single instance of this (Enchant 2523, SpellID 22780).
-		return proto.Stat_StatRage
+		return -1
 	case 96:
-		return proto.Stat_StatAllHitRating
+		return proto.Stat_StatAllPhysHitRating
 	case 128:
 		return proto.Stat_StatSpellHitRating
 	case 512:
-		// The forbidden "Only Ranged Crit". Only two of these exist, and they're not valid sim items.
-		return proto.Stat_StatRage
+		// The forbidden "Only Ranged Crit". Only two of these exist, one is low level gloves another is an enchant.
+		return -1
 	case 768:
 		return proto.Stat_StatMeleeCritRating
 	case 1024:
@@ -242,6 +242,6 @@ func ConvertModRatingFlagToRatingStat(flag int) proto.Stat {
 		return proto.Stat_StatResilienceRating
 	default:
 		println("UNHANDLED RATING FLAG: " + strconv.Itoa(flag))
-		return proto.Stat_StatRage
+		return -1
 	}
 }

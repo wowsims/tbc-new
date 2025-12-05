@@ -112,7 +112,7 @@ func NewHunter(character *core.Character, options *proto.Player, hunterOptions *
 }
 
 func (hunter *Hunter) Initialize() {
-	hunter.AutoAttacks.RangedConfig().CritMultiplier = hunter.DefaultCritMultiplier()
+	hunter.AutoAttacks.RangedConfig().CritMultiplier = hunter.DefaultMeleeCritMultiplier()
 
 	hunter.RegisterSpells()
 

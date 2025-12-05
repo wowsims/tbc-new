@@ -56,6 +56,10 @@ func AllWeaponSlots() []proto.ItemSlot {
 	return []proto.ItemSlot{proto.ItemSlot_ItemSlotMainHand, proto.ItemSlot_ItemSlotOffHand, proto.ItemSlot_ItemSlotRanged}
 }
 
+func AllMeleeWeaponSlots() []proto.ItemSlot {
+	return []proto.ItemSlot{proto.ItemSlot_ItemSlotMainHand, proto.ItemSlot_ItemSlotOffHand}
+}
+
 func ArmorSpecializationSlots() []proto.ItemSlot {
 	return []proto.ItemSlot{
 		proto.ItemSlot_ItemSlotHead,

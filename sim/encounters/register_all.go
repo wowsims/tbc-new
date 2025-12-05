@@ -25,19 +25,19 @@ func AddDefaultPresetEncounter() {
 		Config: &proto.Target{
 			Id:        31146,
 			Name:      "Raid Target",
-			Level:     93,
+			Level:     73,
 			MobType:   proto.MobType_MobTypeMechanical,
 			TankIndex: 0,
 
 			Stats: stats.Stats{
-				stats.Health:      120_016_403,
-				stats.Armor:       24835,
+				stats.Health:      4_552_800,
+				stats.Armor:       7700,
 				stats.AttackPower: 0,
 			}.ToProtoArray(),
 
 			SpellSchool:      proto.SpellSchool_SpellSchoolPhysical,
 			SwingSpeed:       2,
-			MinBaseDamage:    550000,
+			MinBaseDamage:    3000,
 			DamageSpread:     0.4,
 			SuppressDodge:    false,
 			ParryHaste:       false,

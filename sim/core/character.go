@@ -63,6 +63,8 @@ type Character struct {
 	bonusOHDps     float64
 	bonusRangedDps float64
 
+	spellCritMultiplier float64
+
 	professions [2]proto.Profession
 
 	// Used for effects like "Increased Armor Value from Items"
@@ -122,6 +124,7 @@ func NewCharacter(party *Party, partyIndex int, player *proto.Player) Character 
 
 		majorCooldownManager: newMajorCooldownManager(player.Cooldowns),
 	}
+	character.spellCritMultiplier = character.DefaultSpellCritMultiplier()
 	character.GCD = character.NewTimer()
 	character.RotationTimer = character.NewTimer()
 
@@ -160,7 +163,7 @@ func NewCharacter(party *Party, partyIndex int, player *proto.Player) Character 
 	character.PseudoStats.InFrontOfTarget = player.InFrontOfTarget
 
 	if player.EnableItemSwap && player.ItemSwap != nil {
-		character.enableItemSwap(player.ItemSwap, character.DefaultCritMultiplier(), character.DefaultCritMultiplier(), character.DefaultCritMultiplier())
+		character.enableItemSwap(player.ItemSwap, character.DefaultMeleeCritMultiplier(), character.DefaultMeleeCritMultiplier(), character.DefaultMeleeCritMultiplier())
 	}
 
 	character.EquipScalingManager = character.NewEquipScalingManager()
@@ -368,11 +371,23 @@ func (character *Character) GetParryRatingWithoutStrength() float64 {
 func (character *Character) calculateCritMultiplier(normalCritDamage float64, primaryModifiers float64, secondaryModifiers float64) float64 {
 	return 1.0 + (normalCritDamage*primaryModifiers-1.0)*(1.0+secondaryModifiers)
 }
-func (character *Character) CritMultiplier(primaryModifiers float64, secondaryModifiers float64) float64 {
+func (character *Character) SpellCritMultiplier(primaryModifiers float64, secondaryModifiers float64) float64 {
+	return character.calculateCritMultiplier(1.5, primaryModifiers, secondaryModifiers)
+}
+func (character *Character) MeleeCritMultiplier(primaryModifiers float64, secondaryModifiers float64) float64 {
 	return character.calculateCritMultiplier(2.0, primaryModifiers, secondaryModifiers)
 }
-func (character *Character) DefaultCritMultiplier() float64 {
-	return character.CritMultiplier(1, 0)
+func (character *Character) HealingCritMultiplier(primaryModifiers float64, secondaryModifiers float64) float64 {
+	return character.calculateCritMultiplier(2.0, primaryModifiers, secondaryModifiers)
+}
+func (character *Character) DefaultSpellCritMultiplier() float64 {
+	return character.SpellCritMultiplier(1, 0)
+}
+func (character *Character) DefaultMeleeCritMultiplier() float64 {
+	return character.MeleeCritMultiplier(1, 0)
+}
+func (character *Character) DefaultHealingCritMultiplier() float64 {
+	return character.HealingCritMultiplier(1, 0)
 }
 
 func (character *Character) AddRaidBuffs(_ *proto.RaidBuffs) {

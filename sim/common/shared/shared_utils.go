@@ -61,7 +61,7 @@ func NewProcStatBonusEffectWithDamageProc(config ProcStatBonusEffect, damage Dam
 			ProcMask:                 procMask,
 			Flags:                    core.SpellFlagNoOnCastComplete | core.SpellFlagPassiveSpell,
 			DamageMultiplier:         1,
-			CritMultiplier:           character.DefaultCritMultiplier(),
+			CritMultiplier:           character.DefaultMeleeCritMultiplier(),
 			DamageMultiplierAdditive: 1,
 			ThreatMultiplier:         1,
 			BonusCoefficient:         damage.BonusCoefficient,
@@ -545,6 +545,8 @@ func NewProcDamageEffect(config ProcDamageEffect) {
 		minDmg := config.MinDmg
 		maxDmg := config.MaxDmg
 
+		critMultiplier := core.TernaryFloat64(config.IsMelee, character.DefaultMeleeCritMultiplier(), character.DefaultSpellCritMultiplier())
+
 		if core.ActionID.IsEmptyAction(config.Trigger.ActionID) {
 			config.Trigger.ActionID = triggerActionID
 		}
@@ -560,7 +562,7 @@ func NewProcDamageEffect(config ProcDamageEffect) {
 			Flags:       config.Flags,
 
 			DamageMultiplier: 1,
-			CritMultiplier:   character.DefaultCritMultiplier(),
+			CritMultiplier:   critMultiplier,
 			ThreatMultiplier: 1,
 
 			ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {

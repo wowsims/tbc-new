@@ -194,8 +194,7 @@
 			"frost_resistance": "Frost Resistance",
 			"fire_resistance": "Fire Resistance",
 			"nature_resistance": "Nature Resistance",
-			"shadow_resistance": "Shadow Resistance",
-			"rage": "Rage"
+			"shadow_resistance": "Shadow Resistance"
 		},
 		"mastery_spell_names": {
 			"unknown": "Unknown",

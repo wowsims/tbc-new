@@ -50,12 +50,12 @@ func (s *UnitStats) ToProto() *proto.UnitStats {
 // Infer missing stat weight values for HitRating and CritRating if school-specific components were calculated, then call ToProto(). Kept as a separate method in case we want to use the UnitStats struct for other applications
 // than just stat weights.
 func (s *UnitStats) ExportWeights() *proto.UnitStats {
-	if s.Stats[stats.AllHitRating] == 0 {
-		s.Stats[stats.AllHitRating] = (s.PseudoStats[proto.PseudoStat_PseudoStatMeleeHitPercent] + +s.PseudoStats[proto.PseudoStat_PseudoStatRangedHitPercent]) / PhysicalHitRatingPerHitPercent
+	if s.Stats[stats.AllPhysHitRating] == 0 {
+		s.Stats[stats.AllPhysHitRating] = (s.PseudoStats[proto.PseudoStat_PseudoStatMeleeHitPercent] + +s.PseudoStats[proto.PseudoStat_PseudoStatRangedHitPercent]) / PhysicalHitRatingPerHitPercent
 	}
 
-	if s.Stats[stats.AllCritRating] == 0 {
-		s.Stats[stats.AllCritRating] = (s.PseudoStats[proto.PseudoStat_PseudoStatMeleeCritPercent] + s.PseudoStats[proto.PseudoStat_PseudoStatRangedCritPercent]) / SpellCritRatingPerCritPercent
+	if s.Stats[stats.AllPhysCritRating] == 0 {
+		s.Stats[stats.AllPhysCritRating] = (s.PseudoStats[proto.PseudoStat_PseudoStatMeleeCritPercent] + s.PseudoStats[proto.PseudoStat_PseudoStatRangedCritPercent]) / SpellCritRatingPerCritPercent
 	}
 
 	return s.ToProto()

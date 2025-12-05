@@ -29,7 +29,7 @@ func (druid *Druid) registerMoonfireDoTSpell() {
 		Flags:          core.SpellFlagPassiveSpell,
 
 		DamageMultiplier: 1,
-		CritMultiplier:   druid.DefaultCritMultiplier(),
+		CritMultiplier:   druid.DefaultSpellCritMultiplier(),
 		ThreatMultiplier: 1,
 
 		Dot: core.DotConfig{
@@ -103,7 +103,7 @@ func (druid *Druid) registerMoonfireImpactSpell() {
 
 		DamageMultiplier: 1,
 
-		CritMultiplier:   druid.DefaultCritMultiplier(),
+		CritMultiplier:   druid.DefaultSpellCritMultiplier(),
 		ThreatMultiplier: 1,
 		BonusCoefficient: MoonfireBonusCoeff,
 

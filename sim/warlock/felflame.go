@@ -23,7 +23,7 @@ func (warlock *Warlock) RegisterFelflame(callback WarlockSpellCastedCallback) *c
 			},
 		},
 		DamageMultiplier: 1.0,
-		CritMultiplier:   warlock.DefaultCritMultiplier(),
+		CritMultiplier:   warlock.DefaultSpellCritMultiplier(),
 		ThreatMultiplier: 1,
 		BonusCoefficient: felFlameCoeff,
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {

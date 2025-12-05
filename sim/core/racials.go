@@ -107,7 +107,7 @@ func applyRaceEffects(agent Agent) {
 			},
 
 			DamageMultiplier: 1.0,
-			CritMultiplier:   character.DefaultCritMultiplier(),
+			CritMultiplier:   character.DefaultSpellCritMultiplier(),
 			ThreatMultiplier: 1.0,
 
 			Hot: DotConfig{
@@ -330,7 +330,7 @@ func applyRaceEffects(agent Agent) {
 			SpellSchool: SpellSchoolShadow,
 			ProcMask:    ProcMaskSpellProc,
 
-			CritMultiplier:   character.DefaultCritMultiplier(),
+			CritMultiplier:   character.DefaultSpellCritMultiplier(),
 			DamageMultiplier: 1,
 
 			ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {

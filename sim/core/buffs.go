@@ -1221,7 +1221,7 @@ func StormLashAura(character *Character, actionTag int32) *Aura {
 		ProcMask:    ProcMaskEmpty,
 
 		DamageMultiplier: 1,
-		CritMultiplier:   character.DefaultCritMultiplier(),
+		CritMultiplier:   character.DefaultMeleeCritMultiplier(),
 
 		ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
 			spell.CalcAndDealDamage(sim, target, damage, spell.OutcomeMagicHitAndCrit)

@@ -169,11 +169,14 @@ func GenerateItemEffects(instance *dbc.DBC, db *WowDatabase, itemSources map[int
 					// TBC ANNI: Some socket bonuses are auras too. Need to find them here and either ignore or find how to add to socket bonuses
 
 					value := float64(spellEffect.EffectBasePoints + 1)
+					// Make sure it's not Feral AP
+					if strings.Contains(instance.Spells[spellEffect.SpellID].Description, "forms only") {
+						stat = proto.Stat_StatFeralAttackPower
+					}
 					if stat == proto.Stat_StatArmorPenetration || stat == proto.Stat_StatSpellPenetration {
 						// Make these not negative
 						value = -value
 					}
-					// These are always off by 1...?
 					parsed.ScalingOptions[0].Stats[int32(stat)] += value
 				}
 			}

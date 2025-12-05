@@ -39,9 +39,9 @@ export const statI18nKeys: Record<Stat, string> = {
 	[Stat.StatMeleeCritRating]: 'melee_crit_rating',
 	[Stat.StatMeleeHasteRating]: 'melee_haste_rating',
 	[Stat.StatArmorPenetration]: 'armor_penetration',
-	[Stat.StatAllHitRating]: 'all_hit_rating',
-	[Stat.StatAllCritRating]: 'all_crit_rating',
-	[Stat.StatAllHasteRating]: 'all_haste_rating',
+	[Stat.StatAllPhysHitRating]: 'all_hit_rating',
+	[Stat.StatAllPhysCritRating]: 'all_crit_rating',
+	[Stat.StatAllPhysHasteRating]: 'all_haste_rating',
 	[Stat.StatDefenseRating]: 'defense_rating',
 	[Stat.StatBlockRating]: 'block_rating',
 	[Stat.StatBlockValue]: 'block_value',
@@ -51,7 +51,6 @@ export const statI18nKeys: Record<Stat, string> = {
 	[Stat.StatFrostResistance]: 'frost_resistance',
 	[Stat.StatNatureResistance]: 'nature_resistance',
 	[Stat.StatShadowResistance]: 'shadow_resistance',
-	[Stat.StatRage]: 'rage'
 };
 
 export const protoStatNameI18nKeys: Record<string, string> = {

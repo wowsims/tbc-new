@@ -3,6 +3,7 @@ import { PseudoStat, Spec, Stat } from '../../../proto/common';
 import { UnitStat } from '../../../proto_utils/stats';
 import { IndividualExporter } from './individual_exporter';
 import i18n from '../../../../i18n/config';
+import { stat } from 'fs';
 
 export class IndividualPawnEPExporter<SpecType extends Spec> extends IndividualExporter<SpecType> {
 	constructor(parent: HTMLElement, simUI: IndividualSimUI<SpecType>) {
@@ -82,9 +83,9 @@ export class IndividualPawnEPExporter<SpecType extends Spec> extends IndividualE
 		[Stat.StatMeleeCritRating]: '',
 		[Stat.StatMeleeHasteRating]: '',
 		[Stat.StatArmorPenetration]: '',
-		[Stat.StatAllHitRating]: '',
-		[Stat.StatAllCritRating]: '',
-		[Stat.StatAllHasteRating]: '',
+		[Stat.StatAllPhysHitRating]: '',
+		[Stat.StatAllPhysCritRating]: '',
+		[Stat.StatAllPhysHasteRating]: '',
 		[Stat.StatDefenseRating]: '',
 		[Stat.StatBlockRating]: '',
 		[Stat.StatBlockValue]: '',
@@ -94,7 +95,6 @@ export class IndividualPawnEPExporter<SpecType extends Spec> extends IndividualE
 		[Stat.StatFrostResistance]: '',
 		[Stat.StatNatureResistance]: '',
 		[Stat.StatShadowResistance]: '',
-		[Stat.StatRage]: ''
 	};
 	static pseudoStatNames: Partial<Record<PseudoStat, string>> = {
 		[PseudoStat.PseudoStatMainHandDps]: 'MeleeDps',

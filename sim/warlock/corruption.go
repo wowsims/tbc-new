@@ -23,7 +23,7 @@ func (warlock *Warlock) RegisterCorruption(onApplyCallback WarlockSpellCastedCal
 		Cast:     core.CastConfig{DefaultCast: core.Cast{GCD: core.GCDDefault}},
 
 		DamageMultiplierAdditive: 1,
-		CritMultiplier:           warlock.DefaultCritMultiplier(),
+		CritMultiplier:           warlock.DefaultSpellCritMultiplier(),
 		ThreatMultiplier:         1,
 
 		Dot: core.DotConfig{
