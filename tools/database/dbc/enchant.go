@@ -3,8 +3,6 @@ package dbc
 import (
 	"slices"
 	"sort"
-	"strconv"
-	"strings"
 
 	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
@@ -53,6 +51,7 @@ func (enchant *Enchant) HasEnchantEffect() bool {
 }
 
 func (enchant *Enchant) ToProto() *proto.UIEnchant {
+	// TBC ANNI: TODO - Process ring enchants as Enchanting-prof only.
 	uiEnchant := &proto.UIEnchant{
 		Name:               enchant.Name,
 		ItemId:             int32(enchant.ItemId),
@@ -83,9 +82,6 @@ func (enchant *Enchant) ToProto() *proto.UIEnchant {
 	if enchant.IsWeaponEnchant {
 		// Process weapon enchants.
 		uiEnchant.Type = proto.ItemType_ItemTypeWeapon
-		if strings.Contains(enchant.Name, "2H") {
-			println(enchant.Name + " - " + strconv.Itoa(enchant.SubClassMask))
-		}
 		if enchant.SubClassMask == ITEM_SUBCLASS_BIT_WEAPON_STAFF {
 			// Staff only.
 			uiEnchant.EnchantType = proto.EnchantType_EnchantTypeStaff
