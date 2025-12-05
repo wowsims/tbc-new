@@ -395,6 +395,9 @@
         "off_hand": {
           "type": "string"
         },
+        "ranged": {
+          "type": "string"
+        },
         "weapons": {
           "type": "string"
         }
@@ -419,6 +422,7 @@
         "trinkets",
         "main_hand",
         "off_hand",
+        "ranged",
         "weapons"
       ]
     }
