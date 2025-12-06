@@ -550,6 +550,7 @@ func allZero(stats []float64) bool {
 func ApplySimmableFilters(db *database.WowDatabase) {
 	db.Items = core.FilterMap(db.Items, simmableItemFilter)
 	db.Gems = core.FilterMap(db.Gems, simmableGemFilter)
+	db.Enchants = core.FilterMap(db.Enchants, simmableEnchantFilter)
 }
 
 func ApplyNonSimmableFilters(db *database.WowDatabase) {
@@ -558,6 +559,9 @@ func ApplyNonSimmableFilters(db *database.WowDatabase) {
 	})
 	db.Gems = core.FilterMap(db.Gems, func(id int32, gem *proto.UIGem) bool {
 		return !simmableGemFilter(id, gem)
+	})
+	db.Enchants = core.FilterMap(db.Enchants, func(id database.EnchantDBKey, enchant *proto.UIEnchant) bool {
+		return !simmableEnchantFilter(id, enchant)
 	})
 }
 func simmableItemFilter(_ int32, item *proto.UIItem) bool {
@@ -588,6 +592,15 @@ func simmableGemFilter(_ int32, gem *proto.UIGem) bool {
 	}
 
 	return gem.Quality >= proto.ItemQuality_ItemQualityUncommon
+}
+func simmableEnchantFilter(key database.EnchantDBKey, enchant *proto.UIEnchant) bool {
+	if slices.Contains(database.EnchantAllowList, enchant.EffectId) {
+		return true
+	}
+	if _, ok := database.EnchantDenyList[enchant.EffectId]; ok {
+		return false
+	}
+	return enchant.EffectId > 1000 && (enchant.ItemId > 20000 || enchant.ItemId == 18283) // Filters EXTREMELY low level enchants
 }
 
 type TalentConfig struct {

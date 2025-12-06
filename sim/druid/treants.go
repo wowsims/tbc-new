@@ -66,7 +66,7 @@ func (druid *Druid) NewDefaultTreant(config TreantConfig) *DefaultTreantImpl {
 			BaseDamageMax:        baseWeaponDamage,
 			SwingSpeed:           2,
 			NormalizedSwingSpeed: 2,
-			CritMultiplier:       druid.DefaultCritMultiplier(),
+			CritMultiplier:       druid.DefaultMeleeCritMultiplier(),
 			SpellSchool:          core.SpellSchoolPhysical,
 		},
 

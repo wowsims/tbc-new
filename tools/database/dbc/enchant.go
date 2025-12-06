@@ -51,6 +51,7 @@ func (enchant *Enchant) HasEnchantEffect() bool {
 }
 
 func (enchant *Enchant) ToProto() *proto.UIEnchant {
+	// TBC ANNI: TODO - Process ring enchants as Enchanting-prof only.
 	uiEnchant := &proto.UIEnchant{
 		Name:               enchant.Name,
 		ItemId:             int32(enchant.ItemId),
@@ -88,7 +89,7 @@ func (enchant *Enchant) ToProto() *proto.UIEnchant {
 		if enchant.SubClassMask == rangedMask {
 			uiEnchant.Type = proto.ItemType_ItemTypeRanged
 		}
-		if enchant.SubClassMask == twoHandMask {
+		if enchant.SubClassMask == allTwoHandMask || enchant.SubClassMask == twoHandNoSpearMask {
 			// Two-handed weapon.
 			uiEnchant.EnchantType = proto.EnchantType_EnchantTypeTwoHand
 		}

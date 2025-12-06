@@ -10,7 +10,7 @@ import (
 )
 
 const MAX_SCALING_LEVEL = 100
-const BASE_LEVEL = 90
+const BASE_LEVEL = 70
 
 type SpellEffect struct {
 	ID                             int
@@ -115,8 +115,8 @@ func (s *SpellEffect) ScalingClass() proto.Class {
 	}
 }
 func (s *SpellEffect) Delta(pLevel int, level int) float64 {
-	if level > 90 {
-		level = 90
+	if level > 70 {
+		level = 70
 	}
 
 	var mScale float64

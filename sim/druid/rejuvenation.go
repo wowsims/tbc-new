@@ -22,7 +22,7 @@ func (druid *Druid) registerRejuvenationSpell() {
 		Flags:            core.SpellFlagHelpful | core.SpellFlagAPL,
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
-		CritMultiplier:   druid.DefaultCritMultiplier(),
+		CritMultiplier:   druid.DefaultSpellCritMultiplier(),
 		BonusCoefficient: RejuvenationBonusCoeff,
 
 		ManaCost: core.ManaCostOptions{

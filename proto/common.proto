@@ -173,65 +173,63 @@ enum Stat {
 	StatAgility = 1;
 	StatStamina = 2;
 	StatIntellect = 3;
-	// Unsure if this will be used but including just in case
-	StatRage = 4;
 
 	// Spell Power and Spell Power derivatives
-	StatSpellPower = 5;
-	StatHealingPower = 6;
-	StatSpellDamage = 7;
-	StatArcanePower = 8;
-	StatFirePower = 9;
-	StatFrostPower = 10;
-	StatHolyPower = 11;
-	StatNaturePower = 12;
-	StatShadowPower = 13;
+	StatSpellPower = 4;
+	StatHealingPower = 5;
+	StatSpellDamage = 6;
+	StatArcanePower = 7;
+	StatFirePower = 8;
+	StatFrostPower = 9;
+	StatHolyPower = 10;
+	StatNaturePower = 11;
+	StatShadowPower = 12;
 
 	// Caster Secondaries
-	StatSpellHitRating = 14;
-	StatSpellCritRating = 15;
-	StatSpellHasteRating = 16;
-	StatSpellPenetration = 17;
-	StatSpirit = 18;
+	StatSpellHitRating = 13;
+	StatSpellCritRating = 14;
+	StatSpellHasteRating = 15;
+	StatSpellPenetration = 16;
+	StatSpirit = 17;
 
 	// Physical Secondaries
-	StatAttackPower = 19;
-	StatRangedAttackPower = 20;
-	StatFeralAttackPower = 21;
-	StatMeleeHitRating = 22;
-	StatMeleeCritRating = 23;
-	StatMeleeHasteRating = 24;
-	StatArmorPenetration = 25;
-	StatExpertiseRating = 26;
+	StatAttackPower = 18;
+	StatRangedAttackPower = 19;
+	StatFeralAttackPower = 20;
+	StatMeleeHitRating = 21;
+	StatMeleeCritRating = 22;
+	StatMeleeHasteRating = 23;
+	StatArmorPenetration = 24;
+	StatExpertiseRating = 25;
 
-	// All-School Secondaries
-	StatAllHitRating = 27;
-	StatAllCritRating = 28;
-	StatAllHasteRating = 29;
+	// Melee/Ranged School Secondaries
+	StatAllPhysHitRating = 26;
+	StatAllPhysCritRating = 27;
+	StatAllPhysHasteRating = 28;
 
 	// Tank Secondaries
-	StatDefenseRating = 30;
-	StatBlockRating = 31;
-	StatBlockValue = 32;
-	StatDodgeRating = 33;
-	StatParryRating = 34;
-	StatResilienceRating = 35;
-	StatArmor = 36;
-	StatBonusArmor = 37;
+	StatDefenseRating = 29;
+	StatBlockRating = 30;
+	StatBlockValue = 31;
+	StatDodgeRating = 32;
+	StatParryRating = 33;
+	StatResilienceRating = 34;
+	StatArmor = 35;
+	StatBonusArmor = 36;
 
 	// Composite stats that are built up from the above gear stats + buffs.
 	// These still belong in the Stat enum because they can be present on
 	// some enchants and because the base values need to be stored for NPCs.
-	StatHealth = 38;
-	StatMana = 39;
-	StatMP5 = 40;
+	StatHealth = 37;
+	StatMana = 38;
+	StatMP5 = 39;
 
 	// Resistances
-	StatArcaneResistance = 41;
-	StatFireResistance = 42;
-	StatFrostResistance = 43;
-	StatNatureResistance = 44;
-	StatShadowResistance = 45;
+	StatArcaneResistance = 40;
+	StatFireResistance = 41;
+	StatFrostResistance = 42;
+	StatNatureResistance = 43;
+	StatShadowResistance = 44;
 
 	// DO NOT add new stats here without discussing it first; new stats come
 	// with a performance penalty.

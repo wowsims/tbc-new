@@ -201,6 +201,7 @@ var ItemDenyList = map[int32]struct{}{
 	18582: {},
 	18583: {},
 	18584: {},
+	22736: {},
 	24265: {},
 	32384: {},
 	32421: {},
@@ -1171,11 +1172,20 @@ var GemDenyList = map[int32]struct{}{
 }
 
 var EnchantDenyList = map[int32]struct{}{
+	3269: {}, // Truesilver Fishing Line
+	3289: {}, // Skybreaker Whip/Riding Crop
+	3315: {}, // Carrot on a Stick
 	4671: {}, // Kyle's Test Enchantment
 	4687: {}, // Enchant Weapon - Ninja (TEST VERSION)
 	4717: {}, // Enchant Weapon - Pandamonium (DNT)
 	5029: {}, // Custom - Jaina - Crackling Lightning
 	5110: {}, // Lightweave Embroidery - Junk
+}
+
+var EnchantAllowList = []int32{
+	368,  // Cloak 12 Agi
+	1593, // Bracer 24 AP
+	2564, // Weapon 15 Agi
 }
 
 // Note: EffectId is required for all enchants, because they are

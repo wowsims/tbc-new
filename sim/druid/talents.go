@@ -296,7 +296,7 @@ func (druid *Druid) registerYserasGift() {
 		Flags:            core.SpellFlagHelpful | core.SpellFlagNoOnCastComplete | core.SpellFlagPassiveSpell,
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
-		CritMultiplier:   druid.DefaultCritMultiplier(),
+		CritMultiplier:   druid.DefaultSpellCritMultiplier(),
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			spell.CalcAndDealHealing(sim, target, 0.05*spell.Unit.MaxHealth(), spell.OutcomeHealing)
@@ -358,7 +358,7 @@ func (druid *Druid) registerCenarionWard() {
 		Flags:            core.SpellFlagHelpful | core.SpellFlagNoOnCastComplete,
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
-		CritMultiplier:   druid.DefaultCritMultiplier(),
+		CritMultiplier:   druid.DefaultSpellCritMultiplier(),
 		ClassSpellMask:   DruidSpellCenarionWard,
 
 		Hot: core.DotConfig{

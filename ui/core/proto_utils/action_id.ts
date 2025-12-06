@@ -705,9 +705,7 @@ export class ActionId {
 			case 'Item - Paladin T16 Protection 4P Bonus':
 				name = 'Plate of Winged Triumph - T16 4pc';
 				break;
-			case 'Hurricane':
-			case 'Dancing Steel':
-			case 'Bloody Dancing Steel':
+			case 'Enchant Weapon - Mongoose':
 				if (tag == 1) {
 					name += ' (Main Hand)';
 				} else if (tag == 2) {

@@ -193,7 +193,7 @@ func (rogue *Rogue) OnEncounterStart(sim *core.Simulation) {
 
 func (rogue *Rogue) CritMultiplier(applyLethality bool) float64 {
 	secondaryModifier := 0.0
-	return rogue.GetCharacter().CritMultiplier(1.0, secondaryModifier)
+	return rogue.GetCharacter().MeleeCritMultiplier(1.0, secondaryModifier)
 }
 
 func NewRogue(character *core.Character, options *proto.Player, talents string) *Rogue {

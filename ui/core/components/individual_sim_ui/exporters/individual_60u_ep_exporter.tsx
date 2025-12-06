@@ -80,9 +80,9 @@ export class Individual60UEPExporter<SpecType extends Spec> extends IndividualEx
 		[Stat.StatMeleeCritRating]: '',
 		[Stat.StatMeleeHasteRating]: '',
 		[Stat.StatArmorPenetration]: '',
-		[Stat.StatAllHitRating]: '',
-		[Stat.StatAllCritRating]: '',
-		[Stat.StatAllHasteRating]: '',
+		[Stat.StatAllPhysHitRating]: '',
+		[Stat.StatAllPhysCritRating]: '',
+		[Stat.StatAllPhysHasteRating]: '',
 		[Stat.StatDefenseRating]: '',
 		[Stat.StatBlockRating]: '',
 		[Stat.StatBlockValue]: '',
@@ -92,7 +92,6 @@ export class Individual60UEPExporter<SpecType extends Spec> extends IndividualEx
 		[Stat.StatFrostResistance]: '',
 		[Stat.StatNatureResistance]: '',
 		[Stat.StatShadowResistance]: '',
-		[Stat.StatRage]: ''
 	};
 	static pseudoStatNames: Partial<Record<PseudoStat, string>> = {
 		[PseudoStat.PseudoStatMainHandDps]: 'dps',

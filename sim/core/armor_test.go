@@ -44,7 +44,7 @@ func TestDamageReductionFromArmor(t *testing.T) {
 	target := Unit{
 		Type:         EnemyUnit,
 		Index:        0,
-		Level:        93,
+		Level:        73,
 		auraTracker:  newAuraTracker(),
 		initialStats: stats.Stats{stats.Armor: baseArmor},
 		PseudoStats:  stats.NewPseudoStats(),
@@ -52,7 +52,7 @@ func TestDamageReductionFromArmor(t *testing.T) {
 	}
 	attacker := Unit{
 		Type:  PlayerUnit,
-		Level: 90,
+		Level: 70,
 	}
 	target.stats = target.initialStats
 	expectedDamageReduction := 0.349334

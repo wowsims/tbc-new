@@ -18,7 +18,7 @@ func (druid *Druid) registerRavageSpell() {
 		ClassSpellMask:   DruidSpellRavage,
 		Flags:            core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
 		DamageMultiplier: weaponMultiplier,
-		CritMultiplier:   druid.DefaultCritMultiplier(),
+		CritMultiplier:   druid.DefaultMeleeCritMultiplier(),
 		ThreatMultiplier: 1,
 		BonusCoefficient: 1,
 		MaxRange:         core.MaxMeleeRange,
