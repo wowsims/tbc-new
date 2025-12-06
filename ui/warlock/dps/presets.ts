@@ -32,9 +32,9 @@ export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
 // https://wowhead.com/wotlk/talent-calc and copy the numbers in the url.
 
 export const Talents = {
-	name: 'A',
+	name: 'Destruction',
 	data: SavedTalents.create({
-		talentsString: '',
+		talentsString: '-20501301332001-50500051220051053105',
 	}),
 };
 

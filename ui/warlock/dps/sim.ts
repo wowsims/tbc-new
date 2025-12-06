@@ -16,6 +16,7 @@ const modifyDisplayStats = (player: Player<Spec.SpecWarlock>) => {
 
 	TypedEvent.freezeAllAndDo(() => {
 		const currentStats = player.getCurrentStats().finalStats?.stats;
+		console.log("currentStatrs", currentStats)
 		if (currentStats === undefined) {
 			return {};
 		}
@@ -45,10 +46,17 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecWarlock, {
 			Stat.StatMana,
 			Stat.StatStamina,
 			Stat.StatIntellect,
+			Stat.StatSpirit,
 			Stat.StatSpellPower,
+			Stat.StatShadowPower,
+			Stat.StatFirePower,
 			Stat.StatMP5,
 		],
-		[PseudoStat.PseudoStatSpellHitPercent, PseudoStat.PseudoStatSpellCritPercent, PseudoStat.PseudoStatSpellHastePercent],
+		[
+			PseudoStat.PseudoStatSpellHitPercent,
+			PseudoStat.PseudoStatSpellCritPercent,
+			PseudoStat.PseudoStatSpellHastePercent
+		],
 	),
 	gemStats: DEFAULT_CASTER_GEM_STATS,
 
@@ -85,7 +93,11 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecWarlock, {
 	},
 
 	// IconInputs to include in the 'Player' section on the settings tab.
-	playerIconInputs: [WarlockInputs.PetInput()],
+	playerIconInputs: [
+		WarlockInputs.PetInput(),
+		WarlockInputs.ArmorInput(),
+		WarlockInputs.DemonicSacrificeInput()
+	],
 
 	// Buff and Debuff inputs to include/exclude, overriding the EP-based defaults.
 	includeBuffDebuffInputs: [BuffDebuffInputs.AttackSpeedBuff],

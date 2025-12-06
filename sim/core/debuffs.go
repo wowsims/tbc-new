@@ -77,22 +77,26 @@ const WeakenedBlowsDuration = time.Second * 30
 
 // –10% Physical damage dealt
 func WeakenedBlowsAura(target *Unit) *Aura {
-	return physDamageDealtAura(target, "Weakened Blows", 115798, WeakenedBlowsDuration)
+	return physDamageDealtAura(target, "Weakened Blows", 115798, WeakenedBlowsDuration, 10)
 }
 func DemoralizingScreech(target *Unit) *Aura {
-	return physDamageDealtAura(target, "Demoralizing Screech", 24423, time.Second*10)
+	return physDamageDealtAura(target, "Demoralizing Screech", 24423, time.Second*10, 10)
 }
 func DemoralizingRoar(target *Unit) *Aura {
-	return physDamageDealtAura(target, "Demoralizing Roar", 50256, time.Second*15)
+	return physDamageDealtAura(target, "Demoralizing Roar", 50256, time.Second*15, 10)
 }
 
-func physDamageDealtAura(target *Unit, label string, spellID int32, duration time.Duration) *Aura {
+func ShadowEmbraceAura(target *Unit, level int32, duration time.Duration) *Aura {
+	return physDamageDealtAura(target, "Shadow Embrace", 32385, duration, level)
+}
+
+func physDamageDealtAura(target *Unit, label string, spellID int32, duration time.Duration, level int32) *Aura {
 	aura := target.GetOrRegisterAura(Aura{
 		Label:    label,
 		ActionID: ActionID{SpellID: spellID},
 		Duration: duration,
 	})
-	PhysDamageReductionEffect(aura, 0.1)
+	PhysDamageReductionEffect(aura, 0.1*float64(level))
 	return aura
 }
 
