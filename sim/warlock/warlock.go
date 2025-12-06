@@ -183,7 +183,7 @@ const (
 	WarlockSpellAgony
 	WarlockSpellDrainLife
 	WarlockSpellSeedOfCorruption
-	WarlockSpellSeedOfCorruptionExposion
+	WarlockSpellSeedOfCorruptionExplosion
 	WarlockSpellHellfire
 	WarlockSpellImmolationAura
 	WarlockSpellSearingPain
@@ -209,7 +209,7 @@ const (
 	WarlockSpellAll int64 = 1<<iota - 1
 
 	WarlockShadowDamage = WarlockSpellCorruption | WarlockSpellUnstableAffliction | WarlockSpellDrainLife | WarlockSpellAgony |
-		WarlockSpellShadowBolt | WarlockSpellSeedOfCorruptionExposion | WarlockSpellShadowBurn
+		WarlockSpellShadowBolt | WarlockSpellSeedOfCorruptionExplosion | WarlockSpellShadowBurn
 
 	WarlockPeriodicShadowDamage = WarlockSpellCorruption | WarlockSpellUnstableAffliction |
 		WarlockSpellDrainLife | WarlockSpellAgony

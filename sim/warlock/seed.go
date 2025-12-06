@@ -24,8 +24,8 @@ func (warlock *Warlock) registerSeed() {
 		ActionID:       actionID.WithTag(1), // actually 27285
 		SpellSchool:    core.SpellSchoolShadow,
 		ProcMask:       core.ProcMaskSpellDamage,
-		Flags:          core.SpellFlagAoE | core.SpellFlagPassiveSpell,
-		ClassSpellMask: WarlockSpellSeedOfCorruptionExposion,
+		Flags:          core.SpellFlagPassiveSpell,
+		ClassSpellMask: WarlockSpellSeedOfCorruptionExplosion,
 
 		DamageMultiplierAdditive: 1,
 		CritMultiplier:           warlock.DefaultCritMultiplier(),
