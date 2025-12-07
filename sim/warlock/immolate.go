@@ -17,7 +17,9 @@ func (warlock *Warlock) registerImmolate() {
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: WarlockSpellImmolate,
 
-		ManaCost: core.ManaCostOptions{BaseCostPercent: 3},
+		ManaCost: core.ManaCostOptions{
+			FlatCost: 445,
+		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD:      core.GCDDefault,
@@ -31,9 +33,10 @@ func (warlock *Warlock) registerImmolate() {
 		BonusCoefficient: immolateCoeff,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+			//coeffection 0.13
 			result := spell.CalcDamage(sim, target, warlock.CalcScalingSpellDmg(immolateCoeff), spell.OutcomeMagicHitAndCrit)
 			if result.Landed() {
-				spell.RelatedDotSpell.Cast(sim, target)
+				spell.RelatedDotSpell.Dot(target).Apply(sim)
 			}
 
 			spell.DealDamage(sim, result)
@@ -63,7 +66,10 @@ func (warlock *Warlock) registerImmolate() {
 			TickLength:       3 * time.Second,
 			BonusCoefficient: immolateCoeff,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, isRollover bool) {
-				dot.Snapshot(target, warlock.CalcScalingSpellDmg(immolateCoeff))
+				dot.Snapshot(target, 510) // coefficient 0.2
+			},
+			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
+				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 			},
 		},
 

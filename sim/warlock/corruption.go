@@ -9,7 +9,7 @@ import (
 const corruptionCoeff = 0.156
 
 func (warlock *Warlock) registerCorruption() *core.Spell {
-	resultSlice := make(core.SpellResultSlice, 1)
+	// resultSlice := make(core.SpellResultSlice, 1)
 
 	warlock.Corruption = warlock.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 172},
@@ -18,12 +18,21 @@ func (warlock *Warlock) registerCorruption() *core.Spell {
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: WarlockSpellCorruption,
 
-		ManaCost: core.ManaCostOptions{FlatCost: 370},
+		CritMultiplier: 1,
+		ManaCost:       core.ManaCostOptions{FlatCost: 370},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD:      core.GCDDefault,
 				CastTime: time.Millisecond * 2000,
 			},
+		},
+
+		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+			result := spell.CalcOutcome(sim, target, spell.OutcomeMagicHit)
+			if result.Landed() {
+				spell.Dot(target).Apply(sim)
+			}
+			spell.DealOutcome(sim, result)
 		},
 
 		Dot: core.DotConfig{
@@ -35,18 +44,16 @@ func (warlock *Warlock) registerCorruption() *core.Spell {
 			NumberOfTicks:       6,
 			TickLength:          3 * time.Second,
 			AffectedByCastSpeed: false,
-
+			BonusCoefficient:    corruptionCoeff,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, isRollover bool) {
-				dot.Snapshot(target, warlock.CalcScalingSpellDmg(corruptionCoeff))
+
+				dot.Snapshot(target, 900)
+
+				// println("CALC SCALINGSPELLDMG", warlock.CalcScalingSpellDmg(corruptionCoeff))
+				// dot.Snapshot(target, warlock.CalcScalingSpellDmg(corruptionCoeff))
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				resultSlice[0] = dot.CalcSnapshotDamage(sim, target, dot.OutcomeSnapshotCrit)
-
-				// if onTickCallback != nil {
-				// 	onTickCallback(resultSlice, dot.Spell, sim)
-				// // }
-
-				dot.Spell.DealPeriodicDamage(sim, resultSlice[0])
+				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 			},
 		},
 
@@ -63,10 +70,13 @@ func (warlock *Warlock) registerCorruption() *core.Spell {
 			if useSnapshot {
 				result := dot.CalcSnapshotDamage(sim, target, dot.OutcomeExpectedSnapshotCrit)
 				result.Damage /= dot.TickPeriod().Seconds()
+				println("AFTER MATH", result.Damage)
 				return result
 			} else {
+				println("NOT USESNPASHOT")
 				result := spell.CalcPeriodicDamage(sim, target, warlock.CalcScalingSpellDmg(corruptionCoeff), spell.OutcomeExpectedMagicCrit)
 				result.Damage /= dot.CalcTickPeriod().Round(time.Millisecond).Seconds()
+				println("CALCTICK DMG", result.Damage)
 				return result
 			}
 		},

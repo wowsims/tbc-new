@@ -20,7 +20,7 @@ func (warlock *Warlock) registerCurseOfAgony() {
 		ThreatMultiplier: 1,
 		DamageMultiplier: 1,
 		BonusCoefficient: agonyCoeff,
-
+		CritMultiplier:   1,
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD: core.GCDDefault,
@@ -30,34 +30,31 @@ func (warlock *Warlock) registerCurseOfAgony() {
 		ManaCost: core.ManaCostOptions{
 			BaseCostPercent: 1,
 		},
+		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+			result := spell.CalcOutcome(sim, target, spell.OutcomeMagicHit)
+			if result.Landed() {
+				spell.Dot(target).Apply(sim)
+			}
+			spell.DealOutcome(sim, result)
+		},
 
 		Dot: core.DotConfig{
 			Aura: core.Aura{
-				Label:     "Agony",
-				MaxStacks: 10,
+				Label: "Agony",
+				Tag:   "Affliction",
 			},
 
 			TickLength:          2 * time.Second,
 			NumberOfTicks:       12,
-			AffectedByCastSpeed: true,
+			AffectedByCastSpeed: false,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, isRollover bool) {
-				dot.Snapshot(target, warlock.CalcScalingSpellDmg(agonyScale))
+				dot.Snapshot(target, 1356)
 			},
 
 			BonusCoefficient: agonyCoeff,
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				var stacks int32 = 10
-
-				// on the last tick the aura seems to be deactivated first
-				if dot.Aura.IsActive() {
-					dot.Aura.AddStack(sim)
-					stacks = dot.Aura.GetStacks()
-				}
-
-				result := dot.CalcSnapshotDamage(sim, target, dot.OutcomeMagicHitAndSnapshotCrit)
-				result.Damage *= float64(stacks)
-				dot.Spell.DealPeriodicDamage(sim, result)
+				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 			},
 		},
 
@@ -66,7 +63,7 @@ func (warlock *Warlock) registerCurseOfAgony() {
 
 			// Always compare fully stacked agony damage
 			if useSnapshot {
-				result := dot.CalcSnapshotDamage(sim, target, dot.OutcomeExpectedSnapshotCrit)
+				result := dot.CalcSnapshotDamage(sim, target, dot.OutcomeTick)
 				result.Damage *= 10
 				result.Damage /= dot.TickPeriod().Seconds()
 				return result

@@ -342,7 +342,7 @@ func (spell *Spell) CalcPeriodicDamage(sim *Simulation, target *Unit, baseDamage
 	return spell.calcDamageInternal(sim, target, baseDamage, attackerMultiplier, true, outcomeApplier)
 }
 func (dot *Dot) CalcSnapshotDamage(sim *Simulation, target *Unit, outcomeApplier OutcomeApplier) *SpellResult {
-	return dot.Spell.calcDamageInternal(sim, target, dot.SnapshotBaseDamage, dot.SnapshotAttackerMultiplier, true, outcomeApplier)
+	return dot.Spell.calcDamageInternal(sim, target, dot.SnapshotBaseDamage, 1.0, true, outcomeApplier)
 }
 
 func (spell *Spell) DealOutcome(sim *Simulation, result *SpellResult) {
@@ -526,8 +526,8 @@ func (dot *Dot) Snapshot(target *Unit, baseDamage float64) {
 	}
 	attackTable := dot.Spell.Unit.AttackTables[target.UnitIndex]
 	dot.SnapshotCritChance = dot.Spell.SpellCritChance(target)
-	dot.SnapshotAttackerMultiplier = dot.Spell.AttackerDamageMultiplier(attackTable, true) *
-		dot.PeriodicDamageMultiplier
+	dot.SnapshotAttackerMultiplier = math.Min(dot.Spell.AttackerDamageMultiplier(attackTable, true)*
+		dot.PeriodicDamageMultiplier, 1.0)
 }
 
 func (dot *Dot) SnapshotPhysical(target *Unit, baseDamage float64) {

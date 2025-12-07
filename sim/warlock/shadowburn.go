@@ -22,6 +22,7 @@ func (warlock *Warlock) registerShadowBurn() {
 				GCD: core.GCDDefault,
 			},
 			CD: core.Cooldown{
+				Timer:    warlock.NewTimer(),
 				Duration: time.Second * 15,
 			},
 		},
@@ -30,5 +31,12 @@ func (warlock *Warlock) registerShadowBurn() {
 		CritMultiplier:   warlock.DefaultSpellCritMultiplier(),
 		ThreatMultiplier: 1,
 		BonusCoefficient: shadowBurnCoeff,
+
+		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+			result := spell.CalcDamage(sim, target, warlock.CalcScalingSpellDmg(shadowBurnCoeff), spell.OutcomeMagicHitAndCrit)
+			spell.WaitTravelTime(sim, func(sim *core.Simulation) {
+				spell.DealDamage(sim, result)
+			})
+		},
 	})
 }

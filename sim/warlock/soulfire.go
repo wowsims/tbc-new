@@ -26,6 +26,7 @@ func (warlock *Warlock) registerSoulfire() {
 				CastTime: time.Millisecond*6000 - (time.Millisecond * 400 * time.Duration(warlock.Talents.Bane)),
 			},
 			CD: core.Cooldown{
+				Timer:    warlock.NewTimer(),
 				Duration: 1 * time.Minute,
 			},
 		},
@@ -34,6 +35,13 @@ func (warlock *Warlock) registerSoulfire() {
 		CritMultiplier:   warlock.DefaultSpellCritMultiplier(),
 		ThreatMultiplier: 1,
 		BonusCoefficient: soulfireCoeff,
+
+		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+			result := spell.CalcDamage(sim, target, warlock.CalcScalingSpellDmg(soulfireCoeff), spell.OutcomeMagicHitAndCrit)
+			spell.WaitTravelTime(sim, func(sim *core.Simulation) {
+				spell.DealDamage(sim, result)
+			})
+		},
 	})
 
 }

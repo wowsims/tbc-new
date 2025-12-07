@@ -84,7 +84,6 @@ func (dot *Dot) Apply(sim *Simulation) {
 	}
 
 	dot.TakeSnapshot(sim, false)
-	dot.recomputeAuraDuration(sim)
 	dot.Activate(sim)
 }
 
@@ -97,7 +96,7 @@ func (dot *Dot) ApplyRollover(sim *Simulation) {
 	}
 
 	dot.TakeSnapshot(sim, true)
-	dot.recomputeAuraDuration(sim)
+
 	dot.Activate(sim)
 }
 

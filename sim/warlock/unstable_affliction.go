@@ -24,21 +24,33 @@ func (warlock *Warlock) registerUnstableAffliction() {
 			},
 		},
 
+		CritMultiplier:           1,
 		DamageMultiplierAdditive: 1,
 		ThreatMultiplier:         1,
+		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+			result := spell.CalcOutcome(sim, target, spell.OutcomeMagicHit)
+			if result.Landed() {
+				spell.Dot(target).Apply(sim)
+			}
+			spell.DealOutcome(sim, result)
+		},
 
 		Dot: core.DotConfig{
-			Aura:                core.Aura{Label: "UnstableAffliction"},
-			NumberOfTicks:       7,
+			Aura: core.Aura{
+				Label:    "Unstable Affliction",
+				Tag:      "Affliction",
+				ActionID: core.ActionID{SpellID: 30108},
+			},
+			NumberOfTicks:       9,
 			TickLength:          2 * time.Second,
 			AffectedByCastSpeed: true,
 			BonusCoefficient:    uaCoeff,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, _ bool) {
-				dot.Snapshot(target, warlock.CalcScalingSpellDmg(uaCoeff))
+				dot.Snapshot(target, 1150)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeSnapshotCrit)
+				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 			},
 		},
 
