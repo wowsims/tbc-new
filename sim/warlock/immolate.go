@@ -26,7 +26,7 @@ func (warlock *Warlock) registerImmolate() {
 		},
 
 		DamageMultiplier: 1,
-		CritMultiplier:   warlock.DefaultCritMultiplier(),
+		CritMultiplier:   warlock.DefaultSpellCritMultiplier(),
 		ThreatMultiplier: 1,
 		BonusCoefficient: immolateCoeff,
 
@@ -48,7 +48,6 @@ func (warlock *Warlock) registerImmolate() {
 		Flags:          core.SpellFlagPassiveSpell,
 
 		DamageMultiplier: 1,
-		CritMultiplier:   warlock.DefaultCritMultiplier(),
 
 		Dot: core.DotConfig{
 			Aura: core.Aura{

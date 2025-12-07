@@ -20,7 +20,6 @@ func (warlock *Warlock) registerCurseOfAgony() {
 		ThreatMultiplier: 1,
 		DamageMultiplier: 1,
 		BonusCoefficient: agonyCoeff,
-		CritMultiplier:   warlock.DefaultCritMultiplier(),
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{

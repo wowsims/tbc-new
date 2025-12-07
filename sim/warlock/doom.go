@@ -24,7 +24,7 @@ func (warlock *Warlock) registerCurseOfDoom() {
 		},
 
 		DamageMultiplierAdditive: 1,
-		CritMultiplier:           warlock.DefaultCritMultiplier(),
+		CritMultiplier:           warlock.DefaultSpellCritMultiplier(),
 		ThreatMultiplier:         1,
 
 		Dot: core.DotConfig{

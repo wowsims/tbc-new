@@ -47,12 +47,12 @@ type Warlock struct {
 	ImpShadowboltAura *core.Aura
 
 	// Pets
-	// ActivePet  *WarlockPet
-	// Felhunter  *WarlockPet
-	// Felguard   *WarlockPet
-	// Imp        *WarlockPet
-	// Succubus   *WarlockPet
-	// Voidwalker *WarlockPet
+	ActivePet  *WarlockPet
+	Felhunter  *WarlockPet
+	Felguard   *WarlockPet
+	Imp        *WarlockPet
+	Succubus   *WarlockPet
+	Voidwalker *WarlockPet
 
 	// Doomguard *DoomguardPet
 	// Infernal  *InfernalPet
@@ -114,17 +114,18 @@ func (warlock *Warlock) Initialize() {
 	// warlock.registerSummonDoomguard(doomguardInfernalTimer)
 	// warlock.registerSummonInfernal(doomguardInfernalTimer)
 
-	// Fel Armor 10% Stamina
-	core.MakePermanent(
-		warlock.RegisterAura(core.Aura{
-			Label:    "Fel Armor",
-			ActionID: core.ActionID{SpellID: 104938},
-		}))
-	warlock.MultiplyStat(stats.Stamina, 1.1)
-	warlock.MultiplyStat(stats.Health, 1.1)
+	// Armor selection
+	switch warlock.Options.Armor {
 
-	// 5% int passive
-	warlock.MultiplyStat(stats.Intellect, 1.05)
+	case proto.WarlockOptions_FelArmor:
+		warlock.PseudoStats.SelfHealingMultiplier *= 1.20 + (0.20 * 0.1 * float64(warlock.Talents.DemonicAegis))
+		warlock.AddStat(stats.SpellDamage, (100.0 + 100.0*(0.1*float64(warlock.Talents.DemonicAegis))))
+
+	case proto.WarlockOptions_DemonArmor:
+		warlock.AddStat(stats.Armor, (660 + (660 * (0.1 * float64(warlock.Talents.DemonicAegis)))))
+		warlock.AddStat(stats.ShadowResistance, 18+(18*0.1*float64(warlock.Talents.DemonicAegis)))
+		//HP5 not a thing atm
+	}
 }
 
 func (warlock *Warlock) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
@@ -155,7 +156,7 @@ func NewWarlock(character *core.Character, options *proto.Player, warlockOptions
 	// warlock.Doomguard = warlock.NewDoomguardPet()
 
 	// warlock.serviceTimer = character.NewTimer()
-	// warlock.registerPets()
+	warlock.registerPets()
 	// warlock.registerGrimoireOfService()
 
 	return warlock

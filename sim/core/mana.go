@@ -37,24 +37,23 @@ type manaBar struct {
 // as well as enable the mana gain action to regenerate mana.
 // It will then enable mana gain metrics for reporting.
 func (character *Character) EnableManaBar() {
-	character.EnableManaBarWithModifier(1.0)
+	character.EnableManaBarWithModifier()
 	character.Unit.SetCurrentPowerBar(ManaBar)
 }
 
-func (character *Character) EnableManaBarWithModifier(modifier float64) {
-
-	// Starting with cataclysm you get mp5 equal 5% of your base mana
-	character.AddStat(stats.MP5, character.baseStats[stats.Mana]*0.05)
+func (character *Character) EnableManaBarWithModifier() {
 
 	if character.Unit.Type == PlayerUnit {
+
+		// Patch 2.4 changed mp5 formula -> SpiritIntellectRegen = 5 * 0.00932715221261 * sqrt(Intellect) * Spirit
+		mp5 := 5 * 0.00932715221261 * math.Sqrt(character.stats[stats.Intellect]) * character.stats[stats.Spirit]
+		character.AddStat(stats.MP5, mp5)
+
 		// Pets might have different scaling so let them handle their scaling
 		character.AddStatDependency(stats.Intellect, stats.SpellCritPercent, CritPerIntMaxLevel[character.Class])
 
-		// Starting with cataclysm 1 intellect now provides 1 spell power
-		character.AddStatDependency(stats.Intellect, stats.SpellPower, 1.0)
+		character.AddStatDependency(stats.Intellect, stats.Mana, 15)
 
-		// first 10 int should not count so remove them
-		character.AddStat(stats.SpellPower, -10)
 	}
 
 	// Not a real spell, just holds metrics from mana gain threat.
@@ -62,12 +61,10 @@ func (character *Character) EnableManaBarWithModifier(modifier float64) {
 		ActionID: ActionID{OtherID: proto.OtherAction_OtherActionManaGain},
 	})
 
-	character.manaCombatMetrics = character.NewManaMetrics(ActionID{OtherID: proto.OtherAction_OtherActionManaRegen, Tag: 1})
-	character.manaNotCombatMetrics = character.NewManaMetrics(ActionID{OtherID: proto.OtherAction_OtherActionManaRegen, Tag: 2})
-
 	character.BaseMana = character.GetBaseStats()[stats.Mana]
 	character.Unit.manaBar.unit = &character.Unit
-	character.Unit.manaBar.manaRegenMultiplier = 1.0
+	character.manaCombatMetrics = character.NewManaMetrics(ActionID{OtherID: proto.OtherAction_OtherActionManaRegen, Tag: 1})
+	character.manaNotCombatMetrics = character.NewManaMetrics(ActionID{OtherID: proto.OtherAction_OtherActionManaRegen, Tag: 2})
 }
 
 func (unit *Unit) HasManaBar() bool {
@@ -308,14 +305,19 @@ func (mb *manaBar) reset() {
 func (mb *manaBar) IsOOM() bool {
 	return mb.waitingForMana != 0
 }
-func (mb *manaBar) StartOOMEvent(sim *Simulation, requiredMana float64) {
+func (mb *manaBar) StartOOMEvent(sim *Simulation, requiredMana float64, isPet bool) {
 	mb.waitingForManaStartTime = sim.CurrentTime
 	mb.waitingForMana = requiredMana
-	mb.unit.Metrics.MarkOOM(sim)
+	if !isPet {
+		mb.unit.Metrics.MarkOOM(sim)
+	}
+
 }
-func (mb *manaBar) EndOOMEvent(sim *Simulation) {
+func (mb *manaBar) EndOOMEvent(sim *Simulation, isPet bool) {
 	eventDuration := sim.CurrentTime - mb.waitingForManaStartTime
-	mb.unit.Metrics.AddOOMTime(sim, eventDuration)
+	if !isPet {
+		mb.unit.Metrics.AddOOMTime(sim, eventDuration)
+	}
 	mb.waitingForManaStartTime = 0
 	mb.waitingForMana = 0
 }
@@ -347,18 +349,19 @@ func newManaCost(spell *Spell, options ManaCostOptions) *SpellCost {
 func (mc *ManaCost) MeetsRequirement(sim *Simulation, spell *Spell) bool {
 	spell.CurCast.Cost = spell.Cost.GetCurrentCost()
 	meetsRequirement := spell.Unit.CurrentMana() >= spell.CurCast.Cost
-
+	isPet := spell.Unit.Type == PetUnit
 	if spell.CurCast.Cost > 0 {
 		if meetsRequirement {
 			if spell.Unit.IsOOM() {
-				spell.Unit.EndOOMEvent(sim)
+				spell.Unit.EndOOMEvent(sim, isPet)
 			}
 		} else {
 			if spell.Unit.IsOOM() {
 				// Continuation of OOM event.
 				spell.Unit.waitingForMana = min(spell.Unit.waitingForMana, spell.CurCast.Cost)
 			} else {
-				spell.Unit.StartOOMEvent(sim, spell.CurCast.Cost)
+
+				spell.Unit.StartOOMEvent(sim, spell.CurCast.Cost, isPet)
 			}
 		}
 	}

@@ -26,7 +26,7 @@ func (warlock *Warlock) registerConflagrate() {
 			},
 		},
 		DamageMultiplier: 1.0,
-		CritMultiplier:   warlock.DefaultCritMultiplier(),
+		CritMultiplier:   warlock.DefaultSpellCritMultiplier(),
 		ThreatMultiplier: 1,
 		BonusCoefficient: conflagrateCoeff,
 		RechargeTime:     time.Second * 10,

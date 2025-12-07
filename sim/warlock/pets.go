@@ -1,7 +1,6 @@
 package warlock
 
 import (
-	"math"
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
@@ -13,52 +12,117 @@ type WarlockPet struct {
 	core.Pet
 
 	AutoCastAbilities []*core.Spell
-	MinEnergy         float64 // The minimum amount of energy needed to the AI casts a spell
+	MinMana           float64 // The minimum amount of energy needed to the AI casts a spell
+	ManaIntRatio      float64
 }
 
 var petBaseStats = map[proto.WarlockOptions_Summon]*stats.Stats{
+	// stam 101+171
+	// int 327+124
+	//spirit 263
+	//attack power 135+289
+	//Damage 2.0s, 136-173 (77.1dps)
+	//mana 2988
 	proto.WarlockOptions_Imp: {
-		stats.Health: 48312.8,
-		stats.Armor:  19680,
+		stats.Mana:        10000,
+		stats.Stamina:     101,
+		stats.Strength:    153, //fix these later
+		stats.Agility:     108, //fix these later
+		stats.Intellect:   327,
+		stats.Spirit:      263,
+		stats.AttackPower: 135,
+		stats.MP5:         123,
 	},
+	//str 153
+	//agi 108
+	// stam 280+117
+	// int 133+124
+	//spirit 122
+	//ap 286+289
+	//dmg 115-144
+	//armor
 	proto.WarlockOptions_Voidwalker: {
-		stats.Health: 120900.8,
-		stats.Armor:  19680,
+		stats.Stamina:     280,
+		stats.Strength:    153,
+		stats.Agility:     108,
+		stats.Intellect:   133,
+		stats.Spirit:      122,
+		stats.AttackPower: 286,
+		stats.MP5:         48,
 	},
+	// str 154
+	// agi 108
+	//stam 280+117
+	//int  133+124
+	//spirit 122
+	//ap 286+289
+	//DMG 173-216 97.2 (2.0)
+	// mana 3862
 	proto.WarlockOptions_Succubus: {
-		stats.Health: 84606.8,
-		stats.Armor:  12568,
+		stats.Mana:        10000,
+		stats.Stamina:     280,
+		stats.Strength:    154,
+		stats.Agility:     108,
+		stats.Intellect:   133,
+		stats.Spirit:      122,
+		stats.AttackPower: 286,
+		stats.MP5:         48,
 	},
-	proto.WarlockOptions_Felhunter: {
-		stats.Health: 84606.8,
-		stats.Armor:  19680,
-	},
+	// str 153
+	//agi 108
+	//stam 280+117
+	//int 133+124
+	//spirit 122
+	//ap286+289
+	//dmg 132-164
+	//mana 3862
+	proto.WarlockOptions_Felhunter: {},
+	// str 153
+	//agi 108
+	//stam 280+117
+	//int 133+124
+	//spiri 122
+	//ap286+289
+	//dmg 216+269
+	//mana 3862
 	proto.WarlockOptions_Felguard: {
-		stats.Health: 84606.8,
-		stats.Armor:  12568,
+		stats.Stamina:     280,
+		stats.Strength:    153,
+		stats.Agility:     108,
+		stats.Intellect:   133,
+		stats.Spirit:      122,
+		stats.AttackPower: 286,
+		stats.MP5:         48,
 	},
 }
 
-func (warlock *Warlock) SimplePetStatInheritanceWithScale(apScale float64) core.PetStatInheritance {
+func (warlock *Warlock) SimplePetStatInheritanceWithScale() core.PetStatInheritance {
 	return func(ownerStats stats.Stats) stats.Stats {
-		return stats.Stats{
-			stats.Stamina:             ownerStats[stats.Stamina] * 1.0 / 3.0,
-			stats.SpellPower:          ownerStats[stats.SpellPower], // All pets inherit spell 1:1
-			stats.HasteRating:         ownerStats[stats.HasteRating],
-			stats.PhysicalCritPercent: ownerStats[stats.SpellCritPercent], // All pets seem to use spell crit for Physical abilities
-			stats.SpellCritPercent:    ownerStats[stats.SpellCritPercent],
+		const resistScale = 0.4
+		const baseStatScale = 0.3
 
-			stats.AttackPower: ownerStats[stats.SpellPower] * apScale,
+		return stats.Stats{
+			stats.Stamina:          ownerStats[stats.Stamina] * 0.3,
+			stats.Intellect:        ownerStats[stats.Intellect] * 0.3,
+			stats.Armor:            ownerStats[stats.Armor] * 0.35,
+			stats.SpellPenetration: ownerStats[stats.SpellPenetration], // not 100% on this one
+			stats.SpellPower:       max(ownerStats[stats.ShadowPower], ownerStats[stats.FirePower]) * 0.15,
+			stats.AttackPower:      max(ownerStats[stats.ShadowPower], ownerStats[stats.FirePower]) * 0.57,
+			stats.ArcaneResistance: ownerStats[stats.ArcaneResistance] * resistScale,
+			stats.FireResistance:   ownerStats[stats.FireResistance] * resistScale,
+			stats.FrostResistance:  ownerStats[stats.FrostResistance] * resistScale,
+			stats.NatureResistance: ownerStats[stats.NatureResistance] * resistScale,
+			stats.ShadowResistance: ownerStats[stats.ShadowResistance] * resistScale,
 		}
 	}
 }
 
-func ScaledAutoAttackConfig(swingSpeed float64) *core.AutoAttackOptions {
+func AutoAttackConfig(min float64, max float64) *core.AutoAttackOptions {
 	return &core.AutoAttackOptions{
 		MainHand: core.Weapon{
-			BaseDamageMin:  math.Floor(core.ClassBaseScaling[proto.Class_ClassWarlock]),
-			BaseDamageMax:  math.Ceil(core.ClassBaseScaling[proto.Class_ClassWarlock]),
-			SwingSpeed:     swingSpeed,
+			BaseDamageMin:  float64(min),
+			BaseDamageMax:  float64(max),
+			SwingSpeed:     2.0,
 			CritMultiplier: 2,
 		},
 		AutoSwingMelee: true,
@@ -75,20 +139,16 @@ func (warlock *Warlock) makePet(
 ) *WarlockPet {
 	pet := &WarlockPet{
 		Pet: core.NewPet(core.PetConfig{
-			Name:                            name,
-			Owner:                           &warlock.Character,
-			BaseStats:                       baseStats,
-			NonHitExpStatInheritance:        statInheritance,
-			EnabledOnStart:                  enabledOnStart,
-			IsGuardian:                      isGuardian,
-			HasDynamicMeleeSpeedInheritance: true,
-			HasDynamicCastSpeedInheritance:  true,
-			HasResourceRegenInheritance:     true,
+			Name:                     name,
+			Owner:                    &warlock.Character,
+			BaseStats:                baseStats,
+			NonHitExpStatInheritance: statInheritance,
+			EnabledOnStart:           enabledOnStart,
+			IsGuardian:               isGuardian,
 		}),
 	}
 
 	// set pet class for proper scaling values
-	pet.Class = pet.Owner.Class
 	if enabledOnStart {
 		warlock.RegisterResetEffect(func(sim *core.Simulation) {
 			warlock.ActivePet = pet
@@ -106,12 +166,7 @@ func (warlock *Warlock) setPetOptions(petAgent core.PetAgent, aaOptions *core.Au
 		pet.EnableAutoAttacks(petAgent, *aaOptions)
 	}
 
-	pet.EnableEnergyBar(core.EnergyBarOptions{
-		MaxEnergy:             200,
-		UnitClass:             proto.Class_ClassWarlock,
-		HasHasteRatingScaling: true,
-	})
-
+	pet.EnableManaBar()
 	warlock.AddPet(petAgent)
 }
 
@@ -131,7 +186,7 @@ func (warlock *Warlock) registerImp() *WarlockPet {
 func (warlock *Warlock) registerImpWithName(name string, enabledOnStart bool, isGuardian bool) *WarlockPet {
 	pet := warlock.RegisterPet(proto.WarlockOptions_Imp, 0, 0, name, enabledOnStart, isGuardian)
 	pet.registerFireboltSpell()
-	pet.MinEnergy = 120
+	pet.MinMana = 145
 	return pet
 }
 
@@ -143,8 +198,8 @@ func (warlock *Warlock) registerFelHunter() *WarlockPet {
 
 func (warlock *Warlock) registerFelHunterWithName(name string, enabledOnStart bool, isGuardian bool) *WarlockPet {
 	pet := warlock.RegisterPet(proto.WarlockOptions_Felhunter, 2, 3.5, name, enabledOnStart, isGuardian)
-	pet.registerShadowBiteSpell()
-	pet.MinEnergy = 100
+	//add felhunter ability
+	pet.MinMana = 130
 	return pet
 }
 
@@ -157,7 +212,7 @@ func (warlock *Warlock) registerVoidWalker() *WarlockPet {
 func (warlock *Warlock) registerVoidWalkerWithName(name string, enabledOnStart bool, isGuardian bool) *WarlockPet {
 	pet := warlock.RegisterPet(proto.WarlockOptions_Voidwalker, 2, 3.5, name, enabledOnStart, isGuardian)
 	pet.registerTormentSpell()
-	pet.MinEnergy = 120
+	pet.MinMana = 120
 	return pet
 }
 
@@ -168,16 +223,16 @@ func (warlock *Warlock) registerSuccubus() *WarlockPet {
 }
 
 func (warlock *Warlock) registerSuccubusWithName(name string, enabledOnStart bool, isGuardian bool) *WarlockPet {
-	pet := warlock.RegisterPet(proto.WarlockOptions_Succubus, 3, 1.667, name, enabledOnStart, isGuardian)
+	pet := warlock.RegisterPet(proto.WarlockOptions_Succubus, 173, 216, name, enabledOnStart, isGuardian)
 	pet.registerLashOfPainSpell()
-	pet.MinEnergy = 160
+	pet.MinMana = 190
 	return pet
 }
 
 func (warlock *Warlock) RegisterPet(
 	t proto.WarlockOptions_Summon,
-	swingSpeed float64,
-	apScale float64,
+	min float64,
+	max float64,
 	name string,
 	enabledOnStart bool,
 	isGuardian bool,
@@ -188,11 +243,11 @@ func (warlock *Warlock) RegisterPet(
 	}
 
 	var attackOptions *core.AutoAttackOptions = nil
-	if swingSpeed > 0 {
-		attackOptions = ScaledAutoAttackConfig(swingSpeed)
+	if t > 1 {
+		attackOptions = AutoAttackConfig(min, max)
 	}
 
-	inheritance := warlock.SimplePetStatInheritanceWithScale(apScale)
+	inheritance := warlock.SimplePetStatInheritanceWithScale()
 	return warlock.makePet(name, enabledOnStart, *baseStats, attackOptions, inheritance, isGuardian)
 }
 
@@ -210,54 +265,19 @@ func (pet *WarlockPet) ExecuteCustomRotation(sim *core.Simulation) {
 	waitUntil := time.Duration(1<<63 - 1)
 
 	for _, spell := range pet.AutoCastAbilities {
-		if spell.CanCast(sim, pet.CurrentTarget) && pet.CurrentEnergy() > pet.MinEnergy {
+		if spell.CanCast(sim, pet.CurrentTarget) && pet.CurrentMana() > pet.MinMana {
 			spell.Cast(sim, pet.CurrentTarget)
 			return
 		}
 
 		// calculate energy required
-		cost := max(pet.MinEnergy, spell.Cost.GetCurrentCost())
-		timeTillEnergy := max(0, (cost-pet.CurrentEnergy())/pet.EnergyRegenPerSecond())
-		waitUntil = min(waitUntil, time.Duration(float64(time.Second)*timeTillEnergy))
+		cost := max(pet.MinMana, spell.Cost.GetCurrentCost())
+		timeTillMana := max(0, (cost-pet.CurrentMana())/pet.ManaRegenPerSecondWhileCombat())
+		waitUntil = min(waitUntil, time.Duration(float64(time.Second)*timeTillMana))
 	}
 
 	// for now average the delay out to 100 ms so we don't need to roll random every time
 	pet.WaitUntil(sim, sim.CurrentTime+waitUntil+time.Millisecond*100)
-}
-
-var petActionShadowBite = core.ActionID{SpellID: 54049}
-
-func (pet *WarlockPet) registerShadowBiteSpell() {
-	pet.AutoCastAbilities = append(pet.AutoCastAbilities, pet.RegisterSpell(core.SpellConfig{
-		ActionID:       petActionShadowBite,
-		SpellSchool:    core.SpellSchoolShadow,
-		ProcMask:       core.ProcMaskSpellDamage,
-		ClassSpellMask: WarlockSpellFelHunterShadowBite,
-		Cast: core.CastConfig{
-			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
-			},
-		},
-
-		EnergyCost: core.EnergyCostOptions{
-			Cost: 60,
-		},
-
-		DamageMultiplier: 1,
-		CritMultiplier:   2,
-		ThreatMultiplier: 1,
-		BonusCoefficient: 0.38,
-
-		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			result := spell.CalcAndDealDamage(sim, target, pet.CalcScalingSpellDmg(0.38), spell.OutcomeMagicHitAndCrit)
-			if result.Landed() {
-				switch pet.Owner.Spec {
-				case proto.Spec_SpecDemonologyWarlock:
-					pet.Owner.Unit.GetSecondaryResourceBar().Gain(sim, 12, spell.ActionID)
-				}
-			}
-		},
-	}))
 }
 
 var petActionFireBolt = core.ActionID{SpellID: 3110}
@@ -270,33 +290,26 @@ func (pet *WarlockPet) registerFireboltSpell() {
 		ClassSpellMask: WarlockSpellImpFireBolt,
 		MissileSpeed:   16,
 
-		EnergyCost: core.EnergyCostOptions{
-			Cost: 40,
+		ManaCost: core.ManaCostOptions{
+			FlatCost: 145,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD:      time.Second * 1,
-				CastTime: time.Millisecond * 1750,
+				GCD:      time.Millisecond * 1500,
+				CastTime: time.Millisecond * 2000,
 			},
 		},
 
 		DamageMultiplier: 1,
-		CritMultiplier:   2,
+		CritMultiplier:   1.5,
 		ThreatMultiplier: 1,
-		BonusCoefficient: 0.907,
+		BonusCoefficient: 0.571,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			result := spell.CalcDamage(sim, target, pet.CalcScalingSpellDmg(0.907), spell.OutcomeMagicHitAndCrit)
+			result := spell.CalcDamage(sim, target, pet.CalcScalingSpellDmg(0.571), spell.OutcomeMagicHitAndCrit)
 			spell.WaitTravelTime(sim, func(sim *core.Simulation) {
 				spell.DealDamage(sim, result)
 			})
-
-			if result.Landed() {
-				switch pet.Owner.Spec {
-				case proto.Spec_SpecDemonologyWarlock:
-					pet.Owner.Unit.GetSecondaryResourceBar().Gain(sim, 8, spell.ActionID)
-				}
-			}
 		},
 	}))
 }
@@ -309,8 +322,8 @@ func (pet *WarlockPet) registerLashOfPainSpell() {
 		SpellSchool:    core.SpellSchoolShadow,
 		ProcMask:       core.ProcMaskSpellDamage,
 		ClassSpellMask: WarlockSpellSuccubusLashOfPain,
-		EnergyCost: core.EnergyCostOptions{
-			Cost: 60,
+		ManaCost: core.ManaCostOptions{
+			FlatCost: 190,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
@@ -319,24 +332,19 @@ func (pet *WarlockPet) registerLashOfPainSpell() {
 		},
 
 		DamageMultiplier: 1,
-		CritMultiplier:   2,
+		CritMultiplier:   1.5,
 		ThreatMultiplier: 1,
 		BonusCoefficient: 0.907,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			result := spell.CalcAndDealDamage(sim, target, pet.CalcScalingSpellDmg(0.907), spell.OutcomeMagicHitAndCrit)
-
-			if result.Landed() {
-				switch pet.Owner.Spec {
-				case proto.Spec_SpecDemonologyWarlock:
-					pet.Owner.Unit.GetSecondaryResourceBar().Gain(sim, 12, spell.ActionID)
-				}
-			}
+			result := spell.CalcDamage(sim, target, pet.CalcScalingSpellDmg(0.571), spell.OutcomeMagicHitAndCrit)
+			spell.DealDamage(sim, result)
 		},
 	}))
+
 }
 
-var petActionTorment = core.ActionID{SpellID: 3716}
+var petActionTorment = core.ActionID{SpellID: 27270}
 
 func (pet *WarlockPet) registerTormentSpell() {
 	pet.AutoCastAbilities = append(pet.AutoCastAbilities, pet.RegisterSpell(core.SpellConfig{
@@ -344,28 +352,17 @@ func (pet *WarlockPet) registerTormentSpell() {
 		SpellSchool:    core.SpellSchoolShadow,
 		ProcMask:       core.ProcMaskSpellDamage,
 		ClassSpellMask: WarlockSpellVoidwalkerTorment,
-		EnergyCost: core.EnergyCostOptions{
-			Cost: 50,
+		ManaCost: core.ManaCostOptions{
+			FlatCost: 130,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD: core.GCDDefault,
 			},
 		},
-
-		DamageMultiplier: 1,
-		CritMultiplier:   2,
-		ThreatMultiplier: 1,
-		BonusCoefficient: 0.3,
-
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			result := spell.CalcAndDealDamage(sim, target, pet.CalcScalingSpellDmg(0.3), spell.OutcomeMagicHitAndCrit)
-			if result.Landed() {
-				switch pet.Owner.Spec {
-				case proto.Spec_SpecDemonologyWarlock:
-					pet.Owner.Unit.GetSecondaryResourceBar().Gain(sim, 10, spell.ActionID)
-				}
-			}
+			result := spell.CalcDamage(sim, target, pet.CalcScalingSpellDmg(0.571), spell.OutcomeMagicHitAndCrit)
+			spell.DealDamage(sim, result)
 		},
 	}))
 }

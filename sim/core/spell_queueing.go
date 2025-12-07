@@ -89,7 +89,7 @@ func (spell *Spell) CanQueue(sim *Simulation, target *Unit) bool {
 	}
 
 	// Apply SQW leniency to any pending hardcasts
-	if (spell.Unit.Hardcast.Expires > sim.CurrentTime+MaxSpellQueueWindow) || !spell.CanCastDuringChannel(sim) {
+	if spell.Unit.Hardcast.Expires > sim.CurrentTime+MaxSpellQueueWindow {
 		return false
 	}
 
@@ -125,6 +125,7 @@ func (spell *Spell) CastOrQueue(sim *Simulation, target *Unit) {
 		// Schedule the cast to go off without delay
 		spell.Unit.QueueSpell(sim, spell, target, queueTime)
 	} else {
+		println("I can not cast ", spell.ActionID.SpellID)
 		// Fallback to make sure there is always log output
 		spell.Cast(sim, target)
 	}

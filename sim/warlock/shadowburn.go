@@ -27,7 +27,7 @@ func (warlock *Warlock) registerShadowBurn() {
 		},
 
 		DamageMultiplier: 1,
-		CritMultiplier:   warlock.DefaultCritMultiplier(),
+		CritMultiplier:   warlock.DefaultSpellCritMultiplier(),
 		ThreatMultiplier: 1,
 		BonusCoefficient: shadowBurnCoeff,
 	})

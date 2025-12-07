@@ -90,21 +90,21 @@ export const CONJURED_CONFIG = [
 
 export const makeConjuredInput = makeConsumeInputFactory({ consumesFieldName: 'conjuredId' });
 
-export const ExplosiveBigDaddy = {
-	actionId: ActionId.fromItemId(63396),
-	value: 89637,
+export const ExplosiveSuperSapperCharge = {
+	actionId: ActionId.fromItemId(23827),
+	value: 30560,
 	showWhen: (player: Player<any>) => player.hasProfession(Profession.Engineering),
 };
 
-export const HighpoweredBoltGun = {
-	actionId: ActionId.fromItemId(60223),
-	value: 82207,
+export const GoblinSapperCharge = {
+	actionId: ActionId.fromItemId(10646),
+	value: 12760,
 	showWhen: (player: Player<any>) => player.hasProfession(Profession.Engineering),
 };
 
 export const EXPLOSIVE_CONFIG = [
-	{ config: ExplosiveBigDaddy, stats: [] },
-	{ config: HighpoweredBoltGun, stats: [] },
+	{ config: ExplosiveSuperSapperCharge, stats: [] },
+	{ config: GoblinSapperCharge, stats: [] },
 ] as ConsumableStatOption<number>[];
 export const makeExplosivesInput = makeConsumeInputFactory({ consumesFieldName: 'explosiveId' });
 
@@ -151,6 +151,10 @@ export function makeConsumableInput(
 
 			if (options.consumesFieldName === 'battleElixirId' || options.consumesFieldName === 'guardianElixirId') {
 				newConsumes.flaskId = 0;
+			}
+
+			if (options.consumesFieldName == 'imbueId') {
+				newConsumes.imbueId = 0;
 			}
 			player.setConsumes(eventID, newConsumes);
 		},

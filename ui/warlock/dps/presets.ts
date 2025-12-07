@@ -1,6 +1,6 @@
 import * as PresetUtils from '../../core/preset_utils';
 import { ConsumesSpec, PseudoStat, Stat } from '../../core/proto/common';
-import { Warlock_Options as WarlockOptions } from '../../core/proto/warlock';
+import { Warlock_Options as WarlockOptions, WarlockOptions_Armor, WarlockOptions_Summon } from '../../core/proto/warlock';
 import { SavedTalents } from '../../core/proto/ui';
 import { Stats } from '../../core/proto_utils/stats';
 import BlankAPL from './apls/blank.apl.json'
@@ -40,15 +40,20 @@ export const Talents = {
 
 export const DefaultOptions = WarlockOptions.create({
 	classOptions: {
-
+		armor: WarlockOptions_Armor.FelArmor,
+		summon: WarlockOptions_Summon.Succubus,
+		detonateSeed: false,
+		useItemSwapBonusStats: false,
+		sacrificeSummon: true,
 	},
 });
 
 export const DefaultConsumables = ConsumesSpec.create({
-	flaskId: 76084, // Flask of the Winds
-	foodId: 74648, // Skewered Eel
-	potId: 76089, // Potion of the Tol'vir
-	prepotId: 76089, // Potion of the Tol'vir
+	flaskId: 22866, // Flask of Pure Death
+	foodId: 33825, // Poached Bluefish
+	potId: 22839, // Destructive Potion
+	prepotId: 22839, // Destructive Potion
+	imbueId: 20749 // Brilliant Wizard Oil
 });
 
 export const OtherDefaults = {

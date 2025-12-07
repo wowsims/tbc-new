@@ -104,6 +104,12 @@ export class CharacterStats extends Component {
 				StatGroup.Spell,
 				[
 					UnitStat.fromStat(Stat.StatSpellPower),
+					UnitStat.fromStat(Stat.StatSpellDamage),
+					UnitStat.fromStat(Stat.StatFirePower),
+					UnitStat.fromStat(Stat.StatFrostPower),
+					UnitStat.fromStat(Stat.StatHolyPower),
+					UnitStat.fromStat(Stat.StatNaturePower),
+					UnitStat.fromStat(Stat.StatShadowPower),
 					UnitStat.fromPseudoStat(PseudoStat.PseudoStatSpellHastePercent),
 					UnitStat.fromPseudoStat(PseudoStat.PseudoStatSpellHitPercent),
 					UnitStat.fromPseudoStat(PseudoStat.PseudoStatSpellCritPercent),
@@ -178,6 +184,7 @@ export class CharacterStats extends Component {
 
 	private updateStats(player: Player<any>) {
 		const playerStats = player.getCurrentStats();
+		console.log('playerStats', playerStats);
 		const statMods = this.modifyDisplayStats ? this.modifyDisplayStats(this.player) : {};
 		this.hasRacialHitBonus = this.player.getRace() === Race.RaceDraenei;
 		this.activeRacialExpertiseBonuses = this.player.getActiveRacialExpertiseBonuses();
@@ -188,6 +195,7 @@ export class CharacterStats extends Component {
 		const buffsStats = Stats.fromProto(playerStats.buffsStats);
 		const consumesStats = Stats.fromProto(playerStats.consumesStats);
 		const bonusStats = player.getBonusStats();
+
 
 		let finalStats = Stats.fromProto(playerStats.finalStats)
 			.add(statMods.base || new Stats())
@@ -222,6 +230,7 @@ export class CharacterStats extends Component {
 
 		let idx = 0;
 		this.stats.forEach(unitStat => {
+			console.log('UNIT STAT', unitStat)
 			const bonusStatValue = unitStat.hasRootStat() ? bonusStats.getStat(unitStat.getRootStat()) : 0;
 			let contextualClass: string;
 			if (bonusStatValue == 0) {

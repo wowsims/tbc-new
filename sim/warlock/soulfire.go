@@ -31,7 +31,7 @@ func (warlock *Warlock) registerSoulfire() {
 		},
 
 		DamageMultiplier: 1,
-		CritMultiplier:   warlock.DefaultCritMultiplier(),
+		CritMultiplier:   warlock.DefaultSpellCritMultiplier(),
 		ThreatMultiplier: 1,
 		BonusCoefficient: soulfireCoeff,
 	})

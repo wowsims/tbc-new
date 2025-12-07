@@ -75,7 +75,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 	includeBuffDebuffInputs: [
 		BuffDebuffInputs.CritBuff,
 		BuffDebuffInputs.AttackPowerBuff,
-		BuffDebuffInputs.MasteryBuff,
 		BuffDebuffInputs.StatsBuff,
 		BuffDebuffInputs.AttackSpeedBuff,
 

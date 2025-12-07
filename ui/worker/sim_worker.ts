@@ -44,7 +44,7 @@ let inst: WebAssembly.Instance | null = null;
 
 WebAssembly.instantiateStreaming(fetch('lib.wasm'), go.importObject).then(async result => {
 	inst = result.instance;
-	// console.log("loading wasm...")
+	console.log("loading wasm...")
 	await go.run(inst);
 });
 

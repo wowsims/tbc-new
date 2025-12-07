@@ -26,7 +26,7 @@ export function addRaidSimAction(simUI: SimUI): RaidSimResultsManager {
 			value: simUI.sim.getIterations(),
 		});
 		const button = ev.target as HTMLButtonElement;
-		button.disabled = true;
+		button.disabled = false;
 		if (!isRunning) {
 			isRunning = true;
 

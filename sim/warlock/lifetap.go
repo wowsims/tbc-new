@@ -13,11 +13,11 @@ func (warlock *Warlock) registerLifeTap() {
 	healthCost := 582.0
 	baseRestore := healthCost * (1.0 + 0.1*float64(warlock.Talents.ImprovedLifeTap))
 
-	// petRestore := 0.3333 * float64(warlock.Talents.ManaFeed)
-	// var petManaMetrics []*core.ResourceMetrics
-	// if warlock.Talents.ManaFeed > 0 {
-	// 	petManaMetrics = append(petManaMetrics, warlock.ActivePet.NewManaMetrics(actionID))
-	// }
+	petRestore := 0.3333 * float64(warlock.Talents.ManaFeed)
+	var petManaMetrics []*core.ResourceMetrics
+	if warlock.Talents.ManaFeed > 0 {
+		petManaMetrics = append(petManaMetrics, warlock.ActivePet.NewManaMetrics(actionID))
+	}
 
 	warlock.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
@@ -40,9 +40,9 @@ func (warlock *Warlock) registerLifeTap() {
 			warlock.RemoveHealth(sim, healthCost)
 			warlock.AddMana(sim, restore, manaMetrics)
 
-			// if warlock.Talents.ManaFeed > 0 {
-			// 	warlock.ActivePet.AddMana(sim, restore*petRestore, petManaMetrics[0])
-			// }
+			if warlock.Talents.ManaFeed > 0 {
+				warlock.ActivePet.AddMana(sim, restore*petRestore, petManaMetrics[0])
+			}
 		},
 	})
 }

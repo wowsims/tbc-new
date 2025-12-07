@@ -499,6 +499,7 @@ type PseudoStats struct {
 	HealingTakenMultiplier         float64 // All healing sources including self-healing
 	ExternalHealingTakenMultiplier float64 // Modulates the output of the individual tank sim healing model
 	MovementSpeedMultiplier        float64 // Multiplier for movement speed, default to 1. Player base movement 7 yards/s. All effects affecting movements are multipliers.
+	SelfHealingMultiplier          float64 // Healing from spells and abilities, only-self
 }
 
 func NewPseudoStats() PseudoStats {

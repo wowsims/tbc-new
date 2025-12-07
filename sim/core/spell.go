@@ -593,7 +593,7 @@ func (spell *Spell) CanCast(sim *Simulation, target *Unit) bool {
 	}
 
 	// While casting or channeling, no other action is possible
-	if (spell.Unit.Hardcast.Expires > sim.CurrentTime) || !spell.CanCastDuringChannel(sim) {
+	if spell.Unit.Hardcast.Expires > sim.CurrentTime {
 		//if sim.Log != nil {
 		//	sim.Log("Cant cast because already casting/channeling")
 		//}
@@ -626,7 +626,9 @@ func (spell *Spell) CanCast(sim *Simulation, target *Unit) bool {
 // Example: Metamorphosis drains 4 Demonic Fury every second.
 // This means at the end of the cast you could end up not meeting the casting requirements.
 func (spell *Spell) CanCompleteCast(sim *Simulation, target *Unit, logCastFailure bool) bool {
+
 	if !spell.Unit.IsEnabled() {
+		println("Unit is not Enabled")
 		if logCastFailure {
 			return spell.castFailureHelper(sim, "unit is disabled")
 		}
@@ -659,9 +661,9 @@ func (spell *Spell) CanCompleteCast(sim *Simulation, target *Unit, logCastFailur
 
 	if spell.Cost != nil {
 		if !spell.Cost.MeetsRequirement(sim, spell) {
-			//if sim.Log != nil {
-			//	sim.Log("Cant cast because of resource cost")
-			//}
+			if sim.Log != nil {
+				sim.Log("Cant cast because of resource cost")
+			}
 			if logCastFailure {
 				return spell.castFailureHelper(sim, spell.Cost.CostFailureReason(sim, spell))
 			}
@@ -683,6 +685,7 @@ func (spell *Spell) Cast(sim *Simulation, target *Unit) bool {
 	if target == nil {
 		target = spell.Unit.CurrentTarget
 	}
+
 	return spell.castFn(sim, target)
 }
 

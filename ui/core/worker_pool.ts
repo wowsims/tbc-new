@@ -115,7 +115,9 @@ export class WorkerPool {
 	}
 
 	async raidSimAsync(request: RaidSimRequest, onProgress: WorkerProgressCallback, signals: SimSignals): Promise<RaidSimResult> {
+		console.log("BEFORE WORKER?")
 		const worker = this.getLeastBusyWorker();
+		console.log("RAID SIM REQUEST AFTER WORK BEFORE THING" + RaidSimRequest.toJsonString(request))
 		worker.log('Raid sim request: ' + RaidSimRequest.toJsonString(request));
 		const id = request.requestId;
 
@@ -124,6 +126,7 @@ export class WorkerPool {
 		});
 
 		const iterations = request.simOptions?.iterations ?? 3000;
+		console.log("RAIMD SIME ASYN", SimRequest.raidSimAsync)
 		const result = await this.doAsyncRequest(SimRequest.raidSimAsync, RaidSimRequest.toBinary(request), id, worker, onProgress, iterations);
 
 		// Don't print the logs because it just clogs the console.

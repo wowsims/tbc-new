@@ -46,11 +46,11 @@ type TreantConfig struct {
 func (druid *Druid) NewDefaultTreant(config TreantConfig) *DefaultTreantImpl {
 	treant := &DefaultTreantImpl{
 		Pet: core.NewPet(core.PetConfig{
-			Name:                            "Treant",
-			Owner:                           &druid.Character,
-			NonHitExpStatInheritance:        config.NonHitExpStatInheritance,
-			HasDynamicMeleeSpeedInheritance: true,
-			HasDynamicCastSpeedInheritance:  true,
+			Name:                     "Treant",
+			Owner:                    &druid.Character,
+			NonHitExpStatInheritance: config.NonHitExpStatInheritance,
+			// HasDynamicMeleeSpeedInheritance: true,
+			// HasDynamicCastSpeedInheritance:  true,
 		}),
 	}
 

@@ -28,7 +28,7 @@ func (warlock *Warlock) registerSeed() {
 		ClassSpellMask: WarlockSpellSeedOfCorruptionExplosion,
 
 		DamageMultiplierAdditive: 1,
-		CritMultiplier:           warlock.DefaultCritMultiplier(),
+		CritMultiplier:           warlock.DefaultSpellCritMultiplier(),
 		ThreatMultiplier:         1,
 		BonusCoefficient:         seedExploCoeff,
 
@@ -68,7 +68,6 @@ func (warlock *Warlock) registerSeed() {
 			},
 		},
 
-		CritMultiplier:           warlock.DefaultCritMultiplier(),
 		DamageMultiplierAdditive: 1,
 		ThreatMultiplier:         1,
 

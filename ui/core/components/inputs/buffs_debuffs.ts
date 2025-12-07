@@ -76,16 +76,6 @@ export const CritBuff = InputHelpers.makeMultiIconInput(
 	i18n.t('settings_tab.raid_buffs.crit_percent'),
 );
 
-export const MasteryBuff = InputHelpers.makeMultiIconInput(
-	[
-		// makeBooleanRaidBuffInput({ actionId: ActionId.fromSpellId(19740), fieldName: 'blessingOfMight' }),
-		// makeBooleanRaidBuffInput({ actionId: ActionId.fromSpellId(93435), fieldName: 'roarOfCourage' }),
-		// makeBooleanRaidBuffInput({ actionId: ActionId.fromSpellId(128997), fieldName: 'spiritBeastBlessing' }),
-		// makeBooleanRaidBuffInput({ actionId: ActionId.fromSpellId(116956), fieldName: 'graceOfAir' }),
-	],
-	i18n.t('settings_tab.raid_buffs.mastery'),
-);
-
 export const StaminaBuff = InputHelpers.makeMultiIconInput(
 	[
 		// makeBooleanRaidBuffInput({ actionId: ActionId.fromSpellId(469), fieldName: 'commandingShout' }),
