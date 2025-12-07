@@ -187,7 +187,7 @@ func ConvertEffectAuraToStatIndex(effectAura int, effectMisc int) proto.Stat {
 	case 124: // MOD_RANGED_ATTACK_POWER
 		return proto.Stat_StatRangedAttackPower
 	case 13: // MOD_DAMAGE_DONE
-		return proto.Stat_StatSpellDamage
+		return ConvertSpellDamageFlagToSchoolDamageStat(effectMisc)
 	case 135: // MOD_HEALING_DONE
 		return proto.Stat_StatHealingPower
 	case 34: // MOD_INCREASE_HEALTH
@@ -207,6 +207,25 @@ func ConvertTargetResistanceFlagToPenetrationStat(flag int) proto.Stat {
 		return proto.Stat_StatArmorPenetration
 	default:
 		return proto.Stat_StatSpellPenetration
+	}
+}
+
+func ConvertSpellDamageFlagToSchoolDamageStat(flag int) proto.Stat {
+	switch flag {
+	case 2:
+		return proto.Stat_StatHolyPower
+	case 4:
+		return proto.Stat_StatFirePower
+	case 8:
+		return proto.Stat_StatNaturePower
+	case 16:
+		return proto.Stat_StatFrostPower
+	case 32:
+		return proto.Stat_StatShadowPower
+	case 64:
+		return proto.Stat_StatArcanePower
+	default:
+		return proto.Stat_StatSpellDamage
 	}
 }
 
