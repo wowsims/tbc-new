@@ -151,7 +151,7 @@ func NewMage(character *core.Character, options *proto.Player, mageOptions *prot
 	mage.EnableManaBar()
 	// Nether Attunement
 	// https://www.wowhead.com/mop-classic/spell=117957/nether-attunement
-	mage.HasteEffectsManaRegen()
+	// mage.HasteEffectsManaRegen()
 
 	mage.Icicles = make([]float64, 0)
 	mage.T15_4PC_FrostboltProcChance = 0
