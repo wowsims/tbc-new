@@ -7,6 +7,7 @@ import * as InputHelpers from '../input_helpers';
 import { IconEnumValueConfig } from '../pickers/icon_enum_picker';
 import { ActionInputConfig, ItemStatOption } from './stat_options';
 import i18n from '../../../i18n/config.js';
+import { makeBooleanConsumeInput } from '../icon_inputs';
 
 export interface ConsumableInputConfig<T> extends ActionInputConfig<T> {
 	value: T;
@@ -90,23 +91,107 @@ export const CONJURED_CONFIG = [
 
 export const makeConjuredInput = makeConsumeInputFactory({ consumesFieldName: 'conjuredId' });
 
-export const ExplosiveBigDaddy = {
-	actionId: ActionId.fromItemId(63396),
-	value: 89637,
+///////////////////////////////////////////////////////////////////////////
+//                               ENGINEERING
+///////////////////////////////////////////////////////////////////////////
+
+export const AdamantiteGrenade = {
+	actionId: ActionId.fromItemId(23737),
+	value: 30217,
 	showWhen: (player: Player<any>) => player.hasProfession(Profession.Engineering),
 };
 
-export const HighpoweredBoltGun = {
-	actionId: ActionId.fromItemId(60223),
-	value: 82207,
+export const FelIronBomb = {
+	actionId: ActionId.fromItemId(23736),
+	value: 30216,
+	showWhen: (player: Player<any>) => player.hasProfession(Profession.Engineering),
+};
+
+export const GnomishFlameTurrent = {
+	actionId: ActionId.fromItemId(23841),
+	value: 30526,
 	showWhen: (player: Player<any>) => player.hasProfession(Profession.Engineering),
 };
 
 export const EXPLOSIVE_CONFIG = [
-	{ config: ExplosiveBigDaddy, stats: [] },
-	{ config: HighpoweredBoltGun, stats: [] },
+	{ config: AdamantiteGrenade, stats: [] },
+	{ config: FelIronBomb, stats: [] },
+	{ config: GnomishFlameTurrent, stats: [] },
 ] as ConsumableStatOption<number>[];
 export const makeExplosivesInput = makeConsumeInputFactory({ consumesFieldName: 'explosiveId' });
+
+export const GoblinSapper = makeBooleanConsumeInput({
+	actionId: ActionId.fromItemId(10646),
+	fieldName: 'goblinSapper',
+	showWhen: (player: Player<any>) => player.hasProfession(Profession.Engineering),
+})
+
+export const SuperSapper = makeBooleanConsumeInput({
+	actionId: ActionId.fromItemId(23827),
+	fieldName: 'superSapper',
+	showWhen: (player: Player<any>) => player.hasProfession(Profession.Engineering),
+})
+
+///////////////////////////////////////////////////////////////////////////
+//                               WEAPON IMBUES
+///////////////////////////////////////////////////////////////////////////
+
+// Oils
+export const ManaOil = {
+	actionId: ActionId.fromItemId(20748),
+	value: 25123,
+};
+export const BrilWizardOil = {
+	actionId: ActionId.fromItemId(20749),
+	value: 25122,
+};
+export const SupWizardOil = {
+	actionId: ActionId.fromItemId(22522),
+	value: 28017,
+};
+// Stones
+export const AdamantiteSharpeningMH = {
+	actionId: ActionId.fromItemId(23529),
+	value: 29453,
+	showWhen: (player: Player<any>) => !player.getGear().hasBluntMHWeapon()
+};
+export const AdamantiteWeightMH = {
+	actionId: ActionId.fromItemId(28421),
+	value: 34340,
+	showWhen: (player: Player<any>) => player.getGear().hasBluntMHWeapon()
+};
+export const AdamantiteSharpeningOH = {
+	actionId: ActionId.fromItemId(23529),
+	value: 29453,
+	showWhen: (player: Player<any>) => !player.getGear().hasBluntOHWeapon()
+};
+export const AdamantiteWeightOH = {
+	actionId: ActionId.fromItemId(28421),
+	value: 34340,
+	showWhen: (player: Player<any>) => player.getGear().hasBluntOHWeapon()
+};
+
+// TBC ANNI: Comments here need to be delayed until the specs are set up with new stat weights/displays
+export const IMBUE_CONFIG_MH = [
+	{ config: ManaOil, stats: [Stat.StatSpellPower] }, // TBC ANNI: Change to HealingPower
+	{ config: BrilWizardOil, stats: [Stat.StatSpellPower] }, // TBC ANNI: Change to SpellDamage
+	{ config: SupWizardOil, stats: [Stat.StatSpellPower] }, // TBC ANNI: Change to SpellDamage
+	{ config: AdamantiteSharpeningMH, stats: [Stat.StatAttackPower] }, // TBC ANNI: Change to MeleeCritRating
+	{ config: AdamantiteWeightMH, stats: [Stat.StatAttackPower] }, // TBC ANNI: Change to MeleeCritRating
+] as ConsumableStatOption<number>[];
+
+export const IMBUE_CONFIG_OH = [
+	{ config: ManaOil, stats: [Stat.StatSpellPower] },
+	{ config: BrilWizardOil, stats: [Stat.StatSpellPower] },
+	{ config: SupWizardOil, stats: [Stat.StatSpellPower] },
+	{ config: AdamantiteSharpeningOH, stats: [Stat.StatAttackPower] },
+	{ config: AdamantiteWeightOH, stats: [Stat.StatAttackPower] },
+] as ConsumableStatOption<number>[];
+
+export const makeMHImbueInput = makeConsumeInputFactory({ consumesFieldName: 'mhImbueId' });
+export const makeOHImbueinput = makeConsumeInputFactory({ consumesFieldName: 'ohImbueId' });
+
+///////////////////////////////////////////////////////////////////////////
 
 export interface ConsumableInputOptions {
 	consumesFieldName: keyof ConsumesSpec;

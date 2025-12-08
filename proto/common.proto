@@ -573,8 +573,12 @@ message ConsumesSpec {
 	int32 battle_elixir_id = 4;
 	int32 guardian_elixir_id = 5;
 	int32 food_id = 6;
-	int32 explosive_id = 7;
-	int32 conjured_id = 9;
+	int32 conjured_id = 7;
+	int32 explosive_id = 8;
+	bool superSapper = 9;
+	bool goblinSapper = 10;
+	int32 mhImbue_id = 11;
+	int32 ohImbue_id = 12;
 }
 
 enum MobType {

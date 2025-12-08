@@ -610,6 +610,11 @@
 			},
 			"pet": {
 				"title": "Pet"
+			},
+			"imbue": {
+				"title": "Imbues",
+				"mhImbue": "Main Hand",
+				"ohImbue": "Off Hand"
 			}
 		},
 		"encounter": {
