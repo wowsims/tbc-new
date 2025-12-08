@@ -25,12 +25,12 @@ const (
 	SpellPower
 	HealingPower
 	SpellDamage
-	ArcanePower
-	FirePower
-	FrostPower
-	HolyPower
-	NaturePower
-	ShadowPower
+	ArcaneDamage
+	FireDamage
+	FrostDamage
+	HolyDamage
+	NatureDamage
+	ShadowDamage
 	SpellHitRating
 	SpellCritRating
 	SpellHasteRating
@@ -176,6 +176,18 @@ func (s Stat) StatName() string {
 		return "FeralAttackPower"
 	case SpellDamage:
 		return "SpellDamage"
+	case ArcaneDamage:
+		return "ArcaneDamage"
+	case FireDamage:
+		return "FireDamage"
+	case FrostDamage:
+		return "FrostDamage"
+	case HolyDamage:
+		return "HolyDamage"
+	case NatureDamage:
+		return "NatureDamage"
+	case ShadowDamage:
+		return "ShadowDamage"
 	case ResilienceRating:
 		return "ResilienceRating"
 	case Armor:

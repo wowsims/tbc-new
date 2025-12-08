@@ -328,7 +328,7 @@ const (
 	// Enables casting while channeling
 	SpellMod_AllowCastWhileChanneling
 
-	// Add/subtract bonus spell power
+	// Add/subtract bonus spell damage
 	// Uses: FloatValue
 	SpellMod_BonusSpellDamage_Flat
 

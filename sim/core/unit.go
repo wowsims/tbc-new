@@ -207,8 +207,9 @@ type Unit struct {
 }
 
 func (unit *Unit) getSpellDamageValueImpl(spell *Spell) float64 {
-	return unit.stats[stats.SpellDamage] + spell.BonusSpellDamage
+	return unit.stats[stats.SpellDamage] + float64(spell.SpellSchool.SchoolDamage()) + spell.BonusSpellDamage
 }
+
 func (unit *Unit) getAttackPowerValueImpl(spell *Spell) float64 {
 	return unit.stats[stats.AttackPower]
 }
