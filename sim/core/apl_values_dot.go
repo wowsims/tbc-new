@@ -331,42 +331,6 @@ type APLValueDotCritPercentIncrease struct {
 	*APLValueDotIncreaseCheck
 }
 
-func (rot *APLRotation) newValueDotCritPercentIncrease(config *proto.APLValueDotPercentIncrease, _ *proto.UUID) APLValue {
-	parentImpl := rot.newDotIncreaseValue("Dot Crit Chance Percent Increase", config)
-	if parentImpl == nil {
-		return nil
-	}
-
-	return &APLValueDotCritPercentIncrease{APLValueDotIncreaseCheck: parentImpl}
-}
-
-func (value *APLValueDotCritPercentIncrease) Finalize(rot *APLRotation) {
-	if value.useBaseValue && value.baseValueDummyAura != nil {
-		value.baseValueDummyAura.ApplyOnEncounterStart(func(aura *Aura, sim *Simulation) {
-			value.baseValue = value.getCritChance(false)
-		})
-	}
-}
-
-func (value *APLValueDotCritPercentIncrease) GetFloat(sim *Simulation) float64 {
-	currentCritChance := value.getCritChance(true)
-	if currentCritChance == 0 {
-		return 1
-	}
-	val := value.getCritChance(false)/currentCritChance - 1
-	return val
-}
-
-func (value *APLValueDotCritPercentIncrease) getCritChance(useSnapshot bool) float64 {
-	target := value.targetRef.Get()
-	dot := value.spell.Dot(target)
-	if useSnapshot {
-		return TernaryFloat64(value.useBaseValue, value.baseValue, dot.SnapshotCritChance)
-	}
-
-	return dot.Spell.SpellCritChance(target)
-}
-
 type APLValueDotTickRatePercentIncrease struct {
 	*APLValueDotIncreaseCheck
 }

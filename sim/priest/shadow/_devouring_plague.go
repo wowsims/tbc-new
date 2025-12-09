@@ -91,13 +91,13 @@ func (shadow *ShadowPriest) registerDevouringPlagueSpell() {
 			AffectedByCastSpeed: true,
 			BonusCoefficient:    DpDotCoeff,
 
-			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, isRollover bool) {
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Spell.DamageMultiplier *= float64(shadow.orbsConsumed)
 				dot.Snapshot(target, shadow.CalcScalingSpellDmg(DpDotScale))
 				dot.Spell.DamageMultiplier /= float64(shadow.orbsConsumed)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeSnapshotCrit)
+				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 				devouringPlagueHeal.Cast(sim, &shadow.Unit)
 			},
 		},

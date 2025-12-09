@@ -36,11 +36,11 @@ func (warlock *Warlock) RegisterDrainLife(callback WarlockSpellCastedCallback) {
 			AffectedByCastSpeed:  true,
 			HasteReducesDuration: true,
 			BonusCoefficient:     drainLifeCoeff,
-			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, _ bool) {
-				dot.Snapshot(target, warlock.CalcScalingSpellDmg(drainLifeScale))
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
+				dot.Snapshot(target, 108)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				resultSlice[0] = dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeSnapshotCrit)
+				resultSlice[0] = dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 
 				// Spend mana per tick
 				warlock.SpendMana(sim, dot.Spell.Cost.GetCurrentCost(), manaMetric)

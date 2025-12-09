@@ -84,11 +84,11 @@ func (destruction *DestructionWarlock) registerFireAndBrimstoneImmolate() {
 			TickLength:          3 * time.Second,
 			AffectedByCastSpeed: true,
 			BonusCoefficient:    immolateCoeff,
-			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, isRollover bool) {
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, destruction.CalcScalingSpellDmg(immolateScale))
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				result := dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeSnapshotCrit)
+				result := dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 				if result.DidCrit() {
 					destruction.BurningEmbers.Gain(sim, 1, dot.Spell.ActionID)
 				}

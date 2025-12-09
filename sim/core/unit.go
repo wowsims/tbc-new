@@ -32,7 +32,7 @@ const (
 type DynamicDamageTakenModifier func(sim *Simulation, spell *Spell, result *SpellResult, isPeriodic bool)
 type DynamicHealingTakenModifier func(sim *Simulation, spell *Spell, result *SpellResult)
 
-type GetSpellPowerValue func(spell *Spell) float64
+type GetSpellDamageValue func(spell *Spell) float64
 type GetAttackPowerValue func(spell *Spell) float64
 
 // Unit is an abstraction of a Character/Boss/Pet/etc, containing functionality
@@ -199,16 +199,17 @@ type Unit struct {
 	// Used for reacting to transient stat changes (e.g. for caching snapshotting calculations)
 	OnTemporaryStatsChanges []OnTemporaryStatsChange
 
-	GetSpellPowerValue GetSpellPowerValue
+	GetSpellDamageValue GetSpellDamageValue
 
 	GetAttackPowerValue GetAttackPowerValue
 
 	SpellsInFlight map[*Spell]int32
 }
 
-func (unit *Unit) getSpellPowerValueImpl(spell *Spell) float64 {
-	return unit.stats[stats.SpellPower] + spell.BonusSpellPower
+func (unit *Unit) getSpellDamageValueImpl(spell *Spell) float64 {
+	return unit.stats[stats.SpellDamage] + float64(spell.SpellSchool.SchoolDamage()) + spell.BonusSpellDamage
 }
+
 func (unit *Unit) getAttackPowerValueImpl(spell *Spell) float64 {
 	return unit.stats[stats.AttackPower]
 }
@@ -714,8 +715,8 @@ func (unit *Unit) finalize() {
 
 	unit.AutoAttacks.finalize()
 
-	if unit.GetSpellPowerValue == nil {
-		unit.GetSpellPowerValue = unit.getSpellPowerValueImpl
+	if unit.GetSpellDamageValue == nil {
+		unit.GetSpellDamageValue = unit.getSpellDamageValueImpl
 	}
 
 	if unit.GetAttackPowerValue == nil {

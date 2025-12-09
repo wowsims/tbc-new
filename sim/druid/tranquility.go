@@ -36,7 +36,7 @@ func (druid *Druid) registerTranquilityCD() {
 			AffectedByCastSpeed:  true,
 			HasteReducesDuration: true,
 
-			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, _ bool) {
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.SnapshotBaseDamage = 0.068 * dot.Spell.HealingPower(target) * float64(dot.Aura.GetStacks())
 				dot.SnapshotAttackerMultiplier = dot.CasterPeriodicHealingMultiplier()
 			},
@@ -54,7 +54,7 @@ func (druid *Druid) registerTranquilityCD() {
 			}
 
 			hot.AddStack(sim)
-			hot.TakeSnapshot(sim, false)
+			hot.TakeSnapshot(sim)
 		},
 	})
 
@@ -98,7 +98,7 @@ func (druid *Druid) registerTranquilityCD() {
 			AffectedByCastSpeed:  true,
 			HasteReducesDuration: true,
 
-			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, _ bool) {
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.SnapshotBaseDamage = 3882. + 0.398*dot.Spell.HealingPower(target)
 				dot.SnapshotAttackerMultiplier = dot.Spell.CasterHealingMultiplier()
 			},

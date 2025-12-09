@@ -14,8 +14,6 @@ type Druid struct {
 
 	Talents *proto.DruidTalents
 
-	ClassSpellScaling float64
-
 	StartingForm DruidForm
 
 	Treants TreantAgents
@@ -297,14 +295,13 @@ func (druid *Druid) OnEncounterStart(sim *core.Simulation) {
 
 func New(char *core.Character, form DruidForm, selfBuffs SelfBuffs, talents string) *Druid {
 	druid := &Druid{
-		Character:         *char,
-		SelfBuffs:         selfBuffs,
-		Talents:           &proto.DruidTalents{},
-		StartingForm:      form,
-		form:              form,
-		ClassSpellScaling: core.GetClassSpellScalingCoefficient(proto.Class_ClassDruid),
-		BleedsActive:      make(map[*core.Unit]int32),
-		RipBaseNumTicks:   8,
+		Character:       *char,
+		SelfBuffs:       selfBuffs,
+		Talents:         &proto.DruidTalents{},
+		StartingForm:    form,
+		form:            form,
+		BleedsActive:    make(map[*core.Unit]int32),
+		RipBaseNumTicks: 8,
 	}
 
 	druid.RipMaxNumTicks = druid.RipBaseNumTicks + 3

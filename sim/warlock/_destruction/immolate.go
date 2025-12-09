@@ -80,11 +80,11 @@ func (destruction *DestructionWarlock) registerImmolate() {
 			TickLength:          3 * time.Second,
 			AffectedByCastSpeed: true,
 			BonusCoefficient:    immolateCoeff,
-			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, isRollover bool) {
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, destruction.CalcScalingSpellDmg(immolateScale))
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				result := dot.CalcSnapshotDamage(sim, target, dot.OutcomeSnapshotCrit)
+				result := dot.CalcSnapshotDamage(sim, target, dot.OutcomeTick)
 				if result.DidCrit() {
 					destruction.BurningEmbers.Gain(sim, 1, dot.Spell.ActionID)
 				}
@@ -102,7 +102,7 @@ func (destruction *DestructionWarlock) registerImmolate() {
 		ExpectedTickDamage: func(sim *core.Simulation, target *core.Unit, spell *core.Spell, useSnapshot bool) *core.SpellResult {
 			dot := spell.Dot(target)
 			if useSnapshot {
-				result := dot.CalcSnapshotDamage(sim, target, dot.OutcomeExpectedSnapshotCrit)
+				result := dot.CalcSnapshotDamage(sim, target, dot.OutcomeTick)
 				result.Damage /= dot.TickPeriod().Seconds()
 				return result
 			} else {

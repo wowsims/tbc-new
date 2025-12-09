@@ -69,7 +69,7 @@ func NewTestDataProvider(config CharacterConfig) *TestDataProvider {
 
 // add here over time to overwrite fixed values for tests
 type CharacterConfig struct {
-	SpellPower float64
+	SpellDamage float64
 }
 
 type TestDataProvider struct {
@@ -77,6 +77,6 @@ type TestDataProvider struct {
 	Character *CharacterConfig
 }
 
-func (t TestDataProvider) GetSpellPower() float64 {
-	return t.Character.SpellPower
+func (t TestDataProvider) GetSpellDamage() float64 {
+	return t.Character.SpellDamage
 }

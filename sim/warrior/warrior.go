@@ -170,10 +170,9 @@ func (warrior *Warrior) OnEncounterStart(sim *core.Simulation) {
 
 func NewWarrior(character *core.Character, options *proto.WarriorOptions, talents string, inputs WarriorInputs) *Warrior {
 	warrior := &Warrior{
-		Character:         *character,
-		Talents:           &proto.WarriorTalents{},
-		WarriorInputs:     inputs,
-		ClassSpellScaling: core.GetClassSpellScalingCoefficient(proto.Class_ClassWarrior),
+		Character:     *character,
+		Talents:       &proto.WarriorTalents{},
+		WarriorInputs: inputs,
 	}
 	core.FillTalentsProto(warrior.Talents.ProtoReflect(), talents, TalentTreeSizes)
 

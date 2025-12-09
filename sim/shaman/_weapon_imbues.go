@@ -390,7 +390,7 @@ func (shaman *Shaman) RegisterFrostbrandImbue(procMask core.ProcMask) {
 			},
 			NumberOfTicks: 4,
 			TickLength:    time.Second * 3,
-			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, _ bool) {
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.SnapshotBaseDamage = (shaman.CalcScalingSpellDmg(0.57400000095) + (0.038 * dot.Spell.HealingPower(target)))
 				dot.SnapshotAttackerMultiplier = dot.Spell.CasterHealingMultiplier()
 			},

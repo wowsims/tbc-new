@@ -129,7 +129,7 @@ func (shaman *Shaman) registerRiptideSpell() {
 			},
 			NumberOfTicks: 5,
 			TickLength:    time.Second * 3,
-			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, _ bool) {
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.SnapshotBaseDamage = 334 + hotCoeff*dot.Spell.HealingPower(target)
 				dot.SnapshotAttackerMultiplier = dot.Spell.CasterHealingMultiplier()
 			},
@@ -285,7 +285,7 @@ func (shaman *Shaman) registerEarthShieldSpell() {
 			},
 			NumberOfTicks: 6 + shaman.Talents.ImprovedEarthShield,
 			TickLength:    time.Minute*10 + 1, // tick length longer than expire time.
-			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, _ bool) {
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.SnapshotBaseDamage = 377 + dot.Spell.HealingPower(target)*spCoeff
 				dot.SnapshotAttackerMultiplier = dot.Spell.CasterHealingMultiplier()
 			},

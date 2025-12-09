@@ -34,7 +34,7 @@ type TooltipDataProvider interface {
 	GetSpellIcon(spellId int64) string
 	GetSpellMaxTargets(spellId int64) int64
 	GetSpellName(spellid int64) string
-	GetSpellPower() float64
+	GetSpellDamage() float64
 	GetSpellPPM(spellId int64) float64
 	GetSpellProcChance(spellId int64) float64
 	GetSpellProcCooldown(spellId int64) time.Duration
@@ -1007,11 +1007,11 @@ func ParseTooltip(tooltip string, dataProvider TooltipDataProvider, spellId int6
 		"INT":          1,
 		"AP":           dataProvider.GetAttackPower(),
 		"RAP":          dataProvider.GetAttackPower(),
-		"SP":           dataProvider.GetSpellPower(),
-		"SPS":          dataProvider.GetSpellPower(),
-		"SPFR":         dataProvider.GetSpellPower(),
-		"SPN":          dataProvider.GetSpellPower(),
-		"SPH":          dataProvider.GetSpellPower(),
+		"SP":           dataProvider.GetSpellDamage(),
+		"SPS":          dataProvider.GetSpellDamage(),
+		"SPFR":         dataProvider.GetSpellDamage(),
+		"SPN":          dataProvider.GetSpellDamage(),
+		"SPH":          dataProvider.GetSpellDamage(),
 		"pctH":         1,
 		"PL":           dataProvider.GetPlayerLevel(),
 		"pl":           dataProvider.GetPlayerLevel(),

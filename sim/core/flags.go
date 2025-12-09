@@ -262,6 +262,25 @@ func (ss SpellSchool) ResistanceStat() stats.Stat {
 	}
 }
 
+func (ss SpellSchool) SchoolDamage() stats.Stat {
+	switch ss {
+	case SpellSchoolArcane:
+		return stats.ArcaneDamage
+	case SpellSchoolFire:
+		return stats.FireDamage
+	case SpellSchoolFrost:
+		return stats.FrostDamage
+	case SpellSchoolHoly:
+		return stats.HolyDamage
+	case SpellSchoolNature:
+		return stats.NatureDamage
+	case SpellSchoolShadow:
+		return stats.ShadowDamage
+	default:
+		return stats.SpellDamage
+	}
+}
+
 func SpellSchoolFromProto(p proto.SpellSchool) SpellSchool {
 	switch p {
 	case proto.SpellSchool_SpellSchoolPhysical:

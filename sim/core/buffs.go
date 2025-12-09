@@ -423,7 +423,7 @@ func ElementalOath(u *Unit) *Aura {
 func StillWaterAura(u *Unit) *Aura {
 	return makeExclusiveBuff(u, BuffConfig{"Still Water", ActionID{SpellID: 126309},
 		[]StatConfig{
-			{stats.SpellPower, 1.10, true},
+			{stats.SpellDamage, 1.10, true},
 			{stats.PhysicalCritPercent, 5, false},
 			{stats.SpellCritPercent, 5, false}}})
 }
@@ -431,15 +431,15 @@ func ArcaneBrilliance(u *Unit) *Aura {
 	// Mages: +10% Spell Power
 	return makeExclusiveBuff(u, BuffConfig{"Arcane Brilliance", ActionID{SpellID: 1459},
 		[]StatConfig{
-			{stats.SpellPower, 1.10, true},
+			{stats.SpellDamage, 1.10, true},
 			{stats.PhysicalCritPercent, 5, false},
 			{stats.SpellCritPercent, 5, false}}})
 }
 func BurningWrathAura(u *Unit) *Aura {
-	return makeExclusiveBuff(u, BuffConfig{"Burning Wrath", ActionID{SpellID: 77747}, []StatConfig{{stats.SpellPower, 1.10, true}}})
+	return makeExclusiveBuff(u, BuffConfig{"Burning Wrath", ActionID{SpellID: 77747}, []StatConfig{{stats.SpellDamage, 1.10, true}}})
 }
 func DarkIntentAura(u *Unit) *Aura {
-	return makeExclusiveBuff(u, BuffConfig{"Dark Intent", ActionID{SpellID: 109773}, []StatConfig{{stats.SpellPower, 1.10, true}, {stats.Stamina, 1.10, true}}})
+	return makeExclusiveBuff(u, BuffConfig{"Dark Intent", ActionID{SpellID: 109773}, []StatConfig{{stats.SpellDamage, 1.10, true}, {stats.Stamina, 1.10, true}}})
 }
 
 /////////////
@@ -1234,7 +1234,7 @@ func StormLashAura(character *Character, actionTag int32) *Aura {
 		}
 
 		ap := Ternary(spell.IsRanged(), stormlashSpell.RangedAttackPower(), stormlashSpell.MeleeAttackPower())
-		sp := stormlashSpell.SpellPower()
+		sp := stormlashSpell.SpellDamage()
 		scaledAP := ap * 0.2
 		scaledSP := sp * 0.3
 
@@ -1280,7 +1280,7 @@ func StormLashAura(character *Character, actionTag int32) *Aura {
 		damage = sim.RollWithLabel(min, max, StormLashAuraTag)
 
 		if sim.Log != nil {
-			var chosenStat = Ternary(scaledAP > scaledSP, stats.AttackPower, stats.SpellPower)
+			var chosenStat = Ternary(scaledAP > scaledSP, stats.AttackPower, stats.SpellDamage)
 			var statValue = Ternary(chosenStat == stats.AttackPower, ap, sp)
 
 			character.Log(sim, "[DEBUG] Damage portion for Stormlash procced by %s: Stat=%s, BaseStatValue=%0.2f, BaseDamage=%0.2f, BaseMultiplier=%0.2f, SpeedMultiplier=%0.2f, PreOutcomeDamageAvg=%0.2f, PreOutcomeDamageMin=%0.2f, PreOutcomeDamageMax=%0.2f, PreOutcomeDamageActual=%0.2f",

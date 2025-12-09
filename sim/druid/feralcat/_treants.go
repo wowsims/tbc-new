@@ -84,12 +84,12 @@ func (treant *FeralTreant) Initialize() {
 			NumberOfTicks: 5,
 			TickLength:    time.Second * 3,
 
-			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, _ bool) {
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.SnapshotPhysical(target, flatBaseDamage+bonusCoefficientFromAP*dot.Spell.MeleeAttackPower())
 			},
 
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeSnapshotCrit)
+				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 			},
 		},
 

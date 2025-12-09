@@ -37,11 +37,11 @@ func (affliction *AfflictionWarlock) registerDrainSoul() {
 			HasteReducesDuration: true,
 			BonusCoefficient:     drainSoulCoeff,
 
-			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, _ bool) {
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, affliction.CalcScalingSpellDmg(drainSoulScale))
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				result := dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeSnapshotCrit)
+				result := dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 
 				// Every 2nd tick grants 1 soul shard
 				if dot.TickCount()%2 == 0 {
@@ -67,7 +67,7 @@ func (affliction *AfflictionWarlock) registerDrainSoul() {
 		ExpectedTickDamage: func(sim *core.Simulation, target *core.Unit, spell *core.Spell, useSnapshot bool) *core.SpellResult {
 			dot := spell.Dot(target)
 			if useSnapshot {
-				result := dot.CalcSnapshotDamage(sim, target, dot.OutcomeExpectedSnapshotCrit)
+				result := dot.CalcSnapshotDamage(sim, target, dot.OutcomeTick)
 				result.Damage /= dot.TickPeriod().Seconds()
 				return result
 			} else {

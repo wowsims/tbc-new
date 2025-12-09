@@ -146,7 +146,7 @@ func TestDotSnapshot(t *testing.T) {
 	expectDotTickDamage(t, sim, fa.Dot, 150) // (100) * 1.5
 }
 
-func TestDotSnapshotSpellPower(t *testing.T) {
+func TestDotSnapshotSpellDamage(t *testing.T) {
 	sim := SetupFakeSim()
 	fa := sim.Raid.Parties[0].Players[0].(*FakeAgent)
 
@@ -154,7 +154,7 @@ func TestDotSnapshotSpellPower(t *testing.T) {
 	expectDotTickDamage(t, sim, fa.Dot, 150) // (100) * 1.5
 
 	// Spell power shouldn't get applied because dot was already snapshot.
-	fa.GetCharacter().AddStatDynamic(sim, stats.SpellPower, 100)
+	fa.GetCharacter().AddStatDynamic(sim, stats.SpellDamage, 100)
 	expectDotTickDamage(t, sim, fa.Dot, 150) // (100) * 1.5
 
 	fa.Dot.Deactivate(sim)

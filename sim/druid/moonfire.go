@@ -53,11 +53,11 @@ func (druid *Druid) registerMoonfireDoTSpell() {
 			AffectedByCastSpeed: true,
 			BonusCoefficient:    MoonfireBonusCoeff,
 
-			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, isRollover bool) {
-				dot.Snapshot(target, druid.CalcScalingSpellDmg(MoonfireDotCoeff))
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
+				dot.Snapshot(target, 1) // 1 Replaces CalcScalingSpellDmg(
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeSnapshotCrit)
+				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 			},
 		},
 
@@ -71,11 +71,11 @@ func (druid *Druid) registerMoonfireDoTSpell() {
 		ExpectedTickDamage: func(sim *core.Simulation, target *core.Unit, spell *core.Spell, useSnapshot bool) *core.SpellResult {
 			dot := spell.Dot(target)
 			if useSnapshot {
-				result := dot.CalcSnapshotDamage(sim, target, dot.OutcomeExpectedSnapshotCrit)
+				result := dot.CalcSnapshotDamage(sim, target, dot.OutcomeTick)
 				result.Damage /= dot.TickPeriod().Seconds()
 				return result
 			} else {
-				result := spell.CalcPeriodicDamage(sim, target, druid.CalcScalingSpellDmg(MoonfireDotCoeff), spell.OutcomeExpectedMagicCrit)
+				result := spell.CalcPeriodicDamage(sim, target, 1, spell.OutcomeExpectedMagicCrit) // 1 Replaces CalcScalingSpellDmg(
 				result.Damage /= dot.CalcTickPeriod().Round(time.Millisecond).Seconds()
 				return result
 			}

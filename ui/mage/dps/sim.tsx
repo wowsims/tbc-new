@@ -21,8 +21,8 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecMage, {
 	knownIssues: [],
 
 	// All stats for which EP should be calculated.
-	epStats: [Stat.StatIntellect, Stat.StatSpellPower], // Reference stat against which to calculate EP. I think all classes use either spell power or attack power.
-	epReferenceStat: Stat.StatSpellPower,
+	epStats: [Stat.StatIntellect, Stat.StatSpellDamage], // Reference stat against which to calculate EP. I think all classes use either spell power or attack power.
+	epReferenceStat: Stat.StatSpellDamage,
 	// Which stats to display in the Character Stats section, at the bottom of the left-hand sidebar.
 	displayStats: UnitStat.createDisplayStatArray(
 		[
@@ -31,7 +31,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecMage, {
 			Stat.StatStamina,
 			Stat.StatIntellect,
 			Stat.StatSpirit,
-			Stat.StatSpellPower,
+			Stat.StatSpellDamage,
 		],
 		[PseudoStat.PseudoStatSpellHitPercent, PseudoStat.PseudoStatSpellCritPercent, PseudoStat.PseudoStatSpellHastePercent],
 	),

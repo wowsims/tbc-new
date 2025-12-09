@@ -43,7 +43,7 @@ func (affliction *AfflictionWarlock) registerAgony() {
 			NumberOfTicks:       12,
 			AffectedByCastSpeed: true,
 
-			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, isRollover bool) {
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, affliction.CalcScalingSpellDmg(agonyScale))
 			},
 
@@ -75,7 +75,7 @@ func (affliction *AfflictionWarlock) registerAgony() {
 
 			// Always compare fully stacked agony damage
 			if useSnapshot {
-				result := dot.CalcSnapshotDamage(sim, target, dot.OutcomeExpectedSnapshotCrit)
+				result := dot.CalcSnapshotDamage(sim, target, dot.OutcomeTick)
 				result.Damage *= 10
 				result.Damage /= dot.TickPeriod().Seconds()
 				return result

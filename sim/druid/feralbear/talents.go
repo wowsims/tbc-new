@@ -180,7 +180,7 @@ func (bear *GuardianDruid) registerDreamOfCenarius() {
 		FloatValue: 10,
 	})
 
-	var oldGetSpellPowerValue func(*core.Spell) float64
+	var oldGetSpellDamageValue func(*core.Spell) float64
 
 	bear.DreamOfCenariusAura = bear.RegisterAura(core.Aura{
 		Label:    "Dream of Cenarius",
@@ -194,13 +194,13 @@ func (bear *GuardianDruid) registerDreamOfCenarius() {
 
 			// https://www.mmo-champion.com/threads/1188383-Guardian-Patch-5-4-Survival-Guide
 			// TODO: Verify this
-			oldGetSpellPowerValue = bear.GetSpellPowerValue
+			oldGetSpellDamageValue = bear.GetSpellDamageValue
 
-			bear.GetSpellPowerValue = func(spell *core.Spell) float64 {
+			bear.GetSpellDamageValue = func(spell *core.Spell) float64 {
 				if bear.HealingTouch.IsEqual(spell) {
 					return bear.GetStat(stats.AttackPower) / 2
 				} else {
-					return oldGetSpellPowerValue(spell)
+					return oldGetSpellDamageValue(spell)
 				}
 			}
 		},
@@ -209,7 +209,7 @@ func (bear *GuardianDruid) registerDreamOfCenarius() {
 			bear.HealingTouch.CastTimeMultiplier += 1
 			bear.HealingTouch.Cost.PercentModifier /= -1
 			bear.HealingTouch.FormMask ^= druid.Bear
-			bear.GetSpellPowerValue = oldGetSpellPowerValue
+			bear.GetSpellDamageValue = oldGetSpellDamageValue
 		},
 
 		OnCastComplete: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell) {

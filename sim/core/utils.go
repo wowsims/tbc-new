@@ -239,32 +239,8 @@ func Clamp(val float64, min float64, max float64) float64 {
 	return math.Max(min, math.Min(val, max))
 }
 
-// Gets the spell scaling coefficient associated with a given class
-// Retrieved from https://wago.tools/api/casc/1391660?download&branch=wow_classic_beta
-func GetClassSpellScalingCoefficient(class proto.Class) float64 {
-	return ClassBaseScaling[class]
-}
-
-// spellEffectCoefficient is the value in the "Coefficient" column of the SpellEffect DB2 table
-func CalcScalingSpellAverageEffect(class proto.Class, spellEffectCoefficient float64) float64 {
-	return GetClassSpellScalingCoefficient(class) * spellEffectCoefficient
-}
-
-// spellEffectCoefficient is the value in the "Coefficient" column of the SpellEffect DB2 table
-// spellEffectVariance is the value in the "Variance" column of the SpellEffect DB2 table
-func CalcScalingSpellEffectVarianceMinMax(class proto.Class, spellEffectCoefficient float64, spellEffectVariance float64) (float64, float64) {
-	avgEffect := CalcScalingSpellAverageEffect(class, spellEffectCoefficient)
-	return ApplyVarianceMinMax(avgEffect, spellEffectVariance)
-}
-
-// spellEffectCoefficient is the value in the "Coefficient" column of the SpellEffect DB2 table
-func (char *Character) CalcScalingSpellDmg(spellEffectCoefficient float64) float64 {
-	return GetClassSpellScalingCoefficient(char.Class) * spellEffectCoefficient
-}
-
-func (char *Character) CalcAndRollDamageRange(sim *Simulation, coefficient float64, variance float64) float64 {
-	baseDamage := char.CalcScalingSpellDmg(coefficient)
-	return sim.Roll(ApplyVarianceMinMax(baseDamage, variance))
+func (char *Character) CalcAndRollDamageRange(sim *Simulation, min float64, max float64) float64 {
+	return sim.Roll(min, max)
 }
 
 func ApplyVarianceMinMax(avgEffect float64, variance float64) (float64, float64) {

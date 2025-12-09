@@ -25,12 +25,12 @@ const (
 	SpellPower
 	HealingPower
 	SpellDamage
-	ArcanePower
-	FirePower
-	FrostPower
-	HolyPower
-	NaturePower
-	ShadowPower
+	ArcaneDamage
+	FireDamage
+	FrostDamage
+	HolyDamage
+	NatureDamage
+	ShadowDamage
 	SpellHitRating
 	SpellCritRating
 	SpellHasteRating
@@ -174,8 +174,20 @@ func (s Stat) StatName() string {
 		return "RangedAttackPower"
 	case FeralAttackPower:
 		return "FeralAttackPower"
-	case SpellPower:
-		return "SpellPower"
+	case SpellDamage:
+		return "SpellDamage"
+	case ArcaneDamage:
+		return "ArcaneDamage"
+	case FireDamage:
+		return "FireDamage"
+	case FrostDamage:
+		return "FrostDamage"
+	case HolyDamage:
+		return "HolyDamage"
+	case NatureDamage:
+		return "NatureDamage"
+	case ShadowDamage:
+		return "ShadowDamage"
 	case ResilienceRating:
 		return "ResilienceRating"
 	case Armor:
@@ -441,7 +453,7 @@ type PseudoStats struct {
 	DodgeReduction      float64 // Used by Warrior talent 'Weapon Mastery' and SWP boss auras.
 
 	MobTypeAttackPower float64 // Bonus AP against mobs of the current type.
-	MobTypeSpellPower  float64 // Bonus SP against mobs of the current type.
+	MobTypeSpellDamage float64 // Bonus SP against mobs of the current type.
 
 	ThreatMultiplier float64 // Modulates the threat generated. Affected by things like salv.
 

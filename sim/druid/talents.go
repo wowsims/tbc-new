@@ -346,7 +346,7 @@ func (druid *Druid) registerRenewal() {
 func (druid *Druid) registerCenarionWard() {
 
 	// First register the HoT spell that gets triggered when the target takes damage.
-	baseTickDamage := 11.27999973297 * druid.ClassSpellScaling // ~12349
+	baseTickDamage := 11.27999973297 // ~12349
 
 	// SP is snapshot at the time of the original buff cast according to simc
 	var spSnapshot float64
@@ -369,14 +369,13 @@ func (druid *Druid) registerCenarionWard() {
 			NumberOfTicks: 3,
 			TickLength:    time.Second * 2,
 
-			OnSnapshot: func(_ *core.Simulation, _ *core.Unit, dot *core.Dot, _ bool) {
+			OnSnapshot: func(_ *core.Simulation, _ *core.Unit, dot *core.Dot) {
 				dot.SnapshotBaseDamage = baseTickDamage + spSnapshot*1.04
 				dot.SnapshotAttackerMultiplier = dot.CasterPeriodicHealingMultiplier()
-				dot.SnapshotCritChance = dot.Spell.HealingCritChance()
 			},
 
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.CalcAndDealPeriodicSnapshotHealing(sim, target, dot.OutcomeSnapshotCrit)
+				dot.CalcAndDealPeriodicSnapshotHealing(sim, target, dot.OutcomeTick)
 			},
 		},
 

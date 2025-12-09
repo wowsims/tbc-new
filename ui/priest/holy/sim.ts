@@ -20,14 +20,14 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecHolyPriest, {
 	epStats: [
 		Stat.StatIntellect,
 		Stat.StatSpirit,
-		Stat.StatSpellPower,
+		Stat.StatSpellDamage,
 		Stat.StatMP5,
 	],
 	// Reference stat against which to calculate EP. I think all classes use either spell power or attack power.
-	epReferenceStat: Stat.StatSpellPower,
+	epReferenceStat: Stat.StatSpellDamage,
 	// Which stats to display in the Character Stats section, at the bottom of the left-hand sidebar.
 	displayStats: UnitStat.createDisplayStatArray(
-		[Stat.StatHealth, Stat.StatMana, Stat.StatStamina, Stat.StatIntellect, Stat.StatSpirit, Stat.StatSpellPower, Stat.StatMP5],
+		[Stat.StatHealth, Stat.StatMana, Stat.StatStamina, Stat.StatIntellect, Stat.StatSpirit, Stat.StatSpellDamage, Stat.StatMP5],
 		[PseudoStat.PseudoStatSpellHitPercent, PseudoStat.PseudoStatSpellCritPercent, PseudoStat.PseudoStatSpellHastePercent],
 	),
 	gemStats: DEFAULT_HYBRID_CASTER_GEM_STATS,

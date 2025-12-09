@@ -49,7 +49,7 @@ func (druid *Druid) registerThrashBearSpell() {
 			},
 
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeSnapshotCrit)
+				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 			},
 		},
 
@@ -111,7 +111,7 @@ func (druid *Druid) registerThrashCatSpell() {
 			NumberOfTicks: 5,
 			TickLength:    time.Second * 3,
 
-			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, isRollover bool) {
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				if isRollover {
 					panic("Thrash cannot roll-over snapshots!")
 				}
@@ -121,7 +121,7 @@ func (druid *Druid) registerThrashCatSpell() {
 			},
 
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeSnapshotCrit)
+				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 			},
 		},
 
@@ -141,7 +141,7 @@ func (druid *Druid) registerThrashCatSpell() {
 		ExpectedTickDamage: func(sim *core.Simulation, target *core.Unit, spell *core.Spell, useSnapshot bool) *core.SpellResult {
 			if useSnapshot {
 				dot := spell.Dot(target)
-				return dot.CalcSnapshotDamage(sim, target, dot.OutcomeExpectedSnapshotCrit)
+				return dot.CalcSnapshotDamage(sim, target, dot.OutcomeTick)
 			} else {
 				baseTickDamage := flatTickDamage + 0.141*spell.MeleeAttackPower()
 				return spell.CalcPeriodicDamage(sim, target, baseTickDamage, spell.OutcomeExpectedPhysicalCrit)

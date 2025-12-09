@@ -38,7 +38,7 @@ func (priest *Priest) RegisterHolyFireSpell() {
 			},
 			NumberOfTicks: 7,
 			TickLength:    time.Second * 1,
-			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, _ bool) {
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.SnapshotBaseDamage = 50 + 0.024*dot.Spell.SpellPower()
 				dot.SnapshotAttackerMultiplier = dot.Spell.AttackerDamageMultiplier(dot.Spell.Unit.AttackTables[target.UnitIndex])
 			},

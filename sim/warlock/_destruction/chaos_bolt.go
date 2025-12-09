@@ -42,7 +42,7 @@ func (destro *DestructionWarlock) registerChaosBolt() {
 			NumberOfTicks:    3,
 			TickLength:       time.Second,
 			BonusCoefficient: chaosBoltDotCoeff,
-			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, isRollover bool) {
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, destro.CalcScalingSpellDmg(chaosBoltDotScale))
 				dot.SnapshotAttackerMultiplier *= (1 + destro.GetStat(stats.SpellCritPercent)/100)
 			},

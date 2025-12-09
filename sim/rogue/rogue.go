@@ -199,10 +199,9 @@ func (rogue *Rogue) CritMultiplier(applyLethality bool) float64 {
 func NewRogue(character *core.Character, options *proto.Player, talents string) *Rogue {
 	rogueOptions := options.GetRogue()
 	rogue := &Rogue{
-		Character:         *character,
-		Talents:           &proto.RogueTalents{},
-		Options:           rogueOptions.Options.ClassOptions,
-		ClassSpellScaling: core.GetClassSpellScalingCoefficient(proto.Class_ClassRogue),
+		Character: *character,
+		Talents:   &proto.RogueTalents{},
+		Options:   rogueOptions.Options.ClassOptions,
 	}
 
 	core.FillTalentsProto(rogue.Talents.ProtoReflect(), talents, TalentTreeSizes)

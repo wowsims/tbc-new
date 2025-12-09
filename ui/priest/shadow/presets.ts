@@ -23,7 +23,7 @@ export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
 	Stats.fromMap({
 		[Stat.StatIntellect]: 1.0,
 		[Stat.StatSpirit]: 0.9,
-		[Stat.StatSpellPower]: 0.98,
+		[Stat.StatSpellDamage]: 0.98,
 	}),
 );
 export const P2_EP_PRESET = PresetUtils.makePresetEpWeights(
@@ -31,7 +31,7 @@ export const P2_EP_PRESET = PresetUtils.makePresetEpWeights(
 	Stats.fromMap({
 		[Stat.StatIntellect]: 1.0,
 		[Stat.StatSpirit]: 0.9,
-		[Stat.StatSpellPower]: 0.98,
+		[Stat.StatSpellDamage]: 0.98,
 	}),
 );
 

@@ -105,11 +105,11 @@ func (fireElemental *FireElemental) registerImmolate() {
 			TickLength:          time.Second * 3,
 			BonusCoefficient:    0.34999999404,
 			AffectedByCastSpeed: true,
-			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, isRollover bool) {
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, fireElemental.shamanOwner.CalcScalingSpellDmg(0.62800002098))
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeSnapshotCrit)
+				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 			},
 		},
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
