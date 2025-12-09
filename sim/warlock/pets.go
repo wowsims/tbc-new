@@ -150,6 +150,7 @@ func (warlock *Warlock) makePet(
 
 	// set pet class for proper scaling values
 	if enabledOnStart {
+		warlock.ActivePet = pet
 		warlock.RegisterResetEffect(func(sim *core.Simulation) {
 			warlock.ActivePet = pet
 		})

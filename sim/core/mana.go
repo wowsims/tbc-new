@@ -44,14 +44,8 @@ func (character *Character) EnableManaBar() {
 func (character *Character) EnableManaBarWithModifier() {
 
 	if character.Unit.Type == PlayerUnit {
-
-		// Patch 2.4 changed mp5 formula -> SpiritIntellectRegen = 5 * 0.00932715221261 * sqrt(Intellect) * Spirit
-		mp5 := 5 * 0.00932715221261 * math.Sqrt(character.stats[stats.Intellect]) * character.stats[stats.Spirit]
-		character.AddStat(stats.MP5, mp5)
-
 		// Pets might have different scaling so let them handle their scaling
 		character.AddStatDependency(stats.Intellect, stats.SpellCritPercent, CritPerIntMaxLevel[character.Class])
-
 		character.AddStatDependency(stats.Intellect, stats.Mana, 15)
 
 	}

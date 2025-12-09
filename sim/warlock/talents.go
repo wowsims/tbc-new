@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
@@ -21,10 +22,16 @@ func (warlock *Warlock) applyAfflictionTalents() {
 }
 
 func (warlock *Warlock) applyDemonologyTalents() {
+	warlock.appyImprovedImp()
 	warlock.applyDemonicEmbrace()
 	warlock.applyFelIntellect()
 	warlock.applyFelStamina()
+	warlock.applyImprovedSayaad()
+	warlock.applyUnholyPower()
+	warlock.applyDemonicSacrifice()
+	warlock.applyMasterDemonologist()
 	warlock.applySoulLink()
+	warlock.applyDemonicKnowledge()
 	warlock.applyDemonicTactics()
 
 }
@@ -32,12 +39,15 @@ func (warlock *Warlock) applyDemonologyTalents() {
 func (warlock *Warlock) applyDestructionTalents() {
 	warlock.applyCataclysm()
 	warlock.applyBane()
+	warlock.applyDevastation()
+	warlock.applyImprovedFirebolt()
+	warlock.applyImprovedLashOfPain()
 	warlock.applyDestructiveReach()
 	warlock.applyImprovedSearingPain()
 	warlock.applyRuin()
 	warlock.applyEmberstorm()
 	warlock.applyBacklash()
-	warlock.applySoulLeech()
+	warlock.registerConflagrate()
 	warlock.applyShadowAndFlame()
 }
 
@@ -80,7 +90,7 @@ func (warlock *Warlock) applyImprovedCorruption() {
 }
 
 func (warlock *Warlock) registerAmplifyCurse() {
-	if warlock.Talents.AmplifyCurse == false {
+	if !warlock.Talents.AmplifyCurse {
 		return
 	}
 
@@ -234,25 +244,47 @@ func (warlock *Warlock) applyUnstableAffliction() {
 Demonology
 Skipping so many for now
 */
+func (warlock *Warlock) appyImprovedImp() {
+	if warlock.Talents.ImprovedImp == 0 {
+		return
+	}
+
+	warlock.Imp.AddStaticMod(core.SpellModConfig{
+		Kind:       core.SpellMod_DamageDone_Pct,
+		FloatValue: 0.1 * float64(warlock.Talents.ImprovedImp),
+		ClassMask:  WarlockSpellImpFireBolt,
+	})
+}
+
 func (warlock *Warlock) applyDemonicEmbrace() {
 	if warlock.Talents.DemonicEmbrace == 0 {
 		return
 	}
 
 	warlock.MultiplyStat(stats.Stamina, 1.0+(0.03)*float64(warlock.Talents.DemonicEmbrace))
-	warlock.MultiplyStat(stats.Spirit, 1.0+(0.03)*float64(warlock.Talents.DemonicEmbrace))
-	// warlock.AddStatDependency(stats.Stamina, stats.Stamina, (0.03)*float64(warlock.Talents.DemonicEmbrace))
-	// warlock.AddStatDependency(stats.Spirit, stats.Spirit, (0.03)*float64(warlock.Talents.DemonicEmbrace))
+	warlock.MultiplyStat(stats.Spirit, 1.0-(0.03)*float64(warlock.Talents.DemonicEmbrace))
 }
 
-// TODO - Add pet part
 func (warlock *Warlock) applyFelIntellect() {
 	if warlock.Talents.FelIntellect == 0 {
 		return
 	}
 
-	warlock.AddStatDependency(stats.Intellect, stats.Mana, 15*(0.01)*float64(warlock.Talents.FelIntellect))
+	warlock.MultiplyStat(stats.Mana, 1.0+(0.01)*float64(warlock.Talents.FelIntellect))
+	warlock.ActivePet.MultiplyStat(stats.Mana, 1+(0.05)*float64(warlock.Talents.FelIntellect))
+}
 
+func (warlock *Warlock) applyImprovedSayaad() {
+	if warlock.Talents.ImprovedSayaad == 0 {
+		return
+	}
+
+	//This might not actually increase the damage, find a source to prove this
+	warlock.Succubus.AddStaticMod(core.SpellModConfig{
+		Kind:       core.SpellMod_DamageDone_Pct,
+		FloatValue: 0.1 * float64(warlock.Talents.ImprovedSayaad),
+		ClassMask:  WarlockSpellSuccubusLashOfPain,
+	})
 }
 
 func (warlock *Warlock) applyFelStamina() {
@@ -261,19 +293,66 @@ func (warlock *Warlock) applyFelStamina() {
 	}
 
 	warlock.MultiplyStat(stats.Health, 1.0+0.01*float64(warlock.Talents.FelStamina))
+	warlock.ActivePet.MultiplyStat(stats.Health, 1+(0.05)*float64(warlock.Talents.FelStamina))
+
 }
 
-// Placeholder for Unholy Power
-//func (warlock *Warlock) applyUnholyPower() {}
+func (warlock *Warlock) applyUnholyPower() {
+	if warlock.Talents.UnholyPower == 0 {
+		return
+	}
 
-//Placeholder for DSac
-//func (warlock *Warlock) applyDemonicSacrifice(){}
+	warlock.ActivePet.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexPhysical] *= 1.0 + 0.04*float64(warlock.Talents.UnholyPower)
+	warlock.Imp.AddStaticMod(core.SpellModConfig{
+		Kind:       core.SpellMod_DamageDone_Pct,
+		FloatValue: 0.04 * float64(warlock.Talents.UnholyPower),
+		ClassMask:  WarlockSpellImpFireBolt,
+	})
+}
 
-//Placeholder for MasterDemonologist
-//func (warlock *Warlock) applyMasterDemonologist(){}
+func (warlock *Warlock) applyDemonicSacrifice() {
+	if !warlock.Talents.DemonicSacrifice {
+		return
+	}
 
-//Placeholder for Demonic Knowledge
-//func (warlock *Warlock) applyDemonicKnowledge(){}
+	switch warlock.Options.Summon {
+	case proto.WarlockOptions_Succubus:
+		warlock.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexShadow] *= 1.15
+	case proto.WarlockOptions_Imp:
+		warlock.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexFire] *= 1.15
+	case proto.WarlockOptions_Felguard:
+		warlock.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexShadow] *= 1.10
+		warlock.AddStat(stats.MP5, warlock.GetStats()[stats.Intellect]*1.25)
+	case proto.WarlockOptions_Felhunter:
+		warlock.AddStat(stats.MP5, warlock.GetStats()[stats.Intellect]*1.6667)
+	}
+}
+
+func (warlock *Warlock) applyMasterDemonologist() {
+	if warlock.Talents.MasterDemonologist == 0 {
+		return
+	}
+
+	switch warlock.Options.Summon {
+	case proto.WarlockOptions_Imp:
+		warlock.PseudoStats.ThreatMultiplier *= 1.0 - (0.04 * float64(warlock.Talents.MasterDemonologist))
+	case proto.WarlockOptions_Succubus:
+		warlock.PseudoStats.DamageDealtMultiplier *= 1.0 + 0.02*float64(warlock.Talents.MasterDemonologist)
+	case proto.WarlockOptions_Felguard:
+		warlock.PseudoStats.DamageDealtMultiplier *= 1.0 + 0.01*float64(warlock.Talents.MasterDemonologist)
+	case proto.WarlockOptions_Voidwalker:
+		warlock.PseudoStats.BonusPhysicalDamageTaken *= 1.0 - (0.02 * float64(warlock.Talents.MasterDemonologist))
+	}
+}
+
+func (warlock *Warlock) applyDemonicKnowledge() {
+	if warlock.Talents.DemonicKnowledge == 0 {
+		return
+	}
+
+	petStats := warlock.ActivePet.GetStats()
+	warlock.AddStat(stats.SpellDamage, (0.04*float64(warlock.Talents.DemonicKnowledge))*(petStats[stats.Stamina]+petStats[stats.Intellect]))
+}
 
 func (warlock *Warlock) applySoulLink() {
 	if !warlock.Talents.SoulLink {
@@ -330,9 +409,41 @@ func (warlock *Warlock) applyBane() {
 	})
 }
 
-//TODO - implement the pet talents
-// func (warlock *Warlock) applyImprovedFirebolt(){}
-// func (warlock *Warlock) applyImprovedLashOfPain(){}
+func (warlock *Warlock) applyDevastation() {
+	if warlock.Talents.Devastation == 0 {
+		return
+	}
+
+	warlock.AddStaticMod(core.SpellModConfig{
+		Kind:       core.SpellMod_BonusCrit_Percent,
+		FloatValue: 5.0,
+		ClassMask:  WarlockDestructionSpells,
+	})
+}
+
+func (warlock *Warlock) applyImprovedFirebolt() {
+	if warlock.Talents.ImprovedFirebolt == 0 {
+		return
+	}
+
+	warlock.AddStaticMod(core.SpellModConfig{
+		Kind:      core.SpellMod_CastTime_Flat,
+		TimeValue: -(time.Millisecond * 250) * time.Duration(warlock.Talents.ImprovedFirebolt),
+		ClassMask: WarlockSpellImpFireBolt,
+	})
+}
+
+func (warlock *Warlock) applyImprovedLashOfPain() {
+	if warlock.Talents.ImprovedLashOfPain == 0 {
+		return
+	}
+
+	warlock.AddStaticMod(core.SpellModConfig{
+		Kind:      core.SpellMod_Cooldown_Flat,
+		TimeValue: -(time.Second * 3) * time.Duration(warlock.Talents.ImprovedFirebolt),
+		ClassMask: WarlockSpellSuccubusLashOfPain,
+	})
+}
 
 func (warlock *Warlock) applyDestructiveReach() {
 	if warlock.Talents.DestructiveReach == 0 {
@@ -401,11 +512,24 @@ func (warlock *Warlock) applyBacklash() {
 	warlock.AddStat(stats.SpellCritPercent, float64(warlock.Talents.Backlash))
 }
 
+// ToDo
 func (warlock *Warlock) applySoulLeech() {
 	if warlock.Talents.SoulLeech == 0 {
 		return
 	}
 
+	warlock.AddStaticMod(core.SpellModConfig{
+		Kind: core.SpellMod_Custom,
+		ApplyCustom: func(mod *core.SpellMod, spell *core.Spell) {
+
+		},
+		RemoveCustom: func(mod *core.SpellMod, spell *core.Spell) {
+
+		},
+		ClassMask: WarlockSpellShadowBolt | WarlockSpellShadowBurn | WarlockSpellSoulFire |
+			WarlockSpellIncinerate | WarlockSpellSearingPain | WarlockSpellConflagrate,
+		FloatValue: 2.0,
+	})
 }
 
 func (warlock *Warlock) applyShadowAndFlame() {

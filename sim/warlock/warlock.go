@@ -97,10 +97,8 @@ func (warlock *Warlock) Initialize() {
 	warlock.registerCurseOfElements()
 	warlock.registerCurseOfDoom()
 	warlock.registerCurseOfAgony()
-
 	warlock.registerCorruption()
 	warlock.registerSeed()
-	warlock.registerConflagrate()
 	warlock.registerDrainLife()
 	warlock.registerImmolate()
 	warlock.registerIncinerate()
