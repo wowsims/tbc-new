@@ -230,7 +230,6 @@ export class CharacterStats extends Component {
 
 		let idx = 0;
 		this.stats.forEach(unitStat => {
-			console.log('UNIT STAT', unitStat)
 			const bonusStatValue = unitStat.hasRootStat() ? bonusStats.getStat(unitStat.getRootStat()) : 0;
 			let contextualClass: string;
 			if (bonusStatValue == 0) {
