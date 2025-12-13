@@ -1,5 +1,5 @@
 import { IconSize } from '../player_class';
-import { PlayerSpec } from '../player_spec';
+import { PlayerSpec, Role } from '../player_spec';
 import { Class, Spec } from '../proto/common';
 import { getSpecSiteUrl } from '../proto_utils/utils';
 
@@ -14,6 +14,7 @@ export class Mage extends PlayerSpec<Spec.SpecMage> {
 	static isHealingSpec = false;
 	static isRangedDpsSpec = true;
 	static isMeleeDpsSpec = false;
+	static role = Role.CASTER
 
 	static canDualWield = false;
 
@@ -27,6 +28,7 @@ export class Mage extends PlayerSpec<Spec.SpecMage> {
 	readonly isHealingSpec = Mage.isHealingSpec;
 	readonly isRangedDpsSpec = Mage.isRangedDpsSpec;
 	readonly isMeleeDpsSpec = Mage.isMeleeDpsSpec;
+	readonly role = Mage.role
 
 	readonly canDualWield = Mage.canDualWield;
 

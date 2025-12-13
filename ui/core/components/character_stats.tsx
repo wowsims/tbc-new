@@ -184,7 +184,6 @@ export class CharacterStats extends Component {
 
 	private updateStats(player: Player<any>) {
 		const playerStats = player.getCurrentStats();
-		console.log('playerStats', playerStats);
 		const statMods = this.modifyDisplayStats ? this.modifyDisplayStats(this.player) : {};
 		this.hasRacialHitBonus = this.player.getRace() === Race.RaceDraenei;
 		this.activeRacialExpertiseBonuses = this.player.getActiveRacialExpertiseBonuses();

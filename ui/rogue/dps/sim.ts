@@ -73,14 +73,14 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 	playerIconInputs: [RogueInputs.LethalPoison()],
 	// Buff and Debuff inputs to include/exclude, overriding the EP-based defaults.
 	includeBuffDebuffInputs: [
-		BuffDebuffInputs.CritBuff,
-		BuffDebuffInputs.AttackPowerBuff,
-		BuffDebuffInputs.StatsBuff,
-		BuffDebuffInputs.AttackSpeedBuff,
+		,
+		,
+		,
+		,
 
-		BuffDebuffInputs.MajorHasteBuff,
+		,
 
-		BuffDebuffInputs.SpellDamageDebuff,
+		,
 	],
 	excludeBuffDebuffInputs: [],
 	// Inputs to include in the 'Other' section on the settings tab.

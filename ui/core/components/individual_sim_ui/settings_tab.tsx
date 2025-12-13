@@ -73,8 +73,6 @@ export class SettingsTab extends SimTab {
 
 		if (!this.simUI.isWithinRaidSim) {
 			this.buildBuffsSettings();
-			this.raidExternalDamageCooldowns();
-			this.raidExternalDefensiveCooldowns();
 			this.buildDebuffsSettings();
 		}
 
@@ -203,59 +201,36 @@ export class SettingsTab extends SimTab {
 		const contentBlock = new ContentBlock(this.column3, 'buffs-settings', {
 			header: { title: i18n.t('settings_tab.raid_buffs.title'), tooltip: i18n.t('settings_tab.raid_buffs.tooltip') },
 		});
+
 		contentBlock.headerElement?.appendChild(
 			<p className="fs-body">
 				{i18n.t('settings_tab.raid_buffs.description')}
 			</p>,
 		);
 
-		const buffOptions = relevantStatOptions(BuffDebuffInputs.RAID_BUFFS_CONFIG, this.simUI);
+
+
+		const buffOptions = relevantStatOptions(BuffDebuffInputs.BUFFS_CONFIG, this.simUI);
 		this.configureIconSection(
 			contentBlock.bodyElement,
 			buffOptions.map(options => options.picker && new options.picker(contentBlock.bodyElement, this.simUI.player, options.config as any, this.simUI)),
 		);
 
-		const miscBuffOptions = relevantStatOptions(BuffDebuffInputs.RAID_BUFFS_MISC_CONFIG, this.simUI);
-		if (miscBuffOptions.length > 0) {
-			new MultiIconPicker(
-				contentBlock.bodyElement,
-				this.simUI.player,
-				{
-					inputs: miscBuffOptions.map(option => option.config),
-					label: i18n.t('settings_tab.raid_buffs.misc.label'),
-				},
-				this.simUI,
-			);
-		}
-	}
-
-	private raidExternalDamageCooldowns() {
-		const externalDamageCooldownOptions = relevantStatOptions(BuffDebuffInputs.RAID_BUFFS_EXTERNAL_DAMAGE_COOLDOWN, this.simUI);
-		if (externalDamageCooldownOptions.length > 0) {
-			const contentBlock = new ContentBlock(this.column3, 'buffs-settings', {
-				header: { title: i18n.t('settings_tab.external_damage_cooldowns.title'), tooltip: i18n.t('settings_tab.external_damage_cooldowns.tooltip') },
+		const partyBuffOptions = relevantStatOptions(BuffDebuffInputs.PARTY_BUFFS_CONFIG, this.simUI);
+		if (partyBuffOptions.length > 0) {
+			const partyContentBlock = new ContentBlock(this.column3, 'buffs-settings', {
+				header: { title: i18n.t('settings_tab.raid_buffs.title'), tooltip: i18n.t('settings_tab.raid_buffs.tooltip') },
 			});
 
-			this.configureIconSection(
-				contentBlock.bodyElement,
-				externalDamageCooldownOptions.map(
-					options => options.picker && new options.picker(contentBlock.bodyElement, this.simUI.player, options.config as any),
-				),
+			partyContentBlock.headerElement?.appendChild(
+				<p className="fs-body">
+					{i18n.t('settings_tab.raid_buffs.description')}
+				</p>,
 			);
-		}
-	}
-	private raidExternalDefensiveCooldowns() {
-		const externalDefensiveCooldownOptions = relevantStatOptions(BuffDebuffInputs.RAID_BUFFS_EXTERNAL_DEFENSIVE_COOLDOWN, this.simUI);
-		if (externalDefensiveCooldownOptions.length > 0) {
-			const contentBlock = new ContentBlock(this.column3, 'buffs-settings', {
-				header: { title: i18n.t('settings_tab.external_defensive_cooldowns.title'), tooltip: i18n.t('settings_tab.external_defensive_cooldowns.tooltip') },
-			});
 
 			this.configureIconSection(
-				contentBlock.bodyElement,
-				externalDefensiveCooldownOptions.map(
-					options => options.picker && new options.picker(contentBlock.bodyElement, this.simUI.player, options.config as any),
-				),
+				partyContentBlock.bodyElement,
+				partyBuffOptions.map(options => options.picker && new options.picker(partyContentBlock.bodyElement, this.simUI.player, options.config as any, this.simUI)),
 			);
 		}
 	}
@@ -437,4 +412,24 @@ export class SettingsTab extends SimTab {
 			}
 		}
 	}
+}
+
+export type ExclusivityTag =
+	'Battle Elixir'
+	| 'Drums'
+	| 'Food'
+	| 'Pet Food'
+	| 'Alchohol'
+	| 'Guardian Elixir'
+	| 'Potion'
+	| 'Conjured'
+	| 'Spirit'
+	| 'MH Weapon Imbue'
+	| 'OH Weapon Imbue';
+
+export interface ExclusiveEffect {
+	tags: Array<ExclusivityTag>;
+	changedEvent: TypedEvent<any>;
+	isActive: () => boolean;
+	deactivate: (eventID: EventID) => void;
 }

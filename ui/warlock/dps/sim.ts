@@ -16,7 +16,6 @@ const modifyDisplayStats = (player: Player<Spec.SpecWarlock>) => {
 
 	TypedEvent.freezeAllAndDo(() => {
 		const currentStats = player.getCurrentStats().finalStats?.stats;
-		console.log("currentStatrs", currentStats)
 		if (currentStats === undefined) {
 			return {};
 		}
@@ -36,7 +35,12 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecWarlock, {
 	knownIssues: [],
 
 	// All stats for which EP should be calculated.
-	epStats: [Stat.StatIntellect, Stat.StatSpellPower],
+	epStats: [
+		Stat.StatIntellect,
+		Stat.StatSpellDamage,
+		Stat.StatSpellCritRating,
+		Stat.StatSpellHasteRating
+	],
 	// Reference stat against which to calculate EP. DPS classes use either spell power or attack power.
 	epReferenceStat: Stat.StatSpellPower,
 	// Which stats to display in the Character Stats section, at the bottom of the left-hand sidebar.
@@ -82,7 +86,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecWarlock, {
 			powerWordFortitude: TristateEffect.TristateEffectImproved,
 			divineSpirit: TristateEffect.TristateEffectImproved,
 			giftOfTheWild: TristateEffect.TristateEffectImproved,
-			bloodlust: true,
 		}),
 		partyBuffs: PartyBuffs.create({
 			bloodPact: TristateEffect.TristateEffectMissing,
@@ -130,7 +133,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecWarlock, {
 	],
 
 	// Buff and Debuff inputs to include/exclude, overriding the EP-based defaults.
-	includeBuffDebuffInputs: [BuffDebuffInputs.AttackSpeedBuff],
+	includeBuffDebuffInputs: [],
 	excludeBuffDebuffInputs: [],
 	petConsumeInputs: [],
 	// Inputs to include in the 'Other' section on the settings tab.

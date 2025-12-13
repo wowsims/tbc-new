@@ -1,5 +1,5 @@
 import { IconSize } from '../player_class';
-import { PlayerSpec } from '../player_spec';
+import { PlayerSpec, Role } from '../player_spec';
 import { Class, Spec } from '../proto/common';
 import { getSpecSiteUrl } from '../proto_utils/utils';
 
@@ -14,6 +14,7 @@ export class BalanceDruid extends PlayerSpec<Spec.SpecBalanceDruid> {
 	static isHealingSpec = false;
 	static isRangedDpsSpec = true;
 	static isMeleeDpsSpec = false;
+	static role = Role.CASTER
 
 	static canDualWield = false;
 
@@ -27,6 +28,7 @@ export class BalanceDruid extends PlayerSpec<Spec.SpecBalanceDruid> {
 	readonly isHealingSpec = BalanceDruid.isHealingSpec;
 	readonly isRangedDpsSpec = BalanceDruid.isRangedDpsSpec;
 	readonly isMeleeDpsSpec = BalanceDruid.isMeleeDpsSpec;
+	readonly role = BalanceDruid.role
 
 	readonly canDualWield = BalanceDruid.canDualWield;
 
@@ -50,6 +52,7 @@ export class FeralCatDruid extends PlayerSpec<Spec.SpecFeralCatDruid> {
 	static isHealingSpec = false;
 	static isRangedDpsSpec = false;
 	static isMeleeDpsSpec = true;
+	static role = Role.MELEE
 
 	static canDualWield = false;
 
@@ -63,6 +66,7 @@ export class FeralCatDruid extends PlayerSpec<Spec.SpecFeralCatDruid> {
 	readonly isHealingSpec = FeralCatDruid.isHealingSpec;
 	readonly isRangedDpsSpec = FeralCatDruid.isRangedDpsSpec;
 	readonly isMeleeDpsSpec = FeralCatDruid.isMeleeDpsSpec;
+	readonly role = FeralCatDruid.role
 
 	readonly canDualWield = FeralCatDruid.canDualWield;
 
@@ -86,6 +90,7 @@ export class FeralBearDruid extends PlayerSpec<Spec.SpecFeralBearDruid> {
 	static isHealingSpec = false;
 	static isRangedDpsSpec = false;
 	static isMeleeDpsSpec = true;
+	static role = Role.TANK
 
 	static canDualWield = false;
 
@@ -99,6 +104,7 @@ export class FeralBearDruid extends PlayerSpec<Spec.SpecFeralBearDruid> {
 	readonly isHealingSpec = FeralBearDruid.isHealingSpec;
 	readonly isRangedDpsSpec = FeralBearDruid.isRangedDpsSpec;
 	readonly isMeleeDpsSpec = FeralBearDruid.isMeleeDpsSpec;
+	readonly role = FeralBearDruid.role
 
 	readonly canDualWield = FeralBearDruid.canDualWield;
 
@@ -122,6 +128,7 @@ export class RestorationDruid extends PlayerSpec<Spec.SpecRestorationDruid> {
 	static isHealingSpec = true;
 	static isRangedDpsSpec = false;
 	static isMeleeDpsSpec = false;
+	static role = Role.HEALER
 
 	static canDualWield = false;
 
@@ -135,6 +142,7 @@ export class RestorationDruid extends PlayerSpec<Spec.SpecRestorationDruid> {
 	readonly isHealingSpec = RestorationDruid.isHealingSpec;
 	readonly isRangedDpsSpec = RestorationDruid.isRangedDpsSpec;
 	readonly isMeleeDpsSpec = RestorationDruid.isMeleeDpsSpec;
+	readonly role = RestorationDruid.role
 
 	readonly canDualWield = RestorationDruid.canDualWield;
 

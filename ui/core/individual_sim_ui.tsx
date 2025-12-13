@@ -429,7 +429,6 @@ export abstract class IndividualSimUI<SpecType extends Spec> extends SimUI {
 	private addSidebarComponents() {
 		this.raidSimResultsManager = addRaidSimAction(this);
 		this.sim.waitForInit().then(() => {
-			console.log('its inited')
 			this.epWeightsModal = addStatWeightsAction(this, this.statWeightActionSettings);
 		});
 

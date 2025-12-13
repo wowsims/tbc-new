@@ -1,5 +1,5 @@
 import { IconSize } from '../player_class';
-import { PlayerSpec } from '../player_spec';
+import { PlayerSpec, Role } from '../player_spec';
 import { Class, Spec } from '../proto/common';
 import { getSpecSiteUrl } from '../proto_utils/utils';
 
@@ -14,7 +14,7 @@ export class ElementalShaman extends PlayerSpec<Spec.SpecElementalShaman> {
 	static isHealingSpec = false;
 	static isRangedDpsSpec = true;
 	static isMeleeDpsSpec = false;
-
+	static role = Role.CASTER
 	static canDualWield = false;
 
 	readonly specIndex = ElementalShaman.specIndex;
@@ -27,6 +27,7 @@ export class ElementalShaman extends PlayerSpec<Spec.SpecElementalShaman> {
 	readonly isHealingSpec = ElementalShaman.isHealingSpec;
 	readonly isRangedDpsSpec = ElementalShaman.isRangedDpsSpec;
 	readonly isMeleeDpsSpec = ElementalShaman.isMeleeDpsSpec;
+	readonly role = ElementalShaman.role
 
 	readonly canDualWield = ElementalShaman.canDualWield;
 
@@ -50,7 +51,7 @@ export class EnhancementShaman extends PlayerSpec<Spec.SpecEnhancementShaman> {
 	static isHealingSpec = false;
 	static isRangedDpsSpec = false;
 	static isMeleeDpsSpec = true;
-
+	static role = Role.MELEE
 	static canDualWield = true;
 
 	readonly specIndex = EnhancementShaman.specIndex;
@@ -63,6 +64,7 @@ export class EnhancementShaman extends PlayerSpec<Spec.SpecEnhancementShaman> {
 	readonly isHealingSpec = EnhancementShaman.isHealingSpec;
 	readonly isRangedDpsSpec = EnhancementShaman.isRangedDpsSpec;
 	readonly isMeleeDpsSpec = EnhancementShaman.isMeleeDpsSpec;
+	readonly role = EnhancementShaman.role
 
 	readonly canDualWield = EnhancementShaman.canDualWield;
 
@@ -86,6 +88,7 @@ export class RestorationShaman extends PlayerSpec<Spec.SpecRestorationShaman> {
 	static isHealingSpec = true;
 	static isRangedDpsSpec = false;
 	static isMeleeDpsSpec = false;
+	static role = Role.HEALER;
 
 	static canDualWield = false;
 
@@ -99,6 +102,7 @@ export class RestorationShaman extends PlayerSpec<Spec.SpecRestorationShaman> {
 	readonly isHealingSpec = RestorationShaman.isHealingSpec;
 	readonly isRangedDpsSpec = RestorationShaman.isRangedDpsSpec;
 	readonly isMeleeDpsSpec = RestorationShaman.isMeleeDpsSpec;
+	readonly role = RestorationShaman.role
 
 	readonly canDualWield = RestorationShaman.canDualWield;
 

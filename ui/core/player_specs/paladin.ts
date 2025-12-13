@@ -1,5 +1,5 @@
 import { IconSize } from '../player_class';
-import { PlayerSpec } from '../player_spec';
+import { PlayerSpec, Role } from '../player_spec';
 import { Class, Spec } from '../proto/common';
 import { getSpecSiteUrl } from '../proto_utils/utils';
 
@@ -14,6 +14,7 @@ export class HolyPaladin extends PlayerSpec<Spec.SpecHolyPaladin> {
 	static isHealingSpec = true;
 	static isRangedDpsSpec = false;
 	static isMeleeDpsSpec = false;
+	static role = Role.HEALER
 
 	static canDualWield = false;
 
@@ -27,6 +28,7 @@ export class HolyPaladin extends PlayerSpec<Spec.SpecHolyPaladin> {
 	readonly isHealingSpec = HolyPaladin.isHealingSpec;
 	readonly isRangedDpsSpec = HolyPaladin.isRangedDpsSpec;
 	readonly isMeleeDpsSpec = HolyPaladin.isMeleeDpsSpec;
+	readonly role = HolyPaladin.role
 
 	readonly canDualWield = HolyPaladin.canDualWield;
 
@@ -50,6 +52,7 @@ export class ProtectionPaladin extends PlayerSpec<Spec.SpecProtectionPaladin> {
 	static isHealingSpec = false;
 	static isRangedDpsSpec = false;
 	static isMeleeDpsSpec = false;
+	static role = Role.TANK
 
 	static canDualWield = false;
 
@@ -63,6 +66,7 @@ export class ProtectionPaladin extends PlayerSpec<Spec.SpecProtectionPaladin> {
 	readonly isHealingSpec = ProtectionPaladin.isHealingSpec;
 	readonly isRangedDpsSpec = ProtectionPaladin.isRangedDpsSpec;
 	readonly isMeleeDpsSpec = ProtectionPaladin.isMeleeDpsSpec;
+	readonly role = ProtectionPaladin.role
 
 	readonly canDualWield = ProtectionPaladin.canDualWield;
 
@@ -86,7 +90,7 @@ export class RetributionPaladin extends PlayerSpec<Spec.SpecRetributionPaladin> 
 	static isHealingSpec = false;
 	static isRangedDpsSpec = false;
 	static isMeleeDpsSpec = true;
-
+	static role = Role.MELEE
 	static canDualWield = false;
 
 	readonly specIndex = RetributionPaladin.specIndex;
@@ -99,6 +103,7 @@ export class RetributionPaladin extends PlayerSpec<Spec.SpecRetributionPaladin> 
 	readonly isHealingSpec = RetributionPaladin.isHealingSpec;
 	readonly isRangedDpsSpec = RetributionPaladin.isRangedDpsSpec;
 	readonly isMeleeDpsSpec = RetributionPaladin.isMeleeDpsSpec;
+	readonly role = RetributionPaladin.role
 
 	readonly canDualWield = RetributionPaladin.canDualWield;
 
