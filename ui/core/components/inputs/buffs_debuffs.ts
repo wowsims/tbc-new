@@ -60,7 +60,6 @@ export const BloodPact = makeTristatePartyBuffInput({actionId: ActionId.fromSpel
 export const DrumsOfBattleBuff = makeEnumValuePartyBuffInput(ActionId.fromItemId(185848), 'drums', Drums.DrumsOfBattle, ['Drums']);
 export const DrumsOfRestorationBuff = makeEnumValuePartyBuffInput(ActionId.fromItemId(185850), 'drums', Drums.DrumsOfRestoration, ['Drums']);
 
-<<<<<<< HEAD
 // Individual Buffs
 export const BlessingOfKings = makeBooleanIndividualBuffInput({actionId: ActionId.fromSpellId(25898), fieldName: 'blessingOfKings', label: 'Blessing of Kings'});
 export const BlessingOfMight = makeTristateIndividualBuffInput({actionId: ActionId.fromSpellId(27140), impId: ActionId.fromSpellId(20048), fieldName: 'blessingOfMight', label: 'Blessing of Might'});
@@ -70,17 +69,6 @@ export const BlessingOfWisdom = makeTristateIndividualBuffInput({actionId: Actio
 export const Innervate = makeMultistateIndividualBuffInput({actionId: ActionId.fromSpellId(29166), numStates: 11, fieldName: 'innervates', label: 'Innervates'});
 export const PowerInfusion = makeMultistateIndividualBuffInput({actionId: ActionId.fromSpellId(10060), numStates: 11, fieldName: 'powerInfusions', label: 'Power Infusions'});
 export const UnleashedRage = makeBooleanIndividualBuffInput({actionId: ActionId.fromSpellId(30811), fieldName: 'unleashedRage', label: 'Unleashed Rage'});
-=======
-export const SpellDamageBuff = InputHelpers.makeMultiIconInput(
-	[
-		// makeBooleanRaidBuffInput({ actionId: ActionId.fromSpellId(1459), fieldName: 'arcaneBrilliance' }),
-		// makeBooleanRaidBuffInput({ actionId: ActionId.fromSpellId(126309), fieldName: 'stillWater' }),
-		// makeBooleanRaidBuffInput({ actionId: ActionId.fromSpellId(77747), fieldName: 'burningWrath' }),
-		// makeBooleanRaidBuffInput({ actionId: ActionId.fromSpellId(109773), fieldName: 'darkIntent' }),
-	],
-	i18n.t('settings_tab.raid_buffs.spell_power'),
-);
->>>>>>> b3ce9f60d9f9cb1a719bfc3b8d850772c937187f
 
 export const PARTY_BUFFS_CONFIG = [
 	{
@@ -99,7 +87,6 @@ export const PARTY_BUFFS_CONFIG = [
 		stats: [Stat.StatArmor]
 	},
 	{
-<<<<<<< HEAD
 		config: FerociousInspiration,
 		picker: IconPicker,
 		stats: []
@@ -108,11 +95,6 @@ export const PARTY_BUFFS_CONFIG = [
 		config: LeaderOfThePack,
 		picker: IconPicker,
 		stats: []
-=======
-		config: SpellDamageBuff,
-		picker: MultiIconPicker,
-		stats: [Stat.StatSpellDamage],
->>>>>>> b3ce9f60d9f9cb1a719bfc3b8d850772c937187f
 	},
 	{
 		config: ManaSpringTotem,
