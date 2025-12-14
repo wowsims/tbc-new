@@ -18,7 +18,6 @@ type manaBar struct {
 	currentMana float64
 
 	manaRegenMultiplier float64
-	hasteEffectsRegen   bool
 
 	manaCombatMetrics    *ResourceMetrics
 	manaNotCombatMetrics *ResourceMetrics
@@ -47,7 +46,6 @@ func (character *Character) EnableManaBarWithModifier() {
 		// Pets might have different scaling so let them handle their scaling
 		character.AddStatDependency(stats.Intellect, stats.SpellCritPercent, CritPerIntMaxLevel[character.Class])
 		character.AddStatDependency(stats.Intellect, stats.Mana, 15)
-
 	}
 
 	// Not a real spell, just holds metrics from mana gain threat.
@@ -148,17 +146,13 @@ func (unit *Unit) MP5ManaRegenPerSecond() float64 {
 
 // Returns the rate of mana regen per second from spirit.
 func (unit *Unit) SpiritManaRegenPerSecond() float64 {
-	return 0.001 + unit.stats[stats.Spirit]*math.Sqrt(unit.stats[stats.Intellect])*0.003345
+	return 0.001 + unit.stats[stats.Spirit]*math.Sqrt(unit.stats[stats.Intellect])*0.009327
 }
 
 // Returns the rate of mana regen per second, assuming this unit is
 // considered to be casting.
 func (unit *Unit) ManaRegenPerSecondWhileCombat() float64 {
 	regenRate := unit.MP5ManaRegenPerSecond()
-
-	if unit.manaBar.hasteEffectsRegen {
-		regenRate *= unit.TotalSpellHasteMultiplier()
-	}
 
 	spiritRegenRate := 0.0
 	if unit.PseudoStats.SpiritRegenRateCombat != 0 || unit.PseudoStats.ForceFullSpiritRegen {
@@ -179,10 +173,6 @@ func (unit *Unit) ManaRegenPerSecondWhileCombat() float64 {
 func (unit *Unit) ManaRegenPerSecondWhileNotCombat() float64 {
 	regenRate := unit.MP5ManaRegenPerSecond()
 
-	if unit.manaBar.hasteEffectsRegen {
-		regenRate *= unit.TotalSpellHasteMultiplier()
-	}
-
 	regenRate += unit.SpiritManaRegenPerSecond() * unit.PseudoStats.SpiritRegenMultiplier
 
 	regenRate *= unit.manaRegenMultiplier
@@ -198,10 +188,6 @@ func (unit *Unit) UpdateManaRegenRates() {
 func (unit *Unit) MultiplyManaRegenSpeed(sim *Simulation, multiplier float64) {
 	unit.manaRegenMultiplier *= multiplier
 	unit.UpdateManaRegenRates()
-}
-
-func (unit *Unit) HasteEffectsManaRegen() {
-	unit.manaBar.hasteEffectsRegen = true
 }
 
 // Applies 1 'tick' of mana regen, which worth 2s of regeneration based on mp5/int/spirit/etc.
@@ -314,10 +300,6 @@ func (mb *manaBar) EndOOMEvent(sim *Simulation, isPet bool) {
 	}
 	mb.waitingForManaStartTime = 0
 	mb.waitingForMana = 0
-}
-
-func (unit *Unit) HasteEffectsRegen() {
-	unit.manaBar.hasteEffectsRegen = true
 }
 
 type ManaCostOptions struct {

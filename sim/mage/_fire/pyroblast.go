@@ -86,11 +86,11 @@ func (fire *FireMage) registerPyroblastSpell() {
 			TickLength:          time.Second * 3,
 			BonusCoefficient:    pyroblastDotCoefficient,
 			AffectedByCastSpeed: true,
-			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, isRollover bool) {
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, fire.CalcScalingSpellDmg(pyroblastDotScaling))
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeSnapshotCrit)
+				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 			},
 		},
 

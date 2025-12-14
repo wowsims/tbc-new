@@ -42,7 +42,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecWarlock, {
 		Stat.StatSpellHasteRating
 	],
 	// Reference stat against which to calculate EP. DPS classes use either spell power or attack power.
-	epReferenceStat: Stat.StatSpellPower,
+	epReferenceStat: Stat.StatSpellDamage,
 	// Which stats to display in the Character Stats section, at the bottom of the left-hand sidebar.
 	displayStats: UnitStat.createDisplayStatArray(
 		[
@@ -52,8 +52,8 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecWarlock, {
 			Stat.StatIntellect,
 			Stat.StatSpirit,
 			Stat.StatSpellDamage,
-			Stat.StatShadowPower,
-			Stat.StatFirePower,
+			Stat.StatShadowDamage,
+			Stat.StatFireDamage,
 			Stat.StatMP5,
 		],
 		[

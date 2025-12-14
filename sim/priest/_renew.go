@@ -58,7 +58,7 @@ func (priest *Priest) registerRenewSpell() {
 			},
 			NumberOfTicks: priest.renewTicks(),
 			TickLength:    time.Second * 3,
-			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, _ bool) {
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.SnapshotBaseDamage = 280 + spellCoeff*dot.Spell.HealingPower(target)
 				dot.SnapshotAttackerMultiplier = dot.Spell.CasterHealingMultiplier()
 			},

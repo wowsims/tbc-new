@@ -364,11 +364,11 @@ var ItemSetPlateOfWingedTriumph = core.NewItemSet(core.ItemSet{
 					TickLength:          time.Second,
 					NumberOfTicks:       10,
 					AffectedByCastSpeed: false,
-					OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, isRollover bool) {
+					OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 						dot.Snapshot(target, totalDamageTaken/10.0)
 					},
 					OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-						dot.CalcAndDealPeriodicSnapshotHealing(sim, target, dot.OutcomeSnapshotCrit)
+						dot.CalcAndDealPeriodicSnapshotHealing(sim, target, dot.OutcomeTick)
 					},
 				},
 

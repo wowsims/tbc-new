@@ -47,7 +47,6 @@ func NewShaman(character *core.Character, talents string, selfBuffs SelfBuffs, t
 		FeleAutocast:        feleAutocastOptions,
 		SelfBuffs:           selfBuffs,
 		ThunderstormInRange: thunderstormRange,
-		ClassSpellScaling:   core.GetClassSpellScalingCoefficient(proto.Class_ClassShaman),
 	}
 	// shaman.waterShieldManaMetrics = shaman.NewManaMetrics(core.ActionID{SpellID: 57960})
 

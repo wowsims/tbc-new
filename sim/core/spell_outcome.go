@@ -30,114 +30,6 @@ func (dot *Dot) OutcomeTick(_ *Simulation, result *SpellResult, _ *AttackTable) 
 	result.Outcome = OutcomeHit
 	dot.Spell.SpellMetrics[result.Target.UnitIndex].Ticks++
 }
-func (dot *Dot) OutcomeTickPhysicalHitAndCrit(sim *Simulation, result *SpellResult, attackTable *AttackTable) {
-	if dot.Spell.PhysicalHitCheck(sim, attackTable) {
-		if dot.Spell.PhysicalCritCheck(sim, attackTable) {
-			result.Outcome = OutcomeCrit
-			result.Damage *= dot.Spell.CritDamageMultiplier()
-			dot.Spell.SpellMetrics[result.Target.UnitIndex].CritTicks++
-		} else {
-			result.Outcome = OutcomeHit
-			dot.Spell.SpellMetrics[result.Target.UnitIndex].Ticks++
-		}
-	} else {
-		result.Outcome = OutcomeMiss
-		dot.Spell.SpellMetrics[result.Target.UnitIndex].Misses++
-	}
-}
-func (dot *Dot) OutcomeTickPhysicalCrit(sim *Simulation, result *SpellResult, attackTable *AttackTable) {
-	if dot.Spell.PhysicalCritCheck(sim, attackTable) {
-		result.Outcome = OutcomeCrit
-		result.Damage *= dot.Spell.CritDamageMultiplier()
-		dot.Spell.SpellMetrics[result.Target.UnitIndex].CritTicks++
-	} else {
-		result.Outcome = OutcomeHit
-		dot.Spell.SpellMetrics[result.Target.UnitIndex].Ticks++
-	}
-}
-
-func (dot *Dot) OutcomeTickMagicCrit(sim *Simulation, result *SpellResult, _ *AttackTable) {
-	dot.outcomeTickMagicCrit(sim, result, nil, true)
-}
-func (dot *Dot) OutcomeTickMagicCritNoHitCounter(sim *Simulation, result *SpellResult, _ *AttackTable) {
-	dot.outcomeTickMagicCrit(sim, result, nil, false)
-}
-func (dot *Dot) outcomeTickMagicCrit(sim *Simulation, result *SpellResult, attackTable *AttackTable, countHits bool) {
-	if dot.Spell.MagicCritCheck(sim, result.Target) {
-		result.Outcome = OutcomeCrit
-		result.Damage *= dot.Spell.CritDamageMultiplier()
-		if countHits {
-			dot.Spell.SpellMetrics[result.Target.UnitIndex].CritTicks++
-		}
-	} else {
-		result.Outcome = OutcomeHit
-		if countHits {
-			dot.Spell.SpellMetrics[result.Target.UnitIndex].Ticks++
-		}
-	}
-}
-
-func (dot *Dot) OutcomeTickMagicHitAndCrit(sim *Simulation, result *SpellResult, attackTable *AttackTable) {
-	if dot.Spell.MagicHitCheck(sim, attackTable) {
-		if dot.Spell.MagicCritCheck(sim, result.Target) {
-			result.Outcome = OutcomeCrit
-			result.Damage *= dot.Spell.CritDamageMultiplier()
-			dot.Spell.SpellMetrics[result.Target.UnitIndex].CritTicks++
-		} else {
-			result.Outcome = OutcomeHit
-			dot.Spell.SpellMetrics[result.Target.UnitIndex].Ticks++
-		}
-	} else {
-		result.Outcome = OutcomeMiss
-		result.Damage = 0
-		dot.Spell.SpellMetrics[result.Target.UnitIndex].Misses++
-	}
-}
-
-func (dot *Dot) OutcomeTickHealingCrit(sim *Simulation, result *SpellResult, attackTable *AttackTable) {
-	if dot.Spell.HealingCritCheck(sim) {
-		result.Outcome = OutcomeCrit
-		result.Damage *= dot.Spell.CritDamageMultiplier()
-		dot.Spell.SpellMetrics[result.Target.UnitIndex].CritTicks++
-	} else {
-		result.Outcome = OutcomeHit
-		dot.Spell.SpellMetrics[result.Target.UnitIndex].Ticks++
-	}
-}
-
-func (dot *Dot) OutcomeSnapshotCrit(sim *Simulation, result *SpellResult, _ *AttackTable) {
-	if dot.Spell.CritMultiplier == 0 {
-		panic("Spell " + dot.Spell.ActionID.String() + " missing CritMultiplier")
-	}
-	if sim.RandomFloat("Snapshot Crit Roll") < dot.SnapshotCritChance {
-		result.Outcome = OutcomeCrit
-		result.Damage *= dot.Spell.CritDamageMultiplier()
-		dot.Spell.SpellMetrics[result.Target.UnitIndex].CritTicks++
-	} else {
-		result.Outcome = OutcomeHit
-		dot.Spell.SpellMetrics[result.Target.UnitIndex].Ticks++
-	}
-}
-
-func (dot *Dot) OutcomeMagicHitAndSnapshotCrit(sim *Simulation, result *SpellResult, attackTable *AttackTable) {
-	if dot.Spell.CritMultiplier == 0 {
-		panic("Spell " + dot.Spell.ActionID.String() + " missing CritMultiplier")
-	}
-	if dot.Spell.MagicHitCheck(sim, attackTable) {
-		if sim.RandomFloat("Snapshot Crit Roll") < dot.SnapshotCritChance {
-			result.Outcome = OutcomeCrit
-			result.Damage *= dot.Spell.CritDamageMultiplier()
-			dot.Spell.SpellMetrics[result.Target.UnitIndex].CritTicks++
-		} else {
-			result.Outcome = OutcomeHit
-			dot.Spell.SpellMetrics[result.Target.UnitIndex].Ticks++
-		}
-	} else {
-		result.Outcome = OutcomeMiss
-		result.Damage = 0
-		dot.Spell.SpellMetrics[result.Target.UnitIndex].Misses++
-	}
-}
 
 func (spell *Spell) OutcomeMagicHitAndCrit(sim *Simulation, result *SpellResult, attackTable *AttackTable) {
 	spell.outcomeMagicHitAndCrit(sim, result, attackTable, true)
@@ -565,34 +457,6 @@ func (spell *Spell) outcomeRangedHitAndCrit(sim *Simulation, result *SpellResult
 	}
 }
 
-func (dot *Dot) OutcomeRangedHitAndCritSnapshot(sim *Simulation, result *SpellResult, attackTable *AttackTable) {
-	dot.outcomeRangedHitAndCritSnapshot(sim, result, attackTable, true)
-}
-func (dot *Dot) OutcomeRangedHitAndCritSnapshotNoHitCounter(sim *Simulation, result *SpellResult, attackTable *AttackTable) {
-	dot.outcomeRangedHitAndCritSnapshot(sim, result, attackTable, false)
-}
-func (dot *Dot) outcomeRangedHitAndCritSnapshot(sim *Simulation, result *SpellResult, attackTable *AttackTable, countHits bool) {
-	roll := sim.RandomFloat("White Hit Table")
-	chance := 0.0
-
-	if dot.Spell.Unit.PseudoStats.InFrontOfTarget {
-		if !result.applyAttackTableMissNoDWPenalty(dot.Spell, attackTable, roll, &chance) {
-			if result.applyAttackTableCritSeparateRollSnapshot(sim, dot) {
-				result.applyAttackTableBlock(dot.Spell, attackTable, roll, &chance)
-			} else {
-				if !result.applyAttackTableBlock(dot.Spell, attackTable, roll, &chance) {
-					result.applyAttackTableHit(dot.Spell, countHits)
-				}
-			}
-		}
-	} else {
-		if !result.applyAttackTableMissNoDWPenalty(dot.Spell, attackTable, roll, &chance) &&
-			!result.applyAttackTableCritSeparateRollSnapshot(sim, dot) {
-			result.applyAttackTableHit(dot.Spell, countHits)
-		}
-	}
-}
-
 func (spell *Spell) OutcomeRangedHitAndCritNoBlock(sim *Simulation, result *SpellResult, attackTable *AttackTable) {
 	spell.outcomeRangedHitAndCritNoBlock(sim, result, attackTable, true)
 }
@@ -782,18 +646,6 @@ func (result *SpellResult) applyAttackTableCritSeparateRoll(sim *Simulation, spe
 	}
 	return false
 }
-func (result *SpellResult) applyAttackTableCritSeparateRollSnapshot(sim *Simulation, dot *Dot) bool {
-	if dot.Spell.CritMultiplier == 0 {
-		panic("Spell " + dot.Spell.ActionID.String() + " missing CritMultiplier")
-	}
-	if sim.RandomFloat("Physical Crit Roll") < dot.SnapshotCritChance {
-		result.Outcome = OutcomeCrit
-		result.Damage *= dot.Spell.CritDamageMultiplier()
-		dot.Spell.SpellMetrics[result.Target.UnitIndex].CritTicks++
-		return true
-	}
-	return false
-}
 
 func (result *SpellResult) applyAttackTableHit(spell *Spell, countHits bool) {
 	result.Outcome = OutcomeHit
@@ -959,16 +811,5 @@ func (spell *Spell) OutcomeExpectedMeleeWeaponSpecialHitAndCrit(_ *Simulation, r
 	critChance := spell.PhysicalCritChance(attackTable)
 	averageMultiplier := (1.0 - missChance - dodgeChance - parryChance) * (1.0 + (spell.CritDamageMultiplier()-1)*critChance)
 	averageMultiplier -= blockChance * ((spell.CritDamageMultiplier()-1)*critChance + result.Target.BlockDamageReduction())
-	result.Damage *= averageMultiplier
-}
-
-func (dot *Dot) OutcomeExpectedSnapshotCrit(_ *Simulation, result *SpellResult, _ *AttackTable) {
-	if dot.Spell.CritMultiplier == 0 {
-		panic("Spell " + dot.Spell.ActionID.String() + " missing CritMultiplier")
-	}
-
-	averageMultiplier := 1.0
-	averageMultiplier += dot.SnapshotCritChance * (dot.Spell.CritDamageMultiplier() - 1)
-
 	result.Damage *= averageMultiplier
 }

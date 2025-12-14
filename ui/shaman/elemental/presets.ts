@@ -37,7 +37,7 @@ export const EP_PRESET_DEFAULT = PresetUtils.makePresetEpWeights(
 	'Default',
 	Stats.fromMap({
 		[Stat.StatIntellect]: 1.0,
-		[Stat.StatSpellPower]: 0.82,
+		[Stat.StatSpellDamage]: 0.82,
 		[Stat.StatSpirit]: 1.1,
 	}),
 );
@@ -46,7 +46,7 @@ export const EP_PRESET_P3 = PresetUtils.makePresetEpWeights(
 	'P3 (WiP)',
 	Stats.fromMap({
 		[Stat.StatIntellect]: 1.0,
-		[Stat.StatSpellPower]: 0.82,
+		[Stat.StatSpellDamage]: 0.82,
 		[Stat.StatSpirit]: 1.25,
 	}),
 );
@@ -55,7 +55,7 @@ export const EP_PRESET_AOE = PresetUtils.makePresetEpWeights(
 	'AoE (4+)',
 	Stats.fromMap({
 		[Stat.StatIntellect]: 1.0,
-		[Stat.StatSpellPower]: 0.74,
+		[Stat.StatSpellDamage]: 0.74,
 		[Stat.StatSpirit]: 1.18,
 	}),
 );

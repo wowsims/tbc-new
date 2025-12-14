@@ -15,12 +15,12 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecHolyPaladin, {
 	knownIssues: [],
 
 	// All stats for which EP should be calculated.
-	epStats: [Stat.StatIntellect, Stat.StatSpirit, Stat.StatSpellPower],
+	epStats: [Stat.StatIntellect, Stat.StatSpirit, Stat.StatSpellDamage],
 	// Reference stat against which to calculate EP. I think all classes use either spell power or attack power.
-	epReferenceStat: Stat.StatSpellPower,
+	epReferenceStat: Stat.StatSpellDamage,
 	// Which stats to display in the Character Stats section, at the bottom of the left-hand sidebar.
 	displayStats: UnitStat.createDisplayStatArray(
-		[Stat.StatHealth, Stat.StatMana, Stat.StatIntellect, Stat.StatSpirit, Stat.StatSpellPower, Stat.StatArmor, Stat.StatStamina],
+		[Stat.StatHealth, Stat.StatMana, Stat.StatIntellect, Stat.StatSpirit, Stat.StatSpellDamage, Stat.StatArmor, Stat.StatStamina],
 		[PseudoStat.PseudoStatSpellHastePercent, PseudoStat.PseudoStatSpellCritPercent, PseudoStat.PseudoStatSpellHitPercent],
 	),
 	gemStats: DEFAULT_HYBRID_CASTER_GEM_STATS,

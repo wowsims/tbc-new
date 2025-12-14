@@ -119,7 +119,7 @@ func applyRaceEffects(agent Agent) {
 				AffectedByCastSpeed: false,
 				OnTick: func(sim *Simulation, target *Unit, dot *Dot) {
 					healValue := character.MaxHealth() * 0.04
-					dot.Spell.CalcAndDealPeriodicHealing(sim, target, healValue, dot.OutcomeTickHealingCrit)
+					dot.Spell.CalcAndDealPeriodicHealing(sim, target, healValue, dot.OutcomeTick)
 				},
 			},
 
@@ -252,7 +252,7 @@ func applyRaceEffects(agent Agent) {
 			apBonus = 4514.0
 		}
 
-		buffStats := stats.Stats{stats.AttackPower: apBonus, stats.RangedAttackPower: apBonus, stats.SpellPower: spBonus}
+		buffStats := stats.Stats{stats.AttackPower: apBonus, stats.RangedAttackPower: apBonus, stats.SpellDamage: spBonus}
 		RegisterTemporaryStatsOnUseCD(character, "Blood Fury", buffStats, time.Second*15, SpellConfig{
 			ActionID: actionID,
 
@@ -323,38 +323,38 @@ func applyRaceEffects(agent Agent) {
 	case proto.Race_RaceUndead:
 		character.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexShadow] *= 0.99
 
-		actionID := ActionID{SpellID: 127802}
-		healthMetrics := character.NewHealthMetrics(actionID)
-		touchOfTheGraveDamageSpell := character.RegisterSpell(SpellConfig{
-			ActionID:    actionID,
-			SpellSchool: SpellSchoolShadow,
-			ProcMask:    ProcMaskSpellProc,
+		// actionID := ActionID{SpellID: 127802}
+		// healthMetrics := character.NewHealthMetrics(actionID)
+		// touchOfTheGraveDamageSpell := character.RegisterSpell(SpellConfig{
+		// 	ActionID:    actionID,
+		// 	SpellSchool: SpellSchoolShadow,
+		// 	ProcMask:    ProcMaskSpellProc,
 
-			CritMultiplier:   character.DefaultSpellCritMultiplier(),
-			DamageMultiplier: 1,
+		// 	CritMultiplier:   character.DefaultSpellCritMultiplier(),
+		// 	DamageMultiplier: 1,
 
-			ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
-				baseDamage := sim.Roll(CalcScalingSpellEffectVarianceMinMax(proto.Class_ClassUnknown, 8, 0.15000000596))
-				result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMagicHit)
+		// 	ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
+		// 		baseDamage := sim.Roll(CalcScalingSpellEffectVarianceMinMax(proto.Class_ClassUnknown, 8, 0.15000000596))
+		// 		result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMagicHit)
 
-				character.GainHealth(sim, result.Damage*spell.Unit.PseudoStats.HealingTakenMultiplier, healthMetrics)
-			},
-		})
+		// 		character.GainHealth(sim, result.Damage*spell.Unit.PseudoStats.HealingTakenMultiplier, healthMetrics)
+		// 	},
+		// })
 
-		character.MakeProcTriggerAura(ProcTrigger{
-			Name:               "Touch of the Grave",
-			ActionID:           ActionID{SpellID: 5227},
-			Callback:           CallbackOnSpellHitDealt | CallbackOnPeriodicDamageDealt,
-			ProcMask:           ProcMaskSpellDamage | ProcMaskMelee,
-			Outcome:            OutcomeLanded,
-			ProcChance:         0.2,
-			ICD:                time.Second * 15,
-			TriggerImmediately: true,
+		// character.MakeProcTriggerAura(ProcTrigger{
+		// 	Name:               "Touch of the Grave",
+		// 	ActionID:           ActionID{SpellID: 5227},
+		// 	Callback:           CallbackOnSpellHitDealt | CallbackOnPeriodicDamageDealt,
+		// 	ProcMask:           ProcMaskSpellDamage | ProcMaskMelee,
+		// 	Outcome:            OutcomeLanded,
+		// 	ProcChance:         0.2,
+		// 	ICD:                time.Second * 15,
+		// 	TriggerImmediately: true,
 
-			Handler: func(sim *Simulation, spell *Spell, result *SpellResult) {
-				touchOfTheGraveDamageSpell.Cast(sim, result.Target)
-			},
-		})
+		// 	Handler: func(sim *Simulation, spell *Spell, result *SpellResult) {
+		// 		touchOfTheGraveDamageSpell.Cast(sim, result.Target)
+		// 	},
+		// })
 	}
 }
 

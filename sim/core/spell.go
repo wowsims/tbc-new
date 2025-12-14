@@ -39,7 +39,7 @@ type SpellConfig struct {
 
 	BonusHitPercent      float64
 	BonusCritPercent     float64
-	BonusSpellPower      float64
+	BonusSpellDamage     float64
 	BonusExpertiseRating float64
 
 	DamageMultiplier         float64
@@ -134,7 +134,7 @@ type Spell struct {
 
 	BonusHitPercent          float64
 	BonusCritPercent         float64
-	BonusSpellPower          float64
+	BonusSpellDamage         float64
 	BonusExpertiseRating     float64
 	CastTimeMultiplier       float64
 	CdMultiplier             float64
@@ -236,7 +236,7 @@ func (unit *Unit) RegisterSpell(config SpellConfig) *Spell {
 
 		BonusHitPercent:          config.BonusHitPercent,
 		BonusCritPercent:         config.BonusCritPercent,
-		BonusSpellPower:          config.BonusSpellPower,
+		BonusSpellDamage:         config.BonusSpellDamage,
 		BonusExpertiseRating:     config.BonusExpertiseRating,
 		CastTimeMultiplier:       1,
 		CdMultiplier:             1,

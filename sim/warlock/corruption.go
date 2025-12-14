@@ -45,7 +45,7 @@ func (warlock *Warlock) registerCorruption() *core.Spell {
 			TickLength:          3 * time.Second,
 			AffectedByCastSpeed: false,
 			BonusCoefficient:    corruptionCoeff,
-			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, isRollover bool) {
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 
 				dot.Snapshot(target, 900)
 
@@ -68,13 +68,12 @@ func (warlock *Warlock) registerCorruption() *core.Spell {
 		ExpectedTickDamage: func(sim *core.Simulation, target *core.Unit, spell *core.Spell, useSnapshot bool) *core.SpellResult {
 			dot := spell.Dot(target)
 			if useSnapshot {
-				result := dot.CalcSnapshotDamage(sim, target, dot.OutcomeExpectedSnapshotCrit)
+				result := dot.CalcSnapshotDamage(sim, target, dot.OutcomeTick)
 				result.Damage /= dot.TickPeriod().Seconds()
 				println("AFTER MATH", result.Damage)
 				return result
 			} else {
-				println("NOT USESNPASHOT")
-				result := spell.CalcPeriodicDamage(sim, target, warlock.CalcScalingSpellDmg(corruptionCoeff), spell.OutcomeExpectedMagicCrit)
+				result := spell.CalcPeriodicDamage(sim, target, 900, spell.OutcomeExpectedMagicCrit)
 				result.Damage /= dot.CalcTickPeriod().Round(time.Millisecond).Seconds()
 				println("CALCTICK DMG", result.Damage)
 				return result

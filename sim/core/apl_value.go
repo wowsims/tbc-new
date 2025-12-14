@@ -263,8 +263,6 @@ func (rot *APLRotation) newAPLValueWithContext(config *proto.APLValue, groupVari
 		value = rot.newValueDotBaseDuration(config.GetDotBaseDuration(), config.Uuid)
 	case *proto.APLValue_DotPercentIncrease:
 		value = rot.newValueDotPercentIncrease(config.GetDotPercentIncrease(), config.Uuid)
-	case *proto.APLValue_DotCritPercentIncrease:
-		value = rot.newValueDotCritPercentIncrease(config.GetDotCritPercentIncrease(), config.Uuid)
 	case *proto.APLValue_DotTickRatePercentIncrease:
 		value = rot.newValueDotTickRatePercentIncrease(config.GetDotTickRatePercentIncrease(), config.Uuid)
 

@@ -106,8 +106,8 @@ func (warlock *Warlock) SimplePetStatInheritanceWithScale() core.PetStatInherita
 			stats.Intellect:        ownerStats[stats.Intellect] * 0.3,
 			stats.Armor:            ownerStats[stats.Armor] * 0.35,
 			stats.SpellPenetration: ownerStats[stats.SpellPenetration], // not 100% on this one
-			stats.SpellPower:       max(ownerStats[stats.ShadowPower], ownerStats[stats.FirePower]) * 0.15,
-			stats.AttackPower:      max(ownerStats[stats.ShadowPower], ownerStats[stats.FirePower]) * 0.57,
+			stats.SpellPower:       max(ownerStats[stats.ShadowDamage], ownerStats[stats.FireDamage]) * 0.15,
+			stats.AttackPower:      max(ownerStats[stats.ShadowDamage], ownerStats[stats.FireDamage]) * 0.57,
 			stats.ArcaneResistance: ownerStats[stats.ArcaneResistance] * resistScale,
 			stats.FireResistance:   ownerStats[stats.FireResistance] * resistScale,
 			stats.FrostResistance:  ownerStats[stats.FrostResistance] * resistScale,
@@ -307,7 +307,7 @@ func (pet *WarlockPet) registerFireboltSpell() {
 		BonusCoefficient: 0.571,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			result := spell.CalcDamage(sim, target, pet.CalcScalingSpellDmg(0.571), spell.OutcomeMagicHitAndCrit)
+			result := spell.CalcDamage(sim, target, 5000, spell.OutcomeMagicHitAndCrit)
 			spell.WaitTravelTime(sim, func(sim *core.Simulation) {
 				spell.DealDamage(sim, result)
 			})
@@ -338,7 +338,7 @@ func (pet *WarlockPet) registerLashOfPainSpell() {
 		BonusCoefficient: 0.907,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			result := spell.CalcDamage(sim, target, pet.CalcScalingSpellDmg(0.571), spell.OutcomeMagicHitAndCrit)
+			result := spell.CalcDamage(sim, target, 5000, spell.OutcomeMagicHitAndCrit)
 			spell.DealDamage(sim, result)
 		},
 	}))
@@ -362,7 +362,7 @@ func (pet *WarlockPet) registerTormentSpell() {
 			},
 		},
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			result := spell.CalcDamage(sim, target, pet.CalcScalingSpellDmg(0.571), spell.OutcomeMagicHitAndCrit)
+			result := spell.CalcDamage(sim, target, 1000, spell.OutcomeMagicHitAndCrit)
 			spell.DealDamage(sim, result)
 		},
 	}))

@@ -306,7 +306,7 @@ func (d DBCTooltipDataProvider) GetEffectScaledValue(spellId int64, effectIdx in
 	}
 
 	if effect.EffectBonusCoefficient > 0 {
-		baseDamage += d.GetSpellPower() * effect.EffectBonusCoefficient
+		baseDamage += d.GetSpellDamage() * effect.EffectBonusCoefficient
 	}
 
 	return baseDamage
@@ -381,8 +381,8 @@ func (d DBCTooltipDataProvider) GetSpellDuration(spellId int64) time.Duration {
 	return time.Duration(spell.Duration) * time.Millisecond
 }
 
-// GetSpellPower implements TooltipDataProvider.
-func (d DBCTooltipDataProvider) GetSpellPower() float64 {
+// GetSpellDamage implements TooltipDataProvider.
+func (d DBCTooltipDataProvider) GetSpellDamage() float64 {
 	return 15000
 }
 

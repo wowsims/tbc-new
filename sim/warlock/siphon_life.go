@@ -44,7 +44,7 @@ func (warlock *Warlock) registerSiphonLifeSpell() {
 			TickLength:          3 * time.Second,
 			AffectedByCastSpeed: false,
 
-			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, isRollover bool) {
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, 630)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {

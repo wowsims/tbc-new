@@ -34,7 +34,7 @@ func (warlock *Warlock) registerImmolate() {
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			//coeffection 0.13
-			result := spell.CalcDamage(sim, target, warlock.CalcScalingSpellDmg(immolateCoeff), spell.OutcomeMagicHitAndCrit)
+			result := spell.CalcDamage(sim, target, 1000, spell.OutcomeMagicHitAndCrit)
 			if result.Landed() {
 				spell.RelatedDotSpell.Dot(target).Apply(sim)
 			}
@@ -65,7 +65,7 @@ func (warlock *Warlock) registerImmolate() {
 			NumberOfTicks:    5,
 			TickLength:       3 * time.Second,
 			BonusCoefficient: immolateCoeff,
-			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, isRollover bool) {
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, 510) // coefficient 0.2
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
@@ -76,11 +76,11 @@ func (warlock *Warlock) registerImmolate() {
 		ExpectedTickDamage: func(sim *core.Simulation, target *core.Unit, spell *core.Spell, useSnapshot bool) *core.SpellResult {
 			dot := spell.Dot(target)
 			if useSnapshot {
-				result := dot.CalcSnapshotDamage(sim, target, dot.OutcomeExpectedSnapshotCrit)
+				result := dot.CalcSnapshotDamage(sim, target, dot.OutcomeTick)
 				result.Damage /= dot.TickPeriod().Seconds()
 				return result
 			} else {
-				result := spell.CalcPeriodicDamage(sim, target, warlock.CalcScalingSpellDmg(immolateCoeff), spell.OutcomeExpectedMagicCrit)
+				result := spell.CalcPeriodicDamage(sim, target, 1000, spell.OutcomeExpectedMagicCrit)
 				result.Damage /= dot.CalcTickPeriod().Round(time.Millisecond).Seconds()
 				return result
 			}

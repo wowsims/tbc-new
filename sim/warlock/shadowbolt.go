@@ -30,7 +30,7 @@ func (warlock *Warlock) registerShadowBolt() {
 		ThreatMultiplier:         1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			result := spell.CalcDamage(sim, target, warlock.CalcScalingSpellDmg(shadowBoltCoeff), spell.OutcomeMagicHitAndCrit)
+			result := spell.CalcDamage(sim, target, .517, spell.OutcomeMagicHitAndCrit)
 			spell.WaitTravelTime(sim, func(sim *core.Simulation) {
 				spell.DealDamage(sim, result)
 			})

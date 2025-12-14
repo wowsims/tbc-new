@@ -178,12 +178,12 @@ enum Stat {
 	StatSpellPower = 4;
 	StatHealingPower = 5;
 	StatSpellDamage = 6;
-	StatArcanePower = 7;
-	StatFirePower = 8;
-	StatFrostPower = 9;
-	StatHolyPower = 10;
-	StatNaturePower = 11;
-	StatShadowPower = 12;
+	StatArcaneDamage = 7;
+	StatFireDamage = 8;
+	StatFrostDamage = 9;
+	StatHolyDamage = 10;
+	StatNatureDamage = 11;
+	StatShadowDamage = 12;
 
 	// Caster Secondaries
 	StatSpellHitRating = 13;

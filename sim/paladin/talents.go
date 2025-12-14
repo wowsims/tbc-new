@@ -937,7 +937,7 @@ func (paladin *Paladin) ApplyTalents() {
 // 		NumberOfTicks: 10,
 // 		TickLength:    time.Second,
 
-// 		OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, isRollover bool) {
+// 		OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 // 			dot.Snapshot(target, dot.Spell.SpellPower())
 // 		},
 // 		OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
@@ -948,9 +948,9 @@ func (paladin *Paladin) ApplyTalents() {
 // 				tickMultiplier*tickSpCoef*snapshotSpellPower
 
 // 			if isHealing {
-// 				dot.CalcAndDealPeriodicSnapshotHealing(sim, target, dot.OutcomeSnapshotCrit)
+// 				dot.CalcAndDealPeriodicSnapshotHealing(sim, target, dot.OutcomeTick)
 // 			} else {
-// 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeSnapshotCrit)
+// 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 // 			}
 
 // 			dot.SnapshotBaseDamage = snapshotSpellPower

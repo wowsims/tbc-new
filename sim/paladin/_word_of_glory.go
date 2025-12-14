@@ -112,7 +112,7 @@ func (paladin *Paladin) eternalFlameHotConfig() core.DotConfig {
 
 		BonusCoefficient: 0.08190000057,
 
-		OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, isRollover bool) {
+		OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 			dot.SnapshotHeal(target, paladin.CalcScalingSpellDmg(0.62300002575))
 			dot.SnapshotAttackerMultiplier *= float64(paladin.DynamicHolyPowerSpent)
 			if target == &paladin.Unit {
@@ -121,7 +121,7 @@ func (paladin *Paladin) eternalFlameHotConfig() core.DotConfig {
 			}
 		},
 		OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-			dot.CalcAndDealPeriodicSnapshotHealing(sim, target, dot.OutcomeSnapshotCrit)
+			dot.CalcAndDealPeriodicSnapshotHealing(sim, target, dot.OutcomeTick)
 		},
 	}
 }

@@ -28,15 +28,17 @@ func (warlock *Warlock) registerDrainLife() {
 		BonusCoefficient:         drainLifeCoeff,
 
 		Dot: core.DotConfig{
-			Aura:             core.Aura{Label: "Drain Life"},
-			NumberOfTicks:    5,
-			TickLength:       1 * time.Second,
-			BonusCoefficient: drainLifeCoeff,
-			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, _ bool) {
-				dot.Snapshot(target, warlock.CalcScalingSpellDmg(drainLifeCoeff))
+			Aura:                 core.Aura{Label: "Drain Life"},
+			NumberOfTicks:        6,
+			TickLength:           1 * time.Second,
+			AffectedByCastSpeed:  true,
+			HasteReducesDuration: true,
+			BonusCoefficient:     drainLifeCoeff,
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
+				dot.Snapshot(target, 108)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				resultSlice[0] = dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeSnapshotCrit)
+				resultSlice[0] = dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 
 				warlock.GainHealth(sim, warlock.MaxHealth()*0.02, healthMetric)
 

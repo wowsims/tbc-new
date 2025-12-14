@@ -45,14 +45,14 @@ func (druid *Druid) registerRakeSpell() {
 			NumberOfTicks: 5,
 			TickLength:    time.Second * 3,
 
-			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, isRollover bool) {
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.SnapshotPhysical(target, flatBaseDamage+bonusCoefficientFromAP*dot.Spell.MeleeAttackPower())
 
 				// Store snapshot power parameters for later use.
 				druid.UpdateBleedPower(druid.Rake, sim, target, true, true)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeSnapshotCrit)
+				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 			},
 		},
 
@@ -79,7 +79,7 @@ func (druid *Druid) registerRakeSpell() {
 		ExpectedTickDamage: func(sim *core.Simulation, target *core.Unit, spell *core.Spell, useSnapshot bool) *core.SpellResult {
 			if useSnapshot {
 				dot := spell.Dot(target)
-				return dot.CalcSnapshotDamage(sim, target, dot.OutcomeExpectedSnapshotCrit)
+				return dot.CalcSnapshotDamage(sim, target, dot.OutcomeTick)
 			} else {
 				tickBase := flatBaseDamage + bonusCoefficientFromAP*spell.MeleeAttackPower()
 				ticks := spell.CalcPeriodicDamage(sim, target, tickBase, spell.OutcomeExpectedMagicAlwaysHit)

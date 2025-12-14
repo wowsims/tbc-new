@@ -37,7 +37,7 @@ func (warlock *Warlock) registerSoulfire() {
 		BonusCoefficient: soulfireCoeff,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			result := spell.CalcDamage(sim, target, warlock.CalcScalingSpellDmg(soulfireCoeff), spell.OutcomeMagicHitAndCrit)
+			result := spell.CalcDamage(sim, target, 1000, spell.OutcomeMagicHitAndCrit)
 			spell.WaitTravelTime(sim, func(sim *core.Simulation) {
 				spell.DealDamage(sim, result)
 			})

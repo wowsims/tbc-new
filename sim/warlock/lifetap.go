@@ -36,7 +36,7 @@ func (warlock *Warlock) registerLifeTap() {
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			// Life tap adds 0.8*sp to mana restore
-			restore := baseRestore + (math.Max(warlock.GetStat(stats.SpellPower), warlock.GetStat(stats.ShadowPower)) * 0.8)
+			restore := baseRestore + (math.Max(warlock.GetStat(stats.SpellPower), warlock.GetStat(stats.ShadowDamage)) * 0.8)
 			warlock.RemoveHealth(sim, healthCost)
 			warlock.AddMana(sim, restore, manaMetrics)
 
