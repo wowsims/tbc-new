@@ -312,87 +312,104 @@ export const DEBUFFS_CONFIG = [
 	{
 		config: Mangle,
 		picker: IconPicker,
-		stats: [Role.MELEE]
+		stats: [],
+		roles: [Role.MELEE]
 	},
 	{
 		config: Misery,
 		picker: IconPicker,
-		stats: [Role.CASTER]
+		stats: [],
+		roles: [Role.CASTER]
 	},
 	{
 		config: ShadowWeaving,
 		picker: IconPicker,
-		stats: [Role.CASTER],
+		stats: [],
+		roles: [Role.CASTER],
 	},
 	{
 		config: CurseOfElements,
 		picker: IconPicker,
-		stats: [Role.CASTER]
+		stats: [],
+		roles: [Role.CASTER]
 	},
 	{
 		config: CurseOfRecklessness,
 		picker: IconPicker,
-		stats: [Role.MELEE, Role.RANGED, Role.TANK]
+		stats: [],
+		roles: [Role.MELEE, Role.RANGED, Role.TANK]
 	},
 	{
 		config: FaerieFire,
 		picker: IconPicker,
-		stats: [Role.MELEE, Role.RANGED, Role.TANK]
+		stats: [],
+		roles: [Role.MELEE, Role.RANGED, Role.TANK]
 	},
 	{
 		config: ExposeArmor,
 		picker: IconPicker,
-		stats: [Role.MELEE, Role.RANGED, Role.TANK]
+		stats: [],
+		roles: [Role.MELEE, Role.RANGED, Role.TANK]
 	},
 	{
 		config: SunderArmor,
 		picker: IconPicker,
-		stats: [Role.MELEE, Role.RANGED, Role.TANK]
+		stats: [],
+		roles: [Role.MELEE, Role.RANGED, Role.TANK]
 	},
 	{
 		config: WintersChill,
 		picker: IconPicker,
-		stats: [Role.CASTER]
+		stats: [],
+		roles: [Role.CASTER]
 	},
 	{
 		config: GiftOfArthas,
 		picker: IconPicker,
-		stats: [Role.MELEE, Role.RANGED, Role.TANK]
+		stats: [],
+		roles: [Role.MELEE, Role.RANGED, Role.TANK]
 	},
 	{
 		config: DemoralizingRoar,
 		picker: IconPicker,
-		stats: [Role.TANK]
+		stats: [],
+		roles: [Role.TANK]
 	},
 	{
 		config: DemoralizingShout,
 		picker: IconPicker,
-		stats: [Role.TANK]
+		stats: [],
+		roles: [Role.TANK]
 	},
 	{
 		config: Screech,
 		picker: IconPicker,
-		stats: [Role.TANK]
+		stats: [],
+		roles: [Role.TANK]
 	},
 	{
 		config: ThunderClap,
 		picker: IconPicker,
-		stats: [Role.TANK]
+		stats: [],
+		roles: [Role.TANK]
 	},
 	{
 		config: InsectSwarm,
 		picker: IconPicker,
-		stats: [Role.TANK]
+		stats: [],
+		roles: [Role.TANK]
 	},
 	{
 		config: ScorpidSting,
 		picker: IconPicker,
-		stats: [Role.TANK]
+		stats: [],
+		roles: [Role.TANK]
 	},
 	{
 		config: ShadowEmbrace,
 		picker: IconPicker,
-		stats: [Role.TANK]
+		stats: [],
+		roles: [Role.TANK]
 	}
 ] as PickerStatOptions[]
 

@@ -175,6 +175,7 @@ export class SettingsTab extends SimTab {
 
 	private buildOtherSettings() {
 		const settings = this.simUI.individualConfig.otherInputs?.inputs.filter(inputs => !inputs.extraCssClasses?.includes('within-raid-sim-hide') || true);
+		console.log("SETTINGS", settings);
 
 		const swapSlots = this.simUI.individualConfig.itemSwapSlots || [];
 		if (settings.length > 0 || swapSlots.length > 0) {
@@ -392,7 +393,7 @@ export class SettingsTab extends SimTab {
 	private configureInputSection(sectionElem: HTMLElement, sectionConfig: InputSection) {
 		sectionConfig.inputs.forEach(inputConfig => {
 			if (inputConfig.type == 'number') {
-				new NumberPicker(sectionElem, this.simUI.player, inputConfig);
+				new NumberPicker(sectionElem, this.simUI.player,  inputConfig);
 			} else if (inputConfig.type == 'boolean') {
 				new BooleanPicker(sectionElem, this.simUI.player, { ...inputConfig, reverse: true });
 			} else if (inputConfig.type == 'enum') {

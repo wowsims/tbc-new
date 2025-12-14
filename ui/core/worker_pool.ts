@@ -115,7 +115,7 @@ export class WorkerPool {
 	}
 
 	async raidSimAsync(request: RaidSimRequest, onProgress: WorkerProgressCallback, signals: SimSignals): Promise<RaidSimResult> {
-		console.log("BEFORE WORKER?")
+
 		const worker = this.getLeastBusyWorker();
 		console.log("RAID SIM REQUEST AFTER WORK BEFORE THING" + RaidSimRequest.toJsonString(request))
 		worker.log('Raid sim request: ' + RaidSimRequest.toJsonString(request));

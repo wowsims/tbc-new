@@ -115,6 +115,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecWarlock, {
 			exposeArmor: TristateEffect.TristateEffectRegular,
 			improvedScorch: false,
 			improvedSealOfTheCrusader: true,
+			hemorrhageUptime: 0,
 			isbUptime: 0,
 			misery: true,
 			shadowWeaving: true,
@@ -138,7 +139,12 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecWarlock, {
 	petConsumeInputs: [],
 	// Inputs to include in the 'Other' section on the settings tab.
 	otherInputs: {
-		inputs: [OtherInputs.InputDelay, OtherInputs.DistanceFromTarget, OtherInputs.TankAssignment, OtherInputs.ChannelClipDelay],
+		inputs: [
+			OtherInputs.IsbUptime,
+			OtherInputs.HemoUptime,
+			OtherInputs.DistanceFromTarget,
+			OtherInputs.TankAssignment,
+		],
 	},
 	itemSwapSlots: [ItemSlot.ItemSlotMainHand, ItemSlot.ItemSlotOffHand, ItemSlot.ItemSlotTrinket1, ItemSlot.ItemSlotTrinket2],
 	encounterPicker: {

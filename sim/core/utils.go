@@ -50,6 +50,7 @@ func (unit *Unit) ExecuteResourceGain(sim *Simulation, resource proto.ResourceTy
 		panic("Unsupported Resource Type in ExecuteResourceGain")
 	}
 }
+
 func GetTristateValueInt32(effect proto.TristateEffect, regularValue int32, impValue int32) int32 {
 	if effect == proto.TristateEffect_TristateEffectRegular {
 		return regularValue
@@ -67,6 +68,14 @@ func GetTristateValueFloat(effect proto.TristateEffect, regularValue float64, im
 		return impValue
 	} else {
 		return 0
+	}
+}
+
+func IsImproved(effect proto.TristateEffect) bool {
+	if effect == proto.TristateEffect_TristateEffectImproved {
+		return true
+	} else {
+		return false
 	}
 }
 

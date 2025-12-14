@@ -565,6 +565,7 @@ message Debuffs {
 	bool scorpid_sting = 24;
 	bool shadow_embrace = 25;
 	bool screech = 26;
+	double hemorrhage_uptime = 27;
 }
 
 message ConsumesSpec {

@@ -15,7 +15,7 @@ func (warlock *Warlock) applyAfflictionTalents() {
 	warlock.applyImprovedCurseOfAgony()
 	warlock.applyNightfall()
 	warlock.applyEmpoweredCorruption()
-	warlock.applyShadowEmbrace()
+	// warlock.applyShadowEmbrace()
 	warlock.applyShadowMastery()
 	warlock.applyContagion()
 	warlock.applyUnstableAffliction()
@@ -187,28 +187,28 @@ func (warlock *Warlock) applyEmpoweredCorruption() {
 	})
 }
 
-func (warlock *Warlock) applyShadowEmbrace() {
-	if warlock.Talents.ShadowEmbrace == 0 {
-		return
-	}
+// func (warlock *Warlock) applyShadowEmbrace() {
+// 	if warlock.Talents.ShadowEmbrace == 0 {
+// 		return
+// 	}
 
-	warlock.RegisterAura(core.Aura{
-		Label:    "Shadow Embrace Talent",
-		Duration: core.NeverExpires,
-		OnReset: func(aura *core.Aura, sim *core.Simulation) {
-			aura.Activate(sim)
-		},
-		OnSpellHitDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, spellEffect *core.SpellResult) {
-			if !spellEffect.Landed() {
-				return
-			}
+// 	warlock.RegisterAura(core.Aura{
+// 		Label:    "Shadow Embrace Talent",
+// 		Duration: core.NeverExpires,
+// 		OnReset: func(aura *core.Aura, sim *core.Simulation) {
+// 			aura.Activate(sim)
+// 		},
+// 		OnSpellHitDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, spellEffect *core.SpellResult) {
+// 			if !spellEffect.Landed() {
+// 				return
+// 			}
 
-			if spell == warlock.Corruption || spell == warlock.SiphonLife || spell == warlock.CurseOfAgony || spell.SameAction(warlock.Seed.ActionID) {
-				core.ShadowEmbraceAura(spellEffect.Target, warlock.Talents.ShadowEmbrace, spell.Dot(spellEffect.Target).Duration).Activate(sim)
-			}
-		},
-	})
-}
+// 			if spell == warlock.Corruption || spell == warlock.SiphonLife || spell == warlock.CurseOfAgony || spell.SameAction(warlock.Seed.ActionID) {
+// 				core.ShadowEmbrace(spellEffect.Target, warlock.Talents.ShadowEmbrace, spell.Dot(spellEffect.Target).Duration).Activate(sim)
+// 			}
+// 		},
+// 	})
+// }
 
 func (warlock *Warlock) applyShadowMastery() {
 	if warlock.Talents.ShadowMastery == 0 {

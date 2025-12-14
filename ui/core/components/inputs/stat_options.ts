@@ -52,7 +52,7 @@ export function relevantStatOptions<T, OptionsType extends ItemStatOptions<T> | 
 				option.stats.length == 0 ||
 				option.stats.some(stat => simUI.individualConfig.epStats.includes(stat)) ||
 				simUI.individualConfig.includeBuffDebuffInputs.includes(option.config) ||
-				(option.roles && option.roles.includes(simUI.player.playerSpec.role))
+				option.roles?.includes(simUI.player.playerSpec.role)
 
 		)
 		.filter(option => !simUI.individualConfig.excludeBuffDebuffInputs.includes(option.config));

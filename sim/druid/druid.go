@@ -224,10 +224,6 @@ func (druid *Druid) Initialize() {
 		}
 	})
 
-	druid.WeakenedBlowsAuras = druid.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {
-		return core.WeakenedBlowsAura(target)
-	})
-
 	druid.RegisterBaselineSpells()
 }
 

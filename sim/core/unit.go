@@ -868,6 +868,7 @@ func (unit *Unit) GetTotalParryChanceAsDefender(atkTable *AttackTable) float64 {
 }
 
 func (unit *Unit) GetTotalChanceToBeMissedAsDefender(atkTable *AttackTable) float64 {
+
 	chance := atkTable.BaseMissChance +
 		unit.PseudoStats.ReducedPhysicalHitTakenChance
 	return math.Max(chance, 0.0)

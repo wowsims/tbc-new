@@ -163,7 +163,7 @@ func (spell *Spell) DodgeParrySuppression() float64 {
 }
 
 func (spell *Spell) PhysicalHitChance(attackTable *AttackTable) float64 {
-	hitPercent := spell.Unit.stats[stats.PhysicalHitPercent] + spell.BonusHitPercent
+	hitPercent := spell.Unit.stats[stats.PhysicalHitPercent] + spell.BonusHitPercent - attackTable.Defender.PseudoStats.ReducedPhysicalHitTakenChance
 	return hitPercent / 100
 }
 func (spell *Spell) PhysicalHitCheck(sim *Simulation, attackTable *AttackTable) bool {
@@ -208,7 +208,8 @@ func (spell *Spell) SpellCritChance(target *Unit) float64 {
 	attackTable := spell.Unit.AttackTables[target.UnitIndex]
 	critPercent := spell.Unit.stats[stats.SpellCritPercent] +
 		spell.BonusCritPercent +
-		attackTable.BonusSpellCritPercent
+		attackTable.BonusSpellCritPercent -
+		target.PseudoStats.ReducedCritTakenChance
 	return max(critPercent/100-attackTable.SpellCritSuppression, 0)
 }
 func (spell *Spell) MagicCritCheck(sim *Simulation, target *Unit) bool {
@@ -695,7 +696,7 @@ func (result *SpellResult) applyTargetModifiers(sim *Simulation, spell *Spell, a
 	if spell.Flags.Matches(SpellFlagIgnoreTargetModifiers) {
 		return
 	}
-
+	result.Damage += attackTable.Defender.PseudoStats.BonusPhysicalDamageTaken
 	result.Damage *= spell.TargetDamageMultiplier(sim, attackTable, isPeriodic)
 }
 func (spell *Spell) TargetDamageMultiplier(sim *Simulation, attackTable *AttackTable, isPeriodic bool) float64 {
