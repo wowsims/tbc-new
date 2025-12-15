@@ -338,7 +338,7 @@ func (pet *WarlockPet) registerLashOfPainSpell() {
 		BonusCoefficient: 0.907,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			result := spell.CalcDamage(sim, target, 5000, spell.OutcomeMagicHitAndCrit)
+			result := spell.CalcDamage(sim, target, 500, spell.OutcomeMagicHitAndCrit)
 			spell.DealDamage(sim, result)
 		},
 	}))

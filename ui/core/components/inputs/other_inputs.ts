@@ -279,12 +279,12 @@ export const IsbUptime = {
 	float: true,
 	label: 'ISB Uptime',
 	labelTooltip: 'Amount of uptime for ISB',
-	changedEvent: (raid: Raid) => raid.debuffsChangeEmitter,
-	getValue: (raid: Raid) => Math.round(raid.getDebuffs().isbUptime * 100),
-	setValue: (eventID: EventID, raid: Raid, newValue: number) => {
-		const newDebuffs = raid.getDebuffs();
+	changedEvent: (player: Player<any>) => player.getRaid()!.debuffsChangeEmitter,
+	getValue: (player: Player<any>) => Math.round(player.getRaid()!.getDebuffs().isbUptime! * 100),
+	setValue: (eventID: EventID, player: Player<any>, newValue: number) => {
+		const newDebuffs = player.getRaid()!.getDebuffs()!;
 		newDebuffs.isbUptime = newValue / 100;
-		raid.setDebuffs(eventID, newDebuffs);
+		player.getRaid()!.setDebuffs(eventID, newDebuffs);
 	},
 }
 
@@ -295,11 +295,11 @@ export const HemoUptime = {
 	float: true,
 	label: 'Hemorrhage Uptime',
 	labelTooltip: 'Amount of time hemorrhage is on the boss from a subtely rogue',
-	changedEvent: (raid: Raid) => raid.debuffsChangeEmitter,
-	getValue: (raid: Raid) => Math.round(raid.getDebuffs().hemorrhageUptime * 100),
-	setValue: (eventID: EventID, raid: Raid, newValue: number) => {
-		const newDebuffs = raid.getDebuffs();
-		newDebuffs.hemorrhageUptime = newValue / 100;
-		raid.setDebuffs(eventID, newDebuffs);
+	changedEvent: (player: Player<any>) => player.getRaid()!.debuffsChangeEmitter,
+	getValue: (player: Player<any>) => Math.round(player.getRaid()!.getDebuffs().hemorrhageUptime! * 100),
+	setValue: (eventID: EventID, player: Player<any>, newValue: number) => {
+		const newDebuffs = player.getRaid()!.getDebuffs();
+		newDebuffs!.hemorrhageUptime = newValue / 100;
+		player.getRaid()!.setDebuffs(eventID, newDebuffs!);
 	},
 }

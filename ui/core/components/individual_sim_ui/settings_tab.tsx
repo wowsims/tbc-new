@@ -175,13 +175,13 @@ export class SettingsTab extends SimTab {
 
 	private buildOtherSettings() {
 		const settings = this.simUI.individualConfig.otherInputs?.inputs.filter(inputs => !inputs.extraCssClasses?.includes('within-raid-sim-hide') || true);
-		console.log("SETTINGS", settings);
 
 		const swapSlots = this.simUI.individualConfig.itemSwapSlots || [];
 		if (settings.length > 0 || swapSlots.length > 0) {
 			const contentBlock = new ContentBlock(this.column2, 'other-settings', {
 			header: { title: i18n.t('settings_tab.other.title') },
 		});
+
 
 			if (settings.length > 0) {
 				this.configureInputSection(contentBlock.bodyElement, this.simUI.individualConfig.otherInputs);

@@ -10,7 +10,7 @@ var db = dbc.GetDBC()
 
 func Test_WhenInvalidTernaryGiven_ThenProperlyApplyFixes(t *testing.T) {
 	tp, error := ParseTooltip("$<dam> damage every ${$16914d3/10}.2 seconds$?$w1!=0[ and movement slowed by $w1%][].",
-		NewTestDataProvider(CharacterConfig{SpellPower: 1000}),
+		NewTestDataProvider(CharacterConfig{SpellDamage: 1000}),
 		16914,
 	)
 

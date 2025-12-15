@@ -69,6 +69,7 @@ func applyDebuffEffects(target *Unit, targetIdx int, debuffs *proto.Debuffs, rai
 	}
 
 	if debuffs.IsbUptime > 0.0 {
+		println("ISB UPTIME")
 		MakePermanent(ImprovedShadowBolt(target, debuffs.IsbUptime))
 	}
 
@@ -193,11 +194,11 @@ func FaerieFire(target *Unit, improved bool) *Aura {
 		ActionID: ActionID{SpellID: 26993},
 		Duration: time.Second * 40,
 		OnGain: func(aura *Aura, sim *Simulation) {
-			aura.Unit.AddStatsDynamic(sim, stats.Stats{stats.Armor: -6100})
+			aura.Unit.AddStatsDynamic(sim, stats.Stats{stats.Armor: -610})
 			aura.Unit.PseudoStats.ReducedPhysicalHitTakenChance -= 3.0
 		},
 		OnExpire: func(aura *Aura, sim *Simulation) {
-			aura.Unit.AddStatsDynamic(sim, stats.Stats{stats.Armor: 6100})
+			aura.Unit.AddStatsDynamic(sim, stats.Stats{stats.Armor: 610})
 			aura.Unit.PseudoStats.ReducedPhysicalHitTakenChance += 3.0
 		},
 	})
@@ -219,30 +220,14 @@ func GiftOfArthas(target *Unit) *Aura {
 
 func Hemorrhage(target *Unit, uptime float64) *Aura {
 	return target.GetOrRegisterAura(Aura{
-		Label:     "Hemorrhage",
-		ActionID:  ActionID{SpellID: 33876},
-		Duration:  time.Second * 15,
-		MaxStacks: 15,
+		Label:    "Hemorrhage",
+		ActionID: ActionID{SpellID: 33876},
+		Duration: time.Second * 15,
 		OnGain: func(aura *Aura, sim *Simulation) {
-			aura.stacks = 15
+			aura.Unit.PseudoStats.BonusPhysicalDamageTaken += 42 * uptime
 		},
 		OnExpire: func(aura *Aura, sim *Simulation) {
-			aura.stacks = 15
-		},
-		OnSpellHitTaken: func(aura *Aura, sim *Simulation, spell *Spell, result *SpellResult) {
-			if !spell.SpellSchool.Matches(SpellSchoolPhysical) {
-				return
-			}
-
-			if aura.stacks <= 0 {
-				aura.Deactivate(sim)
-				return
-			}
-
-			result.Damage += 42 * uptime
-			spell.DealDamage(sim, result)
-
-			aura.stacks--
+			aura.Unit.PseudoStats.BonusPhysicalDamageTaken -= 42 * uptime
 		},
 	})
 }
@@ -256,16 +241,25 @@ func HuntersMark(target *Unit, improved bool) *Aura {
 		ActionID: ActionID{SpellID: 14325},
 		Duration: NeverExpires,
 		OnGain: func(aura *Aura, sim *Simulation) {
-			if improved {
-				aura.Unit.AddStat(stats.AttackPower, maxBonus)
+			for _, unit := range sim.AllUnits {
+				if unit.Type == PlayerUnit || unit.Type == PetUnit {
+					if improved {
+						unit.PseudoStats.BonusAttackPower += maxBonus
+					}
+					unit.PseudoStats.BonusRangedAttackPower += maxBonus
+				}
 			}
-			aura.Unit.AddStat(stats.RangedAttackPower, maxBonus)
+
 		},
 		OnExpire: func(aura *Aura, sim *Simulation) {
-			if improved {
-				aura.Unit.AddStat(stats.AttackPower, -maxBonus)
+			for _, unit := range sim.AllUnits {
+				if unit.Type == PlayerUnit || unit.Type == PetUnit {
+					if improved {
+						unit.PseudoStats.BonusAttackPower -= maxBonus
+					}
+					unit.PseudoStats.BonusRangedAttackPower -= maxBonus
+				}
 			}
-			aura.Unit.AddStat(stats.RangedAttackPower, -maxBonus)
 		},
 	})
 }
@@ -290,18 +284,40 @@ func ImprovedSealOfTheCrusader(target *Unit) *Aura {
 }
 
 func ImprovedShadowBolt(target *Unit, uptime float64) *Aura {
-	multiplier := 1.2 * uptime
 
+	multiplier := 0.20 * uptime
 	return target.GetOrRegisterAura(Aura{
 		Label:     "ImprovedShadowBolt",
 		ActionID:  ActionID{SpellID: 17803},
 		Duration:  time.Second * 12,
 		MaxStacks: 4,
+
 		OnGain: func(aura *Aura, sim *Simulation) {
-			aura.Unit.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexShadow] *= multiplier
+			for _, unit := range sim.AllUnits {
+				if unit.Type == PlayerUnit || unit.Type == PetUnit {
+					unit.AddStaticMod(SpellModConfig{
+						Kind:              SpellMod_DamageDone_Pct,
+						FloatValue:        (0.20 * uptime),
+						School:            SpellSchoolShadow,
+						ProcMask:          ProcMaskSpellDamage,
+						ShouldApplyToPets: true,
+					})
+				}
+			}
 		},
 		OnExpire: func(aura *Aura, sim *Simulation) {
-			aura.Unit.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexShadow] /= multiplier
+			inverse := (1.0 / (1.0 + multiplier)) - 1.0
+			for _, unit := range sim.AllUnits {
+				if unit.Type == PlayerUnit {
+					unit.AddStaticMod(SpellModConfig{
+						Kind:              SpellMod_DamageDone_Pct,
+						FloatValue:        inverse,
+						School:            SpellSchoolShadow,
+						ProcMask:          ProcMaskSpellDamage,
+						ShouldApplyToPets: true,
+					})
+				}
+			}
 		},
 	})
 }
@@ -342,22 +358,29 @@ func JudgementOfWisdom(target *Unit) *Aura {
 	actionId := ActionID{SpellID: 27167}
 
 	return target.GetOrRegisterAura(Aura{
-		Label:    "Judgement of Light",
+		Label:    "Judgement of Wisdom",
 		ActionID: actionId,
 		Duration: time.Second * 20,
 		OnSpellHitTaken: func(aura *Aura, sim *Simulation, spell *Spell, result *SpellResult) {
-			var manaMetrics *ResourceMetrics
-			manaMetrics = aura.Unit.NewManaMetrics(actionId)
-			if !spell.ProcMask.Matches(ProcMaskMelee) || !result.Landed() {
+			if spell.ProcMask.Matches(ProcMaskEmpty) {
+				return // Phantom spells (Romulo's, Lightning Capacitor, etc) don't proc JoW.
+			}
+
+			// Melee claim that wisdom can proc on misses.
+			if !spell.ProcMask.Matches(ProcMaskMeleeOrRanged) && !result.Landed() {
 				return
+			}
+
+			unit := spell.Unit
+			if unit.HasManaBar() {
+				if unit.JowManaMetrics == nil {
+					unit.JowManaMetrics = unit.NewManaMetrics(actionId)
+				}
+				unit.AddMana(sim, 121.0, unit.JowManaMetrics)
 			}
 
 			if spell.ActionID.SpellID == 35395 {
 				aura.Refresh(sim)
-			}
-
-			if rand.Float64() < 50.0 {
-				aura.Unit.AddMana(sim, 121.0, manaMetrics)
 			}
 		},
 	})
@@ -413,7 +436,7 @@ func Stormstrike(target *Unit, uptime float64) *Aura {
 }
 
 func SunderArmor(target *Unit) *Aura {
-	return statsDebuff(target, "Sunder Amor", 25225, stats.Stats{stats.Armor: 2600})
+	return statsDebuff(target, "Sunder Amor", 25225, stats.Stats{stats.Armor: -2600})
 }
 
 func WintersChill(target *Unit) *Aura {
@@ -422,11 +445,26 @@ func WintersChill(target *Unit) *Aura {
 		ActionID: ActionID{SpellID: 28595},
 		Duration: time.Second * 15,
 		OnGain: func(aura *Aura, sim *Simulation) {
-			aura.Unit.AddStaticMod(SpellModConfig{
-				Kind:       SpellMod_BonusCrit_Percent,
-				FloatValue: 10.0,
-				School:     SpellSchoolFire,
-			})
+			for _, unit := range sim.AllUnits {
+				if unit.Type == PlayerUnit || unit.Type == PetUnit {
+					unit.AddStaticMod(SpellModConfig{
+						Kind:       SpellMod_BonusCrit_Percent,
+						FloatValue: 10.0,
+						School:     SpellSchoolFrost,
+					})
+				}
+			}
+		},
+		OnExpire: func(aura *Aura, sim *Simulation) {
+			for _, unit := range sim.AllUnits {
+				if unit.Type == PlayerUnit || unit.Type == PetUnit {
+					unit.AddStaticMod(SpellModConfig{
+						Kind:       SpellMod_BonusCrit_Percent,
+						FloatValue: -10.0,
+						School:     SpellSchoolFrost,
+					})
+				}
+			}
 		},
 	})
 }

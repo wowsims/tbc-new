@@ -464,6 +464,9 @@ type PseudoStats struct {
 	PeriodicHealingDealtMultiplier float64            // All periodic healing (on top of HealingDealtMultiplier)
 	CritDamageMultiplier           float64            // All multiplicative crit damage
 
+	BonusRangedAttackPower float64 // Hunter's mark
+	BonusAttackPower       float64 // Also Hunter's Mark
+
 	// Important when unit is attacker or target
 	BlockDamageReduction float64
 
@@ -488,10 +491,9 @@ type PseudoStats struct {
 
 	ReducedCritTakenChance float64 // Reduces chance to be crit.
 
-	BonusHealingTaken           float64 // Talisman of Troll Divinity
-	BonusRangedAttackPowerTaken float64 // Hunters mark
-	BonusSpellCritPercentTaken  float64 // Imp Shadow Bolt / Imp Scorch / Winter's Chill debuff
-	BonusPhysicalDamageTaken    float64 // Hemo, Gift of Arthas, etc
+	BonusHealingTaken          float64 // Talisman of Troll Divinity
+	BonusSpellCritPercentTaken float64 // Imp Shadow Bolt / Imp Scorch / Winter's Chill debuff
+	BonusPhysicalDamageTaken   float64 // Hemo, Gift of Arthas, etc
 
 	DamageTakenMultiplier       float64            // All damage
 	SchoolDamageTakenMultiplier [SchoolLen]float64 // For specific spell schools (arcane, fire, shadow, etc.)
