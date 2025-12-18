@@ -113,8 +113,8 @@ func (druid *Druid) ApplyLeaderOfThePack() {
 }
 
 func (druid *Druid) ApplyNurturingInstinct() {
-	druid.GetSpellPowerValue = func(spell *core.Spell) float64 {
-		sp := druid.GetStat(stats.SpellPower) + spell.BonusSpellPower
+	druid.GetSpellDamageValue = func(spell *core.Spell) float64 {
+		sp := druid.GetStat(stats.SpellDamage) + spell.BonusSpellDamage
 
 		if spell.ProcMask.Matches(core.ProcMaskSpellHealing) || (spell.SpellSchool == core.SpellSchoolNature) {
 			sp += druid.GetStat(stats.Agility)

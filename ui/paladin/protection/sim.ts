@@ -19,7 +19,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 		const playerStats = player.getCurrentStats();
 
 		const statMod = (current: UnitStats, previous?: UnitStats) => {
-			return new Stats().withStat(Stat.StatSpellPower, Stats.fromProto(current).subtract(Stats.fromProto(previous)).getStat(Stat.StatAttackPower) * 0.5);
+			return new Stats().withStat(Stat.StatSpellDamage, Stats.fromProto(current).subtract(Stats.fromProto(previous)).getStat(Stat.StatAttackPower) * 0.5);
 		};
 
 		const base = statMod(playerStats.baseStats!);
@@ -27,7 +27,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 		const talents = statMod(playerStats.talentsStats!, playerStats.gearStats);
 		const buffs = statMod(playerStats.buffsStats!, playerStats.talentsStats);
 		const consumes = statMod(playerStats.consumesStats!, playerStats.buffsStats);
-		const final = new Stats().withStat(Stat.StatSpellPower, Stats.fromProto(playerStats.finalStats).getStat(Stat.StatAttackPower) * 0.5);
+		const final = new Stats().withStat(Stat.StatSpellDamage, Stats.fromProto(playerStats.finalStats).getStat(Stat.StatAttackPower) * 0.5);
 
 		return {
 			base: base,
@@ -36,7 +36,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 			buffs: buffs,
 			consumes: consumes,
 			final: final,
-			stats: [Stat.StatSpellPower],
+			stats: [Stat.StatSpellDamage],
 		};
 	},
 

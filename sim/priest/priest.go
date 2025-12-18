@@ -82,7 +82,7 @@ func (priest *Priest) AddPartyBuffs(_ *proto.PartyBuffs) {
 
 func (priest *Priest) Initialize() {
 	if priest.SelfBuffs.UseInnerFire {
-		priest.MultiplyStat(stats.SpellPower, 1.1)
+		priest.MultiplyStat(stats.SpellDamage, 1.1)
 		priest.ApplyEquipScaling(stats.Armor, 1.1)
 		core.MakePermanent(priest.RegisterAura(core.Aura{
 			Label:    "Inner Fire",

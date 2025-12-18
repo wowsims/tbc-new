@@ -35,11 +35,11 @@ func (warlock *Warlock) RegisterCorruption(onApplyCallback WarlockSpellCastedCal
 			AffectedByCastSpeed: true,
 			BonusCoefficient:    corruptionCoeff,
 
-			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, isRollover bool) {
-				dot.Snapshot(target, warlock.CalcScalingSpellDmg(corruptionScale))
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
+				dot.Snapshot(target, 900)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				resultSlice[0] = dot.CalcSnapshotDamage(sim, target, dot.OutcomeSnapshotCrit)
+				resultSlice[0] = dot.CalcSnapshotDamage(sim, target, dot.OutcomeTick)
 
 				if warlock.SiphonLife != nil {
 					warlock.SiphonLife.Cast(sim, &warlock.Unit)
@@ -68,11 +68,11 @@ func (warlock *Warlock) RegisterCorruption(onApplyCallback WarlockSpellCastedCal
 		ExpectedTickDamage: func(sim *core.Simulation, target *core.Unit, spell *core.Spell, useSnapshot bool) *core.SpellResult {
 			dot := spell.Dot(target)
 			if useSnapshot {
-				result := dot.CalcSnapshotDamage(sim, target, dot.OutcomeExpectedSnapshotCrit)
+				result := dot.CalcSnapshotDamage(sim, target, dot.OutcomeTick)
 				result.Damage /= dot.TickPeriod().Seconds()
 				return result
 			} else {
-				result := spell.CalcPeriodicDamage(sim, target, warlock.CalcScalingSpellDmg(corruptionScale), spell.OutcomeExpectedMagicCrit)
+				result := spell.CalcPeriodicDamage(sim, target, 900, spell.OutcomeExpectedMagicCrit)
 				result.Damage /= dot.CalcTickPeriod().Round(time.Millisecond).Seconds()
 				return result
 			}

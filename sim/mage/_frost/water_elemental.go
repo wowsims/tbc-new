@@ -47,7 +47,7 @@ func (frost *FrostMage) NewWaterElemental() *WaterElemental {
 		// Water elemental usually has about half the HP of the caster
 		return stats.Stats{
 			stats.Stamina:          ownerStats[stats.Stamina] * 0.5,
-			stats.SpellPower:       ownerStats[stats.SpellPower],
+			stats.SpellDamage:      ownerStats[stats.SpellDamage],
 			stats.HasteRating:      ownerStats[stats.HasteRating],
 			stats.SpellCritPercent: ownerStats[stats.SpellCritPercent],
 			// this (crit) needs to be tested more thoroughly when pet hit is not bugged

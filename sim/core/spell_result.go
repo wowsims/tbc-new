@@ -183,14 +183,14 @@ func (spell *Spell) BonusDamage() float64 {
 	if spell.SpellSchool.Matches(SpellSchoolPhysical) {
 		bonusDamage = spell.Unit.PseudoStats.BonusDamage
 	} else {
-		bonusDamage = spell.SpellPower()
+		bonusDamage = spell.SpellDamage()
 	}
 
 	return bonusDamage
 }
 
-func (spell *Spell) SpellPower() float64 {
-	return spell.Unit.GetSpellPowerValue(spell)
+func (spell *Spell) SpellDamage() float64 {
+	return spell.Unit.GetSpellDamageValue(spell)
 }
 
 func (spell *Spell) SpellHitChance(target *Unit) float64 {
@@ -217,7 +217,7 @@ func (spell *Spell) MagicCritCheck(sim *Simulation, target *Unit) bool {
 }
 
 func (spell *Spell) HealingPower(target *Unit) float64 {
-	return spell.SpellPower() + target.PseudoStats.BonusHealingTaken
+	return spell.SpellDamage() + target.PseudoStats.BonusHealingTaken
 }
 func (spell *Spell) HealingCritChance() float64 {
 	return (spell.Unit.GetStat(stats.SpellCritPercent) + spell.BonusCritPercent) / 100
@@ -312,7 +312,7 @@ func (spell *Spell) calcDamageInternal(sim *Simulation, target *Unit, baseDamage
 		spell.Unit.Log(
 			sim,
 			"%s %s [DEBUG] MAP: %0.01f, RAP: %0.01f, SP: %0.01f, BaseDamage:%0.01f, AfterAttackerMods:%0.01f, AfterResistances:%0.01f, AfterTargetMods:%0.01f, AfterOutcome:%0.01f, AfterPostOutcome:%0.01f",
-			target.LogLabel(), spell.ActionID, spell.Unit.GetStat(stats.AttackPower), spell.Unit.GetStat(stats.RangedAttackPower), spell.SpellPower(), baseDamage, afterAttackMods, afterResistances, afterTargetMods, afterOutcome, afterPostOutcome)
+			target.LogLabel(), spell.ActionID, spell.Unit.GetStat(stats.AttackPower), spell.Unit.GetStat(stats.RangedAttackPower), spell.SpellDamage(), baseDamage, afterAttackMods, afterResistances, afterTargetMods, afterOutcome, afterPostOutcome)
 	}
 
 	result.Threat = spell.ThreatFromDamage(sim, result.Outcome, result.Damage, attackTable)
@@ -525,7 +525,6 @@ func (dot *Dot) Snapshot(target *Unit, baseDamage float64) {
 		dot.SnapshotBaseDamage += dot.BonusCoefficient * dot.Spell.BonusDamage()
 	}
 	attackTable := dot.Spell.Unit.AttackTables[target.UnitIndex]
-	dot.SnapshotCritChance = dot.Spell.SpellCritChance(target)
 	dot.SnapshotAttackerMultiplier = dot.Spell.AttackerDamageMultiplier(attackTable, true) *
 		dot.PeriodicDamageMultiplier
 }
@@ -534,7 +533,6 @@ func (dot *Dot) SnapshotPhysical(target *Unit, baseDamage float64) {
 	dot.SnapshotBaseDamage = baseDamage
 	// At this time, not aware of any physical-scaling DoTs that need BonusCoefficient
 	attackTable := dot.Spell.Unit.AttackTables[target.UnitIndex]
-	dot.SnapshotCritChance = dot.Spell.PhysicalCritChance(attackTable)
 	dot.SnapshotAttackerMultiplier = dot.Spell.AttackerDamageMultiplier(attackTable, true) *
 		dot.PeriodicDamageMultiplier
 }
@@ -592,7 +590,6 @@ func (dot *Dot) SnapshotHeal(target *Unit, baseHealing float64) {
 	if dot.BonusCoefficient > 0 {
 		dot.SnapshotBaseDamage += dot.BonusCoefficient * dot.Spell.HealingPower(target)
 	}
-	dot.SnapshotCritChance = dot.Spell.SpellCritChance(target)
 	dot.SnapshotAttackerMultiplier = dot.CasterPeriodicHealingMultiplier()
 }
 

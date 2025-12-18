@@ -37,11 +37,11 @@ func (affliction *AfflictionWarlock) registerMaleficGrasp() {
 			HasteReducesDuration: true,
 			BonusCoefficient:     maleficGraspCoeff,
 
-			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, _ bool) {
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, affliction.CalcScalingSpellDmg(maleficGraspScale))
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				result := dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeSnapshotCrit)
+				result := dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 				if !result.Landed() {
 					return
 				}
@@ -61,7 +61,7 @@ func (affliction *AfflictionWarlock) registerMaleficGrasp() {
 		ExpectedTickDamage: func(sim *core.Simulation, target *core.Unit, spell *core.Spell, useSnapshot bool) *core.SpellResult {
 			dot := spell.Dot(target)
 			if useSnapshot {
-				result := dot.CalcSnapshotDamage(sim, target, dot.OutcomeExpectedSnapshotCrit)
+				result := dot.CalcSnapshotDamage(sim, target, dot.OutcomeTick)
 				result.Damage /= dot.TickPeriod().Seconds()
 				return result
 			} else {

@@ -21,7 +21,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecEnhancementShaman, {
 		const playerStats = player.getCurrentStats();
 
 		const statMod = (current: UnitStats, previous?: UnitStats) => {
-			return new Stats().withStat(Stat.StatSpellPower, Stats.fromProto(current).subtract(Stats.fromProto(previous)).getStat(Stat.StatAttackPower) * 0.65);
+			return new Stats().withStat(Stat.StatSpellDamage, Stats.fromProto(current).subtract(Stats.fromProto(previous)).getStat(Stat.StatAttackPower) * 0.65);
 		};
 
 		const base = statMod(playerStats.baseStats!);
@@ -29,7 +29,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecEnhancementShaman, {
 		const talents = statMod(playerStats.talentsStats!, playerStats.gearStats);
 		const buffs = statMod(playerStats.buffsStats!, playerStats.talentsStats);
 		const consumes = statMod(playerStats.consumesStats!, playerStats.buffsStats);
-		const final = new Stats().withStat(Stat.StatSpellPower, Stats.fromProto(playerStats.finalStats).getStat(Stat.StatAttackPower) * 0.65);
+		const final = new Stats().withStat(Stat.StatSpellDamage, Stats.fromProto(playerStats.finalStats).getStat(Stat.StatAttackPower) * 0.65);
 
 		return {
 			base: base,
@@ -38,7 +38,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecEnhancementShaman, {
 			buffs: buffs,
 			consumes: consumes,
 			final: final,
-			stats: [Stat.StatSpellPower],
+			stats: [Stat.StatSpellDamage],
 		};
 	},
 
@@ -65,7 +65,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecEnhancementShaman, {
 			Stat.StatAgility,
 			Stat.StatIntellect,
 			Stat.StatAttackPower,
-			Stat.StatSpellPower,
+			Stat.StatSpellDamage,
 		],
 		[
 			PseudoStat.PseudoStatMeleeHitPercent,
@@ -106,7 +106,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecEnhancementShaman, {
 	],
 	// Buff and Debuff inputs to include/exclude, overriding the EP-based defaults.
 	includeBuffDebuffInputs: [],
-	excludeBuffDebuffInputs: [BuffDebuffInputs.SpellPowerBuff],
+	excludeBuffDebuffInputs: [BuffDebuffInputs.SpellDamageBuff],
 	// Inputs to include in the 'Other' section on the settings tab.
 	otherInputs: {
 		inputs: [EnhancementInputs.SyncTypeInput, OtherInputs.InputDelay, OtherInputs.TankAssignment, OtherInputs.InFrontOfTarget],

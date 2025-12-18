@@ -46,7 +46,7 @@ export const AttackSpeedBuff = InputHelpers.makeMultiIconInput(
 	i18n.t('settings_tab.raid_buffs.attack_speed'),
 );
 
-export const SpellPowerBuff = InputHelpers.makeMultiIconInput(
+export const SpellDamageBuff = InputHelpers.makeMultiIconInput(
 	[
 		// makeBooleanRaidBuffInput({ actionId: ActionId.fromSpellId(1459), fieldName: 'arcaneBrilliance' }),
 		// makeBooleanRaidBuffInput({ actionId: ActionId.fromSpellId(126309), fieldName: 'stillWater' }),
@@ -216,14 +216,9 @@ export const RAID_BUFFS_CONFIG = [
 		stats: [Stat.StatAttackPower, Stat.StatRangedAttackPower],
 	},
 	{
-		config: SpellPowerBuff,
+		config: SpellDamageBuff,
 		picker: MultiIconPicker,
-		stats: [Stat.StatSpellPower],
-	},
-	{
-		config: SpellHasteBuff,
-		picker: MultiIconPicker,
-		stats: [Stat.StatSpellPower],
+		stats: [Stat.StatSpellDamage],
 	},
 	{
 		config: StaminaBuff,

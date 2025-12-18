@@ -74,14 +74,14 @@ func (warrior *Warrior) registerDeepWounds() {
 			NumberOfTicks: 5,
 			TickLength:    time.Second * 3,
 
-			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, isRollover bool) {
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				baseDamage := warrior.CalcScalingSpellDmg(deepWoundsCoeff)
 				baseDamage += deepWoundsBonusCoeff * dot.Spell.MeleeAttackPower()
 				dot.SnapshotPhysical(target, baseDamage)
 			},
 
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeSnapshotCrit)
+				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 			},
 		},
 
@@ -93,7 +93,7 @@ func (warrior *Warrior) registerDeepWounds() {
 		ExpectedTickDamage: func(sim *core.Simulation, target *core.Unit, spell *core.Spell, useSnapshot bool) *core.SpellResult {
 			if useSnapshot {
 				dot := spell.Dot(target)
-				return dot.CalcSnapshotDamage(sim, target, dot.OutcomeExpectedSnapshotCrit)
+				return dot.CalcSnapshotDamage(sim, target, dot.OutcomeTick)
 			} else {
 				baseDamage := warrior.CalcScalingSpellDmg(deepWoundsCoeff)
 				baseDamage += deepWoundsBonusCoeff * spell.MeleeAttackPower()

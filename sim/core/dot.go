@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-type OnSnapshot func(sim *Simulation, target *Unit, dot *Dot, isRollover bool)
+type OnSnapshot func(sim *Simulation, target *Unit, dot *Dot)
 type OnTick func(sim *Simulation, target *Unit, dot *Dot)
 
 type DotConfig struct {
@@ -45,7 +45,6 @@ type Dot struct {
 	BaseTickLength time.Duration // time between each tick
 
 	SnapshotBaseDamage         float64
-	SnapshotCritChance         float64
 	SnapshotAttackerMultiplier float64
 
 	BaseTickCount          int32 // base tick count without haste applied
@@ -69,9 +68,9 @@ type Dot struct {
 // to force a new snapshot to be taken.
 //
 // doRollover will apply previously snapshotted crit/%dmg instead of recalculating.
-func (dot *Dot) TakeSnapshot(sim *Simulation, doRollover bool) {
+func (dot *Dot) TakeSnapshot(sim *Simulation) {
 	if dot.onSnapshot != nil {
-		dot.onSnapshot(sim, dot.Unit, dot, doRollover)
+		dot.onSnapshot(sim, dot.Unit, dot)
 	}
 }
 
@@ -83,20 +82,7 @@ func (dot *Dot) Apply(sim *Simulation) {
 		return
 	}
 
-	dot.TakeSnapshot(sim, false)
-	dot.recomputeAuraDuration(sim)
-	dot.Activate(sim)
-}
-
-// Rolls over and activates the Dot
-// If the Dot is already active it's duration will be refreshed and the last tick from the previous application will be
-// transfered to the new one
-func (dot *Dot) ApplyRollover(sim *Simulation) {
-	if dot.Spell.Flags&SpellFlagSupressDoTApply > 0 {
-		return
-	}
-
-	dot.TakeSnapshot(sim, true)
+	dot.TakeSnapshot(sim)
 	dot.recomputeAuraDuration(sim)
 	dot.Activate(sim)
 }
@@ -208,7 +194,7 @@ func (dot *Dot) AddTick() {
 // Copy's the original DoT's period and duration to the current DoT.
 // This is only currently used for Mage's Impact DoT spreading and Enhancement's ImprovedLava Lash.
 func (dot *Dot) CopyDotAndApply(sim *Simulation, originaldot *Dot) {
-	dot.TakeSnapshot(sim, false)
+	dot.TakeSnapshot(sim)
 	dot.SnapshotBaseDamage = originaldot.SnapshotBaseDamage
 
 	dot.tickPeriod = originaldot.tickPeriod
@@ -253,7 +239,7 @@ func (dot *Dot) durationExtendInternal(sim *Simulation, extendBy time.Duration, 
 		panic("Can't extend a non-active dot")
 	}
 	if useSnapshot {
-		dot.TakeSnapshot(sim, false)
+		dot.TakeSnapshot(sim)
 	}
 
 	previousTick := dot.tickAction.NextActionAt - dot.tickPeriod
@@ -395,7 +381,6 @@ func newDot(config Dot) *Dot {
 
 		dot.SnapshotAttackerMultiplier = 0
 		dot.SnapshotBaseDamage = 0
-		dot.SnapshotCritChance = 0
 	})
 
 	return dot
@@ -465,7 +450,6 @@ type DotState struct {
 
 	SnapshotBaseDamage         float64
 	SnapshotAttackerMultiplier float64
-	SnapshotCritChance         float64
 	TicksRemaining             int32
 	ExtraTicks                 int32
 	TickPeriod                 time.Duration
@@ -478,7 +462,6 @@ func (dot *Dot) SaveState(sim *Simulation) DotState {
 		AuraState:                  aura,
 		SnapshotBaseDamage:         dot.SnapshotBaseDamage,
 		SnapshotAttackerMultiplier: dot.SnapshotAttackerMultiplier,
-		SnapshotCritChance:         dot.SnapshotCritChance,
 		TicksRemaining:             dot.remainingTicks,
 		ExtraTicks:                 dot.tmpExtraTicks,
 		TickPeriod:                 dot.tickPeriod,
@@ -492,7 +475,6 @@ func (dot *Dot) RestoreState(state DotState, sim *Simulation) {
 	dot.tmpExtraTicks = state.ExtraTicks
 	dot.SnapshotBaseDamage = state.SnapshotBaseDamage
 	dot.SnapshotAttackerMultiplier = state.SnapshotAttackerMultiplier
-	dot.SnapshotCritChance = state.SnapshotCritChance
 	dot.Aura.RestoreState(state.AuraState, sim)
 
 	// recreate with new period, resetting the next tick.

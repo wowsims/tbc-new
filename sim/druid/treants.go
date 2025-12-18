@@ -58,7 +58,7 @@ func (druid *Druid) NewDefaultTreant(config TreantConfig) *DefaultTreantImpl {
 		return treant
 	}
 
-	baseWeaponDamage := config.WeaponDamageCoefficient * druid.ClassSpellScaling
+	baseWeaponDamage := config.WeaponDamageCoefficient
 
 	treant.EnableAutoAttacks(treant, core.AutoAttackOptions{
 		MainHand: core.Weapon{

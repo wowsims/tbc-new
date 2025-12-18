@@ -77,7 +77,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralCatDruid, {
 	// Inputs to include in the 'Rotation' section on the settings tab.
 	rotationInputs: FeralInputs.FeralDruidRotationConfig,
 	// Buff and Debuff inputs to include/exclude, overriding the EP-based defaults.
-	includeBuffDebuffInputs: [BuffDebuffInputs.SpellPowerBuff, BuffDebuffInputs.SpellDamageDebuff, BuffDebuffInputs.SpellHasteBuff],
+	includeBuffDebuffInputs: [BuffDebuffInputs.SpellDamageBuff, BuffDebuffInputs.SpellDamageDebuff, BuffDebuffInputs.SpellHasteBuff],
 	excludeBuffDebuffInputs: [],
 	// Inputs to include in the 'Other' section on the settings tab.
 	otherInputs: {

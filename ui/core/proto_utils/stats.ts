@@ -379,7 +379,13 @@ export const displayStatOrder: Array<UnitStat> = [
 	UnitStat.fromStat(Stat.StatAgility),
 	UnitStat.fromStat(Stat.StatIntellect),
 	UnitStat.fromStat(Stat.StatSpirit),
-	UnitStat.fromStat(Stat.StatSpellPower),
+	UnitStat.fromStat(Stat.StatSpellDamage),
+	UnitStat.fromStat(Stat.StatFireDamage),
+	UnitStat.fromStat(Stat.StatFireDamage),
+	UnitStat.fromStat(Stat.StatFrostDamage),
+	UnitStat.fromStat(Stat.StatHolyDamage),
+	UnitStat.fromStat(Stat.StatNatureDamage),
+	UnitStat.fromStat(Stat.StatShadowDamage),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatSpellHitPercent),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatSpellCritPercent),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatSpellHastePercent),
@@ -734,5 +740,5 @@ export const DEFAULT_GEM_STATS = [
 	Stat.StatSpellCritRating,
 	Stat.StatSpellHasteRating,
 ];
-export const DEFAULT_CASTER_GEM_STATS = [...DEFAULT_GEM_STATS, Stat.StatIntellect, Stat.StatSpellPower];
+export const DEFAULT_CASTER_GEM_STATS = [...DEFAULT_GEM_STATS, Stat.StatIntellect, Stat.StatSpellDamage];
 export const DEFAULT_HYBRID_CASTER_GEM_STATS = [...DEFAULT_CASTER_GEM_STATS, Stat.StatSpirit];

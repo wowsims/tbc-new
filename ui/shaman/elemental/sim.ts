@@ -20,7 +20,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecElementalShaman, {
 	warnings: [],
 
 	// All stats for which EP should be calculated.
-	epStats: [Stat.StatIntellect, Stat.StatSpirit, Stat.StatSpellPower],
+	epStats: [Stat.StatIntellect, Stat.StatSpirit, Stat.StatSpellDamage],
 	// Reference stat against which to calculate EP.
 	epReferenceStat: Stat.StatIntellect,
 	// Which stats to display in the Character Stats section, at the bottom of the left-hand sidebar.
@@ -31,7 +31,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecElementalShaman, {
 			Stat.StatStamina,
 			Stat.StatIntellect,
 			Stat.StatSpirit,
-			Stat.StatSpellPower,
+			Stat.StatSpellDamage,
 		],
 		[PseudoStat.PseudoStatSpellHitPercent, PseudoStat.PseudoStatSpellCritPercent, PseudoStat.PseudoStatSpellHastePercent],
 	),

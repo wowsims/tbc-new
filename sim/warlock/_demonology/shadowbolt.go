@@ -37,7 +37,7 @@ func (demonology *DemonologyWarlock) registerShadowBolt() {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			result := spell.CalcDamage(sim, target, demonology.CalcScalingSpellDmg(shadowBoltScale), spell.OutcomeMagicHitAndCrit)
+			result := spell.CalcDamage(sim, target, demonology.CalcAndRollDamageRange(shadowBoltScale), spell.OutcomeMagicHitAndCrit)
 			spell.WaitTravelTime(sim, func(sim *core.Simulation) {
 				spell.DealDamage(sim, result)
 			})

@@ -91,11 +91,11 @@ func (shadow *ShadowPriest) registerSolaceAndInstanity() {
 			AffectedByCastSpeed:  true,
 			HasteReducesDuration: true,
 			BonusCoefficient:     MfCoeff,
-			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, isRollover bool) {
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, shadow.CalcScalingSpellDmg(MfScale))
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeSnapshotCrit)
+				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 			},
 		},
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {

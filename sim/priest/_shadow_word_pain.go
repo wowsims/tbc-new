@@ -42,12 +42,12 @@ func (priest *Priest) registerShadowWordPainSpell() {
 
 			BonusCoefficient: 0.161,
 
-			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, isRollover bool) {
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, 194.709)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				if priest.Talents.Shadowform {
-					dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeSnapshotCrit)
+					dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 				} else {
 					dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 				}

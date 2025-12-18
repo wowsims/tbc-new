@@ -57,10 +57,9 @@ func RegisterHunter() {
 
 func NewHunter(character *core.Character, options *proto.Player, hunterOptions *proto.HunterOptions) *Hunter {
 	hunter := &Hunter{
-		Character:         *character,
-		Talents:           &proto.HunterTalents{},
-		Options:           hunterOptions,
-		ClassSpellScaling: core.GetClassSpellScalingCoefficient(proto.Class_ClassHunter),
+		Character: *character,
+		Talents:   &proto.HunterTalents{},
+		Options:   hunterOptions,
 	}
 
 	core.FillTalentsProto(hunter.Talents.ProtoReflect(), options.TalentsString, TalentTreeSizes)

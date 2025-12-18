@@ -36,7 +36,7 @@ func (rogue *Rogue) registerCrimsonTempest() {
 			NumberOfTicks: 6,
 			TickLength:    time.Second * 2,
 
-			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, isRollover bool) {
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.SnapshotPhysical(target, lastCTDamage[target.UnitIndex]/6)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {

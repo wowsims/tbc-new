@@ -47,7 +47,6 @@ func NewShaman(character *core.Character, talents string, selfBuffs SelfBuffs, t
 		FeleAutocast:        feleAutocastOptions,
 		SelfBuffs:           selfBuffs,
 		ThunderstormInRange: thunderstormRange,
-		ClassSpellScaling:   core.GetClassSpellScalingCoefficient(proto.Class_ClassShaman),
 	}
 	// shaman.waterShieldManaMetrics = shaman.NewManaMetrics(core.ActionID{SpellID: 57960})
 
@@ -56,7 +55,7 @@ func NewShaman(character *core.Character, talents string, selfBuffs SelfBuffs, t
 	// Add Shaman stat dependencies
 	shaman.AddStatDependency(stats.BonusArmor, stats.Armor, 1)
 	shaman.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiMaxLevel[shaman.Class])
-	shaman.EnableManaBarWithModifier(1.0)
+	shaman.EnableManaBarWithModifier()
 
 	shaman.AddStatDependency(stats.Agility, stats.AttackPower, 2.0)
 	shaman.AddStat(stats.AttackPower, -20)

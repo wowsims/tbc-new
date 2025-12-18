@@ -73,7 +73,7 @@ func (mage *Mage) registerFlamestrikeSpell() {
 			},
 			OnTick: func(sim *core.Simulation, _ *core.Unit, dot *core.Dot) {
 				for _, aoeTarget := range sim.Encounter.ActiveTargetUnits {
-					dot.CalcAndDealPeriodicSnapshotDamage(sim, aoeTarget, dot.OutcomeSnapshotCrit)
+					dot.CalcAndDealPeriodicSnapshotDamage(sim, aoeTarget, dot.OutcomeTick)
 				}
 			},
 		},

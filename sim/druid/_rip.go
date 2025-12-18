@@ -52,7 +52,7 @@ func (druid *Druid) registerRipSpell() {
 			NumberOfTicks: druid.RipBaseNumTicks,
 			TickLength:    time.Second * 2,
 
-			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, isRollover bool) {
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				if isRollover {
 					return
 				}
@@ -65,7 +65,7 @@ func (druid *Druid) registerRipSpell() {
 				druid.UpdateBleedPower(druid.Rip, sim, target, true, true)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeSnapshotCrit)
+				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 			},
 		},
 
@@ -85,7 +85,7 @@ func (druid *Druid) registerRipSpell() {
 		ExpectedTickDamage: func(sim *core.Simulation, target *core.Unit, spell *core.Spell, useSnapshot bool) *core.SpellResult {
 			if useSnapshot {
 				dot := spell.Dot(target)
-				return dot.CalcSnapshotDamage(sim, target, dot.OutcomeExpectedSnapshotCrit)
+				return dot.CalcSnapshotDamage(sim, target, dot.OutcomeTick)
 			} else {
 				cp := 5.0 // Hard-code this so that snapshotting calculations can be performed at any CP value.
 				ap := spell.MeleeAttackPower()

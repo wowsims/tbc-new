@@ -103,7 +103,13 @@ export class CharacterStats extends Component {
 			[
 				StatGroup.Spell,
 				[
-					UnitStat.fromStat(Stat.StatSpellPower),
+					UnitStat.fromStat(Stat.StatSpellDamage),
+					UnitStat.fromStat(Stat.StatFireDamage),
+					UnitStat.fromStat(Stat.StatFireDamage),
+					UnitStat.fromStat(Stat.StatFrostDamage),
+					UnitStat.fromStat(Stat.StatHolyDamage),
+					UnitStat.fromStat(Stat.StatNatureDamage),
+					UnitStat.fromStat(Stat.StatShadowDamage),
 					UnitStat.fromPseudoStat(PseudoStat.PseudoStatSpellHastePercent),
 					UnitStat.fromPseudoStat(PseudoStat.PseudoStatSpellHitPercent),
 					UnitStat.fromPseudoStat(PseudoStat.PseudoStatSpellCritPercent),
@@ -115,7 +121,7 @@ export class CharacterStats extends Component {
 			const hitIndex = statGroups.get(StatGroup.Physical)!.findIndex(stat => stat.equalsPseudoStat(PseudoStat.PseudoStatMeleeHitPercent));
 			statGroups.get(StatGroup.Physical)!.splice(hitIndex+1, 0, UnitStat.fromStat(Stat.StatExpertiseRating));
 			// statGroups.get(StatGroup.Defense)!.push(UnitStat.fromStat(Stat.StatDefenseRating));
-		} else if ([Stat.StatIntellect, Stat.StatSpellPower].includes(simUI.individualConfig.epReferenceStat)) {
+		} else if ([Stat.StatIntellect, Stat.StatSpellDamage].includes(simUI.individualConfig.epReferenceStat)) {
 			const hitIndex = statGroups.get(StatGroup.Spell)!.findIndex(stat => stat.equalsPseudoStat(PseudoStat.PseudoStatSpellHitPercent));
 			// statGroups.get(StatGroup.Spell)!.splice(hitIndex+1, 0, UnitStat.fromStat(Stat.StatExpertiseRating));
 		} else {

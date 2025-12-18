@@ -34,13 +34,13 @@ func (demonology *DemonologyWarlock) registerHandOfGuldan() {
 			TickLength:          time.Second,
 			AffectedByCastSpeed: true,
 			BonusCoefficient:    shadowFlameCoeff,
-			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, isRollover bool) {
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, 0)
 				stacks := math.Min(float64(dot.Aura.GetStacks())+1, 2)
 				dot.SnapshotBaseDamage = demonology.CalcScalingSpellDmg(shadowFlameScale) + stacks*dot.BonusCoefficient*dot.Spell.BonusDamage()
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeSnapshotCrit)
+				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 				demonology.GainDemonicFury(sim, 2, dot.Spell.ActionID)
 			},
 		},

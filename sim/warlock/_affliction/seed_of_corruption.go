@@ -102,7 +102,7 @@ func (affliction *AfflictionWarlock) registerSeed() {
 			TickLength:       3 * time.Second,
 			BonusCoefficient: seedTickCoeff,
 
-			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot, isRollover bool) {
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, affliction.CalcScalingSpellDmg(seedTickScale))
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {

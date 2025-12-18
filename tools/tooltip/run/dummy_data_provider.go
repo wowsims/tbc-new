@@ -95,8 +95,8 @@ func (d DummyTooltipDataProvider) GetSpellDuration(spellId int64) time.Duration 
 	return time.Second * 12
 }
 
-// GetSpellPower implements TooltipDataProvider.
-func (d DummyTooltipDataProvider) GetSpellPower() float64 {
+// GetSpellDamage implements TooltipDataProvider.
+func (d DummyTooltipDataProvider) GetSpellDamage() float64 {
 	return 1
 }
 

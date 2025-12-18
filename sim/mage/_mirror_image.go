@@ -61,7 +61,7 @@ func (mage *Mage) NewMirrorImage() *MirrorImage {
 	mirrorImageStatInheritance := func(ownerStats stats.Stats) stats.Stats {
 		return stats.Stats{
 			stats.Stamina:          ownerStats[stats.Stamina],
-			stats.SpellPower:       ownerStats[stats.SpellPower] * 0.05,
+			stats.SpellDamage:      ownerStats[stats.SpellDamage] * 0.05,
 			stats.HasteRating:      ownerStats[stats.HasteRating],
 			stats.SpellCritPercent: ownerStats[stats.SpellCritPercent],
 		}
