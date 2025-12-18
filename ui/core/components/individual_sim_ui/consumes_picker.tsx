@@ -173,11 +173,9 @@ export class ConsumesPicker extends Component {
 		const mhImbueOptions = ConsumablesInputs.makeMHImbueInput(relevantStatOptions(ConsumablesInputs.IMBUE_CONFIG_MH, this.simUI), i18n.t('settings_tab.consumables.imbue.mhImbue'));
 		const ohImbueOptions = ConsumablesInputs.makeOHImbueinput(relevantStatOptions(ConsumablesInputs.IMBUE_CONFIG_OH, this.simUI), i18n.t('settings_tab.consumables.imbue.ohImbue'));
 
+		buildIconInput(imbuePickerElem, this.simUI.player, mhImbueOptions);
 		if (isDualWieldSpec(this.simUI.player.getSpec())) {
-			buildIconInput(imbuePickerElem, this.simUI.player, mhImbueOptions);
 			buildIconInput(imbuePickerElem, this.simUI.player, ohImbueOptions);
-		} else {
-			buildIconInput(imbuePickerElem, this.simUI.player, mhImbueOptions);
 		}
 	}
 

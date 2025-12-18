@@ -170,22 +170,35 @@ export const AdamantiteWeightOH = {
 	value: 34340,
 	showWhen: (player: Player<any>) => player.getGear().hasBluntOHWeapon()
 };
+export const RogueInstantPoison = {
+	actionId: ActionId.fromItemId(21927),
+	value: 26891,
+	showWhen: (player: Player<any>) => player.getClass() == Class.ClassRogue
+}
+export const RogueDeadlyPoison = {
+	actionId: ActionId.fromItemId(22054),
+	value: 27186,
+	showWhen: (player: Player<any>) => player.getClass() == Class.ClassRogue
+}
 
-// TBC ANNI: Comments here need to be delayed until the specs are set up with new stat weights/displays
 export const IMBUE_CONFIG_MH = [
-	{ config: ManaOil, stats: [Stat.StatSpellPower] }, // TBC ANNI: Change to HealingPower
-	{ config: BrilWizardOil, stats: [Stat.StatSpellPower] }, // TBC ANNI: Change to SpellDamage
-	{ config: SupWizardOil, stats: [Stat.StatSpellPower] }, // TBC ANNI: Change to SpellDamage
-	{ config: AdamantiteSharpeningMH, stats: [Stat.StatAttackPower] }, // TBC ANNI: Change to MeleeCritRating
-	{ config: AdamantiteWeightMH, stats: [Stat.StatAttackPower] }, // TBC ANNI: Change to MeleeCritRating
+	{ config: ManaOil, stats: [Stat.StatHealingPower] },
+	{ config: BrilWizardOil, stats: [Stat.StatSpellDamage] },
+	{ config: SupWizardOil, stats: [Stat.StatSpellDamage] },
+	{ config: AdamantiteSharpeningMH, stats: [Stat.StatAttackPower] },
+	{ config: AdamantiteWeightMH, stats: [Stat.StatAttackPower] },
+	{ config: RogueInstantPoison, stats: [Stat.StatAttackPower] },
+	{ config: RogueDeadlyPoison, stats: [Stat.StatAttackPower] },
 ] as ConsumableStatOption<number>[];
 
 export const IMBUE_CONFIG_OH = [
-	{ config: ManaOil, stats: [Stat.StatSpellPower] },
-	{ config: BrilWizardOil, stats: [Stat.StatSpellPower] },
-	{ config: SupWizardOil, stats: [Stat.StatSpellPower] },
+	{ config: ManaOil, stats: [Stat.StatHealingPower] },
+	{ config: BrilWizardOil, stats: [Stat.StatSpellDamage] },
+	{ config: SupWizardOil, stats: [Stat.StatSpellDamage] },
 	{ config: AdamantiteSharpeningOH, stats: [Stat.StatAttackPower] },
 	{ config: AdamantiteWeightOH, stats: [Stat.StatAttackPower] },
+	{ config: RogueInstantPoison, stats: [Stat.StatAttackPower] },
+	{ config: RogueDeadlyPoison, stats: [Stat.StatAttackPower] },
 ] as ConsumableStatOption<number>[];
 
 export const makeMHImbueInput = makeConsumeInputFactory({ consumesFieldName: 'mhImbueId' });
