@@ -7,6 +7,8 @@ import * as InputHelpers from '../input_helpers';
 import { IconEnumValueConfig } from '../pickers/icon_enum_picker';
 import { ActionInputConfig, ItemStatOption } from './stat_options';
 import i18n from '../../../i18n/config.js';
+import { makeBooleanConsumeInput } from '../icon_inputs';
+import { playerPresets } from '../../../raid/presets';
 
 export interface ConsumableInputConfig<T> extends ActionInputConfig<T> {
 	value: T;
@@ -90,23 +92,164 @@ export const CONJURED_CONFIG = [
 
 export const makeConjuredInput = makeConsumeInputFactory({ consumesFieldName: 'conjuredId' });
 
-export const ExplosiveBigDaddy = {
-	actionId: ActionId.fromItemId(63396),
-	value: 89637,
+///////////////////////////////////////////////////////////////////////////
+//                               ENGINEERING
+///////////////////////////////////////////////////////////////////////////
+
+export const AdamantiteGrenade = {
+	actionId: ActionId.fromItemId(23737),
+	value: 30217,
 	showWhen: (player: Player<any>) => player.hasProfession(Profession.Engineering),
 };
 
-export const HighpoweredBoltGun = {
-	actionId: ActionId.fromItemId(60223),
-	value: 82207,
+export const FelIronBomb = {
+	actionId: ActionId.fromItemId(23736),
+	value: 30216,
+	showWhen: (player: Player<any>) => player.hasProfession(Profession.Engineering),
+};
+
+export const GnomishFlameTurrent = {
+	actionId: ActionId.fromItemId(23841),
+	value: 30526,
 	showWhen: (player: Player<any>) => player.hasProfession(Profession.Engineering),
 };
 
 export const EXPLOSIVE_CONFIG = [
-	{ config: ExplosiveBigDaddy, stats: [] },
-	{ config: HighpoweredBoltGun, stats: [] },
+	{ config: AdamantiteGrenade, stats: [] },
+	{ config: FelIronBomb, stats: [] },
+	{ config: GnomishFlameTurrent, stats: [] },
 ] as ConsumableStatOption<number>[];
 export const makeExplosivesInput = makeConsumeInputFactory({ consumesFieldName: 'explosiveId' });
+
+export const GoblinSapper = makeBooleanConsumeInput({
+	actionId: ActionId.fromItemId(10646),
+	fieldName: 'goblinSapper',
+	showWhen: (player: Player<any>) => player.hasProfession(Profession.Engineering),
+})
+
+export const SuperSapper = makeBooleanConsumeInput({
+	actionId: ActionId.fromItemId(23827),
+	fieldName: 'superSapper',
+	showWhen: (player: Player<any>) => player.hasProfession(Profession.Engineering),
+})
+
+///////////////////////////////////////////////////////////////////////////
+//                               WEAPON IMBUES
+///////////////////////////////////////////////////////////////////////////
+
+// Oils
+export const ManaOil = {
+	actionId: ActionId.fromItemId(20748),
+	value: 25123,
+};
+export const BrilWizardOil = {
+	actionId: ActionId.fromItemId(20749),
+	value: 25122,
+};
+export const SupWizardOil = {
+	actionId: ActionId.fromItemId(22522),
+	value: 28017,
+};
+// Stones
+export const AdamantiteSharpeningMH = {
+	actionId: ActionId.fromItemId(23529),
+	value: 29453,
+	showWhen: (player: Player<any>) => !player.getGear().hasBluntMHWeapon()
+};
+export const AdamantiteWeightMH = {
+	actionId: ActionId.fromItemId(28421),
+	value: 34340,
+	showWhen: (player: Player<any>) => player.getGear().hasBluntMHWeapon()
+};
+export const AdamantiteSharpeningOH = {
+	actionId: ActionId.fromItemId(23529),
+	value: 29453,
+	showWhen: (player: Player<any>) => !player.getGear().hasBluntOHWeapon()
+};
+export const AdamantiteWeightOH = {
+	actionId: ActionId.fromItemId(28421),
+	value: 34340,
+	showWhen: (player: Player<any>) => player.getGear().hasBluntOHWeapon()
+};
+// Rogue Poisons
+export const RogueInstantPoison = {
+	actionId: ActionId.fromItemId(21927),
+	value: 26891,
+	showWhen: (player: Player<any>) => player.getClass() == Class.ClassRogue
+}
+export const RogueDeadlyPoison = {
+	actionId: ActionId.fromItemId(22054),
+	value: 27186,
+	showWhen: (player: Player<any>) => player.getClass() == Class.ClassRogue
+}
+// Shaman Imbues
+export const ShamanImbueWindfury = {
+	actionId: ActionId.fromSpellId(25505),
+	value: 25505,
+	showWhen: (player: Player<any>) => player.getClass() == Class.ClassShaman
+}
+export const ShamanImbueFlametongue = {
+	actionId: ActionId.fromSpellId(25489),
+	value: 25489,
+	showWhen: (player: Player<any>) => player.getClass() == Class.ClassShaman
+}
+
+export const ShamanImbueFrostbrand = {
+	actionId: ActionId.fromSpellId(25500),
+	value: 25500,
+	showWhen: (player: Player<any>) => player.getClass() == Class.ClassShaman
+}
+
+export const ShamanImbueRockbiter = {
+	actionId: ActionId.fromSpellId(25485),
+	value: 25485,
+	showWhen: (player: Player<any>) => player.getClass() == Class.ClassShaman
+}
+
+export const IMBUE_CONFIG_MH = [
+	{ config: ManaOil, stats: [Stat.StatHealingPower] },
+	{ config: BrilWizardOil, stats: [Stat.StatSpellDamage] },
+	{ config: SupWizardOil, stats: [Stat.StatSpellDamage] },
+	{ config: AdamantiteSharpeningMH, stats: [Stat.StatAttackPower] },
+	{ config: AdamantiteWeightMH, stats: [Stat.StatAttackPower] },
+	{ config: RogueInstantPoison, stats: [] },
+	{ config: RogueDeadlyPoison, stats: [] },
+	{ config: ShamanImbueRockbiter, stats: [] },
+	{ config: ShamanImbueFrostbrand, stats: [] },
+	{ config: ShamanImbueFlametongue, stats: [] },
+	{ config: ShamanImbueWindfury, stats: [] },
+] as ConsumableStatOption<number>[];
+
+export const IMBUE_CONFIG_OH = [
+	{ config: ManaOil, stats: [Stat.StatHealingPower] },
+	{ config: BrilWizardOil, stats: [Stat.StatSpellDamage] },
+	{ config: SupWizardOil, stats: [Stat.StatSpellDamage] },
+	{ config: AdamantiteSharpeningOH, stats: [Stat.StatAttackPower] },
+	{ config: AdamantiteWeightOH, stats: [Stat.StatAttackPower] },
+	{ config: RogueInstantPoison, stats: [] },
+	{ config: RogueDeadlyPoison, stats: [] },
+	{ config: ShamanImbueRockbiter, stats: [] },
+	{ config: ShamanImbueFrostbrand, stats: [] },
+	{ config: ShamanImbueFlametongue, stats: [] },
+	{ config: ShamanImbueWindfury, stats: [] },
+] as ConsumableStatOption<number>[];
+
+export const makeMHImbueInput = makeConsumeInputFactory({ consumesFieldName: 'mhImbueId' });
+export const makeOHImbueinput = makeConsumeInputFactory({ consumesFieldName: 'ohImbueId' });
+
+///////////////////////////////////////////////////////////////////////////
+//                               	DRUMS
+///////////////////////////////////////////////////////////////////////////
+
+
+
+///////////////////////////////////////////////////////////////////////////
+//                                 SCROLLS
+///////////////////////////////////////////////////////////////////////////
+
+
+
+///////////////////////////////////////////////////////////////////////////
 
 export interface ConsumableInputOptions {
 	consumesFieldName: keyof ConsumesSpec;

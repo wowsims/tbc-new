@@ -213,17 +213,17 @@ func ConvertTargetResistanceFlagToPenetrationStat(flag int) proto.Stat {
 func ConvertSpellDamageFlagToSchoolDamageStat(flag int) proto.Stat {
 	switch flag {
 	case 2:
-		return proto.Stat_StatHolyPower
+		return proto.Stat_StatHolyDamage
 	case 4:
-		return proto.Stat_StatFirePower
+		return proto.Stat_StatFireDamage
 	case 8:
-		return proto.Stat_StatNaturePower
+		return proto.Stat_StatNatureDamage
 	case 16:
-		return proto.Stat_StatFrostPower
+		return proto.Stat_StatFrostDamage
 	case 32:
-		return proto.Stat_StatShadowPower
+		return proto.Stat_StatShadowDamage
 	case 64:
-		return proto.Stat_StatArcanePower
+		return proto.Stat_StatArcaneDamage
 	default:
 		return proto.Stat_StatSpellDamage
 	}

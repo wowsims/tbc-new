@@ -72,7 +72,7 @@ func NewFakeElementalShaman(char *Character, _ *proto.Player) Agent {
 				AffectedByCastSpeed: true,
 				BonusCoefficient:    1,
 
-				OnSnapshot: func(sim *Simulation, target *Unit, dot *Dot, isRollover bool) {
+				OnSnapshot: func(sim *Simulation, target *Unit, dot *Dot) {
 					dot.Snapshot(target, 100)
 				},
 				OnTick: func(sim *Simulation, target *Unit, dot *Dot) {
