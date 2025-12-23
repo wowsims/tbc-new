@@ -52,7 +52,20 @@ func (hunter *Hunter) GetHunter() *Hunter {
 }
 
 func RegisterHunter() {
-
+	core.RegisterAgentFactory(
+		proto.Player_Hunter{},
+		proto.Spec_SpecHunter,
+		func(character *core.Character, options *proto.Player) core.Agent {
+			return NewHunter(character, options, options.GetHunter().Options.ClassOptions)
+		},
+		func(player *proto.Player, spec interface{}) {
+			playerSpec, ok := spec.(*proto.Player_Hunter)
+			if !ok {
+				panic("Invalid spec value for Hunter!")
+			}
+			player.Spec = playerSpec
+		},
+	)
 }
 
 func NewHunter(character *core.Character, options *proto.Player, hunterOptions *proto.HunterOptions) *Hunter {

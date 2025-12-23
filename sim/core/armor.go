@@ -1,5 +1,11 @@
 package core
 
+import (
+	"math"
+
+	"github.com/wowsims/tbc/sim/core/stats"
+)
+
 func (result *SpellResult) applyArmor(spell *Spell, isPeriodic bool, attackTable *AttackTable) {
 	armorMitigationMultiplier := spell.armorMultiplier(isPeriodic, attackTable)
 
@@ -38,7 +44,9 @@ func (at *AttackTable) getArmorDamageModifier() float64 {
 	ignoreArmorFactor := Clamp(at.ArmorIgnoreFactor, 0.0, 1.0)
 
 	// Assume target > 80
-	armorConstant := float64(at.Attacker.Level)*4037.5 - 317117.5
-	defenderArmor := at.Defender.Armor() * (1.0 - ignoreArmorFactor)
+	armorConstant := float64(at.Attacker.Level)*467.5 - 22167.5
+	defenderArmor := at.Defender.Armor() - (at.Defender.Armor() * ignoreArmorFactor)
+	// TBC ANNI: Apply flat ArP
+	defenderArmor = max(defenderArmor-math.Abs(at.Attacker.stats[stats.ArmorPenetration]), 0)
 	return 1 - defenderArmor/(defenderArmor+armorConstant)
 }

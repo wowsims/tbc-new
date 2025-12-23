@@ -5,7 +5,6 @@ import (
 
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
-	"github.com/wowsims/tbc/sim/core/stats"
 	"github.com/wowsims/tbc/sim/druid"
 )
 
@@ -105,43 +104,43 @@ func (cat *FeralDruid) Initialize() {
 	// cat.applyOmenOfClarity()
 	// cat.applyPredatorySwiftness()
 
-	snapshotHandler := func(aura *core.Aura, sim *core.Simulation) {
-		previousRipSnapshotPower := cat.Rip.NewSnapshotPower
-		cat.UpdateBleedPower(cat.Rip, sim, cat.CurrentTarget, false, true)
-		cat.UpdateBleedPower(cat.Rake, sim, cat.CurrentTarget, false, true)
-		cat.UpdateBleedPower(cat.ThrashCat, sim, cat.CurrentTarget, false, true)
+	// snapshotHandler := func(aura *core.Aura, sim *core.Simulation) {
+	// 	previousRipSnapshotPower := cat.Rip.NewSnapshotPower
+	// 	cat.UpdateBleedPower(cat.Rip, sim, cat.CurrentTarget, false, true)
+	// 	cat.UpdateBleedPower(cat.Rake, sim, cat.CurrentTarget, false, true)
+	// 	cat.UpdateBleedPower(cat.ThrashCat, sim, cat.CurrentTarget, false, true)
 
-		if cat.Rip.NewSnapshotPower > previousRipSnapshotPower+0.001 {
-			if !cat.tempSnapshotAura.IsActive() || (aura.ExpiresAt() < cat.tempSnapshotAura.ExpiresAt()) {
-				cat.tempSnapshotAura = aura
+	// 	if cat.Rip.NewSnapshotPower > previousRipSnapshotPower+0.001 {
+	// 		if !cat.tempSnapshotAura.IsActive() || (aura.ExpiresAt() < cat.tempSnapshotAura.ExpiresAt()) {
+	// 			cat.tempSnapshotAura = aura
 
-				if sim.Log != nil {
-					cat.Log(sim, "New bleed snapshot aura found: %s", aura.ActionID)
-				}
-			}
-		} else if !cat.tempSnapshotAura.IsActive() {
-			cat.tempSnapshotAura = nil
-		}
-	}
+	// 			if sim.Log != nil {
+	// 				cat.Log(sim, "New bleed snapshot aura found: %s", aura.ActionID)
+	// 			}
+	// 		}
+	// 	} else if !cat.tempSnapshotAura.IsActive() {
+	// 		cat.tempSnapshotAura = nil
+	// 	}
+	// }
 
-	cat.TigersFuryAura.ApplyOnGain(snapshotHandler)
-	cat.TigersFuryAura.ApplyOnExpire(snapshotHandler)
-	cat.AddOnTemporaryStatsChange(func(sim *core.Simulation, buffAura *core.Aura, _ stats.Stats) {
-		snapshotHandler(buffAura, sim)
-	})
+	// cat.TigersFuryAura.ApplyOnGain(snapshotHandler)
+	// cat.TigersFuryAura.ApplyOnExpire(snapshotHandler)
+	// cat.AddOnTemporaryStatsChange(func(sim *core.Simulation, buffAura *core.Aura, _ stats.Stats) {
+	// 	snapshotHandler(buffAura, sim)
+	// })
 
-	if cat.DreamOfCenariusAura != nil {
-		cat.DreamOfCenariusAura.ApplyOnGain(snapshotHandler)
-		cat.DreamOfCenariusAura.ApplyOnExpire(snapshotHandler)
-	}
+	// if cat.DreamOfCenariusAura != nil {
+	// 	cat.DreamOfCenariusAura.ApplyOnGain(snapshotHandler)
+	// 	cat.DreamOfCenariusAura.ApplyOnExpire(snapshotHandler)
+	// }
 
-	cat.CatFormAura.ApplyOnGain(func(_ *core.Aura, sim *core.Simulation) {
-		if cat.tempSnapshotAura.IsActive() {
-			cat.UpdateBleedPower(cat.Rip, sim, cat.CurrentTarget, false, true)
-			cat.UpdateBleedPower(cat.Rake, sim, cat.CurrentTarget, false, true)
-			cat.UpdateBleedPower(cat.ThrashCat, sim, cat.CurrentTarget, false, true)
-		}
-	})
+	// cat.CatFormAura.ApplyOnGain(func(_ *core.Aura, sim *core.Simulation) {
+	// 	if cat.tempSnapshotAura.IsActive() {
+	// 		cat.UpdateBleedPower(cat.Rip, sim, cat.CurrentTarget, false, true)
+	// 		cat.UpdateBleedPower(cat.Rake, sim, cat.CurrentTarget, false, true)
+	// 		cat.UpdateBleedPower(cat.ThrashCat, sim, cat.CurrentTarget, false, true)
+	// 	}
+	// })
 }
 
 func (cat *FeralDruid) ApplyTalents() {

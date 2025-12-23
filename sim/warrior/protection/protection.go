@@ -34,7 +34,7 @@ type ProtectionWarrior struct {
 
 // ApplyTalents implements core.Agent.
 func (war *ProtectionWarrior) ApplyTalents() {
-	panic("unimplemented")
+	// panic("unimplemented")
 }
 
 func NewProtectionWarrior(character *core.Character, options *proto.Player) *ProtectionWarrior {

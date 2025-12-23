@@ -2521,6 +2521,26 @@
               "required": [
                 "title"
               ]
+            },
+            "imbue": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "mhImbue": {
+                  "type": "string"
+                },
+                "ohImbue": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "title",
+                "mhImbue",
+                "ohImbue"
+              ]
             }
           },
           "additionalProperties": false,
@@ -2530,7 +2550,8 @@
             "elixirs",
             "food",
             "engineering",
-            "pet"
+            "pet",
+            "imbue"
           ]
         },
         "encounter": {

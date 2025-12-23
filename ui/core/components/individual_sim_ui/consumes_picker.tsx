@@ -43,6 +43,7 @@ export class ConsumesPicker extends Component {
 		this.buildFoodPicker();
 		this.buildEngPicker();
 		this.buildPetPicker();
+		this.buildImbuePicker();
 	}
 
 	private buildPotionsPicker(): void {
@@ -135,12 +136,14 @@ export class ConsumesPicker extends Component {
 
 		const explosivesoptions = ConsumablesInputs.makeExplosivesInput(relevantStatOptions(ConsumablesInputs.EXPLOSIVE_CONFIG, this.simUI), i18n.t('settings_tab.consumables.engineering.explosives'));
 		const explosivePicker = buildIconInput(engiConsumesElem, this.simUI.player, explosivesoptions);
+		const goblinSapperPicker = buildIconInput(engiConsumesElem, this.simUI.player, ConsumablesInputs.GoblinSapper);
+		const superSapperPicker = buildIconInput(engiConsumesElem, this.simUI.player, ConsumablesInputs.SuperSapper);
 
-		const events = this.simUI.player.professionChangeEmitter.on(() => this.updateRow(row, [explosivePicker]));
+		const events = this.simUI.player.professionChangeEmitter.on(() => this.updateRow(row, [explosivePicker, goblinSapperPicker, superSapperPicker]));
 		this.addOnDisposeCallback(() => events.dispose());
 
 		// Initial update of row based on current state.
-		this.updateRow(row, [explosivePicker]);
+		this.updateRow(row, [explosivePicker, goblinSapperPicker, superSapperPicker]);
 	}
 
 	private buildPetPicker(): void {
@@ -158,6 +161,26 @@ export class ConsumesPicker extends Component {
 		}
 	}
 
+	private buildImbuePicker(): void {
+		const imbuePickerRef = ref<HTMLDivElement>();
+		const row = this.rootElem.appendChild(
+			<ConsumeRow label="Imbue">
+				<div ref={imbuePickerRef} className="picker-group icon-group consumes-row-inputs consumes-imbue"></div>
+			</ConsumeRow>
+		);
+		const imbuePickerElem = imbuePickerRef.value!;
+
+		const mhImbueOptions = ConsumablesInputs.makeMHImbueInput(relevantStatOptions(ConsumablesInputs.IMBUE_CONFIG_MH, this.simUI), i18n.t('settings_tab.consumables.imbue.mhImbue'));
+		const ohImbueOptions = ConsumablesInputs.makeOHImbueinput(relevantStatOptions(ConsumablesInputs.IMBUE_CONFIG_OH, this.simUI), i18n.t('settings_tab.consumables.imbue.ohImbue'));
+		mhImbueOptions.enableWhen = (player: Player<any>) => !player.getParty() || player.getParty()!.getBuffs().windfuryTotemRank == 0
+		mhImbueOptions.changedEvent = (player: Player<any>) => TypedEvent.onAny([player.getRaid()?.changeEmitter || player.consumesChangeEmitter]);
+
+		buildIconInput(imbuePickerElem, this.simUI.player, mhImbueOptions);
+		if (isDualWieldSpec(this.simUI.player.getSpec())) {
+			buildIconInput(imbuePickerElem, this.simUI.player, ohImbueOptions);
+		}
+	}
+
 	private updateRow(rowElem: Element, pickers: (IconPicker<Player<any>, any> | IconEnumPicker<Player<any>, any>)[]) {
 		rowElem.classList[!!pickers.find(p => p?.showWhen()) ? 'remove' : 'add']('hide');
 	}
@@ -170,3 +193,7 @@ const ConsumeRow = ({ label, children }: { label: string; children: JSX.Element 
 		{children}
 	</div>
 );
+function isDualWieldSpec(spec: any): boolean {
+	return [Spec.SpecEnhancementShaman, Spec.SpecHunter, Spec.SpecRogue, Spec.SpecDPSWarrior, Spec.SpecProtectionWarrior].includes(spec)
+}
+
