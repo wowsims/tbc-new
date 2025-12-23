@@ -42,6 +42,7 @@ func (warlock *Warlock) applyDestructionTalents() {
 	warlock.applyDevastation()
 	warlock.applyImprovedFirebolt()
 	warlock.applyImprovedLashOfPain()
+	warlock.applyImprovedShadowBolt()
 	warlock.applyDestructiveReach()
 	warlock.applyImprovedSearingPain()
 	warlock.applyRuin()
@@ -375,9 +376,15 @@ func (warlock *Warlock) applyDemonicTactics() {
 /*
 Destruction
 Skip for now:
- - Improved shadowbolt - included in shadowbolt.go
- - ImprovedImmolate - include in immolate.go
+  - Improved shadowbolt - included in shadowbolt.go
+  - ImprovedImmolate - include in immolate.go
 */
+func (warlock *Warlock) applyImprovedShadowBolt() {
+	if warlock.Talents.ImprovedShadowBolt == 0 {
+		return
+	}
+	warlock.ImpShadowboltAura = core.ImprovedShadowBoltAura(warlock.CurrentTarget, 0, warlock.Talents.ImprovedShadowBolt)
+}
 
 func (warlock *Warlock) applyCataclysm() {
 	if warlock.Talents.Cataclysm == 0 {
