@@ -693,7 +693,13 @@ func (result *SpellResult) applyTargetModifiers(sim *Simulation, spell *Spell, a
 	if spell.Flags.Matches(SpellFlagIgnoreTargetModifiers) {
 		return
 	}
-	result.Damage += attackTable.Defender.PseudoStats.BonusPhysicalDamageTaken
+
+	if spell.SpellSchool == SpellSchoolPhysical {
+		result.Damage += attackTable.Defender.PseudoStats.BonusPhysicalDamageTaken
+	} else if spell.SpellSchool != SpellSchoolPhysical && spell.SpellSchool != SpellSchoolNone {
+		result.Damage += attackTable.Defender.PseudoStats.BonusSpellDamageTaken
+	}
+
 	result.Damage *= spell.TargetDamageMultiplier(sim, attackTable, isPeriodic)
 }
 func (spell *Spell) TargetDamageMultiplier(sim *Simulation, attackTable *AttackTable, isPeriodic bool) float64 {

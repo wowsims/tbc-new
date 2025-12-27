@@ -481,7 +481,9 @@ message PartyBuffs {
 	Drums drums = 11;
 
 	// Item Buffs
+	int32 atiesh_druid = 35;
 	int32 atiesh_mage = 12;
+	int32 atiesh_priest = 36;
 	int32 atiesh_warlock = 13;
 	bool braided_eternium_chain = 14;
 	bool eye_of_the_night = 15;

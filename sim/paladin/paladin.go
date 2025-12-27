@@ -189,3 +189,11 @@ func (paladin *Paladin) AnyActiveDefensiveCooldown() bool {
 
 	return false
 }
+
+const (
+	PaladinSpellFlagNone     int64 = 0
+	PaladinSpellConsecration int64 = 1 << iota
+	PaladinSpellFlashOfLight
+	PaladinSpellHolyLight
+	PaladinSpellAll int64 = 1<<iota - 1
+)

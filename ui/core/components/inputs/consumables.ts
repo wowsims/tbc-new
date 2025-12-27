@@ -295,10 +295,6 @@ export function makeConsumableInput(
 			if (options.consumesFieldName === 'battleElixirId' || options.consumesFieldName === 'guardianElixirId') {
 				newConsumes.flaskId = 0;
 			}
-
-			if (options.consumesFieldName == 'imbueId') {
-				newConsumes.imbueId = 0;
-			}
 			player.setConsumes(eventID, newConsumes);
 		},
 	};

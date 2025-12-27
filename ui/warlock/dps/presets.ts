@@ -53,7 +53,7 @@ export const DefaultConsumables = ConsumesSpec.create({
 	foodId: 33825, // Poached Bluefish
 	potId: 22839, // Destructive Potion
 	prepotId: 22839, // Destructive Potion
-	imbueId: 20749 // Brilliant Wizard Oil
+	mhImbueId: 20749 // Brilliant Wizard Oil
 });
 
 export const OtherDefaults = {

@@ -494,6 +494,7 @@ type PseudoStats struct {
 	BonusHealingTaken          float64 // Talisman of Troll Divinity
 	BonusSpellCritPercentTaken float64 // Imp Shadow Bolt / Imp Scorch / Winter's Chill debuff
 	BonusPhysicalDamageTaken   float64 // Hemo, Gift of Arthas, etc
+	BonusSpellDamageTaken      float64 // Amp Magic
 
 	DamageTakenMultiplier       float64            // All damage
 	SchoolDamageTakenMultiplier [SchoolLen]float64 // For specific spell schools (arcane, fire, shadow, etc.)
