@@ -174,6 +174,10 @@ func (s Stat) StatName() string {
 		return "RangedAttackPower"
 	case FeralAttackPower:
 		return "FeralAttackPower"
+	case HealingPower:
+		return "HealingPower"
+	case SpellPower:
+		return "SpellPower"
 	case SpellDamage:
 		return "SpellDamage"
 	case ArcaneDamage:
@@ -210,6 +214,22 @@ func (s Stat) StatName() string {
 		return "SpellCritPercent"
 	case BlockPercent:
 		return "BlockPercent"
+	case DefenseRating:
+		return "DefenseRating"
+	case BlockRating:
+		return "BlockRating"
+	case BlockValue:
+		return "BlockValue"
+	case ArcaneResistance:
+		return "ArcaneResistance"
+	case FireResistance:
+		return "FireResistance"
+	case FrostResistance:
+		return "FrostResistance"
+	case NatureResistance:
+		return "NatureResistance"
+	case ShadowResistance:
+		return "ShadowResistance"
 	}
 
 	return "none"
