@@ -695,36 +695,36 @@ func BlessingOfKingsAura(char *Character) *Aura {
 	return makeMultiplierBuff(char, "Blessing of Kings", 20217, time.Hour*1, bokStats, 1.1)
 }
 
-func BlessingOfLight(char *Character) *Aura {
-	return char.GetOrRegisterAura(Aura{
-		Label:    "Blessing of Light",
-		ActionID: ActionID{SpellID: 27145},
-		Duration: time.Minute * 30,
+// func BlessingOfLight(char *Character) *Aura {
+// 	return char.GetOrRegisterAura(Aura{
+// 		Label:    "Blessing of Light",
+// 		ActionID: ActionID{SpellID: 27145},
+// 		Duration: time.Minute * 30,
 
-		OnApplyEffects: func(aura *Aura, sim *Simulation, target *Unit, spell *Spell) {
-			if spell.ProcMask != ProcMaskSpellHealing {
-				return
-			}
+// 		OnApplyEffects: func(aura *Aura, sim *Simulation, target *Unit, spell *Spell) {
+// 			if spell.ProcMask != ProcMaskSpellHealing {
+// 				return
+// 			}
 
-			if spell.Unit.ownerClass != proto.Class_ClassPaladin {
-				return
-			}
+// 			if spell.Unit.ownerClass != proto.Class_ClassPaladin {
+// 				return
+// 			}
 
-			// Keep an eye on if this changes in paladin.go
-			// FlashOfLight = 2
-			// HolyLight = 3
-			if spell.ClassSpellMask != 2 || spell.ClassSpellMask != 3 {
-				return
-			}
+// 			// Keep an eye on if this changes in paladin.go
+// 			// FlashOfLight = 2
+// 			// HolyLight = 3
+// 			if spell.ClassSpellMask != 2 || spell.ClassSpellMask != 3 {
+// 				return
+// 			}
 
-			if spell.ClassSpellMask == 2 {
-				spell.BonusSpellDamage += 185
-			} else {
-				spell.BonusSpellDamage += 580
-			}
-		},
-	})
-}
+// 			if spell.ClassSpellMask == 2 {
+// 				spell.BonusSpellDamage += 185
+// 			} else {
+// 				spell.BonusSpellDamage += 580
+// 			}
+// 		},
+// 	})
+// }
 
 func BlessingOfMightAura(char *Character, improved bool) *Aura {
 	apBuff := 220.0
