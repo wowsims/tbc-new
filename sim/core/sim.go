@@ -128,6 +128,8 @@ func runSim(rsr *proto.RaidSimRequest, progress chan *proto.ProgressMetrics, ski
 				}
 
 				errStr += "\nStack Trace:\n" + string(debug.Stack())
+
+				println(errStr)
 				result = &proto.RaidSimResult{
 					Error: &proto.ErrorOutcome{Message: errStr},
 				}

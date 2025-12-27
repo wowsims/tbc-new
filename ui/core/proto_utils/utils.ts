@@ -1410,6 +1410,7 @@ export const AL_CATEGORY_TITAN_RUNE = 'Titan Rune';
 
 export const defaultRaidBuffMajorDamageCooldowns = (classID?: Class): Partial<RaidBuffs> => {
 	return RaidBuffs.create({
+		bloodlust: true,
 		//skullBannerCount: classID == Class.ClassWarrior ? 1 : 2,
 		//stormlashTotemCount: classID == Class.ClassShaman ? 3 : 4,
 	});

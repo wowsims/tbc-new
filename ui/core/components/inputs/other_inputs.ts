@@ -5,6 +5,8 @@ import { Sim } from '../../sim.js';
 import { EventID } from '../../typed_event.js';
 import { BooleanPicker } from '../pickers/boolean_picker.js';
 import { EnumPicker } from '../pickers/enum_picker.js';
+import {Raid} from '../../raid';
+import { InputConfig } from '../../individual_sim_ui';
 import i18n from '../../../i18n/config.js';
 
 export function makeShow1hWeaponsSelector(parent: HTMLElement, sim: Sim): BooleanPicker<Sim> {
@@ -269,3 +271,35 @@ export const HpPercentForDefensives = {
 		player.setSimpleCooldowns(eventID, cooldowns);
 	},
 };
+
+export const IsbUptime = {
+	id: 'isbUptime',
+	type: 'number' as const,
+	raid: true,
+	float: true,
+	label: 'ISB Uptime',
+	labelTooltip: 'Amount of uptime for ISB',
+	changedEvent: (player: Player<any>) => player.getRaid()!.debuffsChangeEmitter,
+	getValue: (player: Player<any>) => Math.round(player.getRaid()!.getDebuffs().isbUptime! * 100),
+	setValue: (eventID: EventID, player: Player<any>, newValue: number) => {
+		const newDebuffs = player.getRaid()!.getDebuffs()!;
+		newDebuffs.isbUptime = newValue / 100;
+		player.getRaid()!.setDebuffs(eventID, newDebuffs);
+	},
+}
+
+export const HemoUptime = {
+	id: 'hemoUptime',
+	type: 'number' as const,
+	raid: true,
+	float: true,
+	label: 'Hemorrhage Uptime',
+	labelTooltip: 'Amount of time hemorrhage is on the boss from a subtely rogue',
+	changedEvent: (player: Player<any>) => player.getRaid()!.debuffsChangeEmitter,
+	getValue: (player: Player<any>) => Math.round(player.getRaid()!.getDebuffs().hemorrhageUptime! * 100),
+	setValue: (eventID: EventID, player: Player<any>, newValue: number) => {
+		const newDebuffs = player.getRaid()!.getDebuffs();
+		newDebuffs!.hemorrhageUptime = newValue / 100;
+		player.getRaid()!.setDebuffs(eventID, newDebuffs!);
+	},
+}

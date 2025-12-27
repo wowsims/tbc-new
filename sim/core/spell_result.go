@@ -153,7 +153,7 @@ func (spell *Spell) MeleeAttackPower() float64 {
 }
 
 func (spell *Spell) RangedAttackPower() float64 {
-	return spell.Unit.stats[stats.RangedAttackPower]
+	return spell.Unit.stats[stats.RangedAttackPower] + spell.Unit.PseudoStats.BonusRangedAttackPower
 }
 
 func (spell *Spell) DodgeParrySuppression() float64 {
@@ -163,7 +163,7 @@ func (spell *Spell) DodgeParrySuppression() float64 {
 }
 
 func (spell *Spell) PhysicalHitChance(attackTable *AttackTable) float64 {
-	hitPercent := spell.Unit.stats[stats.PhysicalHitPercent] + spell.BonusHitPercent
+	hitPercent := spell.Unit.stats[stats.PhysicalHitPercent] + spell.BonusHitPercent - attackTable.Defender.PseudoStats.ReducedPhysicalHitTakenChance
 	return hitPercent / 100
 }
 func (spell *Spell) PhysicalHitCheck(sim *Simulation, attackTable *AttackTable) bool {
@@ -208,7 +208,8 @@ func (spell *Spell) SpellCritChance(target *Unit) float64 {
 	attackTable := spell.Unit.AttackTables[target.UnitIndex]
 	critPercent := spell.Unit.stats[stats.SpellCritPercent] +
 		spell.BonusCritPercent +
-		attackTable.BonusSpellCritPercent
+		attackTable.BonusSpellCritPercent -
+		target.PseudoStats.ReducedCritTakenChance
 	return max(critPercent/100-attackTable.SpellCritSuppression, 0)
 }
 func (spell *Spell) MagicCritCheck(sim *Simulation, target *Unit) bool {
@@ -342,7 +343,7 @@ func (spell *Spell) CalcPeriodicDamage(sim *Simulation, target *Unit, baseDamage
 	return spell.calcDamageInternal(sim, target, baseDamage, attackerMultiplier, true, outcomeApplier)
 }
 func (dot *Dot) CalcSnapshotDamage(sim *Simulation, target *Unit, outcomeApplier OutcomeApplier) *SpellResult {
-	return dot.Spell.calcDamageInternal(sim, target, dot.SnapshotBaseDamage, dot.SnapshotAttackerMultiplier, true, outcomeApplier)
+	return dot.Spell.calcDamageInternal(sim, target, dot.SnapshotBaseDamage, 1.0, true, outcomeApplier)
 }
 
 func (spell *Spell) DealOutcome(sim *Simulation, result *SpellResult) {
@@ -691,6 +692,12 @@ func (spell *Spell) attackerDamageMultiplierInternal(attackTable *AttackTable) f
 func (result *SpellResult) applyTargetModifiers(sim *Simulation, spell *Spell, attackTable *AttackTable, isPeriodic bool) {
 	if spell.Flags.Matches(SpellFlagIgnoreTargetModifiers) {
 		return
+	}
+
+	if spell.SpellSchool == SpellSchoolPhysical {
+		result.Damage += attackTable.Defender.PseudoStats.BonusPhysicalDamageTaken
+	} else if spell.SpellSchool != SpellSchoolPhysical && spell.SpellSchool != SpellSchoolNone {
+		result.Damage += attackTable.Defender.PseudoStats.BonusSpellDamageTaken
 	}
 
 	result.Damage *= spell.TargetDamageMultiplier(sim, attackTable, isPeriodic)

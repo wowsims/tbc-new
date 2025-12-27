@@ -43,19 +43,12 @@ func (value *APLValueWarlockShouldRecastDrainSoul) GetBool(sim *core.Simulation)
 		warlock.UnstableAffliction.CastTime()
 
 	curseRefresh := max(
-		warlock.BaneOfAgony.CurDot().RemainingDuration(sim),
-		warlock.BaneOfDoom.CurDot().RemainingDuration(sim),
+		warlock.CurseOfAgony.CurDot().RemainingDuration(sim),
+		warlock.CurseOfDoom.CurDot().RemainingDuration(sim),
 		warlock.CurseOfElementsAuras.Get(warlock.CurrentTarget).RemainingDuration(sim),
-		warlock.CurseOfTonguesAuras.Get(warlock.CurrentTarget).RemainingDuration(sim),
-		warlock.CurseOfWeaknessAuras.Get(warlock.CurrentTarget).RemainingDuration(sim),
-	) - warlock.BaneOfAgony.CastTime()
-
-	hauntRefresh := 1000 * time.Second
-	if warlock.HauntDebuffAuras != nil {
-		hauntRefresh = warlock.HauntDebuffAuras.Get(warlock.CurrentTarget).RemainingDuration(sim) -
-			warlock.Haunt.CastTime() -
-			warlock.Haunt.TravelTime()
-	}
+		// warlock.CurseOfTonguesAuras.Get(warlock.CurrentTarget).RemainingDuration(sim),
+		// warlock.CurseOfWeaknessAuras.Get(warlock.CurrentTarget).RemainingDuration(sim),
+	) - warlock.CurseOfAgony.CastTime()
 
 	timeUntilRefresh := min(uaRefresh, curseRefresh)
 

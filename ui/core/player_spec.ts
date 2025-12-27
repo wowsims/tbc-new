@@ -22,8 +22,17 @@ export abstract class PlayerSpec<SpecType extends Spec> {
 	abstract readonly isHealingSpec: boolean;
 	abstract readonly isRangedDpsSpec: boolean;
 	abstract readonly isMeleeDpsSpec: boolean;
+	abstract readonly role: Role
 
 	abstract readonly canDualWield: boolean;
 
 	abstract getIcon(size: IconSize): string;
+}
+
+export enum Role {
+	CASTER,
+	HEALER,
+	MELEE,
+	RANGED,
+	TANK
 }

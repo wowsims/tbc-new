@@ -104,7 +104,7 @@ export class CharacterStats extends Component {
 				StatGroup.Spell,
 				[
 					UnitStat.fromStat(Stat.StatSpellDamage),
-					UnitStat.fromStat(Stat.StatFireDamage),
+					UnitStat.fromStat(Stat.StatArcaneDamage),
 					UnitStat.fromStat(Stat.StatFireDamage),
 					UnitStat.fromStat(Stat.StatFrostDamage),
 					UnitStat.fromStat(Stat.StatHolyDamage),
@@ -194,6 +194,7 @@ export class CharacterStats extends Component {
 		const buffsStats = Stats.fromProto(playerStats.buffsStats);
 		const consumesStats = Stats.fromProto(playerStats.consumesStats);
 		const bonusStats = player.getBonusStats();
+
 
 		let finalStats = Stats.fromProto(playerStats.finalStats)
 			.add(statMods.base || new Stats())

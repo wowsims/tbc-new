@@ -101,7 +101,7 @@ func (spriest *ShadowPriest) ApplyTalents() {
 		},
 	}))
 
-	core.MakePermanent(core.MindQuickeningAura(&spriest.Unit))
+	// core.MakePermanent(core.MindQuickeningAura(&spriest.Unit))
 
 	// spriest.registerTwistOfFate()
 	// spriest.registerSolaceAndInstanity()

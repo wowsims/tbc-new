@@ -67,6 +67,7 @@ import { SimUI, SimWarning } from './sim_ui';
 import { EventID, TypedEvent } from './typed_event';
 import { isDevMode } from './utils';
 import { CURRENT_API_VERSION } from './constants/other';
+import { Raid } from './raid';
 
 const SAVED_GEAR_STORAGE_KEY = '__savedGear__';
 const SAVED_EP_WEIGHTS_STORAGE_KEY = '__savedEPWeights__';
@@ -81,7 +82,7 @@ export type InputConfig<ModObject> =
 
 export interface InputSection {
 	tooltip?: string;
-	inputs: Array<InputConfig<Player<any>>>;
+	inputs: Array<InputConfig<any>>
 }
 
 export interface OtherDefaults {
