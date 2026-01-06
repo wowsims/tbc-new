@@ -6,10 +6,11 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
-const corruptionCoeff = 0.156
+const corruptionScale = 0.165
+const corruptionCoeff = 0.165
 
-func (warlock *Warlock) registerCorruption() *core.Spell {
-	// resultSlice := make(core.SpellResultSlice, 1)
+func (warlock *Warlock) RegisterCorruption(onApplyCallback WarlockSpellCastedCallback, onTickCallback WarlockSpellCastedCallback) *core.Spell {
+	resultSlice := make(core.SpellResultSlice, 1)
 
 	warlock.Corruption = warlock.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 172},
@@ -18,64 +19,61 @@ func (warlock *Warlock) registerCorruption() *core.Spell {
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: WarlockSpellCorruption,
 
-		CritMultiplier: 1,
-		ManaCost:       core.ManaCostOptions{FlatCost: 370},
-		Cast: core.CastConfig{
-			DefaultCast: core.Cast{
-				GCD:      core.GCDDefault,
-				CastTime: time.Millisecond * 2000,
+		ManaCost: core.ManaCostOptions{BaseCostPercent: 1.25},
+		Cast:     core.CastConfig{DefaultCast: core.Cast{GCD: core.GCDDefault}},
+
+		DamageMultiplierAdditive: 1,
+		CritMultiplier:           warlock.DefaultSpellCritMultiplier(),
+		ThreatMultiplier:         1,
+
+		Dot: core.DotConfig{
+			Aura: core.Aura{
+				Label: "Corruption",
+			},
+			NumberOfTicks:       9,
+			TickLength:          2 * time.Second,
+			AffectedByCastSpeed: true,
+			BonusCoefficient:    corruptionCoeff,
+
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
+				dot.Snapshot(target, 900)
+			},
+			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
+				resultSlice[0] = dot.CalcSnapshotDamage(sim, target, dot.OutcomeTick)
+
+				if warlock.SiphonLife != nil {
+					warlock.SiphonLife.Cast(sim, &warlock.Unit)
+				}
+
+				if onTickCallback != nil {
+					onTickCallback(resultSlice, dot.Spell, sim)
+				}
+
+				dot.Spell.DealPeriodicDamage(sim, resultSlice[0])
 			},
 		},
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			result := spell.CalcOutcome(sim, target, spell.OutcomeMagicHit)
+			result := spell.CalcOutcome(sim, target, spell.OutcomeMagicHitNoHitCounter)
+			dot := spell.Dot(target)
 			if result.Landed() {
-				spell.Dot(target).Apply(sim)
+				warlock.ApplyDotWithPandemic(dot, sim)
+			}
+			if onApplyCallback != nil {
+				resultSlice[0] = result
+				onApplyCallback(resultSlice, spell, sim)
 			}
 			spell.DealOutcome(sim, result)
 		},
-
-		Dot: core.DotConfig{
-			Aura: core.Aura{
-				Label:    "Corruption",
-				Tag:      "Affliction",
-				ActionID: core.ActionID{SpellID: 172},
-			},
-			NumberOfTicks:       6,
-			TickLength:          3 * time.Second,
-			AffectedByCastSpeed: false,
-			BonusCoefficient:    corruptionCoeff,
-			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-
-				dot.Snapshot(target, 900)
-
-				// println("CALC SCALINGSPELLDMG", warlock.CalcScalingSpellDmg(corruptionCoeff))
-				// dot.Snapshot(target, warlock.CalcScalingSpellDmg(corruptionCoeff))
-			},
-			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
-			},
-		},
-
-		// ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		// 	result := spell.CalcOutcome(sim, target, spell.OutcomeMagicHitNoHitCounter)
-		// 	if onApplyCallback != nil {
-		// 		resultSlice[0] = result
-		// 		onApplyCallback(resultSlice, spell, sim)
-		// 	}
-		// 	spell.DealOutcome(sim, result)
-		// },
 		ExpectedTickDamage: func(sim *core.Simulation, target *core.Unit, spell *core.Spell, useSnapshot bool) *core.SpellResult {
 			dot := spell.Dot(target)
 			if useSnapshot {
 				result := dot.CalcSnapshotDamage(sim, target, dot.OutcomeTick)
 				result.Damage /= dot.TickPeriod().Seconds()
-				println("AFTER MATH", result.Damage)
 				return result
 			} else {
 				result := spell.CalcPeriodicDamage(sim, target, 900, spell.OutcomeExpectedMagicCrit)
 				result.Damage /= dot.CalcTickPeriod().Round(time.Millisecond).Seconds()
-				println("CALCTICK DMG", result.Damage)
 				return result
 			}
 		},

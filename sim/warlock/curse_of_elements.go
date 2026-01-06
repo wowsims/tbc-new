@@ -7,7 +7,7 @@ import (
 )
 
 func (warlock *Warlock) registerCurseOfElements() {
-	// warlock.CurseOfElementsAuras = warlock.NewEnemyAuraArray(core.CurseOfElementsAura)
+	warlock.CurseOfElementsAuras = warlock.NewEnemyAuraArray(core.CurseOfElementsAura)
 
 	warlock.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 1490},
@@ -17,7 +17,7 @@ func (warlock *Warlock) registerCurseOfElements() {
 		ClassSpellMask: WarlockSpellCurseOfElements,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 260,
+			BaseCostPercent: 4,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
