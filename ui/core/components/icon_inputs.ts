@@ -48,7 +48,6 @@ export function makeBooleanRaidBuffInput<SpecType extends Spec>(
 			setValue: (eventID: EventID, player: Player<SpecType>, newVal: RaidBuffs) => player.getRaid()!.setBuffs(eventID, newVal),
 			changeEmitter: (player: Player<SpecType>) => TypedEvent.onAny([player.getRaid()!.buffsChangeEmitter, player.raceChangeEmitter]),
 		},
-
 		config.actionId,
 		config.fieldName,
 		config.value,

@@ -209,8 +209,6 @@ func (env *Environment) finalize(raidProto *proto.Raid, _ *proto.Encounter, raid
 	for partyIdx, party := range env.Raid.Parties {
 		for _, player := range party.Players {
 			character := player.GetCharacter()
-			//fillplayerstats check that later
-			println("fillplayerstats in environment.go")
 			character.FillPlayerStats(raidStats.Parties[partyIdx].Players[character.PartyIndex])
 		}
 	}

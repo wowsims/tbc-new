@@ -259,7 +259,6 @@ func (character *Character) addUniversalStatDependencies() {
 	character.Unit.addUniversalStatDependencies()
 	character.AddStat(stats.Health, 20-14*20)
 	character.AddStatDependency(stats.Stamina, stats.Health, 14)
-
 }
 
 // Returns a partially-filled PlayerStats proto for use in the CharacterStats api call.
@@ -448,7 +447,6 @@ func (character *Character) FillPlayerStats(playerStats *proto.PlayerStats) {
 
 	character.applyBuildPhaseAuras(CharacterBuildPhaseAll)
 	playerStats.FinalStats = &proto.UnitStats{
-		// for i, stat
 		Stats:       character.GetStats().ToProtoArray(),
 		PseudoStats: character.GetPseudoStatsProto(),
 		ApiVersion:  GetCurrentProtoVersion(),

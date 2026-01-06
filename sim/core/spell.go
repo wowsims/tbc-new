@@ -626,9 +626,7 @@ func (spell *Spell) CanCast(sim *Simulation, target *Unit) bool {
 // Example: Metamorphosis drains 4 Demonic Fury every second.
 // This means at the end of the cast you could end up not meeting the casting requirements.
 func (spell *Spell) CanCompleteCast(sim *Simulation, target *Unit, logCastFailure bool) bool {
-
 	if !spell.Unit.IsEnabled() {
-		println("Unit is not Enabled")
 		if logCastFailure {
 			return spell.castFailureHelper(sim, "unit is disabled")
 		}
@@ -685,7 +683,6 @@ func (spell *Spell) Cast(sim *Simulation, target *Unit) bool {
 	if target == nil {
 		target = spell.Unit.CurrentTarget
 	}
-
 	return spell.castFn(sim, target)
 }
 

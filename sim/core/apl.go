@@ -161,7 +161,6 @@ func (unit *Unit) newAPLRotation(config *proto.APLRotation) *APLRotation {
 				action := rotation.newAPLAction(aplItem.Action)
 				if action != nil {
 					rotation.priorityList = append(rotation.priorityList, action)
-
 					rotation.priorityListIdxMap = append(rotation.priorityListIdxMap, i)
 				}
 			}

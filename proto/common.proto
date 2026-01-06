@@ -449,7 +449,6 @@ enum StrengthOfEarthType {
 	EnhancingAndCyclone = 4;
 }
 
-
 // Buffs that affect the entire raid.
 // Reindexed to The Burning Crusade raid buffs.
 // Next index: 36
@@ -726,7 +725,6 @@ enum ConsumableType {
 	ConsumableTypeImbue = 8;
 	ConsumableTypePetFood = 9;
 }
-
 
 
 

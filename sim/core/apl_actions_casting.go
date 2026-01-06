@@ -15,16 +15,13 @@ type APLActionCastSpell struct {
 
 func (rot *APLRotation) newActionCastSpell(config *proto.APLActionCastSpell) APLActionImpl {
 	spell := rot.GetAPLSpell(config.SpellId)
-
 	if spell == nil {
 		return nil
 	}
-
 	target := rot.GetTargetUnit(config.Target)
 	if target.Get() == nil {
 		return nil
 	}
-
 	return &APLActionCastSpell{
 		spell:  spell,
 		target: target,
@@ -88,12 +85,9 @@ func (rot *APLRotation) newActionChannelSpell(config *proto.APLActionChannelSpel
 	}
 
 	spell := rot.GetAPLSpell(config.SpellId)
-
 	if spell == nil {
-		println("GETAPLSPELL GAVE ME A NIL ONE")
 		return nil
 	}
-	println("GET APL SPELL: ", spell.ActionID.SpellID)
 	if !spell.Flags.Matches(SpellFlagChanneled) {
 		return nil
 	}

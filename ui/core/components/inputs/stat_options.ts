@@ -22,7 +22,6 @@ export interface StatOption {
 
 export interface ItemStatOption<T> extends StatOption {
 	config: ActionInputConfig<T>;
-
 }
 
 export interface PickerStatOption<PickerType, ConfigType> extends StatOption {

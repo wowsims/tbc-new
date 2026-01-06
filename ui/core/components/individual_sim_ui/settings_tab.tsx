@@ -182,7 +182,6 @@ export class SettingsTab extends SimTab {
 			header: { title: i18n.t('settings_tab.other.title') },
 		});
 
-
 			if (settings.length > 0) {
 				this.configureInputSection(contentBlock.bodyElement, this.simUI.individualConfig.otherInputs);
 				contentBlock.bodyElement.querySelectorAll('.input-root').forEach(elem => {
@@ -208,8 +207,6 @@ export class SettingsTab extends SimTab {
 				{i18n.t('settings_tab.raid_buffs.description')}
 			</p>,
 		);
-
-
 
 		const buffOptions = relevantStatOptions(BuffDebuffInputs.BUFFS_CONFIG, this.simUI);
 		this.configureIconSection(

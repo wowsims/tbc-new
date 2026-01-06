@@ -195,7 +195,6 @@ export class CharacterStats extends Component {
 		const consumesStats = Stats.fromProto(playerStats.consumesStats);
 		const bonusStats = player.getBonusStats();
 
-
 		let finalStats = Stats.fromProto(playerStats.finalStats)
 			.add(statMods.base || new Stats())
 			.add(statMods.gear || new Stats())
