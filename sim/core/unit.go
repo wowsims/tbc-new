@@ -126,8 +126,10 @@ type Unit struct {
 	// Pets owned by this Unit.
 	PetAgents []PetAgent
 
-	DynamicStatsPets     []*Pet
-	RegenInheritancePets []*Pet
+	DynamicStatsPets      []*Pet
+	DynamicMeleeSpeedPets []*Pet
+	DynamicCastSpeedPets  []*Pet
+	RegenInheritancePets  []*Pet
 
 	// AutoAttacks is the manager for auto attack swings.
 	// Must be enabled to use, with "EnableAutoAttacks()".
@@ -209,7 +211,7 @@ func (unit *Unit) getSpellDamageValueImpl(spell *Spell) float64 {
 }
 
 func (unit *Unit) getAttackPowerValueImpl(spell *Spell) float64 {
-	return unit.stats[stats.AttackPower] + unit.PseudoStats.BonusAttackPower
+	return unit.stats[stats.AttackPower]
 }
 
 // Units can be disabled for several reasons:
@@ -494,6 +496,10 @@ func (unit *Unit) updateCastSpeed() {
 func (unit *Unit) MultiplyCastSpeed(sim *Simulation, amount float64) {
 	unit.PseudoStats.CastSpeedMultiplier *= amount
 
+	unit.Env.TriggerDelayedPetInheritance(sim, unit.DynamicCastSpeedPets, func(sim *Simulation, pet *Pet) {
+		pet.dynamicCastSpeedInheritance(sim, amount)
+	})
+
 	unit.updateCastSpeed()
 }
 
@@ -556,6 +562,10 @@ func (unit *Unit) MultiplyMeleeSpeed(sim *Simulation, amount float64) {
 	unit.PseudoStats.MeleeSpeedMultiplier *= amount
 	unit.updateMeleeAttackSpeed()
 
+	unit.Env.TriggerDelayedPetInheritance(sim, unit.DynamicMeleeSpeedPets, func(sim *Simulation, pet *Pet) {
+		pet.dynamicMeleeSpeedInheritance(sim, amount)
+	})
+
 	unit.AutoAttacks.UpdateSwingTimers(sim)
 }
 
@@ -615,6 +625,10 @@ func (unit *Unit) MultiplyAttackSpeed(sim *Simulation, amount float64) {
 	// unit.MultiplyResourceRegenSpeed(sim, amount)
 	unit.updateAttackSpeed()
 	unit.updateMeleeAndRangedHaste()
+
+	unit.Env.TriggerDelayedPetInheritance(sim, unit.DynamicMeleeSpeedPets, func(sim *Simulation, pet *Pet) {
+		pet.dynamicMeleeSpeedInheritance(sim, amount)
+	})
 
 	unit.AutoAttacks.UpdateSwingTimers(sim)
 }
@@ -749,6 +763,7 @@ func (unit *Unit) reset(sim *Simulation, _ Agent) {
 	}
 
 	unit.DynamicStatsPets = unit.DynamicStatsPets[:0]
+	unit.DynamicMeleeSpeedPets = unit.DynamicMeleeSpeedPets[:0]
 	clear(unit.SpellsInFlight)
 
 	if unit.Type != PetUnit {
@@ -869,7 +884,6 @@ func (unit *Unit) GetTotalParryChanceAsDefender(atkTable *AttackTable) float64 {
 }
 
 func (unit *Unit) GetTotalChanceToBeMissedAsDefender(atkTable *AttackTable) float64 {
-
 	chance := atkTable.BaseMissChance +
 		unit.PseudoStats.ReducedPhysicalHitTakenChance
 	return math.Max(chance, 0.0)
