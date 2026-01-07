@@ -4,7 +4,7 @@ import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_u
 import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
 import { APLRotation } from '../../core/proto/apl';
-import { Debuffs, Drums, Faction, IndividualBuffs, ItemSlot, PartyBuffs, PseudoStat, Race, RaidBuffs, Spec, Stat, TristateEffect } from '../../core/proto/common';
+import { Debuffs, Faction, IndividualBuffs, ItemSlot, PartyBuffs, PseudoStat, Race, RaidBuffs, Spec, Stat } from '../../core/proto/common';
 import { DEFAULT_CASTER_GEM_STATS, Stats, UnitStat } from '../../core/proto_utils/stats';
 import { defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
 import { TypedEvent } from '../../core/typed_event';
@@ -35,12 +35,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecWarlock, {
 	knownIssues: [],
 
 	// All stats for which EP should be calculated.
-	epStats: [
-		Stat.StatIntellect,
-		Stat.StatSpellDamage,
-		Stat.StatSpellCritRating,
-		Stat.StatSpellHasteRating
-	],
+	epStats: [Stat.StatIntellect, Stat.StatSpellDamage],
 	// Reference stat against which to calculate EP. DPS classes use either spell power or attack power.
 	epReferenceStat: Stat.StatSpellDamage,
 	// Which stats to display in the Character Stats section, at the bottom of the left-hand sidebar.
@@ -50,17 +45,10 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecWarlock, {
 			Stat.StatMana,
 			Stat.StatStamina,
 			Stat.StatIntellect,
-			Stat.StatSpirit,
 			Stat.StatSpellDamage,
-			Stat.StatShadowDamage,
-			Stat.StatFireDamage,
 			Stat.StatMP5,
 		],
-		[
-			PseudoStat.PseudoStatSpellHitPercent,
-			PseudoStat.PseudoStatSpellCritPercent,
-			PseudoStat.PseudoStatSpellHastePercent
-		],
+		[PseudoStat.PseudoStatSpellHitPercent, PseudoStat.PseudoStatSpellCritPercent, PseudoStat.PseudoStatSpellHastePercent],
 	),
 	gemStats: DEFAULT_CASTER_GEM_STATS,
 
@@ -82,69 +70,30 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecWarlock, {
 		// Default buffs and debuffs settings.
 		raidBuffs: RaidBuffs.create({
 			...defaultRaidBuffMajorDamageCooldowns(),
-			arcaneBrilliance: true,
-			powerWordFortitude: TristateEffect.TristateEffectImproved,
-			divineSpirit: TristateEffect.TristateEffectImproved,
-			giftOfTheWild: TristateEffect.TristateEffectImproved,
 		}),
 		partyBuffs: PartyBuffs.create({
-			bloodPact: TristateEffect.TristateEffectMissing,
-			moonkinAura: TristateEffect.TristateEffectRegular,
-			totemOfWrath: 1,
-			wrathOfAirTotem: TristateEffect.TristateEffectRegular,
-			manaSpringTotem: TristateEffect.TristateEffectRegular,
-			draeneiRacialCaster: false,
-			ferociousInspiration: 0,
-			sanctityAura: TristateEffect.TristateEffectMissing,
-			drums: Drums.DrumsOfBattle
+
 		}),
 		individualBuffs: IndividualBuffs.create({
-			blessingOfKings: true,
-			blessingOfSalvation: false,
-			blessingOfWisdom: TristateEffect.TristateEffectRegular,
-			innervates: 0,
-			powerInfusions: 0,
-			shadowPriestDps: 0,
+
 		}),
 		debuffs: Debuffs.create({
-			bloodFrenzy: true,
-			curseOfElements: TristateEffect.TristateEffectRegular,
-			curseOfRecklessness: true,
-			faerieFire: TristateEffect.TristateEffectRegular,
-			huntersMark: TristateEffect.TristateEffectImproved,
-			exposeArmor: TristateEffect.TristateEffectRegular,
-			improvedScorch: false,
-			improvedSealOfTheCrusader: true,
-			hemorrhageUptime: 0,
-			isbUptime: 0,
-			misery: true,
-			shadowWeaving: true,
-			sunderArmor: true,
-			wintersChill: true,
+
 		}),
 
 		other: Presets.OtherDefaults,
 	},
 
 	// IconInputs to include in the 'Player' section on the settings tab.
-	playerIconInputs: [
-		WarlockInputs.PetInput(),
-		WarlockInputs.ArmorInput(),
-		WarlockInputs.DemonicSacrificeInput()
-	],
+	playerIconInputs: [WarlockInputs.PetInput()],
 
 	// Buff and Debuff inputs to include/exclude, overriding the EP-based defaults.
-	includeBuffDebuffInputs: [BuffDebuffInputs.HuntersMark],
+	includeBuffDebuffInputs: [],
 	excludeBuffDebuffInputs: [],
 	petConsumeInputs: [],
 	// Inputs to include in the 'Other' section on the settings tab.
 	otherInputs: {
-		inputs: [
-			OtherInputs.IsbUptime,
-			OtherInputs.HemoUptime,
-			OtherInputs.DistanceFromTarget,
-			OtherInputs.TankAssignment,
-		],
+		inputs: [OtherInputs.InputDelay, OtherInputs.DistanceFromTarget, OtherInputs.TankAssignment, OtherInputs.ChannelClipDelay],
 	},
 	itemSwapSlots: [ItemSlot.ItemSlotMainHand, ItemSlot.ItemSlotOffHand, ItemSlot.ItemSlotTrinket1, ItemSlot.ItemSlotTrinket2],
 	encounterPicker: {

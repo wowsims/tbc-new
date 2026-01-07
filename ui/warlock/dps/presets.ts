@@ -1,6 +1,6 @@
 import * as PresetUtils from '../../core/preset_utils';
 import { ConsumesSpec, PseudoStat, Stat } from '../../core/proto/common';
-import { Warlock_Options as WarlockOptions, WarlockOptions_Armor, WarlockOptions_Summon } from '../../core/proto/warlock';
+import { Warlock_Options as WarlockOptions } from '../../core/proto/warlock';
 import { SavedTalents } from '../../core/proto/ui';
 import { Stats } from '../../core/proto_utils/stats';
 import BlankAPL from './apls/blank.apl.json'
@@ -32,28 +32,23 @@ export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
 // https://wowhead.com/wotlk/talent-calc and copy the numbers in the url.
 
 export const Talents = {
-	name: 'Destruction',
+	name: 'A',
 	data: SavedTalents.create({
-		talentsString: '-20501301332001-50500051220051053105',
+		talentsString: '',
 	}),
 };
 
 export const DefaultOptions = WarlockOptions.create({
 	classOptions: {
-		armor: WarlockOptions_Armor.FelArmor,
-		summon: WarlockOptions_Summon.Succubus,
-		detonateSeed: false,
-		useItemSwapBonusStats: false,
-		sacrificeSummon: true,
+
 	},
 });
 
 export const DefaultConsumables = ConsumesSpec.create({
-	flaskId: 22866, // Flask of Pure Death
-	foodId: 33825, // Poached Bluefish
-	potId: 22839, // Destructive Potion
-	prepotId: 22839, // Destructive Potion
-	mhImbueId: 20749 // Brilliant Wizard Oil
+	flaskId: 76084, // Flask of the Winds
+	foodId: 74648, // Skewered Eel
+	potId: 76089, // Potion of the Tol'vir
+	prepotId: 76089, // Potion of the Tol'vir
 });
 
 export const OtherDefaults = {
