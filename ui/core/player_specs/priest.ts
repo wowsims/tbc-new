@@ -1,5 +1,5 @@
 import { IconSize } from '../player_class';
-import { PlayerSpec, Role } from '../player_spec';
+import { PlayerSpec } from '../player_spec';
 import { Class, Spec } from '../proto/common';
 import { getSpecSiteUrl } from '../proto_utils/utils';
 
@@ -14,7 +14,6 @@ export class DisciplinePriest extends PlayerSpec<Spec.SpecDisciplinePriest> {
 	static isHealingSpec = true;
 	static isRangedDpsSpec = false;
 	static isMeleeDpsSpec = false;
-	static role = Role.HEALER
 	static canDualWield = false;
 
 	readonly specIndex = DisciplinePriest.specIndex;
@@ -27,7 +26,6 @@ export class DisciplinePriest extends PlayerSpec<Spec.SpecDisciplinePriest> {
 	readonly isHealingSpec = DisciplinePriest.isHealingSpec;
 	readonly isRangedDpsSpec = DisciplinePriest.isRangedDpsSpec;
 	readonly isMeleeDpsSpec = DisciplinePriest.isMeleeDpsSpec;
-	readonly role = DisciplinePriest.role
 
 	readonly canDualWield = DisciplinePriest.canDualWield;
 
@@ -51,7 +49,6 @@ export class HolyPriest extends PlayerSpec<Spec.SpecHolyPriest> {
 	static isHealingSpec = true;
 	static isRangedDpsSpec = false;
 	static isMeleeDpsSpec = false;
-	static role = Role.HEALER
 	static canDualWield = false;
 
 	readonly specIndex = HolyPriest.specIndex;
@@ -64,7 +61,6 @@ export class HolyPriest extends PlayerSpec<Spec.SpecHolyPriest> {
 	readonly isHealingSpec = HolyPriest.isHealingSpec;
 	readonly isRangedDpsSpec = HolyPriest.isRangedDpsSpec;
 	readonly isMeleeDpsSpec = HolyPriest.isMeleeDpsSpec;
-	readonly role = HolyPriest.role
 
 	readonly canDualWield = HolyPriest.canDualWield;
 
@@ -88,7 +84,6 @@ export class ShadowPriest extends PlayerSpec<Spec.SpecShadowPriest> {
 	static isHealingSpec = false;
 	static isRangedDpsSpec = true;
 	static isMeleeDpsSpec = false;
-	static role = Role.CASTER
 	static canDualWield = false;
 
 	readonly specIndex = ShadowPriest.specIndex;
@@ -101,7 +96,6 @@ export class ShadowPriest extends PlayerSpec<Spec.SpecShadowPriest> {
 	readonly isHealingSpec = ShadowPriest.isHealingSpec;
 	readonly isRangedDpsSpec = ShadowPriest.isRangedDpsSpec;
 	readonly isMeleeDpsSpec = ShadowPriest.isMeleeDpsSpec;
-	readonly role = ShadowPriest.role
 
 	readonly canDualWield = ShadowPriest.canDualWield;
 

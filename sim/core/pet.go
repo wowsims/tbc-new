@@ -2,6 +2,7 @@ package core
 
 import (
 	"fmt"
+	"math"
 	"slices"
 	"time"
 
@@ -29,10 +30,13 @@ type PetConfig struct {
 	BaseStats stats.Stats
 	// Hit and Expertise are always inherited by combining the owners physical hit and expertise, then halving it
 	// For casters this will automatically give spell hit cap at 7.5% physical hit and exp
-	NonHitExpStatInheritance PetStatInheritance
-	EnabledOnStart           bool
-	IsGuardian               bool
-	StartsAtOwnerDistance    bool
+	NonHitExpStatInheritance        PetStatInheritance
+	EnabledOnStart                  bool
+	IsGuardian                      bool
+	HasDynamicMeleeSpeedInheritance bool
+	HasDynamicCastSpeedInheritance  bool
+	HasResourceRegenInheritance     bool
+	StartsAtOwnerDistance           bool
 }
 
 // Pet is an extension of Character, for any entity created by a player that can
@@ -55,11 +59,30 @@ type Pet struct {
 	pendingStatInheritance stats.Stats
 	statInheritanceAction  *PendingAction
 
+	// In MoP pets inherit their owners melee speed and cast speed
+	// rather than having auras such as Heroism being applied to them.
+	dynamicMeleeSpeedInheritance  PetSpeedInheritance
+	inheritedMeleeSpeedMultiplier float64
+	dynamicCastSpeedInheritance   PetSpeedInheritance
+	inheritedCastSpeedMultiplier  float64
+
+	// If true the pet will automatically inherit the owner's melee speed
+	hasDynamicMeleeSpeedInheritance bool
+	// If true the pet will automatically inherit the owner's cast speed
+	hasDynamicCastSpeedInheritance bool
+	// If true the pet will automatically inherit the owner's regen speed multiplier
+	hasResourceRegenInheritance bool
+
 	isReset bool
 
 	// Some pets expire after a certain duration. This is the pending action that disables
 	// the pet on expiration.
 	timeoutAction *PendingAction
+
+	// Examples:
+	// DK Raise Dead is doing its whole RP thing by climbing out of the ground before attacking.
+	// Monk clones Rush towards targets before attacking.
+	startAttackDelay time.Duration
 }
 
 func NewPet(config PetConfig) Pet {
@@ -85,10 +108,15 @@ func NewPet(config PetConfig) Pet {
 			PartyIndex: config.Owner.PartyIndex,
 			baseStats:  config.BaseStats,
 		},
-		Owner:           config.Owner,
-		statInheritance: makeStatInheritanceFunc(config.NonHitExpStatInheritance),
-		enabledOnStart:  config.EnabledOnStart,
-		isGuardian:      config.IsGuardian,
+		Owner:                           config.Owner,
+		statInheritance:                 makeStatInheritanceFunc(config.NonHitExpStatInheritance),
+		hasDynamicMeleeSpeedInheritance: config.HasDynamicMeleeSpeedInheritance,
+		inheritedMeleeSpeedMultiplier:   1,
+		hasDynamicCastSpeedInheritance:  config.HasDynamicCastSpeedInheritance,
+		inheritedCastSpeedMultiplier:    1,
+		hasResourceRegenInheritance:     config.HasResourceRegenInheritance,
+		enabledOnStart:                  config.EnabledOnStart,
+		isGuardian:                      config.IsGuardian,
 	}
 
 	pet.GCD = pet.NewTimer()
@@ -105,7 +133,9 @@ func NewPet(config PetConfig) Pet {
 }
 
 func (pet *Pet) Initialize() {
-
+	if pet.hasResourceRegenInheritance {
+		pet.enableResourceRegenInheritance()
+	}
 }
 
 func makeStatInheritanceFunc(nonHitExpStatInheritance PetStatInheritance) PetStatInheritance {
@@ -231,8 +261,20 @@ func (pet *Pet) Enable(sim *Simulation, petAgent PetAgent) {
 		pet.OnPetEnable(sim)
 	}
 
-	pet.SetGCDTimer(sim, max(0, sim.CurrentTime, sim.CurrentTime))
+	if pet.hasDynamicMeleeSpeedInheritance {
+		pet.enableDynamicMeleeSpeed(sim)
+	}
+
+	if pet.hasDynamicCastSpeedInheritance {
+		pet.enableDynamicCastSpeed(sim)
+	}
+
+	pet.SetGCDTimer(sim, max(0, sim.CurrentTime+pet.startAttackDelay, sim.CurrentTime))
 	pet.AutoAttacks.EnableAutoSwing(sim)
+
+	if pet.startAttackDelay > 0 {
+		pet.AutoAttacks.StopMeleeUntil(sim, max(SpellBatchWindow, sim.CurrentTime+pet.startAttackDelay)-pet.AutoAttacks.MainhandSwingSpeed())
+	}
 
 	if sim.Log != nil {
 		pet.Log(sim, "Pet stats: %s", pet.GetStats().FlatString())
@@ -246,13 +288,24 @@ func (pet *Pet) Enable(sim *Simulation, petAgent PetAgent) {
 		// make sure to reset it to refresh focus
 		pet.focusBar.reset(sim)
 		pet.focusBar.enable(sim, sim.CurrentTime)
+		if pet.hasResourceRegenInheritance {
+			pet.focusBar.focusRegenMultiplier *= pet.Owner.PseudoStats.AttackSpeedMultiplier
+		}
 	}
 
 	if pet.HasEnergyBar() {
 		// make sure to reset it to refresh energy
 		pet.energyBar.reset(sim)
 		pet.energyBar.enable(sim, sim.CurrentTime)
+		if pet.hasResourceRegenInheritance {
+			pet.energyBar.energyRegenMultiplier *= pet.Owner.PseudoStats.AttackSpeedMultiplier
+		}
 	}
+}
+
+func (pet *Pet) EnableWithStartAttackDelay(sim *Simulation, petAgent PetAgent, startAttackDelay time.Duration) {
+	pet.startAttackDelay = startAttackDelay
+	pet.Enable(sim, petAgent)
 }
 
 // Helper for enabling a pet that will expire after a certain duration.
@@ -272,6 +325,77 @@ func (pet *Pet) SetTimeoutAction(sim *Simulation, duration time.Duration) {
 	sim.AddPendingAction(pet.timeoutAction)
 }
 
+func (pet *Pet) SetStartAttackDelay(startAttackDelay time.Duration) {
+	pet.startAttackDelay = startAttackDelay
+}
+
+func (pet *Pet) enableDynamicMeleeSpeed(sim *Simulation) {
+	if slices.Contains(pet.Owner.DynamicMeleeSpeedPets, pet) {
+		panic("Pet already present in dynamic melee speed pet list!")
+	}
+
+	if math.Abs(pet.inheritedMeleeSpeedMultiplier-1) > 1e-14 {
+		panic(fmt.Sprintf("Pet melee speed multiplier was not reset properly! Current inherited value = %.17f", pet.inheritedMeleeSpeedMultiplier))
+	}
+
+	pet.dynamicMeleeSpeedInheritance = func(sim *Simulation, ownerSpeedMultiplier float64) {
+		pet.inheritedMeleeSpeedMultiplier *= ownerSpeedMultiplier
+		pet.MultiplyMeleeSpeed(sim, ownerSpeedMultiplier)
+	}
+
+	pet.dynamicMeleeSpeedInheritance(sim, pet.Owner.PseudoStats.MeleeSpeedMultiplier)
+	pet.dynamicMeleeSpeedInheritance(sim, pet.Owner.PseudoStats.AttackSpeedMultiplier)
+	pet.Owner.DynamicMeleeSpeedPets = append(pet.Owner.DynamicMeleeSpeedPets, pet)
+}
+
+func (pet *Pet) resetDynamicMeleeSpeed(sim *Simulation) {
+	if pet.dynamicMeleeSpeedInheritance == nil {
+		return
+	}
+
+	if idx := slices.Index(pet.Owner.DynamicMeleeSpeedPets, pet); idx != -1 {
+		pet.Owner.DynamicMeleeSpeedPets = removeBySwappingToBack(pet.Owner.DynamicMeleeSpeedPets, idx)
+	} else {
+		panic("Pet not present in dynamic melee speed pet list!")
+	}
+
+	pet.dynamicMeleeSpeedInheritance(sim, 1/pet.inheritedMeleeSpeedMultiplier)
+	pet.dynamicMeleeSpeedInheritance = nil
+}
+
+func (pet *Pet) enableDynamicCastSpeed(sim *Simulation) {
+	if slices.Contains(pet.Owner.DynamicCastSpeedPets, pet) {
+		panic("Pet already present in dynamic cast speed pet list!")
+	}
+
+	if math.Abs(pet.inheritedCastSpeedMultiplier-1) > 1e-14 {
+		panic(fmt.Sprintf("Pet cast speed multiplier was not reset properly! Current inherited value = %.17f", pet.inheritedCastSpeedMultiplier))
+	}
+
+	pet.dynamicCastSpeedInheritance = func(sim *Simulation, ownerSpeedMultiplier float64) {
+		pet.inheritedCastSpeedMultiplier *= ownerSpeedMultiplier
+		pet.MultiplyCastSpeed(sim, ownerSpeedMultiplier)
+	}
+
+	pet.dynamicCastSpeedInheritance(sim, pet.Owner.PseudoStats.CastSpeedMultiplier)
+	pet.Owner.DynamicCastSpeedPets = append(pet.Owner.DynamicCastSpeedPets, pet)
+}
+
+func (pet *Pet) resetDynamicCastSpeed(sim *Simulation) {
+	if pet.dynamicCastSpeedInheritance == nil {
+		return
+	}
+
+	if idx := slices.Index(pet.Owner.DynamicCastSpeedPets, pet); idx != -1 {
+		pet.Owner.DynamicCastSpeedPets = removeBySwappingToBack(pet.Owner.DynamicCastSpeedPets, idx)
+	} else {
+		panic("Pet not present in dynamic cast speed pet list!")
+	}
+
+	pet.dynamicCastSpeedInheritance(sim, 1/pet.inheritedCastSpeedMultiplier)
+	pet.dynamicCastSpeedInheritance = nil
+}
+
 func (pet *Pet) enableResourceRegenInheritance() {
 	if !slices.Contains(pet.Owner.RegenInheritancePets, pet) {
 		pet.Owner.RegenInheritancePets = append(pet.Owner.RegenInheritancePets, pet)
@@ -287,6 +411,8 @@ func (pet *Pet) Disable(sim *Simulation) {
 	}
 
 	pet.resetDynamicStats(sim)
+	pet.resetDynamicMeleeSpeed(sim)
+	pet.resetDynamicCastSpeed(sim)
 	pet.CancelGCDTimer(sim)
 	pet.focusBar.disable(sim)
 	pet.energyBar.disable(sim)

@@ -209,11 +209,7 @@ func (unit *Unit) getSpellDamageValueImpl(spell *Spell) float64 {
 }
 
 func (unit *Unit) getAttackPowerValueImpl(spell *Spell) float64 {
-	bonusAP := 0.0
-	if spell.ProcMask == ProcMaskMeleeMHAuto {
-		bonusAP = spell.BonusSpellDamage
-	}
-	return unit.stats[stats.AttackPower] + unit.PseudoStats.BonusAttackPower + bonusAP
+	return unit.stats[stats.AttackPower] + unit.PseudoStats.BonusAttackPower
 }
 
 // Units can be disabled for several reasons:

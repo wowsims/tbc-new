@@ -1,5 +1,5 @@
 import { IconSize } from '../player_class';
-import { PlayerSpec, Role } from '../player_spec';
+import { PlayerSpec } from '../player_spec';
 import { Class, Spec } from '../proto/common';
 import { getSpecSiteUrl } from '../proto_utils/utils';
 
@@ -14,7 +14,6 @@ export class Rogue extends PlayerSpec<Spec.SpecRogue> {
 	static isHealingSpec = false;
 	static isRangedDpsSpec = false;
 	static isMeleeDpsSpec = true;
-	static role = Role.MELEE
 	static canDualWield = true;
 
 	readonly specIndex = Rogue.specIndex;
@@ -27,7 +26,6 @@ export class Rogue extends PlayerSpec<Spec.SpecRogue> {
 	readonly isHealingSpec = Rogue.isHealingSpec;
 	readonly isRangedDpsSpec = Rogue.isRangedDpsSpec;
 	readonly isMeleeDpsSpec = Rogue.isMeleeDpsSpec;
-	readonly role = Rogue.role
 
 	readonly canDualWield = Rogue.canDualWield;
 

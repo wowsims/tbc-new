@@ -1,5 +1,5 @@
 import { IconSize } from '../player_class';
-import { PlayerSpec, Role } from '../player_spec';
+import { PlayerSpec } from '../player_spec';
 import { Class, Spec } from '../proto/common';
 import { getSpecSiteUrl } from '../proto_utils/utils';
 
@@ -14,7 +14,6 @@ export class DPSWarrior extends PlayerSpec<Spec.SpecDPSWarrior> {
 	static isHealingSpec = false;
 	static isRangedDpsSpec = false;
 	static isMeleeDpsSpec = true;
-	static role = Role.MELEE
 	static canDualWield = true;
 
 	readonly specIndex = DPSWarrior.specIndex;
@@ -27,7 +26,6 @@ export class DPSWarrior extends PlayerSpec<Spec.SpecDPSWarrior> {
 	readonly isHealingSpec = DPSWarrior.isHealingSpec;
 	readonly isRangedDpsSpec = DPSWarrior.isRangedDpsSpec;
 	readonly isMeleeDpsSpec = DPSWarrior.isMeleeDpsSpec;
-	readonly role = Role.MELEE
 
 	readonly canDualWield = DPSWarrior.canDualWield;
 
@@ -51,7 +49,6 @@ export class ProtectionWarrior extends PlayerSpec<Spec.SpecProtectionWarrior> {
 	static isHealingSpec = false;
 	static isRangedDpsSpec = false;
 	static isMeleeDpsSpec = false;
-	static role = Role.TANK;
 	static canDualWield = true;
 
 	readonly specIndex = ProtectionWarrior.specIndex;
@@ -64,7 +61,6 @@ export class ProtectionWarrior extends PlayerSpec<Spec.SpecProtectionWarrior> {
 	readonly isHealingSpec = ProtectionWarrior.isHealingSpec;
 	readonly isRangedDpsSpec = ProtectionWarrior.isRangedDpsSpec;
 	readonly isMeleeDpsSpec = ProtectionWarrior.isMeleeDpsSpec;
-	readonly role = ProtectionWarrior.role
 
 	readonly canDualWield = ProtectionWarrior.canDualWield;
 

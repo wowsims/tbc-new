@@ -593,7 +593,7 @@ func (spell *Spell) CanCast(sim *Simulation, target *Unit) bool {
 	}
 
 	// While casting or channeling, no other action is possible
-	if spell.Unit.Hardcast.Expires > sim.CurrentTime {
+	if (spell.Unit.Hardcast.Expires > sim.CurrentTime) || !spell.CanCastDuringChannel(sim) {
 		//if sim.Log != nil {
 		//	sim.Log("Cant cast because already casting/channeling")
 		//}
@@ -659,9 +659,9 @@ func (spell *Spell) CanCompleteCast(sim *Simulation, target *Unit, logCastFailur
 
 	if spell.Cost != nil {
 		if !spell.Cost.MeetsRequirement(sim, spell) {
-			if sim.Log != nil {
-				sim.Log("Cant cast because of resource cost")
-			}
+			//if sim.Log != nil {
+			//	sim.Log("Cant cast because of resource cost")
+			//}
 			if logCastFailure {
 				return spell.castFailureHelper(sim, spell.Cost.CostFailureReason(sim, spell))
 			}

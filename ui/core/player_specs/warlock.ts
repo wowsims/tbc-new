@@ -1,5 +1,5 @@
 import { IconSize } from '../player_class';
-import { PlayerSpec, Role } from '../player_spec';
+import { PlayerSpec } from '../player_spec';
 import { Class, Spec } from '../proto/common';
 import { getSpecSiteUrl } from '../proto_utils/utils';
 
@@ -14,7 +14,6 @@ export class Warlock extends PlayerSpec<Spec.SpecWarlock> {
 	static isHealingSpec = false;
 	static isRangedDpsSpec = true;
 	static isMeleeDpsSpec = false;
-	static role = Role.CASTER
 
 	static canDualWield = false;
 
@@ -28,7 +27,6 @@ export class Warlock extends PlayerSpec<Spec.SpecWarlock> {
 	readonly isHealingSpec = Warlock.isHealingSpec;
 	readonly isRangedDpsSpec = Warlock.isRangedDpsSpec;
 	readonly isMeleeDpsSpec = Warlock.isMeleeDpsSpec;
-	readonly role = Warlock.role
 
 	readonly canDualWield = Warlock.canDualWield;
 

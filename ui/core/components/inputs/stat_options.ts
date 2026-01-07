@@ -7,6 +7,7 @@ import { IconEnumPicker, IconEnumPickerConfig } from '../pickers/icon_enum_picke
 import { IconPicker, IconPickerConfig } from '../pickers/icon_picker';
 import { MultiIconPicker, MultiIconPickerConfig } from '../pickers/multi_icon_picker';
 import { Role } from '../../player_spec';
+import { UnitStat } from '../../proto_utils/stats';
 
 export interface ActionInputConfig<T> {
 	actionId: ActionId;
@@ -17,7 +18,6 @@ export interface ActionInputConfig<T> {
 
 export interface StatOption {
 	stats: Array<Stat>;
-	roles?: Array<Role>;
 }
 
 export interface ItemStatOption<T> extends StatOption {
@@ -49,7 +49,7 @@ export function relevantStatOptions<T, OptionsType extends ItemStatOptions<T> | 
 		.filter(
 			option =>
 				option.stats.length == 0 ||
-				option.stats.some(stat => simUI.individualConfig.epStats.includes(stat)) ||
+				option.stats.some(stat => simUI.individualConfig.displayStats.includes(UnitStat.fromStat(stat))) ||
 				simUI.individualConfig.includeBuffDebuffInputs.includes(option.config) ||
 				option.roles?.includes(simUI.player.playerSpec.role)
 

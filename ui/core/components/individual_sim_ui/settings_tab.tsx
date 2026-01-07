@@ -411,23 +411,3 @@ export class SettingsTab extends SimTab {
 		}
 	}
 }
-
-export type ExclusivityTag =
-	'Battle Elixir'
-	| 'Drums'
-	| 'Food'
-	| 'Pet Food'
-	| 'Alchohol'
-	| 'Guardian Elixir'
-	| 'Potion'
-	| 'Conjured'
-	| 'Spirit'
-	| 'MH Weapon Imbue'
-	| 'OH Weapon Imbue';
-
-export interface ExclusiveEffect {
-	tags: Array<ExclusivityTag>;
-	changedEvent: TypedEvent<any>;
-	isActive: () => boolean;
-	deactivate: (eventID: EventID) => void;
-}
