@@ -4,7 +4,6 @@ import { ConsumesSpec, Debuffs, Faction, IndividualBuffs, PartyBuffs, RaidBuffs,
 import { ActionId } from '../proto_utils/action_id.js';
 import { Raid } from '../raid';
 import { EventID, TypedEvent } from '../typed_event';
-import { ExclusivityTag } from './individual_sim_ui/settings_tab';
 import * as InputHelpers from './input_helpers';
 import { IconEnumPicker, IconEnumPickerDirection, IconEnumValueConfig } from './pickers/icon_enum_picker.jsx';
 import { IconPicker, IconPickerConfig } from './pickers/icon_picker.jsx';
@@ -71,7 +70,7 @@ export function makeBooleanPartyBuffInput<SpecType extends Spec>(
 	);
 }
 
-export function makeEnumValuePartyBuffInput(id: ActionId, buffsFieldName: keyof PartyBuffs, enumValue: number, exclusivityTags?: Array<ExclusivityTag>): InputHelpers.TypedIconPickerConfig<Party,boolean> {
+export function makeEnumValuePartyBuffInput(id: ActionId, buffsFieldName: keyof PartyBuffs, enumValue: number): InputHelpers.TypedIconPickerConfig<Party,boolean> {
 	return {
 		id: id.name,
 		actionId: id,

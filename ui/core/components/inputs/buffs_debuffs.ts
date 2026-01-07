@@ -19,7 +19,6 @@ import * as InputHelpers from '../input_helpers';
 import { IconPicker } from '../pickers/icon_picker';
 import { MultiIconPicker } from '../pickers/multi_icon_picker';
 import { IconPickerStatOption, PickerStatOptions } from './stat_options';
-import { Role } from '../../player_spec'
 
 ///////////////////////////////////////////////////////////////////////////
 //                                 RAID BUFFS
@@ -57,8 +56,8 @@ export const TrueshotAura = makeBooleanPartyBuffInput({actionId: ActionId.fromSp
 export const WrathOfAirTotem = makeTristatePartyBuffInput({actionId: ActionId.fromSpellId(3738), impId: ActionId.fromSpellId(37212), fieldName: 'wrathOfAirTotem', label: 'Wrath of Air Totem'});
 export const BloodPact = makeTristatePartyBuffInput({actionId: ActionId.fromSpellId(27268), impId: ActionId.fromSpellId(18696), fieldName: 'bloodPact', label: 'Bloodpact'});
 
-export const DrumsOfBattleBuff = makeEnumValuePartyBuffInput(ActionId.fromItemId(185848), 'drums', Drums.DrumsOfBattle, ['Drums']);
-export const DrumsOfRestorationBuff = makeEnumValuePartyBuffInput(ActionId.fromItemId(185850), 'drums', Drums.DrumsOfRestoration, ['Drums']);
+export const DrumsOfBattleBuff = makeEnumValuePartyBuffInput(ActionId.fromItemId(185848), 'drums', Drums.DrumsOfBattle);
+export const DrumsOfRestorationBuff = makeEnumValuePartyBuffInput(ActionId.fromItemId(185850), 'drums', Drums.DrumsOfRestoration);
 
 // Individual Buffs
 export const BlessingOfKings = makeBooleanIndividualBuffInput({actionId: ActionId.fromSpellId(25898), fieldName: 'blessingOfKings', label: 'Blessing of Kings'});

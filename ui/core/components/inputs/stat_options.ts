@@ -6,7 +6,6 @@ import { BooleanPicker, BooleanPickerConfig } from '../pickers/boolean_picker';
 import { IconEnumPicker, IconEnumPickerConfig } from '../pickers/icon_enum_picker';
 import { IconPicker, IconPickerConfig } from '../pickers/icon_picker';
 import { MultiIconPicker, MultiIconPickerConfig } from '../pickers/multi_icon_picker';
-import { Role } from '../../player_spec';
 import { UnitStat } from '../../proto_utils/stats';
 
 export interface ActionInputConfig<T> {
@@ -50,8 +49,7 @@ export function relevantStatOptions<T, OptionsType extends ItemStatOptions<T> | 
 			option =>
 				option.stats.length == 0 ||
 				option.stats.some(stat => simUI.individualConfig.displayStats.includes(UnitStat.fromStat(stat))) ||
-				simUI.individualConfig.includeBuffDebuffInputs.includes(option.config) ||
-				option.roles?.includes(simUI.player.playerSpec.role)
+				simUI.individualConfig.includeBuffDebuffInputs.includes(option.config)
 
 		)
 		.filter(option => !simUI.individualConfig.excludeBuffDebuffInputs.includes(option.config));
