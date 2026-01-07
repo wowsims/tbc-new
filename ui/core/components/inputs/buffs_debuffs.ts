@@ -247,7 +247,6 @@ export const BUFFS_CONFIG = [
 	}
 ] as PickerStatOptions[];
 
-
 // Debuffs
 export const BloodFrenzy = makeBooleanDebuffInput({actionId: ActionId.fromSpellId(29859), fieldName: 'bloodFrenzy', label: 'Blood Frenzy'});
 export const HuntersMark = makeTristateDebuffInput({actionId: ActionId.fromSpellId(14325), impId: ActionId.fromSpellId(19425), fieldName: 'huntersMark', label: 'Hunter\'s Mark'});
@@ -277,19 +276,17 @@ export const DEBUFFS_CONFIG = [
 	{
 		config: BloodFrenzy,
 		picker: IconPicker,
-		stats: []
+		stats: [Stat.StatAttackPower]
 	},
 	{
 		config: HuntersMark,
 		picker: IconPicker,
 		stats: [Stat.StatRangedAttackPower, Stat.StatAttackPower],
-		roles: [Role.MELEE, Role.RANGED, Role.TANK]
 	},
 	{
 		config: ImprovedScorch,
 		picker: IconPicker,
-		stats: [],
-		roles: [Role.CASTER]
+		stats: [Stat.StatFireDamage]
 	},
 	{
 		config: ImprovedSealOfTheCrusader,
@@ -299,116 +296,97 @@ export const DEBUFFS_CONFIG = [
 	{
 		config: JudgementOfLight,
 		picker: IconPicker,
-		stats: [],
-		roles: [Role.TANK]
+		stats: [Stat.StatResilienceRating]
 	},
 	{
 		config: JudgementOfWisdom,
 		picker: IconPicker,
-		stats: [],
-		roles: [Role.CASTER, Role.HEALER]
+		stats: [Stat.StatMP5]
 	},
 	{
 		config: Mangle,
 		picker: IconPicker,
-		stats: [],
-		roles: [Role.MELEE]
+		stats: []
 	},
 	{
 		config: Misery,
 		picker: IconPicker,
-		stats: [],
-		roles: [Role.CASTER]
+		stats: [Stat.StatSpellDamage]
 	},
 	{
 		config: ShadowWeaving,
 		picker: IconPicker,
-		stats: [],
-		roles: [Role.CASTER],
+		stats: [Stat.StatShadowDamage]
 	},
 	{
 		config: CurseOfElements,
 		picker: IconPicker,
-		stats: [],
-		roles: [Role.CASTER]
+		stats: [Stat.StatSpellDamage]
 	},
 	{
 		config: CurseOfRecklessness,
 		picker: IconPicker,
-		stats: [],
-		roles: [Role.MELEE, Role.RANGED, Role.TANK]
+		stats: [Stat.StatAttackPower]
 	},
 	{
 		config: FaerieFire,
 		picker: IconPicker,
-		stats: [],
-		roles: [Role.MELEE, Role.RANGED, Role.TANK]
+		stats: [Stat.StatAttackPower]
 	},
 	{
 		config: ExposeArmor,
 		picker: IconPicker,
-		stats: [],
-		roles: [Role.MELEE, Role.RANGED, Role.TANK]
+		stats: [Stat.StatAttackPower]
 	},
 	{
 		config: SunderArmor,
 		picker: IconPicker,
-		stats: [],
-		roles: [Role.MELEE, Role.RANGED, Role.TANK]
+		stats: [Stat.StatAttackPower]
 	},
 	{
 		config: WintersChill,
 		picker: IconPicker,
-		stats: [],
-		roles: [Role.CASTER]
+		stats: [Stat.StatFrostDamage]
 	},
 	{
 		config: GiftOfArthas,
 		picker: IconPicker,
-		stats: [],
-		roles: [Role.MELEE, Role.RANGED, Role.TANK]
+		stats: [Stat.StatAttackPower]
 	},
 	{
 		config: DemoralizingRoar,
 		picker: IconPicker,
-		stats: [],
-		roles: [Role.TANK]
+		stats: [Stat.StatResilienceRating],
 	},
 	{
 		config: DemoralizingShout,
 		picker: IconPicker,
-		stats: [],
-		roles: [Role.TANK]
+		stats: [Stat.StatResilienceRating]
 	},
 	{
 		config: Screech,
 		picker: IconPicker,
-		stats: [],
-		roles: [Role.TANK]
+		stats: [Stat.StatResilienceRating]
 	},
 	{
 		config: ThunderClap,
 		picker: IconPicker,
-		stats: [],
-		roles: [Role.TANK]
+		stats: [Stat.StatResilienceRating]
 	},
 	{
 		config: InsectSwarm,
 		picker: IconPicker,
-		stats: [],
-		roles: [Role.TANK]
+		stats: [Stat.StatResilienceRating]
 	},
 	{
 		config: ScorpidSting,
 		picker: IconPicker,
-		stats: [],
-		roles: [Role.TANK]
+		stats: [Stat.StatResilienceRating],
 	},
 	{
 		config: ShadowEmbrace,
 		picker: IconPicker,
-		stats: [],
-		roles: [Role.TANK]
+		stats: [Stat.StatResilienceRating]
 	}
 ] as PickerStatOptions[]
 
