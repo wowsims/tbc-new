@@ -303,3 +303,19 @@ export const HemoUptime = {
 		player.getRaid()!.setDebuffs(eventID, newDebuffs!);
 	},
 }
+
+export const ShadowPriestDPS = {
+	id: 'shadowPriestDps',
+	type: 'number' as const,
+	raid: true,
+	float: true,
+	label: 'Shadow Priest DPS',
+	labelTooltip: 'Shadow Priest DPS for Mana Battery purposes',
+	changedEvent: (player: Player<any>) => player.buffsChangeEmitter,
+	getValue: (player: Player<any>) => player.getBuffs().shadowPriestDps,
+	setValue: (eventID: EventID, player: Player<any>, newValue: number) => {
+		const buffs = player.getBuffs();
+		buffs.shadowPriestDps = newValue;
+		player.setBuffs(eventID, buffs);
+	},
+};

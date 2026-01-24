@@ -140,6 +140,10 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 		MakePermanent(LeaderOfThePackAura(char, IsImproved(partyBuffs.LeaderOfThePack)))
 	}
 
+	if partyBuffs.ManaSpringTotem != proto.TristateEffect_TristateEffectMissing {
+		MakePermanent(ManaSpringTotemAura(char, IsImproved(partyBuffs.ManaSpringTotem)))
+	}
+
 	if partyBuffs.MoonkinAura != proto.TristateEffect_TristateEffectMissing {
 		MakePermanent(MoonkinAuraBuff(char, IsImproved(partyBuffs.MoonkinAura)))
 	}
@@ -439,6 +443,14 @@ func GraceOfAirTotemAura(char *Character, improved bool) *Aura {
 		agiBuff *= 1.15
 	}
 	return char.NewTemporaryStatsAura("Grace of Air Totem", ActionID{SpellID: 25359}, stats.Stats{stats.Agility: agiBuff}, time.Minute*2).Aura
+}
+
+func ManaSpringTotemAura(char *Character, improved bool) *Aura {
+	mp5Buff := 50.0
+	if improved {
+		mp5Buff *= 1.25
+	}
+	return char.NewTemporaryStatsAura("Mana Spring Totem", ActionID{SpellID: 25570}, stats.Stats{stats.Agility: mp5Buff}, time.Minute*2).Aura
 }
 
 func StrengthOfEarthTotemAura(char *Character, totem *proto.StrengthOfEarthType) *Aura {
