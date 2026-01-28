@@ -10,8 +10,6 @@ import (
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
-const MasteryRaidBuffStrength = 3000
-
 type BuffConfig struct {
 	Label    string
 	ActionID ActionID
@@ -24,14 +22,59 @@ type StatConfig struct {
 	IsMultiplicative bool
 }
 
+func makeMultiplierBuff(aura *Aura, stat stats.Stat, value float64) {
+	dep := aura.Unit.NewDynamicMultiplyStat(stat, value)
+	aura.ApplyOnGain(func(aura *Aura, sim *Simulation) {
+		aura.Unit.EnableBuildPhaseStatDep(sim, dep)
+	}).ApplyOnExpire(func(aura *Aura, sim *Simulation) {
+		aura.Unit.DisableBuildPhaseStatDep(sim, dep)
+	})
+}
+
+func makeFlatStatBuff(aura *Aura, stat stats.Stat, value float64) {
+	aura.ApplyOnGain(func(aura *Aura, sim *Simulation) {
+		aura.Unit.AddStatDynamic(sim, stat, value)
+	}).ApplyOnExpire(func(aura *Aura, sim *Simulation) {
+		aura.Unit.AddStatDynamic(sim, stat, -value)
+	})
+}
+
+func registerStatEffect(aura *Aura, config []StatConfig) {
+	for _, statConfig := range config {
+		if statConfig.IsMultiplicative {
+			makeMultiplierBuff(aura, statConfig.Stat, statConfig.Amount)
+		} else {
+			makeFlatStatBuff(aura, statConfig.Stat, statConfig.Amount)
+		}
+	}
+}
+
+func makeStatBuff(char *Character, config BuffConfig) *Aura {
+	if config.Label == "" {
+		panic("Buff without label.")
+	}
+
+	if ActionID.IsEmptyAction(config.ActionID) {
+		panic("Buff without ActionID")
+	}
+
+	baseAura := MakePermanent(char.GetOrRegisterAura(Aura{
+		Label:      config.Label,
+		ActionID:   config.ActionID,
+		BuildPhase: CharacterBuildPhaseBuffs,
+	}))
+
+	registerStatEffect(baseAura, config.Stats)
+	return baseAura
+}
+
 // Applies buffs that affect individual players.
 func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto.PartyBuffs, individual *proto.IndividualBuffs) {
 	char := agent.GetCharacter()
-	// u := &char.Unit
 
 	// Raid Buffs
 	if raidBuffs.ArcaneBrilliance {
-		MakePermanent(ArcaneBrillianceAura(char))
+		ArcaneBrillianceAura(char)
 	}
 
 	if raidBuffs.DivineSpirit != proto.TristateEffect_TristateEffectMissing {
@@ -39,145 +82,145 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 	}
 
 	if raidBuffs.GiftOfTheWild != proto.TristateEffect_TristateEffectMissing {
-		MakePermanent(GiftOfTheWildAura(char, IsImproved(raidBuffs.GiftOfTheWild)))
+		GiftOfTheWildAura(char, IsImproved(raidBuffs.GiftOfTheWild))
 	}
 
 	if raidBuffs.PowerWordFortitude != proto.TristateEffect_TristateEffectMissing {
-		MakePermanent(PowerWordFortitudeAura(char, IsImproved(raidBuffs.PowerWordFortitude)))
+		PowerWordFortitudeAura(char, IsImproved(raidBuffs.PowerWordFortitude))
 	}
 
 	if raidBuffs.ShadowProtection {
-		MakePermanent(ShadowProtectionAura(char))
+		ShadowProtectionAura(char)
 	}
 
 	// Party Buffs
 	if partyBuffs.AtieshDruid > 0 {
-		MakePermanent(AtieshAura(char, proto.Class_ClassDruid.Enum(), float64(partyBuffs.AtieshDruid)))
+		AtieshAura(char, proto.Class_ClassDruid.Enum(), float64(partyBuffs.AtieshDruid))
 	}
 
 	if partyBuffs.AtieshMage > 0 {
-		MakePermanent(AtieshAura(char, proto.Class_ClassMage.Enum(), float64(partyBuffs.AtieshMage)))
+		AtieshAura(char, proto.Class_ClassMage.Enum(), float64(partyBuffs.AtieshMage))
 	}
 
 	if partyBuffs.AtieshPriest > 0 {
-		MakePermanent(AtieshAura(char, proto.Class_ClassPriest.Enum(), float64(partyBuffs.AtieshPriest)))
+		AtieshAura(char, proto.Class_ClassPriest.Enum(), float64(partyBuffs.AtieshPriest))
 	}
 
 	if partyBuffs.AtieshWarlock > 0 {
-		MakePermanent(AtieshAura(char, proto.Class_ClassWarlock.Enum(), float64(partyBuffs.AtieshMage)))
+		AtieshAura(char, proto.Class_ClassWarlock.Enum(), float64(partyBuffs.AtieshWarlock))
 	}
 
 	if partyBuffs.BattleShout != proto.TristateEffect_TristateEffectMissing {
-		MakePermanent(BattleShoutAura(char, IsImproved(partyBuffs.BattleShout), partyBuffs.BsSolarianSapphire))
+		BattleShoutAura(char, IsImproved(partyBuffs.BattleShout), partyBuffs.BsSolarianSapphire)
 	}
 
 	if partyBuffs.BloodPact != proto.TristateEffect_TristateEffectMissing {
-		MakePermanent(BloodPactAura(char, IsImproved(partyBuffs.BloodPact)))
+		BloodPactAura(char, IsImproved(partyBuffs.BloodPact))
 	}
 
 	if partyBuffs.BraidedEterniumChain {
-		MakePermanent(BraidedEterniumChainAura(char))
+		BraidedEterniumChainAura(char)
 	}
 
 	if partyBuffs.ChainOfTheTwilightOwl {
-		MakePermanent(ChainOfTheTwilightOwlAura(char))
+		ChainOfTheTwilightOwlAura(char)
 	}
 
 	if partyBuffs.CommandingShout != proto.TristateEffect_TristateEffectMissing {
-		MakePermanent(CommandingShoutAura(char, IsImproved(partyBuffs.CommandingShout)))
+		CommandingShoutAura(char, IsImproved(partyBuffs.CommandingShout))
 	}
 
 	if partyBuffs.DevotionAura != proto.TristateEffect_TristateEffectMissing {
-		MakePermanent(DevotionAuraBuff(char, IsImproved(partyBuffs.DevotionAura)))
+		DevotionAuraBuff(char, IsImproved(partyBuffs.DevotionAura))
 	}
 
 	if partyBuffs.DraeneiRacialCaster {
-		MakePermanent(DraneiRacialAura(char, true))
+		DraneiRacialAura(char, true)
 	}
 
 	if partyBuffs.DraeneiRacialMelee {
-		MakePermanent(DraneiRacialAura(char, false))
+		DraneiRacialAura(char, false)
 	}
 
 	if partyBuffs.EyeOfTheNight {
-		MakePermanent(EyeOfTheNightAura(char))
+		EyeOfTheNightAura(char)
 	}
 
 	if partyBuffs.FerociousInspiration > 0 {
-		MakePermanent(FerociousInspiration(char, partyBuffs.FerociousInspiration))
+		FerociousInspiration(char, partyBuffs.FerociousInspiration)
 	}
 
 	if partyBuffs.GraceOfAirTotem != proto.TristateEffect_TristateEffectMissing {
-		MakePermanent(GraceOfAirTotemAura(char, IsImproved(partyBuffs.GraceOfAirTotem)))
+		GraceOfAirTotemAura(char, IsImproved(partyBuffs.GraceOfAirTotem))
 	}
 
 	if partyBuffs.JadePendantOfBlasting {
-		MakePermanent(JadePendantOfBlastingAura(char))
+		JadePendantOfBlastingAura(char)
 	}
 
 	if partyBuffs.LeaderOfThePack != proto.TristateEffect_TristateEffectMissing {
-		MakePermanent(LeaderOfThePackAura(char, IsImproved(partyBuffs.LeaderOfThePack)))
+		LeaderOfThePackAura(char, IsImproved(partyBuffs.LeaderOfThePack))
 	}
 
 	if partyBuffs.ManaSpringTotem != proto.TristateEffect_TristateEffectMissing {
-		MakePermanent(ManaSpringTotemAura(char, IsImproved(partyBuffs.ManaSpringTotem)))
+		ManaSpringTotemAura(char, IsImproved(partyBuffs.ManaSpringTotem))
 	}
 
 	if partyBuffs.MoonkinAura != proto.TristateEffect_TristateEffectMissing {
-		MakePermanent(MoonkinAuraBuff(char, IsImproved(partyBuffs.MoonkinAura)))
+		MoonkinAuraBuff(char, IsImproved(partyBuffs.MoonkinAura))
 	}
 
 	if partyBuffs.RetributionAura != proto.TristateEffect_TristateEffectMissing {
-		MakePermanent(RetributionAuraBuff(char, IsImproved(partyBuffs.RetributionAura), 5))
+		RetributionAuraBuff(char, IsImproved(partyBuffs.RetributionAura), 5)
 	}
 
 	if partyBuffs.SanctityAura != proto.TristateEffect_TristateEffectMissing {
-		MakePermanent(SanctityAuraBuff(char, IsImproved(partyBuffs.SanctityAura)))
+		SanctityAuraBuff(char, IsImproved(partyBuffs.SanctityAura))
 	}
 
 	if partyBuffs.StrengthOfEarthTotem != proto.StrengthOfEarthType_None {
-		MakePermanent(StrengthOfEarthTotemAura(char, partyBuffs.StrengthOfEarthTotem.Enum()))
+		StrengthOfEarthTotemAura(char, partyBuffs.StrengthOfEarthTotem.Enum())
 	}
 
 	if partyBuffs.TotemOfWrath > 0 {
-		MakePermanent(TotemOfWrathAura(char, partyBuffs.TotemOfWrath))
+		TotemOfWrathAura(char, partyBuffs.TotemOfWrath)
 	}
 
 	if partyBuffs.TranquilAirTotem {
-		MakePermanent(TranquilAirTotemAura(char))
+		TranquilAirTotemAura(char)
 	}
 
-	if partyBuffs.TrueshotAura != proto.TristateEffect_TristateEffectMissing {
-		MakePermanent(TrueShotAuraBuff(char, IsImproved(partyBuffs.TrueshotAura)))
+	if partyBuffs.TrueshotAura {
+		TrueShotAuraBuff(char)
 	}
 
 	if partyBuffs.WindfuryTotemRank > 0 && char.AutoAttacks.anyEnabled() {
-		MakePermanent(WindfuryTotemAura(char, partyBuffs.WindfuryTotemIwt))
+		WindfuryTotemAura(char, partyBuffs.WindfuryTotemIwt)
 	}
 
 	if partyBuffs.WrathOfAirTotem != proto.TristateEffect_TristateEffectMissing {
-		MakePermanent(WrathOfAirTotemAura(char, IsImproved(partyBuffs.WrathOfAirTotem)))
+		WrathOfAirTotemAura(char, IsImproved(partyBuffs.WrathOfAirTotem))
 	}
 
 	// Individual Buffs
 	if individual.BlessingOfKings {
-		MakePermanent(BlessingOfKingsAura(char))
+		BlessingOfKingsAura(char)
 	}
 
 	if individual.BlessingOfMight != proto.TristateEffect_TristateEffectMissing {
-		MakePermanent(BlessingOfMightAura(char, IsImproved(individual.BlessingOfMight)))
+		BlessingOfMightAura(char, IsImproved(individual.BlessingOfMight))
 	}
 
 	if individual.BlessingOfSalvation {
-		MakePermanent(BlessingOfSalvationAura(char))
+		BlessingOfSalvationAura(char)
 	}
 
 	if individual.BlessingOfSanctuary {
-		MakePermanent(BlessingOfSanctuaryAura(char))
+		BlessingOfSanctuaryAura(char)
 	}
 
 	if individual.BlessingOfWisdom != proto.TristateEffect_TristateEffectMissing {
-		MakePermanent(BlessingOfWisdomAura(char, IsImproved(individual.BlessingOfWisdom)))
+		BlessingOfWisdomAura(char, IsImproved(individual.BlessingOfWisdom))
 	}
 
 	if individual.Innervates > 0 {
@@ -189,11 +232,11 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 	}
 
 	if individual.ShadowPriestDps > 0 {
-		MakePermanent(ShadowPriestDPSManaAura(char, float64(individual.ShadowPriestDps)))
+		ShadowPriestDPSManaAura(char, float64(individual.ShadowPriestDps))
 	}
 
 	if individual.UnleashedRage {
-		MakePermanent(UnleashedRageAura(char))
+		UnleashedRageAura(char)
 	}
 
 }
@@ -203,18 +246,43 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 ///////////////////////////////////////////////////////////////////////////
 
 func ArcaneBrillianceAura(char *Character) *Aura {
-	return char.NewTemporaryStatsAura("Arcane Brilliance", ActionID{SpellID: 27127}, stats.Stats{stats.Intellect: 40}, time.Hour*1).Aura
+	return makeStatBuff(char, BuffConfig{
+		Label:    "Arcane Brilliance",
+		ActionID: ActionID{SpellID: 27127},
+		Stats: []StatConfig{
+			{stats.Intellect, 40, false},
+		},
+	})
 }
 
 func DivineSpiritAura(char *Character, improved bool) *Aura {
-	dsBuff := stats.Stats{stats.Spirit: 50}
-	if improved {
-		dsBuff.Add(stats.Stats{
-			stats.SpellDamage:  (char.GetStat(stats.Spirit) + 50.0) * 1.1,
-			stats.HealingPower: (char.GetStat(stats.Spirit) + 50.0) * 1.1,
-		})
-	}
-	return char.NewTemporaryStatsAura("Divine Spirit", ActionID{SpellID: 25312}, dsBuff, time.Minute*30).Aura
+	spiritBuff := stats.Stats{stats.Spirit: 50}
+
+	dsSDStatDep := char.NewDynamicStatDependency(stats.Spirit, stats.SpellDamage, 1.1)
+	dsHPStatDep := char.NewDynamicStatDependency(stats.Spirit, stats.HealingPower, 1.1)
+
+	return char.GetOrRegisterAura(Aura{
+		Label:      "Divine Spirit Buff",
+		ActionID:   ActionID{SpellID: 25312},
+		Duration:   time.Minute * 30,
+		BuildPhase: CharacterBuildPhaseBuffs,
+
+		OnGain: func(aura *Aura, sim *Simulation) {
+			char.AddStatsDynamic(sim, spiritBuff)
+			if improved {
+				char.EnableBuildPhaseStatDep(sim, dsSDStatDep)
+				char.EnableBuildPhaseStatDep(sim, dsHPStatDep)
+			}
+		},
+
+		OnExpire: func(aura *Aura, sim *Simulation) {
+			char.AddStatsDynamic(sim, spiritBuff.Invert())
+			if improved {
+				char.DisableBuildPhaseStatDep(sim, dsSDStatDep)
+				char.DisableBuildPhaseStatDep(sim, dsHPStatDep)
+			}
+		},
+	})
 }
 
 func GiftOfTheWildAura(char *Character, improved bool) *Aura {
@@ -222,33 +290,49 @@ func GiftOfTheWildAura(char *Character, improved bool) *Aura {
 	if improved {
 		mod = 1.35
 	}
-	gotwStats := stats.Stats{
-		stats.Armor:            340 * mod,
-		stats.Stamina:          14 * mod,
-		stats.Strength:         14 * mod,
-		stats.Agility:          14 * mod,
-		stats.Intellect:        14 * mod,
-		stats.Spirit:           14 * mod,
-		stats.ArcaneResistance: 25 * mod,
-		stats.FireResistance:   25 * mod,
-		stats.FrostResistance:  25 * mod,
-		stats.NatureResistance: 25 * mod,
-		stats.ShadowResistance: 25 * mod,
-	}
 
-	return char.NewTemporaryStatsAura("Gift of the Wild", ActionID{SpellID: 26991}, gotwStats, time.Hour*1).Aura
+	return makeStatBuff(char, BuffConfig{
+		Label:    "Gift of the Wild",
+		ActionID: ActionID{SpellID: 26991},
+		Stats: []StatConfig{
+			{stats.Armor, 340 * mod, false},
+			{stats.Stamina, 14 * mod, false},
+			{stats.Strength, 14 * mod, false},
+			{stats.Agility, 14 * mod, false},
+			{stats.Intellect, 14 * mod, false},
+			{stats.Spirit, 14 * mod, false},
+			{stats.ArcaneResistance, 25 * mod, false},
+			{stats.FireResistance, 25 * mod, false},
+			{stats.FrostResistance, 25 * mod, false},
+			{stats.NatureResistance, 25 * mod, false},
+			{stats.ShadowResistance, 25 * mod, false},
+		},
+	})
 }
 
 func PowerWordFortitudeAura(char *Character, improved bool) *Aura {
-	mod := 1.0
+	stat := 79.0
 	if improved {
-		mod = 1.3
+		stat *= 1.3
 	}
-	return char.NewTemporaryStatsAura("Power Word: Fortitude", ActionID{SpellID: 25389}, stats.Stats{stats.Stamina: 79.0 * mod}, time.Hour*1).Aura
+
+	return makeStatBuff(char, BuffConfig{
+		Label:    "Power Word: Fortitude",
+		ActionID: ActionID{SpellID: 25389},
+		Stats: []StatConfig{
+			{stats.Stamina, stat, false},
+		},
+	})
 }
 
 func ShadowProtectionAura(char *Character) *Aura {
-	return char.NewTemporaryStatsAura("Shadow Protection", ActionID{SpellID: 10958}, stats.Stats{stats.ShadowResistance: 60}, time.Minute*10).Aura
+	return makeStatBuff(char, BuffConfig{
+		Label:    "Shadow Protection",
+		ActionID: ActionID{SpellID: 10958},
+		Stats: []StatConfig{
+			{stats.ShadowResistance, 60, false},
+		},
+	})
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -264,7 +348,14 @@ func BattleShoutAura(char *Character, improved bool, sapphire bool) *Aura {
 	if sapphire {
 		apBuff += 70
 	}
-	return char.NewTemporaryStatsAura("Battle Shout", ActionID{SpellID: 2048}, stats.Stats{stats.AttackPower: apBuff}, time.Minute*2).Aura
+
+	return makeStatBuff(char, BuffConfig{
+		Label:    "Battle Shout",
+		ActionID: ActionID{SpellID: 2048},
+		Stats: []StatConfig{
+			{stats.AttackPower, apBuff, false},
+		},
+	})
 }
 
 func BloodPactAura(char *Character, improved bool) *Aura {
@@ -272,7 +363,14 @@ func BloodPactAura(char *Character, improved bool) *Aura {
 	if improved {
 		stamBuff *= 1.3
 	}
-	return char.NewTemporaryStatsAura("Blood Pact", ActionID{SpellID: 27268}, stats.Stats{stats.Stamina: stamBuff}, NeverExpires).Aura
+
+	return makeStatBuff(char, BuffConfig{
+		Label:    "Blood Pact",
+		ActionID: ActionID{SpellID: 27268},
+		Stats: []StatConfig{
+			{stats.Stamina, stamBuff, false},
+		},
+	})
 }
 
 func CommandingShoutAura(char *Character, improved bool) *Aura {
@@ -280,7 +378,14 @@ func CommandingShoutAura(char *Character, improved bool) *Aura {
 	if improved {
 		hpBuff *= 1.25
 	}
-	return char.NewTemporaryStatsAura("Battle Shout", ActionID{SpellID: 469}, stats.Stats{stats.Health: hpBuff}, time.Minute*2).Aura
+
+	return makeStatBuff(char, BuffConfig{
+		Label:    "Commanding Shout",
+		ActionID: ActionID{SpellID: 469},
+		Stats: []StatConfig{
+			{stats.Health, hpBuff, false},
+		},
+	})
 }
 
 func DevotionAuraBuff(char *Character, improved bool) *Aura {
@@ -289,7 +394,13 @@ func DevotionAuraBuff(char *Character, improved bool) *Aura {
 		armorBuff *= 1.40
 	}
 
-	return char.NewTemporaryStatsAura("Devotion Aura", ActionID{SpellID: 27149}, stats.Stats{stats.Armor: armorBuff}, NeverExpires).Aura
+	return makeStatBuff(char, BuffConfig{
+		Label:    "Devotion Aura",
+		ActionID: ActionID{SpellID: 27149},
+		Stats: []StatConfig{
+			{stats.Armor, armorBuff, false},
+		},
+	})
 }
 
 func FerociousInspiration(char *Character, count int32) *Aura {
@@ -299,33 +410,40 @@ func FerociousInspiration(char *Character, count int32) *Aura {
 		Label:    "Ferocious Inspiration",
 		ActionID: ActionID{SpellID: 34460},
 		Duration: time.Second * 10,
-
-		OnGain: func(aura *Aura, sim *Simulation) {
-			aura.Unit.PseudoStats.DamageDealtMultiplier *= 1 + dmgBuff
-		},
-		OnExpire: func(aura *Aura, sim *Simulation) {
-			aura.Unit.PseudoStats.DamageDealtMultiplier /= 1 + dmgBuff
-		},
-	})
+	}).AttachMultiplicativePseudoStatBuff(&char.PseudoStats.DamageDealtMultiplier, 1+dmgBuff)
 }
 
 func LeaderOfThePackAura(char *Character, improved bool) *Aura {
-	packBuff := stats.Stats{
-		stats.MeleeCritRating:   5 * PhysicalCritRatingPerCritPercent,
-		stats.RangedCritPercent: 5,
+	statsConfig := []StatConfig{
+		{stats.PhysicalCritPercent, 5, false},
+		{stats.RangedCritPercent, 5, false},
 	}
+
 	if improved {
-		packBuff.Add(stats.Stats{stats.AllPhysCritRating: 22})
+		statsConfig = append(statsConfig, StatConfig{stats.MeleeCritRating, 20, false})
+		statsConfig = append(statsConfig, StatConfig{stats.SpellCritRating, 20, false})
 	}
-	return char.NewTemporaryStatsAura("Leader of the Pack", ActionID{SpellID: 17007}, packBuff, NeverExpires).Aura
+
+	return makeStatBuff(char, BuffConfig{
+		Label:    "Leader of the Pack",
+		ActionID: ActionID{SpellID: 17007},
+		Stats:    statsConfig,
+	})
 }
 
 func MoonkinAuraBuff(char *Character, improved bool) *Aura {
-	auraBuff := stats.Stats{stats.SpellCritPercent: 5}
-	if improved {
-		auraBuff.Add(stats.Stats{stats.SpellCritRating: 20})
+	statsConfig := []StatConfig{
+		{stats.SpellCritPercent, 5, false},
 	}
-	return char.NewTemporaryStatsAura("Moonkin Aura", ActionID{SpellID: 24907}, auraBuff, NeverExpires).Aura
+	if improved {
+		statsConfig = append(statsConfig, StatConfig{stats.SpellCritRating, 20, false})
+	}
+
+	return makeStatBuff(char, BuffConfig{
+		Label:    "Moonkin Aura",
+		ActionID: ActionID{SpellID: 24907},
+		Stats:    statsConfig,
+	})
 }
 
 func RetributionAuraBuff(char *Character, improved bool, points int32) *Aura {
@@ -362,39 +480,39 @@ func RetributionAuraBuff(char *Character, improved bool, points int32) *Aura {
 }
 
 func SanctityAuraBuff(char *Character, improved bool) *Aura {
-	return char.GetOrRegisterAura(Aura{
-		Label:    "Sanctity Aura Buff",
+	aura := char.GetOrRegisterAura(Aura{
+		Label:    "Sanctity Aura",
 		ActionID: ActionID{SpellID: 20218},
-		Duration: NeverExpires,
+	}).AttachMultiplicativePseudoStatBuff(&char.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexHoly], 1.1)
 
-		OnGain: func(aura *Aura, sim *Simulation) {
-			aura.Unit.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexHoly] *= 1.10
-			if improved {
-				aura.Unit.PseudoStats.DamageDealtMultiplier *= 1.02
-			}
-		},
+	if improved {
+		aura.AttachMultiplicativePseudoStatBuff(&char.PseudoStats.DamageDealtMultiplier, 1.02)
+	}
 
-		OnExpire: func(aura *Aura, sim *Simulation) {
-			aura.Unit.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexHoly] /= 1.10
-			if improved {
-				aura.Unit.PseudoStats.DamageDealtMultiplier /= 1.02
-			}
-		},
-	})
-
+	return aura
 }
 
-func TrueShotAuraBuff(char *Character, improved bool) *Aura {
-	apBuff := 0.0
-	if improved {
-		apBuff = 125.0
-	}
-	return char.NewTemporaryStatsAura("Trueshot Aura", ActionID{SpellID: 27066}, stats.Stats{stats.RangedAttackPower: 125, stats.AttackPower: apBuff}, NeverExpires).Aura
+func TrueShotAuraBuff(char *Character) *Aura {
+	apBuff := 125.0
+
+	return makeStatBuff(char, BuffConfig{
+		Label:    "Trueshot Aura",
+		ActionID: ActionID{SpellID: 27066},
+		Stats: []StatConfig{
+			{stats.RangedAttackPower, apBuff, false},
+			{stats.AttackPower, apBuff, false},
+		},
+	})
 }
 
 func UnleashedRageAura(char *Character) *Aura {
-	apStat := char.GetStat(stats.AttackPower)
-	return char.NewTemporaryStatsAura("Unleashed Rage", ActionID{SpellID: 30811}, stats.Stats{stats.AttackPower: apStat * 1.1}, time.Second*10).Aura
+	return makeStatBuff(char, BuffConfig{
+		Label:    "Unleashed Rage",
+		ActionID: ActionID{SpellID: 30809},
+		Stats: []StatConfig{
+			{stats.AttackPower, 1.1, true},
+		},
+	})
 }
 
 // //////////////////////////
@@ -407,7 +525,14 @@ func GraceOfAirTotemAura(char *Character, improved bool) *Aura {
 	if improved {
 		agiBuff *= 1.15
 	}
-	return char.NewTemporaryStatsAura("Grace of Air Totem", ActionID{SpellID: 25359}, stats.Stats{stats.Agility: agiBuff}, time.Minute*2).Aura
+
+	return makeStatBuff(char, BuffConfig{
+		Label:    "Grace of Air Totem",
+		ActionID: ActionID{SpellID: 25359},
+		Stats: []StatConfig{
+			{stats.Agility, agiBuff, false},
+		},
+	})
 }
 
 func ManaSpringTotemAura(char *Character, improved bool) *Aura {
@@ -415,29 +540,47 @@ func ManaSpringTotemAura(char *Character, improved bool) *Aura {
 	if improved {
 		mp5Buff *= 1.25
 	}
-	return char.NewTemporaryStatsAura("Mana Spring Totem", ActionID{SpellID: 25570}, stats.Stats{stats.Agility: mp5Buff}, time.Minute*2).Aura
+
+	return makeStatBuff(char, BuffConfig{
+		Label:    "Mana Spring Totem",
+		ActionID: ActionID{SpellID: 25570},
+		Stats: []StatConfig{
+			{stats.MP5, mp5Buff, false},
+		},
+	})
 }
 
 func StrengthOfEarthTotemAura(char *Character, totem *proto.StrengthOfEarthType) *Aura {
 	strBuff := 86.0
 
 	switch totem {
-	case proto.StrengthOfEarthType_CycloneBonus.Enum():
-		strBuff = 98
-	case proto.StrengthOfEarthType_EnhancingTotems.Enum():
+	case proto.StrengthOfEarthType_CycloneBonus.Enum(),
+		proto.StrengthOfEarthType_EnhancingTotems.Enum():
 		strBuff = 98
 	case proto.StrengthOfEarthType_EnhancingAndCyclone.Enum():
 		strBuff = 112
 	}
-	return char.NewTemporaryStatsAura("Strength of Earth Totem", ActionID{SpellID: 25528}, stats.Stats{stats.Strength: strBuff}, time.Minute*2).Aura
+
+	return makeStatBuff(char, BuffConfig{
+		Label:    "Strength of Earth Totem",
+		ActionID: ActionID{SpellID: 25528},
+		Stats: []StatConfig{
+			{stats.Strength, strBuff, false},
+		},
+	})
 }
 
 func TotemOfWrathAura(char *Character, count int32) *Aura {
 	modValue := 3.0 * float64(count)
-	return char.NewTemporaryStatsAura("Totem of Wrath", ActionID{SpellID: 30706}, stats.Stats{
-		stats.SpellCritPercent: modValue,
-		stats.SpellHitPercent:  modValue,
-	}, time.Minute*2).Aura
+
+	return makeStatBuff(char, BuffConfig{
+		Label:    "Totem of Wrath",
+		ActionID: ActionID{SpellID: 30706},
+		Stats: []StatConfig{
+			{stats.SpellCritPercent, modValue, false},
+			{stats.SpellHitPercent, modValue, false},
+		},
+	})
 }
 
 func TranquilAirTotemAura(char *Character) *Aura {
@@ -445,13 +588,7 @@ func TranquilAirTotemAura(char *Character) *Aura {
 		Label:    "Tranquil Air Totem",
 		ActionID: ActionID{SpellID: 25909},
 		Duration: time.Minute * 2,
-		OnGain: func(aura *Aura, sim *Simulation) {
-			char.PseudoStats.ThreatMultiplier *= 0.80
-		},
-		OnExpire: func(aura *Aura, sim *Simulation) {
-			char.PseudoStats.ThreatMultiplier /= 0.80
-		},
-	})
+	}).AttachMultiplicativePseudoStatBuff(&char.PseudoStats.ThreatMultiplier, 0.8)
 }
 
 func WindfuryTotemAura(char *Character, iwtTalentPoints int32) *Aura {
@@ -543,10 +680,15 @@ func WrathOfAirTotemAura(char *Character, improved bool) *Aura {
 	if improved {
 		buff += 20.0
 	}
-	return char.NewTemporaryStatsAura("Wrath of Air Totem", ActionID{SpellID: 3738}, stats.Stats{
-		stats.SpellDamage:  buff,
-		stats.HealingPower: buff,
-	}, time.Minute*2).Aura
+
+	return makeStatBuff(char, BuffConfig{
+		Label:    "Wrath of Air Totem",
+		ActionID: ActionID{SpellID: 3738},
+		Stats: []StatConfig{
+			{stats.SpellDamage, buff, false},
+			{stats.HealingPower, buff, false},
+		},
+	})
 }
 
 ////////////////////////////
@@ -556,27 +698,60 @@ func WrathOfAirTotemAura(char *Character, improved bool) *Aura {
 func AtieshAura(char *Character, class *proto.Class, numStaves float64) *Aura {
 	switch class {
 	case proto.Class_ClassDruid.Enum():
-		return char.NewTemporaryStatsAura("Power of the Guardian - Druid", ActionID{SpellID: 28145}, stats.Stats{stats.MP5: 11 * numStaves}, NeverExpires).Aura
+		return makeStatBuff(char, BuffConfig{
+			Label:    "Power of the Guardian - Druid",
+			ActionID: ActionID{SpellID: 28145},
+			Stats: []StatConfig{
+				{stats.MP5, 11 * numStaves, false},
+			},
+		})
 	case proto.Class_ClassMage.Enum():
-		return char.NewTemporaryStatsAura("Power of the Guardian - Mage", ActionID{SpellID: 28142}, stats.Stats{stats.SpellCritRating: 28 * numStaves}, NeverExpires).Aura
+		return makeStatBuff(char, BuffConfig{
+			Label:    "Power of the Guardian - Mage",
+			ActionID: ActionID{SpellID: 28142},
+			Stats: []StatConfig{
+				{stats.SpellCritRating, 28 * numStaves, false},
+			},
+		})
 	case proto.Class_ClassPriest.Enum():
-		return char.NewTemporaryStatsAura("Power of the Guardian - Priest", ActionID{SpellID: 28144}, stats.Stats{stats.HealingPower: 62 * numStaves}, NeverExpires).Aura
-	default:
-		// Use warlock as default to satisfy compiler
-		return char.NewTemporaryStatsAura("Power of the Guardian - Warlock", ActionID{SpellID: 28143}, stats.Stats{
-			stats.SpellDamage:  33 * numStaves,
-			stats.HealingPower: 33 * numStaves,
-		}, NeverExpires).Aura
+		return makeStatBuff(char, BuffConfig{
+			Label:    "Power of the Guardian - Priest",
+			ActionID: ActionID{SpellID: 28144},
+			Stats: []StatConfig{
+				{stats.HealingPower, 62 * numStaves, false},
+			},
+		})
+	default: // Use warlock as default to satisfy compiler
+		return makeStatBuff(char, BuffConfig{
+			Label:    "Power of the Guardian - Warlock",
+			ActionID: ActionID{SpellID: 28143},
+			Stats: []StatConfig{
+				{stats.SpellDamage, 33 * numStaves, false},
+				{stats.HealingPower, 33 * numStaves, false},
+			},
+		})
 	}
 
 }
 
 func BraidedEterniumChainAura(char *Character) *Aura {
-	return char.NewTemporaryStatsAura("Braided Eternium Chain", ActionID{SpellID: 31025}, stats.Stats{stats.AllPhysCritRating: 28}, time.Minute*30).Aura
+	return makeStatBuff(char, BuffConfig{
+		Label:    "Braided Eternium Chain",
+		ActionID: ActionID{SpellID: 31025},
+		Stats: []StatConfig{
+			{stats.AllPhysCritRating, 28, false},
+		},
+	})
 }
 
 func ChainOfTheTwilightOwlAura(char *Character) *Aura {
-	return char.NewTemporaryStatsAura("Chain of the Twlight Owl", ActionID{SpellID: 31035}, stats.Stats{stats.SpellCritPercent: 2}, time.Minute*30).Aura
+	return makeStatBuff(char, BuffConfig{
+		Label:    "Chain of the Twilight Owl",
+		ActionID: ActionID{SpellID: 31035},
+		Stats: []StatConfig{
+			{stats.SpellCritPercent, 2, false},
+		},
+	})
 }
 
 func DraneiRacialAura(char *Character, caster bool) *Aura {
@@ -592,18 +767,43 @@ func DraneiRacialAura(char *Character, caster bool) *Aura {
 	}
 
 	if caster {
-		return char.NewTemporaryStatsAura("Inspiring Presence", ActionID{SpellID: 6562}, stats.Stats{stats.SpellHitPercent: 1}, NeverExpires).Aura
+		return makeStatBuff(char, BuffConfig{
+			Label:    "Inspiring Presence",
+			ActionID: ActionID{SpellID: 28878},
+			Stats: []StatConfig{
+				{stats.SpellHitPercent, 1, false},
+			},
+		})
 	} else {
-		return char.NewTemporaryStatsAura("Heroic Presence", ActionID{SpellID: 28878}, stats.Stats{stats.SpellHitPercent: 1}, NeverExpires).Aura
+		return makeStatBuff(char, BuffConfig{
+			Label:    "Heroic Presence",
+			ActionID: ActionID{SpellID: 6562},
+			Stats: []StatConfig{
+				{stats.MeleeHitRating, 1, false},
+				{stats.RangedHitPercent, 1, false},
+			},
+		})
 	}
 }
 
 func EyeOfTheNightAura(char *Character) *Aura {
-	return char.NewTemporaryStatsAura("Eye of the Night", ActionID{SpellID: 31033}, stats.Stats{stats.SpellDamage: 33}, time.Minute*30).Aura
+	return makeStatBuff(char, BuffConfig{
+		Label:    "Eye of the Night",
+		ActionID: ActionID{SpellID: 31033},
+		Stats: []StatConfig{
+			{stats.SpellDamage, 33, false},
+		},
+	})
 }
 
 func JadePendantOfBlastingAura(char *Character) *Aura {
-	return char.NewTemporaryStatsAura("Jade Pendant of Blasting", ActionID{SpellID: 25607}, stats.Stats{stats.SpellDamage: 15}, time.Minute*30).Aura
+	return makeStatBuff(char, BuffConfig{
+		Label:    "Jade Pendant of Blasting",
+		ActionID: ActionID{SpellID: 25607},
+		Stats: []StatConfig{
+			{stats.SpellDamage, 15, false},
+		},
+	})
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -660,16 +860,17 @@ func DampenMagicAura(char *Character, improved bool) *Aura {
 //
 // //////////////////////////
 func BlessingOfKingsAura(char *Character) *Aura {
-
-	bokStats := stats.Stats{
-		stats.Agility:   char.GetStat(stats.Agility) * 1.1,
-		stats.Strength:  char.GetStat(stats.Strength) * 1.1,
-		stats.Stamina:   char.GetStat(stats.Stamina) * 1.1,
-		stats.Intellect: char.GetStat(stats.Intellect) * 1.1,
-		stats.Spirit:    char.GetStat(stats.Spirit) * 1.1,
-	}
-
-	return char.NewTemporaryStatsAura("Blessing of Kings", ActionID{SpellID: 20217}, bokStats, time.Minute*30).Aura
+	return makeStatBuff(char, BuffConfig{
+		Label:    "Blessing of Kings",
+		ActionID: ActionID{SpellID: 20217},
+		Stats: []StatConfig{
+			{stats.Agility, 1.1, true},
+			{stats.Strength, 1.1, true},
+			{stats.Stamina, 1.1, true},
+			{stats.Intellect, 1.1, true},
+			{stats.Spirit, 1.1, true},
+		},
+	})
 }
 
 // func BlessingOfLight(char *Character) *Aura {
@@ -708,10 +909,15 @@ func BlessingOfMightAura(char *Character, improved bool) *Aura {
 	if improved {
 		apBuff *= 1.2
 	}
-	return char.NewTemporaryStatsAura("Blessing Of Might", ActionID{SpellID: 27141}, stats.Stats{
-		stats.AttackPower:       apBuff,
-		stats.RangedAttackPower: apBuff,
-	}, time.Minute*30).Aura
+
+	return makeStatBuff(char, BuffConfig{
+		Label:    "Blessing Of Might",
+		ActionID: ActionID{SpellID: 27141},
+		Stats: []StatConfig{
+			{stats.AttackPower, apBuff, false},
+			{stats.RangedAttackPower, apBuff, false},
+		},
+	})
 }
 
 func BlessingOfSalvationAura(char *Character) *Aura {
@@ -719,14 +925,7 @@ func BlessingOfSalvationAura(char *Character) *Aura {
 		Label:    "Blessing Of Salvation",
 		ActionID: ActionID{SpellID: 25895},
 		Duration: time.Minute * 30,
-
-		OnGain: func(aura *Aura, sim *Simulation) {
-			aura.Unit.PseudoStats.ThreatMultiplier *= 0.7
-		},
-		OnExpire: func(aura *Aura, sim *Simulation) {
-			aura.Unit.PseudoStats.ThreatMultiplier /= 0.7
-		},
-	})
+	}).AttachMultiplicativePseudoStatBuff(&char.PseudoStats.ThreatMultiplier, 0.7)
 }
 
 func BlessingOfSanctuaryAura(char *Character) *Aura {
@@ -776,7 +975,14 @@ func BlessingOfWisdomAura(char *Character, improved bool) *Aura {
 	if improved {
 		mp5Buff *= 1.20
 	}
-	return char.NewTemporaryStatsAura("Blessing of Wisdom", ActionID{SpellID: 25894}, stats.Stats{stats.MP5: mp5Buff}, time.Minute*30).Aura
+
+	return makeStatBuff(char, BuffConfig{
+		Label:    "Blessing of Wisdom",
+		ActionID: ActionID{SpellID: 25894},
+		Stats: []StatConfig{
+			{stats.MP5, mp5Buff, false},
+		},
+	})
 }
 
 ////////////////////////////
@@ -784,7 +990,13 @@ func BlessingOfWisdomAura(char *Character, improved bool) *Aura {
 ////////////////////////////
 
 func ShadowPriestDPSManaAura(char *Character, dps float64) *Aura {
-	return char.NewTemporaryStatsAura("Vampiric Touch", ActionID{SpellID: 34914}, stats.Stats{stats.MP5: dps * 0.25}, time.Second*15).Aura
+	return makeStatBuff(char, BuffConfig{
+		Label:    "Vampiric Touch",
+		ActionID: ActionID{SpellID: 34914},
+		Stats: []StatConfig{
+			{stats.MP5, dps * 0.25, false},
+		},
+	})
 }
 
 ////////////////////////////
