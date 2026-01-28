@@ -109,7 +109,7 @@ func applyDebuffEffects(target *Unit, targetIdx int, debuffs *proto.Debuffs, rai
 	}
 
 	if debuffs.WintersChill {
-		MakePermanent(WintersChillAura(target))
+		MakePermanent(WintersChillAura(target, 5))
 	}
 }
 
@@ -138,7 +138,7 @@ func CurseOfElementsAura(target *Unit, improved bool) *Aura {
 }
 
 func CurseOfRecklessnessAura(target *Unit) *Aura {
-	return statsDebuff(target, "Curse of Recklesness", 27226, stats.Stats{stats.Armor: -8000, stats.AttackPower: 135})
+	return statsDebuff(target, "Curse of Recklesness", 27226, stats.Stats{stats.Armor: -800, stats.AttackPower: 135})
 }
 
 func DemoralizingRoarAura(target *Unit, improved bool) *Aura {
@@ -164,7 +164,7 @@ func ExposeArmorAura(target *Unit, improved bool) *Aura {
 	if improved {
 		eaValue *= 1.50
 	}
-	return statsDebuff(target, "Expose Armor", 26866, stats.Stats{stats.Armor: eaValue})
+	return statsDebuff(target, "Expose Armor", 26866, stats.Stats{stats.Armor: -eaValue})
 }
 
 func ExposeWeaknessAura(target *Unit, uptime float64, hunterAgility float64) *Aura {
@@ -194,11 +194,16 @@ func FaerieFireAura(target *Unit, improved bool) *Aura {
 		Duration: time.Second * 40,
 		OnGain: func(aura *Aura, sim *Simulation) {
 			aura.Unit.AddStatsDynamic(sim, stats.Stats{stats.Armor: -610})
-			aura.Unit.PseudoStats.ReducedPhysicalHitTakenChance -= 3.0
+			if improved {
+				aura.Unit.PseudoStats.ReducedPhysicalHitTakenChance -= 3.0
+			}
+
 		},
 		OnExpire: func(aura *Aura, sim *Simulation) {
 			aura.Unit.AddStatsDynamic(sim, stats.Stats{stats.Armor: 610})
-			aura.Unit.PseudoStats.ReducedPhysicalHitTakenChance += 3.0
+			if improved {
+				aura.Unit.PseudoStats.ReducedPhysicalHitTakenChance += 3.0
+			}
 		},
 	})
 }
@@ -435,28 +440,31 @@ func SunderArmorAura(target *Unit) *Aura {
 	return statsDebuff(target, "Sunder Amor", 25225, stats.Stats{stats.Armor: -2600})
 }
 
-func WintersChillAura(target *Unit) *Aura {
+func WintersChillAura(target *Unit, startingStacks int32) *Aura {
+	critBonus := 2.0
 	return target.GetOrRegisterAura(Aura{
-		Label:    "Winter's Chill",
-		ActionID: ActionID{SpellID: 28595},
-		Duration: time.Second * 15,
+		Label:     "Winter's Chill",
+		ActionID:  ActionID{SpellID: 28595},
+		Duration:  time.Second * 15,
+		MaxStacks: 5,
 		OnGain: func(aura *Aura, sim *Simulation) {
-			for _, unit := range sim.AllUnits {
-				if unit.Type == PlayerUnit || unit.Type == PetUnit {
-					unit.AddStaticMod(SpellModConfig{
-						Kind:       SpellMod_BonusCrit_Percent,
-						FloatValue: 10.0,
-						School:     SpellSchoolFrost,
-					})
-				}
-			}
+			aura.SetStacks(sim, startingStacks)
 		},
-		OnExpire: func(aura *Aura, sim *Simulation) {
+		OnStacksChange: func(aura *Aura, sim *Simulation, oldStacks int32, newStacks int32) {
 			for _, unit := range sim.AllUnits {
 				if unit.Type == PlayerUnit || unit.Type == PetUnit {
+					// Remove previous mod then update for new one
+					if oldStacks > 0 {
+						unit.AddStaticMod(SpellModConfig{
+							Kind:       SpellMod_BonusCrit_Percent,
+							FloatValue: -(critBonus * float64(oldStacks)),
+							School:     SpellSchoolFrost,
+						})
+					}
+
 					unit.AddStaticMod(SpellModConfig{
 						Kind:       SpellMod_BonusCrit_Percent,
-						FloatValue: -10.0,
+						FloatValue: critBonus * float64(newStacks),
 						School:     SpellSchoolFrost,
 					})
 				}

@@ -172,7 +172,7 @@ export function makeTristatePartyBuffInput<SpecType extends Spec>(
 			showWhen: (player: Player<SpecType>) => !config.faction || config.faction == player.getFaction(),
 			getValue: (player: Player<SpecType>) => player.getParty()?.getBuffs()!!,
 			setValue: (eventID: EventID, player: Player<SpecType>, newVal: PartyBuffs) => player.getParty()?.setBuffs(eventID, newVal),
-			changeEmitter: (player: Player<SpecType>) => TypedEvent.onAny([player.buffsChangeEmitter, player.raceChangeEmitter]),
+			changeEmitter: (player: Player<SpecType>) => TypedEvent.onAny([player.getParty()!.buffsChangeEmitter, player.raceChangeEmitter]),
 		},
 		config.actionId,
 		config.impId,

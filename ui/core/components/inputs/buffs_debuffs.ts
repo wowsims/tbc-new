@@ -43,14 +43,16 @@ export const DevotionAura = makeTristatePartyBuffInput({actionId: ActionId.fromS
 export const DraeneiRacialCaster = makeBooleanPartyBuffInput({actionId: ActionId.fromSpellId(28878), fieldName: 'draeneiRacialCaster', label: 'Inspiring Presense - Caster'});
 export const DraeneiRacialMelee = makeBooleanPartyBuffInput({actionId: ActionId.fromSpellId(6562), fieldName:'draeneiRacialMelee', label: 'Inspiring Presense - Melee'});
 export const EyeOfTheNight = makeBooleanPartyBuffInput({actionId: ActionId.fromSpellId(31033), fieldName: 'eyeOfTheNight', label: 'Eye of the Night'});
-export const FerociousInspiration = makeMultistatePartyBuffInput(ActionId.fromSpellId(34460), 5, 'ferociousInspiration', 'Ferocious Inspirtation');
+export const FerociousInspiration = makeMultistatePartyBuffInput(ActionId.fromSpellId(34460), 5, 'ferociousInspiration', 'Ferocious Inspiratation');
+export const GraceOfAirTotem = makeTristatePartyBuffInput({actionId: ActionId.fromSpellId(8835), impId: ActionId.fromSpellId(25359), fieldName: 'graceOfAirTotem', label: 'Grace of Air Totem', })
 export const JadePendantOfBlasting = makeBooleanPartyBuffInput({actionId: ActionId.fromSpellId(25607), fieldName: 'jadePendantOfBlasting', label: 'Jade Pendant of Blasting'});
-export const LeaderOfThePack = makeTristatePartyBuffInput({actionId: ActionId.fromSpellId(17007), impId: ActionId.fromItemId(32387), fieldName: 'leaderOfThePack', label: 'Leader of the Pack'});
+export const LeaderOfThePack = makeTristatePartyBuffInput({actionId: ActionId.fromSpellId(32387), impId: ActionId.fromItemId(34297), fieldName: 'leaderOfThePack', label: 'Leader of the Pack'});
 export const ManaSpringTotem = makeTristatePartyBuffInput({actionId: ActionId.fromSpellId(25570), impId: ActionId.fromSpellId(16208), fieldName: 'manaSpringTotem', label: 'Mana Spring Totem'});
 export const ManaTideTotem = makeMultistatePartyBuffInput(ActionId.fromSpellId(16190), 5, 'manaTideTotems', 'Mana Tide Totem');
 export const MoonkinAura = makeTristatePartyBuffInput({actionId: ActionId.fromSpellId(24907), impId: ActionId.fromItemId(32387), fieldName: 'moonkinAura', label: 'Moonkin Aura'});
 export const RetributionAura = makeTristatePartyBuffInput({actionId: ActionId.fromSpellId(27150), impId: ActionId.fromSpellId(20092), fieldName: 'retributionAura', label: 'Retribution Aura'});
 export const SanctityAura = makeTristatePartyBuffInput({actionId: ActionId.fromSpellId(20218), impId: ActionId.fromSpellId(31870), fieldName: 'sanctityAura', label: 'Sanctity Aura'});
+export const StrengthOfEarthTotem = makeTristatePartyBuffInput({actionId: ActionId.fromSpellId(8076), impId: ActionId.fromSpellId(25527), fieldName: 'strengthOfEarthTotem', label: 'Strength of Earth Totem', })
 export const TotemOfWrath = makeMultistatePartyBuffInput(ActionId.fromSpellId(30706), 5, 'totemOfWrath', 'Totem of Wrath');
 export const TrueshotAura = makeBooleanPartyBuffInput({actionId: ActionId.fromSpellId(27066), fieldName: 'trueshotAura', label: 'Trueshot Aura'});
 export const WrathOfAirTotem = makeTristatePartyBuffInput({actionId: ActionId.fromSpellId(3738), impId: ActionId.fromSpellId(37212), fieldName: 'wrathOfAirTotem', label: 'Wrath of Air Totem'});
@@ -88,12 +90,12 @@ export const PARTY_BUFFS_CONFIG = [
 	{
 		config: FerociousInspiration,
 		picker: IconPicker,
-		stats: []
+		stats: [Stat.StatAttackPower, Stat.StatRangedAttackPower]
 	},
 	{
 		config: LeaderOfThePack,
 		picker: IconPicker,
-		stats: []
+		stats: [Stat.StatAllPhysCritRating]
 	},
 	{
 		config: ManaSpringTotem,
@@ -103,27 +105,32 @@ export const PARTY_BUFFS_CONFIG = [
 	{
 		config: ManaTideTotem,
 		picker: IconPicker,
-		stats: []
+		stats: [Stat.StatMP5]
 	},
-		{
+	{
 		config: MoonkinAura,
 		picker: IconPicker,
-		stats: []
+		stats: [Stat.StatSpellCritRating]
 	},
 	{
 		config: RetributionAura,
 		picker: IconPicker,
-		stats: []
+		stats: [Stat.StatResilienceRating, Stat.StatArmor, Stat.StatDefenseRating]
 	},
 	{
 		config: SanctityAura,
 		picker: IconPicker,
-		stats: []
+		stats: [Stat.StatHolyDamage]
+	},
+		{
+		config: StrengthOfEarthTotem,
+		picker: IconPicker,
+		stats: [Stat.StatStrength]
 	},
 	{
 		config: TotemOfWrath,
 		picker: IconPicker,
-		stats: []
+		stats: [Stat.StatSpellCritRating, Stat.StatSpellHitRating]
 	},
 	{
 		config: TrueshotAura,
@@ -133,7 +140,7 @@ export const PARTY_BUFFS_CONFIG = [
 	{
 		config: WrathOfAirTotem,
 		picker: IconPicker,
-		stats: [Stat.StatAgility]
+		stats: [Stat.StatSpellDamage]
 	},
 	{
 		config: UnleashedRage,
@@ -180,6 +187,11 @@ export const PARTY_BUFFS_CONFIG = [
 		picker: IconPicker,
 		stats: [Stat.StatSpellDamage],
 	},
+	{
+		config: GraceOfAirTotem,
+		picker: IconPicker,
+		stats: [Stat.StatAgility]
+	}
 ] as PickerStatOptions[];
 
 export const BUFFS_CONFIG = [
@@ -218,7 +230,7 @@ export const BUFFS_CONFIG = [
 	{
 		config: Thorns,
 		picker: IconPicker,
-		stats: [],
+		stats: [Stat.StatResilienceRating, Stat.StatDefenseRating, Stat.StatStamina],
 	},
 	{
 		config: PowerWordFortitude,
@@ -243,7 +255,7 @@ export const BUFFS_CONFIG = [
 	{
 		config: PowerInfusion,
 		picker: IconPicker,
-		stats: []
+		stats: [Stat.StatSpellHasteRating]
 	}
 ] as PickerStatOptions[];
 
@@ -331,7 +343,7 @@ export const DEBUFFS_CONFIG = [
 	{
 		config: FaerieFire,
 		picker: IconPicker,
-		stats: [Stat.StatAttackPower]
+		stats: [Stat.StatAttackPower, Stat.StatAllPhysHitRating]
 	},
 	{
 		config: ExposeArmor,

@@ -208,6 +208,7 @@ export class SettingsTab extends SimTab {
 			</p>,
 		);
 
+
 		const buffOptions = relevantStatOptions(BuffDebuffInputs.BUFFS_CONFIG, this.simUI);
 		this.configureIconSection(
 			contentBlock.bodyElement,
