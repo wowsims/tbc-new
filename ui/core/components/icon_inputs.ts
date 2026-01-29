@@ -54,23 +54,28 @@ export function makeBooleanRaidBuffInput<SpecType extends Spec>(
 	);
 }
 export function makeBooleanPartyBuffInput<SpecType extends Spec>(
-	config: BooleanInputConfig<PartyBuffs>,
+	config: Omit<BooleanInputConfig<PartyBuffs>, 'showWhen'> & { showWhen?: (player: Party) => boolean },
 ): InputHelpers.TypedIconPickerConfig<Player<SpecType>, boolean> {
 	return InputHelpers.makeBooleanIconInput<any, PartyBuffs, Party>(
 		{
 			getModObject: (player: Player<SpecType>) => player.getParty()!,
 			getValue: (party: Party) => party.getBuffs(),
 			setValue: (eventID: EventID, party: Party, newVal: PartyBuffs) => party.setBuffs(eventID, newVal),
-			changeEmitter: (party: Party) => party.buffsChangeEmitter,
+			changeEmitter: (party: Party) => TypedEvent.onAny([party.buffsChangeEmitter, party.getPlayer(0)!.raceChangeEmitter]),
+			showWhen: config.showWhen,
 		},
 		config.actionId,
 		config.fieldName,
 		config.value,
-		config.label
+		config.label,
 	);
 }
 
-export function makeEnumValuePartyBuffInput(id: ActionId, buffsFieldName: keyof PartyBuffs, enumValue: number): InputHelpers.TypedIconPickerConfig<Party,boolean> {
+export function makeEnumValuePartyBuffInput(
+	id: ActionId,
+	buffsFieldName: keyof PartyBuffs,
+	enumValue: number,
+): InputHelpers.TypedIconPickerConfig<Party, boolean> {
 	return {
 		id: id.name,
 		actionId: id,
@@ -83,7 +88,7 @@ export function makeEnumValuePartyBuffInput(id: ActionId, buffsFieldName: keyof 
 			(newBuffs[buffsFieldName] as number) = newValue ? enumValue : 0;
 			party.setBuffs(eventID, newBuffs);
 		},
-	}
+	};
 }
 
 export function makeBooleanIndividualBuffInput<SpecType extends Spec>(

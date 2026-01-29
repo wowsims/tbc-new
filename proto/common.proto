@@ -472,7 +472,7 @@ message PartyBuffs {
 	TristateEffect sanctity_aura = 5;
 	TristateEffect devotion_aura = 6;
 	TristateEffect retribution_aura = 7;
-	TristateEffect trueshot_aura = 8;
+	bool trueshot_aura = 8;
 	bool draenei_racial_melee = 9;
 	bool draenei_racial_caster = 10;
 

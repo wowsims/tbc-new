@@ -442,6 +442,19 @@ func SunderArmorAura(target *Unit) *Aura {
 
 func WintersChillAura(target *Unit, startingStacks int32) *Aura {
 	critBonus := 2.0
+
+	dynamicMods := make(map[int32]*SpellMod, len(target.Env.AllUnits))
+
+	for _, unit := range target.Env.AllUnits {
+		if unit.Type == PlayerUnit || unit.Type == PetUnit {
+			dynamicMods[unit.UnitIndex] = unit.AddDynamicMod(SpellModConfig{
+				Kind:       SpellMod_BonusCrit_Percent,
+				FloatValue: 0,
+				School:     SpellSchoolFrost,
+			})
+		}
+	}
+
 	return target.GetOrRegisterAura(Aura{
 		Label:     "Winter's Chill",
 		ActionID:  ActionID{SpellID: 28595},
@@ -453,20 +466,7 @@ func WintersChillAura(target *Unit, startingStacks int32) *Aura {
 		OnStacksChange: func(aura *Aura, sim *Simulation, oldStacks int32, newStacks int32) {
 			for _, unit := range sim.AllUnits {
 				if unit.Type == PlayerUnit || unit.Type == PetUnit {
-					// Remove previous mod then update for new one
-					if oldStacks > 0 {
-						unit.AddStaticMod(SpellModConfig{
-							Kind:       SpellMod_BonusCrit_Percent,
-							FloatValue: -(critBonus * float64(oldStacks)),
-							School:     SpellSchoolFrost,
-						})
-					}
-
-					unit.AddStaticMod(SpellModConfig{
-						Kind:       SpellMod_BonusCrit_Percent,
-						FloatValue: critBonus * float64(newStacks),
-						School:     SpellSchoolFrost,
-					})
+					dynamicMods[unit.UnitIndex].UpdateFloatValue(critBonus * float64(newStacks))
 				}
 			}
 		},
