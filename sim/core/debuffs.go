@@ -57,7 +57,7 @@ func applyDebuffEffects(target *Unit, targetIdx int, debuffs *proto.Debuffs, rai
 	}
 
 	if debuffs.ImprovedScorch {
-		MakePermanent(ImprovedScorchAura(target))
+		MakePermanent(ImprovedScorchAura(target, 5))
 	}
 
 	if debuffs.ImprovedSealOfTheCrusader {
@@ -268,8 +268,42 @@ func HuntersMarkAura(target *Unit, improved bool) *Aura {
 	})
 }
 
-func ImprovedScorchAura(target *Unit) *Aura {
-	return damageTakenDebuff(target, "Improved Scorch", 12873, []stats.SchoolIndex{stats.SchoolIndexFire}, 1.15, time.Second*30)
+func ImprovedScorchAura(target *Unit, startingStacks int32) *Aura {
+	fireBonus := 0.03
+
+	dynamicMods := make(map[int32]*SpellMod, len(target.Env.AllUnits))
+
+	for _, unit := range target.Env.AllUnits {
+		if unit.Type == PlayerUnit || unit.Type == PetUnit {
+			dynamicMods[unit.UnitIndex] = unit.AddDynamicMod(SpellModConfig{
+				Kind:       SpellMod_DamageDone_Pct,
+				FloatValue: 0,
+				School:     SpellSchoolFire,
+			})
+		}
+	}
+
+	return target.GetOrRegisterAura(Aura{
+		Label:     "Improved Scorch",
+		ActionID:  ActionID{SpellID: 12873},
+		Duration:  time.Second * 30,
+		MaxStacks: 5,
+		OnGain: func(aura *Aura, sim *Simulation) {
+			aura.SetStacks(sim, startingStacks)
+		},
+		OnStacksChange: func(aura *Aura, sim *Simulation, oldStacks int32, newStacks int32) {
+			for _, unit := range sim.AllUnits {
+				if unit.Type == PlayerUnit || unit.Type == PetUnit {
+					dynamicMods[unit.UnitIndex].UpdateFloatValue(fireBonus * float64(newStacks))
+
+					if !dynamicMods[unit.UnitIndex].IsActive {
+						dynamicMods[unit.UnitIndex].Activate()
+					}
+				}
+			}
+		},
+	})
+
 }
 
 func ImprovedSealOfTheCrusaderAura(target *Unit) *Aura {
@@ -450,7 +484,7 @@ func WintersChillAura(target *Unit, startingStacks int32) *Aura {
 			dynamicMods[unit.UnitIndex] = unit.AddDynamicMod(SpellModConfig{
 				Kind:       SpellMod_BonusCrit_Percent,
 				FloatValue: 0,
-				School:     SpellSchoolFrost,
+				School:     SpellSchoolShadow,
 			})
 		}
 	}
@@ -467,6 +501,9 @@ func WintersChillAura(target *Unit, startingStacks int32) *Aura {
 			for _, unit := range sim.AllUnits {
 				if unit.Type == PlayerUnit || unit.Type == PetUnit {
 					dynamicMods[unit.UnitIndex].UpdateFloatValue(critBonus * float64(newStacks))
+					if !dynamicMods[unit.UnitIndex].IsActive {
+						dynamicMods[unit.UnitIndex].Activate()
+					}
 				}
 			}
 		},
