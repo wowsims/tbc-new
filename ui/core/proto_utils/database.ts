@@ -360,7 +360,7 @@ export class Database {
 		return Database.getWowheadTooltipData(id, 'spell', { signal: options?.signal });
 	}
 	private static async getWowheadTooltipData(id: number, tooltipPostfix: string, options: { signal?: AbortSignal } = {}): Promise<IconData> {
-		const url = `https://nether.wowhead.com/mop-classic/tooltip/${tooltipPostfix}/${id}?lvl=${CHARACTER_LEVEL}&dataEnv=${WOWHEAD_EXPANSION_ENV}`;
+		const url = `https://nether.wowhead.com/tbc/tooltip/${tooltipPostfix}/${id}?lvl=${CHARACTER_LEVEL}&dataEnv=${WOWHEAD_EXPANSION_ENV}`;
 		try {
 			const response = await fetch(url, { signal: options?.signal });
 			const json = await response.json();

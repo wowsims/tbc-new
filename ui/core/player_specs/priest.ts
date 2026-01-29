@@ -14,7 +14,6 @@ export class DisciplinePriest extends PlayerSpec<Spec.SpecDisciplinePriest> {
 	static isHealingSpec = true;
 	static isRangedDpsSpec = false;
 	static isMeleeDpsSpec = false;
-
 	static canDualWield = false;
 
 	readonly specIndex = DisciplinePriest.specIndex;
@@ -50,7 +49,6 @@ export class HolyPriest extends PlayerSpec<Spec.SpecHolyPriest> {
 	static isHealingSpec = true;
 	static isRangedDpsSpec = false;
 	static isMeleeDpsSpec = false;
-
 	static canDualWield = false;
 
 	readonly specIndex = HolyPriest.specIndex;
@@ -86,7 +84,6 @@ export class ShadowPriest extends PlayerSpec<Spec.SpecShadowPriest> {
 	static isHealingSpec = false;
 	static isRangedDpsSpec = true;
 	static isMeleeDpsSpec = false;
-
 	static canDualWield = false;
 
 	readonly specIndex = ShadowPriest.specIndex;

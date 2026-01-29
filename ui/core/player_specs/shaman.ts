@@ -14,7 +14,6 @@ export class ElementalShaman extends PlayerSpec<Spec.SpecElementalShaman> {
 	static isHealingSpec = false;
 	static isRangedDpsSpec = true;
 	static isMeleeDpsSpec = false;
-
 	static canDualWield = false;
 
 	readonly specIndex = ElementalShaman.specIndex;
@@ -50,7 +49,6 @@ export class EnhancementShaman extends PlayerSpec<Spec.SpecEnhancementShaman> {
 	static isHealingSpec = false;
 	static isRangedDpsSpec = false;
 	static isMeleeDpsSpec = true;
-
 	static canDualWield = true;
 
 	readonly specIndex = EnhancementShaman.specIndex;

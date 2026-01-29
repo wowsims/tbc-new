@@ -85,8 +85,10 @@ func TestStatsProtoInSync(t *testing.T) {
 		protoName := enum.Name()
 		goName := Stat(enum.Number()).StatName()
 		sanitizedGoName := strings.ReplaceAll(goName, " ", "")
-		if string(protoName) != "Stat"+sanitizedGoName {
+		if string(protoName) != "Stat"+sanitizedGoName && !strings.Contains(string(protoName), "AllPhys") {
 			t.Fatalf("Encountered stat enum %d in proto.Stats with name %s differs from Go enum name %s (ignoring Stat prefix)", enum.Number(), protoName, goName)
+		} else if strings.Contains(string(protoName), "AllPhys") && string(protoName) != "StatAllPhys"+sanitizedGoName {
+			t.Fatalf("Encountered stat enum %d in proto.Stats with name %s differs from Go enum name %s (ignoring AllPhys prefix)", enum.Number(), protoName, goName)
 		}
 	}
 }

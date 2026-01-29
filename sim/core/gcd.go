@@ -74,7 +74,7 @@ func (unit *Unit) ReactToEvent(sim *Simulation, randomizeReactionTime bool) {
 	newEvaluationTime := sim.CurrentTime + unit.ReactionTime
 
 	if randomizeReactionTime {
-		newEvaluationTime = sim.CurrentTime + DurationFromSeconds(sim.RandomFloat("Reaction Time") * 2 * unit.ReactionTime.Seconds())
+		newEvaluationTime = sim.CurrentTime + DurationFromSeconds(sim.RandomFloat("Reaction Time")*2*unit.ReactionTime.Seconds())
 	}
 
 	if unit.NextRotationActionAt() > newEvaluationTime {

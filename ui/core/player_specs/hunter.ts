@@ -27,7 +27,6 @@ export class Hunter extends PlayerSpec<Spec.SpecHunter> {
 	readonly isHealingSpec = Hunter.isHealingSpec;
 	readonly isRangedDpsSpec = Hunter.isRangedDpsSpec;
 	readonly isMeleeDpsSpec = Hunter.isMeleeDpsSpec;
-
 	readonly canDualWield = Hunter.canDualWield;
 
 	static getIcon = (size: IconSize): string => {

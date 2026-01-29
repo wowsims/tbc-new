@@ -3,7 +3,6 @@ package holy
 import (
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
-	"github.com/wowsims/tbc/sim/core/stats"
 	"github.com/wowsims/tbc/sim/paladin"
 )
 
@@ -44,7 +43,6 @@ func (holy *HolyPaladin) GetPaladin() *paladin.Paladin {
 
 func (holy *HolyPaladin) ApplyTalents() {
 	holy.Paladin.ApplyTalents()
-	holy.ApplyArmorSpecializationEffect(stats.Intellect, proto.ArmorType_ArmorTypePlate, 86525)
 }
 
 func (holy *HolyPaladin) Initialize() {

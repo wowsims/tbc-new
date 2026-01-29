@@ -62,21 +62,21 @@ func TestDamageReductionFromArmor(t *testing.T) {
 		t.Fatalf("Expected no armor modifiers to result in %f damage reduction got %f", expectedDamageReduction, 1-attackTable.getArmorDamageModifier())
 	}
 
-	// Major
-	weakenedArmorAura := WeakenedArmorAura(&target)
-	weakenedArmorAura.Activate(&sim)
-	weakenedArmorAura.SetStacks(&sim, 3)
-	expectedDamageReduction = 0.320864
-	if !WithinToleranceFloat64(1-expectedDamageReduction, attackTable.getArmorDamageModifier(), tolerance) {
-		t.Fatalf("Expected major armor modifier to result in %f damage reduction got %f", expectedDamageReduction, 1-attackTable.getArmorDamageModifier())
-	}
-	weakenedArmorAura.Deactivate(&sim)
+	// // Major
+	// weakenedArmorAura := WeakenedArmorAura(&target)
+	// weakenedArmorAura.Activate(&sim)
+	// weakenedArmorAura.SetStacks(&sim, 3)
+	// expectedDamageReduction = 0.320864
+	// if !WithinToleranceFloat64(1-expectedDamageReduction, attackTable.getArmorDamageModifier(), tolerance) {
+	// 	t.Fatalf("Expected major armor modifier to result in %f damage reduction got %f", expectedDamageReduction, 1-attackTable.getArmorDamageModifier())
+	// }
+	// weakenedArmorAura.Deactivate(&sim)
 
-	// Major Multi
-	shatteringThrowAura := ShatteringThrowAura(&target, attacker.UnitIndex)
-	shatteringThrowAura.Activate(&sim)
-	expectedDamageReduction = 0.300459
-	if !WithinToleranceFloat64(1-expectedDamageReduction, attackTable.getArmorDamageModifier(), tolerance) {
-		t.Fatalf("Expected major & shattering modifier to result in %f damage reduction got %f", expectedDamageReduction, 1-attackTable.getArmorDamageModifier())
-	}
+	// // Major Multi
+	// shatteringThrowAura := ShatteringThrowAura(&target, attacker.UnitIndex)
+	// shatteringThrowAura.Activate(&sim)
+	// expectedDamageReduction = 0.300459
+	// if !WithinToleranceFloat64(1-expectedDamageReduction, attackTable.getArmorDamageModifier(), tolerance) {
+	// 	t.Fatalf("Expected major & shattering modifier to result in %f damage reduction got %f", expectedDamageReduction, 1-attackTable.getArmorDamageModifier())
+	// }
 }

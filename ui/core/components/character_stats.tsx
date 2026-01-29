@@ -104,7 +104,7 @@ export class CharacterStats extends Component {
 				StatGroup.Spell,
 				[
 					UnitStat.fromStat(Stat.StatSpellDamage),
-					UnitStat.fromStat(Stat.StatFireDamage),
+					UnitStat.fromStat(Stat.StatArcaneDamage),
 					UnitStat.fromStat(Stat.StatFireDamage),
 					UnitStat.fromStat(Stat.StatFrostDamage),
 					UnitStat.fromStat(Stat.StatHolyDamage),

@@ -174,6 +174,10 @@ func (s Stat) StatName() string {
 		return "RangedAttackPower"
 	case FeralAttackPower:
 		return "FeralAttackPower"
+	case HealingPower:
+		return "HealingPower"
+	case SpellPower:
+		return "SpellPower"
 	case SpellDamage:
 		return "SpellDamage"
 	case ArcaneDamage:
@@ -210,6 +214,22 @@ func (s Stat) StatName() string {
 		return "SpellCritPercent"
 	case BlockPercent:
 		return "BlockPercent"
+	case DefenseRating:
+		return "DefenseRating"
+	case BlockRating:
+		return "BlockRating"
+	case BlockValue:
+		return "BlockValue"
+	case ArcaneResistance:
+		return "ArcaneResistance"
+	case FireResistance:
+		return "FireResistance"
+	case FrostResistance:
+		return "FrostResistance"
+	case NatureResistance:
+		return "NatureResistance"
+	case ShadowResistance:
+		return "ShadowResistance"
 	}
 
 	return "none"
@@ -464,6 +484,9 @@ type PseudoStats struct {
 	PeriodicHealingDealtMultiplier float64            // All periodic healing (on top of HealingDealtMultiplier)
 	CritDamageMultiplier           float64            // All multiplicative crit damage
 
+	BonusRangedAttackPower float64 // Hunter's mark
+	BonusAttackPower       float64 // Also Hunter's Mark
+
 	// Important when unit is attacker or target
 	BlockDamageReduction float64
 
@@ -488,10 +511,10 @@ type PseudoStats struct {
 
 	ReducedCritTakenChance float64 // Reduces chance to be crit.
 
-	BonusHealingTaken           float64 // Talisman of Troll Divinity
-	BonusRangedAttackPowerTaken float64 // Hunters mark
-	BonusSpellCritPercentTaken  float64 // Imp Shadow Bolt / Imp Scorch / Winter's Chill debuff
-	BonusPhysicalDamageTaken    float64 // Hemo, Gift of Arthas, etc
+	BonusHealingTaken          float64 // Talisman of Troll Divinity
+	BonusSpellCritPercentTaken float64 // Imp Shadow Bolt / Imp Scorch / Winter's Chill debuff
+	BonusPhysicalDamageTaken   float64 // Hemo, Gift of Arthas, etc
+	BonusSpellDamageTaken      float64 // Amp Magic
 
 	DamageTakenMultiplier       float64            // All damage
 	SchoolDamageTakenMultiplier [SchoolLen]float64 // For specific spell schools (arcane, fire, shadow, etc.)
@@ -511,6 +534,7 @@ type PseudoStats struct {
 	HealingTakenMultiplier         float64 // All healing sources including self-healing
 	ExternalHealingTakenMultiplier float64 // Modulates the output of the individual tank sim healing model
 	MovementSpeedMultiplier        float64 // Multiplier for movement speed, default to 1. Player base movement 7 yards/s. All effects affecting movements are multipliers.
+	SelfHealingMultiplier          float64 // Healing from spells and abilities, only-self
 }
 
 func NewPseudoStats() PseudoStats {
