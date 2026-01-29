@@ -22,7 +22,6 @@ const (
 	Agility
 	Stamina
 	Intellect
-	SpellPower
 	HealingPower
 	SpellDamage
 	ArcaneDamage
@@ -176,8 +175,6 @@ func (s Stat) StatName() string {
 		return "FeralAttackPower"
 	case HealingPower:
 		return "HealingPower"
-	case SpellPower:
-		return "SpellPower"
 	case SpellDamage:
 		return "SpellDamage"
 	case ArcaneDamage:

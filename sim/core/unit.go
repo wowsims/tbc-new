@@ -207,11 +207,12 @@ type Unit struct {
 }
 
 func (unit *Unit) getSpellDamageValueImpl(spell *Spell) float64 {
-	return unit.stats[stats.SpellDamage] + float64(spell.SpellSchool.SchoolDamage()) + spell.BonusSpellDamage
+	return spell.Unit.GetStat(stats.SpellDamage) + spell.BonusSpellDamage + spell.SpellSchoolBonusDamage() + spell.Unit.PseudoStats.MobTypeSpellDamage
+
 }
 
 func (unit *Unit) getAttackPowerValueImpl(spell *Spell) float64 {
-	return unit.stats[stats.AttackPower]
+	return unit.GetStat(stats.AttackPower)
 }
 
 // Units can be disabled for several reasons:
