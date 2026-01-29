@@ -146,7 +146,6 @@ type Unit struct {
 	DynamicDamageTakenModifiers  []DynamicDamageTakenModifier
 	DynamicHealingTakenModifiers []DynamicHealingTakenModifier
 	Blockhandler                 func(sim *Simulation, spell *Spell, result *SpellResult)
-	avoidanceParams              DiminishingReturnsConstants
 
 	GCD *Timer
 
@@ -542,7 +541,7 @@ func (unit *Unit) Armor() float64 {
 }
 
 func (unit *Unit) BlockDamageReduction() float64 {
-	return unit.PseudoStats.BlockDamageReduction
+	return unit.stats[stats.BlockValue]
 }
 
 func (unit *Unit) TotalRangedHasteMultiplier() float64 {
@@ -870,17 +869,31 @@ func (unit *Unit) ExecuteCustomRotation(sim *Simulation) {
 	panic("Unimplemented ExecuteCustomRotation")
 }
 
-func (unit *Unit) GetTotalDodgeChanceAsDefender(atkTable *AttackTable) float64 {
+func (unit *Unit) GetDodgeFromRating() float64 {
+	return unit.stats[stats.DodgeRating] / DodgeRatingPerDodgePercent
+}
+func (unit *Unit) GetParryFromRating() float64 {
+	return unit.stats[stats.ParryRating] / ParryRatingPerParryPercent
+}
+func (unit *Unit) GetBlockFromRating() float64 {
+	return unit.stats[stats.BlockPercent] + unit.stats[stats.ParryRating]/ParryRatingPerParryPercent
+}
+
+func (unit *Unit) GetTotalDodgeChanceAsDefender(spell *Spell, atkTable *AttackTable) float64 {
 	chance := unit.PseudoStats.BaseDodgeChance +
 		atkTable.BaseDodgeChance +
-		unit.GetDiminishedDodgeChance()
+		unit.GetDodgeFromRating() -
+		spell.DodgeParrySuppression() -
+		unit.PseudoStats.DodgeReduction
+
 	return math.Max(chance, 0.0)
 }
 
-func (unit *Unit) GetTotalParryChanceAsDefender(atkTable *AttackTable) float64 {
+func (unit *Unit) GetTotalParryChanceAsDefender(spell *Spell, atkTable *AttackTable) float64 {
 	chance := unit.PseudoStats.BaseParryChance +
 		atkTable.BaseParryChance +
-		unit.GetDiminishedParryChance()
+		unit.GetParryFromRating() -
+		spell.DodgeParrySuppression()
 	return math.Max(chance, 0.0)
 }
 
@@ -893,14 +906,15 @@ func (unit *Unit) GetTotalChanceToBeMissedAsDefender(atkTable *AttackTable) floa
 func (unit *Unit) GetTotalBlockChanceAsDefender(atkTable *AttackTable) float64 {
 	chance := unit.PseudoStats.BaseBlockChance +
 		atkTable.BaseBlockChance +
-		unit.GetDiminishedBlockChance()
+		unit.GetBlockFromRating() +
+		unit.stats[stats.DefenseRating]*DefenseRatingToChanceReduction
 	return math.Max(chance, 0.0)
 }
 
-func (unit *Unit) GetTotalAvoidanceChance(atkTable *AttackTable) float64 {
+func (unit *Unit) GetTotalAvoidanceChance(spell *Spell, atkTable *AttackTable) float64 {
 	miss := unit.GetTotalChanceToBeMissedAsDefender(atkTable)
-	dodge := unit.GetTotalDodgeChanceAsDefender(atkTable)
-	parry := unit.GetTotalParryChanceAsDefender(atkTable)
+	dodge := unit.GetTotalDodgeChanceAsDefender(spell, atkTable)
+	parry := unit.GetTotalParryChanceAsDefender(spell, atkTable)
 	block := unit.GetTotalBlockChanceAsDefender(atkTable)
 	return miss + dodge + parry + block
 }
