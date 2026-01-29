@@ -171,6 +171,7 @@ func (hunter *Hunter) AddStatDependencies() {
 	hunter.AddStatDependency(stats.Agility, stats.AttackPower, 2)
 	hunter.AddStatDependency(stats.Agility, stats.RangedAttackPower, 2)
 	hunter.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiMaxLevel[hunter.Class])
+	hunter.AddStatDependency(stats.Agility, stats.DodgeRating, 1.0/25*core.DodgeRatingPerDodgePercent)
 }
 
 func (hunter *Hunter) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
