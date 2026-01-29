@@ -1,0 +1,104 @@
+package mage
+
+import (
+	"time"
+
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/stats"
+)
+
+var ItemSetAldorRegalia = core.NewItemSet(core.ItemSet{
+	Name:                    "Aldor Regalia",
+	DisabledInChallengeMode: true,
+	Bonuses: map[int32]core.ApplySetBonus{
+		4: func(_ core.Agent, setBonusAura *core.Aura) {
+			setBonusAura.AttachSpellMod(core.SpellModConfig{
+				Kind:      core.SpellMod_CastTime_Flat,
+				TimeValue: time.Second * -24,
+				ClassMask: MageSpellPresenceOfMind,
+			}).AttachSpellMod(core.SpellModConfig{
+				Kind:      core.SpellMod_CastTime_Flat,
+				TimeValue: time.Second * -4,
+				ClassMask: MageSpellBlastWave,
+			}).AttachSpellMod(core.SpellModConfig{
+				Kind:      core.SpellMod_CastTime_Flat,
+				TimeValue: time.Second * -40,
+				ClassMask: MageSpellIceBlock,
+			})
+		},
+	},
+})
+
+var ItemSetTirisfalRegalia = core.NewItemSet(core.ItemSet{
+	Name:                    "Tirisfal Regalia",
+	DisabledInChallengeMode: true,
+	Bonuses: map[int32]core.ApplySetBonus{
+		2: func(agent core.Agent, setBonusAura *core.Aura) {
+			setBonusAura.AttachSpellMod(core.SpellModConfig{
+				Kind:       core.SpellMod_DamageDone_Pct,
+				FloatValue: .20,
+				ClassMask:  MageSpellArcaneBlast,
+			}).AttachSpellMod(core.SpellModConfig{
+				Kind:       core.SpellMod_PowerCost_Pct,
+				FloatValue: .20,
+				ClassMask:  MageSpellArcaneBlast,
+			})
+		},
+		4: func(agent core.Agent, setBonusAura *core.Aura) {
+			mage := agent.(MageAgent).GetMage()
+
+			madnessAura := mage.NewTemporaryStatsAura(
+				"Arcane Madness",
+				core.ActionID{SpellID: 37444},
+				stats.Stats{stats.SpellDamage: 70},
+				time.Second*6,
+			)
+
+			mage.RegisterAura(core.Aura{
+				Label:    "Tirisfal 4pc",
+				Duration: core.NeverExpires,
+				OnReset: func(aura *core.Aura, sim *core.Simulation) {
+					aura.Activate(sim)
+				},
+				OnSpellHitDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+					if spell.ProcMask.Matches(core.ProcMaskMeleeOrRanged) {
+						return
+					}
+
+					if result.Outcome.Matches(core.OutcomeCrit) {
+						madnessAura.Activate(sim)
+					}
+				},
+			})
+		},
+	},
+})
+
+var ItemSetTempestRegalia = core.NewItemSet(core.ItemSet{
+	Name:                    "Tempest Regalia",
+	DisabledInChallengeMode: true,
+	Bonuses: map[int32]core.ApplySetBonus{
+		2: func(agent core.Agent, setBonusAura *core.Aura) {
+			setBonusAura.AttachSpellMod(core.SpellModConfig{
+				Kind:      core.SpellMod_BuffDuration_Flat,
+				TimeValue: time.Second * 2,
+				ClassMask: MageSpellEvocation,
+			})
+		},
+		4: func(agent core.Agent, setBonusAura *core.Aura) {
+			setBonusAura.AttachSpellMod(core.SpellModConfig{
+				Kind:       core.SpellMod_DamageDone_Pct,
+				FloatValue: .05,
+				ClassMask:  MageSpellFireball,
+			}).AttachSpellMod(core.SpellModConfig{
+				Kind:       core.SpellMod_DamageDone_Pct,
+				FloatValue: .05,
+				ClassMask:  MageSpellFrostbolt,
+			}).AttachSpellMod(core.SpellModConfig{
+				Kind:       core.SpellMod_DamageDone_Pct,
+				FloatValue: .05,
+				ClassMask:  MageSpellArcaneMissilesTick,
+			})
+		},
+	},
+})

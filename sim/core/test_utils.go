@@ -79,8 +79,8 @@ var FullRaidBuffs = &proto.RaidBuffs{
 	// // Major Haste
 	// Bloodlust: true,
 
-	// // Major Mana Replenishment
-	// ManaTideTotemCount: 1, // Shamans
+	// Major Mana Replenishment
+	//InnervateCount: 1, // Druids
 
 	// // Crit Damage %
 	// SkullBannerCount: 1, // Warrior

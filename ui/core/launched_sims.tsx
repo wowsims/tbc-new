@@ -53,7 +53,7 @@ export const simLaunchStatuses: Record<Spec, SimStatus> = {
 	// Mage
 	[Spec.SpecMage]: {
 		phase: Phase.Phase1,
-		status: LaunchStatus.Unlaunched,
+		status: LaunchStatus.Alpha,
 	},
 	// Paladin
 	[Spec.SpecHolyPaladin]: {

@@ -156,6 +156,37 @@ func MasterPoisonerDebuff(target *Unit) *Aura {
 func CurseOfElementsAura(target *Unit) *Aura {
 	return spellDamageEffectAura(Aura{Label: "Curse of Elements", ActionID: ActionID{SpellID: 1490}, Duration: time.Minute * 5}, target, 1.05)
 }
+func ImprovedScorchAura(target *Unit, startingStacks int32) *Aura {
+	fireDamageBonus := .03
+	dynamicMods := make(map[int32]*SpellMod, len(target.Env.AllUnits))
+
+	for _, unit := range target.Env.AllUnits {
+		if unit.Type == PlayerUnit || unit.Type == PetUnit {
+			dynamicMods[unit.UnitIndex] = unit.AddDynamicMod(SpellModConfig{
+				Kind:       SpellMod_DamageDone_Pct,
+				FloatValue: 0,
+				School:     SpellSchoolFire,
+			})
+		}
+	}
+
+	return target.GetOrRegisterAura(Aura{
+		Label:     "Improved Scorch",
+		ActionID:  ActionID{SpellID: 12873},
+		Duration:  time.Second * 30,
+		MaxStacks: 5,
+		OnGain: func(aura *Aura, sim *Simulation) {
+			aura.SetStacks(sim, 1)
+		},
+		OnStacksChange: func(aura *Aura, sim *Simulation, oldStacks, newStacks int32) {
+			for _, unit := range sim.AllUnits {
+				if unit.Type == PlayerUnit || unit.Type == PetUnit {
+					dynamicMods[unit.UnitIndex].UpdateFloatValue(fireDamageBonus * float64(newStacks))
+				}
+			}
+		},
+	})
+}
 
 func majorHealingReductionAura(target *Unit, label string, spellID int32, multiplier float64) *Aura {
 	aura := target.GetOrRegisterAura(Aura{Label: label, ActionID: ActionID{SpellID: spellID}, Duration: time.Second * 30})
@@ -188,7 +219,7 @@ func CurseOfEnfeeblement(target *Unit) *Aura {
 	return castSpeedReductionAura(target, "Curse of Enfeeblement", 109466, 1.5, time.Second*30)
 }
 func SlowAura(target *Unit) *Aura {
-	return castSpeedReductionAura(target, "Slow", 31589, 1.5, time.Second*15)
+	return castSlowReductionAura(target, "Slow", 31589, 1.5, time.Second*15)
 }
 func castSpeedReductionAura(target *Unit, label string, spellID int32, multiplier float64, duration time.Duration) *Aura {
 	aura := target.GetOrRegisterAura(Aura{Label: label, ActionID: ActionID{SpellID: spellID}, Duration: duration})
@@ -199,6 +230,22 @@ func castSpeedReductionAura(target *Unit, label string, spellID int32, multiplie
 		},
 		OnExpire: func(ee *ExclusiveEffect, sim *Simulation) {
 			ee.Aura.Unit.MultiplyCastSpeed(sim, multiplier)
+		},
+	})
+	return aura
+}
+
+func castSlowReductionAura(target *Unit, label string, spellID int32, multiplier float64, duration time.Duration) *Aura {
+	aura := target.GetOrRegisterAura(Aura{Label: label, ActionID: ActionID{SpellID: spellID}, Duration: duration})
+	aura.NewExclusiveEffect("CastSpdReduction", false, ExclusiveEffect{
+		Priority: multiplier,
+		OnGain: func(ee *ExclusiveEffect, sim *Simulation) {
+			ee.Aura.Unit.MultiplyCastSpeed(sim, 1/multiplier)
+			ee.Aura.Unit.MultiplyRangedSpeed(sim, 1/multiplier)
+		},
+		OnExpire: func(ee *ExclusiveEffect, sim *Simulation) {
+			ee.Aura.Unit.MultiplyCastSpeed(sim, multiplier)
+			ee.Aura.Unit.MultiplyRangedSpeed(sim, multiplier)
 		},
 	})
 	return aura
@@ -286,6 +333,25 @@ func PhysDamageReductionEffect(aura *Aura, dmgReduction float64) *ExclusiveEffec
 		},
 		OnExpire: func(ee *ExclusiveEffect, sim *Simulation) {
 			ee.Aura.Unit.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexPhysical] /= reductionMult
+		},
+	})
+}
+
+func damageTakenDebuff(target *Unit, label string, spellID int32, schools []stats.SchoolIndex, multiplier float64, duration time.Duration) *Aura {
+	return target.GetOrRegisterAura(Aura{
+		Label:    label,
+		ActionID: ActionID{SpellID: spellID},
+		Duration: time.Second * 30,
+		OnGain: func(aura *Aura, sim *Simulation) {
+			for _, school := range schools {
+				target.PseudoStats.SchoolDamageTakenMultiplier[school] *= multiplier
+			}
+		},
+
+		OnExpire: func(aura *Aura, sim *Simulation) {
+			for _, school := range schools {
+				target.PseudoStats.SchoolDamageDealtMultiplier[school] /= -multiplier
+			}
 		},
 	})
 }

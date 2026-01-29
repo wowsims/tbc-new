@@ -57,6 +57,7 @@ export class SettingsTab extends SimTab {
 		this.contentContainer.appendChild(this.leftPanel);
 		this.contentContainer.appendChild(this.rightPanel);
 		this.simUI.sim.waitForInit().then(() => {
+			console.log("hello there")
 			this.buildTabContent();
 		});
 	}
@@ -214,6 +215,7 @@ export class SettingsTab extends SimTab {
 			contentBlock.bodyElement,
 			buffOptions.map(options => options.picker && new options.picker(contentBlock.bodyElement, this.simUI.player, options.config as any, this.simUI)),
 		);
+
 
 		const miscBuffOptions = relevantStatOptions(BuffDebuffInputs.RAID_BUFFS_MISC_CONFIG, this.simUI);
 		if (miscBuffOptions.length > 0) {

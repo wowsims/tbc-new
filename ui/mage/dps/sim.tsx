@@ -15,6 +15,7 @@ import * as Presets from './presets';
 import * as MageInputs from './inputs';
 
 const SPEC_CONFIG = registerSpecConfig(Spec.SpecMage, {
+	requiredTalentRows: [],
 	cssClass: 'mage-sim-ui',
 	cssScheme: PlayerClasses.getCssClass(Mage),
 	// List any known bugs / issues here and they'll be shown on the site.

@@ -98,6 +98,7 @@ export const StaminaBuff = InputHelpers.makeMultiIconInput(
 
 // Misc Buffs
 // export const ManaTideTotem = makeMultistateRaidBuffInput({ actionId: ActionId.fromSpellId(16190), numStates: 5, fieldName: 'manaTideTotemCount' });
+export const Innervate = makeMultistateIndividualBuffInput({ actionId: ActionId.fromSpellId(29166), numStates:5, fieldName: 'innervates' });
 
 // External Damage Cooldowns
 export const MajorHasteBuff = makeBooleanRaidBuffInput({ actionId: ActionId.fromSpellId(2825), fieldName: 'bloodlust', label: i18n.t('settings_tab.external_damage_cooldowns.bloodlust') });
@@ -233,6 +234,11 @@ export const RAID_BUFFS_MISC_CONFIG = [
 	// 	picker: IconPicker,
 	// 	stats: [Stat.StatSpirit],
 	// },
+	{
+		config: Innervate,
+		picker: IconPicker,
+		stats: [Stat.StatMP5],
+	},
 ] as IconPickerStatOption[];
 
 export const RAID_BUFFS_EXTERNAL_DAMAGE_COOLDOWN = [

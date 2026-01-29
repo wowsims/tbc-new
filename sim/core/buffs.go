@@ -183,6 +183,7 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, _ *proto.PartyBuf
 	// // Stamina & Strength/Agility secondary grouping
 	// applyStaminaBuffs(u, raidBuffs)
 
+	registerInnervateCD(agent, individual.Innervates)
 	// registerManaTideTotemCD(agent, raidBuffs.ManaTideTotemCount)
 	// registerSkullBannerCD(agent, raidBuffs.SkullBannerCount)
 	// registerStormLashCD(agent, raidBuffs.StormlashTotemCount)
@@ -674,6 +675,75 @@ func TricksOfTheTradeAura(character *Unit, actionTag int32, damageMult float64) 
 
 	RegisterPercentDamageModifierEffect(aura, damageMult)
 	return aura
+}
+
+var InnervateAuraTag = "Innervate"
+
+const InnervateDuration = time.Second * 20
+const InnervateCD = time.Minute * 6
+
+func InnervateManaThreshold(character *Character) float64 {
+	if character.Class == proto.Class_ClassMage {
+		// Mages burn mana really fast so they need a higher threshold.
+		return character.MaxMana() * 0.7
+	} else {
+		return 1000
+	}
+}
+
+func registerInnervateCD(agent Agent, numInnervates int32) {
+	if numInnervates == 0 {
+		return
+	}
+
+	innervateThreshold := 0.0
+	var innervateAura *Aura
+
+	character := agent.GetCharacter()
+	character.Env.RegisterPostFinalizeEffect(func() {
+		innervateThreshold = InnervateManaThreshold(character)
+		innervateAura = InnervateAura(character, -1)
+	})
+
+	registerExternalConsecutiveCDApproximation(
+		agent,
+		externalConsecutiveCDApproximation{
+			ActionID:         ActionID{SpellID: 29166, Tag: -1},
+			AuraTag:          InnervateAuraTag,
+			CooldownPriority: CooldownPriorityDefault,
+			AuraDuration:     InnervateDuration,
+			AuraCD:           InnervateCD,
+			Type:             CooldownTypeMana,
+			ShouldActivate: func(sim *Simulation, character *Character) bool {
+				// Only cast innervate when very low on mana, to make sure all other mana CDs are prioritized.
+				return character.CurrentMana() <= innervateThreshold
+			},
+			AddAura: func(sim *Simulation, character *Character) {
+				innervateAura.Activate(sim)
+			},
+		},
+		numInnervates)
+}
+
+func InnervateAura(character *Character, actionTag int32) *Aura {
+	actionID := ActionID{SpellID: 29166, Tag: actionTag}
+	return character.GetOrRegisterAura(Aura{
+		Label:    "Innervate-" + actionID.String(),
+		Tag:      InnervateAuraTag,
+		ActionID: actionID,
+		Duration: InnervateDuration,
+		OnGain: func(aura *Aura, sim *Simulation) {
+			character.PseudoStats.ForceFullSpiritRegen = true
+			character.PseudoStats.SpiritRegenMultiplier *= 5
+			character.UpdateManaRegenRates()
+
+		},
+		OnExpire: func(aura *Aura, sim *Simulation) {
+			character.PseudoStats.ForceFullSpiritRegen = false
+			character.PseudoStats.SpiritRegenMultiplier /= 5.0
+			character.UpdateManaRegenRates()
+		},
+	})
 }
 
 var UnholyFrenzyAuraTag = "UnholyFrenzy"

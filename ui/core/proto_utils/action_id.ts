@@ -827,6 +827,7 @@ export class ActionId {
 		} else if (this.otherId) {
 			return 'other-' + this.otherId;
 		} else {
+			console.log(this.name, this.tag, this)
 			console.error('Empty action id!');
 			return this.name;
 		}

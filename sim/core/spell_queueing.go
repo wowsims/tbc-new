@@ -88,8 +88,10 @@ func (spell *Spell) CanQueue(sim *Simulation, target *Unit) bool {
 		return false
 	}
 
+	//MOP Fork carry-over
+	//TBC doesn't have abilities that can cast during a channeled spell
 	// Apply SQW leniency to any pending hardcasts
-	if (spell.Unit.Hardcast.Expires > sim.CurrentTime+MaxSpellQueueWindow) || !spell.CanCastDuringChannel(sim) {
+	if spell.Flags.Matches(SpellFlagChanneled) && spell.Unit.Hardcast.Expires > sim.CurrentTime+MaxSpellQueueWindow /* || !spell.CanCastDuringChannel(sim) */ {
 		return false
 	}
 

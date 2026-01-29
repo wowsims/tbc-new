@@ -1,212 +1,605 @@
 package mage
 
-// import (
-// 	"time"
+import (
+	"time"
 
-// 	"github.com/wowsims/tbc/sim/core"
-// )
+	"github.com/wowsims/tbc/sim/common/shared"
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/stats"
+)
 
 func (mage *Mage) ApplyTalents() {
 
-	// 	// Level 15
-	// 	mage.registerPresenceOfMind()
-	// 	mage.registerIceFloes()
+	//------- ARCANE --------
+	mage.registerArcaneSubtlety()
+	mage.registerArcaneFocus()
+	//mage.registerImprovedArcaneMissiles()
 
-	// 	// Level 30
+	// mage.registerWandSpecialization()
+	// mage.registerMagicAbsorption()
+	mage.registerArcaneConcentration()
 
-	// 	// Level 45
+	// mage.registerMagicAttunement()
+	mage.registerArcaneImpact()
+	//mage.registerArcaneFortitude()
 
-	// 	// Level 75
-	// 	mage.registerNetherTempest()
-	// 	mage.registerLivingBomb()
-	// 	mage.registerFrostBomb()
+	// mage.registerImprovedManaShield()
+	// mage.registerImprovedCounterspell()
+	mage.registerArcaneMeditation()
 
-	// 	// Level 90
-	// 	mage.registerRuneOfPower()
-	// 	mage.registerInvocation()
+	//mage.registerImprovedBlink()
+	mage.registerArcaneMind()
 
+	// mage.registerPrismaticCloak()
+	mage.registerArcaneInstability()
+
+	mage.registerEmpoweredArcaneMissiles()
+	mage.registerSpellPower()
+
+	mage.registerMindMastery()
+
+	//-------  FIRE  --------
+	mage.registerImprovedFireball()
+	// mage.registerImpact()
+
+	mage.registerIgnite()
+	// mage.registerFlameThrowing()
+	mage.registerImprovedFireBlast()
+
+	mage.registerIncineration()
+	mage.registerImprovedFlamestrike()
+	mage.registerBurningSoul()
+
+	// mage.registerMoltenShields()
+	mage.registerMasterOfElements()
+
+	mage.registerPlayingWithFire()
+	mage.registerCriticalMass()
+
+	// mage.registerBlazingSpeed()
+	mage.registerFirePower()
+
+	mage.registerPyromaniac()
+	mage.registerMoltenFury()
+
+	mage.registerEmpoweredFireball()
+
+	//------- FROST --------
+	// mage.registerFrostWarding()
+	mage.registerImprovedFrostbolt()
+	mage.registerElementalPrecision()
+
+	mage.registerIceShards()
+	// mage.registerFrostbite()
+	mage.registerImprovedFrostNova()
+	// mage.registerPermafrost()
+
+	mage.registerPiercingIce()
+	// mage.registerImprovedBlizzard()
+
+	// mage.registerArcticReach()
+	mage.registerFrostChanneling()
+	// mage.registerShatter()
+
+	mage.registerImprovedConeOfCold()
+
+	mage.registerIceFloes()
+	mage.registerWinterChill()
+
+	mage.registerArcticWinds()
+
+	mage.registerEmpoweredFrostbolt()
 }
 
-// func (mage *Mage) registerPresenceOfMind() {
-// 	if !mage.Talents.PresenceOfMind {
-// 		return
-// 	}
+func (mage *Mage) registerArcaneSubtlety() {
+	if mage.Talents.ArcaneSubtlety > 0 {
+		//all spells resist 5 & arcance spells threat 20% per rank
+		mage.AddStaticMod(core.SpellModConfig{
+			School:     core.SpellSchoolArcane,
+			FloatValue: .20 * float64(mage.Talents.ArcaneSubtlety),
+			Kind:       core.SpellMod_Custom,
+			ApplyCustom: func(mod *core.SpellMod, spell *core.Spell) {
+				spell.ThreatMultiplier -= mod.GetFloatValue()
+			},
+			RemoveCustom: func(mod *core.SpellMod, spell *core.Spell) {
+				spell.ThreatMultiplier += mod.GetFloatValue()
+			},
+		})
+	}
+}
 
-// 	presenceOfMindMod := mage.AddDynamicMod(core.SpellModConfig{
-// 		ClassMask:  MageSpellsAll ^ (MageSpellInstantCast | MageSpellBlizzard | MageSpellEvocation),
-// 		FloatValue: -1,
-// 		Kind:       core.SpellMod_CastTime_Pct,
-// 	})
+func (mage *Mage) registerArcaneFocus() {
+	if mage.Talents.ArcaneFocus > 0 {
+		mage.AddStaticMod(core.SpellModConfig{
+			School:     core.SpellSchoolArcane,
+			FloatValue: 2 * float64(mage.Talents.ArcaneFocus),
+			Kind:       core.SpellMod_BonusHit_Percent,
+		})
+	}
+}
 
-// 	pomSpell := mage.RegisterSpell(core.SpellConfig{
-// 		ActionID:       core.ActionID{SpellID: 12043},
-// 		Flags:          core.SpellFlagNoOnCastComplete,
-// 		ClassSpellMask: MageSpellPresenceOfMind,
-// 		Cast: core.CastConfig{
-// 			DefaultCast: core.Cast{
-// 				NonEmpty: true,
-// 			},
-// 			CD: core.Cooldown{
-// 				Timer:    mage.NewTimer(),
-// 				Duration: time.Second * 90,
-// 			},
-// 		},
-// 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {
-// 			mage.PresenceOfMindAura.Activate(sim)
-// 		},
-// 	})
+func (mage *Mage) registerArcaneConcentration() {
+	if mage.Talents.ArcaneConcentration > 0 {
+		bonusCrit := float64(mage.Talents.ArcanePotency) * 10 * core.SpellCritRatingPerCritPercent
+		var proccedAt time.Duration
+		var proccedSpell *core.Spell
 
-// 	mage.PresenceOfMindAura = mage.RegisterAura(core.Aura{
-// 		Label:    "Presence of Mind",
-// 		ActionID: core.ActionID{SpellID: 12043},
-// 		Duration: time.Hour,
-// 		OnGain: func(aura *core.Aura, sim *core.Simulation) {
-// 			presenceOfMindMod.Activate()
-// 		},
-// 		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
-// 			presenceOfMindMod.Deactivate()
-// 			pomSpell.CD.Use(sim)
-// 		},
-// 		OnCastComplete: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell) {
-// 			// Pyroblast and FFB are handeled separately because they can be instant cast through another aura
-// 			if spell.Matches(MageSpellPyroblast | MageSpellFrostfireBolt) {
-// 				return
-// 			}
-// 			if !spell.Matches(MageSpellsAll ^ (MageSpellInstantCast | MageSpellEvocation)) {
-// 				return
-// 			}
-// 			if spell.DefaultCast.CastTime == 0 {
-// 				return
-// 			}
-// 			aura.Deactivate(sim)
-// 		},
-// 	})
+		mage.ClearCasting = mage.RegisterAura(core.Aura{
+			Label:    "Clearcasting",
+			ActionID: core.ActionID{SpellID: 12536},
+			Duration: time.Second * 15,
+			OnGain: func(aura *core.Aura, sim *core.Simulation) {
+				mage.AddStatDynamic(sim, stats.SpellCritRating, bonusCrit)
+				aura.Unit.PseudoStats.SpellCostPercentModifier -= 100
+			},
+			OnExpire: func(aura *core.Aura, sim *core.Simulation) {
+				mage.AddStatDynamic(sim, stats.SpellCritRating, -bonusCrit)
+				aura.Unit.PseudoStats.SpellCostPercentModifier += 100
+			},
+			OnCastComplete: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell) {
+				if spell.ClassSpellMask&MageSpellsAllDamaging == 0 {
+					return
+				}
 
-// 	mage.AddMajorCooldown(core.MajorCooldown{
-// 		Spell: pomSpell,
-// 		Type:  core.CooldownTypeDPS,
-// 	})
-// }
+				if spell.DefaultCast.Cost == 0 {
+					return
+				}
 
-// func (mage *Mage) registerIceFloes() {
-// 	if !mage.Talents.IceFloes {
-// 		return
-// 	}
+				if proccedAt == sim.CurrentTime && proccedSpell == spell {
+					// Means this is another hit from the same cast that procced CC.
+					return
+				}
 
-// 	iceFloesMod := mage.AddDynamicMod(core.SpellModConfig{
-// 		ClassMask: MageSpellsAll ^ (MageSpellInstantCast | MageSpellEvocation),
-// 		Kind:      core.SpellMod_AllowCastWhileMoving,
-// 	})
+				aura.Deactivate(sim)
+			},
+		})
 
-// 	iceFloesSpell := mage.RegisterSpell(core.SpellConfig{
-// 		ActionID:       core.ActionID{SpellID: 108839},
-// 		Flags:          core.SpellFlagNoOnCastComplete, //Need to investigate this
-// 		ClassSpellMask: MageSpellIceFloes,
-// 		Charges:        3,
-// 		RechargeTime:   time.Second * 20,
-// 		Cast: core.CastConfig{
-// 			DefaultCast: core.Cast{
-// 				NonEmpty: true,
-// 			},
-// 		},
-// 		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
-// 			return mage.GCD.IsReady(sim)
-// 		},
-// 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {
-// 			mage.PresenceOfMindAura.Activate(sim)
-// 		},
-// 	})
+		mage.RegisterAura(core.Aura{
+			Label:    "Arcane Concentration",
+			Duration: core.NeverExpires,
+			OnReset: func(aura *core.Aura, sim *core.Simulation) {
+				aura.Activate(sim)
+			},
+			OnSpellHitDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+				if spell.ClassSpellMask&MageSpellsAllDamaging == 0 {
+					return
+				}
 
-// 	mage.IceFloesAura = mage.RegisterAura(core.Aura{
-// 		Label:    "Ice Floes",
-// 		ActionID: core.ActionID{SpellID: 108839},
-// 		Duration: time.Second * 15,
-// 		OnGain: func(aura *core.Aura, sim *core.Simulation) {
-// 			iceFloesMod.Activate()
-// 			iceFloesSpell.CD.Use(sim)
-// 		},
-// 		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
-// 			iceFloesMod.Deactivate()
-// 		},
-// 		OnCastComplete: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell) {
-// 			if !spell.Matches(MageSpellsAll ^ (MageSpellInstantCast | MageSpellEvocation)) {
-// 				return
-// 			}
-// 			if spell.DefaultCast.CastTime == 0 {
-// 				return
-// 			}
-// 			aura.Deactivate(sim)
-// 		},
-// 	})
+				if !result.Landed() {
+					return
+				}
 
-// }
+				procChance := 0.02 * float64(mage.Talents.ArcaneConcentration)
 
-// func (mage *Mage) registerInvocation() {
-// 	if !mage.Talents.Invocation {
-// 		return
-// 	}
+				if sim.RandomFloat("Arcane Concentration") > procChance {
+					return
+				}
 
-// 	mage.AddStaticMod(core.SpellModConfig{
-// 		ClassMask:  MageSpellEvocation,
-// 		FloatValue: -1,
-// 		Kind:       core.SpellMod_Cooldown_Multiplier,
-// 	})
+				proccedAt = sim.CurrentTime
+				proccedSpell = spell
+				mage.ClearCasting.Activate(sim)
+			},
+		})
+	}
+}
 
-// 	mage.AddStaticMod(core.SpellModConfig{
-// 		ClassMask: MageSpellEvocation,
-// 		TimeValue: time.Second * -1.0,
-// 		Kind:      core.SpellMod_DotTickLength_Flat,
-// 	})
+func (mage *Mage) registerArcaneImpact() {
+	if mage.Talents.ArcaneImpact > 0 {
+		mage.AddStaticMod(core.SpellModConfig{
+			ClassMask:  MageSpellArcaneBlast | MageSpellArcaneExplosion,
+			FloatValue: 2 * float64(mage.Talents.ArcaneImpact),
+			Kind:       core.SpellMod_BonusCrit_Percent,
+		})
+	}
+}
 
-// 	mage.InvocationAura = mage.RegisterAura(core.Aura{
-// 		Label:    "Invocation Aura",
-// 		ActionID: core.ActionID{SpellID: 116257},
-// 		Duration: time.Minute,
-// 		OnGain: func(aura *core.Aura, sim *core.Simulation) {
-// 			mage.MultiplyManaRegenSpeed(sim, 0.5)
-// 		},
-// 		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
-// 			mage.MultiplyManaRegenSpeed(sim, 1/0.5)
-// 		},
-// 	}).AttachSpellMod(core.SpellModConfig{
-// 		FloatValue: 0.15,
-// 		Kind:       core.SpellMod_DamageDone_Pct,
-// 	})
+func (mage *Mage) registerArcaneMeditation() {
+	if mage.Talents.ArcaneMeditation > 0 {
+		mage.PseudoStats.SpiritRegenRateCombat += float64(mage.Talents.ArcaneMeditation) * 0.1
+		mage.UpdateManaRegenRates()
+	}
+}
 
-// }
+func (mage *Mage) registerArcaneMind() {
+	if mage.Talents.ArcaneMind > 0 {
+		mage.AddStat(stats.Intellect, mage.GetStat(stats.Intellect)*(float64(mage.Talents.ArcaneMind)*.03))
+	}
+}
 
-// func (mage *Mage) registerRuneOfPower() {
-// 	if !mage.Talents.RuneOfPower {
-// 		return
-// 	}
+func (mage *Mage) registerArcaneInstability() {
+	if mage.Talents.ArcaneInstability > 0 {
+		mage.AddStaticMod(core.SpellModConfig{
+			ClassMask:  MageSpellsAll,
+			FloatValue: 1 * float64(mage.Talents.ArcaneInstability),
+			Kind:       core.SpellMod_BonusCrit_Percent,
+		})
 
-// 	mage.RuneOfPowerAura = mage.RegisterAura(core.Aura{
-// 		Label:    "Rune of Power",
-// 		ActionID: core.ActionID{SpellID: 116011},
-// 		Duration: time.Minute,
-// 		OnGain: func(aura *core.Aura, sim *core.Simulation) {
-// 			mage.MultiplyManaRegenSpeed(sim, 1.75)
-// 		},
-// 		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
-// 			mage.MultiplyManaRegenSpeed(sim, 1/1.75)
-// 		},
-// 	}).AttachSpellMod(core.SpellModConfig{
-// 		Kind:       core.SpellMod_DamageDone_Pct,
-// 		FloatValue: 0.15,
-// 	})
+		mage.AddStat(stats.SpellDamage, mage.GetStat(stats.SpellDamage)*(.01*float64(mage.Talents.ArcaneInstability)))
+	}
+}
 
-// 	mage.RegisterSpell(core.SpellConfig{
-// 		ActionID:       core.ActionID{SpellID: 116011},
-// 		Flags:          core.SpellFlagAPL,
-// 		ClassSpellMask: MagespellRuneOfPower,
-// 		Cast: core.CastConfig{
-// 			DefaultCast: core.Cast{
-// 				GCD:      core.GCDDefault,
-// 				CastTime: time.Millisecond * 1500,
-// 			},
-// 		},
-// 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {
-// 			mage.RuneOfPowerAura.Activate(sim)
-// 		},
-// 	})
-// }
+func (mage *Mage) registerEmpoweredArcaneMissiles() {
+	if mage.Talents.EmpoweredArcaneMissiles > 0 {
+		mage.AddStaticMod(core.SpellModConfig{
+			ClassMask:  MageSpellArcaneMissilesTick,
+			FloatValue: .15 * float64(mage.Talents.EmpoweredArcaneMissiles),
+			Kind:       core.SpellMod_DamageDone_Pct,
+		})
+
+		mage.AddStaticMod(core.SpellModConfig{
+			ClassMask:  MageSpellArcaneMissilesCast,
+			FloatValue: .02 * float64(mage.Talents.EmpoweredArcaneMissiles),
+			Kind:       core.SpellMod_PowerCost_Pct,
+		})
+	}
+}
+
+func (mage *Mage) registerSpellPower() {
+	if mage.Talents.SpellPower > 0 {
+		mage.AddStaticMod(core.SpellModConfig{
+			ClassMask:  MageSpellsAll,
+			FloatValue: .25 * float64(mage.Talents.SpellPower),
+			Kind:       core.SpellMod_CritMultiplier_Flat,
+		})
+	}
+}
+
+func (mage *Mage) registerMindMastery() {
+	if mage.Talents.MindMastery > 0 {
+		mage.AddStat(stats.SpellDamage, mage.GetStat(stats.Intellect)*(.05*float64(mage.Talents.MindMastery)))
+	}
+}
+
+// ------ FIRE TALENTS ------
+
+func (mage *Mage) registerImprovedFireball() {
+	if mage.Talents.ImprovedFireball > 0 {
+		mage.AddStaticMod(core.SpellModConfig{
+			ClassMask: MageSpellFireball,
+			TimeValue: time.Millisecond * time.Duration(-100*float64(mage.Talents.ImprovedFireball)),
+			Kind:      core.SpellMod_CastTime_Flat,
+		})
+	}
+}
+
+func (mage *Mage) registerIgnite() {
+	if mage.Talents.Ignite > 0 {
+		mage.Ignite = shared.RegisterIgniteEffect(&mage.Unit, shared.IgniteConfig{
+			ActionID:       core.ActionID{SpellID: 12846},
+			ClassSpellMask: MageSpellIgnite,
+			DotAuraLabel:   "Ignite",
+			DotAuraTag:     "IgniteDot",
+
+			ProcTrigger: core.ProcTrigger{
+				Name:     "Ignite Talent",
+				Callback: core.CallbackOnSpellHitDealt,
+				ProcMask: core.ProcMaskSpellDamage,
+				Outcome:  core.OutcomeCrit,
+
+				ExtraCondition: func(_ *core.Simulation, spell *core.Spell, _ *core.SpellResult) bool {
+					return spell.Matches(FireSpellIgnitable)
+				},
+			},
+
+			DamageCalculator: func(result *core.SpellResult) float64 {
+				return result.Damage * (float64(mage.Talents.Ignite) * .08)
+			},
+		})
+
+		// This is needed because we want to listen for the spell "cast" event that refreshes the Dot
+		mage.Ignite.Flags ^= core.SpellFlagNoOnCastComplete
+	}
+}
+
+func (mage *Mage) registerImprovedFireBlast() {
+	if mage.Talents.ImprovedFireBlast > 0 {
+		mage.AddStaticMod(core.SpellModConfig{
+			ClassMask:  MageSpellFireBlast,
+			FloatValue: -.05 * float64(mage.Talents.ImprovedFireBlast),
+			Kind:       core.SpellMod_Cooldown_Flat,
+		})
+	}
+}
+
+func (mage *Mage) registerIncineration() {
+	if mage.Talents.Incineration > 0 {
+		mage.AddStaticMod(core.SpellModConfig{
+			ClassMask:  MageSpellFireBlast | MageSpellScorch,
+			FloatValue: 2 * float64(mage.Talents.Incineration),
+			Kind:       core.SpellMod_BonusCrit_Percent,
+		})
+	}
+}
+
+func (mage *Mage) registerImprovedFlamestrike() {
+	if mage.Talents.ImprovedFlamestrike > 0 {
+		mage.AddStaticMod(core.SpellModConfig{
+			ClassMask:  MageSpellFlamestrike,
+			FloatValue: .05 * float64(mage.Talents.ImprovedFlamestrike),
+			Kind:       core.SpellMod_BonusCrit_Percent,
+		})
+	}
+}
+
+func (mage *Mage) registerBurningSoul() {
+	mage.AddStaticMod(core.SpellModConfig{
+		School:     core.SpellSchoolFire,
+		FloatValue: .05 * float64(mage.Talents.BurningSoul),
+		Kind:       core.SpellMod_Custom,
+		ApplyCustom: func(mod *core.SpellMod, spell *core.Spell) {
+			spell.ThreatMultiplier -= mod.GetFloatValue()
+		},
+		RemoveCustom: func(mod *core.SpellMod, spell *core.Spell) {
+			spell.ThreatMultiplier += mod.GetFloatValue()
+		},
+	})
+}
+
+func (mage *Mage) registerMasterOfElements() {
+	if mage.Talents.MasterOfElements > 0 {
+		refundCoeff := 0.1 * float64(mage.Talents.MasterOfElements)
+		manaMetrics := mage.NewManaMetrics(core.ActionID{SpellID: 29076})
+
+		mage.RegisterAura(core.Aura{
+			Label:    "Master of Elements",
+			Duration: core.NeverExpires,
+			OnReset: func(aura *core.Aura, sim *core.Simulation) {
+				aura.Activate(sim)
+			},
+			OnSpellHitDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+				if spell.ProcMask.Matches(core.ProcMaskMeleeOrRanged) || !spell.SpellSchool.Matches(core.SpellSchoolFrostfire) {
+					return
+				}
+				if spell.CurCast.Cost == 0 {
+					return
+				}
+				if result.DidCrit() {
+					mage.AddMana(sim, spell.DefaultCast.Cost*refundCoeff, manaMetrics)
+				}
+			},
+		})
+	}
+}
+
+func (mage *Mage) registerPlayingWithFire() {
+	if mage.Talents.PlayingWithFire > 0 {
+		mage.AddStaticMod(core.SpellModConfig{
+			ProcMask:   core.ProcMaskSpellDamage,
+			FloatValue: .01 * float64(mage.Talents.PlayingWithFire),
+			Kind:       core.SpellMod_DamageDone_Pct,
+		})
+	}
+}
+
+func (mage *Mage) registerCriticalMass() {
+	if mage.Talents.CriticalMass > 0 {
+		mage.AddStaticMod(core.SpellModConfig{
+			SpellFlag:  core.SpellFlag(core.SpellSchoolFire),
+			FloatValue: 2 * float64(mage.Talents.CriticalMass),
+			Kind:       core.SpellMod_BonusCrit_Percent,
+		})
+	}
+}
+
+func (mage *Mage) registerFirePower() {
+	if mage.Talents.FirePower > 0 {
+		mage.AddStaticMod(core.SpellModConfig{
+			School:     core.SpellSchoolFire,
+			FloatValue: .02 * float64(mage.Talents.FirePower),
+			Kind:       core.SpellMod_DamageDone_Pct,
+		})
+	}
+}
+
+func (mage *Mage) registerPyromaniac() {
+	if mage.Talents.Pyromaniac > 0 {
+		percent := 1 * float64(mage.Talents.Pyromaniac)
+		mage.AddStaticMod(core.SpellModConfig{
+			School:     core.SpellSchoolFire,
+			FloatValue: percent,
+			Kind:       core.SpellMod_BonusCrit_Percent,
+		})
+
+		mage.AddStaticMod(core.SpellModConfig{
+			School:     core.SpellSchoolFire,
+			FloatValue: -percent,
+			Kind:       core.SpellMod_Custom,
+			ApplyCustom: func(mod *core.SpellMod, spell *core.Spell) {
+				spell.ThreatMultiplier -= mod.GetFloatValue()
+			},
+			RemoveCustom: func(mod *core.SpellMod, spell *core.Spell) {
+				spell.ThreatMultiplier += mod.GetFloatValue()
+			},
+		})
+	}
+}
+
+func (mage *Mage) registerMoltenFury() {
+	if mage.Talents.MoltenFury > 0 {
+		multiplier := .1 * float64(mage.Talents.MoltenFury)
+		mage.RegisterResetEffect(func(sim *core.Simulation) {
+			sim.RegisterExecutePhaseCallback(func(sim *core.Simulation, isExecute int32) {
+				if isExecute == 20 {
+					mage.PseudoStats.DamageDealtMultiplier *= multiplier
+				}
+			})
+		})
+	}
+}
+
+func (mage *Mage) registerEmpoweredFireball() {
+	if mage.Talents.EmpoweredFireball > 0 {
+		mage.AddStaticMod(core.SpellModConfig{
+			ClassMask:  MageSpellFireball,
+			FloatValue: (.03 * float64(mage.Talents.EmpoweredFireball)) * mage.GetStat(stats.FireDamage),
+			Kind:       core.SpellMod_BonusSpellDamage_Flat,
+		})
+	}
+}
+
+// ------ FROST TALENTS ------
+
+func (mage *Mage) registerImprovedFrostbolt() {
+	if mage.Talents.ImprovedFrostbolt > 0 {
+		mage.AddStaticMod(core.SpellModConfig{
+			ClassMask: MageSpellFrostbolt,
+			TimeValue: time.Millisecond * time.Duration(-100*float64(mage.Talents.ImprovedFrostbolt)),
+			Kind:      core.SpellMod_CastTime_Flat,
+		})
+	}
+}
+
+func (mage *Mage) registerElementalPrecision() {
+	if mage.Talents.ElementalPrecision > 0 {
+		percent := 1 * float64(mage.Talents.ElementalPrecision)
+		mage.AddStaticMod(core.SpellModConfig{
+			School:     core.SpellSchoolFrostfire,
+			FloatValue: -percent / 100,
+			Kind:       core.SpellMod_PowerCost_Pct,
+		})
+
+		mage.AddStaticMod(core.SpellModConfig{
+			School:     core.SpellSchoolFrostfire,
+			FloatValue: percent,
+			Kind:       core.SpellMod_BonusHit_Percent,
+		})
+	}
+}
+
+func (mage *Mage) registerIceShards() {
+	if mage.Talents.IceShards > 0 {
+		mage.AddStaticMod(core.SpellModConfig{
+			ClassMask:  MageSpellsAll,
+			FloatValue: .2 * float64(mage.Talents.IceShards),
+			Kind:       core.SpellMod_CritMultiplier_Flat,
+		})
+	}
+}
+
+func (mage *Mage) registerImprovedFrostNova() {
+	if mage.Talents.ImprovedFrostNova > 0 {
+		mage.AddStaticMod(core.SpellModConfig{
+			ClassMask: MageSpellFrostNova,
+			TimeValue: time.Second * time.Duration(-2*mage.Talents.ImprovedFrostNova),
+			Kind:      core.SpellMod_CastTime_Flat,
+		})
+	}
+}
+
+func (mage *Mage) registerPiercingIce() {
+	if mage.Talents.PiercingIce > 0 {
+		mage.AddStaticMod(core.SpellModConfig{
+			ClassMask:  MageSpellFrost,
+			FloatValue: .02 * float64(mage.Talents.PiercingIce),
+			Kind:       core.SpellMod_DamageDone_Pct,
+		})
+	}
+}
+
+func (mage *Mage) registerFrostChanneling() {
+	if mage.Talents.FrostChanneling > 0 {
+		mage.AddStaticMod(core.SpellModConfig{
+			ClassMask:  MageSpellFrost,
+			FloatValue: -.05 * float64(mage.Talents.FrostChanneling),
+			Kind:       core.SpellMod_PowerCost_Pct,
+		})
+
+		threatMod := []float64{.04, .07, .1}
+		mage.AddStaticMod(core.SpellModConfig{
+			School:     core.SpellSchoolFrost,
+			FloatValue: threatMod[mage.Talents.FrostChanneling-1],
+			Kind:       core.SpellMod_Custom,
+			ApplyCustom: func(mod *core.SpellMod, spell *core.Spell) {
+				spell.ThreatMultiplier -= mod.GetFloatValue()
+			},
+			RemoveCustom: func(mod *core.SpellMod, spell *core.Spell) {
+				spell.ThreatMultiplier += mod.GetFloatValue()
+			},
+		})
+	}
+}
+
+func (mage *Mage) registerImprovedConeOfCold() {
+	if mage.Talents.ImprovedConeOfCold > 0 {
+		mage.AddStaticMod(core.SpellModConfig{
+			ClassMask:  MageSpellConeOfCold,
+			FloatValue: .15 + (.10 * (float64(mage.Talents.ImprovedConeOfCold) - 1)),
+			Kind:       core.SpellMod_DamageDone_Pct,
+		})
+	}
+}
+
+func (mage *Mage) registerIceFloes() {
+	if mage.Talents.IceFloes > 0 {
+		mage.AddStaticMod(core.SpellModConfig{
+			ClassMask:  MageSpellColdSnap | MageSpellConeOfCold | MageSpellIceBarrier | MageSpellIceBlock,
+			FloatValue: 1 - .1*float64(mage.Talents.IceFloes),
+			Kind:       core.SpellMod_Cooldown_Multiplier,
+		})
+	}
+}
+
+func (mage *Mage) registerWinterChill() {
+	if mage.Talents.WintersChill > 0 {
+		procChance := []float64{0, 0.33, 0.66, 1}[mage.Talents.WintersChill]
+
+		/*
+			wcAuras := mage.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {
+				return core.WintersChillAura(target, 0)
+			})
+
+			mage.Env.RegisterPreFinalizeEffect(func() {
+				for _, spell := range mage.GetSpellsMatchingSchool(core.SpellSchoolFrost) {
+					spell.RelatedAuras = append(spell.RelatedAuras, wcAuras)
+				}
+			})
+		*/
+
+		mage.RegisterAura(core.Aura{
+			Label:    "Winters Chill Talent",
+			Duration: core.NeverExpires,
+			OnReset: func(aura *core.Aura, sim *core.Simulation) {
+				aura.Activate(sim)
+			},
+			OnSpellHitDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+				if !result.Landed() || !spell.SpellSchool.Matches(core.SpellSchoolFrost) {
+					return
+				}
+
+				if sim.Proc(procChance, "Winters Chill") {
+					//aura := wcAuras.Get(result.Target)
+					aura.Activate(sim)
+					if aura.IsActive() {
+						aura.AddStack(sim)
+					}
+				}
+			},
+		})
+	}
+}
+
+func (mage *Mage) registerArcticWinds() {
+	if mage.Talents.ArcticWinds > 0 {
+		mage.AddStaticMod(core.SpellModConfig{
+			ClassMask:  MageSpellFrost,
+			FloatValue: .01 * float64(mage.Talents.ArcticWinds),
+			Kind:       core.SpellMod_DamageDone_Pct,
+		})
+	}
+}
+
+func (mage *Mage) registerEmpoweredFrostbolt() {
+	if mage.Talents.EmpoweredFrostbolt > 0 {
+		mage.AddStaticMod(core.SpellModConfig{
+			ClassMask:  MageSpellFrostbolt,
+			FloatValue: (.02 * float64(mage.Talents.EmpoweredFrostbolt)) * mage.GetStat(stats.FrostDamage),
+			Kind:       core.SpellMod_BonusSpellDamage_Flat,
+		})
+
+		mage.AddStaticMod(core.SpellModConfig{
+			ClassMask:  MageSpellFrostbolt,
+			FloatValue: .01 * float64(mage.Talents.EmpoweredFrostbolt),
+			Kind:       core.SpellMod_BonusCrit_Percent,
+		})
+	}
+}
