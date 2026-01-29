@@ -5,8 +5,8 @@ import { ActionId } from '../proto_utils/action_id.js';
 import { Raid } from '../raid';
 import { EventID, TypedEvent } from '../typed_event';
 import * as InputHelpers from './input_helpers';
-import { IconEnumPicker } from './pickers/icon_enum_picker.jsx';
-import { IconPicker } from './pickers/icon_picker.jsx';
+import { IconEnumPicker, IconEnumPickerDirection, IconEnumValueConfig } from './pickers/icon_enum_picker.jsx';
+import { IconPicker, IconPickerConfig } from './pickers/icon_picker.jsx';
 
 // Component Functions
 
@@ -54,19 +54,41 @@ export function makeBooleanRaidBuffInput<SpecType extends Spec>(
 	);
 }
 export function makeBooleanPartyBuffInput<SpecType extends Spec>(
-	config: BooleanInputConfig<PartyBuffs>,
+	config: Omit<BooleanInputConfig<PartyBuffs>, 'showWhen'> & { showWhen?: (player: Party) => boolean },
 ): InputHelpers.TypedIconPickerConfig<Player<SpecType>, boolean> {
 	return InputHelpers.makeBooleanIconInput<any, PartyBuffs, Party>(
 		{
 			getModObject: (player: Player<SpecType>) => player.getParty()!,
 			getValue: (party: Party) => party.getBuffs(),
 			setValue: (eventID: EventID, party: Party, newVal: PartyBuffs) => party.setBuffs(eventID, newVal),
-			changeEmitter: (party: Party) => party.buffsChangeEmitter,
+			changeEmitter: (party: Party) => TypedEvent.onAny([party.buffsChangeEmitter, party.getPlayer(0)!.raceChangeEmitter]),
+			showWhen: config.showWhen,
 		},
 		config.actionId,
 		config.fieldName,
 		config.value,
+		config.label,
 	);
+}
+
+export function makeEnumValuePartyBuffInput(
+	id: ActionId,
+	buffsFieldName: keyof PartyBuffs,
+	enumValue: number,
+): InputHelpers.TypedIconPickerConfig<Party, boolean> {
+	return {
+		id: id.name,
+		actionId: id,
+		type: 'icon',
+		states: 2,
+		changedEvent: (party: Party) => party.buffsChangeEmitter,
+		getValue: (party: Party) => party.getBuffs()[buffsFieldName] == enumValue,
+		setValue: (eventID: EventID, party: Party, newValue: boolean) => {
+			const newBuffs = party.getBuffs();
+			(newBuffs[buffsFieldName] as number) = newValue ? enumValue : 0;
+			party.setBuffs(eventID, newBuffs);
+		},
+	};
 }
 
 export function makeBooleanIndividualBuffInput<SpecType extends Spec>(
@@ -138,6 +160,24 @@ export function makeTristateRaidBuffInput<SpecType extends Spec>(
 			getValue: (player: Player<SpecType>) => player.getRaid()!.getBuffs(),
 			setValue: (eventID: EventID, player: Player<SpecType>, newVal: RaidBuffs) => player.getRaid()!.setBuffs(eventID, newVal),
 			changeEmitter: (player: Player<SpecType>) => TypedEvent.onAny([player.getRaid()!.buffsChangeEmitter, player.raceChangeEmitter]),
+		},
+		config.actionId,
+		config.impId,
+		config.fieldName,
+		config.label,
+	);
+}
+
+export function makeTristatePartyBuffInput<SpecType extends Spec>(
+	config: TristateInputConfig<PartyBuffs>,
+): InputHelpers.TypedIconPickerConfig<Player<SpecType>, number> {
+	return InputHelpers.makeTristateIconInput<any, PartyBuffs, Player<SpecType>>(
+		{
+			getModObject: (player: Player<SpecType>) => player,
+			showWhen: (player: Player<SpecType>) => !config.faction || config.faction == player.getFaction(),
+			getValue: (player: Player<SpecType>) => player.getParty()?.getBuffs()!!,
+			setValue: (eventID: EventID, player: Player<SpecType>, newVal: PartyBuffs) => player.getParty()?.setBuffs(eventID, newVal),
+			changeEmitter: (player: Player<SpecType>) => TypedEvent.onAny([player.getParty()!.buffsChangeEmitter, player.raceChangeEmitter]),
 		},
 		config.actionId,
 		config.impId,

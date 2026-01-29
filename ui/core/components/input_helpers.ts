@@ -144,6 +144,7 @@ export function makeRotationBooleanInput<SpecType extends Spec>(
 /////////////////////////////////////////////////////////////////////////////////
 export interface TypedNumberPickerConfig<ModObject> extends NumberPickerConfig<ModObject> {
 	type: 'number';
+	raid?: boolean
 }
 
 interface WrappedNumberInputConfig<SpecType extends Spec, ModObject> extends NumberPickerConfig<ModObject> {

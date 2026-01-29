@@ -86,7 +86,6 @@ export class RetributionPaladin extends PlayerSpec<Spec.SpecRetributionPaladin> 
 	static isHealingSpec = false;
 	static isRangedDpsSpec = false;
 	static isMeleeDpsSpec = true;
-
 	static canDualWield = false;
 
 	readonly specIndex = RetributionPaladin.specIndex;

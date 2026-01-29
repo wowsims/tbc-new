@@ -14,7 +14,6 @@ export class BalanceDruid extends PlayerSpec<Spec.SpecBalanceDruid> {
 	static isHealingSpec = false;
 	static isRangedDpsSpec = true;
 	static isMeleeDpsSpec = false;
-
 	static canDualWield = false;
 
 	readonly specIndex = BalanceDruid.specIndex;

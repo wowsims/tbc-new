@@ -2,9 +2,11 @@ import { IndividualSimUI } from '../../individual_sim_ui';
 import { Player } from '../../player';
 import { Faction, Stat } from '../../proto/common';
 import { ActionId } from '../../proto_utils/action_id';
+import { BooleanPicker, BooleanPickerConfig } from '../pickers/boolean_picker';
 import { IconEnumPicker, IconEnumPickerConfig } from '../pickers/icon_enum_picker';
 import { IconPicker, IconPickerConfig } from '../pickers/icon_picker';
 import { MultiIconPicker, MultiIconPickerConfig } from '../pickers/multi_icon_picker';
+import { UnitStat } from '../../proto_utils/stats';
 
 export interface ActionInputConfig<T> {
 	actionId: ActionId;
@@ -32,20 +34,27 @@ export interface MultiIconPickerStatOption extends PickerStatOption<typeof Multi
 
 export interface IconEnumPickerStatOption extends PickerStatOption<typeof IconEnumPicker<Player<any>, any>, IconEnumPickerConfig<Player<any>, any>> {}
 
+export interface BooleanPickerStatOption extends PickerStatOption<typeof BooleanPicker<Player<any>>, BooleanPickerConfig<Player<any>>> {}
+
 export type ItemStatOptions<T> = ItemStatOption<T>;
-export type PickerStatOptions = IconPickerStatOption | MultiIconPickerStatOption | IconEnumPickerStatOption;
+export type PickerStatOptions = IconPickerStatOption | MultiIconPickerStatOption | IconEnumPickerStatOption | BooleanPickerStatOption;
 export type StatOptions<T, Options extends ItemStatOptions<T> | PickerStatOptions> = Array<Options>;
 
 export function relevantStatOptions<T, OptionsType extends ItemStatOptions<T> | PickerStatOptions>(
 	options: StatOptions<T, OptionsType>,
 	simUI: IndividualSimUI<any>,
 ): StatOptions<T, OptionsType> {
+
+	const displayStatSet = new Set(
+		simUI.individualConfig.displayStats.map(us => us.getRootStat())
+	);
+
 	return options
-		.filter(
-			option =>
-				option.stats.length == 0 ||
-				option.stats.some(stat => simUI.individualConfig.epStats.includes(stat)) ||
-				simUI.individualConfig.includeBuffDebuffInputs.includes(option.config),
+		  .filter(option =>
+			option.stats.length === 0 ||
+			option.stats.some(stat => displayStatSet.has(stat)) ||
+			option.stats.some(stat => simUI.individualConfig.epStats.includes(stat)) ||
+			simUI.individualConfig.includeBuffDebuffInputs.includes(option.config)
 		)
 		.filter(option => !simUI.individualConfig.excludeBuffDebuffInputs.includes(option.config));
 }

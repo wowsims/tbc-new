@@ -22,7 +22,6 @@ export abstract class PlayerSpec<SpecType extends Spec> {
 	abstract readonly isHealingSpec: boolean;
 	abstract readonly isRangedDpsSpec: boolean;
 	abstract readonly isMeleeDpsSpec: boolean;
-
 	abstract readonly canDualWield: boolean;
 
 	abstract getIcon(size: IconSize): string;

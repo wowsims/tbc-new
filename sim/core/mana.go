@@ -53,12 +53,10 @@ func (character *Character) EnableManaBarWithModifier() {
 		ActionID: ActionID{OtherID: proto.OtherAction_OtherActionManaGain},
 	})
 
-	character.manaCombatMetrics = character.NewManaMetrics(ActionID{OtherID: proto.OtherAction_OtherActionManaRegen, Tag: 1})
-	character.manaNotCombatMetrics = character.NewManaMetrics(ActionID{OtherID: proto.OtherAction_OtherActionManaRegen, Tag: 2})
-
 	character.BaseMana = character.GetBaseStats()[stats.Mana]
 	character.Unit.manaBar.unit = &character.Unit
-	character.Unit.manaBar.manaRegenMultiplier = 1.0
+	character.manaCombatMetrics = character.NewManaMetrics(ActionID{OtherID: proto.OtherAction_OtherActionManaRegen, Tag: 1})
+	character.manaNotCombatMetrics = character.NewManaMetrics(ActionID{OtherID: proto.OtherAction_OtherActionManaRegen, Tag: 2})
 }
 
 func (unit *Unit) HasManaBar() bool {
@@ -287,14 +285,19 @@ func (mb *manaBar) reset() {
 func (mb *manaBar) IsOOM() bool {
 	return mb.waitingForMana != 0
 }
-func (mb *manaBar) StartOOMEvent(sim *Simulation, requiredMana float64) {
+func (mb *manaBar) StartOOMEvent(sim *Simulation, requiredMana float64, isPet bool) {
 	mb.waitingForManaStartTime = sim.CurrentTime
 	mb.waitingForMana = requiredMana
-	mb.unit.Metrics.MarkOOM(sim)
+	if !isPet {
+		mb.unit.Metrics.MarkOOM(sim)
+	}
+
 }
-func (mb *manaBar) EndOOMEvent(sim *Simulation) {
+func (mb *manaBar) EndOOMEvent(sim *Simulation, isPet bool) {
 	eventDuration := sim.CurrentTime - mb.waitingForManaStartTime
-	mb.unit.Metrics.AddOOMTime(sim, eventDuration)
+	if !isPet {
+		mb.unit.Metrics.AddOOMTime(sim, eventDuration)
+	}
 	mb.waitingForManaStartTime = 0
 	mb.waitingForMana = 0
 }
@@ -322,18 +325,19 @@ func newManaCost(spell *Spell, options ManaCostOptions) *SpellCost {
 func (mc *ManaCost) MeetsRequirement(sim *Simulation, spell *Spell) bool {
 	spell.CurCast.Cost = spell.Cost.GetCurrentCost()
 	meetsRequirement := spell.Unit.CurrentMana() >= spell.CurCast.Cost
-
+	isPet := spell.Unit.Type == PetUnit
 	if spell.CurCast.Cost > 0 {
 		if meetsRequirement {
 			if spell.Unit.IsOOM() {
-				spell.Unit.EndOOMEvent(sim)
+				spell.Unit.EndOOMEvent(sim, isPet)
 			}
 		} else {
 			if spell.Unit.IsOOM() {
 				// Continuation of OOM event.
 				spell.Unit.waitingForMana = min(spell.Unit.waitingForMana, spell.CurCast.Cost)
 			} else {
-				spell.Unit.StartOOMEvent(sim, spell.CurCast.Cost)
+
+				spell.Unit.StartOOMEvent(sim, spell.CurCast.Cost, isPet)
 			}
 		}
 	}

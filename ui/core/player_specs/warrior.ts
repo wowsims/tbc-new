@@ -14,7 +14,6 @@ export class DPSWarrior extends PlayerSpec<Spec.SpecDPSWarrior> {
 	static isHealingSpec = false;
 	static isRangedDpsSpec = false;
 	static isMeleeDpsSpec = true;
-
 	static canDualWield = true;
 
 	readonly specIndex = DPSWarrior.specIndex;
@@ -50,7 +49,6 @@ export class ProtectionWarrior extends PlayerSpec<Spec.SpecProtectionWarrior> {
 	static isHealingSpec = false;
 	static isRangedDpsSpec = false;
 	static isMeleeDpsSpec = false;
-
 	static canDualWield = true;
 
 	readonly specIndex = ProtectionWarrior.specIndex;

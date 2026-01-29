@@ -14,7 +14,6 @@ export class Rogue extends PlayerSpec<Spec.SpecRogue> {
 	static isHealingSpec = false;
 	static isRangedDpsSpec = false;
 	static isMeleeDpsSpec = true;
-
 	static canDualWield = true;
 
 	readonly specIndex = Rogue.specIndex;

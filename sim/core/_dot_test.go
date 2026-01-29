@@ -69,7 +69,7 @@ func NewFakeElementalShaman(char *Character, _ *proto.Player) Agent {
 				},
 				NumberOfTicks:       6,
 				TickLength:          time.Second * 3,
-				AffectedByCastSpeed: true,
+				AffectedByCastSpeed: false,
 				BonusCoefficient:    1,
 
 				OnSnapshot: func(sim *Simulation, target *Unit, dot *Dot) {
