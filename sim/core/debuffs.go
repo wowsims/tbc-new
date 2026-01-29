@@ -484,7 +484,7 @@ func WintersChillAura(target *Unit, startingStacks int32) *Aura {
 			dynamicMods[unit.UnitIndex] = unit.AddDynamicMod(SpellModConfig{
 				Kind:       SpellMod_BonusCrit_Percent,
 				FloatValue: 0,
-				School:     SpellSchoolShadow,
+				School:     SpellSchoolFrost,
 			})
 		}
 	}
