@@ -1,6 +1,7 @@
 package mage
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
@@ -50,10 +51,12 @@ func (mage *Mage) registerArmorSpells() {
 		Label:    "Mage Armor",
 		Duration: time.Minute * 30,
 		OnGain: func(aura *core.Aura, sim *core.Simulation) {
+			fmt.Println("activated")
 			mage.PseudoStats.SpiritRegenRateCombat += .3
 			mage.UpdateManaRegenRates()
 		},
 		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
+			fmt.Println("deactivated")
 			mage.PseudoStats.SpiritRegenRateCombat -= .3
 			mage.UpdateManaRegenRates()
 		},
