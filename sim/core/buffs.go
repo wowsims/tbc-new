@@ -1053,7 +1053,6 @@ func PowerInfusionAura(char *Character, actionTag int32) *Aura {
 		OnGain: func(aura *Aura, sim *Simulation) {
 			if char.HasManaBar() {
 				char.PseudoStats.SpellCostPercentModifier -= 20
-
 			}
 			if !char.HasActiveAuraWithTag(BloodlustAuraTag) {
 				char.MultiplyCastSpeed(sim, 1.2)
