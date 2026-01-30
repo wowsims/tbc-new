@@ -61,7 +61,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecMage, {
 	// IconInputs to include in the 'Player' section on the settings tab.
 	playerIconInputs: [MageInputs.MageArmorInputs()],
 	// Buff and Debuff inputs to include/exclude, overriding the EP-based defaults.
-	includeBuffDebuffInputs: [],
+	includeBuffDebuffInputs: [Stat.StatMP5],
 	excludeBuffDebuffInputs: [],
 	// Inputs to include in the 'Other' section on the settings tab.
 	otherInputs: {

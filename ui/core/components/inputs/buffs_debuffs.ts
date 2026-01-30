@@ -22,6 +22,7 @@ import { IconPickerStatOption, PickerStatOptions } from './stat_options';
 import { Player } from '../../player';
 import { raceI18nKeys } from '../../../i18n/entity_mapping';
 import { Party } from '../../party';
+import { stat } from 'fs';
 
 ///////////////////////////////////////////////////////////////////////////
 //                                 RAID BUFFS
@@ -86,7 +87,6 @@ export const DraeneiRacialCaster = makeBooleanPartyBuffInput({
 	fieldName: 'draeneiRacialCaster',
 	label: 'Inspiring Presense - Caster',
 	showWhen: (party: Party) => {
-		console.log('yayyy', party.getPlayer(0)!.getRace());
 		return [Race.RaceDraenei, Race.RaceDwarf, Race.RaceGnome, Race.RaceHuman, Race.RaceNightElf].includes(party.getPlayer(0)!.getRace())
 	},
 });
