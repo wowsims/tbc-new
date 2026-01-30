@@ -6,7 +6,7 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
-func (mage *Mage) registerIcyVeins() {
+func (mage *Mage) registerIcyVeinsSpell() {
 	if !mage.Talents.IcyVeins {
 		return
 	}
@@ -41,11 +41,11 @@ func (mage *Mage) registerIcyVeins() {
 		Duration: time.Second * 20,
 		OnGain: func(aura *core.Aura, sim *core.Simulation) {
 			icyVeinsMod.Activate()
+			mage.IcyVeins.CD.Use(sim)
 		},
 		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
 			aura.Deactivate(sim)
 			icyVeinsMod.Deactivate()
-			mage.IcyVeins.CD.Use(sim)
 		},
 	})
 

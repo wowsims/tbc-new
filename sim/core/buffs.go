@@ -93,6 +93,10 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 		ShadowProtectionAura(char)
 	}
 
+	if raidBuffs.Bloodlust {
+		registerBloodlustCD(char)
+	}
+
 	// Party Buffs
 	if partyBuffs.AtieshDruid > 0 {
 		AtieshAura(char, proto.Class_ClassDruid.Enum(), float64(partyBuffs.AtieshDruid))
@@ -164,6 +168,10 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 
 	if partyBuffs.ManaSpringTotem != proto.TristateEffect_TristateEffectMissing {
 		ManaSpringTotemAura(char, IsImproved(partyBuffs.ManaSpringTotem))
+	}
+
+	if partyBuffs.ManaTideTotems > 0 {
+		registerManaTideTotemCD(char, partyBuffs.ManaTideTotems)
 	}
 
 	if partyBuffs.MoonkinAura != proto.TristateEffect_TristateEffectMissing {
@@ -1044,8 +1052,7 @@ func PowerInfusionAura(char *Character, actionTag int32) *Aura {
 		Duration: PowerInfusionDuration,
 		OnGain: func(aura *Aura, sim *Simulation) {
 			if char.HasManaBar() {
-				// TODO: Double-check this is how the calculation works.
-				char.PseudoStats.SpellCostPercentModifier *= 80
+				char.PseudoStats.SpellCostPercentModifier -= 20
 
 			}
 			if !char.HasActiveAuraWithTag(BloodlustAuraTag) {
@@ -1054,7 +1061,7 @@ func PowerInfusionAura(char *Character, actionTag int32) *Aura {
 		},
 		OnExpire: func(aura *Aura, sim *Simulation) {
 			if char.HasManaBar() {
-				char.PseudoStats.SpellCostPercentModifier /= 80
+				char.PseudoStats.SpellCostPercentModifier += 20
 			}
 			if !char.HasActiveAuraWithTag(BloodlustAuraTag) {
 				char.MultiplyCastSpeed(sim, 1/1.2)
@@ -1263,9 +1270,7 @@ const BloodlustAuraTag = "Bloodlust"
 const BloodlustDuration = time.Second * 40
 const BloodlustCD = time.Minute * 10
 
-func registerBloodlustCD(agent Agent, spellID int32) {
-	character := agent.GetCharacter()
-	BloodlustActionID.SpellID = spellID
+func registerBloodlustCD(character *Character) {
 	bloodlustAura := BloodlustAura(character, -1)
 
 	spell := character.RegisterSpell(SpellConfig{

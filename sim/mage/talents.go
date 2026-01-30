@@ -543,17 +543,15 @@ func (mage *Mage) registerWinterChill() {
 	if mage.Talents.WintersChill > 0 {
 		procChance := []float64{0, 0.33, 0.66, 1}[mage.Talents.WintersChill]
 
-		/*
-			wcAuras := mage.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {
-				return core.WintersChillAura(target, 0)
-			})
+		wcAuras := mage.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {
+			return core.WintersChillAura(target, 0)
+		})
 
-			mage.Env.RegisterPreFinalizeEffect(func() {
-				for _, spell := range mage.GetSpellsMatchingSchool(core.SpellSchoolFrost) {
-					spell.RelatedAuras = append(spell.RelatedAuras, wcAuras)
-				}
-			})
-		*/
+		mage.Env.RegisterPreFinalizeEffect(func() {
+			for _, spell := range mage.GetSpellsMatchingSchool(core.SpellSchoolFrost) {
+				spell.RelatedAuraArrays.Append(wcAuras)
+			}
+		})
 
 		mage.RegisterAura(core.Aura{
 			Label:    "Winters Chill Talent",
@@ -567,7 +565,7 @@ func (mage *Mage) registerWinterChill() {
 				}
 
 				if sim.Proc(procChance, "Winters Chill") {
-					//aura := wcAuras.Get(result.Target)
+					aura := wcAuras.Get(result.Target)
 					aura.Activate(sim)
 					if aura.IsActive() {
 						aura.AddStack(sim)

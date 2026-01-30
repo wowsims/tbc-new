@@ -125,6 +125,7 @@ func (mage *Mage) registerSpells() {
 	mage.registerCombustionSpell()
 	mage.registerDragonsBreathSpell()
 
+	mage.registerIcyVeinsSpell()
 	mage.registerColdSnapSpell()
 	mage.registerSummonWaterElementalSpell()
 
