@@ -29,7 +29,7 @@ func TestAcane(t *testing.T) {
 			}},
 			GearSet:  core.GetGearSet("../../ui/mage/dps/gear_sets", "blank"),
 			Talents:  "2500052300030150330125--053500031003001",
-			Rotation: core.GetAplRotation("../../ui/mage/dps/apls", "test"),
+			Rotation: core.GetAplRotation("../../ui/mage/dps/apls", "blank"),
 			ItemFilter: core.ItemFilter{
 				WeaponTypes: []proto.WeaponType{
 					proto.WeaponType_WeaponTypeDagger,
