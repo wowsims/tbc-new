@@ -1,0 +1,125 @@
+character_stats_results: {
+ key: "TestAcane-CharacterStats-Default"
+ value: {
+  final_stats: 34
+  final_stats: 41
+  final_stats: 51
+  final_stats: 209.05
+  final_stats: 0
+  final_stats: 0
+  final_stats: 42.2625
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 160
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 3667
+  final_stats: 5376.75
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 3.4575
+  final_stats: 3.52063
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+ }
+}
+dps_results: {
+ key: "TestAcane-AllItems-AldorRegalia"
+ value: {}
+}
+dps_results: {
+ key: "TestAcane-AllItems-TempestRegalia"
+ value: {}
+}
+dps_results: {
+ key: "TestAcane-AllItems-TirisfalRegalia"
+ value: {}
+}
+dps_results: {
+ key: "TestAcane-Average-Default"
+ value: {}
+}
+dps_results: {
+ key: "TestAcane-Settings-Orc-blank-Arcane-blank-FullBuffs-0.0yards-LongMultiTarget"
+ value: {}
+}
+dps_results: {
+ key: "TestAcane-Settings-Orc-blank-Arcane-blank-FullBuffs-0.0yards-LongSingleTarget"
+ value: {}
+}
+dps_results: {
+ key: "TestAcane-Settings-Orc-blank-Arcane-blank-FullBuffs-0.0yards-ShortSingleTarget"
+ value: {}
+}
+dps_results: {
+ key: "TestAcane-Settings-Orc-blank-Arcane-blank-NoBuffs-0.0yards-LongMultiTarget"
+ value: {}
+}
+dps_results: {
+ key: "TestAcane-Settings-Orc-blank-Arcane-blank-NoBuffs-0.0yards-LongSingleTarget"
+ value: {}
+}
+dps_results: {
+ key: "TestAcane-Settings-Orc-blank-Arcane-blank-NoBuffs-0.0yards-ShortSingleTarget"
+ value: {}
+}
+dps_results: {
+ key: "TestAcane-Settings-Troll-blank-Arcane-blank-FullBuffs-0.0yards-LongMultiTarget"
+ value: {}
+}
+dps_results: {
+ key: "TestAcane-Settings-Troll-blank-Arcane-blank-FullBuffs-0.0yards-LongSingleTarget"
+ value: {}
+}
+dps_results: {
+ key: "TestAcane-Settings-Troll-blank-Arcane-blank-FullBuffs-0.0yards-ShortSingleTarget"
+ value: {}
+}
+dps_results: {
+ key: "TestAcane-Settings-Troll-blank-Arcane-blank-NoBuffs-0.0yards-LongMultiTarget"
+ value: {}
+}
+dps_results: {
+ key: "TestAcane-Settings-Troll-blank-Arcane-blank-NoBuffs-0.0yards-LongSingleTarget"
+ value: {}
+}
+dps_results: {
+ key: "TestAcane-Settings-Troll-blank-Arcane-blank-NoBuffs-0.0yards-ShortSingleTarget"
+ value: {}
+}
+dps_results: {
+ key: "TestAcane-SwitchInFrontOfTarget-Default"
+ value: {}
+}
