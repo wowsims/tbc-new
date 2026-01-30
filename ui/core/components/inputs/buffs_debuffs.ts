@@ -22,7 +22,6 @@ import { IconPickerStatOption, PickerStatOptions } from './stat_options';
 import { Player } from '../../player';
 import { raceI18nKeys } from '../../../i18n/entity_mapping';
 import { Party } from '../../party';
-import { stat } from 'fs';
 
 ///////////////////////////////////////////////////////////////////////////
 //                                 RAID BUFFS
