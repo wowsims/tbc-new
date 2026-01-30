@@ -8,6 +8,7 @@ import (
 )
 
 var ItemSetAldorRegalia = core.NewItemSet(core.ItemSet{
+	ID:                      648,
 	Name:                    "Aldor Regalia",
 	DisabledInChallengeMode: true,
 	Bonuses: map[int32]core.ApplySetBonus{
@@ -30,6 +31,7 @@ var ItemSetAldorRegalia = core.NewItemSet(core.ItemSet{
 })
 
 var ItemSetTirisfalRegalia = core.NewItemSet(core.ItemSet{
+	ID:                      649,
 	Name:                    "Tirisfal Regalia",
 	DisabledInChallengeMode: true,
 	Bonuses: map[int32]core.ApplySetBonus{
@@ -75,6 +77,7 @@ var ItemSetTirisfalRegalia = core.NewItemSet(core.ItemSet{
 })
 
 var ItemSetTempestRegalia = core.NewItemSet(core.ItemSet{
+	ID:                      671,
 	Name:                    "Tempest Regalia",
 	DisabledInChallengeMode: true,
 	Bonuses: map[int32]core.ApplySetBonus{

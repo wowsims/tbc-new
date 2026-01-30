@@ -45,18 +45,17 @@ func (mage *Mage) registerArmorSpells() {
 	})
 
 	mageArmorActionId := core.ActionID{SpellID: 6117}
-	mageArmorMetrics := mage.NewManaMetrics(mageArmorActionId)
 	mageArmor := mage.RegisterAura(core.Aura{
 		ActionID: mageArmorActionId,
 		Label:    "Mage Armor",
 		Duration: time.Minute * 30,
 		OnGain: func(aura *core.Aura, sim *core.Simulation) {
-			//mage.PseudoStats.SpiritRegenRateCombat += .3
-			//mage.UpdateManaRegenRates()
+			mage.PseudoStats.SpiritRegenRateCombat += .3
+			mage.UpdateManaRegenRates()
 		},
 		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
-			//mage.PseudoStats.SpiritRegenRateCombat -= .3
-			//mage.UpdateManaRegenRates()
+			mage.PseudoStats.SpiritRegenRateCombat -= .3
+			mage.UpdateManaRegenRates()
 		},
 		BuildPhase: core.Ternary(mage.Options.DefaultMageArmor == proto.MageArmor_MageArmorMageArmor, core.CharacterBuildPhaseBuffs, core.CharacterBuildPhaseNone),
 	})
@@ -70,16 +69,6 @@ func (mage *Mage) registerArmorSpells() {
 		ClassSpellMask: MageSpellMageArmor,
 		ManaCost: core.ManaCostOptions{
 			FlatCost: 575,
-		},
-
-		Hot: core.DotConfig{
-			Aura:          *mageArmor,
-			SelfOnly:      true,
-			TickLength:    time.Second * 5,
-			NumberOfTicks: 360,
-			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				mage.AddMana(sim, mage.ManaRegenPerSecondWhileNotCombat()*.3, mageArmorMetrics)
-			},
 		},
 
 		Cast: core.CastConfig{
