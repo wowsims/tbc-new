@@ -83,8 +83,8 @@ var ItemSetTempestRegalia = core.NewItemSet(core.ItemSet{
 	Bonuses: map[int32]core.ApplySetBonus{
 		2: func(agent core.Agent, setBonusAura *core.Aura) {
 			setBonusAura.AttachSpellMod(core.SpellModConfig{
-				Kind:      core.SpellMod_BuffDuration_Flat,
-				TimeValue: time.Second * 2,
+				Kind:      core.SpellMod_DotNumberOfTicks_Flat,
+				IntValue:  1,
 				ClassMask: MageSpellEvocation,
 			})
 		},
