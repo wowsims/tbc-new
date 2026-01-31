@@ -8,7 +8,7 @@ import (
 
 func (mage *Mage) registerFlamestrikeSpell() {
 
-	flameStrikeCoefficient := 0.23600000143 // Per https://wago.tools/db2/SpellEffect?build=5.5.0.61217&filter%5BSpellID%5D=exact%253A2120 Field: "BonusCoefficient"
+	flameStrikeCoefficient := 0.23600000143 // Per https://wago.tools/db2/SpellEffect?build=2.5.5.65295&filter%5BSpellID%5D=exact%253A2120 Field: "BonusCoefficient"
 	flameStrikeDotCoefficient := 0.02999999933
 
 	mage.Flamestrike = mage.RegisterSpell(core.SpellConfig{
@@ -42,8 +42,7 @@ func (mage *Mage) registerFlamestrikeSpell() {
 			TickLength:       time.Second * 2,
 			BonusCoefficient: flameStrikeDotCoefficient,
 
-			OnSnapshot: func(sim *core.Simulation, _ *core.Unit, dot *core.Dot) {
-				target := mage.CurrentTarget
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, 106)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {

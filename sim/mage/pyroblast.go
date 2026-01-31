@@ -9,7 +9,7 @@ import (
 func (mage *Mage) registerPyroblastSpell() {
 	actionID := core.ActionID{SpellID: 11366}
 
-	pyroblastCoefficient := 1.14999997616 // Per https://wago.tools/db2/SpellEffect?build=5.5.0.61217&filter%5BSpellID%5D=11366 Field: "BonusCoefficient"
+	pyroblastCoefficient := 1.14999997616 // Per https://wago.tools/db2/SpellEffect?build=2.5.5.65295&filter%5BSpellID%5D=11366 Field: "BonusCoefficient"
 	pyroblastDotCoefficient := 0.05000000075
 
 	mage.Pyroblast = mage.RegisterSpell(core.SpellConfig{

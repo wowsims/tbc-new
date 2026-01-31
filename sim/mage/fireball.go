@@ -8,7 +8,7 @@ import (
 
 func (mage *Mage) registerFireballSpell() {
 
-	fireBallCoefficient := 1.0 // Per https://wago.tools/db2/SpellEffect?build=5.5.0.61217&filter%5BSpellID%5D=exact%253A133 Field: "BonusCoefficient"
+	fireBallCoefficient := 1.0 // Per https://wago.tools/db2/SpellEffect?build=2.5.5.65295&filter%5BSpellID%5D=exact%253A133 Field: "BonusCoefficient"
 
 	mage.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 133},
