@@ -177,15 +177,36 @@ func (spell *Spell) PhysicalCritCheck(sim *Simulation, attackTable *AttackTable)
 }
 
 func (spell *Spell) BonusDamage() float64 {
-	var bonusDamage float64
+	bonusDamage := 0.0
 
 	if spell.SpellSchool.Matches(SpellSchoolPhysical) {
-		bonusDamage = spell.Unit.PseudoStats.BonusDamage
+		bonusDamage = spell.Unit.PseudoStats.BonusDamage + spell.Unit.PseudoStats.MobTypeAttackPower
 	} else {
 		bonusDamage = spell.SpellDamage()
 	}
 
 	return bonusDamage
+}
+
+func (spell *Spell) SpellSchoolBonusDamage() float64 {
+	schoolBonusSpellDamage := 0.0
+
+	switch spell.SchoolIndex {
+	case stats.SchoolIndexArcane:
+		schoolBonusSpellDamage = spell.Unit.GetStat(stats.ArcaneDamage)
+	case stats.SchoolIndexFire:
+		schoolBonusSpellDamage = spell.Unit.GetStat(stats.FireDamage)
+	case stats.SchoolIndexFrost:
+		schoolBonusSpellDamage = spell.Unit.GetStat(stats.FrostDamage)
+	case stats.SchoolIndexHoly:
+		schoolBonusSpellDamage = spell.Unit.GetStat(stats.HolyDamage)
+	case stats.SchoolIndexNature:
+		schoolBonusSpellDamage = spell.Unit.GetStat(stats.NatureDamage)
+	case stats.SchoolIndexShadow:
+		schoolBonusSpellDamage = spell.Unit.GetStat(stats.ShadowDamage)
+	}
+
+	return schoolBonusSpellDamage
 }
 
 func (spell *Spell) SpellDamage() float64 {
@@ -261,7 +282,6 @@ func (spell *Spell) CalcOutcome(sim *Simulation, target *Unit, outcomeApplier Ou
 
 func (spell *Spell) calcDamageInternal(sim *Simulation, target *Unit, baseDamage float64, attackerMultiplier float64, isPeriodic bool, outcomeApplier OutcomeApplier) *SpellResult {
 	attackTable := spell.Unit.AttackTables[target.UnitIndex]
-
 	result := spell.NewResult(target)
 	result.Damage = baseDamage
 
@@ -339,10 +359,11 @@ func (spell *Spell) CalcPeriodicDamage(sim *Simulation, target *Unit, baseDamage
 		baseDamage += dot.BonusCoefficient * spell.BonusDamage()
 	}
 	attackerMultiplier *= dot.PeriodicDamageMultiplier
+
 	return spell.calcDamageInternal(sim, target, baseDamage, attackerMultiplier, true, outcomeApplier)
 }
 func (dot *Dot) CalcSnapshotDamage(sim *Simulation, target *Unit, outcomeApplier OutcomeApplier) *SpellResult {
-	return dot.Spell.calcDamageInternal(sim, target, dot.SnapshotBaseDamage, 1.0, true, outcomeApplier)
+	return dot.Spell.calcDamageInternal(sim, target, dot.SnapshotBaseDamage, dot.SnapshotAttackerMultiplier, true, outcomeApplier)
 }
 
 func (spell *Spell) DealOutcome(sim *Simulation, result *SpellResult) {
@@ -372,11 +393,7 @@ func (spell *Spell) dealDamageInternal(sim *Simulation, isPeriodic bool, result 
 				}
 			}
 		} else if result.DidGlance() {
-			if result.DidBlock() {
-				spell.SpellMetrics[result.Target.UnitIndex].TotalGlanceBlockDamage += result.Damage
-			} else {
-				spell.SpellMetrics[result.Target.UnitIndex].TotalGlanceDamage += result.Damage
-			}
+			spell.SpellMetrics[result.Target.UnitIndex].TotalGlanceDamage += result.Damage
 		} else if result.DidBlock() {
 			spell.SpellMetrics[result.Target.UnitIndex].TotalBlockDamage += result.Damage
 		}

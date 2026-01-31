@@ -95,7 +95,7 @@ func MapBonusStatIndexToStat(index int) (proto.Stat, bool) {
 	case ITEM_MOD_SPELL_DAMAGE_DONE:
 		return proto.Stat_StatSpellDamage, true
 	case ITEM_MOD_SPELL_POWER:
-		return proto.Stat_StatSpellPower, true
+		return 0, false
 	case 50: // ExtraArmor maps to BonusArmor (green armor)
 		return proto.Stat_StatBonusArmor, true
 	case ITEM_MOD_MANA_REGENERATION: // ManaRegeneration

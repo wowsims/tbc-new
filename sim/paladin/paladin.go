@@ -147,19 +147,10 @@ func NewPaladin(character *core.Character, talentsStr string, options *proto.Pal
 		AutoSwingMelee: true,
 	})
 
-	paladin.PseudoStats.BaseBlockChance += 0.03
-	paladin.PseudoStats.BaseDodgeChance += 0.03
-	paladin.PseudoStats.BaseParryChance += 0.03
-
 	paladin.AddStatDependency(stats.Strength, stats.AttackPower, 2)
 	paladin.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiMaxLevel[character.Class])
-
-	// Base strength to Parry is not affected by Diminishing Returns
-	baseStrength := paladin.GetBaseStats()[stats.Strength]
-	paladin.PseudoStats.BaseParryChance += baseStrength * core.StrengthToParryPercent
-	paladin.AddStat(stats.ParryRating, -baseStrength*core.StrengthToParryRating)
-	paladin.AddStatDependency(stats.Strength, stats.ParryRating, core.StrengthToParryRating)
-	paladin.AddStatDependency(stats.Agility, stats.DodgeRating, 0.1/10000.0/100.0)
+	paladin.AddStatDependency(stats.Intellect, stats.SpellCritPercent, core.CritPerIntMaxLevel[character.Class])
+	paladin.AddStatDependency(stats.Agility, stats.DodgeRating, 1/25.0*core.DodgeRatingPerDodgePercent)
 
 	// Bonus Armor and Armor are treated identically for Paladins
 	paladin.AddStatDependency(stats.BonusArmor, stats.Armor, 1)

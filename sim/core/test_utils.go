@@ -37,14 +37,15 @@ func FreshDefaultTargetConfig() *proto.Target {
 	return &proto.Target{
 		Level: CharacterLevel + 3,
 		Stats: stats.Stats{
-			stats.Armor:       24835,
-			stats.AttackPower: 0,
+			stats.Armor:       7684,
+			stats.AttackPower: 320,
+			stats.BlockValue:  54,
 		}.ToProtoArray(),
 		MobType: proto.MobType_MobTypeMechanical,
 
 		SwingSpeed:    2,
-		MinBaseDamage: 550000,
-		ParryHaste:    false,
+		MinBaseDamage: 4192.05,
+		ParryHaste:    true,
 		DamageSpread:  0.4,
 	}
 }
@@ -52,62 +53,82 @@ func FreshDefaultTargetConfig() *proto.Target {
 var DefaultTargetProto = FreshDefaultTargetConfig()
 
 var FullRaidBuffs = &proto.RaidBuffs{
-	// // +10% Attack Power
-	// TrueshotAura: true, // Hunters
-
-	// // +10% Melee & Ranged Attack Speed
-	// UnholyAura: true, // Frost/Unholy DKs
-
-	// // +10% Spell Power
-	// ArcaneBrilliance: true, // Mages
-
-	// // +5% Spell Haste
-	// ShadowForm: true, // Shadow Priests
-
-	// // +5% Critical Strike Chance
-	// LeaderOfThePack: true, // Feral/Guardian Druids
-
-	// // +3000 Mastery Rating
-	// BlessingOfMight: true, // Paladins
-
-	// // +5% Strength, Agility, Intellect
-	// BlessingOfKings: true, // Paladins
-
-	// // +10% Stamina
-	// PowerWordFortitude: true, // Priests
-
-	// // Major Haste
-	// Bloodlust: true,
-
-	// // Major Mana Replenishment
-	// ManaTideTotemCount: 1, // Shamans
-
-	// // Crit Damage %
-	// SkullBannerCount: 1, // Warrior
-
-	// // Additional Nature Damage Proc
-	// StormlashTotemCount: 1, // Shaman
+	Bloodlust:          true,
+	ArcaneBrilliance:   true,
+	PowerWordFortitude: proto.TristateEffect_TristateEffectImproved,
+	DivineSpirit:       proto.TristateEffect_TristateEffectImproved,
+	GiftOfTheWild:      proto.TristateEffect_TristateEffectImproved,
+	Thorns:             proto.TristateEffect_TristateEffectImproved,
+	ShadowProtection:   true,
 }
 
-var FullPartyBuffs = &proto.PartyBuffs{}
+var FullPartyBuffs = &proto.PartyBuffs{
+	FerociousInspiration:  1,
+	BloodPact:             proto.TristateEffect_TristateEffectImproved,
+	MoonkinAura:           proto.TristateEffect_TristateEffectImproved,
+	LeaderOfThePack:       proto.TristateEffect_TristateEffectImproved,
+	SanctityAura:          proto.TristateEffect_TristateEffectImproved,
+	DevotionAura:          proto.TristateEffect_TristateEffectImproved,
+	RetributionAura:       proto.TristateEffect_TristateEffectImproved,
+	TrueshotAura:          true,
+	DraeneiRacialMelee:    true,
+	DraeneiRacialCaster:   true,
+	AtieshDruid:           1,
+	AtieshMage:            1,
+	AtieshPriest:          1,
+	AtieshWarlock:         1,
+	BraidedEterniumChain:  true,
+	EyeOfTheNight:         true,
+	ChainOfTheTwilightOwl: true,
+	JadePendantOfBlasting: true,
 
-var FullIndividualBuffs = &proto.IndividualBuffs{}
+	ManaSpringTotem:      proto.TristateEffect_TristateEffectImproved,
+	ManaTideTotems:       1,
+	TotemOfWrath:         1,
+	WrathOfAirTotem:      proto.TristateEffect_TristateEffectImproved,
+	GraceOfAirTotem:      proto.TristateEffect_TristateEffectImproved,
+	StrengthOfEarthTotem: proto.StrengthOfEarthType_EnhancingTotems,
+	TranquilAirTotem:     true,
+	WindfuryTotemRank:    5,
+
+	BattleShout:     proto.TristateEffect_TristateEffectImproved,
+	CommandingShout: proto.TristateEffect_TristateEffectImproved,
+}
+
+var FullIndividualBuffs = &proto.IndividualBuffs{
+	BlessingOfKings:     true,
+	BlessingOfSanctuary: true,
+	BlessingOfWisdom:    proto.TristateEffect_TristateEffectImproved,
+	BlessingOfMight:     proto.TristateEffect_TristateEffectImproved,
+	UnleashedRage:       true,
+}
 
 var FullDebuffs = &proto.Debuffs{
-	// WeakenedBlows:         true,
-	// PhysicalVulnerability: true,
-	// WeakenedArmor:         true,
-	// MortalWounds:          true,
-	// FireBreath:            true,
-	// LightningBreath:       true,
-	// MasterPoisoner:        true,
-	// CurseOfElements:       true,
-	// NecroticStrike:        true,
-	// LavaBreath:            true,
-	// SporeCloud:            true,
-	// Slow:                  true,
-	// MindNumbingPoison:     true,
-	// CurseOfEnfeeblement:   true,
+	JudgementOfWisdom:         true,
+	JudgementOfLight:          true,
+	ImprovedSealOfTheCrusader: true,
+	Misery:                    true,
+	CurseOfElements:           proto.TristateEffect_TristateEffectImproved,
+	IsbUptime:                 1,
+	ShadowWeaving:             true,
+	ImprovedScorch:            true,
+	WintersChill:              true,
+	BloodFrenzy:               true,
+	GiftOfArthas:              true,
+	Mangle:                    true,
+	ExposeArmor:               proto.TristateEffect_TristateEffectImproved,
+	FaerieFire:                proto.TristateEffect_TristateEffectImproved,
+	SunderArmor:               true,
+	CurseOfRecklessness:       true,
+	HuntersMark:               proto.TristateEffect_TristateEffectImproved,
+	DemoralizingRoar:          proto.TristateEffect_TristateEffectImproved,
+	// DemoralizingShout:         proto.TristateEffect_TristateEffectImproved,
+	ThunderClap:      proto.TristateEffect_TristateEffectImproved,
+	InsectSwarm:      true,
+	ScorpidSting:     true,
+	ShadowEmbrace:    true,
+	Screech:          true,
+	HemorrhageUptime: 1,
 }
 
 func NewDefaultTarget() *proto.Target {

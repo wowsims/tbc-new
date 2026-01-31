@@ -137,8 +137,6 @@ func (ho HitOutcome) String() string {
 	} else if ho.Matches(OutcomeBlock) {
 		if ho.Matches(OutcomeCrit) {
 			return "CriticalBlock"
-		} else if ho.Matches(OutcomeGlance) {
-			return "GlanceBlock"
 		} else {
 			return "Block"
 		}
@@ -157,11 +155,11 @@ func (ho HitOutcome) String() string {
 
 func (ho HitOutcome) PartialResistString() string {
 	if ho.Matches(OutcomePartial1) {
-		return " (30% Resist)"
+		return " (25% Resist)"
 	} else if ho.Matches(OutcomePartial2) {
-		return " (20% Resist)"
+		return " (50% Resist)"
 	} else if ho.Matches(OutcomePartial4) {
-		return " (10% Resist)"
+		return " (75% Resist)"
 	} else {
 		return ""
 	}
