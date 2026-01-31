@@ -56,20 +56,14 @@ var ItemSetTirisfalRegalia = core.NewItemSet(core.ItemSet{
 				time.Second*6,
 			)
 
-			mage.RegisterAura(core.Aura{
-				Label:    "Tirisfal 4pc",
-				Duration: core.NeverExpires,
-				OnReset: func(aura *core.Aura, sim *core.Simulation) {
-					aura.Activate(sim)
-				},
-				OnSpellHitDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-					if spell.ProcMask.Matches(core.ProcMaskMeleeOrRanged) {
-						return
-					}
+			setBonusAura.AttachProcTrigger(core.ProcTrigger{
+				Name:     "Tirisfal 4PC",
+				Callback: core.CallbackOnSpellHitDealt,
+				ProcMask: core.ProcMaskSpellDamage,
+				Outcome:  core.OutcomeCrit,
 
-					if result.Outcome.Matches(core.OutcomeCrit) {
-						madnessAura.Activate(sim)
-					}
+				Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+					madnessAura.Activate(sim)
 				},
 			})
 		},
