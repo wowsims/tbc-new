@@ -22,7 +22,6 @@ type Mage struct {
 
 	waterElemental *WaterElemental
 
-	ArcaneBlast        *core.Spell
 	ArcaneChargesAura  *core.Aura
 	ClearCasting       *core.Aura
 	PresenceOfMindAura *core.Aura
@@ -32,6 +31,7 @@ type Mage struct {
 	ImprovedScorchAuras core.AuraArray
 	SlowAuras           core.AuraArray
 
+	ArcaneBlast          *core.Spell
 	Ignite               *core.Spell
 	FireBlast            *core.Spell
 	FlameOrbExplode      *core.Spell

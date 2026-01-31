@@ -9,6 +9,7 @@ import (
 func (mage *Mage) registerScorchSpell() {
 
 	scorchCoefficient := 0.42899999022 // Per https://wago.tools/db2/SpellEffect?build=2.5.5.65295&filter%5BSpellID%5D=exact%253A2948 Field: "BonusCoefficient"
+	procChance := []float64{0, 0.33, 0.66, 1}[mage.Talents.ImprovedScorch]
 
 	mage.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 2948},
@@ -36,15 +37,9 @@ func (mage *Mage) registerScorchSpell() {
 			baseDamage := mage.CalcAndRollDamageRange(sim, 304, 361)
 			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
 			if result.Landed() && mage.Talents.ImprovedScorch > 0 {
-				procChance := []float64{0, 0.33, 0.66, 1}[mage.Talents.ImprovedScorch]
-
-				if sim.RandomFloat("Improved Scorch") > procChance {
-					return
-				}
-
-				aura := mage.ImprovedScorchAuras.Get(target)
-				aura.Activate(sim)
-				if aura.IsActive() {
+				if sim.Proc(procChance, "Improved Scorch") {
+					aura := mage.ImprovedScorchAuras.Get(target)
+					aura.Activate(sim)
 					aura.AddStack(sim)
 				}
 			}
