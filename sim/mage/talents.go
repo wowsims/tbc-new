@@ -258,7 +258,7 @@ func (mage *Mage) registerMindMastery() {
 		return
 	}
 
-	mage.AddStat(stats.SpellDamage, mage.GetStat(stats.Intellect)*(.05*float64(mage.Talents.MindMastery)))
+	mage.AddStatDependency(stats.Intellect, stats.SpellDamage, .05*float64(mage.Talents.MindMastery))
 }
 
 // ------ FIRE TALENTS ------
@@ -287,14 +287,11 @@ func (mage *Mage) registerIgnite() {
 		DotAuraTag:     "IgniteDot",
 
 		ProcTrigger: core.ProcTrigger{
-			Name:     "Ignite Talent",
-			Callback: core.CallbackOnSpellHitDealt,
-			ProcMask: core.ProcMaskSpellDamage,
-			Outcome:  core.OutcomeCrit,
-
-			ExtraCondition: func(_ *core.Simulation, spell *core.Spell, _ *core.SpellResult) bool {
-				return spell.Matches(FireSpellIgnitable)
-			},
+			Name:           "Ignite Talent",
+			Callback:       core.CallbackOnSpellHitDealt,
+			ProcMask:       core.ProcMaskSpellDamage,
+			ClassSpellMask: FireSpellIgnitable,
+			Outcome:        core.OutcomeCrit,
 		},
 
 		DamageCalculator: func(result *core.SpellResult) float64 {
@@ -362,22 +359,16 @@ func (mage *Mage) registerMasterOfElements() {
 	refundCoeff := 0.1 * float64(mage.Talents.MasterOfElements)
 	manaMetrics := mage.NewManaMetrics(core.ActionID{SpellID: 29076})
 
-	mage.RegisterAura(core.Aura{
-		Label:    "Master of Elements",
-		Duration: core.NeverExpires,
-		OnReset: func(aura *core.Aura, sim *core.Simulation) {
-			aura.Activate(sim)
-		},
-		OnSpellHitDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			if spell.ProcMask.Matches(core.ProcMaskMeleeOrRanged) || !spell.SpellSchool.Matches(core.SpellSchoolFrostfire) {
-				return
-			}
+	mage.MakeProcTriggerAura(core.ProcTrigger{
+		Name:           "Master of Elements",
+		Duration:       core.NeverExpires,
+		ClassSpellMask: MageSpellFire | MageSpellFrost,
+		Outcome:        core.OutcomeCrit,
+		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			if spell.CurCast.Cost == 0 {
 				return
 			}
-			if result.DidCrit() {
-				mage.AddMana(sim, spell.DefaultCast.Cost*refundCoeff, manaMetrics)
-			}
+			mage.AddMana(sim, spell.DefaultCast.Cost*refundCoeff, manaMetrics)
 		},
 	})
 }
