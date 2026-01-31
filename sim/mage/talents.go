@@ -96,14 +96,8 @@ func (mage *Mage) registerArcaneSubtlety() {
 		//all spells resist 5 & arcance spells threat 20% per rank
 		mage.AddStaticMod(core.SpellModConfig{
 			School:     core.SpellSchoolArcane,
-			FloatValue: .20 * float64(mage.Talents.ArcaneSubtlety),
-			Kind:       core.SpellMod_Custom,
-			ApplyCustom: func(mod *core.SpellMod, spell *core.Spell) {
-				spell.ThreatMultiplier -= mod.GetFloatValue()
-			},
-			RemoveCustom: func(mod *core.SpellMod, spell *core.Spell) {
-				spell.ThreatMultiplier += mod.GetFloatValue()
-			},
+			FloatValue: -.20 * float64(mage.Talents.ArcaneSubtlety),
+			Kind:       core.SpellMod_ThreatMultiplier_Flat,
 		})
 	}
 }
@@ -324,14 +318,8 @@ func (mage *Mage) registerImprovedFlamestrike() {
 func (mage *Mage) registerBurningSoul() {
 	mage.AddStaticMod(core.SpellModConfig{
 		School:     core.SpellSchoolFire,
-		FloatValue: .05 * float64(mage.Talents.BurningSoul),
-		Kind:       core.SpellMod_Custom,
-		ApplyCustom: func(mod *core.SpellMod, spell *core.Spell) {
-			spell.ThreatMultiplier -= mod.GetFloatValue()
-		},
-		RemoveCustom: func(mod *core.SpellMod, spell *core.Spell) {
-			spell.ThreatMultiplier += mod.GetFloatValue()
-		},
+		FloatValue: -.05 * float64(mage.Talents.BurningSoul),
+		Kind:       core.SpellMod_ThreatMultiplier_Flat,
 	})
 }
 
@@ -403,13 +391,7 @@ func (mage *Mage) registerPyromaniac() {
 		mage.AddStaticMod(core.SpellModConfig{
 			School:     core.SpellSchoolFire,
 			FloatValue: -percent,
-			Kind:       core.SpellMod_Custom,
-			ApplyCustom: func(mod *core.SpellMod, spell *core.Spell) {
-				spell.ThreatMultiplier -= mod.GetFloatValue()
-			},
-			RemoveCustom: func(mod *core.SpellMod, spell *core.Spell) {
-				spell.ThreatMultiplier += mod.GetFloatValue()
-			},
+			Kind:       core.SpellMod_ThreatMultiplier_Flat,
 		})
 	}
 }
@@ -507,14 +489,8 @@ func (mage *Mage) registerFrostChanneling() {
 		threatMod := []float64{.04, .07, .1}
 		mage.AddStaticMod(core.SpellModConfig{
 			School:     core.SpellSchoolFrost,
-			FloatValue: threatMod[mage.Talents.FrostChanneling-1],
-			Kind:       core.SpellMod_Custom,
-			ApplyCustom: func(mod *core.SpellMod, spell *core.Spell) {
-				spell.ThreatMultiplier -= mod.GetFloatValue()
-			},
-			RemoveCustom: func(mod *core.SpellMod, spell *core.Spell) {
-				spell.ThreatMultiplier += mod.GetFloatValue()
-			},
+			FloatValue: -threatMod[mage.Talents.FrostChanneling-1],
+			Kind:       core.SpellMod_ThreatMultiplier_Flat,
 		})
 	}
 }
