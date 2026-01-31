@@ -54,7 +54,9 @@ export function relevantStatOptions<T, OptionsType extends ItemStatOptions<T> | 
 			option.stats.length === 0 ||
 			option.stats.some(stat => displayStatSet.has(stat)) ||
 			option.stats.some(stat => simUI.individualConfig.epStats.includes(stat)) ||
-			simUI.individualConfig.includeBuffDebuffInputs.includes(option.config)
+			option.stats.some(stat => simUI.individualConfig.includeBuffDebuffInputs.includes(stat))
 		)
-		.filter(option => !simUI.individualConfig.excludeBuffDebuffInputs.includes(option.config));
+		.filter(option =>
+			!option.stats.some(stat => simUI.individualConfig.excludeBuffDebuffInputs.includes(stat))
+		);
 }

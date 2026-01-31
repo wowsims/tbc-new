@@ -239,7 +239,7 @@
 }
 
 .talent-picker-req-arrow-down {
-	background-image: url('/cata/assets/talent_calc/down.png');
+	background-image: url('/tbc/assets/talent_calc/down.png');
 	background-position: bottom center;
 	top: 3rem;
 	height: 1.3rem;
@@ -252,20 +252,24 @@
 		height: 8.3rem;
 	}
 
+	&[data-req-arrow-row-size='4'] {
+		height: 11.8rem;
+	}
+
 	&[data-req-active] {
-		background-image: url('/cata/assets/talent_calc/down2.png');
+		background-image: url('/tbc/assets/talent_calc/down2.png');
 	}
 }
 
 .talent-picker-req-arrow-rightdown {
-	background-image: url('/cata/assets/talent_calc/rightdown.png');
+	background-image: url('/tbc/assets/talent_calc/rightdown.png');
 	background-position: right top;
 	left: 3rem;
 	top: 1.4rem;
 	width: 2.7rem;
 
 	div:first-child {
-		background-image: url('/cata/assets/talent_calc/down.png');
+		background-image: url('/tbc/assets/talent_calc/down.png');
 		background-repeat: no-repeat;
 		background-position: bottom right;
 		position: relative;
@@ -280,23 +284,23 @@
 	}
 
 	&[data-req-active] {
-		background-image: url('/cata/assets/talent_calc/rightdown2.png');
+		background-image: url('/tbc/assets/talent_calc/rightdown2.png');
 
 		div:first-child {
-			background-image: url('/cata/assets/talent_calc/down2.png');
+			background-image: url('/tbc/assets/talent_calc/down2.png');
 		}
 	}
 }
 
 .talent-picker-req-arrow-leftdown {
-	background-image: url('/cata/assets/talent_calc/leftdown.png');
+	background-image: url('/tbc/assets/talent_calc/leftdown.png');
 	background-position: left top;
 	top: 1.4rem;
 	left: 1.3rem;
 	width: 3rem;
 
 	div:first-child {
-		background-image: url('/cata/assets/talent_calc/down.png');
+		background-image: url('/tbc/assets/talent_calc/down.png');
 		background-repeat: no-repeat;
 		background-position: bottom left;
 		position: relative;
@@ -311,16 +315,16 @@
 	}
 
 	&[data-req-active] {
-		background-image: url('/cata/assets/talent_calc/leftdown2.png');
+		background-image: url('/tbc/assets/talent_calc/leftdown2.png');
 
 		div:first-child {
-			background-image: url('/cata/assets/talent_calc/down2.png');
+			background-image: url('/tbc/assets/talent_calc/down2.png');
 		}
 	}
 }
 
 .talent-picker-req-arrow-left {
-	background-image: url('/cata/assets/talent_calc/left.png');
+	background-image: url('/tbc/assets/talent_calc/left.png');
 	background-position: left center;
 	right: 0.9rem;
 	width: 2rem;
@@ -331,12 +335,12 @@
 }
 
 .talent-picker-req-arrow-right {
-	background-image: url('/cata/assets/talent_calc/right.png');
+	background-image: url('/tbc/assets/talent_calc/right.png');
 	background-position: right center;
 	left: 3rem;
 	width: 1.3rem;
 
 	&[data-req-active] {
-		background-image: url('/cata/assets/talent_calc/right2.png');
+		background-image: url('/tbc/assets/talent_calc/right2.png');
 	}
 }
