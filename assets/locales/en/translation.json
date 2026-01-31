@@ -1938,7 +1938,6 @@
 				"tick": "Tick",
 				"critical_tick": "Critical Tick",
 				"glancing_blow": "Glancing Blow",
-				"blocked_glancing_blow": "Blocked Glancing Blow",
 				"blocked_hit": "Blocked Hit",
 				"blocked_critical_hit": "Blocked Critical Hit",
 				"miss": "Miss",

@@ -8110,9 +8110,6 @@
                 "glancing_blow": {
                   "type": "string"
                 },
-                "blocked_glancing_blow": {
-                  "type": "string"
-                },
                 "blocked_hit": {
                   "type": "string"
                 },
@@ -8139,7 +8136,6 @@
                 "tick",
                 "critical_tick",
                 "glancing_blow",
-                "blocked_glancing_blow",
                 "blocked_hit",
                 "blocked_critical_hit",
                 "miss",

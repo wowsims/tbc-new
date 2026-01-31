@@ -47,7 +47,6 @@ export class DamageMetricsTable extends MetricsTable<ActionMetrics> {
 					const tickValues = metric.damageDone.tick;
 					const critTickValues = metric.damageDone.critTick;
 					const glanceValues = metric.damageDone.glance;
-					const glanceBlockValues = metric.damageDone.glanceBlock;
 					const blockValues = metric.damageDone.block;
 					const critBlockValues = metric.damageDone.critBlock;
 
@@ -80,10 +79,6 @@ export class DamageMetricsTable extends MetricsTable<ActionMetrics> {
 										{
 											name: i18n.t('results_tab.details.attack_types.glancing_blow'),
 											...glanceValues,
-										},
-										{
-											name: i18n.t('results_tab.details.attack_types.blocked_glancing_blow'),
-											...glanceBlockValues,
 										},
 										{
 											name: i18n.t('results_tab.details.attack_types.blocked_hit'),
@@ -215,7 +210,6 @@ export class DamageMetricsTable extends MetricsTable<ActionMetrics> {
 					const relativeTickPercent = (metric.ticks / metric.landedTicks) * 100;
 					const relativeCritTickPercent = (metric.critTicks / metric.landedTicks) * 100;
 					const relativeGlancePercent = (metric.glances / metric.landedHits) * 100;
-					const relativeGlanceBlockPercent = (metric.glanceBlocks / metric.landedHits) * 100;
 					const relativeBlockPercent = (metric.blocks / metric.landedHits) * 100;
 					const relativeCritBlockPercent = (metric.critBlocks / metric.landedHits) * 100;
 
@@ -242,11 +236,6 @@ export class DamageMetricsTable extends MetricsTable<ActionMetrics> {
 											name: i18n.t('results_tab.details.attack_types.glancing_blow'),
 											value: metric.glances,
 											percentage: relativeGlancePercent,
-										},
-										{
-											name: i18n.t('results_tab.details.attack_types.blocked_glancing_blow'),
-											value: metric.glanceBlocks,
-											percentage: relativeGlanceBlockPercent,
 										},
 										{
 											name: i18n.t('results_tab.details.attack_types.blocked_hit'),

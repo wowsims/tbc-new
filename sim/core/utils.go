@@ -72,7 +72,7 @@ func GetTristateValueFloat(effect proto.TristateEffect, regularValue float64, im
 }
 
 func IsImproved(effect proto.TristateEffect) bool {
-	return effect == proto.TristateEffect_TristateEffectImproved;
+	return effect == proto.TristateEffect_TristateEffectImproved
 }
 
 func MakeTristateValue(hasRegular bool, hasImproved bool) proto.TristateEffect {

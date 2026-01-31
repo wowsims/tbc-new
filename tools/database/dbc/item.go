@@ -3,7 +3,6 @@ package dbc
 import (
 	"math"
 
-	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
 )
@@ -93,17 +92,6 @@ func (item *Item) ToScaledUIItem(itemLevel int) *proto.UIItem {
 
 	uiItem.ScalingOptions = scalingProperties
 	return uiItem
-}
-
-func (item *Item) CanUpgrade() bool {
-	return item.ItemLevel >= core.MinUpgradeIlvl && UPGRADE_SYSTEM_ACTIVE && item.Flags2.Has(CAN_BE_UPGRADED) && item.UpgradeID > 0
-}
-
-func (item *Item) GetMaxIlvl() int {
-	if item.CanUpgrade() {
-		return item.ItemLevel + item.UpgradePath[len(item.UpgradePath)-1]
-	}
-	return item.ItemLevel
 }
 
 func (item *Item) ParseItemFlags(uiItem *proto.UIItem) {

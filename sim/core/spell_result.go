@@ -394,11 +394,7 @@ func (spell *Spell) dealDamageInternal(sim *Simulation, isPeriodic bool, result 
 				}
 			}
 		} else if result.DidGlance() {
-			if result.DidBlock() {
-				spell.SpellMetrics[result.Target.UnitIndex].TotalGlanceBlockDamage += result.Damage
-			} else {
-				spell.SpellMetrics[result.Target.UnitIndex].TotalGlanceDamage += result.Damage
-			}
+			spell.SpellMetrics[result.Target.UnitIndex].TotalGlanceDamage += result.Damage
 		} else if result.DidBlock() {
 			spell.SpellMetrics[result.Target.UnitIndex].TotalBlockDamage += result.Damage
 		}
