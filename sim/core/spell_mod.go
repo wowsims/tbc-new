@@ -359,6 +359,10 @@ const (
 	// Will increase the dot.BaseDurationMultiplier. +5% = 0.05
 	// Uses FloatValue
 	SpellMod_DotBaseDuration_Pct
+
+	// Will increase the spell.ThreatMultiplier. +5% = 0.05
+	// Uses FloatValue
+	SpellMod_ThreatMultiplier_Flat
 )
 
 var spellModMap = map[SpellModType]*SpellModFunctions{
@@ -479,6 +483,11 @@ var spellModMap = map[SpellModType]*SpellModFunctions{
 	SpellMod_DotBaseDuration_Pct: {
 		Apply:  applyDotBaseDurationMultiplier,
 		Remove: removeDotBaseDurationMultiplier,
+	},
+
+	SpellMod_ThreatMultiplier_Flat: {
+		Apply:  applyThreatMultiplierFlat,
+		Remove: removeThreatMultiplierFlat,
 	},
 }
 
@@ -802,4 +811,12 @@ func removeDotBaseDurationMultiplier(mod *SpellMod, spell *Spell) {
 	if spell.aoeDot != nil {
 		spell.aoeDot.BaseDurationMultiplier /= (1 + mod.floatValue)
 	}
+}
+
+func applyThreatMultiplierFlat(mod *SpellMod, spell *Spell) {
+	spell.ThreatMultiplier += mod.floatValue
+}
+
+func removeThreatMultiplierFlat(mod *SpellMod, spell *Spell) {
+	spell.ThreatMultiplier -= mod.floatValue
 }
