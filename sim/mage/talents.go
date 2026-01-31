@@ -171,14 +171,11 @@ func (mage *Mage) registerArcaneConcentration() {
 			}
 
 			procChance := 0.02 * float64(mage.Talents.ArcaneConcentration)
-
-			if sim.RandomFloat("Arcane Concentration") > procChance {
-				return
+			if sim.Proc(procChance, "Arcane Concentration") {
+				proccedAt = sim.CurrentTime
+				proccedSpell = spell
+				mage.ClearCasting.Activate(sim)
 			}
-
-			proccedAt = sim.CurrentTime
-			proccedSpell = spell
-			mage.ClearCasting.Activate(sim)
 		},
 	})
 }
@@ -209,7 +206,7 @@ func (mage *Mage) registerArcaneMind() {
 		return
 	}
 
-	mage.AddStat(stats.Intellect, mage.GetStat(stats.Intellect)*(float64(mage.Talents.ArcaneMind)*.03))
+	mage.MultiplyStat(stats.Intellect, 1+(float64(mage.Talents.ArcaneMind)*.03))
 }
 
 func (mage *Mage) registerArcaneInstability() {
@@ -223,7 +220,7 @@ func (mage *Mage) registerArcaneInstability() {
 		Kind:       core.SpellMod_BonusCrit_Percent,
 	})
 
-	mage.AddStat(stats.SpellDamage, mage.GetStat(stats.SpellDamage)*(.01*float64(mage.Talents.ArcaneInstability)))
+	mage.MultiplyStat(stats.SpellDamage, 1+(.01*float64(mage.Talents.ArcaneInstability)))
 }
 
 func (mage *Mage) registerEmpoweredArcaneMissiles() {
