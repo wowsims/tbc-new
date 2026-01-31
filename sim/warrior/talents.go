@@ -7,9 +7,8 @@ package warrior
 // 	"github.com/wowsims/tbc/sim/core/proto"
 // )
 
-func (warrior *Warrior) ApplyTalents() {
-	// warrior.registerJuggernaut()
-	// warrior.registerBladestorm()
+func (war *Warrior) ApplyTalents() {
+	war.registerArmsTalents()
 }
 
 // func (war *Warrior) registerJuggernaut() {

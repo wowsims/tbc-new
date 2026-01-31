@@ -7,7 +7,8 @@ import (
 )
 
 const ThreatPerRageGained = 5
-const BaseRageHitFactor = 1.75
+const BaseRageHitFactor = 3.5
+const RageFactor = 274.7
 
 type rageBar struct {
 	unit *Unit
@@ -32,6 +33,8 @@ type RageBarOptions struct {
 }
 
 func (unit *Unit) EnableRageBar(options RageBarOptions) {
+	rageFromDamageTakenMetrics := unit.NewRageMetrics(ActionID{OtherID: proto.OtherAction_OtherActionDamageTaken})
+
 	unit.SetCurrentPowerBar(RageBar)
 	unit.RegisterAura(Aura{
 		Label:    "RageBar",
@@ -59,8 +62,18 @@ func (unit *Unit) EnableRageBar(options RageBarOptions) {
 				return
 			}
 
-			// rage in mop is normalized so it only depends on weapon swing speed and some multipliers
-			generatedRage := hitFactor * speed
+			if result.Outcome.Matches(OutcomeCrit) {
+				hitFactor *= 2
+			}
+
+			damage := result.Damage
+			if result.Outcome.Matches(OutcomeDodge | OutcomeParry) {
+				// Rage is still generated for dodges/parries, based on the damage it WOULD have done.
+				damage = result.PostArmorAndResistanceMultiplier
+			}
+
+			// generatedRage is capped for very low damage swings
+			generatedRage := min((damage*7.5/RageFactor+hitFactor*speed)/2, damage*15/RageFactor)
 
 			var metrics *ResourceMetrics
 			if spell.Cost != nil {
@@ -72,6 +85,13 @@ func (unit *Unit) EnableRageBar(options RageBarOptions) {
 				metrics = spell.ResourceMetrics
 			}
 			unit.AddRage(sim, generatedRage, metrics)
+		},
+		OnSpellHitTaken: func(aura *Aura, sim *Simulation, spell *Spell, result *SpellResult) {
+			if unit.GetCurrentPowerBar() != RageBar {
+				return
+			}
+			generatedRage := result.Damage * 2.5 / RageFactor
+			unit.AddRage(sim, generatedRage, rageFromDamageTakenMetrics)
 		},
 	})
 

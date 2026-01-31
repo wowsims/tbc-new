@@ -12,7 +12,7 @@ import (
 func applyDebuffEffects(target *Unit, targetIdx int, debuffs *proto.Debuffs, raid *proto.Raid) {
 
 	if debuffs.BloodFrenzy {
-		MakePermanent(BloodFrenzyAura(target))
+		MakePermanent(BloodFrenzyAura(target, 2))
 	}
 
 	if debuffs.CurseOfElements != proto.TristateEffect_TristateEffectMissing {
@@ -112,9 +112,15 @@ func applyDebuffEffects(target *Unit, targetIdx int, debuffs *proto.Debuffs, rai
 	}
 }
 
-// Physical anmd Armor Related Debuffs
-func BloodFrenzyAura(target *Unit) *Aura {
-	return damageTakenDebuff(target, "Blood Frenzy", 29859, []stats.SchoolIndex{stats.SchoolIndexPhysical}, 1.04, time.Second*21)
+// Physical and Armor Related Debuffs
+func BloodFrenzyAura(target *Unit, points int32) *Aura {
+	return damageTakenDebuff(target,
+		"Blood Frenzy",
+		29859,
+		[]stats.SchoolIndex{stats.SchoolIndexPhysical},
+		1+0.02*float64(points),
+		NeverExpires,
+	)
 }
 
 // Damage Taken Debuffs

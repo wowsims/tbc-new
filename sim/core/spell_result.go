@@ -19,6 +19,7 @@ type SpellResult struct {
 
 	ArmorAndResistanceMultiplier     float64 // Armor multiplier
 	PostArmorAndResistanceMultiplier float64 // Damage done by this cast after Armor is applied
+	PreOutcomeDamage                 float64 // Damage done by this cast after Outcome is applied
 	PostOutcomeDamage                float64 // Damage done by this cast after Outcome is applied
 
 	inUse bool

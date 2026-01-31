@@ -27,9 +27,12 @@ const (
 	SpellMaskShieldWall
 	SpellMaskLastStand
 	SpellMaskCharge
+	SpellMaskIntercept
 	SpellMaskDemoralizingShout
 
 	// Special attacks
+	SpellMaskRend
+	SpellMaskDeepWounds
 	SpellMaskSweepingStrikes
 	SpellMaskSweepingStrikesHit
 	SpellMaskSweepingStrikesNormalizedHit
@@ -45,6 +48,7 @@ const (
 	SpellMaskWhirlwind
 	SpellMaskWhirlwindOh
 	SpellMaskShieldSlam
+	SpellMaskShieldBash
 	SpellMaskBloodthirst
 	SpellMaskMortalStrike
 	SpellMaskWildStrike
@@ -52,13 +56,17 @@ const (
 	SpellMaskHamstring
 	SpellMaskPummel
 
-	// Talents
-	SpellMaskImpendingVictory
-	SpellMaskBladestorm
-	SpellMaskBladestormMH
-	SpellMaskBladestormOH
+	WarriorSpellLast
+	WarriorSpellsAll = WarriorSpellLast<<1 - 1
 
-	SpellMaskShouts = SpellMaskCommandingShout | SpellMaskBattleShout | SpellMaskDemoralizingShout
+	SpellMaskShouts             = SpellMaskCommandingShout | SpellMaskBattleShout | SpellMaskDemoralizingShout
+	SpellMaskDirectDamageSpells = SpellMaskSweepingStrikesHit | SpellMaskSweepingStrikesNormalizedHit |
+		SpellMaskCleave | SpellMaskExecute | SpellMaskHeroicStrike | SpellMaskOverpower |
+		SpellMaskRevenge | SpellMaskSlam | SpellMaskSweepingSlam | SpellMaskShieldBash | SpellMaskSunderArmor |
+		SpellMaskThunderClap | SpellMaskWhirlwind | SpellMaskWhirlwindOh | SpellMaskShieldSlam |
+		SpellMaskBloodthirst | SpellMaskMortalStrike | SpellMaskIntercept
+
+	SpellMaskDamageSpells = SpellMaskDirectDamageSpells | SpellMaskDeepWounds | SpellMaskRend
 )
 
 const EnrageTag = "EnrageEffect"
@@ -76,6 +84,7 @@ type Warrior struct {
 	Stance              Stance
 	CriticalBlockChance []float64 // Can be gained as non-prot via certain talents and spells
 	PrePullChargeGain   float64
+	ChargeRageGain      float64
 
 	HeroicStrikeCleaveCostMod *core.SpellMod
 
@@ -85,8 +94,9 @@ type Warrior struct {
 	DefensiveStance *core.Spell
 	BerserkerStance *core.Spell
 
-	MortalStrike                    *core.Spell
+	Rend                            *core.Spell
 	DeepWounds                      *core.Spell
+	MortalStrike                    *core.Spell
 	ShieldSlam                      *core.Spell
 	SweepingStrikesNormalizedAttack *core.Spell
 
@@ -97,8 +107,8 @@ type Warrior struct {
 	DefensiveStanceAura *core.Aura
 	BerserkerStanceAura *core.Aura
 
-	InciteAura          *core.Aura
-	UltimatumAura       *core.Aura
+	RendAura            *core.Aura
+	DeepWoundsAura      *core.Aura
 	SweepingStrikesAura *core.Aura
 	EnrageAura          *core.Aura
 	BerserkerRageAura   *core.Aura
@@ -163,10 +173,21 @@ func (warrior *Warrior) registerPassives() {
 
 func (warrior *Warrior) Reset(_ *core.Simulation) {
 	warrior.Stance = StanceNone
+	warrior.ChargeRageGain = 10.0
 }
 
 func (warrior *Warrior) OnEncounterStart(sim *core.Simulation) {
 	warrior.PrePullChargeGain = 0
+}
+
+func (war *Warrior) GetHandType() proto.HandType {
+	mh := war.GetMHWeapon()
+
+	if mh != nil && (mh.HandType == proto.HandType_HandTypeTwoHand) {
+		return proto.HandType_HandTypeTwoHand
+	}
+
+	return proto.HandType_HandTypeOneHand
 }
 
 func NewWarrior(character *core.Character, options *proto.WarriorOptions, talents string, inputs WarriorInputs) *Warrior {
