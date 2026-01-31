@@ -157,14 +157,13 @@ func (spell *Spell) RangedAttackPower() float64 {
 }
 
 func (spell *Spell) DodgeParrySuppression() float64 {
-	// TBC ANNI: Verify if Expertise truncates
 	expertiseRating := spell.Unit.stats[stats.ExpertiseRating] + spell.BonusExpertiseRating
-	return expertiseRating / ExpertisePerQuarterPercentReduction / 400
+	return math.Floor(expertiseRating/ExpertisePerQuarterPercentReduction) / 400
 }
 
 func (spell *Spell) PhysicalHitChance(attackTable *AttackTable) float64 {
 	hitPercent := spell.Unit.stats[stats.PhysicalHitPercent] + spell.BonusHitPercent - attackTable.Defender.PseudoStats.ReducedPhysicalHitTakenChance
-	return hitPercent / 100
+	return max(hitPercent/100-attackTable.HitSuppression, 0)
 }
 func (spell *Spell) PhysicalHitCheck(sim *Simulation, attackTable *AttackTable) bool {
 	return sim.Proc(1.0-spell.GetPhysicalMissChance(attackTable), "Physical Hit Roll")
