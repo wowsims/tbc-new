@@ -166,7 +166,7 @@ enum Profession {
 // the Go Stats array to be larger than the size of the Stat enum proto, but the
 // shared indices between the two must exactly match.
 //
-// NextIndex: 22;
+// NextIndex: 44;
 enum Stat {
 	// Primary attributes ("main stat")
 	StatStrength = 0;
@@ -175,61 +175,60 @@ enum Stat {
 	StatIntellect = 3;
 
 	// Spell Power and Spell Power derivatives
-	StatSpellPower = 4;
-	StatHealingPower = 5;
-	StatSpellDamage = 6;
-	StatArcaneDamage = 7;
-	StatFireDamage = 8;
-	StatFrostDamage = 9;
-	StatHolyDamage = 10;
-	StatNatureDamage = 11;
-	StatShadowDamage = 12;
+	StatHealingPower = 4;
+	StatSpellDamage = 5;
+	StatArcaneDamage = 6;
+	StatFireDamage = 7;
+	StatFrostDamage = 8;
+	StatHolyDamage = 9;
+	StatNatureDamage = 10;
+	StatShadowDamage = 11;
 
 	// Caster Secondaries
-	StatSpellHitRating = 13;
-	StatSpellCritRating = 14;
-	StatSpellHasteRating = 15;
-	StatSpellPenetration = 16;
-	StatSpirit = 17;
+	StatSpellHitRating = 12;
+	StatSpellCritRating = 13;
+	StatSpellHasteRating = 14;
+	StatSpellPenetration = 15;
+	StatSpirit = 16;
 
 	// Physical Secondaries
-	StatAttackPower = 18;
-	StatRangedAttackPower = 19;
-	StatFeralAttackPower = 20;
-	StatMeleeHitRating = 21;
-	StatMeleeCritRating = 22;
-	StatMeleeHasteRating = 23;
-	StatArmorPenetration = 24;
-	StatExpertiseRating = 25;
+	StatAttackPower = 17;
+	StatRangedAttackPower = 18;
+	StatFeralAttackPower = 19;
+	StatMeleeHitRating = 20;
+	StatMeleeCritRating = 21;
+	StatMeleeHasteRating = 22;
+	StatArmorPenetration = 23;
+	StatExpertiseRating = 24;
 
 	// Melee/Ranged School Secondaries
-	StatAllPhysHitRating = 26;
-	StatAllPhysCritRating = 27;
-	StatAllPhysHasteRating = 28;
+	StatAllPhysHitRating = 25;
+	StatAllPhysCritRating = 26;
+	StatAllPhysHasteRating = 27;
 
 	// Tank Secondaries
-	StatDefenseRating = 29;
-	StatBlockRating = 30;
-	StatBlockValue = 31;
-	StatDodgeRating = 32;
-	StatParryRating = 33;
-	StatResilienceRating = 34;
-	StatArmor = 35;
-	StatBonusArmor = 36;
+	StatDefenseRating = 28;
+	StatBlockRating = 29;
+	StatBlockValue = 30;
+	StatDodgeRating = 31;
+	StatParryRating = 32;
+	StatResilienceRating = 33;
+	StatArmor = 34;
+	StatBonusArmor = 35;
 
 	// Composite stats that are built up from the above gear stats + buffs.
 	// These still belong in the Stat enum because they can be present on
 	// some enchants and because the base values need to be stored for NPCs.
-	StatHealth = 37;
-	StatMana = 38;
-	StatMP5 = 39;
+	StatHealth = 36;
+	StatMana = 37;
+	StatMP5 = 38;
 
 	// Resistances
-	StatArcaneResistance = 40;
-	StatFireResistance = 41;
-	StatFrostResistance = 42;
-	StatNatureResistance = 43;
-	StatShadowResistance = 44;
+	StatArcaneResistance = 39;
+	StatFireResistance = 40;
+	StatFrostResistance = 41;
+	StatNatureResistance = 42;
+	StatShadowResistance = 43;
 
 	// DO NOT add new stats here without discussing it first; new stats come
 	// with a performance penalty.
@@ -261,7 +260,7 @@ enum Stat {
 // between the UI and backend. It's also OK to include things here which aren't
 // in the PseudoStats struct.
 //
-// NextIndex: 16;
+// NextIndex: 27;
 enum PseudoStat {
 	PseudoStatMainHandDps = 0;
 	PseudoStatOffHandDps = 1;
@@ -451,7 +450,7 @@ enum StrengthOfEarthType {
 
 // Buffs that affect the entire raid.
 // Reindexed to The Burning Crusade raid buffs.
-// Next index: 36
+// Next index: 8
 message RaidBuffs {
 	bool arcane_brilliance = 1;
 	TristateEffect power_word_fortitude = 2;

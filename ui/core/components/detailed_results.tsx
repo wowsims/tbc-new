@@ -22,7 +22,6 @@ import { StickyToolbar } from './sticky_toolbar';
 import i18n from '../../i18n/config';
 import { ref } from 'tsx-vanilla';
 import { isDevMode } from '../utils';
-import { IndividualSimUI } from '../individual_sim_ui';
 import { trackEvent } from '../../tracking/utils';
 
 type Tab = {

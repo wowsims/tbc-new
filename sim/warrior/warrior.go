@@ -187,22 +187,11 @@ func NewWarrior(character *core.Character, options *proto.WarriorOptions, talent
 
 	warrior.PseudoStats.CanParry = true
 
-	warrior.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiMaxLevel[character.Class])
 	warrior.AddStatDependency(stats.Strength, stats.AttackPower, 2)
-
-	// Base strength to Parry is not affected by Diminishing Returns
-	baseStrength := warrior.GetBaseStats()[stats.Strength]
-	warrior.PseudoStats.BaseParryChance += baseStrength * core.StrengthToParryPercent
-	warrior.AddStat(stats.ParryRating, -baseStrength*core.StrengthToParryRating)
-	warrior.AddStatDependency(stats.Strength, stats.ParryRating, core.StrengthToParryRating)
-	warrior.AddStatDependency(stats.Agility, stats.DodgeRating, 0.1/10000.0/100.0)
+	warrior.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiMaxLevel[character.Class])
+	warrior.AddStatDependency(stats.Agility, stats.DodgeRating, 1/30.0*core.DodgeRatingPerDodgePercent)
 	warrior.AddStatDependency(stats.BonusArmor, stats.Armor, 1)
-	// warrior.MultiplyStat(stats.HasteRating, 1.5)
 
-	// Base dodge unaffected by Diminishing Returns
-	warrior.PseudoStats.BaseDodgeChance += 0.03
-	warrior.PseudoStats.BaseParryChance += 0.03
-	warrior.PseudoStats.BaseBlockChance += 0.03
 	warrior.CriticalBlockChance = append(warrior.CriticalBlockChance, 0.0, 0.0)
 
 	warrior.HeroicStrikeCleaveCostMod = warrior.AddDynamicMod(core.SpellModConfig{

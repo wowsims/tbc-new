@@ -141,12 +141,9 @@
 			"expertise": "Expertise",
 			"dodge": "Dodge",
 			"parry": "Parry",
-			"mastery": "Mastery",
 			"attack_power": "Attack Power",
 			"ranged_attack_power": "Ranged Attack Power",
 			"spell_power": "Spell Power",
-			"pvp_resilience": "PvP Resilience",
-			"pvp_power": "PvP Power",
 			"armor": "Armor",
 			"bonus_armor": "Bonus Armor",
 			"health": "Health",
@@ -195,43 +192,6 @@
 			"fire_resistance": "Fire Resistance",
 			"nature_resistance": "Nature Resistance",
 			"shadow_resistance": "Shadow Resistance"
-		},
-		"mastery_spell_names": {
-			"unknown": "Unknown",
-			"potent_poisons": "Potent Poisons",
-			"main_gauche": "Main Gauche",
-			"executioner": "Executioner",
-			"blood_shield": "Blood Shield",
-			"frozen_heart": "Frozen Heart",
-			"dreadblade": "Dreadblade",
-			"total_eclipse": "Total Eclipse",
-			"razor_claws": "Razor Claws",
-			"natures_guardian": "Nature's Guardian",
-			"harmony": "Harmony",
-			"illuminated_healing": "Illuminated Healing",
-			"divine_bulwark": "Divine Bulwark",
-			"hand_of_light": "Hand of Light",
-			"elemental_overload": "Elemental Overload",
-			"enhanced_elements": "Enhanced Elements",
-			"deep_healing": "Deep Healing",
-			"master_of_beasts": "Master of Beasts",
-			"wild_quiver": "Wild Quiver",
-			"essence_of_the_viper": "Essence of the Viper",
-			"strikes_of_opportunity": "Strikes of Opportunity",
-			"unshackled_fury": "Unshackled Fury",
-			"critical_block": "Critical Block",
-			"mana_adept": "Mana Adept",
-			"ignite": "Ignite",
-			"icicles": "Icicles",
-			"shield_discipline": "Shield Discipline",
-			"echo_of_light": "Echo of Light",
-			"shadow_orb_power": "Shadow Orb Power",
-			"potent_afflictions": "Potent Afflictions",
-			"master_demonologist": "Master Demonologist",
-			"emberstorm": "Emberstorm",
-			"elusive_brawler": "Elusive Brawler",
-			"gift_of_the_serpent": "Gift of the Serpent",
-			"bottled_fury": "Bottled Fury"
 		},
 		"currency": {
 			"valorPoints": "Valor Points",
@@ -424,7 +384,6 @@
 			"spell_power": "Spell Power",
 			"spell_haste": "Spell Haste",
 			"crit_percent": "Crit %",
-			"mastery": "Mastery",
 			"stamina": "Stamina"
 		},
 		"external_damage_cooldowns": {
@@ -573,10 +532,6 @@
 			"item_swap": {
 				"label": "Item Swap",
 				"tooltip": "Swap with equipped items"
-			},
-			"assume_prepull_mastery_elixir": {
-				"label": "Assume Prepull Mastery Elixir",
-				"tooltip": "Enabling this assumes you are using a Mastery Elixir during prepull."
 			},
 			"blessings": {
 				"title": "Blessings",
@@ -1983,7 +1938,6 @@
 				"tick": "Tick",
 				"critical_tick": "Critical Tick",
 				"glancing_blow": "Glancing Blow",
-				"blocked_glancing_blow": "Blocked Glancing Blow",
 				"blocked_hit": "Blocked Hit",
 				"blocked_critical_hit": "Blocked Critical Hit",
 				"miss": "Miss",
