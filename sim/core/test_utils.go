@@ -53,6 +53,7 @@ func FreshDefaultTargetConfig() *proto.Target {
 var DefaultTargetProto = FreshDefaultTargetConfig()
 
 var FullRaidBuffs = &proto.RaidBuffs{
+	Bloodlust:          true,
 	ArcaneBrilliance:   true,
 	PowerWordFortitude: proto.TristateEffect_TristateEffectImproved,
 	DivineSpirit:       proto.TristateEffect_TristateEffectImproved,
@@ -82,6 +83,7 @@ var FullPartyBuffs = &proto.PartyBuffs{
 	JadePendantOfBlasting: true,
 
 	ManaSpringTotem:      proto.TristateEffect_TristateEffectImproved,
+	ManaTideTotems:       1,
 	TotemOfWrath:         1,
 	WrathOfAirTotem:      proto.TristateEffect_TristateEffectImproved,
 	GraceOfAirTotem:      proto.TristateEffect_TristateEffectImproved,
