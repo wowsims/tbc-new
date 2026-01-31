@@ -434,10 +434,17 @@ func (mage *Mage) registerMoltenFury() {
 	}
 
 	multiplier := .1 * float64(mage.Talents.MoltenFury)
+	moltenFury := mage.AddDynamicMod(core.SpellModConfig{
+		Kind:       core.SpellMod_DamageDone_Pct,
+		FloatValue: multiplier,
+		ClassMask:  MageSpellsAll,
+	})
+
 	mage.RegisterResetEffect(func(sim *core.Simulation) {
+		moltenFury.Deactivate()
 		sim.RegisterExecutePhaseCallback(func(sim *core.Simulation, isExecute int32) {
 			if isExecute == 20 {
-				mage.PseudoStats.DamageDealtMultiplier *= multiplier
+				moltenFury.Activate()
 			}
 		})
 	})
@@ -584,24 +591,16 @@ func (mage *Mage) registerWinterChill() {
 		}
 	})
 
-	mage.RegisterAura(core.Aura{
-		Label:    "Winters Chill Talent",
-		Duration: core.NeverExpires,
-		OnReset: func(aura *core.Aura, sim *core.Simulation) {
+	mage.MakeProcTriggerAura(core.ProcTrigger{
+		Name:           "Winters Chill Talent",
+		Duration:       core.NeverExpires,
+		Outcome:        core.OutcomeLanded,
+		ClassSpellMask: MageSpellFrost,
+		ProcChance:     procChance,
+		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+			aura := wcAuras.Get(result.Target)
 			aura.Activate(sim)
-		},
-		OnSpellHitDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			if !result.Landed() || !spell.SpellSchool.Matches(core.SpellSchoolFrost) {
-				return
-			}
-
-			if sim.Proc(procChance, "Winters Chill") {
-				aura := wcAuras.Get(result.Target)
-				aura.Activate(sim)
-				if aura.IsActive() {
-					aura.AddStack(sim)
-				}
-			}
+			aura.AddStack(sim)
 		},
 	})
 }

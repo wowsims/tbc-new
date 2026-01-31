@@ -48,7 +48,6 @@ func (mage *Mage) NewWaterElemental() *WaterElemental {
 		// Water elemental usually has about half the HP of the caster
 		return stats.Stats{
 			stats.Stamina:          ownerStats[stats.Stamina] * 0.3,
-			stats.Intellect:        ownerStats[stats.Intellect] * 0.3,
 			stats.SpellDamage:      ownerStats[stats.FrostDamage] * 0.33,
 			stats.SpellHitRating:   ownerStats[stats.SpellHitRating],
 			stats.SpellPenetration: ownerStats[stats.SpellPenetration],
@@ -64,13 +63,11 @@ func (mage *Mage) NewWaterElemental() *WaterElemental {
 
 	waterElemental := &WaterElemental{
 		Pet: core.NewPet(core.PetConfig{
-			Name:                           "Water Elemental",
-			Owner:                          &mage.Character,
-			BaseStats:                      waterElementalBaseStats,
-			NonHitExpStatInheritance:       waterElementalStatInheritance,
-			HasDynamicCastSpeedInheritance: true,
-			EnabledOnStart:                 true,
-			IsGuardian:                     true,
+			Name:                     "Water Elemental",
+			Owner:                    &mage.Character,
+			BaseStats:                waterElementalBaseStats,
+			NonHitExpStatInheritance: waterElementalStatInheritance,
+			IsGuardian:               true,
 		}),
 		mageOwner: mage,
 	}
