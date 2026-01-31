@@ -169,7 +169,7 @@ func (spell *Spell) PhysicalHitCheck(sim *Simulation, attackTable *AttackTable) 
 	return sim.Proc(1.0-spell.GetPhysicalMissChance(attackTable), "Physical Hit Roll")
 }
 func (spell *Spell) PhysicalCritChance(attackTable *AttackTable) float64 {
-	critPercent := spell.Unit.stats[stats.PhysicalCritPercent] + spell.BonusCritPercent
+	critPercent := spell.Unit.stats[stats.PhysicalCritPercent] + spell.BonusCritPercent - attackTable.Defender.PseudoStats.ReducedCritTakenChance
 	return max(critPercent/100-attackTable.MeleeCritSuppression, 0)
 }
 func (spell *Spell) PhysicalCritCheck(sim *Simulation, attackTable *AttackTable) bool {
