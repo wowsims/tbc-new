@@ -11,7 +11,7 @@ func (mage *Mage) registerColdSnapSpell() {
 		return
 	}
 
-	coldSnapSpell := mage.RegisterSpell(core.SpellConfig{
+	mage.RegisterSpell(core.SpellConfig{
 		ActionID: core.ActionID{SpellID: 11958},
 		Flags:    core.SpellFlagNoOnCastComplete,
 
@@ -34,19 +34,6 @@ func (mage *Mage) registerColdSnapSpell() {
 			if mage.SummonWaterElemental != nil {
 				mage.SummonWaterElemental.CD.Reset()
 			}
-		},
-	})
-
-	mage.AddMajorCooldown(core.MajorCooldown{
-		Spell: coldSnapSpell,
-		Type:  core.CooldownTypeDPS,
-
-		ShouldActivate: func(sim *core.Simulation, character *core.Character) bool {
-			if sim.CurrentTime < time.Second*2 {
-				return false
-			}
-
-			return true
 		},
 	})
 }

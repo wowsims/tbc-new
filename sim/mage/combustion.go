@@ -49,7 +49,7 @@ func (mage *Mage) registerCombustionSpell() {
 		},
 
 		OnSpellHitDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			if spell.SpellSchool != core.SpellSchoolFire {
+			if !spell.SpellSchool.Matches(core.SpellSchoolFire) {
 				return
 			}
 
