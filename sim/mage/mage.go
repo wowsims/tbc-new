@@ -120,9 +120,6 @@ func (mage *Mage) registerSpells() {
 	mage.registerIcyVeinsSpell()
 	mage.registerColdSnapSpell()
 	mage.registerSummonWaterElementalSpell()
-
-	//Hotfixes will go here
-	mage.registerHotfixes()
 }
 
 func (mage *Mage) Reset(sim *core.Simulation) {
