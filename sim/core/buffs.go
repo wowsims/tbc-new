@@ -13,6 +13,7 @@ import (
 type BuffConfig struct {
 	Label    string
 	ActionID ActionID
+	Duration time.Duration
 	Stats    []StatConfig
 }
 
@@ -61,6 +62,7 @@ func makeStatBuff(char *Character, config BuffConfig) *Aura {
 	baseAura := MakePermanent(char.GetOrRegisterAura(Aura{
 		Label:      config.Label,
 		ActionID:   config.ActionID,
+		Duration:   TernaryDuration(config.Duration > 0, config.Duration, NeverExpires),
 		BuildPhase: CharacterBuildPhaseBuffs,
 	}))
 
@@ -358,6 +360,7 @@ func BattleShoutAura(char *Character, apMultiplier float64, hasSolarianSapphire 
 	return makeStatBuff(char, BuffConfig{
 		Label:    "Battle Shout",
 		ActionID: ActionID{SpellID: 2048},
+		Duration: time.Minute * 2,
 		Stats: []StatConfig{
 			{stats.AttackPower, apBuff, false},
 		},
@@ -389,6 +392,7 @@ func CommandingShoutAura(char *Character, hpMultiplier float64, hasT6Tank2P bool
 	return makeStatBuff(char, BuffConfig{
 		Label:    "Commanding Shout",
 		ActionID: ActionID{SpellID: 469},
+		Duration: time.Minute * 2,
 		Stats: []StatConfig{
 			{stats.Health, hpBuff, false},
 		},

@@ -58,7 +58,7 @@ const (
 	SpellMaskBladestormMH
 	SpellMaskBladestormOH
 
-	SpellMaskShouts = SpellMaskCommandingShout | SpellMaskBattleShout
+	SpellMaskShouts = SpellMaskCommandingShout | SpellMaskBattleShout | SpellMaskDemoralizingShout
 )
 
 const EnrageTag = "EnrageEffect"

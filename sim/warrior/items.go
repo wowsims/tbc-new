@@ -4,6 +4,25 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
+// Dungeon Set 3 - Tank
+var ItemSetBoldArmor = core.NewItemSet(core.ItemSet{
+	Name: "Bold Armor",
+	Bonuses: map[int32]core.ApplySetBonus{
+		2: func(agent core.Agent, setBonusAura *core.Aura) {
+			setBonusAura.
+				AttachSpellMod(core.SpellModConfig{
+					ClassMask: SpellMaskShouts,
+					Kind:      core.SpellMod_PowerCost_Flat,
+					IntValue:  -2,
+				}).
+				ExposeToAPL(37512)
+		},
+		4: func(agent core.Agent, setBonusAura *core.Aura) {
+			setBonusAura.ExposeToAPL(37513)
+		},
+	},
+})
+
 // T6 - DPS
 var ItemSetOnslaughtBattlegear = core.NewItemSet(core.ItemSet{
 	Name: "Onslaught Battlegear",
