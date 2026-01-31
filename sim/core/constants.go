@@ -9,8 +9,6 @@ import (
 const CharacterLevel = 70
 const MinIlvl = 60
 const MaxIlvl = 600
-const MinUpgradeIlvl = 458
-const MaxChallengeModeIlvl = 463
 
 const GCDMin = time.Second * 1
 const GCDDefault = time.Millisecond * 1500
@@ -25,16 +23,13 @@ const MaxMeleeRange = 5.0 // in yards
 
 const DefaultAttackPowerPerDPS = 14.0
 
-// Updated based on formulas supplied by InDebt on WoWSims Discord
-const EnemyAutoAttackAPCoefficient = 1.0 / (14.0 * 177.0)
+const ArmorPenPerPercentArmor = 5.92
+const MissDodgeParryBlockCritChancePerDefense = 0.04
+const ResilienceRatingPerCritReductionChance = 39.4231
+const ResilienceRatingPerCritDamageReductionPercent = 39.4231 / 2
+const DefenseRatingToChanceReduction = (1.0 / DefenseRatingPerDefenseLevel) * MissDodgeParryBlockCritChancePerDefense / 100
 
-// Used by Protection Warriors, Protection Paladins and Blood Death Knights
-const StrengthToParryPercent = 1 / 95115.8596
-const StrengthToParryRating = StrengthToParryPercent * 100 * ParryRatingPerParryPercent
-
-// Used by Druids
-const AgilityToDodgePercent = 1 / 95115.8596
-const AgilityToDodgeRating = AgilityToDodgePercent * 100 * DodgeRatingPerDodgePercent
+const EnemyAutoAttackAPCoefficient = 0.000649375
 
 // IDs for items used in core
 // const ()

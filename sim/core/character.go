@@ -100,7 +100,6 @@ func NewCharacter(party *Party, partyIndex int, player *proto.Player) Character 
 			Metrics:     NewUnitMetrics(),
 
 			StatDependencyManager: stats.NewStatDependencyManager(),
-			avoidanceParams:       AvoidanceDRByClass[player.Class],
 
 			ReactionTime:            time.Duration(max(player.ReactionTimeMs, 10)) * time.Millisecond,
 			ChannelClipDelay:        max(0, time.Duration(player.ChannelClipDelayMs)*time.Millisecond),
@@ -257,8 +256,9 @@ func (character *Character) applyEquipment() {
 
 func (character *Character) addUniversalStatDependencies() {
 	character.Unit.addUniversalStatDependencies()
-	character.AddStat(stats.Health, 20-14*20)
-	character.AddStatDependency(stats.Stamina, stats.Health, 14)
+	character.AddStat(stats.Health, 20-10*20)
+	character.AddStatDependency(stats.Stamina, stats.Health, 10)
+	character.AddStatDependency(stats.Agility, stats.Armor, 2)
 }
 
 // Returns a partially-filled PlayerStats proto for use in the CharacterStats api call.
@@ -351,17 +351,6 @@ func (character *Character) AddPet(pet PetAgent) {
 
 func (character *Character) GetBaseStats() stats.Stats {
 	return character.baseStats
-}
-
-func (character *Character) GetParryRatingWithoutStrength() float64 {
-	parryRating := character.GetStat(stats.ParryRating)
-	strength := character.GetStat(stats.Strength)
-	baseStrength := character.GetBaseStats()[stats.Strength]
-
-	parryRating += baseStrength * StrengthToParryRating
-	parryRating -= strength * StrengthToParryRating
-
-	return parryRating
 }
 
 // Returns the crit multiplier for a spell.
@@ -674,10 +663,10 @@ func (character *Character) GetPseudoStatsProto() []float64 {
 		proto.PseudoStat_PseudoStatOffHandDps:  character.AutoAttacks.OH().DPS(),
 		proto.PseudoStat_PseudoStatRangedDps:   character.AutoAttacks.Ranged().DPS(),
 
-		// Base values are modified by Enemy attackTables, but we display for LVL 90 enemy as paperdoll default
-		proto.PseudoStat_PseudoStatDodgePercent: (character.PseudoStats.BaseDodgeChance + character.GetDiminishedDodgeChance()) * 100,
-		proto.PseudoStat_PseudoStatParryPercent: Ternary(character.PseudoStats.CanParry, (character.PseudoStats.BaseParryChance+character.GetDiminishedParryChance())*100, 0),
-		proto.PseudoStat_PseudoStatBlockPercent: Ternary(character.PseudoStats.CanBlock, (character.PseudoStats.BaseBlockChance+character.GetDiminishedBlockChance())*100, 0),
+		// Base values are modified by Enemy attackTables, but we display for LVL 70 enemy as paperdoll default
+		proto.PseudoStat_PseudoStatDodgePercent: (character.PseudoStats.BaseDodgeChance + character.GetDodgeFromRating()) * 100,
+		proto.PseudoStat_PseudoStatParryPercent: Ternary(character.PseudoStats.CanParry, (character.PseudoStats.BaseParryChance+character.GetParryFromRating())*100, 0),
+		proto.PseudoStat_PseudoStatBlockPercent: Ternary(character.PseudoStats.CanBlock, (character.PseudoStats.BaseBlockChance+character.GetBlockFromRating())*100, 0),
 
 		// Used by UI to incorporate multiplicative Haste buffs into final character stats display.
 		proto.PseudoStat_PseudoStatRangedSpeedMultiplier: character.PseudoStats.RangedSpeedMultiplier * character.PseudoStats.AttackSpeedMultiplier,

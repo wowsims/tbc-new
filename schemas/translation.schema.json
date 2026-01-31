@@ -555,9 +555,6 @@
             "parry": {
               "type": "string"
             },
-            "mastery": {
-              "type": "string"
-            },
             "attack_power": {
               "type": "string"
             },
@@ -565,12 +562,6 @@
               "type": "string"
             },
             "spell_power": {
-              "type": "string"
-            },
-            "pvp_resilience": {
-              "type": "string"
-            },
-            "pvp_power": {
               "type": "string"
             },
             "armor": {
@@ -731,12 +722,9 @@
             "expertise",
             "dodge",
             "parry",
-            "mastery",
             "attack_power",
             "ranged_attack_power",
             "spell_power",
-            "pvp_resilience",
-            "pvp_power",
             "armor",
             "bonus_armor",
             "health",
@@ -785,154 +773,6 @@
             "fire_resistance",
             "nature_resistance",
             "shadow_resistance"
-          ]
-        },
-        "mastery_spell_names": {
-          "type": "object",
-          "properties": {
-            "unknown": {
-              "type": "string"
-            },
-            "potent_poisons": {
-              "type": "string"
-            },
-            "main_gauche": {
-              "type": "string"
-            },
-            "executioner": {
-              "type": "string"
-            },
-            "blood_shield": {
-              "type": "string"
-            },
-            "frozen_heart": {
-              "type": "string"
-            },
-            "dreadblade": {
-              "type": "string"
-            },
-            "total_eclipse": {
-              "type": "string"
-            },
-            "razor_claws": {
-              "type": "string"
-            },
-            "natures_guardian": {
-              "type": "string"
-            },
-            "harmony": {
-              "type": "string"
-            },
-            "illuminated_healing": {
-              "type": "string"
-            },
-            "divine_bulwark": {
-              "type": "string"
-            },
-            "hand_of_light": {
-              "type": "string"
-            },
-            "elemental_overload": {
-              "type": "string"
-            },
-            "enhanced_elements": {
-              "type": "string"
-            },
-            "deep_healing": {
-              "type": "string"
-            },
-            "master_of_beasts": {
-              "type": "string"
-            },
-            "wild_quiver": {
-              "type": "string"
-            },
-            "essence_of_the_viper": {
-              "type": "string"
-            },
-            "strikes_of_opportunity": {
-              "type": "string"
-            },
-            "unshackled_fury": {
-              "type": "string"
-            },
-            "critical_block": {
-              "type": "string"
-            },
-            "mana_adept": {
-              "type": "string"
-            },
-            "ignite": {
-              "type": "string"
-            },
-            "icicles": {
-              "type": "string"
-            },
-            "shield_discipline": {
-              "type": "string"
-            },
-            "echo_of_light": {
-              "type": "string"
-            },
-            "shadow_orb_power": {
-              "type": "string"
-            },
-            "potent_afflictions": {
-              "type": "string"
-            },
-            "master_demonologist": {
-              "type": "string"
-            },
-            "emberstorm": {
-              "type": "string"
-            },
-            "elusive_brawler": {
-              "type": "string"
-            },
-            "gift_of_the_serpent": {
-              "type": "string"
-            },
-            "bottled_fury": {
-              "type": "string"
-            }
-          },
-          "additionalProperties": false,
-          "required": [
-            "unknown",
-            "potent_poisons",
-            "main_gauche",
-            "executioner",
-            "blood_shield",
-            "frozen_heart",
-            "dreadblade",
-            "total_eclipse",
-            "razor_claws",
-            "natures_guardian",
-            "harmony",
-            "illuminated_healing",
-            "divine_bulwark",
-            "hand_of_light",
-            "elemental_overload",
-            "enhanced_elements",
-            "deep_healing",
-            "master_of_beasts",
-            "wild_quiver",
-            "essence_of_the_viper",
-            "strikes_of_opportunity",
-            "unshackled_fury",
-            "critical_block",
-            "mana_adept",
-            "ignite",
-            "icicles",
-            "shield_discipline",
-            "echo_of_light",
-            "shadow_orb_power",
-            "potent_afflictions",
-            "master_demonologist",
-            "emberstorm",
-            "elusive_brawler",
-            "gift_of_the_serpent",
-            "bottled_fury"
           ]
         },
         "currency": {
@@ -1087,7 +927,6 @@
         "spell_schools",
         "resource_types",
         "stats",
-        "mastery_spell_names",
         "currency",
         "copy_button",
         "list_picker",
@@ -1732,9 +1571,6 @@
             "crit_percent": {
               "type": "string"
             },
-            "mastery": {
-              "type": "string"
-            },
             "stamina": {
               "type": "string"
             }
@@ -1751,7 +1587,6 @@
             "spell_power",
             "spell_haste",
             "crit_percent",
-            "mastery",
             "stamina"
           ]
         },
@@ -2403,22 +2238,6 @@
                 "tooltip"
               ]
             },
-            "assume_prepull_mastery_elixir": {
-              "type": "object",
-              "properties": {
-                "label": {
-                  "type": "string"
-                },
-                "tooltip": {
-                  "type": "string"
-                }
-              },
-              "additionalProperties": false,
-              "required": [
-                "label",
-                "tooltip"
-              ]
-            },
             "blessings": {
               "type": "object",
               "properties": {
@@ -2498,7 +2317,6 @@
             "phase_selector",
             "enable_item_swap",
             "item_swap",
-            "assume_prepull_mastery_elixir",
             "blessings",
             "shaman_disable_immolate",
             "shaman_disable_immolate_duration"
@@ -8352,9 +8170,6 @@
                 "glancing_blow": {
                   "type": "string"
                 },
-                "blocked_glancing_blow": {
-                  "type": "string"
-                },
                 "blocked_hit": {
                   "type": "string"
                 },
@@ -8381,7 +8196,6 @@
                 "tick",
                 "critical_tick",
                 "glancing_blow",
-                "blocked_glancing_blow",
                 "blocked_hit",
                 "blocked_critical_hit",
                 "miss",

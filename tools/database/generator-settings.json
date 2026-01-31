@@ -4,7 +4,7 @@
 		"BuildConfig": "buildConfig",
 		"CDNConfig": "cdnConfig",
 		"Region": "us",
-		"Product": "wow_classic"
+		"Product": "wow_anniversary"
 	},
 	"TargetDirectory": "dbfilesclient",
 	"DatabaseFile": "wowsims.db",
@@ -16,7 +16,6 @@
 		"chancetospellcritbase",
 		"combatratings",
 		"octbasempbyclass",
-		"OCTBaseHPByClass",
 		"SpellScaling"
 	],
 	"Tables": [
@@ -37,7 +36,6 @@
 		"ItemExtendedCost",
 		"ItemRandomSuffix",
 		"RandPropPoints",
-		"RulesetItemUpgrade",
 		"ItemDamageAmmo",
 		"ItemDamageOneHand",
 		"ItemDamageOneHandCaster",
@@ -89,7 +87,6 @@
 		"Map",
 		"JournalEncounter",
 		"JournalEncounterItem",
-		"AreaTable",
-		"JournalInstance"
+		"AreaTable"
 	]
 }

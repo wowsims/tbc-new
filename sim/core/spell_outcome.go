@@ -183,14 +183,16 @@ func (spell *Spell) outcomeMeleeWhite(sim *Simulation, result *SpellResult, atta
 			!result.applyAttackTableParry(spell, attackTable, roll, &chance) &&
 			!result.applyAttackTableGlance(spell, attackTable, roll, &chance) &&
 			!result.applyAttackTableBlock(spell, attackTable, roll, &chance) &&
-			!result.applyAttackTableCrit(spell, attackTable, roll, &chance, countHits) {
+			!result.applyAttackTableCrit(spell, attackTable, roll, &chance, countHits) &&
+			!result.applyEnemyAttackTableCrush(spell, attackTable, roll, &chance, countHits) {
 			result.applyAttackTableHit(spell, countHits)
 		}
 	} else {
 		if !result.applyAttackTableMiss(spell, attackTable, roll, &chance) &&
 			!result.applyAttackTableDodge(spell, attackTable, roll, &chance) &&
 			!result.applyAttackTableGlance(spell, attackTable, roll, &chance) &&
-			!result.applyAttackTableCrit(spell, attackTable, roll, &chance, countHits) {
+			!result.applyAttackTableCrit(spell, attackTable, roll, &chance, countHits) &&
+			!result.applyEnemyAttackTableCrush(spell, attackTable, roll, &chance, countHits) {
 			result.applyAttackTableHit(spell, countHits)
 		}
 	}
@@ -558,7 +560,7 @@ func (result *SpellResult) applyAttackTableMissNoDWPenalty(spell *Spell, attackT
 }
 
 func (result *SpellResult) applyAttackTableBlock(spell *Spell, attackTable *AttackTable, roll float64, chance *float64) bool {
-	*chance += attackTable.BaseBlockChance
+	*chance += spell.Unit.GetTotalBlockChanceAsDefender(attackTable)
 
 	if roll < *chance {
 		result.Outcome |= OutcomeBlock
@@ -567,7 +569,7 @@ func (result *SpellResult) applyAttackTableBlock(spell *Spell, attackTable *Atta
 		} else {
 			spell.SpellMetrics[result.Target.UnitIndex].Blocks++
 		}
-		damageReduced := result.Damage * (1 - result.Target.BlockDamageReduction())
+		damageReduced := result.Damage - result.Target.BlockDamageReduction()
 		result.Damage = max(0, damageReduced)
 		return true
 	}
@@ -579,7 +581,7 @@ func (result *SpellResult) applyAttackTableDodge(spell *Spell, attackTable *Atta
 		return false
 	}
 
-	*chance += max(0, attackTable.BaseDodgeChance-spell.DodgeParrySuppression()-spell.Unit.PseudoStats.DodgeReduction)
+	*chance += spell.Unit.GetTotalDodgeChanceAsDefender(spell, attackTable)
 
 	if roll < *chance {
 		result.Outcome = OutcomeDodge
@@ -591,7 +593,7 @@ func (result *SpellResult) applyAttackTableDodge(spell *Spell, attackTable *Atta
 }
 
 func (result *SpellResult) applyAttackTableParry(spell *Spell, attackTable *AttackTable, roll float64, chance *float64) bool {
-	*chance += max(0, attackTable.BaseParryChance-spell.DodgeParrySuppression())
+	*chance += spell.Unit.GetTotalParryChanceAsDefender(spell, attackTable)
 
 	if roll < *chance {
 		result.Outcome = OutcomeParry
@@ -699,7 +701,7 @@ func (result *SpellResult) applyEnemyAttackTableDodge(spell *Spell, attackTable 
 		return false
 	}
 
-	*chance += max(result.Target.GetTotalDodgeChanceAsDefender(attackTable)-spell.Unit.PseudoStats.DodgeReduction, 0.0)
+	*chance += max(result.Target.GetTotalDodgeChanceAsDefender(spell, attackTable), 0.0)
 
 	if roll < *chance {
 		result.Outcome = OutcomeDodge
@@ -715,7 +717,7 @@ func (result *SpellResult) applyEnemyAttackTableParry(spell *Spell, attackTable 
 		return false
 	}
 
-	*chance += result.Target.GetTotalParryChanceAsDefender(attackTable)
+	*chance += result.Target.GetTotalParryChanceAsDefender(spell, attackTable)
 
 	if roll < *chance {
 		result.Outcome = OutcomeParry
@@ -727,9 +729,10 @@ func (result *SpellResult) applyEnemyAttackTableParry(spell *Spell, attackTable 
 }
 
 func (result *SpellResult) applyEnemyAttackTableCrit(spell *Spell, _ *AttackTable, roll float64, chance *float64, countHits bool) bool {
-
-	critPercent := spell.Unit.stats[stats.PhysicalCritPercent] + spell.BonusCritPercent
+	critPercent := spell.Unit.GetStat(stats.PhysicalCritPercent) + spell.BonusCritPercent
 	critChance := critPercent / 100
+	critChance -= result.Target.GetStat(stats.DefenseRating) * DefenseRatingToChanceReduction
+	critChance -= result.Target.GetStat(stats.ResilienceRating) / ResilienceRatingPerCritReductionChance / 100
 	critChance -= result.Target.PseudoStats.ReducedCritTakenChance
 	*chance += max(0, critChance)
 
@@ -738,7 +741,27 @@ func (result *SpellResult) applyEnemyAttackTableCrit(spell *Spell, _ *AttackTabl
 		if countHits {
 			spell.SpellMetrics[result.Target.UnitIndex].Crits++
 		}
-		result.Damage *= 2
+		resilCritMultiplier := 1 - result.Target.GetStat(stats.ResilienceRating)/ResilienceRatingPerCritDamageReductionPercent/100
+		result.Damage *= 2 * resilCritMultiplier
+		return true
+	}
+	return false
+}
+
+func (result *SpellResult) applyEnemyAttackTableCrush(spell *Spell, at *AttackTable, roll float64, chance *float64, countHits bool) bool {
+	if !at.Attacker.PseudoStats.CanCrush {
+		return false
+	}
+
+	crushChance := at.BaseCrushChance
+	*chance += max(0, crushChance)
+
+	if roll < *chance {
+		result.Outcome = OutcomeCrush
+		if countHits {
+			spell.SpellMetrics[result.Target.UnitIndex].Crushes++
+		}
+		result.Damage *= 1.5
 		return true
 	}
 	return false

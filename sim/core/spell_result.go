@@ -157,14 +157,13 @@ func (spell *Spell) RangedAttackPower() float64 {
 }
 
 func (spell *Spell) DodgeParrySuppression() float64 {
-	// TBC ANNI: Verify if Expertise truncates
 	expertiseRating := spell.Unit.stats[stats.ExpertiseRating] + spell.BonusExpertiseRating
-	return expertiseRating / ExpertisePerQuarterPercentReduction / 400
+	return math.Floor(expertiseRating/ExpertisePerQuarterPercentReduction) / 400
 }
 
 func (spell *Spell) PhysicalHitChance(attackTable *AttackTable) float64 {
 	hitPercent := spell.Unit.stats[stats.PhysicalHitPercent] + spell.BonusHitPercent - attackTable.Defender.PseudoStats.ReducedPhysicalHitTakenChance
-	return hitPercent / 100
+	return max(hitPercent/100-attackTable.HitSuppression, 0)
 }
 func (spell *Spell) PhysicalHitCheck(sim *Simulation, attackTable *AttackTable) bool {
 	return sim.Proc(1.0-spell.GetPhysicalMissChance(attackTable), "Physical Hit Roll")
@@ -178,15 +177,36 @@ func (spell *Spell) PhysicalCritCheck(sim *Simulation, attackTable *AttackTable)
 }
 
 func (spell *Spell) BonusDamage() float64 {
-	var bonusDamage float64
+	bonusDamage := 0.0
 
 	if spell.SpellSchool.Matches(SpellSchoolPhysical) {
-		bonusDamage = spell.Unit.PseudoStats.BonusDamage
+		bonusDamage = spell.Unit.PseudoStats.BonusDamage + spell.Unit.PseudoStats.MobTypeAttackPower
 	} else {
 		bonusDamage = spell.SpellDamage()
 	}
 
 	return bonusDamage
+}
+
+func (spell *Spell) SpellSchoolBonusDamage() float64 {
+	schoolBonusSpellDamage := 0.0
+
+	switch spell.SchoolIndex {
+	case stats.SchoolIndexArcane:
+		schoolBonusSpellDamage = spell.Unit.GetStat(stats.ArcaneDamage)
+	case stats.SchoolIndexFire:
+		schoolBonusSpellDamage = spell.Unit.GetStat(stats.FireDamage)
+	case stats.SchoolIndexFrost:
+		schoolBonusSpellDamage = spell.Unit.GetStat(stats.FrostDamage)
+	case stats.SchoolIndexHoly:
+		schoolBonusSpellDamage = spell.Unit.GetStat(stats.HolyDamage)
+	case stats.SchoolIndexNature:
+		schoolBonusSpellDamage = spell.Unit.GetStat(stats.NatureDamage)
+	case stats.SchoolIndexShadow:
+		schoolBonusSpellDamage = spell.Unit.GetStat(stats.ShadowDamage)
+	}
+
+	return schoolBonusSpellDamage
 }
 
 func (spell *Spell) SpellDamage() float64 {
@@ -262,7 +282,6 @@ func (spell *Spell) CalcOutcome(sim *Simulation, target *Unit, outcomeApplier Ou
 
 func (spell *Spell) calcDamageInternal(sim *Simulation, target *Unit, baseDamage float64, attackerMultiplier float64, isPeriodic bool, outcomeApplier OutcomeApplier) *SpellResult {
 	attackTable := spell.Unit.AttackTables[target.UnitIndex]
-
 	result := spell.NewResult(target)
 	result.Damage = baseDamage
 
@@ -340,10 +359,11 @@ func (spell *Spell) CalcPeriodicDamage(sim *Simulation, target *Unit, baseDamage
 		baseDamage += dot.BonusCoefficient * spell.BonusDamage()
 	}
 	attackerMultiplier *= dot.PeriodicDamageMultiplier
+
 	return spell.calcDamageInternal(sim, target, baseDamage, attackerMultiplier, true, outcomeApplier)
 }
 func (dot *Dot) CalcSnapshotDamage(sim *Simulation, target *Unit, outcomeApplier OutcomeApplier) *SpellResult {
-	return dot.Spell.calcDamageInternal(sim, target, dot.SnapshotBaseDamage, 1.0, true, outcomeApplier)
+	return dot.Spell.calcDamageInternal(sim, target, dot.SnapshotBaseDamage, dot.SnapshotAttackerMultiplier, true, outcomeApplier)
 }
 
 func (spell *Spell) DealOutcome(sim *Simulation, result *SpellResult) {
@@ -373,11 +393,7 @@ func (spell *Spell) dealDamageInternal(sim *Simulation, isPeriodic bool, result 
 				}
 			}
 		} else if result.DidGlance() {
-			if result.DidBlock() {
-				spell.SpellMetrics[result.Target.UnitIndex].TotalGlanceBlockDamage += result.Damage
-			} else {
-				spell.SpellMetrics[result.Target.UnitIndex].TotalGlanceDamage += result.Damage
-			}
+			spell.SpellMetrics[result.Target.UnitIndex].TotalGlanceDamage += result.Damage
 		} else if result.DidBlock() {
 			spell.SpellMetrics[result.Target.UnitIndex].TotalBlockDamage += result.Damage
 		}

@@ -337,6 +337,7 @@ type AttackTable struct {
 	BaseDodgeChance     float64
 	BaseParryChance     float64
 	BaseGlanceChance    float64
+	BaseCrushChance     float64
 
 	GlanceMultiplier     float64
 	MeleeCritSuppression float64
@@ -392,6 +393,7 @@ func NewAttackTable(attacker *Unit, defender *Unit) *AttackTable {
 		table.BaseBlockChance = UnitLevelFloat64(attacker.Level, 0.05, 0.048, 0.046, 0.044)
 		table.BaseDodgeChance = UnitLevelFloat64(attacker.Level, 0, -0.002, -0.004, -0.006)
 		table.BaseParryChance = UnitLevelFloat64(attacker.Level, 0.05, 0.048, 0.046, 0.044)
+		table.BaseCrushChance = UnitLevelFloat64(attacker.Level, 0.0, 0.0, 0.0, 0.15)
 	}
 
 	return table
