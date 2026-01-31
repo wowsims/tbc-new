@@ -12,7 +12,7 @@ func init() {
 	RegisterMage()
 }
 
-func TestAcane(t *testing.T) {
+func TestArcane(t *testing.T) {
 	core.RunTestSuite(t, t.Name(), core.FullCharacterTestSuiteGenerator([]core.CharacterSuiteConfig{
 		{
 			Class:      proto.Class_ClassMage,

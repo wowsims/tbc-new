@@ -102,7 +102,7 @@ func (we *WaterElemental) ExecuteCustomRotation(sim *core.Simulation) {
 
 func (we *WaterElemental) registerWaterboltSpell() {
 
-	waterboltCoefficient := 0.83300000429 // Per https://wago.tools/db2/SpellEffect?build=5.5.0.60802&filter%5BSpellID%5D=31707 Field: "BonusCoefficient"
+	waterboltCoefficient := 0.83300000429 // Per https://wago.tools/db2/SpellEffect?build=2.5.5.65295&filter%5BSpellID%5D=31707 Field: "BonusCoefficient"
 
 	we.Waterbolt = we.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 31707},

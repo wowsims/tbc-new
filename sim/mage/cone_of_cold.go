@@ -8,7 +8,7 @@ import (
 
 func (mage *Mage) registerConeOfColdSpell() {
 
-	coneOfColdCoefficient := 0.1930000037 // Per https://wago.tools/db2/SpellEffect?build=5.5.0.60802&filter%5BSpellID%5D=exact%253A120 Field "EffetBonusCoefficient"
+	coneOfColdCoefficient := 0.1930000037 // Per https://wago.tools/db2/SpellEffect?build=2.5.5.65295&filter%5BSpellID%5D=exact%253A120 Field "EffetBonusCoefficient"
 
 	mage.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 120},

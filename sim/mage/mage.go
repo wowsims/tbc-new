@@ -12,8 +12,6 @@ var TalentTreeSizes = [3]int{23, 22, 22}
 type Mage struct {
 	core.Character
 
-	waterElemental *WaterElemental
-
 	ClassSpellScaling float64
 
 	Talents *proto.MageTalents
@@ -22,11 +20,14 @@ type Mage struct {
 	// FireOptions   *proto.FireMage_Options
 	// FrostOptions  *proto.FrostMage_Options
 
+	waterElemental *WaterElemental
+
 	ArcaneBlast        *core.Spell
 	ArcaneChargesAura  *core.Aura
 	ClearCasting       *core.Aura
 	PresenceOfMindAura *core.Aura
 	ArcanePowerAura    *core.Aura
+	IcyVeinsAura       *core.Aura
 
 	ImprovedScorchAuras core.AuraArray
 	SlowAuras           core.AuraArray
@@ -40,15 +41,6 @@ type Mage struct {
 	Pyroblast            *core.Spell
 	SummonWaterElemental *core.Spell
 	IcyVeins             *core.Spell
-
-	IcyVeinsAura *core.Aura
-
-	//T15_4PC_FrostboltProcChance float64
-	//T15_4PC_ArcaneChargeEffect  float64
-	//Icicles                     []float64
-
-	// Item sets
-	//T16_4pc *core.Aura
 }
 
 func (mage *Mage) GetCharacter() *core.Character {

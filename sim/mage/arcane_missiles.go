@@ -7,7 +7,7 @@ import (
 )
 
 func (mage *Mage) registerArcaneMissilesSpell() {
-	// Values found at https://wago.tools/db2/SpellEffect?build=5.5.0.60802&filter%5BSpellID%5D=exact%253A7268
+	// Values found at https://wago.tools/db2/SpellEffect?build=2.5.5.65295&filter%5BSpellID%5D=exact%253A7268
 	arcaneMissilesCoefficient := 0.28600001335
 	actionID := core.ActionID{SpellID: 7268}
 

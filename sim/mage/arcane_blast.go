@@ -8,7 +8,7 @@ import (
 
 func (mage *Mage) registerArcaneBlastSpell() {
 
-	//https://wago.tools/db2/SpellEffect?build=5.5.0.60802&filter%5BSpellID%5D=30451
+	//https://wago.tools/db2/SpellEffect?build=2.5.5.65295&filter%5BSpellID%5D=30451
 	arcaneBlastCoefficient := 0.71399998665
 
 	mage.RegisterSpell(core.SpellConfig{
