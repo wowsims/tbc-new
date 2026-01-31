@@ -39,17 +39,14 @@ func (warrior *Warrior) MakeShoutSpellHelper(actionID core.ActionID, spellMask i
 }
 
 func (warrior *Warrior) registerShouts() {
+	commandingPresenceMultiplier := 1.0 + 0.05*float64(warrior.Talents.CommandingPresence)
+	hasSolarianSapphire := warrior.HasItemEquipped(30446, core.TrinketSlots())
+
 	warrior.BattleShout = warrior.MakeShoutSpellHelper(core.ActionID{SpellID: 6673}, SpellMaskBattleShout, warrior.NewAllyAuraArray(func(unit *core.Unit) *core.Aura {
-		if unit.Type == core.PetUnit {
-			return nil
-		}
-		return core.BattleShoutAura(unit, false)
+		return core.BattleShoutAura(warrior.GetCharacter(), commandingPresenceMultiplier, hasSolarianSapphire)
 	}))
 
 	warrior.CommandingShout = warrior.MakeShoutSpellHelper(core.ActionID{SpellID: 469}, SpellMaskCommandingShout, warrior.NewAllyAuraArray(func(unit *core.Unit) *core.Aura {
-		if unit.Type == core.PetUnit {
-			return nil
-		}
-		return core.CommandingShoutAura(unit, false)
+		return core.CommandingShoutAura(warrior.GetCharacter(), commandingPresenceMultiplier, warrior.T6Tank2P != nil && warrior.T6Tank2P.IsActive())
 	}))
 }

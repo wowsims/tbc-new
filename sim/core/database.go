@@ -212,20 +212,18 @@ func EnchantFromProto(pData *proto.SimEnchant) Enchant {
 }
 
 type Gem struct {
-	ID                      int32
-	Name                    string
-	Stats                   stats.Stats
-	Color                   proto.GemColor
-	DisabledInChallengeMode bool
+	ID    int32
+	Name  string
+	Stats stats.Stats
+	Color proto.GemColor
 }
 
 func GemFromProto(pData *proto.SimGem) Gem {
 	return Gem{
-		ID:                      pData.Id,
-		Name:                    pData.Name,
-		Stats:                   stats.FromProtoArray(pData.Stats),
-		Color:                   pData.Color,
-		DisabledInChallengeMode: pData.DisabledInChallengeMode,
+		ID:    pData.Id,
+		Name:  pData.Name,
+		Stats: stats.FromProtoArray(pData.Stats),
+		Color: pData.Color,
 	}
 }
 

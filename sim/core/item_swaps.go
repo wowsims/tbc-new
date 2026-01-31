@@ -172,7 +172,7 @@ func (swap *ItemSwap) registerProcInternal(config ItemSwapProcConfig) {
 		isItemSlotMatch := false
 
 		if isItemProc {
-			isItemSlotMatch = character.hasItemEquipped(config.ItemID, config.Slots)
+			isItemSlotMatch = character.HasItemEquipped(config.ItemID, config.Slots)
 		} else if isEnchantEffectProc {
 			isItemSlotMatch = character.hasEnchantEquipped(config.EnchantId, config.Slots)
 		}
@@ -223,7 +223,7 @@ func (swap *ItemSwap) RegisterActive(itemID int32) {
 			aura.Deactivate(sim)
 		}
 
-		hasItemEquipped := character.hasItemEquipped(itemID, slots)
+		hasItemEquipped := character.HasItemEquipped(itemID, slots)
 		if !hasItemEquipped {
 			spell.Flags |= SpellFlagSwapped
 			return
@@ -274,7 +274,7 @@ func (swap *ItemSwap) IsSwapped() bool {
 	return swap.swapSet == proto.APLActionItemSwap_Swap1
 }
 
-func (character *Character) hasItemEquipped(itemID int32, possibleSlots []proto.ItemSlot) bool {
+func (character *Character) HasItemEquipped(itemID int32, possibleSlots []proto.ItemSlot) bool {
 	return character.Equipment.containsItemInSlots(itemID, possibleSlots)
 }
 

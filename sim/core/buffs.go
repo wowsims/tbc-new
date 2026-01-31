@@ -111,7 +111,11 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 	}
 
 	if partyBuffs.BattleShout != proto.TristateEffect_TristateEffectMissing {
-		BattleShoutAura(char, IsImproved(partyBuffs.BattleShout), partyBuffs.BsSolarianSapphire)
+		BattleShoutAura(
+			char,
+			TernaryFloat64(IsImproved(partyBuffs.BattleShout), 1.25, 1.0),
+			partyBuffs.BsSolarianSapphire,
+		)
 	}
 
 	if partyBuffs.BloodPact != proto.TristateEffect_TristateEffectMissing {
@@ -127,7 +131,11 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 	}
 
 	if partyBuffs.CommandingShout != proto.TristateEffect_TristateEffectMissing {
-		CommandingShoutAura(char, IsImproved(partyBuffs.CommandingShout))
+		CommandingShoutAura(
+			char,
+			TernaryFloat64(IsImproved(partyBuffs.CommandingShout), 1.25, 1.0),
+			false,
+		)
 	}
 
 	if partyBuffs.DevotionAura != proto.TristateEffect_TristateEffectMissing {
@@ -339,15 +347,13 @@ func ShadowProtectionAura(char *Character) *Aura {
 //							Party Buffs
 ///////////////////////////////////////////////////////////////////////////
 
-func BattleShoutAura(char *Character, improved bool, sapphire bool) *Aura {
+func BattleShoutAura(char *Character, apMultiplier float64, hasSolarianSapphire bool) *Aura {
 	apBuff := 306.0
-	if improved {
-		apBuff *= 1.25
-	}
-
-	if sapphire {
+	if hasSolarianSapphire {
 		apBuff += 70
 	}
+
+	apBuff *= apMultiplier
 
 	return makeStatBuff(char, BuffConfig{
 		Label:    "Battle Shout",
@@ -373,11 +379,12 @@ func BloodPactAura(char *Character, improved bool) *Aura {
 	})
 }
 
-func CommandingShoutAura(char *Character, improved bool) *Aura {
+func CommandingShoutAura(char *Character, hpMultiplier float64, hasT6Tank2P bool) *Aura {
 	hpBuff := 1080.0
-	if improved {
-		hpBuff *= 1.25
+	if hasT6Tank2P {
+		hpBuff += 170
 	}
+	hpBuff *= hpMultiplier
 
 	return makeStatBuff(char, BuffConfig{
 		Label:    "Commanding Shout",

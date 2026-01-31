@@ -1,5 +1,3 @@
-package protection
-
 import (
 	"time"
 

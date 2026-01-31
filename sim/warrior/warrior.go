@@ -115,6 +115,9 @@ type Warrior struct {
 	SunderArmorAuras       core.AuraArray
 	ThunderClapAuras       core.AuraArray
 	WeakenedArmorAuras     core.AuraArray
+
+	// Set bonuses
+	T6Tank2P *core.Aura
 }
 
 func (warrior *Warrior) GetCharacter() *core.Character {
@@ -132,8 +135,8 @@ func (warrior *Warrior) Initialize() {
 	warrior.sharedHSCleaveCD = warrior.NewTimer()
 	warrior.sharedShoutsCD = warrior.NewTimer()
 
-	// warrior.registerStances()
-	// warrior.registerShouts()
+	warrior.registerStances()
+	warrior.registerShouts()
 	warrior.registerPassives()
 
 	// warrior.registerBerserkerRage()
@@ -159,7 +162,7 @@ func (warrior *Warrior) registerPassives() {
 }
 
 func (warrior *Warrior) Reset(_ *core.Simulation) {
-	// warrior.Stance = StanceNone
+	warrior.Stance = StanceNone
 }
 
 func (warrior *Warrior) OnEncounterStart(sim *core.Simulation) {
@@ -188,6 +191,7 @@ func NewWarrior(character *core.Character, options *proto.WarriorOptions, talent
 	warrior.PseudoStats.CanParry = true
 
 	warrior.AddStatDependency(stats.Strength, stats.AttackPower, 2)
+	warrior.AddStatDependency(stats.Strength, stats.BlockValue, 1/20.0)
 	warrior.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiMaxLevel[character.Class])
 	warrior.AddStatDependency(stats.Agility, stats.DodgeRating, 1/30.0*core.DodgeRatingPerDodgePercent)
 	warrior.AddStatDependency(stats.BonusArmor, stats.Armor, 1)
