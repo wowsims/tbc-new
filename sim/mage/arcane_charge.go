@@ -13,9 +13,10 @@ func (mage *Mage) registerArcaneCharges() {
 		Kind:       core.SpellMod_PowerCost_Pct,
 	})
 
+	castTimeReduction := time.Millisecond * -334
 	abCastMod := mage.AddDynamicMod(core.SpellModConfig{
 		ClassMask: MageSpellArcaneBlast,
-		TimeValue: time.Millisecond * -334,
+		TimeValue: castTimeReduction,
 		Kind:      core.SpellMod_CastTime_Flat,
 	})
 
@@ -34,7 +35,7 @@ func (mage *Mage) registerArcaneCharges() {
 		},
 		OnStacksChange: func(aura *core.Aura, sim *core.Simulation, oldStacks int32, newStacks int32) {
 			stacks := float64(newStacks)
-			abCastMod.UpdateTimeValue(time.Millisecond * -334 * time.Duration(newStacks))
+			abCastMod.UpdateTimeValue(castTimeReduction * time.Duration(newStacks))
 			abCostMod.UpdateFloatValue(1.75 * stacks)
 		},
 	}))
