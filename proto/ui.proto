@@ -275,11 +275,15 @@ enum SourceFilterOption {
 
 enum RaidFilterOption {
 	RaidUnknown = 0;
-	RaidMogushanVaults = 1;
-	RaidHeartOfFear = 2;
-	RaidTerraceOfEndlessSpring = 3;
-	RaidThroneOfThunder = 4;
-	RaidSiegeOfOrgrimmar = 5;
+	RaidKara = 1;
+	RaidGruul = 2;
+	RaidMag = 3;
+	RaidTK = 4;
+	RaidSSC = 5;
+	RaidMH = 6;
+	RaidBT = 7;
+	RaidZA = 8;
+	RaidSWP = 9;
 }
 
 // NextIndex: 24

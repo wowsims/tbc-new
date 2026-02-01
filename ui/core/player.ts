@@ -1170,11 +1170,15 @@ export class Player<SpecType extends Spec> {
 	};
 
 	static readonly RAID_IDS: Partial<Record<RaidFilterOption, number>> = {
-		[RaidFilterOption.RaidMogushanVaults]: 6125,
-		[RaidFilterOption.RaidHeartOfFear]: 6297,
-		[RaidFilterOption.RaidTerraceOfEndlessSpring]: 6067,
-		[RaidFilterOption.RaidThroneOfThunder]: 6622,
-		[RaidFilterOption.RaidSiegeOfOrgrimmar]: 6738,
+		[RaidFilterOption.RaidKara]: 3457,
+		[RaidFilterOption.RaidGruul]: 3923,
+		[RaidFilterOption.RaidMag]: 3836,
+		[RaidFilterOption.RaidTK]: 3845,
+		[RaidFilterOption.RaidSSC]: 3607,
+		[RaidFilterOption.RaidMH]: 3606,
+		[RaidFilterOption.RaidBT]: 3959,
+		[RaidFilterOption.RaidZA]: 3805,
+		[RaidFilterOption.RaidSWP]: 4075,
 	};
 
 	get armorSpecializationArmorType() {
