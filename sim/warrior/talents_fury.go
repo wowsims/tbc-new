@@ -5,7 +5,6 @@ import (
 
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/stats"
-	"github.com/wowsims/tbc/sim/warrior"
 )
 
 func (war *Warrior) registerFuryTalents() {
@@ -44,6 +43,9 @@ func (war *Warrior) registerFuryTalents() {
 
 	// Tier 8
 	war.registerImprovedBerserkerStance()
+
+	// Tier 9
+	war.registerRampage()
 }
 
 func (war *Warrior) registerCruelty() {
@@ -297,7 +299,7 @@ func (war *Warrior) registerBloodthirst() {
 		SpellSchool:    core.SpellSchoolPhysical,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
-		ClassSpellMask: warrior.SpellMaskBloodthirst,
+		ClassSpellMask: SpellMaskBloodthirst,
 		MaxRange:       core.MaxMeleeRange,
 
 		RageCost: core.RageCostOptions{
@@ -354,4 +356,71 @@ func (war *Warrior) registerImprovedBerserkerStance() {
 		}
 	})
 
+}
+
+func (war *Warrior) registerRampage() {
+	actionID := core.ActionID{SpellID: 29801}
+
+	validUntil := time.Duration(0)
+
+	aura := core.MakeStackingAura(&war.Character, core.StackingStatAura{
+		Aura: core.Aura{
+			Label:     "Rampage",
+			ActionID:  actionID,
+			Duration:  time.Second * 30,
+			MaxStacks: 5,
+		},
+		BonusPerStack: stats.Stats{stats.AttackPower: 50},
+	})
+
+	war.MakeProcTriggerAura(core.ProcTrigger{
+		Name:     "Rampage - Trigger",
+		Outcome:  core.OutcomeLanded,
+		Callback: core.CallbackOnSpellHitDealt,
+		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+			if result.Outcome.Matches(core.OutcomeCrit) {
+				validUntil = sim.CurrentTime + time.Second*5
+			}
+
+			if spell.ProcMask.Matches(core.ProcMaskMelee) {
+				if aura.IsActive() {
+					aura.AddStack(sim)
+				}
+			}
+		},
+	})
+
+	spell := war.RegisterSpell(core.SpellConfig{
+		ActionID: actionID,
+		Flags:    core.SpellFlagAPL,
+
+		Cast: core.CastConfig{
+			DefaultCast: core.Cast{
+				NonEmpty: true,
+			},
+			CD: core.Cooldown{
+				Timer:    war.NewTimer(),
+				Duration: time.Second * 90,
+			},
+		},
+
+		RageCost: core.RageCostOptions{
+			Cost: 20,
+		},
+
+		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
+			return sim.CurrentTime < validUntil
+		},
+
+		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {
+			validUntil = 0
+			aura.Activate(sim)
+			aura.AddStack(sim)
+		},
+	})
+
+	war.AddMajorCooldown(core.MajorCooldown{
+		Type:  core.CooldownTypeDPS,
+		Spell: spell,
+	})
 }
