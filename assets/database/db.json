@@ -9958,7 +9958,7 @@
 {"id":13872,"name":"Endurance","icon":"spell_shadow_shadowward"},
 {"id":13875,"name":"Improved Sprint","icon":"ability_rogue_sprint"},
 {"id":13877,"name":"Blade Flurry","icon":"ability_warrior_punishingblow","hasBuff":true},
-{"id":13889,"name":"Enchant Boots - Cat's Swiftness","icon":"inv_misc_note_01"},
+{"id":13889,"name":"Enchant Boots - Boar's Speed","icon":"inv_misc_note_01"},
 {"id":13958,"name":"Master of Deception","icon":"spell_shadow_charm"},
 {"id":13960,"name":"Sword Specialization","icon":"inv_sword_27"},
 {"id":13961,"name":"Sword Specialization","icon":"inv_sword_27"},
@@ -11039,7 +11039,7 @@
 {"id":25064,"name":"Enchant Gloves - Shadow Power","icon":"inv_misc_note_01"},
 {"id":25065,"name":"Enchant Gloves - Fire Power","icon":"inv_misc_note_01"},
 {"id":25066,"name":"Enchant Gloves - Frost Power","icon":"inv_misc_note_01"},
-{"id":25067,"name":"Enchant Bracer - Superior Healing","icon":"inv_misc_note_01"},
+{"id":25067,"name":"Enchant Gloves - Healing Power","icon":"inv_misc_note_01"},
 {"id":25068,"name":"Enchant Cloak - Greater Fire Resistance","icon":"inv_misc_note_01"},
 {"id":25069,"name":"Enchant Cloak - Greater Nature Resistance","icon":"inv_misc_note_01"},
 {"id":25070,"name":"Enchant Cloak - Subtlety","icon":"inv_misc_note_01"},
@@ -12102,10 +12102,7 @@
 {"id":33208,"type":2,"stats":[18,18,18,18,0,0,0,0,0,0,0,0,0,0,0,0,18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,35,35,35,35,35],"name":"Flask of Chromatic Wonder","icon":"inv_potion_48","buffDuration":7200,"categoryCooldownDuration":3},
 {"id":33825,"type":3,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,20,0,0,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"name":"Skullfish Soup","icon":"inv_misc_food_63","buffDuration":30,"categoryCooldownDuration":1},
 {"id":33867,"type":3,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,8,8,8,8],"name":"Broiled Bloodfin","icon":"inv_misc_fish_29","buffDuration":30,"categoryCooldownDuration":1},
-{"id":33872,"type":3,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,20,0,0,0,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"name":"Spicy Hot Talbuk","icon":"inv_misc_food_84_roastclefthoof","buffDuration":30,"categoryCooldownDuration":1},
-{"id":62290,"stats":[0,0,90,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"buffsMainStat":true},
-{"id":62649,"stats":[0,0,90,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"buffsMainStat":true},
-{"id":86125,"type":1}
+{"id":33872,"type":3,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,20,0,0,0,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"name":"Spicy Hot Talbuk","icon":"inv_misc_food_84_roastclefthoof","buffDuration":30,"categoryCooldownDuration":1}
 ],
 "spellEffects":[
 {"id":696085,"spellId":17528,"type":30,"minEffectSize":449,"effectSpread":301,"resourceType":3}
