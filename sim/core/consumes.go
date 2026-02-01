@@ -405,18 +405,22 @@ func registerDrumsCD(agent Agent, consumables *proto.ConsumesSpec) {
 		actionID := ActionID{SpellID: consumables.DrumsId}
 		var drumLabel string
 		var drumStats stats.Stats
+		var duration time.Duration
 		switch consumables.DrumsId {
 		case 351355:
 			drumLabel = "Drums of Battle"
 			drumStats = stats.Stats{stats.MeleeHasteRating: 40, stats.SpellHasteRating: 40}
+			duration = time.Second * 30
 		case 351360:
 			drumLabel = "Drums of War"
 			drumStats = stats.Stats{stats.AttackPower: 60, stats.SpellDamage: 30}
+			duration = time.Second * 30
 		case 351358:
 			drumLabel = "Drums of Restoration"
 			drumStats = stats.Stats{stats.MP5: 200}
+			duration = time.Second * 15
 		}
-		aura := character.NewTemporaryStatsAura(drumLabel, actionID, drumStats, time.Second*30)
+		aura := character.NewTemporaryStatsAura(drumLabel, actionID, drumStats, duration)
 
 		spell := character.GetOrRegisterSpell(SpellConfig{
 			ActionID: actionID,
