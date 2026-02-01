@@ -1,22 +1,20 @@
-package affliction
+package warlock
 
 import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
-	"github.com/wowsims/tbc/sim/warlock"
 )
 
-const uaCoeff = 0.29
-const uaScale = 0.29
+const uaCoeff = 0.2
 
-func (affliction *AfflictionWarlock) registerUnstableAffliction() {
-	affliction.UnstableAffliction = affliction.RegisterSpell(core.SpellConfig{
+func (warlock *Warlock) registerUnstableAffliction() {
+	warlock.UnstableAffliction = warlock.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 30108},
 		SpellSchool:    core.SpellSchoolShadow,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL,
-		ClassSpellMask: warlock.WarlockSpellUnstableAffliction,
+		ClassSpellMask: WarlockSpellUnstableAffliction,
 
 		ManaCost: core.ManaCostOptions{BaseCostPercent: 1.5},
 		Cast: core.CastConfig{
@@ -26,31 +24,34 @@ func (affliction *AfflictionWarlock) registerUnstableAffliction() {
 			},
 		},
 
+		CritMultiplier:           1,
 		DamageMultiplierAdditive: 1,
-		CritMultiplier:           affliction.DefaultCritMultiplier(),
 		ThreatMultiplier:         1,
+		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+			result := spell.CalcOutcome(sim, target, spell.OutcomeMagicHit)
+			if result.Landed() {
+				spell.Dot(target).Apply(sim)
+			}
+			spell.DealOutcome(sim, result)
+		},
 
 		Dot: core.DotConfig{
-			Aura:                core.Aura{Label: "UnstableAffliction"},
-			NumberOfTicks:       7,
+			Aura: core.Aura{
+				Label:    "Unstable Affliction",
+				Tag:      "Affliction",
+				ActionID: core.ActionID{SpellID: 30108},
+			},
+			NumberOfTicks:       9,
 			TickLength:          2 * time.Second,
 			AffectedByCastSpeed: true,
 			BonusCoefficient:    uaCoeff,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.Snapshot(target, affliction.CalcScalingSpellDmg(uaScale))
+				dot.Snapshot(target, 1150)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 			},
-		},
-
-		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			result := spell.CalcOutcome(sim, target, spell.OutcomeMagicHitNoHitCounter)
-			if result.Landed() {
-				affliction.ApplyDotWithPandemic(spell.Dot(target), sim)
-			}
-			spell.DealOutcome(sim, result)
 		},
 
 		ExpectedTickDamage: func(sim *core.Simulation, target *core.Unit, spell *core.Spell, useSnapshot bool) *core.SpellResult {
@@ -60,7 +61,7 @@ func (affliction *AfflictionWarlock) registerUnstableAffliction() {
 				result.Damage /= dot.TickPeriod().Seconds()
 				return result
 			} else {
-				result := spell.CalcPeriodicDamage(sim, target, affliction.CalcScalingSpellDmg(uaScale), spell.OutcomeExpectedMagicCrit)
+				result := spell.CalcPeriodicDamage(sim, target, 1000, spell.OutcomeExpectedMagicCrit)
 				result.Damage /= dot.CalcTickPeriod().Round(time.Millisecond).Seconds()
 				return result
 			}

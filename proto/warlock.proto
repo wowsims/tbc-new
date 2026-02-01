@@ -87,9 +87,17 @@ message WarlockOptions {
 		Felguard = 5;
 	}
 
+	enum Armor {
+		NoArmor = 0;
+		FelArmor = 1;
+		DemonArmor = 2;
+	}
+
 	Summon summon = 1;
 	bool detonate_seed = 2;
 	bool use_item_swap_bonus_stats = 3;
+	bool sacrifice_summon = 5;
+	Armor armor = 4;
 }
 
 message Warlock {

@@ -1,10 +1,9 @@
-package destruction
+package warlock
 
 import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
-	"github.com/wowsims/tbc/sim/warlock"
 )
 
 // Rain of Fire does not need to be channeled anymore for destruction warlocks
@@ -16,9 +15,9 @@ import (
 var rofScale = 0.15
 var rofCoeff = 0.15
 
-func (destruction DestructionWarlock) registerRainOfFire() {
-	baseDamage := destruction.CalcScalingSpellDmg(rofScale)
-	destruction.RegisterSpell(core.SpellConfig{
+func (warlock *Warlock) registerRainOfFire() {
+	baseDamage := warlock.CalcAndRollDamageRange(rofScale)
+	warlock.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 104232},
 		SpellSchool:    core.SpellSchoolFire,
 		ProcMask:       core.ProcMaskSpellDamage,
@@ -35,7 +34,7 @@ func (destruction DestructionWarlock) registerRainOfFire() {
 		},
 
 		DamageMultiplierAdditive: 1,
-		CritMultiplier:           destruction.DefaultCritMultiplier(),
+		CritMultiplier:           warlock.DefaultCritMultiplier(),
 		ThreatMultiplier:         1,
 		BonusCoefficient:         rofCoeff,
 
@@ -55,7 +54,7 @@ func (destruction DestructionWarlock) registerRainOfFire() {
 				for _, aoeTarget := range sim.Encounter.ActiveTargetUnits {
 					result := dot.Spell.CalcAndDealPeriodicDamage(sim, aoeTarget, baseDamage, dot.OutcomeTickMagicCrit)
 					if result.Landed() && sim.Proc(0.125, "RoF - Ember Proc") {
-						destruction.BurningEmbers.Gain(sim, 2, dot.ActionID)
+						warlock.BurningEmbers.Gain(sim, 2, dot.ActionID)
 					}
 				}
 			},

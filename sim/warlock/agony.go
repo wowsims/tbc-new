@@ -1,28 +1,26 @@
-package affliction
+package warlock
 
 import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
-	"github.com/wowsims/tbc/sim/warlock"
 )
 
 const agonyScale = 0.0255
 const agonyCoeff = 0.0255
 
-func (affliction *AfflictionWarlock) registerAgony() {
-	affliction.Agony = affliction.RegisterSpell(core.SpellConfig{
+func (warlock *Warlock) registerCurseOfAgony() {
+	warlock.CurseOfAgony = warlock.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 980},
 		Flags:          core.SpellFlagAPL,
 		ProcMask:       core.ProcMaskSpellDamage,
 		SpellSchool:    core.SpellSchoolShadow,
-		ClassSpellMask: warlock.WarlockSpellAgony,
+		ClassSpellMask: WarlockSpellCurseOfAgony,
 
 		ThreatMultiplier: 1,
 		DamageMultiplier: 1,
 		BonusCoefficient: agonyCoeff,
-		CritMultiplier:   affliction.DefaultCritMultiplier(),
-
+		CritMultiplier:   1,
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD: core.GCDDefault,
@@ -32,42 +30,32 @@ func (affliction *AfflictionWarlock) registerAgony() {
 		ManaCost: core.ManaCostOptions{
 			BaseCostPercent: 1,
 		},
+		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+			result := spell.CalcOutcome(sim, target, spell.OutcomeMagicHit)
+			if result.Landed() {
+				spell.Dot(target).Apply(sim)
+			}
+			spell.DealOutcome(sim, result)
+		},
 
 		Dot: core.DotConfig{
 			Aura: core.Aura{
-				Label:     "Agony",
-				MaxStacks: 10,
+				Label: "Agony",
+				Tag:   "Affliction",
 			},
 
 			TickLength:          2 * time.Second,
 			NumberOfTicks:       12,
-			AffectedByCastSpeed: true,
+			AffectedByCastSpeed: false,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.Snapshot(target, affliction.CalcScalingSpellDmg(agonyScale))
+				dot.Snapshot(target, 1356)
 			},
 
 			BonusCoefficient: agonyCoeff,
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				var stacks int32 = 10
-
-				// on the last tick the aura seems to be deactivated first
-				if dot.Aura.IsActive() {
-					dot.Aura.AddStack(sim)
-					stacks = dot.Aura.GetStacks()
-				}
-
-				result := dot.CalcSnapshotDamage(sim, target, dot.OutcomeMagicHitAndSnapshotCrit)
-				result.Damage *= float64(stacks)
-				dot.Spell.DealPeriodicDamage(sim, result)
+				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 			},
-		},
-
-		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			if spell.CalcAndDealOutcome(sim, target, spell.OutcomeMagicHit).Landed() {
-				affliction.ApplyDotWithPandemic(spell.Dot(target), sim)
-				spell.Dot(target).AddStack(sim)
-			}
 		},
 
 		ExpectedTickDamage: func(sim *core.Simulation, target *core.Unit, spell *core.Spell, useSnapshot bool) *core.SpellResult {
@@ -80,7 +68,7 @@ func (affliction *AfflictionWarlock) registerAgony() {
 				result.Damage /= dot.TickPeriod().Seconds()
 				return result
 			} else {
-				result := spell.CalcPeriodicDamage(sim, target, affliction.CalcScalingSpellDmg(agonyScale), spell.OutcomeExpectedMagicCrit)
+				result := spell.CalcPeriodicDamage(sim, target, 1000, spell.OutcomeExpectedMagicCrit)
 				result.Damage *= 10
 				result.Damage /= dot.CalcTickPeriod().Round(time.Millisecond).Seconds()
 				return result
