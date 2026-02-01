@@ -465,8 +465,8 @@ export class DamageDealtLog extends SimLog {
 				.then(cause => {
 					params.actionId = cause;
 
-					const amount = match[17] ? parseFloat(match[17]) : 0;
-					const type = match[18] || '';
+					const amount = match[16] ? parseFloat(match[16]) : 0;
+					const type = match[17] || '';
 
 					return new DamageDealtLog(
 						params,
