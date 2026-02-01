@@ -14,69 +14,47 @@ func applyConsumeEffects(agent Agent) {
 	if consumables == nil {
 		return
 	}
-	alchemyFlaskBonus := TernaryFloat64(character.HasProfession(proto.Profession_Alchemy), 320, 0)
-	alchemyBattleElixirBonus := TernaryFloat64(character.HasProfession(proto.Profession_Alchemy), 240, 0)
+
 	if consumables.FlaskId != 0 {
 		flask := ConsumablesByID[consumables.FlaskId]
-		if flask.Stats[stats.Strength] > 0 {
-			flask.Stats[stats.Strength] += alchemyFlaskBonus
-		} else if flask.Stats[stats.Agility] > 0 {
-			flask.Stats[stats.Agility] += alchemyFlaskBonus
-		} else if flask.Stats[stats.Intellect] > 0 {
-			flask.Stats[stats.Intellect] += alchemyFlaskBonus
-		} else if flask.Stats[stats.Spirit] > 0 {
-			flask.Stats[stats.Spirit] += alchemyFlaskBonus
-		} else if flask.Stats[stats.Stamina] > 0 {
-			flask.Stats[stats.Stamina] += alchemyFlaskBonus * 1.5
-		}
 		character.AddStats(flask.Stats)
 	}
 
 	if consumables.BattleElixirId != 0 {
 		elixir := ConsumablesByID[consumables.BattleElixirId]
-		if elixir.Stats[stats.MeleeHasteRating] > 0 {
-			elixir.Stats[stats.MeleeHasteRating] += alchemyBattleElixirBonus
-		} else if elixir.Stats[stats.MeleeCritRating] > 0 {
-			elixir.Stats[stats.MeleeCritRating] += alchemyBattleElixirBonus
-		} else if elixir.Stats[stats.MeleeHitRating] > 0 {
-			elixir.Stats[stats.MeleeHitRating] += alchemyBattleElixirBonus
-		} else if elixir.Stats[stats.SpellHitRating] > 0 {
-			elixir.Stats[stats.SpellHitRating] += alchemyBattleElixirBonus
-		} else if elixir.Stats[stats.SpellCritRating] > 0 {
-			elixir.Stats[stats.SpellCritRating] += alchemyBattleElixirBonus
-		} else if elixir.Stats[stats.SpellHasteRating] > 0 {
-			elixir.Stats[stats.SpellHasteRating] += alchemyBattleElixirBonus
-		} else if elixir.Stats[stats.ExpertiseRating] > 0 {
-			elixir.Stats[stats.ExpertiseRating] += alchemyBattleElixirBonus
-		} else if elixir.Stats[stats.Spirit] > 0 {
-			elixir.Stats[stats.Spirit] += alchemyBattleElixirBonus
-		}
 		character.AddStats(elixir.Stats)
 	}
 
 	if consumables.GuardianElixirId != 0 {
 		elixir := ConsumablesByID[consumables.GuardianElixirId]
-		if character.HasProfession(proto.Profession_Alchemy) && elixir.Stats[stats.Armor] > 0 {
-			elixir.Stats[stats.Armor] += 280
-		}
 		character.AddStats(elixir.Stats)
 	}
 	if consumables.FoodId != 0 {
 		food := ConsumablesByID[consumables.FoodId]
-		var foodBuffStats stats.Stats
-		if food.BuffsMainStat {
-			buffAmount := food.Stats[stats.Stamina]
-			foodBuffStats[stats.Stamina] = buffAmount
-			foodBuffStats[character.GetHighestStatType([]stats.Stat{stats.Strength, stats.Agility, stats.Intellect})] = buffAmount
-		} else {
-			foodBuffStats = food.Stats
-		}
-		character.AddStats(foodBuffStats)
+		character.AddStats(food.Stats)
+	}
+
+	// Scrolls
+	if consumables.ScrollAgi {
+		character.AddStat(stats.Agility, 20)
+	}
+	if consumables.ScrollStr {
+		character.AddStat(stats.Strength, 20)
+	}
+	if consumables.ScrollInt {
+		character.AddStat(stats.Intellect, 20)
+	}
+	if consumables.ScrollSpi {
+		character.AddStat(stats.Spirit, 20)
+	}
+	if consumables.ScrollArm {
+		character.AddStat(stats.Armor, 300)
 	}
 
 	registerPotionCD(agent, consumables)
 	registerConjuredCD(agent, consumables)
 	registerExplosivesCD(agent, consumables)
+	registerDrumsCD(agent, consumables)
 }
 
 var PotionAuraTag = "Potion"
@@ -86,28 +64,16 @@ func registerPotionCD(agent Agent, consumes *proto.ConsumesSpec) {
 	potion := consumes.PotId
 	prepot := consumes.PrepotId
 
-	if potion == 0 && prepot == 0 {
-		return
-	}
-	var mcd MajorCooldown
 	if prepot != 0 {
-		mcd = makePotionActivationSpell(prepot, character)
-		if mcd.Spell != nil {
-			mcd.Spell.Flags |= SpellFlagPrepullPotion
-		}
+		prepotMCD := makePotionActivationSpell(prepot, character)
+		prepotMCD.Spell.Flags |= SpellFlagPrepullPotion
+		character.AddMajorCooldown(prepotMCD)
 	}
 
-	var defaultMCD MajorCooldown
-	if potion == prepot {
-		defaultMCD = mcd
-	} else {
-		if potion != 0 {
-			defaultMCD = makePotionActivationSpell(potion, character)
-		}
-	}
-	if defaultMCD.Spell != nil {
-		defaultMCD.Spell.Flags |= SpellFlagCombatPotion
-		character.AddMajorCooldown(defaultMCD)
+	if potion != 0 {
+		potMCD := makePotionActivationSpell(potion, character)
+		potMCD.Spell.Flags |= SpellFlagCombatPotion
+		character.AddMajorCooldown(potMCD)
 	}
 }
 
@@ -123,7 +89,7 @@ func (character *Character) HasAlchStone() bool {
 
 func makePotionActivationSpell(potionId int32, character *Character) MajorCooldown {
 	potion := ConsumablesByID[potionId]
-	categoryCooldownDuration := TernaryDuration(potion.CategoryCooldownDuration > 0, potion.CategoryCooldownDuration, time.Minute*1)
+	categoryCooldownDuration := TernaryDuration(potion.CategoryCooldownDuration > 0, potion.CategoryCooldownDuration, time.Minute*2)
 	mcd := makePotionActivationSpellInternal(potion, character)
 
 	if mcd.Spell != nil {
@@ -152,7 +118,7 @@ type resourceGainConfig struct {
 
 func makePotionActivationSpellInternal(potion Consumable, character *Character) MajorCooldown {
 	stoneMul := TernaryFloat64(character.HasAlchStone(), 1.4, 1.0)
-	cooldownDuration := TernaryDuration(potion.CooldownDuration > 0, potion.CooldownDuration, time.Minute*1)
+	cooldownDuration := TernaryDuration(potion.CooldownDuration > 0, potion.CooldownDuration, time.Minute*2)
 
 	potionCast := CastConfig{
 		CD: Cooldown{
@@ -161,7 +127,7 @@ func makePotionActivationSpellInternal(potion Consumable, character *Character) 
 		},
 		SharedCD: Cooldown{
 			Timer:    character.GetPotionCD(),
-			Duration: time.Minute * 60,
+			Duration: cooldownDuration,
 		},
 	}
 
@@ -310,6 +276,32 @@ func registerConjuredCD(agent Agent, consumes *proto.ConsumesSpec) {
 			Spell: spell,
 			Type:  CooldownTypeSurvival,
 		})
+	case 7676:
+		actionID := ActionID{ItemID: 7676}
+		energyMetrics := character.NewEnergyMetrics(actionID)
+
+		spell := character.RegisterSpell(SpellConfig{
+			ActionID: actionID,
+			Flags:    SpellFlagNoOnCastComplete,
+			Cast: CastConfig{
+				SharedCD: Cooldown{
+					Timer:    character.GetConjuredCD(),
+					Duration: time.Minute * 2,
+				},
+
+				CD: Cooldown{
+					Timer:    character.NewTimer(),
+					Duration: time.Minute * 5,
+				},
+			},
+			ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
+				character.AddEnergy(sim, 40, energyMetrics)
+			},
+		})
+		character.AddMajorCooldown(MajorCooldown{
+			Spell: spell,
+			Type:  CooldownTypeDPS,
+		})
 	}
 }
 
@@ -404,5 +396,53 @@ func registerExplosivesCD(agent Agent, consumes *proto.ConsumesSpec) {
 	// 			return false // Intentionally not automatically used
 	// 		},
 	// 	})
+	}
+}
+
+func registerDrumsCD(agent Agent, consumables *proto.ConsumesSpec) {
+	if consumables.DrumsId > 0 {
+		character := agent.GetCharacter()
+		actionID := ActionID{SpellID: consumables.DrumsId}
+		var drumLabel string
+		var drumStats stats.Stats
+		switch consumables.DrumsId {
+		case 351355:
+			drumLabel = "Drums of Battle"
+			drumStats = stats.Stats{stats.MeleeHasteRating: 40, stats.SpellHasteRating: 40}
+		case 351360:
+			drumLabel = "Drums of War"
+			drumStats = stats.Stats{stats.AttackPower: 60, stats.SpellDamage: 30}
+		case 351358:
+			drumLabel = "Drums of Restoration"
+			drumStats = stats.Stats{stats.MP5: 200}
+		}
+		aura := character.NewTemporaryStatsAura(drumLabel, actionID, drumStats, time.Second*30)
+
+		spell := character.GetOrRegisterSpell(SpellConfig{
+			ActionID: actionID,
+			Flags:    SpellFlagNoOnCastComplete,
+			ProcMask: ProcMaskEmpty,
+
+			Cast: CastConfig{
+				CD: Cooldown{
+					Timer:    character.NewTimer(),
+					Duration: time.Minute * 2,
+				},
+			},
+
+			ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
+				aura.Activate(sim)
+			},
+		})
+
+		character.AddMajorCooldown(MajorCooldown{
+			Spell:              spell,
+			Type:               CooldownTypeDPS,
+			Priority:           CooldownPriorityDrums,
+			AllowSpellQueueing: true,
+			ShouldActivate: func(s *Simulation, c *Character) bool {
+				return true
+			},
+		})
 	}
 }
