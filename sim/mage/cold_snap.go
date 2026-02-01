@@ -21,12 +21,6 @@ func (mage *Mage) registerColdSnapSpell() {
 				Duration: time.Second * 480,
 			},
 		},
-		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
-			// Don't use if there are no cooldowns to reset.
-			// I don't know if I should leave this up to APL or not
-			return (mage.IcyVeins != nil && !mage.IcyVeins.IsReady(sim)) ||
-				(mage.SummonWaterElemental != nil && !mage.SummonWaterElemental.IsReady(sim))
-		},
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {
 			if mage.IcyVeins != nil {
 				mage.IcyVeins.CD.Reset()
