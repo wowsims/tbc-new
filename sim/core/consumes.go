@@ -409,7 +409,7 @@ func registerDrumsCD(agent Agent, consumables *proto.ConsumesSpec) {
 		switch consumables.DrumsId {
 		case 351355:
 			drumLabel = "Drums of Battle"
-			drumStats = stats.Stats{stats.MeleeHasteRating: 40, stats.SpellHasteRating: 40}
+			drumStats = stats.Stats{stats.MeleeHasteRating: 80, stats.SpellHasteRating: 80}
 			duration = time.Second * 30
 		case 351360:
 			drumLabel = "Drums of War"
