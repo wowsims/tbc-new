@@ -6,12 +6,13 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
-const hellFireScale = 0.20999999344
-const hellFireCoeff = 0.20999999344
+const hellFireCoeff = 0.095
 
 func (warlock *Warlock) RegisterHellfire(callback WarlockSpellCastedCallback) *core.Spell {
 	hellfireActionID := core.ActionID{SpellID: 1949}
 	manaMetric := warlock.NewManaMetrics(hellfireActionID)
+
+	manaCost := int32(1665)
 	warlock.Hellfire = warlock.RegisterSpell(core.SpellConfig{
 		ActionID:         hellfireActionID,
 		SpellSchool:      core.SpellSchoolFire,
@@ -26,7 +27,7 @@ func (warlock *Warlock) RegisterHellfire(callback WarlockSpellCastedCallback) *c
 				GCD: core.GCDDefault,
 			},
 		},
-		ManaCost: core.ManaCostOptions{BaseCostPercent: 2},
+		ManaCost: core.ManaCostOptions{FlatCost: manaCost},
 
 		Dot: core.DotConfig{
 			Aura: core.Aura{
@@ -42,7 +43,8 @@ func (warlock *Warlock) RegisterHellfire(callback WarlockSpellCastedCallback) *c
 
 			OnTick: func(sim *core.Simulation, _ *core.Unit, dot *core.Dot) {
 				results := dot.Spell.CalcAndDealPeriodicAoeDamage(sim, 308, dot.Spell.OutcomeMagicHit)
-				warlock.SpendMana(sim, warlock.MaxMana()*0.02, manaMetric)
+				warlock.SpendMana(sim, float64(manaCost/15), manaMetric)
+				warlock.RemoveHealth(sim, 308)
 
 				if callback != nil {
 					callback(results, dot.Spell, sim)

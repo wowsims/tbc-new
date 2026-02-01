@@ -40,11 +40,7 @@ func (warlock *Warlock) registerDrainLife() {
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				resultSlice[0] = dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 
-				warlock.GainHealth(sim, warlock.MaxHealth()*0.02, healthMetric)
-
-				// if callback != nil {
-				// 	callback(resultSlice, dot.Spell, sim)
-				// }
+				warlock.GainHealth(sim, resultSlice[0].Damage*warlock.HealthRegainModifier, healthMetric)
 			},
 		},
 

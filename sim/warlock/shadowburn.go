@@ -33,7 +33,8 @@ func (warlock *Warlock) registerShadowBurn() {
 		BonusCoefficient: shadowBurnCoeff,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			result := spell.CalcDamage(sim, target, 0.429, spell.OutcomeMagicHitAndCrit)
+			dmgRoll := warlock.CalcAndRollDamageRange(sim, 597, 665)
+			result := spell.CalcDamage(sim, target, dmgRoll, spell.OutcomeMagicHitAndCrit)
 			spell.WaitTravelTime(sim, func(sim *core.Simulation) {
 				spell.DealDamage(sim, result)
 			})

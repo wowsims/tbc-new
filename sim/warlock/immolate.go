@@ -6,7 +6,8 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
-const immolateCoeff = 0.13
+const immolateCoeff = 0.2
+const immolateDotCoeff = 0.13
 
 func (warlock *Warlock) registerImmolate() {
 	actionID := core.ActionID{SpellID: 348}
@@ -34,7 +35,7 @@ func (warlock *Warlock) registerImmolate() {
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			//coeffection 0.13
-			result := spell.CalcDamage(sim, target, 1000, spell.OutcomeMagicHitAndCrit)
+			result := spell.CalcDamage(sim, target, 332, spell.OutcomeMagicHitAndCrit)
 			if result.Landed() {
 				spell.RelatedDotSpell.Dot(target).Apply(sim)
 			}
@@ -55,18 +56,12 @@ func (warlock *Warlock) registerImmolate() {
 		Dot: core.DotConfig{
 			Aura: core.Aura{
 				Label: "Immolate (DoT)",
-				// OnGain: func(aura *core.Aura, sim *core.Simulation) {
-				// 	core.EnableDamageDoneByCaster(DDBC_Immolate, DDBC_Total, warlock.AttackTables[aura.Unit.UnitIndex], immolateDamageDoneByCasterHandler)
-				// },
-				// OnExpire: func(aura *core.Aura, sim *core.Simulation) {
-				// 	core.DisableDamageDoneByCaster(DDBC_Immolate, warlock.AttackTables[aura.Unit.UnitIndex])
-				// },
 			},
 			NumberOfTicks:    5,
 			TickLength:       3 * time.Second,
-			BonusCoefficient: immolateCoeff,
+			BonusCoefficient: immolateDotCoeff,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.Snapshot(target, 510) // coefficient 0.2
+				dot.Snapshot(target, 615)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)

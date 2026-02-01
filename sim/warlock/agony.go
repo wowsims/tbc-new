@@ -6,8 +6,7 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
-const agonyScale = 0.0255
-const agonyCoeff = 0.0255
+const agonyCoeff = 0.1
 
 func (warlock *Warlock) registerCurseOfAgony() {
 	warlock.CurseOfAgony = warlock.RegisterSpell(core.SpellConfig{
@@ -28,7 +27,7 @@ func (warlock *Warlock) registerCurseOfAgony() {
 		},
 
 		ManaCost: core.ManaCostOptions{
-			BaseCostPercent: 1,
+			FlatCost: 265.0,
 		},
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			result := spell.CalcOutcome(sim, target, spell.OutcomeMagicHit)

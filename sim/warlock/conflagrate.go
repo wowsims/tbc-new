@@ -37,8 +37,12 @@ func (warlock *Warlock) registerConflagrate() {
 		RechargeTime:     time.Second * 10,
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			//tie this to landed/hit
-			target.GetAura("Immolate (DoT)").Deactivate(sim)
+			dmgRoll := warlock.CalcAndRollDamageRange(sim, 579, 721)
+			result := spell.CalcAndDealDamage(sim, target, dmgRoll, spell.OutcomeMagicHitAndCrit)
 
+			if result.Outcome == core.OutcomeLanded || result.Outcome == core.OutcomePartial {
+				target.GetAura("Immolate (DoT)").Deactivate(sim)
+			}
 		},
 	})
 }

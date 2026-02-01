@@ -57,7 +57,8 @@ type Warlock struct {
 	// Doomguard *DoomguardPet
 	// Infernal  *InfernalPet
 
-	serviceTimer *core.Timer
+	serviceTimer         *core.Timer
+	HealthRegainModifier float64
 }
 
 func (warlock *Warlock) GetCharacter() *core.Character {

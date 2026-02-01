@@ -7,7 +7,6 @@ import (
 )
 
 const soulfireCoeff = 1.15
-const soulfireVariance = 0.2
 
 func (warlock *Warlock) registerSoulfire() {
 	warlock.Soulfire = warlock.RegisterSpell(core.SpellConfig{
@@ -23,7 +22,7 @@ func (warlock *Warlock) registerSoulfire() {
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD:      core.GCDDefault,
-				CastTime: time.Millisecond*6000 - (time.Millisecond * 400 * time.Duration(warlock.Talents.Bane)),
+				CastTime: time.Millisecond * 6000,
 			},
 			CD: core.Cooldown{
 				Timer:    warlock.NewTimer(),
@@ -37,7 +36,8 @@ func (warlock *Warlock) registerSoulfire() {
 		BonusCoefficient: soulfireCoeff,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			result := spell.CalcDamage(sim, target, 1000, spell.OutcomeMagicHitAndCrit)
+			dmgRoll := warlock.CalcAndRollDamageRange(sim, 1003, 1257)
+			result := spell.CalcDamage(sim, target, dmgRoll, spell.OutcomeMagicHitAndCrit)
 			spell.WaitTravelTime(sim, func(sim *core.Simulation) {
 				spell.DealDamage(sim, result)
 			})

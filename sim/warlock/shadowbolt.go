@@ -6,7 +6,7 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
-const shadowBoltCoeff = 1.38
+const shadowBoltCoeff = 0.857
 
 func (warlock *Warlock) registerShadowBolt() {
 
@@ -15,27 +15,29 @@ func (warlock *Warlock) registerShadowBolt() {
 		SpellSchool:    core.SpellSchoolShadow,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL,
-		ClassSpellMask: WarlockSpellShadowBolt,
+		ClassSpellMask: WarlockSpellShadowBolt | WarlockDestructionSpells,
 		MissileSpeed:   20,
 
 		ManaCost: core.ManaCostOptions{BaseCostPercent: 5.5},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD:      core.GCDDefault,
-				CastTime: 2500 * time.Millisecond,
+				CastTime: 3000 * time.Millisecond,
 			},
 		},
 
 		DamageMultiplierAdditive: 1,
 		CritMultiplier:           warlock.DefaultSpellCritMultiplier(),
 		ThreatMultiplier:         1,
+		BonusCoefficient:         shadowBoltCoeff,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			result := spell.CalcDamage(sim, target, 1000, spell.OutcomeMagicHitAndCrit)
+			dmgRoll := warlock.CalcAndRollDamageRange(sim, 544, 607)
+			result := spell.CalcDamage(sim, target, dmgRoll, spell.OutcomeMagicHitAndCrit)
 			existingAura := target.GetAurasWithTag("ImprovedShadowBolt")
 
 			if len(existingAura) == 0 || existingAura[0].Duration != core.NeverExpires {
-				if result.Landed() && result.Outcome.Matches(core.OutcomeCrit) {
+				if result.Landed() && result.Outcome.Matches(core.OutcomeCrit) && warlock.Talents.ImprovedShadowBolt > 0 {
 					if !warlock.ImpShadowboltAura.IsActive() {
 
 						warlock.ImpShadowboltAura.Activate(sim)

@@ -1,13 +1,13 @@
 package warlock
 
 import (
+	"math/rand/v2"
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
 )
 
-const incinerateVariance = 0.1
-const incinerateCoeff = 1.54 * 1.15
+const incinerateCoeff = 0.714
 
 func (warlock *Warlock) registerIncinerate() {
 	warlock.RegisterSpell(core.SpellConfig{
@@ -32,7 +32,10 @@ func (warlock *Warlock) registerIncinerate() {
 		BonusCoefficient:         incinerateCoeff,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := warlock.CalcAndRollDamageRange(sim, incinerateCoeff, incinerateVariance)
+			baseDamage := warlock.CalcAndRollDamageRange(sim, 444, 514)
+			if target.GetAura("Immolate (DoT)").IsActive() {
+				baseDamage += float64(rand.Int32N(128-111+1) + 111)
+			}
 			result := spell.CalcDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
 
 			spell.WaitTravelTime(sim, func(sim *core.Simulation) {
