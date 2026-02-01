@@ -423,7 +423,7 @@ func registerDrumsCD(agent Agent, consumables *proto.ConsumesSpec) {
 			duration = time.Second * 30
 		case 351360:
 			drumLabel = "Drums of War"
-			drumStats = stats.Stats{stats.AttackPower: 60, stats.SpellDamage: 30}
+			drumStats = stats.Stats{stats.AttackPower: 60, stats.RangedAttackPower: 60, stats.SpellDamage: 30}
 			duration = time.Second * 30
 		case 351358:
 			drumLabel = "Drums of Restoration"
@@ -450,13 +450,9 @@ func registerDrumsCD(agent Agent, consumables *proto.ConsumesSpec) {
 		})
 
 		character.AddMajorCooldown(MajorCooldown{
-			Spell:              spell,
-			Type:               CooldownTypeDPS,
-			Priority:           CooldownPriorityDrums,
-			AllowSpellQueueing: true,
-			ShouldActivate: func(s *Simulation, c *Character) bool {
-				return true
-			},
+			Spell:    spell,
+			Type:     CooldownTypeDPS,
+			Priority: CooldownPriorityDrums,
 		})
 	}
 }

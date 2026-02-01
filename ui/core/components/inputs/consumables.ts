@@ -8,8 +8,6 @@ import { IconEnumValueConfig } from '../pickers/icon_enum_picker';
 import { ActionInputConfig, ItemStatOption } from './stat_options';
 import i18n from '../../../i18n/config.js';
 import { makeBooleanConsumeInput } from '../icon_inputs';
-import { playerPresets } from '../../../raid/presets';
-import { stat } from 'fs';
 
 export interface ConsumableInputConfig<T> extends ActionInputConfig<T> {
 	value: T;
