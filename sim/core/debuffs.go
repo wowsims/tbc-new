@@ -96,7 +96,7 @@ func applyDebuffEffects(target *Unit, targetIdx int, debuffs *proto.Debuffs, rai
 	}
 
 	if debuffs.ShadowEmbrace {
-		MakePermanent(ShadowEmbraceAura(target))
+		MakePermanent(ShadowEmbraceAura(target, 5))
 	}
 
 	if debuffs.ShadowWeaving {
@@ -418,8 +418,8 @@ func ScreechAura(target *Unit) *Aura {
 	return statsDebuff(target, "Screech", 27051, stats.Stats{stats.AttackPower: -210})
 }
 
-func ShadowEmbraceAura(target *Unit) *Aura {
-	return damageDealtDebuff(target, "Shadow Embrace", 32394, []stats.SchoolIndex{stats.SchoolIndexPhysical}, 0.95, NeverExpires)
+func ShadowEmbraceAura(target *Unit, ranks int32) *Aura {
+	return damageDealtDebuff(target, "Shadow Embrace", 32394, []stats.SchoolIndex{stats.SchoolIndexPhysical}, 1.0-(.01*float64(ranks)), NeverExpires)
 }
 
 func ShadowWeavingAura(target *Unit) *Aura {

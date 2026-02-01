@@ -1,6 +1,7 @@
 package warlock
 
 import (
+	"math"
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
@@ -23,7 +24,6 @@ func (warlock *Warlock) registerDrainLife() {
 		Cast:     core.CastConfig{DefaultCast: core.Cast{GCD: core.GCDDefault}},
 
 		DamageMultiplierAdditive: 1,
-		CritMultiplier:           warlock.DefaultSpellCritMultiplier(),
 		ThreatMultiplier:         1,
 		BonusCoefficient:         drainLifeCoeff,
 
@@ -38,6 +38,14 @@ func (warlock *Warlock) registerDrainLife() {
 				dot.Snapshot(target, 108)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
+				if warlock.Talents.SoulSiphon > 0 {
+					cappedDmgBonus := 0.24
+					if warlock.Talents.SoulSiphon == 2 {
+						cappedDmgBonus = 0.60
+					}
+					dot.PeriodicDamageMultiplier *= 1 + math.Min((0.02*float64(warlock.Talents.SoulSiphon)), cappedDmgBonus)
+				}
+
 				resultSlice[0] = dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 
 				warlock.GainHealth(sim, resultSlice[0].Damage*warlock.HealthRegainModifier, healthMetric)

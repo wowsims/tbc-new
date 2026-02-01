@@ -15,7 +15,7 @@ func (warlock *Warlock) applyAfflictionTalents() {
 	warlock.applyImprovedCurseOfAgony()
 	warlock.applyNightfall()
 	warlock.applyEmpoweredCorruption()
-	// warlock.applyShadowEmbrace()
+	warlock.applyShadowEmbrace()
 	warlock.applyShadowMastery()
 	warlock.applyContagion()
 	warlock.applyUnstableAffliction()
@@ -39,23 +39,27 @@ func (warlock *Warlock) applyDemonologyTalents() {
 func (warlock *Warlock) applyDestructionTalents() {
 	warlock.applyCataclysm()
 	warlock.applyBane()
-	warlock.applyDevastation()
 	warlock.applyImprovedFirebolt()
 	warlock.applyImprovedLashOfPain()
+	warlock.applyDevastation()
+	warlock.applyShadowburn()
 	warlock.applyImprovedShadowBolt()
 	warlock.applyDestructiveReach()
 	warlock.applyImprovedSearingPain()
+	warlock.applyImprovedImmolate()
 	warlock.applyRuin()
 	warlock.applyEmberstorm()
 	warlock.applyBacklash()
-	warlock.registerConflagrate()
+	warlock.applyConflagrate()
+	warlock.applySoulLeech()
 	warlock.applyShadowAndFlame()
+	warlock.applyShadowfury()
 }
 
 /*
 Affliction
 Skipping the following (for now)
-- Soul Siphon
+- Soul Siphon -> included in drain_life.go
 - Improved Life Tap -> included in lifetap.go
 - Empowered Corruption -> included in corruption.go
 - Siphon Life -> implemented in siphon_life.go
@@ -100,6 +104,14 @@ func (warlock *Warlock) registerAmplifyCurse() {
 		Label:    "Amplify Curse",
 		ActionID: actionID,
 		Duration: time.Second * 30,
+		OnSpellHitDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+			if !result.Landed() || (spell.ClassSpellMask != WarlockSpellCurseOfDoom && spell.ClassSpellMask != WarlockSpellAgony) {
+				return
+			}
+
+			spell.DamageMultiplier *= 1.5
+			warlock.AmplifyCurseAura.Deactivate(sim)
+		},
 	})
 
 	warlock.AmplifyCurse = warlock.RegisterSpell(core.SpellConfig{
@@ -115,7 +127,7 @@ func (warlock *Warlock) registerAmplifyCurse() {
 			},
 		},
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {
-
+			warlock.AmplifyCurseAura.Activate(sim)
 		},
 		RelatedSelfBuff: warlock.AmplifyCurseAura,
 	})
@@ -134,7 +146,7 @@ func (warlock *Warlock) applyImprovedCurseOfAgony() {
 	//This is a flat X% dot dmg buff, technically incorrect, fix later
 	warlock.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DotDamageDone_Pct,
-		FloatValue: 1 * (0.05 * float64(warlock.Talents.ImprovedCurseOfAgony)),
+		FloatValue: 0.05 * float64(warlock.Talents.ImprovedCurseOfAgony),
 		ClassMask:  WarlockSpellCurseOfAgony,
 	})
 }
@@ -167,7 +179,7 @@ func (warlock *Warlock) applyNightfall() {
 			if spell != warlock.Corruption && spell != warlock.DrainLife {
 				return
 			}
-			if sim.RandomFloat("nightfall") > 0.04 {
+			if !sim.Proc(0.02*float64(warlock.Talents.Nightfall), "nightfall") {
 				return
 			}
 			warlock.NightfallProcAura.Activate(sim)
@@ -183,33 +195,33 @@ func (warlock *Warlock) applyEmpoweredCorruption() {
 
 	warlock.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCoeffecient_Flat,
-		FloatValue: ((0.12 * float64(warlock.Talents.EmpoweredCorruption)) / 6),
+		FloatValue: (0.12 * float64(warlock.Talents.EmpoweredCorruption)) / 6.0,
 		ClassMask:  WarlockSpellCorruption,
 	})
 }
 
-// func (warlock *Warlock) applyShadowEmbrace() {
-// 	if warlock.Talents.ShadowEmbrace == 0 {
-// 		return
-// 	}
+func (warlock *Warlock) applyShadowEmbrace() {
+	if warlock.Talents.ShadowEmbrace == 0 {
+		return
+	}
 
-// 	warlock.RegisterAura(core.Aura{
-// 		Label:    "Shadow Embrace Talent",
-// 		Duration: core.NeverExpires,
-// 		OnReset: func(aura *core.Aura, sim *core.Simulation) {
-// 			aura.Activate(sim)
-// 		},
-// 		OnSpellHitDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, spellEffect *core.SpellResult) {
-// 			if !spellEffect.Landed() {
-// 				return
-// 			}
+	warlock.RegisterAura(core.Aura{
+		Label:    "Shadow Embrace",
+		Duration: core.NeverExpires,
+		OnReset: func(aura *core.Aura, sim *core.Simulation) {
+			aura.Activate(sim)
+		},
+		OnSpellHitDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, spellEffect *core.SpellResult) {
+			if !spellEffect.Landed() {
+				return
+			}
 
-// 			if spell == warlock.Corruption || spell == warlock.SiphonLife || spell == warlock.CurseOfAgony || spell.SameAction(warlock.Seed.ActionID) {
-// 				core.ShadowEmbrace(spellEffect.Target, warlock.Talents.ShadowEmbrace, spell.Dot(spellEffect.Target).Duration).Activate(sim)
-// 			}
-// 		},
-// 	})
-// }
+			if spell == warlock.Corruption || spell == warlock.SiphonLife || spell == warlock.CurseOfAgony || spell.SameAction(warlock.Seed.ActionID) {
+				core.ShadowEmbraceAura(spellEffect.Target, warlock.Talents.ShadowEmbrace).Activate(sim)
+			}
+		},
+	})
+}
 
 func (warlock *Warlock) applyShadowMastery() {
 	if warlock.Talents.ShadowMastery == 0 {
@@ -243,7 +255,13 @@ func (warlock *Warlock) applyUnstableAffliction() {
 
 /*
 Demonology
-Skipping so many for now
+Skipping the following:
+  - Improved Healthstone
+  - Improved Health Funnel
+  - Improved Voidwalker
+  - Fel Domination
+  - Demonic Aegis ->
+  - Mana Feed -> applied in lifetap.go
 */
 func (warlock *Warlock) appyImprovedImp() {
 	if warlock.Talents.ImprovedImp == 0 {
@@ -330,7 +348,7 @@ func (warlock *Warlock) applyDemonicSacrifice() {
 }
 
 func (warlock *Warlock) applyMasterDemonologist() {
-	if warlock.Talents.MasterDemonologist == 0 {
+	if warlock.Talents.MasterDemonologist == 0 || warlock.Options.SacrificeSummon == true {
 		return
 	}
 
@@ -346,15 +364,6 @@ func (warlock *Warlock) applyMasterDemonologist() {
 	}
 }
 
-func (warlock *Warlock) applyDemonicKnowledge() {
-	if warlock.Talents.DemonicKnowledge == 0 {
-		return
-	}
-
-	petStats := warlock.ActivePet.GetStats()
-	warlock.AddStat(stats.SpellDamage, (0.04*float64(warlock.Talents.DemonicKnowledge))*(petStats[stats.Stamina]+petStats[stats.Intellect]))
-}
-
 func (warlock *Warlock) applySoulLink() {
 	if !warlock.Talents.SoulLink {
 		return
@@ -365,19 +374,28 @@ func (warlock *Warlock) applySoulLink() {
 	warlock.PseudoStats.DamageDealtMultiplier *= 1.05
 }
 
+func (warlock *Warlock) applyDemonicKnowledge() {
+	if warlock.Talents.DemonicKnowledge == 0 {
+		return
+	}
+
+	petStats := warlock.ActivePet.GetStats()
+	warlock.AddStat(stats.SpellDamage, (0.04*float64(warlock.Talents.DemonicKnowledge))*(petStats[stats.Stamina]+petStats[stats.Intellect]))
+}
+
 func (warlock *Warlock) applyDemonicTactics() {
 	if warlock.Talents.DemonicTactics == 0 {
 		return
 	}
 
 	warlock.AddStat(stats.SpellCritPercent, 0.01*float64(warlock.Talents.DemonicTactics))
+	warlock.ActivePet.AddStat(stats.SpellCritPercent, 0.01*float64(warlock.Talents.DemonicTactics))
 }
 
 /*
 Destruction
 Skip for now:
-  - Improved shadowbolt - included in shadowbolt.go
-  - ImprovedImmolate - include in immolate.go
+  - Aftermath
 */
 func (warlock *Warlock) applyImprovedShadowBolt() {
 	if warlock.Talents.ImprovedShadowBolt == 0 {
@@ -416,18 +434,6 @@ func (warlock *Warlock) applyBane() {
 	})
 }
 
-func (warlock *Warlock) applyDevastation() {
-	if warlock.Talents.Devastation == 0 {
-		return
-	}
-
-	warlock.AddStaticMod(core.SpellModConfig{
-		Kind:       core.SpellMod_BonusCrit_Percent,
-		FloatValue: 5.0,
-		ClassMask:  WarlockDestructionSpells,
-	})
-}
-
 func (warlock *Warlock) applyImprovedFirebolt() {
 	if warlock.Talents.ImprovedFirebolt == 0 {
 		return
@@ -452,12 +458,37 @@ func (warlock *Warlock) applyImprovedLashOfPain() {
 	})
 }
 
+func (warlock *Warlock) applyDevastation() {
+	if warlock.Talents.Devastation == 0 {
+		return
+	}
+
+	warlock.AddStaticMod(core.SpellModConfig{
+		Kind:       core.SpellMod_BonusCrit_Percent,
+		FloatValue: 5.0,
+		ClassMask:  WarlockDestructionSpells,
+	})
+}
+
+func (warlock *Warlock) applyShadowburn() {
+	if !warlock.Talents.Shadowburn {
+		return
+	}
+
+	warlock.registerShadowBurn()
+}
+
 func (warlock *Warlock) applyDestructiveReach() {
 	if warlock.Talents.DestructiveReach == 0 {
 		return
 	}
 
-	warlock.PseudoStats.ThreatMultiplier *= 1.0 - (0.5 * float64(warlock.Talents.DestructiveReach))
+	warlock.AddStaticMod(core.SpellModConfig{
+		Kind:       core.SpellMod_ThreatMultiplier_Flat,
+		FloatValue: 1.0 - (0.5 * float64(warlock.Talents.DestructiveReach)),
+		ClassMask:  WarlockDestructionSpells,
+	})
+
 }
 
 func (warlock *Warlock) applyImprovedSearingPain() {
@@ -478,6 +509,18 @@ func (warlock *Warlock) applyImprovedSearingPain() {
 		Kind:       core.SpellMod_BonusCrit_Percent,
 		FloatValue: float64(critBonus),
 		ClassMask:  WarlockSpellSearingPain,
+	})
+}
+
+func (warlock *Warlock) applyImprovedImmolate() {
+	if warlock.Talents.ImprovedImmolate == 0 {
+		return
+	}
+
+	warlock.AddStaticMod(core.SpellModConfig{
+		Kind:       core.SpellMod_DamageDone_Pct,
+		FloatValue: 0.05 * float64(warlock.Talents.ImprovedImmolate),
+		ClassMask:  WarlockSpellImmolate,
 	})
 }
 
@@ -507,7 +550,7 @@ func (warlock *Warlock) applyEmberstorm() {
 	warlock.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_CastTime_Pct,
 		FloatValue: 0.02 * float64(warlock.Talents.Emberstorm),
-		ClassMask:  WarlockSpellImmolate,
+		ClassMask:  WarlockSpellIncinerate,
 	})
 }
 
@@ -519,23 +562,38 @@ func (warlock *Warlock) applyBacklash() {
 	warlock.AddStat(stats.SpellCritPercent, float64(warlock.Talents.Backlash))
 }
 
+func (warlock *Warlock) applyConflagrate() {
+	if !warlock.Talents.Conflagrate {
+		return
+	}
+
+	warlock.registerConflagrate()
+}
+
 // ToDo
 func (warlock *Warlock) applySoulLeech() {
 	if warlock.Talents.SoulLeech == 0 {
 		return
 	}
-
-	warlock.AddStaticMod(core.SpellModConfig{
-		Kind: core.SpellMod_Custom,
-		ApplyCustom: func(mod *core.SpellMod, spell *core.Spell) {
-
+	healthMetric := warlock.NewHealthMetrics(core.ActionID{SpellID: 30296})
+	warlock.RegisterAura(core.Aura{
+		Label:    "Soul Leech",
+		Duration: core.NeverExpires,
+		OnReset: func(aura *core.Aura, sim *core.Simulation) {
+			aura.Activate(sim)
 		},
-		RemoveCustom: func(mod *core.SpellMod, spell *core.Spell) {
+		OnSpellHitDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 
+			if spell.ClassSpellMask != WarlockSoulLeech || result.Outcome != core.OutcomeHit {
+				return
+			}
+
+			if !sim.Proc(0.10*float64(warlock.Talents.SoulLeech), "Soul Leech") {
+				return
+			}
+
+			warlock.GainHealth(sim, result.Damage*warlock.HealthRegainModifier, healthMetric)
 		},
-		ClassMask: WarlockSpellShadowBolt | WarlockSpellShadowBurn | WarlockSpellSoulFire |
-			WarlockSpellIncinerate | WarlockSpellSearingPain | WarlockSpellConflagrate,
-		FloatValue: 2.0,
 	})
 }
 
@@ -549,4 +607,12 @@ func (warlock *Warlock) applyShadowAndFlame() {
 		FloatValue: 0.04 * float64(warlock.Talents.ShadowAndFlame),
 		ClassMask:  WarlockSpellShadowBolt | WarlockSpellIncinerate,
 	})
+}
+
+func (warlock *Warlock) applyShadowfury() {
+	if !warlock.Talents.Shadowfury {
+		return
+	}
+
+	warlock.registerShadowfury()
 }

@@ -34,6 +34,7 @@ func (warlock *Warlock) registerCorruption() *core.Spell {
 			}
 			spell.DealOutcome(sim, result)
 		},
+		BonusCoefficient: corruptionCoeff,
 
 		Dot: core.DotConfig{
 			Aura: core.Aura{
@@ -44,7 +45,7 @@ func (warlock *Warlock) registerCorruption() *core.Spell {
 			NumberOfTicks:       6,
 			TickLength:          3 * time.Second,
 			AffectedByCastSpeed: false,
-			BonusCoefficient:    corruptionCoeff,
+			BonusCoefficient:    warlock.Corruption.BonusCoefficient,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, 900)
 			},

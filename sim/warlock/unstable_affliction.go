@@ -10,13 +10,13 @@ const uaCoeff = 0.2
 
 func (warlock *Warlock) registerUnstableAffliction() {
 	warlock.UnstableAffliction = warlock.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 30108},
+		ActionID:       core.ActionID{SpellID: 30405},
 		SpellSchool:    core.SpellSchoolShadow,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: WarlockSpellUnstableAffliction,
 
-		ManaCost: core.ManaCostOptions{BaseCostPercent: 1.5},
+		ManaCost: core.ManaCostOptions{FlatCost: 400},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD:      core.GCDDefault,
@@ -34,6 +34,7 @@ func (warlock *Warlock) registerUnstableAffliction() {
 			}
 			spell.DealOutcome(sim, result)
 		},
+		BonusCoefficient: uaCoeff,
 
 		Dot: core.DotConfig{
 			Aura: core.Aura{
@@ -47,7 +48,7 @@ func (warlock *Warlock) registerUnstableAffliction() {
 			BonusCoefficient:    uaCoeff,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.Snapshot(target, 1150)
+				dot.Snapshot(target, 1050)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)

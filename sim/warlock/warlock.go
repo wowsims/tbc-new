@@ -205,6 +205,7 @@ const (
 	WarlockSpellCurseOfTongues
 	WarlockSpellSiphonLife
 	WarlockSpellDrainSoul
+	WarlockSpellShadowFury
 	WarlockSpellAll int64 = 1<<iota - 1
 
 	WarlockShadowDamage = WarlockSpellCorruption | WarlockSpellUnstableAffliction | WarlockSpellDrainLife | WarlockSpellAgony |
@@ -228,6 +229,9 @@ const (
 
 	WarlockCurses = WarlockSpellCurseOfAgony | WarlockSpellCurseOfDoom | WarlockSpellCurseOfElements |
 		WarlockSpellCurseOfRecklessness | WarlockSpellCurseOfTongues | WarlockSpellCurseOfWeakness
+
+	WarlockSoulLeech = WarlockSpellShadowBolt | WarlockSpellShadowBurn | WarlockSpellSoulFire |
+		WarlockSpellIncinerate | WarlockSpellSearingPain | WarlockSpellConflagrate
 
 	WarlockAfflictionSpells = WarlockSpellCorruption | WarlockSpellCurseOfAgony | WarlockSpellCurseOfDoom | WarlockSpellCurseOfRecklessness | WarlockSpellCurseOfElements |
 		WarlockSpellCurseOfTongues | WarlockSpellCurseOfWeakness | WarlockSpellDrainLife |
