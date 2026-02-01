@@ -67,7 +67,7 @@ enum Spec {
 
 	SpecWarlock = 17;
 
-	SpecDPSWarrior = 18;
+	SpecDpsWarrior = 18;
 	SpecProtectionWarrior = 19;
 }
 

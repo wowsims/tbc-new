@@ -80,7 +80,7 @@ func (character *Character) enableItemSwap(itemSwap *proto.ItemSwap, mhCritMulti
 	equipmentStats := calcItemSwapStatsOffset(character.Equipment, swapItems, prepullBonusStats, slots, character.Spec)
 
 	character.ItemSwap = ItemSwap{
-		isFuryWarrior:        character.Spec == proto.Spec_SpecDPSWarrior,
+		isFuryWarrior:        character.Spec == proto.Spec_SpecDpsWarrior,
 		isFeralDruid:         character.Spec == proto.Spec_SpecFeralCatDruid || character.Spec == proto.Spec_SpecFeralBearDruid,
 		mhCritMultiplier:     mhCritMultiplier,
 		ohCritMultiplier:     ohCritMultiplier,

@@ -15,7 +15,7 @@ import * as Presets from './presets';
 const P2HitPostCapEPs = [0, 0];
 const P3HitPostCapEPs = [0.42 * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT, 0];
 
-const SPEC_CONFIG = registerSpecConfig(Spec.SpecDPSWarrior, {
+const SPEC_CONFIG = registerSpecConfig(Spec.SpecDpsWarrior, {
 	cssClass: 'dps-warrior-sim-ui',
 	cssScheme: PlayerClasses.getCssClass(PlayerClasses.Warrior),
 	// List any known bugs / issues here and they'll be shown on the site.
@@ -115,13 +115,13 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecDPSWarrior, {
 		builds: [Presets.P1_PRESET_BUILD_SMF, Presets.P1_PRESET_BUILD_TG],
 	},
 
-	autoRotation: (_player: Player<Spec.SpecDPSWarrior>): APLRotation => {
+	autoRotation: (_player: Player<Spec.SpecDpsWarrior>): APLRotation => {
 		return Presets.FURY_DEFAULT_ROTATION.rotation.rotation!;
 	},
 
 	raidSimPresets: [
 		{
-			spec: Spec.SpecDPSWarrior,
+			spec: Spec.SpecDpsWarrior,
 			talents: Presets.FurySMFTalents.data,
 			specOptions: Presets.DefaultOptions,
 			consumables: Presets.DefaultConsumables,
@@ -150,8 +150,8 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecDPSWarrior, {
 	],
 });
 
-export class DPSWarriorSimUI extends IndividualSimUI<Spec.SpecDPSWarrior> {
-	constructor(parentElem: HTMLElement, player: Player<Spec.SpecDPSWarrior>) {
+export class DpsWarriorSimUI extends IndividualSimUI<Spec.SpecDpsWarrior> {
+	constructor(parentElem: HTMLElement, player: Player<Spec.SpecDpsWarrior>) {
 		super(parentElem, player, SPEC_CONFIG);
 	}
 }

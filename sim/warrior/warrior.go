@@ -88,11 +88,12 @@ type Warrior struct {
 
 	HeroicStrikeCleaveCostMod *core.SpellMod
 
-	BattleShout     *core.Spell
-	CommandingShout *core.Spell
-	BattleStance    *core.Spell
-	DefensiveStance *core.Spell
-	BerserkerStance *core.Spell
+	BattleShout       *core.Spell
+	CommandingShout   *core.Spell
+	DemoralizingShout *core.Spell
+	BattleStance      *core.Spell
+	DefensiveStance   *core.Spell
+	BerserkerStance   *core.Spell
 
 	Rend                            *core.Spell
 	DeepWounds                      *core.Spell

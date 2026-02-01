@@ -107,9 +107,9 @@ import {
 	WarlockTalents,
 } from '../proto/warlock.js';
 import {
-	DPSWarrior,
-	DPSWarrior_Options,
-	DPSWarrior_Rotation,
+	DpsWarrior,
+	DpsWarrior_Options,
+	DpsWarrior_Rotation,
 	ProtectionWarrior,
 	ProtectionWarrior_Options,
 	ProtectionWarrior_Rotation,
@@ -181,7 +181,7 @@ export type PriestSpecs = Spec.SpecDisciplinePriest | Spec.SpecHolyPriest | Spec
 export type RogueSpecs = Spec.SpecRogue;
 export type ShamanSpecs = Spec.SpecElementalShaman | Spec.SpecEnhancementShaman | Spec.SpecRestorationShaman;
 export type WarlockSpecs = Spec.SpecWarlock;
-export type WarriorSpecs = Spec.SpecDPSWarrior | Spec.SpecProtectionWarrior;
+export type WarriorSpecs = Spec.SpecDpsWarrior | Spec.SpecProtectionWarrior;
 
 export type ClassSpecs<T extends Class> = T extends Class.ClassDruid
 	? DruidSpecs
@@ -279,8 +279,8 @@ export type SpecRotation<T extends Spec> =
 																							T extends Spec.SpecWarlock
 																							? Warlock_Rotation
 																									: // Warrior
-																										T extends Spec.SpecDPSWarrior
-																										? DPSWarrior_Rotation
+																										T extends Spec.SpecDpsWarrior
+																										? DpsWarrior_Rotation
 																											: T extends Spec.SpecProtectionWarrior
 																												? ProtectionWarrior_Rotation
 																												: // Should never reach this case
@@ -392,8 +392,8 @@ export type SpecOptions<T extends Spec> =
 																							T extends Spec.SpecWarlock
 																							? Warlock_Options
 																									: // Warrior
-																										T extends Spec.SpecDPSWarrior
-																										? DPSWarrior_Options
+																										T extends Spec.SpecDpsWarrior
+																										? DpsWarrior_Options
 																											: T extends Spec.SpecProtectionWarrior
 																												? ProtectionWarrior_Options
 																												: // Should never reach this case
@@ -443,8 +443,8 @@ export type SpecType<T extends Spec> =
 																							T extends Spec.SpecWarlock
 																							? Warlock
 																									: // Warrior
-																										T extends Spec.SpecDPSWarrior
-																										? DPSWarrior
+																										T extends Spec.SpecDpsWarrior
+																										? DpsWarrior
 																											: T extends Spec.SpecProtectionWarrior
 																												? ProtectionWarrior
 																												: // Should never reach this case
@@ -893,12 +893,12 @@ export const specTypeFunctions: Record<Spec, SpecTypeFunctions<any>> = {
 				: Warlock_Options.create({ classOptions: {} }),
 	},
 	// Warrior
-	[Spec.SpecDPSWarrior]: {
-		rotationCreate: () => DPSWarrior_Rotation.create(),
-		rotationEquals: (a, b) => DPSWarrior_Rotation.equals(a as DPSWarrior_Rotation, b as DPSWarrior_Rotation),
-		rotationCopy: a => DPSWarrior_Rotation.clone(a as DPSWarrior_Rotation),
-		rotationToJson: a => DPSWarrior_Rotation.toJson(a as DPSWarrior_Rotation),
-		rotationFromJson: obj => DPSWarrior_Rotation.fromJson(obj),
+	[Spec.SpecDpsWarrior]: {
+		rotationCreate: () => DpsWarrior_Rotation.create(),
+		rotationEquals: (a, b) => DpsWarrior_Rotation.equals(a as DpsWarrior_Rotation, b as DpsWarrior_Rotation),
+		rotationCopy: a => DpsWarrior_Rotation.clone(a as DpsWarrior_Rotation),
+		rotationToJson: a => DpsWarrior_Rotation.toJson(a as DpsWarrior_Rotation),
+		rotationFromJson: obj => DpsWarrior_Rotation.fromJson(obj),
 
 		talentsCreate: () => WarriorTalents.create(),
 		talentsEquals: (a, b) => WarriorTalents.equals(a as WarriorTalents, b as WarriorTalents),
@@ -906,15 +906,15 @@ export const specTypeFunctions: Record<Spec, SpecTypeFunctions<any>> = {
 		talentsToJson: a => WarriorTalents.toJson(a as WarriorTalents),
 		talentsFromJson: obj => WarriorTalents.fromJson(obj),
 
-		optionsCreate: () => DPSWarrior_Options.create({ classOptions: {} }),
-		optionsEquals: (a, b) => DPSWarrior_Options.equals(a as DPSWarrior_Options, b as DPSWarrior_Options),
-		optionsCopy: a => DPSWarrior_Options.clone(a as DPSWarrior_Options),
-		optionsToJson: a => DPSWarrior_Options.toJson(a as DPSWarrior_Options),
-		optionsFromJson: obj => DPSWarrior_Options.fromJson(obj),
+		optionsCreate: () => DpsWarrior_Options.create({ classOptions: {} }),
+		optionsEquals: (a, b) => DpsWarrior_Options.equals(a as DpsWarrior_Options, b as DpsWarrior_Options),
+		optionsCopy: a => DpsWarrior_Options.clone(a as DpsWarrior_Options),
+		optionsToJson: a => DpsWarrior_Options.toJson(a as DpsWarrior_Options),
+		optionsFromJson: obj => DpsWarrior_Options.fromJson(obj),
 		optionsFromPlayer: player =>
 			player.spec.oneofKind == 'dpsWarrior'
-				? player.spec.dpsWarrior.options || DPSWarrior_Options.create()
-				: DPSWarrior_Options.create({ classOptions: {} }),
+				? player.spec.dpsWarrior.options || DpsWarrior_Options.create()
+				: DpsWarrior_Options.create({ classOptions: {} }),
 	},
 	[Spec.SpecProtectionWarrior]: {
 		rotationCreate: () => ProtectionWarrior_Rotation.create(),
@@ -1107,11 +1107,11 @@ export function withSpec<SpecType extends Spec>(spec: Spec, player: Player, spec
 			};
 			return copy;
 		// Warrior
-		case Spec.SpecDPSWarrior:
+		case Spec.SpecDpsWarrior:
 			copy.spec = {
 				oneofKind: 'dpsWarrior',
-				dpsWarrior: DPSWarrior.create({
-					options: specOptions as DPSWarrior_Options,
+				dpsWarrior: DpsWarrior.create({
+					options: specOptions as DpsWarrior_Options,
 				}),
 			};
 			return copy;
@@ -1192,7 +1192,7 @@ export function canEquipItem<SpecType extends Spec>(item: Item, playerSpec: Play
 		if (item.handType == HandType.HandTypeTwoHand && !eligibleWeaponType.canUseTwoHand) {
 			return false;
 		}
-		if (item.handType == HandType.HandTypeTwoHand && slot == ItemSlot.ItemSlotOffHand && playerSpec.specID != Spec.SpecDPSWarrior) {
+		if (item.handType == HandType.HandTypeTwoHand && slot == ItemSlot.ItemSlotOffHand && playerSpec.specID != Spec.SpecDpsWarrior) {
 			return false;
 		}
 

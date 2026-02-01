@@ -7,7 +7,7 @@ import { WarriorSyncType } from '../../core/proto/warrior';
 import { Stats } from '../../core/proto_utils/stats';
 import i18n from '../../i18n/config.js';
 
-export const SyncTypeInput = InputHelpers.makeSpecOptionsEnumInput<Spec.SpecDPSWarrior, WarriorSyncType>({
+export const SyncTypeInput = InputHelpers.makeSpecOptionsEnumInput<Spec.SpecDpsWarrior, WarriorSyncType>({
 	fieldName: 'syncType',
 	label: i18n.t('settings_tab.other.sync_type.label'),
 	labelTooltip: i18n.t('settings_tab.other.sync_type.tooltip'),

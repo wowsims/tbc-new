@@ -97,7 +97,7 @@ export class BulkTab extends SimTab {
 
 		this.simUI = simUI;
 		this.playerCanDualWield = this.simUI.player.getPlayerSpec().canDualWield && this.simUI.player.getClass() !== Class.ClassHunter;
-		this.playerIsFuryWarrior = this.simUI.player.getSpec() === Spec.SpecDPSWarrior;
+		this.playerIsFuryWarrior = this.simUI.player.getSpec() === Spec.SpecDpsWarrior;
 
 		const setupTabBtnRef = ref<HTMLButtonElement>();
 		const setupTabRef = ref<HTMLDivElement>();

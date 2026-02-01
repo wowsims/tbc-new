@@ -28,7 +28,7 @@ func applyDebuffEffects(target *Unit, targetIdx int, debuffs *proto.Debuffs, rai
 	}
 
 	if debuffs.DemoralizingShout != proto.TristateEffect_TristateEffectMissing {
-		MakePermanent(DemoralizingRoarAura(target, IsImproved(debuffs.DemoralizingRoar)))
+		MakePermanent(DemoralizingShoutAura(target, 5, TernaryInt32(IsImproved(debuffs.DemoralizingShout), 5, 0)))
 	}
 
 	if debuffs.ExposeArmor != proto.TristateEffect_TristateEffectMissing {
@@ -143,7 +143,7 @@ func CurseOfElementsAura(target *Unit, improved bool) *Aura {
 }
 
 func CurseOfRecklessnessAura(target *Unit) *Aura {
-	return statsDebuff(target, "Curse of Recklesness", 27226, stats.Stats{stats.Armor: -800, stats.AttackPower: 135})
+	return statsDebuff(target, "Curse of Recklesness", 27226, stats.Stats{stats.Armor: -800, stats.AttackPower: 135}, time.Minute*2)
 }
 
 func DemoralizingRoarAura(target *Unit, improved bool) *Aura {
@@ -152,16 +152,14 @@ func DemoralizingRoarAura(target *Unit, improved bool) *Aura {
 		apReduction *= 1.4
 	}
 
-	return statsDebuff(target, "Demoralizing Roar", 26998, stats.Stats{stats.AttackPower: apReduction})
+	return statsDebuff(target, "Demoralizing Roar", 26998, stats.Stats{stats.AttackPower: apReduction}, time.Second*30)
 }
 
-func DemoralizingShoutAura(target *Unit, improved bool) *Aura {
-	apReduction := 300.0
-	if improved {
-		apReduction *= 1.4
-	}
+func DemoralizingShoutAura(target *Unit, boomingVoicePoints int32, improvedDemoShoutPoints int32) *Aura {
+	apReduction := 300.0 * (1 + 0.1*float64(improvedDemoShoutPoints))
+	duration := time.Duration(float64(time.Second*30) * (1 + 0.1*float64(boomingVoicePoints)))
 
-	return statsDebuff(target, "Demoralizing Shout", 25203, stats.Stats{stats.AttackPower: apReduction})
+	return statsDebuff(target, "Demoralizing Shout", 25203, stats.Stats{stats.AttackPower: apReduction}, duration)
 }
 
 func ExposeArmorAura(target *Unit, improved bool) *Aura {
@@ -169,7 +167,7 @@ func ExposeArmorAura(target *Unit, improved bool) *Aura {
 	if improved {
 		eaValue *= 1.50
 	}
-	return statsDebuff(target, "Expose Armor", 26866, stats.Stats{stats.Armor: -eaValue})
+	return statsDebuff(target, "Expose Armor", 26866, stats.Stats{stats.Armor: -eaValue}, time.Second*30)
 }
 
 func ExposeWeaknessAura(target *Unit, uptime float64, hunterAgility float64) *Aura {
@@ -327,10 +325,16 @@ func ImprovedShadowBoltAura(target *Unit, uptime float64, points int32) *Aura {
 }
 
 func InsectSwarmAura(target *Unit) *Aura {
-	return statsDebuff(target, "Insect Swarm", 27013, stats.Stats{
-		stats.AllPhysHitRating: 0.98,
-		stats.SpellHitPercent:  0.98,
-	})
+	return statsDebuff(
+		target,
+		"Insect Swarm",
+		27013,
+		stats.Stats{
+			stats.AllPhysHitRating: 0.98,
+			stats.SpellHitPercent:  0.98,
+		},
+		time.Second*12,
+	)
 }
 
 func JudgementOfLightAura(target *Unit) *Aura {
@@ -417,11 +421,11 @@ func MiseryAura(target *Unit) *Aura {
 }
 
 func ScorpidStingAura(target *Unit) *Aura {
-	return statsDebuff(target, "Scorpid Sting", 3043, stats.Stats{stats.AllPhysHitRating: -5.0})
+	return statsDebuff(target, "Scorpid Sting", 3043, stats.Stats{stats.AllPhysHitRating: -5.0}, time.Second*20)
 }
 
 func ScreechAura(target *Unit) *Aura {
-	return statsDebuff(target, "Screech", 27051, stats.Stats{stats.AttackPower: -210})
+	return statsDebuff(target, "Screech", 27051, stats.Stats{stats.AttackPower: -210}, time.Second*4)
 }
 
 func ShadowEmbraceAura(target *Unit) *Aura {
@@ -441,7 +445,7 @@ func StormstrikeAura(target *Unit, uptime float64) *Aura {
 }
 
 func SunderArmorAura(target *Unit) *Aura {
-	return statsDebuff(target, "Sunder Amor", 25225, stats.Stats{stats.Armor: -2600})
+	return statsDebuff(target, "Sunder Amor", 25225, stats.Stats{stats.Armor: -2600}, time.Second*30)
 }
 
 func WintersChillAura(target *Unit, startingStacks int32) *Aura {
@@ -517,10 +521,14 @@ func damageDealtDebuff(target *Unit, label string, spellID int32, schools []stat
 	})
 }
 
-func statsDebuff(target *Unit, label string, spellID int32, stats stats.Stats) *Aura {
+func statsDebuff(target *Unit, label string, spellID int32, stats stats.Stats, duration time.Duration) *Aura {
+	if duration == 0 {
+		duration = time.Second * 30
+	}
+
 	return target.GetOrRegisterAura(Aura{
 		Label:    label,
 		ActionID: ActionID{SpellID: spellID},
-		Duration: time.Second * 30,
+		Duration: duration,
 	}).AttachStatsBuff(stats)
 }

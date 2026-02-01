@@ -10,7 +10,7 @@ import (
 func RegisterDpsWarrior() {
 	core.RegisterAgentFactory(
 		proto.Player_DpsWarrior{},
-		proto.Spec_SpecDPSWarrior,
+		proto.Spec_SpecDpsWarrior,
 		func(character *core.Character, options *proto.Player) core.Agent {
 			return NewDpsWarrior(character, options)
 		},
@@ -27,7 +27,7 @@ func RegisterDpsWarrior() {
 type DpsWarrior struct {
 	*warrior.Warrior
 
-	Options *proto.DPSWarrior_Options
+	Options *proto.DpsWarrior_Options
 
 	BloodsurgeAura  *core.Aura
 	MeatCleaverAura *core.Aura

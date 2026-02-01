@@ -498,6 +498,7 @@ func (war *Warrior) registerImprovedMortalStrike() {
 		FloatValue: float64(war.Talents.ImprovedMortalStrike),
 	})
 }
+
 func (war *Warrior) registerEndlessRage() {
 	if !war.Talents.EndlessRage {
 		return

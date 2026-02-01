@@ -82,7 +82,7 @@ message WarriorTalents {
 message WarriorOptions {
 }
 
-message DPSWarrior {
+message DpsWarrior {
 	message Rotation {}
 
 	message Options {

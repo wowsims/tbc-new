@@ -115,6 +115,7 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 	if partyBuffs.BattleShout != proto.TristateEffect_TristateEffectMissing {
 		BattleShoutAura(
 			char,
+			5,
 			TernaryFloat64(IsImproved(partyBuffs.BattleShout), 1.25, 1.0),
 			partyBuffs.BsSolarianSapphire,
 		)
@@ -135,6 +136,7 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 	if partyBuffs.CommandingShout != proto.TristateEffect_TristateEffectMissing {
 		CommandingShoutAura(
 			char,
+			5,
 			TernaryFloat64(IsImproved(partyBuffs.CommandingShout), 1.25, 1.0),
 			false,
 		)
@@ -349,7 +351,7 @@ func ShadowProtectionAura(char *Character) *Aura {
 //							Party Buffs
 ///////////////////////////////////////////////////////////////////////////
 
-func BattleShoutAura(char *Character, apMultiplier float64, hasSolarianSapphire bool) *Aura {
+func BattleShoutAura(char *Character, boomingVoicePoints int32, apMultiplier float64, hasSolarianSapphire bool) *Aura {
 	apBuff := 306.0
 	if hasSolarianSapphire {
 		apBuff += 70
@@ -360,7 +362,7 @@ func BattleShoutAura(char *Character, apMultiplier float64, hasSolarianSapphire 
 	return makeStatBuff(char, BuffConfig{
 		Label:    "Battle Shout",
 		ActionID: ActionID{SpellID: 2048},
-		Duration: time.Minute * 2,
+		Duration: time.Duration(float64(time.Minute*2) * (1 + 0.25*float64(boomingVoicePoints))),
 		Stats: []StatConfig{
 			{stats.AttackPower, apBuff, false},
 		},
@@ -382,7 +384,7 @@ func BloodPactAura(char *Character, improved bool) *Aura {
 	})
 }
 
-func CommandingShoutAura(char *Character, hpMultiplier float64, hasT6Tank2P bool) *Aura {
+func CommandingShoutAura(char *Character, boomingVoicePoints int32, hpMultiplier float64, hasT6Tank2P bool) *Aura {
 	hpBuff := 1080.0
 	if hasT6Tank2P {
 		hpBuff += 170
@@ -392,7 +394,7 @@ func CommandingShoutAura(char *Character, hpMultiplier float64, hasT6Tank2P bool
 	return makeStatBuff(char, BuffConfig{
 		Label:    "Commanding Shout",
 		ActionID: ActionID{SpellID: 469},
-		Duration: time.Minute * 2,
+		Duration: time.Duration(float64(time.Minute*2) * (1 + 0.25*float64(boomingVoicePoints))),
 		Stats: []StatConfig{
 			{stats.Health, hpBuff, false},
 		},

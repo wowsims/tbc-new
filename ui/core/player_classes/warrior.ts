@@ -1,6 +1,6 @@
 import { EligibleWeaponType, IconSize, PlayerClass } from '../player_class';
 import { PlayerSpec } from '../player_spec';
-import { DPSWarrior, ProtectionWarrior } from '../player_specs/warrior';
+import { DpsWarrior, ProtectionWarrior } from '../player_specs/warrior';
 import { ArmorType, Class, Race, RangedWeaponType, WeaponType } from '../proto/common';
 import { WarriorSpecs } from '../proto_utils/utils';
 
@@ -9,7 +9,7 @@ export class Warrior extends PlayerClass<Class.ClassWarrior> {
 	static friendlyName = 'Warrior';
 	static hexColor = '#c79c6e';
 	static specs: Record<string, PlayerSpec<WarriorSpecs>> = {
-		[DPSWarrior.friendlyName]: DPSWarrior,
+		[DpsWarrior.friendlyName]: DpsWarrior,
 		[ProtectionWarrior.friendlyName]: ProtectionWarrior,
 	};
 	static races: Race[] = [

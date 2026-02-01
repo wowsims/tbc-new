@@ -7,7 +7,7 @@ import i18n from '../i18n/config.js';
 
 // Arms/Fury only
 
-// export const StanceSnapshot = <SpecType extends Spec.SpecDPSWarrior | Spec.SpecProtectionWarrior>() =>
+// export const StanceSnapshot = <SpecType extends Spec.SpecDpsWarrior | Spec.SpecProtectionWarrior>() =>
 // 	InputHelpers.makeSpecOptionsBooleanInput<SpecType>({
 // 		fieldName: 'stanceSnapshot',
 // 		label: i18n.t('settings_tab.other.stance_snapshot.label'),

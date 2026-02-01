@@ -194,6 +194,6 @@ const ConsumeRow = ({ label, children }: { label: string; children: JSX.Element 
 	</div>
 );
 function isDualWieldSpec(spec: any): boolean {
-	return [Spec.SpecEnhancementShaman, Spec.SpecHunter, Spec.SpecRogue, Spec.SpecDPSWarrior, Spec.SpecProtectionWarrior].includes(spec)
+	return [Spec.SpecEnhancementShaman, Spec.SpecHunter, Spec.SpecRogue, Spec.SpecDpsWarrior, Spec.SpecProtectionWarrior].includes(spec)
 }
 

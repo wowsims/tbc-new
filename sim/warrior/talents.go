@@ -9,6 +9,7 @@ package warrior
 
 func (war *Warrior) ApplyTalents() {
 	war.registerArmsTalents()
+	war.registerFuryTalents()
 }
 
 // func (war *Warrior) registerJuggernaut() {

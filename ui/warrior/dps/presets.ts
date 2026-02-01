@@ -2,7 +2,7 @@ import { Player } from '../../core/player';
 import * as PresetUtils from '../../core/preset_utils';
 import { ConsumesSpec, HandType, ItemSlot, Profession, PseudoStat, Race, Spec, Stat } from '../../core/proto/common';
 import { SavedTalents } from '../../core/proto/ui';
-import { DPSWarrior_Options as WarriorOptions } from '../../core/proto/warrior';
+import { DpsWarrior_Options as WarriorOptions } from '../../core/proto/warrior';
 import { Stats } from '../../core/proto_utils/stats';
 import DefaultFuryApl from './apls/default.apl.json';
 import P2FurySMFGear from './gear_sets/p2_fury_smf.gear.json';
@@ -19,11 +19,11 @@ import PreraidFuryTGGear from './gear_sets/preraid_fury_tg.gear.json';
 
 // Handlers for spec specific load checks
 const FURY_SMF_PRESET_OPTIONS = {
-	onLoad: (player: Player<Spec.SpecDPSWarrior>) => {
+	onLoad: (player: Player<Spec.SpecDpsWarrior>) => {
 		PresetUtils.makeSpecChangeWarningToast(
 			[
 				{
-					condition: (player: Player<Spec.SpecDPSWarrior>) =>
+					condition: (player: Player<Spec.SpecDpsWarrior>) =>
 						player.getEquippedItem(ItemSlot.ItemSlotMainHand)?.item.handType === HandType.HandTypeTwoHand,
 					message: 'Check your gear: You have a two-handed weapon equipped, but the selected option is for one-handed weapons.',
 				},
@@ -37,7 +37,7 @@ const FURY_TG_PRESET_OPTIONS = {
 		PresetUtils.makeSpecChangeWarningToast(
 			[
 				{
-					condition: (player: Player<Spec.SpecDPSWarrior>) =>
+					condition: (player: Player<Spec.SpecDpsWarrior>) =>
 						player.getEquippedItem(ItemSlot.ItemSlotMainHand)?.item.handType === HandType.HandTypeOneHand,
 					message: 'Check your gear: You have a one-handed weapon equipped, but the selected option is for two-handed weapons.',
 				},
