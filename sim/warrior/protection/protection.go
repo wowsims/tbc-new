@@ -32,9 +32,8 @@ type ProtectionWarrior struct {
 	SwordAndBoardAura *core.Aura
 }
 
-// ApplyTalents implements core.Agent.
 func (war *ProtectionWarrior) ApplyTalents() {
-	// panic("unimplemented")
+	war.Warrior.ApplyTalents()
 }
 
 func NewProtectionWarrior(character *core.Character, options *proto.Player) *ProtectionWarrior {

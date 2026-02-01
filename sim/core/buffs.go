@@ -793,6 +793,7 @@ func DraneiRacialAura(char *Character, caster bool) *Aura {
 			ActionID: ActionID{SpellID: 6562},
 			Stats: []StatConfig{
 				{stats.PhysicalHitPercent, 1, false},
+				{stats.RangedHitPercent, 1, false},
 			},
 		})
 	}

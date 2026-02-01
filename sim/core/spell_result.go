@@ -711,9 +711,9 @@ func (result *SpellResult) applyTargetModifiers(sim *Simulation, spell *Spell, a
 		return
 	}
 
-	if spell.SpellSchool == SpellSchoolPhysical {
+	if spell.SpellSchool.Matches(SpellSchoolPhysical) {
 		result.Damage += attackTable.Defender.PseudoStats.BonusPhysicalDamageTaken
-	} else if spell.SpellSchool != SpellSchoolPhysical && spell.SpellSchool != SpellSchoolNone {
+	} else if !spell.SpellSchool.Matches(SpellSchoolPhysical) && !spell.SpellSchool.Matches(SpellSchoolNone) {
 		result.Damage += attackTable.Defender.PseudoStats.BonusSpellDamageTaken
 	}
 

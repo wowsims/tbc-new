@@ -1,12 +1,5 @@
 package warrior
 
-// import (
-// 	"time"
-
-// 	"github.com/wowsims/tbc/sim/core"
-// 	"github.com/wowsims/tbc/sim/core/proto"
-// )
-
 func (war *Warrior) ApplyTalents() {
 	war.registerArmsTalents()
 	war.registerFuryTalents()

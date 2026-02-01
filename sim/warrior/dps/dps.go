@@ -33,9 +33,8 @@ type DpsWarrior struct {
 	MeatCleaverAura *core.Aura
 }
 
-// ApplyTalents implements core.Agent.
 func (war *DpsWarrior) ApplyTalents() {
-	// panic("unimplemented")
+	war.Warrior.ApplyTalents()
 }
 
 func NewDpsWarrior(character *core.Character, options *proto.Player) *DpsWarrior {

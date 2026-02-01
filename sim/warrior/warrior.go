@@ -30,6 +30,11 @@ const (
 	SpellMaskIntercept
 	SpellMaskDemoralizingShout
 
+	// Stances
+	SpellMaskBattleStance
+	SpellMaskBerserkerStance
+	SpellMaskDefensiveStance
+
 	// Special attacks
 	SpellMaskRend
 	SpellMaskDeepWounds
@@ -95,11 +100,10 @@ type Warrior struct {
 	DefensiveStance   *core.Spell
 	BerserkerStance   *core.Spell
 
-	Rend                            *core.Spell
-	DeepWounds                      *core.Spell
-	MortalStrike                    *core.Spell
-	ShieldSlam                      *core.Spell
-	SweepingStrikesNormalizedAttack *core.Spell
+	Rend         *core.Spell
+	DeepWounds   *core.Spell
+	MortalStrike *core.Spell
+	ShieldSlam   *core.Spell
 
 	sharedShoutsCD   *core.Timer
 	sharedHSCleaveCD *core.Timer
@@ -150,7 +154,6 @@ func (warrior *Warrior) Initialize() {
 	warrior.registerShouts()
 	warrior.registerPassives()
 
-	// warrior.registerBerserkerRage()
 	// warrior.registerRallyingCry()
 	// warrior.registerExecuteSpell()
 	// warrior.registerHeroicStrikeSpell()
@@ -231,17 +234,6 @@ func NewWarrior(character *core.Character, options *proto.WarriorOptions, talent
 
 func (warrior *Warrior) GetCriticalBlockChance() float64 {
 	return warrior.CriticalBlockChance[0] + warrior.CriticalBlockChance[1]
-}
-
-func (warrior *Warrior) CastNormalizedSweepingStrikesAttack(results core.SpellResultSlice, sim *core.Simulation) {
-	if warrior.SweepingStrikesAura != nil && warrior.SweepingStrikesAura.IsActive() {
-		for _, result := range results {
-			if result.Landed() {
-				warrior.SweepingStrikesNormalizedAttack.Cast(sim, warrior.Env.NextActiveTargetUnit(result.Target))
-				break
-			}
-		}
-	}
 }
 
 // Agent is a generic way to access underlying warrior on any of the agents.

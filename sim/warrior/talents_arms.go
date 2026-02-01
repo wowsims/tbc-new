@@ -97,8 +97,8 @@ func (war *Warrior) registerImprovedThunderClap() {
 		return
 	}
 
-	rageCostReduction := []float64{1, 2, 4}[war.Talents.ImprovedThunderClap]
-	damageGain := []float64{0.4, 0.7, 1.0}[war.Talents.ImprovedThunderClap]
+	rageCostReduction := []float64{0, 1, 2, 4}[war.Talents.ImprovedThunderClap]
+	damageGain := []float64{0, 0.4, 0.7, 1.0}[war.Talents.ImprovedThunderClap]
 
 	war.AddStaticMod(core.SpellModConfig{
 		ClassMask:  SpellMaskThunderClap,
@@ -400,6 +400,7 @@ func (war *Warrior) registerImprovedDisciplines() {
 	}
 
 	cooldownReduction := []time.Duration{
+		0,
 		4 * time.Minute,
 		7 * time.Minute,
 		10 * time.Minute,
@@ -476,7 +477,11 @@ func (war *Warrior) registerMortalStrike() {
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			baseDamage := 210 + spell.Unit.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower())
-			spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeWeaponSpecialHitAndCrit)
+			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeWeaponSpecialHitAndCrit)
+
+			if !result.Landed() {
+				spell.IssueRefund(sim)
+			}
 		},
 	})
 }
