@@ -34,6 +34,14 @@ func applyConsumeEffects(agent Agent) {
 		character.AddStats(food.Stats)
 	}
 
+	// Static Imbues
+	if consumables.MhImbueId != 0 {
+		registerStaticImbue(agent, consumables.MhImbueId, true)
+	}
+	if consumables.OhImbueId != 0 {
+		registerStaticImbue(agent, consumables.OhImbueId, false)
+	}
+
 	// Scrolls
 	if consumables.ScrollAgi {
 		character.AddStat(stats.Agility, 20)
@@ -448,5 +456,26 @@ func registerDrumsCD(agent Agent, consumables *proto.ConsumesSpec) {
 				return true
 			},
 		})
+	}
+}
+
+func registerStaticImbue(agent Agent, imbueId int32, isMH bool) {
+	character := agent.GetCharacter()
+	switch imbueId {
+	case 25123: // Mana Oil
+		character.AddStat(stats.HealingPower, 25)
+		character.AddStat(stats.MP5, 12)
+	case 25122: // Briliant Wizard Oil
+		character.AddStat(stats.SpellDamage, 36)
+		character.AddStat(stats.SpellCritRating, 14)
+	case 28017: // Superior Wizard Oil
+		character.AddStat(stats.SpellDamage, 42)
+	case 29453, 34340: // Addy Stone
+		character.AddStat(stats.MeleeCritRating, 14)
+		if isMH {
+			character.bonusMHDps += 12
+		} else {
+			character.bonusOHDps += 12
+		}
 	}
 }
