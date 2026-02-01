@@ -313,98 +313,100 @@ func registerConjuredCD(agent Agent, consumes *proto.ConsumesSpec) {
 	}
 }
 
-var BigDaddyActionID = ActionID{SpellID: 89637}
-var HighpoweredBoltGunActionID = ActionID{ItemID: 40771}
+var SuperSapperActionID = ActionID{ItemID: 23827}
+var GoblinSapperActionID = ActionID{ItemID: 10646}
+var FelIronBombActionID = ActionID{ItemID: 23736}
+var AdamantiteGrenadeActionID = ActionID{ItemID: 23737}
+var GnomishFlameTurretActionID = ActionID{ItemID: 23841}
 
 func registerExplosivesCD(agent Agent, consumes *proto.ConsumesSpec) {
-	//Todo: Get them dynamically from dbc data
 	character := agent.GetCharacter()
 	if !character.HasProfession(proto.Profession_Engineering) {
 		return
 	}
-	switch consumes.ExplosiveId {
-	// case 89637:
-	// 	bomb := character.GetOrRegisterSpell(SpellConfig{
-	// 		ActionID:    BigDaddyActionID,
-	// 		SpellSchool: SpellSchoolFire,
-	// 		ProcMask:    ProcMaskEmpty,
-	// 		Flags:       SpellFlagAoE,
-
-	// 		Cast: CastConfig{
-	// 			CD: Cooldown{
-	// 				Timer:    character.NewTimer(),
-	// 				Duration: time.Minute,
-	// 			},
-
-	// 			DefaultCast: Cast{
-	// 				CastTime: time.Millisecond * 500,
-	// 			},
-
-	// 			ModifyCast: func(sim *Simulation, spell *Spell, cast *Cast) {
-	// 				spell.Unit.AutoAttacks.StopMeleeUntil(sim, sim.CurrentTime)
-	// 				spell.Unit.AutoAttacks.StopRangedUntil(sim, sim.CurrentTime)
-	// 			},
-	// 		},
-
-	// 		// Explosives always have 1% resist chance, so just give them hit cap.
-	// 		BonusHitPercent:  100,
-	// 		DamageMultiplier: 1,
-	// 		CritMultiplier:   2,
-	// 		ThreatMultiplier: 1,
-
-	// 		ApplyEffects: func(sim *Simulation, _ *Unit, spell *Spell) {
-	// 			spell.CalcAndDealAoeDamage(sim, 5006, spell.OutcomeMagicHitAndCrit)
-	// 		},
-	// 	})
-
-	// 	character.AddMajorCooldown(MajorCooldown{
-	// 		Spell:    bomb,
-	// 		Type:     CooldownTypeDPS | CooldownTypeExplosive,
-	// 		Priority: CooldownPriorityLow + 10,
-	// 	})
-	// case 40771:
-	// 	boltGun := character.GetOrRegisterSpell(SpellConfig{
-	// 		ActionID:    ActionID{SpellID: 82207},
-	// 		SpellSchool: SpellSchoolFire,
-	// 		ProcMask:    ProcMaskEmpty,
-	// 		Flags:       SpellFlagNoOnCastComplete | SpellFlagCanCastWhileMoving,
-
-	// 		Cast: CastConfig{
-	// 			DefaultCast: Cast{
-	// 				GCD:      GCDDefault,
-	// 				CastTime: time.Second,
-	// 			},
-	// 			IgnoreHaste: true,
-	// 			CD: Cooldown{
-	// 				Timer:    character.NewTimer(),
-	// 				Duration: time.Minute * 2,
-	// 			},
-	// 			SharedCD: Cooldown{
-	// 				Timer:    character.GetOffensiveTrinketCD(),
-	// 				Duration: time.Second * 15,
-	// 			},
-	// 		},
-
-	// 		// Explosives always have 1% resist chance, so just give them hit cap.
-	// 		BonusHitPercent:  100,
-	// 		DamageMultiplier: 1,
-	// 		CritMultiplier:   2,
-	// 		ThreatMultiplier: 1,
-
-	// 		ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
-	// 			spell.CalcAndDealDamage(sim, target, 8860, spell.OutcomeMagicHitAndCrit)
-	// 		},
-	// 	})
-
-	// 	character.AddMajorCooldown(MajorCooldown{
-	// 		Spell:    boltGun,
-	// 		Type:     CooldownTypeDPS | CooldownTypeExplosive,
-	// 		Priority: CooldownPriorityLow + 10,
-	// 		ShouldActivate: func(s *Simulation, c *Character) bool {
-	// 			return false // Intentionally not automatically used
-	// 		},
-	// 	})
+	if !consumes.GoblinSapper && !consumes.SuperSapper && consumes.ExplosiveId == 0 {
+		return
 	}
+	sharedTimer := character.NewTimer()
+
+	if consumes.SuperSapper {
+		character.AddMajorCooldown(MajorCooldown{
+			Spell:    character.newSuperSapperSpell(sharedTimer),
+			Type:     CooldownTypeDPS | CooldownTypeExplosive,
+			Priority: CooldownPriorityLow + 30,
+		})
+	}
+	if consumes.GoblinSapper {
+		character.AddMajorCooldown(MajorCooldown{
+			Spell:    character.newGoblinSapperSpell(sharedTimer),
+			Type:     CooldownTypeDPS | CooldownTypeExplosive,
+			Priority: CooldownPriorityLow + 20,
+		})
+	}
+	if consumes.ExplosiveId > 0 {
+		var filler *Spell
+		switch consumes.ExplosiveId {
+		case 30217:
+			filler = character.newAdamantiteGrenadeSpell(sharedTimer)
+		case 30216:
+			filler = character.newFelIronBombSpell(sharedTimer)
+		case 30526:
+			// Summon Gnomish Turret? Just treat it like a DoT? TBD
+		}
+
+		character.AddMajorCooldown(MajorCooldown{
+			Spell:    filler,
+			Type:     CooldownTypeDPS | CooldownTypeExplosive,
+			Priority: CooldownPriorityLow + 10,
+		})
+	}
+}
+
+// Creates a spell object for the common explosive case.
+func (character *Character) newBasicExplosiveSpellConfig(sharedTimer *Timer, actionID ActionID, school SpellSchool, minDamage float64, maxDamage float64, cooldown Cooldown) SpellConfig {
+	dealSelfDamage := actionID.SameAction(SuperSapperActionID) || actionID.SameAction(GoblinSapperActionID)
+
+	return SpellConfig{
+		ActionID:    actionID,
+		SpellSchool: school,
+		ProcMask:    ProcMaskEmpty,
+
+		Cast: CastConfig{
+			CD: cooldown,
+			SharedCD: Cooldown{
+				Timer:    sharedTimer,
+				Duration: time.Minute,
+			},
+		},
+
+		// Explosives always have 1% resist chance, so just give them hit cap.
+		BonusHitPercent:  100,
+		DamageMultiplier: 1,
+		CritMultiplier:   2,
+		ThreatMultiplier: 1,
+
+		ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
+			baseDamage := sim.Roll(minDamage, maxDamage) * sim.Encounter.AOECapMultiplier()
+			spell.CalcAndDealAoeDamage(sim, baseDamage, spell.OutcomeMagicHitAndCrit)
+
+			if dealSelfDamage {
+				baseDamage := sim.Roll(minDamage, maxDamage)
+				spell.CalcAndDealDamage(sim, &character.Unit, baseDamage, spell.OutcomeMagicHitAndCrit)
+			}
+		},
+	}
+}
+func (character *Character) newSuperSapperSpell(sharedTimer *Timer) *Spell {
+	return character.GetOrRegisterSpell(character.newBasicExplosiveSpellConfig(sharedTimer, SuperSapperActionID, SpellSchoolFire, 900, 1500, Cooldown{Timer: character.NewTimer(), Duration: time.Minute * 5}))
+}
+func (character *Character) newGoblinSapperSpell(sharedTimer *Timer) *Spell {
+	return character.GetOrRegisterSpell(character.newBasicExplosiveSpellConfig(sharedTimer, GoblinSapperActionID, SpellSchoolFire, 450, 750, Cooldown{Timer: character.NewTimer(), Duration: time.Minute * 5}))
+}
+func (character *Character) newAdamantiteGrenadeSpell(sharedTimer *Timer) *Spell {
+	return character.GetOrRegisterSpell(character.newBasicExplosiveSpellConfig(sharedTimer, AdamantiteGrenadeActionID, SpellSchoolFire, 450, 750, Cooldown{}))
+}
+func (character *Character) newFelIronBombSpell(sharedTimer *Timer) *Spell {
+	return character.GetOrRegisterSpell(character.newBasicExplosiveSpellConfig(sharedTimer, AdamantiteGrenadeActionID, SpellSchoolFire, 330, 770, Cooldown{}))
 }
 
 func registerDrumsCD(agent Agent, consumables *proto.ConsumesSpec) {

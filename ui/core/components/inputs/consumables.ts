@@ -118,7 +118,7 @@ export const GnomishFlameTurrent = {
 export const EXPLOSIVE_CONFIG = [
 	{ config: AdamantiteGrenade, stats: [] },
 	{ config: FelIronBomb, stats: [] },
-	{ config: GnomishFlameTurrent, stats: [] },
+	// { config: GnomishFlameTurrent, stats: [] }, Excluding this thing for now because it's weird and I don't like it
 ] as ConsumableStatOption<number>[];
 export const makeExplosivesInput = makeConsumeInputFactory({ consumesFieldName: 'explosiveId' });
 
