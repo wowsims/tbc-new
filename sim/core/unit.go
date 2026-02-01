@@ -1,7 +1,6 @@
 package core
 
 import (
-	"fmt"
 	"math"
 	"time"
 
@@ -886,15 +885,6 @@ func (unit *Unit) GetTotalDodgeChanceAsDefender(spell *Spell, atkTable *AttackTa
 		unit.GetDodgeFromRating() -
 		spell.DodgeParrySuppression() -
 		unit.PseudoStats.DodgeReduction
-
-	fmt.Println("Dodge chance",
-		unit.PseudoStats.BaseDodgeChance,
-		atkTable.BaseDodgeChance,
-		unit.GetDodgeFromRating(),
-		spell.DodgeParrySuppression(),
-		unit.PseudoStats.DodgeReduction,
-	)
-
 	return math.Max(chance, 0.0)
 }
 
