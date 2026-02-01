@@ -43,10 +43,7 @@ func (mage *Mage) registerEvocation() {
 
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
 			manaPerTick = mage.MaxMana() * .15
-			//manaRegenMulti = mage.TotalSpellHasteMultiplier()
-
 			spell.SelfHot().Apply(sim)
-			//spell.SelfHot().TickOnce(sim)
 		},
 	})
 

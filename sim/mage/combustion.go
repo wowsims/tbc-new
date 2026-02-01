@@ -62,6 +62,7 @@ func (mage *Mage) registerCombustionSpell() {
 			}
 
 			if numCrits >= 3 {
+				aura.Deactivate(sim)
 				return
 			}
 
