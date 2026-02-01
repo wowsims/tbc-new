@@ -581,6 +581,14 @@ message ConsumesSpec {
 	bool goblinSapper = 10;
 	int32 mhImbue_id = 11;
 	int32 ohImbue_id = 12;
+	int32 drums_id = 13;
+	bool scroll_agi = 14;
+	bool scroll_str = 15;
+	bool scroll_int = 16;
+	bool scroll_spi = 17;
+	bool scroll_arm = 18;
+	bool pet_scroll_agi = 19;
+	bool pet_scroll_str = 20;
 }
 
 enum MobType {

@@ -2359,6 +2359,30 @@
                 "mhImbue",
                 "ohImbue"
               ]
+            },
+            "drums": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "title"
+              ]
+            },
+            "scrolls": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "title"
+              ]
             }
           },
           "additionalProperties": false,
@@ -2369,7 +2393,9 @@
             "food",
             "engineering",
             "pet",
-            "imbue"
+            "imbue",
+            "drums",
+            "scrolls"
           ]
         },
         "encounter": {
