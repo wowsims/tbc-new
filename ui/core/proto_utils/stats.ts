@@ -107,6 +107,8 @@ export class UnitStat {
 			return ratingValue / Mechanics.DODGE_RATING_PER_DODGE_PERCENT;
 		} else if (this.linkedToStat(Stat.StatParryRating)) {
 			return ratingValue / Mechanics.PARRY_RATING_PER_PARRY_PERCENT;
+		} else if (this.linkedToStat(Stat.StatBlockRating)) {
+			return ratingValue / Mechanics.BLOCK_RATING_PER_BLOCK_PERCENT;
 		} else if (this.equalsPseudoStat(PseudoStat.PseudoStatMeleeHitPercent) || this.equalsPseudoStat(PseudoStat.PseudoStatRangedHitPercent)) {
 			return ratingValue / Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT;
 		} else if (this.equalsPseudoStat(PseudoStat.PseudoStatSpellHitPercent)) {
@@ -135,6 +137,8 @@ export class UnitStat {
 			return percentOrPointsValue * Mechanics.DODGE_RATING_PER_DODGE_PERCENT;
 		} else if (this.linkedToStat(Stat.StatParryRating)) {
 			return percentOrPointsValue * Mechanics.PARRY_RATING_PER_PARRY_PERCENT;
+		} else if (this.linkedToStat(Stat.StatBlockRating)) {
+			return percentOrPointsValue * Mechanics.BLOCK_RATING_PER_BLOCK_PERCENT;
 		} else if (this.equalsPseudoStat(PseudoStat.PseudoStatMeleeHitPercent) || this.equalsPseudoStat(PseudoStat.PseudoStatRangedHitPercent)) {
 			return percentOrPointsValue * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT;
 		} else if (this.equalsPseudoStat(PseudoStat.PseudoStatSpellHitPercent)) {
@@ -294,6 +298,8 @@ export class UnitStat {
 			return Stat.StatDodgeRating;
 		} else if (pseudoStatName.includes('Parry')) {
 			return Stat.StatParryRating;
+		} else if (pseudoStatName.includes('Block')) {
+			return Stat.StatBlockRating;
 		} else if (pseudoStatName.includes('SpellHaste')) {
 			return Stat.StatSpellHasteRating;
 		} else if (pseudoStatName.includes('SpellHit')) {
@@ -347,11 +353,11 @@ export class UnitStat {
 	// null if not applicable.
 	static getSiblingPseudoStat(pseudoStat: PseudoStat): PseudoStat | null {
 		switch (pseudoStat) {
-			case PseudoStat.PseudoStatMeleeHitPercent, PseudoStat.PseudoStatRangedHitPercent:
+			case (PseudoStat.PseudoStatMeleeHitPercent, PseudoStat.PseudoStatRangedHitPercent):
 				return PseudoStat.PseudoStatSpellHitPercent;
 			case PseudoStat.PseudoStatSpellHitPercent: // Unlikely to care about Ranged here...
 				return PseudoStat.PseudoStatMeleeHitPercent;
-			case PseudoStat.PseudoStatMeleeCritPercent, PseudoStat.PseudoStatRangedCritPercent:
+			case (PseudoStat.PseudoStatMeleeCritPercent, PseudoStat.PseudoStatRangedCritPercent):
 				return PseudoStat.PseudoStatSpellCritPercent;
 			case PseudoStat.PseudoStatSpellCritPercent:
 				return PseudoStat.PseudoStatMeleeHitPercent;
@@ -442,7 +448,7 @@ export class Stats {
 
 	getStat(stat: Stat): number {
 		if (stat === Stat.StatMeleeHitRating) {
-			return this.stats[stat] + this.stats[Stat.StatAllPhysHitRating]
+			return this.stats[stat] + this.stats[Stat.StatAllPhysHitRating];
 		}
 		return this.stats[stat];
 	}

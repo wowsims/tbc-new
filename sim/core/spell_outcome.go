@@ -536,7 +536,6 @@ func (spell *Spell) GetPhysicalMissChance(attackTable *AttackTable) float64 {
 
 func (result *SpellResult) applyAttackTableMiss(spell *Spell, attackTable *AttackTable, roll float64, chance *float64) bool {
 	*chance = spell.GetPhysicalMissChance(attackTable)
-
 	if roll < *chance {
 		result.Outcome = OutcomeMiss
 		spell.SpellMetrics[result.Target.UnitIndex].Misses++
