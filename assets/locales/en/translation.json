@@ -73,11 +73,15 @@
 		},
 		"raids": {
 			"unknown": "Unknown",
-			"mogushan_vaults": "Mogu'shan Vaults",
-			"heart_of_fear": "Heart of Fear",
-			"terrace_of_endless_spring": "Terrace of Endless Spring",
-			"throne_of_thunder": "Throne of Thunder",
-			"siege_of_orgrimmar": "Siege of Orgrimmar"
+			"kara": "Karazhan",
+			"gruuls": "Gruul's Lair",
+			"mag": "Magtheridon",
+			"tk": "Tempest Keep",
+			"ssc": "Serpentshrine Cavern",
+			"mh": "Mount Hyjal",
+			"bt": "Black Temple",
+			"za": "Zul'Aman",
+			"swp": "Sunwell Plateu"
 		},
 		"armor_types": {
 			"unknown": "Unknown",
