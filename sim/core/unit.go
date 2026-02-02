@@ -870,13 +870,13 @@ func (unit *Unit) ExecuteCustomRotation(sim *Simulation) {
 }
 
 func (unit *Unit) GetDodgeFromRating() float64 {
-	return unit.stats[stats.DodgeRating] / DodgeRatingPerDodgePercent
+	return unit.stats[stats.DodgeRating] / DodgeRatingPerDodgePercent / 100
 }
 func (unit *Unit) GetParryFromRating() float64 {
-	return unit.stats[stats.ParryRating] / ParryRatingPerParryPercent
+	return unit.stats[stats.ParryRating] / ParryRatingPerParryPercent / 100
 }
 func (unit *Unit) GetBlockFromRating() float64 {
-	return unit.stats[stats.BlockPercent] + unit.stats[stats.ParryRating]/ParryRatingPerParryPercent
+	return unit.stats[stats.BlockPercent] + unit.stats[stats.BlockRating]/BlockRatingPerBlockPercent/100
 }
 
 func (unit *Unit) GetTotalDodgeChanceAsDefender(spell *Spell, atkTable *AttackTable) float64 {
@@ -885,7 +885,6 @@ func (unit *Unit) GetTotalDodgeChanceAsDefender(spell *Spell, atkTable *AttackTa
 		unit.GetDodgeFromRating() -
 		spell.DodgeParrySuppression() -
 		unit.PseudoStats.DodgeReduction
-
 	return math.Max(chance, 0.0)
 }
 

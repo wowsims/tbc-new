@@ -293,30 +293,46 @@
             "unknown": {
               "type": "string"
             },
-            "mogushan_vaults": {
+            "kara": {
               "type": "string"
             },
-            "heart_of_fear": {
+            "gruuls": {
               "type": "string"
             },
-            "terrace_of_endless_spring": {
+            "mag": {
               "type": "string"
             },
-            "throne_of_thunder": {
+            "tk": {
               "type": "string"
             },
-            "siege_of_orgrimmar": {
+            "ssc": {
+              "type": "string"
+            },
+            "mh": {
+              "type": "string"
+            },
+            "bt": {
+              "type": "string"
+            },
+            "za": {
+              "type": "string"
+            },
+            "swp": {
               "type": "string"
             }
           },
           "additionalProperties": false,
           "required": [
             "unknown",
-            "mogushan_vaults",
-            "heart_of_fear",
-            "terrace_of_endless_spring",
-            "throne_of_thunder",
-            "siege_of_orgrimmar"
+            "kara",
+            "gruuls",
+            "mag",
+            "tk",
+            "ssc",
+            "mh",
+            "bt",
+            "za",
+            "swp"
           ]
         },
         "armor_types": {
@@ -2419,6 +2435,30 @@
                 "mhImbue",
                 "ohImbue"
               ]
+            },
+            "drums": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "title"
+              ]
+            },
+            "scrolls": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "title"
+              ]
             }
           },
           "additionalProperties": false,
@@ -2429,7 +2469,9 @@
             "food",
             "engineering",
             "pet",
-            "imbue"
+            "imbue",
+            "drums",
+            "scrolls"
           ]
         },
         "encounter": {

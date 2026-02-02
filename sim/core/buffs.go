@@ -787,8 +787,7 @@ func DraneiRacialAura(char *Character, caster bool) *Aura {
 			Label:    "Heroic Presence",
 			ActionID: ActionID{SpellID: 6562},
 			Stats: []StatConfig{
-				{stats.MeleeHitRating, 1, false},
-				{stats.RangedHitPercent, 1, false},
+				{stats.PhysicalHitPercent, 1, false},
 			},
 		})
 	}

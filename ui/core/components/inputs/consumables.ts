@@ -8,7 +8,6 @@ import { IconEnumValueConfig } from '../pickers/icon_enum_picker';
 import { ActionInputConfig, ItemStatOption } from './stat_options';
 import i18n from '../../../i18n/config.js';
 import { makeBooleanConsumeInput } from '../icon_inputs';
-import { playerPresets } from '../../../raid/presets';
 
 export interface ConsumableInputConfig<T> extends ActionInputConfig<T> {
 	value: T;
@@ -117,7 +116,7 @@ export const GnomishFlameTurrent = {
 export const EXPLOSIVE_CONFIG = [
 	{ config: AdamantiteGrenade, stats: [] },
 	{ config: FelIronBomb, stats: [] },
-	{ config: GnomishFlameTurrent, stats: [] },
+	// { config: GnomishFlameTurrent, stats: [] }, Excluding this thing for now because it's weird and I don't like it
 ] as ConsumableStatOption<number>[];
 export const makeExplosivesInput = makeConsumeInputFactory({ consumesFieldName: 'explosiveId' });
 
@@ -241,13 +240,62 @@ export const makeOHImbueinput = makeConsumeInputFactory({ consumesFieldName: 'oh
 //                               	DRUMS
 ///////////////////////////////////////////////////////////////////////////
 
+export const GreaterDrumsBattle = {
+	actionId: ActionId.fromItemId(185848),
+	value: 351355,
+}
 
+export const GreaterDrumsRestoration = {
+	actionId: ActionId.fromItemId(185850),
+	value: 351358,
+}
+
+export const GreaterDrumsWar = {
+	actionId: ActionId.fromItemId(185852),
+	value: 351360,
+}
+
+export const DRUMS_CONFIG = [
+	{ config: GreaterDrumsBattle, stats: [] },
+	{ config: GreaterDrumsRestoration, stats: [Stat.StatMana] },
+	{ config: GreaterDrumsWar, stats: [Stat.StatAttackPower, Stat.StatSpellDamage] },
+] as ConsumableStatOption<number>[];
+
+export const makeDrumsInput = makeConsumeInputFactory({ consumesFieldName: 'drumsId' })
 
 ///////////////////////////////////////////////////////////////////////////
 //                                 SCROLLS
 ///////////////////////////////////////////////////////////////////////////
 
+export const ScrollAgi = makeBooleanConsumeInput({
+	actionId: ActionId.fromItemId(27498),
+	fieldName: 'scrollAgi',
+	showWhen: (player: Player<any>) => player.getEpWeights().getStat(Stat.StatAgility) > 0
+})
 
+export const ScrollStr = makeBooleanConsumeInput({
+	actionId: ActionId.fromItemId(27503),
+	fieldName: 'scrollStr',
+	showWhen: (player: Player<any>) => player.getEpWeights().getStat(Stat.StatStrength) > 0
+})
+
+export const ScrollInt = makeBooleanConsumeInput({
+	actionId: ActionId.fromItemId(27499),
+	fieldName: 'scrollInt',
+	showWhen: (player: Player<any>) => player.getEpWeights().getStat(Stat.StatIntellect) > 0
+})
+
+export const ScrollSpi = makeBooleanConsumeInput({
+	actionId: ActionId.fromItemId(27501),
+	fieldName: 'scrollSpi',
+	showWhen: (player: Player<any>) => player.getEpWeights().getStat(Stat.StatSpirit) > 0
+})
+
+export const ScrollArm = makeBooleanConsumeInput({
+	actionId: ActionId.fromItemId(27500),
+	fieldName: 'scrollArm',
+	showWhen: (player: Player<any>) => player.getEpWeights().getStat(Stat.StatArmor) > 0
+})
 
 ///////////////////////////////////////////////////////////////////////////
 
