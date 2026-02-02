@@ -12,8 +12,9 @@ func (mage *Mage) registerColdSnapSpell() {
 	}
 
 	mage.RegisterSpell(core.SpellConfig{
-		ActionID: core.ActionID{SpellID: 11958},
-		Flags:    core.SpellFlagNoOnCastComplete,
+		ActionID:       core.ActionID{SpellID: 11958},
+		Flags:          core.SpellFlagNoOnCastComplete | core.SpellFlagAPL,
+		ClassSpellMask: MageSpellColdSnap,
 
 		Cast: core.CastConfig{
 			CD: core.Cooldown{
