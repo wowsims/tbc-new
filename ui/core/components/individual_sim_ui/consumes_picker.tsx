@@ -44,6 +44,8 @@ export class ConsumesPicker extends Component {
 		this.buildEngPicker();
 		this.buildPetPicker();
 		this.buildImbuePicker();
+		this.buildDrumsPicker();
+		this.buildScrollsPicker();
 	}
 
 	private buildPotionsPicker(): void {
@@ -179,6 +181,38 @@ export class ConsumesPicker extends Component {
 		if (isDualWieldSpec(this.simUI.player.getSpec())) {
 			buildIconInput(imbuePickerElem, this.simUI.player, ohImbueOptions);
 		}
+	}
+
+	private buildDrumsPicker(): void {
+		const drumsPickerRef = ref<HTMLDivElement>();
+		const row = this.rootElem.appendChild(
+			<ConsumeRow label="Drums">
+				<div ref={drumsPickerRef} className="picker-group icon-group consumes-row-inputs consumes-drums"></div>
+			</ConsumeRow>
+		);
+		const drumsPickerElem = drumsPickerRef.value!;
+
+		const drumsOptions = ConsumablesInputs.makeDrumsInput(relevantStatOptions(ConsumablesInputs.DRUMS_CONFIG, this.simUI));
+		buildIconInput(drumsPickerElem, this.simUI.player, drumsOptions);
+	}
+
+	private buildScrollsPicker(): void {
+		const scrollsRef = ref<HTMLDivElement>();
+		const row = this.rootElem.appendChild(
+			<ConsumeRow label="Scrolls">
+				<div ref={scrollsRef} className="picker-group icon-group consumes-row-inputs consumes-scrolls"></div>
+			</ConsumeRow>,
+		);
+		const scrollsElem = scrollsRef.value!;
+
+		const scrollAgi = buildIconInput(scrollsElem, this.simUI.player, ConsumablesInputs.ScrollAgi);
+		const scrollStr = buildIconInput(scrollsElem, this.simUI.player, ConsumablesInputs.ScrollStr);
+		const scrollInt = buildIconInput(scrollsElem, this.simUI.player, ConsumablesInputs.ScrollInt);
+		const scrollSpi = buildIconInput(scrollsElem, this.simUI.player, ConsumablesInputs.ScrollSpi);
+		const scrollArm = buildIconInput(scrollsElem, this.simUI.player, ConsumablesInputs.ScrollArm);
+
+		// Initial update of row based on current state.
+		this.updateRow(row, [scrollAgi, scrollStr, scrollInt, scrollSpi, scrollArm]);
 	}
 
 	private updateRow(rowElem: Element, pickers: (IconPicker<Player<any>, any> | IconEnumPicker<Player<any>, any>)[]) {
