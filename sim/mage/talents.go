@@ -100,7 +100,7 @@ func (mage *Mage) registerArcaneSubtlety() {
 	mage.AddStaticMod(core.SpellModConfig{
 		School:     core.SpellSchoolArcane,
 		FloatValue: -.20 * float64(mage.Talents.ArcaneSubtlety),
-		Kind:       core.SpellMod_ThreatMultiplier_Flat,
+		Kind:       core.SpellMod_ThreatMultiplier_Pct,
 	})
 }
 
@@ -347,7 +347,7 @@ func (mage *Mage) registerBurningSoul() {
 	mage.AddStaticMod(core.SpellModConfig{
 		School:     core.SpellSchoolFire,
 		FloatValue: -.05 * float64(mage.Talents.BurningSoul),
-		Kind:       core.SpellMod_ThreatMultiplier_Flat,
+		Kind:       core.SpellMod_ThreatMultiplier_Pct,
 	})
 }
 
@@ -424,7 +424,7 @@ func (mage *Mage) registerPyromaniac() {
 	mage.AddStaticMod(core.SpellModConfig{
 		School:     core.SpellSchoolFire,
 		FloatValue: -percent,
-		Kind:       core.SpellMod_ThreatMultiplier_Flat,
+		Kind:       core.SpellMod_PowerCost_Pct,
 	})
 }
 
@@ -546,7 +546,7 @@ func (mage *Mage) registerFrostChanneling() {
 	mage.AddStaticMod(core.SpellModConfig{
 		School:     core.SpellSchoolFrost,
 		FloatValue: -threatMod[mage.Talents.FrostChanneling-1],
-		Kind:       core.SpellMod_ThreatMultiplier_Flat,
+		Kind:       core.SpellMod_ThreatMultiplier_Pct,
 	})
 }
 
