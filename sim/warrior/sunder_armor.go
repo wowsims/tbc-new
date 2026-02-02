@@ -1,17 +1,10 @@
 package warrior
 
-import (
-	"github.com/wowsims/tbc/sim/core"
-	"github.com/wowsims/tbc/sim/core/proto"
-)
+import "github.com/wowsims/tbc/sim/core"
 
 func (war *Warrior) registerSunderArmor() {
-	if war.Spec == proto.Spec_SpecProtectionWarrior {
-		return
-	}
-
 	war.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 7386},
+		ActionID:       core.ActionID{SpellID: 25225},
 		SpellSchool:    core.SpellSchoolPhysical,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
@@ -33,6 +26,7 @@ func (war *Warrior) registerSunderArmor() {
 		},
 
 		ThreatMultiplier: 1,
+		FlatThreatBonus:  301.5,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			result := spell.CalcAndDealOutcome(sim, target, spell.OutcomeMeleeSpecialHit)
@@ -44,17 +38,17 @@ func (war *Warrior) registerSunderArmor() {
 			}
 		},
 
-		RelatedAuraArrays: war.WeakenedArmorAuras.ToMap(),
+		RelatedAuraArrays: war.SunderArmorAuras.ToMap(),
 	})
 }
 
 func (warrior *Warrior) CanApplySunderAura(target *core.Unit) bool {
-	return warrior.WeakenedArmorAuras.Get(target).IsActive() || !warrior.WeakenedArmorAuras.Get(target).ExclusiveEffects[0].Category.AnyActive()
+	return warrior.SunderArmorAuras.Get(target).IsActive() || !warrior.SunderArmorAuras.Get(target).ExclusiveEffects[0].Category.AnyActive()
 }
 
 func (warrior *Warrior) TryApplySunderArmorEffect(sim *core.Simulation, target *core.Unit) {
 	if warrior.CanApplySunderAura(target) {
-		aura := warrior.WeakenedArmorAuras.Get(target)
+		aura := warrior.SunderArmorAuras.Get(target)
 		aura.Activate(sim)
 		if aura.IsActive() {
 			aura.AddStack(sim)

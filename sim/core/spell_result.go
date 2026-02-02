@@ -134,15 +134,6 @@ func (result *SpellResult) HealingString() string {
 func (spell *Spell) ThreatFromDamage(sim *Simulation, outcome HitOutcome, damage float64, attackTable *AttackTable) float64 {
 	if outcome.Matches(OutcomeLanded) {
 		threat := (damage*spell.ThreatMultiplier + spell.FlatThreatBonus) * spell.Unit.PseudoStats.ThreatMultiplier
-
-		if attackTable.ThreatDoneByCasterExtraMultiplier != nil {
-			for i := range attackTable.ThreatDoneByCasterExtraMultiplier {
-				if attackTable.ThreatDoneByCasterExtraMultiplier[i] != nil {
-					threat *= attackTable.ThreatDoneByCasterExtraMultiplier[i](sim, spell, attackTable)
-				}
-			}
-		}
-
 		return threat
 	} else {
 		return 0

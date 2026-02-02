@@ -31,10 +31,6 @@ func applyDebuffEffects(target *Unit, targetIdx int, debuffs *proto.Debuffs, rai
 		MakePermanent(DemoralizingShoutAura(target, 5, TernaryInt32(IsImproved(debuffs.DemoralizingShout), 5, 0)))
 	}
 
-	if debuffs.ExposeArmor != proto.TristateEffect_TristateEffectMissing {
-		MakePermanent(ExposeArmorAura(target, IsImproved(debuffs.ExposeArmor)))
-	}
-
 	if debuffs.ExposeWeaknessUptime > 0.0 {
 		MakePermanent(ExposeWeaknessAura(target, debuffs.ExposeWeaknessUptime, debuffs.ExposeWeaknessHunterAgility))
 	}
@@ -103,12 +99,44 @@ func applyDebuffEffects(target *Unit, targetIdx int, debuffs *proto.Debuffs, rai
 		MakePermanent(ShadowWeavingAura(target))
 	}
 
+	if debuffs.ExposeArmor != proto.TristateEffect_TristateEffectMissing {
+		aura := MakePermanent(ExposeArmorAura(target, IsImproved(debuffs.ExposeArmor)))
+
+		ScheduledMajorArmorAura(aura, PeriodicActionOptions{
+			Period:   time.Second * 3,
+			NumTicks: 1,
+			OnAction: func(sim *Simulation) {
+				aura.Activate(sim)
+			},
+		}, raid)
+	}
+
 	if debuffs.SunderArmor {
-		MakePermanent(SunderArmorAura(target))
+		aura := MakePermanent(SunderArmorAura(target))
+
+		ScheduledMajorArmorAura(aura, PeriodicActionOptions{
+			Period:          GCDDefault,
+			NumTicks:        5,
+			TickImmediately: true,
+			Priority:        ActionPriorityDOT, // High prio so it comes before actual warrior sunders.
+			OnAction: func(sim *Simulation) {
+				aura.Activate(sim)
+				if aura.IsActive() {
+					aura.AddStack(sim)
+				}
+			},
+		}, raid)
 	}
 
 	if debuffs.WintersChill {
 		MakePermanent(WintersChillAura(target, 5))
+	}
+}
+
+func ScheduledMajorArmorAura(aura *Aura, options PeriodicActionOptions, raid *proto.Raid) {
+	aura.OnReset = func(aura *Aura, sim *Simulation) {
+		aura.Duration = NeverExpires
+		StartPeriodicAction(sim, options)
 	}
 }
 
@@ -160,14 +188,6 @@ func DemoralizingShoutAura(target *Unit, boomingVoicePoints int32, improvedDemoS
 	duration := time.Duration(float64(time.Second*30) * (1 + 0.1*float64(boomingVoicePoints)))
 
 	return statsDebuff(target, "Demoralizing Shout", 25203, stats.Stats{stats.AttackPower: apReduction}, duration)
-}
-
-func ExposeArmorAura(target *Unit, improved bool) *Aura {
-	eaValue := 2050.0
-	if improved {
-		eaValue *= 1.50
-	}
-	return statsDebuff(target, "Expose Armor", 26866, stats.Stats{stats.Armor: -eaValue}, time.Second*30)
 }
 
 func ExposeWeaknessAura(target *Unit, uptime float64, hunterAgility float64) *Aura {
@@ -444,8 +464,46 @@ func StormstrikeAura(target *Unit, uptime float64) *Aura {
 	return damageTakenDebuff(target, "Stormstrike", 17364, []stats.SchoolIndex{stats.SchoolIndexNature}, multiplier, time.Second*12)
 }
 
+var MajorArmorReductionEffectCategory = "MajorArmorReduction"
+
+func ExposeArmorAura(target *Unit, improved bool) *Aura {
+	eaValue := 2050.0
+	if improved {
+		eaValue *= 1.50
+	}
+	aura := statsDebuff(target, "Expose Armor", 26866, stats.Stats{stats.Armor: -eaValue}, time.Second*30)
+
+	aura.NewExclusiveEffect(MajorArmorReductionEffectCategory, true, ExclusiveEffect{
+		Priority: eaValue,
+	})
+
+	return aura
+
+}
+
 func SunderArmorAura(target *Unit) *Aura {
-	return statsDebuff(target, "Sunder Amor", 25225, stats.Stats{stats.Armor: -2600}, time.Second*30)
+	var effect *ExclusiveEffect
+	aura := target.GetOrRegisterAura(Aura{
+		Label:     "Sunder Armor",
+		ActionID:  ActionID{SpellID: 25225},
+		Duration:  time.Second * 30,
+		MaxStacks: 5,
+		OnStacksChange: func(aura *Aura, sim *Simulation, oldStacks int32, newStacks int32) {
+			effect.SetPriority(sim, 520*float64(newStacks))
+		},
+	})
+
+	effect = aura.NewExclusiveEffect(MajorArmorReductionEffectCategory, true, ExclusiveEffect{
+		Priority: 0,
+		OnGain: func(ee *ExclusiveEffect, sim *Simulation) {
+			ee.Aura.Unit.stats[stats.Armor] += ee.Priority
+		},
+		OnExpire: func(ee *ExclusiveEffect, sim *Simulation) {
+			ee.Aura.Unit.stats[stats.Armor] -= ee.Priority
+		},
+	})
+
+	return aura
 }
 
 func WintersChillAura(target *Unit, startingStacks int32) *Aura {

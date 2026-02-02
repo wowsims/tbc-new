@@ -1,3 +1,10 @@
+package warrior
+
+import (
+	"time"
+
+	"github.com/wowsims/tbc/sim/core"
+)
 
 func (war *Warrior) registerBerserkerRage() {
 	actionID := core.ActionID{SpellID: 18499}

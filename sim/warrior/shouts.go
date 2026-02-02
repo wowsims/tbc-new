@@ -31,6 +31,8 @@ func (warrior *Warrior) MakeShoutSpellHelper(actionID core.ActionID, spellMask i
 			},
 		},
 
+		FlatThreatBonus: 68,
+
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {
 			allyAuras.ActivateAllPlayers(sim)
 		},

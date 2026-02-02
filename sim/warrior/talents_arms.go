@@ -97,7 +97,7 @@ func (war *Warrior) registerImprovedThunderClap() {
 		return
 	}
 
-	rageCostReduction := []float64{0, 1, 2, 4}[war.Talents.ImprovedThunderClap]
+	rageCostReduction := []int32{0, 1, 2, 4}[war.Talents.ImprovedThunderClap]
 	damageGain := []float64{0, 0.4, 0.7, 1.0}[war.Talents.ImprovedThunderClap]
 
 	war.AddStaticMod(core.SpellModConfig{
@@ -107,9 +107,9 @@ func (war *Warrior) registerImprovedThunderClap() {
 	})
 
 	war.AddStaticMod(core.SpellModConfig{
-		ClassMask:  SpellMaskThunderClap,
-		Kind:       core.SpellMod_PowerCost_Flat,
-		FloatValue: -rageCostReduction,
+		ClassMask: SpellMaskThunderClap,
+		Kind:      core.SpellMod_PowerCost_Flat,
+		IntValue:  -rageCostReduction,
 	})
 }
 
@@ -312,7 +312,8 @@ func (war *Warrior) registerDeathWish() {
 		)
 
 	deathWishSpell := war.RegisterSpell(core.SpellConfig{
-		ActionID: actionID,
+		ActionID:       actionID,
+		ClassSpellMask: SpellMaskDeathWish,
 
 		RageCost: core.RageCostOptions{
 			Cost: 10,

@@ -104,12 +104,12 @@ func (war *Warrior) registerImprovedExecute() {
 		return
 	}
 
-	rageCostReduction := []float64{0, 2, 5}[war.Talents.ImprovedExecute]
+	rageCostReduction := []int32{0, 2, 5}[war.Talents.ImprovedExecute]
 
 	war.AddStaticMod(core.SpellModConfig{
-		ClassMask:  SpellMaskExecute,
-		Kind:       core.SpellMod_PowerCost_Flat,
-		FloatValue: -rageCostReduction,
+		ClassMask: SpellMaskExecute,
+		Kind:      core.SpellMod_PowerCost_Flat,
+		IntValue:  -rageCostReduction,
 	})
 }
 
@@ -352,8 +352,10 @@ func (war *Warrior) registerImprovedBerserkerStance() {
 	apDep := war.NewDynamicMultiplyStat(stats.AttackPower, 1+0.02*float64(war.Talents.ImprovedBerserkerStance))
 	war.OnSpellRegistered(func(spell *core.Spell) {
 		if !spell.Matches(SpellMaskBerserkerStance) {
-			war.BerserkerStanceAura.AttachStatDependency(apDep)
+			return
 		}
+
+		spell.RelatedSelfBuff.AttachStatDependency(apDep)
 	})
 
 }
@@ -391,8 +393,9 @@ func (war *Warrior) registerRampage() {
 	})
 
 	spell := war.RegisterSpell(core.SpellConfig{
-		ActionID: actionID,
-		Flags:    core.SpellFlagAPL,
+		ActionID:       actionID,
+		ClassSpellMask: SpellMaskRampage,
+		Flags:          core.SpellFlagAPL,
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{

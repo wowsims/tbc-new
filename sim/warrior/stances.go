@@ -22,14 +22,15 @@ func (warrior *Warrior) StanceMatches(other Stance) bool {
 	return (warrior.Stance & other) != 0
 }
 
-func (warrior *Warrior) makeStanceSpell(stance Stance, aura *core.Aura, stanceCD *core.Timer) *core.Spell {
+func (warrior *Warrior) makeStanceSpell(stance Stance, mask int64, aura *core.Aura, stanceCD *core.Timer) *core.Spell {
 	maxRetainedRage := 10.0 + 5*float64(warrior.Talents.TacticalMastery)
 	actionID := aura.ActionID
 	rageMetrics := warrior.NewRageMetrics(actionID)
 
 	return warrior.RegisterSpell(core.SpellConfig{
-		ActionID: actionID,
-		Flags:    core.SpellFlagNoOnCastComplete | core.SpellFlagAPL,
+		ActionID:       actionID,
+		ClassSpellMask: mask,
+		Flags:          core.SpellFlagNoOnCastComplete | core.SpellFlagAPL,
 
 		Cast: core.CastConfig{
 			CD: core.Cooldown{
@@ -59,62 +60,50 @@ func (warrior *Warrior) makeStanceSpell(stance Stance, aura *core.Aura, stanceCD
 
 			warrior.Stance = stance
 		},
+
+		RelatedSelfBuff: aura,
 	})
 }
 
-func (warrior *Warrior) registerBattleStanceAura() {
+func (warrior *Warrior) registerBattleStanceAura() *core.Aura {
 	actionID := core.ActionID{SpellID: 2457}
 
-	warrior.BattleStanceAura = warrior.GetOrRegisterAura(core.Aura{
+	aura := warrior.GetOrRegisterAura(core.Aura{
 		Label:    "Battle Stance",
 		ActionID: actionID,
 		Duration: core.NeverExpires,
 	}).AttachMultiplicativePseudoStatBuff(&warrior.PseudoStats.ThreatMultiplier, 0.8)
 
-	warrior.BattleStanceAura.NewExclusiveEffect(stanceEffectCategory, true, core.ExclusiveEffect{})
+	aura.NewExclusiveEffect(stanceEffectCategory, true, core.ExclusiveEffect{})
+
+	return aura
 }
 
-func (warrior *Warrior) registerDefensiveStanceAura() {
+func (warrior *Warrior) registerDefensiveStanceAura() *core.Aura {
 	actionID := core.ActionID{SpellID: 71}
-	threatMultiplier := 1.3 * (1 + 0.05*float64(warrior.Talents.Defiance))
-	impDefStanceMultiplier := 1 - 0.02*float64(warrior.Talents.ImprovedDefensiveStance)
 
-	warrior.DefensiveStanceAura = warrior.GetOrRegisterAura(core.Aura{
+	aura := warrior.GetOrRegisterAura(core.Aura{
 		Label:    "Defensive Stance",
 		ActionID: actionID,
 		Duration: core.NeverExpires,
-		OnGain: func(aura *core.Aura, sim *core.Simulation) {
-			warrior.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexArcane] *= impDefStanceMultiplier
-			warrior.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexFire] *= impDefStanceMultiplier
-			warrior.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexFrost] *= impDefStanceMultiplier
-			warrior.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexHoly] *= impDefStanceMultiplier
-			warrior.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexNature] *= impDefStanceMultiplier
-			warrior.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexShadow] *= impDefStanceMultiplier
-		},
-		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
-			warrior.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexArcane] /= impDefStanceMultiplier
-			warrior.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexFire] /= impDefStanceMultiplier
-			warrior.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexFrost] /= impDefStanceMultiplier
-			warrior.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexHoly] /= impDefStanceMultiplier
-			warrior.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexNature] /= impDefStanceMultiplier
-			warrior.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexShadow] /= impDefStanceMultiplier
-		},
 	}).AttachMultiplicativePseudoStatBuff(
-		&warrior.PseudoStats.ThreatMultiplier, threatMultiplier,
+		&warrior.PseudoStats.ThreatMultiplier, 1.3,
 	).AttachMultiplicativePseudoStatBuff(
 		&warrior.PseudoStats.DamageTakenMultiplier, 0.9,
 	).AttachMultiplicativePseudoStatBuff(
 		&warrior.PseudoStats.DamageDealtMultiplier, 0.9,
 	)
 
-	warrior.DefensiveStanceAura.NewExclusiveEffect(stanceEffectCategory, true, core.ExclusiveEffect{})
+	aura.NewExclusiveEffect(stanceEffectCategory, true, core.ExclusiveEffect{})
+
+	return aura
 }
 
-func (warrior *Warrior) registerBerserkerStanceAura() {
+func (warrior *Warrior) registerBerserkerStanceAura() *core.Aura {
 	actionId := core.ActionID{SpellID: 2458}
 	threatMultiplier := 0.8 - 0.02*float64(warrior.Talents.ImprovedBerserkerStance)
 
-	warrior.BerserkerStanceAura = warrior.GetOrRegisterAura(core.Aura{
+	aura := warrior.GetOrRegisterAura(core.Aura{
 		Label:    "Berserker Stance",
 		ActionID: actionId,
 		Duration: core.NeverExpires,
@@ -122,15 +111,17 @@ func (warrior *Warrior) registerBerserkerStanceAura() {
 		&warrior.PseudoStats.ThreatMultiplier, threatMultiplier,
 	).AttachStatBuff(stats.PhysicalCritPercent, 3)
 
-	warrior.BerserkerStanceAura.NewExclusiveEffect(stanceEffectCategory, true, core.ExclusiveEffect{})
+	aura.NewExclusiveEffect(stanceEffectCategory, true, core.ExclusiveEffect{})
+
+	return aura
 }
 
 func (warrior *Warrior) registerStances() {
 	stanceCD := warrior.NewTimer()
-	warrior.registerBattleStanceAura()
-	warrior.registerDefensiveStanceAura()
-	warrior.registerBerserkerStanceAura()
-	warrior.BattleStance = warrior.makeStanceSpell(BattleStance, warrior.BattleStanceAura, stanceCD)
-	warrior.DefensiveStance = warrior.makeStanceSpell(DefensiveStance, warrior.DefensiveStanceAura, stanceCD)
-	warrior.BerserkerStance = warrior.makeStanceSpell(BerserkerStance, warrior.BerserkerStanceAura, stanceCD)
+	battleStanceAura := warrior.registerBattleStanceAura()
+	defensiveStanceAura := warrior.registerDefensiveStanceAura()
+	berserkerStanceAura := warrior.registerBerserkerStanceAura()
+	warrior.BattleStance = warrior.makeStanceSpell(BattleStance, SpellMaskBattleStance, battleStanceAura, stanceCD)
+	warrior.DefensiveStance = warrior.makeStanceSpell(DefensiveStance, SpellMaskDefensiveStance, defensiveStanceAura, stanceCD)
+	warrior.BerserkerStance = warrior.makeStanceSpell(BerserkerStance, SpellMaskBerserkerStance, berserkerStanceAura, stanceCD)
 }

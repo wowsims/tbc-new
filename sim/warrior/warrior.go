@@ -24,6 +24,8 @@ const (
 	SpellMaskBerserkerRage
 	SpellMaskRallyingCry
 	SpellMaskRecklessness
+	SpellMaskDeathWish
+	SpellMaskRampage
 	SpellMaskShieldWall
 	SpellMaskLastStand
 	SpellMaskCharge
@@ -42,6 +44,7 @@ const (
 	SpellMaskSweepingStrikesHit
 	SpellMaskSweepingStrikesNormalizedHit
 	SpellMaskCleave
+	SpellMaskDevastate
 	SpellMaskExecute
 	SpellMaskHeroicStrike
 	SpellMaskOverpower
@@ -69,7 +72,7 @@ const (
 		SpellMaskCleave | SpellMaskExecute | SpellMaskHeroicStrike | SpellMaskOverpower |
 		SpellMaskRevenge | SpellMaskSlam | SpellMaskSweepingSlam | SpellMaskShieldBash | SpellMaskSunderArmor |
 		SpellMaskThunderClap | SpellMaskWhirlwind | SpellMaskWhirlwindOh | SpellMaskShieldSlam |
-		SpellMaskBloodthirst | SpellMaskMortalStrike | SpellMaskIntercept
+		SpellMaskBloodthirst | SpellMaskMortalStrike | SpellMaskIntercept | SpellMaskDevastate
 
 	SpellMaskDamageSpells = SpellMaskDirectDamageSpells | SpellMaskDeepWounds | SpellMaskRend
 )
@@ -103,14 +106,9 @@ type Warrior struct {
 	Rend         *core.Spell
 	DeepWounds   *core.Spell
 	MortalStrike *core.Spell
-	ShieldSlam   *core.Spell
 
 	sharedShoutsCD   *core.Timer
 	sharedHSCleaveCD *core.Timer
-
-	BattleStanceAura    *core.Aura
-	DefensiveStanceAura *core.Aura
-	BerserkerStanceAura *core.Aura
 
 	RendAura            *core.Aura
 	DeepWoundsAura      *core.Aura
@@ -149,6 +147,8 @@ func (warrior *Warrior) AddPartyBuffs(_ *proto.PartyBuffs) {
 func (warrior *Warrior) Initialize() {
 	warrior.sharedHSCleaveCD = warrior.NewTimer()
 	warrior.sharedShoutsCD = warrior.NewTimer()
+
+	warrior.registerSunderArmor()
 
 	warrior.registerStances()
 	warrior.registerShouts()
