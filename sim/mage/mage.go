@@ -16,9 +16,6 @@ type Mage struct {
 
 	Talents *proto.MageTalents
 	Options *proto.MageOptions
-	// ArcaneOptions *proto.ArcaneMage_Options
-	// FireOptions   *proto.FireMage_Options
-	// FrostOptions  *proto.FrostMage_Options
 
 	waterElemental *WaterElemental
 
