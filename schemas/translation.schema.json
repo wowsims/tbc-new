@@ -1606,6 +1606,66 @@
             "stamina"
           ]
         },
+		"party_buffs": {
+			"type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "misc": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string"
+                },
+                "tooltip": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "label",
+                "tooltip"
+              ]
+            },
+            "stats": {
+              "type": "string"
+            },
+            "attack_power": {
+              "type": "string"
+            },
+            "attack_speed": {
+              "type": "string"
+            },
+            "spell_power": {
+              "type": "string"
+            },
+            "spell_haste": {
+              "type": "string"
+            },
+            "crit_percent": {
+              "type": "string"
+            },
+            "mastery": {
+              "type": "string"
+            },
+            "stamina": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "title",
+            "tooltip",
+            "description"
+          ]
+		},
         "external_damage_cooldowns": {
           "type": "object",
           "properties": {

@@ -22,6 +22,7 @@ import { IconPickerStatOption, PickerStatOptions } from './stat_options';
 import { Player } from '../../player';
 import { raceI18nKeys } from '../../../i18n/entity_mapping';
 import { Party } from '../../party';
+import { NumberPicker } from '../pickers/number_picker';
 
 ///////////////////////////////////////////////////////////////////////////
 //                                 RAID BUFFS
@@ -92,7 +93,6 @@ export const DraeneiRacialCaster = makeBooleanPartyBuffInput({
 	fieldName: 'draeneiRacialCaster',
 	label: 'Inspiring Presense - Caster',
 	showWhen: (party: Party) => {
-		console.log('yayyy', party.getPlayer(0)!.getRace());
 		return [Race.RaceDraenei, Race.RaceDwarf, Race.RaceGnome, Race.RaceHuman, Race.RaceNightElf].includes(party.getPlayer(0)!.getRace())
 	},
 });
@@ -216,6 +216,12 @@ export const PowerInfusion = makeMultistateIndividualBuffInput({
 	fieldName: 'powerInfusions',
 	label: 'Power Infusions',
 });
+export const ShadowPriestDPS = makeMultistateIndividualBuffInput({
+	actionId: ActionId.fromSpellId(34914),
+	numStates: 1500,
+	fieldName: 'shadowPriestDps',
+	label: 'Vampiric Touch',
+});
 export const UnleashedRage = makeBooleanIndividualBuffInput({ actionId: ActionId.fromSpellId(30811), fieldName: 'unleashedRage', label: 'Unleashed Rage' });
 
 export const PARTY_BUFFS_CONFIG = [
@@ -256,6 +262,11 @@ export const PARTY_BUFFS_CONFIG = [
 	},
 	{
 		config: ManaTideTotem,
+		picker: IconPicker,
+		stats: [Stat.StatMP5],
+	},
+	{
+		config: ShadowPriestDPS,
 		picker: IconPicker,
 		stats: [Stat.StatMP5],
 	},
@@ -407,7 +418,7 @@ export const BUFFS_CONFIG = [
 		config: PowerInfusion,
 		picker: IconPicker,
 		stats: [Stat.StatSpellHasteRating],
-	},
+	}
 ] as PickerStatOptions[];
 
 // Debuffs

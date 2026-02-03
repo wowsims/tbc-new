@@ -218,12 +218,12 @@ export class SettingsTab extends SimTab {
 		const partyBuffOptions = relevantStatOptions(BuffDebuffInputs.PARTY_BUFFS_CONFIG, this.simUI);
 		if (partyBuffOptions.length > 0) {
 			const partyContentBlock = new ContentBlock(this.column3, 'buffs-settings', {
-				header: { title: i18n.t('settings_tab.raid_buffs.title'), tooltip: i18n.t('settings_tab.raid_buffs.tooltip') },
+				header: { title: i18n.t('settings_tab.party_buffs.title'), tooltip: i18n.t('settings_tab.party_buffs.tooltip') },
 			});
 
 			partyContentBlock.headerElement?.appendChild(
 				<p className="fs-body">
-					{i18n.t('settings_tab.raid_buffs.description')}
+					{i18n.t('settings_tab.party_buffs.description')}
 				</p>,
 			);
 

@@ -390,6 +390,11 @@
 			"crit_percent": "Crit %",
 			"stamina": "Stamina"
 		},
+		"party_buffs": {
+			"title": "Party Buffs",
+			"tooltip": "Buffs provided by <strong>other</strong> party members.",
+			"description": "All party buffs/debuffs selected are assumed to be provided by other raid members than the simulated player."
+		},
 		"external_damage_cooldowns": {
 			"title": "External Damage Cooldowns",
 			"tooltip": "Major damage cooldowns provided by <strong>other</strong> party/raid members.",
