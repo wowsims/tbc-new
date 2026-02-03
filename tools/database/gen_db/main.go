@@ -473,7 +473,8 @@ func ApplyGlobalFilters(db *database.WowDatabase) {
 			return false
 		}
 
-		if gem.Color == proto.GemColor_GemColorMeta && gem.Quality > proto.ItemQuality_ItemQualityRare {
+		_, uncut, _ := strings.Cut(gem.Name, " ")
+		if slices.Contains([]string{"Crimson Spinel", "Empyrean Sapphire", "Lionseye", "Shadowsong Amethyst", "Pyrestone", "Seaspray Emerald"}, uncut) {
 			gem.Phase = 3
 		} else {
 			gem.Phase = 1
