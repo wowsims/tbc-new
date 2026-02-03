@@ -87,7 +87,7 @@ var FullPartyBuffs = &proto.PartyBuffs{
 	TotemOfWrath:         1,
 	WrathOfAirTotem:      proto.TristateEffect_TristateEffectImproved,
 	GraceOfAirTotem:      proto.TristateEffect_TristateEffectImproved,
-	StrengthOfEarthTotem: proto.StrengthOfEarthType_EnhancingTotems,
+	StrengthOfEarthTotem: proto.TristateEffect_TristateEffectImproved,
 	TranquilAirTotem:     true,
 	WindfuryTotem:        proto.TristateEffect_TristateEffectImproved,
 

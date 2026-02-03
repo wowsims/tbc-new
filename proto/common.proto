@@ -495,7 +495,7 @@ message PartyBuffs {
 	TristateEffect wrath_of_air_totem = 21;
 	bool snapshot_improved_wrath_of_air_totem = 22;
 	TristateEffect grace_of_air_totem = 23;
-	StrengthOfEarthType strength_of_earth_totem = 24;
+	TristateEffect strength_of_earth_totem = 24;
 	bool snapshot_improved_strength_of_earth_totem = 25;
 	bool tranquil_air_totem = 26;
 

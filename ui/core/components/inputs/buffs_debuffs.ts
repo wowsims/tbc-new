@@ -105,8 +105,8 @@ export const DraeneiRacialMelee = makeBooleanPartyBuffInput({
 export const EyeOfTheNight = makeBooleanPartyBuffInput({ actionId: ActionId.fromSpellId(31033), fieldName: 'eyeOfTheNight', label: 'Eye of the Night' });
 export const FerociousInspiration = makeMultistatePartyBuffInput(ActionId.fromSpellId(34460), 5, 'ferociousInspiration', 'Ferocious Inspiratation');
 export const GraceOfAirTotem = makeTristatePartyBuffInput({
-	actionId: ActionId.fromSpellId(8835),
-	impId: ActionId.fromSpellId(25359),
+	actionId: ActionId.fromSpellId(25359),
+	impId: ActionId.fromSpellId(16295),
 	fieldName: 'graceOfAirTotem',
 	label: 'Grace of Air Totem',
 });
@@ -147,8 +147,8 @@ export const SanctityAura = makeTristatePartyBuffInput({
 	label: 'Sanctity Aura',
 });
 export const StrengthOfEarthTotem = makeTristatePartyBuffInput({
-	actionId: ActionId.fromSpellId(8076),
-	impId: ActionId.fromSpellId(25527),
+	actionId: ActionId.fromSpellId(25528),
+	impId: ActionId.fromSpellId(16295),
 	fieldName: 'strengthOfEarthTotem',
 	label: 'Strength of Earth Totem',
 });
@@ -275,11 +275,6 @@ export const PARTY_BUFFS_CONFIG = [
 		stats: [],
 	},
 	{
-		config: StrengthOfEarthTotem,
-		picker: IconPicker,
-		stats: [Stat.StatStrength],
-	},
-	{
 		config: TotemOfWrath,
 		picker: IconPicker,
 		stats: [Stat.StatSpellCritRating, Stat.StatSpellHitRating],
@@ -338,6 +333,11 @@ export const PARTY_BUFFS_CONFIG = [
 		config: JadePendantOfBlasting,
 		picker: IconPicker,
 		stats: [Stat.StatSpellDamage],
+	},
+	{
+		config: StrengthOfEarthTotem,
+		picker: IconPicker,
+		stats: [Stat.StatStrength],
 	},
 	{
 		config: GraceOfAirTotem,

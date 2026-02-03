@@ -178,8 +178,8 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 		SanctityAuraBuff(char, IsImproved(partyBuffs.SanctityAura))
 	}
 
-	if partyBuffs.StrengthOfEarthTotem != proto.StrengthOfEarthType_None {
-		StrengthOfEarthTotemAura(char, partyBuffs.StrengthOfEarthTotem.Enum())
+	if partyBuffs.StrengthOfEarthTotem != proto.TristateEffect_TristateEffectMissing {
+		StrengthOfEarthTotemAura(char, IsImproved(partyBuffs.StrengthOfEarthTotem))
 	}
 
 	if partyBuffs.TotemOfWrath > 0 {
@@ -554,15 +554,10 @@ func ManaSpringTotemAura(char *Character, improved bool) *Aura {
 	})
 }
 
-func StrengthOfEarthTotemAura(char *Character, totem *proto.StrengthOfEarthType) *Aura {
+func StrengthOfEarthTotemAura(char *Character, isImproved bool) *Aura {
 	strBuff := 86.0
-
-	switch totem {
-	case proto.StrengthOfEarthType_CycloneBonus.Enum(),
-		proto.StrengthOfEarthType_EnhancingTotems.Enum():
-		strBuff = 98
-	case proto.StrengthOfEarthType_EnhancingAndCyclone.Enum():
-		strBuff = 112
+	if isImproved {
+		strBuff *= 1.15
 	}
 
 	return makeStatBuff(char, BuffConfig{
