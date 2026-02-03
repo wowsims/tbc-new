@@ -28,7 +28,7 @@ func (war *Warrior) registerExecute() {
 		},
 
 		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
-		DamageMultiplier: 1.0,
+		DamageMultiplier: 1,
 		ThreatMultiplier: 1.25,
 
 		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {

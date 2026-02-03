@@ -35,7 +35,8 @@ func (war *Warrior) registerSlam() {
 			},
 		},
 
-		CritMultiplier: war.DefaultMeleeCritMultiplier(),
+		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
+		DamageMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			baseDamage := 140 + spell.Unit.MHWeaponDamage(sim, spell.MeleeAttackPower())

@@ -25,6 +25,7 @@ func (war *Warrior) registerSunderArmor() {
 			return war.CanApplySunderAura(target)
 		},
 
+		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
 		FlatThreatBonus:  301.5,
 

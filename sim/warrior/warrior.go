@@ -1,6 +1,8 @@
 package warrior
 
 import (
+	"time"
+
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
@@ -10,6 +12,8 @@ var TalentTreeSizes = [3]int{23, 21, 22}
 
 type WarriorInputs struct {
 	StanceSnapshot bool
+	QueueDelay     int32
+	Stance         proto.WarriorStance
 }
 
 const (
@@ -110,8 +114,9 @@ type Warrior struct {
 	curQueueAura       *core.Aura
 	curQueuedAutoSpell *core.Spell
 
-	sharedMCD      *core.Timer // Recklessness, Shield Wall & Retaliation
-	sharedShoutsCD *core.Timer
+	sharedMCD        *core.Timer // Recklessness, Shield Wall & Retaliation
+	sharedShoutsCD   *core.Timer
+	queuedRealismICD *core.Cooldown
 
 	EnrageAura *core.Aura
 
@@ -142,6 +147,7 @@ func (warrior *Warrior) Initialize() {
 	warrior.registerShieldWall()
 	warrior.registerRetaliation()
 
+	warrior.registerBloodrage()
 	warrior.registerCharge()
 	warrior.registerIntercept()
 	warrior.registerPummel()
@@ -165,6 +171,9 @@ func (warrior *Warrior) Initialize() {
 }
 
 func (warrior *Warrior) Reset(_ *core.Simulation) {
+	warrior.curQueueAura = nil
+	warrior.curQueuedAutoSpell = nil
+
 	warrior.Stance = StanceNone
 	warrior.ChargeRageGain = 15.0
 }
@@ -212,6 +221,12 @@ func NewWarrior(character *core.Character, options *proto.WarriorOptions, talent
 	warrior.sharedShoutsCD = warrior.NewTimer()
 	warrior.sharedMCD = warrior.NewTimer()
 	warrior.ChargeRageGain = 15.0
+	// The sim often re-enables heroic strike in an unrealistic amount of time.
+	// This can cause an unrealistic immediate double-hit around wild strikes procs
+	warrior.queuedRealismICD = &core.Cooldown{
+		Timer:    warrior.NewTimer(),
+		Duration: time.Millisecond * time.Duration(warrior.WarriorInputs.QueueDelay),
+	}
 
 	return warrior
 }

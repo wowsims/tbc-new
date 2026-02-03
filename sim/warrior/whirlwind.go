@@ -17,8 +17,9 @@ func (war *Warrior) registerWhirlwind() {
 		ClassSpellMask: SpellMaskWhirlwindOh,
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagPassiveSpell | core.SpellFlagNoOnCastComplete,
 
-		ThreatMultiplier: 1.25,
 		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
+		DamageMultiplier: 1,
+		ThreatMultiplier: 1.25,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			baseDamage := war.OHNormalizedWeaponDamage(sim, spell.MeleeAttackPower())
@@ -48,6 +49,7 @@ func (war *Warrior) registerWhirlwind() {
 			IgnoreHaste: true,
 		},
 
+		DamageMultiplier: 1,
 		ThreatMultiplier: 1.25,
 		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
 

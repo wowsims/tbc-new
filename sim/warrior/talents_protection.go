@@ -376,12 +376,12 @@ func (war *Warrior) registerDevastate() {
 			return war.PseudoStats.CanBlock
 		},
 
-		DamageMultiplier: 0.5,
+		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
 		FlatThreatBonus:  301.5 + 100,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := war.MHWeaponDamage(sim, spell.MeleeAttackPower()) + spell.BonusDamage()
+			baseDamage := war.MHWeaponDamage(sim, spell.MeleeAttackPower())*0.5 + spell.BonusDamage()
 
 			sunderStacks := war.SunderArmorAuras.Get(target).GetStacks()
 			sunderDamage := core.TernaryFloat64(war.CanApplySunderAura(target), float64(sunderStacks)*war.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower()), 0)

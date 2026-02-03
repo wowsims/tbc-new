@@ -1,15 +1,12 @@
 import * as OtherInputs from '../../core/components/inputs/other_inputs';
-import * as Mechanics from '../../core/constants/mechanics';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui';
 import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
 import { APLRotation } from '../../core/proto/apl';
 import { Class, Debuffs, Faction, IndividualBuffs, ItemSlot, PartyBuffs, PseudoStat, Race, RaidBuffs, Spec, Stat } from '../../core/proto/common';
-import { StatCapType } from '../../core/proto/ui';
-import { StatCap, Stats, UnitStat } from '../../core/proto_utils/stats';
+import { DEFAULT_MELEE_GEM_STATS, UnitStat } from '../../core/proto_utils/stats';
 import { defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
 import * as WarriorInputs from '../inputs';
-import * as FuryInputs from './inputs';
 import * as Presets from './presets';
 
 const SPEC_CONFIG = registerSpecConfig(Spec.SpecDpsWarrior, {
@@ -19,10 +16,11 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecDpsWarrior, {
 	knownIssues: [],
 
 	// All stats for which EP should be calculated.
-	epStats: [Stat.StatStrength, Stat.StatAgility, Stat.StatAttackPower, Stat.StatExpertiseRating],
+	epStats: [Stat.StatStrength, Stat.StatAgility, Stat.StatAttackPower, Stat.StatExpertiseRating, Stat.StatMeleeHasteRating, Stat.StatMeleeCritRating],
 	epPseudoStats: [PseudoStat.PseudoStatMainHandDps, PseudoStat.PseudoStatOffHandDps],
 	// Reference stat against which to calculate EP. I think all classes use either spell power or attack power.
 	epReferenceStat: Stat.StatStrength,
+	gemStats: DEFAULT_MELEE_GEM_STATS,
 	// Which stats to display in the Character Stats section, at the bottom of the left-hand sidebar.
 	displayStats: UnitStat.createDisplayStatArray(
 		[Stat.StatHealth, Stat.StatStamina, Stat.StatStrength, Stat.StatAgility, Stat.StatAttackPower, Stat.StatExpertiseRating],
@@ -63,10 +61,11 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecDpsWarrior, {
 	// Inputs to include in the 'Other' section on the settings tab.
 	otherInputs: {
 		inputs: [
-			FuryInputs.SyncTypeInput,
+			WarriorInputs.StartingRage(),
 			WarriorInputs.StanceSnapshot(),
-			OtherInputs.DistanceFromTarget,
+			WarriorInputs.QueueDelay(),
 			OtherInputs.InputDelay,
+			OtherInputs.DistanceFromTarget,
 			OtherInputs.TankAssignment,
 			OtherInputs.InFrontOfTarget,
 		],

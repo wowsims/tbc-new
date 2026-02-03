@@ -42,11 +42,11 @@ func NewDpsWarrior(character *core.Character, options *proto.Player) *DpsWarrior
 	war := &DpsWarrior{
 		Warrior: warrior.NewWarrior(character, dpsOptions.ClassOptions, options.TalentsString, warrior.WarriorInputs{
 			StanceSnapshot: dpsOptions.StanceSnapshot,
+			QueueDelay:     dpsOptions.QueueDelay,
+			Stance:         dpsOptions.Stance,
 		}),
 		Options: dpsOptions,
 	}
-
-	war.ApplySyncType(dpsOptions.SyncType)
 
 	return war
 }
@@ -65,20 +65,4 @@ func (war *DpsWarrior) Reset(sim *core.Simulation) {
 
 func (war *DpsWarrior) OnEncounterStart(sim *core.Simulation) {
 	war.Warrior.OnEncounterStart(sim)
-}
-
-func (war *DpsWarrior) ApplySyncType(syncType proto.WarriorSyncType) {
-	if syncType == proto.WarriorSyncType_WarriorSyncMainhandOffhandSwings {
-		war.AutoAttacks.SetReplaceMHSwing(func(sim *core.Simulation, mhSwingSpell *core.Spell) *core.Spell {
-			aa := &war.AutoAttacks
-			if nextMHSwingAt := sim.CurrentTime + aa.MainhandSwingSpeed(); nextMHSwingAt > aa.OffhandSwingAt() {
-				aa.SetOffhandSwingAt(nextMHSwingAt)
-			}
-
-			return mhSwingSpell
-		})
-
-	} else {
-		war.AutoAttacks.SetReplaceMHSwing(nil)
-	}
 }

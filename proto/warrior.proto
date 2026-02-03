@@ -79,6 +79,20 @@ message WarriorTalents {
 
 // END GENERATED
 
+enum WarriorShout {
+    WarriorShoutNone = 0;
+    WarriorShoutBattle = 1;
+    WarriorShoutCommanding = 2;
+}
+
+enum WarriorStance {
+    WarriorStanceNone = 0;
+    WarriorStanceBattle = 1;
+    WarriorStanceDefensive = 2;
+    WarriorStanceBerserker = 3;
+    WarriorStanceGladiator = 4;
+}
+
 message WarriorOptions {
 }
 
@@ -87,25 +101,31 @@ message DpsWarrior {
 
 	message Options {
 		WarriorOptions class_options = 1;
-		bool stance_snapshot = 2;
-		WarriorSyncType sync_type = 3;
-		bool use_item_swap_bonus_stats = 4;
+		bool use_item_swap_bonus_stats = 2;
+
+		double starting_rage = 3;
+		bool stance_snapshot = 4;
+		int32 queue_delay = 5;
+
+        WarriorShout shout = 6;
+        WarriorStance stance = 7;
 	}
 	Options options = 1;
 }
-
-enum WarriorSyncType {
-	WarriorNoSync = 0;
-	WarriorSyncMainhandOffhandSwings = 1;
-  }
 
 message ProtectionWarrior {
 	message Rotation {}
 
 	message Options {
 		WarriorOptions class_options = 1;
-		bool stance_snapshot = 2;
-		bool use_item_swap_bonus_stats = 3;
+		bool use_item_swap_bonus_stats = 2;
+
+		double starting_rage = 3;
+		bool stance_snapshot = 4;
+		int32 queue_delay = 5;
+
+        WarriorShout shout = 6;
+        WarriorStance stance = 7;
 	}
 	Options options = 1;
 }

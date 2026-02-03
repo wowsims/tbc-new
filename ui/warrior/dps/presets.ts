@@ -117,7 +117,6 @@ export const DefaultOptions = WarriorOptions.create({
 	queueDelay: 250,
 	startingRage: 0,
 	stance: WarriorStance.WarriorStanceBerserker,
-	syncType: 0,
 });
 
 export const DefaultConsumables = ConsumesSpec.create({

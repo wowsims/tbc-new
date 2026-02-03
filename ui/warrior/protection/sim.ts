@@ -77,8 +77,10 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionWarrior, {
 	otherInputs: {
 		inputs: [
 			OtherInputs.DistanceFromTarget,
-			OtherInputs.InputDelay,
+			WarriorInputs.StartingRage(),
 			WarriorInputs.StanceSnapshot(),
+			WarriorInputs.QueueDelay(),
+			OtherInputs.InputDelay,
 			OtherInputs.TankAssignment,
 			OtherInputs.IncomingHps,
 			OtherInputs.HealingCadence,

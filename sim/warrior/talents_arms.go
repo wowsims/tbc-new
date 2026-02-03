@@ -132,7 +132,7 @@ func (war *Warrior) registerAngerManagement() {
 		return
 	}
 
-	rageMetrics := war.NewRageMetrics(core.ActionID{SpellID: 13957})
+	rageMetrics := war.NewRageMetrics(core.ActionID{SpellID: 12296})
 
 	war.RegisterResetEffect(func(sim *core.Simulation) {
 		core.StartPeriodicAction(sim, core.PeriodicActionOptions{

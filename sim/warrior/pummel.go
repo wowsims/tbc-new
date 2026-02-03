@@ -27,7 +27,8 @@ func (war *Warrior) registerPummel() {
 			},
 		},
 
-		CritMultiplier: war.DefaultMeleeCritMultiplier(),
+		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
+		DamageMultiplier: 1,
 
 		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
 			return war.StanceMatches(BerserkerStance)

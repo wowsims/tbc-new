@@ -53,7 +53,7 @@ func (war *Warrior) registerCharge() {
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			aura.Activate(sim)
 			war.AddRage(sim, war.ChargeRageGain, metrics)
-			war.MoveTo(chargeMinRange-1, sim) // movement aura is discretized in 1 yard intervals, so need to overshoot to guarantee melee range
+			war.MoveTo(chargeMinRange-3.5, sim) // movement aura is discretized in 1 yard intervals, so need to overshoot to guarantee melee range
 		},
 	})
 }

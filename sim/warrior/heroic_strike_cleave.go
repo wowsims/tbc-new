@@ -36,6 +36,10 @@ func (war *Warrior) registerHeroicStrike() {
 			if !result.Landed() {
 				spell.IssueRefund(sim)
 			}
+
+			if war.curQueueAura != nil {
+				war.curQueueAura.Deactivate(sim)
+			}
 		},
 	})
 	war.makeQueueSpellsAndAura(spell)
@@ -72,16 +76,25 @@ func (war *Warrior) registerCleave() {
 			baseDamage := flatDamage + war.MHWeaponDamage(sim, spell.MeleeAttackPower())
 			spell.CalcCleaveDamage(sim, target, maxTargets, baseDamage, spell.OutcomeMeleeWeaponSpecialHitAndCrit)
 			spell.DealBatchedAoeDamage(sim)
+
+			if war.curQueueAura != nil {
+				war.curQueueAura.Deactivate(sim)
+			}
 		},
 	})
 	war.makeQueueSpellsAndAura(spell)
 }
 
 func (war *Warrior) makeQueueSpellsAndAura(srcSpell *core.Spell) *core.Spell {
+	isQueueQueued := false
+
 	queueAura := war.RegisterAura(core.Aura{
 		Label:    "HS/Cleave Queue Aura-" + srcSpell.ActionID.String(),
-		ActionID: srcSpell.ActionID,
+		ActionID: srcSpell.ActionID.WithTag(1),
 		Duration: core.NeverExpires,
+		OnReset: func(aura *core.Aura, sim *core.Simulation) {
+			isQueueQueued = false
+		},
 		OnGain: func(aura *core.Aura, sim *core.Simulation) {
 			if war.curQueueAura != nil {
 				war.curQueueAura.Deactivate(sim)
@@ -98,19 +111,35 @@ func (war *Warrior) makeQueueSpellsAndAura(srcSpell *core.Spell) *core.Spell {
 	})
 
 	queueSpell := war.RegisterSpell(core.SpellConfig{
-		ActionID:    srcSpell.WithTag(1),
+		ActionID:    srcSpell.ActionID.WithTag(1),
 		SpellSchool: core.SpellSchoolPhysical,
 		ProcMask:    core.ProcMaskMeleeMHSpecial,
 		Flags:       core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
 
-		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
-			return war.curQueueAura != queueAura &&
-				war.CurrentRage() >= srcSpell.Cost.GetCurrentCost() &&
-				sim.CurrentTime >= war.Hardcast.Expires
+		Cast: core.CastConfig{
+			DefaultCast: core.Cast{
+				NonEmpty: true,
+			},
 		},
 
+		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
+			return war.curQueueAura == nil &&
+				!isQueueQueued &&
+				war.CurrentRage() >= srcSpell.Cost.GetCurrentCost() &&
+				war.queuedRealismICD.IsReady(sim)
+		},
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			queueAura.Activate(sim)
+			if war.queuedRealismICD.IsReady(sim) {
+				isQueueQueued = true
+				war.queuedRealismICD.Use(sim)
+				sim.AddPendingAction(&core.PendingAction{
+					NextActionAt: sim.CurrentTime + war.queuedRealismICD.Duration,
+					OnAction: func(sim *core.Simulation) {
+						queueAura.Activate(sim)
+						isQueueQueued = false
+					},
+				})
+			}
 		},
 	})
 

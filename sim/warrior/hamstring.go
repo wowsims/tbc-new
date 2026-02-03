@@ -24,6 +24,7 @@ func (war *Warrior) registerHamstring() {
 			IgnoreHaste: true,
 		},
 
+		DamageMultiplier: 1,
 		ThreatMultiplier: 1.25,
 		FlatThreatBonus:  167.5,
 

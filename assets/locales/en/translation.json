@@ -469,9 +469,17 @@
 				"label": "Detonate Seed on Cast",
 				"tooltip": "Simulates raid doing damage to targets such that seed detonates immediately on cast."
 			},
+			"starting_rage": {
+				"label": "Starting Rage",
+				"tooltip": "Initial rage at the start of each iteration."
+			},
 			"stance_snapshot": {
 				"label": "Stance Snapshot",
 				"tooltip": "Ability that is cast at the same time as stance swap will benefit from the bonus of the stance before the swap."
+			},
+			"queue_delay": {
+				"label": "HS/Cleave Queue Delay (ms)",
+				"tooltip": "How long (in milliseconds) to delay re-queueing Heroic Strike/Cleave in order to simulate real reaction time and game delay."
 			},
 			"assume_bleed_active": {
 				"label": "Assume Bleed Always Active",

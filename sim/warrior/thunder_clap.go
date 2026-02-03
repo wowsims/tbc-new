@@ -32,8 +32,9 @@ func (war *Warrior) registerThunderClap() {
 			},
 		},
 
-		ThreatMultiplier: 1.75,
 		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
+		DamageMultiplier: 1,
+		ThreatMultiplier: 1.75,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			baseDamage := 123.0
