@@ -464,30 +464,22 @@ func RetributionAuraBuff(char *Character, improved bool, points int32) *Aura {
 		},
 	})
 
-	return char.RegisterAura(Aura{
+	return MakePermanent(char.RegisterAura(Aura{
 		Label:    "Retribution Aura",
 		ActionID: actionID,
-		Duration: NeverExpires,
-		OnReset: func(aura *Aura, sim *Simulation) {
-			aura.Activate(sim)
-		},
 		OnSpellHitTaken: func(aura *Aura, sim *Simulation, spell *Spell, result *SpellResult) {
 			if result.Landed() && spell.SpellSchool == SpellSchoolPhysical {
 				procSpell.Cast(sim, spell.Unit)
 			}
 		},
-	})
+	}))
 }
 
 func SanctityAuraBuff(char *Character, improved bool) *Aura {
-	aura := char.GetOrRegisterAura(Aura{
+	aura := MakePermanent(char.GetOrRegisterAura(Aura{
 		Label:    "Sanctity Aura",
 		ActionID: ActionID{SpellID: 20218},
-		Duration: NeverExpires,
-		OnReset: func(aura *Aura, sim *Simulation) {
-			aura.Activate(sim)
-		},
-	}).AttachMultiplicativePseudoStatBuff(&char.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexHoly], 1.1)
+	}).AttachMultiplicativePseudoStatBuff(&char.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexHoly], 1.1))
 
 	if improved {
 		aura.AttachMultiplicativePseudoStatBuff(&char.PseudoStats.DamageDealtMultiplier, 1.02)
@@ -592,27 +584,25 @@ func TranquilAirTotemAura(char *Character) *Aura {
 
 func WindfuryTotemAura(char *Character, isImpoved bool) *Aura {
 	apBonus := 445.0
-	apBonus *= TernaryFloat64(isImpoved, 1.3, 1)
-	const procChance = 0.2
-
+	if isImpoved {
+		apBonus *= 1.3
+	}
 	// Chance on MH Auto Attack to instantly attack with another AA with apBonus.
 	// AP bonus comes from an aura that lingers for 1.5 seconds?
 
 	wfProcAura := char.NewTemporaryStatsAura("Windfury Totem Proc", ActionID{SpellID: 25584}, stats.Stats{stats.AttackPower: apBonus}, time.Millisecond*1500)
 
-	return char.GetOrRegisterAura(Aura{
-		Label:    "Windfury Totem",
-		ActionID: ActionID{SpellID: 25587},
-		Duration: NeverExpires,
-
-		OnReset: func(aura *Aura, sim *Simulation) {
-			aura.Activate(sim)
-		},
-		OnSpellHitDealt: func(aura *Aura, sim *Simulation, spell *Spell, result *SpellResult) {
-			if result.Landed() && spell == char.AutoAttacks.MHAuto() && sim.RandomFloat("Windfury Totem") < procChance {
-				wfProcAura.Activate(sim)
-				char.AutoAttacks.mh.swing(sim)
-			}
+	return char.MakeProcTriggerAura(ProcTrigger{
+		Name:            "Windfury Totem",
+		MetricsActionID: ActionID{SpellID: 25587},
+		ProcChance:      0.2,
+		Outcome:         OutcomeLanded,
+		Callback:        CallbackOnSpellHitDealt,
+		ProcMask:        ProcMaskMeleeMHAuto,
+		ICD:             time.Millisecond * 100, // No procs on procs
+		Handler: func(sim *Simulation, spell *Spell, result *SpellResult) {
+			wfProcAura.Activate(sim)
+			char.AutoAttacks.mh.swing(sim)
 		},
 	})
 }
