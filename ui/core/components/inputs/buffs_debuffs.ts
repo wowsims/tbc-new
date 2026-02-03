@@ -166,6 +166,12 @@ export const BloodPact = makeTristatePartyBuffInput({
 	fieldName: 'bloodPact',
 	label: 'Bloodpact',
 });
+export const WindfuryTotem = makeTristatePartyBuffInput({
+	actionId: ActionId.fromSpellId(25587),
+	impId: ActionId.fromSpellId(29193),
+	fieldName: 'windfuryTotem',
+	label: 'Windfury Totem'
+})
 
 export const DrumsOfBattleBuff = makeEnumValuePartyBuffInput(ActionId.fromItemId(185848), 'drums', Drums.DrumsOfBattle);
 export const DrumsOfRestorationBuff = makeEnumValuePartyBuffInput(ActionId.fromItemId(185850), 'drums', Drums.DrumsOfRestoration);
@@ -337,6 +343,11 @@ export const PARTY_BUFFS_CONFIG = [
 		config: GraceOfAirTotem,
 		picker: IconPicker,
 		stats: [Stat.StatAgility],
+	},
+	{
+		config: WindfuryTotem,
+		picker: IconPicker,
+		stats: [Stat.StatAttackPower]
 	},
 ] as PickerStatOptions[];
 

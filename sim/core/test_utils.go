@@ -89,7 +89,7 @@ var FullPartyBuffs = &proto.PartyBuffs{
 	GraceOfAirTotem:      proto.TristateEffect_TristateEffectImproved,
 	StrengthOfEarthTotem: proto.StrengthOfEarthType_EnhancingTotems,
 	TranquilAirTotem:     true,
-	WindfuryTotemRank:    5,
+	WindfuryTotem:        proto.TristateEffect_TristateEffectImproved,
 
 	BattleShout:     proto.TristateEffect_TristateEffectImproved,
 	CommandingShout: proto.TristateEffect_TristateEffectImproved,
