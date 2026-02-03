@@ -3,13 +3,12 @@ import { ref } from 'tsx-vanilla';
 import { MISSING_RANDOM_SUFFIX_WARNING } from '../../constants/item_notices';
 import { setItemQualityCssClass } from '../../css_utils';
 import { Player } from '../../player';
-import { ItemSlot, ItemType } from '../../proto/common';
+import { ItemSlot } from '../../proto/common';
 import { UIEnchant as Enchant, UIGem as Gem } from '../../proto/ui';
 import { ActionId } from '../../proto_utils/action_id';
 import { getEnchantDescription } from '../../proto_utils/enchants';
 import { EquippedItem } from '../../proto_utils/equipped_item';
-import { translateProtoStatName, translateSlotName, translateStat } from '../../../i18n/localization';
-import i18n from '../../../i18n/config';
+import { translateProtoStatName, translateSlotName } from '../../../i18n/localization';
 import { SimUI } from '../../sim_ui';
 import { EventID } from '../../typed_event';
 import { Component } from '../component';
@@ -48,7 +47,7 @@ export default class GearPicker extends Component {
 			ItemSlot.ItemSlotWrist,
 			ItemSlot.ItemSlotMainHand,
 			ItemSlot.ItemSlotOffHand,
-			ItemSlot.ItemSlotRanged
+			ItemSlot.ItemSlotRanged,
 		].map(slot => new ItemPicker(leftSideRef.value!, this, simUI, player, slot));
 
 		const rightItemPickers = [
