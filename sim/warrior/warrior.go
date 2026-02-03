@@ -90,10 +90,8 @@ type Warrior struct {
 	WarriorInputs
 
 	// Current state
-	Stance              Stance
-	CriticalBlockChance []float64 // Can be gained as non-prot via certain talents and spells
-	PrePullChargeGain   float64
-	ChargeRageGain      float64
+	Stance         Stance
+	ChargeRageGain float64
 
 	BattleShout       *core.Spell
 	CommandingShout   *core.Spell
@@ -114,19 +112,11 @@ type Warrior struct {
 	sharedMCD      *core.Timer // Recklessness, Shield Wall & Retaliation
 	sharedShoutsCD *core.Timer
 
-	RendAura            *core.Aura
-	DeepWoundsAura      *core.Aura
-	SweepingStrikesAura *core.Aura
-	EnrageAura          *core.Aura
-	BerserkerRageAura   *core.Aura
-	LastStandAura       *core.Aura
-	VictoryRushAura     *core.Aura
-	ShieldBarrierAura   *core.DamageAbsorptionAura
+	EnrageAura *core.Aura
 
 	SkullBannerAura         *core.Aura
 	DemoralizingBannerAuras core.AuraArray
 
-	RallyingCryAuras       core.AuraArray
 	DemoralizingShoutAuras core.AuraArray
 	SunderArmorAuras       core.AuraArray
 
@@ -149,7 +139,7 @@ func (warrior *Warrior) Initialize() {
 
 	warrior.registerRecklessness()
 	warrior.registerShieldWall()
-	warrior.registerRetailiation()
+	warrior.registerRetaliation()
 
 	warrior.registerCharge()
 	warrior.registerIntercept()
@@ -162,6 +152,7 @@ func (warrior *Warrior) Initialize() {
 	warrior.registerCleave()
 	warrior.registerOverpower()
 	warrior.registerSlam()
+	warrior.registerWhirlwind()
 	warrior.registerExecute()
 	warrior.registerThunderClap()
 	warrior.registerRevenge()
@@ -170,27 +161,6 @@ func (warrior *Warrior) Initialize() {
 
 	warrior.registerStances()
 	warrior.registerShouts()
-	warrior.registerPassives()
-
-	// warrior.registerRallyingCry()
-	// warrior.registerExecuteSpell()
-	// warrior.registerHeroicStrikeSpell()
-	// warrior.registerCleaveSpell()
-	// warrior.registerRecklessness()
-	// warrior.registerVictoryRush()
-	// warrior.registerShieldWall()
-	// warrior.registerSunderArmor()
-	// warrior.registerHamstring()
-	// warrior.registerThunderClap()
-	// warrior.registerWhirlwind()
-	// warrior.registerCharge()
-	// warrior.registerPummel()
-}
-
-func (warrior *Warrior) registerPassives() {
-	// warrior.registerEnrage()
-	// warrior.registerDeepWounds()
-	// warrior.registerBloodAndThunder()
 }
 
 func (warrior *Warrior) Reset(_ *core.Simulation) {
@@ -198,9 +168,7 @@ func (warrior *Warrior) Reset(_ *core.Simulation) {
 	warrior.ChargeRageGain = 15.0
 }
 
-func (warrior *Warrior) OnEncounterStart(sim *core.Simulation) {
-	warrior.PrePullChargeGain = 0
-}
+func (warrior *Warrior) OnEncounterStart(sim *core.Simulation) {}
 
 func (war *Warrior) GetHandType() proto.HandType {
 	mh := war.GetMHWeapon()

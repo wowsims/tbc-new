@@ -27,8 +27,6 @@ type ProtectionWarrior struct {
 	*warrior.Warrior
 
 	Options *proto.ProtectionWarrior_Options
-
-	SwordAndBoardAura *core.Aura
 }
 
 func (war *ProtectionWarrior) ApplyTalents() {
@@ -54,21 +52,6 @@ func (war *ProtectionWarrior) GetWarrior() *warrior.Warrior {
 
 func (war *ProtectionWarrior) Initialize() {
 	war.Warrior.Initialize()
-	war.registerPassives()
-
-	// war.registerRevenge()
-	// war.registerShieldSlam()
-	// war.registerShieldBlock()
-	// war.registerDemoralizingShout()
-	// war.registerLastStand()
-}
-
-func (war *ProtectionWarrior) registerPassives() {
-	// war.registerUnwaveringSentinel()
-	// war.registerBastionOfDefense()
-	// war.registerSwordAndBoard()
-	// war.registerUltimatum()
-	// war.registerRiposte()
 }
 
 func (war *ProtectionWarrior) Reset(sim *core.Simulation) {

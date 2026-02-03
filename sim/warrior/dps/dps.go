@@ -57,17 +57,6 @@ func (war *DpsWarrior) GetWarrior() *warrior.Warrior {
 
 func (war *DpsWarrior) Initialize() {
 	war.Warrior.Initialize()
-	war.registerPassives()
-	// war.registerBloodthirst()
-}
-
-func (war *DpsWarrior) registerPassives() {
-	// war.registerCrazedBerserker()
-	// war.registerFlurry()
-	// war.registerBloodsurge()
-	// war.registerMeatCleaver()
-	// war.registerSingleMindedFuryOrTitansGrip()
-	// war.registerUnshackledFury()
 }
 
 func (war *DpsWarrior) Reset(sim *core.Simulation) {

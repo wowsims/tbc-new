@@ -11,7 +11,7 @@ func (war *Warrior) registerBerserkerRage() {
 	rageMetrics := war.NewRageMetrics(actionID)
 	instantRage := 5 * float64(war.Talents.ImprovedBerserkerRage)
 
-	war.BerserkerRageAura = war.RegisterAura(core.Aura{
+	aura := war.RegisterAura(core.Aura{
 		Label:    "Berserker Rage",
 		ActionID: actionID,
 		Duration: time.Second * 10,
@@ -37,8 +37,9 @@ func (war *Warrior) registerBerserkerRage() {
 			if instantRage > 0 {
 				war.AddRage(sim, instantRage, rageMetrics)
 			}
-			war.BerserkerRageAura.Activate(sim)
+			aura.Activate(sim)
 		},
+		RelatedSelfBuff: aura,
 	})
 
 	war.AddMajorCooldown(core.MajorCooldown{
