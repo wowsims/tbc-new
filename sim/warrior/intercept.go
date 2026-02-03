@@ -14,7 +14,7 @@ func (war *Warrior) registerIntercept() {
 	var interceptTarget *core.Unit
 
 	aura := war.RegisterAura(core.Aura{
-		Label:    "Charge",
+		Label:    "Intercept",
 		ActionID: actionID,
 		Duration: 15 * time.Second,
 		OnGain: func(aura *core.Aura, sim *core.Simulation) {

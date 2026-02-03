@@ -131,6 +131,10 @@ func applyDebuffEffects(target *Unit, targetIdx int, debuffs *proto.Debuffs, rai
 	if debuffs.WintersChill {
 		MakePermanent(WintersChillAura(target, 5))
 	}
+
+	if debuffs.ThunderClap != proto.TristateEffect_TristateEffectMissing {
+		MakePermanent(ThunderClapAura(target, GetTristateValueInt32(debuffs.ThunderClap, 0, 3)))
+	}
 }
 
 func ScheduledMajorArmorAura(aura *Aura, options PeriodicActionOptions, raid *proto.Raid) {
@@ -536,6 +540,28 @@ func WintersChillAura(target *Unit, startingStacks int32) *Aura {
 					dynamicMods[unit.UnitIndex].UpdateFloatValue(critBonus * float64(newStacks))
 				}
 			}
+		},
+	})
+}
+
+func ThunderClapAura(target *Unit, points int32) *Aura {
+	aura := target.GetOrRegisterAura(Aura{
+		Label:    "ThunderClap-" + strconv.Itoa(int(points)),
+		ActionID: ActionID{SpellID: 47502},
+		Duration: time.Second * 30,
+	})
+	AtkSpeedReductionEffect(aura, []float64{1.1, 1.14, 1.17, 1.2}[points])
+	return aura
+}
+
+func AtkSpeedReductionEffect(aura *Aura, speedMultiplier float64) *ExclusiveEffect {
+	return aura.NewExclusiveEffect("AtkSpdReduction", false, ExclusiveEffect{
+		Priority: speedMultiplier,
+		OnGain: func(ee *ExclusiveEffect, sim *Simulation) {
+			ee.Aura.Unit.MultiplyAttackSpeed(sim, 1/speedMultiplier)
+		},
+		OnExpire: func(ee *ExclusiveEffect, sim *Simulation) {
+			ee.Aura.Unit.MultiplyAttackSpeed(sim, speedMultiplier)
 		},
 	})
 }

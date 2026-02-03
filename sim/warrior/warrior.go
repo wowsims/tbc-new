@@ -111,6 +111,7 @@ type Warrior struct {
 	curQueueAura       *core.Aura
 	curQueuedAutoSpell *core.Spell
 
+	sharedMCD      *core.Timer // Recklessness, Shield Wall & Retaliation
 	sharedShoutsCD *core.Timer
 
 	RendAura            *core.Aura
@@ -128,8 +129,6 @@ type Warrior struct {
 	RallyingCryAuras       core.AuraArray
 	DemoralizingShoutAuras core.AuraArray
 	SunderArmorAuras       core.AuraArray
-	ThunderClapAuras       core.AuraArray
-	WeakenedArmorAuras     core.AuraArray
 
 	// Set bonuses
 	T6Tank2P *core.Aura
@@ -148,16 +147,24 @@ func (warrior *Warrior) AddPartyBuffs(_ *proto.PartyBuffs) {
 
 func (warrior *Warrior) Initialize() {
 
+	warrior.registerRecklessness()
+	warrior.registerShieldWall()
+	warrior.registerRetailiation()
+
 	warrior.registerCharge()
 	warrior.registerIntercept()
 	warrior.registerPummel()
 	warrior.registerHamstring()
 
+	warrior.registerRend()
 	warrior.registerSunderArmor()
 	warrior.registerHeroicStrike()
 	warrior.registerCleave()
-	warrior.registerExecute()
 	warrior.registerOverpower()
+	warrior.registerSlam()
+	warrior.registerExecute()
+	warrior.registerThunderClap()
+	warrior.registerRevenge()
 	warrior.registerShieldBlock()
 	warrior.registerShieldBash()
 
@@ -234,6 +241,7 @@ func NewWarrior(character *core.Character, options *proto.WarriorOptions, talent
 	warrior.AddStatDependency(stats.BonusArmor, stats.Armor, 1)
 
 	warrior.sharedShoutsCD = warrior.NewTimer()
+	warrior.sharedMCD = warrior.NewTimer()
 	warrior.ChargeRageGain = 15.0
 
 	return warrior

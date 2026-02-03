@@ -97,6 +97,8 @@ func (war *Warrior) registerImprovedThunderClap() {
 		return
 	}
 
+	// Slowing effect implemented in core/debuffs.go
+
 	rageCostReduction := []int32{0, 1, 2, 4}[war.Talents.ImprovedThunderClap]
 	damageGain := []float64{0, 0.4, 0.7, 1.0}[war.Talents.ImprovedThunderClap]
 

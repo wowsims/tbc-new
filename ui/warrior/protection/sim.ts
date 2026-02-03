@@ -9,6 +9,7 @@ import { Class, Debuffs, Faction, IndividualBuffs, ItemSlot, PartyBuffs, PseudoS
 import { Stats, UnitStat } from '../../core/proto_utils/stats';
 import { defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
 import * as Presets from './presets';
+import * as WarriorInputs from '../inputs';
 
 const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionWarrior, {
 	cssClass: 'protection-warrior-sim-ui',
@@ -79,6 +80,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionWarrior, {
 		inputs: [
 			OtherInputs.DistanceFromTarget,
 			OtherInputs.InputDelay,
+			WarriorInputs.StanceSnapshot(),
 			OtherInputs.TankAssignment,
 			OtherInputs.IncomingHps,
 			OtherInputs.HealingCadence,

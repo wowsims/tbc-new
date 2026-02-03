@@ -83,7 +83,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecDpsWarrior, {
 	otherInputs: {
 		inputs: [
 			FuryInputs.SyncTypeInput,
-			//WarriorInputs.StanceSnapshot(),
+			WarriorInputs.StanceSnapshot(),
 			OtherInputs.DistanceFromTarget,
 			OtherInputs.InputDelay,
 			OtherInputs.TankAssignment,

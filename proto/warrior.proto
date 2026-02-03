@@ -104,6 +104,8 @@ message ProtectionWarrior {
 
 	message Options {
 		WarriorOptions class_options = 1;
+		bool stance_snapshot = 2;
+		bool use_item_swap_bonus_stats = 3;
 	}
 	Options options = 1;
 }
