@@ -45,7 +45,7 @@ func (warlock *Warlock) registerCorruption() *core.Spell {
 			NumberOfTicks:       6,
 			TickLength:          3 * time.Second,
 			AffectedByCastSpeed: false,
-			BonusCoefficient:    warlock.Corruption.BonusCoefficient,
+			BonusCoefficient:    corruptionCoeff,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, 900)
 			},

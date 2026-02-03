@@ -30,11 +30,14 @@ func (warlock *Warlock) registerConflagrate() {
 				Duration: time.Second * 10,
 			},
 		},
+		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
+			return target.HasActiveAura("Immolate (DoT)-1")
+		},
+
 		DamageMultiplier: 1.0,
 		CritMultiplier:   warlock.DefaultSpellCritMultiplier(),
 		ThreatMultiplier: 1,
 		BonusCoefficient: conflagrateCoeff,
-		RechargeTime:     time.Second * 10,
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			//tie this to landed/hit
 			dmgRoll := warlock.CalcAndRollDamageRange(sim, 579, 721)

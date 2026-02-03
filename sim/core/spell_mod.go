@@ -363,6 +363,10 @@ const (
 	// Will increase the spell.ThreatMultiplier. +5% = 0.05
 	// Uses FloatValue
 	SpellMod_ThreatMultiplier_Flat
+
+	// Will increase the spell.ThreatMultiplier. +5% = 0.05
+	// Uses FloatValue
+	SpellMod_OnHit_Proc
 )
 
 var spellModMap = map[SpellModType]*SpellModFunctions{

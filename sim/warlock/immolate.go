@@ -24,7 +24,7 @@ func (warlock *Warlock) registerImmolate() {
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD:      core.GCDDefault,
-				CastTime: 1500 * time.Millisecond,
+				CastTime: 2000*time.Millisecond - time.Duration(100*warlock.Talents.Bane),
 			},
 		},
 

@@ -86,7 +86,6 @@ export const DraeneiRacialCaster = makeBooleanPartyBuffInput({
 	fieldName: 'draeneiRacialCaster',
 	label: 'Inspiring Presense - Caster',
 	showWhen: (party: Party) => {
-		console.log('yayyy', party.getPlayer(0)!.getRace());
 		return [Race.RaceDraenei, Race.RaceDwarf, Race.RaceGnome, Race.RaceHuman, Race.RaceNightElf].includes(party.getPlayer(0)!.getRace())
 	},
 });

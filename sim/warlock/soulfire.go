@@ -22,7 +22,7 @@ func (warlock *Warlock) registerSoulfire() {
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD:      core.GCDDefault,
-				CastTime: time.Millisecond * 6000,
+				CastTime: time.Millisecond*6000 - time.Duration(400*warlock.Talents.Bane),
 			},
 			CD: core.Cooldown{
 				Timer:    warlock.NewTimer(),

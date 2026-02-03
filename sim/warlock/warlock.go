@@ -57,8 +57,7 @@ type Warlock struct {
 	// Doomguard *DoomguardPet
 	// Infernal  *InfernalPet
 
-	serviceTimer         *core.Timer
-	HealthRegainModifier float64
+	serviceTimer *core.Timer
 }
 
 func (warlock *Warlock) GetCharacter() *core.Character {
@@ -98,6 +97,7 @@ func (warlock *Warlock) Initialize() {
 	warlock.registerCurseOfElements()
 	warlock.registerCurseOfDoom()
 	warlock.registerCurseOfAgony()
+
 	warlock.registerCorruption()
 	warlock.registerSeed()
 	warlock.registerDrainLife()
@@ -105,10 +105,11 @@ func (warlock *Warlock) Initialize() {
 	warlock.registerIncinerate()
 	warlock.registerLifeTap()
 	warlock.registerShadowBolt()
-	warlock.registerShadowBurn()
+	warlock.registerSearingPain()
 	warlock.registerSiphonLifeSpell()
 	warlock.registerSoulfire()
 
+	warlock.PseudoStats.SelfHealingMultiplier = 1.0
 	// doomguardInfernalTimer := warlock.NewTimer()
 	// warlock.registerSummonDoomguard(doomguardInfernalTimer)
 	// warlock.registerSummonInfernal(doomguardInfernalTimer)
@@ -206,6 +207,7 @@ const (
 	WarlockSpellSiphonLife
 	WarlockSpellDrainSoul
 	WarlockSpellShadowFury
+	WarlockSpellShadowbolt2
 	WarlockSpellAll int64 = 1<<iota - 1
 
 	WarlockShadowDamage = WarlockSpellCorruption | WarlockSpellUnstableAffliction | WarlockSpellDrainLife | WarlockSpellAgony |

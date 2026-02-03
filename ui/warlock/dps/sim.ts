@@ -4,7 +4,7 @@ import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_u
 import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
 import { APLRotation } from '../../core/proto/apl';
-import { Debuffs, Faction, IndividualBuffs, ItemSlot, PartyBuffs, PseudoStat, Race, RaidBuffs, Spec, Stat } from '../../core/proto/common';
+import { Debuffs, Faction, IndividualBuffs, ItemSlot, PartyBuffs, PseudoStat, Race, RaidBuffs, Spec, Stat, TristateEffect } from '../../core/proto/common';
 import { DEFAULT_CASTER_GEM_STATS, Stats, UnitStat } from '../../core/proto_utils/stats';
 import { defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
 import { TypedEvent } from '../../core/typed_event';
@@ -35,7 +35,16 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecWarlock, {
 	knownIssues: [],
 
 	// All stats for which EP should be calculated.
-	epStats: [Stat.StatIntellect, Stat.StatSpellDamage],
+	epStats: [
+		Stat.StatIntellect,
+		Stat.StatSpellDamage,
+		Stat.StatShadowDamage,
+		Stat.StatFireDamage,
+		Stat.StatSpellHitRating,
+		Stat.StatSpellCritRating,
+		Stat.StatSpellHasteRating,
+		Stat.StatMP5
+	],
 	// Reference stat against which to calculate EP. DPS classes use either spell power or attack power.
 	epReferenceStat: Stat.StatSpellDamage,
 	// Which stats to display in the Character Stats section, at the bottom of the left-hand sidebar.
@@ -46,6 +55,8 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecWarlock, {
 			Stat.StatStamina,
 			Stat.StatIntellect,
 			Stat.StatSpellDamage,
+			Stat.StatShadowDamage,
+			Stat.StatFireDamage,
 			Stat.StatMP5,
 		],
 		[PseudoStat.PseudoStatSpellHitPercent, PseudoStat.PseudoStatSpellCritPercent, PseudoStat.PseudoStatSpellHastePercent],
@@ -70,8 +81,12 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecWarlock, {
 		// Default buffs and debuffs settings.
 		raidBuffs: RaidBuffs.create({
 			...defaultRaidBuffMajorDamageCooldowns(),
+			arcaneBrilliance: true,
+			giftOfTheWild: TristateEffect.TristateEffectImproved,
+			powerWordFortitude: TristateEffect.TristateEffectImproved,
 		}),
 		partyBuffs: PartyBuffs.create({
+
 
 		}),
 		individualBuffs: IndividualBuffs.create({

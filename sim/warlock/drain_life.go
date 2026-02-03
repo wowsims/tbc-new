@@ -48,7 +48,7 @@ func (warlock *Warlock) registerDrainLife() {
 
 				resultSlice[0] = dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 
-				warlock.GainHealth(sim, resultSlice[0].Damage*warlock.HealthRegainModifier, healthMetric)
+				warlock.GainHealth(sim, resultSlice[0].Damage*warlock.PseudoStats.SelfHealingMultiplier, healthMetric)
 			},
 		},
 

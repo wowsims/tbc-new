@@ -15,7 +15,7 @@ func (warlock *Warlock) registerShadowBolt() {
 		SpellSchool:    core.SpellSchoolShadow,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL,
-		ClassSpellMask: WarlockSpellShadowBolt | WarlockDestructionSpells,
+		ClassSpellMask: WarlockSpellShadowBolt,
 		MissileSpeed:   20,
 
 		ManaCost: core.ManaCostOptions{FlatCost: 420},
@@ -39,7 +39,6 @@ func (warlock *Warlock) registerShadowBolt() {
 			if len(existingAura) == 0 || existingAura[0].Duration != core.NeverExpires {
 				if result.Landed() && result.Outcome.Matches(core.OutcomeCrit) && warlock.Talents.ImprovedShadowBolt > 0 {
 					if !warlock.ImpShadowboltAura.IsActive() {
-
 						warlock.ImpShadowboltAura.Activate(sim)
 					}
 					warlock.ImpShadowboltAura.SetStacks(sim, 4)

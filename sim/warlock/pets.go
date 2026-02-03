@@ -330,6 +330,10 @@ func (pet *WarlockPet) registerLashOfPainSpell() {
 			DefaultCast: core.Cast{
 				GCD: time.Second,
 			},
+			CD: core.Cooldown{
+				Timer:    pet.NewTimer(),
+				Duration: 12 * time.Second,
+			},
 		},
 
 		DamageMultiplier: 1,

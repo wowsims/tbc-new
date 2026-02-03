@@ -396,6 +396,7 @@ func (warlock *Warlock) applyDemonicTactics() {
 Destruction
 Skip for now:
   - Aftermath
+  - Bane -> applied in respective spells --> shadowbolt.go, immolate.go, soulfire.go
 */
 func (warlock *Warlock) applyImprovedShadowBolt() {
 	if warlock.Talents.ImprovedShadowBolt == 0 {
@@ -417,19 +418,19 @@ func (warlock *Warlock) applyCataclysm() {
 }
 
 func (warlock *Warlock) applyBane() {
-	if warlock.Talents.Cataclysm == 0 {
+	if warlock.Talents.Bane == 0 {
 		return
 	}
 
 	warlock.AddStaticMod(core.SpellModConfig{
 		Kind:      core.SpellMod_CastTime_Flat,
-		TimeValue: -(time.Millisecond * 100) * time.Duration(warlock.Talents.Bane),
+		TimeValue: time.Millisecond * time.Duration(-100*warlock.Talents.Bane),
 		ClassMask: WarlockSpellShadowBolt | WarlockSpellImmolate,
 	})
 
 	warlock.AddStaticMod(core.SpellModConfig{
 		Kind:      core.SpellMod_CastTime_Flat,
-		TimeValue: -(time.Millisecond * 400) * time.Duration(warlock.Talents.Bane),
+		TimeValue: time.Millisecond * time.Duration(-400*warlock.Talents.Bane),
 		ClassMask: WarlockSpellSoulFire,
 	})
 }
@@ -439,9 +440,9 @@ func (warlock *Warlock) applyImprovedFirebolt() {
 		return
 	}
 
-	warlock.AddStaticMod(core.SpellModConfig{
+	warlock.ActivePet.AddStaticMod(core.SpellModConfig{
 		Kind:      core.SpellMod_CastTime_Flat,
-		TimeValue: -(time.Millisecond * 250) * time.Duration(warlock.Talents.ImprovedFirebolt),
+		TimeValue: time.Millisecond * time.Duration(-250*warlock.Talents.ImprovedFirebolt),
 		ClassMask: WarlockSpellImpFireBolt,
 	})
 }
@@ -451,9 +452,9 @@ func (warlock *Warlock) applyImprovedLashOfPain() {
 		return
 	}
 
-	warlock.AddStaticMod(core.SpellModConfig{
+	warlock.ActivePet.AddStaticMod(core.SpellModConfig{
 		Kind:      core.SpellMod_Cooldown_Flat,
-		TimeValue: -(time.Second * 3) * time.Duration(warlock.Talents.ImprovedFirebolt),
+		TimeValue: time.Second * time.Duration(-3*warlock.Talents.ImprovedLashOfPain),
 		ClassMask: WarlockSpellSuccubusLashOfPain,
 	})
 }
@@ -485,7 +486,7 @@ func (warlock *Warlock) applyDestructiveReach() {
 
 	warlock.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_ThreatMultiplier_Flat,
-		FloatValue: 1.0 - (0.5 * float64(warlock.Talents.DestructiveReach)),
+		FloatValue: -0.05 * float64(warlock.Talents.DestructiveReach),
 		ClassMask:  WarlockDestructionSpells,
 	})
 
@@ -495,19 +496,19 @@ func (warlock *Warlock) applyImprovedSearingPain() {
 	if warlock.Talents.ImprovedSearingPain == 0 {
 		return
 	}
-	var critBonus = 0
+	var critBonus = 0.0
 	switch warlock.Talents.ImprovedSearingPain {
 	case 1:
-		critBonus = 4
+		critBonus = 4.0
 	case 2:
-		critBonus = 7
-	case 10:
-		critBonus = 10
+		critBonus = 7.0
+	case 3:
+		critBonus = 10.0
 	}
 
 	warlock.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
-		FloatValue: float64(critBonus),
+		FloatValue: critBonus,
 		ClassMask:  WarlockSpellSearingPain,
 	})
 }
@@ -543,13 +544,13 @@ func (warlock *Warlock) applyEmberstorm() {
 
 	warlock.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Pct,
-		FloatValue: 0.01 * float64(warlock.Talents.Emberstorm),
+		FloatValue: 0.02 * float64(warlock.Talents.Emberstorm),
 		ClassMask:  WarlockFireDamage,
 	})
 
 	warlock.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_CastTime_Pct,
-		FloatValue: 0.02 * float64(warlock.Talents.Emberstorm),
+		FloatValue: -0.02 * float64(warlock.Talents.Emberstorm),
 		ClassMask:  WarlockSpellIncinerate,
 	})
 }
@@ -584,7 +585,7 @@ func (warlock *Warlock) applySoulLeech() {
 		},
 		OnSpellHitDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 
-			if spell.ClassSpellMask != WarlockSoulLeech || result.Outcome != core.OutcomeHit {
+			if (spell.ClassSpellMask&WarlockSoulLeech == 0) || !result.Landed() {
 				return
 			}
 
@@ -592,7 +593,7 @@ func (warlock *Warlock) applySoulLeech() {
 				return
 			}
 
-			warlock.GainHealth(sim, result.Damage*warlock.HealthRegainModifier, healthMetric)
+			warlock.GainHealth(sim, result.Damage*0.2*warlock.PseudoStats.SelfHealingMultiplier, healthMetric)
 		},
 	})
 }
