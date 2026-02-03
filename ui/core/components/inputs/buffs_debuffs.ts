@@ -566,37 +566,37 @@ export const DEBUFFS_CONFIG = [
 	{
 		config: DemoralizingRoar,
 		picker: IconPicker,
-		stats: [Stat.StatResilienceRating],
+		stats: [Stat.StatStamina],
 	},
 	{
 		config: DemoralizingShout,
 		picker: IconPicker,
-		stats: [Stat.StatResilienceRating],
+		stats: [Stat.StatStamina],
 	},
 	{
 		config: Screech,
 		picker: IconPicker,
-		stats: [Stat.StatResilienceRating],
+		stats: [Stat.StatStamina],
 	},
 	{
 		config: ThunderClap,
 		picker: IconPicker,
-		stats: [Stat.StatResilienceRating],
+		stats: [Stat.StatStamina],
 	},
 	{
 		config: InsectSwarm,
 		picker: IconPicker,
-		stats: [Stat.StatResilienceRating],
+		stats: [Stat.StatStamina],
 	},
 	{
 		config: ScorpidSting,
 		picker: IconPicker,
-		stats: [Stat.StatResilienceRating],
+		stats: [Stat.StatStamina],
 	},
 	{
 		config: ShadowEmbrace,
 		picker: IconPicker,
-		stats: [Stat.StatResilienceRating],
+		stats: [Stat.StatStamina],
 	},
 ] as PickerStatOptions[];
 
