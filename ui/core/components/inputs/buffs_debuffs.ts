@@ -75,6 +75,12 @@ export const CommandingShout = makeTristatePartyBuffInput({
 	fieldName: 'commandingShout',
 	label: 'Commanding Shout',
 });
+export const BattleShout = makeTristatePartyBuffInput({
+	actionId: ActionId.fromSpellId(2048),
+	impId: ActionId.fromSpellId(12861),
+	fieldName: 'battleShout',
+	label: "Battle Shout"
+});
 export const DevotionAura = makeTristatePartyBuffInput({
 	actionId: ActionId.fromSpellId(27149),
 	impId: ActionId.fromSpellId(20142),
@@ -218,6 +224,11 @@ export const PARTY_BUFFS_CONFIG = [
 		stats: [Stat.StatHealth],
 	},
 	{
+		config: BattleShout,
+		picker: IconPicker,
+		stats: [Stat.StatAttackPower, Stat.StatRangedAttackPower]
+	},
+	{
 		config: DevotionAura,
 		picker: IconPicker,
 		stats: [Stat.StatArmor],
@@ -255,7 +266,7 @@ export const PARTY_BUFFS_CONFIG = [
 	{
 		config: SanctityAura,
 		picker: IconPicker,
-		stats: [Stat.StatHolyDamage],
+		stats: [],
 	},
 	{
 		config: StrengthOfEarthTotem,
@@ -270,7 +281,7 @@ export const PARTY_BUFFS_CONFIG = [
 	{
 		config: TrueshotAura,
 		picker: IconPicker,
-		stats: [],
+		stats: [Stat.StatAttackPower, Stat.StatRangedAttackPower],
 	},
 	{
 		config: WrathOfAirTotem,
@@ -295,7 +306,7 @@ export const PARTY_BUFFS_CONFIG = [
 	{
 		config: BraidedEterniumChain,
 		picker: IconPicker,
-		stats: [Stat.StatSpellCritRating],
+		stats: [Stat.StatMeleeCritRating],
 	},
 	{
 		config: ChainOfTheTwilightOwl,

@@ -483,6 +483,10 @@ func SanctityAuraBuff(char *Character, improved bool) *Aura {
 	aura := char.GetOrRegisterAura(Aura{
 		Label:    "Sanctity Aura",
 		ActionID: ActionID{SpellID: 20218},
+		Duration: NeverExpires,
+		OnReset: func(aura *Aura, sim *Simulation) {
+			aura.Activate(sim)
+		},
 	}).AttachMultiplicativePseudoStatBuff(&char.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexHoly], 1.1)
 
 	if improved {
