@@ -9,9 +9,8 @@ import (
 func (war *Warrior) registerRetaliation() {
 	actionID := core.ActionID{SpellID: 20230}
 
-	// The hits will proc in any stance
 	attackSpell := war.RegisterSpell(core.SpellConfig{
-		ClassSpellMask: SpellMaskRetaliation,
+		ClassSpellMask: SpellMaskRetaliationHit,
 		ActionID:       core.ActionID{SpellID: 20240},
 		SpellSchool:    core.SpellSchoolPhysical,
 		ProcMask:       core.ProcMaskMeleeMH,
@@ -25,7 +24,7 @@ func (war *Warrior) registerRetaliation() {
 		},
 	})
 
-	buffAura := war.RegisterAura(core.Aura{
+	aura := war.RegisterAura(core.Aura{
 		ActionID:  actionID,
 		Label:     "Retaliation",
 		Duration:  time.Second * 15,
@@ -60,11 +59,11 @@ func (war *Warrior) registerRetaliation() {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			buffAura.Activate(sim)
-			buffAura.SetStacks(sim, 30)
+			aura.Activate(sim)
+			aura.SetStacks(sim, 30)
 		},
 
-		RelatedSelfBuff: buffAura,
+		RelatedSelfBuff: aura,
 	})
 
 	war.AddMajorCooldown(core.MajorCooldown{

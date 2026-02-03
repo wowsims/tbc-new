@@ -26,6 +26,7 @@ const (
 	SpellMaskRecklessness
 	SpellMaskDeathWish
 	SpellMaskRetaliation
+	SpellMaskRetaliationHit
 	SpellMaskRampage
 	SpellMaskShieldWall
 	SpellMaskLastStand
@@ -73,7 +74,7 @@ const (
 		SpellMaskCleave | SpellMaskExecute | SpellMaskHeroicStrike | SpellMaskOverpower |
 		SpellMaskRevenge | SpellMaskSlam | SpellMaskSweepingSlam | SpellMaskShieldBash | SpellMaskSunderArmor |
 		SpellMaskThunderClap | SpellMaskWhirlwind | SpellMaskWhirlwindOh | SpellMaskShieldSlam |
-		SpellMaskBloodthirst | SpellMaskMortalStrike | SpellMaskIntercept | SpellMaskDevastate
+		SpellMaskBloodthirst | SpellMaskMortalStrike | SpellMaskIntercept | SpellMaskDevastate | SpellMaskRetaliationHit
 
 	SpellMaskDamageSpells = SpellMaskDirectDamageSpells | SpellMaskDeepWounds | SpellMaskRend
 )

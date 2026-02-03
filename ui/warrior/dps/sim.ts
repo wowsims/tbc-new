@@ -12,9 +12,6 @@ import * as WarriorInputs from '../inputs';
 import * as FuryInputs from './inputs';
 import * as Presets from './presets';
 
-const P2HitPostCapEPs = [0, 0];
-const P3HitPostCapEPs = [0.42 * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT, 0];
-
 const SPEC_CONFIG = registerSpecConfig(Spec.SpecDpsWarrior, {
 	cssClass: 'dps-warrior-sim-ui',
 	cssScheme: PlayerClasses.getCssClass(PlayerClasses.Warrior),
@@ -22,12 +19,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecDpsWarrior, {
 	knownIssues: [],
 
 	// All stats for which EP should be calculated.
-	epStats: [
-		Stat.StatStrength,
-		Stat.StatAgility,
-		Stat.StatAttackPower,
-		Stat.StatExpertiseRating,
-	],
+	epStats: [Stat.StatStrength, Stat.StatAgility, Stat.StatAttackPower, Stat.StatExpertiseRating],
 	epPseudoStats: [PseudoStat.PseudoStatMainHandDps, PseudoStat.PseudoStatOffHandDps],
 	// Reference stat against which to calculate EP. I think all classes use either spell power or attack power.
 	epReferenceStat: Stat.StatStrength,
@@ -36,16 +28,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecDpsWarrior, {
 		[Stat.StatHealth, Stat.StatStamina, Stat.StatStrength, Stat.StatAgility, Stat.StatAttackPower, Stat.StatExpertiseRating],
 		[PseudoStat.PseudoStatMeleeHitPercent, PseudoStat.PseudoStatMeleeHitPercent, PseudoStat.PseudoStatMeleeHastePercent],
 	),
-	// modifyDisplayStats: (player: Player<Spec.SpecFuryWarrior>) => {
-	// 	//let stats = new Stats();
-	// 	if (!player.getInFrontOfTarget()) {
-	// 		// When behind target, dodge is the only outcome affected by Expertise.
-	// 		//stats = stats.addStat(Stat.StatExpertise, player.getTalents().weaponMastery * 4 * Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION);
-	// 	}
-	// 	return {
-	// 	//	talents: stats,
-	// 	};
-	// },
 
 	defaults: {
 		// Default equipped gear.
@@ -63,15 +45,9 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecDpsWarrior, {
 		raidBuffs: RaidBuffs.create({
 			...defaultRaidBuffMajorDamageCooldowns(Class.ClassWarrior),
 		}),
-		partyBuffs: PartyBuffs.create({
-
-		}),
-		individualBuffs: IndividualBuffs.create({
-
-		}),
-		debuffs: Debuffs.create({
-
-		}),
+		partyBuffs: PartyBuffs.create({}),
+		individualBuffs: IndividualBuffs.create({}),
+		debuffs: Debuffs.create({}),
 	},
 
 	// IconInputs to include in the 'Player' section on the settings tab.
