@@ -8,7 +8,7 @@ import (
 )
 
 // Registers all consume-related effects to the Agent.
-func applyConsumeEffects(agent Agent) {
+func applyConsumeEffects(agent Agent, partyBuffs *proto.PartyBuffs) {
 	character := agent.GetCharacter()
 	consumables := character.Consumables
 	if consumables == nil {
@@ -35,7 +35,7 @@ func applyConsumeEffects(agent Agent) {
 	}
 
 	// Static Imbues
-	if consumables.MhImbueId != 0 {
+	if consumables.MhImbueId != 0 && partyBuffs.WindfuryTotem == proto.TristateEffect_TristateEffectMissing {
 		registerStaticImbue(agent, consumables.MhImbueId, true)
 	}
 	if consumables.OhImbueId != 0 {
