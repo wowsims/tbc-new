@@ -190,8 +190,8 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 		SanctityAuraBuff(char, IsImproved(partyBuffs.SanctityAura))
 	}
 
-	if partyBuffs.StrengthOfEarthTotem != proto.StrengthOfEarthType_None {
-		StrengthOfEarthTotemAura(char, partyBuffs.StrengthOfEarthTotem.Enum())
+	if partyBuffs.StrengthOfEarthTotem != proto.TristateEffect_TristateEffectMissing {
+		StrengthOfEarthTotemAura(char, IsImproved(partyBuffs.StrengthOfEarthTotem))
 	}
 
 	if partyBuffs.TotemOfWrath > 0 {
@@ -206,8 +206,8 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 		TrueShotAuraBuff(char)
 	}
 
-	if partyBuffs.WindfuryTotemRank > 0 && char.AutoAttacks.anyEnabled() {
-		WindfuryTotemAura(char, partyBuffs.WindfuryTotemIwt)
+	if partyBuffs.WindfuryTotem != proto.TristateEffect_TristateEffectMissing {
+		WindfuryTotemAura(char, IsImproved(partyBuffs.WindfuryTotem))
 	}
 
 	if partyBuffs.WrathOfAirTotem != proto.TristateEffect_TristateEffectMissing {
@@ -477,26 +477,22 @@ func RetributionAuraBuff(char *Character, improved bool, points int32) *Aura {
 		},
 	})
 
-	return char.RegisterAura(Aura{
+	return MakePermanent(char.RegisterAura(Aura{
 		Label:    "Retribution Aura",
 		ActionID: actionID,
-		Duration: NeverExpires,
-		OnReset: func(aura *Aura, sim *Simulation) {
-			aura.Activate(sim)
-		},
 		OnSpellHitTaken: func(aura *Aura, sim *Simulation, spell *Spell, result *SpellResult) {
 			if result.Landed() && spell.SpellSchool == SpellSchoolPhysical {
 				procSpell.Cast(sim, spell.Unit)
 			}
 		},
-	})
+	}))
 }
 
 func SanctityAuraBuff(char *Character, improved bool) *Aura {
-	aura := char.GetOrRegisterAura(Aura{
+	aura := MakePermanent(char.GetOrRegisterAura(Aura{
 		Label:    "Sanctity Aura",
 		ActionID: ActionID{SpellID: 20218},
-	}).AttachMultiplicativePseudoStatBuff(&char.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexHoly], 1.1)
+	}).AttachMultiplicativePseudoStatBuff(&char.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexHoly], 1.1))
 
 	if improved {
 		aura.AttachMultiplicativePseudoStatBuff(&char.PseudoStats.DamageDealtMultiplier, 1.02)
@@ -563,15 +559,10 @@ func ManaSpringTotemAura(char *Character, improved bool) *Aura {
 	})
 }
 
-func StrengthOfEarthTotemAura(char *Character, totem *proto.StrengthOfEarthType) *Aura {
+func StrengthOfEarthTotemAura(char *Character, isImproved bool) *Aura {
 	strBuff := 86.0
-
-	switch totem {
-	case proto.StrengthOfEarthType_CycloneBonus.Enum(),
-		proto.StrengthOfEarthType_EnhancingTotems.Enum():
-		strBuff = 98
-	case proto.StrengthOfEarthType_EnhancingAndCyclone.Enum():
-		strBuff = 112
+	if isImproved {
+		strBuff *= 1.15
 	}
 
 	return makeStatBuff(char, BuffConfig{
@@ -604,86 +595,27 @@ func TranquilAirTotemAura(char *Character) *Aura {
 	}).AttachMultiplicativePseudoStatBuff(&char.PseudoStats.ThreatMultiplier, 0.8)
 }
 
-func WindfuryTotemAura(char *Character, iwtTalentPoints int32) *Aura {
-	buffActionID := ActionID{SpellID: 25587}
+func WindfuryTotemAura(char *Character, isImpoved bool) *Aura {
 	apBonus := 445.0
-	apBonus *= 1 + 0.15*float64(iwtTalentPoints)
-
-	var charges int32
-	icd := Cooldown{
-		Timer:    char.NewTimer(),
-		Duration: 1,
+	if isImpoved {
+		apBonus *= 1.3
 	}
+	// Chance on MH Auto Attack to instantly attack with another AA with apBonus.
+	// AP bonus comes from an aura that lingers for 1.5 seconds?
 
-	wfBuffAura := char.NewTemporaryStatsAuraWrapped("Windfury Buff", buffActionID, stats.Stats{stats.AttackPower: apBonus}, time.Millisecond*1500, func(config *Aura) {
-		config.OnSpellHitDealt = func(aura *Aura, sim *Simulation, spell *Spell, result *SpellResult) {
-			// *Special Case* Windfury should not proc on Seal of Command
-			if spell.ActionID.SpellID == 20424 {
-				return
-			}
-			if !spell.ProcMask.Matches(ProcMaskMeleeWhiteHit) || spell.ProcMask.Matches(ProcMaskMeleeSpecial) {
-				return
-			}
-			charges--
-			if charges == 0 {
-				aura.Deactivate(sim)
-			}
-		}
-	})
-	const procChance = 0.2
-	var wfSpell *Spell
+	wfProcAura := char.NewTemporaryStatsAura("Windfury Totem Proc", ActionID{SpellID: 25584}, stats.Stats{stats.AttackPower: apBonus}, time.Millisecond*1500)
 
-	return char.GetOrRegisterAura(Aura{
-		Label:    "Windfury Totem",
-		ActionID: ActionID{SpellID: 25587},
-		OnInit: func(aura *Aura, sim *Simulation) {
-			wfSpell = char.GetOrRegisterSpell(SpellConfig{
-				ActionID:    buffActionID, // temporary buff ("Windfury Attack") spell id
-				SpellSchool: SpellSchoolPhysical,
-				Flags:       SpellFlagMeleeMetrics | SpellFlagNoOnCastComplete,
-
-				ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
-					wfSwing := char.AutoAttacks.MHAuto()
-					wfSwing.BonusSpellDamage = 445
-					wfSwing.Cast(sim, target)
-				},
-			})
-		},
-		OnReset: func(aura *Aura, sim *Simulation) {
-			aura.Activate(sim)
-		},
-		OnSpellHitDealt: func(aura *Aura, sim *Simulation, spell *Spell, result *SpellResult) {
-			// *Special Case* Windfury should not proc on Seal of Command
-			if spell.ActionID.SpellID == 20424 {
-				return
-			}
-			if !result.Landed() || !spell.ProcMask.Matches(ProcMaskMeleeMHAuto) {
-				return
-			}
-
-			if wfBuffAura.IsActive() {
-				return
-			}
-			if !icd.IsReady(sim) {
-				// Checking for WF buff aura isn't quite enough now that we refactored auras.
-				// TODO: Clean this up to remove the need for an instant ICD.
-				return
-			}
-
-			if sim.RandomFloat("Windfury Totem") > procChance {
-				return
-			}
-
-			// TODO: the current proc system adds auras after cast and damage, in game they're added after cast
-			startCharges := int32(2)
-			if !spell.ProcMask.Matches(ProcMaskMeleeMHSpecial) {
-				startCharges--
-			}
-			charges = startCharges
-			wfBuffAura.Activate(sim)
-			icd.Use(sim)
-
-			aura.Unit.AutoAttacks.MaybeReplaceMHSwing(sim, wfSpell).Cast(sim, result.Target)
+	return char.MakeProcTriggerAura(ProcTrigger{
+		Name:            "Windfury Totem",
+		MetricsActionID: ActionID{SpellID: 25587},
+		ProcChance:      0.2,
+		Outcome:         OutcomeLanded,
+		Callback:        CallbackOnSpellHitDealt,
+		ProcMask:        ProcMaskMeleeMHAuto,
+		ICD:             time.Millisecond * 100, // No procs on procs
+		Handler: func(sim *Simulation, spell *Spell, result *SpellResult) {
+			wfProcAura.Activate(sim)
+			char.AutoAttacks.mh.swing(sim)
 		},
 	})
 }
