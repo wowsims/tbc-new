@@ -1,38 +1,40 @@
 package warrior
 
 import (
+	"time"
+
 	"github.com/wowsims/tbc/sim/core"
 )
 
-func (war *Warrior) registerExecuteSpell() {
+func (war *Warrior) registerPummel() {
 	war.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 5308},
-		SpellSchool:    core.SpellSchoolPhysical,
-		ProcMask:       core.ProcMaskMeleeMHSpecial,
+		ActionID:       core.ActionID{SpellID: 6552},
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
-		ClassSpellMask: SpellMaskExecute,
+		ClassSpellMask: SpellMaskPummel,
+		ProcMask:       core.ProcMaskMeleeMHSpecial,
+		SpellSchool:    core.SpellSchoolPhysical,
 		MaxRange:       core.MaxMeleeRange,
 
 		RageCost: core.RageCostOptions{
-			Cost:   30,
+			Cost:   10,
 			Refund: 0.8,
 		},
+
 		Cast: core.CastConfig{
-			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+			CD: core.Cooldown{
+				Timer:    war.NewTimer(),
+				Duration: time.Second * 10,
 			},
-			IgnoreHaste: true,
 		},
 
-		CritMultiplier:   war.DefaultCritMultiplier(),
-		DamageMultiplier: 1.0,
+		CritMultiplier: war.DefaultMeleeCritMultiplier(),
 
 		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
-			return sim.IsExecutePhase20() || war.T16Dps4P.IsActive()
+			return war.StanceMatches(BerserkerStance)
 		},
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := war.CalcScalingSpellDmg(5.52500009537) + spell.MeleeAttackPower()*2.54999995232
+			baseDamage := 50.0
 			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialHitAndCrit)
 
 			if !result.Landed() {

@@ -5,7 +5,6 @@ import (
 
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
-	"github.com/wowsims/tbc/sim/core/stats"
 )
 
 var TalentTreeSizes = [3]int{23, 22, 22}
@@ -117,7 +116,6 @@ func (mage *Mage) Initialize() {
 }
 
 func (mage *Mage) registerPassives() {
-	mage.ApplyArmorSpecializationEffect(stats.Intellect, proto.ArmorType_ArmorTypeCloth, 89744)
 }
 
 func (mage *Mage) registerSpells() {

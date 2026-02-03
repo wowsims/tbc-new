@@ -25,6 +25,7 @@ const (
 	SpellMaskRallyingCry
 	SpellMaskRecklessness
 	SpellMaskDeathWish
+	SpellMaskRetaliation
 	SpellMaskRampage
 	SpellMaskShieldWall
 	SpellMaskLastStand
@@ -94,8 +95,6 @@ type Warrior struct {
 	PrePullChargeGain   float64
 	ChargeRageGain      float64
 
-	HeroicStrikeCleaveCostMod *core.SpellMod
-
 	BattleShout       *core.Spell
 	CommandingShout   *core.Spell
 	DemoralizingShout *core.Spell
@@ -107,15 +106,18 @@ type Warrior struct {
 	DeepWounds   *core.Spell
 	MortalStrike *core.Spell
 
-	sharedShoutsCD   *core.Timer
-	sharedHSCleaveCD *core.Timer
+	HeroicStrike       *core.Spell
+	Cleave             *core.Spell
+	curQueueAura       *core.Aura
+	curQueuedAutoSpell *core.Spell
+
+	sharedShoutsCD *core.Timer
 
 	RendAura            *core.Aura
 	DeepWoundsAura      *core.Aura
 	SweepingStrikesAura *core.Aura
 	EnrageAura          *core.Aura
 	BerserkerRageAura   *core.Aura
-	ShieldBlockAura     *core.Aura
 	LastStandAura       *core.Aura
 	VictoryRushAura     *core.Aura
 	ShieldBarrierAura   *core.DamageAbsorptionAura
@@ -145,10 +147,19 @@ func (warrior *Warrior) AddPartyBuffs(_ *proto.PartyBuffs) {
 }
 
 func (warrior *Warrior) Initialize() {
-	warrior.sharedHSCleaveCD = warrior.NewTimer()
-	warrior.sharedShoutsCD = warrior.NewTimer()
+
+	warrior.registerCharge()
+	warrior.registerIntercept()
+	warrior.registerPummel()
+	warrior.registerHamstring()
 
 	warrior.registerSunderArmor()
+	warrior.registerHeroicStrike()
+	warrior.registerCleave()
+	warrior.registerExecute()
+	warrior.registerOverpower()
+	warrior.registerShieldBlock()
+	warrior.registerShieldBash()
 
 	warrior.registerStances()
 	warrior.registerShouts()
@@ -177,7 +188,7 @@ func (warrior *Warrior) registerPassives() {
 
 func (warrior *Warrior) Reset(_ *core.Simulation) {
 	warrior.Stance = StanceNone
-	warrior.ChargeRageGain = 10.0
+	warrior.ChargeRageGain = 15.0
 }
 
 func (warrior *Warrior) OnEncounterStart(sim *core.Simulation) {
@@ -211,6 +222,7 @@ func NewWarrior(character *core.Character, options *proto.WarriorOptions, talent
 		MainHand:       warrior.WeaponFromMainHand(warrior.DefaultMeleeCritMultiplier()),
 		OffHand:        warrior.WeaponFromOffHand(warrior.DefaultMeleeCritMultiplier()),
 		AutoSwingMelee: true,
+		ReplaceMHSwing: warrior.TryHSOrCleave,
 	})
 
 	warrior.PseudoStats.CanParry = true
@@ -221,19 +233,10 @@ func NewWarrior(character *core.Character, options *proto.WarriorOptions, talent
 	warrior.AddStatDependency(stats.Agility, stats.DodgeRating, 1/30.0*core.DodgeRatingPerDodgePercent)
 	warrior.AddStatDependency(stats.BonusArmor, stats.Armor, 1)
 
-	warrior.CriticalBlockChance = append(warrior.CriticalBlockChance, 0.0, 0.0)
-
-	warrior.HeroicStrikeCleaveCostMod = warrior.AddDynamicMod(core.SpellModConfig{
-		ClassMask:  SpellMaskHeroicStrike | SpellMaskCleave,
-		Kind:       core.SpellMod_PowerCost_Pct,
-		FloatValue: -2,
-	})
+	warrior.sharedShoutsCD = warrior.NewTimer()
+	warrior.ChargeRageGain = 15.0
 
 	return warrior
-}
-
-func (warrior *Warrior) GetCriticalBlockChance() float64 {
-	return warrior.CriticalBlockChance[0] + warrior.CriticalBlockChance[1]
 }
 
 // Agent is a generic way to access underlying warrior on any of the agents.

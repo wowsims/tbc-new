@@ -1,8 +1,6 @@
 package warrior
 
 import (
-	"time"
-
 	"github.com/wowsims/tbc/sim/core"
 )
 
@@ -21,19 +19,21 @@ func (war *Warrior) registerHamstring() {
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				NonEmpty: true,
+				GCD: core.GCDDefault,
 			},
 			IgnoreHaste: true,
-			CD: core.Cooldown{
-				Timer:    war.NewTimer(),
-				Duration: time.Second * 1,
-			},
 		},
 
-		ThreatMultiplier: 1,
+		ThreatMultiplier: 1.25,
+		FlatThreatBonus:  167.5,
+
+		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
+			return war.StanceMatches(BerserkerStance)
+		},
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			result := spell.CalcAndDealOutcome(sim, target, spell.OutcomeMeleeSpecialHit)
+			baseDamage := 63.0
+			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialHitAndCrit)
 
 			if !result.Landed() {
 				spell.IssueRefund(sim)

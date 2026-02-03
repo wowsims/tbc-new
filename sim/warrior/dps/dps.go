@@ -3,7 +3,6 @@ package dps
 import (
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
-	"github.com/wowsims/tbc/sim/core/stats"
 	"github.com/wowsims/tbc/sim/warrior"
 )
 
@@ -63,8 +62,6 @@ func (war *DpsWarrior) Initialize() {
 }
 
 func (war *DpsWarrior) registerPassives() {
-	war.ApplyArmorSpecializationEffect(stats.Strength, proto.ArmorType_ArmorTypePlate, 86526)
-
 	// war.registerCrazedBerserker()
 	// war.registerFlurry()
 	// war.registerBloodsurge()
@@ -78,7 +75,6 @@ func (war *DpsWarrior) Reset(sim *core.Simulation) {
 }
 
 func (war *DpsWarrior) OnEncounterStart(sim *core.Simulation) {
-	war.ResetRageBar(sim, 25+war.PrePullChargeGain)
 	war.Warrior.OnEncounterStart(sim)
 }
 

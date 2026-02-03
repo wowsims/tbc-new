@@ -8871,9 +8871,6 @@
             "unspent_talent_points": {
               "type": "string"
             },
-            "armor_specialization": {
-              "type": "string"
-            },
             "dual_wield_2h_without_titans_grip": {
               "type": "string"
             },
@@ -8887,7 +8884,6 @@
             "profession_requirement",
             "too_many_jc_gems",
             "unspent_talent_points",
-            "armor_specialization",
             "dual_wield_2h_without_titans_grip",
             "shaman_fele_autocast"
           ]

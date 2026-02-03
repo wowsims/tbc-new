@@ -319,22 +319,6 @@ export abstract class IndividualSimUI<SpecType extends Spec> extends SimUI {
 			},
 		});
 		this.addWarning({
-			updateOn: this.player.gearChangeEmitter,
-			getContent: () => {
-				if (!this.player.armorSpecializationArmorType) {
-					return '';
-				}
-
-				if (this.player.hasArmorSpecializationBonus()) {
-					return i18n.t('sidebar.warnings.armor_specialization', {
-						armorType: armorTypeNames.get(this.player.armorSpecializationArmorType),
-					});
-				} else {
-					return '';
-				}
-			},
-		});
-		this.addWarning({
 			updateOn: TypedEvent.onAny([this.player.gearChangeEmitter, this.player.talentsChangeEmitter]),
 			getContent: () => {
 				if (

@@ -201,10 +201,10 @@ func (war *Warrior) registerDeepWounds() {
 
 	war.MakeProcTriggerAura(core.ProcTrigger{
 		Name:               "Deep Wounds - Trigger",
-		Outcome:            core.OutcomeCrit,
-		Callback:           core.CallbackOnSpellHitDealt,
 		TriggerImmediately: true,
 		ProcMaskExclude:    core.ProcMaskEmpty,
+		Outcome:            core.OutcomeCrit,
+		Callback:           core.CallbackOnSpellHitDealt,
 		ExtraCondition: func(sim *core.Simulation, spell *core.Spell, _ *core.SpellResult) bool {
 			return spell.SpellSchool.Matches(core.SpellSchoolPhysical)
 		},
@@ -358,11 +358,12 @@ func (war *Warrior) registerSwordSpecialization() {
 	dpm := newSwordSpecializationDPM()
 
 	procTrigger := war.MakeProcTriggerAura(core.ProcTrigger{
-		Name:     "Sword Specialization",
-		DPM:      dpm,
-		ICD:      time.Millisecond * 500,
-		Outcome:  core.OutcomeLanded,
-		Callback: core.CallbackOnSpellHitDealt,
+		Name:               "Sword Specialization",
+		DPM:                dpm,
+		ICD:                time.Millisecond * 500,
+		TriggerImmediately: true,
+		Outcome:            core.OutcomeLanded,
+		Callback:           core.CallbackOnSpellHitDealt,
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			// OH WW hits can't proc this
 			if spell.Matches(SpellMaskWhirlwindOh) {
@@ -410,13 +411,13 @@ func (war *Warrior) registerImprovedDisciplines() {
 	durationIncrease := time.Second * time.Duration(2*war.Talents.ImprovedDisciplines)
 
 	war.AddStaticMod(core.SpellModConfig{
-		ClassMask: SpellMaskIntercept,
+		ClassMask: SpellMaskRetaliation | SpellMaskRecklessness | SpellMaskShieldWall,
 		Kind:      core.SpellMod_Cooldown_Flat,
 		TimeValue: -cooldownReduction,
 	})
 
 	war.AddStaticMod(core.SpellModConfig{
-		ClassMask: SpellMaskIntercept,
+		ClassMask: SpellMaskRetaliation | SpellMaskRecklessness | SpellMaskShieldWall,
 		Kind:      core.SpellMod_BuffDuration_Flat,
 		TimeValue: durationIncrease,
 	})

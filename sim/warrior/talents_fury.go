@@ -17,7 +17,7 @@ func (war *Warrior) registerFuryTalents() {
 	war.registerUnbridledWrath()
 
 	// Tier 3
-	war.registerImprovedCleave()
+	// Improved Cleave implemented in heroic_strike_cleave.go
 	// Piercing Howl not implemented
 	// Blood Craze not implemented
 	// Commanding Presence implemented in shouts.go
@@ -75,18 +75,6 @@ func (war *Warrior) registerUnbridledWrath() {
 	})
 }
 
-func (war *Warrior) registerImprovedCleave() {
-	if war.Talents.ImprovedCleave == 0 {
-		return
-	}
-
-	war.AddStaticMod(core.SpellModConfig{
-		ClassMask:  SpellMaskCleave,
-		Kind:       core.SpellMod_DamageDone_Flat,
-		FloatValue: 0.4 * float64(war.Talents.ImprovedCleave),
-	})
-}
-
 func (war *Warrior) registerDualWieldSpecialization() {
 	if war.Talents.DualWieldSpecialization == 0 {
 		return
@@ -128,8 +116,9 @@ func (war *Warrior) registerEnrage() {
 		Kind:       core.SpellMod_DamageDone_Flat,
 		FloatValue: 0.05 * float64(war.Talents.Enrage),
 	}).AttachProcTrigger(core.ProcTrigger{
-		Name:     "Enrage - Spend",
-		ProcMask: core.ProcMaskMelee,
+		Name:               "Enrage - Spend",
+		TriggerImmediately: true,
+		ProcMask:           core.ProcMaskMelee,
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			war.EnrageAura.RemoveStack(sim)
 		},
@@ -259,10 +248,10 @@ func (war *Warrior) registerFlurry() {
 	war.MakeProcTriggerAura(core.ProcTrigger{
 		Name:               "Flurry - Trigger",
 		ActionID:           core.ActionID{SpellID: 12319},
-		Callback:           core.CallbackOnSpellHitDealt,
 		ProcMask:           core.ProcMaskMelee,
-		Outcome:            core.OutcomeLanded,
 		TriggerImmediately: true,
+		Callback:           core.CallbackOnSpellHitDealt,
+		Outcome:            core.OutcomeLanded,
 
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			if spell.Matches(SpellMaskWhirlwindOh) {
@@ -376,9 +365,10 @@ func (war *Warrior) registerRampage() {
 	})
 
 	war.MakeProcTriggerAura(core.ProcTrigger{
-		Name:     "Rampage - Trigger",
-		Outcome:  core.OutcomeLanded,
-		Callback: core.CallbackOnSpellHitDealt,
+		Name:               "Rampage - Trigger",
+		TriggerImmediately: true,
+		Outcome:            core.OutcomeLanded,
+		Callback:           core.CallbackOnSpellHitDealt,
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			if result.Outcome.Matches(core.OutcomeCrit) {
 				validUntil = sim.CurrentTime + time.Second*5

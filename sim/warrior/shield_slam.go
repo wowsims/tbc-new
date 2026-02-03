@@ -1,22 +1,26 @@
+package warrior
+
 import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
-	"github.com/wowsims/tbc/sim/warrior"
 )
 
-func (war *ProtectionWarrior) registerShieldSlam() {
-	actionID := core.ActionID{SpellID: 23922}
-	rageMetrics := war.NewRageMetrics(actionID)
+func (war *Warrior) registerShieldBash() {
+	actionID := core.ActionID{SpellID: 72}
 
-	war.ShieldSlam = war.RegisterSpell(core.SpellConfig{
+	war.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
 		SpellSchool:    core.SpellSchoolPhysical,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
-		ClassSpellMask: warrior.SpellMaskShieldSlam,
+		ClassSpellMask: SpellMaskShieldSlam,
 		MaxRange:       core.MaxMeleeRange,
 
+		RageCost: core.RageCostOptions{
+			Cost:   10,
+			Refund: 0.8,
+		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD: core.GCDDefault,
@@ -24,25 +28,25 @@ func (war *ProtectionWarrior) registerShieldSlam() {
 			IgnoreHaste: true,
 			CD: core.Cooldown{
 				Timer:    war.NewTimer(),
-				Duration: time.Second * 6,
+				Duration: time.Second * 12,
 			},
 		},
 
 		DamageMultiplier: 1,
-		CritMultiplier:   war.DefaultCritMultiplier(),
-		ThreatMultiplier: 1,
+		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
+		ThreatMultiplier: 1.5,
+		FlatThreatBonus:  192,
 
 		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
-			return war.PseudoStats.CanBlock
+			return war.PseudoStats.CanBlock && war.StanceMatches(DefensiveStance|BattleStance)
 		},
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := war.CalcAndRollDamageRange(sim, 11.25, 0.05000000075) + spell.MeleeAttackPower()*1.5
+			baseDamage := 45.0
 			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialHitAndCrit)
-			additionalRage := core.TernaryFloat64(war.SwordAndBoardAura.IsActive(), 5, 0)
 
-			if result.Landed() {
-				war.AddRage(sim, (20+additionalRage)*war.GetRageMultiplier(target), rageMetrics)
+			if !result.Landed() {
+				spell.IssueRefund(sim)
 			}
 		},
 	})

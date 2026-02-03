@@ -3,7 +3,6 @@ package protection
 import (
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
-	"github.com/wowsims/tbc/sim/core/stats"
 	"github.com/wowsims/tbc/sim/warrior"
 )
 
@@ -63,8 +62,6 @@ func (war *ProtectionWarrior) Initialize() {
 }
 
 func (war *ProtectionWarrior) registerPassives() {
-	war.ApplyArmorSpecializationEffect(stats.Stamina, proto.ArmorType_ArmorTypePlate, 86526)
-
 	// war.registerUnwaveringSentinel()
 	// war.registerBastionOfDefense()
 	// war.registerSwordAndBoard()
@@ -77,6 +74,5 @@ func (war *ProtectionWarrior) Reset(sim *core.Simulation) {
 }
 
 func (war *ProtectionWarrior) OnEncounterStart(sim *core.Simulation) {
-	war.ResetRageBar(sim, core.TernaryFloat64(war.ShieldBarrierAura.IsActive(), 5, 25)+war.PrePullChargeGain)
 	war.Warrior.OnEncounterStart(sim)
 }

@@ -20,7 +20,7 @@ func (war *Warrior) registerProtectionTalents() {
 
 	// Tier 3
 	war.registerLastStand()
-	war.registerShieldImprovedBlock()
+	war.registerImprovedShieldBlock()
 	// Improved Revenge not implemented
 	war.registerDefiance()
 
@@ -110,10 +110,11 @@ func (war *Warrior) registerShieldSpecialization() {
 	rageMetrics := war.NewRageMetrics(core.ActionID{SpellID: 23602})
 
 	war.MakeProcTriggerAura(core.ProcTrigger{
-		Name:       "Shield Specialization",
-		ProcChance: 0.2 * float64(war.Talents.ShieldSpecialization),
-		Outcome:    core.OutcomeBlock,
-		Callback:   core.CallbackOnSpellHitTaken,
+		Name:               "Shield Specialization",
+		ProcChance:         0.2 * float64(war.Talents.ShieldSpecialization),
+		TriggerImmediately: true,
+		Outcome:            core.OutcomeBlock,
+		Callback:           core.CallbackOnSpellHitTaken,
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			war.AddRage(sim, 1, rageMetrics)
 		},
@@ -168,7 +169,7 @@ func (war *Warrior) registerLastStand() {
 	})
 }
 
-func (war *Warrior) registerShieldImprovedBlock() {
+func (war *Warrior) registerImprovedShieldBlock() {
 	if !war.Talents.ImprovedShieldBlock {
 		return
 	}

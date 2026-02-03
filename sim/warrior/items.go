@@ -55,9 +55,10 @@ var ItemSetWarbringerBattlegear = core.NewItemSet(core.ItemSet{
 
 			setBonusAura.
 				AttachProcTrigger(core.ProcTrigger{
-					Name:     "Warbringer Battlegear - 4PC",
-					Callback: core.CallbackOnSpellHitDealt,
-					Outcome:  core.OutcomeParry | core.OutcomeDodge,
+					Name:               "Warbringer Battlegear - 4PC",
+					TriggerImmediately: true,
+					Callback:           core.CallbackOnSpellHitDealt,
+					Outcome:            core.OutcomeParry | core.OutcomeDodge,
 					Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 						warrior.AddRage(sim, 2, rageMetrics)
 					},
@@ -88,9 +89,10 @@ var ItemSetWarbringerArmor = core.NewItemSet(core.ItemSet{
 
 			setBonusAura.
 				AttachProcTrigger(core.ProcTrigger{
-					Name:     "Warbringer Armor - 2PC",
-					Callback: core.CallbackOnSpellHitTaken,
-					Outcome:  core.OutcomeParry,
+					Name:               "Warbringer Armor - 2PC",
+					TriggerImmediately: true,
+					Callback:           core.CallbackOnSpellHitTaken,
+					Outcome:            core.OutcomeParry,
 					Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 						shield.Activate(sim)
 					},
@@ -108,18 +110,20 @@ var ItemSetWarbringerArmor = core.NewItemSet(core.ItemSet{
 
 			setBonusAura.
 				AttachProcTrigger(core.ProcTrigger{
-					Name:           "Warbringer Armor 4PC - Trigger",
-					ClassSpellMask: SpellMaskRevenge,
-					Callback:       core.CallbackOnSpellHitDealt,
-					Outcome:        core.OutcomeLanded,
+					Name:               "Warbringer Armor 4PC - Trigger",
+					TriggerImmediately: true,
+					ClassSpellMask:     SpellMaskRevenge,
+					Callback:           core.CallbackOnSpellHitDealt,
+					Outcome:            core.OutcomeLanded,
 					Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 						revengeMod.Activate()
 					},
 				}).
 				AttachProcTrigger(core.ProcTrigger{
-					Name:           "Warbringer Armor 4PC - Deactivate",
-					ClassSpellMask: SpellMaskDirectDamageSpells,
-					Callback:       core.CallbackOnSpellHitDealt,
+					Name:               "Warbringer Armor 4PC - Deactivate",
+					TriggerImmediately: true,
+					ClassSpellMask:     SpellMaskDirectDamageSpells,
+					Callback:           core.CallbackOnSpellHitDealt,
 					Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 						revengeMod.Deactivate()
 					},
@@ -149,9 +153,10 @@ var ItemSetDestroyerBattlegear = core.NewItemSet(core.ItemSet{
 
 			setBonusAura.
 				AttachProcTrigger(core.ProcTrigger{
-					Name:     "Destroyer Battlegear - 4PC",
-					Callback: core.CallbackOnSpellHitDealt,
-					Outcome:  core.OutcomeParry | core.OutcomeDodge,
+					Name:               "Destroyer Battlegear - 4PC",
+					TriggerImmediately: true,
+					Callback:           core.CallbackOnSpellHitDealt,
+					Outcome:            core.OutcomeParry | core.OutcomeDodge,
 					Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 						warrior.AddRage(sim, 2, rageMetrics)
 					},
@@ -178,9 +183,10 @@ var ItemSetDestroyerArmor = core.NewItemSet(core.ItemSet{
 
 			setBonusAura.
 				AttachProcTrigger(core.ProcTrigger{
-					Name:           "Destroyer Armor - 2PC",
-					ClassSpellMask: SpellMaskOverpower,
-					Callback:       core.CallbackOnSpellHitDealt,
+					Name:               "Destroyer Armor - 2PC",
+					ClassSpellMask:     SpellMaskOverpower,
+					TriggerImmediately: true,
+					Callback:           core.CallbackOnSpellHitDealt,
 					Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 						aura.Activate(sim)
 					},

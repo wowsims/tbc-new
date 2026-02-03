@@ -84,10 +84,6 @@ type Druid struct {
 	WeakenedBlowsAuras       core.AuraArray
 
 	form DruidForm
-
-	// Guardian leather specialization is form-specific
-	GuardianLeatherSpecTracker *core.Aura
-	GuardianLeatherSpecDep     *stats.StatDependency
 }
 
 const (
