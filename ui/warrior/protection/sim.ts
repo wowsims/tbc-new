@@ -38,7 +38,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionWarrior, {
 		],
 		[
 			PseudoStat.PseudoStatMeleeHitPercent,
-			PseudoStat.PseudoStatMeleeHitPercent,
+			PseudoStat.PseudoStatMeleeCritPercent,
 			PseudoStat.PseudoStatMeleeHastePercent,
 			PseudoStat.PseudoStatBlockPercent,
 			PseudoStat.PseudoStatDodgePercent,

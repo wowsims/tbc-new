@@ -26,7 +26,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecDpsWarrior, {
 	// Which stats to display in the Character Stats section, at the bottom of the left-hand sidebar.
 	displayStats: UnitStat.createDisplayStatArray(
 		[Stat.StatHealth, Stat.StatStamina, Stat.StatStrength, Stat.StatAgility, Stat.StatAttackPower, Stat.StatExpertiseRating],
-		[PseudoStat.PseudoStatMeleeHitPercent, PseudoStat.PseudoStatMeleeHitPercent, PseudoStat.PseudoStatMeleeHastePercent],
+		[PseudoStat.PseudoStatMeleeHitPercent, PseudoStat.PseudoStatMeleeHitPercent, PseudoStat.PseudoStatMeleeCritPercent,PseudoStat.PseudoStatMeleeHastePercent],
 	),
 
 	defaults: {

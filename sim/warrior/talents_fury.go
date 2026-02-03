@@ -53,7 +53,7 @@ func (war *Warrior) registerCruelty() {
 		return
 	}
 
-	war.AddStat(stats.PhysicalCritPercent, 1+0.01*float64(war.Talents.Cruelty))
+	war.AddStat(stats.PhysicalCritPercent, 1*float64(war.Talents.Cruelty))
 }
 
 func (war *Warrior) registerUnbridledWrath() {
@@ -276,8 +276,8 @@ func (war *Warrior) registerPrecision() {
 		return
 	}
 
-	war.AddStat(stats.PhysicalHitPercent, 0.01*float64(war.Talents.Precision))
-	war.AddStat(stats.RangedHitPercent, 0.01*float64(war.Talents.Precision))
+	war.AddStat(stats.PhysicalHitPercent, 1*float64(war.Talents.Precision))
+	war.AddStat(stats.RangedHitPercent, 1*float64(war.Talents.Precision))
 }
 
 func (war *Warrior) registerBloodthirst() {
