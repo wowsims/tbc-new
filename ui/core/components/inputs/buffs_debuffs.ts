@@ -76,6 +76,12 @@ export const CommandingShout = makeTristatePartyBuffInput({
 	fieldName: 'commandingShout',
 	label: 'Commanding Shout',
 });
+export const BattleShout = makeTristatePartyBuffInput({
+	actionId: ActionId.fromSpellId(2048),
+	impId: ActionId.fromSpellId(12861),
+	fieldName: 'battleShout',
+	label: "Battle Shout"
+});
 export const DevotionAura = makeTristatePartyBuffInput({
 	actionId: ActionId.fromSpellId(27149),
 	impId: ActionId.fromSpellId(20142),
@@ -99,8 +105,8 @@ export const DraeneiRacialMelee = makeBooleanPartyBuffInput({
 export const EyeOfTheNight = makeBooleanPartyBuffInput({ actionId: ActionId.fromSpellId(31033), fieldName: 'eyeOfTheNight', label: 'Eye of the Night' });
 export const FerociousInspiration = makeMultistatePartyBuffInput(ActionId.fromSpellId(34460), 5, 'ferociousInspiration', 'Ferocious Inspiratation');
 export const GraceOfAirTotem = makeTristatePartyBuffInput({
-	actionId: ActionId.fromSpellId(8835),
-	impId: ActionId.fromSpellId(25359),
+	actionId: ActionId.fromSpellId(25359),
+	impId: ActionId.fromSpellId(16295),
 	fieldName: 'graceOfAirTotem',
 	label: 'Grace of Air Totem',
 });
@@ -141,8 +147,8 @@ export const SanctityAura = makeTristatePartyBuffInput({
 	label: 'Sanctity Aura',
 });
 export const StrengthOfEarthTotem = makeTristatePartyBuffInput({
-	actionId: ActionId.fromSpellId(8076),
-	impId: ActionId.fromSpellId(25527),
+	actionId: ActionId.fromSpellId(25528),
+	impId: ActionId.fromSpellId(16295),
 	fieldName: 'strengthOfEarthTotem',
 	label: 'Strength of Earth Totem',
 });
@@ -160,6 +166,12 @@ export const BloodPact = makeTristatePartyBuffInput({
 	fieldName: 'bloodPact',
 	label: 'Bloodpact',
 });
+export const WindfuryTotem = makeTristatePartyBuffInput({
+	actionId: ActionId.fromSpellId(25587),
+	impId: ActionId.fromSpellId(29193),
+	fieldName: 'windfuryTotem',
+	label: 'Windfury Totem'
+})
 
 export const DrumsOfBattleBuff = makeEnumValuePartyBuffInput(ActionId.fromItemId(185848), 'drums', Drums.DrumsOfBattle);
 export const DrumsOfRestorationBuff = makeEnumValuePartyBuffInput(ActionId.fromItemId(185850), 'drums', Drums.DrumsOfRestoration);
@@ -224,6 +236,11 @@ export const PARTY_BUFFS_CONFIG = [
 		stats: [Stat.StatHealth],
 	},
 	{
+		config: BattleShout,
+		picker: IconPicker,
+		stats: [Stat.StatAttackPower, Stat.StatRangedAttackPower]
+	},
+	{
 		config: DevotionAura,
 		picker: IconPicker,
 		stats: [Stat.StatArmor],
@@ -266,12 +283,7 @@ export const PARTY_BUFFS_CONFIG = [
 	{
 		config: SanctityAura,
 		picker: IconPicker,
-		stats: [Stat.StatHolyDamage],
-	},
-	{
-		config: StrengthOfEarthTotem,
-		picker: IconPicker,
-		stats: [Stat.StatStrength],
+		stats: [],
 	},
 	{
 		config: TotemOfWrath,
@@ -281,7 +293,7 @@ export const PARTY_BUFFS_CONFIG = [
 	{
 		config: TrueshotAura,
 		picker: IconPicker,
-		stats: [],
+		stats: [Stat.StatAttackPower, Stat.StatRangedAttackPower],
 	},
 	{
 		config: WrathOfAirTotem,
@@ -306,7 +318,7 @@ export const PARTY_BUFFS_CONFIG = [
 	{
 		config: BraidedEterniumChain,
 		picker: IconPicker,
-		stats: [Stat.StatSpellCritRating],
+		stats: [Stat.StatMeleeCritRating],
 	},
 	{
 		config: ChainOfTheTwilightOwl,
@@ -334,10 +346,20 @@ export const PARTY_BUFFS_CONFIG = [
 		stats: [Stat.StatSpellDamage],
 	},
 	{
+		config: StrengthOfEarthTotem,
+		picker: IconPicker,
+		stats: [Stat.StatStrength],
+	},
+	{
 		config: GraceOfAirTotem,
 		picker: IconPicker,
 		stats: [Stat.StatAgility],
-	}
+	},
+	{
+		config: WindfuryTotem,
+		picker: IconPicker,
+		stats: [Stat.StatAttackPower]
+	},
 ] as PickerStatOptions[];
 
 export const BUFFS_CONFIG = [

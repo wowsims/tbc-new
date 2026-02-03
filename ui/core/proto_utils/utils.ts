@@ -1192,7 +1192,7 @@ export function canEquipItem<SpecType extends Spec>(item: Item, playerSpec: Play
 		if (item.handType == HandType.HandTypeTwoHand && !eligibleWeaponType.canUseTwoHand) {
 			return false;
 		}
-		if (item.handType == HandType.HandTypeTwoHand && slot == ItemSlot.ItemSlotOffHand && playerSpec.specID != Spec.SpecDPSWarrior) {
+		if (item.handType == HandType.HandTypeTwoHand && slot == ItemSlot.ItemSlotOffHand) {
 			return false;
 		}
 
@@ -1245,10 +1245,6 @@ export function getEligibleItemSlots(item: Item, isFuryWarrior?: boolean): Array
 	}
 
 	if (item.type == ItemType.ItemTypeWeapon) {
-		if (isFuryWarrior) {
-			return [ItemSlot.ItemSlotMainHand, ItemSlot.ItemSlotOffHand];
-		}
-
 		if (item.handType == HandType.HandTypeMainHand) {
 			return [ItemSlot.ItemSlotMainHand];
 		} else if (item.handType == HandType.HandTypeOffHand) {
