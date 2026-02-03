@@ -194,8 +194,7 @@ func (war *Warrior) registerDeepWounds() {
 		}
 
 		newDamage := awd * 0.2 * float64(war.Talents.DeepWounds)
-
-		dot.SnapshotBaseDamage = (dot.OutstandingDmg() + newDamage) / float64(dot.RemainingTicks())
+		dot.SnapshotBaseDamage = (dot.OutstandingDmg() + newDamage) / float64(dot.ExpectedTickCount())
 		dot.SnapshotAttackerMultiplier = war.DeepWounds.AttackerDamageMultiplier(attackTable, true)
 
 		war.DeepWounds.Cast(sim, target)
