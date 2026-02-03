@@ -5,6 +5,7 @@ import { PlayerSpec } from '../player_spec.js';
 import { PlayerSpecs } from '../player_specs';
 import { Player } from '../proto/api.js';
 import {
+	ArmorType,
 	Class,
 	EnchantType,
 	Faction,
