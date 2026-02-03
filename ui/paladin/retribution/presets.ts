@@ -89,7 +89,6 @@ export const DefaultConsumables = ConsumesSpec.create({
 	flaskId: 76088, // Flask of Winter's Bite
 	foodId: 74646, // Black Pepper Ribs and Shrimp
 	potId: 76095, // Potion of Mogu Power
-	prepotId: 76095, // Potion of Mogu Power
 });
 
 export const OtherDefaults = {

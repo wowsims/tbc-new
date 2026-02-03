@@ -62,22 +62,16 @@ export class ConsumesPicker extends Component {
 		if (this.simUI.player.getClass() !== Class.ClassWarrior && this.simUI.player.getSpec() !== Spec.SpecFeralBearDruid) {
 			pots = pots.filter(pot => pot.id !== 13442);
 		}
-		const prePotOptions = ConsumablesInputs.makeConsumableInput(pots, { consumesFieldName: 'prepotId' }, i18n.t('settings_tab.consumables.potions.prepop'));
 		const potionsOptions = ConsumablesInputs.makeConsumableInput(pots, { consumesFieldName: 'potId' }, i18n.t('settings_tab.consumables.potions.combat'));
-
-		const prePotPicker = buildIconInput(potionsElem, this.simUI.player, prePotOptions);
-
 		const potionsPicker = buildIconInput(potionsElem, this.simUI.player, potionsOptions);
 
 		const conjuredOptions = ConsumablesInputs.makeConjuredInput(relevantStatOptions(ConsumablesInputs.CONJURED_CONFIG, this.simUI));
 		const conjuredPicker = buildIconInput(potionsElem, this.simUI.player, conjuredOptions);
 
-		const events = TypedEvent.onAny([this.simUI.player.professionChangeEmitter]).on(() =>
-			this.updateRow(row, [potionsPicker, conjuredPicker, prePotPicker]),
-		);
+		const events = TypedEvent.onAny([this.simUI.player.professionChangeEmitter]).on(() => this.updateRow(row, [potionsPicker, conjuredPicker]));
 		this.addOnDisposeCallback(() => events.dispose());
 
-		this.updateRow(row, [potionsPicker, conjuredPicker, prePotPicker]);
+		this.updateRow(row, [potionsPicker, conjuredPicker]);
 	}
 
 	private buildElixirsPicker(): void {
@@ -136,7 +130,10 @@ export class ConsumesPicker extends Component {
 		);
 		const engiConsumesElem = engiConsumesRef.value!;
 
-		const explosivesoptions = ConsumablesInputs.makeExplosivesInput(relevantStatOptions(ConsumablesInputs.EXPLOSIVE_CONFIG, this.simUI), i18n.t('settings_tab.consumables.engineering.explosives'));
+		const explosivesoptions = ConsumablesInputs.makeExplosivesInput(
+			relevantStatOptions(ConsumablesInputs.EXPLOSIVE_CONFIG, this.simUI),
+			i18n.t('settings_tab.consumables.engineering.explosives'),
+		);
 		const explosivePicker = buildIconInput(engiConsumesElem, this.simUI.player, explosivesoptions);
 		const goblinSapperPicker = buildIconInput(engiConsumesElem, this.simUI.player, ConsumablesInputs.GoblinSapper);
 		const superSapperPicker = buildIconInput(engiConsumesElem, this.simUI.player, ConsumablesInputs.SuperSapper);
@@ -168,13 +165,19 @@ export class ConsumesPicker extends Component {
 		const row = this.rootElem.appendChild(
 			<ConsumeRow label="Imbue">
 				<div ref={imbuePickerRef} className="picker-group icon-group consumes-row-inputs consumes-imbue"></div>
-			</ConsumeRow>
+			</ConsumeRow>,
 		);
 		const imbuePickerElem = imbuePickerRef.value!;
 
-		const mhImbueOptions = ConsumablesInputs.makeMHImbueInput(relevantStatOptions(ConsumablesInputs.IMBUE_CONFIG_MH, this.simUI), i18n.t('settings_tab.consumables.imbue.mhImbue'));
-		const ohImbueOptions = ConsumablesInputs.makeOHImbueinput(relevantStatOptions(ConsumablesInputs.IMBUE_CONFIG_OH, this.simUI), i18n.t('settings_tab.consumables.imbue.ohImbue'));
-		mhImbueOptions.enableWhen = (player: Player<any>) => !player.getParty() || player.getParty()!.getBuffs().windfuryTotem == 0
+		const mhImbueOptions = ConsumablesInputs.makeMHImbueInput(
+			relevantStatOptions(ConsumablesInputs.IMBUE_CONFIG_MH, this.simUI),
+			i18n.t('settings_tab.consumables.imbue.mhImbue'),
+		);
+		const ohImbueOptions = ConsumablesInputs.makeOHImbueinput(
+			relevantStatOptions(ConsumablesInputs.IMBUE_CONFIG_OH, this.simUI),
+			i18n.t('settings_tab.consumables.imbue.ohImbue'),
+		);
+		mhImbueOptions.enableWhen = (player: Player<any>) => !player.getParty() || player.getParty()!.getBuffs().windfuryTotem == 0;
 		mhImbueOptions.changedEvent = (player: Player<any>) => TypedEvent.onAny([player.getParty()?.changeEmitter || player.consumesChangeEmitter]);
 
 		buildIconInput(imbuePickerElem, this.simUI.player, mhImbueOptions);
@@ -188,7 +191,7 @@ export class ConsumesPicker extends Component {
 		const row = this.rootElem.appendChild(
 			<ConsumeRow label="Drums">
 				<div ref={drumsPickerRef} className="picker-group icon-group consumes-row-inputs consumes-drums"></div>
-			</ConsumeRow>
+			</ConsumeRow>,
 		);
 		const drumsPickerElem = drumsPickerRef.value!;
 
@@ -228,6 +231,5 @@ const ConsumeRow = ({ label, children }: { label: string; children: JSX.Element 
 	</div>
 );
 function isDualWieldSpec(spec: any): boolean {
-	return [Spec.SpecEnhancementShaman, Spec.SpecHunter, Spec.SpecRogue, Spec.SpecDpsWarrior, Spec.SpecProtectionWarrior].includes(spec)
+	return [Spec.SpecEnhancementShaman, Spec.SpecHunter, Spec.SpecRogue, Spec.SpecDpsWarrior, Spec.SpecProtectionWarrior].includes(spec);
 }
-

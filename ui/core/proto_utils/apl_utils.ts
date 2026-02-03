@@ -52,6 +52,6 @@ export function simpleCooldownActions(cooldowns: Cooldowns): Array<APLAction> {
 		});
 }
 
-export function standardCooldownDefaults(cooldowns: Cooldowns, prepotAt?: string, startAutocastCDsAt?: string): [Array<APLPrepullAction>, Array<APLAction>] {
-	return [[prepullPotionAction(prepotAt)], [autocastCooldownsAction(startAutocastCDsAt), simpleCooldownActions(cooldowns)].flat()];
+export function standardCooldownDefaults(cooldowns: Cooldowns, startAutocastCDsAt?: string): [Array<APLPrepullAction>, Array<APLAction>] {
+	return [[], [autocastCooldownsAction(startAutocastCDsAt), simpleCooldownActions(cooldowns)].flat()];
 }
