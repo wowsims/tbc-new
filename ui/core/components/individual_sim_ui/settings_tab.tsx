@@ -312,7 +312,6 @@ export class SettingsTab extends SimTab {
 					simUI.player.setInFrontOfTarget(eventID, newSettings.inFrontOfTarget);
 					simUI.player.setDistanceFromTarget(eventID, newSettings.distanceFromTarget);
 					simUI.player.setHealingModel(eventID, newSettings.healingModel || HealingModel.create());
-					simUI.player.setChallengeModeEnabled(eventID, newSettings.challengeMode);
 				});
 			},
 			changeEmitters: [
@@ -384,7 +383,6 @@ export class SettingsTab extends SimTab {
 			inFrontOfTarget: this.simUI.player.getInFrontOfTarget(),
 			distanceFromTarget: this.simUI.player.getDistanceFromTarget(),
 			healingModel: this.simUI.player.getHealingModel(),
-			challengeMode: this.simUI.player.getChallengeModeEnabled(),
 		});
 	}
 

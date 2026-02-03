@@ -269,16 +269,9 @@
 			"title": "Gem Summary",
 			"reset_gems": "Reset gems"
 		},
-		"reforge_summary": {
-			"title": "Reforge Summary",
-			"reset_reforges": "Reset Reforges",
-			"copy_to_reforge_lite": "Copy to Reforge Lite"
-		},
 		"reforge_success": {
-			"title": "The following items were reforged:",
-			"removed_reforge": "Removed reforge",
-			"no_changes": "No reforge changes were made!",
-			"copy_to_reforge_lite": "Copy to Reforge Lite"
+			"title": "The following items were regemmed:",
+			"no_changes": "No gem changes were made!"
 		},
 		"gear_sets": {
 			"title": "Gear Sets",
@@ -291,19 +284,13 @@
 				"items": "Item",
 				"random_suffix": "Random Suffix",
 				"enchants": "Enchants",
-				"tinkers": "Tinkers",
-				"reforging": "Reforging",
-				"upgrades": "Upgrades",
 				"gem1": "Gem",
 				"gem2": "Gem",
 				"gem3": "Gem"
 			},
 			"remove_buttons": {
 				"remove_enchant": "Remove Enchant",
-				"remove_tinkers": "Remove Tinkers",
-				"remove_reforge": "Remove Reforge",
 				"remove_random_suffix": "Remove Random Suffix",
-				"remove_upgrade": "Remove Upgrade",
 				"remove_gem": "Remove Gem"
 			},
 			"filters": {
@@ -359,8 +346,7 @@
 			"ranged_weapon_type": "Ranged Weapon Type",
 			"ranged_weapon_speed": "Ranged Weapon Speed",
 			"min_ranged_speed": "Min Ranged Speed",
-			"max_ranged_speed": "Max Ranged Speed",
-			"reforge_text": "Reforged {{fromAmount}} {{fromStat}} → {{toAmount}} {{toStat}}"
+			"max_ranged_speed": "Max Ranged Speed"
 		},
 		"preset_configurations": {
 			"title": "Preset Configurations",
@@ -1981,10 +1967,6 @@
 			"instructions": "To import, paste the gear planner link below and click, 'Import'.",
 			"upload_button": "Upload File",
 			"import_button": "Import",
-			"tinker_warning": {
-				"title": "Tinker issues",
-				"message": "There are known issues importing tinkers from Wowhead. Always make sure to double check your tinkers after importing."
-			},
 			"error_invalid_url": "Invalid WCL URL {{url}}, must look like \"https://www.wowhead.com/tbc/gear-planner/CLASS/RACE/XXXX\"",
 			"error_cannot_parse_class": "Could not parse Class: {{classId}}",
 			"error_cannot_parse_race": "Could not parse Race: {{raceId}}"
@@ -1996,11 +1978,7 @@
 			"feature_description": "This feature imports gear, race, talents, and professions. It does NOT import buffs, debuffs, consumes, rotation, or custom stats.",
 			"instructions": "To import, paste the output from the addon below and click, 'Import'.",
 			"upload_button": "Upload File",
-			"import_button": "Import",
-			"reforge_warning": {
-				"title": "Reforging issues",
-				"message": "There are known issues with Reforging when using the WSE addon. Always make sure to double check your reforges after importing."
-			}
+			"import_button": "Import"
 		}
 	},
 	"export": {
@@ -2116,7 +2094,7 @@
 			"meta_gem_disabled": "Meta gem disabled ({{gemName}}): {{description}}",
 			"profession_requirement": "{{itemName}} requires {{professionName}}, but it is not selected.",
 			"too_many_jc_gems": "Only 2 Jewelcrafting Gems are allowed, but {{count}} are equipped.",
-			"unspent_talent_points": "Missing required talent selections in row {{rowNumbers}}.",
+			"unspent_talent_points": "You have {{count}} unspent talent point(s).",
 			"dual_wield_2h_without_titans_grip": "Dual wielding two-handed weapon(s) without Titan's Grip spec.",
 			"shaman_fele_autocast": "Your Fire Elemental spell autocast setup is not optimal with the use of the Primal Elementalist talent (everything ON but Empower). If you know what you're doing, please ignore this."
 		},
@@ -2216,15 +2194,14 @@
 				}
 			},
 			"suggest_reforges": {
-				"title": "Suggest Reforges",
-				"tooltip": "Change Reforge Optimizer settings",
+				"title": "Suggest Gems",
+				"tooltip": "Change Gem Optimizer settings",
 				"use_soft_cap_breakpoints": "Use soft cap breakpoints",
-				"force_stat_proc": "Force RoRo proc",
 				"any": "Any",
-				"optimize_gems_tooltip": "Optimize gems and Reforges simultaneously.",
-				"freeze_item_slots_tooltip": "Flag one or more item slots to be \"frozen\", which will prevent the optimizer from changing the Reforge or gems in that slot from their current settings. This can be useful for hybrid classes who use the same gear piece for multiple raid roles.",
+				"optimize_gems_tooltip": "Optimize gems.",
+				"freeze_item_slots_tooltip": "Flag one or more item slots to be \"frozen\", which will prevent the optimizer from changing the gems in that slot from their current settings. This can be useful for hybrid classes who use the same gear piece for multiple raid roles.",
 				"edit_stat_caps": "Edit stat caps",
-				"stat_caps_tooltip": "Stat caps are the maximum amount of a stat that can be gained from Reforging. If a stat exceeds its cap, the optimizer will attempt to reduce it to the cap value.",
+				"stat_caps_tooltip": "Stat caps are the maximum amount of a stat that can be gained from Gemming. If a stat exceeds its cap, the optimizer will attempt to reduce it to the cap value.",
 				"reset_to_defaults": "Reset to stat cap defaults",
 				"stat": "Stat",
 				"select_preset": "Select preset",
@@ -2233,7 +2210,7 @@
 				"no_limit_set": "No limit set",
 				"breakpoints_implemented": "The following breakpoints have been implemented for this spec:",
 				"post_cap_ep": "Post cap EP",
-				"reforge_optimization_failed": "Reforge optimization failed. Please try again, or report the issue if it persists.",
+				"reforge_optimization_failed": "Gem optimization failed. Please try again, or report the issue if it persists.",
 				"use_custom": "Use custom EP Weights",
 				"enable_modification": "This will enable modification of the default EP weights and setting custom stat caps.",
 				"modify_in_editor": "Ep weights can be modified in the Stat Weights editor.",
@@ -2241,8 +2218,6 @@
 				"edit_weights": "Edit weights",
 				"include_gems": "Include gems",
 				"freeze_item_slots": "Freeze item slots",
-				"include_eotbp_socket": "Include EotBP Socket",
-				"include_eotbp_socket_tooltip": "Allows the optimiser to also include the \"Eye of the Black Prince\" socket in the optimization.",
 				"limit_execution_time": "Limit execution time",
 				"limit_execution_time_tooltip": "If checked, the solver will error out if the total computation time exceeds 30 seconds. If unchecked, then total computation time will be capped at 1 hour instead."
 			}

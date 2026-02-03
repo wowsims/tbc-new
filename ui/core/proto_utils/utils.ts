@@ -135,7 +135,7 @@ export function getTalentTreePoints(talentsString: string): Array<number> {
 }
 
 export function getTalentPoints(talentsString: string): number {
-	return getTalentTreePoints(talentsString).filter(Boolean).length;
+	return sum(getTalentTreePoints(talentsString));
 }
 
 // Gets the URL for the individual sim corresponding to the given spec.

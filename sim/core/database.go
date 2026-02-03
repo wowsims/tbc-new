@@ -479,7 +479,6 @@ func ProtoToEquipment(es *proto.EquipmentSpec) Equipment {
 type ItemStringSpec struct {
 	Name    string
 	Enchant string
-	Tinker  string
 	Gems    []string
 }
 

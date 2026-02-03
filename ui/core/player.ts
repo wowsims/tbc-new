@@ -51,7 +51,7 @@ import {
 } from './proto/ui';
 import { ActionId } from './proto_utils/action_id';
 import { Database } from './proto_utils/database';
-import { EquippedItem, ReforgeData } from './proto_utils/equipped_item';
+import { EquippedItem } from './proto_utils/equipped_item';
 import { Gear, ItemSwapGear } from './proto_utils/gear';
 import { gemMatchesSocket, isUnrestrictedGem } from './proto_utils/gems';
 import { StatCap, Stats } from './proto_utils/stats';
@@ -252,7 +252,6 @@ export class Player<SpecType extends Spec> {
 	private distanceFromTarget = 0;
 	private healingModel: HealingModel = HealingModel.create();
 	private healingEnabled = false;
-	private challengeModeEnabled = false;
 
 	private readonly autoRotationGenerator: AutoRotationGenerator<SpecType> | null = null;
 	private readonly simpleRotationGenerator: SimpleRotationGenerator<SpecType> | null = null;
@@ -290,7 +289,6 @@ export class Player<SpecType extends Spec> {
 	readonly healingModelChangeEmitter = new TypedEvent<void>('PlayerHealingModel');
 	readonly epWeightsChangeEmitter = new TypedEvent<void>('PlayerEpWeights');
 	readonly miscOptionsChangeEmitter = new TypedEvent<void>('PlayerMiscOptions');
-	readonly challengeModeChangeEmitter = new TypedEvent<void>('ChallengeMode');
 
 	readonly currentStatsEmitter = new TypedEvent<void>('PlayerCurrentStats');
 	readonly epRatiosChangeEmitter = new TypedEvent<void>('PlayerEpRatios');
@@ -327,8 +325,6 @@ export class Player<SpecType extends Spec> {
 
 		this.itemSwapSettings = new ItemSwapSettings(this);
 
-		this.bindChallengeModeChange();
-
 		this.changeEmitter = TypedEvent.onAny(
 			[
 				this.nameChangeEmitter,
@@ -348,16 +344,9 @@ export class Player<SpecType extends Spec> {
 				this.epWeightsChangeEmitter,
 				this.epRatiosChangeEmitter,
 				this.epRefStatChangeEmitter,
-				this.challengeModeChangeEmitter,
 			],
 			'PlayerChange',
 		);
-	}
-
-	bindChallengeModeChange() {
-		this.challengeModeChangeEmitter.on(() => {
-			this.setGear(TypedEvent.nextEventID(), this.gear, true);
-		});
 	}
 
 	getSpecIcon(): string {
@@ -473,12 +462,6 @@ export class Player<SpecType extends Spec> {
 	// Returns all enchants that this player can wear in the given slot.
 	getEnchants(slot: ItemSlot): Array<Enchant> {
 		return this.sim.db.getEnchants(slot).filter(enchant => canEquipEnchant(enchant, this.playerSpec));
-	}
-
-	// Returns all tinkers that this player can wear in the given slot.
-	// For the purpose of this function, they are all enchants still, however we split them since you can have both on the same item.
-	getTinkers(slot: ItemSlot): Array<Enchant> {
-		return this.sim.db.getEnchants(slot).filter(enchant => enchant.requiredProfession == Profession.Engineering);
 	}
 
 	// Returns all gems that this player can wear of the given color.
@@ -931,17 +914,6 @@ export class Player<SpecType extends Spec> {
 		this.miscOptionsChangeEmitter.emit(eventID);
 	}
 
-	getChallengeModeEnabled(): boolean {
-		return this.challengeModeEnabled;
-	}
-
-	setChallengeModeEnabled(eventID: EventID, value: boolean) {
-		if (value === this.challengeModeEnabled) return;
-
-		this.challengeModeEnabled = value;
-		this.challengeModeChangeEmitter.emit(eventID);
-	}
-
 	getInFrontOfTarget(): boolean {
 		return this.inFrontOfTarget;
 	}
@@ -1054,25 +1026,16 @@ export class Player<SpecType extends Spec> {
 		return ep;
 	}
 
-	computeReforgingEP(reforging: ReforgeData): number {
-		let stats = new Stats([]);
-		stats = stats.addStat(reforging.fromStat, reforging.fromAmount);
-		stats = stats.addStat(reforging.toStat, reforging.toAmount);
-
-		return this.computeStatsEP(stats);
-	}
-
 	computeItemEP(item: Item, slot: ItemSlot): number {
 		if (item == null) return 0;
 
-		const cacheKey = `${item.id}-${JSON.stringify(this.epWeights)}-${this.challengeModeEnabled}`;
+		const cacheKey = `${item.id}-${JSON.stringify(this.epWeights)}`;
 
 		const cached = this.itemEPCache[slot].get(cacheKey);
 		if (cached !== undefined) return cached;
 
 		const equippedItem = new EquippedItem({
 			item,
-			challengeMode: this.challengeModeEnabled,
 		}).withDynamicStats();
 		const itemStats = equippedItem.calcStats(slot);
 
@@ -1410,7 +1373,6 @@ export class Player<SpecType extends Spec> {
 				inFrontOfTarget: this.getInFrontOfTarget(),
 				distanceFromTarget: this.getDistanceFromTarget(),
 				healingModel: this.getHealingModel(),
-				challengeMode: this.getChallengeModeEnabled(),
 			});
 			player = withSpec(this.getSpec(), player, this.getSpecOptions());
 		}
@@ -1465,7 +1427,6 @@ export class Player<SpecType extends Spec> {
 				this.setInFrontOfTarget(eventID, proto.inFrontOfTarget);
 				this.setDistanceFromTarget(eventID, proto.distanceFromTarget);
 				this.setHealingModel(eventID, proto.healingModel || HealingModel.create());
-				this.setChallengeModeEnabled(eventID, proto.challengeMode);
 			}
 			if (loadCategory(SimSettingCategories.External)) {
 				this.setBuffs(eventID, proto.buffs || IndividualBuffs.create());

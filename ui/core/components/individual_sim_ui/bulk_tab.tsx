@@ -223,7 +223,7 @@ export class BulkTab extends SimTab {
 			};
 			loadEquippedItems();
 
-			TypedEvent.onAny([this.simUI.player.challengeModeChangeEmitter, this.simUI.player.gearChangeEmitter]).on(() => loadEquippedItems());
+			this.simUI.player.gearChangeEmitter.on(() => loadEquippedItems());
 
 			TypedEvent.onAny([this.settingsChangedEmitter, this.itemsChangedEmitter]).on(() => this.storeSettings());
 
@@ -739,8 +739,6 @@ export class BulkTab extends SimTab {
 			let isAborted = false;
 			this.topGearResults = null;
 			this.originalGearResults = null;
-			const playerPhase = this.simUI.sim.getPhase() >= 2;
-			const challengeModeEnabled = this.simUI.player.getChallengeModeEnabled();
 			const hasBlacksmithing = this.simUI.player.isBlacksmithing();
 
 			try {
@@ -802,9 +800,7 @@ export class BulkTab extends SimTab {
 
 					for (const [itemSlot, equippedItem] of allItemCombos[comboIdx].entries()) {
 						const equippedItemInSlot = this.originalGear.getEquippedItem(itemSlot);
-						let updatedItem = equippedItemInSlot
-							? equippedItemInSlot.withItem(equippedItem.item)
-							: equippedItem;
+						let updatedItem = equippedItemInSlot ? equippedItemInSlot.withItem(equippedItem.item) : equippedItem;
 
 						if (equippedItem._randomSuffix) {
 							updatedItem = updatedItem.withRandomSuffix(equippedItem._randomSuffix);

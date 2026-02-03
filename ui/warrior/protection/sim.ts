@@ -15,9 +15,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionWarrior, {
 	cssClass: 'protection-warrior-sim-ui',
 	cssScheme: PlayerClasses.getCssClass(PlayerClasses.Warrior),
 	// List any known bugs / issues here and they'll be shown on the site.
-	knownIssues: [
-		'When reforging stats make sure to balance parry/dodge afterwards to avoid diminishing returns. We currently do not support dynamic EP weights.',
-	],
+	knownIssues: [],
 
 	// All stats for which EP should be calculated.
 	epStats: [Stat.StatStamina, Stat.StatStrength, Stat.StatAgility, Stat.StatAttackPower, Stat.StatArmor, Stat.StatBonusArmor],

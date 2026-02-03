@@ -104,18 +104,6 @@ export const InputDelay = {
 	},
 };
 
-export const ChallengeMode = {
-	id: 'challenge-mode',
-	type: 'boolean' as const,
-	label: i18n.t('settings_tab.other.challenge_mode.label'),
-	labelTooltip: i18n.t('settings_tab.other.challenge_mode.tooltip'),
-	changedEvent: (player: Player<any>) => player.challengeModeChangeEmitter,
-	getValue: (player: Player<any>) => player.getChallengeModeEnabled(),
-	setValue: (eventID: EventID, player: Player<any>, value: boolean) => {
-		player.setChallengeModeEnabled(eventID, value);
-	},
-};
-
 export const ChannelClipDelay = {
 	id: 'channel-clip-delay',
 	type: 'number' as const,

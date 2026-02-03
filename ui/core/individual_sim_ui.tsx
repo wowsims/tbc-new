@@ -6,7 +6,7 @@ import { EncounterPickerConfig } from './components/encounter_picker';
 import * as IconInputs from './components/icon_inputs';
 import { BulkTab } from './components/individual_sim_ui/bulk_tab';
 import {
-	// Individual60UEPExporter,
+	Individual60UEPExporter,
 	IndividualCLIExporter,
 	IndividualJsonExporter,
 	IndividualLinkExporter,
@@ -15,7 +15,7 @@ import {
 } from './components/individual_sim_ui/exporters';
 import { GearTab } from './components/individual_sim_ui/gear_tab';
 import {
-	// Individual60UImporter,
+	Individual60UImporter,
 	IndividualAddonImporter,
 	IndividualJsonImporter,
 	IndividualLinkImporter,
@@ -68,6 +68,7 @@ import { EventID, TypedEvent } from './typed_event';
 import { isDevMode } from './utils';
 import { CURRENT_API_VERSION } from './constants/other';
 import { Raid } from './raid';
+import { CHARACTER_LEVEL } from './constants/mechanics';
 
 const SAVED_GEAR_STORAGE_KEY = '__savedGear__';
 const SAVED_EP_WEIGHTS_STORAGE_KEY = '__savedEPWeights__';
@@ -82,7 +83,7 @@ export type InputConfig<ModObject> =
 
 export interface InputSection {
 	tooltip?: string;
-	inputs: Array<InputConfig<any>>
+	inputs: Array<InputConfig<any>>;
 }
 
 export interface OtherDefaults {
@@ -137,7 +138,7 @@ export interface IndividualSimUIConfig<SpecType extends Spec> extends PlayerConf
 		itemSwap?: ItemSwap;
 
 		epWeights: Stats;
-		// Used for Reforge Optimizer
+		// Used for Gem Optimizer
 		statCaps?: Stats;
 		/**
 		 * Allows specification of soft cap breakpoints for one or more stats.
@@ -302,16 +303,14 @@ export abstract class IndividualSimUI<SpecType extends Spec> extends SimUI {
 			updateOn: this.player.talentsChangeEmitter,
 			getContent: () => {
 				const talentPoints = getTalentPoints(this.player.getTalentsString());
-				const requiredRows = getRequiredTalentRows(this.player.getSpecConfig());
+				const maxTalentPoints = CHARACTER_LEVEL - 9;
 
 				// Only skip warning during initial load if there are no required talents
-				if (talentPoints == 0 && requiredRows.length == 0) {
+				if (talentPoints == 0) {
 					return '';
-				} else if (!hasRequiredTalents(this.player.getSpecConfig(), this.player.getTalentsString())) {
-					const missingRows = getMissingTalentRows(this.player.getSpecConfig(), this.player.getTalentsString());
-					const missingRowNumbers = missingRows.map(row => row + 1).join(', ');
+				} else if (talentPoints < maxTalentPoints) {
 					return i18n.t('sidebar.warnings.unspent_talent_points', {
-						rowNumbers: missingRowNumbers,
+						count: maxTalentPoints - talentPoints,
 					});
 				} else {
 					return '';
@@ -366,7 +365,7 @@ export abstract class IndividualSimUI<SpecType extends Spec> extends SimUI {
 	}
 
 	applyDefaultConfigOptions(config: IndividualSimUIConfig<SpecType>): IndividualSimUIConfig<SpecType> {
-		config.otherInputs.inputs = [OtherInputs.ChallengeMode, ...config.otherInputs.inputs];
+		config.otherInputs.inputs = [...config.otherInputs.inputs];
 
 		return config;
 	}
@@ -462,14 +461,14 @@ export abstract class IndividualSimUI<SpecType extends Spec> extends SimUI {
 
 	private addTopbarComponents() {
 		this.simHeader.addImportLink('JSON', new IndividualJsonImporter(this.rootElem, this), true);
-		// this.simHeader.addImportLink('60U Cata', new Individual60UImporter(this.rootElem, this), true);
+		this.simHeader.addImportLink('60U TBC', new Individual60UImporter(this.rootElem, this), true);
 		this.simHeader.addImportLink('WoWHead', new IndividualWowheadGearPlannerImporter(this.rootElem, this), false, false);
 		this.simHeader.addImportLink('Addon', new IndividualAddonImporter(this.rootElem, this), true);
 
 		this.simHeader.addExportLink('Link', new IndividualLinkExporter(this.rootElem, this), false);
 		this.simHeader.addExportLink('JSON', new IndividualJsonExporter(this.rootElem, this), true);
 		this.simHeader.addExportLink('WoWHead', new IndividualWowheadGearPlannerExporter(this.rootElem, this), false, false);
-		// this.simHeader.addExportLink('60U Cata EP', new Individual60UEPExporter(this.rootElem, this), false);
+		this.simHeader.addExportLink('60U TBC EP', new Individual60UEPExporter(this.rootElem, this), false);
 		this.simHeader.addExportLink('Pawn EP', new IndividualPawnEPExporter(this.rootElem, this), false);
 		this.simHeader.addExportLink('CLI', new IndividualCLIExporter(this.rootElem, this), true);
 	}
