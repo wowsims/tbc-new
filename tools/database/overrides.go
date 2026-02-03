@@ -308,6 +308,12 @@ var EnchantDenyListItems = map[int32]struct{}{
 var GemDenyList = map[int32]struct{}{
 	// pvp non-unique gems not in game currently.
 	32735: {},
+	33132: {},
+	33137: {},
+	33138: {},
+	33139: {},
+	33141: {},
+	33142: {},
 	35489: {},
 	38545: {},
 	38546: {},
