@@ -14,6 +14,7 @@ type rageBar struct {
 	unit *Unit
 
 	maxRage             float64
+	startingRage        float64
 	currentRage         float64
 	totalRageMultiplier float64
 
@@ -30,6 +31,7 @@ type rageBar struct {
 type RageBarOptions struct {
 	BaseRageMultiplier float64
 	MaxRage            float64
+	StartingRage       float64
 }
 
 func (unit *Unit) EnableRageBar(options RageBarOptions) {
@@ -105,6 +107,7 @@ func (unit *Unit) EnableRageBar(options RageBarOptions) {
 	unit.rageBar = rageBar{
 		unit:                  unit,
 		maxRage:               maxRage,
+		startingRage:          max(0, min(options.StartingRage, maxRage)),
 		totalRageMultiplier:   1.0,
 		startingHitFactor:     BaseRageHitFactor * options.BaseRageMultiplier,
 		RageRefundMetrics:     unit.NewRageMetrics(ActionID{OtherID: proto.OtherAction_OtherActionRefund}),
@@ -181,7 +184,7 @@ func (rb *rageBar) reset(_ *Simulation) {
 		return
 	}
 
-	rb.currentRage = 0
+	rb.currentRage = rb.startingRage
 	rb.currentHitFactor = rb.startingHitFactor
 	rb.totalRageMultiplier = 1.0
 }

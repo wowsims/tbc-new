@@ -569,7 +569,10 @@ export class ActionId {
 				}
 				break;
 			case 'Battle Shout':
+			case 'Commanding Shout':
 				if (tag == 1) {
+					name += ' (External)';
+				} else if (tag == 3) {
 					name += ' (Snapshot)';
 				}
 				break;

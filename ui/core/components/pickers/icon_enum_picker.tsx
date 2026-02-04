@@ -56,6 +56,7 @@ export class IconEnumPicker<ModObject, T> extends Input<ModObject, T> {
 	constructor(parent: HTMLElement, modObj: ModObject, config: IconEnumPickerConfig<ModObject, T>) {
 		super(parent, 'icon-enum-picker-root', modObj, config);
 		this.rootElem.classList.add('icon-picker', (config.direction ?? 'vertical') === 'vertical' ? 'dropdown' : 'dropend');
+		this.rootElem.classList.add('input-inline');
 		this.config = config;
 		this.currentValue = this.config.zeroValue;
 

@@ -11,9 +11,14 @@ import (
 var TalentTreeSizes = [3]int{23, 21, 22}
 
 type WarriorInputs struct {
-	StanceSnapshot bool
-	QueueDelay     int32
-	Stance         proto.WarriorStance
+	DefaultShout  proto.WarriorShout
+	DefaultStance proto.WarriorStance
+
+	StartingRage          float64
+	QueueDelay            int32
+	StanceSnapshot        bool
+	HasBsSolarianSapphire bool
+	HasBsT2               bool
 }
 
 const (
@@ -135,7 +140,6 @@ func (warrior *Warrior) GetCharacter() *core.Character {
 }
 
 func (warrior *Warrior) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
-
 }
 
 func (warrior *Warrior) AddPartyBuffs(_ *proto.PartyBuffs) {
@@ -201,6 +205,7 @@ func NewWarrior(character *core.Character, options *proto.WarriorOptions, talent
 	warrior.EnableRageBar(core.RageBarOptions{
 		MaxRage:            100,
 		BaseRageMultiplier: 1,
+		StartingRage:       inputs.StartingRage,
 	})
 
 	warrior.EnableAutoAttacks(warrior, core.AutoAttackOptions{

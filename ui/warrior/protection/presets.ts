@@ -1,7 +1,7 @@
 import * as PresetUtils from '../../core/preset_utils.js';
 import { ConsumesSpec, Profession, PseudoStat, Spec, Stat } from '../../core/proto/common.js';
 import { SavedTalents } from '../../core/proto/ui.js';
-import { ProtectionWarrior_Options as ProtectionWarriorOptions, WarriorStance } from '../../core/proto/warrior.js';
+import { ProtectionWarrior_Options as ProtectionWarriorOptions, WarriorShout, WarriorStance } from '../../core/proto/warrior.js';
 import { Stats } from '../../core/proto_utils/stats';
 import GenericApl from './apls/default.apl.json';
 import GarajalApl from './apls/garajal.apl.json';
@@ -113,10 +113,12 @@ export const StandardTalents = {
 };
 
 export const DefaultOptions = ProtectionWarriorOptions.create({
-	classOptions: {},
-	queueDelay: 250,
-	startingRage: 0,
-	stance: WarriorStance.WarriorStanceDefensive,
+	classOptions: {
+		queueDelay: 250,
+		startingRage: 0,
+		defaultShout: WarriorShout.WarriorShoutCommanding,
+		defaultStance: WarriorStance.WarriorStanceDefensive,
+	},
 });
 
 export const DefaultConsumables = ConsumesSpec.create({

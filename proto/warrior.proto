@@ -94,6 +94,14 @@ enum WarriorStance {
 }
 
 message WarriorOptions {
+	WarriorShout default_shout = 1;
+	WarriorStance default_stance = 2;
+
+	double starting_rage = 3;
+	int32 queue_delay = 4;
+	bool stance_snapshot = 5;
+	bool has_bs_solarian_sapphire = 6;
+	bool has_bs_t2 = 7;
 }
 
 message DpsWarrior {
@@ -102,13 +110,6 @@ message DpsWarrior {
 	message Options {
 		WarriorOptions class_options = 1;
 		bool use_item_swap_bonus_stats = 2;
-
-		double starting_rage = 3;
-		bool stance_snapshot = 4;
-		int32 queue_delay = 5;
-
-        WarriorShout shout = 6;
-        WarriorStance stance = 7;
 	}
 	Options options = 1;
 }
@@ -119,13 +120,6 @@ message ProtectionWarrior {
 	message Options {
 		WarriorOptions class_options = 1;
 		bool use_item_swap_bonus_stats = 2;
-
-		double starting_rage = 3;
-		bool stance_snapshot = 4;
-		int32 queue_delay = 5;
-
-        WarriorShout shout = 6;
-        WarriorStance stance = 7;
 	}
 	Options options = 1;
 }

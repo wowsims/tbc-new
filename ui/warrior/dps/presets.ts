@@ -2,7 +2,7 @@ import { Player } from '../../core/player';
 import * as PresetUtils from '../../core/preset_utils';
 import { ConsumesSpec, HandType, ItemSlot, Profession, PseudoStat, Race, Spec, Stat } from '../../core/proto/common';
 import { SavedTalents } from '../../core/proto/ui';
-import { DpsWarrior_Options as WarriorOptions, WarriorStance } from '../../core/proto/warrior';
+import { DpsWarrior_Options as WarriorOptions, WarriorShout, WarriorStance } from '../../core/proto/warrior';
 import { Stats } from '../../core/proto_utils/stats';
 import DefaultArmsApl from './apls/arms.apl.json';
 import DefaultFuryApl from './apls/fury.apl.json';
@@ -113,10 +113,12 @@ export const ArmsTalents = {
 };
 
 export const DefaultOptions = WarriorOptions.create({
-	classOptions: {},
-	queueDelay: 250,
-	startingRage: 0,
-	stance: WarriorStance.WarriorStanceBerserker,
+	classOptions: {
+		queueDelay: 250,
+		startingRage: 0,
+		defaultShout: WarriorShout.WarriorShoutCommanding,
+		defaultStance: WarriorStance.WarriorStanceBerserker,
+	},
 });
 
 export const DefaultConsumables = ConsumesSpec.create({

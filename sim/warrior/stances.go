@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
@@ -69,9 +70,10 @@ func (warrior *Warrior) registerBattleStanceAura() *core.Aura {
 	actionID := core.ActionID{SpellID: 2457}
 
 	aura := warrior.GetOrRegisterAura(core.Aura{
-		Label:    "Battle Stance",
-		ActionID: actionID,
-		Duration: core.NeverExpires,
+		Label:      "Battle Stance",
+		ActionID:   actionID,
+		Duration:   core.NeverExpires,
+		BuildPhase: core.Ternary(warrior.DefaultStance == proto.WarriorStance_WarriorStanceBattle, core.CharacterBuildPhaseBuffs, core.CharacterBuildPhaseNone),
 	}).AttachMultiplicativePseudoStatBuff(&warrior.PseudoStats.ThreatMultiplier, 0.8)
 
 	aura.NewExclusiveEffect(stanceEffectCategory, true, core.ExclusiveEffect{})
@@ -83,9 +85,10 @@ func (warrior *Warrior) registerDefensiveStanceAura() *core.Aura {
 	actionID := core.ActionID{SpellID: 71}
 
 	aura := warrior.GetOrRegisterAura(core.Aura{
-		Label:    "Defensive Stance",
-		ActionID: actionID,
-		Duration: core.NeverExpires,
+		Label:      "Defensive Stance",
+		ActionID:   actionID,
+		Duration:   core.NeverExpires,
+		BuildPhase: core.Ternary(warrior.DefaultStance == proto.WarriorStance_WarriorStanceDefensive, core.CharacterBuildPhaseBuffs, core.CharacterBuildPhaseNone),
 	}).AttachMultiplicativePseudoStatBuff(
 		&warrior.PseudoStats.ThreatMultiplier, 1.3,
 	).AttachMultiplicativePseudoStatBuff(
@@ -104,9 +107,10 @@ func (warrior *Warrior) registerBerserkerStanceAura() *core.Aura {
 	threatMultiplier := 0.8 - 0.02*float64(warrior.Talents.ImprovedBerserkerStance)
 
 	aura := warrior.GetOrRegisterAura(core.Aura{
-		Label:    "Berserker Stance",
-		ActionID: actionId,
-		Duration: core.NeverExpires,
+		Label:      "Berserker Stance",
+		ActionID:   actionId,
+		Duration:   core.NeverExpires,
+		BuildPhase: core.Ternary(warrior.DefaultStance == proto.WarriorStance_WarriorStanceBerserker, core.CharacterBuildPhaseBuffs, core.CharacterBuildPhaseNone),
 	}).AttachMultiplicativePseudoStatBuff(
 		&warrior.PseudoStats.ThreatMultiplier, threatMultiplier,
 	).AttachStatBuff(stats.PhysicalCritPercent, 3)

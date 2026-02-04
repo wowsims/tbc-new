@@ -35,12 +35,17 @@ func (war *ProtectionWarrior) ApplyTalents() {
 
 func NewProtectionWarrior(character *core.Character, options *proto.Player) *ProtectionWarrior {
 	protOptions := options.GetProtectionWarrior().Options
+	classOptions := protOptions.ClassOptions
 
 	war := &ProtectionWarrior{
 		Warrior: warrior.NewWarrior(character, protOptions.ClassOptions, options.TalentsString, warrior.WarriorInputs{
-			StanceSnapshot: protOptions.StanceSnapshot,
-			QueueDelay:     protOptions.QueueDelay,
-			Stance:         protOptions.Stance,
+			DefaultShout:          classOptions.DefaultShout,
+			DefaultStance:         classOptions.DefaultStance,
+			StartingRage:          classOptions.StartingRage,
+			QueueDelay:            classOptions.QueueDelay,
+			StanceSnapshot:        classOptions.StanceSnapshot,
+			HasBsSolarianSapphire: classOptions.HasBsSolarianSapphire,
+			HasBsT2:               classOptions.HasBsT2,
 		}),
 		Options: protOptions,
 	}

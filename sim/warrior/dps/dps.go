@@ -38,12 +38,17 @@ func (war *DpsWarrior) ApplyTalents() {
 
 func NewDpsWarrior(character *core.Character, options *proto.Player) *DpsWarrior {
 	dpsOptions := options.GetDpsWarrior().Options
+	classOptions := dpsOptions.ClassOptions
 
 	war := &DpsWarrior{
 		Warrior: warrior.NewWarrior(character, dpsOptions.ClassOptions, options.TalentsString, warrior.WarriorInputs{
-			StanceSnapshot: dpsOptions.StanceSnapshot,
-			QueueDelay:     dpsOptions.QueueDelay,
-			Stance:         dpsOptions.Stance,
+			DefaultShout:          classOptions.DefaultShout,
+			DefaultStance:         classOptions.DefaultStance,
+			StartingRage:          classOptions.StartingRage,
+			QueueDelay:            classOptions.QueueDelay,
+			StanceSnapshot:        classOptions.StanceSnapshot,
+			HasBsSolarianSapphire: classOptions.HasBsSolarianSapphire,
+			HasBsT2:               classOptions.HasBsT2,
 		}),
 		Options: dpsOptions,
 	}

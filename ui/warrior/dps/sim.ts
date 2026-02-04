@@ -3,10 +3,11 @@ import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_u
 import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
 import { APLRotation } from '../../core/proto/apl';
-import { Class, Debuffs, Faction, IndividualBuffs, ItemSlot, PartyBuffs, PseudoStat, Race, RaidBuffs, Spec, Stat } from '../../core/proto/common';
+import { Faction, IndividualBuffs, ItemSlot, PseudoStat, Race, Spec, Stat } from '../../core/proto/common';
 import { DEFAULT_MELEE_GEM_STATS, UnitStat } from '../../core/proto_utils/stats';
-import { defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
+
 import * as WarriorInputs from '../inputs';
+import * as WarriorPresets from '../presets';
 import * as Presets from './presets';
 
 const SPEC_CONFIG = registerSpecConfig(Spec.SpecDpsWarrior, {
@@ -45,27 +46,27 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecDpsWarrior, {
 		// Default spec-specific settings.
 		specOptions: Presets.DefaultOptions,
 		// Default raid/party buffs settings.
-		raidBuffs: RaidBuffs.create({
-			...defaultRaidBuffMajorDamageCooldowns(Class.ClassWarrior),
-		}),
-		partyBuffs: PartyBuffs.create({}),
-		individualBuffs: IndividualBuffs.create({}),
-		debuffs: Debuffs.create({}),
+		raidBuffs: WarriorPresets.DefaultRaidBuffs,
+		partyBuffs: WarriorPresets.DefaultPartyBuffs,
+		individualBuffs: WarriorPresets.DefaultIndividualBuffs,
+		debuffs: WarriorPresets.DefaultDebuffs,
 	},
 
 	// IconInputs to include in the 'Player' section on the settings tab.
-	playerIconInputs: [],
+	playerIconInputs: [WarriorInputs.ShoutPicker(), WarriorInputs.StancePicker()],
 	// Buff and Debuff inputs to include/exclude, overriding the EP-based defaults.
 	includeBuffDebuffInputs: [],
 	excludeBuffDebuffInputs: [],
 	// Inputs to include in the 'Other' section on the settings tab.
 	otherInputs: {
 		inputs: [
+			WarriorInputs.BattleShoutSolarianSapphire(),
+			WarriorInputs.BattleShoutT2(),
 			WarriorInputs.StartingRage(),
 			WarriorInputs.StanceSnapshot(),
+			OtherInputs.DistanceFromTarget,
 			WarriorInputs.QueueDelay(),
 			OtherInputs.InputDelay,
-			OtherInputs.DistanceFromTarget,
 			OtherInputs.TankAssignment,
 			OtherInputs.InFrontOfTarget,
 		],

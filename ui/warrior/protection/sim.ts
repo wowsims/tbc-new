@@ -1,14 +1,12 @@
-import * as BuffDebuffInputs from '../../core/components/inputs/buffs_debuffs';
 import * as OtherInputs from '../../core/components/inputs/other_inputs';
-import * as Mechanics from '../../core/constants/mechanics';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui';
 import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
 import { APLRotation } from '../../core/proto/apl';
-import { Class, Debuffs, Faction, IndividualBuffs, ItemSlot, PartyBuffs, PseudoStat, Race, RaidBuffs, Spec, Stat } from '../../core/proto/common';
-import { Stats, UnitStat } from '../../core/proto_utils/stats';
-import { defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
+import { Faction, ItemSlot, PseudoStat, Race, Spec, Stat } from '../../core/proto/common';
+import { UnitStat } from '../../core/proto_utils/stats';
 import * as Presets from './presets';
+import * as WarriorPresets from '../presets';
 import * as WarriorInputs from '../inputs';
 
 const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionWarrior, {
@@ -60,25 +58,25 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionWarrior, {
 		// Default spec-specific settings.
 		specOptions: Presets.DefaultOptions,
 		// Default raid/party buffs settings.
-		raidBuffs: RaidBuffs.create({
-			...defaultRaidBuffMajorDamageCooldowns(Class.ClassWarrior),
-		}),
-		partyBuffs: PartyBuffs.create({}),
-		individualBuffs: IndividualBuffs.create({}),
-		debuffs: Debuffs.create({}),
+		raidBuffs: WarriorPresets.DefaultRaidBuffs,
+		partyBuffs: WarriorPresets.DefaultPartyBuffs,
+		individualBuffs: WarriorPresets.DefaultIndividualBuffs,
+		debuffs: WarriorPresets.DefaultDebuffs,
 	},
 
 	// IconInputs to include in the 'Player' section on the settings tab.
-	playerIconInputs: [],
+	playerIconInputs: [WarriorInputs.ShoutPicker(), WarriorInputs.StancePicker()],
 	// Buff and Debuff inputs to include/exclude, overriding the EP-based defaults.
 	includeBuffDebuffInputs: [],
 	excludeBuffDebuffInputs: [],
 	// Inputs to include in the 'Other' section on the settings tab.
 	otherInputs: {
 		inputs: [
-			OtherInputs.DistanceFromTarget,
+			WarriorInputs.BattleShoutSolarianSapphire(),
+			WarriorInputs.BattleShoutT2(),
 			WarriorInputs.StartingRage(),
 			WarriorInputs.StanceSnapshot(),
+			OtherInputs.DistanceFromTarget,
 			WarriorInputs.QueueDelay(),
 			OtherInputs.InputDelay,
 			OtherInputs.TankAssignment,

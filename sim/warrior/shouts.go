@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
 )
 
 const ShoutExpirationThreshold = time.Second * 3
@@ -43,7 +44,6 @@ func (warrior *Warrior) MakeShoutSpellHelper(actionID core.ActionID, spellMask i
 
 func (warrior *Warrior) registerShouts() {
 	commandingPresenceMultiplier := 1.0 + 0.05*float64(warrior.Talents.CommandingPresence)
-	hasSolarianSapphire := warrior.HasItemEquipped(30446, core.TrinketSlots())
 
 	warrior.registerDemoralizingShout()
 
@@ -51,7 +51,16 @@ func (warrior *Warrior) registerShouts() {
 		core.ActionID{SpellID: 6673},
 		SpellMaskBattleShout,
 		warrior.NewAllyAuraArray(func(unit *core.Unit) *core.Aura {
-			return core.BattleShoutAura(warrior.GetCharacter(), warrior.Talents.BoomingVoice, commandingPresenceMultiplier, hasSolarianSapphire)
+			aura := core.BattleShoutAura(
+				warrior.GetCharacter(),
+				warrior.DefaultShout != proto.WarriorShout_WarriorShoutNone,
+				warrior.Talents.BoomingVoice,
+				commandingPresenceMultiplier,
+				warrior.HasBsSolarianSapphire,
+				warrior.HasBsT2,
+			)
+			aura.BuildPhase = core.Ternary(warrior.DefaultShout == proto.WarriorShout_WarriorShoutBattle, core.CharacterBuildPhaseBuffs, core.CharacterBuildPhaseNone)
+			return aura
 		}),
 	)
 
@@ -59,7 +68,15 @@ func (warrior *Warrior) registerShouts() {
 		core.ActionID{SpellID: 469},
 		SpellMaskCommandingShout,
 		warrior.NewAllyAuraArray(func(unit *core.Unit) *core.Aura {
-			return core.CommandingShoutAura(warrior.GetCharacter(), warrior.Talents.BoomingVoice, commandingPresenceMultiplier, warrior.T6Tank2P != nil && warrior.T6Tank2P.IsActive())
+			aura := core.CommandingShoutAura(
+				warrior.GetCharacter(),
+				warrior.DefaultShout != proto.WarriorShout_WarriorShoutNone,
+				warrior.Talents.BoomingVoice,
+				commandingPresenceMultiplier,
+				warrior.T6Tank2P != nil && warrior.T6Tank2P.IsActive(),
+			)
+			aura.BuildPhase = core.Ternary(warrior.DefaultShout == proto.WarriorShout_WarriorShoutCommanding, core.CharacterBuildPhaseBuffs, core.CharacterBuildPhaseNone)
+			return aura
 		}),
 	)
 }

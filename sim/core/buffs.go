@@ -1,6 +1,7 @@
 package core
 
 import (
+	"fmt"
 	"slices"
 	"time"
 
@@ -59,12 +60,15 @@ func makeStatBuff(char *Character, config BuffConfig) *Aura {
 		panic("Buff without ActionID")
 	}
 
-	baseAura := MakePermanent(char.GetOrRegisterAura(Aura{
+	baseAura := char.GetOrRegisterAura(Aura{
 		Label:      config.Label,
 		ActionID:   config.ActionID,
 		Duration:   TernaryDuration(config.Duration > 0, config.Duration, NeverExpires),
 		BuildPhase: CharacterBuildPhaseBuffs,
-	}))
+		OnReset: func(aura *Aura, sim *Simulation) {
+			aura.Activate(sim)
+		},
+	})
 
 	registerStatEffect(baseAura, config.Stats)
 	return baseAura
@@ -113,12 +117,14 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 	}
 
 	if partyBuffs.BattleShout != proto.TristateEffect_TristateEffectMissing {
-		BattleShoutAura(
+		MakePermanent(BattleShoutAura(
 			char,
+			false,
 			5,
 			TernaryFloat64(IsImproved(partyBuffs.BattleShout), 1.25, 1.0),
 			partyBuffs.BsSolarianSapphire,
-		)
+			false,
+		))
 	}
 
 	if partyBuffs.BloodPact != proto.TristateEffect_TristateEffectMissing {
@@ -134,12 +140,13 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 	}
 
 	if partyBuffs.CommandingShout != proto.TristateEffect_TristateEffectMissing {
-		CommandingShoutAura(
+		MakePermanent(CommandingShoutAura(
 			char,
+			false,
 			5,
 			TernaryFloat64(IsImproved(partyBuffs.CommandingShout), 1.25, 1.0),
 			false,
-		)
+		))
 	}
 
 	if partyBuffs.DevotionAura != proto.TristateEffect_TristateEffectMissing {
@@ -347,26 +354,46 @@ func ShadowProtectionAura(char *Character) *Aura {
 	})
 }
 
-///////////////////////////////////////////////////////////////////////////
-//							Party Buffs
-///////////////////////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////////////////////
+//
+//	Party Buffs
+//
+// /////////////////////////////////////////////////////////////////////////
+var BattleShoutCategory = "BattleShout"
 
-func BattleShoutAura(char *Character, boomingVoicePoints int32, apMultiplier float64, hasSolarianSapphire bool) *Aura {
-	apBuff := 306.0
+func BattleShoutAura(char *Character, isPlayer bool, boomingVoicePoints int32, commandingPresenceMultiplier float64, hasSolarianSapphire bool, hasT2 bool) *Aura {
+	baseApBuff := 306.0
+	apBuff := baseApBuff
 	if hasSolarianSapphire {
 		apBuff += 70
 	}
+	if hasT2 {
+		apBuff += 30
+	}
+	nonPlayerApBuff := apBuff * commandingPresenceMultiplier
 
-	apBuff *= apMultiplier
-
-	return makeStatBuff(char, BuffConfig{
-		Label:    "Battle Shout",
-		ActionID: ActionID{SpellID: 2048},
-		Duration: time.Duration(float64(time.Minute*2) * (1 + 0.25*float64(boomingVoicePoints))),
-		Stats: []StatConfig{
-			{stats.AttackPower, apBuff, false},
+	var ee *ExclusiveEffect
+	aura := char.GetOrRegisterAura(Aura{
+		Label:      fmt.Sprintf("Battle Shout (%s)", Ternary(isPlayer, "Player", "External")),
+		ActionID:   ActionID{SpellID: 2048}.WithTag(TernaryInt32(isPlayer, 0, 1)),
+		Duration:   time.Duration(float64(time.Minute*2) * (1 + 0.25*float64(boomingVoicePoints))),
+		BuildPhase: CharacterBuildPhaseBuffs,
+		OnGain: func(aura *Aura, sim *Simulation) {
+			ee.SetPriority(sim, TernaryFloat64(sim.CurrentTime <= 0, nonPlayerApBuff, baseApBuff*commandingPresenceMultiplier))
 		},
 	})
+
+	ee = aura.NewExclusiveEffect(BattleShoutCategory, false, ExclusiveEffect{
+		Priority: 0,
+		OnGain: func(ee *ExclusiveEffect, sim *Simulation) {
+			ee.Aura.Unit.AddStatDynamic(sim, stats.AttackPower, ee.Priority)
+		},
+		OnExpire: func(ee *ExclusiveEffect, sim *Simulation) {
+			ee.Aura.Unit.AddStatDynamic(sim, stats.AttackPower, -ee.Priority)
+		},
+	})
+
+	return aura
 }
 
 func BloodPactAura(char *Character, improved bool) *Aura {
@@ -384,21 +411,38 @@ func BloodPactAura(char *Character, improved bool) *Aura {
 	})
 }
 
-func CommandingShoutAura(char *Character, boomingVoicePoints int32, hpMultiplier float64, hasT6Tank2P bool) *Aura {
-	hpBuff := 1080.0
+var CommandingShoutCategory = "CommandingShout"
+
+func CommandingShoutAura(char *Character, isPlayer bool, boomingVoicePoints int32, commandingPresenceMultiplier float64, hasT6Tank2P bool) *Aura {
+	baseHpBuff := 1080.0
+	hpBuff := baseHpBuff
 	if hasT6Tank2P {
 		hpBuff += 170
 	}
-	hpBuff *= hpMultiplier
+	nonPlayerHpBuff := hpBuff * commandingPresenceMultiplier
 
-	return makeStatBuff(char, BuffConfig{
-		Label:    "Commanding Shout",
-		ActionID: ActionID{SpellID: 469},
-		Duration: time.Duration(float64(time.Minute*2) * (1 + 0.25*float64(boomingVoicePoints))),
-		Stats: []StatConfig{
-			{stats.Health, hpBuff, false},
+	var ee *ExclusiveEffect
+	aura := char.GetOrRegisterAura(Aura{
+		Label:      fmt.Sprintf("Commanding Shout (%s)", Ternary(isPlayer, "Player", "External")),
+		ActionID:   ActionID{SpellID: 469}.WithTag(TernaryInt32(isPlayer, 0, 1)),
+		Duration:   time.Duration(float64(time.Minute*2) * (1 + 0.25*float64(boomingVoicePoints))),
+		BuildPhase: CharacterBuildPhaseBuffs,
+		OnGain: func(aura *Aura, sim *Simulation) {
+			ee.SetPriority(sim, TernaryFloat64(sim.CurrentTime <= 0, nonPlayerHpBuff, baseHpBuff*commandingPresenceMultiplier))
 		},
 	})
+
+	ee = aura.NewExclusiveEffect(CommandingShoutCategory, false, ExclusiveEffect{
+		Priority: 0,
+		OnGain: func(ee *ExclusiveEffect, sim *Simulation) {
+			ee.Aura.Unit.AddStatDynamic(sim, stats.Health, ee.Priority)
+		},
+		OnExpire: func(ee *ExclusiveEffect, sim *Simulation) {
+			ee.Aura.Unit.AddStatDynamic(sim, stats.Health, -ee.Priority)
+		},
+	})
+
+	return aura
 }
 
 func DevotionAuraBuff(char *Character, improved bool) *Aura {

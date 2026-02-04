@@ -79,7 +79,8 @@ const SAVED_TALENTS_STORAGE_KEY = '__savedTalents__';
 export type InputConfig<ModObject> =
 	| InputHelpers.TypedBooleanPickerConfig<ModObject>
 	| InputHelpers.TypedNumberPickerConfig<ModObject>
-	| InputHelpers.TypedEnumPickerConfig<ModObject>;
+	| InputHelpers.TypedEnumPickerConfig<ModObject>
+	| IconInputs.IconInputConfig<ModObject, any>;
 
 export interface InputSection {
 	tooltip?: string;
