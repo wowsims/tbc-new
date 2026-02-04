@@ -78,6 +78,7 @@ func init() {
 		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
 			Name:     "The Lightning Capacitor",
 			ActionID: core.ActionID{ItemID: 28785},
+			ProcMask: core.ProcMaskSpellOrSpellProc,
 			ICD:      time.Millisecond * 2500,
 			Outcome:  core.OutcomeCrit,
 			Callback: core.CallbackOnSpellHitDealt,
