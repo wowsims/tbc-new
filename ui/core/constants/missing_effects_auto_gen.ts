@@ -39,7 +39,6 @@ export const MISSING_ITEM_EFFECTS = [
     27416, // Fetish of the Fallen
     27484, // Libram of Avengement
     27529, // Figurine of the Colossus
-    27683, // Quagmirran's Eye
     27896, // Alembic of Infernal Power
     27920, // Mark of Conquest
     27921, // Mark of Conquest
