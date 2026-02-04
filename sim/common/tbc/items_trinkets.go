@@ -21,12 +21,13 @@ func init() {
 		)
 
 		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:       "Quagmirran's Eye",
-			ActionID:   core.ActionID{ItemID: 27683},
-			ProcChance: 1,
-			ICD:        time.Second * 45,
-			Outcome:    core.OutcomeLanded,
-			Callback:   core.CallbackOnSpellHitDealt,
+			Name:               "Quagmirran's Eye",
+			ActionID:           core.ActionID{ItemID: 27683},
+			ProcChance:         .1,
+			ICD:                time.Second * 45,
+			Outcome:            core.OutcomeLanded,
+			Callback:           core.CallbackOnSpellHitDealt,
+			RequireDamageDealt: true,
 			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 				quagmirransEyeAura.Activate(sim)
 			},
