@@ -82,6 +82,12 @@ export class CharacterStats extends Component {
 					UnitStat.fromPseudoStat(PseudoStat.PseudoStatDodgePercent),
 					UnitStat.fromPseudoStat(PseudoStat.PseudoStatParryPercent),
 					UnitStat.fromPseudoStat(PseudoStat.PseudoStatBlockPercent),
+					UnitStat.fromStat(Stat.StatBlockValue),
+					UnitStat.fromStat(Stat.StatArcaneResistance),
+					UnitStat.fromStat(Stat.StatFireResistance),
+					UnitStat.fromStat(Stat.StatFrostDamage),
+					UnitStat.fromStat(Stat.StatNatureResistance),
+					UnitStat.fromStat(Stat.StatShadowResistance),
 				],
 			],
 			[
@@ -119,14 +125,14 @@ export class CharacterStats extends Component {
 
 		if (this.player.getPlayerSpec().isTankSpec) {
 			const hitIndex = statGroups.get(StatGroup.Physical)!.findIndex(stat => stat.equalsPseudoStat(PseudoStat.PseudoStatMeleeHitPercent));
-			statGroups.get(StatGroup.Physical)!.splice(hitIndex+1, 0, UnitStat.fromStat(Stat.StatExpertiseRating));
+			statGroups.get(StatGroup.Physical)!.splice(hitIndex + 1, 0, UnitStat.fromStat(Stat.StatExpertiseRating));
 			// statGroups.get(StatGroup.Defense)!.push(UnitStat.fromStat(Stat.StatDefenseRating));
 		} else if ([Stat.StatIntellect, Stat.StatSpellDamage].includes(simUI.individualConfig.epReferenceStat)) {
 			const hitIndex = statGroups.get(StatGroup.Spell)!.findIndex(stat => stat.equalsPseudoStat(PseudoStat.PseudoStatSpellHitPercent));
 			// statGroups.get(StatGroup.Spell)!.splice(hitIndex+1, 0, UnitStat.fromStat(Stat.StatExpertiseRating));
 		} else {
 			const hitIndex = statGroups.get(StatGroup.Physical)!.findIndex(stat => stat.equalsPseudoStat(PseudoStat.PseudoStatMeleeHitPercent));
-			statGroups.get(StatGroup.Physical)!.splice(hitIndex+1, 0, UnitStat.fromStat(Stat.StatExpertiseRating));
+			statGroups.get(StatGroup.Physical)!.splice(hitIndex + 1, 0, UnitStat.fromStat(Stat.StatExpertiseRating));
 		}
 
 		statGroups.forEach((groupedStats, key) => {
@@ -145,9 +151,7 @@ export class CharacterStats extends Component {
 				const valueRef = ref<HTMLTableCellElement>();
 				const row = (
 					<tr className="character-stats-table-row">
-						<td className="character-stats-table-label">
-							{statName}
-						</td>
+						<td className="character-stats-table-label">{statName}</td>
 						<td ref={valueRef} className="character-stats-table-value">
 							{unitStat.hasRootStat() && this.bonusStatsLink(unitStat)}
 						</td>
@@ -156,7 +160,12 @@ export class CharacterStats extends Component {
 				body.appendChild(row);
 				this.valueElems.push(valueRef.value!);
 
-				if (unitStat.isPseudoStat() && (unitStat.getPseudoStat() === PseudoStat.PseudoStatMeleeCritPercent || unitStat.getPseudoStat() === PseudoStat.PseudoStatRangedCritPercent) && this.shouldShowMeleeCritCap(player)) {
+				if (
+					unitStat.isPseudoStat() &&
+					(unitStat.getPseudoStat() === PseudoStat.PseudoStatMeleeCritPercent ||
+						unitStat.getPseudoStat() === PseudoStat.PseudoStatRangedCritPercent) &&
+					this.shouldShowMeleeCritCap(player)
+				) {
 					const critCapRow = (
 						<tr className="character-stats-table-row">
 							<td className="character-stats-table-label">{i18n.t('sidebar.character_stats.melee_crit_cap')}</td>
@@ -288,7 +297,11 @@ export class CharacterStats extends Component {
 				</div>
 			);
 
-			if (unitStat.isPseudoStat() && (unitStat.getPseudoStat() === PseudoStat.PseudoStatMeleeCritPercent || unitStat.getPseudoStat() === PseudoStat.PseudoStatRangedCritPercent) && this.shouldShowMeleeCritCap(player)) {
+			if (
+				unitStat.isPseudoStat() &&
+				(unitStat.getPseudoStat() === PseudoStat.PseudoStatMeleeCritPercent || unitStat.getPseudoStat() === PseudoStat.PseudoStatRangedCritPercent) &&
+				this.shouldShowMeleeCritCap(player)
+			) {
 				idx++;
 
 				const meleeCritCapInfo = player.getMeleeCritCapInfo();
@@ -359,9 +372,7 @@ export class CharacterStats extends Component {
 		const rootStat = unitStat.hasRootStat() ? unitStat.getRootStat() : null;
 		let rootRatingValue = rootStat !== null ? deltaStats.getStat(rootStat) : null;
 		let derivedPercentOrPointsValue = unitStat.convertDefaultUnitsToPercent(deltaStats.getUnitStat(unitStat));
-		const percentOrPointsSuffix = false
-			? ` ${i18n.t('sidebar.character_stats.points_suffix')}`
-			: i18n.t('sidebar.character_stats.percent_suffix');
+		const percentOrPointsSuffix = false ? ` ${i18n.t('sidebar.character_stats.points_suffix')}` : i18n.t('sidebar.character_stats.percent_suffix');
 
 		if (false && includeBase) {
 			derivedPercentOrPointsValue = derivedPercentOrPointsValue! + this.player.getBaseMastery();
@@ -394,6 +405,10 @@ export class CharacterStats extends Component {
 				const ohPercentString = `${ohPercentValue.toFixed(2)}` + percentOrPointsSuffix;
 				const wrappedPercentString = hideRootRating ? `${mhPercentString} / ${ohPercentString}` : ` (${mhPercentString} / ${ohPercentString})`;
 				return rootRatingString + wrappedPercentString;
+			}
+		} else if (rootStat == Stat.StatBlockValue) {
+			if (rootRatingValue !== null && rootRatingValue > 0) {
+				rootRatingValue *= deltaStats.getPseudoStat(PseudoStat.PseudoStatBlockValueMultiplier) || 1;
 			}
 		}
 

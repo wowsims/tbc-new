@@ -185,10 +185,11 @@ export class PresetConfigurationPicker extends Component {
 					);
 				}
 				if (settings.specOptions) {
-					simUI.player.setSpecOptions(eventID, {
-						...simUI.player.getSpecOptions(),
-						...settings.specOptions,
-					});
+					// Avoid object-spread over a large union type (produces an unassignable union);
+					// getSpecOptions() already returns a copy, so mutating it is safe here.
+					const mergedSpecOptions = simUI.player.getSpecOptions() as any;
+					Object.assign(mergedSpecOptions, settings.specOptions);
+					simUI.player.setSpecOptions(eventID, mergedSpecOptions);
 				}
 				if (settings.raidBuffs) simUI.sim.raid.setBuffs(eventID, settings.raidBuffs);
 				if (settings.buffs) simUI.player.setBuffs(eventID, settings.buffs);

@@ -2,7 +2,6 @@ package core
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/wowsims/tbc/sim/core/proto"
 	"google.golang.org/protobuf/encoding/protojson"
@@ -286,25 +285,6 @@ func (unit *Unit) newAPLRotation(config *proto.APLRotation) *APLRotation {
 			}
 		}
 	}
-
-	// If user has a Prepull potion set but does not use it in their APL settings, we enable it here.
-	rotation.doAndRecordWarnings(nil, true, func() {
-		prepotSpell := rotation.GetAPLSpell(ActionID{OtherID: proto.OtherAction_OtherActionPotion}.ToProto())
-		if prepotSpell != nil {
-			found := false
-			for _, prepullAction := range rotation.allPrepullActions() {
-				if castSpellAction, ok := prepullAction.impl.(*APLActionCastSpell); ok &&
-					(castSpellAction.spell == prepotSpell || castSpellAction.spell.Flags.Matches(SpellFlagPotion)) {
-					found = true
-				}
-			}
-			if !found {
-				unit.RegisterPrepullAction(-1*time.Second, func(sim *Simulation) {
-					prepotSpell.Cast(sim, nil)
-				})
-			}
-		}
-	})
 
 	return rotation
 }

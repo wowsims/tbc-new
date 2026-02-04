@@ -678,7 +678,7 @@ const actionKindFactories: { [f in NonNullable<APLActionKind>]: ActionKindConfig
 		submenu: undefined,
 		shortDescription: '',
 		fullDescription: undefined,
-		includeIf: undefined,
+		includeIf: (_player: Player<any>, _isPrepull: boolean) => false, // Never show this, because its not implemented
 		newValue: function (): APLActionCatOptimalRotationAction {
 			throw new Error('Function not implemented.');
 		},
@@ -691,7 +691,7 @@ const actionKindFactories: { [f in NonNullable<APLActionKind>]: ActionKindConfig
 		submenu: undefined,
 		shortDescription: '',
 		fullDescription: undefined,
-		includeIf: undefined,
+		includeIf: (_player: Player<any>, _isPrepull: boolean) => false, // Never show this, because its not implemented
 		newValue: function (): APLActionGuardianHotwDpsRotation {
 			throw new Error('Function not implemented.');
 		},
@@ -704,7 +704,7 @@ const actionKindFactories: { [f in NonNullable<APLActionKind>]: ActionKindConfig
 		submenu: undefined,
 		shortDescription: '',
 		fullDescription: undefined,
-		includeIf: undefined,
+		includeIf: (_player: Player<any>, _isPrepull: boolean) => false, // Never show this, because its not implemented
 		newValue: function (): APLActionWarlockNextExhaleTarget {
 			throw new Error('Function not implemented.');
 		},

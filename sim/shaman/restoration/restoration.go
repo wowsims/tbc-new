@@ -3,7 +3,6 @@ package restoration
 import (
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
-	"github.com/wowsims/tbc/sim/core/stats"
 	"github.com/wowsims/tbc/sim/shaman"
 )
 
@@ -82,5 +81,4 @@ func (resto *RestorationShaman) Initialize() {
 
 func (resto *RestorationShaman) ApplyTalents() {
 	resto.Shaman.ApplyTalents()
-	resto.ApplyArmorSpecializationEffect(stats.Intellect, proto.ArmorType_ArmorTypeMail, 86529)
 }

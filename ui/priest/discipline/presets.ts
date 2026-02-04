@@ -51,7 +51,6 @@ export const DefaultConsumables = ConsumesSpec.create({
 	flaskId: 123, // Flask of the Frost Wyrm (not found in list)
 	foodId: 62290, // Seafood Magnifique Feast
 	potId: 58091, // Volcanic Potion
-	prepotId: 58091, // Volcanic Potion
 });
 export const DefaultRaidBuffs = RaidBuffs.create({
 	...defaultRaidBuffMajorDamageCooldowns()

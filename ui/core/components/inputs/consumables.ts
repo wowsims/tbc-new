@@ -1,5 +1,5 @@
 import { Player } from '../../player';
-import { Class, ConsumesSpec, Profession, Spec, Stat } from '../../proto/common';
+import { Class, ConsumesSpec, ItemSlot, Profession, Spec, Stat } from '../../proto/common';
 import { Consumable } from '../../proto/db';
 import { ActionId } from '../../proto_utils/action_id';
 import { EventID, TypedEvent } from '../../typed_event';
@@ -22,6 +22,8 @@ export interface ConsumeInputFactoryArgs<T extends number> {
 	// Additional callback if logic besides syncing consumes is required
 	onSet?: (eventactionId: EventID, player: Player<any>, newValue: T) => void;
 	showWhen?: (player: Player<any>) => boolean;
+	enableWhen?: (player: Player<any>) => boolean;
+	changedEvent?: (player: Player<any>) => void;
 }
 
 function makeConsumeInputFactory<T extends number, SpecType extends Spec>(
@@ -46,6 +48,7 @@ function makeConsumeInputFactory<T extends number, SpecType extends Spec>(
 			zeroValue: 0 as T,
 			changedEvent: (player: Player<any>) => TypedEvent.onAny([player.consumesChangeEmitter, player.gearChangeEmitter, player.professionChangeEmitter]),
 			showWhen: (player: Player<any>) => (!args.showWhen || args.showWhen(player)) && valueOptions.some(option => option.showWhen?.(player)),
+			enableWhen: args.enableWhen,
 			getValue: (player: Player<any>) => player.getConsumes()[args.consumesFieldName] as T,
 			setValue: (eventID: EventID, player: Player<any>, newValue: number) => {
 				const newConsumes = player.getConsumes();
@@ -121,16 +124,16 @@ export const EXPLOSIVE_CONFIG = [
 export const makeExplosivesInput = makeConsumeInputFactory({ consumesFieldName: 'explosiveId' });
 
 export const GoblinSapper = makeBooleanConsumeInput({
-	actionId: ActionId.fromItemId(10646),
+	actionId: () => ActionId.fromItemId(10646),
 	fieldName: 'goblinSapper',
 	showWhen: (player: Player<any>) => player.hasProfession(Profession.Engineering),
-})
+});
 
 export const SuperSapper = makeBooleanConsumeInput({
-	actionId: ActionId.fromItemId(23827),
+	actionId: () => ActionId.fromItemId(23827),
 	fieldName: 'superSapper',
 	showWhen: (player: Player<any>) => player.hasProfession(Profession.Engineering),
-})
+});
 
 ///////////////////////////////////////////////////////////////////////////
 //                               WEAPON IMBUES
@@ -153,57 +156,57 @@ export const SupWizardOil = {
 export const AdamantiteSharpeningMH = {
 	actionId: ActionId.fromItemId(23529),
 	value: 29453,
-	showWhen: (player: Player<any>) => !player.getGear().hasBluntMHWeapon()
+	showWhen: (player: Player<any>) => !player.getGear().hasBluntMHWeapon(),
 };
 export const AdamantiteWeightMH = {
 	actionId: ActionId.fromItemId(28421),
 	value: 34340,
-	showWhen: (player: Player<any>) => player.getGear().hasBluntMHWeapon()
+	showWhen: (player: Player<any>) => player.getGear().hasBluntMHWeapon(),
 };
 export const AdamantiteSharpeningOH = {
 	actionId: ActionId.fromItemId(23529),
 	value: 29453,
-	showWhen: (player: Player<any>) => !player.getGear().hasBluntOHWeapon()
+	showWhen: (player: Player<any>) => !player.getGear().hasBluntOHWeapon(),
 };
 export const AdamantiteWeightOH = {
 	actionId: ActionId.fromItemId(28421),
 	value: 34340,
-	showWhen: (player: Player<any>) => player.getGear().hasBluntOHWeapon()
+	showWhen: (player: Player<any>) => player.getGear().hasBluntOHWeapon(),
 };
 // Rogue Poisons
 export const RogueInstantPoison = {
 	actionId: ActionId.fromItemId(21927),
 	value: 26891,
-	showWhen: (player: Player<any>) => player.getClass() == Class.ClassRogue
-}
+	showWhen: (player: Player<any>) => player.getClass() == Class.ClassRogue,
+};
 export const RogueDeadlyPoison = {
 	actionId: ActionId.fromItemId(22054),
 	value: 27186,
-	showWhen: (player: Player<any>) => player.getClass() == Class.ClassRogue
-}
+	showWhen: (player: Player<any>) => player.getClass() == Class.ClassRogue,
+};
 // Shaman Imbues
 export const ShamanImbueWindfury = {
 	actionId: ActionId.fromSpellId(25505),
 	value: 25505,
-	showWhen: (player: Player<any>) => player.getClass() == Class.ClassShaman
-}
+	showWhen: (player: Player<any>) => player.getClass() == Class.ClassShaman,
+};
 export const ShamanImbueFlametongue = {
 	actionId: ActionId.fromSpellId(25489),
 	value: 25489,
-	showWhen: (player: Player<any>) => player.getClass() == Class.ClassShaman
-}
+	showWhen: (player: Player<any>) => player.getClass() == Class.ClassShaman,
+};
 
 export const ShamanImbueFrostbrand = {
 	actionId: ActionId.fromSpellId(25500),
 	value: 25500,
-	showWhen: (player: Player<any>) => player.getClass() == Class.ClassShaman
-}
+	showWhen: (player: Player<any>) => player.getClass() == Class.ClassShaman,
+};
 
 export const ShamanImbueRockbiter = {
 	actionId: ActionId.fromSpellId(25485),
 	value: 25485,
-	showWhen: (player: Player<any>) => player.getClass() == Class.ClassShaman
-}
+	showWhen: (player: Player<any>) => player.getClass() == Class.ClassShaman,
+};
 
 export const IMBUE_CONFIG_MH = [
 	{ config: ManaOil, stats: [Stat.StatHealingPower] },
@@ -233,8 +236,15 @@ export const IMBUE_CONFIG_OH = [
 	{ config: ShamanImbueWindfury, stats: [] },
 ] as ConsumableStatOption<number>[];
 
-export const makeMHImbueInput = makeConsumeInputFactory({ consumesFieldName: 'mhImbueId' });
-export const makeOHImbueinput = makeConsumeInputFactory({ consumesFieldName: 'ohImbueId' });
+export const makeMHImbueInput = makeConsumeInputFactory({
+	consumesFieldName: 'mhImbueId',
+	enableWhen: (player: Player<any>) => !player.getParty() || player.getParty()!.getBuffs().windfuryTotem == 0,
+	changedEvent: (player: Player<any>) => TypedEvent.onAny([player.getParty()?.changeEmitter || player.consumesChangeEmitter]),
+});
+export const makeOHImbueinput = makeConsumeInputFactory({
+	consumesFieldName: 'ohImbueId',
+	showWhen: (player: Player<any>) => player.getGear().getEquippedItem(ItemSlot.ItemSlotOffHand)?.item.weaponSpeed !== undefined,
+});
 
 ///////////////////////////////////////////////////////////////////////////
 //                               	DRUMS
@@ -243,17 +253,17 @@ export const makeOHImbueinput = makeConsumeInputFactory({ consumesFieldName: 'oh
 export const GreaterDrumsBattle = {
 	actionId: ActionId.fromItemId(185848),
 	value: 351355,
-}
+};
 
 export const GreaterDrumsRestoration = {
 	actionId: ActionId.fromItemId(185850),
 	value: 351358,
-}
+};
 
 export const GreaterDrumsWar = {
 	actionId: ActionId.fromItemId(185852),
 	value: 351360,
-}
+};
 
 export const DRUMS_CONFIG = [
 	{ config: GreaterDrumsBattle, stats: [] },
@@ -261,41 +271,41 @@ export const DRUMS_CONFIG = [
 	{ config: GreaterDrumsWar, stats: [Stat.StatAttackPower, Stat.StatSpellDamage] },
 ] as ConsumableStatOption<number>[];
 
-export const makeDrumsInput = makeConsumeInputFactory({ consumesFieldName: 'drumsId' })
+export const makeDrumsInput = makeConsumeInputFactory({ consumesFieldName: 'drumsId' });
 
 ///////////////////////////////////////////////////////////////////////////
 //                                 SCROLLS
 ///////////////////////////////////////////////////////////////////////////
 
 export const ScrollAgi = makeBooleanConsumeInput({
-	actionId: ActionId.fromItemId(27498),
+	actionId: () => ActionId.fromItemId(27498),
 	fieldName: 'scrollAgi',
-	showWhen: (player: Player<any>) => player.getEpWeights().getStat(Stat.StatAgility) > 0
-})
+	showWhen: (player: Player<any>) => player.getEpWeights().getStat(Stat.StatAgility) > 0,
+});
 
 export const ScrollStr = makeBooleanConsumeInput({
-	actionId: ActionId.fromItemId(27503),
+	actionId: () => ActionId.fromItemId(27503),
 	fieldName: 'scrollStr',
-	showWhen: (player: Player<any>) => player.getEpWeights().getStat(Stat.StatStrength) > 0
-})
+	showWhen: (player: Player<any>) => player.getEpWeights().getStat(Stat.StatStrength) > 0,
+});
 
 export const ScrollInt = makeBooleanConsumeInput({
-	actionId: ActionId.fromItemId(27499),
+	actionId: () => ActionId.fromItemId(27499),
 	fieldName: 'scrollInt',
-	showWhen: (player: Player<any>) => player.getEpWeights().getStat(Stat.StatIntellect) > 0
-})
+	showWhen: (player: Player<any>) => player.getEpWeights().getStat(Stat.StatIntellect) > 0,
+});
 
 export const ScrollSpi = makeBooleanConsumeInput({
-	actionId: ActionId.fromItemId(27501),
+	actionId: () => ActionId.fromItemId(27501),
 	fieldName: 'scrollSpi',
-	showWhen: (player: Player<any>) => player.getEpWeights().getStat(Stat.StatSpirit) > 0
-})
+	showWhen: (player: Player<any>) => player.getEpWeights().getStat(Stat.StatSpirit) > 0,
+});
 
 export const ScrollArm = makeBooleanConsumeInput({
-	actionId: ActionId.fromItemId(27500),
+	actionId: () => ActionId.fromItemId(27500),
 	fieldName: 'scrollArm',
-	showWhen: (player: Player<any>) => player.getEpWeights().getStat(Stat.StatArmor) > 0
-})
+	showWhen: (player: Player<any>) => player.getEpWeights().getStat(Stat.StatArmor) > 0,
+});
 
 ///////////////////////////////////////////////////////////////////////////
 

@@ -10,5 +10,5 @@ func init() {
 	RegisterDpsWarrior()
 }
 
-func TestFury(t *testing.T) {
+func TestDpsWarrior(t *testing.T) {
 }

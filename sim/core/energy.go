@@ -53,6 +53,7 @@ func (unit *Unit) EnableEnergyBar(options EnergyBarOptions) {
 		hasteRatingMultiplier: 1,
 		regenMetrics:          unit.NewEnergyMetrics(ActionID{OtherID: proto.OtherAction_OtherActionEnergyRegen}),
 		EnergyRefundMetrics:   unit.NewEnergyMetrics(ActionID{OtherID: proto.OtherAction_OtherActionRefund}),
+		EncounterStartMetrics: unit.NewEnergyMetrics(ActionID{OtherID: proto.OtherAction_OtherActionEncounterStart}),
 		ownerClass:            options.UnitClass,
 		hasNoRegen:            options.HasNoRegen,
 	}

@@ -3,7 +3,6 @@ package protection
 import (
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
-	"github.com/wowsims/tbc/sim/core/stats"
 	"github.com/wowsims/tbc/sim/warrior"
 )
 
@@ -28,20 +27,26 @@ type ProtectionWarrior struct {
 	*warrior.Warrior
 
 	Options *proto.ProtectionWarrior_Options
-
-	SwordAndBoardAura *core.Aura
 }
 
-// ApplyTalents implements core.Agent.
 func (war *ProtectionWarrior) ApplyTalents() {
-	// panic("unimplemented")
+	war.Warrior.ApplyTalents()
 }
 
 func NewProtectionWarrior(character *core.Character, options *proto.Player) *ProtectionWarrior {
 	protOptions := options.GetProtectionWarrior().Options
+	classOptions := protOptions.ClassOptions
 
 	war := &ProtectionWarrior{
-		Warrior: warrior.NewWarrior(character, protOptions.ClassOptions, options.TalentsString, warrior.WarriorInputs{}),
+		Warrior: warrior.NewWarrior(character, protOptions.ClassOptions, options.TalentsString, warrior.WarriorInputs{
+			DefaultShout:          classOptions.DefaultShout,
+			DefaultStance:         classOptions.DefaultStance,
+			StartingRage:          classOptions.StartingRage,
+			QueueDelay:            classOptions.QueueDelay,
+			StanceSnapshot:        classOptions.StanceSnapshot,
+			HasBsSolarianSapphire: classOptions.HasBsSolarianSapphire,
+			HasBsT2:               classOptions.HasBsT2,
+		}),
 		Options: protOptions,
 	}
 
@@ -54,23 +59,6 @@ func (war *ProtectionWarrior) GetWarrior() *warrior.Warrior {
 
 func (war *ProtectionWarrior) Initialize() {
 	war.Warrior.Initialize()
-	war.registerPassives()
-
-	// war.registerRevenge()
-	// war.registerShieldSlam()
-	// war.registerShieldBlock()
-	// war.registerDemoralizingShout()
-	// war.registerLastStand()
-}
-
-func (war *ProtectionWarrior) registerPassives() {
-	war.ApplyArmorSpecializationEffect(stats.Stamina, proto.ArmorType_ArmorTypePlate, 86526)
-
-	// war.registerUnwaveringSentinel()
-	// war.registerBastionOfDefense()
-	// war.registerSwordAndBoard()
-	// war.registerUltimatum()
-	// war.registerRiposte()
 }
 
 func (war *ProtectionWarrior) Reset(sim *core.Simulation) {
@@ -78,6 +66,5 @@ func (war *ProtectionWarrior) Reset(sim *core.Simulation) {
 }
 
 func (war *ProtectionWarrior) OnEncounterStart(sim *core.Simulation) {
-	war.ResetRageBar(sim, core.TernaryFloat64(war.ShieldBarrierAura.IsActive(), 5, 25)+war.PrePullChargeGain)
 	war.Warrior.OnEncounterStart(sim)
 }

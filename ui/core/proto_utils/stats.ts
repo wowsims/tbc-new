@@ -298,6 +298,8 @@ export class UnitStat {
 			return Stat.StatDodgeRating;
 		} else if (pseudoStatName.includes('Parry')) {
 			return Stat.StatParryRating;
+		} else if (pseudoStatName.includes('BlockValue')) {
+			return Stat.StatBlockValue;
 		} else if (pseudoStatName.includes('Block')) {
 			return Stat.StatBlockRating;
 		} else if (pseudoStatName.includes('SpellHaste')) {
@@ -408,6 +410,7 @@ export const displayStatOrder: Array<UnitStat> = [
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatRangedCritPercent),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatRangedHastePercent),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatBlockPercent),
+	UnitStat.fromStat(Stat.StatBlockValue),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatDodgePercent),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatParryPercent),
 ];
@@ -738,13 +741,21 @@ export function statIsCapped(stat: Stat, hardCaps: Stats, softCaps: StatCap[]): 
 	return false;
 }
 
-export const DEFAULT_GEM_STATS = [
+export const DEFAULT_GEM_STATS = [Stat.StatStamina];
+export const DEFAULT_MELEE_GEM_STATS = [
+	...DEFAULT_GEM_STATS,
+	Stat.StatStrength,
+	Stat.StatAgility,
 	Stat.StatAllPhysHitRating,
 	Stat.StatAllPhysCritRating,
 	Stat.StatAllPhysHasteRating,
+];
+export const DEFAULT_CASTER_GEM_STATS = [
+	...DEFAULT_GEM_STATS,
+	Stat.StatIntellect,
+	Stat.StatSpellDamage,
 	Stat.StatSpellHitRating,
 	Stat.StatSpellCritRating,
 	Stat.StatSpellHasteRating,
 ];
-export const DEFAULT_CASTER_GEM_STATS = [...DEFAULT_GEM_STATS, Stat.StatIntellect, Stat.StatSpellDamage];
 export const DEFAULT_HYBRID_CASTER_GEM_STATS = [...DEFAULT_CASTER_GEM_STATS, Stat.StatSpirit];

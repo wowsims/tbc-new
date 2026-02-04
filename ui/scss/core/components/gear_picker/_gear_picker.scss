@@ -82,9 +82,7 @@
 
 		.item-picker-name-row,
 		.item-picker-name-container *,
-		.item-picker-reforge,
-		.item-picker-enchant,
-		.item-picker-tinker {
+		.item-picker-enchant {
 			letter-spacing: normal;
 
 			.gear-picker-right & {
@@ -101,17 +99,7 @@
 			font-size: var(--h6-font-size);
 		}
 
-		.item-picker-reforge {
-			color: var(--bs-uncommon);
-			font-size: var(--content-font-size);
-		}
-
 		.item-picker-enchant {
-			color: var(--bs-uncommon);
-			font-size: var(--content-font-size);
-		}
-
-		.item-picker-tinker {
 			color: var(--bs-uncommon);
 			font-size: var(--content-font-size);
 		}

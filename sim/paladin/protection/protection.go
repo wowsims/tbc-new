@@ -3,7 +3,6 @@ package protection
 import (
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
-	"github.com/wowsims/tbc/sim/core/stats"
 	"github.com/wowsims/tbc/sim/paladin"
 )
 
@@ -107,7 +106,6 @@ func (prot *ProtectionPaladin) trackDamageTakenLastGlobal() {
 
 func (prot *ProtectionPaladin) ApplyTalents() {
 	prot.Paladin.ApplyTalents()
-	prot.ApplyArmorSpecializationEffect(stats.Stamina, proto.ArmorType_ArmorTypePlate, 86525)
 }
 
 func (prot *ProtectionPaladin) Reset(sim *core.Simulation) {

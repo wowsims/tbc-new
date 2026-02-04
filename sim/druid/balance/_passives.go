@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
-	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
 	"github.com/wowsims/tbc/sim/druid"
 )
@@ -15,7 +14,6 @@ func (moonkin *BalanceDruid) RegisterBalancePassives() {
 	moonkin.registerEuphoria()
 	moonkin.registerOwlkinFrenzy()
 	moonkin.registerKillerInstinct()
-	moonkin.registerLeatherSpecialization()
 	moonkin.registerNaturalInsight()
 	moonkin.registerTotalEclipse()
 	moonkin.registerLunarShower()
@@ -130,10 +128,6 @@ func (moonkin *BalanceDruid) registerOwlkinFrenzy() {
 }
 
 func (moonkin *BalanceDruid) registerKillerInstinct() {}
-
-func (moonkin *BalanceDruid) registerLeatherSpecialization() {
-	moonkin.ApplyArmorSpecializationEffect(stats.Intellect, proto.ArmorType_ArmorTypeLeather, 86093)
-}
 
 func (moonkin *BalanceDruid) registerNaturalInsight() {
 	moonkin.MultiplyStat(stats.Mana, 5)

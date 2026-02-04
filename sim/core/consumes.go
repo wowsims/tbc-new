@@ -70,13 +70,6 @@ var PotionAuraTag = "Potion"
 func registerPotionCD(agent Agent, consumes *proto.ConsumesSpec) {
 	character := agent.GetCharacter()
 	potion := consumes.PotId
-	prepot := consumes.PrepotId
-
-	if prepot != 0 {
-		prepotMCD := makePotionActivationSpell(prepot, character)
-		prepotMCD.Spell.Flags |= SpellFlagPrepullPotion
-		character.AddMajorCooldown(prepotMCD)
-	}
 
 	if potion != 0 {
 		potMCD := makePotionActivationSpell(potion, character)

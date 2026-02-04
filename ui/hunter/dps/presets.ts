@@ -68,7 +68,6 @@ export const DefaultConsumables = ConsumesSpec.create({
 	flaskId: 76084, // Flask of the Winds
 	foodId: 74648, // Seafood Magnifique Feast
 	potId: 76089, // Potion of the Tol'vir
-	prepotId: 76089, // Potion of the Tol'vir
 });
 
 export const OtherDefaults = {
