@@ -40,29 +40,36 @@ func init() {
 		character := agent.GetCharacter()
 
 		lightningBolt := character.RegisterSpell(core.SpellConfig{
-			ActionID:     core.ActionID{SpellID: 123},
+			ActionID:     core.ActionID{SpellID: 42372},
 			SpellSchool:  core.SpellSchoolNature,
 			ProcMask:     core.ProcMaskEmpty,
-			Flags:        core.SpellFlagPassiveSpell,
+			Flags:        core.SpellFlagPassiveSpell | core.SpellFlagIgnoreAttackerModifiers,
 			MissileSpeed: 28, // this is a guess atm
+
+			DamageMultiplier: 1,
+			CritMultiplier:   character.DefaultSpellCritMultiplier(),
 
 			ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 				spell.WaitTravelTime(sim, func(s *core.Simulation) {
 					baseDamage := sim.Roll(694, 806)
-					spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeAlwaysHit)
+					//https://www.wowhead.com/tbc/item=28785/the-lightning-capacitor#comments
+					//It can crit, may need some testing
+					spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMagicCrit)
 				})
 
 			},
 		})
 
 		lightningCapacitorAura := character.RegisterAura(core.Aura{
-			ActionID:  core.ActionID{SpellID: 37657},
+			Label:     "Electrical Charge",
+			ActionID:  core.ActionID{SpellID: 37658},
 			Duration:  core.NeverExpires,
 			MaxStacks: 3,
 			OnStacksChange: func(aura *core.Aura, sim *core.Simulation, oldStacks, newStacks int32) {
-				if newStacks == 3 {
+				if newStacks >= 3 {
+					aura.SetStacks(sim, newStacks%3)
 					aura.Deactivate(sim)
-					lightningBolt.Cast(sim, character.CurrentTarget)
+					lightningBolt.Proc(sim, character.CurrentTarget)
 				}
 			},
 		})
