@@ -264,7 +264,7 @@ Skipping the following:
   - Mana Feed -> applied in lifetap.go
 */
 func (warlock *Warlock) appyImprovedImp() {
-	if warlock.Talents.ImprovedImp == 0 {
+	if warlock.Talents.ImprovedImp == 0 || warlock.Options.SacrificeSummon {
 		return
 	}
 
@@ -290,11 +290,14 @@ func (warlock *Warlock) applyFelIntellect() {
 	}
 
 	warlock.MultiplyStat(stats.Mana, 1.0+(0.01)*float64(warlock.Talents.FelIntellect))
-	warlock.ActivePet.MultiplyStat(stats.Mana, 1+(0.05)*float64(warlock.Talents.FelIntellect))
+	if warlock.ActivePet != nil {
+		warlock.ActivePet.MultiplyStat(stats.Mana, 1+(0.05)*float64(warlock.Talents.FelIntellect))
+	}
+
 }
 
 func (warlock *Warlock) applyImprovedSayaad() {
-	if warlock.Talents.ImprovedSayaad == 0 {
+	if warlock.Talents.ImprovedSayaad == 0 || !warlock.Options.SacrificeSummon {
 		return
 	}
 
@@ -312,12 +315,14 @@ func (warlock *Warlock) applyFelStamina() {
 	}
 
 	warlock.MultiplyStat(stats.Health, 1.0+0.01*float64(warlock.Talents.FelStamina))
-	warlock.ActivePet.MultiplyStat(stats.Health, 1+(0.05)*float64(warlock.Talents.FelStamina))
+	if warlock.ActivePet != nil {
+		warlock.ActivePet.MultiplyStat(stats.Health, 1+(0.05)*float64(warlock.Talents.FelStamina))
+	}
 
 }
 
 func (warlock *Warlock) applyUnholyPower() {
-	if warlock.Talents.UnholyPower == 0 {
+	if warlock.Talents.UnholyPower == 0 || warlock.Options.SacrificeSummon {
 		return
 	}
 
@@ -330,7 +335,7 @@ func (warlock *Warlock) applyUnholyPower() {
 }
 
 func (warlock *Warlock) applyDemonicSacrifice() {
-	if !warlock.Talents.DemonicSacrifice {
+	if !warlock.Talents.DemonicSacrifice || warlock.Options.SacrificeSummon == false {
 		return
 	}
 
@@ -372,6 +377,7 @@ func (warlock *Warlock) applySoulLink() {
 	// Add if/while pet is alive
 	warlock.PseudoStats.DamageTakenMultiplier *= 0.80
 	warlock.PseudoStats.DamageDealtMultiplier *= 1.05
+	warlock.ActivePet.PseudoStats.DamageDealtMultiplier *= 1.05
 }
 
 func (warlock *Warlock) applyDemonicKnowledge() {
@@ -388,15 +394,14 @@ func (warlock *Warlock) applyDemonicTactics() {
 		return
 	}
 
-	warlock.AddStat(stats.SpellCritPercent, 0.01*float64(warlock.Talents.DemonicTactics))
-	warlock.ActivePet.AddStat(stats.SpellCritPercent, 0.01*float64(warlock.Talents.DemonicTactics))
+	warlock.AddStat(stats.SpellCritRating, core.SpellCritRatingPerCritPercent*float64(warlock.Talents.DemonicTactics))
+	warlock.ActivePet.AddStat(stats.SpellCritRating, core.SpellCritRatingPerCritPercent*float64(warlock.Talents.DemonicTactics))
 }
 
 /*
 Destruction
-Skip for now:
+Skipped Talents:
   - Aftermath
-  - Bane -> applied in respective spells --> shadowbolt.go, immolate.go, soulfire.go
 */
 func (warlock *Warlock) applyImprovedShadowBolt() {
 	if warlock.Talents.ImprovedShadowBolt == 0 {
@@ -571,7 +576,6 @@ func (warlock *Warlock) applyConflagrate() {
 	warlock.registerConflagrate()
 }
 
-// ToDo
 func (warlock *Warlock) applySoulLeech() {
 	if warlock.Talents.SoulLeech == 0 {
 		return

@@ -307,7 +307,8 @@ func (pet *WarlockPet) registerFireboltSpell() {
 		BonusCoefficient: 0.571,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			result := spell.CalcDamage(sim, target, 5000, spell.OutcomeMagicHitAndCrit)
+			dmgRoll := pet.CalcAndRollDamageRange(sim, 112, 127)
+			result := spell.CalcDamage(sim, target, dmgRoll, spell.OutcomeMagicHitAndCrit)
 			spell.WaitTravelTime(sim, func(sim *core.Simulation) {
 				spell.DealDamage(sim, result)
 			})
@@ -339,10 +340,10 @@ func (pet *WarlockPet) registerLashOfPainSpell() {
 		DamageMultiplier: 1,
 		CritMultiplier:   1.5,
 		ThreatMultiplier: 1,
-		BonusCoefficient: 0.907,
+		BonusCoefficient: 0.429,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			result := spell.CalcDamage(sim, target, 500, spell.OutcomeMagicHitAndCrit)
+			result := spell.CalcDamage(sim, target, 123, spell.OutcomeMagicHitAndCrit)
 			spell.DealDamage(sim, result)
 		},
 	}))

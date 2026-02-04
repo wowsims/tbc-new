@@ -54,6 +54,10 @@ type Warlock struct {
 	Succubus   *WarlockPet
 	Voidwalker *WarlockPet
 
+	// Armors
+	FelArmor   *core.Aura
+	DemonArmor *core.Aura
+
 	// Doomguard *DoomguardPet
 	// Infernal  *InfernalPet
 
@@ -109,23 +113,13 @@ func (warlock *Warlock) Initialize() {
 	warlock.registerSiphonLifeSpell()
 	warlock.registerSoulfire()
 
+	warlock.registerArmors()
+
 	warlock.PseudoStats.SelfHealingMultiplier = 1.0
 	// doomguardInfernalTimer := warlock.NewTimer()
 	// warlock.registerSummonDoomguard(doomguardInfernalTimer)
 	// warlock.registerSummonInfernal(doomguardInfernalTimer)
 
-	// Armor selection
-	switch warlock.Options.Armor {
-
-	case proto.WarlockOptions_FelArmor:
-		warlock.PseudoStats.SelfHealingMultiplier *= 1.20 + (0.20 * 0.1 * float64(warlock.Talents.DemonicAegis))
-		warlock.AddStat(stats.SpellDamage, (100.0 + 100.0*(0.1*float64(warlock.Talents.DemonicAegis))))
-
-	case proto.WarlockOptions_DemonArmor:
-		warlock.AddStat(stats.Armor, (660 + (660 * (0.1 * float64(warlock.Talents.DemonicAegis)))))
-		warlock.AddStat(stats.ShadowResistance, 18+(18*0.1*float64(warlock.Talents.DemonicAegis)))
-		//HP5 not a thing atm
-	}
 }
 
 func (warlock *Warlock) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
@@ -139,7 +133,16 @@ func (warlock *Warlock) AddPartyBuffs(partyBuffs *proto.PartyBuffs) {
 func (warlock *Warlock) Reset(sim *core.Simulation) {
 }
 
-func (warlock *Warlock) OnEncounterStart(_ *core.Simulation) {
+func (warlock *Warlock) OnEncounterStart(sim *core.Simulation) {
+	// Armor selection
+	switch warlock.Options.Armor {
+
+	case proto.WarlockOptions_FelArmor:
+		warlock.FelArmor.Activate(sim)
+
+	case proto.WarlockOptions_DemonArmor:
+		warlock.DemonArmor.Activate(sim)
+	}
 }
 
 func NewWarlock(character *core.Character, options *proto.Player, warlockOptions *proto.WarlockOptions) *Warlock {
@@ -156,7 +159,11 @@ func NewWarlock(character *core.Character, options *proto.Player, warlockOptions
 	// warlock.Doomguard = warlock.NewDoomguardPet()
 
 	// warlock.serviceTimer = character.NewTimer()
-	warlock.registerPets()
+
+	if !warlock.Options.SacrificeSummon {
+		warlock.registerPets()
+	}
+
 	// warlock.registerGrimoireOfService()
 
 	return warlock

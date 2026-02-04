@@ -16,8 +16,11 @@ var ItemSetOblivionRaiment = core.NewItemSet(core.ItemSet{
 		2: func(agent core.Agent, setBonusAura *core.Aura) {
 			// Grants your pet 45 mana per 5 sec.
 			// Pet Mana Regen - 37375
-			pet := agent.GetCharacter().PetAgents[0]
-			pet.GetCharacter().AddStat(stats.MP5, 45.0)
+			petAgents := agent.GetCharacter().PetAgents
+			if petAgents != nil {
+				agent.GetCharacter().PetAgents[0].GetCharacter().AddStat(stats.MP5, 45.0)
+			}
+
 		},
 		4: func(agent core.Agent, setBonusAura *core.Aura) {
 			// Your Seed of Corruption deals 180 additional damage when it detonates.
