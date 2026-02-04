@@ -53,7 +53,6 @@ export interface TopGearResult {
 export class BulkTab extends SimTab {
 	readonly simUI: IndividualSimUI<any>;
 	readonly playerCanDualWield: boolean;
-	readonly playerIsFuryWarrior: boolean;
 
 	readonly itemsChangedEmitter = new TypedEvent<void>();
 	readonly settingsChangedEmitter = new TypedEvent<void>();
@@ -96,8 +95,7 @@ export class BulkTab extends SimTab {
 		super(parentElem, simUI, { identifier: 'bulk-tab', title: i18n.t('bulk_tab.title') });
 
 		this.simUI = simUI;
-		this.playerCanDualWield = this.simUI.player.getPlayerSpec().canDualWield && this.simUI.player.getClass() !== Class.ClassHunter;
-		this.playerIsFuryWarrior = this.simUI.player.getSpec() === Spec.SpecDpsWarrior;
+		this.playerCanDualWield = this.simUI.player.getPlayerSpec().canDualWield;
 
 		const setupTabBtnRef = ref<HTMLButtonElement>();
 		const setupTabRef = ref<HTMLDivElement>();
@@ -346,7 +344,7 @@ export class BulkTab extends SimTab {
 		items.forEach(item => {
 			const equippedItem = this.simUI.sim.db.lookupItemSpec(item)?.withDynamicStats();
 			if (equippedItem) {
-				getEligibleItemSlots(equippedItem.item, this.playerIsFuryWarrior).forEach(slot => {
+				getEligibleItemSlots(equippedItem.item).forEach(slot => {
 					// Avoid duplicating rings/trinkets/weapons
 					if (this.isSecondaryItemSlot(slot) || !canEquipItem(equippedItem.item, this.simUI.player.getPlayerSpec(), slot)) return;
 
@@ -364,7 +362,7 @@ export class BulkTab extends SimTab {
 	addItemToSlot(item: ItemSpec, bulkSlot: BulkSimItemSlot) {
 		const equippedItem = this.simUI.sim.db.lookupItemSpec(item)?.withDynamicStats();
 		if (equippedItem) {
-			const eligibleItemSlots = getEligibleItemSlots(equippedItem.item, this.playerIsFuryWarrior);
+			const eligibleItemSlots = getEligibleItemSlots(equippedItem.item);
 			if (!canEquipItem(equippedItem.item, this.simUI.player.getPlayerSpec(), eligibleItemSlots[0])) return;
 
 			const idx = this.items.push(item) - 1;
@@ -379,7 +377,7 @@ export class BulkTab extends SimTab {
 		if (equippedItem) {
 			this.items[idx] = newItem;
 
-			getEligibleItemSlots(equippedItem.item, this.playerIsFuryWarrior).forEach(slot => {
+			getEligibleItemSlots(equippedItem.item).forEach(slot => {
 				// Avoid duplicating rings/trinkets/weapons
 				if (this.isSecondaryItemSlot(slot) || !canEquipItem(equippedItem.item, this.simUI.player.getPlayerSpec(), slot)) return;
 
@@ -415,7 +413,7 @@ export class BulkTab extends SimTab {
 			this.items[idx] = null;
 
 			// Try to find the matching item within its eligible groups
-			getEligibleItemSlots(equippedItem.item, this.playerIsFuryWarrior).forEach(slot => {
+			getEligibleItemSlots(equippedItem.item).forEach(slot => {
 				if (!canEquipItem(equippedItem.item, this.simUI.player.getPlayerSpec(), slot)) return;
 				const bulkSlot = getBulkItemSlotFromSlot(slot, this.playerCanDualWield);
 				const group = this.pickerGroups.get(bulkSlot)!;
@@ -806,7 +804,7 @@ export class BulkTab extends SimTab {
 							updatedItem = updatedItem.withRandomSuffix(equippedItem._randomSuffix);
 						}
 
-						updatedGear = updatedGear.withEquippedItem(itemSlot, updatedItem, this.playerIsFuryWarrior);
+						updatedGear = updatedGear.withEquippedItem(itemSlot, updatedItem);
 
 						for (const [socketIdx, socketColor] of equippedItem.curSocketColors(hasBlacksmithing).entries()) {
 							if (defaultGemsByColor.get(socketColor)) {

@@ -55,7 +55,7 @@ export class ItemSwapSettings {
 	}
 
 	equipItem(eventID: EventID, slot: ItemSlot, newItem: EquippedItem | null) {
-		this.setGear(eventID, this.gear.withEquippedItem(slot, newItem, this.player.canDualWield2H()));
+		this.setGear(eventID, this.gear.withEquippedItem(slot, newItem));
 	}
 
 	getItem(slot: ItemSlot): EquippedItem | null {
@@ -163,8 +163,8 @@ export class ItemSwapPicker<SpecType extends Spec> extends Component {
 			const gearItem = player.getGear().getEquippedItem(slot);
 			const swapItem = player.itemSwapSettings.getGear().getEquippedItem(slot);
 
-			newGear = newGear.withEquippedItem(slot, swapItem, player.canDualWield2H());
-			newIsg = newIsg.withEquippedItem(slot, gearItem, player.canDualWield2H());
+			newGear = newGear.withEquippedItem(slot, swapItem);
+			newIsg = newIsg.withEquippedItem(slot, gearItem);
 		});
 
 		TypedEvent.freezeAllAndDo(() => {

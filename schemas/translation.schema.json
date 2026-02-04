@@ -8942,9 +8942,6 @@
             "unspent_talent_points": {
               "type": "string"
             },
-            "dual_wield_2h_without_titans_grip": {
-              "type": "string"
-            },
             "shaman_fele_autocast": {
               "type": "string"
             }
@@ -8955,7 +8952,6 @@
             "profession_requirement",
             "too_many_jc_gems",
             "unspent_talent_points",
-            "dual_wield_2h_without_titans_grip",
             "shaman_fele_autocast"
           ]
         },
@@ -9424,16 +9420,7 @@
                 "edit_weights": {
                   "type": "string"
                 },
-                "include_gems": {
-                  "type": "string"
-                },
                 "freeze_item_slots": {
-                  "type": "string"
-                },
-                "limit_execution_time": {
-                  "type": "string"
-                },
-                "limit_execution_time_tooltip": {
                   "type": "string"
                 }
               },
@@ -9461,10 +9448,7 @@
                 "modify_in_editor",
                 "hard_cap_info",
                 "edit_weights",
-                "include_gems",
-                "freeze_item_slots",
-                "limit_execution_time",
-                "limit_execution_time_tooltip"
+                "freeze_item_slots"
               ]
             }
           },

@@ -82,7 +82,7 @@ abstract class BaseGear {
 	 *
 	 * Checks for validity and removes/exchanges items/gems as needed.
 	 */
-	protected withEquippedItemInternal(newSlot: ItemSlot, newItem: EquippedItem | null, canDualWield2H: boolean): Partial<InternalGear> {
+	protected withEquippedItemInternal(newSlot: ItemSlot, newItem: EquippedItem | null): Partial<InternalGear> {
 		// Create a new identical set of gear
 		const newInternalGear = this.asMap();
 
@@ -94,7 +94,7 @@ abstract class BaseGear {
 		// Actually assign the new item.
 		newInternalGear[newSlot] = newItem;
 
-		BaseGear.validateWeaponCombo(newInternalGear, newSlot, canDualWield2H);
+		BaseGear.validateWeaponCombo(newInternalGear, newSlot);
 
 		return newInternalGear;
 	}
@@ -127,11 +127,11 @@ abstract class BaseGear {
 		}
 	}
 
-	private static validateWeaponCombo(gear: Partial<InternalGear>, newSlot: ItemSlot, canDualWield2H: boolean) {
+	private static validateWeaponCombo(gear: Partial<InternalGear>, newSlot: ItemSlot) {
 		// Check for valid weapon combos.
-		if (!validWeaponCombo(gear[ItemSlot.ItemSlotMainHand]?.item, gear[ItemSlot.ItemSlotOffHand]?.item, canDualWield2H)) {
+		if (!validWeaponCombo(gear[ItemSlot.ItemSlotMainHand]?.item, gear[ItemSlot.ItemSlotOffHand]?.item)) {
 			if (newSlot == ItemSlot.ItemSlotOffHand) {
-				if (!canDualWield2H && gear[ItemSlot.ItemSlotOffHand]?.item.handType == HandType.HandTypeTwoHand) {
+				if (gear[ItemSlot.ItemSlotOffHand]?.item.handType == HandType.HandTypeTwoHand) {
 					gear[ItemSlot.ItemSlotOffHand] = null;
 				}
 
@@ -189,8 +189,8 @@ export class Gear extends BaseGear {
 		return getEnumValues(ItemSlot);
 	}
 
-	withEquippedItem(newSlot: ItemSlot, newItem: EquippedItem | null, canDualWield2H: boolean): Gear {
-		return new Gear(this.withEquippedItemInternal(newSlot, newItem, canDualWield2H));
+	withEquippedItem(newSlot: ItemSlot, newItem: EquippedItem | null): Gear {
+		return new Gear(this.withEquippedItemInternal(newSlot, newItem));
 	}
 
 	asSpec(): EquipmentSpec {
@@ -267,7 +267,7 @@ export class Gear extends BaseGear {
 		const item = this.getEquippedItem(itemSlot);
 
 		if (item) {
-			return this.withEquippedItem(itemSlot, item.withGem(gem, socketIdx), true);
+			return this.withEquippedItem(itemSlot, item.withGem(gem, socketIdx));
 		}
 
 		return this;
@@ -318,7 +318,7 @@ export class Gear extends BaseGear {
 		if (headItem) {
 			for (const [socketIdx, socketColor] of headItem.allSocketColors().entries()) {
 				if (socketColor == GemColor.GemColorMeta) {
-					return this.withEquippedItem(ItemSlot.ItemSlotHead, headItem.withGem(metaGem, socketIdx), true);
+					return this.withEquippedItem(ItemSlot.ItemSlotHead, headItem.withGem(metaGem, socketIdx));
 				}
 			}
 		}
@@ -330,13 +330,13 @@ export class Gear extends BaseGear {
 		const headItem = this.getEquippedItem(ItemSlot.ItemSlotHead);
 		const metaGem = this.getMetaGem();
 		if (headItem && metaGem) {
-			return this.withEquippedItem(ItemSlot.ItemSlotHead, headItem.removeGemsWithId(metaGem.id), true);
+			return this.withEquippedItem(ItemSlot.ItemSlotHead, headItem.removeGemsWithId(metaGem.id));
 		} else {
 			return this;
 		}
 	}
 
-	withoutGems(canDualWield2H: boolean, ignoreSlots?: Set<ItemSlot>, ignoreMeta?: boolean): Gear {
+	withoutGems(ignoreSlots?: Set<ItemSlot>, ignoreMeta?: boolean): Gear {
 		let curGear: Gear = this;
 		const metaGem = this.getMetaGem();
 
@@ -344,26 +344,12 @@ export class Gear extends BaseGear {
 			const item = this.getEquippedItem(slot);
 
 			if (item && !ignoreSlots?.has(slot)) {
-				curGear = curGear.withEquippedItem(slot, item.removeAllGems(), canDualWield2H);
+				curGear = curGear.withEquippedItem(slot, item.removeAllGems());
 			}
 		}
 
 		if (ignoreMeta) {
 			return curGear.withMetaGem(metaGem);
-		}
-
-		return curGear;
-	}
-
-	withoutReforges(canDualWield2H: boolean, ignoreSlots?: Set<ItemSlot>): Gear {
-		let curGear: Gear = this;
-
-		for (const slot of this.getItemSlots()) {
-			const item = this.getEquippedItem(slot);
-
-			if (item && !ignoreSlots?.has(slot)) {
-				curGear = curGear.withEquippedItem(slot, item.withItem(item.item).withRandomSuffix(item._randomSuffix), canDualWield2H);
-			}
 		}
 
 		return curGear;
@@ -422,13 +408,13 @@ export class Gear extends BaseGear {
 		return setItemCount;
 	}
 
-	getAverageItemLevel(canDualWield2H: boolean): number {
+	getAverageItemLevel(): number {
 		const items = this.getEquippedItems();
 		let itemSlotsToCount = this.getItemSlots().length;
 		let has2H = items?.[ItemSlot.ItemSlotMainHand]?.item?.handType === HandType.HandTypeTwoHand;
 
 		// If user cannot dual wield 2H, then only count the main hand item as there is no off hand
-		if (has2H && !canDualWield2H) itemSlotsToCount -= 1;
+		if (has2H) itemSlotsToCount -= 1;
 
 		const totalIlvl = sum(items.filter((item): item is EquippedItem => item != null).map(item => item.ilvl));
 		return totalIlvl / itemSlotsToCount;
@@ -449,7 +435,7 @@ export class ItemSwapGear extends BaseGear {
 		return getEnumValues(ItemSlot);
 	}
 
-	withEquippedItem(newSlot: ItemSlot, newItem: EquippedItem | null, canDualWield2H: boolean): ItemSwapGear {
-		return new ItemSwapGear(this.withEquippedItemInternal(newSlot, newItem, canDualWield2H));
+	withEquippedItem(newSlot: ItemSlot, newItem: EquippedItem | null): ItemSwapGear {
+		return new ItemSwapGear(this.withEquippedItemInternal(newSlot, newItem));
 	}
 }

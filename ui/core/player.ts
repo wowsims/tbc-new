@@ -663,12 +663,8 @@ export class Player<SpecType extends Spec> {
 		this.consumesChangeEmitter.emit(eventID);
 	}
 
-	canDualWield2H(): boolean {
-		return false;
-	}
-
 	equipItem(eventID: EventID, slot: ItemSlot, newItem: EquippedItem | null) {
-		this.setGear(eventID, this.gear.withEquippedItem(slot, newItem, this.canDualWield2H()));
+		this.setGear(eventID, this.gear.withEquippedItem(slot, newItem));
 	}
 
 	getEquippedItem(slot: ItemSlot): EquippedItem | null {

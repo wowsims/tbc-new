@@ -85,7 +85,6 @@ export class ActionId {
 				} else if (this.tag == 99999) {
 					name += ' (Boss)';
 				} else if (this.tag == 99998) {
-					console.log(this, this.tag);
 					name += ' (Add)';
 				} else if (this.tag > 6445300) {
 					name += ` (Set'thik Windblade ${(this.tag - 6445300).toFixed(0)})`;
