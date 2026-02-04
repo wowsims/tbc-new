@@ -249,7 +249,7 @@ func (war *Warrior) registerImpale() {
 	war.AddStaticMod(core.SpellModConfig{
 		ClassMask:  SpellMaskDamageSpells,
 		Kind:       core.SpellMod_BonusCrit_Percent,
-		FloatValue: 0.1 * float64(war.Talents.ImprovedOverpower),
+		FloatValue: 0.1 * float64(war.Talents.Impale),
 	})
 }
 
