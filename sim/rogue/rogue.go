@@ -61,8 +61,9 @@ type Rogue struct {
 	Rupture      *core.Spell
 	SliceAndDice *core.Spell
 
-	deadlyPoisonPPHM *core.DynamicProcManager
-	woundPoisonPPHM  *core.DynamicProcManager
+	deadlyPoisonPPHM  *core.DynamicProcManager
+	woundPoisonPPHM   *core.DynamicProcManager
+	instantPoisonPPHM *core.DynamicProcManager
 
 	AdrenalineRushAura   *core.Aura
 	BladeFlurryAura      *core.Aura
@@ -76,6 +77,9 @@ type Rogue struct {
 
 	ruthlessnessMetrics      *core.ResourceMetrics
 	relentlessStrikesMetrics *core.ResourceMetrics
+
+	HasPvpEnergy     bool
+	DeathmantleBonus float64
 }
 
 // ApplyTalents implements core.Agent.
@@ -115,15 +119,30 @@ func (rogue *Rogue) GetBaseDamageFromCoefficient(c float64) float64 {
 
 func (rogue *Rogue) Initialize() {
 	// Update auto crit multipliers now that we have the targets.
-	rogue.AutoAttacks.MHConfig().CritMultiplier = rogue.CritMultiplier(false)
-	rogue.AutoAttacks.OHConfig().CritMultiplier = rogue.CritMultiplier(false)
-	rogue.AutoAttacks.RangedConfig().CritMultiplier = rogue.CritMultiplier(false)
+	rogue.AutoAttacks.MHConfig().CritMultiplier = rogue.DefaultMeleeCritMultiplier()
+	rogue.AutoAttacks.OHConfig().CritMultiplier = rogue.DefaultMeleeCritMultiplier()
+	rogue.AutoAttacks.RangedConfig().CritMultiplier = rogue.DefaultMeleeCritMultiplier()
 
 	rogue.ExposeArmorModifier = 1
+	rogue.DeathmantleBonus = 0
 
 	rogue.registerAssassinationTalents()
 	rogue.registerCombatTalents()
 	rogue.registerSubtletyTalents()
+
+	rogue.registerAmbushSpell()
+	rogue.registerBackstabSpell()
+	rogue.registerEnvenom()
+	rogue.registerEviscerate()
+	rogue.registerExposeArmorSpell()
+	rogue.registerGarrote()
+	rogue.registerDeadlyPoisonSpell()
+	rogue.registerInstantPoisonSpell()
+	rogue.registerWoundPoisonSpell()
+	rogue.registerRupture()
+	rogue.registerSinisterStrikeSpell()
+	rogue.registerSliceAndDice()
+	rogue.registerVanishSpell()
 
 	rogue.ruthlessnessMetrics = rogue.NewComboPointMetrics(core.ActionID{SpellID: 14161})
 	rogue.relentlessStrikesMetrics = rogue.NewEnergyMetrics(core.ActionID{SpellID: 58423})
@@ -147,11 +166,6 @@ func (rogue *Rogue) Reset(sim *core.Simulation) {
 func (rogue *Rogue) OnEncounterStart(sim *core.Simulation) {
 }
 
-func (rogue *Rogue) CritMultiplier(applyLethality bool) float64 {
-	secondaryModifier := 0.0
-	return rogue.GetCharacter().MeleeCritMultiplier(1.0, secondaryModifier)
-}
-
 func NewRogue(character *core.Character, options *proto.Player, talents string) *Rogue {
 	rogueOptions := options.GetRogue()
 	rogue := &Rogue{
@@ -169,6 +183,9 @@ func NewRogue(character *core.Character, options *proto.Player, talents string) 
 	maxEnergy := 100.0
 
 	if rogue.Talents.Vigor {
+		maxEnergy += 10
+	}
+	if rogue.HasPvpEnergy {
 		maxEnergy += 10
 	}
 

@@ -10,7 +10,7 @@ func (rogue *Rogue) registerVanishSpell() {
 	rogue.Vanish = rogue.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 1856},
 		SpellSchool:    core.SpellSchoolPhysical,
-		Flags:          core.SpellFlagAPL | core.SpellFlagReadinessTrinket,
+		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: RogueSpellVanish,
 
 		Cast: core.CastConfig{
@@ -20,7 +20,7 @@ func (rogue *Rogue) registerVanishSpell() {
 			IgnoreHaste: true,
 			CD: core.Cooldown{
 				Timer:    rogue.NewTimer(),
-				Duration: time.Minute * 2,
+				Duration: time.Minute * 5,
 			},
 		},
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {

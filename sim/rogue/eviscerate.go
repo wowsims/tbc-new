@@ -7,16 +7,12 @@ import (
 )
 
 func (rogue *Rogue) registerEviscerate() {
-	coefficient := 0.5339999795
-	resourceCoefficient := 0.70700001717
-	apScalingPerComboPoint := 0.18
-
-	avgBaseDamage := coefficient * rogue.ClassSpellScaling
-	damagePerComboPoint := resourceCoefficient * rogue.ClassSpellScaling
-	baseMinDamage := avgBaseDamage * 0.5
+	flatDamage := 60.0
+	comboDamageBonus := 185.0 + rogue.DeathmantleBonus
+	damageVariance := 120.0
 
 	rogue.Eviscerate = rogue.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 2098},
+		ActionID:       core.ActionID{SpellID: 26865},
 		SpellSchool:    core.SpellSchoolPhysical,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
 		Flags:          core.SpellFlagMeleeMetrics | SpellFlagFinisher | core.SpellFlagAPL,
@@ -25,13 +21,12 @@ func (rogue *Rogue) registerEviscerate() {
 
 		EnergyCost: core.EnergyCostOptions{
 			Cost:          35,
-			Refund:        0.8,
+			Refund:        0.4 * float64(rogue.Talents.QuickRecovery),
 			RefundMetrics: rogue.EnergyRefundMetrics,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD:    time.Second,
-				GCDMin: time.Millisecond * 500,
+				GCD: time.Second,
 			},
 			IgnoreHaste: true,
 			ModifyCast: func(sim *core.Simulation, spell *core.Spell, cast *core.Cast) {
@@ -44,7 +39,7 @@ func (rogue *Rogue) registerEviscerate() {
 
 		DamageMultiplier:         1,
 		DamageMultiplierAdditive: 1,
-		CritMultiplier:           rogue.CritMultiplier(false),
+		CritMultiplier:           rogue.DefaultMeleeCritMultiplier(),
 		ThreatMultiplier:         1,
 
 		BonusCoefficient: 1,
@@ -53,16 +48,14 @@ func (rogue *Rogue) registerEviscerate() {
 			rogue.BreakStealth(sim)
 
 			comboPoints := float64(rogue.ComboPoints())
-			baseDamage := baseMinDamage +
-				sim.RandomFloat("Eviscerate")*avgBaseDamage +
-				damagePerComboPoint*comboPoints +
-				apScalingPerComboPoint*comboPoints*spell.MeleeAttackPower()
+			flatBaseDamage := flatDamage + comboDamageBonus*float64(comboPoints)
+
+			baseDamage := sim.Roll(flatBaseDamage, flatBaseDamage+damageVariance) + 0.03*float64(comboPoints)*spell.MeleeAttackPower()
 
 			result := spell.CalcDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialHitAndCrit)
 
 			if result.Landed() {
 				rogue.ApplyFinisher(sim, spell)
-				rogue.ApplyCutToTheChase(sim)
 			} else {
 				spell.IssueRefund(sim)
 			}

@@ -1,54 +1,52 @@
-package subtlety
+package rogue
 
 import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
-	"github.com/wowsims/tbc/sim/rogue"
 )
 
-func (subRogue *SubtletyRogue) registerBackstabSpell() {
-	baseDamage := subRogue.GetBaseDamageFromCoefficient(0.36800000072)
-	weaponDamage := 3.8
+func (rogue *Rogue) registerBackstabSpell() {
+	baseDamage := 255.0
+	weaponDamage := 1.5
 
-	subRogue.Backstab = subRogue.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 53},
+	rogue.Backstab = rogue.RegisterSpell(core.SpellConfig{
+		ActionID:       core.ActionID{SpellID: 26863},
 		SpellSchool:    core.SpellSchoolPhysical,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
-		Flags:          core.SpellFlagMeleeMetrics | rogue.SpellFlagBuilder | core.SpellFlagAPL,
-		ClassSpellMask: rogue.RogueSpellBackstab,
+		Flags:          core.SpellFlagMeleeMetrics | SpellFlagBuilder | core.SpellFlagAPL,
+		ClassSpellMask: RogueSpellBackstab,
 
 		EnergyCost: core.EnergyCostOptions{
-			Cost:   35,
+			Cost:   60,
 			Refund: 0.8,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD:    time.Second,
-				GCDMin: time.Millisecond * 700,
+				GCD: time.Second,
 			},
 			IgnoreHaste: true,
 		},
 		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
-			return !subRogue.PseudoStats.InFrontOfTarget && subRogue.HasDagger(core.MainHand)
+			return !rogue.PseudoStats.InFrontOfTarget && rogue.HasDagger(core.MainHand)
 		},
 
 		DamageMultiplierAdditive: weaponDamage,
 		DamageMultiplier:         1,
-		CritMultiplier:           subRogue.CritMultiplier(true),
+		CritMultiplier:           rogue.DefaultMeleeCritMultiplier(),
 		ThreatMultiplier:         1,
 
 		BonusCoefficient: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			subRogue.BreakStealth(sim)
+			rogue.BreakStealth(sim)
 			baseDamage := baseDamage +
 				spell.Unit.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower())
 
 			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeWeaponSpecialHitAndCrit)
 
 			if result.Landed() {
-				subRogue.AddComboPointsOrAnticipation(sim, 1, spell.ComboPointMetrics())
+				rogue.AddComboPoints(sim, 1, spell.ComboPointMetrics())
 			} else {
 				spell.IssueRefund(sim)
 			}

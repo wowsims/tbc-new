@@ -32,7 +32,7 @@ func applyDebuffEffects(target *Unit, targetIdx int, debuffs *proto.Debuffs, rai
 	}
 
 	if debuffs.ExposeArmor != proto.TristateEffect_TristateEffectMissing {
-		MakePermanent(ExposeArmorAura(target, IsImproved(debuffs.ExposeArmor)))
+		MakePermanent(ExposeArmorAura(target, 5, 2))
 	}
 
 	if debuffs.ExposeWeaknessUptime > 0.0 {
@@ -178,11 +178,9 @@ func castSlowReductionAura(target *Unit, label string, spellID int32, multiplier
 	return aura
 }
 
-func ExposeArmorAura(target *Unit, improved bool) *Aura {
-	eaValue := 2050.0
-	if improved {
-		eaValue *= 1.50
-	}
+func ExposeArmorAura(target *Unit, comboPoints int32, talentPoints int32) *Aura {
+	eaValue := 410.0 * float64(comboPoints)
+	eaValue *= 1.0 + 0.25*float64(talentPoints)
 	return statsDebuff(target, "Expose Armor", 26866, stats.Stats{stats.Armor: -eaValue})
 }
 

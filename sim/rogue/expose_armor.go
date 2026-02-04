@@ -8,28 +8,32 @@ import (
 
 func (rogue *Rogue) registerExposeArmorSpell() {
 	rogue.ExposeArmorAuras = rogue.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {
-		return core.WeakenedArmorAura(target)
+		return core.ExposeArmorAura(target, rogue.ComboPoints(), rogue.Talents.ImprovedExposeArmor)
 	})
 
-	cpMetric := rogue.NewComboPointMetrics(core.ActionID{SpellID: 8647})
-
 	rogue.ExposeArmor = rogue.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 8647},
+		ActionID:       core.ActionID{SpellID: 26866},
 		SpellSchool:    core.SpellSchoolPhysical,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
 		Flags:          core.SpellFlagMeleeMetrics | SpellFlagBuilder | core.SpellFlagAPL,
 		ClassSpellMask: RogueSpellExposeArmor,
 
 		EnergyCost: core.EnergyCostOptions{
-			Cost:   25.0,
-			Refund: 0.8,
+			Cost:          25.0,
+			Refund:        0.4 * float64(rogue.Talents.QuickRecovery),
+			RefundMetrics: rogue.EnergyRefundMetrics,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD: time.Second,
-				// Omitting the GCDMin - does not appear affected by either Shadow Blades or Adrenaline Rush
 			},
 			IgnoreHaste: true,
+			ModifyCast: func(sim *core.Simulation, spell *core.Spell, cast *core.Cast) {
+				spell.SetMetricsSplit(rogue.ComboPoints())
+			},
+		},
+		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
+			return rogue.ComboPoints() > 0
 		},
 
 		ThreatMultiplier: 1,
@@ -40,9 +44,7 @@ func (rogue *Rogue) registerExposeArmorSpell() {
 			if result.Landed() {
 				debuffAura := rogue.ExposeArmorAuras.Get(target)
 				debuffAura.Activate(sim)
-				debuffAura.AddStack(sim)
-
-				rogue.AddComboPointsOrAnticipation(sim, 1, cpMetric)
+				rogue.ApplyFinisher(sim, spell)
 			} else {
 				spell.IssueRefund(sim)
 			}

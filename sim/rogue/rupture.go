@@ -10,11 +10,6 @@ const RuptureEnergyCost = 25.0
 const RuptureSpellID = 1943
 
 func (rogue *Rogue) registerRupture() {
-	coefficient := 0.18500000238
-	resourceCoefficient := 0.02600000054
-
-	baseDamage := rogue.GetBaseDamageFromCoefficient(coefficient)
-	damagePerComboPoint := rogue.GetBaseDamageFromCoefficient(resourceCoefficient)
 
 	rogue.Rupture = rogue.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: RuptureSpellID},
@@ -26,13 +21,12 @@ func (rogue *Rogue) registerRupture() {
 
 		EnergyCost: core.EnergyCostOptions{
 			Cost:          RuptureEnergyCost,
-			Refund:        0.8,
+			Refund:        0.4 * float64(rogue.Talents.QuickRecovery),
 			RefundMetrics: rogue.EnergyRefundMetrics,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD:    time.Second,
-				GCDMin: time.Millisecond * 500,
+				GCD: time.Second,
 			},
 			IgnoreHaste: true,
 			ModifyCast: func(sim *core.Simulation, spell *core.Spell, cast *core.Cast) {
@@ -44,7 +38,7 @@ func (rogue *Rogue) registerRupture() {
 		},
 
 		DamageMultiplier: 1,
-		CritMultiplier:   rogue.CritMultiplier(false),
+		CritMultiplier:   0,
 		ThreatMultiplier: 1,
 
 		Dot: core.DotConfig{
@@ -56,7 +50,7 @@ func (rogue *Rogue) registerRupture() {
 			TickLength:    time.Second * 2,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.SnapshotPhysical(target, rogue.ruptureDamage(rogue.ComboPoints(), baseDamage, damagePerComboPoint))
+				dot.SnapshotPhysical(target, rogue.ruptureDamage(rogue.ComboPoints(), 70, 11))
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
@@ -69,9 +63,6 @@ func (rogue *Rogue) registerRupture() {
 			if result.Landed() {
 				dot := spell.Dot(target)
 				dot.BaseTickCount = 2 + (2 * rogue.ComboPoints())
-				if rogue.Has2PT15 {
-					dot.BaseTickCount += 2
-				}
 				dot.Apply(sim)
 				rogue.ApplyFinisher(sim, spell)
 				spell.DealOutcome(sim, result)
@@ -87,5 +78,5 @@ func (rogue *Rogue) registerRupture() {
 func (rogue *Rogue) ruptureDamage(comboPoints int32, baseDamage float64, damagePerComboPoint float64) float64 {
 	return baseDamage +
 		damagePerComboPoint*float64(comboPoints) +
-		[]float64{0, 0.025, 0.04, 0.05, 0.056, 0.062}[comboPoints]*rogue.Rupture.MeleeAttackPower()
+		[]float64{0, 0.01, 0.02, 0.03, 0.03, 0.03}[comboPoints]*rogue.Rupture.MeleeAttackPower()
 }
