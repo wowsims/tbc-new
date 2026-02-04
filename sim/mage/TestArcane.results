@@ -67,6 +67,10 @@ dps_results: {
  value: {}
 }
 dps_results: {
+ key: "TestArcane-AllItems-TheLightningCapacitor-28785"
+ value: {}
+}
+dps_results: {
  key: "TestArcane-AllItems-TirisfalRegalia"
  value: {}
 }
