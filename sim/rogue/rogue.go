@@ -27,85 +27,52 @@ type Rogue struct {
 	Options              *proto.RogueOptions
 	AssassinationOptions *proto.Rogue_Options
 
-	MasteryBaseValue  float64
-	MasteryMultiplier float64
-
 	SliceAndDiceBonusFlat    float64 // The flat bonus Attack Speed bonus before Mastery is applied
 	AdditiveEnergyRegenBonus float64
+	ExposeArmorModifier      float64
 
 	sliceAndDiceDurations [6]time.Duration
 
-	Backstab         *core.Spell
-	BladeFlurry      *core.Spell
-	DeadlyPoison     *core.Spell
-	FanOfKnives      *core.Spell
-	Feint            *core.Spell
-	Garrote          *core.Spell
-	Ambush           *core.Spell
-	Hemorrhage       *core.Spell
-	GhostlyStrike    *core.Spell
-	HungerForBlood   *core.Spell
-	WoundPoison      *core.Spell
-	Mutilate         *core.Spell
-	Dispatch         *core.Spell
-	MutilateMH       *core.Spell
-	MutilateOH       *core.Spell
-	Shiv             *core.Spell
-	SinisterStrike   *core.Spell
-	TricksOfTheTrade *core.Spell
-	Shadowstep       *core.Spell
-	Preparation      *core.Spell
-	Premeditation    *core.Spell
-	ShadowDance      *core.Spell
-	ColdBlood        *core.Spell
-	Vanish           *core.Spell
-	VenomousWounds   *core.Spell
-	Vendetta         *core.Spell
-	RevealingStrike  *core.Spell
-	KillingSpree     *core.Spell
-	AdrenalineRush   *core.Spell
-	Gouge            *core.Spell
-	ShadowBlades     *core.Spell
+	Backstab       *core.Spell
+	BladeFlurry    *core.Spell
+	DeadlyPoison   *core.Spell
+	Feint          *core.Spell
+	Garrote        *core.Spell
+	Ambush         *core.Spell
+	Hemorrhage     *core.Spell
+	GhostlyStrike  *core.Spell
+	WoundPoison    *core.Spell
+	Mutilate       *core.Spell
+	MutilateMH     *core.Spell
+	MutilateOH     *core.Spell
+	Shiv           *core.Spell
+	SinisterStrike *core.Spell
+	Shadowstep     *core.Spell
+	Preparation    *core.Spell
+	Premeditation  *core.Spell
+	ColdBlood      *core.Spell
+	Vanish         *core.Spell
+	AdrenalineRush *core.Spell
+	Gouge          *core.Spell
 
-	Envenom           *core.Spell
-	Eviscerate        *core.Spell
-	ExposeArmor       *core.Spell
-	Rupture           *core.Spell
-	SliceAndDice      *core.Spell
-	CrimsonTempest    *core.Spell
-	CrimsonTempestDoT *core.Spell
+	Envenom      *core.Spell
+	Eviscerate   *core.Spell
+	ExposeArmor  *core.Spell
+	Rupture      *core.Spell
+	SliceAndDice *core.Spell
 
 	deadlyPoisonPPHM *core.DynamicProcManager
 	woundPoisonPPHM  *core.DynamicProcManager
 
 	AdrenalineRushAura   *core.Aura
 	BladeFlurryAura      *core.Aura
-	EnvenomAura          *core.Aura
 	ExposeArmorAuras     core.AuraArray
-	HungerForBloodAura   *core.Aura
-	KillingSpreeAura     *core.Aura
 	SliceAndDiceAura     *core.Aura
 	MasterOfSubtletyAura *core.Aura
 	ShadowstepAura       *core.Aura
-	ShadowDanceAura      *core.Aura
-	DirtyDeedsAura       *core.Aura
-	HonorAmongThieves    *core.Aura
 	StealthAura          *core.Aura
-	SubterfugeAura       *core.Aura
-	BanditsGuileAura     *core.Aura
-	AnticipationAura     *core.Aura
-	ShadowBladesAura     *core.Aura
 
-	NightstalkerMod *core.SpellMod
-	ShadowFocusMod  *core.SpellMod
-
-	MasterPoisonerDebuffAuras core.AuraArray
-	SavageCombatDebuffAuras   core.AuraArray
-	WoundPoisonDebuffAuras    core.AuraArray
-
-	Has2PT15      bool
-	T16EnergyAura *core.Aura
-	T16SpecMod    *core.SpellMod
+	WoundPoisonDebuffAuras core.AuraArray
 
 	ruthlessnessMetrics      *core.ResourceMetrics
 	relentlessStrikesMetrics *core.ResourceMetrics
@@ -152,22 +119,11 @@ func (rogue *Rogue) Initialize() {
 	rogue.AutoAttacks.OHConfig().CritMultiplier = rogue.CritMultiplier(false)
 	rogue.AutoAttacks.RangedConfig().CritMultiplier = rogue.CritMultiplier(false)
 
-	// rogue.registerStealthAura()
-	// rogue.registerVanishSpell()
-	// rogue.registerAmbushSpell()
-	// rogue.registerGarrote()
-	// rogue.registerRupture()
-	// rogue.registerSliceAndDice()
-	// rogue.registerEviscerate()
-	// rogue.registerExposeArmorSpell()
-	// rogue.registerFanOfKnives()
-	// rogue.registerTricksOfTheTradeSpell()
-	// rogue.registerDeadlyPoisonSpell()
-	// rogue.registerWoundPoisonSpell()
-	// rogue.registerPoisonAuras()
-	// rogue.registerShadowBladesCD()
-	// rogue.registerCrimsonTempest()
-	// rogue.registerPreparationCD()
+	rogue.ExposeArmorModifier = 1
+
+	rogue.registerAssassinationTalents()
+	rogue.registerCombatTalents()
+	rogue.registerSubtletyTalents()
 
 	rogue.ruthlessnessMetrics = rogue.NewComboPointMetrics(core.ActionID{SpellID: 14161})
 	rogue.relentlessStrikesMetrics = rogue.NewEnergyMetrics(core.ActionID{SpellID: 58423})
@@ -217,10 +173,9 @@ func NewRogue(character *core.Character, options *proto.Player, talents string) 
 	}
 
 	rogue.EnableEnergyBar(core.EnergyBarOptions{
-		MaxComboPoints:        5,
-		MaxEnergy:             maxEnergy,
-		UnitClass:             proto.Class_ClassRogue,
-		HasHasteRatingScaling: true,
+		MaxComboPoints: 5,
+		MaxEnergy:      maxEnergy,
+		UnitClass:      proto.Class_ClassRogue,
 	})
 
 	rogue.EnableAutoAttacks(rogue, core.AutoAttackOptions{
@@ -232,7 +187,7 @@ func NewRogue(character *core.Character, options *proto.Player, talents string) 
 	//rogue.applyPoisons()
 
 	rogue.AddStatDependency(stats.Strength, stats.AttackPower, 1)
-	rogue.AddStatDependency(stats.Agility, stats.AttackPower, 2)
+	rogue.AddStatDependency(stats.Agility, stats.AttackPower, 1)
 	rogue.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiMaxLevel[character.Class])
 	rogue.AddStatDependency(stats.Agility, stats.DodgeRating, 1/20*core.DodgeRatingPerDodgePercent)
 
@@ -300,50 +255,35 @@ const (
 	RogueSpellEnvenom
 	RogueSpellEviscerate
 	RogueSpellExposeArmor
-	RogueSpellFanOfKnives
 	RogueSpellFeint
 	RogueSpellGarrote
 	RogueSpellGouge
-	RogueSpellRecuperate
 	RogueSpellRupture
-	RogueSpellCrimsonTempest
-	RogueSpellCrimsonTempestDoT
 	RogueSpellShiv
 	RogueSpellSinisterStrike
 	RogueSpellSliceAndDice
 	RogueSpellStealth
-	RogueSpellTricksOfTheTrade
-	RogueSpellTricksOfTheTradeThreat
 	RogueSpellVanish
 	RogueSpellHemorrhage
 	RogueSpellPremeditation
 	RogueSpellPreparation
-	RogueSpellShadowDance
 	RogueSpellShadowstep
 	RogueSpellAdrenalineRush
 	RogueSpellBladeFlurry
-	RogueSpellKillingSpree
-	RogueSpellKillingSpreeHit
-	RogueSpellMainGauche
-	RogueSpellRevealingStrike
 	RogueSpellColdBlood
 	RogueSpellMutilate
 	RogueSpellMutilateHit
-	RogueSpellDispatch
-	RogueSpellVendetta
-	RogueSpellVenomousWounds
+	RogueSpellInstantPoison
 	RogueSpellWoundPoison
 	RogueSpellDeadlyPoison
-	RogueSpellShadowBlades
-	RogueSpellShadowBladesHit
-	RogueSpellMarkedForDeath
+	RogueSpellGhostlyStrike
 
 	RogueSpellLast
 	RogueSpellsAll = RogueSpellLast<<1 - 1
 
-	RogueSpellPoisons          = RogueSpellVenomousWounds | RogueSpellWoundPoison | RogueSpellDeadlyPoison
-	RogueSpellGenerator        = RogueSpellBackstab | RogueSpellHemorrhage | RogueSpellSinisterStrike | RogueSpellRevealingStrike | RogueSpellMutilate | RogueSpellDispatch | RogueSpellAmbush | RogueSpellGarrote | RogueSpellFanOfKnives
-	RogueSpellDamagingFinisher = RogueSpellEnvenom | RogueSpellEviscerate | RogueSpellRupture | RogueSpellCrimsonTempest
-	RogueSpellWeightedBlades   = RogueSpellSinisterStrike | RogueSpellRevealingStrike
-	RogueSpellActives          = RogueSpellGenerator | RogueSpellDamagingFinisher | RogueSpellSliceAndDice
+	RogueSpellPoisons        = RogueSpellWoundPoison | RogueSpellDeadlyPoison | RogueSpellInstantPoison
+	RogueSpellLethality      = RogueSpellSinisterStrike | RogueSpellGouge | RogueSpellBackstab | RogueSpellGhostlyStrike | RogueSpellMutilateHit | RogueSpellShiv | RogueSpellHemorrhage
+	RogueSpellDirectFinisher = RogueSpellEnvenom | RogueSpellEviscerate
+	RogueSpellFinisher       = RogueSpellDirectFinisher | RogueSpellSliceAndDice | RogueSpellRupture | RogueSpellExposeArmor
+	RogueSpellCanCrit        = RogueSpellLethality | RogueSpellDirectFinisher
 )

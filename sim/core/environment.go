@@ -191,6 +191,8 @@ func (env *Environment) finalize(raidProto *proto.Raid, _ *proto.Encounter, raid
 		}
 	}
 
+	env.setupAttackTables()
+
 	// Use a traditional for loop here to accomodate callback chains that
 	// queue up additional delayed evaluations.
 	for i := 0; i < len(env.postFinalizeEffects); i++ {
@@ -201,8 +203,6 @@ func (env *Environment) finalize(raidProto *proto.Raid, _ *proto.Encounter, raid
 	slices.SortStableFunc(env.prepullActions, func(a1, a2 PrepullAction) int {
 		return int(a1.DoAt - a2.DoAt)
 	})
-
-	env.setupAttackTables()
 
 	env.State = Finalized
 
