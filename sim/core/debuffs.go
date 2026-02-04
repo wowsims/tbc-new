@@ -100,7 +100,7 @@ func applyDebuffEffects(target *Unit, targetIdx int, debuffs *proto.Debuffs, rai
 	}
 
 	if debuffs.ExposeArmor != proto.TristateEffect_TristateEffectMissing {
-		aura := MakePermanent(ExposeArmorAura(target, IsImproved(debuffs.ExposeArmor)))
+		aura := MakePermanent(ExposeArmorAura(target, 5, int32(debuffs.ExposeArmor)))
 
 		ScheduledMajorArmorAura(aura, PeriodicActionOptions{
 			Period:   time.Second * 3,
@@ -490,11 +490,9 @@ func StormstrikeAura(target *Unit, uptime float64) *Aura {
 
 var MajorArmorReductionEffectCategory = "MajorArmorReduction"
 
-func ExposeArmorAura(target *Unit, improved bool) *Aura {
-	eaValue := 2050.0
-	if improved {
-		eaValue *= 1.50
-	}
+func ExposeArmorAura(target *Unit, points int32, talents int32) *Aura {
+	eaValue := 410.0 * float64(points)
+	eaValue *= 1.0 + 0.25*float64(talents)
 	aura := statsDebuff(target, "Expose Armor", 26866, stats.Stats{stats.Armor: -eaValue}, time.Second*30)
 
 	aura.NewExclusiveEffect(MajorArmorReductionEffectCategory, true, ExclusiveEffect{
@@ -513,7 +511,7 @@ func SunderArmorAura(target *Unit) *Aura {
 		Duration:  time.Second * 30,
 		MaxStacks: 5,
 		OnStacksChange: func(aura *Aura, sim *Simulation, oldStacks int32, newStacks int32) {
-			effect.SetPriority(sim, 520*float64(newStacks))
+			effect.SetPriority(sim, -520*float64(newStacks))
 		},
 	})
 
