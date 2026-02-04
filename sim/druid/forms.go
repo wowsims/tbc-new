@@ -196,10 +196,6 @@ func (druid *Druid) RegisterBearFormAura() {
 			healthFrac := druid.CurrentHealth() / druid.MaxHealth()
 			druid.EnableBuildPhaseStatDep(sim, stamDep)
 
-			if druid.GuardianLeatherSpecTracker.IsActive() {
-				druid.EnableBuildPhaseStatDep(sim, druid.GuardianLeatherSpecDep)
-			}
-
 			if !druid.Env.MeasuringStats {
 				druid.GainHealth(sim, healthFrac*druid.MaxHealth()-druid.CurrentHealth(), healthMetrics)
 				druid.AutoAttacks.SetMH(clawWeapon)
@@ -221,10 +217,6 @@ func (druid *Druid) RegisterBearFormAura() {
 
 			healthFrac := druid.CurrentHealth() / druid.MaxHealth()
 			druid.DisableBuildPhaseStatDep(sim, stamDep)
-
-			if druid.GuardianLeatherSpecTracker.IsActive() {
-				druid.DisableBuildPhaseStatDep(sim, druid.GuardianLeatherSpecDep)
-			}
 
 			if !druid.Env.MeasuringStats {
 				druid.RemoveHealth(sim, druid.CurrentHealth()-healthFrac*druid.MaxHealth())

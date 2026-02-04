@@ -222,7 +222,7 @@ export const specI18nKeys: Record<Spec, string> = {
 	// Warlock
 	[Spec.SpecWarlock]: 'warlock',
 	// Warrior
-	[Spec.SpecDPSWarrior]: 'dps',
+	[Spec.SpecDpsWarrior]: 'dps',
 	[Spec.SpecProtectionWarrior]: 'protection',
 };
 

@@ -578,10 +578,7 @@ export class Sim {
 	getShowHealingMetrics(): boolean {
 		return (
 			this.showHealingMetrics ||
-			(this.showThreatMetrics &&
-				[Spec.SpecFeralBearDruid, Spec.SpecProtectionPaladin].includes(
-					this.raid.getPlayer(0)?.playerSpec.specID,
-				))
+			(this.showThreatMetrics && [Spec.SpecFeralBearDruid, Spec.SpecProtectionPaladin].includes(this.raid.getPlayer(0)?.playerSpec.specID))
 		);
 	}
 	setShowHealingMetrics(eventID: EventID, newShowHealingMetrics: boolean) {
@@ -710,8 +707,7 @@ export class Sim {
 			const filters = proto.filters || Sim.defaultFilters();
 			if (filters.armorTypes.length == 0) {
 				if (this.type == SimType.SimTypeIndividual) {
-					// For Individual sims, by default only show the class's default armor type because of armor specialization
-					filters.armorTypes = [this.raid.getActivePlayers()[0].getPlayerClass().armorTypes[0]];
+					filters.armorTypes = this.raid.getActivePlayers()[0].getPlayerClass().armorTypes.slice();
 				} else {
 					filters.armorTypes = Sim.ALL_ARMOR_TYPES.slice();
 				}

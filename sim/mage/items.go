@@ -8,9 +8,8 @@ import (
 )
 
 var ItemSetAldorRegalia = core.NewItemSet(core.ItemSet{
-	ID:                      648,
-	Name:                    "Aldor Regalia",
-	DisabledInChallengeMode: true,
+	ID:   648,
+	Name: "Aldor Regalia",
 	Bonuses: map[int32]core.ApplySetBonus{
 		4: func(_ core.Agent, setBonusAura *core.Aura) {
 			setBonusAura.AttachSpellMod(core.SpellModConfig{
@@ -31,9 +30,8 @@ var ItemSetAldorRegalia = core.NewItemSet(core.ItemSet{
 })
 
 var ItemSetTirisfalRegalia = core.NewItemSet(core.ItemSet{
-	ID:                      649,
-	Name:                    "Tirisfal Regalia",
-	DisabledInChallengeMode: true,
+	ID:   649,
+	Name: "Tirisfal Regalia",
 	Bonuses: map[int32]core.ApplySetBonus{
 		2: func(agent core.Agent, setBonusAura *core.Aura) {
 			setBonusAura.AttachSpellMod(core.SpellModConfig{
@@ -71,9 +69,8 @@ var ItemSetTirisfalRegalia = core.NewItemSet(core.ItemSet{
 })
 
 var ItemSetTempestRegalia = core.NewItemSet(core.ItemSet{
-	ID:                      671,
-	Name:                    "Tempest Regalia",
-	DisabledInChallengeMode: true,
+	ID:   671,
+	Name: "Tempest Regalia",
 	Bonuses: map[int32]core.ApplySetBonus{
 		2: func(agent core.Agent, setBonusAura *core.Aura) {
 			setBonusAura.AttachSpellMod(core.SpellModConfig{

@@ -10,10 +10,9 @@ import (
 type ApplySetBonus func(agent Agent, setBonusAura *Aura)
 
 type ItemSet struct {
-	ID                      int32
-	Name                    string
-	AlternativeName         string
-	DisabledInChallengeMode bool
+	ID              int32
+	Name            string
+	AlternativeName string
 	// Maps set piece requirement to an ApplyEffect function that will be called
 	// before the Sim starts.
 	//

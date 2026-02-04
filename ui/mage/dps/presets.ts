@@ -50,7 +50,6 @@ export const DefaultConsumables = ConsumesSpec.create({
 	battleElixirId:28103, // Adept's Elixir
 	foodId: 27657, // Blackened Basilisk
 	mhImbueId: 20749, // Brilliant Wizard Oil
-	prepotId: 22839, // Destruction Potion
 	potId: 22839, // Destruction Potion
 	conjuredId: 12662, // Demonic Rune
 });

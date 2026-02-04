@@ -37,6 +37,7 @@ var safeDepsOrder = []Stat{
 	DodgeRating,
 	ParryRating,
 	ExpertiseRating,
+	BlockValue,
 	ArmorPenetration,
 	SpellPenetration,
 	SpellCritPercent,

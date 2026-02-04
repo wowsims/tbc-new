@@ -484,6 +484,9 @@ type PseudoStats struct {
 	BonusRangedAttackPower float64 // Hunter's mark
 	BonusAttackPower       float64 // Also Hunter's Mark
 
+	// Important when unit is attacker or target
+	BlockValueMultiplier float64
+
 	// Only used for NPCs, governs variance in enemy auto-attack damage
 	DamageSpread float64
 
@@ -551,6 +554,8 @@ func NewPseudoStats() PseudoStats {
 		HealingDealtMultiplier:         1,
 		PeriodicHealingDealtMultiplier: 1,
 		CritDamageMultiplier:           1,
+
+		BlockValueMultiplier: 1,
 
 		DamageSpread: 0.3333,
 

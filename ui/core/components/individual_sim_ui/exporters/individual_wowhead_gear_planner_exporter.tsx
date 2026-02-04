@@ -175,10 +175,6 @@ export class IndividualWowheadGearPlannerExporter<SpecType extends Spec> extends
 					itemData.enchantIds.push(item._enchant.spellId);
 				}
 
-				if (ItemSlot.ItemSlotHands == itemSlot) {
-					//Todo: IF Hands we want to append any tinkers if existing
-				}
-
 				if (item._gems) {
 					itemData.gemItemIds = item._gems.map(gem => {
 						return gem?.id ?? 0;

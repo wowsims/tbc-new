@@ -12,7 +12,7 @@ import (
 func applyDebuffEffects(target *Unit, targetIdx int, debuffs *proto.Debuffs, raid *proto.Raid) {
 
 	if debuffs.BloodFrenzy {
-		MakePermanent(BloodFrenzyAura(target))
+		MakePermanent(BloodFrenzyAura(target, 2))
 	}
 
 	if debuffs.CurseOfElements != proto.TristateEffect_TristateEffectMissing {
@@ -28,11 +28,7 @@ func applyDebuffEffects(target *Unit, targetIdx int, debuffs *proto.Debuffs, rai
 	}
 
 	if debuffs.DemoralizingShout != proto.TristateEffect_TristateEffectMissing {
-		MakePermanent(DemoralizingRoarAura(target, IsImproved(debuffs.DemoralizingRoar)))
-	}
-
-	if debuffs.ExposeArmor != proto.TristateEffect_TristateEffectMissing {
-		MakePermanent(ExposeArmorAura(target, 5, 2))
+		MakePermanent(DemoralizingShoutAura(target, 5, TernaryInt32(IsImproved(debuffs.DemoralizingShout), 5, 0)))
 	}
 
 	if debuffs.ExposeWeaknessUptime > 0.0 {
@@ -103,18 +99,60 @@ func applyDebuffEffects(target *Unit, targetIdx int, debuffs *proto.Debuffs, rai
 		MakePermanent(ShadowWeavingAura(target))
 	}
 
+	if debuffs.ExposeArmor != proto.TristateEffect_TristateEffectMissing {
+		aura := MakePermanent(ExposeArmorAura(target, IsImproved(debuffs.ExposeArmor)))
+
+		ScheduledMajorArmorAura(aura, PeriodicActionOptions{
+			Period:   time.Second * 3,
+			NumTicks: 1,
+			OnAction: func(sim *Simulation) {
+				aura.Activate(sim)
+			},
+		}, raid)
+	}
+
 	if debuffs.SunderArmor {
-		MakePermanent(SunderArmorAura(target))
+		aura := MakePermanent(SunderArmorAura(target))
+
+		ScheduledMajorArmorAura(aura, PeriodicActionOptions{
+			Period:          GCDDefault,
+			NumTicks:        5,
+			TickImmediately: true,
+			Priority:        ActionPriorityDOT, // High prio so it comes before actual warrior sunders.
+			OnAction: func(sim *Simulation) {
+				aura.Activate(sim)
+				if aura.IsActive() {
+					aura.AddStack(sim)
+				}
+			},
+		}, raid)
 	}
 
 	if debuffs.WintersChill {
 		MakePermanent(WintersChillAura(target, 5))
 	}
+
+	if debuffs.ThunderClap != proto.TristateEffect_TristateEffectMissing {
+		MakePermanent(ThunderClapAura(target, GetTristateValueInt32(debuffs.ThunderClap, 0, 3)))
+	}
 }
 
-// Physical anmd Armor Related Debuffs
-func BloodFrenzyAura(target *Unit) *Aura {
-	return damageTakenDebuff(target, "Blood Frenzy", 29859, []stats.SchoolIndex{stats.SchoolIndexPhysical}, 1.04, time.Second*21)
+func ScheduledMajorArmorAura(aura *Aura, options PeriodicActionOptions, raid *proto.Raid) {
+	aura.OnReset = func(aura *Aura, sim *Simulation) {
+		aura.Duration = NeverExpires
+		StartPeriodicAction(sim, options)
+	}
+}
+
+// Physical and Armor Related Debuffs
+func BloodFrenzyAura(target *Unit, points int32) *Aura {
+	return damageTakenDebuff(target,
+		"Blood Frenzy",
+		29859,
+		[]stats.SchoolIndex{stats.SchoolIndexPhysical},
+		1+0.02*float64(points),
+		NeverExpires,
+	)
 }
 
 // Damage Taken Debuffs
@@ -137,7 +175,7 @@ func CurseOfElementsAura(target *Unit, improved bool) *Aura {
 }
 
 func CurseOfRecklessnessAura(target *Unit) *Aura {
-	return statsDebuff(target, "Curse of Recklesness", 27226, stats.Stats{stats.Armor: -800, stats.AttackPower: 135})
+	return statsDebuff(target, "Curse of Recklesness", 27226, stats.Stats{stats.Armor: -800, stats.AttackPower: 135}, time.Minute*2)
 }
 
 func DemoralizingRoarAura(target *Unit, improved bool) *Aura {
@@ -146,16 +184,14 @@ func DemoralizingRoarAura(target *Unit, improved bool) *Aura {
 		apReduction *= 1.4
 	}
 
-	return statsDebuff(target, "Demoralizing Roar", 26998, stats.Stats{stats.AttackPower: apReduction})
+	return statsDebuff(target, "Demoralizing Roar", 26998, stats.Stats{stats.AttackPower: apReduction}, time.Second*30)
 }
 
-func DemoralizingShoutAura(target *Unit, improved bool) *Aura {
-	apReduction := 300.0
-	if improved {
-		apReduction *= 1.4
-	}
+func DemoralizingShoutAura(target *Unit, boomingVoicePoints int32, improvedDemoShoutPoints int32) *Aura {
+	apReduction := 300.0 * (1 + 0.1*float64(improvedDemoShoutPoints))
+	duration := time.Duration(float64(time.Second*30) * (1 + 0.1*float64(boomingVoicePoints)))
 
-	return statsDebuff(target, "Demoralizing Shout", 25203, stats.Stats{stats.AttackPower: apReduction})
+	return statsDebuff(target, "Demoralizing Shout", 25203, stats.Stats{stats.AttackPower: apReduction}, duration)
 }
 
 func SlowAura(target *Unit) *Aura {
@@ -176,12 +212,6 @@ func castSlowReductionAura(target *Unit, label string, spellID int32, multiplier
 		},
 	})
 	return aura
-}
-
-func ExposeArmorAura(target *Unit, comboPoints int32, talentPoints int32) *Aura {
-	eaValue := 410.0 * float64(comboPoints)
-	eaValue *= 1.0 + 0.25*float64(talentPoints)
-	return statsDebuff(target, "Expose Armor", 26866, stats.Stats{stats.Armor: -eaValue})
 }
 
 func ExposeWeaknessAura(target *Unit, uptime float64, hunterAgility float64) *Aura {
@@ -339,10 +369,16 @@ func ImprovedShadowBoltAura(target *Unit, uptime float64, points int32) *Aura {
 }
 
 func InsectSwarmAura(target *Unit) *Aura {
-	return statsDebuff(target, "Insect Swarm", 27013, stats.Stats{
-		stats.AllPhysHitRating: 0.98,
-		stats.SpellHitPercent:  0.98,
-	})
+	return statsDebuff(
+		target,
+		"Insect Swarm",
+		27013,
+		stats.Stats{
+			stats.AllPhysHitRating: 0.98,
+			stats.SpellHitPercent:  0.98,
+		},
+		time.Second*12,
+	)
 }
 
 func JudgementOfLightAura(target *Unit) *Aura {
@@ -429,11 +465,11 @@ func MiseryAura(target *Unit) *Aura {
 }
 
 func ScorpidStingAura(target *Unit) *Aura {
-	return statsDebuff(target, "Scorpid Sting", 3043, stats.Stats{stats.AllPhysHitRating: -5.0})
+	return statsDebuff(target, "Scorpid Sting", 3043, stats.Stats{stats.AllPhysHitRating: -5.0}, time.Second*20)
 }
 
 func ScreechAura(target *Unit) *Aura {
-	return statsDebuff(target, "Screech", 27051, stats.Stats{stats.AttackPower: -210})
+	return statsDebuff(target, "Screech", 27051, stats.Stats{stats.AttackPower: -210}, time.Second*4)
 }
 
 func ShadowEmbraceAura(target *Unit) *Aura {
@@ -452,8 +488,46 @@ func StormstrikeAura(target *Unit, uptime float64) *Aura {
 	return damageTakenDebuff(target, "Stormstrike", 17364, []stats.SchoolIndex{stats.SchoolIndexNature}, multiplier, time.Second*12)
 }
 
+var MajorArmorReductionEffectCategory = "MajorArmorReduction"
+
+func ExposeArmorAura(target *Unit, improved bool) *Aura {
+	eaValue := 2050.0
+	if improved {
+		eaValue *= 1.50
+	}
+	aura := statsDebuff(target, "Expose Armor", 26866, stats.Stats{stats.Armor: -eaValue}, time.Second*30)
+
+	aura.NewExclusiveEffect(MajorArmorReductionEffectCategory, true, ExclusiveEffect{
+		Priority: eaValue,
+	})
+
+	return aura
+
+}
+
 func SunderArmorAura(target *Unit) *Aura {
-	return statsDebuff(target, "Sunder Amor", 25225, stats.Stats{stats.Armor: -2600})
+	var effect *ExclusiveEffect
+	aura := target.GetOrRegisterAura(Aura{
+		Label:     "Sunder Armor",
+		ActionID:  ActionID{SpellID: 25225},
+		Duration:  time.Second * 30,
+		MaxStacks: 5,
+		OnStacksChange: func(aura *Aura, sim *Simulation, oldStacks int32, newStacks int32) {
+			effect.SetPriority(sim, 520*float64(newStacks))
+		},
+	})
+
+	effect = aura.NewExclusiveEffect(MajorArmorReductionEffectCategory, true, ExclusiveEffect{
+		Priority: 0,
+		OnGain: func(ee *ExclusiveEffect, sim *Simulation) {
+			ee.Aura.Unit.stats[stats.Armor] += ee.Priority
+		},
+		OnExpire: func(ee *ExclusiveEffect, sim *Simulation) {
+			ee.Aura.Unit.stats[stats.Armor] -= ee.Priority
+		},
+	})
+
+	return aura
 }
 
 func WintersChillAura(target *Unit, startingStacks int32) *Aura {
@@ -486,6 +560,28 @@ func WintersChillAura(target *Unit, startingStacks int32) *Aura {
 					dynamicMods[unit.UnitIndex].UpdateFloatValue(critBonus * float64(newStacks))
 				}
 			}
+		},
+	})
+}
+
+func ThunderClapAura(target *Unit, points int32) *Aura {
+	aura := target.GetOrRegisterAura(Aura{
+		Label:    "ThunderClap-" + strconv.Itoa(int(points)),
+		ActionID: ActionID{SpellID: 47502},
+		Duration: time.Second * 30,
+	})
+	AtkSpeedReductionEffect(aura, []float64{1.1, 1.14, 1.17, 1.2}[points])
+	return aura
+}
+
+func AtkSpeedReductionEffect(aura *Aura, speedMultiplier float64) *ExclusiveEffect {
+	return aura.NewExclusiveEffect("AtkSpdReduction", false, ExclusiveEffect{
+		Priority: speedMultiplier,
+		OnGain: func(ee *ExclusiveEffect, sim *Simulation) {
+			ee.Aura.Unit.MultiplyAttackSpeed(sim, 1/speedMultiplier)
+		},
+		OnExpire: func(ee *ExclusiveEffect, sim *Simulation) {
+			ee.Aura.Unit.MultiplyAttackSpeed(sim, speedMultiplier)
 		},
 	})
 }
@@ -529,10 +625,14 @@ func damageDealtDebuff(target *Unit, label string, spellID int32, schools []stat
 	})
 }
 
-func statsDebuff(target *Unit, label string, spellID int32, stats stats.Stats) *Aura {
+func statsDebuff(target *Unit, label string, spellID int32, stats stats.Stats, duration time.Duration) *Aura {
+	if duration == 0 {
+		duration = time.Second * 30
+	}
+
 	return target.GetOrRegisterAura(Aura{
 		Label:    label,
 		ActionID: ActionID{SpellID: spellID},
-		Duration: time.Second * 30,
+		Duration: duration,
 	}).AttachStatsBuff(stats)
 }
