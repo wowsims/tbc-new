@@ -128,4 +128,13 @@ func (warrior *Warrior) registerStances() {
 	warrior.BattleStance = warrior.makeStanceSpell(BattleStance, SpellMaskBattleStance, battleStanceAura, stanceCD)
 	warrior.DefensiveStance = warrior.makeStanceSpell(DefensiveStance, SpellMaskDefensiveStance, defensiveStanceAura, stanceCD)
 	warrior.BerserkerStance = warrior.makeStanceSpell(BerserkerStance, SpellMaskBerserkerStance, berserkerStanceAura, stanceCD)
+
+	switch warrior.DefaultStance {
+	case proto.WarriorStance_WarriorStanceBattle:
+		core.MakePermanent(battleStanceAura)
+	case proto.WarriorStance_WarriorStanceDefensive:
+		core.MakePermanent(defensiveStanceAura)
+	case proto.WarriorStance_WarriorStanceBerserker:
+		core.MakePermanent(berserkerStanceAura)
+	}
 }

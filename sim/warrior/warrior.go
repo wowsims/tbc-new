@@ -100,8 +100,9 @@ type Warrior struct {
 	WarriorInputs
 
 	// Current state
-	Stance         Stance
-	ChargeRageGain float64
+	Stance                Stance
+	ChargeRageGain        float64
+	BerserkerRageRageGain float64
 
 	BattleShout       *core.Spell
 	CommandingShout   *core.Spell
@@ -151,6 +152,7 @@ func (warrior *Warrior) Initialize() {
 	warrior.registerShieldWall()
 	warrior.registerRetaliation()
 
+	warrior.registerBerserkerRage()
 	warrior.registerBloodrage()
 	warrior.registerCharge()
 	warrior.registerIntercept()
@@ -179,7 +181,8 @@ func (warrior *Warrior) Reset(_ *core.Simulation) {
 	warrior.curQueuedAutoSpell = nil
 
 	warrior.Stance = StanceNone
-	warrior.ChargeRageGain = 15.0
+	warrior.ChargeRageGain = 15
+	warrior.BerserkerRageRageGain = 0
 }
 
 func (warrior *Warrior) OnEncounterStart(sim *core.Simulation) {}
@@ -225,7 +228,8 @@ func NewWarrior(character *core.Character, options *proto.WarriorOptions, talent
 
 	warrior.sharedShoutsCD = warrior.NewTimer()
 	warrior.sharedMCD = warrior.NewTimer()
-	warrior.ChargeRageGain = 15.0
+	warrior.ChargeRageGain = 15
+	warrior.BerserkerRageRageGain = 0
 	// The sim often re-enables heroic strike in an unrealistic amount of time.
 	// This can cause an unrealistic immediate double-hit around wild strikes procs
 	warrior.queuedRealismICD = &core.Cooldown{

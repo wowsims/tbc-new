@@ -120,7 +120,10 @@ func (war *Warrior) registerImprovedOverpower() {
 		return
 	}
 
-	war.AddStaticMod(core.SpellModConfig{
+	core.MakePermanent(war.RegisterAura(core.Aura{
+		Label:    "Improved Overpower",
+		ActionID: core.ActionID{SpellID: 12963}.WithTag(war.Talents.ImprovedOverpower),
+	})).AttachSpellMod(core.SpellModConfig{
 		ClassMask:  SpellMaskOverpower,
 		Kind:       core.SpellMod_BonusCrit_Percent,
 		FloatValue: 0.25 * float64(war.Talents.ImprovedOverpower),
@@ -158,6 +161,7 @@ func (war *Warrior) registerDeepWounds() {
 		Flags:       core.SpellFlagNoOnCastComplete | core.SpellFlagIgnoreModifiers,
 
 		DamageMultiplier: 1,
+		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
 		ThreatMultiplier: 1,
 
 		Dot: core.DotConfig{

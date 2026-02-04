@@ -583,6 +583,10 @@ export class ActionId {
 					name += ' (Queue)';
 				}
 				break;
+			case 'Improved Berserker Rage':
+			case 'Improved Overpower':
+				name += ` (${tag}/2)`;
+				break;
 			case 'Seed of Corruption':
 				if (tag == 0) {
 					name += ' (DoT)';

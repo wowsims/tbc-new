@@ -17,8 +17,8 @@ func (war *Warrior) registerWhirlwind() {
 		ClassSpellMask: SpellMaskWhirlwindOh,
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagPassiveSpell | core.SpellFlagNoOnCastComplete,
 
-		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
 		DamageMultiplier: 1,
+		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
 		ThreatMultiplier: 1.25,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
@@ -50,8 +50,8 @@ func (war *Warrior) registerWhirlwind() {
 		},
 
 		DamageMultiplier: 1,
-		ThreatMultiplier: 1.25,
 		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
+		ThreatMultiplier: 1.25,
 
 		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
 			return war.StanceMatches(BerserkerStance)
