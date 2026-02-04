@@ -68,7 +68,7 @@ message Player {
 
 		Warlock warlock = 35;
 
-		DPSWarrior dps_warrior = 37;
+		DpsWarrior dps_warrior = 37;
 		ProtectionWarrior protection_warrior = 38;
 	}
 

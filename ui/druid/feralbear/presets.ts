@@ -123,7 +123,6 @@ export const DefaultConsumables = ConsumesSpec.create({
 	flaskId: 76087,
 	foodId: 74656,
 	potId: 76090,
-	prepotId: 76090,
 	conjuredId: 5512, // Conjured Healthstone
 });
 export const OtherDefaults = {

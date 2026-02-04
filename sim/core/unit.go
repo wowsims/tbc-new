@@ -541,7 +541,7 @@ func (unit *Unit) Armor() float64 {
 }
 
 func (unit *Unit) BlockDamageReduction() float64 {
-	return unit.stats[stats.BlockValue]
+	return unit.stats[stats.BlockValue] * unit.PseudoStats.BlockValueMultiplier
 }
 
 func (unit *Unit) TotalRangedHasteMultiplier() float64 {

@@ -10,7 +10,7 @@ import { Class, GemColor, ItemQuality, ItemRandomSuffix, ItemSlot, ItemSpec } fr
 import { DatabaseFilters, RepFaction, UIEnchant as Enchant, UIGem as Gem, UIItem as Item, UIItem_FactionRestriction } from '../../proto/ui';
 import { ActionId } from '../../proto_utils/action_id';
 import { getUniqueEnchantString } from '../../proto_utils/enchants';
-import { EquippedItem, ReforgeData } from '../../proto_utils/equipped_item';
+import { EquippedItem } from '../../proto_utils/equipped_item';
 import { difficultyNames, professionNames, REP_FACTION_NAMES, REP_FACTION_QUARTERMASTERS, REP_LEVEL_NAMES } from '../../proto_utils/names';
 import { getPVPSeasonFromItem, isPVPItem } from '../../proto_utils/utils';
 import { Sim } from '../../sim';
@@ -55,7 +55,7 @@ export interface GearData {
 	changeEvent: TypedEvent<any>;
 }
 
-export type ItemListType = Item | Enchant | Gem | ReforgeData | ItemRandomSuffix;
+export type ItemListType = Item | Enchant | Gem | ItemRandomSuffix;
 enum ItemListSortBy {
 	EP,
 	ILVL,
@@ -157,7 +157,7 @@ export default class ItemList<T extends ItemListType> {
 					</button>
 				</div>
 				<div className="selector-modal-list-labels">
-					{(label === SelectorModalTabs.Items || label === SelectorModalTabs.Upgrades) && (
+					{label === SelectorModalTabs.Items && (
 						<h6 className="ilvl-label interactive" onclick={sortByIlvl}>
 							{i18n.t('gear_tab.gear_picker.table_headers.ilvl')}
 						</h6>
@@ -169,13 +169,7 @@ export default class ItemList<T extends ItemListType> {
 								? getTranslatedTabLabel(SelectorModalTabs.Enchants)
 								: [SelectorModalTabs.Gem1, SelectorModalTabs.Gem2, SelectorModalTabs.Gem3].includes(label as SelectorModalTabs)
 									? getTranslatedTabLabel(SelectorModalTabs.Gem1)
-									: label === SelectorModalTabs.Reforging
-										? getTranslatedTabLabel(SelectorModalTabs.Reforging)
-										: label === SelectorModalTabs.Upgrades
-											? getTranslatedTabLabel(SelectorModalTabs.Upgrades)
-											: label === SelectorModalTabs.Tinkers
-												? getTranslatedTabLabel(SelectorModalTabs.Tinkers)
-												: ''}
+									: ''}
 					</h6>
 					{label === SelectorModalTabs.Items && <h6 className="source-label">{i18n.t('gear_tab.gear_picker.table_headers.source')}</h6>}
 					<h6 className="ep-label interactive" onclick={sortByEP}>
@@ -268,17 +262,8 @@ export default class ItemList<T extends ItemListType> {
 				case SelectorModalTabs.Enchants:
 					removeButton.textContent = i18n.t('gear_tab.gear_picker.remove_buttons.remove_enchant');
 					break;
-				case SelectorModalTabs.Tinkers:
-					removeButton.textContent = i18n.t('gear_tab.gear_picker.remove_buttons.remove_tinkers');
-					break;
-				case SelectorModalTabs.Reforging:
-					removeButton.textContent = i18n.t('gear_tab.gear_picker.remove_buttons.remove_reforge');
-					break;
 				case SelectorModalTabs.RandomSuffixes:
 					removeButton.textContent = i18n.t('gear_tab.gear_picker.remove_buttons.remove_random_suffix');
-					break;
-				case SelectorModalTabs.Upgrades:
-					removeButton.textContent = i18n.t('gear_tab.gear_picker.remove_buttons.remove_upgrade');
 					break;
 				case SelectorModalTabs.Gem1:
 				case SelectorModalTabs.Gem2:
@@ -307,18 +292,12 @@ export default class ItemList<T extends ItemListType> {
 		switch (this.label) {
 			case SelectorModalTabs.Enchants:
 				return (item as Enchant)?.effectId;
-			case SelectorModalTabs.Tinkers:
-				return (item as Enchant)?.effectId;
-			case SelectorModalTabs.Reforging:
-				return (item as ReforgeData)?.id;
 			case SelectorModalTabs.Items:
 			case SelectorModalTabs.Gem1:
 			case SelectorModalTabs.Gem2:
 			case SelectorModalTabs.Gem3:
 			case SelectorModalTabs.RandomSuffixes:
 				return (item as Item | Gem | ItemRandomSuffix)?.id;
-			// case SelectorModalTabs.Upgrades:
-			// 	return item as ItemLevelState;
 			default:
 				return null;
 		}
@@ -361,7 +340,7 @@ export default class ItemList<T extends ItemListType> {
 
 		if (this.label === SelectorModalTabs.Items) {
 			itemIdxs = this.player.filterItemData(itemIdxs, i => this.itemData[i].item as unknown as Item, this.slot);
-		} else if (this.label === SelectorModalTabs.Enchants || this.label === SelectorModalTabs.Tinkers) {
+		} else if (this.label === SelectorModalTabs.Enchants) {
 			itemIdxs = this.player.filterEnchantData(itemIdxs, i => this.itemData[i].item as unknown as Enchant, this.slot, currentEquippedItem);
 		} else if (this.label === SelectorModalTabs.Gem1 || this.label === SelectorModalTabs.Gem2 || this.label === SelectorModalTabs.Gem3) {
 			itemIdxs = this.player.filterGemData(itemIdxs, i => this.itemData[i].item as unknown as Gem, this.slot, this.socketColor);
@@ -392,7 +371,7 @@ export default class ItemList<T extends ItemListType> {
 			return true;
 		});
 
-		if ([ItemSlot.ItemSlotTrinket1, ItemSlot.ItemSlotTrinket2].includes(this.slot) || this.label === SelectorModalTabs.Upgrades) {
+		if ([ItemSlot.ItemSlotTrinket1, ItemSlot.ItemSlotTrinket2].includes(this.slot)) {
 			// Trinket EP is weird so just sort by ilvl instead.
 			this.sortBy = ItemListSortBy.ILVL;
 		} else {
@@ -424,8 +403,7 @@ export default class ItemList<T extends ItemListType> {
 			const second = (this.sortDirection === SortDirection.DESC ? itemA : itemB) as unknown as Item;
 			const diff = this.computeEP(first as T) - this.computeEP(second as T);
 			// if EP is same, sort by ilvl
-			if (Math.abs(diff) < 0.01)
-				return (first.scalingOptions?.[0].ilvl || first.ilvl) - (second.scalingOptions?.[0].ilvl || second.ilvl);
+			if (Math.abs(diff) < 0.01) return (first.scalingOptions?.[0].ilvl || first.ilvl) - (second.scalingOptions?.[0].ilvl || second.ilvl);
 			return diff;
 		};
 		switch (this.sortBy) {
@@ -433,9 +411,7 @@ export default class ItemList<T extends ItemListType> {
 				sortFn = (itemA: T, itemB: T) => {
 					const first = (this.sortDirection === SortDirection.DESC ? itemB : itemA) as unknown as Item;
 					const second = (this.sortDirection === SortDirection.DESC ? itemA : itemB) as unknown as Item;
-					return (
-						(first.scalingOptions?.[0].ilvl || first.ilvl) - (second.scalingOptions?.[0].ilvl || second.ilvl)
-					);
+					return (first.scalingOptions?.[0].ilvl || first.ilvl) - (second.scalingOptions?.[0].ilvl || second.ilvl);
 				};
 				break;
 		}
@@ -485,7 +461,7 @@ export default class ItemList<T extends ItemListType> {
 
 		const listItemElem = (
 			<li className={`selector-modal-list-item ${equippedItemID === itemData.id ? 'active' : ''}`} dataset={{ idx: item.idx.toString() }}>
-				{(this.label === SelectorModalTabs.Items || this.label === SelectorModalTabs.Upgrades) && (
+				{this.label === SelectorModalTabs.Items && (
 					<div className="selector-modal-list-item-ilvl-container">{itemData.ilvl || (itemData.item as unknown as Item).ilvl}</div>
 				)}
 				<div className="selector-modal-list-label-cell gap-1" ref={labelCellElem}>
@@ -538,10 +514,6 @@ export default class ItemList<T extends ItemListType> {
 					favMethodName = 'favoriteEnchants';
 					favId = getUniqueEnchantString(itemData.item as unknown as Enchant);
 					break;
-				case SelectorModalTabs.Tinkers:
-					favMethodName = 'favoriteEnchants';
-					favId = getUniqueEnchantString(itemData.item as unknown as Enchant);
-					break;
 				case SelectorModalTabs.Gem1:
 				case SelectorModalTabs.Gem2:
 				case SelectorModalTabs.Gem3:
@@ -550,10 +522,6 @@ export default class ItemList<T extends ItemListType> {
 					break;
 				case SelectorModalTabs.RandomSuffixes:
 					favMethodName = 'favoriteRandomSuffixes';
-					favId = itemData.id;
-					break;
-				case SelectorModalTabs.Reforging:
-					favMethodName = 'favoriteReforges';
 					favId = itemData.id;
 					break;
 				default:
@@ -645,14 +613,10 @@ export default class ItemList<T extends ItemListType> {
 			return this.currentFilters.favoriteItems.includes(itemData.id);
 		} else if (this.label === SelectorModalTabs.Enchants) {
 			return this.currentFilters.favoriteEnchants.includes(getUniqueEnchantString(itemData.item as unknown as Enchant));
-		} else if (this.label === SelectorModalTabs.Tinkers) {
-			return this.currentFilters.favoriteEnchants.includes(getUniqueEnchantString(itemData.item as unknown as Enchant));
 		} else if (this.label.startsWith('Gem')) {
 			return this.currentFilters.favoriteGems.includes(itemData.id);
 		} else if (this.label === SelectorModalTabs.RandomSuffixes) {
 			return this.currentFilters.favoriteRandomSuffixes.includes(itemData.id);
-		} else if (this.label === SelectorModalTabs.Reforging) {
-			return this.currentFilters.favoriteReforges.includes(itemData.id);
 		}
 		return false;
 	}
@@ -793,10 +757,5 @@ export default class ItemList<T extends ItemListType> {
 
 	private bindToggleCompare(element: Element) {
 		element.classList['remove']('hide');
-		//const toggleCompare = () => element.classList[!this.player.sim.getShowExperimental() ? 'add' : 'remove']('hide');
-		//toggleCompare();
-		//this.player.sim.showExperimentalChangeEmitter.on(() => {
-		//	toggleCompare();
-		//});
 	}
 }

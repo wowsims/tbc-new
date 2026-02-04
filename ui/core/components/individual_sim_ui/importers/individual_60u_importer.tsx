@@ -1,6 +1,7 @@
 import { IndividualSimUI } from '../../../individual_sim_ui';
 import { Class, EquipmentSpec, ItemSpec, Race, Spec } from '../../../proto/common';
 import { nameToClass, nameToRace } from '../../../proto_utils/names';
+import { getEligibleEnchantSlots, getEligibleItemSlots } from '../../../proto_utils/utils';
 import { talentSpellIdsToTalentString } from '../../../talents/factory';
 import Toast from '../../toast';
 import { IndividualImporter } from './individual_importer';
@@ -32,6 +33,9 @@ export class Individual60UImporter<SpecType extends Spec> extends IndividualImpo
 			throw new Error('Please use a valid Sixty Upgrades export.');
 		}
 
+		const missingItems: number[] = [];
+		const missingEnchants: number[] = [];
+
 		// Parse all the settings.
 		const charClass = nameToClass((importJson?.character?.gameClass as string) || '');
 		if (charClass == Class.ClassUnknown) {
@@ -45,31 +49,40 @@ export class Individual60UImporter<SpecType extends Spec> extends IndividualImpo
 
 		let talentsStr = '';
 		if (importJson?.talents?.length > 0) {
-			const talentIds = (importJson.talents as Array<any>).map(talentJson => talentJson.spellId);
+			const talentIds = (importJson.talents as any[]).map(talentJson => talentJson.spellId);
 			talentsStr = talentSpellIdsToTalentString(charClass, talentIds);
 		}
 
 		let hasRemovedRandomSuffix = false;
 		const modifiedItemNames: string[] = [];
 		const equipmentSpec = EquipmentSpec.create();
-		(importJson.items as Array<any>).forEach(itemJson => {
+		(importJson.items as any[]).forEach(itemJson => {
 			const itemSpec = ItemSpec.create();
 			itemSpec.id = itemJson.id;
+			const dbItem = this.simUI.sim.db.getItemById(itemSpec.id);
+
+			if (!dbItem) {
+				missingItems.push(itemSpec.id);
+				return;
+			}
+
 			if (itemJson.enchant?.id) {
 				itemSpec.enchant = itemJson.enchant.id;
+				const slots = getEligibleItemSlots(dbItem);
+				const enchant = slots.flatMap(slot => this.simUI.sim.db.getEnchants(slot)).some(enchant => enchant.effectId == itemSpec.enchant);
+				if (!enchant) {
+					missingEnchants.push(itemSpec.enchant);
+					return;
+				}
 			}
 			if (itemJson.gems) {
-				itemSpec.gems = (itemJson.gems as Array<any>).filter(gemJson => gemJson?.id).map(gemJson => gemJson.id);
+				itemSpec.gems = (itemJson.gems as any[]).filter(gemJson => gemJson?.id).map(gemJson => gemJson.id);
 			}
 
 			// As long as 60U exports the wrong suffixes we should
 			// inform the user that they need to manually add them.
-			// Due to this we also remove the reforge on the item.
 			if (itemJson.suffixId) {
 				hasRemovedRandomSuffix = true;
-				if (itemJson.reforge?.id) {
-					itemJson.reforge.id = null;
-				}
 				modifiedItemNames.push(itemJson.name);
 			}
 			equipmentSpec.items.push(itemSpec);
@@ -83,6 +96,8 @@ export class Individual60UImporter<SpecType extends Spec> extends IndividualImpo
 			equipmentSpec,
 			talentsStr,
 			professions: [],
+			missingEnchants,
+			missingItems,
 		});
 
 		if (hasRemovedRandomSuffix && modifiedItemNames.length) {
