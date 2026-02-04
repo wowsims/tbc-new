@@ -3,7 +3,6 @@ package retribution
 import (
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
-	"github.com/wowsims/tbc/sim/core/stats"
 	"github.com/wowsims/tbc/sim/paladin"
 )
 
@@ -63,7 +62,6 @@ func (ret *RetributionPaladin) Initialize() {
 
 func (ret *RetributionPaladin) ApplyTalents() {
 	ret.Paladin.ApplyTalents()
-	ret.ApplyArmorSpecializationEffect(stats.Strength, proto.ArmorType_ArmorTypePlate, 86525)
 }
 
 func (ret *RetributionPaladin) Reset(sim *core.Simulation) {

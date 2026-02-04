@@ -3,9 +3,9 @@ import { PlayerSpec } from '../player_spec';
 import { Class, Spec } from '../proto/common';
 import { getSpecSiteUrl } from '../proto_utils/utils';
 
-export class DPSWarrior extends PlayerSpec<Spec.SpecDPSWarrior> {
+export class DpsWarrior extends PlayerSpec<Spec.SpecDpsWarrior> {
 	static specIndex = 0;
-	static specID = Spec.SpecDPSWarrior as Spec.SpecDPSWarrior;
+	static specID = Spec.SpecDpsWarrior as Spec.SpecDpsWarrior;
 	static classID = Class.ClassWarrior as Class.ClassWarrior;
 	static friendlyName = 'DPS Warrior';
 	static simLink = getSpecSiteUrl('warrior', 'dps');
@@ -16,25 +16,25 @@ export class DPSWarrior extends PlayerSpec<Spec.SpecDPSWarrior> {
 	static isMeleeDpsSpec = true;
 	static canDualWield = true;
 
-	readonly specIndex = DPSWarrior.specIndex;
-	readonly specID = DPSWarrior.specID;
-	readonly classID = DPSWarrior.classID;
-	readonly friendlyName = DPSWarrior.friendlyName;
-	readonly simLink = DPSWarrior.simLink;
+	readonly specIndex = DpsWarrior.specIndex;
+	readonly specID = DpsWarrior.specID;
+	readonly classID = DpsWarrior.classID;
+	readonly friendlyName = DpsWarrior.friendlyName;
+	readonly simLink = DpsWarrior.simLink;
 
-	readonly isTankSpec = DPSWarrior.isTankSpec;
-	readonly isHealingSpec = DPSWarrior.isHealingSpec;
-	readonly isRangedDpsSpec = DPSWarrior.isRangedDpsSpec;
-	readonly isMeleeDpsSpec = DPSWarrior.isMeleeDpsSpec;
+	readonly isTankSpec = DpsWarrior.isTankSpec;
+	readonly isHealingSpec = DpsWarrior.isHealingSpec;
+	readonly isRangedDpsSpec = DpsWarrior.isRangedDpsSpec;
+	readonly isMeleeDpsSpec = DpsWarrior.isMeleeDpsSpec;
 
-	readonly canDualWield = DPSWarrior.canDualWield;
+	readonly canDualWield = DpsWarrior.canDualWield;
 
 	static getIcon = (size: IconSize): string => {
-		return `https://wow.zamimg.com/images/wow/icons/${size}/spell_nature_bloodlust.jpg`;
+		return `https://wow.zamimg.com/images/wow/icons/${size}/ability_warrior_savageblow.jpg`;
 	};
 
 	getIcon = (size: IconSize): string => {
-		return DPSWarrior.getIcon(size);
+		return DpsWarrior.getIcon(size);
 	};
 }
 

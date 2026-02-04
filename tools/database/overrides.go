@@ -30,6 +30,8 @@ var ItemDenyList = map[int32]struct{}{
 	32384: {},
 	32421: {},
 	32422: {},
+	32482: {},
+	32824: {}, // Trashbringer
 	33482: {},
 	33350: {},
 	34576: {}, // Battlemaster's Cruelty
@@ -264,6 +266,8 @@ var DenyListNameRegexes = []*regexp.Regexp{
 	regexp.MustCompile(`Adventurine`),
 	regexp.MustCompile(`Sardonyx`),
 	regexp.MustCompile(`Zyanite`),
+	regexp.MustCompile(`zzold`),
+	regexp.MustCompile(`Tom's`),
 }
 
 // Allows manual overriding for Gem fields in case WowHead is wrong.
@@ -304,6 +308,12 @@ var EnchantDenyListItems = map[int32]struct{}{
 var GemDenyList = map[int32]struct{}{
 	// pvp non-unique gems not in game currently.
 	32735: {},
+	33132: {},
+	33137: {},
+	33138: {},
+	33139: {},
+	33141: {},
+	33142: {},
 	35489: {},
 	38545: {},
 	38546: {},
@@ -325,9 +335,11 @@ var EnchantDenyList = map[int32]struct{}{
 }
 
 var EnchantAllowList = []int32{
-	368,  // Cloak 12 Agi
+	368,  // Enchant Cloak - Greater Agility
+	684,  // Enchant Gloves - Major Strength
 	1593, // Bracer 24 AP
 	2564, // Weapon 15 Agi
+	2647, // Enchant Bracer - Brawn
 }
 
 // Note: EffectId is required for all enchants, because they are

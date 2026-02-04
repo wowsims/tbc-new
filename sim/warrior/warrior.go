@@ -1,6 +1,8 @@
 package warrior
 
 import (
+	"time"
+
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
@@ -9,7 +11,14 @@ import (
 var TalentTreeSizes = [3]int{23, 21, 22}
 
 type WarriorInputs struct {
-	StanceSnapshot bool
+	DefaultShout  proto.WarriorShout
+	DefaultStance proto.WarriorStance
+
+	StartingRage          float64
+	QueueDelay            int32
+	StanceSnapshot        bool
+	HasBsSolarianSapphire bool
+	HasBsT2               bool
 }
 
 const (
@@ -24,16 +33,29 @@ const (
 	SpellMaskBerserkerRage
 	SpellMaskRallyingCry
 	SpellMaskRecklessness
+	SpellMaskDeathWish
+	SpellMaskRetaliation
+	SpellMaskRetaliationHit
+	SpellMaskRampage
 	SpellMaskShieldWall
 	SpellMaskLastStand
 	SpellMaskCharge
+	SpellMaskIntercept
 	SpellMaskDemoralizingShout
 
+	// Stances
+	SpellMaskBattleStance
+	SpellMaskBerserkerStance
+	SpellMaskDefensiveStance
+
 	// Special attacks
+	SpellMaskRend
+	SpellMaskDeepWounds
 	SpellMaskSweepingStrikes
 	SpellMaskSweepingStrikesHit
 	SpellMaskSweepingStrikesNormalizedHit
 	SpellMaskCleave
+	SpellMaskDevastate
 	SpellMaskExecute
 	SpellMaskHeroicStrike
 	SpellMaskOverpower
@@ -45,6 +67,7 @@ const (
 	SpellMaskWhirlwind
 	SpellMaskWhirlwindOh
 	SpellMaskShieldSlam
+	SpellMaskShieldBash
 	SpellMaskBloodthirst
 	SpellMaskMortalStrike
 	SpellMaskWildStrike
@@ -52,13 +75,17 @@ const (
 	SpellMaskHamstring
 	SpellMaskPummel
 
-	// Talents
-	SpellMaskImpendingVictory
-	SpellMaskBladestorm
-	SpellMaskBladestormMH
-	SpellMaskBladestormOH
+	WarriorSpellLast
+	WarriorSpellsAll = WarriorSpellLast<<1 - 1
 
-	SpellMaskShouts = SpellMaskCommandingShout | SpellMaskBattleShout
+	SpellMaskShouts             = SpellMaskCommandingShout | SpellMaskBattleShout | SpellMaskDemoralizingShout
+	SpellMaskDirectDamageSpells = SpellMaskSweepingStrikesHit | SpellMaskSweepingStrikesNormalizedHit |
+		SpellMaskCleave | SpellMaskExecute | SpellMaskHeroicStrike | SpellMaskOverpower |
+		SpellMaskRevenge | SpellMaskSlam | SpellMaskSweepingSlam | SpellMaskShieldBash | SpellMaskSunderArmor |
+		SpellMaskThunderClap | SpellMaskWhirlwind | SpellMaskWhirlwindOh | SpellMaskShieldSlam |
+		SpellMaskBloodthirst | SpellMaskMortalStrike | SpellMaskIntercept | SpellMaskDevastate | SpellMaskRetaliationHit
+
+	SpellMaskDamageSpells = SpellMaskDirectDamageSpells | SpellMaskDeepWounds | SpellMaskRend
 )
 
 const EnrageTag = "EnrageEffect"
@@ -73,48 +100,39 @@ type Warrior struct {
 	WarriorInputs
 
 	// Current state
-	Stance              Stance
-	CriticalBlockChance []float64 // Can be gained as non-prot via certain talents and spells
-	PrePullChargeGain   float64
+	Stance         Stance
+	ChargeRageGain float64
 
-	HeroicStrikeCleaveCostMod *core.SpellMod
+	BattleShout       *core.Spell
+	CommandingShout   *core.Spell
+	DemoralizingShout *core.Spell
+	BattleStance      *core.Spell
+	DefensiveStance   *core.Spell
+	BerserkerStance   *core.Spell
 
-	BattleShout     *core.Spell
-	CommandingShout *core.Spell
-	BattleStance    *core.Spell
-	DefensiveStance *core.Spell
-	BerserkerStance *core.Spell
+	Rend         *core.Spell
+	DeepWounds   *core.Spell
+	MortalStrike *core.Spell
 
-	MortalStrike                    *core.Spell
-	DeepWounds                      *core.Spell
-	ShieldSlam                      *core.Spell
-	SweepingStrikesNormalizedAttack *core.Spell
+	HeroicStrike       *core.Spell
+	Cleave             *core.Spell
+	curQueueAura       *core.Aura
+	curQueuedAutoSpell *core.Spell
 
+	sharedMCD        *core.Timer // Recklessness, Shield Wall & Retaliation
 	sharedShoutsCD   *core.Timer
-	sharedHSCleaveCD *core.Timer
+	queuedRealismICD *core.Cooldown
 
-	BattleStanceAura    *core.Aura
-	DefensiveStanceAura *core.Aura
-	BerserkerStanceAura *core.Aura
-
-	InciteAura          *core.Aura
-	UltimatumAura       *core.Aura
-	SweepingStrikesAura *core.Aura
-	EnrageAura          *core.Aura
-	BerserkerRageAura   *core.Aura
-	ShieldBlockAura     *core.Aura
-	LastStandAura       *core.Aura
-	VictoryRushAura     *core.Aura
-	ShieldBarrierAura   *core.DamageAbsorptionAura
+	EnrageAura *core.Aura
 
 	SkullBannerAura         *core.Aura
 	DemoralizingBannerAuras core.AuraArray
 
-	RallyingCryAuras       core.AuraArray
 	DemoralizingShoutAuras core.AuraArray
 	SunderArmorAuras       core.AuraArray
-	ThunderClapAuras       core.AuraArray
-	WeakenedArmorAuras     core.AuraArray
+
+	// Set bonuses
+	T6Tank2P *core.Aura
 }
 
 func (warrior *Warrior) GetCharacter() *core.Character {
@@ -122,48 +140,58 @@ func (warrior *Warrior) GetCharacter() *core.Character {
 }
 
 func (warrior *Warrior) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
-
 }
 
 func (warrior *Warrior) AddPartyBuffs(_ *proto.PartyBuffs) {
 }
 
 func (warrior *Warrior) Initialize() {
-	warrior.sharedHSCleaveCD = warrior.NewTimer()
-	warrior.sharedShoutsCD = warrior.NewTimer()
 
-	// warrior.registerStances()
-	// warrior.registerShouts()
-	warrior.registerPassives()
+	warrior.registerRecklessness()
+	warrior.registerShieldWall()
+	warrior.registerRetaliation()
 
-	// warrior.registerBerserkerRage()
-	// warrior.registerRallyingCry()
-	// warrior.registerExecuteSpell()
-	// warrior.registerHeroicStrikeSpell()
-	// warrior.registerCleaveSpell()
-	// warrior.registerRecklessness()
-	// warrior.registerVictoryRush()
-	// warrior.registerShieldWall()
-	// warrior.registerSunderArmor()
-	// warrior.registerHamstring()
-	// warrior.registerThunderClap()
-	// warrior.registerWhirlwind()
-	// warrior.registerCharge()
-	// warrior.registerPummel()
-}
+	warrior.registerBloodrage()
+	warrior.registerCharge()
+	warrior.registerIntercept()
+	warrior.registerPummel()
+	warrior.registerHamstring()
 
-func (warrior *Warrior) registerPassives() {
-	// warrior.registerEnrage()
-	// warrior.registerDeepWounds()
-	// warrior.registerBloodAndThunder()
+	warrior.registerRend()
+	warrior.registerSunderArmor()
+	warrior.registerHeroicStrike()
+	warrior.registerCleave()
+	warrior.registerOverpower()
+	warrior.registerSlam()
+	warrior.registerWhirlwind()
+	warrior.registerExecute()
+	warrior.registerThunderClap()
+	warrior.registerRevenge()
+	warrior.registerShieldBlock()
+	warrior.registerShieldBash()
+
+	warrior.registerStances()
+	warrior.registerShouts()
 }
 
 func (warrior *Warrior) Reset(_ *core.Simulation) {
-	// warrior.Stance = StanceNone
+	warrior.curQueueAura = nil
+	warrior.curQueuedAutoSpell = nil
+
+	warrior.Stance = StanceNone
+	warrior.ChargeRageGain = 15.0
 }
 
-func (warrior *Warrior) OnEncounterStart(sim *core.Simulation) {
-	warrior.PrePullChargeGain = 0
+func (warrior *Warrior) OnEncounterStart(sim *core.Simulation) {}
+
+func (war *Warrior) GetHandType() proto.HandType {
+	mh := war.GetMHWeapon()
+
+	if mh != nil && (mh.HandType == proto.HandType_HandTypeTwoHand) {
+		return proto.HandType_HandTypeTwoHand
+	}
+
+	return proto.HandType_HandTypeOneHand
 }
 
 func NewWarrior(character *core.Character, options *proto.WarriorOptions, talents string, inputs WarriorInputs) *Warrior {
@@ -177,45 +205,35 @@ func NewWarrior(character *core.Character, options *proto.WarriorOptions, talent
 	warrior.EnableRageBar(core.RageBarOptions{
 		MaxRage:            100,
 		BaseRageMultiplier: 1,
+		StartingRage:       inputs.StartingRage,
 	})
 
 	warrior.EnableAutoAttacks(warrior, core.AutoAttackOptions{
 		MainHand:       warrior.WeaponFromMainHand(warrior.DefaultMeleeCritMultiplier()),
 		OffHand:        warrior.WeaponFromOffHand(warrior.DefaultMeleeCritMultiplier()),
 		AutoSwingMelee: true,
+		ReplaceMHSwing: warrior.TryHSOrCleave,
 	})
 
 	warrior.PseudoStats.CanParry = true
 
 	warrior.AddStatDependency(stats.Strength, stats.AttackPower, 2)
+	warrior.AddStatDependency(stats.Strength, stats.BlockValue, 1/20.0)
 	warrior.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiMaxLevel[character.Class])
 	warrior.AddStatDependency(stats.Agility, stats.DodgeRating, 1/30.0*core.DodgeRatingPerDodgePercent)
 	warrior.AddStatDependency(stats.BonusArmor, stats.Armor, 1)
 
-	warrior.CriticalBlockChance = append(warrior.CriticalBlockChance, 0.0, 0.0)
-
-	warrior.HeroicStrikeCleaveCostMod = warrior.AddDynamicMod(core.SpellModConfig{
-		ClassMask:  SpellMaskHeroicStrike | SpellMaskCleave,
-		Kind:       core.SpellMod_PowerCost_Pct,
-		FloatValue: -2,
-	})
+	warrior.sharedShoutsCD = warrior.NewTimer()
+	warrior.sharedMCD = warrior.NewTimer()
+	warrior.ChargeRageGain = 15.0
+	// The sim often re-enables heroic strike in an unrealistic amount of time.
+	// This can cause an unrealistic immediate double-hit around wild strikes procs
+	warrior.queuedRealismICD = &core.Cooldown{
+		Timer:    warrior.NewTimer(),
+		Duration: time.Millisecond * time.Duration(warrior.WarriorInputs.QueueDelay),
+	}
 
 	return warrior
-}
-
-func (warrior *Warrior) GetCriticalBlockChance() float64 {
-	return warrior.CriticalBlockChance[0] + warrior.CriticalBlockChance[1]
-}
-
-func (warrior *Warrior) CastNormalizedSweepingStrikesAttack(results core.SpellResultSlice, sim *core.Simulation) {
-	if warrior.SweepingStrikesAura != nil && warrior.SweepingStrikesAura.IsActive() {
-		for _, result := range results {
-			if result.Landed() {
-				warrior.SweepingStrikesNormalizedAttack.Cast(sim, warrior.Env.NextActiveTargetUnit(result.Target))
-				break
-			}
-		}
-	}
 }
 
 // Agent is a generic way to access underlying warrior on any of the agents.

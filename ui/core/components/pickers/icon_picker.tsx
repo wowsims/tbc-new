@@ -11,7 +11,7 @@ import { Input, InputConfig } from '../input.js';
 // ModObject is the object being modified (Sim, Player, or Target).
 // ValueType is either number or boolean.
 export interface IconPickerConfig<ModObject, ValueType> extends InputConfig<ModObject, ValueType> {
-	actionId: ActionId;
+	actionId: (modObj: ModObject) => ActionId | null;
 
 	// The number of possible 'states' this icon can have. Most inputs will use 2
 	// for a bi-state icon (on or off). 0 indicates an unlimited number of states.
@@ -85,10 +85,10 @@ export class IconPicker<ModObject, ValueType> extends Input<ModObject, ValueType
 		this.improvedAnchor2 = ia2.value!;
 		this.counterElem = ce.value!;
 
-		this.updateButtonImage()
+		this.updateButtonImage();
 
 		const event = this.config.changedEvent(this.modObject).on(() => {
-			this.updateButtonImage()
+			this.updateButtonImage();
 
 			if (this.showWhen()) {
 				this.rootElem.classList.remove('hide');
@@ -135,11 +135,12 @@ export class IconPicker<ModObject, ValueType> extends Input<ModObject, ValueType
 	}
 
 	updateButtonImage() {
-		this.config.actionId.fillAndSet(this.rootAnchor, true, true);
+		this.config.actionId(this.modObject)?.fillAndSet(this.rootAnchor, true, true);
 
 		if (this.config.states >= 3 && this.config.improvedId) {
 			this.config.improvedId.fillAndSet(this.improvedAnchor, true, true, { signal: this.signal });
 		}
+
 		if (this.config.states >= 4 && this.config.improvedId2) {
 			this.config.improvedId2.fillAndSet(this.improvedAnchor2, true, true, { signal: this.signal });
 		}
@@ -190,13 +191,13 @@ export class IconPicker<ModObject, ValueType> extends Input<ModObject, ValueType
 		if (v == 0) {
 			return null;
 		} else if (v == 1) {
-			return this.config.actionId;
+			return this.config.actionId(this.modObject);
 		} else if (v == 2 && this.config.improvedId) {
 			return this.config.improvedId;
 		} else if (v == 3 && this.config.improvedId2) {
 			return this.config.improvedId2;
 		} else {
-			return this.config.actionId;
+			return this.config.actionId(this.modObject);
 		}
 	}
 
@@ -223,12 +224,8 @@ export class IconPicker<ModObject, ValueType> extends Input<ModObject, ValueType
 		if (this.config.states >= 4 && this.config.improvedId2) {
 			if (this.currentValue > 2) {
 				this.improvedAnchor2.classList.add('active');
-				this.improvedAnchor.hidden = true;
-				this.improvedAnchor2.hidden = false;
 			} else {
 				this.improvedAnchor2.classList.remove('active');
-				this.improvedAnchor.hidden = false;
-				this.improvedAnchor2.hidden = true;
 			}
 		}
 

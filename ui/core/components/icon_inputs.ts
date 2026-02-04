@@ -5,8 +5,8 @@ import { ActionId } from '../proto_utils/action_id.js';
 import { Raid } from '../raid';
 import { EventID, TypedEvent } from '../typed_event';
 import * as InputHelpers from './input_helpers';
-import { IconEnumPicker, IconEnumPickerDirection, IconEnumValueConfig } from './pickers/icon_enum_picker.jsx';
-import { IconPicker, IconPickerConfig } from './pickers/icon_picker.jsx';
+import { IconEnumPicker } from './pickers/icon_enum_picker.jsx';
+import { IconPicker } from './pickers/icon_picker.jsx';
 
 // Component Functions
 
@@ -28,7 +28,7 @@ export function withLabel<ModObject, T>(config: IconInputConfig<ModObject, T>, l
 }
 
 interface BooleanInputConfig<T> {
-	actionId: ActionId;
+	actionId: () => ActionId;
 	fieldName: keyof T;
 	value?: number;
 	label?: string;
@@ -46,11 +46,11 @@ export function makeBooleanRaidBuffInput<SpecType extends Spec>(
 			getValue: (player: Player<SpecType>) => player.getRaid()!.getBuffs(),
 			setValue: (eventID: EventID, player: Player<SpecType>, newVal: RaidBuffs) => player.getRaid()!.setBuffs(eventID, newVal),
 			changeEmitter: (player: Player<SpecType>) => TypedEvent.onAny([player.getRaid()!.buffsChangeEmitter, player.raceChangeEmitter]),
+			label: config.label,
 		},
 		config.actionId,
 		config.fieldName,
 		config.value,
-		config.label,
 	);
 }
 export function makeBooleanPartyBuffInput<SpecType extends Spec>(
@@ -63,11 +63,11 @@ export function makeBooleanPartyBuffInput<SpecType extends Spec>(
 			setValue: (eventID: EventID, party: Party, newVal: PartyBuffs) => party.setBuffs(eventID, newVal),
 			changeEmitter: (party: Party) => TypedEvent.onAny([party.buffsChangeEmitter, party.getPlayer(0)!.raceChangeEmitter]),
 			showWhen: config.showWhen,
+			label: config.label,
 		},
 		config.actionId,
 		config.fieldName,
 		config.value,
-		config.label,
 	);
 }
 
@@ -78,7 +78,7 @@ export function makeEnumValuePartyBuffInput(
 ): InputHelpers.TypedIconPickerConfig<Party, boolean> {
 	return {
 		id: id.name,
-		actionId: id,
+		actionId: () => id,
 		type: 'icon',
 		states: 2,
 		changedEvent: (party: Party) => party.buffsChangeEmitter,
@@ -101,11 +101,11 @@ export function makeBooleanIndividualBuffInput<SpecType extends Spec>(
 			getValue: (player: Player<SpecType>) => player.getBuffs(),
 			setValue: (eventID: EventID, player: Player<SpecType>, newVal: IndividualBuffs) => player.setBuffs(eventID, newVal),
 			changeEmitter: (player: Player<SpecType>) => TypedEvent.onAny([player.buffsChangeEmitter, player.raceChangeEmitter]),
+			label: config.label,
 		},
 		config.actionId,
 		config.fieldName,
 		config.value,
-		config.label,
 	);
 }
 
@@ -134,16 +134,16 @@ export function makeBooleanDebuffInput<SpecType extends Spec>(
 			getValue: (player: Player<SpecType>) => player.getRaid()!.getDebuffs(),
 			setValue: (eventID: EventID, player: Player<SpecType>, newVal: Debuffs) => player.getRaid()!.setDebuffs(eventID, newVal),
 			changeEmitter: (player: Player<SpecType>) => TypedEvent.onAny([player.getRaid()!.debuffsChangeEmitter]),
+			label: config.label,
 		},
 		config.actionId,
 		config.fieldName,
 		config.value,
-		config.label,
 	);
 }
 
 interface TristateInputConfig<T> {
-	actionId: ActionId;
+	actionId: () => ActionId;
 	impId: ActionId;
 	fieldName: keyof T;
 	faction?: Faction;
@@ -160,11 +160,11 @@ export function makeTristateRaidBuffInput<SpecType extends Spec>(
 			getValue: (player: Player<SpecType>) => player.getRaid()!.getBuffs(),
 			setValue: (eventID: EventID, player: Player<SpecType>, newVal: RaidBuffs) => player.getRaid()!.setBuffs(eventID, newVal),
 			changeEmitter: (player: Player<SpecType>) => TypedEvent.onAny([player.getRaid()!.buffsChangeEmitter, player.raceChangeEmitter]),
+			label: config.label,
 		},
 		config.actionId,
 		config.impId,
 		config.fieldName,
-		config.label,
 	);
 }
 
@@ -178,11 +178,11 @@ export function makeTristatePartyBuffInput<SpecType extends Spec>(
 			getValue: (player: Player<SpecType>) => player.getParty()?.getBuffs()!!,
 			setValue: (eventID: EventID, player: Player<SpecType>, newVal: PartyBuffs) => player.getParty()?.setBuffs(eventID, newVal),
 			changeEmitter: (player: Player<SpecType>) => TypedEvent.onAny([player.getParty()!.buffsChangeEmitter, player.raceChangeEmitter]),
+			label: config.label,
 		},
 		config.actionId,
 		config.impId,
 		config.fieldName,
-		config.label,
 	);
 }
 
@@ -196,11 +196,11 @@ export function makeTristateIndividualBuffInput<SpecType extends Spec>(
 			getValue: (player: Player<SpecType>) => player.getBuffs(),
 			setValue: (eventID: EventID, player: Player<SpecType>, newVal: IndividualBuffs) => player.setBuffs(eventID, newVal),
 			changeEmitter: (player: Player<SpecType>) => TypedEvent.onAny([player.buffsChangeEmitter, player.raceChangeEmitter]),
+			label: config.label,
 		},
 		config.actionId,
 		config.impId,
 		config.fieldName,
-		config.label,
 	);
 }
 
@@ -213,41 +213,46 @@ export function makeTristateDebuffInput<SpecType extends Spec>(
 			getValue: (raid: Raid) => raid.getDebuffs(),
 			setValue: (eventID: EventID, raid: Raid, newVal: Debuffs) => raid.setDebuffs(eventID, newVal),
 			changeEmitter: (raid: Raid) => raid.debuffsChangeEmitter,
+			label: config.label,
 		},
 		config.actionId,
 		config.impId,
 		config.fieldName,
-		config.label,
 	);
 }
 
 interface QuadStateInputConfig<T> {
-	actionId: ActionId;
+	actionId: () => ActionId;
 	impId: ActionId;
 	impId2: ActionId;
 	fieldName: keyof T;
+	fieldNameImp2: keyof T;
 	faction?: Faction;
+	label?: string;
 }
 
-export function makeQuadstateDebuffInput<SpecType extends Spec>(
-	config: QuadStateInputConfig<Debuffs>,
+export function makeQuadstatePartyBuffInput<SpecType extends Spec>(
+	config: QuadStateInputConfig<PartyBuffs>,
 ): InputHelpers.TypedIconPickerConfig<Player<SpecType>, number> {
-	return InputHelpers.makeQuadstateIconInput<any, Debuffs, Raid>(
+	return InputHelpers.makeQuadstateIconInput<any, PartyBuffs, Player<SpecType>>(
 		{
-			getModObject: (player: Player<SpecType>) => player.getRaid()!,
-			getValue: (raid: Raid) => raid.getDebuffs(),
-			setValue: (eventID: EventID, raid: Raid, newVal: Debuffs) => raid.setDebuffs(eventID, newVal),
-			changeEmitter: (raid: Raid) => raid.debuffsChangeEmitter,
+			getModObject: (player: Player<SpecType>) => player,
+			showWhen: (player: Player<SpecType>) => !config.faction || config.faction == player.getFaction(),
+			getValue: (player: Player<SpecType>) => player.getParty()?.getBuffs()!!,
+			setValue: (eventID: EventID, player: Player<SpecType>, newVal: PartyBuffs) => player.getParty()?.setBuffs(eventID, newVal),
+			changeEmitter: (player: Player<SpecType>) => TypedEvent.onAny([player.getParty()!.buffsChangeEmitter, player.raceChangeEmitter]),
+			label: config.label,
 		},
 		config.actionId,
 		config.impId,
 		config.impId2,
 		config.fieldName,
+		config.fieldNameImp2,
 	);
 }
 
 interface MultiStateInputConfig<T> {
-	actionId: ActionId;
+	actionId: () => ActionId;
 	label?: string;
 	numStates: number;
 	fieldName: keyof T;
@@ -265,12 +270,12 @@ export function makeMultistateRaidBuffInput<SpecType extends Spec>(
 			getValue: (player: Player<SpecType>) => player.getRaid()!.getBuffs(),
 			setValue: (eventID: EventID, player: Player<SpecType>, newVal: RaidBuffs) => player.getRaid()!.setBuffs(eventID, newVal),
 			changeEmitter: (player: Player<SpecType>) => TypedEvent.onAny([player.getRaid()!.buffsChangeEmitter, player.raceChangeEmitter]),
+			label: config.label,
 		},
 		config.actionId,
 		config.numStates,
 		config.fieldName,
 		config.multiplier,
-		config.label,
 	);
 }
 export function makeMultistatePartyBuffInput<SpecType extends Spec>(
@@ -285,12 +290,11 @@ export function makeMultistatePartyBuffInput<SpecType extends Spec>(
 			getValue: (party: Party) => party.getBuffs(),
 			setValue: (eventID: EventID, party: Party, newVal: PartyBuffs) => party.setBuffs(eventID, newVal),
 			changeEmitter: (party: Party) => party.buffsChangeEmitter,
+			label,
 		},
-		actionId,
+		() => actionId,
 		numStates,
 		fieldName,
-		undefined,
-		label,
 	);
 }
 export function makeMultistateIndividualBuffInput<SpecType extends Spec>(
@@ -303,12 +307,12 @@ export function makeMultistateIndividualBuffInput<SpecType extends Spec>(
 			getValue: (player: Player<SpecType>) => player.getBuffs(),
 			setValue: (eventID: EventID, player: Player<SpecType>, newVal: IndividualBuffs) => player.setBuffs(eventID, newVal),
 			changeEmitter: (player: Player<SpecType>) => TypedEvent.onAny([player.buffsChangeEmitter, player.raceChangeEmitter]),
+			label: config.label,
 		},
 		config.actionId,
 		config.numStates,
 		config.fieldName,
 		config.multiplier,
-		config.label,
 	);
 }
 
@@ -325,7 +329,7 @@ export function makeMultistateMultiplierIndividualBuffInput<SpecType extends Spe
 			setValue: (eventID: EventID, player: Player<SpecType>, newVal: IndividualBuffs) => player.setBuffs(eventID, newVal),
 			changeEmitter: (player: Player<SpecType>) => player.buffsChangeEmitter,
 		},
-		actionId,
+		() => actionId,
 		numStates,
 		fieldName,
 		multiplier,
@@ -345,7 +349,7 @@ export function makeMultistateMultiplierDebuffInput<SpecType extends Spec>(
 			setValue: (eventID: EventID, raid: Raid, newVal: Debuffs) => raid.setDebuffs(eventID, newVal),
 			changeEmitter: (raid: Raid) => raid.debuffsChangeEmitter,
 		},
-		actionId,
+		() => actionId,
 		numStates,
 		fieldName,
 		multiplier,

@@ -1,5 +1,13 @@
 package warrior
 
+import (
+	"time"
+
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
+	"github.com/wowsims/tbc/sim/core/stats"
+)
+
 type Stance uint8
 
 const (
@@ -11,123 +19,113 @@ const (
 
 const stanceEffectCategory = "Stance"
 
-// func (warrior *Warrior) StanceMatches(other Stance) bool {
-// 	return (warrior.Stance & other) != 0
-// }
+func (warrior *Warrior) StanceMatches(other Stance) bool {
+	return (warrior.Stance & other) != 0
+}
 
-// func (warrior *Warrior) makeStanceSpell(stance Stance, aura *core.Aura, stanceCD *core.Timer) *core.Spell {
-// 	actionID := aura.ActionID
+func (warrior *Warrior) makeStanceSpell(stance Stance, mask int64, aura *core.Aura, stanceCD *core.Timer) *core.Spell {
+	maxRetainedRage := 10.0 + 5*float64(warrior.Talents.TacticalMastery)
+	actionID := aura.ActionID
+	rageMetrics := warrior.NewRageMetrics(actionID)
 
-// 	return warrior.RegisterSpell(core.SpellConfig{
-// 		ActionID: actionID,
-// 		Flags:    core.SpellFlagNoOnCastComplete | core.SpellFlagAPL,
+	return warrior.RegisterSpell(core.SpellConfig{
+		ActionID:       actionID,
+		ClassSpellMask: mask,
+		Flags:          core.SpellFlagNoOnCastComplete | core.SpellFlagAPL,
 
-// 		Cast: core.CastConfig{
-// 			CD: core.Cooldown{
-// 				Timer:    stanceCD,
-// 				Duration: time.Millisecond * 1500,
-// 			},
-// 		},
-// 		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
-// 			return warrior.Stance != stance
-// 		},
+		Cast: core.CastConfig{
+			CD: core.Cooldown{
+				Timer:    stanceCD,
+				Duration: time.Millisecond * 1500,
+			},
+		},
+		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
+			return warrior.Stance != stance
+		},
 
-// 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {
-// 			// TODO: see if this is fixed in 4.4.0
-// 			if warrior.WarriorInputs.StanceSnapshot {
-// 				// Delayed, so same-GCD casts are affected by the current aura.
-// 				//  Alternatively, those casts could just (artificially) happen before the stance change.
-// 				pa := sim.GetConsumedPendingActionFromPool()
-// 				pa.NextActionAt = sim.CurrentTime + 10*time.Millisecond
-// 				pa.OnAction = aura.Activate
-// 				sim.AddPendingAction(pa)
-// 			} else {
-// 				aura.Activate(sim)
-// 			}
+		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {
+			if warrior.WarriorInputs.StanceSnapshot {
+				// Delayed, so same-GCD casts are affected by the current aura.
+				//  Alternatively, those casts could just (artificially) happen before the stance change.
+				pa := sim.GetConsumedPendingActionFromPool()
+				pa.NextActionAt = sim.CurrentTime + 10*time.Millisecond
+				pa.OnAction = aura.Activate
+				sim.AddPendingAction(pa)
+			} else {
+				aura.Activate(sim)
+			}
 
-// 			warrior.Stance = stance
-// 		},
-// 	})
-// }
+			if warrior.CurrentRage() > maxRetainedRage {
+				warrior.SpendRage(sim, warrior.CurrentRage()-maxRetainedRage, rageMetrics)
+			}
 
-// func (warrior *Warrior) registerBattleStanceAura() {
-// 	actionID := core.ActionID{SpellID: 2457}
+			warrior.Stance = stance
+		},
 
-// 	warrior.BattleStanceAura = warrior.GetOrRegisterAura(core.Aura{
-// 		Label:    "Battle Stance",
-// 		ActionID: actionID,
-// 		Duration: core.NeverExpires,
-// 		OnGain: func(aura *core.Aura, sim *core.Simulation) {
-// 			aura.Unit.MultiplyAutoAttackRageGen(2.0)
-// 		},
-// 		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
-// 			aura.Unit.MultiplyAutoAttackRageGen(1.0 / 2.0)
-// 		},
-// 	})
-// 	warrior.BattleStanceAura.NewExclusiveEffect(stanceEffectCategory, true, core.ExclusiveEffect{})
-// }
+		RelatedSelfBuff: aura,
+	})
+}
 
-// func (warrior *Warrior) registerDefensiveStanceAura() {
-// 	actionID := core.ActionID{SpellID: 71}
-// 	rageMetrics := warrior.NewRageMetrics(actionID)
+func (warrior *Warrior) registerBattleStanceAura() *core.Aura {
+	actionID := core.ActionID{SpellID: 2457}
 
-// 	var pa *core.PendingAction
-// 	warrior.DefensiveStanceAura = warrior.GetOrRegisterAura(core.Aura{
-// 		Label:    "Defensive Stance",
-// 		ActionID: actionID,
-// 		Duration: core.NeverExpires,
-// 		OnGain: func(aura *core.Aura, sim *core.Simulation) {
-// 			warrior.GetAura("RageBar").Deactivate(sim)
-// 			pa = core.StartPeriodicAction(sim, core.PeriodicActionOptions{
-// 				Period: time.Second * 3,
-// 				OnAction: func(sim *core.Simulation) {
-// 					if sim.CurrentTime > 0 {
-// 						warrior.AddRage(sim, 1, rageMetrics)
-// 					}
-// 				},
-// 			})
-// 		},
-// 		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
-// 			warrior.GetAura("RageBar").Activate(sim)
-// 			if pa != nil {
-// 				pa.Cancel(sim)
-// 				pa = nil
-// 			}
-// 		},
-// 	}).AttachMultiplicativePseudoStatBuff(
-// 		&warrior.PseudoStats.ThreatMultiplier, 7,
-// 	).AttachMultiplicativePseudoStatBuff(
-// 		&warrior.PseudoStats.DamageTakenMultiplier, 0.75,
-// 	)
+	aura := warrior.GetOrRegisterAura(core.Aura{
+		Label:      "Battle Stance",
+		ActionID:   actionID,
+		Duration:   core.NeverExpires,
+		BuildPhase: core.Ternary(warrior.DefaultStance == proto.WarriorStance_WarriorStanceBattle, core.CharacterBuildPhaseBuffs, core.CharacterBuildPhaseNone),
+	}).AttachMultiplicativePseudoStatBuff(&warrior.PseudoStats.ThreatMultiplier, 0.8)
 
-// 	warrior.DefensiveStanceAura.NewExclusiveEffect(stanceEffectCategory, true, core.ExclusiveEffect{})
-// }
+	aura.NewExclusiveEffect(stanceEffectCategory, true, core.ExclusiveEffect{})
 
-// func (warrior *Warrior) registerBerserkerStanceAura() {
-// 	actionId := core.ActionID{SpellID: 2458}
-// 	rageMetrics := warrior.NewRageMetrics(actionId)
-// 	warrior.BerserkerStanceAura = warrior.GetOrRegisterAura(core.Aura{
-// 		Label:    "Berserker Stance",
-// 		ActionID: actionId,
-// 		Duration: core.NeverExpires,
-// 	}).AttachProcTrigger(core.ProcTrigger{
-// 		Name:     "Berserker Stance - Rage Gain",
-// 		ActionID: actionId,
-// 		Callback: core.CallbackOnSpellHitTaken,
-// 		Outcome:  core.OutcomeLanded,
-// 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-// 			warrior.AddRage(sim, math.Floor(result.Damage/warrior.MaxHealth()*100), rageMetrics)
-// 		},
-// 	})
-// 	warrior.BerserkerStanceAura.NewExclusiveEffect(stanceEffectCategory, true, core.ExclusiveEffect{})
-// }
+	return aura
+}
 
-// func (warrior *Warrior) registerStances() {
-// 	stanceCD := warrior.NewTimer()
-// 	warrior.registerBattleStanceAura()
-// 	warrior.registerDefensiveStanceAura()
-// 	warrior.registerBerserkerStanceAura()
-// 	warrior.BattleStance = warrior.makeStanceSpell(BattleStance, warrior.BattleStanceAura, stanceCD)
-// 	warrior.DefensiveStance = warrior.makeStanceSpell(DefensiveStance, warrior.DefensiveStanceAura, stanceCD)
-// 	warrior.BerserkerStance = warrior.makeStanceSpell(BerserkerStance, warrior.BerserkerStanceAura, stanceCD)
-// }
+func (warrior *Warrior) registerDefensiveStanceAura() *core.Aura {
+	actionID := core.ActionID{SpellID: 71}
+
+	aura := warrior.GetOrRegisterAura(core.Aura{
+		Label:      "Defensive Stance",
+		ActionID:   actionID,
+		Duration:   core.NeverExpires,
+		BuildPhase: core.Ternary(warrior.DefaultStance == proto.WarriorStance_WarriorStanceDefensive, core.CharacterBuildPhaseBuffs, core.CharacterBuildPhaseNone),
+	}).AttachMultiplicativePseudoStatBuff(
+		&warrior.PseudoStats.ThreatMultiplier, 1.3,
+	).AttachMultiplicativePseudoStatBuff(
+		&warrior.PseudoStats.DamageTakenMultiplier, 0.9,
+	).AttachMultiplicativePseudoStatBuff(
+		&warrior.PseudoStats.DamageDealtMultiplier, 0.9,
+	)
+
+	aura.NewExclusiveEffect(stanceEffectCategory, true, core.ExclusiveEffect{})
+
+	return aura
+}
+
+func (warrior *Warrior) registerBerserkerStanceAura() *core.Aura {
+	actionId := core.ActionID{SpellID: 2458}
+	threatMultiplier := 0.8 - 0.02*float64(warrior.Talents.ImprovedBerserkerStance)
+
+	aura := warrior.GetOrRegisterAura(core.Aura{
+		Label:      "Berserker Stance",
+		ActionID:   actionId,
+		Duration:   core.NeverExpires,
+		BuildPhase: core.Ternary(warrior.DefaultStance == proto.WarriorStance_WarriorStanceBerserker, core.CharacterBuildPhaseBuffs, core.CharacterBuildPhaseNone),
+	}).AttachMultiplicativePseudoStatBuff(
+		&warrior.PseudoStats.ThreatMultiplier, threatMultiplier,
+	).AttachStatBuff(stats.PhysicalCritPercent, 3)
+
+	aura.NewExclusiveEffect(stanceEffectCategory, true, core.ExclusiveEffect{})
+
+	return aura
+}
+
+func (warrior *Warrior) registerStances() {
+	stanceCD := warrior.NewTimer()
+	battleStanceAura := warrior.registerBattleStanceAura()
+	defensiveStanceAura := warrior.registerDefensiveStanceAura()
+	berserkerStanceAura := warrior.registerBerserkerStanceAura()
+	warrior.BattleStance = warrior.makeStanceSpell(BattleStance, SpellMaskBattleStance, battleStanceAura, stanceCD)
+	warrior.DefensiveStance = warrior.makeStanceSpell(DefensiveStance, SpellMaskDefensiveStance, defensiveStanceAura, stanceCD)
+	warrior.BerserkerStance = warrior.makeStanceSpell(BerserkerStance, SpellMaskBerserkerStance, berserkerStanceAura, stanceCD)
+}

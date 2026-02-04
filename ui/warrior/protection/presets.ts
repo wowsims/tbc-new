@@ -1,8 +1,9 @@
 import * as PresetUtils from '../../core/preset_utils.js';
 import { ConsumesSpec, Profession, PseudoStat, Spec, Stat } from '../../core/proto/common.js';
 import { SavedTalents } from '../../core/proto/ui.js';
-import { ProtectionWarrior_Options as ProtectionWarriorOptions } from '../../core/proto/warrior.js';
+import { ProtectionWarrior_Options as ProtectionWarriorOptions, WarriorShout, WarriorStance } from '../../core/proto/warrior.js';
 import { Stats } from '../../core/proto_utils/stats';
+import * as WarriorPresets from '../presets';
 import GenericApl from './apls/default.apl.json';
 import GarajalApl from './apls/garajal.apl.json';
 import ShaApl from './apls/sha.apl.json';
@@ -75,7 +76,7 @@ export const P3_EP_PRESET = PresetUtils.makePresetEpWeights(
 	'P3 - Balanced',
 	Stats.fromMap(
 		{
-			[Stat.StatStrength]: 1.00,
+			[Stat.StatStrength]: 1.0,
 			[Stat.StatStamina]: 0.83,
 			[Stat.StatAttackPower]: 0.24,
 			[Stat.StatArmor]: 0.64,
@@ -91,9 +92,9 @@ export const P3_OFFENSIVE_EP_PRESET = PresetUtils.makePresetEpWeights(
 	'P3 - Offensive',
 	Stats.fromMap(
 		{
-			[Stat.StatStrength]: 1.00,
+			[Stat.StatStrength]: 1.0,
 			[Stat.StatStamina]: 0.37,
-			[Stat.StatAttackPower]: 0.30,
+			[Stat.StatAttackPower]: 0.3,
 			[Stat.StatArmor]: 0.27,
 			[Stat.StatBonusArmor]: 0.27,
 		},
@@ -113,15 +114,18 @@ export const StandardTalents = {
 };
 
 export const DefaultOptions = ProtectionWarriorOptions.create({
-	classOptions: {},
+	classOptions: {
+		queueDelay: 250,
+		startingRage: 0,
+		defaultShout: WarriorShout.WarriorShoutCommanding,
+		defaultStance: WarriorStance.WarriorStanceDefensive,
+	},
 });
 
 export const DefaultConsumables = ConsumesSpec.create({
-	flaskId: 76087, // Flask of the Earth
-	foodId: 74656, // Chun Tian Spring Rolls
-	prepotId: 76090, // Potion of the Mountains
-	potId: 76090, // Potion of the Mountains
-	conjuredId: 5512, // Healthstone
+	...WarriorPresets.DefaultConsumables,
+	flaskId: 22854,
+	potId: 22828,
 });
 
 export const OtherDefaults = {
@@ -156,7 +160,6 @@ export const PRESET_BUILD_HORRIDON = PresetUtils.makePresetBuildFromJSON('Horrid
 // 			battleElixirId: 76076, // Mad Hozen Elixir
 // 			guardianElixirId: 76081, // Elixir of Mirrors
 // 			foodId: 74646, // Black Pepper Rib and Shrimp
-// 			prepotId: 76095, // Potion of Mogu Power
 // 			potId: 76095, // Potion of Mogu Power
 // 			conjuredId: 5512, // Healthstone
 // 		}),

@@ -56,6 +56,7 @@ export class IconEnumPicker<ModObject, T> extends Input<ModObject, T> {
 	constructor(parent: HTMLElement, modObj: ModObject, config: IconEnumPickerConfig<ModObject, T>) {
 		super(parent, 'icon-enum-picker-root', modObj, config);
 		this.rootElem.classList.add('icon-picker', (config.direction ?? 'vertical') === 'vertical' ? 'dropdown' : 'dropend');
+		this.rootElem.classList.add('input-inline');
 		this.config = config;
 		this.currentValue = this.config.zeroValue;
 
@@ -188,11 +189,11 @@ export class IconEnumPicker<ModObject, T> extends Input<ModObject, T> {
 		this.storedValue = undefined;
 	}
 
-	private setActionImage(elem: HTMLAnchorElement, actionId: ActionId) {
-		actionId.fillAndSet(elem, true, true);
+	private async setActionImage(elem: HTMLAnchorElement, actionId: ActionId) {
+		return actionId.fillAndSet(elem, true, true, { signal: this.signal });
 	}
 
-	private setImage(elem: HTMLAnchorElement, valueConfig: IconEnumValueConfig<ModObject, T>) {
+	private async setImage(elem: HTMLAnchorElement, valueConfig: IconEnumValueConfig<ModObject, T>) {
 		if (valueConfig.showWhen && !valueConfig.showWhen(this.modObject)) {
 			elem.removeAttribute('href');
 			return;
@@ -200,7 +201,7 @@ export class IconEnumPicker<ModObject, T> extends Input<ModObject, T> {
 
 		const actionId = valueConfig.actionId;
 		if (actionId) {
-			this.setActionImage(elem, actionId);
+			await this.setActionImage(elem, actionId);
 			elem.style.filter = '';
 		} else if (valueConfig.iconUrl) {
 			elem.style.backgroundImage = `url(${valueConfig.iconUrl})`;
@@ -234,15 +235,17 @@ export class IconEnumPicker<ModObject, T> extends Input<ModObject, T> {
 
 		const valueConfig = this.config.values.find(valueConfig => this.config.equals(valueConfig.value, this.currentValue))!;
 		if (valueConfig) {
-			this.setImage(this.buttonElem, valueConfig);
-			if (valueConfig.text != undefined) {
-				this.buttonText.style.display = 'block';
-				this.buttonText.textContent = valueConfig.text;
-			}
+			this.setImage(this.buttonElem, valueConfig).then(() => {
+				if (valueConfig.text != undefined) {
+					this.buttonText.style.display = 'block';
+					this.buttonText.textContent = valueConfig.text;
+				}
+			});
 		} else if (this.config.backupIconUrl) {
 			const backupId = this.config.backupIconUrl(this.currentValue);
-			this.setActionImage(this.buttonElem, backupId);
-			this.setActive(false);
+			this.setActionImage(this.buttonElem, backupId).then(() => {
+				this.setActive(false);
+			});
 		}
 	}
 

@@ -196,6 +196,8 @@ func ConvertEffectAuraToStatIndex(effectAura int, effectMisc int) proto.Stat {
 		return ConvertTargetResistanceFlagToPenetrationStat(effectMisc)
 	case 189: // MOD_RATING (Stat Ratings but as Auras; includes mostly Vanilla items, but also some socket bonuses and random one-offs)
 		return ConvertModRatingFlagToRatingStat(effectMisc)
+	case 564:
+		return proto.Stat_StatBlockValue
 	default:
 		return -1
 	}

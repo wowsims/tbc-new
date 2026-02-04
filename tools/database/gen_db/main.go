@@ -473,7 +473,8 @@ func ApplyGlobalFilters(db *database.WowDatabase) {
 			return false
 		}
 
-		if gem.Color == proto.GemColor_GemColorMeta && gem.Quality > proto.ItemQuality_ItemQualityRare {
+		_, uncut, _ := strings.Cut(gem.Name, " ")
+		if slices.Contains([]string{"Crimson Spinel", "Empyrean Sapphire", "Lionseye", "Shadowsong Amethyst", "Pyrestone", "Seaspray Emerald"}, uncut) {
 			gem.Phase = 3
 		} else {
 			gem.Phase = 1
@@ -806,11 +807,11 @@ func GetAllRotationSpellIds() map[string][]int32 {
 		}, &proto.Player_Warlock{Warlock: &proto.Warlock{Options: &proto.Warlock_Options{ClassOptions: &proto.WarlockOptions{}}}}), nil, nil, nil)},
 
 		// Warrior
-		{Name: "dpsWarrior", Raid: core.SinglePlayerRaidProto(core.WithSpec(&proto.Player{
+		{Name: "DpsWarrior", Raid: core.SinglePlayerRaidProto(core.WithSpec(&proto.Player{
 			Class:         proto.Class_ClassWarrior,
 			Equipment:     &proto.EquipmentSpec{},
 			TalentsString: "000000",
-		}, &proto.Player_DpsWarrior{DpsWarrior: &proto.DPSWarrior{Options: &proto.DPSWarrior_Options{ClassOptions: &proto.WarriorOptions{}}}}), nil, nil, nil)},
+		}, &proto.Player_DpsWarrior{DpsWarrior: &proto.DpsWarrior{Options: &proto.DpsWarrior_Options{ClassOptions: &proto.WarriorOptions{}}}}), nil, nil, nil)},
 		{Name: "protectionWarrior", Raid: core.SinglePlayerRaidProto(core.WithSpec(&proto.Player{
 			Class:         proto.Class_ClassWarrior,
 			Equipment:     &proto.EquipmentSpec{},

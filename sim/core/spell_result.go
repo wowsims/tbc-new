@@ -19,6 +19,7 @@ type SpellResult struct {
 
 	ArmorAndResistanceMultiplier     float64 // Armor multiplier
 	PostArmorAndResistanceMultiplier float64 // Damage done by this cast after Armor is applied
+	PreOutcomeDamage                 float64 // Damage done by this cast after Outcome is applied
 	PostOutcomeDamage                float64 // Damage done by this cast after Outcome is applied
 
 	inUse bool
@@ -133,15 +134,6 @@ func (result *SpellResult) HealingString() string {
 func (spell *Spell) ThreatFromDamage(sim *Simulation, outcome HitOutcome, damage float64, attackTable *AttackTable) float64 {
 	if outcome.Matches(OutcomeLanded) {
 		threat := (damage*spell.ThreatMultiplier + spell.FlatThreatBonus) * spell.Unit.PseudoStats.ThreatMultiplier
-
-		if attackTable.ThreatDoneByCasterExtraMultiplier != nil {
-			for i := range attackTable.ThreatDoneByCasterExtraMultiplier {
-				if attackTable.ThreatDoneByCasterExtraMultiplier[i] != nil {
-					threat *= attackTable.ThreatDoneByCasterExtraMultiplier[i](sim, spell, attackTable)
-				}
-			}
-		}
-
 		return threat
 	} else {
 		return 0
@@ -710,9 +702,9 @@ func (result *SpellResult) applyTargetModifiers(sim *Simulation, spell *Spell, a
 		return
 	}
 
-	if spell.SpellSchool == SpellSchoolPhysical {
+	if spell.SpellSchool.Matches(SpellSchoolPhysical) {
 		result.Damage += attackTable.Defender.PseudoStats.BonusPhysicalDamageTaken
-	} else if spell.SpellSchool != SpellSchoolPhysical && spell.SpellSchool != SpellSchoolNone {
+	} else if !spell.SpellSchool.Matches(SpellSchoolPhysical) && !spell.SpellSchool.Matches(SpellSchoolNone) {
 		result.Damage += attackTable.Defender.PseudoStats.BonusSpellDamageTaken
 	}
 

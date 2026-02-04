@@ -17,15 +17,12 @@ type ActionIdOptions = {
 	name?: string;
 	iconUrl?: string;
 	randomSuffixId?: number;
-	reforgeId?: number;
-	upgradeStep?: number;
 };
 
 // Uniquely identifies a specific item / spell / thing in WoW. This object is immutable.
 export class ActionId {
 	readonly itemId: number;
 	readonly randomSuffixId: number;
-	readonly reforgeId: number;
 	readonly spellId: number;
 	readonly otherId: OtherAction;
 	readonly tag: number;
@@ -35,10 +32,9 @@ export class ActionId {
 	readonly iconUrl: string;
 	readonly spellIdTooltipOverride: number | null;
 
-	private constructor({ itemId, spellId, otherId, tag, baseName, name, iconUrl, randomSuffixId, reforgeId, upgradeStep }: ActionIdOptions = {}) {
+	private constructor({ itemId, spellId, otherId, tag, baseName, name, iconUrl, randomSuffixId }: ActionIdOptions = {}) {
 		this.itemId = itemId ?? 0;
 		this.randomSuffixId = randomSuffixId ?? 0;
-		this.reforgeId = reforgeId ?? 0;
 		this.spellId = spellId ?? 0;
 		this.otherId = otherId ?? OtherAction.OtherActionNone;
 		this.tag = tag ?? 0;
@@ -89,7 +85,7 @@ export class ActionId {
 				} else if (this.tag == 99999) {
 					name += ' (Boss)';
 				} else if (this.tag == 99998) {
-					console.log(this, this.tag)
+					console.log(this, this.tag);
 					name += ' (Add)';
 				} else if (this.tag > 6445300) {
 					name += ` (Set'thik Windblade ${(this.tag - 6445300).toFixed(0)})`;
@@ -147,12 +143,7 @@ export class ActionId {
 	}
 
 	equalsIgnoringTag(other: ActionId): boolean {
-		return (
-			this.itemId == other.itemId &&
-			this.randomSuffixId == other.randomSuffixId &&
-			this.spellId == other.spellId &&
-			this.otherId == other.otherId
-		);
+		return this.itemId == other.itemId && this.randomSuffixId == other.randomSuffixId && this.spellId == other.spellId && this.otherId == other.otherId;
 	}
 
 	setBackground(elem: HTMLElement) {
@@ -578,7 +569,10 @@ export class ActionId {
 				}
 				break;
 			case 'Battle Shout':
+			case 'Commanding Shout':
 				if (tag == 1) {
+					name += ' (External)';
+				} else if (tag == 3) {
 					name += ' (Snapshot)';
 				}
 				break;
@@ -880,7 +874,7 @@ export class ActionId {
 		return new ActionId({
 			itemId,
 			tag,
-			randomSuffixId
+			randomSuffixId,
 		});
 	}
 

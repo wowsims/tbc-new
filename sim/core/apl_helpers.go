@@ -207,19 +207,10 @@ func (rot *APLRotation) GetAPLSpell(spellId *proto.ActionID) *Spell {
 	var spell *Spell
 
 	if actionID.IsOtherAction(proto.OtherAction_OtherActionPotion) {
-		if rot.parsingPrepull {
-			for _, s := range rot.unit.Spellbook {
-				if s.Flags.Matches(SpellFlagPrepullPotion) {
-					spell = s
-					break
-				}
-			}
-		} else {
-			for _, s := range rot.unit.Spellbook {
-				if s.Flags.Matches(SpellFlagCombatPotion) {
-					spell = s
-					break
-				}
+		for _, s := range rot.unit.Spellbook {
+			if s.Flags.Matches(SpellFlagCombatPotion) {
+				spell = s
+				break
 			}
 		}
 	} else {
