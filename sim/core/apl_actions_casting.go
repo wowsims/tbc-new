@@ -28,7 +28,11 @@ func (rot *APLRotation) newActionCastSpell(config *proto.APLActionCastSpell) APL
 	}
 }
 func (action *APLActionCastSpell) IsReady(sim *Simulation) bool {
-	return action.spell.CanCastOrQueue(sim, action.target.Get()) && (!action.spell.Flags.Matches(SpellFlagMCD) || action.spell.Flags.Matches(SpellFlagReactive) || action.spell.Unit.GCD.IsReady(sim) || action.spell.Unit.Rotation.inSequence)
+	return action.spell.CanCastOrQueue(sim, action.target.Get()) &&
+		(!action.spell.Flags.Matches(SpellFlagMCD) ||
+			action.spell.Flags.Matches(SpellFlagReactive) ||
+			action.spell.Unit.GCD.IsReady(sim) ||
+			action.spell.Unit.Rotation.inSequence)
 }
 func (action *APLActionCastSpell) Execute(sim *Simulation) {
 	action.spell.CastOrQueue(sim, action.target.Get())

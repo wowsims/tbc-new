@@ -16,17 +16,20 @@ type Mage struct {
 
 	Talents *proto.MageTalents
 	Options *proto.MageOptions
-	// ArcaneOptions *proto.ArcaneMage_Options
-	// FireOptions   *proto.FireMage_Options
-	// FrostOptions  *proto.FrostMage_Options
 
-	// mirrorImages []*MirrorImage
+	waterElemental *WaterElemental
 
-	AlterTime            *core.Spell
-	Combustion           *core.Spell
+	ArcaneChargesAura  *core.Aura
+	ClearCasting       *core.Aura
+	PresenceOfMindAura *core.Aura
+	ArcanePowerAura    *core.Aura
+	IcyVeinsAura       *core.Aura
+
+	ImprovedScorchAuras core.AuraArray
+	SlowAuras           core.AuraArray
+
+	ArcaneBlast          *core.Spell
 	Ignite               *core.Spell
-	LivingBomb           *core.Spell
-	NetherTempest        *core.Spell
 	FireBlast            *core.Spell
 	FlameOrbExplode      *core.Spell
 	Flamestrike          *core.Spell
@@ -34,31 +37,7 @@ type Mage struct {
 	FrostfireOrb         *core.Spell
 	Pyroblast            *core.Spell
 	SummonWaterElemental *core.Spell
-	SummonMirrorImages   *core.Spell
 	IcyVeins             *core.Spell
-	Icicle               *core.Spell
-
-	AlterTimeAura        *core.Aura
-	InvocationAura       *core.Aura
-	RuneOfPowerAura      *core.Aura
-	PresenceOfMindAura   *core.Aura
-	FingersOfFrostAura   *core.Aura
-	BrainFreezeAura      *core.Aura
-	IcyVeinsAura         *core.Aura
-	IceFloesAura         *core.Aura
-	IciclesAura          *core.Aura
-	ArcaneChargesAura    *core.Aura
-	HeatingUp            *core.Aura
-	InstantPyroblastAura *core.Aura
-
-	ArcanePowerDamageMod *core.SpellMod
-
-	T15_4PC_FrostboltProcChance float64
-	T15_4PC_ArcaneChargeEffect  float64
-	Icicles                     []float64
-
-	// Item sets
-	T16_4pc *core.Aura
 }
 
 func (mage *Mage) GetCharacter() *core.Character {
@@ -93,55 +72,54 @@ func (mage *Mage) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
 func (mage *Mage) AddPartyBuffs(partyBuffs *proto.PartyBuffs) {
 }
 
-func (mage *Mage) ProcFingersOfFrost(sim *core.Simulation, spell *core.Spell) {
-	if mage.FingersOfFrostAura == nil {
-		return
-	}
-	if spell.Matches(MageSpellFrostbolt | MageSpellFrostfireBolt) {
-		if sim.Proc(0.15+core.TernaryFloat64(spell.Matches(MageSpellFrostbolt), mage.T15_4PC_FrostboltProcChance, 0), "FingersOfFrostProc") {
-			mage.FingersOfFrostAura.Activate(sim)
-			mage.FingersOfFrostAura.AddStack(sim)
-		}
-	} else if spell.Matches(MageSpellBlizzard) {
-		if sim.Proc(0.05, "FingersOfFrostBlizzardProc") {
-			mage.FingersOfFrostAura.Activate(sim)
-			mage.FingersOfFrostAura.AddStack(sim)
-		}
-	}
-}
-
 func (mage *Mage) Initialize() {
+
+	mage.ImprovedScorchAuras = mage.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {
+		return core.ImprovedScorchAura(target, 0)
+	})
+
+	mage.SlowAuras = mage.NewEnemyAuraArray(core.SlowAura)
+
 	mage.registerPassives()
 	mage.registerSpells()
 }
 
 func (mage *Mage) registerPassives() {
+	mage.registerArcaneCharges()
 }
 
 func (mage *Mage) registerSpells() {
-	// mage.registerArmorSpells()
+	mage.registerArcaneBlastSpell()
+	mage.registerArcaneExplosionSpell()
+	mage.registerArcaneMissilesSpell()
+	mage.registerArmorSpells()
+	mage.registerBlizzardSpell()
+	mage.registerConeOfColdSpell()
+	mage.registerFrostboltSpell()
+	mage.registerEvocation()
+	mage.registerFireballSpell()
+	mage.registerFireBlastSpell()
+	mage.registerFlamestrikeSpell()
+	mage.registerFrostNovaSpell()
+	mage.registerManaGems()
+	mage.registerScorchSpell()
 
-	// mage.registerArcaneExplosionSpell()
-	// mage.registerBlizzardSpell()
-	// mage.registerConeOfColdSpell()
-	// mage.registerDeepFreezeSpell()
-	// mage.registerFlamestrikeSpell()
-	// mage.registerIceLanceSpell()
-	// mage.registerFrostfireBoltSpell()
-	// mage.registerEvocation()
-	// mage.registerFireBlastSpell()
-	// mage.registerManaGems()
-	// mage.registerMirrorImageCD()
-	// mage.registerFrostNovaSpell()
-	// mage.registerIcyVeinsCD()
-	// mage.registerHeatingUp()
-	// mage.registerAlterTimeCD()
+	//TalentSpells
+	mage.registerPresenceOfMindSpell()
+	mage.registerArcanePowerSpell()
+	mage.registerSlowSpell()
 
-	// mage.registerHotfixes()
+	mage.registerBlastWaveSpell()
+	mage.registerPyroblastSpell()
+	mage.registerCombustionSpell()
+	mage.registerDragonsBreathSpell()
+
+	mage.registerIcyVeinsSpell()
+	mage.registerColdSnapSpell()
+	mage.registerSummonWaterElementalSpell()
 }
 
 func (mage *Mage) Reset(sim *core.Simulation) {
-	mage.Icicles = make([]float64, 0)
 }
 
 func (mage *Mage) OnEncounterStart(sim *core.Simulation) {
@@ -157,15 +135,7 @@ func NewMage(character *core.Character, options *proto.Player) *Mage {
 
 	core.FillTalentsProto(mage.Talents.ProtoReflect(), options.TalentsString, TalentTreeSizes)
 
-	//mage.mirrorImages = []*MirrorImage{mage.NewMirrorImage(), mage.NewMirrorImage(), mage.NewMirrorImage()}
 	mage.EnableManaBar()
-	// Nether Attunement
-	// https://www.wowhead.com/mop-classic/spell=117957/nether-attunement
-	// mage.HasteEffectsManaRegen()
-
-	mage.Icicles = make([]float64, 0)
-	mage.T15_4PC_FrostboltProcChance = 0
-	mage.T15_4PC_ArcaneChargeEffect = 1.0
 
 	return mage
 }
@@ -177,18 +147,16 @@ type MageAgent interface {
 
 const (
 	FireSpellMaxTimeUntilResult       = 750 * time.Millisecond
-	HeatingUpDeactivateBuffer         = 250 * time.Millisecond
 	MageSpellFlagNone           int64 = 0
-	MageSpellAlterTime          int64 = 1 << iota
-	MageSpellArcaneBarrage
-	MageSpellArcaneBlast
+	MageSpellArcaneBlast        int64 = 1 << iota
 	MageSpellArcaneExplosion
 	MageSpellArcanePower
 	MageSpellArcaneMissilesCast
 	MageSpellArcaneMissilesTick
+	MageSpellBlastWave
 	MageSpellBlizzard
+	MageSpellColdSnap
 	MageSpellConeOfCold
-	MageSpellDeepFreeze
 	MageSpellDragonsBreath
 	MageSpellEvocation
 	MageSpellFireBlast
@@ -197,51 +165,32 @@ const (
 	MageSpellFlamestrikeDot
 	MageSpellFrostArmor
 	MageSpellFrostbolt
-	MageSpellFrostBomb
-	MageSpellFrostBombExplosion
-	MageSpellFrostfireBolt
 	MageSpellFrostNova
-	MageSpellFrozenOrb
-	MageSpellFrozenOrbTick
-	MageSpellIcicle
-	MageSpellIceFloes
+	MageSpellIceBarrier
+	MageSpellIceBlock
 	MageSpellIceLance
 	MageSpellIcyVeins
 	MageSpellIgnite
-	MageSpellInfernoBlast
-	MageSpellLivingBombApply
-	MageSpellLivingBombExplosion
-	MageSpellLivingBombDot
 	MageSpellMageArmor
 	MageSpellManaGems
-	MageSpellMirrorImage
 	MageSpellMoltenArmor
-	MageSpellNetherTempest
-	MageSpellNetherTempestDot
 	MageSpellPresenceOfMind
 	MageSpellPyroblast
 	MageSpellPyroblastDot
-	MagespellRuneOfPower
 	MageSpellScorch
+	MageSpellSlow
 	MageSpellCombustion
-	MageSpellCombustionDot
-	MageMirrorImageSpellArcaneBlast
 	MageWaterElementalSpellWaterBolt
 	MageSpellLast
-	MageSpellsAll       = MageSpellLast<<1 - 1
-	MageSpellLivingBomb = MageSpellLivingBombDot | MageSpellLivingBombExplosion
-	MageSpellFire       = MageSpellDragonsBreath | MageSpellFireball | MageSpellCombustion |
-		MageSpellFireBlast | MageSpellFlamestrike | MageSpellFrostfireBolt | MageSpellIgnite |
-		MageSpellLivingBomb | MageSpellPyroblast | MageSpellScorch
-	MageSpellBrainFreeze  = MageSpellFireball | MageSpellFrostfireBolt
-	MageSpellsAllDamaging = MageSpellArcaneBarrage | MageSpellArcaneBlast | MageSpellArcaneExplosion | MageSpellArcaneMissilesTick | MageSpellBlizzard | MageSpellDeepFreeze |
-		MageSpellDragonsBreath | MageSpellFireBlast | MageSpellFireball | MageSpellFlamestrike | MageSpellFrostbolt | MageSpellFrostfireBolt | MageSpellFrozenOrbTick |
-		MageSpellIceLance | MageSpellLivingBombExplosion | MageSpellLivingBombDot | MageSpellPyroblast | MageSpellPyroblastDot | MageSpellScorch | MageSpellInfernoBlast
-	MageSpellInstantCast = MageSpellArcaneBarrage | MageSpellArcaneMissilesCast | MageSpellArcaneMissilesTick |
-		MageSpellFireBlast | MageSpellArcaneExplosion | MageSpellInfernoBlast | MageSpellPyroblastDot |
-		MageSpellCombustion | MageSpellConeOfCold | MageSpellDeepFreeze |
-		MageSpellDragonsBreath | MageSpellIceLance | MageSpellManaGems | MageSpellMirrorImage |
-		MageSpellPresenceOfMind | MageSpellLivingBombDot | MageSpellFrostBomb | MageSpellNetherTempest | MageSpellNetherTempestDot
-	MageSpellExtraResult = MageSpellLivingBombExplosion | MageSpellArcaneMissilesTick | MageSpellBlizzard
-	FireSpellIgnitable   = MageSpellFireball | MageSpellFrostfireBolt | MageSpellInfernoBlast | MageSpellScorch | MageSpellPyroblast
+	MageSpellsAll  = MageSpellLast<<1 - 1
+	MageSpellFrost = MageSpellFrostbolt | MageSpellBlizzard | MageSpellFrostNova | MageSpellConeOfCold | MageSpellIceLance
+	MageSpellFire  = MageSpellDragonsBreath | MageSpellFireball | MageSpellCombustion |
+		MageSpellFireBlast | MageSpellFlamestrike | MageSpellIgnite | MageSpellPyroblast | MageSpellScorch
+	MageSpellsAllDamaging = MageSpellArcaneBlast | MageSpellArcaneExplosion | MageSpellArcaneMissilesTick | MageSpellBlizzard |
+		MageSpellDragonsBreath | MageSpellFireBlast | MageSpellFireball | MageSpellFlamestrike | MageSpellFrostbolt |
+		MageSpellIceLance | MageSpellPyroblast | MageSpellPyroblastDot | MageSpellScorch
+	MageSpellInstantCast = MageSpellArcaneMissilesCast | MageSpellArcaneMissilesTick | MageSpellFireBlast | MageSpellArcaneExplosion | MageSpellPyroblastDot |
+		MageSpellCombustion | MageSpellConeOfCold | MageSpellDragonsBreath | MageSpellIceLance | MageSpellManaGems | MageSpellPresenceOfMind
+	MageSpellExtraResult = MageSpellArcaneMissilesTick | MageSpellBlizzard
+	FireSpellIgnitable   = MageSpellFireball | MageSpellScorch | MageSpellPyroblast
 )

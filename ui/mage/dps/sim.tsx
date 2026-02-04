@@ -9,12 +9,13 @@ import { Faction, IndividualBuffs, ItemSlot, PartyBuffs, PseudoStat, Race, Spec,
 import { StatCapType } from '../../core/proto/ui';
 import { DEFAULT_CASTER_GEM_STATS, StatCap, Stats, UnitStat } from '../../core/proto_utils/stats';
 import { formatToNumber } from '../../core/utils';
-import { DefaultDebuffs, DefaultRaidBuffs } from './presets';
+import { DefaultDebuffs, DefaultRaidBuffs, DefaultPartyBuffs, DefaultIndividualBuffs, DefaultConsumables} from './presets';
 import * as Inputs from './inputs';
 import * as Presets from './presets';
 import * as MageInputs from './inputs';
 
 const SPEC_CONFIG = registerSpecConfig(Spec.SpecMage, {
+	requiredTalentRows: [],
 	cssClass: 'mage-sim-ui',
 	cssScheme: PlayerClasses.getCssClass(Mage),
 	// List any known bugs / issues here and they'll be shown on the site.
@@ -43,7 +44,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecMage, {
 		// Default EP weights for sorting gear in the gear picker.
 		epWeights: Presets.P1_EP_PRESET.epWeights,
 		// Default consumes settings.
-		consumables: Presets.DefaultConsumables,
+		consumables: DefaultConsumables,
 		// Default talents.
 		talents: Presets.Talents.data,
 		// Default spec-specific settings.
@@ -52,19 +53,19 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecMage, {
 		// Default raid/party buffs settings.
 		raidBuffs: DefaultRaidBuffs,
 
-		partyBuffs: PartyBuffs.create({}),
-		individualBuffs: IndividualBuffs.create({}),
+		partyBuffs: DefaultPartyBuffs,
+		individualBuffs: DefaultIndividualBuffs,
 		debuffs: DefaultDebuffs,
 	},
 
 	// IconInputs to include in the 'Player' section on the settings tab.
 	playerIconInputs: [MageInputs.MageArmorInputs()],
 	// Buff and Debuff inputs to include/exclude, overriding the EP-based defaults.
-	includeBuffDebuffInputs: [],
+	includeBuffDebuffInputs: [Stat.StatMP5],
 	excludeBuffDebuffInputs: [],
 	// Inputs to include in the 'Other' section on the settings tab.
 	otherInputs: {
-		inputs: [OtherInputs.InputDelay, OtherInputs.DistanceFromTarget, OtherInputs.TankAssignment],
+		inputs: [OtherInputs.InputDelay, OtherInputs.DistanceFromTarget, OtherInputs.TankAssignment, OtherInputs.ShadowPriestDPS],
 	},
 	itemSwapSlots: [ItemSlot.ItemSlotMainHand, ItemSlot.ItemSlotOffHand, ItemSlot.ItemSlotTrinket1, ItemSlot.ItemSlotTrinket2],
 	encounterPicker: {

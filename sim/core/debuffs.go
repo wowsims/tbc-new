@@ -194,6 +194,26 @@ func DemoralizingShoutAura(target *Unit, boomingVoicePoints int32, improvedDemoS
 	return statsDebuff(target, "Demoralizing Shout", 25203, stats.Stats{stats.AttackPower: apReduction}, duration)
 }
 
+func SlowAura(target *Unit) *Aura {
+	return castSlowReductionAura(target, "Slow", 31589, 1.5, time.Second*15)
+}
+
+func castSlowReductionAura(target *Unit, label string, spellID int32, multiplier float64, duration time.Duration) *Aura {
+	aura := target.GetOrRegisterAura(Aura{Label: label, ActionID: ActionID{SpellID: spellID}, Duration: duration})
+	aura.NewExclusiveEffect("CastSpdReduction", false, ExclusiveEffect{
+		Priority: multiplier,
+		OnGain: func(ee *ExclusiveEffect, sim *Simulation) {
+			ee.Aura.Unit.MultiplyCastSpeed(sim, 1/multiplier)
+			ee.Aura.Unit.MultiplyRangedSpeed(sim, 1/multiplier)
+		},
+		OnExpire: func(ee *ExclusiveEffect, sim *Simulation) {
+			ee.Aura.Unit.MultiplyCastSpeed(sim, multiplier)
+			ee.Aura.Unit.MultiplyRangedSpeed(sim, multiplier)
+		},
+	})
+	return aura
+}
+
 func ExposeWeaknessAura(target *Unit, uptime float64, hunterAgility float64) *Aura {
 	apBonus := hunterAgility * 0.25 * uptime
 

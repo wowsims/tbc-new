@@ -1,9 +1,9 @@
 import * as PresetUtils from '../../core/preset_utils';
-import { Debuffs, PseudoStat, RaidBuffs, Stat, ConsumesSpec } from '../../core/proto/common';
+import { Debuffs, PseudoStat, RaidBuffs, Stat, ConsumesSpec, TristateEffect, PartyBuffs, IndividualBuffs } from '../../core/proto/common';
 import { defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
 import { Stats } from '../../core/proto_utils/stats';
 import { SavedTalents } from '../../core/proto/ui';
-import { Mage_Options as MageOptions } from '../../core/proto/mage';
+import { MageArmor, Mage_Options as MageOptions } from '../../core/proto/mage';
 import BlankAPL from './apls/blank.apl.json'
 import BlankGear from './gear_sets/blank.gear.json';
 
@@ -38,7 +38,6 @@ export const Talents = {
 
 export const DefaultOptions = MageOptions.create({
 	classOptions: {
-
 	},
 });
 
@@ -47,15 +46,32 @@ export const OtherDefaults = {
 };
 
 export const DefaultConsumables = ConsumesSpec.create({
-	flaskId: 76084, // Flask of the Winds
-	foodId: 74648, // Skewered Eel
-	potId: 76089, // Potion of the Tol'vir
+	guardianElixirId:32067, // Elixir of Draenic Wisdom
+	battleElixirId:28103, // Adept's Elixir
+	foodId: 27657, // Blackened Basilisk
+	mhImbueId: 20749, // Brilliant Wizard Oil
+	potId: 22839, // Destruction Potion
+	conjuredId: 12662, // Demonic Rune
 });
 
 export const DefaultRaidBuffs = RaidBuffs.create({
-	...defaultRaidBuffMajorDamageCooldowns(),
+	bloodlust: true,
+	divineSpirit: 2,
+	arcaneBrilliance: true,
+	giftOfTheWild: 2,
+	powerWordFortitude: 2,
+	shadowProtection: true,
 });
 
-export const DefaultDebuffs = Debuffs.create({
+export const DefaultPartyBuffs = PartyBuffs.create({
+})
 
+export const DefaultIndividualBuffs = IndividualBuffs.create({
+	blessingOfKings: true,
+	blessingOfWisdom: 2,
+})
+
+export const DefaultDebuffs = Debuffs.create({
+	misery: true,
+	curseOfElements: 2,
 });

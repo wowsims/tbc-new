@@ -1303,12 +1303,18 @@ export class Player<SpecType extends Spec> {
 
 			// This is not exactly a player selected filter, just a general filter to remove any gems with stats that is not in use for the player.
 			// i.e dead gems.
-			const statsFilter = this.specConfig.gemStats ?? this.specConfig.epStats;
+
+			//Remove Gem filter from MOP
+			//We may want to instead change it per spec or class?
+			//const statsFilter = this.specConfig.gemStats ?? this.specConfig.epStats;
 			const positiveStatIds = gem.stats.map((value, statId) => (value > 0 ? statId : -1)).filter(statId => statId >= 0);
 			if (!positiveStatIds.length) {
 				return false;
 			}
-			return !positiveStatIds.some(statId => !statsFilter.includes(statId));
+
+			return positiveStatIds
+			//Filter removed
+			//!positiveStatIds.some(statId => !statsFilter.includes(statId));
 		});
 	}
 
