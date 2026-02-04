@@ -3,6 +3,7 @@ import { ConsumesSpec, Profession, PseudoStat, Spec, Stat } from '../../core/pro
 import { SavedTalents } from '../../core/proto/ui.js';
 import { ProtectionWarrior_Options as ProtectionWarriorOptions, WarriorShout, WarriorStance } from '../../core/proto/warrior.js';
 import { Stats } from '../../core/proto_utils/stats';
+import * as WarriorPresets from '../presets';
 import GenericApl from './apls/default.apl.json';
 import GarajalApl from './apls/garajal.apl.json';
 import ShaApl from './apls/sha.apl.json';
@@ -122,10 +123,9 @@ export const DefaultOptions = ProtectionWarriorOptions.create({
 });
 
 export const DefaultConsumables = ConsumesSpec.create({
-	flaskId: 76087, // Flask of the Earth
-	foodId: 74656, // Chun Tian Spring Rolls
-	potId: 76090, // Potion of the Mountains
-	conjuredId: 5512, // Healthstone
+	...WarriorPresets.DefaultConsumables,
+	flaskId: 22854,
+	potId: 22828,
 });
 
 export const OtherDefaults = {

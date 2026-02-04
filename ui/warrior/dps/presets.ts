@@ -4,6 +4,7 @@ import { ConsumesSpec, HandType, ItemSlot, Profession, PseudoStat, Race, Spec, S
 import { SavedTalents } from '../../core/proto/ui';
 import { DpsWarrior_Options as WarriorOptions, WarriorShout, WarriorStance } from '../../core/proto/warrior';
 import { Stats } from '../../core/proto_utils/stats';
+import * as WarriorPresets from '../presets';
 import DefaultArmsApl from './apls/arms.apl.json';
 import DefaultFuryApl from './apls/fury.apl.json';
 import PreraidArmsGear from './gear_sets/preraid_arms.gear.json';
@@ -122,9 +123,7 @@ export const DefaultOptions = WarriorOptions.create({
 });
 
 export const DefaultConsumables = ConsumesSpec.create({
-	flaskId: 76088, // Flask of Winter's Bite
-	foodId: 74646, // Black Pepper Ribs and Shrimp
-	potId: 76095, // Potion of Mogu Power
+	...WarriorPresets.DefaultConsumables,
 });
 
 export const OtherDefaults = {

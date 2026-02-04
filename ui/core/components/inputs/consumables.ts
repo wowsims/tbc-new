@@ -1,5 +1,5 @@
 import { Player } from '../../player';
-import { Class, ConsumesSpec, Profession, Spec, Stat } from '../../proto/common';
+import { Class, ConsumesSpec, ItemSlot, Profession, Spec, Stat } from '../../proto/common';
 import { Consumable } from '../../proto/db';
 import { ActionId } from '../../proto_utils/action_id';
 import { EventID, TypedEvent } from '../../typed_event';
@@ -22,6 +22,8 @@ export interface ConsumeInputFactoryArgs<T extends number> {
 	// Additional callback if logic besides syncing consumes is required
 	onSet?: (eventactionId: EventID, player: Player<any>, newValue: T) => void;
 	showWhen?: (player: Player<any>) => boolean;
+	enableWhen?: (player: Player<any>) => boolean;
+	changedEvent?: (player: Player<any>) => void;
 }
 
 function makeConsumeInputFactory<T extends number, SpecType extends Spec>(
@@ -46,6 +48,7 @@ function makeConsumeInputFactory<T extends number, SpecType extends Spec>(
 			zeroValue: 0 as T,
 			changedEvent: (player: Player<any>) => TypedEvent.onAny([player.consumesChangeEmitter, player.gearChangeEmitter, player.professionChangeEmitter]),
 			showWhen: (player: Player<any>) => (!args.showWhen || args.showWhen(player)) && valueOptions.some(option => option.showWhen?.(player)),
+			enableWhen: args.enableWhen,
 			getValue: (player: Player<any>) => player.getConsumes()[args.consumesFieldName] as T,
 			setValue: (eventID: EventID, player: Player<any>, newValue: number) => {
 				const newConsumes = player.getConsumes();
@@ -233,8 +236,15 @@ export const IMBUE_CONFIG_OH = [
 	{ config: ShamanImbueWindfury, stats: [] },
 ] as ConsumableStatOption<number>[];
 
-export const makeMHImbueInput = makeConsumeInputFactory({ consumesFieldName: 'mhImbueId' });
-export const makeOHImbueinput = makeConsumeInputFactory({ consumesFieldName: 'ohImbueId' });
+export const makeMHImbueInput = makeConsumeInputFactory({
+	consumesFieldName: 'mhImbueId',
+	enableWhen: (player: Player<any>) => !player.getParty() || player.getParty()!.getBuffs().windfuryTotem == 0,
+	changedEvent: (player: Player<any>) => TypedEvent.onAny([player.getParty()?.changeEmitter || player.consumesChangeEmitter]),
+});
+export const makeOHImbueinput = makeConsumeInputFactory({
+	consumesFieldName: 'ohImbueId',
+	showWhen: (player: Player<any>) => player.getGear().getEquippedItem(ItemSlot.ItemSlotOffHand)?.item.weaponSpeed !== undefined,
+});
 
 ///////////////////////////////////////////////////////////////////////////
 //                               	DRUMS

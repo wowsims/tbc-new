@@ -1,4 +1,4 @@
-import { Class, Debuffs, IndividualBuffs, PartyBuffs, RaidBuffs, TristateEffect } from '../core/proto/common';
+import { Class, ConsumesSpec, Debuffs, IndividualBuffs, PartyBuffs, RaidBuffs, TristateEffect } from '../core/proto/common';
 import { defaultRaidBuffMajorDamageCooldowns } from '../core/proto_utils/utils';
 
 export const DefaultIndividualBuffs = IndividualBuffs.create({
@@ -32,4 +32,17 @@ export const DefaultDebuffs = Debuffs.create({
 	sunderArmor: true,
 	curseOfRecklessness: true,
 	huntersMark: TristateEffect.TristateEffectImproved,
+});
+
+export const DefaultConsumables = ConsumesSpec.create({
+	potId: 22838,
+	flaskId: 22854,
+	foodId: 27658,
+	conjuredId: 5512,
+	explosiveId: 30217,
+	superSapper: true,
+	ohImbueId: 29453,
+	drumsId: 351355,
+	scrollAgi: true,
+	scrollStr: true,
 });

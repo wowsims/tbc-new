@@ -173,12 +173,11 @@ export class ConsumesPicker extends Component {
 			relevantStatOptions(ConsumablesInputs.IMBUE_CONFIG_MH, this.simUI),
 			i18n.t('settings_tab.consumables.imbue.mhImbue'),
 		);
+
 		const ohImbueOptions = ConsumablesInputs.makeOHImbueinput(
 			relevantStatOptions(ConsumablesInputs.IMBUE_CONFIG_OH, this.simUI),
 			i18n.t('settings_tab.consumables.imbue.ohImbue'),
 		);
-		mhImbueOptions.enableWhen = (player: Player<any>) => !player.getParty() || player.getParty()!.getBuffs().windfuryTotem == 0;
-		mhImbueOptions.changedEvent = (player: Player<any>) => TypedEvent.onAny([player.getParty()?.changeEmitter || player.consumesChangeEmitter]);
 
 		buildIconInput(imbuePickerElem, this.simUI.player, mhImbueOptions);
 		if (isDualWieldSpec(this.simUI.player.getSpec())) {
