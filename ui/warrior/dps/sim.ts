@@ -25,6 +25,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecDpsWarrior, {
 		Stat.StatAgility,
 		Stat.StatAttackPower,
 		Stat.StatExpertiseRating,
+		Stat.StatMeleeHitRating,
 		Stat.StatMeleeHasteRating,
 		Stat.StatMeleeCritRating,
 	],

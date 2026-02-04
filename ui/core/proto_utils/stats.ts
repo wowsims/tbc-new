@@ -93,10 +93,14 @@ export class UnitStat {
 	// (Strength for example), then null is returned. Mastery is special cased to return
 	// Mastery points rather than %.
 	convertRatingToPercent(ratingValue: number): number | null {
-		if (this.linkedToStat(Stat.StatSpellCritRating)) {
+		if (this.linkedToStat(Stat.StatSpellHitRating)) {
+			return ratingValue / Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT;
+		} else if (this.linkedToStat(Stat.StatSpellCritRating)) {
 			return ratingValue / Mechanics.SPELL_CRIT_RATING_PER_CRIT_PERCENT;
 		} else if (this.linkedToStat(Stat.StatSpellHasteRating)) {
 			return ratingValue / Mechanics.SPELL_HASTE_RATING_PER_HASTE_PERCENT;
+		} else if (this.linkedToStat(Stat.StatMeleeHitRating)) {
+			return ratingValue / Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT;
 		} else if (this.linkedToStat(Stat.StatMeleeCritRating)) {
 			return ratingValue / Mechanics.PHYSICAL_CRIT_RATING_PER_CRIT_PERCENT;
 		} else if (this.linkedToStat(Stat.StatMeleeHasteRating)) {
@@ -123,10 +127,14 @@ export class UnitStat {
 	// for example), then null is returned. Mastery is special cased to assume a Mastery points input
 	// rather than a percentage.
 	convertPercentToRating(percentOrPointsValue: number): number | null {
-		if (this.linkedToStat(Stat.StatSpellCritRating)) {
+		if (this.linkedToStat(Stat.StatSpellHitRating)) {
+			return percentOrPointsValue * Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT;
+		} else if (this.linkedToStat(Stat.StatSpellCritRating)) {
 			return percentOrPointsValue * Mechanics.SPELL_CRIT_RATING_PER_CRIT_PERCENT;
 		} else if (this.linkedToStat(Stat.StatSpellHasteRating)) {
 			return percentOrPointsValue * Mechanics.SPELL_HASTE_RATING_PER_HASTE_PERCENT;
+		} else if (this.linkedToStat(Stat.StatMeleeHitRating)) {
+			return percentOrPointsValue * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT;
 		} else if (this.linkedToStat(Stat.StatMeleeCritRating)) {
 			return percentOrPointsValue * Mechanics.PHYSICAL_CRIT_RATING_PER_CRIT_PERCENT;
 		} else if (this.linkedToStat(Stat.StatMeleeHasteRating)) {

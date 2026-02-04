@@ -57,12 +57,12 @@ type GemData = {
 };
 
 const INCLUDED_STATS = [
-	Stat.StatMeleeHitRating,
 	Stat.StatSpellHitRating,
-	Stat.StatMeleeCritRating,
 	Stat.StatSpellCritRating,
-	Stat.StatMeleeHasteRating,
 	Stat.StatSpellHasteRating,
+	Stat.StatMeleeHitRating,
+	Stat.StatMeleeCritRating,
+	Stat.StatMeleeHasteRating,
 	Stat.StatExpertiseRating,
 	Stat.StatArmorPenetration,
 	Stat.StatDodgeRating,
@@ -1120,6 +1120,7 @@ export class ReforgeOptimizer {
 			}
 
 			const distributedSocketBonus = new Stats(scaledItem.item.socketBonus).scale(1.0 / socketBonusNormalization).getBuffedStats();
+			console.log(translateSlotName(slot), socketColors, distributedSocketBonus);
 
 			// First determine whether the socket bonus should be obviously matched in order to save on brute force computation.
 			let forceSocketBonus: boolean = false;
