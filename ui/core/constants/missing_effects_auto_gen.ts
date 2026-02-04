@@ -58,7 +58,6 @@ export const MISSING_ITEM_EFFECTS = [
     28590, // Ribbon of Sacrifice
     28602, // Robe of the Elder Scribes
     28727, // Pendant of the Violet Eye
-    28785, // The Lightning Capacitor
     28789, // Eye of Magtheridon
     28823, // Eye of Gruul
     28830, // Dragonspine Trophy
