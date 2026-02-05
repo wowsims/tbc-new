@@ -32,7 +32,7 @@ func createDynamicAddsAIPreset() {
 			TankIndex: 0,
 
 			Stats: stats.Stats{
-				stats.Armor:       7700,
+				stats.Armor:       7685,
 				stats.AttackPower: 0,
 			}.ToProtoArray(),
 
@@ -57,7 +57,7 @@ func createDynamicAddsAIPreset() {
 			TankIndex: 1,
 
 			Stats: stats.Stats{
-				stats.Armor:       7700,
+				stats.Armor:       7685,
 				stats.AttackPower: 0,
 			}.ToProtoArray(),
 

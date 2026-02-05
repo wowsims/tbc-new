@@ -3,6 +3,10 @@ package warrior
 import "github.com/wowsims/tbc/sim/core"
 
 func (war *Warrior) registerSunderArmor() {
+	war.SunderArmorAuras = war.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {
+		return core.SunderArmorAura(target)
+	})
+
 	war.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 25225},
 		SpellSchool:    core.SpellSchoolPhysical,

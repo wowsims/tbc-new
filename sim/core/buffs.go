@@ -1263,7 +1263,7 @@ func registerBloodlustCD(character *Character) {
 
 	spell := character.RegisterSpell(SpellConfig{
 		ActionID: bloodlustAura.ActionID,
-		Flags:    SpellFlagNoOnCastComplete | SpellFlagNoMetrics | SpellFlagNoLogs,
+		Flags:    SpellFlagAPL | SpellFlagNoOnCastComplete | SpellFlagNoMetrics | SpellFlagNoLogs,
 
 		Cast: CastConfig{
 			CD: Cooldown{

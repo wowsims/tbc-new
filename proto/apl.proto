@@ -99,7 +99,7 @@ message APLAction {
 }
 
 
-// NextIndex: 125
+// NextIndex: 126
 message APLValue {
 	UUID uuid = 85;
 
@@ -189,6 +189,7 @@ message APLValue {
         APLValueAuraICDIsReady aura_icd_is_ready = 108;
         APLValueAuraICDIsReady aura_icd_is_ready_with_reaction_time = 51 [deprecated=true];
         APLValueAuraShouldRefresh aura_should_refresh = 43;
+        APLValueAuraDuration aura_duration = 125;
 
         // Aggregate Aura set values
         APLValueAllTrinketStatProcsActive all_trinket_stat_procs_active = 78; // TODO: Rename in MoP as it includes all item/effect procs
@@ -638,6 +639,10 @@ message APLValueAuraShouldRefresh {
     UnitReference source_unit = 2;
     ActionID aura_id = 1;
     APLValue max_overlap = 3;
+}
+message APLValueAuraDuration {
+    UnitReference source_unit = 2;
+    ActionID aura_id = 1;
 }
 
 message APLValueAllTrinketStatProcsActive {

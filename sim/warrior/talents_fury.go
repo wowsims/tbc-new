@@ -33,7 +33,7 @@ func (war *Warrior) registerFuryTalents() {
 	war.registerWeaponMastery()
 
 	// Tier 6
-	// Improved Berserker Rage implemented in berserker_rage.go
+	war.registerImprovedBerserkerRage()
 	war.registerFlurry()
 
 	// Tier 7
@@ -166,6 +166,7 @@ func (war *Warrior) registerSweepingStrikes() {
 		Flags:       core.SpellFlagIgnoreResists | core.SpellFlagIgnoreModifiers | core.SpellFlagMeleeMetrics | core.SpellFlagPassiveSpell | core.SpellFlagNoOnCastComplete,
 
 		DamageMultiplier: 1,
+		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
 		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
@@ -231,6 +232,23 @@ func (war *Warrior) registerWeaponMastery() {
 	}
 
 	war.PseudoStats.DodgeReduction += 0.01 * float64(war.Talents.WeaponMastery)
+}
+
+func (war *Warrior) registerImprovedBerserkerRage() {
+	if war.Talents.ImprovedBerserkerRage == 0 {
+		return
+	}
+
+	core.MakePermanent(war.RegisterAura(core.Aura{
+		Label:    "Improved Berserker Rage",
+		ActionID: core.ActionID{SpellID: 20500}.WithTag(war.Talents.ImprovedBerserkerRage),
+		OnGain: func(aura *core.Aura, sim *core.Simulation) {
+			war.BerserkerRageRageGain += 5 * float64(war.Talents.ImprovedBerserkerRage)
+		},
+		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
+			war.BerserkerRageRageGain -= 5 * float64(war.Talents.ImprovedBerserkerRage)
+		},
+	}))
 }
 
 func (war *Warrior) registerFlurry() {
@@ -350,8 +368,11 @@ func (war *Warrior) registerImprovedBerserkerStance() {
 }
 
 func (war *Warrior) registerRampage() {
-	actionID := core.ActionID{SpellID: 29801}
+	if !war.Talents.Rampage {
+		return
+	}
 
+	actionID := core.ActionID{SpellID: 29801}
 	validUntil := time.Duration(0)
 
 	aura := core.MakeStackingAura(&war.Character, core.StackingStatAura{

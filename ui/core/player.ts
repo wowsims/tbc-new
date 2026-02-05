@@ -1308,7 +1308,7 @@ export class Player<SpecType extends Spec> {
 				return false;
 			}
 
-			return positiveStatIds
+			return positiveStatIds;
 			//Filter removed
 			//!positiveStatIds.some(statId => !statsFilter.includes(statId));
 		});
@@ -1486,38 +1486,13 @@ export class Player<SpecType extends Spec> {
 		}
 
 		switch (this.getRace()) {
-			case Race.RaceDwarf:
-				return [
-					mainHand?.item.weaponType === WeaponType.WeaponTypeMace ||
-						mainHand?.item.rangedWeaponType === RangedWeaponType.RangedWeaponTypeBow ||
-						mainHand?.item.rangedWeaponType === RangedWeaponType.RangedWeaponTypeCrossbow ||
-						mainHand?.item.rangedWeaponType === RangedWeaponType.RangedWeaponTypeGun,
-					offHand?.item.weaponType === WeaponType.WeaponTypeMace,
-				];
-			case Race.RaceGnome:
-				return [
-					mainHand?.item.weaponType === WeaponType.WeaponTypeDagger ||
-						(mainHand?.item.handType !== HandType.HandTypeTwoHand && mainHand?.item.weaponType === WeaponType.WeaponTypeSword),
-					offHand?.item.weaponType === WeaponType.WeaponTypeDagger ||
-						(offHand?.item.handType !== HandType.HandTypeTwoHand && offHand?.item.weaponType === WeaponType.WeaponTypeSword),
-				];
 			case Race.RaceHuman:
 				return [
 					mainHand?.item.weaponType === WeaponType.WeaponTypeMace || mainHand?.item.weaponType === WeaponType.WeaponTypeSword,
 					offHand?.item.weaponType === WeaponType.WeaponTypeMace || offHand?.item.weaponType === WeaponType.WeaponTypeSword,
 				];
 			case Race.RaceOrc:
-				return [
-					mainHand?.item.weaponType === WeaponType.WeaponTypeAxe || mainHand?.item.weaponType === WeaponType.WeaponTypeFist,
-					offHand?.item.weaponType === WeaponType.WeaponTypeAxe || offHand?.item.weaponType === WeaponType.WeaponTypeFist,
-				];
-			case Race.RaceTroll:
-				return [
-					mainHand?.item.rangedWeaponType === RangedWeaponType.RangedWeaponTypeBow ||
-						mainHand?.item.rangedWeaponType === RangedWeaponType.RangedWeaponTypeCrossbow ||
-						mainHand?.item.rangedWeaponType === RangedWeaponType.RangedWeaponTypeGun,
-					false,
-				];
+				return [mainHand?.item.weaponType === WeaponType.WeaponTypeAxe, offHand?.item.weaponType === WeaponType.WeaponTypeAxe];
 		}
 
 		return [false, false];

@@ -32,8 +32,8 @@ func (war *Warrior) registerThunderClap() {
 			},
 		},
 
-		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
 		DamageMultiplier: 1,
+		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
 		ThreatMultiplier: 1.75,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {

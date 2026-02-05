@@ -273,15 +273,6 @@ export class ActionId {
 			case 'Combustion':
 				if (tag) name += ' (DoT)';
 				break;
-			case 'Frost Bomb':
-			case 'Living Bomb':
-				if (tag == 1) name += ' (DoT)';
-				else if (tag == 2) name += ' (Explosion)';
-				break;
-			case 'Nether Tempest':
-				if (tag == 1) name += ' (DoT)';
-				if (tag == 2) name += ' (Cleave)';
-				break;
 			case 'Evocation':
 				if (tag == 1) {
 					name += ' (1 Tick)';
@@ -331,11 +322,7 @@ export class ActionId {
 				break;
 			case 'Devotion Aura':
 			case 'Shattering Throw':
-			case 'Skull Banner':
-			case 'Stormlash':
-			case 'Vigilance':
 			case 'Pain Suppression':
-			case 'Rallying Cry':
 				if (tag === -1) {
 					name += ' (raid)';
 				} else {
@@ -409,13 +396,9 @@ export class ActionId {
 					name += ' (Off Hand)';
 				}
 				break;
-			case 'Elemental Blast':
 			case 'Chain Lightning':
 			case 'Lightning Bolt':
-			case 'Lava Beam':
 			case 'Lava Burst':
-			case 'Unleash Flame':
-			case 'Unleash Frost':
 				if (tag == 6) {
 					name += ' (Overload)';
 				} else if (tag == 7) {
@@ -452,65 +435,10 @@ export class ActionId {
 					name += ' (Wasted)';
 				}
 				break;
-			case 'Crescendo of Suffering':
-				if (tag == 1) {
-					name += ' (Pre-Pull)';
-				}
-				break;
-			case 'Soul Fire':
-				if (this.spellId == 104027) {
-					name += ' (Demon form)';
-				}
-				break;
-			case 'Shadowflame':
 			case 'Moonfire':
 			case 'Sunfire':
 				if (tag == 1) {
 					name += ' (DoT)';
-				}
-				break;
-			case 'Sacred Shield':
-				if (this.spellId === 65148) {
-					name += ' (Absorb)';
-				}
-				break;
-			case 'Censure':
-				if (tag == 2) {
-					name += ' (DoT)';
-				}
-				break;
-			case 'Hammer of the Righteous':
-				if (this.spellId === 88263) {
-					name += ' (Holy)';
-				} else {
-					name += ' (Physical)';
-				}
-				break;
-			case 'Seal of Righteousness':
-				if (tag === 1) {
-					name += ' (DS)';
-				}
-				break;
-			case 'Harsh Word':
-				name = 'Word of Glory (Damage';
-				if (tag > 0) {
-					name += `, ${tag} HP`;
-				}
-				name += ')';
-				break;
-			case 'Word of Glory':
-				if (tag > 0) {
-					name += `(${tag} HP)`;
-				}
-				break;
-			case 'Eternal Flame':
-				if (tag > 0) {
-					name += `(${tag} HP)`;
-				}
-				break;
-			case "Templar's Verdict":
-				if (tag === 2) {
-					name += ' (T15 4P)';
 				}
 				break;
 			// For targetted buffs, tag is the source player's raid index or -1 if none.
@@ -532,6 +460,14 @@ export class ActionId {
 					name += ' (raid)';
 				}
 				break;
+			case 'Berserking':
+				console.log(this)
+				if (tag == 1) {
+					name += ' (10%)';
+				} else if (tag == 2) {
+					name += ' (30%)';
+				}
+				break;
 			case 'Elemental Mastery':
 				if (this.spellId === 64701) {
 					name = `${name} (Buff)`;
@@ -539,26 +475,7 @@ export class ActionId {
 					name = `${name} (Instant)`;
 				}
 				break;
-			case 'Heart Strike':
-				if (tag == 2) {
-					name += ' (Off-target)';
-				}
-				break;
-			case 'Raging Blow':
-				if (tag == 2) {
-					name += ' (Main Hand)';
-				} else if (tag == 3) {
-					name += ' (Off Hand)';
-				}
-				break;
-			case 'Soul Reaper':
-				if (tag === 0) {
-					name += ' (Tick)';
-				}
-				break;
 			case 'Whirlwind':
-			case 'Storm Bolt':
-			case 'Lightning Speed':
 			case 'Windfury Weapon':
 			case 'Berserk':
 				if (tag == 1) {
@@ -581,6 +498,10 @@ export class ActionId {
 				if (tag == 1) {
 					name += ' (Queue)';
 				}
+				break;
+			case 'Improved Berserker Rage':
+			case 'Improved Overpower':
+				name += ` (${tag}/2)`;
 				break;
 			case 'Seed of Corruption':
 				if (tag == 0) {
@@ -618,85 +539,9 @@ export class ActionId {
 				}
 				break;
 			case 'Immolate':
-			case 'Chaos Bolt':
 				if (tag == 1) {
 					name += ' (DoT)';
 				}
-				break;
-			case 'Immolation Aura':
-				if (tag == 2) {
-					name += ' (Tick)';
-				}
-				break;
-			case 'Frozen Blows':
-			case 'Opportunity Strike':
-				break;
-			case 'Slam':
-				if (tag == 1) {
-					name += ' (Sweeping Strikes)';
-				}
-				break;
-			// Souldrinker - Drain Life
-			case 'Drain Life':
-				if (this.spellId === 109828) {
-					name += ' 1.3%';
-				} else if (this.spellId === 108022) {
-					name += ' 1.5%';
-				} else if (this.spellId === 109831) {
-					name += ' 1.7%';
-				}
-
-				if (tag === 2) {
-					name += ' (Heal)';
-				}
-				break;
-			// No'Kaled
-			case 'Flameblast':
-			case 'Iceblast':
-			case 'Shadowblast':
-				if (this.spellId === 109871 || this.spellId === 109869 || this.spellId === 109867) {
-					name += ' (LFR)';
-				} else if (this.spellId === 107785 || this.spellId === 107789 || this.spellId === 107787) {
-					name += ' (Normal)';
-				} else if (this.spellId === 109872 || this.spellId === 109870 || this.spellId === 109868) {
-					name += ' (Heroic)';
-				}
-				break;
-			case 'Item - Paladin T14 Retribution 2P Bonus':
-				name = 'White Tiger Battlegear - T14 2pc';
-				break;
-			case 'Item - Paladin T10 Retribution 4P Bonus':
-				name = 'White Tiger Battlegear - T14 4pc';
-				break;
-			case 'Item - Paladin T14 Protection 2P Bonus':
-				name = 'White Tiger Plate - T14 2pc';
-				break;
-			case 'Item - Paladin T14 Protection 4P Bonus':
-				name = 'White Tiger Plate - T14 4pc';
-				break;
-			case 'Item - Paladin T15 Retribution 2P Bonus':
-				name = 'Battlegear of the Lightning Emperor - T15 2pc';
-				break;
-			case 'Item - Paladin T15 Retribution 4P Bonus':
-				name = 'Battlegear of the Lightning Emperor - T15 4pc';
-				break;
-			case 'Item - Paladin T15 Protection 2P Bonus':
-				name = 'Plate of the Lightning Emperor - T15 2pc';
-				break;
-			case 'Item - Paladin T15 Protection 4P Bonus':
-				name = 'Plate of the Lightning Emperor - T15 4pc';
-				break;
-			case 'Item - Paladin T16 Retribution 2P Bonus':
-				name = 'Battlegear of Winged Triumph - T16 2pc';
-				break;
-			case 'Item - Paladin T16 Retribution 4P Bonus':
-				name = 'Battlegear of Winged Triumph - T16 4pc';
-				break;
-			case 'Item - Paladin T16 Protection 2P Bonus':
-				name = 'Plate of Winged Triumph - T16 2pc';
-				break;
-			case 'Item - Paladin T16 Protection 4P Bonus':
-				name = 'Plate of Winged Triumph - T16 4pc';
 				break;
 			case 'Enchant Weapon - Mongoose':
 				if (tag == 1) {
@@ -707,31 +552,10 @@ export class ActionId {
 					name += ' (Spell)';
 				}
 				break;
-			case 'Landslide':
-				if (tag == 1) {
-					name += ' (Main Hand)';
-				} else if (tag == 2) {
-					name += ' (Off Hand)';
-				}
-				break;
-			case 'Jade Spirit':
-				if (tag == 1) {
-					name += ' (Intellect)';
-				} else if (tag == 2) {
-					name += ' (Spirit)';
-				}
-				break;
-
 			case 'Vampiric Touch':
 			case 'Shadow Word: Pain':
 				if (tag == 77486) {
 					name += ' (Mastery)';
-				}
-
-				break;
-			case 'Cascade':
-				if (tag == 1) {
-					name += ' (Bounce)';
 				}
 
 				break;
@@ -740,45 +564,6 @@ export class ActionId {
 			case 'Corruption':
 				if (tag == 1) {
 					name += ' (Malefic)';
-				}
-				break;
-			case 'Holy Prism':
-				if (this.spellId === 114852) {
-					if (tag === 1) {
-						name += ' (Damage)';
-					} else if (tag === 2) {
-						name += ' (Aoe heal)';
-					}
-				} else if (this.spellId === 114871) {
-					if (tag === 1) {
-						name += ' (Heal)';
-					} else if (tag === 2) {
-						name += ' (Aoe damage)';
-					}
-				}
-				break;
-			case 'Alter Time':
-				if (tag == 1) {
-					name += ' (Restore)';
-				}
-				break;
-			case 'Glaive Toss':
-				if (tag == 1) {
-					name += ' (Glaive 1)';
-				} else if (tag == 2) {
-					name += ' (Glaive 2)';
-				}
-				break;
-			case 'Serpent Sting':
-				if (tag == 1) {
-					name += ' (Improved)';
-				}
-				break;
-			case 'Soul Swap':
-				if (tag == 1) {
-					name += ': Inhale';
-				} else if (tag == 2) {
-					name += ': Soulburn';
 				}
 				break;
 			default:

@@ -59,7 +59,15 @@ dps_results: {
  value: {}
 }
 dps_results: {
+ key: "TestArcane-AllItems-Quagmirran'sEye-27683"
+ value: {}
+}
+dps_results: {
  key: "TestArcane-AllItems-TempestRegalia"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-AllItems-TheLightningCapacitor-28785"
  value: {}
 }
 dps_results: {

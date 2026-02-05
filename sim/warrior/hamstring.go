@@ -25,6 +25,7 @@ func (war *Warrior) registerHamstring() {
 		},
 
 		DamageMultiplier: 1,
+		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
 		ThreatMultiplier: 1.25,
 		FlatThreatBonus:  167.5,
 

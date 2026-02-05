@@ -36,7 +36,7 @@ func (warrior *Warrior) makeStanceSpell(stance Stance, mask int64, aura *core.Au
 		Cast: core.CastConfig{
 			CD: core.Cooldown{
 				Timer:    stanceCD,
-				Duration: time.Millisecond * 1500,
+				Duration: time.Second * 1,
 			},
 		},
 		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {

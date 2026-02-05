@@ -120,7 +120,10 @@ func (war *Warrior) registerImprovedOverpower() {
 		return
 	}
 
-	war.AddStaticMod(core.SpellModConfig{
+	core.MakePermanent(war.RegisterAura(core.Aura{
+		Label:    "Improved Overpower",
+		ActionID: core.ActionID{SpellID: 12963}.WithTag(war.Talents.ImprovedOverpower),
+	})).AttachSpellMod(core.SpellModConfig{
 		ClassMask:  SpellMaskOverpower,
 		Kind:       core.SpellMod_BonusCrit_Percent,
 		FloatValue: 0.25 * float64(war.Talents.ImprovedOverpower),
@@ -155,9 +158,10 @@ func (war *Warrior) registerDeepWounds() {
 		ActionID:    core.ActionID{SpellID: 12867},
 		SpellSchool: core.SpellSchoolPhysical,
 		ProcMask:    core.ProcMaskEmpty,
-		Flags:       core.SpellFlagNoOnCastComplete | core.SpellFlagIgnoreModifiers,
+		Flags:       core.SpellFlagNoOnCastComplete | core.SpellFlagIgnoreResists,
 
 		DamageMultiplier: 1,
+		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
 		ThreatMultiplier: 1,
 
 		Dot: core.DotConfig{
@@ -165,40 +169,23 @@ func (war *Warrior) registerDeepWounds() {
 				Label: "DeepWounds",
 			},
 			NumberOfTicks: 6,
-			TickLength:    time.Second * 1,
+			TickLength:    time.Second * 3,
+
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
+				baseDamage := dot.Unit.AutoAttacks.MH().CalculateAverageWeaponDamage(dot.Spell.MeleeAttackPower())
+				dot.SnapshotPhysical(target, baseDamage/float64(dot.HastedTickCount())*0.2*float64(war.Talents.DeepWounds))
+			},
 
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.SnapshotAttackerMultiplier = target.PseudoStats.PeriodicPhysicalDamageTakenMultiplier
 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 			},
 		},
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+			spell.Dot(target).Deactivate(sim)
 			spell.Dot(target).Apply(sim)
-			spell.CalcAndDealOutcome(sim, target, spell.OutcomeAlwaysHit)
 		},
 	})
-
-	procDeepWounds := func(sim *core.Simulation, target *core.Unit, isOh bool) {
-		dot := war.DeepWounds.Dot(target)
-
-		attackTable := war.AttackTables[target.UnitIndex]
-
-		var awd float64
-		if isOh {
-			adm := war.AutoAttacks.OHAuto().AttackerDamageMultiplier(attackTable, true)
-			awd = war.AutoAttacks.OH().CalculateAverageWeaponDamage(war.DeepWounds.MeleeAttackPower()) * 0.5 * adm
-		} else { // MH
-			adm := war.AutoAttacks.MHAuto().AttackerDamageMultiplier(attackTable, true)
-			awd = war.AutoAttacks.MH().CalculateAverageWeaponDamage(war.DeepWounds.MeleeAttackPower()) * adm
-		}
-
-		newDamage := awd * 0.2 * float64(war.Talents.DeepWounds)
-		dot.SnapshotBaseDamage = (dot.OutstandingDmg() + newDamage) / float64(dot.ExpectedTickCount())
-		dot.SnapshotAttackerMultiplier = war.DeepWounds.AttackerDamageMultiplier(attackTable, true)
-
-		war.DeepWounds.Cast(sim, target)
-	}
 
 	war.MakeProcTriggerAura(core.ProcTrigger{
 		Name:               "Deep Wounds - Trigger",
@@ -210,7 +197,7 @@ func (war *Warrior) registerDeepWounds() {
 			return spell.SpellSchool.Matches(core.SpellSchoolPhysical)
 		},
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			procDeepWounds(sim, result.Target, spell.IsOH())
+			war.DeepWounds.Cast(sim, result.Target)
 		},
 	})
 
