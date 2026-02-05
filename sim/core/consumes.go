@@ -464,9 +464,11 @@ func registerStaticImbue(agent Agent, imbueId int32, isMH bool) {
 	case 29453, 34340: // Addy Stone
 		character.AddStat(stats.MeleeCritRating, 14)
 		if isMH {
-			character.bonusMHDps += 12
+			character.AutoAttacks.MH().BaseDamageMax += 12
+			character.AutoAttacks.MH().BaseDamageMin += 12
 		} else {
-			character.bonusOHDps += 12
+			character.AutoAttacks.OH().BaseDamageMax += 12
+			character.AutoAttacks.OH().BaseDamageMin += 12
 		}
 	}
 }
