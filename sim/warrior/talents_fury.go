@@ -299,6 +299,10 @@ func (war *Warrior) registerPrecision() {
 }
 
 func (war *Warrior) registerBloodthirst() {
+	if !war.Talents.Bloodthirst {
+		return
+	}
+
 	actionID := core.ActionID{SpellID: 23881}
 
 	war.RegisterSpell(core.SpellConfig{
