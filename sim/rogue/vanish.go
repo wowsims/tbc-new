@@ -30,11 +30,4 @@ func (rogue *Rogue) registerVanishSpell() {
 			rogue.StealthAura.Activate(sim)
 		},
 	})
-
-	rogue.AddMajorCooldown(core.MajorCooldown{
-		Spell:              rogue.Vanish,
-		Type:               core.CooldownTypeDPS,
-		Priority:           core.CooldownPriorityDrums,
-		AllowSpellQueueing: true,
-	})
 }

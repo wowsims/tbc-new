@@ -84,6 +84,9 @@ type Rogue struct {
 
 // ApplyTalents implements core.Agent.
 func (rogue *Rogue) ApplyTalents() {
+	rogue.registerAssassinationTalents()
+	rogue.registerCombatTalents()
+	rogue.registerSubtletyTalents()
 }
 
 func (rogue *Rogue) GetCharacter() *core.Character {
@@ -126,10 +129,6 @@ func (rogue *Rogue) Initialize() {
 	rogue.ExposeArmorModifier = 1
 	rogue.DeathmantleBonus = 0
 
-	rogue.registerAssassinationTalents()
-	rogue.registerCombatTalents()
-	rogue.registerSubtletyTalents()
-
 	rogue.registerAmbushSpell()
 	rogue.registerBackstabSpell()
 	rogue.registerEnvenom()
@@ -145,7 +144,7 @@ func (rogue *Rogue) Initialize() {
 	rogue.registerVanishSpell()
 
 	rogue.ruthlessnessMetrics = rogue.NewComboPointMetrics(core.ActionID{SpellID: 14161})
-	rogue.relentlessStrikesMetrics = rogue.NewEnergyMetrics(core.ActionID{SpellID: 58423})
+	rogue.relentlessStrikesMetrics = rogue.NewEnergyMetrics(core.ActionID{SpellID: 14179})
 }
 
 func (rogue *Rogue) ApplyAdditiveEnergyRegenBonus(sim *core.Simulation, increment float64) {

@@ -8,7 +8,7 @@ import (
 
 func (rogue *Rogue) registerExposeArmorSpell() {
 	rogue.ExposeArmorAuras = rogue.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {
-		return core.ExposeArmorAura(target, rogue.ComboPoints(), rogue.Talents.ImprovedExposeArmor)
+		return core.ExposeArmorAura(target, rogue.ComboPoints, rogue.Talents.ImprovedExposeArmor)
 	})
 
 	rogue.ExposeArmor = rogue.RegisterSpell(core.SpellConfig{
@@ -29,7 +29,7 @@ func (rogue *Rogue) registerExposeArmorSpell() {
 			},
 			IgnoreHaste: true,
 			ModifyCast: func(sim *core.Simulation, spell *core.Spell, cast *core.Cast) {
-				spell.SetMetricsSplit(rogue.ComboPoints())
+				//spell.SetMetricsSplit(rogue.ComboPoints())
 			},
 		},
 		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
@@ -42,8 +42,7 @@ func (rogue *Rogue) registerExposeArmorSpell() {
 			rogue.BreakStealth(sim)
 			result := spell.CalcOutcome(sim, target, spell.OutcomeMeleeSpecialHit)
 			if result.Landed() {
-				debuffAura := rogue.ExposeArmorAuras.Get(target)
-				debuffAura.Activate(sim)
+				rogue.TryApplyExposeArmorEffect(sim, target)
 				rogue.ApplyFinisher(sim, spell)
 			} else {
 				spell.IssueRefund(sim)
@@ -53,4 +52,19 @@ func (rogue *Rogue) registerExposeArmorSpell() {
 
 		RelatedAuraArrays: rogue.ExposeArmorAuras.ToMap(),
 	})
+}
+
+func (rogue *Rogue) GetExposeArmorValue() float64 {
+	return 410.0 * float64(rogue.ComboPoints())
+}
+
+func (rogue *Rogue) CanApplyExposeArmorAura(target *core.Unit) bool {
+	return !rogue.ExposeArmorAuras.Get(target).IsActive() || rogue.ExposeArmorAuras.Get(target).ExclusiveEffects[0].Priority <= rogue.GetExposeArmorValue()
+}
+
+func (rogue *Rogue) TryApplyExposeArmorEffect(sim *core.Simulation, target *core.Unit) {
+	if rogue.CanApplyExposeArmorAura(target) {
+		aura := rogue.ExposeArmorAuras.Get(target)
+		aura.Activate(sim)
+	}
 }

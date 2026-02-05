@@ -227,13 +227,14 @@ func (rogue *Rogue) registerSwordSpecialization() {
 	}
 
 	rogue.MakeProcTriggerAura(core.ProcTrigger{
-		Name:       "Sword Spec Proc Trigger",
-		ActionID:   core.ActionID{SpellID: 13964},
-		ProcChance: 0.01 * float64(rogue.Talents.SwordSpecialization),
-		Callback:   core.CallbackOnSpellHitDealt,
-		Outcome:    core.OutcomeLanded,
-		ProcMask:   procMask,
-		ICD:        time.Millisecond * 500,
+		Name:               "Sword Spec Proc Trigger",
+		ActionID:           core.ActionID{SpellID: 13964},
+		ProcChance:         0.01 * float64(rogue.Talents.SwordSpecialization),
+		Callback:           core.CallbackOnSpellHitDealt,
+		Outcome:            core.OutcomeLanded,
+		ProcMask:           procMask,
+		ICD:                time.Millisecond * 500,
+		TriggerImmediately: true,
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			rogue.AutoAttacks.MHAuto().Cast(sim, result.Target)
 		},
