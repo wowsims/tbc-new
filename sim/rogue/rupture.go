@@ -7,7 +7,7 @@ import (
 )
 
 const RuptureEnergyCost = 25.0
-const RuptureSpellID = 1943
+const RuptureSpellID = 26867
 
 func (rogue *Rogue) registerRupture() {
 
@@ -38,7 +38,7 @@ func (rogue *Rogue) registerRupture() {
 		},
 
 		DamageMultiplier: 1,
-		CritMultiplier:   0,
+		CritMultiplier:   1,
 		ThreatMultiplier: 1,
 
 		Dot: core.DotConfig{

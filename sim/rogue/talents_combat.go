@@ -278,7 +278,7 @@ func (rogue *Rogue) registerAggression() {
 	rogue.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
 		ClassMask:  RogueSpellSinisterStrike | RogueSpellBackstab | RogueSpellEviscerate,
-		FloatValue: 0.06 * float64(rogue.Talents.Aggression),
+		FloatValue: 0.02 * float64(rogue.Talents.Aggression),
 	})
 }
 
@@ -344,12 +344,13 @@ func (rogue *Rogue) registerCombatPotency() {
 	potencyMetrics := rogue.NewEnergyMetrics(core.ActionID{SpellID: 35553})
 
 	rogue.MakeProcTriggerAura(core.ProcTrigger{
-		Name:       "Combat Potency Trigger",
-		ActionID:   core.ActionID{SpellID: 35553},
-		ProcChance: 0.2,
-		Callback:   core.CallbackOnSpellHitDealt,
-		Outcome:    core.OutcomeLanded,
-		ProcMask:   core.ProcMaskMeleeOH,
+		Name:               "Combat Potency Trigger",
+		ActionID:           core.ActionID{SpellID: 35553},
+		ProcChance:         0.2,
+		Callback:           core.CallbackOnSpellHitDealt,
+		Outcome:            core.OutcomeLanded,
+		ProcMask:           core.ProcMaskMeleeOH,
+		TriggerImmediately: true,
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			rogue.AddEnergy(sim, 3.0*float64(rogue.Talents.CombatPotency), potencyMetrics)
 		},

@@ -334,6 +334,7 @@ export class ActionId {
 			case 'Eviscerate':
 			case 'Rupture':
 			case 'Slice and Dice':
+			case 'Expose Armor':
 				if (tag) name += ` (${tag} CP)`;
 				break;
 			case 'Crimson Tempest':
@@ -377,13 +378,6 @@ export class ActionId {
 					name += ' (Main Hand)';
 				} else if (tag == 2) {
 					name += ' (Off Hand)';
-				}
-				break;
-			case 'Hemorrhage':
-				if (tag == 1) {
-					name += ' (Hit)';
-				} else {
-					name += ' (DoT)';
 				}
 				break;
 			case 'Wind Lash':

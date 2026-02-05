@@ -16,6 +16,7 @@ func (rogue *Rogue) registerExposeArmorSpell() {
 		SpellSchool:    core.SpellSchoolPhysical,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
 		Flags:          core.SpellFlagMeleeMetrics | SpellFlagBuilder | core.SpellFlagAPL,
+		MetricSplits:   6,
 		ClassSpellMask: RogueSpellExposeArmor,
 
 		EnergyCost: core.EnergyCostOptions{
@@ -29,7 +30,7 @@ func (rogue *Rogue) registerExposeArmorSpell() {
 			},
 			IgnoreHaste: true,
 			ModifyCast: func(sim *core.Simulation, spell *core.Spell, cast *core.Cast) {
-				//spell.SetMetricsSplit(rogue.ComboPoints())
+				spell.SetMetricsSplit(rogue.ComboPoints())
 			},
 		},
 		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {

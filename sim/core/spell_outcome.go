@@ -61,11 +61,11 @@ func (spell *Spell) outcomeMagicHitAndCrit(sim *Simulation, result *SpellResult,
 	}
 }
 
-func (spell *Spell) OutcomeMagicCrit(sim *Simulation, result *SpellResult, _ *AttackTable) {
-	spell.outcomeMagicCrit(sim, result, nil, true)
+func (spell *Spell) OutcomeMagicCrit(sim *Simulation, result *SpellResult, at *AttackTable) {
+	spell.outcomeMagicCrit(sim, result, at, true)
 }
-func (spell *Spell) OutcomeMagicCritNoHitCounter(sim *Simulation, result *SpellResult, _ *AttackTable) {
-	spell.outcomeMagicCrit(sim, result, nil, false)
+func (spell *Spell) OutcomeMagicCritNoHitCounter(sim *Simulation, result *SpellResult, at *AttackTable) {
+	spell.outcomeMagicCrit(sim, result, at, false)
 }
 func (spell *Spell) outcomeMagicCrit(sim *Simulation, result *SpellResult, attackTable *AttackTable, countHits bool) {
 	if spell.CritMultiplier == 0 {

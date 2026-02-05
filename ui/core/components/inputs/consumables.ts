@@ -184,6 +184,11 @@ export const RogueDeadlyPoison = {
 	value: 27186,
 	showWhen: (player: Player<any>) => player.getClass() == Class.ClassRogue,
 };
+export const RogueWoundPoison = {
+	actionId: ActionId.fromItemId(22055),
+	value: 27188,
+	showWhen: (player: Player<any>) => player.getClass() == Class.ClassRogue,
+}
 // Shaman Imbues
 export const ShamanImbueWindfury = {
 	actionId: ActionId.fromSpellId(25505),
@@ -216,6 +221,7 @@ export const IMBUE_CONFIG_MH = [
 	{ config: AdamantiteWeightMH, stats: [Stat.StatAttackPower] },
 	{ config: RogueInstantPoison, stats: [] },
 	{ config: RogueDeadlyPoison, stats: [] },
+	{ config: RogueWoundPoison, stats: [] },
 	{ config: ShamanImbueRockbiter, stats: [] },
 	{ config: ShamanImbueFrostbrand, stats: [] },
 	{ config: ShamanImbueFlametongue, stats: [] },
@@ -230,6 +236,7 @@ export const IMBUE_CONFIG_OH = [
 	{ config: AdamantiteWeightOH, stats: [Stat.StatAttackPower] },
 	{ config: RogueInstantPoison, stats: [] },
 	{ config: RogueDeadlyPoison, stats: [] },
+	{ config: RogueWoundPoison, stats: [] },
 	{ config: ShamanImbueRockbiter, stats: [] },
 	{ config: ShamanImbueFrostbrand, stats: [] },
 	{ config: ShamanImbueFlametongue, stats: [] },

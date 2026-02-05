@@ -81,6 +81,7 @@ func (dot *Dot) Apply(sim *Simulation) {
 	}
 
 	dot.TakeSnapshot(sim)
+	dot.recomputeAuraDuration(sim)
 	dot.Activate(sim)
 }
 
