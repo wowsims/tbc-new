@@ -19,29 +19,21 @@ func (rogue *Rogue) registerSliceAndDice() {
 		time.Duration(time.Second * 21),
 	}
 
-	getDuration := func(comboPoints int32) time.Duration {
-		duration := rogue.sliceAndDiceDurations[comboPoints]
-		if rogue.Talents.ImprovedSliceAndDice > 0 {
-			duration *= time.Duration(1 + 0.15*float64(rogue.Talents.ImprovedSliceAndDice))
-		}
-		return duration
-	}
-
-	var slideAndDiceMod float64
+	var sliceAndDiceMod float64
 	rogue.SliceAndDiceAura = rogue.RegisterAura(core.Aura{
 		Label:    "Slice and Dice",
 		ActionID: actionID,
 		// This will be overridden on cast, but set a non-zero default so it doesn't crash when used in APL prepull
 		Duration: rogue.sliceAndDiceDurations[5],
 		OnGain: func(aura *core.Aura, sim *core.Simulation) {
-			slideAndDiceMod = 1 + rogue.SliceAndDiceBonusFlat
-			rogue.MultiplyMeleeSpeed(sim, slideAndDiceMod)
+			sliceAndDiceMod = 1 + rogue.SliceAndDiceBonusFlat
+			rogue.MultiplyMeleeSpeed(sim, sliceAndDiceMod)
 			if sim.Log != nil {
-				rogue.Log(sim, "[DEBUG]: Slice and Dice attack speed mod: %v", slideAndDiceMod)
+				rogue.Log(sim, "[DEBUG]: Slice and Dice attack speed mod: %v", sliceAndDiceMod)
 			}
 		},
 		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
-			rogue.MultiplyMeleeSpeed(sim, 1/slideAndDiceMod)
+			rogue.MultiplyMeleeSpeed(sim, 1/sliceAndDiceMod)
 		},
 	})
 
@@ -71,10 +63,18 @@ func (rogue *Rogue) registerSliceAndDice() {
 			comboPoints := rogue.ComboPoints()
 			rogue.ApplyFinisher(sim, spell)
 			spell.RelatedSelfBuff.Deactivate(sim)
-			spell.RelatedSelfBuff.Duration = getDuration(comboPoints)
+			spell.RelatedSelfBuff.Duration = rogue.getSliceDuration(comboPoints)
 			spell.RelatedSelfBuff.Activate(sim)
 		},
 
 		RelatedSelfBuff: rogue.SliceAndDiceAura,
 	})
+}
+
+func (rogue *Rogue) getSliceDuration(comboPoints int32) time.Duration {
+	duration := rogue.sliceAndDiceDurations[comboPoints]
+	if rogue.Talents.ImprovedSliceAndDice > 0 {
+		duration *= time.Duration(1 + 0.15*float64(rogue.Talents.ImprovedSliceAndDice))
+	}
+	return duration + (time.Second * time.Duration(rogue.SliceAndDiceBonusDuration))
 }

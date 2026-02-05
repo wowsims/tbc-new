@@ -78,8 +78,9 @@ type Rogue struct {
 	ruthlessnessMetrics      *core.ResourceMetrics
 	relentlessStrikesMetrics *core.ResourceMetrics
 
-	HasPvpEnergy     bool
-	DeathmantleBonus float64
+	HasPvpEnergy              bool
+	DeathmantleBonus          float64
+	SliceAndDiceBonusDuration float64
 }
 
 // ApplyTalents implements core.Agent.
@@ -125,9 +126,6 @@ func (rogue *Rogue) Initialize() {
 	rogue.AutoAttacks.MHConfig().CritMultiplier = rogue.DefaultMeleeCritMultiplier()
 	rogue.AutoAttacks.OHConfig().CritMultiplier = rogue.DefaultMeleeCritMultiplier()
 	rogue.AutoAttacks.RangedConfig().CritMultiplier = rogue.DefaultMeleeCritMultiplier()
-
-	rogue.ExposeArmorModifier = 1
-	rogue.DeathmantleBonus = 0
 
 	rogue.registerAmbushSpell()
 	rogue.registerBackstabSpell()

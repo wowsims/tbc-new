@@ -1,3 +1,4 @@
+import { stat } from 'node:fs';
 import * as BuffDebuffInputs from '../../core/components/inputs/buffs_debuffs';
 import * as OtherInputs from '../../core/components/inputs/other_inputs';
 import * as Mechanics from '../../core/constants/mechanics.js';
@@ -23,6 +24,10 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 	epStats: [
 		Stat.StatStamina,
 		Stat.StatAgility,
+		Stat.StatStrength,
+		Stat.StatAllPhysCritRating,
+		Stat.StatAllPhysHasteRating,
+		Stat.StatAllPhysHitRating,
 		Stat.StatMeleeCritRating,
 		Stat.StatMeleeHasteRating,
 		Stat.StatMeleeHitRating,
