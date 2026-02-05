@@ -1,6 +1,6 @@
 import * as PresetUtils from '../../core/preset_utils';
 import { ConsumesSpec, PseudoStat, Stat } from '../../core/proto/common';
-import { RogueOptions_PoisonOptions, Rogue_Options as RogueOptions } from '../../core/proto/rogue';
+import { Rogue_Options as RogueOptions } from '../../core/proto/rogue';
 import { SavedTalents } from '../../core/proto/ui';
 import { Stats } from '../../core/proto_utils/stats';
 import BlankAPL from './apls/blank.apl.json'
@@ -45,10 +45,6 @@ export const Talents = {
 
 export const DefaultOptions = RogueOptions.create({
 	classOptions: {
-		lethalPoison: RogueOptions_PoisonOptions.DeadlyPoison,
-		applyPoisonsManually: false,
-		startingOverkillDuration: 20,
-		vanishBreakTime: 0.1,
 	},
 });
 

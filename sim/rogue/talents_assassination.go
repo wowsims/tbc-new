@@ -318,7 +318,13 @@ func (rogue *Rogue) newMutilateHitSpell(isMH bool) *core.Spell {
 				baseDamage = mutBaseDamage + spell.Unit.OHNormalizedWeaponDamage(sim, spell.MeleeAttackPower())
 			}
 
+			oldMultiplier := spell.DamageMultiplier
+			if rogue.DeadlyPoison.Dot(target).IsActive() || rogue.WoundPoisonDebuffAuras.Get(target).IsActive() {
+				spell.DamageMultiplier += 0.5
+			}
+
 			spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialBlockAndCrit)
+			spell.DamageMultiplier = oldMultiplier
 		},
 	})
 }

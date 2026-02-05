@@ -344,11 +344,11 @@ export class ActionId {
 					name += ` (${tag} CP)`;
 				}
 				break;
-			case 'Deadly Poison':
+			case 'Deadly Poison VII':
+			case 'Wound Poison':
+			case 'Instant Poison VII':
 				if (tag == 1) {
-					name += ' (DoT)';
-				} else {
-					name += ' (Hit)';
+					name += ' (Shiv)'
 				}
 				break;
 			case 'Shadow Blades':

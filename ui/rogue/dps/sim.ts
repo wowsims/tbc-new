@@ -7,7 +7,6 @@ import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
 import { APLRotation } from '../../core/proto/apl';
 import { Debuffs, Faction, IndividualBuffs, ItemSlot, PartyBuffs, PseudoStat, Race, RaidBuffs, Spec, Stat } from '../../core/proto/common';
-import { RogueOptions_PoisonOptions } from '../../core/proto/rogue';
 import { UnitStat } from '../../core/proto_utils/stats';
 import { defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
 import * as RogueInputs from './inputs';
@@ -72,10 +71,10 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 	},
 
 	playerInputs: {
-		inputs: [RogueInputs.ApplyPoisonsManually()],
+		inputs: [],
 	},
 	// IconInputs to include in the 'Player' section on the settings tab.
-	playerIconInputs: [RogueInputs.LethalPoison()],
+	playerIconInputs: [],
 	// Buff and Debuff inputs to include/exclude, overriding the EP-based defaults.
 	includeBuffDebuffInputs: [],
 	excludeBuffDebuffInputs: [],
@@ -134,16 +133,10 @@ export class RogueSimUI extends IndividualSimUI<Spec.SpecRogue> {
 
 		this.player.changeEmitter.on(c => {
 			const options = this.player.getSpecOptions();
-			if (!options.classOptions!.applyPoisonsManually) {
-				options.classOptions!.lethalPoison = RogueOptions_PoisonOptions.DeadlyPoison;
-			}
 			this.player.setSpecOptions(c, options);
 		});
 		this.sim.encounter.changeEmitter.on(c => {
 			const options = this.player.getSpecOptions();
-			if (!options.classOptions!.applyPoisonsManually) {
-				options.classOptions!.lethalPoison = RogueOptions_PoisonOptions.DeadlyPoison;
-			}
 			this.player.setSpecOptions(c, options);
 		});
 	}
