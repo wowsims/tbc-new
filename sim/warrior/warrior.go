@@ -180,9 +180,20 @@ func (warrior *Warrior) Reset(_ *core.Simulation) {
 	warrior.curQueueAura = nil
 	warrior.curQueuedAutoSpell = nil
 
-	warrior.Stance = StanceNone
 	warrior.ChargeRageGain = 15
 	warrior.BerserkerRageRageGain = 0
+
+	switch warrior.DefaultStance {
+	case proto.WarriorStance_WarriorStanceBattle:
+		warrior.Stance = BattleStance
+		core.MakePermanent(warrior.BattleStance.RelatedSelfBuff)
+	case proto.WarriorStance_WarriorStanceDefensive:
+		warrior.Stance = DefensiveStance
+		core.MakePermanent(warrior.DefensiveStance.RelatedSelfBuff)
+	case proto.WarriorStance_WarriorStanceBerserker:
+		warrior.Stance = BerserkerStance
+		core.MakePermanent(warrior.BerserkerStance.RelatedSelfBuff)
+	}
 }
 
 func (warrior *Warrior) OnEncounterStart(sim *core.Simulation) {}
