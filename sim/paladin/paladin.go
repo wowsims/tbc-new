@@ -8,57 +8,63 @@ import (
 
 var TalentTreeSizes = [3]int{20, 23, 22}
 
+const JudgementAuraTag = "JudgementAura"
+
 type Paladin struct {
 	core.Character
 
-	Seal proto.PaladinSeal
-	// HolyPower HolyPowerBar
-
+	Seal    proto.PaladinSeal
 	Talents *proto.PaladinTalents
 
-	// Used for CS/HotR
-	sharedBuilderTimer *core.Timer
+	PreviousSeal     *core.Aura
+	PreviousJudgement *core.Spell
+	CurrentSeal      *core.Aura
+	CurrentJudgement *core.Spell
 
-	CurrentSeal *core.Aura
+	// Shared spells
+	Judgement    *core.Spell
+	Consecrations []*core.Spell
+	Exorcism     *core.Spell
+	HolyShock    *core.Spell
 
-	// Pets
-	// AncientGuardian *AncientGuardianPet
+	// Seal Auras
+	SealOfRighteousnessAuras []*core.Aura
+	SealOfCommandAuras       []*core.Aura
+	SealOfLightAuras         []*core.Aura
+	SealOfWisdomAuras        []*core.Aura
+	SealOfJusticeAuras       []*core.Aura
+	SealOfTheCrusaderAuras   []*core.Aura
+	SealOfBloodAuras         []*core.Aura
+	SealOfVengeanceAuras     []*core.Aura
 
-	AvengersShield *core.Spell
-	Exorcism       *core.Spell
-	HammerOfWrath  *core.Spell
-	Judgment       *core.Spell
+	// Seals
+	SealOfRighteousness 	[]*core.Spell
+	SealOfCommand      		[]*core.Spell
+	SealOfLight        		[]*core.Spell
+	SealOfWisdom       		[]*core.Spell
+	SealOfJustice     		[]*core.Spell
+	SealOfTheCrusader  		[]*core.Spell
+	SealOfBlood      		[]*core.Spell
+	SealOfVengeance 		[]*core.Spell
 
-	AncientPowerAura        *core.Aura
-	AvengingWrathAura       *core.Aura
-	BastionOfGloryAura      *core.Aura
-	BastionOfPowerAura      *core.Aura
-	DivineCrusaderAura      *core.Aura
-	DivineFavorAura         *core.Aura
-	DivineProtectionAura    *core.Aura
-	DivinePurposeAura       *core.Aura
-	GoakAura                *core.Aura
-	InfusionOfLightAura     *core.Aura
-	SealOfInsightAura       *core.Aura
-	SealOfJusticeAura       *core.Aura
-	SealOfRighteousnessAura *core.Aura
-	SealOfTruthAura         *core.Aura
-	SelflessHealerAura      *core.Aura
-	TheArtOfWarAura         *core.Aura
+	// Seal Judgements
+	SealOfRighteousnessJudgements 	[]*core.Spell
+	SealOfCommandJudgements      	[]*core.Spell
+	SealOfLightJudgements       	[]*core.Spell
+	SealOfWisdomJudgements      	[]*core.Spell
+	SealOfJusticeJudgements     	[]*core.Spell
+	SealOfTheCrusaderJudgements   	[]*core.Spell
+	SealOfBloodJudgements      		[]*core.Spell
+	SealOfVengeanceJudgements 		[]*core.Spell
 
-	// Item sets
-	T11Ret4pc                *core.Aura
-	T15Ret4pc                *core.Aura
-	T15Ret4pcTemplarsVerdict *core.Spell
-
-	HolyAvengerActionIDFilter  []core.ActionID
-	JudgmentsOfTheWiseActionID core.ActionID
-	DefensiveCooldownAuras     []*core.Aura
-
-	DynamicHolyPowerSpent                        float64
-	BastionOfGloryMultiplier                     float64
-	ShieldOfTheRighteousAdditiveMultiplier       float64
-	ShieldOfTheRighteousMultiplicativeMultiplier float64
+	// Talent-specific auras and spells
+	DivineFavorAura        *core.Aura
+	DivineIlluminationAura *core.Aura
+	SanctityAura           *core.Aura
+	HolyShieldAura         *core.Aura
+	AvengersShield         *core.Spell
+	CrusaderStrike         *core.Spell
+	Repentance             *core.Spell
 }
 
 // Implemented by each Paladin spec.
@@ -82,43 +88,30 @@ func (paladin *Paladin) AddPartyBuffs(_ *proto.PartyBuffs) {
 
 func (paladin *Paladin) Initialize() {
 	paladin.registerSpells()
-	// paladin.addMistsPvpGloves()
 }
 
 func (paladin *Paladin) registerSpells() {
-	// paladin.registerAvengingWrath()
-	// paladin.registerCrusaderStrike()
-	// paladin.registerDevotionAura()
-	// paladin.registerDivineProtection()
-	// paladin.registerFlashOfLight()
-	// paladin.registerForbearance()
-	// paladin.registerGuardianOfAncientKings()
-	// paladin.registerHammerOfTheRighteous()
-	// paladin.registerHammerOfWrath()
-	// paladin.registerJudgment()
-	// paladin.registerLayOnHands()
-	// paladin.registerSanctityOfBattle()
-	// paladin.registerSealOfInsight()
-	// paladin.registerSealOfRighteousness()
-	// paladin.registerSealOfTruth()
-	// paladin.registerWordOfGlory()
+	// Core abilities
+	paladin.registerJudgement()
+	paladin.registerConsecration()
+	// paladin.registerExorcism()
+
+	// Seals
+	paladin.registerSeals()
+
+	// Auras
+	// paladin.registerAuras()
+
+	// // Blessings
+	// paladin.registerBlessings()
+
+	// // Healing spells
+	// paladin.registerHealingSpells()
+
+	paladin.ApplyTalents()
 }
 
 func (paladin *Paladin) Reset(sim *core.Simulation) {
-	switch paladin.Seal {
-	case proto.PaladinSeal_Truth:
-		paladin.CurrentSeal = paladin.SealOfTruthAura
-		paladin.SealOfTruthAura.Activate(sim)
-	case proto.PaladinSeal_Insight:
-		paladin.CurrentSeal = paladin.SealOfInsightAura
-		paladin.SealOfInsightAura.Activate(sim)
-	case proto.PaladinSeal_Righteousness:
-		paladin.CurrentSeal = paladin.SealOfRighteousnessAura
-		paladin.SealOfRighteousnessAura.Activate(sim)
-	case proto.PaladinSeal_Justice:
-		paladin.CurrentSeal = paladin.SealOfJusticeAura
-		paladin.SealOfJusticeAura.Activate(sim)
-	}
 }
 
 func (paladin *Paladin) OnEncounterStart(sim *core.Simulation) {
@@ -137,46 +130,24 @@ func NewPaladin(character *core.Character, talentsStr string, options *proto.Pal
 
 	paladin.EnableManaBar()
 
-	// Only retribution and holy are actually pets performing some kind of action
-	// if paladin.Spec != proto.Spec_SpecProtectionPaladin {
-	// 	paladin.AncientGuardian = paladin.NewAncientGuardian()
-	// }
-
 	paladin.EnableAutoAttacks(paladin, core.AutoAttackOptions{
 		MainHand:       paladin.WeaponFromMainHand(paladin.DefaultMeleeCritMultiplier()),
 		AutoSwingMelee: true,
 	})
 
+	// TBC stat conversions
+	// 1 Strength = 2 Attack Power
 	paladin.AddStatDependency(stats.Strength, stats.AttackPower, 2)
+
+	// Crit from Agility and Intellect
 	paladin.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiMaxLevel[character.Class])
 	paladin.AddStatDependency(stats.Intellect, stats.SpellCritPercent, core.CritPerIntMaxLevel[character.Class])
+
+	// Dodge from Agility
 	paladin.AddStatDependency(stats.Agility, stats.DodgeRating, 1/25.0*core.DodgeRatingPerDodgePercent)
 
 	// Bonus Armor and Armor are treated identically for Paladins
 	paladin.AddStatDependency(stats.BonusArmor, stats.Armor, 1)
 
 	return paladin
-}
-
-func (paladin *Paladin) CanTriggerHolyAvengerHpGain(actionID core.ActionID) {
-	paladin.HolyAvengerActionIDFilter = append(paladin.HolyAvengerActionIDFilter, actionID)
-}
-
-// Shared cooldown for CS and HotR
-func (paladin *Paladin) BuilderCooldown() *core.Timer {
-	return paladin.Character.GetOrInitTimer(&paladin.sharedBuilderTimer)
-}
-
-func (paladin *Paladin) AddDefensiveCooldownAura(aura *core.Aura) {
-	paladin.DefensiveCooldownAuras = append(paladin.DefensiveCooldownAuras, aura)
-}
-
-func (paladin *Paladin) AnyActiveDefensiveCooldown() bool {
-	for _, aura := range paladin.DefensiveCooldownAuras {
-		if aura.IsActive() {
-			return true
-		}
-	}
-
-	return false
 }

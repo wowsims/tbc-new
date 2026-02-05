@@ -3,7 +3,6 @@ package retribution
 import (
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
-	"github.com/wowsims/tbc/sim/core/stats"
 	"github.com/wowsims/tbc/sim/paladin"
 )
 
@@ -36,8 +35,6 @@ func NewRetributionPaladin(character *core.Character, options *proto.Player) *Re
 
 type RetributionPaladin struct {
 	*paladin.Paladin
-
-	HoLDamage float64
 }
 
 func (ret *RetributionPaladin) GetPaladin() *paladin.Paladin {
@@ -46,24 +43,10 @@ func (ret *RetributionPaladin) GetPaladin() *paladin.Paladin {
 
 func (ret *RetributionPaladin) Initialize() {
 	ret.Paladin.Initialize()
-
-	// ret.registerMastery()
-
-	// ret.registerArtOfWar()
-	// ret.registerDivineStorm()
-	// ret.registerExorcism()
-	// ret.registerInquisition()
-	// ret.registerJudgmentsOfTheBold()
-	// ret.registerSealOfJustice()
-	// ret.registerSwordOfLight()
-	// ret.registerTemplarsVerdict()
-
-	// ret.registerHotfixPassive()
 }
 
 func (ret *RetributionPaladin) ApplyTalents() {
 	ret.Paladin.ApplyTalents()
-	ret.ApplyArmorSpecializationEffect(stats.Strength, proto.ArmorType_ArmorTypePlate, 86525)
 }
 
 func (ret *RetributionPaladin) Reset(sim *core.Simulation) {

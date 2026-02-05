@@ -3,7 +3,6 @@ package protection
 import (
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
-	"github.com/wowsims/tbc/sim/core/stats"
 	"github.com/wowsims/tbc/sim/paladin"
 )
 
@@ -36,8 +35,6 @@ func NewProtectionPaladin(character *core.Character, options *proto.Player) *Pro
 
 type ProtectionPaladin struct {
 	*paladin.Paladin
-
-	DamageTakenLastGlobal float64
 }
 
 func (prot *ProtectionPaladin) GetPaladin() *paladin.Paladin {
@@ -46,68 +43,10 @@ func (prot *ProtectionPaladin) GetPaladin() *paladin.Paladin {
 
 func (prot *ProtectionPaladin) Initialize() {
 	prot.Paladin.Initialize()
-
-	// prot.registerMastery()
-
-	// prot.registerArdentDefender()
-	// prot.registerAvengersShieldSpell()
-	// prot.registerConsecrationSpell()
-	// prot.registerGrandCrusader()
-	// prot.registerGuardedByTheLight()
-	// prot.registerHolyWrath()
-	// prot.registerJudgmentsOfTheWise()
-	// prot.registerRighteousFury()
-	// prot.registerSanctuary()
-	// prot.registerShieldOfTheRighteous()
-
-	// prot.AddStaticMod(core.SpellModConfig{
-	// 	Kind:       core.SpellMod_DamageDone_Pct,
-	// 	ClassMask:  paladin.SpellMaskSealOfTruth | paladin.SpellMaskCensure,
-	// 	FloatValue: -0.8,
-	// })
-
-	prot.trackDamageTakenLastGlobal()
-
-	// prot.registerHotfixPassive()
-}
-
-func (prot *ProtectionPaladin) trackDamageTakenLastGlobal() {
-	prot.DamageTakenLastGlobal = 0.0
-
-	core.MakePermanent(prot.GetOrRegisterAura(core.Aura{
-		Label: "Damage Taken Last Global",
-
-		OnGain: func(aura *core.Aura, sim *core.Simulation) {
-			prot.DamageTakenLastGlobal = 0.0
-		},
-		OnSpellHitTaken: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			if result.Landed() {
-				damageTaken := result.Damage
-				prot.DamageTakenLastGlobal += damageTaken
-				if sim.Log != nil {
-					prot.Log(sim, "Damage Taken Last Global: %0.2f", prot.DamageTakenLastGlobal)
-				}
-
-				pa := sim.GetConsumedPendingActionFromPool()
-				pa.NextActionAt = sim.CurrentTime + core.GCDDefault
-
-				pa.OnAction = func(sim *core.Simulation) {
-					prot.DamageTakenLastGlobal -= damageTaken
-
-					if sim.Log != nil {
-						prot.Log(sim, "Damage Taken Last Global: %0.2f", prot.DamageTakenLastGlobal)
-					}
-				}
-
-				sim.AddPendingAction(pa)
-			}
-		},
-	}))
 }
 
 func (prot *ProtectionPaladin) ApplyTalents() {
 	prot.Paladin.ApplyTalents()
-	prot.ApplyArmorSpecializationEffect(stats.Stamina, proto.ArmorType_ArmorTypePlate, 86525)
 }
 
 func (prot *ProtectionPaladin) Reset(sim *core.Simulation) {
