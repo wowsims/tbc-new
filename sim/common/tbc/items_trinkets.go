@@ -8,6 +8,7 @@ import (
 )
 
 func init() {
+	// Quagmirran's Eye
 	core.NewItemEffect(27683, func(agent core.Agent) {
 		character := agent.GetCharacter()
 		duration := time.Second * 6
@@ -36,6 +37,7 @@ func init() {
 		character.ItemSwap.RegisterProc(27683, procAura)
 	})
 
+	// The Lightning Capacitor
 	core.NewItemEffect(28785, func(agent core.Agent) {
 		character := agent.GetCharacter()
 
@@ -74,7 +76,6 @@ func init() {
 			},
 		})
 
-		//procTrigger
 		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
 			Name:     "The Lightning Capacitor",
 			ActionID: core.ActionID{ItemID: 28785},
@@ -89,5 +90,34 @@ func init() {
 		})
 
 		character.ItemSwap.RegisterProc(28785, procAura)
+	})
+
+	// Dragonspine Trophy
+	core.NewItemEffect(28830, func(agent core.Agent) {
+		character := agent.GetCharacter()
+		duration := time.Second * 6
+		value := 325.0
+
+		aura := character.NewTemporaryStatsAura(
+			"Haste",
+			core.ActionID{SpellID: 34775},
+			stats.Stats{stats.MeleeHasteRating: value},
+			duration,
+		)
+
+		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
+			Name:     "Dragonspine Trophy",
+			ActionID: core.ActionID{ItemID: 28830},
+			DPM:      character.NewLegacyPPMManager(1, core.ProcMaskMeleeOrRanged),
+			ICD:      time.Second * 20,
+			ProcMask: core.ProcMaskMeleeOrRanged,
+			Outcome:  core.OutcomeLanded,
+			Callback: core.CallbackOnSpellHitDealt,
+			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+				aura.Activate(sim)
+			},
+		})
+
+		character.ItemSwap.RegisterProc(28830, procAura)
 	})
 }
