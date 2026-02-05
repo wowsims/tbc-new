@@ -60,7 +60,6 @@ export const MISSING_ITEM_EFFECTS = [
     28727, // Pendant of the Violet Eye
     28789, // Eye of Magtheridon
     28823, // Eye of Gruul
-    28830, // Dragonspine Trophy
     29108, // Blade of the Unyielding
     29109, // Rod of the Unyielding
     29297, // Band of the Eternal Defender

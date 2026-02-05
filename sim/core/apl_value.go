@@ -225,6 +225,8 @@ func (rot *APLRotation) newAPLValueWithContext(config *proto.APLValue, groupVari
 		value = rot.newValueAuraICDIsReady(inputConfig, config.Uuid)
 	case *proto.APLValue_AuraShouldRefresh:
 		value = rot.newValueAuraShouldRefresh(config.GetAuraShouldRefresh(), config.Uuid)
+	case *proto.APLValue_AuraDuration:
+		value = rot.newValueAuraDuration(config.GetAuraDuration(), config.Uuid)
 
 	// Aura sets
 	case *proto.APLValue_AllTrinketStatProcsActive:

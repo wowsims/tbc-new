@@ -170,7 +170,7 @@ func applyRaceEffects(agent Agent) {
 		character.MultiplyStat(stats.Intellect, 1.05)
 	case proto.Race_RaceHuman:
 		character.MultiplyStat(stats.Spirit, 1.10)
-		applyWeaponSpecialization(character, "Mace Specialization ", 20865, false, proto.WeaponType_WeaponTypeMace)
+		applyWeaponSpecialization(character, "Mace Specialization ", 20864, false, proto.WeaponType_WeaponTypeMace)
 		applyWeaponSpecialization(character, "Sword Specialization ", 20597, false, proto.WeaponType_WeaponTypeSword)
 	case proto.Race_RaceNightElf:
 		character.stats[stats.NatureResistance] += 10

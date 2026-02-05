@@ -29,6 +29,7 @@ func (war *Warrior) registerRend() {
 		},
 
 		DamageMultiplier: 1,
+		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
 		ThreatMultiplier: 1,
 
 		Dot: core.DotConfig{

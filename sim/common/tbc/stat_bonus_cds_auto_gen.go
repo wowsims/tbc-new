@@ -19,7 +19,6 @@ func RegisterAllOnUseCds() {
 	shared.NewSimpleStatActive(33830) // Ancient Aqir Artifact
 
 	// ArmorPenetration
-	shared.NewSimpleStatActive(21670) // Badge of the Swarmguard
 	shared.NewSimpleStatActive(28121) // Icon of Unyielding Courage
 
 	// AttackPower

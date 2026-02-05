@@ -490,11 +490,11 @@
 				"label": "Stance Snapshot",
 				"tooltip": "Ability that is cast at the same time as stance swap will benefit from the bonus of the stance before the swap."
 			},
-			"has_bs_solarian_sapphire":{
+			"has_bs_solarian_sapphire": {
 				"label": "Prepull Battle Shout: Solarian Sapphire",
 				"tooltip": "If enabled, Battle Shout during prepull will provide bonus AP from the Solarian Sapphire."
 			},
-			"has_bs_tier_2":{
+			"has_bs_tier_2": {
 				"label": "Prepull Battle Shout: Tier 2",
 				"tooltip": "If enabled, Battle Shout during prepull will provide bonus AP from the Tier 2 set bonus."
 			},
@@ -1395,6 +1395,10 @@
 					"label": "Aura Should Refresh",
 					"tooltip": "Whether this aura should be refreshed, e.g. for the purpose of maintaining a debuff.",
 					"full_description": "<p>This condition checks not only the specified aura but also any other auras on the same unit, including auras applied by other raid members, which apply the same debuff category.</p><p>For example, 'Should Refresh Debuff(Sunder Armor)' will return <b>False</b> if the unit has an active Expose Armor aura.</p>"
+				},
+				"aura_duration": {
+					"label": "Aura Duration",
+					"tooltip": "The full cooldown duration of the aura"
 				},
 				"all_trinket_stat_procs_active": {
 					"label": "All Item Proc Buffs Active",
