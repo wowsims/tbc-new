@@ -27,7 +27,7 @@ func init() {
 
 		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
 			Name:               "Badge of the Swarmguard",
-			ActionID:           core.ActionID{ItemID: 26480},
+			MetricsActionID:    core.ActionID{SpellID: 26480},
 			DPM:                character.NewLegacyPPMManager(10, core.ProcMaskMeleeOrRanged),
 			Duration:           duration,
 			Outcome:            core.OutcomeLanded,

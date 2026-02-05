@@ -221,8 +221,8 @@
 {"effectId":2934,"spellId":33993,"name":"Enchant Gloves - Blasting","icon":"trade_engraving","type":7,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"quality":1},
 {"effectId":3150,"spellId":39882,"name":"Enchant Chest - Restore Mana Prime","icon":"trade_engraving","type":5,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"quality":1},
 {"effectId":3269,"itemId":34836,"spellId":45698,"name":"Truesilver Fishing Line","icon":"inv_misc_thread_01","type":13,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"quality":2},
-{"effectId":3289,"spellId":48555,"name":"Skybreaker Whip","icon":"trade_engraving","type":13,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"quality":1},
 {"effectId":3289,"spellId":48557,"name":"Riding Crop","icon":"trade_engraving","type":13,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"quality":1},
+{"effectId":3289,"spellId":48555,"name":"Skybreaker Whip","icon":"trade_engraving","type":13,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"quality":1},
 {"effectId":3315,"itemId":37312,"spellId":48401,"name":"Carrot on a Stick","icon":"inv_misc_food_54","type":13,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"quality":2}
 ],
 "gems":[

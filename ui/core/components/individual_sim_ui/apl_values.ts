@@ -106,6 +106,7 @@ import {
 	APLValueDotTimeToNextTick,
 	APLValueSpellInFlight,
 	APLValueBossCurrentTarget,
+	APLValueAuraDuration,
 } from '../../proto/apl.js';
 import { Class, Spec } from '../../proto/common.js';
 import { ShamanTotems_TotemType as TotemType } from '../../proto/shaman.js';
@@ -1156,6 +1157,14 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 			}),
 		],
 	}),
+	auraDuration: inputBuilder({
+		label: i18n.t('rotation_tab.apl.values.aura_duration.label'),
+		submenu: ['aura'],
+		shortDescription: i18n.t('rotation_tab.apl.values.aura_duration.tooltip'),
+		fullDescription: i18n.t('rotation_tab.apl.values.aura_duration.full_description'),
+		newValue: () => APLValueAuraDuration.create,
+		fields: [AplHelpers.unitFieldConfig('sourceUnit', 'aura_sources'), AplHelpers.actionIdFieldConfig('auraId', 'auras', 'sourceUnit')],
+	}),
 
 	// Aura Sets
 	allTrinketStatProcsActive: inputBuilder({
@@ -1471,10 +1480,7 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 		shortDescription: i18n.t('rotation_tab.apl.values.affliction_current_snapshot.tooltip'),
 		newValue: APLValueAfflictionCurrentSnapshot.create,
 		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getSpec() == Spec.SpecWarlock,
-		fields: [
-			AplHelpers.unitFieldConfig('targetUnit', 'targets'),
-			AplHelpers.actionIdFieldConfig('spellId', 'expected_dot_spells', ''),
-		],
+		fields: [AplHelpers.unitFieldConfig('targetUnit', 'targets'), AplHelpers.actionIdFieldConfig('spellId', 'expected_dot_spells', '')],
 	}),
 	mageCurrentCombustionDotEstimate: inputBuilder({
 		label: i18n.t('rotation_tab.apl.values.mage_current_combustion_dot_estimate.label'),

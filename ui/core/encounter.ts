@@ -192,7 +192,7 @@ export class Encounter {
 			level: Mechanics.BOSS_LEVEL,
 			mobType: MobType.MobTypeMechanical,
 			stats: Stats.fromMap({
-				[Stat.StatArmor]: 7700,
+				[Stat.StatArmor]: 7685,
 				[Stat.StatAttackPower]: 320,
 				[Stat.StatHealth]: 4552800,
 			}).asProtoArray(),
