@@ -49,7 +49,7 @@ message APLGroup {
 	repeated APLValueVariable variables = 3;  // Variables that can be used in this group
 }
 
-// NextIndex: 30
+// NextIndex: 29
 message APLAction {
     APLValue condition = 1; // If set, action will only execute if value is true or != 0.
 
@@ -88,7 +88,6 @@ message APLAction {
         // Class or Spec-specific actions
         APLActionCatOptimalRotationAction cat_optimal_rotation_action = 18;
         APLActionGuardianHotwDpsRotation guardian_hotw_dps_rotation = 27;
-		APLActionWarlockNextExhaleTarget warlock_next_exhale_target = 29;
 
         // Internal use only, not exposed in UI.
         APLActionCustomRotation custom_rotation = 19;
@@ -99,7 +98,7 @@ message APLAction {
 }
 
 
-// NextIndex: 126
+// NextIndex: 125
 message APLValue {
 	UUID uuid = 85;
 
@@ -180,24 +179,21 @@ message APLValue {
         // Aura values
         APLValueAuraIsKnown aura_is_known = 73;
         APLValueAuraIsActive aura_is_active = 22;
-        APLValueAuraIsActive aura_is_active_with_reaction_time = 50 [deprecated=true];
         APLValueAuraIsInactive aura_is_inactive = 107;
-        APLValueAuraIsInactive aura_is_inactive_with_reaction_time = 76 [deprecated=true];
         APLValueAuraRemainingTime aura_remaining_time = 23;
         APLValueAuraNumStacks aura_num_stacks = 24;
         APLValueAuraInternalCooldown aura_internal_cooldown = 39;
         APLValueAuraICDIsReady aura_icd_is_ready = 108;
-        APLValueAuraICDIsReady aura_icd_is_ready_with_reaction_time = 51 [deprecated=true];
         APLValueAuraShouldRefresh aura_should_refresh = 43;
-        APLValueAuraDuration aura_duration = 125;
+        APLValueAuraDuration aura_duration = 124;
 
         // Aggregate Aura set values
-        APLValueAllTrinketStatProcsActive all_trinket_stat_procs_active = 78; // TODO: Rename in MoP as it includes all item/effect procs
-        APLValueAnyTrinketStatProcsActive any_trinket_stat_procs_active = 79; // TODO: Rename in MoP as it includes all item/effect procs
-		APLValueAnyTrinketStatProcsAvailable any_trinket_stat_procs_available = 121; // TODO: Rename in MoP as it includes all item/effect procs
-        APLValueTrinketProcsMinRemainingTime trinket_procs_min_remaining_time = 80; // TODO: Rename in MoP as it includes all item/effect procs
-        APLValueTrinketProcsMaxRemainingICD trinket_procs_max_remaining_icd = 82; // TODO: Rename in MoP as it includes all item/effect procs
-        APLValueNumEquippedStatProcTrinkets num_equipped_stat_proc_trinkets = 81; // TODO: Rename in MoP as it includes all item/effect procs
+        APLValueAllItemStatProcsActive all_item_stat_procs_active = 78;
+        APLValueAnyItemStatProcsActive any_item_stat_procs_active = 79;
+		APLValueAnyItemStatProcsAvailable any_item_stat_procs_available = 121;
+        APLValueItemProcsMinRemainingTime item_procs_min_remaining_time = 80;
+        APLValueItemProcsMaxRemainingICD item_procs_max_remaining_icd = 82;
+        APLValueNumEquippedStatProcItems num_equipped_stat_proc_items = 81;
         APLValueNumStatBuffCooldowns num_stat_buff_cooldowns = 84;
         APLValueAnyStatBuffCooldownsActive any_stat_buff_cooldowns_active = 106;
 		APLValueAnyStatBuffCooldownsMinDuration any_stat_buff_cooldowns_min_duration = 122;
@@ -229,13 +225,10 @@ message APLValue {
         APLValueCatExcessEnergy cat_excess_energy = 52;
         APLValueCatNewSavageRoarDuration cat_new_savage_roar_duration = 61;
         APLValueWarlockHandOfGuldanInFlight warlock_hand_of_guldan_in_flight = 59;
-        APLValueWarlockHauntInFlight warlock_haunt_in_flight = 60 [deprecated=true];
         APLValueCurrentEclipsePhase druid_current_eclipse_phase = 70;
-		APLValueMageCurrentCombustionDotEstimate mage_current_combustion_dot_estimate = 77;
         APLValueShamanFireElementalDuration shaman_fire_elemental_duration = 83;
 		APLValueProtectionPaladinDamageTakenLastGlobal protection_paladin_damage_taken_last_global = 100;
 		APLValueAfflictionCurrentSnapshot affliction_current_snapshot = 123;
-		APLValueAfflictionExhaleWindow affliction_exhale_window = 124;
 
 		// Variable reference
 		APLValueVariableRef variable_ref = 111;
@@ -246,6 +239,9 @@ message APLValue {
 
 		// Item Swap
 		APLValueActiveItemSwapSet active_item_swap_set = 113;
+
+		// Misc
+		APLValueMultipleCdUsages multiple_cd_usages = 60;
 	}
 }
 
@@ -401,9 +397,6 @@ message APLActionMoveDuration {
 }
 
 message APLActionCustomRotation {
-}
-
-message APLActionWarlockNextExhaleTarget {
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -645,37 +638,37 @@ message APLValueAuraDuration {
     ActionID aura_id = 1;
 }
 
-message APLValueAllTrinketStatProcsActive {
+message APLValueAllItemStatProcsActive {
     int32 stat_type1 = 1;
     int32 stat_type2 = 2;
     int32 stat_type3 = 3;
     double min_icd_seconds = 4;
 }
-message APLValueAnyTrinketStatProcsActive {
+message APLValueAnyItemStatProcsActive {
     int32 stat_type1 = 1;
     int32 stat_type2 = 2;
     int32 stat_type3 = 3;
     double min_icd_seconds = 4;
 }
-message APLValueAnyTrinketStatProcsAvailable {
+message APLValueAnyItemStatProcsAvailable {
     int32 stat_type1 = 1;
     int32 stat_type2 = 2;
     int32 stat_type3 = 3;
     double min_icd_seconds = 4;
 }
-message APLValueTrinketProcsMinRemainingTime {
+message APLValueItemProcsMinRemainingTime {
     int32 stat_type1 = 1;
     int32 stat_type2 = 2;
     int32 stat_type3 = 3;
     double min_icd_seconds = 4;
 }
-message APLValueTrinketProcsMaxRemainingICD {
+message APLValueItemProcsMaxRemainingICD {
     int32 stat_type1 = 1;
     int32 stat_type2 = 2;
     int32 stat_type3 = 3;
     double min_icd_seconds = 4;
 }
-message APLValueNumEquippedStatProcTrinkets {
+message APLValueNumEquippedStatProcItems {
     int32 stat_type1 = 1;
     int32 stat_type2 = 2;
     int32 stat_type3 = 3;
@@ -736,13 +729,10 @@ message APLValueTotemRemainingTime {
 message APLValueCatExcessEnergy {}
 message APLValueCatNewSavageRoarDuration {}
 message APLValueWarlockHandOfGuldanInFlight {}
-message APLValueWarlockHauntInFlight {}
-message APLValueAfflictionExhaleWindow {}
 message APLValueAfflictionCurrentSnapshot {
 	ActionID spell_id = 1;
 	UnitReference target_unit = 2;
 }
-message APLValueMageCurrentCombustionDotEstimate {}
 message APLValueShamanFireElementalDuration {}
 
 message APLValueProtectionPaladinDamageTakenLastGlobal {}
@@ -777,4 +767,10 @@ message APLValueVariablePlaceholder {
 
 message APLValueActiveItemSwapSet {
     APLActionItemSwap.SwapSet swap_set = 1;
+}
+
+message APLValueMultipleCdUsages {
+	ActionID base_spell_id = 1;
+	ActionID target_spell_id = 2;
+	APLValue offset = 3;
 }

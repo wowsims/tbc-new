@@ -1277,6 +1277,8 @@ func registerBloodlustCD(character *Character) {
 				bloodlustAura.Activate(sim)
 			}
 		},
+
+		RelatedSelfBuff: bloodlustAura,
 	})
 
 	character.AddMajorCooldown(MajorCooldown{
