@@ -261,9 +261,12 @@ func (d DBCTooltipDataProvider) GetEffectScaledValue(spellId int64, effectIdx in
 		baseDamage += baseValue * effect.Coefficient
 	} else {
 		baseDamage += float64(effect.EffectBasePoints)
+
 		spell := d.DBC.Spells[int(spellId)]
 		if spell.MaxScalingLevel > 0 {
 			baseDamage += effect.EffectRealPointsPerLevel * math.Min(float64(spell.MaxScalingLevel), core.CharacterLevel)
+		} else {
+			baseDamage += float64(effect.EffectDieSides)
 		}
 	}
 

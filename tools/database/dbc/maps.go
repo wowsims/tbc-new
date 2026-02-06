@@ -455,3 +455,37 @@ var Classes = []DbcClass{
 // 	}
 // 	return proto.Spec_SpecUnknown
 // }
+
+// Used to map ITEM_SPELLTRIGGER_CHANCE_ON_HIT items using PPM
+// which is not available in the gamefiles.
+// Adding PPM values here will prevent filtering of the item
+// when parsing in item_effect.go#MergeItemEffectsForAllStates.
+var MapItemIdToPPM = map[int32]float64{
+	28579: 1,    // Romulo's Poison Vial
+	31859: 1,    // Darkmoon Card: Madness
+	28830: 1,    // Dragonspine Trophy 20s ICD
+	29301: 1,    // Band of the Eternal Champion 60s ICD
+	28437: 1,    // Drakefist Hammer
+	28438: 1,    // Dragonmaw
+	28439: 1,    // Dragonstrike
+	28429: 1,    // Lionheart Champion
+	28430: 1,    // Lionheart Executioner
+	30311: 2,    // Warp Slicer
+	29996: 1,    // Rod of the sun king
+	29962: 1,    // Heartrazor
+	29348: 1,    // The Bladefist
+	31331: 2,    // The Night blade
+	12798: 1,    // Annihilator
+	19019: 6,    // Thunderfury
+	30316: 2,    // Devastation
+	28774: 1.33, // Glaive of the Pit
+	28573: 0.5,  // Despair
+	29693: 0.5,  // Khorium Champion
+}
+
+func getPPMForItemID(itemID int32) float64 {
+	if ppm, ok := MapItemIdToPPM[itemID]; ok {
+		return ppm
+	}
+	return 0
+}

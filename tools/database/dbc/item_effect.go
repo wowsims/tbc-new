@@ -1,6 +1,8 @@
 package dbc
 
 import (
+	"fmt"
+
 	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
 )
@@ -43,7 +45,7 @@ func makeBaseProto(e *ItemEffect, statsSpellID int) *proto.ItemEffect {
 	sp := dbcInstance.Spells[e.SpellID]
 	base := &proto.ItemEffect{
 		BuffId:           int32(e.SpellID),
-		BuffName:         sp.NameLang,
+		BuffName:         fmt.Sprintf("%s (%d)", sp.NameLang, e.SpellID),
 		EffectDurationMs: int32(sp.Duration),
 		ScalingOptions:   make(map[int32]*proto.ScalingItemEffectProperties),
 	}
@@ -68,9 +70,22 @@ func assignTrigger(e *ItemEffect, statsSpellID int, pe *proto.ItemEffect) {
 		proc := &proto.ProcEffect{
 			IcdMs: spTop.ProcCategoryRecovery,
 		}
-
+		// If proc chance is above 100 it is most likely a PPM proc
+		// Or if we manually assigned PPM
+		ppm := getPPMForItemID(int32(e.ParentItemID))
+		if spTop.ProcChance == 0 || spTop.ProcChance > 100 || ppm > 0 {
+			if ppm > 0 {
+				proc.ProcRate = &proto.ProcEffect_Ppm{
+					Ppm: ppm,
+				}
+			}
+		} else {
+			proc.ProcRate = &proto.ProcEffect_ProcChance{
+				ProcChance: float64(spTop.ProcChance) / 100,
+			}
+		}
 		pe.BuffId = statsSP.ID
-		pe.BuffName = statsSP.NameLang
+		pe.BuffName = fmt.Sprintf("%s (%d)", statsSP.NameLang, e.SpellID)
 		pe.Effect = &proto.ItemEffect_Proc{Proc: proc}
 	}
 }
@@ -201,7 +216,7 @@ func MergeItemEffectsForAllStates(parsed *proto.UIItem) *proto.ItemEffect {
 
 		e := &dbcInstance.ItemEffectsByParentID[int(parsed.Id)][i]
 		props := buildScalingProps(resolveStatsSpell(e.SpellID), int(parsed.ScalingOptions[int32(0)].Ilvl), e.SpellID)
-		if e.CoolDownMSec > 0 && len(props.Stats) > 0 {
+		if ((e.TriggerType == ITEM_SPELLTRIGGER_CHANCE_ON_HIT && getPPMForItemID(parsed.Id) > 0) || e.CoolDownMSec > 0) && len(props.Stats) > 0 {
 			baseEff = e
 			break
 		}

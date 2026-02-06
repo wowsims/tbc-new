@@ -429,12 +429,9 @@ func BuildProcInfo(parsed *proto.UIItem, instance *dbc.DBC, tooltip string) (Pro
 	for _, effectInfo := range itemEffectInfo {
 		procId := effectInfo.SpellID
 		procSpell, ok := instance.Spells[int(procId)]
+
 		if !ok {
 			panic(fmt.Sprintf("Could not find proc aura %d spell for item effect %d.\n", procId, parsed.Id))
-		}
-
-		if len(procSpell.ProcTypeMask) == 0 || procSpell.ProcTypeMask[0] == 0 {
-			continue
 		}
 
 		itemType := proto.ItemType_ItemTypeUnknown
@@ -442,6 +439,9 @@ func BuildProcInfo(parsed *proto.UIItem, instance *dbc.DBC, tooltip string) (Pro
 			itemType = proto.ItemType_ItemTypeWeapon
 		}
 
+		if itemType != proto.ItemType_ItemTypeWeapon && (len(procSpell.ProcTypeMask) == 0 || procSpell.ProcTypeMask[0] == 0) {
+			continue
+		}
 		procInfo, supported := BuildSpellProcInfo(&procSpell, tooltip, itemType)
 
 		// we do not support generation of more than one proc effect right now
