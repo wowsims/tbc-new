@@ -69,7 +69,7 @@ func (war *Warrior) registerDeflection() {
 		return
 	}
 
-	war.PseudoStats.BaseParryChance += float64(war.Talents.Deflection)
+	war.PseudoStats.BaseParryChance += 0.01 * float64(war.Talents.Deflection)
 }
 
 func (war *Warrior) registerImprovedRend() {

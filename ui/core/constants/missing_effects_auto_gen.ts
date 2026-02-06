@@ -46,7 +46,6 @@ export const MISSING_ITEM_EFFECTS = [
     27924, // Mark of Defiance
     27926, // Mark of Vindication
     27927, // Mark of Vindication
-    28034, // Hourglass of the Unraveller
     28108, // Power Infused Mushroom
     28109, // Essence Infused Mushroom
     28190, // Scarab of the Infinite Cycle
@@ -77,9 +76,6 @@ export const MISSING_ITEM_EFFECTS = [
     31323, // Don Santos' Famous Hunting Rifle
     31328, // Leggings of Beast Mastery
     31336, // Blade of Wizardry
-    31856, // Darkmoon Card: Crusade
-    31857, // Darkmoon Card: Wrath
-    31858, // Darkmoon Card: Vengeance
     32262, // Syphon of the Nathrezim
     32336, // Black Bow of the Betrayer
     32375, // Bulwark of Azzinoth
