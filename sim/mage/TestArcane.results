@@ -59,6 +59,10 @@ dps_results: {
  value: {}
 }
 dps_results: {
+ key: "TestArcane-AllItems-BadgeoftheSwarmguard-21670"
+ value: {}
+}
+dps_results: {
  key: "TestArcane-AllItems-Quagmirran'sEye-27683"
  value: {}
 }
