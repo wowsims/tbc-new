@@ -69,7 +69,7 @@ func (warrior *Warrior) makeStanceSpell(stance Stance, mask int64, aura *core.Au
 func (warrior *Warrior) registerBattleStanceAura() *core.Aura {
 	actionID := core.ActionID{SpellID: 2457}
 
-	aura := warrior.GetOrRegisterAura(core.Aura{
+	aura := warrior.RegisterAura(core.Aura{
 		Label:      "Battle Stance",
 		ActionID:   actionID,
 		Duration:   core.NeverExpires,
@@ -84,7 +84,7 @@ func (warrior *Warrior) registerBattleStanceAura() *core.Aura {
 func (warrior *Warrior) registerDefensiveStanceAura() *core.Aura {
 	actionID := core.ActionID{SpellID: 71}
 
-	aura := warrior.GetOrRegisterAura(core.Aura{
+	aura := warrior.RegisterAura(core.Aura{
 		Label:      "Defensive Stance",
 		ActionID:   actionID,
 		Duration:   core.NeverExpires,
@@ -106,7 +106,7 @@ func (warrior *Warrior) registerBerserkerStanceAura() *core.Aura {
 	actionId := core.ActionID{SpellID: 2458}
 	threatMultiplier := 0.8 - 0.02*float64(warrior.Talents.ImprovedBerserkerStance)
 
-	aura := warrior.GetOrRegisterAura(core.Aura{
+	aura := warrior.RegisterAura(core.Aura{
 		Label:      "Berserker Stance",
 		ActionID:   actionId,
 		Duration:   core.NeverExpires,
@@ -128,4 +128,13 @@ func (warrior *Warrior) registerStances() {
 	warrior.BattleStance = warrior.makeStanceSpell(BattleStance, SpellMaskBattleStance, battleStanceAura, stanceCD)
 	warrior.DefensiveStance = warrior.makeStanceSpell(DefensiveStance, SpellMaskDefensiveStance, defensiveStanceAura, stanceCD)
 	warrior.BerserkerStance = warrior.makeStanceSpell(BerserkerStance, SpellMaskBerserkerStance, berserkerStanceAura, stanceCD)
+
+	switch warrior.DefaultStance {
+	case proto.WarriorStance_WarriorStanceBattle:
+		core.MakePermanent(warrior.BattleStance.RelatedSelfBuff)
+	case proto.WarriorStance_WarriorStanceDefensive:
+		core.MakePermanent(warrior.DefensiveStance.RelatedSelfBuff)
+	case proto.WarriorStance_WarriorStanceBerserker:
+		core.MakePermanent(warrior.BerserkerStance.RelatedSelfBuff)
+	}
 }
