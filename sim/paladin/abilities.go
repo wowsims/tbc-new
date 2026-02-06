@@ -6,46 +6,6 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
-// Exorcism
-// https://www.wowhead.com/tbc/spell=10314
-//
-// Causes Holy damage to an Undead or Demon target.
-func (paladin *Paladin) registerExorcism() {
-	actionID := core.ActionID{SpellID: 10314}
-
-	paladin.Exorcism = paladin.RegisterSpell(core.SpellConfig{
-		ActionID:       actionID,
-		SpellSchool:    core.SpellSchoolHoly,
-		ProcMask:       core.ProcMaskSpellDamage,
-		Flags:          core.SpellFlagAPL,
-		ClassSpellMask: SpellMaskExorcism,
-
-		MaxRange: 30,
-
-		ManaCost: core.ManaCostOptions{
-			FlatCost: 295, // Rank 7
-		},
-		Cast: core.CastConfig{
-			DefaultCast: core.Cast{
-				GCD:      core.GCDDefault,
-				CastTime: time.Millisecond * 1500,
-			},
-			CD: core.Cooldown{
-				Timer:    paladin.NewTimer(),
-				Duration: time.Second * 15,
-			},
-		},
-
-		DamageMultiplier: 1,
-		CritMultiplier:   paladin.DefaultMeleeCritMultiplier(),
-		ThreatMultiplier: 1,
-
-		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			// TODO: Implement damage calculation (only works on Undead/Demon)
-		},
-	})
-}
-
 // Hammer of Justice
 // https://www.wowhead.com/tbc/spell=10308
 //

@@ -1,90 +1,86 @@
 package paladin
 
-// Holy Shock
-// https://www.wowhead.com/tbc/spell=33072
-//
-// Blasts the target with Holy energy, causing 721 to 779 Holy damage to an
-// enemy, or 931 to 987 healing to an ally.
-
 import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
 )
 
+
+// Holy Shock
+// https://www.wowhead.com/tbc/spell=20473
+// 
+// Blasts the target with Holy energy, causing X to Y Holy damage to an enemy, or X*1.267 to Y*1.267 healing to an ally.
 func (paladin *Paladin) registerHolyShock() {
-	// Holy Shock Damage
-	holyShockDamage := paladin.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 33072}.WithTag(1),
-		SpellSchool:    core.SpellSchoolHoly,
-		ProcMask:       core.ProcMaskSpellDamage,
-		Flags:          core.SpellFlagAPL,
-		ClassSpellMask: SpellMaskHolyShock,
+	var ranks = []struct {
+		level        int32
+		spellID      int32
+		manaCost     int32
+		minValue     float64
+		maxValue     float64
+		coeff        float64
+	}{
+		{},
+		{level: 40, spellID: 20473, manaCost: 335, minValue: 277, maxValue: 299, coeff: 0.429},
+		{level: 48, spellID: 20929, manaCost: 410, minValue: 379, maxValue: 409, coeff: 0.429},
+		{level: 56, spellID: 20930, manaCost: 485, minValue: 496, maxValue: 628, coeff: 0.429},
+		{level: 64, spellID: 27174, manaCost: 575, minValue: 614, maxValue: 664, coeff: 0.429},
+		{level: 70, spellID: 33072, manaCost: 650, minValue: 721, maxValue: 779, coeff: 0.429},
+	}
 
-		MaxRange: 20,
+	for rank := 1; rank < len(ranks); rank++ {
+		if paladin.Level < ranks[rank].level {
+			break
+		}
 
-		ManaCost: core.ManaCostOptions{
-			FlatCost: 520,
-		},
-		Cast: core.CastConfig{
-			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+		// Holy Shock heals for 1.267x the damage component of the spell.
+		healingCoeff := 1.267
+
+		holyShock := paladin.RegisterSpell(core.SpellConfig{
+			ActionID:       core.ActionID{SpellID: ranks[rank].spellID},
+			SpellSchool:    core.SpellSchoolHoly,
+			ProcMask:       core.ProcMaskSpellDamage,
+			Flags:          core.SpellFlagAPL,
+			ClassSpellMask: SpellMaskHolyShock,
+
+			MaxRange: 20,
+
+			ManaCost: core.ManaCostOptions{
+				FlatCost: ranks[rank].manaCost,
 			},
-			CD: core.Cooldown{
-				Timer:    paladin.NewTimer(),
-				Duration: time.Second * 15,
+			Cast: core.CastConfig{
+				DefaultCast: core.Cast{
+					GCD: core.GCDDefault,
+				},
+				CD: core.Cooldown{
+					Timer:    paladin.NewTimer(),
+					Duration: time.Second * 15,
+				},
 			},
-		},
 
-		DamageMultiplier: 1,
-		CritMultiplier:   paladin.DefaultMeleeCritMultiplier(),
-		ThreatMultiplier: 1,
+			BonusCoefficient: ranks[rank].coeff,
 
-		BonusCoefficient: 0.4286,
+			ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+				if target.IsOpponent(target) {
+					damage := sim.Roll(ranks[rank].minValue, ranks[rank].maxValue)
+					spell.CalcAndDealDamage(sim, target, damage, spell.OutcomeMagicHitAndCrit)
+				} else {
+					// Temporarily configure the spell as a healing spell
+					spell.Flags |= core.SpellFlagHelpful
+					originalProcMask := spell.ProcMask
+					spell.ProcMask = core.ProcMaskSpellHealing
 
-		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := sim.Roll(721, 779)
-			spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
-		},
-	})
+					// TODO: Use healing power instead of holy power for healing calculations
+					healing := sim.Roll(ranks[rank].minValue, ranks[rank].maxValue) * healingCoeff
+					spell.CalcAndDealHealing(sim, target, healing, spell.OutcomeHealingCrit)
 
-	// Holy Shock Healing
-	holyShockHeal := paladin.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 33072}.WithTag(2),
-		SpellSchool:    core.SpellSchoolHoly,
-		ProcMask:       core.ProcMaskSpellHealing,
-		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
-		ClassSpellMask: SpellMaskHolyShock,
-
-		MaxRange: 40,
-
-		ManaCost: core.ManaCostOptions{
-			FlatCost: 520,
-		},
-		Cast: core.CastConfig{
-			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+					// Reset the spell to its original configuration
+					spell.Flags &= ^core.SpellFlagHelpful
+					spell.ProcMask = originalProcMask
+				}
 			},
-			CD: core.Cooldown{
-				Timer:    holyShockDamage.CD.Timer,
-				Duration: time.Second * 15,
-			},
-		},
+		})
 
-		DamageMultiplier: 1,
-		CritMultiplier:   paladin.DefaultMeleeCritMultiplier(),
-		ThreatMultiplier: 1,
-
-		BonusCoefficient: 0.4286,
-
-		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			if target.IsOpponent(&paladin.Unit) {
-				target = &paladin.Unit
-			}
-			baseHealing := sim.Roll(931, 987)
-			spell.CalcAndDealHealing(sim, target, baseHealing, spell.OutcomeHealingCrit)
-		},
-	})
-
-	_ = holyShockHeal
+		paladin.HolyShocks = append(paladin.HolyShocks, holyShock)
+	}
 }

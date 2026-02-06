@@ -16,16 +16,21 @@ type Paladin struct {
 	Seal    proto.PaladinSeal
 	Talents *proto.PaladinTalents
 
-	PreviousSeal     *core.Aura
+	Forbearance *core.Aura
+
+	PreviousSeal      *core.Aura
 	PreviousJudgement *core.Spell
-	CurrentSeal      *core.Aura
-	CurrentJudgement *core.Spell
+	CurrentSeal       *core.Aura
+	CurrentJudgement  *core.Spell
 
 	// Shared spells
-	Judgement    *core.Spell
+	Judgement     *core.Spell
 	Consecrations []*core.Spell
-	Exorcism     *core.Spell
-	HolyShock    *core.Spell
+	Exorcisms     []*core.Spell
+	HolyShocks    []*core.Spell
+	HolyLights    []*core.Spell
+	FlashOfLights []*core.Spell
+	LayOnHands    []*core.Spell
 
 	// Seal Auras
 	SealOfRighteousnessAuras []*core.Aura
@@ -38,24 +43,24 @@ type Paladin struct {
 	SealOfVengeanceAuras     []*core.Aura
 
 	// Seals
-	SealOfRighteousness 	[]*core.Spell
-	SealOfCommand      		[]*core.Spell
-	SealOfLight        		[]*core.Spell
-	SealOfWisdom       		[]*core.Spell
-	SealOfJustice     		[]*core.Spell
-	SealOfTheCrusader  		[]*core.Spell
-	SealOfBlood      		[]*core.Spell
-	SealOfVengeance 		[]*core.Spell
+	SealOfRighteousness []*core.Spell
+	SealOfCommand       []*core.Spell
+	SealOfLight         []*core.Spell
+	SealOfWisdom        []*core.Spell
+	SealOfJustice       []*core.Spell
+	SealOfTheCrusader   []*core.Spell
+	SealOfBlood         []*core.Spell
+	SealOfVengeance     []*core.Spell
 
 	// Seal Judgements
-	SealOfRighteousnessJudgements 	[]*core.Spell
-	SealOfCommandJudgements      	[]*core.Spell
-	SealOfLightJudgements       	[]*core.Spell
-	SealOfWisdomJudgements      	[]*core.Spell
-	SealOfJusticeJudgements     	[]*core.Spell
-	SealOfTheCrusaderJudgements   	[]*core.Spell
-	SealOfBloodJudgements      		[]*core.Spell
-	SealOfVengeanceJudgements 		[]*core.Spell
+	SealOfRighteousnessJudgements []*core.Spell
+	SealOfCommandJudgements       []*core.Spell
+	SealOfLightJudgements         []*core.Spell
+	SealOfWisdomJudgements        []*core.Spell
+	SealOfJusticeJudgements       []*core.Spell
+	SealOfTheCrusaderJudgements   []*core.Spell
+	SealOfBloodJudgements         []*core.Spell
+	SealOfVengeanceJudgements     []*core.Spell
 
 	// Talent-specific auras and spells
 	DivineFavorAura        *core.Aura
@@ -105,10 +110,8 @@ func (paladin *Paladin) registerSpells() {
 	// // Blessings
 	// paladin.registerBlessings()
 
-	// // Healing spells
-	// paladin.registerHealingSpells()
-
-	paladin.ApplyTalents()
+	// Healing spells
+	paladin.registerHealingSpells()
 }
 
 func (paladin *Paladin) Reset(sim *core.Simulation) {
