@@ -307,6 +307,9 @@ func (war *Warrior) registerDeathWish() {
 			Cost: 10,
 		},
 		Cast: core.CastConfig{
+			DefaultCast: core.Cast{
+				GCD: core.GCDDefault,
+			},
 			IgnoreHaste: true,
 			CD: core.Cooldown{
 				Timer:    war.NewTimer(),
