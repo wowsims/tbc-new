@@ -39,11 +39,6 @@ type ExtraSpellInfo struct {
 	Trigger func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult)
 }
 
-type ItemVariant struct {
-	ItemID   int32
-	ItemName string
-}
-
 type CustomProcHandler func(sim *core.Simulation, procAura *core.StatBuffAura)
 
 func NewProcStatBonusEffectWithDamageProc(config ProcStatBonusEffect, damage DamageEffect) {
@@ -213,23 +208,6 @@ func factory_StatBonusEffect(config ProcStatBonusEffect, extraSpell func(agent c
 
 		character.AddStatProcBuff(effectID, procAura, isEnchant, eligibleSlots)
 	})
-}
-
-func NewProcStatBonusEffectWithVariants(config ProcStatBonusEffect, variants []ItemVariant) {
-	var maxItemID int32
-
-	for _, variant := range variants {
-		maxItemID = max(maxItemID, variant.ItemID)
-	}
-
-	for _, variant := range variants {
-		config.Name = variant.ItemName
-		config.ItemID = variant.ItemID
-		core.AddEffectsToTest = (config.ItemID == maxItemID)
-		NewProcStatBonusEffect(config)
-	}
-
-	core.AddEffectsToTest = true
 }
 
 func NewProcStatBonusEffect(config ProcStatBonusEffect) {
@@ -405,51 +383,61 @@ func NewStackingStatBonusCD(config StackingStatBonusCD) {
 type StackingStatBonusEffect struct {
 	Name               string
 	ItemID             int32
-	AuraID             int32
-	Bonus              stats.Stats
-	Duration           time.Duration
 	MaxStacks          int32
 	Callback           core.AuraCallback
 	ProcMask           core.ProcMask
 	SpellFlags         core.SpellFlag
 	Outcome            core.HitOutcome
 	RequireDamageDealt bool
-	ProcChance         float64
-	Icd                time.Duration
 }
 
 func NewStackingStatBonusEffect(config StackingStatBonusEffect) {
+
+	// Ignore empty dummy implementations
+	if config.Callback == core.CallbackEmpty {
+		return
+	}
+
+	if core.HasItemEffect(config.ItemID) {
+		return
+	}
+
 	core.NewItemEffect(config.ItemID, func(agent core.Agent) {
 		character := agent.GetCharacter()
-
-		eligibleSlotsForItem := character.ItemSwap.EligibleSlotsForItem(config.ItemID)
-
-		auraID := core.ActionID{SpellID: config.AuraID}
-		if auraID.IsEmptyAction() {
-			auraID = core.ActionID{ItemID: config.ItemID}
-		}
-
-		// If we do not get a manual stat, overwrite it with scaling stats
-		if config.Bonus.Equals(stats.Stats{}) {
-			item := core.GetItemByID(config.ItemID)
-			if item == nil || item.ItemEffect == nil {
-				panic("Unsupported Item-/Effect")
+		eligibleSlots := character.ItemSwap.EligibleSlotsForItem(config.ItemID)
+		var procEffect *proto.ItemEffect
+		item := core.GetItemByID(config.ItemID)
+		if item.ItemEffect != nil {
+			if item.ItemEffect.GetProc() != nil {
+				procEffect = item.ItemEffect
 			}
-
-			config.Bonus = stats.FromProtoMap(item.ItemEffect.ScalingOptions[int32(0)].Stats)
 		}
 
-		var dpm *core.DynamicProcManager
+		if procEffect == nil {
+			err, _ := fmt.Printf("Error getting proc effect for item/enchant %v", config.ItemID)
+			panic(err)
+		}
 
+		proc := procEffect.GetProc()
+		procAction := core.ActionID{SpellID: procEffect.BuffId}
 		procAura := core.MakeStackingAura(character, core.StackingStatAura{
 			Aura: core.Aura{
 				Label:     config.Name + " Proc",
-				ActionID:  auraID,
-				Duration:  config.Duration,
+				ActionID:  procAction,
+				Duration:  time.Millisecond * time.Duration(procEffect.EffectDurationMs),
 				MaxStacks: config.MaxStacks,
 			},
-			BonusPerStack: config.Bonus,
+			BonusPerStack: stats.FromProtoMap(procEffect.ScalingOptions[int32(0)].Stats),
 		})
+
+		var dpm *core.DynamicProcManager
+		if proc.GetPpm() > 0 {
+			if config.ProcMask == core.ProcMaskUnknown {
+				dpm = character.NewDynamicLegacyProcForEnchant(config.ItemID, proc.GetPpm(), 0)
+			} else {
+				dpm = character.NewLegacyPPMManager(proc.GetPpm(), config.ProcMask)
+			}
+		}
 
 		triggerAura := character.MakeProcTriggerAura(core.ProcTrigger{
 			ActionID:           core.ActionID{ItemID: config.ItemID},
@@ -459,9 +447,9 @@ func NewStackingStatBonusEffect(config StackingStatBonusEffect) {
 			SpellFlags:         config.SpellFlags,
 			Outcome:            config.Outcome,
 			RequireDamageDealt: config.RequireDamageDealt,
-			ProcChance:         config.ProcChance,
+			ProcChance:         proc.GetProcChance(),
 			DPM:                dpm,
-			ICD:                config.Icd,
+			ICD:                time.Millisecond * time.Duration(proc.IcdMs),
 			Handler: func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
 				procAura.Activate(sim)
 				procAura.AddStack(sim)
@@ -469,8 +457,8 @@ func NewStackingStatBonusEffect(config StackingStatBonusEffect) {
 		})
 
 		procAura.Icd = triggerAura.Icd
-		character.AddStatProcBuff(config.ItemID, procAura, false, eligibleSlotsForItem)
-		character.ItemSwap.RegisterProcWithSlots(config.ItemID, triggerAura, eligibleSlotsForItem)
+		character.AddStatProcBuff(config.ItemID, procAura, false, eligibleSlots)
+		character.ItemSwap.RegisterProcWithSlots(config.ItemID, triggerAura, eligibleSlots)
 	})
 }
 

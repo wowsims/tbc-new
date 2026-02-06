@@ -5,7 +5,6 @@
 export const MISSING_ITEM_EFFECTS = [
     11810, // Force of Will
     12641, // Invulnerable Mail
-    12798, // Annihilator
     13243, // Argent Defender
     13375, // Crest of Retribution
     14557, // The Lion Horn of Stormwind
@@ -80,7 +79,6 @@ export const MISSING_ITEM_EFFECTS = [
     30664, // Living Root of the Wildheart
     31323, // Don Santos' Famous Hunting Rifle
     31328, // Leggings of Beast Mastery
-    31331, // The Night Blade
     31336, // Blade of Wizardry
     32262, // Syphon of the Nathrezim
     32336, // Black Bow of the Betrayer

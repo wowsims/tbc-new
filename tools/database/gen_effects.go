@@ -20,10 +20,11 @@ import (
 const MIN_EFFECT_ILVL = 50
 
 type ProcInfo struct {
-	Outcome            core.HitOutcome
-	Callback           core.AuraCallback
-	ProcMask           core.ProcMask
-	RequireDamageDealt bool
+	Outcome             core.HitOutcome
+	Callback            core.AuraCallback
+	ProcMask            core.ProcMask
+	MaxCumulativeStacks int32
+	RequireDamageDealt  bool
 }
 
 // Entry represents a single effect with its ID and display name.
@@ -453,9 +454,9 @@ func BuildProcInfo(parsed *proto.UIItem, instance *dbc.DBC, tooltip string) (Pro
 			return procInfo, false
 		}
 
-		if SpellUsesStacks(int(procId), instance) {
-			return procInfo, false
-		}
+		// if SpellUsesStacks(int(procId), instance) {
+		// 	return procInfo, true
+		// }
 
 		return procInfo, supported
 	}
@@ -480,16 +481,17 @@ func BuildEnchantProcInfo(enchant *proto.UIEnchant, instance *dbc.DBC, tooltip s
 		return procInfo, false
 	}
 
-	if SpellUsesStacks(int(procSpellID), instance) {
-		return procInfo, false
-	}
+	// if SpellUsesStacks(int(procSpellID), instance) {
+	// 	return procInfo, false
+	// }
 
 	return procInfo, supported
 }
 
 func BuildSpellProcInfo(procSpell *dbc.Spell, tooltip string, itemType proto.ItemType) (ProcInfo, bool) {
 	var info = ProcInfo{
-		RequireDamageDealt: true,
+		RequireDamageDealt:  true,
+		MaxCumulativeStacks: procSpell.MaxCumulativeStacks,
 	}
 
 	// On hit proc

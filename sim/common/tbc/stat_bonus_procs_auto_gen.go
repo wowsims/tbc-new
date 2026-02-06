@@ -13,20 +13,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Reduces an enemy's armor by 200. Stacks up to 3 times.
-	// shared.NewProcStatBonusEffect(shared.ProcStatBonusEffect{
-	//	Name:               "Annihilator",
-	//	ItemID:             12798,
-	//	Callback:           core.CallbackOnSpellHitDealt,
-	//	ProcMask:           core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial,
-	//	Outcome:            core.OutcomeLanded,
-	//	RequireDamageDealt: true
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Increases your chance to resist Fear effects by 5%.
 	// shared.NewProcStatBonusEffect(shared.ProcStatBonusEffect{
 	//	Name:               "Lionheart Champion",
@@ -93,26 +79,11 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// })
 
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Your attacks ignore 435 of your enemies' armor for 10s. This effect stacks up to 3 times.
-	// shared.NewProcStatBonusEffect(shared.ProcStatBonusEffect{
-	//	Name:               "The Night Blade",
-	//	ItemID:             31331,
-	//	Callback:           core.CallbackOnSpellHitDealt,
-	//	ProcMask:           core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial,
-	//	Outcome:            core.OutcomeLanded,
-	//	RequireDamageDealt: true
-	// })
-
-	// Blasts your enemy with lightning, dealing 300 Nature damage and then jumping to additional nearby enemies.
-	// Each jump reduces that victim's Nature resistance by 25. Affects 5 targets. Your primary target is also
-	// consumed by a cyclone, slowing its attack speed by 20% for 12s.
-	shared.NewProcStatBonusEffect(shared.ProcStatBonusEffect{
-		Name:               "Thunderfury, Blessed Blade of the Windseeker",
-		ItemID:             19019,
+	// Reduces an enemy's armor by 200. Stacks up to 3 times.
+	shared.NewStackingStatBonusEffect(shared.StackingStatBonusEffect{
+		Name:               "Annihilator",
+		ItemID:             12798,
+		MaxStacks:          3,
 		Callback:           core.CallbackOnSpellHitDealt,
 		ProcMask:           core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial,
 		Outcome:            core.OutcomeLanded,
@@ -185,6 +156,17 @@ func RegisterAllProcs() {
 		ItemID:             30450,
 		Callback:           core.CallbackOnSpellHitDealt,
 		ProcMask:           core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial | core.ProcMaskMeleeProc,
+		Outcome:            core.OutcomeLanded,
+		RequireDamageDealt: true,
+	})
+
+	// Your attacks ignore 435 of your enemies' armor for 10s. This effect stacks up to 3 times.
+	shared.NewStackingStatBonusEffect(shared.StackingStatBonusEffect{
+		Name:               "The Night Blade",
+		ItemID:             31331,
+		MaxStacks:          3,
+		Callback:           core.CallbackOnSpellHitDealt,
+		ProcMask:           core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial,
 		Outcome:            core.OutcomeLanded,
 		RequireDamageDealt: true,
 	})

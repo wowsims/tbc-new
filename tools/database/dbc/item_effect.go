@@ -16,6 +16,7 @@ type ItemEffect struct {
 	CoolDownMSec         int // Cooldown in milliseconds
 	CategoryCoolDownMSec int // Category cooldown in milliseconds
 	SpellCategoryID      int // Spell category ID
+	MaxCumulativeStacks  int // Max cumulative stacks
 	SpellID              int // Spell ID
 	ChrSpecializationID  int // Character specialization ID
 	ParentItemID         int // Parent item ID
@@ -30,6 +31,7 @@ func (e *ItemEffect) ToMap() map[string]interface{} {
 		"Charges":              e.Charges,
 		"CoolDownMSec":         e.CoolDownMSec,
 		"CategoryCoolDownMSec": e.CategoryCoolDownMSec,
+		"MaxCumulativeStacks":  e.MaxCumulativeStacks,
 		"SpellCategoryID":      e.SpellCategoryID,
 		"SpellID":              e.SpellID,
 		"ChrSpecializationID":  e.ChrSpecializationID,
@@ -59,6 +61,7 @@ func makeBaseProto(e *ItemEffect, statsSpellID int) *proto.ItemEffect {
 func assignTrigger(e *ItemEffect, statsSpellID int, pe *proto.ItemEffect) {
 	spTop := dbcInstance.Spells[e.SpellID]
 	statsSP := dbcInstance.Spells[statsSpellID]
+
 	switch resolveTriggerType(e.TriggerType, e.SpellID) {
 	case ITEM_SPELLTRIGGER_ON_USE:
 		pe.Effect = &proto.ItemEffect_OnUse{OnUse: &proto.OnUseEffect{
@@ -87,6 +90,9 @@ func assignTrigger(e *ItemEffect, statsSpellID int, pe *proto.ItemEffect) {
 		pe.BuffId = statsSP.ID
 		pe.BuffName = fmt.Sprintf("%s (%d)", statsSP.NameLang, e.SpellID)
 		pe.Effect = &proto.ItemEffect_Proc{Proc: proc}
+		if spTop.MaxCumulativeStacks > 0 {
+			pe.MaxCumulativeStacks = spTop.MaxCumulativeStacks
+		}
 	}
 }
 
