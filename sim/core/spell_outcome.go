@@ -580,7 +580,7 @@ func (result *SpellResult) applyAttackTableDodge(spell *Spell, attackTable *Atta
 		return false
 	}
 
-	*chance += spell.Unit.GetTotalDodgeChanceAsDefender(spell, attackTable)
+	*chance += result.Target.GetTotalDodgeChanceAsDefender(spell, attackTable)
 
 	if roll < *chance {
 		result.Outcome = OutcomeDodge
@@ -592,7 +592,7 @@ func (result *SpellResult) applyAttackTableDodge(spell *Spell, attackTable *Atta
 }
 
 func (result *SpellResult) applyAttackTableParry(spell *Spell, attackTable *AttackTable, roll float64, chance *float64) bool {
-	*chance += spell.Unit.GetTotalParryChanceAsDefender(spell, attackTable)
+	*chance += result.Target.GetTotalParryChanceAsDefender(spell, attackTable)
 
 	if roll < *chance {
 		result.Outcome = OutcomeParry

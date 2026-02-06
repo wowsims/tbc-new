@@ -126,7 +126,7 @@ func (war *Warrior) registerImprovedOverpower() {
 	})).AttachSpellMod(core.SpellModConfig{
 		ClassMask:  SpellMaskOverpower,
 		Kind:       core.SpellMod_BonusCrit_Percent,
-		FloatValue: 0.25 * float64(war.Talents.ImprovedOverpower),
+		FloatValue: 25 * float64(war.Talents.ImprovedOverpower),
 	})
 }
 
@@ -235,7 +235,7 @@ func (war *Warrior) registerImpale() {
 
 	war.AddStaticMod(core.SpellModConfig{
 		ClassMask:  SpellMaskDamageSpells,
-		Kind:       core.SpellMod_BonusCrit_Percent,
+		Kind:       core.SpellMod_CritMultiplier_Flat,
 		FloatValue: 0.1 * float64(war.Talents.Impale),
 	})
 }
@@ -252,13 +252,13 @@ func (war *Warrior) registerPoleaxeSpecialization() {
 	mhCritMod := war.AddDynamicMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
 		ProcMask:   core.ProcMaskMeleeMH,
-		FloatValue: 0.01 * float64(war.Talents.PoleaxeSpecialization),
+		FloatValue: 1 * float64(war.Talents.PoleaxeSpecialization),
 	})
 
 	ohCritMod := war.AddDynamicMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
 		ProcMask:   core.ProcMaskMeleeOH,
-		FloatValue: 0.01 * float64(war.Talents.PoleaxeSpecialization),
+		FloatValue: 1 * float64(war.Talents.PoleaxeSpecialization),
 	})
 
 	handleEquippedWeapons := func() {
