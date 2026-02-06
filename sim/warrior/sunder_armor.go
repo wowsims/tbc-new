@@ -1,6 +1,8 @@
 package warrior
 
-import "github.com/wowsims/tbc/sim/core"
+import (
+	"github.com/wowsims/tbc/sim/core"
+)
 
 func (war *Warrior) registerSunderArmor() {
 	war.SunderArmorAuras = war.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {

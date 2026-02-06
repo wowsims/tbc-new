@@ -884,7 +884,7 @@ func (unit *Unit) GetTotalDodgeChanceAsDefender(spell *Spell, atkTable *AttackTa
 		atkTable.BaseDodgeChance +
 		unit.GetDodgeFromRating() -
 		spell.DodgeParrySuppression() -
-		unit.PseudoStats.DodgeReduction
+		spell.Unit.PseudoStats.DodgeReduction
 	return math.Max(chance, 0.0)
 }
 

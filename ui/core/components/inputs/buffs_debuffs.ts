@@ -119,8 +119,8 @@ export const JadePendantOfBlasting = makeBooleanPartyBuffInput({
 	label: 'Jade Pendant of Blasting',
 });
 export const LeaderOfThePack = makeTristatePartyBuffInput({
-	actionId: () => ActionId.fromSpellId(32387),
-	impId: ActionId.fromItemId(34297),
+	actionId: () => ActionId.fromSpellId(17007),
+	impId: ActionId.fromItemId(32387),
 	fieldName: 'leaderOfThePack',
 	label: 'Leader of the Pack',
 });
@@ -260,7 +260,7 @@ export const PARTY_BUFFS_CONFIG = [
 	{
 		config: LeaderOfThePack,
 		picker: IconPicker,
-		stats: [Stat.StatAllPhysCritRating],
+		stats: [Stat.StatAttackPower, Stat.StatAllPhysCritRating],
 	},
 	{
 		config: ManaSpringTotem,

@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
@@ -357,12 +358,18 @@ func (war *Warrior) registerImprovedBerserkerStance() {
 	}
 
 	apDep := war.NewDynamicMultiplyStat(stats.AttackPower, 1+0.02*float64(war.Talents.ImprovedBerserkerStance))
+	aura := war.RegisterAura(core.Aura{
+		Label:      "Improved Berserker Stance",
+		Duration:   core.NeverExpires,
+		BuildPhase: core.Ternary(war.DefaultStance == proto.WarriorStance_WarriorStanceBerserker, core.CharacterBuildPhaseTalents, core.CharacterBuildPhaseNone),
+	}).AttachStatDependency(apDep)
+
 	war.OnSpellRegistered(func(spell *core.Spell) {
 		if !spell.Matches(SpellMaskBerserkerStance) {
 			return
 		}
 
-		spell.RelatedSelfBuff.AttachStatDependency(apDep)
+		spell.RelatedSelfBuff.AttachDependentAura(aura)
 	})
 
 }
