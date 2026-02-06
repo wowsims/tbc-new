@@ -49,7 +49,6 @@ const actionIdSets: Record<
 	auras: {
 		defaultLabel: i18n.t('rotation_tab.apl.helpers.action_id_sets.auras'),
 		getActionIDs: async metadata => {
-			console.log(metadata)
 			return metadata.getAuras().map(actionId => {
 				return {
 					value: actionId.id,
