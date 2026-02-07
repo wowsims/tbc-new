@@ -105,6 +105,7 @@ import {
 	APLValueBossCurrentTarget,
 	APLValueAuraDuration,
 	APLValueMultipleCdUsages,
+	APLValueActionGroupUsed,
 } from '../../proto/apl.js';
 import { Class, Spec } from '../../proto/common.js';
 import { ShamanTotems_TotemType as TotemType } from '../../proto/shaman.js';
@@ -1473,6 +1474,13 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 				labelTooltip: 'Name of the variable placeholder to expose. This name will be used when referencing the group.',
 			}),
 		],
+	}),
+	actionGroupUsed: inputBuilder({
+		label: "Action Group is used",
+		submenu: ['Variables'],
+		shortDescription: "Returns <b>True</b> if the specified action group is used in the rotation. This allows you to conditionally execute actions based on whether an action group is included in the rotation.",
+		newValue: APLValueActionGroupUsed.create,
+		fields: [AplHelpers.groupNameFieldConfig('name')],
 	}),
 	activeItemSwapSet: inputBuilder({
 		label: 'Item Swap',
