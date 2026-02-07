@@ -91,6 +91,8 @@ func (mage *Mage) registerCombustionSpell() {
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {
 			combustAura.Activate(sim)
 		},
+
+		RelatedSelfBuff: combustAura,
 	})
 
 	mage.AddMajorCooldown(core.MajorCooldown{

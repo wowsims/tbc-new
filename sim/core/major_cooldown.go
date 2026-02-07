@@ -388,8 +388,10 @@ func (mcdm *majorCooldownManager) sort() {
 // This is use for effects like Icon of the Silver Crescent and Bloodlust Brooch.
 func RegisterTemporaryStatsOnUseCD(character *Character, auraLabel string, tempStats stats.Stats, duration time.Duration, config SpellConfig) *StatBuffAura {
 	aura := character.NewTemporaryStatsAura(auraLabel, config.ActionID, tempStats, duration)
-
 	cdType := aura.InferCDType()
+	if config.Cast.CD.Duration > 0 {
+		aura.Icd = &config.Cast.CD
+	}
 
 	config.Flags |= SpellFlagNoOnCastComplete
 	config.ApplyEffects = func(sim *Simulation, _ *Unit, _ *Spell) {
@@ -397,6 +399,7 @@ func RegisterTemporaryStatsOnUseCD(character *Character, auraLabel string, tempS
 	}
 
 	spell := character.RegisterSpell(config)
+	spell.RelatedSelfBuff = aura.Aura
 
 	character.AddMajorCooldown(MajorCooldown{
 		Spell:    spell,

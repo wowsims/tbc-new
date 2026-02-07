@@ -58,7 +58,7 @@ type APLValueAllItemStatProcsActive struct {
 	*APLValueItemStatProcCheck
 }
 
-func (rot *APLRotation) newValueAllItemStatProcsActive(config *proto.APLValueAllTrinketStatProcsActive, uuid *proto.UUID) APLValue {
+func (rot *APLRotation) newValueAllItemStatProcsActive(config *proto.APLValueAllItemStatProcsActive, uuid *proto.UUID) APLValue {
 	parentImpl := rot.newItemStatProcValue("AllItemStatProcsActive", config.StatType1, config.StatType2, config.StatType3, config.MinIcdSeconds, true, uuid)
 
 	if parentImpl == nil {
@@ -86,7 +86,7 @@ type APLValueAnyItemStatProcsActive struct {
 	*APLValueItemStatProcCheck
 }
 
-func (rot *APLRotation) newValueAnyTrinketStatProcsActive(config *proto.APLValueAnyTrinketStatProcsActive, uuid *proto.UUID) APLValue {
+func (rot *APLRotation) newValueAnyItemStatProcsActive(config *proto.APLValueAnyItemStatProcsActive, uuid *proto.UUID) APLValue {
 	parentImpl := rot.newItemStatProcValue("AnyItemStatProcsActive", config.StatType1, config.StatType2, config.StatType3, config.MinIcdSeconds, true, uuid)
 
 	if parentImpl == nil {
@@ -114,7 +114,7 @@ type APLValueAnyItemStatProcsAvailable struct {
 	*APLValueItemStatProcCheck
 }
 
-func (rot *APLRotation) newValueAnyTrinketStatProcsAvailable(config *proto.APLValueAnyTrinketStatProcsAvailable, uuid *proto.UUID) APLValue {
+func (rot *APLRotation) newValueAnyItemStatProcsAvailable(config *proto.APLValueAnyItemStatProcsAvailable, uuid *proto.UUID) APLValue {
 	parentImpl := rot.newItemStatProcValue("AnyItemStatProcsAvailable", config.StatType1, config.StatType2, config.StatType3, config.MinIcdSeconds, true, uuid)
 
 	if parentImpl == nil {
@@ -149,7 +149,7 @@ type APLValueItemProcsMinRemainingTime struct {
 	*APLValueItemStatProcCheck
 }
 
-func (rot *APLRotation) newValueItemProcsMinRemainingTime(config *proto.APLValueTrinketProcsMinRemainingTime, uuid *proto.UUID) APLValue {
+func (rot *APLRotation) newValueItemProcsMinRemainingTime(config *proto.APLValueItemProcsMinRemainingTime, uuid *proto.UUID) APLValue {
 	parentImpl := rot.newItemStatProcValue("ItemProcsMinRemainingTime", config.StatType1, config.StatType2, config.StatType3, config.MinIcdSeconds, true, uuid)
 
 	if parentImpl == nil {
@@ -179,7 +179,7 @@ type APLValueItemProcsMaxRemainingICD struct {
 	*APLValueItemStatProcCheck
 }
 
-func (rot *APLRotation) newValueItemsProcsMaxRemainingICD(config *proto.APLValueTrinketProcsMaxRemainingICD, uuid *proto.UUID) APLValue {
+func (rot *APLRotation) newValueItemsProcsMaxRemainingICD(config *proto.APLValueItemProcsMaxRemainingICD, uuid *proto.UUID) APLValue {
 	parentImpl := rot.newItemStatProcValue("ItemProcsMaxRemainingICD", config.StatType1, config.StatType2, config.StatType3, config.MinIcdSeconds, true, uuid)
 
 	if parentImpl == nil {
@@ -209,7 +209,7 @@ type APLValueNumEquippedStatProcItems struct {
 	*APLValueItemStatProcCheck
 }
 
-func (rot *APLRotation) newValueNumEquippedStatProcItems(config *proto.APLValueNumEquippedStatProcTrinkets, uuid *proto.UUID) APLValue {
+func (rot *APLRotation) newValueNumEquippedStatProcItems(config *proto.APLValueNumEquippedStatProcItems, uuid *proto.UUID) APLValue {
 	parentImpl := rot.newItemStatProcValue("NumEquippedStatProcItems", config.StatType1, config.StatType2, config.StatType3, config.MinIcdSeconds, false, uuid)
 
 	return &APLValueNumEquippedStatProcItems{

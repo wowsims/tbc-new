@@ -366,7 +366,14 @@ export abstract class IndividualSimUI<SpecType extends Spec> extends SimUI {
 	}
 
 	applyDefaultConfigOptions(config: IndividualSimUIConfig<SpecType>): IndividualSimUIConfig<SpecType> {
-		config.otherInputs.inputs = [...config.otherInputs.inputs];
+		const hasAttackPowerScaling = config.epStats.includes(Stat.StatAttackPower);
+		const hasSpellDamageScaling = config.epStats.includes(Stat.StatSpellDamage);
+
+		config.otherInputs.inputs = [
+			...(hasAttackPowerScaling ? [OtherInputs.ExposeWeaknessHunterAgility, OtherInputs.ExposeWeaknessUptime] : []),
+			...(hasSpellDamageScaling ? [OtherInputs.ShadowPriestDPS] : []),
+			...config.otherInputs.inputs,
+		];
 
 		return config;
 	}
