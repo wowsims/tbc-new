@@ -12,6 +12,7 @@ func init() {
 	core.NewItemEffect(21670, func(agent core.Agent) {
 		character := agent.GetCharacter()
 		duration := time.Second * 30
+
 		arpAura := core.MakeStackingAura(
 			character,
 			core.StackingStatAura{
@@ -56,6 +57,8 @@ func init() {
 			ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
 				procAura.Activate(sim)
 			},
+
+			RelatedSelfBuff: arpAura.Aura,
 		})
 
 		character.AddMajorCooldown(core.MajorCooldown{

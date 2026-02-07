@@ -6309,6 +6309,12 @@
                     },
                     "target_spell_tooltip": {
                       "type": "string"
+                    },
+                    "align_cd_end": {
+                      "type": "string"
+                    },
+                    "align_cd_end_tooltip": {
+                      "type": "string"
                     }
                   },
                   "additionalProperties": false,
@@ -6318,7 +6324,9 @@
                     "base_spell",
                     "base_spell_tooltip",
                     "target_spell",
-                    "target_spell_tooltip"
+                    "target_spell_tooltip",
+                    "align_cd_end",
+                    "align_cd_end_tooltip"
                   ]
                 },
                 "offset": {

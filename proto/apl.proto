@@ -773,4 +773,5 @@ message APLValueMultipleCdUsages {
 	ActionID base_spell_id = 1;
 	ActionID target_spell_id = 2;
 	APLValue offset = 3;
+	bool align_cd_end = 4;
 }

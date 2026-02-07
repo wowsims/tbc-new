@@ -106,7 +106,7 @@ import {
 	APLValueAuraDuration,
 	APLValueMultipleCdUsages,
 } from '../../proto/apl.js';
-import {  Class, Spec } from '../../proto/common.js';
+import { Class, Spec } from '../../proto/common.js';
 import { ShamanTotems_TotemType as TotemType } from '../../proto/shaman.js';
 import { EventID } from '../../typed_event.js';
 import { randomUUID } from '../../utils';
@@ -1510,6 +1510,9 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 			valueFieldConfig('offset', {
 				label: i18n.t('rotation_tab.apl.values.offset.label'),
 				labelTooltip: i18n.t('rotation_tab.apl.values.offset.tooltip'),
+			}),
+			AplHelpers.booleanFieldConfig('alignCdEnd', i18n.t('rotation_tab.apl.values.multiple_cd_usages.align_cd_end'), {
+				labelTooltip: i18n.t('rotation_tab.apl.values.multiple_cd_usages.align_cd_end_tooltip'),
 			}),
 		],
 	}),
