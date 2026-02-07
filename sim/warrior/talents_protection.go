@@ -177,6 +177,8 @@ func (war *Warrior) registerLastStand() {
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
 			aura.Activate(sim)
 		},
+
+		RelatedSelfBuff: aura,
 	})
 
 	war.AddMajorCooldown(core.MajorCooldown{

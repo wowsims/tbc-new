@@ -441,6 +441,8 @@ func registerDrumsCD(agent Agent, consumables *proto.ConsumesSpec) {
 			ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
 				aura.Activate(sim)
 			},
+
+			RelatedSelfBuff: aura.Aura,
 		})
 
 		character.AddMajorCooldown(MajorCooldown{

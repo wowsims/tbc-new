@@ -219,6 +219,8 @@ func (war *Warrior) registerSweepingStrikes() {
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
 			ssAura.Activate(sim)
 		},
+
+		RelatedSelfBuff: ssAura,
 	})
 
 	war.AddMajorCooldown(core.MajorCooldown{
@@ -438,6 +440,8 @@ func (war *Warrior) registerRampage() {
 			aura.Activate(sim)
 			aura.AddStack(sim)
 		},
+
+		RelatedSelfBuff: aura.Aura,
 	})
 
 	war.AddMajorCooldown(core.MajorCooldown{
