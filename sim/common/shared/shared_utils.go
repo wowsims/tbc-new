@@ -371,6 +371,8 @@ func NewStackingStatBonusCD(config StackingStatBonusCD) {
 			ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
 				statAura.Activate(sim)
 			},
+
+			RelatedSelfBuff: statAura.Aura,
 		})
 
 		character.AddMajorCooldown(core.MajorCooldown{

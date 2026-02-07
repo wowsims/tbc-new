@@ -155,10 +155,11 @@ func (war *Warrior) registerDeepWounds() {
 	}
 
 	war.DeepWounds = war.RegisterSpell(core.SpellConfig{
-		ActionID:    core.ActionID{SpellID: 12867},
-		SpellSchool: core.SpellSchoolPhysical,
-		ProcMask:    core.ProcMaskEmpty,
-		Flags:       core.SpellFlagNoOnCastComplete | core.SpellFlagIgnoreResists,
+		ActionID:       core.ActionID{SpellID: 12867},
+		SpellSchool:    core.SpellSchoolPhysical,
+		ProcMask:       core.ProcMaskEmpty,
+		ClassSpellMask: SpellMaskDeepWounds,
+		Flags:          core.SpellFlagNoOnCastComplete | core.SpellFlagIgnoreResists,
 
 		DamageMultiplier: 1,
 		CritMultiplier:   war.DefaultMeleeCritMultiplier(),

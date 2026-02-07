@@ -32,7 +32,7 @@ func applyDebuffEffects(target *Unit, targetIdx int, debuffs *proto.Debuffs, rai
 	}
 
 	if debuffs.ExposeWeaknessUptime > 0.0 {
-		MakePermanent(ExposeWeaknessAura(target, debuffs.ExposeWeaknessUptime, debuffs.ExposeWeaknessHunterAgility))
+		ExposeWeaknessAura(target, debuffs.ExposeWeaknessUptime, debuffs.ExposeWeaknessHunterAgility)
 	}
 
 	if debuffs.FaerieFire != proto.TristateEffect_TristateEffectMissing {
@@ -40,7 +40,7 @@ func applyDebuffEffects(target *Unit, targetIdx int, debuffs *proto.Debuffs, rai
 	}
 
 	if debuffs.HemorrhageUptime > 0.0 {
-		MakePermanent(HemorrhageAura(target, debuffs.HemorrhageUptime))
+		HemorrhageAura(target, debuffs.HemorrhageUptime)
 	}
 
 	if debuffs.GiftOfArthas {
@@ -64,7 +64,7 @@ func applyDebuffEffects(target *Unit, targetIdx int, debuffs *proto.Debuffs, rai
 	}
 
 	if debuffs.IsbUptime > 0.0 {
-		MakePermanent(ImprovedShadowBoltAura(target, debuffs.IsbUptime, 5))
+		ImprovedShadowBoltAura(target, debuffs.IsbUptime, 5)
 	}
 
 	if debuffs.JudgementOfLight {
@@ -215,22 +215,29 @@ func castSlowReductionAura(target *Unit, label string, spellID int32, multiplier
 }
 
 func ExposeWeaknessAura(target *Unit, uptime float64, hunterAgility float64) *Aura {
-	apBonus := hunterAgility * 0.25 * uptime
+	apBonus := hunterAgility * 0.25
+	stats := stats.Stats{stats.AttackPower: apBonus, stats.RangedAttackPower: apBonus}
+	character := target.Env.Raid.GetPlayerFromUnitIndex(1).GetCharacter()
 
-	return target.GetOrRegisterAura(Aura{
+	hasAura := target.HasAura("Expose Weakness")
+	aura := target.GetOrRegisterAura(Aura{
 		Label:    "Expose Weakness",
 		Tag:      "ExposeWeakness",
 		ActionID: ActionID{SpellID: 34503},
 		Duration: time.Second * 7,
 		OnGain: func(aura *Aura, sim *Simulation) {
-			aura.Unit.AddStat(stats.AttackPower, apBonus)
-			aura.Unit.AddStat(stats.RangedAttackPower, apBonus)
+			character.AddStatsDynamic(sim, stats)
 		},
 		OnExpire: func(aura *Aura, sim *Simulation) {
-			aura.Unit.AddStat(stats.AttackPower, -apBonus)
-			aura.Unit.AddStat(stats.RangedAttackPower, -apBonus)
+			character.AddStatsDynamic(sim, stats.Invert())
 		},
 	})
+
+	if !hasAura {
+		ApplyFixedUptimeAura(aura, uptime, aura.Duration, 1)
+	}
+
+	return aura
 
 }
 
@@ -257,11 +264,19 @@ func GiftOfArthasAura(target *Unit) *Aura {
 }
 
 func HemorrhageAura(target *Unit, uptime float64) *Aura {
-	return target.GetOrRegisterAura(Aura{
+	hasAura := target.HasAura("Hemorrhage")
+	aura := target.GetOrRegisterAura(Aura{
 		Label:    "Hemorrhage",
 		ActionID: ActionID{SpellID: 33876},
 		Duration: time.Second * 15,
-	}).AttachAdditivePseudoStatBuff(&target.PseudoStats.BonusPhysicalDamageTaken, 42*uptime)
+	})
+
+	if !hasAura {
+		aura.AttachAdditivePseudoStatBuff(&target.PseudoStats.BonusPhysicalDamageTaken, 42)
+		ApplyFixedUptimeAura(aura, uptime, aura.Duration, 1)
+	}
+
+	return aura
 }
 
 func HuntersMarkAura(target *Unit, improved bool) *Aura {
@@ -343,9 +358,6 @@ func ImprovedSealOfTheCrusaderAura(target *Unit) *Aura {
 func ImprovedShadowBoltAura(target *Unit, uptime float64, points int32) *Aura {
 	bonus := 0.04 * float64(points)
 	multiplier := 1 + bonus
-	if uptime != 0.0 {
-		multiplier = 1 + bonus*uptime
-	}
 
 	config := Aura{
 		Label:     "ImprovedShadowBolt-" + strconv.Itoa(int(points)),
@@ -364,8 +376,14 @@ func ImprovedShadowBoltAura(target *Unit, uptime float64, points int32) *Aura {
 		}
 	}
 
-	return target.GetOrRegisterAura(config).
-		AttachMultiplicativePseudoStatBuff(&target.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexShadow], multiplier)
+	hasAura := target.HasAura(config.Label)
+	aura := target.GetOrRegisterAura(config)
+	if !hasAura {
+		aura.AttachMultiplicativePseudoStatBuff(&target.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexShadow], multiplier)
+		ApplyFixedUptimeAura(aura, uptime, aura.Duration, 1)
+	}
+
+	return aura
 }
 
 func InsectSwarmAura(target *Unit) *Aura {
@@ -482,10 +500,14 @@ func ShadowWeavingAura(target *Unit) *Aura {
 
 func StormstrikeAura(target *Unit, uptime float64) *Aura {
 	multiplier := 1.20
-	if uptime != 0 {
-		multiplier *= uptime
+	hasAura := target.HasAura("Stormstrike")
+	aura := damageTakenDebuff(target, "Stormstrike", 17364, []stats.SchoolIndex{stats.SchoolIndexNature}, multiplier, time.Second*12)
+
+	if !hasAura {
+		ApplyFixedUptimeAura(aura, uptime, aura.Duration, 1)
 	}
-	return damageTakenDebuff(target, "Stormstrike", 17364, []stats.SchoolIndex{stats.SchoolIndexNature}, multiplier, time.Second*12)
+
+	return aura
 }
 
 var MajorArmorReductionEffectCategory = "MajorArmorReduction"

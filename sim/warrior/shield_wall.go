@@ -55,6 +55,9 @@ func (war *Warrior) registerShieldWall() {
 		Spell: spell,
 		Type:  core.CooldownTypeSurvival,
 		ShouldActivate: func(s *core.Simulation, c *core.Character) bool {
+			if war.Spec == proto.Spec_SpecDpsWarrior {
+				return false
+			}
 			return war.CurrentHealthPercent() < 0.4
 		},
 	})
