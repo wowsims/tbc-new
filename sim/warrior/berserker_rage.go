@@ -17,8 +17,9 @@ func (war *Warrior) registerBerserkerRage() {
 	})
 
 	spell := war.RegisterSpell(core.SpellConfig{
-		ActionID: actionID,
-		Flags:    core.SpellFlagAPL,
+		ActionID:       actionID,
+		ClassSpellMask: SpellMaskBerserkerRage,
+		Flags:          core.SpellFlagAPL,
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{

@@ -161,10 +161,11 @@ func (war *Warrior) registerSweepingStrikes() {
 
 	var curDmg float64
 	hitSpell := war.RegisterSpell(core.SpellConfig{
-		ActionID:    ssHitActionID,
-		SpellSchool: core.SpellSchoolPhysical,
-		ProcMask:    core.ProcMaskEmpty, // No proc mask, so it won't proc itself.
-		Flags:       core.SpellFlagIgnoreResists | core.SpellFlagIgnoreModifiers | core.SpellFlagMeleeMetrics | core.SpellFlagPassiveSpell | core.SpellFlagNoOnCastComplete,
+		ActionID:       ssHitActionID,
+		ClassSpellMask: SpellMaskSweepingStrikesHit,
+		SpellSchool:    core.SpellSchoolPhysical,
+		ProcMask:       core.ProcMaskEmpty, // No proc mask, so it won't proc itself.
+		Flags:          core.SpellFlagIgnoreResists | core.SpellFlagIgnoreModifiers | core.SpellFlagMeleeMetrics | core.SpellFlagPassiveSpell | core.SpellFlagNoOnCastComplete,
 
 		DamageMultiplier: 1,
 		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
@@ -200,8 +201,9 @@ func (war *Warrior) registerSweepingStrikes() {
 	})
 
 	ssCD := war.RegisterSpell(core.SpellConfig{
-		ActionID:    ssSpellActionID,
-		SpellSchool: core.SpellSchoolPhysical,
+		ActionID:       ssSpellActionID,
+		ClassSpellMask: SpellMaskSweepingStrikes,
+		SpellSchool:    core.SpellSchoolPhysical,
 
 		RageCost: core.RageCostOptions{
 			Cost: 30,

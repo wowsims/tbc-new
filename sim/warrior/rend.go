@@ -8,10 +8,11 @@ import (
 
 func (war *Warrior) registerRend() {
 	war.Rend = war.RegisterSpell(core.SpellConfig{
-		ActionID:    core.ActionID{SpellID: 772},
-		SpellSchool: core.SpellSchoolPhysical,
-		ProcMask:    core.ProcMaskMeleeMHSpecial,
-		Flags:       core.SpellFlagNoOnCastComplete | core.SpellFlagAPL,
+		ActionID:       core.ActionID{SpellID: 772},
+		SpellSchool:    core.SpellSchoolPhysical,
+		ClassSpellMask: SpellMaskRend,
+		ProcMask:       core.ProcMaskMeleeMHSpecial,
+		Flags:          core.SpellFlagNoOnCastComplete | core.SpellFlagAPL,
 
 		RageCost: core.RageCostOptions{
 			Cost:   10,

@@ -165,7 +165,8 @@ func (war *Warrior) registerLastStand() {
 	})
 
 	spell := war.RegisterSpell(core.SpellConfig{
-		ActionID: actionID,
+		ActionID:       actionID,
+		ClassSpellMask: SpellMaskLastStand,
 
 		Cast: core.CastConfig{
 			CD: core.Cooldown{
@@ -312,11 +313,12 @@ func (war *Warrior) registerShieldSlam() {
 	}
 
 	war.RegisterSpell(core.SpellConfig{
-		ActionID:    core.ActionID{SpellID: 23922},
-		SpellSchool: core.SpellSchoolPhysical,
-		ProcMask:    core.ProcMaskMeleeMHSpecial,
-		Flags:       core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
-		MaxRange:    core.MaxMeleeRange,
+		ActionID:       core.ActionID{SpellID: 23922},
+		ClassSpellMask: SpellMaskShieldSlam,
+		SpellSchool:    core.SpellSchoolPhysical,
+		ProcMask:       core.ProcMaskMeleeMHSpecial,
+		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
+		MaxRange:       core.MaxMeleeRange,
 
 		RageCost: core.RageCostOptions{
 			Cost:   20,
@@ -379,11 +381,12 @@ func (war *Warrior) registerDevastate() {
 	}
 
 	war.RegisterSpell(core.SpellConfig{
-		ActionID:    core.ActionID{SpellID: 20243},
-		SpellSchool: core.SpellSchoolPhysical,
-		ProcMask:    core.ProcMaskMeleeMHSpecial,
-		Flags:       core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
-		MaxRange:    core.MaxMeleeRange,
+		ActionID:       core.ActionID{SpellID: 20243},
+		ClassSpellMask: SpellMaskDevastate,
+		SpellSchool:    core.SpellSchoolPhysical,
+		ProcMask:       core.ProcMaskMeleeMHSpecial,
+		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
+		MaxRange:       core.MaxMeleeRange,
 
 		RageCost: core.RageCostOptions{
 			Cost:   15,

@@ -11,10 +11,10 @@ func (war *Warrior) registerShieldBash() {
 
 	war.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
+		ClassSpellMask: SpellMaskShieldBash,
 		SpellSchool:    core.SpellSchoolPhysical,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
-		ClassSpellMask: SpellMaskShieldSlam,
 		MaxRange:       core.MaxMeleeRange,
 
 		RageCost: core.RageCostOptions{

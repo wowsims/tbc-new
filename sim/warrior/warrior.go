@@ -31,7 +31,6 @@ const (
 	SpellMaskBattleShout int64 = 1 << iota
 	SpellMaskCommandingShout
 	SpellMaskBerserkerRage
-	SpellMaskRallyingCry
 	SpellMaskRecklessness
 	SpellMaskDeathWish
 	SpellMaskRetaliation
@@ -53,15 +52,13 @@ const (
 	SpellMaskDeepWounds
 	SpellMaskSweepingStrikes
 	SpellMaskSweepingStrikesHit
-	SpellMaskSweepingStrikesNormalizedHit
+	SpellMaskHeroicStrike
 	SpellMaskCleave
 	SpellMaskDevastate
 	SpellMaskExecute
-	SpellMaskHeroicStrike
 	SpellMaskOverpower
 	SpellMaskRevenge
 	SpellMaskSlam
-	SpellMaskSweepingSlam
 	SpellMaskSunderArmor
 	SpellMaskThunderClap
 	SpellMaskWhirlwind
@@ -70,7 +67,6 @@ const (
 	SpellMaskShieldBash
 	SpellMaskBloodthirst
 	SpellMaskMortalStrike
-	SpellMaskWildStrike
 	SpellMaskShieldBlock
 	SpellMaskHamstring
 	SpellMaskPummel
@@ -79,9 +75,9 @@ const (
 	WarriorSpellsAll = WarriorSpellLast<<1 - 1
 
 	SpellMaskShouts             = SpellMaskCommandingShout | SpellMaskBattleShout | SpellMaskDemoralizingShout
-	SpellMaskDirectDamageSpells = SpellMaskSweepingStrikesHit | SpellMaskSweepingStrikesNormalizedHit |
+	SpellMaskDirectDamageSpells = SpellMaskSweepingStrikesHit |
 		SpellMaskCleave | SpellMaskExecute | SpellMaskHeroicStrike | SpellMaskOverpower |
-		SpellMaskRevenge | SpellMaskSlam | SpellMaskSweepingSlam | SpellMaskShieldBash | SpellMaskSunderArmor |
+		SpellMaskRevenge | SpellMaskSlam | SpellMaskShieldBash | SpellMaskSunderArmor |
 		SpellMaskThunderClap | SpellMaskWhirlwind | SpellMaskWhirlwindOh | SpellMaskShieldSlam |
 		SpellMaskBloodthirst | SpellMaskMortalStrike | SpellMaskIntercept | SpellMaskDevastate | SpellMaskRetaliationHit
 
