@@ -481,6 +481,7 @@ var MapItemIdToPPM = map[int32]float64{
 	28774: 1.33, // Glaive of the Pit
 	28573: 0.5,  // Despair
 	29693: 0.5,  // Khorium Champion
+	// 22559: 1,    // Mongoose
 }
 
 func getPPMForItemID(itemID int32) float64 {

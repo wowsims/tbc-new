@@ -15,10 +15,6 @@ type DBCTooltipDataProvider struct {
 }
 
 func GetEffectByIndex(effects map[int]dbc.SpellEffect, index int) *dbc.SpellEffect {
-	if len(effects) <= index {
-		return nil
-	}
-
 	// quick check
 	effect := effects[index]
 	if effect.EffectIndex == index {
@@ -233,11 +229,6 @@ func (d DBCTooltipDataProvider) GetEffectScaledValue(spellId int64, effectIdx in
 
 	if !ok {
 		return 1
-	}
-
-	// some spells are just fucked..
-	if int(effectIdx) >= len(effectEntries) {
-		effectIdx = int64(len(effectEntries) - 1)
 	}
 
 	effect := GetEffectByIndex(effectEntries, int(effectIdx))

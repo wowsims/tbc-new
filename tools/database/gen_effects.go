@@ -151,7 +151,7 @@ func GenerateEnchantEffects(instance *dbc.DBC, db *WowDatabase) {
 	for _, grp := range groupMapProc {
 		procGroups = append(procGroups, &grp)
 	}
-	//GenerateEffectsFile(procGroups, "sim/common/tbc/enchants_auto_gen.go", TmplStrEnchant)
+	// GenerateEffectsFile(procGroups, "sim/common/tbc/enchants_auto_gen.go", TmplStrEnchant)
 }
 
 func GenerateItemEffects(instance *dbc.DBC, db *WowDatabase, itemSources map[int][]*proto.DropSource) {
@@ -320,7 +320,7 @@ func TryParseProcEffect(parsed *proto.UIItem, instance *dbc.DBC, groupMapProc ma
 			return EffectParseResultSuccess
 		}
 
-		tooltipString, id := dbc.GetItemEffectSpellTooltip(int(parsed.Id))
+		tooltipString, id := dbc.GetItemEffectSpellTooltip(int(parsed.Id), parsed.ItemEffect.BuffId)
 		tooltip, _ := tooltip.ParseTooltip(tooltipString, tooltip.DBCTooltipDataProvider{DBC: instance}, int64(id))
 
 		grp, exists := groupMapProc["Procs"]
@@ -436,7 +436,7 @@ func BuildProcInfo(parsed *proto.UIItem, instance *dbc.DBC, tooltip string) (Pro
 		}
 
 		itemType := proto.ItemType_ItemTypeUnknown
-		if itemEffectInfo[0].TriggerType == 2 {
+		if effectInfo.TriggerType == 2 {
 			itemType = proto.ItemType_ItemTypeWeapon
 		}
 
@@ -445,18 +445,13 @@ func BuildProcInfo(parsed *proto.UIItem, instance *dbc.DBC, tooltip string) (Pro
 		}
 		procInfo, supported := BuildSpellProcInfo(&procSpell, tooltip, itemType)
 
-		// we do not support generation of more than one proc effect right now
-		if len(itemEffectInfo) > 1 {
-			return procInfo, false
+		if len(itemEffectInfo) > 1 && !supported {
+			continue
 		}
 
 		if SpellHasDummyEffect(int(procId), instance) {
 			return procInfo, false
 		}
-
-		// if SpellUsesStacks(int(procId), instance) {
-		// 	return procInfo, true
-		// }
 
 		return procInfo, supported
 	}
@@ -480,10 +475,6 @@ func BuildEnchantProcInfo(enchant *proto.UIEnchant, instance *dbc.DBC, tooltip s
 	if SpellHasDummyEffect(int(procSpellID), instance) {
 		return procInfo, false
 	}
-
-	// if SpellUsesStacks(int(procSpellID), instance) {
-	// 	return procInfo, false
-	// }
 
 	return procInfo, supported
 }

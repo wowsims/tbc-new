@@ -13,62 +13,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Increases your chance to resist Fear effects by 5%.
-	// shared.NewProcStatBonusEffect(shared.ProcStatBonusEffect{
-	//	Name:               "Lionheart Champion",
-	//	ItemID:             28429,
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Increases your chance to resist Fear effects by 8%.
-	// shared.NewProcStatBonusEffect(shared.ProcStatBonusEffect{
-	//	Name:               "Lionheart Executioner",
-	//	ItemID:             28430,
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Increases attack power by 70.
-	// shared.NewProcStatBonusEffect(shared.ProcStatBonusEffect{
-	//	Name:               "Warp Slicer",
-	//	ItemID:             30311,
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Increases attack power by 150.
-	// shared.NewProcStatBonusEffect(shared.ProcStatBonusEffect{
-	//	Name:               "Devastation",
-	//	ItemID:             30316,
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Increases your pet's resistances by 130 and increases your spell damage by up to 48.
 	// shared.NewProcStatBonusEffect(shared.ProcStatBonusEffect{
 	//	Name:               "Void Star Talisman",
@@ -84,6 +28,26 @@ func RegisterAllProcs() {
 		Name:               "Annihilator",
 		ItemID:             12798,
 		MaxStacks:          3,
+		Callback:           core.CallbackOnSpellHitDealt,
+		ProcMask:           core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial,
+		Outcome:            core.OutcomeLanded,
+		RequireDamageDealt: true,
+	})
+
+	// Increases Strength by 100 for 10s.
+	shared.NewProcStatBonusEffect(shared.ProcStatBonusEffect{
+		Name:               "Lionheart Champion",
+		ItemID:             28429,
+		Callback:           core.CallbackOnSpellHitDealt,
+		ProcMask:           core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial,
+		Outcome:            core.OutcomeLanded,
+		RequireDamageDealt: true,
+	})
+
+	// Increases Strength by 100 for 10s.
+	shared.NewProcStatBonusEffect(shared.ProcStatBonusEffect{
+		Name:               "Lionheart Executioner",
+		ItemID:             28430,
 		Callback:           core.CallbackOnSpellHitDealt,
 		ProcMask:           core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial,
 		Outcome:            core.OutcomeLanded,

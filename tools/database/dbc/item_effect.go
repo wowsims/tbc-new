@@ -205,9 +205,12 @@ func ParseItemEffects(itemID, itemLevel int) []*proto.ItemEffect {
 	return out
 }
 
-func GetItemEffectSpellTooltip(itemID int) (string, int) {
+func GetItemEffectSpellTooltip(itemID int, buffId int32) (string, int) {
 	raw := dbcInstance.ItemEffectsByParentID[itemID]
 	for _, effect := range raw {
+		if effect.SpellID != int(buffId) && len(raw) > 1 {
+			continue
+		}
 		spell := dbcInstance.Spells[effect.SpellID]
 		return spell.Description, effect.SpellID
 	}

@@ -52,8 +52,6 @@ export const MISSING_ITEM_EFFECTS = [
     28356, // Gladiator's Libram of Justice
     28357, // Gladiator's Totem of the Third Wind
     28418, // Shiffar's Nexus-Horn
-    28429, // Lionheart Champion
-    28430, // Lionheart Executioner
     28578, // Masquerade Gown
     28579, // Romulo's Poison Vial
     28590, // Ribbon of Sacrifice
@@ -67,8 +65,6 @@ export const MISSING_ITEM_EFFECTS = [
     29301, // Band of the Eternal Champion
     29305, // Band of the Eternal Sage
     29309, // Band of the Eternal Restorer
-    30311, // Warp Slicer
-    30316, // Devastation
     30317, // Cosmic Infuser
     30449, // Void Star Talisman
     30619, // Fel Reaver's Piston
