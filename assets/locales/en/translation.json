@@ -1531,7 +1531,7 @@
 					"base_spell_tooltip": "The spell (ie. Bloodlust) you are casting that can have multiple other spells within it's cooldown",
 					"target_spell": "Target Spell",
 					"target_spell_tooltip": "The spell (ie. Death Wish) you want to fit within the cooldown of the Base Spell.",
-					"align_cd_end":"Align Target spell encounter end",
+					"align_cd_end":"Align target spell to encounter end",
 					"align_cd_end_tooltip":"When checked will try to align the CD usage to the end of the encounter. This is useful for cooldowns/specs that benefit for example from execute."
 				},
 				"offset": {
