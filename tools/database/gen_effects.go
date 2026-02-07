@@ -20,10 +20,11 @@ import (
 const MIN_EFFECT_ILVL = 50
 
 type ProcInfo struct {
-	Outcome            core.HitOutcome
-	Callback           core.AuraCallback
-	ProcMask           core.ProcMask
-	RequireDamageDealt bool
+	Outcome             core.HitOutcome
+	Callback            core.AuraCallback
+	ProcMask            core.ProcMask
+	MaxCumulativeStacks int32
+	RequireDamageDealt  bool
 }
 
 // Entry represents a single effect with its ID and display name.
@@ -150,7 +151,7 @@ func GenerateEnchantEffects(instance *dbc.DBC, db *WowDatabase) {
 	for _, grp := range groupMapProc {
 		procGroups = append(procGroups, &grp)
 	}
-	//GenerateEffectsFile(procGroups, "sim/common/tbc/enchants_auto_gen.go", TmplStrEnchant)
+	// GenerateEffectsFile(procGroups, "sim/common/tbc/enchants_auto_gen.go", TmplStrEnchant)
 }
 
 func GenerateItemEffects(instance *dbc.DBC, db *WowDatabase, itemSources map[int][]*proto.DropSource) {
@@ -319,7 +320,7 @@ func TryParseProcEffect(parsed *proto.UIItem, instance *dbc.DBC, groupMapProc ma
 			return EffectParseResultSuccess
 		}
 
-		tooltipString, id := dbc.GetItemEffectSpellTooltip(int(parsed.Id))
+		tooltipString, id := dbc.GetItemEffectSpellTooltip(int(parsed.Id), parsed.ItemEffect.BuffId)
 		tooltip, _ := tooltip.ParseTooltip(tooltipString, tooltip.DBCTooltipDataProvider{DBC: instance}, int64(id))
 
 		grp, exists := groupMapProc["Procs"]
@@ -429,31 +430,26 @@ func BuildProcInfo(parsed *proto.UIItem, instance *dbc.DBC, tooltip string) (Pro
 	for _, effectInfo := range itemEffectInfo {
 		procId := effectInfo.SpellID
 		procSpell, ok := instance.Spells[int(procId)]
+
 		if !ok {
 			panic(fmt.Sprintf("Could not find proc aura %d spell for item effect %d.\n", procId, parsed.Id))
 		}
 
-		if len(procSpell.ProcTypeMask) == 0 || procSpell.ProcTypeMask[0] == 0 {
-			continue
-		}
-
 		itemType := proto.ItemType_ItemTypeUnknown
-		if itemEffectInfo[0].TriggerType == 2 {
+		if effectInfo.TriggerType == 2 {
 			itemType = proto.ItemType_ItemTypeWeapon
 		}
 
+		if itemType != proto.ItemType_ItemTypeWeapon && (len(procSpell.ProcTypeMask) == 0 || procSpell.ProcTypeMask[0] == 0) {
+			continue
+		}
 		procInfo, supported := BuildSpellProcInfo(&procSpell, tooltip, itemType)
 
-		// we do not support generation of more than one proc effect right now
-		if len(itemEffectInfo) > 1 {
-			return procInfo, false
+		if len(itemEffectInfo) > 1 && !supported {
+			continue
 		}
 
 		if SpellHasDummyEffect(int(procId), instance) {
-			return procInfo, false
-		}
-
-		if SpellUsesStacks(int(procId), instance) {
 			return procInfo, false
 		}
 
@@ -480,16 +476,13 @@ func BuildEnchantProcInfo(enchant *proto.UIEnchant, instance *dbc.DBC, tooltip s
 		return procInfo, false
 	}
 
-	if SpellUsesStacks(int(procSpellID), instance) {
-		return procInfo, false
-	}
-
 	return procInfo, supported
 }
 
 func BuildSpellProcInfo(procSpell *dbc.Spell, tooltip string, itemType proto.ItemType) (ProcInfo, bool) {
 	var info = ProcInfo{
-		RequireDamageDealt: true,
+		RequireDamageDealt:  true,
+		MaxCumulativeStacks: procSpell.MaxCumulativeStacks,
 	}
 
 	// On hit proc

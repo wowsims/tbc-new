@@ -320,8 +320,6 @@ func (effect *SpellEffect) ParseStatEffect(scalesWithIlvl bool, ilvl int) *stats
 	case effect.EffectAura == A_MOD_TARGET_RESISTANCE:
 		resist := ConvertTargetResistanceFlagToPenetrationStat(effect.EffectMiscValues[0])
 		effectStats[resist] = float64(effect.EffectBasePoints + effect.EffectDieSides)
-	case effect.EffectAura == A_MOD_MELEE_HASTE && effect.ImplicitTargets[0] == 1:
-		effectStats[proto.Stat_StatMeleeHasteRating] = float64(effect.EffectBasePoints+effect.EffectDieSides) * core.PhysicalHasteRatingPerHastePercent
 	}
 
 	return effectStats
