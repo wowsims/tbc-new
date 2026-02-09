@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
@@ -13,46 +14,46 @@ func init() {
 	// EffectID: 2673, Proc SpellID: 28093
 	// PPM: 1, ICD: 0
 	// Permanently enchant a Melee Weapon to occasionally increase Agility by 120 and attack speed slightly (2%).
-	// core.NewEnchantEffect(2673, func(agent core.Agent) {
-	// 	character := agent.GetCharacter()
-	// 	duration := time.Second * 15
+	core.NewEnchantEffect(2673, func(agent core.Agent) {
+		character := agent.GetCharacter()
+		duration := time.Second * 15
 
-	// 	createMongooseAuras := func(tag int32) *core.StatBuffAura {
-	// 		labelSuffix := core.Ternary(tag == 1, " (MH)", " (OH)")
-	// 		slot := core.Ternary(tag == 1, proto.ItemSlot_ItemSlotMainHand, proto.ItemSlot_ItemSlotOffHand)
-	// 		aura := character.NewTemporaryStatsAuraWrapped(
-	// 			"Lightning Speed"+labelSuffix,
-	// 			core.ActionID{SpellID: 28093}.WithTag(tag),
-	// 			stats.Stats{stats.Agility: 120},
-	// 			duration,
-	// 			func(aura *core.Aura) {
-	// 				aura.ApplyOnGain(func(aura *core.Aura, sim *core.Simulation) {
-	// 					character.MultiplyAttackSpeed(sim, 1.2)
-	// 				})
-	// 				aura.ApplyOnExpire(func(aura *core.Aura, sim *core.Simulation) {
-	// 					character.MultiplyAttackSpeed(sim, 1/1.2)
-	// 				})
-	// 			},
-	// 		)
-	// 		character.AddStatProcBuff(2673, aura, true, []proto.ItemSlot{slot})
-	// 		character.ItemSwap.RegisterWeaponEnchantBuff(aura.Aura, 2673)
-	// 		return aura
-	// 	}
+		createMongooseAuras := func(tag int32) *core.StatBuffAura {
+			labelSuffix := core.Ternary(tag == 1, " (MH)", " (OH)")
+			slot := core.Ternary(tag == 1, proto.ItemSlot_ItemSlotMainHand, proto.ItemSlot_ItemSlotOffHand)
+			aura := character.NewTemporaryStatsAuraWrapped(
+				"Lightning Speed"+labelSuffix,
+				core.ActionID{SpellID: 28093}.WithTag(tag),
+				stats.Stats{stats.Agility: 120},
+				duration,
+				func(aura *core.Aura) {
+					aura.ApplyOnGain(func(aura *core.Aura, sim *core.Simulation) {
+						character.MultiplyAttackSpeed(sim, 1.2)
+					})
+					aura.ApplyOnExpire(func(aura *core.Aura, sim *core.Simulation) {
+						character.MultiplyAttackSpeed(sim, 1/1.2)
+					})
+				},
+			)
+			character.AddStatProcBuff(2673, aura, true, []proto.ItemSlot{slot})
+			character.ItemSwap.RegisterWeaponEnchantBuff(aura.Aura, 2673)
+			return aura
+		}
 
-	// 	mhAuras := createMongooseAuras(1)
-	// 	ohAuras := createMongooseAuras(2)
+		mhAuras := createMongooseAuras(1)
+		ohAuras := createMongooseAuras(2)
 
-	// 	character.MakeProcTriggerAura(core.ProcTrigger{
-	// 		Name:     "Enchant Weapon - Mongoose",
-	// 		Callback: core.CallbackOnSpellHitDealt,
-	// 		ActionID: core.ActionID{SpellID: 28093},
-	// 		DPM:      character.NewDynamicLegacyProcForEnchant(2673, 1.0, 0),
-	// 		Outcome:  core.OutcomeLanded,
-	// 		Handler: func(sim *core.Simulation, spell *core.Spell, _ *core.SpellResult) {
-	// 			core.Ternary(spell.IsOH(), ohAuras, mhAuras).Activate(sim)
-	// 		},
-	// 	})
-	// })
+		character.MakeProcTriggerAura(core.ProcTrigger{
+			Name:     "Enchant Weapon - Mongoose",
+			Callback: core.CallbackOnSpellHitDealt,
+			ActionID: core.ActionID{SpellID: 28093},
+			DPM:      character.NewDynamicLegacyProcForEnchant(2673, 1.0, 0),
+			Outcome:  core.OutcomeLanded,
+			Handler: func(sim *core.Simulation, spell *core.Spell, _ *core.SpellResult) {
+				core.Ternary(spell.IsOH(), ohAuras, mhAuras).Activate(sim)
+			},
+		})
+	})
 
 	// Executioner
 	// EffectID: 3225, Proc SpellID: 42976
