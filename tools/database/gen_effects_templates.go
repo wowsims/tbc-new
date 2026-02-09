@@ -11,8 +11,14 @@ func RegisterAllOnUseCds() {
 
 	// {{ .Name }}
 {{- range .Entries }}
+	{{- if not .Supported}}
   	{{- with index .Variants 0}}
-	shared.NewSimpleStatActive({{ .ID }}) // {{ .Name }}
+	// shared.NewSimpleStatActive({{ .ID }}) // {{ .Name }} - https://www.wowhead.com/tbc/spell={{.SpellID}}
+	{{- end}}
+	{{- else}}
+  	{{- with index .Variants 0}}
+	shared.NewSimpleStatActive({{ .ID }}) // {{ .Name }} - https://www.wowhead.com/tbc/spell={{.SpellID}}
+	{{- end}}
 	{{- end}}
 {{- end }}
 

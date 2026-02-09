@@ -366,11 +366,13 @@ func TryParseOnUseEffect(parsed *proto.UIItem, itemEffect *proto.ItemEffect, gro
 			grp = Group{Name: groupName}
 		}
 
-		grp.Entries = append(grp.Entries, &Entry{Variants: []*Variant{{ID: int(parsed.Id), Name: parsed.Name, SpellID: int(itemEffect.BuffId)}}})
+		entry := &Entry{Variants: []*Variant{{ID: int(parsed.Id), Name: parsed.Name, SpellID: int(itemEffect.BuffId)}}, Supported: true}
+		grp.Entries = append(grp.Entries, entry)
 		groupMap[groupName] = grp
 
 		if len(itemEffect.ScalingOptions[0].Stats) == 0 {
-			return EffectParseResultInvalid
+			entry.Supported = false
+			return EffectParseResultUnsupported
 		}
 
 		return EffectParseResultSuccess

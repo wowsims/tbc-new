@@ -179,8 +179,8 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Increases attack power by 45 when fighting Beasts.
-	// https://www.wowhead.com/tbc/spell=18067
+	// Skinning +10.
+	// https://www.wowhead.com/tbc/spell=16718
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
@@ -1253,8 +1253,8 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Restores 2 health per 5 sec.
-	// https://www.wowhead.com/tbc/spell=21346
+	// Returns you to the sanctuary of Dun Baldar.
+	// https://www.wowhead.com/tbc/spell=22564
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
@@ -1316,8 +1316,8 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Restores 2 health per 5 sec.
-	// https://www.wowhead.com/tbc/spell=21346
+	// Returns you to the sanctuary of Frostwolf Keep.
+	// https://www.wowhead.com/tbc/spell=22563
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
@@ -1364,8 +1364,8 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Returns you to the sanctuary of Frostwolf Keep.
-	// https://www.wowhead.com/tbc/spell=22563
+	// Restores 7 health per 5 sec.
+	// https://www.wowhead.com/tbc/spell=21600
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
@@ -1395,7 +1395,9 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// https://www.wowhead.com/tbc/spell=22619
+	// When the shield blocks it releases an electrical charge that damages all nearby enemies. This also has
+	// a chance of damaging the shield.
+	// https://www.wowhead.com/tbc/spell=22600
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
@@ -4600,9 +4602,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Sometimes heals bearer of 120 damage when damaging an enemy in melee and chance on ranged hit to restore
-	// 172 mana to the bearer.
-	// https://www.wowhead.com/tbc/spell=33504
+	// https://www.wowhead.com/tbc/spell=39599
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
@@ -6141,7 +6141,8 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// https://www.wowhead.com/tbc/spell=38328
+	// Reduces the threat from your harmful critical strikes.
+	// https://www.wowhead.com/tbc/spell=38329
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
@@ -7303,8 +7304,8 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Allows you to look far into the distance.
-	// https://www.wowhead.com/tbc/spell=12883
+	// Shows the location of all nearby gas clouds on the minimap.
+	// https://www.wowhead.com/tbc/spell=30645
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
@@ -7337,8 +7338,8 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Allows you to look far into the distance.
-	// https://www.wowhead.com/tbc/spell=12883
+	// Shows the location of all nearby gas clouds on the minimap.
+	// https://www.wowhead.com/tbc/spell=30645
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
@@ -7348,57 +7349,6 @@ func RegisterAllProcs() {
 	//	{ItemID: 32473, ItemName: "Tankatronic Goggles"},
 	//	{ItemID: 32473, ItemName: "Tankatronic Goggles"},
 	//	{ItemID: 32473, ItemName: "Tankatronic Goggles"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Shows the location of all nearby gas clouds on the minimap.
-	// https://www.wowhead.com/tbc/spell=30645
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32474, ItemName: "Surestrike Goggles v2.0"},
-	//	{ItemID: 32474, ItemName: "Surestrike Goggles v2.0"},
-	//	{ItemID: 32474, ItemName: "Surestrike Goggles v2.0"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Shows the location of all nearby gas clouds on the minimap.
-	// https://www.wowhead.com/tbc/spell=30645
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32475, ItemName: "Living Replicator Specs"},
-	//	{ItemID: 32475, ItemName: "Living Replicator Specs"},
-	//	{ItemID: 32475, ItemName: "Living Replicator Specs"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Shows the location of all nearby gas clouds on the minimap.
-	// https://www.wowhead.com/tbc/spell=30645
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32476, ItemName: "Gadgetstorm Goggles"},
-	//	{ItemID: 32476, ItemName: "Gadgetstorm Goggles"},
-	//	{ItemID: 32476, ItemName: "Gadgetstorm Goggles"},
 	// })
 
 	// TODO: Manual implementation required
@@ -7407,6 +7357,57 @@ func RegisterAllProcs() {
 	//
 	// Slightly increases your stealth detection.
 	// https://www.wowhead.com/tbc/spell=40273
+	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+	//	Callback:           core.CallbackEmpty,
+	//	ProcMask:           core.ProcMaskEmpty,
+	//	Outcome:            core.OutcomeEmpty,
+	//	RequireDamageDealt: false
+	// }, []shared.ItemVariant{
+	//	{ItemID: 32474, ItemName: "Surestrike Goggles v2.0"},
+	//	{ItemID: 32474, ItemName: "Surestrike Goggles v2.0"},
+	//	{ItemID: 32474, ItemName: "Surestrike Goggles v2.0"},
+	// })
+
+	// TODO: Manual implementation required
+	//       This can be ignored if the effect has already been implemented.
+	//       With next db run the item will be removed if implemented.
+	//
+	// Slightly increases your stealth detection.
+	// https://www.wowhead.com/tbc/spell=40273
+	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+	//	Callback:           core.CallbackEmpty,
+	//	ProcMask:           core.ProcMaskEmpty,
+	//	Outcome:            core.OutcomeEmpty,
+	//	RequireDamageDealt: false
+	// }, []shared.ItemVariant{
+	//	{ItemID: 32475, ItemName: "Living Replicator Specs"},
+	//	{ItemID: 32475, ItemName: "Living Replicator Specs"},
+	//	{ItemID: 32475, ItemName: "Living Replicator Specs"},
+	// })
+
+	// TODO: Manual implementation required
+	//       This can be ignored if the effect has already been implemented.
+	//       With next db run the item will be removed if implemented.
+	//
+	// Allows you to look far into the distance.
+	// https://www.wowhead.com/tbc/spell=12883
+	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+	//	Callback:           core.CallbackEmpty,
+	//	ProcMask:           core.ProcMaskEmpty,
+	//	Outcome:            core.OutcomeEmpty,
+	//	RequireDamageDealt: false
+	// }, []shared.ItemVariant{
+	//	{ItemID: 32476, ItemName: "Gadgetstorm Goggles"},
+	//	{ItemID: 32476, ItemName: "Gadgetstorm Goggles"},
+	//	{ItemID: 32476, ItemName: "Gadgetstorm Goggles"},
+	// })
+
+	// TODO: Manual implementation required
+	//       This can be ignored if the effect has already been implemented.
+	//       With next db run the item will be removed if implemented.
+	//
+	// Shows the location of all nearby gas clouds on the minimap.
+	// https://www.wowhead.com/tbc/spell=30645
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
@@ -7611,8 +7612,8 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Shows the location of all nearby gas clouds on the minimap.
-	// https://www.wowhead.com/tbc/spell=30645
+	// Slightly increases your stealth detection.
+	// https://www.wowhead.com/tbc/spell=40273
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
@@ -7628,8 +7629,8 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Shows the location of all nearby gas clouds on the minimap.
-	// https://www.wowhead.com/tbc/spell=30645
+	// Allows you to look far into the distance.
+	// https://www.wowhead.com/tbc/spell=12883
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
@@ -8660,8 +8661,8 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Allows you to look far into the distance.
-	// https://www.wowhead.com/tbc/spell=12883
+	// Slightly increases your stealth detection.
+	// https://www.wowhead.com/tbc/spell=40273
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
@@ -8772,9 +8773,8 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Release all accumulated Holy Energy to instantly heal current friendly target by the amount of Holy Energy
-	// accumulated.
-	// https://www.wowhead.com/tbc/spell=45064
+	// Collects 99 Holy Energy from healing spells you cast. Cannot collect more than 1980 Holy Energy.
+	// https://www.wowhead.com/tbc/spell=45062
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
@@ -8869,8 +8869,8 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Allows you to look far into the distance.
-	// https://www.wowhead.com/tbc/spell=12883
+	// Slightly increases your stealth detection.
+	// https://www.wowhead.com/tbc/spell=40273
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
@@ -9278,8 +9278,8 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Shows the location of all nearby gas clouds on the minimap.
-	// https://www.wowhead.com/tbc/spell=30645
+	// Allows you to look far into the distance.
+	// https://www.wowhead.com/tbc/spell=12883
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
@@ -9295,8 +9295,8 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Shows the location of all nearby gas clouds on the minimap.
-	// https://www.wowhead.com/tbc/spell=30645
+	// Slightly increases your stealth detection.
+	// https://www.wowhead.com/tbc/spell=40273
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
@@ -9306,40 +9306,6 @@ func RegisterAllProcs() {
 	//	{ItemID: 35182, ItemName: "Hyper-Magnified Moon Specs"},
 	//	{ItemID: 35182, ItemName: "Hyper-Magnified Moon Specs"},
 	//	{ItemID: 35182, ItemName: "Hyper-Magnified Moon Specs"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Shows the location of all nearby gas clouds on the minimap.
-	// https://www.wowhead.com/tbc/spell=30645
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 35183, ItemName: "Wonderheal XT68 Shades"},
-	//	{ItemID: 35183, ItemName: "Wonderheal XT68 Shades"},
-	//	{ItemID: 35183, ItemName: "Wonderheal XT68 Shades"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Shows the location of all nearby gas clouds on the minimap.
-	// https://www.wowhead.com/tbc/spell=30645
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 35184, ItemName: "Primal-Attuned Goggles"},
-	//	{ItemID: 35184, ItemName: "Primal-Attuned Goggles"},
-	//	{ItemID: 35184, ItemName: "Primal-Attuned Goggles"},
 	// })
 
 	// TODO: Manual implementation required
@@ -9348,6 +9314,40 @@ func RegisterAllProcs() {
 	//
 	// Allows you to look far into the distance.
 	// https://www.wowhead.com/tbc/spell=12883
+	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+	//	Callback:           core.CallbackEmpty,
+	//	ProcMask:           core.ProcMaskEmpty,
+	//	Outcome:            core.OutcomeEmpty,
+	//	RequireDamageDealt: false
+	// }, []shared.ItemVariant{
+	//	{ItemID: 35183, ItemName: "Wonderheal XT68 Shades"},
+	//	{ItemID: 35183, ItemName: "Wonderheal XT68 Shades"},
+	//	{ItemID: 35183, ItemName: "Wonderheal XT68 Shades"},
+	// })
+
+	// TODO: Manual implementation required
+	//       This can be ignored if the effect has already been implemented.
+	//       With next db run the item will be removed if implemented.
+	//
+	// Shows the location of all nearby gas clouds on the minimap.
+	// https://www.wowhead.com/tbc/spell=30645
+	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+	//	Callback:           core.CallbackEmpty,
+	//	ProcMask:           core.ProcMaskEmpty,
+	//	Outcome:            core.OutcomeEmpty,
+	//	RequireDamageDealt: false
+	// }, []shared.ItemVariant{
+	//	{ItemID: 35184, ItemName: "Primal-Attuned Goggles"},
+	//	{ItemID: 35184, ItemName: "Primal-Attuned Goggles"},
+	//	{ItemID: 35184, ItemName: "Primal-Attuned Goggles"},
+	// })
+
+	// TODO: Manual implementation required
+	//       This can be ignored if the effect has already been implemented.
+	//       With next db run the item will be removed if implemented.
+	//
+	// Shows the location of all nearby gas clouds on the minimap.
+	// https://www.wowhead.com/tbc/spell=30645
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
