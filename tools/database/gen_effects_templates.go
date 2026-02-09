@@ -39,42 +39,57 @@ func RegisterAllProcs() {
 	{{- range (.Tooltip | formatStrings 100) }}
 	// {{.}}
 	{{- end}}
+	{{with index .Variants 0 -}}
+	// https://www.wowhead.com/tbc/spell={{.SpellID}}
+	{{- end}}
 	{{- if .Supported}}
 		{{- if gt .ProcInfo.MaxCumulativeStacks 0 }}
-			shared.NewStackingStatBonusEffect(shared.StackingStatBonusEffect{
-				{{with index .Variants 0 -}}
-				Name:               "{{ .Name }}",
-				ItemID:             {{ .ID }},
-				{{- end}}
-				MaxStacks:          {{ .ProcInfo.MaxCumulativeStacks }},
+			shared.NewStackingStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 				Callback:           {{ .ProcInfo.Callback | asCoreCallback }},
 				ProcMask:           {{ .ProcInfo.ProcMask | asCoreProcMask }},
 				Outcome:            {{ .ProcInfo.Outcome | asCoreOutcome }},
 				RequireDamageDealt: {{ .ProcInfo.RequireDamageDealt }},
+			}, []shared.ItemVariant{
+				{{- range .Variants }}
+				{ItemID: {{.ID}}, ItemName: "{{.Name}}"},
+				{{- end}}
 			})
 		{{- else}}
-			shared.NewProcStatBonusEffect(shared.ProcStatBonusEffect{
-				{{with index .Variants 0 -}}
-				Name:               "{{ .Name }}",
-				ItemID:             {{ .ID }},
-				{{- end}}
+			shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 				Callback:           {{ .ProcInfo.Callback | asCoreCallback }},
 				ProcMask:           {{ .ProcInfo.ProcMask | asCoreProcMask }},
 				Outcome:            {{ .ProcInfo.Outcome | asCoreOutcome }},
 				RequireDamageDealt: {{ .ProcInfo.RequireDamageDealt }},
+			}, []shared.ItemVariant{
+				{{- range .Variants }}
+				{ItemID: {{.ID}}, ItemName: "{{.Name}}"},
+				{{- end}}
 			})
 		{{- end}}
 	{{- else}}
-		// shared.NewProcStatBonusEffect(shared.ProcStatBonusEffect{
-		{{ with index .Variants 0 -}}
-		//	Name:               "{{ .Name }}",
-		//	ItemID:             {{ .ID }},
+		{{- if gt .ProcInfo.MaxCumulativeStacks 0 }}
+			// shared.NewStackingStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+			//	Callback:           {{ .ProcInfo.Callback | asCoreCallback }},
+			//	ProcMask:           {{ .ProcInfo.ProcMask | asCoreProcMask }},
+			//	Outcome:            {{ .ProcInfo.Outcome | asCoreOutcome }},
+			//	RequireDamageDealt: {{ .ProcInfo.RequireDamageDealt }}
+			// }, []shared.ItemVariant{
+				{{- range .Variants }}
+			//	{ItemID: {{.ID}}, ItemName: "{{.Name}}"},
+				{{- end}}
+			// })
+		{{- else}}
+			// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+			//	Callback:           {{ .ProcInfo.Callback | asCoreCallback }},
+			//	ProcMask:           {{ .ProcInfo.ProcMask | asCoreProcMask }},
+			//	Outcome:            {{ .ProcInfo.Outcome | asCoreOutcome }},
+			//	RequireDamageDealt: {{ .ProcInfo.RequireDamageDealt }}
+			// }, []shared.ItemVariant{
+				{{- range .Variants }}
+			//	{ItemID: {{.ID}}, ItemName: "{{.Name}}"},
+				{{- end}}
+			// })
 		{{- end}}
-		//	Callback:           {{ .ProcInfo.Callback | asCoreCallback }},
-		//	ProcMask:           {{ .ProcInfo.ProcMask | asCoreProcMask }},
-		//	Outcome:            {{ .ProcInfo.Outcome | asCoreOutcome }},
-		//	RequireDamageDealt: {{ .ProcInfo.RequireDamageDealt }}
-		// })
 	{{- end}}
 {{- end }}
 
@@ -101,6 +116,9 @@ func RegisterAllEnchants() {
 	{{- end}}
 	{{- range (.Tooltip | formatStrings 100) }}
 	// {{.}}
+	{{- end}}
+	{{with index .Variants 0 -}}
+	// https://www.wowhead.com/tbc/spell={{.SpellID}}
 	{{- end}}
 	{{- if .Supported}}
 		shared.NewProcStatBonusEffect(shared.ProcStatBonusEffect{
@@ -134,15 +152,30 @@ const TmplStrMissingEffects = `
 // This file is auto generated
 // Changes will be overwritten on next database generation
 
-export const MISSING_ITEM_EFFECTS = [
+export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 {{- range .ItemEffects }}
-    {{.ID}}, // {{.Name}}
+	[
+		{{.ItemID}}, // {{ .Name }}
+		[
+			{{- range .Effects }}
+			"{{ .Name }}", // {{.SpellID}} - https://www.wowhead.com/tbc/spell={{.SpellID}}
+			{{- end}}
+		]
+	],
 {{- end }}
-]
+])
 
-export const MISSING_ENCHANT_EFFECTS = [
+export const MISSING_ENCHANT_EFFECTS = new Map<number, string[]>([
 {{- range .EnchantEffects }}
-    {{.ID}}, // {{.Name}}
+{{- $name := .Name }}
+{{- range .Entries }}
+{{- $tooltip := .Tooltip }}
+{{- if not .Supported}}
+{{- range .Variants }}
+	[{{.ID}}, "{{- range $tooltip }}{{.}}{{- end}}"], // {{ $name }} - {{.SpellID}} - https://www.wowhead.com/tbc/spell={{.SpellID}}
+{{- end}}
 {{- end }}
-]
+{{- end }}
+{{- end }}
+])
 `

@@ -205,7 +205,7 @@ func (item *Item) GetGemBonus() stats.Stats {
 			// effectStat is the SpellID
 			effectAuras := GetDBC().SpellEffects[effectStat]
 			for _, effectAura := range effectAuras {
-				stat := ConvertEffectAuraToStatIndex(int(effectAura.EffectAura), effectAura.EffectMiscValues[0])
+				stat := ConvertEffectAuraToStatIndex(effectAura.EffectAura, effectAura.EffectMiscValues[0])
 				if stat > 0 {
 					stats[stat] = float64(effectAura.EffectBasePoints + 1)
 				}
