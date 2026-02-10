@@ -2,6 +2,7 @@ package database
 
 import (
 	"fmt"
+	"math"
 	"os"
 	"regexp"
 	"sort"
@@ -173,7 +174,7 @@ func GenerateItemEffects(instance *dbc.DBC, db *WowDatabase, itemSources map[int
 					}
 					if stat == proto.Stat_StatArmorPenetration || stat == proto.Stat_StatSpellPenetration {
 						// Make these not negative
-						value = -value
+						value = math.Abs(value)
 					}
 					parsed.ScalingOptions[0].Stats[int32(stat)] += value
 				}
