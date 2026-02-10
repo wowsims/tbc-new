@@ -5,7 +5,44 @@ import (
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
+func (paladin *Paladin) registerTalentSpells() {
+	// Holy Tree
+	if paladin.Talents.DivineFavor {
+		paladin.registerDivineFavor()
+	}
+	if paladin.Talents.HolyShock {
+		paladin.registerHolyShock()
+	}
+	if paladin.Talents.DivineIllumination {
+		paladin.registerDivineIllumination()
+	}
+
+	// Protection Tree
+	if paladin.Talents.HolyShield {
+		paladin.registerHolyShield()
+	}
+	if paladin.Talents.AvengersShield {
+		paladin.registerAvengersShield()
+	}
+
+	// Retribution Tree
+	if paladin.Talents.SealOfCommand {
+		paladin.registerSealOfCommand()
+	}
+	if paladin.Talents.SanctityAura {
+		paladin.registerSanctityAura()
+	}
+	if paladin.Talents.Repentance {
+		paladin.registerRepentance()
+	}
+	if paladin.Talents.CrusaderStrike {
+		paladin.registerCrusaderStrike()
+	}
+}
+
 func (paladin *Paladin) ApplyTalents() {
+	paladin.registerTalentSpells()
+
 	// ==================
 	// Holy Talents
 	// ==================
@@ -57,12 +94,6 @@ func (paladin *Paladin) ApplyTalents() {
 	// Pure of Heart (Tier 5) - Increases your resistance to Curse and Disease effects by 5/10/15%
 	// TODO: Implement resistance
 
-	// Divine Favor (Tier 5) - When activated, gives your next Flash of Light, Holy Light, or Holy Shock spell a 100% critical effect chance
-	// https://www.wowhead.com/tbc/spell=20216
-	if paladin.Talents.DivineFavor {
-		paladin.registerDivineFavor()
-	}
-
 	// Sanctified Light (Tier 6) - Increases the critical effect chance of your Holy Light and Holy Shock spells by 2/4/6%
 	if paladin.Talents.SanctifiedLight > 0 {
 		paladin.applySanctifiedLight()
@@ -81,24 +112,12 @@ func (paladin *Paladin) ApplyTalents() {
 	// Light's Grace (Tier 7) - Your Holy Light spell reduces the cast time of your next Holy Light spell by 0.15/0.30/0.50 sec
 	// TODO: Implement
 
-	// Holy Shock (Tier 8) - Blasts the target with Holy energy
-	// https://www.wowhead.com/tbc/spell=33072
-	if paladin.Talents.HolyShock {
-		paladin.registerHolyShock()
-	}
-
 	// Blessed Life (Tier 8) - All attacks against you have a 4/7/10% chance to cause half damage
 	// TODO: Implement damage reduction
 
 	// Holy Guidance (Tier 9) - Increases your spell damage and healing by 7/14/21/28/35% of your total Intellect
 	if paladin.Talents.HolyGuidance > 0 {
 		paladin.applyHolyGuidance()
-	}
-
-	// Divine Illumination (Tier 9) - Reduces the mana cost of all spells by 50% for 15 sec
-	// https://www.wowhead.com/tbc/spell=31842
-	if paladin.Talents.DivineIllumination {
-		paladin.registerDivineIllumination()
 	}
 
 	// ==================
@@ -124,13 +143,6 @@ func (paladin *Paladin) ApplyTalents() {
 	// Toughness (Tier 2) - Increases your armor value from items by 2/4/6/8/10%
 	if paladin.Talents.Toughness > 0 {
 		paladin.applyToughness()
-	}
-
-	// Blessing of Kings (Tier 3) - Places a Blessing on the friendly target, increasing total stats by 10% for 10 min
-	// https://www.wowhead.com/tbc/spell=25898
-	// NOTE: This is a trainable spell in TBC if you have the talent point
-	if paladin.Talents.BlessingOfKings {
-		// Registered in blessings.go when talent is taken
 	}
 
 	// Improved Righteous Fury (Tier 3) - While Righteous Fury is active, all damage taken is reduced by 2/4/6%
@@ -160,12 +172,6 @@ func (paladin *Paladin) ApplyTalents() {
 		paladin.applySpellWarding()
 	}
 
-	// Blessing of Sanctuary (Tier 6) - When the target blocks, parries, or dodges a melee attack the target will gain 10 rage, 20 runic power, or 2% of maximum mana
-	// https://www.wowhead.com/tbc/spell=25899
-	if paladin.Talents.BlessingOfSanctuary {
-		// Registered in blessings.go when talent is taken
-	}
-
 	// Reckoning (Tier 6) - Gives you a 2/4/6/8/10% chance after being hit by any damaging attack that the next 4 weapon swings within 8 sec will generate an additional attack
 	if paladin.Talents.Reckoning > 0 {
 		paladin.applyReckoning()
@@ -184,12 +190,6 @@ func (paladin *Paladin) ApplyTalents() {
 	// Improved Holy Shield (Tier 8) - Increases damage caused by Holy Shield by 10/20% and increases the number of charges by 2/4
 	// TODO: Implement when Holy Shield is added
 
-	// Holy Shield (Tier 8) - Increases chance to block by 30% for 10 sec, and deals Holy damage for each attack blocked while active
-	// https://www.wowhead.com/tbc/spell=27179
-	if paladin.Talents.HolyShield {
-		paladin.registerHolyShield()
-	}
-
 	// Ardent Defender (Tier 8) - When you have less than 35% health, all damage taken is reduced by 6/12/18/24/30%
 	if paladin.Talents.ArdentDefender > 0 {
 		paladin.applyArdentDefender()
@@ -198,12 +198,6 @@ func (paladin *Paladin) ApplyTalents() {
 	// Combat Expertise (Tier 9) - Increases your expertise by 1/2/3/4/5, total Stamina by 2/4/6/8/10% and spell critical strike chance by 1/2/3/4/5%
 	if paladin.Talents.CombatExpertise > 0 {
 		paladin.applyCombatExpertise()
-	}
-
-	// Avenger's Shield (Tier 9) - Hurls a holy shield at the enemy, dealing damage and silencing
-	// https://www.wowhead.com/tbc/spell=32700
-	if paladin.Talents.AvengersShield {
-		paladin.registerAvengersShield()
 	}
 
 	// ==================
@@ -243,12 +237,6 @@ func (paladin *Paladin) ApplyTalents() {
 		paladin.applyConviction()
 	}
 
-	// Seal of Command (Tier 3) - Gives the Paladin a chance to deal additional Holy damage
-	// https://www.wowhead.com/tbc/spell=20375
-	if paladin.Talents.SealOfCommand {
-		paladin.registerSealOfCommand()
-	}
-
 	// Pursuit of Justice (Tier 4) - Increases movement and mounted movement speed by 5/10%. This does not stack with other movement speed increasing effects
 	// TODO: Implement movement speed
 
@@ -268,12 +256,6 @@ func (paladin *Paladin) ApplyTalents() {
 	// Two-Handed Weapon Specialization (Tier 6) - Increases the damage you deal with two-handed melee weapons by 2/4/6%
 	if paladin.Talents.TwoHandedWeaponSpecialization > 0 {
 		paladin.applyTwoHandedWeaponSpecialization()
-	}
-
-	// Sanctity Aura (Tier 6) - Increases Holy damage done by party members within 30 yards by 10%
-	// https://www.wowhead.com/tbc/spell=20218
-	if paladin.Talents.SanctityAura {
-		paladin.registerSanctityAura()
 	}
 
 	// Improved Sanctity Aura (Tier 7) - Increases the damage caused by all party members within 30 yards of the Paladin with Sanctity Aura active by 1/2%
@@ -297,12 +279,6 @@ func (paladin *Paladin) ApplyTalents() {
 		paladin.applySanctifiedSeals()
 	}
 
-	// Repentance (Tier 8) - Puts the enemy target in a state of meditation, incapacitating them for up to 1 min
-	// https://www.wowhead.com/tbc/spell=20066
-	if paladin.Talents.Repentance {
-		paladin.registerRepentance()
-	}
-
 	// Divine Purpose (Tier 9) - Reduces your chance to be hit by spells and ranged attacks by 1/2/3%
 	// Also decreases the duration of Stun effects by 10/20/30% and gives your Hand of Freedom a 50/100% chance to remove Stun effects
 	if paladin.Talents.DivinePurpose > 0 {
@@ -312,12 +288,6 @@ func (paladin *Paladin) ApplyTalents() {
 	// Fanaticism (Tier 9) - Increases the critical strike chance of all Judgements capable of a critical hit by 5/10/15/18/25% and reduces threat caused by all actions by 6/12/18/24/30% except when under the effects of Righteous Fury
 	if paladin.Talents.Fanaticism > 0 {
 		paladin.applyFanaticism()
-	}
-
-	// Crusader Strike (Tier 9) - An instant strike that causes weapon damage plus Holy damage
-	// https://www.wowhead.com/tbc/spell=35395
-	if paladin.Talents.CrusaderStrike {
-		paladin.registerCrusaderStrike()
 	}
 }
 

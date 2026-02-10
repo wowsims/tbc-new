@@ -19,6 +19,7 @@ const (
 	SpellMaskDivineProtection
 	SpellMaskBlessingOfProtection
 	SpellMaskHammerOfWrath
+	SpellMaskHolyWrath
 
 	// Seals
 	SpellMaskSealOfRighteousness

@@ -32,6 +32,11 @@ func (paladin *Paladin) registerExorcism() {
 		{level: 68, spellID: 27138, manaCost: 340, minValue: 619, maxValue: 691, coeff: 0.429, scaleLevel: 73, scalingCoeff: 3.50},
 	}
 
+	cd := core.Cooldown{
+		Timer:    paladin.NewTimer(),
+		Duration: time.Second * 15,
+	}
+
 	for rank := 1; rank < len(ranks); rank++ {
 		if paladin.Level < ranks[rank].level {
 			break
@@ -54,10 +59,7 @@ func (paladin *Paladin) registerExorcism() {
 				DefaultCast: core.Cast{
 					GCD:      core.GCDDefault,
 				},
-				CD: core.Cooldown{
-					Timer:    paladin.NewTimer(),
-					Duration: time.Second * 15,
-				},
+				CD: cd,
 			},
 
 			MaxRange: 30,

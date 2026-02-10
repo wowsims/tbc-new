@@ -27,6 +27,11 @@ func (paladin *Paladin) registerConsecration() {
 		{level: 70, spellID: 27173, manaCost: 660, value: 64, coeff: 0.119},
 	}
 
+	cd := core.Cooldown{
+		Timer:    paladin.NewTimer(),
+		Duration: 8 * time.Second,
+	}
+
 	for rank := 1; rank < len(ranks); rank++ {
 		if paladin.Level < ranks[rank].level {
 			break
@@ -48,10 +53,7 @@ func (paladin *Paladin) registerConsecration() {
 				DefaultCast: core.Cast{
 					GCD: core.GCDDefault,
 				},
-				CD: core.Cooldown{
-					Timer:    paladin.NewTimer(),
-					Duration: 8 * time.Second,
-				},
+				CD: cd,
 			},
 	
 			Dot: core.DotConfig{

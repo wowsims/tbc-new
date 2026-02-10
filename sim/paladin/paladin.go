@@ -24,13 +24,14 @@ type Paladin struct {
 	CurrentJudgement  *core.Spell
 
 	// Shared spells
-	Judgement     *core.Spell
-	Consecrations []*core.Spell
-	Exorcisms     []*core.Spell
-	HolyShocks    []*core.Spell
-	HolyLights    []*core.Spell
-	FlashOfLights []*core.Spell
-	LayOnHands    []*core.Spell
+	Judgement      *core.Spell
+	Consecrations  []*core.Spell
+	Exorcisms      []*core.Spell
+	HammerOfWraths []*core.Spell
+	HolyWraths     []*core.Spell
+	HolyLights     []*core.Spell
+	FlashOfLights  []*core.Spell
+	LayOnHands     []*core.Spell
 
 	// Seal Auras
 	SealOfRighteousnessAuras []*core.Aura
@@ -66,10 +67,12 @@ type Paladin struct {
 	DivineFavorAura        *core.Aura
 	DivineIlluminationAura *core.Aura
 	SanctityAura           *core.Aura
-	HolyShieldAura         *core.Aura
-	AvengersShield         *core.Spell
+	HolyShields            []*core.Spell
+	HolyShieldAuras        []*core.Aura
+	AvengersShields        []*core.Spell
 	CrusaderStrike         *core.Spell
 	Repentance             *core.Spell
+	HolyShocks             []*core.Spell
 }
 
 // Implemented by each Paladin spec.
@@ -99,7 +102,9 @@ func (paladin *Paladin) registerSpells() {
 	// Core abilities
 	paladin.registerJudgement()
 	paladin.registerConsecration()
-	// paladin.registerExorcism()
+	paladin.registerHammerOfWrath()
+	paladin.registerHolyWrath()
+	paladin.registerExorcism()
 
 	// Seals
 	paladin.registerSeals()

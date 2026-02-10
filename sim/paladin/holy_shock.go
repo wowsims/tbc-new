@@ -28,6 +28,11 @@ func (paladin *Paladin) registerHolyShock() {
 		{level: 70, spellID: 33072, manaCost: 650, minValue: 721, maxValue: 779, coeff: 0.429},
 	}
 
+	cd := core.Cooldown{
+		Timer:    paladin.NewTimer(),
+		Duration: time.Second * 15,
+	}
+
 	for rank := 1; rank < len(ranks); rank++ {
 		if paladin.Level < ranks[rank].level {
 			break
@@ -52,10 +57,7 @@ func (paladin *Paladin) registerHolyShock() {
 				DefaultCast: core.Cast{
 					GCD: core.GCDDefault,
 				},
-				CD: core.Cooldown{
-					Timer:    paladin.NewTimer(),
-					Duration: time.Second * 15,
-				},
+				CD: cd,
 			},
 
 			BonusCoefficient: ranks[rank].coeff,

@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
-	"github.com/wowsims/tbc/sim/core/stats"
 )
 
 func (paladin *Paladin) registerDivineFavor() {
@@ -21,10 +20,26 @@ func (paladin *Paladin) registerDivineFavor() {
 		ActionID: actionID,
 		Duration: core.NeverExpires,
 		OnGain: func(aura *core.Aura, sim *core.Simulation) {
-			paladin.AddStatDynamic(sim, stats.SpellCritPercent, 100)
+			for _, spell := range paladin.HolyLights {
+				spell.BonusCritPercent += 100
+			}
+			for _, spell := range paladin.FlashOfLights {
+				spell.BonusCritPercent += 100
+			}
+			for _, spell := range paladin.HolyShocks {
+				spell.BonusCritPercent += 100
+			}
 		},
 		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
-			paladin.AddStatDynamic(sim, stats.SpellCritPercent, -100)
+			for _, spell := range paladin.HolyLights {
+				spell.BonusCritPercent -= 100
+			}
+			for _, spell := range paladin.FlashOfLights {
+				spell.BonusCritPercent -= 100
+			}
+			for _, spell := range paladin.HolyShocks {
+				spell.BonusCritPercent -= 100
+			}
 		},
 		OnCastComplete: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell) {
 			// Consume after Flash of Light, Holy Light, or Holy Shock
@@ -40,7 +55,7 @@ func (paladin *Paladin) registerDivineFavor() {
 		ClassSpellMask: SpellMaskDivineFavor,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 75,
+			BaseCostPercent: 3,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
@@ -51,6 +66,8 @@ func (paladin *Paladin) registerDivineFavor() {
 				Duration: 2 * time.Minute,
 			},
 		},
+
+		CritMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
 			spell.RelatedSelfBuff.Activate(sim)

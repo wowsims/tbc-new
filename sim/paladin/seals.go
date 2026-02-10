@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/stats"
 )
 
 type proc struct {
@@ -41,22 +42,46 @@ func (paladin *Paladin) registerSeals() {
 	paladin.registerSealOfVengeance()
 }
 
+// Seal Twist
+const TwistTag = "Twistable"
+
+// Command -> Blood
+// Command -> Righteousness
+// Command -> Wisdom
+// Command -> Light
+// Command -> Justice
+
+// Blood -> X
+
+// Righteous -> Command
+// Righteous -> Blood
+// Righteous -> Wisdom
+// Righteous -> Light
+// Righteous -> Justice
+
+// Wisdom -> X
+
+// Light -> X
+
+// Justice -> X
 func (paladin *Paladin) applySeal(newSeal *core.Aura, judgement *core.Spell, sim *core.Simulation) {
 	if paladin.CurrentSeal != nil {
 		newSealLabel := newSeal.ActionID.SpellID
 		currentSealLabel := paladin.CurrentSeal.ActionID.SpellID
-		// If they are recasting the same seal, we just update the duration
+		// If they are recasting the same seal, we just refresh the duration
 		if newSealLabel == currentSealLabel {
 			paladin.CurrentSeal.Refresh(sim)
 			return
 		}
 	}
-	if paladin.CurrentSeal.IsActive() {
+
+	// Twisting only occurs when current seal is Command or Righteousness
+	if paladin.CurrentSeal.IsActive() && paladin.CurrentSeal.Tag == TwistTag {
 		paladin.CurrentSeal.UpdateExpires(sim.CurrentTime + (time.Millisecond * 399)) // always update, even if it extends duration
+		paladin.PreviousSeal = paladin.CurrentSeal
+		paladin.PreviousJudgement = paladin.CurrentJudgement
 	}
 
-	paladin.PreviousSeal = paladin.CurrentSeal
-	paladin.PreviousJudgement = paladin.CurrentJudgement
 	paladin.CurrentSeal = newSeal
 	paladin.CurrentJudgement = judgement
 	paladin.CurrentSeal.Activate(sim)
@@ -174,6 +199,7 @@ func (paladin *Paladin) registerSealOfRighteousness() {
 			Label:    "Seal of Righteousness" + paladin.Label + strconv.Itoa(rank),
 			ActionID: core.ActionID{SpellID: ranks[rank].spellID},
 			Duration: time.Second * 30,
+			Tag:      TwistTag,
 
 			OnSpellHitDealt: func(_ *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 				if !result.Landed() {
@@ -595,6 +621,7 @@ func (paladin *Paladin) registerSealOfTheCrusader() {
 				Tag:      JudgementAuraTag,
 				Duration: time.Second * 20,
 
+				// TODO: Implement when Holy damage taken is added
 				OnGain: func(aura *core.Aura, sim *core.Simulation) {
 					// aura.Unit.PseudoStats.SchoolBonusDamageTaken[stats.SchoolIndexHoly] += bonus
 				},
@@ -628,19 +655,19 @@ func (paladin *Paladin) registerSealOfTheCrusader() {
 			},
 		})
 
-		// baseAp := float64(ranks[rank].proc.value)
-		// scalingAp := float64(ranks[rank].proc.scale)
-		// maximumScalingLevel := ranks[rank].scaleLevel
-		// minimumScalingLevel := ranks[rank].level
-		// meleeAp := baseAp + scalingAp*float64(min(paladin.Level, maximumScalingLevel)-minimumScalingLevel)
+		baseAp := float64(ranks[rank].proc.value)
+		scalingAp := float64(ranks[rank].proc.scale)
+		maximumScalingLevel := ranks[rank].scaleLevel
+		minimumScalingLevel := ranks[rank].level
+		meleeAp := baseAp + scalingAp*float64(min(paladin.Level, maximumScalingLevel)-minimumScalingLevel)
 
 		aura := paladin.RegisterAura(core.Aura{
 			Label:    "Seal of the Crusader" + paladin.Label + strconv.Itoa(rank),
 			ActionID: core.ActionID{SpellID: ranks[rank].spellID},
 			Duration: time.Second * 30,
-		})// .AttachMultiplyMeleeSpeed(1.4).
-		// 	AttachMultiplicativePseudoStatBuff(&paladin.AutoAttacks.MHAuto().DamageMultiplier, 1/1.4).
-		// 	AttachStatBuff(stats.AttackPower, meleeAp)
+		}).AttachMultiplyMeleeSpeed(1.4).
+		AttachMultiplicativePseudoStatBuff(&paladin.AutoAttacks.MHAuto().DamageMultiplier, 1/1.4).
+		AttachStatBuff(stats.AttackPower, meleeAp)
 
 		paladin.SealOfTheCrusaderAuras = append(paladin.SealOfTheCrusaderAuras, aura)
 
@@ -988,6 +1015,7 @@ func (paladin *Paladin) registerSealOfCommand() {
 			Label:    "Seal of Command" + paladin.Label + strconv.Itoa(rank),
 			ActionID: core.ActionID{SpellID: ranks[rank].spellID},
 			Duration: time.Second * 30,
+			Tag:      TwistTag,
 		}).AttachProcTrigger(core.ProcTrigger{
 			ProcMask: core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeProc,
 			ICD:      time.Second * 1,
