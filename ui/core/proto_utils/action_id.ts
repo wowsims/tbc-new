@@ -78,19 +78,10 @@ export class ActionId {
 					name += ' (Main Hand)';
 				} else if (this.tag == 2) {
 					name += ' (Off Hand)';
-				} else if (this.tag == 68476) {
-					name += ' (Horridon)';
-				} else if (this.tag == 69374) {
-					name += ' (War-God Jalak)';
 				} else if (this.tag == 99999) {
 					name += ' (Boss)';
 				} else if (this.tag == 99998) {
-					console.log(this, this.tag);
 					name += ' (Add)';
-				} else if (this.tag > 6445300) {
-					name += ` (Set'thik Windblade ${(this.tag - 6445300).toFixed(0)})`;
-				} else if (this.tag > 4191800) {
-					name += ` (Animated Bone Warrior ${(this.tag - 4191800).toFixed(0)})`;
 				}
 				break;
 			case OtherAction.OtherActionShoot:
@@ -462,7 +453,6 @@ export class ActionId {
 				}
 				break;
 			case 'Berserking':
-				console.log(this)
 				if (tag == 1) {
 					name += ' (10%)';
 				} else if (tag == 2) {

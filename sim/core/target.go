@@ -199,6 +199,12 @@ func NewTarget(options *proto.Target, targetIndex int32) *Target {
 	target.stats[stats.PhysicalCritPercent] = UnitLevelFloat64(target.Level, 5.0, 5.2, 5.4, 5.6)
 	target.addUniversalStatDependencies()
 
+	if target.Level == 73 && options.SuppressDodge {
+		// Sunwell boss Dodge Suppression. -20% dodge and -5% miss chance.
+		target.PseudoStats.DodgeReduction += 0.2
+		target.PseudoStats.IncreasedMissChance -= 0.05
+	}
+
 	target.PseudoStats.CanBlock = true
 	target.PseudoStats.CanParry = true
 	target.PseudoStats.ParryHaste = options.ParryHaste
