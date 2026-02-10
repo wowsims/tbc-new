@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
@@ -160,10 +161,11 @@ func (war *Warrior) registerSweepingStrikes() {
 
 	var curDmg float64
 	hitSpell := war.RegisterSpell(core.SpellConfig{
-		ActionID:    ssHitActionID,
-		SpellSchool: core.SpellSchoolPhysical,
-		ProcMask:    core.ProcMaskEmpty, // No proc mask, so it won't proc itself.
-		Flags:       core.SpellFlagIgnoreResists | core.SpellFlagIgnoreModifiers | core.SpellFlagMeleeMetrics | core.SpellFlagPassiveSpell | core.SpellFlagNoOnCastComplete,
+		ActionID:       ssHitActionID,
+		ClassSpellMask: SpellMaskSweepingStrikesHit,
+		SpellSchool:    core.SpellSchoolPhysical,
+		ProcMask:       core.ProcMaskEmpty, // No proc mask, so it won't proc itself.
+		Flags:          core.SpellFlagIgnoreResists | core.SpellFlagIgnoreModifiers | core.SpellFlagMeleeMetrics | core.SpellFlagPassiveSpell | core.SpellFlagNoOnCastComplete,
 
 		DamageMultiplier: 1,
 		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
@@ -180,7 +182,7 @@ func (war *Warrior) registerSweepingStrikes() {
 		Duration:  core.NeverExpires,
 		MaxStacks: 10,
 		OnGain: func(aura *core.Aura, sim *core.Simulation) {
-			aura.SetStacks(sim, 5)
+			aura.SetStacks(sim, 10)
 		},
 		OnSpellHitDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			if aura.GetStacks() == 0 || result.Damage <= 0 || !spell.ProcMask.Matches(core.ProcMaskMelee) {
@@ -199,8 +201,9 @@ func (war *Warrior) registerSweepingStrikes() {
 	})
 
 	ssCD := war.RegisterSpell(core.SpellConfig{
-		ActionID:    ssSpellActionID,
-		SpellSchool: core.SpellSchoolPhysical,
+		ActionID:       ssSpellActionID,
+		ClassSpellMask: SpellMaskSweepingStrikes,
+		SpellSchool:    core.SpellSchoolPhysical,
 
 		RageCost: core.RageCostOptions{
 			Cost: 30,
@@ -218,6 +221,8 @@ func (war *Warrior) registerSweepingStrikes() {
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
 			ssAura.Activate(sim)
 		},
+
+		RelatedSelfBuff: ssAura,
 	})
 
 	war.AddMajorCooldown(core.MajorCooldown{
@@ -299,6 +304,10 @@ func (war *Warrior) registerPrecision() {
 }
 
 func (war *Warrior) registerBloodthirst() {
+	if !war.Talents.Bloodthirst {
+		return
+	}
+
 	actionID := core.ActionID{SpellID: 23881}
 
 	war.RegisterSpell(core.SpellConfig{
@@ -357,12 +366,18 @@ func (war *Warrior) registerImprovedBerserkerStance() {
 	}
 
 	apDep := war.NewDynamicMultiplyStat(stats.AttackPower, 1+0.02*float64(war.Talents.ImprovedBerserkerStance))
+	aura := war.RegisterAura(core.Aura{
+		Label:      "Improved Berserker Stance",
+		Duration:   core.NeverExpires,
+		BuildPhase: core.Ternary(war.DefaultStance == proto.WarriorStance_WarriorStanceBerserker, core.CharacterBuildPhaseTalents, core.CharacterBuildPhaseNone),
+	}).AttachStatDependency(apDep)
+
 	war.OnSpellRegistered(func(spell *core.Spell) {
 		if !spell.Matches(SpellMaskBerserkerStance) {
 			return
 		}
 
-		spell.RelatedSelfBuff.AttachStatDependency(apDep)
+		spell.RelatedSelfBuff.AttachDependentAura(aura)
 	})
 
 }
@@ -431,6 +446,8 @@ func (war *Warrior) registerRampage() {
 			aura.Activate(sim)
 			aura.AddStack(sim)
 		},
+
+		RelatedSelfBuff: aura.Aura,
 	})
 
 	war.AddMajorCooldown(core.MajorCooldown{

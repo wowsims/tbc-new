@@ -23,7 +23,23 @@ func (mage *Mage) registerArcanePowerSpell() {
 		Kind:       core.SpellMod_DamageDone_Pct,
 	})
 
-	arcanePowerSpell := mage.RegisterSpell(core.SpellConfig{
+	var arcanePowerSpell *core.Spell
+	mage.ArcanePowerAura = mage.RegisterAura(core.Aura{
+		Label:    "Arcane Power",
+		ActionID: core.ActionID{SpellID: 12042},
+		Duration: time.Second * 15,
+		OnGain: func(aura *core.Aura, sim *core.Simulation) {
+			arcanePowerCostMod.Activate()
+			arcanePowerDmgMod.Activate()
+		},
+		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
+			arcanePowerCostMod.Deactivate()
+			arcanePowerDmgMod.Deactivate()
+			arcanePowerSpell.CD.Use(sim)
+		},
+	})
+
+	arcanePowerSpell = mage.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 12042},
 		Flags:          core.SpellFlagNoOnCastComplete,
 		ClassSpellMask: MageSpellArcanePower,
@@ -39,21 +55,7 @@ func (mage *Mage) registerArcanePowerSpell() {
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {
 			mage.ArcanePowerAura.Activate(sim)
 		},
-	})
-
-	mage.ArcanePowerAura = mage.RegisterAura(core.Aura{
-		Label:    "Arcane Power",
-		ActionID: core.ActionID{SpellID: 12042},
-		Duration: time.Second * 15,
-		OnGain: func(aura *core.Aura, sim *core.Simulation) {
-			arcanePowerCostMod.Activate()
-			arcanePowerDmgMod.Activate()
-		},
-		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
-			arcanePowerCostMod.Deactivate()
-			arcanePowerDmgMod.Deactivate()
-			arcanePowerSpell.CD.Use(sim)
-		},
+		RelatedSelfBuff: mage.ArcanePowerAura,
 	})
 
 	mage.AddMajorCooldown(core.MajorCooldown{

@@ -1400,29 +1400,29 @@
 					"label": "Aura Duration",
 					"tooltip": "The full cooldown duration of the aura"
 				},
-				"all_trinket_stat_procs_active": {
+				"all_item_stat_procs_active": {
 					"label": "All Item Proc Buffs Active",
 					"tooltip": "<b>True</b> if all item/enchant procs that buff the specified stat type(s) are currently active, otherwise <b>False</b>.",
 					"full_description": "<p>For stacking proc buffs, this condition also checks that the buff has been stacked to its maximum possible strength.</p>"
 				},
-				"any_trinket_stat_procs_active": {
+				"any_item_stat_procs_active": {
 					"label": "Any Item Proc Buff Active",
 					"tooltip": "<b>True</b> if any item/enchant procs that buff the specified stat type(s) are currently active, otherwise <b>False</b>.",
 					"full_description": "<p>For stacking proc buffs, this condition also checks that the buff has been stacked to its maximum possible strength.</p>"
 				},
-				"any_trinket_stat_procs_available": {
+				"any_item_stat_procs_available": {
 					"label": "Any Item Proc Buff Available",
 					"tooltip": "<b>True</b> if any item/enchant procs that buff the specified stat type(s) are currently not on ICD and aren't active, otherwise <b>False</b>."
 				},
-				"trinket_procs_min_remaining_time": {
+				"item_procs_min_remaining_time": {
 					"label": "Item Procs Min Remaining Time",
 					"tooltip": "Shortest remaining duration on any active item/enchant procs that buff the specified stat type(s), or infinity if none are currently active."
 				},
-				"trinket_procs_max_remaining_icd": {
+				"item_procs_max_remaining_icd": {
 					"label": "Item Procs Max Remaining ICD",
 					"tooltip": "Longest remaining ICD on any inactive item/enchant procs that buff the specified stat type(s), or 0 if all are currently active."
 				},
-				"num_equipped_stat_proc_trinkets": {
+				"num_equipped_stat_proc_items": {
 					"label": "Num Equipped Stat Proc Effects",
 					"tooltip": "Number of equipped passive item/enchant effects that buff the specified stat type(s) when they proc."
 				},
@@ -1500,21 +1500,9 @@
 					"label": "Hand of Guldan in Flight",
 					"tooltip": "Returns <b>True</b> if the impact of Hand of Guldan currenty is in flight."
 				},
-				"warlock_haunt_in_flight": {
-					"label": "[DEPRECATED] Haunt In Flight",
-					"tooltip": "Returns <b>True</b> if Haunt currently is in flight."
-				},
 				"affliction_current_snapshot": {
 					"label": "Existing Raw Snapshot %",
 					"tooltip": "How much stronger your existing snapshot is relative to baseline. Ignores Haste and Crit. Not recommended to use unless you know what you're doing."
-				},
-				"affliction_exhale_window": {
-					"label": "Exhale Window",
-					"tooltip": "Configured leeway for exhaling inhaled DoTs."
-				},
-				"mage_current_combustion_dot_estimate": {
-					"label": "Combustion Dot Value",
-					"tooltip": "Returns the current estimated size of your Combustion Dot."
 				},
 				"protection_paladin_damage_taken_last_global": {
 					"label": "Damage Taken Last Global",
@@ -1535,6 +1523,20 @@
 				"overlap": {
 					"label": "Overlap",
 					"tooltip": "Maximum amount of time before the aura expires when it may be refreshed."
+				},
+				"multiple_cd_usages": {
+					"label": "Multiple CD Usages",
+					"tooltip": "Will try to fit the selected <b>Target spell</b> within the cooldown of the selected <b>Base spell</b>.<br/> If you lose a 2nd cast of Death Wish whilst waiting for a delayed Bloodlust (using the offset) it will cast Death Wish earlier.",
+					"base_spell": "Base Spell",
+					"base_spell_tooltip": "The spell (ie. Bloodlust) you are casting that can have multiple other spells within it's cooldown",
+					"target_spell": "Target Spell",
+					"target_spell_tooltip": "The spell (ie. Death Wish) you want to fit within the cooldown of the Base Spell.",
+					"align_cd_end":"Align target spell to encounter end",
+					"align_cd_end_tooltip":"When checked will try to align the CD usage to the end of the encounter. This is useful for cooldowns/specs that benefit for example from execute."
+				},
+				"offset": {
+					"label": "Offset",
+					"tooltip": "The time offset from which when the cooldown will be triggered"
 				}
 			},
 			"operators": {

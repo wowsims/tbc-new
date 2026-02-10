@@ -170,7 +170,7 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 	}
 
 	if partyBuffs.FerociousInspiration > 0 {
-		FerociousInspiration(char, partyBuffs.FerociousInspiration)
+		MakePermanent(FerociousInspiration(char, partyBuffs.FerociousInspiration))
 	}
 
 	if partyBuffs.GraceOfAirTotem != proto.TristateEffect_TristateEffectMissing {
@@ -1278,6 +1278,8 @@ func registerBloodlustCD(character *Character) {
 				bloodlustAura.Activate(sim)
 			}
 		},
+
+		RelatedSelfBuff: bloodlustAura,
 	})
 
 	character.AddMajorCooldown(MajorCooldown{

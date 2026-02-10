@@ -69,7 +69,7 @@ func (war *Warrior) registerDeflection() {
 		return
 	}
 
-	war.PseudoStats.BaseParryChance += float64(war.Talents.Deflection)
+	war.PseudoStats.BaseParryChance += 0.01 * float64(war.Talents.Deflection)
 }
 
 func (war *Warrior) registerImprovedRend() {
@@ -126,7 +126,7 @@ func (war *Warrior) registerImprovedOverpower() {
 	})).AttachSpellMod(core.SpellModConfig{
 		ClassMask:  SpellMaskOverpower,
 		Kind:       core.SpellMod_BonusCrit_Percent,
-		FloatValue: 0.25 * float64(war.Talents.ImprovedOverpower),
+		FloatValue: 25 * float64(war.Talents.ImprovedOverpower),
 	})
 }
 
@@ -155,10 +155,11 @@ func (war *Warrior) registerDeepWounds() {
 	}
 
 	war.DeepWounds = war.RegisterSpell(core.SpellConfig{
-		ActionID:    core.ActionID{SpellID: 12867},
-		SpellSchool: core.SpellSchoolPhysical,
-		ProcMask:    core.ProcMaskEmpty,
-		Flags:       core.SpellFlagNoOnCastComplete | core.SpellFlagIgnoreResists,
+		ActionID:       core.ActionID{SpellID: 12867},
+		SpellSchool:    core.SpellSchoolPhysical,
+		ProcMask:       core.ProcMaskEmpty,
+		ClassSpellMask: SpellMaskDeepWounds,
+		Flags:          core.SpellFlagNoOnCastComplete | core.SpellFlagIgnoreResists,
 
 		DamageMultiplier: 1,
 		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
@@ -235,7 +236,7 @@ func (war *Warrior) registerImpale() {
 
 	war.AddStaticMod(core.SpellModConfig{
 		ClassMask:  SpellMaskDamageSpells,
-		Kind:       core.SpellMod_BonusCrit_Percent,
+		Kind:       core.SpellMod_CritMultiplier_Flat,
 		FloatValue: 0.1 * float64(war.Talents.Impale),
 	})
 }
@@ -252,13 +253,13 @@ func (war *Warrior) registerPoleaxeSpecialization() {
 	mhCritMod := war.AddDynamicMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
 		ProcMask:   core.ProcMaskMeleeMH,
-		FloatValue: 0.01 * float64(war.Talents.PoleaxeSpecialization),
+		FloatValue: 1 * float64(war.Talents.PoleaxeSpecialization),
 	})
 
 	ohCritMod := war.AddDynamicMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
 		ProcMask:   core.ProcMaskMeleeOH,
-		FloatValue: 0.01 * float64(war.Talents.PoleaxeSpecialization),
+		FloatValue: 1 * float64(war.Talents.PoleaxeSpecialization),
 	})
 
 	handleEquippedWeapons := func() {
@@ -307,6 +308,9 @@ func (war *Warrior) registerDeathWish() {
 			Cost: 10,
 		},
 		Cast: core.CastConfig{
+			DefaultCast: core.Cast{
+				GCD: core.GCDDefault,
+			},
 			IgnoreHaste: true,
 			CD: core.Cooldown{
 				Timer:    war.NewTimer(),
