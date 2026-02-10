@@ -376,7 +376,7 @@ export class CharacterStats extends Component {
 
 		if (false && includeBase) {
 			derivedPercentOrPointsValue = derivedPercentOrPointsValue! + this.player.getBaseMastery();
-		} else if ((rootStat === Stat.StatMeleeHitRating || rootStat === Stat.StatAllPhysHitRating) && includeBase && this.hasRacialHitBonus) {
+		} else if (rootStat === Stat.StatMeleeHitRating && includeBase && this.hasRacialHitBonus) {
 			// Remove the rating display and only show %
 			if (rootRatingValue !== null && rootRatingValue > 0) {
 				rootRatingValue -= Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT;

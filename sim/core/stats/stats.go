@@ -43,9 +43,6 @@ const (
 	MeleeHasteRating
 	ArmorPenetration
 	ExpertiseRating
-	AllPhysHitRating
-	AllPhysCritRating
-	AllPhysHasteRating
 	DefenseRating
 	BlockRating
 	BlockValue
@@ -148,19 +145,13 @@ func (s Stat) StatName() string {
 	case SpellPenetration:
 		return "SpellPenetration"
 	case MeleeHitRating:
-		return "MeleeHitRating"
+		return "HitRating"
 	case MeleeCritRating:
-		return "MeleeCritRating"
+		return "CritRating"
 	case MeleeHasteRating:
-		return "MeleeHasteRating"
+		return "HasteRating"
 	case ExpertiseRating:
 		return "ExpertiseRating"
-	case AllPhysHitRating:
-		return "HitRating"
-	case AllPhysCritRating:
-		return "CritRating"
-	case AllPhysHasteRating:
-		return "HasteRating"
 	case ArmorPenetration:
 		return "ArmorPenetration"
 	case DodgeRating:

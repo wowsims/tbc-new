@@ -260,7 +260,7 @@ export const PARTY_BUFFS_CONFIG = [
 	{
 		config: LeaderOfThePack,
 		picker: IconPicker,
-		stats: [Stat.StatAttackPower, Stat.StatAllPhysCritRating],
+		stats: [Stat.StatAttackPower, Stat.StatMeleeCritRating],
 	},
 	{
 		config: ManaSpringTotem,
@@ -563,7 +563,7 @@ export const DEBUFFS_CONFIG = [
 	{
 		config: FaerieFire,
 		picker: IconPicker,
-		stats: [Stat.StatAttackPower, Stat.StatAllPhysHitRating],
+		stats: [Stat.StatAttackPower, Stat.StatMeleeHitRating],
 	},
 	{
 		config: ExposeArmor,
