@@ -43,9 +43,6 @@ const (
 	MeleeHasteRating
 	ArmorPenetration
 	ExpertiseRating
-	AllPhysHitRating
-	AllPhysCritRating
-	AllPhysHasteRating
 	DefenseRating
 	BlockRating
 	BlockValue
@@ -155,12 +152,6 @@ func (s Stat) StatName() string {
 		return "MeleeHasteRating"
 	case ExpertiseRating:
 		return "ExpertiseRating"
-	case AllPhysHitRating:
-		return "HitRating"
-	case AllPhysCritRating:
-		return "CritRating"
-	case AllPhysHasteRating:
-		return "HasteRating"
 	case ArmorPenetration:
 		return "ArmorPenetration"
 	case DodgeRating:
@@ -425,10 +416,6 @@ func (stats Stats) ToProtoMap() map[int32]float64 {
 func FromProtoMap(m map[int32]float64) Stats {
 	var stats Stats
 	for k, v := range m {
-		if k == int32(proto.Stat_StatArmorPenetration) || k == int32(proto.Stat_StatSpellPenetration) {
-			stats[k] = math.Abs(v)
-			continue
-		}
 		stats[k] = v
 	}
 	return stats

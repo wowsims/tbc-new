@@ -259,7 +259,7 @@ func ConvertModRatingFlagToRatingStat(flag int) proto.Stat {
 		// The forbidden "Only Ranged Hit". There's a single instance of this (Enchant 2523, SpellID 22780).
 		return -1
 	case 96:
-		return proto.Stat_StatAllPhysHitRating
+		return proto.Stat_StatMeleeHitRating
 	case 128:
 		return proto.Stat_StatSpellHitRating
 	case 256:

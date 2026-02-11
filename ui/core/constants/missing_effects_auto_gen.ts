@@ -157,7 +157,7 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 	[
 		13937, // Headmaster's Charge
 		[
-			"Gives 19 additional intellect to party members within 30 yards.", // 18264 - https://www.wowhead.com/tbc/spell=18264
+			"Gives 20 additional intellect to party members within 30 yards.", // 18264 - https://www.wowhead.com/tbc/spell=18264
 		]
 	],
 	[
@@ -803,7 +803,7 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 	[
 		19948, // Zandalarian Hero Badge
 		[
-			"Increases your armor by 1990 and defense rating by 40 for 20s. Every time you take melee or ranged damage, this bonus is reduced by 200 armor and 5 defense rating.", // 24574 - https://www.wowhead.com/tbc/spell=24574
+			"Increases your armor by 2000 and defense rating by 50 for 20s. Every time you take melee or ranged damage, this bonus is reduced by 200 armor and 5 defense rating.", // 24574 - https://www.wowhead.com/tbc/spell=24574
 		]
 	],
 	[
@@ -1957,7 +1957,7 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 	[
 		28064, // Idol of the Wild
 		[
-			"Increases the damage dealt by Mangle (Cat) by 22 and the damage dealt by Mangle (Bear) by 50.", // 37736 - https://www.wowhead.com/tbc/spell=37736
+			"Increases the damage dealt by Mangle (Cat) by 24 and the damage dealt by Mangle (Bear) by 52.", // 37736 - https://www.wowhead.com/tbc/spell=37736
 		]
 	],
 	[
@@ -2691,7 +2691,7 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 	[
 		31033, // Libram of Righteous Power
 		[
-			"Increases the damage dealt by Crusader Strike by 35.", // 37763 - https://www.wowhead.com/tbc/spell=37763
+			"Increases the damage dealt by Crusader Strike by 36.", // 37763 - https://www.wowhead.com/tbc/spell=37763
 		]
 	],
 	[
@@ -3679,7 +3679,7 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 	[
 		34471, // Vial of the Sunwell
 		[
-			"Collects 99 Holy Energy from healing spells you cast. Cannot collect more than 1980 Holy Energy.", // 45062 - https://www.wowhead.com/tbc/spell=45062
+			"Collects 100 Holy Energy from healing spells you cast. Cannot collect more than 2000 Holy Energy.", // 45062 - https://www.wowhead.com/tbc/spell=45062
 			"Release all accumulated Holy Energy to instantly heal current friendly target by the amount of Holy Energy accumulated.", // 45064 - https://www.wowhead.com/tbc/spell=45064
 		]
 	],

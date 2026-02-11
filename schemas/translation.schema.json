@@ -8230,13 +8230,25 @@
                 "hit": {
                   "type": "string"
                 },
+                "resisted_hit": {
+                  "type": "string"
+                },
                 "critical_hit": {
+                  "type": "string"
+                },
+                "resisted_critical_hit": {
                   "type": "string"
                 },
                 "tick": {
                   "type": "string"
                 },
+                "resisted_tick": {
+                  "type": "string"
+                },
                 "critical_tick": {
+                  "type": "string"
+                },
+                "resisted_critical_tick": {
                   "type": "string"
                 },
                 "glancing_blow": {
@@ -8246,6 +8258,9 @@
                   "type": "string"
                 },
                 "blocked_critical_hit": {
+                  "type": "string"
+                },
+                "crushing_blow": {
                   "type": "string"
                 },
                 "miss": {
@@ -8264,12 +8279,17 @@
               "additionalProperties": false,
               "required": [
                 "hit",
+                "resisted_hit",
                 "critical_hit",
+                "resisted_critical_hit",
                 "tick",
+                "resisted_tick",
                 "critical_tick",
+                "resisted_critical_tick",
                 "glancing_blow",
                 "blocked_hit",
                 "blocked_critical_hit",
+                "crushing_blow",
                 "miss",
                 "parry",
                 "dodge",

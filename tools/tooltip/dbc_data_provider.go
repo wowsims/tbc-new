@@ -328,7 +328,7 @@ func (d DBCTooltipDataProvider) GetEffectBaseValue(spellId int64, effectIdx int6
 		return 0
 	}
 
-	return float64(effect.EffectBasePoints)
+	return float64(effect.EffectBasePoints + effect.EffectDieSides)
 }
 
 // GetEffectPeriod implements TooltipDataProvider.

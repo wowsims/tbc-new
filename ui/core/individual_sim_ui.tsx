@@ -1,5 +1,5 @@
 import i18n from '../i18n/config';
-import { CharacterStats, StatMods, StatWrites } from './components/character_stats';
+import { CharacterStats,  } from './components/character_stats';
 import { ContentBlock } from './components/content_block';
 import { DetailedResults } from './components/detailed_results';
 import { EncounterPickerConfig } from './components/encounter_picker';
@@ -128,8 +128,8 @@ export interface IndividualSimUIConfig<SpecType extends Spec> extends PlayerConf
 	epPseudoStats?: Array<PseudoStat>;
 	epReferenceStat: Stat;
 	displayStats: Array<UnitStat>;
-	modifyDisplayStats?: (player: Player<SpecType>) => StatMods;
-	overwriteDisplayStats?: (player: Player<SpecType>) => StatWrites;
+	modifyDisplayStats?: CharacterStats['modifyDisplayStats'];
+	overwriteDisplayStats?: CharacterStats['overwriteDisplayStats'];
 
 	// This can be used as a shorthand for setting "defaults".
 	// Useful for when the defaults should be the same as the preset build options

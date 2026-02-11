@@ -2,6 +2,7 @@ package dbc
 
 import (
 	"fmt"
+	"math"
 	"strings"
 
 	"github.com/wowsims/tbc/sim/core/proto"
@@ -167,7 +168,7 @@ func buildBaseStatScalingProps(spellID int, itemSpellID int) *proto.ScalingItemE
 				}
 				if stat == proto.Stat_StatArmorPenetration || stat == proto.Stat_StatSpellPenetration {
 					// Make these not negative
-					value = -value
+					value = math.Abs(value)
 				}
 				total[int32(stat)] += value
 				continue

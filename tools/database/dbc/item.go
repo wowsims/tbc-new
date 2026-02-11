@@ -118,7 +118,7 @@ func (item *Item) GetStats(itemLevel int) *stats.Stats {
 		}
 		stats[stat] = item.GetScaledStat(i, itemLevel)
 		if stat == proto.Stat_StatArmorPenetration {
-			stats[stat] = -stats[stat]
+			stats[stat] = math.Abs(stats[stat])
 		}
 	}
 

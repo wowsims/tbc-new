@@ -217,7 +217,16 @@ func castSlowReductionAura(target *Unit, label string, spellID int32, multiplier
 func ExposeWeaknessAura(target *Unit, uptime float64, hunterAgility float64) *Aura {
 	apBonus := hunterAgility * 0.25
 	stats := stats.Stats{stats.AttackPower: apBonus, stats.RangedAttackPower: apBonus}
-	character := target.Env.Raid.GetPlayerFromUnitIndex(1).GetCharacter()
+	var character *Character
+	for _, party := range target.Env.Raid.Parties {
+		for _, agent := range party.Players {
+			c := agent.GetCharacter()
+			if c.Type == PlayerUnit {
+				character = c
+				break
+			}
+		}
+	}
 
 	hasAura := target.HasAura("Expose Weakness")
 	aura := target.GetOrRegisterAura(Aura{
@@ -392,8 +401,8 @@ func InsectSwarmAura(target *Unit) *Aura {
 		"Insect Swarm",
 		27013,
 		stats.Stats{
-			stats.AllPhysHitRating: 0.98,
-			stats.SpellHitPercent:  0.98,
+			stats.MeleeHitRating:  0.98,
+			stats.SpellHitPercent: 0.98,
 		},
 		time.Second*12,
 	)
@@ -483,7 +492,7 @@ func MiseryAura(target *Unit) *Aura {
 }
 
 func ScorpidStingAura(target *Unit) *Aura {
-	return statsDebuff(target, "Scorpid Sting", 3043, stats.Stats{stats.AllPhysHitRating: -5.0}, time.Second*20)
+	return statsDebuff(target, "Scorpid Sting", 3043, stats.Stats{stats.MeleeHitRating: -5.0}, time.Second*20)
 }
 
 func ScreechAura(target *Unit) *Aura {
@@ -535,7 +544,7 @@ func SunderArmorAura(target *Unit) *Aura {
 		Duration:  time.Second * 30,
 		MaxStacks: 5,
 		OnStacksChange: func(aura *Aura, sim *Simulation, oldStacks int32, newStacks int32) {
-			effect.SetPriority(sim, 520*float64(newStacks))
+			effect.SetPriority(sim, -520*float64(newStacks))
 		},
 	})
 
