@@ -51,7 +51,7 @@ export const ITEM_NOTICES = new Map<number, ItemNoticeData>([
 				<>
 					<p className="fw-bold">The following item effect (on-use or proc) is not implemented!</p>
 					<ul>
-						{tooltips.map(tooltip => (
+						{tooltips.filter(tooltip => !!tooltip).map(tooltip => (
 							<li>{tooltip}</li>
 						))}
 					</ul>
