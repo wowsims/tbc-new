@@ -36,6 +36,9 @@ func (paladin *Paladin) registerBlessingOfMight() {
 		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
 		ClassSpellMask: SpellMaskBlessingOfMight,
 
+		DamageMultiplier: 1,
+		ThreatMultiplier: 1,
+
 		ManaCost: core.ManaCostOptions{
 			FlatCost: 180, // Rank 8
 		},
@@ -66,6 +69,9 @@ func (paladin *Paladin) registerBlessingOfWisdom() {
 		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
 		ClassSpellMask: SpellMaskBlessingOfWisdom,
 
+		DamageMultiplier: 1,
+		ThreatMultiplier: 1,
+
 		ManaCost: core.ManaCostOptions{
 			FlatCost: 165, // Rank 7
 		},
@@ -95,6 +101,9 @@ func (paladin *Paladin) registerBlessingOfKings() {
 		ProcMask:       core.ProcMaskEmpty,
 		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
 		ClassSpellMask: SpellMaskBlessingOfKings,
+
+		DamageMultiplier: 1,
+		ThreatMultiplier: 1,
 
 		ManaCost: core.ManaCostOptions{
 			BaseCostPercent: 6,
@@ -127,6 +136,9 @@ func (paladin *Paladin) registerBlessingOfSalvation() {
 		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
 		ClassSpellMask: SpellMaskBlessingOfSalvation,
 
+		DamageMultiplier: 1,
+		ThreatMultiplier: 1,
+
 		ManaCost: core.ManaCostOptions{
 			BaseCostPercent: 6,
 		},
@@ -158,6 +170,9 @@ func (paladin *Paladin) registerBlessingOfSanctuary() {
 		ProcMask:       core.ProcMaskEmpty,
 		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
 		ClassSpellMask: SpellMaskBlessingOfSanctuary,
+
+		DamageMultiplier: 1,
+		ThreatMultiplier: 1,
 
 		ManaCost: core.ManaCostOptions{
 			FlatCost: 135,
@@ -192,6 +207,9 @@ func (paladin *Paladin) registerBlessingOfProtection() {
 		ProcMask:       core.ProcMaskEmpty,
 		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
 		ClassSpellMask: SpellMaskBlessingOfProtection,
+
+		DamageMultiplier: 1,
+		ThreatMultiplier: 1,
 
 		ManaCost: core.ManaCostOptions{
 			BaseCostPercent: 6,

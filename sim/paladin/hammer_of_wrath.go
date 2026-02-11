@@ -47,9 +47,12 @@ func (paladin *Paladin) registerHammerOfWrath() {
 			SpellSchool:    core.SpellSchoolHoly,
 			ProcMask:       core.ProcMaskRangedSpecial,
 			Flags:          core.SpellFlagAPL,
-			ClassSpellMask: SpellMaskHammerOfWrath,
+		ClassSpellMask: SpellMaskHammerOfWrath,
 
-			MaxRange: 30,
+		DamageMultiplier: 1,
+		ThreatMultiplier: 1,
+
+		MaxRange: 30,
 
 			ManaCost: core.ManaCostOptions{
 				FlatCost: ranks[rank].manaCost,

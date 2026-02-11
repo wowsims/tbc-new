@@ -1,6 +1,7 @@
 package paladin
 
 import (
+	"strconv"
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
@@ -11,12 +12,12 @@ import (
 //
 // Consecrates the land beneath the Paladin, doing X Holy damage over 8 sec to enemies who enter the area.
 func (paladin *Paladin) registerConsecration() {
-	var ranks = []struct{
-		level int32
-		spellID int32
+	var ranks = []struct {
+		level    int32
+		spellID  int32
 		manaCost int32
-		value float64
-		coeff float64
+		value    float64
+		coeff    float64
 	}{
 		{},
 		{level: 20, spellID: 26573, manaCost: 120, value: 8, coeff: 0.119},
@@ -43,9 +44,12 @@ func (paladin *Paladin) registerConsecration() {
 			ProcMask:       core.ProcMaskSpellDamage,
 			Flags:          core.SpellFlagAPL,
 			ClassSpellMask: SpellMaskConsecration,
-	
+
+			DamageMultiplier: 1,
+			ThreatMultiplier: 1,
+
 			MaxRange: 8,
-	
+
 			ManaCost: core.ManaCostOptions{
 				FlatCost: ranks[rank].manaCost,
 			},
@@ -55,27 +59,21 @@ func (paladin *Paladin) registerConsecration() {
 				},
 				CD: cd,
 			},
-	
+
 			Dot: core.DotConfig{
 				IsAOE: true,
 				Aura: core.Aura{
 					ActionID: core.ActionID{SpellID: ranks[rank].spellID},
-					Label:    "Consecration" + paladin.Label,
+					Label:    "Consecration" + paladin.Label + " Rank " + strconv.Itoa(rank),
 				},
-				NumberOfTicks: 8,
-				TickLength:    time.Second * 1,
+				NumberOfTicks:    8,
+				TickLength:       time.Second * 1,
 				BonusCoefficient: ranks[rank].coeff,
 				OnTick: func(sim *core.Simulation, _ *core.Unit, dot *core.Dot) {
-					if dot.RemainingTicks() == 8 { // The first tick can be resisted
-						dot.Spell.CalcPeriodicAoeDamage(sim, ranks[rank].value, dot.Spell.OutcomeMagicHit)
-						dot.Spell.DealBatchedPeriodicDamage(sim)
-					} else {
-						dot.Spell.CalcPeriodicAoeDamage(sim, ranks[rank].value, dot.Spell.OutcomeAlwaysHit)
-						dot.Spell.DealBatchedPeriodicDamage(sim)
-					}
+					dot.Spell.CalcAndDealPeriodicAoeDamage(sim, ranks[rank].value, dot.Spell.OutcomeAlwaysHit)
 				},
 			},
-	
+
 			ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 				spell.AOEDot().Apply(sim)
 			},

@@ -50,9 +50,13 @@ func (paladin *Paladin) registerExorcism() {
 			SpellSchool:    core.SpellSchoolHoly,
 			ProcMask:       core.ProcMaskSpellDamage,
 			Flags:          core.SpellFlagAPL,
-			ClassSpellMask: SpellMaskExorcism,
+		ClassSpellMask: SpellMaskExorcism,
 
-			ManaCost: core.ManaCostOptions{
+		DamageMultiplier: 1,
+		ThreatMultiplier: 1,
+		CritMultiplier:   1.5,
+
+		ManaCost: core.ManaCostOptions{
 				FlatCost: ranks[rank].manaCost,
 			},
 			Cast: core.CastConfig{

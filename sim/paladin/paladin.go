@@ -6,7 +6,7 @@ import (
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
-var TalentTreeSizes = [3]int{20, 23, 22}
+var TalentTreeSizes = [3]int{20, 22, 22}
 
 const JudgementAuraTag = "JudgementAura"
 
@@ -24,14 +24,16 @@ type Paladin struct {
 	CurrentJudgement  *core.Spell
 
 	// Shared spells
-	Judgement      *core.Spell
-	Consecrations  []*core.Spell
-	Exorcisms      []*core.Spell
-	HammerOfWraths []*core.Spell
-	HolyWraths     []*core.Spell
-	HolyLights     []*core.Spell
-	FlashOfLights  []*core.Spell
-	LayOnHands     []*core.Spell
+	Judgement         *core.Spell
+	Consecrations     []*core.Spell
+	Exorcisms         []*core.Spell
+	HammerOfWraths    []*core.Spell
+	HolyWraths        []*core.Spell
+	HolyLights        []*core.Spell
+	FlashOfLights     []*core.Spell
+	LayOnHands        []*core.Spell
+	AvengingWrath     *core.Spell
+	AvengingWrathAura *core.Aura
 
 	// Seal Auras
 	SealOfRighteousnessAuras []*core.Aura
@@ -64,15 +66,16 @@ type Paladin struct {
 	SealOfVengeanceJudgements     []*core.Spell
 
 	// Talent-specific auras and spells
-	DivineFavorAura        *core.Aura
-	DivineIlluminationAura *core.Aura
-	SanctityAura           *core.Aura
-	HolyShields            []*core.Spell
-	HolyShieldAuras        []*core.Aura
-	AvengersShields        []*core.Spell
-	CrusaderStrike         *core.Spell
-	Repentance             *core.Spell
-	HolyShocks             []*core.Spell
+	DivineFavorAura         *core.Aura
+	DivineIlluminationSpell *core.Spell
+	DivineIlluminationAura  *core.Aura
+	SanctityAura            *core.Aura
+	HolyShields             []*core.Spell
+	HolyShieldAuras         []*core.Aura
+	AvengersShields         []*core.Spell
+	CrusaderStrike          *core.Spell
+	Repentance              *core.Spell
+	HolyShocks              []*core.Spell
 }
 
 // Implemented by each Paladin spec.
@@ -105,12 +108,15 @@ func (paladin *Paladin) registerSpells() {
 	paladin.registerHammerOfWrath()
 	paladin.registerHolyWrath()
 	paladin.registerExorcism()
+	paladin.registerAvengingWrath()
+
+	paladin.registerForbearance()
 
 	// Seals
 	paladin.registerSeals()
 
 	// Auras
-	// paladin.registerAuras()
+	paladin.registerAuras()
 
 	// // Blessings
 	// paladin.registerBlessings()

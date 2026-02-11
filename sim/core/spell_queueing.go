@@ -89,7 +89,7 @@ func (spell *Spell) CanQueue(sim *Simulation, target *Unit) bool {
 	}
 
 	// Apply SQW leniency to any pending hardcasts
-	if (spell.Unit.Hardcast.Expires > sim.CurrentTime+MaxSpellQueueWindow) || !spell.CanCastDuringChannel(sim) {
+	if (spell.Unit.Hardcast.Expires > sim.CurrentTime+MaxSpellQueueWindow) || (spell.Unit.IsChanneling() && !spell.CanCastDuringChannel(sim)) {
 		return false
 	}
 

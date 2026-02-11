@@ -2,6 +2,7 @@ package paladin
 
 import (
 	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/stats"
 )
 
 func (paladin *Paladin) registerAuras() {
@@ -27,6 +28,9 @@ func (paladin *Paladin) registerDevotionAura() {
 		ProcMask:       core.ProcMaskEmpty,
 		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
 		ClassSpellMask: SpellMaskDevotionAura,
+
+		DamageMultiplier: 1,
+		ThreatMultiplier: 1,
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
@@ -55,6 +59,9 @@ func (paladin *Paladin) registerRetributionAura() {
 		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
 		ClassSpellMask: SpellMaskRetributionAura,
 
+		DamageMultiplier: 1,
+		ThreatMultiplier: 1,
+
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD: core.GCDDefault,
@@ -81,6 +88,9 @@ func (paladin *Paladin) registerConcentrationAura() {
 		ProcMask:       core.ProcMaskEmpty,
 		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
 		ClassSpellMask: SpellMaskConcentrationAura,
+
+		DamageMultiplier: 1,
+		ThreatMultiplier: 1,
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
@@ -109,6 +119,9 @@ func (paladin *Paladin) registerFireResistanceAura() {
 		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
 		ClassSpellMask: SpellMaskFireResistanceAura,
 
+		DamageMultiplier: 1,
+		ThreatMultiplier: 1,
+
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD: core.GCDDefault,
@@ -135,6 +148,9 @@ func (paladin *Paladin) registerFrostResistanceAura() {
 		ProcMask:       core.ProcMaskEmpty,
 		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
 		ClassSpellMask: SpellMaskFrostResistanceAura,
+
+		DamageMultiplier: 1,
+		ThreatMultiplier: 1,
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
@@ -163,6 +179,9 @@ func (paladin *Paladin) registerShadowResistanceAura() {
 		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
 		ClassSpellMask: SpellMaskShadowResistanceAura,
 
+		DamageMultiplier: 1,
+		ThreatMultiplier: 1,
+
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD: core.GCDDefault,
@@ -183,11 +202,19 @@ func (paladin *Paladin) registerShadowResistanceAura() {
 func (paladin *Paladin) registerSanctityAura() {
 	actionID := core.ActionID{SpellID: 20218}
 
+	aura := paladin.RegisterAura(core.Aura{
+		Label:    "Sanctity Aura" + paladin.Label,
+		ActionID: actionID,
+		Duration: core.NeverExpires,
+	}).AttachMultiplicativePseudoStatBuff(
+		&paladin.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexHoly], 1.1,
+	)
+
 	paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
 		SpellSchool:    core.SpellSchoolHoly,
 		ProcMask:       core.ProcMaskEmpty,
-		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
+		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: SpellMaskSanctityAura,
 
 		Cast: core.CastConfig{
@@ -197,7 +224,7 @@ func (paladin *Paladin) registerSanctityAura() {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			// TODO: Implement aura activation
+			aura.Activate(sim)
 		},
 	})
 }

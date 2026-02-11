@@ -24,8 +24,10 @@ func (paladin *Paladin) registerJudgement() {
 
 		ClassSpellMask: SpellMaskJudgement,
 
+		DamageMultiplier: 1,
+		ThreatMultiplier: 1,
+
 		Cast: core.CastConfig{
-			IgnoreHaste: true,
 			CD: core.Cooldown{
 				Timer:    paladin.NewTimer(),
 				Duration: time.Second * 10,

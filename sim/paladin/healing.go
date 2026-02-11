@@ -56,6 +56,9 @@ func (paladin *Paladin) registerHolyLight() {
 			Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
 			ClassSpellMask: SpellMaskHolyLight,
 
+			DamageMultiplier: 1,
+			ThreatMultiplier: 1,
+
 			MaxRange: 40,
 
 			ManaCost: core.ManaCostOptions{
@@ -119,6 +122,9 @@ func (paladin *Paladin) registerFlashOfLight() {
 			Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
 			ClassSpellMask: SpellMaskFlashOfLight,
 
+			DamageMultiplier: 1,
+			ThreatMultiplier: 1,
+
 			MaxRange: 40,
 
 			ManaCost: core.ManaCostOptions{
@@ -176,7 +182,10 @@ func (paladin *Paladin) registerLayOnHands() {
 			ProcMask:       core.ProcMaskSpellHealing,
 			Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
 			ClassSpellMask: SpellMaskLayOnHands,
-	
+
+			DamageMultiplier: 1,
+			ThreatMultiplier: 1,
+
 			MaxRange: 40,
 	
 			Cast: core.CastConfig{

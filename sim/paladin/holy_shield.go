@@ -16,11 +16,11 @@ import (
 // 35% additional threat. Each block expends a charge. 4 charges.
 func (paladin *Paladin) registerHolyShield() {
 	var ranks = []struct {
-		level        int32
-		spellID      int32
-		manaCost     int32
-		value        float64
-		coeff        float64
+		level    int32
+		spellID  int32
+		manaCost int32
+		value    float64
+		coeff    float64
 	}{
 		{},
 		{level: 40, spellID: 20925, manaCost: 135, value: 59, coeff: 0.05},
@@ -53,6 +53,7 @@ func (paladin *Paladin) registerHolyShield() {
 			Flags:       core.SpellFlagNoOnCastComplete | core.SpellFlagPassiveSpell,
 
 			BonusCoefficient: coeff,
+			DamageMultiplier: 1,
 			ThreatMultiplier: 1.35,
 
 			ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
@@ -87,6 +88,9 @@ func (paladin *Paladin) registerHolyShield() {
 			ProcMask:       core.ProcMaskEmpty,
 			Flags:          core.SpellFlagAPL,
 			ClassSpellMask: SpellMaskHolyShield,
+
+			DamageMultiplier: 1,
+			ThreatMultiplier: 1,
 
 			ManaCost: core.ManaCostOptions{
 				FlatCost: manaCost,

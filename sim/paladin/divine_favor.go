@@ -54,6 +54,9 @@ func (paladin *Paladin) registerDivineFavor() {
 		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
 		ClassSpellMask: SpellMaskDivineFavor,
 
+		DamageMultiplier: 1,
+		ThreatMultiplier: 1,
+
 		ManaCost: core.ManaCostOptions{
 			BaseCostPercent: 3,
 		},

@@ -13,12 +13,12 @@ import (
 // then jumping to additional nearby enemies. Affects 3 total targets.
 func (paladin *Paladin) registerAvengersShield() {
 	var ranks = []struct {
-		level        int32
-		spellID      int32
-		manaCost     int32
-		minValue     float64
-		maxValue     float64
-		coeff        float64
+		level    int32
+		spellID  int32
+		manaCost int32
+		minValue float64
+		maxValue float64
+		coeff    float64
 	}{
 		{},
 		{level: 50, spellID: 31935, manaCost: 500, minValue: 270, maxValue: 330, coeff: 0.193},
@@ -51,6 +51,10 @@ func (paladin *Paladin) registerAvengersShield() {
 			Flags:          core.SpellFlagAPL,
 			ClassSpellMask: SpellMaskAvengersShield,
 
+			DamageMultiplier: 1,
+			ThreatMultiplier: 1,
+			CritMultiplier:   1.5,
+
 			MaxRange:     30,
 			MissileSpeed: 35,
 
@@ -59,7 +63,7 @@ func (paladin *Paladin) registerAvengersShield() {
 			},
 			Cast: core.CastConfig{
 				DefaultCast: core.Cast{
-					GCD: time.Second,
+					GCD:      time.Second,
 					CastTime: time.Second,
 				},
 				CD: cd,

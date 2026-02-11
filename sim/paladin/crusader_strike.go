@@ -33,8 +33,10 @@ func (paladin *Paladin) registerCrusaderStrike() {
 			BaseCostPercent: 8,
 		},
 
-		MaxRange: core.MaxMeleeRange,
+		MaxRange:         core.MaxMeleeRange,
 		DamageMultiplier: 1.1,
+		ThreatMultiplier: 1,
+		CritMultiplier:   2,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			baseDamage := spell.Unit.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower())

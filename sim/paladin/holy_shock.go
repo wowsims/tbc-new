@@ -6,19 +6,18 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
-
 // Holy Shock
 // https://www.wowhead.com/tbc/spell=20473
-// 
+//
 // Blasts the target with Holy energy, causing X to Y Holy damage to an enemy, or X*1.267 to Y*1.267 healing to an ally.
 func (paladin *Paladin) registerHolyShock() {
 	var ranks = []struct {
-		level        int32
-		spellID      int32
-		manaCost     int32
-		minValue     float64
-		maxValue     float64
-		coeff        float64
+		level    int32
+		spellID  int32
+		manaCost int32
+		minValue float64
+		maxValue float64
+		coeff    float64
 	}{
 		{},
 		{level: 40, spellID: 20473, manaCost: 335, minValue: 277, maxValue: 299, coeff: 0.429},
@@ -47,6 +46,10 @@ func (paladin *Paladin) registerHolyShock() {
 			ProcMask:       core.ProcMaskSpellDamage,
 			Flags:          core.SpellFlagAPL,
 			ClassSpellMask: SpellMaskHolyShock,
+
+			DamageMultiplier: 1,
+			ThreatMultiplier: 1,
+			CritMultiplier:   1.5,
 
 			MaxRange: 20,
 

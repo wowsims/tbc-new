@@ -49,6 +49,10 @@ func (paladin *Paladin) registerHolyWrath() {
 			Flags:          core.SpellFlagAPL,
 			ClassSpellMask: SpellMaskHolyWrath,
 
+			DamageMultiplier: 1,
+			ThreatMultiplier: 1,
+			CritMultiplier:   1.5,
+
 			ManaCost: core.ManaCostOptions{
 				FlatCost: ranks[rank].manaCost,
 			},
