@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"regexp"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -161,6 +162,36 @@ func GenerateEnchantEffects(instance *dbc.DBC, db *WowDatabase) {
 	// GenerateEffectsFile(procGroups, "sim/common/tbc/enchants_auto_gen.go", TmplStrEnchant)
 }
 
+func ItemEffectIsSupported(instance *dbc.DBC, effectID int) bool {
+	supported := true
+	if effects, ok := instance.SpellEffects[effectID]; ok {
+		for _, effect := range effects {
+			if params, ok := IgnoreSpellEffectByAuraType[effect.EffectAura]; ok {
+				if len(params) == 0 {
+					supported = false
+					break
+				} else {
+					if slices.Contains(params, effect.EffectMiscValues[0]) {
+						supported = false
+					}
+				}
+			}
+
+			if params, ok := IgnoreSpellEffectBySpellEffectType[effect.EffectType]; ok {
+				if len(params) == 0 {
+					supported = false
+					break
+				} else {
+					if slices.Contains(params, effect.EffectMiscValues[0]) {
+						supported = false
+					}
+				}
+			}
+		}
+	}
+	return supported
+}
+
 func GenerateItemEffects(instance *dbc.DBC, db *WowDatabase, itemSources map[int][]*proto.DropSource) {
 	groupMapOnUse := map[string]Group{}
 	groupMapProc := map[string]Group{}
@@ -170,13 +201,12 @@ func GenerateItemEffects(instance *dbc.DBC, db *WowDatabase, itemSources map[int
 		parsed.ItemEffects = dbc.MergeItemEffectsForAllStates(parsed)
 
 		for _, itemEffect := range parsed.ItemEffects {
-			result := TryParseOnUseEffect(parsed, itemEffect, groupMapOnUse)
-
-			if result == EffectParseResultSuccess {
+			if !ItemEffectIsSupported(instance, int(itemEffect.BuffId)) {
 				continue
 			}
 
-			if TryParseProcEffect(parsed, itemEffect, instance, groupMapProc) != EffectParseResultSuccess {
+			if TryParseOnUseEffect(parsed, itemEffect, groupMapOnUse) != EffectParseResultSuccess &&
+				TryParseProcEffect(parsed, itemEffect, instance, groupMapProc) != EffectParseResultSuccess {
 				ParseTooltipForMissingEffect(parsed, itemEffect, instance, groupMapProc, "Procs")
 			}
 		}
@@ -420,11 +450,11 @@ func TryParseEnchantEffect(enchant *proto.UIEnchant, enchantEffect *proto.ItemEf
 	return EffectParseResultInvalid
 }
 
-func ParseTooltipForMissingEffect(parsed *proto.UIItem, itemEffect *proto.ItemEffect, instance *dbc.DBC, groupMap map[string]Group, groupMapName string) EffectParseResult {
+func ParseTooltipForMissingEffect(parsed *proto.UIItem, itemEffect *proto.ItemEffect, instance *dbc.DBC, groupMap map[string]Group, groupMapName string) {
 	if parsed.ScalingOptions[0].Ilvl > MIN_EFFECT_ILVL {
 		// Effect was already manually implemented
 		if core.HasItemEffect(parsed.Id) {
-			return EffectParseResultSuccess
+			return
 		}
 
 		tooltipString, id := dbc.GetItemEffectSpellTooltip(int(parsed.Id), int(itemEffect.BuffId))
@@ -458,14 +488,9 @@ func ParseTooltipForMissingEffect(parsed *proto.UIItem, itemEffect *proto.ItemEf
 					Name:    renderedTooltip,
 					SpellID: int(itemEffect.BuffId),
 				})
-				return EffectParseResultUnsupported
 			}
-			return EffectParseResultSuccess
-		} else {
-			return EffectParseResultUnsupported
 		}
 	}
-	return EffectParseResultInvalid
 }
 
 var critMatcher = regexp.MustCompile(`critical ([^\s]+|damage,?)( chance)? [^fbc]`)

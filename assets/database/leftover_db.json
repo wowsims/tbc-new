@@ -129,7 +129,7 @@
 {"effectId":865,"itemId":11166,"spellId":13697,"name":"Enchant Gloves - Skinning","icon":"inv_misc_note_01","type":7,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"quality":2},
 {"effectId":866,"spellId":13625,"name":"Enchant Chest - Lesser Stats","icon":"trade_engraving","type":5,"stats":[2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"quality":1},
 {"effectId":884,"spellId":13746,"name":"Enchant Cloak - Greater Defense","icon":"trade_engraving","type":4,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,50,0,0,0,0,0,0,0,0],"quality":1},
-{"effectId":903,"spellId":13796,"name":"Enchant Cloak - Resistance","icon":"trade_engraving","type":4,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0],"quality":1},
+{"effectId":903,"spellId":13796,"name":"Enchant Cloak - Resistance","icon":"trade_engraving","type":4,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0],"quality":1},
 {"effectId":904,"spellId":13365,"name":"Enchant Gloves - Agility","icon":"trade_engraving","type":7,"stats":[0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"quality":1},
 {"effectId":904,"spellId":13365,"name":"Enchant Boots - Agility","icon":"trade_engraving","type":10,"stats":[0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"quality":1},
 {"effectId":905,"spellId":13366,"name":"Enchant Bracer - Intellect","icon":"trade_engraving","type":6,"stats":[0,0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"quality":1},
@@ -179,8 +179,8 @@
 {"effectId":1896,"itemId":16247,"spellId":20030,"name":"Enchant 2H Weapon - Superior Impact","icon":"inv_misc_note_01","type":13,"enchantType":1,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"quality":2},
 {"effectId":1897,"spellId":13695,"name":"Enchant 2H Weapon - Impact","icon":"trade_engraving","type":13,"enchantType":1,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"quality":1},
 {"effectId":1897,"itemId":16250,"spellId":20031,"name":"Enchant Weapon - Superior Striking","icon":"inv_misc_note_01","type":13,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"quality":2},
-{"effectId":1898,"itemId":16254,"spellId":20004,"name":"Enchant Weapon - Lifestealing","icon":"inv_misc_note_01","type":13,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"quality":3},
 {"effectId":1898,"spellId":20004,"name":"Enchant Weapon - Major Spirit","icon":"trade_engraving","type":13,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"quality":1},
+{"effectId":1898,"itemId":16254,"spellId":20004,"name":"Enchant Weapon - Lifestealing","icon":"inv_misc_note_01","type":13,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"quality":3},
 {"effectId":1899,"itemId":16248,"spellId":20006,"name":"Enchant Weapon - Unholy Weapon","icon":"inv_misc_note_01","type":13,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"quality":2,"enchantEffects":[{"buffId":20006,"buffName":"Unholy Curse (20006)","effectDurationMs":12000,"scalingOptions":{"0":{"stats":{"5":-15}}},"proc":{}}]},
 {"effectId":1900,"itemId":16252,"spellId":20007,"name":"Enchant Weapon - Crusader","icon":"inv_misc_note_01","type":13,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"quality":2},
 {"effectId":1903,"itemId":16255,"spellId":19986,"name":"Enchant 2H Weapon - Major Spirit","icon":"inv_misc_note_01","type":13,"enchantType":1,"stats":[0,0,0,0,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"quality":2},
@@ -221,8 +221,8 @@
 {"effectId":2934,"spellId":33993,"name":"Enchant Gloves - Blasting","icon":"trade_engraving","type":7,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"quality":1},
 {"effectId":3150,"spellId":39882,"name":"Enchant Chest - Restore Mana Prime","icon":"trade_engraving","type":5,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0],"quality":1},
 {"effectId":3269,"itemId":34836,"spellId":45698,"name":"Truesilver Fishing Line","icon":"inv_misc_thread_01","type":13,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"quality":2},
-{"effectId":3289,"spellId":48555,"name":"Skybreaker Whip","icon":"trade_engraving","type":13,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"quality":1},
 {"effectId":3289,"spellId":48557,"name":"Riding Crop","icon":"trade_engraving","type":13,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"quality":1},
+{"effectId":3289,"spellId":48555,"name":"Skybreaker Whip","icon":"trade_engraving","type":13,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"quality":1},
 {"effectId":3315,"itemId":37312,"spellId":48401,"name":"Carrot on a Stick","icon":"inv_misc_food_54","type":13,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"quality":2}
 ],
 "gems":[

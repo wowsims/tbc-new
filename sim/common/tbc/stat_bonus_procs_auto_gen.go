@@ -28,22 +28,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Poisons all enemies in an 8 yard radius around the caster. Victims of the poison suffer 50 Nature damage
-	// every 5 sec for 45 sec.
-	// https://www.wowhead.com/tbc/spell=12766
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 10455, ItemName: "Chained Essence of Eranikus"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Increases attack power by 33 when fighting Demons.
 	// https://www.wowhead.com/tbc/spell=18079
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -98,21 +82,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 11810, ItemName: "Force of Will"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Right Click to summon and dismiss your bird.
-	// https://www.wowhead.com/tbc/spell=17567
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 12185, ItemName: "Bloodsail Admiral's Hat"},
 	// })
 
 	// TODO: Manual implementation required
@@ -179,15 +148,14 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Skinning +10.
-	// https://www.wowhead.com/tbc/spell=16718
+	// Increases attack power by 45 when fighting Beasts.
+	// https://www.wowhead.com/tbc/spell=18067
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
 	//	Outcome:            core.OutcomeEmpty,
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
-	//	{ItemID: 12709, ItemName: "Pip's Skinner"},
 	//	{ItemID: 12709, ItemName: "Pip's Skinner"},
 	// })
 
@@ -287,21 +255,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Summons a Skeleton that will protect you for 1min.
-	// https://www.wowhead.com/tbc/spell=17490
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 13353, ItemName: "Book of the Dead"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Deals 35 damage every time you block.
 	// https://www.wowhead.com/tbc/spell=17496
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -311,21 +264,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 13375, ItemName: "Crest of Retribution"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Summons a cannon that will fire at enemies in front of it that are attacking you.
-	// https://www.wowhead.com/tbc/spell=6251
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 13382, ItemName: "Cannonball Runner"},
 	// })
 
 	// TODO: Manual implementation required
@@ -377,20 +315,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// https://www.wowhead.com/tbc/spell=17623
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 13544, ItemName: "Spectral Essence"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Gives 20 additional intellect to party members within 30 yards.
 	// https://www.wowhead.com/tbc/spell=18264
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -400,22 +324,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 13937, ItemName: "Headmaster's Charge"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Calls forth 3 servants of the House Barov that will fight, cook, and clean for you.
-	// https://www.wowhead.com/tbc/spell=18307
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 14022, ItemName: "Barov Peasant Caller"},
-	//	{ItemID: 14023, ItemName: "Barov Peasant Caller"},
 	// })
 
 	// TODO: Manual implementation required
@@ -527,21 +435,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Activates your Arcanite Dragonling to fight for you for 1min.
-	// https://www.wowhead.com/tbc/spell=19804
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 16022, ItemName: "Arcanite Dragonling"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Increases the damage absorbed by your Mana Shield by 285.
 	// https://www.wowhead.com/tbc/spell=23037
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -566,21 +459,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 16392, ItemName: "Knight-Lieutenant's Leather Boots"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Slightly increases your stealth detection.
-	// https://www.wowhead.com/tbc/spell=23217
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 16397, ItemName: "Knight-Lieutenant's Dragonhide Gloves"},
 	// })
 
 	// TODO: Manual implementation required
@@ -664,21 +542,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Slightly increases your stealth detection.
-	// https://www.wowhead.com/tbc/spell=23217
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 16448, ItemName: "Marshal's Dragonhide Gauntlets"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Increases the damage done by your Multi-Shot by 5%.
 	// https://www.wowhead.com/tbc/spell=28539
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -733,21 +596,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 16487, ItemName: "Blood Guard's Silk Gloves"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Slightly increases your stealth detection.
-	// https://www.wowhead.com/tbc/spell=23217
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 16496, ItemName: "Blood Guard's Dragonhide Gauntlets"},
 	// })
 
 	// TODO: Manual implementation required
@@ -839,21 +687,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 16548, ItemName: "General's Plate Gauntlets"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Slightly increases your stealth detection.
-	// https://www.wowhead.com/tbc/spell=23217
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 16555, ItemName: "General's Dragonhide Gloves"},
 	// })
 
 	// TODO: Manual implementation required
@@ -981,21 +814,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Summons a Skeleton that will protect you for 1min.
-	// https://www.wowhead.com/tbc/spell=17490
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 17067, ItemName: "Ancient Cornerstone Grimoire"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Restores 16 health per 5 sec.
 	// https://www.wowhead.com/tbc/spell=23210
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -1036,20 +854,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 17111, ItemName: "Blazefury Medallion"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// https://www.wowhead.com/tbc/spell=21079
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 17142, ItemName: "Shard of the Defiler"},
 	// })
 
 	// TODO: Manual implementation required
@@ -1221,15 +1025,14 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Increases your chance to resist Stun and Fear effects by 1%.
-	// https://www.wowhead.com/tbc/spell=21958
+	// Absorbs 650 physical damage. Lasts 10s.
+	// https://www.wowhead.com/tbc/spell=21956
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
 	//	Outcome:            core.OutcomeEmpty,
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
-	//	{ItemID: 17759, ItemName: "Mark of Resolution"},
 	//	{ItemID: 17759, ItemName: "Mark of Resolution"},
 	// })
 
@@ -1269,8 +1072,8 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Restores 5 health per 5 sec.
-	// https://www.wowhead.com/tbc/spell=21596
+	// Returns you to the sanctuary of Dun Baldar.
+	// https://www.wowhead.com/tbc/spell=22564
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
@@ -1316,8 +1119,8 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Restores 2 health per 5 sec.
-	// https://www.wowhead.com/tbc/spell=21346
+	// Returns you to the sanctuary of Frostwolf Keep.
+	// https://www.wowhead.com/tbc/spell=22563
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
@@ -1332,8 +1135,8 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Restores 2 health per 5 sec.
-	// https://www.wowhead.com/tbc/spell=21346
+	// Returns you to the sanctuary of Frostwolf Keep.
+	// https://www.wowhead.com/tbc/spell=22563
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
@@ -1364,8 +1167,8 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Restores 7 health per 5 sec.
-	// https://www.wowhead.com/tbc/spell=21600
+	// Returns you to the sanctuary of Frostwolf Keep.
+	// https://www.wowhead.com/tbc/spell=22563
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
@@ -1395,9 +1198,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// When the shield blocks it releases an electrical charge that damages all nearby enemies. This also has
-	// a chance of damaging the shield.
-	// https://www.wowhead.com/tbc/spell=22600
+	// https://www.wowhead.com/tbc/spell=22619
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
@@ -1528,20 +1329,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 18639, ItemName: "Ultra-Flash Shadow Reflector"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// https://www.wowhead.com/tbc/spell=23101
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 18646, ItemName: "The Eye of Divinity"},
 	// })
 
 	// TODO: Manual implementation required
@@ -1943,21 +1730,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Skinning +10.
-	// https://www.wowhead.com/tbc/spell=24591
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 19901, ItemName: "Zulian Slicer"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Restores 60 mana every 5.0 sec for 30s.
 	// https://www.wowhead.com/tbc/spell=24268
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -2150,37 +1922,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 19968, ItemName: "Fiery Retributer"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Turns you into a fish giving water breath and increasing your movement speed, but attacking or casting
-	// while in this form breaks the effect. Does not work out of water or at the water's surface.
-	// https://www.wowhead.com/tbc/spell=24347
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 19979, ItemName: "Hook of the Master Angler"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Slightly increases your stealth detection.
-	// https://www.wowhead.com/tbc/spell=23217
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 19998, ItemName: "Bloodvine Lens"},
 	// })
 
 	// TODO: Manual implementation required
@@ -2472,21 +2213,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Calls forth a Timbermaw Ancestor to fight at your side and heal you.
-	// https://www.wowhead.com/tbc/spell=26066
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 21326, ItemName: "Defender of the Timbermaw"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Spikes sprout from you causing 25 Nature damage to attackers when hit. Lasts 30s.
 	// https://www.wowhead.com/tbc/spell=26168
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -2527,21 +2253,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 21526, ItemName: "Band of Icy Depths"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Summons a Vanquished Tentacle to your aid for 30s.
-	// https://www.wowhead.com/tbc/spell=26391
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 21579, ItemName: "Vanquished Tentacle of C'Thun"},
 	// })
 
 	// TODO: Manual implementation required
@@ -2625,36 +2336,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Reduces melee damage taken by 35 for 20s.
-	// https://www.wowhead.com/tbc/spell=26609
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 21784, ItemName: "Figurine - Black Diamond Crab"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Every swing poisons your foe for 15 damage every second for 20s.
-	// https://www.wowhead.com/tbc/spell=26614
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 21789, ItemName: "Figurine - Dark Iron Scorpid"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Calls down a meteor, burning all enemies within the area for 442 total Fire damage.
 	// https://www.wowhead.com/tbc/spell=26789
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -2664,21 +2345,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 21891, ItemName: "Shard of the Fallen Star"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Increases your effective stealth level.
-	// https://www.wowhead.com/tbc/spell=27037
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 22003, ItemName: "Darkmantle Boots"},
 	// })
 
 	// TODO: Manual implementation required
@@ -2974,21 +2640,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Slightly increases your stealth detection.
-	// https://www.wowhead.com/tbc/spell=23217
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 22863, ItemName: "Blood Guard's Dragonhide Grips"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Gives you a 50% chance to avoid interruption caused by damage while casting Searing Pain.
 	// https://www.wowhead.com/tbc/spell=23046
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -3148,21 +2799,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 23072, ItemName: "Fists of the Unrelenting"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Increases your effective stealth level.
-	// https://www.wowhead.com/tbc/spell=27037
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 23073, ItemName: "Boots of Displacement"},
 	// })
 
 	// TODO: Manual implementation required
@@ -3472,22 +3108,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// When struck has a 15% chance of reducing the attacker's movement speed by 50% for 5 secs. Chance to fizzle
-	// against targets over level 60.
-	// https://www.wowhead.com/tbc/spell=29164
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 23238, ItemName: "Stygian Buckler"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Increases the damage done by your Multi-Shot by 5%.
 	// https://www.wowhead.com/tbc/spell=28539
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -3497,21 +3117,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 23279, ItemName: "Knight-Lieutenant's Chain Vices"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Slightly increases your stealth detection.
-	// https://www.wowhead.com/tbc/spell=23217
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 23280, ItemName: "Knight-Lieutenant's Dragonhide Grips"},
 	// })
 
 	// TODO: Manual implementation required
@@ -3668,36 +3273,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Shows the location of all nearby gas clouds on the minimap.
-	// https://www.wowhead.com/tbc/spell=30645
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 23762, ItemName: "Ultra-Spectropic Detection Goggles"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Increases your stealth detection for 15s.
-	// https://www.wowhead.com/tbc/spell=30249
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 23763, ItemName: "Hyper-Vision Goggles"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Engage the rocket boots to greatly increase your speed... most of the time.
 	// https://www.wowhead.com/tbc/spell=51582
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -3754,36 +3329,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 23836, ItemName: "Goblin Rocket Launcher"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// +10% Stun Resistance.
-	// https://www.wowhead.com/tbc/spell=40386
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 23838, ItemName: "Foreman's Enchanted Helmet"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Increases your chance to resist Stun and Disorient effects by 10%.
-	// https://www.wowhead.com/tbc/spell=30519
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 23839, ItemName: "Foreman's Reinforced Helmet"},
 	// })
 
 	// TODO: Manual implementation required
@@ -3955,21 +3500,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Summons the Felsteel Boar to fight for you for 30 seconds.
-	// https://www.wowhead.com/tbc/spell=31038
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 24124, ItemName: "Figurine - Felsteel Boar"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Restores 900 mana over 12s.
 	// https://www.wowhead.com/tbc/spell=31045
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -3979,21 +3509,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 24127, ItemName: "Figurine - Talasite Owl"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Increases your effective stealth level by 1.
-	// https://www.wowhead.com/tbc/spell=17746
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 24128, ItemName: "Figurine - Nightseye Panther"},
 	// })
 
 	// TODO: Manual implementation required
@@ -4151,21 +3666,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Increases mount speed by 10%.
-	// https://www.wowhead.com/tbc/spell=48776
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 25653, ItemName: "Riding Crop"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Increases damage done by Ferocious Bite by 14 per combo point.
 	// https://www.wowhead.com/tbc/spell=32410
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -4302,21 +3802,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Increased Fishing +20.
-	// https://www.wowhead.com/tbc/spell=7826
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 25978, ItemName: "Seth's Graphite Fishing Pole"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Increases defense rating by 80 for 15s.
 	// https://www.wowhead.com/tbc/spell=32957
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -4371,21 +3856,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 27416, ItemName: "Fetish of the Fallen"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Increases your effective stealth level by 1.
-	// https://www.wowhead.com/tbc/spell=17746
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 27467, ItemName: "Silent-Strider Kneeboots"},
 	// })
 
 	// TODO: Manual implementation required
@@ -4602,7 +4072,9 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// https://www.wowhead.com/tbc/spell=39599
+	// Sometimes heals bearer of 120 damage when damaging an enemy in melee and chance on ranged hit to restore
+	// 172 mana to the bearer.
+	// https://www.wowhead.com/tbc/spell=33504
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
@@ -4792,21 +4264,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Creates 10 edible Underspore Pods.
-	// https://www.wowhead.com/tbc/spell=33770
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 28111, ItemName: "Everlasting Underspore Frond"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Reduces the cast time of your Cyclone spell by -0.1 sec.
 	// https://www.wowhead.com/tbc/spell=33830
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -4831,54 +4288,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 28136, ItemName: "Gladiator's Wyrmhide Gloves"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Removes all movement impairing effects and all effects which cause loss of control of your character.
-	// https://www.wowhead.com/tbc/spell=42292
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 28234, ItemName: "Medallion of the Alliance"},
-	//	{ItemID: 28235, ItemName: "Medallion of the Alliance"},
-	//	{ItemID: 28236, ItemName: "Medallion of the Alliance"},
-	//	{ItemID: 28237, ItemName: "Medallion of the Alliance"},
-	//	{ItemID: 28238, ItemName: "Medallion of the Alliance"},
-	//	{ItemID: 30348, ItemName: "Medallion of the Alliance"},
-	//	{ItemID: 30349, ItemName: "Medallion of the Alliance"},
-	//	{ItemID: 30350, ItemName: "Medallion of the Alliance"},
-	//	{ItemID: 30351, ItemName: "Medallion of the Alliance"},
-	//	{ItemID: 37864, ItemName: "Medallion of the Alliance"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Removes all movement impairing effects and all effects which cause loss of control of your character.
-	// https://www.wowhead.com/tbc/spell=42292
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 28239, ItemName: "Medallion of the Horde"},
-	//	{ItemID: 28240, ItemName: "Medallion of the Horde"},
-	//	{ItemID: 28241, ItemName: "Medallion of the Horde"},
-	//	{ItemID: 28242, ItemName: "Medallion of the Horde"},
-	//	{ItemID: 28243, ItemName: "Medallion of the Horde"},
-	//	{ItemID: 30343, ItemName: "Medallion of the Horde"},
-	//	{ItemID: 30344, ItemName: "Medallion of the Horde"},
-	//	{ItemID: 30345, ItemName: "Medallion of the Horde"},
-	//	{ItemID: 30346, ItemName: "Medallion of the Horde"},
-	//	{ItemID: 37865, ItemName: "Medallion of the Horde"},
 	// })
 
 	// TODO: Manual implementation required
@@ -4999,51 +4408,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 28372, ItemName: "Idol of Feral Shadows"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Increases your chance to resist Fear effects by 5%.
-	// https://www.wowhead.com/tbc/spell=34514
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 28428, ItemName: "Lionheart Blade"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Increases your chance to resist Fear effects by 5%.
-	// https://www.wowhead.com/tbc/spell=34514
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 28429, ItemName: "Lionheart Champion -  - Strength"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Increases your chance to resist Fear effects by 8%.
-	// https://www.wowhead.com/tbc/spell=34515
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 28430, ItemName: "Lionheart Executioner -  - Strength"},
 	// })
 
 	// TODO: Manual implementation required
@@ -5580,34 +4944,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// https://www.wowhead.com/tbc/spell=38162
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 29108, ItemName: "Blade of the Unyielding"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// https://www.wowhead.com/tbc/spell=38162
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 29109, ItemName: "Rod of the Unyielding"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Reduces your threat to enemy targets within 30 yards, making them less likely to attack you.
 	// https://www.wowhead.com/tbc/spell=35352
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -5942,22 +5278,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Shields the caster, absorbing 100000 damage and making the caster immune to Fear and Snare effects for
-	// 4s.
-	// https://www.wowhead.com/tbc/spell=36481
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 30314, ItemName: "Phaseshift Bulwark"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Increases your movement speed by 50%, and your melee attack speed by 20% for 30s.
 	// https://www.wowhead.com/tbc/spell=36479
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -6141,7 +5461,8 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// https://www.wowhead.com/tbc/spell=38328
+	// Reduces the threat from your harmful critical strikes.
+	// https://www.wowhead.com/tbc/spell=38329
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
@@ -6293,8 +5614,8 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Increases your pet's critical strike chance by 2%.
-	// https://www.wowhead.com/tbc/spell=27043
+	// Increases damage dealt by your pet by 3%.
+	// https://www.wowhead.com/tbc/spell=27206
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
@@ -6354,111 +5675,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Allows the bearer to see into the ghost world while in Shadowmoon Valley.
-	// https://www.wowhead.com/tbc/spell=39841
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 31104, ItemName: "Evoker's Helmet of Second Sight"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Allows the bearer to see into the ghost world while in Shadowmoon Valley.
-	// https://www.wowhead.com/tbc/spell=39841
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 31105, ItemName: "Overlord's Helmet of Second Sight"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Allows the bearer to see into the ghost world while in Shadowmoon Valley.
-	// https://www.wowhead.com/tbc/spell=39841
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 31106, ItemName: "Stalker's Helmet of Second Sight"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Allows the bearer to see into the ghost world while in Shadowmoon Valley.
-	// https://www.wowhead.com/tbc/spell=39841
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 31107, ItemName: "Shamanistic Helmet of Second Sight"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Allows the bearer to see into the ghost world while in Shadowmoon Valley.
-	// https://www.wowhead.com/tbc/spell=39841
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 31109, ItemName: "Stealther's Helmet of Second Sight"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Allows the bearer to see into the ghost world while in Shadowmoon Valley.
-	// https://www.wowhead.com/tbc/spell=39841
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 31110, ItemName: "Druidic Helmet of Second Sight"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Increases your effective stealth level by 1.
-	// https://www.wowhead.com/tbc/spell=17746
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 31288, ItemName: "The Master's Treads"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Increases your pet's attack power by 70, armor by 490 and Stamina by 52.
 	// https://www.wowhead.com/tbc/spell=38297
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -6468,21 +5684,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 31328, ItemName: "Leggings of Beast Mastery"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Slightly increases your stealth detection.
-	// https://www.wowhead.com/tbc/spell=23217
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 31333, ItemName: "The Night Watchman"},
 	// })
 
 	// TODO: Manual implementation required
@@ -7196,22 +6397,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Shows the location of all nearby demons on the minimap until cancelled. Only one form of tracking can
-	// be active at a time.
-	// https://www.wowhead.com/tbc/spell=47524
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32235, ItemName: "Cursed Vision of Sargeras"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Your Mangle ability also increases your attack power by 94 for 20s.
 	// https://www.wowhead.com/tbc/spell=41037
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -7297,159 +6482,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 32387, ItemName: "Idol of the Raven Goddess"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Slightly increases your stealth detection.
-	// https://www.wowhead.com/tbc/spell=40273
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32461, ItemName: "Furious Gizmatic Goggles"},
-	//	{ItemID: 32461, ItemName: "Furious Gizmatic Goggles"},
-	//	{ItemID: 32461, ItemName: "Furious Gizmatic Goggles"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Allows you to look far into the distance.
-	// https://www.wowhead.com/tbc/spell=12883
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32472, ItemName: "Justicebringer 2000 Specs"},
-	//	{ItemID: 32472, ItemName: "Justicebringer 2000 Specs"},
-	//	{ItemID: 32472, ItemName: "Justicebringer 2000 Specs"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Shows the location of all nearby gas clouds on the minimap.
-	// https://www.wowhead.com/tbc/spell=30645
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32473, ItemName: "Tankatronic Goggles"},
-	//	{ItemID: 32473, ItemName: "Tankatronic Goggles"},
-	//	{ItemID: 32473, ItemName: "Tankatronic Goggles"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Allows you to look far into the distance.
-	// https://www.wowhead.com/tbc/spell=12883
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32474, ItemName: "Surestrike Goggles v2.0"},
-	//	{ItemID: 32474, ItemName: "Surestrike Goggles v2.0"},
-	//	{ItemID: 32474, ItemName: "Surestrike Goggles v2.0"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Allows you to look far into the distance.
-	// https://www.wowhead.com/tbc/spell=12883
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32475, ItemName: "Living Replicator Specs"},
-	//	{ItemID: 32475, ItemName: "Living Replicator Specs"},
-	//	{ItemID: 32475, ItemName: "Living Replicator Specs"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Shows the location of all nearby gas clouds on the minimap.
-	// https://www.wowhead.com/tbc/spell=30645
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32476, ItemName: "Gadgetstorm Goggles"},
-	//	{ItemID: 32476, ItemName: "Gadgetstorm Goggles"},
-	//	{ItemID: 32476, ItemName: "Gadgetstorm Goggles"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Shows the location of all nearby gas clouds on the minimap.
-	// https://www.wowhead.com/tbc/spell=30645
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32478, ItemName: "Deathblow X11 Goggles"},
-	//	{ItemID: 32478, ItemName: "Deathblow X11 Goggles"},
-	//	{ItemID: 32478, ItemName: "Deathblow X11 Goggles"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Slightly increases your stealth detection.
-	// https://www.wowhead.com/tbc/spell=40273
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32479, ItemName: "Wonderheal XT40 Shades"},
-	//	{ItemID: 32479, ItemName: "Wonderheal XT40 Shades"},
-	//	{ItemID: 32479, ItemName: "Wonderheal XT40 Shades"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Slightly increases your stealth detection.
-	// https://www.wowhead.com/tbc/spell=40273
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32480, ItemName: "Magnified Moon Specs"},
-	//	{ItemID: 32480, ItemName: "Magnified Moon Specs"},
-	//	{ItemID: 32480, ItemName: "Magnified Moon Specs"},
 	// })
 
 	// TODO: Manual implementation required
@@ -7611,40 +6643,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Slightly increases your stealth detection.
-	// https://www.wowhead.com/tbc/spell=40273
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32494, ItemName: "Destruction Holo-gogs"},
-	//	{ItemID: 32494, ItemName: "Destruction Holo-gogs"},
-	//	{ItemID: 32494, ItemName: "Destruction Holo-gogs"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Allows you to look far into the distance.
-	// https://www.wowhead.com/tbc/spell=12883
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32495, ItemName: "Powerheal 4000 Lens"},
-	//	{ItemID: 32495, ItemName: "Powerheal 4000 Lens"},
-	//	{ItemID: 32495, ItemName: "Powerheal 4000 Lens"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Each time you cast a spell, there is chance you will gain up to 76 mana per 5 for 15s.
 	// https://www.wowhead.com/tbc/spell=37656
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -7730,81 +6728,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 32539, ItemName: "Skyguard's Drape"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Calls forth a Netherwing Ally to fight at your side in Shadowmoon Valley.
-	// https://www.wowhead.com/tbc/spell=40811
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32694, ItemName: "Overseer's Badge"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Calls forth a Netherwing Ally to fight at your side.
-	// https://www.wowhead.com/tbc/spell=40815
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32695, ItemName: "Captain's Badge"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Transforms caster to have the appearance of a Skettis arakkoa.
-	// https://www.wowhead.com/tbc/spell=41301
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32782, ItemName: "Time-Lost Figurine"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Increases mount speed by 10%.
-	// https://www.wowhead.com/tbc/spell=48776
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32863, ItemName: "Skybreaker Whip"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Calls forth a Netherwing Ally to fight at your side.
-	// https://www.wowhead.com/tbc/spell=40815
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32864, ItemName: "Commander's Badge"},
 	// })
 
 	// TODO: Manual implementation required
@@ -8273,7 +7196,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 33820, ItemName: "Weather-Beaten Fishing Hat"},
-	//	{ItemID: 33820, ItemName: "Weather-Beaten Fishing Hat"},
 	// })
 
 	// TODO: Manual implementation required
@@ -8595,21 +7517,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Calls forth 3 Voodoo Gnomes to destroy your enemies.
-	// https://www.wowhead.com/tbc/spell=43995
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 34029, ItemName: "Tiny Voodoo Mask"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Thori'dal generates magical arrows when the bow string is drawn. Does not use ammo.
 	// https://www.wowhead.com/tbc/spell=46699
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -8620,91 +7527,6 @@ func RegisterAllProcs() {
 	// }, []shared.ItemVariant{
 	//	{ItemID: 34334, ItemName: "Thori'dal, the Stars' Fury"},
 	//	{ItemID: 34334, ItemName: "Thori'dal, the Stars' Fury"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Allows you to look far into the distance.
-	// https://www.wowhead.com/tbc/spell=12883
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 34353, ItemName: "Quad Deathblow X44 Goggles"},
-	//	{ItemID: 34353, ItemName: "Quad Deathblow X44 Goggles"},
-	//	{ItemID: 34353, ItemName: "Quad Deathblow X44 Goggles"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Slightly increases your stealth detection.
-	// https://www.wowhead.com/tbc/spell=40273
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 34354, ItemName: "Mayhem Projection Goggles"},
-	//	{ItemID: 34354, ItemName: "Mayhem Projection Goggles"},
-	//	{ItemID: 34354, ItemName: "Mayhem Projection Goggles"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Slightly increases your stealth detection.
-	// https://www.wowhead.com/tbc/spell=40273
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 34355, ItemName: "Lightning Etched Specs"},
-	//	{ItemID: 34355, ItemName: "Lightning Etched Specs"},
-	//	{ItemID: 34355, ItemName: "Lightning Etched Specs"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Allows you to look far into the distance.
-	// https://www.wowhead.com/tbc/spell=12883
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 34356, ItemName: "Surestrike Goggles v3.0"},
-	//	{ItemID: 34356, ItemName: "Surestrike Goggles v3.0"},
-	//	{ItemID: 34356, ItemName: "Surestrike Goggles v3.0"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Slightly increases your stealth detection.
-	// https://www.wowhead.com/tbc/spell=40273
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 34357, ItemName: "Hard Khorium Goggles"},
-	//	{ItemID: 34357, ItemName: "Hard Khorium Goggles"},
-	//	{ItemID: 34357, ItemName: "Hard Khorium Goggles"},
 	// })
 
 	// TODO: Manual implementation required
@@ -8862,23 +7684,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 34680, ItemName: "Shattered Sun Pendant of Resolve"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Shows the location of all nearby gas clouds on the minimap.
-	// https://www.wowhead.com/tbc/spell=30645
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 34847, ItemName: "Annihilator Holo-Gogs"},
-	//	{ItemID: 34847, ItemName: "Annihilator Holo-Gogs"},
-	//	{ItemID: 34847, ItemName: "Annihilator Holo-Gogs"},
 	// })
 
 	// TODO: Manual implementation required
@@ -9277,91 +8082,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Shows the location of all nearby gas clouds on the minimap.
-	// https://www.wowhead.com/tbc/spell=30645
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 35181, ItemName: "Powerheal 9000 Lens"},
-	//	{ItemID: 35181, ItemName: "Powerheal 9000 Lens"},
-	//	{ItemID: 35181, ItemName: "Powerheal 9000 Lens"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Allows you to look far into the distance.
-	// https://www.wowhead.com/tbc/spell=12883
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 35182, ItemName: "Hyper-Magnified Moon Specs"},
-	//	{ItemID: 35182, ItemName: "Hyper-Magnified Moon Specs"},
-	//	{ItemID: 35182, ItemName: "Hyper-Magnified Moon Specs"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Shows the location of all nearby gas clouds on the minimap.
-	// https://www.wowhead.com/tbc/spell=30645
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 35183, ItemName: "Wonderheal XT68 Shades"},
-	//	{ItemID: 35183, ItemName: "Wonderheal XT68 Shades"},
-	//	{ItemID: 35183, ItemName: "Wonderheal XT68 Shades"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Shows the location of all nearby gas clouds on the minimap.
-	// https://www.wowhead.com/tbc/spell=30645
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 35184, ItemName: "Primal-Attuned Goggles"},
-	//	{ItemID: 35184, ItemName: "Primal-Attuned Goggles"},
-	//	{ItemID: 35184, ItemName: "Primal-Attuned Goggles"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Shows the location of all nearby gas clouds on the minimap.
-	// https://www.wowhead.com/tbc/spell=30645
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 35185, ItemName: "Justicebringer 3000 Specs"},
-	//	{ItemID: 35185, ItemName: "Justicebringer 3000 Specs"},
-	//	{ItemID: 35185, ItemName: "Justicebringer 3000 Specs"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Disguises the user as a blood elf.
 	// https://www.wowhead.com/tbc/spell=46354
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -9637,36 +8357,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Summons the Khorium Boar to fight for you for 30 sec.
-	// https://www.wowhead.com/tbc/spell=46782
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 35694, ItemName: "Figurine - Khorium Boar"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Increases your effective stealth level by 1.
-	// https://www.wowhead.com/tbc/spell=17746
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 35702, ItemName: "Figurine - Shadowsong Panther"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Restores 900 mana over 12s.
 	// https://www.wowhead.com/tbc/spell=46785
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -9676,38 +8366,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 35703, ItemName: "Figurine - Seaspray Albatross"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Right Click to summon the Brewmaiden, whose very presence bolsters a party's vigor. Wave at her for Brewfest
-	// Brew!
-	// https://www.wowhead.com/tbc/spell=48041
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 37127, ItemName: "Brightbrew Charm"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Right Click to summon the Black Brewmaiden, who will smite your foes with your empty tankards. Wave at
-	// her for Brewfest Brew!
-	// https://www.wowhead.com/tbc/spell=48042
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 37128, ItemName: "Balebrew Charm"},
 	// })
 
 	// TODO: Manual implementation required
@@ -9744,16 +8402,13 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Right Click to summon an incorporeal coyote spirit to accompany you. The spirit will remain until sent
-	// away or you remove the hat.
-	// https://www.wowhead.com/tbc/spell=51149
+	// https://www.wowhead.com/tbc/spell=52172
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
 	//	Outcome:            core.OutcomeEmpty,
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
-	//	{ItemID: 38506, ItemName: "Don Carlos' Famous Hat"},
 	//	{ItemID: 38506, ItemName: "Don Carlos' Famous Hat"},
 	// })
 
@@ -9834,7 +8489,7 @@ func RegisterAllProcs() {
 		Outcome:            core.OutcomeLanded,
 		RequireDamageDealt: true,
 	}, []shared.ItemVariant{
-		{ItemID: 28429, ItemName: "Lionheart Champion -  - Strength"},
+		{ItemID: 28429, ItemName: "Lionheart Champion"},
 	})
 
 	// Increases Strength by 100 for 10s.
@@ -9845,7 +8500,7 @@ func RegisterAllProcs() {
 		Outcome:            core.OutcomeLanded,
 		RequireDamageDealt: true,
 	}, []shared.ItemVariant{
-		{ItemID: 28430, ItemName: "Lionheart Executioner -  - Strength"},
+		{ItemID: 28430, ItemName: "Lionheart Executioner"},
 	})
 
 	// Increases your haste rating by 212 for 10s.

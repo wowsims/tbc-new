@@ -10,12 +10,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		10455, // Chained Essence of Eranikus
-		[
-			"Poisons all enemies in an 8 yard radius around the caster. Victims of the poison suffer 50 Nature damage every 5 sec for 45 sec.", // 12766 - https://www.wowhead.com/tbc/spell=12766
-		]
-	],
-	[
 		10696, // Enchanted Azsharite Felbane Sword
 		[
 			"Increases attack power by 33 when fighting Demons.", // 18079 - https://www.wowhead.com/tbc/spell=18079
@@ -37,12 +31,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		11810, // Force of Will
 		[
 			"When struck in combat has a 1% chance of reducing all melee damage taken by 25 for 10 sec.", // 15595 - https://www.wowhead.com/tbc/spell=15595
-		]
-	],
-	[
-		12185, // Bloodsail Admiral's Hat
-		[
-			"Right Click to summon and dismiss your bird.", // 17567 - https://www.wowhead.com/tbc/spell=17567
 		]
 	],
 	[
@@ -72,7 +60,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 	[
 		12709, // Pip's Skinner
 		[
-			"Skinning +10.", // 16718 - https://www.wowhead.com/tbc/spell=16718
 			"Increases attack power by 45 when fighting Beasts.", // 18067 - https://www.wowhead.com/tbc/spell=18067
 		]
 	],
@@ -113,21 +100,9 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		13353, // Book of the Dead
-		[
-			"Summons a Skeleton that will protect you for 1min.", // 17490 - https://www.wowhead.com/tbc/spell=17490
-		]
-	],
-	[
 		13375, // Crest of Retribution
 		[
 			"Deals 35 damage every time you block.", // 17496 - https://www.wowhead.com/tbc/spell=17496
-		]
-	],
-	[
-		13382, // Cannonball Runner
-		[
-			"Summons a cannon that will fire at enemies in front of it that are attacking you.", // 6251 - https://www.wowhead.com/tbc/spell=6251
 		]
 	],
 	[
@@ -149,27 +124,9 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		13544, // Spectral Essence
-		[
-			"", // 17623 - https://www.wowhead.com/tbc/spell=17623
-		]
-	],
-	[
 		13937, // Headmaster's Charge
 		[
 			"Gives 20 additional intellect to party members within 30 yards.", // 18264 - https://www.wowhead.com/tbc/spell=18264
-		]
-	],
-	[
-		14022, // Barov Peasant Caller
-		[
-			"Calls forth 3 servants of the House Barov that will fight, cook, and clean for you.", // 18307 - https://www.wowhead.com/tbc/spell=18307
-		]
-	],
-	[
-		14023, // Barov Peasant Caller
-		[
-			"Calls forth 3 servants of the House Barov that will fight, cook, and clean for you.", // 18308 - https://www.wowhead.com/tbc/spell=18308
 		]
 	],
 	[
@@ -215,12 +172,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		16022, // Arcanite Dragonling
-		[
-			"Activates your Arcanite Dragonling to fight for you for 1min.", // 19804 - https://www.wowhead.com/tbc/spell=19804
-		]
-	],
-	[
 		16391, // Knight-Lieutenant's Silk Gloves
 		[
 			"Increases the damage absorbed by your Mana Shield by 285.", // 23037 - https://www.wowhead.com/tbc/spell=23037
@@ -230,12 +181,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		16392, // Knight-Lieutenant's Leather Boots
 		[
 			"Increases the duration of your Sprint ability by 3.0 sec.", // 23049 - https://www.wowhead.com/tbc/spell=23049
-		]
-	],
-	[
-		16397, // Knight-Lieutenant's Dragonhide Gloves
-		[
-			"Slightly increases your stealth detection.", // 23217 - https://www.wowhead.com/tbc/spell=23217
 		]
 	],
 	[
@@ -269,12 +214,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		16448, // Marshal's Dragonhide Gauntlets
-		[
-			"Slightly increases your stealth detection.", // 23217 - https://www.wowhead.com/tbc/spell=23217
-		]
-	],
-	[
 		16463, // Marshal's Chain Grips
 		[
 			"Increases the damage done by your Multi-Shot by 5%.", // 28539 - https://www.wowhead.com/tbc/spell=28539
@@ -296,12 +235,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		16487, // Blood Guard's Silk Gloves
 		[
 			"Increases the damage absorbed by your Mana Shield by 285.", // 23037 - https://www.wowhead.com/tbc/spell=23037
-		]
-	],
-	[
-		16496, // Blood Guard's Dragonhide Gauntlets
-		[
-			"Slightly increases your stealth detection.", // 23217 - https://www.wowhead.com/tbc/spell=23217
 		]
 	],
 	[
@@ -338,12 +271,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		16548, // General's Plate Gauntlets
 		[
 			"Hamstring Rage cost reduced by -3.0.", // 22778 - https://www.wowhead.com/tbc/spell=22778
-		]
-	],
-	[
-		16555, // General's Dragonhide Gloves
-		[
-			"Slightly increases your stealth detection.", // 23217 - https://www.wowhead.com/tbc/spell=23217
 		]
 	],
 	[
@@ -395,12 +322,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		17067, // Ancient Cornerstone Grimoire
-		[
-			"Summons a Skeleton that will protect you for 1min.", // 17490 - https://www.wowhead.com/tbc/spell=17490
-		]
-	],
-	[
 		17082, // Shard of the Flame
 		[
 			"Restores 16 health per 5 sec.", // 23210 - https://www.wowhead.com/tbc/spell=23210
@@ -416,12 +337,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		17111, // Blazefury Medallion
 		[
 			"Adds 2 fire damage to your melee attacks.", // 7712 - https://www.wowhead.com/tbc/spell=7712
-		]
-	],
-	[
-		17142, // Shard of the Defiler
-		[
-			"", // 21079 - https://www.wowhead.com/tbc/spell=21079
 		]
 	],
 	[
@@ -494,7 +409,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		17759, // Mark of Resolution
 		[
 			"Absorbs 650 physical damage. Lasts 10s.", // 21956 - https://www.wowhead.com/tbc/spell=21956
-			"Increases your chance to resist Stun and Fear effects by 1%.", // 21958 - https://www.wowhead.com/tbc/spell=21958
 		]
 	],
 	[
@@ -618,12 +532,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		18639, // Ultra-Flash Shadow Reflector
 		[
 			"Reflects Shadow spells back at their caster for 5s. Chance to be resisted when used by players over level 60.", // 23132 - https://www.wowhead.com/tbc/spell=23132
-		]
-	],
-	[
-		18646, // The Eye of Divinity
-		[
-			"", // 23101 - https://www.wowhead.com/tbc/spell=23101
 		]
 	],
 	[
@@ -783,12 +691,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		19901, // Zulian Slicer
-		[
-			"Skinning +10.", // 24591 - https://www.wowhead.com/tbc/spell=24591
-		]
-	],
-	[
 		19930, // Mar'li's Eye
 		[
 			"Restores 60 mana every 5.0 sec for 30s.", // 24268 - https://www.wowhead.com/tbc/spell=24268
@@ -864,18 +766,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		19968, // Fiery Retributer
 		[
 			"Adds 2 fire damage to your melee attacks.", // 7712 - https://www.wowhead.com/tbc/spell=7712
-		]
-	],
-	[
-		19979, // Hook of the Master Angler
-		[
-			"Turns you into a fish giving water breath and increasing your movement speed, but attacking or casting while in this form breaks the effect. Does not work out of water or at the water's surface.", // 24347 - https://www.wowhead.com/tbc/spell=24347
-		]
-	],
-	[
-		19998, // Bloodvine Lens
-		[
-			"Slightly increases your stealth detection.", // 23217 - https://www.wowhead.com/tbc/spell=23217
 		]
 	],
 	[
@@ -993,12 +883,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		21326, // Defender of the Timbermaw
-		[
-			"Calls forth a Timbermaw Ancestor to fight at your side and heal you.", // 26066 - https://www.wowhead.com/tbc/spell=26066
-		]
-	],
-	[
 		21488, // Fetish of Chitinous Spikes
 		[
 			"Spikes sprout from you causing 25 Nature damage to attackers when hit. Lasts 30s.", // 26168 - https://www.wowhead.com/tbc/spell=26168
@@ -1014,12 +898,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		21526, // Band of Icy Depths
 		[
 			"Allows underwater breathing.", // 11789 - https://www.wowhead.com/tbc/spell=11789
-		]
-	],
-	[
-		21579, // Vanquished Tentacle of C'Thun
-		[
-			"Summons a Vanquished Tentacle to your aid for 30s.", // 26391 - https://www.wowhead.com/tbc/spell=26391
 		]
 	],
 	[
@@ -1053,27 +931,9 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		21784, // Figurine - Black Diamond Crab
-		[
-			"Reduces melee damage taken by 35 for 20s.", // 26609 - https://www.wowhead.com/tbc/spell=26609
-		]
-	],
-	[
-		21789, // Figurine - Dark Iron Scorpid
-		[
-			"Every swing poisons your foe for 15 damage every second for 20s.", // 26614 - https://www.wowhead.com/tbc/spell=26614
-		]
-	],
-	[
 		21891, // Shard of the Fallen Star
 		[
 			"Calls down a meteor, burning all enemies within the area for 442 total Fire damage.", // 26789 - https://www.wowhead.com/tbc/spell=26789
-		]
-	],
-	[
-		22003, // Darkmantle Boots
-		[
-			"Increases your effective stealth level.", // 27037 - https://www.wowhead.com/tbc/spell=27037
 		]
 	],
 	[
@@ -1209,12 +1069,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		22863, // Blood Guard's Dragonhide Grips
-		[
-			"Slightly increases your stealth detection.", // 23217 - https://www.wowhead.com/tbc/spell=23217
-		]
-	],
-	[
 		22865, // Blood Guard's Dreadweave Handwraps
 		[
 			"Gives you a 50% chance to avoid interruption caused by damage while casting Searing Pain.", // 23046 - https://www.wowhead.com/tbc/spell=23046
@@ -1278,12 +1132,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		23072, // Fists of the Unrelenting
 		[
 			"Disarm duration reduced by 50%.", // 43588 - https://www.wowhead.com/tbc/spell=43588
-		]
-	],
-	[
-		23073, // Boots of Displacement
-		[
-			"Increases your effective stealth level.", // 27037 - https://www.wowhead.com/tbc/spell=27037
 		]
 	],
 	[
@@ -1413,12 +1261,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		23238, // Stygian Buckler
-		[
-			"When struck has a 15% chance of reducing the attacker's movement speed by 50% for 5 secs. Chance to fizzle against targets over level 60.", // 29164 - https://www.wowhead.com/tbc/spell=29164
-		]
-	],
-	[
 		23274, // Knight-Lieutenant's Lamellar Gauntlets
 		[
 			"Increases the Holy damage bonus of your Judgement of the Crusader by 20.", // 23300 - https://www.wowhead.com/tbc/spell=23300
@@ -1428,12 +1270,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		23279, // Knight-Lieutenant's Chain Vices
 		[
 			"Increases the damage done by your Multi-Shot by 5%.", // 28539 - https://www.wowhead.com/tbc/spell=28539
-		]
-	],
-	[
-		23280, // Knight-Lieutenant's Dragonhide Grips
-		[
-			"Slightly increases your stealth detection.", // 23217 - https://www.wowhead.com/tbc/spell=23217
 		]
 	],
 	[
@@ -1503,18 +1339,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		23762, // Ultra-Spectropic Detection Goggles
-		[
-			"Shows the location of all nearby gas clouds on the minimap.", // 30645 - https://www.wowhead.com/tbc/spell=30645
-		]
-	],
-	[
-		23763, // Hyper-Vision Goggles
-		[
-			"Increases your stealth detection for 15s.", // 30249 - https://www.wowhead.com/tbc/spell=30249
-		]
-	],
-	[
 		23824, // Rocket Boots Xtreme
 		[
 			"Engage the rocket boots to greatly increase your speed... most of the time.", // 51582 - https://www.wowhead.com/tbc/spell=51582
@@ -1536,18 +1360,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		23836, // Goblin Rocket Launcher
 		[
 			"Fire a powerful rocket at the enemy that does 1440 damage and stuns them for 3 sec. This thing has quite a kick though...", // 46567 - https://www.wowhead.com/tbc/spell=46567
-		]
-	],
-	[
-		23838, // Foreman's Enchanted Helmet
-		[
-			"+10% Stun Resistance.", // 40386 - https://www.wowhead.com/tbc/spell=40386
-		]
-	],
-	[
-		23839, // Foreman's Reinforced Helmet
-		[
-			"Increases your chance to resist Stun and Disorient effects by 10%.", // 30519 - https://www.wowhead.com/tbc/spell=30519
 		]
 	],
 	[
@@ -1617,21 +1429,9 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		24124, // Figurine - Felsteel Boar
-		[
-			"Summons the Felsteel Boar to fight for you for 30 seconds.", // 31038 - https://www.wowhead.com/tbc/spell=31038
-		]
-	],
-	[
 		24127, // Figurine - Talasite Owl
 		[
 			"Restores 900 mana over 12s.", // 31045 - https://www.wowhead.com/tbc/spell=31045
-		]
-	],
-	[
-		24128, // Figurine - Nightseye Panther
-		[
-			"Increases your effective stealth level by 1.", // 17746 - https://www.wowhead.com/tbc/spell=17746
 		]
 	],
 	[
@@ -1695,12 +1495,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		25653, // Riding Crop
-		[
-			"Increases mount speed by 10%.", // 48776 - https://www.wowhead.com/tbc/spell=48776
-		]
-	],
-	[
 		25667, // Idol of the Beast
 		[
 			"Increases damage done by Ferocious Bite by 14 per combo point.", // 32410 - https://www.wowhead.com/tbc/spell=32410
@@ -1755,12 +1549,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		25978, // Seth's Graphite Fishing Pole
-		[
-			"Increased Fishing +20.", // 7826 - https://www.wowhead.com/tbc/spell=7826
-		]
-	],
-	[
 		25996, // Emblem of Perseverance
 		[
 			"Increases defense rating by 80 for 15s.", // 32957 - https://www.wowhead.com/tbc/spell=32957
@@ -1782,12 +1570,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		27416, // Fetish of the Fallen
 		[
 			"The next opponent killed within 15s that yields experience or honor will restore 900 health.", // 33014 - https://www.wowhead.com/tbc/spell=33014
-		]
-	],
-	[
-		27467, // Silent-Strider Kneeboots
-		[
-			"Increases your effective stealth level by 1.", // 17746 - https://www.wowhead.com/tbc/spell=17746
 		]
 	],
 	[
@@ -1985,12 +1767,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		28111, // Everlasting Underspore Frond
-		[
-			"Creates 10 edible Underspore Pods.", // 33770 - https://www.wowhead.com/tbc/spell=33770
-		]
-	],
-	[
 		28126, // Gladiator's Dragonhide Gloves
 		[
 			"Reduces the cast time of your Cyclone spell by -0.1 sec.", // 33830 - https://www.wowhead.com/tbc/spell=33830
@@ -2000,66 +1776,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		28136, // Gladiator's Wyrmhide Gloves
 		[
 			"Reduces the cast time of your Cyclone spell by -0.1 sec.", // 33830 - https://www.wowhead.com/tbc/spell=33830
-		]
-	],
-	[
-		28234, // Medallion of the Alliance
-		[
-			"Removes all movement impairing effects and all effects which cause loss of control of your character.", // 42292 - https://www.wowhead.com/tbc/spell=42292
-		]
-	],
-	[
-		28235, // Medallion of the Alliance
-		[
-			"Removes all movement impairing effects and all effects which cause loss of control of your character.", // 42292 - https://www.wowhead.com/tbc/spell=42292
-		]
-	],
-	[
-		28236, // Medallion of the Alliance
-		[
-			"Removes all movement impairing effects and all effects which cause loss of control of your character.", // 42292 - https://www.wowhead.com/tbc/spell=42292
-		]
-	],
-	[
-		28237, // Medallion of the Alliance
-		[
-			"Removes all movement impairing effects and all effects which cause loss of control of your character.", // 42292 - https://www.wowhead.com/tbc/spell=42292
-		]
-	],
-	[
-		28238, // Medallion of the Alliance
-		[
-			"Removes all movement impairing effects and all effects which cause loss of control of your character.", // 42292 - https://www.wowhead.com/tbc/spell=42292
-		]
-	],
-	[
-		28239, // Medallion of the Horde
-		[
-			"Removes all movement impairing effects and all effects which cause loss of control of your character.", // 42292 - https://www.wowhead.com/tbc/spell=42292
-		]
-	],
-	[
-		28240, // Medallion of the Horde
-		[
-			"Removes all movement impairing effects and all effects which cause loss of control of your character.", // 42292 - https://www.wowhead.com/tbc/spell=42292
-		]
-	],
-	[
-		28241, // Medallion of the Horde
-		[
-			"Removes all movement impairing effects and all effects which cause loss of control of your character.", // 42292 - https://www.wowhead.com/tbc/spell=42292
-		]
-	],
-	[
-		28242, // Medallion of the Horde
-		[
-			"Removes all movement impairing effects and all effects which cause loss of control of your character.", // 42292 - https://www.wowhead.com/tbc/spell=42292
-		]
-	],
-	[
-		28243, // Medallion of the Horde
-		[
-			"Removes all movement impairing effects and all effects which cause loss of control of your character.", // 42292 - https://www.wowhead.com/tbc/spell=42292
 		]
 	],
 	[
@@ -2108,24 +1824,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		28372, // Idol of Feral Shadows
 		[
 			"Increases periodic damage done by Rip by 7 per combo point.", // 34241 - https://www.wowhead.com/tbc/spell=34241
-		]
-	],
-	[
-		28428, // Lionheart Blade
-		[
-			"Increases your chance to resist Fear effects by 5%.", // 34514 - https://www.wowhead.com/tbc/spell=34514
-		]
-	],
-	[
-		28429, // Lionheart Champion
-		[
-			"Increases your chance to resist Fear effects by 5%.", // 34514 - https://www.wowhead.com/tbc/spell=34514
-		]
-	],
-	[
-		28430, // Lionheart Executioner
-		[
-			"Increases your chance to resist Fear effects by 8%.", // 34515 - https://www.wowhead.com/tbc/spell=34515
 		]
 	],
 	[
@@ -2339,18 +2037,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		29108, // Blade of the Unyielding
-		[
-			"", // 38162 - https://www.wowhead.com/tbc/spell=38162
-		]
-	],
-	[
-		29109, // Rod of the Unyielding
-		[
-			"", // 38162 - https://www.wowhead.com/tbc/spell=38162
-		]
-	],
-	[
 		29181, // Timelapse Shard
 		[
 			"Reduces your threat to enemy targets within 30 yards, making them less likely to attack you.", // 35352 - https://www.wowhead.com/tbc/spell=35352
@@ -2483,12 +2169,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		30314, // Phaseshift Bulwark
-		[
-			"Shields the caster, absorbing 100000 damage and making the caster immune to Fear and Snare effects for 4s.", // 36481 - https://www.wowhead.com/tbc/spell=36481
-		]
-	],
-	[
 		30316, // Devastation
 		[
 			"Increases your movement speed by 50%, and your melee attack speed by 20% for 30s.", // 36479 - https://www.wowhead.com/tbc/spell=36479
@@ -2504,54 +2184,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		30318, // Netherstrand Longbow
 		[
 			"Increases your ranged weapon critical strike damage bonus by 50%.", // 36413 - https://www.wowhead.com/tbc/spell=36413
-		]
-	],
-	[
-		30343, // Medallion of the Horde
-		[
-			"Removes all movement impairing effects and all effects which cause loss of control of your character.", // 42292 - https://www.wowhead.com/tbc/spell=42292
-		]
-	],
-	[
-		30344, // Medallion of the Horde
-		[
-			"Removes all movement impairing effects and all effects which cause loss of control of your character.", // 42292 - https://www.wowhead.com/tbc/spell=42292
-		]
-	],
-	[
-		30345, // Medallion of the Horde
-		[
-			"Removes all movement impairing effects and all effects which cause loss of control of your character.", // 42292 - https://www.wowhead.com/tbc/spell=42292
-		]
-	],
-	[
-		30346, // Medallion of the Horde
-		[
-			"Removes all movement impairing effects and all effects which cause loss of control of your character.", // 42292 - https://www.wowhead.com/tbc/spell=42292
-		]
-	],
-	[
-		30348, // Medallion of the Alliance
-		[
-			"Removes all movement impairing effects and all effects which cause loss of control of your character.", // 42292 - https://www.wowhead.com/tbc/spell=42292
-		]
-	],
-	[
-		30349, // Medallion of the Alliance
-		[
-			"Removes all movement impairing effects and all effects which cause loss of control of your character.", // 42292 - https://www.wowhead.com/tbc/spell=42292
-		]
-	],
-	[
-		30350, // Medallion of the Alliance
-		[
-			"Removes all movement impairing effects and all effects which cause loss of control of your character.", // 42292 - https://www.wowhead.com/tbc/spell=42292
-		]
-	],
-	[
-		30351, // Medallion of the Alliance
-		[
-			"Removes all movement impairing effects and all effects which cause loss of control of your character.", // 42292 - https://www.wowhead.com/tbc/spell=42292
 		]
 	],
 	[
@@ -2695,57 +2327,9 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		31104, // Evoker's Helmet of Second Sight
-		[
-			"Allows the bearer to see into the ghost world while in Shadowmoon Valley.", // 39841 - https://www.wowhead.com/tbc/spell=39841
-		]
-	],
-	[
-		31105, // Overlord's Helmet of Second Sight
-		[
-			"Allows the bearer to see into the ghost world while in Shadowmoon Valley.", // 39841 - https://www.wowhead.com/tbc/spell=39841
-		]
-	],
-	[
-		31106, // Stalker's Helmet of Second Sight
-		[
-			"Allows the bearer to see into the ghost world while in Shadowmoon Valley.", // 39841 - https://www.wowhead.com/tbc/spell=39841
-		]
-	],
-	[
-		31107, // Shamanistic Helmet of Second Sight
-		[
-			"Allows the bearer to see into the ghost world while in Shadowmoon Valley.", // 39841 - https://www.wowhead.com/tbc/spell=39841
-		]
-	],
-	[
-		31109, // Stealther's Helmet of Second Sight
-		[
-			"Allows the bearer to see into the ghost world while in Shadowmoon Valley.", // 39841 - https://www.wowhead.com/tbc/spell=39841
-		]
-	],
-	[
-		31110, // Druidic Helmet of Second Sight
-		[
-			"Allows the bearer to see into the ghost world while in Shadowmoon Valley.", // 39841 - https://www.wowhead.com/tbc/spell=39841
-		]
-	],
-	[
-		31288, // The Master's Treads
-		[
-			"Increases your effective stealth level by 1.", // 17746 - https://www.wowhead.com/tbc/spell=17746
-		]
-	],
-	[
 		31328, // Leggings of Beast Mastery
 		[
 			"Increases your pet's attack power by 70, armor by 490 and Stamina by 52.", // 38297 - https://www.wowhead.com/tbc/spell=38297
-		]
-	],
-	[
-		31333, // The Night Watchman
-		[
-			"Slightly increases your stealth detection.", // 23217 - https://www.wowhead.com/tbc/spell=23217
 		]
 	],
 	[
@@ -3031,12 +2615,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		32235, // Cursed Vision of Sargeras
-		[
-			"Shows the location of all nearby demons on the minimap until cancelled. Only one form of tracking can be active at a time.", // 47524 - https://www.wowhead.com/tbc/spell=47524
-		]
-	],
-	[
 		32257, // Idol of the White Stag
 		[
 			"Your Mangle ability also increases your attack power by 94 for 20s.", // 41037 - https://www.wowhead.com/tbc/spell=41037
@@ -3070,78 +2648,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		32387, // Idol of the Raven Goddess
 		[
 			"Increases the healing granted by the Tree of Life form aura by 44, adds 20 critical strike rating to the Leader of the Pack aura, and adds 20 spell critical strike rating to the Moonkin form aura.", // 39926 - https://www.wowhead.com/tbc/spell=39926
-		]
-	],
-	[
-		32461, // Furious Gizmatic Goggles
-		[
-			"Shows the location of all nearby gas clouds on the minimap.", // 30645 - https://www.wowhead.com/tbc/spell=30645
-			"Slightly increases your stealth detection.", // 40273 - https://www.wowhead.com/tbc/spell=40273
-			"Allows you to look far into the distance.", // 12883 - https://www.wowhead.com/tbc/spell=12883
-		]
-	],
-	[
-		32472, // Justicebringer 2000 Specs
-		[
-			"Shows the location of all nearby gas clouds on the minimap.", // 30645 - https://www.wowhead.com/tbc/spell=30645
-			"Slightly increases your stealth detection.", // 40273 - https://www.wowhead.com/tbc/spell=40273
-			"Allows you to look far into the distance.", // 12883 - https://www.wowhead.com/tbc/spell=12883
-		]
-	],
-	[
-		32473, // Tankatronic Goggles
-		[
-			"Shows the location of all nearby gas clouds on the minimap.", // 30645 - https://www.wowhead.com/tbc/spell=30645
-			"Slightly increases your stealth detection.", // 40273 - https://www.wowhead.com/tbc/spell=40273
-			"Allows you to look far into the distance.", // 12883 - https://www.wowhead.com/tbc/spell=12883
-		]
-	],
-	[
-		32474, // Surestrike Goggles v2.0
-		[
-			"Shows the location of all nearby gas clouds on the minimap.", // 30645 - https://www.wowhead.com/tbc/spell=30645
-			"Slightly increases your stealth detection.", // 40273 - https://www.wowhead.com/tbc/spell=40273
-			"Allows you to look far into the distance.", // 12883 - https://www.wowhead.com/tbc/spell=12883
-		]
-	],
-	[
-		32475, // Living Replicator Specs
-		[
-			"Shows the location of all nearby gas clouds on the minimap.", // 30645 - https://www.wowhead.com/tbc/spell=30645
-			"Slightly increases your stealth detection.", // 40273 - https://www.wowhead.com/tbc/spell=40273
-			"Allows you to look far into the distance.", // 12883 - https://www.wowhead.com/tbc/spell=12883
-		]
-	],
-	[
-		32476, // Gadgetstorm Goggles
-		[
-			"Shows the location of all nearby gas clouds on the minimap.", // 30645 - https://www.wowhead.com/tbc/spell=30645
-			"Slightly increases your stealth detection.", // 40273 - https://www.wowhead.com/tbc/spell=40273
-			"Allows you to look far into the distance.", // 12883 - https://www.wowhead.com/tbc/spell=12883
-		]
-	],
-	[
-		32478, // Deathblow X11 Goggles
-		[
-			"Shows the location of all nearby gas clouds on the minimap.", // 30645 - https://www.wowhead.com/tbc/spell=30645
-			"Slightly increases your stealth detection.", // 40273 - https://www.wowhead.com/tbc/spell=40273
-			"Allows you to look far into the distance.", // 12883 - https://www.wowhead.com/tbc/spell=12883
-		]
-	],
-	[
-		32479, // Wonderheal XT40 Shades
-		[
-			"Shows the location of all nearby gas clouds on the minimap.", // 30645 - https://www.wowhead.com/tbc/spell=30645
-			"Slightly increases your stealth detection.", // 40273 - https://www.wowhead.com/tbc/spell=40273
-			"Allows you to look far into the distance.", // 12883 - https://www.wowhead.com/tbc/spell=12883
-		]
-	],
-	[
-		32480, // Magnified Moon Specs
-		[
-			"Shows the location of all nearby gas clouds on the minimap.", // 30645 - https://www.wowhead.com/tbc/spell=30645
-			"Slightly increases your stealth detection.", // 40273 - https://www.wowhead.com/tbc/spell=40273
-			"Allows you to look far into the distance.", // 12883 - https://www.wowhead.com/tbc/spell=12883
 		]
 	],
 	[
@@ -3205,22 +2711,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		32494, // Destruction Holo-gogs
-		[
-			"Shows the location of all nearby gas clouds on the minimap.", // 30645 - https://www.wowhead.com/tbc/spell=30645
-			"Slightly increases your stealth detection.", // 40273 - https://www.wowhead.com/tbc/spell=40273
-			"Allows you to look far into the distance.", // 12883 - https://www.wowhead.com/tbc/spell=12883
-		]
-	],
-	[
-		32495, // Powerheal 4000 Lens
-		[
-			"Shows the location of all nearby gas clouds on the minimap.", // 30645 - https://www.wowhead.com/tbc/spell=30645
-			"Slightly increases your stealth detection.", // 40273 - https://www.wowhead.com/tbc/spell=40273
-			"Allows you to look far into the distance.", // 12883 - https://www.wowhead.com/tbc/spell=12883
-		]
-	],
-	[
 		32496, // Memento of Tyrande
 		[
 			"Each time you cast a spell, there is chance you will gain up to 76 mana per 5 for 15s.", // 37656 - https://www.wowhead.com/tbc/spell=37656
@@ -3254,36 +2744,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		32539, // Skyguard's Drape
 		[
 			"Reduces your fall speed for 10s.", // 12438 - https://www.wowhead.com/tbc/spell=12438
-		]
-	],
-	[
-		32694, // Overseer's Badge
-		[
-			"Calls forth a Netherwing Ally to fight at your side in Shadowmoon Valley.", // 40811 - https://www.wowhead.com/tbc/spell=40811
-		]
-	],
-	[
-		32695, // Captain's Badge
-		[
-			"Calls forth a Netherwing Ally to fight at your side.", // 40815 - https://www.wowhead.com/tbc/spell=40815
-		]
-	],
-	[
-		32782, // Time-Lost Figurine
-		[
-			"Transforms caster to have the appearance of a Skettis arakkoa.", // 41301 - https://www.wowhead.com/tbc/spell=41301
-		]
-	],
-	[
-		32863, // Skybreaker Whip
-		[
-			"Increases mount speed by 10%.", // 48776 - https://www.wowhead.com/tbc/spell=48776
-		]
-	],
-	[
-		32864, // Commander's Badge
-		[
-			"Calls forth a Netherwing Ally to fight at your side.", // 40815 - https://www.wowhead.com/tbc/spell=40815
 		]
 	],
 	[
@@ -3469,7 +2929,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 	[
 		33820, // Weather-Beaten Fishing Hat
 		[
-			"Increased Fishing +5.", // 7823 - https://www.wowhead.com/tbc/spell=7823
 			"Attach a lure to your equipped fishing pole, increasing Fishing by 75 for 10 min.", // 43699 - https://www.wowhead.com/tbc/spell=43699
 		]
 	],
@@ -3600,56 +3059,10 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		34029, // Tiny Voodoo Mask
-		[
-			"Calls forth 3 Voodoo Gnomes to destroy your enemies.", // 43995 - https://www.wowhead.com/tbc/spell=43995
-		]
-	],
-	[
 		34334, // Thori'dal, the Stars' Fury
 		[
 			"Increases ranged attack speed by 15%. Does not stack with quiver or ammo pouch haste effects.", // 44972 - https://www.wowhead.com/tbc/spell=44972
 			"Thori'dal generates magical arrows when the bow string is drawn. Does not use ammo.", // 46699 - https://www.wowhead.com/tbc/spell=46699
-		]
-	],
-	[
-		34353, // Quad Deathblow X44 Goggles
-		[
-			"Shows the location of all nearby gas clouds on the minimap.", // 30645 - https://www.wowhead.com/tbc/spell=30645
-			"Slightly increases your stealth detection.", // 40273 - https://www.wowhead.com/tbc/spell=40273
-			"Allows you to look far into the distance.", // 12883 - https://www.wowhead.com/tbc/spell=12883
-		]
-	],
-	[
-		34354, // Mayhem Projection Goggles
-		[
-			"Shows the location of all nearby gas clouds on the minimap.", // 30645 - https://www.wowhead.com/tbc/spell=30645
-			"Slightly increases your stealth detection.", // 40273 - https://www.wowhead.com/tbc/spell=40273
-			"Allows you to look far into the distance.", // 12883 - https://www.wowhead.com/tbc/spell=12883
-		]
-	],
-	[
-		34355, // Lightning Etched Specs
-		[
-			"Shows the location of all nearby gas clouds on the minimap.", // 30645 - https://www.wowhead.com/tbc/spell=30645
-			"Slightly increases your stealth detection.", // 40273 - https://www.wowhead.com/tbc/spell=40273
-			"Allows you to look far into the distance.", // 12883 - https://www.wowhead.com/tbc/spell=12883
-		]
-	],
-	[
-		34356, // Surestrike Goggles v3.0
-		[
-			"Shows the location of all nearby gas clouds on the minimap.", // 30645 - https://www.wowhead.com/tbc/spell=30645
-			"Slightly increases your stealth detection.", // 40273 - https://www.wowhead.com/tbc/spell=40273
-			"Allows you to look far into the distance.", // 12883 - https://www.wowhead.com/tbc/spell=12883
-		]
-	],
-	[
-		34357, // Hard Khorium Goggles
-		[
-			"Shows the location of all nearby gas clouds on the minimap.", // 30645 - https://www.wowhead.com/tbc/spell=30645
-			"Slightly increases your stealth detection.", // 40273 - https://www.wowhead.com/tbc/spell=40273
-			"Allows you to look far into the distance.", // 12883 - https://www.wowhead.com/tbc/spell=12883
 		]
 	],
 	[
@@ -3711,14 +3124,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		34680, // Shattered Sun Pendant of Resolve
 		[
 			"Your melee and ranged attacks have a chance to call on the power of the Arcane if you're exalted with the Scryers, or the Light if you're exalted with the Aldor.", // 45483 - https://www.wowhead.com/tbc/spell=45483
-		]
-	],
-	[
-		34847, // Annihilator Holo-Gogs
-		[
-			"Shows the location of all nearby gas clouds on the minimap.", // 30645 - https://www.wowhead.com/tbc/spell=30645
-			"Slightly increases your stealth detection.", // 40273 - https://www.wowhead.com/tbc/spell=40273
-			"Allows you to look far into the distance.", // 12883 - https://www.wowhead.com/tbc/spell=12883
 		]
 	],
 	[
@@ -3878,46 +3283,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		35181, // Powerheal 9000 Lens
-		[
-			"Shows the location of all nearby gas clouds on the minimap.", // 30645 - https://www.wowhead.com/tbc/spell=30645
-			"Slightly increases your stealth detection.", // 40273 - https://www.wowhead.com/tbc/spell=40273
-			"Allows you to look far into the distance.", // 12883 - https://www.wowhead.com/tbc/spell=12883
-		]
-	],
-	[
-		35182, // Hyper-Magnified Moon Specs
-		[
-			"Shows the location of all nearby gas clouds on the minimap.", // 30645 - https://www.wowhead.com/tbc/spell=30645
-			"Slightly increases your stealth detection.", // 40273 - https://www.wowhead.com/tbc/spell=40273
-			"Allows you to look far into the distance.", // 12883 - https://www.wowhead.com/tbc/spell=12883
-		]
-	],
-	[
-		35183, // Wonderheal XT68 Shades
-		[
-			"Shows the location of all nearby gas clouds on the minimap.", // 30645 - https://www.wowhead.com/tbc/spell=30645
-			"Slightly increases your stealth detection.", // 40273 - https://www.wowhead.com/tbc/spell=40273
-			"Allows you to look far into the distance.", // 12883 - https://www.wowhead.com/tbc/spell=12883
-		]
-	],
-	[
-		35184, // Primal-Attuned Goggles
-		[
-			"Shows the location of all nearby gas clouds on the minimap.", // 30645 - https://www.wowhead.com/tbc/spell=30645
-			"Slightly increases your stealth detection.", // 40273 - https://www.wowhead.com/tbc/spell=40273
-			"Allows you to look far into the distance.", // 12883 - https://www.wowhead.com/tbc/spell=12883
-		]
-	],
-	[
-		35185, // Justicebringer 3000 Specs
-		[
-			"Shows the location of all nearby gas clouds on the minimap.", // 30645 - https://www.wowhead.com/tbc/spell=30645
-			"Slightly increases your stealth detection.", // 40273 - https://www.wowhead.com/tbc/spell=40273
-			"Allows you to look far into the distance.", // 12883 - https://www.wowhead.com/tbc/spell=12883
-		]
-	],
-	[
 		35275, // Orb of the Sin'dorei
 		[
 			"Disguises the user as a blood elf.", // 46354 - https://www.wowhead.com/tbc/spell=46354
@@ -4056,45 +3421,9 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		35694, // Figurine - Khorium Boar
-		[
-			"Summons the Khorium Boar to fight for you for 30 sec.", // 46782 - https://www.wowhead.com/tbc/spell=46782
-		]
-	],
-	[
-		35702, // Figurine - Shadowsong Panther
-		[
-			"Increases your effective stealth level by 1.", // 17746 - https://www.wowhead.com/tbc/spell=17746
-		]
-	],
-	[
 		35703, // Figurine - Seaspray Albatross
 		[
 			"Restores 900 mana over 12s.", // 46785 - https://www.wowhead.com/tbc/spell=46785
-		]
-	],
-	[
-		37127, // Brightbrew Charm
-		[
-			"Right Click to summon the Brewmaiden, whose very presence bolsters a party's vigor. Wave at her for Brewfest Brew!", // 48041 - https://www.wowhead.com/tbc/spell=48041
-		]
-	],
-	[
-		37128, // Balebrew Charm
-		[
-			"Right Click to summon the Black Brewmaiden, who will smite your foes with your empty tankards. Wave at her for Brewfest Brew!", // 48042 - https://www.wowhead.com/tbc/spell=48042
-		]
-	],
-	[
-		37864, // Medallion of the Alliance
-		[
-			"Removes all movement impairing effects and all effects which cause loss of control of your character.", // 42292 - https://www.wowhead.com/tbc/spell=42292
-		]
-	],
-	[
-		37865, // Medallion of the Horde
-		[
-			"Removes all movement impairing effects and all effects which cause loss of control of your character.", // 42292 - https://www.wowhead.com/tbc/spell=42292
 		]
 	],
 	[
@@ -4113,7 +3442,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		38506, // Don Carlos' Famous Hat
 		[
 			"", // 52172 - https://www.wowhead.com/tbc/spell=52172
-			"Right Click to summon an incorporeal coyote spirit to accompany you. The spirit will remain until sent away or you remove the hat.", // 51149 - https://www.wowhead.com/tbc/spell=51149
 		]
 	],
 ])
