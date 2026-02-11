@@ -1103,12 +1103,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		23040, // Glyph of Deflection
-		[
-			"Increases the block value of your shield by 235 for 20s.", // 28773 - https://www.wowhead.com/tbc/spell=28773
-		]
-	],
-	[
 		23072, // Fists of the Unrelenting
 		[
 			"Disarm duration reduced by 50%.", // 43588 - https://www.wowhead.com/tbc/spell=43588
@@ -1711,12 +1705,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		28042, // Regal Protectorate
-		[
-			"Increases maximum health by 900 for 15s.", // 33668 - https://www.wowhead.com/tbc/spell=33668
-		]
-	],
-	[
 		28064, // Idol of the Wild
 		[
 			"Increases the damage dealt by Mangle (Cat) by 24 and the damage dealt by Mangle (Bear) by 52.", // 37736 - https://www.wowhead.com/tbc/spell=37736
@@ -1933,12 +1921,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		28789, // Eye of Magtheridon
-		[
-			"Grants 170 increased spell damage for 10s when one of your spells is resisted.", // 34747 - https://www.wowhead.com/tbc/spell=34747
-		]
-	],
-	[
 		28806, // High Warlord's Chain Gauntlets
 		[
 			"Increases the damage done by your Multi-Shot by 5%.", // 28539 - https://www.wowhead.com/tbc/spell=28539
@@ -2041,12 +2023,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		29387, // Gnomeregan Auto-Blocker 600
-		[
-			"Increases the block value of your shield by 200 for 20s.", // 35169 - https://www.wowhead.com/tbc/spell=35169
-		]
-	],
-	[
 		29388, // Libram of Repentance
 		[
 			"Increases your block rating by 42 while Holy Shield is active.", // 37742 - https://www.wowhead.com/tbc/spell=37742
@@ -2137,12 +2113,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		30300, // Dabiri's Enigma
-		[
-			"Increases block rating by 125 for 15s.", // 36372 - https://www.wowhead.com/tbc/spell=36372
-		]
-	],
-	[
 		30311, // Warp Slicer
 		[
 			"Increases your movement speed by 50%, and your melee attack speed by 20% for 30s.", // 36479 - https://www.wowhead.com/tbc/spell=36479
@@ -2164,12 +2134,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		30318, // Netherstrand Longbow
 		[
 			"Increases your ranged weapon critical strike damage bonus by 50%.", // 36413 - https://www.wowhead.com/tbc/spell=36413
-		]
-	],
-	[
-		30446, // Solarian's Sapphire
-		[
-			"Your Battle Shout ability grants an additional 70 attack power.", // 37536 - https://www.wowhead.com/tbc/spell=37536
 		]
 	],
 	[
@@ -2200,25 +2164,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		30619, // Fel Reaver's Piston
 		[
 			"Your direct healing spells have a chance to place a heal over time on your target, healing 500 over 12s.", // 38324 - https://www.wowhead.com/tbc/spell=38324
-		]
-	],
-	[
-		30620, // Spyglass of the Hidden Fleet
-		[
-			"Heals 1300 damage over 12s.", // 38325 - https://www.wowhead.com/tbc/spell=38325
-		]
-	],
-	[
-		30621, // Prism of Inner Calm
-		[
-			"Reduces the threat from your harmful critical strikes.", // 38329 - https://www.wowhead.com/tbc/spell=38329
-			"", // 38328 - https://www.wowhead.com/tbc/spell=38328
-		]
-	],
-	[
-		30626, // Sextant of Unstable Currents
-		[
-			"Your spell critical strikes have a chance to increase your spell damage and healing by 190 for 15s.", // 38348 - https://www.wowhead.com/tbc/spell=38348
 		]
 	],
 	[
@@ -2691,18 +2636,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		32501, // Shadowmoon Insignia
-		[
-			"Increases your maximum health by 1750 for 20s.", // 40464 - https://www.wowhead.com/tbc/spell=40464
-		]
-	],
-	[
-		32534, // Brooch of the Immortal King
-		[
-			"Increases maximum health by 1250 for 15s.", // 40538 - https://www.wowhead.com/tbc/spell=40538
-		]
-	],
-	[
 		32538, // Skywitch's Drape
 		[
 			"Reduces your fall speed for 10s.", // 12438 - https://www.wowhead.com/tbc/spell=12438
@@ -3031,12 +2964,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		[
 			"Increases ranged attack speed by 15%. Does not stack with quiver or ammo pouch haste effects.", // 44972 - https://www.wowhead.com/tbc/spell=44972
 			"Thori'dal generates magical arrows when the bow string is drawn. Does not use ammo.", // 46699 - https://www.wowhead.com/tbc/spell=46699
-		]
-	],
-	[
-		34428, // Steely Naaru Sliver
-		[
-			"Increases maximum health by 2000 for 15s.", // 45049 - https://www.wowhead.com/tbc/spell=45049
 		]
 	],
 	[
@@ -3398,12 +3325,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		38175, // The Horseman's Blade
 		[
 			"Summon Pumpkin Soldiers to burn your foes.", // 50070 - https://www.wowhead.com/tbc/spell=50070
-		]
-	],
-	[
-		38289, // Coren's Lucky Coin
-		[
-			"Increases the block value of your shield by 200 for 20s.", // 51952 - https://www.wowhead.com/tbc/spell=51952
 		]
 	],
 	[
