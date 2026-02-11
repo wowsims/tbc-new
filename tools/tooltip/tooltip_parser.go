@@ -1049,6 +1049,7 @@ func ParseTooltip(tooltip string, dataProvider TooltipDataProvider, spellId int6
 				// Complex values can evaluate to string or float - use float and parse
 				result := c.VariableAssignment.Value.String(ctx)
 				f, e := strconv.ParseFloat(result, 64)
+
 				if e != nil {
 					panic("[" + strconv.FormatInt(spellId, 10) + "] Variable description result does not evaluate to float.")
 				}

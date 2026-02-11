@@ -318,6 +318,7 @@ func getMatchingRatingMods(value int) []RatingModType {
 	allMods := []RatingModType{
 		RATING_MOD_DODGE,
 		RATING_MOD_PARRY,
+		RATING_MOD_BLOCK,
 		RATING_MOD_HIT_MELEE,
 		RATING_MOD_HIT_RANGED,
 		RATING_MOD_HIT_SPELL,
@@ -351,8 +352,10 @@ func getMatchingRatingMods(value int) []RatingModType {
 }
 
 var RatingModToStat = map[RatingModType]proto.Stat{
+	RATING_MOD_DEFENSE:      proto.Stat_StatDefenseRating,
 	RATING_MOD_DODGE:        proto.Stat_StatDodgeRating,
 	RATING_MOD_PARRY:        proto.Stat_StatParryRating,
+	RATING_MOD_BLOCK:        proto.Stat_StatBlockRating,
 	RATING_MOD_HIT_MELEE:    proto.Stat_StatMeleeHitRating,
 	RATING_MOD_HIT_RANGED:   proto.Stat_StatMeleeHitRating,
 	RATING_MOD_HIT_SPELL:    proto.Stat_StatSpellHitRating,
@@ -449,3 +452,39 @@ var Classes = []DbcClass{
 // 	}
 // 	return proto.Spec_SpecUnknown
 // }
+
+// Used to map ITEM_SPELLTRIGGER_CHANCE_ON_HIT items using PPM
+// which is not available in the gamefiles.
+// Adding PPM values here will prevent filtering of the item
+// when parsing in item_effect.go#MergeItemEffectsForAllStates.
+var MapItemIdToPPM = map[int32]float64{
+	12798: 1, // Annihilator
+	// 19019: 6,    // Thunderfury
+	// 22559: 1,    // Mongoose
+	28579: 1,    // Romulo's Poison Vial
+	28429: 1,    // Lionheart Champion
+	28430: 1,    // Lionheart Executioner
+	28437: 1,    // Drakefist Hammer
+	28438: 1,    // Dragonmaw
+	28439: 1,    // Dragonstrike
+	28573: 0.5,  // Despair
+	28774: 1.33, // Glaive of the Pit
+	28830: 1,    // Dragonspine Trophy 20s ICD
+	// 29301: 1, // Band of the Eternal Champion 60s ICD
+	29348: 1,   // The Bladefist
+	29693: 0.5, // Khorium Champion
+	29962: 1,   // Heartrazor
+	29996: 1,   // Rod of the sun king
+	31331: 2,   // The Night blade
+	30311: 2,   // Warp Slicer
+	30316: 2,   // Devastation
+	32505: 1,   // Madness of the Betrayer
+	31859: 1,   // Darkmoon Card: Madness
+}
+
+func getPPMForItemID(itemID int32) float64 {
+	if ppm, ok := MapItemIdToPPM[itemID]; ok {
+		return ppm
+	}
+	return 0
+}
