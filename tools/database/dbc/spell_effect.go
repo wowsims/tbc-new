@@ -1,7 +1,6 @@
 package dbc
 
 import (
-	"fmt"
 	"math"
 	"slices"
 
@@ -239,9 +238,6 @@ func (effect *SpellEffect) ParseStatEffect(scalesWithIlvl bool, ilvl int) *stats
 	effectStats := &stats.Stats{}
 	stat, _ := MapMainStatToStat(effect.EffectMiscValues[0])
 
-	if effect.SpellID == 35169 {
-		fmt.Println("reeee", effect.EffectAura)
-	}
 	switch {
 	case effect.EffectAura == A_MOD_RANGED_ATTACK_POWER:
 		if effect.Coefficient != 0 && scalesWithIlvl {

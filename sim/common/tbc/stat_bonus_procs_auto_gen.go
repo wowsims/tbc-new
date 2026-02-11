@@ -7281,8 +7281,8 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Increases ranged attack speed by 15%. Does not stack with quiver or ammo pouch haste effects.
-	// https://www.wowhead.com/tbc/spell=44972
+	// Thori'dal generates magical arrows when the bow string is drawn. Does not use ammo.
+	// https://www.wowhead.com/tbc/spell=46699
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
