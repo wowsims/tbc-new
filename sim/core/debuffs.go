@@ -217,7 +217,16 @@ func castSlowReductionAura(target *Unit, label string, spellID int32, multiplier
 func ExposeWeaknessAura(target *Unit, uptime float64, hunterAgility float64) *Aura {
 	apBonus := hunterAgility * 0.25
 	stats := stats.Stats{stats.AttackPower: apBonus, stats.RangedAttackPower: apBonus}
-	character := target.Env.Raid.GetPlayerFromUnitIndex(1).GetCharacter()
+	var character *Character
+	for _, party := range target.Env.Raid.Parties {
+		for _, agent := range party.Players {
+			c := agent.GetCharacter()
+			if c.Type == PlayerUnit {
+				character = c
+				break
+			}
+		}
+	}
 
 	hasAura := target.HasAura("Expose Weakness")
 	aura := target.GetOrRegisterAura(Aura{
@@ -535,7 +544,7 @@ func SunderArmorAura(target *Unit) *Aura {
 		Duration:  time.Second * 30,
 		MaxStacks: 5,
 		OnStacksChange: func(aura *Aura, sim *Simulation, oldStacks int32, newStacks int32) {
-			effect.SetPriority(sim, 520*float64(newStacks))
+			effect.SetPriority(sim, -520*float64(newStacks))
 		},
 	})
 

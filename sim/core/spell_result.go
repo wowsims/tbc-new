@@ -19,7 +19,6 @@ type SpellResult struct {
 
 	ArmorAndResistanceMultiplier     float64 // Armor multiplier
 	PostArmorAndResistanceMultiplier float64 // Damage done by this cast after Armor is applied
-	PreOutcomeDamage                 float64 // Damage done by this cast after Outcome is applied
 	PostOutcomeDamage                float64 // Damage done by this cast after Outcome is applied
 
 	inUse bool
@@ -680,9 +679,16 @@ func (spell *Spell) RegisterTravelTimeCallback(sim *Simulation, travelTime time.
 
 // Returns the combined attacker modifiers.
 func (spell *Spell) AttackerDamageMultiplier(attackTable *AttackTable, isDot bool) float64 {
-	damageMultiplierAdditive := TernaryFloat64(isDot && !spell.Flags.Matches(SpellFlagIgnoreAttackerModifiers),
+	if spell.Flags.Matches(SpellFlagIgnoreAttackerModifiers) {
+		return 1
+	}
+
+	damageMultiplierAdditive := TernaryFloat64(
+		isDot,
 		spell.DamageMultiplierAdditive+spell.Unit.PseudoStats.DotDamageMultiplierAdditive-1,
-		spell.DamageMultiplierAdditive)
+		spell.DamageMultiplierAdditive,
+	)
+
 	return spell.attackerDamageMultiplierInternal(attackTable) *
 		spell.DamageMultiplier *
 		damageMultiplierAdditive

@@ -498,6 +498,11 @@ export class ActionId {
 					name += ' (Queue)';
 				}
 				break;
+			case 'Sweeping Strikes':
+				if (tag == 1) {
+					name += ' (Normalized)';
+				}
+				break;
 			case 'Improved Berserker Rage':
 			case 'Improved Overpower':
 				name += ` (${tag}/2)`;
@@ -781,65 +786,18 @@ const spellIdIconOverrides: Map<string, ActionIdOverride> = new Map([
 	[JSON.stringify({ spellId: 37212 }), { itemId: 29035 }], // Improved Wrath of Air Totem
 	[JSON.stringify({ spellId: 37223 }), { itemId: 29040 }], // Improved Strength of Earth Totem
 	[JSON.stringify({ spellId: 37447 }), { itemId: 30720 }], // Serpent-Coil Braid
-	[JSON.stringify({ spellId: 123077 }), { itemId: 85338 }], // Battlegear of the Lost Catacomb (2pc bonus)
-	[JSON.stringify({ spellId: 123078 }), { itemId: 85334 }], // Battlegear of the Lost Catacomb (4pc bonus)
-	[JSON.stringify({ spellId: 123079 }), { itemId: 85338 }], // Plate of the Lost Catacomb (2pc bonus)
-	[JSON.stringify({ spellId: 123080 }), { itemId: 85334 }], // Plate of the Lost Catacomb (4pc bonus)
-	[JSON.stringify({ spellId: 138343 }), { itemId: 95225 }], // Battleplate of the All-Consuming Maw (2pc bonus)
-	[JSON.stringify({ spellId: 138347 }), { itemId: 95229 }], // Battleplate of the All-Consuming Maw (4pc bonus)
-	[JSON.stringify({ spellId: 138195 }), { itemId: 95225 }], // Plate of the All-Consuming Maw (2pc bonus)
-	[JSON.stringify({ spellId: 138197 }), { itemId: 95229 }], // Plate of the All-Consuming Maw (4pc bonus)
-	[JSON.stringify({ spellId: 144899 }), { itemId: 99188 }], // Battleplate of Cyclopean Dread (2pc bonus)
-	[JSON.stringify({ spellId: 144907 }), { itemId: 99179 }], // Battleplate of Cyclopean Dread (4pc bonus)
-	[JSON.stringify({ spellId: 144934 }), { itemId: 99188 }], // Plate of Cyclopean Dread (2pc bonus)
-	[JSON.stringify({ spellId: 144950 }), { itemId: 99179 }], // Plate of Cyclopean Dread (4pc bonus)
-	[JSON.stringify({ spellId: 123180 }), { itemId: 85343 }], // White Tiger Battlegear (2pc bonus)
-	[JSON.stringify({ spellId: 70762 }), { itemId: 85339 }], // White Tiger Battlegear  (4pc bonus)
-	[JSON.stringify({ spellId: 123104 }), { itemId: 85343 }], // White Tiger Plate (2pc bonus)
-	[JSON.stringify({ spellId: 123107 }), { itemId: 85339 }], // White Tiger Plate (4pc bonus)
-	[JSON.stringify({ spellId: 138159 }), { itemId: 95280 }], // Battlegear of the Lightning Emperor (2pc bonus)
-	[JSON.stringify({ spellId: 138164 }), { itemId: 95284 }], // Battlegear of the Lightning Emperor (4pc bonus)
-	[JSON.stringify({ spellId: 138238 }), { itemId: 95280 }], // Plate of the Lightning Emperor (2pc bonus)
-	[JSON.stringify({ spellId: 138244 }), { itemId: 95284 }], // Plate of the Lightning Emperor (4pc bonus)
-	[JSON.stringify({ spellId: 144586 }), { itemId: 99136 }], // Battlegear of Winged Triumph (2pc bonus)
-	[JSON.stringify({ spellId: 144593 }), { itemId: 99132 }], // Battlegear of Winged Triumph (4pc bonus)
-	[JSON.stringify({ spellId: 144580 }), { itemId: 99136 }], // Plate of Winged Triumph (2pc bonus)
-	[JSON.stringify({ spellId: 144566 }), { itemId: 99132 }], // Plate of Winged Triumph (4pc bonus)
-	[JSON.stringify({ spellId: 13889 }), { spellId: 109709 }], // Minor Run Speed
-	[JSON.stringify({ spellId: 65658 }), { spellId: 48721 }], // Blood Boil RP regen
 ]);
 
 const spellIdTooltipOverrides: Map<string, ActionIdOverride> = new Map([
-	[JSON.stringify({ spellId: 85256, tag: 2 }), { spellId: 138165 }], // Paladin - T15 4P Ret Templar's Verdict
 	[JSON.stringify({ spellId: 2818, tag: 2 }), { spellId: 113780 }], // Rogue - Deadly Poison - Hit
-	[JSON.stringify({ spellId: 121411, tag: 7 }), { spellId: 122233 }], // Rogue - Crimson Tempest - DoT
-	[JSON.stringify({ spellId: 121471, tag: 1 }), { spellId: 121473 }], // Rogue - Shadow Blade
-	[JSON.stringify({ spellId: 117050, tag: 1 }), { spellId: 120755 }], // Hunter - Glaive Toss (Glaive 1)
-	[JSON.stringify({ spellId: 117050, tag: 2 }), { spellId: 120756 }], // Hunter - Glaive Toss (Glaive 2)
-	[JSON.stringify({ spellId: 1978, tag: 1 }), { spellId: 82834 }], // Hunter - Serpent Sting
 
 	// Off-Hand attacks
 	[JSON.stringify({ spellId: 1329, tag: 2 }), { spellId: 27576 }], // Rogue - Mutilate Off-Hand
-	[JSON.stringify({ spellId: 121471, tag: 2 }), { spellId: 121474 }], // Rogue - Shadow Blade Off-Hand
 	[JSON.stringify({ spellId: 17364, tag: 2 }), { spellId: 32176 }], // Shaman - Stormstrike Off-Hand
-	[JSON.stringify({ spellId: 85288, tag: 2 }), { spellId: 96103 }], // Warrior - Raging Blow Main-Hand
-	[JSON.stringify({ spellId: 85288, tag: 3 }), { spellId: 85384 }], // Warrior - Raging Blow Off-Hand
 	[JSON.stringify({ spellId: 1680, tag: 2 }), { spellId: 44949 }], // Warrior - Whirlwind Off-Hand
-	[JSON.stringify({ spellId: 107570, tag: 2 }), { spellId: 145585 }], // Warrior - Storm Bolt Off-Hand
 
-	// Shadow
-	[JSON.stringify({ spellId: 2944, tag: 2 }), { spellId: 127626 }], // Devouring Plague (Heal)
-
-	// Mage - Living Bomb
-	[JSON.stringify({ spellId: 44457, tag: 2 }), { spellId: 44461 }], // Living Bomb Explosion
-	[JSON.stringify({ spellId: 114923, tag: 2 }), { spellId: 114954 }], // Nether Tempest (Cleave)
-
-	// Warlock - Immolation Aura
-	[JSON.stringify({ spellId: 104025, tag: 2 }), { spellId: 129476 }],
-	[JSON.stringify({ spellId: 47897, tag: 1 }), { spellId: 47960 }], // Shadowflame Dot
-	[JSON.stringify({ spellId: 30108, tag: 1 }), { spellId: 131736 }], // Malefic Grasp - Unstable Affliction
-	[JSON.stringify({ spellId: 980, tag: 1 }), { spellId: 131737 }], // Malefic Grasp - Agony
-	[JSON.stringify({ spellId: 172, tag: 1 }), { spellId: 131740 }], // Malefic Grasp - Corruption
+	// Warrior
+	[JSON.stringify({ spellId: 12723, tag: 1 }), { spellId: 26654 }], // Sweeping Strikes (Normalized)
 ]);
 
 export const defaultTargetIcon = 'https://wow.zamimg.com/images/wow/icons/large/spell_shadow_metamorphosis.jpg';

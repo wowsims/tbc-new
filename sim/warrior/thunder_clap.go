@@ -39,6 +39,7 @@ func (war *Warrior) registerThunderClap() {
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			baseDamage := 123.0
 			results := spell.CalcCleaveDamage(sim, target, 4, baseDamage, spell.OutcomeRangedHitAndCrit)
+			war.CastNormalizedSweepingStrikesAttack(results, sim)
 
 			for _, result := range results {
 				if result.Landed() {
