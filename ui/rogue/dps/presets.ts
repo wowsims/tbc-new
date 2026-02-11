@@ -3,7 +3,8 @@ import { ConsumesSpec, PseudoStat, Stat } from '../../core/proto/common';
 import { Rogue_Options as RogueOptions } from '../../core/proto/rogue';
 import { SavedTalents } from '../../core/proto/ui';
 import { Stats } from '../../core/proto_utils/stats';
-import BlankAPL from './apls/blank.apl.json'
+import ShivAPL from './apls/shiv.apl.json'
+import SinisterAPL from './apls/sinister.apl.json'
 import PreraidSwordsGear from './gear_sets/preraid.gear.json';
 import P1SwordsGear from './gear_sets/p1.gear.json';
 
@@ -11,10 +12,11 @@ import P1SwordsGear from './gear_sets/p1.gear.json';
 // Eventually we will import these values for the raid sim too, so its good to
 // keep them in a separate file.
 
-export const BLANK_APL = PresetUtils.makePresetAPLRotation('Blank', BlankAPL)
+export const SHIV_APL = PresetUtils.makePresetAPLRotation('Shiv EA', ShivAPL)
+export const SINSITER_APL = PresetUtils.makePresetAPLRotation('Sinister Strike EA', SinisterAPL)
 
-export const P1_SWORDS_GEAR = PresetUtils.makePresetGear('P1 Combat Swords', P1SwordsGear);
-export const PREARAID_SWORDS_GEAR = PresetUtils.makePresetGear('Preraid Combat Swords', PreraidSwordsGear);
+export const P1_SWORDS_GEAR = PresetUtils.makePresetGear('P1 Swords', P1SwordsGear);
+export const PREARAID_SWORDS_GEAR = PresetUtils.makePresetGear('Preraid Swords', PreraidSwordsGear);
 
 
 // Preset options for EP weights
@@ -52,9 +54,12 @@ export const DefaultOptions = RogueOptions.create({
 });
 
 export const DefaultConsumables = ConsumesSpec.create({
-	flaskId: 76084, // Flask of the Winds
-	foodId: 74648, // Skewered Eel
-	potId: 76089, // Potion of the Tol'vir
+	flaskId: 22854,
+	foodId: 33872,
+	potId: 22838,
+	conjuredId: 7676,
+	ohImbueId: 27186,
+	drumsId: 351355
 });
 
 export const OtherDefaults = {

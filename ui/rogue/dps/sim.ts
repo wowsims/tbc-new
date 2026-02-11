@@ -1,7 +1,4 @@
-import { stat } from 'node:fs';
-import * as BuffDebuffInputs from '../../core/components/inputs/buffs_debuffs';
 import * as OtherInputs from '../../core/components/inputs/other_inputs';
-import * as Mechanics from '../../core/constants/mechanics.js';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui';
 import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
@@ -9,8 +6,7 @@ import { APLRotation } from '../../core/proto/apl';
 import { Debuffs, Faction, IndividualBuffs, ItemSlot, PartyBuffs, PseudoStat, Race, RaidBuffs, Spec, Stat } from '../../core/proto/common';
 import { UnitStat } from '../../core/proto_utils/stats';
 import { defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
-import * as RogueInputs from './inputs';
-import * as Inputs from './inputs';
+
 import * as Presets from './presets';
 
 const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
@@ -90,13 +86,13 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 		// Preset talents that the user can quickly select.
 		talents: [Presets.Talents],
 		// Preset rotations that the user can quickly select.
-		rotations: [],
+		rotations: [Presets.SINSITER_APL, Presets.SHIV_APL],
 		// Preset gear configurations that the user can quickly select.
 		gear: [Presets.PREARAID_SWORDS_GEAR, Presets.P1_SWORDS_GEAR],
 	},
 
 	autoRotation: (player: Player<Spec.SpecRogue>): APLRotation => {
-		return Presets.BLANK_APL.rotation.rotation!;
+		return Presets.SINSITER_APL.rotation.rotation!;
 	},
 
 	raidSimPresets: [
