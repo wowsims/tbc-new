@@ -17,20 +17,25 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecDpsWarrior, {
 	knownIssues: [],
 
 	// All stats for which EP should be calculated.
-	epStats: [Stat.StatStrength, Stat.StatAgility, Stat.StatAttackPower, Stat.StatExpertiseRating, Stat.StatMeleeHasteRating, Stat.StatMeleeCritRating],
+	epStats: [
+		Stat.StatStrength,
+		Stat.StatAgility,
+		Stat.StatAttackPower,
+		Stat.StatArmorPenetration,
+		Stat.StatMeleeHitRating,
+		Stat.StatMeleeHasteRating,
+		Stat.StatMeleeCritRating,
+		Stat.StatArmorPenetration,
+		Stat.StatExpertiseRating,
+	],
 	epPseudoStats: [PseudoStat.PseudoStatMainHandDps, PseudoStat.PseudoStatOffHandDps],
 	// Reference stat against which to calculate EP. I think all classes use either spell power or attack power.
 	epReferenceStat: Stat.StatStrength,
 	gemStats: DEFAULT_MELEE_GEM_STATS,
 	// Which stats to display in the Character Stats section, at the bottom of the left-hand sidebar.
 	displayStats: UnitStat.createDisplayStatArray(
-		[Stat.StatHealth, Stat.StatStamina, Stat.StatStrength, Stat.StatAgility, Stat.StatAttackPower, Stat.StatExpertiseRating],
-		[
-			PseudoStat.PseudoStatMeleeHitPercent,
-			PseudoStat.PseudoStatMeleeHitPercent,
-			PseudoStat.PseudoStatMeleeCritPercent,
-			PseudoStat.PseudoStatMeleeHastePercent,
-		],
+		[Stat.StatHealth, Stat.StatStamina, Stat.StatStrength, Stat.StatAgility, Stat.StatAttackPower, Stat.StatExpertiseRating, Stat.StatArmorPenetration],
+		[PseudoStat.PseudoStatMeleeHitPercent, PseudoStat.PseudoStatMeleeCritPercent, PseudoStat.PseudoStatMeleeHastePercent],
 	),
 
 	defaults: {
