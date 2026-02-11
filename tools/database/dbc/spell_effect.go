@@ -319,7 +319,7 @@ func (effect *SpellEffect) ParseStatEffect(scalesWithIlvl bool, ilvl int) *stats
 		}
 	case effect.EffectAura == A_MOD_TARGET_RESISTANCE:
 		resist := ConvertTargetResistanceFlagToPenetrationStat(effect.EffectMiscValues[0])
-		effectStats[resist] = float64(effect.EffectBasePoints + effect.EffectDieSides)
+		effectStats[resist] = math.Abs(float64(effect.EffectBasePoints + effect.EffectDieSides))
 	}
 
 	return effectStats

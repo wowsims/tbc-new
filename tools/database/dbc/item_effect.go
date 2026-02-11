@@ -324,9 +324,6 @@ func MergeItemEffectsForAllStates(parsed *proto.UIItem) []*proto.ItemEffect {
 		for state, opt := range parsed.ScalingOptions {
 			ilvl := int(opt.Ilvl)
 			scalingProps := buildItemEffectScalingProps(baseEff.SpellID, ilvl)
-			// if len(scalingProps.Stats) == 0 {
-			// 	continue
-			// }
 			pe.ScalingOptions[state] = scalingProps
 			effects = append(effects, pe)
 		}
