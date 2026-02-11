@@ -252,6 +252,10 @@
 		height: 8.3rem;
 	}
 
+	&[data-req-arrow-row-size='4'] {
+		height: 11.8rem;
+	}
+
 	&[data-req-active] {
 		background-image: url('/tbc/assets/talent_calc/down2.png');
 	}

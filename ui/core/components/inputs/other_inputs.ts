@@ -5,7 +5,7 @@ import { Sim } from '../../sim.js';
 import { EventID } from '../../typed_event.js';
 import { BooleanPicker } from '../pickers/boolean_picker.js';
 import { EnumPicker } from '../pickers/enum_picker.js';
-import {Raid} from '../../raid';
+import { Raid } from '../../raid';
 import { InputConfig } from '../../individual_sim_ui';
 import i18n from '../../../i18n/config.js';
 
@@ -101,18 +101,6 @@ export const InputDelay = {
 	getValue: (player: Player<any>) => player.getReactionTime(),
 	setValue: (eventID: EventID, player: Player<any>, newValue: number) => {
 		player.setReactionTime(eventID, newValue);
-	},
-};
-
-export const ChallengeMode = {
-	id: 'challenge-mode',
-	type: 'boolean' as const,
-	label: i18n.t('settings_tab.other.challenge_mode.label'),
-	labelTooltip: i18n.t('settings_tab.other.challenge_mode.tooltip'),
-	changedEvent: (player: Player<any>) => player.challengeModeChangeEmitter,
-	getValue: (player: Player<any>) => player.getChallengeModeEnabled(),
-	setValue: (eventID: EventID, player: Player<any>, value: boolean) => {
-		player.setChallengeModeEnabled(eventID, value);
 	},
 };
 
@@ -286,7 +274,7 @@ export const IsbUptime = {
 		newDebuffs.isbUptime = newValue / 100;
 		player.getRaid()!.setDebuffs(eventID, newDebuffs);
 	},
-}
+};
 
 export const HemoUptime = {
 	id: 'hemoUptime',
@@ -302,7 +290,7 @@ export const HemoUptime = {
 		newDebuffs!.hemorrhageUptime = newValue / 100;
 		player.getRaid()!.setDebuffs(eventID, newDebuffs!);
 	},
-}
+};
 
 export const ShadowPriestDPS = {
 	id: 'shadowPriestDps',
@@ -317,5 +305,39 @@ export const ShadowPriestDPS = {
 		const buffs = player.getBuffs();
 		buffs.shadowPriestDps = newValue;
 		player.setBuffs(eventID, buffs);
+	},
+};
+
+export const ExposeWeaknessUptime = {
+	id: 'exposeWeaknessUptime',
+	type: 'number' as const,
+	label: 'Expose Weakness Uptime',
+	labelTooltip: 'Uptime of Expose Weakness in %.',
+	changedEvent: (player: Player<any>) => player.getRaid()!.debuffsChangeEmitter,
+	getValue: (player: Player<any>) => Math.round(player.getRaid()!.getDebuffs().exposeWeaknessUptime * 100),
+	setValue: (eventID: EventID, player: Player<any>, newValue: number) => {
+		const raid = player.getRaid()!;
+		const debuffs = raid.getDebuffs();
+		if (debuffs) {
+			debuffs.exposeWeaknessUptime = newValue / 100;
+			raid.setDebuffs(eventID, debuffs);
+		}
+	},
+};
+
+export const ExposeWeaknessHunterAgility = {
+	id: 'exposeWeaknessHunterAgility',
+	type: 'number' as const,
+	label: 'Expose Weakness Hunter Agility',
+	labelTooltip: 'The amount of Agility provided by your Hunter. Used for calculating the value of Expose Weakness.',
+	changedEvent: (player: Player<any>) => player.getRaid()!.debuffsChangeEmitter,
+	getValue: (player: Player<any>) => player.getRaid()!.getDebuffs().exposeWeaknessHunterAgility,
+	setValue: (eventID: EventID, player: Player<any>, newValue: number) => {
+		const raid = player.getRaid()!;
+		const debuffs = raid.getDebuffs();
+		if (debuffs) {
+			debuffs.exposeWeaknessHunterAgility = newValue;
+			raid.setDebuffs(eventID, debuffs);
+		}
 	},
 };

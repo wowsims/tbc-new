@@ -362,7 +362,7 @@ const (
 
 	// Will increase the spell.ThreatMultiplier. +5% = 0.05
 	// Uses FloatValue
-	SpellMod_ThreatMultiplier_Flat
+	SpellMod_ThreatMultiplier_Pct
 )
 
 var spellModMap = map[SpellModType]*SpellModFunctions{
@@ -485,9 +485,9 @@ var spellModMap = map[SpellModType]*SpellModFunctions{
 		Remove: removeDotBaseDurationMultiplier,
 	},
 
-	SpellMod_ThreatMultiplier_Flat: {
-		Apply:  applyThreatMultiplierFlat,
-		Remove: removeThreatMultiplierFlat,
+	SpellMod_ThreatMultiplier_Pct: {
+		Apply:  applyThreatMultiplierPercent,
+		Remove: removeThreatMultiplierPercent,
 	},
 }
 
@@ -813,10 +813,10 @@ func removeDotBaseDurationMultiplier(mod *SpellMod, spell *Spell) {
 	}
 }
 
-func applyThreatMultiplierFlat(mod *SpellMod, spell *Spell) {
-	spell.ThreatMultiplier += mod.floatValue
+func applyThreatMultiplierPercent(mod *SpellMod, spell *Spell) {
+	spell.ThreatMultiplier *= (1 + mod.floatValue)
 }
 
-func removeThreatMultiplierFlat(mod *SpellMod, spell *Spell) {
-	spell.ThreatMultiplier -= mod.floatValue
+func removeThreatMultiplierPercent(mod *SpellMod, spell *Spell) {
+	spell.ThreatMultiplier /= (1 + mod.floatValue)
 }

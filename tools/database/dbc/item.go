@@ -118,7 +118,7 @@ func (item *Item) GetStats(itemLevel int) *stats.Stats {
 		}
 		stats[stat] = item.GetScaledStat(i, itemLevel)
 		if stat == proto.Stat_StatArmorPenetration {
-			stats[stat] = -stats[stat]
+			stats[stat] = math.Abs(stats[stat])
 		}
 	}
 
@@ -193,16 +193,24 @@ func (item *Item) GetGemBonus() stats.Stats {
 		if effectStat == 0 {
 			continue
 		}
-		stat, success := MapBonusStatIndexToStat(effectStat)
-		if !success {
-			return stats
+		if !bonus.EffectIsAura {
+			stat, success := MapBonusStatIndexToStat(effectStat)
+			if !success {
+				return stats
+			}
+			value := bonus.EffectPointsMin[i]
+			stats[stat] = float64(value)
+		} else {
+			// This socket bonus in an Aura, need to loop over the raw SpellEffect data
+			// effectStat is the SpellID
+			effectAuras := GetDBC().SpellEffects[effectStat]
+			for _, effectAura := range effectAuras {
+				stat := ConvertEffectAuraToStatIndex(effectAura.EffectAura, effectAura.EffectMiscValues[0])
+				if stat > 0 {
+					stats[stat] = float64(effectAura.EffectBasePoints + 1)
+				}
+			}
 		}
-		value := bonus.EffectPointsMin[i]
-		stats[stat] = float64(value)
-		//Todo: check if this is always true
-		// if stat == proto.Stat_StatAttackPower {
-		// 	stats[proto.Stat_StatRangedAttackPower] = float64(value)
-		// }
 	}
 	return stats
 }

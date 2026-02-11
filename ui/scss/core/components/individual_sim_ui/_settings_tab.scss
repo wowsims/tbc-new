@@ -23,6 +23,19 @@
 		}
 	}
 
+	.other-settings {
+		.icon-picker {
+			&:has(label) {
+				width: 100% !important;
+				flex-direction: row-reverse !important;
+
+				label {
+					margin-left: 0;
+				}
+			}
+		}
+	}
+
 	.cooldown-settings {
 		.cooldown-timings-picker {
 			min-width: 40%;
@@ -37,12 +50,21 @@
 		}
 
 		.content-block-body {
+			--column-count: 3;
 			display: grid;
-			grid-template-columns: repeat(4, minmax(0, 1fr));
+			grid-template-columns: repeat(var(--column-count), minmax(0, 1fr));
 			grid-gap: var(--block-spacer);
 
+			@include media-breakpoint-down(xxxl) {
+				--column-count: 2;
+			}
+
+			@include media-breakpoint-down(lg) {
+				--column-count: 3;
+			}
+
 			@include media-breakpoint-down(md) {
-				grid-template-columns: repeat(2, minmax(0, 1fr));
+				--column-count: 2;
 			}
 
 			& > .icon-picker {

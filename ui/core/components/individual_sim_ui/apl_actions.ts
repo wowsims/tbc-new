@@ -32,7 +32,6 @@ import {
 	APLActionWait,
 	APLActionWaitUntil,
 	APLValue,
-	APLActionWarlockNextExhaleTarget,
 } from '../../proto/apl.js';
 import { Spec } from '../../proto/common.js';
 import { EventID } from '../../typed_event.js';
@@ -678,7 +677,7 @@ const actionKindFactories: { [f in NonNullable<APLActionKind>]: ActionKindConfig
 		submenu: undefined,
 		shortDescription: '',
 		fullDescription: undefined,
-		includeIf: undefined,
+		includeIf: (_player: Player<any>, _isPrepull: boolean) => false, // Never show this, because its not implemented
 		newValue: function (): APLActionCatOptimalRotationAction {
 			throw new Error('Function not implemented.');
 		},
@@ -691,7 +690,7 @@ const actionKindFactories: { [f in NonNullable<APLActionKind>]: ActionKindConfig
 		submenu: undefined,
 		shortDescription: '',
 		fullDescription: undefined,
-		includeIf: undefined,
+		includeIf: (_player: Player<any>, _isPrepull: boolean) => false, // Never show this, because its not implemented
 		newValue: function (): APLActionGuardianHotwDpsRotation {
 			throw new Error('Function not implemented.');
 		},
@@ -699,17 +698,4 @@ const actionKindFactories: { [f in NonNullable<APLActionKind>]: ActionKindConfig
 			throw new Error('Function not implemented.');
 		}
 	},
-	warlockNextExhaleTarget: {
-		label: '',
-		submenu: undefined,
-		shortDescription: '',
-		fullDescription: undefined,
-		includeIf: undefined,
-		newValue: function (): APLActionWarlockNextExhaleTarget {
-			throw new Error('Function not implemented.');
-		},
-		factory: function (parent: HTMLElement, player: Player<any>, config: InputConfig<Player<any>, APLActionWarlockNextExhaleTarget, APLActionWarlockNextExhaleTarget>): Input<Player<any>, APLActionWarlockNextExhaleTarget, APLActionWarlockNextExhaleTarget> {
-			throw new Error('Function not implemented.');
-		}
-	}
 };

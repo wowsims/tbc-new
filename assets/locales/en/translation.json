@@ -269,16 +269,9 @@
 			"title": "Gem Summary",
 			"reset_gems": "Reset gems"
 		},
-		"reforge_summary": {
-			"title": "Reforge Summary",
-			"reset_reforges": "Reset Reforges",
-			"copy_to_reforge_lite": "Copy to Reforge Lite"
-		},
 		"reforge_success": {
-			"title": "The following items were reforged:",
-			"removed_reforge": "Removed reforge",
-			"no_changes": "No reforge changes were made!",
-			"copy_to_reforge_lite": "Copy to Reforge Lite"
+			"title": "The following items were regemmed:",
+			"no_changes": "No gem changes were made!"
 		},
 		"gear_sets": {
 			"title": "Gear Sets",
@@ -291,19 +284,13 @@
 				"items": "Item",
 				"random_suffix": "Random Suffix",
 				"enchants": "Enchants",
-				"tinkers": "Tinkers",
-				"reforging": "Reforging",
-				"upgrades": "Upgrades",
 				"gem1": "Gem",
 				"gem2": "Gem",
 				"gem3": "Gem"
 			},
 			"remove_buttons": {
 				"remove_enchant": "Remove Enchant",
-				"remove_tinkers": "Remove Tinkers",
-				"remove_reforge": "Remove Reforge",
 				"remove_random_suffix": "Remove Random Suffix",
-				"remove_upgrade": "Remove Upgrade",
 				"remove_gem": "Remove Gem"
 			},
 			"filters": {
@@ -359,8 +346,7 @@
 			"ranged_weapon_type": "Ranged Weapon Type",
 			"ranged_weapon_speed": "Ranged Weapon Speed",
 			"min_ranged_speed": "Min Ranged Speed",
-			"max_ranged_speed": "Max Ranged Speed",
-			"reforge_text": "Reforged {{fromAmount}} {{fromStat}} → {{toAmount}} {{toStat}}"
+			"max_ranged_speed": "Max Ranged Speed"
 		},
 		"preset_configurations": {
 			"title": "Preset Configurations",
@@ -389,6 +375,11 @@
 			"spell_haste": "Spell Haste",
 			"crit_percent": "Crit %",
 			"stamina": "Stamina"
+		},
+		"party_buffs": {
+			"title": "Party Buffs",
+			"tooltip": "Buffs provided by <strong>other</strong> party members.",
+			"description": "All party buffs/debuffs selected are assumed to be provided by other raid members than the simulated player."
 		},
 		"external_damage_cooldowns": {
 			"title": "External Damage Cooldowns",
@@ -483,9 +474,33 @@
 				"label": "Detonate Seed on Cast",
 				"tooltip": "Simulates raid doing damage to targets such that seed detonates immediately on cast."
 			},
+			"default_shout": {
+				"label": "Default Shout",
+				"tooltip": "Which shout to use by default (can be overridden in the APL."
+			},
+			"default_stance": {
+				"label": "Default Stance",
+				"tooltip": "Which stance to use by default (can be overridden in the APL)."
+			},
+			"starting_rage": {
+				"label": "Starting Rage",
+				"tooltip": "Initial rage at the start of each iteration."
+			},
 			"stance_snapshot": {
 				"label": "Stance Snapshot",
 				"tooltip": "Ability that is cast at the same time as stance swap will benefit from the bonus of the stance before the swap."
+			},
+			"has_bs_solarian_sapphire": {
+				"label": "Prepull Battle Shout: Solarian Sapphire",
+				"tooltip": "If enabled, Battle Shout during prepull will provide bonus AP from the Solarian Sapphire."
+			},
+			"has_bs_tier_2": {
+				"label": "Prepull Battle Shout: Tier 2",
+				"tooltip": "If enabled, Battle Shout during prepull will provide bonus AP from the Tier 2 set bonus."
+			},
+			"queue_delay": {
+				"label": "HS/Cleave Queue Delay (ms)",
+				"tooltip": "How long (in milliseconds) to delay re-queueing Heroic Strike/Cleave in order to simulate real reaction time and game delay."
 			},
 			"assume_bleed_active": {
 				"label": "Assume Bleed Always Active",
@@ -574,6 +589,12 @@
 				"title": "Imbues",
 				"mhImbue": "Main Hand",
 				"ohImbue": "Off Hand"
+			},
+			"drums": {
+				"title": "Drums"
+			},
+			"scrolls": {
+				"title": "Scrolls"
 			}
 		},
 		"encounter": {
@@ -1375,29 +1396,33 @@
 					"tooltip": "Whether this aura should be refreshed, e.g. for the purpose of maintaining a debuff.",
 					"full_description": "<p>This condition checks not only the specified aura but also any other auras on the same unit, including auras applied by other raid members, which apply the same debuff category.</p><p>For example, 'Should Refresh Debuff(Sunder Armor)' will return <b>False</b> if the unit has an active Expose Armor aura.</p>"
 				},
-				"all_trinket_stat_procs_active": {
+				"aura_duration": {
+					"label": "Aura Duration",
+					"tooltip": "The full cooldown duration of the aura"
+				},
+				"all_item_stat_procs_active": {
 					"label": "All Item Proc Buffs Active",
 					"tooltip": "<b>True</b> if all item/enchant procs that buff the specified stat type(s) are currently active, otherwise <b>False</b>.",
 					"full_description": "<p>For stacking proc buffs, this condition also checks that the buff has been stacked to its maximum possible strength.</p>"
 				},
-				"any_trinket_stat_procs_active": {
+				"any_item_stat_procs_active": {
 					"label": "Any Item Proc Buff Active",
 					"tooltip": "<b>True</b> if any item/enchant procs that buff the specified stat type(s) are currently active, otherwise <b>False</b>.",
 					"full_description": "<p>For stacking proc buffs, this condition also checks that the buff has been stacked to its maximum possible strength.</p>"
 				},
-				"any_trinket_stat_procs_available": {
+				"any_item_stat_procs_available": {
 					"label": "Any Item Proc Buff Available",
 					"tooltip": "<b>True</b> if any item/enchant procs that buff the specified stat type(s) are currently not on ICD and aren't active, otherwise <b>False</b>."
 				},
-				"trinket_procs_min_remaining_time": {
+				"item_procs_min_remaining_time": {
 					"label": "Item Procs Min Remaining Time",
 					"tooltip": "Shortest remaining duration on any active item/enchant procs that buff the specified stat type(s), or infinity if none are currently active."
 				},
-				"trinket_procs_max_remaining_icd": {
+				"item_procs_max_remaining_icd": {
 					"label": "Item Procs Max Remaining ICD",
 					"tooltip": "Longest remaining ICD on any inactive item/enchant procs that buff the specified stat type(s), or 0 if all are currently active."
 				},
-				"num_equipped_stat_proc_trinkets": {
+				"num_equipped_stat_proc_items": {
 					"label": "Num Equipped Stat Proc Effects",
 					"tooltip": "Number of equipped passive item/enchant effects that buff the specified stat type(s) when they proc."
 				},
@@ -1475,21 +1500,9 @@
 					"label": "Hand of Guldan in Flight",
 					"tooltip": "Returns <b>True</b> if the impact of Hand of Guldan currenty is in flight."
 				},
-				"warlock_haunt_in_flight": {
-					"label": "[DEPRECATED] Haunt In Flight",
-					"tooltip": "Returns <b>True</b> if Haunt currently is in flight."
-				},
 				"affliction_current_snapshot": {
 					"label": "Existing Raw Snapshot %",
 					"tooltip": "How much stronger your existing snapshot is relative to baseline. Ignores Haste and Crit. Not recommended to use unless you know what you're doing."
-				},
-				"affliction_exhale_window": {
-					"label": "Exhale Window",
-					"tooltip": "Configured leeway for exhaling inhaled DoTs."
-				},
-				"mage_current_combustion_dot_estimate": {
-					"label": "Combustion Dot Value",
-					"tooltip": "Returns the current estimated size of your Combustion Dot."
 				},
 				"protection_paladin_damage_taken_last_global": {
 					"label": "Damage Taken Last Global",
@@ -1510,6 +1523,20 @@
 				"overlap": {
 					"label": "Overlap",
 					"tooltip": "Maximum amount of time before the aura expires when it may be refreshed."
+				},
+				"multiple_cd_usages": {
+					"label": "Multiple CD Usages",
+					"tooltip": "Will try to fit the selected <b>Target spell</b> within the cooldown of the selected <b>Base spell</b>.<br/> If you lose a 2nd cast of Death Wish whilst waiting for a delayed Bloodlust (using the offset) it will cast Death Wish earlier.",
+					"base_spell": "Base Spell",
+					"base_spell_tooltip": "The spell (ie. Bloodlust) you are casting that can have multiple other spells within it's cooldown",
+					"target_spell": "Target Spell",
+					"target_spell_tooltip": "The spell (ie. Death Wish) you want to fit within the cooldown of the Base Spell.",
+					"align_cd_end":"Align target spell to encounter end",
+					"align_cd_end_tooltip":"When checked will try to align the CD usage to the end of the encounter. This is useful for cooldowns/specs that benefit for example from execute."
+				},
+				"offset": {
+					"label": "Offset",
+					"tooltip": "The time offset from which when the cooldown will be triggered"
 				}
 			},
 			"operators": {
@@ -1938,12 +1965,17 @@
 			},
 			"attack_types": {
 				"hit": "Hit",
+				"resisted_hit": "Resisted Hit",
 				"critical_hit": "Critical Hit",
+				"resisted_critical_hit": "Resisted Critical Hit",
 				"tick": "Tick",
+				"resisted_tick": "Resisted Tick",
 				"critical_tick": "Critical Tick",
+				"resisted_critical_tick": "Resisted Critical Tick",
 				"glancing_blow": "Glancing Blow",
 				"blocked_hit": "Blocked Hit",
 				"blocked_critical_hit": "Blocked Critical Hit",
+				"crushing_blow": "Crushing Blow",
 				"miss": "Miss",
 				"parry": "Parry",
 				"dodge": "Dodge",
@@ -1975,10 +2007,6 @@
 			"instructions": "To import, paste the gear planner link below and click, 'Import'.",
 			"upload_button": "Upload File",
 			"import_button": "Import",
-			"tinker_warning": {
-				"title": "Tinker issues",
-				"message": "There are known issues importing tinkers from Wowhead. Always make sure to double check your tinkers after importing."
-			},
 			"error_invalid_url": "Invalid WCL URL {{url}}, must look like \"https://www.wowhead.com/tbc/gear-planner/CLASS/RACE/XXXX\"",
 			"error_cannot_parse_class": "Could not parse Class: {{classId}}",
 			"error_cannot_parse_race": "Could not parse Race: {{raceId}}"
@@ -1990,11 +2018,7 @@
 			"feature_description": "This feature imports gear, race, talents, and professions. It does NOT import buffs, debuffs, consumes, rotation, or custom stats.",
 			"instructions": "To import, paste the output from the addon below and click, 'Import'.",
 			"upload_button": "Upload File",
-			"import_button": "Import",
-			"reforge_warning": {
-				"title": "Reforging issues",
-				"message": "There are known issues with Reforging when using the WSE addon. Always make sure to double check your reforges after importing."
-			}
+			"import_button": "Import"
 		}
 	},
 	"export": {
@@ -2110,8 +2134,7 @@
 			"meta_gem_disabled": "Meta gem disabled ({{gemName}}): {{description}}",
 			"profession_requirement": "{{itemName}} requires {{professionName}}, but it is not selected.",
 			"too_many_jc_gems": "Only 2 Jewelcrafting Gems are allowed, but {{count}} are equipped.",
-			"unspent_talent_points": "Missing required talent selections in row {{rowNumbers}}.",
-			"armor_specialization": "Equip {{armorType}} gear in each slot for the Armor Specialization (5% primary stat) effect.",
+			"unspent_talent_points": "You have {{count}} unspent talent point(s).",
 			"dual_wield_2h_without_titans_grip": "Dual wielding two-handed weapon(s) without Titan's Grip spec.",
 			"shaman_fele_autocast": "Your Fire Elemental spell autocast setup is not optimal with the use of the Primal Elementalist talent (everything ON but Empower). If you know what you're doing, please ignore this."
 		},
@@ -2211,15 +2234,14 @@
 				}
 			},
 			"suggest_reforges": {
-				"title": "Suggest Reforges",
-				"tooltip": "Change Reforge Optimizer settings",
+				"title": "Suggest Gems",
+				"tooltip": "Change Gem Optimizer settings",
 				"use_soft_cap_breakpoints": "Use soft cap breakpoints",
-				"force_stat_proc": "Force RoRo proc",
 				"any": "Any",
-				"optimize_gems_tooltip": "Optimize gems and Reforges simultaneously.",
-				"freeze_item_slots_tooltip": "Flag one or more item slots to be \"frozen\", which will prevent the optimizer from changing the Reforge or gems in that slot from their current settings. This can be useful for hybrid classes who use the same gear piece for multiple raid roles.",
+				"optimize_gems_tooltip": "Optimize gems.",
+				"freeze_item_slots_tooltip": "Flag one or more item slots to be \"frozen\", which will prevent the optimizer from changing the gems in that slot from their current settings. This can be useful for hybrid classes who use the same gear piece for multiple raid roles.",
 				"edit_stat_caps": "Edit stat caps",
-				"stat_caps_tooltip": "Stat caps are the maximum amount of a stat that can be gained from Reforging. If a stat exceeds its cap, the optimizer will attempt to reduce it to the cap value.",
+				"stat_caps_tooltip": "Stat caps are the maximum amount of a stat that can be gained from Gemming. If a stat exceeds its cap, the optimizer will attempt to reduce it to the cap value.",
 				"reset_to_defaults": "Reset to stat cap defaults",
 				"stat": "Stat",
 				"select_preset": "Select preset",
@@ -2228,7 +2250,7 @@
 				"no_limit_set": "No limit set",
 				"breakpoints_implemented": "The following breakpoints have been implemented for this spec:",
 				"post_cap_ep": "Post cap EP",
-				"reforge_optimization_failed": "Reforge optimization failed. Please try again, or report the issue if it persists.",
+				"reforge_optimization_failed": "Gem optimization failed. Please try again, or report the issue if it persists.",
 				"use_custom": "Use custom EP Weights",
 				"enable_modification": "This will enable modification of the default EP weights and setting custom stat caps.",
 				"modify_in_editor": "Ep weights can be modified in the Stat Weights editor.",
@@ -2236,8 +2258,6 @@
 				"edit_weights": "Edit weights",
 				"include_gems": "Include gems",
 				"freeze_item_slots": "Freeze item slots",
-				"include_eotbp_socket": "Include EotBP Socket",
-				"include_eotbp_socket_tooltip": "Allows the optimiser to also include the \"Eye of the Black Prince\" socket in the optimization.",
 				"limit_execution_time": "Limit execution time",
 				"limit_execution_time_tooltip": "If checked, the solver will error out if the total computation time exceeds 30 seconds. If unchecked, then total computation time will be capped at 1 hour instead."
 			}

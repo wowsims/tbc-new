@@ -199,6 +199,12 @@ func NewTarget(options *proto.Target, targetIndex int32) *Target {
 	target.stats[stats.PhysicalCritPercent] = UnitLevelFloat64(target.Level, 5.0, 5.2, 5.4, 5.6)
 	target.addUniversalStatDependencies()
 
+	if target.Level == 73 && options.SuppressDodge {
+		// Sunwell boss Dodge Suppression. -20% dodge and -5% miss chance.
+		target.PseudoStats.DodgeReduction += 0.2
+		target.PseudoStats.IncreasedMissChance -= 0.05
+	}
+
 	target.PseudoStats.CanBlock = true
 	target.PseudoStats.CanParry = true
 	target.PseudoStats.ParryHaste = options.ParryHaste
@@ -358,8 +364,6 @@ type AttackTable struct {
 	// When you need more then 1 active, default to using the above one
 	// Used with EnableDamageDoneByCaster/DisableDamageDoneByCaster
 	DamageDoneByCasterExtraMultiplier []DynamicDamageDoneByCaster
-
-	ThreatDoneByCasterExtraMultiplier []DynamicThreatDoneByCaster
 }
 
 func NewAttackTable(attacker *Unit, defender *Unit) *AttackTable {
@@ -408,15 +412,4 @@ func EnableDamageDoneByCaster(index int, maxIndex int, attackTable *AttackTable,
 
 func DisableDamageDoneByCaster(index int, attackTable *AttackTable) {
 	attackTable.DamageDoneByCasterExtraMultiplier[index] = nil
-}
-
-func EnableThreatDoneByCaster(index int, maxIndex int, attackTable *AttackTable, handler DynamicThreatDoneByCaster) {
-	if attackTable.ThreatDoneByCasterExtraMultiplier == nil {
-		attackTable.ThreatDoneByCasterExtraMultiplier = make([]DynamicThreatDoneByCaster, maxIndex)
-	}
-	attackTable.ThreatDoneByCasterExtraMultiplier[index] = handler
-}
-
-func DisableThreatDoneByCaster(index int, attackTable *AttackTable) {
-	attackTable.ThreatDoneByCasterExtraMultiplier[index] = nil
 }

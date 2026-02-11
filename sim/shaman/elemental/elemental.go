@@ -3,7 +3,6 @@ package elemental
 import (
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
-	"github.com/wowsims/tbc/sim/core/stats"
 	"github.com/wowsims/tbc/sim/shaman"
 )
 
@@ -65,7 +64,6 @@ func (ele *ElementalShaman) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
 func (ele *ElementalShaman) ApplyTalents() {
 	// ele.ApplyElementalTalents()
 	ele.Shaman.ApplyTalents()
-	ele.ApplyArmorSpecializationEffect(stats.Intellect, proto.ArmorType_ArmorTypeMail, 86529)
 }
 
 type ElementalShaman struct {

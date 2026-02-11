@@ -166,7 +166,7 @@ func processEnchantmentEffects(
 				if spellEffect.EffectType == E_APPLY_AURA && spellEffect.EffectAura == A_MOD_STAT {
 					outStats[spellEffect.EffectMiscValues[0]] += float64(spellEffect.EffectBasePoints + 1)
 				} else {
-					stat := ConvertEffectAuraToStatIndex(int(spellEffect.EffectAura), spellEffect.EffectMiscValues[0])
+					stat := ConvertEffectAuraToStatIndex(spellEffect.EffectAura, spellEffect.EffectMiscValues[0])
 					if stat >= 0 {
 						outStats[stat] += float64(spellEffect.EffectBasePoints + 1)
 					}
@@ -180,25 +180,41 @@ func processEnchantmentEffects(
 	}
 }
 
-func ConvertEffectAuraToStatIndex(effectAura int, effectMisc int) proto.Stat {
+func ConvertEffectAuraToStatIndex(effectAura EffectAuraType, effectMisc int) proto.Stat {
 	switch effectAura {
-	case 99: // MOD_ATTACK_POWER
+	case A_MOD_ATTACK_POWER:
 		return proto.Stat_StatAttackPower
-	case 124: // MOD_RANGED_ATTACK_POWER
+	case A_MOD_RANGED_ATTACK_POWER:
 		return proto.Stat_StatRangedAttackPower
-	case 13: // MOD_DAMAGE_DONE
+	case A_MOD_DAMAGE_DONE:
 		return ConvertSpellDamageFlagToSchoolDamageStat(effectMisc)
-	case 135: // MOD_HEALING_DONE
+	case A_MOD_HEALING_DONE:
 		return proto.Stat_StatHealingPower
-	case 34: // MOD_INCREASE_HEALTH
+	case A_MOD_INCREASE_HEALTH:
 		return proto.Stat_StatHealth
-	case 123: // MOD_TARGET_RESISTANCE
+	case A_MOD_TARGET_RESISTANCE:
 		return ConvertTargetResistanceFlagToPenetrationStat(effectMisc)
-	case 189: // MOD_RATING (Stat Ratings but as Auras; includes mostly Vanilla items, but also some socket bonuses and random one-offs)
+	case A_MOD_RESISTANCE:
+		return ConvertResistanceFlagToResistanceStat(effectMisc)
+	case A_MOD_RATING: // MOD_RATING (Stat Ratings but as Auras; includes mostly Vanilla items, but also some socket bonuses and random one-offs)
 		return ConvertModRatingFlagToRatingStat(effectMisc)
+	case A_MOD_SHIELD_BLOCKVALUE:
+		return proto.Stat_StatBlockValue
+	case A_MOD_POWER_REGEN:
+		return proto.Stat_StatMP5
 	default:
 		return -1
 	}
+}
+
+func ConvertResistanceFlagToResistanceStat(flag int) proto.Stat {
+	school := SpellSchool(flag)
+	for schoolType, stat := range SpellSchoolToStat {
+		if school.Has(schoolType) {
+			return stat
+		}
+	}
+	return -1
 }
 
 func ConvertTargetResistanceFlagToPenetrationStat(flag int) proto.Stat {
@@ -243,9 +259,11 @@ func ConvertModRatingFlagToRatingStat(flag int) proto.Stat {
 		// The forbidden "Only Ranged Hit". There's a single instance of this (Enchant 2523, SpellID 22780).
 		return -1
 	case 96:
-		return proto.Stat_StatAllPhysHitRating
+		return proto.Stat_StatMeleeHitRating
 	case 128:
 		return proto.Stat_StatSpellHitRating
+	case 256:
+		return proto.Stat_StatFireResistance
 	case 512:
 		// The forbidden "Only Ranged Crit". Only two of these exist, one is low level gloves another is an enchant.
 		return -1
@@ -253,12 +271,14 @@ func ConvertModRatingFlagToRatingStat(flag int) proto.Stat {
 		return proto.Stat_StatMeleeCritRating
 	case 1024:
 		return proto.Stat_StatSpellCritRating
+	case 49152:
+		return proto.Stat_StatResilienceRating
 	case 131072:
 		return proto.Stat_StatMeleeHasteRating
 	case 393216:
 		return proto.Stat_StatMeleeHasteRating
-	case 49152:
-		return proto.Stat_StatResilienceRating
+	case 524288:
+		return proto.Stat_StatMeleeHasteRating
 	default:
 		println("UNHANDLED RATING FLAG: " + strconv.Itoa(flag))
 		return -1

@@ -170,7 +170,7 @@ func LoadAndWriteRawItems(dbHelper *DBHelper, filter string, inputsDir string) (
 func ScanItemStatEffects(rows *sql.Rows) (dbc.ItemStatEffect, error) {
 	var raw dbc.ItemStatEffect
 	var ePointsMin, epointsMax, eArgs string
-	err := rows.Scan(&raw.ID, &ePointsMin, &epointsMax, &eArgs)
+	err := rows.Scan(&raw.ID, &raw.EffectIsAura, &ePointsMin, &epointsMax, &eArgs)
 	if err != nil {
 		panic("Error scanning item stat effects")
 	}
@@ -190,7 +190,9 @@ func ScanItemStatEffects(rows *sql.Rows) (dbc.ItemStatEffect, error) {
 }
 
 func LoadAndWriteItemStatEffects(dbHelper *DBHelper, inputsDir string) ([]dbc.ItemStatEffect, error) {
-	query := `SELECT ID, EffectPointsMin, EffectPointsMax, EffectArg FROM SpellItemEnchantment WHERE Effect_0 = 5`
+	query := `SELECT ID,
+		CASE WHEN Effect_0 = 3 THEN 1 ELSE 0 END as EffectIsAura,
+		EffectPointsMin, EffectPointsMax, EffectArg FROM SpellItemEnchantment WHERE Effect_0 = 5 OR Effect_0 = 3`
 	items, err := LoadRows(dbHelper.db, query, ScanItemStatEffects)
 	if err != nil {
 		return nil, fmt.Errorf("error in query load items")

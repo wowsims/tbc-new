@@ -116,14 +116,13 @@ const (
 	OutcomeCrit
 	OutcomeCrush
 
-	OutcomePartial1
-	OutcomePartial2
-	OutcomePartial4
-	OutcomePartial8
+	OutcomePartial1_4 // 1/4 of the spell was resisted.
+	OutcomePartial2_4 // 2/4 of the spell was resisted.
+	OutcomePartial3_4 // 3/4 of the spell was resisted.
 )
 
 const (
-	OutcomePartial = OutcomePartial1 | OutcomePartial2 | OutcomePartial4 | OutcomePartial8
+	OutcomePartial = OutcomePartial1_4 | OutcomePartial2_4 | OutcomePartial3_4
 	OutcomeLanded  = OutcomeHit | OutcomeCrit | OutcomeCrush | OutcomeGlance | OutcomeBlock
 )
 
@@ -134,18 +133,16 @@ func (ho HitOutcome) String() string {
 		return "Dodge"
 	} else if ho.Matches(OutcomeParry) {
 		return "Parry"
+	} else if ho.Matches(OutcomeBlock) && ho.Matches(OutcomeCrit) {
+		return "BlockedCrit"
 	} else if ho.Matches(OutcomeBlock) {
-		if ho.Matches(OutcomeCrit) {
-			return "CriticalBlock"
-		} else {
-			return "Block"
-		}
+		return "Block"
 	} else if ho.Matches(OutcomeGlance) {
-		return "Glance"
+		return "Glance" + ho.PartialResistString()
 	} else if ho.Matches(OutcomeCrit) {
-		return "Crit"
+		return "Crit" + ho.PartialResistString()
 	} else if ho.Matches(OutcomeHit) {
-		return "Hit"
+		return "Hit" + ho.PartialResistString()
 	} else if ho.Matches(OutcomeCrush) {
 		return "Crush"
 	} else {
@@ -154,11 +151,11 @@ func (ho HitOutcome) String() string {
 }
 
 func (ho HitOutcome) PartialResistString() string {
-	if ho.Matches(OutcomePartial1) {
+	if ho.Matches(OutcomePartial1_4) {
 		return " (25% Resist)"
-	} else if ho.Matches(OutcomePartial2) {
+	} else if ho.Matches(OutcomePartial2_4) {
 		return " (50% Resist)"
-	} else if ho.Matches(OutcomePartial4) {
+	} else if ho.Matches(OutcomePartial3_4) {
 		return " (75% Resist)"
 	} else {
 		return ""
@@ -197,7 +194,6 @@ const (
 	SpellFlagPrepullOnly                                    // Indicates this spell should only be used during prepull. Not enforced, just a signal for the APL UI.
 	SpellFlagEncounterOnly                                  // Indicates this spell should only be used during the encounter (not prepull). Not enforced, just a signal for the APL UI.
 	SpellFlagPotion                                         // Indicates this spell is a potion spell.
-	SpellFlagPrepullPotion                                  // Indicates this spell is the prepull potion.
 	SpellFlagCombatPotion                                   // Indicates this spell is the combat potion.
 	SpellFlagNoSpellMods                                    // Indicates that no spell mods should be applied to this spell
 	SpellFlagCanCastWhileMoving                             // Allows the cast to be casted while moving

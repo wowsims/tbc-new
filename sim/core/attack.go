@@ -527,18 +527,7 @@ func (aa *AutoAttacks) reset(sim *Simulation) {
 
 		if aa.IsDualWielding {
 			aa.oh.updateSwingDuration(aa.mh.curSwingSpeed)
-			aa.oh.swingAt = 0
-
-			// Apply random delay of 0 - 50% swing time, to one of the weapons if dual wielding
-			if aa.oh.unit.Type == EnemyUnit {
-				aa.oh.swingAt = DurationFromSeconds(aa.mh.SwingSpeed / 2)
-			} else {
-				if sim.RandomFloat("SwingResetWeapon") < 0.5 {
-					aa.mh.swingAt = DurationFromSeconds(sim.RandomFloat("SwingResetDelay") * aa.mh.SwingSpeed / 2)
-				} else {
-					aa.oh.swingAt = DurationFromSeconds(sim.RandomFloat("SwingResetDelay") * aa.mh.SwingSpeed / 2)
-				}
-			}
+			aa.oh.swingAt = DurationFromSeconds(aa.mh.SwingSpeed / 2)
 		}
 
 	}
@@ -571,18 +560,7 @@ func (aa *AutoAttacks) startPull(sim *Simulation) {
 
 		if aa.IsDualWielding {
 			if aa.oh.swingAt == NeverExpires {
-				aa.oh.swingAt = 0
-
-				// Apply random delay of 0 - 50% swing time, to one of the weapons if dual wielding
-				if aa.oh.unit.Type == EnemyUnit {
-					aa.oh.swingAt = DurationFromSeconds(aa.mh.SwingSpeed / 2)
-				} else {
-					if sim.RandomFloat("SwingResetWeapon") < 0.5 {
-						aa.mh.swingAt = DurationFromSeconds(sim.RandomFloat("SwingResetDelay") * aa.mh.SwingSpeed / 2)
-					} else {
-						aa.oh.swingAt = DurationFromSeconds(sim.RandomFloat("SwingResetDelay") * aa.mh.SwingSpeed / 2)
-					}
-				}
+				aa.oh.swingAt = DurationFromSeconds(aa.mh.SwingSpeed / 2)
 			}
 			if aa.oh.IsInRange() {
 				aa.oh.enabled = true
@@ -755,7 +733,6 @@ func (aa *AutoAttacks) DesyncOffHand(sim *Simulation, readyAt time.Duration) {
 	if !aa.AutoSwingMelee { // if not auto swinging, don't auto restart.
 		return
 	}
-
 	if aa.IsDualWielding {
 		aa.oh.swingAt = readyAt + aa.oh.curSwingDuration
 		aa.oh.swingAt += aa.oh.curSwingDuration / 2

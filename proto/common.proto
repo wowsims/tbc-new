@@ -67,7 +67,7 @@ enum Spec {
 
 	SpecWarlock = 17;
 
-	SpecDPSWarrior = 18;
+	SpecDpsWarrior = 18;
 	SpecProtectionWarrior = 19;
 }
 
@@ -166,7 +166,7 @@ enum Profession {
 // the Go Stats array to be larger than the size of the Stat enum proto, but the
 // shared indices between the two must exactly match.
 //
-// NextIndex: 44;
+// NextIndex: 41;
 enum Stat {
 	// Primary attributes ("main stat")
 	StatStrength = 0;
@@ -201,34 +201,29 @@ enum Stat {
 	StatArmorPenetration = 23;
 	StatExpertiseRating = 24;
 
-	// Melee/Ranged School Secondaries
-	StatAllPhysHitRating = 25;
-	StatAllPhysCritRating = 26;
-	StatAllPhysHasteRating = 27;
-
 	// Tank Secondaries
-	StatDefenseRating = 28;
-	StatBlockRating = 29;
-	StatBlockValue = 30;
-	StatDodgeRating = 31;
-	StatParryRating = 32;
-	StatResilienceRating = 33;
-	StatArmor = 34;
-	StatBonusArmor = 35;
+	StatDefenseRating = 25;
+	StatBlockRating = 26;
+	StatBlockValue = 27;
+	StatDodgeRating = 28;
+	StatParryRating = 29;
+	StatResilienceRating = 30;
+	StatArmor = 31;
+	StatBonusArmor = 32;
 
 	// Composite stats that are built up from the above gear stats + buffs.
 	// These still belong in the Stat enum because they can be present on
 	// some enchants and because the base values need to be stored for NPCs.
-	StatHealth = 36;
-	StatMana = 37;
-	StatMP5 = 38;
+	StatHealth = 33;
+	StatMana = 34;
+	StatMP5 = 35;
 
 	// Resistances
-	StatArcaneResistance = 39;
-	StatFireResistance = 40;
-	StatFrostResistance = 41;
-	StatNatureResistance = 42;
-	StatShadowResistance = 43;
+	StatArcaneResistance = 36;
+	StatFireResistance = 37;
+	StatFrostResistance = 38;
+	StatNatureResistance = 39;
+	StatShadowResistance = 40;
 
 	// DO NOT add new stats here without discussing it first; new stats come
 	// with a performance penalty.
@@ -495,21 +490,20 @@ message PartyBuffs {
 	TristateEffect wrath_of_air_totem = 21;
 	bool snapshot_improved_wrath_of_air_totem = 22;
 	TristateEffect grace_of_air_totem = 23;
-	StrengthOfEarthType strength_of_earth_totem = 24;
+	TristateEffect strength_of_earth_totem = 24;
 	bool snapshot_improved_strength_of_earth_totem = 25;
 	bool tranquil_air_totem = 26;
 
-	int32 windfury_totem_rank = 27; // 0 if none, otherwise rank of the ability (1-5).
-	int32 windfury_totem_iwt = 28;
+	TristateEffect windfury_totem = 27;
 
-	TristateEffect battle_shout = 29;
-	bool bs_solarian_sapphire = 30;
-	bool snapshot_bs_solarian_sapphire = 31;
-	bool snapshot_bs_t2 = 32;
-	int32 snapshot_bs_booming_voice_rank = 33;
+	TristateEffect battle_shout = 28;
+	bool bs_solarian_sapphire = 29;
+	bool snapshot_bs_solarian_sapphire = 30;
+	bool snapshot_bs_t2 = 31;
+	int32 snapshot_bs_booming_voice_rank = 32;
 
 	// Mitigation buffs
-	TristateEffect commanding_shout = 34;
+	TristateEffect commanding_shout = 33;
 }
 
 // These are usually individual actions taken by other Characters.
@@ -569,18 +563,25 @@ message Debuffs {
 }
 
 message ConsumesSpec {
-	int32 prepot_id = 1;
-	int32 pot_id = 2;
-	int32 flask_id = 3;
-	int32 battle_elixir_id = 4;
-	int32 guardian_elixir_id = 5;
-	int32 food_id = 6;
-	int32 conjured_id = 7;
-	int32 explosive_id = 8;
-	bool superSapper = 9;
-	bool goblinSapper = 10;
-	int32 mhImbue_id = 11;
-	int32 ohImbue_id = 12;
+	int32 pot_id = 1;
+	int32 flask_id = 2;
+	int32 battle_elixir_id = 3;
+	int32 guardian_elixir_id = 4;
+	int32 food_id = 5;
+	int32 conjured_id = 6;
+	int32 explosive_id = 7;
+	bool superSapper = 8;
+	bool goblinSapper = 9;
+	int32 mhImbue_id = 10;
+	int32 ohImbue_id = 11;
+	int32 drums_id = 12;
+	bool scroll_agi = 13;
+	bool scroll_str = 14;
+	bool scroll_int = 15;
+	bool scroll_spi = 16;
+	bool scroll_arm = 17;
+	bool pet_scroll_agi = 18;
+	bool pet_scroll_str = 19;
 }
 
 enum MobType {

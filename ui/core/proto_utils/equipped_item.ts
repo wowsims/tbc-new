@@ -38,22 +38,11 @@ export const getWeaponStatsBySlot = (item: Item, slot: ItemSlot, upgradeStep: 0)
 	return itemStats;
 };
 
-export interface ReforgeData {
-	id: number;
-	item: Item;
-	fromStat: Stat;
-	toStat: Stat;
-	fromAmount: number;
-	toAmount: number;
-}
-
 type EquippedItemOptions = {
 	item: Item;
 	enchant?: Enchant | null;
-	tinker?: Enchant | null;
 	gems?: Array<Gem | null>;
 	randomSuffix?: ItemRandomSuffix | null;
-	challengeMode?: boolean;
 };
 
 /**
@@ -148,7 +137,6 @@ export class EquippedItem {
 	 */
 	withItem(item: Item): EquippedItem {
 		let newEnchant = null;
-		let newTinker = null;
 		if (this._enchant && enchantAppliesToItem(this._enchant, item)) newEnchant = this._enchant;
 		// Reorganize gems to match as many colors in the new item as possible.
 		const newGems = new Array(item.gemSockets.length).fill(null);
@@ -175,7 +163,6 @@ export class EquippedItem {
 		return new EquippedItem({
 			item,
 			enchant: newEnchant,
-			tinker: newTinker,
 			gems: newGems,
 		});
 	}

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"regexp"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -20,16 +21,18 @@ import (
 const MIN_EFFECT_ILVL = 50
 
 type ProcInfo struct {
-	Outcome            core.HitOutcome
-	Callback           core.AuraCallback
-	ProcMask           core.ProcMask
-	RequireDamageDealt bool
+	Outcome             core.HitOutcome
+	Callback            core.AuraCallback
+	ProcMask            core.ProcMask
+	MaxCumulativeStacks int32
+	RequireDamageDealt  bool
 }
 
-// Entry represents a single effect with its ID and display name.
+// Entry represents a effect with its Item ID, Spell ID and display name.
 type Variant struct {
-	ID   int
-	Name string
+	ID      int
+	SpellID int
+	Name    string
 }
 
 type Entry struct {
@@ -45,7 +48,13 @@ type Group struct {
 	Entries []*Entry
 }
 
-var missingEffectsMap = map[string][]Variant{
+type MissingItemEffect struct {
+	ItemID  int32
+	Name    string
+	Effects []Variant
+}
+
+var missingEffectsMap = map[string]map[int32]MissingItemEffect{
 	"EnchantEffects": {},
 	"ItemEffects":    {},
 }
@@ -104,19 +113,18 @@ func GenerateMissingEffectsFile() error {
 		return fmt.Errorf("unable to check file %s: %w", missingEffectsFileName, err)
 	}
 
-	tmpl := template.Must(template.New("missingEffects").Parse(TmplStrMissingEffects))
+	funcMap := map[string]any{
+		"asCoreCallback": asCoreCallback,
+		"asCoreProcMask": asCoreProcMask,
+		"asCoreOutcome":  asCoreOutcome,
+		"formatStrings":  formatStrings,
+	}
+	tmpl := template.Must(template.New("missingEffects").Funcs(funcMap).Parse(TmplStrMissingEffects))
 	f, err := os.Create(missingEffectsFileName)
 	if err != nil {
 		return fmt.Errorf("failed to create file %s: %w", missingEffectsFileName, err)
 	}
 	defer f.Close()
-
-	sort.Slice(missingEffectsMap["EnchantEffects"], func(i, j int) bool {
-		return missingEffectsMap["EnchantEffects"][i].ID < missingEffectsMap["EnchantEffects"][j].ID
-	})
-	sort.Slice(missingEffectsMap["ItemEffects"], func(i, j int) bool {
-		return missingEffectsMap["ItemEffects"][i].ID < missingEffectsMap["ItemEffects"][j].ID
-	})
 
 	if err := tmpl.Execute(f, missingEffectsMap); err != nil {
 		return fmt.Errorf("failed to execute template: %w", err)
@@ -141,8 +149,8 @@ func GenerateEnchantEffects(instance *dbc.DBC, db *WowDatabase) {
 			continue
 		}
 
-		if TryParseEnchantEffect(parsed, groupMapProc, instance, enchantSpellEffects) == EffectParseResultUnsupported {
-			missingEffectsMap["EnchantEffects"] = append(missingEffectsMap["EnchantEffects"], Variant{ID: enchant.EffectId, Name: enchant.Name})
+		for _, enchantEffect := range parsed.EnchantEffects {
+			TryParseEnchantEffect(parsed, enchantEffect, groupMapProc, instance, enchantSpellEffects)
 		}
 	}
 
@@ -150,7 +158,38 @@ func GenerateEnchantEffects(instance *dbc.DBC, db *WowDatabase) {
 	for _, grp := range groupMapProc {
 		procGroups = append(procGroups, &grp)
 	}
-	//GenerateEffectsFile(procGroups, "sim/common/tbc/enchants_auto_gen.go", TmplStrEnchant)
+
+	// GenerateEffectsFile(procGroups, "sim/common/tbc/enchants_auto_gen.go", TmplStrEnchant)
+}
+
+func ItemEffectIsSupported(instance *dbc.DBC, effectID int) bool {
+	supported := true
+	if effects, ok := instance.SpellEffects[effectID]; ok {
+		for _, effect := range effects {
+			if params, ok := IgnoreSpellEffectByAuraType[effect.EffectAura]; ok {
+				if len(params) == 0 {
+					supported = false
+					break
+				} else {
+					if slices.Contains(params, effect.EffectMiscValues[0]) {
+						supported = false
+					}
+				}
+			}
+
+			if params, ok := IgnoreSpellEffectBySpellEffectType[effect.EffectType]; ok {
+				if len(params) == 0 {
+					supported = false
+					break
+				} else {
+					if slices.Contains(params, effect.EffectMiscValues[0]) {
+						supported = false
+					}
+				}
+			}
+		}
+	}
+	return supported
 }
 
 func GenerateItemEffects(instance *dbc.DBC, db *WowDatabase, itemSources map[int][]*proto.DropSource) {
@@ -159,43 +198,17 @@ func GenerateItemEffects(instance *dbc.DBC, db *WowDatabase, itemSources map[int
 
 	// Example loop over your items
 	for _, parsed := range db.Items {
-		// TBC ANNI: Items can have "static" ItemEffects that don't have a duration.
-		// We need to parse these into stats just as is done for ItemSparse data.
-		for _, itemEffect := range dbc.GetAllStaticItemEffects(parsed) {
-			spellEffects := instance.SpellEffects[itemEffect.SpellID]
-			for _, spellEffect := range spellEffects {
-				stat := dbc.ConvertEffectAuraToStatIndex(int(spellEffect.EffectAura), spellEffect.EffectMiscValues[0])
-				if stat >= 0 {
-					// TBC ANNI: Some socket bonuses are auras too. Need to find them here and either ignore or find how to add to socket bonuses
+		parsed.ItemEffects = dbc.MergeItemEffectsForAllStates(parsed)
 
-					value := float64(spellEffect.EffectBasePoints + 1)
-					// Make sure it's not Feral AP
-					if strings.Contains(instance.Spells[spellEffect.SpellID].Description, "forms only") {
-						stat = proto.Stat_StatFeralAttackPower
-					}
-					if stat == proto.Stat_StatArmorPenetration || stat == proto.Stat_StatSpellPenetration {
-						// Make these not negative
-						value = -value
-					}
-					parsed.ScalingOptions[0].Stats[int32(stat)] += value
-				}
+		for _, itemEffect := range parsed.ItemEffects {
+			if !ItemEffectIsSupported(instance, int(itemEffect.BuffId)) {
+				continue
 			}
-		}
 
-		parsed.ItemEffect = dbc.MergeItemEffectsForAllStates(parsed)
-
-		result := TryParseOnUseEffect(parsed, groupMapOnUse)
-		if result == EffectParseResultSuccess {
-			continue
-		}
-
-		if (result == EffectParseResultUnsupported) ||
-			(TryParseProcEffect(parsed, instance, groupMapProc) == EffectParseResultUnsupported) {
-			missingEffectsMap["ItemEffects"] = append(missingEffectsMap["ItemEffects"],
-				Variant{
-					ID:   int(parsed.Id),
-					Name: parsed.Name + BuildItemDifficultyPostfix(itemSources, int(parsed.Id), instance),
-				})
+			if TryParseOnUseEffect(parsed, itemEffect, groupMapOnUse) != EffectParseResultSuccess &&
+				TryParseProcEffect(parsed, itemEffect, instance, groupMapProc) != EffectParseResultSuccess {
+				ParseTooltipForMissingEffect(parsed, itemEffect, instance, groupMapProc, "Procs")
+			}
 		}
 	}
 
@@ -254,7 +267,9 @@ func GenerateItemEffects(instance *dbc.DBC, db *WowDatabase, itemSources map[int
 			for _, variant := range entry.Variants {
 				if _, ok := needsStatPostfix[variant.Name]; ok {
 					item := db.Items[int32(variant.ID)]
-					variant.Name += " - " + GetEffectStatString(item)
+					for _, itemEffect := range item.ItemEffects {
+						variant.Name += " - " + GetEffectStatString(itemEffect)
+					}
 				}
 
 				variant.Name += BuildItemDifficultyPostfix(itemSources, variant.ID, instance)
@@ -314,14 +329,14 @@ func BuildItemDifficultyPostfix(itemSources map[int][]*proto.DropSource, itemId 
 	return difficultyPostfix
 }
 
-func TryParseProcEffect(parsed *proto.UIItem, instance *dbc.DBC, groupMapProc map[string]Group) EffectParseResult {
-	if parsed.ItemEffect.GetProc() != nil && parsed.ScalingOptions[0].Ilvl > MIN_EFFECT_ILVL {
+func TryParseProcEffect(parsed *proto.UIItem, itemEffect *proto.ItemEffect, instance *dbc.DBC, groupMapProc map[string]Group) EffectParseResult {
+	if itemEffect.GetProc() != nil && parsed.ScalingOptions[0].Ilvl > MIN_EFFECT_ILVL {
 		// Effect was already manually implemented
 		if core.HasItemEffect(parsed.Id) {
 			return EffectParseResultSuccess
 		}
 
-		tooltipString, id := dbc.GetItemEffectSpellTooltip(int(parsed.Id))
+		tooltipString, id := dbc.GetItemEffectSpellTooltip(int(parsed.Id), int(itemEffect.BuffId))
 		tooltip, _ := tooltip.ParseTooltip(tooltipString, tooltip.DBCTooltipDataProvider{DBC: instance}, int64(id))
 
 		grp, exists := groupMapProc["Procs"]
@@ -331,14 +346,20 @@ func TryParseProcEffect(parsed *proto.UIItem, instance *dbc.DBC, groupMapProc ma
 
 		if tooltip != nil {
 			renderedTooltip := tooltip.String()
-			entry := Entry{Tooltip: strings.Split(renderedTooltip, "\n"), Variants: []*Variant{{ID: int(parsed.Id), Name: parsed.Name}}}
-			entry.ProcInfo, entry.Supported = BuildProcInfo(parsed, instance, renderedTooltip)
-			grp.Entries = append(grp.Entries, &entry)
-			groupMapProc["Procs"] = grp
+			entry := Entry{Tooltip: strings.Split(renderedTooltip, "\n"), Variants: []*Variant{{ID: int(parsed.Id), Name: parsed.Name, SpellID: int(itemEffect.BuffId)}}}
+			entry.ProcInfo, entry.Supported = BuildProcInfo(parsed, int(itemEffect.BuffId), instance, renderedTooltip)
 
-			if !entry.Supported {
+			if len(itemEffect.ScalingOptions[0].Stats) == 0 || !entry.Supported {
+				StoreMissingEffect("ItemEffects", parsed.Name, Variant{
+					ID:      int(parsed.Id),
+					Name:    renderedTooltip,
+					SpellID: int(itemEffect.BuffId),
+				})
 				return EffectParseResultUnsupported
 			}
+
+			grp.Entries = append(grp.Entries, &entry)
+			groupMapProc["Procs"] = grp
 
 			return EffectParseResultSuccess
 		} else {
@@ -358,33 +379,40 @@ func TryParseProcEffect(parsed *proto.UIItem, instance *dbc.DBC, groupMapProc ma
 	return EffectParseResultInvalid
 }
 
-func TryParseOnUseEffect(parsed *proto.UIItem, groupMap map[string]Group) EffectParseResult {
+func TryParseOnUseEffect(parsed *proto.UIItem, itemEffect *proto.ItemEffect, groupMap map[string]Group) EffectParseResult {
 	// Effect was already manually implemented
 	if core.HasItemEffect(parsed.Id) {
 		return EffectParseResultSuccess
 	}
 
-	if parsed.ItemEffect.GetOnUse() != nil && parsed.ScalingOptions[0].Ilvl > MIN_EFFECT_ILVL {
-
-		if parsed.ItemEffect.GetOnUse().CooldownMs < 0 && parsed.ItemEffect.GetOnUse().CategoryCooldownMs < 0 {
+	if itemEffect.GetOnUse() != nil && parsed.ScalingOptions[0].Ilvl > MIN_EFFECT_ILVL {
+		if itemEffect.GetOnUse().CooldownMs < 0 && itemEffect.GetOnUse().CategoryCooldownMs < 0 {
 			return EffectParseResultUnsupported
 		}
 
-		groupName := GetEffectStatString(parsed)
+		groupName := GetEffectStatString(itemEffect)
 		grp, exists := groupMap[groupName]
 		if !exists {
 			grp = Group{Name: groupName}
 		}
-		grp.Entries = append(grp.Entries, &Entry{Variants: []*Variant{{ID: int(parsed.Id), Name: parsed.Name}}})
+
+		entry := &Entry{Variants: []*Variant{{ID: int(parsed.Id), Name: parsed.Name, SpellID: int(itemEffect.BuffId)}}, Supported: true}
+		grp.Entries = append(grp.Entries, entry)
 		groupMap[groupName] = grp
+
+		if len(itemEffect.ScalingOptions[0].Stats) == 0 {
+			entry.Supported = false
+			return EffectParseResultUnsupported
+		}
+
 		return EffectParseResultSuccess
 	}
 
 	return EffectParseResultInvalid
 }
 
-func TryParseEnchantEffect(enchant *proto.UIEnchant, groupMapProc map[string]Group, instance *dbc.DBC, enchantSpellEffects map[int]*dbc.SpellEffect) EffectParseResult {
-	if (enchant.EnchantEffect.GetProc() != nil || EnchantHasDummyEffect(enchant, instance)) && enchant.EffectId > 4267 {
+func TryParseEnchantEffect(enchant *proto.UIEnchant, enchantEffect *proto.ItemEffect, groupMapProc map[string]Group, instance *dbc.DBC, enchantSpellEffects map[int]*dbc.SpellEffect) EffectParseResult {
+	if (enchantEffect.GetProc() != nil || EnchantHasDummyEffect(enchant, instance)) && enchant.EffectId > 4267 {
 
 		// Effect was already manually implemented
 		if core.HasEnchantEffect(enchant.EffectId) {
@@ -401,11 +429,17 @@ func TryParseEnchantEffect(enchant *proto.UIEnchant, groupMapProc map[string]Gro
 			}
 
 			renderedTooltip := tooltip.String()
-			entry := Entry{Tooltip: strings.Split(renderedTooltip, "\n"), Variants: []*Variant{{ID: int(enchant.EffectId), Name: enchant.Name}}}
+			entry := Entry{Tooltip: strings.Split(renderedTooltip, "\n"), Variants: []*Variant{{ID: int(enchant.EffectId), Name: enchant.Name, SpellID: int(enchantingSpell.SpellID)}}}
 			entry.ProcInfo, entry.Supported = BuildEnchantProcInfo(enchant, instance, renderedTooltip)
 			grp.Entries = append(grp.Entries, &entry)
 			groupMapProc["Enchants"] = grp
+
 			if !entry.Supported {
+				StoreMissingEffect("EnchantEffects", enchant.Name, Variant{
+					ID:      int(enchant.EffectId),
+					Name:    renderedTooltip,
+					SpellID: int(enchant.SpellId),
+				})
 				return EffectParseResultUnsupported
 			}
 
@@ -416,53 +450,79 @@ func TryParseEnchantEffect(enchant *proto.UIEnchant, groupMapProc map[string]Gro
 	return EffectParseResultInvalid
 }
 
+func ParseTooltipForMissingEffect(parsed *proto.UIItem, itemEffect *proto.ItemEffect, instance *dbc.DBC, groupMap map[string]Group, groupMapName string) {
+	if parsed.ScalingOptions[0].Ilvl > MIN_EFFECT_ILVL {
+		// Effect was already manually implemented
+		if core.HasItemEffect(parsed.Id) {
+			return
+		}
+
+		tooltipString, id := dbc.GetItemEffectSpellTooltip(int(parsed.Id), int(itemEffect.BuffId))
+		tooltip, _ := tooltip.ParseTooltip(tooltipString, tooltip.DBCTooltipDataProvider{DBC: instance}, int64(id))
+
+		grp, exists := groupMap[groupMapName]
+		if !exists {
+			grp = Group{Name: groupMapName}
+		}
+
+		if tooltip != nil {
+			renderedTooltip := tooltip.String()
+			entry := Entry{
+				Tooltip:   strings.Split(renderedTooltip, "\n"),
+				Supported: false,
+				Variants: []*Variant{
+					{
+						ID:      int(parsed.Id),
+						Name:    parsed.Name,
+						SpellID: int(itemEffect.BuffId),
+					},
+				},
+			}
+
+			grp.Entries = append(grp.Entries, &entry)
+			groupMap[groupMapName] = grp
+
+			if len(itemEffect.ScalingOptions[0].Stats) == 0 || !entry.Supported {
+				StoreMissingEffect("ItemEffects", parsed.Name, Variant{
+					ID:      int(parsed.Id),
+					Name:    renderedTooltip,
+					SpellID: int(itemEffect.BuffId),
+				})
+			}
+		}
+	}
+}
+
 var critMatcher = regexp.MustCompile(`critical ([^\s]+|damage,?)( chance)? [^fbc]`)
 var pureHealMatcher = regexp.MustCompile(`healing spells`)
 var hasHealMatcher = regexp.MustCompile(`heal(ing)?[^,]`)
 var hasGenericMatcher = regexp.MustCompile(`a spell`)
 
-func BuildProcInfo(parsed *proto.UIItem, instance *dbc.DBC, tooltip string) (ProcInfo, bool) {
-	itemEffectInfo, ok := instance.ItemEffectsByParentID[int(parsed.Id)]
-	if !ok {
-		fmt.Printf("WARN: Can not generate proc info for Item: %d, not found.\n", parsed.Id)
+func BuildProcInfo(parsed *proto.UIItem, itemEffectID int, instance *dbc.DBC, tooltip string) (ProcInfo, bool) {
+	itemEffect := dbc.GetItemEffectForBuffID(int(parsed.Id), itemEffectID)
+	if itemEffect == nil {
+		return ProcInfo{}, false
 	}
 
 	// if we have multiple spells find the first that has a proc aura assigned
-	for _, effectInfo := range itemEffectInfo {
-		procId := effectInfo.SpellID
-		procSpell, ok := instance.Spells[int(procId)]
-		if !ok {
-			panic(fmt.Sprintf("Could not find proc aura %d spell for item effect %d.\n", procId, parsed.Id))
-		}
-
-		if len(procSpell.ProcTypeMask) == 0 || procSpell.ProcTypeMask[0] == 0 {
-			continue
-		}
-
-		itemType := proto.ItemType_ItemTypeUnknown
-		if itemEffectInfo[0].TriggerType == 2 {
-			itemType = proto.ItemType_ItemTypeWeapon
-		}
-
-		procInfo, supported := BuildSpellProcInfo(&procSpell, tooltip, itemType)
-
-		// we do not support generation of more than one proc effect right now
-		if len(itemEffectInfo) > 1 {
-			return procInfo, false
-		}
-
-		if SpellHasDummyEffect(int(procId), instance) {
-			return procInfo, false
-		}
-
-		if SpellUsesStacks(int(procId), instance) {
-			return procInfo, false
-		}
-
-		return procInfo, supported
+	procId := itemEffect.SpellID
+	procSpell, ok := instance.Spells[int(procId)]
+	if !ok {
+		panic(fmt.Sprintf("Could not find proc aura %d spell for item effect %d.\n", procId, parsed.Id))
 	}
 
-	return ProcInfo{}, false
+	itemType := proto.ItemType_ItemTypeUnknown
+	if itemEffect.TriggerType == 2 {
+		itemType = proto.ItemType_ItemTypeWeapon
+	}
+
+	procInfo, supported := BuildSpellProcInfo(&procSpell, tooltip, itemType)
+
+	if SpellHasDummyEffect(int(procId), instance) {
+		return procInfo, false
+	}
+
+	return procInfo, supported
 }
 
 func BuildEnchantProcInfo(enchant *proto.UIEnchant, instance *dbc.DBC, tooltip string) (ProcInfo, bool) {
@@ -482,16 +542,13 @@ func BuildEnchantProcInfo(enchant *proto.UIEnchant, instance *dbc.DBC, tooltip s
 		return procInfo, false
 	}
 
-	if SpellUsesStacks(int(procSpellID), instance) {
-		return procInfo, false
-	}
-
 	return procInfo, supported
 }
 
 func BuildSpellProcInfo(procSpell *dbc.Spell, tooltip string, itemType proto.ItemType) (ProcInfo, bool) {
 	var info = ProcInfo{
-		RequireDamageDealt: true,
+		RequireDamageDealt:  true,
+		MaxCumulativeStacks: procSpell.MaxCumulativeStacks,
 	}
 
 	// On hit proc
@@ -503,6 +560,10 @@ func BuildSpellProcInfo(procSpell *dbc.Spell, tooltip string, itemType proto.Ite
 	if itemType == proto.ItemType_ItemTypeRanged {
 		info.Callback |= core.CallbackOnSpellHitDealt
 		info.ProcMask |= core.ProcMaskRanged
+	}
+
+	if len(procSpell.SpellClassMask) > 0 {
+		return info, false
 	}
 
 	if len(procSpell.ProcTypeMask) > 0 {
@@ -613,6 +674,37 @@ func BuildSpellProcInfo(procSpell *dbc.Spell, tooltip string, itemType proto.Ite
 		info.ProcMask == core.ProcMaskEmpty
 
 	return info, !unsupported
+}
+
+func StoreMissingEffect(effectType string, name string, variant Variant) {
+	if missingEffectsMap[effectType] == nil {
+		missingEffectsMap[effectType] = map[int32]MissingItemEffect{}
+	}
+	id := int32(variant.ID)
+	if missingEffectsMap[effectType][id].Effects == nil {
+		missingEffectsMap[effectType][id] = MissingItemEffect{
+			ItemID:  id,
+			Name:    name,
+			Effects: []Variant{},
+		}
+	}
+	itemEntry := missingEffectsMap[effectType][id]
+	haveEffect := false
+	for _, effect := range itemEntry.Effects {
+		if effect.SpellID == variant.SpellID {
+			haveEffect = true
+			break
+		}
+	}
+	if haveEffect {
+		return
+	}
+
+	itemEntry.Effects = append(
+		itemEntry.Effects,
+		variant,
+	)
+	missingEffectsMap[effectType][id] = itemEntry
 }
 
 func asCoreCallback(callback core.AuraCallback) string {

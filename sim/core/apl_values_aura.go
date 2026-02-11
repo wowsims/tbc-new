@@ -284,3 +284,30 @@ func (value *APLValueAuraShouldRefresh) GetBool(sim *Simulation) bool {
 func (value *APLValueAuraShouldRefresh) String() string {
 	return fmt.Sprintf("Should Refresh Aura(%s)", value.aura.String())
 }
+
+type APLValueAuraDuration struct {
+	DefaultAPLValueImpl
+	aura AuraReference
+}
+
+func (rot *APLRotation) newValueAuraDuration(config *proto.APLValueAuraDuration, _ *proto.UUID) APLValue {
+	if config.AuraId == nil {
+		return nil
+	}
+	aura := rot.GetAPLAura(rot.GetSourceUnit(config.SourceUnit), config.AuraId)
+	if aura.Get() == nil {
+		return nil
+	}
+	return &APLValueAuraDuration{
+		aura: aura,
+	}
+}
+func (value *APLValueAuraDuration) Type() proto.APLValueType {
+	return proto.APLValueType_ValueTypeDuration
+}
+func (value *APLValueAuraDuration) GetDuration(sim *Simulation) time.Duration {
+	return value.aura.Get().Duration
+}
+func (value *APLValueAuraDuration) String() string {
+	return fmt.Sprintf("Aura Duration(%s)", value.aura.String())
+}

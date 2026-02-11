@@ -4,7 +4,7 @@ import { UIEnchant as Enchant, UIGem as Gem, UIItem as Item } from '../proto/ui'
 import { isBluntWeaponType, isSharpWeaponType } from '../proto_utils/utils';
 import { distinct, equalsOrBothNull, getEnumValues, sum } from '../utils';
 import { Database } from './database';
-import { EquippedItem, ReforgeData } from './equipped_item';
+import { EquippedItem } from './equipped_item';
 import { gemMatchesSocket, isMetaGemActive } from './gems';
 import { Stats } from './stats';
 import { validWeaponCombo } from './utils';

@@ -44,6 +44,8 @@ export class ConsumesPicker extends Component {
 		this.buildEngPicker();
 		this.buildPetPicker();
 		this.buildImbuePicker();
+		this.buildDrumsPicker();
+		this.buildScrollsPicker();
 	}
 
 	private buildPotionsPicker(): void {
@@ -60,22 +62,16 @@ export class ConsumesPicker extends Component {
 		if (this.simUI.player.getClass() !== Class.ClassWarrior && this.simUI.player.getSpec() !== Spec.SpecFeralBearDruid) {
 			pots = pots.filter(pot => pot.id !== 13442);
 		}
-		const prePotOptions = ConsumablesInputs.makeConsumableInput(pots, { consumesFieldName: 'prepotId' }, i18n.t('settings_tab.consumables.potions.prepop'));
 		const potionsOptions = ConsumablesInputs.makeConsumableInput(pots, { consumesFieldName: 'potId' }, i18n.t('settings_tab.consumables.potions.combat'));
-
-		const prePotPicker = buildIconInput(potionsElem, this.simUI.player, prePotOptions);
-
 		const potionsPicker = buildIconInput(potionsElem, this.simUI.player, potionsOptions);
 
 		const conjuredOptions = ConsumablesInputs.makeConjuredInput(relevantStatOptions(ConsumablesInputs.CONJURED_CONFIG, this.simUI));
 		const conjuredPicker = buildIconInput(potionsElem, this.simUI.player, conjuredOptions);
 
-		const events = TypedEvent.onAny([this.simUI.player.professionChangeEmitter]).on(() =>
-			this.updateRow(row, [potionsPicker, conjuredPicker, prePotPicker]),
-		);
+		const events = TypedEvent.onAny([this.simUI.player.professionChangeEmitter]).on(() => this.updateRow(row, [potionsPicker, conjuredPicker]));
 		this.addOnDisposeCallback(() => events.dispose());
 
-		this.updateRow(row, [potionsPicker, conjuredPicker, prePotPicker]);
+		this.updateRow(row, [potionsPicker, conjuredPicker]);
 	}
 
 	private buildElixirsPicker(): void {
@@ -134,7 +130,10 @@ export class ConsumesPicker extends Component {
 		);
 		const engiConsumesElem = engiConsumesRef.value!;
 
-		const explosivesoptions = ConsumablesInputs.makeExplosivesInput(relevantStatOptions(ConsumablesInputs.EXPLOSIVE_CONFIG, this.simUI), i18n.t('settings_tab.consumables.engineering.explosives'));
+		const explosivesoptions = ConsumablesInputs.makeExplosivesInput(
+			relevantStatOptions(ConsumablesInputs.EXPLOSIVE_CONFIG, this.simUI),
+			i18n.t('settings_tab.consumables.engineering.explosives'),
+		);
 		const explosivePicker = buildIconInput(engiConsumesElem, this.simUI.player, explosivesoptions);
 		const goblinSapperPicker = buildIconInput(engiConsumesElem, this.simUI.player, ConsumablesInputs.GoblinSapper);
 		const superSapperPicker = buildIconInput(engiConsumesElem, this.simUI.player, ConsumablesInputs.SuperSapper);
@@ -166,19 +165,56 @@ export class ConsumesPicker extends Component {
 		const row = this.rootElem.appendChild(
 			<ConsumeRow label="Imbue">
 				<div ref={imbuePickerRef} className="picker-group icon-group consumes-row-inputs consumes-imbue"></div>
-			</ConsumeRow>
+			</ConsumeRow>,
 		);
 		const imbuePickerElem = imbuePickerRef.value!;
 
-		const mhImbueOptions = ConsumablesInputs.makeMHImbueInput(relevantStatOptions(ConsumablesInputs.IMBUE_CONFIG_MH, this.simUI), i18n.t('settings_tab.consumables.imbue.mhImbue'));
-		const ohImbueOptions = ConsumablesInputs.makeOHImbueinput(relevantStatOptions(ConsumablesInputs.IMBUE_CONFIG_OH, this.simUI), i18n.t('settings_tab.consumables.imbue.ohImbue'));
-		mhImbueOptions.enableWhen = (player: Player<any>) => !player.getParty() || player.getParty()!.getBuffs().windfuryTotemRank == 0
-		mhImbueOptions.changedEvent = (player: Player<any>) => TypedEvent.onAny([player.getRaid()?.changeEmitter || player.consumesChangeEmitter]);
+		const mhImbueOptions = ConsumablesInputs.makeMHImbueInput(
+			relevantStatOptions(ConsumablesInputs.IMBUE_CONFIG_MH, this.simUI),
+			i18n.t('settings_tab.consumables.imbue.mhImbue'),
+		);
+
+		const ohImbueOptions = ConsumablesInputs.makeOHImbueinput(
+			relevantStatOptions(ConsumablesInputs.IMBUE_CONFIG_OH, this.simUI),
+			i18n.t('settings_tab.consumables.imbue.ohImbue'),
+		);
 
 		buildIconInput(imbuePickerElem, this.simUI.player, mhImbueOptions);
 		if (isDualWieldSpec(this.simUI.player.getSpec())) {
 			buildIconInput(imbuePickerElem, this.simUI.player, ohImbueOptions);
 		}
+	}
+
+	private buildDrumsPicker(): void {
+		const drumsPickerRef = ref<HTMLDivElement>();
+		const row = this.rootElem.appendChild(
+			<ConsumeRow label="Drums">
+				<div ref={drumsPickerRef} className="picker-group icon-group consumes-row-inputs consumes-drums"></div>
+			</ConsumeRow>,
+		);
+		const drumsPickerElem = drumsPickerRef.value!;
+
+		const drumsOptions = ConsumablesInputs.makeDrumsInput(relevantStatOptions(ConsumablesInputs.DRUMS_CONFIG, this.simUI));
+		buildIconInput(drumsPickerElem, this.simUI.player, drumsOptions);
+	}
+
+	private buildScrollsPicker(): void {
+		const scrollsRef = ref<HTMLDivElement>();
+		const row = this.rootElem.appendChild(
+			<ConsumeRow label="Scrolls">
+				<div ref={scrollsRef} className="picker-group icon-group consumes-row-inputs consumes-scrolls"></div>
+			</ConsumeRow>,
+		);
+		const scrollsElem = scrollsRef.value!;
+
+		const scrollAgi = buildIconInput(scrollsElem, this.simUI.player, ConsumablesInputs.ScrollAgi);
+		const scrollStr = buildIconInput(scrollsElem, this.simUI.player, ConsumablesInputs.ScrollStr);
+		const scrollInt = buildIconInput(scrollsElem, this.simUI.player, ConsumablesInputs.ScrollInt);
+		const scrollSpi = buildIconInput(scrollsElem, this.simUI.player, ConsumablesInputs.ScrollSpi);
+		const scrollArm = buildIconInput(scrollsElem, this.simUI.player, ConsumablesInputs.ScrollArm);
+
+		// Initial update of row based on current state.
+		this.updateRow(row, [scrollAgi, scrollStr, scrollInt, scrollSpi, scrollArm]);
 	}
 
 	private updateRow(rowElem: Element, pickers: (IconPicker<Player<any>, any> | IconEnumPicker<Player<any>, any>)[]) {
@@ -194,6 +230,5 @@ const ConsumeRow = ({ label, children }: { label: string; children: JSX.Element 
 	</div>
 );
 function isDualWieldSpec(spec: any): boolean {
-	return [Spec.SpecEnhancementShaman, Spec.SpecHunter, Spec.SpecRogue, Spec.SpecDPSWarrior, Spec.SpecProtectionWarrior].includes(spec)
+	return [Spec.SpecEnhancementShaman, Spec.SpecHunter, Spec.SpecRogue, Spec.SpecDpsWarrior, Spec.SpecProtectionWarrior].includes(spec);
 }
-

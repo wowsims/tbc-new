@@ -38,9 +38,6 @@ export const statI18nKeys: Record<Stat, string> = {
 	[Stat.StatMeleeCritRating]: 'melee_crit_rating',
 	[Stat.StatMeleeHasteRating]: 'melee_haste_rating',
 	[Stat.StatArmorPenetration]: 'armor_penetration',
-	[Stat.StatAllPhysHitRating]: 'all_hit_rating',
-	[Stat.StatAllPhysCritRating]: 'all_crit_rating',
-	[Stat.StatAllPhysHasteRating]: 'all_haste_rating',
 	[Stat.StatDefenseRating]: 'defense_rating',
 	[Stat.StatBlockRating]: 'block_rating',
 	[Stat.StatBlockValue]: 'block_value',
@@ -222,7 +219,7 @@ export const specI18nKeys: Record<Spec, string> = {
 	// Warlock
 	[Spec.SpecWarlock]: 'warlock',
 	// Warrior
-	[Spec.SpecDPSWarrior]: 'dps',
+	[Spec.SpecDpsWarrior]: 'dps',
 	[Spec.SpecProtectionWarrior]: 'protection',
 };
 

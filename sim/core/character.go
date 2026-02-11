@@ -296,7 +296,7 @@ func (character *Character) applyAllEffects(agent Agent, raidBuffs *proto.RaidBu
 	character.applyBuildPhaseAuras(CharacterBuildPhaseBuffs)
 	playerStats.BuffsStats = measureStats()
 
-	applyConsumeEffects(agent)
+	applyConsumeEffects(agent, partyBuffs)
 	character.applyBuildPhaseAuras(CharacterBuildPhaseConsumes)
 	playerStats.ConsumesStats = measureStats()
 	character.clearBuildPhaseAuras(CharacterBuildPhaseAll)
@@ -664,9 +664,10 @@ func (character *Character) GetPseudoStatsProto() []float64 {
 		proto.PseudoStat_PseudoStatRangedDps:   character.AutoAttacks.Ranged().DPS(),
 
 		// Base values are modified by Enemy attackTables, but we display for LVL 70 enemy as paperdoll default
-		proto.PseudoStat_PseudoStatDodgePercent: (character.PseudoStats.BaseDodgeChance + character.GetDodgeFromRating()) * 100,
-		proto.PseudoStat_PseudoStatParryPercent: Ternary(character.PseudoStats.CanParry, (character.PseudoStats.BaseParryChance+character.GetParryFromRating())*100, 0),
-		proto.PseudoStat_PseudoStatBlockPercent: Ternary(character.PseudoStats.CanBlock, (character.PseudoStats.BaseBlockChance+character.GetBlockFromRating())*100, 0),
+		proto.PseudoStat_PseudoStatDodgePercent:         (character.PseudoStats.BaseDodgeChance + character.GetDodgeFromRating()) * 100,
+		proto.PseudoStat_PseudoStatParryPercent:         Ternary(character.PseudoStats.CanParry, (character.PseudoStats.BaseParryChance+character.GetParryFromRating())*100, 0),
+		proto.PseudoStat_PseudoStatBlockPercent:         Ternary(character.PseudoStats.CanBlock, (character.PseudoStats.BaseBlockChance+character.GetBlockFromRating())*100, 0),
+		proto.PseudoStat_PseudoStatBlockValueMultiplier: character.PseudoStats.BlockValueMultiplier,
 
 		// Used by UI to incorporate multiplicative Haste buffs into final character stats display.
 		proto.PseudoStat_PseudoStatRangedSpeedMultiplier: character.PseudoStats.RangedSpeedMultiplier * character.PseudoStats.AttackSpeedMultiplier,
@@ -757,53 +758,4 @@ func FillTalentsProto(data protoreflect.Message, talentsStr string, treeSizes [3
 		}
 		offset += treeSizes[treeIdx]
 	}
-}
-
-func (character *Character) MeetsArmorSpecializationRequirement(armorType proto.ArmorType) bool {
-	for _, itemSlot := range ArmorSpecializationSlots() {
-		item := character.Equipment[itemSlot]
-		if item.ArmorType == proto.ArmorType_ArmorTypeUnknown {
-			continue
-		}
-		if item.ArmorType != armorType {
-			return false
-		}
-	}
-
-	return true
-}
-
-func (character *Character) RegisterArmorSpecializationTracker(armorType proto.ArmorType, spellID int32) *Aura {
-	isEnabled := character.MeetsArmorSpecializationRequirement(armorType)
-
-	aura := character.RegisterAura(Aura{
-		Label:      "Armor Specialization",
-		ActionID:   ActionID{SpellID: spellID},
-		BuildPhase: Ternary(isEnabled, CharacterBuildPhaseTalents, CharacterBuildPhaseNone),
-		Duration:   NeverExpires,
-	})
-
-	if isEnabled {
-		aura = MakePermanent(aura)
-	}
-
-	character.RegisterItemSwapCallback(ArmorSpecializationSlots(),
-		func(sim *Simulation, _ proto.ItemSlot) {
-			if character.MeetsArmorSpecializationRequirement(armorType) {
-				if !aura.IsActive() {
-					aura.Activate(sim)
-				}
-			} else {
-				aura.Deactivate(sim)
-			}
-		})
-
-	return aura
-}
-
-func (character *Character) ApplyArmorSpecializationEffect(primaryStat stats.Stat, armorType proto.ArmorType, spellID int32) *Aura {
-	armorSpecializationDependency := character.NewDynamicMultiplyStat(primaryStat, 1.05)
-	trackerAura := character.RegisterArmorSpecializationTracker(armorType, spellID)
-	trackerAura.AttachStatDependency(armorSpecializationDependency)
-	return trackerAura
 }

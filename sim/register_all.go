@@ -20,7 +20,7 @@ import (
 	"github.com/wowsims/tbc/sim/shaman/enhancement"
 	restoShaman "github.com/wowsims/tbc/sim/shaman/restoration"
 	"github.com/wowsims/tbc/sim/warlock"
-	dpswarrior "github.com/wowsims/tbc/sim/warrior/dps"
+	DpsWarrior "github.com/wowsims/tbc/sim/warrior/dps"
 	protWarrior "github.com/wowsims/tbc/sim/warrior/protection"
 )
 
@@ -57,7 +57,7 @@ func RegisterAll() {
 
 	warlock.RegisterWarlock()
 
-	dpswarrior.RegisterDpsWarrior()
+	DpsWarrior.RegisterDpsWarrior()
 	protWarrior.RegisterProtectionWarrior()
 
 	common.RegisterAllEffects()

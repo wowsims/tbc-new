@@ -3,8 +3,8 @@
 	"properties": {
 		"items": {
 			"type": "array",
-			"minItems": 16,
-			"maxItems": 16,
+			"minItems": 17,
+			"maxItems": 17,
 			"items": {
 				"type": "object",
 				"properties": {
@@ -20,18 +20,8 @@
 					"enchant": {
 						"type": "integer"
 					},
-					"tinker": {
-						"type": "integer"
-					},
-					"reforging": {
-						"type": "integer"
-					},
 					"randomSuffix": {
 						"type": "integer"
-					},
-					"upgradeStep": {
-						"type": "string",
-						"enum": ["ChallengeMode", "UpgradeStepOne", "UpgradeStepTwo", "UpgradeStepThree", "UpgradeStepFour"]
 					}
 				},
 				"additionalProperties": false

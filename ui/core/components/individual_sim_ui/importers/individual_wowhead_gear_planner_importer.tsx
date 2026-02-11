@@ -232,7 +232,6 @@ export class IndividualWowheadGearPlannerImporter<SpecType extends Spec> extends
 			if (!!item.enchantIds?.length) {
 				item.enchantIds.forEach(enchantSpellId => {
 					const enchant = this.simUI.sim.db.enchantSpellIdToEnchant(enchantSpellId);
-					const isTinker = enchant?.requiredProfession === Profession.Engineering;
 					if (!enchant) {
 						missingEnchants.push(enchantSpellId);
 						return;
