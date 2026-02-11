@@ -83,7 +83,7 @@ type Rogue struct {
 
 	HasPvpEnergy              bool
 	DeathmantleBonus          float64
-	SliceAndDiceBonusDuration float64
+	SliceAndDiceBonusDuration time.Duration
 }
 
 // ApplyTalents implements core.Agent.

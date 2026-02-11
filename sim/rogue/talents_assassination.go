@@ -67,7 +67,7 @@ func (rogue *Rogue) registerMalice() {
 		return
 	}
 
-	rogue.AddStat(stats.AllPhysCritRating, float64(rogue.Talents.Malice)*core.PhysicalCritRatingPerCritPercent)
+	rogue.AddStat(stats.MeleeCritRating, float64(rogue.Talents.Malice)*core.PhysicalCritRatingPerCritPercent)
 }
 
 func (rogue *Rogue) registerMurder() {

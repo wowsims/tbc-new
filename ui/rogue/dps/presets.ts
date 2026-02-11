@@ -4,7 +4,7 @@ import { Rogue_Options as RogueOptions } from '../../core/proto/rogue';
 import { SavedTalents } from '../../core/proto/ui';
 import { Stats } from '../../core/proto_utils/stats';
 import BlankAPL from './apls/blank.apl.json'
-import BlankGear from './gear_sets/blank.gear.json';
+import BlankGear from './gear_sets/p1.gear.json';
 
 // Preset options for this spec.
 // Eventually we will import these values for the raid sim too, so its good to
@@ -12,11 +12,11 @@ import BlankGear from './gear_sets/blank.gear.json';
 
 export const BLANK_APL = PresetUtils.makePresetAPLRotation('Blank', BlankAPL)
 
-export const BLANK_GEARSET = PresetUtils.makePresetGear('Blank', BlankGear);
+export const BLANK_GEARSET = PresetUtils.makePresetGear('P1 Combat Swords', BlankGear);
 
 // Preset options for EP weights
 export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
-	'Sub',
+	'Combat Swords',
 	Stats.fromMap(
 		{
 			[Stat.StatAgility]: 1.0,
@@ -37,9 +37,9 @@ export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
 // https://wowhead.com/wotlk/talent-calc and copy the numbers in the url.
 
 export const Talents = {
-	name: 'A',
+	name: 'Combat Swords',
 	data: SavedTalents.create({
-		talentsString: '',
+		talentsString: '00532012502-023305200005015002321151',
 	}),
 };
 

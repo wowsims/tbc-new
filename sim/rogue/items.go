@@ -26,7 +26,7 @@ var Tier4 = core.NewItemSet(core.ItemSet{
 	ID:   621,
 	Bonuses: map[int32]core.ApplySetBonus{
 		2: func(agent core.Agent, setBonusAura *core.Aura) {
-			agent.(RogueAgent).GetRogue().SliceAndDiceBonusDuration += 3
+			agent.(RogueAgent).GetRogue().SliceAndDiceBonusDuration += time.Second * 3
 		},
 		4: func(agent core.Agent, setBonusAura *core.Aura) {
 			rogue := agent.(RogueAgent).GetRogue()
