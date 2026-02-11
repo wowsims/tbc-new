@@ -478,32 +478,6 @@ func init() {
 		character.ItemSwap.RegisterProc(31858, procAura)
 	})
 
-	// Madness of the Betrayer
-	core.NewItemEffect(31857, func(agent core.Agent) {
-		character := agent.GetCharacter()
-
-		aura := character.NewTemporaryStatsAura(
-			"Forceful Strike",
-			core.ActionID{SpellID: 40477},
-			stats.Stats{stats.ArmorPenetration: 300},
-			time.Second*10,
-		)
-
-		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:     "Madness of the Betrayer",
-			ActionID: core.ActionID{ItemID: 31857},
-			ProcMask: core.ProcMaskMeleeOrRanged,
-			DPM:      character.NewLegacyPPMManager(1, core.ProcMaskMeleeOrRanged),
-			Outcome:  core.OutcomeLanded,
-			Callback: core.CallbackOnSpellHitDealt,
-			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-				aura.Activate(sim)
-			},
-		})
-
-		character.ItemSwap.RegisterProc(31857, procAura)
-	})
-
 	// Brooch of the Immortal King
 	core.NewItemEffect(32534, func(agent core.Agent) {
 		character := agent.GetCharacter()
