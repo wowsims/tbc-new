@@ -21,6 +21,25 @@ var PVPSet = core.NewItemSet(core.ItemSet{
 	},
 })
 
+var Dungeon3 = core.NewItemSet(core.ItemSet{
+	Name: "Assassination Armor",
+	ID:   620,
+	Bonuses: map[int32]core.ApplySetBonus{
+		2: func(agent core.Agent, setBonusAura *core.Aura) {
+			// Your Cheap Shot and Kidney Shot attacks grant you 160 haste rating for 6 sec.
+			// NYI
+		},
+		4: func(agent core.Agent, setBonusAura *core.Aura) {
+			// Your Eviscerate and Envenom abilities cost 10 less energy.
+			setBonusAura.AttachSpellMod(core.SpellModConfig{
+				Kind:      core.SpellMod_PowerCost_Flat,
+				ClassMask: RogueSpellEviscerate | RogueSpellEnvenom,
+				IntValue:  -10,
+			})
+		},
+	},
+})
+
 var Tier4 = core.NewItemSet(core.ItemSet{
 	Name: "Netherblade",
 	ID:   621,
