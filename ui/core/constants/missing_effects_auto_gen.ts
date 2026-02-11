@@ -57,7 +57,6 @@ export const MISSING_ITEM_EFFECTS = [
     28590, // Ribbon of Sacrifice
     28602, // Robe of the Elder Scribes
     28727, // Pendant of the Violet Eye
-    28789, // Eye of Magtheridon
     28823, // Eye of Gruul
     29108, // Blade of the Unyielding
     29109, // Rod of the Unyielding
@@ -68,8 +67,6 @@ export const MISSING_ITEM_EFFECTS = [
     30317, // Cosmic Infuser
     30449, // Void Star Talisman
     30619, // Fel Reaver's Piston
-    30621, // Prism of Inner Calm
-    30626, // Sextant of Unstable Currents
     30627, // Tsunami Talisman
     30663, // Fathom-Brooch of the Tidewalker
     30664, // Living Root of the Wildheart

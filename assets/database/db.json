@@ -9691,7 +9691,7 @@
 {"id":9334,"name":"Inscription of Vengeance","icon":"spell_holy_fistofjustice"},
 {"id":9336,"name":"Greater Inscription of Vengeance","icon":"spell_holy_greaterblessingofkings"},
 {"id":9344,"name":"Inscription of Discipline","icon":"spell_holy_sealofwisdom"},
-{"id":9346,"name":"Zandalar Signet of Mojo","icon":"inv_jewelry_ring_46"},
+{"id":9346,"name":"Greater Inscription of Discipline","icon":"spell_holy_sealofwisdom"},
 {"id":9408,"name":"Greater Inscription of the Oracle","icon":"spell_holy_powerinfusion"},
 {"id":9417,"name":"Greater Inscription of the Orb","icon":"inv_misc_orb_03"},
 {"id":9452,"name":"Vindication","icon":"spell_holy_vindication"},

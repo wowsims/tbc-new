@@ -282,4 +282,8 @@ var ItemSetOnslaughtArmor = core.NewItemSet(core.ItemSet{
 	},
 })
 
-func init() {}
+func init() {
+	// Empty function to remove the warning from the UI
+	// because this effect has been implemented in buffs.go
+	core.NewItemEffect(30446, func(agent core.Agent) {})
+}
