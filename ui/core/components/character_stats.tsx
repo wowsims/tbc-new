@@ -15,7 +15,10 @@ import { Component } from './component.js';
 import { NumberPicker } from './pickers/number_picker.js';
 
 export type StatMods = { base?: Stats; gear?: Stats; talents?: Stats; buffs?: Stats; consumes?: Stats; final?: Stats; stats?: Array<Stat> };
-export type StatWrites = { base: Stats; gear: Stats; talents: Stats; buffs: Stats; consumes: Stats; final: Stats; stats: Array<Stat> };
+export type DisplayStat = {
+	stat: UnitStat;
+	notEditable?: boolean;
+};
 
 enum StatGroup {
 	Primary = 'Primary',
@@ -24,6 +27,79 @@ enum StatGroup {
 	Spell = 'Spell',
 	Defense = 'Defense',
 }
+
+const statGroups = new Map<string, Array<DisplayStat>>([
+	['Primary', [{ stat: UnitStat.fromStat(Stat.StatHealth) }, { stat: UnitStat.fromStat(Stat.StatMana) }]],
+	[
+		'Attributes',
+		[
+			{ stat: UnitStat.fromStat(Stat.StatStrength) },
+			{ stat: UnitStat.fromStat(Stat.StatAgility) },
+			{ stat: UnitStat.fromStat(Stat.StatStamina) },
+			{ stat: UnitStat.fromStat(Stat.StatIntellect) },
+			{ stat: UnitStat.fromStat(Stat.StatSpirit) },
+		],
+	],
+	[
+		'Physical',
+		[
+			{ stat: UnitStat.fromStat(Stat.StatAttackPower) },
+			{ stat: UnitStat.fromStat(Stat.StatFeralAttackPower) },
+			{ stat: UnitStat.fromStat(Stat.StatRangedAttackPower) },
+			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatMeleeHitPercent) },
+			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatMeleeCritPercent) },
+			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatMeleeHastePercent) },
+			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatRangedHitPercent) },
+			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatRangedCritPercent) },
+			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatRangedHastePercent) },
+			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatMeleeSpeedMultiplier) },
+			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatRangedSpeedMultiplier) },
+			{ stat: UnitStat.fromStat(Stat.StatExpertiseRating) },
+			{ stat: UnitStat.fromStat(Stat.StatArmorPenetration) },
+			// { stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatBonusPhysicalDamage) },
+		],
+	],
+	[
+		'Spell',
+		[
+			{ stat: UnitStat.fromStat(Stat.StatSpellDamage) },
+			{ stat: UnitStat.fromStat(Stat.StatArcaneDamage) },
+			{ stat: UnitStat.fromStat(Stat.StatFireDamage) },
+			{ stat: UnitStat.fromStat(Stat.StatFrostDamage) },
+			{ stat: UnitStat.fromStat(Stat.StatHolyDamage) },
+			{ stat: UnitStat.fromStat(Stat.StatNatureDamage) },
+			{ stat: UnitStat.fromStat(Stat.StatShadowDamage) },
+			{ stat: UnitStat.fromStat(Stat.StatHealingPower) },
+			{ stat: UnitStat.fromStat(Stat.StatSpellHitRating) },
+			{ stat: UnitStat.fromStat(Stat.StatSpellCritRating) },
+			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatCastSpeedMultiplier) },
+			{ stat: UnitStat.fromStat(Stat.StatSpellPenetration) },
+			{ stat: UnitStat.fromStat(Stat.StatMP5) },
+		],
+	],
+	[
+		'Defense',
+		[
+			{ stat: UnitStat.fromStat(Stat.StatArmor) },
+			{ stat: UnitStat.fromStat(Stat.StatBonusArmor) },
+			{ stat: UnitStat.fromStat(Stat.StatDefenseRating) },
+			{ stat: UnitStat.fromStat(Stat.StatDodgeRating) },
+			{ stat: UnitStat.fromStat(Stat.StatParryRating) },
+			{ stat: UnitStat.fromStat(Stat.StatBlockRating) },
+			{ stat: UnitStat.fromStat(Stat.StatBlockValue) },
+		],
+	],
+	[
+		'Resistance',
+		[
+			{ stat: UnitStat.fromStat(Stat.StatArcaneResistance) },
+			{ stat: UnitStat.fromStat(Stat.StatFireResistance) },
+			{ stat: UnitStat.fromStat(Stat.StatFrostResistance) },
+			{ stat: UnitStat.fromStat(Stat.StatNatureResistance) },
+			{ stat: UnitStat.fromStat(Stat.StatShadowResistance) },
+		],
+	],
+]);
 
 export class CharacterStats extends Component {
 	readonly stats: Array<UnitStat>;
@@ -35,15 +111,15 @@ export class CharacterStats extends Component {
 
 	private readonly player: Player<any>;
 	private readonly modifyDisplayStats?: (player: Player<any>) => StatMods;
-	private readonly overwriteDisplayStats?: (player: Player<any>) => StatWrites;
+	private readonly overwriteDisplayStats?: (player: Player<any>) => Required<StatMods>;
 
 	constructor(
 		parent: HTMLElement,
 		simUI: IndividualSimUI<any>,
-		player: Player<any>,
-		statList: Array<UnitStat>,
-		modifyDisplayStats?: (player: Player<any>) => StatMods,
-		overwriteDisplayStats?: (player: Player<any>) => StatWrites,
+		player: CharacterStats['player'],
+		statList: CharacterStats['stats'],
+		modifyDisplayStats?: CharacterStats['modifyDisplayStats'],
+		overwriteDisplayStats?: CharacterStats['overwriteDisplayStats'],
 	) {
 		super(parent, 'character-stats-root');
 		this.stats = [];
@@ -61,129 +137,46 @@ export class CharacterStats extends Component {
 		this.rootElem.appendChild(table);
 
 		this.valueElems = [];
-
-		const statGroups = new Map<StatGroup, Array<UnitStat>>([
-			[StatGroup.Primary, [UnitStat.fromStat(Stat.StatHealth), UnitStat.fromStat(Stat.StatMana)]],
-			[
-				StatGroup.Attributes,
-				[
-					UnitStat.fromStat(Stat.StatStrength),
-					UnitStat.fromStat(Stat.StatAgility),
-					UnitStat.fromStat(Stat.StatStamina),
-					UnitStat.fromStat(Stat.StatIntellect),
-					UnitStat.fromStat(Stat.StatSpirit),
-				],
-			],
-			[
-				StatGroup.Defense,
-				[
-					UnitStat.fromStat(Stat.StatArmor),
-					UnitStat.fromStat(Stat.StatBonusArmor),
-					UnitStat.fromPseudoStat(PseudoStat.PseudoStatDodgePercent),
-					UnitStat.fromPseudoStat(PseudoStat.PseudoStatParryPercent),
-					UnitStat.fromPseudoStat(PseudoStat.PseudoStatBlockPercent),
-					UnitStat.fromStat(Stat.StatBlockValue),
-					UnitStat.fromStat(Stat.StatArcaneResistance),
-					UnitStat.fromStat(Stat.StatFireResistance),
-					UnitStat.fromStat(Stat.StatFrostDamage),
-					UnitStat.fromStat(Stat.StatNatureResistance),
-					UnitStat.fromStat(Stat.StatShadowResistance),
-				],
-			],
-			[
-				StatGroup.Physical,
-				[
-					UnitStat.fromStat(Stat.StatAttackPower),
-					UnitStat.fromStat(Stat.StatRangedAttackPower),
-					UnitStat.fromStat(Stat.StatFeralAttackPower),
-					UnitStat.fromStat(Stat.StatArmorPenetration),
-					UnitStat.fromPseudoStat(PseudoStat.PseudoStatMeleeHastePercent),
-					UnitStat.fromPseudoStat(PseudoStat.PseudoStatRangedHastePercent),
-					UnitStat.fromPseudoStat(PseudoStat.PseudoStatMeleeHitPercent),
-					//UnitStat.fromStat(Stat.StatExpertiseRating),
-					UnitStat.fromPseudoStat(PseudoStat.PseudoStatMeleeCritPercent),
-					UnitStat.fromPseudoStat(PseudoStat.PseudoStatRangedHitPercent),
-					UnitStat.fromPseudoStat(PseudoStat.PseudoStatRangedCritPercent),
-				],
-			],
-			[
-				StatGroup.Spell,
-				[
-					UnitStat.fromStat(Stat.StatSpellDamage),
-					UnitStat.fromStat(Stat.StatArcaneDamage),
-					UnitStat.fromStat(Stat.StatFireDamage),
-					UnitStat.fromStat(Stat.StatFrostDamage),
-					UnitStat.fromStat(Stat.StatHolyDamage),
-					UnitStat.fromStat(Stat.StatNatureDamage),
-					UnitStat.fromStat(Stat.StatShadowDamage),
-					UnitStat.fromPseudoStat(PseudoStat.PseudoStatSpellHastePercent),
-					UnitStat.fromPseudoStat(PseudoStat.PseudoStatSpellHitPercent),
-					UnitStat.fromPseudoStat(PseudoStat.PseudoStatSpellCritPercent),
-				],
-			],
-		]);
-
-		if (this.player.getPlayerSpec().isTankSpec) {
-			const hitIndex = statGroups.get(StatGroup.Physical)!.findIndex(stat => stat.equalsPseudoStat(PseudoStat.PseudoStatMeleeHitPercent));
-			statGroups.get(StatGroup.Physical)!.splice(hitIndex + 1, 0, UnitStat.fromStat(Stat.StatExpertiseRating));
-			// statGroups.get(StatGroup.Defense)!.push(UnitStat.fromStat(Stat.StatDefenseRating));
-		} else if ([Stat.StatIntellect, Stat.StatSpellDamage].includes(simUI.individualConfig.epReferenceStat)) {
-			const hitIndex = statGroups.get(StatGroup.Spell)!.findIndex(stat => stat.equalsPseudoStat(PseudoStat.PseudoStatSpellHitPercent));
-			// statGroups.get(StatGroup.Spell)!.splice(hitIndex+1, 0, UnitStat.fromStat(Stat.StatExpertiseRating));
-		} else {
-			const hitIndex = statGroups.get(StatGroup.Physical)!.findIndex(stat => stat.equalsPseudoStat(PseudoStat.PseudoStatMeleeHitPercent));
-			statGroups.get(StatGroup.Physical)!.splice(hitIndex + 1, 0, UnitStat.fromStat(Stat.StatExpertiseRating));
-		}
-
 		statGroups.forEach((groupedStats, key) => {
-			const filteredStats = groupedStats.filter(stat => statList.find(listStat => listStat.equals(stat)));
+			const filteredStats = groupedStats.filter(stat => statList.find(displayStat => displayStat.equals(stat.stat)));
+
 			if (!filteredStats.length) return;
 
-			// Don't show mastery twice if the spec doesn't care about both Physical and Spell
-			if ([StatGroup.Physical, StatGroup.Spell].includes(key) && filteredStats.length === 1) return;
-
 			const body = <tbody></tbody>;
-			filteredStats.forEach(unitStat => {
-				this.stats.push(unitStat);
+			filteredStats.forEach(displayStat => {
+				const { stat } = displayStat;
+				this.stats.push(stat);
 
-				const statName = unitStat.getShortName(player.getClass());
-
-				const valueRef = ref<HTMLTableCellElement>();
+				const statName = stat.getShortName(player.getClass());
+				const tableValueRef = ref<HTMLTableCellElement>();
 				const row = (
 					<tr className="character-stats-table-row">
 						<td className="character-stats-table-label">{statName}</td>
-						<td ref={valueRef} className="character-stats-table-value">
-							{unitStat.hasRootStat() && this.bonusStatsLink(unitStat)}
+						<td className="character-stats-table-value" ref={tableValueRef}>
+							{this.bonusStatsLink(displayStat)}
 						</td>
 					</tr>
 				);
 				body.appendChild(row);
-				this.valueElems.push(valueRef.value!);
 
-				if (
-					unitStat.isPseudoStat() &&
-					(unitStat.getPseudoStat() === PseudoStat.PseudoStatMeleeCritPercent ||
-						unitStat.getPseudoStat() === PseudoStat.PseudoStatRangedCritPercent) &&
-					this.shouldShowMeleeCritCap(player)
-				) {
-					const critCapRow = (
-						<tr className="character-stats-table-row">
-							<td className="character-stats-table-label">{i18n.t('sidebar.character_stats.melee_crit_cap')}</td>
-							<td className="character-stats-table-value">
-								{/* Hacky placeholder for spacing */}
-								<span className="px-2 border-start border-end border-body border-brand" style={{ '--bs-border-opacity': '0' }} />
-							</td>
-						</tr>
-					);
-					body.appendChild(critCapRow);
-
-					const critCapValueElem = critCapRow.getElementsByClassName('character-stats-table-value')[0] as HTMLTableCellElement;
-					this.valueElems.push(critCapValueElem);
-				}
+				this.valueElems.push(tableValueRef.value!);
 			});
 
 			table.appendChild(body);
 		});
+
+		if (this.shouldShowMeleeCritCap(player)) {
+			const tableValueRef = ref<HTMLTableCellElement>();
+			const row = (
+				<tr className="character-stats-table-row">
+					<td className="character-stats-table-label">Melee Crit Cap</td>
+					<td className="character-stats-table-value" ref={tableValueRef}></td>
+				</tr>
+			);
+
+			table.appendChild(row);
+			this.meleeCritCapValueElem = tableValueRef.value!;
+		}
 
 		this.updateStats(player);
 		TypedEvent.onAny([player.currentStatsEmitter, player.sim.changeEmitter, player.talentsChangeEmitter]).on(() => {
@@ -235,8 +228,7 @@ export class CharacterStats extends Component {
 			}
 		}
 
-		let idx = 0;
-		this.stats.forEach(unitStat => {
+		this.stats.forEach((unitStat, idx) => {
 			const bonusStatValue = unitStat.hasRootStat() ? bonusStats.getStat(unitStat.getRootStat()) : 0;
 			let contextualClass: string;
 			if (bonusStatValue == 0) {
@@ -258,7 +250,6 @@ export class CharacterStats extends Component {
 			);
 
 			const statLinkElem = statLinkElemRef.value!;
-
 			this.valueElems[idx].querySelector('.stat-value-link-container')?.remove();
 			this.valueElems[idx].prepend(valueElem);
 
@@ -297,75 +288,76 @@ export class CharacterStats extends Component {
 				</div>
 			);
 
-			if (
-				unitStat.isPseudoStat() &&
-				(unitStat.getPseudoStat() === PseudoStat.PseudoStatMeleeCritPercent || unitStat.getPseudoStat() === PseudoStat.PseudoStatRangedCritPercent) &&
-				this.shouldShowMeleeCritCap(player)
-			) {
-				idx++;
-
-				const meleeCritCapInfo = player.getMeleeCritCapInfo();
-				const valueElem = <button className="stat-value-link">{this.meleeCritCapDisplayString(player, finalStats)} </button>;
-
-				const capDelta = meleeCritCapInfo.playerCritCapDelta;
-				if (capDelta == 0) {
-					valueElem.classList.add('text-white');
-				} else if (capDelta > 0) {
-					valueElem.classList.add('text-danger');
-				} else if (capDelta < 0) {
-					valueElem.classList.add('text-success');
-				}
-
-				this.valueElems[idx].querySelector('.stat-value-link-container')?.remove();
-				this.valueElems[idx].prepend(<div className="stat-value-link-container">{valueElem}</div>);
-
-				const critCapTooltipContent = (
-					<div>
-						<div className="character-stats-tooltip-row">
-							<span>{i18n.t('sidebar.character_stats.attack_table.glancing')}</span>
-							<span>{`${meleeCritCapInfo.glancing.toFixed(2)}%`}</span>
-						</div>
-						<div className="character-stats-tooltip-row">
-							<span>{i18n.t('sidebar.character_stats.attack_table.suppression')}</span>
-							<span>{`${meleeCritCapInfo.suppression.toFixed(2)}%`}</span>
-						</div>
-						<div className="character-stats-tooltip-row">
-							<span>{i18n.t('sidebar.character_stats.attack_table.to_hit_cap')}</span>
-							<span>{`${meleeCritCapInfo.remainingMeleeHitCap.toFixed(2)}%`}</span>
-						</div>
-						<div className="character-stats-tooltip-row">
-							<span>{i18n.t('sidebar.character_stats.attack_table.to_exp_cap')}</span>
-							<span>{`${meleeCritCapInfo.remainingExpertiseCap.toFixed(2)}%`}</span>
-						</div>
-						{meleeCritCapInfo.specSpecificOffset != 0 && (
-							<div className="character-stats-tooltip-row">
-								<span>{i18n.t('sidebar.character_stats.attack_table.spec_offsets')}</span>
-								<span>{`${meleeCritCapInfo.specSpecificOffset.toFixed(2)}%`}</span>
-							</div>
-						)}
-						<div className="character-stats-tooltip-row">
-							<span>{i18n.t('sidebar.character_stats.attack_table.final_crit_cap')}</span>
-							<span>{`${meleeCritCapInfo.baseCritCap.toFixed(2)}%`}</span>
-						</div>
-						<hr />
-						<div className="character-stats-tooltip-row">
-							<span>{i18n.t('sidebar.character_stats.attack_table.can_raise_by')}</span>
-							<span>{`${(meleeCritCapInfo.remainingExpertiseCap + meleeCritCapInfo.remainingMeleeHitCap).toFixed(2)}%`}</span>
-						</div>
-					</div>
-				);
-
-				tippy(valueElem, {
-					content: critCapTooltipContent,
-				});
-			}
-
 			tippy(statLinkElem, {
 				content: tooltipContent,
 			});
-
-			idx++;
 		});
+
+		if (this.meleeCritCapValueElem) {
+			const meleeCritCapInfo = player.getMeleeCritCapInfo();
+
+			const valueElem = (
+				<a href="javascript:void(0)" className="stat-value-link" attributes={{ role: 'button' }}>
+					{`${this.meleeCritCapDisplayString(player, finalStats)} `}
+				</a>
+			);
+
+			const capDelta = meleeCritCapInfo.playerCritCapDelta;
+			if (capDelta === 0) {
+				valueElem.classList.add('text-white');
+			} else if (capDelta > 0) {
+				valueElem.classList.add('text-danger');
+			} else if (capDelta < 0) {
+				valueElem.classList.add('text-success');
+			}
+
+			this.meleeCritCapValueElem.querySelector('.stat-value-link')?.remove();
+			this.meleeCritCapValueElem.prepend(valueElem);
+
+			const tooltipContent = (
+				<div>
+					<div className="character-stats-tooltip-row">
+						<span>Glancing:</span>
+						<span>{`${meleeCritCapInfo.glancing.toFixed(2)}%`}</span>
+					</div>
+					<div className="character-stats-tooltip-row">
+						<span>Suppression:</span>
+						<span>{`${meleeCritCapInfo.suppression.toFixed(2)}%`}</span>
+					</div>
+					<div className="character-stats-tooltip-row">
+						<span>To Hit Cap:</span>
+						<span>{`${meleeCritCapInfo.remainingMeleeHitCap.toFixed(2)}%`}</span>
+					</div>
+					<div className="character-stats-tooltip-row">
+						<span>To Exp Cap:</span>
+						<span>{`${meleeCritCapInfo.remainingExpertiseCap.toFixed(2)}%`}</span>
+					</div>
+					<div className="character-stats-tooltip-row">
+						<span>Debuffs:</span>
+						<span>{`${meleeCritCapInfo.debuffCrit.toFixed(2)}%`}</span>
+					</div>
+					{meleeCritCapInfo.specSpecificOffset != 0 && (
+						<div className="character-stats-tooltip-row">
+							<span>Spec Offsets:</span>
+							<span>{`${meleeCritCapInfo.specSpecificOffset.toFixed(2)}%`}</span>
+						</div>
+					)}
+					<div className="character-stats-tooltip-row">
+						<span>Final Crit Cap:</span>
+						<span>{`${meleeCritCapInfo.baseCritCap.toFixed(2)}%`}</span>
+					</div>
+					<hr />
+					<div className="character-stats-tooltip-row">
+						<span>Can Raise By:</span>
+						<span>{`${(meleeCritCapInfo.remainingExpertiseCap + meleeCritCapInfo.remainingMeleeHitCap).toFixed(2)}%`}</span>
+					</div>
+				</div>
+			);
+
+			tippy(valueElem, {
+				content: tooltipContent,
+			});
+		}
 	}
 
 	private statDisplayString(deltaStats: Stats, unitStat: UnitStat, includeBase?: boolean): string {
@@ -376,7 +368,7 @@ export class CharacterStats extends Component {
 
 		if (false && includeBase) {
 			derivedPercentOrPointsValue = derivedPercentOrPointsValue! + this.player.getBaseMastery();
-		} else if ((rootStat === Stat.StatMeleeHitRating || rootStat === Stat.StatAllPhysHitRating) && includeBase && this.hasRacialHitBonus) {
+		} else if (rootStat === Stat.StatMeleeHitRating && includeBase && this.hasRacialHitBonus) {
 			// Remove the rating display and only show %
 			if (rootRatingValue !== null && rootRatingValue > 0) {
 				rootRatingValue -= Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT;
@@ -419,14 +411,15 @@ export class CharacterStats extends Component {
 		return rootRatingString + wrappedPercentOrPointsString;
 	}
 
-	private bonusStatsLink(unitStat: UnitStat): HTMLElement {
-		const rootStat = unitStat.getRootStat();
+	private bonusStatsLink(displayStat: DisplayStat): HTMLElement {
+		const { stat, notEditable } = displayStat;
+		const rootStat = stat.getRootStat();
 		const statName = getStatName(rootStat);
 		const linkRef = ref<HTMLButtonElement>();
 		const iconRef = ref<HTMLDivElement>();
 
 		const link = (
-			<button ref={linkRef} className="add-bonus-stats text-white ms-2" dataset={{ bsToggle: 'popover' }}>
+			<button ref={linkRef} className={clsx('add-bonus-stats text-white ms-2', notEditable && 'd-none')} dataset={{ bsToggle: 'popover' }}>
 				<i ref={iconRef} className="fas fa-plus-minus"></i>
 			</button>
 		);

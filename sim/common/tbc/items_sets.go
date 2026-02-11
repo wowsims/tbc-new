@@ -13,7 +13,7 @@ var ItemSetDoomplateBattlegear = core.NewItemSet(core.ItemSet{
 	Bonuses: map[int32]core.ApplySetBonus{
 		2: func(agent core.Agent, setBonusAura *core.Aura) {
 			setBonusAura.
-				AttachStatBuff(stats.AllPhysHitRating, 35).
+				AttachStatBuff(stats.MeleeHitRating, 35).
 				ExposeToAPL(37610)
 		},
 		4: func(agent core.Agent, setBonusAura *core.Aura) {

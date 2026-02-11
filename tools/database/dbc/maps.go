@@ -61,24 +61,18 @@ func MapBonusStatIndexToStat(index int) (proto.Stat, bool) {
 		return proto.Stat_StatBlockRating, true
 
 	// Secondary ratings
-	case ITEM_MOD_HIT_MELEE_RATING, ITEM_MOD_HIT_RANGED_RATING:
+	case ITEM_MOD_HIT_MELEE_RATING, ITEM_MOD_HIT_RANGED_RATING, ITEM_MOD_HIT_RATING:
 		return proto.Stat_StatMeleeHitRating, true
 	case ITEM_MOD_HIT_SPELL_RATING:
 		return proto.Stat_StatSpellHitRating, true
-	case ITEM_MOD_HIT_RATING:
-		return proto.Stat_StatAllPhysHitRating, true
-	case ITEM_MOD_CRIT_MELEE_RATING, ITEM_MOD_CRIT_RANGED_RATING:
+	case ITEM_MOD_CRIT_MELEE_RATING, ITEM_MOD_CRIT_RANGED_RATING, ITEM_MOD_CRIT_RATING:
 		return proto.Stat_StatMeleeCritRating, true
 	case ITEM_MOD_CRIT_SPELL_RATING:
 		return proto.Stat_StatSpellCritRating, true
-	case ITEM_MOD_CRIT_RATING:
-		return proto.Stat_StatAllPhysCritRating, true
-	case ITEM_MOD_HASTE_MELEE_RATING, ITEM_MOD_HASTE_RANGED_RATING:
+	case ITEM_MOD_HASTE_MELEE_RATING, ITEM_MOD_HASTE_RANGED_RATING, ITEM_MOD_HASTE_RATING:
 		return proto.Stat_StatMeleeHasteRating, true
 	case ITEM_MOD_HASTE_SPELL_RATING:
 		return proto.Stat_StatSpellHasteRating, true
-	case ITEM_MOD_HASTE_RATING:
-		return proto.Stat_StatAllPhysHasteRating, true
 	case ITEM_MOD_EXPERTISE_RATING:
 		return proto.Stat_StatExpertiseRating, true
 	case ITEM_MOD_ARMOR_PENETRATION_RATING:

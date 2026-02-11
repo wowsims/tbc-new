@@ -736,7 +736,7 @@ func BraidedEterniumChainAura(char *Character) *Aura {
 		Label:    "Braided Eternium Chain",
 		ActionID: ActionID{SpellID: 31025},
 		Stats: []StatConfig{
-			{stats.AllPhysCritRating, 28, false},
+			{stats.MeleeCritRating, 28, false},
 		},
 	})
 }
