@@ -13,6 +13,11 @@ func (warlock *Warlock) registerDrainLife() {
 	healthMetric := warlock.NewHealthMetrics(core.ActionID{SpellID: 689})
 	resultSlice := make(core.SpellResultSlice, 1)
 
+	cappedDmgBonus := 1.24
+	if warlock.Talents.SoulSiphon == 2 {
+		cappedDmgBonus = 1.60
+	}
+
 	warlock.DrainLife = warlock.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 689},
 		SpellSchool:    core.SpellSchoolShadow,
@@ -38,16 +43,8 @@ func (warlock *Warlock) registerDrainLife() {
 				dot.Snapshot(target, 108)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				if warlock.Talents.SoulSiphon > 0 {
-					cappedDmgBonus := 0.24
-					if warlock.Talents.SoulSiphon == 2 {
-						cappedDmgBonus = 0.60
-					}
-					dot.PeriodicDamageMultiplier *= 1 + math.Min((0.02*float64(warlock.Talents.SoulSiphon)), cappedDmgBonus)
-				}
-
+				dot.PeriodicDamageMultiplier = math.Max(1, math.Min(1+(0.02*float64(warlock.Talents.SoulSiphon)*float64(len(target.GetAurasWithTag("Affliction")))), cappedDmgBonus))
 				resultSlice[0] = dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
-
 				warlock.GainHealth(sim, resultSlice[0].Damage*warlock.PseudoStats.SelfHealingMultiplier, healthMetric)
 			},
 		},

@@ -62,7 +62,7 @@ func (warlock *Warlock) registerUnstableAffliction() {
 				result.Damage /= dot.TickPeriod().Seconds()
 				return result
 			} else {
-				result := spell.CalcPeriodicDamage(sim, target, 1000, spell.OutcomeExpectedMagicCrit)
+				result := spell.CalcPeriodicDamage(sim, target, 1050, spell.OutcomeExpectedMagicCrit)
 				result.Damage /= dot.CalcTickPeriod().Round(time.Millisecond).Seconds()
 				return result
 			}

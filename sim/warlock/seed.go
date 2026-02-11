@@ -6,11 +6,8 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
-const seedTickScale = 0.21
-const seedTickCoeff = 0.21
-const seedExploScale = 0.91
-const seedExploCoeff = 0.91
-const seedExploVariance = 0.15
+const seedTickCoeff = 0.25
+const seedExploCoeff = 0.143
 
 func (warlock *Warlock) registerSeed() {
 	actionID := core.ActionID{SpellID: 27243}
@@ -27,26 +24,27 @@ func (warlock *Warlock) registerSeed() {
 		Flags:          core.SpellFlagPassiveSpell,
 		ClassSpellMask: WarlockSpellSeedOfCorruptionExplosion,
 
-		DamageMultiplierAdditive: 1,
-		CritMultiplier:           warlock.DefaultSpellCritMultiplier(),
-		ThreatMultiplier:         1,
-		BonusCoefficient:         seedExploCoeff,
+		DamageMultiplier: 1,
+		CritMultiplier:   warlock.DefaultSpellCritMultiplier(),
+		ThreatMultiplier: 1,
+		BonusCoefficient: seedExploCoeff,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDmg := warlock.CalcAndRollDamageRange(sim, seedExploScale, seedExploVariance)
-			isSoulBurn := seedPropertyTracker[target.UnitIndex].isSoulBurn
+			baseDmg := warlock.CalcAndRollDamageRange(sim, 1110, 1290)
 			for _, aoeTarget := range sim.Encounter.ActiveTargetUnits {
 				result := spell.CalcAndDealDamage(sim, aoeTarget, baseDmg, spell.OutcomeMagicHitAndCrit)
-				if isSoulBurn && result.Landed() {
-					warlock.Corruption.Proc(sim, aoeTarget)
+				if result.Landed() {
+					if warlock.Talents.ShadowEmbrace > 0 {
+						warlock.ShadowEmbraceAura.Activate(sim)
+					}
 				}
 			}
 		},
 	})
 
-	trySeedPop := func(sim *core.Simulation, target *core.Unit, dmg float64, seed *core.Dot) {
+	trySeedPop := func(sim *core.Simulation, target *core.Unit, dmg float64) {
 		seedPropertyTracker[target.UnitIndex].damageTaken += dmg
-		if seedPropertyTracker[target.UnitIndex].damageTaken >= float64(seed.HastedTickCount())*seed.SnapshotBaseDamage*seed.SnapshotAttackerMultiplier {
+		if seedPropertyTracker[target.UnitIndex].damageTaken >= 1044 {
 			warlock.Seed.Dot(target).Deactivate(sim)
 			seedExplosion.Cast(sim, target)
 		}
@@ -68,21 +66,24 @@ func (warlock *Warlock) registerSeed() {
 			},
 		},
 
-		DamageMultiplierAdditive: 1,
-		ThreatMultiplier:         1,
+		DamageMultiplier: 1,
+		ThreatMultiplier: 1,
 
 		Dot: core.DotConfig{
 			Aura: core.Aura{
 				Label: "Seed",
 				OnSpellHitTaken: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-					if !result.Landed() {
+					if !result.Landed() || spell.SpellSchool != core.SpellSchoolShadow {
 						return
 					}
 
-					trySeedPop(sim, result.Target, result.Damage, warlock.Seed.Dot(result.Target))
+					trySeedPop(sim, result.Target, result.Damage)
 				},
 				OnPeriodicDamageTaken: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-					trySeedPop(sim, result.Target, result.Damage, warlock.Seed.Dot(result.Target))
+					if spell.SpellSchool != core.SpellSchoolShadow {
+						return
+					}
+					trySeedPop(sim, result.Target, result.Damage)
 				},
 				OnGain: func(aura *core.Aura, sim *core.Simulation) {
 					seedPropertyTracker[aura.Unit.UnitIndex].damageTaken = 0
@@ -97,11 +98,11 @@ func (warlock *Warlock) registerSeed() {
 			BonusCoefficient: seedTickCoeff,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.Snapshot(target, 350)
+				dot.Snapshot(target, 174)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				result := dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
-				trySeedPop(sim, target, result.Damage, dot)
+				trySeedPop(sim, target, result.Damage)
 			},
 		},
 

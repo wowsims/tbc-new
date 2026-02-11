@@ -65,6 +65,7 @@ Skipping the following (for now)
 - Siphon Life -> implemented in siphon_life.go
 - Fel Concentration
 - Grim Reach
+- Shadow Embrace -> implemented in corruption.go, curseOfAgony.go, siphon_life.go, and seed.go
 - Curse of Weakness
 - Curse of Exhaustion
 - Dark Pact
@@ -77,7 +78,7 @@ func (warlock *Warlock) applySuppression() {
 
 	warlock.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusHit_Percent,
-		FloatValue: 0.02 * float64(warlock.Talents.Suppression),
+		FloatValue: 2.0 * float64(warlock.Talents.Suppression),
 		ClassMask:  WarlockAfflictionSpells,
 	})
 }
@@ -89,7 +90,7 @@ func (warlock *Warlock) applyImprovedCorruption() {
 
 	warlock.AddStaticMod(core.SpellModConfig{
 		Kind:      core.SpellMod_CastTime_Flat,
-		TimeValue: time.Millisecond * 400 * time.Duration(warlock.Talents.ImprovedCorruption),
+		TimeValue: time.Millisecond * -400 * time.Duration(warlock.Talents.ImprovedCorruption),
 		ClassMask: WarlockAfflictionSpells,
 	})
 }
@@ -104,12 +105,12 @@ func (warlock *Warlock) registerAmplifyCurse() {
 		Label:    "Amplify Curse",
 		ActionID: actionID,
 		Duration: time.Second * 30,
-		OnSpellHitDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			if !result.Landed() || (spell.ClassSpellMask != WarlockSpellCurseOfDoom && spell.ClassSpellMask != WarlockSpellAgony) {
+		OnApplyEffects: func(aura *core.Aura, sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+			if (spell.ClassSpellMask&WarlockSpellCurseOfDoom != 0) && (spell.ClassSpellMask&WarlockSpellCurseOfAgony != 0) {
 				return
 			}
+			spell.DamageMultiplier = 1.5
 
-			spell.DamageMultiplier *= 1.5
 			warlock.AmplifyCurseAura.Deactivate(sim)
 		},
 	})
@@ -194,8 +195,8 @@ func (warlock *Warlock) applyEmpoweredCorruption() {
 	}
 
 	warlock.AddStaticMod(core.SpellModConfig{
-		Kind:       core.SpellMod_BonusCoeffecient_Flat,
-		FloatValue: (0.12 * float64(warlock.Talents.EmpoweredCorruption)) / 6.0,
+		Kind:       core.SpellMod_DotBonusCoeffecient_Flat,
+		FloatValue: (0.12 * float64(warlock.Talents.EmpoweredCorruption)) / 6,
 		ClassMask:  WarlockSpellCorruption,
 	})
 }
@@ -204,23 +205,8 @@ func (warlock *Warlock) applyShadowEmbrace() {
 	if warlock.Talents.ShadowEmbrace == 0 {
 		return
 	}
+	warlock.ShadowEmbraceAura = core.ShadowEmbraceAura(warlock.CurrentTarget, warlock.Talents.ShadowEmbrace)
 
-	warlock.RegisterAura(core.Aura{
-		Label:    "Shadow Embrace",
-		Duration: core.NeverExpires,
-		OnReset: func(aura *core.Aura, sim *core.Simulation) {
-			aura.Activate(sim)
-		},
-		OnSpellHitDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, spellEffect *core.SpellResult) {
-			if !spellEffect.Landed() {
-				return
-			}
-
-			if spell == warlock.Corruption || spell == warlock.SiphonLife || spell == warlock.CurseOfAgony || spell.SameAction(warlock.Seed.ActionID) {
-				core.ShadowEmbraceAura(spellEffect.Target, warlock.Talents.ShadowEmbrace).Activate(sim)
-			}
-		},
-	})
 }
 
 func (warlock *Warlock) applyShadowMastery() {

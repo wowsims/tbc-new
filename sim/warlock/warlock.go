@@ -45,6 +45,7 @@ type Warlock struct {
 	AmplifyCurseAura  *core.Aura
 	NightfallProcAura *core.Aura
 	ImpShadowboltAura *core.Aura
+	ShadowEmbraceAura *core.Aura
 
 	// Pets
 	ActivePet  *WarlockPet
@@ -188,7 +189,6 @@ const (
 	WarlockSpellUnstableAffliction
 	WarlockSpellCurseOfAgony
 	WarlockSpellCurseOfElements
-	WarlockSpellAgony
 	WarlockSpellDrainLife
 	WarlockSpellSeedOfCorruption
 	WarlockSpellSeedOfCorruptionExplosion
@@ -217,24 +217,24 @@ const (
 	WarlockSpellShadowbolt2
 	WarlockSpellAll int64 = 1<<iota - 1
 
-	WarlockShadowDamage = WarlockSpellCorruption | WarlockSpellUnstableAffliction | WarlockSpellDrainLife | WarlockSpellAgony |
-		WarlockSpellShadowBolt | WarlockSpellSeedOfCorruptionExplosion | WarlockSpellShadowBurn
+	WarlockShadowDamage = WarlockSpellCorruption | WarlockSpellUnstableAffliction | WarlockSpellDrainLife | WarlockSpellCurseOfAgony |
+		WarlockSpellShadowBolt | WarlockSpellSeedOfCorruptionExplosion | WarlockSpellSeedOfCorruption | WarlockSpellShadowBurn | WarlockSpellSiphonLife
 
 	WarlockPeriodicShadowDamage = WarlockSpellCorruption | WarlockSpellUnstableAffliction |
-		WarlockSpellDrainLife | WarlockSpellAgony
+		WarlockSpellDrainLife | WarlockSpellCurseOfAgony
 
 	WarlockFireDamage = WarlockSpellConflagrate | WarlockSpellImmolate | WarlockSpellIncinerate | WarlockSpellSoulFire |
 		WarlockSpellSearingPain | WarlockSpellImmolateDot | WarlockSpellShadowBurn
 
 	WarlockDoT = WarlockSpellCorruption | WarlockSpellUnstableAffliction |
-		WarlockSpellDrainLife | WarlockSpellAgony | WarlockSpellImmolateDot
+		WarlockSpellDrainLife | WarlockSpellCurseOfAgony | WarlockSpellImmolateDot
 
 	WarlockSummonSpells = WarlockSpellSummonImp | WarlockSpellSummonSuccubus | WarlockSpellSummonFelhunter |
 		WarlockSpellSummonFelguard
 
 	WarlockAllSummons = WarlockSummonSpells | WarlockSpellSummonInfernal | WarlockSpellSummonDoomguard
 
-	WarlockContagionSpells = WarlockSpellCurseOfAgony | WarlockSpellCorruption | WarlockSpellSeedOfCorruption
+	WarlockContagionSpells = WarlockSpellCurseOfAgony | WarlockSpellCorruption | WarlockSpellSeedOfCorruption | WarlockSpellSeedOfCorruptionExplosion
 
 	WarlockCurses = WarlockSpellCurseOfAgony | WarlockSpellCurseOfDoom | WarlockSpellCurseOfElements |
 		WarlockSpellCurseOfRecklessness | WarlockSpellCurseOfTongues | WarlockSpellCurseOfWeakness

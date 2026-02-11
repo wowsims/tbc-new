@@ -18,8 +18,9 @@ func (warlock *Warlock) registerCorruption() *core.Spell {
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: WarlockSpellCorruption,
 
-		CritMultiplier: 1,
-		ManaCost:       core.ManaCostOptions{FlatCost: 370},
+		DamageMultiplier: 1,
+		CritMultiplier:   1,
+		ManaCost:         core.ManaCostOptions{FlatCost: 370},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD:      core.GCDDefault,
@@ -31,6 +32,9 @@ func (warlock *Warlock) registerCorruption() *core.Spell {
 			result := spell.CalcOutcome(sim, target, spell.OutcomeMagicHit)
 			if result.Landed() {
 				spell.Dot(target).Apply(sim)
+				if warlock.Talents.ShadowEmbrace > 0 {
+					warlock.ShadowEmbraceAura.Activate(sim)
+				}
 			}
 			spell.DealOutcome(sim, result)
 		},
@@ -38,9 +42,8 @@ func (warlock *Warlock) registerCorruption() *core.Spell {
 
 		Dot: core.DotConfig{
 			Aura: core.Aura{
-				Label:    "Corruption",
-				Tag:      "Affliction",
-				ActionID: core.ActionID{SpellID: 172},
+				Label: "Corruption",
+				Tag:   "Affliction",
 			},
 			NumberOfTicks:       6,
 			TickLength:          3 * time.Second,

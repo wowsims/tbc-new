@@ -17,14 +17,8 @@ type WarlockPet struct {
 }
 
 var petBaseStats = map[proto.WarlockOptions_Summon]*stats.Stats{
-	// stam 101+171
-	// int 327+124
-	//spirit 263
-	//attack power 135+289
-	//Damage 2.0s, 136-173 (77.1dps)
-	//mana 2988
 	proto.WarlockOptions_Imp: {
-		stats.Mana:        10000,
+		stats.Mana:        2988,
 		stats.Stamina:     101,
 		stats.Strength:    153, //fix these later
 		stats.Agility:     108, //fix these later
@@ -33,14 +27,6 @@ var petBaseStats = map[proto.WarlockOptions_Summon]*stats.Stats{
 		stats.AttackPower: 135,
 		stats.MP5:         123,
 	},
-	//str 153
-	//agi 108
-	// stam 280+117
-	// int 133+124
-	//spirit 122
-	//ap 286+289
-	//dmg 115-144
-	//armor
 	proto.WarlockOptions_Voidwalker: {
 		stats.Stamina:     280,
 		stats.Strength:    153,
@@ -50,16 +36,8 @@ var petBaseStats = map[proto.WarlockOptions_Summon]*stats.Stats{
 		stats.AttackPower: 286,
 		stats.MP5:         48,
 	},
-	// str 154
-	// agi 108
-	//stam 280+117
-	//int  133+124
-	//spirit 122
-	//ap 286+289
-	//DMG 173-216 97.2 (2.0)
-	// mana 3862
 	proto.WarlockOptions_Succubus: {
-		stats.Mana:        10000,
+		stats.Mana:        3862,
 		stats.Stamina:     280,
 		stats.Strength:    154,
 		stats.Agility:     108,
@@ -68,25 +46,10 @@ var petBaseStats = map[proto.WarlockOptions_Summon]*stats.Stats{
 		stats.AttackPower: 286,
 		stats.MP5:         48,
 	},
-	// str 153
-	//agi 108
-	//stam 280+117
-	//int 133+124
-	//spirit 122
-	//ap286+289
-	//dmg 132-164
-	//mana 3862
 	proto.WarlockOptions_Felhunter: {},
-	// str 153
-	//agi 108
-	//stam 280+117
-	//int 133+124
-	//spiri 122
-	//ap286+289
-	//dmg 216+269
-	//mana 3862
 	proto.WarlockOptions_Felguard: {
 		stats.Stamina:     280,
+		stats.Mana:        3862,
 		stats.Strength:    153,
 		stats.Agility:     108,
 		stats.Intellect:   133,
