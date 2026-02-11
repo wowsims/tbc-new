@@ -145,11 +145,11 @@ func (s Stat) StatName() string {
 	case SpellPenetration:
 		return "SpellPenetration"
 	case MeleeHitRating:
-		return "HitRating"
+		return "MeleeHitRating"
 	case MeleeCritRating:
-		return "CritRating"
+		return "MeleeCritRating"
 	case MeleeHasteRating:
-		return "HasteRating"
+		return "MeleeHasteRating"
 	case ExpertiseRating:
 		return "ExpertiseRating"
 	case ArmorPenetration:
