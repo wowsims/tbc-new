@@ -185,6 +185,10 @@ func (war *Warrior) registerLastStand() {
 	war.AddMajorCooldown(core.MajorCooldown{
 		Spell: spell,
 		Type:  core.CooldownTypeSurvival,
+		BuffAura: &core.StatBuffAura{
+			Aura:            aura,
+			BuffedStatTypes: []stats.Stat{stats.Health},
+		},
 	})
 }
 

@@ -11,8 +11,14 @@ func RegisterAllOnUseCds() {
 
 	// {{ .Name }}
 {{- range .Entries }}
+	{{- if not .Supported}}
   	{{- with index .Variants 0}}
-	shared.NewSimpleStatActive({{ .ID }}) // {{ .Name }}
+	// shared.NewSimpleStatActive({{ .ID }}) // {{ .Name }} - https://www.wowhead.com/tbc/spell={{.SpellID}}
+	{{- end}}
+	{{- else}}
+  	{{- with index .Variants 0}}
+	shared.NewSimpleStatActive({{ .ID }}) // {{ .Name }} - https://www.wowhead.com/tbc/spell={{.SpellID}}
+	{{- end}}
 	{{- end}}
 {{- end }}
 
@@ -39,54 +45,57 @@ func RegisterAllProcs() {
 	{{- range (.Tooltip | formatStrings 100) }}
 	// {{.}}
 	{{- end}}
+	{{with index .Variants 0 -}}
+	// https://www.wowhead.com/tbc/spell={{.SpellID}}
+	{{- end}}
 	{{- if .Supported}}
-	{{- if len .Variants | eq 1}}
-	shared.NewProcStatBonusEffect(shared.ProcStatBonusEffect{
-		{{with index .Variants 0 -}}
-		Name:               "{{ .Name }}",
-		ItemID:             {{ .ID }},
+		{{- if gt .ProcInfo.MaxCumulativeStacks 0 }}
+			shared.NewStackingStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+				Callback:           {{ .ProcInfo.Callback | asCoreCallback }},
+				ProcMask:           {{ .ProcInfo.ProcMask | asCoreProcMask }},
+				Outcome:            {{ .ProcInfo.Outcome | asCoreOutcome }},
+				RequireDamageDealt: {{ .ProcInfo.RequireDamageDealt }},
+			}, []shared.ItemVariant{
+				{{- range .Variants }}
+				{ItemID: {{.ID}}, ItemName: "{{.Name}}"},
+				{{- end}}
+			})
+		{{- else}}
+			shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+				Callback:           {{ .ProcInfo.Callback | asCoreCallback }},
+				ProcMask:           {{ .ProcInfo.ProcMask | asCoreProcMask }},
+				Outcome:            {{ .ProcInfo.Outcome | asCoreOutcome }},
+				RequireDamageDealt: {{ .ProcInfo.RequireDamageDealt }},
+			}, []shared.ItemVariant{
+				{{- range .Variants }}
+				{ItemID: {{.ID}}, ItemName: "{{.Name}}"},
+				{{- end}}
+			})
 		{{- end}}
-		Callback:           {{ .ProcInfo.Callback | asCoreCallback }},
-		ProcMask:           {{ .ProcInfo.ProcMask | asCoreProcMask }},
-		Outcome:            {{ .ProcInfo.Outcome | asCoreOutcome }},
-		RequireDamageDealt: {{ .ProcInfo.RequireDamageDealt }},
-	})
-	{{- else }}
-	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-		Callback:           {{ .ProcInfo.Callback | asCoreCallback }},
-		ProcMask:           {{ .ProcInfo.ProcMask | asCoreProcMask }},
-		Outcome:            {{ .ProcInfo.Outcome | asCoreOutcome }},
-		RequireDamageDealt: {{ .ProcInfo.RequireDamageDealt }},
-	}, []shared.ItemVariant{
-		{{- range .Variants }}
-		{ItemID: {{.ID}}, ItemName: "{{.Name}}"},
-		{{- end}}
-	})
-	{{- end}}
 	{{- else}}
-	{{- if len .Variants | eq 1}}
-	// shared.NewProcStatBonusEffect(shared.ProcStatBonusEffect{
-	{{ with index .Variants 0 -}}
-	//	Name:               "{{ .Name }}",
-	//	ItemID:             {{ .ID }},
+		{{- if gt .ProcInfo.MaxCumulativeStacks 0 }}
+			// shared.NewStackingStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+			//	Callback:           {{ .ProcInfo.Callback | asCoreCallback }},
+			//	ProcMask:           {{ .ProcInfo.ProcMask | asCoreProcMask }},
+			//	Outcome:            {{ .ProcInfo.Outcome | asCoreOutcome }},
+			//	RequireDamageDealt: {{ .ProcInfo.RequireDamageDealt }}
+			// }, []shared.ItemVariant{
+				{{- range .Variants }}
+			//	{ItemID: {{.ID}}, ItemName: "{{.Name}}"},
+				{{- end}}
+			// })
+		{{- else}}
+			// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+			//	Callback:           {{ .ProcInfo.Callback | asCoreCallback }},
+			//	ProcMask:           {{ .ProcInfo.ProcMask | asCoreProcMask }},
+			//	Outcome:            {{ .ProcInfo.Outcome | asCoreOutcome }},
+			//	RequireDamageDealt: {{ .ProcInfo.RequireDamageDealt }}
+			// }, []shared.ItemVariant{
+				{{- range .Variants }}
+			//	{ItemID: {{.ID}}, ItemName: "{{.Name}}"},
+				{{- end}}
+			// })
 		{{- end}}
-	//	Callback:           {{ .ProcInfo.Callback | asCoreCallback }},
-	//	ProcMask:           {{ .ProcInfo.ProcMask | asCoreProcMask }},
-	//	Outcome:            {{ .ProcInfo.Outcome | asCoreOutcome }},
-	//	RequireDamageDealt: {{ .ProcInfo.RequireDamageDealt }}
-	// })
-	{{- else }}
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           {{ .ProcInfo.Callback | asCoreCallback }},
-	//	ProcMask:           {{ .ProcInfo.ProcMask | asCoreProcMask }},
-	//	Outcome:            {{ .ProcInfo.Outcome | asCoreOutcome }},
-	//	RequireDamageDealt: {{ .ProcInfo.RequireDamageDealt }},
-	// }, []shared.ItemVariant{
-		{{- range .Variants }}
-	//	{ItemID: {{.ID}}, ItemName: "{{.Name}}"},
-		{{- end}}
-	// })
-	{{- end}}
 	{{- end}}
 {{- end }}
 
@@ -114,28 +123,31 @@ func RegisterAllEnchants() {
 	{{- range (.Tooltip | formatStrings 100) }}
 	// {{.}}
 	{{- end}}
+	{{with index .Variants 0 -}}
+	// https://www.wowhead.com/tbc/spell={{.SpellID}}
+	{{- end}}
 	{{- if .Supported}}
-	shared.NewProcStatBonusEffect(shared.ProcStatBonusEffect{
-		{{with index .Variants 0 -}}
-		Name:               "{{ .Name }}",
-		EnchantID:          {{ .ID }},
-		{{- end}}
-		Callback:           {{ .ProcInfo.Callback | asCoreCallback }},
-		ProcMask:           {{ .ProcInfo.ProcMask | asCoreProcMask }},
-		Outcome:            {{ .ProcInfo.Outcome | asCoreOutcome }},
-		RequireDamageDealt: {{ .ProcInfo.RequireDamageDealt }},
-	})
+		shared.NewProcStatBonusEffect(shared.ProcStatBonusEffect{
+			{{with index .Variants 0 -}}
+			Name:               "{{ .Name }}",
+			EnchantID:          {{ .ID }},
+			{{- end}}
+			Callback:           {{ .ProcInfo.Callback | asCoreCallback }},
+			ProcMask:           {{ .ProcInfo.ProcMask | asCoreProcMask }},
+			Outcome:            {{ .ProcInfo.Outcome | asCoreOutcome }},
+			RequireDamageDealt: {{ .ProcInfo.RequireDamageDealt }},
+		})
 	{{- else}}
-	// shared.NewProcStatBonusEffect(shared.ProcStatBonusEffect{
-	{{- with index .Variants 0 }}
-	//	Name:               "{{ .Name }}",
-	//	EnchantID:          {{ .ID }},
+		// shared.NewProcStatBonusEffect(shared.ProcStatBonusEffect{
+		{{- with index .Variants 0 }}
+		//	Name:               "{{ .Name }}",
+		//	EnchantID:          {{ .ID }},
 		{{- end}}
-	//	Callback:           {{ .ProcInfo.Callback | asCoreCallback }},
-	//	ProcMask:           {{ .ProcInfo.ProcMask | asCoreProcMask }},
-	//	Outcome:            {{ .ProcInfo.Outcome | asCoreOutcome }},
-	//	RequireDamageDealt: {{ .ProcInfo.RequireDamageDealt }},
-	// })
+		//	Callback:           {{ .ProcInfo.Callback | asCoreCallback }},
+		//	ProcMask:           {{ .ProcInfo.ProcMask | asCoreProcMask }},
+		//	Outcome:            {{ .ProcInfo.Outcome | asCoreOutcome }},
+		//	RequireDamageDealt: {{ .ProcInfo.RequireDamageDealt }},
+		// })
 	{{- end}}
 {{- end }}
 
@@ -146,15 +158,30 @@ const TmplStrMissingEffects = `
 // This file is auto generated
 // Changes will be overwritten on next database generation
 
-export const MISSING_ITEM_EFFECTS = [
+export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 {{- range .ItemEffects }}
-    {{.ID}}, // {{.Name}}
+	[
+		{{.ItemID}}, // {{ .Name }}
+		[
+			{{- range .Effects }}
+			"{{ .Name }}", // {{.SpellID}} - https://www.wowhead.com/tbc/spell={{.SpellID}}
+			{{- end}}
+		]
+	],
 {{- end }}
-]
+])
 
-export const MISSING_ENCHANT_EFFECTS = [
+export const MISSING_ENCHANT_EFFECTS = new Map<number, string[]>([
 {{- range .EnchantEffects }}
-    {{.ID}}, // {{.Name}}
+{{- $name := .Name }}
+{{- range .Entries }}
+{{- $tooltip := .Tooltip }}
+{{- if not .Supported}}
+{{- range .Variants }}
+	[{{.ID}}, "{{- range $tooltip }}{{.}}{{- end}}"], // {{ $name }} - {{.SpellID}} - https://www.wowhead.com/tbc/spell={{.SpellID}}
+{{- end}}
 {{- end }}
-]
+{{- end }}
+{{- end }}
+])
 `

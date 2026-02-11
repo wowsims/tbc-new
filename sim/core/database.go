@@ -146,7 +146,7 @@ type Item struct {
 	TempEnchant    int32
 	ScalingOptions map[int32]*proto.ScalingItemProperties
 	RandPropPoints int32
-	ItemEffect     *proto.ItemEffect
+	ItemEffects    []*proto.ItemEffect
 }
 
 func ItemFromProto(pData *proto.SimItem) Item {
@@ -164,7 +164,7 @@ func ItemFromProto(pData *proto.SimItem) Item {
 		SetName:          pData.SetName,
 		SetID:            pData.SetId,
 		ScalingOptions:   pData.ScalingOptions,
-		ItemEffect:       pData.ItemEffect,
+		ItemEffects:      pData.ItemEffects,
 	}
 }
 
@@ -196,7 +196,7 @@ func RandomSuffixFromProto(pData *proto.ItemRandomSuffix) RandomSuffix {
 type Enchant struct {
 	EffectID      int32 // Used by UI to apply effect to tooltip
 	Stats         stats.Stats
-	EnchantEffect *proto.ItemEffect
+	EnchantEffect []*proto.ItemEffect
 	Name          string         // Only needed for unit tests
 	Type          proto.ItemType // Only needed for unit tests
 }

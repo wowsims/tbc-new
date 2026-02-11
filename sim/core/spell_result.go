@@ -19,7 +19,6 @@ type SpellResult struct {
 
 	ArmorAndResistanceMultiplier     float64 // Armor multiplier
 	PostArmorAndResistanceMultiplier float64 // Damage done by this cast after Armor is applied
-	PreOutcomeDamage                 float64 // Damage done by this cast after Outcome is applied
 	PostOutcomeDamage                float64 // Damage done by this cast after Outcome is applied
 
 	inUse bool
@@ -118,6 +117,22 @@ func (result *SpellResult) DidGlance() bool {
 
 func (result *SpellResult) DidBlock() bool {
 	return result.Outcome.Matches(OutcomeBlock)
+}
+
+func (result *SpellResult) DidBlockCrit() bool {
+	return result.Outcome.Matches(OutcomeBlock) && result.Outcome.Matches(OutcomeCrit)
+}
+
+func (result *SpellResult) DidResist() bool {
+	return result.Outcome.Matches(OutcomePartial)
+}
+
+func (result *SpellResult) DidParry() bool {
+	return result.Outcome.Matches(OutcomeParry)
+}
+
+func (result *SpellResult) DidDodge() bool {
+	return result.Outcome.Matches(OutcomeDodge)
 }
 
 func (result *SpellResult) DamageString() string {
@@ -369,19 +384,33 @@ func (spell *Spell) CalcAndDealOutcome(sim *Simulation, target *Unit, outcomeApp
 
 // Applies the fully computed spell result to the sim.
 func (spell *Spell) dealDamageInternal(sim *Simulation, isPeriodic bool, result *SpellResult) {
+	isPartialResist := result.DidResist()
+
 	if sim.CurrentTime >= 0 {
 		spell.SpellMetrics[result.Target.UnitIndex].TotalDamage += result.Damage
-		if isPeriodic {
-			spell.SpellMetrics[result.Target.UnitIndex].TotalTickDamage += result.Damage
+		if isPartialResist {
+			spell.SpellMetrics[result.Target.UnitIndex].TotalResistedDamage += result.Damage
 		}
 
-		if result.DidCrit() {
-			if result.DidBlock() {
-				spell.SpellMetrics[result.Target.UnitIndex].TotalCritBlockDamage += result.Damage
-			} else {
-				spell.SpellMetrics[result.Target.UnitIndex].TotalCritDamage += result.Damage
-				if isPeriodic {
-					spell.SpellMetrics[result.Target.UnitIndex].TotalCritTickDamage += result.Damage
+		if isPeriodic {
+			spell.SpellMetrics[result.Target.UnitIndex].TotalTickDamage += result.Damage
+			if isPartialResist {
+				spell.SpellMetrics[result.Target.UnitIndex].TotalResistedTickDamage += result.Damage
+			}
+		}
+
+		if result.DidBlockCrit() {
+			spell.SpellMetrics[result.Target.UnitIndex].TotalBlockedCritDamage += result.Damage
+		} else if result.DidCrit() {
+			spell.SpellMetrics[result.Target.UnitIndex].TotalCritDamage += result.Damage
+			if isPartialResist {
+				spell.SpellMetrics[result.Target.UnitIndex].TotalResistedCritDamage += result.Damage
+			}
+
+			if isPeriodic {
+				spell.SpellMetrics[result.Target.UnitIndex].TotalCritTickDamage += result.Damage
+				if isPartialResist {
+					spell.SpellMetrics[result.Target.UnitIndex].TotalResistedCritTickDamage += result.Damage
 				}
 			}
 		} else if result.DidGlance() {
@@ -680,9 +709,16 @@ func (spell *Spell) RegisterTravelTimeCallback(sim *Simulation, travelTime time.
 
 // Returns the combined attacker modifiers.
 func (spell *Spell) AttackerDamageMultiplier(attackTable *AttackTable, isDot bool) float64 {
-	damageMultiplierAdditive := TernaryFloat64(isDot && !spell.Flags.Matches(SpellFlagIgnoreAttackerModifiers),
+	if spell.Flags.Matches(SpellFlagIgnoreAttackerModifiers) {
+		return 1
+	}
+
+	damageMultiplierAdditive := TernaryFloat64(
+		isDot,
 		spell.DamageMultiplierAdditive+spell.Unit.PseudoStats.DotDamageMultiplierAdditive-1,
-		spell.DamageMultiplierAdditive)
+		spell.DamageMultiplierAdditive,
+	)
+
 	return spell.attackerDamageMultiplierInternal(attackTable) *
 		spell.DamageMultiplier *
 		damageMultiplierAdditive
