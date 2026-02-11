@@ -37,8 +37,9 @@ var IgnoreSpellEffectByAuraType = map[dbc.EffectAuraType][]int{
 }
 
 var IgnoreSpellEffectBySpellEffectType = map[dbc.SpellEffectType][]int{
-	dbc.E_CREATE_ITEM: {},
-	dbc.E_SUMMON:      {},
+	dbc.E_CREATE_ITEM:    {},
+	dbc.E_SUMMON:         {},
+	dbc.E_TELEPORT_UNITS: {},
 }
 
 var OtherItemIdsToFetch = []string{}

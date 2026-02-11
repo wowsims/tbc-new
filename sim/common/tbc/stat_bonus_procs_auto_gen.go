@@ -995,36 +995,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Returns you to the sanctuary of Frostwolf Keep.
-	// https://www.wowhead.com/tbc/spell=22563
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 17690, ItemName: "Frostwolf Insignia Rank 1"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Returns you to the sanctuary of Dun Baldar.
-	// https://www.wowhead.com/tbc/spell=22564
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 17691, ItemName: "Stormpike Insignia Rank 1"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Absorbs 650 physical damage. Lasts 10s.
 	// https://www.wowhead.com/tbc/spell=21956
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -1049,7 +1019,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 17900, ItemName: "Stormpike Insignia Rank 2"},
-	//	{ItemID: 17900, ItemName: "Stormpike Insignia Rank 2"},
 	// })
 
 	// TODO: Manual implementation required
@@ -1065,15 +1034,14 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 17901, ItemName: "Stormpike Insignia Rank 3"},
-	//	{ItemID: 17901, ItemName: "Stormpike Insignia Rank 3"},
 	// })
 
 	// TODO: Manual implementation required
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Returns you to the sanctuary of Dun Baldar.
-	// https://www.wowhead.com/tbc/spell=22564
+	// Restores 5 health per 5 sec.
+	// https://www.wowhead.com/tbc/spell=21596
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
@@ -1081,22 +1049,20 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 17902, ItemName: "Stormpike Insignia Rank 4"},
-	//	{ItemID: 17902, ItemName: "Stormpike Insignia Rank 4"},
 	// })
 
 	// TODO: Manual implementation required
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Returns you to the sanctuary of Dun Baldar.
-	// https://www.wowhead.com/tbc/spell=22564
+	// Restores 7 health per 5 sec.
+	// https://www.wowhead.com/tbc/spell=21600
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
 	//	Outcome:            core.OutcomeEmpty,
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
-	//	{ItemID: 17903, ItemName: "Stormpike Insignia Rank 5"},
 	//	{ItemID: 17903, ItemName: "Stormpike Insignia Rank 5"},
 	// })
 
@@ -1119,15 +1085,14 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Returns you to the sanctuary of Frostwolf Keep.
-	// https://www.wowhead.com/tbc/spell=22563
+	// Restores 2 health per 5 sec.
+	// https://www.wowhead.com/tbc/spell=21346
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
 	//	Outcome:            core.OutcomeEmpty,
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
-	//	{ItemID: 17905, ItemName: "Frostwolf Insignia Rank 2"},
 	//	{ItemID: 17905, ItemName: "Frostwolf Insignia Rank 2"},
 	// })
 
@@ -1135,15 +1100,14 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Returns you to the sanctuary of Frostwolf Keep.
-	// https://www.wowhead.com/tbc/spell=22563
+	// Restores 2 health per 5 sec.
+	// https://www.wowhead.com/tbc/spell=21346
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
 	//	Outcome:            core.OutcomeEmpty,
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
-	//	{ItemID: 17906, ItemName: "Frostwolf Insignia Rank 3"},
 	//	{ItemID: 17906, ItemName: "Frostwolf Insignia Rank 3"},
 	// })
 
@@ -1160,22 +1124,20 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 17907, ItemName: "Frostwolf Insignia Rank 4"},
-	//	{ItemID: 17907, ItemName: "Frostwolf Insignia Rank 4"},
 	// })
 
 	// TODO: Manual implementation required
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Returns you to the sanctuary of Frostwolf Keep.
-	// https://www.wowhead.com/tbc/spell=22563
+	// Restores 7 health per 5 sec.
+	// https://www.wowhead.com/tbc/spell=21600
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
 	//	Outcome:            core.OutcomeEmpty,
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
-	//	{ItemID: 17908, ItemName: "Frostwolf Insignia Rank 5"},
 	//	{ItemID: 17908, ItemName: "Frostwolf Insignia Rank 5"},
 	// })
 
@@ -4072,9 +4034,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Sometimes heals bearer of 120 damage when damaging an enemy in melee and chance on ranged hit to restore
-	// 172 mana to the bearer.
-	// https://www.wowhead.com/tbc/spell=33504
+	// https://www.wowhead.com/tbc/spell=39599
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
@@ -5393,38 +5353,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 30487, ItemName: "Merciless Gladiator's Plate Gauntlets"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Rips the dimensional walls asunder and transports you to Area 52 in Netherstorm. There are technical problems
-	// that sometimes occur, but that's what Goblin Engineering is all about!
-	// https://www.wowhead.com/tbc/spell=36890
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 30542, ItemName: "Dimensional Ripper - Area 52"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Safely transport yourself to Toshley's Station in Blade's Edge! Nothing to worry about while using this
-	// baby! Gnomish know-how will get you there in a safe and timely fashion!
-	// https://www.wowhead.com/tbc/spell=36941
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 30544, ItemName: "Ultrasafe Transporter: Toshley's Station"},
 	// })
 
 	// TODO: Manual implementation required
@@ -7517,8 +7445,8 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Thori'dal generates magical arrows when the bow string is drawn. Does not use ammo.
-	// https://www.wowhead.com/tbc/spell=46699
+	// Increases ranged attack speed by 15%. Does not stack with quiver or ammo pouch haste effects.
+	// https://www.wowhead.com/tbc/spell=44972
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
@@ -7594,8 +7522,9 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Collects 100 Holy Energy from healing spells you cast. Cannot collect more than 2000 Holy Energy.
-	// https://www.wowhead.com/tbc/spell=45062
+	// Release all accumulated Holy Energy to instantly heal current friendly target by the amount of Holy Energy
+	// accumulated.
+	// https://www.wowhead.com/tbc/spell=45064
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,

@@ -14,17 +14,7 @@ func RegisterAllOnUseCds() {
 	// shared.NewSimpleStatActive(13937) // Headmaster's Charge - https://www.wowhead.com/tbc/spell=18264
 	// shared.NewSimpleStatActive(14152) // Robe of the Archmage - https://www.wowhead.com/tbc/spell=18385
 	// shared.NewSimpleStatActive(14153) // Robe of the Void - https://www.wowhead.com/tbc/spell=18386
-	// shared.NewSimpleStatActive(17690) // Frostwolf Insignia Rank 1 - https://www.wowhead.com/tbc/spell=22563
-	// shared.NewSimpleStatActive(17691) // Stormpike Insignia Rank 1 - https://www.wowhead.com/tbc/spell=22564
 	// shared.NewSimpleStatActive(17759) // Mark of Resolution - https://www.wowhead.com/tbc/spell=21956
-	// shared.NewSimpleStatActive(17900) // Stormpike Insignia Rank 2 - https://www.wowhead.com/tbc/spell=22564
-	// shared.NewSimpleStatActive(17901) // Stormpike Insignia Rank 3 - https://www.wowhead.com/tbc/spell=22564
-	// shared.NewSimpleStatActive(17902) // Stormpike Insignia Rank 4 - https://www.wowhead.com/tbc/spell=22564
-	// shared.NewSimpleStatActive(17903) // Stormpike Insignia Rank 5 - https://www.wowhead.com/tbc/spell=22564
-	// shared.NewSimpleStatActive(17905) // Frostwolf Insignia Rank 2 - https://www.wowhead.com/tbc/spell=22563
-	// shared.NewSimpleStatActive(17906) // Frostwolf Insignia Rank 3 - https://www.wowhead.com/tbc/spell=22563
-	// shared.NewSimpleStatActive(17907) // Frostwolf Insignia Rank 4 - https://www.wowhead.com/tbc/spell=22563
-	// shared.NewSimpleStatActive(17908) // Frostwolf Insignia Rank 5 - https://www.wowhead.com/tbc/spell=22563
 	// shared.NewSimpleStatActive(18639) // Ultra-Flash Shadow Reflector - https://www.wowhead.com/tbc/spell=23132
 	// shared.NewSimpleStatActive(19336) // Arcane Infused Gem - https://www.wowhead.com/tbc/spell=23721
 	// shared.NewSimpleStatActive(19340) // Rune of Metamorphosis - https://www.wowhead.com/tbc/spell=23724
@@ -88,8 +78,6 @@ func RegisterAllOnUseCds() {
 	// shared.NewSimpleStatActive(29181) // Timelapse Shard - https://www.wowhead.com/tbc/spell=35352
 	// shared.NewSimpleStatActive(29387) // Gnomeregan Auto-Blocker 600 - https://www.wowhead.com/tbc/spell=35169
 	// shared.NewSimpleStatActive(30300) // Dabiri's Enigma - https://www.wowhead.com/tbc/spell=36372
-	// shared.NewSimpleStatActive(30542) // Dimensional Ripper - Area 52 - https://www.wowhead.com/tbc/spell=36890
-	// shared.NewSimpleStatActive(30544) // Ultrasafe Transporter: Toshley's Station - https://www.wowhead.com/tbc/spell=36941
 	// shared.NewSimpleStatActive(30620) // Spyglass of the Hidden Fleet - https://www.wowhead.com/tbc/spell=38325
 	// shared.NewSimpleStatActive(30841) // Lower City Prayerbook - https://www.wowhead.com/tbc/spell=37877
 	// shared.NewSimpleStatActive(30847) // X-52 Rocket Helmet - https://www.wowhead.com/tbc/spell=37896
