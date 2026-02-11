@@ -1,8 +1,6 @@
 package core
 
 import (
-	"math"
-
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 

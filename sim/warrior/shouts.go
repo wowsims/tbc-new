@@ -73,7 +73,7 @@ func (warrior *Warrior) registerShouts() {
 				warrior.DefaultShout != proto.WarriorShout_WarriorShoutNone,
 				warrior.Talents.BoomingVoice,
 				commandingPresenceMultiplier,
-				warrior.T6Tank2P != nil && warrior.T6Tank2P.IsActive(),
+				warrior.CouldHaveSetBonus(ItemSetOnslaughtArmor, 2),
 			)
 			aura.BuildPhase = core.Ternary(warrior.DefaultShout == proto.WarriorShout_WarriorShoutCommanding, core.CharacterBuildPhaseBuffs, core.CharacterBuildPhaseNone)
 			return aura
