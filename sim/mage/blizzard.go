@@ -31,7 +31,7 @@ func (mage *Mage) registerBlizzardSpell() {
 		ActionID:       core.ActionID{SpellID: 10},
 		SpellSchool:    core.SpellSchoolFrost,
 		ProcMask:       core.ProcMaskSpellDamage,
-		Flags:          core.SpellFlagChanneled | core.SpellFlagAPL | core.SpellFlagBinary,
+		Flags:          core.SpellFlagChanneled | core.SpellFlagAPL,
 		ClassSpellMask: MageSpellBlizzard,
 		ManaCost: core.ManaCostOptions{
 			FlatCost: 1645,
