@@ -1,9 +1,7 @@
 package core
 
 import (
-	"fmt"
 	"math"
-	"strings"
 
 	"github.com/wowsims/tbc/sim/core/stats"
 )
@@ -35,29 +33,88 @@ func (spell *Spell) ResistanceMultiplier(sim *Simulation, isPeriodic bool, attac
 	}
 
 	// Magical resistance.
-	averageResist := attackTable.Defender.averageResist(spell.SpellSchool, attackTable.Attacker)
-	if averageResist == 0 { // for equal or lower level mobs
-		return 1, OutcomeEmpty
-	}
-
 	if spell.Flags.Matches(SpellFlagBinary) {
-		if resistanceRoll := sim.RandomFloat("Binary Resist"); resistanceRoll < averageResist {
-			return 0, OutcomeEmpty
-		}
 		return 1, OutcomeEmpty
 	}
 
-	thresholds := attackTable.Defender.partialResistRollThresholds(averageResist)
+	resistanceRoll := sim.RandomFloat("Partial Resist")
 
-	switch resistanceRoll := sim.RandomFloat("Partial Resist"); {
-	case resistanceRoll < thresholds[0].cumulativeChance:
-		return thresholds[0].damageMultiplier(), OutcomePartial8
-	case resistanceRoll < thresholds[1].cumulativeChance:
-		return thresholds[1].damageMultiplier(), OutcomePartial4
-	case resistanceRoll < thresholds[2].cumulativeChance:
-		return thresholds[2].damageMultiplier(), OutcomePartial2
-	default:
-		return thresholds[3].damageMultiplier(), OutcomePartial1
+	threshold00, threshold25, threshold50 := attackTable.GetPartialResistThresholds(spell)
+	//if sim.Log != nil {
+	//	sim.Log("Resist thresholds: %0.04f, %0.04f, %0.04f", threshold00, threshold25, threshold50)
+	//}
+
+	if resistanceRoll > threshold00 {
+		// No partial resist.
+		return 1, OutcomeEmpty
+	} else if resistanceRoll > threshold25 {
+		return 0.75, OutcomePartial1_4
+	} else if resistanceRoll > threshold50 {
+		return 0.5, OutcomePartial2_4
+	} else {
+		return 0.25, OutcomePartial3_4
+	}
+}
+
+func (at *AttackTable) GetPartialResistThresholds(spell *Spell) (float64, float64, float64) {
+	return at.Defender.partialResistRollThresholds(spell, at.Attacker)
+}
+
+func (at *AttackTable) GetBinaryHitChance(spell *Spell) float64 {
+	return at.Defender.binaryHitChance(spell, at.Attacker)
+}
+
+// All of the following calculations are based on this guide:
+// https://royalgiraffe.github.io/resist-guide
+
+func (unit *Unit) resistCoeff(spell *Spell, attacker *Unit, binary bool) float64 {
+	if spell.SchoolIndex <= stats.SchoolIndexPhysical {
+		return 0
+	}
+
+	resistance := max(0, unit.GetStat(spell.SpellSchool.ResistanceStat())-attacker.stats[stats.SpellPenetration])
+	if resistance <= 0 {
+		return unit.levelBasedResist(attacker)
+	}
+
+	resistanceCap := float64(attacker.Level * 5)
+	resistanceCoef := resistance / resistanceCap
+
+	if !binary && unit.Type == EnemyUnit && unit.Level > attacker.Level {
+		avgMitigationAdded := unit.levelBasedResist(attacker)
+		// coef is scaled 0 to 1, not 0 to 0.75
+		resistanceCoef += avgMitigationAdded * 1 / 0.75
+	}
+
+	return min(1, resistanceCoef)
+}
+
+func (unit *Unit) levelBasedResist(attacker *Unit) float64 {
+	if unit.Type == EnemyUnit && unit.Level > attacker.Level {
+		// 2% average mitigation per level difference
+		return 0.02 * float64(unit.Level-attacker.Level)
+	}
+	return 0
+}
+
+func (unit *Unit) binaryHitChance(spell *Spell, attacker *Unit) float64 {
+	resistCoeff := unit.resistCoeff(spell, attacker, true)
+	return 1 - 0.75*resistCoeff
+}
+
+// Roll threshold for each type of partial resist.
+func (unit *Unit) partialResistRollThresholds(spell *Spell, attacker *Unit) (float64, float64, float64) {
+	resistCoeff := unit.resistCoeff(spell, attacker, false)
+
+	// Based on the piecewise linear regression estimates at https://royalgiraffe.github.io/partial-resist-table.
+	if val := resistCoeff * 3; val <= 1 {
+		return 0.76 * val, 0.21 * val, 0.03 * val
+	} else if val <= 2 {
+		val -= 1
+		return 0.76 + 0.24*val, 0.21 + 0.57*val, 0.03 + 0.19*val
+	} else {
+		val -= 2
+		return 1, 0.78 + 0.18*val, 0.22 + 0.58*val
 	}
 }
 
@@ -76,97 +133,4 @@ func (at *AttackTable) GetArmorDamageModifier(spell *Spell) float64 {
 	// TBC ANNI: Apply flat ArP
 	defenderArmor = max(defenderArmor-at.Attacker.stats[stats.ArmorPenetration], 0)
 	return 1 - defenderArmor/(defenderArmor+armorConstant)
-}
-
-/*
- The following calculations are based on
- https://web.archive.org/web/20110207221537/http://elitistjerks.com/f15/t44675-resistance_mechanics_wotlk/
- This handles the mob vs. player case
-  - average resist is calculated as AR = R / (R + C), C is 400 for level 80 mobs, assumed 510 for level 83 mobs
-  - actual resist values come in multiples of 10%, with 3-4 values around the average resist
-  - probability for a given resist value is P(x) = 0.5 - 2.5*|x - AR| (transformed for AR < 0.1 or AR > 0.9)
-  - the resist cap is likely gone, since resists work like armor now
- https://web.archive.org/web/20110209210726/http://elitistjerks.com/f75/t38540-general_mage_discussion_information/p11/#post1171056
- This handles the player vs. mob partial resists case
-  - it's modelled identical to the mob vs. player case
-  - the resulting numbers have been verified in game (55% for 0%, 30% for 10%, 15% for 20% resists)
-*/
-
-func (unit *Unit) averageResist(school SpellSchool, attacker *Unit) float64 {
-	resistance := unit.GetStat(school.ResistanceStat()) - attacker.stats[stats.SpellPenetration]
-	if resistance <= 0 {
-		// https://wowpedia.fandom.com/wiki/Resistance?oldid=6512353
-		// With the release of cataclysm, level based resistances seem to have been removed
-		return 0
-	}
-
-	level := float64(unit.Level)
-	c := 150 + (level-60)*(level-67.5)
-
-	return resistance / (c + resistance)
-}
-
-type Threshold struct {
-	cumulativeChance float64
-	bracket          int
-}
-
-func (x Threshold) damageMultiplier() float64 {
-	return 1 - 0.1*float64(x.bracket)
-}
-
-type Thresholds [4]Threshold
-
-func (x Thresholds) String() string {
-	var sb strings.Builder
-	var chance float64
-	for _, t := range x {
-		sb.WriteString(fmt.Sprintf("%.1f%% for %d%% ", (t.cumulativeChance-chance)*100, t.bracket*10))
-		if t.cumulativeChance >= 1 {
-			break
-		}
-		chance = t.cumulativeChance
-	}
-	return sb.String()
-}
-
-func (unit *Unit) partialResistRollThresholds(ar float64) Thresholds {
-	if ar <= 0.1 { // always 0%, 10%, or 20%; this covers all player vs. mob cases, in practice
-		return Thresholds{
-			{cumulativeChance: 1 - 7.5*ar, bracket: 0},
-			{cumulativeChance: 1 - 2.5*ar, bracket: 1},
-			{cumulativeChance: 1, bracket: 2},
-		}
-	}
-
-	if ar >= 0.9 { // always 80%, 90%, or 100%; only relevant for tests ;)
-		return Thresholds{
-			{cumulativeChance: 1 - 7.5*(1-ar), bracket: 10},
-			{cumulativeChance: 1 - 2.5*(1-ar), bracket: 9},
-			{cumulativeChance: 1, bracket: 8},
-		}
-	}
-
-	p := func(x float64) float64 {
-		return math.Max(0.5-2.5*math.Abs(x-ar), 0)
-	}
-
-	const eps = 1e-9 // imprecision guard (25-50-25 might become almost0-25-50-25-almost0)
-
-	var thresholds Thresholds
-	var cumulativeChance float64
-	var index int
-	for bracket := 0; bracket <= 10; bracket++ {
-		if chance := p(float64(bracket) * 0.1); chance > eps {
-			cumulativeChance += chance
-			thresholds[index] = Threshold{cumulativeChance: cumulativeChance, bracket: bracket}
-			index++
-		}
-	}
-
-	if thresholds[index-1].cumulativeChance < 1 { // also guards against floating point imprecision
-		thresholds[index-1].cumulativeChance = 1
-	}
-
-	return thresholds
 }
