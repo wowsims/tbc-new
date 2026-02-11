@@ -4,7 +4,8 @@ import { Rogue_Options as RogueOptions } from '../../core/proto/rogue';
 import { SavedTalents } from '../../core/proto/ui';
 import { Stats } from '../../core/proto_utils/stats';
 import BlankAPL from './apls/blank.apl.json'
-import BlankGear from './gear_sets/p1.gear.json';
+import PreraidSwordsGear from './gear_sets/preraid.gear.json';
+import P1SwordsGear from './gear_sets/p1.gear.json';
 
 // Preset options for this spec.
 // Eventually we will import these values for the raid sim too, so its good to
@@ -12,7 +13,9 @@ import BlankGear from './gear_sets/p1.gear.json';
 
 export const BLANK_APL = PresetUtils.makePresetAPLRotation('Blank', BlankAPL)
 
-export const BLANK_GEARSET = PresetUtils.makePresetGear('P1 Combat Swords', BlankGear);
+export const P1_SWORDS_GEAR = PresetUtils.makePresetGear('P1 Combat Swords', P1SwordsGear);
+export const PREARAID_SWORDS_GEAR = PresetUtils.makePresetGear('Preraid Combat Swords', PreraidSwordsGear);
+
 
 // Preset options for EP weights
 export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(

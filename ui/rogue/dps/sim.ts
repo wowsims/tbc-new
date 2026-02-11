@@ -42,7 +42,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 
 	defaults: {
 		// Default equipped gear.
-		gear: Presets.BLANK_GEARSET.gear,
+		gear: Presets.P1_SWORDS_GEAR.gear,
 		// Default EP weights for sorting gear in the gear picker.
 		epWeights: Presets.P1_EP_PRESET.epWeights,
 		other: Presets.OtherDefaults,
@@ -92,7 +92,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 		// Preset rotations that the user can quickly select.
 		rotations: [],
 		// Preset gear configurations that the user can quickly select.
-		gear: [],
+		gear: [Presets.PREARAID_SWORDS_GEAR, Presets.P1_SWORDS_GEAR],
 	},
 
 	autoRotation: (player: Player<Spec.SpecRogue>): APLRotation => {
@@ -113,10 +113,10 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 			defaultGear: {
 				[Faction.Unknown]: {},
 				[Faction.Alliance]: {
-					1: Presets.BLANK_GEARSET.gear,
+					1: Presets.P1_SWORDS_GEAR.gear,
 				},
 				[Faction.Horde]: {
-					1: Presets.BLANK_GEARSET.gear,
+					1: Presets.P1_SWORDS_GEAR.gear,
 				},
 			},
 			otherDefaults: Presets.OtherDefaults,
