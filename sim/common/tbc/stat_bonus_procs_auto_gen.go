@@ -1160,9 +1160,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// When the shield blocks it releases an electrical charge that damages all nearby enemies. This also has
-	// a chance of damaging the shield.
-	// https://www.wowhead.com/tbc/spell=22600
+	// https://www.wowhead.com/tbc/spell=22619
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
@@ -2739,21 +2737,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Increases the block value of your shield by 235 for 20s.
-	// https://www.wowhead.com/tbc/spell=28773
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 23040, ItemName: "Glyph of Deflection"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Disarm duration reduced by 50%.
 	// https://www.wowhead.com/tbc/spell=43588
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -4036,7 +4019,9 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// https://www.wowhead.com/tbc/spell=39599
+	// Sometimes heals bearer of 120 damage when damaging an enemy in melee and chance on ranged hit to restore
+	// 172 mana to the bearer.
+	// https://www.wowhead.com/tbc/spell=33504
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
@@ -4128,21 +4113,6 @@ func RegisterAllProcs() {
 	// }, []shared.ItemVariant{
 	//	{ItemID: 27989, ItemName: "Idol of Savagery"},
 	//	{ItemID: 27990, ItemName: "Idol of Savagery"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Increases maximum health by 900 for 15s.
-	// https://www.wowhead.com/tbc/spell=33668
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 28042, ItemName: "Regal Protectorate"},
 	// })
 
 	// TODO: Manual implementation required
@@ -6498,21 +6468,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Increases your maximum health by 1750 for 20s.
-	// https://www.wowhead.com/tbc/spell=40464
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32501, ItemName: "Shadowmoon Insignia"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Reduces your fall speed for 10s.
 	// https://www.wowhead.com/tbc/spell=12438
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -7336,21 +7291,6 @@ func RegisterAllProcs() {
 	// }, []shared.ItemVariant{
 	//	{ItemID: 34334, ItemName: "Thori'dal, the Stars' Fury"},
 	//	{ItemID: 34334, ItemName: "Thori'dal, the Stars' Fury"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Increases maximum health by 2000 for 15s.
-	// https://www.wowhead.com/tbc/spell=45049
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskEmpty,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 34428, ItemName: "Steely Naaru Sliver"},
 	// })
 
 	// TODO: Manual implementation required
@@ -8252,6 +8192,17 @@ func RegisterAllProcs() {
 		{ItemID: 24123, ItemName: "Circlet of Arcane Might"},
 	})
 
+	// Your harmful spells have a chance to increase your spell haste rating by 320 for 6 secs.
+	// https://www.wowhead.com/tbc/spell=33370
+	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+		Callback:           core.CallbackOnSpellHitDealt,
+		ProcMask:           core.ProcMaskSpellDamage,
+		Outcome:            core.OutcomeLanded,
+		RequireDamageDealt: false,
+	}, []shared.ItemVariant{
+		{ItemID: 27683, ItemName: "Quagmirran's Eye"},
+	})
+
 	// Your direct healing and heal over time spells have a chance to increase your spell haste rating by 320
 	// for 6 secs.
 	// https://www.wowhead.com/tbc/spell=33370
@@ -8351,6 +8302,17 @@ func RegisterAllProcs() {
 		RequireDamageDealt: false,
 	}, []shared.ItemVariant{
 		{ItemID: 28602, ItemName: "Robe of the Elder Scribes"},
+	})
+
+	// Your melee and ranged attacks have a chance to increase your haste rating by 325 for 10s.
+	// https://www.wowhead.com/tbc/spell=34775
+	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+		Callback:           core.CallbackOnSpellHitDealt,
+		ProcMask:           core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial | core.ProcMaskRangedAuto | core.ProcMaskRangedSpecial,
+		Outcome:            core.OutcomeLanded,
+		RequireDamageDealt: true,
+	}, []shared.ItemVariant{
+		{ItemID: 28830, ItemName: "Dragonspine Trophy"},
 	})
 
 	// Chance on hit to increase your attack power by 160 for 10 seconds.

@@ -1103,12 +1103,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		23040, // Glyph of Deflection
-		[
-			"Increases the block value of your shield by 235 for 20s.", // 28773 - https://www.wowhead.com/tbc/spell=28773
-		]
-	],
-	[
 		23072, // Fists of the Unrelenting
 		[
 			"Disarm duration reduced by 50%.", // 43588 - https://www.wowhead.com/tbc/spell=43588
@@ -1708,12 +1702,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		27990, // Idol of Savagery
 		[
 			"Increases the damage of your Claw and Rake abilites by 30.", // 33565 - https://www.wowhead.com/tbc/spell=33565
-		]
-	],
-	[
-		28042, // Regal Protectorate
-		[
-			"Increases maximum health by 900 for 15s.", // 33668 - https://www.wowhead.com/tbc/spell=33668
 		]
 	],
 	[
@@ -2648,12 +2636,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		32501, // Shadowmoon Insignia
-		[
-			"Increases your maximum health by 1750 for 20s.", // 40464 - https://www.wowhead.com/tbc/spell=40464
-		]
-	],
-	[
 		32538, // Skywitch's Drape
 		[
 			"Reduces your fall speed for 10s.", // 12438 - https://www.wowhead.com/tbc/spell=12438
@@ -2982,12 +2964,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		[
 			"Increases ranged attack speed by 15%. Does not stack with quiver or ammo pouch haste effects.", // 44972 - https://www.wowhead.com/tbc/spell=44972
 			"Thori'dal generates magical arrows when the bow string is drawn. Does not use ammo.", // 46699 - https://www.wowhead.com/tbc/spell=46699
-		]
-	],
-	[
-		34428, // Steely Naaru Sliver
-		[
-			"Increases maximum health by 2000 for 15s.", // 45049 - https://www.wowhead.com/tbc/spell=45049
 		]
 	],
 	[

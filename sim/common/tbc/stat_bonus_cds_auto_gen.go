@@ -38,7 +38,6 @@ func RegisterAllOnUseCds() {
 	// shared.NewSimpleStatActive(21891) // Shard of the Fallen Star - https://www.wowhead.com/tbc/spell=26789
 	// shared.NewSimpleStatActive(23001) // Eye of Diminution - https://www.wowhead.com/tbc/spell=28862
 	// shared.NewSimpleStatActive(23027) // Warmth of Forgiveness - https://www.wowhead.com/tbc/spell=28760
-	// shared.NewSimpleStatActive(23040) // Glyph of Deflection - https://www.wowhead.com/tbc/spell=28773
 	// shared.NewSimpleStatActive(23558) // The Burrower's Shell - https://www.wowhead.com/tbc/spell=29506
 	// shared.NewSimpleStatActive(23564) // Twisting Nether Chain Shirt - https://www.wowhead.com/tbc/spell=34518
 	// shared.NewSimpleStatActive(23565) // Embrace of the Twisting Nether - https://www.wowhead.com/tbc/spell=34518
@@ -71,19 +70,16 @@ func RegisterAllOnUseCds() {
 	// shared.NewSimpleStatActive(27529) // Figurine of the Colossus - https://www.wowhead.com/tbc/spell=33089
 	// shared.NewSimpleStatActive(27770) // Argussian Compass - https://www.wowhead.com/tbc/spell=39228
 	// shared.NewSimpleStatActive(27900) // Jewel of Charismatic Mystique - https://www.wowhead.com/tbc/spell=33486
-	// shared.NewSimpleStatActive(28042) // Regal Protectorate - https://www.wowhead.com/tbc/spell=33668
 	// shared.NewSimpleStatActive(28590) // Ribbon of Sacrifice - https://www.wowhead.com/tbc/spell=38332
 	// shared.NewSimpleStatActive(28727) // Pendant of the Violet Eye - https://www.wowhead.com/tbc/spell=29601
 	// shared.NewSimpleStatActive(28767) // The Decapitator - https://www.wowhead.com/tbc/spell=37208
 	// shared.NewSimpleStatActive(29181) // Timelapse Shard - https://www.wowhead.com/tbc/spell=35352
 	// shared.NewSimpleStatActive(30841) // Lower City Prayerbook - https://www.wowhead.com/tbc/spell=37877
 	// shared.NewSimpleStatActive(30847) // X-52 Rocket Helmet - https://www.wowhead.com/tbc/spell=37896
-	// shared.NewSimpleStatActive(32501) // Shadowmoon Insignia - https://www.wowhead.com/tbc/spell=40464
 	// shared.NewSimpleStatActive(32538) // Skywitch's Drape - https://www.wowhead.com/tbc/spell=12438
 	// shared.NewSimpleStatActive(32539) // Skyguard's Drape - https://www.wowhead.com/tbc/spell=12438
 	// shared.NewSimpleStatActive(33808) // The Horseman's Helm - https://www.wowhead.com/tbc/spell=43873
 	// shared.NewSimpleStatActive(33820) // Weather-Beaten Fishing Hat - https://www.wowhead.com/tbc/spell=43699
-	// shared.NewSimpleStatActive(34428) // Steely Naaru Sliver - https://www.wowhead.com/tbc/spell=45049
 	// shared.NewSimpleStatActive(34429) // Shifting Naaru Sliver - https://www.wowhead.com/tbc/spell=45042
 	// shared.NewSimpleStatActive(34430) // Glimmering Naaru Sliver - https://www.wowhead.com/tbc/spell=45052
 	// shared.NewSimpleStatActive(34471) // Vial of the Sunwell - https://www.wowhead.com/tbc/spell=45064
@@ -131,6 +127,14 @@ func RegisterAllOnUseCds() {
 	shared.NewSimpleStatActive(33831) // Berserker's Call - https://www.wowhead.com/tbc/spell=43716
 	shared.NewSimpleStatActive(38287) // Empty Mug of Direbrew - https://www.wowhead.com/tbc/spell=51955
 
+	// BlockRating
+	shared.NewSimpleStatActive(30300) // Dabiri's Enigma - https://www.wowhead.com/tbc/spell=36372
+
+	// BlockValue
+	shared.NewSimpleStatActive(23040) // Glyph of Deflection - https://www.wowhead.com/tbc/spell=28773
+	shared.NewSimpleStatActive(29387) // Gnomeregan Auto-Blocker 600 - https://www.wowhead.com/tbc/spell=35169
+	shared.NewSimpleStatActive(38289) // Coren's Lucky Coin - https://www.wowhead.com/tbc/spell=51952
+
 	// DodgeRating
 	shared.NewSimpleStatActive(25787) // Charm of Alacrity - https://www.wowhead.com/tbc/spell=32600
 	shared.NewSimpleStatActive(28528) // Moroes' Lucky Pocket Watch - https://www.wowhead.com/tbc/spell=34519
@@ -166,13 +170,21 @@ func RegisterAllOnUseCds() {
 	shared.NewSimpleStatActive(38290) // Dark Iron Smoking Pipe - https://www.wowhead.com/tbc/spell=51953
 
 	// Health
+	shared.NewSimpleStatActive(28042) // Regal Protectorate - https://www.wowhead.com/tbc/spell=33668
+	shared.NewSimpleStatActive(32501) // Shadowmoon Insignia - https://www.wowhead.com/tbc/spell=40464
+	shared.NewSimpleStatActive(32534) // Brooch of the Immortal King - https://www.wowhead.com/tbc/spell=40538
 	shared.NewSimpleStatActive(33832) // Battlemaster's Determination - https://www.wowhead.com/tbc/spell=44055
 	shared.NewSimpleStatActive(34049) // Battlemaster's Audacity - https://www.wowhead.com/tbc/spell=44055
 	shared.NewSimpleStatActive(34050) // Battlemaster's Perseverance - https://www.wowhead.com/tbc/spell=44055
 	shared.NewSimpleStatActive(34162) // Battlemaster's Depravity - https://www.wowhead.com/tbc/spell=44055
 	shared.NewSimpleStatActive(34163) // Battlemaster's Cruelty - https://www.wowhead.com/tbc/spell=44055
+	shared.NewSimpleStatActive(34428) // Steely Naaru Sliver - https://www.wowhead.com/tbc/spell=45049
 	shared.NewSimpleStatActive(35326) // Battlemaster's Alacrity - https://www.wowhead.com/tbc/spell=44055
 	shared.NewSimpleStatActive(35327) // Battlemaster's Alacrity - https://www.wowhead.com/tbc/spell=44055
+
+	// Health / Strength
+	shared.NewSimpleStatActive(28484) // Bulwark of Kings - https://www.wowhead.com/tbc/spell=34511
+	shared.NewSimpleStatActive(28485) // Bulwark of the Ancient Kings - https://www.wowhead.com/tbc/spell=34511
 
 	// MeleeCritRating
 	shared.NewSimpleStatActive(24114) // Braided Eternium Chain - https://www.wowhead.com/tbc/spell=31025
@@ -207,8 +219,4 @@ func RegisterAllOnUseCds() {
 	// Spirit
 	shared.NewSimpleStatActive(28370) // Bangle of Endless Blessings - https://www.wowhead.com/tbc/spell=34210
 	shared.NewSimpleStatActive(30665) // Earring of Soulful Meditation - https://www.wowhead.com/tbc/spell=40402
-
-	// Strength
-	shared.NewSimpleStatActive(28484) // Bulwark of Kings - https://www.wowhead.com/tbc/spell=34511
-	shared.NewSimpleStatActive(28485) // Bulwark of the Ancient Kings - https://www.wowhead.com/tbc/spell=34511
 }

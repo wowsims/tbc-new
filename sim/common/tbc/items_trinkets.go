@@ -8,35 +8,6 @@ import (
 )
 
 func init() {
-	// Quagmirran's Eye
-	core.NewItemEffect(27683, func(agent core.Agent) {
-		character := agent.GetCharacter()
-		duration := time.Second * 6
-		spellHasteRating := 320.0
-
-		quagmirransEyeAura := character.NewTemporaryStatsAura(
-			"Spell Haste Trinket",
-			core.ActionID{SpellID: 33297},
-			stats.Stats{stats.SpellHasteRating: spellHasteRating},
-			duration,
-		)
-
-		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:               "Quagmirran's Eye",
-			ActionID:           core.ActionID{ItemID: 27683},
-			ProcChance:         .1,
-			ICD:                time.Second * 45,
-			Outcome:            core.OutcomeLanded,
-			Callback:           core.CallbackOnSpellHitDealt,
-			RequireDamageDealt: true,
-			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-				quagmirransEyeAura.Activate(sim)
-			},
-		})
-
-		character.ItemSwap.RegisterProc(27683, procAura)
-	})
-
 	// Hourglass of the Unraveller
 	core.NewItemEffect(28034, func(agent core.Agent) {
 		character := agent.GetCharacter()
@@ -146,121 +117,6 @@ func init() {
 		character.ItemSwap.RegisterProc(28789, procAura)
 	})
 
-	// Dragonspine Trophy
-	core.NewItemEffect(28830, func(agent core.Agent) {
-		character := agent.GetCharacter()
-		duration := time.Second * 6
-		value := 325.0
-
-		aura := character.NewTemporaryStatsAura(
-			"Haste",
-			core.ActionID{SpellID: 34775},
-			stats.Stats{stats.MeleeHasteRating: value},
-			duration,
-		)
-
-		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:     "Dragonspine Trophy",
-			ActionID: core.ActionID{ItemID: 28830},
-			DPM:      character.NewLegacyPPMManager(1, core.ProcMaskMeleeOrRanged),
-			ICD:      time.Second * 20,
-			ProcMask: core.ProcMaskMeleeOrRanged,
-			Outcome:  core.OutcomeLanded,
-			Callback: core.CallbackOnSpellHitDealt,
-			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-				aura.Activate(sim)
-			},
-		})
-
-		character.ItemSwap.RegisterProc(28830, procAura)
-	})
-
-	// Gnomeregan Auto-Blocker 600
-	core.NewItemEffect(29387, func(agent core.Agent) {
-		character := agent.GetCharacter()
-
-		aura := character.NewTemporaryStatsAura(
-			"Gnome Ingenuity",
-			core.ActionID{SpellID: 35169},
-			stats.Stats{stats.BlockValue: 200},
-			time.Second*20,
-		)
-
-		spell := character.RegisterSpell(core.SpellConfig{
-			ActionID:    core.ActionID{ItemID: 29387},
-			SpellSchool: core.SpellSchoolPhysical,
-
-			ProcMask: core.ProcMaskEmpty,
-			Flags:    core.SpellFlagNoOnCastComplete,
-
-			Cast: core.CastConfig{
-				DefaultCast: core.Cast{
-					NonEmpty: true,
-				},
-				CD: core.Cooldown{
-					Timer:    character.NewTimer(),
-					Duration: time.Minute * 2,
-				},
-				IgnoreHaste: true,
-			},
-
-			ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-				aura.Activate(sim)
-			},
-		})
-
-		character.AddMajorCooldown(core.MajorCooldown{
-			Spell:    spell,
-			Type:     core.CooldownTypeSurvival,
-			BuffAura: aura,
-		})
-
-		character.ItemSwap.RegisterActive(29387)
-	})
-
-	// Dabiri's Enigma
-	core.NewItemEffect(30300, func(agent core.Agent) {
-		character := agent.GetCharacter()
-
-		aura := character.NewTemporaryStatsAura(
-			"Phalanx",
-			core.ActionID{SpellID: 36372},
-			stats.Stats{stats.BlockRating: 125},
-			time.Second*15,
-		)
-
-		spell := character.RegisterSpell(core.SpellConfig{
-			ActionID:    core.ActionID{ItemID: 30300},
-			SpellSchool: core.SpellSchoolArcane,
-
-			ProcMask: core.ProcMaskEmpty,
-			Flags:    core.SpellFlagNoOnCastComplete,
-
-			Cast: core.CastConfig{
-				DefaultCast: core.Cast{
-					NonEmpty: true,
-				},
-				CD: core.Cooldown{
-					Timer:    character.NewTimer(),
-					Duration: time.Second * 90,
-				},
-				IgnoreHaste: true,
-			},
-
-			ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-				aura.Activate(sim)
-			},
-		})
-
-		character.AddMajorCooldown(core.MajorCooldown{
-			Spell:    spell,
-			Type:     core.CooldownTypeSurvival,
-			BuffAura: aura,
-		})
-
-		character.ItemSwap.RegisterActive(30300)
-	})
-
 	// Spyglass of the Hidden Fleet
 	core.NewItemEffect(30620, func(agent core.Agent) {
 		character := agent.GetCharacter()
@@ -316,6 +172,7 @@ func init() {
 
 		character.ItemSwap.RegisterActive(30620)
 	})
+
 	// Prism of Inner Calm
 	core.NewItemEffect(30621, func(agent core.Agent) {
 		character := agent.GetCharacter()
@@ -478,89 +335,4 @@ func init() {
 		character.ItemSwap.RegisterProc(31858, procAura)
 	})
 
-	// Brooch of the Immortal King
-	core.NewItemEffect(32534, func(agent core.Agent) {
-		character := agent.GetCharacter()
-
-		aura := character.NewTemporaryStatsAura(
-			"Tenacity",
-			core.ActionID{SpellID: 40538},
-			stats.Stats{stats.Health: 1250},
-			time.Second*15,
-		)
-
-		spell := character.RegisterSpell(core.SpellConfig{
-			ActionID:    core.ActionID{ItemID: 32534},
-			SpellSchool: core.SpellSchoolArcane,
-
-			ProcMask: core.ProcMaskEmpty,
-			Flags:    core.SpellFlagNoOnCastComplete,
-
-			Cast: core.CastConfig{
-				DefaultCast: core.Cast{
-					NonEmpty: true,
-				},
-				CD: core.Cooldown{
-					Timer:    character.NewTimer(),
-					Duration: time.Minute * 5,
-				},
-				IgnoreHaste: true,
-			},
-
-			ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-				aura.Activate(sim)
-			},
-		})
-
-		character.AddMajorCooldown(core.MajorCooldown{
-			Spell:    spell,
-			Type:     core.CooldownTypeSurvival,
-			BuffAura: aura,
-		})
-
-		character.ItemSwap.RegisterActive(32534)
-	})
-
-	// Coren's Lucky Coin
-	core.NewItemEffect(38289, func(agent core.Agent) {
-		character := agent.GetCharacter()
-
-		aura := character.NewTemporaryStatsAura(
-			"Dark Iron Luck",
-			core.ActionID{SpellID: 51952},
-			stats.Stats{stats.BlockValue: 200},
-			time.Second*20,
-		)
-
-		spell := character.RegisterSpell(core.SpellConfig{
-			ActionID:    core.ActionID{ItemID: 38289},
-			SpellSchool: core.SpellSchoolPhysical,
-
-			ProcMask: core.ProcMaskEmpty,
-			Flags:    core.SpellFlagNoOnCastComplete,
-
-			Cast: core.CastConfig{
-				DefaultCast: core.Cast{
-					NonEmpty: true,
-				},
-				CD: core.Cooldown{
-					Timer:    character.NewTimer(),
-					Duration: time.Minute * 2,
-				},
-				IgnoreHaste: true,
-			},
-
-			ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-				aura.Activate(sim)
-			},
-		})
-
-		character.AddMajorCooldown(core.MajorCooldown{
-			Spell:    spell,
-			Type:     core.CooldownTypeSurvival,
-			BuffAura: aura,
-		})
-
-		character.ItemSwap.RegisterActive(38289)
-	})
 }

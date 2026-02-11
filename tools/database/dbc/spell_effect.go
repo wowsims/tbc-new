@@ -1,6 +1,7 @@
 package dbc
 
 import (
+	"fmt"
 	"math"
 	"slices"
 
@@ -236,9 +237,11 @@ func (effect *SpellEffect) GetScalingValue(ilvl int) float64 {
 }
 func (effect *SpellEffect) ParseStatEffect(scalesWithIlvl bool, ilvl int) *stats.Stats {
 	effectStats := &stats.Stats{}
-
 	stat, _ := MapMainStatToStat(effect.EffectMiscValues[0])
 
+	if effect.SpellID == 35169 {
+		fmt.Println("reeee", effect.EffectAura)
+	}
 	switch {
 	case effect.EffectAura == A_MOD_RANGED_ATTACK_POWER:
 		if effect.Coefficient != 0 && scalesWithIlvl {
@@ -320,6 +323,10 @@ func (effect *SpellEffect) ParseStatEffect(scalesWithIlvl bool, ilvl int) *stats
 	case effect.EffectAura == A_MOD_TARGET_RESISTANCE:
 		resist := ConvertTargetResistanceFlagToPenetrationStat(effect.EffectMiscValues[0])
 		effectStats[resist] = math.Abs(float64(effect.EffectBasePoints + effect.EffectDieSides))
+	case effect.EffectAura == A_MOD_SHIELD_BLOCKVALUE:
+		effectStats[proto.Stat_StatBlockValue] = float64(effect.EffectBasePoints + effect.EffectDieSides)
+	case effect.EffectAura == A_MOD_INCREASE_HEALTH:
+		effectStats[proto.Stat_StatHealth] = float64(effect.EffectBasePoints + effect.EffectDieSides)
 	}
 
 	return effectStats

@@ -318,6 +318,7 @@ func getMatchingRatingMods(value int) []RatingModType {
 	allMods := []RatingModType{
 		RATING_MOD_DODGE,
 		RATING_MOD_PARRY,
+		RATING_MOD_BLOCK,
 		RATING_MOD_HIT_MELEE,
 		RATING_MOD_HIT_RANGED,
 		RATING_MOD_HIT_SPELL,
@@ -351,8 +352,10 @@ func getMatchingRatingMods(value int) []RatingModType {
 }
 
 var RatingModToStat = map[RatingModType]proto.Stat{
+	RATING_MOD_DEFENSE:      proto.Stat_StatDefenseRating,
 	RATING_MOD_DODGE:        proto.Stat_StatDodgeRating,
 	RATING_MOD_PARRY:        proto.Stat_StatParryRating,
+	RATING_MOD_BLOCK:        proto.Stat_StatBlockRating,
 	RATING_MOD_HIT_MELEE:    proto.Stat_StatMeleeHitRating,
 	RATING_MOD_HIT_RANGED:   proto.Stat_StatMeleeHitRating,
 	RATING_MOD_HIT_SPELL:    proto.Stat_StatSpellHitRating,
@@ -466,7 +469,7 @@ var MapItemIdToPPM = map[int32]float64{
 	28439: 1,    // Dragonstrike
 	28573: 0.5,  // Despair
 	28774: 1.33, // Glaive of the Pit
-	// 28830: 1, // Dragonspine Trophy 20s ICD
+	28830: 1,    // Dragonspine Trophy 20s ICD
 	// 29301: 1, // Band of the Eternal Champion 60s ICD
 	29348: 1,   // The Bladefist
 	29693: 0.5, // Khorium Champion
