@@ -53,6 +53,7 @@ function serializeConstraints(constraints: YalpsConstraints): SerializedConstrai
 type GemData = {
 	gem: Gem;
 	isJC: boolean;
+	isUnique: boolean;
 	coefficients: YalpsCoefficients;
 };
 
@@ -1058,6 +1059,14 @@ export class ReforgeOptimizer {
 		const variables = this.buildYalpsVariables(baseGear, validatedWeights, reforgeCaps, reforgeSoftCaps);
 		const constraints = this.buildYalpsConstraints(baseGear, baseStats);
 
+		// After building variables and constraints we check for unique gems being used
+		for (const coefficients of variables.values()) {
+			for (const key of coefficients.keys()) {
+				if (key.startsWith('UniqueGem_') && !constraints.has(key)) {
+					constraints.set(key, lessEq(1));
+				}
+			}
+		}
 		// Solve in multiple passes to enforce caps
 		await this.solveModel(baseGear, validatedWeights, reforgeCaps, reforgeSoftCaps, variables, constraints, 3600 / (batchRun ? 4 : 1));
 	}
@@ -1209,6 +1218,10 @@ export class ReforgeOptimizer {
 							coefficients.set('JewelcraftingGem', 1);
 						}
 
+						if (gemData.isUnique) {
+							coefficients.set(`UniqueGem_${gemData.gem.id}`, 1);
+						}
+
 						variables.set(variableKey, coefficients);
 					}
 				}
@@ -1267,6 +1280,7 @@ export class ReforgeOptimizer {
 				filteredGemDataForColor.push({
 					gem,
 					isJC,
+					isUnique: gem.unique,
 					coefficients: scoredGemVariableMap.get('temp')!,
 				});
 			}
