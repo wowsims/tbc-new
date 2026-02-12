@@ -156,52 +156,76 @@ func (war *Warrior) registerSweepingStrikes() {
 		return
 	}
 
-	ssSpellActionID := core.ActionID{SpellID: 12723}
-	ssHitActionID := core.ActionID{SpellID: 12723}
+	actionID := core.ActionID{SpellID: 12723}
 
-	var curDmg float64
+	var copyDamage float64
 	hitSpell := war.RegisterSpell(core.SpellConfig{
-		ActionID:    ssHitActionID,
-		SpellSchool: core.SpellSchoolPhysical,
-		ProcMask:    core.ProcMaskEmpty, // No proc mask, so it won't proc itself.
-		Flags:       core.SpellFlagIgnoreResists | core.SpellFlagIgnoreModifiers | core.SpellFlagMeleeMetrics | core.SpellFlagPassiveSpell | core.SpellFlagNoOnCastComplete,
+		ActionID:       actionID,
+		ClassSpellMask: SpellMaskSweepingStrikesHit,
+		SpellSchool:    core.SpellSchoolPhysical,
+		ProcMask:       core.ProcMaskMeleeSpecial,
+		Flags:          core.SpellFlagIgnoreModifiers | core.SpellFlagMeleeMetrics | core.SpellFlagPassiveSpell | core.SpellFlagNoOnCastComplete,
 
 		DamageMultiplier: 1,
-		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
 		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			spell.CalcAndDealDamage(sim, target, curDmg, spell.OutcomeAlwaysHit)
+			spell.CalcAndDealDamage(sim, target, copyDamage, spell.OutcomeAlwaysHit)
 		},
 	})
 
-	ssAura := war.RegisterAura(core.Aura{
-		Label:     "Sweeping Strikes",
-		ActionID:  ssHitActionID,
-		Duration:  core.NeverExpires,
-		MaxStacks: 10,
-		OnGain: func(aura *core.Aura, sim *core.Simulation) {
-			aura.SetStacks(sim, 5)
+	war.SweepingStrikesNormalizedAttack = war.RegisterSpell(core.SpellConfig{
+		ActionID:       actionID.WithTag(1), // Real SpellID: 26654
+		ClassSpellMask: SpellMaskSweepingStrikesNormalizedHit,
+		SpellSchool:    core.SpellSchoolPhysical,
+		ProcMask:       core.ProcMaskMeleeSpecial,
+		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagPassiveSpell | core.SpellFlagNoOnCastComplete,
+
+		DamageMultiplier: 1,
+		ThreatMultiplier: 1,
+
+		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+			baseDamage := spell.Unit.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower())
+			spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeAlwaysHit)
 		},
-		OnSpellHitDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			if aura.GetStacks() == 0 || result.Damage <= 0 || !spell.ProcMask.Matches(core.ProcMaskMelee) {
+	})
+
+	war.SweepingStrikesAura = war.MakeProcTriggerAura(core.ProcTrigger{
+		Name:               "Sweeping Strikes",
+		ActionID:           actionID,
+		MetricsActionID:    actionID,
+		Duration:           time.Second * 10,
+		Callback:           core.CallbackOnSpellHitDealt,
+		ProcMask:           core.ProcMaskMelee,
+		Outcome:            core.OutcomeLanded,
+		TriggerImmediately: true,
+
+		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+			if war.Env.ActiveTargetCount() < 2 || war.SweepingStrikesAura.GetStacks() == 0 || result.PostOutcomeDamage <= 0 || !spell.ProcMask.Matches(core.ProcMaskMelee) {
 				return
 			}
 
-			if (spell.Matches(SpellMaskExecute) && !sim.IsExecutePhase20()) || spell.Matches(SpellMaskWhirlwind) {
-				curDmg = spell.Unit.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower())
-			} else {
-				curDmg = result.Damage
+			if spell.Matches(SpellMaskSweepingStrikesHit | SpellMaskSweepingStrikesNormalizedHit | SpellMaskThunderClap | SpellMaskWhirlwind | SpellMaskWhirlwindOh) {
+				return
 			}
 
-			hitSpell.Cast(sim, war.Env.NextActiveTargetUnit(result.Target))
-			aura.RemoveStack(sim)
+			nextTarget := war.Env.NextActiveTargetUnit(result.Target)
+			if spell.Matches(SpellMaskExecute) && sim.IsExecutePhase20() {
+				war.SweepingStrikesNormalizedAttack.Cast(sim, nextTarget)
+			} else {
+				copyDamage = result.Damage / result.ArmorAndResistanceMultiplier
+				hitSpell.Cast(sim, nextTarget)
+			}
+
+			war.SweepingStrikesAura.RemoveStack(sim)
 		},
 	})
+	war.SweepingStrikesAura.MaxStacks = 10
 
 	ssCD := war.RegisterSpell(core.SpellConfig{
-		ActionID:    ssSpellActionID,
-		SpellSchool: core.SpellSchoolPhysical,
+		ActionID:       actionID,
+		ClassSpellMask: SpellMaskSweepingStrikes,
+		SpellSchool:    core.SpellSchoolPhysical,
 
 		RageCost: core.RageCostOptions{
 			Cost: 30,
@@ -217,8 +241,11 @@ func (war *Warrior) registerSweepingStrikes() {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			ssAura.Activate(sim)
+			spell.RelatedSelfBuff.Activate(sim)
+			war.SweepingStrikesAura.SetStacks(sim, 10)
 		},
+
+		RelatedSelfBuff: war.SweepingStrikesAura,
 	})
 
 	war.AddMajorCooldown(core.MajorCooldown{
@@ -300,6 +327,10 @@ func (war *Warrior) registerPrecision() {
 }
 
 func (war *Warrior) registerBloodthirst() {
+	if !war.Talents.Bloodthirst {
+		return
+	}
+
 	actionID := core.ActionID{SpellID: 23881}
 
 	war.RegisterSpell(core.SpellConfig{
@@ -438,6 +469,8 @@ func (war *Warrior) registerRampage() {
 			aura.Activate(sim)
 			aura.AddStack(sim)
 		},
+
+		RelatedSelfBuff: aura.Aura,
 	})
 
 	war.AddMajorCooldown(core.MajorCooldown{

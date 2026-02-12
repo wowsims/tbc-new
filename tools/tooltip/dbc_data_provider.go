@@ -15,10 +15,6 @@ type DBCTooltipDataProvider struct {
 }
 
 func GetEffectByIndex(effects map[int]dbc.SpellEffect, index int) *dbc.SpellEffect {
-	if len(effects) <= index {
-		return nil
-	}
-
 	// quick check
 	effect := effects[index]
 	if effect.EffectIndex == index {
@@ -235,11 +231,6 @@ func (d DBCTooltipDataProvider) GetEffectScaledValue(spellId int64, effectIdx in
 		return 1
 	}
 
-	// some spells are just fucked..
-	if int(effectIdx) >= len(effectEntries) {
-		effectIdx = int64(len(effectEntries) - 1)
-	}
-
 	effect := GetEffectByIndex(effectEntries, int(effectIdx))
 	if effect == nil {
 		return 1
@@ -261,9 +252,12 @@ func (d DBCTooltipDataProvider) GetEffectScaledValue(spellId int64, effectIdx in
 		baseDamage += baseValue * effect.Coefficient
 	} else {
 		baseDamage += float64(effect.EffectBasePoints)
+
 		spell := d.DBC.Spells[int(spellId)]
 		if spell.MaxScalingLevel > 0 {
 			baseDamage += effect.EffectRealPointsPerLevel * math.Min(float64(spell.MaxScalingLevel), core.CharacterLevel)
+		} else {
+			baseDamage += float64(effect.EffectDieSides)
 		}
 	}
 
@@ -334,7 +328,7 @@ func (d DBCTooltipDataProvider) GetEffectBaseValue(spellId int64, effectIdx int6
 		return 0
 	}
 
-	return float64(effect.EffectBasePoints)
+	return float64(effect.EffectBasePoints + effect.EffectDieSides)
 }
 
 // GetEffectPeriod implements TooltipDataProvider.

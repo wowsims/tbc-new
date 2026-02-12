@@ -50,12 +50,12 @@ func (s *UnitStats) ToProto() *proto.UnitStats {
 // Infer missing stat weight values for HitRating and CritRating if school-specific components were calculated, then call ToProto(). Kept as a separate method in case we want to use the UnitStats struct for other applications
 // than just stat weights.
 func (s *UnitStats) ExportWeights() *proto.UnitStats {
-	if s.Stats[stats.AllPhysHitRating] == 0 {
-		s.Stats[stats.AllPhysHitRating] = (s.PseudoStats[proto.PseudoStat_PseudoStatMeleeHitPercent] + +s.PseudoStats[proto.PseudoStat_PseudoStatRangedHitPercent]) / PhysicalHitRatingPerHitPercent
+	if s.Stats[stats.MeleeHitRating] == 0 {
+		s.Stats[stats.MeleeHitRating] = (s.PseudoStats[proto.PseudoStat_PseudoStatMeleeHitPercent] + +s.PseudoStats[proto.PseudoStat_PseudoStatRangedHitPercent]) / PhysicalHitRatingPerHitPercent
 	}
 
-	if s.Stats[stats.AllPhysCritRating] == 0 {
-		s.Stats[stats.AllPhysCritRating] = (s.PseudoStats[proto.PseudoStat_PseudoStatMeleeCritPercent] + s.PseudoStats[proto.PseudoStat_PseudoStatRangedCritPercent]) / SpellCritRatingPerCritPercent
+	if s.Stats[stats.MeleeCritRating] == 0 {
+		s.Stats[stats.MeleeCritRating] = (s.PseudoStats[proto.PseudoStat_PseudoStatMeleeCritPercent] + s.PseudoStats[proto.PseudoStat_PseudoStatRangedCritPercent]) / SpellCritRatingPerCritPercent
 	}
 
 	return s.ToProto()
@@ -170,7 +170,7 @@ func buildStatWeightRequests(swr *proto.StatWeightsRequest) *proto.StatWeightReq
 	for _, s := range statsToWeigh {
 		stat := stats.UnitStatFromStat(s)
 		statMod := defaultStatMod
-		if stat.EqualsStat(stats.Armor) || stat.EqualsStat(stats.BonusArmor) {
+		if stat.EqualsStat(stats.Armor) || stat.EqualsStat(stats.BonusArmor) || stat.EqualsStat(stats.ArmorPenetration) {
 			statMod = defaultStatMod * 10
 		}
 		statModsHigh[stat] = statMod
@@ -283,7 +283,17 @@ func computeStatWeights(swcr *proto.StatWeightsCalcRequest) *proto.StatWeightsRe
 			}
 			hi.scale(1 / statResult.StatData.ModHigh)
 
-			mean, stdev := lo.merge(&hi).meanAndStdDev()
+			var aggr *aggregator
+			if stat.EqualsPseudoStat(proto.PseudoStat_PseudoStatMeleeHitPercent) ||
+				stat.EqualsStat(stats.Stat(proto.Stat_StatMeleeHitRating)) ||
+				stat.EqualsStat(stats.Stat(proto.Stat_StatSpellHitRating)) ||
+				stat.EqualsStat(stats.Stat(proto.Stat_StatExpertiseRating)) {
+				aggr = &hi
+			} else {
+				aggr = hi.merge(&lo)
+			}
+
+			mean, stdev := aggr.meanAndStdDev()
 			weightResults.Weights.AddStat(stat, mean)
 			weightResults.WeightsStdev.AddStat(stat, stdev)
 		}

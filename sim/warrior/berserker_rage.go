@@ -17,8 +17,9 @@ func (war *Warrior) registerBerserkerRage() {
 	})
 
 	spell := war.RegisterSpell(core.SpellConfig{
-		ActionID: actionID,
-		Flags:    core.SpellFlagAPL,
+		ActionID:       actionID,
+		ClassSpellMask: SpellMaskBerserkerRage,
+		Flags:          core.SpellFlagAPL,
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
@@ -45,5 +46,8 @@ func (war *Warrior) registerBerserkerRage() {
 	war.AddMajorCooldown(core.MajorCooldown{
 		Spell: spell,
 		Type:  core.CooldownTypeSurvival,
+		ShouldActivate: func(s *core.Simulation, c *core.Character) bool {
+			return war.BerserkerRageRageGain > 0 && war.CurrentRage()+war.BerserkerRageRageGain <= war.MaximumRage()
+		},
 	})
 }

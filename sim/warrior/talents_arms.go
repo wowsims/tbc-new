@@ -69,7 +69,7 @@ func (war *Warrior) registerDeflection() {
 		return
 	}
 
-	war.PseudoStats.BaseParryChance += float64(war.Talents.Deflection)
+	war.PseudoStats.BaseParryChance += 0.01 * float64(war.Talents.Deflection)
 }
 
 func (war *Warrior) registerImprovedRend() {
@@ -155,10 +155,11 @@ func (war *Warrior) registerDeepWounds() {
 	}
 
 	war.DeepWounds = war.RegisterSpell(core.SpellConfig{
-		ActionID:    core.ActionID{SpellID: 12867},
-		SpellSchool: core.SpellSchoolPhysical,
-		ProcMask:    core.ProcMaskEmpty,
-		Flags:       core.SpellFlagNoOnCastComplete | core.SpellFlagIgnoreResists,
+		ActionID:       core.ActionID{SpellID: 12867},
+		SpellSchool:    core.SpellSchoolPhysical,
+		ProcMask:       core.ProcMaskEmpty,
+		ClassSpellMask: SpellMaskDeepWounds,
+		Flags:          core.SpellFlagNoOnCastComplete | core.SpellFlagIgnoreResists,
 
 		DamageMultiplier: 1,
 		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
@@ -307,6 +308,9 @@ func (war *Warrior) registerDeathWish() {
 			Cost: 10,
 		},
 		Cast: core.CastConfig{
+			DefaultCast: core.Cast{
+				GCD: core.GCDDefault,
+			},
 			IgnoreHaste: true,
 			CD: core.Cooldown{
 				Timer:    war.NewTimer(),

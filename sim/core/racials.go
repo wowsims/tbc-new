@@ -159,6 +159,8 @@ func applyRaceEffects(agent Agent) {
 			ApplyEffects: func(sim *Simulation, _ *Unit, _ *Spell) {
 				stoneFormAura.Activate(sim)
 			},
+
+			RelatedSelfBuff: stoneFormAura.Aura,
 		})
 
 		character.AddMajorCooldown(MajorCooldown{
@@ -330,6 +332,7 @@ func applyRaceEffects(agent Agent) {
 				})
 
 			berserkingSpellConfig := baseSpellConfig
+			berserkingSpellConfig.RelatedSelfBuff = berserkingAura
 			berserkingSpellConfig.ApplyEffects = func(sim *Simulation, _ *Unit, _ *Spell) {
 				berserkingAura.Activate(sim)
 			}

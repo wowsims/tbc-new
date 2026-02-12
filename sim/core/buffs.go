@@ -423,11 +423,11 @@ var CommandingShoutCategory = "CommandingShout"
 
 func CommandingShoutAura(char *Character, isPlayer bool, boomingVoicePoints int32, commandingPresenceMultiplier float64, hasT6Tank2P bool) *Aura {
 	baseHpBuff := 1080.0
-	hpBuff := baseHpBuff
 	if hasT6Tank2P {
-		hpBuff += 170
+		baseHpBuff += 170
 	}
-	nonPlayerHpBuff := hpBuff * commandingPresenceMultiplier
+
+	nonPlayerHpBuff := baseHpBuff * commandingPresenceMultiplier
 
 	var ee *ExclusiveEffect
 	aura := char.GetOrRegisterAura(Aura{
@@ -736,7 +736,7 @@ func BraidedEterniumChainAura(char *Character) *Aura {
 		Label:    "Braided Eternium Chain",
 		ActionID: ActionID{SpellID: 31025},
 		Stats: []StatConfig{
-			{stats.AllPhysCritRating, 28, false},
+			{stats.MeleeCritRating, 28, false},
 		},
 	})
 }
@@ -1277,6 +1277,8 @@ func registerBloodlustCD(character *Character) {
 				bloodlustAura.Activate(sim)
 			}
 		},
+
+		RelatedSelfBuff: bloodlustAura,
 	})
 
 	character.AddMajorCooldown(MajorCooldown{

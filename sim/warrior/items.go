@@ -138,39 +138,6 @@ var ItemSetDestroyerBattlegear = core.NewItemSet(core.ItemSet{
 	Name: "Destroyer Battlegear",
 	Bonuses: map[int32]core.ApplySetBonus{
 		2: func(agent core.Agent, setBonusAura *core.Aura) {
-			setBonusAura.
-				AttachSpellMod(core.SpellModConfig{
-					ClassMask: SpellMaskWhirlwind,
-					Kind:      core.SpellMod_PowerCost_Flat,
-					IntValue:  -5,
-				}).
-				ExposeToAPL(37518)
-		},
-		4: func(agent core.Agent, setBonusAura *core.Aura) {
-			warrior := agent.(WarriorAgent).GetWarrior()
-			actionID := core.ActionID{SpellID: 37521}
-			rageMetrics := warrior.NewRageMetrics(actionID)
-
-			setBonusAura.
-				AttachProcTrigger(core.ProcTrigger{
-					Name:               "Destroyer Battlegear - 4PC",
-					TriggerImmediately: true,
-					Callback:           core.CallbackOnSpellHitDealt,
-					Outcome:            core.OutcomeParry | core.OutcomeDodge,
-					Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-						warrior.AddRage(sim, 2, rageMetrics)
-					},
-				}).
-				ExposeToAPL(actionID.SpellID)
-		},
-	},
-})
-
-// T5 - Tank
-var ItemSetDestroyerArmor = core.NewItemSet(core.ItemSet{
-	Name: "Destroyer Armor",
-	Bonuses: map[int32]core.ApplySetBonus{
-		2: func(agent core.Agent, setBonusAura *core.Aura) {
 			warrior := agent.(WarriorAgent).GetWarrior()
 			actionID := core.ActionID{SpellID: 37529}
 
@@ -183,7 +150,7 @@ var ItemSetDestroyerArmor = core.NewItemSet(core.ItemSet{
 
 			setBonusAura.
 				AttachProcTrigger(core.ProcTrigger{
-					Name:               "Destroyer Armor - 2PC",
+					Name:               "Destroyer Battlegear - 2PC",
 					ClassSpellMask:     SpellMaskOverpower,
 					TriggerImmediately: true,
 					Callback:           core.CallbackOnSpellHitDealt,
@@ -201,6 +168,69 @@ var ItemSetDestroyerArmor = core.NewItemSet(core.ItemSet{
 					IntValue:  -5,
 				}).
 				ExposeToAPL(37535)
+		},
+	},
+})
+
+// T5 - Tank
+var ItemSetDestroyerArmor = core.NewItemSet(core.ItemSet{
+	Name: "Destroyer Armor",
+	Bonuses: map[int32]core.ApplySetBonus{
+		2: func(agent core.Agent, setBonusAura *core.Aura) {
+			warrior := agent.(WarriorAgent).GetWarrior()
+			actionID := core.ActionID{SpellID: 37523}
+
+			aura := warrior.NewTemporaryStatsAura(
+				"Reinforced Shield",
+				actionID,
+				stats.Stats{stats.BlockValue: 100},
+				time.Second*6,
+			)
+
+			setBonusAura.
+				AttachProcTrigger(core.ProcTrigger{
+					Name:               "Destroyer Armor - 2PC - Trigger",
+					ClassSpellMask:     SpellMaskShieldBlock,
+					TriggerImmediately: true,
+					Callback:           core.CallbackOnSpellHitDealt,
+					Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+						aura.Activate(sim)
+					},
+				}).
+				AttachProcTrigger(core.ProcTrigger{
+					Name:               "Destroyer Armor - 2PC - Consume",
+					TriggerImmediately: true,
+					Outcome:            core.OutcomeBlock,
+					Callback:           core.CallbackOnSpellHitTaken,
+					Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+						aura.Deactivate(sim)
+					},
+				}).
+				ExposeToAPL(actionID.SpellID)
+		},
+		4: func(agent core.Agent, setBonusAura *core.Aura) {
+			warrior := agent.(WarriorAgent).GetWarrior()
+			actionID := core.ActionID{SpellID: 37526}
+
+			aura := warrior.NewTemporaryStatsAura(
+				"Battle Rush",
+				actionID,
+				stats.Stats{stats.MeleeHasteRating: 200},
+				time.Second*10,
+			)
+
+			setBonusAura.
+				AttachProcTrigger(core.ProcTrigger{
+					Name:               "Destroyer Armor - 4PC",
+					TriggerImmediately: true,
+					ProcChance:         0.07,
+					RequireDamageDealt: true,
+					Callback:           core.CallbackOnSpellHitTaken,
+					Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+						aura.Activate(sim)
+					},
+				}).
+				ExposeToAPL(actionID.SpellID)
 		},
 	},
 })
@@ -235,6 +265,9 @@ var ItemSetOnslaughtArmor = core.NewItemSet(core.ItemSet{
 	Name: "Onslaught Armor",
 	Bonuses: map[int32]core.ApplySetBonus{
 		2: func(agent core.Agent, setBonusAura *core.Aura) {
+			warrior := agent.(WarriorAgent).GetWarrior()
+			warrior.T6Tank2P = setBonusAura
+
 			setBonusAura.ExposeToAPL(38408)
 		},
 		4: func(agent core.Agent, setBonusAura *core.Aura) {
@@ -249,4 +282,8 @@ var ItemSetOnslaughtArmor = core.NewItemSet(core.ItemSet{
 	},
 })
 
-func init() {}
+func init() {
+	// Empty function to remove the warning from the UI
+	// because this effect has been implemented in buffs.go
+	core.NewItemEffect(30446, func(agent core.Agent) {})
+}

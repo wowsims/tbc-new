@@ -31,7 +31,6 @@ const (
 	SpellMaskBattleShout int64 = 1 << iota
 	SpellMaskCommandingShout
 	SpellMaskBerserkerRage
-	SpellMaskRallyingCry
 	SpellMaskRecklessness
 	SpellMaskDeathWish
 	SpellMaskRetaliation
@@ -54,14 +53,13 @@ const (
 	SpellMaskSweepingStrikes
 	SpellMaskSweepingStrikesHit
 	SpellMaskSweepingStrikesNormalizedHit
+	SpellMaskHeroicStrike
 	SpellMaskCleave
 	SpellMaskDevastate
 	SpellMaskExecute
-	SpellMaskHeroicStrike
 	SpellMaskOverpower
 	SpellMaskRevenge
 	SpellMaskSlam
-	SpellMaskSweepingSlam
 	SpellMaskSunderArmor
 	SpellMaskThunderClap
 	SpellMaskWhirlwind
@@ -70,7 +68,6 @@ const (
 	SpellMaskShieldBash
 	SpellMaskBloodthirst
 	SpellMaskMortalStrike
-	SpellMaskWildStrike
 	SpellMaskShieldBlock
 	SpellMaskHamstring
 	SpellMaskPummel
@@ -81,7 +78,7 @@ const (
 	SpellMaskShouts             = SpellMaskCommandingShout | SpellMaskBattleShout | SpellMaskDemoralizingShout
 	SpellMaskDirectDamageSpells = SpellMaskSweepingStrikesHit | SpellMaskSweepingStrikesNormalizedHit |
 		SpellMaskCleave | SpellMaskExecute | SpellMaskHeroicStrike | SpellMaskOverpower |
-		SpellMaskRevenge | SpellMaskSlam | SpellMaskSweepingSlam | SpellMaskShieldBash | SpellMaskSunderArmor |
+		SpellMaskRevenge | SpellMaskSlam | SpellMaskShieldBash | SpellMaskSunderArmor |
 		SpellMaskThunderClap | SpellMaskWhirlwind | SpellMaskWhirlwindOh | SpellMaskShieldSlam |
 		SpellMaskBloodthirst | SpellMaskMortalStrike | SpellMaskIntercept | SpellMaskDevastate | SpellMaskRetaliationHit
 
@@ -111,9 +108,10 @@ type Warrior struct {
 	DefensiveStance   *core.Spell
 	BerserkerStance   *core.Spell
 
-	Rend         *core.Spell
-	DeepWounds   *core.Spell
-	MortalStrike *core.Spell
+	Rend                            *core.Spell
+	DeepWounds                      *core.Spell
+	MortalStrike                    *core.Spell
+	SweepingStrikesNormalizedAttack *core.Spell
 
 	HeroicStrike       *core.Spell
 	Cleave             *core.Spell
@@ -126,8 +124,7 @@ type Warrior struct {
 
 	EnrageAura *core.Aura
 
-	SkullBannerAura         *core.Aura
-	DemoralizingBannerAuras core.AuraArray
+	SweepingStrikesAura *core.Aura
 
 	DemoralizingShoutAuras core.AuraArray
 	SunderArmorAuras       core.AuraArray
@@ -246,6 +243,18 @@ func NewWarrior(character *core.Character, options *proto.WarriorOptions, talent
 	}
 
 	return warrior
+}
+
+func (warrior *Warrior) CastNormalizedSweepingStrikesAttack(results core.SpellResultSlice, sim *core.Simulation) {
+	if warrior.SweepingStrikesAura != nil && warrior.SweepingStrikesAura.IsActive() {
+		for _, result := range results {
+			if result.Landed() {
+				warrior.SweepingStrikesNormalizedAttack.Cast(sim, warrior.Env.NextActiveTargetUnit(result.Target))
+				warrior.SweepingStrikesAura.RemoveStack(sim)
+				break
+			}
+		}
+	}
 }
 
 // Agent is a generic way to access underlying warrior on any of the agents.

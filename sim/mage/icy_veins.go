@@ -17,6 +17,19 @@ func (mage *Mage) registerIcyVeinsSpell() {
 		Kind:       core.SpellMod_CastTime_Pct,
 	})
 
+	mage.IcyVeinsAura = mage.RegisterAura(core.Aura{
+		Label:    "Icy Veins",
+		ActionID: core.ActionID{SpellID: 12472},
+		Duration: time.Second * 20,
+		OnGain: func(aura *core.Aura, sim *core.Simulation) {
+			icyVeinsMod.Activate()
+		},
+		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
+			aura.Deactivate(sim)
+			icyVeinsMod.Deactivate()
+		},
+	})
+
 	mage.IcyVeins = mage.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 12472},
 		Flags:          core.SpellFlagNoOnCastComplete,
@@ -33,20 +46,7 @@ func (mage *Mage) registerIcyVeinsSpell() {
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {
 			mage.IcyVeinsAura.Activate(sim)
 		},
-	})
-
-	mage.IcyVeinsAura = mage.RegisterAura(core.Aura{
-		Label:    "Icy Veins",
-		ActionID: core.ActionID{SpellID: 12472},
-		Duration: time.Second * 20,
-		OnGain: func(aura *core.Aura, sim *core.Simulation) {
-			icyVeinsMod.Activate()
-			mage.IcyVeins.CD.Use(sim)
-		},
-		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
-			aura.Deactivate(sim)
-			icyVeinsMod.Deactivate()
-		},
+		RelatedSelfBuff: mage.IcyVeinsAura,
 	})
 
 	mage.AddMajorCooldown(core.MajorCooldown{
