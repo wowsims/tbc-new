@@ -24,16 +24,19 @@ export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
 	'Combat Swords',
 	Stats.fromMap(
 		{
-			[Stat.StatAgility]: 1.0,
-			[Stat.StatMeleeHitRating]: 1.0,
-			[Stat.StatMeleeHasteRating]: 1.0,
-			[Stat.StatMeleeCritRating]: 1.0,
-			[Stat.StatArmorPenetration]: 1.0,
+			[Stat.StatStrength]: 1.1,
+			[Stat.StatAgility]: 2.17,
+			[Stat.StatStamina]: 0.01,
 			[Stat.StatAttackPower]: 1.0,
+			[Stat.StatMeleeHitRating]: 3.06,
+			[Stat.StatMeleeCritRating]: 1.7,
+			[Stat.StatMeleeHasteRating]: 2.19,
+			[Stat.StatArmorPenetration]: 0.3,
+			[Stat.StatExpertiseRating]: 3.47
 		},
 		{
-			[PseudoStat.PseudoStatMainHandDps]: 1,
-			[PseudoStat.PseudoStatOffHandDps]: 1,
+			[PseudoStat.PseudoStatMainHandDps]: 9.34,
+			[PseudoStat.PseudoStatOffHandDps]: 3.40,
 		},
 	),
 );

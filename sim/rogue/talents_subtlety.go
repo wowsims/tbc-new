@@ -266,7 +266,7 @@ func (rogue *Rogue) registerHemorrhage() {
 			// This more accurately models each individual Hemo's DPS contribution without needing to somehow consume the stacks.
 			// It's also easier for me to just leave it that way :)
 
-			baseDamage := rogue.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower()) + 420
+			baseDamage := rogue.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower())
 			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialHitAndCrit)
 			if result.Landed() {
 				rogue.AddComboPoints(sim, 1, pointMetric)

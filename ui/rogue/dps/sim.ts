@@ -3,7 +3,7 @@ import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_u
 import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
 import { APLRotation } from '../../core/proto/apl';
-import { Debuffs, Faction, IndividualBuffs, ItemSlot, PartyBuffs, PseudoStat, Race, RaidBuffs, Spec, Stat } from '../../core/proto/common';
+import { Debuffs, Faction, IndividualBuffs, ItemSlot, PartyBuffs, PseudoStat, Race, RaidBuffs, Spec, Stat, TristateEffect } from '../../core/proto/common';
 import { UnitStat } from '../../core/proto_utils/stats';
 import { defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
 
@@ -51,15 +51,28 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 		// Default raid/party buffs settings.
 		raidBuffs: RaidBuffs.create({
 			...defaultRaidBuffMajorDamageCooldowns(),
+			giftOfTheWild: TristateEffect.TristateEffectImproved
 		}),
 		partyBuffs: PartyBuffs.create({
-
+			battleShout: TristateEffect.TristateEffectImproved,
+			ferociousInspiration: 1,
+			strengthOfEarthTotem: TristateEffect.TristateEffectImproved,
+			graceOfAirTotem: TristateEffect.TristateEffectImproved,
+			windfuryTotem: TristateEffect.TristateEffectImproved,
 		}),
 		individualBuffs: IndividualBuffs.create({
-
+			blessingOfKings: true,
+			blessingOfMight: TristateEffect.TristateEffectImproved,
+			unleashedRage: true,
 		}),
 		debuffs: Debuffs.create({
-
+			bloodFrenzy: true,
+			huntersMark: TristateEffect.TristateEffectImproved,
+			improvedSealOfTheCrusader: true,
+			mangle: true,
+			misery: true,
+			curseOfRecklessness: true,
+			faerieFire: TristateEffect.TristateEffectImproved,
 		}),
 	},
 
