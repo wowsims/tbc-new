@@ -14,6 +14,8 @@ export const DefaultPartyBuffs = PartyBuffs.create({
 	strengthOfEarthTotem: TristateEffect.TristateEffectImproved,
 	windfuryTotem: TristateEffect.TristateEffectImproved,
 	battleShout: TristateEffect.TristateEffectImproved,
+	leaderOfThePack: TristateEffect.TristateEffectImproved,
+	trueshotAura: true,
 });
 
 export const DefaultRaidBuffs = RaidBuffs.create({
@@ -32,6 +34,8 @@ export const DefaultDebuffs = Debuffs.create({
 	sunderArmor: true,
 	curseOfRecklessness: true,
 	huntersMark: TristateEffect.TristateEffectImproved,
+	exposeWeaknessUptime: 0.9,
+	exposeWeaknessHunterAgility: 1080,
 });
 
 export const DefaultConsumables = ConsumesSpec.create({
