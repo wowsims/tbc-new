@@ -1,3 +1,4 @@
+import { CharacterStats } from './components/character_stats';
 import { ItemSwapSettings } from './components/item_swap_picker';
 import Toast from './components/toast';
 import * as Mechanics from './constants/mechanics';
@@ -705,10 +706,13 @@ export class Player<SpecType extends Spec> {
 	}
 
 	getMeleeCritCapInfo(): MeleeCritCapInfo {
-		const meleeCrit = this.currentStats.finalStats?.pseudoStats[PseudoStat.PseudoStatMeleeCritPercent] || 0.0;
-		const meleeHit = this.currentStats.finalStats?.pseudoStats[PseudoStat.PseudoStatMeleeHitPercent] || 0.0;
-		const expertise = (this.currentStats.finalStats?.stats[Stat.StatExpertiseRating] || 0.0) / Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION / 4;
-		//const agility = (this.currentStats.finalStats?.stats[Stat.StatAgility] || 0.0) / this.getClass();
+		const debuffStats = CharacterStats.getDebuffStats(this);
+		const debuffHit = debuffStats.getPseudoStat(PseudoStat.PseudoStatMeleeHitPercent) || 0;
+		const debuffCrit = debuffStats.getPseudoStat(PseudoStat.PseudoStatMeleeCritPercent) || 0;
+
+		const meleeCrit = (this.currentStats.finalStats?.pseudoStats[PseudoStat.PseudoStatMeleeCritPercent] || 0) + debuffCrit;
+		const meleeHit = (this.currentStats.finalStats?.pseudoStats[PseudoStat.PseudoStatMeleeHitPercent] || 0) + debuffHit;
+		const expertise = (this.currentStats.finalStats?.stats[Stat.StatExpertiseRating] || 0) / Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION / 4;
 		const critSuppression = [0, 1, 2, 4.8][this.sim.encounter.primaryTarget.level - Mechanics.CHARACTER_LEVEL];
 		const hitSuppression = [0, 0, 0, 1][this.sim.encounter.primaryTarget.level - Mechanics.CHARACTER_LEVEL];
 		const glancing = [6, 12, 18, 24][this.sim.encounter.primaryTarget.level - Mechanics.CHARACTER_LEVEL];
@@ -735,8 +739,6 @@ export class Player<SpecType extends Spec> {
 			const ranks = player.getTalents().elementalDevastation;
 			specSpecificOffset = 3.0 * ranks;
 		}
-
-		const debuffCrit = 0.0;
 
 		const baseCritCap = 100.0 - glancing + critSuppression - remainingMeleeHitCap - remainingExpertiseCap - specSpecificOffset;
 		const playerCritCapDelta = meleeCrit - baseCritCap;
