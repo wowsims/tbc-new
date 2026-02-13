@@ -34,7 +34,7 @@ func (mage *Mage) registerFrostboltSpell() {
 
 	mage.RegisterSpell(mage.frostBoltConfig(core.SpellConfig{
 		ActionID: actionID,
-		Flags:    core.SpellFlagAPL,
+		Flags:    core.SpellFlagAPL | core.SpellFlagBinary,
 
 		ManaCost: core.ManaCostOptions{
 			FlatCost: 345,

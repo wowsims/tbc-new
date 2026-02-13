@@ -119,7 +119,7 @@ func factory_StatBonusEffect(config ProcStatBonusEffect, extraSpell func(agent c
 		if isEnchant {
 			eligibleSlots = character.ItemSwap.EligibleSlotsForEffect(effectID)
 			ench := core.GetEnchantByEffectID(effectID)
-			for _, effect := range ench.EnchantEffect {
+			for _, effect := range ench.EnchantEffects {
 				if effect.GetProc() != nil {
 					procEffects[effect.BuffId] = effect
 				}
