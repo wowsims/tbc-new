@@ -1129,7 +1129,6 @@ export class ReforgeOptimizer {
 			}
 
 			const distributedSocketBonus = new Stats(scaledItem.item.socketBonus).scale(1.0 / socketBonusNormalization).getBuffedStats();
-			console.log(translateSlotName(slot), socketColors, distributedSocketBonus);
 
 			// First determine whether the socket bonus should be obviously matched in order to save on brute force computation.
 			let forceSocketBonus: boolean = false;
@@ -1288,36 +1287,9 @@ export class ReforgeOptimizer {
 			// Sort from highest to lowest pre-cap EP.
 			filteredGemDataForColor.sort((a, b) => b.coefficients.get('score')! - a.coefficients.get('score')!);
 
-			// Go down the list and include all gems until we find the highest EP option with zero capped stats.
-			let maxGemOptionsForStat: number = this.isTankSpec ? 3 : 4;
-
-			if (socketColor == GemColor.GemColorYellow) {
-				let foundCritOrHasteCap = false;
-
-				for (const parentStat of [
-					Stat.StatMeleeHitRating,
-					Stat.StatSpellHitRating,
-					Stat.StatMeleeCritRating,
-					Stat.StatSpellCritRating,
-					Stat.StatMeleeHasteRating,
-					Stat.StatSpellHasteRating,
-				]) {
-					for (const childStat of UnitStat.getChildren(parentStat)) {
-						if (pseudoStatIsCapped(childStat, reforgeCaps, reforgeSoftCaps)) {
-							foundCritOrHasteCap = true;
-						}
-					}
-				}
-
-				if (!foundCritOrHasteCap) {
-					maxGemOptionsForStat = 1;
-				}
-			}
-
 			const includedGemDataForColor = new Array<GemData>();
 			let foundUncappedJCGem = false;
 			let foundUncappedNormalGem = false;
-			let numUncappedNormalGems = 0;
 			const numGemOptionsForStat = new Map<string, number>();
 
 			for (const gemData of filteredGemDataForColor) {
@@ -1327,9 +1299,7 @@ export class ReforgeOptimizer {
 				for (const statKey of cappedStatKeys) {
 					const numExistingOptions = numGemOptionsForStat.get(statKey) || 0;
 
-					if (numExistingOptions == maxGemOptionsForStat) {
-						isRedundantGem = true;
-					} else if (!gemData.isJC) {
+					if (!gemData.isJC) {
 						numGemOptionsForStat.set(statKey, numExistingOptions + 1);
 					}
 				}
@@ -1343,11 +1313,6 @@ export class ReforgeOptimizer {
 						foundUncappedJCGem = true;
 					} else {
 						foundUncappedNormalGem = true;
-						numUncappedNormalGems++;
-
-						if (numUncappedNormalGems == 3) {
-							break;
-						}
 					}
 				}
 			}
@@ -1393,7 +1358,7 @@ export class ReforgeOptimizer {
 		coefficients.set(PseudoStat[pseudoStat], currentValue + amount);
 	}
 
-	buildYalpsConstraints(gear: Gear, baseStats: Stats): YalpsConstraints {
+	buildYalpsConstraints(gear: Gear, _: Stats): YalpsConstraints {
 		const constraints = new Map<string, Constraint>();
 		const metaGem = gear.getMetaGem();
 		if (metaGem?.id) {

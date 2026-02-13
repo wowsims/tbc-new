@@ -42,6 +42,7 @@ type Item struct {
 	UpgradeID              int
 	UpgradePath            []int
 	LimitCategory          int
+	Bonding                int
 }
 
 func (item *Item) ToUIItem() *proto.UIItem {
