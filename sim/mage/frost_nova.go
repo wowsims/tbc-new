@@ -14,7 +14,7 @@ func (mage *Mage) registerFrostNovaSpell() {
 		ActionID:       core.ActionID{SpellID: 122},
 		SpellSchool:    core.SpellSchoolFrost,
 		ProcMask:       core.ProcMaskSpellDamage,
-		Flags:          core.SpellFlagAPL,
+		Flags:          core.SpellFlagAPL | core.SpellFlagBinary,
 		ClassSpellMask: MageSpellFrostNova,
 
 		ManaCost: core.ManaCostOptions{
