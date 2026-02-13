@@ -29,6 +29,7 @@ import type { LPModel, LPSolution, SerializedConstraints, SerializedVariables } 
 import { ProgressTrackerModal } from './progress_tracker_modal';
 import { getEmptySlotIconUrl } from './gear_picker/utils';
 import { CURRENT_PHASE, Phase } from '../constants/other';
+import { CharacterStats } from './character_stats';
 
 type YalpsCoefficients = Map<string, number>;
 type YalpsVariables = Map<string, YalpsCoefficients>;
@@ -1074,6 +1075,7 @@ export class ReforgeOptimizer {
 	async updateGear(gear: Gear): Promise<Stats> {
 		await this.player.setGearAsync(TypedEvent.nextEventID(), gear);
 		let baseStats = Stats.fromProto(this.player.getCurrentStats().finalStats);
+		baseStats = baseStats.add(CharacterStats.getDebuffStats(this.player));
 		if (this.updateGearStatsModifier) baseStats = this.updateGearStatsModifier(baseStats);
 		return baseStats;
 	}

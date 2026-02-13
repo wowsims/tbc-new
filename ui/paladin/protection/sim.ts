@@ -27,42 +27,29 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 		const talents = statMod(playerStats.talentsStats!, playerStats.gearStats);
 		const buffs = statMod(playerStats.buffsStats!, playerStats.talentsStats);
 		const consumes = statMod(playerStats.consumesStats!, playerStats.buffsStats);
+		const debuffs = new Stats();
 		const final = new Stats().withStat(Stat.StatSpellDamage, Stats.fromProto(playerStats.finalStats).getStat(Stat.StatAttackPower) * 0.5);
 
 		return {
-			base: base,
-			gear: gear,
-			talents: talents,
-			buffs: buffs,
-			consumes: consumes,
-			final: final,
+			base,
+			gear,
+			talents,
+			buffs,
+			consumes,
+			debuffs,
+			final,
 			stats: [Stat.StatSpellDamage],
 		};
 	},
 
 	// All stats for which EP should be calculated.
-	epStats: [
-		Stat.StatStamina,
-		Stat.StatStrength,
-		Stat.StatAgility,
-		Stat.StatAttackPower,
-		Stat.StatArmor,
-		Stat.StatBonusArmor,
-	],
+	epStats: [Stat.StatStamina, Stat.StatStrength, Stat.StatAgility, Stat.StatAttackPower, Stat.StatArmor, Stat.StatBonusArmor],
 	epPseudoStats: [PseudoStat.PseudoStatMainHandDps],
 	// Reference stat against which to calculate EP. I think all classes use either spell power or attack power.
 	epReferenceStat: Stat.StatStrength,
 	// Which stats to display in the Character Stats section, at the bottom of the left-hand sidebar.
 	displayStats: UnitStat.createDisplayStatArray(
-		[
-			Stat.StatHealth,
-			Stat.StatArmor,
-			Stat.StatBonusArmor,
-			Stat.StatStamina,
-			Stat.StatStrength,
-			Stat.StatAgility,
-			Stat.StatAttackPower,
-		],
+		[Stat.StatHealth, Stat.StatArmor, Stat.StatBonusArmor, Stat.StatStamina, Stat.StatStrength, Stat.StatAgility, Stat.StatAttackPower],
 		[
 			PseudoStat.PseudoStatMeleeHitPercent,
 			PseudoStat.PseudoStatMeleeCritPercent,
@@ -91,13 +78,10 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 		// Default raid/party buffs settings.
 		raidBuffs: RaidBuffs.create({
 			...defaultRaidBuffMajorDamageCooldowns(),
-
 		}),
 		partyBuffs: PartyBuffs.create({}),
 		individualBuffs: IndividualBuffs.create({}),
-		debuffs: Debuffs.create({
-
-		}),
+		debuffs: Debuffs.create({}),
 		rotationType: APLRotation_Type.TypeAuto,
 	},
 
