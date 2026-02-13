@@ -117,7 +117,7 @@ export const DefaultOptions = WarriorOptions.create({
 	classOptions: {
 		queueDelay: 250,
 		startingRage: 0,
-		defaultShout: WarriorShout.WarriorShoutCommanding,
+		defaultShout: WarriorShout.WarriorShoutBattle,
 		defaultStance: WarriorStance.WarriorStanceBerserker,
 	},
 });
