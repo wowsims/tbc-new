@@ -424,6 +424,9 @@ export class CharacterStats extends Component {
 			debuffStats = debuffStats.addPseudoStat(PseudoStat.PseudoStatRangedCritPercent, 3);
 			debuffStats = debuffStats.addPseudoStat(PseudoStat.PseudoStatSpellCritPercent, 3);
 		}
+		if (debuffs.exposeWeaknessUptime && debuffs.exposeWeaknessHunterAgility) {
+			debuffStats = debuffStats.addStat(Stat.StatAttackPower, debuffs.exposeWeaknessHunterAgility * 0.25);
+		}
 
 		return debuffStats;
 	}
