@@ -809,10 +809,6 @@
 			"combination_singular": "1 Combination",
 			"iterations": "Iterations",
 			"default_gems": "Default Gems",
-			"inherit_upgrades": {
-				"label": "Inherit Upgrades",
-				"tooltip": "When enabled, items will inherit upgrades from the equipped item. Otherwise, items will be simmed without any upgrades."
-			},
 			"freeze_ring": {
 				"label": "Freeze ring slot",
 				"tooltip": "Freeze one equipped ring to reduce combination counts"

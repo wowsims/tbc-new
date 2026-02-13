@@ -3368,22 +3368,6 @@
             "default_gems": {
               "type": "string"
             },
-            "inherit_upgrades": {
-              "type": "object",
-              "properties": {
-                "label": {
-                  "type": "string"
-                },
-                "tooltip": {
-                  "type": "string"
-                }
-              },
-              "additionalProperties": false,
-              "required": [
-                "label",
-                "tooltip"
-              ]
-            },
             "freeze_ring": {
               "type": "object",
               "properties": {
@@ -3423,7 +3407,6 @@
             "combination_singular",
             "iterations",
             "default_gems",
-            "inherit_upgrades",
             "freeze_ring",
             "freeze_trinket"
           ]

@@ -107,19 +107,19 @@ export class EquippedItem {
 		return this._item.scalingOptions[0];
 	}
 
-	equals(other: EquippedItem, ignoreReforge?: boolean, ignoreEnchants?: boolean, ignoreGems?: boolean, ignoreUpgrades?: boolean) {
+	equals(other: EquippedItem, ignoreEnchants?: boolean, ignoreGems?: boolean) {
 		if (this.id != other.id) return false;
-		if (!Item.equals(this._item, other.item) && !ignoreUpgrades) return false;
+		if (!Item.equals(this._item, other.item)) return false;
 
 		if ((this._randomSuffix == null) != (other.randomSuffix == null)) return false;
 
 		if (this._randomSuffix && other.randomSuffix && !ItemRandomSuffix.equals(this._randomSuffix, other.randomSuffix)) return false;
 
-		if (((this._enchant == null) != (other.enchant == null)) && !ignoreEnchants) return false;
+		if ((this._enchant == null) != (other.enchant == null) && !ignoreEnchants) return false;
 
 		if (this._enchant && other.enchant && !Enchant.equals(this._enchant, other.enchant) && !ignoreEnchants) return false;
 
-		if ((this._gems.length != other.gems.length) && !ignoreGems) return false;
+		if (this._gems.length != other.gems.length && !ignoreGems) return false;
 
 		if (!ignoreGems) {
 			for (let i = 0; i < this._gems.length; i++) {
@@ -343,7 +343,8 @@ export class EquippedItem {
 	}
 
 	hasExtraGem(): boolean {
-		return false; this._gems.length > this.item.gemSockets.length;
+		return false;
+		this._gems.length > this.item.gemSockets.length;
 	}
 
 	hasSocketedGem(socketIdx: number): boolean {
@@ -358,7 +359,7 @@ export class EquippedItem {
 	}
 
 	curGems(isBlacksmithing: boolean): Array<Gem | null> {
-		return this._gems;//.slice(0, this.numSockets(isBlacksmithing));
+		return this._gems; //.slice(0, this.numSockets(isBlacksmithing));
 	}
 	curEquippedGems(isBlacksmithing: boolean): Array<Gem> {
 		return this.curGems(true).filter(g => g != null) as Array<Gem>;
