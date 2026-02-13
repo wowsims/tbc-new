@@ -157,7 +157,7 @@ func main() {
 		parsed := gem.ToProto()
 		// All BOA gems are unique-equipped, but this isn't indicated in the gamefiles.
 		if gem.Bonding == dbc.BIND_ON_ACQUIRE {
-			gem.Flags0 |= dbc.UNIQUE_EQUIPPABLE
+			parsed.Unique = true
 		}
 		if parsed.Icon == "" {
 			parsed.Icon = strings.ToLower(database.GetIconName(iconsMap, gem.FDID))
