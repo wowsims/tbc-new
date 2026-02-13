@@ -1144,43 +1144,6 @@ export class ReforgeOptimizer {
 				forceSocketBonus = true;
 			}
 
-			const dummyVariables = new Map<string, YalpsCoefficients>();
-			dummyVariables.set('matched', new Map<string, number>());
-			dummyVariables.set('unmatched', new Map<string, number>());
-
-			for (const socketColor of socketColors.values()) {
-				if (![GemColor.GemColorRed, GemColor.GemColorBlue, GemColor.GemColorYellow, GemColor.GemColorPrismatic].includes(socketColor)) {
-					break;
-				}
-
-				const matchedCoeffs = dummyVariables.get('matched')!;
-				const worstMatchedGemData = gemsToInclude.get(socketColor)!.at(-1)!;
-
-				for (const [key, value] of worstMatchedGemData.coefficients.entries()) {
-					matchedCoeffs.set(key, (matchedCoeffs.get(key) || 0) + value);
-				}
-
-				for (const [key, value] of socketBonusAsCoeff.entries()) {
-					matchedCoeffs.set(key, (matchedCoeffs.get(key) || 0) + value);
-				}
-
-				const unmatchedCoeffs = dummyVariables.get('unmatched')!;
-				const worstUnmatchedGemData = gemsToInclude.get(GemColor.GemColorPrismatic)!.at(-1)!;
-
-				for (const [key, value] of worstUnmatchedGemData.coefficients.entries()) {
-					unmatchedCoeffs.set(key, (unmatchedCoeffs.get(key) || 0) + value);
-				}
-			}
-
-			const scoredDummyVariables = this.updateReforgeScores(dummyVariables, preCapEPs);
-
-			if (
-				scoredDummyVariables.get('matched')!.get('score')! > scoredDummyVariables.get('unmatched')!.get('score')! &&
-				(socketBonusNormalization > 1 || !ReforgeOptimizer.includesCappedStat(scoredDummyVariables.get('matched')!, reforgeCaps, reforgeSoftCaps))
-			) {
-				forceSocketBonus = true;
-			}
-
 			socketColors.forEach((socketColor, socketIdx) => {
 				let gemColorKeys: GemColor[] = [];
 
