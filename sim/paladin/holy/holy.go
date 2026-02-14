@@ -14,7 +14,7 @@ func RegisterHolyPaladin() {
 			return NewHolyPaladin(character, options)
 		},
 		func(player *proto.Player, spec interface{}) {
-			playerSpec, ok := spec.(*proto.Player_HolyPaladin) // I don't really understand this line
+			playerSpec, ok := spec.(*proto.Player_HolyPaladin)
 			if !ok {
 				panic("Invalid spec value for Holy Paladin!")
 			}
@@ -47,8 +47,6 @@ func (holy *HolyPaladin) ApplyTalents() {
 
 func (holy *HolyPaladin) Initialize() {
 	holy.Paladin.Initialize()
-
-	holy.registerHotfixPassive()
 }
 
 func (holy *HolyPaladin) Reset(sim *core.Simulation) {

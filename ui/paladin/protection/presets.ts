@@ -1,6 +1,6 @@
 import * as PresetUtils from '../../core/preset_utils.js';
 import { ConsumesSpec, Profession, PseudoStat, Spec, Stat } from '../../core/proto/common.js';
-import { PaladinSeal, ProtectionPaladin_Options as ProtectionPaladinOptions } from '../../core/proto/paladin.js';
+import { ProtectionPaladin_Options as ProtectionPaladinOptions } from '../../core/proto/paladin.js';
 import { SavedTalents } from '../../core/proto/ui.js';
 import { Stats } from '../../core/proto_utils/stats';
 import DefaultApl from './apls/default.apl.json';
@@ -55,7 +55,6 @@ export const PRESET_BUILD_SHA = PresetUtils.makePresetBuildFromJSON("Sha of Fear
 
 export const DefaultOptions = ProtectionPaladinOptions.create({
 	classOptions: {
-		seal: PaladinSeal.Insight,
 	},
 });
 

@@ -7,7 +7,6 @@ import { APLRotation, APLRotation_Type } from '../../core/proto/apl.js';
 import { Debuffs, Faction, IndividualBuffs, PartyBuffs, PseudoStat, Race, RaidBuffs, Spec, Stat, UnitStats } from '../../core/proto/common.js';
 import { Stats, UnitStat } from '../../core/proto_utils/stats.js';
 import { defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
-import * as PaladinInputs from '../inputs.js';
 import * as Presets from './presets.js';
 
 const SPEC_CONFIG = registerSpecConfig(Spec.SpecRetributionPaladin, {
@@ -15,31 +14,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRetributionPaladin, {
 	cssScheme: PlayerClasses.getCssClass(PlayerClasses.Paladin),
 	// List any known bugs / issues here and they'll be shown on the site.
 	knownIssues: [],
-
-	overwriteDisplayStats: (player: Player<Spec.SpecRetributionPaladin>) => {
-		const playerStats = player.getCurrentStats();
-
-		const statMod = (current: UnitStats, previous?: UnitStats) => {
-			return new Stats().withStat(Stat.StatSpellDamage, Stats.fromProto(current).subtract(Stats.fromProto(previous)).getStat(Stat.StatAttackPower) * 0.5);
-		};
-
-		const base = statMod(playerStats.baseStats!);
-		const gear = statMod(playerStats.gearStats!, playerStats.baseStats);
-		const talents = statMod(playerStats.talentsStats!, playerStats.gearStats);
-		const buffs = statMod(playerStats.buffsStats!, playerStats.talentsStats);
-		const consumes = statMod(playerStats.consumesStats!, playerStats.buffsStats);
-		const final = new Stats().withStat(Stat.StatSpellDamage, Stats.fromProto(playerStats.finalStats).getStat(Stat.StatAttackPower) * 0.5);
-
-		return {
-			base: base,
-			gear: gear,
-			talents: talents,
-			buffs: buffs,
-			consumes: consumes,
-			final: final,
-			stats: [Stat.StatSpellDamage],
-		};
-	},
 
 	// All stats for which EP should be calculated.
 	epStats: [
@@ -100,7 +74,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRetributionPaladin, {
 	},
 
 	// IconInputs to include in the 'Player' section on the settings tab.
-	playerIconInputs: [PaladinInputs.StartingSealSelection()],
+	playerIconInputs: [],
 	// Buff and Debuff inputs to include/exclude, overriding the EP-based defaults.
 	includeBuffDebuffInputs: [],
 	excludeBuffDebuffInputs: [],

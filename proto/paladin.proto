@@ -81,13 +81,21 @@ enum Blessings {
 	BlessingUnknown = 0;
 	BlessingOfKings = 1;
 	BlessingOfMight = 2;
+	BlessingOfWisdom = 3;
+	BlessingOfSalvation = 4;
+	BlessingOfSanctuary = 5;
 }
 
 enum PaladinSeal {
-	Truth = 0;
-	Justice = 1;
-	Insight = 2;
-	Righteousness = 3;
+	SealUnknown = 0;
+	Righteousness = 1;
+	Command = 2;
+	Light = 3;
+	Wisdom = 4;
+	Justice = 5;
+	Crusader = 6;
+	Blood = 7;      // Horde only
+	Vengeance = 8;  // Alliance only
 }
 
 message PaladinOptions {

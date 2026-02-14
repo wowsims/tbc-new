@@ -1,7 +1,7 @@
 import * as PresetUtils from '../../core/preset_utils.js';
 import { APLRotation_Type as APLRotationType } from '../../core/proto/apl.js';
 import { ConsumesSpec, Profession, PseudoStat, Race, Spec, Stat } from '../../core/proto/common.js';
-import { PaladinSeal, RetributionPaladin_Options as RetributionPaladinOptions } from '../../core/proto/paladin.js';
+import { RetributionPaladin_Options as RetributionPaladinOptions } from '../../core/proto/paladin.js';
 import { SavedTalents } from '../../core/proto/ui.js';
 import { Stats } from '../../core/proto_utils/stats';
 import DefaultApl from './apls/default.apl.json';
@@ -81,7 +81,6 @@ export const PRERAID_BUILD_PRESET = PresetUtils.makePresetBuildFromJSON('Pre-rai
 
 export const DefaultOptions = RetributionPaladinOptions.create({
 	classOptions: {
-		seal: PaladinSeal.Truth,
 	},
 });
 

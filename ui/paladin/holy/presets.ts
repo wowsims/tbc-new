@@ -2,7 +2,6 @@ import * as PresetUtils from '../../core/preset_utils.js';
 import { ConsumesSpec, Debuffs, Profession, RaidBuffs, Stat } from '../../core/proto/common.js';
 import {
 	HolyPaladin_Options as Paladin_Options,
-	PaladinSeal,
 } from '../../core/proto/paladin.js';
 import { SavedTalents } from '../../core/proto/ui.js';
 import { Stats } from '../../core/proto_utils/stats';
@@ -37,7 +36,6 @@ export const StandardTalents = {
 
 export const DefaultOptions = Paladin_Options.create({
 	classOptions: {
-		seal: PaladinSeal.Insight,
 	},
 });
 
