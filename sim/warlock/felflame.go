@@ -6,9 +6,7 @@ const felFlameVariance = 0.1
 const felFlameScale = 0.85
 const felFlameCoeff = 0.85
 
-func (warlock *Warlock) RegisterFelflame(callback WarlockSpellCastedCallback) *core.Spell {
-	resultSlice := make(core.SpellResultSlice, 1)
-
+func (warlock *Warlock) RegisterFelflame() *core.Spell {
 	return warlock.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 77799},
 		SpellSchool:    core.SpellSchoolFire | core.SpellSchoolShadow,
@@ -29,11 +27,6 @@ func (warlock *Warlock) RegisterFelflame(callback WarlockSpellCastedCallback) *c
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			baseDamage := warlock.CalcAndRollDamageRange(sim, felFlameScale, felFlameVariance)
 			result := spell.CalcDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
-			resultSlice[0] = result
-
-			if callback != nil {
-				callback(resultSlice, spell, sim)
-			}
 
 			spell.WaitTravelTime(sim, func(s *core.Simulation) {
 				spell.DealDamage(sim, result)
