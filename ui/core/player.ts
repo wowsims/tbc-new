@@ -1,3 +1,4 @@
+import { CharacterStats } from './components/character_stats';
 import { ItemSwapSettings } from './components/item_swap_picker';
 import Toast from './components/toast';
 import * as Mechanics from './constants/mechanics';
@@ -630,9 +631,6 @@ export class Player<SpecType extends Spec> {
 	hasProfession(prof: Profession): boolean {
 		return this.getProfessions().includes(prof);
 	}
-	isBlacksmithing(): boolean {
-		return this.hasProfession(Profession.Blacksmithing);
-	}
 
 	getFaction(): Faction {
 		return raceToFaction[this.getRace()];
@@ -664,12 +662,8 @@ export class Player<SpecType extends Spec> {
 		this.consumesChangeEmitter.emit(eventID);
 	}
 
-	canDualWield2H(): boolean {
-		return false;
-	}
-
 	equipItem(eventID: EventID, slot: ItemSlot, newItem: EquippedItem | null) {
-		this.setGear(eventID, this.gear.withEquippedItem(slot, newItem, this.canDualWield2H()));
+		this.setGear(eventID, this.gear.withEquippedItem(slot, newItem));
 	}
 
 	getEquippedItem(slot: ItemSlot): EquippedItem | null {
@@ -709,10 +703,13 @@ export class Player<SpecType extends Spec> {
 	}
 
 	getMeleeCritCapInfo(): MeleeCritCapInfo {
-		const meleeCrit = this.currentStats.finalStats?.pseudoStats[PseudoStat.PseudoStatMeleeCritPercent] || 0.0;
-		const meleeHit = this.currentStats.finalStats?.pseudoStats[PseudoStat.PseudoStatMeleeHitPercent] || 0.0;
-		const expertise = (this.currentStats.finalStats?.stats[Stat.StatExpertiseRating] || 0.0) / Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION / 4;
-		//const agility = (this.currentStats.finalStats?.stats[Stat.StatAgility] || 0.0) / this.getClass();
+		const debuffStats = CharacterStats.getDebuffStats(this);
+		const debuffHit = debuffStats.getPseudoStat(PseudoStat.PseudoStatMeleeHitPercent) || 0;
+		const debuffCrit = debuffStats.getPseudoStat(PseudoStat.PseudoStatMeleeCritPercent) || 0;
+
+		const meleeCrit = (this.currentStats.finalStats?.pseudoStats[PseudoStat.PseudoStatMeleeCritPercent] || 0) + debuffCrit;
+		const meleeHit = (this.currentStats.finalStats?.pseudoStats[PseudoStat.PseudoStatMeleeHitPercent] || 0) + debuffHit;
+		const expertise = (this.currentStats.finalStats?.stats[Stat.StatExpertiseRating] || 0) / Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION / 4;
 		const critSuppression = [0, 1, 2, 4.8][this.sim.encounter.primaryTarget.level - Mechanics.CHARACTER_LEVEL];
 		const hitSuppression = [0, 0, 0, 1][this.sim.encounter.primaryTarget.level - Mechanics.CHARACTER_LEVEL];
 		const glancing = [6, 12, 18, 24][this.sim.encounter.primaryTarget.level - Mechanics.CHARACTER_LEVEL];
@@ -739,8 +736,6 @@ export class Player<SpecType extends Spec> {
 			const ranks = player.getTalents().elementalDevastation;
 			specSpecificOffset = 3.0 * ranks;
 		}
-
-		const debuffCrit = 0.0;
 
 		const baseCritCap = 100.0 - glancing + critSuppression - remainingMeleeHitCap - remainingExpertiseCap - specSpecificOffset;
 		const playerCritCapDelta = meleeCrit - baseCritCap;
@@ -1093,8 +1088,7 @@ export class Player<SpecType extends Spec> {
 	}
 
 	async setWowheadData(equippedItem: EquippedItem, elem: HTMLElement) {
-		const isBlacksmithing = this.hasProfession(Profession.Blacksmithing);
-		const gemIds = equippedItem.gems.length ? equippedItem.curGems(isBlacksmithing).map(gem => (gem ? gem.id : 0)) : [];
+		const gemIds = equippedItem.gems.length ? equippedItem.curGems().map(gem => (gem ? gem.id : 0)) : [];
 		const enchantIds = [equippedItem.enchant?.effectId].filter((id): id is number => id !== undefined);
 		equippedItem.asActionId().setWowheadDataset(elem, {
 			gemIds,
@@ -1105,7 +1099,6 @@ export class Player<SpecType extends Spec> {
 				.asArray()
 				.filter(ei => ei != null)
 				.map(ei => ei!.item.id),
-			hasExtraSocket: equippedItem.hasExtraSocket(isBlacksmithing),
 		});
 
 		elem.dataset.whtticon = 'false';

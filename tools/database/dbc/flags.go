@@ -61,6 +61,19 @@ func (f SpellSchool) Has(flag SpellSchool) bool {
 	return f&flag != 0
 }
 
+const (
+	BIND_NONE                        = 0
+	BIND_ON_ACQUIRE                  = 1
+	BIND_ON_EQUIP                    = 2
+	BIND_ON_USE                      = 3
+	BIND_QUEST                       = 4
+	BIND_UNUSED_1                    = 5
+	BIND_UNUSED_2                    = 6
+	BIND_WOW_ACCOUNT                 = 7
+	BIND_BNET_ACCOUNT                = 8
+	BIND_BNET_ACCOUNT_UNTIL_EQUIPPED = 9
+)
+
 type ItemStaticFlags1 uint32
 
 const (

@@ -6,7 +6,7 @@ import i18n from '../../i18n/config.js';
 import * as Mechanics from '../constants/mechanics.js';
 import { IndividualSimUI } from '../individual_sim_ui';
 import { Player } from '../player.js';
-import { ItemSlot, PseudoStat, Race, Spec, Stat, WeaponType } from '../proto/common.js';
+import { ItemSlot, PseudoStat, Race, Spec, Stat, TristateEffect, WeaponType } from '../proto/common.js';
 import { ActionId } from '../proto_utils/action_id';
 import { getStatName } from '../proto_utils/names.js';
 import { Stats, UnitStat } from '../proto_utils/stats.js';
@@ -14,19 +14,11 @@ import { EventID, TypedEvent } from '../typed_event.js';
 import { Component } from './component.js';
 import { NumberPicker } from './pickers/number_picker.js';
 
-export type StatMods = { base?: Stats; gear?: Stats; talents?: Stats; buffs?: Stats; consumes?: Stats; final?: Stats; stats?: Array<Stat> };
+export type StatMods = { base?: Stats; gear?: Stats; talents?: Stats; buffs?: Stats; consumes?: Stats; debuffs?: Stats; final?: Stats; stats?: Array<Stat> };
 export type DisplayStat = {
 	stat: UnitStat;
 	notEditable?: boolean;
 };
-
-enum StatGroup {
-	Primary = 'Primary',
-	Attributes = 'Attributes',
-	Physical = 'Physical',
-	Spell = 'Spell',
-	Defense = 'Defense',
-}
 
 const statGroups = new Map<string, Array<DisplayStat>>([
 	['Primary', [{ stat: UnitStat.fromStat(Stat.StatHealth) }, { stat: UnitStat.fromStat(Stat.StatMana) }]],
@@ -195,6 +187,7 @@ export class CharacterStats extends Component {
 		const talentsStats = Stats.fromProto(playerStats.talentsStats);
 		const buffsStats = Stats.fromProto(playerStats.buffsStats);
 		const consumesStats = Stats.fromProto(playerStats.consumesStats);
+		const debuffStats = CharacterStats.getDebuffStats(this.player);
 		const bonusStats = player.getBonusStats();
 
 		let finalStats = Stats.fromProto(playerStats.finalStats)
@@ -203,7 +196,9 @@ export class CharacterStats extends Component {
 			.add(statMods.talents || new Stats())
 			.add(statMods.buffs || new Stats())
 			.add(statMods.consumes || new Stats())
-			.add(statMods.final || new Stats());
+			.add(statMods.debuffs || new Stats())
+			.add(statMods.final || new Stats())
+			.add(debuffStats);
 
 		let baseDelta = baseStats.add(statMods.base || new Stats());
 		let gearDelta = gearStats
@@ -213,6 +208,7 @@ export class CharacterStats extends Component {
 		let talentsDelta = talentsStats.subtract(gearStats).add(statMods.talents || new Stats());
 		let buffsDelta = buffsStats.subtract(talentsStats).add(statMods.buffs || new Stats());
 		let consumesDelta = consumesStats.subtract(buffsStats).add(statMods.consumes || new Stats());
+		let debuffsDelta = debuffStats.add(statMods.debuffs || new Stats());
 
 		if (this.overwriteDisplayStats) {
 			const statOverwrites = this.overwriteDisplayStats(this.player);
@@ -223,6 +219,7 @@ export class CharacterStats extends Component {
 					talentsDelta = talentsDelta.withStat(stat, statOverwrites.talents.getStat(stat));
 					buffsDelta = buffsDelta.withStat(stat, statOverwrites.buffs.getStat(stat));
 					consumesDelta = consumesDelta.withStat(stat, statOverwrites.consumes.getStat(stat));
+					debuffsDelta = debuffsDelta.withStat(stat, statOverwrites.debuffs.getStat(stat));
 					finalStats = finalStats.withStat(stat, statOverwrites.final.getStat(stat));
 				});
 			}
@@ -274,6 +271,10 @@ export class CharacterStats extends Component {
 					<div className="character-stats-tooltip-row">
 						<span>{i18n.t('sidebar.character_stats.tooltip.consumes')}</span>
 						<span>{this.statDisplayString(consumesDelta, unitStat)}</span>
+					</div>
+					<div className="character-stats-tooltip-row">
+						<span>{i18n.t('sidebar.character_stats.tooltip.debuffs')}</span>
+						<span>{this.statDisplayString(debuffsDelta, unitStat)}</span>
 					</div>
 					{bonusStatValue !== 0 && (
 						<div className="character-stats-tooltip-row">
@@ -409,6 +410,25 @@ export class CharacterStats extends Component {
 		const percentOrPointsString = derivedPercentOrPointsValue === null ? '' : `${derivedPercentOrPointsValue.toFixed(2)}` + percentOrPointsSuffix;
 		const wrappedPercentOrPointsString = hideRootRating || derivedPercentOrPointsValue === null ? percentOrPointsString : ` (${percentOrPointsString})`;
 		return rootRatingString + wrappedPercentOrPointsString;
+	}
+
+	public static getDebuffStats(player: Player<any>): Stats {
+		let debuffStats = new Stats();
+		const debuffs = player.sim.raid.getDebuffs();
+		if (debuffs.faerieFire == TristateEffect.TristateEffectImproved) {
+			debuffStats = debuffStats.addPseudoStat(PseudoStat.PseudoStatMeleeHitPercent, 3);
+			debuffStats = debuffStats.addPseudoStat(PseudoStat.PseudoStatRangedHitPercent, 3);
+		}
+		if (debuffs.improvedSealOfTheCrusader) {
+			debuffStats = debuffStats.addPseudoStat(PseudoStat.PseudoStatMeleeCritPercent, 3);
+			debuffStats = debuffStats.addPseudoStat(PseudoStat.PseudoStatRangedCritPercent, 3);
+			debuffStats = debuffStats.addPseudoStat(PseudoStat.PseudoStatSpellCritPercent, 3);
+		}
+		if (debuffs.exposeWeaknessUptime && debuffs.exposeWeaknessHunterAgility) {
+			debuffStats = debuffStats.addStat(Stat.StatAttackPower, debuffs.exposeWeaknessHunterAgility * 0.25);
+		}
+
+		return debuffStats;
 	}
 
 	private bonusStatsLink(displayStat: DisplayStat): HTMLElement {

@@ -75,10 +75,7 @@ export const bulkSimItemSlotToItemSlotPairs: Map<BulkSimItemSlot, [ItemSlot, Ite
 	[BulkSimItemSlot.ItemSlotHandWeapon, [ItemSlot.ItemSlotMainHand, ItemSlot.ItemSlotOffHand]],
 ]);
 
-export const getBulkItemSlotFromSlot = (slot: ItemSlot, canDualWield: boolean): BulkSimItemSlot => {
-	if (canDualWield && [ItemSlot.ItemSlotMainHand, ItemSlot.ItemSlotOffHand].includes(slot)) {
-		return BulkSimItemSlot.ItemSlotHandWeapon;
-	}
+export const getBulkItemSlotFromSlot = (slot: ItemSlot): BulkSimItemSlot => {
 	return itemSlotToBulkSimItemSlot.get(slot)!;
 };
 

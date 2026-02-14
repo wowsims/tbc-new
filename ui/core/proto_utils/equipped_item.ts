@@ -64,7 +64,7 @@ export class EquippedItem {
 		this._gems = gems || [];
 		this._randomSuffix = randomSuffix || null;
 
-		this.numPossibleSockets = this.numSockets(true);
+		this.numPossibleSockets = this.numSockets();
 
 		// Fill gems with null so we always have the same number of gems as gem slots.
 		if (this._gems.length < this.numPossibleSockets) {
@@ -107,19 +107,19 @@ export class EquippedItem {
 		return this._item.scalingOptions[0];
 	}
 
-	equals(other: EquippedItem, ignoreReforge?: boolean, ignoreEnchants?: boolean, ignoreGems?: boolean, ignoreUpgrades?: boolean) {
+	equals(other: EquippedItem, ignoreEnchants?: boolean, ignoreGems?: boolean) {
 		if (this.id != other.id) return false;
-		if (!Item.equals(this._item, other.item) && !ignoreUpgrades) return false;
+		if (!Item.equals(this._item, other.item)) return false;
 
 		if ((this._randomSuffix == null) != (other.randomSuffix == null)) return false;
 
 		if (this._randomSuffix && other.randomSuffix && !ItemRandomSuffix.equals(this._randomSuffix, other.randomSuffix)) return false;
 
-		if (((this._enchant == null) != (other.enchant == null)) && !ignoreEnchants) return false;
+		if ((this._enchant == null) != (other.enchant == null) && !ignoreEnchants) return false;
 
 		if (this._enchant && other.enchant && !Enchant.equals(this._enchant, other.enchant) && !ignoreEnchants) return false;
 
-		if ((this._gems.length != other.gems.length) && !ignoreGems) return false;
+		if (this._gems.length != other.gems.length && !ignoreGems) return false;
 
 		if (!ignoreGems) {
 			for (let i = 0; i < this._gems.length; i++) {
@@ -303,20 +303,7 @@ export class EquippedItem {
 		}
 	}
 
-	// Whether this item could have an extra socket
-	couldHaveExtraSocket(): boolean {
-		return false; //[ItemType.ItemTypeWrist, ItemType.ItemTypeHands].includes(this.item.type);
-	}
-
-	requiresExtraSocket(): boolean {
-		return false; //this.couldHaveExtraSocket() && this.hasExtraGem() && this._gems[this._gems.length - 1] != null;
-	}
-
-	hasExtraSocket(isBlacksmithing: boolean): boolean {
-		return false; //isBlacksmithing && this.couldHaveExtraSocket();
-	}
-
-	numSockets(isBlacksmithing: boolean): number {
+	numSockets(): number {
 		return this._item.gemSockets.length;
 	}
 
@@ -336,16 +323,6 @@ export class EquippedItem {
 		return !!this._item.randomSuffixOptions.length;
 	}
 
-	hasUpgradeOptions(): boolean {
-		// Make sure to always exclude Challenge Mode scaling options as those are handled globally
-		// and offset these options by 1 due to items always having a base option.
-		return !!Object.keys(this._item.scalingOptions).filter(upgradeStep => Number(upgradeStep) > 0).length;
-	}
-
-	hasExtraGem(): boolean {
-		return false; this._gems.length > this.item.gemSockets.length;
-	}
-
 	hasSocketedGem(socketIdx: number): boolean {
 		return this._gems[socketIdx] != null;
 	}
@@ -353,15 +330,15 @@ export class EquippedItem {
 	allSocketColors(): Array<GemColor> {
 		return this._item.gemSockets;
 	}
-	curSocketColors(isBlacksmithing: boolean): Array<GemColor> {
+	curSocketColors(): Array<GemColor> {
 		return this._item.gemSockets;
 	}
 
-	curGems(isBlacksmithing: boolean): Array<Gem | null> {
-		return this._gems;//.slice(0, this.numSockets(isBlacksmithing));
+	curGems(): Array<Gem | null> {
+		return this._gems;
 	}
-	curEquippedGems(isBlacksmithing: boolean): Array<Gem> {
-		return this.curGems(true).filter(g => g != null) as Array<Gem>;
+	curEquippedGems(): Array<Gem> {
+		return this.curGems().filter(g => g != null) as Array<Gem>;
 	}
 
 	getProfessionRequirements(): Array<Profession> {

@@ -21,6 +21,8 @@ function serveExternalAssets() {
 		'/tbc/sim_worker.js': '/tbc/local_worker.js',
 		'/tbc/net_worker.js': '/tbc/net_worker.js',
 		'/tbc/lib.wasm': '/tbc/lib.wasm',
+		'/tbc/reforge_worker.js': '/tbc/reforge_worker.js',
+		'/tbc/highs.wasm': '/tbc/highs.wasm',
 	};
 
 	return {
@@ -33,6 +35,15 @@ function serveExternalAssets() {
 					const targetPath = workerMappings[url as keyof typeof workerMappings];
 					const assetsPath = path.resolve(__dirname, './dist/tbc');
 					const requestedPath = path.join(assetsPath, targetPath.replace('/tbc/', ''));
+
+					serveFile(res, requestedPath);
+					return;
+				}
+
+				// Serve HiGHS chunk files
+				if (url.startsWith('/tbc/highs-') && url.endsWith('.js')) {
+					const assetsPath = path.resolve(__dirname, './dist/tbc');
+					const requestedPath = path.join(assetsPath, url.replace('/tbc/', ''));
 
 					serveFile(res, requestedPath);
 					return;
