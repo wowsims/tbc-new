@@ -38,7 +38,7 @@ export class GemSummary extends Component {
 
 	private updateTable() {
 		const body = <></>;
-		const fullGemList = this.player.getGear().getAllGems(this.player.isBlacksmithing());
+		const fullGemList = this.player.getGear().getAllGems();
 		const hasGems = !!fullGemList.length;
 		this.rootElem.classList[!hasGems ? 'add' : 'remove']('hide');
 

@@ -199,21 +199,21 @@ export class Gear extends BaseGear {
 		});
 	}
 
-	getAllGems(isBlacksmithing: boolean): Array<Gem> {
+	getAllGems(): Array<Gem> {
 		return this.asArray()
-			.map(ei => (ei == null ? [] : ei.curEquippedGems(isBlacksmithing)))
+			.map(ei => (ei == null ? [] : ei.curEquippedGems()))
 			.flat();
 	}
 
-	getNonMetaGems(isBlacksmithing: boolean): Array<Gem> {
-		return this.getAllGems(isBlacksmithing).filter(gem => gem.color != GemColor.GemColorMeta);
+	getNonMetaGems(): Array<Gem> {
+		return this.getAllGems().filter(gem => gem.color != GemColor.GemColorMeta);
 	}
 
-	statsFromGems(isBlacksmithing: boolean): Stats {
+	statsFromGems(): Stats {
 		let stats = new Stats();
 
 		// Stats from just the gems.
-		const gems = this.getAllGems(isBlacksmithing);
+		const gems = this.getAllGems();
 		for (let i = 0; i < gems.length; i++) {
 			stats = stats.add(new Stats(gems[i].stats));
 		}
@@ -227,20 +227,20 @@ export class Gear extends BaseGear {
 		return stats;
 	}
 
-	getGemsOfColor(color: GemColor, isBlacksmithing: boolean): Array<Gem> {
-		return this.getAllGems(isBlacksmithing).filter(gem => gem.color == color);
+	getGemsOfColor(color: GemColor): Array<Gem> {
+		return this.getAllGems().filter(gem => gem.color == color);
 	}
 
-	getJCGems(isBlacksmithing: boolean): Array<Gem> {
-		return this.getAllGems(isBlacksmithing).filter(gem => gem.requiredProfession == Profession.Jewelcrafting);
+	getJCGems(): Array<Gem> {
+		return this.getAllGems().filter(gem => gem.requiredProfession == Profession.Jewelcrafting);
 	}
 
 	getMetaGem(): Gem | null {
-		return this.getGemsOfColor(GemColor.GemColorMeta, true)[0] || null;
+		return this.getGemsOfColor(GemColor.GemColorMeta)[0] || null;
 	}
 
-	gemColorCounts(isBlacksmithing: boolean): { red: number; yellow: number; blue: number } {
-		const gems = this.getAllGems(isBlacksmithing);
+	gemColorCounts(): { red: number; yellow: number; blue: number } {
+		const gems = this.getAllGems();
 		return {
 			red: gems.filter(gem => gemMatchesSocket(gem, GemColor.GemColorRed)).length,
 			yellow: gems.filter(gem => gemMatchesSocket(gem, GemColor.GemColorYellow)).length,
@@ -249,18 +249,18 @@ export class Gear extends BaseGear {
 	}
 
 	// Returns true if this gear set has a meta gem AND the other gems meet the meta's conditions.
-	hasActiveMetaGem(isBlacksmithing: boolean): boolean {
+	hasActiveMetaGem(): boolean {
 		const metaGem = this.getMetaGem();
 		if (!metaGem) {
 			return false;
 		}
 
-		const gemColorCounts = this.gemColorCounts(isBlacksmithing);
+		const gemColorCounts = this.gemColorCounts();
 		return isMetaGemActive(metaGem, gemColorCounts.red, gemColorCounts.yellow, gemColorCounts.blue);
 	}
 
-	hasInactiveMetaGem(isBlacksmithing: boolean): boolean {
-		return this.getMetaGem() != null && !this.hasActiveMetaGem(isBlacksmithing);
+	hasInactiveMetaGem(): boolean {
+		return this.getMetaGem() != null && !this.hasActiveMetaGem();
 	}
 
 	withGem(itemSlot: ItemSlot, socketIdx: number, gem: Gem | null): Gear {
@@ -273,7 +273,7 @@ export class Gear extends BaseGear {
 		return this;
 	}
 
-	withSingleGemSubstitution(oldGem: Gem | null, newGem: Gem | null, isBlacksmithing: boolean): Gear {
+	withSingleGemSubstitution(oldGem: Gem | null, newGem: Gem | null): Gear {
 		for (const slot of this.getItemSlots()) {
 			const item = this.getEquippedItem(slot);
 
@@ -281,7 +281,7 @@ export class Gear extends BaseGear {
 				continue;
 			}
 
-			const currentGems = item!.curGems(isBlacksmithing);
+			const currentGems = item!.curGems();
 
 			if (currentGems.includes(oldGem)) {
 				const socketIdx = currentGems.indexOf(oldGem);
@@ -292,7 +292,7 @@ export class Gear extends BaseGear {
 		return this;
 	}
 
-	findGem(gemToFind: Gem, isBlacksmithing: boolean): [ItemSlot, number][] {
+	findGem(gemToFind: Gem): [ItemSlot, number][] {
 		const gemMatchData: [ItemSlot, number][] = [];
 
 		for (const slot of this.getItemSlots()) {
@@ -302,7 +302,7 @@ export class Gear extends BaseGear {
 				continue;
 			}
 
-			for (const [socketIdx, gem] of item.curGems(isBlacksmithing).entries()) {
+			for (const [socketIdx, gem] of item.curGems().entries()) {
 				if (gem?.id === gemToFind.id) {
 					gemMatchData.push([slot, socketIdx]);
 				}

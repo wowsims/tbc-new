@@ -1,5 +1,5 @@
 import i18n from '../i18n/config';
-import { CharacterStats,  } from './components/character_stats';
+import { CharacterStats } from './components/character_stats';
 import { ContentBlock } from './components/content_block';
 import { DetailedResults } from './components/detailed_results';
 import { EncounterPickerConfig } from './components/encounter_picker';
@@ -262,7 +262,7 @@ export abstract class IndividualSimUI<SpecType extends Spec> extends SimUI {
 		this.addWarning({
 			updateOn: this.player.gearChangeEmitter,
 			getContent: () => {
-				if (!this.player.getGear().hasInactiveMetaGem(this.player.isBlacksmithing())) {
+				if (!this.player.getGear().hasInactiveMetaGem()) {
 					return '';
 				}
 
@@ -292,7 +292,7 @@ export abstract class IndividualSimUI<SpecType extends Spec> extends SimUI {
 		this.addWarning({
 			updateOn: this.player.gearChangeEmitter,
 			getContent: () => {
-				const jcGems = this.player.getGear().getJCGems(this.player.isBlacksmithing());
+				const jcGems = this.player.getGear().getJCGems();
 				if (jcGems.length <= 2) {
 					return '';
 				}

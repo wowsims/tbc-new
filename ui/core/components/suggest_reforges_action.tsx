@@ -1122,7 +1122,7 @@ export class ReforgeOptimizer {
 			}
 
 			const scaledItem = item.withDynamicStats();
-			const socketColors = item.curSocketColors(this.player.isBlacksmithing());
+			const socketColors = item.curSocketColors();
 
 			let socketBonusNormalization: number = socketColors.length || 1;
 
@@ -1343,7 +1343,7 @@ export class ReforgeOptimizer {
 			constraints.set(ItemSlot[slot], lessEq(1));
 
 			gear.getEquippedItem(slot)
-				?.curSocketColors(this.player.isBlacksmithing())
+				?.curSocketColors()
 				.forEach((_, socketIdx) => {
 					constraints.set(`${slot}_${socketIdx}`, lessEq(1));
 				});
@@ -1588,7 +1588,6 @@ export class ReforgeOptimizer {
 			return newGear;
 		}
 
-		const isBlacksmithing = this.player.isBlacksmithing();
 		const finalizedSocketKeys: string[] = [];
 
 		for (const slot of newGear.getItemSlots()) {
@@ -1599,10 +1598,10 @@ export class ReforgeOptimizer {
 				continue;
 			}
 
-			const newGems = newItem.curGems(isBlacksmithing);
-			const originalGems = originalItem.curGems(isBlacksmithing);
+			const newGems = newItem.curGems();
+			const originalGems = originalItem.curGems();
 
-			for (const [socketIdx, socketColor] of newItem.curSocketColors(isBlacksmithing).entries()) {
+			for (const [socketIdx, socketColor] of newItem.curSocketColors().entries()) {
 				const socketKey = `${slot}_${socketIdx}`;
 
 				if (finalizedSocketKeys.includes(socketKey)) {
@@ -1619,7 +1618,7 @@ export class ReforgeOptimizer {
 					continue;
 				}
 
-				for (const [matchedSlot, matchedSocketIdx] of newGear.findGem(originalGems[socketIdx]!, isBlacksmithing)) {
+				for (const [matchedSlot, matchedSocketIdx] of newGear.findGem(originalGems[socketIdx]!)) {
 					if (this.frozenItemSlots.has(matchedSlot)) {
 						continue;
 					}
@@ -1630,7 +1629,7 @@ export class ReforgeOptimizer {
 						continue;
 					}
 
-					const matchedSocketColor = newGear.getEquippedItem(matchedSlot)!.curSocketColors(isBlacksmithing)[matchedSocketIdx];
+					const matchedSocketColor = newGear.getEquippedItem(matchedSlot)!.curSocketColors()[matchedSocketIdx];
 
 					if (gemMatchesSocket(originalGems[socketIdx]!, matchedSocketColor) && !gemMatchesSocket(newGems[socketIdx]!, matchedSocketColor)) {
 						continue;

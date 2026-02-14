@@ -631,9 +631,6 @@ export class Player<SpecType extends Spec> {
 	hasProfession(prof: Profession): boolean {
 		return this.getProfessions().includes(prof);
 	}
-	isBlacksmithing(): boolean {
-		return this.hasProfession(Profession.Blacksmithing);
-	}
 
 	getFaction(): Faction {
 		return raceToFaction[this.getRace()];
@@ -1091,8 +1088,7 @@ export class Player<SpecType extends Spec> {
 	}
 
 	async setWowheadData(equippedItem: EquippedItem, elem: HTMLElement) {
-		const isBlacksmithing = this.hasProfession(Profession.Blacksmithing);
-		const gemIds = equippedItem.gems.length ? equippedItem.curGems(isBlacksmithing).map(gem => (gem ? gem.id : 0)) : [];
+		const gemIds = equippedItem.gems.length ? equippedItem.curGems().map(gem => (gem ? gem.id : 0)) : [];
 		const enchantIds = [equippedItem.enchant?.effectId].filter((id): id is number => id !== undefined);
 		equippedItem.asActionId().setWowheadDataset(elem, {
 			gemIds,
@@ -1103,7 +1099,6 @@ export class Player<SpecType extends Spec> {
 				.asArray()
 				.filter(ei => ei != null)
 				.map(ei => ei!.item.id),
-			hasExtraSocket: equippedItem.hasExtraSocket(isBlacksmithing),
 		});
 
 		elem.dataset.whtticon = 'false';

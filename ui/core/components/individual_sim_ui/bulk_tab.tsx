@@ -696,7 +696,6 @@ export class BulkTab extends SimTab {
 			let isAborted = false;
 			this.topGearResults = null;
 			this.originalGearResults = null;
-			const hasBlacksmithing = this.simUI.player.isBlacksmithing();
 
 			try {
 				await this.simUI.sim.signalManager.abortType(RequestTypes.All);
@@ -765,7 +764,7 @@ export class BulkTab extends SimTab {
 
 						updatedGear = updatedGear.withEquippedItem(itemSlot, updatedItem);
 
-						for (const [socketIdx, socketColor] of equippedItem.curSocketColors(hasBlacksmithing).entries()) {
+						for (const [socketIdx, socketColor] of equippedItem.curSocketColors().entries()) {
 							if (defaultGemsByColor.get(socketColor)) {
 								updatedGear = updatedGear.withGem(itemSlot, socketIdx, defaultGemsByColor.get(socketColor)!);
 							}
