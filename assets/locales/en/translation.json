@@ -26,6 +26,7 @@
 		"name": "Name",
 		"search": "Search",
 		"filter": "Filter",
+		"elapsed_time": "Elapsed Time",
 		"phases": {
 			"1": "Phase 1 (2.0 - T4)",
 			"2": "Phase 2 (2.1 - T5)",
@@ -490,11 +491,11 @@
 				"label": "Stance Snapshot",
 				"tooltip": "Ability that is cast at the same time as stance swap will benefit from the bonus of the stance before the swap."
 			},
-			"has_bs_solarian_sapphire":{
+			"has_bs_solarian_sapphire": {
 				"label": "Prepull Battle Shout: Solarian Sapphire",
 				"tooltip": "If enabled, Battle Shout during prepull will provide bonus AP from the Solarian Sapphire."
 			},
-			"has_bs_tier_2":{
+			"has_bs_tier_2": {
 				"label": "Prepull Battle Shout: Tier 2",
 				"tooltip": "If enabled, Battle Shout during prepull will provide bonus AP from the Tier 2 set bonus."
 			},
@@ -808,10 +809,6 @@
 			"combination_singular": "1 Combination",
 			"iterations": "Iterations",
 			"default_gems": "Default Gems",
-			"inherit_upgrades": {
-				"label": "Inherit Upgrades",
-				"tooltip": "When enabled, items will inherit upgrades from the equipped item. Otherwise, items will be simmed without any upgrades."
-			},
 			"freeze_ring": {
 				"label": "Freeze ring slot",
 				"tooltip": "Freeze one equipped ring to reduce combination counts"
@@ -1396,29 +1393,33 @@
 					"tooltip": "Whether this aura should be refreshed, e.g. for the purpose of maintaining a debuff.",
 					"full_description": "<p>This condition checks not only the specified aura but also any other auras on the same unit, including auras applied by other raid members, which apply the same debuff category.</p><p>For example, 'Should Refresh Debuff(Sunder Armor)' will return <b>False</b> if the unit has an active Expose Armor aura.</p>"
 				},
-				"all_trinket_stat_procs_active": {
+				"aura_duration": {
+					"label": "Aura Duration",
+					"tooltip": "The full cooldown duration of the aura"
+				},
+				"all_item_stat_procs_active": {
 					"label": "All Item Proc Buffs Active",
 					"tooltip": "<b>True</b> if all item/enchant procs that buff the specified stat type(s) are currently active, otherwise <b>False</b>.",
 					"full_description": "<p>For stacking proc buffs, this condition also checks that the buff has been stacked to its maximum possible strength.</p>"
 				},
-				"any_trinket_stat_procs_active": {
+				"any_item_stat_procs_active": {
 					"label": "Any Item Proc Buff Active",
 					"tooltip": "<b>True</b> if any item/enchant procs that buff the specified stat type(s) are currently active, otherwise <b>False</b>.",
 					"full_description": "<p>For stacking proc buffs, this condition also checks that the buff has been stacked to its maximum possible strength.</p>"
 				},
-				"any_trinket_stat_procs_available": {
+				"any_item_stat_procs_available": {
 					"label": "Any Item Proc Buff Available",
 					"tooltip": "<b>True</b> if any item/enchant procs that buff the specified stat type(s) are currently not on ICD and aren't active, otherwise <b>False</b>."
 				},
-				"trinket_procs_min_remaining_time": {
+				"item_procs_min_remaining_time": {
 					"label": "Item Procs Min Remaining Time",
 					"tooltip": "Shortest remaining duration on any active item/enchant procs that buff the specified stat type(s), or infinity if none are currently active."
 				},
-				"trinket_procs_max_remaining_icd": {
+				"item_procs_max_remaining_icd": {
 					"label": "Item Procs Max Remaining ICD",
 					"tooltip": "Longest remaining ICD on any inactive item/enchant procs that buff the specified stat type(s), or 0 if all are currently active."
 				},
-				"num_equipped_stat_proc_trinkets": {
+				"num_equipped_stat_proc_items": {
 					"label": "Num Equipped Stat Proc Effects",
 					"tooltip": "Number of equipped passive item/enchant effects that buff the specified stat type(s) when they proc."
 				},
@@ -1496,21 +1497,9 @@
 					"label": "Hand of Guldan in Flight",
 					"tooltip": "Returns <b>True</b> if the impact of Hand of Guldan currenty is in flight."
 				},
-				"warlock_haunt_in_flight": {
-					"label": "[DEPRECATED] Haunt In Flight",
-					"tooltip": "Returns <b>True</b> if Haunt currently is in flight."
-				},
 				"affliction_current_snapshot": {
 					"label": "Existing Raw Snapshot %",
 					"tooltip": "How much stronger your existing snapshot is relative to baseline. Ignores Haste and Crit. Not recommended to use unless you know what you're doing."
-				},
-				"affliction_exhale_window": {
-					"label": "Exhale Window",
-					"tooltip": "Configured leeway for exhaling inhaled DoTs."
-				},
-				"mage_current_combustion_dot_estimate": {
-					"label": "Combustion Dot Value",
-					"tooltip": "Returns the current estimated size of your Combustion Dot."
 				},
 				"protection_paladin_damage_taken_last_global": {
 					"label": "Damage Taken Last Global",
@@ -1531,6 +1520,20 @@
 				"overlap": {
 					"label": "Overlap",
 					"tooltip": "Maximum amount of time before the aura expires when it may be refreshed."
+				},
+				"multiple_cd_usages": {
+					"label": "Multiple CD Usages",
+					"tooltip": "Will try to fit the selected <b>Target spell</b> within the cooldown of the selected <b>Base spell</b>.<br/> If you lose a 2nd cast of Death Wish whilst waiting for a delayed Bloodlust (using the offset) it will cast Death Wish earlier.",
+					"base_spell": "Base Spell",
+					"base_spell_tooltip": "The spell (ie. Bloodlust) you are casting that can have multiple other spells within it's cooldown",
+					"target_spell": "Target Spell",
+					"target_spell_tooltip": "The spell (ie. Death Wish) you want to fit within the cooldown of the Base Spell.",
+					"align_cd_end":"Align target spell to encounter end",
+					"align_cd_end_tooltip":"When checked will try to align the CD usage to the end of the encounter. This is useful for cooldowns/specs that benefit for example from execute."
+				},
+				"offset": {
+					"label": "Offset",
+					"tooltip": "The time offset from which when the cooldown will be triggered"
 				}
 			},
 			"operators": {
@@ -1959,12 +1962,17 @@
 			},
 			"attack_types": {
 				"hit": "Hit",
+				"resisted_hit": "Resisted Hit",
 				"critical_hit": "Critical Hit",
+				"resisted_critical_hit": "Resisted Critical Hit",
 				"tick": "Tick",
+				"resisted_tick": "Resisted Tick",
 				"critical_tick": "Critical Tick",
+				"resisted_critical_tick": "Resisted Critical Tick",
 				"glancing_blow": "Glancing Blow",
 				"blocked_hit": "Blocked Hit",
 				"blocked_critical_hit": "Blocked Critical Hit",
+				"crushing_blow": "Crushing Blow",
 				"miss": "Miss",
 				"parry": "Parry",
 				"dodge": "Dodge",
@@ -2124,7 +2132,6 @@
 			"profession_requirement": "{{itemName}} requires {{professionName}}, but it is not selected.",
 			"too_many_jc_gems": "Only 2 Jewelcrafting Gems are allowed, but {{count}} are equipped.",
 			"unspent_talent_points": "You have {{count}} unspent talent point(s).",
-			"dual_wield_2h_without_titans_grip": "Dual wielding two-handed weapon(s) without Titan's Grip spec.",
 			"shaman_fele_autocast": "Your Fire Elemental spell autocast setup is not optimal with the use of the Primal Elementalist talent (everything ON but Empower). If you know what you're doing, please ignore this."
 		},
 		"buttons": {
@@ -2245,10 +2252,8 @@
 				"modify_in_editor": "Ep weights can be modified in the Stat Weights editor.",
 				"hard_cap_info": "If you want to hard cap a stat make sure to put the EP for that stat higher.",
 				"edit_weights": "Edit weights",
-				"include_gems": "Include gems",
 				"freeze_item_slots": "Freeze item slots",
-				"limit_execution_time": "Limit execution time",
-				"limit_execution_time_tooltip": "If checked, the solver will error out if the total computation time exceeds 30 seconds. If unchecked, then total computation time will be capped at 1 hour instead."
+				"max_gem_phase": "Max Gem Phase"
 			}
 		},
 		"header": {
@@ -2325,6 +2330,7 @@
 				"talents": "Talents:",
 				"buffs": "Buffs:",
 				"consumes": "Consumes:",
+				"debuffs": "Debuffs:",
 				"bonus": "Bonus:",
 				"total": "Total:",
 				"glancing": "Glancing:",

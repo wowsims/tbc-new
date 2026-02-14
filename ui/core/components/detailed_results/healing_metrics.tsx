@@ -141,7 +141,7 @@ export class HealingMetricsTable extends MetricsTable<ActionMetrics> {
 					const relativeCritTickPercent = (metric.critTicks / metric.landedTicks) * 100;
 					const relativeGlancePercent = (metric.glances / metric.landedHits) * 100;
 					const relativeBlockPercent = (metric.blocks / metric.landedHits) * 100;
-					const relativeCritBlockPercent = (metric.critBlocks / metric.landedHits) * 100;
+					const relativeBlockedCritPercent = (metric.blockedCrits / metric.landedHits) * 100;
 
 					cellElem.appendChild(
 						<MetricsCombinedTooltipTable
@@ -175,8 +175,8 @@ export class HealingMetricsTable extends MetricsTable<ActionMetrics> {
 										},
 										{
 											name: i18n.t('results_tab.details.attack_types.blocked_critical_hit'),
-											value: metric.critBlocks,
-											percentage: relativeCritBlockPercent,
+											value: metric.blockedCrits,
+											percentage: relativeBlockedCritPercent,
 										},
 									],
 								},

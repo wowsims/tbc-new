@@ -2,12 +2,12 @@ import { Player } from '../../player.js';
 import { itemSwapEnabledSpecs } from '../../individual_sim_ui.js';
 import {
 	APLValue,
-	APLValueAllTrinketStatProcsActive,
-	APLValueAnyTrinketStatProcsAvailable,
+	APLValueAllItemStatProcsActive,
+	APLValueAnyItemStatProcsAvailable,
 	APLValueAnd,
 	APLValueAnyStatBuffCooldownsActive,
 	APLValueAnyStatBuffCooldownsMinDuration,
-	APLValueAnyTrinketStatProcsActive,
+	APLValueAnyItemStatProcsActive,
 	APLValueAuraInternalCooldown,
 	APLValueAuraIsActive,
 	APLValueAuraIsKnown,
@@ -54,7 +54,6 @@ import {
 	APLValueInputDelay,
 	APLValueIsExecutePhase,
 	APLValueIsExecutePhase_ExecutePhaseThreshold as ExecutePhaseThreshold,
-	APLValueMageCurrentCombustionDotEstimate,
 	APLValueMath,
 	APLValueMath_MathOperator as MathOperator,
 	APLValueMax,
@@ -66,7 +65,7 @@ import {
 	APLValueMin,
 	APLValueNot,
 	APLValueNumberTargets,
-	APLValueNumEquippedStatProcTrinkets,
+	APLValueNumEquippedStatProcItems,
 	APLValueNumStatBuffCooldowns,
 	APLValueOr,
 	APLValueProtectionPaladinDamageTakenLastGlobal,
@@ -89,14 +88,12 @@ import {
 	APLValueSpellTimeToReady,
 	APLValueSpellTravelTime,
 	APLValueTotemRemainingTime,
-	APLValueTrinketProcsMaxRemainingICD,
-	APLValueTrinketProcsMinRemainingTime,
+	APLValueItemProcsMaxRemainingICD,
+	APLValueItemProcsMinRemainingTime,
 	APLValueUnitDistance,
 	APLValueUnitIsMoving,
 	APLValueVariablePlaceholder,
 	APLValueWarlockHandOfGuldanInFlight,
-	APLValueWarlockHauntInFlight,
-	APLValueAfflictionExhaleWindow,
 	APLValueAuraIsInactive,
 	APLValueAuraICDIsReady,
 	APLValueActiveItemSwapSet,
@@ -106,6 +103,9 @@ import {
 	APLValueDotTimeToNextTick,
 	APLValueSpellInFlight,
 	APLValueBossCurrentTarget,
+	APLValueAuraDuration,
+	APLValueMultipleCdUsages,
+	APLValueActionGroupUsed,
 } from '../../proto/apl.js';
 import { Class, Spec } from '../../proto/common.js';
 import { ShamanTotems_TotemType as TotemType } from '../../proto/shaman.js';
@@ -116,6 +116,7 @@ import { TextDropdownPicker, TextDropdownValueConfig } from '../pickers/dropdown
 import { ListItemPickerConfig, ListPicker } from '../pickers/list_picker.jsx';
 import i18n from '../../../i18n/config';
 import * as AplHelpers from './apl_helpers.js';
+import { ActionId } from '../../proto_utils/action_id';
 
 export interface APLValuePickerConfig extends InputConfig<Player<any>, APLValue | undefined> {}
 
@@ -1063,13 +1064,6 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 			AplHelpers.reactionTimeCheckbox(),
 		],
 	}),
-	auraIsActiveWithReactionTime: inputBuilder({
-		label: i18n.t('rotation_tab.apl.values.aura_active_with_reaction_time.label'),
-		submenu: ['aura'],
-		shortDescription: i18n.t('rotation_tab.apl.values.aura_active_with_reaction_time.tooltip'),
-		newValue: () => APLValueAuraIsActive.create({ includeReactionTime: true }),
-		fields: [AplHelpers.unitFieldConfig('sourceUnit', 'aura_sources'), AplHelpers.actionIdFieldConfig('auraId', 'auras', 'sourceUnit')],
-	}),
 	auraIsInactive: inputBuilder({
 		label: i18n.t('rotation_tab.apl.values.aura_inactive.label'),
 		submenu: ['aura'],
@@ -1080,13 +1074,6 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 			AplHelpers.actionIdFieldConfig('auraId', 'auras', 'sourceUnit'),
 			AplHelpers.reactionTimeCheckbox(),
 		],
-	}),
-	auraIsInactiveWithReactionTime: inputBuilder({
-		label: i18n.t('rotation_tab.apl.values.aura_inactive_with_reaction_time.label'),
-		submenu: ['aura'],
-		shortDescription: i18n.t('rotation_tab.apl.values.aura_inactive_with_reaction_time.tooltip'),
-		newValue: () => APLValueAuraIsInactive.create({ includeReactionTime: true }),
-		fields: [AplHelpers.unitFieldConfig('sourceUnit', 'aura_sources'), AplHelpers.actionIdFieldConfig('auraId', 'auras', 'sourceUnit')],
 	}),
 	auraRemainingTime: inputBuilder({
 		label: i18n.t('rotation_tab.apl.values.aura_remaining_time.label'),
@@ -1124,13 +1111,6 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 			AplHelpers.reactionTimeCheckbox(),
 		],
 	}),
-	auraIcdIsReadyWithReactionTime: inputBuilder({
-		label: i18n.t('rotation_tab.apl.values.aura_icd_is_ready_with_reaction_time.label'),
-		submenu: ['aura'],
-		shortDescription: i18n.t('rotation_tab.apl.values.aura_icd_is_ready_with_reaction_time.tooltip'),
-		newValue: () => APLValueAuraICDIsReady.create({ includeReactionTime: true }),
-		fields: [AplHelpers.unitFieldConfig('sourceUnit', 'aura_sources'), AplHelpers.actionIdFieldConfig('auraId', 'icd_auras', 'sourceUnit')],
-	}),
 	auraShouldRefresh: inputBuilder({
 		label: i18n.t('rotation_tab.apl.values.aura_should_refresh.label'),
 		submenu: ['aura'],
@@ -1156,15 +1136,23 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 			}),
 		],
 	}),
+	auraDuration: inputBuilder({
+		label: i18n.t('rotation_tab.apl.values.aura_duration.label'),
+		submenu: ['aura'],
+		shortDescription: i18n.t('rotation_tab.apl.values.aura_duration.tooltip'),
+		fullDescription: i18n.t('rotation_tab.apl.values.aura_duration.full_description'),
+		newValue: () => APLValueAuraDuration.create,
+		fields: [AplHelpers.unitFieldConfig('sourceUnit', 'aura_sources'), AplHelpers.actionIdFieldConfig('auraId', 'auras', 'sourceUnit')],
+	}),
 
 	// Aura Sets
-	allTrinketStatProcsActive: inputBuilder({
-		label: i18n.t('rotation_tab.apl.values.all_trinket_stat_procs_active.label'),
+	allItemStatProcsActive: inputBuilder({
+		label: i18n.t('rotation_tab.apl.values.all_item_stat_procs_active.label'),
 		submenu: ['aura_sets'],
-		shortDescription: i18n.t('rotation_tab.apl.values.all_trinket_stat_procs_active.tooltip'),
-		fullDescription: i18n.t('rotation_tab.apl.values.all_trinket_stat_procs_active.full_description'),
+		shortDescription: i18n.t('rotation_tab.apl.values.all_item_stat_procs_active.tooltip'),
+		fullDescription: i18n.t('rotation_tab.apl.values.all_item_stat_procs_active.full_description'),
 		newValue: () =>
-			APLValueAllTrinketStatProcsActive.create({
+			APLValueAllItemStatProcsActive.create({
 				statType1: -1,
 				statType2: -1,
 				statType3: -1,
@@ -1176,13 +1164,13 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 			AplHelpers.minIcdInput,
 		],
 	}),
-	anyTrinketStatProcsActive: inputBuilder({
-		label: i18n.t('rotation_tab.apl.values.any_trinket_stat_procs_active.label'),
+	anyItemStatProcsActive: inputBuilder({
+		label: i18n.t('rotation_tab.apl.values.any_item_stat_procs_active.label'),
 		submenu: ['aura_sets'],
-		shortDescription: i18n.t('rotation_tab.apl.values.any_trinket_stat_procs_active.tooltip'),
-		fullDescription: i18n.t('rotation_tab.apl.values.any_trinket_stat_procs_active.full_description'),
+		shortDescription: i18n.t('rotation_tab.apl.values.any_item_stat_procs_active.tooltip'),
+		fullDescription: i18n.t('rotation_tab.apl.values.any_item_stat_procs_active.full_description'),
 		newValue: () =>
-			APLValueAnyTrinketStatProcsActive.create({
+			APLValueAnyItemStatProcsActive.create({
 				statType1: -1,
 				statType2: -1,
 				statType3: -1,
@@ -1194,13 +1182,12 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 			AplHelpers.minIcdInput,
 		],
 	}),
-	anyTrinketStatProcsAvailable: inputBuilder({
-		label: i18n.t('rotation_tab.apl.values.any_trinket_stat_procs_available.label'),
+	anyItemStatProcsAvailable: inputBuilder({
+		label: i18n.t('rotation_tab.apl.values.any_item_stat_procs_available.label'),
 		submenu: ['aura_sets'],
-		shortDescription: i18n.t('rotation_tab.apl.values.any_trinket_stat_procs_available.tooltip'),
-		// fullDescription: i18n.t('rotation_tab.apl.values.any_trinket_stat_procs_available.full_description'),
+		shortDescription: i18n.t('rotation_tab.apl.values.any_item_stat_procs_available.tooltip'),
 		newValue: () =>
-			APLValueAnyTrinketStatProcsAvailable.create({
+			APLValueAnyItemStatProcsAvailable.create({
 				statType1: -1,
 				statType2: -1,
 				statType3: -1,
@@ -1212,12 +1199,12 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 			AplHelpers.minIcdInput,
 		],
 	}),
-	trinketProcsMinRemainingTime: inputBuilder({
-		label: i18n.t('rotation_tab.apl.values.trinket_procs_min_remaining_time.label'),
+	itemProcsMinRemainingTime: inputBuilder({
+		label: i18n.t('rotation_tab.apl.values.item_procs_min_remaining_time.label'),
 		submenu: ['aura_sets'],
-		shortDescription: i18n.t('rotation_tab.apl.values.trinket_procs_min_remaining_time.tooltip'),
+		shortDescription: i18n.t('rotation_tab.apl.values.item_procs_min_remaining_time.tooltip'),
 		newValue: () =>
-			APLValueTrinketProcsMinRemainingTime.create({
+			APLValueItemProcsMinRemainingTime.create({
 				statType1: -1,
 				statType2: -1,
 				statType3: -1,
@@ -1229,12 +1216,12 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 			AplHelpers.minIcdInput,
 		],
 	}),
-	trinketProcsMaxRemainingIcd: inputBuilder({
-		label: i18n.t('rotation_tab.apl.values.trinket_procs_max_remaining_icd.label'),
+	itemProcsMaxRemainingIcd: inputBuilder({
+		label: i18n.t('rotation_tab.apl.values.item_procs_max_remaining_icd.label'),
 		submenu: ['aura_sets'],
-		shortDescription: i18n.t('rotation_tab.apl.values.trinket_procs_max_remaining_icd.tooltip'),
+		shortDescription: i18n.t('rotation_tab.apl.values.item_procs_max_remaining_icd.tooltip'),
 		newValue: () =>
-			APLValueTrinketProcsMaxRemainingICD.create({
+			APLValueItemProcsMaxRemainingICD.create({
 				statType1: -1,
 				statType2: -1,
 				statType3: -1,
@@ -1246,12 +1233,12 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 			AplHelpers.minIcdInput,
 		],
 	}),
-	numEquippedStatProcTrinkets: inputBuilder({
-		label: i18n.t('rotation_tab.apl.values.num_equipped_stat_proc_trinkets.label'),
+	numEquippedStatProcItems: inputBuilder({
+		label: i18n.t('rotation_tab.apl.values.num_equipped_stat_proc_items.label'),
 		submenu: ['aura_sets'],
-		shortDescription: i18n.t('rotation_tab.apl.values.num_equipped_stat_proc_trinkets.tooltip'),
+		shortDescription: i18n.t('rotation_tab.apl.values.num_equipped_stat_proc_items.tooltip'),
 		newValue: () =>
-			APLValueNumEquippedStatProcTrinkets.create({
+			APLValueNumEquippedStatProcItems.create({
 				statType1: -1,
 				statType2: -1,
 				statType3: -1,
@@ -1449,40 +1436,13 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getSpec() == Spec.SpecWarlock,
 		fields: [],
 	}),
-	warlockHauntInFlight: inputBuilder({
-		label: i18n.t('rotation_tab.apl.values.warlock_haunt_in_flight.label'),
-		submenu: ['warlock'],
-		shortDescription: i18n.t('rotation_tab.apl.values.warlock_haunt_in_flight.tooltip'),
-		newValue: APLValueWarlockHauntInFlight.create,
-		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getSpec() == Spec.SpecWarlock,
-		fields: [],
-	}),
-	afflictionExhaleWindow: inputBuilder({
-		label: i18n.t('rotation_tab.apl.values.affliction_exhale_window.label'),
-		submenu: ['warlock'],
-		shortDescription: i18n.t('rotation_tab.apl.values.affliction_exhale_window.tooltip'),
-		newValue: APLValueAfflictionExhaleWindow.create,
-		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getSpec() == Spec.SpecWarlock,
-		fields: [],
-	}),
 	afflictionCurrentSnapshot: inputBuilder({
 		label: i18n.t('rotation_tab.apl.values.affliction_current_snapshot.label'),
 		submenu: ['warlock'],
 		shortDescription: i18n.t('rotation_tab.apl.values.affliction_current_snapshot.tooltip'),
 		newValue: APLValueAfflictionCurrentSnapshot.create,
 		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getSpec() == Spec.SpecWarlock,
-		fields: [
-			AplHelpers.unitFieldConfig('targetUnit', 'targets'),
-			AplHelpers.actionIdFieldConfig('spellId', 'expected_dot_spells', ''),
-		],
-	}),
-	mageCurrentCombustionDotEstimate: inputBuilder({
-		label: i18n.t('rotation_tab.apl.values.mage_current_combustion_dot_estimate.label'),
-		submenu: ['mage'],
-		shortDescription: i18n.t('rotation_tab.apl.values.mage_current_combustion_dot_estimate.tooltip'),
-		newValue: APLValueMageCurrentCombustionDotEstimate.create,
-		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getSpec() == Spec.SpecMage,
-		fields: [],
+		fields: [AplHelpers.unitFieldConfig('targetUnit', 'targets'), AplHelpers.actionIdFieldConfig('spellId', 'expected_dot_spells', '')],
 	}),
 	protectionPaladinDamageTakenLastGlobal: inputBuilder({
 		label: i18n.t('rotation_tab.apl.values.protection_paladin_damage_taken_last_global.label'),
@@ -1492,7 +1452,6 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getSpec() === Spec.SpecProtectionPaladin,
 		fields: [],
 	}),
-
 	variableRef: inputBuilder({
 		label: 'Variable Reference',
 		submenu: ['Variables'],
@@ -1516,6 +1475,13 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 			}),
 		],
 	}),
+	actionGroupUsed: inputBuilder({
+		label: "Action Group is used",
+		submenu: ['Variables'],
+		shortDescription: "Returns <b>True</b> if the specified action group is used in the rotation. This allows you to conditionally execute actions based on whether an action group is included in the rotation.",
+		newValue: APLValueActionGroupUsed.create,
+		fields: [AplHelpers.groupNameFieldConfig('name')],
+	}),
 	activeItemSwapSet: inputBuilder({
 		label: 'Item Swap',
 		submenu: ['Misc'],
@@ -1523,5 +1489,39 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 		includeIf: (player: Player<any>, _isPrepull: boolean) => itemSwapEnabledSpecs.includes(player.getSpec()),
 		newValue: APLValueActiveItemSwapSet.create,
 		fields: [AplHelpers.itemSwapSetFieldConfig('swapSet')],
+	}),
+	multipleCdUsages: inputBuilder({
+		label: i18n.t('rotation_tab.apl.values.multiple_cd_usages.label'),
+		submenu: ['Misc'],
+		shortDescription: i18n.t('rotation_tab.apl.values.multiple_cd_usages.tooltip'),
+		newValue: () =>
+			APLValueMultipleCdUsages.create({
+				offset: {
+					value: {
+						oneofKind: 'const',
+						const: {
+							val: '0ms',
+						},
+					},
+				},
+			}),
+		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getClass() == Class.ClassWarrior,
+		fields: [
+			AplHelpers.actionIdFieldConfig('baseSpellId', 'castable_spells', '', undefined, {
+				label: i18n.t('rotation_tab.apl.values.multiple_cd_usages.base_spell'),
+				labelTooltip: i18n.t('rotation_tab.apl.values.multiple_cd_usages.base_spell_tooltip'),
+			}),
+			AplHelpers.actionIdFieldConfig('targetSpellId', 'castable_spells', '', undefined, {
+				label: i18n.t('rotation_tab.apl.values.multiple_cd_usages.target_spell'),
+				labelTooltip: i18n.t('rotation_tab.apl.values.multiple_cd_usages.target_spell_tooltip'),
+			}),
+			valueFieldConfig('offset', {
+				label: i18n.t('rotation_tab.apl.values.offset.label'),
+				labelTooltip: i18n.t('rotation_tab.apl.values.offset.tooltip'),
+			}),
+			AplHelpers.booleanFieldConfig('alignCdEnd', i18n.t('rotation_tab.apl.values.multiple_cd_usages.align_cd_end'), {
+				labelTooltip: i18n.t('rotation_tab.apl.values.multiple_cd_usages.align_cd_end_tooltip'),
+			}),
+		],
 	}),
 };

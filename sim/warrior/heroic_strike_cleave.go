@@ -9,7 +9,7 @@ func (war *Warrior) registerHeroicStrike() {
 		ActionID:       core.ActionID{SpellID: 78},
 		SpellSchool:    core.SpellSchoolPhysical,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
-		Flags:          core.SpellFlagAPL | core.SpellFlagMeleeMetrics,
+		Flags:          core.SpellFlagMeleeMetrics,
 		ClassSpellMask: SpellMaskHeroicStrike,
 		MaxRange:       core.MaxMeleeRange,
 
@@ -53,7 +53,7 @@ func (war *Warrior) registerCleave() {
 		ActionID:       core.ActionID{SpellID: 845},
 		SpellSchool:    core.SpellSchoolPhysical,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
-		Flags:          core.SpellFlagAPL | core.SpellFlagMeleeMetrics,
+		Flags:          core.SpellFlagMeleeMetrics,
 		ClassSpellMask: SpellMaskCleave,
 		MaxRange:       core.MaxMeleeRange,
 

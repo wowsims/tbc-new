@@ -28,6 +28,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRetributionPaladin, {
 		const talents = statMod(playerStats.talentsStats!, playerStats.gearStats);
 		const buffs = statMod(playerStats.buffsStats!, playerStats.talentsStats);
 		const consumes = statMod(playerStats.consumesStats!, playerStats.buffsStats);
+		const debuffs = new Stats();
 		const final = new Stats().withStat(Stat.StatSpellDamage, Stats.fromProto(playerStats.finalStats).getStat(Stat.StatAttackPower) * 0.5);
 
 		return {
@@ -37,34 +38,20 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRetributionPaladin, {
 			buffs: buffs,
 			consumes: consumes,
 			final: final,
+			debuffs,
 			stats: [Stat.StatSpellDamage],
 		};
 	},
 
 	// All stats for which EP should be calculated.
-	epStats: [
-		Stat.StatStrength,
-		Stat.StatAttackPower,
-	],
-	gemStats: [
-		Stat.StatStamina,
-		Stat.StatStrength,
-	],
+	epStats: [Stat.StatStrength, Stat.StatAttackPower],
+	gemStats: [Stat.StatStamina, Stat.StatStrength],
 	epPseudoStats: [PseudoStat.PseudoStatMainHandDps],
 	// Reference stat against which to calculate EP. I think all classes use either spell power or attack power.
 	epReferenceStat: Stat.StatStrength,
 	// Which stats to display in the Character Stats section, at the bottom of the left-hand sidebar.
 	displayStats: UnitStat.createDisplayStatArray(
-		[
-			Stat.StatStrength,
-			Stat.StatAgility,
-			Stat.StatIntellect,
-			Stat.StatAttackPower,
-			Stat.StatSpellDamage,
-			Stat.StatMana,
-			Stat.StatHealth,
-			Stat.StatStamina,
-		],
+		[Stat.StatStrength, Stat.StatAgility, Stat.StatIntellect, Stat.StatAttackPower, Stat.StatSpellDamage, Stat.StatMana, Stat.StatHealth, Stat.StatStamina],
 		[
 			PseudoStat.PseudoStatMeleeHitPercent,
 			PseudoStat.PseudoStatMeleeCritPercent,
@@ -93,9 +80,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRetributionPaladin, {
 		}),
 		partyBuffs: PartyBuffs.create({}),
 		individualBuffs: IndividualBuffs.create({}),
-		debuffs: Debuffs.create({
-
-		}),
+		debuffs: Debuffs.create({}),
 		rotationType: APLRotation_Type.TypeAuto,
 	},
 

@@ -146,7 +146,7 @@ type Item struct {
 	TempEnchant    int32
 	ScalingOptions map[int32]*proto.ScalingItemProperties
 	RandPropPoints int32
-	ItemEffect     *proto.ItemEffect
+	ItemEffects    []*proto.ItemEffect
 }
 
 func ItemFromProto(pData *proto.SimItem) Item {
@@ -164,7 +164,7 @@ func ItemFromProto(pData *proto.SimItem) Item {
 		SetName:          pData.SetName,
 		SetID:            pData.SetId,
 		ScalingOptions:   pData.ScalingOptions,
-		ItemEffect:       pData.ItemEffect,
+		ItemEffects:      pData.ItemEffects,
 	}
 }
 
@@ -194,20 +194,20 @@ func RandomSuffixFromProto(pData *proto.ItemRandomSuffix) RandomSuffix {
 }
 
 type Enchant struct {
-	EffectID      int32 // Used by UI to apply effect to tooltip
-	Stats         stats.Stats
-	EnchantEffect *proto.ItemEffect
-	Name          string         // Only needed for unit tests
-	Type          proto.ItemType // Only needed for unit tests
+	EffectID       int32 // Used by UI to apply effect to tooltip
+	Stats          stats.Stats
+	EnchantEffects []*proto.ItemEffect
+	Name           string         // Only needed for unit tests
+	Type           proto.ItemType // Only needed for unit tests
 }
 
 func EnchantFromProto(pData *proto.SimEnchant) Enchant {
 	return Enchant{
-		EffectID:      pData.EffectId,
-		Stats:         stats.FromProtoArray(pData.Stats),
-		EnchantEffect: pData.EnchantEffect,
-		Name:          pData.Name,
-		Type:          pData.Type,
+		EffectID:       pData.EffectId,
+		Stats:          stats.FromProtoArray(pData.Stats),
+		EnchantEffects: pData.EnchantEffects,
+		Name:           pData.Name,
+		Type:           pData.Type,
 	}
 }
 
@@ -620,7 +620,7 @@ var itemTypeToSlotsMap = map[proto.ItemType][]proto.ItemSlot{
 	// ItemType_ItemTypeWeapon is excluded intentionally - the slot cannot be decided based on type alone for weapons.
 }
 
-func eligibleSlotsForItem(item *Item, isFuryWarrior bool) []proto.ItemSlot {
+func eligibleSlotsForItem(item *Item) []proto.ItemSlot {
 	if item == nil {
 		return nil
 	}
@@ -629,10 +629,6 @@ func eligibleSlotsForItem(item *Item, isFuryWarrior bool) []proto.ItemSlot {
 	}
 
 	if item.Type == proto.ItemType_ItemTypeWeapon {
-		if isFuryWarrior {
-			return []proto.ItemSlot{proto.ItemSlot_ItemSlotMainHand, proto.ItemSlot_ItemSlotOffHand}
-		}
-
 		switch item.HandType {
 		case proto.HandType_HandTypeTwoHand, proto.HandType_HandTypeMainHand:
 			return []proto.ItemSlot{proto.ItemSlot_ItemSlotMainHand}

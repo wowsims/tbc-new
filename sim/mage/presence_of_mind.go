@@ -17,24 +17,7 @@ func (mage *Mage) registerPresenceOfMindSpell() {
 		Kind:       core.SpellMod_CastTime_Pct,
 	})
 
-	pomSpell := mage.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 12043},
-		Flags:          core.SpellFlagNoOnCastComplete,
-		ClassSpellMask: MageSpellPresenceOfMind,
-		Cast: core.CastConfig{
-			DefaultCast: core.Cast{
-				NonEmpty: true,
-			},
-			CD: core.Cooldown{
-				Timer:    mage.NewTimer(),
-				Duration: time.Second * 180,
-			},
-		},
-		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {
-			mage.PresenceOfMindAura.Activate(sim)
-		},
-	})
-
+	var pomSpell *core.Spell
 	mage.PresenceOfMindAura = mage.RegisterAura(core.Aura{
 		Label:    "Presence of Mind",
 		ActionID: core.ActionID{SpellID: 12043},
@@ -55,6 +38,25 @@ func (mage *Mage) registerPresenceOfMindSpell() {
 			}
 			aura.Deactivate(sim)
 		},
+	})
+
+	pomSpell = mage.RegisterSpell(core.SpellConfig{
+		ActionID:       core.ActionID{SpellID: 12043},
+		Flags:          core.SpellFlagNoOnCastComplete,
+		ClassSpellMask: MageSpellPresenceOfMind,
+		Cast: core.CastConfig{
+			DefaultCast: core.Cast{
+				NonEmpty: true,
+			},
+			CD: core.Cooldown{
+				Timer:    mage.NewTimer(),
+				Duration: time.Second * 180,
+			},
+		},
+		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {
+			mage.PresenceOfMindAura.Activate(sim)
+		},
+		RelatedSelfBuff: mage.PresenceOfMindAura,
 	})
 
 	mage.AddMajorCooldown(core.MajorCooldown{

@@ -17,6 +17,7 @@ type Gem struct {
 	Quality      ItemQuality
 	IsJc         bool
 	Flags0       ItemStaticFlags0
+	Bonding      int
 }
 
 func (gem *Gem) ToProto() *proto.UIGem {

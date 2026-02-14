@@ -50,12 +50,12 @@ func (s *UnitStats) ToProto() *proto.UnitStats {
 // Infer missing stat weight values for HitRating and CritRating if school-specific components were calculated, then call ToProto(). Kept as a separate method in case we want to use the UnitStats struct for other applications
 // than just stat weights.
 func (s *UnitStats) ExportWeights() *proto.UnitStats {
-	if s.Stats[stats.AllPhysHitRating] == 0 {
-		s.Stats[stats.AllPhysHitRating] = (s.PseudoStats[proto.PseudoStat_PseudoStatMeleeHitPercent] + +s.PseudoStats[proto.PseudoStat_PseudoStatRangedHitPercent]) / PhysicalHitRatingPerHitPercent
+	if s.Stats[stats.MeleeHitRating] == 0 {
+		s.Stats[stats.MeleeHitRating] = (s.PseudoStats[proto.PseudoStat_PseudoStatMeleeHitPercent] + +s.PseudoStats[proto.PseudoStat_PseudoStatRangedHitPercent]) / PhysicalHitRatingPerHitPercent
 	}
 
-	if s.Stats[stats.AllPhysCritRating] == 0 {
-		s.Stats[stats.AllPhysCritRating] = (s.PseudoStats[proto.PseudoStat_PseudoStatMeleeCritPercent] + s.PseudoStats[proto.PseudoStat_PseudoStatRangedCritPercent]) / SpellCritRatingPerCritPercent
+	if s.Stats[stats.MeleeCritRating] == 0 {
+		s.Stats[stats.MeleeCritRating] = (s.PseudoStats[proto.PseudoStat_PseudoStatMeleeCritPercent] + s.PseudoStats[proto.PseudoStat_PseudoStatRangedCritPercent]) / SpellCritRatingPerCritPercent
 	}
 
 	return s.ToProto()
@@ -170,12 +170,21 @@ func buildStatWeightRequests(swr *proto.StatWeightsRequest) *proto.StatWeightReq
 	for _, s := range statsToWeigh {
 		stat := stats.UnitStatFromStat(s)
 		statMod := defaultStatMod
-		if stat.EqualsStat(stats.Armor) || stat.EqualsStat(stats.BonusArmor) {
+		if stat.EqualsStat(stats.Armor) || stat.EqualsStat(stats.BonusArmor) || stat.EqualsStat(stats.ArmorPenetration) {
 			statMod = defaultStatMod * 10
 		}
 		statModsHigh[stat] = statMod
 		statModsLow[stat] = -statMod
+
+		if stat.EqualsStat(stats.MeleeHitRating) {
+			statModsLow[stats.MeleeHitRating] = 0
+		} else if stat.EqualsStat(stats.SpellHitRating) {
+			statModsLow[stats.SpellHitRating] = 0
+		} else if stat.EqualsStat(stats.ExpertiseRating) {
+			statModsLow[stats.ExpertiseRating] = 0
+		}
 	}
+
 	for _, s := range swr.PseudoStatsToWeigh {
 		stat := stats.UnitStatFromPseudoStat(s)
 		statName := proto.PseudoStat_name[int32(s)]
@@ -217,17 +226,19 @@ func buildStatWeightRequests(swr *proto.StatWeightsRequest) *proto.StatWeightReq
 			statModsLow[stats.SpellCritRating] = 0
 			statModsHigh[stats.SpellCritRating] = 0
 		}
-
 	}
 
 	for i := range statModsLow {
 		stat := stats.UnitStatFromIdx(i)
-		if statModsLow[stat] == 0 {
+		if statModsLow[stat] == 0 && statModsHigh[stat] == 0 {
 			continue
 		}
 
-		lowSimRequest := googleProto.Clone(swBaseResponse.BaseRequest).(*proto.RaidSimRequest)
-		stat.AddToStatsProto(lowSimRequest.Raid.Parties[0].Players[0].BonusStats, statModsLow[stat])
+		var lowSimRequest *proto.RaidSimRequest
+		if statModsLow[stat] > 0 {
+			lowSimRequest = googleProto.Clone(swBaseResponse.BaseRequest).(*proto.RaidSimRequest)
+			stat.AddToStatsProto(lowSimRequest.Raid.Parties[0].Players[0].BonusStats, statModsLow[stat])
+		}
 
 		highSimRequest := googleProto.Clone(swBaseResponse.BaseRequest).(*proto.RaidSimRequest)
 		stat.AddToStatsProto(highSimRequest.Raid.Parties[0].Players[0].BonusStats, statModsHigh[stat])
@@ -263,8 +274,14 @@ func computeStatWeights(swcr *proto.StatWeightsCalcRequest) *proto.StatWeightsRe
 		stat := stats.UnitStatFromIdx(int(statResult.StatData.UnitStat))
 
 		baselinePlayer := swcr.BaseResult.RaidMetrics.Parties[0].Players[0]
-		modPlayerLow := statResult.ResultLow.RaidMetrics.Parties[0].Players[0]
 		modPlayerHigh := statResult.ResultHigh.RaidMetrics.Parties[0].Players[0]
+		hasLowMeasurement := statResult.ResultLow != nil
+		var modPlayerLow *proto.UnitMetrics
+		if hasLowMeasurement {
+			modPlayerLow = statResult.ResultLow.RaidMetrics.Parties[0].Players[0]
+		} else {
+			modPlayerLow = baselinePlayer
+		}
 
 		// Check for hard caps. Hard caps will have results identical to the baseline because RNG is fixed.
 		// When we find a hard-capped stat, just skip it (will return 0).
@@ -274,16 +291,25 @@ func computeStatWeights(swcr *proto.StatWeightsCalcRequest) *proto.StatWeightsRe
 
 		calcWeightResults := func(baselineMetrics *proto.DistributionMetrics, modLowMetrics *proto.DistributionMetrics, modHighMetrics *proto.DistributionMetrics, weightResults *StatWeightValues) {
 			var lo, hi aggregator
-			for i := range baselineMetrics.AllValues {
-				lo.add(modLowMetrics.AllValues[i] - baselineMetrics.AllValues[i])
+			if hasLowMeasurement {
+				for i := range baselineMetrics.AllValues {
+					lo.add(modLowMetrics.AllValues[i] - baselineMetrics.AllValues[i])
+				}
+				lo.scale(1 / statResult.StatData.ModLow)
 			}
-			lo.scale(1 / statResult.StatData.ModLow)
+
 			for i := range baselineMetrics.AllValues {
 				hi.add(modHighMetrics.AllValues[i] - baselineMetrics.AllValues[i])
 			}
 			hi.scale(1 / statResult.StatData.ModHigh)
 
-			mean, stdev := lo.merge(&hi).meanAndStdDev()
+			var aggr = &hi
+			if hasLowMeasurement {
+				aggr = aggr.merge(&lo)
+			}
+
+			mean, stdev := aggr.meanAndStdDev()
+
 			weightResults.Weights.AddStat(stat, mean)
 			weightResults.WeightsStdev.AddStat(stat, stdev)
 		}
@@ -336,9 +362,12 @@ func runStatWeights(request *proto.StatWeightsRequest, progress chan *proto.Prog
 	var simsCompleted int32 = 0
 
 	for _, reqData := range requestData.StatSimRequests {
-		iterationsTotal += reqData.RequestLow.SimOptions.Iterations
+		if reqData.RequestLow != nil {
+			iterationsTotal += reqData.RequestLow.SimOptions.Iterations
+			simsTotal += 1
+		}
 		iterationsTotal += reqData.RequestHigh.SimOptions.Iterations
-		simsTotal += 2
+		simsTotal += 1
 	}
 
 	waitForResult := func(srcProgressChannel chan *proto.ProgressMetrics) *proto.RaidSimResult {
@@ -380,11 +409,14 @@ func runStatWeights(request *proto.StatWeightsRequest, progress chan *proto.Prog
 	statResults := []*proto.StatWeightsStatResultData{}
 
 	for _, reqData := range requestData.StatSimRequests {
-		lowProgress := make(chan *proto.ProgressMetrics, 100)
-		go simFunc(reqData.RequestLow, lowProgress, signals)
-		lowRes := waitForResult(lowProgress)
-		if lowRes.Error != nil {
-			return &proto.StatWeightsResult{Error: lowRes.Error}
+		var lowRes *proto.RaidSimResult
+		if reqData.RequestLow != nil {
+			lowProgress := make(chan *proto.ProgressMetrics, 100)
+			go simFunc(reqData.RequestLow, lowProgress, signals)
+			lowRes = waitForResult(lowProgress)
+			if lowRes.Error != nil {
+				return &proto.StatWeightsResult{Error: lowRes.Error}
+			}
 		}
 
 		highProgress := make(chan *proto.ProgressMetrics, 100)

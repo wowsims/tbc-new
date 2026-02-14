@@ -53,9 +53,9 @@ func (war *Warrior) registerIntercept() {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			target = interceptTarget
+			interceptTarget = target
 			aura.Activate(sim)
-			war.MoveTo(chargeMinRange-1, sim) // movement aura is discretized in 1 yard intervals, so need to overshoot to guarantee melee range
+			war.MoveTo(chargeMinRange-3.5, sim) // movement aura is discretized in 1 yard intervals, so need to overshoot to guarantee melee range
 		},
 	})
 }

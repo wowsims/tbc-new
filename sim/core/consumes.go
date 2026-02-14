@@ -144,6 +144,7 @@ func makePotionActivationSpellInternal(potion Consumable, character *Character) 
 	if potion.BuffDuration > 0 {
 		// Add stat buff aura if applicable
 		aura = character.NewTemporaryStatsAura(potion.Name, actionID, potion.Stats, potion.BuffDuration)
+		mcd.Spell.RelatedSelfBuff = aura.Aura
 		mcd.Type = aura.InferCDType()
 	}
 	var gains []resourceGainConfig
@@ -440,6 +441,8 @@ func registerDrumsCD(agent Agent, consumables *proto.ConsumesSpec) {
 			ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
 				aura.Activate(sim)
 			},
+
+			RelatedSelfBuff: aura.Aura,
 		})
 
 		character.AddMajorCooldown(MajorCooldown{

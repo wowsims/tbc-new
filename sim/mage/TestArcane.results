@@ -22,12 +22,9 @@ character_stats_results: {
   final_stats: 389
   final_stats: 0
   final_stats: 0
-  final_stats: 20
+  final_stats: 48
   final_stats: 0
   final_stats: 0
-  final_stats: 0
-  final_stats: 0
-  final_stats: 28
   final_stats: 0
   final_stats: 0
   final_stats: 0
@@ -59,7 +56,63 @@ dps_results: {
  value: {}
 }
 dps_results: {
+ key: "TestArcane-AllItems-BadgeoftheSwarmguard-21670"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-AllItems-BroochoftheImmortalKing-32534"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-AllItems-Coren'sLuckyCoin-38289"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-AllItems-Dabiri'sEnigma-30300"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-AllItems-DarkmoonCard:Crusade-31856"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-AllItems-DarkmoonCard:Vengeance-31858"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-AllItems-DarkmoonCard:Wrath-31857"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-AllItems-DragonspineTrophy-28830"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-AllItems-EyeofMagtheridon-28789"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-AllItems-GnomereganAuto-Blocker600-29387"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-AllItems-HourglassoftheUnraveller-28034"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-AllItems-PrismofInnerCalm-30621"
+ value: {}
+}
+dps_results: {
  key: "TestArcane-AllItems-Quagmirran'sEye-27683"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-AllItems-SextantofUnstableCurrents-30626"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-AllItems-SpyglassoftheHiddenFleet-30620"
  value: {}
 }
 dps_results: {

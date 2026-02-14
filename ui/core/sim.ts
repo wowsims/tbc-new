@@ -218,17 +218,9 @@ export class Sim {
 				let gear = this.db.lookupEquipmentSpec(player.equipment);
 				let gearChanged = false;
 
-				const isBlacksmith = [player.profession1, player.profession2].includes(Profession.Blacksmithing);
-
 				// Disable meta gem if inactive.
-				if (gear.hasInactiveMetaGem(isBlacksmith)) {
+				if (gear.hasInactiveMetaGem()) {
 					gear = gear.withoutMetaGem();
-					gearChanged = true;
-				}
-
-				// Remove bonus sockets if not blacksmith.
-				if (!isBlacksmith) {
-					gear = gear.withoutBlacksmithSockets();
 					gearChanged = true;
 				}
 

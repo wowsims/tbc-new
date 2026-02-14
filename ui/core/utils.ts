@@ -1,6 +1,7 @@
 // @ts-expect-error
 import cloneDeep from 'lodash/cloneDeep';
 import { v4 as uuidv4 } from 'uuid';
+import { Phase } from './constants/other';
 
 export const randomUUID = () => uuidv4();
 
@@ -411,3 +412,8 @@ export const findInputItemForEnum = <T extends Record<string, string | number>, 
 		return normalizeName(item.name) === formatName(targetEnumKey);
 	});
 };
+
+export const phasesEnumToNumber = () =>
+	Object.keys(Phase)
+		.filter(key => !isNaN(Number(key)))
+		.map(key => Number(key));

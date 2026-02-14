@@ -71,6 +71,10 @@ func (war *Warrior) registerTacticalMastery() {
 }
 
 func (war *Warrior) registerDefiance() {
+	if war.Talents.Defiance == 0 {
+		return
+	}
+
 	war.AddStat(stats.ExpertiseRating, 2*float64(war.Talents.Defiance)*core.ExpertisePerQuarterPercentReduction)
 
 	war.OnSpellRegistered(func(spell *core.Spell) {
@@ -88,6 +92,10 @@ func (war *Warrior) registerDefiance() {
 }
 
 func (war *Warrior) registerAnticipation() {
+	if war.Talents.Anticipation == 0 {
+		return
+	}
+
 	war.AddStat(stats.DefenseRating, 4*float64(war.Talents.Anticipation)*core.DefenseRatingPerDefenseLevel)
 
 	war.OnSpellRegistered(func(spell *core.Spell) {
@@ -105,6 +113,10 @@ func (war *Warrior) registerAnticipation() {
 }
 
 func (war *Warrior) registerShieldSpecialization() {
+	if war.Talents.ShieldSpecialization == 0 {
+		return
+	}
+
 	war.AddStat(stats.BlockPercent, 0.01*float64(war.Talents.ShieldSpecialization))
 
 	rageMetrics := war.NewRageMetrics(core.ActionID{SpellID: 23602})
@@ -122,6 +134,10 @@ func (war *Warrior) registerShieldSpecialization() {
 }
 
 func (war *Warrior) registerToughness() {
+	if war.Talents.Toughness == 0 {
+		return
+	}
+
 	war.MultiplyStat(stats.Armor, 1+0.02*float64(war.Talents.Toughness))
 }
 
@@ -149,7 +165,8 @@ func (war *Warrior) registerLastStand() {
 	})
 
 	spell := war.RegisterSpell(core.SpellConfig{
-		ActionID: actionID,
+		ActionID:       actionID,
+		ClassSpellMask: SpellMaskLastStand,
 
 		Cast: core.CastConfig{
 			CD: core.Cooldown{
@@ -161,11 +178,17 @@ func (war *Warrior) registerLastStand() {
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
 			aura.Activate(sim)
 		},
+
+		RelatedSelfBuff: aura,
 	})
 
 	war.AddMajorCooldown(core.MajorCooldown{
 		Spell: spell,
 		Type:  core.CooldownTypeSurvival,
+		BuffAura: &core.StatBuffAura{
+			Aura:            aura,
+			BuffedStatTypes: []stats.Stat{stats.Health},
+		},
 	})
 }
 
@@ -289,12 +312,17 @@ func (war *Warrior) registerImprovedDefensiveStance() {
 }
 
 func (war *Warrior) registerShieldSlam() {
+	if !war.Talents.ShieldSlam {
+		return
+	}
+
 	war.RegisterSpell(core.SpellConfig{
-		ActionID:    core.ActionID{SpellID: 23922},
-		SpellSchool: core.SpellSchoolPhysical,
-		ProcMask:    core.ProcMaskMeleeMHSpecial,
-		Flags:       core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
-		MaxRange:    core.MaxMeleeRange,
+		ActionID:       core.ActionID{SpellID: 23922},
+		ClassSpellMask: SpellMaskShieldSlam,
+		SpellSchool:    core.SpellSchoolPhysical,
+		ProcMask:       core.ProcMaskMeleeMHSpecial,
+		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
+		MaxRange:       core.MaxMeleeRange,
 
 		RageCost: core.RageCostOptions{
 			Cost:   20,
@@ -315,6 +343,7 @@ func (war *Warrior) registerShieldSlam() {
 		},
 
 		DamageMultiplier: 1,
+		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
 		ThreatMultiplier: 1,
 		FlatThreatBonus:  305,
 
@@ -351,12 +380,17 @@ func (war *Warrior) registerVitality() {
 }
 
 func (war *Warrior) registerDevastate() {
+	if !war.Talents.Devastate {
+		return
+	}
+
 	war.RegisterSpell(core.SpellConfig{
-		ActionID:    core.ActionID{SpellID: 20243},
-		SpellSchool: core.SpellSchoolPhysical,
-		ProcMask:    core.ProcMaskMeleeMHSpecial,
-		Flags:       core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
-		MaxRange:    core.MaxMeleeRange,
+		ActionID:       core.ActionID{SpellID: 20243},
+		ClassSpellMask: SpellMaskDevastate,
+		SpellSchool:    core.SpellSchoolPhysical,
+		ProcMask:       core.ProcMaskMeleeMHSpecial,
+		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
+		MaxRange:       core.MaxMeleeRange,
 
 		RageCost: core.RageCostOptions{
 			Cost:   15,
@@ -377,6 +411,7 @@ func (war *Warrior) registerDevastate() {
 		},
 
 		DamageMultiplier: 1,
+		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
 		ThreatMultiplier: 1,
 		FlatThreatBonus:  301.5 + 100,
 

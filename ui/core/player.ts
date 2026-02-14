@@ -1,3 +1,4 @@
+import { CharacterStats } from './components/character_stats';
 import { ItemSwapSettings } from './components/item_swap_picker';
 import Toast from './components/toast';
 import * as Mechanics from './constants/mechanics';
@@ -187,6 +188,7 @@ export interface MeleeCritCapInfo {
 	expertise: number;
 	suppression: number;
 	glancing: number;
+	debuffCrit: number;
 	hasOffhandWeapon: boolean;
 	meleeHitCap: number;
 	expertiseCap: number;
@@ -629,9 +631,6 @@ export class Player<SpecType extends Spec> {
 	hasProfession(prof: Profession): boolean {
 		return this.getProfessions().includes(prof);
 	}
-	isBlacksmithing(): boolean {
-		return this.hasProfession(Profession.Blacksmithing);
-	}
 
 	getFaction(): Faction {
 		return raceToFaction[this.getRace()];
@@ -663,12 +662,8 @@ export class Player<SpecType extends Spec> {
 		this.consumesChangeEmitter.emit(eventID);
 	}
 
-	canDualWield2H(): boolean {
-		return false;
-	}
-
 	equipItem(eventID: EventID, slot: ItemSlot, newItem: EquippedItem | null) {
-		this.setGear(eventID, this.gear.withEquippedItem(slot, newItem, this.canDualWield2H()));
+		this.setGear(eventID, this.gear.withEquippedItem(slot, newItem));
 	}
 
 	getEquippedItem(slot: ItemSlot): EquippedItem | null {
@@ -708,18 +703,25 @@ export class Player<SpecType extends Spec> {
 	}
 
 	getMeleeCritCapInfo(): MeleeCritCapInfo {
-		const meleeCrit = this.currentStats.finalStats?.pseudoStats[PseudoStat.PseudoStatMeleeCritPercent] || 0.0;
-		const meleeHit = this.currentStats.finalStats?.pseudoStats[PseudoStat.PseudoStatMeleeHitPercent] || 0.0;
-		const expertise = (this.currentStats.finalStats?.stats[Stat.StatExpertiseRating] || 0.0) / Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION / 4;
-		//const agility = (this.currentStats.finalStats?.stats[Stat.StatAgility] || 0.0) / this.getClass();
-		const suppression = 4.8;
-		const glancing = 24.0;
+		const debuffStats = CharacterStats.getDebuffStats(this);
+		const debuffHit = debuffStats.getPseudoStat(PseudoStat.PseudoStatMeleeHitPercent) || 0;
+		const debuffCrit = debuffStats.getPseudoStat(PseudoStat.PseudoStatMeleeCritPercent) || 0;
+
+		const meleeCrit = (this.currentStats.finalStats?.pseudoStats[PseudoStat.PseudoStatMeleeCritPercent] || 0) + debuffCrit;
+		const meleeHit = (this.currentStats.finalStats?.pseudoStats[PseudoStat.PseudoStatMeleeHitPercent] || 0) + debuffHit;
+		const expertise = (this.currentStats.finalStats?.stats[Stat.StatExpertiseRating] || 0) / Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION / 4;
+		const critSuppression = [0, 1, 2, 4.8][this.sim.encounter.primaryTarget.level - Mechanics.CHARACTER_LEVEL];
+		const hitSuppression = [0, 0, 0, 1][this.sim.encounter.primaryTarget.level - Mechanics.CHARACTER_LEVEL];
+		const glancing = [6, 12, 18, 24][this.sim.encounter.primaryTarget.level - Mechanics.CHARACTER_LEVEL];
+		const oneHandHitCap = [5, 6, 7, 8][this.sim.encounter.primaryTarget.level - Mechanics.CHARACTER_LEVEL] + hitSuppression;
+		// DW Penalty is a fixed 19%
+		const dualWieldHitCap = oneHandHitCap + 19;
 
 		const hasOffhandWeapon = this.getGear().getEquippedItem(ItemSlot.ItemSlotOffHand)?.item.weaponSpeed !== undefined;
 		// Due to warrior HS bug, hit cap for crit cap calculation should be 8% instead of 27%
-		const meleeHitCap = hasOffhandWeapon && this.getClass() != Class.ClassWarrior ? 27.0 : 8.0;
-		const dodgeCap = 6.5;
-		const parryCap = this.getInFrontOfTarget() ? 14.0 : 0;
+		const meleeHitCap = hasOffhandWeapon && this.getClass() != Class.ClassWarrior ? dualWieldHitCap : oneHandHitCap;
+		const dodgeCap = [5, 5.5, 6, 6.5][this.sim.encounter.primaryTarget.level - Mechanics.CHARACTER_LEVEL];
+		const parryCap = this.getInFrontOfTarget() ? [5, 5.5, 6, 14][this.sim.encounter.primaryTarget.level - Mechanics.CHARACTER_LEVEL] : 0;
 		const expertiseCap = dodgeCap + parryCap;
 
 		const remainingMeleeHitCap = Math.max(meleeHitCap - meleeHit, 0.0);
@@ -727,24 +729,24 @@ export class Player<SpecType extends Spec> {
 		const remainingParryCap = Math.max(parryCap - expertise, 0.0);
 		const remainingExpertiseCap = remainingDodgeCap + remainingParryCap;
 
-		const specSpecificOffset = 0.0;
+		let specSpecificOffset = 0.0;
+		if (this.getSpec() === Spec.SpecEnhancementShaman) {
+			const player = this as unknown as Player<Spec.SpecEnhancementShaman>;
+			// Elemental Devastation uptime is near 100%
+			const ranks = player.getTalents().elementalDevastation;
+			specSpecificOffset = 3.0 * ranks;
+		}
 
-		// if (this.getSpec() === Spec.SpecEnhancementShaman) {
-		// 	// Elemental Devastation uptime is near 100%
-		// 	// TODO: Cata - Check this
-		// 	const ranks = (this as unknown as Player<Spec.SpecEnhancementShaman>).getTalents().elementalDevastation;
-		// 	specSpecificOffset = 3.0 * ranks;
-		// }
-
-		const baseCritCap = 100.0 - glancing + suppression - remainingMeleeHitCap - remainingExpertiseCap - specSpecificOffset;
+		const baseCritCap = 100.0 - glancing + critSuppression - remainingMeleeHitCap - remainingExpertiseCap - specSpecificOffset;
 		const playerCritCapDelta = meleeCrit - baseCritCap;
 
 		return {
 			meleeCrit,
 			meleeHit,
 			expertise,
-			suppression,
+			suppression: critSuppression,
 			glancing,
+			debuffCrit,
 			hasOffhandWeapon,
 			meleeHitCap,
 			expertiseCap,
@@ -1086,8 +1088,7 @@ export class Player<SpecType extends Spec> {
 	}
 
 	async setWowheadData(equippedItem: EquippedItem, elem: HTMLElement) {
-		const isBlacksmithing = this.hasProfession(Profession.Blacksmithing);
-		const gemIds = equippedItem.gems.length ? equippedItem.curGems(isBlacksmithing).map(gem => (gem ? gem.id : 0)) : [];
+		const gemIds = equippedItem.gems.length ? equippedItem.curGems().map(gem => (gem ? gem.id : 0)) : [];
 		const enchantIds = [equippedItem.enchant?.effectId].filter((id): id is number => id !== undefined);
 		equippedItem.asActionId().setWowheadDataset(elem, {
 			gemIds,
@@ -1098,7 +1099,6 @@ export class Player<SpecType extends Spec> {
 				.asArray()
 				.filter(ei => ei != null)
 				.map(ei => ei!.item.id),
-			hasExtraSocket: equippedItem.hasExtraSocket(isBlacksmithing),
 		});
 
 		elem.dataset.whtticon = 'false';

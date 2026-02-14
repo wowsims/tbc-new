@@ -65,13 +65,17 @@ export const P1_FURY_EP_PRESET = PresetUtils.makePresetEpWeights(
 	Stats.fromMap(
 		{
 			[Stat.StatStrength]: 1.0,
-			[Stat.StatAgility]: 0.06,
+			[Stat.StatAgility]: 0.65,
 			[Stat.StatAttackPower]: 0.45,
-			[Stat.StatExpertiseRating]: 1.19,
+			[Stat.StatMeleeHitRating]: 0.55,
+			[Stat.StatMeleeCritRating]: 0.88,
+			[Stat.StatMeleeHasteRating]: 0.85,
+			[Stat.StatArmorPenetration]: 0.15,
+			[Stat.StatExpertiseRating]: 0.89,
 		},
 		{
-			[PseudoStat.PseudoStatMainHandDps]: 2.15,
-			[PseudoStat.PseudoStatOffHandDps]: 1.31,
+			[PseudoStat.PseudoStatMainHandDps]: 2.72,
+			[PseudoStat.PseudoStatOffHandDps]: 1.55,
 		},
 	),
 	FURY_PRESET_OPTIONS,
@@ -82,16 +86,19 @@ export const P1_ARMS_EP_PRESET = PresetUtils.makePresetEpWeights(
 	Stats.fromMap(
 		{
 			[Stat.StatStrength]: 1.0,
-			[Stat.StatAgility]: 0.06,
+			[Stat.StatAgility]: 0.65,
 			[Stat.StatAttackPower]: 0.45,
-			[Stat.StatExpertiseRating]: 1.19,
+			[Stat.StatMeleeHitRating]: 0.55,
+			[Stat.StatMeleeCritRating]: 0.88,
+			[Stat.StatMeleeHasteRating]: 0.85,
+			[Stat.StatArmorPenetration]: 0.15,
+			[Stat.StatExpertiseRating]: 0.89,
 		},
 		{
-			[PseudoStat.PseudoStatMainHandDps]: 2.15,
-			[PseudoStat.PseudoStatOffHandDps]: 1.31,
+			[PseudoStat.PseudoStatMainHandDps]: 2.72,
 		},
 	),
-	FURY_PRESET_OPTIONS,
+	ARMS_PRESET_OPTIONS,
 );
 
 // Default talents. Uses the wowhead calculator format, make the talents on
@@ -117,7 +124,7 @@ export const DefaultOptions = WarriorOptions.create({
 	classOptions: {
 		queueDelay: 250,
 		startingRage: 0,
-		defaultShout: WarriorShout.WarriorShoutCommanding,
+		defaultShout: WarriorShout.WarriorShoutBattle,
 		defaultStance: WarriorStance.WarriorStanceBerserker,
 	},
 });

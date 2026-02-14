@@ -30,7 +30,7 @@ export class DpsWarrior extends PlayerSpec<Spec.SpecDpsWarrior> {
 	readonly canDualWield = DpsWarrior.canDualWield;
 
 	static getIcon = (size: IconSize): string => {
-		return `https://wow.zamimg.com/images/wow/icons/${size}/ability_warrior_savageblow.jpg`;
+		return `https://wow.zamimg.com/images/wow/icons/${size}/ability_warrior_innerrage.jpg`;
 	};
 
 	getIcon = (size: IconSize): string => {

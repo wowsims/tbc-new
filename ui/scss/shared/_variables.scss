@@ -155,6 +155,7 @@ $damage-hit: green;
 $damage-crit: blue;
 $damage-partial: yellow;
 $damage-miss: red;
+$damage-cancel: #e68066;
 $damage-dps: #ed5653;
 $damage-threat: #b56d07;
 
@@ -165,6 +166,7 @@ $damage-colors: (
 	crit: $damage-crit,
 	partial: $damage-partial,
 	miss: $damage-miss,
+	cancel: $damage-cancel,
 );
 $theme-colors: map-merge($theme-colors, $damage-colors);
 

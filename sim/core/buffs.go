@@ -170,7 +170,7 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 	}
 
 	if partyBuffs.FerociousInspiration > 0 {
-		FerociousInspiration(char, partyBuffs.FerociousInspiration)
+		MakePermanent(FerociousInspiration(char, partyBuffs.FerociousInspiration))
 	}
 
 	if partyBuffs.GraceOfAirTotem != proto.TristateEffect_TristateEffectMissing {
@@ -423,11 +423,11 @@ var CommandingShoutCategory = "CommandingShout"
 
 func CommandingShoutAura(char *Character, isPlayer bool, boomingVoicePoints int32, commandingPresenceMultiplier float64, hasT6Tank2P bool) *Aura {
 	baseHpBuff := 1080.0
-	hpBuff := baseHpBuff
 	if hasT6Tank2P {
-		hpBuff += 170
+		baseHpBuff += 170
 	}
-	nonPlayerHpBuff := hpBuff * commandingPresenceMultiplier
+
+	nonPlayerHpBuff := baseHpBuff * commandingPresenceMultiplier
 
 	var ee *ExclusiveEffect
 	aura := char.GetOrRegisterAura(Aura{
@@ -737,7 +737,7 @@ func BraidedEterniumChainAura(char *Character) *Aura {
 		Label:    "Braided Eternium Chain",
 		ActionID: ActionID{SpellID: 31025},
 		Stats: []StatConfig{
-			{stats.AllPhysCritRating, 28, false},
+			{stats.MeleeCritRating, 28, false},
 		},
 	})
 }
@@ -1264,7 +1264,7 @@ func registerBloodlustCD(character *Character) {
 
 	spell := character.RegisterSpell(SpellConfig{
 		ActionID: bloodlustAura.ActionID,
-		Flags:    SpellFlagNoOnCastComplete | SpellFlagNoMetrics | SpellFlagNoLogs,
+		Flags:    SpellFlagAPL | SpellFlagNoOnCastComplete | SpellFlagNoMetrics | SpellFlagNoLogs,
 
 		Cast: CastConfig{
 			CD: Cooldown{
@@ -1278,6 +1278,8 @@ func registerBloodlustCD(character *Character) {
 				bloodlustAura.Activate(sim)
 			}
 		},
+
+		RelatedSelfBuff: bloodlustAura,
 	})
 
 	character.AddMajorCooldown(MajorCooldown{

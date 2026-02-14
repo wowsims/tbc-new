@@ -12,26 +12,6 @@ func InferPhase(item *proto.UIItem) int32 {
 	ilvl := item.ScalingOptions[int32(0)].Ilvl
 	name := item.Name
 
-	// PvP Sets
-	if item.Quality == proto.ItemQuality_ItemQualityEpic && ilvl > 115 {
-		switch {
-		case strings.Contains(name, "Merciless Gladiator"),
-			strings.Contains(name, "Veteran's"):
-			return 2
-		case strings.Contains(name, "Vengeful Gladiator"),
-			strings.Contains(name, "Vindicator's"):
-			return 3
-		case strings.Contains(name, "Brutal Gladiator"),
-			strings.Contains(name, "Guardian's"):
-			return 5
-		case strings.Contains(name, "Gladiator's"),
-			strings.Contains(name, "Marshal's"),
-			strings.Contains(name, "General's"),
-			strings.Contains(name, "Sergeant's"):
-			return 1
-		}
-	}
-
 	// PvE Sets
 	if item.SetId > 0 {
 		if ilvl == 120 {
@@ -86,6 +66,26 @@ func InferPhase(item *proto.UIItem) int32 {
 			if ilvl <= 117 {
 				return 1
 			}
+		}
+	}
+
+	// PvP Sets
+	if item.Quality == proto.ItemQuality_ItemQualityEpic && ilvl > 115 {
+		switch {
+		case strings.Contains(name, "Merciless Gladiator"),
+			strings.Contains(name, "Veteran's"):
+			return 2
+		case strings.Contains(name, "Vengeful Gladiator"),
+			strings.Contains(name, "Vindicator's"):
+			return 3
+		case strings.Contains(name, "Brutal Gladiator"),
+			strings.Contains(name, "Guardian's"):
+			return 5
+		case strings.Contains(name, "Gladiator's"),
+			strings.Contains(name, "Marshal's"),
+			strings.Contains(name, "General's"),
+			strings.Contains(name, "Sergeant's"):
+			return 1
 		}
 	}
 

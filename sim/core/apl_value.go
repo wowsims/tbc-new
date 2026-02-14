@@ -198,18 +198,8 @@ func (rot *APLRotation) newAPLValueWithContext(config *proto.APLValue, groupVari
 		value = rot.newValueAuraIsKnown(config.GetAuraIsKnown(), config.Uuid)
 	case *proto.APLValue_AuraIsActive:
 		value = rot.newValueAuraIsActive(config.GetAuraIsActive(), config.Uuid)
-	// TODO: Deprecated - Remove in the future
-	case *proto.APLValue_AuraIsActiveWithReactionTime:
-		inputConfig := config.GetAuraIsActiveWithReactionTime()
-		inputConfig.IncludeReactionTime = true
-		value = rot.newValueAuraIsActive(inputConfig, config.Uuid)
 	case *proto.APLValue_AuraIsInactive:
 		value = rot.newValueAuraIsInactive(config.GetAuraIsInactive(), config.Uuid)
-	// TODO: Deprecated - Remove in the future
-	case *proto.APLValue_AuraIsInactiveWithReactionTime:
-		inputConfig := config.GetAuraIsInactiveWithReactionTime()
-		inputConfig.IncludeReactionTime = true
-		value = rot.newValueAuraIsInactive(inputConfig, config.Uuid)
 	case *proto.APLValue_AuraRemainingTime:
 		value = rot.newValueAuraRemainingTime(config.GetAuraRemainingTime(), config.Uuid)
 	case *proto.APLValue_AuraNumStacks:
@@ -218,27 +208,24 @@ func (rot *APLRotation) newAPLValueWithContext(config *proto.APLValue, groupVari
 		value = rot.newValueAuraInternalCooldown(config.GetAuraInternalCooldown(), config.Uuid)
 	case *proto.APLValue_AuraIcdIsReady:
 		value = rot.newValueAuraICDIsReady(config.GetAuraIcdIsReady(), config.Uuid)
-	// TODO: Deprecated - Remove in the future
-	case *proto.APLValue_AuraIcdIsReadyWithReactionTime:
-		inputConfig := config.GetAuraIcdIsReadyWithReactionTime()
-		inputConfig.IncludeReactionTime = true
-		value = rot.newValueAuraICDIsReady(inputConfig, config.Uuid)
 	case *proto.APLValue_AuraShouldRefresh:
 		value = rot.newValueAuraShouldRefresh(config.GetAuraShouldRefresh(), config.Uuid)
+	case *proto.APLValue_AuraDuration:
+		value = rot.newValueAuraDuration(config.GetAuraDuration(), config.Uuid)
 
 	// Aura sets
-	case *proto.APLValue_AllTrinketStatProcsActive:
-		value = rot.newValueAllItemStatProcsActive(config.GetAllTrinketStatProcsActive(), config.Uuid)
-	case *proto.APLValue_AnyTrinketStatProcsActive:
-		value = rot.newValueAnyTrinketStatProcsActive(config.GetAnyTrinketStatProcsActive(), config.Uuid)
-	case *proto.APLValue_AnyTrinketStatProcsAvailable:
-		value = rot.newValueAnyTrinketStatProcsAvailable(config.GetAnyTrinketStatProcsAvailable(), config.Uuid)
-	case *proto.APLValue_TrinketProcsMinRemainingTime:
-		value = rot.newValueItemProcsMinRemainingTime(config.GetTrinketProcsMinRemainingTime(), config.Uuid)
-	case *proto.APLValue_TrinketProcsMaxRemainingIcd:
-		value = rot.newValueItemsProcsMaxRemainingICD(config.GetTrinketProcsMaxRemainingIcd(), config.Uuid)
-	case *proto.APLValue_NumEquippedStatProcTrinkets:
-		value = rot.newValueNumEquippedStatProcItems(config.GetNumEquippedStatProcTrinkets(), config.Uuid)
+	case *proto.APLValue_AllItemStatProcsActive:
+		value = rot.newValueAllItemStatProcsActive(config.GetAllItemStatProcsActive(), config.Uuid)
+	case *proto.APLValue_AnyItemStatProcsActive:
+		value = rot.newValueAnyItemStatProcsActive(config.GetAnyItemStatProcsActive(), config.Uuid)
+	case *proto.APLValue_AnyItemStatProcsAvailable:
+		value = rot.newValueAnyItemStatProcsAvailable(config.GetAnyItemStatProcsAvailable(), config.Uuid)
+	case *proto.APLValue_ItemProcsMinRemainingTime:
+		value = rot.newValueItemProcsMinRemainingTime(config.GetItemProcsMinRemainingTime(), config.Uuid)
+	case *proto.APLValue_ItemProcsMaxRemainingIcd:
+		value = rot.newValueItemsProcsMaxRemainingICD(config.GetItemProcsMaxRemainingIcd(), config.Uuid)
+	case *proto.APLValue_NumEquippedStatProcItems:
+		value = rot.newValueNumEquippedStatProcItems(config.GetNumEquippedStatProcItems(), config.Uuid)
 	case *proto.APLValue_NumStatBuffCooldowns:
 		value = rot.newValueNumStatBuffCooldowns(config.GetNumStatBuffCooldowns(), config.Uuid)
 	case *proto.APLValue_AnyStatBuffCooldownsActive:
@@ -295,9 +282,15 @@ func (rot *APLRotation) newAPLValueWithContext(config *proto.APLValue, groupVari
 		// Otherwise create the placeholder as normal
 		value = rot.newValueVariablePlaceholder(config.GetVariablePlaceholder(), config.Uuid)
 
+	case *proto.APLValue_ActionGroupUsed:
+		value = rot.newValueActionGroupUsed(config.GetActionGroupUsed(), config.Uuid)
+
 	// Item Swap
 	case *proto.APLValue_ActiveItemSwapSet:
 		value = rot.newValueActiveItemSwapSet(config.GetActiveItemSwapSet(), config.Uuid)
+
+	case *proto.APLValue_MultipleCdUsages:
+		value = rot.newValueMultipleCdUsages(config.GetMultipleCdUsages(), config.Uuid)
 
 	default:
 		value = nil

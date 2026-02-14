@@ -8,10 +8,11 @@ import (
 
 func (war *Warrior) registerRend() {
 	war.Rend = war.RegisterSpell(core.SpellConfig{
-		ActionID:    core.ActionID{SpellID: 772},
-		SpellSchool: core.SpellSchoolPhysical,
-		ProcMask:    core.ProcMaskMeleeMHSpecial,
-		Flags:       core.SpellFlagNoOnCastComplete | core.SpellFlagAPL,
+		ActionID:       core.ActionID{SpellID: 772},
+		SpellSchool:    core.SpellSchoolPhysical,
+		ClassSpellMask: SpellMaskRend,
+		ProcMask:       core.ProcMaskMeleeMHSpecial,
+		Flags:          core.SpellFlagNoOnCastComplete | core.SpellFlagAPL,
 
 		RageCost: core.RageCostOptions{
 			Cost:   10,
@@ -29,6 +30,7 @@ func (war *Warrior) registerRend() {
 		},
 
 		DamageMultiplier: 1,
+		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
 		ThreatMultiplier: 1,
 
 		Dot: core.DotConfig{
@@ -38,7 +40,7 @@ func (war *Warrior) registerRend() {
 			NumberOfTicks: 7,
 			TickLength:    time.Second * 3,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.SnapshotBaseDamage = 182 + war.AutoAttacks.MH().CalculateAverageWeaponDamage(dot.Spell.MeleeAttackPower())*0.05201
+				dot.SnapshotBaseDamage = float64(182/dot.BaseTickCount) + war.AutoAttacks.MH().CalculateAverageWeaponDamage(dot.Spell.MeleeAttackPower())*0.00743
 				dot.SnapshotAttackerMultiplier = dot.Spell.AttackerDamageMultiplier(dot.Spell.Unit.AttackTables[target.UnitIndex], true)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {

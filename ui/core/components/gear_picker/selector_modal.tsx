@@ -143,8 +143,7 @@ export default class SelectorModal extends BaseModal {
 		// If a gem tab is selected but the item has no eligible sockets, default to items
 		if (
 			(selectedTab === SelectorModalTabs.Enchants && !eligibleEnchants.length) ||
-			([SelectorModalTabs.Gem1, SelectorModalTabs.Gem2, SelectorModalTabs.Gem3].includes(selectedTab) &&
-				equippedItem?.numSockets(this.player.isBlacksmithing()) === 0)
+			([SelectorModalTabs.Gem1, SelectorModalTabs.Gem2, SelectorModalTabs.Gem3].includes(selectedTab) && equippedItem?.numSockets() === 0)
 		) {
 			selectedTab = SelectorModalTabs.Items;
 		}
@@ -318,7 +317,7 @@ export default class SelectorModal extends BaseModal {
 		}
 
 		const socketBonusEP = this.player.computeStatsEP(new Stats(equippedItem.item.socketBonus)) / (equippedItem.item.gemSockets.length || 1);
-		equippedItem.curSocketColors(this.player.isBlacksmithing()).forEach((socketColor, socketIdx) => {
+		equippedItem.curSocketColors().forEach((socketColor, socketIdx) => {
 			const label = SelectorModalTabs[`Gem${socketIdx + 1}` as keyof typeof SelectorModalTabs];
 			this.addTab<Gem>({
 				id: sanitizeId(`${this.options.id}-${label}`),

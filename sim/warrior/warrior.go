@@ -31,7 +31,6 @@ const (
 	SpellMaskBattleShout int64 = 1 << iota
 	SpellMaskCommandingShout
 	SpellMaskBerserkerRage
-	SpellMaskRallyingCry
 	SpellMaskRecklessness
 	SpellMaskDeathWish
 	SpellMaskRetaliation
@@ -54,14 +53,13 @@ const (
 	SpellMaskSweepingStrikes
 	SpellMaskSweepingStrikesHit
 	SpellMaskSweepingStrikesNormalizedHit
+	SpellMaskHeroicStrike
 	SpellMaskCleave
 	SpellMaskDevastate
 	SpellMaskExecute
-	SpellMaskHeroicStrike
 	SpellMaskOverpower
 	SpellMaskRevenge
 	SpellMaskSlam
-	SpellMaskSweepingSlam
 	SpellMaskSunderArmor
 	SpellMaskThunderClap
 	SpellMaskWhirlwind
@@ -70,7 +68,6 @@ const (
 	SpellMaskShieldBash
 	SpellMaskBloodthirst
 	SpellMaskMortalStrike
-	SpellMaskWildStrike
 	SpellMaskShieldBlock
 	SpellMaskHamstring
 	SpellMaskPummel
@@ -81,7 +78,7 @@ const (
 	SpellMaskShouts             = SpellMaskCommandingShout | SpellMaskBattleShout | SpellMaskDemoralizingShout
 	SpellMaskDirectDamageSpells = SpellMaskSweepingStrikesHit | SpellMaskSweepingStrikesNormalizedHit |
 		SpellMaskCleave | SpellMaskExecute | SpellMaskHeroicStrike | SpellMaskOverpower |
-		SpellMaskRevenge | SpellMaskSlam | SpellMaskSweepingSlam | SpellMaskShieldBash | SpellMaskSunderArmor |
+		SpellMaskRevenge | SpellMaskSlam | SpellMaskShieldBash | SpellMaskSunderArmor |
 		SpellMaskThunderClap | SpellMaskWhirlwind | SpellMaskWhirlwindOh | SpellMaskShieldSlam |
 		SpellMaskBloodthirst | SpellMaskMortalStrike | SpellMaskIntercept | SpellMaskDevastate | SpellMaskRetaliationHit
 
@@ -100,8 +97,9 @@ type Warrior struct {
 	WarriorInputs
 
 	// Current state
-	Stance         Stance
-	ChargeRageGain float64
+	Stance                Stance
+	ChargeRageGain        float64
+	BerserkerRageRageGain float64
 
 	BattleShout       *core.Spell
 	CommandingShout   *core.Spell
@@ -110,9 +108,10 @@ type Warrior struct {
 	DefensiveStance   *core.Spell
 	BerserkerStance   *core.Spell
 
-	Rend         *core.Spell
-	DeepWounds   *core.Spell
-	MortalStrike *core.Spell
+	Rend                            *core.Spell
+	DeepWounds                      *core.Spell
+	MortalStrike                    *core.Spell
+	SweepingStrikesNormalizedAttack *core.Spell
 
 	HeroicStrike       *core.Spell
 	Cleave             *core.Spell
@@ -125,8 +124,7 @@ type Warrior struct {
 
 	EnrageAura *core.Aura
 
-	SkullBannerAura         *core.Aura
-	DemoralizingBannerAuras core.AuraArray
+	SweepingStrikesAura *core.Aura
 
 	DemoralizingShoutAuras core.AuraArray
 	SunderArmorAuras       core.AuraArray
@@ -151,6 +149,7 @@ func (warrior *Warrior) Initialize() {
 	warrior.registerShieldWall()
 	warrior.registerRetaliation()
 
+	warrior.registerBerserkerRage()
 	warrior.registerBloodrage()
 	warrior.registerCharge()
 	warrior.registerIntercept()
@@ -178,8 +177,17 @@ func (warrior *Warrior) Reset(_ *core.Simulation) {
 	warrior.curQueueAura = nil
 	warrior.curQueuedAutoSpell = nil
 
-	warrior.Stance = StanceNone
-	warrior.ChargeRageGain = 15.0
+	warrior.ChargeRageGain = 15
+	warrior.BerserkerRageRageGain = 0
+
+	switch warrior.DefaultStance {
+	case proto.WarriorStance_WarriorStanceBattle:
+		warrior.Stance = BattleStance
+	case proto.WarriorStance_WarriorStanceDefensive:
+		warrior.Stance = DefensiveStance
+	case proto.WarriorStance_WarriorStanceBerserker:
+		warrior.Stance = BerserkerStance
+	}
 }
 
 func (warrior *Warrior) OnEncounterStart(sim *core.Simulation) {}
@@ -225,7 +233,8 @@ func NewWarrior(character *core.Character, options *proto.WarriorOptions, talent
 
 	warrior.sharedShoutsCD = warrior.NewTimer()
 	warrior.sharedMCD = warrior.NewTimer()
-	warrior.ChargeRageGain = 15.0
+	warrior.ChargeRageGain = 15
+	warrior.BerserkerRageRageGain = 0
 	// The sim often re-enables heroic strike in an unrealistic amount of time.
 	// This can cause an unrealistic immediate double-hit around wild strikes procs
 	warrior.queuedRealismICD = &core.Cooldown{
@@ -234,6 +243,18 @@ func NewWarrior(character *core.Character, options *proto.WarriorOptions, talent
 	}
 
 	return warrior
+}
+
+func (warrior *Warrior) CastNormalizedSweepingStrikesAttack(results core.SpellResultSlice, sim *core.Simulation) {
+	if warrior.SweepingStrikesAura != nil && warrior.SweepingStrikesAura.IsActive() {
+		for _, result := range results {
+			if result.Landed() {
+				warrior.SweepingStrikesNormalizedAttack.Cast(sim, warrior.Env.NextActiveTargetUnit(result.Target))
+				warrior.SweepingStrikesAura.RemoveStack(sim)
+				break
+			}
+		}
+	}
 }
 
 // Agent is a generic way to access underlying warrior on any of the agents.

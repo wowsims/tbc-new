@@ -42,6 +42,7 @@ type Item struct {
 	UpgradeID              int
 	UpgradePath            []int
 	LimitCategory          int
+	Bonding                int
 }
 
 func (item *Item) ToUIItem() *proto.UIItem {
@@ -118,7 +119,7 @@ func (item *Item) GetStats(itemLevel int) *stats.Stats {
 		}
 		stats[stat] = item.GetScaledStat(i, itemLevel)
 		if stat == proto.Stat_StatArmorPenetration {
-			stats[stat] = -stats[stat]
+			stats[stat] = math.Abs(stats[stat])
 		}
 	}
 
@@ -205,7 +206,7 @@ func (item *Item) GetGemBonus() stats.Stats {
 			// effectStat is the SpellID
 			effectAuras := GetDBC().SpellEffects[effectStat]
 			for _, effectAura := range effectAuras {
-				stat := ConvertEffectAuraToStatIndex(int(effectAura.EffectAura), effectAura.EffectMiscValues[0])
+				stat := ConvertEffectAuraToStatIndex(effectAura.EffectAura, effectAura.EffectMiscValues[0])
 				if stat > 0 {
 					stats[stat] = float64(effectAura.EffectBasePoints + 1)
 				}
@@ -349,13 +350,13 @@ func (item *Item) GetRandomSuffixType() int {
 			ITEM_SUBCLASS_WEAPON_MACE2,
 			ITEM_SUBCLASS_WEAPON_POLEARM,
 			ITEM_SUBCLASS_WEAPON_SWORD2,
-			ITEM_SUBCLASS_WEAPON_STAFF,
+			ITEM_SUBCLASS_WEAPON_STAFF:
+			return 0
+
+		case ITEM_SUBCLASS_WEAPON_THROWN,
 			ITEM_SUBCLASS_WEAPON_GUN,
 			ITEM_SUBCLASS_WEAPON_BOW,
 			ITEM_SUBCLASS_WEAPON_CROSSBOW:
-			return 0
-
-		case ITEM_SUBCLASS_WEAPON_THROWN:
 			return 4
 
 		default:

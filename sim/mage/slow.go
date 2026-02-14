@@ -11,7 +11,7 @@ func (mage *Mage) registerSlowSpell() {
 		ActionID:       core.ActionID{SpellID: 31589},
 		ClassSpellMask: MageSpellSlow,
 		SpellSchool:    core.SpellSchoolArcane,
-		Flags:          core.SpellFlagAPL,
+		Flags:          core.SpellFlagAPL | core.SpellFlagBinary,
 
 		ManaCost: core.ManaCostOptions{
 			BaseCostPercent: 20,

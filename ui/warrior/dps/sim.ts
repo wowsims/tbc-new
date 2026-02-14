@@ -1,11 +1,14 @@
 import * as OtherInputs from '../../core/components/inputs/other_inputs';
+import { ReforgeOptimizer } from '../../core/components/suggest_reforges_action';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui';
 import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
 import { APLRotation } from '../../core/proto/apl';
 import { Faction, IndividualBuffs, ItemSlot, PseudoStat, Race, Spec, Stat } from '../../core/proto/common';
-import { DEFAULT_MELEE_GEM_STATS, UnitStat } from '../../core/proto_utils/stats';
+import { StatCapType } from '../../core/proto/ui';
+import { DEFAULT_MELEE_GEM_STATS, StatCap, Stats, UnitStat } from '../../core/proto_utils/stats';
 
+import * as Mechanics from '../../core/constants/mechanics';
 import * as WarriorInputs from '../inputs';
 import * as WarriorPresets from '../presets';
 import * as Presets from './presets';
@@ -17,20 +20,25 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecDpsWarrior, {
 	knownIssues: [],
 
 	// All stats for which EP should be calculated.
-	epStats: [Stat.StatStrength, Stat.StatAgility, Stat.StatAttackPower, Stat.StatExpertiseRating, Stat.StatMeleeHasteRating, Stat.StatMeleeCritRating],
+	epStats: [
+		Stat.StatStrength,
+		Stat.StatAgility,
+		Stat.StatAttackPower,
+		Stat.StatArmorPenetration,
+		Stat.StatMeleeHitRating,
+		Stat.StatMeleeHasteRating,
+		Stat.StatMeleeCritRating,
+		Stat.StatArmorPenetration,
+		Stat.StatExpertiseRating,
+	],
 	epPseudoStats: [PseudoStat.PseudoStatMainHandDps, PseudoStat.PseudoStatOffHandDps],
 	// Reference stat against which to calculate EP. I think all classes use either spell power or attack power.
 	epReferenceStat: Stat.StatStrength,
 	gemStats: DEFAULT_MELEE_GEM_STATS,
 	// Which stats to display in the Character Stats section, at the bottom of the left-hand sidebar.
 	displayStats: UnitStat.createDisplayStatArray(
-		[Stat.StatHealth, Stat.StatStamina, Stat.StatStrength, Stat.StatAgility, Stat.StatAttackPower, Stat.StatExpertiseRating],
-		[
-			PseudoStat.PseudoStatMeleeHitPercent,
-			PseudoStat.PseudoStatMeleeHitPercent,
-			PseudoStat.PseudoStatMeleeCritPercent,
-			PseudoStat.PseudoStatMeleeHastePercent,
-		],
+		[Stat.StatHealth, Stat.StatStamina, Stat.StatStrength, Stat.StatAgility, Stat.StatAttackPower, Stat.StatExpertiseRating, Stat.StatArmorPenetration],
+		[PseudoStat.PseudoStatMeleeHitPercent, PseudoStat.PseudoStatMeleeCritPercent, PseudoStat.PseudoStatMeleeHastePercent],
 	),
 
 	defaults: {
@@ -38,6 +46,19 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecDpsWarrior, {
 		gear: Presets.P1_BIS_FURY_PRESET.gear,
 		// Default EP weights for sorting gear in the gear picker.
 		epWeights: Presets.P1_FURY_EP_PRESET.epWeights,
+		statCaps: (() => {
+			const expCap = new Stats().withStat(Stat.StatExpertiseRating, 6.5 * 4 * Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION);
+			return expCap;
+		})(),
+		softCapBreakpoints: (() => {
+			const meleeHitSoftCapConfig = StatCap.fromPseudoStat(PseudoStat.PseudoStatMeleeHitPercent, {
+				breakpoints: [9, 28],
+				capType: StatCapType.TypeSoftCap,
+				postCapEPs: [0, 0],
+			});
+
+			return [meleeHitSoftCapConfig];
+		})(),
 		other: Presets.OtherDefaults,
 		// Default consumes settings.
 		consumables: Presets.DefaultConsumables,
@@ -116,5 +137,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecDpsWarrior, {
 export class DpsWarriorSimUI extends IndividualSimUI<Spec.SpecDpsWarrior> {
 	constructor(parentElem: HTMLElement, player: Player<Spec.SpecDpsWarrior>) {
 		super(parentElem, player, SPEC_CONFIG);
+
+		this.reforger = new ReforgeOptimizer(this);
 	}
 }

@@ -107,6 +107,9 @@
         "filter": {
           "type": "string"
         },
+        "elapsed_time": {
+          "type": "string"
+        },
         "phases": {
           "type": "object",
           "properties": {
@@ -931,6 +934,7 @@
         "name",
         "search",
         "filter",
+        "elapsed_time",
         "phases",
         "tanks",
         "status",
@@ -1549,8 +1553,8 @@
             "stamina"
           ]
         },
-		"party_buffs": {
-			"type": "object",
+        "party_buffs": {
+          "type": "object",
           "properties": {
             "title": {
               "type": "string"
@@ -1560,46 +1564,6 @@
             },
             "description": {
               "type": "string"
-            },
-            "misc": {
-              "type": "object",
-              "properties": {
-                "label": {
-                  "type": "string"
-                },
-                "tooltip": {
-                  "type": "string"
-                }
-              },
-              "additionalProperties": false,
-              "required": [
-                "label",
-                "tooltip"
-              ]
-            },
-            "stats": {
-              "type": "string"
-            },
-            "attack_power": {
-              "type": "string"
-            },
-            "attack_speed": {
-              "type": "string"
-            },
-            "spell_power": {
-              "type": "string"
-            },
-            "spell_haste": {
-              "type": "string"
-            },
-            "crit_percent": {
-              "type": "string"
-            },
-            "mastery": {
-              "type": "string"
-            },
-            "stamina": {
-              "type": "string"
             }
           },
           "additionalProperties": false,
@@ -1608,7 +1572,7 @@
             "tooltip",
             "description"
           ]
-		},
+        },
         "external_damage_cooldowns": {
           "type": "object",
           "properties": {
@@ -3175,6 +3139,7 @@
       "required": [
         "title",
         "raid_buffs",
+        "party_buffs",
         "external_damage_cooldowns",
         "external_defensive_cooldowns",
         "debuffs",
@@ -3403,22 +3368,6 @@
             "default_gems": {
               "type": "string"
             },
-            "inherit_upgrades": {
-              "type": "object",
-              "properties": {
-                "label": {
-                  "type": "string"
-                },
-                "tooltip": {
-                  "type": "string"
-                }
-              },
-              "additionalProperties": false,
-              "required": [
-                "label",
-                "tooltip"
-              ]
-            },
             "freeze_ring": {
               "type": "object",
               "properties": {
@@ -3458,7 +3407,6 @@
             "combination_singular",
             "iterations",
             "default_gems",
-            "inherit_upgrades",
             "freeze_ring",
             "freeze_trinket"
           ]
@@ -5816,7 +5764,23 @@
                     "full_description"
                   ]
                 },
-                "all_trinket_stat_procs_active": {
+                "aura_duration": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    },
+                    "tooltip": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "label",
+                    "tooltip"
+                  ]
+                },
+                "all_item_stat_procs_active": {
                   "type": "object",
                   "properties": {
                     "label": {
@@ -5836,7 +5800,7 @@
                     "full_description"
                   ]
                 },
-                "any_trinket_stat_procs_active": {
+                "any_item_stat_procs_active": {
                   "type": "object",
                   "properties": {
                     "label": {
@@ -5856,7 +5820,7 @@
                     "full_description"
                   ]
                 },
-                "any_trinket_stat_procs_available": {
+                "any_item_stat_procs_available": {
                   "type": "object",
                   "properties": {
                     "label": {
@@ -5872,7 +5836,7 @@
                     "tooltip"
                   ]
                 },
-                "trinket_procs_min_remaining_time": {
+                "item_procs_min_remaining_time": {
                   "type": "object",
                   "properties": {
                     "label": {
@@ -5888,7 +5852,7 @@
                     "tooltip"
                   ]
                 },
-                "trinket_procs_max_remaining_icd": {
+                "item_procs_max_remaining_icd": {
                   "type": "object",
                   "properties": {
                     "label": {
@@ -5904,7 +5868,7 @@
                     "tooltip"
                   ]
                 },
-                "num_equipped_stat_proc_trinkets": {
+                "num_equipped_stat_proc_items": {
                   "type": "object",
                   "properties": {
                     "label": {
@@ -6216,55 +6180,7 @@
                     "tooltip"
                   ]
                 },
-                "warlock_haunt_in_flight": {
-                  "type": "object",
-                  "properties": {
-                    "label": {
-                      "type": "string"
-                    },
-                    "tooltip": {
-                      "type": "string"
-                    }
-                  },
-                  "additionalProperties": false,
-                  "required": [
-                    "label",
-                    "tooltip"
-                  ]
-                },
                 "affliction_current_snapshot": {
-                  "type": "object",
-                  "properties": {
-                    "label": {
-                      "type": "string"
-                    },
-                    "tooltip": {
-                      "type": "string"
-                    }
-                  },
-                  "additionalProperties": false,
-                  "required": [
-                    "label",
-                    "tooltip"
-                  ]
-                },
-                "affliction_exhale_window": {
-                  "type": "object",
-                  "properties": {
-                    "label": {
-                      "type": "string"
-                    },
-                    "tooltip": {
-                      "type": "string"
-                    }
-                  },
-                  "additionalProperties": false,
-                  "required": [
-                    "label",
-                    "tooltip"
-                  ]
-                },
-                "mage_current_combustion_dot_estimate": {
                   "type": "object",
                   "properties": {
                     "label": {
@@ -6359,6 +6275,62 @@
                     "label",
                     "tooltip"
                   ]
+                },
+                "multiple_cd_usages": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    },
+                    "tooltip": {
+                      "type": "string"
+                    },
+                    "base_spell": {
+                      "type": "string"
+                    },
+                    "base_spell_tooltip": {
+                      "type": "string"
+                    },
+                    "target_spell": {
+                      "type": "string"
+                    },
+                    "target_spell_tooltip": {
+                      "type": "string"
+                    },
+                    "align_cd_end": {
+                      "type": "string"
+                    },
+                    "align_cd_end_tooltip": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "label",
+                    "tooltip",
+                    "base_spell",
+                    "base_spell_tooltip",
+                    "target_spell",
+                    "target_spell_tooltip",
+                    "align_cd_end",
+                    "align_cd_end_tooltip"
+                  ]
+                },
+                "offset": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    },
+                    "tooltip": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "label",
+                    "tooltip"
+                  ]
                 }
               },
               "additionalProperties": false,
@@ -6437,12 +6409,13 @@
                 "aura_remaining_time",
                 "aura_num_stacks",
                 "aura_should_refresh",
-                "all_trinket_stat_procs_active",
-                "any_trinket_stat_procs_active",
-                "any_trinket_stat_procs_available",
-                "trinket_procs_min_remaining_time",
-                "trinket_procs_max_remaining_icd",
-                "num_equipped_stat_proc_trinkets",
+                "aura_duration",
+                "all_item_stat_procs_active",
+                "any_item_stat_procs_active",
+                "any_item_stat_procs_available",
+                "item_procs_min_remaining_time",
+                "item_procs_max_remaining_icd",
+                "num_equipped_stat_proc_items",
                 "num_stat_buff_cooldowns",
                 "any_stat_buff_cooldowns_active",
                 "any_stat_buff_cooldowns_min_duration",
@@ -6461,15 +6434,14 @@
                 "cat_excess_energy",
                 "cat_new_savage_roar_duration",
                 "warlock_hand_of_guldan_in_flight",
-                "warlock_haunt_in_flight",
                 "affliction_current_snapshot",
-                "affliction_exhale_window",
-                "mage_current_combustion_dot_estimate",
                 "protection_paladin_damage_taken_last_global",
                 "aura_remaining_icd",
                 "aura_icd_is_ready",
                 "aura_icd_is_ready_with_reaction_time",
-                "overlap"
+                "overlap",
+                "multiple_cd_usages",
+                "offset"
               ]
             },
             "operators": {
@@ -8245,13 +8217,25 @@
                 "hit": {
                   "type": "string"
                 },
+                "resisted_hit": {
+                  "type": "string"
+                },
                 "critical_hit": {
+                  "type": "string"
+                },
+                "resisted_critical_hit": {
                   "type": "string"
                 },
                 "tick": {
                   "type": "string"
                 },
+                "resisted_tick": {
+                  "type": "string"
+                },
                 "critical_tick": {
+                  "type": "string"
+                },
+                "resisted_critical_tick": {
                   "type": "string"
                 },
                 "glancing_blow": {
@@ -8261,6 +8245,9 @@
                   "type": "string"
                 },
                 "blocked_critical_hit": {
+                  "type": "string"
+                },
+                "crushing_blow": {
                   "type": "string"
                 },
                 "miss": {
@@ -8279,12 +8266,17 @@
               "additionalProperties": false,
               "required": [
                 "hit",
+                "resisted_hit",
                 "critical_hit",
+                "resisted_critical_hit",
                 "tick",
+                "resisted_tick",
                 "critical_tick",
+                "resisted_critical_tick",
                 "glancing_blow",
                 "blocked_hit",
                 "blocked_critical_hit",
+                "crushing_blow",
                 "miss",
                 "parry",
                 "dodge",
@@ -8942,9 +8934,6 @@
             "unspent_talent_points": {
               "type": "string"
             },
-            "dual_wield_2h_without_titans_grip": {
-              "type": "string"
-            },
             "shaman_fele_autocast": {
               "type": "string"
             }
@@ -8955,7 +8944,6 @@
             "profession_requirement",
             "too_many_jc_gems",
             "unspent_talent_points",
-            "dual_wield_2h_without_titans_grip",
             "shaman_fele_autocast"
           ]
         },
@@ -9424,16 +9412,10 @@
                 "edit_weights": {
                   "type": "string"
                 },
-                "include_gems": {
-                  "type": "string"
-                },
                 "freeze_item_slots": {
                   "type": "string"
                 },
-                "limit_execution_time": {
-                  "type": "string"
-                },
-                "limit_execution_time_tooltip": {
+                "max_gem_phase": {
                   "type": "string"
                 }
               },
@@ -9461,10 +9443,8 @@
                 "modify_in_editor",
                 "hard_cap_info",
                 "edit_weights",
-                "include_gems",
                 "freeze_item_slots",
-                "limit_execution_time",
-                "limit_execution_time_tooltip"
+                "max_gem_phase"
               ]
             }
           },
@@ -9776,6 +9756,9 @@
                 "consumes": {
                   "type": "string"
                 },
+                "debuffs": {
+                  "type": "string"
+                },
                 "bonus": {
                   "type": "string"
                 },
@@ -9811,6 +9794,7 @@
                 "talents",
                 "buffs",
                 "consumes",
+                "debuffs",
                 "bonus",
                 "total",
                 "glancing",

@@ -93,10 +93,14 @@ export class UnitStat {
 	// (Strength for example), then null is returned. Mastery is special cased to return
 	// Mastery points rather than %.
 	convertRatingToPercent(ratingValue: number): number | null {
-		if (this.linkedToStat(Stat.StatSpellCritRating)) {
+		if (this.linkedToStat(Stat.StatSpellHitRating)) {
+			return ratingValue / Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT;
+		} else if (this.linkedToStat(Stat.StatSpellCritRating)) {
 			return ratingValue / Mechanics.SPELL_CRIT_RATING_PER_CRIT_PERCENT;
 		} else if (this.linkedToStat(Stat.StatSpellHasteRating)) {
 			return ratingValue / Mechanics.SPELL_HASTE_RATING_PER_HASTE_PERCENT;
+		} else if (this.linkedToStat(Stat.StatMeleeHitRating)) {
+			return ratingValue / Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT;
 		} else if (this.linkedToStat(Stat.StatMeleeCritRating)) {
 			return ratingValue / Mechanics.PHYSICAL_CRIT_RATING_PER_CRIT_PERCENT;
 		} else if (this.linkedToStat(Stat.StatMeleeHasteRating)) {
@@ -123,10 +127,14 @@ export class UnitStat {
 	// for example), then null is returned. Mastery is special cased to assume a Mastery points input
 	// rather than a percentage.
 	convertPercentToRating(percentOrPointsValue: number): number | null {
-		if (this.linkedToStat(Stat.StatSpellCritRating)) {
+		if (this.linkedToStat(Stat.StatSpellHitRating)) {
+			return percentOrPointsValue * Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT;
+		} else if (this.linkedToStat(Stat.StatSpellCritRating)) {
 			return percentOrPointsValue * Mechanics.SPELL_CRIT_RATING_PER_CRIT_PERCENT;
 		} else if (this.linkedToStat(Stat.StatSpellHasteRating)) {
 			return percentOrPointsValue * Mechanics.SPELL_HASTE_RATING_PER_HASTE_PERCENT;
+		} else if (this.linkedToStat(Stat.StatMeleeHitRating)) {
+			return percentOrPointsValue * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT;
 		} else if (this.linkedToStat(Stat.StatMeleeCritRating)) {
 			return percentOrPointsValue * Mechanics.PHYSICAL_CRIT_RATING_PER_CRIT_PERCENT;
 		} else if (this.linkedToStat(Stat.StatMeleeHasteRating)) {
@@ -308,18 +316,12 @@ export class UnitStat {
 			return Stat.StatSpellHitRating;
 		} else if (pseudoStatName.includes('SpellCrit')) {
 			return Stat.StatSpellCritRating;
-		} else if (pseudoStatName.includes('MeleeHaste')) {
-			return Stat.StatMeleeHasteRating;
-		} else if (pseudoStatName.includes('MeleeHit')) {
-			return Stat.StatMeleeHitRating;
-		} else if (pseudoStatName.includes('MeleeCrit')) {
-			return Stat.StatMeleeCritRating;
 		} else if (pseudoStatName.includes('Haste')) {
-			return Stat.StatAllPhysHasteRating;
+			return Stat.StatMeleeHasteRating;
 		} else if (pseudoStatName.includes('Hit')) {
-			return Stat.StatAllPhysHitRating;
+			return Stat.StatMeleeHitRating;
 		} else if (pseudoStatName.includes('Crit')) {
-			return Stat.StatAllPhysCritRating;
+			return Stat.StatMeleeCritRating;
 		} else {
 			return null;
 		}
@@ -328,12 +330,6 @@ export class UnitStat {
 	// Inverse of the above
 	static getChildren(parentStat: Stat): PseudoStat[] {
 		switch (parentStat) {
-			case Stat.StatAllPhysHitRating:
-				return [PseudoStat.PseudoStatMeleeHitPercent, PseudoStat.PseudoStatRangedHitPercent];
-			case Stat.StatAllPhysCritRating:
-				return [PseudoStat.PseudoStatMeleeCritPercent, PseudoStat.PseudoStatRangedCritPercent];
-			case Stat.StatAllPhysHasteRating:
-				return [PseudoStat.PseudoStatMeleeHastePercent, PseudoStat.PseudoStatRangedHastePercent];
 			case Stat.StatMeleeHitRating:
 				return [PseudoStat.PseudoStatMeleeHitPercent, PseudoStat.PseudoStatRangedHitPercent];
 			case Stat.StatMeleeCritRating:
@@ -450,9 +446,6 @@ export class Stats {
 	}
 
 	getStat(stat: Stat): number {
-		if (stat === Stat.StatMeleeHitRating) {
-			return this.stats[stat] + this.stats[Stat.StatAllPhysHitRating];
-		}
 		return this.stats[stat];
 	}
 	getPseudoStat(stat: PseudoStat): number {
@@ -746,9 +739,9 @@ export const DEFAULT_MELEE_GEM_STATS = [
 	...DEFAULT_GEM_STATS,
 	Stat.StatStrength,
 	Stat.StatAgility,
-	Stat.StatAllPhysHitRating,
-	Stat.StatAllPhysCritRating,
-	Stat.StatAllPhysHasteRating,
+	Stat.StatMeleeHitRating,
+	Stat.StatMeleeCritRating,
+	Stat.StatMeleeHasteRating,
 ];
 export const DEFAULT_CASTER_GEM_STATS = [
 	...DEFAULT_GEM_STATS,
