@@ -319,6 +319,44 @@ export class Sim {
 		}
 	}
 
+	// Runs a lightweight version of the sim that doesn't compute combat logs
+	// or other expensive data, and returns the raw result from the sim worker.
+	async runRaidSimLightweight(onProgress: WorkerProgressCallback, _: RunSimOptions = {}): Promise<[RaidSimRequest, RaidSimResult] | ErrorOutcome> {
+		if (this.raid.isEmpty()) {
+			throw new Error('Raid is empty! Try adding some players first.');
+		} else if (this.encounter.targets.length < 1) {
+			throw new Error('Encounter has no targets! Try adding some targets first.');
+		}
+
+		const signals = this.signalManager.registerRunning(RequestTypes.RaidSim);
+		try {
+			await this.waitForInit();
+
+			const request = this.makeRaidSimRequest(false);
+
+			let result;
+			// Only use worker base concurrency when running wasm. Local sim has native threading.
+			if (await this.shouldUseWasmConcurrency()) {
+				result = await runConcurrentSim(request, this.workerPool, onProgress, signals);
+			} else {
+				result = await this.workerPool.raidSimAsync(request, onProgress, signals);
+			}
+
+			if (result.error) {
+				if (result.error.type != ErrorOutcomeType.ErrorOutcomeError) return result.error;
+				throw new SimError(result.error.message);
+			}
+
+			return [request, result];
+		} catch (error) {
+			if (error instanceof SimError) throw error;
+			console.error(error);
+			throw new Error('Something went wrong running your lightweight raid sim. Reload the page and try again.');
+		} finally {
+			this.signalManager.unregisterRunning(signals);
+		}
+	}
+
 	async runRaidSimWithLogs(eventID: EventID, options: RunSimOptions = {}): Promise<SimResult | null> {
 		if (this.raid.isEmpty()) {
 			throw new Error('Raid is empty! Try adding some players first.');

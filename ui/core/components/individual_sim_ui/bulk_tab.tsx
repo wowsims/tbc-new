@@ -261,7 +261,13 @@ export class BulkTab extends SimTab {
 	private storeSettings() {
 		const settings = this.createBulkSettings();
 		const setStr = BulkSettings.toJsonString(settings, { enumAsInteger: true });
-		window.localStorage.setItem(this.getSettingsKey(), setStr);
+		try {
+			window.localStorage.setItem(this.getSettingsKey(), setStr);
+		} catch (e) {
+			if (e && e instanceof DOMException && e.name === 'QuotaExceededError') {
+				window.localStorage.removeItem(this.getSettingsKey());
+			}
+		}
 	}
 
 	protected createBulkSettings(): BulkSettings {
@@ -781,25 +787,28 @@ export class BulkTab extends SimTab {
 						}
 					}
 
-					const result = await this.simUI.runSim(
-						(progressMetrics: ProgressMetrics) => {
-							const msSinceStart = new Date().getTime() - simStart;
-							this.setSimProgress(progressMetrics, msSinceStart / 1000, comboIdx + 1, this.combinations);
-						},
-						{ silent: true },
-					);
+					const response = await this.simUI.runSimLightweight((progressMetrics: ProgressMetrics) => {
+						const msSinceStart = new Date().getTime() - simStart;
+						this.setSimProgress(progressMetrics, msSinceStart / 1000, comboIdx + 1, this.combinations);
+					});
 
-					if (result && 'type' in result) {
-						throw new Error(result.message);
+					if (!response || (response && 'type' in response)) {
+						throw new Error(response?.message);
 					}
+
+					const [_, result] = response;
 
 					updatedGear = this.simUI.player.getGear();
 					const isOriginalGear = this.originalGear.equals(updatedGear);
-					if (!isOriginalGear)
+					if (!isOriginalGear) {
+						const dpsMetrics = result!.raidMetrics!.dps!;
+						dpsMetrics.hist = [];
+						dpsMetrics.allValues = [];
 						topGearResults.push({
 							gear: updatedGear,
-							dpsMetrics: result!.getFirstPlayer()!.dps,
+							dpsMetrics,
 						});
+					}
 
 					topGearResults.sort((a, b) => b.dpsMetrics.avg - a.dpsMetrics.avg);
 					if (topGearResults.length > 5) topGearResults.pop();
