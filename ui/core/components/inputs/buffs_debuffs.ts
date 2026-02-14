@@ -543,7 +543,7 @@ export const DEBUFFS_CONFIG = [
 	{
 		config: Misery,
 		picker: IconPicker,
-		stats: [Stat.StatSpellDamage],
+		stats: [],
 	},
 	{
 		config: ShadowWeaving,

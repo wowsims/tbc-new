@@ -46,7 +46,7 @@ function makeConsumeInputFactory<T extends number, SpecType extends Spec>(
 			values: [{ value: 0, iconUrl: '', tooltip: i18n.t('common.none') } as unknown as IconEnumValueConfig<Player<SpecType>, T>].concat(valueOptions),
 			equals: (a: T, b: T) => a == b,
 			zeroValue: 0 as T,
-			changedEvent: (player: Player<any>) => TypedEvent.onAny([player.consumesChangeEmitter, player.gearChangeEmitter, player.professionChangeEmitter]),
+			changedEvent: (player: Player<any>) => (args.changedEvent && args.changedEvent(player)) || TypedEvent.onAny([player.consumesChangeEmitter, player.gearChangeEmitter, player.professionChangeEmitter]),
 			showWhen: (player: Player<any>) => (!args.showWhen || args.showWhen(player)) && valueOptions.some(option => option.showWhen?.(player)),
 			enableWhen: args.enableWhen,
 			getValue: (player: Player<any>) => player.getConsumes()[args.consumesFieldName] as T,
@@ -184,6 +184,11 @@ export const RogueDeadlyPoison = {
 	value: 27186,
 	showWhen: (player: Player<any>) => player.getClass() == Class.ClassRogue,
 };
+export const RogueWoundPoison = {
+	actionId: ActionId.fromItemId(22055),
+	value: 27188,
+	showWhen: (player: Player<any>) => player.getClass() == Class.ClassRogue,
+}
 // Shaman Imbues
 export const ShamanImbueWindfury = {
 	actionId: ActionId.fromSpellId(25505),
@@ -216,6 +221,7 @@ export const IMBUE_CONFIG_MH = [
 	{ config: AdamantiteWeightMH, stats: [Stat.StatAttackPower] },
 	{ config: RogueInstantPoison, stats: [] },
 	{ config: RogueDeadlyPoison, stats: [] },
+	{ config: RogueWoundPoison, stats: [] },
 	{ config: ShamanImbueRockbiter, stats: [] },
 	{ config: ShamanImbueFrostbrand, stats: [] },
 	{ config: ShamanImbueFlametongue, stats: [] },
@@ -230,6 +236,7 @@ export const IMBUE_CONFIG_OH = [
 	{ config: AdamantiteWeightOH, stats: [Stat.StatAttackPower] },
 	{ config: RogueInstantPoison, stats: [] },
 	{ config: RogueDeadlyPoison, stats: [] },
+	{ config: RogueWoundPoison, stats: [] },
 	{ config: ShamanImbueRockbiter, stats: [] },
 	{ config: ShamanImbueFrostbrand, stats: [] },
 	{ config: ShamanImbueFlametongue, stats: [] },
@@ -238,8 +245,8 @@ export const IMBUE_CONFIG_OH = [
 
 export const makeMHImbueInput = makeConsumeInputFactory({
 	consumesFieldName: 'mhImbueId',
-	enableWhen: (player: Player<any>) => !player.getParty() || player.getParty()!.getBuffs().windfuryTotem == 0,
-	changedEvent: (player: Player<any>) => TypedEvent.onAny([player.getParty()?.changeEmitter || player.consumesChangeEmitter]),
+	showWhen: (player: Player<any>) => !player.getParty() || player.getParty()!.getBuffs().windfuryTotem == 0,
+	changedEvent: (player: Player<any>) => TypedEvent.onAny([player.getParty()!.changeEmitter]),
 });
 export const makeOHImbueinput = makeConsumeInputFactory({
 	consumesFieldName: 'ohImbueId',

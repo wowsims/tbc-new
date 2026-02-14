@@ -8,7 +8,6 @@ import (
 
 func (rogue *Rogue) registerSinisterStrikeSpell() {
 	baseDamage := 98.0
-	wepDamage := 1.0
 
 	rogue.SinisterStrike = rogue.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 1752},
@@ -28,7 +27,7 @@ func (rogue *Rogue) registerSinisterStrikeSpell() {
 			IgnoreHaste: true,
 		},
 
-		DamageMultiplier:         wepDamage,
+		DamageMultiplier:         1,
 		DamageMultiplierAdditive: 1,
 		CritMultiplier:           rogue.DefaultMeleeCritMultiplier(),
 		ThreatMultiplier:         1,

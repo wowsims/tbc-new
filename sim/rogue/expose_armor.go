@@ -16,6 +16,7 @@ func (rogue *Rogue) registerExposeArmorSpell() {
 		SpellSchool:    core.SpellSchoolPhysical,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
 		Flags:          core.SpellFlagMeleeMetrics | SpellFlagBuilder | core.SpellFlagAPL,
+		MetricSplits:   6,
 		ClassSpellMask: RogueSpellExposeArmor,
 
 		EnergyCost: core.EnergyCostOptions{
@@ -29,7 +30,7 @@ func (rogue *Rogue) registerExposeArmorSpell() {
 			},
 			IgnoreHaste: true,
 			ModifyCast: func(sim *core.Simulation, spell *core.Spell, cast *core.Cast) {
-				//spell.SetMetricsSplit(rogue.ComboPoints())
+				spell.SetMetricsSplit(rogue.ComboPoints())
 			},
 		},
 		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
@@ -39,15 +40,17 @@ func (rogue *Rogue) registerExposeArmorSpell() {
 		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			rogue.BreakStealth(sim)
-			result := spell.CalcOutcome(sim, target, spell.OutcomeMeleeSpecialHit)
-			if result.Landed() {
-				rogue.TryApplyExposeArmorEffect(sim, target)
-				rogue.ApplyFinisher(sim, spell)
-			} else {
-				spell.IssueRefund(sim)
+			if rogue.CanApplyExposeArmorAura(target) {
+				rogue.BreakStealth(sim)
+				result := spell.CalcOutcome(sim, target, spell.OutcomeMeleeSpecialHit)
+				if result.Landed() {
+					rogue.ExposeArmorAuras.Get(target).Activate(sim)
+					rogue.ApplyFinisher(sim, spell)
+				} else {
+					spell.IssueRefund(sim)
+				}
+				spell.DealOutcome(sim, result)
 			}
-			spell.DealOutcome(sim, result)
 		},
 
 		RelatedAuraArrays: rogue.ExposeArmorAuras.ToMap(),
@@ -55,16 +58,9 @@ func (rogue *Rogue) registerExposeArmorSpell() {
 }
 
 func (rogue *Rogue) GetExposeArmorValue() float64 {
-	return 410.0 * float64(rogue.ComboPoints())
+	return 410.0 * float64(rogue.ComboPoints()) * (1 + 0.25*float64(rogue.Talents.ImprovedExposeArmor))
 }
 
 func (rogue *Rogue) CanApplyExposeArmorAura(target *core.Unit) bool {
 	return !rogue.ExposeArmorAuras.Get(target).IsActive() || rogue.ExposeArmorAuras.Get(target).ExclusiveEffects[0].Priority <= rogue.GetExposeArmorValue()
-}
-
-func (rogue *Rogue) TryApplyExposeArmorEffect(sim *core.Simulation, target *core.Unit) {
-	if rogue.CanApplyExposeArmorAura(target) {
-		aura := rogue.ExposeArmorAuras.Get(target)
-		aura.Activate(sim)
-	}
 }

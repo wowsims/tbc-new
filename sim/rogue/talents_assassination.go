@@ -67,13 +67,14 @@ func (rogue *Rogue) registerMalice() {
 		return
 	}
 
-	rogue.AddStat(stats.AllPhysCritRating, float64(rogue.Talents.Malice)*core.PhysicalCritRatingPerCritPercent)
+	rogue.AddStat(stats.PhysicalCritPercent, float64(rogue.Talents.Malice))
 }
 
 func (rogue *Rogue) registerMurder() {
 	if rogue.Talents.Murder == 0 {
 		return
 	}
+
 	var multiplier float64 = 1.0 + (0.01 * float64(rogue.Talents.Murder))
 	rogue.Env.RegisterPostFinalizeEffect(func() {
 		for _, at := range rogue.AttackTables {
@@ -145,7 +146,7 @@ func (rogue *Rogue) registerColdBlood() {
 		Duration: core.NeverExpires,
 
 		OnSpellHitDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			if spell.ClassSpellMask&RogueSpellCanCrit != 0 {
+			if spell.Matches(RogueSpellCanCrit) {
 				aura.Deactivate(sim)
 			}
 		},
@@ -311,14 +312,20 @@ func (rogue *Rogue) newMutilateHitSpell(isMH bool) *core.Spell {
 		ThreatMultiplier:         1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			var baseDamage float64
+			baseDamage := mutBaseDamage
 			if isMH {
-				baseDamage = mutBaseDamage + spell.Unit.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower())
+				baseDamage += spell.Unit.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower())
 			} else {
-				baseDamage = mutBaseDamage + spell.Unit.OHNormalizedWeaponDamage(sim, spell.MeleeAttackPower())
+				baseDamage += spell.Unit.OHNormalizedWeaponDamage(sim, spell.MeleeAttackPower())
+			}
+
+			oldMultiplier := spell.DamageMultiplier
+			if rogue.DeadlyPoison.Dot(target).IsActive() || rogue.WoundPoisonDebuffAuras.Get(target).IsActive() {
+				spell.DamageMultiplier += 0.5
 			}
 
 			spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialBlockAndCrit)
+			spell.DamageMultiplier = oldMultiplier
 		},
 	})
 }

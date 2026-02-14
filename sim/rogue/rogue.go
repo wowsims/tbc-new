@@ -33,27 +33,30 @@ type Rogue struct {
 
 	sliceAndDiceDurations [6]time.Duration
 
-	Backstab       *core.Spell
-	BladeFlurry    *core.Spell
-	DeadlyPoison   *core.Spell
-	Feint          *core.Spell
-	Garrote        *core.Spell
-	Ambush         *core.Spell
-	Hemorrhage     *core.Spell
-	GhostlyStrike  *core.Spell
-	WoundPoison    *core.Spell
-	Mutilate       *core.Spell
-	MutilateMH     *core.Spell
-	MutilateOH     *core.Spell
-	Shiv           *core.Spell
-	SinisterStrike *core.Spell
-	Shadowstep     *core.Spell
-	Preparation    *core.Spell
-	Premeditation  *core.Spell
-	ColdBlood      *core.Spell
-	Vanish         *core.Spell
-	AdrenalineRush *core.Spell
-	Gouge          *core.Spell
+	Backstab          *core.Spell
+	BladeFlurry       *core.Spell
+	DeadlyPoison      *core.Spell
+	Feint             *core.Spell
+	Garrote           *core.Spell
+	Ambush            *core.Spell
+	Hemorrhage        *core.Spell
+	GhostlyStrike     *core.Spell
+	WoundPoison       *core.Spell
+	Mutilate          *core.Spell
+	MutilateMH        *core.Spell
+	MutilateOH        *core.Spell
+	Shiv              *core.Spell
+	SinisterStrike    *core.Spell
+	Shadowstep        *core.Spell
+	Preparation       *core.Spell
+	Premeditation     *core.Spell
+	ColdBlood         *core.Spell
+	Vanish            *core.Spell
+	AdrenalineRush    *core.Spell
+	InstantPoison     *core.Spell
+	ShivInstantPoison *core.Spell
+	ShivDeadlyPoison  *core.Spell
+	ShivWoundPoison   *core.Spell
 
 	Envenom      *core.Spell
 	Eviscerate   *core.Spell
@@ -80,7 +83,7 @@ type Rogue struct {
 
 	HasPvpEnergy              bool
 	DeathmantleBonus          float64
-	SliceAndDiceBonusDuration float64
+	SliceAndDiceBonusDuration time.Duration
 }
 
 // ApplyTalents implements core.Agent.
@@ -140,6 +143,7 @@ func (rogue *Rogue) Initialize() {
 	rogue.registerSinisterStrikeSpell()
 	rogue.registerSliceAndDice()
 	rogue.registerVanishSpell()
+	rogue.registerShivSpell()
 
 	rogue.ruthlessnessMetrics = rogue.NewComboPointMetrics(core.ActionID{SpellID: 14161})
 	rogue.relentlessStrikesMetrics = rogue.NewEnergyMetrics(core.ActionID{SpellID: 14179})
@@ -198,7 +202,7 @@ func NewRogue(character *core.Character, options *proto.Player, talents string) 
 		AutoSwingMelee: true,
 	})
 
-	//rogue.applyPoisons()
+	rogue.applyPoisons()
 
 	rogue.AddStatDependency(stats.Strength, stats.AttackPower, 1)
 	rogue.AddStatDependency(stats.Agility, stats.AttackPower, 1)

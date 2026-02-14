@@ -21,12 +21,37 @@ var PVPSet = core.NewItemSet(core.ItemSet{
 	},
 })
 
+var Dungeon3 = core.NewItemSet(core.ItemSet{
+	Name: "Assassination Armor",
+	ID:   620,
+	Bonuses: map[int32]core.ApplySetBonus{
+		2: func(agent core.Agent, setBonusAura *core.Aura) {
+			// Your Cheap Shot and Kidney Shot attacks grant you 160 haste rating for 6 sec.
+			// NYI
+		},
+		4: func(agent core.Agent, setBonusAura *core.Aura) {
+			// Your Eviscerate and Envenom abilities cost 10 less energy.
+			setBonusAura.AttachSpellMod(core.SpellModConfig{
+				Kind:      core.SpellMod_PowerCost_Flat,
+				ClassMask: RogueSpellEviscerate | RogueSpellEnvenom,
+				IntValue:  -10,
+			})
+		},
+	},
+})
+
 var Tier4 = core.NewItemSet(core.ItemSet{
 	Name: "Netherblade",
 	ID:   621,
 	Bonuses: map[int32]core.ApplySetBonus{
 		2: func(agent core.Agent, setBonusAura *core.Aura) {
-			agent.(RogueAgent).GetRogue().SliceAndDiceBonusDuration += 3
+			setBonusAura.
+				ApplyOnGain(func(aura *core.Aura, sim *core.Simulation) {
+					agent.(RogueAgent).GetRogue().SliceAndDiceBonusDuration += time.Second * 3
+				}).
+				ApplyOnExpire(func(aura *core.Aura, sim *core.Simulation) {
+					agent.(RogueAgent).GetRogue().SliceAndDiceBonusDuration -= time.Second * 3
+				})
 		},
 		4: func(agent core.Agent, setBonusAura *core.Aura) {
 			rogue := agent.(RogueAgent).GetRogue()
@@ -78,8 +103,13 @@ var Tier6 = core.NewItemSet(core.ItemSet{
 	Name: "Slayer's Armor",
 	Bonuses: map[int32]core.ApplySetBonus{
 		2: func(agent core.Agent, setBonusAura *core.Aura) {
-			rogue := agent.(RogueAgent).GetRogue()
-			rogue.SliceAndDiceBonusFlat += 0.05
+			setBonusAura.
+				ApplyOnGain(func(aura *core.Aura, sim *core.Simulation) {
+					agent.(RogueAgent).GetRogue().SliceAndDiceBonusFlat += 0.5
+				}).
+				ApplyOnExpire(func(aura *core.Aura, sim *core.Simulation) {
+					agent.(RogueAgent).GetRogue().SliceAndDiceBonusFlat -= 0.5
+				})
 		},
 		4: func(agent core.Agent, setBonusAura *core.Aura) {
 			setBonusAura.AttachSpellMod(core.SpellModConfig{

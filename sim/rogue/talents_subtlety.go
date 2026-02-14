@@ -220,8 +220,9 @@ func (rogue *Rogue) registerDirtyDeeds() {
 		FloatValue: 0.1 * float64(rogue.Talents.DirtyDeeds),
 	})
 
-	rogue.RegisterResetEffect(func(s *core.Simulation) {
-		s.RegisterExecutePhaseCallback(func(sim *core.Simulation, isExecute int32) {
+	rogue.RegisterResetEffect(func(sim *core.Simulation) {
+		ddAura.Deactivate(sim)
+		sim.RegisterExecutePhaseCallback(func(sim *core.Simulation, isExecute int32) {
 			if isExecute == 35 {
 				ddAura.Activate(sim)
 			}
@@ -266,7 +267,7 @@ func (rogue *Rogue) registerHemorrhage() {
 			// This more accurately models each individual Hemo's DPS contribution without needing to somehow consume the stacks.
 			// It's also easier for me to just leave it that way :)
 
-			baseDamage := rogue.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower()) + 420
+			baseDamage := rogue.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower())
 			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialHitAndCrit)
 			if result.Landed() {
 				rogue.AddComboPoints(sim, 1, pointMetric)

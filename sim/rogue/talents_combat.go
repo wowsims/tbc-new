@@ -16,8 +16,8 @@ func (rogue *Rogue) registerCombatTalents() {
 
 	// Tier 2
 	// Improved Slice and Dice implemented in slice_and_dice.go
-	rogue.registerDeflection()
-	// Improved Sprint NYI
+	// Deflection NYI
+	rogue.registerPrecision()
 
 	// Tier 3
 	// None in this tier implemented
@@ -82,12 +82,12 @@ func (rogue *Rogue) registerLightningReflexes() {
 	rogue.AddStat(stats.DodgeRating, float64(rogue.Talents.LightningReflexes)*core.DodgeRatingPerDodgePercent)
 }
 
-func (rogue *Rogue) registerDeflection() {
-	if rogue.Talents.Deflection == 0 {
+func (rogue *Rogue) registerPrecision() {
+	if rogue.Talents.Precision == 0 {
 		return
 	}
 
-	rogue.AddStat(stats.ParryRating, float64(rogue.Talents.Deflection)*core.ParryRatingPerParryPercent)
+	rogue.AddStat(stats.PhysicalHitPercent, float64(rogue.Talents.Precision))
 }
 
 func (rogue *Rogue) registerDaggerSpecialization() {
@@ -95,20 +95,37 @@ func (rogue *Rogue) registerDaggerSpecialization() {
 		return
 	}
 
+	mhMod := rogue.AddDynamicMod(core.SpellModConfig{
+		Kind:       core.SpellMod_BonusCrit_Percent,
+		ProcMask:   core.ProcMaskMeleeMH,
+		FloatValue: 1.0 * float64(rogue.Talents.DaggerSpecialization),
+	})
+	ohMod := rogue.AddDynamicMod(core.SpellModConfig{
+		Kind:       core.SpellMod_BonusCrit_Percent,
+		ProcMask:   core.ProcMaskMeleeOH,
+		FloatValue: 1.0 * float64(rogue.Talents.DaggerSpecialization),
+	})
+
 	if rogue.HasDagger(true) {
-		rogue.AddStaticMod(core.SpellModConfig{
-			Kind:       core.SpellMod_BonusCrit_Percent,
-			ProcMask:   core.ProcMaskMeleeMH,
-			FloatValue: 1.0 * float64(rogue.Talents.DaggerSpecialization),
-		})
+		mhMod.Activate()
 	}
 	if rogue.HasDagger(false) {
-		rogue.AddStaticMod(core.SpellModConfig{
-			Kind:       core.SpellMod_BonusCrit_Percent,
-			ProcMask:   core.ProcMaskMeleeOH,
-			FloatValue: 1.0 * float64(rogue.Talents.DaggerSpecialization),
-		})
+		ohMod.Activate()
 	}
+
+	rogue.RegisterItemSwapCallback(core.AllMeleeWeaponSlots(), func(sim *core.Simulation, slot proto.ItemSlot) {
+		if rogue.HasDagger(true) {
+			mhMod.Activate()
+		} else {
+			mhMod.Deactivate()
+		}
+
+		if rogue.HasDagger(false) {
+			ohMod.Activate()
+		} else {
+			ohMod.Deactivate()
+		}
+	})
 }
 
 func (rogue *Rogue) registerDualWieldSpecialization() {
@@ -128,20 +145,37 @@ func (rogue *Rogue) registerMaceSpecialization() {
 		return
 	}
 
+	mhMod := rogue.AddDynamicMod(core.SpellModConfig{
+		Kind:       core.SpellMod_CritMultiplier_Flat,
+		ProcMask:   core.ProcMaskMeleeMH,
+		FloatValue: 0.01 * float64(rogue.Talents.MaceSpecialization),
+	})
+	ohMod := rogue.AddDynamicMod(core.SpellModConfig{
+		Kind:       core.SpellMod_CritMultiplier_Flat,
+		ProcMask:   core.ProcMaskMeleeOH,
+		FloatValue: 0.01 * float64(rogue.Talents.MaceSpecialization),
+	})
+
 	if rogue.GetMHWeapon() != nil && rogue.GetMHWeapon().WeaponType == proto.WeaponType_WeaponTypeMace {
-		rogue.AddStaticMod(core.SpellModConfig{
-			Kind:       core.SpellMod_CritMultiplier_Flat,
-			ProcMask:   core.ProcMaskMeleeMH,
-			FloatValue: 0.01 * float64(rogue.Talents.MaceSpecialization),
-		})
+		mhMod.Activate()
 	}
 	if rogue.GetOHWeapon() != nil && rogue.GetOHWeapon().WeaponType == proto.WeaponType_WeaponTypeMace {
-		rogue.AddStaticMod(core.SpellModConfig{
-			Kind:       core.SpellMod_CritMultiplier_Flat,
-			ProcMask:   core.ProcMaskMeleeOH,
-			FloatValue: 0.01 * float64(rogue.Talents.MaceSpecialization),
-		})
+		ohMod.Activate()
 	}
+
+	rogue.RegisterItemSwapCallback(core.AllMeleeWeaponSlots(), func(sim *core.Simulation, slot proto.ItemSlot) {
+		if rogue.GetMHWeapon() != nil && rogue.GetMHWeapon().WeaponType == proto.WeaponType_WeaponTypeMace {
+			mhMod.Activate()
+		} else {
+			mhMod.Deactivate()
+		}
+
+		if rogue.GetOHWeapon() != nil && rogue.GetOHWeapon().WeaponType == proto.WeaponType_WeaponTypeMace {
+			ohMod.Activate()
+		} else {
+			ohMod.Deactivate()
+		}
+	})
 }
 
 func (rogue *Rogue) registerBladeFlurry() {
@@ -218,26 +252,25 @@ func (rogue *Rogue) registerSwordSpecialization() {
 		return
 	}
 
-	var procMask core.ProcMask
-	if rogue.GetMHWeapon() != nil && rogue.GetMHWeapon().WeaponType == proto.WeaponType_WeaponTypeSword {
-		procMask |= core.ProcMaskMeleeMH
-	}
-	if rogue.GetOHWeapon() != nil && rogue.GetOHWeapon().WeaponType == proto.WeaponType_WeaponTypeSword {
-		procMask |= core.ProcMaskMeleeOH
+	swordSpecDPM := func() *core.DynamicProcManager {
+		return rogue.NewFixedProcChanceManager(0.01*float64(rogue.Talents.SwordSpecialization), rogue.GetProcMaskForTypes(proto.WeaponType_WeaponTypeSword))
 	}
 
-	rogue.MakeProcTriggerAura(core.ProcTrigger{
+	procTrigger := rogue.MakeProcTriggerAura(core.ProcTrigger{
 		Name:               "Sword Spec Proc Trigger",
 		ActionID:           core.ActionID{SpellID: 13964},
-		ProcChance:         0.01 * float64(rogue.Talents.SwordSpecialization),
 		Callback:           core.CallbackOnSpellHitDealt,
 		Outcome:            core.OutcomeLanded,
-		ProcMask:           procMask,
 		ICD:                time.Millisecond * 500,
 		TriggerImmediately: true,
+		DPM:                swordSpecDPM(),
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			rogue.AutoAttacks.MHAuto().Cast(sim, result.Target)
 		},
+	})
+
+	rogue.RegisterItemSwapCallback(core.AllMeleeWeaponSlots(), func(sim *core.Simulation, slot proto.ItemSlot) {
+		procTrigger.Dpm = swordSpecDPM()
 	})
 }
 
@@ -246,20 +279,37 @@ func (rogue *Rogue) registerFistWeaponSpecialization() {
 		return
 	}
 
+	mhMod := rogue.AddDynamicMod(core.SpellModConfig{
+		Kind:       core.SpellMod_BonusCrit_Percent,
+		ProcMask:   core.ProcMaskMeleeMH,
+		FloatValue: 1 * float64(rogue.Talents.FistWeaponSpecialization),
+	})
+	ohMod := rogue.AddDynamicMod(core.SpellModConfig{
+		Kind:       core.SpellMod_BonusCrit_Percent,
+		ProcMask:   core.ProcMaskMeleeOH,
+		FloatValue: 1 * float64(rogue.Talents.FistWeaponSpecialization),
+	})
+
 	if rogue.GetMHWeapon() != nil && rogue.GetMHWeapon().WeaponType == proto.WeaponType_WeaponTypeFist {
-		rogue.AddStaticMod(core.SpellModConfig{
-			Kind:       core.SpellMod_BonusCrit_Percent,
-			ProcMask:   core.ProcMaskMeleeMH,
-			FloatValue: 1 * float64(rogue.Talents.MaceSpecialization),
-		})
+		mhMod.Activate()
 	}
 	if rogue.GetOHWeapon() != nil && rogue.GetOHWeapon().WeaponType == proto.WeaponType_WeaponTypeFist {
-		rogue.AddStaticMod(core.SpellModConfig{
-			Kind:       core.SpellMod_BonusCrit_Percent,
-			ProcMask:   core.ProcMaskMeleeOH,
-			FloatValue: 1 * float64(rogue.Talents.MaceSpecialization),
-		})
+		ohMod.Activate()
 	}
+
+	rogue.RegisterItemSwapCallback(core.AllMeleeWeaponSlots(), func(sim *core.Simulation, slot proto.ItemSlot) {
+		if rogue.GetMHWeapon() != nil && rogue.GetMHWeapon().WeaponType == proto.WeaponType_WeaponTypeFist {
+			mhMod.Activate()
+		} else {
+			mhMod.Deactivate()
+		}
+
+		if rogue.GetOHWeapon() != nil && rogue.GetOHWeapon().WeaponType == proto.WeaponType_WeaponTypeFist {
+			ohMod.Activate()
+		} else {
+			ohMod.Deactivate()
+		}
+	})
 }
 
 func (rogue *Rogue) registerWeaponExpertise() {
@@ -278,7 +328,7 @@ func (rogue *Rogue) registerAggression() {
 	rogue.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
 		ClassMask:  RogueSpellSinisterStrike | RogueSpellBackstab | RogueSpellEviscerate,
-		FloatValue: 0.06 * float64(rogue.Talents.Aggression),
+		FloatValue: 0.02 * float64(rogue.Talents.Aggression),
 	})
 }
 
@@ -344,12 +394,13 @@ func (rogue *Rogue) registerCombatPotency() {
 	potencyMetrics := rogue.NewEnergyMetrics(core.ActionID{SpellID: 35553})
 
 	rogue.MakeProcTriggerAura(core.ProcTrigger{
-		Name:       "Combat Potency Trigger",
-		ActionID:   core.ActionID{SpellID: 35553},
-		ProcChance: 0.2,
-		Callback:   core.CallbackOnSpellHitDealt,
-		Outcome:    core.OutcomeLanded,
-		ProcMask:   core.ProcMaskMeleeOH,
+		Name:               "Combat Potency Trigger",
+		ActionID:           core.ActionID{SpellID: 35553},
+		ProcChance:         0.2,
+		Callback:           core.CallbackOnSpellHitDealt,
+		Outcome:            core.OutcomeLanded,
+		ProcMask:           core.ProcMaskMeleeOH,
+		TriggerImmediately: true,
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			rogue.AddEnergy(sim, 3.0*float64(rogue.Talents.CombatPotency), potencyMetrics)
 		},
