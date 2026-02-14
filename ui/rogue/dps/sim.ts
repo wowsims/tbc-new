@@ -1,16 +1,12 @@
-import * as BuffDebuffInputs from '../../core/components/inputs/buffs_debuffs';
 import * as OtherInputs from '../../core/components/inputs/other_inputs';
-import * as Mechanics from '../../core/constants/mechanics.js';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui';
 import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
 import { APLRotation } from '../../core/proto/apl';
-import { Debuffs, Faction, IndividualBuffs, ItemSlot, PartyBuffs, PseudoStat, Race, RaidBuffs, Spec, Stat } from '../../core/proto/common';
-import { RogueOptions_PoisonOptions } from '../../core/proto/rogue';
+import { Debuffs, Faction, IndividualBuffs, ItemSlot, PartyBuffs, PseudoStat, Race, RaidBuffs, Spec, Stat, TristateEffect } from '../../core/proto/common';
 import { UnitStat } from '../../core/proto_utils/stats';
 import { defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
-import * as RogueInputs from './inputs';
-import * as Inputs from './inputs';
+
 import * as Presets from './presets';
 
 const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
@@ -23,6 +19,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 	epStats: [
 		Stat.StatStamina,
 		Stat.StatAgility,
+		Stat.StatStrength,
 		Stat.StatMeleeCritRating,
 		Stat.StatMeleeHasteRating,
 		Stat.StatMeleeHitRating,
@@ -41,7 +38,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 
 	defaults: {
 		// Default equipped gear.
-		gear: Presets.BLANK_GEARSET.gear,
+		gear: Presets.P1_SWORDS_GEAR.gear,
 		// Default EP weights for sorting gear in the gear picker.
 		epWeights: Presets.P1_EP_PRESET.epWeights,
 		other: Presets.OtherDefaults,
@@ -54,23 +51,36 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 		// Default raid/party buffs settings.
 		raidBuffs: RaidBuffs.create({
 			...defaultRaidBuffMajorDamageCooldowns(),
+			giftOfTheWild: TristateEffect.TristateEffectImproved
 		}),
 		partyBuffs: PartyBuffs.create({
-
+			battleShout: TristateEffect.TristateEffectImproved,
+			ferociousInspiration: 1,
+			strengthOfEarthTotem: TristateEffect.TristateEffectImproved,
+			graceOfAirTotem: TristateEffect.TristateEffectImproved,
+			windfuryTotem: TristateEffect.TristateEffectImproved,
 		}),
 		individualBuffs: IndividualBuffs.create({
-
+			blessingOfKings: true,
+			blessingOfMight: TristateEffect.TristateEffectImproved,
+			unleashedRage: true,
 		}),
 		debuffs: Debuffs.create({
-
+			bloodFrenzy: true,
+			huntersMark: TristateEffect.TristateEffectImproved,
+			improvedSealOfTheCrusader: true,
+			mangle: true,
+			misery: true,
+			curseOfRecklessness: true,
+			faerieFire: TristateEffect.TristateEffectImproved,
 		}),
 	},
 
 	playerInputs: {
-		inputs: [RogueInputs.ApplyPoisonsManually()],
+		inputs: [],
 	},
 	// IconInputs to include in the 'Player' section on the settings tab.
-	playerIconInputs: [RogueInputs.LethalPoison()],
+	playerIconInputs: [],
 	// Buff and Debuff inputs to include/exclude, overriding the EP-based defaults.
 	includeBuffDebuffInputs: [],
 	excludeBuffDebuffInputs: [],
@@ -89,13 +99,13 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 		// Preset talents that the user can quickly select.
 		talents: [Presets.Talents],
 		// Preset rotations that the user can quickly select.
-		rotations: [],
+		rotations: [Presets.SINSITER_APL, Presets.SHIV_APL],
 		// Preset gear configurations that the user can quickly select.
-		gear: [],
+		gear: [Presets.PREARAID_SWORDS_GEAR, Presets.P1_SWORDS_GEAR],
 	},
 
 	autoRotation: (player: Player<Spec.SpecRogue>): APLRotation => {
-		return Presets.BLANK_APL.rotation.rotation!;
+		return Presets.SINSITER_APL.rotation.rotation!;
 	},
 
 	raidSimPresets: [
@@ -112,10 +122,10 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 			defaultGear: {
 				[Faction.Unknown]: {},
 				[Faction.Alliance]: {
-					1: Presets.BLANK_GEARSET.gear,
+					1: Presets.P1_SWORDS_GEAR.gear,
 				},
 				[Faction.Horde]: {
-					1: Presets.BLANK_GEARSET.gear,
+					1: Presets.P1_SWORDS_GEAR.gear,
 				},
 			},
 			otherDefaults: Presets.OtherDefaults,
@@ -129,16 +139,10 @@ export class RogueSimUI extends IndividualSimUI<Spec.SpecRogue> {
 
 		this.player.changeEmitter.on(c => {
 			const options = this.player.getSpecOptions();
-			if (!options.classOptions!.applyPoisonsManually) {
-				options.classOptions!.lethalPoison = RogueOptions_PoisonOptions.DeadlyPoison;
-			}
 			this.player.setSpecOptions(c, options);
 		});
 		this.sim.encounter.changeEmitter.on(c => {
 			const options = this.player.getSpecOptions();
-			if (!options.classOptions!.applyPoisonsManually) {
-				options.classOptions!.lethalPoison = RogueOptions_PoisonOptions.DeadlyPoison;
-			}
 			this.player.setSpecOptions(c, options);
 		});
 	}

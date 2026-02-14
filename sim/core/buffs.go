@@ -658,16 +658,17 @@ func WindfuryTotemAura(char *Character, isImpoved bool) *Aura {
 	wfProcAura := char.NewTemporaryStatsAura("Windfury Totem Proc", ActionID{SpellID: 25584}, stats.Stats{stats.AttackPower: apBonus}, time.Millisecond*1500)
 
 	return char.MakeProcTriggerAura(ProcTrigger{
-		Name:            "Windfury Totem",
-		MetricsActionID: ActionID{SpellID: 25587},
-		ProcChance:      0.2,
-		Outcome:         OutcomeLanded,
-		Callback:        CallbackOnSpellHitDealt,
-		ProcMask:        ProcMaskMeleeMHAuto,
-		ICD:             time.Millisecond * 100, // No procs on procs
+		Name:               "Windfury Totem",
+		MetricsActionID:    ActionID{SpellID: 25587},
+		ProcChance:         0.2,
+		Outcome:            OutcomeLanded,
+		Callback:           CallbackOnSpellHitDealt,
+		ProcMask:           ProcMaskMeleeMHAuto,
+		ICD:                time.Millisecond * 100, // No procs on procs
+		TriggerImmediately: true,
 		Handler: func(sim *Simulation, spell *Spell, result *SpellResult) {
 			wfProcAura.Activate(sim)
-			char.AutoAttacks.mh.swing(sim)
+			char.AutoAttacks.MHAuto().Cast(sim, result.Target)
 		},
 	})
 }

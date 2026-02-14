@@ -1,0 +1,77 @@
+package rogue
+
+import (
+	"time"
+
+	"github.com/wowsims/tbc/sim/core"
+)
+
+func (rogue *Rogue) registerSliceAndDice() {
+	actionID := core.ActionID{SpellID: 6774}
+
+	rogue.SliceAndDiceBonusFlat = 0.3
+	rogue.sliceAndDiceDurations = [6]time.Duration{
+		0,
+		time.Duration(time.Second * 9),
+		time.Duration(time.Second * 12),
+		time.Duration(time.Second * 15),
+		time.Duration(time.Second * 18),
+		time.Duration(time.Second * 21),
+	}
+
+	var sliceAndDiceMod float64
+	rogue.SliceAndDiceAura = rogue.RegisterAura(core.Aura{
+		Label:    "Slice and Dice",
+		ActionID: actionID,
+		// This will be overridden on cast, but set a non-zero default so it doesn't crash when used in APL prepull
+		Duration: rogue.sliceAndDiceDurations[5],
+		OnGain: func(aura *core.Aura, sim *core.Simulation) {
+			sliceAndDiceMod = 1 + rogue.SliceAndDiceBonusFlat
+			rogue.MultiplyMeleeSpeed(sim, sliceAndDiceMod)
+			if sim.Log != nil {
+				rogue.Log(sim, "[DEBUG]: Slice and Dice attack speed mod: %v", sliceAndDiceMod)
+			}
+		},
+		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
+			rogue.MultiplyMeleeSpeed(sim, 1/sliceAndDiceMod)
+		},
+	})
+
+	rogue.SliceAndDice = rogue.RegisterSpell(core.SpellConfig{
+		ActionID:       actionID,
+		Flags:          SpellFlagFinisher | core.SpellFlagAPL,
+		MetricSplits:   6,
+		ClassSpellMask: RogueSpellSliceAndDice,
+
+		EnergyCost: core.EnergyCostOptions{
+			Cost: 25,
+		},
+		Cast: core.CastConfig{
+			DefaultCast: core.Cast{
+				GCD: time.Second,
+			},
+			IgnoreHaste: true,
+			ModifyCast: func(sim *core.Simulation, spell *core.Spell, cast *core.Cast) {
+				spell.SetMetricsSplit(rogue.ComboPoints())
+			},
+		},
+		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
+			return rogue.ComboPoints() > 0
+		},
+
+		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
+			comboPoints := rogue.ComboPoints()
+			rogue.ApplyFinisher(sim, spell)
+			spell.RelatedSelfBuff.Deactivate(sim)
+			spell.RelatedSelfBuff.Duration = rogue.getSliceDuration(comboPoints)
+			spell.RelatedSelfBuff.Activate(sim)
+		},
+
+		RelatedSelfBuff: rogue.SliceAndDiceAura,
+	})
+}
+
+func (rogue *Rogue) getSliceDuration(comboPoints int32) time.Duration {
+	duration := rogue.sliceAndDiceDurations[comboPoints]
+	return time.Duration(float64(duration+rogue.SliceAndDiceBonusDuration) * (1 + 0.15*float64(rogue.Talents.ImprovedSliceAndDice)))
+}
