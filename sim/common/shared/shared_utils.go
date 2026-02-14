@@ -794,7 +794,7 @@ type SpellRankConfig struct {
 	FlatThreatBonus  float64
 }
 
-type SpellRankMap map[int32]SpellRankConfig
+type SpellRankMap []SpellRankConfig
 type SpellRankFactory func(config SpellRankConfig)
 
 func (spell SpellRankConfig) GetRankLabel() string {
