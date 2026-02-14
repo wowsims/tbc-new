@@ -37,20 +37,8 @@ import {
 	RestorationDruid_Options,
 	RestorationDruid_Rotation,
 } from '../proto/druid.js';
-import {
-	Hunter,
-	Hunter_Rotation,
-	Hunter_Options,
-	HunterOptions,
-	HunterTalents,
-} from '../proto/hunter.js';
-import {
-	Mage,
-	Mage_Options,
-	Mage_Rotation,
-	MageOptions,
-	MageTalents,
-} from '../proto/mage.js';
+import { Hunter, Hunter_Rotation, Hunter_Options, HunterOptions, HunterTalents } from '../proto/hunter.js';
+import { Mage, Mage_Options, Mage_Rotation, MageOptions, MageTalents } from '../proto/mage.js';
 import {
 	Blessings,
 	HolyPaladin,
@@ -78,13 +66,7 @@ import {
 	ShadowPriest_Options,
 	ShadowPriest_Rotation,
 } from '../proto/priest.js';
-import {
-	Rogue,
-	Rogue_Options,
-	Rogue_Rotation,
-	RogueOptions,
-	RogueTalents,
-} from '../proto/rogue.js';
+import { Rogue, Rogue_Options, Rogue_Rotation, RogueOptions, RogueTalents } from '../proto/rogue.js';
 import {
 	ElementalShaman,
 	ElementalShaman_Options,
@@ -100,13 +82,7 @@ import {
 } from '../proto/shaman.js';
 import { ResourceType } from '../proto/spell';
 import { BlessingsAssignment, BlessingsAssignments, UIEnchant as Enchant, UIGem as Gem, UIItem as Item } from '../proto/ui.js';
-import {
-	Warlock,
-	Warlock_Options,
-	Warlock_Rotation,
-	WarlockOptions,
-	WarlockTalents,
-} from '../proto/warlock.js';
+import { Warlock, Warlock_Options, Warlock_Rotation, WarlockOptions, WarlockTalents } from '../proto/warlock.js';
 import {
 	DpsWarrior,
 	DpsWarrior_Options,
@@ -239,95 +215,95 @@ export type SpecClasses<T extends Spec> =
 export type SpecRotation<T extends Spec> =
 	// Druid
 	T extends Spec.SpecBalanceDruid
-	? BalanceDruid_Rotation
-	: T extends Spec.SpecFeralCatDruid
-		? FeralCatDruid_Rotation
-		: T extends Spec.SpecFeralBearDruid
-			? FeralBearDruid_Rotation
-			: T extends Spec.SpecRestorationDruid
-				? RestorationDruid_Rotation
-				: // Hunter
-					T extends Spec.SpecHunter
-					? Hunter_Rotation
-							: // Mage
-								T extends Spec.SpecMage
-								? Mage_Rotation
-										: // Paladin
-											T extends Spec.SpecHolyPaladin
-											? HolyPaladin_Rotation
-											: T extends Spec.SpecProtectionPaladin
-												? ProtectionPaladin_Rotation
-												: T extends Spec.SpecRetributionPaladin
-													? RetributionPaladin_Rotation
-													: // Priest
-														T extends Spec.SpecDisciplinePriest
-														? DisciplinePriest_Rotation
-														: T extends Spec.SpecHolyPriest
-															? HolyPriest_Rotation
-															: T extends Spec.SpecShadowPriest
-																? ShadowPriest_Rotation
-																: // Rogue
-																	T extends Spec.SpecRogue
-																	? Rogue_Rotation
-																			: // Shaman
-																				T extends Spec.SpecElementalShaman
-																				? ElementalShaman_Rotation
-																				: T extends Spec.SpecEnhancementShaman
-																					? EnhancementShaman_Rotation
-																					: T extends Spec.SpecRestorationShaman
-																						? RestorationShaman_Rotation
-																						: // Warlock
-																							T extends Spec.SpecWarlock
-																							? Warlock_Rotation
-																									: // Warrior
-																										T extends Spec.SpecDpsWarrior
-																										? DpsWarrior_Rotation
-																											: T extends Spec.SpecProtectionWarrior
-																												? ProtectionWarrior_Rotation
-																												: // Should never reach this case
-																													UnknownRotation;
+		? BalanceDruid_Rotation
+		: T extends Spec.SpecFeralCatDruid
+			? FeralCatDruid_Rotation
+			: T extends Spec.SpecFeralBearDruid
+				? FeralBearDruid_Rotation
+				: T extends Spec.SpecRestorationDruid
+					? RestorationDruid_Rotation
+					: // Hunter
+						T extends Spec.SpecHunter
+						? Hunter_Rotation
+						: // Mage
+							T extends Spec.SpecMage
+							? Mage_Rotation
+							: // Paladin
+								T extends Spec.SpecHolyPaladin
+								? HolyPaladin_Rotation
+								: T extends Spec.SpecProtectionPaladin
+									? ProtectionPaladin_Rotation
+									: T extends Spec.SpecRetributionPaladin
+										? RetributionPaladin_Rotation
+										: // Priest
+											T extends Spec.SpecDisciplinePriest
+											? DisciplinePriest_Rotation
+											: T extends Spec.SpecHolyPriest
+												? HolyPriest_Rotation
+												: T extends Spec.SpecShadowPriest
+													? ShadowPriest_Rotation
+													: // Rogue
+														T extends Spec.SpecRogue
+														? Rogue_Rotation
+														: // Shaman
+															T extends Spec.SpecElementalShaman
+															? ElementalShaman_Rotation
+															: T extends Spec.SpecEnhancementShaman
+																? EnhancementShaman_Rotation
+																: T extends Spec.SpecRestorationShaman
+																	? RestorationShaman_Rotation
+																	: // Warlock
+																		T extends Spec.SpecWarlock
+																		? Warlock_Rotation
+																		: // Warrior
+																			T extends Spec.SpecDpsWarrior
+																			? DpsWarrior_Rotation
+																			: T extends Spec.SpecProtectionWarrior
+																				? ProtectionWarrior_Rotation
+																				: // Should never reach this case
+																					UnknownRotation;
 
 export type SpecTalents<T extends Spec> =
 	// Druid
 	T extends DruidSpecs
-	? DruidTalents
-	: // Hunter
-		T extends HunterSpecs
-		? HunterTalents
-		: // Mage
-			T extends MageSpecs
-			? MageTalents
-			: // Paladin
-				T extends PaladinSpecs
-				? PaladinTalents
-				: // Priest
-					T extends PriestSpecs
-					? PriestTalents
-					: // Rogue
-						T extends RogueSpecs
-						? RogueTalents
-						: // Shaman
-							T extends ShamanSpecs
-							? ShamanTalents
-							: // Warlock
-								T extends WarlockSpecs
-								? WarlockTalents
-								: // Warrior
-									T extends WarriorSpecs
-									? WarriorTalents
-									: // Should never reach this case
-										UnknownTalents;
+		? DruidTalents
+		: // Hunter
+			T extends HunterSpecs
+			? HunterTalents
+			: // Mage
+				T extends MageSpecs
+				? MageTalents
+				: // Paladin
+					T extends PaladinSpecs
+					? PaladinTalents
+					: // Priest
+						T extends PriestSpecs
+						? PriestTalents
+						: // Rogue
+							T extends RogueSpecs
+							? RogueTalents
+							: // Shaman
+								T extends ShamanSpecs
+								? ShamanTalents
+								: // Warlock
+									T extends WarlockSpecs
+									? WarlockTalents
+									: // Warrior
+										T extends WarriorSpecs
+										? WarriorTalents
+										: // Should never reach this case
+											UnknownTalents;
 
 export type ClassOptions<T extends Spec> =
 	// Druid
 	T extends DruidSpecs
-	? DruidOptions
-	: // Hunter
-		T extends HunterSpecs
-		? HunterOptions
-		: // Mage
-			T extends MageSpecs
-			? MageOptions
+		? DruidOptions
+		: // Hunter
+			T extends HunterSpecs
+			? HunterOptions
+			: // Mage
+				T extends MageSpecs
+				? MageOptions
 				: // Paladin
 					T extends PaladinSpecs
 					? PaladinOptions
@@ -352,104 +328,104 @@ export type ClassOptions<T extends Spec> =
 export type SpecOptions<T extends Spec> =
 	// Druid
 	T extends Spec.SpecBalanceDruid
-	? BalanceDruid_Options
-	: T extends Spec.SpecFeralCatDruid
-		? FeralCatDruid_Options
-		: T extends Spec.SpecFeralBearDruid
-			? FeralBearDruid_Options
-			: T extends Spec.SpecRestorationDruid
-				? RestorationDruid_Options
-				: // Hunter
-					T extends Spec.SpecHunter
-					? Hunter_Options
-							: // Mage
-								T extends Spec.SpecMage
-								? Mage_Options
-										: // Paladin
-											T extends Spec.SpecHolyPaladin
-											? HolyPaladin_Options
-											: T extends Spec.SpecProtectionPaladin
-												? ProtectionPaladin_Options
-												: T extends Spec.SpecRetributionPaladin
-													? RetributionPaladin_Options
-													: // Priest
-														T extends Spec.SpecDisciplinePriest
-														? DisciplinePriest_Options
-														: T extends Spec.SpecHolyPriest
-															? HolyPriest_Options
-															: T extends Spec.SpecShadowPriest
-																? ShadowPriest_Options
-																: // Rogue
-																	T extends Spec.SpecRogue
-																	? Rogue_Options
-																			: // Shaman
-																				T extends Spec.SpecElementalShaman
-																				? ElementalShaman_Options
-																				: T extends Spec.SpecEnhancementShaman
-																					? EnhancementShaman_Options
-																					: T extends Spec.SpecRestorationShaman
-																						? RestorationShaman_Options
-																						: // Warlock
-																							T extends Spec.SpecWarlock
-																							? Warlock_Options
-																									: // Warrior
-																										T extends Spec.SpecDpsWarrior
-																										? DpsWarrior_Options
-																											: T extends Spec.SpecProtectionWarrior
-																												? ProtectionWarrior_Options
-																												: // Should never reach this case
-																													UnknownSpecOptions;
+		? BalanceDruid_Options
+		: T extends Spec.SpecFeralCatDruid
+			? FeralCatDruid_Options
+			: T extends Spec.SpecFeralBearDruid
+				? FeralBearDruid_Options
+				: T extends Spec.SpecRestorationDruid
+					? RestorationDruid_Options
+					: // Hunter
+						T extends Spec.SpecHunter
+						? Hunter_Options
+						: // Mage
+							T extends Spec.SpecMage
+							? Mage_Options
+							: // Paladin
+								T extends Spec.SpecHolyPaladin
+								? HolyPaladin_Options
+								: T extends Spec.SpecProtectionPaladin
+									? ProtectionPaladin_Options
+									: T extends Spec.SpecRetributionPaladin
+										? RetributionPaladin_Options
+										: // Priest
+											T extends Spec.SpecDisciplinePriest
+											? DisciplinePriest_Options
+											: T extends Spec.SpecHolyPriest
+												? HolyPriest_Options
+												: T extends Spec.SpecShadowPriest
+													? ShadowPriest_Options
+													: // Rogue
+														T extends Spec.SpecRogue
+														? Rogue_Options
+														: // Shaman
+															T extends Spec.SpecElementalShaman
+															? ElementalShaman_Options
+															: T extends Spec.SpecEnhancementShaman
+																? EnhancementShaman_Options
+																: T extends Spec.SpecRestorationShaman
+																	? RestorationShaman_Options
+																	: // Warlock
+																		T extends Spec.SpecWarlock
+																		? Warlock_Options
+																		: // Warrior
+																			T extends Spec.SpecDpsWarrior
+																			? DpsWarrior_Options
+																			: T extends Spec.SpecProtectionWarrior
+																				? ProtectionWarrior_Options
+																				: // Should never reach this case
+																					UnknownSpecOptions;
 
 export type SpecType<T extends Spec> =
 	// Druid
 	T extends Spec.SpecBalanceDruid
-	? BalanceDruid
-	: T extends Spec.SpecFeralCatDruid
-		? FeralCatDruid
-		: T extends Spec.SpecFeralBearDruid
-			? FeralBearDruid
-			: T extends Spec.SpecRestorationDruid
-				? RestorationDruid
-				: // Hunter
-					T extends Spec.SpecHunter
-					? Hunter
-							: // Mage
-								T extends Spec.SpecMage
-								? Mage
-										: // Paladin
-											T extends Spec.SpecHolyPaladin
-											? HolyPaladin
-											: T extends Spec.SpecProtectionPaladin
-												? ProtectionPaladin
-												: T extends Spec.SpecRetributionPaladin
-													? RetributionPaladin
-													: // Priest
-														T extends Spec.SpecDisciplinePriest
-														? DisciplinePriest
-														: T extends Spec.SpecHolyPriest
-															? HolyPriest
-															: T extends Spec.SpecShadowPriest
-																? ShadowPriest
-																: // Rogue
-																	T extends Spec.SpecRogue
-																	? Rogue
-																			: // Shaman
-																				T extends Spec.SpecElementalShaman
-																				? ElementalShaman
-																				: T extends Spec.SpecEnhancementShaman
-																					? EnhancementShaman
-																					: T extends Spec.SpecRestorationShaman
-																						? RestorationShaman
-																						: // Warlock
-																							T extends Spec.SpecWarlock
-																							? Warlock
-																									: // Warrior
-																										T extends Spec.SpecDpsWarrior
-																										? DpsWarrior
-																											: T extends Spec.SpecProtectionWarrior
-																												? ProtectionWarrior
-																												: // Should never reach this case
-																													Spec.SpecUnknown;
+		? BalanceDruid
+		: T extends Spec.SpecFeralCatDruid
+			? FeralCatDruid
+			: T extends Spec.SpecFeralBearDruid
+				? FeralBearDruid
+				: T extends Spec.SpecRestorationDruid
+					? RestorationDruid
+					: // Hunter
+						T extends Spec.SpecHunter
+						? Hunter
+						: // Mage
+							T extends Spec.SpecMage
+							? Mage
+							: // Paladin
+								T extends Spec.SpecHolyPaladin
+								? HolyPaladin
+								: T extends Spec.SpecProtectionPaladin
+									? ProtectionPaladin
+									: T extends Spec.SpecRetributionPaladin
+										? RetributionPaladin
+										: // Priest
+											T extends Spec.SpecDisciplinePriest
+											? DisciplinePriest
+											: T extends Spec.SpecHolyPriest
+												? HolyPriest
+												: T extends Spec.SpecShadowPriest
+													? ShadowPriest
+													: // Rogue
+														T extends Spec.SpecRogue
+														? Rogue
+														: // Shaman
+															T extends Spec.SpecElementalShaman
+															? ElementalShaman
+															: T extends Spec.SpecEnhancementShaman
+																? EnhancementShaman
+																: T extends Spec.SpecRestorationShaman
+																	? RestorationShaman
+																	: // Warlock
+																		T extends Spec.SpecWarlock
+																		? Warlock
+																		: // Warrior
+																			T extends Spec.SpecDpsWarrior
+																			? DpsWarrior
+																			: T extends Spec.SpecProtectionWarrior
+																				? ProtectionWarrior
+																				: // Should never reach this case
+																					Spec.SpecUnknown;
 
 export type SpecTypeFunctions<SpecType extends Spec> = {
 	rotationCreate: () => SpecRotation<SpecType>;
@@ -607,9 +583,7 @@ export const specTypeFunctions: Record<Spec, SpecTypeFunctions<any>> = {
 		optionsToJson: a => Hunter_Options.toJson(a as Hunter_Options),
 		optionsFromJson: obj => Hunter_Options.fromJson(obj),
 		optionsFromPlayer: player =>
-			player.spec.oneofKind == 'hunter'
-				? player.spec.hunter.options || Hunter_Options.create()
-				: Hunter_Options.create({ classOptions: {} }),
+			player.spec.oneofKind == 'hunter' ? player.spec.hunter.options || Hunter_Options.create() : Hunter_Options.create({ classOptions: {} }),
 	},
 	// Mage
 	[Spec.SpecMage]: {
@@ -631,9 +605,7 @@ export const specTypeFunctions: Record<Spec, SpecTypeFunctions<any>> = {
 		optionsToJson: a => Mage_Options.toJson(a as Mage_Options),
 		optionsFromJson: obj => Mage_Options.fromJson(obj),
 		optionsFromPlayer: player =>
-			player.spec.oneofKind == 'mage'
-				? player.spec.mage.options || Mage_Options.create()
-				: Mage_Options.create({ classOptions: {} }),
+			player.spec.oneofKind == 'mage' ? player.spec.mage.options || Mage_Options.create() : Mage_Options.create({ classOptions: {} }),
 	},
 	// Paladin
 	[Spec.SpecHolyPaladin]: {
@@ -795,9 +767,7 @@ export const specTypeFunctions: Record<Spec, SpecTypeFunctions<any>> = {
 		optionsToJson: a => Rogue_Options.toJson(a as Rogue_Options),
 		optionsFromJson: obj => Rogue_Options.fromJson(obj),
 		optionsFromPlayer: player =>
-			player.spec.oneofKind == 'rogue'
-				? player.spec.rogue.options || Rogue_Options.create()
-				: Rogue_Options.create({ classOptions: {} }),
+			player.spec.oneofKind == 'rogue' ? player.spec.rogue.options || Rogue_Options.create() : Rogue_Options.create({ classOptions: {} }),
 	},
 	// Shaman
 	[Spec.SpecElementalShaman]: {
@@ -889,9 +859,7 @@ export const specTypeFunctions: Record<Spec, SpecTypeFunctions<any>> = {
 		optionsToJson: a => Warlock_Options.toJson(a as Warlock_Options),
 		optionsFromJson: obj => Warlock_Options.fromJson(obj),
 		optionsFromPlayer: player =>
-			player.spec.oneofKind == 'warlock'
-				? player.spec.warlock.options || Warlock_Options.create()
-				: Warlock_Options.create({ classOptions: {} }),
+			player.spec.oneofKind == 'warlock' ? player.spec.warlock.options || Warlock_Options.create() : Warlock_Options.create({ classOptions: {} }),
 	},
 	// Warrior
 	[Spec.SpecDpsWarrior]: {
@@ -1240,7 +1208,7 @@ const itemTypeToSlotsMap: Partial<Record<ItemType, Array<ItemSlot>>> = {
 	[ItemType.ItemTypeRanged]: [ItemSlot.ItemSlotRanged],
 };
 
-export function getEligibleItemSlots(item: Item, isFuryWarrior?: boolean): Array<ItemSlot> {
+export function getEligibleItemSlots(item: Item): Array<ItemSlot> {
 	if (itemTypeToSlotsMap[item.type]) {
 		return itemTypeToSlotsMap[item.type]!;
 	}
@@ -1263,15 +1231,12 @@ export const isSecondaryItemSlot = (slot: ItemSlot) => slot === ItemSlot.ItemSlo
 
 // Returns whether the given main-hand and off-hand items can be worn at the
 // same time.
-export function validWeaponCombo(mainHand: Item | null | undefined, offHand: Item | null | undefined, canDW2h: boolean): boolean {
-	if (mainHand?.handType == HandType.HandTypeTwoHand && !canDW2h) {
-		return false;
-	} else if (mainHand?.handType == HandType.HandTypeTwoHand && mainHand?.weaponType == WeaponType.WeaponTypeStaff) {
+export function validWeaponCombo(mainHand: Item | null | undefined, offHand: Item | null | undefined): boolean {
+	if (mainHand?.handType == HandType.HandTypeTwoHand) {
 		return false;
 	}
-	if (offHand?.handType == HandType.HandTypeTwoHand && !canDW2h) {
-		return false;
-	} else if (offHand?.handType == HandType.HandTypeTwoHand && offHand?.weaponType == WeaponType.WeaponTypeStaff) {
+
+	if (offHand?.handType == HandType.HandTypeTwoHand) {
 		return false;
 	}
 

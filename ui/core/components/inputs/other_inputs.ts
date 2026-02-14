@@ -8,6 +8,7 @@ import { EnumPicker } from '../pickers/enum_picker.js';
 import { Raid } from '../../raid';
 import { InputConfig } from '../../individual_sim_ui';
 import i18n from '../../../i18n/config.js';
+import { phasesEnumToNumber } from '../../utils';
 
 export function makeShow1hWeaponsSelector(parent: HTMLElement, sim: Sim): BooleanPicker<Sim> {
 	parent.classList.remove('hide');
@@ -77,13 +78,10 @@ export function makePhaseSelector(parent: HTMLElement, sim: Sim): EnumPicker<Sim
 	return new EnumPicker<Sim>(parent, sim, {
 		id: 'phase-selector',
 		extraCssClasses: ['phase-selector'],
-		values: [
-			{ name: i18n.t('common.phases.1'), value: 1 },
-			{ name: i18n.t('common.phases.2'), value: 2 },
-			{ name: i18n.t('common.phases.3'), value: 3 },
-			{ name: i18n.t('common.phases.4'), value: 4 },
-			{ name: i18n.t('common.phases.5'), value: 5 },
-		],
+		values: phasesEnumToNumber().map(phaseIndex => ({
+			name: i18n.t(`common.phases.${phaseIndex}`),
+			value: phaseIndex,
+		})),
 		changedEvent: (sim: Sim) => sim.phaseChangeEmitter,
 		getValue: (sim: Sim) => sim.getPhase(),
 		setValue: (eventID: EventID, sim: Sim, newValue: number) => {

@@ -346,6 +346,16 @@ export abstract class SimUI extends Component {
 		}
 	}
 
+	// Runs a lightweight version of the sim that doesn't compute combat logs or other expensive data, and returns the raw result from the sim worker.
+	async runSimLightweight(onProgress: WorkerProgressCallback, options: RunSimOptions = {}) {
+		try {
+			await this.sim.signalManager.abortType(RequestTypes.All);
+			return this.sim.runRaidSimLightweight(onProgress, options);
+		} catch (e) {
+			this.handleCrash(e);
+		}
+	}
+
 	async runSimOnce(options: RunSimOptions = {}) {
 		this.resultsViewer.setPending();
 		try {

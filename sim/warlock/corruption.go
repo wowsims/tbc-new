@@ -9,7 +9,6 @@ import (
 const corruptionCoeff = 0.156
 
 func (warlock *Warlock) registerCorruption() *core.Spell {
-	// resultSlice := make(core.SpellResultSlice, 1)
 
 	warlock.Corruption = warlock.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 172},
@@ -56,15 +55,6 @@ func (warlock *Warlock) registerCorruption() *core.Spell {
 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 			},
 		},
-
-		// ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		// 	result := spell.CalcOutcome(sim, target, spell.OutcomeMagicHitNoHitCounter)
-		// 	if onApplyCallback != nil {
-		// 		resultSlice[0] = result
-		// 		onApplyCallback(resultSlice, spell, sim)
-		// 	}
-		// 	spell.DealOutcome(sim, result)
-		// },
 		ExpectedTickDamage: func(sim *core.Simulation, target *core.Unit, spell *core.Spell, useSnapshot bool) *core.SpellResult {
 			dot := spell.Dot(target)
 			if useSnapshot {

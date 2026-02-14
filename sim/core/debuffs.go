@@ -401,8 +401,8 @@ func InsectSwarmAura(target *Unit) *Aura {
 		"Insect Swarm",
 		27013,
 		stats.Stats{
-			stats.MeleeHitRating:  0.98,
-			stats.SpellHitPercent: 0.98,
+			stats.PhysicalHitPercent: -2,
+			stats.SpellHitPercent:    -2,
 		},
 		time.Second*12,
 	)
@@ -492,7 +492,7 @@ func MiseryAura(target *Unit) *Aura {
 }
 
 func ScorpidStingAura(target *Unit) *Aura {
-	return statsDebuff(target, "Scorpid Sting", 3043, stats.Stats{stats.MeleeHitRating: -5.0}, time.Second*20)
+	return statsDebuff(target, "Scorpid Sting", 3043, stats.Stats{stats.PhysicalHitPercent: -5.0}, time.Second*20)
 }
 
 func ScreechAura(target *Unit) *Aura {

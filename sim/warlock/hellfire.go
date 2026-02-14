@@ -8,7 +8,7 @@ import (
 
 const hellFireCoeff = 0.095
 
-func (warlock *Warlock) RegisterHellfire(callback WarlockSpellCastedCallback) *core.Spell {
+func (warlock *Warlock) RegisterHellfire() *core.Spell {
 	hellfireActionID := core.ActionID{SpellID: 1949}
 	manaMetric := warlock.NewManaMetrics(hellfireActionID)
 
@@ -42,13 +42,9 @@ func (warlock *Warlock) RegisterHellfire(callback WarlockSpellCastedCallback) *c
 			BonusCoefficient:     hellFireCoeff,
 
 			OnTick: func(sim *core.Simulation, _ *core.Unit, dot *core.Dot) {
-				results := dot.Spell.CalcAndDealPeriodicAoeDamage(sim, 308, dot.Spell.OutcomeMagicHit)
-				warlock.SpendMana(sim, float64(manaCost/15), manaMetric)
+				dot.Spell.CalcAndDealPeriodicAoeDamage(sim, 308, dot.Spell.OutcomeMagicHit)
 				warlock.RemoveHealth(sim, 308)
 
-				if callback != nil {
-					callback(results, dot.Spell, sim)
-				}
 			},
 		},
 
