@@ -783,53 +783,26 @@ func RegisterIgniteEffect(unit *core.Unit, config IgniteConfig) *core.Spell {
 	return igniteSpell
 }
 
-type ItemVersion byte
-
-const (
-	ItemVersionLFR = iota
-	ItemVersionNormal
-	ItemVersionHeroic
-	ItemVersionThunderforged
-	ItemVersionHeroicThunderforged
-	ItemVersionWarforged
-	ItemVersionHeroicWarforged
-	ItemVersionFlexible
-)
-
-type ItemVersionMap map[ItemVersion]int32
-type ItemVersionFactory func(version ItemVersion, id int32, versionLabel string)
-
-func (version ItemVersion) GetLabel() string {
-	switch version {
-	case ItemVersionLFR:
-		return "(Celestial)"
-	case ItemVersionHeroic:
-		return "(Heroic)"
-	case ItemVersionThunderforged:
-		return "(Thunderforged)"
-	case ItemVersionHeroicThunderforged:
-		return "(Heroic Thunderforged)"
-	case ItemVersionWarforged:
-		return "(Warforged)"
-	case ItemVersionHeroicWarforged:
-		return "(Heroic Warforged)"
-	case ItemVersionFlexible:
-		return "(Flex)"
-	}
-	return ""
+type SpellRankConfig struct {
+	Rank             int32
+	SpellID          int32
+	Cost             int32
+	MinDamage        float64
+	MaxDamage        float64
+	Coefficient      float64
+	ThreatMultiplier float64
+	FlatThreatBonus  float64
 }
 
-func (versions ItemVersionMap) RegisterAll(fac ItemVersionFactory) {
-	var maxItemID int32
+type SpellRankMap []SpellRankConfig
+type SpellRankFactory func(config SpellRankConfig)
 
-	for _, id := range versions {
-		maxItemID = max(maxItemID, id)
+func (spell SpellRankConfig) GetRankLabel() string {
+	return fmt.Sprintf("Rank %d", spell.Rank)
+}
+
+func (ranks SpellRankMap) RegisterAll(factory SpellRankFactory) {
+	for _, rankConfig := range ranks {
+		factory(rankConfig)
 	}
-
-	for version, id := range versions {
-		core.AddEffectsToTest = (id == maxItemID)
-		fac(version, id, version.GetLabel())
-	}
-
-	core.AddEffectsToTest = true
 }
