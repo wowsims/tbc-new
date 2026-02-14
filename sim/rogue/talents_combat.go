@@ -17,7 +17,7 @@ func (rogue *Rogue) registerCombatTalents() {
 	// Tier 2
 	// Improved Slice and Dice implemented in slice_and_dice.go
 	// Deflection NYI
-	// Improved Sprint NYI
+	rogue.registerPrecision()
 
 	// Tier 3
 	// None in this tier implemented
@@ -80,6 +80,14 @@ func (rogue *Rogue) registerLightningReflexes() {
 	}
 
 	rogue.AddStat(stats.DodgeRating, float64(rogue.Talents.LightningReflexes)*core.DodgeRatingPerDodgePercent)
+}
+
+func (rogue *Rogue) registerPrecision() {
+	if rogue.Talents.Precision == 0 {
+		return
+	}
+
+	rogue.AddStat(stats.PhysicalHitPercent, float64(rogue.Talents.Precision))
 }
 
 func (rogue *Rogue) registerDaggerSpecialization() {
