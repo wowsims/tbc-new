@@ -45,7 +45,13 @@ var Tier4 = core.NewItemSet(core.ItemSet{
 	ID:   621,
 	Bonuses: map[int32]core.ApplySetBonus{
 		2: func(agent core.Agent, setBonusAura *core.Aura) {
-			agent.(RogueAgent).GetRogue().SliceAndDiceBonusDuration += time.Second * 3
+			setBonusAura.
+				ApplyOnGain(func(aura *core.Aura, sim *core.Simulation) {
+					agent.(RogueAgent).GetRogue().SliceAndDiceBonusDuration += time.Second * 3
+				}).
+				ApplyOnExpire(func(aura *core.Aura, sim *core.Simulation) {
+					agent.(RogueAgent).GetRogue().SliceAndDiceBonusDuration -= time.Second * 3
+				})
 		},
 		4: func(agent core.Agent, setBonusAura *core.Aura) {
 			rogue := agent.(RogueAgent).GetRogue()
@@ -97,8 +103,13 @@ var Tier6 = core.NewItemSet(core.ItemSet{
 	Name: "Slayer's Armor",
 	Bonuses: map[int32]core.ApplySetBonus{
 		2: func(agent core.Agent, setBonusAura *core.Aura) {
-			rogue := agent.(RogueAgent).GetRogue()
-			rogue.SliceAndDiceBonusFlat += 0.05
+			setBonusAura.
+				ApplyOnGain(func(aura *core.Aura, sim *core.Simulation) {
+					agent.(RogueAgent).GetRogue().SliceAndDiceBonusFlat += 0.5
+				}).
+				ApplyOnExpire(func(aura *core.Aura, sim *core.Simulation) {
+					agent.(RogueAgent).GetRogue().SliceAndDiceBonusFlat -= 0.5
+				})
 		},
 		4: func(agent core.Agent, setBonusAura *core.Aura) {
 			setBonusAura.AttachSpellMod(core.SpellModConfig{

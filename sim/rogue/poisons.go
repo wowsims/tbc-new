@@ -39,11 +39,7 @@ func (rogue *Rogue) registerDeadlyPoisonSpell() {
 			TickLength:    time.Second * 3,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				if stacks := dot.GetStacks(); stacks > 0 {
-					dot.SnapshotBaseDamage = 45.0 * float64(dot.GetStacks())
-					at := dot.Spell.Unit.AttackTables[target.UnitIndex]
-					dot.SnapshotAttackerMultiplier = dot.Spell.AttackerDamageMultiplier(at, true)
-				}
+				dot.Snapshot(target, 45.0*float64(dot.GetStacks()))
 			},
 
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
@@ -216,11 +212,11 @@ func (rogue *Rogue) applyDeadlyPoison() {
 		Outcome:            core.OutcomeLanded,
 		Callback:           core.CallbackOnSpellHitDealt,
 		TriggerImmediately: true,
+		ProcMask:           procMask,
+		DPM:                rogue.deadlyPoisonPPHM,
 
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			if rogue.deadlyPoisonPPHM.Proc(sim, spell.ProcMask, "Deadly Poison") {
-				rogue.DeadlyPoison.Cast(sim, result.Target)
-			}
+			rogue.DeadlyPoison.Cast(sim, result.Target)
 		},
 	})
 }
@@ -239,11 +235,10 @@ func (rogue *Rogue) applyWoundPoison() {
 		Callback:           core.CallbackOnSpellHitDealt,
 		TriggerImmediately: true,
 		ProcMask:           procMask,
+		DPM:                rogue.woundPoisonPPHM,
 
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			if rogue.woundPoisonPPHM.Proc(sim, spell.ProcMask, "Wound Poison") {
-				rogue.WoundPoison.Cast(sim, result.Target)
-			}
+			rogue.WoundPoison.Cast(sim, result.Target)
 		},
 	})
 }
@@ -261,11 +256,11 @@ func (rogue *Rogue) applyInstantPoison() {
 		Outcome:            core.OutcomeLanded,
 		Callback:           core.CallbackOnSpellHitDealt,
 		TriggerImmediately: true,
+		ProcMask:           procMask,
+		DPM:                rogue.instantPoisonPPHM,
 
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			if rogue.instantPoisonPPHM.Proc(sim, spell.ProcMask, "Instant Poison") {
-				rogue.InstantPoison.Cast(sim, result.Target)
-			}
+			rogue.InstantPoison.Cast(sim, result.Target)
 		},
 	})
 }

@@ -220,8 +220,9 @@ func (rogue *Rogue) registerDirtyDeeds() {
 		FloatValue: 0.1 * float64(rogue.Talents.DirtyDeeds),
 	})
 
-	rogue.RegisterResetEffect(func(s *core.Simulation) {
-		s.RegisterExecutePhaseCallback(func(sim *core.Simulation, isExecute int32) {
+	rogue.RegisterResetEffect(func(sim *core.Simulation) {
+		ddAura.Deactivate(sim)
+		sim.RegisterExecutePhaseCallback(func(sim *core.Simulation, isExecute int32) {
 			if isExecute == 35 {
 				ddAura.Activate(sim)
 			}

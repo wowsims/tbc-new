@@ -4,13 +4,16 @@ import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
 )
 
 func (rogue *Rogue) registerShivSpell() {
-	var baseCost float64
-	if ohWeapon := rogue.GetOHWeapon(); ohWeapon != nil {
-		baseCost = 20 + 10*ohWeapon.SwingSpeed
-	}
+	shivCostMod := rogue.AddDynamicMod(core.SpellModConfig{
+		Kind:      core.SpellMod_PowerCost_Flat,
+		ClassMask: RogueSpellShiv,
+		IntValue:  rogue.getShivCostModifier(),
+	})
+	shivCostMod.Activate()
 
 	rogue.Shiv = rogue.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 5938},
@@ -20,7 +23,7 @@ func (rogue *Rogue) registerShivSpell() {
 		ClassSpellMask: RogueSpellShiv,
 
 		EnergyCost: core.EnergyCostOptions{
-			Cost: int32(baseCost),
+			Cost: 20,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
@@ -53,4 +56,17 @@ func (rogue *Rogue) registerShivSpell() {
 			}
 		},
 	})
+
+	rogue.RegisterItemSwapCallback(core.AllMeleeWeaponSlots(), func(s *core.Simulation, is proto.ItemSlot) {
+		shivCostMod.UpdateIntValue(rogue.getShivCostModifier())
+		shivCostMod.Activate()
+	})
+}
+
+func (rogue *Rogue) getShivCostModifier() int32 {
+	if ohWeapon := rogue.GetOHWeapon(); ohWeapon != nil {
+		return int32(10 * ohWeapon.SwingSpeed)
+	}
+
+	return 0
 }
