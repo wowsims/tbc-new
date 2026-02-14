@@ -476,7 +476,7 @@ func (warlock *Warlock) applyDestructiveReach() {
 	}
 
 	warlock.AddStaticMod(core.SpellModConfig{
-		Kind:       core.SpellMod_ThreatMultiplier_Flat,
+		Kind:       core.SpellMod_ThreatMultiplier_Pct,
 		FloatValue: -0.05 * float64(warlock.Talents.DestructiveReach),
 		ClassMask:  WarlockDestructionSpells,
 	})

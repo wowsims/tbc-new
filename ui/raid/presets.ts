@@ -19,7 +19,7 @@ import { ElementalShamanSimUI } from '../shaman/elemental/sim.js';
 import { EnhancementShamanSimUI } from '../shaman/enhancement/sim.js';
 import { RestorationShamanSimUI } from '../shaman/restoration/sim.js';
 import { WarlockSimUI } from '../warlock/dps/sim.js';
-import { DPSWarriorSimUI } from '../warrior/dps/sim.js';
+import { DpsWarriorSimUI } from '../warrior/dps/sim.js';
 import { ProtectionWarriorSimUI } from '../warrior/protection/sim';
 
 export const specSimFactories: Partial<Record<Spec, (parentElem: HTMLElement, player: Player<any>) => IndividualSimUI<any>>> = {
@@ -49,7 +49,7 @@ export const specSimFactories: Partial<Record<Spec, (parentElem: HTMLElement, pl
 	// Warlock
 	[Spec.SpecWarlock]: (parentElem: HTMLElement, player: Player<any>) => new WarlockSimUI(parentElem, player),
 	// Warrior
-	[Spec.SpecDPSWarrior]: (parentElem: HTMLElement, player: Player<any>) => new DPSWarriorSimUI(parentElem, player),
+	[Spec.SpecDpsWarrior]: (parentElem: HTMLElement, player: Player<any>) => new DpsWarriorSimUI(parentElem, player),
 	[Spec.SpecProtectionWarrior]: (parentElem: HTMLElement, player: Player<any>) => new ProtectionWarriorSimUI(parentElem, player),
 };
 

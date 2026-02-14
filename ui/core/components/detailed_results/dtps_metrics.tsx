@@ -43,12 +43,16 @@ export class DtpsMetricsTable extends MetricsTable<ActionMetrics> {
 					);
 
 					const hitValues = metric.damageDone.hit;
+					const resistedHitValues = metric.damageDone.resistedHit;
 					const critHitValues = metric.damageDone.critHit;
+					const resistedCritHitValues = metric.damageDone.resistedCritHit;
 					const tickValues = metric.damageDone.tick;
+					const resistedTickValues = metric.damageDone.resistedTick;
 					const critTickValues = metric.damageDone.critTick;
+					const resistedCritTickValues = metric.damageDone.resistedCritTick;
 					const glanceValues = metric.damageDone.glance;
 					const blockValues = metric.damageDone.block;
-					const critBlockValues = metric.damageDone.critBlock;
+					const blockedCritValues = metric.damageDone.blockedCrit;
 
 					cellElem.appendChild(
 						<MetricsCombinedTooltipTable
@@ -65,16 +69,32 @@ export class DtpsMetricsTable extends MetricsTable<ActionMetrics> {
 											...hitValues,
 										},
 										{
+											name: i18n.t('results_tab.details.attack_types.resisted_hit'),
+											...resistedHitValues,
+										},
+										{
 											name: i18n.t('results_tab.details.attack_types.critical_hit'),
 											...critHitValues,
+										},
+										{
+											name: i18n.t('results_tab.details.attack_types.resisted_critical_hit'),
+											...resistedCritHitValues,
 										},
 										{
 											name: i18n.t('results_tab.details.attack_types.tick'),
 											...tickValues,
 										},
 										{
+											name: i18n.t('results_tab.details.attack_types.resisted_tick'),
+											...resistedTickValues,
+										},
+										{
 											name: i18n.t('results_tab.details.attack_types.critical_tick'),
 											...critTickValues,
+										},
+										{
+											name: i18n.t('results_tab.details.attack_types.resisted_critical_tick'),
+											...resistedCritTickValues,
 										},
 										{
 											name: i18n.t('results_tab.details.attack_types.glancing_blow'),
@@ -86,7 +106,7 @@ export class DtpsMetricsTable extends MetricsTable<ActionMetrics> {
 										},
 										{
 											name: i18n.t('results_tab.details.attack_types.blocked_critical_hit'),
-											...critBlockValues,
+											...blockedCritValues,
 										},
 									],
 								},
@@ -167,13 +187,17 @@ export class DtpsMetricsTable extends MetricsTable<ActionMetrics> {
 					);
 					if (!metric.landedHits && !metric.landedTicks) return;
 
-					const relativeHitPercent = (metric.hits / metric.landedHits) * 100;
-					const relativeCritPercent = (metric.crits / metric.landedHits) * 100;
-					const relativeTickPercent = (metric.ticks / metric.landedTicks) * 100;
-					const relativeCritTickPercent = (metric.critTicks / metric.landedTicks) * 100;
+					const relativeHitPercent = ((metric.hits - metric.resistedHits) / metric.landedHits) * 100;
+					const relativeResistedHitPercent = (metric.resistedHits / metric.landedHits) * 100;
+					const relativeCritPercent = ((metric.crits - metric.resistedCrits) / metric.landedHits) * 100;
+					const relativeResistedCritPercent = (metric.resistedCrits / metric.landedHits) * 100;
+					const relativeTickPercent = ((metric.ticks - metric.resistedTicks) / metric.landedTicks) * 100;
+					const relativeResistedTickPercent = (metric.resistedTicks / metric.landedTicks) * 100;
+					const relativeCritTickPercent = ((metric.critTicks - metric.resistedCritTicks) / metric.landedTicks) * 100;
+					const relativeResistedCritTickPercent = (metric.resistedCritTicks / metric.landedTicks) * 100;
 					const relativeGlancePercent = (metric.glances / metric.landedHits) * 100;
 					const relativeBlockPercent = (metric.blocks / metric.landedHits) * 100;
-					const relativeCritBlockPercent = (metric.critBlocks / metric.landedHits) * 100;
+					const relativeBlockedCritPercent = (metric.blockedCrits / metric.landedHits) * 100;
 
 					cellElem.appendChild(
 						<MetricsCombinedTooltipTable
@@ -186,13 +210,28 @@ export class DtpsMetricsTable extends MetricsTable<ActionMetrics> {
 									data: [
 										{
 											name: i18n.t('results_tab.details.attack_types.hit'),
-											value: metric.hits,
+											value: metric.hits - metric.resistedHits,
 											percentage: relativeHitPercent,
 										},
 										{
+											name: i18n.t('results_tab.details.attack_types.resisted_hit'),
+											value: metric.resistedHits,
+											percentage: relativeResistedHitPercent,
+										},
+										{
 											name: i18n.t('results_tab.details.attack_types.critical_hit'),
-											value: metric.crits,
+											value: metric.crits - metric.resistedCrits,
 											percentage: relativeCritPercent,
+										},
+										{
+											name: i18n.t('results_tab.details.attack_types.blocked_critical_hit'),
+											value: metric.blockedCrits,
+											percentage: relativeBlockedCritPercent,
+										},
+										{
+											name: i18n.t('results_tab.details.attack_types.resisted_critical_hit'),
+											value: metric.resistedCrits,
+											percentage: relativeResistedCritPercent,
 										},
 										{
 											name: i18n.t('results_tab.details.attack_types.glancing_blow'),
@@ -204,11 +243,6 @@ export class DtpsMetricsTable extends MetricsTable<ActionMetrics> {
 											value: metric.blocks,
 											percentage: relativeBlockPercent,
 										},
-										{
-											name: i18n.t('results_tab.details.attack_types.blocked_critical_hit'),
-											value: metric.critBlocks,
-											percentage: relativeCritBlockPercent,
-										},
 									],
 								},
 								{
@@ -218,13 +252,23 @@ export class DtpsMetricsTable extends MetricsTable<ActionMetrics> {
 									data: [
 										{
 											name: i18n.t('results_tab.details.attack_types.tick'),
-											value: metric.ticks,
+											value: metric.ticks - metric.resistedTicks,
 											percentage: relativeTickPercent,
 										},
 										{
+											name: i18n.t('results_tab.details.attack_types.resisted_tick'),
+											value: metric.resistedTicks,
+											percentage: relativeResistedTickPercent,
+										},
+										{
 											name: i18n.t('results_tab.details.attack_types.critical_tick'),
-											value: metric.critTicks,
+											value: metric.critTicks - metric.resistedCritTicks,
 											percentage: relativeCritTickPercent,
+										},
+										{
+											name: i18n.t('results_tab.details.attack_types.resisted_critical_tick'),
+											value: metric.resistedCritTicks,
+											percentage: relativeResistedCritTickPercent,
 										},
 									],
 								},
@@ -286,10 +330,12 @@ export class DtpsMetricsTable extends MetricsTable<ActionMetrics> {
 			},
 			{
 				name: i18n.t('results_tab.details.columns.crit_percent'),
-				getValue: (metric: ActionMetrics) => metric.critPercent + metric.critBlockPercent || metric.critTickPercent,
+				getValue: (metric: ActionMetrics) => metric.critPercent + metric.blockedCritPercent || metric.critTickPercent,
 				getDisplayString: (metric: ActionMetrics) =>
-					`${formatToPercent(metric.critPercent + metric.critBlockPercent || metric.critTickPercent, { fallbackString: '-' })}${
-						metric.critPercent + metric.critBlockPercent && metric.critTickPercent ? ` (${formatToPercent(metric.critTickPercent, { fallbackString: '-' })})` : ''
+					`${formatToPercent(metric.critPercent + metric.blockedCritPercent || metric.critTickPercent, { fallbackString: '-' })}${
+						metric.critPercent + metric.blockedCritPercent && metric.critTickPercent
+							? ` (${formatToPercent(metric.critTickPercent, { fallbackString: '-' })})`
+							: ''
 					}`,
 			},
 			{

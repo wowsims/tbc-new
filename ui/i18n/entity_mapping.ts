@@ -38,9 +38,6 @@ export const statI18nKeys: Record<Stat, string> = {
 	[Stat.StatMeleeCritRating]: 'melee_crit_rating',
 	[Stat.StatMeleeHasteRating]: 'melee_haste_rating',
 	[Stat.StatArmorPenetration]: 'armor_penetration',
-	[Stat.StatAllPhysHitRating]: 'all_hit_rating',
-	[Stat.StatAllPhysCritRating]: 'all_crit_rating',
-	[Stat.StatAllPhysHasteRating]: 'all_haste_rating',
 	[Stat.StatDefenseRating]: 'defense_rating',
 	[Stat.StatBlockRating]: 'block_rating',
 	[Stat.StatBlockValue]: 'block_value',
@@ -222,7 +219,7 @@ export const specI18nKeys: Record<Spec, string> = {
 	// Warlock
 	[Spec.SpecWarlock]: 'warlock',
 	// Warrior
-	[Spec.SpecDPSWarrior]: 'dps',
+	[Spec.SpecDpsWarrior]: 'dps',
 	[Spec.SpecProtectionWarrior]: 'protection',
 };
 
@@ -296,11 +293,15 @@ export const sourceFilterI18nKeys: Record<SourceFilterOption, string> = {
 
 export const raidFilterI18nKeys: Record<RaidFilterOption, string> = {
 	[RaidFilterOption.RaidUnknown]: 'unknown',
-	[RaidFilterOption.RaidMogushanVaults]: 'mogushan_vaults',
-	[RaidFilterOption.RaidHeartOfFear]: 'heart_of_fear',
-	[RaidFilterOption.RaidTerraceOfEndlessSpring]: 'terrace_of_endless_spring',
-	[RaidFilterOption.RaidThroneOfThunder]: 'throne_of_thunder',
-	[RaidFilterOption.RaidSiegeOfOrgrimmar]: 'siege_of_orgrimmar',
+	[RaidFilterOption.RaidKara]: 'kara',
+	[RaidFilterOption.RaidGruul]: 'gruuls',
+	[RaidFilterOption.RaidMag]: 'mag',
+	[RaidFilterOption.RaidTK]: 'tk',
+	[RaidFilterOption.RaidSSC]: 'ssc',
+	[RaidFilterOption.RaidMH]: 'mh',
+	[RaidFilterOption.RaidBT]: 'bt',
+	[RaidFilterOption.RaidZA]: 'za',
+	[RaidFilterOption.RaidSWP]: 'swp',
 };
 
 export const armorTypeI18nKeys: Record<ArmorType, string> = {

@@ -8,75 +8,61 @@ import (
 )
 
 // Registers all consume-related effects to the Agent.
-func applyConsumeEffects(agent Agent) {
+func applyConsumeEffects(agent Agent, partyBuffs *proto.PartyBuffs) {
 	character := agent.GetCharacter()
 	consumables := character.Consumables
 	if consumables == nil {
 		return
 	}
-	alchemyFlaskBonus := TernaryFloat64(character.HasProfession(proto.Profession_Alchemy), 320, 0)
-	alchemyBattleElixirBonus := TernaryFloat64(character.HasProfession(proto.Profession_Alchemy), 240, 0)
+
 	if consumables.FlaskId != 0 {
 		flask := ConsumablesByID[consumables.FlaskId]
-		if flask.Stats[stats.Strength] > 0 {
-			flask.Stats[stats.Strength] += alchemyFlaskBonus
-		} else if flask.Stats[stats.Agility] > 0 {
-			flask.Stats[stats.Agility] += alchemyFlaskBonus
-		} else if flask.Stats[stats.Intellect] > 0 {
-			flask.Stats[stats.Intellect] += alchemyFlaskBonus
-		} else if flask.Stats[stats.Spirit] > 0 {
-			flask.Stats[stats.Spirit] += alchemyFlaskBonus
-		} else if flask.Stats[stats.Stamina] > 0 {
-			flask.Stats[stats.Stamina] += alchemyFlaskBonus * 1.5
-		}
 		character.AddStats(flask.Stats)
 	}
 
 	if consumables.BattleElixirId != 0 {
 		elixir := ConsumablesByID[consumables.BattleElixirId]
-		if elixir.Stats[stats.MeleeHasteRating] > 0 {
-			elixir.Stats[stats.MeleeHasteRating] += alchemyBattleElixirBonus
-		} else if elixir.Stats[stats.MeleeCritRating] > 0 {
-			elixir.Stats[stats.MeleeCritRating] += alchemyBattleElixirBonus
-		} else if elixir.Stats[stats.MeleeHitRating] > 0 {
-			elixir.Stats[stats.MeleeHitRating] += alchemyBattleElixirBonus
-		} else if elixir.Stats[stats.SpellHitRating] > 0 {
-			elixir.Stats[stats.SpellHitRating] += alchemyBattleElixirBonus
-		} else if elixir.Stats[stats.SpellCritRating] > 0 {
-			elixir.Stats[stats.SpellCritRating] += alchemyBattleElixirBonus
-		} else if elixir.Stats[stats.SpellHasteRating] > 0 {
-			elixir.Stats[stats.SpellHasteRating] += alchemyBattleElixirBonus
-		} else if elixir.Stats[stats.ExpertiseRating] > 0 {
-			elixir.Stats[stats.ExpertiseRating] += alchemyBattleElixirBonus
-		} else if elixir.Stats[stats.Spirit] > 0 {
-			elixir.Stats[stats.Spirit] += alchemyBattleElixirBonus
-		}
 		character.AddStats(elixir.Stats)
 	}
 
 	if consumables.GuardianElixirId != 0 {
 		elixir := ConsumablesByID[consumables.GuardianElixirId]
-		if character.HasProfession(proto.Profession_Alchemy) && elixir.Stats[stats.Armor] > 0 {
-			elixir.Stats[stats.Armor] += 280
-		}
 		character.AddStats(elixir.Stats)
 	}
 	if consumables.FoodId != 0 {
 		food := ConsumablesByID[consumables.FoodId]
-		var foodBuffStats stats.Stats
-		if food.BuffsMainStat {
-			buffAmount := food.Stats[stats.Stamina]
-			foodBuffStats[stats.Stamina] = buffAmount
-			foodBuffStats[character.GetHighestStatType([]stats.Stat{stats.Strength, stats.Agility, stats.Intellect})] = buffAmount
-		} else {
-			foodBuffStats = food.Stats
-		}
-		character.AddStats(foodBuffStats)
+		character.AddStats(food.Stats)
+	}
+
+	// Static Imbues
+	if consumables.MhImbueId != 0 && partyBuffs.WindfuryTotem == proto.TristateEffect_TristateEffectMissing {
+		registerStaticImbue(agent, consumables.MhImbueId, true)
+	}
+	if consumables.OhImbueId != 0 {
+		registerStaticImbue(agent, consumables.OhImbueId, false)
+	}
+
+	// Scrolls
+	if consumables.ScrollAgi {
+		character.AddStat(stats.Agility, 20)
+	}
+	if consumables.ScrollStr {
+		character.AddStat(stats.Strength, 20)
+	}
+	if consumables.ScrollInt {
+		character.AddStat(stats.Intellect, 20)
+	}
+	if consumables.ScrollSpi {
+		character.AddStat(stats.Spirit, 20)
+	}
+	if consumables.ScrollArm {
+		character.AddStat(stats.Armor, 300)
 	}
 
 	registerPotionCD(agent, consumables)
 	registerConjuredCD(agent, consumables)
 	registerExplosivesCD(agent, consumables)
+	registerDrumsCD(agent, consumables)
 }
 
 var PotionAuraTag = "Potion"
@@ -84,30 +70,11 @@ var PotionAuraTag = "Potion"
 func registerPotionCD(agent Agent, consumes *proto.ConsumesSpec) {
 	character := agent.GetCharacter()
 	potion := consumes.PotId
-	prepot := consumes.PrepotId
 
-	if potion == 0 && prepot == 0 {
-		return
-	}
-	var mcd MajorCooldown
-	if prepot != 0 {
-		mcd = makePotionActivationSpell(prepot, character)
-		if mcd.Spell != nil {
-			mcd.Spell.Flags |= SpellFlagPrepullPotion
-		}
-	}
-
-	var defaultMCD MajorCooldown
-	if potion == prepot {
-		defaultMCD = mcd
-	} else {
-		if potion != 0 {
-			defaultMCD = makePotionActivationSpell(potion, character)
-		}
-	}
-	if defaultMCD.Spell != nil {
-		defaultMCD.Spell.Flags |= SpellFlagCombatPotion
-		character.AddMajorCooldown(defaultMCD)
+	if potion != 0 {
+		potMCD := makePotionActivationSpell(potion, character)
+		potMCD.Spell.Flags |= SpellFlagCombatPotion
+		character.AddMajorCooldown(potMCD)
 	}
 }
 
@@ -123,7 +90,7 @@ func (character *Character) HasAlchStone() bool {
 
 func makePotionActivationSpell(potionId int32, character *Character) MajorCooldown {
 	potion := ConsumablesByID[potionId]
-	categoryCooldownDuration := TernaryDuration(potion.CategoryCooldownDuration > 0, potion.CategoryCooldownDuration, time.Minute*1)
+	categoryCooldownDuration := TernaryDuration(potion.CategoryCooldownDuration > 0, potion.CategoryCooldownDuration, time.Minute*2)
 	mcd := makePotionActivationSpellInternal(potion, character)
 
 	if mcd.Spell != nil {
@@ -152,7 +119,7 @@ type resourceGainConfig struct {
 
 func makePotionActivationSpellInternal(potion Consumable, character *Character) MajorCooldown {
 	stoneMul := TernaryFloat64(character.HasAlchStone(), 1.4, 1.0)
-	cooldownDuration := TernaryDuration(potion.CooldownDuration > 0, potion.CooldownDuration, time.Minute*1)
+	cooldownDuration := TernaryDuration(potion.CooldownDuration > 0, potion.CooldownDuration, time.Minute*2)
 
 	potionCast := CastConfig{
 		CD: Cooldown{
@@ -161,7 +128,7 @@ func makePotionActivationSpellInternal(potion Consumable, character *Character) 
 		},
 		SharedCD: Cooldown{
 			Timer:    character.GetPotionCD(),
-			Duration: time.Minute * 60,
+			Duration: cooldownDuration,
 		},
 	}
 
@@ -177,6 +144,7 @@ func makePotionActivationSpellInternal(potion Consumable, character *Character) 
 	if potion.BuffDuration > 0 {
 		// Add stat buff aura if applicable
 		aura = character.NewTemporaryStatsAura(potion.Name, actionID, potion.Stats, potion.BuffDuration)
+		mcd.Spell.RelatedSelfBuff = aura.Aura
 		mcd.Type = aura.InferCDType()
 	}
 	var gains []resourceGainConfig
@@ -310,99 +278,198 @@ func registerConjuredCD(agent Agent, consumes *proto.ConsumesSpec) {
 			Spell: spell,
 			Type:  CooldownTypeSurvival,
 		})
+	case 7676:
+		actionID := ActionID{ItemID: 7676}
+		energyMetrics := character.NewEnergyMetrics(actionID)
+
+		spell := character.RegisterSpell(SpellConfig{
+			ActionID: actionID,
+			Flags:    SpellFlagNoOnCastComplete,
+			Cast: CastConfig{
+				SharedCD: Cooldown{
+					Timer:    character.GetConjuredCD(),
+					Duration: time.Minute * 2,
+				},
+
+				CD: Cooldown{
+					Timer:    character.NewTimer(),
+					Duration: time.Minute * 5,
+				},
+			},
+			ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
+				character.AddEnergy(sim, 40, energyMetrics)
+			},
+		})
+		character.AddMajorCooldown(MajorCooldown{
+			Spell: spell,
+			Type:  CooldownTypeDPS,
+		})
 	}
 }
 
-var BigDaddyActionID = ActionID{SpellID: 89637}
-var HighpoweredBoltGunActionID = ActionID{ItemID: 40771}
+var SuperSapperActionID = ActionID{ItemID: 23827}
+var GoblinSapperActionID = ActionID{ItemID: 10646}
+var FelIronBombActionID = ActionID{ItemID: 23736}
+var AdamantiteGrenadeActionID = ActionID{ItemID: 23737}
+var GnomishFlameTurretActionID = ActionID{ItemID: 23841}
 
 func registerExplosivesCD(agent Agent, consumes *proto.ConsumesSpec) {
-	//Todo: Get them dynamically from dbc data
 	character := agent.GetCharacter()
 	if !character.HasProfession(proto.Profession_Engineering) {
 		return
 	}
-	switch consumes.ExplosiveId {
-	// case 89637:
-	// 	bomb := character.GetOrRegisterSpell(SpellConfig{
-	// 		ActionID:    BigDaddyActionID,
-	// 		SpellSchool: SpellSchoolFire,
-	// 		ProcMask:    ProcMaskEmpty,
-	// 		Flags:       SpellFlagAoE,
+	if !consumes.GoblinSapper && !consumes.SuperSapper && consumes.ExplosiveId == 0 {
+		return
+	}
+	sharedTimer := character.NewTimer()
 
-	// 		Cast: CastConfig{
-	// 			CD: Cooldown{
-	// 				Timer:    character.NewTimer(),
-	// 				Duration: time.Minute,
-	// 			},
+	if consumes.SuperSapper {
+		character.AddMajorCooldown(MajorCooldown{
+			Spell:    character.newSuperSapperSpell(sharedTimer),
+			Type:     CooldownTypeDPS | CooldownTypeExplosive,
+			Priority: CooldownPriorityLow + 30,
+		})
+	}
+	if consumes.GoblinSapper {
+		character.AddMajorCooldown(MajorCooldown{
+			Spell:    character.newGoblinSapperSpell(sharedTimer),
+			Type:     CooldownTypeDPS | CooldownTypeExplosive,
+			Priority: CooldownPriorityLow + 20,
+		})
+	}
+	if consumes.ExplosiveId > 0 {
+		var filler *Spell
+		switch consumes.ExplosiveId {
+		case 30217:
+			filler = character.newAdamantiteGrenadeSpell(sharedTimer)
+		case 30216:
+			filler = character.newFelIronBombSpell(sharedTimer)
+		case 30526:
+			// Summon Gnomish Turret? Just treat it like a DoT? TBD
+		}
 
-	// 			DefaultCast: Cast{
-	// 				CastTime: time.Millisecond * 500,
-	// 			},
+		character.AddMajorCooldown(MajorCooldown{
+			Spell:    filler,
+			Type:     CooldownTypeDPS | CooldownTypeExplosive,
+			Priority: CooldownPriorityLow + 10,
+		})
+	}
+}
 
-	// 			ModifyCast: func(sim *Simulation, spell *Spell, cast *Cast) {
-	// 				spell.Unit.AutoAttacks.StopMeleeUntil(sim, sim.CurrentTime)
-	// 				spell.Unit.AutoAttacks.StopRangedUntil(sim, sim.CurrentTime)
-	// 			},
-	// 		},
+// Creates a spell object for the common explosive case.
+func (character *Character) newBasicExplosiveSpellConfig(sharedTimer *Timer, actionID ActionID, school SpellSchool, minDamage float64, maxDamage float64, cooldown Cooldown) SpellConfig {
+	dealSelfDamage := actionID.SameAction(SuperSapperActionID) || actionID.SameAction(GoblinSapperActionID)
 
-	// 		// Explosives always have 1% resist chance, so just give them hit cap.
-	// 		BonusHitPercent:  100,
-	// 		DamageMultiplier: 1,
-	// 		CritMultiplier:   2,
-	// 		ThreatMultiplier: 1,
+	return SpellConfig{
+		ActionID:    actionID,
+		SpellSchool: school,
+		ProcMask:    ProcMaskEmpty,
 
-	// 		ApplyEffects: func(sim *Simulation, _ *Unit, spell *Spell) {
-	// 			spell.CalcAndDealAoeDamage(sim, 5006, spell.OutcomeMagicHitAndCrit)
-	// 		},
-	// 	})
+		Cast: CastConfig{
+			CD: cooldown,
+			SharedCD: Cooldown{
+				Timer:    sharedTimer,
+				Duration: time.Minute,
+			},
+		},
 
-	// 	character.AddMajorCooldown(MajorCooldown{
-	// 		Spell:    bomb,
-	// 		Type:     CooldownTypeDPS | CooldownTypeExplosive,
-	// 		Priority: CooldownPriorityLow + 10,
-	// 	})
-	// case 40771:
-	// 	boltGun := character.GetOrRegisterSpell(SpellConfig{
-	// 		ActionID:    ActionID{SpellID: 82207},
-	// 		SpellSchool: SpellSchoolFire,
-	// 		ProcMask:    ProcMaskEmpty,
-	// 		Flags:       SpellFlagNoOnCastComplete | SpellFlagCanCastWhileMoving,
+		// Explosives always have 1% resist chance, so just give them hit cap.
+		BonusHitPercent:  100,
+		DamageMultiplier: 1,
+		CritMultiplier:   2,
+		ThreatMultiplier: 1,
 
-	// 		Cast: CastConfig{
-	// 			DefaultCast: Cast{
-	// 				GCD:      GCDDefault,
-	// 				CastTime: time.Second,
-	// 			},
-	// 			IgnoreHaste: true,
-	// 			CD: Cooldown{
-	// 				Timer:    character.NewTimer(),
-	// 				Duration: time.Minute * 2,
-	// 			},
-	// 			SharedCD: Cooldown{
-	// 				Timer:    character.GetOffensiveTrinketCD(),
-	// 				Duration: time.Second * 15,
-	// 			},
-	// 		},
+		ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
+			baseDamage := sim.Roll(minDamage, maxDamage) * sim.Encounter.AOECapMultiplier()
+			spell.CalcAndDealAoeDamage(sim, baseDamage, spell.OutcomeMagicHitAndCrit)
 
-	// 		// Explosives always have 1% resist chance, so just give them hit cap.
-	// 		BonusHitPercent:  100,
-	// 		DamageMultiplier: 1,
-	// 		CritMultiplier:   2,
-	// 		ThreatMultiplier: 1,
+			if dealSelfDamage {
+				baseDamage := sim.Roll(minDamage, maxDamage)
+				spell.CalcAndDealDamage(sim, &character.Unit, baseDamage, spell.OutcomeMagicHitAndCrit)
+			}
+		},
+	}
+}
+func (character *Character) newSuperSapperSpell(sharedTimer *Timer) *Spell {
+	return character.GetOrRegisterSpell(character.newBasicExplosiveSpellConfig(sharedTimer, SuperSapperActionID, SpellSchoolFire, 900, 1500, Cooldown{Timer: character.NewTimer(), Duration: time.Minute * 5}))
+}
+func (character *Character) newGoblinSapperSpell(sharedTimer *Timer) *Spell {
+	return character.GetOrRegisterSpell(character.newBasicExplosiveSpellConfig(sharedTimer, GoblinSapperActionID, SpellSchoolFire, 450, 750, Cooldown{Timer: character.NewTimer(), Duration: time.Minute * 5}))
+}
+func (character *Character) newAdamantiteGrenadeSpell(sharedTimer *Timer) *Spell {
+	return character.GetOrRegisterSpell(character.newBasicExplosiveSpellConfig(sharedTimer, AdamantiteGrenadeActionID, SpellSchoolFire, 450, 750, Cooldown{}))
+}
+func (character *Character) newFelIronBombSpell(sharedTimer *Timer) *Spell {
+	return character.GetOrRegisterSpell(character.newBasicExplosiveSpellConfig(sharedTimer, AdamantiteGrenadeActionID, SpellSchoolFire, 330, 770, Cooldown{}))
+}
 
-	// 		ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
-	// 			spell.CalcAndDealDamage(sim, target, 8860, spell.OutcomeMagicHitAndCrit)
-	// 		},
-	// 	})
+func registerDrumsCD(agent Agent, consumables *proto.ConsumesSpec) {
+	if consumables.DrumsId > 0 {
+		character := agent.GetCharacter()
+		actionID := ActionID{SpellID: consumables.DrumsId}
+		var drumLabel string
+		var drumStats stats.Stats
+		var duration time.Duration
+		switch consumables.DrumsId {
+		case 351355:
+			drumLabel = "Drums of Battle"
+			drumStats = stats.Stats{stats.MeleeHasteRating: 80, stats.SpellHasteRating: 80}
+			duration = time.Second * 30
+		case 351360:
+			drumLabel = "Drums of War"
+			drumStats = stats.Stats{stats.AttackPower: 60, stats.RangedAttackPower: 60, stats.SpellDamage: 30}
+			duration = time.Second * 30
+		case 351358:
+			drumLabel = "Drums of Restoration"
+			drumStats = stats.Stats{stats.MP5: 200}
+			duration = time.Second * 15
+		}
+		aura := character.NewTemporaryStatsAura(drumLabel, actionID, drumStats, duration)
 
-	// 	character.AddMajorCooldown(MajorCooldown{
-	// 		Spell:    boltGun,
-	// 		Type:     CooldownTypeDPS | CooldownTypeExplosive,
-	// 		Priority: CooldownPriorityLow + 10,
-	// 		ShouldActivate: func(s *Simulation, c *Character) bool {
-	// 			return false // Intentionally not automatically used
-	// 		},
-	// 	})
+		spell := character.GetOrRegisterSpell(SpellConfig{
+			ActionID: actionID,
+			Flags:    SpellFlagNoOnCastComplete,
+			ProcMask: ProcMaskEmpty,
+
+			Cast: CastConfig{
+				CD: Cooldown{
+					Timer:    character.NewTimer(),
+					Duration: time.Minute * 2,
+				},
+			},
+
+			ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
+				aura.Activate(sim)
+			},
+
+			RelatedSelfBuff: aura.Aura,
+		})
+
+		character.AddMajorCooldown(MajorCooldown{
+			Spell:    spell,
+			Type:     CooldownTypeDPS,
+			Priority: CooldownPriorityDrums,
+		})
+	}
+}
+
+func registerStaticImbue(agent Agent, imbueId int32, isMH bool) {
+	character := agent.GetCharacter()
+	switch imbueId {
+	case 25123: // Mana Oil
+		character.AddStat(stats.HealingPower, 25)
+		character.AddStat(stats.MP5, 12)
+	case 25122: // Briliant Wizard Oil
+		character.AddStat(stats.SpellDamage, 36)
+		character.AddStat(stats.SpellCritRating, 14)
+	case 28017: // Superior Wizard Oil
+		character.AddStat(stats.SpellDamage, 42)
+	case 29453, 34340: // Addy Stone
+		character.AddStat(stats.MeleeCritRating, 14)
+		if isMH {
+			character.bonusMHDps += 12
+		} else {
+			character.bonusOHDps += 12
+		}
 	}
 }

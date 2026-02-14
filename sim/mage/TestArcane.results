@@ -1,0 +1,185 @@
+character_stats_results: {
+ key: "TestArcane-CharacterStats-Default"
+ value: {
+  final_stats: 166.98
+  final_stats: 163.295
+  final_stats: 289.96
+  final_stats: 260.4635
+  final_stats: 529.969
+  final_stats: 662.37742
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 40
+  final_stats: 0
+  final_stats: 0
+  final_stats: 251.79
+  final_stats: 848.65
+  final_stats: 389
+  final_stats: 0
+  final_stats: 0
+  final_stats: 48
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 1990.99
+  final_stats: 0
+  final_stats: 7282.6
+  final_stats: 6147.9525
+  final_stats: 111.7
+  final_stats: 33.75
+  final_stats: 33.75
+  final_stats: 33.75
+  final_stats: 33.75
+  final_stats: 93.75
+  final_stats: 0
+  final_stats: 3
+  final_stats: 10.63172
+  final_stats: 15.97514
+  final_stats: 0
+  final_stats: 0
+  final_stats: 5
+ }
+}
+dps_results: {
+ key: "TestArcane-AllItems-AldorRegalia"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-AllItems-BadgeoftheSwarmguard-21670"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-AllItems-BroochoftheImmortalKing-32534"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-AllItems-Coren'sLuckyCoin-38289"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-AllItems-Dabiri'sEnigma-30300"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-AllItems-DarkmoonCard:Crusade-31856"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-AllItems-DarkmoonCard:Vengeance-31858"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-AllItems-DarkmoonCard:Wrath-31857"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-AllItems-DragonspineTrophy-28830"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-AllItems-EyeofMagtheridon-28789"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-AllItems-GnomereganAuto-Blocker600-29387"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-AllItems-HourglassoftheUnraveller-28034"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-AllItems-PrismofInnerCalm-30621"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-AllItems-Quagmirran'sEye-27683"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-AllItems-SextantofUnstableCurrents-30626"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-AllItems-SpyglassoftheHiddenFleet-30620"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-AllItems-TempestRegalia"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-AllItems-TheLightningCapacitor-28785"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-AllItems-TirisfalRegalia"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-Average-Default"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-Settings-Orc-blank-Arcane-blank-FullBuffs-0.0yards-LongMultiTarget"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-Settings-Orc-blank-Arcane-blank-FullBuffs-0.0yards-LongSingleTarget"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-Settings-Orc-blank-Arcane-blank-FullBuffs-0.0yards-ShortSingleTarget"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-Settings-Orc-blank-Arcane-blank-NoBuffs-0.0yards-LongMultiTarget"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-Settings-Orc-blank-Arcane-blank-NoBuffs-0.0yards-LongSingleTarget"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-Settings-Orc-blank-Arcane-blank-NoBuffs-0.0yards-ShortSingleTarget"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-Settings-Troll-blank-Arcane-blank-FullBuffs-0.0yards-LongMultiTarget"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-Settings-Troll-blank-Arcane-blank-FullBuffs-0.0yards-LongSingleTarget"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-Settings-Troll-blank-Arcane-blank-FullBuffs-0.0yards-ShortSingleTarget"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-Settings-Troll-blank-Arcane-blank-NoBuffs-0.0yards-LongMultiTarget"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-Settings-Troll-blank-Arcane-blank-NoBuffs-0.0yards-LongSingleTarget"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-Settings-Troll-blank-Arcane-blank-NoBuffs-0.0yards-ShortSingleTarget"
+ value: {}
+}
+dps_results: {
+ key: "TestArcane-SwitchInFrontOfTarget-Default"
+ value: {}
+}

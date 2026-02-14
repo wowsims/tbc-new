@@ -5,12 +5,9 @@ import (
 
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
-	"github.com/wowsims/tbc/sim/core/stats"
 )
 
 func (rogue *Rogue) ApplyTalents() {
-	rogue.ApplyArmorSpecializationEffect(stats.Agility, proto.ArmorType_ArmorTypeLeather, 87504)
-
 	// Hotfix Passive: https://www.wowhead.com/mop-classic/spell=137034/hotfix-passive
 	rogue.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Pct,

@@ -2,42 +2,45 @@ import { Player } from '../../core/player';
 import * as PresetUtils from '../../core/preset_utils';
 import { ConsumesSpec, HandType, ItemSlot, Profession, PseudoStat, Race, Spec, Stat } from '../../core/proto/common';
 import { SavedTalents } from '../../core/proto/ui';
-import { DPSWarrior_Options as WarriorOptions } from '../../core/proto/warrior';
+import { DpsWarrior_Options as WarriorOptions, WarriorShout, WarriorStance } from '../../core/proto/warrior';
 import { Stats } from '../../core/proto_utils/stats';
-import DefaultFuryApl from './apls/default.apl.json';
-import P2FurySMFGear from './gear_sets/p2_fury_smf.gear.json';
-import P2FuryTGGear from './gear_sets/p2_fury_tg.gear.json';
-import P3FuryTGGear from './gear_sets/p3_fury_tg.gear.json';
-import P1FurySMFGear from './gear_sets/p1_fury_smf.gear.json';
-import P1FuryTGGear from './gear_sets/p1_fury_tg.gear.json';
-import PreraidFurySMFGear from './gear_sets/preraid_fury_smf.gear.json';
-import PreraidFuryTGGear from './gear_sets/preraid_fury_tg.gear.json';
+import * as WarriorPresets from '../presets';
+import DefaultArmsApl from './apls/arms.apl.json';
+import DefaultFuryApl from './apls/fury.apl.json';
+import PreraidArmsGear from './gear_sets/preraid_arms.gear.json';
+import PreraidFuryGear from './gear_sets/preraid_fury.gear.json';
+import P1ArmsGear from './gear_sets/p1_arms.gear.json';
+import P1FuryGear from './gear_sets/p1_fury.gear.json';
 
 // Preset options for this spec.
 // Eventually we will import these values for the raid sim too, so its good to
 // keep them in a separate file.
 
 // Handlers for spec specific load checks
-const FURY_SMF_PRESET_OPTIONS = {
-	onLoad: (player: Player<Spec.SpecDPSWarrior>) => {
+const FURY_PRESET_OPTIONS = {
+	onLoad: (player: Player<Spec.SpecDpsWarrior>) => {
 		PresetUtils.makeSpecChangeWarningToast(
 			[
 				{
-					condition: (player: Player<Spec.SpecDPSWarrior>) =>
+					condition: (player: Player<Spec.SpecDpsWarrior>) =>
 						player.getEquippedItem(ItemSlot.ItemSlotMainHand)?.item.handType === HandType.HandTypeTwoHand,
-					message: 'Check your gear: You have a two-handed weapon equipped, but the selected option is for one-handed weapons.',
+					message: 'Check your gear: You have a two-handed weapon equipped, but the selected option is for dual wield.',
+				},
+				{
+					condition: (player: Player<Spec.SpecDpsWarrior>) => !player.getTalents().dualWieldSpecialization,
+					message: "Check your talents: You have selected a dual-wield spec but don't have [Dual Wield Specialization] talented.",
 				},
 			],
 			player,
 		);
 	},
 };
-const FURY_TG_PRESET_OPTIONS = {
+const ARMS_PRESET_OPTIONS = {
 	onLoad: (player: Player<any>) => {
 		PresetUtils.makeSpecChangeWarningToast(
 			[
 				{
-					condition: (player: Player<Spec.SpecDPSWarrior>) =>
+					condition: (player: Player<Spec.SpecDpsWarrior>) =>
 						player.getEquippedItem(ItemSlot.ItemSlotMainHand)?.item.handType === HandType.HandTypeOneHand,
 					message: 'Check your gear: You have a one-handed weapon equipped, but the selected option is for two-handed weapons.',
 				},
@@ -47,19 +50,18 @@ const FURY_TG_PRESET_OPTIONS = {
 	},
 };
 
-export const P1_PRERAID_FURY_SMF_PRESET = PresetUtils.makePresetGear('Preraid - 1H', PreraidFurySMFGear, FURY_SMF_PRESET_OPTIONS);
-export const P1_PRERAID_FURY_TG_PRESET = PresetUtils.makePresetGear('Preraid - 2H', PreraidFuryTGGear, FURY_TG_PRESET_OPTIONS);
-export const P1_BIS_FURY_SMF_PRESET = PresetUtils.makePresetGear('P1 - 1H', P1FurySMFGear, FURY_SMF_PRESET_OPTIONS);
-export const P1_BIS_FURY_TG_PRESET = PresetUtils.makePresetGear('P1 - 2H', P1FuryTGGear, FURY_TG_PRESET_OPTIONS);
-export const P2_BIS_FURY_SMF_PRESET = PresetUtils.makePresetGear('P2 - 1H', P2FurySMFGear, FURY_SMF_PRESET_OPTIONS);
-export const P2_BIS_FURY_TG_PRESET = PresetUtils.makePresetGear('P2 - 2H', P2FuryTGGear, FURY_TG_PRESET_OPTIONS);
-export const P3_BIS_FURY_TG_PRESET = PresetUtils.makePresetGear('P3 - 2H', P3FuryTGGear, FURY_TG_PRESET_OPTIONS);
+export const P1_PRERAID_FURY_PRESET = PresetUtils.makePresetGear('Preraid - Fury', PreraidFuryGear, FURY_PRESET_OPTIONS);
+export const P1_BIS_FURY_PRESET = PresetUtils.makePresetGear('P1 - Fury', P1FuryGear, FURY_PRESET_OPTIONS);
 
-export const FURY_DEFAULT_ROTATION = PresetUtils.makePresetAPLRotation('Default', DefaultFuryApl);
+export const P1_PRERAID_ARMS_PRESET = PresetUtils.makePresetGear('Preraid - Arms', PreraidArmsGear, ARMS_PRESET_OPTIONS);
+export const P1_BIS_ARMS_PRESET = PresetUtils.makePresetGear('P1 - Arms', P1ArmsGear, ARMS_PRESET_OPTIONS);
+
+export const FURY_DEFAULT_ROTATION = PresetUtils.makePresetAPLRotation('Fury', DefaultFuryApl);
+export const ARMS_DEFAULT_ROTATION = PresetUtils.makePresetAPLRotation('Arms', DefaultArmsApl);
 
 // Preset options for EP weights
-export const P1_FURY_SMF_EP_PRESET = PresetUtils.makePresetEpWeights(
-	'P1 - SMF',
+export const P1_FURY_EP_PRESET = PresetUtils.makePresetEpWeights(
+	'P1 - Fury',
 	Stats.fromMap(
 		{
 			[Stat.StatStrength]: 1.0,
@@ -72,72 +74,56 @@ export const P1_FURY_SMF_EP_PRESET = PresetUtils.makePresetEpWeights(
 			[PseudoStat.PseudoStatOffHandDps]: 1.31,
 		},
 	),
-	FURY_SMF_PRESET_OPTIONS,
+	FURY_PRESET_OPTIONS,
 );
 
-export const P1_FURY_TG_EP_PRESET = PresetUtils.makePresetEpWeights(
-	'P1 - TG',
+export const P1_ARMS_EP_PRESET = PresetUtils.makePresetEpWeights(
+	'P1 - Arms',
 	Stats.fromMap(
 		{
 			[Stat.StatStrength]: 1.0,
-			[Stat.StatAgility]: 0.07,
+			[Stat.StatAgility]: 0.06,
 			[Stat.StatAttackPower]: 0.45,
-			[Stat.StatExpertiseRating]: 1.42,
+			[Stat.StatExpertiseRating]: 1.19,
 		},
 		{
-			[PseudoStat.PseudoStatMainHandDps]: 2.59,
-			[PseudoStat.PseudoStatOffHandDps]: 1.11,
+			[PseudoStat.PseudoStatMainHandDps]: 2.15,
+			[PseudoStat.PseudoStatOffHandDps]: 1.31,
 		},
 	),
-	FURY_TG_PRESET_OPTIONS,
-);
-
-export const P3_FURY_TG_EP_PRESET = PresetUtils.makePresetEpWeights(
-	'P3 - TG',
-	Stats.fromMap(
-		{
-			[Stat.StatStrength]: 1.0,
-			[Stat.StatAgility]: 0.07,
-			[Stat.StatAttackPower]: 0.45,
-			[Stat.StatExpertiseRating]: 1.89,
-		},
-		{
-			[PseudoStat.PseudoStatMainHandDps]: 2.56,
-			[PseudoStat.PseudoStatOffHandDps]: 1.30,
-		},
-	),
-	FURY_TG_PRESET_OPTIONS,
+	FURY_PRESET_OPTIONS,
 );
 
 // Default talents. Uses the wowhead calculator format, make the talents on
 // https://wowhead.com/tbc/talent-calc and copy the numbers in the url.
 
-export const FurySMFTalents = {
-	name: 'SMF',
+export const FuryTalents = {
+	name: 'Fury',
 	data: SavedTalents.create({
-		talentsString: '133333',
+		talentsString: '3500501130201-05050005505012050115',
 	}),
-	...FURY_SMF_PRESET_OPTIONS,
+	...FURY_PRESET_OPTIONS,
 };
 
-export const FuryTGTalents = {
-	name: 'TG',
+export const ArmsTalents = {
+	name: 'Arms',
 	data: SavedTalents.create({
-		talentsString: '133133',
+		talentsString: '33005001352010500221-0550000500521203',
 	}),
-	...FURY_TG_PRESET_OPTIONS,
+	...ARMS_PRESET_OPTIONS,
 };
 
 export const DefaultOptions = WarriorOptions.create({
-	classOptions: {},
-	syncType: 0,
+	classOptions: {
+		queueDelay: 250,
+		startingRage: 0,
+		defaultShout: WarriorShout.WarriorShoutBattle,
+		defaultStance: WarriorStance.WarriorStanceBerserker,
+	},
 });
 
 export const DefaultConsumables = ConsumesSpec.create({
-	flaskId: 76088, // Flask of Winter's Bite
-	foodId: 74646, // Black Pepper Ribs and Shrimp
-	potId: 76095, // Potion of Mogu Power
-	prepotId: 76095, // Potion of Mogu Power
+	...WarriorPresets.DefaultConsumables,
 });
 
 export const OtherDefaults = {
@@ -147,14 +133,14 @@ export const OtherDefaults = {
 	distanceFromTarget: 25,
 };
 
-export const P1_PRESET_BUILD_SMF = PresetUtils.makePresetBuild('P1 - SMF', {
-	gear: P1_BIS_FURY_SMF_PRESET,
-	talents: FurySMFTalents,
-	epWeights: P1_FURY_SMF_EP_PRESET,
+export const P1_PRESET_BUILD_FURY = PresetUtils.makePresetBuild('P1 - Fury', {
+	gear: P1_BIS_FURY_PRESET,
+	talents: FuryTalents,
+	epWeights: P1_FURY_EP_PRESET,
 });
 
-export const P1_PRESET_BUILD_TG = PresetUtils.makePresetBuild('P1 - TG', {
-	gear: P1_BIS_FURY_TG_PRESET,
-	talents: FuryTGTalents,
-	epWeights: P1_FURY_TG_EP_PRESET,
+export const P1_PRESET_BUILD_ARMS = PresetUtils.makePresetBuild('P1 - Arms', {
+	gear: P1_BIS_ARMS_PRESET,
+	talents: ArmsTalents,
+	epWeights: P1_ARMS_EP_PRESET,
 });

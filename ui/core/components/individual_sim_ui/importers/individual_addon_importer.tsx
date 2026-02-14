@@ -1,4 +1,3 @@
-import { JsonObject } from '@protobuf-ts/runtime';
 import { ref } from 'tsx-vanilla';
 
 import { IndividualSimUI } from '../../../individual_sim_ui';
@@ -29,22 +28,6 @@ export class IndividualAddonImporter<SpecType extends Spec> extends IndividualIm
 				<div ref={warningRef} />
 			</div>
 		);
-
-		if (warningRef.value)
-			new Toast({
-				title: i18n.t('import.addon.reforge_warning.title'),
-				body: (
-					<div>
-						{i18n.t('import.addon.reforge_warning.message')}
-					</div>
-				),
-				additionalClasses: ['toast-import-warning'],
-				container: warningRef.value,
-				variant: 'warning',
-				canClose: false,
-				autoShow: true,
-				autohide: false,
-			});
 	}
 
 	async onImport(data: string) {

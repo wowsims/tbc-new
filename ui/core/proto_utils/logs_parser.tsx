@@ -465,8 +465,8 @@ export class DamageDealtLog extends SimLog {
 				.then(cause => {
 					params.actionId = cause;
 
-					const amount = match[17] ? parseFloat(match[17]) : 0;
-					const type = match[18] || '';
+					const amount = match[16] ? parseFloat(match[16]) : 0;
+					const type = match[17] || '';
 
 					return new DamageDealtLog(
 						params,
@@ -480,9 +480,9 @@ export class DamageDealtLog extends SimLog {
 						match[3] == 'Parry',
 						match[3] == 'Block' || match[3] == 'CriticalBlock',
 						Boolean(match[2]) && match[2].includes('tick'),
-						match[15] == '10',
-						match[15] == '20',
-						match[15] == '30',
+						match[14] == '25',
+						match[14] == '50',
+						match[14] == '75',
 					);
 				});
 		} else {

@@ -119,6 +119,22 @@ func (result *SpellResult) DidBlock() bool {
 	return result.Outcome.Matches(OutcomeBlock)
 }
 
+func (result *SpellResult) DidBlockCrit() bool {
+	return result.Outcome.Matches(OutcomeBlock) && result.Outcome.Matches(OutcomeCrit)
+}
+
+func (result *SpellResult) DidResist() bool {
+	return result.Outcome.Matches(OutcomePartial)
+}
+
+func (result *SpellResult) DidParry() bool {
+	return result.Outcome.Matches(OutcomeParry)
+}
+
+func (result *SpellResult) DidDodge() bool {
+	return result.Outcome.Matches(OutcomeDodge)
+}
+
 func (result *SpellResult) DamageString() string {
 	outcomeStr := result.Outcome.String()
 	if !result.Landed() {
@@ -133,15 +149,6 @@ func (result *SpellResult) HealingString() string {
 func (spell *Spell) ThreatFromDamage(sim *Simulation, outcome HitOutcome, damage float64, attackTable *AttackTable) float64 {
 	if outcome.Matches(OutcomeLanded) {
 		threat := (damage*spell.ThreatMultiplier + spell.FlatThreatBonus) * spell.Unit.PseudoStats.ThreatMultiplier
-
-		if attackTable.ThreatDoneByCasterExtraMultiplier != nil {
-			for i := range attackTable.ThreatDoneByCasterExtraMultiplier {
-				if attackTable.ThreatDoneByCasterExtraMultiplier[i] != nil {
-					threat *= attackTable.ThreatDoneByCasterExtraMultiplier[i](sim, spell, attackTable)
-				}
-			}
-		}
-
 		return threat
 	} else {
 		return 0
@@ -218,7 +225,7 @@ func (spell *Spell) SpellHitChance(target *Unit) float64 {
 	return hitPercent / 100
 }
 func (spell *Spell) SpellChanceToMiss(attackTable *AttackTable) float64 {
-	return math.Max(0, attackTable.BaseSpellMissChance-spell.SpellHitChance(attackTable.Defender))
+	return math.Max(0.01, attackTable.BaseSpellMissChance-spell.SpellHitChance(attackTable.Defender))
 }
 func (spell *Spell) MagicHitCheck(sim *Simulation, attackTable *AttackTable) bool {
 	return sim.Proc(1.0-spell.SpellChanceToMiss(attackTable), "Magical Hit Roll")
@@ -377,19 +384,33 @@ func (spell *Spell) CalcAndDealOutcome(sim *Simulation, target *Unit, outcomeApp
 
 // Applies the fully computed spell result to the sim.
 func (spell *Spell) dealDamageInternal(sim *Simulation, isPeriodic bool, result *SpellResult) {
+	isPartialResist := result.DidResist()
+
 	if sim.CurrentTime >= 0 {
 		spell.SpellMetrics[result.Target.UnitIndex].TotalDamage += result.Damage
-		if isPeriodic {
-			spell.SpellMetrics[result.Target.UnitIndex].TotalTickDamage += result.Damage
+		if isPartialResist {
+			spell.SpellMetrics[result.Target.UnitIndex].TotalResistedDamage += result.Damage
 		}
 
-		if result.DidCrit() {
-			if result.DidBlock() {
-				spell.SpellMetrics[result.Target.UnitIndex].TotalCritBlockDamage += result.Damage
-			} else {
-				spell.SpellMetrics[result.Target.UnitIndex].TotalCritDamage += result.Damage
-				if isPeriodic {
-					spell.SpellMetrics[result.Target.UnitIndex].TotalCritTickDamage += result.Damage
+		if isPeriodic {
+			spell.SpellMetrics[result.Target.UnitIndex].TotalTickDamage += result.Damage
+			if isPartialResist {
+				spell.SpellMetrics[result.Target.UnitIndex].TotalResistedTickDamage += result.Damage
+			}
+		}
+
+		if result.DidBlockCrit() {
+			spell.SpellMetrics[result.Target.UnitIndex].TotalBlockedCritDamage += result.Damage
+		} else if result.DidCrit() {
+			spell.SpellMetrics[result.Target.UnitIndex].TotalCritDamage += result.Damage
+			if isPartialResist {
+				spell.SpellMetrics[result.Target.UnitIndex].TotalResistedCritDamage += result.Damage
+			}
+
+			if isPeriodic {
+				spell.SpellMetrics[result.Target.UnitIndex].TotalCritTickDamage += result.Damage
+				if isPartialResist {
+					spell.SpellMetrics[result.Target.UnitIndex].TotalResistedCritTickDamage += result.Damage
 				}
 			}
 		} else if result.DidGlance() {
@@ -688,9 +709,16 @@ func (spell *Spell) RegisterTravelTimeCallback(sim *Simulation, travelTime time.
 
 // Returns the combined attacker modifiers.
 func (spell *Spell) AttackerDamageMultiplier(attackTable *AttackTable, isDot bool) float64 {
-	damageMultiplierAdditive := TernaryFloat64(isDot && !spell.Flags.Matches(SpellFlagIgnoreAttackerModifiers),
+	if spell.Flags.Matches(SpellFlagIgnoreAttackerModifiers) {
+		return 1
+	}
+
+	damageMultiplierAdditive := TernaryFloat64(
+		isDot,
 		spell.DamageMultiplierAdditive+spell.Unit.PseudoStats.DotDamageMultiplierAdditive-1,
-		spell.DamageMultiplierAdditive)
+		spell.DamageMultiplierAdditive,
+	)
+
 	return spell.attackerDamageMultiplierInternal(attackTable) *
 		spell.DamageMultiplier *
 		damageMultiplierAdditive
@@ -710,9 +738,9 @@ func (result *SpellResult) applyTargetModifiers(sim *Simulation, spell *Spell, a
 		return
 	}
 
-	if spell.SpellSchool == SpellSchoolPhysical {
+	if spell.SpellSchool.Matches(SpellSchoolPhysical) {
 		result.Damage += attackTable.Defender.PseudoStats.BonusPhysicalDamageTaken
-	} else if spell.SpellSchool != SpellSchoolPhysical && spell.SpellSchool != SpellSchoolNone {
+	} else if !spell.SpellSchool.Matches(SpellSchoolPhysical) && !spell.SpellSchool.Matches(SpellSchoolNone) {
 		result.Damage += attackTable.Defender.PseudoStats.BonusSpellDamageTaken
 	}
 

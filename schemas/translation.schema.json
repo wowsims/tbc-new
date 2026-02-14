@@ -293,30 +293,46 @@
             "unknown": {
               "type": "string"
             },
-            "mogushan_vaults": {
+            "kara": {
               "type": "string"
             },
-            "heart_of_fear": {
+            "gruuls": {
               "type": "string"
             },
-            "terrace_of_endless_spring": {
+            "mag": {
               "type": "string"
             },
-            "throne_of_thunder": {
+            "tk": {
               "type": "string"
             },
-            "siege_of_orgrimmar": {
+            "ssc": {
+              "type": "string"
+            },
+            "mh": {
+              "type": "string"
+            },
+            "bt": {
+              "type": "string"
+            },
+            "za": {
+              "type": "string"
+            },
+            "swp": {
               "type": "string"
             }
           },
           "additionalProperties": false,
           "required": [
             "unknown",
-            "mogushan_vaults",
-            "heart_of_fear",
-            "terrace_of_endless_spring",
-            "throne_of_thunder",
-            "siege_of_orgrimmar"
+            "kara",
+            "gruuls",
+            "mag",
+            "tk",
+            "ssc",
+            "mh",
+            "bt",
+            "za",
+            "swp"
           ]
         },
         "armor_types": {
@@ -1088,48 +1104,20 @@
             "reset_gems"
           ]
         },
-        "reforge_summary": {
-          "type": "object",
-          "properties": {
-            "title": {
-              "type": "string"
-            },
-            "reset_reforges": {
-              "type": "string"
-            },
-            "copy_to_reforge_lite": {
-              "type": "string"
-            }
-          },
-          "additionalProperties": false,
-          "required": [
-            "title",
-            "reset_reforges",
-            "copy_to_reforge_lite"
-          ]
-        },
         "reforge_success": {
           "type": "object",
           "properties": {
             "title": {
               "type": "string"
             },
-            "removed_reforge": {
-              "type": "string"
-            },
             "no_changes": {
-              "type": "string"
-            },
-            "copy_to_reforge_lite": {
               "type": "string"
             }
           },
           "additionalProperties": false,
           "required": [
             "title",
-            "removed_reforge",
-            "no_changes",
-            "copy_to_reforge_lite"
+            "no_changes"
           ]
         },
         "gear_sets": {
@@ -1171,15 +1159,6 @@
                 "enchants": {
                   "type": "string"
                 },
-                "tinkers": {
-                  "type": "string"
-                },
-                "reforging": {
-                  "type": "string"
-                },
-                "upgrades": {
-                  "type": "string"
-                },
                 "gem1": {
                   "type": "string"
                 },
@@ -1195,9 +1174,6 @@
                 "items",
                 "random_suffix",
                 "enchants",
-                "tinkers",
-                "reforging",
-                "upgrades",
                 "gem1",
                 "gem2",
                 "gem3"
@@ -1209,16 +1185,7 @@
                 "remove_enchant": {
                   "type": "string"
                 },
-                "remove_tinkers": {
-                  "type": "string"
-                },
-                "remove_reforge": {
-                  "type": "string"
-                },
                 "remove_random_suffix": {
-                  "type": "string"
-                },
-                "remove_upgrade": {
                   "type": "string"
                 },
                 "remove_gem": {
@@ -1228,10 +1195,7 @@
               "additionalProperties": false,
               "required": [
                 "remove_enchant",
-                "remove_tinkers",
-                "remove_reforge",
                 "remove_random_suffix",
-                "remove_upgrade",
                 "remove_gem"
               ]
             },
@@ -1438,9 +1402,6 @@
             },
             "max_ranged_speed": {
               "type": "string"
-            },
-            "reforge_text": {
-              "type": "string"
             }
           },
           "additionalProperties": false,
@@ -1466,8 +1427,7 @@
             "ranged_weapon_type",
             "ranged_weapon_speed",
             "min_ranged_speed",
-            "max_ranged_speed",
-            "reforge_text"
+            "max_ranged_speed"
           ]
         },
         "preset_configurations": {
@@ -1511,7 +1471,6 @@
       "required": [
         "title",
         "gem_summary",
-        "reforge_summary",
         "reforge_success",
         "gear_sets",
         "gear_picker",
@@ -1588,6 +1547,26 @@
             "spell_haste",
             "crit_percent",
             "stamina"
+          ]
+        },
+        "party_buffs": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "title",
+            "tooltip",
+            "description"
           ]
         },
         "external_damage_cooldowns": {
@@ -1961,7 +1940,103 @@
                 "tooltip"
               ]
             },
+            "default_shout": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string"
+                },
+                "tooltip": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "label",
+                "tooltip"
+              ]
+            },
+            "default_stance": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string"
+                },
+                "tooltip": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "label",
+                "tooltip"
+              ]
+            },
+            "starting_rage": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string"
+                },
+                "tooltip": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "label",
+                "tooltip"
+              ]
+            },
             "stance_snapshot": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string"
+                },
+                "tooltip": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "label",
+                "tooltip"
+              ]
+            },
+            "has_bs_solarian_sapphire": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string"
+                },
+                "tooltip": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "label",
+                "tooltip"
+              ]
+            },
+            "has_bs_tier_2": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string"
+                },
+                "tooltip": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "label",
+                "tooltip"
+              ]
+            },
+            "queue_delay": {
               "type": "object",
               "properties": {
                 "label": {
@@ -2245,7 +2320,13 @@
             "pet_uptime",
             "glaive_toss_chance",
             "detonate_seed",
+            "default_shout",
+            "default_stance",
+            "starting_rage",
             "stance_snapshot",
+            "has_bs_solarian_sapphire",
+            "has_bs_tier_2",
+            "queue_delay",
             "assume_bleed_active",
             "cannot_shred_target",
             "okf_uptime",
@@ -2359,6 +2440,30 @@
                 "mhImbue",
                 "ohImbue"
               ]
+            },
+            "drums": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "title"
+              ]
+            },
+            "scrolls": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "title"
+              ]
             }
           },
           "additionalProperties": false,
@@ -2369,7 +2474,9 @@
             "food",
             "engineering",
             "pet",
-            "imbue"
+            "imbue",
+            "drums",
+            "scrolls"
           ]
         },
         "encounter": {
@@ -3028,6 +3135,7 @@
       "required": [
         "title",
         "raid_buffs",
+        "party_buffs",
         "external_damage_cooldowns",
         "external_defensive_cooldowns",
         "debuffs",
@@ -5669,7 +5777,23 @@
                     "full_description"
                   ]
                 },
-                "all_trinket_stat_procs_active": {
+                "aura_duration": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    },
+                    "tooltip": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "label",
+                    "tooltip"
+                  ]
+                },
+                "all_item_stat_procs_active": {
                   "type": "object",
                   "properties": {
                     "label": {
@@ -5689,7 +5813,7 @@
                     "full_description"
                   ]
                 },
-                "any_trinket_stat_procs_active": {
+                "any_item_stat_procs_active": {
                   "type": "object",
                   "properties": {
                     "label": {
@@ -5709,7 +5833,7 @@
                     "full_description"
                   ]
                 },
-                "any_trinket_stat_procs_available": {
+                "any_item_stat_procs_available": {
                   "type": "object",
                   "properties": {
                     "label": {
@@ -5725,7 +5849,7 @@
                     "tooltip"
                   ]
                 },
-                "trinket_procs_min_remaining_time": {
+                "item_procs_min_remaining_time": {
                   "type": "object",
                   "properties": {
                     "label": {
@@ -5741,7 +5865,7 @@
                     "tooltip"
                   ]
                 },
-                "trinket_procs_max_remaining_icd": {
+                "item_procs_max_remaining_icd": {
                   "type": "object",
                   "properties": {
                     "label": {
@@ -5757,7 +5881,7 @@
                     "tooltip"
                   ]
                 },
-                "num_equipped_stat_proc_trinkets": {
+                "num_equipped_stat_proc_items": {
                   "type": "object",
                   "properties": {
                     "label": {
@@ -6069,55 +6193,7 @@
                     "tooltip"
                   ]
                 },
-                "warlock_haunt_in_flight": {
-                  "type": "object",
-                  "properties": {
-                    "label": {
-                      "type": "string"
-                    },
-                    "tooltip": {
-                      "type": "string"
-                    }
-                  },
-                  "additionalProperties": false,
-                  "required": [
-                    "label",
-                    "tooltip"
-                  ]
-                },
                 "affliction_current_snapshot": {
-                  "type": "object",
-                  "properties": {
-                    "label": {
-                      "type": "string"
-                    },
-                    "tooltip": {
-                      "type": "string"
-                    }
-                  },
-                  "additionalProperties": false,
-                  "required": [
-                    "label",
-                    "tooltip"
-                  ]
-                },
-                "affliction_exhale_window": {
-                  "type": "object",
-                  "properties": {
-                    "label": {
-                      "type": "string"
-                    },
-                    "tooltip": {
-                      "type": "string"
-                    }
-                  },
-                  "additionalProperties": false,
-                  "required": [
-                    "label",
-                    "tooltip"
-                  ]
-                },
-                "mage_current_combustion_dot_estimate": {
                   "type": "object",
                   "properties": {
                     "label": {
@@ -6212,6 +6288,62 @@
                     "label",
                     "tooltip"
                   ]
+                },
+                "multiple_cd_usages": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    },
+                    "tooltip": {
+                      "type": "string"
+                    },
+                    "base_spell": {
+                      "type": "string"
+                    },
+                    "base_spell_tooltip": {
+                      "type": "string"
+                    },
+                    "target_spell": {
+                      "type": "string"
+                    },
+                    "target_spell_tooltip": {
+                      "type": "string"
+                    },
+                    "align_cd_end": {
+                      "type": "string"
+                    },
+                    "align_cd_end_tooltip": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "label",
+                    "tooltip",
+                    "base_spell",
+                    "base_spell_tooltip",
+                    "target_spell",
+                    "target_spell_tooltip",
+                    "align_cd_end",
+                    "align_cd_end_tooltip"
+                  ]
+                },
+                "offset": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    },
+                    "tooltip": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "label",
+                    "tooltip"
+                  ]
                 }
               },
               "additionalProperties": false,
@@ -6290,12 +6422,13 @@
                 "aura_remaining_time",
                 "aura_num_stacks",
                 "aura_should_refresh",
-                "all_trinket_stat_procs_active",
-                "any_trinket_stat_procs_active",
-                "any_trinket_stat_procs_available",
-                "trinket_procs_min_remaining_time",
-                "trinket_procs_max_remaining_icd",
-                "num_equipped_stat_proc_trinkets",
+                "aura_duration",
+                "all_item_stat_procs_active",
+                "any_item_stat_procs_active",
+                "any_item_stat_procs_available",
+                "item_procs_min_remaining_time",
+                "item_procs_max_remaining_icd",
+                "num_equipped_stat_proc_items",
                 "num_stat_buff_cooldowns",
                 "any_stat_buff_cooldowns_active",
                 "any_stat_buff_cooldowns_min_duration",
@@ -6314,15 +6447,14 @@
                 "cat_excess_energy",
                 "cat_new_savage_roar_duration",
                 "warlock_hand_of_guldan_in_flight",
-                "warlock_haunt_in_flight",
                 "affliction_current_snapshot",
-                "affliction_exhale_window",
-                "mage_current_combustion_dot_estimate",
                 "protection_paladin_damage_taken_last_global",
                 "aura_remaining_icd",
                 "aura_icd_is_ready",
                 "aura_icd_is_ready_with_reaction_time",
-                "overlap"
+                "overlap",
+                "multiple_cd_usages",
+                "offset"
               ]
             },
             "operators": {
@@ -8098,13 +8230,25 @@
                 "hit": {
                   "type": "string"
                 },
+                "resisted_hit": {
+                  "type": "string"
+                },
                 "critical_hit": {
+                  "type": "string"
+                },
+                "resisted_critical_hit": {
                   "type": "string"
                 },
                 "tick": {
                   "type": "string"
                 },
+                "resisted_tick": {
+                  "type": "string"
+                },
                 "critical_tick": {
+                  "type": "string"
+                },
+                "resisted_critical_tick": {
                   "type": "string"
                 },
                 "glancing_blow": {
@@ -8114,6 +8258,9 @@
                   "type": "string"
                 },
                 "blocked_critical_hit": {
+                  "type": "string"
+                },
+                "crushing_blow": {
                   "type": "string"
                 },
                 "miss": {
@@ -8132,12 +8279,17 @@
               "additionalProperties": false,
               "required": [
                 "hit",
+                "resisted_hit",
                 "critical_hit",
+                "resisted_critical_hit",
                 "tick",
+                "resisted_tick",
                 "critical_tick",
+                "resisted_critical_tick",
                 "glancing_blow",
                 "blocked_hit",
                 "blocked_critical_hit",
+                "crushing_blow",
                 "miss",
                 "parry",
                 "dodge",
@@ -8257,22 +8409,6 @@
             "import_button": {
               "type": "string"
             },
-            "tinker_warning": {
-              "type": "object",
-              "properties": {
-                "title": {
-                  "type": "string"
-                },
-                "message": {
-                  "type": "string"
-                }
-              },
-              "additionalProperties": false,
-              "required": [
-                "title",
-                "message"
-              ]
-            },
             "error_invalid_url": {
               "type": "string"
             },
@@ -8292,7 +8428,6 @@
             "instructions",
             "upload_button",
             "import_button",
-            "tinker_warning",
             "error_invalid_url",
             "error_cannot_parse_class",
             "error_cannot_parse_race"
@@ -8321,22 +8456,6 @@
             },
             "import_button": {
               "type": "string"
-            },
-            "reforge_warning": {
-              "type": "object",
-              "properties": {
-                "title": {
-                  "type": "string"
-                },
-                "message": {
-                  "type": "string"
-                }
-              },
-              "additionalProperties": false,
-              "required": [
-                "title",
-                "message"
-              ]
             }
           },
           "additionalProperties": false,
@@ -8347,8 +8466,7 @@
             "feature_description",
             "instructions",
             "upload_button",
-            "import_button",
-            "reforge_warning"
+            "import_button"
           ]
         }
       },
@@ -8829,9 +8947,6 @@
             "unspent_talent_points": {
               "type": "string"
             },
-            "armor_specialization": {
-              "type": "string"
-            },
             "dual_wield_2h_without_titans_grip": {
               "type": "string"
             },
@@ -8845,7 +8960,6 @@
             "profession_requirement",
             "too_many_jc_gems",
             "unspent_talent_points",
-            "armor_specialization",
             "dual_wield_2h_without_titans_grip",
             "shaman_fele_autocast"
           ]
@@ -9258,9 +9372,6 @@
                 "use_soft_cap_breakpoints": {
                   "type": "string"
                 },
-                "force_stat_proc": {
-                  "type": "string"
-                },
                 "any": {
                   "type": "string"
                 },
@@ -9324,12 +9435,6 @@
                 "freeze_item_slots": {
                   "type": "string"
                 },
-                "include_eotbp_socket": {
-                  "type": "string"
-                },
-                "include_eotbp_socket_tooltip": {
-                  "type": "string"
-                },
                 "limit_execution_time": {
                   "type": "string"
                 },
@@ -9342,7 +9447,6 @@
                 "title",
                 "tooltip",
                 "use_soft_cap_breakpoints",
-                "force_stat_proc",
                 "any",
                 "optimize_gems_tooltip",
                 "freeze_item_slots_tooltip",
@@ -9364,8 +9468,6 @@
                 "edit_weights",
                 "include_gems",
                 "freeze_item_slots",
-                "include_eotbp_socket",
-                "include_eotbp_socket_tooltip",
                 "limit_execution_time",
                 "limit_execution_time_tooltip"
               ]

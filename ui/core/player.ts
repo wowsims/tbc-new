@@ -51,7 +51,7 @@ import {
 } from './proto/ui';
 import { ActionId } from './proto_utils/action_id';
 import { Database } from './proto_utils/database';
-import { EquippedItem, ReforgeData } from './proto_utils/equipped_item';
+import { EquippedItem } from './proto_utils/equipped_item';
 import { Gear, ItemSwapGear } from './proto_utils/gear';
 import { gemMatchesSocket, isUnrestrictedGem } from './proto_utils/gems';
 import { StatCap, Stats } from './proto_utils/stats';
@@ -187,6 +187,7 @@ export interface MeleeCritCapInfo {
 	expertise: number;
 	suppression: number;
 	glancing: number;
+	debuffCrit: number;
 	hasOffhandWeapon: boolean;
 	meleeHitCap: number;
 	expertiseCap: number;
@@ -252,7 +253,6 @@ export class Player<SpecType extends Spec> {
 	private distanceFromTarget = 0;
 	private healingModel: HealingModel = HealingModel.create();
 	private healingEnabled = false;
-	private challengeModeEnabled = false;
 
 	private readonly autoRotationGenerator: AutoRotationGenerator<SpecType> | null = null;
 	private readonly simpleRotationGenerator: SimpleRotationGenerator<SpecType> | null = null;
@@ -290,7 +290,6 @@ export class Player<SpecType extends Spec> {
 	readonly healingModelChangeEmitter = new TypedEvent<void>('PlayerHealingModel');
 	readonly epWeightsChangeEmitter = new TypedEvent<void>('PlayerEpWeights');
 	readonly miscOptionsChangeEmitter = new TypedEvent<void>('PlayerMiscOptions');
-	readonly challengeModeChangeEmitter = new TypedEvent<void>('ChallengeMode');
 
 	readonly currentStatsEmitter = new TypedEvent<void>('PlayerCurrentStats');
 	readonly epRatiosChangeEmitter = new TypedEvent<void>('PlayerEpRatios');
@@ -327,8 +326,6 @@ export class Player<SpecType extends Spec> {
 
 		this.itemSwapSettings = new ItemSwapSettings(this);
 
-		this.bindChallengeModeChange();
-
 		this.changeEmitter = TypedEvent.onAny(
 			[
 				this.nameChangeEmitter,
@@ -348,16 +345,9 @@ export class Player<SpecType extends Spec> {
 				this.epWeightsChangeEmitter,
 				this.epRatiosChangeEmitter,
 				this.epRefStatChangeEmitter,
-				this.challengeModeChangeEmitter,
 			],
 			'PlayerChange',
 		);
-	}
-
-	bindChallengeModeChange() {
-		this.challengeModeChangeEmitter.on(() => {
-			this.setGear(TypedEvent.nextEventID(), this.gear, true);
-		});
 	}
 
 	getSpecIcon(): string {
@@ -473,12 +463,6 @@ export class Player<SpecType extends Spec> {
 	// Returns all enchants that this player can wear in the given slot.
 	getEnchants(slot: ItemSlot): Array<Enchant> {
 		return this.sim.db.getEnchants(slot).filter(enchant => canEquipEnchant(enchant, this.playerSpec));
-	}
-
-	// Returns all tinkers that this player can wear in the given slot.
-	// For the purpose of this function, they are all enchants still, however we split them since you can have both on the same item.
-	getTinkers(slot: ItemSlot): Array<Enchant> {
-		return this.sim.db.getEnchants(slot).filter(enchant => enchant.requiredProfession == Profession.Engineering);
 	}
 
 	// Returns all gems that this player can wear of the given color.
@@ -729,14 +713,18 @@ export class Player<SpecType extends Spec> {
 		const meleeHit = this.currentStats.finalStats?.pseudoStats[PseudoStat.PseudoStatMeleeHitPercent] || 0.0;
 		const expertise = (this.currentStats.finalStats?.stats[Stat.StatExpertiseRating] || 0.0) / Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION / 4;
 		//const agility = (this.currentStats.finalStats?.stats[Stat.StatAgility] || 0.0) / this.getClass();
-		const suppression = 4.8;
-		const glancing = 24.0;
+		const critSuppression = [0, 1, 2, 4.8][this.sim.encounter.primaryTarget.level - Mechanics.CHARACTER_LEVEL];
+		const hitSuppression = [0, 0, 0, 1][this.sim.encounter.primaryTarget.level - Mechanics.CHARACTER_LEVEL];
+		const glancing = [6, 12, 18, 24][this.sim.encounter.primaryTarget.level - Mechanics.CHARACTER_LEVEL];
+		const oneHandHitCap = [5, 6, 7, 8][this.sim.encounter.primaryTarget.level - Mechanics.CHARACTER_LEVEL] + hitSuppression;
+		// DW Penalty is a fixed 19%
+		const dualWieldHitCap = oneHandHitCap + 19;
 
 		const hasOffhandWeapon = this.getGear().getEquippedItem(ItemSlot.ItemSlotOffHand)?.item.weaponSpeed !== undefined;
 		// Due to warrior HS bug, hit cap for crit cap calculation should be 8% instead of 27%
-		const meleeHitCap = hasOffhandWeapon && this.getClass() != Class.ClassWarrior ? 27.0 : 8.0;
-		const dodgeCap = 6.5;
-		const parryCap = this.getInFrontOfTarget() ? 14.0 : 0;
+		const meleeHitCap = hasOffhandWeapon && this.getClass() != Class.ClassWarrior ? dualWieldHitCap : oneHandHitCap;
+		const dodgeCap = [5, 5.5, 6, 6.5][this.sim.encounter.primaryTarget.level - Mechanics.CHARACTER_LEVEL];
+		const parryCap = this.getInFrontOfTarget() ? [5, 5.5, 6, 14][this.sim.encounter.primaryTarget.level - Mechanics.CHARACTER_LEVEL] : 0;
 		const expertiseCap = dodgeCap + parryCap;
 
 		const remainingMeleeHitCap = Math.max(meleeHitCap - meleeHit, 0.0);
@@ -744,24 +732,26 @@ export class Player<SpecType extends Spec> {
 		const remainingParryCap = Math.max(parryCap - expertise, 0.0);
 		const remainingExpertiseCap = remainingDodgeCap + remainingParryCap;
 
-		const specSpecificOffset = 0.0;
+		let specSpecificOffset = 0.0;
+		if (this.getSpec() === Spec.SpecEnhancementShaman) {
+			const player = this as unknown as Player<Spec.SpecEnhancementShaman>;
+			// Elemental Devastation uptime is near 100%
+			const ranks = player.getTalents().elementalDevastation;
+			specSpecificOffset = 3.0 * ranks;
+		}
 
-		// if (this.getSpec() === Spec.SpecEnhancementShaman) {
-		// 	// Elemental Devastation uptime is near 100%
-		// 	// TODO: Cata - Check this
-		// 	const ranks = (this as unknown as Player<Spec.SpecEnhancementShaman>).getTalents().elementalDevastation;
-		// 	specSpecificOffset = 3.0 * ranks;
-		// }
+		const debuffCrit = 0.0;
 
-		const baseCritCap = 100.0 - glancing + suppression - remainingMeleeHitCap - remainingExpertiseCap - specSpecificOffset;
+		const baseCritCap = 100.0 - glancing + critSuppression - remainingMeleeHitCap - remainingExpertiseCap - specSpecificOffset;
 		const playerCritCapDelta = meleeCrit - baseCritCap;
 
 		return {
 			meleeCrit,
 			meleeHit,
 			expertise,
-			suppression,
+			suppression: critSuppression,
 			glancing,
+			debuffCrit,
 			hasOffhandWeapon,
 			meleeHitCap,
 			expertiseCap,
@@ -931,17 +921,6 @@ export class Player<SpecType extends Spec> {
 		this.miscOptionsChangeEmitter.emit(eventID);
 	}
 
-	getChallengeModeEnabled(): boolean {
-		return this.challengeModeEnabled;
-	}
-
-	setChallengeModeEnabled(eventID: EventID, value: boolean) {
-		if (value === this.challengeModeEnabled) return;
-
-		this.challengeModeEnabled = value;
-		this.challengeModeChangeEmitter.emit(eventID);
-	}
-
 	getInFrontOfTarget(): boolean {
 		return this.inFrontOfTarget;
 	}
@@ -1054,25 +1033,16 @@ export class Player<SpecType extends Spec> {
 		return ep;
 	}
 
-	computeReforgingEP(reforging: ReforgeData): number {
-		let stats = new Stats([]);
-		stats = stats.addStat(reforging.fromStat, reforging.fromAmount);
-		stats = stats.addStat(reforging.toStat, reforging.toAmount);
-
-		return this.computeStatsEP(stats);
-	}
-
 	computeItemEP(item: Item, slot: ItemSlot): number {
 		if (item == null) return 0;
 
-		const cacheKey = `${item.id}-${JSON.stringify(this.epWeights)}-${this.challengeModeEnabled}`;
+		const cacheKey = `${item.id}-${JSON.stringify(this.epWeights)}`;
 
 		const cached = this.itemEPCache[slot].get(cacheKey);
 		if (cached !== undefined) return cached;
 
 		const equippedItem = new EquippedItem({
 			item,
-			challengeMode: this.challengeModeEnabled,
 		}).withDynamicStats();
 		const itemStats = equippedItem.calcStats(slot);
 
@@ -1170,35 +1140,16 @@ export class Player<SpecType extends Spec> {
 	};
 
 	static readonly RAID_IDS: Partial<Record<RaidFilterOption, number>> = {
-		[RaidFilterOption.RaidMogushanVaults]: 6125,
-		[RaidFilterOption.RaidHeartOfFear]: 6297,
-		[RaidFilterOption.RaidTerraceOfEndlessSpring]: 6067,
-		[RaidFilterOption.RaidThroneOfThunder]: 6622,
-		[RaidFilterOption.RaidSiegeOfOrgrimmar]: 6738,
+		[RaidFilterOption.RaidKara]: 3457,
+		[RaidFilterOption.RaidGruul]: 3923,
+		[RaidFilterOption.RaidMag]: 3836,
+		[RaidFilterOption.RaidTK]: 3845,
+		[RaidFilterOption.RaidSSC]: 3607,
+		[RaidFilterOption.RaidMH]: 3606,
+		[RaidFilterOption.RaidBT]: 3959,
+		[RaidFilterOption.RaidZA]: 3805,
+		[RaidFilterOption.RaidSWP]: 4075,
 	};
-
-	get armorSpecializationArmorType() {
-		// We always pick the first entry since this is always the preffered armor type
-		return this.playerClass.armorTypes[0];
-	}
-
-	hasArmorSpecializationBonus() {
-		return [
-			ItemSlot.ItemSlotHead,
-			ItemSlot.ItemSlotShoulder,
-			ItemSlot.ItemSlotChest,
-			ItemSlot.ItemSlotWrist,
-			ItemSlot.ItemSlotHands,
-			ItemSlot.ItemSlotWaist,
-			ItemSlot.ItemSlotLegs,
-			ItemSlot.ItemSlotFeet,
-		].some(itemSlot => {
-			const item = this.getEquippedItem(itemSlot)?.item;
-			if (!item) return false;
-			const armorType = item.armorType;
-			return armorType !== this.armorSpecializationArmorType;
-		});
-	}
 
 	filterItemData<T>(itemData: Array<T>, getItemFunc: (val: T) => Item, slot: ItemSlot): Array<T> {
 		const filters = this.sim.getFilters();
@@ -1359,12 +1310,18 @@ export class Player<SpecType extends Spec> {
 
 			// This is not exactly a player selected filter, just a general filter to remove any gems with stats that is not in use for the player.
 			// i.e dead gems.
-			const statsFilter = this.specConfig.gemStats ?? this.specConfig.epStats;
+
+			//Remove Gem filter from MOP
+			//We may want to instead change it per spec or class?
+			//const statsFilter = this.specConfig.gemStats ?? this.specConfig.epStats;
 			const positiveStatIds = gem.stats.map((value, statId) => (value > 0 ? statId : -1)).filter(statId => statId >= 0);
 			if (!positiveStatIds.length) {
 				return false;
 			}
-			return !positiveStatIds.some(statId => !statsFilter.includes(statId));
+
+			return positiveStatIds;
+			//Filter removed
+			//!positiveStatIds.some(statId => !statsFilter.includes(statId));
 		});
 	}
 
@@ -1429,7 +1386,6 @@ export class Player<SpecType extends Spec> {
 				inFrontOfTarget: this.getInFrontOfTarget(),
 				distanceFromTarget: this.getDistanceFromTarget(),
 				healingModel: this.getHealingModel(),
-				challengeMode: this.getChallengeModeEnabled(),
 			});
 			player = withSpec(this.getSpec(), player, this.getSpecOptions());
 		}
@@ -1484,7 +1440,6 @@ export class Player<SpecType extends Spec> {
 				this.setInFrontOfTarget(eventID, proto.inFrontOfTarget);
 				this.setDistanceFromTarget(eventID, proto.distanceFromTarget);
 				this.setHealingModel(eventID, proto.healingModel || HealingModel.create());
-				this.setChallengeModeEnabled(eventID, proto.challengeMode);
 			}
 			if (loadCategory(SimSettingCategories.External)) {
 				this.setBuffs(eventID, proto.buffs || IndividualBuffs.create());
@@ -1542,38 +1497,13 @@ export class Player<SpecType extends Spec> {
 		}
 
 		switch (this.getRace()) {
-			case Race.RaceDwarf:
-				return [
-					mainHand?.item.weaponType === WeaponType.WeaponTypeMace ||
-						mainHand?.item.rangedWeaponType === RangedWeaponType.RangedWeaponTypeBow ||
-						mainHand?.item.rangedWeaponType === RangedWeaponType.RangedWeaponTypeCrossbow ||
-						mainHand?.item.rangedWeaponType === RangedWeaponType.RangedWeaponTypeGun,
-					offHand?.item.weaponType === WeaponType.WeaponTypeMace,
-				];
-			case Race.RaceGnome:
-				return [
-					mainHand?.item.weaponType === WeaponType.WeaponTypeDagger ||
-						(mainHand?.item.handType !== HandType.HandTypeTwoHand && mainHand?.item.weaponType === WeaponType.WeaponTypeSword),
-					offHand?.item.weaponType === WeaponType.WeaponTypeDagger ||
-						(offHand?.item.handType !== HandType.HandTypeTwoHand && offHand?.item.weaponType === WeaponType.WeaponTypeSword),
-				];
 			case Race.RaceHuman:
 				return [
 					mainHand?.item.weaponType === WeaponType.WeaponTypeMace || mainHand?.item.weaponType === WeaponType.WeaponTypeSword,
 					offHand?.item.weaponType === WeaponType.WeaponTypeMace || offHand?.item.weaponType === WeaponType.WeaponTypeSword,
 				];
 			case Race.RaceOrc:
-				return [
-					mainHand?.item.weaponType === WeaponType.WeaponTypeAxe || mainHand?.item.weaponType === WeaponType.WeaponTypeFist,
-					offHand?.item.weaponType === WeaponType.WeaponTypeAxe || offHand?.item.weaponType === WeaponType.WeaponTypeFist,
-				];
-			case Race.RaceTroll:
-				return [
-					mainHand?.item.rangedWeaponType === RangedWeaponType.RangedWeaponTypeBow ||
-						mainHand?.item.rangedWeaponType === RangedWeaponType.RangedWeaponTypeCrossbow ||
-						mainHand?.item.rangedWeaponType === RangedWeaponType.RangedWeaponTypeGun,
-					false,
-				];
+				return [mainHand?.item.weaponType === WeaponType.WeaponTypeAxe, offHand?.item.weaponType === WeaponType.WeaponTypeAxe];
 		}
 
 		return [false, false];

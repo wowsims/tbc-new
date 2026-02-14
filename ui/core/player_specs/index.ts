@@ -43,7 +43,7 @@ const specToPlayerSpec: Record<Spec, PlayerSpec<any> | undefined> = {
 	// Warlock
 	[Spec.SpecWarlock]: WarlockSpecs.Warlock,
 	// Warrior
-	[Spec.SpecDPSWarrior]: WarriorSpecs.DPSWarrior,
+	[Spec.SpecDpsWarrior]: WarriorSpecs.DpsWarrior,
 	[Spec.SpecProtectionWarrior]: WarriorSpecs.ProtectionWarrior,
 };
 

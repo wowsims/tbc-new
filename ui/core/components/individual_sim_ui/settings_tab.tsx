@@ -22,6 +22,7 @@ import { SavedDataManager } from '../saved_data_manager.jsx';
 import { SimTab } from '../sim_tab.js';
 import { ConsumesPicker } from './consumes_picker.jsx';
 import { PresetConfigurationCategory, PresetConfigurationPicker } from './preset_configuration_picker.jsx';
+import { IconPicker } from '../pickers/icon_picker';
 
 export class SettingsTab extends SimTab {
 	protected simUI: IndividualSimUI<any>;
@@ -179,8 +180,8 @@ export class SettingsTab extends SimTab {
 		const swapSlots = this.simUI.individualConfig.itemSwapSlots || [];
 		if (settings.length > 0 || swapSlots.length > 0) {
 			const contentBlock = new ContentBlock(this.column2, 'other-settings', {
-			header: { title: i18n.t('settings_tab.other.title') },
-		});
+				header: { title: i18n.t('settings_tab.other.title') },
+			});
 
 			if (settings.length > 0) {
 				this.configureInputSection(contentBlock.bodyElement, this.simUI.individualConfig.otherInputs);
@@ -202,12 +203,7 @@ export class SettingsTab extends SimTab {
 			header: { title: i18n.t('settings_tab.raid_buffs.title'), tooltip: i18n.t('settings_tab.raid_buffs.tooltip') },
 		});
 
-		contentBlock.headerElement?.appendChild(
-			<p className="fs-body">
-				{i18n.t('settings_tab.raid_buffs.description')}
-			</p>,
-		);
-
+		contentBlock.headerElement?.appendChild(<p className="fs-body">{i18n.t('settings_tab.raid_buffs.description')}</p>);
 
 		const buffOptions = relevantStatOptions(BuffDebuffInputs.BUFFS_CONFIG, this.simUI);
 		this.configureIconSection(
@@ -218,18 +214,16 @@ export class SettingsTab extends SimTab {
 		const partyBuffOptions = relevantStatOptions(BuffDebuffInputs.PARTY_BUFFS_CONFIG, this.simUI);
 		if (partyBuffOptions.length > 0) {
 			const partyContentBlock = new ContentBlock(this.column3, 'buffs-settings', {
-				header: { title: i18n.t('settings_tab.raid_buffs.title'), tooltip: i18n.t('settings_tab.raid_buffs.tooltip') },
+				header: { title: i18n.t('settings_tab.party_buffs.title'), tooltip: i18n.t('settings_tab.party_buffs.tooltip') },
 			});
 
-			partyContentBlock.headerElement?.appendChild(
-				<p className="fs-body">
-					{i18n.t('settings_tab.raid_buffs.description')}
-				</p>,
-			);
+			partyContentBlock.headerElement?.appendChild(<p className="fs-body">{i18n.t('settings_tab.party_buffs.description')}</p>);
 
 			this.configureIconSection(
 				partyContentBlock.bodyElement,
-				partyBuffOptions.map(options => options.picker && new options.picker(partyContentBlock.bodyElement, this.simUI.player, options.config as any, this.simUI)),
+				partyBuffOptions.map(
+					options => options.picker && new options.picker(partyContentBlock.bodyElement, this.simUI.player, options.config as any, this.simUI),
+				),
 			);
 		}
 	}
@@ -312,7 +306,6 @@ export class SettingsTab extends SimTab {
 					simUI.player.setInFrontOfTarget(eventID, newSettings.inFrontOfTarget);
 					simUI.player.setDistanceFromTarget(eventID, newSettings.distanceFromTarget);
 					simUI.player.setHealingModel(eventID, newSettings.healingModel || HealingModel.create());
-					simUI.player.setChallengeModeEnabled(eventID, newSettings.challengeMode);
 				});
 			},
 			changeEmitters: [
@@ -384,18 +377,19 @@ export class SettingsTab extends SimTab {
 			inFrontOfTarget: this.simUI.player.getInFrontOfTarget(),
 			distanceFromTarget: this.simUI.player.getDistanceFromTarget(),
 			healingModel: this.simUI.player.getHealingModel(),
-			challengeMode: this.simUI.player.getChallengeModeEnabled(),
 		});
 	}
 
 	private configureInputSection(sectionElem: HTMLElement, sectionConfig: InputSection) {
 		sectionConfig.inputs.forEach(inputConfig => {
 			if (inputConfig.type == 'number') {
-				new NumberPicker(sectionElem, this.simUI.player,  inputConfig);
+				new NumberPicker(sectionElem, this.simUI.player, inputConfig);
 			} else if (inputConfig.type == 'boolean') {
 				new BooleanPicker(sectionElem, this.simUI.player, { ...inputConfig, reverse: true });
 			} else if (inputConfig.type == 'enum') {
 				new EnumPicker(sectionElem, this.simUI.player, inputConfig);
+			} else if (inputConfig.type == 'icon') {
+				new IconPicker(sectionElem, this.simUI.player, inputConfig);
 			}
 		});
 	}

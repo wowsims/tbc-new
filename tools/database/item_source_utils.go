@@ -1,223 +1,122 @@
 package database
 
 import (
+	"slices"
+	"strconv"
 	"strings"
 
-	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
 )
 
 func InferPhase(item *proto.UIItem) int32 {
 	ilvl := item.ScalingOptions[int32(0)].Ilvl
-	hasRandomSuffixOptions := len(item.RandomSuffixOptions) > 0
 	name := item.Name
-	description := item.NameDescription
-	quality := item.Quality
 
-	//- Any blue pvp ''Crafted'' item of ilvl 458 is 5.2
-	//- Any blue pvp ''Crafted'' item of ilvl 476 is 5.4
-	if strings.Contains(name, "Crafted") {
-		switch ilvl {
-		case 458:
-			return 3
-		case 476:
-			return 5
-		}
-	}
-
-	//- Any "Tyrannical" item is 5.2
-	//- Any "Grievous" item is 5.4
-	//- Any "Prideful" item is 5.4
-	switch {
-	case strings.Contains(name, "Grievous"),
-		strings.Contains(name, "Prideful"):
-		return 5
-	case strings.Contains(name, "Tyrannical"):
-		return 3
-	}
-
-	//iLvl 600 legendary vs. epic
-	if ilvl == core.MaxIlvl {
-		if quality == proto.ItemQuality_ItemQualityLegendary {
-			return 5
-		}
-		if quality == proto.ItemQuality_ItemQualityEpic {
-			return 4
-		}
-	}
-
-	//- Any item above ilvl 542 is 5.4 (except the 600 ilvl Epic Cloaks from the legendary questline)
-	if ilvl > 542 && quality < proto.ItemQuality_ItemQualityLegendary {
-		return 5
-	}
-
-	//- Any 483 green item is a boosted level 90 item in 5.4
-	if ilvl == 483 && quality == proto.ItemQuality_ItemQualityUncommon {
-		return 5
-	}
-
-	//- All pve tier items of ilvl 528/540/553/566 are 5.4
-	//- All pve tier items of ilvl 502/522/535 are 5.2
+	// PvE Sets
 	if item.SetId > 0 {
-		switch ilvl {
-		case 528, 540, 553, 566:
-			return 5
-		case 502, 522, 535:
+		if ilvl == 120 {
+			return 1
+		}
+		if ilvl == 133 {
+			return 2
+		}
+		if ilvl == 146 {
 			return 3
 		}
-	}
-
-	// Timeless Isle trinkets are all ilvl 496 or 535 and description "Timeless" and does not have a source listed.
-	if len(item.Sources) == 0 {
-		if item.Type == proto.ItemType_ItemTypeTrinket && (ilvl == 496 || (ilvl == 535 && strings.Contains(description, "Timeless"))) {
+		if ilvl == 154 {
 			return 5
 		}
 	}
 
 	//AtlasLoot‐style source checks
 	for _, src := range item.Sources {
-		if rep := src.GetRep(); rep != nil {
-			//- All items with Reputation requirements of "Shado-Pan Assault" are 5.2
-			if rep.RepFactionId == proto.RepFaction_RepFactionShadoPanAssault {
-				return 3
+		if craft := src.GetCrafted(); craft != nil {
+			if strings.Contains(item.Name, "Figurine") && ilvl == 125 {
+				return 5
 			}
-			//- All items with Reputation requirements of "Sunreaver Onslaught" or "Kirin Tor Offensive" are 5.2
-			if rep.RepFactionId == proto.RepFaction_RepFactionSunreaverOnslaught || rep.RepFactionId == proto.RepFaction_RepFactionKirinTorOffensive {
-				return 3
+			if ilvl <= 127 {
+				return 1
 			}
-			if rep.RepFactionId == proto.RepFaction_RepFactionOperationShieldwall || rep.RepFactionId == proto.RepFaction_RepFactionDominanceOffensive {
+			if ilvl == 146 || ilvl == 136 { // T5 + Vortex BoP Crafts
 				return 2
 			}
-			//- All items with Reputation requirements of "Emperor Shaohao" are 5.4
-			if rep.RepFactionId == proto.RepFaction_RepFactionEmperorShaohao {
+			if ilvl >= 128 && ilvl <= 141 { // T6 Crafts
 				return 3
 			}
-		}
-		if craft := src.GetCrafted(); craft != nil {
-			switch ilvl {
-			case 476, 496:
-				return 1
-			case 502:
-				return 4
-			case 522:
-				return 3
-			case 553:
-				return 4
+			if ilvl == 159 { // SWP Crafts
+				return 5
 			}
 		}
 		if drop := src.GetDrop(); drop != nil {
-			switch drop.ZoneId {
-			case 6297, 6125, 6067:
+			if slices.Contains([]int32{3457, 3923, 3836}, drop.ZoneId) { // Kara, Gruul, Mag
 				return 1
-			case 6622:
-				return 3
-			case 6738:
-				return 5
 			}
-			//- All "Oondasta (World Boss)" items are 5.2
-			if drop.NpcId == 826 {
+			if slices.Contains([]int32{3845, 3607}, drop.ZoneId) { // TK, SSC
+				return 2
+			}
+			if slices.Contains([]int32{3606, 3959}, drop.ZoneId) { // MH, BT
 				return 3
 			}
-			//- All "Ordos (World Boss)" items are 5.4
-			if drop.NpcId == 861 {
+			if slices.Contains([]int32{3805}, drop.ZoneId) { // ZA
+				return 4
+			}
+			if slices.Contains([]int32{4075, 4131}, drop.ZoneId) { // SWP, MGT
 				return 5
+			}
+			if ilvl <= 117 {
+				return 1
 			}
 		}
 	}
 
-	//- Any 476 epic item with random stats is 5.1
-	//- Any 496 epic item with random stats is 5.4
-	//- Any 516 epic items with random stats are 5.3
-	//- Any 535 epic items with random stats are 5.4
-	//- Any 489 random stat epic is 5.3
-	if hasRandomSuffixOptions {
-		switch ilvl {
-		case 476:
+	// PvP Sets
+	if item.Quality == proto.ItemQuality_ItemQualityEpic && ilvl > 115 {
+		switch {
+		case strings.Contains(name, "Merciless Gladiator"),
+			strings.Contains(name, "Veteran's"):
 			return 2
-		case 489:
-			return 4
-		case 496:
+		case strings.Contains(name, "Vengeful Gladiator"),
+			strings.Contains(name, "Vindicator's"):
+			return 3
+		case strings.Contains(name, "Brutal Gladiator"),
+			strings.Contains(name, "Guardian's"):
 			return 5
-		case 516:
-			return 4
-		case 535:
-			return 5
+		case strings.Contains(name, "Gladiator's"),
+			strings.Contains(name, "Marshal's"),
+			strings.Contains(name, "General's"),
+			strings.Contains(name, "Sergeant's"):
+			return 1
 		}
 	}
 
-	// high ilvl greens probably boosted
-	if ilvl > 440 && quality < proto.ItemQuality_ItemQualityRare {
-		return 5
-	}
-
-	if ilvl <= 463 {
+	if ilvl <= 117 || (ilvl <= 120 && item.Quality == proto.ItemQuality_ItemQualityUncommon) { // Catch-all for Pre-TBC, Outlands Questing, Random Green, and Heroic Dungeon Gear
 		return 1
 	}
 
-	switch ilvl {
-	case 476, 483, 489, 496:
+	if (ilvl == 120 || ilvl == 125) && item.Quality == proto.ItemQuality_ItemQualityEpic { // P1 World Boss, Mag Head Rings
 		return 1
-	case 502, 522, 535, 541:
+	}
+
+	if strings.Contains(item.Name, "Violet Signet") { // Kara Rep Rings
+		return 1
+	}
+
+	if ilvl == 138 { // TK Quest Necks
+		return 2
+	}
+
+	if strings.Contains(item.Name, "Band of Eternity") || strings.Contains(item.Name, "Band of the Eternal") { // Hyjal Rep Rings
 		return 3
-	case 553, 528, 566, 540:
+	}
+
+	if ilvl == 128 || ilvl == 136 || ilvl == 133 || ilvl == 132 { // ZA Badge Gear
+		return 4
+	}
+
+	if ilvl >= 159 || ilvl == 141 || ilvl == 146 || ilvl == 135 || item.Id == 34407 { // SWP Mote Turn-ins, SWP Badge Armor, SWP Badge Weapons, The 2 Ring, Tranquil Moonlight Wraps (SWP Mote item but lower ilvl???)
 		return 5
 	}
 
+	println("Uncategorized Item: " + item.Name + " with Ilvl: " + strconv.FormatInt(int64(ilvl), 10))
 	return 0
-}
-
-func InferThroneOfThunderSource(item *proto.UIItem) []*proto.UIItemSource {
-	sources := make([]*proto.UIItemSource, 0, len(item.Sources)+1)
-
-	sources = append(sources, &proto.UIItemSource{
-		Source: &proto.UIItemSource_Drop{Drop: &proto.DropSource{
-			ZoneId:    6622,
-			OtherName: "Shared Boss Loot",
-		}},
-	})
-
-	sources = append(sources, item.Sources...)
-	return sources
-}
-
-func InferCelestialItemSource(item *proto.UIItem) []*proto.UIItemSource {
-	if item.Phase <= 2 {
-		sources := make([]*proto.UIItemSource, 0, len(item.Sources)+1)
-		// Make sure to always add the SoldBy source first so it shows up first in the UI since we pick the first index
-		// but we still need the other sources to add things like Sha-Touched gems
-		sources = append(sources, &proto.UIItemSource{
-			Source: &proto.UIItemSource_SoldBy{SoldBy: &proto.SoldBySource{
-				NpcId:   248108,
-				NpcName: "Avatar of the August Celestials",
-			}},
-		})
-		sources = append(sources, item.Sources...)
-		return sources
-	}
-	return item.Sources
-}
-
-func InferFlexibleRaidItemSource(item *proto.UIItem) []*proto.UIItemSource {
-	sources := item.Sources
-	hasSources := len(item.Sources) > 0
-	if hasSources {
-		for _, source := range sources {
-			if drop := source.GetDrop(); drop != nil {
-				// Flex raid has no difficulty index so we need to infer it from name
-				if drop.Difficulty == proto.DungeonDifficulty_DifficultyUnknown {
-					drop.Difficulty = proto.DungeonDifficulty_DifficultyRaidFlex
-				}
-			}
-		}
-	} else {
-		// Some Flex items don't have a drop source listed,
-		// so just add the difficulty for filtering
-		sources = append(sources, &proto.UIItemSource{
-			Source: &proto.UIItemSource_Drop{Drop: &proto.DropSource{
-				Difficulty: proto.DungeonDifficulty_DifficultyRaidFlex,
-			}},
-		})
-	}
-
-	return sources
 }

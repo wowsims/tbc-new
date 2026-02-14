@@ -43,9 +43,6 @@ const (
 	MeleeHasteRating
 	ArmorPenetration
 	ExpertiseRating
-	AllPhysHitRating
-	AllPhysCritRating
-	AllPhysHasteRating
 	DefenseRating
 	BlockRating
 	BlockValue
@@ -155,12 +152,6 @@ func (s Stat) StatName() string {
 		return "MeleeHasteRating"
 	case ExpertiseRating:
 		return "ExpertiseRating"
-	case AllPhysHitRating:
-		return "HitRating"
-	case AllPhysCritRating:
-		return "CritRating"
-	case AllPhysHasteRating:
-		return "HasteRating"
 	case ArmorPenetration:
 		return "ArmorPenetration"
 	case DodgeRating:
@@ -425,10 +416,6 @@ func (stats Stats) ToProtoMap() map[int32]float64 {
 func FromProtoMap(m map[int32]float64) Stats {
 	var stats Stats
 	for k, v := range m {
-		if k == int32(proto.Stat_StatArmorPenetration) || k == int32(proto.Stat_StatSpellPenetration) {
-			stats[k] = math.Abs(v)
-			continue
-		}
 		stats[k] = v
 	}
 	return stats
@@ -483,6 +470,9 @@ type PseudoStats struct {
 
 	BonusRangedAttackPower float64 // Hunter's mark
 	BonusAttackPower       float64 // Also Hunter's Mark
+
+	// Important when unit is attacker or target
+	BlockValueMultiplier float64
 
 	// Only used for NPCs, governs variance in enemy auto-attack damage
 	DamageSpread float64
@@ -551,6 +541,8 @@ func NewPseudoStats() PseudoStats {
 		HealingDealtMultiplier:         1,
 		PeriodicHealingDealtMultiplier: 1,
 		CritDamageMultiplier:           1,
+
+		BlockValueMultiplier: 1,
 
 		DamageSpread: 0.3333,
 
