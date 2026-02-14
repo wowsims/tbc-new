@@ -808,7 +808,7 @@
 			"combinations_count": "{{count}} Combinations",
 			"combination_singular": "1 Combination",
 			"iterations": "Iterations",
-			"default_gems": "Default Gems",
+			"default_gems": "Fallback Gems",
 			"freeze_ring": {
 				"label": "Freeze ring slot",
 				"tooltip": "Freeze one equipped ring to reduce combination counts"
@@ -2247,6 +2247,7 @@
 				"breakpoints_implemented": "The following breakpoints have been implemented for this spec:",
 				"post_cap_ep": "Post cap EP",
 				"reforge_optimization_failed": "Gem optimization failed. Please try again, or report the issue if it persists.",
+				"reforge_optimization_cancelled": "Gem optimization cancelled.",
 				"use_custom": "Use custom EP Weights",
 				"enable_modification": "This will enable modification of the default EP weights and setting custom stat caps.",
 				"modify_in_editor": "Ep weights can be modified in the Stat Weights editor.",

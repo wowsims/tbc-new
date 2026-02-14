@@ -553,12 +553,12 @@ export class BulkTab extends SimTab {
 		return itemsForCombo;
 	}
 
-	protected async calculateBulkCombinations() {
+	protected calculateBulkCombinations() {
 		try {
 			let numCombinations: number = this.getAllWeaponCombos().length;
 
 			for (const [bulkItemSlot, pickerGroup] of this.pickerGroups.entries()) {
-				if ([BulkSimItemSlot.ItemSlotMainHand, BulkSimItemSlot.ItemSlotOffHand, BulkSimItemSlot.ItemSlotHandWeapon].includes(bulkItemSlot)) {
+				if ([BulkSimItemSlot.ItemSlotMainHand, BulkSimItemSlot.ItemSlotOffHand].includes(bulkItemSlot)) {
 					continue;
 				}
 
@@ -722,7 +722,7 @@ export class BulkTab extends SimTab {
 				let simStart = new Date().getTime();
 
 				this.resetResultsTabContent();
-				await this.calculateBulkCombinations();
+				this.calculateBulkCombinations();
 				await this.simUI.runSim((progressMetrics: ProgressMetrics) => {
 					const msSinceStart = new Date().getTime() - simStart;
 					this.setSimProgress(progressMetrics, msSinceStart / 1000, 0, this.combinations);
@@ -990,7 +990,7 @@ export class BulkTab extends SimTab {
 	}
 
 	private async getCombinationsCount(): Promise<Element> {
-		await this.calculateBulkCombinations();
+		this.calculateBulkCombinations();
 		this.bulkSimButton.disabled = this.combinations > 50000;
 
 		const warningRef = ref<HTMLButtonElement>();

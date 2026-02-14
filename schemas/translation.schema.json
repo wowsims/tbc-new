@@ -9397,6 +9397,9 @@
                 "reforge_optimization_failed": {
                   "type": "string"
                 },
+                "reforge_optimization_cancelled": {
+                  "type": "string"
+                },
                 "use_custom": {
                   "type": "string"
                 },
@@ -9438,6 +9441,7 @@
                 "breakpoints_implemented",
                 "post_cap_ep",
                 "reforge_optimization_failed",
+                "reforge_optimization_cancelled",
                 "use_custom",
                 "enable_modification",
                 "modify_in_editor",
