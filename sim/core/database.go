@@ -620,7 +620,7 @@ var itemTypeToSlotsMap = map[proto.ItemType][]proto.ItemSlot{
 	// ItemType_ItemTypeWeapon is excluded intentionally - the slot cannot be decided based on type alone for weapons.
 }
 
-func eligibleSlotsForItem(item *Item, isFuryWarrior bool) []proto.ItemSlot {
+func eligibleSlotsForItem(item *Item) []proto.ItemSlot {
 	if item == nil {
 		return nil
 	}
@@ -629,10 +629,6 @@ func eligibleSlotsForItem(item *Item, isFuryWarrior bool) []proto.ItemSlot {
 	}
 
 	if item.Type == proto.ItemType_ItemTypeWeapon {
-		if isFuryWarrior {
-			return []proto.ItemSlot{proto.ItemSlot_ItemSlotMainHand, proto.ItemSlot_ItemSlotOffHand}
-		}
-
 		switch item.HandType {
 		case proto.HandType_HandTypeTwoHand, proto.HandType_HandTypeMainHand:
 			return []proto.ItemSlot{proto.ItemSlot_ItemSlotMainHand}

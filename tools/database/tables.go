@@ -60,6 +60,7 @@ func ScanRawItemData(rows *sql.Rows) (dbc.Item, error) {
 		&raw.ItemSubClass,
 		&raw.NameDescription,
 		&raw.LimitCategory,
+		&raw.Bonding,
 	)
 	if err != nil {
 		panic(err)
@@ -132,7 +133,8 @@ func LoadAndWriteRawItems(dbHelper *DBHelper, filter string, inputsDir string) (
 			 i.ClassID,
 			 i.SubClassID,
 			 COALESCE(ind.Description_lang, ''),
-			s.LimitCategory
+			s.LimitCategory,
+			s.Bonding
 		FROM Item i
 		JOIN ItemSparse s ON i.ID = s.ID
 		JOIN ItemClass ic ON i.ClassID = ic.ClassID
@@ -362,7 +364,20 @@ func ScanGemTable(rows *sql.Rows) (dbc.Gem, error) {
 	var statListString string
 	var statBonusString string
 	var effectString string
-	err := rows.Scan(&raw.ItemId, &raw.Name, &raw.FDID, &raw.GemType, &statListString, &statBonusString, &raw.MinItemLevel, &raw.Quality, &effectString, &raw.IsJc, &raw.Flags0)
+	err := rows.Scan(
+		&raw.ItemId,
+		&raw.Name,
+		&raw.FDID,
+		&raw.GemType,
+		&statListString,
+		&statBonusString,
+		&raw.MinItemLevel,
+		&raw.Quality,
+		&effectString,
+		&raw.IsJc,
+		&raw.Flags0,
+		&raw.Bonding,
+	)
 	if err != nil {
 		return raw, fmt.Errorf("scanning gem data: %w", err)
 	}
@@ -400,7 +415,8 @@ func LoadAndWriteRawGems(dbHelper *DBHelper, inputsDir string) ([]dbc.Gem, error
 			WHEN s.RequiredSkill = 755 THEN 1
 			ELSE 0
 		END AS IsJc,
-		s.Flags_0
+		s.Flags_0,
+		s.Bonding
 		FROM ItemSparse s
 		JOIN Item i ON s.ID = i.ID
 		JOIN GemProperties gp ON s.Gem_properties = gp.ID
@@ -436,7 +452,12 @@ func ScanEnchantsTable(rows *sql.Rows) (dbc.Enchant, error) {
 		&raw.IsWeaponEnchant,
 		&raw.InventoryType,
 		&raw.SubClassMask,
-		&raw.ClassMask, &raw.FDID, &raw.Quality, &raw.RequiredProfession, &raw.EffectName)
+		&raw.ClassMask,
+		&raw.FDID,
+		&raw.Quality,
+		&raw.RequiredProfession,
+		&raw.EffectName,
+	)
 	if err != nil {
 		return raw, fmt.Errorf("scanning enchant data for effect ID %d: %w", raw.EffectId, err)
 	}

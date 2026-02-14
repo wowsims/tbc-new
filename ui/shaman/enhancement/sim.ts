@@ -21,7 +21,10 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecEnhancementShaman, {
 		const playerStats = player.getCurrentStats();
 
 		const statMod = (current: UnitStats, previous?: UnitStats) => {
-			return new Stats().withStat(Stat.StatSpellDamage, Stats.fromProto(current).subtract(Stats.fromProto(previous)).getStat(Stat.StatAttackPower) * 0.65);
+			return new Stats().withStat(
+				Stat.StatSpellDamage,
+				Stats.fromProto(current).subtract(Stats.fromProto(previous)).getStat(Stat.StatAttackPower) * 0.65,
+			);
 		};
 
 		const base = statMod(playerStats.baseStats!);
@@ -29,6 +32,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecEnhancementShaman, {
 		const talents = statMod(playerStats.talentsStats!, playerStats.gearStats);
 		const buffs = statMod(playerStats.buffsStats!, playerStats.talentsStats);
 		const consumes = statMod(playerStats.consumesStats!, playerStats.buffsStats);
+		const debuffs = new Stats();
 		const final = new Stats().withStat(Stat.StatSpellDamage, Stats.fromProto(playerStats.finalStats).getStat(Stat.StatAttackPower) * 0.65);
 
 		return {
@@ -37,17 +41,14 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecEnhancementShaman, {
 			talents: talents,
 			buffs: buffs,
 			consumes: consumes,
+			debuffs,
 			final: final,
 			stats: [Stat.StatSpellDamage],
 		};
 	},
 
 	// All stats for which EP should be calculated.
-	epStats: [
-		Stat.StatAgility,
-		Stat.StatIntellect,
-		Stat.StatAttackPower,
-	],
+	epStats: [Stat.StatAgility, Stat.StatIntellect, Stat.StatAttackPower],
 	epPseudoStats: [
 		PseudoStat.PseudoStatMainHandDps,
 		PseudoStat.PseudoStatOffHandDps,
@@ -58,15 +59,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecEnhancementShaman, {
 	epReferenceStat: Stat.StatAgility,
 	// Which stats to display in the Character Stats section, at the bottom of the left-hand sidebar.
 	displayStats: UnitStat.createDisplayStatArray(
-		[
-			Stat.StatHealth,
-			Stat.StatStamina,
-			Stat.StatStrength,
-			Stat.StatAgility,
-			Stat.StatIntellect,
-			Stat.StatAttackPower,
-			Stat.StatSpellDamage,
-		],
+		[Stat.StatHealth, Stat.StatStamina, Stat.StatStrength, Stat.StatAgility, Stat.StatIntellect, Stat.StatAttackPower, Stat.StatSpellDamage],
 		[
 			PseudoStat.PseudoStatMeleeHitPercent,
 			PseudoStat.PseudoStatMeleeCritPercent,

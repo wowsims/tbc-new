@@ -880,13 +880,15 @@ export class Timeline extends ResultComponent {
 					className="rotation-timeline-cast"
 					style={{
 						left: this.timeToPx(castLog.timestamp),
-						minWidth: this.timeToPx(castLog.castTime + castLog.travelTime),
+						minWidth: this.timeToPx(castLog.cancelTime || castLog.castTime + castLog.travelTime),
 					}}
 				/>
 			);
 			rowElem.appendChild(castElem);
 
-			if (castLog.travelTime != 0) {
+			if (castLog.cancelTime) {
+				castElem.classList.add('cast-cancelled');
+			} else if (castLog.travelTime != 0) {
 				const travelTimeElem = (
 					<div
 						className="rotation-timeline-travel-time"
@@ -928,8 +930,11 @@ export class Timeline extends ResultComponent {
 			const tt = (
 				<div className="timeline-tooltip">
 					<span>
-						{castLog.actionId!.name} from {castLog.timestamp.toFixed(2)}s to {(castLog.timestamp + castLog.castTime).toFixed(2)}s (
-						{castLog.castTime > 0 && `${castLog.castTime.toFixed(2)}s, `} {castLog.effectiveTime.toFixed(2)}s GCD Time)
+						{castLog.actionId!.name} from {castLog.timestamp.toFixed(2)}s to{' '}
+						{(castLog.castCancelledLog?.timestamp || castLog.timestamp + castLog.castTime).toFixed(2)}s
+						{castLog.castCancelledLog?.timestamp
+							? ` (Cancelled after ${castLog.cancelTime.toFixed(2)}s)`
+							: ` (${castLog.castTime > 0 ? `${castLog.castTime.toFixed(2)}s, ` : ''}${castLog.effectiveTime.toFixed(2)}s GCD Time)`}
 						{travelTimeStr.length > 0 && travelTimeStr}
 					</span>
 					{totalDamage > 0 && (
@@ -1295,10 +1300,7 @@ const MELEE_ACTION_CATEGORY = 1;
 const SPELL_ACTION_CATEGORY = 2;
 const DEFAULT_ACTION_CATEGORY = 3;
 
-const auraAsResource = [
-	// Mage
-	148022, // Icicle
-];
+const auraAsResource: number[] = [];
 
 // Hard-coded spell categories for controlling rotation ordering.
 const idToCategoryMap: Record<number, number> = {
@@ -1429,20 +1431,13 @@ const idToCategoryMap: Record<number, number> = {
 	[30108]: SPELL_ACTION_CATEGORY + 0.3, // Unstable Affliction
 	[348]: SPELL_ACTION_CATEGORY + 0.31, // Immolate
 	[17962]: SPELL_ACTION_CATEGORY + 0.32, // Conflagrate
-	[50796]: SPELL_ACTION_CATEGORY + 0.49, // Chaos Bolt
 	[686]: SPELL_ACTION_CATEGORY + 0.5, // Shadow Bolt
 	[29722]: SPELL_ACTION_CATEGORY + 0.51, // Incinerate
-	[6353]: SPELL_ACTION_CATEGORY + 0.52, // Soul Fire
 	[1120]: SPELL_ACTION_CATEGORY + 0.6, // Drain Soul
 	[1454]: SPELL_ACTION_CATEGORY + 0.7, // Life Tap
-	[59672]: SPELL_ACTION_CATEGORY + 0.8, // Metamorphosis
-	[104025]: SPELL_ACTION_CATEGORY + 0.81, // Immolation Aura
-	[129476]: SPELL_ACTION_CATEGORY + 0.81, // Immolation Aura
-	[47193]: SPELL_ACTION_CATEGORY + 0.82, // Demonic Empowerment
 
 	// Mage
 	[42842]: SPELL_ACTION_CATEGORY + 0.01, // Frostbolt
-	[47610]: SPELL_ACTION_CATEGORY + 0.02, // Frostfire Bolt
 	[42897]: SPELL_ACTION_CATEGORY + 0.02, // Arcane Blast
 	[42833]: SPELL_ACTION_CATEGORY + 0.02, // Fireball
 	[10]: SPELL_ACTION_CATEGORY + 0.021, // Blizzard - Cast
@@ -1453,8 +1448,6 @@ const idToCategoryMap: Record<number, number> = {
 	[44572]: SPELL_ACTION_CATEGORY + 0.1, // Deep Freeze
 	[44781]: SPELL_ACTION_CATEGORY + 0.2, // Arcane Barrage
 	[42914]: SPELL_ACTION_CATEGORY + 0.2, // Ice Lance
-	[55360]: SPELL_ACTION_CATEGORY + 0.2, // Living Bomb
-	[55362]: SPELL_ACTION_CATEGORY + 0.21, // Living Bomb (Explosion)
 	[12654]: SPELL_ACTION_CATEGORY + 0.3, // Ignite
 	[12472]: SPELL_ACTION_CATEGORY + 0.4, // Icy Veins
 	[11129]: SPELL_ACTION_CATEGORY + 0.4, // Combustion
@@ -1465,10 +1458,7 @@ const idToCategoryMap: Record<number, number> = {
 	[55342]: SPELL_ACTION_CATEGORY + 0.5, // Mirror Image
 	[33312]: SPELL_ACTION_CATEGORY + 0.51, // Mana Gems
 	[12051]: SPELL_ACTION_CATEGORY + 0.52, // Evocate
-	[44401]: SPELL_ACTION_CATEGORY + 0.6, // Missile Barrage
 	[44448]: SPELL_ACTION_CATEGORY + 0.6, // Hot Streak
-	[44545]: SPELL_ACTION_CATEGORY + 0.6, // Fingers of Frost
-	[44549]: SPELL_ACTION_CATEGORY + 0.61, // Brain Freeze
 	[12536]: SPELL_ACTION_CATEGORY + 0.61, // Clearcasting
 
 	// Warrior
@@ -1478,6 +1468,7 @@ const idToCategoryMap: Record<number, number> = {
 	[23881]: MELEE_ACTION_CATEGORY + 0.1, // Bloodthirst
 	[47486]: MELEE_ACTION_CATEGORY + 0.1, // Mortal Strike
 	[30356]: MELEE_ACTION_CATEGORY + 0.1, // Shield Slam
+	[47498]: MELEE_ACTION_CATEGORY + 0.21, // Devastate
 	[47467]: MELEE_ACTION_CATEGORY + 0.22, // Sunder Armor
 	[57823]: MELEE_ACTION_CATEGORY + 0.23, // Revenge
 	[1680]: MELEE_ACTION_CATEGORY + 0.24, // Whirlwind
@@ -1485,10 +1476,7 @@ const idToCategoryMap: Record<number, number> = {
 	[47471]: MELEE_ACTION_CATEGORY + 0.42, // Execute
 	[12867]: SPELL_ACTION_CATEGORY + 0.51, // Deep Wounds
 	[58874]: SPELL_ACTION_CATEGORY + 0.52, // Damage Shield
-	[47296]: SPELL_ACTION_CATEGORY + 0.53, // Critical Block
-	[46924]: MELEE_ACTION_CATEGORY + 0.61, // Bladestorm
 	[2565]: SPELL_ACTION_CATEGORY + 0.62, // Shield Block
-	[76857]: SPELL_ACTION_CATEGORY + 0.64, // Mastery: Critical Block
 	[71]: DEFAULT_ACTION_CATEGORY + 0.1, // Defensive Stance
 	[2457]: DEFAULT_ACTION_CATEGORY + 0.1, // Battle Stance
 	[6673]: DEFAULT_ACTION_CATEGORY + 0.1, // Battle Shout
@@ -1497,13 +1485,8 @@ const idToCategoryMap: Record<number, number> = {
 	// Generic
 	[53307]: SPELL_ACTION_CATEGORY + 0.931, // Thorns
 	[54043]: SPELL_ACTION_CATEGORY + 0.932, // Retribution Aura
-	[54758]: SPELL_ACTION_CATEGORY + 0.933, // Hyperspeed Acceleration
 	[42641]: SPELL_ACTION_CATEGORY + 0.941, // Sapper
 	[40536]: SPELL_ACTION_CATEGORY + 0.942, // Explosive Decoy
-	[41119]: SPELL_ACTION_CATEGORY + 0.943, // Saronite Bomb
-	[40771]: SPELL_ACTION_CATEGORY + 0.944, // Cobalt Frag Bomb
-	[120687]: DEFAULT_ACTION_CATEGORY + 0.945, // Stormlash Totem
-	[114206]: DEFAULT_ACTION_CATEGORY + 0.946, // Skull Bnaner
 };
 
 const idsToGroupForRotation: Array<number> = [
