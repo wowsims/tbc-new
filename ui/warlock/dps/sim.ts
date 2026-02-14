@@ -84,9 +84,9 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecWarlock, {
 			arcaneBrilliance: true,
 			giftOfTheWild: TristateEffect.TristateEffectImproved,
 			powerWordFortitude: TristateEffect.TristateEffectImproved,
+			divineSpirit: TristateEffect.TristateEffectImproved
 		}),
 		partyBuffs: PartyBuffs.create({
-
 
 		}),
 		individualBuffs: IndividualBuffs.create({
@@ -107,12 +107,12 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecWarlock, {
 	],
 
 	// Buff and Debuff inputs to include/exclude, overriding the EP-based defaults.
-	includeBuffDebuffInputs: [],
+	includeBuffDebuffInputs: [BuffDebuffInputs.DivineSpirit],
 	excludeBuffDebuffInputs: [],
 	petConsumeInputs: [],
 	// Inputs to include in the 'Other' section on the settings tab.
 	otherInputs: {
-		inputs: [OtherInputs.InputDelay, OtherInputs.DistanceFromTarget, OtherInputs.TankAssignment, OtherInputs.ChannelClipDelay],
+		inputs: [OtherInputs.TankAssignment],
 	},
 	itemSwapSlots: [ItemSlot.ItemSlotMainHand, ItemSlot.ItemSlotOffHand, ItemSlot.ItemSlotTrinket1, ItemSlot.ItemSlotTrinket2],
 	encounterPicker: {
