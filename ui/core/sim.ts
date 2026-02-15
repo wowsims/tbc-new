@@ -321,9 +321,13 @@ export class Sim {
 		}
 	}
 
-	// Runs a lightweight version of the sim that doesn't compute combat logs
-	// or other expensive data, and returns the raw result from the sim worker.
-	async runRaidSimLightweight(onProgress: WorkerProgressCallback, _: RunSimOptions = {}): Promise<[RaidSimRequest, RaidSimResult] | ErrorOutcome> {
+	// Runs a lightweight version of the sim that uses a gear set and doesn't compute combat logs or other expensive data,
+	// and returns the raw result from the sim worker.
+	async runRaidSimLightweight(
+		gear: Gear,
+		onProgress: WorkerProgressCallback,
+		_: RunSimOptions = {},
+	): Promise<[RaidSimRequest, RaidSimResult] | ErrorOutcome> {
 		if (this.raid.isEmpty()) {
 			throw new Error('Raid is empty! Try adding some players first.');
 		} else if (this.encounter.targets.length < 1) {
@@ -335,6 +339,18 @@ export class Sim {
 			await this.waitForInit();
 
 			const request = this.makeRaidSimRequest(false);
+			const player = request.raid!.parties[0].players[0];
+
+			// Remove any inactive meta gems, since the backend doesn't have its own validation.
+			// Disable meta gem if inactive.
+			if (gear.hasInactiveMetaGem()) {
+				gear = gear.withoutMetaGem();
+			}
+
+			player.database = gear.toDatabase(this.db);
+			player.equipment = gear.asSpec();
+
+			request.raid!.parties[0].players[0] = player;
 
 			let result;
 			// Only use worker base concurrency when running wasm. Local sim has native threading.

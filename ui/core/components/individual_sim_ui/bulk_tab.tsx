@@ -779,7 +779,7 @@ export class BulkTab extends SimTab {
 
 					updatedGear = (await this.simUI.reforger?.optimizeReforges(updatedGear).catch(noop)) || updatedGear;
 
-					const response = await this.simUI.runSimLightweight((progressMetrics: ProgressMetrics) => {
+					const response = await this.simUI.runSimLightweight(updatedGear, (progressMetrics: ProgressMetrics) => {
 						const msSinceStart = new Date().getTime() - simStart;
 						this.setSimProgress(progressMetrics, msSinceStart / 1000, comboIdx + 1, this.combinations);
 					});
