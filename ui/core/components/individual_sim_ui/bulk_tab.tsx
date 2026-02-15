@@ -17,7 +17,7 @@ import { getEmptyGemSocketIconUrl } from '../../proto_utils/gems';
 import { canEquipItem, getEligibleItemSlots, isSecondaryItemSlot } from '../../proto_utils/utils';
 import { RequestTypes } from '../../sim_signal_manager';
 import { TypedEvent } from '../../typed_event';
-import { getEnumValues, isExternal } from '../../utils';
+import { getEnumValues, isExternal, noop } from '../../utils';
 import { ItemData } from '../gear_picker/item_list';
 import SelectorModal from '../gear_picker/selector_modal';
 import { ResultsViewer } from '../results_viewer';
@@ -777,15 +777,7 @@ export class BulkTab extends SimTab {
 						}
 					}
 
-					await this.simUI.player.setGearAsync(TypedEvent.nextEventID(), updatedGear);
-
-					if (this.simUI.reforger) {
-						try {
-							await this.simUI.reforger.optimizeReforges(true);
-						} catch (error) {
-							continue;
-						}
-					}
+					updatedGear = (await this.simUI.reforger?.optimizeReforges(updatedGear).catch(noop)) || updatedGear;
 
 					const response = await this.simUI.runSimLightweight((progressMetrics: ProgressMetrics) => {
 						const msSinceStart = new Date().getTime() - simStart;
@@ -798,7 +790,6 @@ export class BulkTab extends SimTab {
 
 					const [_, result] = response;
 
-					updatedGear = this.simUI.player.getGear();
 					const isOriginalGear = this.originalGear.equals(updatedGear);
 					if (!isOriginalGear) {
 						const dpsMetrics = result!.raidMetrics!.dps!;
