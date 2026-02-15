@@ -46,7 +46,9 @@ function makeConsumeInputFactory<T extends number, SpecType extends Spec>(
 			values: [{ value: 0, iconUrl: '', tooltip: i18n.t('common.none') } as unknown as IconEnumValueConfig<Player<SpecType>, T>].concat(valueOptions),
 			equals: (a: T, b: T) => a == b,
 			zeroValue: 0 as T,
-			changedEvent: (player: Player<any>) => (args.changedEvent && args.changedEvent(player)) || TypedEvent.onAny([player.consumesChangeEmitter, player.gearChangeEmitter, player.professionChangeEmitter]),
+			changedEvent: (player: Player<any>) =>
+				(args.changedEvent && args.changedEvent(player)) ||
+				TypedEvent.onAny([player.consumesChangeEmitter, player.gearChangeEmitter, player.professionChangeEmitter]),
 			showWhen: (player: Player<any>) => (!args.showWhen || args.showWhen(player)) && valueOptions.some(option => option.showWhen?.(player)),
 			enableWhen: args.enableWhen,
 			getValue: (player: Player<any>) => player.getConsumes()[args.consumesFieldName] as T,
@@ -188,7 +190,7 @@ export const RogueWoundPoison = {
 	actionId: ActionId.fromItemId(22055),
 	value: 27188,
 	showWhen: (player: Player<any>) => player.getClass() == Class.ClassRogue,
-}
+};
 // Shaman Imbues
 export const ShamanImbueWindfury = {
 	actionId: ActionId.fromSpellId(25505),
@@ -357,7 +359,7 @@ export function makeConsumableInput(
 				newConsumes.battleElixirId = 0;
 			}
 
-			if (options.consumesFieldName === 'battleElixirId' || options.consumesFieldName === 'guardianElixirId') {
+			if ((options.consumesFieldName === 'battleElixirId' || options.consumesFieldName === 'guardianElixirId') && newValue != 0) {
 				newConsumes.flaskId = 0;
 			}
 			player.setConsumes(eventID, newConsumes);
