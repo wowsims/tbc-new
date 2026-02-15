@@ -59,6 +59,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 			strengthOfEarthTotem: TristateEffect.TristateEffectImproved,
 			graceOfAirTotem: TristateEffect.TristateEffectImproved,
 			windfuryTotem: TristateEffect.TristateEffectImproved,
+			leaderOfThePack: TristateEffect.TristateEffectRegular
 		}),
 		individualBuffs: IndividualBuffs.create({
 			blessingOfKings: true,
@@ -73,6 +74,8 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 			misery: true,
 			curseOfRecklessness: true,
 			faerieFire: TristateEffect.TristateEffectImproved,
+			exposeWeaknessUptime: 0.9,
+			exposeWeaknessHunterAgility: 1080,
 		}),
 	},
 
