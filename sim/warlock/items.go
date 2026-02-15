@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
-	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
@@ -16,21 +15,25 @@ var ItemSetOblivionRaiment = core.NewItemSet(core.ItemSet{
 		2: func(agent core.Agent, setBonusAura *core.Aura) {
 			// Grants your pet 45 mana per 5 sec.
 			// Pet Mana Regen - 37375
-			petAgents := agent.GetCharacter().PetAgents
-			if petAgents != nil {
-				agent.GetCharacter().PetAgents[0].GetCharacter().AddStat(stats.MP5, 45.0)
-			}
+			warlock := agent.(WarlockAgent).GetWarlock()
+
+			setBonusAura.
+				ApplyOnGain(func(aura *core.Aura, sim *core.Simulation) {
+					for _, pet := range warlock.Pets {
+						pet.AddStatDynamic(sim, stats.MP5, 45.0)
+					}
+				}).
+				ApplyOnExpire(func(aura *core.Aura, sim *core.Simulation) {
+					for _, pet := range warlock.Pets {
+						pet.AddStatDynamic(sim, stats.MP5, -45.0)
+					}
+				})
 
 		},
 		4: func(agent core.Agent, setBonusAura *core.Aura) {
 			// Your Seed of Corruption deals 180 additional damage when it detonates.
 			// Improved Seed of Corruption - 37376
-			char := agent.GetCharacter()
-			if char.Class != proto.Class_ClassWarlock {
-				return
-			}
-
-			char.AddDynamicMod(core.SpellModConfig{
+			setBonusAura.AttachSpellMod(core.SpellModConfig{
 				Kind:       core.SpellMod_BonusSpellDamage_Flat,
 				FloatValue: 180.0,
 				ClassMask:  WarlockSpellSeedOfCorruptionExplosion,
@@ -54,17 +57,11 @@ var ItemSetVoidheartRaiment = core.NewItemSet(core.ItemSet{
 			// Hellfire - 39437
 			fireBonus := warlock.NewTemporaryStatsAura("Shadowflame Hellfire", core.ActionID{SpellID: 39437}, stats.Stats{stats.FireDamage: 135}, time.Second*15)
 
-			warlock.RegisterAura(core.Aura{
-				Label:    "Voidheart Raiment 2pc",
-				Duration: time.Second * 15,
-				OnReset: func(aura *core.Aura, sim *core.Simulation) {
-					aura.Activate(sim)
-				},
-				OnCastComplete: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell) {
-
-					if !sim.Proc(0.05, "voidheart4pc") {
-						return
-					}
+			setBonusAura.AttachProcTrigger(core.ProcTrigger{
+				Name:       "Voidheart Raiment 2pc",
+				ProcChance: 0.05,
+				Callback:   core.CallbackOnCastComplete,
+				Handler: func(sim *core.Simulation, spell *core.Spell, _ *core.SpellResult) {
 					if spell.SpellSchool.Matches(core.SpellSchoolShadow) {
 						shadowBonus.Activate(sim)
 					}
@@ -192,19 +189,23 @@ var ItemSetMaleficRaiment = core.NewItemSet(core.ItemSet{
 func init() {
 	core.NewItemEffect(19337, func(agent core.Agent) {
 		// The Black Book
-		agent.(WarlockAgent).GetWarlock().ActivePet.NewTemporaryStatsAura("Blessing of The Black Book", core.ActionID{SpellID: 23720}, stats.Stats{stats.SpellDamage: 200, stats.AttackPower: 325, stats.Armor: 1600}, time.Second*30)
+		for _, pet := range agent.(WarlockAgent).GetWarlock().Pets {
+			pet.NewTemporaryStatsAura("Blessing of The Black Book", core.ActionID{SpellID: 23720}, stats.Stats{stats.SpellDamage: 200, stats.AttackPower: 325, stats.Armor: 1600}, time.Second*30)
+		}
 	})
 
 	core.NewItemEffect(30449, func(agent core.Agent) {
 		// Void Star Talisman
-		agent.(WarlockAgent).GetWarlock().ActivePet.AddStats(stats.Stats{
-			stats.SpellDamage:      48,
-			stats.ArcaneResistance: 130,
-			stats.FireResistance:   130,
-			stats.FrostResistance:  130,
-			stats.NatureResistance: 130,
-			stats.ShadowResistance: 130,
-		})
+		for _, pet := range agent.(WarlockAgent).GetWarlock().Pets {
+			pet.AddStats(stats.Stats{
+				stats.SpellDamage:      48,
+				stats.ArcaneResistance: 130,
+				stats.FireResistance:   130,
+				stats.FrostResistance:  130,
+				stats.NatureResistance: 130,
+				stats.ShadowResistance: 130,
+			})
+		}
 	})
 
 	core.NewItemEffect(32493, func(agent core.Agent) {

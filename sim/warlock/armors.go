@@ -17,13 +17,13 @@ func (warlock *Warlock) registerArmors() {
 	demonArmorSRBonus := 18.0
 
 	if warlock.Talents.DemonicAegis > 0 {
-		bonusMultipler := 1.0 + (0.1 * float64(warlock.Talents.DemonicAegis))
+		bonusMultiplier := 1.0 + (0.1 * float64(warlock.Talents.DemonicAegis))
 
-		felArmorBonus *= bonusMultipler
-		felArmorHealingBonus *= bonusMultipler
+		felArmorBonus *= bonusMultiplier
+		felArmorHealingBonus *= bonusMultiplier
 
-		demonArmorBonus *= bonusMultipler
-		demonArmorSRBonus *= bonusMultipler
+		demonArmorBonus *= bonusMultiplier
+		demonArmorSRBonus *= bonusMultiplier
 	}
 
 	warlock.FelArmor = warlock.RegisterAura(core.Aura{
