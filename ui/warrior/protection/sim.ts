@@ -26,6 +26,9 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionWarrior, {
 		Stat.StatMeleeCritRating,
 		Stat.StatArmorPenetration,
 		Stat.StatExpertiseRating,
+		Stat.StatDefenseRating,
+		Stat.StatDodgeRating,
+		Stat.StatParryRating,
 		Stat.StatArmor,
 		Stat.StatBonusArmor,
 	],
@@ -43,6 +46,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionWarrior, {
 			Stat.StatAgility,
 			Stat.StatAttackPower,
 			Stat.StatBlockValue,
+			Stat.StatDefenseRating,
 			Stat.StatArcaneResistance,
 			Stat.StatFireResistance,
 			Stat.StatFrostResistance,
@@ -119,10 +123,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionWarrior, {
 		// Preset rotations that the user can quickly select.
 		rotations: [Presets.ROTATION_DEFAULT],
 		// Preset gear configurations that the user can quickly select.
-		gear: [
-			Presets.PRERAID_BALANCED_PRESET,
-			Presets.P1_PRESET,
-		],
+		gear: [Presets.PRERAID_BALANCED_PRESET, Presets.P1_PRESET],
 	},
 
 	autoRotation: (_player: Player<Spec.SpecProtectionWarrior>): APLRotation => {

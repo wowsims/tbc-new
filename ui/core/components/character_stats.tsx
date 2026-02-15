@@ -75,9 +75,9 @@ const statGroups = new Map<string, Array<DisplayStat>>([
 			{ stat: UnitStat.fromStat(Stat.StatArmor) },
 			{ stat: UnitStat.fromStat(Stat.StatBonusArmor) },
 			{ stat: UnitStat.fromStat(Stat.StatDefenseRating) },
-			{ stat: UnitStat.fromStat(Stat.StatDodgeRating) },
-			{ stat: UnitStat.fromStat(Stat.StatParryRating) },
-			{ stat: UnitStat.fromStat(Stat.StatBlockRating) },
+			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatDodgePercent) },
+			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatParryPercent) },
+			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatBlockPercent) },
 			{ stat: UnitStat.fromStat(Stat.StatBlockValue) },
 		],
 	],
@@ -131,7 +131,7 @@ export class CharacterStats extends Component {
 		this.valueElems = [];
 		statGroups.forEach((groupedStats, key) => {
 			const filteredStats = groupedStats.filter(stat => statList.find(displayStat => displayStat.equals(stat.stat)));
-
+			console.log(key, statList, groupedStats);
 			if (!filteredStats.length) return;
 
 			const body = <tbody></tbody>;

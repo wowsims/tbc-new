@@ -383,8 +383,9 @@ export const displayStatOrder: Array<UnitStat> = [
 	UnitStat.fromStat(Stat.StatAgility),
 	UnitStat.fromStat(Stat.StatIntellect),
 	UnitStat.fromStat(Stat.StatSpirit),
+	UnitStat.fromStat(Stat.StatHealingPower),
 	UnitStat.fromStat(Stat.StatSpellDamage),
-	UnitStat.fromStat(Stat.StatFireDamage),
+	UnitStat.fromStat(Stat.StatArcaneDamage),
 	UnitStat.fromStat(Stat.StatFireDamage),
 	UnitStat.fromStat(Stat.StatFrostDamage),
 	UnitStat.fromStat(Stat.StatHolyDamage),
@@ -405,10 +406,16 @@ export const displayStatOrder: Array<UnitStat> = [
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatRangedHitPercent),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatRangedCritPercent),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatRangedHastePercent),
+	UnitStat.fromStat(Stat.StatDefenseRating),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatBlockPercent),
 	UnitStat.fromStat(Stat.StatBlockValue),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatDodgePercent),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatParryPercent),
+	UnitStat.fromStat(Stat.StatArcaneResistance),
+	UnitStat.fromStat(Stat.StatFireResistance),
+	UnitStat.fromStat(Stat.StatFrostResistance),
+	UnitStat.fromStat(Stat.StatNatureResistance),
+	UnitStat.fromStat(Stat.StatShadowResistance),
 ];
 
 /**
