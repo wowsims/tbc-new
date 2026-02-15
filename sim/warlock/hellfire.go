@@ -6,12 +6,12 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
-const hellFireScale = 0.20999999344
-const hellFireCoeff = 0.20999999344
+const hellFireCoeff = 0.095
 
-func (warlock *Warlock) RegisterHellfire() *core.Spell {
+func (warlock *Warlock) registerHellfire() *core.Spell {
 	hellfireActionID := core.ActionID{SpellID: 1949}
-	manaMetric := warlock.NewManaMetrics(hellfireActionID)
+
+	manaCost := int32(1665)
 	warlock.Hellfire = warlock.RegisterSpell(core.SpellConfig{
 		ActionID:         hellfireActionID,
 		SpellSchool:      core.SpellSchoolFire,
@@ -26,7 +26,7 @@ func (warlock *Warlock) RegisterHellfire() *core.Spell {
 				GCD: core.GCDDefault,
 			},
 		},
-		ManaCost: core.ManaCostOptions{BaseCostPercent: 2},
+		ManaCost: core.ManaCostOptions{FlatCost: manaCost},
 
 		Dot: core.DotConfig{
 			Aura: core.Aura{
@@ -41,8 +41,14 @@ func (warlock *Warlock) RegisterHellfire() *core.Spell {
 			BonusCoefficient:     hellFireCoeff,
 
 			OnTick: func(sim *core.Simulation, _ *core.Unit, dot *core.Dot) {
-				dot.Spell.CalcAndDealPeriodicAoeDamage(sim, 308, dot.Spell.OutcomeMagicHit)
-				warlock.SpendMana(sim, warlock.MaxMana()*0.02, manaMetric)
+				resultSlice := dot.Spell.CalcPeriodicAoeDamage(sim, 308, dot.Spell.OutcomeMagicHit)
+				if resultSlice[0].Damage > warlock.CurrentHealth() {
+					dot.Deactivate(sim)
+				}
+
+				dot.Spell.DealBatchedPeriodicDamage(sim)
+				warlock.RemoveHealth(sim, 308)
+
 			},
 		},
 
