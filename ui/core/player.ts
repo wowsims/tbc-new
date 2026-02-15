@@ -996,7 +996,7 @@ export class Player<SpecType extends Spec> {
 		}
 
 		const epFromStats = this.computeStatsEP(new Stats(gem.stats));
-		const epFromEffect = getMetaGemEffectEP(this.playerSpec, gem, Stats.fromProto(this.currentStats.finalStats));
+		const epFromEffect = getMetaGemEffectEP(this, gem);
 		let bonusEP = 0;
 		// unique items are slightly worse than non-unique because you can have only one.
 		if (gem.unique) {
