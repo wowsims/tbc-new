@@ -206,7 +206,7 @@ type Unit struct {
 }
 
 func (unit *Unit) getSpellDamageValueImpl(spell *Spell) float64 {
-	return spell.Unit.GetStat(stats.SpellDamage) + spell.BonusSpellDamage + spell.SpellSchoolBonusDamage() + spell.Unit.PseudoStats.MobTypeSpellDamage
+	return spell.Unit.GetStat(stats.SpellDamage) + spell.BonusSpellDamage + spell.SpellSchoolBonusDamage()
 
 }
 

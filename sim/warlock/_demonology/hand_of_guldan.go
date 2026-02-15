@@ -36,8 +36,9 @@ func (demonology *DemonologyWarlock) registerHandOfGuldan() {
 			BonusCoefficient:    shadowFlameCoeff,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, 0)
+				attackTable := dot.Spell.Unit.AttackTables[target.UnitIndex]
 				stacks := math.Min(float64(dot.Aura.GetStacks())+1, 2)
-				dot.SnapshotBaseDamage = demonology.CalcScalingSpellDmg(shadowFlameScale) + stacks*dot.BonusCoefficient*dot.Spell.BonusDamage()
+				dot.SnapshotBaseDamage = demonology.CalcScalingSpellDmg(shadowFlameScale) + stacks*dot.BonusCoefficient*dot.Spell.BonusDamage(attackTable)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
