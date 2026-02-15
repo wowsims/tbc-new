@@ -129,9 +129,9 @@ export class CharacterStats extends Component {
 		this.rootElem.appendChild(table);
 
 		this.valueElems = [];
-		statGroups.forEach((groupedStats, key) => {
+		statGroups.forEach((groupedStats, _) => {
 			const filteredStats = groupedStats.filter(stat => statList.find(displayStat => displayStat.equals(stat.stat)));
-			console.log(key, statList, groupedStats);
+
 			if (!filteredStats.length) return;
 
 			const body = <tbody></tbody>;
