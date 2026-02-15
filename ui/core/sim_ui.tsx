@@ -24,6 +24,7 @@ import { EventID, TypedEvent } from './typed_event.js';
 import { WorkerProgressCallback } from './worker_pool';
 import { isDevMode } from './utils';
 import { trackEvent } from '../tracking/utils';
+import { Gear } from './proto_utils/gear';
 
 const URLMAXLEN = 2048;
 const globalKnownIssues: Array<string> = [];
@@ -346,11 +347,12 @@ export abstract class SimUI extends Component {
 		}
 	}
 
-	// Runs a lightweight version of the sim that doesn't compute combat logs or other expensive data, and returns the raw result from the sim worker.
-	async runSimLightweight(onProgress: WorkerProgressCallback, options: RunSimOptions = {}) {
+	// Runs a lightweight version of the sim that uses a gear set and doesn't compute combat logs or other expensive data,
+	// and returns the raw result from the sim worker.
+	async runSimLightweight(gear: Gear, onProgress: WorkerProgressCallback, options: RunSimOptions = {}) {
 		try {
 			await this.sim.signalManager.abortType(RequestTypes.All);
-			return this.sim.runRaidSimLightweight(onProgress, options);
+			return this.sim.runRaidSimLightweight(gear, onProgress, options);
 		} catch (e) {
 			this.handleCrash(e);
 		}

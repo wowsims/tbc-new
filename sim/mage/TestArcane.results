@@ -60,6 +60,10 @@ dps_results: {
  value: {}
 }
 dps_results: {
+ key: "TestArcane-AllItems-BlackenedNaaruSliver-34427"
+ value: {}
+}
+dps_results: {
  key: "TestArcane-AllItems-DarkmoonCard:Crusade-31856"
  value: {}
 }

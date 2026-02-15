@@ -8,6 +8,7 @@ import {
 	ComputeStatsRequest,
 	ErrorOutcome,
 	ErrorOutcomeType,
+	PlayerStats,
 	Raid as RaidProto,
 	RaidSimRequest,
 	RaidSimResult,
@@ -32,6 +33,7 @@ import { Consumable } from './proto/db';
 import { SpellEffect } from './proto/spell';
 import { DatabaseFilters, RaidFilterOption, SimSettings as SimSettingsProto, SourceFilterOption } from './proto/ui.js';
 import { Database } from './proto_utils/database.js';
+import { Gear } from './proto_utils/gear';
 import { SimResult } from './proto_utils/sim_result.js';
 import { Raid } from './raid.js';
 import { runConcurrentSim, runConcurrentStatWeights } from './sim_concurrent';
@@ -319,9 +321,13 @@ export class Sim {
 		}
 	}
 
-	// Runs a lightweight version of the sim that doesn't compute combat logs
-	// or other expensive data, and returns the raw result from the sim worker.
-	async runRaidSimLightweight(onProgress: WorkerProgressCallback, _: RunSimOptions = {}): Promise<[RaidSimRequest, RaidSimResult] | ErrorOutcome> {
+	// Runs a lightweight version of the sim that uses a gear set and doesn't compute combat logs or other expensive data,
+	// and returns the raw result from the sim worker.
+	async runRaidSimLightweight(
+		gear: Gear,
+		onProgress: WorkerProgressCallback,
+		_: RunSimOptions = {},
+	): Promise<[RaidSimRequest, RaidSimResult] | ErrorOutcome> {
 		if (this.raid.isEmpty()) {
 			throw new Error('Raid is empty! Try adding some players first.');
 		} else if (this.encounter.targets.length < 1) {
@@ -333,6 +339,18 @@ export class Sim {
 			await this.waitForInit();
 
 			const request = this.makeRaidSimRequest(false);
+			const player = request.raid!.parties[0].players[0];
+
+			// Remove any inactive meta gems, since the backend doesn't have its own validation.
+			// Disable meta gem if inactive.
+			if (gear.hasInactiveMetaGem()) {
+				gear = gear.withoutMetaGem();
+			}
+
+			player.database = gear.toDatabase(this.db);
+			player.equipment = gear.asSpec();
+
+			request.raid!.parties[0].players[0] = player;
 
 			let result;
 			// Only use worker base concurrency when running wasm. Local sim has native threading.
@@ -433,6 +451,68 @@ export class Sim {
 				this.unitMetadataEmitter.emit(eventID);
 			}
 		});
+	}
+
+	// Returns the stats for Player 0 without triggering any metadata updates.
+	// Can be used for Suggest Gems / Batch Simming without interfering with the UI.
+	async getCharacterStatsForGear(eventID: EventID, gear: Gear): Promise<PlayerStats> {
+		await this.waitForInit();
+
+		const raidProto = this.raid.toProto(false, true);
+		this.modifyRaidProto(raidProto);
+
+		const player = raidProto.parties[0].players[0];
+
+		// Remove any inactive meta gems, since the backend doesn't have its own validation.
+		// Disable meta gem if inactive.
+		if (gear.hasInactiveMetaGem()) {
+			gear = gear.withoutMetaGem();
+		}
+
+		player.database = gear.toDatabase(this.db);
+		player.equipment = gear.asSpec();
+
+		// Include consumables in the player db
+		const pdb = player.database!;
+
+		const newConsumables: Consumable[] = [];
+		const newSpellEffects: SpellEffect[] = [];
+		const seenConsumableIds = new Set<number>();
+		const seenEffectIds = new Set<number>();
+		Object.values(player.consumables ?? []).forEach((cid: number) => {
+			if (!cid || seenConsumableIds.has(cid)) return;
+			const consume = this.db.getConsumable(cid);
+			if (!consume) return;
+			seenConsumableIds.add(consume.id);
+			newConsumables.push(consume);
+			for (const eid of consume.effectIds) {
+				if (seenEffectIds.has(eid)) continue;
+				const effect = this.db.getSpellEffect(eid);
+				if (!effect) continue;
+
+				seenEffectIds.add(effect.id);
+				newSpellEffects.push(effect);
+			}
+		});
+
+		// swap in the fresh arrays
+		pdb.consumables = newConsumables;
+		pdb.spellEffects = newSpellEffects;
+		player.database = pdb;
+
+		raidProto.parties[0].players[0] = player;
+
+		const req = ComputeStatsRequest.create({
+			raid: raidProto,
+			encounter: this.encounter.toProto(),
+		});
+
+		const result = await this.workerPool.computeStats(req);
+		if (result.errorResult != '') {
+			this.crashEmitter.emit(eventID, new SimError(result.errorResult));
+		}
+
+		return result.raidStats!.parties[0].players[0];
 	}
 
 	async statWeights(
