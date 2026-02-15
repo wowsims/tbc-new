@@ -927,7 +927,7 @@ func LoadAndWriteConsumables(dbHelper *DBHelper, inputsDir string) ([]dbc.Consum
 			LEFT JOIN Spell sp ON ie.SpellID = sp.ID
 			LEFT JOIN SpellMisc sm ON ie.SpellId = sm.SpellID
 			LEFT JOIN SpellDuration sd ON sm.DurationIndex = sd.ID
-			WHERE ((i.ClassID = 0 AND i.SubclassID IS NOT 0 AND i.SubclassID IS NOT 8 AND i.SubclassID IS NOT 6) OR (i.ClassID = 7 AND i.SubclassID = 2)) AND ItemEffects is not null AND (s.RequiredLevel >= 50 OR i.ID = 22788 OR i.ID = 13442) OR i.ID = 86125
+			WHERE ((i.ClassID = 0 AND i.SubclassID IS NOT 0 AND i.SubclassID IS NOT 8 AND i.SubclassID IS NOT 6) OR (i.ClassID = 7 AND i.SubclassID = 2)) AND ItemEffects is not null AND (s.RequiredLevel >= 50 OR i.ID = 22788 OR i.ID = 13442 OR i.ID = 9224) OR i.ID = 86125
 			AND s.Display_lang != ''
 			AND s.Display_lang NOT LIKE '%Test%'
 			AND s.Display_lang NOT LIKE 'QA%'

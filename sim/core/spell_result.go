@@ -183,13 +183,13 @@ func (spell *Spell) PhysicalCritCheck(sim *Simulation, attackTable *AttackTable)
 	return sim.RandomFloat("Physical Crit Roll") < spell.PhysicalCritChance(attackTable)
 }
 
-func (spell *Spell) BonusDamage() float64 {
+func (spell *Spell) BonusDamage(attackTable *AttackTable) float64 {
 	bonusDamage := 0.0
 
 	if spell.SpellSchool.Matches(SpellSchoolPhysical) {
-		bonusDamage = spell.Unit.PseudoStats.BonusDamage + spell.Unit.PseudoStats.MobTypeAttackPower
+		bonusDamage = spell.Unit.PseudoStats.BonusDamage + attackTable.MobTypeBonusStats[attackTable.Defender.MobType][stats.AttackPower]
 	} else {
-		bonusDamage = spell.SpellDamage()
+		bonusDamage = spell.SpellDamage() + attackTable.MobTypeBonusStats[attackTable.Defender.MobType][stats.SpellDamage]
 	}
 
 	return bonusDamage
@@ -347,14 +347,16 @@ func (spell *Spell) calcDamageInternal(sim *Simulation, target *Unit, baseDamage
 	return result
 }
 func (spell *Spell) CalcDamage(sim *Simulation, target *Unit, baseDamage float64, outcomeApplier OutcomeApplier) *SpellResult {
+	attackTable := spell.Unit.AttackTables[target.UnitIndex]
 	attackerMultiplier := spell.AttackerDamageMultiplier(spell.Unit.AttackTables[target.UnitIndex], false)
 	if spell.BonusCoefficient > 0 {
-		baseDamage += spell.BonusCoefficient * spell.BonusDamage()
+		baseDamage += spell.BonusCoefficient * spell.BonusDamage(attackTable)
 	}
 	return spell.calcDamageInternal(sim, target, baseDamage, attackerMultiplier, false, outcomeApplier)
 }
 func (spell *Spell) CalcPeriodicDamage(sim *Simulation, target *Unit, baseDamage float64, outcomeApplier OutcomeApplier) *SpellResult {
-	attackerMultiplier := spell.AttackerDamageMultiplier(spell.Unit.AttackTables[target.UnitIndex], true)
+	attackTable := spell.Unit.AttackTables[target.UnitIndex]
+	attackerMultiplier := spell.AttackerDamageMultiplier(attackTable, true)
 
 	var dot *Dot
 	if spell.aoeDot != nil {
@@ -363,7 +365,7 @@ func (spell *Spell) CalcPeriodicDamage(sim *Simulation, target *Unit, baseDamage
 		dot = spell.Dot(target)
 	}
 	if dot.BonusCoefficient > 0 {
-		baseDamage += dot.BonusCoefficient * spell.BonusDamage()
+		baseDamage += dot.BonusCoefficient * spell.BonusDamage(attackTable)
 	}
 	attackerMultiplier *= dot.PeriodicDamageMultiplier
 
@@ -559,10 +561,10 @@ func (dot *Dot) CalcAndDealPeriodicSnapshotDamage(sim *Simulation, target *Unit,
 
 func (dot *Dot) Snapshot(target *Unit, baseDamage float64) {
 	dot.SnapshotBaseDamage = baseDamage
-	if dot.BonusCoefficient > 0 {
-		dot.SnapshotBaseDamage += dot.BonusCoefficient * dot.Spell.BonusDamage()
-	}
 	attackTable := dot.Spell.Unit.AttackTables[target.UnitIndex]
+	if dot.BonusCoefficient > 0 {
+		dot.SnapshotBaseDamage += dot.BonusCoefficient * dot.Spell.BonusDamage(attackTable)
+	}
 	dot.SnapshotAttackerMultiplier = dot.Spell.AttackerDamageMultiplier(attackTable, true) *
 		dot.PeriodicDamageMultiplier
 }

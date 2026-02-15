@@ -365,6 +365,8 @@ type AttackTable struct {
 	// If set, the damage taken multiplier is multiplied by the callbacks result.
 	DamageDoneByCasterMultiplier DynamicDamageDoneByCaster
 
+	MobTypeBonusStats map[proto.MobType]stats.Stats // Bonus stats against mobs of the current type.
+
 	// When you need more then 1 active, default to using the above one
 	// Used with EnableDamageDoneByCaster/DisableDamageDoneByCaster
 	DamageDoneByCasterExtraMultiplier []DynamicDamageDoneByCaster
@@ -380,6 +382,8 @@ func NewAttackTable(attacker *Unit, defender *Unit) *AttackTable {
 		DamageTakenMultiplier:       1,
 		RangedDamageTakenMultiplier: 1,
 		HealingDealtMultiplier:      1,
+
+		MobTypeBonusStats: make(map[proto.MobType]stats.Stats),
 	}
 
 	if defender.Type == EnemyUnit {
