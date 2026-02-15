@@ -59,14 +59,11 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionWarrior, {
 		],
 	),
 
-	defaultBuild: Presets.PRESET_BUILD_SHA,
-
 	defaults: {
 		// Default equipped gear.
-		gear: Presets.P2_BALANCED_PRESET.gear,
-		itemSwap: Presets.P2_ITEM_SWAP.itemSwap,
+		gear: Presets.P1_PRESET.gear,
 		// Default EP weights for sorting gear in the gear picker.
-		epWeights: Presets.P2_EP_PRESET.epWeights,
+		epWeights: Presets.P1_EP_PRESET.epWeights,
 		other: Presets.OtherDefaults,
 		// Default consumes settings.
 		consumables: Presets.DefaultConsumables,
@@ -116,26 +113,20 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionWarrior, {
 	},
 
 	presets: {
-		epWeights: [Presets.P2_EP_PRESET, Presets.P2_OFFENSIVE_EP_PRESET, Presets.P3_EP_PRESET, Presets.P3_OFFENSIVE_EP_PRESET],
+		epWeights: [Presets.P1_EP_PRESET],
 		// Preset talents that the user can quickly select.
 		talents: [Presets.StandardTalents],
 		// Preset rotations that the user can quickly select.
-		rotations: [Presets.ROTATION_GENERIC, Presets.ROTATION_GARAJAL, Presets.ROTATION_SHA, Presets.ROTATION_HORRIDON],
+		rotations: [Presets.ROTATION_DEFAULT],
 		// Preset gear configurations that the user can quickly select.
 		gear: [
 			Presets.PRERAID_BALANCED_PRESET,
-			Presets.P2_BALANCED_PRESET,
-			Presets.P2_OFFENSIVE_PRESET,
-			Presets.P3_PROG_PRESET,
-			Presets.P3_BALANCED_PRESET,
-			Presets.P3_OFFENSIVE_PRESET,
+			Presets.P1_PRESET,
 		],
-		itemSwaps: [Presets.PRERAID_ITEM_SWAP, Presets.P2_ITEM_SWAP],
-		builds: [Presets.PRESET_BUILD_GARAJAL, Presets.PRESET_BUILD_SHA, Presets.PRESET_BUILD_HORRIDON],
 	},
 
 	autoRotation: (_player: Player<Spec.SpecProtectionWarrior>): APLRotation => {
-		return Presets.ROTATION_GENERIC.rotation.rotation!;
+		return Presets.ROTATION_DEFAULT.rotation.rotation!;
 	},
 
 	raidSimPresets: [
@@ -153,11 +144,11 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionWarrior, {
 				[Faction.Unknown]: {},
 				[Faction.Alliance]: {
 					1: Presets.PRERAID_BALANCED_PRESET.gear,
-					2: Presets.P2_BALANCED_PRESET.gear,
+					2: Presets.P1_PRESET.gear,
 				},
 				[Faction.Horde]: {
 					1: Presets.PRERAID_BALANCED_PRESET.gear,
-					2: Presets.P2_BALANCED_PRESET.gear,
+					2: Presets.P1_PRESET.gear,
 				},
 			},
 			otherDefaults: Presets.OtherDefaults,

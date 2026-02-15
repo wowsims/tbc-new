@@ -1,23 +1,11 @@
 import * as PresetUtils from '../../core/preset_utils.js';
-import { ConsumesSpec, Profession, PseudoStat, Spec, Stat } from '../../core/proto/common.js';
+import { ConsumesSpec, Profession, PseudoStat, Stat } from '../../core/proto/common.js';
 import { SavedTalents } from '../../core/proto/ui.js';
 import { ProtectionWarrior_Options as ProtectionWarriorOptions, WarriorShout, WarriorStance } from '../../core/proto/warrior.js';
 import { Stats } from '../../core/proto_utils/stats';
 import * as WarriorPresets from '../presets';
 import GenericApl from './apls/default.apl.json';
-import GarajalApl from './apls/garajal.apl.json';
-import ShaApl from './apls/sha.apl.json';
-import HorridonApl from './apls/horridon.apl.json';
-import GarajalBuild from './builds/garajal_encounter_only.build.json';
-import ShaBuild from './builds/sha_encounter_only.build.json';
-import HorridonBuild from './builds/horridon_encounter_only.build.json';
-import P2BISGear from './gear_sets/p2_bis.gear.json';
-import P3ProgGear from './gear_sets/p3_prog.gear.json';
-import P3BISGear from './gear_sets/p3_bis.gear.json';
-import P3BISOffensiveGear from './gear_sets/p3_bis_offensive.gear.json';
-import P2BISItemSwapGear from './gear_sets/p2_bis_item_swap.gear.json';
-import P2BISOffensiveGear from './gear_sets/p2_bis_offensive.gear.json';
-import PreRaidItemSwapGear from './gear_sets/p1_preraid_item_swap.gear.json';
+import P1BISGear from './gear_sets/p1_bis.gear.json';
 import PreraidBISGear from './gear_sets/preraid.gear.json';
 
 // Preset options for this spec.
@@ -25,23 +13,13 @@ import PreraidBISGear from './gear_sets/preraid.gear.json';
 // keep them in a separate file.
 
 export const PRERAID_BALANCED_PRESET = PresetUtils.makePresetGear('Pre-raid', PreraidBISGear);
-export const P2_BALANCED_PRESET = PresetUtils.makePresetGear('P2 - BIS', P2BISGear);
-export const P2_OFFENSIVE_PRESET = PresetUtils.makePresetGear('P2 - BIS (Offensive)', P2BISOffensiveGear);
-export const P3_PROG_PRESET = PresetUtils.makePresetGear('Tentative - P3 - Prog (Balanced)', P3ProgGear);
-export const P3_BALANCED_PRESET = PresetUtils.makePresetGear('Tentative - P3 - BIS (Balanced)', P3BISGear);
-export const P3_OFFENSIVE_PRESET = PresetUtils.makePresetGear('Tentative - P3 - BIS (Offensive)', P3BISOffensiveGear);
+export const P1_PRESET = PresetUtils.makePresetGear('P1 - BIS', P1BISGear);
 
-export const PRERAID_ITEM_SWAP = PresetUtils.makePresetItemSwapGear('Pre-raid - Item Swap', PreRaidItemSwapGear);
-export const P2_ITEM_SWAP = PresetUtils.makePresetItemSwapGear('P2 - Item Swap', P2BISItemSwapGear);
-
-export const ROTATION_GENERIC = PresetUtils.makePresetAPLRotation('Generic', GenericApl);
-export const ROTATION_GARAJAL = PresetUtils.makePresetAPLRotation("Gara'jal", GarajalApl);
-export const ROTATION_SHA = PresetUtils.makePresetAPLRotation('Sha of Fear', ShaApl);
-export const ROTATION_HORRIDON = PresetUtils.makePresetAPLRotation('Horridon', HorridonApl);
+export const ROTATION_DEFAULT = PresetUtils.makePresetAPLRotation('Generic', GenericApl);
 
 // Preset options for EP weights
-export const P2_EP_PRESET = PresetUtils.makePresetEpWeights(
-	'P2 - Default',
+export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
+	'P1 - Default',
 	Stats.fromMap(
 		{
 			[Stat.StatStrength]: 1,
@@ -56,60 +34,12 @@ export const P2_EP_PRESET = PresetUtils.makePresetEpWeights(
 	),
 );
 
-export const P2_OFFENSIVE_EP_PRESET = PresetUtils.makePresetEpWeights(
-	'P2 - Offensive',
-	Stats.fromMap(
-		{
-			[Stat.StatStrength]: 1,
-			[Stat.StatStamina]: 0.36,
-			[Stat.StatAttackPower]: 0.4,
-			[Stat.StatArmor]: 0.18,
-			[Stat.StatBonusArmor]: 0.18,
-		},
-		{
-			[PseudoStat.PseudoStatMainHandDps]: 1.37,
-		},
-	),
-);
-
-export const P3_EP_PRESET = PresetUtils.makePresetEpWeights(
-	'P3 - Balanced',
-	Stats.fromMap(
-		{
-			[Stat.StatStrength]: 1.0,
-			[Stat.StatStamina]: 0.83,
-			[Stat.StatAttackPower]: 0.24,
-			[Stat.StatArmor]: 0.64,
-			[Stat.StatBonusArmor]: 0.64,
-		},
-		{
-			[PseudoStat.PseudoStatMainHandDps]: 0.97,
-		},
-	),
-);
-
-export const P3_OFFENSIVE_EP_PRESET = PresetUtils.makePresetEpWeights(
-	'P3 - Offensive',
-	Stats.fromMap(
-		{
-			[Stat.StatStrength]: 1.0,
-			[Stat.StatStamina]: 0.37,
-			[Stat.StatAttackPower]: 0.3,
-			[Stat.StatArmor]: 0.27,
-			[Stat.StatBonusArmor]: 0.27,
-		},
-		{
-			[PseudoStat.PseudoStatMainHandDps]: 1.08,
-		},
-	),
-);
-
 // Default talents. Uses the wowhead calculator format, make the talents on
 // https://wowhead.com/tbc/talent-calc and copy the numbers in the url.
 export const StandardTalents = {
 	name: 'Standard',
 	data: SavedTalents.create({
-		talentsString: '213332',
+		talentsString: '',
 	}),
 };
 
@@ -131,54 +61,5 @@ export const DefaultConsumables = ConsumesSpec.create({
 export const OtherDefaults = {
 	profession1: Profession.Engineering,
 	profession2: Profession.Blacksmithing,
-	distanceFromTarget: 15,
+	distanceFromTarget: 25,
 };
-
-export const PRESET_BUILD_GARAJAL = PresetUtils.makePresetBuildFromJSON("Gara'jal", Spec.SpecProtectionWarrior, GarajalBuild);
-export const PRESET_BUILD_SHA = PresetUtils.makePresetBuildFromJSON('Sha of Fear P2', Spec.SpecProtectionWarrior, ShaBuild);
-export const PRESET_BUILD_HORRIDON = PresetUtils.makePresetBuildFromJSON('Horridon P2', Spec.SpecProtectionWarrior, HorridonBuild);
-
-// const TEMP_P3_STATIC_ENCOUNTER = PresetUtils.makePresetEncounter('P3', {
-// 	...Encounter.defaultEncounterProto(),
-// 	targets: [
-// 		{
-// 			...Encounter.defaultTargetProto(),
-// 			minBaseDamage: 950000,
-// 		},
-// 	],
-// });
-
-// export const PRESET_BUILD_P3_BIS_OFFENSIVE = PresetUtils.makePresetBuild('P3 - BIS - Offensive (TBD)', {
-// 	gear: P3_OFFENSIVE_PRESET,
-// 	talents: StandardTalents,
-// 	rotation: ROTATION_GENERIC,
-// 	settings: {
-// 		name: 'P3 - BIS',
-// 		consumables: ConsumesSpec.create({
-// 			...DefaultConsumables,
-// 			flaskId: undefined,
-// 			battleElixirId: 76076, // Mad Hozen Elixir
-// 			guardianElixirId: 76081, // Elixir of Mirrors
-// 			foodId: 74646, // Black Pepper Rib and Shrimp
-// 			potId: 76095, // Potion of Mogu Power
-// 			conjuredId: 5512, // Healthstone
-// 		}),
-// 	},
-// 	encounter: TEMP_P3_STATIC_ENCOUNTER,
-// });
-
-// export const PRESET_BUILD_P3_BIS = PresetUtils.makePresetBuild('P3 - BIS (TBD)', {
-// 	gear: P3_BALANCED_PRESET,
-// 	talents: StandardTalents,
-// 	rotation: ROTATION_GENERIC,
-// 	settings: {
-// 		name: 'P3 - BIS',
-// 		consumables: ConsumesSpec.create({
-// 			...DefaultConsumables,
-// 			flaskId: undefined,
-// 			battleElixirId: 76076, // Mad Hozen Elixir
-// 			guardianElixirId: 76081, // Elixir of Mirrors
-// 		}),
-// 	},
-// 	encounter: TEMP_P3_STATIC_ENCOUNTER,
-// });
