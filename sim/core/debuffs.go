@@ -427,7 +427,7 @@ func JudgementOfLightAura(target *Unit) *Aura {
 			}
 
 			if sim.Proc(0.5, "Judgement of Light - Heal") {
-				aura.Unit.GainHealth(sim, 95.0, healthMetrics)
+				spell.Unit.GainHealth(sim, 95.0, healthMetrics)
 			}
 		},
 	})
