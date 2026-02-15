@@ -41,7 +41,11 @@ func (warlock *Warlock) registerLifeTap() {
 			warlock.AddMana(sim, restore, manaMetrics)
 
 			if warlock.Talents.ManaFeed > 0 && warlock.ActivePet != nil {
-				warlock.ActivePet.AddMana(sim, restore*petRestore, petManaMetrics[0])
+				for _, pet := range warlock.Pets {
+					if pet == &warlock.ActivePet.Pet {
+						pet.AddMana(sim, restore*petRestore, petManaMetrics[0])
+					}
+				}
 			}
 		},
 	})

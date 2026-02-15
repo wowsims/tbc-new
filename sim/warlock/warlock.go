@@ -42,10 +42,12 @@ type Warlock struct {
 	UnstableAffliction *core.Spell
 
 	// Auras
-	AmplifyCurseAura  *core.Aura
-	NightfallProcAura *core.Aura
-	ImpShadowboltAura *core.Aura
-	ShadowEmbraceAura *core.Aura
+	AmplifyCurseAura       *core.Aura
+	NightfallProcAura      *core.Aura
+	ImpShadowboltAura      *core.Aura
+	ShadowEmbraceAura      *core.Aura
+	DemonicKnowledgeAura   *core.Aura
+	MasterDemonologistAura *core.Aura
 
 	// Pets
 	ActivePet  *WarlockPet
@@ -58,9 +60,6 @@ type Warlock struct {
 	// Armors
 	FelArmor   *core.Aura
 	DemonArmor *core.Aura
-
-	// Doomguard *DoomguardPet
-	// Infernal  *InfernalPet
 
 	serviceTimer *core.Timer
 }
@@ -106,6 +105,7 @@ func (warlock *Warlock) Initialize() {
 	warlock.registerCorruption()
 	warlock.registerSeed()
 	warlock.registerDrainLife()
+	warlock.registerHellfire()
 	warlock.registerImmolate()
 	warlock.registerIncinerate()
 	warlock.registerLifeTap()
@@ -134,17 +134,7 @@ func (warlock *Warlock) AddPartyBuffs(partyBuffs *proto.PartyBuffs) {
 func (warlock *Warlock) Reset(sim *core.Simulation) {
 }
 
-func (warlock *Warlock) OnEncounterStart(sim *core.Simulation) {
-	// Armor selection
-	switch warlock.Options.Armor {
-
-	case proto.WarlockOptions_FelArmor:
-		warlock.FelArmor.Activate(sim)
-
-	case proto.WarlockOptions_DemonArmor:
-		warlock.DemonArmor.Activate(sim)
-	}
-}
+func (warlock *Warlock) OnEncounterStart(sim *core.Simulation) {}
 
 func NewWarlock(character *core.Character, options *proto.Player, warlockOptions *proto.WarlockOptions) *Warlock {
 	warlock := &Warlock{
@@ -168,6 +158,10 @@ func NewWarlock(character *core.Character, options *proto.Player, warlockOptions
 	// warlock.registerGrimoireOfService()
 
 	return warlock
+}
+
+func (warlock *Warlock) AfflictionCount(target *core.Unit) float64 {
+	return float64(len(target.GetAurasWithTag("Affliction")))
 }
 
 // Agent is a generic way to access underlying warlock on any of the agents.
@@ -236,10 +230,12 @@ const (
 
 	WarlockContagionSpells = WarlockSpellCurseOfAgony | WarlockSpellCorruption | WarlockSpellSeedOfCorruption | WarlockSpellSeedOfCorruptionExplosion
 
+	WarlockShadowEmbraceSpells = WarlockSpellCorruption | WarlockSpellCurseOfAgony | WarlockSpellSiphonLife | WarlockSpellSeedOfCorruption
+
 	WarlockCurses = WarlockSpellCurseOfAgony | WarlockSpellCurseOfDoom | WarlockSpellCurseOfElements |
 		WarlockSpellCurseOfRecklessness | WarlockSpellCurseOfTongues | WarlockSpellCurseOfWeakness
 
-	WarlockSoulLeech = WarlockSpellShadowBolt | WarlockSpellShadowBurn | WarlockSpellSoulFire |
+	WarlockSoulLeechSpells = WarlockSpellShadowBolt | WarlockSpellShadowBurn | WarlockSpellSoulFire |
 		WarlockSpellIncinerate | WarlockSpellSearingPain | WarlockSpellConflagrate
 
 	WarlockAfflictionSpells = WarlockSpellCorruption | WarlockSpellCurseOfAgony | WarlockSpellCurseOfDoom | WarlockSpellCurseOfRecklessness | WarlockSpellCurseOfElements |

@@ -28,14 +28,7 @@ func (warlock *Warlock) registerCorruption() *core.Spell {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			result := spell.CalcOutcome(sim, target, spell.OutcomeMagicHit)
-			if result.Landed() {
-				spell.Dot(target).Apply(sim)
-				if warlock.Talents.ShadowEmbrace > 0 {
-					warlock.ShadowEmbraceAura.Activate(sim)
-				}
-			}
-			spell.DealOutcome(sim, result)
+			spell.CalcAndDealOutcome(sim, target, spell.OutcomeMagicHit)
 		},
 		BonusCoefficient: corruptionCoeff,
 

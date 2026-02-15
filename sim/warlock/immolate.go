@@ -24,7 +24,7 @@ func (warlock *Warlock) registerImmolate() {
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD:      core.GCDDefault,
-				CastTime: 2000*time.Millisecond - time.Duration(100*warlock.Talents.Bane),
+				CastTime: 2000 * time.Millisecond,
 			},
 		},
 
@@ -34,7 +34,6 @@ func (warlock *Warlock) registerImmolate() {
 		BonusCoefficient: immolateCoeff,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			//coeffection 0.13
 			result := spell.CalcDamage(sim, target, 332, spell.OutcomeMagicHitAndCrit)
 			if result.Landed() {
 				spell.RelatedDotSpell.Dot(target).Apply(sim)

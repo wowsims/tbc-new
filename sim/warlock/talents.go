@@ -101,17 +101,13 @@ func (warlock *Warlock) registerAmplifyCurse() {
 	}
 
 	actionID := core.ActionID{SpellID: 18288}
-	warlock.AmplifyCurseAura = warlock.RegisterAura(core.Aura{
-		Label:    "Amplify Curse",
-		ActionID: actionID,
-		Duration: time.Second * 30,
-		OnApplyEffects: func(aura *core.Aura, sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			if (spell.ClassSpellMask&WarlockSpellCurseOfDoom != 0) && (spell.ClassSpellMask&WarlockSpellCurseOfAgony != 0) {
-				return
-			}
-			spell.DamageMultiplier = 1.5
-
-			warlock.AmplifyCurseAura.Deactivate(sim)
+	warlock.AmplifyCurseAura = warlock.MakeProcTriggerAura(core.ProcTrigger{
+		Name:           "Amplify Curse Aura",
+		ActionID:       actionID,
+		ClassSpellMask: WarlockSpellCurseOfAgony,
+		Callback:       core.CallbackOnApplyEffects,
+		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+			spell.DamageMultiplier *= 1.5
 		},
 	})
 
@@ -157,33 +153,36 @@ func (warlock *Warlock) applyNightfall() {
 		return
 	}
 
-	warlock.NightfallProcAura = warlock.RegisterAura(core.Aura{
-		Label:    "Nightfall Shadow Trance",
-		ActionID: core.ActionID{SpellID: 17941},
-		Duration: time.Second * 10,
-		OnCastComplete: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell) {
-			// Check for an instant cast shadowbolt to disable aura
-			if spell != warlock.ShadowBolt || spell.CurCast.CastTime != 0 {
-				return
-			}
-			aura.Deactivate(sim)
-		},
+	isbMod := warlock.AddDynamicMod(core.SpellModConfig{
+		Kind:       core.SpellMod_CastTime_Pct,
+		FloatValue: 1.0,
+		ClassMask:  WarlockSpellShadowBolt,
 	})
 
-	warlock.RegisterAura(core.Aura{
-		Label:    "Nightfall",
-		Duration: core.NeverExpires,
-		OnReset: func(aura *core.Aura, sim *core.Simulation) {
-			aura.Activate(sim)
-		},
-		OnPeriodicDamageDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, spellEffect *core.SpellResult) {
-			if spell != warlock.Corruption && spell != warlock.DrainLife {
-				return
-			}
+	warlock.NightfallProcAura = warlock.MakeProcTriggerAura(core.ProcTrigger{
+		Name:           "Nightfall",
+		ClassSpellMask: WarlockSpellCorruption | WarlockSpellDrainLife,
+		Callback:       core.CallbackOnPeriodicDamageDealt,
+		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			if !sim.Proc(0.02*float64(warlock.Talents.Nightfall), "nightfall") {
 				return
 			}
 			warlock.NightfallProcAura.Activate(sim)
+			isbMod.Activate()
+		},
+	})
+
+	warlock.MakeProcTriggerAura(core.ProcTrigger{
+		Name:           "Nightfall Shadow Trance",
+		ClassSpellMask: WarlockSpellShadowBolt,
+		Callback:       core.CallbackOnCastComplete,
+		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+			if spell.CurCast.CastTime != 0 {
+				return
+			}
+
+			isbMod.Deactivate()
+			warlock.NightfallProcAura.Deactivate(sim)
 		},
 	})
 
@@ -205,7 +204,18 @@ func (warlock *Warlock) applyShadowEmbrace() {
 	if warlock.Talents.ShadowEmbrace == 0 {
 		return
 	}
+
 	warlock.ShadowEmbraceAura = core.ShadowEmbraceAura(warlock.CurrentTarget, warlock.Talents.ShadowEmbrace)
+	warlock.MakeProcTriggerAura(core.ProcTrigger{
+		Name:           "Shadow Embrace Trigger" + warlock.Label,
+		Callback:       core.CallbackOnSpellHitDealt,
+		Outcome:        core.OutcomeLanded,
+		ProcChance:     1,
+		ClassSpellMask: WarlockShadowEmbraceSpells,
+		Handler: func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
+			warlock.ShadowEmbraceAura.Activate(sim)
+		},
+	})
 
 }
 
@@ -246,7 +256,7 @@ Skipping the following:
   - Improved Health Funnel
   - Improved Voidwalker
   - Fel Domination
-  - Demonic Aegis ->
+  - Demonic Aegis -> implemented in armors.go
   - Mana Feed -> applied in lifetap.go
 */
 func (warlock *Warlock) appyImprovedImp() {
@@ -276,8 +286,8 @@ func (warlock *Warlock) applyFelIntellect() {
 	}
 
 	warlock.MultiplyStat(stats.Mana, 1.0+(0.01)*float64(warlock.Talents.FelIntellect))
-	if warlock.ActivePet != nil {
-		warlock.ActivePet.MultiplyStat(stats.Mana, 1+(0.05)*float64(warlock.Talents.FelIntellect))
+	for _, pet := range warlock.Pets {
+		pet.MultiplyStat(stats.Mana, 1+(0.05)*float64(warlock.Talents.FelIntellect))
 	}
 
 }
@@ -301,8 +311,8 @@ func (warlock *Warlock) applyFelStamina() {
 	}
 
 	warlock.MultiplyStat(stats.Health, 1.0+0.01*float64(warlock.Talents.FelStamina))
-	if warlock.ActivePet != nil {
-		warlock.ActivePet.MultiplyStat(stats.Health, 1+(0.05)*float64(warlock.Talents.FelStamina))
+	for _, pet := range warlock.Pets {
+		pet.MultiplyStat(stats.Health, 1+(0.05)*float64(warlock.Talents.FelStamina))
 	}
 
 }
@@ -312,7 +322,12 @@ func (warlock *Warlock) applyUnholyPower() {
 		return
 	}
 
-	warlock.ActivePet.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexPhysical] *= 1.0 + 0.04*float64(warlock.Talents.UnholyPower)
+	for _, pet := range warlock.Pets {
+		if pet != &warlock.Imp.Pet {
+			pet.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexPhysical] *= 1.0 + 0.04*float64(warlock.Talents.UnholyPower)
+		}
+	}
+
 	warlock.Imp.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Pct,
 		FloatValue: 0.04 * float64(warlock.Talents.UnholyPower),
@@ -332,9 +347,9 @@ func (warlock *Warlock) applyDemonicSacrifice() {
 		warlock.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexFire] *= 1.15
 	case proto.WarlockOptions_Felguard:
 		warlock.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexShadow] *= 1.10
-		warlock.AddStat(stats.MP5, warlock.GetStats()[stats.Intellect]*1.25)
+		warlock.AddStat(stats.MP5, warlock.GetStat(stats.Intellect)*1.25)
 	case proto.WarlockOptions_Felhunter:
-		warlock.AddStat(stats.MP5, warlock.GetStats()[stats.Intellect]*1.6667)
+		warlock.AddStat(stats.MP5, warlock.GetStat(stats.Intellect)*1.6667)
 	}
 }
 
@@ -342,16 +357,39 @@ func (warlock *Warlock) applyMasterDemonologist() {
 	if warlock.Talents.MasterDemonologist == 0 || warlock.Options.SacrificeSummon == true {
 		return
 	}
+	points := float64(warlock.Talents.MasterDemonologist)
 
 	switch warlock.Options.Summon {
 	case proto.WarlockOptions_Imp:
-		warlock.PseudoStats.ThreatMultiplier *= 1.0 - (0.04 * float64(warlock.Talents.MasterDemonologist))
+		warlock.MasterDemonologistAura = warlock.NewTemporaryStatsAura("Master Demonologist", core.ActionID{SpellID: (23825 + int32(points))}, stats.Stats{}, core.NeverExpires).Aura
+		warlock.MasterDemonologistAura.AttachMultiplicativePseudoStatBuff(&warlock.PseudoStats.ThreatMultiplier, 1.0-0.04*points)
 	case proto.WarlockOptions_Succubus:
-		warlock.PseudoStats.DamageDealtMultiplier *= 1.0 + 0.02*float64(warlock.Talents.MasterDemonologist)
+		warlock.MasterDemonologistAura = warlock.NewTemporaryStatsAura("Master Demonologist", core.ActionID{SpellID: (23832 + int32(points))}, stats.Stats{}, core.NeverExpires).Aura
+		warlock.MasterDemonologistAura.AttachMultiplicativePseudoStatBuff(&warlock.PseudoStats.DamageDealtMultiplier, 1.0+0.02*points)
 	case proto.WarlockOptions_Felguard:
-		warlock.PseudoStats.DamageDealtMultiplier *= 1.0 + 0.01*float64(warlock.Talents.MasterDemonologist)
+		resistsBonus := 0.10 * points * 70
+		warlock.MasterDemonologistAura = warlock.NewTemporaryStatsAura("Master Demonologist", core.ActionID{SpellID: (35701 + int32(points))}, stats.Stats{
+			stats.ArcaneResistance: resistsBonus,
+			stats.FireResistance:   resistsBonus,
+			stats.FrostResistance:  resistsBonus,
+			stats.NatureResistance: resistsBonus,
+			stats.ShadowResistance: resistsBonus,
+		}, core.NeverExpires).Aura
+		warlock.MasterDemonologistAura.AttachMultiplicativePseudoStatBuff(&warlock.PseudoStats.DamageDealtMultiplier, 1.0+0.01*points)
 	case proto.WarlockOptions_Voidwalker:
-		warlock.PseudoStats.BonusPhysicalDamageTaken *= 1.0 - (0.02 * float64(warlock.Talents.MasterDemonologist))
+		warlock.PseudoStats.BonusPhysicalDamageTaken *= 1.0 - 0.02*points
+		warlock.MasterDemonologistAura = warlock.NewTemporaryStatsAura("Master Demonologist", core.ActionID{SpellID: (23840 + int32(points))}, stats.Stats{}, core.NeverExpires).Aura
+		warlock.MasterDemonologistAura.AttachMultiplicativePseudoStatBuff(&warlock.PseudoStats.BonusPhysicalDamageTaken, 1.0-0.02*points)
+	case proto.WarlockOptions_Felhunter:
+		resistsBonus := 0.20 * points * 70
+		warlock.MasterDemonologistAura = warlock.NewTemporaryStatsAura("Master Demonologist", core.ActionID{SpellID: (23836 + int32(points))}, stats.Stats{}, core.NeverExpires).Aura
+		warlock.MasterDemonologistAura.AttachStatsBuff(stats.Stats{
+			stats.ArcaneResistance: resistsBonus,
+			stats.FireResistance:   resistsBonus,
+			stats.FrostResistance:  resistsBonus,
+			stats.NatureResistance: resistsBonus,
+			stats.ShadowResistance: resistsBonus,
+		})
 	}
 }
 
@@ -363,25 +401,34 @@ func (warlock *Warlock) applySoulLink() {
 	// Add if/while pet is alive
 	warlock.PseudoStats.DamageTakenMultiplier *= 0.80
 	warlock.PseudoStats.DamageDealtMultiplier *= 1.05
-	warlock.ActivePet.PseudoStats.DamageDealtMultiplier *= 1.05
+
+	for _, pet := range warlock.Pets {
+		pet.PseudoStats.DamageDealtMultiplier *= 1.05
+	}
 }
 
 func (warlock *Warlock) applyDemonicKnowledge() {
 	if warlock.Talents.DemonicKnowledge == 0 {
 		return
 	}
-
-	petStats := warlock.ActivePet.GetStats()
-	warlock.AddStat(stats.SpellDamage, (0.04*float64(warlock.Talents.DemonicKnowledge))*(petStats[stats.Stamina]+petStats[stats.Intellect]))
+	bonus := (0.04 * float64(warlock.Talents.DemonicKnowledge)) * (warlock.ActivePet.GetStat(stats.Stamina) + warlock.ActivePet.GetStat(stats.Intellect))
+	warlock.DemonicKnowledgeAura = warlock.NewTemporaryStatsAura("Demonic Knowledge", core.ActionID{SpellID: 35693}, stats.Stats{stats.SpellDamage: bonus}, core.NeverExpires).Aura
 }
 
 func (warlock *Warlock) applyDemonicTactics() {
 	if warlock.Talents.DemonicTactics == 0 {
 		return
 	}
+	points := float64(warlock.Talents.DemonicTactics)
+	warlock.AddStat(stats.SpellCritPercent, points)
+	warlock.AddStat(stats.PhysicalCritPercent, points)
+	warlock.AddStat(stats.RangedCritPercent, points)
 
-	warlock.AddStat(stats.SpellCritRating, core.SpellCritRatingPerCritPercent*float64(warlock.Talents.DemonicTactics))
-	warlock.ActivePet.AddStat(stats.SpellCritRating, core.SpellCritRatingPerCritPercent*float64(warlock.Talents.DemonicTactics))
+	for _, pet := range warlock.Pets {
+		pet.AddStat(stats.SpellCritPercent, points)
+		pet.AddStat(stats.PhysicalCritPercent, points)
+		pet.AddStat(stats.RangedCritPercent, points)
+	}
 }
 
 /*
@@ -457,7 +504,7 @@ func (warlock *Warlock) applyDevastation() {
 
 	warlock.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
-		FloatValue: 5.0,
+		FloatValue: float64(warlock.Talents.Devastation),
 		ClassMask:  WarlockDestructionSpells,
 	})
 }
@@ -487,15 +534,7 @@ func (warlock *Warlock) applyImprovedSearingPain() {
 	if warlock.Talents.ImprovedSearingPain == 0 {
 		return
 	}
-	var critBonus = 0.0
-	switch warlock.Talents.ImprovedSearingPain {
-	case 1:
-		critBonus = 4.0
-	case 2:
-		critBonus = 7.0
-	case 3:
-		critBonus = 10.0
-	}
+	critBonus := []float64{0, 4, 7, 10}[warlock.Talents.ImprovedSearingPain]
 
 	warlock.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
@@ -567,18 +606,11 @@ func (warlock *Warlock) applySoulLeech() {
 		return
 	}
 	healthMetric := warlock.NewHealthMetrics(core.ActionID{SpellID: 30296})
-	warlock.RegisterAura(core.Aura{
-		Label:    "Soul Leech",
-		Duration: core.NeverExpires,
-		OnReset: func(aura *core.Aura, sim *core.Simulation) {
-			aura.Activate(sim)
-		},
-		OnSpellHitDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-
-			if (spell.ClassSpellMask&WarlockSoulLeech == 0) || !result.Landed() {
-				return
-			}
-
+	warlock.MakeProcTriggerAura(core.ProcTrigger{
+		Name:           "Soul Leech",
+		ClassSpellMask: WarlockSoulLeechSpells,
+		Callback:       core.CallbackOnSpellHitDealt,
+		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			if !sim.Proc(0.10*float64(warlock.Talents.SoulLeech), "Soul Leech") {
 				return
 			}

@@ -33,9 +33,6 @@ func (warlock *Warlock) registerCurseOfAgony() {
 			result := spell.CalcOutcome(sim, target, spell.OutcomeMagicHit)
 			if result.Landed() {
 				spell.Dot(target).Apply(sim)
-				if warlock.Talents.ShadowEmbrace > 0 {
-					warlock.ShadowEmbraceAura.Activate(sim)
-				}
 			}
 			spell.DealOutcome(sim, result)
 		},

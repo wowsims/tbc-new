@@ -4,42 +4,48 @@ import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
 func (warlock *Warlock) registerArmors() {
+
+	felArmorBonus := 100.0
+	felArmorHealingBonus := 1.2
+
+	demonArmorBonus := 660.0
+	demonArmorSRBonus := 18.0
+
+	if warlock.Talents.DemonicAegis > 0 {
+		bonusMultipler := 1.0 + (0.1 * float64(warlock.Talents.DemonicAegis))
+
+		felArmorBonus *= bonusMultipler
+		felArmorHealingBonus *= bonusMultipler
+
+		demonArmorBonus *= bonusMultipler
+		demonArmorSRBonus *= bonusMultipler
+	}
+
 	warlock.FelArmor = warlock.RegisterAura(core.Aura{
 		Label:    "Fel Armor",
 		ActionID: core.ActionID{SpellID: 28176},
 		Duration: time.Minute * 30,
-
-		OnGain: func(aura *core.Aura, sim *core.Simulation) {
-			aura.Unit.PseudoStats.SelfHealingMultiplier *= 1.20
-			aura.Unit.AddStatDynamic(sim, stats.SpellDamage, 100)
-		},
-
-		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
-			aura.Unit.PseudoStats.SelfHealingMultiplier /= 1.20
-			aura.Unit.AddStatDynamic(sim, stats.SpellDamage, -100)
-		},
-	})
+	}).AttachMultiplicativePseudoStatBuff(&warlock.PseudoStats.SelfHealingMultiplier, felArmorHealingBonus).AttachStatBuff(stats.SpellDamage, felArmorBonus)
 
 	warlock.DemonArmor = warlock.RegisterAura(core.Aura{
 		Label:    "Demon Armor",
 		ActionID: core.ActionID{SpellID: 27260},
 		Duration: time.Minute * 30,
+	}).AttachStatBuff(stats.Armor, demonArmorBonus).AttachStatBuff(stats.ShadowResistance, demonArmorSRBonus)
 
-		OnGain: func(aura *core.Aura, sim *core.Simulation) {
-			aura.Unit.AddStatDynamic(sim, stats.Armor, 660)
-			aura.Unit.AddStatDynamic(sim, stats.ShadowResistance, 18)
-			//18 hp5
-		},
+	// Armor selection
+	switch warlock.Options.Armor {
 
-		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
-			aura.Unit.AddStatDynamic(sim, stats.Armor, -660)
-			aura.Unit.AddStatDynamic(sim, stats.ShadowResistance, -18)
-			//-18 hp5
-		},
-	})
+	case proto.WarlockOptions_FelArmor:
+		core.MakePermanent(warlock.FelArmor)
+
+	case proto.WarlockOptions_DemonArmor:
+		core.MakePermanent(warlock.DemonArmor)
+	}
 
 }

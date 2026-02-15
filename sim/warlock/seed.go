@@ -32,12 +32,7 @@ func (warlock *Warlock) registerSeed() {
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			baseDmg := warlock.CalcAndRollDamageRange(sim, 1110, 1290)
 			for _, aoeTarget := range sim.Encounter.ActiveTargetUnits {
-				result := spell.CalcAndDealDamage(sim, aoeTarget, baseDmg, spell.OutcomeMagicHitAndCrit)
-				if result.Landed() {
-					if warlock.Talents.ShadowEmbrace > 0 {
-						warlock.ShadowEmbraceAura.Activate(sim)
-					}
-				}
+				spell.CalcAndDealDamage(sim, aoeTarget, baseDmg, spell.OutcomeMagicHitAndCrit)
 			}
 		},
 	})
@@ -73,14 +68,14 @@ func (warlock *Warlock) registerSeed() {
 			Aura: core.Aura{
 				Label: "Seed",
 				OnSpellHitTaken: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-					if !result.Landed() || spell.SpellSchool != core.SpellSchoolShadow {
+					if !result.Landed() || !spell.SpellSchool.Matches(core.SpellSchoolShadow) {
 						return
 					}
 
 					trySeedPop(sim, result.Target, result.Damage)
 				},
 				OnPeriodicDamageTaken: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-					if spell.SpellSchool != core.SpellSchoolShadow {
+					if !spell.SpellSchool.Matches(core.SpellSchoolShadow) {
 						return
 					}
 					trySeedPop(sim, result.Target, result.Damage)

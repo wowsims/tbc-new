@@ -114,6 +114,20 @@ func (warlock *Warlock) makePet(
 	// set pet class for proper scaling values
 	if enabledOnStart {
 		warlock.ActivePet = pet
+		pet.OnPetEnable = func(sim *core.Simulation) {
+			if warlock.Talents.DemonicKnowledge > 0 {
+				if warlock.DemonicKnowledgeAura.IsActive() {
+					warlock.DemonicKnowledgeAura.Deactivate(sim)
+				}
+				warlock.DemonicKnowledgeAura.Activate(sim)
+			}
+			if warlock.Talents.MasterDemonologist > 0 {
+				if warlock.MasterDemonologistAura.IsActive() {
+					warlock.MasterDemonologistAura.Deactivate(sim)
+				}
+				warlock.MasterDemonologistAura.Activate(sim)
+			}
+		}
 		warlock.RegisterResetEffect(func(sim *core.Simulation) {
 			warlock.ActivePet = pet
 		})

@@ -43,8 +43,8 @@ func (warlock *Warlock) registerConflagrate() {
 			dmgRoll := warlock.CalcAndRollDamageRange(sim, 579, 721)
 			result := spell.CalcAndDealDamage(sim, target, dmgRoll, spell.OutcomeMagicHitAndCrit)
 
-			if result.Outcome == core.OutcomeLanded || result.Outcome == core.OutcomePartial {
-				target.GetAura("Immolate (DoT)").Deactivate(sim)
+			if result.Outcome.Matches(core.OutcomeLanded | core.OutcomePartial) {
+				warlock.Immolate.Dot(target).Deactivate(sim)
 			}
 		},
 	})

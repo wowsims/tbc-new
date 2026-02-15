@@ -1,7 +1,6 @@
 package warlock
 
 import (
-	"math/rand/v2"
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
@@ -33,8 +32,8 @@ func (warlock *Warlock) registerIncinerate() {
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			baseDamage := warlock.CalcAndRollDamageRange(sim, 444, 514)
-			if target.GetAura("Immolate (DoT)").IsActive() {
-				baseDamage += float64(rand.Int32N(128-111+1) + 111)
+			if warlock.Immolate.Dot(target).IsActive() {
+				baseDamage += sim.Roll(111, 128)
 			}
 			result := spell.CalcDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
 

@@ -34,9 +34,6 @@ func (warlock *Warlock) registerSiphonLifeSpell() {
 
 			if result.Landed() {
 				spell.Dot(target).Apply(sim)
-				if warlock.Talents.ShadowEmbrace > 0 {
-					warlock.ShadowEmbraceAura.Activate(sim)
-				}
 			}
 			spell.DealOutcome(sim, result)
 		},
@@ -55,7 +52,7 @@ func (warlock *Warlock) registerSiphonLifeSpell() {
 				dot.Snapshot(target, 63)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				var result = dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
+				result := dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 
 				healthToRegain := result.Damage * (1 * warlock.PseudoStats.BonusHealingTaken)
 				warlock.GainHealth(sim, healthToRegain, healthMetrics)

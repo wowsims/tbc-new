@@ -43,7 +43,7 @@ func (warlock *Warlock) registerDrainLife() {
 				dot.Snapshot(target, 108)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.PeriodicDamageMultiplier = math.Max(1, math.Min(1+(0.02*float64(warlock.Talents.SoulSiphon)*float64(len(target.GetAurasWithTag("Affliction")))), cappedDmgBonus))
+				dot.PeriodicDamageMultiplier = math.Max(1, math.Min(1+(0.02*float64(warlock.Talents.SoulSiphon)*warlock.AfflictionCount(target)), cappedDmgBonus))
 				resultSlice[0] = dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 				warlock.GainHealth(sim, resultSlice[0].Damage*warlock.PseudoStats.SelfHealingMultiplier, healthMetric)
 			},
