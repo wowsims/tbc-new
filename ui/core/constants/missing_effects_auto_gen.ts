@@ -1523,12 +1523,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		25996, // Emblem of Perseverance
-		[
-			"Increases defense rating by 80 for 15s.", // 32957 - https://www.wowhead.com/tbc/spell=32957
-		]
-	],
-	[
 		26000, // Gladiator's Linked Gauntlets
 		[
 			"Increases the damage done by your Lightning Shield by 8%.", // 33020 - https://www.wowhead.com/tbc/spell=33020
