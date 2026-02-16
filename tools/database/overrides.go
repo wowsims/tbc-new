@@ -178,6 +178,7 @@ var ConsumableAllowList = []int32{
 	7676,  // Thisle Tea
 	9224,  // Elixir of Demonslaying
 	13442, // Migty Rage Potion
+	13452, // Elixir of the Mongoose
 	20520, // Dark Rune
 	22797, // Nightmare Seed
 }

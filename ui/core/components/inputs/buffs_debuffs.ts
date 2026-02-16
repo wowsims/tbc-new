@@ -186,7 +186,7 @@ export const BlessingOfKings = makeBooleanIndividualBuffInput({
 	label: 'Blessing of Kings',
 });
 export const BlessingOfMight = makeTristateIndividualBuffInput({
-	actionId: () => ActionId.fromSpellId(27140),
+	actionId: () => ActionId.fromSpellId(27141),
 	impId: ActionId.fromSpellId(20048),
 	fieldName: 'blessingOfMight',
 	label: 'Blessing of Might',
@@ -199,7 +199,7 @@ export const BlessingOfSalvation = makeBooleanIndividualBuffInput({
 export const BlessingOfSanctuary = makeBooleanIndividualBuffInput({
 	actionId: () => ActionId.fromSpellId(27169),
 	fieldName: 'blessingOfSanctuary',
-	label: 'BlessingOfSanctuary',
+	label: 'Blessing of Sanctuary',
 });
 export const BlessingOfWisdom = makeTristateIndividualBuffInput({
 	actionId: () => ActionId.fromSpellId(27143),
@@ -415,6 +415,11 @@ export const BUFFS_CONFIG = [
 		config: BlessingOfWisdom,
 		picker: IconPicker,
 		stats: [Stat.StatMP5],
+	},
+	{
+		config: BlessingOfSanctuary,
+		picker: IconPicker,
+		stats: [Stat.StatStamina, Stat.StatArmor],
 	},
 	{
 		config: Innervate,

@@ -9700,12 +9700,12 @@
 {"id":8676,"name":"Ambush","icon":"ability_rogue_ambush"},
 {"id":9102,"name":"Enchant Cloak - Greater Agility","icon":"trade_engraving"},
 {"id":9316,"name":"Inscription of Faith","icon":"spell_holy_sealofsalvation"},
-{"id":9318,"name":"Zandalar Signet of Serenity","icon":"spell_holy_powerwordshield"},
+{"id":9318,"name":"Greater Inscription of Faith","icon":"spell_holy_greaterblessingofsalvation"},
 {"id":9331,"name":"Greater Inscription of the Blade","icon":"spell_holy_weaponmastery"},
 {"id":9334,"name":"Inscription of Vengeance","icon":"spell_holy_fistofjustice"},
 {"id":9336,"name":"Zandalar Signet of Might","icon":"inv_misc_armorkit_08"},
 {"id":9344,"name":"Inscription of Discipline","icon":"spell_holy_sealofwisdom"},
-{"id":9346,"name":"Greater Inscription of Discipline","icon":"spell_holy_sealofwisdom"},
+{"id":9346,"name":"Zandalar Signet of Mojo","icon":"inv_jewelry_ring_46"},
 {"id":9408,"name":"Greater Inscription of the Oracle","icon":"spell_holy_powerinfusion"},
 {"id":9417,"name":"Greater Inscription of the Orb","icon":"inv_misc_orb_03"},
 {"id":9452,"name":"Vindication","icon":"spell_holy_vindication"},
@@ -11020,7 +11020,7 @@
 {"id":23709,"name":"Corehound Belt","icon":"temp"},
 {"id":23710,"name":"Molten Belt","icon":"temp"},
 {"id":23785,"name":"Master Demonologist","icon":"spell_shadow_shadowpact"},
-{"id":23794,"name":"Enchant Weapon - Agility","icon":"inv_misc_note_01"},
+{"id":23794,"name":"Enchant Gloves - Superior Agility","icon":"inv_misc_note_01"},
 {"id":23822,"name":"Master Demonologist","icon":"spell_shadow_shadowpact"},
 {"id":23823,"name":"Master Demonologist","icon":"spell_shadow_shadowpact"},
 {"id":23824,"name":"Master Demonologist","icon":"spell_shadow_shadowpact"},
@@ -12139,9 +12139,12 @@
 {"path":"Default/Dynamic Adds","targets":[{"path":"Default/Dynamic Boss","target":{"id":99999,"name":"Dynamic Boss","level":73,"mobType":7,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7685,0,0,0,0,0,0,0,0,0],"minBaseDamage":3000,"damageSpread":0.5,"swingSpeed":2,"targetInputs":[{"inputType":1,"label":"Add(s) respawn Time","tooltip":"Time for add(s) to respawn after previous died (in seconds)","numberValue":10},{"inputType":1,"label":"Add(s) lifetime","tooltip":"How long the add(s) stay alive (in seconds)","numberValue":20},{"inputType":1,"label":"Add(s) spawn delay","tooltip":"Initial delay before the add(s) spawn (in seconds)","numberValue":10}]}},{"path":"Default/Dynamic Add","target":{"id":99998,"name":"Dynamic Add","level":72,"mobType":7,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7685,0,0,0,0,0,0,0,0,0],"minBaseDamage":700,"damageSpread":0.4,"swingSpeed":1.5,"tankIndex":1}}]}
 ],
 "consumables":[
+{"id":7676,"type":3,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"name":"Thistle Tea","icon":"inv_drink_milk_05","cooldownDuration":300,"categoryCooldownDuration":120,"effectIds":[684839]},
 {"id":9224,"type":6,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"name":"Elixir of Demonslaying","icon":"inv_potion_27","buffDuration":300,"categoryCooldownDuration":3},
 {"id":13442,"type":1,"stats":[60,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"name":"Mighty Rage Potion","icon":"inv_potion_41","buffDuration":20,"categoryCooldownDuration":120,"effectIds":[696085]},
+{"id":13452,"type":6,"stats":[0,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,28,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"name":"Elixir of the Mongoose","icon":"inv_potion_32","buffDuration":3600,"categoryCooldownDuration":3},
 {"id":13511,"type":2,"stats":[0,0,0,65,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"name":"Flask of Distilled Wisdom","icon":"inv_potion_97","buffDuration":7200,"categoryCooldownDuration":3},
+{"id":20520,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"name":"Dark Rune","icon":"spell_shadow_sealofkings","categoryCooldownDuration":120,"effectIds":[704014]},
 {"id":22797,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2000,0,0,0,0,0,0,0],"name":"Nightmare Seed","icon":"inv_misc_herb_nightmareseed","buffDuration":30,"categoryCooldownDuration":180},
 {"id":22824,"type":6,"stats":[35,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"name":"Elixir of Major Strength","icon":"inv_potion_147","buffDuration":3600,"categoryCooldownDuration":3},
 {"id":22825,"type":6,"stats":[0,0,0,0,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"name":"Elixir of Healing Power","icon":"inv_potion_142","buffDuration":3600,"categoryCooldownDuration":3},
@@ -12176,6 +12179,8 @@
 {"id":33872,"type":3,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,20,0,0,0,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"name":"Spicy Hot Talbuk","icon":"inv_misc_food_84_roastclefthoof","buffDuration":30,"categoryCooldownDuration":1}
 ],
 "spellEffects":[
-{"id":696085,"spellId":17528,"type":30,"minEffectSize":449,"effectSpread":301,"resourceType":3}
+{"id":684839,"spellId":9512,"type":30,"minEffectSize":99,"effectSpread":1,"resourceType":2},
+{"id":696085,"spellId":17528,"type":30,"minEffectSize":449,"effectSpread":301,"resourceType":3},
+{"id":704014,"spellId":27869,"type":30,"minEffectSize":899,"effectSpread":601,"resourceType":1}
 ]
 }

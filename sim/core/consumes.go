@@ -317,6 +317,34 @@ func registerConjuredCD(agent Agent, consumes *proto.ConsumesSpec) {
 			},
 		})
 	}
+
+	if consumes.NightmareSeed {
+		aura := character.NewTemporaryStatsAura(
+			"Nightmare Seed",
+			ActionID{SpellID: 28726},
+			stats.Stats{stats.Health: 2000},
+			time.Second*30,
+		)
+
+		spell := character.RegisterSpell(SpellConfig{
+			ActionID: ActionID{ItemID: 22797},
+			Flags:    SpellFlagNoOnCastComplete,
+			Cast: CastConfig{
+				CD: Cooldown{
+					Timer:    character.GetConjuredCD(),
+					Duration: time.Minute * 3,
+				},
+			},
+			ApplyEffects: func(sim *Simulation, _ *Unit, _ *Spell) {
+				aura.Activate(sim)
+			},
+		})
+
+		character.AddMajorCooldown(MajorCooldown{
+			Spell: spell,
+			Type:  CooldownTypeSurvival,
+		})
+	}
 }
 
 var SuperSapperActionID = ActionID{ItemID: 23827}

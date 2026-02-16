@@ -596,6 +596,9 @@
 			},
 			"scrolls": {
 				"title": "Scrolls"
+			},
+			"miscellaneous": {
+				"title": "Miscellaneous"
 			}
 		},
 		"encounter": {
