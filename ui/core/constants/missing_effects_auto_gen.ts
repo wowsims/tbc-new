@@ -953,27 +953,14 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		22195, // Light Obsidian Belt
-		[
-			"+5 All Resistances.", // 18676 - https://www.wowhead.com/tbc/spell=18676
-		]
-	],
-	[
 		22196, // Thick Obsidian Breastplate
 		[
 			"When struck by a non-periodic damage spell you have a 30% chance of getting a 6s spell shield that absorbs 500 of that school of damage.", // 27539 - https://www.wowhead.com/tbc/spell=27539
 		]
 	],
 	[
-		22197, // Heavy Obsidian Belt
-		[
-			"+5 All Resistances.", // 18676 - https://www.wowhead.com/tbc/spell=18676
-		]
-	],
-	[
 		22198, // Jagged Obsidian Shield
 		[
-			"+5 All Resistances.", // 18676 - https://www.wowhead.com/tbc/spell=18676
 			"When struck by a harmful spell, the caster of that spell has a 5% chance to be silenced for 3s.", // 27559 - https://www.wowhead.com/tbc/spell=27559
 		]
 	],
