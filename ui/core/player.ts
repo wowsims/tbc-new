@@ -702,6 +702,25 @@ export class Player<SpecType extends Spec> {
 		this.bonusStatsChangeEmitter.emit(eventID);
 	}
 
+	getCritImmunityInfo() {
+		const critImmuneCap = 5.6;
+		const defense = this.currentStats.finalStats?.stats[Stat.StatDefenseRating] || 0;
+		const resilience = this.currentStats.finalStats?.stats[Stat.StatResilienceRating] || 0;
+
+		const defenseContribution = defense * Mechanics.DEFENSE_RATING_PER_DEFENSE_LEVEL * Mechanics.DEFENSE_RATING_TO_CHANCE_REDUCTION;
+		const resilienceContribution = resilience / Mechanics.RESILIENCE_RATING_PER_CRIT_REDUCTION_CHANCE;
+		return {
+			total: defenseContribution + resilienceContribution,
+			delta: critImmuneCap - (defenseContribution + resilienceContribution),
+			defense: defenseContribution,
+			resilience: resilienceContribution,
+		};
+	}
+
+	getCritImmunity() {
+		return this.getCritImmunityInfo().delta;
+	}
+
 	getMeleeCritCapInfo(): MeleeCritCapInfo {
 		const debuffStats = CharacterStats.getDebuffStats(this);
 		const debuffHit = debuffStats.getPseudoStat(PseudoStat.PseudoStatMeleeHitPercent) || 0;
@@ -1466,8 +1485,8 @@ export class Player<SpecType extends Spec> {
 		});
 	}
 
-	getBaseMastery(): number {
-		return 8;
+	getBaseDefense(): number {
+		return Mechanics.CHARACTER_LEVEL * 5;
 	}
 
 	static updateProtoVersion(proto: PlayerProto) {

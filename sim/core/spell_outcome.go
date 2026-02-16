@@ -773,8 +773,9 @@ func (result *SpellResult) applyEnemyAttackTableParry(spell *Spell, attackTable 
 
 func (result *SpellResult) applyEnemyAttackTableCrit(spell *Spell, _ *AttackTable, roll float64, chance *float64, countHits bool) bool {
 	critPercent := spell.Unit.GetStat(stats.PhysicalCritPercent) + spell.BonusCritPercent
+
 	critChance := critPercent / 100
-	critChance -= result.Target.GetStat(stats.DefenseRating) * DefenseRatingToChanceReduction
+	critChance -= result.Target.GetDefenseReduction()
 	critChance -= result.Target.GetStat(stats.ResilienceRating) / ResilienceRatingPerCritReductionChance / 100
 	critChance -= result.Target.PseudoStats.ReducedCritTakenChance
 	*chance += max(0, critChance)
@@ -787,7 +788,7 @@ func (result *SpellResult) applyEnemyAttackTableCrit(spell *Spell, _ *AttackTabl
 				spell.SpellMetrics[result.Target.UnitIndex].ResistedCrits++
 			}
 		}
-		resilCritMultiplier := 1 - result.Target.GetStat(stats.ResilienceRating)/ResilienceRatingPerCritDamageReductionPercent/100
+		resilCritMultiplier := 1 - result.Target.GetStat(stats.ResilienceRating)/ResilienceRatingPerCritReductionChance/2/100
 		result.Damage *= 2 * resilCritMultiplier
 		return true
 	}
