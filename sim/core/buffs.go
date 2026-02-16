@@ -174,7 +174,7 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 	}
 
 	if partyBuffs.GraceOfAirTotem != proto.TristateEffect_TristateEffectMissing {
-		GraceOfAirTotemAura(char, IsImproved(partyBuffs.GraceOfAirTotem))
+		GraceOfAirTotemAura(char, IsImproved(partyBuffs.GraceOfAirTotem), partyBuffs.WindfuryTotem > 0)
 	}
 
 	if partyBuffs.JadePendantOfBlasting {
@@ -581,10 +581,15 @@ func UnleashedRageAura(char *Character) *Aura {
 //	Totems
 //
 // //////////////////////////
-func GraceOfAirTotemAura(char *Character, improved bool) *Aura {
+func GraceOfAirTotemAura(char *Character, improved bool, wfActive bool) *Aura {
 	agiBuff := 77.0
 	if improved {
 		agiBuff *= 1.15
+	}
+
+	duration := NeverExpires
+	if wfActive {
+		duration = time.Second * 9
 	}
 
 	return makeStatBuff(char, BuffConfig{
@@ -593,6 +598,17 @@ func GraceOfAirTotemAura(char *Character, improved bool) *Aura {
 		Stats: []StatConfig{
 			{stats.Agility, agiBuff, false},
 		},
+		Duration: duration,
+	}).ApplyOnReset(func(aura *Aura, sim *Simulation) {
+		if wfActive {
+			StartPeriodicAction(sim, PeriodicActionOptions{
+				Period:   time.Second * 10,
+				Priority: ActionPriorityAuto,
+				OnAction: func(sim *Simulation) {
+					aura.Activate(sim)
+				},
+			})
+		}
 	})
 }
 
@@ -653,24 +669,62 @@ func WindfuryTotemAura(char *Character, isImpoved bool) *Aura {
 		apBonus *= 1.3
 	}
 	// Chance on MH Auto Attack to instantly attack with another AA with apBonus.
-	// AP bonus comes from an aura that lingers for 1.5 seconds?
+	// AP bonus lingers until 2 auto attacks are performed.
+	// If procced from a normal auto, this consumes the buff almost instantly (server tick rate applies)
+	// If procced from a "Next Auto" special (HS/Cleave), this can result in the aura lasting the entire 1.5s duration.
 
 	wfProcAura := char.NewTemporaryStatsAura("Windfury Totem Proc", ActionID{SpellID: 25584}, stats.Stats{stats.AttackPower: apBonus}, time.Millisecond*1500)
+	wfProcAura.MaxStacks = 2
+	wfProcAura.AttachProcTrigger(ProcTrigger{
+		Name:     "Windfury Attack",
+		Callback: CallbackOnSpellHitDealt,
+		ProcMask: ProcMaskMeleeMHAuto | ProcMaskMeleeOHAuto,
+		// TriggerImmediately ommited for improved UI clarity (the timeline tick would be near invisible for MHAuto procs)
+		Handler: func(sim *Simulation, spell *Spell, result *SpellResult) {
+			if wfProcAura.active && !spell.ProcMask.Matches(ProcMaskMeleeSpecial) {
+				wfProcAura.SetStacks(sim, wfProcAura.stacks-1)
+				if wfProcAura.stacks == 0 {
+					wfProcAura.Deactivate(sim)
+				}
+			}
+		},
+	})
 
-	return char.MakeProcTriggerAura(ProcTrigger{
+	wfProcTrigger := char.MakeProcTriggerAura(ProcTrigger{
 		Name:               "Windfury Totem",
 		MetricsActionID:    ActionID{SpellID: 25587},
 		ProcChance:         0.2,
+		Duration:           time.Second * 10,
 		Outcome:            OutcomeLanded,
 		Callback:           CallbackOnSpellHitDealt,
 		ProcMask:           ProcMaskMeleeMHAuto,
-		ICD:                time.Millisecond * 100, // No procs on procs
+		ICD:                time.Millisecond * 1500,
 		TriggerImmediately: true,
 		Handler: func(sim *Simulation, spell *Spell, result *SpellResult) {
 			wfProcAura.Activate(sim)
+			if spell.ProcMask == ProcMaskMeleeMHAuto {
+				wfProcAura.SetStacks(sim, 1)
+			} else {
+				wfProcAura.SetStacks(sim, 2)
+			}
 			char.AutoAttacks.MHAuto().Cast(sim, result.Target)
 		},
+	}).ApplyOnReset(func(aura *Aura, sim *Simulation) {
+		aura.Activate(sim)
+		StartPeriodicAction(sim, PeriodicActionOptions{
+			Period:   time.Second * 5,
+			Priority: ActionPriorityAuto,
+			OnAction: func(sim *Simulation) {
+				aura.Activate(sim)
+			},
+		})
 	})
+
+	char.RegisterItemSwapCallback([]proto.ItemSlot{proto.ItemSlot_ItemSlotMainHand}, func(sim *Simulation, slot proto.ItemSlot) {
+		wfProcTrigger.Deactivate(sim)
+	})
+
+	return wfProcTrigger
 }
 
 func WrathOfAirTotemAura(char *Character, improved bool) *Aura {
