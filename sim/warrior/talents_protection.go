@@ -96,7 +96,7 @@ func (war *Warrior) registerAnticipation() {
 		return
 	}
 
-	war.AddStat(stats.DefenseRating, float64(war.Talents.Anticipation)*core.DefenseRatingPerDefenseLevel)
+	war.AddStat(stats.DefenseRating, 4*float64(war.Talents.Anticipation)*core.DefenseRatingPerDefenseLevel)
 
 	war.OnSpellRegistered(func(spell *core.Spell) {
 		if !spell.Matches(SpellMaskDefensiveStance) {

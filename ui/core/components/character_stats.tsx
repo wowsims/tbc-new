@@ -425,9 +425,7 @@ export class CharacterStats extends Component {
 		const displaySuffix = unitStat.equalsStat(Stat.StatDefenseRating) ? '' : i18n.t('sidebar.character_stats.percent_suffix');
 
 		if (unitStat.equalsStat(Stat.StatDefenseRating) && includeBase) {
-			if (rootRatingValue !== null) {
-				rootRatingValue += this.player.getBaseDefense();
-			}
+			derivedPercentOrPointsValue! += this.player.getBaseDefense();
 		} else if (rootStat === Stat.StatMeleeHitRating && includeBase && this.hasRacialHitBonus) {
 			// Remove the rating display and only show %
 			if (rootRatingValue !== null && rootRatingValue > 0) {
@@ -464,7 +462,8 @@ export class CharacterStats extends Component {
 			}
 		}
 
-		const hideRootRating = rootRatingValue === null || (rootRatingValue === 0 && derivedPercentOrPointsValue !== null);
+		const hideRootRating =
+			(rootRatingValue === null || (rootRatingValue === 0 && derivedPercentOrPointsValue !== null)) && !unitStat.equalsStat(Stat.StatDefenseRating);
 		const rootRatingString = hideRootRating ? '' : String(Math.round(rootRatingValue!));
 		const percentOrPointsString =
 			derivedPercentOrPointsValue === null
