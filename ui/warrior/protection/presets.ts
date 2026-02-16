@@ -39,7 +39,7 @@ export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
 export const StandardTalents = {
 	name: 'Standard',
 	data: SavedTalents.create({
-		talentsString: '',
+		talentsString: '350003011-05-0055511033001103501351',
 	}),
 };
 

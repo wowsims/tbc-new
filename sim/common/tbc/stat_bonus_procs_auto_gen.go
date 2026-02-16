@@ -4067,7 +4067,9 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// https://www.wowhead.com/tbc/spell=39599
+	// Sometimes heals bearer of 120 damage when damaging an enemy in melee and chance on ranged hit to restore
+	// 172 mana to the bearer.
+	// https://www.wowhead.com/tbc/spell=33504
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,

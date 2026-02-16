@@ -882,7 +882,8 @@ func (unit *Unit) GetTotalDodgeChanceAsDefender(spell *Spell, atkTable *AttackTa
 		atkTable.BaseDodgeChance +
 		unit.GetDodgeFromRating() -
 		spell.DodgeParrySuppression() -
-		spell.Unit.PseudoStats.DodgeReduction
+		spell.Unit.PseudoStats.DodgeReduction +
+		unit.GetDefenseReduction()
 	return math.Max(chance, 0.0)
 }
 
@@ -890,7 +891,8 @@ func (unit *Unit) GetTotalParryChanceAsDefender(spell *Spell, atkTable *AttackTa
 	chance := unit.PseudoStats.BaseParryChance +
 		atkTable.BaseParryChance +
 		unit.GetParryFromRating() -
-		spell.DodgeParrySuppression()
+		spell.DodgeParrySuppression() +
+		unit.GetDefenseReduction()
 	return math.Max(chance, 0.0)
 }
 
@@ -904,8 +906,12 @@ func (unit *Unit) GetTotalBlockChanceAsDefender(atkTable *AttackTable) float64 {
 	chance := unit.PseudoStats.BaseBlockChance +
 		atkTable.BaseBlockChance +
 		unit.GetBlockFromRating() +
-		unit.stats[stats.DefenseRating]*DefenseRatingToChanceReduction
+		unit.GetDefenseReduction()
 	return math.Max(chance, 0.0)
+}
+
+func (unit *Unit) GetDefenseReduction() float64 {
+	return math.Floor(unit.stats[stats.DefenseRating]/DefenseRatingPerDefenseLevel) * MissDodgeParryBlockCritChancePerDefense / 100
 }
 
 func (unit *Unit) GetTotalAvoidanceChance(spell *Spell, atkTable *AttackTable) float64 {

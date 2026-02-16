@@ -389,13 +389,12 @@ var EnchantDenyList = map[int32]struct{}{
 }
 
 var EnchantAllowList = []int32{
-	368,   // Enchant Cloak - Greater Agility
-	684,   // Enchant Gloves - Major Strength
-	1593,  // Bracer 24 AP
-	1594,  // Gloves 26 AP
-	2564,  // Weapon 15 Agi
-	2647,  // Enchant Bracer - Brawn
-	19782, // Presence of Might
+	368,  // Enchant Cloak - Greater Agility
+	684,  // Enchant Gloves - Major Strength
+	1593, // Bracer 24 AP
+	2564, // Weapon 15 Agi
+	2583, // Presence of Might
+	2647, // Enchant Bracer - Brawn
 }
 
 // Note: EffectId is required for all enchants, because they are
