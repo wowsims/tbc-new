@@ -135,6 +135,7 @@ func NewPaladin(character *core.Character, talentsStr string, options *proto.Pal
 
 	paladin.PseudoStats.CanParry = true
 	paladin.PseudoStats.BaseParryChance += 0.05
+	paladin.PseudoStats.BaseBlockChance += 0.05
 
 	paladin.EnableManaBar()
 

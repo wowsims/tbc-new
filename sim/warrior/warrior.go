@@ -225,6 +225,7 @@ func NewWarrior(character *core.Character, options *proto.WarriorOptions, talent
 
 	warrior.PseudoStats.CanParry = true
 	warrior.PseudoStats.BaseParryChance += 0.05
+	warrior.PseudoStats.BaseBlockChance += 0.05
 
 	warrior.AddStatDependency(stats.Strength, stats.AttackPower, 2)
 	warrior.AddStatDependency(stats.Strength, stats.BlockValue, 1/20.0)

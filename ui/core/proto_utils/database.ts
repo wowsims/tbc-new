@@ -201,6 +201,9 @@ export class Database {
 		return this.getConsumables().filter(consume => consume.type == type);
 	}
 	getConsumablesByTypeAndStats(type: ConsumableType, stats: Array<Stat>): Array<Consumable> {
+		if (stats.includes(Stat.StatStamina)) {
+			stats.push(Stat.StatHealth);
+		}
 		return this.getConsumablesByType(type).filter(consume => consume.buffsMainStat || stats.some(index => consume.stats[index] > 0));
 	}
 	getRandomSuffixById(id: number): ItemRandomSuffix | undefined {
