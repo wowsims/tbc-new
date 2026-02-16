@@ -112,6 +112,12 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
+		13503, // Alchemist's Stone
+		[
+			"Increases the effect that healing and mana potions have on the wearer by 40%. This effect does not stack.", // 17619 - https://www.wowhead.com/tbc/spell=17619
+		]
+	],
+	[
 		13505, // Runeblade of Baron Rivendare
 		[
 			"Increases movement speed and life regeneration rate.", // 17625 - https://www.wowhead.com/tbc/spell=17625
@@ -3319,6 +3325,30 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		35703, // Figurine - Seaspray Albatross
 		[
 			"Restores 900 mana over 12s.", // 46785 - https://www.wowhead.com/tbc/spell=46785
+		]
+	],
+	[
+		35748, // Guardian's Alchemist Stone
+		[
+			"Increases the effect that healing and mana potions have on the wearer by 40%. This effect does not stack.", // 17619 - https://www.wowhead.com/tbc/spell=17619
+		]
+	],
+	[
+		35749, // Sorcerer's Alchemist Stone
+		[
+			"Increases the effect that healing and mana potions have on the wearer by 40%. This effect does not stack.", // 17619 - https://www.wowhead.com/tbc/spell=17619
+		]
+	],
+	[
+		35750, // Redeemer's Alchemist Stone
+		[
+			"Increases the effect that healing and mana potions have on the wearer by 40%. This effect does not stack.", // 17619 - https://www.wowhead.com/tbc/spell=17619
+		]
+	],
+	[
+		35751, // Assassin's Alchemist Stone
+		[
+			"Increases the effect that healing and mana potions have on the wearer by 40%. This effect does not stack.", // 17619 - https://www.wowhead.com/tbc/spell=17619
 		]
 	],
 	[

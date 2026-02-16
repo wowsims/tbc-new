@@ -44,7 +44,24 @@ var IgnoreSpellEffectBySpellEffectType = map[dbc.SpellEffectType][]int{
 
 var OtherItemIdsToFetch = []string{}
 var ConsumableOverrides = []*proto.Consumable{}
-var ItemOverrides = []*proto.UIItem{}
+var ItemOverrides = []*proto.UIItem{
+	{Id: 32658, Phase: 2}, // Badge of Tenacity
+
+	{Id: 34665, Phase: 5},
+	{Id: 34666, Phase: 5},
+	{Id: 34667, Phase: 5},
+	{Id: 34670, Phase: 5},
+	{Id: 34671, Phase: 5},
+	{Id: 34672, Phase: 5},
+	{Id: 34673, Phase: 5},
+	{Id: 34674, Phase: 5},
+	{Id: 34675, Phase: 5},
+	{Id: 34676, Phase: 5},
+	{Id: 34677, Phase: 5},
+	{Id: 34678, Phase: 5},
+	{Id: 34679, Phase: 5},
+	{Id: 34680, Phase: 5},
+}
 
 // Keep these sorted by item ID.
 var ItemAllowList = map[int32]struct{}{
