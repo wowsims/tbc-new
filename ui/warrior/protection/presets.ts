@@ -54,8 +54,9 @@ export const DefaultOptions = ProtectionWarriorOptions.create({
 
 export const DefaultConsumables = ConsumesSpec.create({
 	...WarriorPresets.DefaultConsumables,
-	flaskId: 22854,
-	potId: 22828,
+	foodId: 27667,
+	flaskId: 22851,
+	potId: 22849,
 });
 
 export const OtherDefaults = {
