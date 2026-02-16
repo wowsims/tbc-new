@@ -165,6 +165,12 @@ func processEnchantmentEffects(
 				}
 				if spellEffect.EffectType == E_APPLY_AURA && spellEffect.EffectAura == A_MOD_STAT {
 					outStats[spellEffect.EffectMiscValues[0]] += float64(spellEffect.EffectBasePoints + 1)
+				} else if spellEffect.EffectType == E_APPLY_AURA && spellEffect.EffectAura == A_MOD_RESISTANCE && (spellEffect.EffectMiscValues[0] == 126 || spellEffect.EffectMiscValues[0] == 124) {
+					outStats[proto.Stat_StatArcaneResistance] += float64(spellEffect.EffectBasePoints + 1)
+					outStats[proto.Stat_StatFireResistance] += float64(spellEffect.EffectBasePoints + 1)
+					outStats[proto.Stat_StatFrostResistance] += float64(spellEffect.EffectBasePoints + 1)
+					outStats[proto.Stat_StatNatureResistance] += float64(spellEffect.EffectBasePoints + 1)
+					outStats[proto.Stat_StatShadowResistance] += float64(spellEffect.EffectBasePoints + 1)
 				} else {
 					stat := ConvertEffectAuraToStatIndex(spellEffect.EffectAura, spellEffect.EffectMiscValues[0])
 					if stat >= 0 {
@@ -209,6 +215,11 @@ func ConvertEffectAuraToStatIndex(effectAura EffectAuraType, effectMisc int) pro
 
 func ConvertResistanceFlagToResistanceStat(flag int) proto.Stat {
 	school := SpellSchool(flag)
+	if school == 126 || school == 124 {
+		// All 5 Magic School resist; return -2 to be handled as special case
+		// 124 excludes "Holy" which isn't a resist anyways
+		return -2
+	}
 	for schoolType, stat := range SpellSchoolToStat {
 		if school.Has(schoolType) {
 			return stat
