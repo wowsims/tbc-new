@@ -361,13 +361,11 @@ message IndividualSimSettings {
 message ReforgeSettings {
 	bool use_custom_ep_values = 1;
 	bool use_soft_cap_breakpoints = 2;
-	bool include_timeout = 3;
-	bool include_gems = 4;
-	bool freeze_item_slots = 5;
-	repeated ItemSlot frozen_item_slots = 6;
-	UIStat relative_stat_cap_stat = 7;
-	UnitStats stat_caps = 8;
-	UnitStats breakpoint_limits = 9;
+	bool freeze_item_slots = 3;
+	repeated ItemSlot frozen_item_slots = 4;
+	UnitStats stat_caps = 5;
+	UnitStats breakpoint_limits = 6;
+	int32 max_gem_phase = 7;
 }
 
 message StatCapConfig {

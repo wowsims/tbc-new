@@ -75,13 +75,12 @@ func (dot *Dot) TakeSnapshot(sim *Simulation) {
 }
 
 // Snapshots and activates the Dot
-// If the Dot is already active it's duration will be refreshed and the last tick from the previous application will be
-// transfered to the new one
 func (dot *Dot) Apply(sim *Simulation) {
 	if dot.Spell.Flags&SpellFlagSupressDoTApply > 0 {
 		return
 	}
 
+	dot.Deactivate(sim)
 	dot.TakeSnapshot(sim)
 	dot.recomputeAuraDuration(sim)
 	dot.Activate(sim)
@@ -105,9 +104,7 @@ func (dot *Dot) CalcTickPeriod() time.Duration {
 	}
 }
 
-func (dot *Dot) recomputeAuraDuration(sim *Simulation) {
-	nextTick := dot.TimeUntilNextTick(sim)
-
+func (dot *Dot) recomputeAuraDuration(_ *Simulation) {
 	dot.tickPeriod = dot.CalcTickPeriod()
 	dot.remainingTicks = dot.calculateTickCount(dot.BaseDuration(), dot.BaseTickLength)
 	if (dot.affectedByCastSpeed || dot.affectedByRealHaste) && !dot.hasteReducesDuration {
@@ -116,14 +113,6 @@ func (dot *Dot) recomputeAuraDuration(sim *Simulation) {
 
 	dot.tmpExtraTicks = 0
 	dot.Duration = dot.tickPeriod * time.Duration(dot.remainingTicks)
-
-	// we a have running dot tick
-	// the next tick never gets clipped and is added onto the dot's time for hasted dots
-	// see: https://github.com/wowsims/tbc/issues/50
-	if dot.IsActive() {
-		dot.Duration += nextTick
-		dot.remainingTicks++
-	}
 }
 
 // TickPeriod is how fast the snapshotted dot ticks.

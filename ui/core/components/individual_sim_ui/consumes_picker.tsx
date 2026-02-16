@@ -2,7 +2,7 @@ import { ref } from 'tsx-vanilla';
 
 import { IndividualSimUI } from '../../individual_sim_ui';
 import { Player } from '../../player';
-import { Class, ConsumableType, Spec } from '../../proto/common';
+import { Class, ConsumableType, Spec, Stat } from '../../proto/common';
 import { Consumable } from '../../proto/db';
 import { Database } from '../../proto_utils/database';
 import { TypedEvent } from '../../typed_event';
@@ -28,7 +28,20 @@ export class ConsumesPicker extends Component {
 	}
 
 	private getConsumables(type: ConsumableType): Consumable[] {
-		return this.db.getConsumablesByTypeAndStats(type, this.simUI.individualConfig.consumableStats ?? this.simUI.individualConfig.epStats);
+		const consumables: Consumable[] = [];
+		const hasAttackPowerStat = (this.simUI.individualConfig.consumableStats ?? this.simUI.individualConfig.epStats).find(
+			stat => stat === Stat.StatAttackPower,
+		);
+		if (type == ConsumableType.ConsumableTypeBattleElixir && hasAttackPowerStat) {
+			const elixirOfDemonSlaying = this.db.getConsumable(9224);
+			if (elixirOfDemonSlaying) {
+				consumables.push(elixirOfDemonSlaying);
+			}
+		}
+		return [
+			...consumables,
+			...this.db.getConsumablesByTypeAndStats(type, this.simUI.individualConfig.consumableStats ?? this.simUI.individualConfig.epStats),
+		];
 	}
 
 	public static create(parentElem: HTMLElement, settingsTab: SettingsTab, simUI: IndividualSimUI<any>): ConsumesPicker {

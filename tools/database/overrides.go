@@ -109,6 +109,7 @@ var ExtraItemIcons = []int32{
 	33208,
 
 	// Elixer IDs
+	9224,
 	13452,
 	13454,
 	22824,
@@ -158,6 +159,7 @@ var ExtraItemIcons = []int32{
 // Item Ids of consumables to allow
 var ConsumableAllowList = []int32{
 	7676,  // Thisle Tea
+	9224,  // Elixir of Demonslaying
 	13442, // Migty Rage Potion
 	20520, // Dark Rune
 }
@@ -374,6 +376,7 @@ var EnchantAllowList = []int32{
 	684,  // Enchant Gloves - Major Strength
 	1593, // Bracer 24 AP
 	2564, // Weapon 15 Agi
+	2583, // Presence of Might
 	2647, // Enchant Bracer - Brawn
 }
 

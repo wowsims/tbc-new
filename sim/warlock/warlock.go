@@ -1,9 +1,6 @@
 package warlock
 
 import (
-	"math"
-	"time"
-
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
@@ -222,69 +219,3 @@ const (
 	WarlockAllSummons                = WarlockSummonSpells | WarlockSpellSummonInfernal | WarlockSpellSummonDoomguard
 	WarlockSpellsChaoticEnergyDestro = WarlockSpellAll &^ WarlockAllSummons &^ WarlockSpellDrainLife
 )
-
-// Pandemic - For now a Warlock only ability. Might be moved into core support in late expansions
-func (warlock *Warlock) ApplyDotWithPandemic(dot *core.Dot, sim *core.Simulation) {
-
-	// if DoT was not active before, there is nothing we need to do for pandemic
-	if !dot.IsActive() {
-		dot.Apply(sim)
-		return
-	}
-
-	// MoP Pandemic is a warlock only ability
-	// It allows for the extension of up to 50% of the unhasted base duration
-	// So we need to determine which is shorter base + remaining or base + maxExtend
-	remaining := dot.RemainingDuration(sim)
-	extend := time.Duration(math.Min(
-		float64(dot.BaseDuration()+remaining),
-		float64(dot.BaseDuration()+dot.BaseDuration()/2),
-	))
-
-	// First do usual dot carry over
-	dot.Apply(sim)
-	for dot.RemainingDuration(sim)-dot.TimeUntilNextTick(sim)+dot.TickPeriod() <= extend {
-		dot.AddTick()
-	}
-}
-
-// Called to handle custom resources
-type WarlockSpellCastedCallback func(resultList core.SpellResultSlice, spell *core.Spell, sim *core.Simulation)
-
-type SecondaryResourceCost struct {
-	SecondaryCost int
-	Name          string
-}
-
-// // CostFailureReason implements core.ResourceCostImpl.
-// func (s *SecondaryResourceCost) CostFailureReason(_ *core.Simulation, spell *core.Spell) string {
-// 	return fmt.Sprintf(
-// 		"Not enough %s (Current %s = %0.03f, %s Cost = %0.03f)",
-// 		s.Name,
-// 		s.Name,
-// 		spell.Unit.GetSecondaryResourceBar(),
-// 		s.Name,
-// 		spell.CurCast.Cost,
-// 	)
-// }
-
-// // IssueRefund implements core.ResourceCostImpl.
-// func (s *SecondaryResourceCost) IssueRefund(sim *core.Simulation, spell *core.Spell) {
-// 	curCost := spell.Cost.PercentModifier * float64(s.SecondaryCost)
-// 	spell.Unit.GetSecondaryResourceBar().Gain(sim, curCost, spell.ActionID)
-// }
-
-// // MeetsRequirement implements core.ResourceCostImpl.
-// func (s *SecondaryResourceCost) MeetsRequirement(_ *core.Simulation, spell *core.Spell) bool {
-// 	spell.CurCast.Cost = spell.Cost.PercentModifier * float64(s.SecondaryCost)
-// 	return spell.Unit.GetSecondaryResourceBar().CanSpend(spell.CurCast.Cost)
-// }
-
-// // SpendCost implements core.ResourceCostImpl.
-// func (s *SecondaryResourceCost) SpendCost(sim *core.Simulation, spell *core.Spell) {
-
-// 	// during some hard casts resourc might tick down, make sure spells don't execute on exhaustion
-// 	if spell.Unit.GetSecondaryResourceBar().CanSpend(spell.CurCast.Cost) {
-// 		spell.Unit.GetSecondaryResourceBar().Spend(sim, spell.CurCast.Cost, spell.ActionID)
-// 	}
-// }

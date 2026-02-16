@@ -26,6 +26,7 @@
 		"name": "Name",
 		"search": "Search",
 		"filter": "Filter",
+		"elapsed_time": "Elapsed Time",
 		"phases": {
 			"1": "Phase 1 (2.0 - T4)",
 			"2": "Phase 2 (2.1 - T5)",
@@ -807,11 +808,7 @@
 			"combinations_count": "{{count}} Combinations",
 			"combination_singular": "1 Combination",
 			"iterations": "Iterations",
-			"default_gems": "Default Gems",
-			"inherit_upgrades": {
-				"label": "Inherit Upgrades",
-				"tooltip": "When enabled, items will inherit upgrades from the equipped item. Otherwise, items will be simmed without any upgrades."
-			},
+			"default_gems": "Fallback Gems",
 			"freeze_ring": {
 				"label": "Freeze ring slot",
 				"tooltip": "Freeze one equipped ring to reduce combination counts"
@@ -2135,7 +2132,6 @@
 			"profession_requirement": "{{itemName}} requires {{professionName}}, but it is not selected.",
 			"too_many_jc_gems": "Only 2 Jewelcrafting Gems are allowed, but {{count}} are equipped.",
 			"unspent_talent_points": "You have {{count}} unspent talent point(s).",
-			"dual_wield_2h_without_titans_grip": "Dual wielding two-handed weapon(s) without Titan's Grip spec.",
 			"shaman_fele_autocast": "Your Fire Elemental spell autocast setup is not optimal with the use of the Primal Elementalist talent (everything ON but Empower). If you know what you're doing, please ignore this."
 		},
 		"buttons": {
@@ -2251,15 +2247,14 @@
 				"breakpoints_implemented": "The following breakpoints have been implemented for this spec:",
 				"post_cap_ep": "Post cap EP",
 				"reforge_optimization_failed": "Gem optimization failed. Please try again, or report the issue if it persists.",
+				"reforge_optimization_cancelled": "Gem optimization cancelled.",
 				"use_custom": "Use custom EP Weights",
 				"enable_modification": "This will enable modification of the default EP weights and setting custom stat caps.",
 				"modify_in_editor": "Ep weights can be modified in the Stat Weights editor.",
 				"hard_cap_info": "If you want to hard cap a stat make sure to put the EP for that stat higher.",
 				"edit_weights": "Edit weights",
-				"include_gems": "Include gems",
 				"freeze_item_slots": "Freeze item slots",
-				"limit_execution_time": "Limit execution time",
-				"limit_execution_time_tooltip": "If checked, the solver will error out if the total computation time exceeds 30 seconds. If unchecked, then total computation time will be capped at 1 hour instead."
+				"max_gem_phase": "Max Gem Phase"
 			}
 		},
 		"header": {
@@ -2336,6 +2331,7 @@
 				"talents": "Talents:",
 				"buffs": "Buffs:",
 				"consumes": "Consumes:",
+				"debuffs": "Debuffs:",
 				"bonus": "Bonus:",
 				"total": "Total:",
 				"glancing": "Glancing:",

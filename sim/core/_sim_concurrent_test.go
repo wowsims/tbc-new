@@ -93,7 +93,7 @@ func makeTestCase(player *proto.Player) *proto.RaidSimRequest {
 			core.FullRaidBuffs,
 			core.FullDebuffs),
 		Encounter: &proto.Encounter{
-			Duration: 300,
+			Duration: 180,
 			Targets: []*proto.Target{
 				core.NewDefaultTarget(),
 			},

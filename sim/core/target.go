@@ -196,7 +196,7 @@ func NewTarget(options *proto.Target, targetIndex int32) *Target {
 	// accomplished by specifying the extra (or reduced) Crit within the CritRating field of the
 	// proto stats array. Any specified CritRating will be applied as an OFFSET to the default
 	// level-based values, rather than as a replacement.
-	target.stats[stats.PhysicalCritPercent] = UnitLevelFloat64(target.Level, 5.0, 5.2, 5.4, 5.6)
+	target.stats[stats.PhysicalCritPercent] += UnitLevelFloat64(target.Level, 5.0, 5.2, 5.4, 5.6)
 	target.addUniversalStatDependencies()
 
 	if target.Level == 73 && options.SuppressDodge {
@@ -350,6 +350,10 @@ type AttackTable struct {
 	SpellCritSuppression float64
 	HitSuppression       float64
 
+	// All "Apply Aura: Mod All Damage Done Against Creature" effects in Vanilla and TBC also increase the CritMultiplier.
+	// Explicitly for hunters' "Monster Slaying" and "Humanoid Slaying", but likewise for rogues' "Murder", or trolls' "Beastslaying".
+	CritMultiplier float64
+
 	DamageDealtMultiplier       float64 // attacker buff, applied in applyAttackerModifiers()
 	DamageTakenMultiplier       float64 // defender debuff, applied in applyTargetModifiers()
 	HealingDealtMultiplier      float64
@@ -361,6 +365,8 @@ type AttackTable struct {
 	// If set, the damage taken multiplier is multiplied by the callbacks result.
 	DamageDoneByCasterMultiplier DynamicDamageDoneByCaster
 
+	MobTypeBonusStats map[proto.MobType]stats.Stats // Bonus stats against mobs of the current type.
+
 	// When you need more then 1 active, default to using the above one
 	// Used with EnableDamageDoneByCaster/DisableDamageDoneByCaster
 	DamageDoneByCasterExtraMultiplier []DynamicDamageDoneByCaster
@@ -371,10 +377,13 @@ func NewAttackTable(attacker *Unit, defender *Unit) *AttackTable {
 		Attacker: attacker,
 		Defender: defender,
 
+		CritMultiplier:              1,
 		DamageDealtMultiplier:       1,
 		DamageTakenMultiplier:       1,
 		RangedDamageTakenMultiplier: 1,
 		HealingDealtMultiplier:      1,
+
+		MobTypeBonusStats: make(map[proto.MobType]stats.Stats),
 	}
 
 	if defender.Type == EnemyUnit {

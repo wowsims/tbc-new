@@ -1,3 +1,4 @@
+import { CharacterStats } from './components/character_stats';
 import { ItemSwapSettings } from './components/item_swap_picker';
 import Toast from './components/toast';
 import * as Mechanics from './constants/mechanics';
@@ -630,9 +631,6 @@ export class Player<SpecType extends Spec> {
 	hasProfession(prof: Profession): boolean {
 		return this.getProfessions().includes(prof);
 	}
-	isBlacksmithing(): boolean {
-		return this.hasProfession(Profession.Blacksmithing);
-	}
 
 	getFaction(): Faction {
 		return raceToFaction[this.getRace()];
@@ -664,12 +662,8 @@ export class Player<SpecType extends Spec> {
 		this.consumesChangeEmitter.emit(eventID);
 	}
 
-	canDualWield2H(): boolean {
-		return false;
-	}
-
 	equipItem(eventID: EventID, slot: ItemSlot, newItem: EquippedItem | null) {
-		this.setGear(eventID, this.gear.withEquippedItem(slot, newItem, this.canDualWield2H()));
+		this.setGear(eventID, this.gear.withEquippedItem(slot, newItem));
 	}
 
 	getEquippedItem(slot: ItemSlot): EquippedItem | null {
@@ -708,11 +702,34 @@ export class Player<SpecType extends Spec> {
 		this.bonusStatsChangeEmitter.emit(eventID);
 	}
 
+	getCritImmunityInfo() {
+		const critImmuneCap = 5.6;
+		const defense = this.currentStats.finalStats?.stats[Stat.StatDefenseRating] || 0;
+		const resilience = this.currentStats.finalStats?.stats[Stat.StatResilienceRating] || 0;
+
+		const defenseContribution = Math.floor(defense / Mechanics.DEFENSE_RATING_PER_DEFENSE_LEVEL) * Mechanics.MISS_DODGE_PARRY_BLOCK_CRIT_CHANCE_PER_DEFENSE;
+		const resilienceContribution = resilience / Mechanics.RESILIENCE_RATING_PER_CRIT_REDUCTION_CHANCE;
+
+		return {
+			total: defenseContribution + resilienceContribution,
+			delta: critImmuneCap - (defenseContribution + resilienceContribution),
+			defense: defenseContribution,
+			resilience: resilienceContribution,
+		};
+	}
+
+	getCritImmunity() {
+		return this.getCritImmunityInfo().delta;
+	}
+
 	getMeleeCritCapInfo(): MeleeCritCapInfo {
-		const meleeCrit = this.currentStats.finalStats?.pseudoStats[PseudoStat.PseudoStatMeleeCritPercent] || 0.0;
-		const meleeHit = this.currentStats.finalStats?.pseudoStats[PseudoStat.PseudoStatMeleeHitPercent] || 0.0;
-		const expertise = (this.currentStats.finalStats?.stats[Stat.StatExpertiseRating] || 0.0) / Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION / 4;
-		//const agility = (this.currentStats.finalStats?.stats[Stat.StatAgility] || 0.0) / this.getClass();
+		const debuffStats = CharacterStats.getDebuffStats(this);
+		const debuffHit = debuffStats.getPseudoStat(PseudoStat.PseudoStatMeleeHitPercent) || 0;
+		const debuffCrit = debuffStats.getPseudoStat(PseudoStat.PseudoStatMeleeCritPercent) || 0;
+
+		const meleeCrit = (this.currentStats.finalStats?.pseudoStats[PseudoStat.PseudoStatMeleeCritPercent] || 0) + debuffCrit;
+		const meleeHit = (this.currentStats.finalStats?.pseudoStats[PseudoStat.PseudoStatMeleeHitPercent] || 0) + debuffHit;
+		const expertise = (this.currentStats.finalStats?.stats[Stat.StatExpertiseRating] || 0) / Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION / 4;
 		const critSuppression = [0, 1, 2, 4.8][this.sim.encounter.primaryTarget.level - Mechanics.CHARACTER_LEVEL];
 		const hitSuppression = [0, 0, 0, 1][this.sim.encounter.primaryTarget.level - Mechanics.CHARACTER_LEVEL];
 		const glancing = [6, 12, 18, 24][this.sim.encounter.primaryTarget.level - Mechanics.CHARACTER_LEVEL];
@@ -739,8 +756,6 @@ export class Player<SpecType extends Spec> {
 			const ranks = player.getTalents().elementalDevastation;
 			specSpecificOffset = 3.0 * ranks;
 		}
-
-		const debuffCrit = 0.0;
 
 		const baseCritCap = 100.0 - glancing + critSuppression - remainingMeleeHitCap - remainingExpertiseCap - specSpecificOffset;
 		const playerCritCapDelta = meleeCrit - baseCritCap;
@@ -1001,7 +1016,7 @@ export class Player<SpecType extends Spec> {
 		}
 
 		const epFromStats = this.computeStatsEP(new Stats(gem.stats));
-		const epFromEffect = getMetaGemEffectEP(this.playerSpec, gem, Stats.fromProto(this.currentStats.finalStats));
+		const epFromEffect = getMetaGemEffectEP(this, gem);
 		let bonusEP = 0;
 		// unique items are slightly worse than non-unique because you can have only one.
 		if (gem.unique) {
@@ -1093,8 +1108,7 @@ export class Player<SpecType extends Spec> {
 	}
 
 	async setWowheadData(equippedItem: EquippedItem, elem: HTMLElement) {
-		const isBlacksmithing = this.hasProfession(Profession.Blacksmithing);
-		const gemIds = equippedItem.gems.length ? equippedItem.curGems(isBlacksmithing).map(gem => (gem ? gem.id : 0)) : [];
+		const gemIds = equippedItem.gems.length ? equippedItem.curGems().map(gem => (gem ? gem.id : 0)) : [];
 		const enchantIds = [equippedItem.enchant?.effectId].filter((id): id is number => id !== undefined);
 		equippedItem.asActionId().setWowheadDataset(elem, {
 			gemIds,
@@ -1105,7 +1119,6 @@ export class Player<SpecType extends Spec> {
 				.asArray()
 				.filter(ei => ei != null)
 				.map(ei => ei!.item.id),
-			hasExtraSocket: equippedItem.hasExtraSocket(isBlacksmithing),
 		});
 
 		elem.dataset.whtticon = 'false';
@@ -1473,8 +1486,8 @@ export class Player<SpecType extends Spec> {
 		});
 	}
 
-	getBaseMastery(): number {
-		return 8;
+	getBaseDefense(): number {
+		return Mechanics.CHARACTER_LEVEL * 5;
 	}
 
 	static updateProtoVersion(proto: PlayerProto) {

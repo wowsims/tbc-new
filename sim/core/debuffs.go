@@ -100,7 +100,7 @@ func applyDebuffEffects(target *Unit, targetIdx int, debuffs *proto.Debuffs, rai
 	}
 
 	if debuffs.ExposeArmor != proto.TristateEffect_TristateEffectMissing {
-		aura := MakePermanent(ExposeArmorAura(target, IsImproved(debuffs.ExposeArmor)))
+		aura := MakePermanent(ExposeArmorAura(target, func() int32 { return 5 }, TernaryInt32(debuffs.ExposeArmor == 2, 2, 0)))
 
 		ScheduledMajorArmorAura(aura, PeriodicActionOptions{
 			Period:   time.Second * 3,
@@ -401,8 +401,8 @@ func InsectSwarmAura(target *Unit) *Aura {
 		"Insect Swarm",
 		27013,
 		stats.Stats{
-			stats.MeleeHitRating:  0.98,
-			stats.SpellHitPercent: 0.98,
+			stats.PhysicalHitPercent: -2,
+			stats.SpellHitPercent:    -2,
 		},
 		time.Second*12,
 	)
@@ -427,7 +427,7 @@ func JudgementOfLightAura(target *Unit) *Aura {
 			}
 
 			if sim.Proc(0.5, "Judgement of Light - Heal") {
-				aura.Unit.GainHealth(sim, 95.0, healthMetrics)
+				spell.Unit.GainHealth(sim, 95.0, healthMetrics)
 			}
 		},
 	})
@@ -492,7 +492,7 @@ func MiseryAura(target *Unit) *Aura {
 }
 
 func ScorpidStingAura(target *Unit) *Aura {
-	return statsDebuff(target, "Scorpid Sting", 3043, stats.Stats{stats.MeleeHitRating: -5.0}, time.Second*20)
+	return statsDebuff(target, "Scorpid Sting", 3043, stats.Stats{stats.PhysicalHitPercent: -5.0}, time.Second*20)
 }
 
 func ScreechAura(target *Unit) *Aura {
@@ -521,15 +521,28 @@ func StormstrikeAura(target *Unit, uptime float64) *Aura {
 
 var MajorArmorReductionEffectCategory = "MajorArmorReduction"
 
-func ExposeArmorAura(target *Unit, improved bool) *Aura {
-	eaValue := 2050.0
-	if improved {
-		eaValue *= 1.50
-	}
-	aura := statsDebuff(target, "Expose Armor", 26866, stats.Stats{stats.Armor: -eaValue}, time.Second*30)
+func ExposeArmorAura(target *Unit, getComboPoints func() int32, talents int32) *Aura {
 
-	aura.NewExclusiveEffect(MajorArmorReductionEffectCategory, true, ExclusiveEffect{
-		Priority: eaValue,
+	var effect *ExclusiveEffect
+	aura := target.GetOrRegisterAura(Aura{
+		Label:    "Expose Armor",
+		ActionID: ActionID{SpellID: 26866},
+		Duration: time.Second * 30,
+		OnGain: func(aura *Aura, sim *Simulation) {
+			eaValue := 410.0 * float64(getComboPoints())
+			eaValue *= 1.0 + 0.25*float64(talents)
+			effect.SetPriority(sim, eaValue)
+		},
+	})
+
+	effect = aura.NewExclusiveEffect(MajorArmorReductionEffectCategory, true, ExclusiveEffect{
+		Priority: 0,
+		OnGain: func(ee *ExclusiveEffect, s *Simulation) {
+			ee.Aura.Unit.stats[stats.Armor] -= ee.Priority
+		},
+		OnExpire: func(ee *ExclusiveEffect, s *Simulation) {
+			ee.Aura.Unit.stats[stats.Armor] += ee.Priority
+		},
 	})
 
 	return aura

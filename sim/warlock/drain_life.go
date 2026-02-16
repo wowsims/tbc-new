@@ -9,7 +9,7 @@ import (
 const drainLifeScale = 0.334
 const drainLifeCoeff = 0.334
 
-func (warlock *Warlock) RegisterDrainLife(callback WarlockSpellCastedCallback) {
+func (warlock *Warlock) RegisterDrainLife() {
 	manaMetric := warlock.NewManaMetrics(core.ActionID{SpellID: 689})
 	healthMetric := warlock.NewHealthMetrics(core.ActionID{SpellID: 689})
 	resultSlice := make(core.SpellResultSlice, 1)
@@ -45,10 +45,6 @@ func (warlock *Warlock) RegisterDrainLife(callback WarlockSpellCastedCallback) {
 				// Spend mana per tick
 				warlock.SpendMana(sim, dot.Spell.Cost.GetCurrentCost(), manaMetric)
 				warlock.GainHealth(sim, warlock.MaxHealth()*0.02, healthMetric)
-
-				if callback != nil {
-					callback(resultSlice, dot.Spell, sim)
-				}
 			},
 		},
 

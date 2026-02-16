@@ -107,6 +107,9 @@
         "filter": {
           "type": "string"
         },
+        "elapsed_time": {
+          "type": "string"
+        },
         "phases": {
           "type": "object",
           "properties": {
@@ -931,6 +934,7 @@
         "name",
         "search",
         "filter",
+        "elapsed_time",
         "phases",
         "tanks",
         "status",
@@ -3364,22 +3368,6 @@
             "default_gems": {
               "type": "string"
             },
-            "inherit_upgrades": {
-              "type": "object",
-              "properties": {
-                "label": {
-                  "type": "string"
-                },
-                "tooltip": {
-                  "type": "string"
-                }
-              },
-              "additionalProperties": false,
-              "required": [
-                "label",
-                "tooltip"
-              ]
-            },
             "freeze_ring": {
               "type": "object",
               "properties": {
@@ -3419,7 +3407,6 @@
             "combination_singular",
             "iterations",
             "default_gems",
-            "inherit_upgrades",
             "freeze_ring",
             "freeze_trinket"
           ]
@@ -8947,9 +8934,6 @@
             "unspent_talent_points": {
               "type": "string"
             },
-            "dual_wield_2h_without_titans_grip": {
-              "type": "string"
-            },
             "shaman_fele_autocast": {
               "type": "string"
             }
@@ -8960,7 +8944,6 @@
             "profession_requirement",
             "too_many_jc_gems",
             "unspent_talent_points",
-            "dual_wield_2h_without_titans_grip",
             "shaman_fele_autocast"
           ]
         },
@@ -9414,6 +9397,9 @@
                 "reforge_optimization_failed": {
                   "type": "string"
                 },
+                "reforge_optimization_cancelled": {
+                  "type": "string"
+                },
                 "use_custom": {
                   "type": "string"
                 },
@@ -9429,16 +9415,10 @@
                 "edit_weights": {
                   "type": "string"
                 },
-                "include_gems": {
-                  "type": "string"
-                },
                 "freeze_item_slots": {
                   "type": "string"
                 },
-                "limit_execution_time": {
-                  "type": "string"
-                },
-                "limit_execution_time_tooltip": {
+                "max_gem_phase": {
                   "type": "string"
                 }
               },
@@ -9461,15 +9441,14 @@
                 "breakpoints_implemented",
                 "post_cap_ep",
                 "reforge_optimization_failed",
+                "reforge_optimization_cancelled",
                 "use_custom",
                 "enable_modification",
                 "modify_in_editor",
                 "hard_cap_info",
                 "edit_weights",
-                "include_gems",
                 "freeze_item_slots",
-                "limit_execution_time",
-                "limit_execution_time_tooltip"
+                "max_gem_phase"
               ]
             }
           },
@@ -9781,6 +9760,9 @@
                 "consumes": {
                   "type": "string"
                 },
+                "debuffs": {
+                  "type": "string"
+                },
                 "bonus": {
                   "type": "string"
                 },
@@ -9816,6 +9798,7 @@
                 "talents",
                 "buffs",
                 "consumes",
+                "debuffs",
                 "bonus",
                 "total",
                 "glancing",

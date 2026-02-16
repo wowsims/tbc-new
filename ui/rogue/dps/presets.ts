@@ -1,34 +1,42 @@
 import * as PresetUtils from '../../core/preset_utils';
 import { ConsumesSpec, PseudoStat, Stat } from '../../core/proto/common';
-import { RogueOptions_PoisonOptions, Rogue_Options as RogueOptions } from '../../core/proto/rogue';
+import { Rogue_Options as RogueOptions } from '../../core/proto/rogue';
 import { SavedTalents } from '../../core/proto/ui';
 import { Stats } from '../../core/proto_utils/stats';
-import BlankAPL from './apls/blank.apl.json'
-import BlankGear from './gear_sets/blank.gear.json';
+import ShivAPL from './apls/shiv.apl.json'
+import SinisterAPL from './apls/sinister.apl.json'
+import PreraidSwordsGear from './gear_sets/preraid.gear.json';
+import P1SwordsGear from './gear_sets/p1.gear.json';
 
 // Preset options for this spec.
 // Eventually we will import these values for the raid sim too, so its good to
 // keep them in a separate file.
 
-export const BLANK_APL = PresetUtils.makePresetAPLRotation('Blank', BlankAPL)
+export const SHIV_APL = PresetUtils.makePresetAPLRotation('Shiv EA', ShivAPL)
+export const SINSITER_APL = PresetUtils.makePresetAPLRotation('Sinister Strike EA', SinisterAPL)
 
-export const BLANK_GEARSET = PresetUtils.makePresetGear('Blank', BlankGear);
+export const P1_SWORDS_GEAR = PresetUtils.makePresetGear('P1 Swords', P1SwordsGear);
+export const PREARAID_SWORDS_GEAR = PresetUtils.makePresetGear('Preraid Swords', PreraidSwordsGear);
+
 
 // Preset options for EP weights
 export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
-	'Sub',
+	'Combat Swords',
 	Stats.fromMap(
 		{
-			[Stat.StatAgility]: 1.0,
-			[Stat.StatMeleeHitRating]: 1.0,
-			[Stat.StatMeleeHasteRating]: 1.0,
-			[Stat.StatMeleeCritRating]: 1.0,
-			[Stat.StatArmorPenetration]: 1.0,
+			[Stat.StatStrength]: 1.1,
+			[Stat.StatAgility]: 2.17,
+			[Stat.StatStamina]: 0.01,
 			[Stat.StatAttackPower]: 1.0,
+			[Stat.StatMeleeHitRating]: 3.06,
+			[Stat.StatMeleeCritRating]: 1.7,
+			[Stat.StatMeleeHasteRating]: 2.19,
+			[Stat.StatArmorPenetration]: 0.3,
+			[Stat.StatExpertiseRating]: 3.47
 		},
 		{
-			[PseudoStat.PseudoStatMainHandDps]: 1,
-			[PseudoStat.PseudoStatOffHandDps]: 1,
+			[PseudoStat.PseudoStatMainHandDps]: 9.34,
+			[PseudoStat.PseudoStatOffHandDps]: 3.40,
 		},
 	),
 );
@@ -37,25 +45,24 @@ export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
 // https://wowhead.com/wotlk/talent-calc and copy the numbers in the url.
 
 export const Talents = {
-	name: 'A',
+	name: 'Combat Swords',
 	data: SavedTalents.create({
-		talentsString: '',
+		talentsString: '00532012502-023305200005015002321151',
 	}),
 };
 
 export const DefaultOptions = RogueOptions.create({
 	classOptions: {
-		lethalPoison: RogueOptions_PoisonOptions.DeadlyPoison,
-		applyPoisonsManually: false,
-		startingOverkillDuration: 20,
-		vanishBreakTime: 0.1,
 	},
 });
 
 export const DefaultConsumables = ConsumesSpec.create({
-	flaskId: 76084, // Flask of the Winds
-	foodId: 74648, // Skewered Eel
-	potId: 76089, // Potion of the Tol'vir
+	flaskId: 22854,
+	foodId: 33872,
+	potId: 22838,
+	conjuredId: 7676,
+	ohImbueId: 27186,
+	drumsId: 351355
 });
 
 export const OtherDefaults = {

@@ -1,0 +1,285 @@
+character_stats_results: {
+ key: "TestRogue-CharacterStats-Default"
+ value: {
+  final_stats: 240.68
+  final_stats: 608.6289
+  final_stats: 594.4224
+  final_stats: 114.29
+  final_stats: 456.5099
+  final_stats: 504.5099
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 40
+  final_stats: 0
+  final_stats: 0
+  final_stats: 185.009
+  final_stats: 2878.48979
+  final_stats: 1265
+  final_stats: 0
+  final_stats: 377
+  final_stats: 185
+  final_stats: 0
+  final_stats: 0
+  final_stats: 93.13462
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 56.76924
+  final_stats: 0
+  final_stats: 0
+  final_stats: 4652.6578
+  final_stats: 0
+  final_stats: 10638.224
+  final_stats: 0
+  final_stats: 111.7
+  final_stats: 33.75
+  final_stats: 33.75
+  final_stats: 33.75
+  final_stats: 33.75
+  final_stats: 93.75
+  final_stats: 29.90731
+  final_stats: 4
+  final_stats: 33.30051
+  final_stats: 11.81185
+  final_stats: 0
+  final_stats: 1
+  final_stats: 5
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-AssassinationArmor"
+ value: {
+  dps: 2070.19791
+  tps: 1469.84051
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-BadgeoftheSwarmguard-21670"
+ value: {
+  dps: 2336.07885
+  tps: 1658.61598
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-BlackenedNaaruSliver-34427"
+ value: {
+  dps: 2532.70175
+  tps: 1798.21824
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-DarkmoonCard:Crusade-31856"
+ value: {
+  dps: 2357.10785
+  tps: 1673.54657
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-DarkmoonCard:Vengeance-31858"
+ value: {
+  dps: 2292.5244
+  tps: 1627.69232
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-DarkmoonCard:Wrath-31857"
+ value: {
+  dps: 2316.72148
+  tps: 1644.87225
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-Deathmantle"
+ value: {
+  dps: 2219.13865
+  tps: 1575.58844
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-EnchantWeapon-Deathfrost-3273"
+ value: {
+  dps: 2091.01134
+  tps: 1484.61805
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-EnchantWeapon-Executioner-3225"
+ value: {
+  dps: 2144.63856
+  tps: 1522.69338
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-EyeofMagtheridon-28789"
+ value: {
+  dps: 2292.5244
+  tps: 1627.69232
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-Gladiator'sVestments"
+ value: {
+  dps: 2271.2963
+  tps: 1612.62037
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-Netherblade"
+ value: {
+  dps: 2182.60694
+  tps: 1549.65092
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-PrismofInnerCalm-30621"
+ value: {
+  dps: 2292.5015
+  tps: 1627.67606
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-SextantofUnstableCurrents-30626"
+ value: {
+  dps: 2292.5244
+  tps: 1627.69232
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-Slayer'sArmor"
+ value: {
+  dps: 3365.75896
+  tps: 2389.68886
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-SpyglassoftheHiddenFleet-30620"
+ value: {
+  dps: 2292.62287
+  tps: 1627.76224
+  hps: 14.44444
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-SwiftWindfireDiamond"
+ value: {
+  dps: 2295.65691
+  tps: 1629.91641
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-TheLightningCapacitor-28785"
+ value: {
+  dps: 2292.5244
+  tps: 1627.69232
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-WastewalkerArmor"
+ value: {
+  dps: 2135.26696
+  tps: 1516.03954
+ }
+}
+dps_results: {
+ key: "TestRogue-Average-Default"
+ value: {
+  dps: 2320.68408
+  tps: 1647.6857
+ }
+}
+dps_results: {
+ key: "TestRogue-Settings-Human-preraid-Rogue-sinister-FullBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 2766.75869
+  tps: 1964.39867
+ }
+}
+dps_results: {
+ key: "TestRogue-Settings-Human-preraid-Rogue-sinister-FullBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 2326.86662
+  tps: 1652.0753
+ }
+}
+dps_results: {
+ key: "TestRogue-Settings-Human-preraid-Rogue-sinister-FullBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 2684.63242
+  tps: 1906.08902
+ }
+}
+dps_results: {
+ key: "TestRogue-Settings-Human-preraid-Rogue-sinister-NoBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 772.92422
+  tps: 548.7762
+ }
+}
+dps_results: {
+ key: "TestRogue-Settings-Human-preraid-Rogue-sinister-NoBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 663.58731
+  tps: 471.14699
+ }
+}
+dps_results: {
+ key: "TestRogue-Settings-Human-preraid-Rogue-sinister-NoBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 668.19776
+  tps: 474.42041
+ }
+}
+dps_results: {
+ key: "TestRogue-Settings-Orc-preraid-Rogue-sinister-FullBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 2779.98839
+  tps: 1973.79176
+ }
+}
+dps_results: {
+ key: "TestRogue-Settings-Orc-preraid-Rogue-sinister-FullBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 2329.19823
+  tps: 1653.73074
+ }
+}
+dps_results: {
+ key: "TestRogue-Settings-Orc-preraid-Rogue-sinister-FullBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 2695.00668
+  tps: 1913.45475
+ }
+}
+dps_results: {
+ key: "TestRogue-Settings-Orc-preraid-Rogue-sinister-NoBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 779.05996
+  tps: 553.13257
+ }
+}
+dps_results: {
+ key: "TestRogue-Settings-Orc-preraid-Rogue-sinister-NoBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 661.37468
+  tps: 469.57602
+ }
+}
+dps_results: {
+ key: "TestRogue-Settings-Orc-preraid-Rogue-sinister-NoBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 669.01325
+  tps: 474.99941
+ }
+}
+dps_results: {
+ key: "TestRogue-SwitchInFrontOfTarget-Default"
+ value: {
+  dps: 2115.30011
+  tps: 1501.86308
+ }
+}

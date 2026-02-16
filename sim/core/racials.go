@@ -270,13 +270,14 @@ func applyRaceEffects(agent Agent) {
 		})
 
 		// Beast Slaying (+5% damage to beasts)
-		if character.CurrentTarget.MobType == proto.MobType_MobTypeBeast {
-			MakePermanent(character.GetOrRegisterAura(Aura{
-				Label:    "Beast Slaying",
-				ActionID: ActionID{SpellID: 20557},
-				Duration: NeverExpires,
-			})).AttachMultiplicativePseudoStatBuff(&character.PseudoStats.DamageDealtMultiplier, 1.05)
-		}
+		character.Env.RegisterPostFinalizeEffect(func() {
+			for _, at := range character.AttackTables {
+				if at.Defender.MobType == proto.MobType_MobTypeBeast {
+					at.DamageDealtMultiplier *= 1.05
+					at.CritMultiplier *= 1.05
+				}
+			}
+		})
 
 		// Berserking
 		baseSpellConfig := SpellConfig{
@@ -294,26 +295,20 @@ func applyRaceEffects(agent Agent) {
 		}
 
 		createBerserkingSpell := func(labelSuffix string, tag int32, percentage float64) {
-			var resourceMetrics *ResourceMetrics = nil
-			if resourceMetrics == nil {
-				if character.HasEnergyBar() {
-					baseSpellConfig.ActionID = ActionID{SpellID: 26297}.WithTag(tag)
-					resourceMetrics = character.NewEnergyMetrics(baseSpellConfig.ActionID)
-					baseSpellConfig.EnergyCost = EnergyCostOptions{
-						Cost: 10,
-					}
-				} else if character.HasRageBar() {
-					baseSpellConfig.ActionID = ActionID{SpellID: 26296}.WithTag(tag)
-					resourceMetrics = character.NewManaMetrics(baseSpellConfig.ActionID)
-					baseSpellConfig.RageCost = RageCostOptions{
-						Cost: 5,
-					}
-				} else if character.HasManaBar() {
-					baseSpellConfig.ActionID = ActionID{SpellID: 20554}.WithTag(tag)
-					resourceMetrics = character.NewManaMetrics(baseSpellConfig.ActionID)
-					baseSpellConfig.ManaCost = ManaCostOptions{
-						FlatCost: int32(character.BaseMana * 0.06),
-					}
+			if character.HasEnergyBar() {
+				baseSpellConfig.ActionID = ActionID{SpellID: 26297}.WithTag(tag)
+				baseSpellConfig.EnergyCost = EnergyCostOptions{
+					Cost: 10,
+				}
+			} else if character.HasRageBar() {
+				baseSpellConfig.ActionID = ActionID{SpellID: 26296}.WithTag(tag)
+				baseSpellConfig.RageCost = RageCostOptions{
+					Cost: 5,
+				}
+			} else if character.HasManaBar() {
+				baseSpellConfig.ActionID = ActionID{SpellID: 20554}.WithTag(tag)
+				baseSpellConfig.ManaCost = ManaCostOptions{
+					FlatCost: int32(character.BaseMana * 0.06),
 				}
 			}
 

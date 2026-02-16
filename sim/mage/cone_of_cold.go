@@ -14,7 +14,7 @@ func (mage *Mage) registerConeOfColdSpell() {
 		ActionID:       core.ActionID{SpellID: 120},
 		SpellSchool:    core.SpellSchoolFrost,
 		ProcMask:       core.ProcMaskSpellDamage,
-		Flags:          core.SpellFlagAPL,
+		Flags:          core.SpellFlagAPL | core.SpellFlagBinary,
 		ClassSpellMask: MageSpellConeOfCold,
 
 		ManaCost: core.ManaCostOptions{

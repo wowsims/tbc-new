@@ -22,7 +22,7 @@ message SimEnchant {
 	string name = 2; // Only needed for unit tests.
 	ItemType type = 3; // Only needed for unit tests.
 	repeated double stats = 4;
-	repeated ItemEffect enchant_effect = 5;
+	repeated ItemEffect enchant_effects = 5;
 }
 
 // Contains only the Item info needed by the sim.

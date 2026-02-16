@@ -6,7 +6,7 @@ import i18n from '../../i18n/config.js';
 import * as Mechanics from '../constants/mechanics.js';
 import { IndividualSimUI } from '../individual_sim_ui';
 import { Player } from '../player.js';
-import { ItemSlot, PseudoStat, Race, Spec, Stat, WeaponType } from '../proto/common.js';
+import { ItemSlot, PseudoStat, Race, Spec, Stat, TristateEffect, WeaponType } from '../proto/common.js';
 import { ActionId } from '../proto_utils/action_id';
 import { getStatName } from '../proto_utils/names.js';
 import { Stats, UnitStat } from '../proto_utils/stats.js';
@@ -14,19 +14,11 @@ import { EventID, TypedEvent } from '../typed_event.js';
 import { Component } from './component.js';
 import { NumberPicker } from './pickers/number_picker.js';
 
-export type StatMods = { base?: Stats; gear?: Stats; talents?: Stats; buffs?: Stats; consumes?: Stats; final?: Stats; stats?: Array<Stat> };
+export type StatMods = { base?: Stats; gear?: Stats; talents?: Stats; buffs?: Stats; consumes?: Stats; debuffs?: Stats; final?: Stats; stats?: Array<Stat> };
 export type DisplayStat = {
 	stat: UnitStat;
 	notEditable?: boolean;
 };
-
-enum StatGroup {
-	Primary = 'Primary',
-	Attributes = 'Attributes',
-	Physical = 'Physical',
-	Spell = 'Spell',
-	Defense = 'Defense',
-}
 
 const statGroups = new Map<string, Array<DisplayStat>>([
 	['Primary', [{ stat: UnitStat.fromStat(Stat.StatHealth) }, { stat: UnitStat.fromStat(Stat.StatMana) }]],
@@ -83,9 +75,10 @@ const statGroups = new Map<string, Array<DisplayStat>>([
 			{ stat: UnitStat.fromStat(Stat.StatArmor) },
 			{ stat: UnitStat.fromStat(Stat.StatBonusArmor) },
 			{ stat: UnitStat.fromStat(Stat.StatDefenseRating) },
-			{ stat: UnitStat.fromStat(Stat.StatDodgeRating) },
-			{ stat: UnitStat.fromStat(Stat.StatParryRating) },
-			{ stat: UnitStat.fromStat(Stat.StatBlockRating) },
+			{ stat: UnitStat.fromStat(Stat.StatResilienceRating) },
+			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatDodgePercent) },
+			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatParryPercent) },
+			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatBlockPercent) },
 			{ stat: UnitStat.fromStat(Stat.StatBlockValue) },
 		],
 	],
@@ -105,6 +98,7 @@ export class CharacterStats extends Component {
 	readonly stats: Array<UnitStat>;
 	readonly valueElems: Array<HTMLTableCellElement>;
 	readonly meleeCritCapValueElem: HTMLTableCellElement | undefined;
+	critImmunityCapValueElem: HTMLTableCellElement | undefined;
 	masteryElem: HTMLTableCellElement | undefined;
 	hasRacialHitBonus = false;
 	activeRacialExpertiseBonuses = [false, false];
@@ -162,6 +156,18 @@ export class CharacterStats extends Component {
 				this.valueElems.push(tableValueRef.value!);
 			});
 
+			if (key === 'Defense' && this.shouldShowCritImmunity(player)) {
+				const tableValueRef = ref<HTMLTableCellElement>();
+				const row = (
+					<tr className="character-stats-table-row">
+						<td className="character-stats-table-label">Crit Immunity</td>
+						<td className="character-stats-table-value" ref={tableValueRef}></td>
+					</tr>
+				);
+
+				body.appendChild(row);
+				this.critImmunityCapValueElem = tableValueRef.value!;
+			}
 			table.appendChild(body);
 		});
 
@@ -195,6 +201,7 @@ export class CharacterStats extends Component {
 		const talentsStats = Stats.fromProto(playerStats.talentsStats);
 		const buffsStats = Stats.fromProto(playerStats.buffsStats);
 		const consumesStats = Stats.fromProto(playerStats.consumesStats);
+		const debuffStats = CharacterStats.getDebuffStats(this.player);
 		const bonusStats = player.getBonusStats();
 
 		let finalStats = Stats.fromProto(playerStats.finalStats)
@@ -203,7 +210,9 @@ export class CharacterStats extends Component {
 			.add(statMods.talents || new Stats())
 			.add(statMods.buffs || new Stats())
 			.add(statMods.consumes || new Stats())
-			.add(statMods.final || new Stats());
+			.add(statMods.debuffs || new Stats())
+			.add(statMods.final || new Stats())
+			.add(debuffStats);
 
 		let baseDelta = baseStats.add(statMods.base || new Stats());
 		let gearDelta = gearStats
@@ -213,6 +222,7 @@ export class CharacterStats extends Component {
 		let talentsDelta = talentsStats.subtract(gearStats).add(statMods.talents || new Stats());
 		let buffsDelta = buffsStats.subtract(talentsStats).add(statMods.buffs || new Stats());
 		let consumesDelta = consumesStats.subtract(buffsStats).add(statMods.consumes || new Stats());
+		let debuffsDelta = debuffStats.add(statMods.debuffs || new Stats());
 
 		if (this.overwriteDisplayStats) {
 			const statOverwrites = this.overwriteDisplayStats(this.player);
@@ -223,6 +233,7 @@ export class CharacterStats extends Component {
 					talentsDelta = talentsDelta.withStat(stat, statOverwrites.talents.getStat(stat));
 					buffsDelta = buffsDelta.withStat(stat, statOverwrites.buffs.getStat(stat));
 					consumesDelta = consumesDelta.withStat(stat, statOverwrites.consumes.getStat(stat));
+					debuffsDelta = debuffsDelta.withStat(stat, statOverwrites.debuffs.getStat(stat));
 					finalStats = finalStats.withStat(stat, statOverwrites.final.getStat(stat));
 				});
 			}
@@ -274,6 +285,10 @@ export class CharacterStats extends Component {
 					<div className="character-stats-tooltip-row">
 						<span>{i18n.t('sidebar.character_stats.tooltip.consumes')}</span>
 						<span>{this.statDisplayString(consumesDelta, unitStat)}</span>
+					</div>
+					<div className="character-stats-tooltip-row">
+						<span>{i18n.t('sidebar.character_stats.tooltip.debuffs')}</span>
+						<span>{this.statDisplayString(debuffsDelta, unitStat)}</span>
 					</div>
 					{bonusStatValue !== 0 && (
 						<div className="character-stats-tooltip-row">
@@ -358,16 +373,59 @@ export class CharacterStats extends Component {
 				content: tooltipContent,
 			});
 		}
+
+		if (this.critImmunityCapValueElem) {
+			const critImmunityInfo = player.getCritImmunityInfo();
+
+			const valueElem = (
+				<a href="javascript:void(0)" className="stat-value-link" attributes={{ role: 'button' }}>
+					{`${this.critImmunityCapDisplayString(player, finalStats)} `}
+				</a>
+			);
+
+			const capDelta = critImmunityInfo.delta;
+			if (capDelta === 0) {
+				valueElem.classList.add('text-white');
+			} else if (capDelta > 0) {
+				valueElem.classList.add('text-danger');
+			} else if (capDelta < 0) {
+				valueElem.classList.add('text-success');
+			}
+
+			this.critImmunityCapValueElem.querySelector('.stat-value-link')?.remove();
+			this.critImmunityCapValueElem.prepend(valueElem);
+
+			const tooltipContent = (
+				<div>
+					<div className="character-stats-tooltip-row">
+						<span>Defense:</span>
+						<span>{`${critImmunityInfo.defense.toFixed(2)}%`}</span>
+					</div>
+					<div className="character-stats-tooltip-row">
+						<span>Resilience:</span>
+						<span>{`${critImmunityInfo.resilience.toFixed(2)}%`}</span>
+					</div>
+					<div className="character-stats-tooltip-row">
+						<span>Total:</span>
+						<span>{`${critImmunityInfo.total.toFixed(2)}%`}</span>
+					</div>
+				</div>
+			);
+
+			tippy(valueElem, {
+				content: tooltipContent,
+			});
+		}
 	}
 
 	private statDisplayString(deltaStats: Stats, unitStat: UnitStat, includeBase?: boolean): string {
 		const rootStat = unitStat.hasRootStat() ? unitStat.getRootStat() : null;
 		let rootRatingValue = rootStat !== null ? deltaStats.getStat(rootStat) : null;
 		let derivedPercentOrPointsValue = unitStat.convertDefaultUnitsToPercent(deltaStats.getUnitStat(unitStat));
-		const percentOrPointsSuffix = false ? ` ${i18n.t('sidebar.character_stats.points_suffix')}` : i18n.t('sidebar.character_stats.percent_suffix');
+		const displaySuffix = unitStat.equalsStat(Stat.StatDefenseRating) ? '' : i18n.t('sidebar.character_stats.percent_suffix');
 
-		if (false && includeBase) {
-			derivedPercentOrPointsValue = derivedPercentOrPointsValue! + this.player.getBaseMastery();
+		if (unitStat.equalsStat(Stat.StatDefenseRating) && includeBase) {
+			derivedPercentOrPointsValue! += this.player.getBaseDefense();
 		} else if (rootStat === Stat.StatMeleeHitRating && includeBase && this.hasRacialHitBonus) {
 			// Remove the rating display and only show %
 			if (rootRatingValue !== null && rootRatingValue > 0) {
@@ -392,9 +450,9 @@ export class CharacterStats extends Component {
 			) {
 				const hideRootRating = rootRatingValue === null || (rootRatingValue === 0 && derivedPercentOrPointsValue !== null);
 				const rootRatingString = hideRootRating ? '' : String(Math.round(rootRatingValue!));
-				const mhPercentString = `${derivedPercentOrPointsValue!.toFixed(2)}` + percentOrPointsSuffix;
+				const mhPercentString = `${derivedPercentOrPointsValue!.toFixed(2)}` + displaySuffix;
 				const ohPercentValue = derivedPercentOrPointsValue! + (ohWeaponExpertiseActive ? 1 : -1);
-				const ohPercentString = `${ohPercentValue.toFixed(2)}` + percentOrPointsSuffix;
+				const ohPercentString = `${ohPercentValue.toFixed(2)}` + displaySuffix;
 				const wrappedPercentString = hideRootRating ? `${mhPercentString} / ${ohPercentString}` : ` (${mhPercentString} / ${ohPercentString})`;
 				return rootRatingString + wrappedPercentString;
 			}
@@ -404,11 +462,34 @@ export class CharacterStats extends Component {
 			}
 		}
 
-		const hideRootRating = rootRatingValue === null || (rootRatingValue === 0 && derivedPercentOrPointsValue !== null);
+		const hideRootRating =
+			(rootRatingValue === null || (rootRatingValue === 0 && derivedPercentOrPointsValue !== null)) && !unitStat.equalsStat(Stat.StatDefenseRating);
 		const rootRatingString = hideRootRating ? '' : String(Math.round(rootRatingValue!));
-		const percentOrPointsString = derivedPercentOrPointsValue === null ? '' : `${derivedPercentOrPointsValue.toFixed(2)}` + percentOrPointsSuffix;
+		const percentOrPointsString =
+			derivedPercentOrPointsValue === null
+				? ''
+				: `${derivedPercentOrPointsValue.toFixed(unitStat.equalsStat(Stat.StatDefenseRating) ? 0 : 2)}` + displaySuffix;
 		const wrappedPercentOrPointsString = hideRootRating || derivedPercentOrPointsValue === null ? percentOrPointsString : ` (${percentOrPointsString})`;
 		return rootRatingString + wrappedPercentOrPointsString;
+	}
+
+	public static getDebuffStats(player: Player<any>): Stats {
+		let debuffStats = new Stats();
+		const debuffs = player.sim.raid.getDebuffs();
+		if (debuffs.faerieFire == TristateEffect.TristateEffectImproved) {
+			debuffStats = debuffStats.addPseudoStat(PseudoStat.PseudoStatMeleeHitPercent, 3);
+			debuffStats = debuffStats.addPseudoStat(PseudoStat.PseudoStatRangedHitPercent, 3);
+		}
+		if (debuffs.improvedSealOfTheCrusader) {
+			debuffStats = debuffStats.addPseudoStat(PseudoStat.PseudoStatMeleeCritPercent, 3);
+			debuffStats = debuffStats.addPseudoStat(PseudoStat.PseudoStatRangedCritPercent, 3);
+			debuffStats = debuffStats.addPseudoStat(PseudoStat.PseudoStatSpellCritPercent, 3);
+		}
+		if (debuffs.exposeWeaknessUptime && debuffs.exposeWeaknessHunterAgility) {
+			debuffStats = debuffStats.addStat(Stat.StatAttackPower, debuffs.exposeWeaknessHunterAgility * 0.25);
+		}
+
+		return debuffStats;
 	}
 
 	private bonusStatsLink(displayStat: DisplayStat): HTMLElement {
@@ -452,6 +533,21 @@ export class CharacterStats extends Component {
 
 	private shouldShowMeleeCritCap(player: Player<any>): boolean {
 		return player.getPlayerSpec().isMeleeDpsSpec;
+	}
+
+	private shouldShowCritImmunity(player: Player<any>): boolean {
+		return player.getPlayerSpec().isTankSpec;
+	}
+
+	private critImmunityCapDisplayString(player: Player<any>, _finalStats: Stats): string {
+		const critImmuneDelta = player.getCritImmunity();
+
+		if (critImmuneDelta === 0.0) {
+			return i18n.t('sidebar.character_stats.crit_cap.exact');
+		}
+
+		const prefix = critImmuneDelta > 0 ? i18n.t('sidebar.character_stats.crit_cap.under_by') : i18n.t('sidebar.character_stats.crit_cap.over_by');
+		return `${prefix} ${Math.abs(critImmuneDelta).toFixed(2)}%`;
 	}
 
 	private meleeCritCapDisplayString(player: Player<any>, _finalStats: Stats): string {

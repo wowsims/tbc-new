@@ -601,6 +601,4 @@ message BulkSettings {
 	int32 default_yellow_gem = 5;
 	int32 default_meta_gem = 6;
 	int32 default_prismatic_gem = 7;
-
-	bool inherit_upgrades = 8;
 }

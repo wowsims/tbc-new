@@ -34,7 +34,7 @@ func TestAbort(t *testing.T) {
 	rsr := &proto.RaidSimRequest{
 		Raid: core.SinglePlayerRaidProto(player, core.FullPartyBuffs, core.FullRaidBuffs, core.FullDebuffs),
 		Encounter: &proto.Encounter{
-			Duration: 300,
+			Duration: 180,
 			Targets: []*proto.Target{
 				core.NewDefaultTarget(),
 			},

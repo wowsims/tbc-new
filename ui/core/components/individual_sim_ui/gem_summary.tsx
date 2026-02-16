@@ -38,7 +38,7 @@ export class GemSummary extends Component {
 
 	private updateTable() {
 		const body = <></>;
-		const fullGemList = this.player.getGear().getAllGems(this.player.isBlacksmithing());
+		const fullGemList = this.player.getGear().getAllGems();
 		const hasGems = !!fullGemList.length;
 		this.rootElem.classList[!hasGems ? 'add' : 'remove']('hide');
 
@@ -97,7 +97,7 @@ export class GemSummary extends Component {
 							category: 'gems',
 							label: 'reset',
 						});
-						this.player.setGear(TypedEvent.nextEventID(), this.player.getGear().withoutGems(this.player.canDualWield2H()));
+						this.player.setGear(TypedEvent.nextEventID(), this.player.getGear().withoutGems());
 					}}>
 					<i className="fas fa-times me-1"></i>
 					{i18n.t('gear_tab.gem_summary.reset_gems')}

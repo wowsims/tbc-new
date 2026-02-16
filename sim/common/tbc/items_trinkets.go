@@ -8,35 +8,6 @@ import (
 )
 
 func init() {
-	// Quagmirran's Eye
-	core.NewItemEffect(27683, func(agent core.Agent) {
-		character := agent.GetCharacter()
-		duration := time.Second * 6
-		spellHasteRating := 320.0
-
-		quagmirransEyeAura := character.NewTemporaryStatsAura(
-			"Spell Haste Trinket",
-			core.ActionID{SpellID: 33297},
-			stats.Stats{stats.SpellHasteRating: spellHasteRating},
-			duration,
-		)
-
-		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:               "Quagmirran's Eye",
-			ActionID:           core.ActionID{ItemID: 27683},
-			ProcChance:         .1,
-			ICD:                time.Second * 45,
-			Outcome:            core.OutcomeLanded,
-			Callback:           core.CallbackOnSpellHitDealt,
-			RequireDamageDealt: true,
-			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-				quagmirransEyeAura.Activate(sim)
-			},
-		})
-
-		character.ItemSwap.RegisterProc(27683, procAura)
-	})
-
 	// Hourglass of the Unraveller
 	core.NewItemEffect(28034, func(agent core.Agent) {
 		character := agent.GetCharacter()
@@ -121,33 +92,137 @@ func init() {
 		character.ItemSwap.RegisterProc(28785, procAura)
 	})
 
-	// Dragonspine Trophy
-	core.NewItemEffect(28830, func(agent core.Agent) {
+	// Eye of Magtheridon
+	core.NewItemEffect(28789, func(agent core.Agent) {
 		character := agent.GetCharacter()
-		duration := time.Second * 6
-		value := 325.0
 
+		value := 170.0
 		aura := character.NewTemporaryStatsAura(
-			"Haste",
-			core.ActionID{SpellID: 34775},
-			stats.Stats{stats.MeleeHasteRating: value},
-			duration,
+			"Recurring Power",
+			core.ActionID{SpellID: 34747},
+			stats.Stats{stats.SpellDamage: value, stats.HealingPower: value},
+			time.Second*10,
 		)
 
 		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:     "Dragonspine Trophy",
-			ActionID: core.ActionID{ItemID: 28830},
-			DPM:      character.NewLegacyPPMManager(1, core.ProcMaskMeleeOrRanged),
-			ICD:      time.Second * 20,
-			ProcMask: core.ProcMaskMeleeOrRanged,
-			Outcome:  core.OutcomeLanded,
+			Name:     "Eye of Magtheridon",
+			ActionID: core.ActionID{ItemID: 28789},
+			Outcome:  core.OutcomeMiss,
 			Callback: core.CallbackOnSpellHitDealt,
 			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 				aura.Activate(sim)
 			},
 		})
 
-		character.ItemSwap.RegisterProc(28830, procAura)
+		character.ItemSwap.RegisterProc(28789, procAura)
+	})
+
+	// Spyglass of the Hidden Fleet
+	core.NewItemEffect(30620, func(agent core.Agent) {
+		character := agent.GetCharacter()
+
+		spell := character.RegisterSpell(core.SpellConfig{
+			ActionID:    core.ActionID{ItemID: 30620},
+			SpellSchool: core.SpellSchoolNature,
+
+			ProcMask: core.ProcMaskEmpty,
+			Flags:    core.SpellFlagNoOnCastComplete,
+
+			Cast: core.CastConfig{
+				DefaultCast: core.Cast{
+					NonEmpty: true,
+				},
+				CD: core.Cooldown{
+					Timer:    character.NewTimer(),
+					Duration: time.Minute * 2,
+				},
+				IgnoreHaste: true,
+			},
+
+			DamageMultiplier: 1,
+			CritMultiplier:   character.DefaultMeleeCritMultiplier(),
+			ThreatMultiplier: 1,
+
+			Hot: core.DotConfig{
+				Aura: core.Aura{
+					Label: "Regeneration",
+				},
+
+				NumberOfTicks: 4,
+				TickLength:    time.Second * 3,
+
+				OnSnapshot: func(_ *core.Simulation, target *core.Unit, dot *core.Dot) {
+					dot.SnapshotHeal(target, 325)
+				},
+
+				OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
+					dot.CalcAndDealPeriodicSnapshotHealing(sim, target, dot.OutcomeTick)
+				},
+			},
+
+			ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+				spell.Hot(&character.Unit).Apply(sim)
+			},
+		})
+
+		character.AddMajorCooldown(core.MajorCooldown{
+			Spell: spell,
+			Type:  core.CooldownTypeSurvival,
+		})
+
+		character.ItemSwap.RegisterActive(30620)
+	})
+
+	// Prism of Inner Calm
+	core.NewItemEffect(30621, func(agent core.Agent) {
+		character := agent.GetCharacter()
+
+		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
+			Name:               "Prism of Inner Calm",
+			ActionID:           core.ActionID{ItemID: 30621},
+			Outcome:            core.OutcomeCrit,
+			Callback:           core.CallbackOnSpellHitDealt,
+			RequireDamageDealt: true,
+			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+				threatReduction := 150.0
+				if spell.ProcMask.Matches(core.ProcMaskSpellDamageProc) {
+					threatReduction = 1000
+				}
+				spell.FlatThreatBonus -= threatReduction
+				result.Threat = spell.ThreatFromDamage(sim, result.Outcome, result.Damage, spell.Unit.AttackTables[result.Target.UnitIndex])
+				spell.FlatThreatBonus += threatReduction
+			},
+		})
+
+		character.ItemSwap.RegisterProc(27683, procAura)
+	})
+
+	// Sextant of Unstable Currents
+	core.NewItemEffect(30626, func(agent core.Agent) {
+		character := agent.GetCharacter()
+
+		value := 190.0
+		aura := character.NewTemporaryStatsAura(
+			"Unstable Currents",
+			core.ActionID{SpellID: 38348},
+			stats.Stats{stats.SpellDamage: value, stats.HealingPower: value},
+			time.Second*15,
+		)
+
+		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
+			Name:               "Sextant of Unstable Currents",
+			ActionID:           core.ActionID{ItemID: 30626},
+			ProcChance:         0.2,
+			ICD:                time.Second * 45,
+			Outcome:            core.OutcomeCrit,
+			Callback:           core.CallbackOnSpellHitDealt,
+			RequireDamageDealt: true,
+			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+				aura.Activate(sim)
+			},
+		})
+
+		character.ItemSwap.RegisterProc(30626, procAura)
 	})
 
 	// Darkmoon Card: Crusade
@@ -187,7 +262,7 @@ func init() {
 			},
 		})
 
-		character.ItemSwap.RegisterProc(28830, procAura)
+		character.ItemSwap.RegisterProc(31856, procAura)
 	})
 
 	// Darkmoon Card: Wrath
@@ -258,6 +333,49 @@ func init() {
 		})
 
 		character.ItemSwap.RegisterProc(31858, procAura)
+	})
+
+	// Blackened Naaru Sliver
+	core.NewItemEffect(34427, func(agent core.Agent) {
+		character := agent.GetCharacter()
+
+		aura := core.MakeStackingAura(character, core.StackingStatAura{
+			Aura: core.Aura{
+				Label:     "Combat Insight",
+				ActionID:  core.ActionID{SpellID: 45041},
+				Duration:  time.Second * 20,
+				MaxStacks: 10,
+			},
+			BonusPerStack: stats.Stats{stats.AttackPower: 44, stats.RangedAttackPower: 44},
+		})
+
+		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
+			Name:     "Battle Trance",
+			ActionID: core.ActionID{SpellID: 45040},
+			Duration: time.Second * 20,
+			ProcMask: core.ProcMaskMeleeOrRanged,
+			Outcome:  core.OutcomeLanded,
+			Callback: core.CallbackOnSpellHitDealt,
+			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+				aura.Activate(sim)
+				aura.AddStack(sim)
+			},
+		})
+
+		triggerAura := character.MakeProcTriggerAura(core.ProcTrigger{
+			Name:       "Blackened Naaru Sliver",
+			ActionID:   core.ActionID{ItemID: 34427},
+			ICD:        time.Second * 45,
+			ProcChance: 0.1,
+			ProcMask:   core.ProcMaskMeleeOrRanged,
+			Outcome:    core.OutcomeLanded,
+			Callback:   core.CallbackOnSpellHitDealt,
+			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+				procAura.Activate(sim)
+			},
+		})
+
+		character.ItemSwap.RegisterProc(34427, triggerAura)
 	})
 
 }
