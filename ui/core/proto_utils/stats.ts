@@ -107,6 +107,8 @@ export class UnitStat {
 			return ratingValue / Mechanics.PHYSICAL_HASTE_RATING_PER_HASTE_PERCENT;
 		} else if (this.equalsStat(Stat.StatExpertiseRating)) {
 			return ratingValue / Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION / 4;
+		} else if (this.linkedToStat(Stat.StatDefenseRating)) {
+			return ratingValue / Mechanics.DEFENSE_RATING_PER_DEFENSE_LEVEL;
 		} else if (this.linkedToStat(Stat.StatDodgeRating)) {
 			return ratingValue / Mechanics.DODGE_RATING_PER_DODGE_PERCENT;
 		} else if (this.linkedToStat(Stat.StatParryRating)) {
@@ -141,6 +143,8 @@ export class UnitStat {
 			return percentOrPointsValue * Mechanics.PHYSICAL_HASTE_RATING_PER_HASTE_PERCENT;
 		} else if (this.equalsStat(Stat.StatExpertiseRating)) {
 			return percentOrPointsValue * Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION * 4;
+		} else if (this.linkedToStat(Stat.StatDefenseRating)) {
+			return percentOrPointsValue * Mechanics.DEFENSE_RATING_PER_DEFENSE_LEVEL;
 		} else if (this.linkedToStat(Stat.StatDodgeRating)) {
 			return percentOrPointsValue * Mechanics.DODGE_RATING_PER_DODGE_PERCENT;
 		} else if (this.linkedToStat(Stat.StatParryRating)) {
@@ -383,8 +387,9 @@ export const displayStatOrder: Array<UnitStat> = [
 	UnitStat.fromStat(Stat.StatAgility),
 	UnitStat.fromStat(Stat.StatIntellect),
 	UnitStat.fromStat(Stat.StatSpirit),
+	UnitStat.fromStat(Stat.StatHealingPower),
 	UnitStat.fromStat(Stat.StatSpellDamage),
-	UnitStat.fromStat(Stat.StatFireDamage),
+	UnitStat.fromStat(Stat.StatArcaneDamage),
 	UnitStat.fromStat(Stat.StatFireDamage),
 	UnitStat.fromStat(Stat.StatFrostDamage),
 	UnitStat.fromStat(Stat.StatHolyDamage),
@@ -405,10 +410,17 @@ export const displayStatOrder: Array<UnitStat> = [
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatRangedHitPercent),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatRangedCritPercent),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatRangedHastePercent),
+	UnitStat.fromStat(Stat.StatResilienceRating),
+	UnitStat.fromStat(Stat.StatDefenseRating),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatBlockPercent),
 	UnitStat.fromStat(Stat.StatBlockValue),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatDodgePercent),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatParryPercent),
+	UnitStat.fromStat(Stat.StatArcaneResistance),
+	UnitStat.fromStat(Stat.StatFireResistance),
+	UnitStat.fromStat(Stat.StatFrostResistance),
+	UnitStat.fromStat(Stat.StatNatureResistance),
+	UnitStat.fromStat(Stat.StatShadowResistance),
 ];
 
 /**

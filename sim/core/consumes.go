@@ -21,8 +21,20 @@ func applyConsumeEffects(agent Agent, partyBuffs *proto.PartyBuffs) {
 	}
 
 	if consumables.BattleElixirId != 0 {
-		elixir := ConsumablesByID[consumables.BattleElixirId]
-		character.AddStats(elixir.Stats)
+		// Elixir of Demonslaying
+		if consumables.BattleElixirId == 9224 {
+			character.Env.RegisterPostFinalizeEffect(func() {
+				for _, at := range character.AttackTables {
+					at.MobTypeBonusStats[proto.MobType_MobTypeDemon] = at.MobTypeBonusStats[proto.MobType_MobTypeDemon].Add(stats.Stats{
+						stats.AttackPower:       265,
+						stats.RangedAttackPower: 265,
+					})
+				}
+			})
+		} else {
+			elixir := ConsumablesByID[consumables.BattleElixirId]
+			character.AddStats(elixir.Stats)
+		}
 	}
 
 	if consumables.GuardianElixirId != 0 {
@@ -467,9 +479,11 @@ func registerStaticImbue(agent Agent, imbueId int32, isMH bool) {
 	case 29453, 34340: // Addy Stone
 		character.AddStat(stats.MeleeCritRating, 14)
 		if isMH {
-			character.bonusMHDps += 12
+			character.AutoAttacks.MH().BaseDamageMax += 12
+			character.AutoAttacks.MH().BaseDamageMin += 12
 		} else {
-			character.bonusOHDps += 12
+			character.AutoAttacks.OH().BaseDamageMax += 12
+			character.AutoAttacks.OH().BaseDamageMin += 12
 		}
 	}
 }

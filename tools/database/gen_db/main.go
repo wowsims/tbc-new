@@ -72,7 +72,7 @@ func main() {
 		panic(fmt.Sprintf("Error loading DBC data %v", err))
 	}
 
-	_, err = database.LoadAndWriteRawItems(helper, "s.OverallQualityId != 7 AND s.Field_1_15_7_59706_054 = 0 AND s.OverallQualityId != 0 AND (i.ClassID = 2 OR i.ClassID = 4) AND s.Display_lang != '' AND (s.ID != 34219 AND s.Display_lang NOT LIKE '%Test%' AND s.Display_lang NOT LIKE 'QA%' AND s.Display_lang != 'unused')", inputsDir)
+	_, err = database.LoadAndWriteRawItems(helper, "s.OverallQualityId != 7 AND s.Field_1_15_7_59706_054 = 0 AND s.OverallQualityId != 0 AND (i.ClassID = 2 OR i.ClassID = 4 OR (i.ClassID = 7 AND i.InventoryType = 12)) AND s.Display_lang != '' AND (s.ID != 34219 AND s.Display_lang NOT LIKE '%Test%' AND s.Display_lang NOT LIKE 'QA%' AND s.Display_lang != 'unused')", inputsDir)
 	if err != nil {
 		panic(fmt.Sprintf("Error loading DBC data %v", err))
 	}

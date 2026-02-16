@@ -31,7 +31,7 @@ var AverageDefaultSimTestOptions = &proto.SimOptions{
 }
 
 const ShortDuration = 60
-const LongDuration = 300
+const LongDuration = 180
 
 func FreshDefaultTargetConfig() *proto.Target {
 	return &proto.Target{

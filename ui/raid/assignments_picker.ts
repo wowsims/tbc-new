@@ -12,14 +12,12 @@ export class AssignmentsPicker extends Component {
 	readonly changeEmitter: TypedEvent<void> = new TypedEvent<void>();
 
 	private readonly innervatesPicker: InnervatesPicker;
-	private readonly tricksOfTheTradesPicker: TricksOfTheTradesPicker;
 
 	constructor(parentElem: HTMLElement, raidSimUI: RaidSimUI) {
 		super(parentElem, 'assignments-picker-root');
 		this.raidSimUI = raidSimUI;
 
 		this.innervatesPicker = new InnervatesPicker(this.rootElem, raidSimUI);
-		this.tricksOfTheTradesPicker = new TricksOfTheTradesPicker(this.rootElem, raidSimUI);
 	}
 }
 
@@ -124,22 +122,3 @@ class InnervatesPicker extends AssignedBuffPicker {
 	}
 }
 
-class TricksOfTheTradesPicker extends AssignedBuffPicker {
-	getTitle(): string {
-		return 'Tricks of the Trade';
-	}
-
-	getSourcePlayers(): Array<Player<any>> {
-		return this.raidSimUI.getActivePlayers().filter(player => player.isClass(Class.ClassRogue));
-	}
-
-	getPlayerValue(player: Player<any>): UnitReference {
-		return (player as Player<RogueSpecs>).getSpecOptions().classOptions!.tricksOfTheTradeTarget || emptyUnitReference();
-	}
-
-	setPlayerValue(eventID: EventID, player: Player<any>, newValue: UnitReference) {
-		const newOptions = (player as Player<RogueSpecs>).getSpecOptions();
-		newOptions.classOptions!.tricksOfTheTradeTarget = newValue;
-		player.setSpecOptions(eventID, newOptions);
-	}
-}

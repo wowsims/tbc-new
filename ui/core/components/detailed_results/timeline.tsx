@@ -1490,13 +1490,11 @@ const idToCategoryMap: Record<number, number> = {
 };
 
 const idsToGroupForRotation: Array<number> = [
-	5171, // Rogue - Slice and Dice
-	2098, // Rogue - Eviscerate
-	1943, // Rogue - Rupture
-	51690, // Rogue - Killing Spree
-	32645, // Rogue - Envenom
-	16511, // Rogue - Hemorrhage
-	121471, // Rogue - Shadow Blades
+	6774, // Rogue - Slice and Dice
+	26865, // Rogue - Eviscerate
+	26867, // Rogue - Rupture
+	32684, // Rogue - Envenom
+	26866, // Rogue - Expose Armor
 ];
 
 const percentageResources: Array<ResourceType> = [ResourceType.ResourceTypeHealth, ResourceType.ResourceTypeMana];

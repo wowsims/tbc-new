@@ -23,7 +23,7 @@ var StandardTarget = &proto.Target{
 }
 
 var STEncounter = &proto.Encounter{
-	Duration: 300,
+	Duration: 180,
 	Targets: []*proto.Target{
 		StandardTarget,
 	},

@@ -262,7 +262,7 @@ func init() {
 			},
 		})
 
-		character.ItemSwap.RegisterProc(28830, procAura)
+		character.ItemSwap.RegisterProc(31856, procAura)
 	})
 
 	// Darkmoon Card: Wrath
@@ -333,6 +333,49 @@ func init() {
 		})
 
 		character.ItemSwap.RegisterProc(31858, procAura)
+	})
+
+	// Blackened Naaru Sliver
+	core.NewItemEffect(34427, func(agent core.Agent) {
+		character := agent.GetCharacter()
+
+		aura := core.MakeStackingAura(character, core.StackingStatAura{
+			Aura: core.Aura{
+				Label:     "Combat Insight",
+				ActionID:  core.ActionID{SpellID: 45041},
+				Duration:  time.Second * 20,
+				MaxStacks: 10,
+			},
+			BonusPerStack: stats.Stats{stats.AttackPower: 44, stats.RangedAttackPower: 44},
+		})
+
+		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
+			Name:     "Battle Trance",
+			ActionID: core.ActionID{SpellID: 45040},
+			Duration: time.Second * 20,
+			ProcMask: core.ProcMaskMeleeOrRanged,
+			Outcome:  core.OutcomeLanded,
+			Callback: core.CallbackOnSpellHitDealt,
+			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+				aura.Activate(sim)
+				aura.AddStack(sim)
+			},
+		})
+
+		triggerAura := character.MakeProcTriggerAura(core.ProcTrigger{
+			Name:       "Blackened Naaru Sliver",
+			ActionID:   core.ActionID{ItemID: 34427},
+			ICD:        time.Second * 45,
+			ProcChance: 0.1,
+			ProcMask:   core.ProcMaskMeleeOrRanged,
+			Outcome:    core.OutcomeLanded,
+			Callback:   core.CallbackOnSpellHitDealt,
+			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+				procAura.Activate(sim)
+			},
+		})
+
+		character.ItemSwap.RegisterProc(34427, triggerAura)
 	})
 
 }

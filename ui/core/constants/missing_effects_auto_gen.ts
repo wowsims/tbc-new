@@ -112,6 +112,12 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
+		13503, // Alchemist's Stone
+		[
+			"Increases the effect that healing and mana potions have on the wearer by 40%. This effect does not stack.", // 17619 - https://www.wowhead.com/tbc/spell=17619
+		]
+	],
+	[
 		13505, // Runeblade of Baron Rivendare
 		[
 			"Increases movement speed and life regeneration rate.", // 17625 - https://www.wowhead.com/tbc/spell=17625
@@ -947,14 +953,27 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
+		22195, // Light Obsidian Belt
+		[
+			"+5 All Resistances.", // 18676 - https://www.wowhead.com/tbc/spell=18676
+		]
+	],
+	[
 		22196, // Thick Obsidian Breastplate
 		[
 			"When struck by a non-periodic damage spell you have a 30% chance of getting a 6s spell shield that absorbs 500 of that school of damage.", // 27539 - https://www.wowhead.com/tbc/spell=27539
 		]
 	],
 	[
+		22197, // Heavy Obsidian Belt
+		[
+			"+5 All Resistances.", // 18676 - https://www.wowhead.com/tbc/spell=18676
+		]
+	],
+	[
 		22198, // Jagged Obsidian Shield
 		[
+			"+5 All Resistances.", // 18676 - https://www.wowhead.com/tbc/spell=18676
 			"When struck by a harmful spell, the caster of that spell has a 5% chance to be silenced for 3s.", // 27559 - https://www.wowhead.com/tbc/spell=27559
 		]
 	],
@@ -3319,6 +3338,30 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		35703, // Figurine - Seaspray Albatross
 		[
 			"Restores 900 mana over 12s.", // 46785 - https://www.wowhead.com/tbc/spell=46785
+		]
+	],
+	[
+		35748, // Guardian's Alchemist Stone
+		[
+			"Increases the effect that healing and mana potions have on the wearer by 40%. This effect does not stack.", // 17619 - https://www.wowhead.com/tbc/spell=17619
+		]
+	],
+	[
+		35749, // Sorcerer's Alchemist Stone
+		[
+			"Increases the effect that healing and mana potions have on the wearer by 40%. This effect does not stack.", // 17619 - https://www.wowhead.com/tbc/spell=17619
+		]
+	],
+	[
+		35750, // Redeemer's Alchemist Stone
+		[
+			"Increases the effect that healing and mana potions have on the wearer by 40%. This effect does not stack.", // 17619 - https://www.wowhead.com/tbc/spell=17619
+		]
+	],
+	[
+		35751, // Assassin's Alchemist Stone
+		[
+			"Increases the effect that healing and mana potions have on the wearer by 40%. This effect does not stack.", // 17619 - https://www.wowhead.com/tbc/spell=17619
 		]
 	],
 	[

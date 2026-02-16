@@ -285,6 +285,21 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
+	// Increases the effect that healing and mana potions have on the wearer by 40%. This effect does not stack.
+	// https://www.wowhead.com/tbc/spell=17619
+	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+	//	Callback:           core.CallbackEmpty,
+	//	ProcMask:           core.ProcMaskEmpty,
+	//	Outcome:            core.OutcomeEmpty,
+	//	RequireDamageDealt: false
+	// }, []shared.ItemVariant{
+	//	{ItemID: 13503, ItemName: "Alchemist's Stone"},
+	// })
+
+	// TODO: Manual implementation required
+	//       This can be ignored if the effect has already been implemented.
+	//       With next db run the item will be removed if implemented.
+	//
 	// Increases movement speed and life regeneration rate.
 	// https://www.wowhead.com/tbc/spell=17625
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -1160,9 +1175,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// When the shield blocks it releases an electrical charge that damages all nearby enemies. This also has
-	// a chance of damaging the shield.
-	// https://www.wowhead.com/tbc/spell=22600
+	// https://www.wowhead.com/tbc/spell=22619
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
@@ -2390,6 +2403,21 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
+	// +5 All Resistances.
+	// https://www.wowhead.com/tbc/spell=18676
+	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+	//	Callback:           core.CallbackEmpty,
+	//	ProcMask:           core.ProcMaskEmpty,
+	//	Outcome:            core.OutcomeEmpty,
+	//	RequireDamageDealt: false
+	// }, []shared.ItemVariant{
+	//	{ItemID: 22195, ItemName: "Light Obsidian Belt"},
+	// })
+
+	// TODO: Manual implementation required
+	//       This can be ignored if the effect has already been implemented.
+	//       With next db run the item will be removed if implemented.
+	//
 	// When struck by a non-periodic damage spell you have a 30% chance of getting a 6s spell shield that absorbs
 	// 500 of that school of damage.
 	// https://www.wowhead.com/tbc/spell=27539
@@ -2406,14 +2434,30 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// When struck by a harmful spell, the caster of that spell has a 5% chance to be silenced for 3s.
-	// https://www.wowhead.com/tbc/spell=27559
+	// +5 All Resistances.
+	// https://www.wowhead.com/tbc/spell=18676
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
 	//	Outcome:            core.OutcomeEmpty,
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
+	//	{ItemID: 22197, ItemName: "Heavy Obsidian Belt"},
+	// })
+
+	// TODO: Manual implementation required
+	//       This can be ignored if the effect has already been implemented.
+	//       With next db run the item will be removed if implemented.
+	//
+	// +5 All Resistances.
+	// https://www.wowhead.com/tbc/spell=18676
+	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+	//	Callback:           core.CallbackEmpty,
+	//	ProcMask:           core.ProcMaskEmpty,
+	//	Outcome:            core.OutcomeEmpty,
+	//	RequireDamageDealt: false
+	// }, []shared.ItemVariant{
+	//	{ItemID: 22198, ItemName: "Jagged Obsidian Shield"},
 	//	{ItemID: 22198, ItemName: "Jagged Obsidian Shield"},
 	// })
 
@@ -4021,7 +4065,9 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// https://www.wowhead.com/tbc/spell=39599
+	// Sometimes heals bearer of 120 damage when damaging an enemy in melee and chance on ranged hit to restore
+	// 172 mana to the bearer.
+	// https://www.wowhead.com/tbc/spell=33504
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
@@ -5408,8 +5454,8 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Increases your pet's critical strike chance by 2%.
-	// https://www.wowhead.com/tbc/spell=27043
+	// Increases damage dealt by your pet by 3%.
+	// https://www.wowhead.com/tbc/spell=27206
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskEmpty,
@@ -8121,6 +8167,66 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
+	// Increases the effect that healing and mana potions have on the wearer by 40%. This effect does not stack.
+	// https://www.wowhead.com/tbc/spell=17619
+	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+	//	Callback:           core.CallbackEmpty,
+	//	ProcMask:           core.ProcMaskEmpty,
+	//	Outcome:            core.OutcomeEmpty,
+	//	RequireDamageDealt: false
+	// }, []shared.ItemVariant{
+	//	{ItemID: 35748, ItemName: "Guardian's Alchemist Stone"},
+	// })
+
+	// TODO: Manual implementation required
+	//       This can be ignored if the effect has already been implemented.
+	//       With next db run the item will be removed if implemented.
+	//
+	// Increases the effect that healing and mana potions have on the wearer by 40%. This effect does not stack.
+	// https://www.wowhead.com/tbc/spell=17619
+	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+	//	Callback:           core.CallbackEmpty,
+	//	ProcMask:           core.ProcMaskEmpty,
+	//	Outcome:            core.OutcomeEmpty,
+	//	RequireDamageDealt: false
+	// }, []shared.ItemVariant{
+	//	{ItemID: 35749, ItemName: "Sorcerer's Alchemist Stone"},
+	// })
+
+	// TODO: Manual implementation required
+	//       This can be ignored if the effect has already been implemented.
+	//       With next db run the item will be removed if implemented.
+	//
+	// Increases the effect that healing and mana potions have on the wearer by 40%. This effect does not stack.
+	// https://www.wowhead.com/tbc/spell=17619
+	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+	//	Callback:           core.CallbackEmpty,
+	//	ProcMask:           core.ProcMaskEmpty,
+	//	Outcome:            core.OutcomeEmpty,
+	//	RequireDamageDealt: false
+	// }, []shared.ItemVariant{
+	//	{ItemID: 35750, ItemName: "Redeemer's Alchemist Stone"},
+	// })
+
+	// TODO: Manual implementation required
+	//       This can be ignored if the effect has already been implemented.
+	//       With next db run the item will be removed if implemented.
+	//
+	// Increases the effect that healing and mana potions have on the wearer by 40%. This effect does not stack.
+	// https://www.wowhead.com/tbc/spell=17619
+	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+	//	Callback:           core.CallbackEmpty,
+	//	ProcMask:           core.ProcMaskEmpty,
+	//	Outcome:            core.OutcomeEmpty,
+	//	RequireDamageDealt: false
+	// }, []shared.ItemVariant{
+	//	{ItemID: 35751, ItemName: "Assassin's Alchemist Stone"},
+	// })
+
+	// TODO: Manual implementation required
+	//       This can be ignored if the effect has already been implemented.
+	//       With next db run the item will be removed if implemented.
+	//
 	// Summon Pumpkin Soldiers to burn your foes.
 	// https://www.wowhead.com/tbc/spell=50070
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -8448,18 +8554,6 @@ func RegisterAllProcs() {
 		RequireDamageDealt: true,
 	}, []shared.ItemVariant{
 		{ItemID: 32771, ItemName: "Airman's Ribbon of Gallantry"},
-	})
-
-	// Chance on hit to enter a Battle Trance, during which your melee or ranged attacks will each grant 44 attack
-	// power, stacking up to 10 times. Expires after 20s.
-	// https://www.wowhead.com/tbc/spell=45041
-	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-		Callback:           core.CallbackOnSpellHitDealt,
-		ProcMask:           core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial | core.ProcMaskRangedAuto | core.ProcMaskRangedSpecial,
-		Outcome:            core.OutcomeLanded,
-		RequireDamageDealt: true,
-	}, []shared.ItemVariant{
-		{ItemID: 34427, ItemName: "Blackened Naaru Sliver"},
 	})
 
 	// Chance on hit to increase your attack power by 230 for 20s.

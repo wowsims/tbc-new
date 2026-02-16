@@ -83,16 +83,7 @@ message RogueTalents {
 // END GENERATED
 
 message RogueOptions {
-	UnitReference tricks_of_the_trade_target = 1;
-	enum PoisonOptions {
-		NoPoison = 0;
-		DeadlyPoison = 1;
-		WoundPoison = 2;
-	}
-	PoisonOptions lethal_poison = 2;
-	int32 starting_overkill_duration = 3;
-	bool apply_poisons_manually = 4;
-	float vanish_break_time = 5;
+
 }
 
 message Rogue {

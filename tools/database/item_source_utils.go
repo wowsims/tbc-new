@@ -31,9 +31,13 @@ func InferPhase(item *proto.UIItem) int32 {
 	//AtlasLoot‐style source checks
 	for _, src := range item.Sources {
 		if craft := src.GetCrafted(); craft != nil {
-			if strings.Contains(item.Name, "Figurine") && ilvl == 125 {
+			if (strings.Contains(item.Name, "Figurine") || strings.Contains(item.Name, "Alchemist")) && ilvl == 125 {
 				return 5
 			}
+			if ilvl == 127 && item.RequiredProfession == proto.Profession_Engineering { // Engi goggles
+				return 2
+			}
+
 			if ilvl <= 127 {
 				return 1
 			}

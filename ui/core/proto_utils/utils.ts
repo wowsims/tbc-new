@@ -1,9 +1,10 @@
 import { CURRENT_API_VERSION, REPO_NAME } from '../constants/other.js';
+import { Player } from '../player';
 import { PlayerClass } from '../player_class.js';
 import { PlayerClasses } from '../player_classes';
 import { PlayerSpec } from '../player_spec.js';
 import { PlayerSpecs } from '../player_specs';
-import { Player } from '../proto/api.js';
+import { Player as PlayerProto } from '../proto/api.js';
 import {
 	ArmorType,
 	Class,
@@ -17,6 +18,7 @@ import {
 	RaidBuffs,
 	RangedWeaponType,
 	Spec,
+	Stat,
 	UnitReference,
 	UnitReference_Type,
 	WeaponType,
@@ -445,7 +447,7 @@ export type SpecTypeFunctions<SpecType extends Spec> = {
 	optionsCopy: (a: SpecOptions<SpecType>) => SpecOptions<SpecType>;
 	optionsToJson: (a: SpecOptions<SpecType>) => any;
 	optionsFromJson: (obj: any) => SpecOptions<SpecType>;
-	optionsFromPlayer: (player: Player) => SpecOptions<SpecType>;
+	optionsFromPlayer: (player: PlayerProto) => SpecOptions<SpecType>;
 };
 
 export const specTypeFunctions: Record<Spec, SpecTypeFunctions<any>> = {
@@ -927,8 +929,8 @@ export const raceToFaction: Record<Race, Faction> = {
 };
 
 // Returns a copy of playerOptions, with the class field set.
-export function withSpec<SpecType extends Spec>(spec: Spec, player: Player, specOptions: SpecOptions<SpecType>): Player {
-	const copy = Player.clone(player);
+export function withSpec<SpecType extends Spec>(spec: Spec, player: PlayerProto, specOptions: SpecOptions<SpecType>): PlayerProto {
+	const copy = PlayerProto.clone(player);
 
 	switch (spec) {
 		// Druid
@@ -1097,7 +1099,7 @@ export function withSpec<SpecType extends Spec>(spec: Spec, player: Player, spec
 	}
 }
 
-export function getPlayerSpecFromPlayer<SpecType extends Spec>(player: Player): PlayerSpec<SpecType> {
+export function getPlayerSpecFromPlayer<SpecType extends Spec>(player: PlayerProto): PlayerSpec<SpecType> {
 	const specValues = getEnumValues(Spec);
 	for (let i = 0; i < specValues.length; i++) {
 		const spec = specValues[i] as SpecType;
@@ -1110,7 +1112,7 @@ export function getPlayerSpecFromPlayer<SpecType extends Spec>(player: Player): 
 		}
 	}
 
-	throw new Error('Unable to parse spec from player proto: ' + JSON.stringify(Player.toJson(player), null, 2));
+	throw new Error('Unable to parse spec from player proto: ' + JSON.stringify(PlayerProto.toJson(player), null, 2));
 }
 
 export function isSharpWeaponType(weaponType: WeaponType): boolean {
@@ -1123,11 +1125,22 @@ export function isBluntWeaponType(weaponType: WeaponType): boolean {
 
 // Custom functions for determining the EP value of meta gem effects.
 // Default meta effect EP value is 0, so just handle the ones relevant to your spec.
-const metaGemEffectEPs: Partial<Record<Spec, (gem: Gem, playerStats: Stats) => number>> = {};
+const metaGemEffectEPs: Partial<Record<Spec, (gem: Gem, player: Player<any>) => number>> = {
+	[Spec.SpecDpsWarrior]: (gem: Gem, player: Player<any>) => {
+		// Relentless Earthstorm Diamond
+		if (gem.id == 32409) {
+			const epWeights = player.getEpWeights();
+			const relativeStrengthEP = (44.46 / epWeights.getStat(Stat.StatStrength))
+			return relativeStrengthEP;
+		}
+		return 0;
+	},
+};
 
-export function getMetaGemEffectEP<SpecType extends Spec>(playerSpec: PlayerSpec<SpecType>, gem: Gem, playerStats: Stats) {
-	if (metaGemEffectEPs[playerSpec.specID]) {
-		return metaGemEffectEPs[playerSpec.specID]!(gem, playerStats);
+export function getMetaGemEffectEP<SpecType extends Spec>(player: Player<SpecType>, gem: Gem) {
+	const playerSpec = player.getSpec();
+	if (metaGemEffectEPs[playerSpec]) {
+		return metaGemEffectEPs[playerSpec]!(gem, player);
 	} else {
 		return 0;
 	}

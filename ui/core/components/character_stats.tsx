@@ -75,9 +75,10 @@ const statGroups = new Map<string, Array<DisplayStat>>([
 			{ stat: UnitStat.fromStat(Stat.StatArmor) },
 			{ stat: UnitStat.fromStat(Stat.StatBonusArmor) },
 			{ stat: UnitStat.fromStat(Stat.StatDefenseRating) },
-			{ stat: UnitStat.fromStat(Stat.StatDodgeRating) },
-			{ stat: UnitStat.fromStat(Stat.StatParryRating) },
-			{ stat: UnitStat.fromStat(Stat.StatBlockRating) },
+			{ stat: UnitStat.fromStat(Stat.StatResilienceRating) },
+			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatDodgePercent) },
+			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatParryPercent) },
+			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatBlockPercent) },
 			{ stat: UnitStat.fromStat(Stat.StatBlockValue) },
 		],
 	],
@@ -97,6 +98,7 @@ export class CharacterStats extends Component {
 	readonly stats: Array<UnitStat>;
 	readonly valueElems: Array<HTMLTableCellElement>;
 	readonly meleeCritCapValueElem: HTMLTableCellElement | undefined;
+	critImmunityCapValueElem: HTMLTableCellElement | undefined;
 	masteryElem: HTMLTableCellElement | undefined;
 	hasRacialHitBonus = false;
 	activeRacialExpertiseBonuses = [false, false];
@@ -154,6 +156,18 @@ export class CharacterStats extends Component {
 				this.valueElems.push(tableValueRef.value!);
 			});
 
+			if (key === 'Defense' && this.shouldShowCritImmunity(player)) {
+				const tableValueRef = ref<HTMLTableCellElement>();
+				const row = (
+					<tr className="character-stats-table-row">
+						<td className="character-stats-table-label">Crit Immunity</td>
+						<td className="character-stats-table-value" ref={tableValueRef}></td>
+					</tr>
+				);
+
+				body.appendChild(row);
+				this.critImmunityCapValueElem = tableValueRef.value!;
+			}
 			table.appendChild(body);
 		});
 
@@ -359,16 +373,59 @@ export class CharacterStats extends Component {
 				content: tooltipContent,
 			});
 		}
+
+		if (this.critImmunityCapValueElem) {
+			const critImmunityInfo = player.getCritImmunityInfo();
+
+			const valueElem = (
+				<a href="javascript:void(0)" className="stat-value-link" attributes={{ role: 'button' }}>
+					{`${this.critImmunityCapDisplayString(player, finalStats)} `}
+				</a>
+			);
+
+			const capDelta = critImmunityInfo.delta;
+			if (capDelta === 0) {
+				valueElem.classList.add('text-white');
+			} else if (capDelta > 0) {
+				valueElem.classList.add('text-danger');
+			} else if (capDelta < 0) {
+				valueElem.classList.add('text-success');
+			}
+
+			this.critImmunityCapValueElem.querySelector('.stat-value-link')?.remove();
+			this.critImmunityCapValueElem.prepend(valueElem);
+
+			const tooltipContent = (
+				<div>
+					<div className="character-stats-tooltip-row">
+						<span>Defense:</span>
+						<span>{`${critImmunityInfo.defense.toFixed(2)}%`}</span>
+					</div>
+					<div className="character-stats-tooltip-row">
+						<span>Resilience:</span>
+						<span>{`${critImmunityInfo.resilience.toFixed(2)}%`}</span>
+					</div>
+					<div className="character-stats-tooltip-row">
+						<span>Total:</span>
+						<span>{`${critImmunityInfo.total.toFixed(2)}%`}</span>
+					</div>
+				</div>
+			);
+
+			tippy(valueElem, {
+				content: tooltipContent,
+			});
+		}
 	}
 
 	private statDisplayString(deltaStats: Stats, unitStat: UnitStat, includeBase?: boolean): string {
 		const rootStat = unitStat.hasRootStat() ? unitStat.getRootStat() : null;
 		let rootRatingValue = rootStat !== null ? deltaStats.getStat(rootStat) : null;
 		let derivedPercentOrPointsValue = unitStat.convertDefaultUnitsToPercent(deltaStats.getUnitStat(unitStat));
-		const percentOrPointsSuffix = false ? ` ${i18n.t('sidebar.character_stats.points_suffix')}` : i18n.t('sidebar.character_stats.percent_suffix');
+		const displaySuffix = unitStat.equalsStat(Stat.StatDefenseRating) ? '' : i18n.t('sidebar.character_stats.percent_suffix');
 
-		if (false && includeBase) {
-			derivedPercentOrPointsValue = derivedPercentOrPointsValue! + this.player.getBaseMastery();
+		if (unitStat.equalsStat(Stat.StatDefenseRating) && includeBase) {
+			derivedPercentOrPointsValue! += this.player.getBaseDefense();
 		} else if (rootStat === Stat.StatMeleeHitRating && includeBase && this.hasRacialHitBonus) {
 			// Remove the rating display and only show %
 			if (rootRatingValue !== null && rootRatingValue > 0) {
@@ -393,9 +450,9 @@ export class CharacterStats extends Component {
 			) {
 				const hideRootRating = rootRatingValue === null || (rootRatingValue === 0 && derivedPercentOrPointsValue !== null);
 				const rootRatingString = hideRootRating ? '' : String(Math.round(rootRatingValue!));
-				const mhPercentString = `${derivedPercentOrPointsValue!.toFixed(2)}` + percentOrPointsSuffix;
+				const mhPercentString = `${derivedPercentOrPointsValue!.toFixed(2)}` + displaySuffix;
 				const ohPercentValue = derivedPercentOrPointsValue! + (ohWeaponExpertiseActive ? 1 : -1);
-				const ohPercentString = `${ohPercentValue.toFixed(2)}` + percentOrPointsSuffix;
+				const ohPercentString = `${ohPercentValue.toFixed(2)}` + displaySuffix;
 				const wrappedPercentString = hideRootRating ? `${mhPercentString} / ${ohPercentString}` : ` (${mhPercentString} / ${ohPercentString})`;
 				return rootRatingString + wrappedPercentString;
 			}
@@ -405,9 +462,13 @@ export class CharacterStats extends Component {
 			}
 		}
 
-		const hideRootRating = rootRatingValue === null || (rootRatingValue === 0 && derivedPercentOrPointsValue !== null);
+		const hideRootRating =
+			(rootRatingValue === null || (rootRatingValue === 0 && derivedPercentOrPointsValue !== null)) && !unitStat.equalsStat(Stat.StatDefenseRating);
 		const rootRatingString = hideRootRating ? '' : String(Math.round(rootRatingValue!));
-		const percentOrPointsString = derivedPercentOrPointsValue === null ? '' : `${derivedPercentOrPointsValue.toFixed(2)}` + percentOrPointsSuffix;
+		const percentOrPointsString =
+			derivedPercentOrPointsValue === null
+				? ''
+				: `${derivedPercentOrPointsValue.toFixed(unitStat.equalsStat(Stat.StatDefenseRating) ? 0 : 2)}` + displaySuffix;
 		const wrappedPercentOrPointsString = hideRootRating || derivedPercentOrPointsValue === null ? percentOrPointsString : ` (${percentOrPointsString})`;
 		return rootRatingString + wrappedPercentOrPointsString;
 	}
@@ -472,6 +533,21 @@ export class CharacterStats extends Component {
 
 	private shouldShowMeleeCritCap(player: Player<any>): boolean {
 		return player.getPlayerSpec().isMeleeDpsSpec;
+	}
+
+	private shouldShowCritImmunity(player: Player<any>): boolean {
+		return player.getPlayerSpec().isTankSpec;
+	}
+
+	private critImmunityCapDisplayString(player: Player<any>, _finalStats: Stats): string {
+		const critImmuneDelta = player.getCritImmunity();
+
+		if (critImmuneDelta === 0.0) {
+			return i18n.t('sidebar.character_stats.crit_cap.exact');
+		}
+
+		const prefix = critImmuneDelta > 0 ? i18n.t('sidebar.character_stats.crit_cap.under_by') : i18n.t('sidebar.character_stats.crit_cap.over_by');
+		return `${prefix} ${Math.abs(critImmuneDelta).toFixed(2)}%`;
 	}
 
 	private meleeCritCapDisplayString(player: Player<any>, _finalStats: Stats): string {
