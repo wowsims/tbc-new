@@ -911,7 +911,7 @@ func (unit *Unit) GetTotalBlockChanceAsDefender(atkTable *AttackTable) float64 {
 }
 
 func (unit *Unit) GetDefenseReduction() float64 {
-	return unit.stats[stats.DefenseRating] * DefenseRatingPerDefenseLevel * DefenseRatingToChanceReduction
+	return math.Floor(unit.stats[stats.DefenseRating]/DefenseRatingPerDefenseLevel) * MissDodgeParryBlockCritChancePerDefense / 100
 }
 
 func (unit *Unit) GetTotalAvoidanceChance(spell *Spell, atkTable *AttackTable) float64 {

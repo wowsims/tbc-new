@@ -707,8 +707,9 @@ export class Player<SpecType extends Spec> {
 		const defense = this.currentStats.finalStats?.stats[Stat.StatDefenseRating] || 0;
 		const resilience = this.currentStats.finalStats?.stats[Stat.StatResilienceRating] || 0;
 
-		const defenseContribution = defense * Mechanics.DEFENSE_RATING_TO_CHANCE_REDUCTION;
+		const defenseContribution = Math.floor(defense / Mechanics.DEFENSE_RATING_PER_DEFENSE_LEVEL) * Mechanics.MISS_DODGE_PARRY_BLOCK_CRIT_CHANCE_PER_DEFENSE;
 		const resilienceContribution = resilience / Mechanics.RESILIENCE_RATING_PER_CRIT_REDUCTION_CHANCE;
+
 		return {
 			total: defenseContribution + resilienceContribution,
 			delta: critImmuneCap - (defenseContribution + resilienceContribution),
