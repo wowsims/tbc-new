@@ -3,77 +3,66 @@ package paladin
 import (
 	"time"
 
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
 )
+
+var HolyWrathRankMap = shared.SpellRankMap{
+	{Rank: 1, SpellID: 2812, Cost: 550, MinDamage: 368, MaxDamage: 435, Coefficient: 0.286},
+	{Rank: 2, SpellID: 10318, Cost: 685, MinDamage: 497, MaxDamage: 584, Coefficient: 0.286},
+	{Rank: 3, SpellID: 27139, Cost: 825, MinDamage: 637, MaxDamage: 748, Coefficient: 0.286},
+}
 
 // Holy Wrath
 // https://www.wowhead.com/tbc/spell=2812/holy-wrath
 //
 // Sends bolts of holy power in all directions, causing Holy damage
 // to all Undead and Demon targets within 20 yds.
-func (paladin *Paladin) registerHolyWrath() {
-	var ranks = []struct {
-		level        int32
-		spellID      int32
-		manaCost     int32
-		minValue     float64
-		maxValue     float64
-		coeff        float64
-		scaleLevel   int32
-		scalingCoeff float64
-	}{
-		{},
-		{level: 50, spellID: 2812, manaCost: 550, minValue: 362, maxValue: 428, coeff: 0.286, scaleLevel: 54, scalingCoeff: 1.60},
-		{level: 60, spellID: 10318, manaCost: 700, minValue: 490, maxValue: 576, coeff: 0.286, scaleLevel: 64, scalingCoeff: 1.90},
-		{level: 69, spellID: 27139, manaCost: 805, minValue: 635, maxValue: 745, coeff: 0.286, scaleLevel: 73, scalingCoeff: 2.20},
-	}
+// 2 sec cast, 1 min cooldown.
+func (paladin *Paladin) registerHolyWrath(rankConfig shared.SpellRankConfig) {
+	spellID := rankConfig.SpellID
+	cost := rankConfig.Cost
+	minDamage := rankConfig.MinDamage
+	maxDamage := rankConfig.MaxDamage
+	coefficient := rankConfig.Coefficient
 
 	cd := core.Cooldown{
 		Timer:    paladin.NewTimer(),
 		Duration: time.Minute,
 	}
 
-	for rank := 1; rank < len(ranks); rank++ {
-		if paladin.Level < ranks[rank].level {
-			break
-		}
+	paladin.HolyWraths = append(paladin.HolyWraths, paladin.RegisterSpell(core.SpellConfig{
+		ActionID:       core.ActionID{SpellID: spellID},
+		SpellSchool:    core.SpellSchoolHoly,
+		ProcMask:       core.ProcMaskSpellDamage,
+		Flags:          core.SpellFlagAPL,
+		ClassSpellMask: SpellMaskHolyWrath,
 
-		minDamage := ranks[rank].minValue + ranks[rank].scalingCoeff*float64(min(paladin.Level, ranks[rank].scaleLevel)-ranks[rank].level)
-		maxDamage := ranks[rank].maxValue + ranks[rank].scalingCoeff*float64(min(paladin.Level, ranks[rank].scaleLevel)-ranks[rank].level)
+		DamageMultiplier: 1,
+		ThreatMultiplier: 1,
+		CritMultiplier:   paladin.DefaultSpellCritMultiplier(),
 
-		paladin.HolyWraths = append(paladin.HolyWraths, paladin.RegisterSpell(core.SpellConfig{
-			ActionID:       core.ActionID{SpellID: ranks[rank].spellID},
-			SpellSchool:    core.SpellSchoolHoly,
-			ProcMask:       core.ProcMaskSpellDamage,
-			Flags:          core.SpellFlagAPL,
-			ClassSpellMask: SpellMaskHolyWrath,
-
-			DamageMultiplier: 1,
-			ThreatMultiplier: 1,
-			CritMultiplier:   paladin.DefaultSpellCritMultiplier(),
-
-			ManaCost: core.ManaCostOptions{
-				FlatCost: ranks[rank].manaCost,
+		ManaCost: core.ManaCostOptions{
+			FlatCost: cost,
+		},
+		Cast: core.CastConfig{
+			DefaultCast: core.Cast{
+				GCD:      core.GCDDefault,
+				CastTime: time.Second * 2,
 			},
-			Cast: core.CastConfig{
-				DefaultCast: core.Cast{
-					GCD:      core.GCDDefault,
-					CastTime: time.Second * 2,
-				},
-				CD: cd,
-			},
+			CD: cd,
+		},
 
-			BonusCoefficient: ranks[rank].coeff,
+		BonusCoefficient: coefficient,
 
-			ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-				baseDamage := sim.Roll(minDamage, maxDamage)
-				for _, aoeTarget := range sim.Encounter.ActiveTargetUnits {
-					if aoeTarget.MobType == proto.MobType_MobTypeUndead || aoeTarget.MobType == proto.MobType_MobTypeDemon {
-						spell.CalcAndDealDamage(sim, aoeTarget, baseDamage, spell.OutcomeMagicHitAndCrit)
-					}
+		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+			damage := sim.Roll(minDamage, maxDamage)
+			for _, aoeTarget := range sim.Encounter.ActiveTargetUnits {
+				if aoeTarget.MobType == proto.MobType_MobTypeUndead || aoeTarget.MobType == proto.MobType_MobTypeDemon {
+					spell.CalcAndDealDamage(sim, aoeTarget, damage, spell.OutcomeMagicHitAndCrit)
 				}
-			},
-		}))
-	}
+			}
+		},
+	}))
 }

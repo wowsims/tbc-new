@@ -11,7 +11,7 @@ func (paladin *Paladin) registerTalentSpells() {
 		paladin.registerDivineFavor()
 	}
 	if paladin.Talents.HolyShock {
-		paladin.registerHolyShock()
+		HolyShockRankMap.RegisterAll(paladin.registerHolyShock)
 	}
 	if paladin.Talents.DivineIllumination {
 		paladin.registerDivineIllumination()
@@ -19,10 +19,10 @@ func (paladin *Paladin) registerTalentSpells() {
 
 	// Protection Tree
 	if paladin.Talents.HolyShield {
-		paladin.registerHolyShield()
+		HolyShieldRankMap.RegisterAll(paladin.registerHolyShield)
 	}
 	if paladin.Talents.AvengersShield {
-		paladin.registerAvengersShield()
+		AvengersShieldRankMap.RegisterAll(paladin.registerAvengersShield)
 	}
 
 	// Retribution Tree

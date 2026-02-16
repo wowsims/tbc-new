@@ -104,10 +104,10 @@ func (paladin *Paladin) Initialize() {
 func (paladin *Paladin) registerSpells() {
 	// Core abilities
 	paladin.registerJudgement()
-	paladin.registerConsecration()
-	paladin.registerHammerOfWrath()
-	paladin.registerHolyWrath()
-	paladin.registerExorcism()
+	ConsecrationRankMap.RegisterAll(paladin.registerConsecration)
+	HammerOfWrathRankMap.RegisterAll(paladin.registerHammerOfWrath)
+	HolyWrathRankMap.RegisterAll(paladin.registerHolyWrath)
+	ExorcismRankMap.RegisterAll(paladin.registerExorcism)
 	paladin.registerAvengingWrath()
 
 	paladin.registerForbearance()
@@ -165,7 +165,6 @@ func NewPaladin(character *core.Character, talentsStr string, options *proto.Pal
 
 	return paladin
 }
-
 
 func (paladin *Paladin) DefaultMeleeCritMultiplier() float64 {
 	return paladin.Character.DefaultMeleeCritMultiplier()

@@ -94,8 +94,8 @@ enum PaladinSeal {
 	Wisdom = 4;
 	Justice = 5;
 	Crusader = 6;
-	Blood = 7;      // Horde only
-	Vengeance = 8;  // Alliance only
+	Blood = 7;
+	Vengeance = 8; 
 }
 
 message PaladinOptions {

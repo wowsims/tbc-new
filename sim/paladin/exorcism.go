@@ -3,82 +3,71 @@ package paladin
 import (
 	"time"
 
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
 )
+
+var ExorcismRankMap = shared.SpellRankMap{
+	{Rank: 1, SpellID: 879, Cost: 70, MinDamage: 90, MaxDamage: 102, Coefficient: 0.429},
+	{Rank: 2, SpellID: 5614, Cost: 115, MinDamage: 160, MaxDamage: 180, Coefficient: 0.429},
+	{Rank: 3, SpellID: 5615, Cost: 155, MinDamage: 227, MaxDamage: 255, Coefficient: 0.429},
+	{Rank: 4, SpellID: 10312, Cost: 200, MinDamage: 316, MaxDamage: 354, Coefficient: 0.429},
+	{Rank: 5, SpellID: 10313, Cost: 240, MinDamage: 507, MaxDamage: 453, Coefficient: 0.429},
+	{Rank: 6, SpellID: 10314, Cost: 295, MinDamage: 521, MaxDamage: 579, Coefficient: 0.429},
+	{Rank: 7, SpellID: 27138, Cost: 340, MinDamage: 626, MaxDamage: 698, Coefficient: 0.429},
+}
 
 // Exorcism
 // https://www.wowhead.com/tbc/spell=10314
 //
 // Causes X to Y Holy damage to an Undead or Demon target.
-func (paladin *Paladin) registerExorcism() {
-	var ranks = []struct {
-		level        int32
-		spellID      int32
-		manaCost     int32
-		minValue     float64
-		maxValue     float64
-		coeff        float64
-		scaleLevel   int32
-		scalingCoeff float64
-	}{
-		{},
-		{level: 20, spellID: 879, 	manaCost: 70,  minValue: 84,  maxValue: 96,  coeff: 0.429, scaleLevel: 25, scalingCoeff: 1.20},
-		{level: 28, spellID: 5614, 	manaCost: 115, minValue: 152, maxValue: 172, coeff: 0.429, scaleLevel: 33, scalingCoeff: 1.60},
-		{level: 36, spellID: 5615, 	manaCost: 155, minValue: 217, maxValue: 245, coeff: 0.429, scaleLevel: 41, scalingCoeff: 2.00},
-		{level: 44, spellID: 10312, manaCost: 200, minValue: 304, maxValue: 342, coeff: 0.429, scaleLevel: 49, scalingCoeff: 2.40},
-		{level: 52, spellID: 10313, manaCost: 240, minValue: 393, maxValue: 439, coeff: 0.429, scaleLevel: 57, scalingCoeff: 2.80},
-		{level: 60, spellID: 10314, manaCost: 295, minValue: 505, maxValue: 563, coeff: 0.429, scaleLevel: 65, scalingCoeff: 3.20},
-		{level: 68, spellID: 27138, manaCost: 340, minValue: 619, maxValue: 691, coeff: 0.429, scaleLevel: 73, scalingCoeff: 3.50},
-	}
+func (paladin *Paladin) registerExorcism(rankConfig shared.SpellRankConfig) {
+	spellID := rankConfig.SpellID
+	cost := rankConfig.Cost
+	minDamage := rankConfig.MinDamage
+	maxDamage := rankConfig.MaxDamage
+	coefficient := rankConfig.Coefficient
 
 	cd := core.Cooldown{
 		Timer:    paladin.NewTimer(),
 		Duration: time.Second * 15,
 	}
 
-	for rank := 1; rank < len(ranks); rank++ {
-		if paladin.Level < ranks[rank].level {
-			break
-		}
-
-		minDamage := ranks[rank].minValue + ranks[rank].scalingCoeff*float64(min(paladin.Level, ranks[rank].scaleLevel)-ranks[rank].level)
-		maxDamage := ranks[rank].maxValue + ranks[rank].scalingCoeff*float64(min(paladin.Level, ranks[rank].scaleLevel)-ranks[rank].level)
-
-		exorcism := paladin.RegisterSpell(core.SpellConfig{
-			ActionID:       core.ActionID{SpellID: ranks[rank].spellID},
-			SpellSchool:    core.SpellSchoolHoly,
-			ProcMask:       core.ProcMaskSpellDamage,
-			Flags:          core.SpellFlagAPL,
+	exorcism := paladin.RegisterSpell(core.SpellConfig{
+		ActionID:       core.ActionID{SpellID: spellID},
+		SpellSchool:    core.SpellSchoolHoly,
+		ProcMask:       core.ProcMaskSpellDamage,
+		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: SpellMaskExorcism,
 
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
-		CritMultiplier:   1.5,
+		CritMultiplier:   paladin.DefaultSpellCritMultiplier(),
+
+		MaxRange: 30,
 
 		ManaCost: core.ManaCostOptions{
-				FlatCost: ranks[rank].manaCost,
+			FlatCost: cost,
+		},
+		Cast: core.CastConfig{
+			DefaultCast: core.Cast{
+				GCD: core.GCDDefault,
 			},
-			Cast: core.CastConfig{
-				DefaultCast: core.Cast{
-					GCD:      core.GCDDefault,
-				},
-				CD: cd,
-			},
+			CD: cd,
+		},
 
-			MaxRange: 30,
-			BonusCoefficient: ranks[rank].coeff,
+		BonusCoefficient: coefficient,
 
-			ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
-				return target.MobType == proto.MobType_MobTypeUndead || target.MobType == proto.MobType_MobTypeDemon
-			},
+		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
+			return target.MobType == proto.MobType_MobTypeUndead || target.MobType == proto.MobType_MobTypeDemon
+		},
 
-			ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-				result := spell.CalcDamage(sim, target, sim.Roll(minDamage, maxDamage), spell.OutcomeMagicHitAndCrit)
-				spell.DealDamage(sim, result)
-			},
-		})
+		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+			result := spell.CalcDamage(sim, target, sim.Roll(minDamage, maxDamage), spell.OutcomeMagicHitAndCrit)
+			spell.DealDamage(sim, result)
+		},
+	})
 
-		paladin.Exorcisms = append(paladin.Exorcisms, exorcism)
-	}
+	paladin.Exorcisms = append(paladin.Exorcisms, exorcism)
 }

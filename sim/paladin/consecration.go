@@ -4,81 +4,75 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
+
+var ConsecrationRankMap = shared.SpellRankMap{
+	{Rank: 1, SpellID: 26573, Cost: 120, MinDamage: 8, MaxDamage: 8, Coefficient: 0.119},
+	{Rank: 2, SpellID: 20116, Cost: 205, MinDamage: 15, MaxDamage: 15, Coefficient: 0.119},
+	{Rank: 3, SpellID: 20922, Cost: 290, MinDamage: 24, MaxDamage: 24, Coefficient: 0.119},
+	{Rank: 4, SpellID: 20923, Cost: 390, MinDamage: 35, MaxDamage: 35, Coefficient: 0.119},
+	{Rank: 5, SpellID: 20924, Cost: 505, MinDamage: 48, MaxDamage: 48, Coefficient: 0.119},
+	{Rank: 6, SpellID: 27173, Cost: 660, MinDamage: 64, MaxDamage: 64, Coefficient: 0.119},
+}
 
 // Consecration
 // https://www.wowhead.com/tbc/spell=26573
 //
 // Consecrates the land beneath the Paladin, doing X Holy damage over 8 sec to enemies who enter the area.
-func (paladin *Paladin) registerConsecration() {
-	var ranks = []struct {
-		level    int32
-		spellID  int32
-		manaCost int32
-		value    float64
-		coeff    float64
-	}{
-		{},
-		{level: 20, spellID: 26573, manaCost: 120, value: 8, coeff: 0.119},
-		{level: 30, spellID: 20116, manaCost: 205, value: 15, coeff: 0.119},
-		{level: 40, spellID: 20922, manaCost: 290, value: 24, coeff: 0.119},
-		{level: 50, spellID: 20923, manaCost: 390, value: 35, coeff: 0.119},
-		{level: 60, spellID: 20924, manaCost: 505, value: 48, coeff: 0.119},
-		{level: 70, spellID: 27173, manaCost: 660, value: 64, coeff: 0.119},
-	}
+func (paladin *Paladin) registerConsecration(rankConfig shared.SpellRankConfig) {
+	rank := rankConfig.Rank
+	spellID := rankConfig.SpellID
+	cost := rankConfig.Cost
+	minDamage := rankConfig.MinDamage
+	coefficient := rankConfig.Coefficient
 
 	cd := core.Cooldown{
 		Timer:    paladin.NewTimer(),
 		Duration: 8 * time.Second,
 	}
 
-	for rank := 1; rank < len(ranks); rank++ {
-		if paladin.Level < ranks[rank].level {
-			break
-		}
+	consecration := paladin.RegisterSpell(core.SpellConfig{
+		ActionID:       core.ActionID{SpellID: spellID},
+		SpellSchool:    core.SpellSchoolHoly,
+		ProcMask:       core.ProcMaskSpellDamage,
+		Flags:          core.SpellFlagAPL,
+		ClassSpellMask: SpellMaskConsecration,
 
-		consecration := paladin.RegisterSpell(core.SpellConfig{
-			ActionID:       core.ActionID{SpellID: ranks[rank].spellID},
-			SpellSchool:    core.SpellSchoolHoly,
-			ProcMask:       core.ProcMaskSpellDamage,
-			Flags:          core.SpellFlagAPL,
-			ClassSpellMask: SpellMaskConsecration,
+		DamageMultiplier: 1,
+		ThreatMultiplier: 1,
 
-			DamageMultiplier: 1,
-			ThreatMultiplier: 1,
+		MaxRange: 8,
 
-			MaxRange: 8,
-
-			ManaCost: core.ManaCostOptions{
-				FlatCost: ranks[rank].manaCost,
+		ManaCost: core.ManaCostOptions{
+			FlatCost: cost,
+		},
+		Cast: core.CastConfig{
+			DefaultCast: core.Cast{
+				GCD: core.GCDDefault,
 			},
-			Cast: core.CastConfig{
-				DefaultCast: core.Cast{
-					GCD: core.GCDDefault,
-				},
-				CD: cd,
-			},
+			CD: cd,
+		},
 
-			Dot: core.DotConfig{
-				IsAOE: true,
-				Aura: core.Aura{
-					ActionID: core.ActionID{SpellID: ranks[rank].spellID},
-					Label:    "Consecration" + paladin.Label + " Rank " + strconv.Itoa(rank),
-				},
-				NumberOfTicks:    8,
-				TickLength:       time.Second * 1,
-				BonusCoefficient: ranks[rank].coeff,
-				OnTick: func(sim *core.Simulation, _ *core.Unit, dot *core.Dot) {
-					dot.Spell.CalcAndDealPeriodicAoeDamage(sim, ranks[rank].value, dot.Spell.OutcomeAlwaysHit)
-				},
+		Dot: core.DotConfig{
+			IsAOE: true,
+			Aura: core.Aura{
+				ActionID: core.ActionID{SpellID: spellID},
+				Label:    "Consecration" + paladin.Label + " Rank " + strconv.Itoa(int(rank)),
 			},
-
-			ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-				spell.AOEDot().Apply(sim)
+			NumberOfTicks:    8,
+			TickLength:       time.Second * 1,
+			BonusCoefficient: coefficient,
+			OnTick: func(sim *core.Simulation, _ *core.Unit, dot *core.Dot) {
+				dot.Spell.CalcAndDealPeriodicAoeDamage(sim, minDamage, dot.Spell.OutcomeAlwaysHit)
 			},
-		})
+		},
 
-		paladin.Consecrations = append(paladin.Consecrations, consecration)
-	}
+		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+			spell.AOEDot().Apply(sim)
+		},
+	})
+
+	paladin.Consecrations = append(paladin.Consecrations, consecration)
 }
