@@ -70,8 +70,6 @@ func (paladin *Paladin) registerDivineFavor() {
 			},
 		},
 
-		CritMultiplier: 1,
-
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
 			spell.RelatedSelfBuff.Activate(sim)
 		},

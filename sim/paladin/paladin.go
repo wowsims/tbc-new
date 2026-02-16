@@ -165,3 +165,16 @@ func NewPaladin(character *core.Character, talentsStr string, options *proto.Pal
 
 	return paladin
 }
+
+
+func (paladin *Paladin) DefaultMeleeCritMultiplier() float64 {
+	return paladin.Character.DefaultMeleeCritMultiplier()
+}
+
+func (paladin *Paladin) DefaultSpellCritMultiplier() float64 {
+	return paladin.Character.DefaultSpellCritMultiplier()
+}
+
+func (paladin *Paladin) DefaultHealingCritMultiplier() float64 {
+	return paladin.Character.DefaultHealingCritMultiplier()
+}

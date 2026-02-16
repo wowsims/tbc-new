@@ -358,9 +358,8 @@ func (paladin *Paladin) applyImprovedDevotionAura() {
 
 // Precision - Increases your chance to hit with melee weapons and spells by 1/2/3%
 func (paladin *Paladin) applyPrecision() {
-	hitBonus := float64(paladin.Talents.Precision) * core.PhysicalHitRatingPerHitPercent
-	paladin.AddStat(stats.MeleeHitRating, hitBonus)
-	paladin.AddStat(stats.SpellHitRating, hitBonus)
+	paladin.AddStat(stats.PhysicalHitPercent, float64(paladin.Talents.Precision))
+	paladin.AddStat(stats.SpellHitPercent, float64(paladin.Talents.Precision))
 }
 
 // Toughness - Increases your armor value from items by 2/4/6/8/10%
@@ -375,7 +374,7 @@ func (paladin *Paladin) applyImprovedRighteousFury() {
 
 // Anticipation - Increases your Defense skill by 4/8/12/16/20
 func (paladin *Paladin) applyAnticipation() {
-	defenseBonus := float64(paladin.Talents.Anticipation) * 4
+	defenseBonus := float64(paladin.Talents.Anticipation) * 4 * core.DefenseRatingPerDefenseLevel
 	paladin.AddStat(stats.DefenseRating, defenseBonus)
 }
 
@@ -406,16 +405,13 @@ func (paladin *Paladin) applyArdentDefender() {
 	// TODO: Implement low health damage reduction
 }
 
-// Combat Expertise - Increases your expertise by 1/2/3/4/5, total Stamina by 2/4/6/8/10% and spell critical strike chance by 1/2/3/4/5%
+// Combat Expertise - Increases your expertise by 1/2/3/4/5, total Stamina by 2/4/6/8/10%
 func (paladin *Paladin) applyCombatExpertise() {
 	expertiseBonus := float64(paladin.Talents.CombatExpertise)
-	paladin.AddStat(stats.ExpertiseRating, expertiseBonus*core.ExpertisePerQuarterPercentReduction*4)
+	paladin.AddStat(stats.ExpertiseRating, expertiseBonus*core.ExpertisePerQuarterPercentReduction)
 
 	staminaBonus := 1.0 + 0.02*float64(paladin.Talents.CombatExpertise)
 	paladin.MultiplyStat(stats.Stamina, staminaBonus)
-
-	spellCritBonus := float64(paladin.Talents.CombatExpertise) * core.SpellCritRatingPerCritPercent
-	paladin.AddStat(stats.SpellCritRating, spellCritBonus)
 }
 
 // ==================
@@ -450,9 +446,8 @@ func (paladin *Paladin) applyDeflection() {
 
 // Conviction - Increases your chance to get a critical strike with all spells and attacks by 1/2/3/4/5%
 func (paladin *Paladin) applyConviction() {
-	critBonus := float64(paladin.Talents.Conviction) * core.PhysicalCritRatingPerCritPercent
-	paladin.AddStat(stats.MeleeCritRating, critBonus)
-	paladin.AddStat(stats.SpellCritRating, critBonus)
+	paladin.AddStat(stats.PhysicalCritPercent, float64(paladin.Talents.Conviction))
+	paladin.AddStat(stats.SpellCritPercent, float64(paladin.Talents.Conviction))
 }
 
 // Improved Retribution Aura - Increases the damage done by your Retribution Aura by 25/50%
@@ -487,9 +482,8 @@ func (paladin *Paladin) applySanctifiedJudgement() {
 
 // Sanctified Seals - Increases your chance to critically hit with all spells and attacks by 1/2/3% and reduces the chance your Seals will be dispelled by 33/67/100%
 func (paladin *Paladin) applySanctifiedSeals() {
-	critBonus := float64(paladin.Talents.SanctifiedSeals) * core.PhysicalCritRatingPerCritPercent
-	paladin.AddStat(stats.MeleeCritRating, critBonus)
-	paladin.AddStat(stats.SpellCritRating, critBonus)
+	paladin.AddStat(stats.PhysicalCritPercent, float64(paladin.Talents.SanctifiedSeals))
+	paladin.AddStat(stats.SpellCritPercent, float64(paladin.Talents.SanctifiedSeals))
 }
 
 // Divine Purpose (talent) - Reduces your chance to be hit by spells and ranged attacks by 1/2/3%

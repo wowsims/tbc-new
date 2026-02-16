@@ -51,7 +51,7 @@ func (paladin *Paladin) registerHolyWrath() {
 
 			DamageMultiplier: 1,
 			ThreatMultiplier: 1,
-			CritMultiplier:   1.5,
+			CritMultiplier:   paladin.DefaultSpellCritMultiplier(),
 
 			ManaCost: core.ManaCostOptions{
 				FlatCost: ranks[rank].manaCost,

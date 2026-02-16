@@ -49,7 +49,7 @@ func (paladin *Paladin) registerHolyShock() {
 
 			DamageMultiplier: 1,
 			ThreatMultiplier: 1,
-			CritMultiplier:   1.5,
+			CritMultiplier:   paladin.DefaultSpellCritMultiplier(),
 
 			MaxRange: 20,
 

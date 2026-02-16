@@ -155,7 +155,7 @@ func (paladin *Paladin) registerSealOfRighteousness() {
 
 			DamageMultiplier: 1,
 			ThreatMultiplier: 1,
-			CritMultiplier:   1.5,
+			CritMultiplier:   paladin.DefaultSpellCritMultiplier(),
 			BonusCoefficient: ranks[rank].judge.coeff,
 
 			ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
@@ -190,7 +190,7 @@ func (paladin *Paladin) registerSealOfRighteousness() {
 
 			DamageMultiplier: 1,
 			ThreatMultiplier: 1,
-			CritMultiplier:   1.5,
+			CritMultiplier:   paladin.DefaultSpellCritMultiplier(),
 			BonusCoefficient: ranks[rank].proc.coeff,
 
 			ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
@@ -778,7 +778,7 @@ func (paladin *Paladin) registerSealOfBlood() {
 
 			DamageMultiplier: 1,
 			ThreatMultiplier: 1,
-			CritMultiplier:   2,
+			CritMultiplier:   paladin.DefaultMeleeCritMultiplier(),
 			BonusCoefficient: ranks[rank].judge.coeff,
 
 			ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
@@ -812,7 +812,7 @@ func (paladin *Paladin) registerSealOfBlood() {
 
 			DamageMultiplier: 1,
 			ThreatMultiplier: 1,
-			CritMultiplier:   2,
+			CritMultiplier:   paladin.DefaultMeleeCritMultiplier(),
 
 			ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 				baseDamage := spell.Unit.MHWeaponDamage(sim, spell.MeleeAttackPower()) * float64(ranks[rank].proc.value)
@@ -907,7 +907,7 @@ func (paladin *Paladin) registerSealOfVengeance() {
 
 			DamageMultiplier: 1,
 			ThreatMultiplier: 1,
-			CritMultiplier:   1.5,
+			CritMultiplier:   paladin.DefaultSpellCritMultiplier(),
 			BonusCoefficient: ranks[rank].judge.coeff,
 
 			ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
@@ -1061,7 +1061,7 @@ func (paladin *Paladin) registerSealOfCommand() {
 
 			DamageMultiplier: 1,
 			ThreatMultiplier: 1,
-			CritMultiplier:   1.5,
+			CritMultiplier:   paladin.DefaultMeleeCritMultiplier(),
 			BonusCoefficient: ranks[rank].judge.coeff,
 
 			ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
@@ -1089,7 +1089,7 @@ func (paladin *Paladin) registerSealOfCommand() {
 
 			DamageMultiplier: 1,
 			ThreatMultiplier: 1,
-			CritMultiplier:   2,
+			CritMultiplier:   paladin.DefaultMeleeCritMultiplier(),
 			BonusCoefficient: ranks[rank].proc.coeff,
 
 			ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {

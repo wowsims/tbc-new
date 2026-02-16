@@ -31,8 +31,6 @@ func (paladin *Paladin) registerAvengersShield() {
 		Duration: time.Second * 30,
 	}
 
-	targets := min(int32(3), paladin.Env.TotalTargetCount())
-
 	for rank := 1; rank < len(ranks); rank++ {
 		if paladin.Level < ranks[rank].level {
 			break
@@ -53,7 +51,7 @@ func (paladin *Paladin) registerAvengersShield() {
 
 			DamageMultiplier: 1,
 			ThreatMultiplier: 1,
-			CritMultiplier:   1.5,
+			CritMultiplier:   paladin.DefaultSpellCritMultiplier(),
 
 			MaxRange:     30,
 			MissileSpeed: 35,
@@ -72,12 +70,8 @@ func (paladin *Paladin) registerAvengersShield() {
 			BonusCoefficient: coeff,
 
 			ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-				// TODO: Verify if its rolled once for all targets or per target
 				damage := sim.Roll(minValue, maxValue)
-				for range targets {
-					spell.CalcAndDealDamage(sim, target, damage, spell.OutcomeMagicHitAndCrit)
-					target = sim.Environment.NextActiveTargetUnit(target)
-				}
+				spell.CalcAndDealCleaveDamage(sim, target, 3, damage, spell.OutcomeMagicHitAndCrit)
 			},
 		}))
 	}
