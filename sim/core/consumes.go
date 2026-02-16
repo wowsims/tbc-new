@@ -227,42 +227,6 @@ func registerConjuredCD(agent Agent, consumes *proto.ConsumesSpec) {
 
 	//Todo: Implement dynamic handling like pots etc.
 	switch consumes.ConjuredId {
-	case 20520:
-		actionID := ActionID{ItemID: 20520}
-		manaMetrics := character.NewManaMetrics(actionID)
-		// damageTakenManaMetrics := character.NewManaMetrics(ActionID{SpellID: 33776})
-		spell := character.RegisterSpell(SpellConfig{
-			ActionID: actionID,
-			Flags:    SpellFlagNoOnCastComplete,
-			Cast: CastConfig{
-				CD: Cooldown{
-					Timer:    character.GetConjuredCD(),
-					Duration: time.Minute * 15,
-				},
-			},
-			ApplyEffects: func(sim *Simulation, _ *Unit, _ *Spell) {
-				// Restores 900 to 1500 mana. (2 Min Cooldown)
-				manaGain := sim.RollWithLabel(900, 1500, "dark rune")
-				character.AddMana(sim, manaGain, manaMetrics)
-
-				// if character.Class == proto.Class_ClassPaladin {
-				// 	// Paladins gain extra mana from self-inflicted damage
-				// 	// TO-DO: It is possible for damage to be resisted or to crit
-				// 	// This would affect mana returns for Paladins
-				// 	manaFromDamage := manaGain * 2.0 / 3.0 * 0.1
-				// 	character.AddMana(sim, manaFromDamage, damageTakenManaMetrics, false)
-				// }
-			},
-		})
-		character.AddMajorCooldown(MajorCooldown{
-			Spell: spell,
-			Type:  CooldownTypeMana,
-			ShouldActivate: func(sim *Simulation, character *Character) bool {
-				// Only pop if we have less than the max mana provided by the potion minus 1mp5 tick.
-				totalRegen := character.ManaRegenPerSecondWhileCombat() * 5
-				return character.MaxMana()-(character.CurrentMana()+totalRegen) >= 1500
-			},
-		})
 	case 5512:
 		actionID := ActionID{ItemID: 5512}
 		healthMetrics := character.NewHealthMetrics(actionID)
@@ -315,6 +279,42 @@ func registerConjuredCD(agent Agent, consumes *proto.ConsumesSpec) {
 		character.AddMajorCooldown(MajorCooldown{
 			Spell: spell,
 			Type:  CooldownTypeDPS,
+		})
+	case 20520:
+		actionID := ActionID{ItemID: 20520}
+		manaMetrics := character.NewManaMetrics(actionID)
+		// damageTakenManaMetrics := character.NewManaMetrics(ActionID{SpellID: 33776})
+		spell := character.RegisterSpell(SpellConfig{
+			ActionID: actionID,
+			Flags:    SpellFlagNoOnCastComplete,
+			Cast: CastConfig{
+				CD: Cooldown{
+					Timer:    character.GetConjuredCD(),
+					Duration: time.Minute * 15,
+				},
+			},
+			ApplyEffects: func(sim *Simulation, _ *Unit, _ *Spell) {
+				// Restores 900 to 1500 mana. (2 Min Cooldown)
+				manaGain := sim.RollWithLabel(900, 1500, "dark rune")
+				character.AddMana(sim, manaGain, manaMetrics)
+
+				// if character.Class == proto.Class_ClassPaladin {
+				// 	// Paladins gain extra mana from self-inflicted damage
+				// 	// TO-DO: It is possible for damage to be resisted or to crit
+				// 	// This would affect mana returns for Paladins
+				// 	manaFromDamage := manaGain * 2.0 / 3.0 * 0.1
+				// 	character.AddMana(sim, manaFromDamage, damageTakenManaMetrics, false)
+				// }
+			},
+		})
+		character.AddMajorCooldown(MajorCooldown{
+			Spell: spell,
+			Type:  CooldownTypeMana,
+			ShouldActivate: func(sim *Simulation, character *Character) bool {
+				// Only pop if we have less than the max mana provided by the potion minus 1mp5 tick.
+				totalRegen := character.ManaRegenPerSecondWhileCombat() * 5
+				return character.MaxMana()-(character.CurrentMana()+totalRegen) >= 1500
+			},
 		})
 	}
 }
