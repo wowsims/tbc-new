@@ -1,3 +1,4 @@
+import { ConsumesPicker } from '../../core/components/individual_sim_ui/consumes_picker';
 import * as BuffDebuffInputs from '../../core/components/inputs/buffs_debuffs';
 import * as OtherInputs from '../../core/components/inputs/other_inputs';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui';
@@ -87,6 +88,10 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecWarlock, {
 			divineSpirit: TristateEffect.TristateEffectImproved
 		}),
 		partyBuffs: PartyBuffs.create({
+			manaSpringTotem: TristateEffect.TristateEffectRegular,
+			moonkinAura: TristateEffect.TristateEffectImproved,
+			totemOfWrath: 1,
+			wrathOfAirTotem: TristateEffect.TristateEffectRegular,
 
 		}),
 		individualBuffs: IndividualBuffs.create({
@@ -99,6 +104,14 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecWarlock, {
 		other: Presets.OtherDefaults,
 	},
 
+	consumableStats: [
+		Stat.StatSpellDamage,
+		Stat.StatSpellCritRating,
+		Stat.StatSpellHitRating,
+		Stat.StatSpellHasteRating,
+		Stat.StatShadowDamage,
+		Stat.StatFireDamage,
+	],
 	// IconInputs to include in the 'Player' section on the settings tab.
 	playerIconInputs: [
 		WarlockInputs.PetInput(),
@@ -107,12 +120,12 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecWarlock, {
 	],
 
 	// Buff and Debuff inputs to include/exclude, overriding the EP-based defaults.
-	includeBuffDebuffInputs: [BuffDebuffInputs.DivineSpirit],
+	includeBuffDebuffInputs: [BuffDebuffInputs.DivineSpirit, BuffDebuffInputs.SanctityAura, BuffDebuffInputs.ManaSpringTotem, BuffDebuffInputs.ManaTideTotem],
 	excludeBuffDebuffInputs: [],
 	petConsumeInputs: [],
 	// Inputs to include in the 'Other' section on the settings tab.
 	otherInputs: {
-		inputs: [OtherInputs.TankAssignment],
+		inputs: [OtherInputs.IsbUptime, OtherInputs.ShadowPriestDPS],
 	},
 	itemSwapSlots: [ItemSlot.ItemSlotMainHand, ItemSlot.ItemSlotOffHand, ItemSlot.ItemSlotTrinket1, ItemSlot.ItemSlotTrinket2],
 	encounterPicker: {
@@ -135,6 +148,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecWarlock, {
 	autoRotation: (_player: Player<Spec.SpecWarlock>): APLRotation => {
 		return Presets.BLANK_APL.rotation.rotation!;
 	},
+	customSections: [WarlockInputs.CursesSection],
 
 	raidSimPresets: [
 		{

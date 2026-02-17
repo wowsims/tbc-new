@@ -28,7 +28,12 @@ func (warlock *Warlock) registerCorruption() *core.Spell {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			spell.CalcAndDealOutcome(sim, target, spell.OutcomeMagicHit)
+			result := spell.CalcOutcome(sim, target, spell.OutcomeMagicHit)
+
+			if result.Landed() {
+				spell.Dot(target).Apply(sim)
+			}
+			spell.DealOutcome(sim, result)
 		},
 		BonusCoefficient: corruptionCoeff,
 
@@ -42,7 +47,7 @@ func (warlock *Warlock) registerCorruption() *core.Spell {
 			AffectedByCastSpeed: false,
 			BonusCoefficient:    corruptionCoeff,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.Snapshot(target, 900)
+				dot.Snapshot(target, 900/6)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)

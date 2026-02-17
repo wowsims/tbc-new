@@ -48,7 +48,7 @@ func (warlock *Warlock) registerCurseOfAgony() {
 			AffectedByCastSpeed: false,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.Snapshot(target, 1356)
+				dot.Snapshot(target, 1356/12)
 			},
 
 			BonusCoefficient: agonyCoeff,

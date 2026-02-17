@@ -93,11 +93,25 @@ message WarlockOptions {
 		DemonArmor = 2;
 	}
 
+	enum PetOptions {
+		None = 0;
+		MeleeOnly = 1;
+	}
+
+	enum CurseOptions {
+		Agony = 0;
+		Doom = 1;
+		Elements = 2;
+		Recklessness = 3;
+	}
+
 	Summon summon = 1;
 	bool detonate_seed = 2;
 	bool use_item_swap_bonus_stats = 3;
 	bool sacrifice_summon = 5;
 	Armor armor = 4;
+	PetOptions pet_options = 6;
+	CurseOptions curse_options = 7;
 }
 
 message Warlock {
