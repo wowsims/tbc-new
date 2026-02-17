@@ -367,7 +367,8 @@ func (war *Warrior) registerSwordSpecialization() {
 
 	procTrigger.ApplyOnInit(func(aura *core.Aura, sim *core.Simulation) {
 		config := *war.AutoAttacks.MHConfig()
-		config.ActionID = core.ActionID{SpellID: 12281}
+		config.ActionID = config.ActionID.WithTag(12281)
+		config.Flags |= core.SpellFlagPassiveSpell
 		swordSpecializationSpell = war.GetOrRegisterSpell(config)
 	})
 

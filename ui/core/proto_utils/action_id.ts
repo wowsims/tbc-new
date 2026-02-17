@@ -78,6 +78,10 @@ export class ActionId {
 					name += ' (Main Hand)';
 				} else if (this.tag == 2) {
 					name += ' (Off Hand)';
+				} else if (this.tag == 12281) {
+					name += ' (Sword Specialization)';
+				} else if (this.tag == 31332) {
+					name += ' (Blinkstrike)';
 				} else if (this.tag == 99999) {
 					name += ' (Boss)';
 				} else if (this.tag == 99998) {
