@@ -38,8 +38,38 @@ func applyConsumeEffects(agent Agent, partyBuffs *proto.PartyBuffs) {
 	}
 
 	if consumables.GuardianElixirId != 0 {
-		elixir := ConsumablesByID[consumables.GuardianElixirId]
-		character.AddStats(elixir.Stats)
+		// Gift of Arthas
+		if consumables.GuardianElixirId == 9088 {
+			auras := character.NewEnemyAuraArray(func(target *Unit) *Aura {
+				return GiftOfArthasAura(target)
+			})
+			procSpell := character.RegisterSpell(SpellConfig{
+				ActionID:    ActionID{SpellID: 11374},
+				SpellSchool: SpellSchoolNature,
+				ProcMask:    ProcMaskEmpty,
+
+				FlatThreatBonus: 90,
+
+				ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
+					spell.CalcAndDealOutcome(sim, target, spell.OutcomeAlwaysHit)
+					auras.Get(target).Activate(sim)
+				},
+			})
+
+			character.MakeProcTriggerAura(ProcTrigger{
+				Name:       "Gift of Arthas - Trigger",
+				ICD:        time.Second * 3,
+				ProcChance: 0.3,
+				Outcome:    OutcomeLanded,
+				Callback:   CallbackOnSpellHitTaken,
+				Handler: func(sim *Simulation, spell *Spell, _ *SpellResult) {
+					procSpell.Cast(sim, spell.Unit)
+				},
+			})
+		} else {
+			elixir := ConsumablesByID[consumables.GuardianElixirId]
+			character.AddStats(elixir.Stats)
+		}
 	}
 	if consumables.FoodId != 0 {
 		food := ConsumablesByID[consumables.FoodId]

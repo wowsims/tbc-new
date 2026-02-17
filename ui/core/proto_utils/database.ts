@@ -203,6 +203,11 @@ export class Database {
 	getConsumablesByTypeAndStats(type: ConsumableType, stats: Array<Stat>): Array<Consumable> {
 		if (stats.includes(Stat.StatStamina)) {
 			stats.push(Stat.StatHealth);
+			stats.push(Stat.StatArcaneResistance);
+			stats.push(Stat.StatFireResistance);
+			stats.push(Stat.StatFrostResistance);
+			stats.push(Stat.StatNatureResistance);
+			stats.push(Stat.StatShadowResistance);
 		}
 		return this.getConsumablesByType(type).filter(consume => consume.buffsMainStat || stats.some(index => consume.stats[index] > 0));
 	}
