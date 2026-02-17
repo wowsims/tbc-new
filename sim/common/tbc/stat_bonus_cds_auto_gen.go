@@ -94,6 +94,9 @@ func RegisterAllOnUseCds() {
 	// Agility / Stamina / Strength
 	shared.NewSimpleStatActive(15873) // Ragged John's Neverending Cup - https://www.wowhead.com/tbc/spell=20587
 
+	// ArcaneDamage
+	shared.NewSimpleStatActive(19959) // Hazza'rah's Charm of Magic - https://www.wowhead.com/tbc/spell=24544
+
 	// ArcaneResistance / FireResistance / FrostResistance / NatureResistance / ShadowResistance
 	shared.NewSimpleStatActive(15867) // Prismcharm - https://www.wowhead.com/tbc/spell=19638
 	shared.NewSimpleStatActive(23042) // Loatheb's Reflection - https://www.wowhead.com/tbc/spell=28778
@@ -205,7 +208,6 @@ func RegisterAllOnUseCds() {
 	shared.NewSimpleStatActive(19957) // Hazza'rah's Charm of Destruction - https://www.wowhead.com/tbc/spell=24543
 
 	// SpellDamage
-	shared.NewSimpleStatActive(19959) // Hazza'rah's Charm of Magic - https://www.wowhead.com/tbc/spell=24544
 	shared.NewSimpleStatActive(30340) // Starkiller's Bauble - https://www.wowhead.com/tbc/spell=36432
 
 	// SpellDamage / SpellPenetration
