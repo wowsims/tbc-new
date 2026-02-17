@@ -98,7 +98,7 @@ message APLAction {
 }
 
 
-// NextIndex: 126
+// NextIndex: 128
 message APLValue {
 	UUID uuid = 85;
 
@@ -157,7 +157,9 @@ message APLValue {
         APLValueGCDTimeToReady gcd_time_to_ready = 18;
 
         // Autoattack values
+		APLValueAutoSwingTime auto_swing_time = 126;
         APLValueAutoTimeToNext auto_time_to_next = 40;
+        APLValueAutoTimeSinceLast auto_time_since_last = 127;
 
         // Spell values
         APLValueSpellIsKnown spell_is_known = 74;
@@ -543,7 +545,34 @@ message APLValueCurrentEclipsePhase {
 message APLValueGCDIsReady {}
 message APLValueGCDTimeToReady {}
 
-message APLValueAutoTimeToNext {}
+enum APLValueAutoAttackType
+{
+	UnknownAuto = 0;
+	AnyAuto = 1;
+	MeleeAuto = 2;
+	MainHandAuto = 3;
+	OffHandAuto = 4;
+	RangedAuto = 5;
+}
+
+message APLValueAutoSwingTime {
+    enum SwingType
+    {
+        Unknown = 0;
+        MainHand = 3;
+        OffHand = 4;
+        Ranged = 5;
+    }
+    SwingType auto_type = 1;
+}
+
+message APLValueAutoTimeToNext {
+    APLValueAutoAttackType auto_type = 1;
+}
+
+message APLValueAutoTimeSinceLast {
+    APLValueAutoAttackType auto_type = 1;
+}
 
 message APLValueSpellIsKnown {
     ActionID spell_id = 1;

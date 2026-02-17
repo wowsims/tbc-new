@@ -110,6 +110,12 @@
         "elapsed_time": {
           "type": "string"
         },
+        "melee": {
+          "type": "string"
+        },
+        "any": {
+          "type": "string"
+        },
         "phases": {
           "type": "object",
           "properties": {
@@ -935,6 +941,8 @@
         "search",
         "filter",
         "elapsed_time",
+        "melee",
+        "any",
         "phases",
         "tanks",
         "status",
@@ -5353,7 +5361,39 @@
                     "tooltip"
                   ]
                 },
+                "auto_swing_time": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    },
+                    "tooltip": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "label",
+                    "tooltip"
+                  ]
+                },
                 "time_to_next_auto": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    },
+                    "tooltip": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "label",
+                    "tooltip"
+                  ]
+                },
+                "time_since_last_auto": {
                   "type": "object",
                   "properties": {
                     "label": {
@@ -6396,7 +6436,9 @@
                 "generic_resource",
                 "gcd_is_ready",
                 "gcd_time_to_ready",
+                "auto_swing_time",
                 "time_to_next_auto",
+                "time_since_last_auto",
                 "spell_known",
                 "current_cost",
                 "can_cast",

@@ -27,6 +27,8 @@
 		"search": "Search",
 		"filter": "Filter",
 		"elapsed_time": "Elapsed Time",
+		"melee": "Melee",
+		"any": "Any",
 		"phases": {
 			"1": "Phase 1 (2.0 - T4)",
 			"2": "Phase 2 (2.1 - T5)",
@@ -1290,9 +1292,17 @@
 					"label": "GCD Time To Ready",
 					"tooltip": "Amount of time remaining before the GCD comes off cooldown, or <b>0</b> if it is not on cooldown."
 				},
+				"auto_swing_time": {
+					"label": "Auto Swing Time",
+					"tooltip": "Total swing duration including all haste buffs."
+				},
 				"time_to_next_auto": {
 					"label": "Time To Next Auto",
-					"tooltip": "Amount of time remaining before the next Main-hand or Off-hand melee attack, or <b>0</b> if autoattacks are not engaged."
+					"tooltip": "Amount of time remaining before the next Main-hand, Off-hand or Ranged attack, or <b>0</b> if autoattacks are not engaged."
+				},
+				"time_since_last_auto": {
+					"label": "Time Since Last Auto",
+					"tooltip": "Amount of time since the last Main-hand, Off-hand or Ranged attack, or <b>0</b> if autoattacks are not engaged."
 				},
 				"spell_known": {
 					"label": "Spell Known",
