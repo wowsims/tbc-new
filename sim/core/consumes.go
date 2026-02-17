@@ -40,6 +40,7 @@ func applyConsumeEffects(agent Agent, partyBuffs *proto.PartyBuffs) {
 	if consumables.GuardianElixirId != 0 {
 		// Gift of Arthas
 		if consumables.GuardianElixirId == 9088 {
+			character.AddStat(stats.ShadowResistance, 10)
 			auras := character.NewEnemyAuraArray(func(target *Unit) *Aura {
 				return GiftOfArthasAura(target)
 			})
