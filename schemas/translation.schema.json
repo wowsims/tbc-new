@@ -2468,6 +2468,18 @@
               "required": [
                 "title"
               ]
+            },
+            "miscellaneous": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "title"
+              ]
             }
           },
           "additionalProperties": false,
@@ -2480,7 +2492,8 @@
             "pet",
             "imbue",
             "drums",
-            "scrolls"
+            "scrolls",
+            "miscellaneous"
           ]
         },
         "encounter": {
