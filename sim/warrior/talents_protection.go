@@ -401,10 +401,6 @@ func (war *Warrior) registerDevastate() {
 				GCD: core.GCDDefault,
 			},
 			IgnoreHaste: true,
-			CD: core.Cooldown{
-				Timer:    war.NewTimer(),
-				Duration: time.Second * 6,
-			},
 		},
 		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
 			return war.PseudoStats.CanBlock
