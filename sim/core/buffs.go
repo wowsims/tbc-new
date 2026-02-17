@@ -174,7 +174,7 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 	}
 
 	if partyBuffs.GraceOfAirTotem != proto.TristateEffect_TristateEffectMissing {
-		GraceOfAirTotemAura(char, IsImproved(partyBuffs.GraceOfAirTotem), partyBuffs.WindfuryTotem > 0)
+		GraceOfAirTotemAura(char, IsImproved(partyBuffs.GraceOfAirTotem), partyBuffs.TotemTwisting)
 	}
 
 	if partyBuffs.JadePendantOfBlasting {
@@ -681,9 +681,9 @@ func WindfuryTotemAura(char *Character, isImpoved bool) *Aura {
 		ProcMask: ProcMaskMeleeMHAuto | ProcMaskMeleeOHAuto,
 		// TriggerImmediately ommited for improved UI clarity (the timeline tick would be near invisible for MHAuto procs)
 		Handler: func(sim *Simulation, spell *Spell, result *SpellResult) {
-			if wfProcAura.active && !spell.ProcMask.Matches(ProcMaskMeleeSpecial) {
-				wfProcAura.SetStacks(sim, wfProcAura.stacks-1)
-				if wfProcAura.stacks == 0 {
+			if wfProcAura.IsActive() && !spell.ProcMask.Matches(ProcMaskMeleeSpecial) {
+				wfProcAura.RemoveStack(sim)
+				if wfProcAura.GetStacks() == 0 {
 					wfProcAura.Deactivate(sim)
 				}
 			}
@@ -702,7 +702,7 @@ func WindfuryTotemAura(char *Character, isImpoved bool) *Aura {
 		TriggerImmediately: true,
 		Handler: func(sim *Simulation, spell *Spell, result *SpellResult) {
 			wfProcAura.Activate(sim)
-			if spell.ProcMask == ProcMaskMeleeMHAuto {
+			if spell.ProcMask.Matches(ProcMaskMeleeMHAuto) {
 				wfProcAura.SetStacks(sim, 1)
 			} else {
 				wfProcAura.SetStacks(sim, 2)

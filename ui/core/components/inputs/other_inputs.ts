@@ -1,5 +1,5 @@
 import { Player } from '../../player.js';
-import { UnitReference } from '../../proto/common.js';
+import { TristateEffect, UnitReference } from '../../proto/common.js';
 import { emptyUnitReference } from '../../proto_utils/utils.js';
 import { Sim } from '../../sim.js';
 import { EventID } from '../../typed_event.js';
@@ -336,6 +336,27 @@ export const ExposeWeaknessHunterAgility = {
 		if (debuffs) {
 			debuffs.exposeWeaknessHunterAgility = newValue;
 			raid.setDebuffs(eventID, debuffs);
+		}
+	},
+};
+
+export const TotemTwisting = {
+	id: 'totemTwisting',
+	type: 'boolean' as const,
+	label: 'Totem Twisting',
+	labelTooltip: 'If both Windfury and Grace of Air are active will alternate between them to keep up both buffs.',
+	enableWhen: (player: Player<any>) => {
+		const buffs = player.getParty()!.getBuffs();
+		return buffs.windfuryTotem != TristateEffect.TristateEffectMissing && buffs.graceOfAirTotem != TristateEffect.TristateEffectMissing;
+	},
+	changedEvent: (player: Player<any>) => player.getParty()!.buffsChangeEmitter,
+	getValue: (player: Player<any>) => player.getParty()!.getBuffs().totemTwisting,
+	setValue: (eventID: EventID, player: Player<any>, newValue: boolean) => {
+		const party = player.getParty()!;
+		const buffs = party.getBuffs();
+		if (buffs) {
+			buffs.totemTwisting = newValue;
+			party.setBuffs(eventID, buffs);
 		}
 	},
 };
