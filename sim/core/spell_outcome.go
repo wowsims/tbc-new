@@ -721,7 +721,6 @@ func (result *SpellResult) applyEnemyAttackTableBlock(sim *Simulation, spell *Sp
 	}
 
 	*chance += result.Target.GetTotalBlockChanceAsDefender(attackTable)
-
 	if roll < *chance {
 		result.Outcome |= OutcomeBlock
 		spell.SpellMetrics[result.Target.UnitIndex].Blocks++

@@ -27,7 +27,7 @@ const ArmorPenPerPercentArmor = 5.92
 const MissDodgeParryBlockCritChancePerDefense = 0.04
 const ResilienceRatingPerCritReductionChance = 39.4231
 
-const EnemyAutoAttackAPCoefficient = 0.000649375
+const EnemyAutoAttackAPCoefficient = 0.00052
 
 // IDs for items used in core
 // const ()
