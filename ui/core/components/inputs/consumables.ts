@@ -347,7 +347,7 @@ export function makeConsumableInput(
 	return {
 		type: 'iconEnum',
 		tooltip: tooltip,
-		numColumns: items.length > 5 ? 2 : 1,
+		numColumns: items.length > 10 ? 3 : items.length > 5 ? 2 : 1,
 		values: [{ value: 0, iconUrl: '', tooltip: i18n.t('common.none') }].concat(valueOptions),
 		equals: (a: number, b: number) => a === b,
 		zeroValue: 0,
