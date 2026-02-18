@@ -28,7 +28,7 @@ export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
 			[Stat.StatAttackPower]: 0.46,
 			[Stat.StatMeleeHitRating]: 0.57,
 			[Stat.StatMeleeCritRating]: 0.88,
-			[Stat.StatMeleeHasteRating]: 0.90,
+			[Stat.StatMeleeHasteRating]: 0.9,
 			[Stat.StatArmorPenetration]: 0.15,
 			[Stat.StatExpertiseRating]: 0.99,
 		},
@@ -58,13 +58,20 @@ export const DefaultOptions = ProtectionWarriorOptions.create({
 
 export const DefaultConsumables = ConsumesSpec.create({
 	...WarriorPresets.DefaultConsumables,
+	conjuredId: 22105,
 	foodId: 27667,
-	flaskId: 22851,
+	flaskId: undefined,
+	battleElixirId: 22831,
+	guardianElixirId: 9088,
 	potId: 22849,
+	nightmareSeed: true,
+	scrollStr: true,
+	scrollAgi: true,
+	scrollArm: true,
 });
 
 export const OtherDefaults = {
 	profession1: Profession.Engineering,
 	profession2: Profession.Blacksmithing,
-	distanceFromTarget: 25,
+	distanceFromTarget: 0,
 };

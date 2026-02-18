@@ -441,6 +441,10 @@
 				"label": "Tank Assignment",
 				"tooltip": "Determines which mobs will be tanked. Most mobs default to targeting the Main Tank, but in preset multi-target encounters this is not always true."
 			},
+			"inspiration_uptime": {
+				"label": "Inspiration % Uptime",
+				"tooltip": "<p>% average of Encounter Duration, during which you have the Inspiration buff.</p><p>If set to 0, the buff isn't applied.</p>"
+			},
 			"incoming_hps": {
 				"label": "Incoming HPS",
 				"tooltip": "Average amount of healing received per second. Used for calculating chance of death. If set to 0, defaults to 25% of the primary target's base DPS."

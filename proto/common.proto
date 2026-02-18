@@ -525,8 +525,6 @@ message IndividualBuffs {
 	// How many of each of these buffs the player will be receiving.
 	int32 innervates = 8;
 	int32 power_infusions = 9;
-
-	double inspiration_uptime = 10;
 }
 
 message Debuffs {
@@ -830,6 +828,8 @@ message HealingModel {
 	double absorb_frac = 5;
 	// TMI burst window bin size
 	int32 burst_window = 3;
+	// % Inspiration buff uptime
+	double inspiration_uptime = 6;
 }
 
 message CustomRotation {
