@@ -69,13 +69,13 @@ export const P1_FURY_EP_PRESET = PresetUtils.makePresetEpWeights(
 			[Stat.StatAttackPower]: 0.46,
 			[Stat.StatMeleeHitRating]: 0.57,
 			[Stat.StatMeleeCritRating]: 0.88,
-			[Stat.StatMeleeHasteRating]: 0.90,
+			[Stat.StatMeleeHasteRating]: 0.9,
 			[Stat.StatArmorPenetration]: 0.15,
 			[Stat.StatExpertiseRating]: 0.99,
 		},
 		{
 			[PseudoStat.PseudoStatMainHandDps]: 2.65,
-			[PseudoStat.PseudoStatOffHandDps]: 1.50,
+			[PseudoStat.PseudoStatOffHandDps]: 1.5,
 		},
 	),
 	FURY_PRESET_OPTIONS,
@@ -86,16 +86,16 @@ export const P1_ARMS_EP_PRESET = PresetUtils.makePresetEpWeights(
 	Stats.fromMap(
 		{
 			[Stat.StatStrength]: 1.0,
-			[Stat.StatAgility]: 0.65,
+			[Stat.StatAgility]: 0.68,
 			[Stat.StatAttackPower]: 0.45,
-			[Stat.StatMeleeHitRating]: 0.55,
-			[Stat.StatMeleeCritRating]: 0.88,
-			[Stat.StatMeleeHasteRating]: 0.85,
-			[Stat.StatArmorPenetration]: 0.15,
-			[Stat.StatExpertiseRating]: 0.89,
+			[Stat.StatMeleeHitRating]: 0.48,
+			[Stat.StatMeleeCritRating]: 0.93,
+			[Stat.StatMeleeHasteRating]: 0.76,
+			[Stat.StatArmorPenetration]: 0.18,
+			[Stat.StatExpertiseRating]: 1.17,
 		},
 		{
-			[PseudoStat.PseudoStatMainHandDps]: 2.72,
+			[PseudoStat.PseudoStatMainHandDps]: 5.85,
 		},
 	),
 	ARMS_PRESET_OPTIONS,
@@ -115,7 +115,7 @@ export const FuryTalents = {
 export const ArmsTalents = {
 	name: 'Arms',
 	data: SavedTalents.create({
-		talentsString: '33005001352010500221-0550000500521203',
+		talentsString: '32005020352010500221-0550000500521203',
 	}),
 	...ARMS_PRESET_OPTIONS,
 };
@@ -144,10 +144,12 @@ export const P1_PRESET_BUILD_FURY = PresetUtils.makePresetBuild('P1 - Fury', {
 	gear: P1_BIS_FURY_PRESET,
 	talents: FuryTalents,
 	epWeights: P1_FURY_EP_PRESET,
+	rotation: FURY_DEFAULT_ROTATION,
 });
 
 export const P1_PRESET_BUILD_ARMS = PresetUtils.makePresetBuild('P1 - Arms', {
 	gear: P1_BIS_ARMS_PRESET,
 	talents: ArmsTalents,
 	epWeights: P1_ARMS_EP_PRESET,
+	rotation: ARMS_DEFAULT_ROTATION,
 });
