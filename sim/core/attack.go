@@ -247,8 +247,29 @@ func (aa *AutoAttacks) RangedAuto() *Spell {
 	return aa.ranged.spell
 }
 
+func (aa *AutoAttacks) MainhandSwingAt() time.Duration {
+	return aa.mh.swingAt
+}
+
+func (aa *AutoAttacks) MainhandPreviousSwing() time.Duration {
+	return aa.mh.previousSwing
+}
+
 func (aa *AutoAttacks) OffhandSwingAt() time.Duration {
 	return aa.oh.swingAt
+}
+
+func (aa *AutoAttacks) OffhandPreviousSwing() time.Duration {
+	return aa.oh.previousSwing
+}
+
+// Returns the time at which the next ranged attack will occur.
+func (aa *AutoAttacks) NextRangedAttackAt() time.Duration {
+	return aa.ranged.swingAt
+}
+
+func (aa *AutoAttacks) PreviousRangedAttack() time.Duration {
+	return aa.ranged.previousSwing
 }
 
 func (aa *AutoAttacks) SetOffhandSwingAt(offhandSwingAt time.Duration) {
@@ -286,7 +307,8 @@ type WeaponAttack struct {
 
 	replaceSwing ReplaceMHSwing
 
-	swingAt time.Duration
+	swingAt       time.Duration
+	previousSwing time.Duration
 
 	curSwingSpeed    float64
 	curSwingDuration time.Duration
@@ -327,6 +349,7 @@ func (wa *WeaponAttack) swing(sim *Simulation) time.Duration {
 
 	// Update swing timer BEFORE the cast, so that APL checks for TimeToNextAuto behave correctly
 	// if the attack causes APL evaluations (e.g. from rage gain).
+	wa.previousSwing = wa.swingAt
 	wa.swingAt = sim.CurrentTime + wa.curSwingDuration
 	attackSpell.Cast(sim, wa.unit.CurrentTarget)
 
@@ -509,7 +532,7 @@ func (aa *AutoAttacks) anyEnabled() bool {
 	return aa.mh.enabled || aa.oh.enabled || aa.ranged.enabled
 }
 
-func (aa *AutoAttacks) reset(sim *Simulation) {
+func (aa *AutoAttacks) reset(_ *Simulation) {
 	if !aa.AutoSwingMelee && !aa.AutoSwingRanged {
 		return
 	}
@@ -518,24 +541,30 @@ func (aa *AutoAttacks) reset(sim *Simulation) {
 	aa.oh.enabled = false
 	aa.ranged.enabled = false
 
+	aa.mh.previousSwing = -NeverExpires
 	aa.mh.swingAt = NeverExpires
+	aa.oh.previousSwing = -NeverExpires
 	aa.oh.swingAt = NeverExpires
 
 	if aa.AutoSwingMelee {
 		aa.mh.updateSwingDuration(aa.mh.unit.TotalMeleeHasteMultiplier())
+		aa.mh.previousSwing = -aa.MainhandSwingSpeed()
 		aa.mh.swingAt = 0
 
 		if aa.IsDualWielding {
 			aa.oh.updateSwingDuration(aa.mh.curSwingSpeed)
+			aa.oh.previousSwing = -aa.OffhandSwingSpeed()
 			aa.oh.swingAt = DurationFromSeconds(aa.mh.SwingSpeed / 2)
 		}
 
 	}
 
+	aa.ranged.previousSwing = -NeverExpires
 	aa.ranged.swingAt = NeverExpires
 
 	if aa.AutoSwingRanged {
 		aa.ranged.updateSwingDuration(aa.ranged.unit.TotalRangedHasteMultiplier())
+		aa.ranged.previousSwing = -aa.RangedSwingSpeed()
 		aa.ranged.swingAt = 0
 	}
 }
@@ -684,6 +713,11 @@ func (aa *AutoAttacks) OffhandSwingSpeed() time.Duration {
 	return aa.oh.curSwingDuration
 }
 
+// The amount of time between two Ranged swings.
+func (aa *AutoAttacks) RangedSwingSpeed() time.Duration {
+	return aa.ranged.curSwingDuration - aa.RangedAuto().CastTime()
+}
+
 // Optionally replaces the given swing spell with an Agent-specified MH Swing replacer.
 // This is for effects like Heroic Strike or Raptor Strike.
 func (aa *AutoAttacks) MaybeReplaceMHSwing(sim *Simulation, mhSwingSpell *Spell) *Spell {
@@ -808,9 +842,14 @@ func (aa *AutoAttacks) DelayRangedUntil(sim *Simulation, readyAt time.Duration) 
 	sim.rescheduleWeaponAttack(aa.ranged.swingAt)
 }
 
-// Returns the time at which the next attack will occur.
+// Returns the time at which the next melee attack will occur.
 func (aa *AutoAttacks) NextAttackAt() time.Duration {
 	return min(aa.mh.swingAt, aa.oh.swingAt)
+}
+
+// Returns the time at which the next attack will occur.
+func (aa *AutoAttacks) NextAnyAttackAt() time.Duration {
+	return min(min(aa.mh.swingAt, aa.oh.swingAt), aa.ranged.swingAt)
 }
 
 // Used to prevent artificial Haste breakpoints arising from APL evaluations after autos occurring at

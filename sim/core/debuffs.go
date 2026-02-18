@@ -265,11 +265,27 @@ func FaerieFireAura(target *Unit, improved bool) *Aura {
 }
 
 func GiftOfArthasAura(target *Unit) *Aura {
-	return target.GetOrRegisterAura(Aura{
+	var effect *ExclusiveEffect
+	aura := target.GetOrRegisterAura(Aura{
 		Label:    "Gift of Arthas",
 		ActionID: ActionID{SpellID: 11374},
 		Duration: time.Minute * 3,
-	}).AttachAdditivePseudoStatBuff(&target.PseudoStats.BonusPhysicalDamageTaken, 8)
+		OnGain: func(aura *Aura, sim *Simulation) {
+			effect.SetPriority(sim, 8)
+		},
+	})
+
+	effect = aura.NewExclusiveEffect("GiftOfArthasAura", true, ExclusiveEffect{
+		Priority: 0,
+		OnGain: func(ee *ExclusiveEffect, s *Simulation) {
+			ee.Aura.Unit.PseudoStats.BonusPhysicalDamageTaken += ee.Priority
+		},
+		OnExpire: func(ee *ExclusiveEffect, s *Simulation) {
+			ee.Aura.Unit.PseudoStats.BonusPhysicalDamageTaken -= ee.Priority
+		},
+	})
+
+	return aura
 }
 
 func HemorrhageAura(target *Unit, uptime float64) *Aura {

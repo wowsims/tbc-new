@@ -64,7 +64,6 @@ func RegisterAllOnUseCds() {
 	// shared.NewSimpleStatActive(25786) // Hypnotist's Watch - https://www.wowhead.com/tbc/spell=32599
 	// shared.NewSimpleStatActive(25827) // Muck-Covered Drape - https://www.wowhead.com/tbc/spell=32641
 	// shared.NewSimpleStatActive(25829) // Talisman of the Alliance - https://www.wowhead.com/tbc/spell=33828
-	// shared.NewSimpleStatActive(25996) // Emblem of Perseverance - https://www.wowhead.com/tbc/spell=32957
 	// shared.NewSimpleStatActive(26055) // Oculus of the Hidden Eye - https://www.wowhead.com/tbc/spell=33012
 	// shared.NewSimpleStatActive(27416) // Fetish of the Fallen - https://www.wowhead.com/tbc/spell=33014
 	// shared.NewSimpleStatActive(27529) // Figurine of the Colossus - https://www.wowhead.com/tbc/spell=33089
@@ -95,6 +94,9 @@ func RegisterAllOnUseCds() {
 	// Agility / Stamina / Strength
 	shared.NewSimpleStatActive(15873) // Ragged John's Neverending Cup - https://www.wowhead.com/tbc/spell=20587
 
+	// ArcaneDamage
+	shared.NewSimpleStatActive(19959) // Hazza'rah's Charm of Magic - https://www.wowhead.com/tbc/spell=24544
+
 	// ArcaneResistance / FireResistance / FrostResistance / NatureResistance / ShadowResistance
 	shared.NewSimpleStatActive(15867) // Prismcharm - https://www.wowhead.com/tbc/spell=19638
 	shared.NewSimpleStatActive(23042) // Loatheb's Reflection - https://www.wowhead.com/tbc/spell=28778
@@ -110,6 +112,9 @@ func RegisterAllOnUseCds() {
 	// ArmorPenetration
 	shared.NewSimpleStatActive(28121) // Icon of Unyielding Courage - https://www.wowhead.com/tbc/spell=34106
 
+	// AttackPower / DefenseRating / RangedAttackPower
+	shared.NewSimpleStatActive(30629) // Scarab of Displacement - https://www.wowhead.com/tbc/spell=38351
+
 	// AttackPower / RangedAttackPower
 	shared.NewSimpleStatActive(14554) // Cloudkeeper Legplates - https://www.wowhead.com/tbc/spell=18787
 	shared.NewSimpleStatActive(21180) // Earthstrike - https://www.wowhead.com/tbc/spell=25891
@@ -121,7 +126,6 @@ func RegisterAllOnUseCds() {
 	shared.NewSimpleStatActive(28041) // Bladefist's Breadth - https://www.wowhead.com/tbc/spell=33667
 	shared.NewSimpleStatActive(29383) // Bloodlust Brooch - https://www.wowhead.com/tbc/spell=35166
 	shared.NewSimpleStatActive(29776) // Core of Ar'kelos - https://www.wowhead.com/tbc/spell=35733
-	shared.NewSimpleStatActive(30629) // Scarab of Displacement - https://www.wowhead.com/tbc/spell=38351
 	shared.NewSimpleStatActive(31617) // Ancient Draenei War Talisman - https://www.wowhead.com/tbc/spell=33667
 	shared.NewSimpleStatActive(32654) // Crystalforged Trinket - https://www.wowhead.com/tbc/spell=40724
 	shared.NewSimpleStatActive(33831) // Berserker's Call - https://www.wowhead.com/tbc/spell=43716
@@ -134,6 +138,9 @@ func RegisterAllOnUseCds() {
 	shared.NewSimpleStatActive(23040) // Glyph of Deflection - https://www.wowhead.com/tbc/spell=28773
 	shared.NewSimpleStatActive(29387) // Gnomeregan Auto-Blocker 600 - https://www.wowhead.com/tbc/spell=35169
 	shared.NewSimpleStatActive(38289) // Coren's Lucky Coin - https://www.wowhead.com/tbc/spell=51952
+
+	// DefenseRating
+	shared.NewSimpleStatActive(25996) // Emblem of Perseverance - https://www.wowhead.com/tbc/spell=32957
 
 	// DodgeRating
 	shared.NewSimpleStatActive(25787) // Charm of Alacrity - https://www.wowhead.com/tbc/spell=32600
@@ -201,7 +208,6 @@ func RegisterAllOnUseCds() {
 	shared.NewSimpleStatActive(19957) // Hazza'rah's Charm of Destruction - https://www.wowhead.com/tbc/spell=24543
 
 	// SpellDamage
-	shared.NewSimpleStatActive(19959) // Hazza'rah's Charm of Magic - https://www.wowhead.com/tbc/spell=24544
 	shared.NewSimpleStatActive(30340) // Starkiller's Bauble - https://www.wowhead.com/tbc/spell=36432
 
 	// SpellDamage / SpellPenetration

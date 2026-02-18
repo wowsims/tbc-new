@@ -110,6 +110,12 @@
         "elapsed_time": {
           "type": "string"
         },
+        "melee": {
+          "type": "string"
+        },
+        "any": {
+          "type": "string"
+        },
         "phases": {
           "type": "object",
           "properties": {
@@ -646,22 +652,22 @@
             "spell_damage": {
               "type": "string"
             },
-            "arcane_power": {
+            "arcane_damage": {
               "type": "string"
             },
-            "fire_power": {
+            "fire_damage": {
               "type": "string"
             },
-            "frost_power": {
+            "frost_damage": {
               "type": "string"
             },
-            "holy_power": {
+            "holy_damage": {
               "type": "string"
             },
-            "nature_power": {
+            "nature_damage": {
               "type": "string"
             },
-            "shadow_power": {
+            "shadow_damage": {
               "type": "string"
             },
             "spell_hit_rating": {
@@ -765,12 +771,12 @@
             "ranged_haste",
             "healing_power",
             "spell_damage",
-            "arcane_power",
-            "fire_power",
-            "frost_power",
-            "holy_power",
-            "nature_power",
-            "shadow_power",
+            "arcane_damage",
+            "fire_damage",
+            "frost_damage",
+            "holy_damage",
+            "nature_damage",
+            "shadow_damage",
             "spell_hit_rating",
             "spell_crit_rating",
             "spell_haste_rating",
@@ -935,6 +941,8 @@
         "search",
         "filter",
         "elapsed_time",
+        "melee",
+        "any",
         "phases",
         "tanks",
         "status",
@@ -2468,6 +2476,18 @@
               "required": [
                 "title"
               ]
+            },
+            "miscellaneous": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "title"
+              ]
             }
           },
           "additionalProperties": false,
@@ -2480,7 +2500,8 @@
             "pet",
             "imbue",
             "drums",
-            "scrolls"
+            "scrolls",
+            "miscellaneous"
           ]
         },
         "encounter": {
@@ -5340,7 +5361,39 @@
                     "tooltip"
                   ]
                 },
+                "auto_swing_time": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    },
+                    "tooltip": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "label",
+                    "tooltip"
+                  ]
+                },
                 "time_to_next_auto": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    },
+                    "tooltip": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "label",
+                    "tooltip"
+                  ]
+                },
+                "time_since_last_auto": {
                   "type": "object",
                   "properties": {
                     "label": {
@@ -6383,7 +6436,9 @@
                 "generic_resource",
                 "gcd_is_ready",
                 "gcd_time_to_ready",
+                "auto_swing_time",
                 "time_to_next_auto",
+                "time_since_last_auto",
                 "spell_known",
                 "current_cost",
                 "can_cast",

@@ -7,6 +7,8 @@ import {
 	APLActionGuardianHotwDpsRotation_Strategy as HotwStrategy,
 	APLActionItemSwap_SwapSet as ItemSwapSet,
 	APLValueEclipsePhase,
+	APLValueAutoAttackType,
+	APLValueAutoSwingTime_SwingType,
 } from '../../proto/apl.js';
 import { ActionID, OtherAction, Stat, UnitReference, UnitReference_Type as UnitType } from '../../proto/common.js';
 import { FeralCatDruid_Rotation_AplType } from '../../proto/druid.js';
@@ -22,6 +24,7 @@ import { ListItemPickerConfig, ListPicker } from '../pickers/list_picker.jsx';
 import { NumberPicker, NumberPickerConfig } from '../pickers/number_picker.js';
 import { AdaptiveStringPicker } from '../pickers/string_picker.js';
 import { UnitPicker, UnitPickerConfig, UnitValue } from '../pickers/unit_picker.jsx';
+import { t } from 'i18next';
 
 export type ACTION_ID_SET =
 	| 'auras'
@@ -1204,6 +1207,46 @@ export function itemSwapSetFieldConfig(field: string): APLPickerBuilderFieldConf
 				values: [
 					{ value: ItemSwapSet.Main, label: i18n.t('rotation_tab.apl.item_swap_sets.main') },
 					{ value: ItemSwapSet.Swap1, label: i18n.t('rotation_tab.apl.item_swap_sets.swapped') },
+				],
+			}),
+	};
+}
+
+export function autoTypeFieldConfig(field: string): APLPickerBuilderFieldConfig<any, any> {
+	return {
+		field: field,
+		newValue: () => APLValueAutoAttackType.AnyAuto,
+		factory: (parent, player, config) =>
+			new TextDropdownPicker(parent, player, {
+				id: randomUUID(),
+				...config,
+				defaultLabel: t('common.none'),
+				equals: (a, b) => a === b,
+				values: [
+					{ value: APLValueAutoAttackType.AnyAuto, label: t('common.any') },
+					{ value: APLValueAutoAttackType.MeleeAuto, label: t('common.melee') },
+					{ value: APLValueAutoAttackType.MainHandAuto, label: t('slots.main_hand', { ns: 'character' }) },
+					{ value: APLValueAutoAttackType.OffHandAuto, label: t('slots.off_hand', { ns: 'character' }) },
+					{ value: APLValueAutoAttackType.RangedAuto, label: t('slots.ranged', { ns: 'character' }) },
+				],
+			}),
+	};
+}
+
+export function autoSwingTypeFieldConfig(field: string): APLPickerBuilderFieldConfig<any, any> {
+	return {
+		field: field,
+		newValue: () => APLValueAutoSwingTime_SwingType.MainHand,
+		factory: (parent, player, config) =>
+			new TextDropdownPicker(parent, player, {
+				id: randomUUID(),
+				...config,
+				defaultLabel: t('common.none'),
+				equals: (a, b) => a === b,
+				values: [
+					{ value: APLValueAutoSwingTime_SwingType.MainHand, label: t('slots.main_hand', { ns: 'character' }) },
+					{ value: APLValueAutoSwingTime_SwingType.OffHand, label: t('slots.off_hand', { ns: 'character' }) },
+					{ value: APLValueAutoSwingTime_SwingType.Ranged, label: t('slots.ranged', { ns: 'character' }) },
 				],
 			}),
 	};

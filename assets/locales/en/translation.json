@@ -27,6 +27,8 @@
 		"search": "Search",
 		"filter": "Filter",
 		"elapsed_time": "Elapsed Time",
+		"melee": "Melee",
+		"any": "Any",
 		"phases": {
 			"1": "Phase 1 (2.0 - T4)",
 			"2": "Phase 2 (2.1 - T5)",
@@ -170,12 +172,12 @@
 			"ranged_haste": "Ranged Haste",
 			"healing_power": "Healing Power",
 			"spell_damage": "Spell Damage",
-			"arcane_power": "Arcane Spellpower",
-			"fire_power": "Fire Spellpower",
-			"frost_power": "Frost Spellpower",
-			"holy_power": "Holy Spellpower",
-			"nature_power": "Nature Spellpower",
-			"shadow_power": "Shadow Spellpower",
+			"arcane_damage": "Arcane Spell Damage",
+			"fire_damage": "Fire Spell Damage",
+			"frost_damage": "Frost Spell Damage",
+			"holy_damage": "Holy Spell Damage",
+			"nature_damage": "Nature Spell Damage",
+			"shadow_damage": "Shadow Spell Damage",
 			"spell_hit_rating": "Spell Hit Rating",
 			"spell_crit_rating": "Spell Crit Rating",
 			"spell_haste_rating": "Spell Haste Rating",
@@ -596,6 +598,9 @@
 			},
 			"scrolls": {
 				"title": "Scrolls"
+			},
+			"miscellaneous": {
+				"title": "Miscellaneous"
 			}
 		},
 		"encounter": {
@@ -1287,9 +1292,17 @@
 					"label": "GCD Time To Ready",
 					"tooltip": "Amount of time remaining before the GCD comes off cooldown, or <b>0</b> if it is not on cooldown."
 				},
+				"auto_swing_time": {
+					"label": "Auto Swing Time",
+					"tooltip": "Total swing duration including all haste buffs."
+				},
 				"time_to_next_auto": {
 					"label": "Time To Next Auto",
-					"tooltip": "Amount of time remaining before the next Main-hand or Off-hand melee attack, or <b>0</b> if autoattacks are not engaged."
+					"tooltip": "Amount of time remaining before the next Main-hand, Off-hand or Ranged attack, or <b>0</b> if autoattacks are not engaged."
+				},
+				"time_since_last_auto": {
+					"label": "Time Since Last Auto",
+					"tooltip": "Amount of time since the last Main-hand, Off-hand or Ranged attack, or <b>0</b> if autoattacks are not engaged."
 				},
 				"spell_known": {
 					"label": "Spell Known",

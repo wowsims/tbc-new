@@ -59,6 +59,7 @@ export class ConsumesPicker extends Component {
 		this.buildImbuePicker();
 		this.buildDrumsPicker();
 		this.buildScrollsPicker();
+		this.buildMiscPicker();
 	}
 
 	private buildPotionsPicker(): void {
@@ -228,6 +229,21 @@ export class ConsumesPicker extends Component {
 
 		// Initial update of row based on current state.
 		this.updateRow(row, [scrollAgi, scrollStr, scrollInt, scrollSpi, scrollArm]);
+	}
+
+	private buildMiscPicker(): void {
+		const miscRef = ref<HTMLDivElement>();
+		const row = this.rootElem.appendChild(
+			<ConsumeRow label="Miscellaneous">
+				<div ref={miscRef} className="picker-group icon-group consumes-row-inputs consumes-misc"></div>
+			</ConsumeRow>,
+		);
+		const miscElem = miscRef.value!;
+
+		const nightmareSeed = buildIconInput(miscElem, this.simUI.player, ConsumablesInputs.NightmareSeed);
+
+		// Initial update of row based on current state.
+		this.updateRow(row, [nightmareSeed]);
 	}
 
 	private updateRow(rowElem: Element, pickers: (IconPicker<Player<any>, any> | IconEnumPicker<Player<any>, any>)[]) {

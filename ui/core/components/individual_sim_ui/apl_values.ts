@@ -106,6 +106,8 @@ import {
 	APLValueAuraDuration,
 	APLValueMultipleCdUsages,
 	APLValueActionGroupUsed,
+	APLValueAutoSwingTime,
+	APLValueAutoTimeSinceLast,
 } from '../../proto/apl.js';
 import { Class, Spec } from '../../proto/common.js';
 import { ShamanTotems_TotemType as TotemType } from '../../proto/shaman.js';
@@ -903,6 +905,25 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 	}),
 
 	// Auto attacks
+	autoSwingTime: inputBuilder({
+		label: i18n.t('rotation_tab.apl.values.auto_swing_time.label'),
+		submenu: ['auto'],
+		shortDescription: i18n.t('rotation_tab.apl.values.auto_swing_time.tooltip'),
+		newValue: APLValueAutoSwingTime.create,
+		includeIf(player: Player<any>, _isPrepull: boolean) {
+			const clss = player.getClass();
+			const spec = player.getSpec();
+			return (
+				clss !== Class.ClassHunter &&
+				clss !== Class.ClassMage &&
+				clss !== Class.ClassPriest &&
+				clss !== Class.ClassWarlock &&
+				spec !== Spec.SpecBalanceDruid &&
+				spec !== Spec.SpecElementalShaman
+			);
+		},
+		fields: [AplHelpers.autoSwingTypeFieldConfig('autoType')],
+	}),
 	autoTimeToNext: inputBuilder({
 		label: i18n.t('rotation_tab.apl.values.time_to_next_auto.label'),
 		submenu: ['auto'],
@@ -920,7 +941,26 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 				spec !== Spec.SpecElementalShaman
 			);
 		},
-		fields: [],
+		fields: [AplHelpers.autoTypeFieldConfig('autoType')],
+	}),
+	autoTimeSinceLast: inputBuilder({
+		label: i18n.t('rotation_tab.apl.values.time_since_last_auto.label'),
+		submenu: ['auto'],
+		shortDescription: i18n.t('rotation_tab.apl.values.time_since_last_auto.tooltip'),
+		newValue: APLValueAutoTimeSinceLast.create,
+		includeIf(player: Player<any>, _isPrepull: boolean) {
+			const clss = player.getClass();
+			const spec = player.getSpec();
+			return (
+				clss !== Class.ClassHunter &&
+				clss !== Class.ClassMage &&
+				clss !== Class.ClassPriest &&
+				clss !== Class.ClassWarlock &&
+				spec !== Spec.SpecBalanceDruid &&
+				spec !== Spec.SpecElementalShaman
+			);
+		},
+		fields: [AplHelpers.autoTypeFieldConfig('autoType')],
 	}),
 
 	// Spells

@@ -317,6 +317,16 @@ export const ScrollArm = makeBooleanConsumeInput({
 });
 
 ///////////////////////////////////////////////////////////////////////////
+//                            MISCELLANEOUS
+///////////////////////////////////////////////////////////////////////////
+
+export const NightmareSeed = makeBooleanConsumeInput({
+	actionId: () => ActionId.fromItemId(22797),
+	fieldName: 'nightmareSeed',
+	showWhen: (player: Player<any>) => player.getPlayerSpec().isTankSpec,
+});
+
+///////////////////////////////////////////////////////////////////////////
 
 export interface ConsumableInputOptions {
 	consumesFieldName: keyof ConsumesSpec;
