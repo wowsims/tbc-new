@@ -64,6 +64,10 @@ dps_results: {
  value: {}
 }
 dps_results: {
+ key: "TestArcane-AllItems-Blinkstrike-31332"
+ value: {}
+}
+dps_results: {
  key: "TestArcane-AllItems-DarkmoonCard:Crusade-31856"
  value: {}
 }

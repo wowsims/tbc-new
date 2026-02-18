@@ -83,8 +83,13 @@ func (value *APLValueMultipleCdUsages) GetBool(sim *Simulation) bool {
 	baseSpellIsActiveAndShouldCast := baseSpellAura.IsActive() && sim.CurrentTime >= castOffset
 	willLoseUses := baseSpellIsReady && (time.Duration(maxUses-1)*targetSpellCD)+targetSpellDuration+castOffset > totalTime
 	baseSpellWasCastAndCanCastAgain := !baseSpellIsReady && canGetSecondUptimeWithinRemainingTime
+	baseSpellIsActiveAtEncounterEnd := castOffset+baseSpellAura.Duration >= totalTime
+	baseAuraExceedsTargetAura := baseSpellAura.Duration >= remainingTime-targetSpellDuration
 
 	if value.alignCdEnd {
+		if maxUses == 1 {
+			return canGetFullDurationAtEncounterEnd || (baseSpellIsActiveAtEncounterEnd && baseSpellIsActiveAndShouldCast && !baseAuraExceedsTargetAura) || (!baseSpellIsActiveAtEncounterEnd && baseSpellIsActiveAndShouldCast)
+		}
 		return canGetFullDurationAtEncounterEnd || baseSpellIsActiveAndShouldCast || willLoseUses || baseSpellWasCastAndCanCastAgain
 	}
 

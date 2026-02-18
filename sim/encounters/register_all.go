@@ -4,12 +4,14 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
+	magtheridonslair "github.com/wowsims/tbc/sim/encounters/magtheridons_lair"
 )
 
 func init() {
 	AddDefaultPresetEncounter()
 	addMovementAI()
 	addDynamicAddsAI()
+	magtheridonslair.Register()
 }
 
 func AddSingleTargetBossEncounter(presetTarget *core.PresetTarget) {
@@ -30,7 +32,7 @@ func AddDefaultPresetEncounter() {
 			TankIndex: 0,
 
 			Stats: stats.Stats{
-				stats.Health:      4_552_800,
+				stats.Health:      6_070_400,
 				stats.Armor:       7685,
 				stats.AttackPower: 0,
 			}.ToProtoArray(),

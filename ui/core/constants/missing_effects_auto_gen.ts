@@ -953,27 +953,14 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		22195, // Light Obsidian Belt
-		[
-			"+5 All Resistances.", // 18676 - https://www.wowhead.com/tbc/spell=18676
-		]
-	],
-	[
 		22196, // Thick Obsidian Breastplate
 		[
 			"When struck by a non-periodic damage spell you have a 30% chance of getting a 6s spell shield that absorbs 500 of that school of damage.", // 27539 - https://www.wowhead.com/tbc/spell=27539
 		]
 	],
 	[
-		22197, // Heavy Obsidian Belt
-		[
-			"+5 All Resistances.", // 18676 - https://www.wowhead.com/tbc/spell=18676
-		]
-	],
-	[
 		22198, // Jagged Obsidian Shield
 		[
-			"+5 All Resistances.", // 18676 - https://www.wowhead.com/tbc/spell=18676
 			"When struck by a harmful spell, the caster of that spell has a 5% chance to be silenced for 3s.", // 27559 - https://www.wowhead.com/tbc/spell=27559
 		]
 	],
@@ -1539,12 +1526,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		25940, // Idol of the Claw
 		[
 			"20% chance per combo point to heal yourself for 110 each time you land a finishing move.", // 34323 - https://www.wowhead.com/tbc/spell=34323
-		]
-	],
-	[
-		25996, // Emblem of Perseverance
-		[
-			"Increases defense rating by 80 for 15s.", // 32957 - https://www.wowhead.com/tbc/spell=32957
 		]
 	],
 	[

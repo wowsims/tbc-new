@@ -174,7 +174,7 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 	}
 
 	if partyBuffs.GraceOfAirTotem != proto.TristateEffect_TristateEffectMissing {
-		GraceOfAirTotemAura(char, IsImproved(partyBuffs.GraceOfAirTotem))
+		GraceOfAirTotemAura(char, IsImproved(partyBuffs.GraceOfAirTotem), partyBuffs.TotemTwisting)
 	}
 
 	if partyBuffs.JadePendantOfBlasting {
@@ -243,7 +243,7 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 	}
 
 	if individual.BlessingOfSanctuary {
-		BlessingOfSanctuaryAura(char)
+		MakePermanent(BlessingOfSanctuaryAura(char))
 	}
 
 	if individual.BlessingOfWisdom != proto.TristateEffect_TristateEffectMissing {
@@ -581,10 +581,15 @@ func UnleashedRageAura(char *Character) *Aura {
 //	Totems
 //
 // //////////////////////////
-func GraceOfAirTotemAura(char *Character, improved bool) *Aura {
+func GraceOfAirTotemAura(char *Character, improved bool, wfActive bool) *Aura {
 	agiBuff := 77.0
 	if improved {
 		agiBuff *= 1.15
+	}
+
+	duration := NeverExpires
+	if wfActive {
+		duration = time.Second * 9
 	}
 
 	return makeStatBuff(char, BuffConfig{
@@ -593,6 +598,17 @@ func GraceOfAirTotemAura(char *Character, improved bool) *Aura {
 		Stats: []StatConfig{
 			{stats.Agility, agiBuff, false},
 		},
+		Duration: duration,
+	}).ApplyOnReset(func(aura *Aura, sim *Simulation) {
+		if wfActive {
+			StartPeriodicAction(sim, PeriodicActionOptions{
+				Period:   time.Second * 10,
+				Priority: ActionPriorityAuto,
+				OnAction: func(sim *Simulation) {
+					aura.Activate(sim)
+				},
+			})
+		}
 	})
 }
 
@@ -653,24 +669,67 @@ func WindfuryTotemAura(char *Character, isImpoved bool) *Aura {
 		apBonus *= 1.3
 	}
 	// Chance on MH Auto Attack to instantly attack with another AA with apBonus.
-	// AP bonus comes from an aura that lingers for 1.5 seconds?
+	// AP bonus lingers until 2 auto attacks are performed.
+	// If procced from a normal auto, this consumes the buff almost instantly (server tick rate applies)
+	// If procced from a "Next Auto" special (HS/Cleave), this can result in the aura lasting the entire 1.5s duration.
 
 	wfProcAura := char.NewTemporaryStatsAura("Windfury Totem Proc", ActionID{SpellID: 25584}, stats.Stats{stats.AttackPower: apBonus}, time.Millisecond*1500)
+	wfProcAura.MaxStacks = 2
+	wfProcAura.AttachProcTrigger(ProcTrigger{
+		Name:     "Windfury Attack",
+		Callback: CallbackOnSpellHitDealt,
+		ProcMask: ProcMaskMeleeMHAuto | ProcMaskMeleeOHAuto,
+		// TriggerImmediately ommited for improved UI clarity (the timeline tick would be near invisible for MHAuto procs)
+		Handler: func(sim *Simulation, spell *Spell, result *SpellResult) {
+			if wfProcAura.IsActive() && !spell.ProcMask.Matches(ProcMaskMeleeSpecial) {
+				wfProcAura.RemoveStack(sim)
+				if wfProcAura.GetStacks() == 0 {
+					wfProcAura.Deactivate(sim)
+				}
+			}
+		},
+	})
 
-	return char.MakeProcTriggerAura(ProcTrigger{
+	var windfurySpell *Spell
+	wfProcTrigger := char.MakeProcTriggerAura(ProcTrigger{
 		Name:               "Windfury Totem",
 		MetricsActionID:    ActionID{SpellID: 25587},
 		ProcChance:         0.2,
+		Duration:           time.Second * 10,
 		Outcome:            OutcomeLanded,
 		Callback:           CallbackOnSpellHitDealt,
 		ProcMask:           ProcMaskMeleeMHAuto,
-		ICD:                time.Millisecond * 100, // No procs on procs
+		ICD:                time.Millisecond * 1500,
 		TriggerImmediately: true,
 		Handler: func(sim *Simulation, spell *Spell, result *SpellResult) {
 			wfProcAura.Activate(sim)
-			char.AutoAttacks.MHAuto().Cast(sim, result.Target)
+			if spell.ProcMask == ProcMaskMeleeMHAuto {
+				wfProcAura.SetStacks(sim, 1)
+			} else {
+				wfProcAura.SetStacks(sim, 2)
+			}
+			char.AutoAttacks.MaybeReplaceMHSwing(sim, windfurySpell).Cast(sim, result.Target)
 		},
+	}).ApplyOnInit(func(aura *Aura, sim *Simulation) {
+		config := *char.AutoAttacks.MHConfig()
+		config.ActionID = config.ActionID.WithTag(25584)
+		windfurySpell = char.GetOrRegisterSpell(config)
+	}).ApplyOnReset(func(aura *Aura, sim *Simulation) {
+		aura.Activate(sim)
+		StartPeriodicAction(sim, PeriodicActionOptions{
+			Period:   time.Second * 5,
+			Priority: ActionPriorityAuto,
+			OnAction: func(sim *Simulation) {
+				aura.Activate(sim)
+			},
+		})
 	})
+
+	char.RegisterItemSwapCallback([]proto.ItemSlot{proto.ItemSlot_ItemSlotMainHand}, func(sim *Simulation, slot proto.ItemSlot) {
+		wfProcTrigger.Deactivate(sim)
+	})
+
+	return wfProcTrigger
 }
 
 func WrathOfAirTotemAura(char *Character, improved bool) *Aura {
@@ -933,15 +992,10 @@ func BlessingOfSanctuaryAura(char *Character) *Aura {
 		ActionID:    actionID,
 		SpellSchool: SpellSchoolHoly,
 		Flags:       SpellFlagBinary,
+		ProcMask:    ProcMaskEmpty,
 
-		// ApplyEffects: ApplyEffectFuncDirectDamage(SpellEffect{
-		// 	ProcMask:         ProcMaskEmpty,
-		// 	DamageMultiplier: 1,
-		// 	ThreatMultiplier: 1,
+		DamageMultiplier: 1,
 
-		// 	BaseDamage:     BaseDamageConfigFlat(46),
-		// 	OutcomeApplier: character.OutcomeFuncMagicHitBinary(),
-		// }),
 		ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
 			spell.CalcAndDealDamage(sim, target, 46, spell.OutcomeAlwaysHit)
 		},
@@ -950,22 +1004,13 @@ func BlessingOfSanctuaryAura(char *Character) *Aura {
 	return char.RegisterAura(Aura{
 		Label:    "Blessing of Sanctuary",
 		ActionID: actionID,
-		Duration: NeverExpires,
-		OnReset: func(aura *Aura, sim *Simulation) {
-			aura.Activate(sim)
-		},
-		OnGain: func(aura *Aura, sim *Simulation) {
-			aura.Unit.PseudoStats.BonusPhysicalDamageTaken -= 80
-		},
-		OnExpire: func(aura *Aura, sim *Simulation) {
-			aura.Unit.PseudoStats.BonusPhysicalDamageTaken += 80
-		},
+		Duration: time.Minute * 10,
 		OnSpellHitTaken: func(aura *Aura, sim *Simulation, spell *Spell, result *SpellResult) {
 			if result.Outcome.Matches(OutcomeBlock) {
 				procSpell.Cast(sim, spell.Unit)
 			}
 		},
-	})
+	}).AttachMultiplicativePseudoStatBuff(&char.PseudoStats.BonusPhysicalDamageTaken, -80)
 }
 
 func BlessingOfWisdomAura(char *Character, improved bool) *Aura {
@@ -1145,6 +1190,29 @@ func InnervateAura(character *Character, expectedBonusManaReduction float64, act
 			character.UpdateManaRegenRates()
 		},
 	})
+}
+
+func InspirationAura(unit *Unit, points int32) *Aura {
+	multiplier := 1 + []float64{0, .08, .16, .25}[points]
+
+	armorDep := unit.NewDynamicMultiplyStat(stats.Armor, multiplier)
+
+	return unit.GetOrRegisterAura(Aura{
+		Label:    "Inspiration",
+		ActionID: ActionID{SpellID: 15363},
+		Duration: time.Second * 15,
+	}).AttachStatDependency(armorDep)
+}
+
+func ApplyInspiration(character *Character, uptime float64) {
+	if uptime <= 0 {
+		return
+	}
+	uptime = min(1, uptime)
+
+	inspirationAura := InspirationAura(&character.Unit, 3)
+
+	ApplyFixedUptimeAura(inspirationAura, uptime, time.Millisecond*2500, 1)
 }
 
 // Applies buffs to pets.

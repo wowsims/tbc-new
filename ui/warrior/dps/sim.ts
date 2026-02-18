@@ -81,6 +81,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecDpsWarrior, {
 	// Inputs to include in the 'Other' section on the settings tab.
 	otherInputs: {
 		inputs: [
+			OtherInputs.TotemTwisting,
 			WarriorInputs.BattleShoutSolarianSapphire(),
 			WarriorInputs.BattleShoutT2(),
 			WarriorInputs.StartingRage(),

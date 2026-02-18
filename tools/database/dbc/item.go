@@ -131,6 +131,12 @@ func (item *Item) GetStats(itemLevel int) *stats.Stats {
 			stats[proto.Stat_StatBonusArmor] = item.QualityModifier
 		}
 	}
+
+	blockValue := item.GetBlockValue(itemLevel)
+	if blockValue > 0 {
+		stats[proto.Stat_StatBlockValue] += blockValue
+	}
+
 	return stats
 }
 func (item *Item) GetRandPropPoints(itemLevel int) int32 {
@@ -226,6 +232,15 @@ func (item *Item) WeaponDmgMin(itemLevel int) float64 {
 		total = 1
 	}
 	return math.Floor(total)
+}
+func (item *Item) GetBlockValue(itemLevel int) float64 {
+	weaponType, _, _ := item.GetWeaponTypes()
+	if weaponType == proto.WeaponType_WeaponTypeShield {
+		blockValues := GetDBC().ShieldBlockValues[itemLevel]
+		blockBudget := float64(blockValues.Values[item.OverallQuality.ToProto()])
+		return blockBudget
+	}
+	return 0
 }
 
 func (item *Item) WeaponDmgMax(itemLevel int) float64 {
@@ -338,6 +353,10 @@ func (item *Item) GetWeaponTypes() (proto.WeaponType, proto.HandType, proto.Rang
 			}
 			weaponType = MapWeaponSubClassToWeaponType[item.ItemSubClass]
 		}
+	}
+	if item.ItemSubClass == ITEM_SUBCLASS_ARMOR_SHIELD && handType == proto.HandType_HandTypeUnknown {
+		handType = proto.HandType_HandTypeOffHand
+		weaponType = proto.WeaponType_WeaponTypeShield
 	}
 	return weaponType, handType, rangedWeaponType
 }

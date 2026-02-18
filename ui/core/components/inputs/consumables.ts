@@ -79,8 +79,8 @@ export const ConjuredDarkRune = {
 	value: 12662,
 };
 export const ConjuredHealthstone = {
-	actionId: ActionId.fromItemId(5512),
-	value: 5512,
+	actionId: ActionId.fromItemId(22105),
+	value: 2496,
 };
 export const ConjuredRogueThistleTea = {
 	actionId: ActionId.fromItemId(7676),
@@ -317,6 +317,16 @@ export const ScrollArm = makeBooleanConsumeInput({
 });
 
 ///////////////////////////////////////////////////////////////////////////
+//                            MISCELLANEOUS
+///////////////////////////////////////////////////////////////////////////
+
+export const NightmareSeed = makeBooleanConsumeInput({
+	actionId: () => ActionId.fromItemId(22797),
+	fieldName: 'nightmareSeed',
+	showWhen: (player: Player<any>) => player.getPlayerSpec().isTankSpec,
+});
+
+///////////////////////////////////////////////////////////////////////////
 
 export interface ConsumableInputOptions {
 	consumesFieldName: keyof ConsumesSpec;
@@ -337,7 +347,7 @@ export function makeConsumableInput(
 	return {
 		type: 'iconEnum',
 		tooltip: tooltip,
-		numColumns: items.length > 5 ? 2 : 1,
+		numColumns: items.length > 10 ? 3 : items.length > 5 ? 2 : 1,
 		values: [{ value: 0, iconUrl: '', tooltip: i18n.t('common.none') }].concat(valueOptions),
 		equals: (a: number, b: number) => a === b,
 		zeroValue: 0,

@@ -158,8 +158,12 @@ func (rot *APLRotation) newAPLValueWithContext(config *proto.APLValue, groupVari
 		value = rot.newValueGCDTimeToReady(config.GetGcdTimeToReady(), config.Uuid)
 
 	// Auto attacks
+	case *proto.APLValue_AutoSwingTime:
+		value = rot.newValueAutoSwingTime(config.GetAutoSwingTime(), config.Uuid)
 	case *proto.APLValue_AutoTimeToNext:
 		value = rot.newValueAutoTimeToNext(config.GetAutoTimeToNext(), config.Uuid)
+	case *proto.APLValue_AutoTimeSinceLast:
+		value = rot.newValueAutoTimeSinceLast(config.GetAutoTimeSinceLast(), config.Uuid)
 
 	// Spells
 	case *proto.APLValue_SpellIsKnown:

@@ -3,7 +3,7 @@ import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_u
 import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
 import { APLRotation } from '../../core/proto/apl';
-import { Faction, ItemSlot, PseudoStat, Race, RaidBuffs, Spec, Stat, TristateEffect } from '../../core/proto/common';
+import { Debuffs, Faction, ItemSlot, PseudoStat, Race, RaidBuffs, Spec, Stat, TristateEffect } from '../../core/proto/common';
 import { UnitStat } from '../../core/proto_utils/stats';
 import * as Presets from './presets';
 import * as WarriorPresets from '../presets';
@@ -81,10 +81,17 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionWarrior, {
 		raidBuffs: RaidBuffs.create({
 			...WarriorPresets.DefaultRaidBuffs,
 			thorns: TristateEffect.TristateEffectImproved,
+			shadowProtection: true,
 		}),
 		partyBuffs: WarriorPresets.DefaultPartyBuffs,
 		individualBuffs: WarriorPresets.DefaultIndividualBuffs,
-		debuffs: WarriorPresets.DefaultDebuffs,
+		debuffs: Debuffs.create({
+			...WarriorPresets.DefaultDebuffs,
+			demoralizingShout: TristateEffect.TristateEffectImproved,
+			thunderClap: TristateEffect.TristateEffectImproved,
+			insectSwarm: true,
+			shadowEmbrace: true,
+		}),
 	},
 
 	// IconInputs to include in the 'Player' section on the settings tab.
@@ -99,10 +106,10 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionWarrior, {
 			WarriorInputs.BattleShoutT2(),
 			WarriorInputs.StartingRage(),
 			WarriorInputs.StanceSnapshot(),
-			OtherInputs.DistanceFromTarget,
 			WarriorInputs.QueueDelay(),
 			OtherInputs.InputDelay,
-			OtherInputs.TankAssignment,
+			// OtherInputs.TankAssignment,
+			OtherInputs.InspirationUptime,
 			OtherInputs.IncomingHps,
 			OtherInputs.HealingCadence,
 			OtherInputs.HealingCadenceVariation,

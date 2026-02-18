@@ -1,5 +1,5 @@
 import { Player } from '../../player.js';
-import { UnitReference } from '../../proto/common.js';
+import { TristateEffect, UnitReference } from '../../proto/common.js';
 import { emptyUnitReference } from '../../proto_utils/utils.js';
 import { Sim } from '../../sim.js';
 import { EventID } from '../../typed_event.js';
@@ -170,7 +170,7 @@ export const IncomingHps = {
 	type: 'number' as const,
 	label: i18n.t('settings_tab.other.incoming_hps.label'),
 	labelTooltip: i18n.t('settings_tab.other.incoming_hps.tooltip'),
-	changedEvent: (player: Player<any>) => player.getRaid()!.changeEmitter,
+	changedEvent: (player: Player<any>) => player.healingModelChangeEmitter,
 	getValue: (player: Player<any>) => player.getHealingModel().hps,
 	setValue: (eventID: EventID, player: Player<any>, newValue: number) => {
 		const healingModel = player.getHealingModel();
@@ -186,7 +186,7 @@ export const HealingCadence = {
 	float: true,
 	label: i18n.t('settings_tab.other.healing_cadence.label'),
 	labelTooltip: i18n.t('settings_tab.other.healing_cadence.tooltip'),
-	changedEvent: (player: Player<any>) => player.getRaid()!.changeEmitter,
+	changedEvent: (player: Player<any>) => player.healingModelChangeEmitter,
 	getValue: (player: Player<any>) => player.getHealingModel().cadenceSeconds,
 	setValue: (eventID: EventID, player: Player<any>, newValue: number) => {
 		const healingModel = player.getHealingModel();
@@ -202,7 +202,7 @@ export const HealingCadenceVariation = {
 	float: true,
 	label: i18n.t('settings_tab.other.healing_cadence_variation.label'),
 	labelTooltip: i18n.t('settings_tab.other.healing_cadence_variation.tooltip'),
-	changedEvent: (player: Player<any>) => player.getRaid()!.changeEmitter,
+	changedEvent: (player: Player<any>) => player.healingModelChangeEmitter,
 	getValue: (player: Player<any>) => player.getHealingModel().cadenceVariation,
 	setValue: (eventID: EventID, player: Player<any>, newValue: number) => {
 		const healingModel = player.getHealingModel();
@@ -233,11 +233,27 @@ export const BurstWindow = {
 	float: false,
 	label: i18n.t('settings_tab.other.burst_window.label'),
 	labelTooltip: i18n.t('settings_tab.other.burst_window.tooltip'),
-	changedEvent: (player: Player<any>) => player.getRaid()!.changeEmitter,
+	changedEvent: (player: Player<any>) => player.healingModelChangeEmitter,
 	getValue: (player: Player<any>) => player.getHealingModel().burstWindow,
 	setValue: (eventID: EventID, player: Player<any>, newValue: number) => {
 		const healingModel = player.getHealingModel();
 		healingModel.burstWindow = newValue;
+		player.setHealingModel(eventID, healingModel);
+	},
+	enableWhen: (player: Player<any>) => (player.getRaid()?.getTanks() || []).find(tank => UnitReference.equals(tank, player.makeUnitReference())) != null,
+};
+
+export const InspirationUptime = {
+	id: 'inspiration-uptime',
+	type: 'number' as const,
+	float: true,
+	label: i18n.t('settings_tab.other.inspiration_uptime.label'),
+	labelTooltip: i18n.t('settings_tab.other.inspiration_uptime.tooltip'),
+	changedEvent: (player: Player<any>) => player.healingModelChangeEmitter,
+	getValue: (player: Player<any>) => player.getHealingModel().inspirationUptime * 100,
+	setValue: (eventID: EventID, player: Player<any>, newValue: number) => {
+		const healingModel = player.getHealingModel();
+		healingModel.inspirationUptime = newValue / 100;
 		player.setHealingModel(eventID, healingModel);
 	},
 	enableWhen: (player: Player<any>) => (player.getRaid()?.getTanks() || []).find(tank => UnitReference.equals(tank, player.makeUnitReference())) != null,
@@ -336,6 +352,27 @@ export const ExposeWeaknessHunterAgility = {
 		if (debuffs) {
 			debuffs.exposeWeaknessHunterAgility = newValue;
 			raid.setDebuffs(eventID, debuffs);
+		}
+	},
+};
+
+export const TotemTwisting = {
+	id: 'totemTwisting',
+	type: 'boolean' as const,
+	label: 'Totem Twisting',
+	labelTooltip: 'If both Windfury and Grace of Air are active will alternate between them to keep up both buffs.',
+	enableWhen: (player: Player<any>) => {
+		const buffs = player.getParty()!.getBuffs();
+		return buffs.windfuryTotem != TristateEffect.TristateEffectMissing && buffs.graceOfAirTotem != TristateEffect.TristateEffectMissing;
+	},
+	changedEvent: (player: Player<any>) => player.getParty()!.buffsChangeEmitter,
+	getValue: (player: Player<any>) => player.getParty()!.getBuffs().totemTwisting,
+	setValue: (eventID: EventID, player: Player<any>, newValue: boolean) => {
+		const party = player.getParty()!;
+		const buffs = party.getBuffs();
+		if (buffs) {
+			buffs.totemTwisting = newValue;
+			party.setBuffs(eventID, buffs);
 		}
 	},
 };

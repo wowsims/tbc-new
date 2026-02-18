@@ -72,4 +72,16 @@ var ItemSetWastewalkerArmor = core.NewItemSet(core.ItemSet{
 	},
 })
 
+// Blacksmithing - Plate
+var ItemSetBurningRage = core.NewItemSet(core.ItemSet{
+	Name: "Burning Rage",
+	Bonuses: map[int32]core.ApplySetBonus{
+		2: func(agent core.Agent, setBonusAura *core.Aura) {
+			setBonusAura.
+				AttachStatBuff(stats.MeleeHitRating, 20).
+				ExposeToAPL(41678)
+		},
+	},
+})
+
 func init() {}

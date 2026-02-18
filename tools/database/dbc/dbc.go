@@ -27,6 +27,7 @@ type DBC struct {
 	Consumables           map[int]Consumable   // Item ID
 	ItemEffects           map[int]ItemEffect   // Effect ID
 	ItemEffectsByParentID map[int][]ItemEffect // ParentItemID
+	ShieldBlockValues     map[int]ShieldBlock
 }
 
 func NewDBC() *DBC {
@@ -49,6 +50,7 @@ func NewDBC() *DBC {
 		ItemEffects:           make(map[int]ItemEffect),
 		SpellScalings:         make(map[int]SpellScaling),
 		ItemEffectsByParentID: make(map[int][]ItemEffect),
+		ShieldBlockValues:     make(map[int]ShieldBlock),
 	}
 }
 
@@ -106,6 +108,7 @@ func InitDBC() error {
 		return fmt.Errorf("loading spells: %w", err)
 	}
 	dbcInstance.LoadSpellScaling()
+	dbcInstance.LoadShieldBlockValues()
 	return nil
 }
 

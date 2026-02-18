@@ -194,7 +194,7 @@ export class Encounter {
 			stats: Stats.fromMap({
 				[Stat.StatArmor]: 7685,
 				[Stat.StatAttackPower]: 320,
-				[Stat.StatHealth]: 4552800,
+				[Stat.StatHealth]: 6070400,
 			}).asProtoArray(),
 			minBaseDamage: 3000,
 			damageSpread: 0.4,

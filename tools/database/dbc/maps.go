@@ -318,6 +318,7 @@ func ClassNameFromDBC(dbc DbcClass) string {
 }
 func getMatchingRatingMods(value int) []RatingModType {
 	allMods := []RatingModType{
+		RATING_MOD_DEFENSE,
 		RATING_MOD_DODGE,
 		RATING_MOD_PARRY,
 		RATING_MOD_BLOCK,

@@ -184,14 +184,14 @@ func DemoralizingRoarAura(target *Unit, improved bool) *Aura {
 		apReduction *= 1.4
 	}
 
-	return statsDebuff(target, "Demoralizing Roar", 26998, stats.Stats{stats.AttackPower: apReduction}, time.Second*30)
+	return statsDebuff(target, "Demoralizing Roar", 26998, stats.Stats{stats.AttackPower: -apReduction}, time.Second*30)
 }
 
 func DemoralizingShoutAura(target *Unit, boomingVoicePoints int32, improvedDemoShoutPoints int32) *Aura {
 	apReduction := 300.0 * (1 + 0.1*float64(improvedDemoShoutPoints))
 	duration := time.Duration(float64(time.Second*30) * (1 + 0.1*float64(boomingVoicePoints)))
 
-	return statsDebuff(target, "Demoralizing Shout", 25203, stats.Stats{stats.AttackPower: apReduction}, duration)
+	return statsDebuff(target, "Demoralizing Shout", 25203, stats.Stats{stats.AttackPower: -apReduction}, duration)
 }
 
 func SlowAura(target *Unit) *Aura {
@@ -265,11 +265,27 @@ func FaerieFireAura(target *Unit, improved bool) *Aura {
 }
 
 func GiftOfArthasAura(target *Unit) *Aura {
-	return target.GetOrRegisterAura(Aura{
+	var effect *ExclusiveEffect
+	aura := target.GetOrRegisterAura(Aura{
 		Label:    "Gift of Arthas",
 		ActionID: ActionID{SpellID: 11374},
 		Duration: time.Minute * 3,
-	}).AttachAdditivePseudoStatBuff(&target.PseudoStats.BonusPhysicalDamageTaken, 8)
+		OnGain: func(aura *Aura, sim *Simulation) {
+			effect.SetPriority(sim, 8)
+		},
+	})
+
+	effect = aura.NewExclusiveEffect("GiftOfArthasAura", true, ExclusiveEffect{
+		Priority: 0,
+		OnGain: func(ee *ExclusiveEffect, s *Simulation) {
+			ee.Aura.Unit.PseudoStats.BonusPhysicalDamageTaken += ee.Priority
+		},
+		OnExpire: func(ee *ExclusiveEffect, s *Simulation) {
+			ee.Aura.Unit.PseudoStats.BonusPhysicalDamageTaken -= ee.Priority
+		},
+	})
+
+	return aura
 }
 
 func HemorrhageAura(target *Unit, uptime float64) *Aura {
@@ -657,13 +673,13 @@ func damageDealtDebuff(target *Unit, label string, spellID int32, schools []stat
 
 		OnGain: func(aura *Aura, sim *Simulation) {
 			for _, school := range schools {
-				target.PseudoStats.SchoolDamageDealtMultiplier[school] *= 1.0 - multiplier
+				target.PseudoStats.SchoolDamageDealtMultiplier[school] *= multiplier
 			}
 		},
 
 		OnExpire: func(aura *Aura, sim *Simulation) {
 			for _, school := range schools {
-				target.PseudoStats.SchoolDamageDealtMultiplier[school] /= 1.0 - multiplier
+				target.PseudoStats.SchoolDamageDealtMultiplier[school] /= multiplier
 			}
 		},
 	})

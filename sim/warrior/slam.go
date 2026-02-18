@@ -30,7 +30,7 @@ func (war *Warrior) registerSlam() {
 			IgnoreHaste: true,
 			ModifyCast: func(sim *core.Simulation, spell *core.Spell, cast *core.Cast) {
 				if cast.CastTime > 0 {
-					war.AutoAttacks.DelayMeleeBy(sim, cast.CastTime)
+					war.AutoAttacks.StopMeleeUntil(sim, sim.CurrentTime+cast.CastTime)
 				}
 			},
 		},

@@ -495,6 +495,7 @@ message PartyBuffs {
 	bool tranquil_air_totem = 26;
 
 	TristateEffect windfury_totem = 27;
+	bool totem_twisting = 34;
 
 	TristateEffect battle_shout = 28;
 	bool bs_solarian_sapphire = 29;
@@ -524,8 +525,6 @@ message IndividualBuffs {
 	// How many of each of these buffs the player will be receiving.
 	int32 innervates = 8;
 	int32 power_infusions = 9;
-
-	double inspiration_uptime = 10;
 }
 
 message Debuffs {
@@ -582,6 +581,7 @@ message ConsumesSpec {
 	bool scroll_arm = 17;
 	bool pet_scroll_agi = 18;
 	bool pet_scroll_str = 19;
+	bool nightmare_seed = 20;
 }
 
 enum MobType {
@@ -828,6 +828,8 @@ message HealingModel {
 	double absorb_frac = 5;
 	// TMI burst window bin size
 	int32 burst_window = 3;
+	// % Inspiration buff uptime
+	double inspiration_uptime = 6;
 }
 
 message CustomRotation {
