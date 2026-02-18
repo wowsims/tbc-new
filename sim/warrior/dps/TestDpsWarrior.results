@@ -54,152 +54,160 @@ character_stats_results: {
 dps_results: {
  key: "TestDpsWarrior-AllItems-BlackenedNaaruSliver-34427"
  value: {
-  dps: 2371.39131
-  tps: 1789.29313
+  dps: 2356.81617
+  tps: 1776.31424
+  dtps: 8.36948
+ }
+}
+dps_results: {
+ key: "TestDpsWarrior-AllItems-Blinkstrike-31332"
+ value: {
+  dps: 2164.59646
+  tps: 1631.5485
   dtps: 8.36948
  }
 }
 dps_results: {
  key: "TestDpsWarrior-AllItems-DarkmoonCard:Crusade-31856"
  value: {
-  dps: 2174.90216
-  tps: 1640.52801
+  dps: 2160.19528
+  tps: 1626.9794
   dtps: 8.36948
  }
 }
 dps_results: {
  key: "TestDpsWarrior-AllItems-DarkmoonCard:Vengeance-31858"
  value: {
-  dps: 2131.50212
-  tps: 1609.05879
+  dps: 2108.84453
+  tps: 1590.07282
   dtps: 8.36948
  }
 }
 dps_results: {
  key: "TestDpsWarrior-AllItems-DarkmoonCard:Wrath-31857"
  value: {
-  dps: 2158.81634
-  tps: 1630.49254
+  dps: 2145.44777
+  tps: 1617.69483
   dtps: 8.36948
  }
 }
 dps_results: {
  key: "TestDpsWarrior-AllItems-EnchantWeapon-Deathfrost-3273"
  value: {
-  dps: 1993.02897
-  tps: 1502.69871
+  dps: 1966.8882
+  tps: 1480.7986
   dtps: 8.36948
  }
 }
 dps_results: {
  key: "TestDpsWarrior-AllItems-EnchantWeapon-Executioner-3225"
  value: {
-  dps: 2033.17208
-  tps: 1531.26679
+  dps: 2033.51462
+  tps: 1530.37797
   dtps: 8.36948
  }
 }
 dps_results: {
  key: "TestDpsWarrior-AllItems-EyeofMagtheridon-28789"
  value: {
-  dps: 2131.50212
-  tps: 1609.05879
+  dps: 2108.84453
+  tps: 1590.07282
   dtps: 8.36948
  }
 }
 dps_results: {
  key: "TestDpsWarrior-AllItems-HourglassoftheUnraveller-28034"
  value: {
-  dps: 2233.68168
-  tps: 1688.73463
+  dps: 2187.87084
+  tps: 1650.45438
   dtps: 8.36948
  }
 }
 dps_results: {
  key: "TestDpsWarrior-AllItems-PrismofInnerCalm-30621"
  value: {
-  dps: 2130.08251
-  tps: 1608.53069
+  dps: 2113.06756
+  tps: 1594.01949
   dtps: 8.36948
  }
 }
 dps_results: {
  key: "TestDpsWarrior-AllItems-SextantofUnstableCurrents-30626"
  value: {
-  dps: 2131.50212
-  tps: 1609.05879
+  dps: 2108.84453
+  tps: 1590.07282
   dtps: 8.36948
  }
 }
 dps_results: {
  key: "TestDpsWarrior-AllItems-Solarian'sSapphire-30446"
  value: {
-  dps: 2131.50212
-  tps: 1609.05879
+  dps: 2108.84453
+  tps: 1590.07282
   dtps: 8.36948
  }
 }
 dps_results: {
  key: "TestDpsWarrior-AllItems-SpyglassoftheHiddenFleet-30620"
  value: {
-  dps: 2131.50212
-  tps: 1609.05879
+  dps: 2108.84453
+  tps: 1590.07282
   dtps: 8.36948
  }
 }
 dps_results: {
  key: "TestDpsWarrior-AllItems-SwiftWindfireDiamond"
  value: {
-  dps: 2112.67506
-  tps: 1595.07575
+  dps: 2137.6216
+  tps: 1612.80456
   dtps: 8.30018
  }
 }
 dps_results: {
  key: "TestDpsWarrior-AllItems-TheLightningCapacitor-28785"
  value: {
-  dps: 2131.50212
-  tps: 1609.05879
+  dps: 2108.84453
+  tps: 1590.07282
   dtps: 8.36948
  }
 }
 dps_results: {
  key: "TestDpsWarrior-AllItems-WastewalkerArmor"
  value: {
-  dps: 1881.53041
-  tps: 1422.92951
+  dps: 1826.32563
+  tps: 1380.00583
   dtps: 8.30018
  }
 }
 dps_results: {
  key: "TestDpsWarrior-Average-Default"
  value: {
-  dps: 2181.76222
-  tps: 1646.03061
+  dps: 2167.36568
+  tps: 1633.86833
   dtps: 8.3819
  }
 }
 dps_results: {
  key: "TestDpsWarrior-Settings-Human-p1_fury-Fury-fury-FullBuffs-25.0yards-LongMultiTarget"
  value: {
-  dps: 10771.17415
-  tps: 7976.55732
+  dps: 10716.86903
+  tps: 7928.85799
   dtps: 123.19259
  }
 }
 dps_results: {
  key: "TestDpsWarrior-Settings-Human-p1_fury-Fury-fury-FullBuffs-25.0yards-LongSingleTarget"
  value: {
-  dps: 2278.05822
-  tps: 1721.39442
+  dps: 2270.49087
+  tps: 1714.31475
   dtps: 8.36948
  }
 }
 dps_results: {
  key: "TestDpsWarrior-Settings-Human-p1_fury-Fury-fury-FullBuffs-25.0yards-ShortSingleTarget"
  value: {
-  dps: 2739.08542
-  tps: 2066.83846
+  dps: 2757.39688
+  tps: 2081.34536
   dtps: 25.10843
  }
 }
@@ -227,24 +235,24 @@ dps_results: {
 dps_results: {
  key: "TestDpsWarrior-Settings-Human-preraid_fury-Fury-fury-FullBuffs-25.0yards-LongMultiTarget"
  value: {
-  dps: 10524.58159
-  tps: 7791.53033
+  dps: 10539.06748
+  tps: 7798.58284
   dtps: 123.19259
  }
 }
 dps_results: {
  key: "TestDpsWarrior-Settings-Human-preraid_fury-Fury-fury-FullBuffs-25.0yards-LongSingleTarget"
  value: {
-  dps: 2176.42243
-  tps: 1647.55105
+  dps: 2162.80706
+  tps: 1634.74747
   dtps: 8.36948
  }
 }
 dps_results: {
  key: "TestDpsWarrior-Settings-Human-preraid_fury-Fury-fury-FullBuffs-25.0yards-ShortSingleTarget"
  value: {
-  dps: 2644.3691
-  tps: 1995.79726
+  dps: 2690.32018
+  tps: 2030.50706
   dtps: 25.10843
  }
 }
@@ -272,24 +280,24 @@ dps_results: {
 dps_results: {
  key: "TestDpsWarrior-Settings-Orc-p1_fury-Fury-fury-FullBuffs-25.0yards-LongMultiTarget"
  value: {
-  dps: 10732.21511
-  tps: 7944.4546
+  dps: 10658.00892
+  tps: 7890.1841
   dtps: 123.19259
  }
 }
 dps_results: {
  key: "TestDpsWarrior-Settings-Orc-p1_fury-Fury-fury-FullBuffs-25.0yards-LongSingleTarget"
  value: {
-  dps: 2290.9103
-  tps: 1727.58611
+  dps: 2270.09158
+  tps: 1711.39883
   dtps: 8.36948
  }
 }
 dps_results: {
  key: "TestDpsWarrior-Settings-Orc-p1_fury-Fury-fury-FullBuffs-25.0yards-ShortSingleTarget"
  value: {
-  dps: 2734.38709
-  tps: 2058.61718
+  dps: 2720.27372
+  tps: 2049.14671
   dtps: 25.10843
  }
 }
@@ -317,24 +325,24 @@ dps_results: {
 dps_results: {
  key: "TestDpsWarrior-Settings-Orc-preraid_fury-Fury-fury-FullBuffs-25.0yards-LongMultiTarget"
  value: {
-  dps: 10569.1977
-  tps: 7820.359
+  dps: 10506.72888
+  tps: 7769.98727
   dtps: 123.19259
  }
 }
 dps_results: {
  key: "TestDpsWarrior-Settings-Orc-preraid_fury-Fury-fury-FullBuffs-25.0yards-LongSingleTarget"
  value: {
-  dps: 2158.695
-  tps: 1630.64437
+  dps: 2164.59646
+  tps: 1631.5485
   dtps: 8.36948
  }
 }
 dps_results: {
  key: "TestDpsWarrior-Settings-Orc-preraid_fury-Fury-fury-FullBuffs-25.0yards-ShortSingleTarget"
  value: {
-  dps: 2637.41545
-  tps: 1990.7657
+  dps: 2633.11261
+  tps: 1984.22066
   dtps: 25.10843
  }
 }
@@ -362,8 +370,8 @@ dps_results: {
 dps_results: {
  key: "TestDpsWarrior-SwitchInFrontOfTarget-Default"
  value: {
-  dps: 1787.17642
-  tps: 1344.65422
+  dps: 1847.0279
+  tps: 1387.69963
   dtps: 8.36948
  }
 }

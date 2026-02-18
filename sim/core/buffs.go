@@ -690,6 +690,7 @@ func WindfuryTotemAura(char *Character, isImpoved bool) *Aura {
 		},
 	})
 
+	var windfurySpell *Spell
 	wfProcTrigger := char.MakeProcTriggerAura(ProcTrigger{
 		Name:               "Windfury Totem",
 		MetricsActionID:    ActionID{SpellID: 25587},
@@ -707,8 +708,12 @@ func WindfuryTotemAura(char *Character, isImpoved bool) *Aura {
 			} else {
 				wfProcAura.SetStacks(sim, 2)
 			}
-			char.AutoAttacks.MHAuto().Cast(sim, result.Target)
+			char.AutoAttacks.MaybeReplaceMHSwing(sim, windfurySpell).Cast(sim, result.Target)
 		},
+	}).ApplyOnInit(func(aura *Aura, sim *Simulation) {
+		config := *char.AutoAttacks.MHConfig()
+		config.ActionID = config.ActionID.WithTag(25584)
+		windfurySpell = char.GetOrRegisterSpell(config)
 	}).ApplyOnReset(func(aura *Aura, sim *Simulation) {
 		aura.Activate(sim)
 		StartPeriodicAction(sim, PeriodicActionOptions{
