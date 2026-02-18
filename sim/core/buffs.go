@@ -702,7 +702,7 @@ func WindfuryTotemAura(char *Character, isImpoved bool) *Aura {
 		TriggerImmediately: true,
 		Handler: func(sim *Simulation, spell *Spell, result *SpellResult) {
 			wfProcAura.Activate(sim)
-			if spell.ProcMask.Matches(ProcMaskMeleeMHAuto) {
+			if spell.ProcMask == ProcMaskMeleeMHAuto {
 				wfProcAura.SetStacks(sim, 1)
 			} else {
 				wfProcAura.SetStacks(sim, 2)
