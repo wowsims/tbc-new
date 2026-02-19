@@ -20,6 +20,7 @@ import { implementedSpecs } from './presets';
 import { RaidPicker } from './raid_picker';
 import { RaidTab } from './raid_tab';
 import { SettingsTab } from './settings_tab';
+import { LOCAL_STORAGE_PREFIX } from '../core/constants/other';
 export interface RaidSimConfig {
 	knownIssues?: Array<string>;
 }
@@ -230,10 +231,10 @@ export class RaidSimUI extends SimUI {
 
 	// Returns the actual key to use for local storage, based on the given key part and the site context.
 	getStorageKey(keyPart: string): string {
-		return '__tbc_new_raid__' + keyPart;
+		return `${LOCAL_STORAGE_PREFIX}_raid__` + keyPart;
 	}
 
 	getSavedRaidStorageKey(): string {
-		return this.getStorageKey('__savedRaid__');
+		return this.getStorageKey(`${LOCAL_STORAGE_PREFIX}_savedRaid__`);
 	}
 }
