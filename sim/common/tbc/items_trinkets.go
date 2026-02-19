@@ -11,13 +11,13 @@ func init() {
 	// Hourglass of the Unraveller
 	core.NewItemEffect(28034, func(agent core.Agent) {
 		character := agent.GetCharacter()
-		duration := time.Second * 6
+		duration := time.Second * 10
 		value := 300.0
 
 		aura := character.NewTemporaryStatsAura(
 			"Rage of the Unraveller",
 			core.ActionID{SpellID: 33649},
-			stats.Stats{stats.MeleeHasteRating: value},
+			stats.Stats{stats.AttackPower: value, stats.RangedAttackPower: value},
 			duration,
 		)
 

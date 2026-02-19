@@ -256,6 +256,7 @@ func (rogue *Rogue) registerSwordSpecialization() {
 		return rogue.NewFixedProcChanceManager(0.01*float64(rogue.Talents.SwordSpecialization), rogue.GetProcMaskForTypes(proto.WeaponType_WeaponTypeSword))
 	}
 
+	var swordSpecializationSpell *core.Spell
 	procTrigger := rogue.MakeProcTriggerAura(core.ProcTrigger{
 		Name:               "Sword Spec Proc Trigger",
 		ActionID:           core.ActionID{SpellID: 13964},
@@ -265,8 +266,15 @@ func (rogue *Rogue) registerSwordSpecialization() {
 		TriggerImmediately: true,
 		DPM:                swordSpecDPM(),
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			rogue.AutoAttacks.MHAuto().Cast(sim, result.Target)
+			rogue.AutoAttacks.MaybeReplaceMHSwing(sim, swordSpecializationSpell).Cast(sim, result.Target)
 		},
+	})
+
+	procTrigger.ApplyOnInit(func(aura *core.Aura, sim *core.Simulation) {
+		config := *rogue.AutoAttacks.MHConfig()
+		config.ActionID = config.ActionID.WithTag(12281)
+		config.Flags |= core.SpellFlagPassiveSpell
+		swordSpecializationSpell = rogue.GetOrRegisterSpell(config)
 	})
 
 	rogue.RegisterItemSwapCallback(core.AllMeleeWeaponSlots(), func(sim *core.Simulation, slot proto.ItemSlot) {

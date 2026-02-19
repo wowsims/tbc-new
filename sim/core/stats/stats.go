@@ -59,6 +59,7 @@ const (
 	FrostResistance
 	NatureResistance
 	ShadowResistance
+	PhysicalDamage
 	// end of Stat enum in proto/common.proto
 
 	// The remaining stats below are stored as PseudoStats rather than as
@@ -218,6 +219,8 @@ func (s Stat) StatName() string {
 		return "NatureResistance"
 	case ShadowResistance:
 		return "ShadowResistance"
+	case PhysicalDamage:
+		return "PhysicalDamage"
 	}
 
 	return "none"
@@ -442,10 +445,6 @@ type PseudoStats struct {
 
 	// If true, allows block/parry.
 	InFrontOfTarget bool
-
-	// "Apply Aura: Mod Damage Done (Physical)", applies to abilities with EffectSpellCoefficient > 0.
-	//  This includes almost all "(Normalized) Weapon Damage", but also some "School Damage (Physical)" abilities.
-	BonusDamage float64 // Comes from '+X Weapon Damage' effects
 
 	BonusMHDps     float64
 	BonusOHDps     float64

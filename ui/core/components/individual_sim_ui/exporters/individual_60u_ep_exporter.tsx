@@ -1,3 +1,4 @@
+import { stat } from 'fs';
 import { IndividualSimUI } from '../../../individual_sim_ui';
 import { PseudoStat, Spec, Stat } from '../../../proto/common';
 import { UnitStat } from '../../../proto_utils/stats';
@@ -70,6 +71,7 @@ export class Individual60UEPExporter<SpecType extends Spec> extends IndividualEx
 		[Stat.StatHolyDamage]: 'holyDamage',
 		[Stat.StatNatureDamage]: 'natureDamage',
 		[Stat.StatShadowDamage]: 'shadowDamage',
+		[Stat.StatPhysicalDamage]: 'physicalDamage',
 		[Stat.StatSpellHitRating]: 'spellHitRating',
 		[Stat.StatSpellCritRating]: 'spellCritRating',
 		[Stat.StatSpellHasteRating]: 'spellHasteRating',

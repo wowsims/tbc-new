@@ -239,6 +239,8 @@ func ConvertTargetResistanceFlagToPenetrationStat(flag int) proto.Stat {
 
 func ConvertSpellDamageFlagToSchoolDamageStat(flag int) proto.Stat {
 	switch flag {
+	case 1:
+		return proto.Stat_StatPhysicalDamage
 	case 2:
 		return proto.Stat_StatHolyDamage
 	case 4:

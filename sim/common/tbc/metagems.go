@@ -62,7 +62,7 @@ func init() {
 	// +3 Melee Damage & Chance to Stun Target
 	core.NewItemEffect(25899, func(agent core.Agent) {
 		character := agent.GetCharacter()
-		character.PseudoStats.BonusDamage += 3
+		character.AddStat(stats.PhysicalDamage, 3)
 	})
 
 	// Insightful Earthstorm Diamond
