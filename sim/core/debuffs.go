@@ -48,7 +48,19 @@ func applyDebuffEffects(target *Unit, targetIdx int, debuffs *proto.Debuffs, rai
 	}
 
 	if debuffs.HuntersMark != proto.TristateEffect_TristateEffectMissing {
-		HuntersMarkAura(target, IsImproved(debuffs.HuntersMark))
+		aura := HuntersMarkAura(target, IsImproved(debuffs.HuntersMark))
+
+		ScheduledAura(aura, PeriodicActionOptions{
+			Period:   time.Second * 1,
+			NumTicks: 5,
+			Priority: ActionPriorityDOT,
+			OnAction: func(sim *Simulation) {
+				aura.Activate(sim)
+				if aura.IsActive() {
+					aura.SetStacks(sim, aura.GetStacks()+6)
+				}
+			},
+		}, raid)
 	}
 
 	if debuffs.ImprovedScorch {
@@ -102,7 +114,7 @@ func applyDebuffEffects(target *Unit, targetIdx int, debuffs *proto.Debuffs, rai
 	if debuffs.ExposeArmor != proto.TristateEffect_TristateEffectMissing {
 		aura := MakePermanent(ExposeArmorAura(target, func() int32 { return 5 }, TernaryInt32(debuffs.ExposeArmor == 2, 2, 0)))
 
-		ScheduledMajorArmorAura(aura, PeriodicActionOptions{
+		ScheduledAura(aura, PeriodicActionOptions{
 			Period:   time.Second * 3,
 			NumTicks: 1,
 			OnAction: func(sim *Simulation) {
@@ -114,7 +126,7 @@ func applyDebuffEffects(target *Unit, targetIdx int, debuffs *proto.Debuffs, rai
 	if debuffs.SunderArmor {
 		aura := MakePermanent(SunderArmorAura(target))
 
-		ScheduledMajorArmorAura(aura, PeriodicActionOptions{
+		ScheduledAura(aura, PeriodicActionOptions{
 			Period:          GCDDefault,
 			NumTicks:        5,
 			TickImmediately: true,
@@ -137,7 +149,7 @@ func applyDebuffEffects(target *Unit, targetIdx int, debuffs *proto.Debuffs, rai
 	}
 }
 
-func ScheduledMajorArmorAura(aura *Aura, options PeriodicActionOptions, raid *proto.Raid) {
+func ScheduledAura(aura *Aura, options PeriodicActionOptions, raid *proto.Raid) {
 	aura.OnReset = func(aura *Aura, sim *Simulation) {
 		aura.Duration = NeverExpires
 		StartPeriodicAction(sim, options)
@@ -304,25 +316,31 @@ func HemorrhageAura(target *Unit, uptime float64) *Aura {
 }
 
 func HuntersMarkAura(target *Unit, improved bool) *Aura {
-	maxBonus := 440.0
+	initialBonus := 110.0
+	bonusPerStack := 11.0
 
+	var effect *ExclusiveEffect
 	hasAura := target.HasAura("Hunters Mark")
 	aura := target.RegisterAura(Aura{
-		Label:    "Hunters Mark",
-		Tag:      "HuntersMark",
-		ActionID: ActionID{SpellID: 14325},
-		Duration: time.Minute * 2,
+		Label:     "Hunters Mark",
+		Tag:       "HuntersMark",
+		ActionID:  ActionID{SpellID: 14325},
+		Duration:  time.Minute * 2,
+		MaxStacks: 30,
+		OnStacksChange: func(aura *Aura, sim *Simulation, oldStacks int32, newStacks int32) {
+			effect.SetPriority(sim, initialBonus+bonusPerStack*float64(newStacks))
+		},
 	})
 
-	aura.NewExclusiveEffect("HuntersMark", true, ExclusiveEffect{
-		Priority: maxBonus,
+	effect = aura.NewExclusiveEffect("HuntersMark", true, ExclusiveEffect{
+		Priority: initialBonus,
 		OnGain: func(ee *ExclusiveEffect, sim *Simulation) {
 			for _, unit := range target.Env.AllUnits {
 				if unit.Type == PlayerUnit || unit.Type == PetUnit {
 					if improved {
-						unit.PseudoStats.BonusAttackPower += maxBonus
+						unit.PseudoStats.BonusAttackPower += ee.Priority
 					}
-					unit.PseudoStats.BonusRangedAttackPower += maxBonus
+					unit.PseudoStats.BonusRangedAttackPower += ee.Priority
 				}
 			}
 		},
@@ -330,9 +348,9 @@ func HuntersMarkAura(target *Unit, improved bool) *Aura {
 			for _, unit := range target.Env.AllUnits {
 				if unit.Type == PlayerUnit || unit.Type == PetUnit {
 					if improved {
-						unit.PseudoStats.BonusAttackPower -= maxBonus
+						unit.PseudoStats.BonusAttackPower -= ee.Priority
 					}
-					unit.PseudoStats.BonusRangedAttackPower -= maxBonus
+					unit.PseudoStats.BonusRangedAttackPower -= ee.Priority
 				}
 			}
 		},
