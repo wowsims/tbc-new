@@ -25,7 +25,8 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 		Stat.StatMeleeHitRating,
 		Stat.StatArmorPenetration,
 		Stat.StatExpertiseRating,
-		Stat.StatAttackPower
+		Stat.StatAttackPower,
+		Stat.StatPhysicalDamage,
 	],
 	epPseudoStats: [PseudoStat.PseudoStatMainHandDps, PseudoStat.PseudoStatOffHandDps],
 	// Reference stat against which to calculate EP.
@@ -76,6 +77,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 			faerieFire: TristateEffect.TristateEffectImproved,
 			exposeWeaknessUptime: 0.9,
 			exposeWeaknessHunterAgility: 1080,
+			giftOfArthas: true,
 		}),
 	},
 

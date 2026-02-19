@@ -166,7 +166,7 @@ enum Profession {
 // the Go Stats array to be larger than the size of the Stat enum proto, but the
 // shared indices between the two must exactly match.
 //
-// NextIndex: 41;
+// NextIndex: 42;
 enum Stat {
 	// Primary attributes ("main stat")
 	StatStrength = 0;
@@ -225,6 +225,8 @@ enum Stat {
 	StatNatureResistance = 39;
 	StatShadowResistance = 40;
 
+	StatPhysicalDamage = 41;
+
 	// DO NOT add new stats here without discussing it first; new stats come
 	// with a performance penalty.
 
@@ -263,32 +265,31 @@ enum PseudoStat {
 	PseudoStatBlockValueMultiplier = 3;
 	PseudoStatDodgePercent = 4;
 	PseudoStatParryPercent = 5;
-	BonusPhysicalDamage = 6;
 
 	// Spell School Hit
-	PseudoStatSchoolHitArcane = 7;
-	PseudoStatSchoolHitFire = 8;
-	PseudoStatSchoolHitFrost = 9;
-	PseudoStatSchoolHitHoly = 10;
-	PseudoStatSchoolHitNature = 11;
-	PseudoStatSchoolHitShadow = 12;
+	PseudoStatSchoolHitArcane = 6;
+	PseudoStatSchoolHitFire = 7;
+	PseudoStatSchoolHitFrost = 8;
+	PseudoStatSchoolHitHoly = 9;
+	PseudoStatSchoolHitNature = 10;
+	PseudoStatSchoolHitShadow = 11;
 
-	PseudoStatMeleeHitPercent = 13;
-	PseudoStatSpellHitPercent = 14;
-	PseudoStatMeleeCritPercent = 15;
-	PseudoStatSpellCritPercent = 16;
-	PseudoStatBlockPercent = 17;
+	PseudoStatMeleeHitPercent = 12;
+	PseudoStatSpellHitPercent = 13;
+	PseudoStatMeleeCritPercent = 14;
+	PseudoStatSpellCritPercent = 15;
+	PseudoStatBlockPercent = 16;
 
-	PseudoStatMeleeSpeedMultiplier = 18;
-	PseudoStatRangedSpeedMultiplier = 19;
-	PseudoStatCastSpeedMultiplier = 20;
-	PseudoStatMeleeHastePercent = 21;
-	PseudoStatRangedHastePercent = 22;
-	PseudoStatSpellHastePercent = 23;
-	PseudoStatBlockValuePerStrength = 24;
+	PseudoStatMeleeSpeedMultiplier = 17;
+	PseudoStatRangedSpeedMultiplier = 18;
+	PseudoStatCastSpeedMultiplier = 19;
+	PseudoStatMeleeHastePercent = 20;
+	PseudoStatRangedHastePercent = 21;
+	PseudoStatSpellHastePercent = 22;
+	PseudoStatBlockValuePerStrength = 23;
 
-	PseudoStatRangedHitPercent = 25;
-	PseudoStatRangedCritPercent = 26;
+	PseudoStatRangedHitPercent = 24;
+	PseudoStatRangedCritPercent = 25;
 }
 
 message UnitStats {

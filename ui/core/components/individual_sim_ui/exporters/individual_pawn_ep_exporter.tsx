@@ -73,6 +73,7 @@ export class IndividualPawnEPExporter<SpecType extends Spec> extends IndividualE
 		[Stat.StatHolyDamage]: '',
 		[Stat.StatNatureDamage]: '',
 		[Stat.StatShadowDamage]: '',
+		[Stat.StatPhysicalDamage]: '',
 		[Stat.StatSpellHitRating]: '',
 		[Stat.StatSpellCritRating]: '',
 		[Stat.StatSpellHasteRating]: '',

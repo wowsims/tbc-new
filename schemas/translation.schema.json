@@ -732,6 +732,9 @@
             },
             "shadow_resistance": {
               "type": "string"
+            },
+            "physical_damage": {
+              "type": "string"
             }
           },
           "additionalProperties": false,
@@ -797,7 +800,8 @@
             "frost_resistance",
             "fire_resistance",
             "nature_resistance",
-            "shadow_resistance"
+            "shadow_resistance",
+            "physical_damage"
           ]
         },
         "currency": {
