@@ -1812,6 +1812,22 @@
                 "tooltip"
               ]
             },
+            "inspiration_uptime": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string"
+                },
+                "tooltip": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "label",
+                "tooltip"
+              ]
+            },
             "incoming_hps": {
               "type": "object",
               "properties": {
@@ -2327,6 +2343,7 @@
             "in_front_of_target",
             "distance_from_target",
             "tank_assignment",
+            "inspiration_uptime",
             "incoming_hps",
             "healing_cadence",
             "healing_cadence_variation",

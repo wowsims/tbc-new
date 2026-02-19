@@ -136,8 +136,7 @@ func (weapon *Weapon) EnemyWeaponDamage(sim *Simulation, attackPower float64, da
 	// TODO: Scrape more logs to determine these values more accurately. AP defined in constants.go
 
 	rand := 1 + damageSpread*sim.RandomFloat("Enemy Weapon Damage")
-
-	return weapon.BaseDamageMin * (rand + attackPower*EnemyAutoAttackAPCoefficient)
+	return weapon.BaseDamageMin * (rand + max(0, attackPower*EnemyAutoAttackAPCoefficient))
 }
 
 func (weapon *Weapon) BaseDamage(sim *Simulation) float64 {

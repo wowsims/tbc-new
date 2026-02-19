@@ -16,7 +16,8 @@
 		"chancetospellcritbase",
 		"combatratings",
 		"octbasempbyclass",
-		"SpellScaling"
+		"SpellScaling",
+		"ShieldBlockRegular"
 	],
 	"Tables": [
 		"Spell",

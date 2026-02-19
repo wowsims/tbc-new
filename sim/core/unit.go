@@ -211,7 +211,7 @@ func (unit *Unit) getSpellDamageValueImpl(spell *Spell) float64 {
 }
 
 func (unit *Unit) getAttackPowerValueImpl(spell *Spell) float64 {
-	return unit.GetStat(stats.AttackPower)
+	return unit.GetStat(stats.AttackPower) + spell.Unit.PseudoStats.BonusAttackPower
 }
 
 // Units can be disabled for several reasons:
@@ -742,6 +742,7 @@ func (unit *Unit) reset(sim *Simulation, _ Agent) {
 	unit.stats = unit.initialStats
 	unit.PseudoStats = unit.initialPseudoStats
 	unit.auraTracker.reset(sim)
+
 	for _, spell := range unit.Spellbook {
 		spell.reset(sim)
 	}

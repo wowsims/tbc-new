@@ -422,6 +422,11 @@ export const BUFFS_CONFIG = [
 		stats: [Stat.StatStamina, Stat.StatArmor],
 	},
 	{
+		config: ShadowProtection,
+		picker: IconPicker,
+		stats: [Stat.StatShadowResistance, Stat.StatStamina],
+	},
+	{
 		config: Innervate,
 		picker: IconPicker,
 		stats: [Stat.StatMP5],

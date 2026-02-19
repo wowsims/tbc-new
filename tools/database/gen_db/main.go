@@ -149,6 +149,7 @@ func main() {
 
 	var instance = dbc.GetDBC()
 	instance.LoadSpellScaling()
+	instance.LoadShieldBlockValues()
 	database.GenerateProtos(instance, db)
 
 	processItems(instance, iconsMap, names, dropSources, craftingSources, repSources, db)

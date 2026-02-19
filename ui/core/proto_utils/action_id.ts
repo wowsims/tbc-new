@@ -84,6 +84,8 @@ export class ActionId {
 					name += ' (Windfury)';
 				}  else if (this.tag == 31332) {
 					name += ' (Blinkstrike)';
+				} else if (this.tag == 17257) {
+					name += ' (Magtheridon)';
 				} else if (this.tag == 99999) {
 					name += ' (Boss)';
 				} else if (this.tag == 99998) {
