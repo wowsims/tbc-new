@@ -42,6 +42,7 @@ character_stats_results: {
   final_stats: 33.75
   final_stats: 33.75
   final_stats: 93.75
+  final_stats: 0
   final_stats: 9.19512
   final_stats: 3
   final_stats: 41.14345
@@ -118,8 +119,8 @@ dps_results: {
 dps_results: {
  key: "TestDpsWarrior-AllItems-HourglassoftheUnraveller-28034"
  value: {
-  dps: 2187.87084
-  tps: 1650.45438
+  dps: 2169.75073
+  tps: 1636.1742
   dtps: 8.36948
  }
 }

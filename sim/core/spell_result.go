@@ -351,6 +351,8 @@ func (spell *Spell) CalcDamage(sim *Simulation, target *Unit, baseDamage float64
 	attackerMultiplier := spell.AttackerDamageMultiplier(spell.Unit.AttackTables[target.UnitIndex], false)
 	if spell.BonusCoefficient > 0 {
 		baseDamage += spell.BonusCoefficient * spell.BonusDamage(attackTable)
+	} else if spell.SpellSchool.Matches(SpellSchoolPhysical) {
+		baseDamage += spell.BonusDamage(attackTable)
 	}
 	return spell.calcDamageInternal(sim, target, baseDamage, attackerMultiplier, false, outcomeApplier)
 }
