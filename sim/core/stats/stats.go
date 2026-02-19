@@ -219,6 +219,8 @@ func (s Stat) StatName() string {
 		return "NatureResistance"
 	case ShadowResistance:
 		return "ShadowResistance"
+	case PhysicalDamage:
+		return "PhysicalDamage"
 	}
 
 	return "none"

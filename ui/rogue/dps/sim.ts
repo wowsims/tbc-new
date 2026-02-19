@@ -78,6 +78,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 			exposeWeaknessUptime: 0.9,
 			exposeWeaknessHunterAgility: 1080,
 			giftOfArthas: true,
+			sunderArmor: true,
 		}),
 	},
 
