@@ -112,6 +112,8 @@ func (rogue *Rogue) registerGhostlyStrike() {
 		CritMultiplier:   rogue.DefaultMeleeCritMultiplier(),
 		ThreatMultiplier: 1,
 
+		BonusCoefficient: 1,
+
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			rogue.BreakStealth(sim)
 
@@ -259,13 +261,10 @@ func (rogue *Rogue) registerHemorrhage() {
 		CritMultiplier:   rogue.DefaultMeleeCritMultiplier(),
 		ThreatMultiplier: 1,
 
+		BonusCoefficient: 1,
+
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			rogue.BreakStealth(sim)
-
-			// Making an executive decision for modeling Hemorrhage as a solo player.
-			// Since the aura won't ever get fully consumed while solo, I'm adding the full value of all 10 stacks into the baseDamage.
-			// This more accurately models each individual Hemo's DPS contribution without needing to somehow consume the stacks.
-			// It's also easier for me to just leave it that way :)
 
 			baseDamage := rogue.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower())
 			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialHitAndCrit)
@@ -280,12 +279,12 @@ func (rogue *Rogue) registerMasterOfSubtlety() {
 	if rogue.Talents.MasterOfSubtlety == 0 {
 		return
 	}
-
+	bonus := []float64{0, 0.04, 0.07, 0.1}[rogue.Talents.MasterOfSubtlety]
 	rogue.MasterOfSubtletyAura = rogue.GetOrRegisterAura(core.Aura{
 		Label:    "Master of Subtlety",
 		ActionID: core.ActionID{SpellID: 31223},
 		Duration: time.Second * 6,
-	}).AttachAdditivePseudoStatBuff(&rogue.PseudoStats.DamageDealtMultiplier, 1.1)
+	}).AttachAdditivePseudoStatBuff(&rogue.PseudoStats.DamageDealtMultiplier, 1+bonus)
 
 	// Activated in stealth.go
 }

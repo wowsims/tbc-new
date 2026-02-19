@@ -37,6 +37,8 @@ func (rogue *Rogue) registerShivSpell() {
 		CritMultiplier:           rogue.DefaultMeleeCritMultiplier(),
 		ThreatMultiplier:         1,
 
+		BonusCoefficient: 1,
+
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			rogue.BreakStealth(sim)
 			baseDamage := spell.Unit.OHNormalizedWeaponDamage(sim, spell.MeleeAttackPower())

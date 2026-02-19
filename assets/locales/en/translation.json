@@ -198,7 +198,8 @@
 			"frost_resistance": "Frost Resistance",
 			"fire_resistance": "Fire Resistance",
 			"nature_resistance": "Nature Resistance",
-			"shadow_resistance": "Shadow Resistance"
+			"shadow_resistance": "Shadow Resistance",
+			"physical_damage": "Bonus Weapon Damage"
 		},
 		"currency": {
 			"valorPoints": "Valor Points",
