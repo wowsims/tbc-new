@@ -262,19 +262,37 @@ func (war *Warrior) registerPoleaxeSpecialization() {
 		FloatValue: 1 * float64(war.Talents.PoleaxeSpecialization),
 	})
 
+	mainhandWWOhCritMod := war.AddDynamicMod(core.SpellModConfig{
+		Kind:       core.SpellMod_BonusCrit_Percent,
+		ClassMask:  SpellMaskWhirlwindOh,
+		FloatValue: 1 * float64(war.Talents.PoleaxeSpecialization),
+	})
+
+	offhandWWOhCritMod := war.AddDynamicMod(core.SpellModConfig{
+		Kind:       core.SpellMod_BonusCrit_Percent,
+		ClassMask:  SpellMaskWhirlwindOh,
+		FloatValue: -1 * float64(war.Talents.PoleaxeSpecialization),
+	})
+
 	handleEquippedWeapons := func() {
 		if isPolearmOrAxe(war.MainHand()) {
 			mhCritMod.Activate()
+			mainhandWWOhCritMod.Activate()
 		} else {
 			mhCritMod.Deactivate()
+			mainhandWWOhCritMod.Deactivate()
 		}
 
 		if isPolearmOrAxe(war.OffHand()) {
 			ohCritMod.Activate()
+			offhandWWOhCritMod.Activate()
 		} else {
 			ohCritMod.Deactivate()
+			offhandWWOhCritMod.Deactivate()
 		}
 	}
+
+	handleEquippedWeapons()
 
 	war.RegisterItemSwapCallback(core.AllMeleeWeaponSlots(), func(sim *core.Simulation, slot proto.ItemSlot) {
 		handleEquippedWeapons()

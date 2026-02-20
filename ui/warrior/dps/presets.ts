@@ -107,7 +107,7 @@ export const P1_ARMS_EP_PRESET = PresetUtils.makePresetEpWeights(
 export const FuryTalents = {
 	name: 'Fury',
 	data: SavedTalents.create({
-		talentsString: '3500501130201-05050005505012050115',
+		talentsString: '3400502130201-05050005505012050115',
 	}),
 	...FURY_PRESET_OPTIONS,
 };
