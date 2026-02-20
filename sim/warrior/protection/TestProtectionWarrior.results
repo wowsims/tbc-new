@@ -1,0 +1,478 @@
+character_stats_results: {
+ key: "TestProtectionWarrior-CharacterStats-Default"
+ value: {
+  final_stats: 514.008
+  final_stats: 456.995
+  final_stats: 1164.933
+  final_stats: 97.79
+  final_stats: 430.749
+  final_stats: 478.749
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 40
+  final_stats: 0
+  final_stats: 0
+  final_stats: 161.59
+  final_stats: 2203.8676
+  final_stats: 403
+  final_stats: 0
+  final_stats: 37
+  final_stats: 123
+  final_stats: 0
+  final_stats: 0
+  final_stats: 43.65385
+  final_stats: 271.3077
+  final_stats: 19
+  final_stats: 256.7004
+  final_stats: 327.25842
+  final_stats: 0
+  final_stats: 41
+  final_stats: 15652.329
+  final_stats: 0
+  final_stats: 17083.33
+  final_stats: 0
+  final_stats: 111.7
+  final_stats: 33.75
+  final_stats: 33.75
+  final_stats: 33.75
+  final_stats: 33.75
+  final_stats: 103.75
+  final_stats: 0
+  final_stats: 2.34634
+  final_stats: 3
+  final_stats: 28.55838
+  final_stats: 11.81185
+  final_stats: 16.96976
+  final_stats: 0
+  final_stats: 5
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-BadgeoftheSwarmguard-21670"
+ value: {
+  dps: 389.95922
+  tps: 509.18072
+  dtps: 410.03651
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-BlackenedNaaruSliver-34427"
+ value: {
+  dps: 409.72277
+  tps: 534.83404
+  dtps: 406.73072
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-Blinkstrike-31332"
+ value: {
+  dps: 399.49738
+  tps: 521.48283
+  dtps: 407.50365
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-BoldArmor"
+ value: {
+  dps: 408.8757
+  tps: 534.60284
+  dtps: 417.58207
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-BurningRage"
+ value: {
+  dps: 431.92269
+  tps: 565.44977
+  dtps: 471.76281
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-DarkmoonCard:Crusade-31856"
+ value: {
+  dps: 397.8155
+  tps: 519.39388
+  dtps: 410.03651
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-DarkmoonCard:Vengeance-31858"
+ value: {
+  dps: 389.95922
+  tps: 509.14822
+  dtps: 413.40038
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-DarkmoonCard:Wrath-31857"
+ value: {
+  dps: 395.33613
+  tps: 516.1707
+  dtps: 410.03651
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-DestroyerArmor"
+ value: {
+  dps: 435.12478
+  tps: 565.62005
+  dtps: 316.63972
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-DestroyerBattlegear"
+ value: {
+  dps: 458.51427
+  tps: 600.03543
+  dtps: 452.86593
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-DoomplateBattlegear"
+ value: {
+  dps: 431.9128
+  tps: 565.43915
+  dtps: 489.89291
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-EnchantWeapon-Deathfrost-3273"
+ value: {
+  dps: 389.51886
+  tps: 508.80479
+  dtps: 396.04246
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-EnchantWeapon-Executioner-3225"
+ value: {
+  dps: 387.88221
+  tps: 506.61061
+  dtps: 419.92725
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-EyeofMagtheridon-28789"
+ value: {
+  dps: 389.95922
+  tps: 509.18072
+  dtps: 410.03651
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-HourglassoftheUnraveller-28034"
+ value: {
+  dps: 396.25283
+  tps: 517.36241
+  dtps: 410.03651
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-OnslaughtArmor"
+ value: {
+  dps: 402.30598
+  tps: 520.13402
+  dtps: 225.65609
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-OnslaughtBattlegear"
+ value: {
+  dps: 517.22323
+  tps: 676.15001
+  dtps: 396.09583
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-PrismofInnerCalm-30621"
+ value: {
+  dps: 389.95922
+  tps: 509.18072
+  dtps: 410.03651
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-SextantofUnstableCurrents-30626"
+ value: {
+  dps: 389.95922
+  tps: 509.18072
+  dtps: 410.03651
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-Solarian'sSapphire-30446"
+ value: {
+  dps: 389.95922
+  tps: 509.18072
+  dtps: 410.03651
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-SpyglassoftheHiddenFleet-30620"
+ value: {
+  dps: 389.95922
+  tps: 509.18072
+  dtps: 410.03651
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-SwiftWindfireDiamond"
+ value: {
+  dps: 401.15199
+  tps: 523.63382
+  dtps: 407.50365
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-TheLightningCapacitor-28785"
+ value: {
+  dps: 389.95922
+  tps: 509.18072
+  dtps: 410.03651
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-Thunderfury,BlessedBladeoftheWindseeker-19019"
+ value: {
+  dps: 399.49738
+  tps: 521.48283
+  dtps: 407.50365
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-WarbringerArmor"
+ value: {
+  dps: 407.13543
+  tps: 529.73806
+  dtps: 322.30285
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-WarbringerBattlegear"
+ value: {
+  dps: 445.17835
+  tps: 582.68968
+  dtps: 447.4673
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-WastewalkerArmor"
+ value: {
+  dps: 424.7735
+  tps: 556.00088
+  dtps: 527.71858
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-Average-Default"
+ value: {
+  dps: 401.97915
+  tps: 523.60836
+  dtps: 405.34328
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-Settings-Human-p1_bis-Protection-default-FullBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 1432.02187
+  tps: 1745.20076
+  dtps: 6748.81805
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-Settings-Human-p1_bis-Protection-default-FullBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 474.77562
+  tps: 618.12154
+  dtps: 340.37638
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-Settings-Human-p1_bis-Protection-default-FullBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 452.1267
+  tps: 588.85474
+  dtps: 347.14151
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-Settings-Human-p1_bis-Protection-default-NoBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 142.48009
+  tps: 185.22411
+  dtps: 12623.68567
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-Settings-Human-p1_bis-Protection-default-NoBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 118.24366
+  tps: 153.71676
+  dtps: 641.60382
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-Settings-Human-p1_bis-Protection-default-NoBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 116.62178
+  tps: 151.60832
+  dtps: 657.05235
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-Settings-Human-preraid-Protection-default-FullBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 1363.00141
+  tps: 1679.54422
+  dtps: 7885.31998
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-Settings-Human-preraid-Protection-default-FullBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 451.83727
+  tps: 589.48539
+  dtps: 396.7382
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-Settings-Human-preraid-Protection-default-FullBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 438.47615
+  tps: 572.72132
+  dtps: 403.78977
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-Settings-Human-preraid-Protection-default-NoBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 132.79852
+  tps: 172.63808
+  dtps: 14513.6424
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-Settings-Human-preraid-Protection-default-NoBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 109.75475
+  tps: 142.68117
+  dtps: 723.63056
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-Settings-Human-preraid-Protection-default-NoBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 104.79276
+  tps: 136.23059
+  dtps: 743.00477
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-Settings-Orc-p1_bis-Protection-default-FullBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 1416.60424
+  tps: 1724.95829
+  dtps: 6772.00631
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-Settings-Orc-p1_bis-Protection-default-FullBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 470.71972
+  tps: 612.95014
+  dtps: 341.04601
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-Settings-Orc-p1_bis-Protection-default-FullBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 450.85567
+  tps: 587.29989
+  dtps: 348.47403
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-Settings-Orc-p1_bis-Protection-default-NoBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 142.57505
+  tps: 185.34757
+  dtps: 12646.9022
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-Settings-Orc-p1_bis-Protection-default-NoBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 117.57072
+  tps: 152.84193
+  dtps: 642.40136
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-Settings-Orc-p1_bis-Protection-default-NoBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 116.48578
+  tps: 151.43152
+  dtps: 657.55046
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-Settings-Orc-preraid-Protection-default-FullBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 1336.59106
+  tps: 1645.0475
+  dtps: 7908.96397
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-Settings-Orc-preraid-Protection-default-FullBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 444.58648
+  tps: 580.09564
+  dtps: 397.12271
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-Settings-Orc-preraid-Protection-default-FullBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 432.8065
+  tps: 565.29635
+  dtps: 405.33491
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-Settings-Orc-preraid-Protection-default-NoBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 131.50883
+  tps: 170.96148
+  dtps: 14548.31041
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-Settings-Orc-preraid-Protection-default-NoBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 108.24198
+  tps: 140.71457
+  dtps: 724.83003
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-Settings-Orc-preraid-Protection-default-NoBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 104.05354
+  tps: 135.26961
+  dtps: 746.48653
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-SwitchInFrontOfTarget-Default"
+ value: {
+  dps: 444.58648
+  tps: 580.09564
+  dtps: 397.12271
+ }
+}

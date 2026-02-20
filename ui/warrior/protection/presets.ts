@@ -40,17 +40,17 @@ export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
 
 // Default talents. Uses the wowhead calculator format, make the talents on
 // https://wowhead.com/tbc/talent-calc and copy the numbers in the url.
-export const StandardTalents = {
-	name: 'Standard',
+export const DefaultTalents = {
+	name: 'Default',
 	data: SavedTalents.create({
-		talentsString: '350003011-05-0055511033001103501351',
+		talentsString: '35000301302-03-0055511033001101501351',
 	}),
 };
 
 export const DefaultOptions = ProtectionWarriorOptions.create({
 	classOptions: {
 		queueDelay: 250,
-		startingRage: 0,
+		startingRage: 100,
 		defaultShout: WarriorShout.WarriorShoutCommanding,
 		defaultStance: WarriorStance.WarriorStanceDefensive,
 	},
@@ -75,3 +75,10 @@ export const OtherDefaults = {
 	profession2: Profession.Blacksmithing,
 	distanceFromTarget: 0,
 };
+
+export const P1_PRESET_BUILD = PresetUtils.makePresetBuild('P1', {
+	gear: P1_PRESET,
+	talents: DefaultTalents,
+	epWeights: P1_EP_PRESET,
+	rotation: ROTATION_DEFAULT,
+});

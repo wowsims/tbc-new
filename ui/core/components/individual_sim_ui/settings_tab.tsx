@@ -329,6 +329,16 @@ export class SettingsTab extends SimTab {
 
 		this.simUI.sim.waitForInit().then(() => {
 			savedEncounterManager.loadUserData();
+			this.simUI.individualConfig.presets.encounters?.forEach(encounter => {
+				savedEncounterManager.addSavedData({
+					name: encounter.name,
+					tooltip: encounter.tooltip,
+					isPreset: true,
+					data: SavedEncounter.create({
+						encounter: encounter.encounter,
+					}),
+				});
+			});
 			savedSettingsManager.loadUserData();
 			this.simUI.individualConfig.presets.settings?.forEach(settings => {
 				savedSettingsManager.addSavedData({

@@ -26,6 +26,7 @@ export const DefaultRaidBuffs = RaidBuffs.create({
 
 export const DefaultDebuffs = Debuffs.create({
 	improvedSealOfTheCrusader: true,
+	misery: true,
 	bloodFrenzy: true,
 	giftOfArthas: true,
 	mangle: true,
