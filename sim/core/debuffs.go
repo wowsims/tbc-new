@@ -338,7 +338,7 @@ func HuntersMarkAura(target *Unit, improved bool) *Aura {
 			for _, unit := range target.Env.AllUnits {
 				if unit.Type == PlayerUnit || unit.Type == PetUnit {
 					if improved {
-						unit.PseudoStats.BonusAttackPower += ee.Priority
+						unit.PseudoStats.BonusAttackPower += initialBonus
 					}
 					unit.PseudoStats.BonusRangedAttackPower += ee.Priority
 				}
@@ -348,7 +348,7 @@ func HuntersMarkAura(target *Unit, improved bool) *Aura {
 			for _, unit := range target.Env.AllUnits {
 				if unit.Type == PlayerUnit || unit.Type == PetUnit {
 					if improved {
-						unit.PseudoStats.BonusAttackPower -= ee.Priority
+						unit.PseudoStats.BonusAttackPower -= initialBonus
 					}
 					unit.PseudoStats.BonusRangedAttackPower -= ee.Priority
 				}
