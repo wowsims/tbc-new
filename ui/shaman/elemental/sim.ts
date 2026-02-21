@@ -1,3 +1,4 @@
+import { stat } from 'fs';
 import * as OtherInputs from '../../core/components/inputs/other_inputs.js';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui.js';
 import { Player } from '../../core/player.js';
@@ -17,18 +18,37 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecElementalShaman, {
 	warnings: [],
 
 	// All stats for which EP should be calculated.
-	epStats: [Stat.StatIntellect, Stat.StatSpirit, Stat.StatSpellDamage],
+	epStats: [
+		Stat.StatIntellect,
+		Stat.StatSpellDamage,
+		Stat.StatNatureDamage,
+		Stat.StatSpellCritRating,
+		Stat.StatSpellHasteRating,
+		Stat.StatSpellHitRating,
+		Stat.StatMP5,
+	],
 	// Reference stat against which to calculate EP.
-	epReferenceStat: Stat.StatIntellect,
+	epReferenceStat: Stat.StatSpellDamage,
 	// Which stats to display in the Character Stats section, at the bottom of the left-hand sidebar.
 	displayStats: UnitStat.createDisplayStatArray(
-		[Stat.StatHealth, Stat.StatMana, Stat.StatStamina, Stat.StatIntellect, Stat.StatSpirit, Stat.StatSpellDamage],
-		[PseudoStat.PseudoStatSpellHitPercent, PseudoStat.PseudoStatSpellCritPercent, PseudoStat.PseudoStatSpellHastePercent],
+		[
+			Stat.StatHealth,
+			Stat.StatMana,
+			Stat.StatStamina,
+			Stat.StatIntellect,
+			Stat.StatSpellDamage,
+			Stat.StatNatureDamage,
+			Stat.StatSpellCritRating,
+			Stat.StatSpellHasteRating,
+			Stat.StatSpellHitRating,
+			Stat.StatMP5,
+		],
+		[],
 	),
 	gemStats: DEFAULT_HYBRID_CASTER_GEM_STATS,
 	defaults: {
 		// Default equipped gear.
-		gear: Presets.P3_PRESET.gear,
+		gear: Presets.P1_PRESET.gear,
 		// Default EP weights for sorting gear in the gear picker.
 		epWeights: Presets.EP_PRESET_DEFAULT.epWeights,
 		// Default consumes settings.
@@ -90,10 +110,10 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecElementalShaman, {
 			defaultGear: {
 				[Faction.Unknown]: {},
 				[Faction.Alliance]: {
-					1: Presets.P3_PRESET.gear,
+					1: Presets.P1_PRESET.gear,
 				},
 				[Faction.Horde]: {
-					1: Presets.P3_PRESET.gear,
+					1: Presets.P1_PRESET.gear,
 				},
 			},
 			otherDefaults: Presets.OtherDefaults,
