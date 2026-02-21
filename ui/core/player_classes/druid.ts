@@ -17,7 +17,7 @@ export class Druid extends PlayerClass<Class.ClassDruid> {
 
 	static races: Race[] = [
 		// [H]
-		Race.RaceTroll,
+		Race.RaceTauren,
 		// [A]
 		Race.RaceNightElf,
 	];

@@ -1,16 +1,12 @@
 import * as OtherInputs from '../../core/components/inputs/other_inputs';
-import * as Mechanics from '../../core/constants/mechanics';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui';
 import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
 import { Mage } from '../../core/player_classes/mage';
 import { APLRotation } from '../../core/proto/apl';
-import { Faction, IndividualBuffs, ItemSlot, PartyBuffs, PseudoStat, Race, Spec, Stat } from '../../core/proto/common';
-import { StatCapType } from '../../core/proto/ui';
-import { DEFAULT_CASTER_GEM_STATS, StatCap, Stats, UnitStat } from '../../core/proto_utils/stats';
-import { formatToNumber } from '../../core/utils';
+import { Faction, ItemSlot, PseudoStat, Race, Spec, Stat } from '../../core/proto/common';
+import { DEFAULT_CASTER_GEM_STATS, UnitStat } from '../../core/proto_utils/stats';
 import { DefaultDebuffs, DefaultRaidBuffs, DefaultPartyBuffs, DefaultIndividualBuffs, DefaultConsumables } from './presets';
-import * as Inputs from './inputs';
 import * as Presets from './presets';
 import * as MageInputs from './inputs';
 

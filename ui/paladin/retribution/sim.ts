@@ -1,5 +1,4 @@
 import * as OtherInputs from '../../core/components/inputs/other_inputs.js';
-import * as Mechanics from '../../core/constants/mechanics.js';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui.js';
 import { Player } from '../../core/player.js';
 import { PlayerClasses } from '../../core/player_classes';
@@ -16,37 +15,21 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRetributionPaladin, {
 	// List any known bugs / issues here and they'll be shown on the site.
 	knownIssues: [],
 
-	overwriteDisplayStats: (player: Player<Spec.SpecRetributionPaladin>) => {
-		const playerStats = player.getCurrentStats();
-
-		const statMod = (current: UnitStats, previous?: UnitStats) => {
-			return new Stats().withStat(Stat.StatSpellDamage, Stats.fromProto(current).subtract(Stats.fromProto(previous)).getStat(Stat.StatAttackPower) * 0.5);
-		};
-
-		const base = statMod(playerStats.baseStats!);
-		const gear = statMod(playerStats.gearStats!, playerStats.baseStats);
-		const talents = statMod(playerStats.talentsStats!, playerStats.gearStats);
-		const buffs = statMod(playerStats.buffsStats!, playerStats.talentsStats);
-		const consumes = statMod(playerStats.consumesStats!, playerStats.buffsStats);
-		const debuffs = new Stats();
-		const final = new Stats().withStat(Stat.StatSpellDamage, Stats.fromProto(playerStats.finalStats).getStat(Stat.StatAttackPower) * 0.5);
-
-		return {
-			base: base,
-			gear: gear,
-			talents: talents,
-			buffs: buffs,
-			consumes: consumes,
-			final: final,
-			debuffs,
-			stats: [Stat.StatSpellDamage],
-		};
-	},
-
 	// All stats for which EP should be calculated.
-	epStats: [Stat.StatStrength, Stat.StatAttackPower],
-	gemStats: [Stat.StatStamina, Stat.StatStrength],
-	epPseudoStats: [PseudoStat.PseudoStatMainHandDps],
+	epStats: [
+		Stat.StatStrength,
+		Stat.StatSpellDamage,
+		Stat.StatAgility,
+		Stat.StatAttackPower,
+		Stat.StatArmorPenetration,
+		Stat.StatMeleeHitRating,
+		Stat.StatMeleeHasteRating,
+		Stat.StatMeleeCritRating,
+		Stat.StatArmorPenetration,
+		Stat.StatExpertiseRating,
+		Stat.StatMana,
+	],
+	epPseudoStats: [PseudoStat.PseudoStatMainHandDps, PseudoStat.PseudoStatOffHandDps],
 	// Reference stat against which to calculate EP. I think all classes use either spell power or attack power.
 	epReferenceStat: Stat.StatStrength,
 	// Which stats to display in the Character Stats section, at the bottom of the left-hand sidebar.
@@ -64,9 +47,9 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRetributionPaladin, {
 
 	defaults: {
 		// Default equipped gear.
-		gear: Presets.P2_GEAR_PRESET.gear,
+		gear: Presets.P1_GEAR_PRESET.gear,
 		// Default EP weights for sorting gear in the gear picker.
-		epWeights: Presets.P1_P2_EP_PRESET.epWeights,
+		epWeights: Presets.P1_EP_PRESET.epWeights,
 		// Default consumes settings.
 		consumables: Presets.DefaultConsumables,
 		// Default talents.
@@ -99,13 +82,13 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRetributionPaladin, {
 	},
 
 	presets: {
-		epWeights: [Presets.P1_P2_EP_PRESET, Presets.P3_EP_PRESET, Presets.PRERAID_EP_PRESET],
+		epWeights: [Presets.P1_EP_PRESET],
 		rotations: [Presets.APL_PRESET],
 		// Preset talents that the user can quickly select.
 		talents: [Presets.DefaultTalents],
 		// Preset gear configurations that the user can quickly select.
-		gear: [Presets.P2_GEAR_PRESET, Presets.P3_GEAR_PRESET, Presets.PRERAID_GEAR_PRESET],
-		builds: [Presets.P2_BUILD_PRESET, Presets.P3_BUILD_PRESET, Presets.PRERAID_BUILD_PRESET],
+		gear: [Presets.PRERAID_GEAR_PRESET, Presets.P1_GEAR_PRESET],
+		builds: [],
 	},
 
 	autoRotation: (_: Player<Spec.SpecRetributionPaladin>): APLRotation => {
@@ -127,13 +110,9 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRetributionPaladin, {
 				[Faction.Unknown]: {},
 				[Faction.Alliance]: {
 					1: Presets.PRERAID_GEAR_PRESET.gear,
-					2: Presets.P2_GEAR_PRESET.gear,
-					3: Presets.P3_GEAR_PRESET.gear,
 				},
 				[Faction.Horde]: {
 					1: Presets.PRERAID_GEAR_PRESET.gear,
-					2: Presets.P2_GEAR_PRESET.gear,
-					3: Presets.P3_GEAR_PRESET.gear,
 				},
 			},
 		},

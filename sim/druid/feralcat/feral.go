@@ -150,14 +150,14 @@ func (cat *FeralDruid) ApplyTalents() {
 }
 
 func (cat *FeralDruid) Reset(sim *core.Simulation) {
-	cat.Druid.Reset(sim)
-	cat.Druid.ClearForm(sim)
-	cat.CatFormAura.Activate(sim)
+	// cat.Druid.Reset(sim)
+	// cat.Druid.ClearForm(sim)
+	// cat.CatFormAura.Activate(sim)
 
 	// Reset snapshot power values until first cast
-	cat.Rip.CurrentSnapshotPower = 0
-	cat.Rip.NewSnapshotPower = 0
-	cat.Rake.CurrentSnapshotPower = 0
-	cat.Rake.NewSnapshotPower = 0
-	cat.tempSnapshotAura = nil
+	// cat.Rip.CurrentSnapshotPower = 0
+	// cat.Rip.NewSnapshotPower = 0
+	// cat.Rake.CurrentSnapshotPower = 0
+	// cat.Rake.NewSnapshotPower = 0
+	// cat.tempSnapshotAura = nil
 }

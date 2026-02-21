@@ -4,29 +4,33 @@ import { defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/util
 import { Stats } from '../../core/proto_utils/stats';
 import { SavedTalents } from '../../core/proto/ui';
 import { MageArmor, Mage_Options as MageOptions } from '../../core/proto/mage';
-import BlankAPL from './apls/blank.apl.json'
+import BlankAPL from './apls/blank.apl.json';
 import BlankGear from './gear_sets/blank.gear.json';
 
 // Preset options for this spec.
 // Eventually we will import these values for the raid sim too, so its good to
 // keep them in a separate file.
 
-export const BLANK_APL = PresetUtils.makePresetAPLRotation('Blank', BlankAPL)
+export const BLANK_APL = PresetUtils.makePresetAPLRotation('Blank', BlankAPL);
 
 export const BLANK_GEARSET = PresetUtils.makePresetGear('Blank', BlankGear);
 
 // Preset options for EP weights
 export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
 	'A',
-	Stats.fromMap(
-		{
-			[Stat.StatAgility]: 1.0,
-		},
-		{
-			[PseudoStat.PseudoStatMainHandDps]: 1.43,
-			[PseudoStat.PseudoStatOffHandDps]: 0.26,
-		},
-	),
+	Stats.fromMap({
+		[Stat.StatIntellect]: 1,
+		[Stat.StatSpirit]: 1,
+		[Stat.StatSpellDamage]: 1,
+		[Stat.StatFrostDamage]: 1,
+		[Stat.StatFireDamage]: 1,
+		[Stat.StatArcaneDamage]: 1,
+		[Stat.StatSpellHitRating]: 1,
+		[Stat.StatSpellCritRating]: 1,
+		[Stat.StatSpellHasteRating]: 1,
+		[Stat.StatSpellPenetration]: 1,
+		[Stat.StatMana]: 1,
+	}),
 );
 
 export const Talents = {
@@ -37,8 +41,7 @@ export const Talents = {
 };
 
 export const DefaultOptions = MageOptions.create({
-	classOptions: {
-	},
+	classOptions: {},
 });
 
 export const OtherDefaults = {
@@ -46,8 +49,8 @@ export const OtherDefaults = {
 };
 
 export const DefaultConsumables = ConsumesSpec.create({
-	guardianElixirId:32067, // Elixir of Draenic Wisdom
-	battleElixirId:28103, // Adept's Elixir
+	guardianElixirId: 32067, // Elixir of Draenic Wisdom
+	battleElixirId: 28103, // Adept's Elixir
 	foodId: 27657, // Blackened Basilisk
 	mhImbueId: 20749, // Brilliant Wizard Oil
 	potId: 22839, // Destruction Potion
@@ -63,13 +66,12 @@ export const DefaultRaidBuffs = RaidBuffs.create({
 	shadowProtection: true,
 });
 
-export const DefaultPartyBuffs = PartyBuffs.create({
-})
+export const DefaultPartyBuffs = PartyBuffs.create({});
 
 export const DefaultIndividualBuffs = IndividualBuffs.create({
 	blessingOfKings: true,
 	blessingOfWisdom: 2,
-})
+});
 
 export const DefaultDebuffs = Debuffs.create({
 	misery: true,

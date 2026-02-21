@@ -118,92 +118,15 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralBearDruid, {
 		// Preset talents that the user can quickly select.
 		talents: [Presets.DefaultTalents],
 		// Preset rotations that the user can quickly select.
-		rotations: [Presets.ROTATION_DEFAULT, Presets.ROTATION_HOTW, Presets.ROTATION_EMPRESS, Presets.ROTATION_SHA, Presets.ROTATION_HORRIDON],
+		rotations: [Presets.ROTATION_DEFAULT],
 		// Preset gear configurations that the user can quickly select.
-		gear: [Presets.PRERAID_PRESET, Presets.MSV_PRESET, Presets.HOF_PRESET, Presets.P2_PRESET, Presets.P2_OFFENSIVE_PRESET, Presets.P3_PRESET],
-		itemSwaps: [Presets.ITEM_SWAP_PRESET],
+		gear: [Presets.PRERAID_PRESET, Presets.P1_PRESET],
 		builds: [],
 	},
 
 	autoRotation: (_player: Player<Spec.SpecFeralBearDruid>): APLRotation => {
 		return Presets.ROTATION_DEFAULT.rotation.rotation!;
 	},
-
-	// simpleRotation: (player: Player<Spec.SpecGuardianDruid>, simple: DruidRotation, cooldowns: Cooldowns): APLRotation => {
-	// 	// const [prepullActions, actions] = AplUtils.standardCooldownDefaults(cooldowns);
-
-	// 	// const stampedeSpellId = player.getTalents().stampede == 1 ? 81016 : 81017;
-	// 	// const preStampede = APLPrepullAction.fromJsonString(
-	// 	// 	`{"action":{"activateAura":{"auraId":{"spellId":${stampedeSpellId.toFixed(0)}}}},"doAtValue":{"const":{"val":"-0.1s"}}}`,
-	// 	// );
-
-	// 	// const emergencySpellId = player.getTalents().pulverize ? 80313 : 33745;
-	// 	// const emergencyPulverize = APLAction.fromJsonString(
-	// 	// 	`{"condition":{"and":{"vals":[{"dotIsActive":{"targetUnit":{"type":"Target"},"spellId":{"spellId":33745}}},{"cmp":{"op":"OpEq","lhs":{"auraNumStacks":{"sourceUnit":{"type":"Target"},"auraId":{"spellId":33745}}},"rhs":{"const":{"val":"3"}}}},{"cmp":{"op":"OpLe","lhs":{"dotRemainingTime":{"targetUnit":{"type":"Target"},"spellId":{"spellId":33745}}},"rhs":{"const":{"val":"${simple.pulverizeTime.toFixed(
-	// 	// 		1,
-	// 	// 	)}s"}}}}]}},"castSpell":{"spellId":{"spellId":${emergencySpellId.toFixed(0)}},"target":{"type":"Target"}}}`,
-	// 	// );
-	// 	// const faerieFireMaintain = APLAction.fromJsonString(
-	// 	// 	`{"condition":{"or":{"vals":[{"not":{"val":{"auraIsActive":{"sourceUnit":{"type":"Target"},"auraId":{"spellId":770}}}}},{"cmp":{"op":"OpLe","lhs":{"auraRemainingTime":{"sourceUnit":{"type":"Target"},"auraId":{"spellId":770}}},"rhs":{"const":{"val":"6s"}}}}]}},"castSpell":{"spellId":{"spellId":16857},"target":{"type":"Target"}}}`,
-	// 	// );
-	// 	// const demoRoar = APLAction.fromJsonString(
-	// 	// 	`{"condition":{"auraShouldRefresh":{"sourceUnit":{"type":"Target"},"auraId":{"spellId":99},"maxOverlap":{"const":{"val":"${simple.demoTime.toFixed(
-	// 	// 		1,
-	// 	// 	)}s"}}}},"castSpell":{"spellId":{"spellId":99},"target":{"type":"Target"}}}`,
-	// 	// );
-	// 	// const berserk = APLAction.fromJsonString(`{"castSpell":{"spellId":{"spellId":50334}}}`);
-	// 	// const enrage = APLAction.fromJsonString(`{"castSpell":{"spellId":{"spellId":5229}}}`);
-	// 	// const synapseSprings = APLAction.fromJsonString(`{"castSpell":{"spellId":{"spellId":82174}}}`);
-	// 	// const lacerateForProcs = APLAction.fromJsonString(
-	// 	// 	`{"condition":{"and":{"vals":[{"not":{"val":{"dotIsActive":{"targetUnit":{"type":"Target"},"spellId":{"spellId":33745}}}}},{"not":{"val":{"auraIsActive":{"auraId":{"spellId":50334}}}}},{"cmp":{"op":"OpGt","lhs":{"spellTimeToReady":{"spellId":{"spellId":50334}}},"rhs":{"const":{"val":"3s"}}}}]}},"castSpell":{"spellId":{"spellId":33745},"target":{"type":"Target"}}}`,
-	// 	// );
-	// 	// const mangle = APLAction.fromJsonString(`{"castSpell":{"spellId":{"spellId":33878},"target":{"type":"Target"}}}`);
-	// 	// const thrash = APLAction.fromJsonString(`{"castSpell":{"spellId":{"spellId":77758},"target":{"type":"Target"}}}`);
-	// 	// const faerieFireFiller = APLAction.fromJsonString(`{"castSpell":{"spellId":{"spellId":16857},"target":{"type":"Target"}}}`);
-	// 	// const pulverize = APLAction.fromJsonString(
-	// 	// 	`{"condition":{"and":{"vals":[{"dotIsActive":{"targetUnit":{"type":"Target"},"spellId":{"spellId":33745}}},{"cmp":{"op":"OpEq","lhs":{"auraNumStacks":{"sourceUnit":{"type":"Target"},"auraId":{"spellId":33745}}},"rhs":{"const":{"val":"3"}}}},{"or":{"vals":[{"not":{"val":{"auraIsActive":{"auraId":{"spellId":80951}}}}},{"cmp":{"op":"OpLe","lhs":{"auraRemainingTime":{"auraId":{"spellId":80951}}},"rhs":{"const":{"val":"${simple.pulverizeTime.toFixed(
-	// 	// 		1,
-	// 	// 	)}s"}}}}]}}]}},"castSpell":{"spellId":{"spellId":80313},"target":{"type":"Target"}}}`,
-	// 	// );
-	// 	// const lacerateBuild = APLAction.fromJsonString(
-	// 	// 	`{"condition":{"cmp":{"op":"OpLt","lhs":{"auraNumStacks":{"sourceUnit":{"type":"Target"},"auraId":{"spellId":33745}}},"rhs":{"const":{"val":"3"}}}},"castSpell":{"spellId":{"spellId":33745},"target":{"type":"Target"}}}`,
-	// 	// );
-	// 	// const maul = APLAction.fromJsonString(`{"castSpell":{"spellId":{"spellId":6807},"target":{"type":"Target"}}}`);
-
-	// 	// prepullActions.push(...([simple.prepullStampede ? preStampede : null].filter(a => a) as Array<APLPrepullAction>));
-
-	// 	// actions.push(
-	// 	// 	...([
-	// 	// 		emergencyPulverize,
-	// 	// 		simple.maintainFaerieFire ? faerieFireMaintain : null,
-	// 	// 		simple.maintainDemoralizingRoar ? demoRoar : null,
-	// 	// 		berserk,
-	// 	// 		enrage,
-	// 	// 		synapseSprings,
-	// 	// 		lacerateForProcs,
-	// 	// 		mangle,
-	// 	// 		thrash,
-	// 	// 		faerieFireFiller,
-	// 	// 		pulverize,
-	// 	// 		lacerateBuild,
-	// 	// 		maul,
-	// 	// 	].filter(a => a) as Array<APLAction>),
-	// 	// );
-
-	// 	// return APLRotation.create({
-	// 	// 	simple: SimpleRotation.create({
-	// 	// 		cooldowns: Cooldowns.create({
-	// 	// 			hpPercentForDefensives: cooldowns.hpPercentForDefensives,
-	// 	// 		}),
-	// 	// 	}),
-	// 	// 	prepullActions: prepullActions,
-	// 	// 	priorityList: actions.map(action =>
-	// 	// 		APLListItem.create({
-	// 	// 			action: action,
-	// 	// 		}),
-	// 	// 	),
-	// 	// });
-	// },
 
 	raidSimPresets: [
 		{
@@ -220,15 +143,9 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralBearDruid, {
 				[Faction.Unknown]: {},
 				[Faction.Alliance]: {
 					1: Presets.P1_PRESET.gear,
-					2: Presets.P2_PRESET.gear,
-					3: Presets.P3_PRESET.gear,
-					4: Presets.P4_PRESET.gear,
 				},
 				[Faction.Horde]: {
 					1: Presets.P1_PRESET.gear,
-					2: Presets.P2_PRESET.gear,
-					3: Presets.P3_PRESET.gear,
-					4: Presets.P4_PRESET.gear,
 				},
 			},
 			otherDefaults: Presets.OtherDefaults,

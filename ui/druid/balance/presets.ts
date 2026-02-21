@@ -6,16 +6,10 @@ import { Stats, UnitStat, UnitStatPresets } from '../../core/proto_utils/stats';
 import { defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
 import StandardApl from './apls/standard.apl.json';
 import PreraidGear from './gear_sets/preraid.gear.json';
-import T14Gear from './gear_sets/t14.gear.json';
-import T14UpgradedGear from './gear_sets/t14-upgraded.gear.json';
-import T15Gear from './gear_sets/t15.gear.json';
-import T16Gear from './gear_sets/t16.gear.json';
+import Phase1 from './gear_sets/p1.gear.json';
 
 export const PreraidPresetGear = PresetUtils.makePresetGear('Pre-raid', PreraidGear);
-export const T14PresetGear = PresetUtils.makePresetGear('T14', T14Gear);
-export const T14UpgradedPresetGear = PresetUtils.makePresetGear('T14 - Upgraded', T14UpgradedGear);
-export const T15PresetGear = PresetUtils.makePresetGear('T15 (WIP)', T15Gear);
-export const T16PresetGear = PresetUtils.makePresetGear('T16 (WIP)', T16Gear);
+export const Phase1PresetGear = PresetUtils.makePresetGear('P1', Phase1);
 
 export const StandardRotation = PresetUtils.makePresetAPLRotation('Standard', StandardApl);
 
@@ -23,8 +17,15 @@ export const StandardEPWeights = PresetUtils.makePresetEpWeights(
 	'Standard',
 	Stats.fromMap({
 		[Stat.StatIntellect]: 1,
-		[Stat.StatSpirit]: 0.88,
-		[Stat.StatSpellDamage]: 0.80,
+		[Stat.StatSpirit]: 1,
+		[Stat.StatSpellDamage]: 1,
+		[Stat.StatNatureDamage]: 1,
+		[Stat.StatArcaneDamage]: 1,
+		[Stat.StatSpellHitRating]: 1,
+		[Stat.StatSpellCritRating]: 1,
+		[Stat.StatSpellHasteRating]: 1,
+		[Stat.StatSpellPenetration]: 1,
+		[Stat.StatMana]: 1,
 	}),
 );
 
@@ -33,7 +34,7 @@ export const StandardEPWeights = PresetUtils.makePresetEpWeights(
 export const StandardTalents = {
 	name: 'Standard',
 	data: SavedTalents.create({
-		talentsString: '113222',
+		talentsString: '',
 	}),
 };
 
@@ -43,11 +44,7 @@ export const DefaultOptions = BalanceDruidOptions.create({
 	},
 });
 
-export const DefaultConsumables = ConsumesSpec.create({
-	flaskId: 76085, // Flask of the Warm Sun
-	foodId: 74650, // Mogu Fish Stew
-	potId: 76093, // Potion of the Jade Serpent
-});
+export const DefaultConsumables = ConsumesSpec.create({});
 
 export const DefaultRaidBuffs = RaidBuffs.create({
 	...defaultRaidBuffMajorDamageCooldowns(),
@@ -57,9 +54,7 @@ export const DefaultIndividualBuffs = IndividualBuffs.create({});
 
 export const DefaultPartyBuffs = PartyBuffs.create({});
 
-export const DefaultDebuffs = Debuffs.create({
-
-});
+export const DefaultDebuffs = Debuffs.create({});
 
 export const OtherDefaults = {
 	distanceFromTarget: 20,
@@ -74,48 +69,9 @@ export const PresetPreraidBuild = PresetUtils.makePresetBuild('Pre-raid', {
 	epWeights: StandardEPWeights,
 });
 
-export const T14PresetBuild = PresetUtils.makePresetBuild('T14', {
-	gear: T14UpgradedPresetGear,
+export const Phase1PresetBuild = PresetUtils.makePresetBuild('P1', {
+	gear: Phase1PresetGear,
 	talents: StandardTalents,
 	rotation: StandardRotation,
 	epWeights: StandardEPWeights,
 });
-
-export const T15PresetBuild = PresetUtils.makePresetBuild('T15', {
-	gear: T15PresetGear,
-	talents: StandardTalents,
-	rotation: StandardRotation,
-	epWeights: StandardEPWeights,
-});
-
-export const T16PresetBuild = PresetUtils.makePresetBuild('T16', {
-	gear: T16PresetGear,
-	talents: StandardTalents,
-	rotation: StandardRotation,
-	epWeights: StandardEPWeights,
-});
-
-export const BALANCE_BREAKPOINTS: UnitStatPresets = {
-	unitStat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatSpellHastePercent),
-	presets: new Map([
-		['9-tick MF/SF', 5.5618],
-		['10-tick MF/SF', 18.0272],
-		['11-tick MF/SF', 30.4347],
-		['12-tick MF/SF', 42.8444],
-		['13-tick MF/SF', 55.3489],
-		['14-tick MF/SF', 67.627],
-	]),
-};
-
-export const BALANCE_T14_4P_BREAKPOINTS: UnitStatPresets = {
-	unitStat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatSpellHastePercent),
-	presets: new Map([
-		['10-tick MF/SF', 3.2431],
-		['11-tick MF/SF', 14.1536],
-		['12-tick MF/SF', 24.9824],
-		['13-tick MF/SF', 35.9227],
-		['14-tick MF/SF', 46.7002],
-		['15-tick MF/SF', 57.6013],
-		['16-tick MF/SF', 68.4388],
-	]),
-};
