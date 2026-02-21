@@ -19,34 +19,33 @@ type EarthElemental struct {
 
 var EarthElementalSpellPowerScaling = 1.3 // Estimated from beta testing
 
-func (shaman *Shaman) NewEarthElemental(isGuardian bool) *EarthElemental {
+func (shaman *Shaman) NewEarthElemental() *EarthElemental {
 	earthElemental := &EarthElemental{
 		Pet: core.NewPet(core.PetConfig{
-			Name:                            core.Ternary(isGuardian, "Greater Earth Elemental", "Primal Earth Elemental"),
+			Name:                            "Greater Earth Elemental",
 			Owner:                           &shaman.Character,
-			BaseStats:                       shaman.earthElementalBaseStats(isGuardian),
-			NonHitExpStatInheritance:        shaman.earthElementalStatInheritance(isGuardian),
+			BaseStats:                       shaman.earthElementalBaseStats(),
+			NonHitExpStatInheritance:        shaman.earthElementalStatInheritance(),
 			EnabledOnStart:                  false,
-			IsGuardian:                      isGuardian,
+			IsGuardian:                      true,
 			HasDynamicMeleeSpeedInheritance: true,
 			HasDynamicCastSpeedInheritance:  true,
 		}),
 		shamanOwner: shaman,
 	}
-	scalingDamage := shaman.CalcScalingSpellDmg(1.3)
-	baseMeleeDamage := core.TernaryFloat64(isGuardian, scalingDamage, scalingDamage*1.8)
+	baseMeleeDamage := 0.0
 	earthElemental.EnableAutoAttacks(earthElemental, core.AutoAttackOptions{
 		MainHand: core.Weapon{
 			BaseDamageMin:  baseMeleeDamage,
 			BaseDamageMax:  baseMeleeDamage,
 			SwingSpeed:     2,
-			CritMultiplier: earthElemental.DefaultCritMultiplier(),
+			CritMultiplier: earthElemental.DefaultMeleeCritMultiplier(),
 			SpellSchool:    core.SpellSchoolPhysical,
 		},
 		AutoSwingMelee: true,
 	})
 
-	earthElemental.OnPetEnable = earthElemental.enable(isGuardian)
+	earthElemental.OnPetEnable = earthElemental.enable()
 	earthElemental.OnPetDisable = earthElemental.disable
 
 	shaman.AddPet(earthElemental)
@@ -54,7 +53,7 @@ func (shaman *Shaman) NewEarthElemental(isGuardian bool) *EarthElemental {
 	return earthElemental
 }
 
-func (earthElemental *EarthElemental) enable(isGuardian bool) func(*core.Simulation) {
+func (earthElemental *EarthElemental) enable() func(*core.Simulation) {
 	return func(sim *core.Simulation) {
 	}
 }
@@ -102,28 +101,28 @@ func (earthElemental *EarthElemental) TryCast(sim *core.Simulation, target *core
 	return true
 }
 
-func (shaman *Shaman) earthElementalBaseStats(isGuardian bool) stats.Stats {
+func (shaman *Shaman) earthElementalBaseStats() stats.Stats {
 	return stats.Stats{
-		stats.Stamina: core.TernaryFloat64(isGuardian, 10457, 10457*1.5),
+		stats.Stamina: 10457,
 	}
 }
 
-func (shaman *Shaman) earthElementalStatInheritance(isGuardian bool) core.PetStatInheritance {
+func (shaman *Shaman) earthElementalStatInheritance() core.PetStatInheritance {
 	return func(ownerStats stats.Stats) stats.Stats {
 		ownerSpellCritPercent := ownerStats[stats.SpellCritPercent]
 		ownerPhysicalCritPercent := ownerStats[stats.PhysicalCritPercent]
-		ownerHasteRating := ownerStats[stats.HasteRating]
+		ownerHasteRating := ownerStats[stats.SpellHasteRating]
 		critPercent := core.TernaryFloat64(math.Abs(ownerPhysicalCritPercent) > math.Abs(ownerSpellCritPercent), ownerPhysicalCritPercent, ownerSpellCritPercent)
 
-		power := core.TernaryFloat64(shaman.Spec == proto.Spec_SpecEnhancementShaman, ownerStats[stats.AttackPower]*0.65, ownerStats[stats.SpellPower])
+		power := core.TernaryFloat64(shaman.Spec == proto.Spec_SpecEnhancementShaman, ownerStats[stats.AttackPower]*0.65, ownerStats[stats.SpellDamage])
 
 		return stats.Stats{
-			stats.Stamina:     ownerStats[stats.Stamina] * core.TernaryFloat64(isGuardian, 1, 1.5),
-			stats.AttackPower: power * core.TernaryFloat64(isGuardian, EarthElementalSpellPowerScaling, EarthElementalSpellPowerScaling*1.8),
+			stats.Stamina:     ownerStats[stats.Stamina],
+			stats.AttackPower: power * EarthElementalSpellPowerScaling,
 
 			stats.SpellCritPercent:    critPercent,
 			stats.PhysicalCritPercent: critPercent,
-			stats.HasteRating:         ownerHasteRating,
+			stats.SpellHasteRating:    ownerHasteRating,
 		}
 	}
 }

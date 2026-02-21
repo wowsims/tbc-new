@@ -64,7 +64,7 @@ func (shaman *Shaman) newElectricSpellConfig(config ShamSpellConfig) core.SpellC
 		},
 
 		DamageMultiplier: 1,
-		CritMultiplier:   shaman.DefaultCritMultiplier(),
+		CritMultiplier:   shaman.DefaultSpellCritMultiplier(),
 		BonusCoefficient: config.BonusCoefficient,
 		ThreatMultiplier: 1,
 	}

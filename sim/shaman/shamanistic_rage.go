@@ -21,7 +21,6 @@ func (shaman *Shaman) registerShamanisticRageSpell() {
 	spell := shaman.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
 		ClassSpellMask: SpellMaskShamanisticRage,
-		Flags:          core.SpellFlagReadinessTrinket,
 		Cast: core.CastConfig{
 			IgnoreHaste: true,
 			CD: core.Cooldown{

@@ -24,7 +24,7 @@ func (fireElemental *FireElemental) registerFireBlast() {
 		},
 
 		DamageMultiplier: 1,
-		CritMultiplier:   fireElemental.DefaultCritMultiplier(),
+		CritMultiplier:   fireElemental.DefaultSpellCritMultiplier(),
 		ThreatMultiplier: 1,
 		BonusCoefficient: 0.42899999022,
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
@@ -40,7 +40,7 @@ func (fireElemental *FireElemental) registerFireNova() {
 		ActionID:    core.ActionID{SpellID: 117588},
 		SpellSchool: core.SpellSchoolFire,
 		ProcMask:    core.ProcMaskSpellDamage,
-		Flags:       core.SpellFlagAoE | SpellFlagShamanSpell,
+		Flags:       SpellFlagShamanSpell,
 
 		ManaCost: core.ManaCostOptions{
 			FlatCost: 30,
@@ -56,7 +56,7 @@ func (fireElemental *FireElemental) registerFireNova() {
 		},
 
 		DamageMultiplier: 1,
-		CritMultiplier:   fireElemental.DefaultCritMultiplier(),
+		CritMultiplier:   fireElemental.DefaultSpellCritMultiplier(),
 		ThreatMultiplier: 1,
 		BonusCoefficient: 1.00,
 
@@ -78,7 +78,7 @@ func (fireElemental *FireElemental) registerImmolate() {
 		Flags:       SpellFlagShamanSpell,
 
 		DamageMultiplier: 1,
-		CritMultiplier:   fireElemental.DefaultCritMultiplier(),
+		CritMultiplier:   fireElemental.DefaultSpellCritMultiplier(),
 		ThreatMultiplier: 1,
 		BonusCoefficient: 1.0,
 
@@ -106,63 +106,16 @@ func (fireElemental *FireElemental) registerImmolate() {
 			BonusCoefficient:    0.34999999404,
 			AffectedByCastSpeed: true,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.Snapshot(target, fireElemental.shamanOwner.CalcScalingSpellDmg(0.62800002098))
+				dot.Snapshot(target, 0.0)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 			},
 		},
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := fireElemental.shamanOwner.CalcScalingSpellDmg(1.79499995708)
+			baseDamage := 0.0
 			spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
 			spell.Dot(target).Apply(sim)
-		},
-	})
-}
-
-func (fireElemental *FireElemental) registerEmpower() {
-	actionID := core.ActionID{SpellID: 118350}
-	buffAura := fireElemental.shamanOwner.RegisterAura(core.Aura{
-		Label:    "Empower",
-		ActionID: actionID,
-		Duration: core.NeverExpires,
-	}).AttachSpellMod(core.SpellModConfig{
-		Kind:       core.SpellMod_DamageDone_Pct,
-		FloatValue: 0.05,
-	})
-
-	fireElemental.Empower = fireElemental.RegisterSpell(core.SpellConfig{
-		ActionID:    actionID,
-		SpellSchool: core.SpellSchoolFire,
-		Flags:       core.SpellFlagChanneled,
-		Cast: core.CastConfig{
-			CD: core.Cooldown{
-				Timer:    fireElemental.NewTimer(),
-				Duration: time.Second * 10,
-			},
-		},
-		Hot: core.DotConfig{
-			Aura: core.Aura{
-				Label: "Empower",
-				OnGain: func(aura *core.Aura, sim *core.Simulation) {
-					buffAura.Activate(sim)
-				},
-				OnExpire: func(aura *core.Aura, sim *core.Simulation) {
-					buffAura.Deactivate(sim)
-				},
-			},
-			NumberOfTicks:        1,
-			TickLength:           time.Second * 60,
-			AffectedByCastSpeed:  false,
-			HasteReducesDuration: false,
-			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-			},
-		},
-		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
-			return !fireElemental.IsGuardian()
-		},
-		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			spell.Hot(target).Apply(sim)
 		},
 	})
 }

@@ -29,35 +29,34 @@ type FireElemental struct {
 
 var FireElementalSpellPowerScaling = 0.36
 
-func (shaman *Shaman) NewFireElemental(isGuardian bool) *FireElemental {
+func (shaman *Shaman) NewFireElemental() *FireElemental {
 	fireElemental := &FireElemental{
 		Pet: core.NewPet(core.PetConfig{
-			Name:                            core.Ternary(isGuardian, "Greater Fire Elemental", "Primal Fire Elemental"),
+			Name:                            "Greater Fire Elemental",
 			Owner:                           &shaman.Character,
-			BaseStats:                       shaman.fireElementalBaseStats(isGuardian),
-			NonHitExpStatInheritance:        shaman.fireElementalStatInheritance(isGuardian),
+			BaseStats:                       shaman.fireElementalBaseStats(),
+			NonHitExpStatInheritance:        shaman.fireElementalStatInheritance(),
 			EnabledOnStart:                  false,
-			IsGuardian:                      isGuardian,
+			IsGuardian:                      true,
 			HasDynamicCastSpeedInheritance:  true,
 			HasDynamicMeleeSpeedInheritance: true,
 		}),
 		shamanOwner:        shaman,
-		fireBlastAutocast:  shaman.FeleAutocast.AutocastFireblast || isGuardian,
-		fireNovaAutocast:   shaman.FeleAutocast.AutocastFirenova || isGuardian,
-		immolateAutocast:   shaman.FeleAutocast.AutocastImmolate && !isGuardian,
-		empowerAutocast:    shaman.FeleAutocast.AutocastEmpower && !isGuardian,
+		fireBlastAutocast:  shaman.FeleAutocast.AutocastFireblast,
+		fireNovaAutocast:   shaman.FeleAutocast.AutocastFirenova,
+		immolateAutocast:   shaman.FeleAutocast.AutocastImmolate,
+		empowerAutocast:    shaman.FeleAutocast.AutocastEmpower,
 		noImmolateDuringWF: shaman.FeleAutocast.NoImmolateWfunleash,
 		noImmolateDuration: core.DurationFromSeconds(shaman.FeleAutocast.NoImmolateDuration),
 	}
-	scalingDamage := shaman.CalcScalingSpellDmg(1.0)
-	baseMeleeDamage := core.TernaryFloat64(isGuardian, scalingDamage, scalingDamage*1.8)
+	baseMeleeDamage := 0.0
 	fireElemental.EnableManaBar()
 	fireElemental.EnableAutoAttacks(fireElemental, core.AutoAttackOptions{
 		MainHand: core.Weapon{
 			BaseDamageMin:  baseMeleeDamage,
 			BaseDamageMax:  baseMeleeDamage,
 			SwingSpeed:     1.4,
-			CritMultiplier: fireElemental.DefaultCritMultiplier(),
+			CritMultiplier: fireElemental.DefaultMeleeCritMultiplier(),
 			SpellSchool:    core.SpellSchoolFire,
 		},
 		AutoSwingMelee: true,
@@ -68,7 +67,7 @@ func (shaman *Shaman) NewFireElemental(isGuardian bool) *FireElemental {
 	fireElemental.AutoAttacks.MHConfig().Flags |= SpellFlagShamanSpell
 	fireElemental.AutoAttacks.MHConfig().ClassSpellMask |= SpellMaskFireElementalMelee
 
-	fireElemental.OnPetEnable = fireElemental.enable(isGuardian)
+	fireElemental.OnPetEnable = fireElemental.enable()
 	fireElemental.OnPetDisable = fireElemental.disable
 
 	shaman.AddPet(fireElemental)
@@ -76,7 +75,7 @@ func (shaman *Shaman) NewFireElemental(isGuardian bool) *FireElemental {
 	return fireElemental
 }
 
-func (fireElemental *FireElemental) enable(isGuardian bool) func(*core.Simulation) {
+func (fireElemental *FireElemental) enable() func(*core.Simulation) {
 	return func(sim *core.Simulation) {
 		if fireElemental.empowerAutocast {
 			if fireElemental.Empower.Cast(sim, &fireElemental.shamanOwner.Unit) {
@@ -101,7 +100,6 @@ func (fireElemental *FireElemental) Initialize() {
 	fireElemental.registerFireBlast()
 	fireElemental.registerFireNova()
 	fireElemental.registerImmolate()
-	fireElemental.registerEmpower()
 }
 
 func (fireElemental *FireElemental) Reset(_ *core.Simulation) {
@@ -116,18 +114,6 @@ func (fireElemental *FireElemental) ExecuteCustomRotation(sim *core.Simulation) 
 	*/
 	target := fireElemental.CurrentTarget
 
-	wfUnleashAura := fireElemental.shamanOwner.WindfuryUnleashAura
-
-	if fireElemental.immolateAutocast &&
-		(!fireElemental.noImmolateDuringWF ||
-			wfUnleashAura == nil ||
-			fireElemental.noImmolateDuration < wfUnleashAura.TimeInactive(sim)) {
-		for _, target := range sim.Encounter.ActiveTargetUnits {
-			if fireElemental.Immolate.Dot(target).RemainingDuration(sim) < fireElemental.Immolate.Dot(target).TickPeriod() && fireElemental.TryCast(sim, target, fireElemental.Immolate) {
-				break
-			}
-		}
-	}
 	if fireElemental.fireNovaAutocast && len(sim.Encounter.ActiveTargetUnits) > 2 {
 		fireElemental.TryCast(sim, target, fireElemental.FireNova)
 	}
@@ -153,29 +139,29 @@ func (fireElemental *FireElemental) TryCast(sim *core.Simulation, target *core.U
 	return true
 }
 
-func (shaman *Shaman) fireElementalBaseStats(isGuardian bool) stats.Stats {
+func (shaman *Shaman) fireElementalBaseStats() stats.Stats {
 	return stats.Stats{
 		stats.Mana:    9916,
-		stats.Stamina: core.TernaryFloat64(isGuardian, 7843, 7843*1.2),
+		stats.Stamina: 7843,
 	}
 }
 
-func (shaman *Shaman) fireElementalStatInheritance(isGuardian bool) core.PetStatInheritance {
+func (shaman *Shaman) fireElementalStatInheritance() core.PetStatInheritance {
 	return func(ownerStats stats.Stats) stats.Stats {
 		ownerSpellCritPercent := ownerStats[stats.SpellCritPercent]
 		ownerPhysicalCritPercent := ownerStats[stats.PhysicalCritPercent]
-		ownerHasteRating := ownerStats[stats.HasteRating]
+		ownerHasteRating := ownerStats[stats.SpellHasteRating]
 		critPercent := core.TernaryFloat64(math.Abs(ownerPhysicalCritPercent) > math.Abs(ownerSpellCritPercent), ownerPhysicalCritPercent, ownerSpellCritPercent)
 
-		power := core.TernaryFloat64(shaman.Spec == proto.Spec_SpecEnhancementShaman, ownerStats[stats.AttackPower]*0.65, ownerStats[stats.SpellPower])
+		power := core.TernaryFloat64(shaman.Spec == proto.Spec_SpecEnhancementShaman, ownerStats[stats.AttackPower]*0.65, ownerStats[stats.SpellDamage])
 
 		return stats.Stats{
-			stats.Stamina:    ownerStats[stats.Stamina] * core.TernaryFloat64(isGuardian, 0.75, 0.75*1.2),
-			stats.SpellPower: power * core.TernaryFloat64(isGuardian, FireElementalSpellPowerScaling, FireElementalSpellPowerScaling*1.8),
+			stats.Stamina:     ownerStats[stats.Stamina] * 0.75,
+			stats.SpellDamage: power * FireElementalSpellPowerScaling,
 
 			stats.SpellCritPercent:    critPercent,
 			stats.PhysicalCritPercent: critPercent,
-			stats.HasteRating:         ownerHasteRating,
+			stats.SpellHasteRating:    ownerHasteRating,
 		}
 	}
 }

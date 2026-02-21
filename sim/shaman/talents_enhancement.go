@@ -48,7 +48,7 @@ func (shaman *Shaman) ApplyEnhancementTalents() {
 		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
 			shaman.MultiplyMeleeSpeed(sim, 1/1.15)
 		},
-	}).AttachStatDependency(shaman.NewDynamicMultiplyStat(stats.HasteRating, 1.5))
+	}).AttachStatDependency(shaman.NewDynamicMultiplyStat(stats.MeleeHasteRating, 1.5))
 
 	shaman.MakeProcTriggerAura(core.ProcTrigger{
 		Name:               "Flurry",
@@ -70,71 +70,11 @@ func (shaman *Shaman) ApplyEnhancementTalents() {
 		},
 	})
 
-	//Searing Flames
-	ftmod := shaman.AddDynamicMod(core.SpellModConfig{
-		ClassMask:  SpellMaskFlametongueWeapon,
-		Kind:       core.SpellMod_DamageDone_Pct,
-		FloatValue: 0.08,
-	})
-	llmod := shaman.AddDynamicMod(core.SpellModConfig{
-		ClassMask:  SpellMaskLavaLash,
-		Kind:       core.SpellMod_DamageDone_Flat,
-		FloatValue: 0.2,
-	})
-
-	searingFlameStackingAura := core.BlockPrepull(shaman.RegisterAura(core.Aura{
-		Label:     "Searing Flames",
-		ActionID:  core.ActionID{SpellID: 77661},
-		Duration:  time.Second * 15,
-		MaxStacks: 5,
-		OnStacksChange: func(aura *core.Aura, sim *core.Simulation, oldStacks, newStacks int32) {
-			ftmod.UpdateFloatValue(float64(newStacks) * 0.08)
-			ftmod.Activate()
-			llmod.UpdateFloatValue(float64(newStacks) * 0.2)
-			llmod.Activate()
-		},
-		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
-			ftmod.Deactivate()
-			llmod.Deactivate()
-		},
-		OnSpellHitDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			if !spell.Matches(SpellMaskLavaLash) {
-				return
-			}
-			aura.Deactivate(sim)
-		},
-	}))
-
-	shaman.FireElemental.MakeProcTriggerAura(core.ProcTrigger{
-		Name:           "Searing Flames Dummy Fire ele",
-		Callback:       core.CallbackOnSpellHitDealt,
-		ClassSpellMask: SpellMaskFireElementalMelee,
-		Outcome:        core.OutcomeLanded,
-		ProcChance:     1,
-
-		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			searingFlameStackingAura.Activate(sim)
-			searingFlameStackingAura.AddStack(sim)
-		},
-	})
-	shaman.MakeProcTriggerAura(core.ProcTrigger{
-		Name:           "Searing Flames Dummy Shaman",
-		Callback:       core.CallbackOnSpellHitDealt,
-		ClassSpellMask: SpellMaskSearingTotem,
-		Outcome:        core.OutcomeLanded,
-		ProcChance:     1,
-
-		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			searingFlameStackingAura.Activate(sim)
-			searingFlameStackingAura.AddStack(sim)
-		},
-	})
-
 	//Static Shock
 	shaman.MakeProcTriggerAura(core.ProcTrigger{
 		Name:               "Static Shock",
 		Callback:           core.CallbackOnSpellHitDealt,
-		ClassSpellMask:     SpellMaskStormstrikeDamage | SpellMaskStormblastDamage | SpellMaskLavaLash,
+		ClassSpellMask:     SpellMaskStormstrikeDamage,
 		ProcChance:         0.45,
 		Outcome:            core.OutcomeLanded,
 		TriggerImmediately: true,
@@ -149,7 +89,7 @@ func (shaman *Shaman) ApplyEnhancementTalents() {
 	})
 
 	//Maelstrom Weapon
-	mwAffectedSpells := SpellMaskLightningBolt | SpellMaskChainLightning | SpellMaskEarthShock | SpellMaskElementalBlast
+	mwAffectedSpells := SpellMaskLightningBolt | SpellMaskChainLightning | SpellMaskEarthShock
 	mwCastTimemod := shaman.AddDynamicMod(core.SpellModConfig{
 		ClassMask:  mwAffectedSpells,
 		Kind:       core.SpellMod_CastTime_Pct,
@@ -181,7 +121,7 @@ func (shaman *Shaman) ApplyEnhancementTalents() {
 			}
 			//If AS is active and MW < 5 stacks, do not consume MW stacks
 			//As i don't know which OnCastComplete is going to be executed first, check here if AS has not just been consumed/is active
-			if aura.GetStacks() < 5 && shaman.Talents.AncestralSwiftness && shaman.AncestralSwiftnessInstantAura.TimeInactive(sim) == 0 {
+			if aura.GetStacks() < 5 && shaman.AncestralSwiftnessInstantAura.TimeInactive(sim) == 0 {
 				return
 			}
 			shaman.MaelstromWeaponAura.Deactivate(sim)

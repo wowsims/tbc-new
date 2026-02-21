@@ -50,7 +50,7 @@ func (shaman *Shaman) setupItemSwapImbue(imbue proto.ShamanImbue, imbueID int32)
 }
 
 func (shaman *Shaman) newWindfuryImbueSpell(isMH bool) *core.Spell {
-	apBonus := shaman.CalcScalingSpellDmg(5.0)
+	apBonus := 0.0
 
 	tag := 1
 	procMask := core.ProcMaskMeleeMHSpecial
@@ -70,7 +70,7 @@ func (shaman *Shaman) newWindfuryImbueSpell(isMH bool) *core.Spell {
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagPassiveSpell,
 
 		DamageMultiplier: 1,
-		CritMultiplier:   shaman.DefaultCritMultiplier(),
+		CritMultiplier:   shaman.DefaultMeleeCritMultiplier(),
 		ThreatMultiplier: 1,
 		BonusCoefficient: 1,
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
@@ -167,13 +167,13 @@ func (shaman *Shaman) newFlametongueImbueSpell(weapon *core.Item) *core.Spell {
 		ClassSpellMask:   SpellMaskFlametongueWeapon,
 		Flags:            core.SpellFlagPassiveSpell | SpellFlagShamanSpell,
 		DamageMultiplier: weapon.SwingSpeed / 2.6,
-		CritMultiplier:   shaman.DefaultCritMultiplier(),
+		CritMultiplier:   shaman.DefaultMeleeCritMultiplier(),
 		ThreatMultiplier: 1,
 		BonusCoefficient: 0.05799999833,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			if weapon.SwingSpeed != 0 {
-				scalingDamage := shaman.CalcScalingSpellDmg(7.75)
+				scalingDamage := 0.0
 				baseDamage := (scalingDamage/77 + scalingDamage/25) / 2
 				spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
 			}
@@ -318,11 +318,11 @@ func (shaman *Shaman) newFrostbrandImbueSpell() *core.Spell {
 		Flags:          core.SpellFlagPassiveSpell | SpellFlagShamanSpell,
 
 		DamageMultiplier: 1,
-		CritMultiplier:   shaman.DefaultCritMultiplier(),
+		CritMultiplier:   shaman.DefaultMeleeCritMultiplier(),
 		ThreatMultiplier: 1,
 		BonusCoefficient: 0.10000000149,
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := shaman.CalcScalingSpellDmg(0.60900002718) //spell id 8034
+			baseDamage := 0.0 //spell id 8034
 			spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
 		},
 	})

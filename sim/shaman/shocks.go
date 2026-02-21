@@ -34,7 +34,7 @@ func (shaman *Shaman) newShockSpellConfig(spellID int32, spellSchool core.SpellS
 		},
 
 		DamageMultiplier: 1,
-		CritMultiplier:   shaman.DefaultCritMultiplier(),
+		CritMultiplier:   shaman.DefaultSpellCritMultiplier(),
 		BonusCoefficient: bonusCoefficient,
 		ThreatMultiplier: 1,
 	}
@@ -56,7 +56,7 @@ func (shaman *Shaman) registerFlameShockSpell(shockTimer *core.Timer) {
 	config := shaman.newShockSpellConfig(8050, core.SpellSchoolFire, 11.9, shockTimer, 0.44900000095)
 	config.ClassSpellMask = SpellMaskFlameShockDirect
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		baseDamage := shaman.CalcScalingSpellDmg(flameShockDirectCoeff)
+		baseDamage := 0.0
 		result := spell.CalcDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
 		if result.Landed() {
 			spell.RelatedDotSpell.Cast(sim, target)
@@ -72,7 +72,7 @@ func (shaman *Shaman) registerFlameShockSpell(shockTimer *core.Timer) {
 		Flags:            config.Flags & ^core.SpellFlagAPL | core.SpellFlagPassiveSpell,
 		ClassSpellMask:   SpellMaskFlameShockDot,
 		DamageMultiplier: 1,
-		CritMultiplier:   shaman.DefaultCritMultiplier(),
+		CritMultiplier:   shaman.DefaultSpellCritMultiplier(),
 		ThreatMultiplier: 1,
 
 		Dot: core.DotConfig{
@@ -84,7 +84,7 @@ func (shaman *Shaman) registerFlameShockSpell(shockTimer *core.Timer) {
 			AffectedByCastSpeed: true,
 			BonusCoefficient:    flameShockCoeff,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				baseDamage := shaman.CalcScalingSpellDmg(flameShockScale)
+				baseDamage := 0.0
 				dot.Snapshot(target, baseDamage)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
@@ -101,7 +101,7 @@ func (shaman *Shaman) registerFlameShockSpell(shockTimer *core.Timer) {
 				result.Damage /= dot.TickPeriod().Seconds()
 				return result
 			} else {
-				result := spell.CalcPeriodicDamage(sim, target, shaman.CalcScalingSpellDmg(flameShockScale), spell.OutcomeExpectedMagicCrit)
+				result := spell.CalcPeriodicDamage(sim, target, 0.0, spell.OutcomeExpectedMagicCrit)
 				result.Damage /= dot.CalcTickPeriod().Round(time.Millisecond).Seconds()
 				return result
 			}

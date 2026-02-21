@@ -19,7 +19,7 @@ func (earthElemental *EarthElemental) registerPulverize() {
 		},
 
 		DamageMultiplier: 1.5,
-		CritMultiplier:   earthElemental.DefaultCritMultiplier(),
+		CritMultiplier:   earthElemental.DefaultSpellCritMultiplier(),
 		ThreatMultiplier: 1,
 		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
 			return !earthElemental.IsGuardian()
