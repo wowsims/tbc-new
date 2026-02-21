@@ -257,7 +257,7 @@ func (war *Warrior) registerOneHandedWeaponSpecialization() {
 
 	weaponMod := war.AddDynamicMod(core.SpellModConfig{
 		School:     core.SpellSchoolPhysical,
-		Kind:       core.SpellMod_DamageDone_Flat,
+		Kind:       core.SpellMod_DamageDone_Pct,
 		FloatValue: 0.02 * float64(war.Talents.OneHandedWeaponSpecialization),
 	})
 

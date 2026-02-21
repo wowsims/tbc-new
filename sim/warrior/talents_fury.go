@@ -83,7 +83,7 @@ func (war *Warrior) registerDualWieldSpecialization() {
 
 	war.AddStaticMod(core.SpellModConfig{
 		ProcMask:   core.ProcMaskMeleeOH,
-		Kind:       core.SpellMod_DamageDone_Flat,
+		Kind:       core.SpellMod_DamageDone_Pct,
 		FloatValue: 0.05 * float64(war.Talents.DualWieldSpecialization),
 	})
 }
@@ -114,7 +114,7 @@ func (war *Warrior) registerEnrage() {
 		MaxStacks: 12,
 	}).AttachSpellMod(core.SpellModConfig{
 		School:     core.SpellSchoolPhysical,
-		Kind:       core.SpellMod_DamageDone_Flat,
+		Kind:       core.SpellMod_DamageDone_Pct,
 		FloatValue: 0.05 * float64(war.Talents.Enrage),
 	}).AttachProcTrigger(core.ProcTrigger{
 		Name:               "Enrage - Spend",
