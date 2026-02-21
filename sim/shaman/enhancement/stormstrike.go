@@ -11,19 +11,13 @@ import (
 var StormstrikeActionID = core.ActionID{SpellID: 17364}
 
 func (enh *EnhancementShaman) StormstrikeDebuffAura(target *core.Unit) *core.Aura {
-	return target.GetOrRegisterAura(core.Aura{
+	aura := target.GetOrRegisterAura(core.Aura{
 		Label:     "Stormstrike-" + enh.Label,
 		ActionID:  StormstrikeActionID,
 		Duration:  time.Second * 12,
 		MaxStacks: 2,
-		OnGain: func(aura *core.Aura, sim *core.Simulation) {
-			target.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexNature] *= 1.2
-		},
-		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
-			target.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexNature] /= 1.2
-		},
 		OnSpellHitTaken: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			if spell.SpellSchool != core.SpellSchoolNature {
+			if !spell.SpellSchool.Matches(core.SpellSchoolNature) {
 				return
 			}
 			if !result.Landed() || result.Damage == 0 {
@@ -32,37 +26,31 @@ func (enh *EnhancementShaman) StormstrikeDebuffAura(target *core.Unit) *core.Aur
 			aura.RemoveStack(sim)
 		},
 	})
+	return aura.AttachMultiplicativePseudoStatBuff(
+		&target.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexNature],
+		1.2,
+	)
 }
-
 
 func (enh *EnhancementShaman) newStormstrikeHitSpellConfig(spellID int32, isMH bool) core.SpellConfig {
 	var procMask core.ProcMask
 	var actionTag int32
 
-	if isMH {
-		procMask = core.ProcMaskMeleeMHSpecial
-		actionTag = 1
-	} else {
-		procMask = core.ProcMaskMeleeOHSpecial
-		actionTag = 2
-	}
+	procMask = core.Ternary(isMH, core.ProcMaskMeleeMHSpecial, core.ProcMaskMeleeOHSpecial)
+	actionTag = core.TernaryInt32(isMH, 1, 2)
 
 	return core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: spellID}.WithTag(actionTag),
-		SpellSchool:    core.SpellSchoolPhysical,
-		ProcMask:       procMask,
-		Flags:          core.SpellFlagMeleeMetrics,
-		ClassSpellMask: shaman.SpellMaskStormstrikeDamage,
+		ActionID:         core.ActionID{SpellID: spellID}.WithTag(actionTag),
+		SpellSchool:      core.SpellSchoolPhysical,
+		ProcMask:         procMask,
+		Flags:            core.SpellFlagMeleeMetrics,
+		ClassSpellMask:   shaman.SpellMaskStormstrikeDamage,
 		ThreatMultiplier: 1,
 		DamageMultiplier: 1,
 		CritMultiplier:   enh.DefaultMeleeCritMultiplier(),
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			var baseDamage float64
-			if isMH {
-				baseDamage = spell.Unit.MHWeaponDamage(sim, spell.MeleeAttackPower())
-			} else {
-				baseDamage = spell.Unit.OHWeaponDamage(sim, spell.MeleeAttackPower())
-			}
+			weaponDamage := core.Ternary(isMH, spell.Unit.MHWeaponDamage, spell.Unit.OHWeaponDamage)
+			baseDamage := weaponDamage(sim, spell.MeleeAttackPower())
 			spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialBlockAndCrit)
 		},
 	}
