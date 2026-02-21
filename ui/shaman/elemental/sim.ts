@@ -38,12 +38,13 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecElementalShaman, {
 			Stat.StatIntellect,
 			Stat.StatSpellDamage,
 			Stat.StatNatureDamage,
-			Stat.StatSpellCritRating,
-			Stat.StatSpellHasteRating,
-			Stat.StatSpellHitRating,
 			Stat.StatMP5,
 		],
-		[],
+		[
+			PseudoStat.PseudoStatSpellCritPercent,
+			PseudoStat.PseudoStatSpellHastePercent,
+			PseudoStat.PseudoStatSpellHitPercent,
+		],
 	),
 	gemStats: DEFAULT_HYBRID_CASTER_GEM_STATS,
 	defaults: {
