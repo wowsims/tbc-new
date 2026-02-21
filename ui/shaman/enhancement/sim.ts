@@ -9,6 +9,7 @@ import { Stats, UnitStat } from '../../core/proto_utils/stats.js';
 import * as ShamanInputs from '../inputs.js';
 import * as EnhancementInputs from './inputs.js';
 import * as Presets from './presets.js';
+import { PRERAID_PRESET } from './presets.js';
 
 const SPEC_CONFIG = registerSpecConfig(Spec.SpecEnhancementShaman, {
 	cssClass: 'enhancement-shaman-sim-ui',
@@ -72,7 +73,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecEnhancementShaman, {
 
 	defaults: {
 		// Default equipped gear.
-		gear: Presets.P3_PRESET.gear,
+		gear: Presets.P1_PRESET.gear,
 		// Default EP weights for sorting gear in the gear picker.
 		epWeights: Presets.P3_EP_PRESET.epWeights,
 		other: Presets.OtherDefaults,
@@ -118,7 +119,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecEnhancementShaman, {
 		// Preset rotations that the user can quickly select.
 		rotations: [Presets.ROTATION_PRESET_DEFAULT, Presets.ROTATION_PRESET_P3],
 		// Preset gear configurations that the user can quickly select.
-		gear: [Presets.P1_PRESET, Presets.P2_PRESET, Presets.P3_PRESET],
+		gear: [PRERAID_PRESET, Presets.P1_PRESET, Presets.P2_PRESET, Presets.P3_PRESET, Presets.P4_PRESET, Presets.P5_PRESET],
 	},
 
 	autoRotation: (_: Player<Spec.SpecEnhancementShaman>): APLRotation => {
