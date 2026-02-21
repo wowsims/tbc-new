@@ -3,7 +3,6 @@ import * as PresetUtils from '../../core/preset_utils.js';
 import { Class, ConsumesSpec, Debuffs, Profession, Race, RaidBuffs, Stat } from '../../core/proto/common.js';
 import {
 	ElementalShaman_Options as ElementalShamanOptions,
-	FeleAutocastSettings,
 	ShamanShield,
 } from '../../core/proto/shaman.js';
 import { SavedTalents } from '../../core/proto/ui.js';
@@ -55,12 +54,6 @@ export const StandardTalents = {
 export const DefaultOptions = ElementalShamanOptions.create({
 	classOptions: {
 		shield: ShamanShield.LightningShield,
-		feleAutocast: FeleAutocastSettings.create({
-			autocastFireblast: true,
-			autocastFirenova: true,
-			autocastImmolate: true,
-			autocastEmpower: false,
-		}),
 	},
 });
 

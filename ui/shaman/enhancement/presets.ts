@@ -3,7 +3,6 @@ import * as PresetUtils from '../../core/preset_utils.js';
 import { Class, ConsumesSpec, Debuffs, Profession, PseudoStat, Race, RaidBuffs, Stat } from '../../core/proto/common.js';
 import {
 	EnhancementShaman_Options as EnhancementShamanOptions,
-	FeleAutocastSettings,
 	ShamanImbue,
 	ShamanShield,
 	ShamanSyncType,
@@ -87,14 +86,6 @@ export const DefaultOptions = EnhancementShamanOptions.create({
 		shield: ShamanShield.LightningShield,
 		imbueMh: ShamanImbue.WindfuryWeapon,
 		imbueMhSwap: ShamanImbue.WindfuryWeapon,
-		feleAutocast: FeleAutocastSettings.create({
-			autocastFireblast: true,
-			autocastFirenova: true,
-			autocastImmolate: true,
-			autocastEmpower: false,
-			noImmolateWfunleash: false,
-			noImmolateDuration: 0,
-		}),
 	},
 	imbueOh: ShamanImbue.FlametongueWeapon,
 	imbueOhSwap: ShamanImbue.FlametongueWeapon,
