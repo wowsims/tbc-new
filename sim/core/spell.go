@@ -175,8 +175,8 @@ func (unit *Unit) OnSpellRegistered(handler SpellRegisteredHandler) {
 
 // Registers a new spell to the unit. Returns the newly created spell.
 func (unit *Unit) RegisterSpell(config SpellConfig) *Spell {
-	if len(unit.Spellbook) > 100 {
-		panic(fmt.Sprintf("Over 100 registered spells when registering %s! There is probably a spell being registered every iteration.", config.ActionID))
+	if len(unit.Spellbook) > 1000 {
+		panic(fmt.Sprintf("Over 1000 registered spells when registering %s! There is probably a spell being registered every iteration.", config.ActionID))
 	}
 
 	// Default the other damage multiplier to 1 if only one or the other is set.
