@@ -118,9 +118,9 @@ func (shaman *Shaman) registerMagmaTotemSpell() {
 
 func (shaman *Shaman) registerFireNovaTotemSpell() {
 	shaman.FireNovaTotemPA = &core.PendingAction{}
-	duration := time.Duration(5-shaman.Talents.ImprovedFireTotems) * time.Second
+	duration := time.Duration(4-shaman.Talents.ImprovedFireTotems) * time.Second
 
-	shaman.MagmaTotem = shaman.RegisterSpell(core.SpellConfig{
+	shaman.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 25537},
 		SpellSchool:    core.SpellSchoolFire,
 		ProcMask:       core.ProcMaskEmpty,

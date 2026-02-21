@@ -48,7 +48,7 @@ func (shaman *Shaman) applyDualWieldSpecialization() {
 	if shaman.AutoAttacks.IsDualWielding {
 		shaman.AddStaticMod(core.SpellModConfig{
 			Kind:       core.SpellMod_BonusHit_Percent,
-			FloatValue: 0.02 * float64(shaman.Talents.DualWieldSpecialization),
+			FloatValue: 2 * float64(shaman.Talents.DualWieldSpecialization),
 			ProcMask:   core.ProcMaskMeleeOrRanged,
 		})
 	}
@@ -253,7 +253,7 @@ func (shaman *Shaman) applyThunderingStrikes() {
 	}
 	shaman.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
-		FloatValue: 0.01 * float64(shaman.Talents.ThunderingStrikes),
+		FloatValue: 1 * float64(shaman.Talents.ThunderingStrikes),
 		ProcMask:   core.ProcMaskMelee,
 	})
 }

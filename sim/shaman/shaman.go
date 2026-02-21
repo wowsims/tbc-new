@@ -57,7 +57,7 @@ func NewShaman(character *core.Character, talents string, selfBuffs SelfBuffs) *
 	}
 
 	shaman.FireElemental = shaman.NewFireElemental()
-	shaman.EarthElemental = shaman.NewEarthElemental()
+	//shaman.EarthElemental = shaman.NewEarthElemental()
 
 	return shaman
 }
@@ -119,11 +119,9 @@ type Shaman struct {
 	FlameShock *core.Spell
 	FrostShock *core.Spell
 
-	// FireElemental      *FireElemental
 	FireElementalTotem *core.Spell
 	FireElemental      *FireElemental
 
-	// EarthElemental      *EarthElemental
 	EarthElementalTotem *core.Spell
 	EarthElemental      *EarthElemental
 
@@ -156,11 +154,12 @@ func (shaman *Shaman) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
 func (shaman *Shaman) Initialize() {
 	shaman.registerChainLightningSpell()
 	shaman.registerFireElementalTotem()
-	shaman.registerEarthElementalTotem()
+	//shaman.registerEarthElementalTotem()
 	shaman.registerLightningBoltSpell()
 	shaman.registerLightningShieldSpell()
 	shaman.registerMagmaTotemSpell()
 	shaman.registerSearingTotemSpell()
+	shaman.registerFireNovaTotemSpell()
 	shaman.registerShocks()
 
 	shaman.registerBloodlustCD()

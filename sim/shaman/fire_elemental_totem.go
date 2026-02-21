@@ -11,7 +11,7 @@ func (shaman *Shaman) registerFireElementalTotem() {
 
 	actionID := core.ActionID{SpellID: 2894}
 
-	totalDuration := time.Second * 60
+	totalDuration := time.Second * 120
 
 	fireElementalAura := shaman.RegisterAura(core.Aura{
 		Label:    "Fire Elemental Totem",
@@ -24,15 +24,15 @@ func (shaman *Shaman) registerFireElementalTotem() {
 		Flags:          core.SpellFlagAPL | SpellFlagInstant,
 		ClassSpellMask: SpellMaskFireElementalTotem,
 		ManaCost: core.ManaCostOptions{
-			BaseCostPercent: 26.9,
+			FlatCost: 680,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: time.Second * 1,
 			},
 			CD: core.Cooldown{
 				Timer:    shaman.NewTimer(),
-				Duration: time.Minute * 5,
+				Duration: time.Minute * 20,
 			},
 			SharedCD: core.Cooldown{
 				Timer:    shaman.GetOrInitTimer(&shaman.ElementalSharedCDTimer),
@@ -46,6 +46,7 @@ func (shaman *Shaman) registerFireElementalTotem() {
 			}
 
 			shaman.MagmaTotem.AOEDot().Deactivate(sim)
+			shaman.FireNovaTotemPA.Cancel(sim)
 			searingTotemDot := shaman.SearingTotem.Dot(shaman.CurrentTarget)
 			if searingTotemDot != nil {
 				searingTotemDot.Deactivate(sim)
