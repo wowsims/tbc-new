@@ -14,20 +14,18 @@ const (
 
 type ShamSpellConfig struct {
 	ActionID            core.ActionID
-	BaseCostPercent     float64
+	BaseFlatCost        int32
 	BaseCastTime        time.Duration
 	IsElementalOverload bool
 	BonusCoefficient    float64
 	BounceReduction     float64
-	Coeff               float64
-	Variance            float64
 	SpellSchool         core.SpellSchool
-	Overloads           *[2][]*core.Spell
+	Overloads           []*core.Spell
 	ClassSpellMask      int64
 }
 
 // Shared precomputation logic for LB and CL.
-// Needs isElementalOverload, actionID, baseCostPercent, baseCastTime, bonusCoefficient fields of the shamSpellConfig
+// Needs isElementalOverload, actionID, BaseFlatCost, baseCastTime, bonusCoefficient fields of the shamSpellConfig
 func (shaman *Shaman) newElectricSpellConfig(config ShamSpellConfig) core.SpellConfig {
 	mask := core.ProcMaskSpellDamage
 	flags := SpellFlagShamanSpell | SpellFlagFocusable
@@ -43,11 +41,10 @@ func (shaman *Shaman) newElectricSpellConfig(config ShamSpellConfig) core.SpellC
 		SpellSchool:    core.SpellSchoolNature,
 		ProcMask:       mask,
 		Flags:          flags,
-		MetricSplits:   6,
 		ClassSpellMask: config.ClassSpellMask,
 
 		ManaCost: core.ManaCostOptions{
-			BaseCostPercent: core.TernaryFloat64(config.IsElementalOverload, 0, config.BaseCostPercent),
+			FlatCost: core.TernaryInt32(config.IsElementalOverload, 0, config.BaseFlatCost),
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
@@ -55,7 +52,6 @@ func (shaman *Shaman) newElectricSpellConfig(config ShamSpellConfig) core.SpellC
 				GCD:      core.GCDDefault,
 			},
 			ModifyCast: func(sim *core.Simulation, spell *core.Spell, cast *core.Cast) {
-				spell.SetMetricsSplit(shaman.MaelstromWeaponAura.GetStacks())
 				castTime := shaman.ApplyCastSpeedForSpell(cast.CastTime, spell)
 				if sim.CurrentTime+castTime > shaman.AutoAttacks.NextAttackAt() {
 					shaman.AutoAttacks.StopMeleeUntil(sim, sim.CurrentTime+castTime)
@@ -71,13 +67,13 @@ func (shaman *Shaman) newElectricSpellConfig(config ShamSpellConfig) core.SpellC
 
 	if config.IsElementalOverload {
 		spell.ActionID.Tag = CastTagLightningOverload
-		spell.ManaCost.BaseCostPercent = 0
+		spell.ManaCost.FlatCost = 0
 		spell.Cast.DefaultCast.CastTime = 0
 		spell.Cast.DefaultCast.GCD = 0
 		spell.Cast.DefaultCast.Cost = 0
 		spell.Cast.ModifyCast = nil
 		spell.MetricSplits = 0
-		spell.DamageMultiplier *= 0.75
+		spell.DamageMultiplier *= 0.5
 		spell.ThreatMultiplier = 0
 	}
 

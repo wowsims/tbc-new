@@ -15,19 +15,21 @@ func (shaman *Shaman) registerLightningShieldSpell() {
 	actionID := core.ActionID{SpellID: 324}
 
 	shaman.LightningShieldDamage = shaman.RegisterSpell(core.SpellConfig{
-		ActionID:         core.ActionID{SpellID: 26364},
+		ActionID:         core.ActionID{SpellID: 25472},
 		SpellSchool:      core.SpellSchoolNature,
 		ProcMask:         core.ProcMaskEmpty,
 		Flags:            SpellFlagShamanSpell,
 		ClassSpellMask:   SpellMaskLightningShield,
 		DamageMultiplier: 1,
-		ThreatMultiplier: 1, //fix when spirit weapons is fixed
+		ThreatMultiplier: 1,
 		CritMultiplier:   shaman.DefaultSpellCritMultiplier(),
-		BonusCoefficient: 0.38800001144,
+		BonusCoefficient: 0.26699998975,
+		ManaCost: core.ManaCostOptions{
+			FlatCost: 400,
+		},
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := 0.0
-			result := shaman.calcDamageStormstrikeCritChance(sim, target, baseDamage, spell)
-			spell.DealDamage(sim, result)
+			baseDamage := 287.0
+			spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
 		},
 	})
 
@@ -39,13 +41,13 @@ func (shaman *Shaman) registerLightningShieldSpell() {
 	shaman.LightningShieldAura = shaman.RegisterAura(core.Aura{
 		Label:     "Lightning Shield",
 		ActionID:  actionID,
-		Duration:  time.Minute * 60,
-		MaxStacks: 7,
+		Duration:  time.Minute * 10,
+		MaxStacks: 3,
 		OnReset: func(aura *core.Aura, sim *core.Simulation) {
 			aura.Activate(sim)
 		},
 		OnGain: func(aura *core.Aura, sim *core.Simulation) {
-			aura.SetStacks(sim, 1)
+			aura.SetStacks(sim, 3)
 		},
 		OnSpellHitTaken: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			if !result.Landed() {
@@ -58,10 +60,6 @@ func (shaman *Shaman) registerLightningShieldSpell() {
 
 			aura.RemoveStack(sim)
 			shaman.LightningShieldDamage.Cast(sim, spell.Unit)
-		},
-		OnEncounterStart: func(aura *core.Aura, sim *core.Simulation) {
-			aura.Activate(sim)
-			aura.SetStacks(sim, 1)
 		},
 	})
 

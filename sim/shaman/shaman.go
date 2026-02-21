@@ -41,12 +41,11 @@ func NewShaman(character *core.Character, talents string, selfBuffs SelfBuffs, t
 		}
 	}
 	shaman := &Shaman{
-		Character:           *character,
-		Talents:             &proto.ShamanTalents{},
-		Totems:              &proto.ShamanTotems{},
-		FeleAutocast:        feleAutocastOptions,
-		SelfBuffs:           selfBuffs,
-		ThunderstormInRange: thunderstormRange,
+		Character:    *character,
+		Talents:      &proto.ShamanTalents{},
+		Totems:       &proto.ShamanTotems{},
+		FeleAutocast: feleAutocastOptions,
+		SelfBuffs:    selfBuffs,
 	}
 	// shaman.waterShieldManaMetrics = shaman.NewManaMetrics(core.ActionID{SpellID: 57960})
 
@@ -106,10 +105,6 @@ const (
 type Shaman struct {
 	core.Character
 
-	ClassSpellScaling float64
-
-	ThunderstormInRange bool // flag if thunderstorm will be in range.
-
 	Talents   *proto.ShamanTalents
 	SelfBuffs SelfBuffs
 
@@ -121,13 +116,10 @@ type Shaman struct {
 	TotemExpirations [4]time.Duration
 
 	LightningBolt         *core.Spell
-	LightningBoltOverload [2]*core.Spell
+	LightningBoltOverload *core.Spell
 
 	ChainLightning          *core.Spell
-	ChainLightningOverloads [2][]*core.Spell
-
-	LavaBeam          *core.Spell
-	LavaBeamOverloads [2][]*core.Spell
+	ChainLightningOverloads []*core.Spell
 
 	Stormstrike           *core.Spell
 	StormstrikeCastResult *core.SpellResult
@@ -156,6 +148,7 @@ type Shaman struct {
 	HealingStreamTotem *core.Spell
 	SearingTotem       *core.Spell
 	TremorTotem        *core.Spell
+	FireNovaTotemPA    *core.PendingAction
 
 	MaelstromWeaponAura           *core.Aura
 	AncestralSwiftnessInstantAura *core.Aura
@@ -248,19 +241,6 @@ func (shaman *Shaman) Reset(sim *core.Simulation) {
 func (shaman *Shaman) OnEncounterStart(sim *core.Simulation) {
 }
 
-func (shaman *Shaman) calcDamageStormstrikeCritChance(sim *core.Simulation, target *core.Unit, baseDamage float64, spell *core.Spell) *core.SpellResult {
-	var result *core.SpellResult
-	if target.HasActiveAura("Stormstrike-" + shaman.Label) {
-		critPercentBonus := core.TernaryFloat64(shaman.T14Enh4pc.IsActive(), 40.0, 25.0)
-		spell.BonusCritPercent += critPercentBonus
-		result = spell.CalcDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
-		spell.BonusCritPercent -= critPercentBonus
-	} else {
-		result = spell.CalcDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
-	}
-	return result
-}
-
 func (shaman *Shaman) GetOverloadChance() float64 {
 	overloadChance := 0.0
 
@@ -303,7 +283,8 @@ const (
 	SpellMaskFrost        = SpellMaskFrostShock
 	SpellMaskOverload     = SpellMaskLightningBoltOverload | SpellMaskChainLightningOverload
 	SpellMaskShock        = SpellMaskFlameShock | SpellMaskEarthShock | SpellMaskFrostShock
-	SpellMaskTotem        = SpellMaskMagmaTotem | SpellMaskSearingTotem | SpellMaskFireElementalTotem | SpellMaskEarthElementalTotem
+	SpellMaskFireTotem    = SpellMaskMagmaTotem | SpellMaskSearingTotem
+	SpellMaskTotem        = SpellMaskFireTotem | SpellMaskFireElementalTotem | SpellMaskEarthElementalTotem
 	SpellMaskInstantSpell = SpellMaskBloodlust
 	SpellMaskImbue        = SpellMaskFrostbrandWeapon | SpellMaskWindfuryWeapon | SpellMaskFlametongueWeapon
 )

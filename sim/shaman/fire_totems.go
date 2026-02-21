@@ -13,13 +13,13 @@ func searingTickCount(offset float64) int32 {
 
 func (shaman *Shaman) registerSearingTotemSpell() {
 	shaman.SearingTotem = shaman.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 3599},
+		ActionID:       core.ActionID{SpellID: 25530},
 		SpellSchool:    core.SpellSchoolFire,
 		ProcMask:       core.ProcMaskEmpty,
 		Flags:          core.SpellFlagAPL | SpellFlagShamanSpell,
 		ClassSpellMask: SpellMaskSearingTotem,
 		ManaCost: core.ManaCostOptions{
-			BaseCostPercent: 5.9,
+			FlatCost: 205,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
@@ -29,18 +29,18 @@ func (shaman *Shaman) registerSearingTotemSpell() {
 
 		DamageMultiplier: 1,
 		CritMultiplier:   shaman.DefaultSpellCritMultiplier(),
-		BonusCoefficient: 0.1099999994,
+		BonusCoefficient: 0.16699999571,
 		Dot: core.DotConfig{
 			Aura: core.Aura{
-				Label: "SearingTotem",
+				Label: "Searing Totem",
 			},
 			// Actual searing totem cast in game is currently 1500 milliseconds with a slight random
 			// delay inbetween each cast so using an extra 20 milliseconds to account for the delay
 			// subtracting 1 tick so that it doesn't shoot after its actual expiration
 			NumberOfTicks: searingTickCount(0),
-			TickLength:    time.Millisecond * (1500 + 20),
+			TickLength:    time.Millisecond * (1500 + 20), // TODO
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				baseDamage := shaman.CalcAndRollDamageRange(sim, 0.06300000101, 0.30000001192)
+				baseDamage := shaman.CalcAndRollDamageRange(sim, 50, 66)
 				dot.Spell.CalcAndDealDamage(sim, target, baseDamage, dot.Spell.OutcomeMagicHitAndCrit)
 			},
 		},
@@ -48,6 +48,7 @@ func (shaman *Shaman) registerSearingTotemSpell() {
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
 			shaman.MagmaTotem.AOEDot().Deactivate(sim)
 			shaman.FireElemental.Disable(sim)
+			shaman.FireNovaTotemPA.Cancel(sim)
 			if sim.CurrentTime < 0 {
 				dropTime := sim.CurrentTime
 				pa := sim.GetConsumedPendingActionFromPool()
@@ -70,13 +71,13 @@ func (shaman *Shaman) registerSearingTotemSpell() {
 
 func (shaman *Shaman) registerMagmaTotemSpell() {
 	shaman.MagmaTotem = shaman.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 8190},
+		ActionID:       core.ActionID{SpellID: 25550},
 		SpellSchool:    core.SpellSchoolFire,
 		ProcMask:       core.ProcMaskEmpty,
 		Flags:          core.SpellFlagAPL | SpellFlagShamanSpell,
 		ClassSpellMask: SpellMaskMagmaTotem,
 		ManaCost: core.ManaCostOptions{
-			BaseCostPercent: 21.1,
+			FlatCost: 800,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
@@ -90,14 +91,14 @@ func (shaman *Shaman) registerMagmaTotemSpell() {
 		Dot: core.DotConfig{
 			IsAOE: true,
 			Aura: core.Aura{
-				Label: "MagmaTotem",
+				Label: "Magma Totem",
 			},
-			NumberOfTicks:    30,
+			NumberOfTicks:    10,
 			TickLength:       time.Second * 2,
 			BonusCoefficient: 0.06700000167,
 
 			OnTick: func(sim *core.Simulation, _ *core.Unit, dot *core.Dot) {
-				baseDamage := 0.0
+				baseDamage := 97.0
 				dot.Spell.CalcPeriodicAoeDamage(sim, baseDamage, dot.Spell.OutcomeMagicHitAndCrit)
 				dot.Spell.DealBatchedPeriodicDamage(sim)
 			},
@@ -106,10 +107,57 @@ func (shaman *Shaman) registerMagmaTotemSpell() {
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
 			shaman.SearingTotem.Dot(shaman.CurrentTarget).Deactivate(sim)
 			shaman.FireElemental.Disable(sim)
+			shaman.FireNovaTotemPA.Cancel(sim)
 			spell.AOEDot().Apply(sim)
 
-			duration := 60
+			duration := 20
 			shaman.TotemExpirations[FireTotem] = sim.CurrentTime + time.Duration(duration)*time.Second
+		},
+	})
+}
+
+func (shaman *Shaman) registerFireNovaTotemSpell() {
+	shaman.FireNovaTotemPA = &core.PendingAction{}
+
+	shaman.MagmaTotem = shaman.RegisterSpell(core.SpellConfig{
+		ActionID:       core.ActionID{SpellID: 25537},
+		SpellSchool:    core.SpellSchoolFire,
+		ProcMask:       core.ProcMaskEmpty,
+		Flags:          core.SpellFlagAPL | SpellFlagShamanSpell,
+		ClassSpellMask: SpellMaskMagmaTotem,
+		ManaCost: core.ManaCostOptions{
+			FlatCost: 765,
+		},
+		Cast: core.CastConfig{
+			DefaultCast: core.Cast{
+				GCD: time.Second,
+			},
+			CD: core.Cooldown{
+				Timer:    shaman.NewTimer(),
+				Duration: time.Second * 15,
+			},
+		},
+
+		DamageMultiplier: 1,
+		CritMultiplier:   shaman.DefaultSpellCritMultiplier(),
+		BonusCoefficient: 0.21400000155,
+
+		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+			shaman.SearingTotem.Dot(shaman.CurrentTarget).Deactivate(sim)
+			shaman.MagmaTotem.AOEDot().Deactivate(sim)
+			shaman.FireElemental.Disable(sim)
+			duration := 5 * time.Second
+
+			baseDamage := shaman.CalcAndRollDamageRange(sim, 654, 730)
+			spell.CalcAoeDamage(sim, baseDamage, spell.OutcomeMagicHitAndCrit)
+
+			shaman.FireNovaTotemPA.OnAction = func(sim *core.Simulation) {
+				spell.DealBatchedAoeDamage(sim)
+			}
+			shaman.FireNovaTotemPA.NextActionAt = sim.CurrentTime + duration
+			sim.AddPendingAction(shaman.FireNovaTotemPA)
+
+			shaman.TotemExpirations[FireTotem] = sim.CurrentTime + duration
 		},
 	})
 }
