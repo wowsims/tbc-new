@@ -118,13 +118,14 @@ func (shaman *Shaman) registerMagmaTotemSpell() {
 
 func (shaman *Shaman) registerFireNovaTotemSpell() {
 	shaman.FireNovaTotemPA = &core.PendingAction{}
+	duration := time.Duration(5-shaman.Talents.ImprovedFireTotems) * time.Second
 
 	shaman.MagmaTotem = shaman.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 25537},
 		SpellSchool:    core.SpellSchoolFire,
 		ProcMask:       core.ProcMaskEmpty,
 		Flags:          core.SpellFlagAPL | SpellFlagShamanSpell,
-		ClassSpellMask: SpellMaskMagmaTotem,
+		ClassSpellMask: SpellMaskFireNovaTotem,
 		ManaCost: core.ManaCostOptions{
 			FlatCost: 765,
 		},
@@ -146,7 +147,6 @@ func (shaman *Shaman) registerFireNovaTotemSpell() {
 			shaman.SearingTotem.Dot(shaman.CurrentTarget).Deactivate(sim)
 			shaman.MagmaTotem.AOEDot().Deactivate(sim)
 			shaman.FireElemental.Disable(sim)
-			duration := 5 * time.Second
 
 			baseDamage := shaman.CalcAndRollDamageRange(sim, 654, 730)
 			spell.CalcAoeDamage(sim, baseDamage, spell.OutcomeMagicHitAndCrit)

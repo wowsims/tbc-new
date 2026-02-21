@@ -242,9 +242,10 @@ func (shaman *Shaman) OnEncounterStart(sim *core.Simulation) {
 }
 
 func (shaman *Shaman) GetOverloadChance() float64 {
-	overloadChance := 0.0
-
-	return overloadChance
+	if shaman.Talents.LightningOverload == 0 {
+		return 0.0
+	}
+	return 0.04 * float64(shaman.Talents.LightningOverload)
 }
 
 const (
@@ -260,10 +261,9 @@ const (
 	SpellMaskChainLightningOverload
 	SpellMaskEarthShock
 	SpellMaskLightningShield
-	SpellMaskThunderstorm
-	SpellMaskFireNova
 	SpellMaskMagmaTotem
 	SpellMaskSearingTotem
+	SpellMaskFireNovaTotem
 	SpellMaskPrimalStrike
 	SpellMaskStormstrikeCast
 	SpellMaskStormstrikeDamage
@@ -278,12 +278,12 @@ const (
 
 	SpellMaskStormstrike  = SpellMaskStormstrikeCast | SpellMaskStormstrikeDamage
 	SpellMaskFlameShock   = SpellMaskFlameShockDirect | SpellMaskFlameShockDot
-	SpellMaskFire         = SpellMaskFlameShock | SpellMaskFireNova
-	SpellMaskNature       = SpellMaskLightningBolt | SpellMaskLightningBoltOverload | SpellMaskChainLightning | SpellMaskChainLightningOverload | SpellMaskEarthShock | SpellMaskThunderstorm
+	SpellMaskFire         = SpellMaskFlameShock
+	SpellMaskNature       = SpellMaskLightningBolt | SpellMaskLightningBoltOverload | SpellMaskChainLightning | SpellMaskChainLightningOverload | SpellMaskEarthShock
 	SpellMaskFrost        = SpellMaskFrostShock
 	SpellMaskOverload     = SpellMaskLightningBoltOverload | SpellMaskChainLightningOverload
 	SpellMaskShock        = SpellMaskFlameShock | SpellMaskEarthShock | SpellMaskFrostShock
-	SpellMaskFireTotem    = SpellMaskMagmaTotem | SpellMaskSearingTotem
+	SpellMaskFireTotem    = SpellMaskMagmaTotem | SpellMaskSearingTotem | SpellMaskFireNovaTotem
 	SpellMaskTotem        = SpellMaskFireTotem | SpellMaskFireElementalTotem | SpellMaskEarthElementalTotem
 	SpellMaskInstantSpell = SpellMaskBloodlust
 	SpellMaskImbue        = SpellMaskFrostbrandWeapon | SpellMaskWindfuryWeapon | SpellMaskFlametongueWeapon
