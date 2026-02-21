@@ -81,6 +81,10 @@ dps_results: {
  value: {}
 }
 dps_results: {
+ key: "TestArcane-AllItems-EnchantWeapon-Crusader-1900"
+ value: {}
+}
+dps_results: {
  key: "TestArcane-AllItems-EyeofMagtheridon-28789"
  value: {}
 }

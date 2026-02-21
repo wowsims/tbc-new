@@ -109,6 +109,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRogue-AllItems-EnchantWeapon-Crusader-1900"
+ value: {
+  dps: 2053.57302
+  tps: 1458.03684
+ }
+}
+dps_results: {
  key: "TestRogue-AllItems-EnchantWeapon-Deathfrost-3273"
  value: {
   dps: 2048.12235

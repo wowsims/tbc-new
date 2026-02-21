@@ -141,6 +141,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestProtectionWarrior-AllItems-EnchantWeapon-Crusader-1900"
+ value: {
+  dps: 363.38282
+  tps: 474.7614
+  dtps: 419.87069
+ }
+}
+dps_results: {
  key: "TestProtectionWarrior-AllItems-EnchantWeapon-Deathfrost-3273"
  value: {
   dps: 366.38752
