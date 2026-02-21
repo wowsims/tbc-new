@@ -1,284 +1,229 @@
 package warlock
 
-// import (
-// 	"time"
+import (
+	"time"
 
-// 	"github.com/wowsims/tbc/sim/core"
-// 	"github.com/wowsims/tbc/sim/core/proto"
-// 	"github.com/wowsims/tbc/sim/core/stats"
-// )
+	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/stats"
+)
 
-// // T11
-// var ItemSetMaleficRaiment = core.NewItemSet(core.ItemSet{
-// 	Name: "Shadowflame Regalia",
-// 	Bonuses: map[int32]core.ApplySetBonus{
-// 		2: func(agent core.Agent, setBonusAura *core.Aura) {
-// 			setBonusAura.AttachSpellMod(core.SpellModConfig{
-// 				Kind:       core.SpellMod_CastTime_Pct,
-// 				ClassMask:  WarlockSpellChaosBolt | WarlockSpellHandOfGuldan | WarlockSpellHaunt,
-// 				FloatValue: -0.1,
-// 			})
-// 		},
-// 		4: func(agent core.Agent, setBonusAura *core.Aura) {
-// 			warlock := agent.(WarlockAgent).GetWarlock()
+// Dungeon Set 3
+var ItemSetOblivionRaiment = core.NewItemSet(core.ItemSet{
+	ID:   644,
+	Name: "Oblivion Raiment",
+	Bonuses: map[int32]core.ApplySetBonus{
+		2: func(agent core.Agent, setBonusAura *core.Aura) {
+			// Grants your pet 45 mana per 5 sec.
+			// Pet Mana Regen - 37375
+			warlock := agent.(WarlockAgent).GetWarlock()
 
-// 			dmgMod := warlock.AddDynamicMod(core.SpellModConfig{
-// 				Kind:       core.SpellMod_DamageDone_Flat,
-// 				ClassMask:  WarlockSpellFelFlame,
-// 				FloatValue: 3.0,
-// 			})
+			setBonusAura.
+				ApplyOnGain(func(aura *core.Aura, sim *core.Simulation) {
+					for _, pet := range warlock.Pets {
+						pet.AddStatDynamic(sim, stats.MP5, 45.0)
+					}
+				}).
+				ApplyOnExpire(func(aura *core.Aura, sim *core.Simulation) {
+					for _, pet := range warlock.Pets {
+						pet.AddStatDynamic(sim, stats.MP5, -45.0)
+					}
+				})
 
-// 			aura := warlock.RegisterAura(core.Aura{
-// 				Label:     "Fel Spark",
-// 				ActionID:  core.ActionID{SpellID: 89937},
-// 				Duration:  15 * time.Second,
-// 				MaxStacks: 2,
-// 				OnGain: func(aura *core.Aura, sim *core.Simulation) {
-// 					dmgMod.Activate()
-// 				},
-// 				OnExpire: func(aura *core.Aura, sim *core.Simulation) {
-// 					dmgMod.Deactivate()
-// 				},
-// 				OnSpellHitDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-// 					if spell.Matches(WarlockSpellFelFlame) && result.Landed() {
-// 						aura.RemoveStack(sim)
-// 					}
-// 				},
-// 			})
+		},
+		4: func(agent core.Agent, setBonusAura *core.Aura) {
+			// Your Seed of Corruption deals 180 additional damage when it detonates.
+			// Improved Seed of Corruption - 37376
+			setBonusAura.AttachSpellMod(core.SpellModConfig{
+				Kind:       core.SpellMod_BonusSpellDamage_Flat,
+				FloatValue: 180.0,
+				ClassMask:  WarlockSpellSeedOfCorruptionExplosion,
+			})
+		},
+	},
+})
 
-// 			setBonusAura.AttachProcTrigger(core.ProcTrigger{
-// 				Name:           "Item - Warlock T11 4P Bonus",
-// 				ActionID:       core.ActionID{SpellID: 89935},
-// 				ClassSpellMask: WarlockSpellImmolateDot | WarlockSpellUnstableAffliction,
-// 				Callback:       core.CallbackOnPeriodicDamageDealt,
-// 				ProcChance:     0.02,
-// 				Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-// 					aura.Activate(sim)
-// 					aura.SetStacks(sim, 2)
-// 				},
-// 			})
-// 		},
-// 	},
-// })
+// T4
+var ItemSetVoidheartRaiment = core.NewItemSet(core.ItemSet{
+	ID:   645,
+	Name: "Voidheart Raiment",
+	Bonuses: map[int32]core.ApplySetBonus{
+		2: func(agent core.Agent, setBonusAura *core.Aura) {
+			warlock := agent.(WarlockAgent).GetWarlock()
+			// Your shadow damage spells have a chance to grant you 135 bonus shadow damage for 15 sec.
+			// Shadowflame - 37377
+			shadowBonus := warlock.NewTemporaryStatsAura("Shadowflame", core.ActionID{SpellID: 37377}, stats.Stats{stats.ShadowDamage: 135}, time.Second*15)
 
-// // T14
-// var ItemSetShaSkinRegalia = core.NewItemSet(core.ItemSet{
-// 	Name:                    "Sha-Skin Regalia",
-// 	DisabledInChallengeMode: true,
-// 	Bonuses: map[int32]core.ApplySetBonus{
-// 		2: func(agent core.Agent, setBonusAura *core.Aura) {
-// 			setBonusAura.AttachSpellMod(core.SpellModConfig{
-// 				Kind:       core.SpellMod_DamageDone_Pct,
-// 				FloatValue: 0.1,
-// 				ClassMask:  WarlockSpellCorruption,
-// 			}).AttachSpellMod(core.SpellModConfig{
-// 				Kind:       core.SpellMod_DamageDone_Pct,
-// 				FloatValue: 0.05,
-// 				ClassMask:  WarlockSpellIncinerate | WarlockSpellFaBIncinerate,
-// 			}).AttachSpellMod(core.SpellModConfig{
-// 				Kind:       core.SpellMod_DamageDone_Pct,
-// 				FloatValue: 0.02,
-// 				ClassMask:  WarlockSpellShadowBolt | WarlockSpellDemonicSlash | WarlockSpellTouchOfChaos,
-// 			})
-// 		},
-// 		4: func(agent core.Agent, setBonusAura *core.Aura) {
-// 			buff := agent.GetCharacter().RegisterAura(core.Aura{
-// 				Label:    "Sha-Skin Regalia - 4P Buff",
-// 				ActionID: core.ActionID{SpellID: 148463},
-// 				Duration: time.Second * 20,
-// 			}).AttachMultiplicativePseudoStatBuff(&agent.GetCharacter().PseudoStats.DamageDealtMultiplier, 1.10)
+			// Your fire damage spells have a chance to grant you 135 bonus fire damage for 15 sec.
+			// Hellfire - 39437
+			fireBonus := warlock.NewTemporaryStatsAura("Shadowflame Hellfire", core.ActionID{SpellID: 39437}, stats.Stats{stats.FireDamage: 135}, time.Second*15)
 
-// 			agent.GetCharacter().OnSpellRegistered(func(spell *core.Spell) {
-// 				if spell.Matches(WarlockDarkSoulSpell) {
-// 					spell.RelatedSelfBuff.ApplyOnGain(func(aura *core.Aura, sim *core.Simulation) {
-// 						buff.Activate(sim)
-// 					})
-// 				}
-// 			})
-// 		},
-// 	},
-// })
+			setBonusAura.AttachProcTrigger(core.ProcTrigger{
+				Name:       "Voidheart Raiment 2pc",
+				ProcChance: 0.05,
+				Callback:   core.CallbackOnCastComplete,
+				Handler: func(sim *core.Simulation, spell *core.Spell, _ *core.SpellResult) {
+					if spell.SpellSchool.Matches(core.SpellSchoolShadow) {
+						shadowBonus.Activate(sim)
+					}
+					if spell.SpellSchool.Matches(core.SpellSchoolFire) {
+						fireBonus.Activate(sim)
+					}
+				},
+			})
+		},
+		4: func(agent core.Agent, setBonusAura *core.Aura) {
+			// Increases the duration of your Corruption and Immolate abilities by 3 sec.
+			// Improved Corruption and Immolate - 37380
 
-// // T15
-// var ItemSetRegaliaOfTheThousandfeldHells = core.NewItemSet(core.ItemSet{
-// 	Name:                    "Regalia of the Thousandfold Hells",
-// 	DisabledInChallengeMode: true,
-// 	Bonuses: map[int32]core.ApplySetBonus{
-// 		2: func(agent core.Agent, setBonusAura *core.Aura) {
-// 			warlock := agent.(WarlockAgent).GetWarlock()
-// 			warlock.T15_2pc = agent.GetCharacter().RegisterAura(core.Aura{
-// 				Label:    "Regalia of the Thousandfold Hells - 2P Buff",
-// 				Duration: time.Second * 20,
-// 			}).AttachSpellMod(core.SpellModConfig{
-// 				Kind:      core.SpellMod_DotNumberOfTicks_Flat,
-// 				IntValue:  2,
-// 				ClassMask: WarlockSpellHaunt,
-// 			})
+			setBonusAura.AttachSpellMod(core.SpellModConfig{
+				Kind:      core.SpellMod_DotNumberOfTicks_Flat,
+				IntValue:  1,
+				ClassMask: WarlockSpellCorruption | WarlockSpellImmolate,
+			})
+		},
+	},
+})
 
-// 			agent.GetCharacter().OnSpellRegistered(func(spell *core.Spell) {
-// 				if spell.Matches(WarlockDarkSoulSpell) {
-// 					spell.RelatedSelfBuff.ApplyOnGain(func(aura *core.Aura, sim *core.Simulation) {
-// 						warlock.T15_2pc.Activate(sim)
-// 					})
-// 				}
-// 			})
-// 		},
-// 		4: func(agent core.Agent, setBonusAura *core.Aura) {
-// 			setBonusAura.AttachSpellMod(core.SpellModConfig{
-// 				Kind:       core.SpellMod_DamageDone_Pct,
-// 				FloatValue: 0.05,
-// 				ClassMask:  WarlockSpellMaleficGrasp | WarlockSpellDrainSoul,
-// 			})
+// T5
+var ItemSetCorruptorRaiment = core.NewItemSet(core.ItemSet{
+	ID:   646,
+	Name: "Corruptor Raiment",
+	Bonuses: map[int32]core.ApplySetBonus{
+		2: func(agent core.Agent, setBonusAura *core.Aura) {
+			// Causes your pet to be healed for 15% of the damage you deal.
+			// Pet Healing - 37381
+			healthMetric := agent.(WarlockAgent).GetWarlock().NewHealthMetrics(core.ActionID{SpellID: 38394})
+			setBonusAura.AttachProcTrigger(core.ProcTrigger{
+				Name:     "Corruptor Raiment 2pc - Pet Healing",
+				ActionID: core.ActionID{SpellID: 37381},
+				Outcome:  core.OutcomeLanded,
+				Callback: core.CallbackOnSpellHitDealt,
+				Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+					agent.(WarlockAgent).GetWarlock().ActivePet.GainHealth(sim, result.Damage*0.15, healthMetric)
+				},
+			})
 
-// 			warlock := agent.(WarlockAgent).GetWarlock()
-// 			warlock.T15_4pc = setBonusAura
-// 		},
-// 	},
-// })
+		},
+		4: func(agent core.Agent, setBonusAura *core.Aura) {
+			// Your Shadowbolt spell hits increase the damage of Corruption by 10% and your Incinerate spell hits increase the damage of Immolate by 10%.
+			// Improved Corruption and Immolate - 37384
+			warlock := agent.(WarlockAgent).GetWarlock()
 
-// // T16
-// var ItemSetRegaliaOfTheHornedNightmare = core.NewItemSet(core.ItemSet{
-// 	Name:                    "Regalia of the Horned Nightmare",
-// 	DisabledInChallengeMode: true,
-// 	Bonuses: map[int32]core.ApplySetBonus{
-// 		2: func(agent core.Agent, setBonusAura *core.Aura) {
-// 			warlock := agent.(WarlockAgent).GetWarlock()
-// 			var buff *core.Aura
-// 			switch warlock.Spec {
-// 			case proto.Spec_SpecAfflictionWarlock:
-// 				buff = warlock.RegisterAura(core.Aura{
-// 					ActionID: core.ActionID{SpellID: 145082},
-// 					Label:    "Regalia of the Horned Nightmare - Affli - 2pc",
-// 					Duration: time.Second * 10,
-// 				}).AttachSpellMod(core.SpellModConfig{
-// 					Kind:       core.SpellMod_DamageDone_Pct,
-// 					FloatValue: 0.15,
-// 					ClassMask:  WarlockSpellDrainSoul | WarlockSpellMaleficGrasp,
-// 				})
+			corrMod := warlock.AddDynamicMod(core.SpellModConfig{
+				Kind:       core.SpellMod_DotDamageDone_Pct,
+				FloatValue: 0.10,
+				ClassMask:  WarlockSpellShadowBolt,
+			})
 
-// 				warlock.T16_2pc_buff = buff
-// 				setBonusAura.OnSpellHitDealt = func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-// 					if spell.Matches(WarlockSpellUnstableAffliction) && result.DidCrit() && sim.Proc(0.5, "T16 - 2pc") {
-// 						buff.Activate(sim)
-// 						return
-// 					}
-// 				}
-// 			case proto.Spec_SpecDemonologyWarlock:
-// 				// TODO: Research if all pets or just the primary pet is affected
-// 				buffAction := core.ActionID{SpellID: 145075}
-// 				applyBuffAura := func(unit *core.Unit) {
-// 					unit.RegisterAura(core.Aura{
-// 						ActionID: buffAction,
-// 						Label:    "Regalia of the Horned Nightmare - Demo - 2pc",
-// 						Duration: time.Second * 10,
-// 					}).AttachMultiplicativePseudoStatBuff(&unit.PseudoStats.DamageDealtMultiplier, 1.2)
-// 				}
+			immoMod := warlock.AddDynamicMod(core.SpellModConfig{
+				Kind:       core.SpellMod_DotDamageDone_Pct,
+				FloatValue: 0.10,
+				ClassMask:  WarlockSpellImmolate,
+			})
 
-// 				applyBuffAura(&warlock.Unit)
-// 				for _, pet := range warlock.Pets {
-// 					if pet.IsGuardian() {
-// 						continue
-// 					}
+			setBonusAura.AttachProcTrigger(core.ProcTrigger{
+				Name:           "Corruptor Raiment 4pc - Improved Corruption and Immolate",
+				ActionID:       core.ActionID{SpellID: 37384},
+				ClassSpellMask: WarlockSpellShadowBolt | WarlockSpellIncinerate,
+				Outcome:        core.OutcomeLanded,
+				Callback:       core.CallbackOnSpellHitDealt,
+				Handler: func(sim *core.Simulation, spell *core.Spell, _ *core.SpellResult) {
+					if spell.Matches(WarlockSpellShadowBolt) {
+						corrMod.Activate()
+					}
+					if spell.Matches(WarlockSpellIncinerate) {
+						immoMod.Activate()
+					}
+				},
+			})
+		},
+	},
+})
 
-// 					applyBuffAura(&pet.Unit)
-// 				}
+// T6
+var ItemSetMaleficRaiment = core.NewItemSet(core.ItemSet{
+	ID:   670,
+	Name: "Malefic Raiment",
+	Bonuses: map[int32]core.ApplySetBonus{
+		2: func(agent core.Agent, setBonusAura *core.Aura) {
+			// Each time one of your Corruption or Immolate spells deals periodic damage, you heal 70 health.
+			// Dot Heals - 38394
+			warlock := agent.(WarlockAgent).GetWarlock()
+			healthMetric := warlock.NewHealthMetrics(core.ActionID{SpellID: 38394})
 
-// 				setBonusAura.OnSpellHitDealt = func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-// 					if spell.Matches(WarlockSpellSoulFire) && sim.Proc(0.2, "T16 - 2pc") {
-// 						warlock.GetAuraByID(buffAction).Activate(sim)
-// 						for _, pet := range warlock.Pets {
-// 							if pet.IsGuardian() {
-// 								continue
-// 							}
+			setBonusAura.AttachProcTrigger(core.ProcTrigger{
+				Name:           "Malefic Raiment 2pc - Dot Heals",
+				ActionID:       core.ActionID{SpellID: 38394},
+				ClassSpellMask: WarlockSpellCorruption | WarlockSpellImmolateDot,
+				Callback:       core.CallbackOnPeriodicDamageDealt,
+				Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+					warlock.GainHealth(sim, 70*warlock.PseudoStats.SelfHealingMultiplier, healthMetric)
+				},
+			})
+		},
+		4: func(agent core.Agent, setBonusAura *core.Aura) {
+			// Increases damage done by shadowbolt and incinerate by 6%.
+			// Improved Shadow Bolt and Incinerate - 38393
+			warlock := agent.(WarlockAgent).GetWarlock()
 
-// 							if !pet.IsActive() {
-// 								continue
-// 							}
+			impSBoltIncMod := warlock.AddDynamicMod(core.SpellModConfig{
+				Kind:       core.SpellMod_DamageDone_Pct,
+				FloatValue: 0.06,
+				ClassMask:  WarlockSpellShadowBolt | WarlockSpellIncinerate,
+			})
 
-// 							pet.GetAuraByID(buffAction).Activate(sim)
-// 						}
-// 					}
-// 				}
-// 			case proto.Spec_SpecDestructionWarlock:
-// 				buff = warlock.RegisterAura(core.Aura{
-// 					ActionID: core.ActionID{SpellID: 145075},
-// 					Label:    "Regalia of the Horned Nightmare - Destro - 2pc",
-// 					Duration: time.Second * 10,
-// 				}).AttachSpellMod(core.SpellModConfig{
-// 					Kind:       core.SpellMod_BonusCrit_Percent,
-// 					FloatValue: 0.1,
-// 					ClassMask:  WarlockSpellImmolate | WarlockSpellImmolateDot | WarlockSpellIncinerate | WarlockSpellFaBIncinerate,
-// 				})
+			setBonusAura.AttachProcTrigger(core.ProcTrigger{
+				Name:           "Malefic Raiment 4pc - Improved Shadow Bolt and Incinerate",
+				ActionID:       core.ActionID{SpellID: 38393},
+				ClassSpellMask: WarlockSpellShadowBolt | WarlockSpellIncinerate,
+				Outcome:        core.OutcomeLanded,
+				Callback:       core.CallbackOnSpellHitDealt,
+				Handler: func(sim *core.Simulation, spell *core.Spell, _ *core.SpellResult) {
+					impSBoltIncMod.Activate()
+				},
+			})
+		},
+	},
+})
 
-// 				setBonusAura.OnSpellHitDealt = func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-// 					if spell.Matches(WarlockSpellConflagrate|WarlockSpellFaBConflagrate) && result.DidCrit() && sim.Proc(0.2, "T16 - 2pc") {
-// 						buff.Activate(sim)
-// 						return
-// 					}
-// 				}
-// 			default:
-// 				return
-// 			}
-// 		},
-// 		4: func(agent core.Agent, setBonusAura *core.Aura) {
-// 			warlock := agent.(WarlockAgent).GetWarlock()
-// 			switch agent.GetCharacter().Spec {
-// 			case proto.Spec_SpecAfflictionWarlock:
-// 				warlock.OnSpellRegistered(func(spell *core.Spell) {
-// 					if !spell.Matches(WarlockSpellHaunt) {
-// 						return
-// 					}
+func init() {
+	core.NewItemEffect(19337, func(agent core.Agent) {
+		// The Black Book
+		for _, pet := range agent.(WarlockAgent).GetWarlock().Pets {
+			pet.NewTemporaryStatsAura("Blessing of The Black Book", core.ActionID{SpellID: 23720}, stats.Stats{stats.SpellDamage: 200, stats.AttackPower: 325, stats.Armor: 1600}, time.Second*30)
+		}
+	})
 
-// 					for _, target := range warlock.Env.Encounter.AllTargets {
-// 						dot := spell.Dot(&target.Unit)
-// 						if dot == nil {
-// 							break
-// 						}
-// 						dot.ApplyOnExpire(func(_ *core.Aura, sim *core.Simulation) {
-// 							if sim.Proc(0.1, "T16 4p") {
-// 								warlock.GetSecondaryResourceBar().Gain(sim, 1, spell.ActionID)
-// 							}
-// 						})
-// 					}
+	core.NewItemEffect(30449, func(agent core.Agent) {
+		// Void Star Talisman
+		for _, pet := range agent.(WarlockAgent).GetWarlock().Pets {
+			pet.AddStats(stats.Stats{
+				stats.SpellDamage:      48,
+				stats.ArcaneResistance: 130,
+				stats.FireResistance:   130,
+				stats.FrostResistance:  130,
+				stats.NatureResistance: 130,
+				stats.ShadowResistance: 130,
+			})
+		}
+	})
 
-// 				})
-// 			case proto.Spec_SpecDemonologyWarlock:
-// 				setBonusAura.AttachProcTrigger(core.ProcTrigger{
-// 					Callback:       core.CallbackOnCastComplete,
-// 					ClassSpellMask: WarlockSpellShadowBolt | WarlockSpellTouchOfChaos,
-// 					ProcChance:     0.08,
-// 					Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-// 						// TODO: NOT IMPLEMENTED - Need to verify how this interacts with existing Shadow Flame DoT
-// 					},
-// 				})
-// 			case proto.Spec_SpecDestructionWarlock:
-// 				buff := warlock.RegisterAura(core.Aura{
-// 					ActionID: core.ActionID{SpellID: 145164},
-// 					Label:    "Regalia of the Horned Nightmare - Demo - 4pc",
-// 					Duration: time.Second * 5,
-// 					Icd: &core.Cooldown{
-// 						Timer:    warlock.NewTimer(),
-// 						Duration: time.Second * 10,
-// 					},
-// 				}).AttachStatBuff(stats.CritRating, core.CritRatingPerCritPercent*15)
+	core.NewItemEffect(32493, func(agent core.Agent) {
+		// Ashtongue Talisman of Shadows
+		warlock := agent.(WarlockAgent).GetWarlock()
+		procAura := warlock.MakeProcTriggerAura(core.ProcTrigger{
+			Name:           "Ashtongue Talisman of Shadows",
+			ClassSpellMask: WarlockSpellCorruption,
+			Callback:       core.CallbackOnPeriodicDamageDealt,
+			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+				if !sim.Proc(0.20, "Ashtongue Talisman of Shadows") {
+					return
+				}
+				warlock.NewTemporaryStatsAura("Ashtongue Talisman of Shadows Proc", core.ActionID{SpellID: 40478}, stats.Stats{stats.SpellDamage: 220}, time.Second*5)
+			},
+		})
 
-// 				warlock.GetSecondaryResourceBar().RegisterOnGain(func(
-// 					sim *core.Simulation,
-// 					_, realGain float64,
-// 					actionID core.ActionID,
-// 				) {
-// 					if realGain == 0 || buff.Icd.IsReady(sim) {
-// 						return
-// 					}
-
-// 					old := warlock.GetSecondaryResourceBar().Value() - realGain
-// 					if int(old/10) == int(warlock.GetSecondaryResourceBar().Value()/10) {
-// 						return
-// 					}
-
-// 					buff.Activate(sim)
-// 				})
-// 			}
-// 		},
-// 	},
-// })
+		warlock.ItemSwap.RegisterProc(32493, procAura)
+		warlock.ItemSwap.RegisterActive(32493)
+	})
+}

@@ -45,9 +45,9 @@ export const DefaultOptions = WarlockOptions.create({
 });
 
 export const DefaultConsumables = ConsumesSpec.create({
-	flaskId: 76084, // Flask of the Winds
-	foodId: 74648, // Skewered Eel
-	potId: 76089, // Potion of the Tol'vir
+	flaskId: 22866, // Flask of Pure Death
+	foodId: 27657, // Blackened Basilisk
+	potId: 22839, // Destruction Potion
 });
 
 export const OtherDefaults = {

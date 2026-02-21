@@ -6,53 +6,55 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
-const corruptionCoeff = 0.156
+const uaCoeff = 0.2
 
-func (warlock *Warlock) registerCorruption() *core.Spell {
-
-	warlock.Corruption = warlock.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 172},
+func (warlock *Warlock) registerUnstableAffliction() {
+	warlock.UnstableAffliction = warlock.RegisterSpell(core.SpellConfig{
+		ActionID:       core.ActionID{SpellID: 30405},
 		SpellSchool:    core.SpellSchoolShadow,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL,
-		ClassSpellMask: WarlockSpellCorruption,
+		ClassSpellMask: WarlockSpellUnstableAffliction,
 
-		DamageMultiplier: 1,
-		CritMultiplier:   1,
-		ManaCost:         core.ManaCostOptions{FlatCost: 370},
+		ManaCost: core.ManaCostOptions{FlatCost: 400},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD:      core.GCDDefault,
-				CastTime: time.Millisecond * 2000,
+				CastTime: 1500 * time.Millisecond,
 			},
 		},
 
+		CritMultiplier:           1,
+		DamageMultiplierAdditive: 1,
+		ThreatMultiplier:         1,
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			result := spell.CalcOutcome(sim, target, spell.OutcomeMagicHit)
-
 			if result.Landed() {
 				spell.Dot(target).Apply(sim)
 			}
 			spell.DealOutcome(sim, result)
 		},
-		BonusCoefficient: corruptionCoeff,
+		BonusCoefficient: uaCoeff,
 
 		Dot: core.DotConfig{
 			Aura: core.Aura{
-				Label: "Corruption",
-				Tag:   "Affliction",
+				Label:    "Unstable Affliction",
+				Tag:      "Affliction",
+				ActionID: core.ActionID{SpellID: 30108},
 			},
-			NumberOfTicks:       6,
-			TickLength:          3 * time.Second,
-			AffectedByCastSpeed: false,
-			BonusCoefficient:    corruptionCoeff,
+			NumberOfTicks:       9,
+			TickLength:          2 * time.Second,
+			AffectedByCastSpeed: true,
+			BonusCoefficient:    uaCoeff,
+
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.Snapshot(target, 900/6)
+				dot.Snapshot(target, 1050)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
 			},
 		},
+
 		ExpectedTickDamage: func(sim *core.Simulation, target *core.Unit, spell *core.Spell, useSnapshot bool) *core.SpellResult {
 			dot := spell.Dot(target)
 			if useSnapshot {
@@ -60,12 +62,10 @@ func (warlock *Warlock) registerCorruption() *core.Spell {
 				result.Damage /= dot.TickPeriod().Seconds()
 				return result
 			} else {
-				result := spell.CalcPeriodicDamage(sim, target, 900, spell.OutcomeExpectedMagicCrit)
+				result := spell.CalcPeriodicDamage(sim, target, 1050, spell.OutcomeExpectedMagicCrit)
 				result.Damage /= dot.CalcTickPeriod().Round(time.Millisecond).Seconds()
 				return result
 			}
 		},
 	})
-
-	return warlock.Corruption
 }

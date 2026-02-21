@@ -360,6 +360,10 @@ const (
 	// Uses FloatValue
 	SpellMod_DotBaseDuration_Pct
 
+	// Add/subtract bonus coefficient
+	// Uses: FloatValue
+	SpellMod_DotBonusCoeffecient_Flat
+
 	// Will increase the spell.ThreatMultiplier. +5% = 0.05
 	// Uses FloatValue
 	SpellMod_ThreatMultiplier_Pct
@@ -483,6 +487,11 @@ var spellModMap = map[SpellModType]*SpellModFunctions{
 	SpellMod_DotBaseDuration_Pct: {
 		Apply:  applyDotBaseDurationMultiplier,
 		Remove: removeDotBaseDurationMultiplier,
+	},
+
+	SpellMod_DotBonusCoeffecient_Flat: {
+		Apply:  applyDotBonusCoefficientFlat,
+		Remove: removeDotBonusCoefficientFlat,
 	},
 
 	SpellMod_ThreatMultiplier_Pct: {
@@ -810,6 +819,34 @@ func removeDotBaseDurationMultiplier(mod *SpellMod, spell *Spell) {
 
 	if spell.aoeDot != nil {
 		spell.aoeDot.BaseDurationMultiplier /= (1 + mod.floatValue)
+	}
+}
+
+func applyDotBonusCoefficientFlat(mod *SpellMod, spell *Spell) {
+	if spell.dots != nil {
+		for _, dot := range spell.dots {
+			if dot != nil {
+				dot.BonusCoefficient += mod.floatValue
+			}
+		}
+	}
+
+	if spell.aoeDot != nil {
+		spell.aoeDot.BonusCoefficient += mod.floatValue
+	}
+}
+
+func removeDotBonusCoefficientFlat(mod *SpellMod, spell *Spell) {
+	if spell.dots != nil {
+		for _, dot := range spell.dots {
+			if dot != nil {
+				dot.BonusCoefficient -= mod.floatValue
+			}
+		}
+	}
+
+	if spell.aoeDot != nil {
+		spell.aoeDot.BonusCoefficient -= mod.floatValue
 	}
 }
 

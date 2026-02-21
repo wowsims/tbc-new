@@ -6,27 +6,29 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
-const corruptionCoeff = 0.156
+const siphonLifeCoeff = 0.1
 
-func (warlock *Warlock) registerCorruption() *core.Spell {
+func (warlock *Warlock) registerSiphonLifeSpell() {
+	actionID := core.ActionID{SpellID: 30911}
+	baseCost := 410.0
 
-	warlock.Corruption = warlock.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 172},
+	healthMetrics := warlock.NewHealthMetrics(actionID)
+
+	warlock.SiphonLife = warlock.RegisterSpell(core.SpellConfig{
+		ActionID:       actionID,
 		SpellSchool:    core.SpellSchoolShadow,
+		ClassSpellMask: WarlockSpellSiphonLife,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL,
-		ClassSpellMask: WarlockSpellCorruption,
-
-		DamageMultiplier: 1,
-		CritMultiplier:   1,
-		ManaCost:         core.ManaCostOptions{FlatCost: 370},
+		BaseCost:       baseCost,
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD:      core.GCDDefault,
-				CastTime: time.Millisecond * 2000,
+				Cost: baseCost,
+				GCD:  core.GCDDefault,
 			},
 		},
-
+		DamageMultiplier: 1,
+		BonusCoefficient: 0.1,
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			result := spell.CalcOutcome(sim, target, spell.OutcomeMagicHit)
 
@@ -35,24 +37,29 @@ func (warlock *Warlock) registerCorruption() *core.Spell {
 			}
 			spell.DealOutcome(sim, result)
 		},
-		BonusCoefficient: corruptionCoeff,
 
 		Dot: core.DotConfig{
 			Aura: core.Aura{
-				Label: "Corruption",
+				Label: "SiphonLife",
 				Tag:   "Affliction",
 			},
-			NumberOfTicks:       6,
+			NumberOfTicks:       10,
 			TickLength:          3 * time.Second,
 			AffectedByCastSpeed: false,
-			BonusCoefficient:    corruptionCoeff,
+			BonusCoefficient:    0.1,
+
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.Snapshot(target, 900/6)
+				dot.Snapshot(target, 63)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
+				result := dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
+
+				healthToRegain := result.Damage * (1 * warlock.PseudoStats.BonusHealingTaken)
+				warlock.GainHealth(sim, healthToRegain, healthMetrics)
+				dot.Spell.ApplyAOEThreat(healthToRegain * 0.5)
 			},
 		},
+
 		ExpectedTickDamage: func(sim *core.Simulation, target *core.Unit, spell *core.Spell, useSnapshot bool) *core.SpellResult {
 			dot := spell.Dot(target)
 			if useSnapshot {
@@ -66,6 +73,4 @@ func (warlock *Warlock) registerCorruption() *core.Spell {
 			}
 		},
 	})
-
-	return warlock.Corruption
 }
