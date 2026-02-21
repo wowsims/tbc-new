@@ -4,12 +4,10 @@ import { Player } from '../../core/player.js';
 import { PlayerClasses } from '../../core/player_classes';
 import { APLRotation } from '../../core/proto/apl.js';
 import { Faction, IndividualBuffs, ItemSlot, PartyBuffs, PseudoStat, Race, Spec, Stat } from '../../core/proto/common.js';
-import { DEFAULT_HYBRID_CASTER_GEM_STATS, Stats, UnitStat } from '../../core/proto_utils/stats.js';
-import { TypedEvent } from '../../core/typed_event';
+import { DEFAULT_HYBRID_CASTER_GEM_STATS, UnitStat } from '../../core/proto_utils/stats.js';
 import * as ShamanInputs from '../inputs.js';
 import * as ElementalInputs from './inputs.js';
 import * as Presets from './presets.js';
-import i18n from '../../i18n/config';
 
 const SPEC_CONFIG = registerSpecConfig(Spec.SpecElementalShaman, {
 	cssClass: 'elemental-shaman-sim-ui',
@@ -24,14 +22,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecElementalShaman, {
 	epReferenceStat: Stat.StatIntellect,
 	// Which stats to display in the Character Stats section, at the bottom of the left-hand sidebar.
 	displayStats: UnitStat.createDisplayStatArray(
-		[
-			Stat.StatHealth,
-			Stat.StatMana,
-			Stat.StatStamina,
-			Stat.StatIntellect,
-			Stat.StatSpirit,
-			Stat.StatSpellDamage,
-		],
+		[Stat.StatHealth, Stat.StatMana, Stat.StatStamina, Stat.StatIntellect, Stat.StatSpirit, Stat.StatSpellDamage],
 		[PseudoStat.PseudoStatSpellHitPercent, PseudoStat.PseudoStatSpellCritPercent, PseudoStat.PseudoStatSpellHastePercent],
 	),
 	gemStats: DEFAULT_HYBRID_CASTER_GEM_STATS,
@@ -39,11 +30,11 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecElementalShaman, {
 		// Default equipped gear.
 		gear: Presets.P3_PRESET.gear,
 		// Default EP weights for sorting gear in the gear picker.
-		epWeights: Presets.EP_PRESET_P3.epWeights,
+		epWeights: Presets.EP_PRESET_DEFAULT.epWeights,
 		// Default consumes settings.
 		consumables: Presets.DefaultConsumables,
 		// Default talents.
-		talents: Presets.P3_TALENTS.data,
+		talents: Presets.StandardTalents.data,
 		// Default spec-specific settings.
 		specOptions: Presets.DefaultOptions,
 		other: Presets.OtherDefaults,
@@ -60,7 +51,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecElementalShaman, {
 	excludeBuffDebuffInputs: [],
 	// Inputs to include in the 'Other' section on the settings tab.
 	otherInputs: {
-		inputs: [ElementalInputs.InThunderstormRange, OtherInputs.InputDelay, OtherInputs.TankAssignment, OtherInputs.DistanceFromTarget],
+		inputs: [OtherInputs.InputDelay, OtherInputs.TankAssignment, OtherInputs.DistanceFromTarget],
 	},
 	itemSwapSlots: [ItemSlot.ItemSlotTrinket1, ItemSlot.ItemSlotTrinket2, ItemSlot.ItemSlotMainHand, ItemSlot.ItemSlotOffHand],
 	customSections: [ShamanInputs.TotemsSection],
@@ -70,30 +61,25 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecElementalShaman, {
 	},
 
 	presets: {
-		epWeights: [Presets.EP_PRESET_DEFAULT, Presets.EP_PRESET_AOE, Presets.EP_PRESET_P3],
+		epWeights: [Presets.EP_PRESET_DEFAULT],
 		// Preset talents that the user can quickly select.
-		talents: [Presets.StandardTalents, Presets.TalentsAoE, Presets.P3_TALENTS],
+		talents: [Presets.StandardTalents],
 		// Preset rotations that the user can quickly select.
-		rotations: [Presets.ROTATION_PRESET_DEFAULT, Presets.ROTATION_PRESET_AOE, Presets.ROTATION_PRESET_CLEAVE, Presets.ROTATION_PRESET_P3],
+		rotations: [Presets.ROTATION_PRESET_DEFAULT],
 		// Preset gear configurations that the user can quickly select.
-		gear: [Presets.PRERAID_PRESET, Presets.P1_PRESET, Presets.P2_PRESET, Presets.P3_PRESET],
-
-		builds: [Presets.P1_PRESET_BUILD_DEFAULT, Presets.P1_PRESET_BUILD_CLEAVE, Presets.P1_PRESET_BUILD_AOE, Presets.P3_PRESET_BUILD_DEFAULT],
+		gear: [Presets.PRERAID_PRESET, Presets.P1_PRESET, Presets.P2_PRESET, Presets.P3_PRESET, Presets.P4_PRESET],
+		// Preset build combinations that the user can quickly select.
+		builds: [Presets.P1_PRESET_BUILD_DEFAULT],
 	},
 
 	autoRotation: (_player: Player<Spec.SpecElementalShaman>): APLRotation => {
-		const numTargets = _player.sim.encounter.targets.length;
-
-		if (numTargets > 2) return Presets.ROTATION_PRESET_AOE.rotation.rotation!;
-		if (numTargets == 2) return Presets.ROTATION_PRESET_CLEAVE.rotation.rotation!;
-
-		return Presets.ROTATION_PRESET_P3.rotation.rotation!;
+		return Presets.ROTATION_PRESET_DEFAULT.rotation.rotation!;
 	},
 
 	raidSimPresets: [
 		{
 			spec: Spec.SpecElementalShaman,
-			talents: Presets.P3_TALENTS.data,
+			talents: Presets.StandardTalents.data,
 			specOptions: Presets.DefaultOptions,
 			consumables: Presets.DefaultConsumables,
 			defaultFactionRaces: {

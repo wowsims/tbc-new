@@ -163,13 +163,6 @@ message ElementalShaman {
 
 	message Options {
 		ShamanOptions class_options = 1;
-
-		enum ThunderstormRange {
-			UnsetTSRange = 0;
-			TSInRange = 1;
-			TSOutofRange = 2;
-		}
-		ThunderstormRange thunderstormRange = 2;
 	}
 	Options options = 3;
 }
