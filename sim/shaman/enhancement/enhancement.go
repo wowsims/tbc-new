@@ -37,7 +37,7 @@ func NewEnhancementShaman(character *core.Character, options *proto.Player) *Enh
 	}
 
 	enh := &EnhancementShaman{
-		Shaman: shaman.NewShaman(character, options.TalentsString, selfBuffs, true, enhOptions.ClassOptions.FeleAutocast),
+		Shaman: shaman.NewShaman(character, options.TalentsString, selfBuffs),
 	}
 
 	// Enable Auto Attacks for this spec
@@ -77,7 +77,7 @@ func (enh *EnhancementShaman) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
 }
 
 func (enh *EnhancementShaman) ApplyTalents() {
-	// enh.ApplyEnhancementTalents()
+	enh.Shaman.ApplyTalents()
 }
 
 func (enh *EnhancementShaman) Initialize() {
@@ -92,8 +92,6 @@ func (enh *EnhancementShaman) Initialize() {
 			enh.ApplySyncType(proto.ShamanSyncType_Auto)
 		})
 	}
-
-	// enh.registerStormstrikeSpell()
 }
 
 func (enh *EnhancementShaman) Reset(sim *core.Simulation) {

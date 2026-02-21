@@ -12,8 +12,6 @@ import (
 type EarthElemental struct {
 	core.Pet
 
-	Pulverize *core.Spell
-
 	shamanOwner *Shaman
 }
 
@@ -67,7 +65,6 @@ func (earthElemental *EarthElemental) GetPet() *core.Pet {
 }
 
 func (earthElemental *EarthElemental) Initialize() {
-	earthElemental.registerPulverize()
 }
 
 func (earthElemental *EarthElemental) Reset(_ *core.Simulation) {
@@ -77,19 +74,7 @@ func (earthElemental *EarthElemental) OnEncounterStart(_ *core.Simulation) {
 }
 
 func (earthElemental *EarthElemental) ExecuteCustomRotation(sim *core.Simulation) {
-	/*
-		Pulverize on cd
-	*/
-	target := earthElemental.CurrentTarget
-
-	earthElemental.TryCast(sim, target, earthElemental.Pulverize)
-
-	if !earthElemental.GCD.IsReady(sim) {
-		return
-	}
-
-	minCd := earthElemental.Pulverize.CD.ReadyAt()
-	earthElemental.ExtendGCDUntil(sim, max(minCd, sim.CurrentTime+time.Second))
+	earthElemental.ExtendGCDUntil(sim, sim.CurrentTime+time.Second)
 }
 
 func (earthElemental *EarthElemental) TryCast(sim *core.Simulation, target *core.Unit, spell *core.Spell) bool {

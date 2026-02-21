@@ -2,7 +2,6 @@ package shaman
 
 import (
 	"math"
-	"time"
 
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
@@ -15,16 +14,8 @@ type FireElemental struct {
 	FireBlast *core.Spell
 	FireNova  *core.Spell
 	Immolate  *core.Spell
-	Empower   *core.Spell
 
 	shamanOwner *Shaman
-
-	fireBlastAutocast  bool
-	fireNovaAutocast   bool
-	immolateAutocast   bool
-	empowerAutocast    bool
-	noImmolateDuringWF bool
-	noImmolateDuration time.Duration
 }
 
 var FireElementalSpellPowerScaling = 0.36
@@ -41,13 +32,7 @@ func (shaman *Shaman) NewFireElemental() *FireElemental {
 			HasDynamicCastSpeedInheritance:  true,
 			HasDynamicMeleeSpeedInheritance: true,
 		}),
-		shamanOwner:        shaman,
-		fireBlastAutocast:  shaman.FeleAutocast.AutocastFireblast,
-		fireNovaAutocast:   shaman.FeleAutocast.AutocastFirenova,
-		immolateAutocast:   shaman.FeleAutocast.AutocastImmolate,
-		empowerAutocast:    shaman.FeleAutocast.AutocastEmpower,
-		noImmolateDuringWF: shaman.FeleAutocast.NoImmolateWfunleash,
-		noImmolateDuration: core.DurationFromSeconds(shaman.FeleAutocast.NoImmolateDuration),
+		shamanOwner: shaman,
 	}
 	baseMeleeDamage := 0.0
 	fireElemental.EnableManaBar()
@@ -77,18 +62,11 @@ func (shaman *Shaman) NewFireElemental() *FireElemental {
 
 func (fireElemental *FireElemental) enable() func(*core.Simulation) {
 	return func(sim *core.Simulation) {
-		if fireElemental.empowerAutocast {
-			if fireElemental.Empower.Cast(sim, &fireElemental.shamanOwner.Unit) {
-				fireElemental.AutoAttacks.StopMeleeUntil(sim, fireElemental.Empower.Hot(&fireElemental.shamanOwner.Unit).ExpiresAt())
-			}
-			return
-		}
 		fireElemental.AutoAttacks.RandomizeMeleeTiming(sim)
 	}
 }
 
 func (fireElemental *FireElemental) disable(sim *core.Simulation) {
-	fireElemental.Empower.Hot(&fireElemental.shamanOwner.Unit).Deactivate(sim)
 }
 
 func (fireElemental *FireElemental) GetPet() *core.Pet {
@@ -114,12 +92,10 @@ func (fireElemental *FireElemental) ExecuteCustomRotation(sim *core.Simulation) 
 	*/
 	target := fireElemental.CurrentTarget
 
-	if fireElemental.fireNovaAutocast && len(sim.Encounter.ActiveTargetUnits) > 2 {
+	if len(sim.Encounter.ActiveTargetUnits) > 2 {
 		fireElemental.TryCast(sim, target, fireElemental.FireNova)
 	}
-	if fireElemental.fireBlastAutocast {
-		fireElemental.FireBlast.Cast(sim, target)
-	}
+	fireElemental.FireBlast.Cast(sim, target)
 
 	if !fireElemental.GCD.IsReady(sim) {
 		return

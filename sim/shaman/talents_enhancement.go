@@ -206,7 +206,7 @@ func (shaman *Shaman) applyShamanisticRage() {
 		ProcMask:           core.ProcMaskMeleeWhiteHit,
 		Outcome:            core.OutcomeLanded,
 		RequireDamageDealt: true,
-		ProcChance:         1,
+		DPM:                shaman.NewLegacyPPMManager(15.0, core.ProcMaskMeleeWhiteHit),
 		TriggerImmediately: true,
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			shaman.AddMana(sim, 0.3*shaman.GetAttackPowerValue(spell), srManaMetric)

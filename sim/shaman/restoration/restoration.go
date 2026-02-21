@@ -31,7 +31,7 @@ func NewRestorationShaman(character *core.Character, options *proto.Player) *Res
 	}
 
 	resto := &RestorationShaman{
-		Shaman: shaman.NewShaman(character, options.TalentsString, selfBuffs, false, restoOptions.ClassOptions.FeleAutocast),
+		Shaman: shaman.NewShaman(character, options.TalentsString, selfBuffs),
 	}
 
 	// if resto.HasMHWeapon() {
@@ -76,7 +76,6 @@ func (resto *RestorationShaman) Initialize() {
 	// resto.RegisterEarthlivingImbue(procMask)
 
 	resto.Shaman.Initialize()
-	resto.Shaman.RegisterHealingSpells()
 }
 
 func (resto *RestorationShaman) ApplyTalents() {
