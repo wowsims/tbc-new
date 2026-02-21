@@ -33,13 +33,14 @@ func createDynamicAddsAIPreset() {
 
 			Stats: stats.Stats{
 				stats.Armor:       7685,
-				stats.AttackPower: 0,
+				stats.AttackPower: 320,
 			}.ToProtoArray(),
 
 			SpellSchool:   proto.SpellSchool_SpellSchoolPhysical,
 			SwingSpeed:    2.0,
-			MinBaseDamage: 3000,
+			MinBaseDamage: 15113,
 			DamageSpread:  0.5,
+			ParryHaste:    true,
 			TargetInputs:  dynamicAddsTargetInputs(),
 		},
 
@@ -57,13 +58,13 @@ func createDynamicAddsAIPreset() {
 			TankIndex: 1,
 
 			Stats: stats.Stats{
-				stats.Armor:       7685,
-				stats.AttackPower: 0,
+				stats.Armor:       6193,
+				stats.AttackPower: 320,
 			}.ToProtoArray(),
 
 			SpellSchool:   proto.SpellSchool_SpellSchoolPhysical,
 			SwingSpeed:    1.5,
-			MinBaseDamage: 700,
+			MinBaseDamage: 5240,
 			DamageSpread:  0.4,
 			TargetInputs:  []*proto.TargetInput{},
 		},

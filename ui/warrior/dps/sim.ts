@@ -100,13 +100,22 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecDpsWarrior, {
 	},
 
 	presets: {
-		epWeights: [Presets.P1_FURY_EP_PRESET, Presets.P1_ARMS_EP_PRESET],
+		epWeights: [Presets.P1_FURY_EP_PRESET, Presets.P2_FURY_EP_PRESET, Presets.P1_ARMS_EP_PRESET],
 		// Preset talents that the user can quickly select.
 		talents: [Presets.FuryTalents, Presets.ArmsTalents],
 		// Preset rotations that the user can quickly select.
 		rotations: [Presets.FURY_DEFAULT_ROTATION, Presets.ARMS_DEFAULT_ROTATION],
 		// Preset gear configurations that the user can quickly select.
-		gear: [Presets.P1_PRERAID_FURY_PRESET, Presets.P1_PRERAID_ARMS_PRESET, Presets.P1_BIS_FURY_PRESET, Presets.P1_BIS_ARMS_PRESET],
+		gear: [
+			Presets.P1_PRERAID_FURY_PRESET,
+			Presets.P1_BIS_FURY_PRESET,
+			Presets.P2_BIS_FURY_PRESET,
+			Presets.P3_BIS_FURY_PRESET,
+			Presets.P35_BIS_FURY_PRESET,
+			Presets.P4_BIS_FURY_PRESET,
+			Presets.P1_PRERAID_ARMS_PRESET,
+			Presets.P1_BIS_ARMS_PRESET,
+		],
 		builds: [Presets.P1_PRESET_BUILD_FURY, Presets.P1_PRESET_BUILD_ARMS],
 	},
 

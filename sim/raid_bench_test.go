@@ -214,7 +214,7 @@ package sim
 // 			ExecuteProportion_20: 0.1,
 // 			Targets: []*proto.Target{
 // 				{
-// 					Stats:   stats.Stats{stats.Armor: 7684}.ToFloatArray(),
+// 					Stats:   stats.Stats{stats.Armor: 7685}.ToFloatArray(),
 // 					MobType: proto.MobType_MobTypeDemon,
 // 				},
 // 			},

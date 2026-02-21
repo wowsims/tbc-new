@@ -37,16 +37,15 @@ func FreshDefaultTargetConfig() *proto.Target {
 	return &proto.Target{
 		Level: CharacterLevel + 3,
 		Stats: stats.Stats{
-			stats.Armor:       7684,
+			stats.Armor:       7685,
 			stats.AttackPower: 320,
-			stats.BlockValue:  54,
 		}.ToProtoArray(),
 		MobType: proto.MobType_MobTypeMechanical,
 
 		SwingSpeed:    2,
-		MinBaseDamage: 4192.05,
+		MinBaseDamage: 15113,
 		ParryHaste:    true,
-		DamageSpread:  0.4,
+		DamageSpread:  0.5,
 	}
 }
 
