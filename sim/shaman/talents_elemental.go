@@ -41,7 +41,7 @@ func (shaman *Shaman) applyCallOfThunder() {
 	}
 	shaman.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
-		FloatValue: 0.01 * float64(shaman.Talents.CallOfThunder),
+		FloatValue: 1 * float64(shaman.Talents.CallOfThunder),
 		ClassMask:  SpellMaskLightningBolt | SpellMaskChainLightning | SpellMaskOverload,
 	})
 }
@@ -75,7 +75,7 @@ func (shaman *Shaman) applyElementalDevastation() {
 		Duration: time.Second * 10,
 	}).AttachSpellMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
-		FloatValue: 0.03 * float64(shaman.Talents.ElementalDevastation),
+		FloatValue: 3 * float64(shaman.Talents.ElementalDevastation),
 		ProcMask:   core.ProcMaskMelee,
 	})
 	shaman.MakeProcTriggerAura(core.ProcTrigger{
@@ -164,7 +164,7 @@ func (shaman *Shaman) applyElementalMastery() {
 		},
 	}).AttachSpellMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
-		FloatValue: 1,
+		FloatValue: 100,
 		ClassMask:  SpellMaskFire | SpellMaskFrost | SpellMaskNature,
 	}).AttachSpellMod(core.SpellModConfig{
 		Kind:       core.SpellMod_PowerCost_Pct,
@@ -193,7 +193,7 @@ func (shaman *Shaman) applyElementalPrecision() {
 	}
 	shaman.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusHit_Percent,
-		FloatValue: 0.02 * float64(shaman.Talents.ElementalPrecision),
+		FloatValue: 2 * float64(shaman.Talents.ElementalPrecision),
 		School:     core.SpellSchoolElemental,
 	})
 	shaman.AddStaticMod(core.SpellModConfig{
