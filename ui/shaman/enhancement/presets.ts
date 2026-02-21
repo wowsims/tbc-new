@@ -68,17 +68,24 @@ export const P3_EP_PRESET = PresetUtils.makePresetEpWeights(
 
 // Default talents. Uses the wowhead calculator format, make the talents on
 // https://wowhead.com/tbc/talent-calc and copy the numbers in the url.
-export const StandardTalents = {
-	name: 'Standard',
+export const SubRestoIWT = {
+	name: 'Sub-Restoration IWT',
 	data: SavedTalents.create({
-		talentsString: '313133',
+		talentsString: '03-500502210501133531151-50005301',
 	}),
 };
 
-export const P3Talents = {
-	name: 'P3 (WiP)',
+export const SubRestoILS = {
+	name: 'Sub-Restoration ILS',
 	data: SavedTalents.create({
-		talentsString: '313122',
+		talentsString: '03-500503210500133531151-50005301',
+	}),
+};
+
+export const SubEle = {
+	name: 'Sub-Elemental',
+	data: SavedTalents.create({
+		talentsString: '250031501-500503210500133531151',
 	}),
 };
 
