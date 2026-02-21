@@ -87,11 +87,16 @@ export const ConjuredRogueThistleTea = {
 	value: 7676,
 	showWhen: <SpecType extends Spec>(player: Player<SpecType>) => player.getClass() == Class.ClassRogue,
 };
+export const ConjuredFlameCap = {
+	actionId: ActionId.fromItemId(22788),
+	value: 22788,
+};
 
 export const CONJURED_CONFIG = [
 	{ config: ConjuredRogueThistleTea, stats: [] },
 	{ config: ConjuredHealthstone, stats: [Stat.StatStamina] },
 	{ config: ConjuredDarkRune, stats: [Stat.StatIntellect] },
+	{ config: ConjuredFlameCap, stats: [] },
 ] as ConsumableStatOption<number>[];
 
 export const makeConjuredInput = makeConsumeInputFactory({ consumesFieldName: 'conjuredId' });

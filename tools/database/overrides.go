@@ -181,6 +181,7 @@ var ConsumableAllowList = []int32{
 	13442, // Migty Rage Potion
 	13452, // Elixir of the Mongoose
 	20520, // Dark Rune
+	22788, // Flamecap
 	22797, // Nightmare Seed
 }
 var ConsumableDenyList = []int32{}
