@@ -63,7 +63,6 @@ func (ele *ElementalShaman) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
 
 func (ele *ElementalShaman) ApplyTalents() {
 	// ele.ApplyElementalTalents()
-	ele.Shaman.ApplyTalents()
 }
 
 type ElementalShaman struct {

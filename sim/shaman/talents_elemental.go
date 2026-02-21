@@ -175,7 +175,7 @@ func (shaman *Shaman) applyElementalMastery() {
 	shaman.RegisterSpell(core.SpellConfig{
 		ActionID:    core.ActionID{SpellID: 16166},
 		SpellSchool: core.SpellSchoolNature,
-		Flags:       core.SpellFlagAPL | core.SpellFlagNoOnCastComplete,
+		Flags:       core.SpellFlagAPL | core.SpellFlagNoOnCastComplete | SpellFlagInstant,
 		Cast: core.CastConfig{
 			CD: core.Cooldown{
 				Timer:    shaman.NewTimer(),

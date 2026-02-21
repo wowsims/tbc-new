@@ -25,7 +25,7 @@ const (
 const (
 	SpellFlagShamanSpell = core.SpellFlagAgentReserved1
 	SpellFlagShock       = core.SpellFlagAgentReserved2
-	SpellFlagIsEcho      = core.SpellFlagAgentReserved3
+	SpellFlagInstant     = core.SpellFlagAgentReserved3
 	SpellFlagFocusable   = core.SpellFlagAgentReserved4
 )
 
@@ -264,6 +264,7 @@ const (
 	SpellMaskMagmaTotem
 	SpellMaskSearingTotem
 	SpellMaskFireNovaTotem
+	SpellMaskFlametongueTotem
 	SpellMaskPrimalStrike
 	SpellMaskStormstrikeCast
 	SpellMaskStormstrikeDamage
@@ -272,6 +273,7 @@ const (
 	SpellMaskFlametongueWeapon
 	SpellMaskWindfuryWeapon
 	SpellMaskFrostbrandWeapon
+	SpellMaskRockbiterWeapon
 	SpellMaskElementalMastery
 	SpellMaskShamanisticRage
 	SpellMaskBloodlust
@@ -286,5 +288,5 @@ const (
 	SpellMaskFireTotem    = SpellMaskMagmaTotem | SpellMaskSearingTotem | SpellMaskFireNovaTotem
 	SpellMaskTotem        = SpellMaskFireTotem | SpellMaskFireElementalTotem | SpellMaskEarthElementalTotem
 	SpellMaskInstantSpell = SpellMaskBloodlust
-	SpellMaskImbue        = SpellMaskFrostbrandWeapon | SpellMaskWindfuryWeapon | SpellMaskFlametongueWeapon
+	SpellMaskImbue        = SpellMaskFrostbrandWeapon | SpellMaskWindfuryWeapon | SpellMaskFlametongueWeapon | SpellMaskRockbiterWeapon
 )

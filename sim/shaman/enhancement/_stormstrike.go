@@ -32,7 +32,7 @@ func (enh *EnhancementShaman) newStormstrikeHitSpellConfig(spellID int32, isMH b
 		ActionID:       core.ActionID{SpellID: spellID}.WithTag(actionTag),
 		SpellSchool:    core.SpellSchoolPhysical,
 		ProcMask:       procMask,
-		Flags:          core.SpellFlagMeleeMetrics,
+		Flags:          core.SpellFlagMeleeMetrics | SpellFlagInstant,
 		ClassSpellMask: shaman.SpellMaskStormstrikeDamage,
 
 		ThreatMultiplier: 1,

@@ -28,7 +28,7 @@ func (shaman *Shaman) registerHealingStreamTotemSpell() {
 		ActionID:         core.ActionID{SpellID: 5394},
 		SpellSchool:      core.SpellSchoolNature,
 		ProcMask:         core.ProcMaskEmpty,
-		Flags:            core.SpellFlagHelpful | core.SpellFlagNoOnCastComplete,
+		Flags:            core.SpellFlagHelpful | core.SpellFlagNoOnCastComplete | SpellFlagInstant,
 		DamageMultiplier: 1,
 		CritMultiplier:   1,
 		ThreatMultiplier: 1,

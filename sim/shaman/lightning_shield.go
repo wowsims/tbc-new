@@ -24,9 +24,6 @@ func (shaman *Shaman) registerLightningShieldSpell() {
 		ThreatMultiplier: 1,
 		CritMultiplier:   shaman.DefaultSpellCritMultiplier(),
 		BonusCoefficient: 0.26699998975,
-		ManaCost: core.ManaCostOptions{
-			FlatCost: 400,
-		},
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			baseDamage := 287.0
 			spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
@@ -65,11 +62,14 @@ func (shaman *Shaman) registerLightningShieldSpell() {
 
 	shaman.LightningShield = shaman.RegisterSpell(core.SpellConfig{
 		ActionID: actionID,
-		Flags:    core.SpellFlagAPL,
+		Flags:    core.SpellFlagAPL | SpellFlagInstant,
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD: core.GCDDefault,
 			},
+		},
+		ManaCost: core.ManaCostOptions{
+			FlatCost: 400,
 		},
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {
 			shaman.LightningShieldAura.Activate(sim)

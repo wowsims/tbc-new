@@ -23,7 +23,7 @@ func (shaman *Shaman) registerBloodlustCD() {
 
 	spell := shaman.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
-		Flags:          core.SpellFlagAPL,
+		Flags:          core.SpellFlagAPL | SpellFlagInstant,
 		ClassSpellMask: SpellMaskBloodlust,
 
 		ManaCost: core.ManaCostOptions{

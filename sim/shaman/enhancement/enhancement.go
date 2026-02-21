@@ -78,7 +78,6 @@ func (enh *EnhancementShaman) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
 
 func (enh *EnhancementShaman) ApplyTalents() {
 	// enh.ApplyEnhancementTalents()
-	enh.Shaman.ApplyTalents()
 }
 
 func (enh *EnhancementShaman) Initialize() {
@@ -92,15 +91,6 @@ func (enh *EnhancementShaman) Initialize() {
 		enh.RegisterItemSwapCallback(core.AllWeaponSlots(), func(_ *core.Simulation, slot proto.ItemSlot) {
 			enh.ApplySyncType(proto.ShamanSyncType_Auto)
 		})
-	}
-
-	//Mental Quickness
-	enh.GetSpellDamageValue = func(spell *core.Spell) float64 {
-		if spell.SpellID == 8024 {
-			// Flametongue weapon damage scales with AP for enh
-			return spell.MeleeAttackPower()
-		}
-		return spell.MeleeAttackPower() * 0.65
 	}
 
 	// enh.registerStormstrikeSpell()

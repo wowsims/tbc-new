@@ -46,7 +46,7 @@ func (shaman *Shaman) applyNaturesSwiftness() {
 	shaman.RegisterSpell(core.SpellConfig{
 		ActionID:    core.ActionID{SpellID: 16188},
 		SpellSchool: core.SpellSchoolPhysical,
-		Flags:       core.SpellFlagAPL | core.SpellFlagNoOnCastComplete,
+		Flags:       core.SpellFlagAPL | core.SpellFlagNoOnCastComplete | SpellFlagInstant,
 		Cast: core.CastConfig{
 			CD: core.Cooldown{
 				Timer:    shaman.NewTimer(),
