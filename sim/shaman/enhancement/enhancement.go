@@ -103,7 +103,7 @@ func (enh *EnhancementShaman) Initialize() {
 		return spell.MeleeAttackPower() * 0.65
 	}
 
-	// enh.registerStormstrikeSpell()
+	enh.registerStormstrikeSpell()
 }
 
 func (enh *EnhancementShaman) Reset(sim *core.Simulation) {

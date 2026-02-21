@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/stats"
 	"github.com/wowsims/tbc/sim/shaman"
 )
 
@@ -11,15 +12,33 @@ var StormstrikeActionID = core.ActionID{SpellID: 17364}
 
 func (enh *EnhancementShaman) StormstrikeDebuffAura(target *core.Unit) *core.Aura {
 	return target.GetOrRegisterAura(core.Aura{
-		Label:    "Stormstrike-" + enh.Label,
-		ActionID: StormstrikeActionID,
-		Duration: time.Second * 15,
+		Label:     "Stormstrike-" + enh.Label,
+		ActionID:  StormstrikeActionID,
+		Duration:  time.Second * 12,
+		MaxStacks: 2,
+		OnGain: func(aura *core.Aura, sim *core.Simulation) {
+			target.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexNature] *= 1.2
+		},
+		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
+			target.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexNature] /= 1.2
+		},
+		OnSpellHitTaken: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+			if spell.SpellSchool != core.SpellSchoolNature {
+				return
+			}
+			if !result.Landed() || result.Damage == 0 {
+				return
+			}
+			aura.RemoveStack(sim)
+		},
 	})
 }
+
 
 func (enh *EnhancementShaman) newStormstrikeHitSpellConfig(spellID int32, isMH bool) core.SpellConfig {
 	var procMask core.ProcMask
 	var actionTag int32
+
 	if isMH {
 		procMask = core.ProcMaskMeleeMHSpecial
 		actionTag = 1
@@ -28,29 +47,25 @@ func (enh *EnhancementShaman) newStormstrikeHitSpellConfig(spellID int32, isMH b
 		actionTag = 2
 	}
 
-	stormstrikeHitSpellConfig := core.SpellConfig{
+	return core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: spellID}.WithTag(actionTag),
 		SpellSchool:    core.SpellSchoolPhysical,
 		ProcMask:       procMask,
 		Flags:          core.SpellFlagMeleeMetrics,
 		ClassSpellMask: shaman.SpellMaskStormstrikeDamage,
-
 		ThreatMultiplier: 1,
-		DamageMultiplier: 4.5, //MoP Classic Changes "https://us.forums.blizzard.com/en/wow/t/feedback-mists-of-pandaria-class-changes/2117387/1"
-		CritMultiplier:   enh.DefaultCritMultiplier(),
-
+		DamageMultiplier: 1,
+		CritMultiplier:   enh.DefaultMeleeCritMultiplier(),
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			var baseDamage float64
 			if isMH {
-				baseDamage = spell.Unit.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower())
+				baseDamage = spell.Unit.MHWeaponDamage(sim, spell.MeleeAttackPower())
 			} else {
-				baseDamage = spell.Unit.OHNormalizedWeaponDamage(sim, spell.MeleeAttackPower())
-				spell.SpellMetrics[target.UnitIndex].Casts--
+				baseDamage = spell.Unit.OHWeaponDamage(sim, spell.MeleeAttackPower())
 			}
 			spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialBlockAndCrit)
 		},
 	}
-	return stormstrikeHitSpellConfig
 }
 
 func (enh *EnhancementShaman) newStormstrikeHitSpell(isMH bool) *core.Spell {
@@ -65,7 +80,7 @@ func (enh *EnhancementShaman) newStormstrikeSpellConfig(spellID int32, ssDebuffA
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
 		ClassSpellMask: shaman.SpellMaskStormstrikeCast,
 		ManaCost: core.ManaCostOptions{
-			BaseCostPercent: 9.4,
+			BaseCostPercent: 8,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
@@ -74,7 +89,7 @@ func (enh *EnhancementShaman) newStormstrikeSpellConfig(spellID int32, ssDebuffA
 			IgnoreHaste: true,
 			CD: core.Cooldown{
 				Timer:    enh.NewTimer(),
-				Duration: time.Second * 8,
+				Duration: time.Second * 10,
 			},
 		},
 
@@ -83,6 +98,7 @@ func (enh *EnhancementShaman) newStormstrikeSpellConfig(spellID int32, ssDebuffA
 			if enh.StormstrikeCastResult.Landed() {
 				ssDebuffAura := ssDebuffAuras.Get(target)
 				ssDebuffAura.Activate(sim)
+				ssDebuffAura.SetStacks(sim, 2)
 
 				if enh.HasMHWeapon() {
 					mhHit.Cast(sim, target)
@@ -95,7 +111,7 @@ func (enh *EnhancementShaman) newStormstrikeSpellConfig(spellID int32, ssDebuffA
 			spell.DisposeResult(enh.StormstrikeCastResult)
 		},
 		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
-			return (enh.HasMHWeapon() || enh.HasOHWeapon()) && !enh.AscendanceAura.IsActive()
+			return (enh.HasMHWeapon() || enh.HasOHWeapon())
 		},
 	}
 	return stormstrikeSpellConfig
