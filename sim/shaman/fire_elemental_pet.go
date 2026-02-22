@@ -130,7 +130,8 @@ func (shaman *Shaman) fireElementalStatInheritance() core.PetStatInheritance {
 		ownerSpellHasteRating := ownerStats[stats.SpellHasteRating]
 		ownerMeleeHasteRating := ownerStats[stats.MeleeHasteRating]
 
-		power := ownerStats[stats.SpellDamage] + ownerStats[stats.NatureDamage]
+		power := ownerStats[stats.SpellDamage] + ownerStats[stats.NatureDamage] -
+			ownerStats[stats.AttackPower]*0.1*float64(shaman.Talents.MentalQuickness) // remove Spell Damage that comes from Mental Quickness
 
 		return stats.Stats{
 			stats.Stamina:     ownerStats[stats.Stamina] * 0.30,
