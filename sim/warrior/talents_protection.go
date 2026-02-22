@@ -31,7 +31,7 @@ func (war *Warrior) registerProtectionTalents() {
 
 	// Tier 5
 	war.registerImprovedShieldWall()
-	// Concussion Blow not implemented
+	war.registerConcussionBlow()
 	// Improved Shield Bash not implemented
 
 	// Tier 6
@@ -239,6 +239,44 @@ func (war *Warrior) registerImprovedShieldWall() {
 		ClassMask: SpellMaskShieldWall,
 		Kind:      core.SpellMod_BuffDuration_Flat,
 		TimeValue: time.Second * duration,
+	})
+}
+
+func (war *Warrior) registerConcussionBlow() {
+	if !war.Talents.ConcussionBlow {
+		return
+	}
+
+	war.RegisterSpell(core.SpellConfig{
+		ActionID:       core.ActionID{SpellID: 12809},
+		ClassSpellMask: SpellMaskConcussionBlow,
+		SpellSchool:    core.SpellSchoolPhysical,
+		ProcMask:       core.ProcMaskMeleeMHSpecial,
+		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
+		MaxRange:       core.MaxMeleeRange,
+
+		RageCost: core.RageCostOptions{
+			Cost:   15,
+			Refund: 0.8,
+		},
+		Cast: core.CastConfig{
+			DefaultCast: core.Cast{
+				NonEmpty: true,
+			},
+			IgnoreHaste: true,
+			CD: core.Cooldown{
+				Timer:    war.NewTimer(),
+				Duration: time.Second * 45,
+			},
+		},
+
+		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+			result := spell.CalcAndDealOutcome(sim, target, spell.OutcomeMeleeSpecialHit)
+
+			if !result.Landed() {
+				spell.IssueRefund(sim)
+			}
+		},
 	})
 }
 
