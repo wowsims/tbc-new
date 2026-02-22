@@ -6,7 +6,7 @@ import (
 
 func (war *Warrior) registerHeroicStrike() {
 	spell := war.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 78},
+		ActionID:       core.ActionID{SpellID: 30324},
 		SpellSchool:    core.SpellSchoolPhysical,
 		ProcMask:       core.ProcMaskMeleeMH,
 		Flags:          core.SpellFlagMeleeMetrics,
@@ -50,7 +50,7 @@ func (war *Warrior) registerCleave() {
 	flatDamage := 70 * (1 + 0.4*float64(war.Talents.ImprovedCleave))
 
 	spell := war.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 845},
+		ActionID:       core.ActionID{SpellID: 25231},
 		SpellSchool:    core.SpellSchoolPhysical,
 		ProcMask:       core.ProcMaskMeleeMH,
 		Flags:          core.SpellFlagMeleeMetrics,
@@ -67,7 +67,7 @@ func (war *Warrior) registerCleave() {
 			},
 		},
 
-		DamageMultiplier: 0.82,
+		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
 		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
 		FlatThreatBonus:  125,

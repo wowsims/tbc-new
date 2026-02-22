@@ -9,7 +9,7 @@ func (war *Warrior) registerExecute() {
 	var rageMetrics *core.ResourceMetrics
 
 	spell := war.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 5308},
+		ActionID:       core.ActionID{SpellID: 25236},
 		SpellSchool:    core.SpellSchoolPhysical,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,

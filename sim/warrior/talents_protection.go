@@ -317,7 +317,7 @@ func (war *Warrior) registerShieldSlam() {
 	}
 
 	war.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 23922},
+		ActionID:       core.ActionID{SpellID: 30356},
 		ClassSpellMask: SpellMaskShieldSlam,
 		SpellSchool:    core.SpellSchoolPhysical,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
@@ -387,7 +387,7 @@ func (war *Warrior) registerDevastate() {
 	bonusThreat := 301.5
 
 	war.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 20243},
+		ActionID:       core.ActionID{SpellID: 30022},
 		ClassSpellMask: SpellMaskDevastate,
 		SpellSchool:    core.SpellSchoolPhysical,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,

@@ -7,7 +7,7 @@ import (
 )
 
 func (war *Warrior) registerOverpower() {
-	actionID := core.ActionID{SpellID: 7384}
+	actionID := core.ActionID{SpellID: 11585}
 
 	aura := war.RegisterAura(core.Aura{
 		ActionID: actionID,
@@ -49,8 +49,8 @@ func (war *Warrior) registerOverpower() {
 		},
 
 		DamageMultiplier: 1,
-		ThreatMultiplier: 0.75,
 		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
+		ThreatMultiplier: 0.75,
 
 		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
 			return war.StanceMatches(BattleStance)

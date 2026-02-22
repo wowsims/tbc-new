@@ -7,7 +7,7 @@ import (
 )
 
 func (war *Warrior) registerShieldBash() {
-	actionID := core.ActionID{SpellID: 72}
+	actionID := core.ActionID{SpellID: 29704}
 
 	war.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,

@@ -6,7 +6,7 @@ import (
 
 func (war *Warrior) registerHamstring() {
 	war.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 1715},
+		ActionID:       core.ActionID{SpellID: 25212},
 		SpellSchool:    core.SpellSchoolPhysical,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,

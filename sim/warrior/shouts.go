@@ -48,7 +48,7 @@ func (warrior *Warrior) registerShouts() {
 	warrior.registerDemoralizingShout()
 
 	warrior.BattleShout = warrior.MakeShoutSpellHelper(
-		core.ActionID{SpellID: 6673},
+		core.ActionID{SpellID: 2048},
 		SpellMaskBattleShout,
 		warrior.NewAllyAuraArray(func(unit *core.Unit) *core.Aura {
 			aura := core.BattleShoutAura(

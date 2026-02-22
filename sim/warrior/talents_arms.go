@@ -462,7 +462,7 @@ func (war *Warrior) registerMortalStrike() {
 	}
 
 	war.MortalStrike = war.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 12294},
+		ActionID:       core.ActionID{SpellID: 30330},
 		SpellSchool:    core.SpellSchoolPhysical,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
 		Flags:          core.SpellFlagAPL | core.SpellFlagMeleeMetrics,
@@ -487,6 +487,7 @@ func (war *Warrior) registerMortalStrike() {
 
 		DamageMultiplier: 1,
 		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
+		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			baseDamage := 210 + spell.Unit.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower())

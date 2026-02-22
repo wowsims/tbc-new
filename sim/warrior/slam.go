@@ -8,7 +8,7 @@ import (
 
 func (war *Warrior) registerSlam() {
 
-	actionID := core.ActionID{SpellID: 1464}
+	actionID := core.ActionID{SpellID: 25242}
 
 	war.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
@@ -37,6 +37,7 @@ func (war *Warrior) registerSlam() {
 
 		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
 		DamageMultiplier: 1,
+		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			baseDamage := 140 + spell.Unit.MHWeaponDamage(sim, spell.MeleeAttackPower())

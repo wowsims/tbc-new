@@ -357,6 +357,8 @@ func registerConjuredCD(agent Agent, consumes *proto.ConsumesSpec) {
 			ApplyEffects: func(sim *Simulation, _ *Unit, _ *Spell) {
 				flameCapAura.Activate(sim)
 			},
+
+			RelatedSelfBuff: flameCapAura.Aura,
 		})
 
 		character.AddMajorCooldown(MajorCooldown{
