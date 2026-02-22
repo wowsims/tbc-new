@@ -258,8 +258,8 @@ func registerConjuredCD(agent Agent, consumes *proto.ConsumesSpec) {
 
 	//Todo: Implement dynamic handling like pots etc.
 	switch consumes.ConjuredId {
-	case 5512:
-		actionID := ActionID{ItemID: 5512}
+	case 22105:
+		actionID := ActionID{ItemID: 22105}
 		healthMetrics := character.NewHealthMetrics(actionID)
 
 		spell := character.RegisterSpell(SpellConfig{
@@ -278,7 +278,7 @@ func registerConjuredCD(agent Agent, consumes *proto.ConsumesSpec) {
 				},
 			},
 			ApplyEffects: func(sim *Simulation, _ *Unit, _ *Spell) {
-				character.GainHealth(sim, 0.45*character.baseStats[stats.Health], healthMetrics)
+				character.GainHealth(sim, 2496, healthMetrics)
 			},
 		})
 		character.AddMajorCooldown(MajorCooldown{
