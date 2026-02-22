@@ -311,6 +311,60 @@ func registerConjuredCD(agent Agent, consumes *proto.ConsumesSpec) {
 			Spell: spell,
 			Type:  CooldownTypeDPS,
 		})
+	case 22788:
+
+		actionID := ActionID{ItemID: 22788}
+
+		flameCapProc := character.RegisterSpell(SpellConfig{
+			ActionID:    actionID,
+			SpellSchool: SpellSchoolFire,
+			ProcMask:    ProcMaskEmpty,
+
+			DamageMultiplier: 1,
+			CritMultiplier:   character.DefaultSpellCritMultiplier(),
+			ThreatMultiplier: 1,
+
+			ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
+				spell.CalcAndDealDamage(sim, target, 40, spell.OutcomeMagicHitAndCrit)
+			},
+		})
+
+		procTrigger := character.MakeProcTriggerAura(ProcTrigger{
+			Name:       "Flame Cap - Proc",
+			ActionID:   actionID,
+			Duration:   time.Minute * 1,
+			ProcChance: 0.185,
+			ProcMask:   ProcMaskMeleeOrRanged,
+			Outcome:    OutcomeLanded,
+			Callback:   CallbackOnSpellHitDealt,
+			Handler: func(sim *Simulation, spell *Spell, result *SpellResult) {
+				flameCapProc.Cast(sim, result.Target)
+			},
+		})
+
+		flameCapAura := character.NewTemporaryStatsAura("Flame Cap", actionID, stats.Stats{stats.FireDamage: 80}, time.Minute)
+		flameCapAura.AttachDependentAura(procTrigger)
+
+		spell := character.RegisterSpell(SpellConfig{
+			ActionID: actionID,
+			Flags:    SpellFlagNoOnCastComplete,
+			Cast: CastConfig{
+				CD: Cooldown{
+					Timer:    character.GetConjuredCD(),
+					Duration: time.Minute * 3,
+				},
+			},
+			ApplyEffects: func(sim *Simulation, _ *Unit, _ *Spell) {
+				flameCapAura.Activate(sim)
+			},
+
+			RelatedSelfBuff: flameCapAura.Aura,
+		})
+
+		character.AddMajorCooldown(MajorCooldown{
+			Spell: spell,
+			Type:  CooldownTypeDPS,
+		})
 	case 20520:
 		actionID := ActionID{ItemID: 20520}
 		manaMetrics := character.NewManaMetrics(actionID)

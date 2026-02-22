@@ -181,6 +181,7 @@ var ConsumableAllowList = []int32{
 	13442, // Migty Rage Potion
 	13452, // Elixir of the Mongoose
 	20520, // Dark Rune
+	22788, // Flamecap
 	22797, // Nightmare Seed
 }
 var ConsumableDenyList = []int32{}
@@ -396,6 +397,7 @@ var EnchantAllowList = []int32{
 	684,  // Enchant Gloves - Major Strength
 	1593, // Bracer 24 AP
 	1594, // Gloves 26 AP
+	1900, // Enchant Weapon - Crusader
 	2564, // Weapon 15 Agi
 	2583, // Presence of Might
 	2647, // Enchant Bracer - Brawn

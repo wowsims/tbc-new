@@ -383,7 +383,7 @@ func BattleShoutAura(char *Character, isPlayer bool, boomingVoicePoints int32, c
 	var ee *ExclusiveEffect
 	aura := char.GetOrRegisterAura(Aura{
 		Label:      fmt.Sprintf("Battle Shout (%s)", Ternary(isPlayer, "Player", "External")),
-		ActionID:   ActionID{SpellID: 2048}.WithTag(TernaryInt32(isPlayer, 0, 1)),
+		ActionID:   ActionID{SpellID: 25289}.WithTag(TernaryInt32(isPlayer, 0, 1)),
 		Duration:   time.Duration(float64(time.Minute*2) * (1 + 0.25*float64(boomingVoicePoints))),
 		BuildPhase: CharacterBuildPhaseBuffs,
 		OnGain: func(aura *Aura, sim *Simulation) {

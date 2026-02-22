@@ -65,6 +65,7 @@ const (
 	SpellMaskWhirlwind
 	SpellMaskWhirlwindOh
 	SpellMaskShieldSlam
+	SpellMaskConcussionBlow
 	SpellMaskShieldBash
 	SpellMaskBloodthirst
 	SpellMaskMortalStrike
@@ -111,6 +112,7 @@ type Warrior struct {
 	Rend                            *core.Spell
 	DeepWounds                      *core.Spell
 	MortalStrike                    *core.Spell
+	DevastateSunder                 *core.Spell
 	SweepingStrikesNormalizedAttack *core.Spell
 
 	HeroicStrike       *core.Spell

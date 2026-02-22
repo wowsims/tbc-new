@@ -20,9 +20,18 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecShadowPriest, {
 	],
 
 	// All stats for which EP should be calculated.
-	epStats: [Stat.StatIntellect, Stat.StatSpirit, Stat.StatSpellDamage],
+	epStats: [
+		Stat.StatIntellect,
+		Stat.StatSpellDamage,
+		Stat.StatShadowDamage,
+		Stat.StatHolyDamage,
+		Stat.StatSpellHitRating,
+		Stat.StatSpellCritRating,
+		Stat.StatSpellHasteRating,
+		Stat.StatMana,
+	],
 	// Reference stat against which to calculate EP. I think all classes use either spell power or attack power.
-	epReferenceStat: Stat.StatIntellect,
+	epReferenceStat: Stat.StatSpellDamage,
 	// Which stats to display in the Character Stats section, at the bottom of the left-hand sidebar.
 	displayStats: UnitStat.createDisplayStatArray(
 		[
@@ -32,23 +41,12 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecShadowPriest, {
 			Stat.StatIntellect,
 			Stat.StatSpirit,
 			Stat.StatSpellDamage,
+			Stat.StatShadowDamage,
+			Stat.StatHolyDamage,
 		],
 		[PseudoStat.PseudoStatSpellHitPercent, PseudoStat.PseudoStatSpellCritPercent, PseudoStat.PseudoStatSpellHastePercent],
 	),
 	gemStats: DEFAULT_HYBRID_CASTER_GEM_STATS,
-	modifyDisplayStats: (player: Player<Spec.SpecShadowPriest>) => {
-		const playerStats = player.getCurrentStats();
-		const gearStats = Stats.fromProto(playerStats.gearStats);
-		const talentsStats = Stats.fromProto(playerStats.talentsStats);
-		const talentsDelta = talentsStats.subtract(gearStats);
-
-		return {
-			talents: new Stats().withStat(
-				Stat.StatSpellHitRating,
-				talentsDelta.getPseudoStat(PseudoStat.PseudoStatSpellHitPercent) * Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT,
-			),
-		};
-	},
 
 	defaults: {
 		// Default equipped gear.
@@ -92,12 +90,12 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecShadowPriest, {
 	},
 
 	presets: {
-		epWeights: [Presets.P1_EP_PRESET, Presets.P2_EP_PRESET],
+		epWeights: [Presets.P1_EP_PRESET],
 		// Preset talents that the user can quickly select.
 		talents: [Presets.StandardTalents],
 		rotations: [Presets.ROTATION_PRESET_DEFAULT],
 		// Preset gear configurations that the user can quickly select.
-		gear: [Presets.PRE_RAID_PRESET, Presets.P1_PRESET, Presets.P2_PRESET],
+		gear: [Presets.PRE_RAID_PRESET, Presets.P1_PRESET],
 		itemSwaps: [],
 		builds: [],
 	},

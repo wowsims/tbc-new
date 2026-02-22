@@ -15,41 +15,48 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 	// List any known bugs / issues here and they'll be shown on the site.
 	knownIssues: [],
 
-	overwriteDisplayStats: (player: Player<Spec.SpecProtectionPaladin>) => {
-		const playerStats = player.getCurrentStats();
-
-		const statMod = (current: UnitStats, previous?: UnitStats) => {
-			return new Stats().withStat(Stat.StatSpellDamage, Stats.fromProto(current).subtract(Stats.fromProto(previous)).getStat(Stat.StatAttackPower) * 0.5);
-		};
-
-		const base = statMod(playerStats.baseStats!);
-		const gear = statMod(playerStats.gearStats!, playerStats.baseStats);
-		const talents = statMod(playerStats.talentsStats!, playerStats.gearStats);
-		const buffs = statMod(playerStats.buffsStats!, playerStats.talentsStats);
-		const consumes = statMod(playerStats.consumesStats!, playerStats.buffsStats);
-		const debuffs = new Stats();
-		const final = new Stats().withStat(Stat.StatSpellDamage, Stats.fromProto(playerStats.finalStats).getStat(Stat.StatAttackPower) * 0.5);
-
-		return {
-			base,
-			gear,
-			talents,
-			buffs,
-			consumes,
-			debuffs,
-			final,
-			stats: [Stat.StatSpellDamage],
-		};
-	},
-
 	// All stats for which EP should be calculated.
-	epStats: [Stat.StatStamina, Stat.StatStrength, Stat.StatAgility, Stat.StatAttackPower, Stat.StatArmor, Stat.StatBonusArmor],
+	epStats: [
+		Stat.StatStamina,
+		Stat.StatStrength,
+		Stat.StatSpellDamage,
+		Stat.StatAgility,
+		Stat.StatAttackPower,
+		Stat.StatMeleeHitRating,
+		Stat.StatMeleeHasteRating,
+		Stat.StatMeleeCritRating,
+		Stat.StatArmorPenetration,
+		Stat.StatExpertiseRating,
+		Stat.StatResilienceRating,
+		Stat.StatDefenseRating,
+		Stat.StatDodgeRating,
+		Stat.StatParryRating,
+		Stat.StatArmor,
+		Stat.StatBonusArmor,
+	],
 	epPseudoStats: [PseudoStat.PseudoStatMainHandDps],
 	// Reference stat against which to calculate EP. I think all classes use either spell power or attack power.
 	epReferenceStat: Stat.StatStrength,
 	// Which stats to display in the Character Stats section, at the bottom of the left-hand sidebar.
 	displayStats: UnitStat.createDisplayStatArray(
-		[Stat.StatHealth, Stat.StatArmor, Stat.StatBonusArmor, Stat.StatStamina, Stat.StatStrength, Stat.StatAgility, Stat.StatAttackPower],
+		[
+			Stat.StatHealth,
+			Stat.StatArmor,
+			Stat.StatBonusArmor,
+			Stat.StatStamina,
+			Stat.StatStrength,
+			Stat.StatSpellDamage,
+			Stat.StatAgility,
+			Stat.StatAttackPower,
+			Stat.StatBlockValue,
+			Stat.StatDefenseRating,
+			Stat.StatResilienceRating,
+			Stat.StatArcaneResistance,
+			Stat.StatFireResistance,
+			Stat.StatFrostResistance,
+			Stat.StatNatureResistance,
+			Stat.StatShadowResistance,
+		],
 		[
 			PseudoStat.PseudoStatMeleeHitPercent,
 			PseudoStat.PseudoStatMeleeCritPercent,
@@ -83,9 +90,9 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 		individualBuffs: IndividualBuffs.create({}),
 		debuffs: Debuffs.create({}),
 		rotationType: APLRotation_Type.TypeAuto,
+		encounter: "Magtheridon's Lair/Magtheridon 25",
 	},
 
-	defaultBuild: Presets.PRESET_BUILD_DEFAULT,
 	// IconInputs to include in the 'Player' section on the settings tab.
 	playerIconInputs: [PaladinInputs.StartingSealSelection()],
 	// Buff and Debuff inputs to include/exclude, overriding the EP-based defaults.
@@ -117,8 +124,8 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 		// Preset rotations that the user can quickly select.
 		rotations: [Presets.APL_PRESET],
 		// Preset gear configurations that the user can quickly select.
-		gear: [Presets.P1_BALANCED_GEAR_PRESET, Presets.P1_OFFENSIVE_GEAR_PRESET],
-		builds: [Presets.P1_BALANCED_BUILD_PRESET, Presets.PRESET_BUILD_SHA],
+		gear: [Presets.P1_BALANCED_GEAR_PRESET],
+		builds: [Presets.P1_BALANCED_BUILD_PRESET],
 	},
 
 	autoRotation: (_player: Player<Spec.SpecProtectionPaladin>): APLRotation => {

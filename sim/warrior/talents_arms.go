@@ -173,7 +173,7 @@ func (war *Warrior) registerDeepWounds() {
 			TickLength:    time.Second * 3,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				baseDamage := dot.Unit.AutoAttacks.MH().CalculateAverageWeaponDamage(dot.Spell.MeleeAttackPower())
+				baseDamage := war.AutoAttacks.MH().CalculateAverageWeaponDamage(dot.Spell.MeleeAttackPower())
 				dot.SnapshotPhysical(target, baseDamage/float64(dot.HastedTickCount())*0.2*float64(war.Talents.DeepWounds))
 			},
 
@@ -212,7 +212,7 @@ func (war *Warrior) registerTwoHandedWeaponSpecialization() {
 	weaponMod := war.AddDynamicMod(core.SpellModConfig{
 		ClassMask:  SpellMaskDirectDamageSpells,
 		School:     core.SpellSchoolPhysical,
-		Kind:       core.SpellMod_DamageDone_Flat,
+		Kind:       core.SpellMod_DamageDone_Pct,
 		FloatValue: 0.02 * float64(war.Talents.TwoHandedWeaponSpecialization),
 	})
 
@@ -262,19 +262,37 @@ func (war *Warrior) registerPoleaxeSpecialization() {
 		FloatValue: 1 * float64(war.Talents.PoleaxeSpecialization),
 	})
 
+	mainhandWWOhCritMod := war.AddDynamicMod(core.SpellModConfig{
+		Kind:       core.SpellMod_BonusCrit_Percent,
+		ClassMask:  SpellMaskWhirlwindOh,
+		FloatValue: 1 * float64(war.Talents.PoleaxeSpecialization),
+	})
+
+	offhandWWOhCritMod := war.AddDynamicMod(core.SpellModConfig{
+		Kind:       core.SpellMod_BonusCrit_Percent,
+		ClassMask:  SpellMaskWhirlwindOh,
+		FloatValue: -1 * float64(war.Talents.PoleaxeSpecialization),
+	})
+
 	handleEquippedWeapons := func() {
 		if isPolearmOrAxe(war.MainHand()) {
 			mhCritMod.Activate()
+			mainhandWWOhCritMod.Activate()
 		} else {
 			mhCritMod.Deactivate()
+			mainhandWWOhCritMod.Deactivate()
 		}
 
 		if isPolearmOrAxe(war.OffHand()) {
 			ohCritMod.Activate()
+			offhandWWOhCritMod.Activate()
 		} else {
 			ohCritMod.Deactivate()
+			offhandWWOhCritMod.Deactivate()
 		}
 	}
+
+	handleEquippedWeapons()
 
 	war.RegisterItemSwapCallback(core.AllMeleeWeaponSlots(), func(sim *core.Simulation, slot proto.ItemSlot) {
 		handleEquippedWeapons()
@@ -444,7 +462,7 @@ func (war *Warrior) registerMortalStrike() {
 	}
 
 	war.MortalStrike = war.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 12294},
+		ActionID:       core.ActionID{SpellID: 30330},
 		SpellSchool:    core.SpellSchoolPhysical,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
 		Flags:          core.SpellFlagAPL | core.SpellFlagMeleeMetrics,
@@ -469,6 +487,7 @@ func (war *Warrior) registerMortalStrike() {
 
 		DamageMultiplier: 1,
 		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
+		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			baseDamage := 210 + spell.Unit.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower())

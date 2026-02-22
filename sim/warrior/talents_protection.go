@@ -31,7 +31,7 @@ func (war *Warrior) registerProtectionTalents() {
 
 	// Tier 5
 	war.registerImprovedShieldWall()
-	// Concussion Blow not implemented
+	war.registerConcussionBlow()
 	// Improved Shield Bash not implemented
 
 	// Tier 6
@@ -242,6 +242,44 @@ func (war *Warrior) registerImprovedShieldWall() {
 	})
 }
 
+func (war *Warrior) registerConcussionBlow() {
+	if !war.Talents.ConcussionBlow {
+		return
+	}
+
+	war.RegisterSpell(core.SpellConfig{
+		ActionID:       core.ActionID{SpellID: 12809},
+		ClassSpellMask: SpellMaskConcussionBlow,
+		SpellSchool:    core.SpellSchoolPhysical,
+		ProcMask:       core.ProcMaskMeleeMHSpecial,
+		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
+		MaxRange:       core.MaxMeleeRange,
+
+		RageCost: core.RageCostOptions{
+			Cost:   15,
+			Refund: 0.8,
+		},
+		Cast: core.CastConfig{
+			DefaultCast: core.Cast{
+				NonEmpty: true,
+			},
+			IgnoreHaste: true,
+			CD: core.Cooldown{
+				Timer:    war.NewTimer(),
+				Duration: time.Second * 45,
+			},
+		},
+
+		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+			result := spell.CalcAndDealOutcome(sim, target, spell.OutcomeMeleeSpecialHit)
+
+			if !result.Landed() {
+				spell.IssueRefund(sim)
+			}
+		},
+	})
+}
+
 func (war *Warrior) registerShieldMastery() {
 	if war.Talents.ShieldMastery == 0 {
 		return
@@ -257,7 +295,7 @@ func (war *Warrior) registerOneHandedWeaponSpecialization() {
 
 	weaponMod := war.AddDynamicMod(core.SpellModConfig{
 		School:     core.SpellSchoolPhysical,
-		Kind:       core.SpellMod_DamageDone_Flat,
+		Kind:       core.SpellMod_DamageDone_Pct,
 		FloatValue: 0.02 * float64(war.Talents.OneHandedWeaponSpecialization),
 	})
 
@@ -317,7 +355,7 @@ func (war *Warrior) registerShieldSlam() {
 	}
 
 	war.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 23922},
+		ActionID:       core.ActionID{SpellID: 30356},
 		ClassSpellMask: SpellMaskShieldSlam,
 		SpellSchool:    core.SpellSchoolPhysical,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
@@ -384,8 +422,10 @@ func (war *Warrior) registerDevastate() {
 		return
 	}
 
+	bonusThreat := 301.5
+
 	war.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 20243},
+		ActionID:       core.ActionID{SpellID: 30022},
 		ClassSpellMask: SpellMaskDevastate,
 		SpellSchool:    core.SpellSchoolPhysical,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
@@ -402,22 +442,24 @@ func (war *Warrior) registerDevastate() {
 			},
 			IgnoreHaste: true,
 		},
-		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
-			return war.PseudoStats.CanBlock
-		},
 
 		DamageMultiplier: 1,
 		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
 		ThreatMultiplier: 1,
-		FlatThreatBonus:  301.5 + 100,
+		FlatThreatBonus:  100,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			attackTable := spell.Unit.AttackTables[target.UnitIndex]
-			baseDamage := war.MHWeaponDamage(sim, spell.MeleeAttackPower())*0.5 + spell.BonusDamage(attackTable)
-
+			baseDamage := war.MHWeaponDamage(sim, spell.MeleeAttackPower()) * 0.5
 			sunderStacks := war.SunderArmorAuras.Get(target).GetStacks()
-			sunderDamage := core.TernaryFloat64(war.CanApplySunderAura(target), float64(sunderStacks)*war.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower()), 0)
+			canApplySunderStack := war.CanApplySunderAura(target) && sunderStacks < 5
+			sunderDamage := core.TernaryFloat64(war.CanApplySunderAura(target), float64(sunderStacks)*35, 0)
+			if canApplySunderStack {
+				spell.FlatThreatBonus += bonusThreat
+			}
 			result := spell.CalcAndDealDamage(sim, target, baseDamage+sunderDamage, spell.OutcomeMeleeSpecialHitAndCrit)
+			if canApplySunderStack {
+				spell.FlatThreatBonus -= bonusThreat
+			}
 
 			if result.Landed() {
 				war.TryApplySunderArmorEffect(sim, target)

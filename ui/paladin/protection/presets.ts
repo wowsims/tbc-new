@@ -1,36 +1,43 @@
 import * as PresetUtils from '../../core/preset_utils.js';
-import { ConsumesSpec, Profession, PseudoStat, Spec, Stat } from '../../core/proto/common.js';
+import { ConsumesSpec, Profession, PseudoStat, Stat } from '../../core/proto/common.js';
 import { PaladinSeal, ProtectionPaladin_Options as ProtectionPaladinOptions } from '../../core/proto/paladin.js';
 import { SavedTalents } from '../../core/proto/ui.js';
 import { Stats } from '../../core/proto_utils/stats';
 import DefaultApl from './apls/default.apl.json';
 import P1_Balanced_Gear from './gear_sets/p1-balanced.gear.json';
-import P1_Offensive_Gear from './gear_sets/p1-offensive.gear.json';
-import DefaultBuild from './builds/sha_default.build.json';
-import ShaBuild from './builds/sha_encounter_only.build.json';
 
 // Preset options for this spec.
 // Eventually we will import these values for the raid sim too, so its good to
 // keep them in a separate file.
 
-export const P1_BALANCED_GEAR_PRESET = PresetUtils.makePresetGear('P1 BiS - Defensive', P1_Balanced_Gear);
-export const P1_OFFENSIVE_GEAR_PRESET = PresetUtils.makePresetGear('P1 BiS - Offensive', P1_Offensive_Gear);
+export const P1_BALANCED_GEAR_PRESET = PresetUtils.makePresetGear('P1', P1_Balanced_Gear);
 
 export const APL_PRESET = PresetUtils.makePresetAPLRotation('Sha of Fear', DefaultApl);
 
 // Preset options for EP weights
 export const P1_BALANCED_EP_PRESET = PresetUtils.makePresetEpWeights(
-	'P1 Balanced',
+	'P1',
 	Stats.fromMap(
 		{
-			[Stat.StatStrength]: 1.00,
-			[Stat.StatStamina]: 0.91,
-			[Stat.StatArmor]: 0.48,
-			[Stat.StatBonusArmor]: 0.48,
-			[Stat.StatAttackPower]: 0.31,
+			[Stat.StatStamina]: 1.0,
+			[Stat.StatStrength]: 1.0,
+			[Stat.StatSpellDamage]: 1.0,
+			[Stat.StatAgility]: 1.0,
+			[Stat.StatAttackPower]: 1.0,
+			[Stat.StatMeleeHitRating]: 1.0,
+			[Stat.StatMeleeHasteRating]: 1.0,
+			[Stat.StatMeleeCritRating]: 1.0,
+			[Stat.StatArmorPenetration]: 1.0,
+			[Stat.StatExpertiseRating]: 1.0,
+			[Stat.StatResilienceRating]: 1.0,
+			[Stat.StatDefenseRating]: 1.0,
+			[Stat.StatDodgeRating]: 1.0,
+			[Stat.StatParryRating]: 1.0,
+			[Stat.StatArmor]: 1.0,
+			[Stat.StatBonusArmor]: 1.0,
 		},
 		{
-			[PseudoStat.PseudoStatMainHandDps]: 0.44,
+			[PseudoStat.PseudoStatMainHandDps]: 1.0,
 		},
 	),
 );
@@ -41,7 +48,7 @@ export const P1_BALANCED_EP_PRESET = PresetUtils.makePresetEpWeights(
 export const DefaultTalents = {
 	name: 'Default',
 	data: SavedTalents.create({
-		talentsString: '313213',
+		talentsString: '',
 	}),
 };
 
@@ -50,8 +57,6 @@ export const P1_BALANCED_BUILD_PRESET = PresetUtils.makePresetBuild('P1 Gear/EPs
 	epWeights: P1_BALANCED_EP_PRESET,
 	talents: DefaultTalents,
 });
-export const PRESET_BUILD_DEFAULT = PresetUtils.makePresetBuildFromJSON("Default", Spec.SpecProtectionPaladin, DefaultBuild);
-export const PRESET_BUILD_SHA = PresetUtils.makePresetBuildFromJSON("Sha of Fear Model", Spec.SpecProtectionPaladin, ShaBuild);
 
 export const DefaultOptions = ProtectionPaladinOptions.create({
 	classOptions: {
@@ -59,11 +64,7 @@ export const DefaultOptions = ProtectionPaladinOptions.create({
 	},
 });
 
-export const DefaultConsumables = ConsumesSpec.create({
-	flaskId: 76087, // Flask of the Earth
-	foodId: 74656, // Chun Tian Spring Rolls
-	potId: 76095, // Potion of Mogu Power
-});
+export const DefaultConsumables = ConsumesSpec.create({});
 
 export const OtherDefaults = {
 	profession1: Profession.Blacksmithing,

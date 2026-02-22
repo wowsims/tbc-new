@@ -1,13 +1,11 @@
 import * as OtherInputs from '../../core/components/inputs/other_inputs';
-import * as Mechanics from '../../core/constants/mechanics';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui';
 import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
 
 import { APLRotation, APLRotation_Type } from '../../core/proto/apl';
 import { Faction, ItemSlot, PseudoStat, Race, Spec, Stat } from '../../core/proto/common';
-import { StatCapType } from '../../core/proto/ui';
-import { DEFAULT_HYBRID_CASTER_GEM_STATS, StatCap, Stats, UnitStat, UnitStatPresets } from '../../core/proto_utils/stats';
+import { DEFAULT_HYBRID_CASTER_GEM_STATS, UnitStat } from '../../core/proto_utils/stats';
 import { formatToNumber } from '../../core/utils';
 import * as DruidInputs from '../inputs';
 import * as BalanceInputs from './inputs';
@@ -20,9 +18,17 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecBalanceDruid, {
 	knownIssues: [],
 
 	// All stats for which EP should be calculated.
-	epStats: [Stat.StatIntellect, Stat.StatSpirit, Stat.StatSpellDamage],
+	epStats: [
+		Stat.StatIntellect,
+		Stat.StatSpellDamage,
+		Stat.StatNatureDamage,
+		Stat.StatArcaneDamage,
+		Stat.StatSpellHitRating,
+		Stat.StatSpellCritRating,
+		Stat.StatSpellHasteRating,
+	],
 	// Reference stat against which to calculate EP. I think all classes use either spell power or attack power.
-	epReferenceStat: Stat.StatIntellect,
+	epReferenceStat: Stat.StatSpellDamage,
 	// Which stats to display in the Character Stats section, at the bottom of the left-hand sidebar.
 	displayStats: UnitStat.createDisplayStatArray(
 		[
@@ -32,29 +38,16 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecBalanceDruid, {
 			Stat.StatIntellect,
 			Stat.StatSpirit,
 			Stat.StatSpellDamage,
+			Stat.StatNatureDamage,
+			Stat.StatArcaneDamage,
 		],
 		[PseudoStat.PseudoStatSpellHitPercent, PseudoStat.PseudoStatSpellCritPercent, PseudoStat.PseudoStatSpellHastePercent],
 	),
 	gemStats: DEFAULT_HYBRID_CASTER_GEM_STATS,
 
-	modifyDisplayStats: (player: Player<Spec.SpecBalanceDruid>) => {
-		const playerStats = player.getCurrentStats();
-		const gearStats = Stats.fromProto(playerStats.gearStats);
-		const talentsStats = Stats.fromProto(playerStats.talentsStats);
-		const talentsDelta = talentsStats.subtract(gearStats);
-		const talentsMod = new Stats().withStat(
-			Stat.StatSpellHitRating,
-			talentsDelta.getPseudoStat(PseudoStat.PseudoStatSpellHitPercent) * Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT,
-		);
-
-		return {
-			talents: talentsMod,
-		};
-	},
-
 	defaults: {
 		// Default equipped gear.
-		gear: Presets.T14PresetGear.gear,
+		gear: Presets.Phase1PresetGear.gear,
 		// Default EP weights for sorting gear in the gear picker.
 		epWeights: Presets.StandardEPWeights.epWeights,
 		// Default consumes settings.
@@ -93,8 +86,8 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecBalanceDruid, {
 		talents: [Presets.StandardTalents],
 		rotations: [Presets.StandardRotation],
 		// Preset gear configurations that the user can quickly select.
-		gear: [Presets.PreraidPresetGear, Presets.T14PresetGear, Presets.T14UpgradedPresetGear, Presets.T15PresetGear /*, Presets.T16PresetGear*/],
-		builds: [Presets.PresetPreraidBuild, Presets.T14PresetBuild,Presets.T15PresetBuild /*, Presets.T16PresetBuild*/],
+		gear: [Presets.PreraidPresetGear, Presets.Phase1PresetGear],
+		builds: [Presets.PresetPreraidBuild, Presets.Phase1PresetBuild],
 	},
 
 	autoRotation: (_player: Player<Spec.SpecBalanceDruid>): APLRotation => {
@@ -129,48 +122,5 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecBalanceDruid, {
 export class BalanceDruidSimUI extends IndividualSimUI<Spec.SpecBalanceDruid> {
 	constructor(parentElem: HTMLElement, player: Player<Spec.SpecBalanceDruid>) {
 		super(parentElem, player, SPEC_CONFIG);
-		const statSelectionHastePreset = {
-			unitStat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatSpellHastePercent),
-			presets: new Map<string, number>([]),
-		};
-
-		const modifyHaste = (oldHastePercent: number, modifier: number) =>
-			Number(formatToNumber(((oldHastePercent / 100 + 1) / modifier - 1) * 100, { maximumFractionDigits: 5 }));
-
-		const createHasteBreakpointVariants = (name: string, breakpoint: number, prefix?: string) => {
-			const breakpoints = new Map<string, number>();
-			breakpoints.set(`${prefix ? `${prefix} - ` : ''}${name}`, breakpoint);
-
-			const blBreakpoint = modifyHaste(breakpoint, 1.3);
-			if (blBreakpoint > 0) {
-				breakpoints.set(`${prefix ? `${prefix} - ` : ''}BL - ${name}`, blBreakpoint);
-			}
-
-			const berserkingBreakpoint = modifyHaste(breakpoint, 1.2);
-			if (berserkingBreakpoint > 0) {
-				breakpoints.set(`${prefix ? `${prefix} - ` : ''}Zerk - ${name}`, berserkingBreakpoint);
-			}
-
-			const blZerkingBreakpoint = modifyHaste(blBreakpoint, 1.2);
-			if (blZerkingBreakpoint > 0) {
-				breakpoints.set(`${prefix ? `${prefix} - ` : ''}BL+Zerk - ${name}`, blZerkingBreakpoint);
-			}
-
-			return breakpoints;
-		};
-
-		for (const [name, breakpoint] of Presets.BALANCE_T14_4P_BREAKPOINTS!.presets) {
-			const variants = createHasteBreakpointVariants(name, breakpoint, 'T14 4P');
-			for (const [variantName, variantValue] of variants) {
-				statSelectionHastePreset.presets.set(variantName, variantValue);
-			}
-		}
-
-		for (const [name, breakpoint] of Presets.BALANCE_BREAKPOINTS!.presets) {
-			const variants = createHasteBreakpointVariants(name, breakpoint);
-			for (const [variantName, variantValue] of variants) {
-				statSelectionHastePreset.presets.set(variantName, variantValue);
-			}
-		}
 	}
 }

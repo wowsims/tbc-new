@@ -11,6 +11,10 @@ import PreraidArmsGear from './gear_sets/preraid_arms.gear.json';
 import PreraidFuryGear from './gear_sets/preraid_fury.gear.json';
 import P1ArmsGear from './gear_sets/p1_arms.gear.json';
 import P1FuryGear from './gear_sets/p1_fury.gear.json';
+import P2FuryGear from './gear_sets/p2_fury.gear.json';
+import P3FuryGear from './gear_sets/p3_fury.gear.json';
+import P35FuryGear from './gear_sets/p3.5_fury.gear.json';
+import P4FuryGear from './gear_sets/p4_fury.gear.json';
 
 // Preset options for this spec.
 // Eventually we will import these values for the raid sim too, so its good to
@@ -52,6 +56,10 @@ const ARMS_PRESET_OPTIONS = {
 
 export const P1_PRERAID_FURY_PRESET = PresetUtils.makePresetGear('Preraid - Fury', PreraidFuryGear, FURY_PRESET_OPTIONS);
 export const P1_BIS_FURY_PRESET = PresetUtils.makePresetGear('P1 - Fury', P1FuryGear, FURY_PRESET_OPTIONS);
+export const P2_BIS_FURY_PRESET = PresetUtils.makePresetGear('P2 - Fury', P2FuryGear, FURY_PRESET_OPTIONS);
+export const P3_BIS_FURY_PRESET = PresetUtils.makePresetGear('P3 - Fury', P3FuryGear, FURY_PRESET_OPTIONS);
+export const P35_BIS_FURY_PRESET = PresetUtils.makePresetGear('P3.5 - Fury', P35FuryGear, FURY_PRESET_OPTIONS);
+export const P4_BIS_FURY_PRESET = PresetUtils.makePresetGear('P4 - Fury', P4FuryGear, FURY_PRESET_OPTIONS);
 
 export const P1_PRERAID_ARMS_PRESET = PresetUtils.makePresetGear('Preraid - Arms', PreraidArmsGear, ARMS_PRESET_OPTIONS);
 export const P1_BIS_ARMS_PRESET = PresetUtils.makePresetGear('P1 - Arms', P1ArmsGear, ARMS_PRESET_OPTIONS);
@@ -75,6 +83,27 @@ export const P1_FURY_EP_PRESET = PresetUtils.makePresetEpWeights(
 		},
 		{
 			[PseudoStat.PseudoStatMainHandDps]: 2.65,
+			[PseudoStat.PseudoStatOffHandDps]: 1.5,
+		},
+	),
+	FURY_PRESET_OPTIONS,
+);
+
+export const P2_FURY_EP_PRESET = PresetUtils.makePresetEpWeights(
+	'P2, P3 & P4 - Fury',
+	Stats.fromMap(
+		{
+			[Stat.StatStrength]: 1.0,
+			[Stat.StatAgility]: 0.75,
+			[Stat.StatAttackPower]: 0.45,
+			[Stat.StatMeleeHitRating]: 0.56,
+			[Stat.StatMeleeCritRating]: 1.01,
+			[Stat.StatMeleeHasteRating]: 0.92,
+			[Stat.StatArmorPenetration]: 0.18,
+			[Stat.StatExpertiseRating]: 1.10,
+		},
+		{
+			[PseudoStat.PseudoStatMainHandDps]: 2.73,
 			[PseudoStat.PseudoStatOffHandDps]: 1.5,
 		},
 	),
@@ -107,7 +136,7 @@ export const P1_ARMS_EP_PRESET = PresetUtils.makePresetEpWeights(
 export const FuryTalents = {
 	name: 'Fury',
 	data: SavedTalents.create({
-		talentsString: '3500501130201-05050005505012050115',
+		talentsString: '3400502130201-05050005505012050115',
 	}),
 	...FURY_PRESET_OPTIONS,
 };

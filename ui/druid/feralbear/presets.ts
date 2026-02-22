@@ -3,27 +3,14 @@ import * as PresetUtils from '../../core/preset_utils.js';
 import { ConsumesSpec, Profession, PseudoStat, Stat } from '../../core/proto/common';
 import { FeralBearDruid_Options as DruidOptions, FeralBearDruid_Rotation as DruidRotation } from '../../core/proto/druid.js';
 import { SavedTalents } from '../../core/proto/ui.js';
+import PreraidGear from './gear_sets/preraid.gear.json';
+import P1Gear from './gear_sets/p1.gear.json';
+
 // Preset options for this spec.
 // Eventually we will import these values for the raid sim too, so its good to
 // keep them in a separate file.
-import PreraidGear from './gear_sets/preraid.gear.json';
-export const PRERAID_PRESET = PresetUtils.makePresetGear('Pre-MSV BiS', PreraidGear);
-import MsvGear from './gear_sets/msv.gear.json';
-export const MSV_PRESET = PresetUtils.makePresetGear('Pre-HoF BiS', MsvGear);
-import HofGear from './gear_sets/hof.gear.json';
-export const HOF_PRESET = PresetUtils.makePresetGear('Pre-ToES BiS', HofGear);
-import P1Gear from './gear_sets/p1.gear.json';
-export const P1_PRESET = PresetUtils.makePresetGear('P1/P2', P1Gear);
-import P2Gear from './gear_sets/p2.gear.json';
-export const P2_PRESET = PresetUtils.makePresetGear('P2 BiS (Balanced)', P2Gear);
-import P2OffensiveGear from './gear_sets/p2_offensive.gear.json';
-export const P2_OFFENSIVE_PRESET = PresetUtils.makePresetGear('P2 BiS (Offensive)', P2OffensiveGear);
-import P3Gear from './gear_sets/p3.gear.json';
-export const P3_PRESET = PresetUtils.makePresetGear('P3 BiS (Tentative)', P3Gear);
-import P4Gear from './gear_sets/p4.gear.json';
-export const P4_PRESET = PresetUtils.makePresetGear('P4', P4Gear);
-import ItemSwapGear from './gear_sets/p2_item_swap.gear.json';
-export const ITEM_SWAP_PRESET = PresetUtils.makePresetItemSwapGear('HotW Caster Weapon Swap', ItemSwapGear);
+export const PRERAID_PRESET = PresetUtils.makePresetGear('Pre-Raid', PreraidGear);
+export const P1_PRESET = PresetUtils.makePresetGear('P1', P1Gear);
 
 export const DefaultSimpleRotation = DruidRotation.create({
 	maintainFaerieFire: true,
@@ -35,15 +22,7 @@ export const DefaultSimpleRotation = DruidRotation.create({
 
 import { Stats } from '../../core/proto_utils/stats';
 import DefaultApl from './apls/default.apl.json';
-import OffensiveHotwApl from './apls/offensiveHotw.apl.json';
-import EmpressApl from './apls/empress.apl.json';
-import ShaApl from './apls/sha.apl.json';
-import HorridonApl from './apls/horridon.apl.json';
-export const ROTATION_DEFAULT = PresetUtils.makePresetAPLRotation("Gara'jal Default", DefaultApl);
-export const ROTATION_HOTW = PresetUtils.makePresetAPLRotation("Gara'jal Offensive HotW", OffensiveHotwApl);
-export const ROTATION_EMPRESS = PresetUtils.makePresetAPLRotation("Empress Adds", EmpressApl);
-export const ROTATION_SHA = PresetUtils.makePresetAPLRotation("Sha Hybrid HotW", ShaApl);
-export const ROTATION_HORRIDON = PresetUtils.makePresetAPLRotation("Horridon Tank 2", HorridonApl);
+export const ROTATION_DEFAULT = PresetUtils.makePresetAPLRotation('Default', DefaultApl);
 
 //export const ROTATION_PRESET_SIMPLE = PresetUtils.makePresetSimpleRotation('Simple Default', Spec.SpecGuardianDruid, DefaultSimpleRotation);
 
@@ -56,7 +35,7 @@ export const SURVIVAL_EP_PRESET = PresetUtils.makePresetEpWeights(
 			[Stat.StatStamina]: 3.93,
 			[Stat.StatAgility]: 1.0,
 			[Stat.StatArmor]: 4.81,
-			[Stat.StatBonusArmor]: 1.10,
+			[Stat.StatBonusArmor]: 1.1,
 			[Stat.StatStrength]: 0.02,
 			[Stat.StatAttackPower]: 0.02,
 		},
@@ -75,14 +54,14 @@ export const BALANCED_EP_PRESET = PresetUtils.makePresetEpWeights(
 			[Stat.StatHealth]: 0.06,
 			[Stat.StatStamina]: 1.41,
 			[Stat.StatAgility]: 1.0,
-			[Stat.StatArmor]: 1.70,
+			[Stat.StatArmor]: 1.7,
 			[Stat.StatBonusArmor]: 0.39,
 			[Stat.StatStrength]: 0.18,
 			[Stat.StatAttackPower]: 0.18,
 		},
 		{
 			[PseudoStat.PseudoStatMainHandDps]: 0.84,
-			[PseudoStat.PseudoStatMeleeHitPercent]: 1.50 * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT,
+			[PseudoStat.PseudoStatMeleeHitPercent]: 1.5 * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT,
 			[PseudoStat.PseudoStatSpellHitPercent]: 0.0 * Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT,
 		},
 	),
@@ -113,18 +92,13 @@ export const OFFENSIVE_EP_PRESET = PresetUtils.makePresetEpWeights(
 export const DefaultTalents = {
 	name: 'Default',
 	data: SavedTalents.create({
-		talentsString: '010101',
+		talentsString: '',
 	}),
 };
 
 export const DefaultOptions = DruidOptions.create({});
 
-export const DefaultConsumables = ConsumesSpec.create({
-	flaskId: 76087,
-	foodId: 74656,
-	potId: 76090,
-	conjuredId: 5512, // Conjured Healthstone
-});
+export const DefaultConsumables = ConsumesSpec.create({});
 export const OtherDefaults = {
 	iterationCount: 50000,
 	profession1: Profession.Engineering,
