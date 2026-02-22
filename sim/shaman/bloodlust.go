@@ -23,14 +23,16 @@ func (shaman *Shaman) registerBloodlustCD() {
 
 	spell := shaman.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
-		Flags:          core.SpellFlagAPL | SpellFlagInstant,
+		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: SpellMaskBloodlust,
 
 		ManaCost: core.ManaCostOptions{
-			BaseCostPercent: 21.5,
-			PercentModifier: 1,
+			FlatCost: 750,
 		},
 		Cast: core.CastConfig{
+			DefaultCast: core.Cast{
+				GCD: core.GCDDefault,
+			},
 			CD: core.Cooldown{
 				Timer:    shaman.NewTimer(),
 				Duration: core.BloodlustCD,
