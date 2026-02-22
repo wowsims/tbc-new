@@ -65,6 +65,7 @@ const (
 	SpellMaskWhirlwind
 	SpellMaskWhirlwindOh
 	SpellMaskShieldSlam
+	SpellMaskConcussionBlow
 	SpellMaskShieldBash
 	SpellMaskBloodthirst
 	SpellMaskMortalStrike
