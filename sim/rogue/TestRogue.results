@@ -308,7 +308,7 @@ dps_results: {
 dps_results: {
  key: "TestRogue-SwitchInFrontOfTarget-Default"
  value: {
-  dps: 2080.17087
-  tps: 1476.92132
+  dps: 2072.85087
+  tps: 1471.72412
  }
 }
