@@ -64,8 +64,6 @@ func NewEnhancementShaman(character *core.Character, options *proto.Player) *Enh
 
 type EnhancementShaman struct {
 	*shaman.Shaman
-
-	StormStrikeDebuffAuras core.AuraArray
 }
 
 func (enh *EnhancementShaman) GetShaman() *shaman.Shaman {

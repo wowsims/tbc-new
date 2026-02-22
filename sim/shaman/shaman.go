@@ -125,6 +125,8 @@ type Shaman struct {
 	EarthElementalTotem *core.Spell
 	EarthElemental      *EarthElemental
 
+	StormStrikeDebuffAuras core.AuraArray
+
 	ElementalSharedCDTimer *core.Timer
 
 	MagmaTotem         *core.Spell
@@ -161,7 +163,7 @@ func (shaman *Shaman) Initialize() {
 	shaman.registerSearingTotemSpell()
 	shaman.registerFireNovaTotemSpell()
 	shaman.registerShocks()
-
+	shaman.registerStormstrikeSpell()
 	shaman.registerBloodlustCD()
 }
 

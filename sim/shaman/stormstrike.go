@@ -1,18 +1,17 @@
-package enhancement
+package shaman
 
 import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/stats"
-	"github.com/wowsims/tbc/sim/shaman"
 )
 
 var StormstrikeActionID = core.ActionID{SpellID: 17364}
 
-func (enh *EnhancementShaman) StormstrikeDebuffAura(target *core.Unit) *core.Aura {
+func (shaman *Shaman) StormstrikeDebuffAura(target *core.Unit) *core.Aura {
 	aura := target.GetOrRegisterAura(core.Aura{
-		Label:     "Stormstrike-" + enh.Label,
+		Label:     "Stormstrike-" + shaman.Label,
 		ActionID:  StormstrikeActionID,
 		Duration:  time.Second * 12,
 		MaxStacks: 2,
@@ -32,7 +31,7 @@ func (enh *EnhancementShaman) StormstrikeDebuffAura(target *core.Unit) *core.Aur
 	)
 }
 
-func (enh *EnhancementShaman) newStormstrikeHitSpellConfig(spellID int32, isMH bool) core.SpellConfig {
+func (shaman *Shaman) newStormstrikeHitSpellConfig(spellID int32, isMH bool) core.SpellConfig {
 	var procMask core.ProcMask
 	var actionTag int32
 
@@ -44,10 +43,10 @@ func (enh *EnhancementShaman) newStormstrikeHitSpellConfig(spellID int32, isMH b
 		SpellSchool:      core.SpellSchoolPhysical,
 		ProcMask:         procMask,
 		Flags:            core.SpellFlagMeleeMetrics,
-		ClassSpellMask:   shaman.SpellMaskStormstrikeDamage,
+		ClassSpellMask:   SpellMaskStormstrikeDamage,
 		ThreatMultiplier: 1,
 		DamageMultiplier: 1,
-		CritMultiplier:   enh.DefaultMeleeCritMultiplier(),
+		CritMultiplier:   shaman.DefaultMeleeCritMultiplier(),
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			weaponDamage := core.Ternary(isMH, spell.Unit.MHWeaponDamage, spell.Unit.OHWeaponDamage)
 			baseDamage := weaponDamage(sim, spell.MeleeAttackPower())
@@ -56,17 +55,17 @@ func (enh *EnhancementShaman) newStormstrikeHitSpellConfig(spellID int32, isMH b
 	}
 }
 
-func (enh *EnhancementShaman) newStormstrikeHitSpell(isMH bool) *core.Spell {
-	return enh.RegisterSpell(enh.newStormstrikeHitSpellConfig(17364, isMH))
+func (shaman *Shaman) newStormstrikeHitSpell(isMH bool) *core.Spell {
+	return shaman.RegisterSpell(shaman.newStormstrikeHitSpellConfig(17364, isMH))
 }
 
-func (enh *EnhancementShaman) newStormstrikeSpellConfig(spellID int32, ssDebuffAuras *core.AuraArray, mhHit *core.Spell, ohHit *core.Spell) core.SpellConfig {
+func (shaman *Shaman) newStormstrikeSpellConfig(spellID int32, ssDebuffAuras *core.AuraArray, mhHit *core.Spell, ohHit *core.Spell) core.SpellConfig {
 	stormstrikeSpellConfig := core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: spellID},
 		SpellSchool:    core.SpellSchoolPhysical,
 		ProcMask:       core.ProcMaskEmpty,
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
-		ClassSpellMask: shaman.SpellMaskStormstrikeCast,
+		ClassSpellMask: SpellMaskStormstrikeCast,
 		ManaCost: core.ManaCostOptions{
 			BaseCostPercent: 8,
 		},
@@ -76,40 +75,40 @@ func (enh *EnhancementShaman) newStormstrikeSpellConfig(spellID int32, ssDebuffA
 			},
 			IgnoreHaste: true,
 			CD: core.Cooldown{
-				Timer:    enh.NewTimer(),
+				Timer:    shaman.NewTimer(),
 				Duration: time.Second * 10,
 			},
 		},
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			enh.StormstrikeCastResult = spell.CalcOutcome(sim, target, spell.OutcomeMeleeSpecialHitNoHitCounter)
-			if enh.StormstrikeCastResult.Landed() {
+			shaman.StormstrikeCastResult = spell.CalcOutcome(sim, target, spell.OutcomeMeleeSpecialHitNoHitCounter)
+			if shaman.StormstrikeCastResult.Landed() {
 				ssDebuffAura := ssDebuffAuras.Get(target)
 				ssDebuffAura.Activate(sim)
 				ssDebuffAura.SetStacks(sim, 2)
 
-				if enh.HasMHWeapon() {
+				if shaman.HasMHWeapon() {
 					mhHit.Cast(sim, target)
 				}
 
-				if enh.AutoAttacks.IsDualWielding && enh.HasOHWeapon() {
+				if shaman.AutoAttacks.IsDualWielding && shaman.HasOHWeapon() {
 					ohHit.Cast(sim, target)
 				}
 			}
-			spell.DisposeResult(enh.StormstrikeCastResult)
+			spell.DisposeResult(shaman.StormstrikeCastResult)
 		},
 		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
-			return (enh.HasMHWeapon() || enh.HasOHWeapon())
+			return (shaman.HasMHWeapon() || shaman.HasOHWeapon())
 		},
 	}
 	return stormstrikeSpellConfig
 }
 
-func (enh *EnhancementShaman) registerStormstrikeSpell() {
-	mhHit := enh.newStormstrikeHitSpell(true)
-	ohHit := enh.newStormstrikeHitSpell(false)
+func (shaman *Shaman) registerStormstrikeSpell() {
+	mhHit := shaman.newStormstrikeHitSpell(true)
+	ohHit := shaman.newStormstrikeHitSpell(false)
 
-	enh.StormStrikeDebuffAuras = enh.NewEnemyAuraArray(enh.StormstrikeDebuffAura)
+	shaman.StormStrikeDebuffAuras = shaman.NewEnemyAuraArray(shaman.StormstrikeDebuffAura)
 
-	enh.Stormstrike = enh.RegisterSpell(enh.newStormstrikeSpellConfig(17364, &enh.StormStrikeDebuffAuras, mhHit, ohHit))
+	shaman.Stormstrike = shaman.RegisterSpell(shaman.newStormstrikeSpellConfig(17364, &shaman.StormStrikeDebuffAuras, mhHit, ohHit))
 }
