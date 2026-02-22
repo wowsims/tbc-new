@@ -18,6 +18,7 @@ func (war *Warrior) registerRetaliation() {
 
 		DamageMultiplier: 1,
 		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
+		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			baseDamage := war.MHWeaponDamage(sim, spell.MeleeAttackPower())

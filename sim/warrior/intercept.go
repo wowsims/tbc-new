@@ -7,7 +7,7 @@ import (
 )
 
 func (war *Warrior) registerIntercept() {
-	actionID := core.ActionID{SpellID: 20252}
+	actionID := core.ActionID{SpellID: 25275}
 	chargeMinRange := 8.0
 
 	var spell *core.Spell

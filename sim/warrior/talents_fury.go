@@ -109,7 +109,7 @@ func (war *Warrior) registerEnrage() {
 
 	war.EnrageAura = war.GetOrRegisterAura(core.Aura{
 		Label:     "Enrage",
-		ActionID:  core.ActionID{SpellID: 12317},
+		ActionID:  core.ActionID{SpellID: 13048},
 		Duration:  time.Second * 12,
 		MaxStacks: 12,
 	}).AttachSpellMod(core.SpellModConfig{
@@ -286,14 +286,14 @@ func (war *Warrior) registerFlurry() {
 
 	flurryAura := war.RegisterAura(core.Aura{
 		Label:     "Flurry",
-		ActionID:  core.ActionID{SpellID: 12966},
+		ActionID:  core.ActionID{SpellID: 12970},
 		Duration:  15 * time.Second,
 		MaxStacks: 3,
 	}).AttachMultiplyMeleeSpeed(1 + 0.05*float64(war.Talents.Flurry))
 
 	war.MakeProcTriggerAura(core.ProcTrigger{
 		Name:               "Flurry - Trigger",
-		ActionID:           core.ActionID{SpellID: 12319},
+		ActionID:           core.ActionID{SpellID: 12974},
 		ProcMask:           core.ProcMaskMelee,
 		TriggerImmediately: true,
 		Callback:           core.CallbackOnSpellHitDealt,
@@ -331,7 +331,7 @@ func (war *Warrior) registerBloodthirst() {
 		return
 	}
 
-	actionID := core.ActionID{SpellID: 23881}
+	actionID := core.ActionID{SpellID: 30335}
 
 	war.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
@@ -410,7 +410,7 @@ func (war *Warrior) registerRampage() {
 		return
 	}
 
-	actionID := core.ActionID{SpellID: 29801}
+	actionID := core.ActionID{SpellID: 30033}
 	validUntil := time.Duration(0)
 
 	aura := core.MakeStackingAura(&war.Character, core.StackingStatAura{

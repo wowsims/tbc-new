@@ -7,7 +7,7 @@ import (
 )
 
 func (war *Warrior) registerRevenge() {
-	actionID := core.ActionID{SpellID: 6572}
+	actionID := core.ActionID{SpellID: 30357}
 
 	aura := war.RegisterAura(core.Aura{
 		Label:    "Revenge",
@@ -51,6 +51,7 @@ func (war *Warrior) registerRevenge() {
 
 		DamageMultiplier: 1,
 		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
+		ThreatMultiplier: 1,
 		FlatThreatBonus:  200,
 
 		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
