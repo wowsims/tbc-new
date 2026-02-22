@@ -6,13 +6,14 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
-func (shaman *Shaman) newTotemSpellConfig(baseCostPercent int32, spellID int32) core.SpellConfig {
+func (shaman *Shaman) newTotemSpellConfig(flatCost int32, spellID int32, spellMask int64) core.SpellConfig {
 	return core.SpellConfig{
-		ActionID: core.ActionID{SpellID: spellID},
-		Flags:    core.SpellFlagAPL,
+		ActionID:       core.ActionID{SpellID: spellID},
+		Flags:          core.SpellFlagAPL,
+		ClassSpellMask: spellMask,
 
 		ManaCost: core.ManaCostOptions{
-			BaseCostPercent: float64(baseCostPercent),
+			FlatCost: flatCost,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
@@ -22,8 +23,31 @@ func (shaman *Shaman) newTotemSpellConfig(baseCostPercent int32, spellID int32) 
 	}
 }
 
+func (shaman *Shaman) registerWindfuryTotemSpell() {
+	config := shaman.newTotemSpellConfig(325, 25587, SpellMaskBasicTotem)
+	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+		shaman.TotemExpirations[AirTotem] = sim.CurrentTime + time.Second*120
+	}
+	shaman.RegisterSpell(config)
+}
+
+func (shaman *Shaman) registerStrengthOfEarthTotemSpell() {
+	config := shaman.newTotemSpellConfig(300, 25528, SpellMaskBasicTotem)
+	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+		shaman.TotemExpirations[EarthTotem] = sim.CurrentTime + time.Second*120
+	}
+	shaman.RegisterSpell(config)
+}
+
+func (shaman *Shaman) registerGraceOfAirTotemSpell() {
+	config := shaman.newTotemSpellConfig(310, 25359, SpellMaskBasicTotem)
+	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+		shaman.TotemExpirations[AirTotem] = sim.CurrentTime + time.Second*120
+	}
+	shaman.RegisterSpell(config)
+}
 func (shaman *Shaman) registerHealingStreamTotemSpell() {
-	config := shaman.newTotemSpellConfig(3, 5394)
+	config := shaman.newTotemSpellConfig(3, 5394, SpellMaskBasicTotem)
 	hsHeal := shaman.RegisterSpell(core.SpellConfig{
 		ActionID:         core.ActionID{SpellID: 5394},
 		SpellSchool:      core.SpellSchoolNature,

@@ -8,7 +8,7 @@ import (
 )
 
 func searingTickCount(offset float64) int32 {
-	return int32(math.Ceil(40*(1.0+offset))) - 1
+	return int32(math.Ceil(24*(1.0+offset))) - 1
 }
 
 func (shaman *Shaman) registerSearingTotemSpell() {
@@ -38,7 +38,7 @@ func (shaman *Shaman) registerSearingTotemSpell() {
 			// delay inbetween each cast so using an extra 20 milliseconds to account for the delay
 			// subtracting 1 tick so that it doesn't shoot after its actual expiration
 			NumberOfTicks: searingTickCount(0),
-			TickLength:    time.Millisecond * (1500 + 20), // TODO
+			TickLength:    time.Millisecond * (2500 + 20),
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				baseDamage := shaman.CalcAndRollDamageRange(sim, 50, 66)
 				dot.Spell.CalcAndDealDamage(sim, target, baseDamage, dot.Spell.OutcomeMagicHitAndCrit)

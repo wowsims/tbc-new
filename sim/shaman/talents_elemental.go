@@ -242,7 +242,15 @@ func (shaman *Shaman) applyTotemOfWrath() {
 	if !shaman.Talents.TotemOfWrath {
 		return
 	}
-	// TODO
+	config := shaman.newTotemSpellConfig(int32(shaman.GetInitialStat(stats.Mana)*0.05), 30706, SpellMaskBasicTotem)
+	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+		shaman.MagmaTotem.AOEDot().Deactivate(sim)
+		shaman.SearingTotem.Dot(shaman.CurrentTarget).Deactivate(sim)
+		shaman.FireElemental.Disable(sim)
+		shaman.FireNovaTotemPA.Cancel(sim)
+		shaman.TotemExpirations[FireTotem] = sim.CurrentTime + time.Second*120
+	}
+	shaman.RegisterSpell(config)
 }
 func (shaman *Shaman) applyUnrelentingStorm() {
 	if shaman.Talents.UnrelentingStorm == 0 {

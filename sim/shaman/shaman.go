@@ -162,8 +162,10 @@ func (shaman *Shaman) Initialize() {
 	shaman.registerMagmaTotemSpell()
 	shaman.registerSearingTotemSpell()
 	shaman.registerFireNovaTotemSpell()
+	shaman.registerWindfuryTotemSpell()
+	shaman.registerStrengthOfEarthTotemSpell()
+	shaman.registerGraceOfAirTotemSpell()
 	shaman.registerShocks()
-	shaman.registerStormstrikeSpell()
 	shaman.registerBloodlustCD()
 }
 
@@ -214,6 +216,7 @@ const (
 	SpellMaskElementalMastery
 	SpellMaskShamanisticRage
 	SpellMaskBloodlust
+	SpellMaskBasicTotem
 
 	SpellMaskStormstrike  = SpellMaskStormstrikeCast | SpellMaskStormstrikeDamage
 	SpellMaskFlameShock   = SpellMaskFlameShockDirect | SpellMaskFlameShockDot
@@ -223,7 +226,7 @@ const (
 	SpellMaskOverload     = SpellMaskLightningBoltOverload | SpellMaskChainLightningOverload
 	SpellMaskShock        = SpellMaskFlameShock | SpellMaskEarthShock | SpellMaskFrostShock
 	SpellMaskFireTotem    = SpellMaskMagmaTotem | SpellMaskSearingTotem | SpellMaskFireNovaTotem
-	SpellMaskTotem        = SpellMaskFireTotem | SpellMaskFireElementalTotem | SpellMaskEarthElementalTotem
+	SpellMaskTotem        = SpellMaskFireTotem | SpellMaskFireElementalTotem | SpellMaskEarthElementalTotem | SpellMaskBasicTotem
 	SpellMaskInstantSpell = SpellMaskBloodlust
 	SpellMaskImbue        = SpellMaskFrostbrandWeapon | SpellMaskWindfuryWeapon | SpellMaskFlametongueWeapon | SpellMaskRockbiterWeapon
 )

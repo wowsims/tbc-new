@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
@@ -45,14 +46,20 @@ func (shaman *Shaman) applyDualWieldSpecialization() {
 	if shaman.Talents.DualWieldSpecialization == 0 {
 		return
 	}
+	mod := shaman.AddDynamicMod(core.SpellModConfig{
+		Kind:       core.SpellMod_BonusHit_Percent,
+		FloatValue: 2 * float64(shaman.Talents.DualWieldSpecialization),
+		ProcMask:   core.ProcMaskMeleeOrRanged,
+	})
 	if shaman.AutoAttacks.IsDualWielding {
-		shaman.AddStaticMod(core.SpellModConfig{
-			Kind:       core.SpellMod_BonusHit_Percent,
-			FloatValue: 2 * float64(shaman.Talents.DualWieldSpecialization),
-			ProcMask:   core.ProcMaskMeleeOrRanged,
-		})
+		mod.Activate()
 	}
-	//TODO weapon swap
+	shaman.RegisterItemSwapCallback(core.AllWeaponSlots(), func(_ *core.Simulation, _ proto.ItemSlot) {
+		mod.Deactivate()
+		if shaman.AutoAttacks.IsDualWielding {
+			mod.Activate()
+		}
+	})
 }
 
 func (shaman *Shaman) applyElementalWeapons() {
@@ -237,14 +244,14 @@ func (shaman *Shaman) applySpiritWeapons() {
 	if !shaman.Talents.SpiritWeapons {
 		return
 	}
-	//TODO
+	//TODO ?
 }
 
 func (shaman *Shaman) applyStormstrike() {
 	if !shaman.Talents.Stormstrike {
 		return
 	}
-	// TODO Need to merge Dora's changes
+	shaman.registerStormstrikeSpell()
 }
 
 func (shaman *Shaman) applyThunderingStrikes() {
