@@ -212,16 +212,14 @@ func (spell *Spell) outcomeMeleeWhite(sim *Simulation, result *SpellResult, atta
 			!result.applyAttackTableParry(spell, attackTable, roll, &chance) &&
 			!result.applyAttackTableGlance(spell, attackTable, roll, &chance) &&
 			!result.applyAttackTableBlock(spell, attackTable, roll, &chance) &&
-			!result.applyAttackTableCrit(spell, attackTable, roll, &chance, countHits) &&
-			!result.applyEnemyAttackTableCrush(spell, attackTable, roll, &chance, countHits) {
+			!result.applyAttackTableCrit(spell, attackTable, roll, &chance, countHits) {
 			result.applyAttackTableHit(spell, countHits)
 		}
 	} else {
 		if !result.applyAttackTableMiss(spell, attackTable, roll, &chance) &&
 			!result.applyAttackTableDodge(spell, attackTable, roll, &chance) &&
 			!result.applyAttackTableGlance(spell, attackTable, roll, &chance) &&
-			!result.applyAttackTableCrit(spell, attackTable, roll, &chance, countHits) &&
-			!result.applyEnemyAttackTableCrush(spell, attackTable, roll, &chance, countHits) {
+			!result.applyAttackTableCrit(spell, attackTable, roll, &chance, countHits) {
 			result.applyAttackTableHit(spell, countHits)
 		}
 	}
@@ -434,8 +432,8 @@ func (spell *Spell) outcomeMeleeSpecialBlockAndCrit(sim *Simulation, result *Spe
 		roll := sim.RandomFloat("White Hit Table")
 		chance := 0.0
 
-		if !result.applyAttackTableBlock(spell, attackTable, roll, &chance) &&
-			!result.applyAttackTableCritSeparateRoll(sim, spell, attackTable, countHits) {
+		if !result.applyAttackTableCritSeparateRoll(sim, spell, attackTable, countHits) &&
+			!result.applyAttackTableBlock(spell, attackTable, roll, &chance) {
 			result.applyAttackTableHit(spell, countHits)
 		}
 	} else {
@@ -544,13 +542,10 @@ func (spell *Spell) outcomeEnemyMeleeWhite(sim *Simulation, result *SpellResult,
 		!result.applyEnemyAttackTableDodge(spell, attackTable, roll, &chance) &&
 		!result.applyEnemyAttackTableParry(spell, attackTable, roll, &chance) &&
 		!result.applyEnemyAttackTableBlock(sim, spell, attackTable, roll, &chance) &&
-		!result.applyEnemyAttackTableCrit(spell, attackTable, roll, &chance, countHits) {
+		!result.applyEnemyAttackTableCrit(spell, attackTable, roll, &chance, countHits) &&
+		!result.applyEnemyAttackTableCrush(spell, attackTable, roll, &chance, countHits) {
 		result.applyAttackTableHit(spell, countHits)
 	}
-}
-
-func (spell *Spell) fixedCritCheck(sim *Simulation, critChance float64) bool {
-	return sim.RandomFloat("Fixed Crit Roll") < critChance
 }
 
 func (spell *Spell) GetPhysicalMissChance(attackTable *AttackTable) float64 {
@@ -589,12 +584,12 @@ func (result *SpellResult) applyAttackTableMissNoDWPenalty(spell *Spell, attackT
 
 func (result *SpellResult) applyAttackTableBlock(spell *Spell, attackTable *AttackTable, roll float64, chance *float64) bool {
 	*chance += result.Target.GetTotalBlockChanceAsDefender(attackTable)
-
 	if roll < *chance {
 		result.Outcome |= OutcomeBlock
 		if result.DidCrit() {
 			spell.SpellMetrics[result.Target.UnitIndex].Crits--
 			spell.SpellMetrics[result.Target.UnitIndex].BlockedCrits++
+
 			if result.DidResist() {
 				spell.SpellMetrics[result.Target.UnitIndex].ResistedCrits--
 			}

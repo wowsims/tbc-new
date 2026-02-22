@@ -197,6 +197,7 @@ func NewTarget(options *proto.Target, targetIndex int32) *Target {
 	// proto stats array. Any specified CritRating will be applied as an OFFSET to the default
 	// level-based values, rather than as a replacement.
 	target.stats[stats.PhysicalCritPercent] += UnitLevelFloat64(target.Level, 5.0, 5.2, 5.4, 5.6)
+	target.stats[stats.BlockValue] = 54
 	target.addUniversalStatDependencies()
 
 	if target.Level == 73 && options.SuppressDodge {

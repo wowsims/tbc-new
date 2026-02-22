@@ -8,8 +8,12 @@ import * as WarriorPresets from '../presets';
 import DefaultArmsApl from './apls/arms.apl.json';
 import DefaultFuryApl from './apls/fury.apl.json';
 import PreraidArmsGear from './gear_sets/preraid_arms.gear.json';
-import PreraidFuryGear from './gear_sets/preraid_fury.gear.json';
 import P1ArmsGear from './gear_sets/p1_arms.gear.json';
+import P2ArmsGear from './gear_sets/p2_arms.gear.json';
+import P3ArmsGear from './gear_sets/p3_arms.gear.json';
+import P35ArmsGear from './gear_sets/p3.5_arms.gear.json';
+import P4ArmsGear from './gear_sets/p4_arms.gear.json';
+import PreraidFuryGear from './gear_sets/preraid_fury.gear.json';
 import P1FuryGear from './gear_sets/p1_fury.gear.json';
 import P2FuryGear from './gear_sets/p2_fury.gear.json';
 import P3FuryGear from './gear_sets/p3_fury.gear.json';
@@ -63,6 +67,10 @@ export const P4_BIS_FURY_PRESET = PresetUtils.makePresetGear('P4 - Fury', P4Fury
 
 export const P1_PRERAID_ARMS_PRESET = PresetUtils.makePresetGear('Preraid - Arms', PreraidArmsGear, ARMS_PRESET_OPTIONS);
 export const P1_BIS_ARMS_PRESET = PresetUtils.makePresetGear('P1 - Arms', P1ArmsGear, ARMS_PRESET_OPTIONS);
+export const P2_BIS_ARMS_PRESET = PresetUtils.makePresetGear('P2 - Arms', P2ArmsGear, ARMS_PRESET_OPTIONS);
+export const P3_BIS_ARMS_PRESET = PresetUtils.makePresetGear('P3 - Arms', P3ArmsGear, ARMS_PRESET_OPTIONS);
+export const P35_BIS_ARMS_PRESET = PresetUtils.makePresetGear('P3.5 - Arms', P35ArmsGear, ARMS_PRESET_OPTIONS);
+export const P4_BIS_ARMS_PRESET = PresetUtils.makePresetGear('P4 - Arms', P4ArmsGear, ARMS_PRESET_OPTIONS);
 
 export const FURY_DEFAULT_ROTATION = PresetUtils.makePresetAPLRotation('Fury', DefaultFuryApl);
 export const ARMS_DEFAULT_ROTATION = PresetUtils.makePresetAPLRotation('Arms', DefaultArmsApl);
@@ -111,17 +119,17 @@ export const P2_FURY_EP_PRESET = PresetUtils.makePresetEpWeights(
 );
 
 export const P1_ARMS_EP_PRESET = PresetUtils.makePresetEpWeights(
-	'P1 - Arms',
+	'P1, P2 - Arms',
 	Stats.fromMap(
 		{
 			[Stat.StatStrength]: 1.0,
-			[Stat.StatAgility]: 0.68,
-			[Stat.StatAttackPower]: 0.45,
-			[Stat.StatMeleeHitRating]: 0.48,
-			[Stat.StatMeleeCritRating]: 0.93,
-			[Stat.StatMeleeHasteRating]: 0.76,
-			[Stat.StatArmorPenetration]: 0.18,
-			[Stat.StatExpertiseRating]: 1.17,
+			[Stat.StatAgility]: 0.75,
+			[Stat.StatAttackPower]: 0.46,
+			[Stat.StatMeleeHitRating]: 0.50,
+			[Stat.StatMeleeCritRating]: 1.02,
+			[Stat.StatMeleeHasteRating]: 0.79,
+			[Stat.StatArmorPenetration]: 0.19,
+			[Stat.StatExpertiseRating]: 1.46,
 		},
 		{
 			[PseudoStat.PseudoStatMainHandDps]: 5.85,
@@ -130,9 +138,28 @@ export const P1_ARMS_EP_PRESET = PresetUtils.makePresetEpWeights(
 	ARMS_PRESET_OPTIONS,
 );
 
+export const P2_ARMS_EP_PRESET = PresetUtils.makePresetEpWeights(
+	'P3 & P4 - Arms',
+	Stats.fromMap(
+		{
+			[Stat.StatStrength]: 1.0,
+			[Stat.StatAgility]: 0.80,
+			[Stat.StatAttackPower]: 0.45,
+			[Stat.StatMeleeHitRating]: 0.56,
+			[Stat.StatMeleeCritRating]: 1.10,
+			[Stat.StatMeleeHasteRating]: 0.85,
+			[Stat.StatArmorPenetration]: 0.23,
+			[Stat.StatExpertiseRating]: 1.66,
+		},
+		{
+			[PseudoStat.PseudoStatMainHandDps]: 6.0,
+		},
+	),
+	ARMS_PRESET_OPTIONS,
+);
+
 // Default talents. Uses the wowhead calculator format, make the talents on
 // https://wowhead.com/tbc/talent-calc and copy the numbers in the url.
-
 export const FuryTalents = {
 	name: 'Fury',
 	data: SavedTalents.create({
