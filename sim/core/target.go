@@ -180,7 +180,7 @@ func NewTarget(options *proto.Target, targetIndex int32) *Target {
 			Metrics:     NewUnitMetrics(),
 
 			StatDependencyManager: stats.NewStatDependencyManager(),
-			ReactionTime:          time.Millisecond * 1620,
+			ReactionTime:          BossGCD,
 			enabled:               !options.DisabledAtStart,
 		},
 	}
