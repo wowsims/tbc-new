@@ -20,7 +20,7 @@ type ShamSpellConfig struct {
 	BonusCoefficient    float64
 	BounceReduction     float64
 	SpellSchool         core.SpellSchool
-	Overloads           []*core.Spell
+	Overloads           *[][]*core.Spell
 	ClassSpellMask      int64
 }
 
