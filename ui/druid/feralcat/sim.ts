@@ -9,7 +9,6 @@ import { Cooldowns, Debuffs, EquipmentSpec, Faction, IndividualBuffs, ItemSlot, 
 import {
 	FeralCatDruid_Rotation as DruidRotation,
 	FeralCatDruid_Rotation_AplType as FeralRotationType,
-	FeralCatDruid_Rotation_HotwStrategy as HotwStrategy,
 } from '../../core/proto/druid';
 import * as AplUtils from '../../core/proto_utils/apl_utils';
 import { Stats, UnitStat } from '../../core/proto_utils/stats';
@@ -111,73 +110,15 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralCatDruid, {
 	},
 
 	simpleRotation: (player: Player<Spec.SpecFeralCatDruid>, simple: DruidRotation, cooldowns: Cooldowns): APLRotation => {
-		const [prepullActions, actions] = AplUtils.standardCooldownDefaults(cooldowns);
-
-		// Rotation entries
-		const agiTrinkets = APLAction.fromJsonString(
-			`{"condition":{"or":{"vals":[{"auraIsActive":{"auraId":{"spellId":5217}}},{"cmp":{"op":"OpLt","lhs":{"remainingTime":{}},"rhs":{"const":{"val":"16s"}}}}]}},"castAllStatBuffCooldowns":{"statType1":1,"statType2":-1,"statType3":-1}}`,
-		);
-		const synapseSprings = APLAction.fromJsonString(
-			`{"condition":{"or":{"vals":[{"auraIsActive":{"auraId":{"spellId":5217}}},{"cmp":{"op":"OpLt","lhs":{"remainingTime":{}},"rhs":{"const":{"val":"11s"}}}}]}},"castSpell":{"spellId":{"spellId":126734}}}`,
-		);
-		const hasteTrinkets = APLAction.fromJsonString(
-			`{"condition":{"or":{"vals":[{"auraIsActive":{"auraId":{"spellId":5217}}},{"cmp":{"op":"OpLt","lhs":{"remainingTime":{}},"rhs":{"const":{"val":"16s"}}}}]}},"castAllStatBuffCooldowns":{"statType1":7,"statType2":-1,"statType3":-1}}`,
-		);
-		const trees = APLAction.fromJsonString(
-			`{"condition":{"or":{"vals":[{"anyStatBuffCooldownsActive":{"statType1":1,"statType2":-1,"statType3":-1}},{"cmp":{"op":"OpLt","lhs":{"remainingTime":{}},"rhs":{"const":{"val":"16s"}}}}]}},"castSpell":{"spellId":{"spellId":106737}}}`,
-		);
-		const potion = APLAction.fromJsonString(
-			`{"condition":{"or":{"vals":[{"and":{"vals":[{"auraIsActive":{"auraId":{"spellId":5217}}},{"cmp":{"op":"OpLt","lhs":{"remainingTime":{}},"rhs":{"math":{"op":"OpAdd","lhs":{"spellTimeToReady":{"spellId":{"spellId":106952}}},"rhs":{"const":{"val":"26s"}}}}}}]}},{"cmp":{"op":"OpLt","lhs":{"remainingTime":{}},"rhs":{"const":{"val":"26s"}}}},{"auraIsActive":{"auraId":{"spellId":106951}}}]}},"castSpell":{"spellId":{"itemId":76089}}}`,
-		);
-		const trollRacial = APLAction.fromJsonString(`{"condition":{"auraIsActive":{"auraId":{"spellId":106951}}},"castSpell":{"spellId":{"spellId":26297}}}`);
-		const blockZerk = APLAction.fromJsonString(`{"condition":{"const":{"val":"false"}},"castSpell":{"spellId":{"spellId":106952}}}`);
-		const blockNS = APLAction.fromJsonString(`{"condition":{"const":{"val":"false"}},"castSpell":{"spellId":{"spellId":132158}}}`);
-		const blockHotw = APLAction.fromJsonString(`{"condition":{"const":{"val":"false"}},"castSpell":{"spellId":{"spellId":108292}}}`);
-		const shouldUseHotw = player.getTalents().heartOfTheWild && simple.hotwStrategy != HotwStrategy.PassivesOnly;
-		const shouldWrathWeave = shouldUseHotw && simple.hotwStrategy == HotwStrategy.Wrath;
-		const doRotation = APLAction.fromJsonString(
-			`{"catOptimalRotationAction":{"rotationType":${simple.rotationType},"manualParams":${simple.manualParams},"allowAoeBerserk":${simple.allowAoeBerserk},"bearWeave":${simple.bearWeave},"snekWeave":${simple.snekWeave},"useNs":${simple.useNs},"wrathWeave":${shouldWrathWeave},"minRoarOffset":${simple.minRoarOffset.toFixed(2)},"ripLeeway":${simple.ripLeeway.toFixed(2)},"useBite":${simple.useBite},"biteTime":${simple.biteTime.toFixed(2)},"berserkBiteTime":${simple.berserkBiteTime.toFixed(2)}}}`,
-		);
-
-		const singleTarget = simple.rotationType == FeralRotationType.SingleTarget;
-		actions.push(
-			...([
-				singleTarget ? agiTrinkets : null,
-				singleTarget ? synapseSprings : null,
-				singleTarget ? hasteTrinkets : null,
-				singleTarget ? trees : null,
-				singleTarget ? potion : null,
-				singleTarget ? trollRacial : null,
-				blockZerk,
-				blockNS,
-				!shouldUseHotw ? blockHotw : null,
-				doRotation,
-			].filter(a => a) as Array<APLAction>),
-		);
-
-		// Pre-pull entries
-		const healingTouch = APLPrepullAction.fromJsonString(`{"action":{"castSpell":{"spellId":{"spellId":5185}}},"doAtValue":{"const":{"val":"-5.2s"}}}`);
-		const shiftCat = APLPrepullAction.fromJsonString(`{"action":{"castSpell":{"spellId":{"spellId":768}}},"doAtValue":{"const":{"val":"-2.6s"}}}`);
-		const preRoar = APLPrepullAction.fromJsonString(`{"action":{"castSpell":{"spellId":{"spellId":52610}}},"doAtValue":{"const":{"val":"-1s"}}}`);
-
-		prepullActions.push(
-			...([
-				// player.getTalents().dreamOfCenarius ? healingTouch : null,
-				// player.getTalents().dreamOfCenarius ? shiftCat : null,
-			].filter(a => a) as Array<APLPrepullAction>),
-		);
-
+		// TODO: Implement TBC-specific rotation logic
+		// This is a placeholder for clean state - build TBC rotations from scratch
 		return APLRotation.create({
-			prepullActions: prepullActions,
-			priorityList: actions.map(action =>
-				APLListItem.create({
-					action: action,
-				}),
-			),
+			prepullActions: [],
+			priorityList: [],
 		});
 	},
 
-	hiddenMCDs: [126734, 106737, 76089, 26297, 106952, 132158, 108292, 55004],
+	hiddenMCDs: [],
 
 	raidSimPresets: [
 		{
