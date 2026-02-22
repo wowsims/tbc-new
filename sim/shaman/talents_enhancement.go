@@ -39,7 +39,7 @@ func (shaman *Shaman) applyDualWield() {
 	if !shaman.Talents.DualWield {
 		return
 	}
-	// TODO ?
+	// TODO ? Do we want to enforce that the user cannot equip 2 weapons in the gear planner if this talent is not picked ?
 }
 
 func (shaman *Shaman) applyDualWieldSpecialization() {
@@ -244,7 +244,7 @@ func (shaman *Shaman) applySpiritWeapons() {
 	if !shaman.Talents.SpiritWeapons {
 		return
 	}
-	//TODO ?
+	//TODO ? Threat related talent
 }
 
 func (shaman *Shaman) applyStormstrike() {

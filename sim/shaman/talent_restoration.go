@@ -63,7 +63,7 @@ func (shaman *Shaman) applyRestorativeTotems() {
 	if shaman.Talents.RestorativeTotems == 0 {
 		return
 	}
-	// TODO
+	// In totems.go
 }
 
 func (shaman *Shaman) applyTidalMastery() {
