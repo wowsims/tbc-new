@@ -37,7 +37,7 @@ func NewEnhancementShaman(character *core.Character, options *proto.Player) *Enh
 	}
 
 	enh := &EnhancementShaman{
-		Shaman: shaman.NewShaman(character, options.TalentsString, selfBuffs, true, enhOptions.ClassOptions.FeleAutocast),
+		Shaman: shaman.NewShaman(character, options.TalentsString, selfBuffs),
 	}
 
 	// Enable Auto Attacks for this spec
@@ -64,8 +64,6 @@ func NewEnhancementShaman(character *core.Character, options *proto.Player) *Enh
 
 type EnhancementShaman struct {
 	*shaman.Shaman
-
-	StormStrikeDebuffAuras core.AuraArray
 }
 
 func (enh *EnhancementShaman) GetShaman() *shaman.Shaman {
@@ -77,7 +75,6 @@ func (enh *EnhancementShaman) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
 }
 
 func (enh *EnhancementShaman) ApplyTalents() {
-	// enh.ApplyEnhancementTalents()
 	enh.Shaman.ApplyTalents()
 }
 
@@ -93,17 +90,6 @@ func (enh *EnhancementShaman) Initialize() {
 			enh.ApplySyncType(proto.ShamanSyncType_Auto)
 		})
 	}
-
-	//Mental Quickness
-	enh.GetSpellDamageValue = func(spell *core.Spell) float64 {
-		if spell.SpellID == 8024 {
-			// Flametongue weapon damage scales with AP for enh
-			return spell.MeleeAttackPower()
-		}
-		return spell.MeleeAttackPower() * 0.65
-	}
-
-	// enh.registerStormstrikeSpell()
 }
 
 func (enh *EnhancementShaman) Reset(sim *core.Simulation) {

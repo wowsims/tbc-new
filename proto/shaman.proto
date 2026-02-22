@@ -83,24 +83,28 @@ enum EarthTotem {
 
 enum AirTotem {
 	NoAirTotem = 0;
-	StormlashTotem = 1;
+    GraceOfAirTotem = 1;
 	GroundingTotem = 2;
-	CapacitorTotem = 3;
-	SpiritLinkTotem = 4;
+    NatureResistanceTotem = 3;  
+    StrengthOfEarthTotem = 4;
+    WindfuryTotem = 5;
 }
 
 enum FireTotem {
 	NoFireTotem = 0;
 	MagmaTotem = 1;
 	SearingTotem = 2;
-	FireElementalTotem = 3;
+    FlametongueTotem = 3;
+    FireNovaTotem = 4;
+	FireElementalTotem = 5;
+    FrostResistanceTotem = 6;
 }
 
 enum WaterTotem {
 	NoWaterTotem = 0;
-	HealingTideTotem = 1;
+	ManaSpringTotem = 1;
 	HealingStreamTotem = 2;
-	ManaTideTotem = 3;
+	FireResistanceTotem = 3;
 }
 
 message ShamanTotems {
@@ -129,32 +133,20 @@ enum ShamanImbue {
     WindfuryWeapon = 1;
     FlametongueWeapon = 2;
     FrostbrandWeapon = 3;
-	EarthlivingWeapon = 4;
-    RockbiterWeapon = 5;
+    RockbiterWeapon = 4;
 }
 
 enum ShamanSyncType {
   NoSync = 0;
   SyncMainhandOffhandSwings = 1;
   DelayOffhandSwings = 2;
-	Auto = 3;
-}
-
-message FeleAutocastSettings {
-    bool autocast_fireblast = 1;
-    bool autocast_firenova = 2;
-    bool autocast_immolate = 3;
-    bool autocast_empower = 4;
-    bool no_immolate_wfunleash = 5;
-    double no_immolate_duration = 6;
+    Auto = 3;
 }
 
 message ShamanOptions {
 	ShamanShield shield = 1;
 	ShamanImbue imbue_mh = 2;
-    ShamanImbue imbue_mh_swap = 4;
-
-    FeleAutocastSettings fele_autocast = 3;
+    ShamanImbue imbue_mh_swap = 3;
 }
 
 message ElementalShaman {
@@ -163,15 +155,8 @@ message ElementalShaman {
 
 	message Options {
 		ShamanOptions class_options = 1;
-
-		enum ThunderstormRange {
-			UnsetTSRange = 0;
-			TSInRange = 1;
-			TSOutofRange = 2;
-		}
-		ThunderstormRange thunderstormRange = 2;
 	}
-	Options options = 3;
+	Options options = 2;
 }
 
 message EnhancementShaman {

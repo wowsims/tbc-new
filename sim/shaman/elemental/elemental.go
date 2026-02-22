@@ -34,9 +34,8 @@ func NewElementalShaman(character *core.Character, options *proto.Player) *Eleme
 		ImbueOHSwap: proto.ShamanImbue_NoImbue,
 	}
 
-	inRange := eleOptions.ThunderstormRange == proto.ElementalShaman_Options_TSInRange
 	ele := &ElementalShaman{
-		Shaman: shaman.NewShaman(character, options.TalentsString, selfBuffs, inRange, eleOptions.ClassOptions.FeleAutocast),
+		Shaman: shaman.NewShaman(character, options.TalentsString, selfBuffs),
 	}
 
 	//Some spells use weapon damage (Unleash Wind, ...)
@@ -53,8 +52,6 @@ func (eleShaman *ElementalShaman) Initialize() {
 
 	// eleShaman.RegisterFlametongueImbue(eleShaman.GetImbueProcMask(proto.ShamanImbue_FlametongueWeapon))
 	// eleShaman.RegisterWindfuryImbue(eleShaman.GetImbueProcMask(proto.ShamanImbue_WindfuryWeapon))
-
-	// eleShaman.registerThunderstormSpell()
 }
 
 func (ele *ElementalShaman) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
@@ -62,7 +59,6 @@ func (ele *ElementalShaman) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
 }
 
 func (ele *ElementalShaman) ApplyTalents() {
-	// ele.ApplyElementalTalents()
 	ele.Shaman.ApplyTalents()
 }
 

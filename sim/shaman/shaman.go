@@ -25,28 +25,16 @@ const (
 const (
 	SpellFlagShamanSpell = core.SpellFlagAgentReserved1
 	SpellFlagShock       = core.SpellFlagAgentReserved2
-	SpellFlagIsEcho      = core.SpellFlagAgentReserved3
+	SpellFlagInstant     = core.SpellFlagAgentReserved3
 	SpellFlagFocusable   = core.SpellFlagAgentReserved4
 )
 
-func NewShaman(character *core.Character, talents string, selfBuffs SelfBuffs, thunderstormRange bool, feleAutocastOptions *proto.FeleAutocastSettings) *Shaman {
-	if feleAutocastOptions == nil {
-		feleAutocastOptions = &proto.FeleAutocastSettings{
-			AutocastFireblast:   true,
-			AutocastFirenova:    true,
-			AutocastImmolate:    true,
-			AutocastEmpower:     false,
-			NoImmolateWfunleash: false,
-			NoImmolateDuration:  0,
-		}
-	}
+func NewShaman(character *core.Character, talents string, selfBuffs SelfBuffs) *Shaman {
 	shaman := &Shaman{
-		Character:           *character,
-		Talents:             &proto.ShamanTalents{},
-		Totems:              &proto.ShamanTotems{},
-		FeleAutocast:        feleAutocastOptions,
-		SelfBuffs:           selfBuffs,
-		ThunderstormInRange: thunderstormRange,
+		Character: *character,
+		Talents:   &proto.ShamanTalents{},
+		Totems:    &proto.ShamanTotems{},
+		SelfBuffs: selfBuffs,
 	}
 	// shaman.waterShieldManaMetrics = shaman.NewManaMetrics(core.ActionID{SpellID: 57960})
 
@@ -68,8 +56,8 @@ func NewShaman(character *core.Character, talents string, selfBuffs SelfBuffs, t
 		shaman.AddStat(stats.MP5, 2138)
 	}
 
-	// shaman.FireElemental = shaman.NewFireElemental(!shaman.Talents.PrimalElementalist)
-	// shaman.EarthElemental = shaman.NewEarthElemental(!shaman.Talents.PrimalElementalist)
+	shaman.FireElemental = shaman.NewFireElemental()
+	//shaman.EarthElemental = shaman.NewEarthElemental()
 
 	return shaman
 }
@@ -106,28 +94,19 @@ const (
 type Shaman struct {
 	core.Character
 
-	ClassSpellScaling float64
-
-	ThunderstormInRange bool // flag if thunderstorm will be in range.
-
 	Talents   *proto.ShamanTalents
 	SelfBuffs SelfBuffs
 
 	Totems *proto.ShamanTotems
 
-	FeleAutocast *proto.FeleAutocastSettings
-
 	// The expiration time of each totem (earth, air, fire, water).
 	TotemExpirations [4]time.Duration
 
-	LightningBolt         *core.Spell
-	LightningBoltOverload [2]*core.Spell
+	LightningBolts         []*core.Spell
+	LightningBoltOverloads []*core.Spell
 
-	ChainLightning          *core.Spell
-	ChainLightningOverloads [2][]*core.Spell
-
-	LavaBeam          *core.Spell
-	LavaBeamOverloads [2][]*core.Spell
+	ChainLightnings         []*core.Spell
+	ChainLightningOverloads [][]*core.Spell
 
 	Stormstrike           *core.Spell
 	StormstrikeCastResult *core.SpellResult
@@ -136,17 +115,17 @@ type Shaman struct {
 	LightningShieldDamage *core.Spell
 	LightningShieldAura   *core.Aura
 
-	Thunderstorm *core.Spell
-
 	EarthShock *core.Spell
 	FlameShock *core.Spell
 	FrostShock *core.Spell
 
-	// FireElemental      *FireElemental
 	FireElementalTotem *core.Spell
+	FireElemental      *FireElemental
 
-	// EarthElemental      *EarthElemental
 	EarthElementalTotem *core.Spell
+	EarthElemental      *EarthElemental
+
+	StormStrikeDebuffAuras core.AuraArray
 
 	ElementalSharedCDTimer *core.Timer
 
@@ -154,32 +133,9 @@ type Shaman struct {
 	HealingStreamTotem *core.Spell
 	SearingTotem       *core.Spell
 	TremorTotem        *core.Spell
-
-	MaelstromWeaponAura           *core.Aura
-	AncestralSwiftnessInstantAura *core.Aura
-	SearingFlames                 *core.Spell
-
-	SearingFlamesMultiplier float64
-
-	// Healing Spells
-	tidalWaveProc          *core.Aura
-	ancestralHealingAmount float64
-	AncestralAwakening     *core.Spell
-	HealingSurge           *core.Spell
-
-	GreaterHealingWave *core.Spell
-	HealingWave        *core.Spell
-	ChainHeal          *core.Spell
-	Riptide            *core.Spell
-	EarthShield        *core.Spell
+	FireNovaTotemPA    *core.PendingAction
 
 	waterShieldManaMetrics *core.ResourceMetrics
-
-	// Item sets
-	T14Ele4pc *core.Aura
-	T14Enh4pc *core.Aura
-	T15Enh2pc *core.Aura
-	S12Enh2pc *core.Aura
 }
 
 // Implemented by each Shaman spec.
@@ -198,46 +154,25 @@ func (shaman *Shaman) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
 }
 
 func (shaman *Shaman) Initialize() {
-	// shaman.registerChainLightningSpell()
-	// shaman.registerFireElementalTotem(!shaman.Talents.PrimalElementalist)
-	// shaman.registerEarthElementalTotem(!shaman.Talents.PrimalElementalist)
-	// shaman.registerLightningBoltSpell()
-	// shaman.registerLightningShieldSpell()
-	// shaman.registerMagmaTotemSpell()
-	// shaman.registerSearingTotemSpell()
-	// shaman.registerShocks()
-	// shaman.registerShamanisticRageSpell()
-
-	// shaman.registerBloodlustCD()
+	shaman.registerChainLightningSpell()
+	shaman.registerFireElementalTotem()
+	//shaman.registerEarthElementalTotem()
+	shaman.registerLightningBoltSpell()
+	shaman.registerLightningShieldSpell()
+	shaman.registerMagmaTotemSpell()
+	shaman.registerSearingTotemSpell()
+	shaman.registerFireNovaTotemSpell()
+	shaman.registerWindfuryTotemSpell()
+	shaman.registerStrengthOfEarthTotemSpell()
+	shaman.registerGraceOfAirTotemSpell()
+	shaman.registerShocks()
+	shaman.registerBloodlustCD()
 }
 
-func (shaman *Shaman) RegisterHealingSpells() {
-	// shaman.registerAncestralHealingSpell()
-	// shaman.registerHealingSurgeSpell()
-	// shaman.registerHealingWaveSpell()
-	// shaman.registerRiptideSpell()
-	// shaman.registerEarthShieldSpell()
-	// shaman.registerChainHealSpell()
-
-	// if shaman.Talents.TidalWaves > 0 {
-	// 	shaman.tidalWaveProc = shaman.GetOrRegisterAura(core.Aura{
-	// 		Label:    "Tidal Wave Proc",
-	// 		ActionID: core.ActionID{SpellID: 53390},
-	// 		Duration: core.NeverExpires,
-	// 		OnReset: func(aura *core.Aura, sim *core.Simulation) {
-	// 			aura.Deactivate(sim)
-	// 		},
-	// 		OnGain: func(aura *core.Aura, sim *core.Simulation) {
-	// 			shaman.HealingWave.CastTimeMultiplier *= 0.7
-	// 			shaman.HealingSurge.BonusCritRating += core.CritRatingPerCritChance * 25
-	// 		},
-	// 		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
-	// 			shaman.HealingWave.CastTimeMultiplier /= 0.7
-	// 			shaman.HealingSurge.BonusCritRating -= core.CritRatingPerCritChance * 25
-	// 		},
-	// 		MaxStacks: 2,
-	// 	})
-	// }
+func (shaman *Shaman) ApplyTalents() {
+	shaman.ApplyElementalTalents()
+	shaman.ApplyEnhancementTalents()
+	shaman.ApplyRestorationTalents()
 }
 
 func (shaman *Shaman) Reset(sim *core.Simulation) {
@@ -246,23 +181,11 @@ func (shaman *Shaman) Reset(sim *core.Simulation) {
 func (shaman *Shaman) OnEncounterStart(sim *core.Simulation) {
 }
 
-func (shaman *Shaman) calcDamageStormstrikeCritChance(sim *core.Simulation, target *core.Unit, baseDamage float64, spell *core.Spell) *core.SpellResult {
-	var result *core.SpellResult
-	if target.HasActiveAura("Stormstrike-" + shaman.Label) {
-		critPercentBonus := core.TernaryFloat64(shaman.T14Enh4pc.IsActive(), 40.0, 25.0)
-		spell.BonusCritPercent += critPercentBonus
-		result = spell.CalcDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
-		spell.BonusCritPercent -= critPercentBonus
-	} else {
-		result = spell.CalcDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
-	}
-	return result
-}
-
 func (shaman *Shaman) GetOverloadChance() float64 {
-	overloadChance := 0.0
-
-	return overloadChance
+	if shaman.Talents.LightningOverload == 0 {
+		return 0.0
+	}
+	return 0.04 * float64(shaman.Talents.LightningOverload)
 }
 
 const (
@@ -278,11 +201,10 @@ const (
 	SpellMaskChainLightningOverload
 	SpellMaskEarthShock
 	SpellMaskLightningShield
-	SpellMaskThunderstorm
-	SpellMaskFireNova
 	SpellMaskMagmaTotem
 	SpellMaskSearingTotem
-	SpellMaskPrimalStrike
+	SpellMaskFireNovaTotem
+	SpellMaskFlametongueTotem
 	SpellMaskStormstrikeCast
 	SpellMaskStormstrikeDamage
 	SpellMaskEarthShield
@@ -290,18 +212,21 @@ const (
 	SpellMaskFlametongueWeapon
 	SpellMaskWindfuryWeapon
 	SpellMaskFrostbrandWeapon
+	SpellMaskRockbiterWeapon
 	SpellMaskElementalMastery
 	SpellMaskShamanisticRage
 	SpellMaskBloodlust
+	SpellMaskBasicTotem
 
 	SpellMaskStormstrike  = SpellMaskStormstrikeCast | SpellMaskStormstrikeDamage
 	SpellMaskFlameShock   = SpellMaskFlameShockDirect | SpellMaskFlameShockDot
-	SpellMaskFire         = SpellMaskFlameShock | SpellMaskFireNova
-	SpellMaskNature       = SpellMaskLightningBolt | SpellMaskLightningBoltOverload | SpellMaskChainLightning | SpellMaskChainLightningOverload | SpellMaskEarthShock | SpellMaskThunderstorm
+	SpellMaskFire         = SpellMaskFlameShock
+	SpellMaskNature       = SpellMaskLightningBolt | SpellMaskLightningBoltOverload | SpellMaskChainLightning | SpellMaskChainLightningOverload | SpellMaskEarthShock
 	SpellMaskFrost        = SpellMaskFrostShock
 	SpellMaskOverload     = SpellMaskLightningBoltOverload | SpellMaskChainLightningOverload
 	SpellMaskShock        = SpellMaskFlameShock | SpellMaskEarthShock | SpellMaskFrostShock
-	SpellMaskTotem        = SpellMaskMagmaTotem | SpellMaskSearingTotem | SpellMaskFireElementalTotem | SpellMaskEarthElementalTotem
+	SpellMaskFireTotem    = SpellMaskMagmaTotem | SpellMaskSearingTotem | SpellMaskFireNovaTotem
+	SpellMaskTotem        = SpellMaskFireTotem | SpellMaskFireElementalTotem | SpellMaskEarthElementalTotem | SpellMaskBasicTotem
 	SpellMaskInstantSpell = SpellMaskBloodlust
-	SpellMaskImbue        = SpellMaskFrostbrandWeapon | SpellMaskWindfuryWeapon | SpellMaskFlametongueWeapon
+	SpellMaskImbue        = SpellMaskFrostbrandWeapon | SpellMaskWindfuryWeapon | SpellMaskFlametongueWeapon | SpellMaskRockbiterWeapon
 )
