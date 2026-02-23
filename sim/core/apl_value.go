@@ -128,6 +128,8 @@ func (rot *APLRotation) newAPLValueWithContext(config *proto.APLValue, groupVari
 		value = rot.newValueCurrentComboPoints(config.GetCurrentComboPoints(), config.Uuid)
 	case *proto.APLValue_MaxHealth:
 		value = rot.newValueMaxHealth(config.GetMaxHealth(), config.Uuid)
+	case *proto.APLValue_MaxMana:
+		value = rot.newValueMaxMana(config.GetMaxMana(), config.Uuid)
 	case *proto.APLValue_MaxComboPoints:
 		value = rot.newValueMaxComboPoints(config.GetMaxComboPoints(), config.Uuid)
 	case *proto.APLValue_MaxEnergy:

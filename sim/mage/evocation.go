@@ -22,7 +22,7 @@ func (mage *Mage) registerEvocation() {
 			},
 			CD: core.Cooldown{
 				Timer:    mage.NewTimer(),
-				Duration: time.Minute * 2,
+				Duration: time.Minute * 8,
 			},
 		},
 

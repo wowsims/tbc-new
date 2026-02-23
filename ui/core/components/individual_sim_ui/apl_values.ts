@@ -61,6 +61,7 @@ import {
 	APLValueMaxEnergy,
 	APLValueMaxFocus,
 	APLValueMaxHealth,
+	APLValueMaxMana,
 	APLValueMaxRage,
 	APLValueMin,
 	APLValueNot,
@@ -721,6 +722,17 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 		submenu: ['resources', 'mana'],
 		shortDescription: i18n.t('rotation_tab.apl.values.current_mana_percent.tooltip'),
 		newValue: APLValueCurrentManaPercent.create,
+		includeIf(player: Player<any>, _isPrepull: boolean) {
+			const clss = player.getClass();
+			return clss !== Class.ClassHunter && clss !== Class.ClassRogue && clss !== Class.ClassWarrior;
+		},
+		fields: [],
+	}),
+	maxMana: inputBuilder({
+		label: i18n.t('rotation_tab.apl.values.max_mana.label'),
+		submenu: ['resources', 'mana'],
+		shortDescription: i18n.t('rotation_tab.apl.values.max_mana.tooltip'),
+		newValue: APLValueMaxMana.create,
 		includeIf(player: Player<any>, _isPrepull: boolean) {
 			const clss = player.getClass();
 			return clss !== Class.ClassHunter && clss !== Class.ClassRogue && clss !== Class.ClassWarrior;

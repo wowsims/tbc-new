@@ -26,6 +26,9 @@ func (mage *Mage) registerManaGems() {
 		Flags:    core.SpellFlagNoOnCastComplete | core.SpellFlagAPL | core.SpellFlagHelpful,
 
 		Cast: core.CastConfig{
+			DefaultCast: core.Cast{
+				NonEmpty: true,
+			},
 			CD: core.Cooldown{
 				Timer:    mage.NewTimer(),
 				Duration: time.Minute * 2,

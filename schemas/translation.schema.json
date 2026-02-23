@@ -5073,6 +5073,22 @@
                     "tooltip"
                   ]
                 },
+                "max_mana": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    },
+                    "tooltip": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "label",
+                    "tooltip"
+                  ]
+                },
                 "current_rage": {
                   "type": "object",
                   "properties": {
@@ -6418,6 +6434,7 @@
                 "max_health",
                 "current_mana",
                 "current_mana_percent",
+                "max_mana",
                 "current_rage",
                 "max_rage",
                 "current_focus",

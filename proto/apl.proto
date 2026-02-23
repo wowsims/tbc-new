@@ -98,7 +98,7 @@ message APLAction {
 }
 
 
-// NextIndex: 128
+// NextIndex: 129
 message APLValue {
 	UUID uuid = 85;
 
@@ -139,6 +139,7 @@ message APLValue {
         APLValueCurrentLunarEnergy current_lunar_energy = 69;
 		APLValueCurrentGenericResource current_generic_resource = 75;
         APLValueMaxHealth max_health = 98;
+		APLValueMaxMana max_mana = 128;
 		APLValueMaxComboPoints max_combo_points = 93;
 		APLValueMaxEnergy max_energy = 87;
 		APLValueMaxFocus max_focus = 88;
@@ -518,6 +519,7 @@ message APLValueCurrentSolarEnergy {}
 message APLValueCurrentLunarEnergy {}
 message APLValueCurrentGenericResource {}
 message APLValueMaxHealth {}
+message APLValueMaxMana {}
 message APLValueMaxComboPoints {}
 message APLValueMaxEnergy {}
 message APLValueMaxFocus {}

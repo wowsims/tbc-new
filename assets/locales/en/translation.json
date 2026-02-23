@@ -1220,6 +1220,10 @@
 					"label": "Current Mana (%)",
 					"tooltip": "Amount of currently available Mana, as a percentage."
 				},
+				"max_mana": {
+					"label": "Max Mana",
+					"tooltip": "Maximum mana of the unit"
+				},
 				"current_rage": {
 					"label": "Current Rage",
 					"tooltip": "Amount of currently available Rage."

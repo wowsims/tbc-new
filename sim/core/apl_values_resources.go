@@ -151,6 +151,31 @@ func (value *APLValueCurrentManaPercent) String() string {
 	return fmt.Sprintf("Current Mana %%")
 }
 
+type APLValueMaxMana struct {
+	DefaultAPLValueImpl
+	unit *Unit
+}
+
+func (rot *APLRotation) newValueMaxMana(_ *proto.APLValueMaxMana, uuid *proto.UUID) APLValue {
+	unit := rot.unit
+	if !unit.HasManaBar() {
+		rot.ValidationMessageByUUID(uuid, proto.LogLevel_Warning, "%s does not use Mana", unit.Label)
+		return nil
+	}
+	return &APLValueMaxMana{
+		unit: unit,
+	}
+}
+func (value *APLValueMaxMana) Type() proto.APLValueType {
+	return proto.APLValueType_ValueTypeFloat
+}
+func (value *APLValueMaxMana) GetFloat(sim *Simulation) float64 {
+	return value.unit.MaxMana()
+}
+func (value *APLValueMaxMana) String() string {
+	return "Max Mana"
+}
+
 type APLValueCurrentRage struct {
 	DefaultAPLValueImpl
 	unit *Unit
