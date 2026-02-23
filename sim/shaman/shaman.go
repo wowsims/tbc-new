@@ -34,11 +34,8 @@ func NewShaman(character *core.Character, talents string, selfBuffs SelfBuffs) *
 	shaman.AddStatDependency(stats.Agility, stats.DodgeRating, 1.0/25*core.DodgeRatingPerDodgePercent)
 	shaman.EnableManaBarWithModifier()
 
-	shaman.AddStatDependency(stats.Agility, stats.AttackPower, 2.0)
+	shaman.AddStatDependency(stats.Strength, stats.AttackPower, 2.0)
 	shaman.AddStat(stats.AttackPower, -20)
-
-	shaman.AddStatDependency(stats.Strength, stats.AttackPower, 1.0)
-	shaman.AddStat(stats.AttackPower, -10)
 
 	if selfBuffs.Shield == proto.ShamanShield_WaterShield {
 		shaman.AddStat(stats.MP5, 50)
