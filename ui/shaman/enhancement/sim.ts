@@ -122,7 +122,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecEnhancementShaman, {
 	},
 
 	autoRotation: (_: Player<Spec.SpecEnhancementShaman>): APLRotation => {
-		return Presets.ROTATION_PRESET_P3.rotation.rotation!;
+		return Presets.ROTATION_PRESET_DEFAULT.rotation.rotation!;
 	},
 
 	raidSimPresets: [
