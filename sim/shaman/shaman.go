@@ -10,18 +10,6 @@ import (
 
 var TalentTreeSizes = [3]int{20, 21, 20}
 
-// Start looking to refresh 5 minute totems at 4:55.
-const TotemRefreshTime5M = time.Second * 295
-
-// Damage Done By Caster setup
-const (
-	DDBC_FrostbrandWeapon int = iota
-	DDBC_UnleashedFury
-	DDBC_2PT16
-
-	DDBC_Total
-)
-
 const (
 	SpellFlagShamanSpell = core.SpellFlagAgentReserved1
 	SpellFlagShock       = core.SpellFlagAgentReserved2
@@ -53,7 +41,7 @@ func NewShaman(character *core.Character, talents string, selfBuffs SelfBuffs) *
 	shaman.AddStat(stats.AttackPower, -10)
 
 	if selfBuffs.Shield == proto.ShamanShield_WaterShield {
-		shaman.AddStat(stats.MP5, 2138)
+		shaman.AddStat(stats.MP5, 50)
 	}
 
 	shaman.FireElemental = shaman.NewFireElemental()
