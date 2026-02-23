@@ -24,7 +24,6 @@ export const ARCANE_TALENTS = PresetUtils.makePresetTalents('Arcane', SavedTalen
 
 export const ROTATION_PRESET_ARCANE = PresetUtils.makePresetAPLRotation('Arcane', ArcaneApl);
 
-
 export const BLANK_GEARSET = PresetUtils.makePresetGear('Blank', BlankGear);
 
 // Preset options for EP weights
