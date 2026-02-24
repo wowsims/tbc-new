@@ -5,11 +5,10 @@ import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_u
 import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
 import { APLAction, APLListItem, APLPrepullAction, APLRotation, APLRotation_Type as APLRotationType } from '../../core/proto/apl';
-import { Cooldowns, Debuffs, Faction, IndividualBuffs, ItemSlot, PartyBuffs, PseudoStat, Race, RaidBuffs, Spec, Stat } from '../../core/proto/common';
+import { Cooldowns, Debuffs, EquipmentSpec, Faction, IndividualBuffs, ItemSlot, PartyBuffs, PseudoStat, Race, RaidBuffs, Spec, Stat } from '../../core/proto/common';
 import {
 	FeralCatDruid_Rotation as DruidRotation,
 	FeralCatDruid_Rotation_AplType as FeralRotationType,
-	FeralCatDruid_Rotation_HotwStrategy as HotwStrategy,
 } from '../../core/proto/druid';
 import * as AplUtils from '../../core/proto_utils/apl_utils';
 import { Stats, UnitStat } from '../../core/proto_utils/stats';
@@ -28,7 +27,11 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralCatDruid, {
 	warnings: [],
 
 	// All stats for which EP should be calculated.
-	epStats: [Stat.StatStrength, Stat.StatAgility, Stat.StatAttackPower],
+	epStats: [
+		Stat.StatStrength,
+		Stat.StatAgility,
+		Stat.StatAttackPower,
+	],
 	epPseudoStats: [PseudoStat.PseudoStatMainHandDps],
 	// Reference stat against which to calculate EP. I think all classes use either spell power or attack power.
 	epReferenceStat: Stat.StatAgility,
@@ -40,12 +43,14 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralCatDruid, {
 
 	defaults: {
 		// Default equipped gear.
-		gear: Presets.PRERAID_PRESET.gear,
+		gear: EquipmentSpec.create(),
 		// Default EP weights for sorting gear in the gear picker.
-		epWeights: Presets.EP_PRESET.epWeights,
+		epWeights: Stats.fromMap({}),
 		other: Presets.OtherDefaults,
 		// Default consumes settings.
 		consumables: Presets.DefaultConsumables,
+		// Default rotation settings.
+		rotationType: APLRotationType.TypeAPL,
 		// Default talents.
 		talents: Presets.StandardTalents.data,
 		// Default spec-specific settings.
@@ -54,9 +59,15 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralCatDruid, {
 		raidBuffs: RaidBuffs.create({
 			...defaultRaidBuffMajorDamageCooldowns(),
 		}),
-		partyBuffs: PartyBuffs.create({}),
-		individualBuffs: IndividualBuffs.create({}),
-		debuffs: Debuffs.create({}),
+		partyBuffs: PartyBuffs.create({
+
+		}),
+		individualBuffs: IndividualBuffs.create({
+
+		}),
+		debuffs: Debuffs.create({
+
+		}),
 	},
 
 	// IconInputs to include in the 'Player' section on the settings tab.
@@ -64,7 +75,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralCatDruid, {
 	// Inputs to include in the 'Rotation' section on the settings tab.
 	rotationInputs: FeralInputs.FeralDruidRotationConfig,
 	// Buff and Debuff inputs to include/exclude, overriding the EP-based defaults.
-	includeBuffDebuffInputs: [, ,],
+	includeBuffDebuffInputs: [, , ],
 	excludeBuffDebuffInputs: [],
 	// Inputs to include in the 'Other' section on the settings tab.
 	otherInputs: {
@@ -84,20 +95,30 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralCatDruid, {
 	},
 
 	presets: {
-		epWeights: [Presets.EP_PRESET],
+		epWeights: [],
 		// Preset talents that the user can quickly select.
 		talents: [Presets.StandardTalents],
-		rotations: [Presets.APL_ROTATION_DEFAULT],
+		rotations: [],
 		// Preset gear configurations that the user can quickly select.
-		gear: [Presets.PRERAID_PRESET, Presets.P1_PRESET],
+		gear: [],
+		itemSwaps: [],
 		builds: [],
 	},
 
 	autoRotation: (_player: Player<Spec.SpecFeralCatDruid>): APLRotation => {
-		return Presets.APL_ROTATION_DEFAULT.rotation.rotation!;
+		return APLRotation.create();
 	},
 
-	hiddenMCDs: [126734, 106737, 76089, 26297, 106952, 132158, 108292, 55004],
+	simpleRotation: (player: Player<Spec.SpecFeralCatDruid>, simple: DruidRotation, cooldowns: Cooldowns): APLRotation => {
+		// TODO: Implement TBC-specific rotation logic
+		// This is a placeholder for clean state - build TBC rotations from scratch
+		return APLRotation.create({
+			prepullActions: [],
+			priorityList: [],
+		});
+	},
+
+	hiddenMCDs: [],
 
 	raidSimPresets: [
 		{
@@ -112,12 +133,8 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralCatDruid, {
 			},
 			defaultGear: {
 				[Faction.Unknown]: {},
-				[Faction.Alliance]: {
-					1: Presets.P1_PRESET.gear,
-				},
-				[Faction.Horde]: {
-					1: Presets.P1_PRESET.gear,
-				},
+				[Faction.Alliance]: {},
+				[Faction.Horde]: {},
 			},
 			otherDefaults: Presets.OtherDefaults,
 		},
