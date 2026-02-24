@@ -700,7 +700,7 @@ const actionKindFactories: { [f in NonNullable<APLActionKind>]: ActionKindConfig
 		}
 	},
 	castWarlockAssignedCurse: inputBuilder({
-		label: 'Cast Assigned Curse',
+		label: i18n.t('rotation_tab.apl.actions.warlock_cast_assigned_curse.label'),
 		submenu: ['Warlock'],
 		shortDescription: "Casts the Warlock's Assigned Curse",
 		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getSpec() == Spec.SpecWarlock,
