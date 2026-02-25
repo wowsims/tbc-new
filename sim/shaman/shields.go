@@ -105,7 +105,7 @@ func (shaman *Shaman) registerLightningShieldSpell() {
 		ClassSpellMask: SpellMaskShieldSelfProc,
 		Handler: func(sim *core.Simulation, spell *core.Spell, _ *core.SpellResult) {
 			shaman.LightningShieldAura.RemoveStack(sim)
-			lsDamage.Cast(sim, spell.Unit)
+			lsDamage.Cast(sim, shaman.CurrentTarget)
 		},
 	})
 
