@@ -125,6 +125,7 @@ export interface IndividualSimUIConfig<SpecType extends Spec> extends PlayerConf
 	epStats: Array<Stat>;
 	epPseudoStats?: Array<PseudoStat>;
 	epReferenceStat: Stat;
+	tankRefStat?: Stat;
 	displayStats: Array<UnitStat>;
 	modifyDisplayStats?: CharacterStats['modifyDisplayStats'];
 	overwriteDisplayStats?: CharacterStats['overwriteDisplayStats'];
@@ -575,6 +576,8 @@ export abstract class IndividualSimUI<SpecType extends Spec> extends SimUI {
 
 			this.reforger?.applyDefaults(eventID);
 
+			this.tankRefStat = this.individualConfig.tankRefStat;
+
 			if (this.isWithinRaidSim) {
 				this.sim.raid.setTargetDummies(eventID, 0);
 			} else {
@@ -715,9 +718,8 @@ export abstract class IndividualSimUI<SpecType extends Spec> extends SimUI {
 				if (settings.healRefStat) {
 					this.healRefStat = settings.healRefStat;
 				}
-				if (settings.tankRefStat) {
-					this.tankRefStat = settings.tankRefStat;
-				}
+
+				this.tankRefStat = settings.tankRefStat || this.individualConfig.tankRefStat;
 
 				if (settings.settings) {
 					this.sim.fromProto(eventID, settings.settings);

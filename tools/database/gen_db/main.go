@@ -442,6 +442,8 @@ func ApplyGlobalFilters(db *database.WowDatabase) {
 		_, uncut, _ := strings.Cut(gem.Name, " ")
 		if slices.Contains([]string{"Crimson Spinel", "Empyrean Sapphire", "Lionseye", "Shadowsong Amethyst", "Pyrestone", "Seaspray Emerald"}, uncut) {
 			gem.Phase = 3
+		} else if gem.Name == "Charmed Amani Jewel" {
+			gem.Phase = 3
 		} else {
 			gem.Phase = 1
 		}

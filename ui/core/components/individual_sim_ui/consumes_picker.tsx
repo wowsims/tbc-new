@@ -40,7 +40,7 @@ export class ConsumesPicker extends Component {
 		}
 		return [
 			...consumables,
-			...this.db.getConsumablesByTypeAndStats(type, this.simUI.individualConfig.consumableStats ?? this.simUI.individualConfig.epStats),
+			...this.db.getConsumablesByTypeAndStats(type, [...(this.simUI.individualConfig.consumableStats ?? this.simUI.individualConfig.epStats)]),
 		];
 	}
 

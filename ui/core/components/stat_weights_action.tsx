@@ -739,7 +739,7 @@ export class EpWeightsMenu extends BaseModal {
 	}
 
 	private getTankEpRefStat(): Stat {
-		return this.simUI.tankRefStat !== undefined ? this.simUI.tankRefStat : Stat.StatArmor;
+		return this.simUI.tankRefStat !== undefined ? this.simUI.tankRefStat : this.simUI.individualConfig.tankRefStat || Stat.StatArmor;
 	}
 
 	private getPrevSimResult(): StatWeightsResult {
