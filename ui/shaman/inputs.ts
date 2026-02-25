@@ -42,8 +42,8 @@ export const ShamanImbueMHSwap = <SpecType extends ShamanSpecs>() =>
 export const ShamanShieldProcrate = <SpecType extends ShamanSpecs>() => 
 	InputHelpers.makeClassOptionsNumberInput<SpecType>({
 		fieldName: 'shieldProcrate',
-		label: 'Shield Proc Rate',
-		labelTooltip: 'Number of proc per minute of the active effect of your Shaman Shield',
+		label: i18n.t('settings_tab.other.shaman_shield_procrate.label'),
+		labelTooltip: i18n.t('settings_tab.other.shaman_shield_procrate.tooltip'),
 		positive: true,
 		float: true,
 	});
