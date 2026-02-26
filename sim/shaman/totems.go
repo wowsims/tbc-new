@@ -51,6 +51,7 @@ func (shaman *Shaman) registerWindfuryTotemSpell() {
 	var windfurySpell *core.Spell
 	wfProcTrigger := shaman.MakeProcTriggerAura(core.ProcTrigger{
 		Name:               "Windfury Totem Trigger (Self)",
+		MetricsActionID:    core.ActionID{SpellID: 25580},
 		ProcChance:         0.2,
 		Duration:           core.NeverExpires,
 		Outcome:            core.OutcomeLanded,
@@ -68,6 +69,12 @@ func (shaman *Shaman) registerWindfuryTotemSpell() {
 			shaman.AutoAttacks.MaybeReplaceMHSwing(sim, windfurySpell).Cast(sim, result.Target)
 		},
 	})
+
+	wfIntermediateAuraForExclusitivity := shaman.RegisterAura(core.Aura{
+		Label:    "Windfury Dummy Aura (self)",
+		Duration: time.Second * 10,
+	})
+
 	wfAura := shaman.RegisterAura(core.Aura{
 		Label:    "Windfury Totem (Self)",
 		ActionID: config.ActionID,
@@ -76,15 +83,23 @@ func (shaman *Shaman) registerWindfuryTotemSpell() {
 		mhConfig := *shaman.AutoAttacks.MHConfig()
 		mhConfig.ActionID = mhConfig.ActionID.WithTag(25584)
 		windfurySpell = shaman.GetOrRegisterSpell(mhConfig)
+	}).AttachPeriodicAction(core.PeriodicActionOptions{
+		Period:          time.Second * 5,
+		TickImmediately: true,
+		Priority:        core.ActionPriorityAuto,
+		OnAction: func(sim *core.Simulation) {
+			wfIntermediateAuraForExclusitivity.Activate(sim)
+		},
 	})
 
-	wfAura.NewExclusiveEffect(core.WindfuryTotemCategory, false, core.ExclusiveEffect{
+	wfIntermediateAuraForExclusitivity.NewExclusiveEffect(core.WindfuryTotemCategory, false, core.ExclusiveEffect{
 		Priority: value,
-		OnGain: func(ee *core.ExclusiveEffect, sim *core.Simulation) {
+		OnGain: func(_ *core.ExclusiveEffect, sim *core.Simulation) {
 			wfProcTrigger.Activate(sim)
 		},
-		OnExpire: func(ee *core.ExclusiveEffect, sim *core.Simulation) {
+		OnExpire: func(_ *core.ExclusiveEffect, sim *core.Simulation) {
 			wfProcTrigger.Deactivate(sim)
+			wfIntermediateAuraForExclusitivity.Deactivate(sim)
 		},
 	})
 
@@ -98,7 +113,7 @@ func (shaman *Shaman) registerWindfuryTotemSpell() {
 	}
 
 	shaman.RegisterItemSwapCallback([]proto.ItemSlot{proto.ItemSlot_ItemSlotMainHand}, func(sim *core.Simulation, slot proto.ItemSlot) {
-		wfAura.Deactivate(sim)
+		wfIntermediateAuraForExclusitivity.Deactivate(sim)
 	})
 
 	shaman.RegisterSpell(config)

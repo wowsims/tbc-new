@@ -746,6 +746,7 @@ func WindfuryTotemAura(char *Character, isImpoved bool) *Aura {
 	var windfurySpell *Spell
 	wfProcTrigger := char.MakeProcTriggerAura(ProcTrigger{
 		Name:               "Windfury Totem Trigger",
+		MetricsActionID:    ActionID{SpellID: 25580, Tag: -1},
 		ProcChance:         0.2,
 		Duration:           NeverExpires,
 		Outcome:            OutcomeLanded,
@@ -785,11 +786,12 @@ func WindfuryTotemAura(char *Character, isImpoved bool) *Aura {
 
 	wfAura.NewExclusiveEffect(WindfuryTotemCategory, false, ExclusiveEffect{
 		Priority: apBonus,
-		OnGain: func(ee *ExclusiveEffect, sim *Simulation) {
+		OnGain: func(_ *ExclusiveEffect, sim *Simulation) {
 			wfProcTrigger.Activate(sim)
 		},
-		OnExpire: func(ee *ExclusiveEffect, sim *Simulation) {
+		OnExpire: func(_ *ExclusiveEffect, sim *Simulation) {
 			wfProcTrigger.Deactivate(sim)
+			wfAura.Deactivate(sim)
 		},
 	})
 

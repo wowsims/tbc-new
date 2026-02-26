@@ -146,9 +146,11 @@ func (shaman *Shaman) RegisterWindfuryImbue(procMask core.ProcMask) {
 
 	aura := shaman.makeWFProcTriggerAura(dpm, &mask, mhSpell, ohSpell)
 
-	aura.NewExclusiveEffect(core.WindfuryTotemCategory, false, core.ExclusiveEffect{
-		Priority: WindfuryAPBonus * 2, // Need to be higher than Windfury Totem priority
-	})
+	if mask.Matches(core.ProcMaskMeleeMH) {
+		aura.NewExclusiveEffect(core.WindfuryTotemCategory, false, core.ExclusiveEffect{
+			Priority: WindfuryAPBonus * 2, // Need to be higher than Windfury Totem priority
+		})
+	}
 
 	shaman.RegisterOnItemSwapWithImbue(windfuryEnchantID, &mask, aura)
 }
