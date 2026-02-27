@@ -17,6 +17,7 @@ type ActionIdOptions = {
 	name?: string;
 	iconUrl?: string;
 	randomSuffixId?: number;
+	rank?: number;
 };
 
 // Uniquely identifies a specific item / spell / thing in WoW. This object is immutable.
@@ -26,18 +27,20 @@ export class ActionId {
 	readonly spellId: number;
 	readonly otherId: OtherAction;
 	readonly tag: number;
+	readonly rank: number;
 
 	readonly baseName: string; // The name without any tag additions.
 	readonly name: string;
 	readonly iconUrl: string;
 	readonly spellIdTooltipOverride: number | null;
 
-	private constructor({ itemId, spellId, otherId, tag, baseName, name, iconUrl, randomSuffixId }: ActionIdOptions = {}) {
+	private constructor({ itemId, spellId, otherId, tag, baseName, name, iconUrl, randomSuffixId, rank }: ActionIdOptions = {}) {
 		this.itemId = itemId ?? 0;
 		this.randomSuffixId = randomSuffixId ?? 0;
 		this.spellId = spellId ?? 0;
 		this.otherId = otherId ?? OtherAction.OtherActionNone;
 		this.tag = tag ?? 0;
+		this.rank = rank ?? 0;
 
 		switch (otherId) {
 			case OtherAction.OtherActionNone:
@@ -82,7 +85,7 @@ export class ActionId {
 					name += ' (Sword Specialization)';
 				} else if (this.tag == 25584) {
 					name += ' (Windfury)';
-				}  else if (this.tag == 31332) {
+				} else if (this.tag == 31332) {
 					name += ' (Blinkstrike)';
 				} else if (this.tag == 17257) {
 					name += ' (Magtheridon)';
@@ -130,6 +133,7 @@ export class ActionId {
 		this.baseName = baseName ?? '';
 		this.name = (name || baseName) ?? '';
 		this.iconUrl = iconUrl ?? '';
+		if (this.name) this.name += this.rank ? ` (Rank ${this.rank})` : '';
 		this.spellIdTooltipOverride = this.spellTooltipOverride?.spellId || null;
 	}
 
@@ -347,7 +351,7 @@ export class ActionId {
 			case 'Wound Poison':
 			case 'Instant Poison VII':
 				if (tag == 1) {
-					name += ' (Shiv)'
+					name += ' (Shiv)';
 				}
 				break;
 			case 'Shadow Blades':
@@ -588,6 +592,7 @@ export class ActionId {
 			name,
 			iconUrl,
 			randomSuffixId: this.randomSuffixId,
+			rank: this.rank || tooltipData['rank'],
 		});
 	}
 
@@ -623,6 +628,7 @@ export class ActionId {
 				oneofKind: 'spellId',
 				spellId: this.spellId,
 			};
+			protoId.rank = this.rank;
 		} else if (this.otherId) {
 			protoId.rawId = {
 				oneofKind: 'otherId',
@@ -645,6 +651,7 @@ export class ActionId {
 			baseName: this.baseName,
 			iconUrl: this.iconUrl,
 			randomSuffixId: this.randomSuffixId,
+			rank: this.rank,
 		});
 	}
 
@@ -660,8 +667,8 @@ export class ActionId {
 		});
 	}
 
-	static fromSpellId(spellId: number, tag?: number): ActionId {
-		return new ActionId({ spellId, tag });
+	static fromSpellId(spellId: number, rank = 0, tag?: number): ActionId {
+		return new ActionId({ spellId, rank, tag });
 	}
 
 	static fromOtherId(otherId: OtherAction, tag?: number): ActionId {
@@ -688,7 +695,7 @@ export class ActionId {
 
 	static fromProto(protoId: ActionIdProto): ActionId {
 		if (protoId.rawId.oneofKind == 'spellId') {
-			return ActionId.fromSpellId(protoId.rawId.spellId, protoId.tag);
+			return ActionId.fromSpellId(protoId.rawId.spellId, protoId.rank, protoId.tag);
 		} else if (protoId.rawId.oneofKind == 'itemId') {
 			return ActionId.fromItemId(protoId.rawId.itemId, protoId.tag);
 		} else if (protoId.rawId.oneofKind == 'otherId') {
@@ -770,6 +777,14 @@ export class ActionId {
 		const override = spellIdTooltipOverrides.get(JSON.stringify({ spellId: this.spellId, tag: this.tag }));
 		if (!override) return null;
 		return override.itemId ? ActionId.fromItemId(override.itemId) : ActionId.fromSpellId(override.spellId!);
+	}
+
+	get nameWithoutRank(): string {
+		return this.name.replace(/ \(Rank \d+\)/g, '');
+	}
+
+	get hasRank(): boolean {
+		return this.rank > 0;
 	}
 }
 
@@ -913,5 +928,4 @@ export const resourceTypeToIcon: Record<ResourceType, string> = {
 };
 
 // Use this to connect a buff row to a cast row in the timeline view
-export const buffAuraToSpellIdMap: Record<number, ActionId> = {
-};
+export const buffAuraToSpellIdMap: Record<number, ActionId> = {};

@@ -846,6 +846,7 @@ func (unit *Unit) GetMetadata() *proto.UnitMetadata {
 			IsFriendly:      spell.Flags.Matches(SpellFlagHelpful),
 			HasExpectedTick: spell.expectedTickDamageInternal != nil,
 			HasMissileSpeed: spell.MissileSpeed > 0.0,
+			HasRanks:        spell.Rank > 0,
 		}
 	})
 

@@ -255,7 +255,8 @@ message IconData {
 	int32 id = 1;
 	string name = 2;
 	string icon = 3;
-	bool has_buff = 4;
+	int32 rank = 4;
+	bool has_buff = 5;
 }
 
 enum SourceFilterOption {

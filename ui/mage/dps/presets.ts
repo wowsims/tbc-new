@@ -52,7 +52,9 @@ export const Talents = {
 };
 
 export const DefaultOptions = MageOptions.create({
-	classOptions: {},
+	classOptions: {
+		defaultMageArmor: MageArmor.MageArmorMageArmor
+	},
 });
 
 export const OtherDefaults = {
@@ -77,14 +79,23 @@ export const DefaultRaidBuffs = RaidBuffs.create({
 	shadowProtection: true,
 });
 
-export const DefaultPartyBuffs = PartyBuffs.create({});
+export const DefaultPartyBuffs = PartyBuffs.create({
+	manaSpringTotem: 2,
+	manaTideTotems: 1,
+	wrathOfAirTotem: 1,
+});
 
 export const DefaultIndividualBuffs = IndividualBuffs.create({
 	blessingOfKings: true,
 	blessingOfWisdom: 2,
+	innervates: 1,
+	powerInfusions: 1,
+	shadowPriestDps: 800,
 });
 
 export const DefaultDebuffs = Debuffs.create({
 	misery: true,
 	curseOfElements: 2,
+	improvedSealOfTheCrusader: true,
+	judgementOfWisdom: true,
 });

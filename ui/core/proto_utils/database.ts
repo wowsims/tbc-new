@@ -29,6 +29,7 @@ const leftoversUrlJson = '/tbc/assets/database/leftover_db.json';
 const leftoversUrlBin = '/tbc/assets/database/leftover_db.bin';
 // When changing this value, don't forget to change the html <link> for preloading!
 const READ_JSON = true;
+const RANK_REGEX = /Rank ([0-9]+)/g;
 
 const iconRequestCache = new CacheHandler<Promise<IconData>>();
 
@@ -356,6 +357,7 @@ export class Database {
 			if (!iconRequestCache.has(cacheKey)) iconRequestCache.set(cacheKey, Database.getWowheadSpellTooltipData(spellId, { signal: options?.signal }));
 			db.spellIcons[spellId] = await iconRequestCache.get(cacheKey)!;
 		}
+
 		return db.spellIcons[spellId];
 	}
 
@@ -370,11 +372,18 @@ export class Database {
 		try {
 			const response = await fetch(url, { signal: options?.signal });
 			const json = await response.json();
+			let rank = 0;
+			if (tooltipPostfix === 'spell') {
+				const rankMatches = [...(json['tooltip'] as string).matchAll(RANK_REGEX)];
+				rank = rankMatches.length ? parseInt(rankMatches[0][1]) : 0;
+			}
+
 			return IconData.create({
 				id: id,
 				name: json['name'],
 				icon: json['icon'],
 				hasBuff: json['buff'] !== '',
+				rank,
 			});
 		} catch (e) {
 			if (e instanceof DOMException && e.name === 'AbortError') {

@@ -32,7 +32,7 @@ type Mage struct {
 	Ignite               *core.Spell
 	FireBlast            *core.Spell
 	FlameOrbExplode      *core.Spell
-	Flamestrike          *core.Spell
+	Flamestrike          []*core.Spell
 	FlamestrikeBW        *core.Spell
 	FrostfireOrb         *core.Spell
 	Pyroblast            *core.Spell
@@ -99,10 +99,11 @@ func (mage *Mage) registerSpells() {
 	mage.registerEvocation()
 	mage.registerFireballSpell()
 	mage.registerFireBlastSpell()
-	mage.registerFlamestrikeSpell()
 	mage.registerFrostNovaSpell()
 	mage.registerManaGems()
 	mage.registerScorchSpell()
+
+	FlameStrikeRankMap.RegisterAll(mage.registerFlamestrike)
 
 	//TalentSpells
 	mage.registerPresenceOfMindSpell()

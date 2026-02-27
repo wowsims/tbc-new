@@ -797,6 +797,8 @@ message ActionID {
 	// Distinguishes between different versions of the same action.
 	// Currently the only use for this is Shaman Lightning Overload.
 	int32 tag = 4;
+	// Various ranks of spells
+	int32 rank = 5;
 }
 
 // Custom options for a particular cooldown.

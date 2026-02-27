@@ -449,6 +449,7 @@ message SpellStats {
 	bool is_friendly = 10; // Whether this spell should be cast on player units
 	bool has_expected_tick = 11; // Whether this spell supports expected damage calculations
 	bool has_missile_speed = 12; // Whether this spell has a missile speed
+	bool has_ranks = 13; // Whether this spell has a rank
 }
 message APLValidation {
 	LogLevel log_level = 1;

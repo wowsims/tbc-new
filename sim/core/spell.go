@@ -22,6 +22,7 @@ type SpellConfig struct {
 	BaseCost       float64
 	MetricSplits   int
 	ClassSpellMask int64
+	Rank           int32
 
 	ManaCost   ManaCostOptions
 	EnergyCost EnergyCostOptions
@@ -72,6 +73,8 @@ type SpellConfig struct {
 type Spell struct {
 	// ID for this spell.
 	ActionID
+	//Rank of the spell.
+	Rank int32
 
 	// The unit who will perform this spell.
 	Unit *Unit
@@ -214,6 +217,7 @@ func (unit *Unit) RegisterSpell(config SpellConfig) *Spell {
 
 	spell := &Spell{
 		ActionID:       config.ActionID,
+		Rank:           config.Rank,
 		Unit:           unit,
 		SpellSchool:    config.SpellSchool,
 		ProcMask:       config.ProcMask,

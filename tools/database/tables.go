@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"regexp"
 	"slices"
 	"strconv"
 	"strings"
@@ -1091,19 +1092,31 @@ type SpellIcon struct {
 	FDID    int
 	HasBuff bool
 	Name    string
+	Rank    int
 }
+
+var spellRankRegex = regexp.MustCompile(`Rank ([0-9]+)`)
 
 func ScanSpellIcon(rows *sql.Rows) (SpellIcon, error) {
 	var icon SpellIcon
-
+	var nameSubtext string
 	err := rows.Scan(
 		&icon.SpellID,
 		&icon.FDID,
 		&icon.HasBuff,
 		&icon.Name,
+		&nameSubtext,
 	)
 	if err != nil {
+		fmt.Println(icon.Name, err)
 		return icon, fmt.Errorf("scanning talent data: %w", err)
+	}
+
+	if spellRankRegex.MatchString(nameSubtext) {
+		rank, _ := strconv.Atoi(spellRankRegex.FindStringSubmatch(nameSubtext)[1])
+		if rank != 0 {
+			icon.Rank = rank
+		}
 	}
 
 	return icon, nil
@@ -1111,13 +1124,14 @@ func ScanSpellIcon(rows *sql.Rows) (SpellIcon, error) {
 
 func LoadSpellIcons(dbHelper *DBHelper) (map[int]SpellIcon, error) {
 	query := `
-		SELECT
-  sm.SpellID,
-  sm.SpellIconFileDataID,
-  (
-    (ss.AuraDescription_lang != '' and ss.AuraDescription_lang is not null)
-  ) AS HasBuff,
-  sn.Name_lang
+SELECT
+	sm.SpellID,
+	sm.SpellIconFileDataID,
+	(
+		(ss.AuraDescription_lang != '' and ss.AuraDescription_lang is not null)
+	) AS HasBuff,
+	sn.Name_lang,
+	COALESCE(ss.NameSubtext_lang, "")
 FROM SpellMisc sm
 LEFT JOIN Spell ss ON ss.ID = sm.SpellID
 LEFT JOIN SpellName sn ON sn.ID = sm.SpellID

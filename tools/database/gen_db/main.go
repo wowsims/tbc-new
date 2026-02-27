@@ -243,7 +243,7 @@ func main() {
 
 	icons, err := database.LoadSpellIcons(helper)
 	if err != nil {
-		panic("error loading icons")
+		panic(fmt.Sprintf("error loading icons: %v", err))
 	}
 
 	addSpellIcons(db, database.SharedSpellsIcons, icons, iconsMap)
@@ -822,6 +822,7 @@ func addSpellIcons(db *database.WowDatabase, spellIds []int32, icons map[int]dat
 			Name:    iconEntry.Name,
 			Icon:    strings.ToLower(database.GetIconName(iconsMap, iconEntry.FDID)),
 			HasBuff: iconEntry.HasBuff,
+			Rank:    int32(iconEntry.Rank),
 		}
 	}
 }
