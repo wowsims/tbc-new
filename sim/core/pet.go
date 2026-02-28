@@ -33,6 +33,7 @@ type PetConfig struct {
 	NonHitExpStatInheritance        PetStatInheritance
 	EnabledOnStart                  bool
 	IsGuardian                      bool
+	IsDynamic                       bool
 	HasDynamicMeleeSpeedInheritance bool
 	HasDynamicCastSpeedInheritance  bool
 	HasResourceRegenInheritance     bool
@@ -66,6 +67,8 @@ type Pet struct {
 	dynamicCastSpeedInheritance   PetSpeedInheritance
 	inheritedCastSpeedMultiplier  float64
 
+	// If true the pet will automatically inherit the owner's stats
+	isDynamic bool
 	// If true the pet will automatically inherit the owner's melee speed
 	hasDynamicMeleeSpeedInheritance bool
 	// If true the pet will automatically inherit the owner's cast speed
@@ -110,9 +113,10 @@ func NewPet(config PetConfig) Pet {
 		},
 		Owner:                           config.Owner,
 		statInheritance:                 makeStatInheritanceFunc(config.NonHitExpStatInheritance),
-		hasDynamicMeleeSpeedInheritance: config.HasDynamicMeleeSpeedInheritance,
+		isDynamic:                       config.IsDynamic,
+		hasDynamicMeleeSpeedInheritance: config.HasDynamicMeleeSpeedInheritance && config.IsDynamic,
 		inheritedMeleeSpeedMultiplier:   1,
-		hasDynamicCastSpeedInheritance:  config.HasDynamicCastSpeedInheritance,
+		hasDynamicCastSpeedInheritance:  config.HasDynamicCastSpeedInheritance && config.IsDynamic,
 		inheritedCastSpeedMultiplier:    1,
 		hasResourceRegenInheritance:     config.HasResourceRegenInheritance,
 		enabledOnStart:                  config.EnabledOnStart,
@@ -155,6 +159,9 @@ func makeStatInheritanceFunc(nonHitExpStatInheritance PetStatInheritance) PetSta
 }
 
 func (pet *Pet) enableDynamicStats(sim *Simulation) {
+	if !pet.isDynamic {
+		return
+	}
 	if slices.Contains(pet.Owner.DynamicStatsPets, pet) {
 		panic("Pet already present in dynamic stats pet list!")
 	}
@@ -188,7 +195,7 @@ func (pet *Pet) AddOwnerStats(sim *Simulation, addedStats stats.Stats) {
 }
 
 func (pet *Pet) resetDynamicStats(sim *Simulation) {
-	if pet.dynamicStatInheritance == nil {
+	if pet.dynamicStatInheritance == nil || !pet.isDynamic {
 		return
 	}
 
