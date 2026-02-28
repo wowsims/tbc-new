@@ -69,8 +69,8 @@ dps_results: {
 dps_results: {
  key: "TestAffliction-AllItems-MaleficRaiment"
  value: {
-  dps: 2037.7106
-  tps: 1361.05284
+  dps: 1961.2377
+  tps: 1292.22723
  }
 }
 dps_results: {
@@ -113,90 +113,6 @@ dps_results: {
  value: {
   dps: 1827.54513
   tps: 1162.67965
- }
-}
-dps_results: {
- key: "TestAffliction-Settings-BloodElf-preraid-Affliction-affliction-FullBuffs-0.0yards-LongMultiTarget"
- value: {
-  dps: 5967.37054
-  tps: 3131.83356
- }
-}
-dps_results: {
- key: "TestAffliction-Settings-BloodElf-preraid-Affliction-affliction-FullBuffs-0.0yards-LongSingleTarget"
- value: {
-  dps: 1818.39833
-  tps: 1160.54335
- }
-}
-dps_results: {
- key: "TestAffliction-Settings-BloodElf-preraid-Affliction-affliction-FullBuffs-0.0yards-ShortSingleTarget"
- value: {
-  dps: 1922.50658
-  tps: 1228.17899
- }
-}
-dps_results: {
- key: "TestAffliction-Settings-BloodElf-preraid-Affliction-affliction-NoBuffs-0.0yards-LongMultiTarget"
- value: {
-  dps: 832.62749
-  tps: 1640.44182
- }
-}
-dps_results: {
- key: "TestAffliction-Settings-BloodElf-preraid-Affliction-affliction-NoBuffs-0.0yards-LongSingleTarget"
- value: {
-  dps: 832.62749
-  tps: 509.68849
- }
-}
-dps_results: {
- key: "TestAffliction-Settings-BloodElf-preraid-Affliction-affliction-NoBuffs-0.0yards-ShortSingleTarget"
- value: {
-  dps: 886.39304
-  tps: 518.22351
- }
-}
-dps_results: {
- key: "TestAffliction-Settings-Gnome-preraid-Affliction-affliction-FullBuffs-0.0yards-LongMultiTarget"
- value: {
-  dps: 6007.90934
-  tps: 3118.37989
- }
-}
-dps_results: {
- key: "TestAffliction-Settings-Gnome-preraid-Affliction-affliction-FullBuffs-0.0yards-LongSingleTarget"
- value: {
-  dps: 1866.57387
-  tps: 1194.83918
- }
-}
-dps_results: {
- key: "TestAffliction-Settings-Gnome-preraid-Affliction-affliction-FullBuffs-0.0yards-ShortSingleTarget"
- value: {
-  dps: 1947.33321
-  tps: 1246.05959
- }
-}
-dps_results: {
- key: "TestAffliction-Settings-Gnome-preraid-Affliction-affliction-NoBuffs-0.0yards-LongMultiTarget"
- value: {
-  dps: 844.85121
-  tps: 1627.60696
- }
-}
-dps_results: {
- key: "TestAffliction-Settings-Gnome-preraid-Affliction-affliction-NoBuffs-0.0yards-LongSingleTarget"
- value: {
-  dps: 844.85121
-  tps: 518.32363
- }
-}
-dps_results: {
- key: "TestAffliction-Settings-Gnome-preraid-Affliction-affliction-NoBuffs-0.0yards-ShortSingleTarget"
- value: {
-  dps: 900.35766
-  tps: 529.36406
  }
 }
 dps_results: {
@@ -281,48 +197,6 @@ dps_results: {
  value: {
   dps: 906.78631
   tps: 530.66505
- }
-}
-dps_results: {
- key: "TestAffliction-Settings-Undead-preraid-Affliction-affliction-FullBuffs-0.0yards-LongMultiTarget"
- value: {
-  dps: 5968.90269
-  tps: 3158.19664
- }
-}
-dps_results: {
- key: "TestAffliction-Settings-Undead-preraid-Affliction-affliction-FullBuffs-0.0yards-LongSingleTarget"
- value: {
-  dps: 1817.988
-  tps: 1162.02239
- }
-}
-dps_results: {
- key: "TestAffliction-Settings-Undead-preraid-Affliction-affliction-FullBuffs-0.0yards-ShortSingleTarget"
- value: {
-  dps: 1925.30452
-  tps: 1229.65588
- }
-}
-dps_results: {
- key: "TestAffliction-Settings-Undead-preraid-Affliction-affliction-NoBuffs-0.0yards-LongMultiTarget"
- value: {
-  dps: 832.61942
-  tps: 1640.39967
- }
-}
-dps_results: {
- key: "TestAffliction-Settings-Undead-preraid-Affliction-affliction-NoBuffs-0.0yards-LongSingleTarget"
- value: {
-  dps: 832.61942
-  tps: 509.64634
- }
-}
-dps_results: {
- key: "TestAffliction-Settings-Undead-preraid-Affliction-affliction-NoBuffs-0.0yards-ShortSingleTarget"
- value: {
-  dps: 886.6481
-  tps: 518.53823
  }
 }
 dps_results: {

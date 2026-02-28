@@ -179,8 +179,6 @@ var ItemSetMaleficRaiment = core.NewItemSet(core.ItemSet{
 				Name:           "Malefic Raiment 4pc - Improved Shadow Bolt and Incinerate",
 				ActionID:       core.ActionID{SpellID: 38393},
 				ClassSpellMask: WarlockSpellShadowBolt | WarlockSpellIncinerate,
-				Outcome:        core.OutcomeLanded,
-				Callback:       core.CallbackOnSpellHitDealt,
 				Handler: func(sim *core.Simulation, spell *core.Spell, _ *core.SpellResult) {
 					impSBoltIncMod.Activate()
 				},

@@ -69,8 +69,8 @@ dps_results: {
 dps_results: {
  key: "TestDestruction-AllItems-MaleficRaiment"
  value: {
-  dps: 2408.67057
-  tps: 2122.66245
+  dps: 2300.28036
+  tps: 2025.11126
  }
 }
 dps_results: {
@@ -116,48 +116,6 @@ dps_results: {
  }
 }
 dps_results: {
- key: "TestDestruction-Settings-BloodElf-preraid-Destruction-destruction-FullBuffs-0.0yards-LongMultiTarget"
- value: {
-  dps: 5621.67131
-  tps: 4243.02107
- }
-}
-dps_results: {
- key: "TestDestruction-Settings-BloodElf-preraid-Destruction-destruction-FullBuffs-0.0yards-LongSingleTarget"
- value: {
-  dps: 2091.16552
-  tps: 1843.60291
- }
-}
-dps_results: {
- key: "TestDestruction-Settings-BloodElf-preraid-Destruction-destruction-FullBuffs-0.0yards-ShortSingleTarget"
- value: {
-  dps: 2201.46553
-  tps: 1925.21937
- }
-}
-dps_results: {
- key: "TestDestruction-Settings-BloodElf-preraid-Destruction-destruction-NoBuffs-0.0yards-LongMultiTarget"
- value: {
-  dps: 824.89993
-  tps: 1958.85377
- }
-}
-dps_results: {
- key: "TestDestruction-Settings-BloodElf-preraid-Destruction-destruction-NoBuffs-0.0yards-LongSingleTarget"
- value: {
-  dps: 824.89993
-  tps: 758.43377
- }
-}
-dps_results: {
- key: "TestDestruction-Settings-BloodElf-preraid-Destruction-destruction-NoBuffs-0.0yards-ShortSingleTarget"
- value: {
-  dps: 899.11072
-  tps: 797.16979
- }
-}
-dps_results: {
  key: "TestDestruction-Settings-Gnome-preraid-Destruction-destruction-FullBuffs-0.0yards-LongMultiTarget"
  value: {
   dps: 5681.43578
@@ -200,48 +158,6 @@ dps_results: {
  }
 }
 dps_results: {
- key: "TestDestruction-Settings-Human-preraid-Destruction-destruction-FullBuffs-0.0yards-LongMultiTarget"
- value: {
-  dps: 5727.06106
-  tps: 4325.20879
- }
-}
-dps_results: {
- key: "TestDestruction-Settings-Human-preraid-Destruction-destruction-FullBuffs-0.0yards-LongSingleTarget"
- value: {
-  dps: 2127.60522
-  tps: 1875.6015
- }
-}
-dps_results: {
- key: "TestDestruction-Settings-Human-preraid-Destruction-destruction-FullBuffs-0.0yards-ShortSingleTarget"
- value: {
-  dps: 2238.46043
-  tps: 1957.88115
- }
-}
-dps_results: {
- key: "TestDestruction-Settings-Human-preraid-Destruction-destruction-NoBuffs-0.0yards-LongMultiTarget"
- value: {
-  dps: 821.45217
-  tps: 1954.40353
- }
-}
-dps_results: {
- key: "TestDestruction-Settings-Human-preraid-Destruction-destruction-NoBuffs-0.0yards-LongSingleTarget"
- value: {
-  dps: 821.45217
-  tps: 753.98353
- }
-}
-dps_results: {
- key: "TestDestruction-Settings-Human-preraid-Destruction-destruction-NoBuffs-0.0yards-ShortSingleTarget"
- value: {
-  dps: 897.42327
-  tps: 795.39628
- }
-}
-dps_results: {
  key: "TestDestruction-Settings-Orc-preraid-Destruction-destruction-FullBuffs-0.0yards-LongMultiTarget"
  value: {
   dps: 5676.4375
@@ -281,48 +197,6 @@ dps_results: {
  value: {
   dps: 917.00952
   tps: 811.87501
- }
-}
-dps_results: {
- key: "TestDestruction-Settings-Undead-preraid-Destruction-destruction-FullBuffs-0.0yards-LongMultiTarget"
- value: {
-  dps: 5651.93678
-  tps: 4265.50579
- }
-}
-dps_results: {
- key: "TestDestruction-Settings-Undead-preraid-Destruction-destruction-FullBuffs-0.0yards-LongSingleTarget"
- value: {
-  dps: 2100.21901
-  tps: 1851.49143
- }
-}
-dps_results: {
- key: "TestDestruction-Settings-Undead-preraid-Destruction-destruction-FullBuffs-0.0yards-ShortSingleTarget"
- value: {
-  dps: 2208.60817
-  tps: 1931.37048
- }
-}
-dps_results: {
- key: "TestDestruction-Settings-Undead-preraid-Destruction-destruction-NoBuffs-0.0yards-LongMultiTarget"
- value: {
-  dps: 821.37691
-  tps: 1954.37736
- }
-}
-dps_results: {
- key: "TestDestruction-Settings-Undead-preraid-Destruction-destruction-NoBuffs-0.0yards-LongSingleTarget"
- value: {
-  dps: 821.37691
-  tps: 753.95736
- }
-}
-dps_results: {
- key: "TestDestruction-Settings-Undead-preraid-Destruction-destruction-NoBuffs-0.0yards-ShortSingleTarget"
- value: {
-  dps: 897.42327
-  tps: 795.39628
  }
 }
 dps_results: {

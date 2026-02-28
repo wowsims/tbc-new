@@ -55,280 +55,154 @@ character_stats_results: {
 dps_results: {
  key: "TestDemonology-AllItems-AshtongueTalismanofShadows-32493"
  value: {
-  dps: 2100.32267
-  tps: 1509.57628
+  dps: 1955.89822
+  tps: 1335.27293
  }
 }
 dps_results: {
  key: "TestDemonology-AllItems-CorruptorRaiment"
  value: {
-  dps: 2041.16344
-  tps: 1458.82042
+  dps: 1949.49953
+  tps: 1329.25792
  }
 }
 dps_results: {
  key: "TestDemonology-AllItems-MaleficRaiment"
  value: {
-  dps: 2308.5589
-  tps: 1696.54073
+  dps: 2142.83278
+  tps: 1499.16166
  }
 }
 dps_results: {
  key: "TestDemonology-AllItems-OblivionRaiment"
  value: {
-  dps: 1884.66118
-  tps: 1329.88194
+  dps: 1786.4612
+  tps: 1200.02839
  }
 }
 dps_results: {
  key: "TestDemonology-AllItems-SwiftWindfireDiamond"
  value: {
-  dps: 2067.38167
-  tps: 1481.21574
+  dps: 1934.93128
+  tps: 1316.55405
  }
 }
 dps_results: {
  key: "TestDemonology-AllItems-TheBlackBook-19337"
  value: {
-  dps: 2050.96507
-  tps: 1470.43449
+  dps: 1913.36409
+  tps: 1301.879
  }
 }
 dps_results: {
  key: "TestDemonology-AllItems-VoidStarTalisman-30449"
  value: {
-  dps: 2085.64952
-  tps: 1491.77547
+  dps: 1954.8327
+  tps: 1328.18468
  }
 }
 dps_results: {
  key: "TestDemonology-AllItems-VoidheartRaiment"
  value: {
-  dps: 2024.43044
-  tps: 1442.21024
+  dps: 1911.83023
+  tps: 1301.04897
  }
 }
 dps_results: {
  key: "TestDemonology-Average-Default"
  value: {
-  dps: 2076.92823
-  tps: 1487.44858
- }
-}
-dps_results: {
- key: "TestDemonology-Settings-BloodElf-preraid-Demo/Ruin-demonology-FullBuffs-0.0yards-LongMultiTarget"
- value: {
-  dps: 5638.4298
-  tps: 3716.79944
- }
-}
-dps_results: {
- key: "TestDemonology-Settings-BloodElf-preraid-Demo/Ruin-demonology-FullBuffs-0.0yards-LongSingleTarget"
- value: {
-  dps: 2055.16747
-  tps: 1479.00534
- }
-}
-dps_results: {
- key: "TestDemonology-Settings-BloodElf-preraid-Demo/Ruin-demonology-FullBuffs-0.0yards-ShortSingleTarget"
- value: {
-  dps: 2096.15357
-  tps: 1506.85207
- }
-}
-dps_results: {
- key: "TestDemonology-Settings-BloodElf-preraid-Demo/Ruin-demonology-NoBuffs-0.0yards-LongMultiTarget"
- value: {
-  dps: 877.61755
-  tps: 1835.65572
- }
-}
-dps_results: {
- key: "TestDemonology-Settings-BloodElf-preraid-Demo/Ruin-demonology-NoBuffs-0.0yards-LongSingleTarget"
- value: {
-  dps: 877.61755
-  tps: 621.35799
- }
-}
-dps_results: {
- key: "TestDemonology-Settings-BloodElf-preraid-Demo/Ruin-demonology-NoBuffs-0.0yards-ShortSingleTarget"
- value: {
-  dps: 921.47349
-  tps: 641.66641
- }
-}
-dps_results: {
- key: "TestDemonology-Settings-Gnome-preraid-Demo/Ruin-demonology-FullBuffs-0.0yards-LongMultiTarget"
- value: {
-  dps: 5673.63835
-  tps: 3703.89496
- }
-}
-dps_results: {
- key: "TestDemonology-Settings-Gnome-preraid-Demo/Ruin-demonology-FullBuffs-0.0yards-LongSingleTarget"
- value: {
-  dps: 2082.7086
-  tps: 1500.10781
- }
-}
-dps_results: {
- key: "TestDemonology-Settings-Gnome-preraid-Demo/Ruin-demonology-FullBuffs-0.0yards-ShortSingleTarget"
- value: {
-  dps: 2113.38796
-  tps: 1521.58559
- }
-}
-dps_results: {
- key: "TestDemonology-Settings-Gnome-preraid-Demo/Ruin-demonology-NoBuffs-0.0yards-LongMultiTarget"
- value: {
-  dps: 878.97791
-  tps: 1793.75837
- }
-}
-dps_results: {
- key: "TestDemonology-Settings-Gnome-preraid-Demo/Ruin-demonology-NoBuffs-0.0yards-LongSingleTarget"
- value: {
-  dps: 878.97791
-  tps: 619.69877
- }
-}
-dps_results: {
- key: "TestDemonology-Settings-Gnome-preraid-Demo/Ruin-demonology-NoBuffs-0.0yards-ShortSingleTarget"
- value: {
-  dps: 927.20844
-  tps: 643.22038
+  dps: 1972.42423
+  tps: 1349.44034
  }
 }
 dps_results: {
  key: "TestDemonology-Settings-Human-preraid-Demo/Ruin-demonology-FullBuffs-0.0yards-LongMultiTarget"
  value: {
-  dps: 5704.78007
-  tps: 3760.79624
+  dps: 5557.10808
+  tps: 3549.01801
  }
 }
 dps_results: {
  key: "TestDemonology-Settings-Human-preraid-Demo/Ruin-demonology-FullBuffs-0.0yards-LongSingleTarget"
  value: {
-  dps: 2077.05275
-  tps: 1495.44725
+  dps: 1960.43916
+  tps: 1346.3553
  }
 }
 dps_results: {
  key: "TestDemonology-Settings-Human-preraid-Demo/Ruin-demonology-FullBuffs-0.0yards-ShortSingleTarget"
  value: {
-  dps: 2127.0145
-  tps: 1530.52673
+  dps: 2030.99957
+  tps: 1398.29756
  }
 }
 dps_results: {
  key: "TestDemonology-Settings-Human-preraid-Demo/Ruin-demonology-NoBuffs-0.0yards-LongMultiTarget"
  value: {
-  dps: 871.75607
-  tps: 1832.35593
+  dps: 801.68378
+  tps: 1737.51118
  }
 }
 dps_results: {
  key: "TestDemonology-Settings-Human-preraid-Demo/Ruin-demonology-NoBuffs-0.0yards-LongSingleTarget"
  value: {
-  dps: 871.75607
-  tps: 614.75313
+  dps: 801.68378
+  tps: 533.45516
  }
 }
 dps_results: {
  key: "TestDemonology-Settings-Human-preraid-Demo/Ruin-demonology-NoBuffs-0.0yards-ShortSingleTarget"
  value: {
-  dps: 921.65739
-  tps: 642.22271
+  dps: 859.12631
+  tps: 566.84545
  }
 }
 dps_results: {
  key: "TestDemonology-Settings-Orc-preraid-Demo/Ruin-demonology-FullBuffs-0.0yards-LongMultiTarget"
  value: {
-  dps: 5688.26661
-  tps: 3731.46488
+  dps: 5524.39415
+  tps: 3508.83466
  }
 }
 dps_results: {
  key: "TestDemonology-Settings-Orc-preraid-Demo/Ruin-demonology-FullBuffs-0.0yards-LongSingleTarget"
  value: {
-  dps: 2072.94832
-  tps: 1486.01449
+  dps: 1941.30437
+  tps: 1322.03998
  }
 }
 dps_results: {
  key: "TestDemonology-Settings-Orc-preraid-Demo/Ruin-demonology-FullBuffs-0.0yards-ShortSingleTarget"
  value: {
-  dps: 2134.98985
-  tps: 1529.20914
+  dps: 2035.67713
+  tps: 1393.58535
  }
 }
 dps_results: {
  key: "TestDemonology-Settings-Orc-preraid-Demo/Ruin-demonology-NoBuffs-0.0yards-LongMultiTarget"
  value: {
-  dps: 883.64322
-  tps: 1837.67806
+  dps: 809.77999
+  tps: 1739.51103
  }
 }
 dps_results: {
  key: "TestDemonology-Settings-Orc-preraid-Demo/Ruin-demonology-NoBuffs-0.0yards-LongSingleTarget"
  value: {
-  dps: 883.64322
-  tps: 620.12573
+  dps: 809.77999
+  tps: 535.50492
  }
 }
 dps_results: {
  key: "TestDemonology-Settings-Orc-preraid-Demo/Ruin-demonology-NoBuffs-0.0yards-ShortSingleTarget"
  value: {
-  dps: 943.04905
-  tps: 653.42254
- }
-}
-dps_results: {
- key: "TestDemonology-Settings-Undead-preraid-Demo/Ruin-demonology-FullBuffs-0.0yards-LongMultiTarget"
- value: {
-  dps: 5665.92307
-  tps: 3734.16042
- }
-}
-dps_results: {
- key: "TestDemonology-Settings-Undead-preraid-Demo/Ruin-demonology-FullBuffs-0.0yards-LongSingleTarget"
- value: {
-  dps: 2058.98529
-  tps: 1481.45828
- }
-}
-dps_results: {
- key: "TestDemonology-Settings-Undead-preraid-Demo/Ruin-demonology-FullBuffs-0.0yards-ShortSingleTarget"
- value: {
-  dps: 2101.78525
-  tps: 1511.18521
- }
-}
-dps_results: {
- key: "TestDemonology-Settings-Undead-preraid-Demo/Ruin-demonology-NoBuffs-0.0yards-LongMultiTarget"
- value: {
-  dps: 868.47945
-  tps: 1830.02227
- }
-}
-dps_results: {
- key: "TestDemonology-Settings-Undead-preraid-Demo/Ruin-demonology-NoBuffs-0.0yards-LongSingleTarget"
- value: {
-  dps: 868.47945
-  tps: 612.47403
- }
-}
-dps_results: {
- key: "TestDemonology-Settings-Undead-preraid-Demo/Ruin-demonology-NoBuffs-0.0yards-ShortSingleTarget"
- value: {
-  dps: 921.50627
-  tps: 642.19807
+  dps: 877.36356
+  tps: 574.7486
  }
 }
 dps_results: {
  key: "TestDemonology-SwitchInFrontOfTarget-Default"
  value: {
-  dps: 2047.65537
-  tps: 1486.01449
+  dps: 1913.49663
+  tps: 1322.03998
  }
 }

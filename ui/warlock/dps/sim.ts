@@ -181,7 +181,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecWarlock, {
 	raidSimPresets: [
 		{
 			spec: Spec.SpecWarlock,
-			talents: Presets.Talents.data,
+			talents: Presets.Destruction.data,
 			specOptions: Presets.DefaultOptions,
 			consumables: Presets.DefaultConsumables,
 			defaultFactionRaces: {
@@ -192,10 +192,10 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecWarlock, {
 			defaultGear: {
 				[Faction.Unknown]: {},
 				[Faction.Alliance]: {
-					1: Presets.BLANK_GEARSET.gear,
+					1: Presets.PRE_RAID.gear,
 				},
 				[Faction.Horde]: {
-					1: Presets.BLANK_GEARSET.gear,
+					1: Presets.PRE_RAID.gear,
 				},
 			},
 			otherDefaults: Presets.OtherDefaults,
