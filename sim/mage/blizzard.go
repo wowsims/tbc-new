@@ -8,11 +8,13 @@ import (
 
 func (mage *Mage) registerBlizzardSpell() {
 
+	blizzardActionId := core.ActionID{SpellID: 27085}
+
 	// https://wago.tools/db2/SpellEffect?build=2.5.5.65295&filter%5BSpellID%5D=42208
 	blizzardCoefficient := 0.11900000274
 
 	blizzardTickSpell := mage.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 42208},
+		ActionID:       blizzardActionId,
 		SpellSchool:    core.SpellSchoolFrost,
 		ProcMask:       core.ProcMaskSpellDamage,
 		ClassSpellMask: MageSpellBlizzard,
@@ -28,7 +30,7 @@ func (mage *Mage) registerBlizzardSpell() {
 	})
 
 	mage.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 10},
+		ActionID:       blizzardActionId,
 		SpellSchool:    core.SpellSchoolFrost,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagChanneled | core.SpellFlagAPL,
@@ -45,7 +47,7 @@ func (mage *Mage) registerBlizzardSpell() {
 			IsAOE: true,
 			Aura: core.Aura{
 				Label:    "Blizzard",
-				ActionID: core.ActionID{SpellID: 10},
+				ActionID: blizzardActionId,
 			},
 			NumberOfTicks:        8,
 			TickLength:           time.Second * 1,

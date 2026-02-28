@@ -12,7 +12,7 @@ func (mage *Mage) registerScorchSpell() {
 	procChance := []float64{0, 0.33, 0.66, 1}[mage.Talents.ImprovedScorch]
 
 	mage.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 2948},
+		ActionID:       core.ActionID{SpellID: 27074},
 		SpellSchool:    core.SpellSchoolFire,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL,

@@ -7,7 +7,7 @@ import (
 )
 
 func (mage *Mage) registerPyroblastSpell() {
-	actionID := core.ActionID{SpellID: 11366}
+	actionID := core.ActionID{SpellID: 33938}
 
 	pyroblastCoefficient := 1.14999997616 // Per https://wago.tools/db2/SpellEffect?build=2.5.5.65295&filter%5BSpellID%5D=11366 Field: "BonusCoefficient"
 	pyroblastDotCoefficient := 0.05000000075
@@ -21,12 +21,12 @@ func (mage *Mage) registerPyroblastSpell() {
 		MissileSpeed:   24,
 
 		ManaCost: core.ManaCostOptions{
-			BaseCostPercent: 5,
+			FlatCost: 500,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD:      core.GCDDefault,
-				CastTime: time.Millisecond * 3500,
+				CastTime: time.Millisecond * 6000,
 			},
 		},
 
@@ -63,7 +63,7 @@ func (mage *Mage) registerPyroblastSpell() {
 			Aura: core.Aura{
 				Label: "PyroblastDoT",
 			},
-			NumberOfTicks:       6,
+			NumberOfTicks:       4,
 			TickLength:          time.Second * 3,
 			BonusCoefficient:    pyroblastDotCoefficient,
 			AffectedByCastSpeed: true,

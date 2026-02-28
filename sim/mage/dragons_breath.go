@@ -14,7 +14,7 @@ func (mage *Mage) registerDragonsBreathSpell() {
 	}
 
 	mage.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 31661},
+		ActionID:       core.ActionID{SpellID: 33043},
 		SpellSchool:    core.SpellSchoolFire,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL,

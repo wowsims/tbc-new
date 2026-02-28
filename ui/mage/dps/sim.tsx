@@ -43,7 +43,12 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecMage, {
 			Stat.StatFireDamage,
 			Stat.StatArcaneDamage,
 		],
-		[PseudoStat.PseudoStatSpellHitPercent, PseudoStat.PseudoStatSpellCritPercent, PseudoStat.PseudoStatSpellHastePercent, PseudoStat.PseudoStatSchoolHitArcane],
+		[
+			PseudoStat.PseudoStatSpellHitPercent,
+			PseudoStat.PseudoStatSpellCritPercent,
+			PseudoStat.PseudoStatSpellHastePercent,
+			PseudoStat.PseudoStatSchoolHitArcane,
+		],
 	),
 	gemStats: DEFAULT_CASTER_GEM_STATS,
 
@@ -99,7 +104,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecMage, {
 		// if (numTargets >= 2) {
 		// 	return Presets.ROTATION_PRESET_CLEAVE.rotation.rotation!;
 		// } else {
-		return Presets.BLANK_APL.rotation.rotation!;
+		return Presets.ROTATION_PRESET_ARCANE.rotation.rotation!;
 		// }
 	},
 

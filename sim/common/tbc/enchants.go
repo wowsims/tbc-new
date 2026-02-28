@@ -28,10 +28,10 @@ func init() {
 				duration,
 				func(aura *core.Aura) {
 					aura.ApplyOnGain(func(aura *core.Aura, sim *core.Simulation) {
-						character.MultiplyAttackSpeed(sim, 1.2)
+						character.MultiplyAttackSpeed(sim, 1.02)
 					})
 					aura.ApplyOnExpire(func(aura *core.Aura, sim *core.Simulation) {
-						character.MultiplyAttackSpeed(sim, 1/1.2)
+						character.MultiplyAttackSpeed(sim, 1/1.02)
 					})
 				},
 			)

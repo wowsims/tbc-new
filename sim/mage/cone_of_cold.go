@@ -11,7 +11,7 @@ func (mage *Mage) registerConeOfColdSpell() {
 	coneOfColdCoefficient := 0.1930000037 // Per https://wago.tools/db2/SpellEffect?build=2.5.5.65295&filter%5BSpellID%5D=exact%253A120 Field "EffetBonusCoefficient"
 
 	mage.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 120},
+		ActionID:       core.ActionID{SpellID: 27087},
 		SpellSchool:    core.SpellSchoolFrost,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL | core.SpellFlagBinary,

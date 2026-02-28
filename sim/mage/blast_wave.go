@@ -14,7 +14,7 @@ func (mage *Mage) registerBlastWaveSpell() {
 	}
 
 	mage.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 11113},
+		ActionID:       core.ActionID{SpellID: 33933},
 		Flags:          core.SpellFlagAPL,
 		SpellSchool:    core.SpellSchoolFire,
 		ProcMask:       core.ProcMaskSpellDamage,

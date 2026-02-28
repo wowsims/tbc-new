@@ -11,7 +11,7 @@ func (mage *Mage) registerFireballSpell() {
 	fireBallCoefficient := 1.0 // Per https://wago.tools/db2/SpellEffect?build=2.5.5.65295&filter%5BSpellID%5D=exact%253A133 Field: "BonusCoefficient"
 
 	mage.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 133},
+		ActionID:       core.ActionID{SpellID: 27070},
 		SpellSchool:    core.SpellSchoolFire,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL,
@@ -19,7 +19,7 @@ func (mage *Mage) registerFireballSpell() {
 		MissileSpeed:   24,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 465,
+			FlatCost: 425,
 		},
 
 		Cast: core.CastConfig{
@@ -49,7 +49,7 @@ func (mage *Mage) registerFireballSpell() {
 		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := mage.CalcAndRollDamageRange(sim, 717, 913)
+			baseDamage := mage.CalcAndRollDamageRange(sim, 649, 821)
 			result := spell.CalcDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
 
 			spell.WaitTravelTime(sim, func(s *core.Simulation) {

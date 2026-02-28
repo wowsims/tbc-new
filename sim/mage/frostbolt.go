@@ -30,14 +30,14 @@ func (mage *Mage) frostBoltConfig(config core.SpellConfig) core.SpellConfig {
 }
 
 func (mage *Mage) registerFrostboltSpell() {
-	actionID := core.ActionID{SpellID: 116}
+	actionID := core.ActionID{SpellID: 27072}
 
 	mage.RegisterSpell(mage.frostBoltConfig(core.SpellConfig{
 		ActionID: actionID,
 		Flags:    core.SpellFlagAPL | core.SpellFlagBinary,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 345,
+			FlatCost: 330,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
@@ -49,7 +49,7 @@ func (mage *Mage) registerFrostboltSpell() {
 		DamageMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := mage.CalcAndRollDamageRange(sim, 629, 680)
+			baseDamage := mage.CalcAndRollDamageRange(sim, 600, 647)
 			result := spell.CalcDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
 
 			spell.WaitTravelTime(sim, func(sim *core.Simulation) {

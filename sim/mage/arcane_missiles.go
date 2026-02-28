@@ -9,7 +9,7 @@ import (
 func (mage *Mage) registerArcaneMissilesSpell() {
 	// Values found at https://wago.tools/db2/SpellEffect?build=2.5.5.65295&filter%5BSpellID%5D=exact%253A7268
 	arcaneMissilesCoefficient := 0.28600001335
-	actionID := core.ActionID{SpellID: 7268}
+	actionID := core.ActionID{SpellID: 38699}
 
 	arcaneMissilesTickSpell := mage.GetOrRegisterSpell(core.SpellConfig{
 		ActionID:       actionID.WithTag(1),
@@ -23,7 +23,7 @@ func (mage *Mage) registerArcaneMissilesSpell() {
 		ThreatMultiplier: 1,
 		BonusCoefficient: arcaneMissilesCoefficient,
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			result := spell.CalcDamage(sim, target, 286, spell.OutcomeTickMagicHitAndCrit)
+			result := spell.CalcDamage(sim, target, 265, spell.OutcomeTickMagicHitAndCrit)
 			spell.SpellMetrics[result.Target.UnitIndex].Casts--
 			spell.WaitTravelTime(sim, func(sim *core.Simulation) {
 				spell.DealDamage(sim, result)
@@ -40,7 +40,7 @@ func (mage *Mage) registerArcaneMissilesSpell() {
 		DamageMultiplier: 0,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 785,
+			FlatCost: 740,
 		},
 
 		Cast: core.CastConfig{

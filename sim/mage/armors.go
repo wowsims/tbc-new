@@ -12,16 +12,17 @@ func (mage *Mage) registerArmorSpells() {
 
 	mageArmorEffectCategory := "MageArmors"
 
+	moltenArmorActionId := core.ActionID{SpellID: 30482}
 	moltenArmor := mage.RegisterAura(core.Aura{
 		Label:    "Molten Armor",
-		ActionID: core.ActionID{SpellID: 30482},
+		ActionID: moltenArmorActionId,
 		Duration: time.Minute * 30,
 	}).AttachStatBuff(stats.SpellCritPercent, 3)
 
 	moltenArmor.NewExclusiveEffect(mageArmorEffectCategory, true, core.ExclusiveEffect{})
 
 	mage.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 30482},
+		ActionID:       moltenArmorActionId,
 		SpellSchool:    core.SpellSchoolFire,
 		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
 		ClassSpellMask: MageSpellMoltenArmor,
@@ -43,7 +44,7 @@ func (mage *Mage) registerArmorSpells() {
 		},
 	})
 
-	mageArmorActionId := core.ActionID{SpellID: 6117}
+	mageArmorActionId := core.ActionID{SpellID: 27125}
 	mageArmor := mage.RegisterAura(core.Aura{
 		ActionID: mageArmorActionId,
 		Label:    "Mage Armor",
@@ -84,16 +85,17 @@ func (mage *Mage) registerArmorSpells() {
 	})
 
 	//Frost armor/IceArmor gives no benefit to dps, merely armor and slow on hit
-	frostArmor := mage.RegisterAura(core.Aura{
-		ActionID: core.ActionID{SpellID: 7302},
+	iceArmorActionId := core.ActionID{SpellID: 27124}
+	iceArmor := mage.RegisterAura(core.Aura{
+		ActionID: iceArmorActionId,
 		Label:    "Frost Armor",
 		Duration: time.Minute * 30,
 	})
 
-	frostArmor.NewExclusiveEffect(mageArmorEffectCategory, true, core.ExclusiveEffect{})
+	iceArmor.NewExclusiveEffect(mageArmorEffectCategory, true, core.ExclusiveEffect{})
 
 	mage.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 7302},
+		ActionID:       iceArmorActionId,
 		SpellSchool:    core.SpellSchoolFrost,
 		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
 		ClassSpellMask: MageSpellFrostArmor,
@@ -107,17 +109,17 @@ func (mage *Mage) registerArmorSpells() {
 			},
 		},
 		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
-			return !frostArmor.IsActive()
+			return !iceArmor.IsActive()
 		},
 
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {
-			frostArmor.Activate(sim)
+			iceArmor.Activate(sim)
 		},
 	})
 
 	switch mage.Options.DefaultMageArmor {
 	case proto.MageArmor_MageArmorFrostArmor:
-		core.MakePermanent(frostArmor)
+		core.MakePermanent(iceArmor)
 	case proto.MageArmor_MageArmorMageArmor:
 		core.MakePermanent(mageArmor)
 	case proto.MageArmor_MageArmorMoltenArmor:
