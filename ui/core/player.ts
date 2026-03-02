@@ -490,6 +490,15 @@ export class Player<SpecType extends Spec> {
 
 	getDefaultEpRatios(isTankSpec: boolean, isHealingSpec: boolean): Array<number> {
 		const defaultRatios = new Array(Player.numEpRatios).fill(0);
+		if (this.specConfig?.epRatios) {
+			if (this.specConfig.epRatios.length != Player.numEpRatios) {
+				throw new Error(
+					`Invalid number of EP ratios in spec config for spec ${this.getSpec()}. Expected ${Player.numEpRatios}, got ${this.specConfig.epRatios.length}`,
+				);
+			}
+			this.specConfig.epRatios.forEach((ratio, index) => (defaultRatios[index] = ratio));
+			return defaultRatios;
+		}
 		if (isHealingSpec) {
 			// By default only value HPS EP for healing spec
 			defaultRatios[1] = 1;

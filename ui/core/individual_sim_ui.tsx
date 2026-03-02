@@ -124,6 +124,7 @@ export interface IndividualSimUIConfig<SpecType extends Spec> extends PlayerConf
 	warnings?: Array<(simUI: IndividualSimUI<SpecType>) => SimWarning>;
 	consumableStats?: Array<Stat>;
 	gemStats?: Array<Stat>;
+	epRatios?: number[];
 	epStats: Array<Stat>;
 	epPseudoStats?: Array<PseudoStat>;
 	epReferenceStat: Stat;

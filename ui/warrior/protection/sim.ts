@@ -18,6 +18,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionWarrior, {
 	// List any known bugs / issues here and they'll be shown on the site.
 	knownIssues: [],
 
+	epRatios: [0, 0, 0.6, 0, 1.15, 0],
 	// All stats for which EP should be calculated.
 	epStats: [
 		Stat.StatStamina,
@@ -36,6 +37,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionWarrior, {
 		Stat.StatDodgeRating,
 		Stat.StatParryRating,
 		Stat.StatArmor,
+		Stat.StatBonusArmor,
 	],
 	epPseudoStats: [PseudoStat.PseudoStatMainHandDps],
 	// Reference stat against which to calculate EP. I think all classes use either spell power or attack power.
@@ -116,6 +118,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionWarrior, {
 			thunderClap: TristateEffect.TristateEffectImproved,
 			insectSwarm: true,
 			shadowEmbrace: true,
+			screech: true,
 		}),
 	},
 
