@@ -172,6 +172,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRogue-AllItems-HandofJustice-11815"
+ value: {
+  dps: 1980.32669
+  tps: 1406.03195
+ }
+}
+dps_results: {
  key: "TestRogue-AllItems-HourglassoftheUnraveller-28034"
  value: {
   dps: 1984.43121
@@ -259,8 +266,8 @@ dps_results: {
 dps_results: {
  key: "TestRogue-Settings-Human-preraid-Rogue-sinister-FullBuffs-0.0yards-LongMultiTarget"
  value: {
-  dps: 3303.31013
-  tps: 2345.35019
+  dps: 2356.50562
+  tps: 1673.11899
  }
 }
 dps_results: {
@@ -301,8 +308,8 @@ dps_results: {
 dps_results: {
  key: "TestRogue-Settings-Orc-preraid-Rogue-sinister-FullBuffs-0.0yards-LongMultiTarget"
  value: {
-  dps: 3293.6597
-  tps: 2338.49838
+  dps: 2362.15186
+  tps: 1677.12782
  }
 }
 dps_results: {

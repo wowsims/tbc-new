@@ -16,6 +16,7 @@ import { bucket, distinct, fragmentToString, maxIndex, stringComparator } from '
 import { actionColors } from './color_settings';
 import i18n from '../../../i18n/config';
 import { ResultComponent, ResultComponentConfig, SimResultData } from './result_component';
+import { APLActionItemSwap_SwapSet } from '../../proto/apl';
 
 type TooltipHandler = (dataPointIndex: number) => Element;
 
@@ -575,8 +576,8 @@ export class Timeline extends ResultComponent {
 			debuffsByTargetById[0],
 		);
 
-		auraAsResource.forEach(auraId => {
-			const auraIndex = buffsById.findIndex(auraUptimeLogs => auraUptimeLogs?.[0].actionId!.spellId === auraId);
+		auraAsResource.forEach(actionId => {
+			const auraIndex = buffsById.findIndex(auraUptimeLogs => auraUptimeLogs?.[0].actionId!.equals(actionId));
 			if (auraIndex !== -1) {
 				this.addAuraRow(buffsById[auraIndex], duration);
 			}
@@ -611,11 +612,10 @@ export class Timeline extends ResultComponent {
 
 		// Don't add a row for buffs that were already visualized in a cast row or are prioritized.
 		const buffsToShow = buffsById.filter(auraUptimeLogs =>
-			playerCastsByAbility.findIndex(
-				casts =>
-					auraUptimeLogs[0].actionId &&
-					(casts[0].actionId!.equalsIgnoringTag(auraUptimeLogs[0].actionId) || auraAsResource.includes(auraUptimeLogs[0].actionId.anyId())),
-			),
+			playerCastsByAbility.findIndex(casts => {
+				const actionId = auraUptimeLogs[0].actionId;
+				return actionId && (casts[0].actionId!.equalsIgnoringTag(actionId) || auraAsResource.find(auraId => auraId.equals(actionId)));
+			}),
 		);
 		if (buffsToShow.length > 0) {
 			this.addSeparatorRow(duration);
@@ -1300,11 +1300,15 @@ const MELEE_ACTION_CATEGORY = 1;
 const SPELL_ACTION_CATEGORY = 2;
 const DEFAULT_ACTION_CATEGORY = 3;
 
-const auraAsResource: number[] = [];
+const auraAsResource: ActionId[] = [
+	ActionId.fromOtherId(OtherAction.OtherActionItemSwap, APLActionItemSwap_SwapSet.Main),
+	ActionId.fromOtherId(OtherAction.OtherActionItemSwap, APLActionItemSwap_SwapSet.Swap1),
+];
 
 // Hard-coded spell categories for controlling rotation ordering.
 const idToCategoryMap: Record<number, number> = {
 	[OtherAction.OtherActionMove]: 0,
+	[OtherAction.OtherActionItemSwap]: 0.015,
 	[OtherAction.OtherActionAttack]: 0.01,
 	[OtherAction.OtherActionShoot]: 0.5,
 

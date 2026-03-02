@@ -205,6 +205,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestProtectionWarrior-AllItems-HandofJustice-11815"
+ value: {
+  dps: 656.67957
+  tps: 1034.32121
+  dtps: 1412.88551
+ }
+}
+dps_results: {
  key: "TestProtectionWarrior-AllItems-HourglassoftheUnraveller-28034"
  value: {
   dps: 663.20937
@@ -328,8 +336,13 @@ dps_results: {
 dps_results: {
  key: "TestProtectionWarrior-Settings-Human-p1_bis-Protection-default-FullBuffs-0.0yards-LongMultiTarget"
  value: {
+<<<<<<< HEAD
   dps: 10385.03638
   tps: 10155.65968
+=======
+  dps: 9340.31482
+  tps: 9242.43797
+>>>>>>> d60fd8c648d6c9415b50862903f0c2b7fa82f944
   dtps: 28161.89763
  }
 }
@@ -376,8 +389,13 @@ dps_results: {
 dps_results: {
  key: "TestProtectionWarrior-Settings-Human-preraid-Protection-default-FullBuffs-0.0yards-LongMultiTarget"
  value: {
+<<<<<<< HEAD
   dps: 10191.36217
   tps: 10011.75222
+=======
+  dps: 9163.49742
+  tps: 9111.76355
+>>>>>>> d60fd8c648d6c9415b50862903f0c2b7fa82f944
   dtps: 31027.55093
  }
 }
@@ -424,8 +442,13 @@ dps_results: {
 dps_results: {
  key: "TestProtectionWarrior-Settings-Orc-p1_bis-Protection-default-FullBuffs-0.0yards-LongMultiTarget"
  value: {
+<<<<<<< HEAD
   dps: 10351.26111
   tps: 10124.99882
+=======
+  dps: 9312.37967
+  tps: 9216.07704
+>>>>>>> d60fd8c648d6c9415b50862903f0c2b7fa82f944
   dtps: 28295.54098
  }
 }
@@ -472,8 +495,13 @@ dps_results: {
 dps_results: {
  key: "TestProtectionWarrior-Settings-Orc-preraid-Protection-default-FullBuffs-0.0yards-LongMultiTarget"
  value: {
+<<<<<<< HEAD
   dps: 10337.30726
   tps: 10126.91143
+=======
+  dps: 9317.63655
+  tps: 9233.15468
+>>>>>>> d60fd8c648d6c9415b50862903f0c2b7fa82f944
   dtps: 31081.70679
  }
 }

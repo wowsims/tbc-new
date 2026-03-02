@@ -1,6 +1,7 @@
 package core
 
 import (
+	"fmt"
 	"slices"
 	"time"
 
@@ -30,6 +31,9 @@ type ItemSwap struct {
 	unEquippedItems Equipment
 	swapSet         proto.APLActionItemSwap_SwapSet
 	equipmentStats  ItemSwapStats
+
+	// Used for dummy auras indicating the current active swap set in the timeline
+	itemSwapAuras map[proto.APLActionItemSwap_SwapSet]*Aura
 
 	initialized bool
 }
@@ -78,6 +82,20 @@ func (character *Character) enableItemSwap(itemSwap *proto.ItemSwap, mhCritMulti
 
 	equipmentStats := calcItemSwapStatsOffset(character.Equipment, swapItems, prepullBonusStats, slots, character.Spec)
 
+	itemSwapAuras := make(map[proto.APLActionItemSwap_SwapSet]*Aura)
+	for _, swapSet := range []proto.APLActionItemSwap_SwapSet{proto.APLActionItemSwap_Main, proto.APLActionItemSwap_Swap1} {
+		isMain := swapSet == proto.APLActionItemSwap_Main
+		itemSwapAuras[swapSet] = character.GetOrRegisterAura(Aura{
+			Label:    fmt.Sprintf("Item Swap: %s", Ternary(isMain, "Main", "Swapped")),
+			ActionID: ActionID{OtherID: proto.OtherAction_OtherActionItemSwap}.WithTag(int32(swapSet)),
+			Duration: NeverExpires,
+		})
+
+		if isMain {
+			MakePermanent(itemSwapAuras[swapSet])
+		}
+	}
+
 	character.ItemSwap = ItemSwap{
 		isFeralDruid:         character.Spec == proto.Spec_SpecFeralCatDruid || character.Spec == proto.Spec_SpecFeralBearDruid,
 		mhCritMultiplier:     mhCritMultiplier,
@@ -89,6 +107,7 @@ func (character *Character) enableItemSwap(itemSwap *proto.ItemSwap, mhCritMulti
 		unEquippedItems:      swapItems,
 		equipmentStats:       equipmentStats,
 		swapSet:              proto.APLActionItemSwap_Main,
+		itemSwapAuras:        itemSwapAuras,
 		initialized:          false,
 	}
 }
@@ -388,6 +407,9 @@ func (swap *ItemSwap) SwapItems(sim *Simulation, swapSet proto.APLActionItemSwap
 		character.AutoAttacks.StopRangedUntil(sim, sim.CurrentTime)
 		character.ExtendGCDUntil(sim, max(character.NextGCDAt(), sim.CurrentTime+GCDDefault))
 	}
+
+	swap.itemSwapAuras[swap.swapSet].Deactivate(sim)
+	swap.itemSwapAuras[swapSet].Activate(sim)
 
 	swap.swapSet = swapSet
 }

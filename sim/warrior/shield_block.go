@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
@@ -56,5 +57,11 @@ func (war *Warrior) registerShieldBlock() {
 		},
 
 		RelatedSelfBuff: aura,
+	})
+
+	war.RegisterItemSwapCallback([]proto.ItemSlot{proto.ItemSlot_ItemSlotOffHand}, func(sim *core.Simulation, slot proto.ItemSlot) {
+		if !war.PseudoStats.CanBlock {
+			aura.Deactivate(sim)
+		}
 	})
 }

@@ -27,9 +27,9 @@ func TestArcane(t *testing.T) {
 					},
 				},
 			}},
-			GearSet:  core.GetGearSet("../../ui/mage/dps/gear_sets", "blank"),
+			GearSet:  core.GetGearSet("../../ui/mage/dps/gear_sets", "p1Arcane"),
 			Talents:  "2500052300030150330125--053500031003001",
-			Rotation: core.GetAplRotation("../../ui/mage/dps/apls", "blank"),
+			Rotation: core.GetAplRotation("../../ui/mage/dps/apls", "arcane"),
 			ItemFilter: core.ItemFilter{
 				WeaponTypes: []proto.WeaponType{
 					proto.WeaponType_WeaponTypeDagger,

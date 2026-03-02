@@ -1,4 +1,5 @@
 import { CHARACTER_LEVEL } from '../constants/mechanics';
+import { APLActionItemSwap_SwapSet } from '../proto/apl';
 import { ActionID as ActionIdProto, ItemRandomSuffix, OtherAction } from '../proto/common';
 import { ResourceType } from '../proto/spell';
 import { IconData, UIItem as Item } from '../proto/ui';
@@ -81,6 +82,8 @@ export class ActionId {
 					name += ' (Main Hand)';
 				} else if (this.tag == 2) {
 					name += ' (Off Hand)';
+				} else if (this.tag == 11815) {
+					name += ' (Hand of Justice)';
 				} else if (this.tag == 12281) {
 					name += ' (Sword Specialization)';
 				} else if (this.tag == 25584) {
@@ -128,6 +131,15 @@ export class ActionId {
 			case OtherAction.OtherActionEncounterStart:
 				baseName = 'Encounter Start';
 				iconUrl = 'https://wow.zamimg.com/images/wow/icons/medium/achievement_faction_elders.jpg';
+				break;
+			case OtherAction.OtherActionItemSwap:
+				baseName = 'Item Swap: ';
+				if (this.tag == APLActionItemSwap_SwapSet.Main) {
+					baseName += 'Main';
+				} else {
+					baseName += 'Swapped';
+				}
+				iconUrl = 'https://wow.zamimg.com/images/wow/icons/medium/ability_dualwield.jpg';
 				break;
 		}
 		this.baseName = baseName ?? '';
