@@ -239,10 +239,14 @@ export const runConcurrentStatWeights = async (
 	let simsDone = 0;
 
 	for (const statReqData of manualResponse.statSimRequests) {
-		statReqData.requestLow!.requestId = id;
+		if (statReqData.requestLow) {
+			statReqData.requestLow!.requestId = id;
+			iterationsTotal += statReqData.requestLow.simOptions!.iterations;
+			simsTotal += 1;
+		}
 		statReqData.requestHigh!.requestId = id;
-		iterationsTotal += statReqData.requestLow!.simOptions!.iterations + statReqData.requestHigh!.simOptions!.iterations;
-		simsTotal += 2;
+		iterationsTotal += statReqData.requestHigh!.simOptions!.iterations;
+		simsTotal += 1;
 	}
 
 	console.log(`Need to run a total of ${simsTotal} sims and ${iterationsTotal} iterations.`);
@@ -277,8 +281,11 @@ export const runConcurrentStatWeights = async (
 		if (signals.abort.isTriggered()) return makeAndSendWeightsError(ErrorOutcome.create({ type: ErrorOutcomeType.ErrorOutcomeAborted }), onProgress);
 
 		lastIterations = 0;
-		const lowRes = await runConcurrentSim(statReqData.requestLow!, workerPool, progressHandler, signals);
-		if (lowRes.error) return makeAndSendWeightsError(lowRes.error, onProgress);
+		let lowRes: RaidSimResult | undefined;
+		if (statReqData.requestLow) {
+			lowRes = await runConcurrentSim(statReqData.requestLow, workerPool, progressHandler, signals);
+			if (lowRes.error) return makeAndSendWeightsError(lowRes.error, onProgress);
+		}
 
 		lastIterations = 0;
 		const highRes = await runConcurrentSim(statReqData.requestHigh!, workerPool, progressHandler, signals);
@@ -287,7 +294,7 @@ export const runConcurrentStatWeights = async (
 		calcRequest.statSimResults.push(
 			StatWeightsStatResultData.create({
 				statData: statReqData.statData,
-				resultLow: lowRes,
+				resultLow: lowRes || RaidSimResult.create(),
 				resultHigh: highRes,
 			}),
 		);
