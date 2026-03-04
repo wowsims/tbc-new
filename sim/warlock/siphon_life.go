@@ -49,7 +49,7 @@ func (warlock *Warlock) registerSiphonLifeSpell() {
 			BonusCoefficient:    0.1,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.Snapshot(target, 140)
+				dot.Snapshot(target, 63)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				result := dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
