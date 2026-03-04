@@ -116,10 +116,8 @@ func (fireElemental *FireElemental) TryCast(sim *core.Simulation, target *core.U
 
 func (shaman *Shaman) fireElementalBaseStats() stats.Stats {
 	return stats.Stats{
-		stats.Mana:                3130,
-		stats.Stamina:             323,
-		stats.PhysicalCritPercent: 5 + 1.8,
-		stats.SpellCritPercent:    2.61,
+		stats.Mana:    3130,
+		stats.Stamina: 323,
 	}
 }
 

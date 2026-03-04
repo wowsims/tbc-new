@@ -146,11 +146,7 @@ func makeStatInheritanceFunc(nonHitExpStatInheritance PetStatInheritance) PetSta
 	return func(ownerStats stats.Stats) stats.Stats {
 		inheritedStats := nonHitExpStatInheritance(ownerStats)
 
-		inheritedStats[stats.SpellHitPercent] = ownerStats[stats.SpellHitPercent]
-		inheritedStats[stats.PhysicalHitPercent] = ownerStats[stats.PhysicalHitPercent]
-		inheritedStats[stats.RangedHitPercent] = ownerStats[stats.RangedHitPercent]
-
-		inheritedStats[stats.ExpertiseRating] = ownerStats[stats.ExpertiseRating]
+		// TODO Apparently fire ele doesnt inherit anything, is it the same for other pets ?
 
 		return inheritedStats
 	}
