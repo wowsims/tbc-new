@@ -121,6 +121,32 @@ func (druid *Druid) applyNaturesGrace() {
 		return
 	}
 
+	druid.MakeProcTriggerAura(core.ProcTrigger{
+		Name:           "Nature's Grace Trigger",
+		Duration:       core.NeverExpires,
+		ClassSpellMask: DruidSpellWrath | DruidSpellStarfire | DruidSpellMoonfire,
+		Outcome:        core.OutcomeCrit,
+		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+			druid.NaturesGrace.Activate(sim)
+		},
+	})
+
+	druid.NaturesGrace = druid.RegisterAura(core.Aura{
+		Label:    "Nature's Grace",
+		ActionID: core.ActionID{SpellID: 16886},
+		Duration: time.Second * 3,
+		OnCastComplete: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell) {
+			if spell.CurCast.CastTime == 0 {
+				return
+			}
+
+			aura.Deactivate(sim)
+		},
+	}).AttachSpellMod(core.SpellModConfig{
+		ClassMask: DruidSpellStarfire | DruidSpellWrath,
+		Kind:      core.SpellMod_CastTime_Flat,
+		TimeValue: time.Millisecond * time.Duration(-500),
+	})
 }
 
 func (druid *Druid) applyLunarGuidance() {
@@ -191,8 +217,8 @@ func (druid *Druid) applyStarlightWrath() {
 
 	druid.AddStaticMod(core.SpellModConfig{
 		ClassMask: DruidSpellStarfire | DruidSpellWrath,
-		TimeValue: time.Millisecond * time.Duration(-100*druid.Talents.StarlightWrath),
 		Kind:      core.SpellMod_CastTime_Flat,
+		TimeValue: time.Millisecond * time.Duration(-100*druid.Talents.StarlightWrath),
 	})
 }
 
@@ -204,7 +230,7 @@ func (druid *Druid) applyFocusedStarlight() {
 	druid.AddStaticMod(core.SpellModConfig{
 		ClassMask:  DruidSpellStarfire | DruidSpellWrath,
 		Kind:       core.SpellMod_BonusCrit_Percent,
-		FloatValue: 2.0 * float64(druid.Talents.FocusedStarlight),
+		FloatValue: 0.02 * float64(druid.Talents.FocusedStarlight),
 	})
 }
 
@@ -217,14 +243,14 @@ func (druid *Druid) applyImprovedMoonfire() {
 	druid.AddStaticMod(core.SpellModConfig{
 		ClassMask:  DruidSpellMoonfire | DruidSpellMoonfireDoT,
 		Kind:       core.SpellMod_DamageDone_Pct,
-		FloatValue: 5.0 * float64(druid.Talents.ImprovedMoonfire),
+		FloatValue: 0.05 * float64(druid.Talents.ImprovedMoonfire),
 	})
 
 	// 5% per point chance to crit with Moonfire
 	druid.AddStaticMod(core.SpellModConfig{
 		ClassMask:  DruidSpellMoonfire,
 		Kind:       core.SpellMod_BonusCrit_Percent,
-		FloatValue: 5.0 * float64(druid.Talents.ImprovedMoonfire),
+		FloatValue: 0.05 * float64(druid.Talents.ImprovedMoonfire),
 	})
 }
 
