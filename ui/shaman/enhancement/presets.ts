@@ -12,7 +12,6 @@ import { SavedTalents } from '../../core/proto/ui.js';
 import { Stats } from '../../core/proto_utils/stats';
 import { defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
 import DefaultApl from './apls/default.apl.json';
-import P3Apl from './apls/p3.apl.json';
 import P1Gear from './gear_sets/p1.gear.json';
 import P2Gear from './gear_sets/p2.gear.json';
 import P3Gear from './gear_sets/p3.gear.json';
@@ -29,7 +28,6 @@ export const P2_PRESET = PresetUtils.makePresetGear('P2', P2Gear);
 export const P3_PRESET = PresetUtils.makePresetGear('P3 (WiP)', P3Gear);
 
 export const ROTATION_PRESET_DEFAULT = PresetUtils.makePresetAPLRotation('Default', DefaultApl);
-export const ROTATION_PRESET_P3 = PresetUtils.makePresetAPLRotation('P3 (WiP)', P3Apl);
 
 // Preset options for EP weights
 export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(

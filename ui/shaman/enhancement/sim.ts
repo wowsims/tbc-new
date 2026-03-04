@@ -17,36 +17,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecEnhancementShaman, {
 	knownIssues: [],
 	warnings: [],
 
-	overwriteDisplayStats: (player: Player<Spec.SpecEnhancementShaman>) => {
-		const playerStats = player.getCurrentStats();
-
-		const statMod = (current: UnitStats, previous?: UnitStats) => {
-			return new Stats().withStat(
-				Stat.StatSpellDamage,
-				Stats.fromProto(current).subtract(Stats.fromProto(previous)).getStat(Stat.StatAttackPower) * 0.65,
-			);
-		};
-
-		const base = statMod(playerStats.baseStats!);
-		const gear = statMod(playerStats.gearStats!, playerStats.baseStats);
-		const talents = statMod(playerStats.talentsStats!, playerStats.gearStats);
-		const buffs = statMod(playerStats.buffsStats!, playerStats.talentsStats);
-		const consumes = statMod(playerStats.consumesStats!, playerStats.buffsStats);
-		const debuffs = new Stats();
-		const final = new Stats().withStat(Stat.StatSpellDamage, Stats.fromProto(playerStats.finalStats).getStat(Stat.StatAttackPower) * 0.65);
-
-		return {
-			base: base,
-			gear: gear,
-			talents: talents,
-			buffs: buffs,
-			consumes: consumes,
-			debuffs,
-			final: final,
-			stats: [Stat.StatSpellDamage],
-		};
-	},
-
 	// All stats for which EP should be calculated.
 	epStats: [Stat.StatAgility, Stat.StatIntellect, Stat.StatAttackPower],
 	epPseudoStats: [
@@ -116,13 +86,13 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecEnhancementShaman, {
 		// Preset talents that the user can quickly select.
 		talents: [Presets.SubRestoIWT, Presets.SubRestoILS, Presets.SubEle],
 		// Preset rotations that the user can quickly select.
-		rotations: [Presets.ROTATION_PRESET_DEFAULT, Presets.ROTATION_PRESET_P3],
+		rotations: [Presets.ROTATION_PRESET_DEFAULT],
 		// Preset gear configurations that the user can quickly select.
 		gear: [Presets.P1_PRESET, Presets.P2_PRESET, Presets.P3_PRESET],
 	},
 
 	autoRotation: (_: Player<Spec.SpecEnhancementShaman>): APLRotation => {
-		return Presets.ROTATION_PRESET_P3.rotation.rotation!;
+		return Presets.ROTATION_PRESET_DEFAULT.rotation.rotation!;
 	},
 
 	raidSimPresets: [
