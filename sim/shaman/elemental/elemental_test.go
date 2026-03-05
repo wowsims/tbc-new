@@ -43,7 +43,6 @@ func TestElemental(t *testing.T) {
 				RangedWeaponTypes: []proto.RangedWeaponType{
 					proto.RangedWeaponType_RangedWeaponTypeTotem,
 				},
-				IDBlacklist: []int32{28370},
 			},
 		},
 	}))
