@@ -16,9 +16,6 @@ const BossGCD = time.Millisecond * 1620
 const MaxSpellQueueWindow = time.Millisecond * 400
 const SpellBatchWindow = time.Millisecond * 10
 const PetUpdateInterval = time.Millisecond * 5250
-const RppmLastCheckCap = time.Second * 10
-const RppmLastProcCap = time.Second * 1000
-const RppmLastProcResetValue = time.Second * 120
 const MaxMeleeRange = 5.0 // in yards
 
 const DefaultAttackPowerPerDPS = 14.0

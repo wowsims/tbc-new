@@ -1229,7 +1229,11 @@ export class ReforgeOptimizer {
 						continue;
 					}
 
-					if (!epStats.includes(statIdx) && statIdx != Stat.StatStamina) {
+					if (
+						!epStats.includes(statIdx) &&
+						statIdx != Stat.StatStamina &&
+						!(statIdx == Stat.StatHealingPower && epStats.includes(Stat.StatSpellDamage))
+					) {
 						allStatsValid = false;
 						break;
 					}

@@ -444,6 +444,7 @@ func ApplyGlobalFilters(db *database.WowDatabase) {
 			"Forceful",
 			"Quick",
 			"Reckless",
+			"Purified Shadowsong",
 		}, prefix) {
 			gem.Phase = 5
 		} else if slices.Contains([]string{

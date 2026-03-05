@@ -35,7 +35,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecWarlock, {
 		[Stat.StatHealth, Stat.StatMana, Stat.StatStamina, Stat.StatIntellect, Stat.StatSpellDamage, Stat.StatShadowDamage, Stat.StatFireDamage, Stat.StatMP5],
 		[PseudoStat.PseudoStatSpellHitPercent, PseudoStat.PseudoStatSpellCritPercent, PseudoStat.PseudoStatSpellHastePercent],
 	),
-	gemStats: DEFAULT_CASTER_GEM_STATS,
+	gemStats: [...DEFAULT_CASTER_GEM_STATS, Stat.StatShadowDamage, Stat.StatFireDamage],
 
 	defaults: {
 		// Default equipped gear.
