@@ -237,6 +237,17 @@ func (rogue *Rogue) registerFindWeakness() {
 			fwAura.Activate(sim)
 		},
 	})
+
+	rogue.MakeProcTriggerAura(core.ProcTrigger{
+		Name:           "Find Weakness SnD Trigger",
+		ActionID:       core.ActionID{SpellID: 31242},
+		ProcChance:     1,
+		Callback:       core.CallbackOnCastComplete,
+		ClassSpellMask: RogueSpellSliceAndDice,
+		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+			fwAura.Activate(sim)
+		},
+	})
 }
 
 const MutilateSpellID int32 = 34413

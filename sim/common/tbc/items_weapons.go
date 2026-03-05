@@ -17,7 +17,7 @@ func init() {
 		extraAttackDPM := func() *core.DynamicProcManager {
 			return character.NewStaticLegacyPPMManager(
 				1,
-				character.GetProcMaskForTypes(proto.WeaponType_WeaponTypeSword),
+				*character.GetDynamicProcMaskForWeaponEffect(31332),
 			)
 		}
 

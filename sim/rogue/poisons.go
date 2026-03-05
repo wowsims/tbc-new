@@ -79,7 +79,11 @@ func (rogue *Rogue) registerDeadlyPoisonSpell() {
 		ThreatMultiplier:         1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			spell.CalcAndDealOutcome(sim, target, spell.OutcomeAlwaysHit)
+			result := spell.CalcAndDealOutcome(sim, target, spell.OutcomeMagicHit)
+			if !result.Landed() {
+				return
+			}
+
 			dot := rogue.DeadlyPoison.Dot(target)
 			if dot.IsActive() {
 				dot.Refresh(sim)
@@ -109,7 +113,7 @@ func (rogue *Rogue) registerWoundPoisonSpell() {
 
 	wpBaseDamage := 65.0
 
-	rogue.WoundPoison = rogue.RegisterSpell(core.SpellConfig{
+	wpConfig := core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 27189},
 		SpellSchool:    core.SpellSchoolNature,
 		ProcMask:       core.ProcMaskSpellDamageProc,
@@ -128,32 +132,19 @@ func (rogue *Rogue) registerWoundPoisonSpell() {
 				rogue.WoundPoisonDebuffAuras.Get(target).Activate(sim)
 			}
 		},
-	})
+	}
 
-	rogue.ShivWoundPoison = rogue.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 27189, Tag: 1},
-		SpellSchool:    core.SpellSchoolNature,
-		ProcMask:       core.ProcMaskSpellDamageProc,
-		ClassSpellMask: RogueSpellWoundPoison,
-		Flags:          core.SpellFlagPoison | core.SpellFlagPassiveSpell,
+	rogue.WoundPoison = rogue.RegisterSpell(wpConfig)
 
-		DamageMultiplier:         1,
-		DamageMultiplierAdditive: 1,
-		CritMultiplier:           rogue.DefaultSpellCritMultiplier(),
-		ThreatMultiplier:         1,
-
-		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			spell.CalcAndDealDamage(sim, target, wpBaseDamage, spell.OutcomeMagicCrit)
-			rogue.WoundPoisonDebuffAuras.Get(target).Activate(sim)
-		},
-	})
+	wpConfig.Tag = 1
+	rogue.ShivWoundPoison = rogue.RegisterSpell(wpConfig)
 }
 
 func (rogue *Rogue) registerInstantPoisonSpell() {
 	ipBaseDamage := 146.0
 	ipRange := 48
 
-	rogue.InstantPoison = rogue.RegisterSpell(core.SpellConfig{
+	ipConfig := core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 26890},
 		SpellSchool:    core.SpellSchoolNature,
 		ProcMask:       core.ProcMaskSpellDamageProc,
@@ -168,24 +159,12 @@ func (rogue *Rogue) registerInstantPoisonSpell() {
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			spell.CalcAndDealDamage(sim, target, ipBaseDamage+sim.RandomFloat("Instant Poison")*float64(ipRange), spell.OutcomeMagicHitAndCrit)
 		},
-	})
+	}
 
-	rogue.ShivInstantPoison = rogue.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 26890, Tag: 1},
-		SpellSchool:    core.SpellSchoolNature,
-		ProcMask:       core.ProcMaskSpellDamageProc,
-		ClassSpellMask: RogueSpellInstantPoison,
-		Flags:          core.SpellFlagPoison | core.SpellFlagPassiveSpell,
+	rogue.InstantPoison = rogue.RegisterSpell(ipConfig)
 
-		DamageMultiplier:         1,
-		DamageMultiplierAdditive: 1,
-		CritMultiplier:           rogue.DefaultSpellCritMultiplier(),
-		ThreatMultiplier:         1,
-
-		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			spell.CalcAndDealDamage(sim, target, ipBaseDamage+sim.RandomFloat("Instant Poison")*float64(ipRange), spell.OutcomeMagicCrit)
-		},
-	})
+	ipConfig.Tag = 1
+	rogue.ShivInstantPoison = rogue.RegisterSpell(ipConfig)
 }
 
 func (rogue *Rogue) getPoisonProcMask(poisonId int32) core.ProcMask {
