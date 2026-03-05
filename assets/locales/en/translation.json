@@ -1107,9 +1107,9 @@
 					"label": "HotW DPS Rotation",
 					"tooltip": "Executes optimized HotW DPS rotation using hardcoded algorithm."
 				},
-				"warlock_next_exhale_target": {
-					"label": "Target Next Exhale Target",
-					"tooltip": "Targets the next valid exhale target. If the current target is not the inhale target or no inhale has been cast, the target will not change."
+				"warlock_cast_assigned_curse": {
+					"label": "Cast Assigned Curse",
+					"tooltip": "Casts the Curse that warlock is assigned"
 				}
 			},
 			"values": {
@@ -1515,13 +1515,9 @@
 					"label": "New Savage Roar Duration",
 					"tooltip": "Returns duration of savage roar based on current combo points"
 				},
-				"warlock_hand_of_guldan_in_flight": {
-					"label": "Hand of Guldan in Flight",
-					"tooltip": "Returns <b>True</b> if the impact of Hand of Guldan currenty is in flight."
-				},
-				"affliction_current_snapshot": {
-					"label": "Existing Raw Snapshot %",
-					"tooltip": "How much stronger your existing snapshot is relative to baseline. Ignores Haste and Crit. Not recommended to use unless you know what you're doing."
+				"warlock_assigned_curse_is_active": {
+					"label": "Assigned Curse Is Active",
+					"tooltip": "Returns true is assigned curse is active on target"
 				},
 				"protection_paladin_damage_taken_last_global": {
 					"label": "Damage Taken Last Global",

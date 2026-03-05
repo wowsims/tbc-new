@@ -16,7 +16,8 @@ func applyDebuffEffects(target *Unit, targetIdx int, debuffs *proto.Debuffs, rai
 	}
 
 	if debuffs.CurseOfElements != proto.TristateEffect_TristateEffectMissing {
-		MakePermanent(CurseOfElementsAura(target, IsImproved(debuffs.CurseOfElements)))
+		ranks := GetTristateValueInt32(debuffs.CurseOfElements, 0, 3)
+		MakePermanent(CurseOfElementsAura(target, ranks))
 	}
 
 	if debuffs.CurseOfRecklessness {
@@ -106,7 +107,7 @@ func applyDebuffEffects(target *Unit, targetIdx int, debuffs *proto.Debuffs, rai
 	}
 
 	if debuffs.ShadowEmbrace {
-		MakePermanent(ShadowEmbraceAura(target))
+		MakePermanent(ShadowEmbraceAura(target, 5))
 	}
 
 	if debuffs.ShadowWeaving {
@@ -170,11 +171,8 @@ func BloodFrenzyAura(target *Unit, points int32) *Aura {
 }
 
 // Damage Taken Debuffs
-func CurseOfElementsAura(target *Unit, improved bool) *Aura {
-	multiplier := 1.10
-	if improved {
-		multiplier += 0.03
-	}
+func CurseOfElementsAura(target *Unit, ranks int32) *Aura {
+	multiplier := 1.10 + 0.03*float64(ranks)
 
 	return damageTakenDebuff(target, "Curse of Elements", 27228,
 		[]stats.SchoolIndex{
@@ -518,8 +516,8 @@ func ScreechAura(target *Unit) *Aura {
 	return statsDebuff(target, "Screech", 27051, stats.Stats{stats.AttackPower: -210}, time.Second*4)
 }
 
-func ShadowEmbraceAura(target *Unit) *Aura {
-	return damageDealtDebuff(target, "Shadow Embrace", 32394, []stats.SchoolIndex{stats.SchoolIndexPhysical}, 0.95, NeverExpires)
+func ShadowEmbraceAura(target *Unit, ranks int32) *Aura {
+	return damageDealtDebuff(target, "Shadow Embrace", 32394, []stats.SchoolIndex{stats.SchoolIndexPhysical}, 1.0-(.01*float64(ranks)), NeverExpires)
 }
 
 func ShadowWeavingAura(target *Unit) *Aura {

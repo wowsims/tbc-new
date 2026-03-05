@@ -43,7 +43,6 @@ import {
 	APLValueDotPercentIncrease,
 	APLValueDotRemainingTime,
 	APLValueDotTickFrequency,
-	APLValueAfflictionCurrentSnapshot,
 	APLValueEnergyRegenPerSecond,
 	APLValueEnergyTimeToTarget,
 	APLValueFocusRegenPerSecond,
@@ -94,7 +93,6 @@ import {
 	APLValueUnitDistance,
 	APLValueUnitIsMoving,
 	APLValueVariablePlaceholder,
-	APLValueWarlockHandOfGuldanInFlight,
 	APLValueAuraIsInactive,
 	APLValueAuraICDIsReady,
 	APLValueActiveItemSwapSet,
@@ -109,6 +107,7 @@ import {
 	APLValueActionGroupUsed,
 	APLValueAutoSwingTime,
 	APLValueAutoTimeSinceLast,
+	APLValueWarlockAssignedCurseIsActive,
 } from '../../proto/apl.js';
 import { Class, Spec } from '../../proto/common.js';
 import { ShamanTotems_TotemType as TotemType } from '../../proto/shaman.js';
@@ -1480,21 +1479,13 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getSpec() == Spec.SpecFeralCatDruid,
 		fields: [],
 	}),
-	warlockHandOfGuldanInFlight: inputBuilder({
-		label: i18n.t('rotation_tab.apl.values.warlock_hand_of_guldan_in_flight.label'),
+	warlockAssignedCurseIsActive: inputBuilder({
+		label: i18n.t('rotation_tab.apl.values.warlock_assigned_curse_is_active.label'),
 		submenu: ['warlock'],
-		shortDescription: i18n.t('rotation_tab.apl.values.warlock_hand_of_guldan_in_flight.tooltip'),
-		newValue: APLValueWarlockHandOfGuldanInFlight.create,
+		shortDescription: i18n.t('rotation_tab.apl.values.warlock_assigned_curse_is_active.tooltip'),
+		newValue: APLValueWarlockAssignedCurseIsActive.create,
 		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getSpec() == Spec.SpecWarlock,
-		fields: [],
-	}),
-	afflictionCurrentSnapshot: inputBuilder({
-		label: i18n.t('rotation_tab.apl.values.affliction_current_snapshot.label'),
-		submenu: ['warlock'],
-		shortDescription: i18n.t('rotation_tab.apl.values.affliction_current_snapshot.tooltip'),
-		newValue: APLValueAfflictionCurrentSnapshot.create,
-		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getSpec() == Spec.SpecWarlock,
-		fields: [AplHelpers.unitFieldConfig('targetUnit', 'targets'), AplHelpers.actionIdFieldConfig('spellId', 'expected_dot_spells', '')],
+		fields: [AplHelpers.unitFieldConfig('newTarget', 'targets')],
 	}),
 	protectionPaladinDamageTakenLastGlobal: inputBuilder({
 		label: i18n.t('rotation_tab.apl.values.protection_paladin_damage_taken_last_global.label'),

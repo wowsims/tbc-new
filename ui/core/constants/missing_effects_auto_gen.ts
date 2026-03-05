@@ -2600,12 +2600,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		32493, // Ashtongue Talisman of Shadows
-		[
-			"Each time your Corruption deals damage, it has a 20% chance to grant you 220 spell damage for 5s.", // 40480 - https://www.wowhead.com/tbc/spell=40480
-		]
-	],
-	[
 		32496, // Memento of Tyrande
 		[
 			"Each time you cast a spell, there is chance you will gain up to 76 mana per 5 for 15s.", // 37656 - https://www.wowhead.com/tbc/spell=37656

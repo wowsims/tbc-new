@@ -1,0 +1,208 @@
+character_stats_results: {
+ key: "TestAffliction-CharacterStats-Default"
+ value: {
+  final_stats: 195.58
+  final_stats: 185.295
+  final_stats: 640.86
+  final_stats: 403.59
+  final_stats: 1196.289
+  final_stats: 1244.289
+  final_stats: 0
+  final_stats: 0
+  final_stats: 233
+  final_stats: 0
+  final_stats: 0
+  final_stats: 233
+  final_stats: 166
+  final_stats: 186
+  final_stats: 40
+  final_stats: 15
+  final_stats: 242.99
+  final_stats: 1052.788
+  final_stats: 389
+  final_stats: 0
+  final_stats: 0
+  final_stats: 48
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 3092.99
+  final_stats: 0
+  final_stats: 10878.6
+  final_stats: 8668.85
+  final_stats: 113.7
+  final_stats: 33.75
+  final_stats: 33.75
+  final_stats: 33.75
+  final_stats: 33.75
+  final_stats: 93.75
+  final_stats: 0
+  final_stats: 0
+  final_stats: 16.15854
+  final_stats: 9.17422
+  final_stats: 25.04889
+  final_stats: 0
+  final_stats: 0
+  final_stats: 5
+ }
+}
+dps_results: {
+ key: "TestAffliction-AllItems-AshtongueTalismanofShadows-32493"
+ value: {
+  dps: 2079.52022
+  tps: 1377.93454
+ }
+}
+dps_results: {
+ key: "TestAffliction-AllItems-CorruptorRaiment"
+ value: {
+  dps: 1973.80141
+  tps: 1301.45296
+ }
+}
+dps_results: {
+ key: "TestAffliction-AllItems-MaleficRaiment"
+ value: {
+  dps: 2145.72159
+  tps: 1458.59609
+ }
+}
+dps_results: {
+ key: "TestAffliction-AllItems-OblivionRaiment"
+ value: {
+  dps: 1800.64921
+  tps: 1165.34963
+ }
+}
+dps_results: {
+ key: "TestAffliction-AllItems-SwiftWindfireDiamond"
+ value: {
+  dps: 2060.31919
+  tps: 1365.10213
+ }
+}
+dps_results: {
+ key: "TestAffliction-AllItems-TheBlackBook-19337"
+ value: {
+  dps: 2036.41403
+  tps: 1348.55914
+ }
+}
+dps_results: {
+ key: "TestAffliction-AllItems-VoidStarTalisman-30449"
+ value: {
+  dps: 2089.4145
+  tps: 1375.28551
+ }
+}
+dps_results: {
+ key: "TestAffliction-AllItems-VoidheartRaiment"
+ value: {
+  dps: 1928.05893
+  tps: 1269.0654
+ }
+}
+dps_results: {
+ key: "TestAffliction-Average-Default"
+ value: {
+  dps: 2062.96501
+  tps: 1368.5962
+ }
+}
+dps_results: {
+ key: "TestAffliction-Settings-Human-preraid-Affliction-affliction-FullBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 6153.83989
+  tps: 3464.74548
+ }
+}
+dps_results: {
+ key: "TestAffliction-Settings-Human-preraid-Affliction-affliction-FullBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 2047.24426
+  tps: 1360.50602
+ }
+}
+dps_results: {
+ key: "TestAffliction-Settings-Human-preraid-Affliction-affliction-FullBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 2411.90113
+  tps: 1654.87877
+ }
+}
+dps_results: {
+ key: "TestAffliction-Settings-Human-preraid-Affliction-affliction-NoBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 912.61961
+  tps: 1819.53061
+ }
+}
+dps_results: {
+ key: "TestAffliction-Settings-Human-preraid-Affliction-affliction-NoBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 912.61961
+  tps: 583.69672
+ }
+}
+dps_results: {
+ key: "TestAffliction-Settings-Human-preraid-Affliction-affliction-NoBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 948.557
+  tps: 576.18109
+ }
+}
+dps_results: {
+ key: "TestAffliction-Settings-Orc-preraid-Affliction-affliction-FullBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 6243.151
+  tps: 3472.55916
+ }
+}
+dps_results: {
+ key: "TestAffliction-Settings-Orc-preraid-Affliction-affliction-FullBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 2069.79155
+  tps: 1373.31741
+ }
+}
+dps_results: {
+ key: "TestAffliction-Settings-Orc-preraid-Affliction-affliction-FullBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 2422.90824
+  tps: 1656.68828
+ }
+}
+dps_results: {
+ key: "TestAffliction-Settings-Orc-preraid-Affliction-affliction-NoBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 930.48959
+  tps: 1813.92374
+ }
+}
+dps_results: {
+ key: "TestAffliction-Settings-Orc-preraid-Affliction-affliction-NoBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 930.48959
+  tps: 590.38286
+ }
+}
+dps_results: {
+ key: "TestAffliction-Settings-Orc-preraid-Affliction-affliction-NoBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 970.5519
+  tps: 585.0026
+ }
+}
+dps_results: {
+ key: "TestAffliction-SwitchInFrontOfTarget-Default"
+ value: {
+  dps: 2069.79155
+  tps: 1373.31741
+ }
+}

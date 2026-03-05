@@ -32,6 +32,7 @@ import {
 	APLActionWait,
 	APLActionWaitUntil,
 	APLValue,
+	APLActionCastWarlockAssignedCurse,
 } from '../../proto/apl.js';
 import { Spec } from '../../proto/common.js';
 import { EventID } from '../../typed_event.js';
@@ -698,4 +699,12 @@ const actionKindFactories: { [f in NonNullable<APLActionKind>]: ActionKindConfig
 			throw new Error('Function not implemented.');
 		}
 	},
+	castWarlockAssignedCurse: inputBuilder({
+		label: i18n.t('rotation_tab.apl.actions.warlock_cast_assigned_curse.label'),
+		submenu: ['Warlock'],
+		shortDescription: "Casts the Warlock's Assigned Curse",
+		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getSpec() == Spec.SpecWarlock,
+		newValue: () => APLActionCastWarlockAssignedCurse.create({}),
+		fields: [AplHelpers.unitFieldConfig('newTarget', 'targets')],
+	}),
 };
