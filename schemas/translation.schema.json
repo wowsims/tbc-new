@@ -643,6 +643,12 @@
             "melee_haste": {
               "type": "string"
             },
+            "ranged_hit": {
+              "type": "string"
+            },
+            "ranged_crit": {
+              "type": "string"
+            },
             "ranged_haste": {
               "type": "string"
             },
