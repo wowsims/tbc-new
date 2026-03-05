@@ -115,8 +115,7 @@ export const simLaunchStatuses: Record<Spec, SimStatus> = {
 	// Warlock
 	[Spec.SpecWarlock]: {
 		phase: Phase.Phase1,
-		status: LaunchStatus.Unlaunched,
-		oldSimLink: 'https://wowsims.github.io/tbc/warlock/',
+		status: LaunchStatus.Alpha,
 	},
 	// Warrior
 	[Spec.SpecDpsWarrior]: {
