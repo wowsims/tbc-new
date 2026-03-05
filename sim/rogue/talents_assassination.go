@@ -223,7 +223,7 @@ func (rogue *Rogue) registerFindWeakness() {
 	}).AttachSpellMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
 		ClassMask:  RogueSpellsAll,
-		FloatValue: 0.1 * float64(rogue.Talents.FindWeakness),
+		FloatValue: 0.02 * float64(rogue.Talents.FindWeakness),
 	})
 
 	rogue.MakeProcTriggerAura(core.ProcTrigger{
@@ -233,6 +233,17 @@ func (rogue *Rogue) registerFindWeakness() {
 		Callback:       core.CallbackOnSpellHitDealt,
 		Outcome:        core.OutcomeLanded,
 		ClassSpellMask: RogueSpellFinisher,
+		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+			fwAura.Activate(sim)
+		},
+	})
+
+	rogue.MakeProcTriggerAura(core.ProcTrigger{
+		Name:           "Find Weakness SnD Trigger",
+		ActionID:       core.ActionID{SpellID: 31242},
+		ProcChance:     1,
+		Callback:       core.CallbackOnCastComplete,
+		ClassSpellMask: RogueSpellSliceAndDice,
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			fwAura.Activate(sim)
 		},
