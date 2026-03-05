@@ -5,9 +5,8 @@ import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_u
 import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
 import { APLRotation } from '../../core/proto/apl';
-import { Debuffs, Faction, IndividualBuffs, ItemSlot, PartyBuffs, PseudoStat, Race, RaidBuffs, Spec, Stat, TristateEffect } from '../../core/proto/common';
+import { ItemSlot, PseudoStat, Spec, Stat } from '../../core/proto/common';
 import { DEFAULT_CASTER_GEM_STATS, Stats, UnitStat } from '../../core/proto_utils/stats';
-import { defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
 import * as WarlockInputs from './inputs';
 import * as Presets from './presets';
 
@@ -57,34 +56,10 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecWarlock, {
 		specOptions: Presets.DefaultOptions,
 
 		// Default buffs and debuffs settings.
-		raidBuffs: RaidBuffs.create({
-			...defaultRaidBuffMajorDamageCooldowns(),
-			arcaneBrilliance: true,
-			giftOfTheWild: TristateEffect.TristateEffectImproved,
-			powerWordFortitude: TristateEffect.TristateEffectImproved,
-			divineSpirit: TristateEffect.TristateEffectImproved,
-		}),
-		partyBuffs: PartyBuffs.create({
-			manaSpringTotem: TristateEffect.TristateEffectImproved,
-			moonkinAura: TristateEffect.TristateEffectImproved,
-			totemOfWrath: 1,
-			wrathOfAirTotem: TristateEffect.TristateEffectImproved,
-		}),
-		individualBuffs: IndividualBuffs.create({
-			blessingOfKings: true,
-			blessingOfWisdom: TristateEffect.TristateEffectImproved,
-			shadowPriestDps: 800,
-		}),
-		debuffs: Debuffs.create({
-			judgementOfWisdom: true,
-			shadowWeaving: true,
-			misery: true,
-			curseOfElements: TristateEffect.TristateEffectRegular,
-			sunderArmor: true,
-			screech: true,
-			faerieFire: TristateEffect.TristateEffectImproved,
-			curseOfRecklessness: true,
-		}),
+		raidBuffs: Presets.DefaultRaidBuffs,
+		partyBuffs: Presets.DefaultPartyBuffs,
+		individualBuffs: Presets.DefaultIndividualBuffs,
+		debuffs: Presets.DefaultDebuffs,
 
 		other: Presets.OtherDefaults,
 	},
@@ -135,29 +110,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecWarlock, {
 	},
 	customSections: [WarlockInputs.CursesSection],
 
-	raidSimPresets: [
-		{
-			spec: Spec.SpecWarlock,
-			talents: Presets.TalentsDestruction.data,
-			specOptions: Presets.DefaultOptions,
-			consumables: Presets.DefaultConsumables,
-			defaultFactionRaces: {
-				[Faction.Unknown]: Race.RaceUnknown,
-				[Faction.Alliance]: Race.RaceHuman,
-				[Faction.Horde]: Race.RaceTroll,
-			},
-			defaultGear: {
-				[Faction.Unknown]: {},
-				[Faction.Alliance]: {
-					1: Presets.PRE_RAID.gear,
-				},
-				[Faction.Horde]: {
-					1: Presets.PRE_RAID.gear,
-				},
-			},
-			otherDefaults: Presets.OtherDefaults,
-		},
-	],
+	raidSimPresets: [],
 });
 
 export class WarlockSimUI extends IndividualSimUI<Spec.SpecWarlock> {

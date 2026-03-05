@@ -1,6 +1,6 @@
 import * as PresetUtils from '../../core/preset_utils';
-import { ConsumesSpec, Profession, PseudoStat, Stat } from '../../core/proto/common';
-import { Warlock_Options as WarlockOptions, WarlockOptions_Armor, WarlockOptions_CurseOptions, WarlockOptions_Summon } from '../../core/proto/warlock';
+import { ConsumesSpec, Debuffs, IndividualBuffs, PartyBuffs, Profession, PseudoStat, RaidBuffs, Stat, TristateEffect } from '../../core/proto/common';
+import { Warlock, Warlock_Options as WarlockOptions, WarlockOptions_Armor, WarlockOptions_CurseOptions, WarlockOptions_Summon } from '../../core/proto/warlock';
 import { SavedTalents } from '../../core/proto/ui';
 import { Stats } from '../../core/proto_utils/stats';
 import BlankAPL from './apls/blank.apl.json';
@@ -17,6 +17,7 @@ import AfflictionRot from './apls/affliction.apl.json';
 import DemoRot from './apls/demonology.apl.json';
 import DestroRot from './apls/destruction.apl.json';
 import DestroFireRot from './apls/destro_fire.apl.json';
+import { defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
 
 // Preset options for this spec.
 // Eventually we will import these values for the raid sim too, so its good to
@@ -56,6 +57,12 @@ export const P1_DESTRUCTION_FIRE_EP = PresetUtils.makePresetEpWeights(
 	'P1 - Destro (Fire)',
 	P1_AFFLI_DEMO_DESTRO_EP.epWeights.withStat(Stat.StatFireDamage, 0.92).withStat(Stat.StatShadowDamage, 0.07),
 );
+
+// Rotations
+export const AfflictionAPL = PresetUtils.makePresetAPLRotation('Affliction', AfflictionRot);
+export const DemoAPL = PresetUtils.makePresetAPLRotation('Demonology', DemoRot);
+export const DestroAPL = PresetUtils.makePresetAPLRotation('Destruction', DestroRot);
+export const DestroFireAPL = PresetUtils.makePresetAPLRotation('Destruction (Fire)', DestroFireRot);
 
 // Default talents. Uses the wowhead calculator format, make the talents on
 // https://wowhead.com/wotlk/talent-calc and copy the numbers in the url.
@@ -98,7 +105,7 @@ export const TalentsDestruction = {
 export const DefaultOptions = WarlockOptions.create({
 	classOptions: {
 		armor: WarlockOptions_Armor.FelArmor,
-		curseOptions: WarlockOptions_CurseOptions.Agony,
+		curseOptions: WarlockOptions_CurseOptions.Recklessness,
 		sacrificeSummon: true,
 		summon: WarlockOptions_Summon.Succubus,
 	},
@@ -107,9 +114,11 @@ export const DefaultOptions = WarlockOptions.create({
 export const DefaultConsumables = ConsumesSpec.create({
 	flaskId: 22866, // Flask of Pure Death
 	foodId: 27657, // Blackened Basilisk
+	conjuredId: 12662, // Demonic Rune
 	mhImbueId: 25122, // Brilliant Wizard Oil
 	potId: 22839, // Destruction Potion
 	drumsId: 351355, // Greater Drums of Battle
+	explosiveId: 30217,
 	petScrollAgi: true,
 	petScrollStr: true,
 });
@@ -120,33 +129,99 @@ export const OtherDefaults = {
 	profession2: Profession.Tailoring,
 };
 
-// Rotations
-export const AfflictionAPL = PresetUtils.makePresetAPLRotation('Affliction', AfflictionRot);
-export const DemoAPL = PresetUtils.makePresetAPLRotation('Demonology', DemoRot);
-export const DestroAPL = PresetUtils.makePresetAPLRotation('Destruction', DestroRot);
-export const DestroFireAPL = PresetUtils.makePresetAPLRotation('Destruction (Fire)', DestroFireRot);
+export const DefaultRaidBuffs = RaidBuffs.create({
+	...defaultRaidBuffMajorDamageCooldowns(),
+	arcaneBrilliance: true,
+	giftOfTheWild: TristateEffect.TristateEffectImproved,
+	powerWordFortitude: TristateEffect.TristateEffectImproved,
+	divineSpirit: TristateEffect.TristateEffectImproved,
+});
+
+export const DefaultPartyBuffs = PartyBuffs.create({
+	manaSpringTotem: TristateEffect.TristateEffectRegular,
+	moonkinAura: TristateEffect.TristateEffectRegular,
+	totemOfWrath: 1,
+	wrathOfAirTotem: TristateEffect.TristateEffectImproved,
+	eyeOfTheNight: true,
+	chainOfTheTwilightOwl: true,
+});
+
+export const DefaultIndividualBuffs = IndividualBuffs.create({
+	blessingOfKings: true,
+	blessingOfWisdom: TristateEffect.TristateEffectImproved,
+	shadowPriestDps: 0,
+});
+
+export const DefaultDebuffs = Debuffs.create({
+	judgementOfWisdom: true,
+	misery: true,
+	shadowWeaving: true,
+	curseOfElements: TristateEffect.TristateEffectImproved,
+	sunderArmor: true,
+	screech: true,
+	faerieFire: TristateEffect.TristateEffectImproved,
+	curseOfRecklessness: true,
+	improvedSealOfTheCrusader: true,
+	shadowEmbrace: true,
+});
+
+export const P1_DEFAULT_SETTINGS: PresetUtils.PresetSettings = {
+	name: 'Default',
+	specOptions: DefaultOptions,
+	consumables: DefaultConsumables,
+	buffs: DefaultIndividualBuffs,
+	partyBuffs: DefaultPartyBuffs,
+	raidBuffs: DefaultRaidBuffs,
+	debuffs: DefaultDebuffs,
+};
+
+export const P1_FIRE_DEFAULT_SETTINGS: PresetUtils.PresetSettings = {
+	name: 'Fire',
+	specOptions: WarlockOptions.create({
+		...DefaultOptions,
+		classOptions: {
+			...DefaultOptions.classOptions,
+			summon: WarlockOptions_Summon.Imp,
+		},
+	}),
+	consumables: ConsumesSpec.create({
+		...DefaultConsumables,
+		conjuredId: 22788,
+	}),
+	buffs: DefaultIndividualBuffs,
+	partyBuffs: DefaultPartyBuffs,
+	raidBuffs: DefaultRaidBuffs,
+	debuffs: Debuffs.create({
+		...DefaultDebuffs,
+		improvedScorch: true,
+	}),
+};
 
 // Builds
 export const AFFLICTION_BUILD = PresetUtils.makePresetBuild('Affliction', {
 	talents: TalentsAffliction,
 	epWeights: P1_AFFLI_DEMO_DESTRO_EP,
 	rotation: AfflictionAPL,
+	settings: P1_DEFAULT_SETTINGS,
 });
 
 export const DEMONOLOGY_BUILD = PresetUtils.makePresetBuild('Demonology', {
 	talents: TalentsDemoRuin,
 	epWeights: P1_AFFLI_DEMO_DESTRO_EP,
 	rotation: DemoAPL,
+	settings: P1_DEFAULT_SETTINGS,
 });
 
 export const DESTRUCTION_BUILD = PresetUtils.makePresetBuild('Destruction', {
 	talents: TalentsDestruction,
 	epWeights: P1_AFFLI_DEMO_DESTRO_EP,
 	rotation: DestroAPL,
+	settings: P1_DEFAULT_SETTINGS,
 });
 
 export const DESTRUCTION_FIRE_BUILD = PresetUtils.makePresetBuild('Destruction (Fire)', {
 	talents: TalentsDestruction,
 	epWeights: P1_DESTRUCTION_FIRE_EP,
 	rotation: DestroFireAPL,
+	settings: P1_FIRE_DEFAULT_SETTINGS,
 });

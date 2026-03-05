@@ -364,8 +364,9 @@ func registerConjuredCD(agent Agent, consumes *proto.ConsumesSpec) {
 			Spell: spell,
 			Type:  CooldownTypeDPS,
 		})
-	case 20520:
-		actionID := ActionID{ItemID: 20520}
+	// Demonic Rune
+	case 12662:
+		actionID := ActionID{ItemID: 12662}
 		manaMetrics := character.NewManaMetrics(actionID)
 		// damageTakenManaMetrics := character.NewManaMetrics(ActionID{SpellID: 33776})
 		spell := character.RegisterSpell(SpellConfig{

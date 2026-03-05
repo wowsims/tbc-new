@@ -14,7 +14,7 @@ import {
 	Stat,
 } from '../proto/common.js';
 import { Consumable, ItemEffectRandPropPoints, SimDatabase } from '../proto/db';
-import { SpellEffect } from '../proto/spell';
+import { ResourceType, SpellEffect } from '../proto/spell';
 import { IconData, UIDatabase, UIEnchant as Enchant, UIGem as Gem, UIItem as Item, UINPC as Npc, UIZone as Zone } from '../proto/ui.js';
 import { distinct } from '../utils.js';
 import { WOWHEAD_EXPANSION_ENV } from '../wowhead';
@@ -168,6 +168,7 @@ export class Database {
 		db.itemIcons.forEach(data => (this.itemIcons[data.id] = data));
 		db.spellIcons.forEach(data => (this.spellIcons[data.id] = data));
 		db.consumables.forEach(consumable => this.consumables.set(consumable.id, consumable));
+		db.spellEffects.forEach(spellEffect => this.spellEffects.set(spellEffect.id, spellEffect));
 	}
 
 	getAllItems(): Array<Item> {
@@ -210,7 +211,24 @@ export class Database {
 			stats.push(Stat.StatNatureResistance);
 			stats.push(Stat.StatShadowResistance);
 		}
-		return this.getConsumablesByType(type).filter(consume => consume.buffsMainStat || stats.some(index => consume.stats[index] > 0));
+
+		return this.getConsumablesByType(type).filter(consume => {
+			// Add consumables that buff Mana as a resource
+			let includesResourceType = false;
+			if (stats.includes(Stat.StatMana) || stats.includes(Stat.StatMP5)) {
+				includesResourceType = consume.effectIds.some(effectId => {
+					const spellEffect = this.getSpellEffect(effectId);
+					if (spellEffect?.miscValue0.oneofKind === 'resourceType') {
+						if (spellEffect.miscValue0.resourceType === ResourceType.ResourceTypeMana) {
+							return true;
+						}
+					}
+					return false;
+				});
+			}
+
+			return consume.buffsMainStat || stats.some(index => consume.stats[index] > 0) || includesResourceType;
+		});
 	}
 	getRandomSuffixById(id: number): ItemRandomSuffix | undefined {
 		return this.randomSuffixes.get(id);
