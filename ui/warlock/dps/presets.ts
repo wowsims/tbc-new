@@ -153,6 +153,7 @@ export const DefaultIndividualBuffs = IndividualBuffs.create({
 });
 
 export const DefaultDebuffs = Debuffs.create({
+	improvedSealOfTheCrusader: true,
 	judgementOfWisdom: true,
 	misery: true,
 	shadowWeaving: true,
@@ -160,9 +161,15 @@ export const DefaultDebuffs = Debuffs.create({
 	screech: true,
 	faerieFire: TristateEffect.TristateEffectImproved,
 	curseOfRecklessness: true,
-	improvedSealOfTheCrusader: true,
 	shadowEmbrace: true,
 	curseOfElements: TristateEffect.TristateEffectImproved,
+	bloodFrenzy: true,
+	giftOfArthas: true,
+	mangle: true,
+	exposeArmor: TristateEffect.TristateEffectImproved,
+	huntersMark: TristateEffect.TristateEffectImproved,
+	exposeWeaknessUptime: 0.9,
+	exposeWeaknessHunterAgility: 1080,
 });
 
 export const P1_DEFAULT_SETTINGS: PresetUtils.PresetSettings = {
