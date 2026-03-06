@@ -91,7 +91,7 @@ func (warlock *Warlock) applyImprovedCorruption() {
 	warlock.AddStaticMod(core.SpellModConfig{
 		Kind:      core.SpellMod_CastTime_Flat,
 		TimeValue: time.Millisecond * (-400 * time.Duration(warlock.Talents.ImprovedCorruption)),
-		ClassMask: WarlockAfflictionSpells,
+		ClassMask: WarlockSpellCorruption,
 	})
 }
 
@@ -107,7 +107,7 @@ func (warlock *Warlock) registerAmplifyCurse() {
 		Tag:      "Affliction",
 		ActionID: actionID,
 		Duration: time.Second * 30,
-		OnApplyEffects: func(aura *core.Aura, sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+		OnCastComplete: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell) {
 			if spell.Matches(WarlockSpellCurseOfAgony | WarlockSpellCurseOfDoom) {
 				warlock.AmplifyCurseAura.Deactivate(sim)
 			}
