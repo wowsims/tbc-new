@@ -1,4 +1,4 @@
-import { CURRENT_API_VERSION, REPO_NAME } from '../constants/other.js';
+import { CURRENT_API_VERSION, Phase, REPO_NAME } from '../constants/other.js';
 import { Player } from '../player';
 import { PlayerClass } from '../player_class.js';
 import { PlayerClasses } from '../player_classes';
@@ -8,6 +8,7 @@ import { Player as PlayerProto } from '../proto/api.js';
 import {
 	ArmorType,
 	Class,
+	Debuffs,
 	EnchantType,
 	Faction,
 	HandType,
@@ -1389,6 +1390,15 @@ export const defaultRaidBuffMajorDamageCooldowns = (classID?: Class): Partial<Ra
 		bloodlust: true,
 	});
 };
+
+const exposeWeaknessPhaseSettings: Map<Phase, Pick<Debuffs, 'exposeWeaknessUptime' | 'exposeWeaknessHunterAgility'>> = new Map([
+	[Phase.Phase1, { exposeWeaknessUptime: 0.9, exposeWeaknessHunterAgility: 1080 }],
+	[Phase.Phase2, { exposeWeaknessUptime: 0.9, exposeWeaknessHunterAgility: 1150 }],
+	[Phase.Phase3, { exposeWeaknessUptime: 0.9, exposeWeaknessHunterAgility: 1210 }],
+	[Phase.Phase4, { exposeWeaknessUptime: 0.9, exposeWeaknessHunterAgility: 1150 }],
+	[Phase.Phase5, { exposeWeaknessUptime: 0.9, exposeWeaknessHunterAgility: 1250 }],
+]);
+export const defaultExposeWeaknessSettings = (phase?: Phase) => exposeWeaknessPhaseSettings.get(phase || Phase.Phase1);
 
 // Adds missing Consumables and SpellEffects to the given player proto.
 export const extendPlayerProtoWithMissingEffects = (playerProto: PlayerProto, db: Database) => {

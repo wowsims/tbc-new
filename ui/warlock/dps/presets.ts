@@ -17,7 +17,8 @@ import AfflictionRot from './apls/affliction.apl.json';
 import DemoRot from './apls/demonology.apl.json';
 import DestroRot from './apls/destruction.apl.json';
 import DestroFireRot from './apls/destro_fire.apl.json';
-import { defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
+import { defaultExposeWeaknessSettings, defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
+import { Phase } from '../../core/constants/other';
 
 // Preset options for this spec.
 // Eventually we will import these values for the raid sim too, so its good to
@@ -153,6 +154,7 @@ export const DefaultIndividualBuffs = IndividualBuffs.create({
 });
 
 export const DefaultDebuffs = Debuffs.create({
+	...defaultExposeWeaknessSettings(Phase.Phase1),
 	improvedSealOfTheCrusader: true,
 	judgementOfWisdom: true,
 	misery: true,
@@ -168,8 +170,7 @@ export const DefaultDebuffs = Debuffs.create({
 	mangle: true,
 	exposeArmor: TristateEffect.TristateEffectImproved,
 	huntersMark: TristateEffect.TristateEffectImproved,
-	exposeWeaknessUptime: 0.9,
-	exposeWeaknessHunterAgility: 1080,
+	isbUptime: 0.52,
 });
 
 export const P1_DEFAULT_SETTINGS: PresetUtils.PresetSettings = {
