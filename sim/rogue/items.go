@@ -105,10 +105,10 @@ var Tier6 = core.NewItemSet(core.ItemSet{
 		2: func(agent core.Agent, setBonusAura *core.Aura) {
 			setBonusAura.
 				ApplyOnGain(func(aura *core.Aura, sim *core.Simulation) {
-					agent.(RogueAgent).GetRogue().SliceAndDiceBonusFlat += 0.5
+					agent.(RogueAgent).GetRogue().SliceAndDiceBonusFlat += 0.05
 				}).
 				ApplyOnExpire(func(aura *core.Aura, sim *core.Simulation) {
-					agent.(RogueAgent).GetRogue().SliceAndDiceBonusFlat -= 0.5
+					agent.(RogueAgent).GetRogue().SliceAndDiceBonusFlat -= 0.05
 				})
 		},
 		4: func(agent core.Agent, setBonusAura *core.Aura) {

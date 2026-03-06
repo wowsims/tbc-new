@@ -13,7 +13,9 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 	cssClass: 'rogue-sim-ui',
 	cssScheme: PlayerClasses.getCssClass(PlayerClasses.Rogue),
 	// List any known bugs / issues here and they'll be shown on the site.
-	knownIssues: [],
+	knownIssues: ["The APL is in constant flux due to bug fixes and new findings; if your DPS drops dramatically, reset it back to \"Auto\" in the Rotation tab!",
+		"Mutilate does not have a default APL currently. It will not be automatically used when talented."
+	],
 
 	// All stats for which EP should be calculated.
 	epStats: [
@@ -106,7 +108,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 		// Preset talents that the user can quickly select.
 		talents: [Presets.Talents],
 		// Preset rotations that the user can quickly select.
-		rotations: [Presets.SINSITER_APL, Presets.SHIV_APL],
+		rotations: [Presets.SINSITER_APL],
 		// Preset gear configurations that the user can quickly select.
 		gear: [Presets.PREARAID_SWORDS_GEAR, Presets.P1_SWORDS_GEAR],
 	},

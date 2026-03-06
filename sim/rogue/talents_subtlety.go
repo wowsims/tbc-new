@@ -55,7 +55,7 @@ func (rogue *Rogue) registerOpportunity() {
 	rogue.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
 		ClassMask:  RogueSpellBackstab | RogueSpellMutilate | RogueSpellAmbush,
-		FloatValue: 0.4 * float64(rogue.Talents.Opportunity),
+		FloatValue: 0.04 * float64(rogue.Talents.Opportunity),
 	})
 }
 

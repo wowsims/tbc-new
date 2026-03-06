@@ -10,7 +10,7 @@ func (rogue *Rogue) registerSinisterStrikeSpell() {
 	baseDamage := 98.0
 
 	rogue.SinisterStrike = rogue.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 1752},
+		ActionID:       core.ActionID{SpellID: 26862},
 		SpellSchool:    core.SpellSchoolPhysical,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
 		Flags:          core.SpellFlagMeleeMetrics | SpellFlagBuilder | core.SpellFlagAPL,

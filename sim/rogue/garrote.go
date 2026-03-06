@@ -10,7 +10,7 @@ func (rogue *Rogue) registerGarrote() {
 	baseDamage := 135.0
 
 	rogue.Garrote = rogue.GetOrRegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 703},
+		ActionID:       core.ActionID{SpellID: 26884},
 		SpellSchool:    core.SpellSchoolPhysical,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
 		Flags:          core.SpellFlagMeleeMetrics | SpellFlagBuilder | core.SpellFlagAPL,

@@ -3,8 +3,7 @@ import { ConsumesSpec, PseudoStat, Stat } from '../../core/proto/common';
 import { Rogue_Options as RogueOptions } from '../../core/proto/rogue';
 import { SavedTalents } from '../../core/proto/ui';
 import { Stats } from '../../core/proto_utils/stats';
-import ShivAPL from './apls/shiv.apl.json'
-import SinisterAPL from './apls/sinister.apl.json'
+import SinisterAPL from './apls/swords.apl.json'
 import PreraidSwordsGear from './gear_sets/preraid.gear.json';
 import P1SwordsGear from './gear_sets/p1.gear.json';
 
@@ -12,8 +11,7 @@ import P1SwordsGear from './gear_sets/p1.gear.json';
 // Eventually we will import these values for the raid sim too, so its good to
 // keep them in a separate file.
 
-export const SHIV_APL = PresetUtils.makePresetAPLRotation('Shiv EA', ShivAPL)
-export const SINSITER_APL = PresetUtils.makePresetAPLRotation('Sinister Strike EA', SinisterAPL)
+export const SINSITER_APL = PresetUtils.makePresetAPLRotation('SS/Hemo/Shiv', SinisterAPL)
 
 export const P1_SWORDS_GEAR = PresetUtils.makePresetGear('P1 Swords', P1SwordsGear);
 export const PREARAID_SWORDS_GEAR = PresetUtils.makePresetGear('Preraid Swords', PreraidSwordsGear);
@@ -48,7 +46,7 @@ export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
 export const Talents = {
 	name: 'Combat Swords',
 	data: SavedTalents.create({
-		talentsString: '00532012502-023305200005015002321151',
+		talentsString: '0053201252-023305200005015002321151',
 	}),
 };
 
