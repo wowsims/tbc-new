@@ -847,8 +847,8 @@ dps_results: {
 dps_results: {
  key: "TestAffliction-AllItems-TheLightningCapacitor-28785"
  value: {
-  dps: 1746.35715
-  tps: 1147.5744
+  dps: 1738.4846
+  tps: 1138.25334
  }
 }
 dps_results: {
