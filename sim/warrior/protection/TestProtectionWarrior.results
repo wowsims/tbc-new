@@ -125,6 +125,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestProtectionWarrior-AllItems-ArcanoweaveVestments"
+ value: {
+  dps: 676.70813
+  tps: 1069.63717
+  dtps: 1542.14963
+ }
+}
+dps_results: {
  key: "TestProtectionWarrior-AllItems-ArgussianCompass-27770"
  value: {
   dps: 689.39884
@@ -733,6 +741,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestProtectionWarrior-AllItems-ImbuedNetherweave"
+ value: {
+  dps: 686.52896
+  tps: 1083.25218
+  dtps: 1623.75889
+ }
+}
+dps_results: {
  key: "TestProtectionWarrior-AllItems-KissoftheSpider-22954"
  value: {
   dps: 707.68454
@@ -813,6 +829,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestProtectionWarrior-AllItems-NetherweaveVestments"
+ value: {
+  dps: 657.34121
+  tps: 1046.07083
+  dtps: 1832.92235
+ }
+}
+dps_results: {
  key: "TestProtectionWarrior-AllItems-OgreMauler'sBadge-25628"
  value: {
   dps: 696.62939
@@ -842,6 +866,14 @@ dps_results: {
   dps: 689.39884
   tps: 1081.1666
   dtps: 1316.28468
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-PrimalMooncloth"
+ value: {
+  dps: 673.62758
+  tps: 1066.16481
+  dtps: 1588.90612
  }
 }
 dps_results: {
@@ -941,6 +973,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestProtectionWarrior-AllItems-Shadow'sEmbrace"
+ value: {
+  dps: 678.06406
+  tps: 1073.08204
+  dtps: 1642.30575
+ }
+}
+dps_results: {
  key: "TestProtectionWarrior-AllItems-ShadowmoonInsignia-32501"
  value: {
   dps: 685.17655
@@ -978,6 +1018,22 @@ dps_results: {
   dps: 689.39884
   tps: 1081.1666
   dtps: 1316.28468
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-SoulclothEmbrace"
+ value: {
+  dps: 679.31893
+  tps: 1074.11526
+  dtps: 1638.61935
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-SpellstrikeInfusion"
+ value: {
+  dps: 702.1722
+  tps: 1102.0231
+  dtps: 1489.03472
  }
 }
 dps_results: {
@@ -1166,6 +1222,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestProtectionWarrior-AllItems-WhitemendWisdom"
+ value: {
+  dps: 701.91303
+  tps: 1101.53361
+  dtps: 1488.9774
+ }
+}
+dps_results: {
  key: "TestProtectionWarrior-AllItems-WindhawkArmor"
  value: {
   dps: 676.87142
@@ -1179,6 +1243,14 @@ dps_results: {
   dps: 717.28971
   tps: 1120.13713
   dtps: 1311.92827
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-WrathofSpellfire"
+ value: {
+  dps: 674.44292
+  tps: 1066.60082
+  dtps: 1548.64536
  }
 }
 dps_results: {

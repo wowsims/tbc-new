@@ -102,6 +102,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRogue-AllItems-ArcanoweaveVestments"
+ value: {
+  dps: 1777.09533
+  tps: 1261.73768
+ }
+}
+dps_results: {
  key: "TestRogue-AllItems-ArgussianCompass-27770"
  value: {
   dps: 1928.18686
@@ -599,6 +606,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRogue-AllItems-ImbuedNetherweave"
+ value: {
+  dps: 1725.98763
+  tps: 1225.45122
+ }
+}
+dps_results: {
  key: "TestRogue-AllItems-KissoftheSpider-22954"
  value: {
   dps: 1978.45477
@@ -669,6 +683,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRogue-AllItems-NetherweaveVestments"
+ value: {
+  dps: 1541.8147
+  tps: 1094.68843
+ }
+}
+dps_results: {
  key: "TestRogue-AllItems-OgreMauler'sBadge-25628"
  value: {
   dps: 1961.96444
@@ -680,6 +701,13 @@ dps_results: {
  value: {
   dps: 1928.18686
   tps: 1369.01267
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-PrimalMooncloth"
+ value: {
+  dps: 1747.15314
+  tps: 1240.47873
  }
 }
 dps_results: {
@@ -767,6 +795,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRogue-AllItems-Shadow'sEmbrace"
+ value: {
+  dps: 1737.56062
+  tps: 1233.66804
+ }
+}
+dps_results: {
  key: "TestRogue-AllItems-ShadowmoonInsignia-32501"
  value: {
   dps: 1928.18686
@@ -799,6 +834,20 @@ dps_results: {
  value: {
   dps: 1979.7818
   tps: 1405.64508
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-SoulclothEmbrace"
+ value: {
+  dps: 1730.70786
+  tps: 1228.80258
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-SpellstrikeInfusion"
+ value: {
+  dps: 1737.20802
+  tps: 1233.41769
  }
 }
 dps_results: {
@@ -957,6 +1006,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRogue-AllItems-WhitemendWisdom"
+ value: {
+  dps: 1736.53316
+  tps: 1232.93854
+ }
+}
+dps_results: {
  key: "TestRogue-AllItems-WindhawkArmor"
  value: {
   dps: 1772.96285
@@ -968,6 +1024,13 @@ dps_results: {
  value: {
   dps: 1955.75741
   tps: 1388.58776
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-WrathofSpellfire"
+ value: {
+  dps: 1745.16228
+  tps: 1239.06522
  }
 }
 dps_results: {

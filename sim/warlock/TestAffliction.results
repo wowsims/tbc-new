@@ -109,6 +109,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestAffliction-AllItems-ArcanoweaveVestments"
+ value: {
+  dps: 1631.55528
+  tps: 1097.87482
+ }
+}
+dps_results: {
  key: "TestAffliction-AllItems-ArgussianCompass-27770"
  value: {
   dps: 1736.69437
@@ -564,6 +571,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestAffliction-AllItems-ImbuedNetherweave"
+ value: {
+  dps: 1646.24281
+  tps: 1098.16665
+ }
+}
+dps_results: {
  key: "TestAffliction-AllItems-KissoftheSpider-22954"
  value: {
   dps: 1736.69437
@@ -648,6 +662,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestAffliction-AllItems-NetherweaveVestments"
+ value: {
+  dps: 1511.87441
+  tps: 993.98902
+ }
+}
+dps_results: {
  key: "TestAffliction-AllItems-OblivionRaiment"
  value: {
   dps: 1511.70192
@@ -666,6 +687,13 @@ dps_results: {
  value: {
   dps: 1775.38609
   tps: 1187.01366
+ }
+}
+dps_results: {
+ key: "TestAffliction-AllItems-PrimalMooncloth"
+ value: {
+  dps: 1705.76347
+  tps: 1143.61623
  }
 }
 dps_results: {
@@ -746,6 +774,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestAffliction-AllItems-Shadow'sEmbrace"
+ value: {
+  dps: 1747.53131
+  tps: 1172.01813
+ }
+}
+dps_results: {
  key: "TestAffliction-AllItems-ShadowmoonInsignia-32501"
  value: {
   dps: 1736.69437
@@ -771,6 +806,20 @@ dps_results: {
  value: {
   dps: 1736.69437
   tps: 1159.48369
+ }
+}
+dps_results: {
+ key: "TestAffliction-AllItems-SoulclothEmbrace"
+ value: {
+  dps: 1617.46876
+  tps: 1085.83645
+ }
+}
+dps_results: {
+ key: "TestAffliction-AllItems-SpellstrikeInfusion"
+ value: {
+  dps: 1700.79921
+  tps: 1132.53586
  }
 }
 dps_results: {
@@ -854,8 +903,8 @@ dps_results: {
 dps_results: {
  key: "TestAffliction-AllItems-TheLightningCapacitor-28785"
  value: {
-  dps: 1738.4846
-  tps: 1138.25334
+  dps: 1773.50257
+  tps: 1165.78596
  }
 }
 dps_results: {
@@ -943,10 +992,24 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestAffliction-AllItems-WhitemendWisdom"
+ value: {
+  dps: 1580.89401
+  tps: 1033.73863
+ }
+}
+dps_results: {
  key: "TestAffliction-AllItems-WrathofCenarius-21190"
  value: {
   dps: 1790.91005
   tps: 1204.34168
+ }
+}
+dps_results: {
+ key: "TestAffliction-AllItems-WrathofSpellfire"
+ value: {
+  dps: 1986.219
+  tps: 1325.64607
  }
 }
 dps_results: {

@@ -210,7 +210,7 @@ func init() {
 					baseDamage := sim.Roll(694, 806)
 					//https://www.wowhead.com/tbc/item=28785/the-lightning-capacitor#comments
 					//It can crit, may need some testing
-					spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMagicCrit)
+					spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
 				})
 
 			},
