@@ -109,11 +109,7 @@ func (mage *Mage) registerArcaneFocus() {
 		return
 	}
 
-	mage.AddStaticMod(core.SpellModConfig{
-		School:     core.SpellSchoolArcane,
-		FloatValue: 2 * float64(mage.Talents.ArcaneFocus),
-		Kind:       core.SpellMod_BonusHit_Percent,
-	})
+	mage.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexArcane] += 2 * float64(mage.Talents.ArcaneFocus)
 }
 
 func (mage *Mage) registerArcaneConcentration() {
@@ -488,11 +484,8 @@ func (mage *Mage) registerElementalPrecision() {
 		Kind:       core.SpellMod_PowerCost_Pct,
 	})
 
-	mage.AddStaticMod(core.SpellModConfig{
-		School:     core.SpellSchoolFrostfire,
-		FloatValue: percent,
-		Kind:       core.SpellMod_BonusHit_Percent,
-	})
+	mage.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexFrost] += percent
+	mage.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexFire] += percent
 }
 
 func (mage *Mage) registerIceShards() {

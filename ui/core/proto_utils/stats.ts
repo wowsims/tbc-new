@@ -117,7 +117,15 @@ export class UnitStat {
 			return ratingValue / Mechanics.BLOCK_RATING_PER_BLOCK_PERCENT;
 		} else if (this.equalsPseudoStat(PseudoStat.PseudoStatMeleeHitPercent) || this.equalsPseudoStat(PseudoStat.PseudoStatRangedHitPercent)) {
 			return ratingValue / Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT;
-		} else if (this.equalsPseudoStat(PseudoStat.PseudoStatSpellHitPercent)) {
+		} else if (
+			this.equalsPseudoStat(PseudoStat.PseudoStatSpellHitPercent) ||
+			this.equalsPseudoStat(PseudoStat.PseudoStatSchoolHitPercentArcane) ||
+			this.equalsPseudoStat(PseudoStat.PseudoStatSchoolHitPercentFire) ||
+			this.equalsPseudoStat(PseudoStat.PseudoStatSchoolHitPercentFrost) ||
+			this.equalsPseudoStat(PseudoStat.PseudoStatSchoolHitPercentHoly) ||
+			this.equalsPseudoStat(PseudoStat.PseudoStatSchoolHitPercentNature) ||
+			this.equalsPseudoStat(PseudoStat.PseudoStatSchoolHitPercentShadow)
+		) {
 			return ratingValue / Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT;
 		} else {
 			return null;
@@ -153,7 +161,15 @@ export class UnitStat {
 			return percentOrPointsValue * Mechanics.BLOCK_RATING_PER_BLOCK_PERCENT;
 		} else if (this.equalsPseudoStat(PseudoStat.PseudoStatMeleeHitPercent) || this.equalsPseudoStat(PseudoStat.PseudoStatRangedHitPercent)) {
 			return percentOrPointsValue * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT;
-		} else if (this.equalsPseudoStat(PseudoStat.PseudoStatSpellHitPercent)) {
+		} else if (
+			this.equalsPseudoStat(PseudoStat.PseudoStatSpellHitPercent) ||
+			this.equalsPseudoStat(PseudoStat.PseudoStatSchoolHitPercentArcane) ||
+			this.equalsPseudoStat(PseudoStat.PseudoStatSchoolHitPercentFire) ||
+			this.equalsPseudoStat(PseudoStat.PseudoStatSchoolHitPercentFrost) ||
+			this.equalsPseudoStat(PseudoStat.PseudoStatSchoolHitPercentHoly) ||
+			this.equalsPseudoStat(PseudoStat.PseudoStatSchoolHitPercentNature) ||
+			this.equalsPseudoStat(PseudoStat.PseudoStatSchoolHitPercentShadow)
+		) {
 			return percentOrPointsValue * Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT;
 		} else {
 			return null;
@@ -318,6 +334,8 @@ export class UnitStat {
 			return Stat.StatSpellHasteRating;
 		} else if (pseudoStatName.includes('SpellHit')) {
 			return Stat.StatSpellHitRating;
+		} else if (pseudoStatName.includes('SchoolHit')) {
+			return null;
 		} else if (pseudoStatName.includes('SpellCrit')) {
 			return Stat.StatSpellCritRating;
 		} else if (pseudoStatName.includes('Haste')) {
@@ -341,30 +359,21 @@ export class UnitStat {
 			case Stat.StatMeleeHasteRating:
 				return [PseudoStat.PseudoStatMeleeHastePercent, PseudoStat.PseudoStatRangedHastePercent];
 			case Stat.StatSpellHitRating:
-				return [PseudoStat.PseudoStatSpellHitPercent];
+				return [
+					PseudoStat.PseudoStatSpellHitPercent,
+					PseudoStat.PseudoStatSchoolHitPercentArcane,
+					PseudoStat.PseudoStatSchoolHitPercentFire,
+					PseudoStat.PseudoStatSchoolHitPercentFrost,
+					PseudoStat.PseudoStatSchoolHitPercentHoly,
+					PseudoStat.PseudoStatSchoolHitPercentNature,
+					PseudoStat.PseudoStatSchoolHitPercentShadow,
+				];
 			case Stat.StatSpellCritRating:
 				return [PseudoStat.PseudoStatSpellCritPercent];
 			case Stat.StatSpellHasteRating:
 				return [PseudoStat.PseudoStatSpellHastePercent];
 			default:
 				return [];
-		}
-	}
-
-	// Returns the other school variant of a school-specific PseudoStat, or
-	// null if not applicable.
-	static getSiblingPseudoStat(pseudoStat: PseudoStat): PseudoStat | null {
-		switch (pseudoStat) {
-			case (PseudoStat.PseudoStatMeleeHitPercent, PseudoStat.PseudoStatRangedHitPercent):
-				return PseudoStat.PseudoStatSpellHitPercent;
-			case PseudoStat.PseudoStatSpellHitPercent: // Unlikely to care about Ranged here...
-				return PseudoStat.PseudoStatMeleeHitPercent;
-			case (PseudoStat.PseudoStatMeleeCritPercent, PseudoStat.PseudoStatRangedCritPercent):
-				return PseudoStat.PseudoStatSpellCritPercent;
-			case PseudoStat.PseudoStatSpellCritPercent:
-				return PseudoStat.PseudoStatMeleeHitPercent;
-			default:
-				return null;
 		}
 	}
 
@@ -396,6 +405,12 @@ export const displayStatOrder: Array<UnitStat> = [
 	UnitStat.fromStat(Stat.StatNatureDamage),
 	UnitStat.fromStat(Stat.StatShadowDamage),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatSpellHitPercent),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatSchoolHitPercentArcane),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatSchoolHitPercentFire),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatSchoolHitPercentFrost),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatSchoolHitPercentHoly),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatSchoolHitPercentNature),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatSchoolHitPercentShadow),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatSpellCritPercent),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatSpellHastePercent),
 	UnitStat.fromStat(Stat.StatMP5),

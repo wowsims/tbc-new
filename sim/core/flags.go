@@ -276,6 +276,29 @@ func (ss SpellSchool) SchoolDamage() stats.Stat {
 	}
 }
 
+func (ss SpellSchool) SchoolIndex() stats.SchoolIndex {
+	switch ss {
+	case SpellSchoolNone:
+		return stats.SchoolIndexNone
+	case SpellSchoolPhysical:
+		return stats.SchoolIndexPhysical
+	case SpellSchoolArcane:
+		return stats.SchoolIndexArcane
+	case SpellSchoolFire:
+		return stats.SchoolIndexFire
+	case SpellSchoolFrost:
+		return stats.SchoolIndexFrost
+	case SpellSchoolHoly:
+		return stats.SchoolIndexHoly
+	case SpellSchoolNature:
+		return stats.SchoolIndexNature
+	case SpellSchoolShadow:
+		return stats.SchoolIndexShadow
+	default:
+		return stats.SchoolIndexPhysical
+	}
+}
+
 func SpellSchoolFromProto(p proto.SpellSchool) SpellSchool {
 	switch p {
 	case proto.SpellSchool_SpellSchoolPhysical:

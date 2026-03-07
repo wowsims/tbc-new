@@ -267,12 +267,12 @@ enum PseudoStat {
 	PseudoStatParryPercent = 5;
 
 	// Spell School Hit
-	PseudoStatSchoolHitArcane = 6;
-	PseudoStatSchoolHitFire = 7;
-	PseudoStatSchoolHitFrost = 8;
-	PseudoStatSchoolHitHoly = 9;
-	PseudoStatSchoolHitNature = 10;
-	PseudoStatSchoolHitShadow = 11;
+	PseudoStatSchoolHitPercentArcane = 6;
+	PseudoStatSchoolHitPercentFire = 7;
+	PseudoStatSchoolHitPercentFrost = 8;
+	PseudoStatSchoolHitPercentHoly = 9;
+	PseudoStatSchoolHitPercentNature = 10;
+	PseudoStatSchoolHitPercentShadow = 11;
 
 	PseudoStatMeleeHitPercent = 12;
 	PseudoStatSpellHitPercent = 13;
