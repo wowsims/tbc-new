@@ -28,7 +28,7 @@ export class ConsumesPicker extends Component {
 
 	private getConsumables(type: ConsumableType): Consumable[] {
 		const consumables: Consumable[] = [];
-		const epStats = [...(this.simUI.individualConfig.consumableStats ?? this.simUI.individualConfig.epStats)];
+		const epStats = [...(this.simUI.individualConfig.consumableStats ?? []), ...this.simUI.individualConfig.epStats];
 		const hasAttackPowerStat = epStats.find(stat => stat === Stat.StatAttackPower);
 		if (type == ConsumableType.ConsumableTypeBattleElixir && hasAttackPowerStat) {
 			const elixirOfDemonSlaying = this.db.getConsumable(9224);
