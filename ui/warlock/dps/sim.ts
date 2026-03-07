@@ -81,7 +81,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecWarlock, {
 	// Buff and Debuff inputs to include/exclude, overriding the EP-based defaults.
 	includeBuffDebuffInputs: [BuffDebuffInputs.DivineSpirit, BuffDebuffInputs.SanctityAura, BuffDebuffInputs.ManaSpringTotem, BuffDebuffInputs.ManaTideTotem],
 	excludeBuffDebuffInputs: [],
-	petConsumeInputs: [],
 	// Inputs to include in the 'Other' section on the settings tab.
 	otherInputs: {
 		inputs: [OtherInputs.IsbUptime],

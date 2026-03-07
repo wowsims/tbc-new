@@ -396,11 +396,11 @@ export class Player<SpecType extends Spec> {
 	}
 
 	// TODO: Cata - Check this
-	isSpec<T extends Spec>(specId: T): this is Player<T> {
+	isSpec<T extends Spec>(specId: T): boolean {
 		return (this.getSpec() as unknown) == specId;
 	}
 
-	isClass<T extends Class>(classId: T): this is Player<ClassSpecs<T>> {
+	isClass<T extends Class>(classId: T): boolean {
 		return (this.getClass() as unknown) == classId;
 	}
 

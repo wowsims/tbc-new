@@ -84,7 +84,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecHunter, {
 
 	// IconInputs to include in the 'Player' section on the settings tab.
 	playerIconInputs: [HunterInputs.PetTypeInput(), HunterInputs.QuiverInput(), HunterInputs.AmmoInput()],
-	petConsumeInputs: [],
 	// Buff and Debuff inputs to include/exclude, overriding the EP-based defaults.
 	includeBuffDebuffInputs: [],
 	excludeBuffDebuffInputs: [],

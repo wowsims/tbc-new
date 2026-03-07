@@ -302,6 +302,22 @@ export const DRUMS_CONFIG = [
 export const makeDrumsInput = makeConsumeInputFactory({ consumesFieldName: 'drumsId' });
 
 ///////////////////////////////////////////////////////////////////////////
+//                                   PET
+///////////////////////////////////////////////////////////////////////////
+
+export const PetScrollAgi = makeBooleanConsumeInput({
+	actionId: () => ActionId.fromItemId(27498),
+	fieldName: 'petScrollAgi',
+	showWhen: (player: Player<any>) => player.isSpec(Spec.SpecHunter) || player.isSpec(Spec.SpecWarlock),
+});
+
+export const PetScrollStr = makeBooleanConsumeInput({
+	actionId: () => ActionId.fromItemId(27503),
+	fieldName: 'petScrollStr',
+	showWhen: (player: Player<any>) => player.isClass(Class.ClassHunter) || player.isClass(Class.ClassWarlock),
+});
+
+///////////////////////////////////////////////////////////////////////////
 //                                 SCROLLS
 ///////////////////////////////////////////////////////////////////////////
 
@@ -350,6 +366,7 @@ export const NightmareSeed = makeBooleanConsumeInput({
 export interface ConsumableInputOptions {
 	consumesFieldName: keyof ConsumesSpec;
 	setValue?: (eventID: EventID, player: Player<any>, newValue: number) => void;
+	showWhen?: (player: Player<any>) => boolean;
 }
 
 export function makeConsumableInput(
@@ -372,7 +389,7 @@ export function makeConsumableInput(
 		zeroValue: 0,
 		changedEvent: (player: Player<any>) => player.consumesChangeEmitter,
 		getValue: (player: Player<any>) => player.getConsumes()[options.consumesFieldName] as number,
-		showWhen: (_: Player<any>) => !!valueOptions.length,
+		showWhen: (player: Player<any>) => !!valueOptions.length && (!options.showWhen || options.showWhen(player)),
 		setValue: (eventID: EventID, player: Player<any>, newValue: number) => {
 			if (options.setValue) {
 				options.setValue(eventID, player, newValue);

@@ -1,5 +1,4 @@
 import { ref } from 'tsx-vanilla';
-
 import { IndividualSimUI } from '../../individual_sim_ui';
 import { Player } from '../../player';
 import { Class, ConsumableType, Spec, Stat } from '../../proto/common';
@@ -51,11 +50,11 @@ export class ConsumesPicker extends Component {
 		this.buildElixirsPicker();
 		this.buildFoodPicker();
 		this.buildEngPicker();
-		this.buildPetPicker();
 		this.buildImbuePicker();
 		this.buildDrumsPicker();
 		this.buildScrollsPicker();
 		this.buildMiscPicker();
+		this.buildPetPicker();
 	}
 
 	private buildPotionsPicker(): void {
@@ -155,18 +154,29 @@ export class ConsumesPicker extends Component {
 	}
 
 	private buildPetPicker(): void {
-		if (this.simUI.individualConfig.petConsumeInputs?.length) {
-			const petConsumesRef = ref<HTMLDivElement>();
-			this.rootElem.appendChild(
-				<ConsumeRow label="Pet">
-					<div ref={petConsumesRef} className="picker-group icon-group consumes-row-inputs consumes-pet"></div>
-				</ConsumeRow>,
-			);
-			const petConsumesElem = petConsumesRef.value!;
+		const petConsumesRef = ref<HTMLDivElement>();
+		this.rootElem.appendChild(
+			<ConsumeRow label="Pet">
+				<div ref={petConsumesRef} className="picker-group icon-group consumes-row-inputs consumes-pet"></div>
+			</ConsumeRow>,
+		);
+		const petConsumesElem = petConsumesRef.value!;
 
-			// Create pickers for each pet consume input.
-			this.simUI.individualConfig.petConsumeInputs.forEach(iconInput => buildIconInput(petConsumesElem, this.simUI.player, iconInput));
-		}
+		// Build pet food picker from database.
+		const petFoods = this.getConsumables(ConsumableType.ConsumableTypePetFood);
+		const petFoodOptions = ConsumablesInputs.makeConsumableInput(
+			petFoods,
+			{
+				consumesFieldName: 'petFoodId',
+				showWhen: (player: Player<any>) => player.isSpec(Spec.SpecHunter) || player.isSpec(Spec.SpecWarlock),
+			},
+			'',
+		);
+		buildIconInput(petConsumesElem, this.simUI.player, petFoodOptions);
+
+		// Create pickers for each pet consume input (scrolls, etc).
+		buildIconInput(petConsumesElem, this.simUI.player, ConsumablesInputs.PetScrollAgi);
+		buildIconInput(petConsumesElem, this.simUI.player, ConsumablesInputs.PetScrollStr);
 	}
 
 	private buildImbuePicker(): void {
