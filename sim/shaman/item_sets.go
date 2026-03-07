@@ -34,7 +34,7 @@ var ItemSetCycloneRegalia = core.NewItemSet(core.ItemSet{
 				FloatValue: -270,
 			})
 
-			procAura := character.MakeProcTriggerAura(core.ProcTrigger{
+			setBonusAura.AttachProcTrigger(core.ProcTrigger{
 				Name:       "Cyclone Regalia",
 				ActionID:   core.ActionID{ItemID: 37214},
 				Callback:   core.CallbackOnSpellHitDealt,
@@ -45,8 +45,33 @@ var ItemSetCycloneRegalia = core.NewItemSet(core.ItemSet{
 					aura.Activate(sim)
 				},
 			})
+		},
+	},
+})
 
-			character.ItemSwap.RegisterProc(33506, procAura)
+var ItemSetCataclysmRegalia = core.NewItemSet(core.ItemSet{
+	Name: "Cataclysm Regalia",
+	Bonuses: map[int32]core.ApplySetBonus{
+		2: func(agent core.Agent, setBonusAura *core.Aura) {
+			// Each time you cast an offensive spell, there is a chance your next Lesser Healing Wave will cost 380 less mana.
+			// Not implementing
+		},
+		4: func(agent core.Agent, setBonusAura *core.Aura) {
+			// Your Lightning Bolt critical strikes have a chance to grant you 120 mana.
+			character := agent.GetCharacter()
+			manaMetrics := character.NewManaMetrics(core.ActionID{SpellID: 37238})
+
+			setBonusAura.AttachProcTrigger(core.ProcTrigger{
+				Name:           "Lightning Bolt Discount",
+				ActionID:       core.ActionID{ItemID: 37237},
+				Callback:       core.CallbackOnSpellHitDealt,
+				Outcome:        core.OutcomeCrit,
+				ClassSpellMask: SpellMaskLightningBolt,
+				ProcChance:     0.25,
+				Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+					character.AddMana(sim, 120, manaMetrics)
+				},
+			})
 		},
 	},
 })

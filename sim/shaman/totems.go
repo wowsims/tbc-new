@@ -179,31 +179,15 @@ func (shaman *Shaman) registerGraceOfAirTotemSpell() {
 
 func (shaman *Shaman) registerWrathOfAirTotemSpell() {
 	duration := time.Second * 120
-	value := 101.0 // TODO +20 with some item set
 	config := shaman.newTotemSpellConfig(320, 3738, SpellMaskBasicTotem)
 	buffAura := shaman.RegisterAura(core.Aura{
 		Label:    "Wrath Of Air Totem (Self)",
 		ActionID: config.ActionID,
 		Duration: duration,
 	})
-	buffAura.NewExclusiveEffect(core.WrathOfAirTotemCategory+stats.SpellDamage.StatName()+"Add", false, core.ExclusiveEffect{
-		Priority: value,
-		OnGain: func(ee *core.ExclusiveEffect, sim *core.Simulation) {
-			ee.Aura.Unit.AddStatDynamic(sim, stats.SpellDamage, value)
-		},
-		OnExpire: func(ee *core.ExclusiveEffect, sim *core.Simulation) {
-			ee.Aura.Unit.AddStatDynamic(sim, stats.SpellDamage, -value)
-		},
-	})
-	buffAura.NewExclusiveEffect(core.WrathOfAirTotemCategory+stats.HealingPower.StatName()+"Add", false, core.ExclusiveEffect{
-		Priority: value,
-		OnGain: func(ee *core.ExclusiveEffect, sim *core.Simulation) {
-			ee.Aura.Unit.AddStatDynamic(sim, stats.HealingPower, value)
-		},
-		OnExpire: func(ee *core.ExclusiveEffect, sim *core.Simulation) {
-			ee.Aura.Unit.AddStatDynamic(sim, stats.HealingPower, -value)
-		},
-	})
+
+	statsAura := core.WrathOfAirTotemAura(&shaman.Character, shaman.Character.CouldHaveSetBonus(ItemSetCycloneRegalia, 2))
+	buffAura.AttachDependentAura(statsAura)
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 		if shaman.AirTotemAura != nil {
 			shaman.AirTotemAura.Deactivate(sim)

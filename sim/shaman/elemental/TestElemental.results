@@ -270,6 +270,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestElemental-AllItems-CataclysmRegalia"
+ value: {
+  dps: 1574.64901
+  tps: 1268.57651
+ }
+}
+dps_results: {
  key: "TestElemental-AllItems-CharmofAlacrity-25787"
  value: {
   dps: 1667.89354
@@ -421,6 +428,13 @@ dps_results: {
  value: {
   dps: 1667.89354
   tps: 1394.56807
+ }
+}
+dps_results: {
+ key: "TestElemental-AllItems-EnchantGloves-Threat-2613"
+ value: {
+  dps: 1733.39768
+  tps: 1419.33576
  }
 }
 dps_results: {
@@ -750,6 +764,13 @@ dps_results: {
  value: {
   dps: 1723.50658
   tps: 1383.72524
+ }
+}
+dps_results: {
+ key: "TestElemental-AllItems-Romulo'sPoisonVial-28579"
+ value: {
+  dps: 1667.89354
+  tps: 1394.56807
  }
 }
 dps_results: {
