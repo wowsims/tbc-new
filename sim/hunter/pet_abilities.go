@@ -62,7 +62,7 @@ func (hp *HunterPet) registerKillCommandSpell() {
 		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := hp.MHWeaponDamage(sim, spell.MeleeAttackPower()) + 127
+			baseDamage := hp.MHWeaponDamage(sim, spell.MeleeAttackPower(target)) + 127
 			spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialHitAndCrit)
 		},
 	})

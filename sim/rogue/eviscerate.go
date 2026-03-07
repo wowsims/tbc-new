@@ -50,7 +50,7 @@ func (rogue *Rogue) registerEviscerate() {
 			comboPoints := float64(rogue.ComboPoints())
 			flatBaseDamage := flatDamage + comboDamageBonus*float64(comboPoints)
 
-			baseDamage := sim.Roll(flatBaseDamage, flatBaseDamage+damageVariance) + 0.03*float64(comboPoints)*spell.MeleeAttackPower()
+			baseDamage := sim.Roll(flatBaseDamage, flatBaseDamage+damageVariance) + 0.03*float64(comboPoints)*spell.MeleeAttackPower(target)
 
 			result := spell.CalcDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialHitAndCrit)
 

@@ -93,7 +93,7 @@ export const DefaultIndividualBuffs = IndividualBuffs.create({
 	blessingOfWisdom: 2,
 	innervates: 1,
 	powerInfusions: 1,
-	shadowPriestDps: 800,
+	shadowPriestDps: 1400,
 });
 
 export const DefaultDebuffs = Debuffs.create({
@@ -101,4 +101,5 @@ export const DefaultDebuffs = Debuffs.create({
 	curseOfElements: 2,
 	improvedSealOfTheCrusader: true,
 	judgementOfWisdom: true,
+	isbUptime: 0.52,
 });

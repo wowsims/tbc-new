@@ -39,8 +39,8 @@ func (hunter *Hunter) registerMultiShotSpell() {
 		ThreatMultiplier: 1,
 		BonusCoefficient: 1,
 
-		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			baseDamage := spell.RangedAttackPower()*0.2 +
+		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+			baseDamage := spell.RangedAttackPower(target)*0.2 +
 				hunter.AutoAttacks.Ranged().BaseDamage(sim) +
 				hunter.talonOfAlarBonus() +
 				205

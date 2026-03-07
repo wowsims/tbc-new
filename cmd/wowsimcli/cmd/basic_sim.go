@@ -41,6 +41,10 @@ func simMain(cmd *cobra.Command, args []string) {
 		log.Fatalf("failed to load input json file: %s", err)
 	}
 
+	if input.SimOptions == nil {
+		log.Fatalf("expected property 'simOptions' to be present in the input json file")
+	}
+
 	var output []byte
 	reporter := make(chan *proto.ProgressMetrics, 10)
 	core.RunRaidSimConcurrentAsync(input, reporter, "cmd-raid-sim")

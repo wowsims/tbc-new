@@ -29,11 +29,13 @@ func (warlock *Warlock) registerCurseOfRecklessness() {
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			result := spell.CalcOutcome(sim, target, spell.OutcomeMagicHit)
 			if result.Landed() {
-				warlock.DeactivateOtherCurses(sim, target)
+				warlock.DeactivateOtherCurses(sim, spell, target)
 				warlock.CurseOfRecklessnessAuras.Get(target).Activate(sim)
 			}
 
 			spell.DealOutcome(sim, result)
 		},
+
+		RelatedAuraArrays: warlock.CurseOfRecklessnessAuras.ToMap(),
 	})
 }

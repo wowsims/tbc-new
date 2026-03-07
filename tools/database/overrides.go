@@ -79,6 +79,7 @@ var ItemDenyList = map[int32]struct{}{
 	18583: {},
 	18584: {},
 	22736: {},
+	23363: {}, // Titanic Breastplate
 	24265: {},
 	32384: {},
 	32421: {},

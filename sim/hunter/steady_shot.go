@@ -41,7 +41,7 @@ func (hunter *Hunter) registerSteadyShotSpell() {
 				weaponDamage -= 12
 			}
 
-			baseDamage := 0.2*spell.RangedAttackPower() +
+			baseDamage := 0.2*spell.RangedAttackPower(target) +
 				weaponDamage*2.8/hunter.AutoAttacks.Ranged().SwingSpeed +
 				hunter.talonOfAlarBonus() +
 				150

@@ -38,7 +38,7 @@ func (hunter *Hunter) registerArcaneShotSpell() {
 		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := spell.RangedAttackPower()*0.15 +
+			baseDamage := spell.RangedAttackPower(target)*0.15 +
 				hunter.talonOfAlarBonus() +
 				273
 

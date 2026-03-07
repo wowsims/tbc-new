@@ -108,7 +108,13 @@ func (rogue *Rogue) registerImprovedExposeArmor() {
 		return
 	}
 
-	rogue.ExposeArmorModifier = 1.5
+	// The bonus of Imp EA is handled inside of Expose Armor in debuffs.go
+
+	// Create a dummy aura for APL handling
+	core.MakePermanent(rogue.RegisterAura(core.Aura{
+		Label:    "Improved Expose Armor",
+		ActionID: core.ActionID{SpellID: 14168},
+	}))
 }
 
 func (rogue *Rogue) registerLethality() {
@@ -327,9 +333,9 @@ func (rogue *Rogue) newMutilateHitSpell(isMH bool) *core.Spell {
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			baseDamage := mutBaseDamage
 			if isMH {
-				baseDamage += spell.Unit.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower())
+				baseDamage += spell.Unit.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower(target))
 			} else {
-				baseDamage += spell.Unit.OHNormalizedWeaponDamage(sim, spell.MeleeAttackPower())
+				baseDamage += spell.Unit.OHNormalizedWeaponDamage(sim, spell.MeleeAttackPower(target))
 			}
 
 			oldMultiplier := spell.DamageMultiplier

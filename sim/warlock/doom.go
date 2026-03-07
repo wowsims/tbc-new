@@ -34,7 +34,7 @@ func (warlock *Warlock) registerCurseOfDoom() {
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			result := spell.CalcOutcome(sim, target, spell.OutcomeMagicHit)
 			if result.Landed() {
-				warlock.DeactivateOtherCurses(sim, target)
+				warlock.DeactivateOtherCurses(sim, spell, target)
 				spell.Dot(target).Apply(sim)
 			}
 			spell.DealOutcome(sim, result)

@@ -49,6 +49,7 @@ type ProcTrigger struct {
 	Handler            ProcHandler
 	TriggerImmediately bool // If false (default), the handler will be called one spell batch window later for improved realism.
 	ClassSpellMask     int64
+	ClassSpellsOnly    bool // Corresponds to the Only Proc From Class Abilities flag, e.g. https://www.wowhead.com/tbc/spell=32106/lesser-spell-blasting
 	ExtraCondition     ProcExtraCondition
 }
 
@@ -100,6 +101,9 @@ func (procAura *Aura) AttachProcTriggerCallback(unit *Unit, config ProcTrigger) 
 			return
 		}
 		if config.ClassSpellMask > 0 && config.ClassSpellMask&spell.ClassSpellMask == 0 {
+			return
+		}
+		if config.ClassSpellsOnly && spell.ClassSpellMask == 0 {
 			return
 		}
 		if config.ProcMaskExclude != ProcMaskUnknown && spell.ProcMask.Matches(config.ProcMaskExclude) {

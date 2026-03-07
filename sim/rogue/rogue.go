@@ -29,7 +29,6 @@ type Rogue struct {
 
 	SliceAndDiceBonusFlat    float64 // The flat bonus Attack Speed bonus before Mastery is applied
 	AdditiveEnergyRegenBonus float64
-	ExposeArmorModifier      float64
 
 	sliceAndDiceDurations [6]time.Duration
 

@@ -11,7 +11,7 @@ func (rogue *Rogue) registerAmbushSpell() {
 	weaponDamage := 2.75
 
 	rogue.Ambush = rogue.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 8676},
+		ActionID:       core.ActionID{SpellID: 27441},
 		SpellSchool:    core.SpellSchoolPhysical,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
 		Flags:          core.SpellFlagMeleeMetrics | SpellFlagBuilder | core.SpellFlagAPL,
@@ -42,7 +42,7 @@ func (rogue *Rogue) registerAmbushSpell() {
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			rogue.BreakStealth(sim)
 			baseDamage := baseDamage +
-				spell.Unit.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower())
+				spell.Unit.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower(target))
 
 			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialNoBlockDodgeParry)
 
