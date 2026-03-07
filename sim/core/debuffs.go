@@ -381,7 +381,7 @@ func ImprovedShadowBoltAura(target *Unit, uptime float64, points int32) *Aura {
 	config := Aura{
 		Label:     "ImprovedShadowBolt-" + strconv.Itoa(int(points)),
 		Tag:       "ImprovedShadowBolt",
-		ActionID:  ActionID{SpellID: 17803},
+		ActionID:  ActionID{SpellID: 17800},
 		Duration:  time.Second * 12,
 		MaxStacks: 4,
 	}

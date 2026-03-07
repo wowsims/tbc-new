@@ -17,6 +17,10 @@ func (rogue *Rogue) applyPoisons() {
 }
 
 func (rogue *Rogue) registerDeadlyPoisonSpell() {
+	procMask := rogue.getPoisonProcMask(deadlyImbueID)
+	if procMask == core.ProcMaskUnknown {
+		return
+	}
 	rogue.DeadlyPoison = rogue.GetOrRegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 27187},
 		SpellSchool:    core.SpellSchoolNature,
@@ -99,6 +103,10 @@ func (rogue *Rogue) registerDeadlyPoisonSpell() {
 }
 
 func (rogue *Rogue) registerWoundPoisonSpell() {
+	procMask := rogue.getPoisonProcMask(woundImbueID)
+	if procMask == core.ProcMaskUnknown {
+		return
+	}
 	woundPoisonDebuffAura := core.Aura{
 		Label:     "Wound Poison",
 		ActionID:  core.ActionID{SpellID: 27189},
@@ -141,6 +149,10 @@ func (rogue *Rogue) registerWoundPoisonSpell() {
 }
 
 func (rogue *Rogue) registerInstantPoisonSpell() {
+	procMask := rogue.getPoisonProcMask(instantImbueID)
+	if procMask == core.ProcMaskUnknown {
+		return
+	}
 	ipBaseDamage := 146.0
 	ipRange := 48
 

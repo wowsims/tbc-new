@@ -198,7 +198,7 @@ func (ai *MagtheridonAI) registerCleave() {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, tankTarget *core.Unit, spell *core.Spell) {
-			baseDamage := spell.Unit.AutoAttacks.MH().EnemyWeaponDamage(sim, spell.MeleeAttackPower(), magtheridonMeleeDamageSpread)
+			baseDamage := spell.Unit.AutoAttacks.MH().EnemyWeaponDamage(sim, spell.MeleeAttackPower(tankTarget), magtheridonMeleeDamageSpread)
 			spell.CalcAndDealDamage(sim, tankTarget, baseDamage, spell.OutcomeEnemyMeleeWhite)
 		},
 	})

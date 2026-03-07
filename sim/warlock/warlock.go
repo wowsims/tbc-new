@@ -66,6 +66,8 @@ type Warlock struct {
 
 	DemonicKnowledgeDep   *stats.StatDependency
 	DemonicKnowledgeBonus float64
+
+	currentActiveCurse *core.Spell
 }
 
 func (warlock *Warlock) GetCharacter() *core.Character {
@@ -159,13 +161,19 @@ func (warlock *Warlock) AfflictionCount(target *core.Unit) float64 {
 	return float64(len(target.GetAurasWithTag("Affliction")))
 }
 
-func (warlock *Warlock) DeactivateOtherCurses(sim *core.Simulation, target *core.Unit) {
+func (warlock *Warlock) DeactivateOtherCurses(sim *core.Simulation, newCurse *core.Spell, target *core.Unit) {
+	if warlock.currentActiveCurse != nil {
+		if warlock.currentActiveCurse.Dot(target) != nil {
+			warlock.currentActiveCurse.Dot(target).Deactivate(sim)
+		}
+		if warlock.currentActiveCurse.RelatedAuraArrays != nil {
+			for _, auraArray := range warlock.currentActiveCurse.RelatedAuraArrays {
+				auraArray.Get(target).Deactivate(sim)
+			}
+		}
+	}
 
-	warlock.CurseOfAgony.Dot(target).Deactivate(sim)
-	warlock.CurseOfDoom.Dot(target).Deactivate(sim)
-	warlock.CurseOfElementsAuras.Get(target).Deactivate(sim)
-	warlock.CurseOfRecklessnessAuras.Get(target).Deactivate(sim)
-
+	warlock.currentActiveCurse = newCurse
 }
 
 // Agent is a generic way to access underlying warlock on any of the agents.

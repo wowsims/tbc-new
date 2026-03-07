@@ -180,7 +180,7 @@ func (bear *GuardianDruid) registerDreamOfCenarius() {
 		FloatValue: 10,
 	})
 
-	var oldGetSpellDamageValue func(*core.Spell) float64
+	var oldGetSpellDamageValue func(*core.Spell, *core.Unit) float64
 
 	bear.DreamOfCenariusAura = bear.RegisterAura(core.Aura{
 		Label:    "Dream of Cenarius",
@@ -196,11 +196,11 @@ func (bear *GuardianDruid) registerDreamOfCenarius() {
 			// TODO: Verify this
 			oldGetSpellDamageValue = bear.GetSpellDamageValue
 
-			bear.GetSpellDamageValue = func(spell *core.Spell) float64 {
+			bear.GetSpellDamageValue = func(spell *core.Spell, target *core.Unit) float64 {
 				if bear.HealingTouch.IsEqual(spell) {
 					return bear.GetStat(stats.AttackPower) / 2
 				} else {
-					return oldGetSpellDamageValue(spell)
+					return oldGetSpellDamageValue(spell, target)
 				}
 			}
 		},

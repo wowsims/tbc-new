@@ -30,7 +30,7 @@ func (war *Warrior) registerHeroicStrike() {
 		FlatThreatBonus:  194,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := 176 + war.MHWeaponDamage(sim, spell.MeleeAttackPower())
+			baseDamage := 176 + war.MHWeaponDamage(sim, spell.MeleeAttackPower(target))
 			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeWeaponSpecialHitAndCrit)
 
 			if !result.Landed() {
@@ -73,7 +73,7 @@ func (war *Warrior) registerCleave() {
 		FlatThreatBonus:  125,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := flatDamage + war.MHWeaponDamage(sim, spell.MeleeAttackPower())
+			baseDamage := flatDamage + war.MHWeaponDamage(sim, spell.MeleeAttackPower(target))
 			spell.CalcCleaveDamage(sim, target, maxTargets, baseDamage, spell.OutcomeMeleeWeaponSpecialHitAndCrit)
 			spell.DealBatchedAoeDamage(sim)
 

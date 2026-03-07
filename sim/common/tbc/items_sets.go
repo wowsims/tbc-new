@@ -99,12 +99,13 @@ var ItemSetManaEtchedRegalia = core.NewItemSet(core.ItemSet{
 			// Spell Power Bonus - 37619
 			clothie := agent.GetCharacter()
 
-			bonusPower := clothie.NewTemporaryStatsAura("Spell POwer Bonus", core.ActionID{SpellID: 37619}, stats.Stats{stats.SpellDamage: 110, stats.HealingPower: 110}, time.Second*15)
+			bonusPower := clothie.NewTemporaryStatsAura("Spell Power Bonus", core.ActionID{SpellID: 37619}, stats.Stats{stats.SpellDamage: 110, stats.HealingPower: 110}, time.Second*15)
 
 			setBonusAura.AttachProcTrigger(core.ProcTrigger{
 				Name:       "Mana Etched Regalia 4pc",
 				ProcChance: 0.02,
-				Callback:   core.CallbackOnCastComplete,
+				ProcMask:   core.ProcMaskSpellDamage,
+				Callback:   core.CallbackOnSpellHitDealt,
 				Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 					bonusPower.Activate(sim)
 				},

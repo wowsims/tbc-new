@@ -290,6 +290,10 @@ const (
 	// Uses FloatValue
 	SpellMod_CritMultiplier_Flat
 
+	// Will increase the CritMultiplier. x100% = 1.0
+	// Uses FloatValue
+	SpellMod_CritMultiplier_Pct
+
 	// Will add / substract % amount from the cast time multiplier.
 	// Ueses: FloatValue
 	SpellMod_CastTime_Pct
@@ -404,6 +408,11 @@ var spellModMap = map[SpellModType]*SpellModFunctions{
 	SpellMod_CritMultiplier_Flat: {
 		Apply:  applyCritMultiplierFlat,
 		Remove: removeCritMultiplierFlat,
+	},
+
+	SpellMod_CritMultiplier_Pct: {
+		Apply:  applyCritMultiplierPct,
+		Remove: removeCritMultiplierPct,
 	},
 
 	SpellMod_CastTime_Pct: {
@@ -570,6 +579,14 @@ func applyCritMultiplierFlat(mod *SpellMod, spell *Spell) {
 
 func removeCritMultiplierFlat(mod *SpellMod, spell *Spell) {
 	spell.CritMultiplierAdditive -= mod.floatValue
+}
+
+func applyCritMultiplierPct(mod *SpellMod, spell *Spell) {
+	spell.CritMultiplier *= (1 + mod.floatValue)
+}
+
+func removeCritMultiplierPct(mod *SpellMod, spell *Spell) {
+	spell.CritMultiplier /= (1 + mod.floatValue)
 }
 
 func applyCastTimePercent(mod *SpellMod, spell *Spell) {

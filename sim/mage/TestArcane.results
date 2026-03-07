@@ -594,8 +594,8 @@ dps_results: {
 dps_results: {
  key: "TestArcane-AllItems-Mana-EtchedRegalia"
  value: {
-  dps: 1569.24102
-  tps: 1101.27657
+  dps: 1567.78906
+  tps: 1100.09312
  }
 }
 dps_results: {
@@ -875,8 +875,8 @@ dps_results: {
 dps_results: {
  key: "TestArcane-AllItems-TirisfalRegalia"
  value: {
-  dps: 1942.69009
-  tps: 1351.00174
+  dps: 1943.46362
+  tps: 1351.28082
  }
 }
 dps_results: {

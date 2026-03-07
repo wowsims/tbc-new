@@ -146,12 +146,12 @@ func (rogue *Rogue) registerMaceSpecialization() {
 	}
 
 	mhMod := rogue.AddDynamicMod(core.SpellModConfig{
-		Kind:       core.SpellMod_CritMultiplier_Flat,
+		Kind:       core.SpellMod_CritMultiplier_Pct,
 		ProcMask:   core.ProcMaskMeleeMH,
 		FloatValue: 0.01 * float64(rogue.Talents.MaceSpecialization),
 	})
 	ohMod := rogue.AddDynamicMod(core.SpellModConfig{
-		Kind:       core.SpellMod_CritMultiplier_Flat,
+		Kind:       core.SpellMod_CritMultiplier_Pct,
 		ProcMask:   core.ProcMaskMeleeOH,
 		FloatValue: 0.01 * float64(rogue.Talents.MaceSpecialization),
 	})

@@ -95,12 +95,12 @@ func (enh *EnhancementShaman) Initialize() {
 	}
 
 	//Mental Quickness
-	enh.GetSpellDamageValue = func(spell *core.Spell) float64 {
+	enh.GetSpellDamageValue = func(spell *core.Spell, target *core.Unit) float64 {
 		if spell.SpellID == 8024 {
 			// Flametongue weapon damage scales with AP for enh
-			return spell.MeleeAttackPower()
+			return spell.MeleeAttackPower(target)
 		}
-		return spell.MeleeAttackPower() * 0.65
+		return spell.MeleeAttackPower(target) * 0.65
 	}
 
 	// enh.registerStormstrikeSpell()

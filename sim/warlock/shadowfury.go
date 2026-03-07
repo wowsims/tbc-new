@@ -20,7 +20,8 @@ func (warlock *Warlock) registerShadowfury() {
 		ManaCost: core.ManaCostOptions{FlatCost: 710},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD:      core.GCDDefault,
+				GCD:      500 * time.Millisecond,
+				GCDMin:   500 * time.Millisecond,
 				CastTime: 500 * time.Millisecond,
 			},
 			CD: core.Cooldown{

@@ -21,7 +21,7 @@ func (war *Warrior) registerWhirlwind() {
 		ThreatMultiplier: 1.25,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := war.OHNormalizedWeaponDamage(sim, spell.MeleeAttackPower())
+			baseDamage := war.OHNormalizedWeaponDamage(sim, spell.MeleeAttackPower(target))
 			spell.CalcCleaveDamage(sim, target, 4, baseDamage, spell.OutcomeMeleeWeaponSpecialHitAndCrit)
 			spell.DealBatchedAoeDamage(sim)
 		},
@@ -57,7 +57,7 @@ func (war *Warrior) registerWhirlwind() {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := war.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower())
+			baseDamage := war.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower(target))
 			results := spell.CalcCleaveDamage(sim, target, 4, baseDamage, spell.OutcomeMeleeWeaponSpecialHitAndCrit)
 			war.CastNormalizedSweepingStrikesAttack(results, sim)
 			spell.DealBatchedAoeDamage(sim)
