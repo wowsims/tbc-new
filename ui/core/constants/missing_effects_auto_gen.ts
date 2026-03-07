@@ -1801,12 +1801,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		28579, // Romulo's Poison Vial
-		[
-			"Your melee and ranged attacks have a chance to inject poison into your target dealing 332 Nature damage.", // 34587 - https://www.wowhead.com/tbc/spell=34587
-		]
-	],
-	[
 		28590, // Ribbon of Sacrifice
 		[
 			"For the next 20s, your direct heals grant Fecundity to your target, increasing the healing received by the target by up to 30. Fecundity lasts 10s and stacks up to 5 times.", // 38332 - https://www.wowhead.com/tbc/spell=38332

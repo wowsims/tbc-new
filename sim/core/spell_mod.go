@@ -84,6 +84,10 @@ func buildMod(unit *Unit, config SpellModConfig) *SpellMod {
 		resetFn = functions.OnReset
 	}
 
+	if config.School > SpellSchoolNone && config.Kind == SpellMod_BonusHit_Percent {
+		panic("For Spell school specific hit modifiers use PseudoStats.SchoolBonusHitChance")
+	}
+
 	if (config.ResourceType > 0) && !slices.Contains([]proto.ResourceType{proto.ResourceType_ResourceTypeMana, proto.ResourceType_ResourceTypeEnergy, proto.ResourceType_ResourceTypeRage, proto.ResourceType_ResourceTypeFocus}, config.ResourceType) {
 		panic(fmt.Sprintf("ResourceType %s for SpellMod is not implemented", config.ResourceType))
 	}

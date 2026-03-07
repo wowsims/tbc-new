@@ -6,7 +6,7 @@ import { Constraint, greaterEq, lessEq } from 'yalps';
 import i18n from '../../i18n/config.js';
 import { IndividualSimUI } from '../individual_sim_ui';
 import { Player } from '../player';
-import { Class, GemColor, ItemSlot, Profession, PseudoStat, Race, Spec, Stat } from '../proto/common';
+import { Class, GemColor, ItemQuality, ItemSlot, Profession, PseudoStat, Race, Spec, Stat } from '../proto/common';
 import { UIGem as Gem, ReforgeSettings, StatCapType } from '../proto/ui';
 import { EquippedItem } from '../proto_utils/equipped_item';
 import { Gear } from '../proto_utils/gear';
@@ -58,17 +58,23 @@ type GemData = {
 	coefficients: YalpsCoefficients;
 };
 
-const INCLUDED_STATS = [
-	Stat.StatSpellHitRating,
-	Stat.StatSpellCritRating,
-	Stat.StatSpellHasteRating,
-	Stat.StatMeleeHitRating,
-	Stat.StatMeleeCritRating,
-	Stat.StatMeleeHasteRating,
-	Stat.StatExpertiseRating,
-	Stat.StatArmorPenetration,
-	Stat.StatDodgeRating,
-	Stat.StatParryRating,
+const INCLUDED_STATS: UnitStat[] = [
+	UnitStat.fromStat(Stat.StatSpellHitRating),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatSchoolHitPercentArcane),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatSchoolHitPercentFire),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatSchoolHitPercentFrost),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatSchoolHitPercentHoly),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatSchoolHitPercentNature),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatSchoolHitPercentShadow),
+	UnitStat.fromStat(Stat.StatSpellCritRating),
+	UnitStat.fromStat(Stat.StatSpellHasteRating),
+	UnitStat.fromStat(Stat.StatMeleeHitRating),
+	UnitStat.fromStat(Stat.StatMeleeCritRating),
+	UnitStat.fromStat(Stat.StatMeleeHasteRating),
+	UnitStat.fromStat(Stat.StatExpertiseRating),
+	UnitStat.fromStat(Stat.StatArmorPenetration),
+	UnitStat.fromStat(Stat.StatDodgeRating),
+	UnitStat.fromStat(Stat.StatParryRating),
 ];
 
 type StatTooltipContent = { [key in Stat]?: () => Element | string };
@@ -358,10 +364,26 @@ export class ReforgeOptimizer {
 		]) {
 			const children = UnitStat.getChildren(parentStat);
 			const specificSchoolWeights = children.map(childStat => weights.getPseudoStat(childStat));
-
 			// If any of the children have non-zero EP, then set pure Rating EP
 			// to 0 and continue.
-			if (specificSchoolWeights.some(weight => weight !== 0)) {
+			if (
+				specificSchoolWeights.some((weight, index) => {
+					if (
+						parentStat === Stat.StatSpellHitRating &&
+						[
+							PseudoStat.PseudoStatSchoolHitPercentArcane,
+							PseudoStat.PseudoStatSchoolHitPercentFire,
+							PseudoStat.PseudoStatSchoolHitPercentFrost,
+							PseudoStat.PseudoStatSchoolHitPercentHoly,
+							PseudoStat.PseudoStatSchoolHitPercentNature,
+							PseudoStat.PseudoStatSchoolHitPercentShadow,
+						].includes(children[index])
+					) {
+						return false;
+					}
+					return weight !== 0;
+				})
+			) {
 				validatedWeights = validatedWeights.withStat(parentStat, 0);
 				continue;
 			}
@@ -746,9 +768,8 @@ export class ReforgeOptimizer {
 				</thead>
 				<tbody>
 					{this.simUI.individualConfig.displayStats.map(unitStat => {
-						if (!unitStat.hasRootStat()) return;
-						const rootStat = unitStat.getRootStat();
-						if (!INCLUDED_STATS.includes(rootStat)) return;
+						const rootStat = unitStat.hasRootStat() ? unitStat.getRootStat() : null;
+						if (!INCLUDED_STATS.some(us => us.equals(unitStat))) return;
 
 						const listElementRef = ref<HTMLTableRowElement>();
 						const statName = unitStat.getShortName(this.player.getClass());
@@ -812,7 +833,7 @@ export class ReforgeOptimizer {
 								})
 							: null;
 
-						const tooltipText = this.statTooltips[rootStat];
+						const tooltipText = rootStat ? this.statTooltips[rootStat] : null;
 						const statTooltipRef = ref<HTMLButtonElement>();
 
 						const row = (
@@ -942,9 +963,7 @@ export class ReforgeOptimizer {
 								(config.capType === StatCapType.TypeThreshold || config.capType === StatCapType.TypeSoftCap) && config.breakpoints.length > 1,
 						)
 						.map(({ breakpoints, unitStat }) => {
-							if (!unitStat.hasRootStat()) return;
-							const rootStat = unitStat.getRootStat();
-							if (!INCLUDED_STATS.includes(rootStat)) return;
+							if (!INCLUDED_STATS.some(us => us.equals(unitStat))) return;
 
 							const listElementRef = ref<HTMLTableRowElement>();
 							const statName = unitStat.getShortName(this.player.getClass());
@@ -1217,7 +1236,13 @@ export class ReforgeOptimizer {
 
 			for (const gem of allGemsOfColor) {
 				const isJC = gem.requiredProfession == Profession.Jewelcrafting;
-				if ((isJC && !hasJC) || !gemMatchesSocket(gem, socketColor) || sum(gem.stats) <= 0 || gem.phase > this.maxGemPhase) {
+				if (
+					(isJC && !hasJC) ||
+					!gemMatchesSocket(gem, socketColor) ||
+					sum(gem.stats) <= 0 ||
+					gem.phase > this.maxGemPhase ||
+					gem.quality < ItemQuality.ItemQualityRare
+				) {
 					continue;
 				}
 
@@ -1262,21 +1287,12 @@ export class ReforgeOptimizer {
 			const includedGemDataForColor = new Array<GemData>();
 			let foundUncappedJCGem = false;
 			let foundUncappedNormalGem = false;
-			const numGemOptionsForStat = new Map<string, number>();
 
 			for (const gemData of filteredGemDataForColor) {
 				const cappedStatKeys = ReforgeOptimizer.getCappedStatKeys(gemData.coefficients, reforgeCaps, reforgeSoftCaps);
-				let isRedundantGem: boolean = false;
 
-				for (const statKey of cappedStatKeys) {
-					const numExistingOptions = numGemOptionsForStat.get(statKey) || 0;
-
-					if (!gemData.isJC) {
-						numGemOptionsForStat.set(statKey, numExistingOptions + 1);
-					}
-				}
-
-				if ((!gemData.isJC || !foundUncappedJCGem) && !isRedundantGem && (cappedStatKeys.length == 0 || !foundUncappedNormalGem)) {
+				// console.log(gemData.gem.name, [...cappedStatKeys], gemData.isJC, foundUncappedJCGem, cappedStatKeys.length == 0, foundUncappedNormalGem);
+				if ((!gemData.isJC || !foundUncappedJCGem) && (cappedStatKeys.length == 0 || !foundUncappedNormalGem)) {
 					includedGemDataForColor.push(gemData);
 				}
 

@@ -44,9 +44,9 @@ export const DemonicSacrificeInput = <SpecType extends WarlockSpecs>() =>
 		actionId: () => ActionId.fromSpellId(18788),
 		getValue: (player: Player<SpecType>) => player.getClassOptions().sacrificeSummon && player.getTalents().demonicSacrifice && player.getClassOptions().summon != Summon.NoSummon,
 		setValue: (eventID: number, player: Player<SpecType>, newValue: boolean) => {
-			const newOptions = player.getClassOptions();
-			newOptions.sacrificeSummon = newValue;
-			player.setClassOptions(eventID, newOptions);
+			const options = player.getClassOptions();
+			options.sacrificeSummon = (player.getTalents().demonicSacrifice) ? newValue : false
+			player.setClassOptions(eventID, options);
 		},
 		changeEmitter: (player: Player<SpecType>) => player.specOptionsChangeEmitter,
 	})

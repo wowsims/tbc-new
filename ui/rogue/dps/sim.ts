@@ -14,8 +14,9 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 	cssClass: 'rogue-sim-ui',
 	cssScheme: PlayerClasses.getCssClass(PlayerClasses.Rogue),
 	// List any known bugs / issues here and they'll be shown on the site.
-	knownIssues: ["The APL is in constant flux due to bug fixes and new findings; if your DPS drops dramatically, reset it back to \"Auto\" in the Rotation tab!",
-		"Mutilate does not have a default APL currently. It will not be automatically used when talented."
+	knownIssues: [
+		'The APL is in constant flux due to bug fixes and new findings; if your DPS drops dramatically, reset it back to "Auto" in the Rotation tab!',
+		'Mutilate does not have a default APL currently. It will not be automatically used when talented.',
 	],
 
 	// All stats for which EP should be calculated.
@@ -95,7 +96,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 	excludeBuffDebuffInputs: [],
 	// Inputs to include in the 'Other' section on the settings tab.
 	otherInputs: {
-		inputs: [OtherInputs.InFrontOfTarget, OtherInputs.InputDelay],
+		inputs: [OtherInputs.TotemTwisting, OtherInputs.InFrontOfTarget, OtherInputs.InputDelay],
 	},
 	itemSwapSlots: [ItemSlot.ItemSlotTrinket1, ItemSlot.ItemSlotTrinket2, ItemSlot.ItemSlotMainHand, ItemSlot.ItemSlotOffHand],
 	encounterPicker: {

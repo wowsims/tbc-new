@@ -76,18 +76,12 @@ func (war *Warrior) registerDefiance() {
 	}
 
 	war.AddStat(stats.ExpertiseRating, 2*float64(war.Talents.Defiance)*core.ExpertisePerQuarterPercentReduction)
-
 	war.OnSpellRegistered(func(spell *core.Spell) {
 		if !spell.Matches(SpellMaskDefensiveStance) {
 			return
 		}
-
 		spell.RelatedSelfBuff.
-			AttachSpellMod(core.SpellModConfig{
-				ClassMask:  SpellMaskMortalStrike | SpellMaskBloodthirst,
-				Kind:       core.SpellMod_ThreatMultiplier_Pct,
-				FloatValue: 0.05 * float64(war.Talents.Defiance),
-			})
+			AttachMultiplicativePseudoStatBuff(&war.PseudoStats.ThreatMultiplier, 1+0.05*float64(war.Talents.Defiance))
 	})
 }
 

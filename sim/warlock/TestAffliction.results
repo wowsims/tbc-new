@@ -410,6 +410,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestAffliction-AllItems-EnchantGloves-Threat-2613"
+ value: {
+  dps: 1768.73901
+  tps: 1209.49448
+ }
+}
+dps_results: {
  key: "TestAffliction-AllItems-EnchantWeapon-Crusader-1900"
  value: {
   dps: 1747.45004
@@ -732,6 +739,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestAffliction-AllItems-Romulo'sPoisonVial-28579"
+ value: {
+  dps: 1736.69437
+  tps: 1159.48369
+ }
+}
+dps_results: {
  key: "TestAffliction-AllItems-RuneofForce-25994"
  value: {
   dps: 1736.69437
@@ -980,7 +994,7 @@ dps_results: {
 dps_results: {
  key: "TestAffliction-AllItems-VoidheartRaiment"
  value: {
-  dps: 1655.25356
+  dps: 1665.60543
   tps: 1107.66559
  }
 }

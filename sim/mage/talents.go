@@ -109,11 +109,7 @@ func (mage *Mage) registerArcaneFocus() {
 		return
 	}
 
-	mage.AddStaticMod(core.SpellModConfig{
-		School:     core.SpellSchoolArcane,
-		FloatValue: 2 * float64(mage.Talents.ArcaneFocus),
-		Kind:       core.SpellMod_BonusHit_Percent,
-	})
+	mage.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexArcane] += 2 * float64(mage.Talents.ArcaneFocus)
 }
 
 func (mage *Mage) registerArcaneConcentration() {
@@ -480,7 +476,6 @@ func (mage *Mage) registerElementalPrecision() {
 	if mage.Talents.ElementalPrecision == 0 {
 		return
 	}
-
 	percent := 1 * float64(mage.Talents.ElementalPrecision)
 	mage.AddStaticMod(core.SpellModConfig{
 		School:     core.SpellSchoolFrostfire,
@@ -488,11 +483,10 @@ func (mage *Mage) registerElementalPrecision() {
 		Kind:       core.SpellMod_PowerCost_Pct,
 	})
 
-	mage.AddStaticMod(core.SpellModConfig{
-		School:     core.SpellSchoolFrostfire,
-		FloatValue: percent,
-		Kind:       core.SpellMod_BonusHit_Percent,
-	})
+	// Bug: Gives 2% hit per point instead of 1% to frost spells.
+	// https://www.warcraftlogs.com/reports/kwd3V8MA9FgrRYhf/?boss=-3&difficulty=0&type=damage-done&source=1&target=2
+	mage.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexFrost] += (percent * 2)
+	mage.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexFire] += percent
 }
 
 func (mage *Mage) registerIceShards() {

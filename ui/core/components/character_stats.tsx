@@ -13,6 +13,7 @@ import { Stats, UnitStat } from '../proto_utils/stats.js';
 import { EventID, TypedEvent } from '../typed_event.js';
 import { Component } from './component.js';
 import { NumberPicker } from './pickers/number_picker.js';
+import { translatePseudoStat, translateStat } from '../../i18n/localization';
 
 export type StatMods = { base?: Stats; gear?: Stats; talents?: Stats; buffs?: Stats; consumes?: Stats; debuffs?: Stats; final?: Stats; stats?: Array<Stat> };
 export type DisplayStat = {
@@ -62,6 +63,12 @@ const statGroups = new Map<string, Array<DisplayStat>>([
 			{ stat: UnitStat.fromStat(Stat.StatNatureDamage) },
 			{ stat: UnitStat.fromStat(Stat.StatShadowDamage) },
 			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatSpellHitPercent) },
+			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatSchoolHitPercentArcane) },
+			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatSchoolHitPercentFire) },
+			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatSchoolHitPercentFrost) },
+			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatSchoolHitPercentHoly) },
+			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatSchoolHitPercentNature) },
+			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatSchoolHitPercentShadow) },
 			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatSpellCritPercent) },
 			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatSpellHastePercent) },
 			{ stat: UnitStat.fromStat(Stat.StatSpellPenetration) },
@@ -239,7 +246,12 @@ export class CharacterStats extends Component {
 		}
 
 		this.stats.forEach((unitStat, idx) => {
-			const bonusStatValue = unitStat.hasRootStat() ? bonusStats.getStat(unitStat.getRootStat()) : 0;
+			const bonusStatValue = unitStat.hasRootStat()
+				? bonusStats.getStat(unitStat.getRootStat())
+				: unitStat.isPseudoStat()
+					? bonusStats.getPseudoStat(unitStat.getPseudoStat())
+					: 0;
+
 			let contextualClass: string;
 			if (bonusStatValue == 0) {
 				contextualClass = 'text-white';
@@ -500,8 +512,9 @@ export class CharacterStats extends Component {
 
 	private bonusStatsLink(displayStat: DisplayStat): HTMLElement {
 		const { stat, notEditable } = displayStat;
-		const rootStat = stat.getRootStat();
-		const statName = getStatName(rootStat);
+		const rootStat = stat.hasRootStat() ? stat.getRootStat() : null;
+		const pseudoStat = !rootStat && stat.isPseudoStat() ? stat.getPseudoStat() : null;
+		const statName = rootStat ? translateStat(rootStat) : pseudoStat ? translatePseudoStat(pseudoStat) : stat.getStat();
 		const linkRef = ref<HTMLButtonElement>();
 		const iconRef = ref<HTMLDivElement>();
 
@@ -523,9 +536,24 @@ export class CharacterStats extends Component {
 					label: `${i18n.t('sidebar.character_stats.bonus_prefix')} ${statName}`,
 					extraCssClasses: ['mb-0'],
 					changedEvent: (player: Player<any>) => player.bonusStatsChangeEmitter,
-					getValue: (player: Player<any>) => player.getBonusStats().getStat(rootStat),
+					getValue: (player: Player<any>) => {
+						const bonusStats = player.getBonusStats();
+						if (rootStat) {
+							return bonusStats.getStat(rootStat);
+						}
+						if (pseudoStat) {
+							return bonusStats.getPseudoStat(pseudoStat);
+						}
+						return bonusStats.getStat(stat.getStat());
+					},
 					setValue: (eventID: EventID, player: Player<any>, newValue: number) => {
-						const bonusStats = player.getBonusStats().withStat(rootStat, newValue);
+						let bonusStats = player.getBonusStats();
+						if (rootStat) {
+							bonusStats = bonusStats.withStat(rootStat, newValue);
+						}
+						if (pseudoStat) {
+							bonusStats = bonusStats.withPseudoStat(pseudoStat, newValue);
+						}
 						player.setBonusStats(eventID, bonusStats);
 						instance?.hide();
 					},

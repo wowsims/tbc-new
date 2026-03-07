@@ -312,6 +312,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestElemental-AllItems-CycloneRegalia"
+ value: {
+  dps: 1494.79261
+  tps: 1200.51305
+ }
+}
+dps_results: {
  key: "TestElemental-AllItems-Dabiri'sEnigma-30300"
  value: {
   dps: 1667.89354
@@ -1043,22 +1050,22 @@ dps_results: {
 dps_results: {
  key: "TestElemental-Settings-Draenei-p1-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
  value: {
-  dps: 796.25599
-  tps: 620.76859
+  dps: 803.64587
+  tps: 626.75208
  }
 }
 dps_results: {
  key: "TestElemental-Settings-Draenei-p1-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
  value: {
-  dps: 706.9469
-  tps: 559.05605
+  dps: 713.69859
+  tps: 564.57793
  }
 }
 dps_results: {
  key: "TestElemental-Settings-Draenei-p1-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
  value: {
-  dps: 1441.98641
-  tps: 1148.8714
+  dps: 1455.66486
+  tps: 1160.1222
  }
 }
 dps_results: {
@@ -1085,22 +1092,22 @@ dps_results: {
 dps_results: {
  key: "TestElemental-Settings-Orc-p1-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
  value: {
-  dps: 798.16509
-  tps: 625.9682
+  dps: 805.419
+  tps: 631.87737
  }
 }
 dps_results: {
  key: "TestElemental-Settings-Orc-p1-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
  value: {
-  dps: 706.54726
-  tps: 560.22734
+  dps: 713.1464
+  tps: 565.62916
  }
 }
 dps_results: {
  key: "TestElemental-Settings-Orc-p1-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
  value: {
-  dps: 1435.9052
-  tps: 1147.54244
+  dps: 1449.27445
+  tps: 1158.55615
  }
 }
 dps_results: {
@@ -1127,22 +1134,22 @@ dps_results: {
 dps_results: {
  key: "TestElemental-Settings-Troll-p1-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
  value: {
-  dps: 784.20342
-  tps: 614.79215
+  dps: 791.3824
+  tps: 620.64259
  }
 }
 dps_results: {
  key: "TestElemental-Settings-Troll-p1-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
  value: {
-  dps: 693.55284
-  tps: 549.98875
+  dps: 700.1541
+  tps: 555.39455
  }
 }
 dps_results: {
  key: "TestElemental-Settings-Troll-p1-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
  value: {
-  dps: 1404.16818
-  tps: 1122.14894
+  dps: 1417.48723
+  tps: 1133.13054
  }
 }
 dps_results: {

@@ -410,6 +410,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestDestruction-AllItems-EnchantGloves-Threat-2613"
+ value: {
+  dps: 1986.97666
+  tps: 1801.98517
+ }
+}
+dps_results: {
  key: "TestDestruction-AllItems-EnchantWeapon-Crusader-1900"
  value: {
   dps: 1969.4254
@@ -729,6 +736,13 @@ dps_results: {
  value: {
   dps: 2030.84553
   tps: 1802.15075
+ }
+}
+dps_results: {
+ key: "TestDestruction-AllItems-Romulo'sPoisonVial-28579"
+ value: {
+  dps: 1940.54686
+  tps: 1726.52279
  }
 }
 dps_results: {

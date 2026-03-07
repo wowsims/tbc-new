@@ -21,31 +21,35 @@ export const P1_BIS_ARCANE = PresetUtils.makePresetGear('Arcane P1 - BIS', P1BIS
 //export const P3_BIS_ARCANE = PresetUtils.makePresetGear('Arcane P3 - BIS', P3BISArcaneGear);
 
 export const ARCANE_TALENTS = PresetUtils.makePresetTalents('Arcane', SavedTalents.create({ talentsString: '2500052300030150330125--053500031003001' }));
-
 export const ROTATION_PRESET_ARCANE = PresetUtils.makePresetAPLRotation('Arcane', ArcaneApl);
-
 export const BLANK_GEARSET = PresetUtils.makePresetGear('Blank', BlankGear);
 
 // Preset options for EP weights
 export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
-	'A',
-	Stats.fromMap({
-		[Stat.StatIntellect]: 1,
-		[Stat.StatSpirit]: 1,
-		[Stat.StatSpellDamage]: 1,
-		[Stat.StatFrostDamage]: 1,
-		[Stat.StatFireDamage]: 1,
-		[Stat.StatArcaneDamage]: 1,
-		[Stat.StatSpellHitRating]: 1,
-		[Stat.StatSpellCritRating]: 1,
-		[Stat.StatSpellHasteRating]: 1,
-		[Stat.StatSpellPenetration]: 1,
-		[Stat.StatMana]: 1,
-	}),
+	'P1 - Arcane',
+	Stats.fromMap(
+		{
+			[Stat.StatMana]: 0.02,
+			[Stat.StatIntellect]: 1.01,
+			[Stat.StatSpirit]: 0.6,
+			[Stat.StatSpellDamage]: 1,
+			[Stat.StatArcaneDamage]: 0.96,
+			[Stat.StatFrostDamage]: 0.01,
+			[Stat.StatSpellHitRating]: 2.27,
+			[Stat.StatSpellCritRating]: 0.76,
+			[Stat.StatSpellHasteRating]: 0.78,
+			[Stat.StatSpellPenetration]: 0,
+			[Stat.StatMP5]: 0.29,
+		},
+		{
+			[PseudoStat.PseudoStatSchoolHitPercentArcane]: 2.24,
+			[PseudoStat.PseudoStatSchoolHitPercentFrost]: 0.03,
+		},
+	),
 );
 
 export const Talents = {
-	name: 'A',
+	name: 'Blank',
 	data: SavedTalents.create({
 		talentsString: '',
 	}),
