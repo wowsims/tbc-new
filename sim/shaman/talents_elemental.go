@@ -261,7 +261,8 @@ func (shaman *Shaman) applyTotemOfWrath() {
 		shaman.TotemExpirations[FireTotem] = sim.CurrentTime + duration
 		buffAura.Activate(sim)
 	}
-	shaman.RegisterSpell(config)
+	shaman.TotemOfWrath = shaman.RegisterSpell(config)
+	shaman.TotemOfWrath.RelatedSelfBuff = buffAura
 }
 func (shaman *Shaman) applyUnrelentingStorm() {
 	if shaman.Talents.UnrelentingStorm == 0 {

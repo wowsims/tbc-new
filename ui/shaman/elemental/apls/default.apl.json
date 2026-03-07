@@ -7,9 +7,8 @@
 		{ "action": { "castSpell": { "spellId": { "spellId": 3738, "rank": 1 } } }, "doAtValue": { "const": { "val": "-2s" } } }
 	],
 	"priorityList": [
-		{ "action": { "groupReference": { "groupName": "Re-Cast Totems" } } },
+		{ "action": { "groupReference": { "groupName": "Totems" } } },
 		{ "action": { "autocastOtherCooldowns": {} } },
-		{ "action": { "condition": { "const": { "val": "false" } }, "castSpell": { "spellId": { "spellId": 2894 } } } },
 		{
 			"action": {
 				"condition": { "cmp": { "op": "OpGe", "lhs": { "currentManaPercent": {} }, "rhs": { "const": { "val": "30%" } } } },
@@ -20,8 +19,17 @@
 	],
 	"groups": [
 		{
-			"name": "Re-Cast Totems",
+			"name": "Totems",
 			"actions": [
+				{
+					"hide": true,
+					"action": {
+						"condition": {
+							"cmp": { "op": "OpLe", "lhs": { "auraRemainingTime": { "auraId": { "spellId": 25528 } } }, "rhs": { "const": { "val": "5s" } } }
+						},
+						"castSpell": { "spellId": { "spellId": 25528 } }
+					}
+				},
 				{
 					"action": {
 						"condition": {
@@ -33,10 +41,17 @@
 				{
 					"action": {
 						"condition": {
-							"cmp": {
-								"op": "OpLe",
-								"lhs": { "auraRemainingTime": { "auraId": { "spellId": 30706, "rank": 1 } } },
-								"rhs": { "const": { "val": "5s" } }
+							"and": {
+								"vals": [
+									{
+										"cmp": {
+											"op": "OpLe",
+											"lhs": { "auraRemainingTime": { "auraId": { "spellId": 30706, "rank": 1 } } },
+											"rhs": { "const": { "val": "5s" } }
+										}
+									},
+									{ "not": { "val": { "auraIsActive": { "auraId": { "spellId": 2894 }, "includeReactionTime": true } } } }
+								]
 							}
 						},
 						"castSpell": { "spellId": { "spellId": 30706, "rank": 1 } }
@@ -53,7 +68,9 @@
 						},
 						"castSpell": { "spellId": { "spellId": 3738, "rank": 1 } }
 					}
-				}
+				},
+				{ "action": { "condition": { "const": { "val": "false" } }, "castSpell": { "spellId": { "spellId": 2894 } } } },
+				{ "hide": true, "action": { "castSpell": { "spellId": { "spellId": 2894 } } } }
 			]
 		}
 	]

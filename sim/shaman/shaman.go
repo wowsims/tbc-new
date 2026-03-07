@@ -109,6 +109,7 @@ type Shaman struct {
 
 	ElementalSharedCDTimer *core.Timer
 
+	TotemOfWrath       *core.Spell
 	MagmaTotem         *core.Spell
 	HealingStreamTotem *core.Spell
 	SearingTotem       *core.Spell
