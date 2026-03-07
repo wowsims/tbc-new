@@ -140,6 +140,10 @@ var ItemSetWindhawkArmor = core.NewItemSet(core.ItemSet{
 	},
 })
 
+///////////////////////////////////////////////////////////////////////////
+//							Tailoring
+///////////////////////////////////////////////////////////////////////////
+
 // Tailoring - Spellstrike
 var ItemSetSpellstrikeInfusion = core.NewItemSet(core.ItemSet{
 	ID:   559,
@@ -167,7 +171,7 @@ var ItemSetSpellstrikeInfusion = core.NewItemSet(core.ItemSet{
 
 // Tailoring - Spellfire
 var ItemSetWrathOfSpellfire = core.NewItemSet(core.ItemSet{
-	ID:   559,
+	ID:   552,
 	Name: "Wrath of Spellfire",
 	Bonuses: map[int32]core.ApplySetBonus{
 		2: func(agent core.Agent, setBonusAura *core.Aura) {
@@ -175,6 +179,22 @@ var ItemSetWrathOfSpellfire = core.NewItemSet(core.ItemSet{
 			character := agent.GetCharacter()
 			statDep := character.Unit.NewDynamicStatDependency(stats.Intellect, stats.SpellDamage, 1.07)
 			setBonusAura.AttachStatDependency(statDep)
+		},
+	},
+})
+
+// Tailoring - Nehterweave
+var ItemSetNetherweaveVestments = core.NewItemSet(core.ItemSet{
+	ID:   618,
+	Name: "Netherweave Vestments",
+	Bonuses: map[int32]core.ApplySetBonus{
+		2: func(agent core.Agent, setBonusAura *core.Aura) {
+			setBonusAura.
+				AttachStatsBuff(stats.Stats{stats.SpellDamage: 23, stats.HealingPower: 23})
+		},
+		4: func(agent core.Agent, setBonusAura *core.Aura) {
+			setBonusAura.
+				AttachStatBuff(stats.SpellCritRating, 14)
 		},
 	},
 })
