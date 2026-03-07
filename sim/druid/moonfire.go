@@ -7,12 +7,14 @@ import (
 )
 
 const (
-	MoonfireBonusCoeff = 0.24
+	MoonfireDotBonusCoeff    = 0.12999999523
+	MoonfireDotTickLength    = time.Second * 3
+	MoonfireDotNumberOfTicks = 4
+	MoonfireDotTotalDamage   = 600
 
-	MoonfireDotCoeff = 0.24
-
-	MoonfireImpactCoeff    = 0.571
-	MoonfireImpactVariance = 0.2
+	MoonfireImpactBonusCoeff = 0.15000000596
+	MoonfireImpactMinDmg     = 305
+	MoonfireImpactMaxDmg     = 357
 )
 
 func (druid *Druid) registerMoonfireSpell() {
@@ -22,39 +24,26 @@ func (druid *Druid) registerMoonfireSpell() {
 
 func (druid *Druid) registerMoonfireDoTSpell() {
 	druid.Moonfire.RelatedDotSpell = druid.Unit.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 8921}.WithTag(1),
+		ActionID:       core.ActionID{SpellID: 26988}.WithTag(1),
 		SpellSchool:    core.SpellSchoolArcane,
 		ProcMask:       core.ProcMaskSpellDamage,
 		ClassSpellMask: DruidSpellMoonfireDoT,
 		Flags:          core.SpellFlagPassiveSpell,
 
 		DamageMultiplier: 1,
-		CritMultiplier:   druid.DefaultSpellCritMultiplier(),
 		ThreatMultiplier: 1,
 
 		Dot: core.DotConfig{
 			Aura: core.Aura{
 				Label: "Moonfire",
-				OnSpellHitTaken: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-					if result.Landed() && result.DidCrit() && spell.Matches(DruidSpellStarfire|DruidSpellStarsurge) {
-						dot := druid.Moonfire.Dot(aura.Unit)
-						oldDuration := dot.RemainingDuration(sim)
-						oldTickrate := dot.TickPeriod()
-						dot.DurationExtend(sim, dot.CalcTickPeriod())
-
-						if sim.Log != nil {
-							druid.Log(sim, "[DEBUG]: %s extended %s. Old Duration: %0.2f, new duration: %0.2f. Old Tickrate: %0.2f, new Tickrate: %0.2f", spell.ActionID, druid.Moonfire.ActionID, oldDuration.Seconds(), dot.RemainingDuration(sim).Seconds(), oldTickrate.Seconds(), dot.TickPeriod().Seconds())
-						}
-					}
-				},
 			},
-			NumberOfTicks:       7,
-			TickLength:          time.Second * 2,
-			AffectedByCastSpeed: true,
-			BonusCoefficient:    MoonfireBonusCoeff,
+			NumberOfTicks:       MoonfireDotNumberOfTicks,
+			TickLength:          MoonfireDotTickLength,
+			AffectedByCastSpeed: false,
+			BonusCoefficient:    MoonfireDotBonusCoeff,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.Snapshot(target, 1) // 1 Replaces CalcScalingSpellDmg(
+				dot.Snapshot(target, MoonfireDotTotalDamage)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
@@ -67,33 +56,19 @@ func (druid *Druid) registerMoonfireDoTSpell() {
 			spell.Dot(target).Apply(sim)
 			spell.DealOutcome(sim, result)
 		},
-
-		ExpectedTickDamage: func(sim *core.Simulation, target *core.Unit, spell *core.Spell, useSnapshot bool) *core.SpellResult {
-			dot := spell.Dot(target)
-			if useSnapshot {
-				result := dot.CalcSnapshotDamage(sim, target, dot.OutcomeTick)
-				result.Damage /= dot.TickPeriod().Seconds()
-				return result
-			} else {
-				result := spell.CalcPeriodicDamage(sim, target, 1, spell.OutcomeExpectedMagicCrit) // 1 Replaces CalcScalingSpellDmg(
-				result.Damage /= dot.CalcTickPeriod().Round(time.Millisecond).Seconds()
-				return result
-			}
-		},
 	})
 }
 
 func (druid *Druid) registerMoonfireImpactSpell() {
-
 	druid.Moonfire = druid.RegisterSpell(Humanoid|Moonkin, core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 8921},
+		ActionID:       core.ActionID{SpellID: 26988},
 		SpellSchool:    core.SpellSchoolArcane,
 		ProcMask:       core.ProcMaskSpellDamage,
 		ClassSpellMask: DruidSpellMoonfire,
 		Flags:          core.SpellFlagAPL,
 
 		ManaCost: core.ManaCostOptions{
-			BaseCostPercent: 9,
+			FlatCost: 495,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
@@ -101,14 +76,13 @@ func (druid *Druid) registerMoonfireImpactSpell() {
 			},
 		},
 
+		BonusCoefficient: MoonfireImpactBonusCoeff,
 		DamageMultiplier: 1,
-
-		CritMultiplier:   druid.DefaultSpellCritMultiplier(),
 		ThreatMultiplier: 1,
-		BonusCoefficient: MoonfireBonusCoeff,
+		CritMultiplier:   druid.DefaultSpellCritMultiplier(),
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := druid.CalcAndRollDamageRange(sim, MoonfireImpactCoeff, MoonfireImpactVariance)
+			baseDamage := druid.CalcAndRollDamageRange(sim, MoonfireImpactMinDmg, MoonfireImpactMaxDmg)
 			result := spell.CalcDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
 
 			if result.Landed() {

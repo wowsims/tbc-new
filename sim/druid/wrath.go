@@ -7,14 +7,14 @@ import (
 )
 
 const (
-	WrathBonusCoeff = 1.338
-	WrathCoeff      = 2.676
-	WrathVariance   = 0.25
+	WrathBonusCoeff = 0.57099997997
+	WrathMinDmg     = 383
+	WrathMaxDmg     = 432
 )
 
 func (druid *Druid) registerWrathSpell() {
 	druid.Wrath = druid.RegisterSpell(Humanoid|Moonkin, core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 5176},
+		ActionID:       core.ActionID{SpellID: 26985},
 		SpellSchool:    core.SpellSchoolNature,
 		ProcMask:       core.ProcMaskSpellDamage,
 		ClassSpellMask: DruidSpellWrath,
@@ -22,7 +22,7 @@ func (druid *Druid) registerWrathSpell() {
 		MissileSpeed:   20,
 
 		ManaCost: core.ManaCostOptions{
-			BaseCostPercent: 8.8,
+			FlatCost: 255,
 		},
 
 		Cast: core.CastConfig{
@@ -30,23 +30,15 @@ func (druid *Druid) registerWrathSpell() {
 				GCD:      core.GCDDefault,
 				CastTime: time.Millisecond * 2000,
 			},
-
-			ModifyCast: func(sim *core.Simulation, spell *core.Spell, curCast *core.Cast) {
-				hastedCastTime := spell.Unit.ApplyCastSpeedForSpell(curCast.CastTime, spell).Round(time.Millisecond)
-				spell.Unit.AutoAttacks.StopMeleeUntil(sim, sim.CurrentTime+hastedCastTime)
-			},
 		},
 
 		BonusCoefficient: WrathBonusCoeff,
-
 		DamageMultiplier: 1,
-
-		CritMultiplier: druid.DefaultSpellCritMultiplier(),
-
 		ThreatMultiplier: 1,
+		CritMultiplier:   druid.DefaultSpellCritMultiplier(),
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := druid.CalcAndRollDamageRange(sim, WrathCoeff, WrathVariance)
+			baseDamage := druid.CalcAndRollDamageRange(sim, WrathMinDmg, WrathMaxDmg)
 			result := spell.CalcDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
 
 			spell.WaitTravelTime(sim, func(sim *core.Simulation) {
