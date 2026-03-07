@@ -1428,13 +1428,15 @@ const idToCategoryMap: Record<number, number> = {
 	[2825]: DEFAULT_ACTION_CATEGORY + 0.1, // Bloodlust
 
 	// Warlock
-	[603]: SPELL_ACTION_CATEGORY + 0.01, // Curse of Doom
-	[980]: SPELL_ACTION_CATEGORY + 0.02, // Curse of Agony
+	[30910]: SPELL_ACTION_CATEGORY + 0.02, // Curse of Doom
+	[27218]: SPELL_ACTION_CATEGORY + 0.02, // Curse of Agony
+	[27226]: SPELL_ACTION_CATEGORY + 0.02, // Curse of Recklessness
+	[27228]: SPELL_ACTION_CATEGORY + 0.02, // Curse of Elements
 	[172]: SPELL_ACTION_CATEGORY + 0.1, // Corruption
 	[48181]: SPELL_ACTION_CATEGORY + 0.2, // Haunt
 	[30108]: SPELL_ACTION_CATEGORY + 0.3, // Unstable Affliction
 	[348]: SPELL_ACTION_CATEGORY + 0.31, // Immolate
-	[17962]: SPELL_ACTION_CATEGORY + 0.32, // Conflagrate
+	[30912]: SPELL_ACTION_CATEGORY + 0.32, // Conflagrate
 	[686]: SPELL_ACTION_CATEGORY + 0.5, // Shadow Bolt
 	[29722]: SPELL_ACTION_CATEGORY + 0.51, // Incinerate
 	[1120]: SPELL_ACTION_CATEGORY + 0.6, // Drain Soul

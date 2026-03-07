@@ -10,7 +10,7 @@ func (rogue *Rogue) registerGarrote() {
 	baseDamage := 135.0
 
 	rogue.Garrote = rogue.GetOrRegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 703},
+		ActionID:       core.ActionID{SpellID: 26884},
 		SpellSchool:    core.SpellSchoolPhysical,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
 		Flags:          core.SpellFlagMeleeMetrics | SpellFlagBuilder | core.SpellFlagAPL,
@@ -43,7 +43,7 @@ func (rogue *Rogue) registerGarrote() {
 			NumberOfTicks: 6,
 			TickLength:    time.Second * 3,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.SnapshotPhysical(target, baseDamage+dot.Spell.MeleeAttackPower()*0.03)
+				dot.SnapshotPhysical(target, baseDamage+dot.Spell.MeleeAttackPower(target)*0.03)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)

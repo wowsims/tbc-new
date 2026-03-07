@@ -41,10 +41,9 @@ func (warlock *Warlock) registerUnstableAffliction() {
 				Tag:      "Affliction",
 				ActionID: core.ActionID{SpellID: 30108},
 			},
-			NumberOfTicks:       9,
-			TickLength:          2 * time.Second,
-			AffectedByCastSpeed: true,
-			BonusCoefficient:    uaCoeff,
+			NumberOfTicks:    6,
+			TickLength:       3 * time.Second,
+			BonusCoefficient: uaCoeff,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, 1050/float64(dot.BaseTickCount))

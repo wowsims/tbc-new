@@ -448,13 +448,13 @@ func (unit *Unit) EnableAutoAttacks(agent Agent, options AutoAttackOptions) {
 		BonusCoefficient: 1,
 
 		ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
-			baseDamage := spell.Unit.MHWeaponDamage(sim, spell.MeleeAttackPower())
+			baseDamage := spell.Unit.MHWeaponDamage(sim, spell.MeleeAttackPower(target))
 
 			spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeWhite)
 		},
 
 		ExpectedInitialDamage: func(sim *Simulation, target *Unit, spell *Spell, _ bool) *SpellResult {
-			baseDamage := spell.Unit.AutoAttacks.MH().CalculateAverageWeaponDamage(spell.MeleeAttackPower())
+			baseDamage := spell.Unit.AutoAttacks.MH().CalculateAverageWeaponDamage(spell.MeleeAttackPower(target))
 			return spell.CalcDamage(sim, target, baseDamage, spell.OutcomeExpectedMeleeWhite)
 		},
 	}
@@ -473,7 +473,7 @@ func (unit *Unit) EnableAutoAttacks(agent Agent, options AutoAttackOptions) {
 		BonusCoefficient: 1,
 
 		ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
-			baseDamage := spell.Unit.OHWeaponDamage(sim, spell.MeleeAttackPower())
+			baseDamage := spell.Unit.OHWeaponDamage(sim, spell.MeleeAttackPower(target))
 
 			spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeWhite)
 		},
@@ -494,7 +494,7 @@ func (unit *Unit) EnableAutoAttacks(agent Agent, options AutoAttackOptions) {
 		BonusCoefficient: 1,
 
 		ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
-			baseDamage := spell.Unit.RangedWeaponDamage(sim, spell.RangedAttackPower())
+			baseDamage := spell.Unit.RangedWeaponDamage(sim, spell.RangedAttackPower(target))
 			spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeRangedHitAndCrit)
 		},
 	}

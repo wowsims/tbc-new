@@ -43,10 +43,9 @@ func (warlock *Warlock) registerSiphonLifeSpell() {
 				Label: "SiphonLife",
 				Tag:   "Affliction",
 			},
-			NumberOfTicks:       10,
-			TickLength:          3 * time.Second,
-			AffectedByCastSpeed: false,
-			BonusCoefficient:    0.1,
+			NumberOfTicks:    10,
+			TickLength:       3 * time.Second,
+			BonusCoefficient: 0.1,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, 63)

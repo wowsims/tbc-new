@@ -67,7 +67,21 @@ func applyDebuffEffects(target *Unit, targetIdx int, debuffs *proto.Debuffs, rai
 	}
 
 	if debuffs.ImprovedScorch {
-		MakePermanent(ImprovedScorchAura(target, 5))
+		aura := MakePermanent(ImprovedScorchAura(target))
+
+		ScheduledAura(aura, PeriodicActionOptions{
+			Period:          time.Millisecond * 1200,
+			NumTicks:        5,
+			TickImmediately: true,
+			Priority:        ActionPriorityDOT, // High prio so it comes before actual warrior sunders.
+			OnAction: func(sim *Simulation) {
+				aura.Activate(sim)
+				if aura.IsActive() {
+					aura.AddStack(sim)
+				}
+			},
+		}, raid)
+
 	}
 
 	if debuffs.ImprovedSealOfTheCrusader {
@@ -337,7 +351,7 @@ func HuntersMarkAura(target *Unit, improved bool) *Aura {
 	return aura
 }
 
-func ImprovedScorchAura(target *Unit, startingStacks int32) *Aura {
+func ImprovedScorchAura(target *Unit) *Aura {
 	fireBonus := 0.03
 
 	return target.GetOrRegisterAura(Aura{
@@ -345,12 +359,9 @@ func ImprovedScorchAura(target *Unit, startingStacks int32) *Aura {
 		ActionID:  ActionID{SpellID: 12873},
 		Duration:  time.Second * 30,
 		MaxStacks: 5,
-		OnGain: func(aura *Aura, sim *Simulation) {
-			aura.SetStacks(sim, startingStacks)
-		},
 		OnStacksChange: func(aura *Aura, sim *Simulation, oldStacks int32, newStacks int32) {
-			target.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexFire] /= 1.0 + fireBonus*float64(oldStacks)
-			target.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexFire] *= 1.0 + fireBonus*float64(newStacks)
+			target.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexFire] /= 1.0 + fireBonus*float64(oldStacks)
+			target.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexFire] *= 1.0 + fireBonus*float64(newStacks)
 		},
 	})
 }
@@ -370,7 +381,7 @@ func ImprovedShadowBoltAura(target *Unit, uptime float64, points int32) *Aura {
 	config := Aura{
 		Label:     "ImprovedShadowBolt-" + strconv.Itoa(int(points)),
 		Tag:       "ImprovedShadowBolt",
-		ActionID:  ActionID{SpellID: 17803},
+		ActionID:  ActionID{SpellID: 17800},
 		Duration:  time.Second * 12,
 		MaxStacks: 4,
 	}

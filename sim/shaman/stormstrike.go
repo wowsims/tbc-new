@@ -49,7 +49,7 @@ func (shaman *Shaman) newStormstrikeHitSpellConfig(spellID int32, isMH bool) cor
 		CritMultiplier:   shaman.DefaultMeleeCritMultiplier(),
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			weaponDamage := core.Ternary(isMH, spell.Unit.MHWeaponDamage, spell.Unit.OHWeaponDamage)
-			baseDamage := weaponDamage(sim, spell.MeleeAttackPower())
+			baseDamage := weaponDamage(sim, spell.MeleeAttackPower(target))
 			spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialBlockAndCrit)
 		},
 	}

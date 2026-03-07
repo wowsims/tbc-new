@@ -44,7 +44,7 @@ func (warlock *Warlock) registerImmolate() {
 	})
 
 	warlock.Immolate.RelatedDotSpell = warlock.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 27215}.WithTag(1),
+		ActionID:       actionID.WithTag(1),
 		SpellSchool:    core.SpellSchoolFire,
 		ProcMask:       core.ProcMaskSpellDamage,
 		ClassSpellMask: WarlockSpellImmolateDot,

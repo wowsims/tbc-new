@@ -55,7 +55,7 @@ func (rogue *Rogue) registerOpportunity() {
 	rogue.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
 		ClassMask:  RogueSpellBackstab | RogueSpellMutilate | RogueSpellAmbush,
-		FloatValue: 0.4 * float64(rogue.Talents.Opportunity),
+		FloatValue: 0.04 * float64(rogue.Talents.Opportunity),
 	})
 }
 
@@ -119,7 +119,7 @@ func (rogue *Rogue) registerGhostlyStrike() {
 
 			// Dodge Aura NYI
 
-			baseDamage := rogue.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower())
+			baseDamage := rogue.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower(target))
 			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialHitAndCrit)
 			if result.Landed() {
 				rogue.AddComboPoints(sim, 1, pointMetric)
@@ -266,7 +266,7 @@ func (rogue *Rogue) registerHemorrhage() {
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			rogue.BreakStealth(sim)
 
-			baseDamage := rogue.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower())
+			baseDamage := rogue.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower(target))
 			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialHitAndCrit)
 			if result.Landed() {
 				rogue.AddComboPoints(sim, 1, pointMetric)
@@ -294,7 +294,7 @@ func (rogue *Rogue) registerDeadliness() {
 		return
 	}
 
-	rogue.MultiplyStat(stats.AttackPower, 1+0.2*float64(rogue.Talents.Deadliness))
+	rogue.MultiplyStat(stats.AttackPower, 1+0.02*float64(rogue.Talents.Deadliness))
 }
 
 func (rogue *Rogue) registerPremeditation() {

@@ -75,7 +75,7 @@ func (mage *Mage) AddPartyBuffs(partyBuffs *proto.PartyBuffs) {
 func (mage *Mage) Initialize() {
 
 	mage.ImprovedScorchAuras = mage.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {
-		return core.ImprovedScorchAura(target, 0)
+		return core.ImprovedScorchAura(target)
 	})
 
 	mage.SlowAuras = mage.NewEnemyAuraArray(core.SlowAura)

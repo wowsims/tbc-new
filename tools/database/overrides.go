@@ -79,6 +79,7 @@ var ItemDenyList = map[int32]struct{}{
 	18583: {},
 	18584: {},
 	22736: {},
+	23363: {}, // Titanic Breastplate
 	24265: {},
 	32384: {},
 	32421: {},
@@ -146,7 +147,6 @@ var ExtraItemIcons = []int32{
 
 	// Potions / In Battle Consumes
 	13442,
-	20520,
 	22105,
 	22788,
 	22828,
@@ -181,11 +181,14 @@ var ConsumableAllowList = []int32{
 	9224,  // Elixir of Demonslaying
 	13442, // Migty Rage Potion
 	13452, // Elixir of the Mongoose
-	20520, // Dark Rune
+	12662, // Demonic Rune
 	22788, // Flamecap
 	22797, // Nightmare Seed
 }
-var ConsumableDenyList = []int32{}
+var ConsumableDenyList = []int32{
+	32762, // Rulkster's Brain Juice
+	32902, // Bottled Nethergon Energy
+}
 
 // Raid buffs / debuffs
 var SharedSpellsIcons = []int32{

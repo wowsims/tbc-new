@@ -29,19 +29,15 @@ export class ConsumesPicker extends Component {
 
 	private getConsumables(type: ConsumableType): Consumable[] {
 		const consumables: Consumable[] = [];
-		const hasAttackPowerStat = (this.simUI.individualConfig.consumableStats ?? this.simUI.individualConfig.epStats).find(
-			stat => stat === Stat.StatAttackPower,
-		);
+		const epStats = [...(this.simUI.individualConfig.consumableStats ?? this.simUI.individualConfig.epStats)];
+		const hasAttackPowerStat = epStats.find(stat => stat === Stat.StatAttackPower);
 		if (type == ConsumableType.ConsumableTypeBattleElixir && hasAttackPowerStat) {
 			const elixirOfDemonSlaying = this.db.getConsumable(9224);
 			if (elixirOfDemonSlaying) {
 				consumables.push(elixirOfDemonSlaying);
 			}
 		}
-		return [
-			...consumables,
-			...this.db.getConsumablesByTypeAndStats(type, [...(this.simUI.individualConfig.consumableStats ?? this.simUI.individualConfig.epStats)]),
-		];
+		return [...consumables, ...this.db.getConsumablesByTypeAndStats(type, epStats)];
 	}
 
 	public static create(parentElem: HTMLElement, settingsTab: SettingsTab, simUI: IndividualSimUI<any>): ConsumesPicker {

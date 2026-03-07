@@ -219,7 +219,7 @@ func (shaman *Shaman) applyShamanisticRage() {
 		RequireDamageDealt: true,
 		DPM:                shaman.NewLegacyPPMManager(15.0, core.ProcMaskMeleeWhiteHit),
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			shaman.AddMana(sim, 0.3*shaman.GetAttackPowerValue(spell), srManaMetric)
+			shaman.AddMana(sim, 0.3*shaman.GetAttackPowerValue(spell, result.Target), srManaMetric)
 		},
 	})
 

@@ -52,6 +52,20 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecMage, {
 	),
 	gemStats: DEFAULT_CASTER_GEM_STATS,
 
+	consumableStats: [
+		Stat.StatIntellect,
+		Stat.StatSpirit,
+		Stat.StatMP5,
+		Stat.StatMana,
+		Stat.StatSpellDamage,
+		Stat.StatFrostDamage,
+		Stat.StatFireDamage,
+		Stat.StatArcaneDamage,
+		Stat.StatSpellCritRating,
+		Stat.StatSpellHitRating,
+		Stat.StatSpellHasteRating,
+	],
+
 	defaults: {
 		// Default equipped gear.
 		gear: Presets.P1_BIS_ARCANE.gear,

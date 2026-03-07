@@ -48,7 +48,7 @@ func (rogue *Rogue) registerEnvenom() {
 			consumed := min(dp.GetStacks(), comboPoints)
 
 			baseDamage := baseDamage*float64(consumed) +
-				apScalingPerComboPoint*float64(consumed)*spell.MeleeAttackPower()
+				apScalingPerComboPoint*float64(consumed)*spell.MeleeAttackPower(target)
 
 			result := spell.CalcDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialHitAndCrit)
 

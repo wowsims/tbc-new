@@ -471,10 +471,8 @@ export class ActionId {
 				}
 				break;
 			case 'Berserking':
-				if (tag == 1) {
-					name += ' (10%)';
-				} else if (tag == 2) {
-					name += ' (30%)';
+				if (tag > 0) {
+					name += ` (${10 + ((tag - 1) * 5)}%)`;
 				}
 				break;
 			case 'Elemental Mastery':

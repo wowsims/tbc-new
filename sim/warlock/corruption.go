@@ -42,10 +42,9 @@ func (warlock *Warlock) registerCorruption() *core.Spell {
 				Label: "Corruption",
 				Tag:   "Affliction",
 			},
-			NumberOfTicks:       6,
-			TickLength:          3 * time.Second,
-			AffectedByCastSpeed: false,
-			BonusCoefficient:    corruptionCoeff,
+			NumberOfTicks:    6,
+			TickLength:       3 * time.Second,
+			BonusCoefficient: corruptionCoeff,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, 900/float64(dot.BaseTickCount))
 			},

@@ -1,8 +1,6 @@
 package warlock
 
 import (
-	"time"
-
 	"github.com/wowsims/tbc/sim/core"
 )
 
@@ -22,8 +20,7 @@ func (warlock *Warlock) registerCurseOfElements() {
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCDMin: time.Millisecond * 500,
-				GCD:    core.GCDMin,
+				GCD: core.GCDDefault,
 			},
 		},
 
@@ -32,11 +29,13 @@ func (warlock *Warlock) registerCurseOfElements() {
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			result := spell.CalcOutcome(sim, target, spell.OutcomeMagicHit)
 			if result.Landed() {
-				warlock.DeactivateOtherCurses(sim, target)
+				warlock.DeactivateOtherCurses(sim, spell, target)
 				warlock.CurseOfElementsAuras.Get(target).Activate(sim)
 			}
 
 			spell.DealOutcome(sim, result)
 		},
+
+		RelatedAuraArrays: warlock.CurseOfElementsAuras.ToMap(),
 	})
 }

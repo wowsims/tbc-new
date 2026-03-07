@@ -32,7 +32,7 @@ func (warlock *Warlock) registerDeathCoil() {
 		BonusCoefficient: 0.214,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			spell.CalcAndDealDamage(sim, target, 526, spell.OutcomeMagicHitAndCrit)
+			spell.CalcAndDealDamage(sim, target, 526, spell.OutcomeMagicHit)
 		},
 	})
 }

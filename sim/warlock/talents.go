@@ -91,7 +91,7 @@ func (warlock *Warlock) applyImprovedCorruption() {
 	warlock.AddStaticMod(core.SpellModConfig{
 		Kind:      core.SpellMod_CastTime_Flat,
 		TimeValue: time.Millisecond * (-400 * time.Duration(warlock.Talents.ImprovedCorruption)),
-		ClassMask: WarlockAfflictionSpells,
+		ClassMask: WarlockSpellCorruption,
 	})
 }
 
@@ -107,7 +107,7 @@ func (warlock *Warlock) registerAmplifyCurse() {
 		Tag:      "Affliction",
 		ActionID: actionID,
 		Duration: time.Second * 30,
-		OnApplyEffects: func(aura *core.Aura, sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+		OnCastComplete: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell) {
 			if spell.Matches(WarlockSpellCurseOfAgony | WarlockSpellCurseOfDoom) {
 				warlock.AmplifyCurseAura.Deactivate(sim)
 			}
@@ -159,37 +159,32 @@ func (warlock *Warlock) applyNightfall() {
 		return
 	}
 
-	isbMod := warlock.AddDynamicMod(core.SpellModConfig{
+	warlock.NightfallProcAura = warlock.MakeProcTriggerAura(core.ProcTrigger{
+		Name:            "Shadow Trance",
+		MetricsActionID: core.ActionID{SpellID: 17941},
+		ClassSpellMask:  WarlockSpellShadowBolt,
+		Callback:        core.CallbackOnCastComplete,
+		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+			if spell.CurCast.CastTime != 0 {
+				return
+			}
+			warlock.NightfallProcAura.Deactivate(sim)
+		},
+	}).AttachSpellMod(core.SpellModConfig{
 		Kind:       core.SpellMod_CastTime_Pct,
 		FloatValue: -1.0,
 		ClassMask:  WarlockSpellShadowBolt,
 	})
 
-	warlock.NightfallProcAura = warlock.MakeProcTriggerAura(core.ProcTrigger{
+	warlock.MakeProcTriggerAura(core.ProcTrigger{
 		Name:           "Nightfall",
 		ClassSpellMask: WarlockSpellCorruption | WarlockSpellDrainLife,
-		Callback:       core.CallbackOnPeriodicDamageDealt,
 		ProcChance:     0.02 * float64(warlock.Talents.Nightfall),
+		Callback:       core.CallbackOnPeriodicDamageDealt,
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			warlock.NightfallProcAura.Activate(sim)
-			isbMod.Activate()
 		},
 	})
-
-	warlock.MakeProcTriggerAura(core.ProcTrigger{
-		Name:           "Nightfall Shadow Trance",
-		ClassSpellMask: WarlockSpellShadowBolt,
-		Callback:       core.CallbackOnCastComplete,
-		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			if spell.CurCast.CastTime != 0 {
-				return
-			}
-
-			isbMod.Deactivate()
-			warlock.NightfallProcAura.Deactivate(sim)
-		},
-	})
-
 }
 
 func (warlock *Warlock) applyEmpoweredCorruption() {

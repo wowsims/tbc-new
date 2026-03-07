@@ -216,6 +216,11 @@ func init() {
 			},
 		})
 
+		icd := core.Cooldown{
+			Timer:    character.NewTimer(),
+			Duration: time.Millisecond * 2500,
+		}
+
 		lightningCapacitorAura := character.RegisterAura(core.Aura{
 			Label:     "Electrical Charge",
 			ActionID:  core.ActionID{SpellID: 37658},
@@ -226,6 +231,7 @@ func init() {
 					aura.SetStacks(sim, newStacks%3)
 					aura.Deactivate(sim)
 					lightningBolt.Proc(sim, character.CurrentTarget)
+					icd.Use(sim)
 				}
 			},
 		})
@@ -234,10 +240,13 @@ func init() {
 			Name:     "The Lightning Capacitor",
 			ActionID: core.ActionID{ItemID: 28785},
 			ProcMask: core.ProcMaskSpellOrSpellProc,
-			ICD:      time.Millisecond * 2500,
 			Outcome:  core.OutcomeCrit,
 			Callback: core.CallbackOnSpellHitDealt,
 			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+				if !icd.IsReady(sim) {
+					return
+				}
+
 				lightningCapacitorAura.Activate(sim)
 				lightningCapacitorAura.AddStack(sim)
 			},
