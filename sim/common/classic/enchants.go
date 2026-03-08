@@ -21,6 +21,16 @@ func init() {
 		character.ItemSwap.RegisterEnchantProc(2613, aura)
 	})
 
+	// Enchant Cloak - Subtlety
+	core.NewEnchantEffect(2621, func(agent core.Agent) {
+		character := agent.GetCharacter()
+		aura := core.MakePermanent(character.RegisterAura(core.Aura{
+			Label: "Decrease Threat",
+		})).AttachMultiplicativePseudoStatBuff(&character.PseudoStats.ThreatMultiplier, 0.98)
+
+		character.ItemSwap.RegisterEnchantProc(2621, aura)
+	})
+
 	// Crusader
 	// EffectID: 1900, Proc SpellID: 20007
 	// PPM: 1, ICD: 0

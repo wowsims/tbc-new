@@ -57,7 +57,7 @@ Directory.CreateDirectory(targetDirectory);
 Directory.CreateDirectory(gameTablesOutDir);
 
 var fsProvider = new FilesystemDBCProvider(targetDirectory, true);
-var githubDbdProvider = new CustomGithubDBDProvider(true, "https://raw.githubusercontent.com/1337LutZ/WoWDBDefs/update/tbca/definitions/");
+var githubDbdProvider = new CustomGithubDBDProvider(true);
 
 var dbcd = new DBCD.DBCD(fsProvider, githubDbdProvider);
 
