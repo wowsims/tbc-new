@@ -11,9 +11,7 @@ import { MageSimUI } from '../mage/dps/sim.jsx';
 import { HolyPaladinSimUI } from '../paladin/holy/sim.js';
 import { ProtectionPaladinSimUI } from '../paladin/protection/sim.js';
 import { RetributionPaladinSimUI } from '../paladin/retribution/sim.js';
-import { DisciplinePriestSimUI } from '../priest/discipline/sim';
-import { HolyPriestSimUI } from '../priest/holy/sim';
-import { ShadowPriestSimUI } from '../priest/shadow/sim.js';
+import { PriestSimUI } from '../priest/dps/sim';
 import { RogueSimUI } from '../rogue/dps/sim.js';
 import { ElementalShamanSimUI } from '../shaman/elemental/sim.js';
 import { EnhancementShamanSimUI } from '../shaman/enhancement/sim.js';
@@ -37,9 +35,7 @@ export const specSimFactories: Partial<Record<Spec, (parentElem: HTMLElement, pl
 	[Spec.SpecProtectionPaladin]: (parentElem: HTMLElement, player: Player<any>) => new ProtectionPaladinSimUI(parentElem, player),
 	[Spec.SpecRetributionPaladin]: (parentElem: HTMLElement, player: Player<any>) => new RetributionPaladinSimUI(parentElem, player),
 	// Priest
-	[Spec.SpecDisciplinePriest]: (parentElem: HTMLElement, player: Player<any>) => new DisciplinePriestSimUI(parentElem, player),
-	[Spec.SpecHolyPriest]: (parentElem: HTMLElement, player: Player<any>) => new HolyPriestSimUI(parentElem, player),
-	[Spec.SpecShadowPriest]: (parentElem: HTMLElement, player: Player<any>) => new ShadowPriestSimUI(parentElem, player),
+	[Spec.SpecPriest]: (parentElem: HTMLElement, player: Player<any>) => new PriestSimUI(parentElem, player),
 	// Rogue
 	[Spec.SpecRogue]: (parentElem: HTMLElement, player: Player<any>) => new RogueSimUI(parentElem, player),
 	// Shaman

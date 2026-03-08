@@ -409,13 +409,7 @@ func getPlayerSpecOptions(player *proto.Player) interface{} {
 	if playerSpec, ok := player.Spec.(*proto.Player_RetributionPaladin); ok {
 		return playerSpec
 	}
-	if playerSpec, ok := player.Spec.(*proto.Player_DisciplinePriest); ok {
-		return playerSpec
-	}
-	if playerSpec, ok := player.Spec.(*proto.Player_HolyPriest); ok {
-		return playerSpec
-	}
-	if playerSpec, ok := player.Spec.(*proto.Player_ShadowPriest); ok {
+	if playerSpec, ok := player.Spec.(*proto.Player_Priest); ok {
 		return playerSpec
 	}
 	if playerSpec, ok := player.Spec.(*proto.Player_Rogue); ok {

@@ -57,19 +57,7 @@ import {
 	RetributionPaladin_Options,
 	RetributionPaladin_Rotation,
 } from '../proto/paladin.js';
-import {
-	DisciplinePriest,
-	DisciplinePriest_Options,
-	DisciplinePriest_Rotation,
-	HolyPriest,
-	HolyPriest_Options,
-	HolyPriest_Rotation,
-	PriestOptions,
-	PriestTalents,
-	ShadowPriest,
-	ShadowPriest_Options,
-	ShadowPriest_Rotation,
-} from '../proto/priest.js';
+import { Priest, Priest_Options, Priest_Rotation, PriestOptions, PriestTalents } from '../proto/priest.js';
 import { Rogue, Rogue_Options, Rogue_Rotation, RogueOptions, RogueTalents } from '../proto/rogue.js';
 import {
 	ElementalShaman,
@@ -158,7 +146,7 @@ export type DruidSpecs = Spec.SpecBalanceDruid | Spec.SpecFeralCatDruid | Spec.S
 export type HunterSpecs = Spec.SpecHunter;
 export type MageSpecs = Spec.SpecMage;
 export type PaladinSpecs = Spec.SpecHolyPaladin | Spec.SpecRetributionPaladin | Spec.SpecProtectionPaladin;
-export type PriestSpecs = Spec.SpecDisciplinePriest | Spec.SpecHolyPriest | Spec.SpecShadowPriest;
+export type PriestSpecs = Spec.SpecPriest;
 export type RogueSpecs = Spec.SpecRogue;
 export type ShamanSpecs = Spec.SpecElementalShaman | Spec.SpecEnhancementShaman | Spec.SpecRestorationShaman;
 export type WarlockSpecs = Spec.SpecWarlock;
@@ -240,32 +228,28 @@ export type SpecRotation<T extends Spec> =
 									: T extends Spec.SpecRetributionPaladin
 										? RetributionPaladin_Rotation
 										: // Priest
-											T extends Spec.SpecDisciplinePriest
-											? DisciplinePriest_Rotation
-											: T extends Spec.SpecHolyPriest
-												? HolyPriest_Rotation
-												: T extends Spec.SpecShadowPriest
-													? ShadowPriest_Rotation
-													: // Rogue
-														T extends Spec.SpecRogue
-														? Rogue_Rotation
-														: // Shaman
-															T extends Spec.SpecElementalShaman
-															? ElementalShaman_Rotation
-															: T extends Spec.SpecEnhancementShaman
-																? EnhancementShaman_Rotation
-																: T extends Spec.SpecRestorationShaman
-																	? RestorationShaman_Rotation
-																	: // Warlock
-																		T extends Spec.SpecWarlock
-																		? Warlock_Rotation
-																		: // Warrior
-																			T extends Spec.SpecDpsWarrior
-																			? DpsWarrior_Rotation
-																			: T extends Spec.SpecProtectionWarrior
-																				? ProtectionWarrior_Rotation
-																				: // Should never reach this case
-																					UnknownRotation;
+											T extends Spec.SpecPriest
+											? Priest_Rotation
+											: // Rogue
+												T extends Spec.SpecRogue
+												? Rogue_Rotation
+												: // Shaman
+													T extends Spec.SpecElementalShaman
+													? ElementalShaman_Rotation
+													: T extends Spec.SpecEnhancementShaman
+														? EnhancementShaman_Rotation
+														: T extends Spec.SpecRestorationShaman
+															? RestorationShaman_Rotation
+															: // Warlock
+																T extends Spec.SpecWarlock
+																? Warlock_Rotation
+																: // Warrior
+																	T extends Spec.SpecDpsWarrior
+																	? DpsWarrior_Rotation
+																	: T extends Spec.SpecProtectionWarrior
+																		? ProtectionWarrior_Rotation
+																		: // Should never reach this case
+																			UnknownRotation;
 
 export type SpecTalents<T extends Spec> =
 	// Druid
@@ -353,32 +337,28 @@ export type SpecOptions<T extends Spec> =
 									: T extends Spec.SpecRetributionPaladin
 										? RetributionPaladin_Options
 										: // Priest
-											T extends Spec.SpecDisciplinePriest
-											? DisciplinePriest_Options
-											: T extends Spec.SpecHolyPriest
-												? HolyPriest_Options
-												: T extends Spec.SpecShadowPriest
-													? ShadowPriest_Options
-													: // Rogue
-														T extends Spec.SpecRogue
-														? Rogue_Options
-														: // Shaman
-															T extends Spec.SpecElementalShaman
-															? ElementalShaman_Options
-															: T extends Spec.SpecEnhancementShaman
-																? EnhancementShaman_Options
-																: T extends Spec.SpecRestorationShaman
-																	? RestorationShaman_Options
-																	: // Warlock
-																		T extends Spec.SpecWarlock
-																		? Warlock_Options
-																		: // Warrior
-																			T extends Spec.SpecDpsWarrior
-																			? DpsWarrior_Options
-																			: T extends Spec.SpecProtectionWarrior
-																				? ProtectionWarrior_Options
-																				: // Should never reach this case
-																					UnknownSpecOptions;
+											T extends Spec.SpecPriest
+											? Priest_Options
+											: // Rogue
+												T extends Spec.SpecRogue
+												? Rogue_Options
+												: // Shaman
+													T extends Spec.SpecElementalShaman
+													? ElementalShaman_Options
+													: T extends Spec.SpecEnhancementShaman
+														? EnhancementShaman_Options
+														: T extends Spec.SpecRestorationShaman
+															? RestorationShaman_Options
+															: // Warlock
+																T extends Spec.SpecWarlock
+																? Warlock_Options
+																: // Warrior
+																	T extends Spec.SpecDpsWarrior
+																	? DpsWarrior_Options
+																	: T extends Spec.SpecProtectionWarrior
+																		? ProtectionWarrior_Options
+																		: // Should never reach this case
+																			UnknownSpecOptions;
 
 export type SpecType<T extends Spec> =
 	// Druid
@@ -404,32 +384,28 @@ export type SpecType<T extends Spec> =
 									: T extends Spec.SpecRetributionPaladin
 										? RetributionPaladin
 										: // Priest
-											T extends Spec.SpecDisciplinePriest
-											? DisciplinePriest
-											: T extends Spec.SpecHolyPriest
-												? HolyPriest
-												: T extends Spec.SpecShadowPriest
-													? ShadowPriest
-													: // Rogue
-														T extends Spec.SpecRogue
-														? Rogue
-														: // Shaman
-															T extends Spec.SpecElementalShaman
-															? ElementalShaman
-															: T extends Spec.SpecEnhancementShaman
-																? EnhancementShaman
-																: T extends Spec.SpecRestorationShaman
-																	? RestorationShaman
-																	: // Warlock
-																		T extends Spec.SpecWarlock
-																		? Warlock
-																		: // Warrior
-																			T extends Spec.SpecDpsWarrior
-																			? DpsWarrior
-																			: T extends Spec.SpecProtectionWarrior
-																				? ProtectionWarrior
-																				: // Should never reach this case
-																					Spec.SpecUnknown;
+											T extends Spec.SpecPriest
+											? Priest
+											: // Rogue
+												T extends Spec.SpecRogue
+												? Rogue
+												: // Shaman
+													T extends Spec.SpecElementalShaman
+													? ElementalShaman
+													: T extends Spec.SpecEnhancementShaman
+														? EnhancementShaman
+														: T extends Spec.SpecRestorationShaman
+															? RestorationShaman
+															: // Warlock
+																T extends Spec.SpecWarlock
+																? Warlock
+																: // Warrior
+																	T extends Spec.SpecDpsWarrior
+																	? DpsWarrior
+																	: T extends Spec.SpecProtectionWarrior
+																		? ProtectionWarrior
+																		: // Should never reach this case
+																			Spec.SpecUnknown;
 
 export type SpecTypeFunctions<SpecType extends Spec> = {
 	rotationCreate: () => SpecRotation<SpecType>;
@@ -682,12 +658,12 @@ export const specTypeFunctions: Record<Spec, SpecTypeFunctions<any>> = {
 				: RetributionPaladin_Options.create({ classOptions: {} }),
 	},
 	// Priest
-	[Spec.SpecDisciplinePriest]: {
-		rotationCreate: () => DisciplinePriest_Rotation.create(),
-		rotationEquals: (a, b) => DisciplinePriest_Rotation.equals(a as DisciplinePriest_Rotation, b as DisciplinePriest_Rotation),
-		rotationCopy: a => DisciplinePriest_Rotation.clone(a as DisciplinePriest_Rotation),
-		rotationToJson: a => DisciplinePriest_Rotation.toJson(a as DisciplinePriest_Rotation),
-		rotationFromJson: obj => DisciplinePriest_Rotation.fromJson(obj),
+	[Spec.SpecPriest]: {
+		rotationCreate: () => Priest_Rotation.create(),
+		rotationEquals: (a, b) => Priest_Rotation.equals(a as Priest_Rotation, b as Priest_Rotation),
+		rotationCopy: a => Priest_Rotation.clone(a as Priest_Rotation),
+		rotationToJson: a => Priest_Rotation.toJson(a as Priest_Rotation),
+		rotationFromJson: obj => Priest_Rotation.fromJson(obj),
 
 		talentsCreate: () => PriestTalents.create(),
 		talentsEquals: (a, b) => PriestTalents.equals(a as PriestTalents, b as PriestTalents),
@@ -695,61 +671,13 @@ export const specTypeFunctions: Record<Spec, SpecTypeFunctions<any>> = {
 		talentsToJson: a => PriestTalents.toJson(a as PriestTalents),
 		talentsFromJson: obj => PriestTalents.fromJson(obj),
 
-		optionsCreate: () => DisciplinePriest_Options.create({ classOptions: {} }),
-		optionsEquals: (a, b) => DisciplinePriest_Options.equals(a as DisciplinePriest_Options, b as DisciplinePriest_Options),
-		optionsCopy: a => DisciplinePriest_Options.clone(a as DisciplinePriest_Options),
-		optionsToJson: a => DisciplinePriest_Options.toJson(a as DisciplinePriest_Options),
-		optionsFromJson: obj => DisciplinePriest_Options.fromJson(obj),
+		optionsCreate: () => Priest_Options.create({ classOptions: {} }),
+		optionsEquals: (a, b) => Priest_Options.equals(a as Priest_Options, b as Priest_Options),
+		optionsCopy: a => Priest_Options.clone(a as Priest_Options),
+		optionsToJson: a => Priest_Options.toJson(a as Priest_Options),
+		optionsFromJson: obj => Priest_Options.fromJson(obj),
 		optionsFromPlayer: player =>
-			player.spec.oneofKind == 'disciplinePriest'
-				? player.spec.disciplinePriest.options || DisciplinePriest_Options.create()
-				: DisciplinePriest_Options.create({ classOptions: {} }),
-	},
-	[Spec.SpecHolyPriest]: {
-		rotationCreate: () => HolyPriest_Rotation.create(),
-		rotationEquals: (a, b) => HolyPriest_Rotation.equals(a as HolyPriest_Rotation, b as HolyPriest_Rotation),
-		rotationCopy: a => HolyPriest_Rotation.clone(a as HolyPriest_Rotation),
-		rotationToJson: a => HolyPriest_Rotation.toJson(a as HolyPriest_Rotation),
-		rotationFromJson: obj => HolyPriest_Rotation.fromJson(obj),
-
-		talentsCreate: () => PriestTalents.create(),
-		talentsEquals: (a, b) => PriestTalents.equals(a as PriestTalents, b as PriestTalents),
-		talentsCopy: a => PriestTalents.clone(a as PriestTalents),
-		talentsToJson: a => PriestTalents.toJson(a as PriestTalents),
-		talentsFromJson: obj => PriestTalents.fromJson(obj),
-
-		optionsCreate: () => HolyPriest_Options.create({ classOptions: {} }),
-		optionsEquals: (a, b) => HolyPriest_Options.equals(a as HolyPriest_Options, b as HolyPriest_Options),
-		optionsCopy: a => HolyPriest_Options.clone(a as HolyPriest_Options),
-		optionsToJson: a => HolyPriest_Options.toJson(a as HolyPriest_Options),
-		optionsFromJson: obj => HolyPriest_Options.fromJson(obj),
-		optionsFromPlayer: player =>
-			player.spec.oneofKind == 'holyPriest'
-				? player.spec.holyPriest.options || HolyPriest_Options.create()
-				: HolyPriest_Options.create({ classOptions: {} }),
-	},
-	[Spec.SpecShadowPriest]: {
-		rotationCreate: () => ShadowPriest_Rotation.create(),
-		rotationEquals: (a, b) => ShadowPriest_Rotation.equals(a as ShadowPriest_Rotation, b as ShadowPriest_Rotation),
-		rotationCopy: a => ShadowPriest_Rotation.clone(a as ShadowPriest_Rotation),
-		rotationToJson: a => ShadowPriest_Rotation.toJson(a as ShadowPriest_Rotation),
-		rotationFromJson: obj => ShadowPriest_Rotation.fromJson(obj),
-
-		talentsCreate: () => PriestTalents.create(),
-		talentsEquals: (a, b) => PriestTalents.equals(a as PriestTalents, b as PriestTalents),
-		talentsCopy: a => PriestTalents.clone(a as PriestTalents),
-		talentsToJson: a => PriestTalents.toJson(a as PriestTalents),
-		talentsFromJson: obj => PriestTalents.fromJson(obj),
-
-		optionsCreate: () => ShadowPriest_Options.create({ classOptions: {} }),
-		optionsEquals: (a, b) => ShadowPriest_Options.equals(a as ShadowPriest_Options, b as ShadowPriest_Options),
-		optionsCopy: a => ShadowPriest_Options.clone(a as ShadowPriest_Options),
-		optionsToJson: a => ShadowPriest_Options.toJson(a as ShadowPriest_Options),
-		optionsFromJson: obj => ShadowPriest_Options.fromJson(obj),
-		optionsFromPlayer: player =>
-			player.spec.oneofKind == 'shadowPriest'
-				? player.spec.shadowPriest.options || ShadowPriest_Options.create()
-				: ShadowPriest_Options.create({ classOptions: {} }),
+			player.spec.oneofKind == 'priest' ? player.spec.priest.options || Priest_Options.create() : Priest_Options.create({ classOptions: {} }),
 	},
 	// Rogue
 	[Spec.SpecRogue]: {
@@ -1012,27 +940,11 @@ export function withSpec<SpecType extends Spec>(spec: Spec, player: PlayerProto,
 			};
 			return copy;
 		// Priest
-		case Spec.SpecDisciplinePriest:
+		case Spec.SpecPriest:
 			copy.spec = {
-				oneofKind: 'disciplinePriest',
-				disciplinePriest: DisciplinePriest.create({
-					options: specOptions as DisciplinePriest_Options,
-				}),
-			};
-			return copy;
-		case Spec.SpecHolyPriest:
-			copy.spec = {
-				oneofKind: 'holyPriest',
-				holyPriest: HolyPriest.create({
-					options: specOptions as HolyPriest_Options,
-				}),
-			};
-			return copy;
-		case Spec.SpecShadowPriest:
-			copy.spec = {
-				oneofKind: 'shadowPriest',
-				shadowPriest: ShadowPriest.create({
-					options: specOptions as ShadowPriest_Options,
+				oneofKind: 'priest',
+				priest: Priest.create({
+					options: specOptions as Priest_Options,
 				}),
 			};
 			return copy;

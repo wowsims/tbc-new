@@ -164,7 +164,7 @@ export class ReforgeOptimizer {
 		this.player = simUI.player;
 		this.playerClass = this.player.getClass();
 		this.isExperimental = options?.experimental;
-		this.isHybridCaster = [Spec.SpecBalanceDruid, Spec.SpecShadowPriest, Spec.SpecElementalShaman].includes(this.player.getSpec());
+		this.isHybridCaster = [Spec.SpecBalanceDruid, Spec.SpecPriest, Spec.SpecElementalShaman].includes(this.player.getSpec());
 		this.isTankSpec = this.player.getPlayerSpec().isTankSpec;
 		this.sim = simUI.sim;
 		this.defaults = simUI.individualConfig.defaults;

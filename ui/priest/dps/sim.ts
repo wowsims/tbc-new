@@ -7,11 +7,11 @@ import { PlayerClasses } from '../../core/player_classes';
 import { APLRotation } from '../../core/proto/apl';
 import { Faction, ItemSlot, PartyBuffs, PseudoStat, Race, Spec, Stat } from '../../core/proto/common';
 import { DEFAULT_HYBRID_CASTER_GEM_STATS, Stats, UnitStat } from '../../core/proto_utils/stats';
-import * as PriestInputs from '../inputs';
+import * as PriestInputs from './inputs';
 import * as Presets from './presets';
 
-const SPEC_CONFIG = registerSpecConfig(Spec.SpecShadowPriest, {
-	cssClass: 'shadow-priest-sim-ui',
+const SPEC_CONFIG = registerSpecConfig(Spec.SpecPriest, {
+	cssClass: 'priest-sim-ui',
 	cssScheme: PlayerClasses.getCssClass(PlayerClasses.Priest),
 	// List any known bugs / issues here and they'll be shown on the site.
 	knownIssues: [
@@ -100,13 +100,13 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecShadowPriest, {
 		builds: [],
 	},
 
-	autoRotation: (_: Player<Spec.SpecShadowPriest>): APLRotation => {
+	autoRotation: (_: Player<Spec.SpecPriest>): APLRotation => {
 		return Presets.ROTATION_PRESET_DEFAULT.rotation.rotation!;
 	},
 
 	raidSimPresets: [
 		{
-			spec: Spec.SpecShadowPriest,
+			spec: Spec.SpecPriest,
 			talents: Presets.StandardTalents.data,
 			specOptions: Presets.DefaultOptions,
 			consumables: Presets.DefaultConsumables,
@@ -131,8 +131,8 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecShadowPriest, {
 	],
 });
 
-export class ShadowPriestSimUI extends IndividualSimUI<Spec.SpecShadowPriest> {
-	constructor(parentElem: HTMLElement, player: Player<Spec.SpecShadowPriest>) {
+export class PriestSimUI extends IndividualSimUI<Spec.SpecPriest> {
+	constructor(parentElem: HTMLElement, player: Player<Spec.SpecPriest>) {
 		super(parentElem, player, SPEC_CONFIG);
 	}
 }

@@ -425,7 +425,7 @@ var Classes = []DbcClass{
 
 // 	// Priest
 // 	256: proto.Spec_SpecDisciplinePriest,
-// 	257: proto.Spec_SpecHolyPriest,
+// 	257: proto.Spec_,
 // 	258: proto.Spec_SpecShadowPriest,
 
 // 	// Rogue

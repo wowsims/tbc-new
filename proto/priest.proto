@@ -88,26 +88,8 @@ message PriestOptions {
 	bool use_shadowfiend = 2;
 }
 
-message DisciplinePriest {
-	message Rotation {}
 
-	message Options {
-		PriestOptions class_options = 1;
-		UnitReference power_infusion_target = 2;
-	}
-	Options options = 3;
-}
-
-message HolyPriest {
-	message Rotation {}
-
-	message Options {
-		PriestOptions class_options = 1;
-	}
-	Options options = 3;
-}
-
-message ShadowPriest {
+message Priest {
 	message Rotation {}
 
 	message Options {

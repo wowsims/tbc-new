@@ -77,17 +77,7 @@ export const simLaunchStatuses: Record<Spec, SimStatus> = {
 		oldSimLink: 'https://wowsims.github.io/tbc/retribution_paladin/',
 	},
 	// Priest
-	[Spec.SpecDisciplinePriest]: {
-		phase: Phase.Phase1,
-		status: LaunchStatus.Unlaunched,
-		oldSimLink: 'https://wowsims.github.io/tbc/smite_priest/',
-	},
-	[Spec.SpecHolyPriest]: {
-		phase: Phase.Phase1,
-		status: LaunchStatus.Unlaunched,
-		oldSimLink: 'https://wowsims.github.io/tbc/smite_priest/',
-	},
-	[Spec.SpecShadowPriest]: {
+	[Spec.SpecPriest]: {
 		phase: Phase.Phase1,
 		status: LaunchStatus.Unlaunched,
 		oldSimLink: 'https://wowsims.github.io/tbc/shadow_priest/',

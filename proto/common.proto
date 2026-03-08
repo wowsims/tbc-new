@@ -55,20 +55,18 @@ enum Spec {
 	SpecProtectionPaladin = 8;
 	SpecRetributionPaladin = 9;
 
-	SpecDisciplinePriest = 10;
-	SpecHolyPriest = 11;
-	SpecShadowPriest = 12;
+	SpecPriest = 10;
 
-	SpecRogue = 13;
+	SpecRogue = 11;
 
-	SpecElementalShaman = 14;
-	SpecEnhancementShaman = 15;
-	SpecRestorationShaman = 16;
+	SpecElementalShaman = 12;
+	SpecEnhancementShaman = 13;
+	SpecRestorationShaman = 14;
 
-	SpecWarlock = 17;
+	SpecWarlock = 15;
 
-	SpecDpsWarrior = 18;
-	SpecProtectionWarrior = 19;
+	SpecDpsWarrior = 16;
+	SpecProtectionWarrior = 17;
 }
 
 enum Race {
