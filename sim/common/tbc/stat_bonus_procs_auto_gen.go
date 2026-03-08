@@ -4361,21 +4361,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Your melee and ranged attacks have a chance to inject poison into your target dealing 332 Nature damage.
-	// https://www.wowhead.com/tbc/spell=34587
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 28579, ItemName: "Romulo's Poison Vial"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// For the next 20s, your direct heals grant Fecundity to your target, increasing the healing received by
 	// the target by up to 30. Fecundity lasts 10s and stacks up to 5 times.
 	// https://www.wowhead.com/tbc/spell=38332

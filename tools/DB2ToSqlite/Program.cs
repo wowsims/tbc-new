@@ -28,8 +28,7 @@ var configuration = new ConfigurationBuilder()
 	.AddJsonFile(settingsFile, false, true)
 	.Build();
 
-var settings = configuration.GetSection("Settings").Get<BindableSettings>();
-if (settings == null) throw new Exception("Failed to load Settings from configuration.");
+var settings = configuration.GetSection("Settings").Get<BindableSettings>() ?? throw new Exception("Failed to load Settings from configuration.");
 
 var listFile = new Listfile();
 
@@ -58,7 +57,7 @@ Directory.CreateDirectory(targetDirectory);
 Directory.CreateDirectory(gameTablesOutDir);
 
 var fsProvider = new FilesystemDBCProvider(targetDirectory, true);
-var githubDbdProvider = new GithubDBDProvider(true);
+var githubDbdProvider = new CustomGithubDBDProvider(true, "https://raw.githubusercontent.com/1337LutZ/WoWDBDefs/update/tbca/definitions/");
 
 var dbcd = new DBCD.DBCD(fsProvider, githubDbdProvider);
 
@@ -97,7 +96,8 @@ SqliteDbCreator.CreateDatabaseWithDefinitions(dbDefinitions, databaseFile, build
 
 if (HotfixManager.HotfixReaders.Count == 0)
 	HotfixManager.LoadCaches(settings.BaseDir);
-if (!HotfixManager.HotfixReaders.TryGetValue(buildNumber, out var hotfixReader)) {
+if (!HotfixManager.HotfixReaders.TryGetValue(buildNumber, out var hotfixReader))
+{
 
 	//throw new Exception("No hotfix found for build " + buildNumber);
 }
@@ -112,10 +112,16 @@ await using var conn = new SqliteConnection(connectionString);
 
 conn.Open();
 
+if (tables == null)
+{
+	throw new Exception("Tables is null");
+}
+
 foreach (var tableName in tables)
 {
 	var storage = storageMap[tableName];
-	if (hotfixReader != null) {
+	if (hotfixReader != null)
+	{
 		storage.ApplyingHotfixes(hotfixReader);
 	}
 	SqliteDataInserter.InsertRows(storage, tableName, dbDefinitions[tableName], conn, buildNumber);
