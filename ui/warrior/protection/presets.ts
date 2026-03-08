@@ -1,6 +1,6 @@
 import { OtherDefaults as SimUIOtherDefaults } from '../../core/individual_sim_ui';
 import * as PresetUtils from '../../core/preset_utils.js';
-import { ConsumesSpec, HealingModel, Profession, PseudoStat, Stat } from '../../core/proto/common.js';
+import { ConsumesSpec, HealingModel, Profession, PseudoStat, Race, Stat } from '../../core/proto/common.js';
 import { SavedTalents } from '../../core/proto/ui.js';
 import { ProtectionWarrior_Options as ProtectionWarriorOptions, WarriorShout, WarriorStance } from '../../core/proto/warrior.js';
 import { Stats } from '../../core/proto_utils/stats';
@@ -69,6 +69,8 @@ export const DefaultOptions = ProtectionWarriorOptions.create({
 		startingRage: 100,
 		defaultShout: WarriorShout.WarriorShoutCommanding,
 		defaultStance: WarriorStance.WarriorStanceDefensive,
+		hasBsT2: true,
+		stanceSnapshot: true,
 	},
 });
 
@@ -89,6 +91,7 @@ export const DefaultConsumables = ConsumesSpec.create({
 export const OtherDefaults: Partial<SimUIOtherDefaults> = {
 	profession1: Profession.Engineering,
 	profession2: Profession.Blacksmithing,
+	race: Race.RaceOrc,
 	distanceFromTarget: 0,
 	healingModel: HealingModel.create({
 		hps: 2200,

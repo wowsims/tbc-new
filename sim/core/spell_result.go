@@ -231,7 +231,7 @@ func (spell *Spell) SpellDamage(target *Unit) float64 {
 }
 
 func (spell *Spell) SpellHitChance(target *Unit) float64 {
-	hitPercent := spell.Unit.stats[stats.SpellHitPercent] + spell.BonusHitPercent
+	hitPercent := spell.Unit.stats[stats.SpellHitPercent] + spell.Unit.PseudoStats.SchoolBonusHitChance[spell.SpellSchool.SchoolIndex()] + spell.BonusHitPercent
 	return hitPercent / 100
 }
 func (spell *Spell) SpellChanceToMiss(attackTable *AttackTable) float64 {

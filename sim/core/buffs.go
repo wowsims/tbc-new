@@ -272,6 +272,38 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 //							Raid Buffs
 ///////////////////////////////////////////////////////////////////////////
 
+func ThornsAura(char *Character, points int32) *Aura {
+	actionID := ActionID{SpellID: 26992}
+
+	procSpell := char.RegisterSpell(SpellConfig{
+		ActionID:    actionID,
+		SpellSchool: SpellSchoolNature,
+		Flags:       SpellFlagBinary,
+		ProcMask:    ProcMaskEmpty,
+
+		DamageMultiplier: 1,
+		ThreatMultiplier: 1,
+
+		ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
+			baseDamage := 25 * (1 + 0.25*float64(points))
+			spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeAlwaysHit)
+		},
+	})
+
+	return char.MakeProcTriggerAura(ProcTrigger{
+		Name:     "Thorns",
+		ActionID: actionID,
+		Duration: time.Minute * 10,
+		Outcome:  OutcomeLanded,
+		Callback: CallbackOnSpellHitTaken,
+		Handler: func(sim *Simulation, spell *Spell, result *SpellResult) {
+			if spell.SpellSchool.Matches(SpellSchoolPhysical) {
+				procSpell.Cast(sim, spell.Unit)
+			}
+		},
+	}).AttachMultiplicativePseudoStatBuff(&char.PseudoStats.BonusPhysicalDamageTaken, -80)
+}
+
 func ArcaneBrillianceAura(char *Character) *Aura {
 	return makeStatBuff(char, BuffConfig{
 		Label:    "Arcane Brilliance",
@@ -993,20 +1025,21 @@ func BlessingOfSanctuaryAura(char *Character) *Aura {
 		ProcMask:    ProcMaskEmpty,
 
 		DamageMultiplier: 1,
+		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
 			spell.CalcAndDealDamage(sim, target, 46, spell.OutcomeAlwaysHit)
 		},
 	})
 
-	return char.RegisterAura(Aura{
-		Label:    "Blessing of Sanctuary",
+	return char.MakeProcTriggerAura(ProcTrigger{
+		Name:     "Blessing of Sanctuary",
 		ActionID: actionID,
 		Duration: time.Minute * 10,
-		OnSpellHitTaken: func(aura *Aura, sim *Simulation, spell *Spell, result *SpellResult) {
-			if result.Outcome.Matches(OutcomeBlock) {
-				procSpell.Cast(sim, spell.Unit)
-			}
+		Outcome:  OutcomeBlock,
+		Callback: CallbackOnSpellHitTaken,
+		Handler: func(sim *Simulation, spell *Spell, result *SpellResult) {
+			procSpell.Cast(sim, spell.Unit)
 		},
 	}).AttachMultiplicativePseudoStatBuff(&char.PseudoStats.BonusPhysicalDamageTaken, -80)
 }

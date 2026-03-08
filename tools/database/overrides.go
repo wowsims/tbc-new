@@ -404,6 +404,7 @@ var EnchantAllowList = []int32{
 	1900, // Enchant Weapon - Crusader
 	2564, // Weapon 15 Agi
 	2583, // Presence of Might
+	2588, // Presence of Sight
 	2647, // Enchant Bracer - Brawn
 	2659, // Enchant Chest - Exceptional Health
 }

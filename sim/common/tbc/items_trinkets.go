@@ -191,6 +191,41 @@ func init() {
 		character.ItemSwap.RegisterProc(28034, procAura)
 	})
 
+	// Romulo's Poison Vial
+	core.NewItemEffect(28579, func(agent core.Agent) {
+		character := agent.GetCharacter()
+
+		spell := character.RegisterSpell(core.SpellConfig{
+			ActionID:    core.ActionID{SpellID: 34587},
+			SpellSchool: core.SpellSchoolNature,
+
+			ProcMask: core.ProcMaskEmpty,
+			Flags:    core.SpellFlagPassiveSpell | core.SpellFlagNoOnCastComplete,
+
+			DamageMultiplier: 1,
+			ThreatMultiplier: 1,
+
+			ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+				baseDamage := sim.Roll(222, 332)
+				spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMagicHit)
+			},
+		})
+
+		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
+			Name:               "Romulo's Poison Vial",
+			ActionID:           core.ActionID{ItemID: 28579},
+			DPM:                character.NewLegacyPPMManager(1, core.ProcMaskMeleeOrRanged),
+			RequireDamageDealt: true,
+			Outcome:            core.OutcomeLanded,
+			Callback:           core.CallbackOnSpellHitDealt,
+			Handler: func(sim *core.Simulation, _ *core.Spell, result *core.SpellResult) {
+				spell.Cast(sim, result.Target)
+			},
+		})
+
+		character.ItemSwap.RegisterProc(28579, procAura)
+	})
+
 	// The Lightning Capacitor
 	core.NewItemEffect(28785, func(agent core.Agent) {
 		character := agent.GetCharacter()

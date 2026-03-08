@@ -17,15 +17,17 @@ func (war *Warrior) registerShieldBlock() {
 		ActionID:  actionId,
 		Duration:  time.Second * 5,
 		MaxStacks: 1,
-	}).AttachStatBuff(stats.BlockPercent, 0.75).AttachProcTrigger(core.ProcTrigger{
-		Name:               "Shield Block - Consume",
-		TriggerImmediately: true,
-		Outcome:            core.OutcomeBlock,
-		Callback:           core.CallbackOnSpellHitTaken,
-		Handler: func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
-			spell.RelatedSelfBuff.RemoveStack(sim)
-		},
-	})
+	}).
+		AttachStatBuff(stats.BlockPercent, 0.75).
+		AttachProcTrigger(core.ProcTrigger{
+			Name:               "Shield Block - Consume",
+			TriggerImmediately: true,
+			Outcome:            core.OutcomeBlock,
+			Callback:           core.CallbackOnSpellHitTaken,
+			Handler: func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
+				spell.RelatedSelfBuff.RemoveStack(sim)
+			},
+		})
 
 	spell = war.RegisterSpell(core.SpellConfig{
 		ActionID:       actionId,
@@ -54,6 +56,7 @@ func (war *Warrior) registerShieldBlock() {
 
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
 			spell.RelatedSelfBuff.Activate(sim)
+			spell.RelatedSelfBuff.SetStacks(sim, spell.RelatedSelfBuff.MaxStacks)
 		},
 
 		RelatedSelfBuff: aura,

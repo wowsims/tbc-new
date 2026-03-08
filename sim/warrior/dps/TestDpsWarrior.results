@@ -477,6 +477,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestDpsWarrior-AllItems-EnchantGloves-Threat-2613"
+ value: {
+  dps: 2085.86927
+  tps: 1609.76512
+  dtps: 7.2778
+ }
+}
+dps_results: {
  key: "TestDpsWarrior-AllItems-EnchantWeapon-Crusader-1900"
  value: {
   dps: 2062.08998
@@ -861,6 +869,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestDpsWarrior-AllItems-Romulo'sPoisonVial-28579"
+ value: {
+  dps: 2061.89688
+  tps: 1561.18927
+  dtps: 7.2778
+ }
+}
+dps_results: {
  key: "TestDpsWarrior-AllItems-RuneofForce-25994"
  value: {
   dps: 2024.69202
@@ -1143,8 +1159,8 @@ dps_results: {
 dps_results: {
  key: "TestDpsWarrior-AllItems-WastewalkerArmor"
  value: {
-  dps: 1796.50746
-  tps: 1361.24646
+  dps: 1792.51565
+  tps: 1357.90259
   dtps: 7.21755
  }
 }
@@ -1232,14 +1248,14 @@ dps_results: {
  key: "TestDpsWarrior-Settings-Human-p1_fury-Fury-fury-NoBuffs-25.0yards-LongMultiTarget"
  value: {
   dps: 1044.18441
-  tps: 929.7617
+  tps: 929.82878
  }
 }
 dps_results: {
  key: "TestDpsWarrior-Settings-Human-p1_fury-Fury-fury-NoBuffs-25.0yards-LongSingleTarget"
  value: {
   dps: 649.5311
-  tps: 510.94788
+  tps: 512.28955
  }
 }
 dps_results: {
@@ -1277,14 +1293,14 @@ dps_results: {
  key: "TestDpsWarrior-Settings-Human-preraid_fury-Fury-fury-NoBuffs-25.0yards-LongMultiTarget"
  value: {
   dps: 955.76193
-  tps: 861.60424
+  tps: 861.67133
  }
 }
 dps_results: {
  key: "TestDpsWarrior-Settings-Human-preraid_fury-Fury-fury-NoBuffs-25.0yards-LongSingleTarget"
  value: {
   dps: 595.0933
-  tps: 468.14736
+  tps: 469.48902
  }
 }
 dps_results: {
@@ -1322,14 +1338,14 @@ dps_results: {
  key: "TestDpsWarrior-Settings-Orc-p1_fury-Fury-fury-NoBuffs-25.0yards-LongMultiTarget"
  value: {
   dps: 1076.29777
-  tps: 953.65287
+  tps: 953.71995
  }
 }
 dps_results: {
  key: "TestDpsWarrior-Settings-Orc-p1_fury-Fury-fury-NoBuffs-25.0yards-LongSingleTarget"
  value: {
   dps: 649.64196
-  tps: 509.33154
+  tps: 510.68279
  }
 }
 dps_results: {
@@ -1367,14 +1383,14 @@ dps_results: {
  key: "TestDpsWarrior-Settings-Orc-preraid_fury-Fury-fury-NoBuffs-25.0yards-LongMultiTarget"
  value: {
   dps: 963.82041
-  tps: 867.56412
+  tps: 867.6312
  }
 }
 dps_results: {
  key: "TestDpsWarrior-Settings-Orc-preraid_fury-Fury-fury-NoBuffs-25.0yards-LongSingleTarget"
  value: {
   dps: 598.23479
-  tps: 469.88432
+  tps: 471.22599
  }
 }
 dps_results: {

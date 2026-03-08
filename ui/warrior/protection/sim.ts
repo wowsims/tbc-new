@@ -3,8 +3,8 @@ import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_u
 import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
 import { APLRotation } from '../../core/proto/apl';
-import { Debuffs, Faction, IndividualBuffs, ItemSlot, PartyBuffs, PseudoStat, Race, RaidBuffs, Spec, Stat, TristateEffect } from '../../core/proto/common';
-import { StatCap, Stats, UnitStat } from '../../core/proto_utils/stats';
+import { Debuffs, IndividualBuffs, ItemSlot, PartyBuffs, PseudoStat, RaidBuffs, Spec, Stat, TristateEffect } from '../../core/proto/common';
+import { Stats, UnitStat } from '../../core/proto_utils/stats';
 import { ReforgeOptimizer } from '../../core/components/suggest_reforges_action';
 
 import * as Mechanics from '../../core/constants/mechanics';
@@ -115,8 +115,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionWarrior, {
 		debuffs: Debuffs.create({
 			...WarriorPresets.DefaultDebuffs,
 			giftOfArthas: false,
-			demoralizingShout: TristateEffect.TristateEffectImproved,
-			thunderClap: TristateEffect.TristateEffectImproved,
 			insectSwarm: true,
 			shadowEmbrace: true,
 			screech: true,
@@ -131,6 +129,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionWarrior, {
 	// Inputs to include in the 'Other' section on the settings tab.
 	otherInputs: {
 		inputs: [
+			OtherInputs.TotemTwisting,
 			WarriorInputs.BattleShoutSolarianSapphire(),
 			WarriorInputs.BattleShoutT2(),
 			WarriorInputs.StartingRage(),
@@ -169,31 +168,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionWarrior, {
 		return Presets.ROTATION_DEFAULT.rotation.rotation!;
 	},
 
-	raidSimPresets: [
-		{
-			spec: Spec.SpecProtectionWarrior,
-			talents: Presets.DefaultTalents.data,
-			specOptions: Presets.DefaultOptions,
-			consumables: Presets.DefaultConsumables,
-			defaultFactionRaces: {
-				[Faction.Unknown]: Race.RaceUnknown,
-				[Faction.Alliance]: Race.RaceNightElf,
-				[Faction.Horde]: Race.RaceOrc,
-			},
-			defaultGear: {
-				[Faction.Unknown]: {},
-				[Faction.Alliance]: {
-					1: Presets.PRERAID_BALANCED_PRESET.gear,
-					2: Presets.P1_PRESET.gear,
-				},
-				[Faction.Horde]: {
-					1: Presets.PRERAID_BALANCED_PRESET.gear,
-					2: Presets.P1_PRESET.gear,
-				},
-			},
-			otherDefaults: Presets.OtherDefaults,
-		},
-	],
+	raidSimPresets: [],
 });
 
 export class ProtectionWarriorSimUI extends IndividualSimUI<Spec.SpecProtectionWarrior> {

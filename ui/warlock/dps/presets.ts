@@ -192,6 +192,25 @@ export const P1_AFFLICTION_DEFAULT_SETTINGS: PresetUtils.PresetSettings = {
 			...DefaultOptions.classOptions,
 			curseOptions: WarlockOptions_CurseOptions.Elements,
 			summon: WarlockOptions_Summon.Imp,
+			sacrificeSummon: false,
+		},
+	}),
+	debuffs: Debuffs.create({
+		...DefaultDebuffs,
+		curseOfElements: TristateEffect.TristateEffectMissing,
+	}),
+};
+
+export const P1_DEMONOLOGY_DEFAULT_SETTINGS: PresetUtils.PresetSettings = {
+	...P1_DEFAULT_SETTINGS,
+	name: 'Demonology',
+	specOptions: WarlockOptions.create({
+		...DefaultOptions,
+		classOptions: {
+			...DefaultOptions.classOptions,
+			curseOptions: WarlockOptions_CurseOptions.Recklessness,
+			summon: WarlockOptions_Summon.Succubus,
+			sacrificeSummon: false,
 		},
 	}),
 	debuffs: Debuffs.create({
@@ -208,6 +227,7 @@ export const P1_FIRE_DEFAULT_SETTINGS: PresetUtils.PresetSettings = {
 		classOptions: {
 			...DefaultOptions.classOptions,
 			summon: WarlockOptions_Summon.Imp,
+			sacrificeSummon: true,
 		},
 	}),
 	consumables: ConsumesSpec.create({
@@ -232,7 +252,7 @@ export const DEMONOLOGY_BUILD = PresetUtils.makePresetBuild('Demonology', {
 	talents: TalentsDemoRuin,
 	epWeights: P1_AFFLI_DEMO_DESTRO_EP,
 	rotation: DemoAPL,
-	settings: P1_DEFAULT_SETTINGS,
+	settings: P1_DEMONOLOGY_DEFAULT_SETTINGS,
 });
 
 export const DESTRUCTION_BUILD = PresetUtils.makePresetBuild('Destruction', {

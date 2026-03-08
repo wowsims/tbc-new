@@ -148,6 +148,12 @@ func NewCharacter(party *Party, partyIndex int, player *proto.Player) Character 
 			character.bonusMHDps = ps[proto.PseudoStat_PseudoStatMainHandDps]
 			character.bonusOHDps = ps[proto.PseudoStat_PseudoStatOffHandDps]
 			character.bonusRangedDps = ps[proto.PseudoStat_PseudoStatRangedDps]
+			character.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexArcane] = ps[proto.PseudoStat_PseudoStatSchoolHitPercentArcane]
+			character.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexFire] = ps[proto.PseudoStat_PseudoStatSchoolHitPercentFire]
+			character.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexFrost] = ps[proto.PseudoStat_PseudoStatSchoolHitPercentFrost]
+			character.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexHoly] = ps[proto.PseudoStat_PseudoStatSchoolHitPercentHoly]
+			character.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexNature] = ps[proto.PseudoStat_PseudoStatSchoolHitPercentNature]
+			character.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexShadow] = ps[proto.PseudoStat_PseudoStatSchoolHitPercentShadow]
 			character.PseudoStats.BonusMHDps += character.bonusMHDps
 			character.PseudoStats.BonusOHDps += character.bonusOHDps
 			character.PseudoStats.BonusRangedDps += character.bonusRangedDps
@@ -661,12 +667,18 @@ func (character *Character) GetPseudoStatsProto() []float64 {
 		// that stat dependencies will work correctly, but are stored as PseudoStats in proto
 		// messages. This is done so that the stats arrays embedded in database files and saved
 		// Encounter settings can omit these extraneous fields.
-		proto.PseudoStat_PseudoStatMeleeHitPercent:   character.GetStat(stats.PhysicalHitPercent),
-		proto.PseudoStat_PseudoStatSpellHitPercent:   character.GetStat(stats.SpellHitPercent),
-		proto.PseudoStat_PseudoStatRangedHitPercent:  character.GetStat(stats.RangedHitPercent) + character.GetStat(stats.PhysicalHitPercent),
-		proto.PseudoStat_PseudoStatMeleeCritPercent:  character.GetStat(stats.PhysicalCritPercent),
-		proto.PseudoStat_PseudoStatSpellCritPercent:  character.GetStat(stats.SpellCritPercent),
-		proto.PseudoStat_PseudoStatRangedCritPercent: character.GetStat(stats.RangedCritPercent) + character.GetStat(stats.PhysicalCritPercent),
+		proto.PseudoStat_PseudoStatMeleeHitPercent:        character.GetStat(stats.PhysicalHitPercent),
+		proto.PseudoStat_PseudoStatSpellHitPercent:        character.GetStat(stats.SpellHitPercent),
+		proto.PseudoStat_PseudoStatSchoolHitPercentArcane: character.GetStat(stats.SpellHitPercent) + character.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexArcane],
+		proto.PseudoStat_PseudoStatSchoolHitPercentFire:   character.GetStat(stats.SpellHitPercent) + character.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexFire],
+		proto.PseudoStat_PseudoStatSchoolHitPercentFrost:  character.GetStat(stats.SpellHitPercent) + character.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexFrost],
+		proto.PseudoStat_PseudoStatSchoolHitPercentHoly:   character.GetStat(stats.SpellHitPercent) + character.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexHoly],
+		proto.PseudoStat_PseudoStatSchoolHitPercentNature: character.GetStat(stats.SpellHitPercent) + character.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexNature],
+		proto.PseudoStat_PseudoStatSchoolHitPercentShadow: character.GetStat(stats.SpellHitPercent) + character.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexShadow],
+		proto.PseudoStat_PseudoStatRangedHitPercent:       character.GetStat(stats.RangedHitPercent) + character.GetStat(stats.PhysicalHitPercent),
+		proto.PseudoStat_PseudoStatMeleeCritPercent:       character.GetStat(stats.PhysicalCritPercent),
+		proto.PseudoStat_PseudoStatSpellCritPercent:       character.GetStat(stats.SpellCritPercent),
+		proto.PseudoStat_PseudoStatRangedCritPercent:      character.GetStat(stats.RangedCritPercent) + character.GetStat(stats.PhysicalCritPercent),
 	}
 }
 
