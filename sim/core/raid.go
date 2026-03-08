@@ -21,7 +21,7 @@ type Party struct {
 	hpsMetrics DistributionMetrics
 }
 
-func NewParty(raid *Raid, index int, partyConfig *proto.Party) *Party {
+func NewParty(raid *Raid, index int, partyConfig *proto.Party, raidConfig *proto.Raid) *Party {
 	party := &Party{
 		Raid:       raid,
 		Index:      index,
@@ -31,7 +31,7 @@ func NewParty(raid *Raid, index int, partyConfig *proto.Party) *Party {
 
 	for playerIndex, playerConfig := range partyConfig.Players {
 		if playerConfig != nil && playerConfig.Class != proto.Class_ClassUnknown {
-			party.Players = append(party.Players, NewAgent(party, playerIndex, playerConfig))
+			party.Players = append(party.Players, NewAgent(party, playerIndex, playerConfig, raidConfig))
 		}
 	}
 
@@ -175,7 +175,7 @@ func NewRaid(raidConfig *proto.Raid) *Raid {
 
 	for partyIndex, partyConfig := range raidConfig.Parties {
 		if partyConfig != nil && partyIndex < numParties {
-			raid.Parties = append(raid.Parties, NewParty(raid, partyIndex, partyConfig))
+			raid.Parties = append(raid.Parties, NewParty(raid, partyIndex, partyConfig, raidConfig))
 		}
 	}
 

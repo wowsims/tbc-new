@@ -10,7 +10,6 @@ import { Class, Spec } from '../proto/common.js';
 import { ActionId } from '../proto_utils/action_id.js';
 import { TypedEvent } from '../typed_event.js';
 import { isRightClick, sum } from '../utils.js';
-import { HunterPet } from './hunter_pet';
 
 export const MAX_POINTS_PLAYER = 61;
 

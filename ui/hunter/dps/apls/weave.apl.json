@@ -1,0 +1,68 @@
+{
+	"type": "TypeAPL",
+	"prepullActions": [{ "action": { "castSpell": { "spellId": { "spellId": 27044, "rank": 8 } } }, "doAtValue": { "const": { "val": "-20s" } } }],
+	"priorityList": [
+		{ "action": { "autocastOtherCooldowns": {} } },
+		{ "action": { "castSpell": { "spellId": { "spellId": 34026 } } } },
+		{
+			"action": {
+				"condition": { "cmp": { "op": "OpGe", "lhs": { "autoTimeSinceLast": { "autoType": "MeleeAuto" } }, "rhs": { "inputDelay": {} } } },
+				"move": { "rangeFromTarget": { "const": { "val": "7" } } }
+			}
+		},
+		{
+			"action": {
+				"condition": {
+					"and": {
+						"vals": [
+							{ "cmp": { "op": "OpGt", "lhs": { "autoTimeToNext": { "autoType": "RangedAuto" } }, "rhs": { "const": { "val": "0.2s" } } } },
+							{ "cmp": { "op": "OpLt", "lhs": { "autoTimeToNext": { "autoType": "MeleeAuto" } }, "rhs": { "const": { "val": "0.1s" } } } },
+							{
+								"cmp": {
+									"op": "OpGe",
+									"lhs": { "spellTimeToReady": { "spellId": { "spellId": 27021, "rank": 6 } } },
+									"rhs": { "const": { "val": "3s" } }
+								}
+							},
+							{
+								"cmp": {
+									"op": "OpGe",
+									"lhs": { "spellTimeToReady": { "spellId": { "spellId": 27019, "rank": 9 } } },
+									"rhs": { "const": { "val": "3s" } }
+								}
+							}
+						]
+					}
+				},
+				"move": { "rangeFromTarget": { "const": { "val": "4" } } }
+			}
+		},
+		{ "action": { "castSpell": { "spellId": { "spellId": 27021, "rank": 6 } } } },
+		{ "action": { "castSpell": { "spellId": { "spellId": 27019, "rank": 9 } } } },
+		{
+			"action": {
+				"condition": {
+					"and": {
+						"vals": [
+							{
+								"cmp": {
+									"op": "OpLe",
+									"lhs": { "spellCastTime": { "spellId": { "spellId": 34120, "rank": 1 } } },
+									"rhs": {
+										"math": {
+											"op": "OpSub",
+											"lhs": { "autoSwingTime": { "autoType": "Ranged" } },
+											"rhs": { "autoTimeSinceLast": { "autoType": "RangedAuto" } }
+										}
+									}
+								}
+							},
+							{}
+						]
+					}
+				},
+				"castSpell": { "spellId": { "spellId": 34120, "rank": 1 } }
+			}
+		}
+	]
+}

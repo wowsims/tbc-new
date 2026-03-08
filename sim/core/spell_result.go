@@ -170,6 +170,11 @@ func (spell *Spell) DodgeParrySuppression() float64 {
 
 func (spell *Spell) PhysicalHitChance(attackTable *AttackTable) float64 {
 	hitPercent := spell.Unit.stats[stats.PhysicalHitPercent] + spell.BonusHitPercent - attackTable.Defender.PseudoStats.ReducedPhysicalHitTakenChance
+
+	if spell.ProcMask.Matches(ProcMaskRanged) {
+		hitPercent += spell.Unit.stats[stats.RangedHitPercent]
+	}
+
 	return max(hitPercent/100-attackTable.HitSuppression, 0)
 }
 func (spell *Spell) PhysicalHitCheck(sim *Simulation, attackTable *AttackTable) bool {
@@ -177,6 +182,11 @@ func (spell *Spell) PhysicalHitCheck(sim *Simulation, attackTable *AttackTable) 
 }
 func (spell *Spell) PhysicalCritChance(attackTable *AttackTable) float64 {
 	critPercent := spell.Unit.stats[stats.PhysicalCritPercent] + spell.BonusCritPercent - attackTable.Defender.PseudoStats.ReducedCritTakenChance
+
+	if spell.ProcMask.Matches(ProcMaskRanged) {
+		critPercent += spell.Unit.stats[stats.RangedCritPercent]
+	}
+
 	return max(critPercent/100-attackTable.MeleeCritSuppression, 0)
 }
 func (spell *Spell) PhysicalCritCheck(sim *Simulation, attackTable *AttackTable) bool {

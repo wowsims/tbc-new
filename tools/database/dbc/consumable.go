@@ -62,6 +62,23 @@ func (c *Consumable) GetConsumableType() proto.ConsumableType {
 			return proto.ConsumableType_ConsumableTypeBattleElixir
 		}
 	}
+	if c.SubClassId == FOOD {
+		// Ugly way to check for pet food
+		for _, effectID := range c.ItemEffects {
+			effect := GetItemEffect(effectID)
+			if effect.ID != 0 {
+				if spellEffects, ok := dbcInstance.SpellEffects[effect.SpellID]; ok {
+					for _, spellEffect := range spellEffects {
+						if slices.Contains(spellEffect.ImplicitTargets, 5) {
+							return proto.ConsumableType_ConsumableTypePetFood
+						}
+					}
+				}
+			}
+		}
+
+		return proto.ConsumableType_ConsumableTypeFood
+	}
 	if val, ok := consumableClassToProto[c.SubClassId]; ok {
 		return val
 	}

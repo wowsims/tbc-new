@@ -347,6 +347,7 @@ export class SettingsTab extends SimTab {
 					isPreset: true,
 					data: SavedSettings.create({
 						race: settings.race,
+						partyBuffs: settings.partyBuffs,
 						raidBuffs: settings.raidBuffs,
 						playerBuffs: settings.buffs,
 						debuffs: settings.debuffs,

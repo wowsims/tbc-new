@@ -52,7 +52,7 @@ func RegisterMage() {
 	core.RegisterAgentFactory(
 		proto.Player_Mage{},
 		proto.Spec_SpecMage,
-		func(character *core.Character, options *proto.Player) core.Agent {
+		func(character *core.Character, options *proto.Player, _ *proto.Raid) core.Agent {
 			return NewMage(character, options)
 		},
 		func(player *proto.Player, spec interface{}) {

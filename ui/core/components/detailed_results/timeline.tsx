@@ -1330,23 +1330,14 @@ const idToCategoryMap: Record<number, number> = {
 	[48463]: SPELL_ACTION_CATEGORY + 0.4, // Moonfire
 
 	// Hunter
-	[48996]: 0.1, // Raptor Strike
-	[53217]: 0.6, // Wild Quiver
-	[53209]: MELEE_ACTION_CATEGORY + 0.1, // Chimera Shot
-	[53353]: MELEE_ACTION_CATEGORY + 0.11, // Chimera Shot Serpent
-	[53301]: MELEE_ACTION_CATEGORY + 0.1, // Explosive Shot
-	[1215485]: MELEE_ACTION_CATEGORY + 0.12, // Explosive Shot
-	[49050]: MELEE_ACTION_CATEGORY + 0.2, // Aimed Shot
-	[49048]: MELEE_ACTION_CATEGORY + 0.21, // Multi Shot
-	[3044]: MELEE_ACTION_CATEGORY + 0.22, // Arcane Shot
-	[56641]: MELEE_ACTION_CATEGORY + 0.27, // Steady Shot
-	[53351]: MELEE_ACTION_CATEGORY + 0.28, // Kill Shot
-	[34490]: MELEE_ACTION_CATEGORY + 0.29, // Silencing Shot
-	[49001]: MELEE_ACTION_CATEGORY + 0.3, // Serpent Sting
-	[53238]: MELEE_ACTION_CATEGORY + 0.31, // Piercing Shots
-	[3674]: MELEE_ACTION_CATEGORY + 0.32, // Black Arrow
-	[49067]: MELEE_ACTION_CATEGORY + 0.33, // Explosive Trap
-	[77767]: MELEE_ACTION_CATEGORY + 0.34, // Cobra Shot
+	[27014]: 0.02, // Raptor Strike
+	[32120]: MELEE_ACTION_CATEGORY + 0.2, // Steady Shot
+	[27065]: MELEE_ACTION_CATEGORY + 0.21, // Aimed Shot
+	[27021]: MELEE_ACTION_CATEGORY + 0.22, // Multi Shot
+	[27019]: MELEE_ACTION_CATEGORY + 0.23, // Arcane Shot
+	[34026]: MELEE_ACTION_CATEGORY + 0.24, // Kill Command
+	[27016]: MELEE_ACTION_CATEGORY + 0.3, // Serpent Sting
+	[3043]: MELEE_ACTION_CATEGORY + 0.31, // Scorpid Sting
 
 	// Paladin
 	[76672]: MELEE_ACTION_CATEGORY + 0.01, // Hand of Light (mastery)

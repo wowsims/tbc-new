@@ -48,8 +48,8 @@ character_stats_results: {
   final_stats: 32.45941
   final_stats: 13.08014
   final_stats: 0
-  final_stats: 1
-  final_stats: 5
+  final_stats: 0
+  final_stats: 0
  }
 }
 dps_results: {
@@ -57,6 +57,13 @@ dps_results: {
  value: {
   dps: 1928.18686
   tps: 1369.01267
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-AdamantiteScope-2722"
+ value: {
+  dps: 1984.75943
+  tps: 1409.17919
  }
 }
 dps_results: {
@@ -218,6 +225,13 @@ dps_results: {
  value: {
   dps: 2000.17131
   tps: 1420.12163
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-Biznicks247x128Accurascope-2523"
+ value: {
+  dps: 1984.75943
+  tps: 1409.17919
  }
 }
 dps_results: {
@@ -620,6 +634,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRogue-AllItems-KhoriumScope-2723"
+ value: {
+  dps: 1984.75943
+  tps: 1409.17919
+ }
+}
+dps_results: {
  key: "TestRogue-AllItems-KissoftheSpider-22954"
  value: {
   dps: 1978.45477
@@ -870,6 +891,13 @@ dps_results: {
   dps: 1928.18686
   tps: 1369.01267
   hps: 14.44444
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-StabilitzedEterniumScope-2724"
+ value: {
+  dps: 1984.75943
+  tps: 1409.17919
  }
 }
 dps_results: {

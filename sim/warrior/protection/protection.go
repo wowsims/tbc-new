@@ -10,7 +10,7 @@ func RegisterProtectionWarrior() {
 	core.RegisterAgentFactory(
 		proto.Player_ProtectionWarrior{},
 		proto.Spec_SpecProtectionWarrior,
-		func(character *core.Character, options *proto.Player) core.Agent {
+		func(character *core.Character, options *proto.Player, _ *proto.Raid) core.Agent {
 			return NewProtectionWarrior(character, options)
 		},
 		func(player *proto.Player, spec interface{}) {

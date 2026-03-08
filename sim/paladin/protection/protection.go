@@ -10,7 +10,7 @@ func RegisterProtectionPaladin() {
 	core.RegisterAgentFactory(
 		proto.Player_ProtectionPaladin{},
 		proto.Spec_SpecProtectionPaladin,
-		func(character *core.Character, options *proto.Player) core.Agent {
+		func(character *core.Character, options *proto.Player, _ *proto.Raid) core.Agent {
 			return NewProtectionPaladin(character, options)
 		},
 		func(player *proto.Player, spec any) {

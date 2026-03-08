@@ -10,7 +10,7 @@ func RegisterShadowPriest() {
 	core.RegisterAgentFactory(
 		proto.Player_ShadowPriest{},
 		proto.Spec_SpecShadowPriest,
-		func(character *core.Character, options *proto.Player) core.Agent {
+		func(character *core.Character, options *proto.Player, _ *proto.Raid) core.Agent {
 			return NewShadowPriest(character, options)
 		},
 		func(player *proto.Player, spec interface{}) {
