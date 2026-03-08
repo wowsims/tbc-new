@@ -177,7 +177,7 @@ var ItemSetWrathOfSpellfire = core.NewItemSet(core.ItemSet{
 		3: func(agent core.Agent, setBonusAura *core.Aura) {
 			// Increases spell damage by up to 7% of your total Intellect.
 			character := agent.GetCharacter()
-			statDep := character.Unit.NewDynamicStatDependency(stats.Intellect, stats.SpellDamage, 1.07)
+			statDep := character.Unit.NewDynamicStatDependency(stats.Intellect, stats.SpellDamage, 0.07)
 			setBonusAura.AttachStatDependency(statDep)
 		},
 	},
@@ -191,7 +191,7 @@ var ItemSetWhitemendWisdom = core.NewItemSet(core.ItemSet{
 		2: func(agent core.Agent, setBonusAura *core.Aura) {
 			// Increases healing by up to 10% of your total Intellect.
 			character := agent.GetCharacter()
-			statDep := character.Unit.NewDynamicStatDependency(stats.Intellect, stats.HealingPower, 1.10)
+			statDep := character.Unit.NewDynamicStatDependency(stats.Intellect, stats.HealingPower, 0.10)
 			setBonusAura.AttachStatDependency(statDep)
 		},
 	},

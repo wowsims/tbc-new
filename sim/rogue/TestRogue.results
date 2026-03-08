@@ -417,6 +417,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRogue-AllItems-EnchantCloak-Subtlety-2621"
+ value: {
+  dps: 1962.02185
+  tps: 1365.1748
+ }
+}
+dps_results: {
  key: "TestRogue-AllItems-EnchantGloves-Threat-2613"
  value: {
   dps: 1959.45858

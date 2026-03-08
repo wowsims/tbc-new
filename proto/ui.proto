@@ -140,38 +140,16 @@ enum RepLevel {
 // Use the faction ID for the field index
 enum RepFaction {
 	RepFactionUnknown = 0;
-	RepFactionTheEarthenRing = 1135;
-	RepFactionGuardiansOfHyjal = 1158;
-	RepFactionTherazane = 1171;
-	RepFactionDragonmawClan = 1172;
-	RepFactionRamkahen = 1173;
-	RepFactionWildhammerClan = 1174;
-	RepFactionBaradinsWardens = 1177;
-	RepFactionHellscreamsReach = 1178;
-	RepFactionAvengersOfHyjal = 1204;
-
-    // MoP Reputations
-    RepFactionGoldenLotus              = 1269;
-    RepFactionTheTillers               = 1272;
-    RepFactionShadoPan                 = 1270;
-    RepFactionShadoPanAssault          = 1435;
-    RepFactionTheBrewmasters           = 1351;
-    RepFactionTheKlaxxi                = 1337;
-    RepFactionTheAugustCelestials      = 1341;
-    RepFactionTheAnglers               = 1302;
-    RepFactionEmperorShaohao           = 1492;
-    RepFactionSunreaverOnslaught       = 1388;
-    RepFactionKirinTorOffensive        = 1387;
-    RepFactionDominanceOffensive       = 1375;
-    RepFactionOrderOfTheCloudSerpent   = 1271;
-    RepFactionShangXisAcademy          = 1216;
-    RepFactionTheLorewalkers           = 1345;
-    RepFactionTheBlackPrince           = 1359;
-    RepFactionForestHozen              = 1228;
-    RepFactionPearlfinJinyu            = 1242;
-    RepFactionHozen                    = 1243;
-    RepFactionOperationShieldwall      = 1376;
-
+	RepFactionTheConsortium = 933;
+	RepFactionTheMagHar = 941;
+	RepFactionCenarionExpedition = 942;
+	RepFactionHonorHold = 946;
+	RepFactionThrallmar = 947;
+	RepFactionSporeggar = 970;
+	RepFactionKurenai = 978;
+	RepFactionAshtongueDeathsworn = 1012;
+	RepFactionNetherwing = 1015;
+	RepFactionOgriLa = 1038;
 }
 
 message UIItemSource {

@@ -410,6 +410,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestEnhancement-AllItems-EnchantCloak-Subtlety-2621"
+ value: {
+  dps: 1935.52607
+  tps: 1773.13537
+ }
+}
+dps_results: {
  key: "TestEnhancement-AllItems-EnchantGloves-Threat-2613"
  value: {
   dps: 1931.86751
@@ -1028,8 +1035,8 @@ dps_results: {
 dps_results: {
  key: "TestEnhancement-AllItems-WrathofSpellfire"
  value: {
-  dps: 1842.45578
-  tps: 1672.81306
+  dps: 1768.9043
+  tps: 1640.52585
  }
 }
 dps_results: {

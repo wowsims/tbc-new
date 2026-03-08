@@ -12,7 +12,7 @@ import "google/protobuf/descriptor.proto";
 // increment the version number directly in the proto files, rather than needing
 // to separately increment two constants in the front-end and back-end code.
 extend google.protobuf.MessageOptions {
-	int32 current_version_number = 50001;
+	int32 current_version_number = 50000;
 }
 
 message ProtoVersion {
@@ -28,7 +28,7 @@ message ProtoVersion {
 	option (current_version_number) = 3;
 
 	// The actual field value is only used within unit tests.
-	int32 saved_version_number = 3;
+	int32 saved_version_number = 1;
 }
 
 message ScalingItemProperties {
