@@ -375,6 +375,10 @@ const (
 	// Will increase the spell.ThreatMultiplier. +5% = 0.05
 	// Uses FloatValue
 	SpellMod_ThreatMultiplier_Pct
+
+	// Add/subtract base damage
+	// Uses: FloatValue
+	SpellMod_BaseDamage_Flat
 )
 
 var spellModMap = map[SpellModType]*SpellModFunctions{
@@ -510,6 +514,11 @@ var spellModMap = map[SpellModType]*SpellModFunctions{
 	SpellMod_ThreatMultiplier_Pct: {
 		Apply:  applyThreatMultiplierPercent,
 		Remove: removeThreatMultiplierPercent,
+	},
+
+	SpellMod_BaseDamage_Flat: {
+		Apply:  applyBaseDamageFlat,
+		Remove: removeBaseDamageFlat,
 	},
 }
 
@@ -877,4 +886,12 @@ func applyThreatMultiplierPercent(mod *SpellMod, spell *Spell) {
 
 func removeThreatMultiplierPercent(mod *SpellMod, spell *Spell) {
 	spell.ThreatMultiplier /= (1 + mod.floatValue)
+}
+
+func applyBaseDamageFlat(mod *SpellMod, spell *Spell) {
+	spell.BonusBaseDamage += mod.floatValue
+}
+
+func removeBaseDamageFlat(mod *SpellMod, spell *Spell) {
+	spell.BonusBaseDamage -= mod.floatValue
 }
