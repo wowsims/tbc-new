@@ -2,7 +2,6 @@ package hunter
 
 import (
 	"math"
-	"time"
 
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/stats"
@@ -45,34 +44,9 @@ func (hunter *Hunter) registerAspectOfTheHawkSpell() {
 func (hunter *Hunter) registerAspectOfTheViper() {
 	actionID := core.ActionID{SpellID: 34074}
 
-	var pa *core.PendingAction
 	hunter.AspectOfTheViperAura = hunter.applySharedAspectConfig(hunter.RegisterAura(core.Aura{
 		Label:    "Aspect of the Viper",
 		ActionID: actionID,
-
-		OnGain: func(aura *core.Aura, sim *core.Simulation) {
-			pa = core.StartPeriodicAction(sim, core.PeriodicActionOptions{
-				Period:   time.Second * 5,
-				Priority: core.ActionPriorityRegen,
-
-				OnAction: func(sim *core.Simulation) {
-					percentMana := math.Max(0.2, math.Min(0.9, hunter.CurrentManaPercent()))
-					scaling := 22.0/35.0*(0.9-percentMana) + 0.11
-					if hunter.GronnStalker2PcAura.IsActive() {
-						scaling += 0.05
-					}
-
-					bonusPer5Seconds := hunter.GetStat(stats.Intellect)*scaling + 0.35*70
-					manaGain := bonusPer5Seconds * 2 / 5
-					hunter.AddMana(sim, manaGain, hunter.AspectOfTheViper.ResourceMetrics)
-				},
-			})
-		},
-
-		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
-			pa.Cancel(sim)
-			pa = nil
-		},
 	}))
 
 	hunter.AspectOfTheViper = hunter.RegisterSpell(core.SpellConfig{
@@ -109,4 +83,24 @@ func (hunter *Hunter) applySharedAspectConfig(aura *core.Aura) *core.Aura {
 	aura.Duration = core.NeverExpires
 	aura.NewExclusiveEffect("Aspect", true, core.ExclusiveEffect{})
 	return aura
+}
+
+func (hunter *Hunter) OnManaTick(sim *core.Simulation) {
+	// https://wowpedia.fandom.com/wiki/Aspect_of_the_Viper?oldid=1458832
+	if hunter.AspectOfTheViperAura.IsActive() {
+		currentMana := hunter.CurrentManaPercent()
+		if currentMana >= 100 {
+			return
+		}
+
+		percentMana := math.Max(0.2, math.Min(0.9, currentMana))
+		scaling := 22.0/35.0*(0.9-percentMana) + 0.11
+		if hunter.GronnStalker2PcAura.IsActive() {
+			scaling += 0.05
+		}
+
+		bonusPer5Seconds := hunter.GetStat(stats.Intellect)*scaling + 0.35*70
+		manaGain := bonusPer5Seconds * 2 / 5
+		hunter.AddMana(sim, manaGain, hunter.AspectOfTheViper.Cost.ResourceCostImpl.(*core.ManaCost).ResourceMetrics)
+	}
 }

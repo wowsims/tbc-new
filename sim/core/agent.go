@@ -32,6 +32,9 @@ type Agent interface {
 	// and once after the final iteration.
 	Reset(sim *Simulation)
 
+	// Called after each mana tick, if this Agent uses mana.
+	OnManaTick(sim *Simulation)
+
 	// Called at the start of each encounter, after the pre-pull.
 	// Used for resetting resources, deactivating auras etc.
 	OnEncounterStart(sim *Simulation)
