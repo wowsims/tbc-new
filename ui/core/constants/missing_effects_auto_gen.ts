@@ -2059,12 +2059,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		29996, // Rod of the Sun King
-		[
-			"Chance on melee attack to gain 10 Energy or 5 Rage.", // 36070 - https://www.wowhead.com/tbc/spell=36070
-		]
-	],
-	[
 		30008, // Pendant of the Lost Ages
 		[
 			"Reduces the duration of any Silence or Interrupt effects used against the wearer by 20%. This effect does not stack with other similar effects.", // 35126 - https://www.wowhead.com/tbc/spell=35126

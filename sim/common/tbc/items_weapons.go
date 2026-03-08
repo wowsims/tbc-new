@@ -9,6 +9,60 @@ import (
 )
 
 func init() {
+	// Rod of the Sun King
+	core.NewItemEffect(29996, func(agent core.Agent) {
+		character := agent.GetCharacter()
+		actionID := core.ActionID{SpellID: 36070}
+		var resourceMetrics *core.ResourceMetrics = nil
+		if character.HasEnergyBar() {
+			resourceMetrics = character.NewEnergyMetrics(actionID)
+		} else if character.HasRageBar() {
+			resourceMetrics = character.NewRageMetrics(actionID)
+		} else {
+			return
+		}
+
+		spell := character.GetOrRegisterSpell(core.SpellConfig{
+			ActionID: actionID,
+			ProcMask: core.ProcMaskEmpty,
+			Flags:    core.SpellFlagNoOnCastComplete | core.SpellFlagNoMetrics,
+
+			ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+				if character.HasEnergyBar() {
+					character.AddEnergy(sim, 10, resourceMetrics)
+				} else if character.HasRageBar() {
+					character.AddRage(sim, 5, resourceMetrics)
+				}
+			},
+		})
+
+		resourceGainDpm := func() *core.DynamicProcManager {
+			return character.NewStaticLegacyPPMManager(
+				1,
+				*character.GetDynamicProcMaskForWeaponEffect(29996),
+			)
+		}
+
+		dpm := resourceGainDpm()
+
+		procTrigger := character.MakeProcTriggerAura(core.ProcTrigger{
+			Name:               "Power of the Sun King",
+			DPM:                dpm,
+			TriggerImmediately: true,
+			Outcome:            core.OutcomeLanded,
+			Callback:           core.CallbackOnSpellHitDealt,
+			Handler: func(sim *core.Simulation, _ *core.Spell, result *core.SpellResult) {
+				spell.Cast(sim, result.Target)
+			},
+		})
+
+		character.RegisterItemSwapCallback(core.AllMeleeWeaponSlots(), func(sim *core.Simulation, slot proto.ItemSlot) {
+			dpm = resourceGainDpm()
+		})
+
+		character.ItemSwap.RegisterProc(29996, procTrigger)
+	})
+
 	// Blinkstrike
 	core.NewItemEffect(31332, func(agent core.Agent) {
 		character := agent.GetCharacter()
@@ -48,6 +102,7 @@ func init() {
 		character.ItemSwap.RegisterProc(31332, procTrigger)
 	})
 
+	// Warglaives of Azzinoth
 	core.NewItemSet(core.ItemSet{
 		Name: "The Twin Blades of Azzinoth",
 		Bonuses: map[int32]core.ApplySetBonus{
