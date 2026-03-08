@@ -28,22 +28,36 @@ func TestElemental(t *testing.T) {
 					},
 				},
 			}},
-			GearSet:  core.GetGearSet("../../../ui/shaman/elemental/gear_sets", "p1"),
-			Talents:  "55003105100213351051--05105301005",
+			GearSet: core.GetGearSet("../../../ui/shaman/elemental/gear_sets", "p1_a"),
+			OtherGearSets: []core.GearSetCombo{
+				core.GetGearSet("../../../ui/shaman/elemental/gear_sets", "p2"),
+				core.GetGearSet("../../../ui/shaman/elemental/gear_sets", "p3"),
+				core.GetGearSet("../../../ui/shaman/elemental/gear_sets", "p3_5"),
+				core.GetGearSet("../../../ui/shaman/elemental/gear_sets", "p4"),
+			},
+			Talents:  DefaulttTalents,
 			Rotation: core.GetAplRotation("../../../ui/shaman/elemental/apls", "default"),
 			ItemFilter: core.ItemFilter{
-				WeaponTypes: []proto.WeaponType{
-					proto.WeaponType_WeaponTypeAxe,
-					proto.WeaponType_WeaponTypeDagger,
-					proto.WeaponType_WeaponTypeFist,
-					proto.WeaponType_WeaponTypeMace,
-					proto.WeaponType_WeaponTypeShield,
-				},
-				ArmorType: proto.ArmorType_ArmorTypeMail,
-				RangedWeaponTypes: []proto.RangedWeaponType{
-					proto.RangedWeaponType_RangedWeaponTypeTotem,
-				},
+				WeaponTypes:       DefaultWeaponTypes,
+				ArmorType:         DefaultArmorType,
+				RangedWeaponTypes: DefaultRangedWeaponTypes,
 			},
 		},
 	}))
+}
+
+const DefaulttTalents = "55003105100213351051--05105301005"
+
+const DefaultArmorType = proto.ArmorType_ArmorTypeMail
+
+var DefaultWeaponTypes = []proto.WeaponType{
+	proto.WeaponType_WeaponTypeAxe,
+	proto.WeaponType_WeaponTypeDagger,
+	proto.WeaponType_WeaponTypeFist,
+	proto.WeaponType_WeaponTypeMace,
+	proto.WeaponType_WeaponTypeShield,
+}
+
+var DefaultRangedWeaponTypes = []proto.RangedWeaponType{
+	proto.RangedWeaponType_RangedWeaponTypeTotem,
 }

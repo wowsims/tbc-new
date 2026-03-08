@@ -1062,129 +1062,633 @@ dps_results: {
  }
 }
 dps_results: {
- key: "TestElemental-Settings-Draenei-p1-Standard-default-FullBuffs-0.0yards-LongMultiTarget"
+ key: "TestElemental-Settings-Draenei-p1_a-Standard-default-FullBuffs-0.0yards-LongMultiTarget"
  value: {
   dps: 2363.32811
   tps: 2531.70039
  }
 }
 dps_results: {
- key: "TestElemental-Settings-Draenei-p1-Standard-default-FullBuffs-0.0yards-LongSingleTarget"
+ key: "TestElemental-Settings-Draenei-p1_a-Standard-default-FullBuffs-0.0yards-LongSingleTarget"
  value: {
   dps: 1787.61138
   tps: 1409.82899
  }
 }
 dps_results: {
- key: "TestElemental-Settings-Draenei-p1-Standard-default-FullBuffs-0.0yards-ShortSingleTarget"
+ key: "TestElemental-Settings-Draenei-p1_a-Standard-default-FullBuffs-0.0yards-ShortSingleTarget"
  value: {
   dps: 2066.79405
   tps: 1643.02867
  }
 }
 dps_results: {
- key: "TestElemental-Settings-Draenei-p1-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
+ key: "TestElemental-Settings-Draenei-p1_a-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
  value: {
   dps: 939.49474
   tps: 719.73109
  }
 }
 dps_results: {
- key: "TestElemental-Settings-Draenei-p1-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
+ key: "TestElemental-Settings-Draenei-p1_a-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
  value: {
   dps: 809.79084
   tps: 629.22199
  }
 }
 dps_results: {
- key: "TestElemental-Settings-Draenei-p1-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
+ key: "TestElemental-Settings-Draenei-p1_a-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
  value: {
   dps: 1504.99028
   tps: 1170.6262
  }
 }
 dps_results: {
- key: "TestElemental-Settings-Orc-p1-Standard-default-FullBuffs-0.0yards-LongMultiTarget"
+ key: "TestElemental-Settings-Draenei-p2-Standard-default-FullBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 2441.30584
+  tps: 2594.95586
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Draenei-p2-Standard-default-FullBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 1834.72821
+  tps: 1447.78026
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Draenei-p2-Standard-default-FullBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 2127.23718
+  tps: 1688.72072
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Draenei-p2-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 950.18369
+  tps: 729.03157
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Draenei-p2-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 813.18745
+  tps: 631.80193
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Draenei-p2-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 1539.5578
+  tps: 1201.0708
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Draenei-p3-Standard-default-FullBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 2877.81139
+  tps: 2960.70841
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Draenei-p3-Standard-default-FullBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 2294.07277
+  tps: 1806.97356
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Draenei-p3-Standard-default-FullBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 2620.05912
+  tps: 2068.10012
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Draenei-p3-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 1193.14746
+  tps: 916.61937
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Draenei-p3-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 1037.24123
+  tps: 805.64373
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Draenei-p3-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 1909.21013
+  tps: 1483.99202
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Draenei-p3_5-Standard-default-FullBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 2931.8454
+  tps: 3134.33427
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Draenei-p3_5-Standard-default-FullBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 2323.95235
+  tps: 1908.96684
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Draenei-p3_5-Standard-default-FullBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 2709.58689
+  tps: 2226.60701
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Draenei-p3_5-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 1171.11173
+  tps: 934.0033
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Draenei-p3_5-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 1032.24245
+  tps: 830.82199
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Draenei-p3_5-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 2015.50598
+  tps: 1624.22545
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Draenei-p4-Standard-default-FullBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 3302.20757
+  tps: 3522.1898
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Draenei-p4-Standard-default-FullBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 2673.63786
+  tps: 2189.5568
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Draenei-p4-Standard-default-FullBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 3056.17728
+  tps: 2495.89699
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Draenei-p4-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 1181.67761
+  tps: 945.17103
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Draenei-p4-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 1048.90504
+  tps: 843.42983
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Draenei-p4-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 2254.24154
+  tps: 1809.11732
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Orc-p1_a-Standard-default-FullBuffs-0.0yards-LongMultiTarget"
  value: {
   dps: 2386.39761
   tps: 2550.07339
  }
 }
 dps_results: {
- key: "TestElemental-Settings-Orc-p1-Standard-default-FullBuffs-0.0yards-LongSingleTarget"
+ key: "TestElemental-Settings-Orc-p1_a-Standard-default-FullBuffs-0.0yards-LongSingleTarget"
  value: {
   dps: 1804.41564
   tps: 1424.23886
  }
 }
 dps_results: {
- key: "TestElemental-Settings-Orc-p1-Standard-default-FullBuffs-0.0yards-ShortSingleTarget"
+ key: "TestElemental-Settings-Orc-p1_a-Standard-default-FullBuffs-0.0yards-ShortSingleTarget"
  value: {
   dps: 2100.59564
   tps: 1671.50244
  }
 }
 dps_results: {
- key: "TestElemental-Settings-Orc-p1-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
+ key: "TestElemental-Settings-Orc-p1_a-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
  value: {
   dps: 937.95796
   tps: 720.84641
  }
 }
 dps_results: {
- key: "TestElemental-Settings-Orc-p1-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
+ key: "TestElemental-Settings-Orc-p1_a-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
  value: {
   dps: 812.37517
   tps: 630.85899
  }
 }
 dps_results: {
- key: "TestElemental-Settings-Orc-p1-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
+ key: "TestElemental-Settings-Orc-p1_a-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
  value: {
   dps: 1520.75315
   tps: 1185.67895
  }
 }
 dps_results: {
- key: "TestElemental-Settings-Troll-p1-Standard-default-FullBuffs-0.0yards-LongMultiTarget"
+ key: "TestElemental-Settings-Orc-p2-Standard-default-FullBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 2460.39775
+  tps: 2611.03769
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Orc-p2-Standard-default-FullBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 1854.75327
+  tps: 1468.44961
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Orc-p2-Standard-default-FullBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 2168.90357
+  tps: 1727.53069
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Orc-p2-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 958.34209
+  tps: 735.99938
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Orc-p2-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 819.92644
+  tps: 636.75886
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Orc-p2-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 1567.95172
+  tps: 1224.06784
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Orc-p3-Standard-default-FullBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 2907.44748
+  tps: 2984.4662
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Orc-p3-Standard-default-FullBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 2319.26505
+  tps: 1827.27682
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Orc-p3-Standard-default-FullBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 2663.5556
+  tps: 2103.25658
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Orc-p3-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 1206.32197
+  tps: 927.08102
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Orc-p3-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 1051.81792
+  tps: 819.12952
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Orc-p3-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 1942.77453
+  tps: 1513.50197
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Orc-p3_5-Standard-default-FullBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 2960.08582
+  tps: 3156.69838
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Orc-p3_5-Standard-default-FullBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 2347.55119
+  tps: 1928.7978
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Orc-p3_5-Standard-default-FullBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 2750.41905
+  tps: 2259.53545
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Orc-p3_5-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 1185.16673
+  tps: 945.04421
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Orc-p3_5-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 1041.05465
+  tps: 837.85843
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Orc-p3_5-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 2049.63869
+  tps: 1652.61479
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Orc-p4-Standard-default-FullBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 3337.81067
+  tps: 3550.62542
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Orc-p4-Standard-default-FullBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 2704.46106
+  tps: 2214.9703
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Orc-p4-Standard-default-FullBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 3108.3764
+  tps: 2537.51791
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Orc-p4-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 1195.64129
+  tps: 955.89654
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Orc-p4-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 1060.08654
+  tps: 852.39691
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Orc-p4-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 2294.56224
+  tps: 1841.16237
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Troll-p1_a-Standard-default-FullBuffs-0.0yards-LongMultiTarget"
  value: {
   dps: 2361.61991
   tps: 2530.25835
  }
 }
 dps_results: {
- key: "TestElemental-Settings-Troll-p1-Standard-default-FullBuffs-0.0yards-LongSingleTarget"
+ key: "TestElemental-Settings-Troll-p1_a-Standard-default-FullBuffs-0.0yards-LongSingleTarget"
  value: {
   dps: 1785.62429
   tps: 1409.13812
  }
 }
 dps_results: {
- key: "TestElemental-Settings-Troll-p1-Standard-default-FullBuffs-0.0yards-ShortSingleTarget"
+ key: "TestElemental-Settings-Troll-p1_a-Standard-default-FullBuffs-0.0yards-ShortSingleTarget"
  value: {
   dps: 2065.93865
   tps: 1643.30496
  }
 }
 dps_results: {
- key: "TestElemental-Settings-Troll-p1-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
+ key: "TestElemental-Settings-Troll-p1_a-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
  value: {
   dps: 925.22109
   tps: 710.30283
  }
 }
 dps_results: {
- key: "TestElemental-Settings-Troll-p1-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
+ key: "TestElemental-Settings-Troll-p1_a-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
  value: {
   dps: 801.44013
   tps: 622.01286
  }
 }
 dps_results: {
- key: "TestElemental-Settings-Troll-p1-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
+ key: "TestElemental-Settings-Troll-p1_a-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
  value: {
   dps: 1492.6379
   tps: 1162.84709
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Troll-p2-Standard-default-FullBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 2435.65212
+  tps: 2591.27326
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Troll-p2-Standard-default-FullBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 1834.80761
+  tps: 1452.33969
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Troll-p2-Standard-default-FullBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 2133.98466
+  tps: 1699.10227
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Troll-p2-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 941.17138
+  tps: 722.41301
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Troll-p2-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 808.28636
+  tps: 627.7109
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Troll-p2-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 1538.90221
+  tps: 1201.14848
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Troll-p3-Standard-default-FullBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 2877.39738
+  tps: 2962.45576
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Troll-p3-Standard-default-FullBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 2292.30837
+  tps: 1805.9081
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Troll-p3-Standard-default-FullBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 2618.98015
+  tps: 2067.98963
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Troll-p3-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 1186.13435
+  tps: 911.23894
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Troll-p3-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 1034.38652
+  tps: 804.71003
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Troll-p3-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 1907.12944
+  tps: 1484.70998
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Troll-p3_5-Standard-default-FullBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 2929.57287
+  tps: 3132.36356
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Troll-p3_5-Standard-default-FullBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 2322.97958
+  tps: 1908.86641
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Troll-p3_5-Standard-default-FullBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 2707.34708
+  tps: 2224.64143
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Troll-p3_5-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 1167.70487
+  tps: 930.97588
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Troll-p3_5-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 1022.17533
+  tps: 822.40884
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Troll-p3_5-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 2014.67701
+  tps: 1624.22545
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Troll-p4-Standard-default-FullBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 3300.82726
+  tps: 3521.00827
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Troll-p4-Standard-default-FullBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 2674.78146
+  tps: 2193.02744
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Troll-p4-Standard-default-FullBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 3056.01148
+  tps: 2495.7639
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Troll-p4-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 1177.93293
+  tps: 942.12977
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Troll-p4-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 1048.30627
+  tps: 842.86906
+ }
+}
+dps_results: {
+ key: "TestElemental-Settings-Troll-p4-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 2252.60785
+  tps: 1807.67641
  }
 }
 dps_results: {

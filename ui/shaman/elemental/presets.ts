@@ -6,7 +6,8 @@ import { SavedTalents } from '../../core/proto/ui.js';
 import { Stats } from '../../core/proto_utils/stats';
 import { defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
 import DefaultApl from './apls/default.apl.json';
-import P1Gear from './gear_sets/p1.gear.json';
+import P1AllianceGear from './gear_sets/p1_a.gear.json';
+import P1HordeGear from './gear_sets/p1_h.gear.json';
 import P2Gear from './gear_sets/p2.gear.json';
 import P3Gear from './gear_sets/p3.gear.json';
 import P3_5Gear from './gear_sets/p3_5.gear.json';
@@ -18,7 +19,8 @@ import PreraidGear from './gear_sets/preraid.gear.json';
 // keep them in a separate file.
 
 export const PRERAID_PRESET = PresetUtils.makePresetGear('Pre-Raid', PreraidGear);
-export const P1_PRESET = PresetUtils.makePresetGear('Phase 1', P1Gear);
+export const P1_PRESET_A = PresetUtils.makePresetGear('Phase 1 (A)', P1AllianceGear);
+export const P1_PRESET_H = PresetUtils.makePresetGear('Phase 1 (H)', P1HordeGear);
 export const P2_PRESET = PresetUtils.makePresetGear('Phase 2', P2Gear);
 export const P3_PRESET = PresetUtils.makePresetGear('Phase 3', P3Gear);
 export const P3_5_PRESET = PresetUtils.makePresetGear('Phase 3.5', P3_5Gear);

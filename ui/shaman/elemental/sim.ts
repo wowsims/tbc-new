@@ -43,7 +43,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecElementalShaman, {
 	gemStats: DEFAULT_HYBRID_CASTER_GEM_STATS,
 	defaults: {
 		// Default equipped gear.
-		gear: Presets.P1_PRESET.gear,
+		gear: Presets.P1_PRESET_A.gear,
 		// Default EP weights for sorting gear in the gear picker.
 		epWeights: Presets.EP_PRESET_DEFAULT.epWeights,
 		// Default consumes settings.
@@ -82,7 +82,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecElementalShaman, {
 		// Preset rotations that the user can quickly select.
 		rotations: [Presets.ROTATION_PRESET_DEFAULT],
 		// Preset gear configurations that the user can quickly select.
-		gear: [Presets.PRERAID_PRESET, Presets.P1_PRESET, Presets.P2_PRESET, Presets.P3_PRESET, Presets.P3_5_PRESET, Presets.P4_PRESET],
+		gear: [Presets.PRERAID_PRESET, Presets.P1_PRESET_A, Presets.P1_PRESET_H, Presets.P2_PRESET, Presets.P3_PRESET, Presets.P3_5_PRESET, Presets.P4_PRESET],
 		// Preset build combinations that the user can quickly select.
 		builds: [Presets.P1_PRESET_BUILD_DEFAULT],
 	},
@@ -105,10 +105,10 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecElementalShaman, {
 			defaultGear: {
 				[Faction.Unknown]: {},
 				[Faction.Alliance]: {
-					1: Presets.P1_PRESET.gear,
+					1: Presets.P1_PRESET_A.gear,
 				},
 				[Faction.Horde]: {
-					1: Presets.P1_PRESET.gear,
+					1: Presets.P1_PRESET_A.gear,
 				},
 			},
 			otherDefaults: Presets.OtherDefaults,
