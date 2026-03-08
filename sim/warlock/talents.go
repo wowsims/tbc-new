@@ -223,7 +223,7 @@ func (warlock *Warlock) applyShadowMastery() {
 	}
 
 	warlock.AddStaticMod(core.SpellModConfig{
-		Kind:       core.SpellMod_DamageDone_Pct,
+		Kind:       core.SpellMod_DamageDone_Flat,
 		FloatValue: 0.02 * float64(warlock.Talents.ShadowMastery),
 		ClassMask:  WarlockShadowDamage,
 	})
@@ -610,7 +610,7 @@ func (warlock *Warlock) applyImprovedImmolate() {
 	}
 
 	warlock.AddStaticMod(core.SpellModConfig{
-		Kind:       core.SpellMod_DamageDone_Pct,
+		Kind:       core.SpellMod_DamageDone_Flat,
 		FloatValue: 0.05 * float64(warlock.Talents.ImprovedImmolate),
 		ClassMask:  WarlockSpellImmolate,
 	})
@@ -634,7 +634,7 @@ func (warlock *Warlock) applyEmberstorm() {
 	}
 
 	warlock.AddStaticMod(core.SpellModConfig{
-		Kind:       core.SpellMod_DamageDone_Pct,
+		Kind:       core.SpellMod_DamageDone_Flat,
 		FloatValue: 0.02 * float64(warlock.Talents.Emberstorm),
 		ClassMask:  WarlockFireDamage,
 	})

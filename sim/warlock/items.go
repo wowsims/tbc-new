@@ -112,16 +112,21 @@ var ItemSetCorruptorRaiment = core.NewItemSet(core.ItemSet{
 			// Improved Corruption and Immolate - 37384
 			warlock := agent.(WarlockAgent).GetWarlock()
 
-			corrMod := warlock.AddDynamicMod(core.SpellModConfig{
-				Kind:       core.SpellMod_DotDamageDone_Pct,
-				FloatValue: 0.10,
-				ClassMask:  WarlockSpellShadowBolt,
-			})
+			warlock.OnSpellRegistered(func(spell *core.Spell) {
+				if spell.Matches(WarlockSpellCorruption | WarlockSpellImmolateDot) {
+					for _, target := range warlock.Env.Encounter.AllTargetUnits {
+						if warlock.T5_4PC_Multiplier[target.UnitIndex] == nil {
+							warlock.T5_4PC_Multiplier[target.UnitIndex] = make(map[*core.Spell]float64)
+						}
 
-			immoMod := warlock.AddDynamicMod(core.SpellModConfig{
-				Kind:       core.SpellMod_DotDamageDone_Pct,
-				FloatValue: 0.10,
-				ClassMask:  WarlockSpellImmolate,
+						dot := spell.Dot(target)
+						if dot != nil {
+							dot.ApplyOnGain(func(_ *core.Aura, _ *core.Simulation) {
+								warlock.T5_4PC_Multiplier[target.UnitIndex][spell] = 1
+							})
+						}
+					}
+				}
 			})
 
 			setBonusAura.AttachProcTrigger(core.ProcTrigger{
@@ -130,12 +135,25 @@ var ItemSetCorruptorRaiment = core.NewItemSet(core.ItemSet{
 				ClassSpellMask: WarlockSpellShadowBolt | WarlockSpellIncinerate,
 				Outcome:        core.OutcomeLanded,
 				Callback:       core.CallbackOnSpellHitDealt,
-				Handler: func(sim *core.Simulation, spell *core.Spell, _ *core.SpellResult) {
-					if spell.Matches(WarlockSpellShadowBolt) {
-						corrMod.Activate()
-					}
-					if spell.Matches(WarlockSpellIncinerate) {
-						immoMod.Activate()
+				Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+					dot := core.Ternary(
+						spell.Matches(WarlockSpellShadowBolt),
+						warlock.Corruption.Dot(result.Target),
+						warlock.Immolate.Dot(result.Target),
+					)
+					baseDamage := core.Ternary(
+						spell.Matches(WarlockSpellShadowBolt),
+						warlock.CorruptionTickBaseDamage,
+						warlock.ImmolateTickBaseDamage,
+					)
+					if dot != nil && dot.IsActive() {
+						currentBaseDamage := baseDamage * warlock.T5_4PC_Multiplier[result.Target.UnitIndex][dot.Spell]
+						snapShotterBonusCoeff := dot.SnapshotBaseDamage - currentBaseDamage
+
+						warlock.T5_4PC_Multiplier[result.Target.UnitIndex][dot.Spell] *= 1.10
+
+						newBaseDamage := baseDamage * warlock.T5_4PC_Multiplier[result.Target.UnitIndex][dot.Spell]
+						dot.SnapshotBaseDamage = newBaseDamage + snapShotterBonusCoeff
 					}
 				},
 			})
@@ -166,22 +184,10 @@ var ItemSetMaleficRaiment = core.NewItemSet(core.ItemSet{
 		},
 		4: func(agent core.Agent, setBonusAura *core.Aura) {
 			// Increases damage done by shadowbolt and incinerate by 6%.
-			// Improved Shadow Bolt and Incinerate - 38393
-			warlock := agent.(WarlockAgent).GetWarlock()
-
-			impSBoltIncMod := warlock.AddDynamicMod(core.SpellModConfig{
-				Kind:       core.SpellMod_DamageDone_Pct,
+			setBonusAura.AttachSpellMod(core.SpellModConfig{
+				Kind:       core.SpellMod_DamageDone_Flat,
 				FloatValue: 0.06,
 				ClassMask:  WarlockSpellShadowBolt | WarlockSpellIncinerate,
-			})
-
-			setBonusAura.AttachProcTrigger(core.ProcTrigger{
-				Name:           "Malefic Raiment 4pc - Improved Shadow Bolt and Incinerate",
-				ActionID:       core.ActionID{SpellID: 38393},
-				ClassSpellMask: WarlockSpellShadowBolt | WarlockSpellIncinerate,
-				Handler: func(sim *core.Simulation, spell *core.Spell, _ *core.SpellResult) {
-					impSBoltIncMod.Activate()
-				},
 			})
 		},
 	},

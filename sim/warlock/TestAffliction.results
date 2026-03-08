@@ -314,7 +314,7 @@ dps_results: {
 dps_results: {
  key: "TestAffliction-AllItems-CorruptorRaiment"
  value: {
-  dps: 1687.92051
+  dps: 1720.53457
   tps: 1107.14806
  }
 }
@@ -622,8 +622,8 @@ dps_results: {
 dps_results: {
  key: "TestAffliction-AllItems-MaleficRaiment"
  value: {
-  dps: 1820.02532
-  tps: 1225.18259
+  dps: 1887.28429
+  tps: 1284.505
  }
 }
 dps_results: {
@@ -994,7 +994,7 @@ dps_results: {
 dps_results: {
  key: "TestAffliction-AllItems-VoidheartRaiment"
  value: {
-  dps: 1665.60543
+  dps: 1677.16521
   tps: 1086.65548
  }
 }
