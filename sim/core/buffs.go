@@ -834,13 +834,18 @@ func WindfuryTotemAura(char *Character, isImpoved bool) *Aura {
 	return wfProcTrigger
 }
 
-var WrathOfAirTotemCategory = "WrathOfAirTotem"
+const (
+	WrathOfAirTotemCategory      = "WrathOfAirTotem"
+	WrathOfAirTotemBaseValue     = 101.0
+	WrathOfAirTotemImprovedValue = 20.0
+)
+
+func WrathOfAirTotemValue(improved bool) float64 {
+	return WrathOfAirTotemBaseValue + TernaryFloat64(improved, WrathOfAirTotemImprovedValue, 0)
+}
 
 func WrathOfAirTotemAura(char *Character, improved bool) *Aura {
-	buff := 101.0
-	if improved {
-		buff += 20.0
-	}
+	buff := WrathOfAirTotemValue(improved)
 
 	return makeStatBuff(char, BuffConfig{
 		Label:    "Wrath of Air Totem",
