@@ -290,7 +290,7 @@ func (spell *Spell) CalcOutcome(sim *Simulation, target *Unit, outcomeApplier Ou
 func (spell *Spell) calcDamageInternal(sim *Simulation, target *Unit, baseDamage float64, attackerMultiplier float64, isPeriodic bool, outcomeApplier OutcomeApplier) *SpellResult {
 	attackTable := spell.Unit.AttackTables[target.UnitIndex]
 	result := spell.NewResult(target)
-	result.Damage = baseDamage
+	result.Damage = baseDamage + spell.BonusBaseDamage
 
 	if sim.Log == nil {
 		result.Damage *= attackerMultiplier

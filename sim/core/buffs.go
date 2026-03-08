@@ -12,10 +12,11 @@ import (
 )
 
 type BuffConfig struct {
-	Label    string
-	ActionID ActionID
-	Duration time.Duration
-	Stats    []StatConfig
+	Label             string
+	ActionID          ActionID
+	Duration          time.Duration
+	Stats             []StatConfig
+	ExclusiveCategory string
 }
 
 type StatConfig struct {
@@ -51,6 +52,41 @@ func registerStatEffect(aura *Aura, config []StatConfig) {
 	}
 }
 
+func makeExclusiveMultiplierBuff(aura *Aura, stat stats.Stat, value float64, exclusiveCategory string) {
+	dep := aura.Unit.NewDynamicMultiplyStat(stat, value)
+	aura.NewExclusiveEffect(exclusiveCategory+stat.StatName()+"Mul", false, ExclusiveEffect{
+		Priority: value,
+		OnGain: func(ee *ExclusiveEffect, s *Simulation) {
+			ee.Aura.Unit.EnableBuildPhaseStatDep(s, dep)
+		},
+		OnExpire: func(ee *ExclusiveEffect, s *Simulation) {
+			ee.Aura.Unit.DisableBuildPhaseStatDep(s, dep)
+		},
+	})
+}
+
+func makeExclusiveFlatStatBuff(aura *Aura, stat stats.Stat, value float64, exclusiveCategory string) {
+	aura.NewExclusiveEffect(exclusiveCategory+stat.StatName()+"Add", false, ExclusiveEffect{
+		Priority: value,
+		OnGain: func(ee *ExclusiveEffect, sim *Simulation) {
+			ee.Aura.Unit.AddStatDynamic(sim, stat, value)
+		},
+		OnExpire: func(ee *ExclusiveEffect, sim *Simulation) {
+			ee.Aura.Unit.AddStatDynamic(sim, stat, -value)
+		},
+	})
+}
+
+func registerExlusiveEffects(aura *Aura, config []StatConfig, exclusiveCategory string) {
+	for _, statConfig := range config {
+		if statConfig.IsMultiplicative {
+			makeExclusiveMultiplierBuff(aura, statConfig.Stat, statConfig.Amount, exclusiveCategory)
+		} else {
+			makeExclusiveFlatStatBuff(aura, statConfig.Stat, statConfig.Amount, exclusiveCategory)
+		}
+	}
+}
+
 func makeStatBuff(char *Character, config BuffConfig) *Aura {
 	if config.Label == "" {
 		panic("Buff without label.")
@@ -62,7 +98,7 @@ func makeStatBuff(char *Character, config BuffConfig) *Aura {
 
 	baseAura := char.GetOrRegisterAura(Aura{
 		Label:      config.Label,
-		ActionID:   config.ActionID,
+		ActionID:   config.ActionID.WithTag(-1),
 		Duration:   TernaryDuration(config.Duration > 0, config.Duration, NeverExpires),
 		BuildPhase: CharacterBuildPhaseBuffs,
 		OnReset: func(aura *Aura, sim *Simulation) {
@@ -70,7 +106,11 @@ func makeStatBuff(char *Character, config BuffConfig) *Aura {
 		},
 	})
 
-	registerStatEffect(baseAura, config.Stats)
+	if config.ExclusiveCategory != "" {
+		registerExlusiveEffects(baseAura, config.Stats, config.ExclusiveCategory)
+	} else {
+		registerStatEffect(baseAura, config.Stats)
+	}
 	return baseAura
 }
 
@@ -598,6 +638,8 @@ func TrueShotAuraBuff(char *Character) *Aura {
 	})
 }
 
+var UnleashedRageCategory = "UnleashedRage"
+
 func UnleashedRageAura(char *Character) *Aura {
 	return makeStatBuff(char, BuffConfig{
 		Label:    "Unleashed Rage",
@@ -605,6 +647,7 @@ func UnleashedRageAura(char *Character) *Aura {
 		Stats: []StatConfig{
 			{stats.AttackPower, 1.1, true},
 		},
+		ExclusiveCategory: UnleashedRageCategory,
 	})
 }
 
@@ -613,6 +656,8 @@ func UnleashedRageAura(char *Character) *Aura {
 //	Totems
 //
 // //////////////////////////
+var GraceOfAirTotemCategory = "GraceOfAirTotem"
+
 func GraceOfAirTotemAura(char *Character, improved bool, wfActive bool) *Aura {
 	agiBuff := 77.0
 	if improved {
@@ -630,7 +675,8 @@ func GraceOfAirTotemAura(char *Character, improved bool, wfActive bool) *Aura {
 		Stats: []StatConfig{
 			{stats.Agility, agiBuff, false},
 		},
-		Duration: duration,
+		Duration:          duration,
+		ExclusiveCategory: GraceOfAirTotemCategory,
 	}).ApplyOnReset(func(aura *Aura, sim *Simulation) {
 		if wfActive {
 			StartPeriodicAction(sim, PeriodicActionOptions{
@@ -644,6 +690,8 @@ func GraceOfAirTotemAura(char *Character, improved bool, wfActive bool) *Aura {
 	})
 }
 
+var ManaSpringTotemCategory = "ManaSpringTotem"
+
 func ManaSpringTotemAura(char *Character, improved bool) *Aura {
 	mp5Buff := 50.0
 	if improved {
@@ -656,8 +704,11 @@ func ManaSpringTotemAura(char *Character, improved bool) *Aura {
 		Stats: []StatConfig{
 			{stats.MP5, mp5Buff, false},
 		},
+		ExclusiveCategory: ManaSpringTotemCategory,
 	})
 }
+
+var StrengthOfEarthTotemCategory = "StrengthOfEarthTotem"
 
 func StrengthOfEarthTotemAura(char *Character, isImproved bool) *Aura {
 	strBuff := 86.0
@@ -671,6 +722,7 @@ func StrengthOfEarthTotemAura(char *Character, isImproved bool) *Aura {
 		Stats: []StatConfig{
 			{stats.Strength, strBuff, false},
 		},
+		ExclusiveCategory: StrengthOfEarthTotemCategory,
 	})
 }
 
@@ -691,9 +743,10 @@ func TranquilAirTotemAura(char *Character) *Aura {
 	return char.GetOrRegisterAura(Aura{
 		Label:    "Tranquil Air Totem",
 		ActionID: ActionID{SpellID: 25909},
-		Duration: time.Minute * 2,
 	}).AttachMultiplicativePseudoStatBuff(&char.PseudoStats.ThreatMultiplier, 0.8)
 }
+
+var WindfuryTotemCategory = "WindfuryTotem"
 
 func WindfuryTotemAura(char *Character, isImpoved bool) *Aura {
 	apBonus := 445.0
@@ -724,10 +777,10 @@ func WindfuryTotemAura(char *Character, isImpoved bool) *Aura {
 
 	var windfurySpell *Spell
 	wfProcTrigger := char.MakeProcTriggerAura(ProcTrigger{
-		Name:               "Windfury Totem",
-		MetricsActionID:    ActionID{SpellID: 25587},
+		Name:               "Windfury Totem Trigger",
+		MetricsActionID:    ActionID{SpellID: 25580, Tag: -1},
 		ProcChance:         0.2,
-		Duration:           time.Second * 10,
+		Duration:           NeverExpires,
 		Outcome:            OutcomeLanded,
 		Callback:           CallbackOnSpellHitDealt,
 		ProcMask:           ProcMaskMeleeMHAuto,
@@ -742,6 +795,12 @@ func WindfuryTotemAura(char *Character, isImpoved bool) *Aura {
 			}
 			char.AutoAttacks.MaybeReplaceMHSwing(sim, windfurySpell).Cast(sim, result.Target)
 		},
+	})
+
+	wfAura := char.GetOrRegisterAura(Aura{
+		Label:    "Windfury Totem",
+		ActionID: ActionID{SpellID: 25587, Tag: -1},
+		Duration: time.Second * 10,
 	}).ApplyOnInit(func(aura *Aura, sim *Simulation) {
 		config := *char.AutoAttacks.MHConfig()
 		config.ActionID = config.ActionID.WithTag(25584)
@@ -757,18 +816,36 @@ func WindfuryTotemAura(char *Character, isImpoved bool) *Aura {
 		})
 	})
 
+	wfAura.NewExclusiveEffect(WindfuryTotemCategory, false, ExclusiveEffect{
+		Priority: apBonus,
+		OnGain: func(_ *ExclusiveEffect, sim *Simulation) {
+			wfProcTrigger.Activate(sim)
+		},
+		OnExpire: func(_ *ExclusiveEffect, sim *Simulation) {
+			wfProcTrigger.Deactivate(sim)
+			wfAura.Deactivate(sim)
+		},
+	})
+
 	char.RegisterItemSwapCallback([]proto.ItemSlot{proto.ItemSlot_ItemSlotMainHand}, func(sim *Simulation, slot proto.ItemSlot) {
-		wfProcTrigger.Deactivate(sim)
+		wfAura.Deactivate(sim)
 	})
 
 	return wfProcTrigger
 }
 
+const (
+	WrathOfAirTotemCategory      = "WrathOfAirTotem"
+	WrathOfAirTotemBaseValue     = 101.0
+	WrathOfAirTotemImprovedValue = 20.0
+)
+
+func WrathOfAirTotemValue(improved bool) float64 {
+	return WrathOfAirTotemBaseValue + TernaryFloat64(improved, WrathOfAirTotemImprovedValue, 0)
+}
+
 func WrathOfAirTotemAura(char *Character, improved bool) *Aura {
-	buff := 101.0
-	if improved {
-		buff += 20.0
-	}
+	buff := WrathOfAirTotemValue(improved)
 
 	return makeStatBuff(char, BuffConfig{
 		Label:    "Wrath of Air Totem",
@@ -777,6 +854,7 @@ func WrathOfAirTotemAura(char *Character, improved bool) *Aura {
 			{stats.SpellDamage, buff, false},
 			{stats.HealingPower, buff, false},
 		},
+		ExclusiveCategory: WrathOfAirTotemCategory,
 	})
 }
 

@@ -290,7 +290,7 @@ export const PARTY_BUFFS_CONFIG = [
 	{
 		config: SanctityAura,
 		picker: IconPicker,
-		stats: [],
+		stats: [Stat.StatHolyDamage],
 	},
 	{
 		config: TotemOfWrath,

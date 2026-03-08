@@ -74,7 +74,6 @@ import {
 	APLValueSequenceIsComplete,
 	APLValueSequenceIsReady,
 	APLValueSequenceTimeToReady,
-	APLValueShamanFireElementalDuration,
 	APLValueSpellCanCast,
 	APLValueSpellCastTime,
 	APLValueSpellChanneledTicks,
@@ -1454,14 +1453,6 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 		newValue: APLValueTotemRemainingTime.create,
 		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getClass() == Class.ClassShaman,
 		fields: [totemTypeFieldConfig('totemType')],
-	}),
-	shamanFireElementalDuration: inputBuilder({
-		label: i18n.t('rotation_tab.apl.values.shaman_fire_elemental_duration.label'),
-		submenu: ['shaman'],
-		shortDescription: i18n.t('rotation_tab.apl.values.shaman_fire_elemental_duration.tooltip'),
-		newValue: APLValueShamanFireElementalDuration.create,
-		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getClass() == Class.ClassShaman,
-		fields: [],
 	}),
 	catExcessEnergy: inputBuilder({
 		label: i18n.t('rotation_tab.apl.values.cat_excess_energy.label'),

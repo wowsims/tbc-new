@@ -611,6 +611,27 @@ func (parentAura *Aura) AttachDDBC(index int, maxIndex int, attackTables *[]*Att
 	return parentAura
 }
 
+func (parentAura *Aura) AttachPeriodicAction(config PeriodicActionOptions) *Aura {
+	var pa *PendingAction
+	tickImmediately := config.TickImmediately
+	config.TickImmediately = false
+	parentAura.ApplyOnGain(func(_ *Aura, sim *Simulation) {
+		if pa == nil {
+			config.TickImmediately = false
+			pa = NewPeriodicAction(sim, config)
+		}
+		pa.NextActionAt = sim.CurrentTime + TernaryDuration(tickImmediately, 0, config.Period)
+		sim.AddPendingAction(pa)
+	})
+	parentAura.ApplyOnExpire(func(_ *Aura, sim *Simulation) {
+		pa.Cancel(sim)
+	})
+	if parentAura.IsActive() {
+		panic("Can't attach a periodic action to an active aura.")
+	}
+	return parentAura
+}
+
 type ShieldStrengthCalculator func(unit *Unit) float64
 type OnDamageAbsorbedCallback func(sim *Simulation, aura *DamageAbsorptionAura, result *SpellResult, absorbedDamage float64)
 type ShieldShouldApplyCondition func(sim *Simulation, spell *Spell, result *SpellResult, isPeriodic bool) bool

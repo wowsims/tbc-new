@@ -7,11 +7,11 @@ import (
 	"github.com/wowsims/tbc/sim/core/proto"
 )
 
-func (shaman *Shaman) registerFireElementalTotem(isGuardian bool) {
+func (shaman *Shaman) registerFireElementalTotem() {
 
 	actionID := core.ActionID{SpellID: 2894}
 
-	totalDuration := time.Second * 60
+	totalDuration := time.Second * 120
 
 	fireElementalAura := shaman.RegisterAura(core.Aura{
 		Label:    "Fire Elemental Totem",
@@ -21,18 +21,18 @@ func (shaman *Shaman) registerFireElementalTotem(isGuardian bool) {
 
 	shaman.FireElementalTotem = shaman.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
-		Flags:          core.SpellFlagAPL | core.SpellFlagReadinessTrinket,
+		Flags:          core.SpellFlagAPL | SpellFlagInstant,
 		ClassSpellMask: SpellMaskFireElementalTotem,
 		ManaCost: core.ManaCostOptions{
-			BaseCostPercent: 26.9,
+			FlatCost: 680,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: time.Second * 1,
 			},
 			CD: core.Cooldown{
 				Timer:    shaman.NewTimer(),
-				Duration: time.Minute * 5,
+				Duration: time.Minute * 20,
 			},
 			SharedCD: core.Cooldown{
 				Timer:    shaman.GetOrInitTimer(&shaman.ElementalSharedCDTimer),
@@ -45,11 +45,7 @@ func (shaman *Shaman) registerFireElementalTotem(isGuardian bool) {
 				shaman.TotemExpirations[FireTotem] = sim.CurrentTime + fireElementalAura.Duration
 			}
 
-			shaman.MagmaTotem.AOEDot().Deactivate(sim)
-			searingTotemDot := shaman.SearingTotem.Dot(shaman.CurrentTarget)
-			if searingTotemDot != nil {
-				searingTotemDot.Deactivate(sim)
-			}
+			shaman.cancelFireTotems(sim)
 
 			shaman.FireElemental.Disable(sim)
 			shaman.FireElemental.EnableWithTimeout(sim, shaman.FireElemental, fireElementalAura.Duration)

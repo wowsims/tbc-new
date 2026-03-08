@@ -12,8 +12,6 @@ func (shaman *Shaman) NewAPLValue(rot *core.APLRotation, config *proto.APLValue)
 	switch config.Value.(type) {
 	case *proto.APLValue_TotemRemainingTime:
 		return shaman.newValueTotemRemainingTime(rot, config.GetTotemRemainingTime(), config.Uuid)
-	case *proto.APLValue_ShamanFireElementalDuration:
-		return shaman.newValueFireElementalDuration(config.GetShamanFireElementalDuration(), config.Uuid)
 	default:
 		return nil
 	}
@@ -39,43 +37,19 @@ func (value *APLValueTotemRemainingTime) Type() proto.APLValueType {
 	return proto.APLValueType_ValueTypeDuration
 }
 func (value *APLValueTotemRemainingTime) GetDuration(sim *core.Simulation) time.Duration {
-	if value.totemType == proto.ShamanTotems_Earth {
+	switch value.totemType {
+	case proto.ShamanTotems_Earth:
 		return max(0, value.shaman.TotemExpirations[EarthTotem]-sim.CurrentTime)
-	} else if value.totemType == proto.ShamanTotems_Air {
+	case proto.ShamanTotems_Air:
 		return max(0, value.shaman.TotemExpirations[AirTotem]-sim.CurrentTime)
-	} else if value.totemType == proto.ShamanTotems_Fire {
+	case proto.ShamanTotems_Fire:
 		return max(0, value.shaman.TotemExpirations[FireTotem]-sim.CurrentTime)
-	} else if value.totemType == proto.ShamanTotems_Water {
+	case proto.ShamanTotems_Water:
 		return max(0, value.shaman.TotemExpirations[WaterTotem]-sim.CurrentTime)
-	} else {
+	default:
 		return 0
 	}
 }
 func (value *APLValueTotemRemainingTime) String() string {
 	return fmt.Sprintf("Totem Remaining Time(%s)", value.totemType.String())
-}
-
-type APLValueShamanFireElementalDuration struct {
-	core.DefaultAPLValueImpl
-	shaman   *Shaman
-	duration time.Duration
-}
-
-func (shaman *Shaman) newValueFireElementalDuration(_ *proto.APLValueShamanFireElementalDuration, _ *proto.UUID) core.APLValue {
-	return &APLValueShamanFireElementalDuration{
-		shaman:   shaman,
-		duration: time.Second * 60,
-	}
-}
-
-func (value *APLValueShamanFireElementalDuration) Type() proto.APLValueType {
-	return proto.APLValueType_ValueTypeDuration
-}
-
-func (value *APLValueShamanFireElementalDuration) GetDuration(sim *core.Simulation) time.Duration {
-	return value.duration
-}
-
-func (value *APLValueShamanFireElementalDuration) String() string {
-	return "Fire Elemental Total Duration"
 }
