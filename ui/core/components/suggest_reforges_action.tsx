@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import tippy, { hideAll } from 'tippy.js';
 import { ref } from 'tsx-vanilla';
-import { Constraint, equalTo, greaterEq, lessEq } from 'yalps';
+import { Constraint, greaterEq, lessEq } from 'yalps';
 
 import i18n from '../../i18n/config.js';
 import { IndividualSimUI } from '../individual_sim_ui';
