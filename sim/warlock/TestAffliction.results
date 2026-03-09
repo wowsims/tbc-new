@@ -277,6 +277,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestAffliction-AllItems-ChainoftheTwilightOwl-24121"
+ value: {
+  dps: 1795.44643
+  tps: 1185.17806
+ }
+}
+dps_results: {
  key: "TestAffliction-AllItems-CharmofAlacrity-25787"
  value: {
   dps: 1735.67365
@@ -449,6 +456,13 @@ dps_results: {
  value: {
   dps: 1798.39914
   tps: 1178.37066
+ }
+}
+dps_results: {
+ key: "TestAffliction-AllItems-EyeoftheNight-24116"
+ value: {
+  dps: 1774.98118
+  tps: 1172.72228
  }
 }
 dps_results: {
@@ -994,7 +1008,7 @@ dps_results: {
 dps_results: {
  key: "TestAffliction-AllItems-VoidheartRaiment"
  value: {
-  dps: 1676.18844
+  dps: 1665.83657
   tps: 1086.65548
  }
 }

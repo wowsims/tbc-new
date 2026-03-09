@@ -120,23 +120,6 @@ var MapProfessionIdToProfession = map[int]proto.Profession{
 	773: proto.Profession_Inscription,
 }
 
-var MapItemSubclassNames = map[ItemSubClass]string{
-	OneHandedAxes:    "One-Handed Axes",
-	TwoHandedAxes:    "Two-Handed Axes",
-	Bows:             "Bows",
-	Guns:             "Guns",
-	OneHandedMaces:   "One-Handed Maces",
-	TwoHandedMaces:   "Two-Handed Maces",
-	Polearms:         "Polearms",
-	OneHandedSwords:  "One-Handed Swords",
-	TwoHandedSwords:  "Two-Handed Swords",
-	Staves:           "Staves",
-	OneHandedExotics: "One-Handed Exotics",
-	TwoHandedExotics: "Two-Handed Exotics",
-	FistWeapons:      "Fist Weapons",
-	Daggers:          "Daggers",
-}
-
 var MapSocketTypeToGemColor = map[int]proto.GemColor{
 	0: proto.GemColor_GemColorUnknown,
 	1: proto.GemColor_GemColorMeta,

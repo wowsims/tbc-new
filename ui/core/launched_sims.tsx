@@ -100,8 +100,7 @@ export const simLaunchStatuses: Record<Spec, SimStatus> = {
 	// Shaman
 	[Spec.SpecElementalShaman]: {
 		phase: Phase.Phase1,
-		status: LaunchStatus.Unlaunched,
-		oldSimLink: 'https://wowsims.github.io/tbc/elemental_shaman/',
+		status: LaunchStatus.Alpha,
 	},
 	[Spec.SpecEnhancementShaman]: {
 		phase: Phase.Phase1,

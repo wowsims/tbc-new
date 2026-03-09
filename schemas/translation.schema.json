@@ -1991,20 +1991,7 @@
 							"additionalProperties": false,
 							"required": ["title", "tooltip"]
 						},
-						"shaman_disable_immolate": {
-							"type": "object",
-							"properties": {
-								"label": {
-									"type": "string"
-								},
-								"tooltip": {
-									"type": "string"
-								}
-							},
-							"additionalProperties": false,
-							"required": ["label", "tooltip"]
-						},
-						"shaman_disable_immolate_duration": {
+						"shaman_shield_procrate": {
 							"type": "object",
 							"properties": {
 								"label": {
@@ -2056,8 +2043,7 @@
 						"enable_item_swap",
 						"item_swap",
 						"blessings",
-						"shaman_disable_immolate",
-						"shaman_disable_immolate_duration"
+						"shaman_shield_procrate"
 					]
 				},
 				"consumables": {
@@ -5186,19 +5172,6 @@
 									"additionalProperties": false,
 									"required": ["label", "tooltip"]
 								},
-								"shaman_fire_elemental_duration": {
-									"type": "object",
-									"properties": {
-										"label": {
-											"type": "string"
-										},
-										"tooltip": {
-											"type": "string"
-										}
-									},
-									"additionalProperties": false,
-									"required": ["label", "tooltip"]
-								},
 								"cat_excess_energy": {
 									"type": "object",
 									"properties": {
@@ -5457,7 +5430,6 @@
 								"sequence_is_ready",
 								"sequence_time_to_ready",
 								"totem_remaining_time",
-								"shaman_fire_elemental_duration",
 								"cat_excess_energy",
 								"cat_new_savage_roar_duration",
 								"warlock_assigned_curse_is_active",
@@ -6351,30 +6323,9 @@
 						},
 						"shaman": {
 							"type": "object",
-							"properties": {
-								"elemental": {
-									"type": "object",
-									"properties": {
-										"thunderstorm_in_range": {
-											"type": "object",
-											"properties": {
-												"label": {
-													"type": "string"
-												},
-												"tooltip": {
-													"type": "string"
-												}
-											},
-											"additionalProperties": false,
-											"required": ["label", "tooltip"]
-										}
-									},
-									"additionalProperties": false,
-									"required": ["thunderstorm_in_range"]
-								}
-							},
+							"properties": {},
 							"additionalProperties": false,
-							"required": ["elemental"]
+							"required": []
 						},
 						"warlock": {
 							"type": "object",
@@ -7603,13 +7554,10 @@
 						},
 						"unspent_talent_points": {
 							"type": "string"
-						},
-						"shaman_fele_autocast": {
-							"type": "string"
 						}
 					},
 					"additionalProperties": false,
-					"required": ["meta_gem_disabled", "profession_requirement", "too_many_jc_gems", "unspent_talent_points", "shaman_fele_autocast"]
+					"required": ["meta_gem_disabled", "profession_requirement", "too_many_jc_gems", "unspent_talent_points"]
 				},
 				"buttons": {
 					"type": "object",

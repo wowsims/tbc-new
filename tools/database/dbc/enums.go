@@ -319,6 +319,7 @@ const (
 	Polearms         ItemSubClass = 1 << 6  // 64   from "Polearms" (SubClassID 6)
 	OneHandedSwords  ItemSubClass = 1 << 7  // 128  from "One-Handed Swords" (SubClassID 7)
 	TwoHandedSwords  ItemSubClass = 1 << 8  // 256  from "Two-Handed Swords" (SubClassID 8)
+	Relic            ItemSubClass = 1 << 9  // 512  from "Relic" (SubClassID 9)
 	Staves           ItemSubClass = 1 << 10 // 1024 from "Staves" (SubClassID 10)
 	OneHandedExotics ItemSubClass = 1 << 11 // 2048 from "One-Handed Exotics" (SubClassID 11)
 	TwoHandedExotics ItemSubClass = 1 << 12 // 4096 from "Two-Handed Exotics" (SubClassID 12)

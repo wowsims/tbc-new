@@ -1192,12 +1192,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		23199, // Totem of the Storm
-		[
-			"Increases damage done by Chain Lightning and Lightning Bolt by up to 33.", // 28857 - https://www.wowhead.com/tbc/spell=28857
-		]
-	],
-	[
 		23200, // Totem of Sustaining
 		[
 			"Increases healing done by Lesser Healing Wave by up to 53.", // 28856 - https://www.wowhead.com/tbc/spell=28856
@@ -1378,21 +1372,9 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		24116, // Eye of the Night
-		[
-			"Increases spell damage by up to 34 for all nearby party members. Lasts 30min.", // 31033 - https://www.wowhead.com/tbc/spell=31033
-		]
-	],
-	[
 		24117, // Embrace of the Dawn
 		[
 			"All stats of nearby party members increased by 10 for 30min.", // 31026 - https://www.wowhead.com/tbc/spell=31026
-		]
-	],
-	[
-		24121, // Chain of the Twilight Owl
-		[
-			"Increases the spell critical hit chance of nearby party members by 2% for 30min.", // 31035 - https://www.wowhead.com/tbc/spell=31035
 		]
 	],
 	[
@@ -1650,12 +1632,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		27947, // Totem of Impact
-		[
-			"Increases damage done by Earth Shock, Flame Shock, and Frost Shock by up to 46.", // 33556 - https://www.wowhead.com/tbc/spell=33556
-		]
-	],
-	[
 		27949, // Libram of Zeal
 		[
 			"Increases the melee attack power bonus of your Seal of the Crusader by 68 and the Holy damage increase of your Judgement of the Crusader by 47.", // 33557 - https://www.wowhead.com/tbc/spell=33557
@@ -1665,12 +1641,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		27983, // Libram of Zeal
 		[
 			"Increases the melee attack power bonus of your Seal of the Crusader by 68 and the Holy damage increase of your Judgement of the Crusader by 47.", // 33557 - https://www.wowhead.com/tbc/spell=33557
-		]
-	],
-	[
-		27984, // Totem of Impact
-		[
-			"Increases damage done by Earth Shock, Flame Shock, and Frost Shock by up to 46.", // 33556 - https://www.wowhead.com/tbc/spell=33556
 		]
 	],
 	[
@@ -1698,12 +1668,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		28066, // Totem of Lightning
-		[
-			"Reduces the mana cost of your Lightning Bolt spells by 15.", // 33696 - https://www.wowhead.com/tbc/spell=33696
-		]
-	],
-	[
 		28108, // Power Infused Mushroom
 		[
 			"Restores 200 mana when you kill a target that gives experience or honor. This effect cannot occur more than once every 10 seconds.", // 33743 - https://www.wowhead.com/tbc/spell=33743
@@ -1725,12 +1689,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		28136, // Gladiator's Wyrmhide Gloves
 		[
 			"Reduces the cast time of your Cyclone spell by -0.1 sec.", // 33830 - https://www.wowhead.com/tbc/spell=33830
-		]
-	],
-	[
-		28248, // Totem of the Void
-		[
-			"Increases damage done by Chain Lightning and Lightning Bolt by up to 55.", // 34230 - https://www.wowhead.com/tbc/spell=34230
 		]
 	],
 	[
@@ -2503,12 +2461,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		32330, // Totem of Ancestral Guidance
-		[
-			"Increases damage done by Chain Lightning and Lightning Bolt by up to 85.", // 41040 - https://www.wowhead.com/tbc/spell=41040
-		]
-	],
-	[
 		32336, // Black Bow of the Betrayer
 		[
 			"Increases attack power by 26.", // 0 - https://www.wowhead.com/tbc/spell=0
@@ -2644,12 +2596,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		33505, // Totem of Living Water
 		[
 			"Reduces the base mana cost of Chain Heal by 20.", // 43752 - https://www.wowhead.com/tbc/spell=43752
-		]
-	],
-	[
-		33506, // Skycall Totem
-		[
-			"Your Lightning Bolt spell has a chance to grant 100 spell haste rating for 10s.", // 43751 - https://www.wowhead.com/tbc/spell=43751
 		]
 	],
 	[

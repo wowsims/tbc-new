@@ -570,13 +570,9 @@
 				"title": "Blessings",
 				"tooltip": "Specify Paladin Blessings for each role, in order of priority. Blessings in the 1st column will be used if there is at least 1 Paladin in the raid, 2nd column if at least 2, etc."
 			},
-			"shaman_disable_immolate": {
-				"label": "Disable Immolate during Unleash WF",
-				"tooltip": "When talented into Primal Elementalist and with Immolate autocast on, this will disallow casting Immolate when the Unleash Wind buff is active on the player."
-			},
-			"shaman_disable_immolate_duration": {
-				"label": "Extend disable by",
-				"tooltip": "Time in seconds for which Immolate won't be cast after the end of the Unleash Wind buff on the player. Set 0 for disabling casting Immolate only while the buff is up."
+			"shaman_shield_procrate": {
+				"label": "Shield Proc Rate",
+				"tooltip": "Number of proc per minute of the active effect of your Shaman Shield."
 			}
 		},
 		"consumables": {
@@ -1509,10 +1505,6 @@
 					"label": "Totem Remaining Time",
 					"tooltip": "Returns the amount of time remaining until the totem will expire."
 				},
-				"shaman_fire_elemental_duration": {
-					"label": "Fire Elemental Total Duration",
-					"tooltip": "Returns the total duration of Fire Elemental Totem"
-				},
 				"cat_excess_energy": {
 					"label": "Excess Energy",
 					"tooltip": "Returns the amount of excess energy available, after subtracting energy that will be needed to maintain DoTs."
@@ -1801,14 +1793,7 @@
 					}
 				}
 			},
-			"shaman": {
-				"elemental": {
-					"thunderstorm_in_range": {
-						"label": "Thunderstorm In Range",
-						"tooltip": "When set to true, thunderstorm casts will cause damage."
-					}
-				}
-			},
+			"shaman": {},
 			"warlock": {
 				"affliction": {
 					"exhale_window": {
@@ -2161,8 +2146,7 @@
 			"meta_gem_disabled": "Meta gem disabled ({{gemName}}): {{description}}",
 			"profession_requirement": "{{itemName}} requires {{professionName}}, but it is not selected.",
 			"too_many_jc_gems": "Only 2 Jewelcrafting Gems are allowed, but {{count}} are equipped.",
-			"unspent_talent_points": "You have {{count}} unspent talent point(s).",
-			"shaman_fele_autocast": "Your Fire Elemental spell autocast setup is not optimal with the use of the Primal Elementalist talent (everything ON but Empower). If you know what you're doing, please ignore this."
+			"unspent_talent_points": "You have {{count}} unspent talent point(s)."
 		},
 		"buttons": {
 			"simulate": "Simulate",

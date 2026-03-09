@@ -277,6 +277,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestDestruction-AllItems-ChainoftheTwilightOwl-24121"
+ value: {
+  dps: 2011.04149
+  tps: 1753.39083
+ }
+}
+dps_results: {
  key: "TestDestruction-AllItems-CharmofAlacrity-25787"
  value: {
   dps: 1938.94417
@@ -449,6 +456,13 @@ dps_results: {
  value: {
   dps: 2022.2484
   tps: 1760.07425
+ }
+}
+dps_results: {
+ key: "TestDestruction-AllItems-EyeoftheNight-24116"
+ value: {
+  dps: 1993.20344
+  tps: 1740.17511
  }
 }
 dps_results: {
