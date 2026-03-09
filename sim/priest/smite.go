@@ -39,11 +39,10 @@ func (priest *Priest) registerSmiteSpell(rankConfig shared.SpellRankConfig) {
 			},
 		},
 
-		DamageMultiplier:         1,
-		DamageMultiplierAdditive: 1,
-		CritMultiplier:           priest.DefaultSpellCritMultiplier(),
-		BonusCoefficient:         rankConfig.Coefficient,
-		ThreatMultiplier:         1,
+		DamageMultiplier: 1,
+		CritMultiplier:   priest.DefaultSpellCritMultiplier(),
+		BonusCoefficient: rankConfig.Coefficient,
+		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			baseDamage := priest.CalcAndRollDamageRange(sim, rankConfig.MinDamage, rankConfig.MaxDamage)
