@@ -1687,12 +1687,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		28066, // Totem of Lightning
-		[
-			"Reduces the mana cost of your Lightning Bolt spells by 15.", // 33696 - https://www.wowhead.com/tbc/spell=33696
-		]
-	],
-	[
 		28108, // Power Infused Mushroom
 		[
 			"Restores 200 mana when you kill a target that gives experience or honor. This effect cannot occur more than once every 10 seconds.", // 33743 - https://www.wowhead.com/tbc/spell=33743
