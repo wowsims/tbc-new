@@ -466,13 +466,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		18168, // Force Reactive Disk
-		[
-			"When the shield blocks it releases an electrical charge that damages all nearby enemies. This also has a chance of damaging the shield.", // 22600 - https://www.wowhead.com/tbc/spell=22600
-			"", // 22619 - https://www.wowhead.com/tbc/spell=22619
-		]
-	],
-	[
 		18345, // Murmuring Ring
 		[
 			"Reduces the duration of any Silence or Interrupt effects used against the wearer by 10%. This effect does not stack with other similar effects.", // 42184 - https://www.wowhead.com/tbc/spell=42184

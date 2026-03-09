@@ -637,6 +637,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestProtectionWarrior-AllItems-ForceReactiveDisk-18168"
+ value: {
+  dps: 700.55308
+  tps: 1313.33399
+  dtps: 1428.43004
+ }
+}
+dps_results: {
  key: "TestProtectionWarrior-AllItems-GlowingCrystalInsignia-25619"
  value: {
   dps: 689.1337
@@ -1026,6 +1034,14 @@ dps_results: {
   dps: 689.1337
   tps: 1291.18391
   dtps: 1317.55944
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-SkullflameShield-1168"
+ value: {
+  dps: 707.3869
+  tps: 1324.14965
+  dtps: 1442.08755
  }
 }
 dps_results: {
