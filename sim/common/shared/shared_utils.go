@@ -797,6 +797,7 @@ type SpellRankConfig struct {
 	Coefficient      float64
 	ThreatMultiplier float64
 	FlatThreatBonus  float64
+	CastTimeSeconds  float64 // Optional: specify only if overriding default cast time
 }
 
 type SpellRankMap []SpellRankConfig

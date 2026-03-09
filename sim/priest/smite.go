@@ -8,8 +8,8 @@ import (
 )
 
 var SmiteRankMap = shared.SpellRankMap{
-	{Rank: 1, SpellID: 585, Cost: 13, MinDamage: 13, MaxDamage: 16, Coefficient: 0.123},
-	{Rank: 2, SpellID: 591, Cost: 30, MinDamage: 28, MaxDamage: 32, Coefficient: 0.271},
+	{Rank: 1, SpellID: 585, Cost: 13, MinDamage: 13, MaxDamage: 16, Coefficient: 0.123, CastTimeSeconds: 1.5},
+	{Rank: 2, SpellID: 591, Cost: 30, MinDamage: 28, MaxDamage: 32, Coefficient: 0.271, CastTimeSeconds: 2.0},
 	{Rank: 3, SpellID: 598, Cost: 50, MinDamage: 48, MaxDamage: 53, Coefficient: 0.554},
 	{Rank: 4, SpellID: 984, Cost: 80, MinDamage: 84, MaxDamage: 94, Coefficient: 0.714},
 	{Rank: 5, SpellID: 1004, Cost: 115, MinDamage: 136, MaxDamage: 152, Coefficient: 0.714},
@@ -24,6 +24,12 @@ func (priest *Priest) registerSmiteSpell(rankConfig shared.SpellRankConfig) {
 	// Divine Fury (Holy Tier 3): -0.1s cast time per rank, max 5 ranks = -0.5s
 	castTimeReduction := time.Duration(priest.Talents.DivineFury) * 100 * time.Millisecond
 
+	// Default cast time for Smite is 2.5 seconds (ranks 3+)
+	baseCastTime := core.DurationFromSeconds(2.5)
+	if rankConfig.CastTimeSeconds > 0 {
+		baseCastTime = core.DurationFromSeconds(rankConfig.CastTimeSeconds)
+	}
+
 	spell := priest.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: rankConfig.SpellID},
 		SpellSchool:    core.SpellSchoolHoly,
@@ -37,7 +43,7 @@ func (priest *Priest) registerSmiteSpell(rankConfig shared.SpellRankConfig) {
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD:      core.GCDDefault,
-				CastTime: 2500*time.Millisecond - castTimeReduction,
+				CastTime: baseCastTime - castTimeReduction,
 			},
 		},
 
