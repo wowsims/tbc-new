@@ -9,6 +9,8 @@ import (
 const corruptionCoeff = 0.156
 
 func (warlock *Warlock) registerCorruption() *core.Spell {
+	tickCount := int32(6)
+	warlock.CorruptionTickBaseDamage = float64(900 / tickCount)
 
 	warlock.Corruption = warlock.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 27216},
@@ -42,11 +44,11 @@ func (warlock *Warlock) registerCorruption() *core.Spell {
 				Label: "Corruption",
 				Tag:   "Affliction",
 			},
-			NumberOfTicks:    6,
+			NumberOfTicks:    tickCount,
 			TickLength:       3 * time.Second,
 			BonusCoefficient: corruptionCoeff,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.Snapshot(target, 900/float64(dot.BaseTickCount))
+				dot.Snapshot(target, warlock.CorruptionTickBaseDamage)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)

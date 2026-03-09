@@ -11,6 +11,9 @@ const immolateDotCoeff = 0.13
 
 func (warlock *Warlock) registerImmolate() {
 	actionID := core.ActionID{SpellID: 27215}
+	tickCount := int32(5)
+	warlock.ImmolateTickBaseDamage = float64(615 / tickCount)
+
 	warlock.Immolate = warlock.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
 		SpellSchool:    core.SpellSchoolFire,
@@ -56,11 +59,11 @@ func (warlock *Warlock) registerImmolate() {
 			Aura: core.Aura{
 				Label: "Immolate (DoT)",
 			},
-			NumberOfTicks:    5,
+			NumberOfTicks:    tickCount,
 			TickLength:       3 * time.Second,
 			BonusCoefficient: immolateDotCoeff,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.Snapshot(target, 123)
+				dot.Snapshot(target, warlock.ImmolateTickBaseDamage)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)

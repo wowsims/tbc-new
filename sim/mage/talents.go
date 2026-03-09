@@ -573,7 +573,7 @@ func (mage *Mage) registerWinterChill() {
 		return
 	}
 
-	procChance := []float64{0, 0.33, 0.66, 1}[mage.Talents.WintersChill]
+	procChance := 0.20 * float64(mage.Talents.WintersChill)
 
 	wcAuras := mage.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {
 		return core.WintersChillAura(target, 0)
@@ -587,7 +587,7 @@ func (mage *Mage) registerWinterChill() {
 
 	mage.MakeProcTriggerAura(core.ProcTrigger{
 		Name:           "Winters Chill Talent",
-		Duration:       core.NeverExpires,
+		Callback:       core.CallbackOnSpellHitDealt,
 		Outcome:        core.OutcomeLanded,
 		ClassSpellMask: MageSpellFrost,
 		ProcChance:     procChance,

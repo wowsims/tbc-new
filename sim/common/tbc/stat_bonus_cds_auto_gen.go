@@ -54,9 +54,7 @@ func RegisterAllOnUseCds() {
 	// shared.NewSimpleStatActive(24098) // Pendant of the Null Rune - https://www.wowhead.com/tbc/spell=31002
 	// shared.NewSimpleStatActive(24106) // Thick Felsteel Necklace - https://www.wowhead.com/tbc/spell=31023
 	// shared.NewSimpleStatActive(24110) // Living Ruby Pendant - https://www.wowhead.com/tbc/spell=31024
-	// shared.NewSimpleStatActive(24116) // Eye of the Night - https://www.wowhead.com/tbc/spell=31033
 	// shared.NewSimpleStatActive(24117) // Embrace of the Dawn - https://www.wowhead.com/tbc/spell=31026
-	// shared.NewSimpleStatActive(24121) // Chain of the Twilight Owl - https://www.wowhead.com/tbc/spell=31035
 	// shared.NewSimpleStatActive(24127) // Figurine - Talasite Owl - https://www.wowhead.com/tbc/spell=31045
 	// shared.NewSimpleStatActive(24376) // Runed Fungalcap - https://www.wowhead.com/tbc/spell=31771
 	// shared.NewSimpleStatActive(24390) // Auslese's Light Channeler - https://www.wowhead.com/tbc/spell=31794

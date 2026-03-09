@@ -65,9 +65,11 @@ var ItemOverrides = []*proto.UIItem{
 
 // Keep these sorted by item ID.
 var ItemAllowList = map[int32]struct{}{
+	1168:  {}, // Skullflame Shield
 	2140:  {},
 	2505:  {},
 	11815: {}, // Hand of Justice
+	18168: {}, // Force Reactive Disk
 }
 
 // Keep these sorted by item ID.
@@ -398,6 +400,7 @@ var EnchantDenyList = map[int32]struct{}{
 
 var EnchantAllowList = []int32{
 	368,  // Enchant Cloak - Greater Agility
+	369,  // Enchant Bracer - Major Intellect
 	684,  // Enchant Gloves - Major Strength
 	1593, // Bracer 24 AP
 	1594, // Gloves 26 AP

@@ -221,7 +221,12 @@ func (spell *Spell) SpellDamage(target *Unit) float64 {
 }
 
 func (spell *Spell) SpellHitChance(target *Unit) float64 {
-	hitPercent := spell.Unit.stats[stats.SpellHitPercent] + spell.Unit.PseudoStats.SchoolBonusHitChance[spell.SpellSchool.SchoolIndex()] + spell.BonusHitPercent
+	hitPercent := spell.Unit.stats[stats.SpellHitPercent] + spell.BonusHitPercent
+	// In TBC all talents that modify spell school specific hit have a container spell class spell mask
+	// so we only apply this hit to spells that have a class spell mask set
+	if spell.ClassSpellMask != 0 {
+		hitPercent += spell.Unit.PseudoStats.SchoolBonusHitChance[spell.SpellSchool.SchoolIndex()]
+	}
 	return hitPercent / 100
 }
 func (spell *Spell) SpellChanceToMiss(attackTable *AttackTable) float64 {
@@ -290,7 +295,7 @@ func (spell *Spell) CalcOutcome(sim *Simulation, target *Unit, outcomeApplier Ou
 func (spell *Spell) calcDamageInternal(sim *Simulation, target *Unit, baseDamage float64, attackerMultiplier float64, isPeriodic bool, outcomeApplier OutcomeApplier) *SpellResult {
 	attackTable := spell.Unit.AttackTables[target.UnitIndex]
 	result := spell.NewResult(target)
-	result.Damage = baseDamage
+	result.Damage = baseDamage + spell.BonusBaseDamage
 
 	if sim.Log == nil {
 		result.Damage *= attackerMultiplier

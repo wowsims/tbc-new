@@ -7,11 +7,11 @@ import (
 	"github.com/wowsims/tbc/sim/core/proto"
 )
 
-func (shaman *Shaman) registerEarthElementalTotem(isGuardian bool) {
+func (shaman *Shaman) registerEarthElementalTotem() {
 
 	actionID := core.ActionID{SpellID: 2062}
 
-	totalDuration := time.Second * 60
+	totalDuration := time.Second * 120
 
 	earthElementalAura := shaman.RegisterAura(core.Aura{
 		Label:    "Earth Elemental Totem",
@@ -21,18 +21,18 @@ func (shaman *Shaman) registerEarthElementalTotem(isGuardian bool) {
 
 	shaman.EarthElementalTotem = shaman.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
-		Flags:          core.SpellFlagAPL | core.SpellFlagReadinessTrinket,
+		Flags:          core.SpellFlagAPL | SpellFlagInstant,
 		ClassSpellMask: SpellMaskEarthElementalTotem,
 		ManaCost: core.ManaCostOptions{
-			BaseCostPercent: 28.1,
+			FlatCost: 705,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: time.Second * 1,
 			},
 			CD: core.Cooldown{
 				Timer:    shaman.NewTimer(),
-				Duration: time.Minute * 5,
+				Duration: time.Minute * 20,
 			},
 			SharedCD: core.Cooldown{
 				Timer:    shaman.GetOrInitTimer(&shaman.ElementalSharedCDTimer),

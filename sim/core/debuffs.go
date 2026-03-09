@@ -353,17 +353,29 @@ func HuntersMarkAura(target *Unit, improved bool) *Aura {
 
 func ImprovedScorchAura(target *Unit) *Aura {
 	fireBonus := 0.03
+	var effect *ExclusiveEffect
 
-	return target.GetOrRegisterAura(Aura{
+	aura := target.GetOrRegisterAura(Aura{
 		Label:     "Improved Scorch",
 		ActionID:  ActionID{SpellID: 12873},
 		Duration:  time.Second * 30,
 		MaxStacks: 5,
 		OnStacksChange: func(aura *Aura, sim *Simulation, oldStacks int32, newStacks int32) {
-			target.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexFire] /= 1.0 + fireBonus*float64(oldStacks)
-			target.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexFire] *= 1.0 + fireBonus*float64(newStacks)
+			effect.SetPriority(sim, 1.0+fireBonus*float64(newStacks))
 		},
 	})
+
+	effect = aura.NewExclusiveEffect("ImprovedScorch", false, ExclusiveEffect{
+		Priority: 1,
+		OnGain: func(ee *ExclusiveEffect, sim *Simulation) {
+			target.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexFire] *= ee.Priority
+		},
+		OnExpire: func(ee *ExclusiveEffect, sim *Simulation) {
+			target.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexFire] /= ee.Priority
+		},
+	})
+
+	return aura
 }
 
 func ImprovedSealOfTheCrusaderAura(target *Unit) *Aura {

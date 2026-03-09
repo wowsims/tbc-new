@@ -120,23 +120,6 @@ var MapProfessionIdToProfession = map[int]proto.Profession{
 	773: proto.Profession_Inscription,
 }
 
-var MapItemSubclassNames = map[ItemSubClass]string{
-	OneHandedAxes:    "One-Handed Axes",
-	TwoHandedAxes:    "Two-Handed Axes",
-	Bows:             "Bows",
-	Guns:             "Guns",
-	OneHandedMaces:   "One-Handed Maces",
-	TwoHandedMaces:   "Two-Handed Maces",
-	Polearms:         "Polearms",
-	OneHandedSwords:  "One-Handed Swords",
-	TwoHandedSwords:  "Two-Handed Swords",
-	Staves:           "Staves",
-	OneHandedExotics: "One-Handed Exotics",
-	TwoHandedExotics: "Two-Handed Exotics",
-	FistWeapons:      "Fist Weapons",
-	Daggers:          "Daggers",
-}
-
 var MapSocketTypeToGemColor = map[int]proto.GemColor{
 	0: proto.GemColor_GemColorUnknown,
 	1: proto.GemColor_GemColorMeta,
@@ -399,62 +382,6 @@ var Classes = []DbcClass{
 	{proto.Class_ClassWarlock, 9},
 	{proto.Class_ClassDruid, 11},
 }
-
-// // SpecByID maps the ChrSpecialization.DB2 ID to proto.Spec
-// var SpecByID = map[int32]proto.Spec{
-// 	// Druid
-// 	102: proto.Spec_SpecBalanceDruid,
-// 	103: proto.Spec_SpecFeralDruid,
-// 	104: proto.Spec_SpecGuardianDruid,
-// 	105: proto.Spec_SpecRestorationDruid,
-
-// 	// Hunter
-// 	253: proto.Spec_SpecBeastMasteryHunter,
-// 	254: proto.Spec_SpecMarksmanshipHunter,
-// 	255: proto.Spec_SpecSurvivalHunter,
-
-// 	// Mage
-// 	62: proto.Spec_SpecArcaneMage,
-// 	63: proto.Spec_SpecFireMage,
-// 	64: proto.Spec_SpecFrostMage,
-
-// 	// Paladin
-// 	65: proto.Spec_SpecHolyPaladin,
-// 	66: proto.Spec_SpecProtectionPaladin,
-// 	70: proto.Spec_SpecRetributionPaladin,
-
-// 	// Priest
-// 	256: proto.Spec_SpecDisciplinePriest,
-// 	257: proto.Spec_SpecHolyPriest,
-// 	258: proto.Spec_SpecShadowPriest,
-
-// 	// Rogue
-// 	259: proto.Spec_SpecAssassinationRogue,
-// 	260: proto.Spec_SpecCombatRogue,
-// 	261: proto.Spec_SpecSubtletyRogue,
-
-// 	// Shaman
-// 	262: proto.Spec_SpecElementalShaman,
-// 	263: proto.Spec_SpecEnhancementShaman,
-// 	264: proto.Spec_SpecRestorationShaman,
-
-// 	// Warlock
-// 	265: proto.Spec_SpecAfflictionWarlock,
-// 	266: proto.Spec_SpecDemonologyWarlock,
-// 	267: proto.Spec_SpecDestructionWarlock,
-
-// 	// Warrior
-// 	71: proto.Spec_SpecArmsWarrior,
-// 	72: proto.Spec_SpecFuryWarrior,
-// 	73: proto.Spec_SpecProtectionWarrior,
-// }
-
-// func SpecFromID(id int32) proto.Spec {
-// 	if s, ok := SpecByID[id]; ok {
-// 		return s
-// 	}
-// 	return proto.Spec_SpecUnknown
-// }
 
 // Used to map ITEM_SPELLTRIGGER_CHANCE_ON_HIT items using PPM
 // which is not available in the gamefiles.

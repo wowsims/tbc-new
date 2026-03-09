@@ -276,6 +276,10 @@ func main() {
 					item.RequiredProfession = crafted.Profession
 				}
 			}
+
+			if rep := source.GetRep(); rep != nil {
+				item.FactionRestriction = proto.UIItem_FactionRestriction(rep.FactionId)
+			}
 		}
 
 		if item.Phase < 2 {

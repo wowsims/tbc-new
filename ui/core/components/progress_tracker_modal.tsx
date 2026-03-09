@@ -102,7 +102,7 @@ export class ProgressTrackerModal extends Component {
 
 		// Ensure we give the modal enough time to finish opening
 		// To solve a Bootstrap Modal bug where it will not close properly
-		setTimeout(() => this.modal.close(), Math.max(0, 650 - (Date.now() - this.startTime)));
+		setTimeout(() => this.modal.close(), Math.max(0, 850 - (Date.now() - this.startTime)));
 	}
 
 	updateProgress(state: Partial<ProgressTrackerModalState>): void {
