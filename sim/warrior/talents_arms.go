@@ -184,6 +184,7 @@ func (war *Warrior) registerDeepWounds() {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+			spell.CalcAndDealOutcome(sim, target, spell.OutcomeAlwaysHitNoHitCounter)
 			spell.Dot(target).Deactivate(sim)
 			spell.Dot(target).Apply(sim)
 		},
@@ -488,7 +489,6 @@ func (war *Warrior) registerBloodFrenzy() {
 	war.MakeProcTriggerAura(core.ProcTrigger{
 		Name:           "Blood Frenzy",
 		ClassSpellMask: SpellMaskRend | SpellMaskDeepWounds,
-		Outcome:        core.OutcomeLanded,
 		Callback:       core.CallbackOnSpellHitDealt,
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			aura := bfAuras.Get(result.Target)

@@ -311,8 +311,8 @@ dps_results: {
 dps_results: {
  key: "TestDpsWarrior-AllItems-CircletofArcaneMight-24123"
  value: {
-  dps: 1937.34852
-  tps: 1465.77191
+  dps: 1936.01753
+  tps: 1464.80573
   dtps: 7.21755
  }
 }
@@ -1159,8 +1159,8 @@ dps_results: {
 dps_results: {
  key: "TestDpsWarrior-AllItems-WastewalkerArmor"
  value: {
-  dps: 1804.0596
-  tps: 1364.81853
+  dps: 1805.75169
+  tps: 1367.13832
   dtps: 7.21755
  }
 }
@@ -1215,8 +1215,8 @@ dps_results: {
 dps_results: {
  key: "TestDpsWarrior-Average-Default"
  value: {
-  dps: 2093.5137
-  tps: 1581.75613
+  dps: 2093.41284
+  tps: 1581.69416
   dtps: 7.35727
  }
 }

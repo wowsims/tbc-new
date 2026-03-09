@@ -487,8 +487,8 @@ dps_results: {
 dps_results: {
  key: "TestProtectionWarrior-AllItems-DoomplateBattlegear"
  value: {
-  dps: 763.30508
-  tps: 1398.37509
+  dps: 764.20023
+  tps: 1399.71249
   dtps: 1589.37337
  }
 }
@@ -1272,9 +1272,9 @@ dps_results: {
 dps_results: {
  key: "TestProtectionWarrior-AllItems-WastewalkerArmor"
  value: {
-  dps: 760.36088
-  tps: 1392.65117
-  dtps: 1693.33065
+  dps: 761.01537
+  tps: 1393.61234
+  dtps: 1691.23851
  }
 }
 dps_results: {
