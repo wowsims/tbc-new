@@ -258,15 +258,6 @@ func main() {
 
 	craftedSpellIds := []int32{}
 	for _, item := range db.Items {
-		// if item.NameDescription == "Celestial" {
-		// 	item.Sources = database.InferCelestialItemSource(item)
-		// }
-
-		// // Infer the drop difficulty for the item
-		// if item.NameDescription == "Flexible" {
-		// 	item.Sources = database.InferFlexibleRaidItemSource(item)
-		// }
-
 		for _, source := range item.Sources {
 			if crafted := source.GetCrafted(); crafted != nil {
 				craftedSpellIds = append(craftedSpellIds, crafted.SpellId)
@@ -462,6 +453,8 @@ func ApplyGlobalFilters(db *database.WowDatabase) {
 			gem.Phase = 3
 		} else if gem.Name == "Charmed Amani Jewel" {
 			gem.Phase = 3
+		} else if strings.Contains(prefix, "Unstable") {
+			gem.Phase = 2
 		} else {
 			gem.Phase = 1
 		}
