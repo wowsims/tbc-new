@@ -10,14 +10,7 @@ import { Class, GemColor, ItemQuality, ItemSlot, Profession, PseudoStat, Race, S
 import { UIGem as Gem, ReforgeSettings, StatCapType } from '../proto/ui';
 import { EquippedItem } from '../proto_utils/equipped_item';
 import { Gear } from '../proto_utils/gear';
-import {
-	PRIMARY_COLORS,
-	gemColorsToMatchingSocket,
-	gemMatchesSocket,
-	getEmptyGemSocketIconUrl,
-	getMetaGemCondition,
-	socketToMatchingColors,
-} from '../proto_utils/gems';
+import { gemColorsToMatchingSocket, gemMatchesSocket, getEmptyGemSocketIconUrl, getMetaGemCondition } from '../proto_utils/gems';
 import { statCapTypeNames } from '../proto_utils/names';
 import { translateSlotName } from '../../i18n/localization';
 import { pseudoStatIsCapped, StatCap, statIsCapped, Stats, UnitStat, UnitStatPresets } from '../proto_utils/stats';
