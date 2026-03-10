@@ -445,6 +445,11 @@ export class ActionId {
 					name += ' (Wasted)';
 				}
 				break;
+			case 'Windfury Totem Effect':
+				if (tag == 1) {
+					name += ' (Party Weapon Buff)';
+				}
+				break;
 			case 'Moonfire':
 			case 'Sunfire':
 				if (tag == 1) {
@@ -472,7 +477,7 @@ export class ActionId {
 				break;
 			case 'Berserking':
 				if (tag > 0) {
-					name += ` (${10 + ((tag - 1) * 5)}%)`;
+					name += ` (${10 + (tag - 1) * 5}%)`;
 				}
 				break;
 			case 'Elemental Mastery':

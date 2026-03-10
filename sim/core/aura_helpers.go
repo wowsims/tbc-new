@@ -617,9 +617,9 @@ func (parentAura *Aura) AttachPeriodicAction(config PeriodicActionOptions) *Aura
 	config.TickImmediately = false
 	parentAura.ApplyOnGain(func(_ *Aura, sim *Simulation) {
 		if pa == nil {
-			config.TickImmediately = false
 			pa = NewPeriodicAction(sim, config)
 		}
+		pa.cancelled = false
 		pa.NextActionAt = sim.CurrentTime + TernaryDuration(tickImmediately, 0, config.Period)
 		sim.AddPendingAction(pa)
 	})
