@@ -245,8 +245,6 @@ func castSlowReductionAura(target *Unit, label string, spellID int32, multiplier
 type ExposeWeaknessAgiFunc func() float64
 
 func ExposeWeaknessAura(target *Unit, agilityFunc ExposeWeaknessAgiFunc) *Aura {
-	var currentApBonus float64
-
 	aura := target.GetOrRegisterAura(Aura{
 		Label:     "Expose Weakness",
 		Tag:       "ExposeWeakness",
@@ -254,14 +252,12 @@ func ExposeWeaknessAura(target *Unit, agilityFunc ExposeWeaknessAgiFunc) *Aura {
 		Duration:  time.Second * 7,
 		MaxStacks: 10000,
 		OnGain: func(aura *Aura, sim *Simulation) {
-			currentApBonus = agilityFunc() * 0.25
-			target.PseudoStats.BonusAttackPower += currentApBonus
-			target.PseudoStats.BonusRangedAttackPower += currentApBonus
-			aura.SetStacks(sim, int32(currentApBonus))
+			aura.SetStacks(sim, int32(agilityFunc()*0.25))
 		},
-		OnExpire: func(aura *Aura, sim *Simulation) {
-			target.PseudoStats.BonusAttackPower -= currentApBonus
-			target.PseudoStats.BonusRangedAttackPower -= currentApBonus
+		OnStacksChange: func(aura *Aura, sim *Simulation, oldStacks int32, newStacks int32) {
+			newValue := float64(newStacks - oldStacks)
+			target.PseudoStats.BonusAttackPower += newValue
+			target.PseudoStats.BonusRangedAttackPower += newValue
 		},
 	})
 

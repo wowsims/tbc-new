@@ -657,17 +657,14 @@ func init() {
 	core.NewItemEffect(28727, func(agent core.Agent) {
 		character := agent.GetCharacter()
 
-		bonusPerStack := stats.Stats{stats.MP5: 21}
-
-		aura := character.RegisterAura(core.Aura{
-			Label:     "Enlightenment",
-			ActionID:  core.ActionID{SpellID: 35095},
-			Duration:  core.NeverExpires,
-			MaxStacks: 20,
-
-			OnStacksChange: func(aura *core.Aura, sim *core.Simulation, oldStacks, newStacks int32) {
-				character.AddStatsDynamic(sim, bonusPerStack.Multiply(float64(newStacks-oldStacks)))
+		stackingAura := core.MakeStackingAura(character, core.StackingStatAura{
+			Aura: core.Aura{
+				Label:     "Enlightenment",
+				ActionID:  core.ActionID{SpellID: 35095},
+				Duration:  core.NeverExpires,
+				MaxStacks: 20,
 			},
+			BonusPerStack: stats.Stats{stats.MP5: 21},
 		})
 
 		procAura := character.RegisterAura(core.Aura{
@@ -676,7 +673,7 @@ func init() {
 			Duration: time.Second * 20,
 
 			OnExpire: func(_ *core.Aura, sim *core.Simulation) {
-				aura.Deactivate(sim)
+				stackingAura.Deactivate(sim)
 			},
 		}).AttachProcTrigger(core.ProcTrigger{
 			Callback: core.CallbackOnCastComplete,
@@ -687,8 +684,8 @@ func init() {
 			},
 
 			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-				aura.Activate(sim)
-				aura.AddStack(sim)
+				stackingAura.Activate(sim)
+				stackingAura.AddStack(sim)
 			},
 		})
 
@@ -715,6 +712,10 @@ func init() {
 			Spell: spell,
 			Type:  core.CooldownTypeMana,
 		})
+
+		eligibleSlots := character.ItemSwap.EligibleSlotsForItem(28727)
+		character.AddStatProcBuff(35095, stackingAura, false, eligibleSlots)
+		character.ItemSwap.RegisterProc(28727, procAura)
 	})
 
 	// Memento of Tyrande
@@ -728,7 +729,7 @@ func init() {
 			time.Second*15,
 		)
 
-		character.MakeProcTriggerAura(core.ProcTrigger{
+		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
 			Name:            "Memento of Tyrande",
 			Callback:        core.CallbackOnCastComplete,
 			ProcMask:        core.ProcMaskSpellDamage | core.ProcMaskSpellHealing,
@@ -740,5 +741,9 @@ func init() {
 				aura.Activate(sim)
 			},
 		})
+
+		eligibleSlots := character.ItemSwap.EligibleSlotsForItem(32496)
+		character.AddStatProcBuff(37656, aura, false, eligibleSlots)
+		character.ItemSwap.RegisterProc(32496, procAura)
 	})
 }

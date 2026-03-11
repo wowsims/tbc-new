@@ -108,8 +108,7 @@ func init() {
 	core.NewItemEffect(ThoridalTheStarsFuryItemID, func(agent core.Agent) {
 		hunter := agent.(HunterAgent).GetHunter()
 
-		wep := hunter.GetRangedWeapon()
-		isEquipped := wep != nil && wep.ID == ThoridalTheStarsFuryItemID
+		isEquipped := hunter.HasItemEquipped(ThoridalTheStarsFuryItemID, []proto.ItemSlot{proto.ItemSlot_ItemSlotRanged})
 		buildPhase := core.Ternary(isEquipped, core.CharacterBuildPhaseGear, core.CharacterBuildPhaseNone)
 
 		hasteAura := hunter.RegisterAura(core.Aura{
@@ -150,8 +149,8 @@ func init() {
 		}
 
 		hunter.RegisterItemSwapCallback([]proto.ItemSlot{proto.ItemSlot_ItemSlotRanged}, func(sim *core.Simulation, _ proto.ItemSlot) {
-			if ranged, weapon := hunter.AutoAttacks.Ranged(), hunter.GetRangedWeapon(); ranged != nil &&
-				(weapon == nil || weapon.ID != ThoridalTheStarsFuryItemID) {
+			if ranged := hunter.AutoAttacks.Ranged(); ranged != nil &&
+				!hunter.HasItemEquipped(ThoridalTheStarsFuryItemID, []proto.ItemSlot{proto.ItemSlot_ItemSlotRanged}) {
 				hunter.AmmoDamageBonus = hunter.AmmoDPS * ranged.SwingSpeed
 				ranged.BaseDamageMin += hunter.AmmoDamageBonus
 				ranged.BaseDamageMax += hunter.AmmoDamageBonus

@@ -63,15 +63,13 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecHunter, {
 		gear: Presets.P1_BM_2H_6P_GEARSET.gear,
 		// Default EP weights for sorting gear in the gear picker.
 		epWeights: Presets.P1_BM_EP_PRESET.epWeights,
-		softCapBreakpoints: (() => {
-			const rangedHitSoftCapConfig = StatCap.fromPseudoStat(PseudoStat.PseudoStatMeleeHitPercent, {
+		softCapBreakpoints: [
+			StatCap.fromPseudoStat(PseudoStat.PseudoStatRangedHitPercent, {
 				breakpoints: [9],
 				capType: StatCapType.TypeSoftCap,
 				postCapEPs: [0],
-			});
-
-			return [rangedHitSoftCapConfig];
-		})(),
+			}),
+		],
 		other: Presets.OtherDefaults,
 		// Default consumes settings.
 		consumables: Presets.DefaultConsumables,

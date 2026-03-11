@@ -170,9 +170,7 @@ export class PresetConfigurationPicker extends Component {
 			if (epWeights) simUI.player.setEpWeights(eventID, epWeights.epWeights);
 			if (settings) {
 				if (settings.race) simUI.player.setRace(eventID, settings.race);
-				if (settings.partyBuffs) {
-					simUI.player.getParty()?.setBuffs(eventID, settings.partyBuffs);
-				}
+				if (settings.partyBuffs) simUI.player.getParty()?.setBuffs(eventID, settings.partyBuffs);
 				if (settings.consumables) simUI.player.setConsumes(eventID, settings.consumables);
 				if (settings.playerOptions?.profession1) simUI.player.setProfession1(eventID, settings.playerOptions.profession1);
 				if (settings.playerOptions?.profession2) simUI.player.setProfession2(eventID, settings.playerOptions.profession2);

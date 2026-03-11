@@ -17,7 +17,7 @@ import {
 import { HunterOptions_PetType as PetType, Hunter_Options as HunterOptions, HunterOptions_Ammo, HunterOptions_QuiverBonus } from '../../core/proto/hunter';
 import { SavedTalents } from '../../core/proto/ui';
 import { Stats } from '../../core/proto_utils/stats';
-import { defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
+import { defaultExposeWeaknessSettings, defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
 import TurretAPL from './apls/turret.apl.json';
 import WeaveAPL from './apls/weave.apl.json';
 import P1PreRaidGear from './gear_sets/p1_pre_raid.gear.json';
@@ -146,8 +146,7 @@ export const DefaultDebuffsNoImpFF = Debuffs.create({
 	bloodFrenzy: true,
 	curseOfRecklessness: true,
 	exposeArmor: TristateEffect.TristateEffectImproved,
-	exposeWeaknessUptime: 0.9,
-	exposeWeaknessHunterAgility: 1080,
+	...defaultExposeWeaknessSettings(Phase.Phase1),
 	faerieFire: TristateEffect.TristateEffectRegular,
 	giftOfArthas: true,
 	huntersMark: TristateEffect.TristateEffectImproved,
