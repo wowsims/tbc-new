@@ -833,7 +833,7 @@ export class ReforgeOptimizer {
 								})
 							: null;
 
-						const tooltipText = rootStat ? this.statTooltips[rootStat] : null;
+						const tooltipText = rootStat !== null ? this.statTooltips[rootStat] : null;
 						const statTooltipRef = ref<HTMLButtonElement>();
 
 						const row = (
