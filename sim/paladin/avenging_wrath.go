@@ -13,10 +13,7 @@ import (
 // Causes Forebearance, preventing the use of Divine Shield,
 // Divine Protection, Blessing of Protection again for 1 min.
 func (paladin *Paladin) registerAvengingWrath() {
-	if paladin.Level < 70 {
-		return
-	}
-
+	
 	actionID := core.ActionID{SpellID: 31884}
 	paladin.AvengingWrathAura = paladin.RegisterAura(core.Aura{
 		Label:    "Avenging Wrath" + paladin.Label,

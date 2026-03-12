@@ -19,16 +19,18 @@ func (paladin *Paladin) registerDivineFavor() {
 		Label:    "Divine Favor" + paladin.Label,
 		ActionID: actionID,
 		Duration: core.NeverExpires,
-		OnCastComplete: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell) {
-			// Consume after Flash of Light, Holy Light, or Holy Shock
-			if spell.Matches(SpellMaskFlashOfLight | SpellMaskHolyLight | SpellMaskHolyShock) {
-				aura.Deactivate(sim)
-			}
-		},
 	}).AttachSpellMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
 		ClassMask:  SpellMaskHolyLight | SpellMaskFlashOfLight | SpellMaskHolyShock,
 		FloatValue: 100,
+	}).AttachProcTrigger(core.ProcTrigger{
+		Name:               "Divine Favor - Consume",
+		Callback:           core.CallbackOnCastComplete,
+		ClassSpellMask:     SpellMaskHolyLight | SpellMaskFlashOfLight | SpellMaskHolyShock,
+		TriggerImmediately: true,
+		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+			paladin.DivineFavorAura.Deactivate(sim)
+		},
 	})
 
 	divineFavor := paladin.RegisterSpell(core.SpellConfig{
