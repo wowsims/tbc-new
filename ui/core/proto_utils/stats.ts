@@ -106,7 +106,7 @@ export class UnitStat {
 		} else if (this.linkedToStat(Stat.StatMeleeHasteRating)) {
 			return ratingValue / Mechanics.PHYSICAL_HASTE_RATING_PER_HASTE_PERCENT;
 		} else if (this.equalsStat(Stat.StatExpertiseRating)) {
-			return ratingValue / Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION / 4;
+			return Math.floor(ratingValue / Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION) / 4;
 		} else if (this.linkedToStat(Stat.StatDefenseRating)) {
 			return ratingValue / Mechanics.DEFENSE_RATING_PER_DEFENSE_LEVEL;
 		} else if (this.linkedToStat(Stat.StatDodgeRating)) {
