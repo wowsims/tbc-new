@@ -232,7 +232,7 @@ func (mage *Mage) registerEmpoweredArcaneMissiles() {
 	mage.AddStaticMod(core.SpellModConfig{
 		ClassMask:  MageSpellArcaneMissilesTick,
 		FloatValue: .15 * float64(mage.Talents.EmpoweredArcaneMissiles),
-		Kind:       core.SpellMod_DamageDone_Pct,
+		Kind:       core.SpellMod_BonusCoeffecient_Flat,
 	})
 
 	mage.AddStaticMod(core.SpellModConfig{
@@ -458,8 +458,8 @@ func (mage *Mage) registerEmpoweredFireball() {
 
 	mage.AddStaticMod(core.SpellModConfig{
 		ClassMask:  MageSpellFireball,
-		FloatValue: (.03 * float64(mage.Talents.EmpoweredFireball)) * mage.GetStat(stats.FireDamage),
-		Kind:       core.SpellMod_BonusSpellDamage_Flat,
+		FloatValue: .03 * float64(mage.Talents.EmpoweredFireball),
+		Kind:       core.SpellMod_BonusCoeffecient_Flat,
 	})
 }
 
@@ -622,9 +622,9 @@ func (mage *Mage) registerEmpoweredFrostbolt() {
 	}
 
 	mage.AddStaticMod(core.SpellModConfig{
-		ClassMask:  MageSpellFrostbolt,
-		FloatValue: (.02 * float64(mage.Talents.EmpoweredFrostbolt)) * mage.GetStat(stats.FrostDamage),
-		Kind:       core.SpellMod_BonusSpellDamage_Flat,
+		ClassMask:  MageSpellFireball,
+		FloatValue: .02 * float64(mage.Talents.EmpoweredFrostbolt),
+		Kind:       core.SpellMod_BonusCoeffecient_Flat,
 	})
 
 	mage.AddStaticMod(core.SpellModConfig{
