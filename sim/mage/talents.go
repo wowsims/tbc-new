@@ -218,7 +218,7 @@ func (mage *Mage) registerArcaneInstability() {
 
 	mage.AddStaticMod(core.SpellModConfig{
 		ClassMask:  MageSpellsAll,
-		FloatValue: 1 + (0.01 * float64(mage.Talents.ArcaneInstability)),
+		FloatValue: 0.01 * float64(mage.Talents.ArcaneInstability),
 		Kind:       core.SpellMod_DamageDone_Pct,
 	})
 
@@ -434,10 +434,9 @@ func (mage *Mage) registerMoltenFury() {
 		return
 	}
 
-	multiplier := .1 * float64(mage.Talents.MoltenFury)
 	moltenFury := mage.AddDynamicMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Pct,
-		FloatValue: multiplier,
+		FloatValue: .1 * float64(mage.Talents.MoltenFury),
 		ClassMask:  MageSpellsAll,
 	})
 
