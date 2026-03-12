@@ -20,7 +20,7 @@ func (mage *Mage) registerArcanePowerSpell() {
 	arcanePowerDmgMod := mage.AddDynamicMod(core.SpellModConfig{
 		ClassMask:  MageSpellsAll,
 		FloatValue: .3,
-		Kind:       core.SpellMod_DamageDone_Pct,
+		Kind:       core.SpellMod_DamageDone_Flat,
 	})
 
 	var arcanePowerSpell *core.Spell

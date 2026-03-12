@@ -457,16 +457,15 @@ func JudgementOfLightAura(target *Unit) *Aura {
 
 func JudgementOfWisdomAura(target *Unit) *Aura {
 	actionId := ActionID{SpellID: 27164}
-
-	return target.GetOrRegisterAura(Aura{
-		Label:    "Judgement of Wisdom",
-		ActionID: actionId,
-		Duration: time.Second * 20,
-		OnSpellHitTaken: func(aura *Aura, sim *Simulation, spell *Spell, result *SpellResult) {
-			if spell.ProcMask.Matches(ProcMaskEmpty) {
-				return // Phantom spells (Romulo's, Lightning Capacitor, etc) don't proc JoW.
-			}
-
+	var aura *Aura
+	aura = target.MakeProcTriggerAura(ProcTrigger{
+		Name:       "Judgement of Wisdom",
+		ActionID:   actionId,
+		Duration:   time.Second * 20,
+		ProcChance: 0.5,
+		ProcMask:   ProcMaskDirect,
+		Callback:   CallbackOnSpellHitTaken,
+		Handler: func(sim *Simulation, spell *Spell, result *SpellResult) {
 			// Melee claim that wisdom can proc on misses.
 			if !spell.ProcMask.Matches(ProcMaskMeleeOrRanged) && !result.Landed() {
 				return
@@ -485,6 +484,8 @@ func JudgementOfWisdomAura(target *Unit) *Aura {
 			}
 		},
 	})
+
+	return aura
 }
 
 func MangleAura(target *Unit) *Aura {
