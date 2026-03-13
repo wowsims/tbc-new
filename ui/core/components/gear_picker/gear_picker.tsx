@@ -322,7 +322,6 @@ export class ItemPicker extends Component {
 	}
 
 	openSelectorModal(selectedTab: SelectorModalTabs) {
-		console.log('dwadawd', selectedTab);
 		this.gearPicker.selectorModal.openTab(this.slot, selectedTab, this.createGearData());
 	}
 
@@ -331,7 +330,8 @@ export class ItemPicker extends Component {
 		const openGemDetailTab = (socketIdx: number) => this.openSelectorModal(`Gem${socketIdx + 1}` as SelectorModalTabs);
 		this.itemElem.socketsElem?.forEach(element => {
 			const socketIdx = Number(element.dataset.socketIdx) || 0;
-			element.addEventListener('click', () => {
+			element.addEventListener('click', event => {
+				event?.preventDefault();
 				openGemDetailTab(socketIdx);
 			});
 			const popover = addQuickGemPopover(this.player, element, this._equippedItem!, this.slot, socketIdx, () => openGemDetailTab(socketIdx));
