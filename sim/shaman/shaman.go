@@ -119,6 +119,7 @@ type Shaman struct {
 	SearingTotem       *core.Spell
 	TremorTotem        *core.Spell
 	FireNovaTotemPA    *core.PendingAction
+	SearingReplaced    bool // Used for cancelling searing dot if the totem is replaced during prepull
 
 	EarthTotemAura *core.Aura
 	WaterTotemAura *core.Aura

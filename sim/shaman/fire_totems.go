@@ -51,8 +51,11 @@ func (shaman *Shaman) registerSearingTotemSpell() {
 			if sim.CurrentTime < 0 {
 				dropTime := sim.CurrentTime
 				pa := sim.GetConsumedPendingActionFromPool()
-
+				shaman.SearingReplaced = false
 				pa.OnAction = func(sim *core.Simulation) {
+					if shaman.SearingReplaced {
+						return
+					}
 					spell.Dot(sim.Encounter.ActiveTargetUnits[0]).BaseTickCount = searingTickCount(dropTime.Minutes())
 					spell.Dot(sim.Encounter.ActiveTargetUnits[0]).Apply(sim)
 				}
@@ -164,6 +167,7 @@ func (shaman *Shaman) cancelFireTotems(sim *core.Simulation) {
 	if searingTotemDot != nil {
 		searingTotemDot.Deactivate(sim)
 	}
+	shaman.SearingReplaced = true
 	if shaman.TotemOfWrath != nil {
 		shaman.TotemOfWrath.RelatedSelfBuff.Deactivate(sim)
 	}
