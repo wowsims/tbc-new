@@ -1517,6 +1517,10 @@
 					"label": "Assigned Curse Is Active",
 					"tooltip": "Returns true is assigned curse is active on target"
 				},
+				"warlock_is_assigned_curse": {
+					"label": "Is Assigned Curse",
+					"tooltip": "True if the warlock is assigned the specified curse"
+				},
 				"protection_paladin_damage_taken_last_global": {
 					"label": "Damage Taken Last Global",
 					"tooltip": "Amount of damage taken in the last 1.5s."
@@ -1576,6 +1580,12 @@
 				"air": "Air",
 				"fire": "Fire",
 				"water": "Water"
+			},
+			"curse_types": {
+				"agony": "Curse of Agony",
+				"doom": "Curse of Doom",
+				"elements": "Curse of Elements",
+				"recklessness": "Curse of Recklessness"
 			},
 			"submenus": {
 				"logic": "Logic",

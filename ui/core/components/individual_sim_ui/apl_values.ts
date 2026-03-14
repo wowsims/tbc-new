@@ -107,6 +107,7 @@ import {
 	APLValueAutoSwingTime,
 	APLValueAutoTimeSinceLast,
 	APLValueWarlockAssignedCurseIsActive,
+	APLValueWarlockIsAssignedCurse,
 } from '../../proto/apl.js';
 import { Class, Spec } from '../../proto/common.js';
 import { ShamanTotems_TotemType as TotemType } from '../../proto/shaman.js';
@@ -117,7 +118,7 @@ import { TextDropdownPicker, TextDropdownValueConfig } from '../pickers/dropdown
 import { ListItemPickerConfig, ListPicker } from '../pickers/list_picker.jsx';
 import i18n from '../../../i18n/config';
 import * as AplHelpers from './apl_helpers.js';
-import { ActionId } from '../../proto_utils/action_id';
+import { WarlockOptions_CurseOptions } from '../../proto/warlock';
 
 export interface APLValuePickerConfig extends InputConfig<Player<any>, APLValue | undefined> {}
 
@@ -448,6 +449,26 @@ function totemTypeFieldConfig(field: string): AplHelpers.APLPickerBuilderFieldCo
 					{ value: TotemType.Air, label: i18n.t('rotation_tab.apl.totem_types.air') },
 					{ value: TotemType.Fire, label: i18n.t('rotation_tab.apl.totem_types.fire') },
 					{ value: TotemType.Water, label: i18n.t('rotation_tab.apl.totem_types.water') },
+				],
+			}),
+	};
+}
+
+function curseTypeFieldConfig(field: string): AplHelpers.APLPickerBuilderFieldConfig<any, any> {
+	return {
+		field: field,
+		newValue: () => WarlockOptions_CurseOptions.Agony,
+		factory: (parent, player, config) =>
+			new TextDropdownPicker(parent, player, {
+				id: randomUUID(),
+				...config,
+				defaultLabel: i18n.t('common.none'),
+				equals: (a, b) => a == b,
+				values: [
+					{ value: WarlockOptions_CurseOptions.Agony, label: i18n.t('rotation_tab.apl.curse_types.agony') },
+					{ value: WarlockOptions_CurseOptions.Doom, label: i18n.t('rotation_tab.apl.curse_types.doom') },
+					{ value: WarlockOptions_CurseOptions.Elements, label: i18n.t('rotation_tab.apl.curse_types.elements') },
+					{ value: WarlockOptions_CurseOptions.Recklessness, label: i18n.t('rotation_tab.apl.curse_types.recklessness') },
 				],
 			}),
 	};
@@ -1478,6 +1499,14 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getSpec() == Spec.SpecWarlock,
 		fields: [AplHelpers.unitFieldConfig('newTarget', 'targets')],
 	}),
+	warlockIsAssignedCurse: inputBuilder({
+		label: i18n.t('rotation_tab.apl.values.warlock_is_assigned_curse.label'),
+		submenu: ['warlock'],
+		shortDescription: i18n.t('rotation_tab.apl.values.warlock_is_assigned_curse.tooltip'),
+		newValue: APLValueWarlockIsAssignedCurse.create,
+		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getSpec() == Spec.SpecWarlock,
+		fields: [curseTypeFieldConfig('curseType')],
+	}),
 	protectionPaladinDamageTakenLastGlobal: inputBuilder({
 		label: i18n.t('rotation_tab.apl.values.protection_paladin_damage_taken_last_global.label'),
 		submenu: ['tank'],
@@ -1510,9 +1539,10 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 		],
 	}),
 	actionGroupUsed: inputBuilder({
-		label: "Action Group is used",
+		label: 'Action Group is used',
 		submenu: ['Variables'],
-		shortDescription: "Returns <b>True</b> if the specified action group is used in the rotation. This allows you to conditionally execute actions based on whether an action group is included in the rotation.",
+		shortDescription:
+			'Returns <b>True</b> if the specified action group is used in the rotation. This allows you to conditionally execute actions based on whether an action group is included in the rotation.',
 		newValue: APLValueActionGroupUsed.create,
 		fields: [AplHelpers.groupNameFieldConfig('name')],
 	}),

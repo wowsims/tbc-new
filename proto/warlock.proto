@@ -76,7 +76,6 @@ message WarlockTalents {
 }
 
 // END GENERATED
-
 message WarlockOptions {
 	enum Summon {
 		NoSummon = 0;

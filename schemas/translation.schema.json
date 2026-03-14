@@ -5211,6 +5211,19 @@
 									"additionalProperties": false,
 									"required": ["label", "tooltip"]
 								},
+								"warlock_is_assigned_curse": {
+									"type": "object",
+									"properties": {
+										"label": {
+											"type": "string"
+										},
+										"tooltip": {
+											"type": "string"
+										}
+									},
+									"additionalProperties": false,
+									"required": ["label", "tooltip"]
+								},
 								"protection_paladin_damage_taken_last_global": {
 									"type": "object",
 									"properties": {
@@ -5433,6 +5446,7 @@
 								"cat_excess_energy",
 								"cat_new_savage_roar_duration",
 								"warlock_assigned_curse_is_active",
+								"warlock_is_assigned_curse",
 								"protection_paladin_damage_taken_last_global",
 								"aura_remaining_icd",
 								"aura_icd_is_ready",
@@ -5530,6 +5544,25 @@
 							},
 							"additionalProperties": false,
 							"required": ["earth", "air", "fire", "water"]
+						},
+						"curse_types": {
+							"type": "object",
+							"properties": {
+								"agony": {
+									"type": "string"
+								},
+								"doom": {
+									"type": "string"
+								},
+								"elements": {
+									"type": "string"
+								},
+								"recklessness": {
+									"type": "string"
+								}
+							},
+							"additionalProperties": false,
+							"required": ["agony", "doom", "elements", "recklessness"]
 						},
 						"submenus": {
 							"type": "object",
@@ -5928,6 +5961,7 @@
 						"operators",
 						"execute_phases",
 						"totem_types",
+						"curse_types",
 						"submenus",
 						"item_swap_sets",
 						"helpers"
@@ -6324,8 +6358,7 @@
 						"shaman": {
 							"type": "object",
 							"properties": {},
-							"additionalProperties": false,
-							"required": []
+							"additionalProperties": false
 						},
 						"warlock": {
 							"type": "object",

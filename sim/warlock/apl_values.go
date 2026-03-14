@@ -10,6 +10,8 @@ import (
 
 func (warlock *Warlock) NewAPLValue(rot *core.APLRotation, config *proto.APLValue) core.APLValue {
 	switch config.Value.(type) {
+	case *proto.APLValue_WarlockIsAssignedCurse:
+		return warlock.newValueWarlockIsAssignedCurse(rot, config.GetWarlockIsAssignedCurse())
 	case *proto.APLValue_WarlockAssignedCurseIsActive:
 		return warlock.newValueWarlockAssignedCurseIsActive(rot, config.GetWarlockAssignedCurseIsActive())
 	default:
@@ -21,16 +23,7 @@ type APLValueWarlockAssignedCurseIsActive struct {
 	core.DefaultAPLValueImpl
 	warlock *Warlock
 	target  core.UnitReference
-}
-
-func (x *APLValueWarlockAssignedCurseIsActive) GetInnerActions() []*core.APLAction { return nil }
-func (x *APLValueWarlockAssignedCurseIsActive) GetAPLValues() []core.APLValue      { return nil }
-func (x *APLValueWarlockAssignedCurseIsActive) Finalize(*core.APLRotation)         {}
-func (x *APLValueWarlockAssignedCurseIsActive) GetNextAction(*core.Simulation) *core.APLAction {
-	return nil
-}
-func (x *APLValueWarlockAssignedCurseIsActive) GetSpellFromAction(sim *core.Simulation) *core.Spell {
-	return x.warlock.GetAssignedCurse()
+	spell   *core.Spell
 }
 
 func (warlock *Warlock) newValueWarlockAssignedCurseIsActive(rot *core.APLRotation, config *proto.APLValueWarlockAssignedCurseIsActive) core.APLValue {
@@ -42,6 +35,7 @@ func (warlock *Warlock) newValueWarlockAssignedCurseIsActive(rot *core.APLRotati
 	return &APLValueWarlockAssignedCurseIsActive{
 		warlock: warlock,
 		target:  target,
+		spell:   warlock.GetAssignedCurse(),
 	}
 }
 
@@ -50,14 +44,44 @@ func (x *APLValueWarlockAssignedCurseIsActive) Type() proto.APLValueType {
 }
 
 func (x *APLValueWarlockAssignedCurseIsActive) GetBool(sim *core.Simulation) bool {
-	assignedCurse := x.GetSpellFromAction(sim)
-	aura := x.target.Get().GetAuraByID(assignedCurse.ActionID)
+	aura := x.target.Get().GetAuraByID(x.spell.ActionID)
 
 	return aura.IsActive()
 }
 
 func (x *APLValueWarlockAssignedCurseIsActive) String() string {
-	return fmt.Sprintf("Is Assigned Curse Active (%s)", x.warlock.GetAssignedCurse().ActionID)
+	return fmt.Sprintf("Is Assigned Curse Active (%s)", x.spell.ActionID)
+}
+
+type APLValueWarlockIsAssignedCurse struct {
+	core.DefaultAPLValueImpl
+	warlock         *Warlock
+	isAssignedCurse bool
+}
+
+func (x *APLValueWarlockIsAssignedCurse) GetSpellFromAction(sim *core.Simulation) *core.Spell {
+	return x.warlock.GetAssignedCurse()
+}
+
+func (warlock *Warlock) newValueWarlockIsAssignedCurse(_ *core.APLRotation, config *proto.APLValueWarlockIsAssignedCurse) core.APLValue {
+	isAssignedCurse := config.CurseType == warlock.Options.CurseOptions
+
+	return &APLValueWarlockIsAssignedCurse{
+		warlock:         warlock,
+		isAssignedCurse: isAssignedCurse,
+	}
+}
+
+func (x *APLValueWarlockIsAssignedCurse) Type() proto.APLValueType {
+	return proto.APLValueType_ValueTypeBool
+}
+
+func (x *APLValueWarlockIsAssignedCurse) GetBool(sim *core.Simulation) bool {
+	return x.isAssignedCurse
+}
+
+func (x *APLValueWarlockIsAssignedCurse) String() string {
+	return fmt.Sprintf("Is Assigned Curse (%t)", x.isAssignedCurse)
 }
 
 func (warlock *Warlock) NewAPLAction(rot *core.APLRotation, config *proto.APLAction) core.APLActionImpl {

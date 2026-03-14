@@ -6,6 +6,7 @@ option go_package = "./proto";
 import "common.proto";
 import "shaman.proto";
 import "druid.proto";
+import "warlock.proto";
 
 // Rotation options are based heavily on APL. See https://github.com/simulationcraft/simc/wiki/ActionLists.
 
@@ -99,7 +100,7 @@ message APLAction {
 }
 
 
-// NextIndex: 129
+// NextIndex: 130
 message APLValue {
 	UUID uuid = 85;
 
@@ -229,6 +230,7 @@ message APLValue {
         APLValueCatExcessEnergy cat_excess_energy = 52;
         APLValueCatNewSavageRoarDuration cat_new_savage_roar_duration = 61;
 		APLValueWarlockAssignedCurseIsActive warlock_assigned_curse_is_active = 59;
+		APLValueWarlockIsAssignedCurse warlock_is_assigned_curse = 129;
         APLValueCurrentEclipsePhase druid_current_eclipse_phase = 70;
 		APLValueProtectionPaladinDamageTakenLastGlobal protection_paladin_damage_taken_last_global = 100;
 
@@ -766,6 +768,9 @@ message APLValueCatExcessEnergy {}
 message APLValueCatNewSavageRoarDuration {}
 message APLValueWarlockAssignedCurseIsActive {
 	UnitReference target_unit = 1;
+}
+message APLValueWarlockIsAssignedCurse {
+	WarlockOptions.CurseOptions curse_type = 1;
 }
 message APLValueAfflictionCurrentSnapshot {
 	ActionID spell_id = 1;
