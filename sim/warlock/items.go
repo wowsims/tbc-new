@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
@@ -15,6 +16,10 @@ var ItemSetOblivionRaiment = core.NewItemSet(core.ItemSet{
 		2: func(agent core.Agent, setBonusAura *core.Aura) {
 			// Grants your pet 45 mana per 5 sec.
 			// Pet Mana Regen - 37375
+			if agent.GetCharacter().Class != proto.Class_ClassWarlock {
+				return
+			}
+
 			warlock := agent.(WarlockAgent).GetWarlock()
 
 			setBonusAura.

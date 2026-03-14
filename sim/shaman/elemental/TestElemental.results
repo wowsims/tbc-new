@@ -270,6 +270,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestElemental-AllItems-CataclysmHarness"
+ value: {
+  dps: 1260.26547
+  tps: 978.37225
+ }
+}
+dps_results: {
  key: "TestElemental-AllItems-CataclysmRegalia"
  value: {
   dps: 1569.66063
@@ -330,6 +337,13 @@ dps_results: {
  value: {
   dps: 1670.55991
   tps: 1352.51969
+ }
+}
+dps_results: {
+ key: "TestElemental-AllItems-CycloneHarness"
+ value: {
+  dps: 1285.83272
+  tps: 997.96185
  }
 }
 dps_results: {
@@ -512,6 +526,13 @@ dps_results: {
  value: {
   dps: 1726.15705
   tps: 1336.16698
+ }
+}
+dps_results: {
+ key: "TestElemental-AllItems-FelscaleArmor"
+ value: {
+  dps: 1306.85739
+  tps: 1016.00472
  }
 }
 dps_results: {
@@ -718,6 +739,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestElemental-AllItems-NetherscaleArmor"
+ value: {
+  dps: 1548.62643
+  tps: 1198.69963
+ }
+}
+dps_results: {
  key: "TestElemental-AllItems-NetherstrikeArmor"
  value: {
   dps: 1698.2981
@@ -743,6 +771,13 @@ dps_results: {
  value: {
   dps: 1697.14329
   tps: 1373.8498
+ }
+}
+dps_results: {
+ key: "TestElemental-AllItems-PrimalIntent"
+ value: {
+  dps: 1451.50325
+  tps: 1130.17382
  }
 }
 dps_results: {
@@ -893,6 +928,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestElemental-AllItems-SkyshatterHarness"
+ value: {
+  dps: 1161.23111
+  tps: 900.66807
+ }
+}
+dps_results: {
  key: "TestElemental-AllItems-SkyshatterRegalia"
  value: {
   dps: 1797.19623
@@ -1010,6 +1052,13 @@ dps_results: {
  value: {
   dps: 1747.49897
   tps: 1413.77279
+ }
+}
+dps_results: {
+ key: "TestElemental-AllItems-ThickDraenicArmor"
+ value: {
+  dps: 1306.85739
+  tps: 1016.00472
  }
 }
 dps_results: {

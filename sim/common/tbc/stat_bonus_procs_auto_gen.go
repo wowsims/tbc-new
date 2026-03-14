@@ -3914,7 +3914,9 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// https://www.wowhead.com/tbc/spell=39599
+	// Sometimes heals bearer of 120 damage when damaging an enemy in melee and chance on ranged hit to restore
+	// 172 mana to the bearer.
+	// https://www.wowhead.com/tbc/spell=33504
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskUnknown,
@@ -5058,6 +5060,21 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
+	// Your special attacks have a chance to give you 1000 armor penetration for 15s.
+	// https://www.wowhead.com/tbc/spell=37174
+	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+	//	Callback:           core.CallbackEmpty,
+	//	ProcMask:           core.ProcMaskUnknown,
+	//	Outcome:            core.OutcomeEmpty,
+	//	RequireDamageDealt: false
+	// }, []shared.ItemVariant{
+	//	{ItemID: 30450, ItemName: "Warp-Spring Coil"},
+	// })
+
+	// TODO: Manual implementation required
+	//       This can be ignored if the effect has already been implemented.
+	//       With next db run the item will be removed if implemented.
+	//
 	// Hamstring Rage cost reduced by -3.0.
 	// https://www.wowhead.com/tbc/spell=22778
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -5210,8 +5227,8 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Increases your pet's critical strike chance by 2%.
-	// https://www.wowhead.com/tbc/spell=27043
+	// Increases damage dealt by your pet by 3%.
+	// https://www.wowhead.com/tbc/spell=27206
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskUnknown,

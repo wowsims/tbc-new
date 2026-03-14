@@ -128,7 +128,7 @@ func (shaman *Shaman) registerWindfuryTotemSpell() {
 
 func (shaman *Shaman) registerStrengthOfEarthTotemSpell() {
 	duration := time.Second * 120
-	value := 86 * []float64{1, 1.08, 1.15}[shaman.Talents.EnhancingTotems]
+	value := core.StrengthOfEarthTotemValue(shaman.Talents.EnhancingTotems, shaman.CouldHaveSetBonus(ItemSetCycloneHarness, 2))
 	config := shaman.newTotemSpellConfig(300, 25528, SpellMaskBasicTotem)
 	buffAura := shaman.RegisterAura(core.Aura{
 		Label:    "Strength Of Earth Totem (Self)",

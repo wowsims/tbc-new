@@ -127,6 +127,18 @@ var ItemSetNetherstrikeArmor = core.NewItemSet(core.ItemSet{
 	},
 })
 
+var ItemSetNetherscaleArmor = core.NewItemSet(core.ItemSet{
+	ID:   616,
+	Name: "Netherscale Armor",
+	Bonuses: map[int32]core.ApplySetBonus{
+		3: func(agent core.Agent, setBonusAura *core.Aura) {
+			setBonusAura.
+				AttachStatBuff(stats.MeleeHitRating, 20).
+				ExposeToAPL(39982)
+		},
+	},
+})
+
 // Leatherworking - Tribal
 var ItemSetWindhawkArmor = core.NewItemSet(core.ItemSet{
 	ID:   618,
@@ -136,6 +148,53 @@ var ItemSetWindhawkArmor = core.NewItemSet(core.ItemSet{
 			setBonusAura.
 				AttachStatBuff(stats.MP5, 8).
 				ExposeToAPL(41591)
+		},
+	},
+})
+
+// Leatherworking - Elemental
+var ItemSetPrimalIntent = core.NewItemSet(core.ItemSet{
+	ID:   619,
+	Name: "Primal Intent",
+	Bonuses: map[int32]core.ApplySetBonus{
+		3: func(agent core.Agent, setBonusAura *core.Aura) {
+			setBonusAura.
+				AttachStatBuff(stats.AttackPower, 40).
+				ExposeToAPL(41832)
+		},
+	},
+})
+
+var ItemSetFelscaleArmor = core.NewItemSet(core.ItemSet{
+	ID:   611,
+	Name: "Felscale Armor",
+	Bonuses: map[int32]core.ApplySetBonus{
+		2: func(agent core.Agent, setBonusAura *core.Aura) {
+			setBonusAura.
+				AttachStatBuff(stats.MeleeCritRating, 15).
+				ExposeToAPL(41748)
+		},
+		4: func(agent core.Agent, setBonusAura *core.Aura) {
+			setBonusAura.
+				AttachStatBuff(stats.Stamina, 20).
+				ExposeToAPL(41747)
+		},
+	},
+})
+
+var ItemSetThickDraenicArmor = core.NewItemSet(core.ItemSet{
+	ID:   613,
+	Name: "Thick Draenic Armor",
+	Bonuses: map[int32]core.ApplySetBonus{
+		2: func(agent core.Agent, setBonusAura *core.Aura) {
+			setBonusAura.
+				AttachStatBuff(stats.MeleeHitRating, 15).
+				ExposeToAPL(41878)
+		},
+		4: func(agent core.Agent, setBonusAura *core.Aura) {
+			setBonusAura.
+				AttachStatBuff(stats.MeleeCritRating, 15).
+				ExposeToAPL(41877)
 		},
 	},
 })

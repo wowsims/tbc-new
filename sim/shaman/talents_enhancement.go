@@ -9,7 +9,6 @@ import (
 )
 
 func (shaman *Shaman) ApplyEnhancementTalents() {
-
 	shaman.applyAncestralKnowledge()
 	shaman.applyDualWield()
 	shaman.applyDualWieldSpecialization()
@@ -104,12 +103,16 @@ func (shaman *Shaman) applyFlurry() {
 		Duration: 500 * time.Millisecond,
 	}
 
+	attackSpeed := 1.05 +
+		0.05*float64(shaman.Talents.Flurry) +
+		core.TernaryFloat64(shaman.CouldHaveSetBonus(ItemSetCataclysmHarness, 4), 0.05, 0)
+
 	flurryAura := shaman.RegisterAura(core.Aura{
 		ActionID:  core.ActionID{SpellID: 16284},
 		Label:     "Flurry",
 		Duration:  time.Second * 15,
 		MaxStacks: 3,
-	}).AttachMultiplyMeleeSpeed(1.05 + 0.05*float64(shaman.Talents.Flurry))
+	}).AttachMultiplyMeleeSpeed(attackSpeed)
 
 	shaman.MakeProcTriggerAura(core.ProcTrigger{
 		Name:     "Flurry Trigger",
