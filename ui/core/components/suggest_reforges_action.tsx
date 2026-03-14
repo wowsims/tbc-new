@@ -1084,10 +1084,14 @@ export class ReforgeOptimizer {
 		const constraints = this.buildYalpsConstraints(this.updatedGear!, baseStats);
 
 		// After building variables and constraints we check for unique gems being used
+		// and add SocketBonusLink constraints for the all-or-nothing socket bonus variables.
 		for (const coefficients of variables.values()) {
 			for (const key of coefficients.keys()) {
 				if (key.startsWith('UniqueGem_') && !constraints.has(key)) {
 					constraints.set(key, lessEq(1));
+				}
+				if (key.startsWith('SocketBonusLink_') && !constraints.has(key)) {
+					constraints.set(key, lessEq(0));
 				}
 			}
 		}
@@ -1174,7 +1178,9 @@ export class ReforgeOptimizer {
 				socketBonusNormalization -= 1;
 			}
 
-			const distributedSocketBonus = new Stats(scaledItem.item.socketBonus).scale(1.0 / socketBonusNormalization).getBuffedStats();
+			const socketBonusStats = new Stats(scaledItem.item.socketBonus);
+			const distributedSocketBonus = socketBonusStats.scale(1.0 / socketBonusNormalization).getBuffedStats();
+			const fullSocketBonus = socketBonusStats.getBuffedStats();
 
 			// First determine whether the socket bonus should be obviously matched in order to save on brute force computation.
 			let forceSocketBonus: boolean = false;
@@ -1256,8 +1262,12 @@ export class ReforgeOptimizer {
 								coefficients.set(`GemColorCompare_${compareColorGreater}_${compareColorLesser}`, compareValue);
 							}
 
-							for (const [stat, value] of distributedSocketBonus.entries()) {
-								this.applyReforgeStat(coefficients, stat, value, preCapEPs);
+							if (forceSocketBonus) {
+								for (const [stat, value] of distributedSocketBonus.entries()) {
+									this.applyReforgeStat(coefficients, stat, value, preCapEPs);
+								}
+							} else {
+								coefficients.set(`SocketBonusLink_${slot}_${socketIdx}`, -1);
 							}
 						} else if (!forceSocketBonus && socketColors.length) {
 							socketColors?.forEach(() => {
@@ -1277,6 +1287,23 @@ export class ReforgeOptimizer {
 					}
 				}
 			});
+
+			if (!forceSocketBonus && socketBonusNormalization > 0) {
+				const socketBonusKey = `SocketBonus_${slot}`;
+				const socketBonusCoefficients = new Map<string, number>();
+
+				for (const [stat, value] of fullSocketBonus.entries()) {
+					this.applyReforgeStat(socketBonusCoefficients, stat, value, preCapEPs);
+				}
+
+				socketColors.forEach((socketColor, socketIdx) => {
+					if ([GemColor.GemColorRed, GemColor.GemColorBlue, GemColor.GemColorYellow, GemColor.GemColorPrismatic].includes(socketColor)) {
+						socketBonusCoefficients.set(`SocketBonusLink_${slot}_${socketIdx}`, 1);
+					}
+				});
+
+				variables.set(socketBonusKey, socketBonusCoefficients);
+			}
 		}
 
 		return variables;
