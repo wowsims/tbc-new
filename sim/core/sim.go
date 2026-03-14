@@ -641,6 +641,7 @@ func (sim *Simulation) AddPendingAction(pa *PendingAction) {
 	//	panic(fmt.Sprintf("Cant add action in the past: %s", pa.NextActionAt))
 	//}
 	pa.consumed = false
+	pa.cancelled = false
 	for index, v := range sim.pendingActions[1:] {
 		if v.NextActionAt < pa.NextActionAt || (v.NextActionAt == pa.NextActionAt && v.Priority >= pa.Priority) {
 			//if sim.Log != nil {
