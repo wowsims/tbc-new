@@ -146,7 +146,6 @@ func (shaman *Shaman) registerFireNovaTotemSpell() {
 			baseDamage := shaman.CalcAndRollDamageRange(sim, 654, 730)
 			spell.CalcAoeDamage(sim, baseDamage, spell.OutcomeMagicHitAndCrit)
 
-			shaman.FireNovaTotemPA = sim.GetConsumedPendingActionFromPool()
 			shaman.FireNovaTotemPA.OnAction = func(sim *core.Simulation) {
 				spell.DealBatchedAoeDamage(sim)
 			}
