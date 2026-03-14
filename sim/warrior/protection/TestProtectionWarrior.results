@@ -853,6 +853,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestProtectionWarrior-AllItems-NetherscaleArmor"
+ value: {
+  dps: 777.4616
+  tps: 1432.95689
+  dtps: 1409.42618
+ }
+}
+dps_results: {
  key: "TestProtectionWarrior-AllItems-NetherstrikeArmor"
  value: {
   dps: 727.31062
@@ -898,6 +906,14 @@ dps_results: {
   dps: 744.75246
   tps: 1375.25518
   dtps: 1321.5462
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-PrimalIntent"
+ value: {
+  dps: 793.00779
+  tps: 1455.11039
+  dtps: 1378.0161
  }
 }
 dps_results: {

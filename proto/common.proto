@@ -492,7 +492,9 @@ message PartyBuffs {
 	bool snapshot_improved_wrath_of_air_totem = 22;
 	TristateEffect grace_of_air_totem = 23;
 	TristateEffect strength_of_earth_totem = 24;
+	bool soe_enhancement_2pt4 = 37;
 	bool snapshot_improved_strength_of_earth_totem = 25;
+
 	bool tranquil_air_totem = 26;
 
 	TristateEffect windfury_totem = 27;

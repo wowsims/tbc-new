@@ -127,6 +127,18 @@ var ItemSetNetherstrikeArmor = core.NewItemSet(core.ItemSet{
 	},
 })
 
+var ItemSetNetherscaleArmor = core.NewItemSet(core.ItemSet{
+	ID:   616,
+	Name: "Netherscale Armor",
+	Bonuses: map[int32]core.ApplySetBonus{
+		3: func(agent core.Agent, setBonusAura *core.Aura) {
+			setBonusAura.
+				AttachStatBuff(stats.MeleeHitRating, 20).
+				ExposeToAPL(39982)
+		},
+	},
+})
+
 // Leatherworking - Tribal
 var ItemSetWindhawkArmor = core.NewItemSet(core.ItemSet{
 	ID:   618,
@@ -136,6 +148,19 @@ var ItemSetWindhawkArmor = core.NewItemSet(core.ItemSet{
 			setBonusAura.
 				AttachStatBuff(stats.MP5, 8).
 				ExposeToAPL(41591)
+		},
+	},
+})
+
+// Leatherworking - Elemental
+var ItemSetPrimalIntent = core.NewItemSet(core.ItemSet{
+	ID:   619,
+	Name: "Primal Intent",
+	Bonuses: map[int32]core.ApplySetBonus{
+		3: func(agent core.Agent, setBonusAura *core.Aura) {
+			setBonusAura.
+				AttachStatBuff(stats.AttackPower, 40).
+				ExposeToAPL(41832)
 		},
 	},
 })

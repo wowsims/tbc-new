@@ -732,6 +732,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRogue-AllItems-PrimalIntent"
+ value: {
+  dps: 1930.15419
+  tps: 1370.40948
+ }
+}
+dps_results: {
  key: "TestRogue-AllItems-PrimalMooncloth"
  value: {
   dps: 1723.71678

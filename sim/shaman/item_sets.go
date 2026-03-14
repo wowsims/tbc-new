@@ -8,6 +8,10 @@ import (
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
+///////////////////////////////////////////////////////////////////////////
+//							Elemental
+///////////////////////////////////////////////////////////////////////////
+
 var ItemSetTidefuryRaiment = core.NewItemSet(core.ItemSet{
 	ID:   630,
 	Name: "Tidefury Raiment",
@@ -148,6 +152,73 @@ var ItemSetSkyshatterRegalia = core.NewItemSet(core.ItemSet{
 				FloatValue: 0.05,
 				ClassMask:  SpellMaskLightningBolt | SpellMaskLightningBoltOverload,
 			}).ExposeToAPL(38436)
+		},
+	},
+})
+
+///////////////////////////////////////////////////////////////////////////
+//							Enhancement
+///////////////////////////////////////////////////////////////////////////
+
+var ItemSetCycloneHarness = core.NewItemSet(core.ItemSet{
+	ID:   633,
+	Name: "Cyclone Harness",
+	Bonuses: map[int32]core.ApplySetBonus{
+		2: func(agent core.Agent, setBonusAura *core.Aura) {
+			// Your Strength of Earth Totem ability grants an additional 12 strength.
+			// Implemented in totems.go
+		},
+		4: func(agent core.Agent, setBonusAura *core.Aura) {
+			// Your Stormstrike ability does an additional 30 damage per weapon.
+			setBonusAura.AttachSpellMod(core.SpellModConfig{
+				Kind:       core.SpellMod_BaseDamage_Flat,
+				FloatValue: 30.0,
+				ClassMask:  SpellMaskStormstrikeDamage,
+			}).ExposeToAPL(37224)
+		},
+	},
+})
+
+var ItemSetCataclysmHarness = core.NewItemSet(core.ItemSet{
+	ID:   636,
+	Name: "Cataclysm Harness",
+	Bonuses: map[int32]core.ApplySetBonus{
+		2: func(agent core.Agent, setBonusAura *core.Aura) {
+			// Your melee attacks have a chance to reduce the cast time of your next Lesser Healing Wave by 1.5 sec.
+			// Not implementing
+		},
+		4: func(agent core.Agent, setBonusAura *core.Aura) {
+			// You gain 5% additional haste from your Flurry ability.
+			// Implemented in talents_enhancement.go
+		},
+	},
+})
+
+var ItemSetSkyshatterHarness = core.NewItemSet(core.ItemSet{
+	ID:   682,
+	Name: "Skyshatter Harness",
+	Bonuses: map[int32]core.ApplySetBonus{
+		2: func(agent core.Agent, setBonusAura *core.Aura) {
+			// Your Earth Shock, Flame Shock, and Frost Shock abilities cost 10% less mana.
+			setBonusAura.AttachSpellMod(core.SpellModConfig{
+				Kind:       core.SpellMod_PowerCost_Pct,
+				FloatValue: -10,
+				ClassMask:  SpellMaskShock,
+			}).ExposeToAPL(38429)
+		},
+		4: func(agent core.Agent, setBonusAura *core.Aura) {
+			// Whenever you use Stormstrike, you gain 70 attack power for 12 sec.
+			character := agent.GetCharacter()
+			bonusPower := character.NewTemporaryStatsAura("Stormstrike AP Buff", core.ActionID{SpellID: 38432}, stats.Stats{stats.AttackPower: 70}, time.Second*12)
+
+			setBonusAura.AttachProcTrigger(core.ProcTrigger{
+				Name:           "Skyshatter Harness 4pc",
+				Callback:       core.CallbackOnCastComplete,
+				ClassSpellMask: SpellMaskStormstrikeCast,
+				Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+					bonusPower.Activate(sim)
+				},
+			})
 		},
 	},
 })

@@ -253,7 +253,7 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 	}
 
 	if partyBuffs.StrengthOfEarthTotem != proto.TristateEffect_TristateEffectMissing {
-		StrengthOfEarthTotemAura(char, IsImproved(partyBuffs.StrengthOfEarthTotem))
+		StrengthOfEarthTotemAura(char, TernaryInt32(IsImproved(partyBuffs.StrengthOfEarthTotem), 2, 0), partyBuffs.SoeEnhancement_2Pt4)
 	}
 
 	if partyBuffs.TotemOfWrath > 0 {
@@ -728,19 +728,24 @@ func ManaSpringTotemAura(char *Character, improved bool) *Aura {
 	})
 }
 
-var StrengthOfEarthTotemCategory = "StrengthOfEarthTotem"
+const (
+	StrengthOfEarthTotemCategory      = "StrengthOfEarthTotem"
+	StrengthOfEarthTotemBaseValue     = 86.0
+	StrengthOfEarthTotemImprovedValue = 12.0
+)
 
-func StrengthOfEarthTotemAura(char *Character, isImproved bool) *Aura {
-	strBuff := 86.0
-	if isImproved {
-		strBuff *= 1.15
-	}
+var StrengthOfEarthMultipliers = []float64{1, 1.08, 1.15}
 
+func StrengthOfEarthTotemValue(enhancingTotemsPoints int32, hasEnh2pT4 bool) float64 {
+	return (86.0 + TernaryFloat64(hasEnh2pT4, StrengthOfEarthTotemImprovedValue, 0)) * StrengthOfEarthMultipliers[enhancingTotemsPoints]
+}
+
+func StrengthOfEarthTotemAura(char *Character, enhancingTotemsPoints int32, hasEnh2pT4 bool) *Aura {
 	return makeStatBuff(char, BuffConfig{
 		Label:    "Strength of Earth Totem",
 		ActionID: ActionID{SpellID: 25528},
 		Stats: []StatConfig{
-			{stats.Strength, strBuff, false},
+			{stats.Strength, StrengthOfEarthTotemValue(enhancingTotemsPoints, hasEnh2pT4), false},
 		},
 		ExclusiveCategory: StrengthOfEarthTotemCategory,
 	})
