@@ -629,6 +629,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestProtectionWarrior-AllItems-FelscaleArmor"
+ value: {
+  dps: 776.74689
+  tps: 1402.12931
+  dtps: 1502.63372
+ }
+}
+dps_results: {
  key: "TestProtectionWarrior-AllItems-Figurine-DawnstoneCrab-24125"
  value: {
   dps: 743.0346
@@ -1219,6 +1227,14 @@ dps_results: {
   dps: 969.061
   tps: 1695.87291
   dtps: 1826.64296
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-ThickDraenicArmor"
+ value: {
+  dps: 772.85758
+  tps: 1398.34772
+  dtps: 1596.12606
  }
 }
 dps_results: {

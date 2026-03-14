@@ -529,6 +529,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestElemental-AllItems-FelscaleArmor"
+ value: {
+  dps: 1306.85739
+  tps: 1016.00472
+ }
+}
+dps_results: {
  key: "TestElemental-AllItems-Figurine-DawnstoneCrab-24125"
  value: {
   dps: 1670.55991
@@ -1045,6 +1052,13 @@ dps_results: {
  value: {
   dps: 1747.49897
   tps: 1413.77279
+ }
+}
+dps_results: {
+ key: "TestElemental-AllItems-ThickDraenicArmor"
+ value: {
+  dps: 1306.85739
+  tps: 1016.00472
  }
 }
 dps_results: {

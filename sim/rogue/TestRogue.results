@@ -1006,6 +1006,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRogue-AllItems-ThickDraenicArmor"
+ value: {
+  dps: 1766.31435
+  tps: 1254.08319
+ }
+}
+dps_results: {
  key: "TestRogue-AllItems-Thunderfury,BlessedBladeoftheWindseeker-19019"
  value: {
   dps: 1961.1185

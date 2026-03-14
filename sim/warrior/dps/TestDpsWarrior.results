@@ -1117,6 +1117,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestDpsWarrior-AllItems-ThickDraenicArmor"
+ value: {
+  dps: 1852.14615
+  tps: 1402.8766
+  dtps: 7.2778
+ }
+}
+dps_results: {
  key: "TestDpsWarrior-AllItems-Thunderfury,BlessedBladeoftheWindseeker-19019"
  value: {
   dps: 2086.67516
