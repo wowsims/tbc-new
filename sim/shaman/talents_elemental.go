@@ -260,10 +260,7 @@ func (shaman *Shaman) applyTotemOfWrath() {
 		stats.SpellHitPercent:  value,
 	})
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		shaman.MagmaTotem.AOEDot().Deactivate(sim)
-		shaman.SearingTotem.Dot(shaman.CurrentTarget).Deactivate(sim)
-		shaman.FireElemental.Disable(sim)
-		shaman.FireNovaTotemPA.Cancel(sim)
+		shaman.cancelFireTotems(sim)
 		shaman.TotemExpirations[FireTotem] = sim.CurrentTime + duration
 		buffAura.Activate(sim)
 	}
