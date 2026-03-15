@@ -35,8 +35,6 @@ func NewRetributionPaladin(character *core.Character, options *proto.Player) *Re
 
 type RetributionPaladin struct {
 	*paladin.Paladin
-
-	HoLDamage float64
 }
 
 func (ret *RetributionPaladin) GetPaladin() *paladin.Paladin {
@@ -45,19 +43,6 @@ func (ret *RetributionPaladin) GetPaladin() *paladin.Paladin {
 
 func (ret *RetributionPaladin) Initialize() {
 	ret.Paladin.Initialize()
-
-	// ret.registerMastery()
-
-	// ret.registerArtOfWar()
-	// ret.registerDivineStorm()
-	// ret.registerExorcism()
-	// ret.registerInquisition()
-	// ret.registerJudgmentsOfTheBold()
-	// ret.registerSealOfJustice()
-	// ret.registerSwordOfLight()
-	// ret.registerTemplarsVerdict()
-
-	// ret.registerHotfixPassive()
 }
 
 func (ret *RetributionPaladin) ApplyTalents() {
