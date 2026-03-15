@@ -55,20 +55,20 @@ func (warlock *Warlock) registerSeed() {
 			}
 
 			maxDamagePerMob := 13580 / float64(maxHits+1)
-			spell.Flags ^= core.SpellFlagIgnoreAttackerModifiers
 			for _, result := range hitResults {
+				spell.Flags ^= core.SpellFlagIgnoreAttackerModifiers
 				attackTable := spell.Unit.AttackTables[target.UnitIndex]
 				baseDamage := warlock.CalcAndRollDamageRange(sim, 1110, 1290) + warlock.SeedOfCorruptionBonusDamage
 				baseDamage += seedPopCoeff * spell.BonusDamage(attackTable)
 				attackerMultiplier := spell.AttackerDamageMultiplier(attackTable, false)
 				baseDamage *= attackerMultiplier
+				spell.Flags |= core.SpellFlagIgnoreAttackerModifiers
 				damageResults = append(damageResults, spell.CalcDamage(sim, result.Target, min(maxDamagePerMob, baseDamage), core.Ternary(result.Landed(), spell.OutcomeMagicCrit, spell.OutcomeAlwaysMiss)))
 			}
 
 			for _, result := range damageResults {
 				spell.DealDamage(sim, result)
 			}
-			spell.Flags |= core.SpellFlagIgnoreAttackerModifiers
 		},
 	})
 
