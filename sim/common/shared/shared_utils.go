@@ -33,6 +33,7 @@ type DamageEffect struct {
 	IsMelee          bool
 	ProcMask         core.ProcMask
 	Outcome          OutcomeType
+	Flags            core.SpellFlag
 }
 
 type ExtraSpellInfo struct {
@@ -531,6 +532,7 @@ const (
 	OutcomeDefault                  = 0
 	OutcomeMeleeCanCrit OutcomeType = iota
 	OutcomeMeleeNoCrit
+	OutcomeMeleeNoBlockDodgeParry
 	OutcomeMeleeNoBlockDodgeParryCrit
 	OutcomeSpellCanCrit
 	OutcomeSpellNoCrit
@@ -558,6 +560,8 @@ func GetOutcome(spell *core.Spell, outcome OutcomeType) core.OutcomeApplier {
 		return spell.OutcomeMeleeSpecialHitAndCrit
 	case OutcomeMeleeNoCrit:
 		return spell.OutcomeMeleeSpecialHit
+	case OutcomeMeleeNoBlockDodgeParry:
+		return spell.OutcomeMeleeSpecialNoBlockDodgeParry
 	case OutcomeMeleeNoBlockDodgeParryCrit:
 		return spell.OutcomeMeleeSpecialNoBlockDodgeParryNoCrit
 	case OutcomeSpellCanCrit:
