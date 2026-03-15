@@ -90,9 +90,9 @@ func (hp *HunterPet) newBite() *core.Spell {
 			IgnoreHaste: true,
 		},
 
-		DamageMultiplier:         1,
-		CritMultiplier:           hp.DefaultMeleeCritMultiplier(),
-		ThreatMultiplier:         1,
+		DamageMultiplier: 1,
+		CritMultiplier:   hp.DefaultMeleeCritMultiplier(),
+		ThreatMultiplier: 1,
 
 		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
 			return hp.IsEnabled()
@@ -123,9 +123,9 @@ func (hp *HunterPet) newClaw() *core.Spell {
 			IgnoreHaste: true,
 		},
 
-		DamageMultiplier:         1,
-		CritMultiplier:           hp.DefaultMeleeCritMultiplier(),
-		ThreatMultiplier:         1,
+		DamageMultiplier: 1,
+		CritMultiplier:   hp.DefaultMeleeCritMultiplier(),
+		ThreatMultiplier: 1,
 
 		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
 			return hp.IsEnabled()
@@ -156,9 +156,9 @@ func (hp *HunterPet) newGore() *core.Spell {
 			IgnoreHaste: true,
 		},
 
-		DamageMultiplier:         1,
-		CritMultiplier:           hp.DefaultMeleeCritMultiplier(),
-		ThreatMultiplier:         1,
+		DamageMultiplier: 1,
+		CritMultiplier:   hp.DefaultMeleeCritMultiplier(),
+		ThreatMultiplier: 1,
 
 		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
 			return hp.IsEnabled()
@@ -191,10 +191,10 @@ func (hp *HunterPet) newLightningBreath() *core.Spell {
 			IgnoreHaste: true,
 		},
 
-		DamageMultiplier:         1,
-		CritMultiplier:           hp.DefaultSpellCritMultiplier(),
-		ThreatMultiplier:         1,
-		BonusCoefficient:         0.05,
+		DamageMultiplier: 1,
+		CritMultiplier:   hp.DefaultSpellCritMultiplier(),
+		ThreatMultiplier: 1,
+		BonusCoefficient: 0.05,
 
 		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
 			return hp.IsEnabled()
@@ -226,9 +226,9 @@ func (hp *HunterPet) newScreech() *core.Spell {
 			IgnoreHaste: true,
 		},
 
-		DamageMultiplier:         1,
-		CritMultiplier:           hp.DefaultMeleeCritMultiplier(),
-		ThreatMultiplier:         1,
+		DamageMultiplier: 1,
+		CritMultiplier:   hp.DefaultMeleeCritMultiplier(),
+		ThreatMultiplier: 1,
 
 		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
 			return hp.IsEnabled()

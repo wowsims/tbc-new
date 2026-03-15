@@ -6,7 +6,7 @@ import (
 
 func RegisterAllOnUseCds() {
 
-	// 
+	//
 	// shared.NewSimpleStatActive(13143) // Mark of the Dragon Lord - https://www.wowhead.com/tbc/spell=17252
 	// shared.NewSimpleStatActive(13171) // Smokey's Lighter - https://www.wowhead.com/tbc/spell=17283
 	// shared.NewSimpleStatActive(13213) // Smolderweb's Eye - https://www.wowhead.com/tbc/spell=17330

@@ -1400,9 +1400,21 @@ func applyPetBuffEffects(petAgent PetAgent, raidBuffs *proto.RaidBuffs, partyBuf
 		partyBuffs.EyeOfTheNight = false
 		partyBuffs.JadePendantOfBlasting = false
 
+		// Strip targeted buffs that require presence at fight start
+		raidBuffs.ArcaneBrilliance = false
+		raidBuffs.DivineSpirit = proto.TristateEffect_TristateEffectMissing
+		raidBuffs.GiftOfTheWild = proto.TristateEffect_TristateEffectMissing
+		raidBuffs.PowerWordFortitude = proto.TristateEffect_TristateEffectMissing
+		raidBuffs.ShadowProtection = false
+		raidBuffs.Thorns = proto.TristateEffect_TristateEffectMissing
+		individualBuffs.BlessingOfMight = proto.TristateEffect_TristateEffectMissing
+		individualBuffs.BlessingOfKings = false
+		individualBuffs.BlessingOfWisdom = proto.TristateEffect_TristateEffectMissing
+
 		// Only individual buff that would apply is Unleashed Rage.
+		unleashedRage := individualBuffs.UnleashedRage
 		individualBuffs = &proto.IndividualBuffs{}
-		individualBuffs.UnleashedRage = true
+		individualBuffs.UnleashedRage = unleashedRage
 	}
 
 	applyBuffEffects(petAgent, raidBuffs, partyBuffs, individualBuffs)

@@ -168,7 +168,7 @@ export class ConsumesPicker extends Component {
 			petFoods,
 			{
 				consumesFieldName: 'petFoodId',
-				showWhen: (player: Player<any>) => [Spec.SpecHunter, Spec.SpecWarlock, Spec.SpecShadowPriest].includes(player.getSpec()),
+				showWhen: (player: Player<any>) => [Spec.SpecHunter, Spec.SpecWarlock, Spec.SpecPriest].includes(player.getSpec()),
 			},
 			'',
 		);
