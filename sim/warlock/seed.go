@@ -13,6 +13,8 @@ const seedExplosionCoeff = 0.143
 const seedTriggerBaseDamage = 1044.0
 
 func (warlock *Warlock) registerSeed() {
+	warlock.SeedOfCorruptionBaseDamage = seedTriggerBaseDamage
+
 	actionID := core.ActionID{SpellID: 27243}
 	type seedOptions struct {
 		damageTaken float64
@@ -37,23 +39,23 @@ func (warlock *Warlock) registerSeed() {
 			if targetCount < 2 {
 				return
 			}
+
 			nextTarget := sim.Environment.NextActiveTargetUnit(target)
 			maxHits := 0
+			results := make([]*core.SpellResult, 0)
 
-			results := make([]*core.SpellResult, maxHits)
 			for range targetCount - 1 {
 				result := spell.CalcOutcome(sim, nextTarget, spell.OutcomeMagicHitNoHitCounter)
+				results = append(results, result)
 				if result.Landed() {
 					maxHits++
 				}
-				results = append(results, result)
 				nextTarget = sim.Environment.NextActiveTargetUnit(nextTarget)
 			}
 
-			totalDamage := min(13580, warlock.CalcAndRollDamageRange(sim, 1110, 1290)*float64(maxHits+1))
-			damagePerMob := totalDamage / float64(maxHits+1)
+			maxDamagePerMob := 13580 / float64(maxHits+1)
 			for _, result := range results {
-				spell.CalcAndDealDamage(sim, result.Target, damagePerMob, core.Ternary(result.Landed(), spell.OutcomeMagicCrit, spell.OutcomeAlwaysMiss))
+				spell.CalcAndDealDamage(sim, result.Target, min(maxDamagePerMob, warlock.CalcAndRollDamageRange(sim, 1110, 1290)), core.Ternary(result.Landed(), spell.OutcomeMagicCrit, spell.OutcomeAlwaysMiss))
 			}
 		},
 	})

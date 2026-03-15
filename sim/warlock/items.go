@@ -38,11 +38,23 @@ var ItemSetOblivionRaiment = core.NewItemSet(core.ItemSet{
 		4: func(agent core.Agent, setBonusAura *core.Aura) {
 			// Your Seed of Corruption deals 180 additional damage when it detonates.
 			// Improved Seed of Corruption - 37376
+			if agent.GetCharacter().Class != proto.Class_ClassWarlock {
+				return
+			}
+
+			warlock := agent.(WarlockAgent).GetWarlock()
+
 			setBonusAura.AttachSpellMod(core.SpellModConfig{
-				Kind:       core.SpellMod_BonusSpellDamage_Flat,
-				FloatValue: 180.0,
-				ClassMask:  WarlockSpellSeedOfCorruptionExplosion,
+				Kind:      core.SpellMod_Custom,
+				ClassMask: WarlockSpellSeedOfCorruptionExplosion,
+				ApplyCustom: func(mod *core.SpellMod, spell *core.Spell) {
+					warlock.SeedOfCorruptionBaseDamage += 180
+				},
+				RemoveCustom: func(mod *core.SpellMod, spell *core.Spell) {
+					warlock.SeedOfCorruptionBaseDamage -= 180
+				},
 			})
+
 		},
 	},
 })
