@@ -175,6 +175,8 @@
 			"melee_hit": "Melee Hit",
 			"melee_crit": "Melee Crit",
 			"melee_haste": "Melee Haste",
+			"ranged_hit": "Ranged Hit",
+			"ranged_crit": "Ranged Crit",
 			"ranged_haste": "Ranged Haste",
 			"healing_power": "Healing Power",
 			"spell_damage": "Spell Damage",
@@ -231,6 +233,7 @@
 			"gear": "Gear",
 			"talents": "Talents",
 			"rotation": "Rotation",
+			"rotationType": "Rotation Type",
 			"encounter": "Encounter",
 			"settings": "Settings",
 			"description": "This preset affects the following settings:",
@@ -239,6 +242,7 @@
 			"consumables": "Consumables",
 			"other_settings": "Other Settings",
 			"buffs": "Buffs",
+			"debuffs": "Debuffs",
 			"reforge_settings": "Suggest Gem Settings"
 		}
 	},
@@ -480,9 +484,44 @@
 				"label": "Pet Uptime (%)",
 				"tooltip": "Percent of the fight duration for which your pet will be alive."
 			},
-			"glaive_toss_chance": {
-				"label": "Glaive Toss Success %",
-				"tooltip": "The chance that Glaive Toss hits secondary targets in percentages."
+			"pet_single_ability": {
+				"label": "Single Pet Ability",
+				"tooltip": "Pet will only use it's primary ability (Gore, Screech etc.)"
+			},
+			"pet_type": {
+				"label": "Pet Type",
+				"tooltip": "Pet type",
+				"no_pet": "No Pet",
+				"bat": "Bat",
+				"bear": "Bear",
+				"cat": "Cat",
+				"crab": "Crab",
+				"owl": "Owl",
+				"raptor": "Raptor",
+				"ravager": "Ravager",
+				"wind_serpent": "Wind Serpent"
+			},
+			"ammo": {
+				"label": "Ammo",
+				"tooltip": "Ammo type",
+				"no_ammo": "No Ammo",
+				"timeless_arrow": "Timeless Arrow",
+				"mysterious_arrow": "Mysterious Arrow",
+				"adamantite_stinger": "Adamantite Stinger",
+				"halaani_razorshaft": "Halaani Razorshaft",
+				"blackflight_arrow": "Blackflight Arrow",
+				"wardens_arrow": "Warden's Arrow"
+			},
+			"quiver": {
+				"label": "Quiver",
+				"tooltip": "Quiver type",
+				"no_quiver": "No Quiver",
+				"speed_15": "15%",
+				"speed_14": "14%",
+				"speed_13": "13%",
+				"speed_12": "12%",
+				"speed_11": "11%",
+				"speed_10": "10%"
 			},
 			"detonate_seed": {
 				"label": "Detonate Seed on Cast",
@@ -665,23 +704,23 @@
 			},
 			"execute_duration_20": {
 				"label": "Execute Duration 20 (%)",
-				"tooltip": "Percentage of the total encounter duration, for which the targets will be considered to be in execute range (< 20% HP) for the purpose of effects like Warrior Execute or Mage Molten Fury."
+				"tooltip": "Percentage of the total encounter duration, for which the targets will be considered to be in execute range (< 20% HP) for the purpose of effects like Warrior Execute."
 			},
 			"execute_duration_25": {
 				"label": "Execute Duration 25 (%)",
-				"tooltip": "Percentage of the total encounter duration, for which the targets will be considered to be in execute range (< 25% HP) for the purpose of effects like Warlock's Drain Soul."
+				"tooltip": "Percentage of the total encounter duration, for which the targets will be considered to be in execute range (< 25% HP)."
 			},
 			"execute_duration_35": {
 				"label": "Execute Duration 35 (%)",
-				"tooltip": "Percentage of the total encounter duration, for which the targets will be considered to be in execute range (< 35% HP) for the purpose of effects like Death Knight Soul Reaper."
+				"tooltip": "Percentage of the total encounter duration, for which the targets will be considered to be in execute range (< 35% HP)."
 			},
 			"execute_duration_45": {
 				"label": "Execute Duration 45 (%)",
-				"tooltip": "Percentage of the total encounter duration, for which the targets will be considered to be in execute range (< 45% HP) for the purpose of effects like Death Knight Soul Reaper with T15 DPS 4pc."
+				"tooltip": "Percentage of the total encounter duration, for which the targets will be considered to be in execute range (< 45% HP)."
 			},
 			"duration_below_high_hp": {
 				"label": "Duration spent below high-HP regime (%)",
-				"tooltip": "Percentage of the total encounter duration, for which the targets are considered out of range for effects like Hunter Careful Aim (<90% HP) or Druid Predatory Strikes (<80% HP)."
+				"tooltip": "Percentage of the total encounter duration, for which the targets are considered out of range for effects like <90% HP or <80% HP."
 			},
 			"encounter_preset": {
 				"label": "Encounter",
@@ -1813,47 +1852,38 @@
 				}
 			},
 			"hunter": {
-				"beast_mastery": {
-					"sting": {
-						"label": "Sting",
-						"tooltip": "Maintains the selected Sting on the primary target",
-						"values": {
-							"none": "None",
-							"serpent_sting": "Serpent Sting"
-						}
-					},
-					"trap_weave": {
-						"label": "Trap Weave",
-						"tooltip": "Uses Explosive Trap at appropriate times. Note that selecting this will disable Black Arrow because they share a CD"
-					},
-					"multi_dot_serpent_sting": {
-						"label": "Multi-Dot Serpent Sting",
-						"tooltip": "Casts Serpent Sting on multiple targets"
+				"sting": {
+					"label": "Sting",
+					"tooltip": "Maintains the selected Sting on the primary target",
+					"values": {
+						"none": "None",
+						"serpent_sting": "Serpent Sting",
+						"scorpid_sting": "Scorpid Sting"
 					}
 				},
-				"marksmanship": {
-					"sting": {
-						"label": "Sting",
-						"tooltip": "Maintains the selected Sting on the primary target",
-						"values": {
-							"none": "None",
-							"serpent_sting": "Serpent Sting"
-						}
-					},
-					"trap_weave": {
-						"label": "Trap Weave",
-						"tooltip": "Uses Explosive Trap at appropriate times. Note that selecting this will disable Black Arrow because they share a CD"
-					},
-					"multi_dot_serpent_sting": {
-						"label": "Multi-Dot Serpent Sting",
-						"tooltip": "Casts Serpent Sting on multiple targets"
-					}
+				"melee_weave": {
+					"label": "Melee Weave",
+					"tooltip": "Moves in to melee weave at appropriate times."
 				},
-				"survival": {
-					"multi_dot_serpent_sting": {
-						"label": "Multi-Dot Serpent Sting",
-						"tooltip": "Casts Serpent Sting on multiple targets"
-					}
+				"weave_only_raptor": {
+					"label": "Only melee weave when Raptor Strike is ready",
+					"tooltip": "Enable to only weave when Raptor Strike is ready."
+				},
+				"use_multi": {
+					"label": "Use Multi-Shot",
+					"tooltip": "Enable to include Multi-Shot as a filler."
+				},
+				"use_arcane": {
+					"label": "Use Arcane Shot",
+					"tooltip": "Enable to include Arcane Shot as a filler."
+				},
+				"viper_start_mana_percent": {
+					"label": "Aspect of the Viper swap threshold start",
+					"tooltip": "The percentage of mana to swap to Aspect of the Viper."
+				},
+				"viper_stop_mana_percent": {
+					"label": "Aspect of the Viper swap threshold end",
+					"tooltip": "The percentage of mana to swap back to Aspect of the Hawk."
 				}
 			}
 		}

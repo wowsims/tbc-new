@@ -48,8 +48,8 @@ character_stats_results: {
   final_stats: 32.45941
   final_stats: 13.08014
   final_stats: 0
-  final_stats: 1
-  final_stats: 5
+  final_stats: 0
+  final_stats: 0
  }
 }
 dps_results: {
@@ -57,6 +57,13 @@ dps_results: {
  value: {
   dps: 1906.22855
   tps: 1353.42227
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-AdamantiteScope-2722"
+ value: {
+  dps: 1961.1185
+  tps: 1392.39414
  }
 }
 dps_results: {
@@ -221,6 +228,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRogue-AllItems-Biznicks247x128Accurascope-2523"
+ value: {
+  dps: 1961.1185
+  tps: 1392.39414
+ }
+}
+dps_results: {
  key: "TestRogue-AllItems-BlackenedNaaruSliver-34427"
  value: {
   dps: 2087.37761
@@ -295,6 +309,13 @@ dps_results: {
  value: {
   dps: 1945.79637
   tps: 1381.51543
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-CoronetofVerdantFlame-24122"
+ value: {
+  dps: 1808.82777
+  tps: 1284.26771
  }
 }
 dps_results: {
@@ -421,6 +442,13 @@ dps_results: {
  value: {
   dps: 1961.1185
   tps: 1392.39414
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-EnchantBoots-Boar'sSpeed-2940"
+ value: {
+  dps: 1955.6024
+  tps: 1388.47771
  }
 }
 dps_results: {
@@ -641,6 +669,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRogue-AllItems-KhoriumScope-2723"
+ value: {
+  dps: 1961.1185
+  tps: 1392.39414
+ }
+}
+dps_results: {
  key: "TestRogue-AllItems-KissoftheSpider-22954"
  value: {
   dps: 1950.82583
@@ -673,6 +708,13 @@ dps_results: {
  value: {
   dps: 1863.57015
   tps: 1323.13481
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-MementoofTyrande-32496"
+ value: {
+  dps: 1906.22855
+  tps: 1353.42227
  }
 }
 dps_results: {
@@ -726,6 +768,13 @@ dps_results: {
 }
 dps_results: {
  key: "TestRogue-AllItems-Oshu'gunRelic-25634"
+ value: {
+  dps: 1906.22855
+  tps: 1353.42227
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-PendantoftheVioletEye-28727"
  value: {
   dps: 1906.22855
   tps: 1353.42227
@@ -905,6 +954,13 @@ dps_results: {
   dps: 1906.22855
   tps: 1353.42227
   hps: 14.44444
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-StabilitzedEterniumScope-2724"
+ value: {
+  dps: 1961.1185
+  tps: 1392.39414
  }
 }
 dps_results: {

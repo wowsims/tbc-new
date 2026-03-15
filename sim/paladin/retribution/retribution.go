@@ -10,7 +10,7 @@ func RegisterRetributionPaladin() {
 	core.RegisterAgentFactory(
 		proto.Player_RetributionPaladin{},
 		proto.Spec_SpecRetributionPaladin,
-		func(character *core.Character, options *proto.Player) core.Agent {
+		func(character *core.Character, options *proto.Player, _ *proto.Raid) core.Agent {
 			return NewRetributionPaladin(character, options)
 		},
 		func(player *proto.Player, spec any) {

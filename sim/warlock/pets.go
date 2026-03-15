@@ -102,12 +102,12 @@ func (warlock *Warlock) makePet(
 ) *WarlockPet {
 	pet := &WarlockPet{
 		Pet: core.NewPet(core.PetConfig{
-			Name:                     name,
-			Owner:                    &warlock.Character,
-			BaseStats:                baseStats,
-			NonHitExpStatInheritance: statInheritance,
-			EnabledOnStart:           enabledOnStart,
-			IsGuardian:               isGuardian,
+			Name:            name,
+			Owner:           &warlock.Character,
+			BaseStats:       baseStats,
+			StatInheritance: statInheritance,
+			EnabledOnStart:  enabledOnStart,
+			IsGuardian:      isGuardian,
 		}),
 	}
 

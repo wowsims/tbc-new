@@ -1378,12 +1378,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		24122, // Coronet of Verdant Flame
-		[
-			"Chance on successful spellcast to restore 90 Mana over 10s.", // 31036 - https://www.wowhead.com/tbc/spell=31036
-		]
-	],
-	[
 		24127, // Figurine - Talasite Owl
 		[
 			"Restores 900 mana over 12s.", // 31045 - https://www.wowhead.com/tbc/spell=31045
@@ -1830,12 +1824,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		28727, // Pendant of the Violet Eye
-		[
-			"Each spell cast within 20 seconds will grant a stacking bonus of 21 mana regen per 5 sec. Expires after 20 seconds. Abilities with no mana cost will not trigger this trinket.", // 29601 - https://www.wowhead.com/tbc/spell=29601
-		]
-	],
-	[
 		28767, // The Decapitator
 		[
 			"Hurls your axe in an attempt to decapitate your target causing 567 damage.", // 37208 - https://www.wowhead.com/tbc/spell=37208
@@ -2064,12 +2052,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		30448, // Talon of Al'ar
-		[
-			"Your Arcane Shot ability increases the damage dealt by all other damaging shots by 40 for 6s.", // 37507 - https://www.wowhead.com/tbc/spell=37507
-		]
-	],
-	[
 		30450, // Warp-Spring Coil
 		[
 			"Your special attacks have a chance to give you 1000 armor penetration for 15s.", // 37174 - https://www.wowhead.com/tbc/spell=37174
@@ -2133,13 +2115,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		30847, // X-52 Rocket Helmet
 		[
 			"Launch yourself from Outland to the stars. For the safety of others, please clear the launching platform before use.", // 37896 - https://www.wowhead.com/tbc/spell=37896
-		]
-	],
-	[
-		30892, // Beast-tamer's Shoulders
-		[
-			"Increases damage dealt by your pet by 3%.", // 27206 - https://www.wowhead.com/tbc/spell=27206
-			"Increases your pet's critical strike chance by 2%.", // 27043 - https://www.wowhead.com/tbc/spell=27043
 		]
 	],
 	[
@@ -2455,12 +2430,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		32336, // Black Bow of the Betrayer
-		[
-			"Increases attack power by 26.", // 0 - https://www.wowhead.com/tbc/spell=0
-		]
-	],
-	[
 		32368, // Tome of the Lightbringer
 		[
 			"Your Judgement ability also increases your shield block value by 186 for 5s.", // 41042 - https://www.wowhead.com/tbc/spell=41042
@@ -2491,12 +2460,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		32487, // Ashtongue Talisman of Swiftness
-		[
-			"Your Steady Shot has a 15% chance to grant you 275 attack power for 8s.", // 40487 - https://www.wowhead.com/tbc/spell=40487
-		]
-	],
-	[
 		32488, // Ashtongue Talisman of Insight
 		[
 			"Your spell critical strikes have a 50% chance to grant you 145 spell haste rating for 5s.", // 40483 - https://www.wowhead.com/tbc/spell=40483
@@ -2524,12 +2487,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		32492, // Ashtongue Talisman of Lethality
 		[
 			"20% chance per combo point for your finishing moves to grant 145 critical strike rating for 10s.", // 40460 - https://www.wowhead.com/tbc/spell=40460
-		]
-	],
-	[
-		32496, // Memento of Tyrande
-		[
-			"Each time you cast a spell, there is chance you will gain up to 76 mana per 5 for 15s.", // 37656 - https://www.wowhead.com/tbc/spell=37656
 		]
 	],
 	[
@@ -2854,13 +2811,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		33953, // Vengeful Gladiator's Totem of Survival
 		[
 			"Your Earth Shock, Flame Shock, and Frost Shock abilities also grant you 34 resilience rating for 6s.", // 43862 - https://www.wowhead.com/tbc/spell=43862
-		]
-	],
-	[
-		34334, // Thori'dal, the Stars' Fury
-		[
-			"Increases ranged attack speed by 15%. Does not stack with quiver or ammo pouch haste effects.", // 44972 - https://www.wowhead.com/tbc/spell=44972
-			"Thori'dal generates magical arrows when the bow string is drawn. Does not use ammo.", // 46699 - https://www.wowhead.com/tbc/spell=46699
 		]
 	],
 	[

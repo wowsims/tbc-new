@@ -122,8 +122,6 @@ func (rot *APLRotation) newAPLValueWithContext(config *proto.APLValue, groupVari
 		value = rot.newValueCurrentRage(config.GetCurrentRage(), config.Uuid)
 	case *proto.APLValue_CurrentEnergy:
 		value = rot.newValueCurrentEnergy(config.GetCurrentEnergy(), config.Uuid)
-	case *proto.APLValue_CurrentFocus:
-		value = rot.newValueCurrentFocus(config.GetCurrentFocus(), config.Uuid)
 	case *proto.APLValue_CurrentComboPoints:
 		value = rot.newValueCurrentComboPoints(config.GetCurrentComboPoints(), config.Uuid)
 	case *proto.APLValue_MaxHealth:
@@ -134,18 +132,12 @@ func (rot *APLRotation) newAPLValueWithContext(config *proto.APLValue, groupVari
 		value = rot.newValueMaxComboPoints(config.GetMaxComboPoints(), config.Uuid)
 	case *proto.APLValue_MaxEnergy:
 		value = rot.newValueMaxEnergy(config.GetMaxEnergy(), config.Uuid)
-	case *proto.APLValue_MaxFocus:
-		value = rot.newValueMaxFocus(config.GetMaxFocus(), config.Uuid)
 	case *proto.APLValue_MaxRage:
 		value = rot.newValueMaxRage(config.GetMaxRage(), config.Uuid)
 	case *proto.APLValue_EnergyRegenPerSecond:
 		value = rot.newValueEnergyRegenPerSecond(config.GetEnergyRegenPerSecond(), config.Uuid)
-	case *proto.APLValue_FocusRegenPerSecond:
-		value = rot.newValueFocusRegenPerSecond(config.GetFocusRegenPerSecond(), config.Uuid)
 	case *proto.APLValue_EnergyTimeToTarget:
 		value = rot.newValueEnergyTimeToTarget(config.GetEnergyTimeToTarget(), config.Uuid)
-	case *proto.APLValue_FocusTimeToTarget:
-		value = rot.newValueFocusTimeToTarget(config.GetFocusTimeToTarget(), config.Uuid)
 
 	// Unit
 	case *proto.APLValue_UnitIsMoving:

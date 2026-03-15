@@ -635,29 +635,12 @@ func (unit *Unit) MultiplyAttackSpeed(sim *Simulation, amount float64) {
 
 // Helper for multiplying resource generation speed
 func (unit *Unit) MultiplyResourceRegenSpeed(sim *Simulation, amount float64) {
-	if unit.HasFocusBar() {
-		unit.MultiplyFocusRegenSpeed(sim, amount)
-	} else if unit.HasEnergyBar() {
+	if unit.HasEnergyBar() {
 		unit.MultiplyEnergyRegenSpeed(sim, amount)
 	}
 
 	unit.Env.TriggerDelayedPetInheritance(sim, unit.RegenInheritancePets, func(sim *Simulation, pet *Pet) {
 		pet.MultiplyResourceRegenSpeed(sim, amount)
-	})
-}
-
-func (unit *Unit) AddBonusRangedHitPercent(percentage float64) {
-	unit.OnSpellRegistered(func(spell *Spell) {
-		if spell.ProcMask.Matches(ProcMaskRanged) {
-			spell.BonusHitPercent += percentage
-		}
-	})
-}
-func (unit *Unit) AddBonusRangedCritPercent(percentage float64) {
-	unit.OnSpellRegistered(func(spell *Spell) {
-		if spell.ProcMask.Matches(ProcMaskRanged) {
-			spell.BonusCritPercent += percentage
-		}
 	})
 }
 

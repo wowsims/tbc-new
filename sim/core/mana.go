@@ -69,6 +69,9 @@ func (unit *Unit) HasManaBar() bool {
 	return unit.manaBar.unit != nil
 }
 
+// Empty handler so Agents don't have to provide one if they have no logic to add.
+func (unit *Unit) OnManaTick(sim *Simulation) {}
+
 // Gets the Maxiumum mana including bonus and temporary affects that would increase your mana pool.
 func (unit *Unit) MaxMana() float64 {
 	return unit.stats[stats.Mana]
@@ -236,24 +239,25 @@ func (unit *Unit) TimeUntilManaRegen(desiredMana float64) time.Duration {
 }
 
 func (sim *Simulation) initManaTickAction() {
-	var unitsWithManaBars []*Unit
+	var playersWithManaBars []Agent
+	var petsWithManaBars []PetAgent
 
 	for _, party := range sim.Raid.Parties {
 		for _, player := range party.Players {
 			character := player.GetCharacter()
 			if character.HasManaBar() {
-				unitsWithManaBars = append(unitsWithManaBars, &player.GetCharacter().Unit)
+				playersWithManaBars = append(playersWithManaBars, player)
 			}
 
 			for _, petAgent := range character.PetAgents {
 				if petAgent.GetPet().HasManaBar() {
-					unitsWithManaBars = append(unitsWithManaBars, &petAgent.GetCharacter().Unit)
+					petsWithManaBars = append(petsWithManaBars, petAgent)
 				}
 			}
 		}
 	}
 
-	if len(unitsWithManaBars) == 0 {
+	if len(playersWithManaBars) == 0 && len(petsWithManaBars) == 0 {
 		return
 	}
 
@@ -263,9 +267,19 @@ func (sim *Simulation) initManaTickAction() {
 		Priority:     ActionPriorityRegen,
 	}
 	pa.OnAction = func(sim *Simulation) {
-		for _, unit := range unitsWithManaBars {
+		for _, player := range playersWithManaBars {
+			unit := &player.GetCharacter().Unit
 			if unit.IsEnabled() {
 				unit.ManaTick(sim)
+				player.OnManaTick(sim)
+			}
+		}
+
+		for _, pet := range petsWithManaBars {
+			unit := &pet.GetCharacter().Unit
+			if unit.IsEnabled() {
+				unit.ManaTick(sim)
+				pet.OnManaTick(sim)
 			}
 		}
 

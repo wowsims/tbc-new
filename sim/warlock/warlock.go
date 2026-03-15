@@ -86,7 +86,7 @@ func RegisterWarlock() {
 	core.RegisterAgentFactory(
 		proto.Player_Warlock{},
 		proto.Spec_SpecWarlock,
-		func(character *core.Character, options *proto.Player) core.Agent {
+		func(character *core.Character, options *proto.Player, _ *proto.Raid) core.Agent {
 			return NewWarlock(character, options, options.GetWarlock().Options.ClassOptions)
 		},
 		func(player *proto.Player, spec interface{}) {

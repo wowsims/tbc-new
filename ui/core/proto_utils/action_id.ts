@@ -585,6 +585,11 @@ export class ActionId {
 					name += ' (Malefic)';
 				}
 				break;
+			case 'Raptor Strike':
+				if (tag == 2) {
+					name += ' (Cooldown)';
+				}
+				break;
 			default:
 				if (tag === -1) {
 					name += ' (External)';
@@ -947,4 +952,6 @@ export const resourceTypeToIcon: Record<ResourceType, string> = {
 };
 
 // Use this to connect a buff row to a cast row in the timeline view
-export const buffAuraToSpellIdMap: Record<number, ActionId> = {};
+export const buffAuraToSpellIdMap: Record<number, ActionId> = {
+	34471: ActionId.fromSpellId(19574), // Bestial Wrath -> The Beast Within
+};

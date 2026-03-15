@@ -53,8 +53,7 @@ export const simLaunchStatuses: Record<Spec, SimStatus> = {
 	// Hunter
 	[Spec.SpecHunter]: {
 		phase: Phase.Phase1,
-		status: LaunchStatus.Unlaunched,
-		oldSimLink: 'https://wowsims.github.io/tbc/hunter/',
+		status: LaunchStatus.Alpha,
 	},
 	// Mage
 	[Spec.SpecMage]: {

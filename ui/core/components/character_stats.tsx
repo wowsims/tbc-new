@@ -6,7 +6,7 @@ import i18n from '../../i18n/config.js';
 import * as Mechanics from '../constants/mechanics.js';
 import { IndividualSimUI } from '../individual_sim_ui';
 import { Player } from '../player.js';
-import { ItemSlot, PseudoStat, Race, Stat, TristateEffect, WeaponType } from '../proto/common.js';
+import { ItemSlot, PseudoStat, Race, Spec, Stat, TristateEffect, WeaponType } from '../proto/common.js';
 import { Stats, UnitStat } from '../proto_utils/stats.js';
 import { EventID, TypedEvent } from '../typed_event.js';
 import { Component } from './component.js';
@@ -485,18 +485,32 @@ export class CharacterStats extends Component {
 	public static getDebuffStats(player: Player<any>): Stats {
 		let debuffStats = new Stats();
 		const debuffs = player.sim.raid.getDebuffs();
+
 		if (debuffs.faerieFire == TristateEffect.TristateEffectImproved) {
 			debuffStats = debuffStats.addPseudoStat(PseudoStat.PseudoStatMeleeHitPercent, 3);
 			debuffStats = debuffStats.addPseudoStat(PseudoStat.PseudoStatRangedHitPercent, 3);
 		}
+
 		if (debuffs.improvedSealOfTheCrusader) {
 			debuffStats = debuffStats.addPseudoStat(PseudoStat.PseudoStatMeleeCritPercent, 3);
 			debuffStats = debuffStats.addPseudoStat(PseudoStat.PseudoStatRangedCritPercent, 3);
 			debuffStats = debuffStats.addPseudoStat(PseudoStat.PseudoStatSpellCritPercent, 3);
 		}
+
 		if (debuffs.exposeWeaknessUptime && debuffs.exposeWeaknessHunterAgility) {
-			debuffStats = debuffStats.addStat(Stat.StatAttackPower, debuffs.exposeWeaknessHunterAgility * 0.25);
+			let agi = debuffs.exposeWeaknessHunterAgility;
+
+			if (player.isSpec(Spec.SpecHunter)) {
+				const hunter = player as Player<Spec.SpecHunter>;
+				if (hunter.getTalents().exposeWeakness > 0) {
+					agi = hunter.getCurrentStats().finalStats?.stats[Stat.StatAgility] ?? agi;
+				}
+			}
+
+			debuffStats = debuffStats.addStat(Stat.StatAttackPower, agi * 0.25);
+			debuffStats = debuffStats.addStat(Stat.StatRangedAttackPower, agi * 0.25);
 		}
+
 		if (debuffs.huntersMark != TristateEffect.TristateEffectMissing) {
 			debuffStats = debuffStats.addStat(Stat.StatRangedAttackPower, 440);
 

@@ -51,7 +51,7 @@ func (s *UnitStats) ToProto() *proto.UnitStats {
 // than just stat weights.
 func (s *UnitStats) ExportWeights() *proto.UnitStats {
 	if s.Stats[stats.MeleeHitRating] == 0 {
-		s.Stats[stats.MeleeHitRating] = (s.PseudoStats[proto.PseudoStat_PseudoStatMeleeHitPercent] + +s.PseudoStats[proto.PseudoStat_PseudoStatRangedHitPercent]) / PhysicalHitRatingPerHitPercent
+		s.Stats[stats.MeleeHitRating] = (s.PseudoStats[proto.PseudoStat_PseudoStatMeleeHitPercent] + s.PseudoStats[proto.PseudoStat_PseudoStatRangedHitPercent]) / PhysicalHitRatingPerHitPercent
 	}
 
 	if s.Stats[stats.MeleeCritRating] == 0 {

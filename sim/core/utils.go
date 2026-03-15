@@ -13,6 +13,14 @@ import (
 	googleproto "google.golang.org/protobuf/proto"
 )
 
+func MinTristate(a proto.TristateEffect, b proto.TristateEffect) proto.TristateEffect {
+	if a < b {
+		return a
+	} else {
+		return b
+	}
+}
+
 func DurationFromSeconds(numSeconds float64) time.Duration {
 	return time.Duration(float64(time.Second) * numSeconds)
 }

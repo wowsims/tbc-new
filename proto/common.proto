@@ -25,7 +25,7 @@ message ProtoVersion {
 	// protos need to define an api_version field so that the UI code knows
 	// to up-convert these protos to the new format whenever api_version is
 	// missing (0) or lower than current_version_number.
-	option (current_version_number) = 4;
+	option (current_version_number) = 5;
 
 	// The actual field value is only used within unit tests.
 	int32 saved_version_number = 1;
@@ -585,6 +585,7 @@ message ConsumesSpec {
 	bool pet_scroll_agi = 18;
 	bool pet_scroll_str = 19;
 	bool nightmare_seed = 20;
+	int32 pet_food_id = 21;
 }
 
 enum MobType {

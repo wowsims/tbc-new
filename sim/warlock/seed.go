@@ -55,7 +55,7 @@ func (warlock *Warlock) registerSeed() {
 
 			maxDamagePerMob := 13580 / float64(maxHits+1)
 			for _, result := range results {
-				spell.CalcAndDealDamage(sim, result.Target, min(maxDamagePerMob, warlock.CalcAndRollDamageRange(sim, 1110+warlock.SeedOfCorruptionBonusDamage, 1290+warlock.SeedOfCorruptionBonusDamage)), core.Ternary(result.Landed(), spell.OutcomeMagicCrit, spell.OutcomeAlwaysMiss))
+				spell.CalcAndDealDamage(sim, result.Target, min(maxDamagePerMob, warlock.CalcAndRollDamageRange(sim, 1110, 1290)+warlock.SeedOfCorruptionBonusDamage), core.Ternary(result.Landed(), spell.OutcomeMagicCrit, spell.OutcomeAlwaysMiss))
 			}
 		},
 	})

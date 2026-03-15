@@ -13,7 +13,6 @@ export class Hunter extends PlayerClass<Class.ClassHunter> {
 	};
 	static races: Race[] = [
 		// [A]
-
 		Race.RaceDwarf,
 		Race.RaceNightElf,
 		Race.RaceDraenei,
@@ -23,8 +22,16 @@ export class Hunter extends PlayerClass<Class.ClassHunter> {
 		Race.RaceTroll,
 		Race.RaceBloodElf,
 	];
-	static armorTypes: ArmorType[] = [ArmorType.ArmorTypeMail];
-	static weaponTypes: EligibleWeaponType[] = []; // hunter cannot wear weapons anymore
+	static armorTypes: ArmorType[] = [ArmorType.ArmorTypeMail, ArmorType.ArmorTypeLeather, ArmorType.ArmorTypeCloth];
+	static weaponTypes: EligibleWeaponType[] = [
+		{ weaponType: WeaponType.WeaponTypeDagger },
+		{ weaponType: WeaponType.WeaponTypeFist },
+		{ weaponType: WeaponType.WeaponTypeAxe, canUseTwoHand: true },
+		{ weaponType: WeaponType.WeaponTypeOffHand },
+		{ weaponType: WeaponType.WeaponTypeSword, canUseTwoHand: true },
+		{ weaponType: WeaponType.WeaponTypeStaff, canUseTwoHand: true },
+		{ weaponType: WeaponType.WeaponTypePolearm, canUseTwoHand: true },
+	];
 	static rangedWeaponTypes: RangedWeaponType[] = [
 		RangedWeaponType.RangedWeaponTypeBow,
 		RangedWeaponType.RangedWeaponTypeCrossbow,

@@ -102,6 +102,24 @@ func applyConsumeEffects(agent Agent, partyBuffs *proto.PartyBuffs) {
 		character.AddStat(stats.Armor, 300)
 	}
 
+	// Pet Consumes
+	for _, pet := range character.Pets {
+		if pet.isGuardian {
+			continue
+		}
+
+		if consumables.PetScrollAgi {
+			pet.AddStat(stats.Agility, 20)
+		}
+		if consumables.PetScrollStr {
+			pet.AddStat(stats.Strength, 20)
+		}
+		if consumables.PetFoodId != 0 {
+			petFood := ConsumablesByID[consumables.PetFoodId]
+			pet.AddStats(petFood.Stats)
+		}
+	}
+
 	registerPotionCD(agent, consumables)
 	registerConjuredCD(agent, consumables)
 	registerExplosivesCD(agent, consumables)
@@ -620,6 +638,11 @@ func registerStaticImbue(agent Agent, imbueId int32, isMH bool) {
 		} else {
 			character.AutoAttacks.OH().BaseDamageMax += 12
 			character.AutoAttacks.OH().BaseDamageMin += 12
+		}
+
+		if imbueId == 34340 && character.AutoAttacks.Ranged() != nil {
+			character.AutoAttacks.Ranged().BaseDamageMin += 12
+			character.AutoAttacks.Ranged().BaseDamageMax += 12
 		}
 	case 28891: // Consecrated Sharpening Stone
 		character.Env.RegisterPostFinalizeEffect(func() {

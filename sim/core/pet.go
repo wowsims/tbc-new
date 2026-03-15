@@ -25,12 +25,10 @@ type PetStatInheritance func(ownerStats stats.Stats) stats.Stats
 type PetSpeedInheritance func(sim *Simulation, ownerSpeedMultiplier float64)
 
 type PetConfig struct {
-	Name      string
-	Owner     *Character
-	BaseStats stats.Stats
-	// Hit and Expertise are always inherited by combining the owners physical hit and expertise, then halving it
-	// For casters this will automatically give spell hit cap at 7.5% physical hit and exp
-	NonHitExpStatInheritance        PetStatInheritance
+	Name                            string
+	Owner                           *Character
+	BaseStats                       stats.Stats
+	StatInheritance                 PetStatInheritance
 	EnabledOnStart                  bool
 	IsGuardian                      bool
 	IsDynamic                       bool
@@ -112,7 +110,7 @@ func NewPet(config PetConfig) Pet {
 			baseStats:  config.BaseStats,
 		},
 		Owner:                           config.Owner,
-		statInheritance:                 makeStatInheritanceFunc(config.NonHitExpStatInheritance),
+		statInheritance:                 makeStatInheritanceFunc(config.StatInheritance),
 		isDynamic:                       config.IsDynamic,
 		hasDynamicMeleeSpeedInheritance: config.HasDynamicMeleeSpeedInheritance && config.IsDynamic,
 		inheritedMeleeSpeedMultiplier:   1,
@@ -142,9 +140,9 @@ func (pet *Pet) Initialize() {
 	}
 }
 
-func makeStatInheritanceFunc(nonHitExpStatInheritance PetStatInheritance) PetStatInheritance {
+func makeStatInheritanceFunc(statInheritance PetStatInheritance) PetStatInheritance {
 	return func(ownerStats stats.Stats) stats.Stats {
-		inheritedStats := nonHitExpStatInheritance(ownerStats)
+		inheritedStats := statInheritance(ownerStats)
 
 		// TODO Apparently fire ele doesnt inherit anything, is it the same for other pets ?
 
@@ -300,9 +298,6 @@ func (pet *Pet) Enable(sim *Simulation, petAgent PetAgent) {
 		// make sure to reset it to refresh focus
 		pet.focusBar.reset(sim)
 		pet.focusBar.enable(sim, sim.CurrentTime)
-		if pet.hasResourceRegenInheritance {
-			pet.focusBar.focusRegenMultiplier *= pet.Owner.PseudoStats.AttackSpeedMultiplier
-		}
 	}
 
 	if pet.HasEnergyBar() {
@@ -455,9 +450,8 @@ func (pet *Pet) Disable(sim *Simulation) {
 		pet.Log(sim, pet.GetStats().FlatString())
 	}
 }
-
-func (pet *Pet) ChangeStatInheritance(nonHitExpStatInheritance PetStatInheritance) {
-	pet.statInheritance = makeStatInheritanceFunc(nonHitExpStatInheritance)
+func (pet *Pet) ChangeStatInheritance(statInheritance PetStatInheritance) {
+	pet.statInheritance = makeStatInheritanceFunc(statInheritance)
 }
 
 func (pet *Pet) GetInheritedStats() stats.Stats {

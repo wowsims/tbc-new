@@ -1,13 +1,11 @@
 import i18n from '../../../i18n/config';
-import { trackEvent } from '../../../tracking/utils';
 import { IndividualSimUI } from '../../individual_sim_ui';
 import { Player } from '../../player';
-import { Class, Spec } from '../../proto/common';
+import { Spec } from '../../proto/common';
 import { SavedTalents } from '../../proto/ui';
 import { classTalentsConfig } from '../../talents/factory';
 import { TalentsPicker } from '../../talents/talents_picker';
 import { EventID, TypedEvent } from '../../typed_event';
-import { PetSpecPicker } from '../pickers/pet_spec_picker';
 import { SavedDataManager } from '../saved_data_manager';
 import { SimTab } from '../sim_tab';
 import { PresetConfigurationCategory, PresetConfigurationPicker } from './preset_configuration_picker';
@@ -36,13 +34,6 @@ export class TalentsTab<SpecType extends Spec> extends SimTab {
 
 		this.buildPresetConfigurationPicker();
 		this.buildSavedTalentsPicker();
-
-		this.buildHunterPetPicker(this.leftPanel);
-	}
-	private buildHunterPetPicker(parentElem: HTMLElement) {
-		if (this.simUI.player.isClass(Class.ClassHunter)) {
-			new PetSpecPicker(parentElem, this.simUI.player);
-		}
 	}
 	private buildTalentsPicker(parentElem: HTMLElement) {
 		new TalentsPicker(parentElem, this.simUI.player, {

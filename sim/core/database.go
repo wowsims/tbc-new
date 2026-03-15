@@ -616,7 +616,7 @@ var itemTypeToSlotsMap = map[proto.ItemType][]proto.ItemSlot{
 	proto.ItemType_ItemTypeFeet:     {proto.ItemSlot_ItemSlotFeet},
 	proto.ItemType_ItemTypeFinger:   {proto.ItemSlot_ItemSlotFinger1, proto.ItemSlot_ItemSlotFinger2},
 	proto.ItemType_ItemTypeTrinket:  {proto.ItemSlot_ItemSlotTrinket1, proto.ItemSlot_ItemSlotTrinket2},
-	proto.ItemType_ItemTypeRanged:   {proto.ItemSlot_ItemSlotMainHand},
+	proto.ItemType_ItemTypeRanged:   {proto.ItemSlot_ItemSlotRanged},
 	// ItemType_ItemTypeWeapon is excluded intentionally - the slot cannot be decided based on type alone for weapons.
 }
 

@@ -19,12 +19,12 @@ var EarthElementalSpellPowerScaling = 0.5
 func (shaman *Shaman) NewEarthElemental() *EarthElemental {
 	earthElemental := &EarthElemental{
 		Pet: core.NewPet(core.PetConfig{
-			Name:                     "Greater Earth Elemental",
-			Owner:                    &shaman.Character,
-			BaseStats:                shaman.earthElementalBaseStats(),
-			NonHitExpStatInheritance: shaman.earthElementalStatInheritance(),
-			EnabledOnStart:           false,
-			IsGuardian:               true,
+			Name:            "Greater Earth Elemental",
+			Owner:           &shaman.Character,
+			BaseStats:       shaman.earthElementalBaseStats(),
+			StatInheritance: shaman.earthElementalStatInheritance(),
+			EnabledOnStart:  false,
+			IsGuardian:      true,
 		}),
 		shamanOwner: shaman,
 	}

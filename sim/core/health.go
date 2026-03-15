@@ -118,7 +118,7 @@ func (character *Character) trackChanceOfDeath(healingModel *proto.HealingModel)
 			if result.Damage > 0 {
 				aura.Unit.RemoveHealth(sim, result.Damage)
 				if aura.Unit.Rotation != nil {
-					aura.Unit.ReactToEvent(sim, false)
+					aura.Unit.ReactToEvent(sim, false, true)
 				}
 
 				if (aura.Unit.CurrentHealth() <= 0) && !aura.Unit.Metrics.Died {

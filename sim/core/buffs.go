@@ -573,7 +573,6 @@ func FerociousInspiration(char *Character, count int32) *Aura {
 func LeaderOfThePackAura(char *Character, improved bool) *Aura {
 	statsConfig := []StatConfig{
 		{stats.PhysicalCritPercent, 5, false},
-		{stats.RangedCritPercent, 5, false},
 	}
 
 	if improved {
@@ -975,7 +974,6 @@ func DraneiRacialAura(char *Character, caster bool) *Aura {
 			ActionID: ActionID{SpellID: 6562},
 			Stats: []StatConfig{
 				{stats.PhysicalHitPercent, 1, false},
-				{stats.RangedHitPercent, 1, false},
 			},
 			ExclusiveCategory: "Heroic Presence",
 		})
@@ -1375,18 +1373,36 @@ func applyPetBuffEffects(petAgent PetAgent, raidBuffs *proto.RaidBuffs, partyBuf
 	if petAgent.GetPet().IsGuardian() {
 		return
 	}
-	raidBuffs = googleProto.Clone(raidBuffs).(*proto.RaidBuffs)
-	partyBuffs = googleProto.Clone(partyBuffs).(*proto.PartyBuffs)
-	individualBuffs = googleProto.Clone(individualBuffs).(*proto.IndividualBuffs)
 
-	//Todo: Only cancel the buffs that are supposed to be cancelled
-	// Check beta when pets are better implemented?
-	raidBuffs = &proto.RaidBuffs{}
-	partyBuffs = &proto.PartyBuffs{}
-	individualBuffs = &proto.IndividualBuffs{}
+	// We need to modify the buffs a bit because some things are applied to pets by
+	// the owner during combat (Bloodlust) or don't make sense for a pet.
+	raidBuffs = googleProto.Clone(raidBuffs).(*proto.RaidBuffs)
+	raidBuffs.Bloodlust = false
+	raidBuffs.Thorns = proto.TristateEffect_TristateEffectMissing
+
+	partyBuffs = googleProto.Clone(partyBuffs).(*proto.PartyBuffs)
+	// Pets can't get extra attacks, doh!
+	partyBuffs.WindfuryTotem = proto.TristateEffect_TristateEffectMissing
+
+	individualBuffs = googleProto.Clone(individualBuffs).(*proto.IndividualBuffs)
+	individualBuffs.Innervates = 0
+	individualBuffs.PowerInfusions = 0
+
+	// Pets don't benefit from buffs that are ratings, e.g. crit rating or haste rating.
+	partyBuffs.Drums = proto.Drums_DrumsUnknown
+	partyBuffs.LeaderOfThePack = MinTristate(partyBuffs.LeaderOfThePack, proto.TristateEffect_TristateEffectRegular)
+	partyBuffs.MoonkinAura = MinTristate(partyBuffs.MoonkinAura, proto.TristateEffect_TristateEffectRegular)
+	partyBuffs.BraidedEterniumChain = false
 
 	if !petAgent.GetPet().enabledOnStart {
-		// What do we do with permanent pets that are not enabled at start?
+		// Auras etc still apply, but not targeted buffs (usually)
+		partyBuffs.ChainOfTheTwilightOwl = false
+		partyBuffs.EyeOfTheNight = false
+		partyBuffs.JadePendantOfBlasting = false
+
+		// Only individual buff that would apply is Unleashed Rage.
+		individualBuffs = &proto.IndividualBuffs{}
+		individualBuffs.UnleashedRage = true
 	}
 
 	applyBuffEffects(petAgent, raidBuffs, partyBuffs, individualBuffs)

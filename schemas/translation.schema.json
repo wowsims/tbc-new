@@ -535,9 +535,6 @@
 						"cast_speed_multiplier": {
 							"type": "string"
 						},
-						"spell_hit": {
-							"type": "string"
-						},
 						"arcane_hit": {
 							"type": "string"
 						},
@@ -556,6 +553,9 @@
 						"shadow_hit": {
 							"type": "string"
 						},
+						"spell_hit": {
+							"type": "string"
+						},
 						"spell_crit": {
 							"type": "string"
 						},
@@ -569,6 +569,12 @@
 							"type": "string"
 						},
 						"melee_haste": {
+							"type": "string"
+						},
+						"ranged_hit": {
+							"type": "string"
+						},
+						"ranged_crit": {
 							"type": "string"
 						},
 						"ranged_haste": {
@@ -693,13 +699,13 @@
 						"melee_speed_multiplier",
 						"ranged_speed_multiplier",
 						"cast_speed_multiplier",
-						"spell_hit",
 						"arcane_hit",
 						"fire_hit",
 						"frost_hit",
 						"holy_hit",
 						"nature_hit",
 						"shadow_hit",
+						"spell_hit",
 						"spell_crit",
 						"spell_haste",
 						"melee_hit",
@@ -822,6 +828,9 @@
 						"rotation": {
 							"type": "string"
 						},
+						"rotationType": {
+							"type": "string"
+						},
 						"encounter": {
 							"type": "string"
 						},
@@ -846,6 +855,9 @@
 						"buffs": {
 							"type": "string"
 						},
+						"debuffs": {
+							"type": "string"
+						},
 						"reforge_settings": {
 							"type": "string"
 						}
@@ -856,6 +868,7 @@
 						"gear",
 						"talents",
 						"rotation",
+						"rotationType",
 						"encounter",
 						"settings",
 						"description",
@@ -864,6 +877,7 @@
 						"consumables",
 						"other_settings",
 						"buffs",
+						"debuffs",
 						"reforge_settings"
 					]
 				}
@@ -1699,7 +1713,7 @@
 							"additionalProperties": false,
 							"required": ["label", "tooltip"]
 						},
-						"glaive_toss_chance": {
+						"pet_single_ability": {
 							"type": "object",
 							"properties": {
 								"label": {
@@ -1711,6 +1725,124 @@
 							},
 							"additionalProperties": false,
 							"required": ["label", "tooltip"]
+						},
+						"pet_type": {
+							"type": "object",
+							"properties": {
+								"label": {
+									"type": "string"
+								},
+								"tooltip": {
+									"type": "string"
+								},
+								"no_pet": {
+									"type": "string"
+								},
+								"bat": {
+									"type": "string"
+								},
+								"bear": {
+									"type": "string"
+								},
+								"cat": {
+									"type": "string"
+								},
+								"crab": {
+									"type": "string"
+								},
+								"owl": {
+									"type": "string"
+								},
+								"raptor": {
+									"type": "string"
+								},
+								"ravager": {
+									"type": "string"
+								},
+								"wind_serpent": {
+									"type": "string"
+								}
+							},
+							"additionalProperties": false,
+							"required": ["label", "tooltip", "no_pet", "bat", "bear", "cat", "crab", "owl", "raptor", "ravager", "wind_serpent"]
+						},
+						"ammo": {
+							"type": "object",
+							"properties": {
+								"label": {
+									"type": "string"
+								},
+								"tooltip": {
+									"type": "string"
+								},
+								"no_ammo": {
+									"type": "string"
+								},
+								"timeless_arrow": {
+									"type": "string"
+								},
+								"mysterious_arrow": {
+									"type": "string"
+								},
+								"adamantite_stinger": {
+									"type": "string"
+								},
+								"halaani_razorshaft": {
+									"type": "string"
+								},
+								"blackflight_arrow": {
+									"type": "string"
+								},
+								"wardens_arrow": {
+									"type": "string"
+								}
+							},
+							"additionalProperties": false,
+							"required": [
+								"label",
+								"tooltip",
+								"no_ammo",
+								"timeless_arrow",
+								"mysterious_arrow",
+								"adamantite_stinger",
+								"halaani_razorshaft",
+								"blackflight_arrow",
+								"wardens_arrow"
+							]
+						},
+						"quiver": {
+							"type": "object",
+							"properties": {
+								"label": {
+									"type": "string"
+								},
+								"tooltip": {
+									"type": "string"
+								},
+								"no_quiver": {
+									"type": "string"
+								},
+								"speed_15": {
+									"type": "string"
+								},
+								"speed_14": {
+									"type": "string"
+								},
+								"speed_13": {
+									"type": "string"
+								},
+								"speed_12": {
+									"type": "string"
+								},
+								"speed_11": {
+									"type": "string"
+								},
+								"speed_10": {
+									"type": "string"
+								}
+							},
+							"additionalProperties": false,
+							"required": ["label", "tooltip", "no_quiver", "speed_15", "speed_14", "speed_13", "speed_12", "speed_11", "speed_10"]
 						},
 						"detonate_seed": {
 							"type": "object",
@@ -2022,7 +2154,10 @@
 						"burst_window",
 						"hp_percent_for_defensives",
 						"pet_uptime",
-						"glaive_toss_chance",
+						"pet_single_ability",
+						"pet_type",
+						"ammo",
+						"quiver",
 						"detonate_seed",
 						"default_shout",
 						"default_stance",
@@ -6390,147 +6525,124 @@
 						"hunter": {
 							"type": "object",
 							"properties": {
-								"beast_mastery": {
+								"sting": {
 									"type": "object",
 									"properties": {
-										"sting": {
-											"type": "object",
-											"properties": {
-												"label": {
-													"type": "string"
-												},
-												"tooltip": {
-													"type": "string"
-												},
-												"values": {
-													"type": "object",
-													"properties": {
-														"none": {
-															"type": "string"
-														},
-														"serpent_sting": {
-															"type": "string"
-														}
-													},
-													"additionalProperties": false,
-													"required": ["none", "serpent_sting"]
-												}
-											},
-											"additionalProperties": false,
-											"required": ["label", "tooltip", "values"]
+										"label": {
+											"type": "string"
 										},
-										"trap_weave": {
-											"type": "object",
-											"properties": {
-												"label": {
-													"type": "string"
-												},
-												"tooltip": {
-													"type": "string"
-												}
-											},
-											"additionalProperties": false,
-											"required": ["label", "tooltip"]
+										"tooltip": {
+											"type": "string"
 										},
-										"multi_dot_serpent_sting": {
+										"values": {
 											"type": "object",
 											"properties": {
-												"label": {
+												"none": {
 													"type": "string"
 												},
-												"tooltip": {
+												"serpent_sting": {
+													"type": "string"
+												},
+												"scorpid_sting": {
 													"type": "string"
 												}
 											},
 											"additionalProperties": false,
-											"required": ["label", "tooltip"]
+											"required": ["none", "serpent_sting", "scorpid_sting"]
 										}
 									},
 									"additionalProperties": false,
-									"required": ["sting", "trap_weave", "multi_dot_serpent_sting"]
+									"required": ["label", "tooltip", "values"]
 								},
-								"marksmanship": {
+								"melee_weave": {
 									"type": "object",
 									"properties": {
-										"sting": {
-											"type": "object",
-											"properties": {
-												"label": {
-													"type": "string"
-												},
-												"tooltip": {
-													"type": "string"
-												},
-												"values": {
-													"type": "object",
-													"properties": {
-														"none": {
-															"type": "string"
-														},
-														"serpent_sting": {
-															"type": "string"
-														}
-													},
-													"additionalProperties": false,
-													"required": ["none", "serpent_sting"]
-												}
-											},
-											"additionalProperties": false,
-											"required": ["label", "tooltip", "values"]
+										"label": {
+											"type": "string"
 										},
-										"trap_weave": {
-											"type": "object",
-											"properties": {
-												"label": {
-													"type": "string"
-												},
-												"tooltip": {
-													"type": "string"
-												}
-											},
-											"additionalProperties": false,
-											"required": ["label", "tooltip"]
-										},
-										"multi_dot_serpent_sting": {
-											"type": "object",
-											"properties": {
-												"label": {
-													"type": "string"
-												},
-												"tooltip": {
-													"type": "string"
-												}
-											},
-											"additionalProperties": false,
-											"required": ["label", "tooltip"]
+										"tooltip": {
+											"type": "string"
 										}
 									},
 									"additionalProperties": false,
-									"required": ["sting", "trap_weave", "multi_dot_serpent_sting"]
+									"required": ["label", "tooltip"]
 								},
-								"survival": {
+								"weave_only_raptor": {
 									"type": "object",
 									"properties": {
-										"multi_dot_serpent_sting": {
-											"type": "object",
-											"properties": {
-												"label": {
-													"type": "string"
-												},
-												"tooltip": {
-													"type": "string"
-												}
-											},
-											"additionalProperties": false,
-											"required": ["label", "tooltip"]
+										"label": {
+											"type": "string"
+										},
+										"tooltip": {
+											"type": "string"
 										}
 									},
 									"additionalProperties": false,
-									"required": ["multi_dot_serpent_sting"]
+									"required": ["label", "tooltip"]
+								},
+								"use_multi": {
+									"type": "object",
+									"properties": {
+										"label": {
+											"type": "string"
+										},
+										"tooltip": {
+											"type": "string"
+										}
+									},
+									"additionalProperties": false,
+									"required": ["label", "tooltip"]
+								},
+								"use_arcane": {
+									"type": "object",
+									"properties": {
+										"label": {
+											"type": "string"
+										},
+										"tooltip": {
+											"type": "string"
+										}
+									},
+									"additionalProperties": false,
+									"required": ["label", "tooltip"]
+								},
+								"viper_start_mana_percent": {
+									"type": "object",
+									"properties": {
+										"label": {
+											"type": "string"
+										},
+										"tooltip": {
+											"type": "string"
+										}
+									},
+									"additionalProperties": false,
+									"required": ["label", "tooltip"]
+								},
+								"viper_stop_mana_percent": {
+									"type": "object",
+									"properties": {
+										"label": {
+											"type": "string"
+										},
+										"tooltip": {
+											"type": "string"
+										}
+									},
+									"additionalProperties": false,
+									"required": ["label", "tooltip"]
 								}
 							},
 							"additionalProperties": false,
-							"required": ["beast_mastery", "marksmanship", "survival"]
+							"required": [
+								"sting",
+								"melee_weave",
+								"weave_only_raptor",
+								"use_multi",
+								"use_arcane",
+								"viper_start_mana_percent",
+								"viper_stop_mana_percent"
+							]
 						}
 					},
 					"additionalProperties": false,

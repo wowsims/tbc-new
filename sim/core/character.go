@@ -606,12 +606,11 @@ func (character *Character) getCurrentProcMaskFor(pred func(item *Item) bool) Pr
 		return mask
 	}
 
+	if pred(character.Ranged()) {
+		mask |= ProcMaskRanged
+	}
 	if pred(character.MainHand()) {
-		if character.MainHand().RangedWeaponType > 0 {
-			mask |= ProcMaskRanged
-		} else {
-			mask |= ProcMaskMeleeMH
-		}
+		mask |= ProcMaskMeleeMH
 	}
 	if pred(character.OffHand()) {
 		mask |= ProcMaskMeleeOH
@@ -620,14 +619,11 @@ func (character *Character) getCurrentProcMaskFor(pred func(item *Item) bool) Pr
 }
 
 func (character *Character) GetProcMaskForWeaponSlot(slot proto.ItemSlot) ProcMask {
-	item := character.GetItemBySlot(slot)
 	switch slot {
+	case proto.ItemSlot_ItemSlotRanged:
+		return ProcMaskRanged
 	case proto.ItemSlot_ItemSlotMainHand:
-		if item.RangedWeaponType > 0 {
-			return ProcMaskRanged
-		} else {
-			return ProcMaskMeleeMH
-		}
+		return ProcMaskMeleeMH
 	case proto.ItemSlot_ItemSlotOffHand:
 		return ProcMaskMeleeOH
 	}
@@ -679,10 +675,10 @@ func (character *Character) GetPseudoStatsProto() []float64 {
 		proto.PseudoStat_PseudoStatSchoolHitPercentHoly:   character.GetStat(stats.SpellHitPercent) + character.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexHoly],
 		proto.PseudoStat_PseudoStatSchoolHitPercentNature: character.GetStat(stats.SpellHitPercent) + character.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexNature],
 		proto.PseudoStat_PseudoStatSchoolHitPercentShadow: character.GetStat(stats.SpellHitPercent) + character.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexShadow],
-		proto.PseudoStat_PseudoStatRangedHitPercent:       character.GetStat(stats.RangedHitPercent),
+		proto.PseudoStat_PseudoStatRangedHitPercent:       character.GetStat(stats.RangedHitPercent) + character.GetStat(stats.PhysicalHitPercent),
 		proto.PseudoStat_PseudoStatMeleeCritPercent:       character.GetStat(stats.PhysicalCritPercent),
 		proto.PseudoStat_PseudoStatSpellCritPercent:       character.GetStat(stats.SpellCritPercent),
-		proto.PseudoStat_PseudoStatRangedCritPercent:      character.GetStat(stats.RangedCritPercent),
+		proto.PseudoStat_PseudoStatRangedCritPercent:      character.GetStat(stats.RangedCritPercent) + character.GetStat(stats.PhysicalCritPercent),
 	}
 }
 

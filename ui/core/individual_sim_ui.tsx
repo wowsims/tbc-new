@@ -179,7 +179,6 @@ export interface IndividualSimUIConfig<SpecType extends Spec> extends PlayerConf
 
 	playerInputs?: InputSection;
 	playerIconInputs: Array<IconInputs.IconInputConfig<Player<SpecType>, any>>;
-	petConsumeInputs?: Array<IconInputs.IconInputConfig<Player<SpecType>, any>>;
 	rotationInputs?: InputSection;
 	rotationIconInputs?: Array<IconInputs.IconInputConfig<Player<SpecType>, any>>;
 	includeBuffDebuffInputs: Array<any>;

@@ -33,7 +33,6 @@ import {
 	Profession,
 	PseudoStat,
 	Race,
-	RangedWeaponType,
 	Spec,
 	Stat,
 	UnitReference,
@@ -55,7 +54,7 @@ import { Database } from './proto_utils/database';
 import { EquippedItem } from './proto_utils/equipped_item';
 import { Gear, ItemSwapGear } from './proto_utils/gear';
 import { gemMatchesSocket, isUnrestrictedGem } from './proto_utils/gems';
-import { StatCap, Stats } from './proto_utils/stats';
+import { Stats } from './proto_utils/stats';
 import {
 	AL_CATEGORY_HARD_MODE,
 	canEquipEnchant,

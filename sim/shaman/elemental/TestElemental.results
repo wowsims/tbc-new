@@ -49,7 +49,7 @@ character_stats_results: {
   final_stats: 40.80865
   final_stats: 0
   final_stats: 3
-  final_stats: 5
+  final_stats: 0
  }
 }
 dps_results: {
@@ -64,6 +64,13 @@ dps_results: {
  value: {
   dps: 1672.53431
   tps: 1355.28115
+ }
+}
+dps_results: {
+ key: "TestElemental-AllItems-AdamantiteScope-2722"
+ value: {
+  dps: 1751.04336
+  tps: 1356.4669
  }
 }
 dps_results: {
@@ -228,6 +235,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestElemental-AllItems-Biznicks247x128Accurascope-2523"
+ value: {
+  dps: 1751.04336
+  tps: 1356.4669
+ }
+}
+dps_results: {
  key: "TestElemental-AllItems-BlackenedNaaruSliver-34427"
  value: {
   dps: 1672.53431
@@ -330,6 +344,13 @@ dps_results: {
  value: {
   dps: 1672.53431
   tps: 1355.28115
+ }
+}
+dps_results: {
+ key: "TestElemental-AllItems-CoronetofVerdantFlame-24122"
+ value: {
+  dps: 1630.52947
+  tps: 1268.64945
  }
 }
 dps_results: {
@@ -456,6 +477,13 @@ dps_results: {
  value: {
   dps: 1672.53431
   tps: 1355.28115
+ }
+}
+dps_results: {
+ key: "TestElemental-AllItems-EnchantBoots-Cat'sSwiftness-2939"
+ value: {
+  dps: 1751.04336
+  tps: 1356.4669
  }
 }
 dps_results: {
@@ -676,6 +704,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestElemental-AllItems-KhoriumScope-2723"
+ value: {
+  dps: 1751.04336
+  tps: 1356.4669
+ }
+}
+dps_results: {
  key: "TestElemental-AllItems-KissoftheSpider-22954"
  value: {
   dps: 1672.53431
@@ -708,6 +743,13 @@ dps_results: {
  value: {
   dps: 1670.00189
   tps: 1294.9995
+ }
+}
+dps_results: {
+ key: "TestElemental-AllItems-MementoofTyrande-32496"
+ value: {
+  dps: 1705.08716
+  tps: 1380.40564
  }
 }
 dps_results: {
@@ -771,6 +813,13 @@ dps_results: {
  value: {
   dps: 1699.15706
   tps: 1376.67533
+ }
+}
+dps_results: {
+ key: "TestElemental-AllItems-PendantoftheVioletEye-28727"
+ value: {
+  dps: 1688.78952
+  tps: 1370.49287
  }
 }
 dps_results: {
@@ -968,6 +1017,13 @@ dps_results: {
   dps: 1672.53431
   tps: 1355.28115
   hps: 14.44444
+ }
+}
+dps_results: {
+ key: "TestElemental-AllItems-StabilitzedEterniumScope-2724"
+ value: {
+  dps: 1751.04336
+  tps: 1356.4669
  }
 }
 dps_results: {

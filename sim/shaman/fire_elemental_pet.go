@@ -20,11 +20,11 @@ type FireElemental struct {
 func (shaman *Shaman) NewFireElemental() *FireElemental {
 	fireElemental := &FireElemental{
 		Pet: core.NewPet(core.PetConfig{
-			Name:                     "Greater Fire Elemental",
-			Owner:                    &shaman.Character,
-			BaseStats:                shaman.fireElementalBaseStats(),
-			NonHitExpStatInheritance: shaman.fireElementalStatInheritance(),
-			IsGuardian:               true,
+			Name:            "Greater Fire Elemental",
+			Owner:           &shaman.Character,
+			BaseStats:       shaman.fireElementalBaseStats(),
+			StatInheritance: shaman.fireElementalStatInheritance(),
+			IsGuardian:      true,
 		}),
 		shamanOwner: shaman,
 	}

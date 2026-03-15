@@ -26,7 +26,6 @@ import {
 	APLValueCurrentComboPoints,
 	APLValueCurrentEclipsePhase,
 	APLValueCurrentEnergy,
-	APLValueCurrentFocus,
 	APLValueCurrentGenericResource,
 	APLValueCurrentHealth,
 	APLValueCurrentHealthPercent,
@@ -45,8 +44,6 @@ import {
 	APLValueDotTickFrequency,
 	APLValueEnergyRegenPerSecond,
 	APLValueEnergyTimeToTarget,
-	APLValueFocusRegenPerSecond,
-	APLValueFocusTimeToTarget,
 	APLValueFrontOfTarget,
 	APLValueGCDIsReady,
 	APLValueGCDTimeToReady,
@@ -58,7 +55,6 @@ import {
 	APLValueMax,
 	APLValueMaxComboPoints,
 	APLValueMaxEnergy,
-	APLValueMaxFocus,
 	APLValueMaxHealth,
 	APLValueMaxMana,
 	APLValueMaxRage,
@@ -91,7 +87,6 @@ import {
 	APLValueItemProcsMinRemainingTime,
 	APLValueUnitDistance,
 	APLValueUnitIsMoving,
-	APLValueVariablePlaceholder,
 	APLValueAuraIsInactive,
 	APLValueAuraICDIsReady,
 	APLValueActiveItemSwapSet,
@@ -732,7 +727,7 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 		newValue: APLValueCurrentMana.create,
 		includeIf(player: Player<any>, _isPrepull: boolean) {
 			const clss = player.getClass();
-			return clss !== Class.ClassHunter && clss !== Class.ClassRogue && clss !== Class.ClassWarrior;
+			return clss !== Class.ClassRogue && clss !== Class.ClassWarrior;
 		},
 		fields: [],
 	}),
@@ -743,7 +738,7 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 		newValue: APLValueCurrentManaPercent.create,
 		includeIf(player: Player<any>, _isPrepull: boolean) {
 			const clss = player.getClass();
-			return clss !== Class.ClassHunter && clss !== Class.ClassRogue && clss !== Class.ClassWarrior;
+			return clss !== Class.ClassRogue && clss !== Class.ClassWarrior;
 		},
 		fields: [],
 	}),
@@ -754,7 +749,7 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 		newValue: APLValueMaxMana.create,
 		includeIf(player: Player<any>, _isPrepull: boolean) {
 			const clss = player.getClass();
-			return clss !== Class.ClassHunter && clss !== Class.ClassRogue && clss !== Class.ClassWarrior;
+			return clss !== Class.ClassRogue && clss !== Class.ClassWarrior;
 		},
 		fields: [],
 	}),
@@ -781,38 +776,6 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 			return spec === Spec.SpecFeralCatDruid || spec === Spec.SpecFeralBearDruid || clss === Class.ClassWarrior;
 		},
 		fields: [],
-	}),
-	currentFocus: inputBuilder({
-		label: i18n.t('rotation_tab.apl.values.current_focus.label'),
-		submenu: ['resources', 'focus'],
-		shortDescription: i18n.t('rotation_tab.apl.values.current_focus.tooltip'),
-		newValue: APLValueCurrentFocus.create,
-		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getClass() == Class.ClassHunter,
-		fields: [],
-	}),
-	maxFocus: inputBuilder({
-		label: i18n.t('rotation_tab.apl.values.max_focus.label'),
-		submenu: ['resources', 'focus'],
-		shortDescription: i18n.t('rotation_tab.apl.values.max_focus.tooltip'),
-		newValue: APLValueMaxFocus.create,
-		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getClass() == Class.ClassHunter,
-		fields: [],
-	}),
-	focusRegenPerSecond: inputBuilder({
-		label: i18n.t('rotation_tab.apl.values.focus_regen_per_second.label'),
-		submenu: ['resources', 'focus'],
-		shortDescription: i18n.t('rotation_tab.apl.values.focus_regen_per_second.tooltip'),
-		newValue: APLValueFocusRegenPerSecond.create,
-		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getClass() == Class.ClassHunter,
-		fields: [],
-	}),
-	focusTimeToTarget: inputBuilder({
-		label: i18n.t('rotation_tab.apl.values.estimated_time_to_target_focus.label'),
-		submenu: ['resources', 'focus'],
-		shortDescription: i18n.t('rotation_tab.apl.values.estimated_time_to_target_focus.tooltip'),
-		newValue: APLValueFocusTimeToTarget.create,
-		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getClass() == Class.ClassHunter,
-		fields: [valueFieldConfig('targetFocus')],
 	}),
 	currentEnergy: inputBuilder({
 		label: i18n.t('rotation_tab.apl.values.current_energy.label'),
@@ -945,7 +908,6 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 			const clss = player.getClass();
 			const spec = player.getSpec();
 			return (
-				clss !== Class.ClassHunter &&
 				clss !== Class.ClassMage &&
 				clss !== Class.ClassPriest &&
 				clss !== Class.ClassWarlock &&
@@ -964,7 +926,6 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 			const clss = player.getClass();
 			const spec = player.getSpec();
 			return (
-				clss !== Class.ClassHunter &&
 				clss !== Class.ClassMage &&
 				clss !== Class.ClassPriest &&
 				clss !== Class.ClassWarlock &&
@@ -983,7 +944,6 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 			const clss = player.getClass();
 			const spec = player.getSpec();
 			return (
-				clss !== Class.ClassHunter &&
 				clss !== Class.ClassMage &&
 				clss !== Class.ClassPriest &&
 				clss !== Class.ClassWarlock &&

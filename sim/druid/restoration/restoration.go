@@ -10,7 +10,7 @@ func RegisterRestorationDruid() {
 	core.RegisterAgentFactory(
 		proto.Player_RestorationDruid{},
 		proto.Spec_SpecRestorationDruid,
-		func(character *core.Character, options *proto.Player) core.Agent {
+		func(character *core.Character, options *proto.Player, _ *proto.Raid) core.Agent {
 			return NewRestorationDruid(character, options)
 		},
 		func(player *proto.Player, spec interface{}) {

@@ -66,7 +66,6 @@ func RegisterAllOnUseCds() {
 	// shared.NewSimpleStatActive(27416) // Fetish of the Fallen - https://www.wowhead.com/tbc/spell=33014
 	// shared.NewSimpleStatActive(27900) // Jewel of Charismatic Mystique - https://www.wowhead.com/tbc/spell=33486
 	// shared.NewSimpleStatActive(28590) // Ribbon of Sacrifice - https://www.wowhead.com/tbc/spell=38332
-	// shared.NewSimpleStatActive(28727) // Pendant of the Violet Eye - https://www.wowhead.com/tbc/spell=29601
 	// shared.NewSimpleStatActive(28767) // The Decapitator - https://www.wowhead.com/tbc/spell=37208
 	// shared.NewSimpleStatActive(29181) // Timelapse Shard - https://www.wowhead.com/tbc/spell=35352
 	// shared.NewSimpleStatActive(30841) // Lower City Prayerbook - https://www.wowhead.com/tbc/spell=37877
