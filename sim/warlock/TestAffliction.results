@@ -389,6 +389,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestAffliction-AllItems-Despair-28573"
+ value: {
+  dps: 1922.70259
+  tps: 1187.06459
+ }
+}
+dps_results: {
  key: "TestAffliction-AllItems-DirebrewHops-38288"
  value: {
   dps: 1911.1205

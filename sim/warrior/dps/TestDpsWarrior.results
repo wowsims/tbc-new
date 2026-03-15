@@ -413,6 +413,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestDpsWarrior-AllItems-Despair-28573"
+ value: {
+  dps: 2082.85956
+  tps: 1573.31739
+  dtps: 7.2778
+ }
+}
+dps_results: {
  key: "TestDpsWarrior-AllItems-DirebrewHops-38288"
  value: {
   dps: 1997.02297

@@ -9,6 +9,52 @@ import (
 )
 
 func init() {
+	// Despair
+	core.NewItemEffect(28573, func(agent core.Agent) {
+		character := agent.GetCharacter()
+
+		spell := character.GetOrRegisterSpell(core.SpellConfig{
+			ActionID:    core.ActionID{SpellID: 34580},
+			ProcMask:    core.ProcMaskEmpty,
+			SpellSchool: core.SpellSchoolPhysical,
+			Flags:       core.SpellFlagPassiveSpell | core.SpellFlagIgnoreResists,
+
+			DamageMultiplier: 1,
+			CritMultiplier:   character.DefaultMeleeCritMultiplier(),
+			ThreatMultiplier: 1,
+
+			ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+				spell.CalcAndDealDamage(sim, target, 600, spell.OutcomeMeleeSpecialNoBlockDodgeParry)
+			},
+		})
+
+		getDpm := func() *core.DynamicProcManager {
+			return character.NewStaticLegacyPPMManager(
+				1,
+				*character.GetDynamicProcMaskForWeaponEffect(28573),
+			)
+		}
+
+		dpm := getDpm()
+
+		procTrigger := character.MakeProcTriggerAura(core.ProcTrigger{
+			Name:               "Despair",
+			DPM:                dpm,
+			TriggerImmediately: true,
+			Outcome:            core.OutcomeLanded,
+			Callback:           core.CallbackOnSpellHitDealt,
+			Handler: func(sim *core.Simulation, _ *core.Spell, result *core.SpellResult) {
+				spell.Cast(sim, result.Target)
+			},
+		})
+
+		character.RegisterItemSwapCallback([]proto.ItemSlot{proto.ItemSlot_ItemSlotMainHand}, func(sim *core.Simulation, slot proto.ItemSlot) {
+			dpm = getDpm()
+		})
+
+		character.ItemSwap.RegisterProc(28573, procTrigger)
+	})
+
 	// Rod of the Sun King
 	core.NewItemEffect(29996, func(agent core.Agent) {
 		character := agent.GetCharacter()

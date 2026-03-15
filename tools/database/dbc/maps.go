@@ -397,7 +397,7 @@ var MapItemIdToPPM = map[int32]float64{
 	28437: 1,    // Drakefist Hammer
 	28438: 1,    // Dragonmaw
 	28439: 1,    // Dragonstrike
-	28573: 0.5,  // Despair
+	28573: 1,    // Despair
 	28774: 1.33, // Glaive of the Pit
 	28830: 1,    // Dragonspine Trophy 20s ICD
 	// 29301: 1, // Band of the Eternal Champion 60s ICD

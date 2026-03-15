@@ -469,6 +469,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestHunter-AllItems-Despair-28573"
+ value: {
+  dps: 3054.41207
+  tps: 2138.95354
+  dtps: 13.84619
+ }
+}
+dps_results: {
  key: "TestHunter-AllItems-DirebrewHops-38288"
  value: {
   dps: 2914.32234

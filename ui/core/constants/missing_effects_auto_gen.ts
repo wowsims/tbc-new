@@ -1734,12 +1734,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		28573, // Despair
-		[
-			"Attempts to impale the target, causing 600 damage.", // 34580 - https://www.wowhead.com/tbc/spell=34580
-		]
-	],
-	[
 		28590, // Ribbon of Sacrifice
 		[
 			"For the next 20s, your direct heals grant Fecundity to your target, increasing the healing received by the target by up to 30. Fecundity lasts 10s and stacks up to 5 times.", // 38332 - https://www.wowhead.com/tbc/spell=38332

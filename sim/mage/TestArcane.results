@@ -382,6 +382,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestArcane-AllItems-Despair-28573"
+ value: {
+  dps: 1874.39965
+  tps: 1284.66602
+ }
+}
+dps_results: {
  key: "TestArcane-AllItems-DirebrewHops-38288"
  value: {
   dps: 1846.42884
