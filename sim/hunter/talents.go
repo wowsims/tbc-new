@@ -111,7 +111,7 @@ func (hunter *Hunter) registerFocusedFire() {
 	}
 
 	hunter.PseudoStats.DamageDealtMultiplier *= 1.0 + 0.01*float64(hunter.Talents.FocusedFire)
-	hunter.AddStaticMod(core.SpellModConfig{
+	hunter.Pet.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
 		ClassMask:  HunterSpellKillCommandPet,
 		FloatValue: 10.0 * float64(hunter.Talents.FocusedFire),
