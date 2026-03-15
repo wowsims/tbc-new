@@ -28,11 +28,15 @@ func (mage *Mage) registerArcanePowerSpell() {
 		Label:    "Arcane Power",
 		ActionID: core.ActionID{SpellID: 12042},
 		Duration: time.Second * 15,
-		OnGain: func(aura *core.Aura, sim *core.Simulation) {
+	})
+
+	mage.ArcanePowerAura.NewExclusiveEffect("ManaCost", true, core.ExclusiveEffect{
+		Priority: 10,
+		OnGain: func(_ *core.ExclusiveEffect, sim *core.Simulation) {
 			arcanePowerCostMod.Activate()
 			arcanePowerDmgMod.Activate()
 		},
-		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
+		OnExpire: func(_ *core.ExclusiveEffect, sim *core.Simulation) {
 			arcanePowerCostMod.Deactivate()
 			arcanePowerDmgMod.Deactivate()
 			arcanePowerSpell.CD.Use(sim)

@@ -1220,26 +1220,38 @@ func registerPowerInfusionCD(char *Character, numPowerInfusions int32) {
 func PowerInfusionAura(char *Character, actionTag int32) *Aura {
 	actionID := ActionID{SpellID: 10060, Tag: actionTag}
 
-	return char.GetOrRegisterAura(Aura{
+	aura := char.GetOrRegisterAura(Aura{
 		Label:    "PowerInfusion-" + actionID.String(),
 		Tag:      PowerInfusionAuraTag,
 		ActionID: actionID,
 		Duration: PowerInfusionDuration,
-		OnGain: func(aura *Aura, sim *Simulation) {
-			if char.HasManaBar() {
-				char.PseudoStats.SpellCostPercentModifier -= 20
-			}
-			if !char.HasActiveAuraWithTag(BloodlustAuraTag) {
-				char.MultiplyCastSpeed(sim, 1.2)
+	})
+
+	aura.NewExclusiveEffect("ManaCost", true, ExclusiveEffect{
+		Priority: -20,
+		OnGain: func(ee *ExclusiveEffect, sim *Simulation) {
+			if ee.Aura.Unit.HasManaBar() {
+				ee.Aura.Unit.PseudoStats.SpellCostPercentModifier -= 20
 			}
 		},
-		OnExpire: func(aura *Aura, sim *Simulation) {
-			if char.HasManaBar() {
-				char.PseudoStats.SpellCostPercentModifier += 20
+		OnExpire: func(ee *ExclusiveEffect, sim *Simulation) {
+			if ee.Aura.Unit.HasManaBar() {
+				ee.Aura.Unit.PseudoStats.SpellCostPercentModifier += 20
 			}
-			if !char.HasActiveAuraWithTag(BloodlustAuraTag) {
-				char.MultiplyCastSpeed(sim, 1/1.2)
-			}
+		},
+	})
+	multiplyCastSpeedEffect(aura, 1.2)
+	return aura
+}
+
+func multiplyCastSpeedEffect(aura *Aura, multiplier float64) *ExclusiveEffect {
+	return aura.NewExclusiveEffect("MultiplyCastSpeed", false, ExclusiveEffect{
+		Priority: multiplier,
+		OnGain: func(ee *ExclusiveEffect, sim *Simulation) {
+			ee.Aura.Unit.MultiplyCastSpeed(sim, multiplier)
+		},
+		OnExpire: func(ee *ExclusiveEffect, sim *Simulation) {
+			ee.Aura.Unit.MultiplyCastSpeed(sim, 1/multiplier)
 		},
 	})
 }
@@ -1513,7 +1525,8 @@ func registerBloodlustCD(character *Character) {
 		Priority: CooldownPriorityBloodlust,
 		Type:     CooldownTypeDPS,
 		ShouldActivate: func(sim *Simulation, character *Character) bool {
-			return !character.HasActiveAura(SatedAuraLabel)
+			// Haste portion doesn't stack with Power Infusion, so prefer to wait.
+			return !character.HasActiveAuraWithTag(PowerInfusionAuraTag) && !character.HasActiveAura(SatedAuraLabel)
 		},
 	})
 }
@@ -1540,7 +1553,6 @@ func BloodlustAura(character *Character, actionTag int32) *Aura {
 		Duration: BloodlustDuration,
 		OnGain: func(aura *Aura, sim *Simulation) {
 			aura.Unit.MultiplyAttackSpeed(sim, 1.3)
-			aura.Unit.MultiplyCastSpeed(sim, 1.3)
 			for _, pet := range character.Pets {
 				if pet.IsEnabled() && !pet.IsGuardian() {
 					pet.GetAura(aura.Label).Activate(sim)
@@ -1550,10 +1562,9 @@ func BloodlustAura(character *Character, actionTag int32) *Aura {
 		},
 		OnExpire: func(aura *Aura, sim *Simulation) {
 			aura.Unit.MultiplyAttackSpeed(sim, 1/1.3)
-			aura.Unit.MultiplyCastSpeed(sim, 1/1.3)
 		},
 	})
-
+	multiplyCastSpeedEffect(aura, 1.3)
 	return aura
 }
 
