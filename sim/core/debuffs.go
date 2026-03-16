@@ -191,7 +191,7 @@ func BloodFrenzyAura(target *Unit, points int32) *Aura {
 func CurseOfElementsAura(target *Unit, casterIndex int32, ranks int32) *Aura {
 	multiplier := 1.10 + 0.01*float64(ranks)
 
-	return damageTakenDebuff(
+	aura := damageTakenDebuff(
 		target,
 		casterIndex,
 		fmt.Sprintf("Curse of the Elements (%s)", Ternary(casterIndex == -1, "External", "Self")),
@@ -205,10 +205,16 @@ func CurseOfElementsAura(target *Unit, casterIndex int32, ranks int32) *Aura {
 		multiplier,
 		time.Minute*5,
 	)
+
+	aura.NewExclusiveEffect("CurseOfElements", true, ExclusiveEffect{
+		Priority: multiplier,
+	})
+
+	return aura
 }
 
 func CurseOfRecklessnessAura(target *Unit, casterIndex int32) *Aura {
-	return statsDebuff(
+	aura := statsDebuff(
 		target,
 		casterIndex,
 		fmt.Sprintf("Curse of Recklessness (%s)", Ternary(casterIndex == -1, "External", "Self")),
@@ -219,6 +225,10 @@ func CurseOfRecklessnessAura(target *Unit, casterIndex int32) *Aura {
 		},
 		time.Minute*2,
 	)
+
+	aura.NewExclusiveEffect("CurseOfRecklessness", true, ExclusiveEffect{})
+
+	return aura
 }
 
 func DemoralizingRoarAura(target *Unit, improved bool) *Aura {

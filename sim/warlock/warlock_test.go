@@ -26,7 +26,7 @@ func TestAffliction(t *testing.T) {
 							Summon:          proto.WarlockOptions_Imp,
 							SacrificeSummon: false,
 							Armor:           proto.WarlockOptions_FelArmor,
-							CurseOptions:    proto.WarlockOptions_Elements,
+							CurseOptions:    proto.WarlockOptions_Doom,
 						},
 					},
 				},
