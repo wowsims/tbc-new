@@ -215,7 +215,7 @@ export const P1_DEMONOLOGY_DEFAULT_SETTINGS: PresetUtils.PresetSettings = {
 	}),
 	debuffs: Debuffs.create({
 		...DefaultDebuffs,
-		curseOfElements: TristateEffect.TristateEffectMissing,
+		curseOfRecklessness: false,
 	}),
 };
 
@@ -237,6 +237,7 @@ export const P1_FIRE_DEFAULT_SETTINGS: PresetUtils.PresetSettings = {
 	debuffs: Debuffs.create({
 		...DefaultDebuffs,
 		improvedScorch: true,
+		curseOfRecklessness: false,
 	}),
 };
 

@@ -337,12 +337,13 @@ export class ActionId {
 
 				break;
 			case 'Devotion Aura':
-			case 'Shattering Throw':
 			case 'Pain Suppression':
+			case 'Curse of the Elements':
+			case 'Curse of Recklessness':
 				if (tag === -1) {
-					name += ' (raid)';
+					name += ' (External)';
 				} else {
-					name += ` (self)`;
+					name += ` (Self)`;
 				}
 				break;
 			case 'Envenom':

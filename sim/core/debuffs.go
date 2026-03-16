@@ -1,6 +1,7 @@
 package core
 
 import (
+	"fmt"
 	"strconv"
 	"time"
 
@@ -17,11 +18,11 @@ func applyDebuffEffects(target *Unit, targetIdx int, debuffs *proto.Debuffs, rai
 
 	if debuffs.CurseOfElements != proto.TristateEffect_TristateEffectMissing {
 		ranks := GetTristateValueInt32(debuffs.CurseOfElements, 0, 3)
-		MakePermanent(CurseOfElementsAura(target, ranks))
+		MakePermanent(CurseOfElementsAura(target, -1, ranks))
 	}
 
 	if debuffs.CurseOfRecklessness {
-		MakePermanent(CurseOfRecklessnessAura(target))
+		MakePermanent(CurseOfRecklessnessAura(target, -1))
 	}
 
 	if debuffs.DemoralizingRoar != proto.TristateEffect_TristateEffectMissing {
@@ -177,7 +178,7 @@ func ScheduledAura(aura *Aura, options PeriodicActionOptions, raid *proto.Raid) 
 
 // Physical and Armor Related Debuffs
 func BloodFrenzyAura(target *Unit, points int32) *Aura {
-	return damageTakenDebuff(target,
+	return damageTakenDebuff(target, 0,
 		"Blood Frenzy",
 		29859,
 		[]stats.SchoolIndex{stats.SchoolIndexPhysical},
@@ -187,10 +188,14 @@ func BloodFrenzyAura(target *Unit, points int32) *Aura {
 }
 
 // Damage Taken Debuffs
-func CurseOfElementsAura(target *Unit, ranks int32) *Aura {
+func CurseOfElementsAura(target *Unit, casterIndex int32, ranks int32) *Aura {
 	multiplier := 1.10 + 0.01*float64(ranks)
 
-	return damageTakenDebuff(target, "Curse of Elements", 27228,
+	return damageTakenDebuff(
+		target,
+		casterIndex,
+		fmt.Sprintf("Curse of the Elements (%s)", Ternary(casterIndex == -1, "External", "Self")),
+		27228,
 		[]stats.SchoolIndex{
 			stats.SchoolIndexArcane,
 			stats.SchoolIndexFire,
@@ -202,8 +207,18 @@ func CurseOfElementsAura(target *Unit, ranks int32) *Aura {
 	)
 }
 
-func CurseOfRecklessnessAura(target *Unit) *Aura {
-	return statsDebuff(target, "Curse of Recklesness", 27226, stats.Stats{stats.Armor: -800, stats.AttackPower: 135}, time.Minute*2)
+func CurseOfRecklessnessAura(target *Unit, casterIndex int32) *Aura {
+	return statsDebuff(
+		target,
+		casterIndex,
+		fmt.Sprintf("Curse of Recklessness (%s)", Ternary(casterIndex == -1, "External", "Self")),
+		27226,
+		stats.Stats{
+			stats.Armor:       -800,
+			stats.AttackPower: 135,
+		},
+		time.Minute*2,
+	)
 }
 
 func DemoralizingRoarAura(target *Unit, improved bool) *Aura {
@@ -212,14 +227,14 @@ func DemoralizingRoarAura(target *Unit, improved bool) *Aura {
 		apReduction *= 1.4
 	}
 
-	return statsDebuff(target, "Demoralizing Roar", 26998, stats.Stats{stats.AttackPower: -apReduction}, time.Second*30)
+	return statsDebuff(target, 0, "Demoralizing Roar", 26998, stats.Stats{stats.AttackPower: -apReduction}, time.Second*30)
 }
 
 func DemoralizingShoutAura(target *Unit, boomingVoicePoints int32, improvedDemoShoutPoints int32) *Aura {
 	apReduction := 300.0 * (1 + 0.1*float64(improvedDemoShoutPoints))
 	duration := time.Duration(float64(time.Second*30) * (1 + 0.1*float64(boomingVoicePoints)))
 
-	return statsDebuff(target, "Demoralizing Shout", 25203, stats.Stats{stats.AttackPower: -apReduction}, duration)
+	return statsDebuff(target, 0, "Demoralizing Shout", 25203, stats.Stats{stats.AttackPower: -apReduction}, duration)
 }
 
 func SlowAura(target *Unit) *Aura {
@@ -424,6 +439,7 @@ func ImprovedShadowBoltAura(target *Unit, uptime float64, points int32) *Aura {
 func InsectSwarmAura(target *Unit) *Aura {
 	return statsDebuff(
 		target,
+		0,
 		"Insect Swarm",
 		27013,
 		stats.Stats{
@@ -503,6 +519,7 @@ func MangleAura(target *Unit) *Aura {
 func MiseryAura(target *Unit) *Aura {
 	return damageTakenDebuff(
 		target,
+		0,
 		"Misery",
 		33195,
 		[]stats.SchoolIndex{
@@ -519,11 +536,11 @@ func MiseryAura(target *Unit) *Aura {
 }
 
 func ScorpidStingAura(target *Unit) *Aura {
-	return statsDebuff(target, "Scorpid Sting", 3043, stats.Stats{stats.PhysicalHitPercent: -5.0}, time.Second*20)
+	return statsDebuff(target, 0, "Scorpid Sting", 3043, stats.Stats{stats.PhysicalHitPercent: -5.0}, time.Second*20)
 }
 
 func ScreechAura(target *Unit) *Aura {
-	return statsDebuff(target, "Screech", 27051, stats.Stats{stats.AttackPower: -210}, time.Second*4)
+	return statsDebuff(target, 0, "Screech", 27051, stats.Stats{stats.AttackPower: -210}, time.Second*4)
 }
 
 func ShadowEmbraceAura(target *Unit, ranks int32) *Aura {
@@ -531,13 +548,13 @@ func ShadowEmbraceAura(target *Unit, ranks int32) *Aura {
 }
 
 func ShadowWeavingAura(target *Unit) *Aura {
-	return damageTakenDebuff(target, "Shadow Weaving", 15334, []stats.SchoolIndex{stats.SchoolIndexShadow}, 1.10, time.Second*15)
+	return damageTakenDebuff(target, 0, "Shadow Weaving", 15334, []stats.SchoolIndex{stats.SchoolIndexShadow}, 1.10, time.Second*15)
 }
 
 func StormstrikeAura(target *Unit, uptime float64) *Aura {
 	multiplier := 1.20
 	hasAura := target.HasAura("Stormstrike")
-	aura := damageTakenDebuff(target, "Stormstrike", 17364, []stats.SchoolIndex{stats.SchoolIndexNature}, multiplier, time.Second*12)
+	aura := damageTakenDebuff(target, 0, "Stormstrike", 17364, []stats.SchoolIndex{stats.SchoolIndexNature}, multiplier, time.Second*12)
 
 	if !hasAura {
 		ApplyFixedUptimeAura(aura, uptime, aura.Duration, 1)
@@ -657,10 +674,15 @@ func AtkSpeedReductionEffect(aura *Aura, speedMultiplier float64) *ExclusiveEffe
 	})
 }
 
-func damageTakenDebuff(target *Unit, label string, spellID int32, schools []stats.SchoolIndex, multiplier float64, duration time.Duration) *Aura {
+func damageTakenDebuff(target *Unit, casterIndex int32, label string, spellID int32, schools []stats.SchoolIndex, multiplier float64, duration time.Duration) *Aura {
+	actionID := ActionID{SpellID: spellID}
+	if casterIndex != 0 {
+		actionID = actionID.WithTag(casterIndex)
+	}
+
 	return target.GetOrRegisterAura(Aura{
 		Label:    label,
-		ActionID: ActionID{SpellID: spellID},
+		ActionID: actionID,
 		Duration: duration,
 		OnGain: func(aura *Aura, sim *Simulation) {
 			for _, school := range schools {
@@ -670,7 +692,7 @@ func damageTakenDebuff(target *Unit, label string, spellID int32, schools []stat
 
 		OnExpire: func(aura *Aura, sim *Simulation) {
 			for _, school := range schools {
-				target.PseudoStats.SchoolDamageDealtMultiplier[school] /= -multiplier
+				target.PseudoStats.SchoolDamageTakenMultiplier[school] /= -multiplier
 			}
 		},
 	})
@@ -696,19 +718,24 @@ func damageDealtDebuff(target *Unit, label string, spellID int32, schools []stat
 	})
 }
 
-func statsDebuff(target *Unit, label string, spellID int32, stats stats.Stats, duration time.Duration) *Aura {
+func statsDebuff(target *Unit, casterIndex int32, label string, spellID int32, stats stats.Stats, duration time.Duration) *Aura {
 	if duration == 0 {
 		duration = time.Second * 30
 	}
 
-	aura := target.GetAura(label)
+	actionID := ActionID{SpellID: spellID}
+	if casterIndex != 0 {
+		actionID = actionID.WithTag(casterIndex)
+	}
+
+	aura := target.GetAuraByID(actionID)
 	if aura != nil {
 		return aura
 	}
 
 	return target.RegisterAura(Aura{
 		Label:    label,
-		ActionID: ActionID{SpellID: spellID},
+		ActionID: actionID,
 		Duration: duration,
 	}).AttachStatsBuff(stats)
 }
