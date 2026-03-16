@@ -96,7 +96,7 @@ func applyConsumeEffects(agent Agent, partyBuffs *proto.PartyBuffs) {
 		character.AddStat(stats.Intellect, 20)
 	}
 	if consumables.ScrollSpi {
-		character.AddStat(stats.Spirit, 20)
+		character.AddStat(stats.Spirit, 30)
 	}
 	if consumables.ScrollArm {
 		character.AddStat(stats.Armor, 300)
