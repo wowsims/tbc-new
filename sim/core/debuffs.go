@@ -137,9 +137,8 @@ func applyDebuffEffects(target *Unit, targetIdx int, debuffs *proto.Debuffs, rai
 			Priority:        ActionPriorityDOT,
 			OnAction: func(sim *Simulation) {
 				aura.Activate(sim)
-				if aura.IsActive() {
-					aura.AddStack(sim)
-				}
+				aura.AddStack(sim)
+
 			},
 		}, raid)
 
