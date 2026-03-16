@@ -1522,12 +1522,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		27518, // Ivory Idol of the Moongoddess
-		[
-			"Increases the damage of your Starfire spell by up to 55.", // 34292 - https://www.wowhead.com/tbc/spell=34292
-		]
-	],
-	[
 		27544, // Totem of Spontaneous Regrowth
 		[
 			"Increases healing done by Healing Wave by up to 88.", // 34294 - https://www.wowhead.com/tbc/spell=34294
@@ -2112,12 +2106,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		31025, // Idol of the Avenger
-		[
-			"Increases the damage dealt by Wrath by 25.", // 37760 - https://www.wowhead.com/tbc/spell=37760
-		]
-	],
-	[
 		31031, // Stormfury Totem
 		[
 			"Reduces the mana cost of Stormstrike by 22.", // 37762 - https://www.wowhead.com/tbc/spell=37762
@@ -2445,12 +2433,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		32485, // Ashtongue Talisman of Valor
 		[
 			"Your Mortal Strike, Bloodthirst, and Shield Slam attacks have a 25% chance to heal you for 330 and grant 55 Strength for 12s.", // 40459 - https://www.wowhead.com/tbc/spell=40459
-		]
-	],
-	[
-		32486, // Ashtongue Talisman of Equilibrium
-		[
-			"Mangle has a 40% chance to grant 140 Strength for 8s, Starfire has a 25% chance to grant up to 150 spell damage for 8s, and Rejuvenation has a 25% chance to grant up to 210 healing for 8s.", // 40442 - https://www.wowhead.com/tbc/spell=40442
 		]
 	],
 	[
