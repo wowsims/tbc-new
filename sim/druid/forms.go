@@ -269,18 +269,31 @@ func (druid *Druid) RegisterMoonkinFormAura() {
 				druid.ClearForm(sim)
 			}
 
+			druid.ApplyDynamicEquipScaling(sim, stats.Armor, 4)
+
 			druid.form = Moonkin
 			druid.SetCurrentPowerBar(core.ManaBar)
 		},
 		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
+			druid.RemoveDynamicEquipScaling(sim, stats.Armor, 4)
 			druid.form = Humanoid
 		},
-	}).AttachStatDependency(
-		druid.NewDynamicMultiplyStat(stats.Armor, 0.6),
-	).AttachSpellMod(core.SpellModConfig{
-		Kind:       core.SpellMod_DamageDone_Pct,
-		FloatValue: 0.35,
-		School:     core.SpellSchoolArcane | core.SpellSchoolNature,
+	})
+
+	manaMetrics := druid.NewManaMetrics(core.ActionID{SpellID: 33926 /* Elune's Touch */})
+
+	// Elune's Touch is assumed to have a PPM of 15.
+	// Mana gained is 30% of melee attack power.
+
+	druid.MakeProcTriggerAura(core.ProcTrigger{
+		Name:               "Elune's Touch",
+		DPM:                druid.NewStaticLegacyPPMManager(15, core.ProcMaskMeleeWhiteHit),
+		RequireDamageDealt: true,
+		Outcome:            core.OutcomeLanded,
+		Callback:           core.CallbackOnSpellHitDealt,
+		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+			druid.AddMana(sim, float64(stats.AttackPower)*0.3, manaMetrics)
+		},
 	})
 }
 
