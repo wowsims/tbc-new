@@ -35,7 +35,7 @@ func TestElemental(t *testing.T) {
 				core.GetGearSet("../../../ui/shaman/elemental/gear_sets", "p3_5"),
 				core.GetGearSet("../../../ui/shaman/elemental/gear_sets", "p4"),
 			},
-			Talents:  DefaulttTalents,
+			Talents:  DefaultTalents,
 			Rotation: core.GetAplRotation("../../../ui/shaman/elemental/apls", "default"),
 			ItemFilter: core.ItemFilter{
 				WeaponTypes:       DefaultWeaponTypes,
@@ -46,7 +46,7 @@ func TestElemental(t *testing.T) {
 	}))
 }
 
-const DefaulttTalents = "55003105100213351051--05105301005"
+const DefaultTalents = "55003105100213351051--05105301005"
 
 const DefaultArmorType = proto.ArmorType_ArmorTypeMail
 
@@ -55,6 +55,7 @@ var DefaultWeaponTypes = []proto.WeaponType{
 	proto.WeaponType_WeaponTypeDagger,
 	proto.WeaponType_WeaponTypeFist,
 	proto.WeaponType_WeaponTypeMace,
+	proto.WeaponType_WeaponTypeStaff,
 	proto.WeaponType_WeaponTypeShield,
 }
 

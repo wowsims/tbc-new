@@ -21,12 +21,14 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecBalanceDruid, {
 	epStats: [
 		Stat.StatIntellect,
 		Stat.StatSpellDamage,
-		Stat.StatNatureDamage,
 		Stat.StatArcaneDamage,
+		Stat.StatNatureDamage,
 		Stat.StatSpellHitRating,
 		Stat.StatSpellCritRating,
 		Stat.StatSpellHasteRating,
+		Stat.StatMP5,
 	],
+	epPseudoStats: [],
 	// Reference stat against which to calculate EP. I think all classes use either spell power or attack power.
 	epReferenceStat: Stat.StatSpellDamage,
 	// Which stats to display in the Character Stats section, at the bottom of the left-hand sidebar.
@@ -36,18 +38,18 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecBalanceDruid, {
 			Stat.StatMana,
 			Stat.StatStamina,
 			Stat.StatIntellect,
-			Stat.StatSpirit,
 			Stat.StatSpellDamage,
-			Stat.StatNatureDamage,
 			Stat.StatArcaneDamage,
+			Stat.StatNatureDamage,
+			Stat.StatMP5,
 		],
-		[PseudoStat.PseudoStatSpellHitPercent, PseudoStat.PseudoStatSpellCritPercent, PseudoStat.PseudoStatSpellHastePercent],
+		[PseudoStat.PseudoStatSpellCritPercent, PseudoStat.PseudoStatSpellHastePercent, PseudoStat.PseudoStatSpellHitPercent],
 	),
 	gemStats: DEFAULT_HYBRID_CASTER_GEM_STATS,
 
 	defaults: {
 		// Default equipped gear.
-		gear: Presets.Phase1PresetGear.gear,
+		gear: Presets.Phase1AlliancePresetGear.gear,
 		// Default EP weights for sorting gear in the gear picker.
 		epWeights: Presets.StandardEPWeights.epWeights,
 		// Default consumes settings.
@@ -86,8 +88,15 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecBalanceDruid, {
 		talents: [Presets.StandardTalents],
 		rotations: [Presets.StandardRotation],
 		// Preset gear configurations that the user can quickly select.
-		gear: [Presets.PreraidPresetGear, Presets.Phase1PresetGear],
-		builds: [Presets.PresetPreraidBuild, Presets.Phase1PresetBuild],
+		gear: [
+			Presets.PreraidPresetGear,
+			Presets.Phase1AlliancePresetGear,
+			Presets.Phase2AlliancePresetGear,
+			Presets.Phase3PresetGear,
+			Presets.Phase3_5PresetGear,
+			Presets.Phase4PresetGear,
+		],
+		builds: [],
 	},
 
 	autoRotation: (_player: Player<Spec.SpecBalanceDruid>): APLRotation => {

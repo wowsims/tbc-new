@@ -1,17 +1,36 @@
 import * as PresetUtils from '../../core/preset_utils.js';
-import { ConsumesSpec, Debuffs, IndividualBuffs, PartyBuffs, Profession, PseudoStat, RaidBuffs, Stat, UnitReference } from '../../core/proto/common.js';
+import {
+	Class,
+	ConsumesSpec,
+	Debuffs,
+	IndividualBuffs,
+	PartyBuffs,
+	Profession,
+	RaidBuffs,
+	Stat,
+	TristateEffect,
+	UnitReference,
+} from '../../core/proto/common.js';
 import { BalanceDruid_Options as BalanceDruidOptions } from '../../core/proto/druid.js';
 import { SavedTalents } from '../../core/proto/ui.js';
-import { Stats, UnitStat, UnitStatPresets } from '../../core/proto_utils/stats';
+import { Stats } from '../../core/proto_utils/stats';
 import { defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
-import StandardApl from './apls/standard.apl.json';
+import DefaultAPL from './apls/default.apl.json';
 import PreraidGear from './gear_sets/preraid.gear.json';
-import Phase1 from './gear_sets/p1.gear.json';
+import Phase1AllianceGear from './gear_sets/p1_a.gear.json';
+import Phase2AllianceGear from './gear_sets/p2_a.gear.json';
+import Phase3Gear from './gear_sets/p3.gear.json';
+import Phase3_5Gear from './gear_sets/p3_5.gear.json';
+import Phase4Gear from './gear_sets/p4.gear.json';
 
 export const PreraidPresetGear = PresetUtils.makePresetGear('Pre-raid', PreraidGear);
-export const Phase1PresetGear = PresetUtils.makePresetGear('P1', Phase1);
+export const Phase1AlliancePresetGear = PresetUtils.makePresetGear('Phase 1 (A)', Phase1AllianceGear);
+export const Phase2AlliancePresetGear = PresetUtils.makePresetGear('Phase 2 (A)', Phase2AllianceGear);
+export const Phase3PresetGear = PresetUtils.makePresetGear('Phase 3', Phase3Gear);
+export const Phase3_5PresetGear = PresetUtils.makePresetGear('Phase 3.5', Phase3_5Gear);
+export const Phase4PresetGear = PresetUtils.makePresetGear('Phase 4', Phase4Gear);
 
-export const StandardRotation = PresetUtils.makePresetAPLRotation('Standard', StandardApl);
+export const StandardRotation = PresetUtils.makePresetAPLRotation('Default', DefaultAPL);
 
 export const StandardEPWeights = PresetUtils.makePresetEpWeights(
 	'Standard',
@@ -34,7 +53,7 @@ export const StandardEPWeights = PresetUtils.makePresetEpWeights(
 export const StandardTalents = {
 	name: 'Standard',
 	data: SavedTalents.create({
-		talentsString: '510022312503135231351--500233',
+		talentsString: '510022312503135231351--520033',
 	}),
 };
 
@@ -44,34 +63,52 @@ export const DefaultOptions = BalanceDruidOptions.create({
 	},
 });
 
-export const DefaultConsumables = ConsumesSpec.create({});
-
 export const DefaultRaidBuffs = RaidBuffs.create({
-	...defaultRaidBuffMajorDamageCooldowns(),
+	...defaultRaidBuffMajorDamageCooldowns(Class.ClassShaman),
+	arcaneBrilliance: true,
+	giftOfTheWild: TristateEffect.TristateEffectImproved,
+	powerWordFortitude: TristateEffect.TristateEffectImproved,
+	divineSpirit: TristateEffect.TristateEffectImproved,
 });
 
-export const DefaultIndividualBuffs = IndividualBuffs.create({});
+export const DefaultPartyBuffs = PartyBuffs.create({
+	moonkinAura: TristateEffect.TristateEffectImproved,
+	chainOfTheTwilightOwl: true,
+	eyeOfTheNight: true,
+});
 
-export const DefaultPartyBuffs = PartyBuffs.create({});
+export const DefaultIndividualBuffs = IndividualBuffs.create({
+	blessingOfKings: true,
+	blessingOfWisdom: TristateEffect.TristateEffectImproved,
+	shadowPriestDps: 800,
+});
 
-export const DefaultDebuffs = Debuffs.create({});
+export const DefaultDebuffs = Debuffs.create({
+	bloodFrenzy: true,
+	curseOfElements: TristateEffect.TristateEffectImproved,
+	curseOfRecklessness: true,
+	exposeArmor: TristateEffect.TristateEffectImproved,
+	faerieFire: TristateEffect.TristateEffectImproved,
+	giftOfArthas: true,
+	huntersMark: TristateEffect.TristateEffectImproved,
+	improvedSealOfTheCrusader: true,
+	judgementOfWisdom: true,
+	mangle: true,
+	misery: true,
+	sunderArmor: true,
+});
+
+export const DefaultConsumables = ConsumesSpec.create({
+	conjuredId: 12662, // Demonic Rune
+	drumsId: 351355, // Greater Drums of Battle
+	flaskId: 22861, // Flask of Blinding Light
+	foodId: 27657, // Blackened Basilisk
+	mhImbueId: 25122, // Brilliant Wizard Oil
+	potId: 22832, // Super Mana Potion
+});
 
 export const OtherDefaults = {
 	distanceFromTarget: 20,
 	profession1: Profession.Engineering,
 	profession2: Profession.Tailoring,
 };
-
-export const PresetPreraidBuild = PresetUtils.makePresetBuild('Pre-raid', {
-	gear: PreraidPresetGear,
-	talents: StandardTalents,
-	rotation: StandardRotation,
-	epWeights: StandardEPWeights,
-});
-
-export const Phase1PresetBuild = PresetUtils.makePresetBuild('P1', {
-	gear: Phase1PresetGear,
-	talents: StandardTalents,
-	rotation: StandardRotation,
-	epWeights: StandardEPWeights,
-});

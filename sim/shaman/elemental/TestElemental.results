@@ -1027,6 +1027,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestElemental-AllItems-StaffoftheQirajiProphets-21128"
+ value: {
+  dps: 1751.04336
+  tps: 1356.4669
+ }
+}
+dps_results: {
  key: "TestElemental-AllItems-Starkiller'sBauble-30340"
  value: {
   dps: 1688.38449

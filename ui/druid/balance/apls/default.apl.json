@@ -1,0 +1,14 @@
+{
+	"type": "TypeAPL",
+	"prepullActions": [{ "action": { "activateAura": { "auraId": { "spellId": 24858 } } }, "doAtValue": { "const": { "val": "-1s" } } }],
+	"priorityList": [
+		{ "action": { "autocastOtherCooldowns": {} } },
+		{
+			"action": {
+				"condition": { "not": { "val": { "dotIsActive": { "spellId": { "spellId": 26988 } } } } },
+				"castSpell": { "spellId": { "spellId": 26988 } }
+			}
+		},
+		{ "action": { "castSpell": { "spellId": { "spellId": 26986 } } } }
+	]
+}

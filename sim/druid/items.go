@@ -78,13 +78,16 @@ var ItemSetNordrassilRegalia = core.NewItemSet(core.ItemSet{
 				}
 
 				for _, target := range druid.Env.Encounter.AllTargetUnits {
-					spell.Dot(target).ApplyOnGain(func(aura *core.Aura, sim *core.Simulation) {
+					dot := spell.Dot(target)
+					if dot == nil {
+						return
+					}
+
+					dot.ApplyOnGain(func(aura *core.Aura, sim *core.Simulation) {
 						if setBonusAura.IsActive() {
 							t5DotBonusDummyAuras.Get(aura.Unit).Activate(sim)
 						}
-					})
-
-					spell.Dot(target).ApplyOnExpire(func(aura *core.Aura, sim *core.Simulation) {
+					}).ApplyOnExpire(func(aura *core.Aura, sim *core.Simulation) {
 						t5DotBonusDummyAuras.Get(aura.Unit).Deactivate(sim)
 					})
 				}
