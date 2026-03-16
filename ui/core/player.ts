@@ -33,7 +33,6 @@ import {
 	Profession,
 	PseudoStat,
 	Race,
-	RangedWeaponType,
 	Spec,
 	Stat,
 	UnitReference,
@@ -55,7 +54,7 @@ import { Database } from './proto_utils/database';
 import { EquippedItem } from './proto_utils/equipped_item';
 import { Gear, ItemSwapGear } from './proto_utils/gear';
 import { gemMatchesSocket, isUnrestrictedGem } from './proto_utils/gems';
-import { StatCap, Stats } from './proto_utils/stats';
+import { Stats } from './proto_utils/stats';
 import {
 	AL_CATEGORY_HARD_MODE,
 	canEquipEnchant,
@@ -1332,18 +1331,18 @@ export class Player<SpecType extends Spec> {
 
 			// This is not exactly a player selected filter, just a general filter to remove any gems with stats that is not in use for the player.
 			// i.e dead gems.
+			// const statsFilter = [...this.specConfig.epStats, ...(this.specConfig.gemStats || [])];
 
 			//Remove Gem filter from MOP
 			//We may want to instead change it per spec or class?
-			//const statsFilter = this.specConfig.gemStats ?? this.specConfig.epStats;
 			const positiveStatIds = gem.stats.map((value, statId) => (value > 0 ? statId : -1)).filter(statId => statId >= 0);
-			if (!positiveStatIds.length) {
-				return false;
+			if (!positiveStatIds.length && gem.color === GemColor.GemColorMeta) {
+				return true;
 			}
 
-			return positiveStatIds;
 			//Filter removed
-			//!positiveStatIds.some(statId => !statsFilter.includes(statId));
+			// return !positiveStatIds.some(statId => !statsFilter.includes(statId));
+			return positiveStatIds;
 		});
 	}
 

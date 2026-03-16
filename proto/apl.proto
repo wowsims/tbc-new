@@ -6,6 +6,7 @@ option go_package = "./proto";
 import "common.proto";
 import "shaman.proto";
 import "druid.proto";
+import "warlock.proto";
 
 // Rotation options are based heavily on APL. See https://github.com/simulationcraft/simc/wiki/ActionLists.
 
@@ -34,22 +35,22 @@ message SimpleRotation {
 message APLPrepullAction {
     APLAction action = 1;
     APLValue do_at_value = 4; // When to perform this prepull action. Should be a negative value.
-    bool hide = 3;            // Causes this item to be ignored.
+    bool hide = 3; // Causes this item to be ignored.
 }
 
 message APLListItem {
-    bool hide = 1;        // Causes this item to be ignored.
-    string notes = 2;     // Comments for the reader.
+    bool hide = 1; // Causes this item to be ignored.
+    string notes = 2; // Comments for the reader.
     APLAction action = 3; // The action to be performed.
 }
 
 message APLGroup {
-	string name = 1;                    // Name of the group (e.g., "careful_aim")
-	repeated APLListItem actions = 2;   // Actions in this group
-	repeated APLValueVariable variables = 3;  // Variables that can be used in this group
+	string name = 1; // Name of the group (e.g., "careful_aim")
+	repeated APLListItem actions = 2; // Actions in this group
+	repeated APLValueVariable variables = 3; // Variables that can be used in this group
 }
 
-// NextIndex: 29
+// NextIndex: 30
 message APLAction {
     APLValue condition = 1; // If set, action will only execute if value is true or != 0.
 
@@ -88,6 +89,7 @@ message APLAction {
         // Class or Spec-specific actions
         APLActionCatOptimalRotationAction cat_optimal_rotation_action = 18;
         APLActionGuardianHotwDpsRotation guardian_hotw_dps_rotation = 27;
+		APLActionCastWarlockAssignedCurse cast_warlock_assigned_curse = 29;
 
         // Internal use only, not exposed in UI.
         APLActionCustomRotation custom_rotation = 19;
@@ -98,7 +100,7 @@ message APLAction {
 }
 
 
-// NextIndex: 129
+// NextIndex: 130
 message APLValue {
 	UUID uuid = 85;
 
@@ -133,7 +135,6 @@ message APLValue {
         APLValueCurrentManaPercent current_mana_percent = 12;
         APLValueCurrentRage current_rage = 14;
         APLValueCurrentEnergy current_energy = 15;
-        APLValueCurrentFocus current_focus = 66;
         APLValueCurrentComboPoints current_combo_points = 16;
         APLValueCurrentSolarEnergy current_solar_energy = 68;
         APLValueCurrentLunarEnergy current_lunar_energy = 69;
@@ -142,12 +143,9 @@ message APLValue {
 		APLValueMaxMana max_mana = 128;
 		APLValueMaxComboPoints max_combo_points = 93;
 		APLValueMaxEnergy max_energy = 87;
-		APLValueMaxFocus max_focus = 88;
 		APLValueMaxRage max_rage = 102;
 		APLValueEnergyRegenPerSecond energy_regen_per_second = 89;
-		APLValueFocusRegenPerSecond focus_regen_per_second = 90;
 		APLValueEnergyTimeToTarget energy_time_to_target = 91;
-		APLValueFocusTimeToTarget focus_time_to_target = 92;
 
 		// Unit values
 		APLValueUnitIsMoving unit_is_moving = 72;
@@ -158,9 +156,9 @@ message APLValue {
         APLValueGCDTimeToReady gcd_time_to_ready = 18;
 
         // Autoattack values
-		APLValueAutoSwingTime auto_swing_time = 126;
+		APLValueAutoSwingTime auto_swing_time = 125;
         APLValueAutoTimeToNext auto_time_to_next = 40;
-        APLValueAutoTimeSinceLast auto_time_since_last = 127;
+        APLValueAutoTimeSinceLast auto_time_since_last = 126;
 
         // Spell values
         APLValueSpellIsKnown spell_is_known = 74;
@@ -188,7 +186,7 @@ message APLValue {
         APLValueAuraInternalCooldown aura_internal_cooldown = 39;
         APLValueAuraICDIsReady aura_icd_is_ready = 108;
         APLValueAuraShouldRefresh aura_should_refresh = 43;
-        APLValueAuraDuration aura_duration = 124;
+        APLValueAuraDuration aura_duration = 123;
 
         // Aggregate Aura set values
         APLValueAllItemStatProcsActive all_item_stat_procs_active = 78;
@@ -227,11 +225,10 @@ message APLValue {
         APLValueTotemRemainingTime totem_remaining_time = 49;
         APLValueCatExcessEnergy cat_excess_energy = 52;
         APLValueCatNewSavageRoarDuration cat_new_savage_roar_duration = 61;
-        APLValueWarlockHandOfGuldanInFlight warlock_hand_of_guldan_in_flight = 59;
+		APLValueWarlockAssignedCurseIsActive warlock_assigned_curse_is_active = 59;
+		APLValueWarlockIsAssignedCurse warlock_is_assigned_curse = 129;
         APLValueCurrentEclipsePhase druid_current_eclipse_phase = 70;
-        APLValueShamanFireElementalDuration shaman_fire_elemental_duration = 83;
 		APLValueProtectionPaladinDamageTakenLastGlobal protection_paladin_damage_taken_last_global = 100;
-		APLValueAfflictionCurrentSnapshot affliction_current_snapshot = 123;
 
 		// Variable reference
 		APLValueVariableRef variable_ref = 111;
@@ -240,7 +237,7 @@ message APLValue {
 		APLValueVariablePlaceholder variable_placeholder = 112; // Placeholder value that gets replaced when group is referenced
 
 		// Action Group
-		APLValueActionGroupUsed action_group_used = 125;
+		APLValueActionGroupUsed action_group_used = 124;
 
 		// Item Swap
 		APLValueActiveItemSwapSet active_item_swap_set = 113;
@@ -404,6 +401,10 @@ message APLActionMoveDuration {
 message APLActionCustomRotation {
 }
 
+message APLActionCastWarlockAssignedCurse{
+	UnitReference target = 1;
+}
+
 ///////////////////////////////////////////////////////////////////////////
 //                                  VALUES
 ///////////////////////////////////////////////////////////////////////////
@@ -513,7 +514,6 @@ message APLValueCurrentManaPercent {
 }
 message APLValueCurrentRage {}
 message APLValueCurrentEnergy {}
-message APLValueCurrentFocus {}
 message APLValueCurrentComboPoints {}
 message APLValueCurrentSolarEnergy {}
 message APLValueCurrentLunarEnergy {}
@@ -522,15 +522,10 @@ message APLValueMaxHealth {}
 message APLValueMaxMana {}
 message APLValueMaxComboPoints {}
 message APLValueMaxEnergy {}
-message APLValueMaxFocus {}
 message APLValueMaxRage {}
 message APLValueEnergyRegenPerSecond {}
-message APLValueFocusRegenPerSecond {}
 message APLValueEnergyTimeToTarget {
 	APLValue target_energy = 1;
-}
-message APLValueFocusTimeToTarget {
-	APLValue target_focus = 1;
 }
 
 enum APLValueEclipsePhase {
@@ -761,12 +756,16 @@ message APLValueTotemRemainingTime {
 }
 message APLValueCatExcessEnergy {}
 message APLValueCatNewSavageRoarDuration {}
-message APLValueWarlockHandOfGuldanInFlight {}
+message APLValueWarlockAssignedCurseIsActive {
+	UnitReference target_unit = 1;
+}
+message APLValueWarlockIsAssignedCurse {
+	WarlockOptions.CurseOptions curse_type = 1;
+}
 message APLValueAfflictionCurrentSnapshot {
 	ActionID spell_id = 1;
 	UnitReference target_unit = 2;
 }
-message APLValueShamanFireElementalDuration {}
 
 message APLValueProtectionPaladinDamageTakenLastGlobal {}
 
@@ -781,8 +780,8 @@ message APLValueDotPercentIncrease {
 }
 
 message APLActionGroupReference {
-	string group_name = 1;                    // Name of the group to reference
-	repeated APLValueVariable variables = 2;  // Variables to set for this group reference
+	string group_name = 1; // Name of the group to reference
+	repeated APLValueVariable variables = 2; // Variables to set for this group reference
 }
 
 message APLValueVariable {

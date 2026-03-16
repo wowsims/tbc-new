@@ -50,7 +50,7 @@ func (rogue *Rogue) registerRupture() {
 			TickLength:    time.Second * 2,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.SnapshotPhysical(target, rogue.ruptureDamage(rogue.ComboPoints(), 70, 11))
+				dot.SnapshotPhysical(target, rogue.ruptureDamage(target, rogue.ComboPoints(), 70, 11))
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
@@ -75,8 +75,8 @@ func (rogue *Rogue) registerRupture() {
 	})
 }
 
-func (rogue *Rogue) ruptureDamage(comboPoints int32, baseDamage float64, damagePerComboPoint float64) float64 {
+func (rogue *Rogue) ruptureDamage(target *core.Unit, comboPoints int32, baseDamage float64, damagePerComboPoint float64) float64 {
 	return baseDamage +
 		damagePerComboPoint*float64(comboPoints) +
-		[]float64{0, 0.01, 0.02, 0.03, 0.03, 0.03}[comboPoints]*rogue.Rupture.MeleeAttackPower()
+		[]float64{0, 0.01, 0.02, 0.03, 0.03, 0.03}[comboPoints]*rogue.Rupture.MeleeAttackPower(target)
 }

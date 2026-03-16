@@ -15,7 +15,7 @@ func (rogue *Rogue) registerExposeArmorSpell() {
 		ActionID:       core.ActionID{SpellID: 26866},
 		SpellSchool:    core.SpellSchoolPhysical,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
-		Flags:          core.SpellFlagMeleeMetrics | SpellFlagBuilder | core.SpellFlagAPL,
+		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
 		MetricSplits:   6,
 		ClassSpellMask: RogueSpellExposeArmor,
 

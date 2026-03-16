@@ -5,11 +5,12 @@ import { PlayerClasses } from '../../core/player_classes';
 import { Mage } from '../../core/player_classes/mage';
 import { APLRotation } from '../../core/proto/apl';
 import { Faction, ItemSlot, PseudoStat, Race, Spec, Stat } from '../../core/proto/common';
-import { DEFAULT_CASTER_GEM_STATS, UnitStat } from '../../core/proto_utils/stats';
+import { DEFAULT_CASTER_GEM_STATS, Stats, UnitStat } from '../../core/proto_utils/stats';
 import { DefaultDebuffs, DefaultRaidBuffs, DefaultPartyBuffs, DefaultIndividualBuffs, DefaultConsumables } from './presets';
 import * as Presets from './presets';
 import * as MageInputs from './inputs';
 import { Mage_Rotation } from '../../core/proto/mage';
+import { ReforgeOptimizer } from '../../core/components/suggest_reforges_action';
 
 const SPEC_CONFIG = registerSpecConfig(Spec.SpecMage, {
 	requiredTalentRows: [],
@@ -21,14 +22,20 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecMage, {
 	// All stats for which EP should be calculated.
 	epStats: [
 		Stat.StatIntellect,
+		Stat.StatSpirit,
 		Stat.StatSpellDamage,
+		Stat.StatArcaneDamage,
 		Stat.StatFrostDamage,
 		Stat.StatFireDamage,
-		Stat.StatArcaneDamage,
+		Stat.StatSpellPenetration,
 		Stat.StatSpellHitRating,
 		Stat.StatSpellCritRating,
 		Stat.StatSpellHasteRating,
-	], // Reference stat against which to calculate EP. I think all classes use either spell power or attack power.
+		Stat.StatMana,
+		Stat.StatMP5,
+	],
+	epPseudoStats: [PseudoStat.PseudoStatSchoolHitPercentArcane, PseudoStat.PseudoStatSchoolHitPercentFire, PseudoStat.PseudoStatSchoolHitPercentFrost],
+	// Reference stat against which to calculate EP. I think all classes use either spell power or attack power.
 	epReferenceStat: Stat.StatSpellDamage,
 	// Which stats to display in the Character Stats section, at the bottom of the left-hand sidebar.
 	displayStats: UnitStat.createDisplayStatArray(
@@ -45,18 +52,37 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecMage, {
 		],
 		[
 			PseudoStat.PseudoStatSpellHitPercent,
+			PseudoStat.PseudoStatSchoolHitPercentArcane,
+			PseudoStat.PseudoStatSchoolHitPercentFire,
+			PseudoStat.PseudoStatSchoolHitPercentFrost,
 			PseudoStat.PseudoStatSpellCritPercent,
 			PseudoStat.PseudoStatSpellHastePercent,
-			PseudoStat.PseudoStatSchoolHitArcane,
 		],
 	),
 	gemStats: DEFAULT_CASTER_GEM_STATS,
+
+	consumableStats: [
+		Stat.StatIntellect,
+		Stat.StatSpirit,
+		Stat.StatMP5,
+		Stat.StatMana,
+		Stat.StatSpellDamage,
+		Stat.StatFrostDamage,
+		Stat.StatFireDamage,
+		Stat.StatArcaneDamage,
+		Stat.StatSpellCritRating,
+		Stat.StatSpellHitRating,
+		Stat.StatSpellHasteRating,
+	],
 
 	defaults: {
 		// Default equipped gear.
 		gear: Presets.P1_BIS_ARCANE.gear,
 		// Default EP weights for sorting gear in the gear picker.
 		epWeights: Presets.P1_EP_PRESET.epWeights,
+		statCaps: (() => {
+			return new Stats().withPseudoStat(PseudoStat.PseudoStatSchoolHitPercentArcane, 16);
+		})(),
 		// Default consumes settings.
 		consumables: Presets.DefaultConsumables,
 		// Default talents.
@@ -88,7 +114,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecMage, {
 	},
 
 	presets: {
-		epWeights: [],
+		epWeights: [Presets.P1_EP_PRESET],
 		// Preset rotations that the user can quickly select.
 		rotations: [Presets.ROTATION_PRESET_ARCANE],
 		// Preset talents that the user can quickly select.
@@ -136,5 +162,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecMage, {
 export class MageSimUI extends IndividualSimUI<Spec.SpecMage> {
 	constructor(parentElem: HTMLElement, player: Player<Spec.SpecMage>) {
 		super(parentElem, player, SPEC_CONFIG);
+
+		this.reforger = new ReforgeOptimizer(this);
 	}
 }

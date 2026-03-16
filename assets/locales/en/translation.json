@@ -164,11 +164,19 @@
 			"ranged_speed_multiplier": "Ranged Speed Multiplier",
 			"cast_speed_multiplier": "Cast Speed Multiplier",
 			"spell_hit": "Spell Hit",
+			"arcane_hit": "Spell Hit Arcane",
+			"fire_hit": "Spell Hit Fire",
+			"frost_hit": "Spell Hit Frost",
+			"holy_hit": "Spell Hit Holy",
+			"nature_hit": "Spell Hit Nature",
+			"shadow_hit": "Spell Hit Shadow",
 			"spell_crit": "Spell Crit",
 			"spell_haste": "Spell Haste",
 			"melee_hit": "Melee Hit",
 			"melee_crit": "Melee Crit",
 			"melee_haste": "Melee Haste",
+			"ranged_hit": "Ranged Hit",
+			"ranged_crit": "Ranged Crit",
 			"ranged_haste": "Ranged Haste",
 			"healing_power": "Healing Power",
 			"spell_damage": "Spell Damage",
@@ -225,6 +233,7 @@
 			"gear": "Gear",
 			"talents": "Talents",
 			"rotation": "Rotation",
+			"rotationType": "Rotation Type",
 			"encounter": "Encounter",
 			"settings": "Settings",
 			"description": "This preset affects the following settings:",
@@ -233,6 +242,7 @@
 			"consumables": "Consumables",
 			"other_settings": "Other Settings",
 			"buffs": "Buffs",
+			"debuffs": "Debuffs",
 			"reforge_settings": "Suggest Gem Settings"
 		}
 	},
@@ -474,9 +484,44 @@
 				"label": "Pet Uptime (%)",
 				"tooltip": "Percent of the fight duration for which your pet will be alive."
 			},
-			"glaive_toss_chance": {
-				"label": "Glaive Toss Success %",
-				"tooltip": "The chance that Glaive Toss hits secondary targets in percentages."
+			"pet_single_ability": {
+				"label": "Single Pet Ability",
+				"tooltip": "Pet will only use it's primary ability (Gore, Screech etc.)"
+			},
+			"pet_type": {
+				"label": "Pet Type",
+				"tooltip": "Pet type",
+				"no_pet": "No Pet",
+				"bat": "Bat",
+				"bear": "Bear",
+				"cat": "Cat",
+				"crab": "Crab",
+				"owl": "Owl",
+				"raptor": "Raptor",
+				"ravager": "Ravager",
+				"wind_serpent": "Wind Serpent"
+			},
+			"ammo": {
+				"label": "Ammo",
+				"tooltip": "Ammo type",
+				"no_ammo": "No Ammo",
+				"timeless_arrow": "Timeless Arrow",
+				"mysterious_arrow": "Mysterious Arrow",
+				"adamantite_stinger": "Adamantite Stinger",
+				"halaani_razorshaft": "Halaani Razorshaft",
+				"blackflight_arrow": "Blackflight Arrow",
+				"wardens_arrow": "Warden's Arrow"
+			},
+			"quiver": {
+				"label": "Quiver",
+				"tooltip": "Quiver type",
+				"no_quiver": "No Quiver",
+				"speed_15": "15%",
+				"speed_14": "14%",
+				"speed_13": "13%",
+				"speed_12": "12%",
+				"speed_11": "11%",
+				"speed_10": "10%"
 			},
 			"detonate_seed": {
 				"label": "Detonate Seed on Cast",
@@ -564,13 +609,9 @@
 				"title": "Blessings",
 				"tooltip": "Specify Paladin Blessings for each role, in order of priority. Blessings in the 1st column will be used if there is at least 1 Paladin in the raid, 2nd column if at least 2, etc."
 			},
-			"shaman_disable_immolate": {
-				"label": "Disable Immolate during Unleash WF",
-				"tooltip": "When talented into Primal Elementalist and with Immolate autocast on, this will disallow casting Immolate when the Unleash Wind buff is active on the player."
-			},
-			"shaman_disable_immolate_duration": {
-				"label": "Extend disable by",
-				"tooltip": "Time in seconds for which Immolate won't be cast after the end of the Unleash Wind buff on the player. Set 0 for disabling casting Immolate only while the buff is up."
+			"shaman_shield_procrate": {
+				"label": "Shield Proc Rate",
+				"tooltip": "Number of proc per minute of the active effect of your Shaman Shield."
 			}
 		},
 		"consumables": {
@@ -663,23 +704,23 @@
 			},
 			"execute_duration_20": {
 				"label": "Execute Duration 20 (%)",
-				"tooltip": "Percentage of the total encounter duration, for which the targets will be considered to be in execute range (< 20% HP) for the purpose of effects like Warrior Execute or Mage Molten Fury."
+				"tooltip": "Percentage of the total encounter duration, for which the targets will be considered to be in execute range (< 20% HP) for the purpose of effects like Warrior Execute."
 			},
 			"execute_duration_25": {
 				"label": "Execute Duration 25 (%)",
-				"tooltip": "Percentage of the total encounter duration, for which the targets will be considered to be in execute range (< 25% HP) for the purpose of effects like Warlock's Drain Soul."
+				"tooltip": "Percentage of the total encounter duration, for which the targets will be considered to be in execute range (< 25% HP)."
 			},
 			"execute_duration_35": {
 				"label": "Execute Duration 35 (%)",
-				"tooltip": "Percentage of the total encounter duration, for which the targets will be considered to be in execute range (< 35% HP) for the purpose of effects like Death Knight Soul Reaper."
+				"tooltip": "Percentage of the total encounter duration, for which the targets will be considered to be in execute range (< 35% HP)."
 			},
 			"execute_duration_45": {
 				"label": "Execute Duration 45 (%)",
-				"tooltip": "Percentage of the total encounter duration, for which the targets will be considered to be in execute range (< 45% HP) for the purpose of effects like Death Knight Soul Reaper with T15 DPS 4pc."
+				"tooltip": "Percentage of the total encounter duration, for which the targets will be considered to be in execute range (< 45% HP)."
 			},
 			"duration_below_high_hp": {
 				"label": "Duration spent below high-HP regime (%)",
-				"tooltip": "Percentage of the total encounter duration, for which the targets are considered out of range for effects like Hunter Careful Aim (<90% HP) or Druid Predatory Strikes (<80% HP)."
+				"tooltip": "Percentage of the total encounter duration, for which the targets are considered out of range for effects like <90% HP or <80% HP."
 			},
 			"encounter_preset": {
 				"label": "Encounter",
@@ -1107,9 +1148,9 @@
 					"label": "HotW DPS Rotation",
 					"tooltip": "Executes optimized HotW DPS rotation using hardcoded algorithm."
 				},
-				"warlock_next_exhale_target": {
-					"label": "Target Next Exhale Target",
-					"tooltip": "Targets the next valid exhale target. If the current target is not the inhale target or no inhale has been cast, the target will not change."
+				"warlock_cast_assigned_curse": {
+					"label": "Cast Assigned Curse",
+					"tooltip": "Casts the Curse that warlock is assigned"
 				}
 			},
 			"values": {
@@ -1503,10 +1544,6 @@
 					"label": "Totem Remaining Time",
 					"tooltip": "Returns the amount of time remaining until the totem will expire."
 				},
-				"shaman_fire_elemental_duration": {
-					"label": "Fire Elemental Total Duration",
-					"tooltip": "Returns the total duration of Fire Elemental Totem"
-				},
 				"cat_excess_energy": {
 					"label": "Excess Energy",
 					"tooltip": "Returns the amount of excess energy available, after subtracting energy that will be needed to maintain DoTs."
@@ -1515,13 +1552,13 @@
 					"label": "New Savage Roar Duration",
 					"tooltip": "Returns duration of savage roar based on current combo points"
 				},
-				"warlock_hand_of_guldan_in_flight": {
-					"label": "Hand of Guldan in Flight",
-					"tooltip": "Returns <b>True</b> if the impact of Hand of Guldan currenty is in flight."
+				"warlock_assigned_curse_is_active": {
+					"label": "Assigned Curse Is Active",
+					"tooltip": "Returns true is assigned curse is active on target"
 				},
-				"affliction_current_snapshot": {
-					"label": "Existing Raw Snapshot %",
-					"tooltip": "How much stronger your existing snapshot is relative to baseline. Ignores Haste and Crit. Not recommended to use unless you know what you're doing."
+				"warlock_is_assigned_curse": {
+					"label": "Is Assigned Curse",
+					"tooltip": "True if the warlock is assigned the specified curse"
 				},
 				"protection_paladin_damage_taken_last_global": {
 					"label": "Damage Taken Last Global",
@@ -1550,8 +1587,8 @@
 					"base_spell_tooltip": "The spell (ie. Bloodlust) you are casting that can have multiple other spells within it's cooldown",
 					"target_spell": "Target Spell",
 					"target_spell_tooltip": "The spell (ie. Death Wish) you want to fit within the cooldown of the Base Spell.",
-					"align_cd_end":"Align target spell to encounter end",
-					"align_cd_end_tooltip":"When checked will try to align the CD usage to the end of the encounter. This is useful for cooldowns/specs that benefit for example from execute."
+					"align_cd_end": "Align target spell to encounter end",
+					"align_cd_end_tooltip": "When checked will try to align the CD usage to the end of the encounter. This is useful for cooldowns/specs that benefit for example from execute."
 				},
 				"offset": {
 					"label": "Offset",
@@ -1582,6 +1619,12 @@
 				"air": "Air",
 				"fire": "Fire",
 				"water": "Water"
+			},
+			"curse_types": {
+				"agony": "Curse of Agony",
+				"doom": "Curse of Doom",
+				"elements": "Curse of Elements",
+				"recklessness": "Curse of Recklessness"
 			},
 			"submenus": {
 				"logic": "Logic",
@@ -1799,14 +1842,7 @@
 					}
 				}
 			},
-			"shaman": {
-				"elemental": {
-					"thunderstorm_in_range": {
-						"label": "Thunderstorm In Range",
-						"tooltip": "When set to true, thunderstorm casts will cause damage."
-					}
-				}
-			},
+			"shaman": {},
 			"warlock": {
 				"affliction": {
 					"exhale_window": {
@@ -1816,47 +1852,38 @@
 				}
 			},
 			"hunter": {
-				"beast_mastery": {
-					"sting": {
-						"label": "Sting",
-						"tooltip": "Maintains the selected Sting on the primary target",
-						"values": {
-							"none": "None",
-							"serpent_sting": "Serpent Sting"
-						}
-					},
-					"trap_weave": {
-						"label": "Trap Weave",
-						"tooltip": "Uses Explosive Trap at appropriate times. Note that selecting this will disable Black Arrow because they share a CD"
-					},
-					"multi_dot_serpent_sting": {
-						"label": "Multi-Dot Serpent Sting",
-						"tooltip": "Casts Serpent Sting on multiple targets"
+				"sting": {
+					"label": "Sting",
+					"tooltip": "Maintains the selected Sting on the primary target",
+					"values": {
+						"none": "None",
+						"serpent_sting": "Serpent Sting",
+						"scorpid_sting": "Scorpid Sting"
 					}
 				},
-				"marksmanship": {
-					"sting": {
-						"label": "Sting",
-						"tooltip": "Maintains the selected Sting on the primary target",
-						"values": {
-							"none": "None",
-							"serpent_sting": "Serpent Sting"
-						}
-					},
-					"trap_weave": {
-						"label": "Trap Weave",
-						"tooltip": "Uses Explosive Trap at appropriate times. Note that selecting this will disable Black Arrow because they share a CD"
-					},
-					"multi_dot_serpent_sting": {
-						"label": "Multi-Dot Serpent Sting",
-						"tooltip": "Casts Serpent Sting on multiple targets"
-					}
+				"melee_weave": {
+					"label": "Melee Weave",
+					"tooltip": "Moves in to melee weave at appropriate times."
 				},
-				"survival": {
-					"multi_dot_serpent_sting": {
-						"label": "Multi-Dot Serpent Sting",
-						"tooltip": "Casts Serpent Sting on multiple targets"
-					}
+				"weave_only_raptor": {
+					"label": "Only melee weave when Raptor Strike is ready",
+					"tooltip": "Enable to only weave when Raptor Strike is ready."
+				},
+				"use_multi": {
+					"label": "Use Multi-Shot",
+					"tooltip": "Enable to include Multi-Shot as a filler."
+				},
+				"use_arcane": {
+					"label": "Use Arcane Shot",
+					"tooltip": "Enable to include Arcane Shot as a filler."
+				},
+				"viper_start_mana_percent": {
+					"label": "Aspect of the Viper swap threshold start",
+					"tooltip": "The percentage of mana to swap to Aspect of the Viper."
+				},
+				"viper_stop_mana_percent": {
+					"label": "Aspect of the Viper swap threshold end",
+					"tooltip": "The percentage of mana to swap back to Aspect of the Hawk."
 				}
 			}
 		}
@@ -2159,8 +2186,7 @@
 			"meta_gem_disabled": "Meta gem disabled ({{gemName}}): {{description}}",
 			"profession_requirement": "{{itemName}} requires {{professionName}}, but it is not selected.",
 			"too_many_jc_gems": "Only 2 Jewelcrafting Gems are allowed, but {{count}} are equipped.",
-			"unspent_talent_points": "You have {{count}} unspent talent point(s).",
-			"shaman_fele_autocast": "Your Fire Elemental spell autocast setup is not optimal with the use of the Primal Elementalist talent (everything ON but Empower). If you know what you're doing, please ignore this."
+			"unspent_talent_points": "You have {{count}} unspent talent point(s)."
 		},
 		"buttons": {
 			"simulate": "Simulate",

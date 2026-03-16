@@ -55,7 +55,7 @@ var RaceOffsets = map[proto.Race]stats.Stats{
 		stats.Strength:  -1,
 		stats.Intellect: -2,
 		stats.Spirit:    5,
-		stats.Stamina:   0,
+		stats.Stamina:   1,
 	},
 	proto.Race_RaceTauren: {
 		stats.Agility:   -4,
@@ -155,7 +155,7 @@ var ClassBaseStats = map[proto.Class]stats.Stats{
 		stats.Agility:   39,
 		stats.Strength:  33,
 		stats.Intellect: 151,
-		stats.Spirit:    159,
+		stats.Spirit:    145,
 		stats.Stamina:   51,
 	},
 	proto.Class_ClassWarlock: {

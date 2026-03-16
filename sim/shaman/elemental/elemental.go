@@ -10,7 +10,7 @@ func RegisterElementalShaman() {
 	core.RegisterAgentFactory(
 		proto.Player_ElementalShaman{},
 		proto.Spec_SpecElementalShaman,
-		func(character *core.Character, options *proto.Player) core.Agent {
+		func(character *core.Character, options *proto.Player, _ *proto.Raid) core.Agent {
 			return NewElementalShaman(character, options)
 		},
 		func(player *proto.Player, spec interface{}) {
@@ -27,16 +27,15 @@ func NewElementalShaman(character *core.Character, options *proto.Player) *Eleme
 	eleOptions := options.GetElementalShaman().Options
 
 	selfBuffs := shaman.SelfBuffs{
-		Shield:      eleOptions.ClassOptions.Shield,
-		ImbueMH:     proto.ShamanImbue_FlametongueWeapon,
-		ImbueOH:     proto.ShamanImbue_NoImbue,
-		ImbueMHSwap: proto.ShamanImbue_FlametongueWeapon,
-		ImbueOHSwap: proto.ShamanImbue_NoImbue,
+		ShieldProcrate: eleOptions.ClassOptions.ShieldProcrate,
+		ImbueMH:        eleOptions.ClassOptions.ImbueMh,
+		ImbueOH:        proto.ShamanImbue_NoImbue,
+		ImbueMHSwap:    eleOptions.ClassOptions.ImbueMhSwap,
+		ImbueOHSwap:    proto.ShamanImbue_NoImbue,
 	}
 
-	inRange := eleOptions.ThunderstormRange == proto.ElementalShaman_Options_TSInRange
 	ele := &ElementalShaman{
-		Shaman: shaman.NewShaman(character, options.TalentsString, selfBuffs, inRange, eleOptions.ClassOptions.FeleAutocast),
+		Shaman: shaman.NewShaman(character, options.TalentsString, selfBuffs),
 	}
 
 	//Some spells use weapon damage (Unleash Wind, ...)
@@ -53,8 +52,6 @@ func (eleShaman *ElementalShaman) Initialize() {
 
 	// eleShaman.RegisterFlametongueImbue(eleShaman.GetImbueProcMask(proto.ShamanImbue_FlametongueWeapon))
 	// eleShaman.RegisterWindfuryImbue(eleShaman.GetImbueProcMask(proto.ShamanImbue_WindfuryWeapon))
-
-	// eleShaman.registerThunderstormSpell()
 }
 
 func (ele *ElementalShaman) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
@@ -62,7 +59,6 @@ func (ele *ElementalShaman) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
 }
 
 func (ele *ElementalShaman) ApplyTalents() {
-	// ele.ApplyElementalTalents()
 	ele.Shaman.ApplyTalents()
 }
 

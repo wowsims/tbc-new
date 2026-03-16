@@ -767,6 +767,10 @@ func (result *SpellResult) applyEnemyAttackTableParry(spell *Spell, attackTable 
 func (result *SpellResult) applyEnemyAttackTableCrit(spell *Spell, _ *AttackTable, roll float64, chance *float64, countHits bool) bool {
 	critPercent := spell.Unit.GetStat(stats.PhysicalCritPercent) + spell.BonusCritPercent
 
+	if spell.ProcMask.Matches(ProcMaskRanged) {
+		critPercent += spell.Unit.GetStat(stats.RangedCritPercent)
+	}
+
 	critChance := critPercent / 100
 	critChance -= result.Target.GetCritImmunityPercent()
 	*chance += max(0, critChance)

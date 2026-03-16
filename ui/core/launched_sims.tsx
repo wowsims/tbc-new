@@ -53,8 +53,7 @@ export const simLaunchStatuses: Record<Spec, SimStatus> = {
 	// Hunter
 	[Spec.SpecHunter]: {
 		phase: Phase.Phase1,
-		status: LaunchStatus.Unlaunched,
-		oldSimLink: 'https://wowsims.github.io/tbc/hunter/',
+		status: LaunchStatus.Alpha,
 	},
 	// Mage
 	[Spec.SpecMage]: {
@@ -100,8 +99,7 @@ export const simLaunchStatuses: Record<Spec, SimStatus> = {
 	// Shaman
 	[Spec.SpecElementalShaman]: {
 		phase: Phase.Phase1,
-		status: LaunchStatus.Unlaunched,
-		oldSimLink: 'https://wowsims.github.io/tbc/elemental_shaman/',
+		status: LaunchStatus.Alpha,
 	},
 	[Spec.SpecEnhancementShaman]: {
 		phase: Phase.Phase1,
@@ -115,8 +113,7 @@ export const simLaunchStatuses: Record<Spec, SimStatus> = {
 	// Warlock
 	[Spec.SpecWarlock]: {
 		phase: Phase.Phase1,
-		status: LaunchStatus.Unlaunched,
-		oldSimLink: 'https://wowsims.github.io/tbc/warlock/',
+		status: LaunchStatus.Alpha,
 	},
 	// Warrior
 	[Spec.SpecDpsWarrior]: {

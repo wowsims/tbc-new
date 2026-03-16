@@ -44,19 +44,15 @@ export function relevantStatOptions<T, OptionsType extends ItemStatOptions<T> | 
 	options: StatOptions<T, OptionsType>,
 	simUI: IndividualSimUI<any>,
 ): StatOptions<T, OptionsType> {
-
-	const displayStatSet = new Set(
-		simUI.individualConfig.displayStats.map(us => us.getRootStat())
-	);
+	const displayStatSet = new Set(simUI.individualConfig.displayStats.map(us => (us.hasRootStat() ? us.getRootStat() : us.getPseudoStat())));
 
 	return options
-		  .filter(option =>
-			option.stats.length === 0 ||
-			option.stats.some(stat => displayStatSet.has(stat)) ||
-			option.stats.some(stat => simUI.individualConfig.epStats.includes(stat)) ||
-			option.stats.some(stat => simUI.individualConfig.includeBuffDebuffInputs.includes(stat))
+		.filter(
+			option =>
+				option.stats.length === 0 ||
+				option.stats.some(stat => displayStatSet.has(stat)) ||
+				option.stats.some(stat => simUI.individualConfig.epStats.includes(stat)) ||
+				option.stats.some(stat => simUI.individualConfig.includeBuffDebuffInputs.includes(stat)),
 		)
-		.filter(option =>
-			!option.stats.some(stat => simUI.individualConfig.excludeBuffDebuffInputs.includes(stat))
-		);
+		.filter(option => !option.stats.some(stat => simUI.individualConfig.excludeBuffDebuffInputs.includes(stat)));
 }

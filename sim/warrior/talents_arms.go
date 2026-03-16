@@ -31,6 +31,7 @@ func (war *Warrior) registerArmsTalents() {
 	// Tier 5
 	war.registerPoleaxeSpecialization()
 	war.registerDeathWish()
+	war.registerMaceSpecialization()
 	war.registerSwordSpecialization()
 
 	// Tier 6
@@ -173,7 +174,7 @@ func (war *Warrior) registerDeepWounds() {
 			TickLength:    time.Second * 3,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				baseDamage := war.AutoAttacks.MH().CalculateAverageWeaponDamage(dot.Spell.MeleeAttackPower())
+				baseDamage := war.AutoAttacks.MH().CalculateAverageWeaponDamage(dot.Spell.MeleeAttackPower(target))
 				dot.SnapshotPhysical(target, baseDamage/float64(dot.HastedTickCount())*0.2*float64(war.Talents.DeepWounds))
 			},
 
@@ -183,6 +184,7 @@ func (war *Warrior) registerDeepWounds() {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+			spell.CalcAndDealOutcome(sim, target, spell.OutcomeAlwaysHitNoHitCounter)
 			spell.Dot(target).Deactivate(sim)
 			spell.Dot(target).Apply(sim)
 		},
@@ -216,12 +218,12 @@ func (war *Warrior) registerTwoHandedWeaponSpecialization() {
 		FloatValue: 0.02 * float64(war.Talents.TwoHandedWeaponSpecialization),
 	})
 
-	if war.GetHandType() == proto.HandType_HandTypeTwoHand {
+	if war.GetMainHandType() == proto.HandType_HandTypeTwoHand {
 		weaponMod.Activate()
 	}
 
 	war.RegisterItemSwapCallback(core.AllMeleeWeaponSlots(), func(sim *core.Simulation, slot proto.ItemSlot) {
-		if war.GetHandType() == proto.HandType_HandTypeTwoHand {
+		if war.GetMainHandType() == proto.HandType_HandTypeTwoHand {
 			weaponMod.Activate()
 		} else {
 			weaponMod.Deactivate()
@@ -350,6 +352,47 @@ func (war *Warrior) registerDeathWish() {
 	})
 }
 
+func (war *Warrior) registerMaceSpecialization() {
+	if war.Talents.MaceSpecialization == 0 {
+		return
+	}
+
+	actionID := core.ActionID{SpellID: 5530}
+	rageMetrics := war.NewRageMetrics(actionID)
+
+	spell := war.RegisterSpell(core.SpellConfig{
+		ActionID: core.ActionID{SpellID: 5530},
+
+		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
+			war.AddRage(sim, 7, rageMetrics)
+		},
+	})
+
+	newMaceSpecializationDPM := func() *core.DynamicProcManager {
+		return war.NewStaticLegacyPPMManager(
+			0.3*float64(war.Talents.MaceSpecialization), // 5/5 has 1.5 PPM - No data for any other ranks, so this is an estimate
+			war.GetProcMaskForTypes(proto.WeaponType_WeaponTypeMace),
+		)
+	}
+
+	dpm := newMaceSpecializationDPM()
+
+	war.MakeProcTriggerAura(core.ProcTrigger{
+		Name:               "Mace Specialization",
+		DPM:                dpm,
+		TriggerImmediately: true,
+		Outcome:            core.OutcomeLanded,
+		Callback:           core.CallbackOnSpellHitDealt,
+		Handler: func(sim *core.Simulation, _ *core.Spell, result *core.SpellResult) {
+			spell.Cast(sim, result.Target)
+		},
+	})
+
+	war.RegisterItemSwapCallback(core.AllMeleeWeaponSlots(), func(sim *core.Simulation, slot proto.ItemSlot) {
+		dpm = newMaceSpecializationDPM()
+	})
+}
+
 func (war *Warrior) registerSwordSpecialization() {
 	if war.Talents.SwordSpecialization == 0 {
 		return
@@ -446,7 +489,6 @@ func (war *Warrior) registerBloodFrenzy() {
 	war.MakeProcTriggerAura(core.ProcTrigger{
 		Name:           "Blood Frenzy",
 		ClassSpellMask: SpellMaskRend | SpellMaskDeepWounds,
-		Outcome:        core.OutcomeLanded,
 		Callback:       core.CallbackOnSpellHitDealt,
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			aura := bfAuras.Get(result.Target)
@@ -490,7 +532,7 @@ func (war *Warrior) registerMortalStrike() {
 		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := 210 + spell.Unit.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower())
+			baseDamage := 210 + spell.Unit.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower(target))
 			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeWeaponSpecialHitAndCrit)
 
 			if !result.Landed() {

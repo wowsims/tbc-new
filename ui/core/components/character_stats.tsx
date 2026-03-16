@@ -7,12 +7,11 @@ import * as Mechanics from '../constants/mechanics.js';
 import { IndividualSimUI } from '../individual_sim_ui';
 import { Player } from '../player.js';
 import { ItemSlot, PseudoStat, Race, Spec, Stat, TristateEffect, WeaponType } from '../proto/common.js';
-import { ActionId } from '../proto_utils/action_id';
-import { getStatName } from '../proto_utils/names.js';
 import { Stats, UnitStat } from '../proto_utils/stats.js';
 import { EventID, TypedEvent } from '../typed_event.js';
 import { Component } from './component.js';
 import { NumberPicker } from './pickers/number_picker.js';
+import { translatePseudoStat, translateStat } from '../../i18n/localization';
 
 export type StatMods = { base?: Stats; gear?: Stats; talents?: Stats; buffs?: Stats; consumes?: Stats; debuffs?: Stats; final?: Stats; stats?: Array<Stat> };
 export type DisplayStat = {
@@ -62,6 +61,12 @@ const statGroups = new Map<string, Array<DisplayStat>>([
 			{ stat: UnitStat.fromStat(Stat.StatNatureDamage) },
 			{ stat: UnitStat.fromStat(Stat.StatShadowDamage) },
 			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatSpellHitPercent) },
+			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatSchoolHitPercentArcane) },
+			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatSchoolHitPercentFire) },
+			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatSchoolHitPercentFrost) },
+			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatSchoolHitPercentHoly) },
+			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatSchoolHitPercentNature) },
+			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatSchoolHitPercentShadow) },
 			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatSpellCritPercent) },
 			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatSpellHastePercent) },
 			{ stat: UnitStat.fromStat(Stat.StatSpellPenetration) },
@@ -239,7 +244,12 @@ export class CharacterStats extends Component {
 		}
 
 		this.stats.forEach((unitStat, idx) => {
-			const bonusStatValue = unitStat.hasRootStat() ? bonusStats.getStat(unitStat.getRootStat()) : 0;
+			const bonusStatValue = unitStat.hasRootStat()
+				? bonusStats.getStat(unitStat.getRootStat())
+				: unitStat.isPseudoStat()
+					? bonusStats.getPseudoStat(unitStat.getPseudoStat())
+					: 0;
+
 			let contextualClass: string;
 			if (bonusStatValue == 0) {
 				contextualClass = 'text-white';
@@ -475,18 +485,32 @@ export class CharacterStats extends Component {
 	public static getDebuffStats(player: Player<any>): Stats {
 		let debuffStats = new Stats();
 		const debuffs = player.sim.raid.getDebuffs();
+
 		if (debuffs.faerieFire == TristateEffect.TristateEffectImproved) {
 			debuffStats = debuffStats.addPseudoStat(PseudoStat.PseudoStatMeleeHitPercent, 3);
 			debuffStats = debuffStats.addPseudoStat(PseudoStat.PseudoStatRangedHitPercent, 3);
 		}
+
 		if (debuffs.improvedSealOfTheCrusader) {
 			debuffStats = debuffStats.addPseudoStat(PseudoStat.PseudoStatMeleeCritPercent, 3);
 			debuffStats = debuffStats.addPseudoStat(PseudoStat.PseudoStatRangedCritPercent, 3);
 			debuffStats = debuffStats.addPseudoStat(PseudoStat.PseudoStatSpellCritPercent, 3);
 		}
+
 		if (debuffs.exposeWeaknessUptime && debuffs.exposeWeaknessHunterAgility) {
-			debuffStats = debuffStats.addStat(Stat.StatAttackPower, debuffs.exposeWeaknessHunterAgility * 0.25);
+			let agi = debuffs.exposeWeaknessHunterAgility;
+
+			if (player.isSpec(Spec.SpecHunter)) {
+				const hunter = player as Player<Spec.SpecHunter>;
+				if (hunter.getTalents().exposeWeakness > 0) {
+					agi = hunter.getCurrentStats().finalStats?.stats[Stat.StatAgility] ?? agi;
+				}
+			}
+
+			debuffStats = debuffStats.addStat(Stat.StatAttackPower, agi * 0.25);
+			debuffStats = debuffStats.addStat(Stat.StatRangedAttackPower, agi * 0.25);
 		}
+
 		if (debuffs.huntersMark != TristateEffect.TristateEffectMissing) {
 			debuffStats = debuffStats.addStat(Stat.StatRangedAttackPower, 440);
 
@@ -500,8 +524,9 @@ export class CharacterStats extends Component {
 
 	private bonusStatsLink(displayStat: DisplayStat): HTMLElement {
 		const { stat, notEditable } = displayStat;
-		const rootStat = stat.getRootStat();
-		const statName = getStatName(rootStat);
+		const rootStat = stat.hasRootStat() ? stat.getRootStat() : null;
+		const pseudoStat = rootStat === null && stat.isPseudoStat() ? stat.getPseudoStat() : null;
+		const statName = rootStat !== null ? translateStat(rootStat) : pseudoStat ? translatePseudoStat(pseudoStat) : stat.getStat();
 		const linkRef = ref<HTMLButtonElement>();
 		const iconRef = ref<HTMLDivElement>();
 
@@ -523,9 +548,24 @@ export class CharacterStats extends Component {
 					label: `${i18n.t('sidebar.character_stats.bonus_prefix')} ${statName}`,
 					extraCssClasses: ['mb-0'],
 					changedEvent: (player: Player<any>) => player.bonusStatsChangeEmitter,
-					getValue: (player: Player<any>) => player.getBonusStats().getStat(rootStat),
+					getValue: (player: Player<any>) => {
+						const bonusStats = player.getBonusStats();
+						if (rootStat !== null) {
+							return bonusStats.getStat(rootStat);
+						}
+						if (pseudoStat !== null) {
+							return bonusStats.getPseudoStat(pseudoStat);
+						}
+						return bonusStats.getStat(stat.getStat());
+					},
 					setValue: (eventID: EventID, player: Player<any>, newValue: number) => {
-						const bonusStats = player.getBonusStats().withStat(rootStat, newValue);
+						let bonusStats = player.getBonusStats();
+						if (rootStat !== null) {
+							bonusStats = bonusStats.withStat(rootStat, newValue);
+						}
+						if (pseudoStat !== null) {
+							bonusStats = bonusStats.withPseudoStat(pseudoStat, newValue);
+						}
 						player.setBonusStats(eventID, bonusStats);
 						instance?.hide();
 					},

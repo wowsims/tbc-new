@@ -209,7 +209,9 @@ func (action *APLActionStrictSequence) GetNextAction(sim *Simulation) *APLAction
 			}
 
 			sim.AddPendingAction(pa)
-			action.unit.SetRotationTimer(sim, pa.NextActionAt+time.Duration(1))
+
+			// Add a 2 ns delay so that spell queued (with 1ns delay) in strict sequences do not get replaced
+			action.unit.SetRotationTimer(sim, pa.NextActionAt+time.Duration(2))
 		}
 
 		return nextAction

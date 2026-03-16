@@ -11,7 +11,7 @@ func RegisterFeralBearDruid() {
 	core.RegisterAgentFactory(
 		proto.Player_GuardianDruid{},
 		proto.Spec_SpecFeralBearDruid,
-		func(character *core.Character, options *proto.Player) core.Agent {
+		func(character *core.Character, options *proto.Player, _ *proto.Raid) core.Agent {
 			return NewFeralBearDruid(character, options)
 		},
 		func(player *proto.Player, spec interface{}) {

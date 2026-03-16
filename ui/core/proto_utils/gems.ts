@@ -22,6 +22,16 @@ socketToMatchingColors.set(GemColor.GemColorPrismatic, [
 	GemColor.GemColorPrismatic,
 ]);
 
+export const gemColorsToMatchingSocket = new Map<GemColor, Array<GemColor>>([
+	[GemColor.GemColorMeta, [GemColor.GemColorMeta]],
+	[GemColor.GemColorRed, [GemColor.GemColorRed]],
+	[GemColor.GemColorBlue, [GemColor.GemColorBlue]],
+	[GemColor.GemColorYellow, [GemColor.GemColorYellow]],
+	[GemColor.GemColorGreen, [GemColor.GemColorBlue, GemColor.GemColorYellow]],
+	[GemColor.GemColorOrange, [GemColor.GemColorRed, GemColor.GemColorYellow]],
+	[GemColor.GemColorPurple, [GemColor.GemColorRed, GemColor.GemColorBlue]],
+]);
+
 export function gemColorMatchesSocket(gemColor: GemColor, socketColor: GemColor) {
 	return gemColor == socketColor || (socketToMatchingColors.has(socketColor) && socketToMatchingColors.get(socketColor)!.includes(gemColor));
 }

@@ -10,7 +10,7 @@ func RegisterRestorationShaman() {
 	core.RegisterAgentFactory(
 		proto.Player_RestorationShaman{},
 		proto.Spec_SpecRestorationShaman,
-		func(character *core.Character, options *proto.Player) core.Agent {
+		func(character *core.Character, options *proto.Player, _ *proto.Raid) core.Agent {
 			return NewRestorationShaman(character, options)
 		},
 		func(player *proto.Player, spec interface{}) {
@@ -24,14 +24,10 @@ func RegisterRestorationShaman() {
 }
 
 func NewRestorationShaman(character *core.Character, options *proto.Player) *RestorationShaman {
-	restoOptions := options.GetRestorationShaman().Options
-
-	selfBuffs := shaman.SelfBuffs{
-		Shield: restoOptions.ClassOptions.Shield,
-	}
+	selfBuffs := shaman.SelfBuffs{}
 
 	resto := &RestorationShaman{
-		Shaman: shaman.NewShaman(character, options.TalentsString, selfBuffs, false, restoOptions.ClassOptions.FeleAutocast),
+		Shaman: shaman.NewShaman(character, options.TalentsString, selfBuffs),
 	}
 
 	// if resto.HasMHWeapon() {
@@ -76,9 +72,7 @@ func (resto *RestorationShaman) Initialize() {
 	// resto.RegisterEarthlivingImbue(procMask)
 
 	resto.Shaman.Initialize()
-	resto.Shaman.RegisterHealingSpells()
 }
 
 func (resto *RestorationShaman) ApplyTalents() {
-	resto.Shaman.ApplyTalents()
 }

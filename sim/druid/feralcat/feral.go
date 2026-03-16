@@ -12,7 +12,7 @@ func RegisterFeralCatDruid() {
 	core.RegisterAgentFactory(
 		proto.Player_FeralDruid{},
 		proto.Spec_SpecFeralCatDruid,
-		func(character *core.Character, options *proto.Player) core.Agent {
+		func(character *core.Character, options *proto.Player, _ *proto.Raid) core.Agent {
 			return NewFeralCatDruid(character, options)
 		},
 		func(player *proto.Player, spec interface{}) {

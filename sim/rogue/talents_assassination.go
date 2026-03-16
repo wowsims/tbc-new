@@ -108,7 +108,13 @@ func (rogue *Rogue) registerImprovedExposeArmor() {
 		return
 	}
 
-	rogue.ExposeArmorModifier = 1.5
+	// The bonus of Imp EA is handled inside of Expose Armor in debuffs.go
+
+	// Create a dummy aura for APL handling
+	core.MakePermanent(rogue.RegisterAura(core.Aura{
+		Label:    "Improved Expose Armor",
+		ActionID: core.ActionID{SpellID: 14168},
+	}))
 }
 
 func (rogue *Rogue) registerLethality() {
@@ -146,13 +152,13 @@ func (rogue *Rogue) registerColdBlood() {
 		Duration: core.NeverExpires,
 
 		OnSpellHitDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			if spell.Matches(RogueSpellCanCrit) {
+			if spell.Matches(RogueSpellActives) {
 				aura.Deactivate(sim)
 			}
 		},
 	}).AttachSpellMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
-		ClassMask:  RogueSpellCanCrit,
+		ClassMask:  RogueSpellActives,
 		FloatValue: 100.0,
 	})
 
@@ -186,13 +192,13 @@ func (rogue *Rogue) registerSealFate() {
 	sfMetrics := rogue.NewComboPointMetrics(core.ActionID{SpellID: 14195})
 
 	rogue.MakeProcTriggerAura(core.ProcTrigger{
-		Name:           "Seal Fate Trigger",
-		ActionID:       core.ActionID{SpellID: 14195},
-		ProcChance:     0.2 * float64(rogue.Talents.SealFate),
-		Callback:       core.CallbackOnSpellHitDealt,
-		Outcome:        core.OutcomeCrit,
-		ClassSpellMask: RogueSpellLethality,
-		ICD:            time.Millisecond * 500,
+		Name:       "Seal Fate Trigger",
+		ActionID:   core.ActionID{SpellID: 14195},
+		ProcChance: 0.2 * float64(rogue.Talents.SealFate),
+		Callback:   core.CallbackOnSpellHitDealt,
+		Outcome:    core.OutcomeCrit,
+		SpellFlags: SpellFlagBuilder,
+		ICD:        time.Millisecond * 500,
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			rogue.AddComboPoints(sim, 1, sfMetrics)
 		},
@@ -223,7 +229,7 @@ func (rogue *Rogue) registerFindWeakness() {
 	}).AttachSpellMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
 		ClassMask:  RogueSpellsAll,
-		FloatValue: 0.1 * float64(rogue.Talents.FindWeakness),
+		FloatValue: 0.02 * float64(rogue.Talents.FindWeakness),
 	})
 
 	rogue.MakeProcTriggerAura(core.ProcTrigger{
@@ -233,6 +239,17 @@ func (rogue *Rogue) registerFindWeakness() {
 		Callback:       core.CallbackOnSpellHitDealt,
 		Outcome:        core.OutcomeLanded,
 		ClassSpellMask: RogueSpellFinisher,
+		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+			fwAura.Activate(sim)
+		},
+	})
+
+	rogue.MakeProcTriggerAura(core.ProcTrigger{
+		Name:           "Find Weakness SnD Trigger",
+		ActionID:       core.ActionID{SpellID: 31242},
+		ProcChance:     1,
+		Callback:       core.CallbackOnCastComplete,
+		ClassSpellMask: RogueSpellSliceAndDice,
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			fwAura.Activate(sim)
 		},
@@ -303,7 +320,7 @@ func (rogue *Rogue) newMutilateHitSpell(isMH bool) *core.Spell {
 		ActionID:       actionID,
 		SpellSchool:    core.SpellSchoolPhysical,
 		ProcMask:       procMask,
-		Flags:          core.SpellFlagMeleeMetrics,
+		Flags:          core.SpellFlagMeleeMetrics | SpellFlagBuilder,
 		ClassSpellMask: RogueSpellMutilateHit,
 
 		DamageMultiplier:         1,
@@ -316,9 +333,9 @@ func (rogue *Rogue) newMutilateHitSpell(isMH bool) *core.Spell {
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			baseDamage := mutBaseDamage
 			if isMH {
-				baseDamage += spell.Unit.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower())
+				baseDamage += spell.Unit.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower(target))
 			} else {
-				baseDamage += spell.Unit.OHNormalizedWeaponDamage(sim, spell.MeleeAttackPower())
+				baseDamage += spell.Unit.OHNormalizedWeaponDamage(sim, spell.MeleeAttackPower(target))
 			}
 
 			oldMultiplier := spell.DamageMultiplier

@@ -30,7 +30,7 @@ func (mage *Mage) registerManaGems() {
 				NonEmpty: true,
 			},
 			CD: core.Cooldown{
-				Timer:    mage.NewTimer(),
+				Timer:    mage.GetConjuredCD(),
 				Duration: time.Minute * 2,
 			},
 		},

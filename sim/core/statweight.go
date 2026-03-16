@@ -51,7 +51,7 @@ func (s *UnitStats) ToProto() *proto.UnitStats {
 // than just stat weights.
 func (s *UnitStats) ExportWeights() *proto.UnitStats {
 	if s.Stats[stats.MeleeHitRating] == 0 {
-		s.Stats[stats.MeleeHitRating] = (s.PseudoStats[proto.PseudoStat_PseudoStatMeleeHitPercent] + +s.PseudoStats[proto.PseudoStat_PseudoStatRangedHitPercent]) / PhysicalHitRatingPerHitPercent
+		s.Stats[stats.MeleeHitRating] = (s.PseudoStats[proto.PseudoStat_PseudoStatMeleeHitPercent] + s.PseudoStats[proto.PseudoStat_PseudoStatRangedHitPercent]) / PhysicalHitRatingPerHitPercent
 	}
 
 	if s.Stats[stats.MeleeCritRating] == 0 {
@@ -188,6 +188,7 @@ func buildStatWeightRequests(swr *proto.StatWeightsRequest) *proto.StatWeightReq
 	for _, s := range swr.PseudoStatsToWeigh {
 		stat := stats.UnitStatFromPseudoStat(s)
 		statName := proto.PseudoStat_name[int32(s)]
+
 		// Scale down the stat increment depending on the type of PseudoStat
 		statMod := defaultStatMod
 
@@ -195,6 +196,8 @@ func buildStatWeightRequests(swr *proto.StatWeightsRequest) *proto.StatWeightReq
 			stat.EqualsPseudoStat(proto.PseudoStat_PseudoStatRangedHitPercent) {
 			statMod /= PhysicalHitRatingPerHitPercent
 		} else if stat.EqualsPseudoStat(proto.PseudoStat_PseudoStatSpellHitPercent) {
+			statMod /= SpellHitRatingPerHitPercent
+		} else if strings.Contains(statName, "SchoolHit") {
 			statMod /= SpellHitRatingPerHitPercent
 		} else if strings.Contains(statName, "Crit") {
 			statMod /= PhysicalCritRatingPerCritPercent // These are the same
@@ -216,7 +219,7 @@ func buildStatWeightRequests(swr *proto.StatWeightsRequest) *proto.StatWeightReq
 			strings.Contains(statName, "RangedHit") {
 			statModsLow[stats.MeleeHitRating] = 0
 			statModsHigh[stats.MeleeHitRating] = 0
-		} else if strings.Contains(statName, "Hit") {
+		} else if strings.Contains(statName, "SpellHit") {
 			statModsLow[stats.SpellHitRating] = 0
 			statModsHigh[stats.SpellHitRating] = 0
 		} else if strings.Contains(statName, "MeleeCrit") {
@@ -281,6 +284,14 @@ func computeStatWeights(swcr *proto.StatWeightsCalcRequest) *proto.StatWeightsRe
 			modPlayerLow = statResult.ResultLow.RaidMetrics.Parties[0].Players[0]
 		} else {
 			modPlayerLow = baselinePlayer
+		}
+
+		if stat.IsPseudoStat() {
+			statName := proto.PseudoStat_name[int32(stat.PseudoStatIdx())]
+			if strings.Contains(statName, "SchoolHit") {
+				statResult.StatData.ModLow *= SpellHitRatingPerHitPercent
+				statResult.StatData.ModHigh *= SpellHitRatingPerHitPercent
+			}
 		}
 
 		// Check for hard caps. Hard caps will have results identical to the baseline because RNG is fixed.

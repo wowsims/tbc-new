@@ -148,6 +148,12 @@ func NewCharacter(party *Party, partyIndex int, player *proto.Player) Character 
 			character.bonusMHDps = ps[proto.PseudoStat_PseudoStatMainHandDps]
 			character.bonusOHDps = ps[proto.PseudoStat_PseudoStatOffHandDps]
 			character.bonusRangedDps = ps[proto.PseudoStat_PseudoStatRangedDps]
+			character.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexArcane] = ps[proto.PseudoStat_PseudoStatSchoolHitPercentArcane]
+			character.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexFire] = ps[proto.PseudoStat_PseudoStatSchoolHitPercentFire]
+			character.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexFrost] = ps[proto.PseudoStat_PseudoStatSchoolHitPercentFrost]
+			character.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexHoly] = ps[proto.PseudoStat_PseudoStatSchoolHitPercentHoly]
+			character.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexNature] = ps[proto.PseudoStat_PseudoStatSchoolHitPercentNature]
+			character.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexShadow] = ps[proto.PseudoStat_PseudoStatSchoolHitPercentShadow]
 			character.PseudoStats.BonusMHDps += character.bonusMHDps
 			character.PseudoStats.BonusOHDps += character.bonusOHDps
 			character.PseudoStats.BonusRangedDps += character.bonusRangedDps
@@ -353,30 +359,14 @@ func (character *Character) GetBaseStats() stats.Stats {
 	return character.baseStats
 }
 
-// Returns the crit multiplier for a spell.
-// https://web.archive.org/web/20081014064638/http://elitistjerks.com/f31/t12595-relentless_earthstorm_diamond_-_melee_only/p4/
-// https://github.com/TheGroxEmpire/TBC_DPS_Warrior_Sim/issues/30
-// TODO "primaryModifiers" could be modelled as a PseudoStat, since they're unit-specific. "secondaryModifiers" apply to a specific set of spells.
-func (character *Character) calculateCritMultiplier(normalCritDamage float64, primaryModifiers float64, secondaryModifiers float64) float64 {
-	return 1.0 + (normalCritDamage*primaryModifiers-1.0)*(1.0+secondaryModifiers)
-}
-func (character *Character) SpellCritMultiplier(primaryModifiers float64, secondaryModifiers float64) float64 {
-	return character.calculateCritMultiplier(1.5, primaryModifiers, secondaryModifiers)
-}
-func (character *Character) MeleeCritMultiplier(primaryModifiers float64, secondaryModifiers float64) float64 {
-	return character.calculateCritMultiplier(2.0, primaryModifiers, secondaryModifiers)
-}
-func (character *Character) HealingCritMultiplier(primaryModifiers float64, secondaryModifiers float64) float64 {
-	return character.calculateCritMultiplier(2.0, primaryModifiers, secondaryModifiers)
-}
 func (character *Character) DefaultSpellCritMultiplier() float64 {
-	return character.SpellCritMultiplier(1, 0)
+	return 1.5
 }
 func (character *Character) DefaultMeleeCritMultiplier() float64 {
-	return character.MeleeCritMultiplier(1, 0)
+	return 2.0
 }
 func (character *Character) DefaultHealingCritMultiplier() float64 {
-	return character.HealingCritMultiplier(1, 0)
+	return 2.0
 }
 
 func (character *Character) AddRaidBuffs(_ *proto.RaidBuffs) {
@@ -616,12 +606,11 @@ func (character *Character) getCurrentProcMaskFor(pred func(item *Item) bool) Pr
 		return mask
 	}
 
+	if pred(character.Ranged()) {
+		mask |= ProcMaskRanged
+	}
 	if pred(character.MainHand()) {
-		if character.MainHand().RangedWeaponType > 0 {
-			mask |= ProcMaskRanged
-		} else {
-			mask |= ProcMaskMeleeMH
-		}
+		mask |= ProcMaskMeleeMH
 	}
 	if pred(character.OffHand()) {
 		mask |= ProcMaskMeleeOH
@@ -630,14 +619,11 @@ func (character *Character) getCurrentProcMaskFor(pred func(item *Item) bool) Pr
 }
 
 func (character *Character) GetProcMaskForWeaponSlot(slot proto.ItemSlot) ProcMask {
-	item := character.GetItemBySlot(slot)
 	switch slot {
+	case proto.ItemSlot_ItemSlotRanged:
+		return ProcMaskRanged
 	case proto.ItemSlot_ItemSlotMainHand:
-		if item.RangedWeaponType > 0 {
-			return ProcMaskRanged
-		} else {
-			return ProcMaskMeleeMH
-		}
+		return ProcMaskMeleeMH
 	case proto.ItemSlot_ItemSlotOffHand:
 		return ProcMaskMeleeOH
 	}
@@ -681,12 +667,18 @@ func (character *Character) GetPseudoStatsProto() []float64 {
 		// that stat dependencies will work correctly, but are stored as PseudoStats in proto
 		// messages. This is done so that the stats arrays embedded in database files and saved
 		// Encounter settings can omit these extraneous fields.
-		proto.PseudoStat_PseudoStatMeleeHitPercent:   character.GetStat(stats.PhysicalHitPercent),
-		proto.PseudoStat_PseudoStatSpellHitPercent:   character.GetStat(stats.SpellHitPercent),
-		proto.PseudoStat_PseudoStatRangedHitPercent:  character.GetStat(stats.RangedHitPercent),
-		proto.PseudoStat_PseudoStatMeleeCritPercent:  character.GetStat(stats.PhysicalCritPercent),
-		proto.PseudoStat_PseudoStatSpellCritPercent:  character.GetStat(stats.SpellCritPercent),
-		proto.PseudoStat_PseudoStatRangedCritPercent: character.GetStat(stats.RangedCritPercent),
+		proto.PseudoStat_PseudoStatMeleeHitPercent:        character.GetStat(stats.PhysicalHitPercent),
+		proto.PseudoStat_PseudoStatSpellHitPercent:        character.GetStat(stats.SpellHitPercent),
+		proto.PseudoStat_PseudoStatSchoolHitPercentArcane: character.GetStat(stats.SpellHitPercent) + character.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexArcane],
+		proto.PseudoStat_PseudoStatSchoolHitPercentFire:   character.GetStat(stats.SpellHitPercent) + character.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexFire],
+		proto.PseudoStat_PseudoStatSchoolHitPercentFrost:  character.GetStat(stats.SpellHitPercent) + character.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexFrost],
+		proto.PseudoStat_PseudoStatSchoolHitPercentHoly:   character.GetStat(stats.SpellHitPercent) + character.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexHoly],
+		proto.PseudoStat_PseudoStatSchoolHitPercentNature: character.GetStat(stats.SpellHitPercent) + character.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexNature],
+		proto.PseudoStat_PseudoStatSchoolHitPercentShadow: character.GetStat(stats.SpellHitPercent) + character.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexShadow],
+		proto.PseudoStat_PseudoStatRangedHitPercent:       character.GetStat(stats.RangedHitPercent) + character.GetStat(stats.PhysicalHitPercent),
+		proto.PseudoStat_PseudoStatMeleeCritPercent:       character.GetStat(stats.PhysicalCritPercent),
+		proto.PseudoStat_PseudoStatSpellCritPercent:       character.GetStat(stats.SpellCritPercent),
+		proto.PseudoStat_PseudoStatRangedCritPercent:      character.GetStat(stats.RangedCritPercent) + character.GetStat(stats.PhysicalCritPercent),
 	}
 }
 

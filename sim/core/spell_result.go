@@ -155,12 +155,12 @@ func (spell *Spell) ThreatFromDamage(sim *Simulation, outcome HitOutcome, damage
 	}
 }
 
-func (spell *Spell) MeleeAttackPower() float64 {
-	return spell.Unit.GetAttackPowerValue(spell)
+func (spell *Spell) MeleeAttackPower(target *Unit) float64 {
+	return spell.Unit.GetAttackPowerValue(spell, target)
 }
 
-func (spell *Spell) RangedAttackPower() float64 {
-	return spell.Unit.stats[stats.RangedAttackPower] + spell.Unit.CurrentTarget.PseudoStats.BonusRangedAttackPower
+func (spell *Spell) RangedAttackPower(target *Unit) float64 {
+	return spell.Unit.stats[stats.RangedAttackPower] + target.PseudoStats.BonusRangedAttackPower + spell.Unit.AttackTables[target.UnitIndex].MobTypeBonusStats[target.MobType][stats.RangedAttackPower]
 }
 
 func (spell *Spell) DodgeParrySuppression() float64 {
@@ -170,6 +170,11 @@ func (spell *Spell) DodgeParrySuppression() float64 {
 
 func (spell *Spell) PhysicalHitChance(attackTable *AttackTable) float64 {
 	hitPercent := spell.Unit.stats[stats.PhysicalHitPercent] + spell.BonusHitPercent - attackTable.Defender.PseudoStats.ReducedPhysicalHitTakenChance
+
+	if spell.ProcMask.Matches(ProcMaskRanged) {
+		hitPercent += spell.Unit.stats[stats.RangedHitPercent]
+	}
+
 	return max(hitPercent/100-attackTable.HitSuppression, 0)
 }
 func (spell *Spell) PhysicalHitCheck(sim *Simulation, attackTable *AttackTable) bool {
@@ -177,6 +182,11 @@ func (spell *Spell) PhysicalHitCheck(sim *Simulation, attackTable *AttackTable) 
 }
 func (spell *Spell) PhysicalCritChance(attackTable *AttackTable) float64 {
 	critPercent := spell.Unit.stats[stats.PhysicalCritPercent] + spell.BonusCritPercent - attackTable.Defender.PseudoStats.ReducedCritTakenChance
+
+	if spell.ProcMask.Matches(ProcMaskRanged) {
+		critPercent += spell.Unit.stats[stats.RangedCritPercent]
+	}
+
 	return max(critPercent/100-attackTable.MeleeCritSuppression, 0)
 }
 func (spell *Spell) PhysicalCritCheck(sim *Simulation, attackTable *AttackTable) bool {
@@ -187,9 +197,9 @@ func (spell *Spell) BonusDamage(attackTable *AttackTable) float64 {
 	bonusDamage := 0.0
 
 	if spell.SpellSchool.Matches(SpellSchoolPhysical) {
-		bonusDamage = spell.Unit.stats[stats.PhysicalDamage] + attackTable.MobTypeBonusStats[attackTable.Defender.MobType][stats.AttackPower]
+		bonusDamage = spell.Unit.stats[stats.PhysicalDamage]
 	} else {
-		bonusDamage = spell.SpellDamage() + attackTable.MobTypeBonusStats[attackTable.Defender.MobType][stats.SpellDamage]
+		bonusDamage = spell.SpellDamage(attackTable.Defender) + attackTable.MobTypeBonusStats[attackTable.Defender.MobType][stats.SpellDamage]
 	}
 
 	return bonusDamage
@@ -216,12 +226,17 @@ func (spell *Spell) SpellSchoolBonusDamage() float64 {
 	return schoolBonusSpellDamage
 }
 
-func (spell *Spell) SpellDamage() float64 {
-	return spell.Unit.GetSpellDamageValue(spell)
+func (spell *Spell) SpellDamage(target *Unit) float64 {
+	return spell.Unit.GetSpellDamageValue(spell, target)
 }
 
 func (spell *Spell) SpellHitChance(target *Unit) float64 {
 	hitPercent := spell.Unit.stats[stats.SpellHitPercent] + spell.BonusHitPercent
+	// In TBC all talents that modify spell school specific hit have a container spell class spell mask
+	// so we only apply this hit to spells that have a class spell mask set
+	if spell.ClassSpellMask != 0 {
+		hitPercent += spell.Unit.PseudoStats.SchoolBonusHitChance[spell.SpellSchool.SchoolIndex()]
+	}
 	return hitPercent / 100
 }
 func (spell *Spell) SpellChanceToMiss(attackTable *AttackTable) float64 {
@@ -245,7 +260,7 @@ func (spell *Spell) MagicCritCheck(sim *Simulation, target *Unit) bool {
 }
 
 func (spell *Spell) HealingPower(target *Unit) float64 {
-	return spell.SpellDamage() + target.PseudoStats.BonusHealingTaken
+	return spell.SpellDamage(target) + target.PseudoStats.BonusHealingTaken
 }
 func (spell *Spell) HealingCritChance() float64 {
 	return (spell.Unit.GetStat(stats.SpellCritPercent) + spell.BonusCritPercent) / 100
@@ -290,7 +305,7 @@ func (spell *Spell) CalcOutcome(sim *Simulation, target *Unit, outcomeApplier Ou
 func (spell *Spell) calcDamageInternal(sim *Simulation, target *Unit, baseDamage float64, attackerMultiplier float64, isPeriodic bool, outcomeApplier OutcomeApplier) *SpellResult {
 	attackTable := spell.Unit.AttackTables[target.UnitIndex]
 	result := spell.NewResult(target)
-	result.Damage = baseDamage
+	result.Damage = baseDamage + spell.BonusBaseDamage
 
 	if sim.Log == nil {
 		result.Damage *= attackerMultiplier
@@ -339,7 +354,7 @@ func (spell *Spell) calcDamageInternal(sim *Simulation, target *Unit, baseDamage
 		spell.Unit.Log(
 			sim,
 			"%s %s [DEBUG] MAP: %0.01f, RAP: %0.01f, SP: %0.01f, BaseDamage:%0.01f, AfterAttackerMods:%0.01f, AfterResistances:%0.01f, AfterTargetMods:%0.01f, AfterOutcome:%0.01f, AfterPostOutcome:%0.01f",
-			target.LogLabel(), spell.ActionID, spell.Unit.GetStat(stats.AttackPower), spell.Unit.GetStat(stats.RangedAttackPower), spell.SpellDamage(), baseDamage, afterAttackMods, afterResistances, afterTargetMods, afterOutcome, afterPostOutcome)
+			target.LogLabel(), spell.ActionID, spell.Unit.GetStat(stats.AttackPower), spell.Unit.GetStat(stats.RangedAttackPower), spell.SpellDamage(target), baseDamage, afterAttackMods, afterResistances, afterTargetMods, afterOutcome, afterPostOutcome)
 	}
 
 	result.Threat = spell.ThreatFromDamage(sim, result.Outcome, result.Damage, attackTable)

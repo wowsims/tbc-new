@@ -1,5 +1,5 @@
 import { Player } from '../../player';
-import { Class, ConsumesSpec, ItemSlot, Profession, Spec, Stat } from '../../proto/common';
+import { Class, ConsumesSpec, ItemSlot, Profession, Spec, Stat, TristateEffect } from '../../proto/common';
 import { Consumable } from '../../proto/db';
 import { ActionId } from '../../proto_utils/action_id';
 import { EventID, TypedEvent } from '../../typed_event';
@@ -105,6 +105,16 @@ export const makeConjuredInput = makeConsumeInputFactory({ consumesFieldName: 'c
 //                               ENGINEERING
 ///////////////////////////////////////////////////////////////////////////
 
+export const EzThroDynamiteTwo = {
+	actionId: ActionId.fromItemId(18588),
+	value: 18588,
+};
+
+export const CrystalCharge = {
+	actionId: ActionId.fromItemId(11566),
+	value: 15239,
+};
+
 export const AdamantiteGrenade = {
 	actionId: ActionId.fromItemId(23737),
 	value: 30217,
@@ -126,6 +136,8 @@ export const GnomishFlameTurrent = {
 export const EXPLOSIVE_CONFIG = [
 	{ config: AdamantiteGrenade, stats: [] },
 	{ config: FelIronBomb, stats: [] },
+	{ config: CrystalCharge, stats: [] },
+	{ config: EzThroDynamiteTwo, stats: [] },
 	// { config: GnomishFlameTurrent, stats: [] }, Excluding this thing for now because it's weird and I don't like it
 ] as ConsumableStatOption<number>[];
 export const makeExplosivesInput = makeConsumeInputFactory({ consumesFieldName: 'explosiveId' });
@@ -266,7 +278,7 @@ export const IMBUE_CONFIG_OH = [
 
 export const makeMHImbueInput = makeConsumeInputFactory({
 	consumesFieldName: 'mhImbueId',
-	showWhen: (player: Player<any>) => !player.getParty() || player.getParty()!.getBuffs().windfuryTotem == 0,
+	showWhen: (player: Player<any>) => !player.getParty() || player.getParty()!.getBuffs().windfuryTotem == TristateEffect.TristateEffectMissing,
 	changedEvent: (player: Player<any>) => TypedEvent.onAny([player.getParty()!.changeEmitter]),
 });
 export const makeOHImbueInput = makeConsumeInputFactory({
@@ -300,6 +312,22 @@ export const DRUMS_CONFIG = [
 ] as ConsumableStatOption<number>[];
 
 export const makeDrumsInput = makeConsumeInputFactory({ consumesFieldName: 'drumsId' });
+
+///////////////////////////////////////////////////////////////////////////
+//                                   PET
+///////////////////////////////////////////////////////////////////////////
+
+export const PetScrollAgi = makeBooleanConsumeInput({
+	actionId: () => ActionId.fromItemId(27498),
+	fieldName: 'petScrollAgi',
+	showWhen: (player: Player<any>) => [Spec.SpecHunter, Spec.SpecWarlock, Spec.SpecShadowPriest].includes(player.getSpec()),
+});
+
+export const PetScrollStr = makeBooleanConsumeInput({
+	actionId: () => ActionId.fromItemId(27503),
+	fieldName: 'petScrollStr',
+	showWhen: (player: Player<any>) => [Spec.SpecHunter, Spec.SpecWarlock, Spec.SpecShadowPriest].includes(player.getSpec()),
+});
 
 ///////////////////////////////////////////////////////////////////////////
 //                                 SCROLLS
@@ -350,6 +378,7 @@ export const NightmareSeed = makeBooleanConsumeInput({
 export interface ConsumableInputOptions {
 	consumesFieldName: keyof ConsumesSpec;
 	setValue?: (eventID: EventID, player: Player<any>, newValue: number) => void;
+	showWhen?: (player: Player<any>) => boolean;
 }
 
 export function makeConsumableInput(
@@ -372,7 +401,7 @@ export function makeConsumableInput(
 		zeroValue: 0,
 		changedEvent: (player: Player<any>) => player.consumesChangeEmitter,
 		getValue: (player: Player<any>) => player.getConsumes()[options.consumesFieldName] as number,
-		showWhen: (_: Player<any>) => !!valueOptions.length,
+		showWhen: (player: Player<any>) => !!valueOptions.length && (!options.showWhen || options.showWhen(player)),
 		setValue: (eventID: EventID, player: Player<any>, newValue: number) => {
 			if (options.setValue) {
 				options.setValue(eventID, player, newValue);

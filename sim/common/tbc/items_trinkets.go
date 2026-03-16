@@ -191,16 +191,51 @@ func init() {
 		character.ItemSwap.RegisterProc(28034, procAura)
 	})
 
+	// Romulo's Poison Vial
+	core.NewItemEffect(28579, func(agent core.Agent) {
+		character := agent.GetCharacter()
+
+		spell := character.RegisterSpell(core.SpellConfig{
+			ActionID:    core.ActionID{SpellID: 34587},
+			SpellSchool: core.SpellSchoolNature,
+
+			ProcMask: core.ProcMaskEmpty,
+			Flags:    core.SpellFlagPassiveSpell | core.SpellFlagNoOnCastComplete,
+
+			DamageMultiplier: 1,
+			ThreatMultiplier: 1,
+
+			ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+				baseDamage := sim.Roll(222, 332)
+				spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMagicHit)
+			},
+		})
+
+		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
+			Name:               "Romulo's Poison Vial",
+			ActionID:           core.ActionID{ItemID: 28579},
+			DPM:                character.NewLegacyPPMManager(1, core.ProcMaskMeleeOrRanged),
+			RequireDamageDealt: true,
+			Outcome:            core.OutcomeLanded,
+			Callback:           core.CallbackOnSpellHitDealt,
+			Handler: func(sim *core.Simulation, _ *core.Spell, result *core.SpellResult) {
+				spell.Cast(sim, result.Target)
+			},
+		})
+
+		character.ItemSwap.RegisterProc(28579, procAura)
+	})
+
 	// The Lightning Capacitor
 	core.NewItemEffect(28785, func(agent core.Agent) {
 		character := agent.GetCharacter()
 
 		lightningBolt := character.RegisterSpell(core.SpellConfig{
-			ActionID:     core.ActionID{SpellID: 42372},
+			ActionID:     core.ActionID{SpellID: 37661},
 			SpellSchool:  core.SpellSchoolNature,
 			ProcMask:     core.ProcMaskEmpty,
 			Flags:        core.SpellFlagPassiveSpell | core.SpellFlagIgnoreAttackerModifiers,
-			MissileSpeed: 28, // this is a guess atm
+			MissileSpeed: 20,
 
 			DamageMultiplier: 1,
 			CritMultiplier:   character.DefaultSpellCritMultiplier(),
@@ -210,11 +245,16 @@ func init() {
 					baseDamage := sim.Roll(694, 806)
 					//https://www.wowhead.com/tbc/item=28785/the-lightning-capacitor#comments
 					//It can crit, may need some testing
-					spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMagicCrit)
+					spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
 				})
 
 			},
 		})
+
+		icd := core.Cooldown{
+			Timer:    character.NewTimer(),
+			Duration: time.Millisecond * 2500,
+		}
 
 		lightningCapacitorAura := character.RegisterAura(core.Aura{
 			Label:     "Electrical Charge",
@@ -226,6 +266,7 @@ func init() {
 					aura.SetStacks(sim, newStacks%3)
 					aura.Deactivate(sim)
 					lightningBolt.Proc(sim, character.CurrentTarget)
+					icd.Use(sim)
 				}
 			},
 		})
@@ -234,10 +275,13 @@ func init() {
 			Name:     "The Lightning Capacitor",
 			ActionID: core.ActionID{ItemID: 28785},
 			ProcMask: core.ProcMaskSpellOrSpellProc,
-			ICD:      time.Millisecond * 2500,
 			Outcome:  core.OutcomeCrit,
 			Callback: core.CallbackOnSpellHitDealt,
 			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+				if !icd.IsReady(sim) {
+					return
+				}
+
 				lightningCapacitorAura.Activate(sim)
 				lightningCapacitorAura.AddStack(sim)
 			},
@@ -348,7 +392,7 @@ func init() {
 			},
 		})
 
-		character.ItemSwap.RegisterProc(27683, procAura)
+		character.ItemSwap.RegisterProc(30621, procAura)
 	})
 
 	// Sextant of Unstable Currents
@@ -607,5 +651,99 @@ func init() {
 				return character.CurrentHealthPercent() < 0.4
 			},
 		})
+	})
+
+	// Pendant of the Violet Eye
+	core.NewItemEffect(28727, func(agent core.Agent) {
+		character := agent.GetCharacter()
+
+		stackingAura := core.MakeStackingAura(character, core.StackingStatAura{
+			Aura: core.Aura{
+				Label:     "Enlightenment",
+				ActionID:  core.ActionID{SpellID: 35095},
+				Duration:  core.NeverExpires,
+				MaxStacks: 20,
+			},
+			BonusPerStack: stats.Stats{stats.MP5: 21},
+		})
+
+		procAura := character.RegisterAura(core.Aura{
+			Label:    "Enlightenment Trigger",
+			ActionID: core.ActionID{SpellID: 29601},
+			Duration: time.Second * 20,
+
+			OnExpire: func(_ *core.Aura, sim *core.Simulation) {
+				stackingAura.Deactivate(sim)
+			},
+		}).AttachProcTrigger(core.ProcTrigger{
+			Callback: core.CallbackOnCastComplete,
+			ProcMask: core.ProcMaskSpellDamage | core.ProcMaskSpellHealing,
+
+			ExtraCondition: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) bool {
+				return spell.CurCast.Cost > 0
+			},
+
+			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+				stackingAura.Activate(sim)
+				stackingAura.AddStack(sim)
+			},
+		})
+
+		spell := character.RegisterSpell(core.SpellConfig{
+			ActionID:    core.ActionID{ItemID: 28727},
+			SpellSchool: core.SpellSchoolPhysical,
+			ProcMask:    core.ProcMaskEmpty,
+
+			Cast: core.CastConfig{
+				CD: core.Cooldown{
+					Timer:    character.NewTimer(),
+					Duration: time.Minute * 2,
+				},
+			},
+
+			ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
+				spell.RelatedSelfBuff.Activate(sim)
+			},
+
+			RelatedSelfBuff: procAura,
+		})
+
+		character.AddMajorCooldown(core.MajorCooldown{
+			Spell: spell,
+			Type:  core.CooldownTypeMana,
+		})
+
+		eligibleSlots := character.ItemSwap.EligibleSlotsForItem(28727)
+		character.AddStatProcBuff(35095, stackingAura, false, eligibleSlots)
+		character.ItemSwap.RegisterProc(28727, procAura)
+	})
+
+	// Memento of Tyrande
+	core.NewItemEffect(32496, func(agent core.Agent) {
+		character := agent.GetCharacter()
+
+		aura := character.NewTemporaryStatsAura(
+			"Wisdom",
+			core.ActionID{SpellID: 37656},
+			stats.Stats{stats.MP5: 76},
+			time.Second*15,
+		)
+
+		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
+			Name:            "Memento of Tyrande",
+			Callback:        core.CallbackOnCastComplete,
+			ProcMask:        core.ProcMaskSpellDamage | core.ProcMaskSpellHealing,
+			MetricsActionID: core.ActionID{SpellID: 37655},
+			ProcChance:      0.1,
+			ICD:             time.Second * 50,
+
+			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+				aura.Activate(sim)
+			},
+		})
+
+		eligibleSlots := character.ItemSwap.EligibleSlotsForItem(32496)
+		character.AddStatProcBuff(37656, aura, false, eligibleSlots)
+		character.ItemSwap.RegisterProc(32496, procAura)
 	})
 }

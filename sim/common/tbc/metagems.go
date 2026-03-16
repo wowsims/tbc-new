@@ -31,10 +31,6 @@ func init() {
 		})
 	})
 
-	// Swift Skyfire Diamond
-	// +24 Attack Power and Minor Run Speed Increase
-	// core.NewItemEffect(25894, func(agent core.Agent) {})
-
 	// Enigmatic Skyfire Diamond
 	// +12 Critical Strike Rating & 5% Snare and Root Resist
 	// core.NewItemEffect(25895, func(agent core.Agent) {})
@@ -96,13 +92,21 @@ func init() {
 	// +12 Spell Critical & 3% Increased Critical Damage
 	core.NewItemEffect(34220, core.ApplyMetaGemCriticalDamageEffect)
 
-	// Swift Starfire Diamond
-	// +12 Spell Damage and Minor Run Speed Increase
-	// core.NewItemEffect(28557, func(agent core.Agent) {})
+	movementSpeedMetas := []int32{
+		25894, // Swift Skyfire Diamond, +24 Attack Power and Minor Run Speed Increase
+		28557, // Swift Starfire Diamond, +12 Spell Damage and Minor Run Speed Increase
+		28556, // Swift Windfire Diamond, +20 Attack Power and Minor Run Speed Increase
+	}
 
-	// Swift Windfire Diamond
-	// +20 Attack Power and Minor Run Speed Increase
-	// core.NewItemEffect(28556, func(agent core.Agent) {})
+	for _, itemID := range movementSpeedMetas {
+		core.NewItemEffect(itemID, func(agent core.Agent) {
+			character := agent.GetCharacter()
+			aura := character.NewPassiveMovementSpeedAura("Minor Run Speed", core.ActionID{SpellID: 23990}, 0.08)
+
+			eligibleSlots := character.ItemSwap.EligibleSlotsForGem(itemID)
+			character.ItemSwap.RegisterProcWithSlots(itemID, aura, eligibleSlots)
+		})
+	}
 
 	// Potent Unstable Diamond
 	// +24 Attack Power and 5% Stun Resistance

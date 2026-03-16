@@ -1,5 +1,6 @@
 {
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.formatOnSave": true,
 	"eslint.validate": ["javascript", "typescript"],
 	"eslint.nodePath": "./node_modules",
 	"eslint.workingDirectories": ["."],
@@ -7,19 +8,26 @@
 	"javascript.preferences.importModuleSpecifierEnding": "minimal",
 	"typescript.preferences.importModuleSpecifier": "relative",
 	"typescript.preferences.importModuleSpecifierEnding": "minimal",
+	"css.validate": false,
+	"less.validate": false,
+	"scss.validate": false,
+	"stylelint.validate": ["css", "scss"],
 	"[javascript][javascriptreact][typescript][typescriptreact][html]": {
 		"editor.codeActionsOnSave": {
 			"source.fixAll.eslint": "always"
 		}
 	},
-	"css.validate": false,
-	"less.validate": false,
-	"scss.validate": false,
-	"stylelint.validate": ["css", "scss"],
 	"[scss]": {
 		"editor.codeActionsOnSave": {
 			"source.fixAll.stylelint": "always"
 		}
+	},
+	"[go]": {
+		"editor.defaultFormatter": "golang.go"
+	},
+	"[json]": {
+		"editor.formatOnSave": false,
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
 	"json.schemas": [
 		{
@@ -124,12 +132,6 @@
 		"tinsert",
 		"UIParent"
 	],
-	"[go]": {
-		"editor.defaultFormatter": "golang.go"
-	},
 	"makefile.configureOnOpen": false,
-	"[json]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
 	"typescript.tsdk": "node_modules/typescript/lib"
 }

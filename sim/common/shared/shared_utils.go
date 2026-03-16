@@ -33,6 +33,7 @@ type DamageEffect struct {
 	IsMelee          bool
 	ProcMask         core.ProcMask
 	Outcome          OutcomeType
+	Flags            core.SpellFlag
 }
 
 type ExtraSpellInfo struct {
@@ -278,13 +279,18 @@ func NewSimpleStatActive(itemID int32) {
 			panic(fmt.Sprintf("No effects data for item with ID: %d", itemID))
 		}
 
-		for _, itemEffect := range itemEffects {
-
+		hasEffect := false
+		for idx, itemEffect := range itemEffects {
 			onUseData := itemEffect.GetOnUse()
+
 			if onUseData == nil {
-				panic(fmt.Sprintf("Item effect for item with ID: %d is not an active effect!", itemID))
+				if !hasEffect && idx == len(itemEffects)-1 {
+					panic(fmt.Sprintf("No active effects found for item with ID: %d!", itemID))
+				}
+				continue
 			}
 
+			hasEffect = true
 			spellConfig := core.SpellConfig{
 				ActionID: core.ActionID{ItemID: itemID},
 			}
@@ -526,6 +532,7 @@ const (
 	OutcomeDefault                  = 0
 	OutcomeMeleeCanCrit OutcomeType = iota
 	OutcomeMeleeNoCrit
+	OutcomeMeleeNoBlockDodgeParry
 	OutcomeMeleeNoBlockDodgeParryCrit
 	OutcomeSpellCanCrit
 	OutcomeSpellNoCrit
@@ -553,6 +560,8 @@ func GetOutcome(spell *core.Spell, outcome OutcomeType) core.OutcomeApplier {
 		return spell.OutcomeMeleeSpecialHitAndCrit
 	case OutcomeMeleeNoCrit:
 		return spell.OutcomeMeleeSpecialHit
+	case OutcomeMeleeNoBlockDodgeParry:
+		return spell.OutcomeMeleeSpecialNoBlockDodgeParry
 	case OutcomeMeleeNoBlockDodgeParryCrit:
 		return spell.OutcomeMeleeSpecialNoBlockDodgeParryNoCrit
 	case OutcomeSpellCanCrit:

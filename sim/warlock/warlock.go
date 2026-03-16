@@ -13,33 +13,65 @@ type Warlock struct {
 	Talents *proto.WarlockTalents
 	Options *proto.WarlockOptions
 
-	Corruption           *core.Spell
-	CurseOfElementsAuras core.AuraArray
-	Immolate             *core.Spell
-	Metamorphosis        *core.Spell
-	Seed                 *core.Spell
-	ShadowEmbraceAuras   core.AuraArray
-	Shadowburn           *core.Spell
-	Hellfire             *core.Spell
-	DrainLife            *core.Spell
-	SiphonLife           *core.Spell
+	// Base Spells
+	Corruption  *core.Spell
+	DrainLife   *core.Spell
+	Hellfire    *core.Spell
+	Immolate    *core.Spell
+	Incinerate  *core.Spell
+	SearingPain *core.Spell
+	ShadowBolt  *core.Spell
+	Soulfire    *core.Spell
 
-	// ActivePet *WarlockPet
-	// Felhunter *WarlockPet
-	// // Felguard  *WarlockPet
-	// Imp        *WarlockPet
-	// Succubus   *WarlockPet
-	// Voidwalker *WarlockPet
+	LifeTap *core.Spell
 
-	// Doomguard *DoomguardPet
-	// Infernal  *InfernalPet
+	// Curses
+	CurseOfAgony             *core.Spell
+	CurseOfDoom              *core.Spell
+	CurseOfElements          *core.Spell
+	CurseOfElementsAuras     core.AuraArray
+	CurseOfRecklessness      *core.Spell
+	CurseOfRecklessnessAuras core.AuraArray
+
+	// Talent Tree Spells
+	AmplifyCurse       *core.Spell
+	Conflagrate        *core.Spell
+	Shadowburn         *core.Spell
+	Shadowfury         *core.Spell
+	SiphonLife         *core.Spell
+	UnstableAffliction *core.Spell
+
+	// Auras
+	AmplifyCurseAura       *core.Aura
+	NightfallProcAura      *core.Aura
+	ImpShadowboltAura      *core.Aura
+	ShadowEmbraceAura      *core.Aura
+	DemonicKnowledgeAura   *core.Aura
+	MasterDemonologistAura *core.Aura
+
+	// Pets
+	ActivePet  *WarlockPet
+	Felhunter  *WarlockPet
+	Felguard   *WarlockPet
+	Imp        *WarlockPet
+	Succubus   *WarlockPet
+	Voidwalker *WarlockPet
+
+	// Armors
+	FelArmor   *core.Aura
+	DemonArmor *core.Aura
 
 	serviceTimer *core.Timer
 
-	// Item sets
-	T15_2pc      *core.Aura
-	T15_4pc      *core.Aura
-	T16_2pc_buff *core.Aura
+	DemonicKnowledgeDep   *stats.StatDependency
+	DemonicKnowledgeBonus float64
+
+	currentActiveCurse *core.Spell
+
+	SeedOfCorruptionBonusDamage float64
+	CorruptionTickBaseDamage    float64
+	ImmolateTickBaseDamage      float64
+	T5_4PC_Multiplier           map[int32]map[*core.Spell]float64
 }
 
 func (warlock *Warlock) GetCharacter() *core.Character {
@@ -54,13 +86,13 @@ func RegisterWarlock() {
 	core.RegisterAgentFactory(
 		proto.Player_Warlock{},
 		proto.Spec_SpecWarlock,
-		func(character *core.Character, options *proto.Player) core.Agent {
+		func(character *core.Character, options *proto.Player, _ *proto.Raid) core.Agent {
 			return NewWarlock(character, options, options.GetWarlock().Options.ClassOptions)
 		},
 		func(player *proto.Player, spec interface{}) {
 			playerSpec, ok := spec.(*proto.Player_Warlock)
 			if !ok {
-				panic("Invalid spec value for Survival Hunter!")
+				panic("Invalid spec value for Warlock!")
 			}
 			player.Spec = playerSpec
 		},
@@ -68,44 +100,49 @@ func RegisterWarlock() {
 }
 
 func (warlock *Warlock) ApplyTalents() {
-	// warlock.registerHarvestLife()
-	// warlock.registerArchimondesDarkness()
-	// warlock.registerKilJaedensCunning()
-	// warlock.registerMannarothsFury()
-	// warlock.registerGrimoireOfSupremacy()
-	// warlock.registerGrimoireOfSacrifice()
+	warlock.applyAfflictionTalents()
+	warlock.applyDemonologyTalents()
+	warlock.applyDestructionTalents()
 }
 
 func (warlock *Warlock) Initialize() {
 
+	// Curses
 	warlock.registerCurseOfElements()
-	// doomguardInfernalTimer := warlock.NewTimer()
-	// warlock.registerSummonDoomguard(doomguardInfernalTimer)
-	// warlock.registerSummonInfernal(doomguardInfernalTimer)
+	warlock.registerCurseOfDoom()
+	warlock.registerCurseOfAgony()
+	warlock.registerCurseOfRecklessness()
+
+	warlock.registerCorruption()
+	warlock.registerDeathCoil()
+	warlock.registerSeed()
+	warlock.registerDrainLife()
+	warlock.registerHellfire()
+	warlock.registerImmolate()
+	warlock.registerIncinerate()
 	warlock.registerLifeTap()
+	warlock.registerShadowBolt()
+	warlock.registerSearingPain()
+	warlock.registerSiphonLifeSpell()
+	warlock.registerSoulfire()
 
-	// Fel Armor 10% Stamina
-	core.MakePermanent(
-		warlock.RegisterAura(core.Aura{
-			Label:    "Fel Armor",
-			ActionID: core.ActionID{SpellID: 104938},
-		}))
-	warlock.MultiplyStat(stats.Stamina, 1.1)
-	warlock.MultiplyStat(stats.Health, 1.1)
+	warlock.registerArmors()
 
-	// 5% int passive
-	warlock.MultiplyStat(stats.Intellect, 1.05)
+	warlock.PseudoStats.SelfHealingMultiplier = 1.0
 }
 
 func (warlock *Warlock) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
 
 }
 
+func (warlock *Warlock) AddPartyBuffs(partyBuffs *proto.PartyBuffs) {
+
+}
+
 func (warlock *Warlock) Reset(sim *core.Simulation) {
 }
 
-func (warlock *Warlock) OnEncounterStart(_ *core.Simulation) {
-}
+func (warlock *Warlock) OnEncounterStart(sim *core.Simulation) {}
 
 func NewWarlock(character *core.Character, options *proto.Player, warlockOptions *proto.WarlockOptions) *Warlock {
 	warlock := &Warlock{
@@ -117,14 +154,32 @@ func NewWarlock(character *core.Character, options *proto.Player, warlockOptions
 	warlock.EnableManaBar()
 	warlock.AddStatDependency(stats.Strength, stats.AttackPower, 1)
 
-	// warlock.Infernal = warlock.NewInfernalPet()
-	// warlock.Doomguard = warlock.NewDoomguardPet()
+	if !warlock.Options.SacrificeSummon {
+		warlock.registerPets()
+	}
 
-	// warlock.serviceTimer = character.NewTimer()
-	// warlock.registerPets()
-	// warlock.registerGrimoireOfService()
+	warlock.T5_4PC_Multiplier = make(map[int32]map[*core.Spell]float64)
 
 	return warlock
+}
+
+func (warlock *Warlock) AfflictionCount(target *core.Unit) float64 {
+	return float64(len(target.GetAurasWithTag("Affliction")))
+}
+
+func (warlock *Warlock) DeactivateOtherCurses(sim *core.Simulation, newCurse *core.Spell, target *core.Unit) {
+	if warlock.currentActiveCurse != nil {
+		if warlock.currentActiveCurse.Dot(target) != nil {
+			warlock.currentActiveCurse.Dot(target).Deactivate(sim)
+		}
+		if warlock.currentActiveCurse.RelatedAuraArrays != nil {
+			for _, auraArray := range warlock.currentActiveCurse.RelatedAuraArrays {
+				auraArray.Get(target).Deactivate(sim)
+			}
+		}
+	}
+
+	warlock.currentActiveCurse = newCurse
 }
 
 // Agent is a generic way to access underlying warlock on any of the agents.
@@ -135,35 +190,26 @@ type WarlockAgent interface {
 const (
 	WarlockSpellFlagNone    int64 = 0
 	WarlockSpellConflagrate int64 = 1 << iota
-	WarlockSpellFaBConflagrate
 	WarlockSpellShadowBolt
-	WarlockSpellChaosBolt
 	WarlockSpellImmolate
 	WarlockSpellImmolateDot
 	WarlockSpellIncinerate
-	WarlockSpellFaBIncinerate
 	WarlockSpellSoulFire
 	WarlockSpellShadowBurn
 	WarlockSpellLifeTap
 	WarlockSpellCorruption
-	WarlockSpellHaunt
 	WarlockSpellUnstableAffliction
+	WarlockSpellCurseOfAgony
 	WarlockSpellCurseOfElements
-	WarlockSpellAgony
-	WarlockSpellDrainSoul
 	WarlockSpellDrainLife
-	WarlockSpellMetamorphosis
 	WarlockSpellSeedOfCorruption
-	WarlockSpellSeedOfCorruptionExposion
-	WarlockSpellHandOfGuldan
+	WarlockSpellSeedOfCorruptionExplosion
 	WarlockSpellHellfire
 	WarlockSpellImmolationAura
 	WarlockSpellSearingPain
 	WarlockSpellSummonDoomguard
 	WarlockSpellDoomguardDoomBolt
 	WarlockSpellSummonFelguard
-	WarlockSpellFelGuardLegionStrike
-	WarlockSpellFelGuardFelstorm
 	WarlockSpellSummonImp
 	WarlockSpellImpFireBolt
 	WarlockSpellSummonFelhunter
@@ -172,50 +218,52 @@ const (
 	WarlockSpellSuccubusLashOfPain
 	WarlockSpellVoidwalkerTorment
 	WarlockSpellSummonInfernal
-	WarlockSpellDemonSoul
-	WarlockSpellShadowflame
-	WarlockSpellShadowflameDot
-	WarlockSpellSoulBurn
-	WarlockSpellFelFlame
-	WarlockSpellBurningEmbers
-	WarlockSpellEmberTap
 	WarlockSpellRainOfFire
-	WarlockSpellFireAndBrimstone
-	WarlockSpellDarkSoulInsanity
-	WarlockSpellDarkSoulKnowledge
-	WarlockSpellDarkSoulMisery
-	WarlockSpellMaleficGrasp
-	WarlockSpellDemonicSlash
-	WarlockSpellTouchOfChaos
-	WarlockSpellChaosWave
-	WarlockSpellCarrionSwarm
-	WarlockSpellDoom
-	WarlockSpellVoidray
+	WarlockSpellCurseOfDoom
+	WarlockSpellCurseOfRecklessness
+	WarlockSpellCurseOfWeakness
 	WarlockSpellSiphonLife
-	WarlockSpellHavoc
+	WarlockSpellDrainSoul
+	WarlockSpellShadowFury
+	WarlockSpellDeathCoil
+	WarlockSpellFelguardCleave
 	WarlockSpellAll int64 = 1<<iota - 1
 
-	WarlockShadowDamage = WarlockSpellCorruption | WarlockSpellUnstableAffliction | WarlockSpellHaunt |
-		WarlockSpellDrainSoul | WarlockSpellDrainLife | WarlockSpellAgony |
-		WarlockSpellShadowBolt | WarlockSpellSeedOfCorruptionExposion | WarlockSpellHandOfGuldan |
-		WarlockSpellShadowflame | WarlockSpellFelFlame | WarlockSpellChaosBolt | WarlockSpellShadowBurn | WarlockSpellHavoc
+	WarlockShadowDamage = WarlockSpellCorruption | WarlockSpellUnstableAffliction | WarlockSpellDrainLife | WarlockSpellCurseOfAgony |
+		WarlockSpellShadowBolt | WarlockSpellSeedOfCorruptionExplosion | WarlockSpellSeedOfCorruption | WarlockSpellShadowBurn | WarlockSpellSiphonLife
 
-	WarlockPeriodicShadowDamage = WarlockSpellCorruption | WarlockSpellUnstableAffliction | WarlockSpellDrainSoul |
-		WarlockSpellDrainLife | WarlockSpellAgony
+	WarlockPeriodicShadowDamage = WarlockSpellCorruption | WarlockSpellUnstableAffliction |
+		WarlockSpellDrainLife | WarlockSpellCurseOfAgony
 
 	WarlockFireDamage = WarlockSpellConflagrate | WarlockSpellImmolate | WarlockSpellIncinerate | WarlockSpellSoulFire |
-		WarlockSpellHandOfGuldan | WarlockSpellSearingPain | WarlockSpellImmolateDot |
-		WarlockSpellShadowflameDot | WarlockSpellFelFlame | WarlockSpellChaosBolt | WarlockSpellShadowBurn | WarlockSpellFaBConflagrate |
-		WarlockSpellFaBIncinerate
+		WarlockSpellSearingPain | WarlockSpellImmolateDot | WarlockSpellShadowBurn
 
-	WarlockDoT = WarlockSpellCorruption | WarlockSpellUnstableAffliction | WarlockSpellDrainSoul |
-		WarlockSpellDrainLife | WarlockSpellAgony | WarlockSpellImmolateDot |
-		WarlockSpellShadowflameDot | WarlockSpellBurningEmbers
+	WarlockDoT = WarlockSpellCorruption | WarlockSpellUnstableAffliction |
+		WarlockSpellDrainLife | WarlockSpellCurseOfAgony | WarlockSpellImmolateDot
 
 	WarlockSummonSpells = WarlockSpellSummonImp | WarlockSpellSummonSuccubus | WarlockSpellSummonFelhunter |
 		WarlockSpellSummonFelguard
 
-	WarlockDarkSoulSpell             = WarlockSpellDarkSoulInsanity | WarlockSpellDarkSoulKnowledge | WarlockSpellDarkSoulMisery
-	WarlockAllSummons                = WarlockSummonSpells | WarlockSpellSummonInfernal | WarlockSpellSummonDoomguard
-	WarlockSpellsChaoticEnergyDestro = WarlockSpellAll &^ WarlockAllSummons &^ WarlockSpellDrainLife
+	WarlockAllSummons = WarlockSummonSpells | WarlockSpellSummonInfernal | WarlockSpellSummonDoomguard
+
+	WarlockContagionSpells = WarlockSpellCurseOfAgony | WarlockSpellCorruption | WarlockSpellSeedOfCorruption | WarlockSpellSeedOfCorruptionExplosion
+
+	WarlockShadowEmbraceSpells = WarlockSpellCorruption | WarlockSpellCurseOfAgony | WarlockSpellSiphonLife | WarlockSpellSeedOfCorruption
+
+	WarlockCurses = WarlockSpellCurseOfAgony | WarlockSpellCurseOfDoom | WarlockSpellCurseOfElements | WarlockSpellCurseOfRecklessness
+
+	WarlockSoulLeechSpells = WarlockSpellShadowBolt | WarlockSpellShadowBurn | WarlockSpellSoulFire |
+		WarlockSpellIncinerate | WarlockSpellSearingPain | WarlockSpellConflagrate
+
+	WarlockAfflictionSpells = WarlockSpellCorruption | WarlockSpellCurseOfAgony | WarlockSpellCurseOfDoom | WarlockSpellCurseOfRecklessness | WarlockSpellCurseOfElements |
+		WarlockSpellDrainLife |
+		WarlockSpellSeedOfCorruption | WarlockSpellDeathCoil
+
+	WarlockDemonologySpells = WarlockAllSummons
+
+	WarlockDestructionSpells = WarlockSpellHellfire | WarlockSpellImmolate | WarlockSpellIncinerate | WarlockSpellRainOfFire | WarlockSpellSearingPain |
+		WarlockSpellShadowBolt | WarlockSpellSoulFire | WarlockSpellConflagrate | WarlockSpellShadowFury | WarlockSpellShadowBurn
 )
+
+// Called to handle custom resources
+type WarlockSpellCastedCallback func(resultList core.SpellResultSlice, spell *core.Spell, sim *core.Simulation)

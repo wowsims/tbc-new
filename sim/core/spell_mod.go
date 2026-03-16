@@ -84,6 +84,10 @@ func buildMod(unit *Unit, config SpellModConfig) *SpellMod {
 		resetFn = functions.OnReset
 	}
 
+	if config.School > SpellSchoolNone && config.Kind == SpellMod_BonusHit_Percent {
+		panic("For Spell school specific hit modifiers use PseudoStats.SchoolBonusHitChance")
+	}
+
 	if (config.ResourceType > 0) && !slices.Contains([]proto.ResourceType{proto.ResourceType_ResourceTypeMana, proto.ResourceType_ResourceTypeEnergy, proto.ResourceType_ResourceTypeRage, proto.ResourceType_ResourceTypeFocus}, config.ResourceType) {
 		panic(fmt.Sprintf("ResourceType %s for SpellMod is not implemented", config.ResourceType))
 	}
@@ -290,6 +294,10 @@ const (
 	// Uses FloatValue
 	SpellMod_CritMultiplier_Flat
 
+	// Will increase the CritMultiplier. x100% = 1.0
+	// Uses FloatValue
+	SpellMod_CritMultiplier_Pct
+
 	// Will add / substract % amount from the cast time multiplier.
 	// Ueses: FloatValue
 	SpellMod_CastTime_Pct
@@ -360,9 +368,17 @@ const (
 	// Uses FloatValue
 	SpellMod_DotBaseDuration_Pct
 
+	// Add/subtract bonus coefficient
+	// Uses: FloatValue
+	SpellMod_DotBonusCoeffecient_Flat
+
 	// Will increase the spell.ThreatMultiplier. +5% = 0.05
 	// Uses FloatValue
 	SpellMod_ThreatMultiplier_Pct
+
+	// Add/subtract base damage
+	// Uses: FloatValue
+	SpellMod_BaseDamage_Flat
 )
 
 var spellModMap = map[SpellModType]*SpellModFunctions{
@@ -400,6 +416,11 @@ var spellModMap = map[SpellModType]*SpellModFunctions{
 	SpellMod_CritMultiplier_Flat: {
 		Apply:  applyCritMultiplierFlat,
 		Remove: removeCritMultiplierFlat,
+	},
+
+	SpellMod_CritMultiplier_Pct: {
+		Apply:  applyCritMultiplierPct,
+		Remove: removeCritMultiplierPct,
 	},
 
 	SpellMod_CastTime_Pct: {
@@ -485,9 +506,19 @@ var spellModMap = map[SpellModType]*SpellModFunctions{
 		Remove: removeDotBaseDurationMultiplier,
 	},
 
+	SpellMod_DotBonusCoeffecient_Flat: {
+		Apply:  applyDotBonusCoefficientFlat,
+		Remove: removeDotBonusCoefficientFlat,
+	},
+
 	SpellMod_ThreatMultiplier_Pct: {
 		Apply:  applyThreatMultiplierPercent,
 		Remove: removeThreatMultiplierPercent,
+	},
+
+	SpellMod_BaseDamage_Flat: {
+		Apply:  applyBaseDamageFlat,
+		Remove: removeBaseDamageFlat,
 	},
 }
 
@@ -561,6 +592,14 @@ func applyCritMultiplierFlat(mod *SpellMod, spell *Spell) {
 
 func removeCritMultiplierFlat(mod *SpellMod, spell *Spell) {
 	spell.CritMultiplierAdditive -= mod.floatValue
+}
+
+func applyCritMultiplierPct(mod *SpellMod, spell *Spell) {
+	spell.CritMultiplier *= (1 + mod.floatValue)
+}
+
+func removeCritMultiplierPct(mod *SpellMod, spell *Spell) {
+	spell.CritMultiplier /= (1 + mod.floatValue)
 }
 
 func applyCastTimePercent(mod *SpellMod, spell *Spell) {
@@ -813,10 +852,46 @@ func removeDotBaseDurationMultiplier(mod *SpellMod, spell *Spell) {
 	}
 }
 
+func applyDotBonusCoefficientFlat(mod *SpellMod, spell *Spell) {
+	if spell.dots != nil {
+		for _, dot := range spell.dots {
+			if dot != nil {
+				dot.BonusCoefficient += mod.floatValue
+			}
+		}
+	}
+
+	if spell.aoeDot != nil {
+		spell.aoeDot.BonusCoefficient += mod.floatValue
+	}
+}
+
+func removeDotBonusCoefficientFlat(mod *SpellMod, spell *Spell) {
+	if spell.dots != nil {
+		for _, dot := range spell.dots {
+			if dot != nil {
+				dot.BonusCoefficient -= mod.floatValue
+			}
+		}
+	}
+
+	if spell.aoeDot != nil {
+		spell.aoeDot.BonusCoefficient -= mod.floatValue
+	}
+}
+
 func applyThreatMultiplierPercent(mod *SpellMod, spell *Spell) {
 	spell.ThreatMultiplier *= (1 + mod.floatValue)
 }
 
 func removeThreatMultiplierPercent(mod *SpellMod, spell *Spell) {
 	spell.ThreatMultiplier /= (1 + mod.floatValue)
+}
+
+func applyBaseDamageFlat(mod *SpellMod, spell *Spell) {
+	spell.BonusBaseDamage += mod.floatValue
+}
+
+func removeBaseDamageFlat(mod *SpellMod, spell *Spell) {
+	spell.BonusBaseDamage -= mod.floatValue
 }

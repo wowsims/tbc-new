@@ -244,7 +244,7 @@ func applyRaceEffects(agent Agent) {
 			BuildPhase: Ternary(hasBowEquipped(), CharacterBuildPhaseBase, CharacterBuildPhaseNone),
 		}).AttachStatBuff(stats.RangedCritPercent, 1)
 
-		hasThwrowingEquipped := func() bool {
+		hasThrowingEquipped := func() bool {
 			ranged := character.Ranged()
 			return ranged != nil && (ranged.RangedWeaponType == proto.RangedWeaponType_RangedWeaponTypeThrown)
 		}
@@ -253,7 +253,7 @@ func applyRaceEffects(agent Agent) {
 			Label:      "Throwing Specialization",
 			ActionID:   ActionID{SpellID: 20558},
 			Duration:   NeverExpires,
-			BuildPhase: Ternary(hasThwrowingEquipped(), CharacterBuildPhaseBase, CharacterBuildPhaseNone),
+			BuildPhase: Ternary(hasThrowingEquipped(), CharacterBuildPhaseBase, CharacterBuildPhaseNone),
 		}).AttachStatBuff(stats.RangedCritPercent, 1)
 
 		character.RegisterItemSwapCallback([]proto.ItemSlot{proto.ItemSlot_ItemSlotRanged}, func(sim *Simulation, slot proto.ItemSlot) {
@@ -262,7 +262,7 @@ func applyRaceEffects(agent Agent) {
 			} else {
 				bowAura.Deactivate(sim)
 			}
-			if hasThwrowingEquipped() {
+			if hasThrowingEquipped() {
 				throwingAura.Activate(sim)
 			} else {
 				throwingAura.Deactivate(sim)
@@ -280,12 +280,14 @@ func applyRaceEffects(agent Agent) {
 		})
 
 		// Berserking
+		sharedCD := Cooldown{
+			Timer:    character.NewTimer(),
+			Duration: time.Minute * 3,
+		}
+
 		baseSpellConfig := SpellConfig{
 			Cast: CastConfig{
-				CD: Cooldown{
-					Timer:    character.NewTimer(),
-					Duration: time.Minute * 3,
-				},
+				CD: sharedCD,
 			},
 		}
 
@@ -332,12 +334,17 @@ func applyRaceEffects(agent Agent) {
 			character.AddMajorCooldown(MajorCooldown{
 				Spell: berserkingSpell,
 				Type:  CooldownTypeDPS,
+				ShouldActivate: func(sim *Simulation, character *Character) bool {
+					return false
+				},
 			})
 
 		}
 
-		createBerserkingSpell("10%", 1, 1.1)
-		createBerserkingSpell("30%", 2, 1.3)
+		for idx := range 5 {
+			percentage := 0.10 + 0.05*float64(idx)
+			createBerserkingSpell(fmt.Sprintf("%d%%", int(percentage*100)), int32(idx+1), 1+percentage)
+		}
 
 	case proto.Race_RaceUndead:
 		character.stats[stats.ShadowResistance] += 10

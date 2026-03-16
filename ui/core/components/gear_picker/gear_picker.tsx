@@ -331,8 +331,8 @@ export class ItemPicker extends Component {
 		this.itemElem.socketsElem?.forEach(element => {
 			const socketIdx = Number(element.dataset.socketIdx) || 0;
 			element.addEventListener('click', event => {
-				event.preventDefault();
-				openGemDetailTab(0);
+				event?.preventDefault();
+				openGemDetailTab(socketIdx);
 			});
 			const popover = addQuickGemPopover(this.player, element, this._equippedItem!, this.slot, socketIdx, () => openGemDetailTab(socketIdx));
 			if (!this.player.sim.getShowQuickSwap()) popover.tooltip?.disable();

@@ -288,7 +288,7 @@ const actionIdSets: Record<
 };
 
 const spellHasRanks = (actionId: ActionId, spells: AuraStats[] | SpellStats[]) => {
-	return spells.filter(spell => actionId.baseName === spell.id.baseName && spell.id.hasRank).length > 1;
+	return spells.filter(spell => actionId.baseName === spell.id.baseName && actionId.tag === spell.id.tag && spell.id.hasRank).length > 1;
 };
 
 const createSpellSubmenu = (actionId: ActionId, spells: AuraStats[] | SpellStats[], baseMenuEntry: string[] = []) => {

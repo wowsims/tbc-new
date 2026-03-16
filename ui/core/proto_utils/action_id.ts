@@ -445,6 +445,11 @@ export class ActionId {
 					name += ' (Wasted)';
 				}
 				break;
+			case 'Windfury Totem Effect':
+				if (tag == 1) {
+					name += ' (Party Weapon Buff)';
+				}
+				break;
 			case 'Moonfire':
 			case 'Sunfire':
 				if (tag == 1) {
@@ -471,10 +476,8 @@ export class ActionId {
 				}
 				break;
 			case 'Berserking':
-				if (tag == 1) {
-					name += ' (10%)';
-				} else if (tag == 2) {
-					name += ' (30%)';
+				if (tag > 0) {
+					name += ` (${10 + (tag - 1) * 5}%)`;
 				}
 				break;
 			case 'Elemental Mastery':
@@ -521,7 +524,21 @@ export class ActionId {
 				if (tag == 0) {
 					name += ' (DoT)';
 				} else if (tag == 1) {
+					name += ' (Instant)';
+				} else if (tag == 2) {
 					name += ' (Explosion)';
+				}
+				break;
+			case 'Improved Corruption and Immolate':
+				if (this.spellId === 37380) {
+					name = 'T4 4PC';
+				} else if (this.spellId === 37384) {
+					name = 'T5 4PC';
+				}
+				break;
+			case 'Improved Shadow Bolt and Incinerate':
+				if (this.spellId === 38393) {
+					name = 'T6 4PC';
 				}
 				break;
 			case 'Thunderfury':
@@ -580,8 +597,15 @@ export class ActionId {
 					name += ' (Malefic)';
 				}
 				break;
+			case 'Raptor Strike':
+				if (tag == 2) {
+					name += ' (Cooldown)';
+				}
+				break;
 			default:
-				if (tag) {
+				if (tag === -1) {
+					name += ' (External)';
+				} else if (tag) {
 					name += ' (??)';
 				}
 				break;
@@ -940,4 +964,6 @@ export const resourceTypeToIcon: Record<ResourceType, string> = {
 };
 
 // Use this to connect a buff row to a cast row in the timeline view
-export const buffAuraToSpellIdMap: Record<number, ActionId> = {};
+export const buffAuraToSpellIdMap: Record<number, ActionId> = {
+	34471: ActionId.fromSpellId(19574), // Bestial Wrath -> The Beast Within
+};

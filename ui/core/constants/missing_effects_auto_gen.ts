@@ -466,13 +466,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		18168, // Force Reactive Disk
-		[
-			"When the shield blocks it releases an electrical charge that damages all nearby enemies. This also has a chance of damaging the shield.", // 22600 - https://www.wowhead.com/tbc/spell=22600
-			"", // 22619 - https://www.wowhead.com/tbc/spell=22619
-		]
-	],
-	[
 		18345, // Murmuring Ring
 		[
 			"Reduces the duration of any Silence or Interrupt effects used against the wearer by 10%. This effect does not stack with other similar effects.", // 42184 - https://www.wowhead.com/tbc/spell=42184
@@ -1199,12 +1192,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		23199, // Totem of the Storm
-		[
-			"Increases damage done by Chain Lightning and Lightning Bolt by up to 33.", // 28857 - https://www.wowhead.com/tbc/spell=28857
-		]
-	],
-	[
 		23200, // Totem of Sustaining
 		[
 			"Increases healing done by Lesser Healing Wave by up to 53.", // 28856 - https://www.wowhead.com/tbc/spell=28856
@@ -1385,27 +1372,9 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		24116, // Eye of the Night
-		[
-			"Increases spell damage by up to 34 for all nearby party members. Lasts 30min.", // 31033 - https://www.wowhead.com/tbc/spell=31033
-		]
-	],
-	[
 		24117, // Embrace of the Dawn
 		[
 			"All stats of nearby party members increased by 10 for 30min.", // 31026 - https://www.wowhead.com/tbc/spell=31026
-		]
-	],
-	[
-		24121, // Chain of the Twilight Owl
-		[
-			"Increases the spell critical hit chance of nearby party members by 2% for 30min.", // 31035 - https://www.wowhead.com/tbc/spell=31035
-		]
-	],
-	[
-		24122, // Coronet of Verdant Flame
-		[
-			"Chance on successful spellcast to restore 90 Mana over 10s.", // 31036 - https://www.wowhead.com/tbc/spell=31036
 		]
 	],
 	[
@@ -1583,12 +1552,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		27815, // Totem of the Astral Winds
-		[
-			"Increases the attack power bonus on Windfury Weapon attacks by 80.", // 34244 - https://www.wowhead.com/tbc/spell=34244
-		]
-	],
-	[
 		27880, // Gladiator's Scaled Gauntlets
 		[
 			"Increases the Holy damage bonus of your Judgement of the Crusader by 20.", // 23300 - https://www.wowhead.com/tbc/spell=23300
@@ -1657,12 +1620,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		27947, // Totem of Impact
-		[
-			"Increases damage done by Earth Shock, Flame Shock, and Frost Shock by up to 46.", // 33556 - https://www.wowhead.com/tbc/spell=33556
-		]
-	],
-	[
 		27949, // Libram of Zeal
 		[
 			"Increases the melee attack power bonus of your Seal of the Crusader by 68 and the Holy damage increase of your Judgement of the Crusader by 47.", // 33557 - https://www.wowhead.com/tbc/spell=33557
@@ -1672,12 +1629,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		27983, // Libram of Zeal
 		[
 			"Increases the melee attack power bonus of your Seal of the Crusader by 68 and the Holy damage increase of your Judgement of the Crusader by 47.", // 33557 - https://www.wowhead.com/tbc/spell=33557
-		]
-	],
-	[
-		27984, // Totem of Impact
-		[
-			"Increases damage done by Earth Shock, Flame Shock, and Frost Shock by up to 46.", // 33556 - https://www.wowhead.com/tbc/spell=33556
 		]
 	],
 	[
@@ -1705,12 +1656,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		28066, // Totem of Lightning
-		[
-			"Reduces the mana cost of your Lightning Bolt spells by 15.", // 33696 - https://www.wowhead.com/tbc/spell=33696
-		]
-	],
-	[
 		28108, // Power Infused Mushroom
 		[
 			"Restores 200 mana when you kill a target that gives experience or honor. This effect cannot occur more than once every 10 seconds.", // 33743 - https://www.wowhead.com/tbc/spell=33743
@@ -1732,12 +1677,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		28136, // Gladiator's Wyrmhide Gloves
 		[
 			"Reduces the cast time of your Cyclone spell by -0.1 sec.", // 33830 - https://www.wowhead.com/tbc/spell=33830
-		]
-	],
-	[
-		28248, // Totem of the Void
-		[
-			"Increases damage done by Chain Lightning and Lightning Bolt by up to 55.", // 34230 - https://www.wowhead.com/tbc/spell=34230
 		]
 	],
 	[
@@ -1792,18 +1731,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		28568, // Idol of the Avian Heart
 		[
 			"Increases the amount healed by Healing Touch by 136.", // 38321 - https://www.wowhead.com/tbc/spell=38321
-		]
-	],
-	[
-		28573, // Despair
-		[
-			"Attempts to impale the target, causing 600 damage.", // 34580 - https://www.wowhead.com/tbc/spell=34580
-		]
-	],
-	[
-		28579, // Romulo's Poison Vial
-		[
-			"Your melee and ranged attacks have a chance to inject poison into your target dealing 332 Nature damage.", // 34587 - https://www.wowhead.com/tbc/spell=34587
 		]
 	],
 	[
@@ -1888,12 +1815,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		28719, // Grand Marshal's Wyrmhide Gloves
 		[
 			"Reduces the cast time of your Cyclone spell by -0.1 sec.", // 33830 - https://www.wowhead.com/tbc/spell=33830
-		]
-	],
-	[
-		28727, // Pendant of the Violet Eye
-		[
-			"Each spell cast within 20 seconds will grant a stacking bonus of 21 mana regen per 5 sec. Expires after 20 seconds. Abilities with no mana cost will not trigger this trinket.", // 29601 - https://www.wowhead.com/tbc/spell=29601
 		]
 	],
 	[
@@ -2065,12 +1986,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		29996, // Rod of the Sun King
-		[
-			"Chance on melee attack to gain 10 Energy or 5 Rage.", // 36070 - https://www.wowhead.com/tbc/spell=36070
-		]
-	],
-	[
 		30008, // Pendant of the Lost Ages
 		[
 			"Reduces the duration of any Silence or Interrupt effects used against the wearer by 20%. This effect does not stack with other similar effects.", // 35126 - https://www.wowhead.com/tbc/spell=35126
@@ -2128,12 +2043,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		30447, // Tome of Fiery Redemption
 		[
 			"Each time you cast a spell, there is chance you will gain up to 290 spell damage and healing.", // 37198 - https://www.wowhead.com/tbc/spell=37198
-		]
-	],
-	[
-		30448, // Talon of Al'ar
-		[
-			"Your Arcane Shot ability increases the damage dealt by all other damaging shots by 40 for 6s.", // 37507 - https://www.wowhead.com/tbc/spell=37507
 		]
 	],
 	[
@@ -2200,13 +2109,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		30847, // X-52 Rocket Helmet
 		[
 			"Launch yourself from Outland to the stars. For the safety of others, please clear the launching platform before use.", // 37896 - https://www.wowhead.com/tbc/spell=37896
-		]
-	],
-	[
-		30892, // Beast-tamer's Shoulders
-		[
-			"Increases damage dealt by your pet by 3%.", // 27206 - https://www.wowhead.com/tbc/spell=27206
-			"Increases your pet's critical strike chance by 2%.", // 27043 - https://www.wowhead.com/tbc/spell=27043
 		]
 	],
 	[
@@ -2522,18 +2424,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		32330, // Totem of Ancestral Guidance
-		[
-			"Increases damage done by Chain Lightning and Lightning Bolt by up to 85.", // 41040 - https://www.wowhead.com/tbc/spell=41040
-		]
-	],
-	[
-		32336, // Black Bow of the Betrayer
-		[
-			"Increases attack power by 26.", // 0 - https://www.wowhead.com/tbc/spell=0
-		]
-	],
-	[
 		32368, // Tome of the Lightbringer
 		[
 			"Your Judgement ability also increases your shield block value by 186 for 5s.", // 41042 - https://www.wowhead.com/tbc/spell=41042
@@ -2564,12 +2454,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		32487, // Ashtongue Talisman of Swiftness
-		[
-			"Your Steady Shot has a 15% chance to grant you 275 attack power for 8s.", // 40487 - https://www.wowhead.com/tbc/spell=40487
-		]
-	],
-	[
 		32488, // Ashtongue Talisman of Insight
 		[
 			"Your spell critical strikes have a 50% chance to grant you 145 spell haste rating for 5s.", // 40483 - https://www.wowhead.com/tbc/spell=40483
@@ -2597,18 +2481,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		32492, // Ashtongue Talisman of Lethality
 		[
 			"20% chance per combo point for your finishing moves to grant 145 critical strike rating for 10s.", // 40460 - https://www.wowhead.com/tbc/spell=40460
-		]
-	],
-	[
-		32493, // Ashtongue Talisman of Shadows
-		[
-			"Each time your Corruption deals damage, it has a 20% chance to grant you 220 spell damage for 5s.", // 40480 - https://www.wowhead.com/tbc/spell=40480
-		]
-	],
-	[
-		32496, // Memento of Tyrande
-		[
-			"Each time you cast a spell, there is chance you will gain up to 76 mana per 5 for 15s.", // 37656 - https://www.wowhead.com/tbc/spell=37656
 		]
 	],
 	[
@@ -2669,12 +2541,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		33505, // Totem of Living Water
 		[
 			"Reduces the base mana cost of Chain Heal by 20.", // 43752 - https://www.wowhead.com/tbc/spell=43752
-		]
-	],
-	[
-		33506, // Skycall Totem
-		[
-			"Your Lightning Bolt spell has a chance to grant 100 spell haste rating for 10s.", // 43751 - https://www.wowhead.com/tbc/spell=43751
 		]
 	],
 	[
@@ -2939,13 +2805,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		33953, // Vengeful Gladiator's Totem of Survival
 		[
 			"Your Earth Shock, Flame Shock, and Frost Shock abilities also grant you 34 resilience rating for 6s.", // 43862 - https://www.wowhead.com/tbc/spell=43862
-		]
-	],
-	[
-		34334, // Thori'dal, the Stars' Fury
-		[
-			"Increases ranged attack speed by 15%. Does not stack with quiver or ammo pouch haste effects.", // 44972 - https://www.wowhead.com/tbc/spell=44972
-			"Thori'dal generates magical arrows when the bow string is drawn. Does not use ammo.", // 46699 - https://www.wowhead.com/tbc/spell=46699
 		]
 	],
 	[
@@ -3331,6 +3190,12 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		38506, // Don Carlos' Famous Hat
 		[
 			"", // 52172 - https://www.wowhead.com/tbc/spell=52172
+		]
+	],
+	[
+		186073, // Communal Totem of the Storm
+		[
+			"Reduces the mana cost of Stormstrike by 5.", // 352522 - https://www.wowhead.com/tbc/spell=352522
 		]
 	],
 ])

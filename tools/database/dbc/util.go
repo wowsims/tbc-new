@@ -4,10 +4,12 @@ import (
 	"compress/gzip"
 	"fmt"
 	"io"
+	"math"
 	"os"
 	"path/filepath"
 	"slices"
 	"strconv"
+	"strings"
 
 	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
@@ -135,19 +137,6 @@ func processEnchantmentEffects(
 				if addRanged && stat == proto.Stat_StatAttackPower {
 					outStats[proto.Stat_StatRangedAttackPower] = float64(effectPoints[i])
 				}
-				// If it's All Hit then boost both
-				// if stat == proto.Stat_StatAllHitRating {
-				// 	outStats[proto.Stat_StatMeleeHitRating] = float64(effectPoints[i])
-				// 	outStats[proto.Stat_StatSpellHitRating] = float64(effectPoints[i])
-				// }
-				// if stat == proto.Stat_StatAllCritRating {
-				// 	outStats[proto.Stat_StatMeleeCritRating] = float64(effectPoints[i])
-				// 	outStats[proto.Stat_StatSpellCritRating] = float64(effectPoints[i])
-				// }
-				// if stat == proto.Stat_StatAllHasteRating {
-				// 	outStats[proto.Stat_StatMeleeHasteRating] = float64(effectPoints[i])
-				// 	outStats[proto.Stat_StatSpellHasteRating] = float64(effectPoints[i])
-				// }
 			}
 		case ITEM_ENCHANTMENT_EQUIP_SPELL: //Buff
 			spellEffects := dbcInstance.SpellEffects[effectArgs[i]]
@@ -173,8 +162,19 @@ func processEnchantmentEffects(
 					outStats[proto.Stat_StatShadowResistance] += float64(spellEffect.EffectBasePoints + 1)
 				} else {
 					stat := ConvertEffectAuraToStatIndex(spellEffect.EffectAura, spellEffect.EffectMiscValues[0])
-					if stat >= 0 {
-						outStats[stat] += float64(spellEffect.EffectBasePoints + 1)
+					if stat >= 0 || stat == -2 {
+						value := float64(spellEffect.EffectBasePoints + 1)
+						if stat == proto.Stat_StatArmorPenetration || stat == proto.Stat_StatSpellPenetration {
+							// Make sure it's not Feral AP
+							if strings.Contains(dbcInstance.Spells[spellEffect.SpellID].Description, "forms only") {
+								stat = proto.Stat_StatFeralAttackPower
+							}
+							if stat == proto.Stat_StatArmorPenetration || stat == proto.Stat_StatSpellPenetration {
+								// Make these not negative
+								value = math.Abs(value)
+							}
+						}
+						outStats[stat] += value
 					}
 				}
 			}

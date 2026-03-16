@@ -179,7 +179,6 @@ export interface IndividualSimUIConfig<SpecType extends Spec> extends PlayerConf
 
 	playerInputs?: InputSection;
 	playerIconInputs: Array<IconInputs.IconInputConfig<Player<SpecType>, any>>;
-	petConsumeInputs?: Array<IconInputs.IconInputConfig<Player<SpecType>, any>>;
 	rotationInputs?: InputSection;
 	rotationIconInputs?: Array<IconInputs.IconInputConfig<Player<SpecType>, any>>;
 	includeBuffDebuffInputs: Array<any>;
@@ -357,8 +356,9 @@ export abstract class IndividualSimUI<SpecType extends Spec> extends SimUI {
 	}
 
 	applyDefaultConfigOptions(config: IndividualSimUIConfig<SpecType>): IndividualSimUIConfig<SpecType> {
-		const hasAttackPowerScaling = config.epStats.includes(Stat.StatAttackPower);
-		const hasSpellDamageScaling = config.epStats.includes(Stat.StatSpellDamage);
+		const epStats = [...config.epStats, ...config.includeBuffDebuffInputs];
+		const hasAttackPowerScaling = epStats.includes(Stat.StatAttackPower);
+		const hasSpellDamageScaling = epStats.includes(Stat.StatSpellDamage);
 
 		config.otherInputs.inputs = [
 			...(hasAttackPowerScaling ? [OtherInputs.ExposeWeaknessHunterAgility, OtherInputs.ExposeWeaknessUptime] : []),

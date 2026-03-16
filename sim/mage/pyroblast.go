@@ -63,10 +63,9 @@ func (mage *Mage) registerPyroblastSpell() {
 			Aura: core.Aura{
 				Label: "PyroblastDoT",
 			},
-			NumberOfTicks:       4,
-			TickLength:          time.Second * 3,
-			BonusCoefficient:    pyroblastDotCoefficient,
-			AffectedByCastSpeed: true,
+			NumberOfTicks:    4,
+			TickLength:       time.Second * 3,
+			BonusCoefficient: pyroblastDotCoefficient,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, 89)
 			},

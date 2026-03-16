@@ -63,11 +63,10 @@ func (mage *Mage) NewWaterElemental() *WaterElemental {
 
 	waterElemental := &WaterElemental{
 		Pet: core.NewPet(core.PetConfig{
-			Name:                     "Water Elemental",
-			Owner:                    &mage.Character,
-			BaseStats:                waterElementalBaseStats,
-			NonHitExpStatInheritance: waterElementalStatInheritance,
-			IsGuardian:               true,
+			Name:            "Water Elemental",
+			Owner:           &mage.Character,
+			BaseStats:       waterElementalBaseStats,
+			StatInheritance: waterElementalStatInheritance,
 		}),
 		mageOwner: mage,
 	}

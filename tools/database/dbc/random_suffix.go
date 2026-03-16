@@ -19,25 +19,59 @@ func (raw RandomSuffix) ToProto() *proto.ItemRandomSuffix {
 		Id:    int32(raw.ID),
 		Stats: stats.Stats{}.ToProtoArray(),
 	}
+
 	for i, effect := range raw.Effects {
-		var stat proto.Stat
-		var matchFound bool
+		amount := float64(raw.AllocationPct[i])
+		switch effect {
+		case ITEM_ENCHANTMENT_RESISTANCE:
+			stat, match := MapResistanceToStat(raw.EffectArgs[i])
+			if !match {
+				continue
+			}
 
-		if effect == 5 {
-			stat, matchFound = MapBonusStatIndexToStat(raw.EffectArgs[i])
-		} else if effect == 4 {
-			stat, matchFound = MapResistanceToStat(raw.EffectArgs[i])
-		}
+			suffix.Stats[stat] = amount
+			if suffix.Name == "" {
+				suffix.Name = stats.Stat(stat).StatName()
+			}
+		case ITEM_ENCHANTMENT_STAT:
+			stat, match := MapBonusStatIndexToStat(raw.EffectArgs[i])
+			if !match {
+				continue
+			}
+			suffix.Stats[stat] = amount
+			if suffix.Name == "" {
+				suffix.Name = stats.Stat(stat).StatName()
+			}
+		case ITEM_ENCHANTMENT_EQUIP_SPELL: //Buff
+			spellEffects := dbcInstance.SpellEffects[raw.EffectArgs[i]]
+			for _, spellEffect := range spellEffects {
+				if spellEffect.EffectMiscValues[0] == -1 &&
+					spellEffect.EffectType == E_APPLY_AURA &&
+					spellEffect.EffectAura == A_MOD_STAT {
+					// Apply bonus to all stats
+					suffix.Stats[proto.Stat_StatAgility] += amount
+					suffix.Stats[proto.Stat_StatIntellect] += amount
+					suffix.Stats[proto.Stat_StatSpirit] += amount
+					suffix.Stats[proto.Stat_StatStamina] += amount
+					suffix.Stats[proto.Stat_StatStrength] += amount
+					continue
+				}
+				if spellEffect.EffectType == E_APPLY_AURA && spellEffect.EffectAura == A_MOD_STAT {
+					suffix.Stats[spellEffect.EffectMiscValues[0]] += amount
+				} else if spellEffect.EffectType == E_APPLY_AURA && spellEffect.EffectAura == A_MOD_RESISTANCE && (spellEffect.EffectMiscValues[0] == 126 || spellEffect.EffectMiscValues[0] == 124) {
+					suffix.Stats[proto.Stat_StatArcaneResistance] += amount
+					suffix.Stats[proto.Stat_StatFireResistance] += amount
+					suffix.Stats[proto.Stat_StatFrostResistance] += amount
+					suffix.Stats[proto.Stat_StatNatureResistance] += amount
+					suffix.Stats[proto.Stat_StatShadowResistance] += amount
+				} else {
+					stat := ConvertEffectAuraToStatIndex(spellEffect.EffectAura, spellEffect.EffectMiscValues[0])
+					if stat >= 0 {
+						suffix.Stats[stat] += amount
+					}
+				}
+			}
 
-		if !matchFound {
-			continue
-		}
-
-		amount := raw.AllocationPct[i]
-		suffix.Stats[stat] = float64(amount)
-
-		if suffix.Name == "" {
-			suffix.Name = stats.Stat(stat).StatName()
 		}
 	}
 	return suffix

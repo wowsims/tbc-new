@@ -3,6 +3,7 @@ package rogue
 import (
 	"testing"
 
+	"github.com/wowsims/tbc/sim/common"
 	_ "github.com/wowsims/tbc/sim/common" // imported to get item effects included.
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
@@ -10,24 +11,25 @@ import (
 
 func init() {
 	RegisterRogue()
+	common.RegisterAllEffects()
 }
 
 func TestRogue(t *testing.T) {
 	core.RunTestSuite(t, t.Name(), core.FullCharacterTestSuiteGenerator([]core.CharacterSuiteConfig{
 		{
-			Class:         proto.Class_ClassRogue,
-			Race:          proto.Race_RaceHuman,
-			OtherRaces:    []proto.Race{proto.Race_RaceOrc},
-			GearSet:       core.GetGearSet("../../ui/rogue/dps/gear_sets", "preraid"),
+			Class:      proto.Class_ClassRogue,
+			Race:       proto.Race_RaceHuman,
+			OtherRaces: []proto.Race{proto.Race_RaceOrc},
+			GearSet:    core.GetGearSet("../../ui/rogue/dps/gear_sets", "preraid"),
 			OtherGearSets: []core.GearSetCombo{
-				//core.GetGearSet("../../../ui/rogue/combat/gear_sets", "p3_combat"),
+				core.GetGearSet("../../ui/rogue/dps/gear_sets", "p1"),
 				//core.GetGearSet("../../../ui/rogue/combat/gear_sets", "p4_combat"),
 			},
 			Talents:     DefaultTalents,
 			Consumables: DefaultConsumables,
 			SpecOptions: core.SpecOptionsCombo{Label: "Rogue", SpecOptions: DefaultOptions},
 
-			Rotation:       core.GetAplRotation("../../ui/rogue/dps/apls", "sinister"),
+			Rotation:       core.GetAplRotation("../../ui/rogue/dps/apls", "swords"),
 			OtherRotations: []core.RotationCombo{},
 			ItemFilter: core.ItemFilter{
 				ArmorType: proto.ArmorType_ArmorTypeLeather,

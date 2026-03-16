@@ -149,10 +149,12 @@ export const SanctityAura = makeTristatePartyBuffInput({
 	fieldName: 'sanctityAura',
 	label: 'Sanctity Aura',
 });
-export const StrengthOfEarthTotem = makeTristatePartyBuffInput({
+export const StrengthOfEarthTotem = makeQuadstatePartyBuffInput({
 	actionId: () => ActionId.fromSpellId(25528),
 	impId: ActionId.fromSpellId(16295),
+	impId2: ActionId.fromSpellId(37223),
 	fieldName: 'strengthOfEarthTotem',
+	fieldNameImp2: 'soeEnhancement2Pt4',
 	label: 'Strength of Earth Totem',
 });
 export const TotemOfWrath = makeMultistatePartyBuffInput(ActionId.fromSpellId(30706), 5, 'totemOfWrath', 'Totem of Wrath');
@@ -389,7 +391,7 @@ export const BUFFS_CONFIG = [
 	{
 		config: DivineSpirit,
 		picker: IconPicker,
-		stats: [Stat.StatSpirit],
+		stats: [Stat.StatSpirit, Stat.StatSpellDamage],
 	},
 	{
 		config: GiftOfTheWild,
@@ -593,42 +595,42 @@ export const DEBUFFS_CONFIG = [
 	{
 		config: GiftOfArthas,
 		picker: IconPicker,
-		stats: [Stat.StatAttackPower],
+		stats: [Stat.StatAttackPower, Stat.StatResilienceRating],
 	},
 	{
 		config: DemoralizingRoar,
 		picker: IconPicker,
-		stats: [Stat.StatStamina],
+		stats: [Stat.StatStamina, Stat.StatResilienceRating],
 	},
 	{
 		config: DemoralizingShout,
 		picker: IconPicker,
-		stats: [Stat.StatStamina],
+		stats: [Stat.StatStamina, Stat.StatResilienceRating],
 	},
 	{
 		config: Screech,
 		picker: IconPicker,
-		stats: [Stat.StatStamina],
+		stats: [Stat.StatStamina, Stat.StatResilienceRating],
 	},
 	{
 		config: ThunderClap,
 		picker: IconPicker,
-		stats: [Stat.StatStamina],
+		stats: [Stat.StatStamina, Stat.StatResilienceRating],
 	},
 	{
 		config: InsectSwarm,
 		picker: IconPicker,
-		stats: [Stat.StatStamina],
+		stats: [Stat.StatStamina, Stat.StatResilienceRating],
 	},
 	{
 		config: ScorpidSting,
 		picker: IconPicker,
-		stats: [Stat.StatStamina],
+		stats: [Stat.StatStamina, Stat.StatResilienceRating],
 	},
 	{
 		config: ShadowEmbrace,
 		picker: IconPicker,
-		stats: [Stat.StatStamina],
+		stats: [Stat.StatStamina, Stat.StatResilienceRating],
 	},
 ] as PickerStatOptions[];
 

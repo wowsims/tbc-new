@@ -10,7 +10,7 @@ func RegisterBalanceDruid() {
 	core.RegisterAgentFactory(
 		proto.Player_BalanceDruid{},
 		proto.Spec_SpecBalanceDruid,
-		func(character *core.Character, options *proto.Player) core.Agent {
+		func(character *core.Character, options *proto.Player, _ *proto.Raid) core.Agent {
 			return NewBalanceDruid(character, options)
 		},
 		func(player *proto.Player, spec interface{}) {

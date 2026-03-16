@@ -54,10 +54,10 @@ func getWeaponMaxRange(item *Item) float64 {
 	case proto.RangedWeaponType_RangedWeaponTypeThrown:
 		return 30
 	default:
-		return 40
+		return 35
 	}
 
-	return 40
+	return 35
 }
 
 func getWeaponMinRange(item *Item) float64 {
@@ -67,7 +67,7 @@ func getWeaponMinRange(item *Item) float64 {
 	case proto.RangedWeaponType_RangedWeaponTypeWand:
 		return 0.
 	default:
-		return 8
+		return 5
 	}
 
 	return 0
@@ -271,6 +271,12 @@ func (aa *AutoAttacks) PreviousRangedAttack() time.Duration {
 	return aa.ranged.previousSwing
 }
 
+// Ranged swings have a 0.5s 'windup' time before they can fire, affected by haste.
+// This function computes the amount of windup time based on the current haste.
+func (aa *AutoAttacks) RangedSwingWindup() time.Duration {
+	return time.Duration(float64(time.Millisecond*500) / aa.character.TotalRangedHasteMultiplier())
+}
+
 func (aa *AutoAttacks) SetOffhandSwingAt(offhandSwingAt time.Duration) {
 	aa.oh.swingAt = offhandSwingAt
 }
@@ -337,7 +343,7 @@ func (wa *WeaponAttack) swing(sim *Simulation) time.Duration {
 
 	if wa.replaceSwing != nil {
 		// Need to check APL here to allow last-moment HS queue casts.
-		wa.unit.ReactToEvent(sim, false)
+		wa.unit.ReactToEvent(sim, false, false)
 
 		// Need to check this again in case the DoNextAction call swapped items.
 		if wa.replaceSwing != nil {
@@ -353,7 +359,7 @@ func (wa *WeaponAttack) swing(sim *Simulation) time.Duration {
 	attackSpell.Cast(sim, wa.unit.CurrentTarget)
 
 	if !sim.Options.Interactive && (wa.unit.Rotation != nil) && !wa.unit.Metrics.isTanking {
-		wa.unit.ReactToEvent(sim, false)
+		wa.unit.ReactToEvent(sim, false, true)
 	}
 
 	return wa.swingAt
@@ -448,13 +454,13 @@ func (unit *Unit) EnableAutoAttacks(agent Agent, options AutoAttackOptions) {
 		BonusCoefficient: 1,
 
 		ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
-			baseDamage := spell.Unit.MHWeaponDamage(sim, spell.MeleeAttackPower())
+			baseDamage := spell.Unit.MHWeaponDamage(sim, spell.MeleeAttackPower(target))
 
 			spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeWhite)
 		},
 
 		ExpectedInitialDamage: func(sim *Simulation, target *Unit, spell *Spell, _ bool) *SpellResult {
-			baseDamage := spell.Unit.AutoAttacks.MH().CalculateAverageWeaponDamage(spell.MeleeAttackPower())
+			baseDamage := spell.Unit.AutoAttacks.MH().CalculateAverageWeaponDamage(spell.MeleeAttackPower(target))
 			return spell.CalcDamage(sim, target, baseDamage, spell.OutcomeExpectedMeleeWhite)
 		},
 	}
@@ -473,7 +479,7 @@ func (unit *Unit) EnableAutoAttacks(agent Agent, options AutoAttackOptions) {
 		BonusCoefficient: 1,
 
 		ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
-			baseDamage := spell.Unit.OHWeaponDamage(sim, spell.MeleeAttackPower())
+			baseDamage := spell.Unit.OHWeaponDamage(sim, spell.MeleeAttackPower(target))
 
 			spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeWhite)
 		},
@@ -485,17 +491,40 @@ func (unit *Unit) EnableAutoAttacks(agent Agent, options AutoAttackOptions) {
 		ProcMask:     Ternary(options.ProcMask == ProcMaskUnknown, ProcMaskRangedAuto, options.ProcMask),
 		Flags:        SpellFlagMeleeMetrics | SpellFlagIncludeTargetBonusDamage,
 		MissileSpeed: 40,
+		MinRange:     unit.AutoAttacks.ranged.MinRange,
+		MaxRange:     unit.AutoAttacks.ranged.MaxRange,
+
+		Cast: CastConfig{
+			DefaultCast: Cast{
+				CastTime: 1,
+			},
+
+			ModifyCast: func(sim *Simulation, spell *Spell, cast *Cast) {
+				cast.CastTime = spell.CastTime()
+			},
+
+			CastTime: func(spell *Spell) time.Duration {
+				return unit.AutoAttacks.RangedSwingWindup()
+			},
+		},
 
 		DamageMultiplier:         1,
 		DamageMultiplierAdditive: 1,
 		CritMultiplier:           options.Ranged.CritMultiplier,
 		ThreatMultiplier:         1,
-
-		BonusCoefficient: 1,
+		BonusCoefficient:         1,
 
 		ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
-			baseDamage := spell.Unit.RangedWeaponDamage(sim, spell.RangedAttackPower())
-			spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeRangedHitAndCrit)
+			baseDamage := spell.Unit.RangedWeaponDamage(sim, spell.RangedAttackPower(target))
+
+			result := spell.CalcDamage(sim, target, baseDamage, spell.OutcomeRangedHitAndCrit)
+
+			spell.WaitTravelTime(sim, func(sim *Simulation) {
+				spell.DealDamage(sim, result)
+			})
+
+			// Have to react an extra time here to allow for movement actions (melee weaving)
+			unit.ReactToEvent(sim, false, true)
 		},
 	}
 
@@ -714,7 +743,7 @@ func (aa *AutoAttacks) OffhandSwingSpeed() time.Duration {
 
 // The amount of time between two Ranged swings.
 func (aa *AutoAttacks) RangedSwingSpeed() time.Duration {
-	return aa.ranged.curSwingDuration - aa.RangedAuto().CastTime()
+	return aa.ranged.curSwingDuration
 }
 
 // Optionally replaces the given swing spell with an Agent-specified MH Swing replacer.

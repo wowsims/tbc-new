@@ -1,29 +1,176 @@
 {
 	"type": "TypeAPL",
-	"prepullActions": [
-	{"action":{"castSpell":{"spellId":{"spellId":30451}}},"doAtValue":{"const":{"val":"-2.5s"}}}
-	],
+	"prepullActions": [{ "action": { "castSpell": { "spellId": { "spellId": 30451 } } }, "doAtValue": { "const": { "val": "-2.5s" } } }],
 	"priorityList": [
-	{"action":{"groupReference":{"groupName":"DetermineRegenRotation"}}},
-	{"action":{"condition":{"and":{"vals":[{"not":{"val":{"spellIsReady":{"spellId":{"spellId":12472}}}}},{"spellIsReady":{"spellId":{"spellId":11958}}}]}},"castSpell":{"spellId":{"spellId":11958}}}},
-	{"action":{"condition":{"spellIsReady":{"spellId":{"spellId":12472}}},"castSpell":{"spellId":{"spellId":12042}}}},
-	{"action":{"autocastOtherCooldowns":{}}},
-	{"action":{"condition":{"and":{"vals":[{"spellIsReady":{"spellId":{"spellId":12472}}},{"auraIsInactive":{"auraId":{"spellId":12472}}},{"auraIsInactive":{"auraId":{"spellId":351355}}}]}},"castSpell":{"spellId":{"spellId":12472}}}},
-	{"action":{"condition":{"auraIsInactive":{"auraId":{"spellId":2825,"tag":-1}}},"castSpell":{"spellId":{"spellId":20554,"tag":1}}}},
-	{"action":{"condition":{"cmp":{"op":"OpLt","lhs":{"math":{"op":"OpAdd","lhs":{"currentMana":{}},"rhs":{"const":{"val":"3000"}}}},"rhs":{"maxMana":{}}}},"castSpell":{"spellId":{"itemId":22044}}}},
-	{"action":{"condition":{"and":{"vals":[{"and":{"vals":[{"auraIsInactive":{"auraId":{"spellId":12042},"includeReactionTime":true}},{"auraIsInactive":{"auraId":{"spellId":12472},"includeReactionTime":true}}]}},{"cmp":{"op":"OpLt","lhs":{"currentManaPercent":{}},"rhs":{"variableRef":{"name":"ConserveEnd"}}}}]}},"castSpell":{"spellId":{"spellId":12051}}}},
-	{"action":{"condition":{"cmp":{"op":"OpLe","lhs":{"remainingTimePercent":{}},"rhs":{"variableRef":{"name":"TimeRemainingAB"}}}},"castSpell":{"spellId":{"spellId":30451}}}},
-	{"action":{"condition":{"and":{"vals":[{"not":{"val":{"sequenceIsReady":{"sequenceName":"regen"}}}},{"auraIsInactive":{"auraId":{"spellId":12042},"includeReactionTime":true}}]}},"groupReference":{"groupName":"ConserveRotation","variables":[{"name":"replaceMe","value":{"variableRef":{}}}]}}},
-	{"action":{"castSpell":{"spellId":{"spellId":30451}}}},
-	{"action":{"castSpell":{"spellId":{"spellId":20554,"tag":2}}}}
+		{ "action": { "groupReference": { "groupName": "DetermineRegenRotation" } } },
+		{
+			"action": {
+				"condition": {
+					"and": {
+						"vals": [
+							{ "not": { "val": { "spellIsReady": { "spellId": { "spellId": 12472 } } } } },
+							{ "spellIsReady": { "spellId": { "spellId": 11958 } } }
+						]
+					}
+				},
+				"castSpell": { "spellId": { "spellId": 11958 } }
+			}
+		},
+		{ "action": { "condition": { "spellIsReady": { "spellId": { "spellId": 12472 } } }, "castSpell": { "spellId": { "spellId": 12042 } } } },
+		{ "action": { "autocastOtherCooldowns": {} } },
+		{
+			"action": {
+				"condition": {
+					"and": {
+						"vals": [
+							{ "spellIsReady": { "spellId": { "spellId": 12472 } } },
+							{ "auraIsInactive": { "auraId": { "spellId": 12472 } } },
+							{ "auraIsInactive": { "auraId": { "spellId": 351355 } } }
+						]
+					}
+				},
+				"castSpell": { "spellId": { "spellId": 12472 } }
+			}
+		},
+		{
+			"action": {
+				"condition": { "auraIsInactive": { "auraId": { "spellId": 2825, "tag": -1 } } },
+				"castSpell": { "spellId": { "spellId": 20554, "tag": 1 } }
+			}
+		},
+		{
+			"action": {
+				"condition": {
+					"cmp": {
+						"op": "OpLt",
+						"lhs": { "math": { "op": "OpAdd", "lhs": { "currentMana": {} }, "rhs": { "const": { "val": "3000" } } } },
+						"rhs": { "maxMana": {} }
+					}
+				},
+				"castSpell": { "spellId": { "itemId": 22044 } }
+			}
+		},
+		{
+			"action": {
+				"condition": { "cmp": { "op": "OpEq", "lhs": { "spellNumCharges": { "spellId": { "itemId": 22044 } } }, "rhs": { "const": { "val": "0" } } } },
+				"castSpell": { "spellId": { "itemId": 12662 } }
+			}
+		},
+		{
+			"action": {
+				"condition": {
+					"and": {
+						"vals": [
+							{
+								"and": {
+									"vals": [
+										{ "auraIsInactive": { "auraId": { "spellId": 12042 }, "includeReactionTime": true } },
+										{ "auraIsInactive": { "auraId": { "spellId": 12472 }, "includeReactionTime": true } }
+									]
+								}
+							},
+							{ "cmp": { "op": "OpLt", "lhs": { "currentManaPercent": {} }, "rhs": { "variableRef": { "name": "ConserveEnd" } } } }
+						]
+					}
+				},
+				"castSpell": { "spellId": { "spellId": 12051 } }
+			}
+		},
+		{
+			"action": {
+				"condition": { "cmp": { "op": "OpLe", "lhs": { "remainingTimePercent": {} }, "rhs": { "variableRef": { "name": "TimeRemainingAB" } } } },
+				"castSpell": { "spellId": { "spellId": 30451 } }
+			}
+		},
+		{
+			"action": {
+				"condition": {
+					"and": {
+						"vals": [
+							{ "not": { "val": { "sequenceIsReady": { "sequenceName": "regen" } } } },
+							{ "auraIsInactive": { "auraId": { "spellId": 12042 }, "includeReactionTime": true } }
+						]
+					}
+				},
+				"groupReference": { "groupName": "ConserveRotation", "variables": [{ "name": "replaceMe", "value": { "variableRef": {} } }] }
+			}
+		},
+		{ "action": { "castSpell": { "spellId": { "spellId": 30451 } } } },
+		{ "action": { "castSpell": { "spellId": { "spellId": 20554, "tag": 2 } } } }
 	],
 	"groups": [
-	{"name":"ConserveRotation","actions":[{"action":{"condition":{"and":{"vals":[{"cmp":{"op":"OpEq","lhs":{"auraNumStacks":{"auraId":{"spellId":36032}}},"rhs":{"const":{"val":"3"}}}},{"cmp":{"op":"OpGt","lhs":{"auraRemainingTime":{"auraId":{"spellId":36032}}},"rhs":{"spellCastTime":{"spellId":{"spellId":30451}}}}}]}},"castSpell":{"spellId":{"spellId":27072,"rank":13}}}},{"action":{"castSpell":{"spellId":{"spellId":30451}}}}]},
-	{"name":"DetermineRegenRotation","actions":[{"action":{"condition":{"and":{"vals":[{"sequenceIsComplete":{"sequenceName":"regen"}},{"cmp":{"op":"OpGe","lhs":{"currentManaPercent":{}},"rhs":{"variableRef":{"name":"ConserveEnd"}}}}]}},"resetSequence":{"sequenceName":"regen"}}},{"action":{"condition":{"cmp":{"op":"OpEq","lhs":{"remainingTimePercent":{}},"rhs":{"const":{"val":"100%"}}}},"resetSequence":{"sequenceName":"regen"}}},{"action":{"condition":{"and":{"vals":[{"sequenceIsReady":{"sequenceName":"regen"}},{"cmp":{"op":"OpLe","lhs":{"currentManaPercent":{}},"rhs":{"variableRef":{"name":"ConserveStart"}}}}]}},"sequence":{"name":"regen","actions":[{"changeTarget":{"newTarget":{"type":"Target"}}}]}}}]}
+		{
+			"name": "ConserveRotation",
+			"actions": [
+				{
+					"action": {
+						"condition": {
+							"and": {
+								"vals": [
+									{
+										"cmp": {
+											"op": "OpEq",
+											"lhs": { "auraNumStacks": { "auraId": { "spellId": 36032 } } },
+											"rhs": { "const": { "val": "3" } }
+										}
+									},
+									{
+										"cmp": {
+											"op": "OpGt",
+											"lhs": { "auraRemainingTime": { "auraId": { "spellId": 36032 } } },
+											"rhs": { "spellCastTime": { "spellId": { "spellId": 30451 } } }
+										}
+									}
+								]
+							}
+						},
+						"castSpell": { "spellId": { "spellId": 27072, "rank": 13 } }
+					}
+				},
+				{ "action": { "castSpell": { "spellId": { "spellId": 30451 } } } }
+			]
+		},
+		{
+			"name": "DetermineRegenRotation",
+			"actions": [
+				{
+					"action": {
+						"condition": {
+							"and": {
+								"vals": [
+									{ "sequenceIsComplete": { "sequenceName": "regen" } },
+									{ "cmp": { "op": "OpGe", "lhs": { "currentManaPercent": {} }, "rhs": { "variableRef": { "name": "ConserveEnd" } } } }
+								]
+							}
+						},
+						"resetSequence": { "sequenceName": "regen" }
+					}
+				},
+				{
+					"action": {
+						"condition": { "cmp": { "op": "OpEq", "lhs": { "remainingTimePercent": {} }, "rhs": { "const": { "val": "100%" } } } },
+						"resetSequence": { "sequenceName": "regen" }
+					}
+				},
+				{
+					"action": {
+						"condition": {
+							"and": {
+								"vals": [
+									{ "sequenceIsReady": { "sequenceName": "regen" } },
+									{ "cmp": { "op": "OpLe", "lhs": { "currentManaPercent": {} }, "rhs": { "variableRef": { "name": "ConserveStart" } } } }
+								]
+							}
+						},
+						"sequence": { "name": "regen", "actions": [{ "changeTarget": { "newTarget": { "type": "Target" } } }] }
+					}
+				}
+			]
+		}
 	],
 	"valueVariables": [
-	{"name":"ConserveStart","value":{"const":{"val":"20%"}}},
-	{"name":"ConserveEnd","value":{"const":{"val":"30%"}}},
-	{"name":"TimeRemainingAB","value":{"const":{"val":"10%"}}}
+		{ "name": "ConserveStart", "value": { "const": { "val": "20%" } } },
+		{ "name": "ConserveEnd", "value": { "const": { "val": "30%" } } },
+		{ "name": "TimeRemainingAB", "value": { "const": { "val": "10%" } } }
 	]
 }

@@ -76,18 +76,12 @@ func (war *Warrior) registerDefiance() {
 	}
 
 	war.AddStat(stats.ExpertiseRating, 2*float64(war.Talents.Defiance)*core.ExpertisePerQuarterPercentReduction)
-
 	war.OnSpellRegistered(func(spell *core.Spell) {
 		if !spell.Matches(SpellMaskDefensiveStance) {
 			return
 		}
-
 		spell.RelatedSelfBuff.
-			AttachSpellMod(core.SpellModConfig{
-				ClassMask:  SpellMaskMortalStrike | SpellMaskBloodthirst,
-				Kind:       core.SpellMod_ThreatMultiplier_Pct,
-				FloatValue: 0.05 * float64(war.Talents.Defiance),
-			})
+			AttachMultiplicativePseudoStatBuff(&war.PseudoStats.ThreatMultiplier, 1+0.05*float64(war.Talents.Defiance))
 	})
 }
 
@@ -301,11 +295,11 @@ func (war *Warrior) registerOneHandedWeaponSpecialization() {
 
 	hasOneHandEquipped := func() bool {
 		mh := war.GetMHWeapon()
-		if mh != nil && mh.HandType == proto.HandType_HandTypeOneHand {
+		if mh != nil && (mh.HandType == proto.HandType_HandTypeOneHand || mh.HandType == proto.HandType_HandTypeMainHand) {
 			return true
 		}
 		oh := war.GetOHWeapon()
-		if oh != nil && oh.HandType == proto.HandType_HandTypeOneHand {
+		if oh != nil && (oh.HandType == proto.HandType_HandTypeOneHand || oh.HandType == proto.HandType_HandTypeOffHand) {
 			return true
 		}
 		return false
@@ -449,7 +443,7 @@ func (war *Warrior) registerDevastate() {
 		FlatThreatBonus:  100,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := war.MHWeaponDamage(sim, spell.MeleeAttackPower()) * 0.5
+			baseDamage := war.MHWeaponDamage(sim, spell.MeleeAttackPower(target)) * 0.5
 			sunderStacks := war.SunderArmorAuras.Get(target).GetStacks()
 			canApplySunderStack := war.CanApplySunderAura(target) && sunderStacks < 5
 			sunderDamage := core.TernaryFloat64(war.CanApplySunderAura(target), float64(sunderStacks)*35, 0)

@@ -35,7 +35,7 @@ var ItemSetTirisfalRegalia = core.NewItemSet(core.ItemSet{
 	Bonuses: map[int32]core.ApplySetBonus{
 		2: func(agent core.Agent, setBonusAura *core.Aura) {
 			setBonusAura.AttachSpellMod(core.SpellModConfig{
-				Kind:       core.SpellMod_DamageDone_Pct,
+				Kind:       core.SpellMod_DamageDone_Flat,
 				FloatValue: .20,
 				ClassMask:  MageSpellArcaneBlast,
 			}).AttachSpellMod(core.SpellModConfig{
@@ -81,17 +81,9 @@ var ItemSetTempestRegalia = core.NewItemSet(core.ItemSet{
 		},
 		4: func(agent core.Agent, setBonusAura *core.Aura) {
 			setBonusAura.AttachSpellMod(core.SpellModConfig{
-				Kind:       core.SpellMod_DamageDone_Pct,
+				Kind:       core.SpellMod_DamageDone_Flat,
 				FloatValue: .05,
-				ClassMask:  MageSpellFireball,
-			}).AttachSpellMod(core.SpellModConfig{
-				Kind:       core.SpellMod_DamageDone_Pct,
-				FloatValue: .05,
-				ClassMask:  MageSpellFrostbolt,
-			}).AttachSpellMod(core.SpellModConfig{
-				Kind:       core.SpellMod_DamageDone_Pct,
-				FloatValue: .05,
-				ClassMask:  MageSpellArcaneMissilesTick,
+				ClassMask:  MageSpellFireball | MageSpellFrostbolt | MageSpellArcaneMissilesTick,
 			})
 		},
 	},

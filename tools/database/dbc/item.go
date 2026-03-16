@@ -321,11 +321,19 @@ func (item *Item) GetWeaponTypes() (proto.WeaponType, proto.HandType, proto.Rang
 		switch item.ItemSubClass {
 		case ITEM_SUBCLASS_ARMOR_MISC:
 			if item.InventoryType == INVTYPE_HOLDABLE {
-
 				handType = proto.HandType_HandTypeOffHand
 				weaponType = proto.WeaponType_WeaponTypeOffHand
 			}
+		case ITEM_SUBCLASS_ARMOR_TOTEM:
+			rangedWeaponType = proto.RangedWeaponType_RangedWeaponTypeTotem
+		case ITEM_SUBCLASS_ARMOR_IDOL:
+			rangedWeaponType = proto.RangedWeaponType_RangedWeaponTypeIdol
+		case ITEM_SUBCLASS_ARMOR_LIBRAM:
+			rangedWeaponType = proto.RangedWeaponType_RangedWeaponTypeLibram
+		case ITEM_SUBCLASS_ARMOR_SIGIL:
+			rangedWeaponType = proto.RangedWeaponType_RangedWeaponTypeSigil
 		}
+
 	case ITEM_CLASS_WEAPON:
 		switch item.ItemSubClass {
 		case ITEM_SUBCLASS_WEAPON_BOW:
@@ -403,7 +411,8 @@ func (item *Item) GetRandomSuffixType() int {
 			INVTYPE_FINGER,
 			INVTYPE_CLOAK,
 			INVTYPE_WRISTS,
-			INVTYPE_SHIELD:
+			INVTYPE_SHIELD,
+			INVTYPE_RELIC:
 			return 2
 
 		default:

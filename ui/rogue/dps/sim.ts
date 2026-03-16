@@ -1,11 +1,12 @@
 import * as OtherInputs from '../../core/components/inputs/other_inputs';
+import { Phase } from '../../core/constants/other';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui';
 import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
 import { APLRotation } from '../../core/proto/apl';
 import { Debuffs, Faction, IndividualBuffs, ItemSlot, PartyBuffs, PseudoStat, Race, RaidBuffs, Spec, Stat, TristateEffect } from '../../core/proto/common';
 import { UnitStat } from '../../core/proto_utils/stats';
-import { defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
+import { defaultExposeWeaknessSettings, defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
 
 import * as Presets from './presets';
 
@@ -13,7 +14,10 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 	cssClass: 'rogue-sim-ui',
 	cssScheme: PlayerClasses.getCssClass(PlayerClasses.Rogue),
 	// List any known bugs / issues here and they'll be shown on the site.
-	knownIssues: [],
+	knownIssues: [
+		'The APL is in constant flux due to bug fixes and new findings; if your DPS drops dramatically, reset it back to "Auto" in the Rotation tab!',
+		'Mutilate does not have a default APL currently. It will not be automatically used when talented.',
+	],
 
 	// All stats for which EP should be calculated.
 	epStats: [
@@ -52,7 +56,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 		// Default raid/party buffs settings.
 		raidBuffs: RaidBuffs.create({
 			...defaultRaidBuffMajorDamageCooldowns(),
-			giftOfTheWild: TristateEffect.TristateEffectImproved
+			giftOfTheWild: TristateEffect.TristateEffectImproved,
 		}),
 		partyBuffs: PartyBuffs.create({
 			battleShout: TristateEffect.TristateEffectImproved,
@@ -69,6 +73,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 			unleashedRage: true,
 		}),
 		debuffs: Debuffs.create({
+			...defaultExposeWeaknessSettings(Phase.Phase1),
 			bloodFrenzy: true,
 			huntersMark: TristateEffect.TristateEffectImproved,
 			improvedSealOfTheCrusader: true,
@@ -76,8 +81,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 			misery: true,
 			curseOfRecklessness: true,
 			faerieFire: TristateEffect.TristateEffectImproved,
-			exposeWeaknessUptime: 0.9,
-			exposeWeaknessHunterAgility: 1080,
 			giftOfArthas: true,
 			sunderArmor: true,
 		}),
@@ -93,7 +96,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 	excludeBuffDebuffInputs: [],
 	// Inputs to include in the 'Other' section on the settings tab.
 	otherInputs: {
-		inputs: [OtherInputs.InFrontOfTarget, OtherInputs.InputDelay],
+		inputs: [OtherInputs.TotemTwisting, OtherInputs.InFrontOfTarget, OtherInputs.InputDelay],
 	},
 	itemSwapSlots: [ItemSlot.ItemSlotTrinket1, ItemSlot.ItemSlotTrinket2, ItemSlot.ItemSlotMainHand, ItemSlot.ItemSlotOffHand],
 	encounterPicker: {
@@ -106,7 +109,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 		// Preset talents that the user can quickly select.
 		talents: [Presets.Talents],
 		// Preset rotations that the user can quickly select.
-		rotations: [Presets.SINSITER_APL, Presets.SHIV_APL],
+		rotations: [Presets.SINSITER_APL],
 		// Preset gear configurations that the user can quickly select.
 		gear: [Presets.PREARAID_SWORDS_GEAR, Presets.P1_SWORDS_GEAR],
 	},

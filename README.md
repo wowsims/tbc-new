@@ -6,7 +6,7 @@ The primary goal of this project is to provide a framework that makes it easy to
 
 This project is licensed with MIT license. We request that anyone using this software in their own project to make sure there is a user visible link back to the original project.
 
-[Live sims can be found here.](https://wowsims.github.io/tbc 'https://wowsims.github.io/tbc')
+[Live sims can be found here.](https://wowsims.com/tbc)
 
 [Support our devs via Patreon.](https://www.patreon.com/wowsims)
 
@@ -14,9 +14,9 @@ This project is licensed with MIT license. We request that anyone using this sof
 
 Links for latest Sim build:
 
--   [Windows Sim](https://github.com/wowsims/tbc/releases/latest/download/wowsimtbc-windows.exe.zip)
--   [MacOS Sim](https://github.com/wowsims/tbc/releases/latest/download/wowsimtbc-amd64-darwin.zip)
--   [Linux Sim](https://github.com/wowsims/tbc/releases/latest/download/wowsimtbc-amd64-linux.zip)
+-   [Windows Sim](https://github.com/wowsims/tbc-new/releases/latest/download/wowsimtbc-windows.exe.zip)
+-   [MacOS Sim](https://github.com/wowsims/tbc-new/releases/latest/download/wowsimtbc-amd64-darwin.zip)
+-   [Linux Sim](https://github.com/wowsims/tbc-new/releases/latest/download/wowsimtbc-amd64-linux.zip)
 
 Then unzip the downloaded file, then open the unzipped file to open the sim in your browser!
 

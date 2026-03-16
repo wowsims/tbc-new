@@ -28,4 +28,25 @@ func (rogue *Rogue) registerStealthAura() {
 		// Stealth breaks on damage taken (if not absorbed)
 		// This may be desirable later, but not applicable currently
 	})
+
+	rogue.RegisterSpell(core.SpellConfig{
+		ActionID:       core.ActionID{SpellID: 1784},
+		SpellSchool:    core.SpellSchoolPhysical,
+		Flags:          core.SpellFlagAPL,
+		ClassSpellMask: RogueSpellStealth,
+
+		Cast: core.CastConfig{
+			CD: core.Cooldown{
+				Timer:    rogue.NewTimer(),
+				Duration: time.Second * 10,
+			},
+		},
+		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
+			return sim.CurrentTime < 0
+		},
+		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+			spell.RelatedSelfBuff.Activate(sim)
+		},
+		RelatedSelfBuff: rogue.StealthAura,
+	})
 }

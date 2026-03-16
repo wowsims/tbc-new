@@ -1175,21 +1175,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// https://www.wowhead.com/tbc/spell=22619
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 18168, ItemName: "Force Reactive Disk"},
-	//	{ItemID: 18168, ItemName: "Force Reactive Disk"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Reduces the duration of any Silence or Interrupt effects used against the wearer by 10%. This effect does
 	// not stack with other similar effects.
 	// https://www.wowhead.com/tbc/spell=42184
@@ -2977,21 +2962,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Increases damage done by Chain Lightning and Lightning Bolt by up to 33.
-	// https://www.wowhead.com/tbc/spell=28857
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 23199, ItemName: "Totem of the Storm"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Increases healing done by Lesser Healing Wave by up to 53.
 	// https://www.wowhead.com/tbc/spell=28856
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -3402,21 +3372,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Increases spell damage by up to 34 for all nearby party members. Lasts 30min.
-	// https://www.wowhead.com/tbc/spell=31033
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 24116, ItemName: "Eye of the Night"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// All stats of nearby party members increased by 10 for 30min.
 	// https://www.wowhead.com/tbc/spell=31026
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -3426,36 +3381,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 24117, ItemName: "Embrace of the Dawn"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Increases the spell critical hit chance of nearby party members by 2% for 30min.
-	// https://www.wowhead.com/tbc/spell=31035
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 24121, ItemName: "Chain of the Twilight Owl"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Chance on successful spellcast to restore 90 Mana over 10s.
-	// https://www.wowhead.com/tbc/spell=31036
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 24122, ItemName: "Coronet of Verdant Flame"},
 	// })
 
 	// TODO: Manual implementation required
@@ -3899,21 +3824,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Increases the attack power bonus on Windfury Weapon attacks by 80.
-	// https://www.wowhead.com/tbc/spell=34244
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 27815, ItemName: "Totem of the Astral Winds"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Increases the Holy damage bonus of your Judgement of the Crusader by 20.
 	// https://www.wowhead.com/tbc/spell=23300
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -3989,7 +3899,9 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// https://www.wowhead.com/tbc/spell=39599
+	// Sometimes heals bearer of 120 damage when damaging an enemy in melee and chance on ranged hit to restore
+	// 172 mana to the bearer.
+	// https://www.wowhead.com/tbc/spell=33504
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskUnknown,
@@ -4032,22 +3944,6 @@ func RegisterAllProcs() {
 	// }, []shared.ItemVariant{
 	//	{ItemID: 27926, ItemName: "Mark of Vindication"},
 	//	{ItemID: 27927, ItemName: "Mark of Vindication"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Increases damage done by Earth Shock, Flame Shock, and Frost Shock by up to 46.
-	// https://www.wowhead.com/tbc/spell=33556
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 27947, ItemName: "Totem of Impact"},
-	//	{ItemID: 27984, ItemName: "Totem of Impact"},
 	// })
 
 	// TODO: Manual implementation required
@@ -4117,21 +4013,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Reduces the mana cost of your Lightning Bolt spells by 15.
-	// https://www.wowhead.com/tbc/spell=33696
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 28066, ItemName: "Totem of Lightning"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Restores 200 mana when you kill a target that gives experience or honor. This effect cannot occur more
 	// than once every 10 seconds.
 	// https://www.wowhead.com/tbc/spell=33743
@@ -4188,21 +4069,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 28136, ItemName: "Gladiator's Wyrmhide Gloves"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Increases damage done by Chain Lightning and Lightning Bolt by up to 55.
-	// https://www.wowhead.com/tbc/spell=34230
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 28248, ItemName: "Totem of the Void"},
 	// })
 
 	// TODO: Manual implementation required
@@ -4338,36 +4204,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 28568, ItemName: "Idol of the Avian Heart"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Attempts to impale the target, causing 600 damage.
-	// https://www.wowhead.com/tbc/spell=34580
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 28573, ItemName: "Despair"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Your melee and ranged attacks have a chance to inject poison into your target dealing 332 Nature damage.
-	// https://www.wowhead.com/tbc/spell=34587
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 28579, ItemName: "Romulo's Poison Vial"},
 	// })
 
 	// TODO: Manual implementation required
@@ -4581,22 +4417,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 28719, ItemName: "Grand Marshal's Wyrmhide Gloves"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Each spell cast within 20 seconds will grant a stacking bonus of 21 mana regen per 5 sec. Expires after
-	// 20 seconds. Abilities with no mana cost will not trigger this trinket.
-	// https://www.wowhead.com/tbc/spell=29601
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 28727, ItemName: "Pendant of the Violet Eye"},
 	// })
 
 	// TODO: Manual implementation required
@@ -5027,21 +4847,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Chance on melee attack to gain 10 Energy or 5 Rage.
-	// https://www.wowhead.com/tbc/spell=36070
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 29996, ItemName: "Rod of the Sun King"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Reduces the duration of any Silence or Interrupt effects used against the wearer by 20%. This effect does
 	// not stack with other similar effects.
 	// https://www.wowhead.com/tbc/spell=35126
@@ -5188,21 +4993,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 30447, ItemName: "Tome of Fiery Redemption"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Your Arcane Shot ability increases the damage dealt by all other damaging shots by 40 for 6s.
-	// https://www.wowhead.com/tbc/spell=37507
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 30448, ItemName: "Talon of Al'ar"},
 	// })
 
 	// TODO: Manual implementation required
@@ -5370,22 +5160,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 30847, ItemName: "X-52 Rocket Helmet"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Increases your pet's critical strike chance by 2%.
-	// https://www.wowhead.com/tbc/spell=27043
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 30892, ItemName: "Beast-tamer's Shoulders"},
-	//	{ItemID: 30892, ItemName: "Beast-tamer's Shoulders"},
 	// })
 
 	// TODO: Manual implementation required
@@ -6174,36 +5948,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Increases damage done by Chain Lightning and Lightning Bolt by up to 85.
-	// https://www.wowhead.com/tbc/spell=41040
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32330, ItemName: "Totem of Ancestral Guidance"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Increases attack power by 26.
-	// https://www.wowhead.com/tbc/spell=0
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32336, ItemName: "Black Bow of the Betrayer"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Your Judgement ability also increases your shield block value by 186 for 5s.
 	// https://www.wowhead.com/tbc/spell=41042
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -6282,21 +6026,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Your Steady Shot has a 15% chance to grant you 275 attack power for 8s.
-	// https://www.wowhead.com/tbc/spell=40487
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32487, ItemName: "Ashtongue Talisman of Swiftness"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Your spell critical strikes have a 50% chance to grant you 145 spell haste rating for 5s.
 	// https://www.wowhead.com/tbc/spell=40483
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -6369,36 +6098,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 32492, ItemName: "Ashtongue Talisman of Lethality"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Each time your Corruption deals damage, it has a 20% chance to grant you 220 spell damage for 5s.
-	// https://www.wowhead.com/tbc/spell=40480
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32493, ItemName: "Ashtongue Talisman of Shadows"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Each time you cast a spell, there is chance you will gain up to 76 mana per 5 for 15s.
-	// https://www.wowhead.com/tbc/spell=37656
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32496, ItemName: "Memento of Tyrande"},
 	// })
 
 	// TODO: Manual implementation required
@@ -6551,21 +6250,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 33505, ItemName: "Totem of Living Water"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Your Lightning Bolt spell has a chance to grant 100 spell haste rating for 10s.
-	// https://www.wowhead.com/tbc/spell=43751
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 33506, ItemName: "Skycall Totem"},
 	// })
 
 	// TODO: Manual implementation required
@@ -7234,22 +6918,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Increases ranged attack speed by 15%. Does not stack with quiver or ammo pouch haste effects.
-	// https://www.wowhead.com/tbc/spell=44972
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 34334, ItemName: "Thori'dal, the Stars' Fury"},
-	//	{ItemID: 34334, ItemName: "Thori'dal, the Stars' Fury"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Conjures a Power Circle lasting for 15s. While standing in this circle, the caster gains up to 320 spell
 	// damage and healing.
 	// https://www.wowhead.com/tbc/spell=45042
@@ -7296,9 +6964,8 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Release all accumulated Holy Energy to instantly heal current friendly target by the amount of Holy Energy
-	// accumulated.
-	// https://www.wowhead.com/tbc/spell=45064
+	// Collects 100 Holy Energy from healing spells you cast. Cannot collect more than 2000 Holy Energy.
+	// https://www.wowhead.com/tbc/spell=45062
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskUnknown,
@@ -8144,6 +7811,21 @@ func RegisterAllProcs() {
 	//	{ItemID: 38506, ItemName: "Don Carlos' Famous Hat"},
 	// })
 
+	// TODO: Manual implementation required
+	//       This can be ignored if the effect has already been implemented.
+	//       With next db run the item will be removed if implemented.
+	//
+	// Reduces the mana cost of Stormstrike by 5.
+	// https://www.wowhead.com/tbc/spell=352522
+	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+	//	Callback:           core.CallbackEmpty,
+	//	ProcMask:           core.ProcMaskUnknown,
+	//	Outcome:            core.OutcomeEmpty,
+	//	RequireDamageDealt: false
+	// }, []shared.ItemVariant{
+	//	{ItemID: 186073, ItemName: "Communal Totem of the Storm"},
+	// })
+
 	// Reduces an enemy's armor by 200. Stacks up to 3 times.
 	// https://www.wowhead.com/tbc/spell=16928
 	shared.NewStackingStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -8177,6 +7859,17 @@ func RegisterAllProcs() {
 		RequireDamageDealt: false,
 	}, []shared.ItemVariant{
 		{ItemID: 21190, ItemName: "Wrath of Cenarius"},
+	})
+
+	// Chance on successful spellcast to restore 90 Mana over 10s.
+	// https://www.wowhead.com/tbc/spell=31036
+	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+		Callback:           core.CallbackOnSpellHitDealt,
+		ProcMask:           core.ProcMaskSpellDamage,
+		Outcome:            core.OutcomeLanded,
+		RequireDamageDealt: false,
+	}, []shared.ItemVariant{
+		{ItemID: 24122, ItemName: "Coronet of Verdant Flame"},
 	})
 
 	// 2% chance on successful spellcast to increase your spell damage by up to 1 for 15s.

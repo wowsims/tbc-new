@@ -251,8 +251,8 @@ func FromUnitStatsProto(unitStatsMessage *proto.UnitStats) Stats {
 		simStats[PhysicalCritPercent] = pseudoStatsMessage[proto.PseudoStat_PseudoStatMeleeCritPercent]
 		simStats[SpellCritPercent] = pseudoStatsMessage[proto.PseudoStat_PseudoStatSpellCritPercent]
 		simStats[BlockPercent] = pseudoStatsMessage[proto.PseudoStat_PseudoStatBlockPercent]
-		simStats[RangedHitPercent] = pseudoStatsMessage[proto.PseudoStat_PseudoStatRangedHitPercent]
-		simStats[RangedCritPercent] = pseudoStatsMessage[proto.PseudoStat_PseudoStatRangedCritPercent]
+		simStats[RangedHitPercent] = pseudoStatsMessage[proto.PseudoStat_PseudoStatRangedHitPercent] - pseudoStatsMessage[proto.PseudoStat_PseudoStatMeleeHitPercent]
+		simStats[RangedCritPercent] = pseudoStatsMessage[proto.PseudoStat_PseudoStatRangedCritPercent] - pseudoStatsMessage[proto.PseudoStat_PseudoStatMeleeCritPercent]
 	}
 
 	return simStats
@@ -501,6 +501,7 @@ type PseudoStats struct {
 
 	DamageTakenMultiplier       float64            // All damage
 	SchoolDamageTakenMultiplier [SchoolLen]float64 // For specific spell schools (arcane, fire, shadow, etc.)
+	SchoolBonusHitChance        [SchoolLen]float64 // Spell school-specific hit bonuses such as Arcane Focus or Elemental Precision - only applied to spells with a non-zero class spell mask
 
 	DiseaseDamageTakenMultiplier          float64
 	PeriodicPhysicalDamageTakenMultiplier float64

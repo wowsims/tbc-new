@@ -1,6 +1,7 @@
 package dps
 
 import (
+	"github.com/wowsims/tbc/sim/common"
 	_ "github.com/wowsims/tbc/sim/common" // imported to get item effects included.
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
@@ -10,6 +11,7 @@ import (
 
 func init() {
 	RegisterDpsWarrior()
+	common.RegisterAllEffects()
 }
 
 func TestDpsWarrior(t *testing.T) {

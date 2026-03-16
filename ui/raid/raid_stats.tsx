@@ -1,14 +1,11 @@
 import tippy from 'tippy.js';
 import { ref } from 'tsx-vanilla';
-
 import { Component } from '../core/components/component.js';
 import { Player } from '../core/player.js';
 import { PlayerClasses } from '../core/player_classes/index.js';
 import { PlayerSpecs } from '../core/player_specs/index.js';
 import { Class, RaidBuffs, Spec } from '../core/proto/common.js';
 import { HunterOptions_PetType as HunterPetType } from '../core/proto/hunter.js';
-import { AirTotem, EarthTotem, FireTotem, WaterTotem } from '../core/proto/shaman.js';
-import { WarlockOptions_Summon as WarlockSummon } from '../core/proto/warlock.js';
 import { ActionId } from '../core/proto_utils/action_id.js';
 import { ClassSpecs, SpecTalents, textCssClassForClass } from '../core/proto_utils/utils.js';
 import { Raid } from '../core/raid.js';
@@ -360,11 +357,6 @@ const RAID_STATS_OPTIONS: RaidStatsOptions = {
 					label: 'Attack Speed',
 					effects: [
 						{
-							label: "Serpent's Swiftness",
-							actionId: ActionId.fromSpellId(128433),
-							playerData: playerClass(Class.ClassHunter),
-						},
-						{
 							label: "Swiftblade's Cunning",
 							actionId: ActionId.fromSpellId(113742),
 							playerData: playerClass(Class.ClassRogue),
@@ -434,16 +426,6 @@ const RAID_STATS_OPTIONS: RaidStatsOptions = {
 							actionId: ActionId.fromSpellId(17007),
 							playerData: playerClass(Class.ClassDruid),
 						},
-						{
-							label: 'Furious Howl',
-							actionId: ActionId.fromSpellId(24604),
-							playerData: playerClass(Class.ClassHunter),
-						},
-						{
-							label: 'Terrifying Roar',
-							actionId: ActionId.fromSpellId(90309),
-							playerData: playerClass(Class.ClassHunter),
-						},
 					],
 				},
 				{
@@ -453,16 +435,6 @@ const RAID_STATS_OPTIONS: RaidStatsOptions = {
 							label: 'Blessing of Might',
 							actionId: ActionId.fromSpellId(19740),
 							playerData: playerClass(Class.ClassPaladin),
-						},
-						{
-							label: 'Roar of Courage',
-							actionId: ActionId.fromSpellId(93435),
-							playerData: playerClass(Class.ClassHunter),
-						},
-						{
-							label: 'Spirit Beast Blessing',
-							actionId: ActionId.fromSpellId(128997),
-							playerData: playerClass(Class.ClassHunter),
 						},
 						{
 							label: 'Grace of Air',
@@ -478,11 +450,6 @@ const RAID_STATS_OPTIONS: RaidStatsOptions = {
 							label: 'Power Word: Fortitude',
 							actionId: ActionId.fromSpellId(21562),
 							playerData: playerClass(Class.ClassPriest),
-						},
-						{
-							label: 'Qiraji Fortitude',
-							actionId: ActionId.fromSpellId(90364),
-							playerData: playerClass(Class.ClassHunter),
 						},
 						{
 							label: 'Commanding Shout',
@@ -569,21 +536,6 @@ const RAID_STATS_OPTIONS: RaidStatsOptions = {
 							actionId: ActionId.fromSpellId(770),
 							playerData: playerClass(Class.ClassDruid),
 						},
-						{
-							label: 'Corosive Spit',
-							actionId: ActionId.fromSpellId(35387),
-							playerData: playerClass(Class.ClassHunter, player => player.getSpecOptions().classOptions?.petType == HunterPetType.Serpent),
-						},
-					],
-				},
-				{
-					label: 'Phys Vuln',
-					effects: [
-						{
-							label: 'Acid Spit',
-							actionId: ActionId.fromSpellId(55749),
-							playerData: playerClass(Class.ClassHunter, player => player.getSpecOptions().classOptions?.petType == HunterPetType.Worm),
-						},
 					],
 				},
 				{
@@ -604,11 +556,6 @@ const RAID_STATS_OPTIONS: RaidStatsOptions = {
 						// 	actionId: ActionId.fromSpellId(16511),
 						// 	playerData: playerClassAndTalent(Class.ClassRogue, 'hemorrhage'),
 						// },
-						{
-							label: 'Stampede',
-							actionId: ActionId.fromSpellId(57386),
-							playerData: playerClass(Class.ClassHunter, player => player.getSpecOptions().classOptions?.petType == HunterPetType.Rhino),
-						},
 					],
 				},
 				{
@@ -639,16 +586,6 @@ const RAID_STATS_OPTIONS: RaidStatsOptions = {
 						// 	actionId: ActionId.fromSpellId(58410),
 						// 	playerData: playerClassAndTalent(Class.ClassRogue, 'masterPoisoner'),
 						// },
-						{
-							label: 'Fire Breath',
-							actionId: ActionId.fromSpellId(34889),
-							playerData: playerClass(Class.ClassHunter, player => player.getSpecOptions().classOptions?.petType == HunterPetType.Dragonhawk),
-						},
-						{
-							label: 'Lightning Breath',
-							actionId: ActionId.fromSpellId(24844),
-							playerData: playerClass(Class.ClassHunter, player => player.getSpecOptions().classOptions?.petType == HunterPetType.WindSerpent),
-						},
 					],
 				},
 			],
@@ -707,11 +644,6 @@ const RAID_STATS_OPTIONS: RaidStatsOptions = {
 							label: 'Earth Shock',
 							actionId: ActionId.fromSpellId(8042),
 							playerData: playerClass(Class.ClassShaman),
-						},
-						{
-							label: 'Dust Cloud',
-							actionId: ActionId.fromSpellId(50285),
-							playerData: playerClass(Class.ClassHunter, player => player.getSpecOptions().classOptions?.petType == HunterPetType.Tallstrider),
 						},
 					],
 				},

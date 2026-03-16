@@ -55,7 +55,7 @@ func (rogue *Rogue) registerOpportunity() {
 	rogue.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
 		ClassMask:  RogueSpellBackstab | RogueSpellMutilate | RogueSpellAmbush,
-		FloatValue: 0.4 * float64(rogue.Talents.Opportunity),
+		FloatValue: 0.04 * float64(rogue.Talents.Opportunity),
 	})
 }
 
@@ -119,7 +119,7 @@ func (rogue *Rogue) registerGhostlyStrike() {
 
 			// Dodge Aura NYI
 
-			baseDamage := rogue.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower())
+			baseDamage := rogue.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower(target))
 			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialHitAndCrit)
 			if result.Landed() {
 				rogue.AddComboPoints(sim, 1, pointMetric)
@@ -242,7 +242,7 @@ func (rogue *Rogue) registerHemorrhage() {
 		ActionID:       core.ActionID{SpellID: 26864},
 		ClassSpellMask: RogueSpellHemorrhage,
 		SpellSchool:    core.SpellSchoolPhysical,
-		Flags:          core.SpellFlagAPL | core.SpellFlagMeleeMetrics,
+		Flags:          core.SpellFlagAPL | core.SpellFlagMeleeMetrics | SpellFlagBuilder,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
 		MaxRange:       core.MaxMeleeRange,
 
@@ -266,7 +266,7 @@ func (rogue *Rogue) registerHemorrhage() {
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			rogue.BreakStealth(sim)
 
-			baseDamage := rogue.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower())
+			baseDamage := rogue.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower(target))
 			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialHitAndCrit)
 			if result.Landed() {
 				rogue.AddComboPoints(sim, 1, pointMetric)
@@ -294,7 +294,7 @@ func (rogue *Rogue) registerDeadliness() {
 		return
 	}
 
-	rogue.MultiplyStat(stats.AttackPower, 1+0.2*float64(rogue.Talents.Deadliness))
+	rogue.MultiplyStat(stats.AttackPower, 1+0.02*float64(rogue.Talents.Deadliness))
 }
 
 func (rogue *Rogue) registerPremeditation() {
@@ -390,13 +390,13 @@ func (rogue *Rogue) registerShadowstep() {
 		ActionID: actionID,
 		Duration: time.Second * 10,
 		OnSpellHitDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			if spell.ClassSpellMask&RogueSpellsAll != 0 {
+			if spell.ClassSpellMask&RogueSpellActives != 0 {
 				aura.Deactivate(sim)
 			}
 		},
 	}).AttachSpellMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
-		ClassMask:  RogueSpellsAll,
+		ClassMask:  RogueSpellActives,
 		FloatValue: 0.2,
 	})
 

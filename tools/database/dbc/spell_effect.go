@@ -324,6 +324,12 @@ func (effect *SpellEffect) ParseStatEffect(scalesWithIlvl bool, ilvl int) *stats
 		effectStats[proto.Stat_StatBlockValue] = float64(effect.EffectBasePoints + effect.EffectDieSides)
 	case effect.EffectAura == A_MOD_INCREASE_HEALTH:
 		effectStats[proto.Stat_StatHealth] = float64(effect.EffectBasePoints + effect.EffectDieSides)
+	case effect.EffectAura == A_MOD_POWER_REGEN && effect.EffectType == E_APPLY_AURA:
+		if effect.Coefficient != 0 && effect.ScalingType != 0 {
+			effectStats[proto.Stat_StatMP5] = effect.CalcCoefficientStatValue(core.TernaryInt(scalesWithIlvl, ilvl, 0))
+			break
+		}
+		effectStats[proto.Stat_StatMP5] = float64(effect.EffectBasePoints + effect.EffectDieSides)
 	}
 
 	return effectStats
