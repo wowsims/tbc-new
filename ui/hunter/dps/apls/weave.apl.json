@@ -13,11 +13,87 @@
 		{ "action": { "condition": { "variableRef": { "name": "Weave" } }, "groupReference": { "groupName": "Weave" } } },
 		{
 			"action": {
+				"condition": { "cmp": { "op": "OpLe", "lhs": { "currentTime": {} }, "rhs": { "const": { "val": "0.5s" } } } },
+				"castSpell": { "spellId": { "spellId": 34120, "rank": 1 } }
+			}
+		},
+		{
+			"notes": "Weave only: Prefer Multi-Shot over Steady when both fit but Steady leaves an awkward gap in the next cycle",
+			"action": {
+				"condition": {
+					"and": {
+						"vals": [
+							{ "variableRef": { "name": "Use Multi-Shot" } },
+							{ "variableRef": { "name": "Weave" } },
+							{
+								"cmp": {
+									"op": "OpLe",
+									"lhs": { "spellCastTime": { "spellId": { "spellId": 34120, "rank": 1 } } },
+									"rhs": { "variableRef": { "name": "Time Until Auto With Buffer" } }
+								}
+							},
+							{
+								"cmp": {
+									"op": "OpLe",
+									"lhs": { "spellCastTime": { "spellId": { "spellId": 27021, "rank": 6 } } },
+									"rhs": { "variableRef": { "name": "Time Until Auto With Buffer" } }
+								}
+							},
+							{
+								"cmp": {
+									"op": "OpGt",
+									"lhs": { "variableRef": { "name": "Next Cycle Gap After Steady" } },
+									"rhs": { "const": { "val": "0.1s" } }
+								}
+							},
+							{
+								"cmp": {
+									"op": "OpLt",
+									"lhs": { "variableRef": { "name": "Next Cycle Gap After Steady" } },
+									"rhs": { "spellCastTime": { "spellId": { "spellId": 27021, "rank": 6 } } }
+								}
+							}
+						]
+					}
+				},
+				"castSpell": { "spellId": { "spellId": 27021, "rank": 6 } }
+			}
+		},
+		{
+			"notes": "Weave only: Prefer Arcane over Steady when Steady causes drift and Multi is on CD",
+			"action": {
+				"condition": {
+					"and": {
+						"vals": [
+							{ "variableRef": { "name": "Use Arcane Shot" } },
+							{ "variableRef": { "name": "Weave" } },
+							{
+								"cmp": {
+									"op": "OpLe",
+									"lhs": { "spellCastTime": { "spellId": { "spellId": 34120, "rank": 1 } } },
+									"rhs": { "variableRef": { "name": "Time Until Auto With Buffer" } }
+								}
+							},
+							{
+								"cmp": {
+									"op": "OpGt",
+									"lhs": { "variableRef": { "name": "Next Cycle Gap After Steady" } },
+									"rhs": { "const": { "val": "0.1s" } }
+								}
+							}
+						]
+					}
+				},
+				"castSpell": { "spellId": { "spellId": 27019, "rank": 9 } }
+			}
+		},
+		{
+			"action": {
 				"condition": {
 					"cmp": {
 						"op": "OpLe",
 						"lhs": { "spellCastTime": { "spellId": { "spellId": 34120, "rank": 1 } } },
-						"rhs": { "math": { "op": "OpAdd", "lhs": { "autoTimeToNext": { "autoType": "RangedAuto" } }, "rhs": { "const": { "val": "0.3s" } } } }
+						"rhs": { "variableRef": { "name": "Time Until Auto With Buffer" } }
 					}
 				},
 				"castSpell": { "spellId": { "spellId": 34120, "rank": 1 } }
@@ -33,13 +109,7 @@
 								"cmp": {
 									"op": "OpLe",
 									"lhs": { "spellCastTime": { "spellId": { "spellId": 27021, "rank": 6 } } },
-									"rhs": {
-										"math": {
-											"op": "OpAdd",
-											"lhs": { "autoTimeToNext": { "autoType": "RangedAuto" } },
-											"rhs": { "const": { "val": "0.3s" } }
-										}
-									}
+									"rhs": { "variableRef": { "name": "Time Until Auto With Buffer" } }
 								}
 							}
 						]
@@ -130,6 +200,43 @@
 		{ "name": "Weave", "value": { "const": { "val": "true" } } },
 		{ "name": "Raptor Only", "value": { "const": { "val": "false" } } },
 		{ "name": "Use Multi-Shot", "value": { "const": { "val": "true" } } },
-		{ "name": "Use Arcane Shot", "value": { "const": { "val": "true" } } }
+		{ "name": "Use Arcane Shot", "value": { "const": { "val": "true" } } },
+		{
+			"name": "Buffer",
+			"value": {
+				"min": {
+					"vals": [
+						{ "const": { "val": "0.3s" } },
+						{ "math": { "op": "OpMul", "lhs": { "autoSwingTime": { "autoType": "Ranged" } }, "rhs": { "const": { "val": "0.15" } } } }
+					]
+				}
+			}
+		},
+		{
+			"name": "Time Until Auto With Buffer",
+			"value": { "math": { "op": "OpAdd", "lhs": { "autoTimeToNext": { "autoType": "RangedAuto" } }, "rhs": { "variableRef": { "name": "Buffer" } } } }
+		},
+		{
+			"name": "Next Cycle Gap After Steady",
+			"value": {
+				"math": {
+					"op": "OpSub",
+					"lhs": {
+						"math": {
+							"op": "OpAdd",
+							"lhs": {
+								"math": {
+									"op": "OpSub",
+									"lhs": { "autoTimeToNext": { "autoType": "RangedAuto" } },
+									"rhs": { "spellCastTime": { "spellId": { "spellId": 34120, "rank": 1 } } }
+								}
+							},
+							"rhs": { "autoSwingTime": { "autoType": "Ranged" } }
+						}
+					},
+					"rhs": { "const": { "val": "1.5s" } }
+				}
+			}
+		}
 	]
 }
