@@ -552,6 +552,10 @@ export class ActionId {
 				if (tag == 1) {
 					name += ' (No Orb)';
 				}
+			case 'Shadowfiend':
+				if (tag == 1) {
+					name += ' (Mana Restore)';
+				}
 			case 'Steady Focus':
 				if (tag == 2) {
 					name += ' (pre)';

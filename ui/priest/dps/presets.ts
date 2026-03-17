@@ -2,7 +2,7 @@ import * as PresetUtils from '../../core/preset_utils';
 import { ConsumesSpec, Debuffs, IndividualBuffs, PartyBuffs, Profession, RaidBuffs, Stat, TristateEffect, PseudoStat } from '../../core/proto/common';
 import { Priest_Options as Options } from '../../core/proto/priest';
 import { SavedTalents } from '../../core/proto/ui';
-import { Stats, UnitStat, UnitStatPresets } from '../../core/proto_utils/stats';
+import { Stats } from '../../core/proto_utils/stats';
 import { defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
 import DefaultApl from './apls/default.apl.json';
 import P1Gear from './gear_sets/p1.gear.json';
@@ -13,6 +13,7 @@ import PreRaidGear from './gear_sets/pre_raid.gear.json';
 // keep them in a separate file.
 export const PRE_RAID_PRESET = PresetUtils.makePresetGear('Pre Raid Preset', PreRaidGear);
 export const P1_PRESET = PresetUtils.makePresetGear('P1 Preset', P1Gear);
+
 export const ROTATION_PRESET_DEFAULT = PresetUtils.makePresetAPLRotation('Default', DefaultApl);
 
 // Preset options for EP weights
@@ -56,6 +57,8 @@ export const DefaultConsumables = ConsumesSpec.create({
 	conjuredId: 12662, // Demonic Rune
 	mhImbueId: 25122, // Brilliant Wizard Oil
 	potId: 22839, // Destruction Potion
+	drumsId: 351355, // Greater Drums of Battle
+	explosiveId: 30217,
 });
 
 export const DefaultRaidBuffs = RaidBuffs.create({
@@ -69,6 +72,8 @@ export const DefaultRaidBuffs = RaidBuffs.create({
 export const DefaultPartyBuffs = PartyBuffs.create({
 	manaSpringTotem: TristateEffect.TristateEffectRegular,
 	wrathOfAirTotem: TristateEffect.TristateEffectImproved,
+	eyeOfTheNight: true,
+	chainOfTheTwilightOwl: true,
 });
 
 export const DefaultIndividualBuffs = IndividualBuffs.create({

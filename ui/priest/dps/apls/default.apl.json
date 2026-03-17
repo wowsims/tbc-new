@@ -1,82 +1,27 @@
 {
 	"type": "TypeAPL",
-	"prepullActions": [{ "action": { "castSpell": { "spellId": { "spellId": 34917 } } }, "doAtValue": { "const": { "val": "-1.5s" } } }],
+	"prepullActions": [
+	{"action":{"castSpell":{"spellId":{"spellId":34917}}},"doAtValue":{"const":{"val":"-1.5s"}}}
+	],
 	"priorityList": [
-		{ "action": { "castSpell": { "spellId": { "spellId": 34433, "rank": 1 } } } },
-		{ "action": { "autocastOtherCooldowns": {} } },
-		{
-			"action": {
-				"condition": {
-					"and": {
-						"vals": [
-							{ "dotIsActive": { "spellId": { "spellId": 25368 } } },
-							{ "dotIsActive": { "spellId": { "spellId": 34917 } } },
-							{ "cmp": { "op": "OpGe", "lhs": { "currentTime": {} }, "rhs": { "const": { "val": "3s" } } } }
-						]
-					}
-				},
-				"castSpell": { "spellId": { "spellId": 20554, "tag": 2 } }
-			}
-		},
-		{
-			"action": {
-				"condition": {
-					"and": {
-						"vals": [
-							{ "dotIsActive": { "spellId": { "spellId": 25368 } } },
-							{ "dotIsActive": { "spellId": { "spellId": 34917 } } },
-							{ "cmp": { "op": "OpGe", "lhs": { "currentTime": {} }, "rhs": { "const": { "val": "3s" } } } }
-						]
-					}
-				},
-				"castSpell": { "spellId": { "spellId": 20554, "tag": 1 } }
-			}
-		},
-		{
-			"hide": true,
-			"action": {
-				"condition": {
-					"and": { "vals": [{ "dotIsActive": { "spellId": { "spellId": 25368 } } }, { "dotIsActive": { "spellId": { "spellId": 34917 } } }] }
-				},
-				"castSpell": { "spellId": { "spellId": 20554, "tag": 2 } }
-			}
-		},
-		{
-			"action": {
-				"condition": { "not": { "val": { "dotIsActive": { "spellId": { "spellId": 25368 } } } } },
-				"castSpell": { "spellId": { "spellId": 25368 } }
-			}
-		},
-		{
-			"action": {
-				"condition": {
-					"cmp": {
-						"op": "OpLt",
-						"lhs": { "dotRemainingTime": { "spellId": { "spellId": 34917 } } },
-						"rhs": { "spellCastTime": { "spellId": { "spellId": 34917 } } }
-					}
-				},
-				"castSpell": { "spellId": { "spellId": 34917 } }
-			}
-		},
-		{
-			"hide": true,
-			"action": {
-				"condition": { "not": { "val": { "dotIsActive": { "spellId": { "spellId": 34917 } } } } },
-				"castSpell": { "spellId": { "spellId": 34917 } }
-			}
-		},
-		{ "action": { "castSpell": { "spellId": { "spellId": 25375 } } } },
-		{ "action": { "castSpell": { "spellId": { "spellId": 32996 } } } },
-		{
-			"action": {
-				"channelSpell": {
-					"spellId": { "spellId": 25387, "rank": 7 },
-					"interruptIf": {
-						"cmp": { "op": "OpGe", "lhs": { "spellChanneledTicks": { "spellId": { "spellId": 25387 } } }, "rhs": { "const": { "val": "2" } } }
-					}
-				}
-			}
-		}
+	{"action":{"condition":{"variableRef":{"name":"Short Fight"}},"castSpell":{"spellId":{"spellId":34433,"rank":1}}}},
+	{"action":{"autocastOtherCooldowns":{}}},
+	{"action":{"condition":{"variableRef":{"name":"Troll"}},"castSpell":{"spellId":{"spellId":20554,"tag":1}}}},
+	{"action":{"condition":{"variableRef":{"name":"Long Fight"}},"castSpell":{"spellId":{"spellId":34433,"rank":1}}}},
+	{"action":{"condition":{"variableRef":{"name":"Night Elf"}},"castSpell":{"spellId":{"spellId":25446}}}},
+	{"action":{"condition":{"not":{"val":{"dotIsActive":{"spellId":{"spellId":25368}}}}},"castSpell":{"spellId":{"spellId":25368}}}},
+	{"action":{"condition":{"cmp":{"op":"OpLt","lhs":{"dotRemainingTime":{"spellId":{"spellId":34917}}},"rhs":{"spellCastTime":{"spellId":{"spellId":34917}}}}},"castSpell":{"spellId":{"spellId":34917}}}},
+	{"action":{"condition":{"or":{"vals":[{"spellIsReady":{"spellId":{"spellId":25372,"rank":10}}},{"spellIsReady":{"spellId":{"spellId":25467}}}]}},"castSpell":{"spellId":{"spellId":14751}}}},
+	{"action":{"condition":{"variableRef":{"name":"Undead"}},"castSpell":{"spellId":{"spellId":25467}}}},
+	{"action":{"castSpell":{"spellId":{"spellId":25375}}}},
+	{"action":{"castSpell":{"spellId":{"spellId":32996}}}},
+	{"action":{"condition":{"and":{"vals":[{"cmp":{"op":"OpGe","lhs":{"dotRemainingTime":{"spellId":{"spellId":25368,"rank":10}}},"rhs":{"const":{"val":"0.5s"}}}}]}},"channelSpell":{"spellId":{"spellId":25387,"rank":7},"interruptIf":{"cmp":{"op":"OpGe","lhs":{"spellChanneledTicks":{"spellId":{"spellId":25387}}},"rhs":{"const":{"val":"2"}}}}}}}
+	],
+	"valueVariables": [
+	{"name":"Night Elf","value":{"spellIsKnown":{"spellId":{"spellId":25446}}}},
+	{"name":"Undead","value":{"spellIsKnown":{"spellId":{"spellId":25467}}}},
+	{"name":"Troll","value":{"or":{"vals":[{"spellIsKnown":{"spellId":{"spellId":20554,"tag":1}}},{"spellIsKnown":{"spellId":{"spellId":20554,"tag":2}}},{"spellIsKnown":{"spellId":{"spellId":20554,"tag":3}}},{"spellIsKnown":{"spellId":{"spellId":20554,"tag":4}}},{"spellIsKnown":{"spellId":{"spellId":20554,"tag":5}}}]}}},
+	{"name":"Short Fight","value":{"and":{"vals":[{"cmp":{"op":"OpLe","lhs":{"remainingTime":{}},"rhs":{"const":{"val":"120s"}}}},{"cmp":{"op":"OpLe","lhs":{"currentTime":{}},"rhs":{"const":{"val":"3s"}}}}]}}},
+	{"name":"Long Fight","value":{"and":{"vals":[{"cmp":{"op":"OpGe","lhs":{"currentTime":{}},"rhs":{"const":{"val":"118s"}}}},{"or":{"vals":[{"spellIsReady":{"spellId":{"itemId":29370}}},{"auraIsActive":{"auraId":{"itemId":29370},"includeReactionTime":true}}]}},{"or":{"vals":[{"spellIsReady":{"spellId":{"itemId":22839}}},{"auraIsActive":{"auraId":{"itemId":22839},"includeReactionTime":true}}]}}]}}}
 	]
 }
