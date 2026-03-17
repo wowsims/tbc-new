@@ -1467,11 +1467,11 @@ const idToCategoryMap: Record<number, number> = {
 	[30330]: MELEE_ACTION_CATEGORY + 0.1, // Mortal Strike
 	[30356]: MELEE_ACTION_CATEGORY + 0.1, // Shield Slam
 	[30022]: MELEE_ACTION_CATEGORY + 0.21, // Devastate
+	[25225]: MELEE_ACTION_CATEGORY + 0.211, // Sunder Armor
 	[30357]: MELEE_ACTION_CATEGORY + 0.23, // Revenge
 	[1680]: MELEE_ACTION_CATEGORY + 0.24, // Whirlwind
 	[11585]: MELEE_ACTION_CATEGORY + 0.25, // Overpower
 	[25236]: MELEE_ACTION_CATEGORY + 0.42, // Execute
-	[25225]: MELEE_ACTION_CATEGORY + 0.43, // Sunder Armor
 	[12867]: SPELL_ACTION_CATEGORY + 0.51, // Deep Wounds
 	[2565]: SPELL_ACTION_CATEGORY + 0.62, // Shield Block
 	[12292]: SPELL_ACTION_CATEGORY + 0.63, // CD - Death Wish
