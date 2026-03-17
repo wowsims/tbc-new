@@ -303,10 +303,11 @@ func init() {
 		)
 
 		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:     "Eye of Magtheridon",
-			ActionID: core.ActionID{ItemID: 28789},
-			Outcome:  core.OutcomeMiss,
-			Callback: core.CallbackOnSpellHitDealt,
+			Name:            "Eye of Magtheridon",
+			ActionID:        core.ActionID{ItemID: 28789},
+			ClassSpellsOnly: true,
+			Outcome:         core.OutcomeMiss,
+			Callback:        core.CallbackOnSpellHitDealt,
 			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 				aura.Activate(sim)
 			},
