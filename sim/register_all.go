@@ -12,9 +12,7 @@ import (
 	holyPaladin "github.com/wowsims/tbc/sim/paladin/holy"
 	protPaladin "github.com/wowsims/tbc/sim/paladin/protection"
 	"github.com/wowsims/tbc/sim/paladin/retribution"
-	"github.com/wowsims/tbc/sim/priest/discipline"
-	holyPriest "github.com/wowsims/tbc/sim/priest/holy"
-	"github.com/wowsims/tbc/sim/priest/shadow"
+	"github.com/wowsims/tbc/sim/priest"
 	"github.com/wowsims/tbc/sim/rogue"
 	"github.com/wowsims/tbc/sim/shaman/elemental"
 	"github.com/wowsims/tbc/sim/shaman/enhancement"
@@ -45,9 +43,7 @@ func RegisterAll() {
 	protPaladin.RegisterProtectionPaladin()
 	retribution.RegisterRetributionPaladin()
 
-	discipline.RegisterDisciplinePriest()
-	holyPriest.RegisterHolyPriest()
-	shadow.RegisterShadowPriest()
+	priest.RegisterPriest()
 
 	rogue.RegisterRogue()
 

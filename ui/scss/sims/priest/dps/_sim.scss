@@ -1,0 +1,4 @@
+// Set color variables which control the site theme.
+.priest-sim-ui {
+	@include theme-color($priest, 0.95, '/tbc/assets/img/shadow_priest_background.jpg');
+}

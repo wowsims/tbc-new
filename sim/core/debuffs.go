@@ -112,7 +112,7 @@ func applyDebuffEffects(target *Unit, targetIdx int, debuffs *proto.Debuffs, rai
 	}
 
 	if debuffs.Misery {
-		MakePermanent(MiseryAura(target))
+		MakePermanent(MiseryAura(target, 5))
 	}
 
 	if debuffs.ScorpidSting {
@@ -128,7 +128,20 @@ func applyDebuffEffects(target *Unit, targetIdx int, debuffs *proto.Debuffs, rai
 	}
 
 	if debuffs.ShadowWeaving {
-		MakePermanent(ShadowWeavingAura(target))
+		aura := MakePermanent(ShadowWeavingAura(target))
+
+		ScheduledAura(aura, PeriodicActionOptions{
+			Period:          time.Millisecond * 1500,
+			NumTicks:        5,
+			TickImmediately: true,
+			Priority:        ActionPriorityDOT,
+			OnAction: func(sim *Simulation) {
+				aura.Activate(sim)
+				aura.AddStack(sim)
+
+			},
+		}, raid)
+
 	}
 
 	if debuffs.ExposeArmor != proto.TristateEffect_TristateEffectMissing {
@@ -526,23 +539,34 @@ func MangleAura(target *Unit) *Aura {
 	}).AttachMultiplicativePseudoStatBuff(&target.PseudoStats.PeriodicPhysicalDamageTakenMultiplier, 1.3)
 }
 
-func MiseryAura(target *Unit) *Aura {
-	return damageTakenDebuff(
-		target,
-		0,
-		"Misery",
-		33195,
-		[]stats.SchoolIndex{
-			stats.SchoolIndexArcane,
-			stats.SchoolIndexFire,
-			stats.SchoolIndexFrost,
-			stats.SchoolIndexHoly,
-			stats.SchoolIndexNature,
-			stats.SchoolIndexShadow,
+func MiseryAura(target *Unit, ranks int32) *Aura {
+	multiplier := 1.0 + 0.01*float64(ranks)
+	schools := []stats.SchoolIndex{
+		stats.SchoolIndexArcane, stats.SchoolIndexFire, stats.SchoolIndexFrost,
+		stats.SchoolIndexHoly, stats.SchoolIndexNature, stats.SchoolIndexShadow,
+	}
+	aura := target.GetOrRegisterAura(Aura{
+		Label:    "Misery",
+		ActionID: ActionID{SpellID: 33195},
+		Duration: NeverExpires,
+	})
+	effect := aura.NewExclusiveEffect("MiseryBonus", true, ExclusiveEffect{
+		Priority: multiplier,
+		OnGain: func(ee *ExclusiveEffect, sim *Simulation) {
+			for _, school := range schools {
+				target.PseudoStats.SchoolDamageTakenMultiplier[school] *= ee.Priority
+			}
 		},
-		1.05,
-		time.Minute*1,
-	)
+		OnExpire: func(ee *ExclusiveEffect, sim *Simulation) {
+			for _, school := range schools {
+				target.PseudoStats.SchoolDamageTakenMultiplier[school] /= ee.Priority
+			}
+		},
+	})
+	if effect.Priority < multiplier {
+		effect.Priority = multiplier
+	}
+	return aura
 }
 
 func ScorpidStingAura(target *Unit) *Aura {
@@ -558,7 +582,30 @@ func ShadowEmbraceAura(target *Unit, ranks int32) *Aura {
 }
 
 func ShadowWeavingAura(target *Unit) *Aura {
-	return damageTakenDebuff(target, 0, "Shadow Weaving", 15334, []stats.SchoolIndex{stats.SchoolIndexShadow}, 1.10, time.Second*15)
+	const shadowBonus = 0.02
+	var effect *ExclusiveEffect
+
+	aura := target.GetOrRegisterAura(Aura{
+		Label:     "Shadow Weaving",
+		ActionID:  ActionID{SpellID: 15334},
+		Duration:  time.Second * 15,
+		MaxStacks: 5,
+		OnStacksChange: func(aura *Aura, sim *Simulation, oldStacks int32, newStacks int32) {
+			effect.SetPriority(sim, 1.0+shadowBonus*float64(newStacks))
+		},
+	})
+
+	effect = aura.NewExclusiveEffect("ShadowWeaving", false, ExclusiveEffect{
+		Priority: 1.0,
+		OnGain: func(ee *ExclusiveEffect, sim *Simulation) {
+			target.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexShadow] *= ee.Priority
+		},
+		OnExpire: func(ee *ExclusiveEffect, sim *Simulation) {
+			target.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexShadow] /= ee.Priority
+		},
+	})
+
+	return aura
 }
 
 func StormstrikeAura(target *Unit, uptime float64) *Aura {

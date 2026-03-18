@@ -51,7 +51,6 @@ func (enchant *Enchant) HasEnchantEffect() bool {
 }
 
 func (enchant *Enchant) ToProto() *proto.UIEnchant {
-	// TBC ANNI: TODO - Process ring enchants as Enchanting-prof only.
 	uiEnchant := &proto.UIEnchant{
 		Name:               enchant.Name,
 		ItemId:             int32(enchant.ItemId),

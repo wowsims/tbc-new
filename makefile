@@ -15,9 +15,7 @@ PAGE_INDECES := ui/druid/balance/index.html \
 				ui/paladin/holy/index.html \
 				ui/paladin/protection/index.html \
 				ui/paladin/retribution/index.html \
-				ui/priest/discipline/index.html \
-				ui/priest/holy/index.html \
-				ui/priest/shadow/index.html \
+				ui/priest/dps/index.html \
 				ui/rogue/dps/index.html \
 				ui/shaman/elemental/index.html \
 				ui/shaman/enhancement/index.html \

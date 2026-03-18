@@ -355,19 +355,14 @@ export class Gear extends BaseGear {
 		return curGear;
 	}
 
-	// Removes bonus gems from blacksmith profession bonus.
-	withoutBlacksmithSockets(): Gear {
+	// Removes enchanting profession bonus.
+	withoutEnchanting(): Gear {
 		let curGear: Gear = this;
 
-		// const wristItem = this.getEquippedItem(ItemSlot.ItemSlotWrist);
-		// if (wristItem) {
-		// 	curGear = curGear.withEquippedItem(ItemSlot.ItemSlotWrist, wristItem.withGem(null, wristItem.numPossibleSockets - 1), true);
-		// }
-
-		// const handsItem = this.getEquippedItem(ItemSlot.ItemSlotHands);
-		// if (handsItem) {
-		// 	curGear = curGear.withEquippedItem(ItemSlot.ItemSlotHands, handsItem.withGem(null, handsItem.numPossibleSockets - 1), true);
-		// }
+		[ItemSlot.ItemSlotFinger1, ItemSlot.ItemSlotFinger2].forEach(slot => {
+			const fingerItem = this.getEquippedItem(slot);
+			if (fingerItem) curGear = curGear.withEquippedItem(slot, fingerItem.withEnchant(null));
+		});
 
 		return curGear;
 	}

@@ -25,7 +25,7 @@ message ProtoVersion {
 	// protos need to define an api_version field so that the UI code knows
 	// to up-convert these protos to the new format whenever api_version is
 	// missing (0) or lower than current_version_number.
-	option (current_version_number) = 5;
+	option (current_version_number) = 6;
 
 	// The actual field value is only used within unit tests.
 	int32 saved_version_number = 1;
@@ -55,20 +55,18 @@ enum Spec {
 	SpecProtectionPaladin = 8;
 	SpecRetributionPaladin = 9;
 
-	SpecDisciplinePriest = 10;
-	SpecHolyPriest = 11;
-	SpecShadowPriest = 12;
+	SpecPriest = 10;
 
-	SpecRogue = 13;
+	SpecRogue = 11;
 
-	SpecElementalShaman = 14;
-	SpecEnhancementShaman = 15;
-	SpecRestorationShaman = 16;
+	SpecElementalShaman = 12;
+	SpecEnhancementShaman = 13;
+	SpecRestorationShaman = 14;
 
-	SpecWarlock = 17;
+	SpecWarlock = 15;
 
-	SpecDpsWarrior = 18;
-	SpecProtectionWarrior = 19;
+	SpecDpsWarrior = 16;
+	SpecProtectionWarrior = 17;
 }
 
 enum Race {

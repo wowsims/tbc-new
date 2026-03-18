@@ -1,6 +1,6 @@
 {
 	"Settings": {
-		"BaseDir": "/mnt/g/Blizzard/World of Warcraft",
+		"BaseDir": "/mnt/c/Program Files/World of Warcraft",
 		"BuildConfig": "buildConfig",
 		"CDNConfig": "cdnConfig",
 		"Region": "us",

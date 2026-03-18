@@ -56,9 +56,7 @@ message Player {
 		ProtectionPaladin protection_paladin = 22;
 		RetributionPaladin retribution_paladin = 23;
 
-		DisciplinePriest discipline_priest = 24;
-		HolyPriest holy_priest = 25;
-		ShadowPriest shadow_priest = 26;
+		Priest priest = 24;
 
 		Rogue rogue = 29;
 

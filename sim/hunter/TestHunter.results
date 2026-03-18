@@ -285,14 +285,6 @@ dps_results: {
  }
 }
 dps_results: {
- key: "TestHunter-AllItems-Biznicks247x128Accurascope-2523"
- value: {
-  dps: 3066.78245
-  tps: 2074.11852
-  dtps: 13.58254
- }
-}
-dps_results: {
  key: "TestHunter-AllItems-BlackBowoftheBetrayer-32336"
  value: {
   dps: 3064.2336
@@ -1155,6 +1147,14 @@ dps_results: {
   tps: 2013.80235
   dtps: 13.44888
   hps: 14.44444
+ }
+}
+dps_results: {
+ key: "TestHunter-AllItems-StabilizedEterniumScope-2523"
+ value: {
+  dps: 3066.78245
+  tps: 2074.11852
+  dtps: 13.58254
  }
 }
 dps_results: {

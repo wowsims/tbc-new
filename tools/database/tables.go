@@ -440,6 +440,7 @@ func ScanEnchantsTable(rows *sql.Rows) (dbc.Enchant, error) {
 	var effectPointsString string
 	var spellEffectPointsString sql.NullString
 	var effectArgsString string
+	var spellItemEnchantmentFlags dbc.SpellItemEnchantmentFlags
 	err := rows.Scan(
 		&raw.EffectId,
 		&raw.Name,
@@ -458,6 +459,7 @@ func ScanEnchantsTable(rows *sql.Rows) (dbc.Enchant, error) {
 		&raw.Quality,
 		&raw.RequiredProfession,
 		&raw.EffectName,
+		&spellItemEnchantmentFlags,
 	)
 	if err != nil {
 		return raw, fmt.Errorf("scanning enchant data for effect ID %d: %w", raw.EffectId, err)
@@ -483,68 +485,78 @@ func ScanEnchantsTable(rows *sql.Rows) (dbc.Enchant, error) {
 		return raw, fmt.Errorf("parsing effect args for enchant %d (%s): %w", raw.EffectId, effectArgsString, err)
 	}
 
+	// Almost all enchants have Enchanting as requirement,
+	// however Enchanting profession requirement is defined by the SOULBOUND flag
+	if raw.RequiredProfession == 333 && !spellItemEnchantmentFlags.Has(dbc.SOULBOUND) {
+		raw.ProfessionId = 0
+		raw.RequiredProfession = 0
+	}
+
 	return raw, nil
 }
 
 func LoadAndWriteRawEnchants(dbHelper *DBHelper, inputsDir string) ([]dbc.Enchant, error) {
-	query := `SELECT DISTINCT
-		sie.ID as effectId,
-		CASE
-		WHEN s.NameSubtext_lang IS NOT NULL
-			AND TRIM(s.NameSubtext_lang) <> ''
-		THEN
-			(CASE
+	query := `
+		SELECT DISTINCT
+			sie.ID as effectId,
+			CASE
+			WHEN s.NameSubtext_lang IS NOT NULL
+				AND TRIM(s.NameSubtext_lang) <> ''
+			THEN
+				(CASE
+				WHEN sn.Name_lang LIKE '%+%' THEN COALESCE(isp.Display_lang, sn.Name_lang)
+				ELSE sn.Name_lang
+				END)
+				|| ' (' || s.NameSubtext_lang || ')'
 			WHEN sn.Name_lang LIKE '%+%' THEN COALESCE(isp.Display_lang, sn.Name_lang)
 			ELSE sn.Name_lang
-			END)
-			|| ' (' || s.NameSubtext_lang || ')'
-		WHEN sn.Name_lang LIKE '%+%' THEN COALESCE(isp.Display_lang, sn.Name_lang)
-		ELSE sn.Name_lang
-		END AS name,
-		CASE
-			WHEN sie.Effect_0 IN (1, 3) THEN sie.EffectArg_0
-			WHEN sie.Effect_1 IN (1, 3) THEN sie.EffectArg_1
-			WHEN sie.Effect_2 IN (1, 3) THEN sie.EffectArg_2
-			ELSE se.SpellID
-		END AS spellId,
-		COALESCE(ie.ParentItemID, 0) as ItemId,
-		sie.Field_1_15_3_55112_014 as professionId,
-		sie.Effect as Effect,
-		sie.EffectPointsMin as EffectPoints,
-		group_concat(ese.EffectBasePoints+1) as SpellEffectPoints,
-		sie.EffectArg as EffectArgs,
-		CASE
-			WHEN sei.EquippedItemClass = 4 THEN false
-			ELSE true
-		END AS isWeaponEnchant,
-		COALESCE(sei.EquippedItemInvTypes, 0) as InvTypes,
-		COALESCE(sei.EquippedItemSubclass, 0),
-		COALESCE(sla.ClassMask, 0),
-		COALESCE(it.IconFileDataID, 0),
-		COALESCE(isp.OverallQualityID, 1),
-		COALESCE(sie.Field_1_15_3_55112_014, 0) as RequiredProfession,
-		COALESCE(sie.Name_lang, "")
+			END AS name,
+			CASE
+				WHEN sie.Effect_0 IN (1, 3) THEN sie.EffectArg_0
+				WHEN sie.Effect_1 IN (1, 3) THEN sie.EffectArg_1
+				WHEN sie.Effect_2 IN (1, 3) THEN sie.EffectArg_2
+				ELSE se.SpellID
+			END AS spellId,
+			COALESCE(ie.ParentItemID, 0) as ItemId,
+			sie.Field_1_15_3_55112_014 as professionId,
+			sie.Effect as Effect,
+			sie.EffectPointsMin as EffectPoints,
+			group_concat(ese.EffectBasePoints+1) as SpellEffectPoints,
+			sie.EffectArg as EffectArgs,
+			CASE
+				WHEN sei.EquippedItemClass = 4 THEN false
+				ELSE true
+			END AS isWeaponEnchant,
+			COALESCE(sei.EquippedItemInvTypes, 0) as InvTypes,
+			COALESCE(sei.EquippedItemSubclass, 0),
+			COALESCE(sla.ClassMask, 0),
+			COALESCE(it.IconFileDataID, 0),
+			COALESCE(isp.OverallQualityID, 1),
+			COALESCE(sla.SkillLine, 0) as RequiredProfession,
+			COALESCE(sie.Name_lang, ""),
+			COALESCE(sie.Flags, 0) AS SpellItemEnchantmentFlags
 		FROM SpellEffect se
-		JOIN Spell s ON se.SpellID = s.ID
-		JOIN SpellName sn ON se.SpellID = sn.ID
-		JOIN SpellItemEnchantment sie ON se.EffectMiscValue_0 = sie.ID
-		LEFT JOIN ItemEffect ie ON se.SpellID = ie.SpellID
-		LEFT JOIN SpellEquippedItems sei ON se.SpellId = sei.SpellID
-		LEFT JOIN SkillLineAbility sla ON se.SpellID = sla.Spell
-		LEFT JOIN Item it ON ie.ParentItemId = it.ID
-		LEFT JOIN ItemSparse isp ON ie.ParentItemId = isp.ID
-		LEFT JOIN SpellEffect ese ON ese.SpellID = sie.ID
-WHERE se.Effect = 53
-  AND (
-       ( sie.Field_1_15_3_55112_014 > 0
-         AND sla.ID               IS NOT NULL
-         AND sie.Field_1_15_3_55112_015 IS NOT NULL
-       )
-    OR
-       sie.Field_1_15_3_55112_014 = 0
-    OR
-       sie.Field_1_15_3_55112_014 = 773
-  )
+			JOIN Spell s ON se.SpellID = s.ID
+			JOIN SpellName sn ON se.SpellID = sn.ID
+			JOIN SpellItemEnchantment sie ON se.EffectMiscValue_0 = sie.ID
+			LEFT JOIN ItemEffect ie ON se.SpellID = ie.SpellID
+			LEFT JOIN SpellEquippedItems sei ON se.SpellId = sei.SpellID
+			LEFT JOIN SkillLineAbility sla ON se.SpellID = sla.Spell
+			LEFT JOIN Item it ON ie.ParentItemId = it.ID
+			LEFT JOIN ItemSparse isp ON ie.ParentItemId = isp.ID
+			LEFT JOIN SpellEffect ese ON ese.SpellID = sie.ID
+			WHERE se.Effect = 53
+				AND (
+					(
+						sie.Field_1_15_3_55112_014 > 0
+						OR sla.ID               IS NOT NULL
+						OR sie.Field_1_15_3_55112_015 IS NOT NULL
+					)
+					OR
+					sie.Field_1_15_3_55112_014 = 0
+					OR
+					sie.Field_1_15_3_55112_014 = 773
+				)
 		GROUP BY name `
 	items, err := LoadRows(dbHelper.db, query, ScanEnchantsTable)
 	if err != nil {

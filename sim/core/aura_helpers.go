@@ -24,6 +24,7 @@ const (
 	CallbackOnPeriodicHealDealt
 	CallbackOnCastComplete
 	CallbackOnApplyEffects
+	CallbackOnPeriodicDamageTaken
 
 	CallbackLast
 )
@@ -216,6 +217,9 @@ func (procAura *Aura) AttachProcTriggerCallback(unit *Unit, config ProcTrigger) 
 			}
 			applyHandler(sim, spell, emptyResult)
 		}
+	}
+	if config.Callback.Matches(CallbackOnPeriodicDamageTaken) {
+		procAura.OnPeriodicDamageTaken = callback
 	}
 }
 

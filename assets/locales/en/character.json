@@ -29,9 +29,7 @@
 			"retribution": "Retribution"
 		},
 		"priest": {
-			"discipline": "Discipline",
-			"holy": "Holy",
-			"shadow": "Shadow"
+			"priest": ""
 		},
 		"rogue": {
 			"rogue": ""

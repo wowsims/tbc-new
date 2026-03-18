@@ -221,9 +221,17 @@ export class Sim {
 				let gear = this.db.lookupEquipmentSpec(player.equipment);
 				let gearChanged = false;
 
+				const isEnchanter = [player.profession1, player.profession2].includes(Profession.Enchanting);
+
 				// Disable meta gem if inactive.
 				if (gear.hasInactiveMetaGem()) {
 					gear = gear.withoutMetaGem();
+					gearChanged = true;
+				}
+
+				// Remove Ring Enchants if not enchanter
+				if (!isEnchanter) {
+					gear = gear.withoutEnchanting();
 					gearChanged = true;
 				}
 

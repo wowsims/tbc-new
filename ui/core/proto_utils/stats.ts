@@ -733,7 +733,7 @@ export function convertHastePresetBreakpointsToPercent(ratingPresets: Map<string
 
 // Helper utility to determine whether a particular PseudoStat has been configured as either a hard cap or
 // soft cap.
-export function pseudoStatIsCapped(pseudoStat: PseudoStat, hardCaps: Stats, softCaps: StatCap[]): boolean {
+export function pseudoStatHasCap(pseudoStat: PseudoStat, hardCaps: Stats, softCaps: StatCap[]): boolean {
 	if (hardCaps.getPseudoStat(pseudoStat) != 0) {
 		return true;
 	}
@@ -747,7 +747,21 @@ export function pseudoStatIsCapped(pseudoStat: PseudoStat, hardCaps: Stats, soft
 	return false;
 }
 
-export function statIsCapped(stat: Stat, hardCaps: Stats, softCaps: StatCap[]): boolean {
+export function pseudoStatIsCapped(pseudoStat: PseudoStat, hardCaps: Stats, softCaps: StatCap[]): boolean {
+	if (hardCaps.getPseudoStat(pseudoStat) < 0) {
+		return true;
+	}
+
+	for (const config of softCaps) {
+		if (config.unitStat.equalsPseudoStat(pseudoStat)) {
+			return config.unitStat.getPseudoStat() < 0;
+		}
+	}
+
+	return false;
+}
+
+export function statHasCap(stat: Stat, hardCaps: Stats, softCaps: StatCap[]): boolean {
 	if (hardCaps.getStat(stat) != 0) {
 		return true;
 	}
@@ -755,6 +769,20 @@ export function statIsCapped(stat: Stat, hardCaps: Stats, softCaps: StatCap[]): 
 	for (const config of softCaps) {
 		if (config.unitStat.equalsStat(stat)) {
 			return true;
+		}
+	}
+
+	return false;
+}
+
+export function statIsCapped(stat: Stat, hardCaps: Stats, softCaps: StatCap[]): boolean {
+	if (hardCaps.getStat(stat) < 0) {
+		return true;
+	}
+
+	for (const config of softCaps) {
+		if (config.unitStat.equalsStat(stat)) {
+			return config.unitStat.getStat() < 0;
 		}
 	}
 

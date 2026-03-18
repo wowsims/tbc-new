@@ -129,7 +129,7 @@ export const pseudoStatI18nKeys: Record<PseudoStat, string> = {
 	[PseudoStat.PseudoStatSchoolHitPercentShadow]: 'shadow_hit',
 	[PseudoStat.PseudoStatBlockValuePerStrength]: 'block_per_strength',
 	[PseudoStat.PseudoStatRangedHitPercent]: 'ranged_hit',
-	[PseudoStat.PseudoStatRangedCritPercent]: 'ranged_crit'
+	[PseudoStat.PseudoStatRangedCritPercent]: 'ranged_crit',
 };
 
 export const spellSchoolI18nKeys: Record<SpellSchool, string> = {
@@ -207,9 +207,7 @@ export const specI18nKeys: Record<Spec, string> = {
 	[Spec.SpecProtectionPaladin]: 'protection',
 	[Spec.SpecRetributionPaladin]: 'retribution',
 	// Priest
-	[Spec.SpecDisciplinePriest]: 'discipline',
-	[Spec.SpecHolyPriest]: 'holy',
-	[Spec.SpecShadowPriest]: 'shadow',
+	[Spec.SpecPriest]: 'priest',
 	// Rogue
 	[Spec.SpecRogue]: 'rogue',
 	// Shaman
