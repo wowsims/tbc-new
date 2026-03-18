@@ -178,7 +178,7 @@ var ItemSetDestroyerBattlegear = core.NewItemSet(core.ItemSet{
 						aura.Activate(sim)
 					},
 				}).
-				ExposeToAPL(actionID.SpellID)
+				ExposeToAPL(37528)
 		},
 		4: func(agent core.Agent, setBonusAura *core.Aura) {
 			setBonusAura.

@@ -4,7 +4,7 @@
 	{"action":{"castSpell":{"spellId":{"spellId":18499}}},"doAtValue":{"const":{"val":"-4.5s"}}},
 	{"action":{"castSpell":{"spellId":{"spellId":2687}}},"doAtValue":{"const":{"val":"-3s"}}},
 	{"action":{"castSpell":{"spellId":{"spellId":2048}}},"doAtValue":{"const":{"val":"-3s"}}},
-	{"action":{"castSpell":{"spellId":{"spellId":25275}}},"doAtValue":{"const":{"val":"-1.5s"}}},
+	{"action":{"groupReference":{"groupName":"Pre-pull: Move"}},"doAtValue":{"const":{"val":"-1.5s"}}},
 	{"action":{"castSpell":{"spellId":{"itemId":22788}}},"doAtValue":{"const":{"val":"-1s"}}}
 	],
 	"priorityList": [
@@ -37,6 +37,7 @@
 	{"hide":true,"action":{"condition":{"const":{"val":"false"}},"castSpell":{"spellId":{"spellId":871}}}}
 	],
 	"groups": [
+	{"name":"Pre-pull: Move","actions":[{"action":{"condition":{"auraIsActive":{"auraId":{"spellId":2457}}},"castSpell":{"spellId":{"spellId":11578,"rank":3}}}},{"action":{"condition":{"auraIsActive":{"auraId":{"spellId":2458}}},"castSpell":{"spellId":{"spellId":25275,"rank":5}}}}]},
 	{"name":"Recklessness ON/OFF","actions":[{"action":{}}]},
 	{"name":"Bloodlust + Drums","actions":[{"action":{"castSpell":{"spellId":{"spellId":2825,"tag":-1}}}},{"action":{"castSpell":{"spellId":{"spellId":351355}}}}]},
 	{"name":"Engineering","actions":[{"action":{"castSpell":{"spellId":{"itemId":23827}}}},{"action":{"castSpell":{"spellId":{"itemId":10646}}}},{"action":{"castSpell":{"spellId":{"itemId":23737}}}},{"action":{"castSpell":{"spellId":{"itemId":23736}}}},{"action":{"castSpell":{"spellId":{"itemId":11566}}}},{"action":{"castSpell":{"spellId":{"itemId":18588}}}}]},
