@@ -209,6 +209,9 @@ func makePotionActivationSpellInternal(potion Consumable, character *Character) 
 	}
 	if potion.BuffDuration > 0 {
 		// Add stat buff aura if applicable
+		if potion.Id == 22839 {
+			potion.Stats[stats.SpellCritPercent] = 2
+		}
 		aura = character.NewTemporaryStatsAura(potion.Name, actionID, potion.Stats, potion.BuffDuration)
 		mcd.Spell.RelatedSelfBuff = aura.Aura
 		mcd.Type = aura.InferCDType()
