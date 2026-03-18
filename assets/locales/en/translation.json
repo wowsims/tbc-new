@@ -136,6 +136,16 @@
 			"burning_embers": "Burning Embers",
 			"generic_resource": "Missing Resource!"
 		},
+		"item_qualities": {
+			"junk": "Junk",
+			"common": "Common",
+			"uncommon": "Uncommon",
+			"rare": "Rare",
+			"epic": "Epic",
+			"legendary": "Legendary",
+			"artifact": "Artifact",
+			"heirloom": "Heirloom"
+		},
 		"stats": {
 			"strength": "Strength",
 			"agility": "Agility",
@@ -2313,7 +2323,9 @@
 				"hard_cap_info": "If you want to hard cap a stat make sure to put the EP for that stat higher.",
 				"edit_weights": "Edit weights",
 				"freeze_item_slots": "Freeze item slots",
-				"max_gem_phase": "Max Gem Phase"
+				"max_gem_phase": "Max Gem Phase",
+				"max_gem_quality": "Max Gem Quality",
+				"disable_unique_gems": "Disable Unique Gems"
 			}
 		},
 		"header": {

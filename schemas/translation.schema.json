@@ -454,6 +454,37 @@
 						"generic_resource"
 					]
 				},
+				"item_qualities": {
+					"type": "object",
+					"properties": {
+						"junk": {
+							"type": "string"
+						},
+						"common": {
+							"type": "string"
+						},
+						"uncommon": {
+							"type": "string"
+						},
+						"rare": {
+							"type": "string"
+						},
+						"epic": {
+							"type": "string"
+						},
+						"legendary": {
+							"type": "string"
+						},
+						"artifact": {
+							"type": "string"
+						},
+						"heirloom": {
+							"type": "string"
+						}
+					},
+					"additionalProperties": false,
+					"required": ["junk", "common", "uncommon", "rare", "epic", "legendary", "artifact", "heirloom"]
+				},
 				"stats": {
 					"type": "object",
 					"properties": {
@@ -905,6 +936,7 @@
 				"ranged_weapon_types",
 				"spell_schools",
 				"resource_types",
+				"item_qualities",
 				"stats",
 				"currency",
 				"copy_button",
@@ -8139,6 +8171,12 @@
 								},
 								"max_gem_phase": {
 									"type": "string"
+								},
+								"max_gem_quality": {
+									"type": "string"
+								},
+								"disable_unique_gems": {
+									"type": "string"
 								}
 							},
 							"additionalProperties": false,
@@ -8167,7 +8205,9 @@
 								"hard_cap_info",
 								"edit_weights",
 								"freeze_item_slots",
-								"max_gem_phase"
+								"max_gem_phase",
+								"max_gem_quality",
+								"disable_unique_gems"
 							]
 						}
 					},

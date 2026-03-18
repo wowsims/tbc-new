@@ -1,5 +1,19 @@
 import { LaunchStatus } from '../core/launched_sims';
-import { ArmorType, Class, MobType, PseudoStat, Race, Profession, Spec, Stat, SpellSchool, WeaponType, RangedWeaponType, ItemSlot } from '../core/proto/common';
+import {
+	ArmorType,
+	Class,
+	MobType,
+	PseudoStat,
+	Race,
+	Profession,
+	Spec,
+	Stat,
+	SpellSchool,
+	WeaponType,
+	RangedWeaponType,
+	ItemSlot,
+	ItemQuality,
+} from '../core/proto/common';
 import { ResourceType } from '../core/proto/spell';
 import { RaidFilterOption, SourceFilterOption } from '../core/proto/ui';
 import { BulkSimItemSlot } from '../core/components/individual_sim_ui/bulk/utils';
@@ -176,6 +190,17 @@ export const resourceTypeI18nKeys: Record<ResourceType, string> = {
 	[ResourceType.ResourceTypeComboPoints]: 'combo_points',
 	[ResourceType.ResourceTypeFocus]: 'focus',
 	[ResourceType.ResourceTypeGenericResource]: 'generic_resource',
+};
+
+export const itemQualityI18nKeys: Record<ItemQuality, string> = {
+	[ItemQuality.ItemQualityJunk]: 'junk',
+	[ItemQuality.ItemQualityCommon]: 'common',
+	[ItemQuality.ItemQualityUncommon]: 'uncommon',
+	[ItemQuality.ItemQualityRare]: 'rare',
+	[ItemQuality.ItemQualityEpic]: 'epic',
+	[ItemQuality.ItemQualityLegendary]: 'legendary',
+	[ItemQuality.ItemQualityArtifact]: 'artifact',
+	[ItemQuality.ItemQualityHeirloom]: 'heirloom',
 };
 
 // standardize keys regardless they are from backend or frontend
