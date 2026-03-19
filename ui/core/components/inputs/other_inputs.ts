@@ -129,6 +129,9 @@ export const InFrontOfTarget = {
 export const DistanceFromTarget = {
 	id: 'distance-from-target',
 	type: 'number' as const,
+	float: true,
+	maxDecimalDigits: 2,
+	positive: true,
 	label: i18n.t('settings_tab.other.distance_from_target.label'),
 	labelTooltip: i18n.t('settings_tab.other.distance_from_target.tooltip'),
 	changedEvent: (player: Player<any>) => player.distanceFromTargetChangeEmitter,
