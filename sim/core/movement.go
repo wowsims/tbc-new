@@ -51,7 +51,7 @@ func (unit *Unit) MoveTo(moveRange float64, sim *Simulation) {
 		return
 	}
 
-	unit.UpdatePosition(sim)
+	unit.UpdatePosition(sim, false)
 	moveDistance := moveRange - unit.DistanceFromTarget
 	timeToMove := time.Duration(math.Abs(moveDistance)/unit.GetMovementSpeed()*1000) * time.Millisecond
 	registerMovementAction(unit, sim, unit.GetMovementSpeed()*TernaryFloat64(moveDistance < 0, -1., 1.), sim.CurrentTime+timeToMove, moveDistance)
@@ -62,17 +62,17 @@ func (unit *Unit) MoveDuration(duration time.Duration, sim *Simulation) {
 		return
 	}
 
-	unit.UpdatePosition(sim)
+	unit.UpdatePosition(sim, false)
 	registerMovementAction(unit, sim, 0., sim.CurrentTime+duration, 0)
 }
 
-func (unit *Unit) UpdatePosition(sim *Simulation) {
+func (unit *Unit) UpdatePosition(sim *Simulation, isFinal bool) {
 	if !unit.Moving {
 		return
 	}
 
 	oldDist := unit.DistanceFromTarget
-	if unit.movementAction.moveDistance != 0 {
+	if isFinal && unit.movementAction.moveDistance != 0 {
 		unit.DistanceFromTarget = unit.movementAction.srcPosition + unit.movementAction.moveDistance
 	} else {
 		unit.DistanceFromTarget = unit.movementAction.GetCurrentPosition(sim)
@@ -111,7 +111,7 @@ func (unit *Unit) FinalizeMovement(sim *Simulation) {
 		return
 	}
 
-	unit.UpdatePosition(sim)
+	unit.UpdatePosition(sim, true)
 	unit.moveAura.Deactivate(sim)
 
 	unit.OnMovement(sim, unit.DistanceFromTarget, MovementEnd)
