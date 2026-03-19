@@ -14,25 +14,15 @@ func (hunter *Hunter) registerSteadyShotSpell() {
 		ProcMask:       core.ProcMaskRangedSpecial,
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
 
-		MissileSpeed: 40,
-		MinRange:     core.MaxMeleeRange,
-		MaxRange:     HunterBaseMaxRange,
-
 		ManaCost: core.ManaCostOptions{
 			FlatCost: 110,
 		},
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD:      core.GCDDefault,
 				CastTime: time.Millisecond * 1500,
 			},
-			IgnoreHaste: true,
 		},
-
-		DamageMultiplier: 1,
-		CritMultiplier:   hunter.DefaultMeleeCritMultiplier(),
-		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			// Steady Shot isn't affected by Ammo, Scopes or Adamantite Weightstone
@@ -58,5 +48,5 @@ func (hunter *Hunter) registerSteadyShotSpell() {
 				spell.DealDamage(sim, result)
 			})
 		},
-	})
+	}, true)
 }

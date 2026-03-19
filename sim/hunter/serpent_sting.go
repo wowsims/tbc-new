@@ -7,31 +7,16 @@ import (
 )
 
 func (hunter *Hunter) registerSerpentStingSpell() {
-	hunter.SerpentSting = hunter.RegisterSpell(core.SpellConfig{
+	hunter.SerpentSting = hunter.RegisterRangedSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 27016},
 		SpellSchool:    core.SpellSchoolNature,
 		ProcMask:       core.ProcMaskProc,
 		ClassSpellMask: HunterSpellSerpentSting,
 		Flags:          core.SpellFlagAPL,
 
-		MissileSpeed: 40,
-		MinRange:     core.MaxMeleeRange,
-		MaxRange:     HunterBaseMaxRange,
-
 		ManaCost: core.ManaCostOptions{
 			FlatCost: 275,
 		},
-
-		Cast: core.CastConfig{
-			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
-			},
-			IgnoreHaste: true,
-		},
-
-		DamageMultiplier: 1,
-		CritMultiplier:   0,
-		ThreatMultiplier: 1,
 
 		Dot: core.DotConfig{
 			Aura: core.Aura{
@@ -65,5 +50,5 @@ func (hunter *Hunter) registerSerpentStingSpell() {
 				spell.DealOutcome(sim, result)
 			})
 		},
-	})
+	}, false)
 }

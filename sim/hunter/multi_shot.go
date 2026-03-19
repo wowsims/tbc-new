@@ -15,8 +15,6 @@ func (hunter *Hunter) registerMultiShotSpell() {
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
 
 		MissileSpeed: 30,
-		MinRange:     core.MaxMeleeRange,
-		MaxRange:     HunterBaseMaxRange,
 
 		ManaCost: core.ManaCostOptions{
 			FlatCost: 275,
@@ -24,19 +22,14 @@ func (hunter *Hunter) registerMultiShotSpell() {
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD:      core.GCDDefault,
 				CastTime: time.Millisecond * 500,
 			},
-			IgnoreHaste: true,
 			CD: core.Cooldown{
 				Timer:    hunter.NewTimer(),
 				Duration: time.Second * 10,
 			},
 		},
 
-		DamageMultiplier: 1,
-		CritMultiplier:   hunter.DefaultMeleeCritMultiplier(),
-		ThreatMultiplier: 1,
 		BonusCoefficient: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
@@ -51,5 +44,5 @@ func (hunter *Hunter) registerMultiShotSpell() {
 				spell.DealBatchedAoeDamage(sim)
 			})
 		},
-	})
+	}, true)
 }

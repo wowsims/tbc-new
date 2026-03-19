@@ -391,7 +391,7 @@ func (apl *APLRotation) DoNextAction(sim *Simulation) {
 	i := 0
 	apl.inLoop = true
 
-	apl.unit.UpdatePosition(sim)
+	apl.unit.UpdatePosition(sim, false)
 	for nextAction := apl.getNextAction(sim); nextAction != nil; i, nextAction = i+1, apl.getNextAction(sim) {
 		if i > 1000 {
 			panic(fmt.Sprintf("[USER_ERROR] Infinite loop detected, current action:\n%s", nextAction))

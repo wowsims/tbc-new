@@ -9,9 +9,10 @@ import (
 
 type MovementAction struct {
 	PendingAction
-	srcPosition float64       // starting position
-	startTime   time.Duration // starting time of the movement
-	speed       float64       // theoretical movement speed, can be 0
+	srcPosition  float64       // starting position
+	moveDistance float64       // distance moved, optional
+	startTime    time.Duration // starting time of the movement
+	speed        float64       // theoretical movement speed, can be 0
 }
 
 func (action *MovementAction) GetCurrentPosition(sim *Simulation) float64 {
@@ -23,7 +24,7 @@ func (unit *Unit) initMovement() {
 		Label:     "Movement",
 		ActionID:  ActionID{OtherID: proto.OtherAction_OtherActionMove},
 		Duration:  NeverExpires,
-		MaxStacks: 30,
+		MaxStacks: 100,
 
 		OnGain: func(aura *Aura, sim *Simulation) {
 			unit.Moving = true
@@ -50,10 +51,10 @@ func (unit *Unit) MoveTo(moveRange float64, sim *Simulation) {
 		return
 	}
 
-	unit.UpdatePosition(sim)
+	unit.UpdatePosition(sim, false)
 	moveDistance := moveRange - unit.DistanceFromTarget
 	timeToMove := time.Duration(math.Abs(moveDistance)/unit.GetMovementSpeed()*1000) * time.Millisecond
-	registerMovementAction(unit, sim, unit.GetMovementSpeed()*TernaryFloat64(moveDistance < 0, -1., 1.), sim.CurrentTime+timeToMove)
+	registerMovementAction(unit, sim, unit.GetMovementSpeed()*TernaryFloat64(moveDistance < 0, -1., 1.), sim.CurrentTime+timeToMove, moveDistance)
 }
 
 func (unit *Unit) MoveDuration(duration time.Duration, sim *Simulation) {
@@ -61,17 +62,21 @@ func (unit *Unit) MoveDuration(duration time.Duration, sim *Simulation) {
 		return
 	}
 
-	unit.UpdatePosition(sim)
-	registerMovementAction(unit, sim, 0., sim.CurrentTime+duration)
+	unit.UpdatePosition(sim, false)
+	registerMovementAction(unit, sim, 0., sim.CurrentTime+duration, 0)
 }
 
-func (unit *Unit) UpdatePosition(sim *Simulation) {
+func (unit *Unit) UpdatePosition(sim *Simulation, isFinal bool) {
 	if !unit.Moving {
 		return
 	}
 
 	oldDist := unit.DistanceFromTarget
-	unit.DistanceFromTarget = unit.movementAction.GetCurrentPosition(sim)
+	if isFinal && unit.movementAction.moveDistance != 0 {
+		unit.DistanceFromTarget = unit.movementAction.srcPosition + unit.movementAction.moveDistance
+	} else {
+		unit.DistanceFromTarget = unit.movementAction.GetCurrentPosition(sim)
+	}
 	if oldDist == unit.DistanceFromTarget {
 		return
 	}
@@ -106,13 +111,13 @@ func (unit *Unit) FinalizeMovement(sim *Simulation) {
 		return
 	}
 
-	unit.UpdatePosition(sim)
+	unit.UpdatePosition(sim, true)
 	unit.moveAura.Deactivate(sim)
 
 	unit.OnMovement(sim, unit.DistanceFromTarget, MovementEnd)
 }
 
-func registerMovementAction(unit *Unit, sim *Simulation, speed float64, endTime time.Duration) {
+func registerMovementAction(unit *Unit, sim *Simulation, speed float64, endTime time.Duration, moveDistance float64) {
 	if unit.movementAction != nil {
 		unit.movementAction.Cancel(sim)
 	} else {
@@ -120,9 +125,10 @@ func registerMovementAction(unit *Unit, sim *Simulation, speed float64, endTime 
 	}
 
 	movementAction := MovementAction{
-		startTime:   sim.CurrentTime,
-		speed:       speed,
-		srcPosition: unit.DistanceFromTarget,
+		startTime:    sim.CurrentTime,
+		speed:        speed,
+		srcPosition:  unit.DistanceFromTarget,
+		moveDistance: moveDistance,
 	}
 
 	movementAction.NextActionAt = endTime
