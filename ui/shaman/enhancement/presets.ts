@@ -54,7 +54,7 @@ export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
 			[Stat.StatStrength]: 2.2,
 			[Stat.StatAttackPower]: 1.0,
 			[Stat.StatSpellDamage]: 0.53,
-			[Stat.StatNatureDamage]: 0.43, // As simulated using Fire Ele Totem Only
+			[Stat.StatNatureDamage]: 0.39, // As simulated using Fire Ele Totem Only
 			[Stat.StatMeleeHitRating]: 1.69,
 			[Stat.StatMeleeCritRating]: 1.66,
 			[Stat.StatMeleeHasteRating]: 1.35,
