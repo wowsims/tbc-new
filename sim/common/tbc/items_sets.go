@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
@@ -112,7 +113,8 @@ var ItemSetManaEtchedRegalia = core.NewItemSet(core.ItemSet{
 
 // Blacksmithing - Plate
 var ItemSetBurningRage = core.NewItemSet(core.ItemSet{
-	Name: "Burning Rage",
+	Name:               "Burning Rage",
+	RequiredProfession: proto.Profession_Blacksmithing,
 	Bonuses: map[int32]core.ApplySetBonus{
 		2: func(agent core.Agent, setBonusAura *core.Aura) {
 			setBonusAura.
