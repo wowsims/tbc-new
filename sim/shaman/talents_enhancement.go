@@ -142,6 +142,7 @@ func (shaman *Shaman) applyImprovedLightningShield() {
 	shaman.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
 		FloatValue: 0.05 * float64(shaman.Talents.ImprovedLightningShield),
+		ClassMask:  SpellMaskLightningShield,
 	})
 }
 
