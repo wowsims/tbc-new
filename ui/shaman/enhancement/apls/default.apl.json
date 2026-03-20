@@ -1,11 +1,370 @@
 {
 	"type": "TypeAPL",
+	"prepullActions": [
+		{ "action": { "castSpell": { "spellId": { "spellId": 25587, "rank": 5 } } }, "doAtValue": { "const": { "val": "-7s" } } },
+		{ "action": { "castSpell": { "spellId": { "spellId": 25528, "rank": 6 } } }, "doAtValue": { "const": { "val": "-5s" } } },
+		{ "action": { "castSpell": { "spellId": { "spellId": 25570, "rank": 5 } } }, "doAtValue": { "const": { "val": "-4s" } } },
+		{ "action": { "castSpell": { "spellId": { "spellId": 25359, "rank": 3 } } }, "doAtValue": { "const": { "val": "-2s" } } },
+		{ "action": { "castSpell": { "spellId": { "spellId": 25537, "rank": 7 } } }, "doAtValue": { "const": { "val": "-1s" } } }
+	],
 	"priorityList": [
-		{"action":{"condition":{"auraIsInactive":{"sourceUnit":{"type":"CurrentTarget"},"auraId":{"spellId":25457,"tag":1},"includeReactionTime":true}},"castSpell":{"spellId":{"spellId":25457}}}},
-		{"action":{"castSpell":{"spellId":{"spellId":17364}}}},
-		{"action":{"castSpell":{"spellId":{"spellId":2894}}}},
-		{"action":{"condition":{"cmp":{"op":"OpLe","lhs":{"currentManaPercent":{}},"rhs":{"const":{"val":"30%"}}}},"castSpell":{"spellId":{"spellId":30823}}}},
-		{"action":{"condition":{"auraIsInactive":{"auraId":{"spellId":25570},"includeReactionTime":true}},"castSpell":{"spellId":{"spellId":25570}}}},
-		{"action":{"castSpell":{"spellId":{"spellId":25454}}}}
+		{
+			"action": {
+				"groupReference": {
+					"groupName": "Shamanistic Rage",
+					"variables": [{ "name": "Use SR when", "value": { "variableRef": { "name": "Mana below 10%" } } }]
+				}
+			}
+		},
+		{ "action": { "castSpell": { "spellId": { "spellId": 17364 } } } },
+		{
+			"action": {
+				"groupReference": {
+					"groupName": "Fire Elemental",
+					"variables": [{ "name": "Enable Fire Elemental?", "value": { "variableRef": { "name": "Yes" } } }]
+				}
+			}
+		},
+		{
+			"action": {
+				"groupReference": {
+					"groupName": "Totems",
+					"variables": [
+						{ "name": "Twist Windfury Totem?", "value": { "variableRef": { "name": "Yes" } } },
+						{ "name": "Pause twisting when", "value": { "variableRef": { "name": "Mana below 10%" } } }
+					]
+				}
+			}
+		},
+		{ "action": { "autocastOtherCooldowns": {} } },
+		{ "action": { "castAllStatBuffCooldowns": { "statType1": 5, "statType2": 22, "statType3": 17 } } },
+		{
+			"action": {
+				"groupReference": {
+					"groupName": "Shocks",
+					"variables": [
+						{ "name": "Twist Flame Shock?", "value": { "variableRef": { "name": "Yes" } } },
+						{ "name": "Filler Shock", "value": { "variableRef": { "name": "Earth Shock" } } }
+					]
+				}
+			}
+		},
+		{
+			"action": {
+				"groupReference": {
+					"groupName": "Fire Totems",
+					"variables": [
+						{ "name": "Twist Fire Nova?", "value": { "variableRef": { "name": "Yes" } } },
+						{ "name": "Filler Fire Totem", "value": { "variableRef": { "name": "Magma Totem" } } }
+					]
+				}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "Fire Elemental",
+			"actions": [
+				{
+					"action": {
+						"condition": {
+							"cmp": {
+								"op": "OpEq",
+								"lhs": { "variablePlaceholder": { "name": "Enable Fire Elemental?" } },
+								"rhs": { "variableRef": { "name": "Yes" } }
+							}
+						},
+						"strictSequence": {
+							"actions": [
+								{ "castAllStatBuffCooldowns": { "statType1": 5, "statType2": -1, "statType3": -1 } },
+								{ "castSpell": { "spellId": { "spellId": 3738, "rank": 1 } } },
+								{ "itemSwap": { "swapSet": "Swap1" } },
+								{ "castSpell": { "spellId": { "spellId": 2894, "rank": 1 } } },
+								{ "itemSwap": { "swapSet": "Main" } }
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Totems",
+			"actions": [
+				{
+					"action": {
+						"condition": {
+							"and": {
+								"vals": [
+									{
+										"cmp": {
+											"op": "OpEq",
+											"lhs": { "variablePlaceholder": { "name": "Twist Windfury Totem?" } },
+											"rhs": { "variableRef": { "name": "Yes" } }
+										}
+									},
+									{
+										"cmp": {
+											"op": "OpLe",
+											"lhs": { "auraRemainingTime": { "auraId": { "spellId": 25580, "tag": 1, "rank": 5 } } },
+											"rhs": { "const": { "val": "0.5s" } }
+										}
+									}
+								]
+							}
+						},
+						"castSpell": { "spellId": { "spellId": 25587, "rank": 5 } }
+					}
+				},
+				{
+					"action": {
+						"condition": {
+							"or": {
+								"vals": [
+									{
+										"and": {
+											"vals": [
+												{
+													"cmp": {
+														"op": "OpEq",
+														"lhs": { "variablePlaceholder": { "name": "Twist Windfury Totem?" } },
+														"rhs": { "variableRef": { "name": "No" } }
+													}
+												},
+												{
+													"cmp": {
+														"op": "OpLe",
+														"lhs": { "auraRemainingTime": { "auraId": { "spellId": 25359, "rank": 3 } } },
+														"rhs": { "const": { "val": "5s" } }
+													}
+												}
+											]
+										}
+									},
+									{
+										"and": {
+											"vals": [
+												{
+													"cmp": {
+														"op": "OpEq",
+														"lhs": { "variablePlaceholder": { "name": "Twist Windfury Totem?" } },
+														"rhs": { "variableRef": { "name": "Yes" } }
+													}
+												},
+												{ "not": { "val": { "variablePlaceholder": { "name": "Pause twisting when" } } } },
+												{
+													"cmp": {
+														"op": "OpLe",
+														"lhs": { "auraRemainingTime": { "auraId": { "spellId": 25359, "rank": 3 } } },
+														"rhs": { "const": { "val": "5s" } }
+													}
+												}
+											]
+										}
+									}
+								]
+							}
+						},
+						"castSpell": { "spellId": { "spellId": 25359, "rank": 3 } }
+					}
+				},
+				{
+					"action": {
+						"condition": {
+							"cmp": { "op": "OpLe", "lhs": { "auraRemainingTime": { "auraId": { "spellId": 25528 } } }, "rhs": { "const": { "val": "5s" } } }
+						},
+						"castSpell": { "spellId": { "spellId": 25528 } }
+					}
+				},
+				{
+					"action": {
+						"condition": {
+							"cmp": { "op": "OpLe", "lhs": { "auraRemainingTime": { "auraId": { "spellId": 25570 } } }, "rhs": { "const": { "val": "5s" } } }
+						},
+						"castSpell": { "spellId": { "spellId": 25570 } }
+					}
+				}
+			]
+		},
+		{
+			"name": "Fire Totems",
+			"actions": [
+				{
+					"action": {
+						"condition": {
+							"and": {
+								"vals": [
+									{ "auraIsInactive": { "auraId": { "spellId": 2894, "rank": 1 }, "includeReactionTime": true } },
+									{
+										"cmp": {
+											"op": "OpEq",
+											"lhs": { "variablePlaceholder": { "name": "Twist Fire Nova?" } },
+											"rhs": { "variableRef": { "name": "Yes" } }
+										}
+									},
+									{ "not": { "val": { "variableRef": { "name": "Mana below 10%" } } } }
+								]
+							}
+						},
+						"castSpell": { "spellId": { "spellId": 25537 } }
+					}
+				},
+				{
+					"action": {
+						"condition": {
+							"and": {
+								"vals": [
+									{
+										"or": {
+											"vals": [
+												{
+													"cmp": {
+														"op": "OpLe",
+														"lhs": { "totemRemainingTime": { "totemType": "Fire" } },
+														"rhs": { "const": { "val": "0s" } }
+													}
+												},
+												{ "dotIsActive": { "spellId": { "spellId": 25530, "rank": 7 } } }
+											]
+										}
+									},
+									{
+										"cmp": {
+											"op": "OpEq",
+											"lhs": { "variablePlaceholder": { "name": "Filler Fire Totem" } },
+											"rhs": { "variableRef": { "name": "Magma Totem" } }
+										}
+									},
+									{ "not": { "val": { "variableRef": { "name": "Mana below 10%" } } } }
+								]
+							}
+						},
+						"castSpell": { "spellId": { "spellId": 25550, "rank": 5 } }
+					}
+				},
+				{
+					"action": {
+						"condition": {
+							"and": {
+								"vals": [
+									{ "cmp": { "op": "OpLe", "lhs": { "totemRemainingTime": { "totemType": "Fire" } }, "rhs": { "const": { "val": "0s" } } } },
+									{
+										"or": {
+											"vals": [
+												{
+													"cmp": {
+														"op": "OpEq",
+														"lhs": { "variablePlaceholder": { "name": "Filler Fire Totem" } },
+														"rhs": { "variableRef": { "name": "Searing Totem" } }
+													}
+												},
+												{ "variableRef": { "name": "Mana below 10%" } }
+											]
+										}
+									}
+								]
+							}
+						},
+						"castSpell": { "spellId": { "spellId": 25530, "rank": 7 } }
+					}
+				}
+			]
+		},
+		{
+			"name": "Shamanistic Rage",
+			"actions": [
+				{ "action": { "condition": { "variablePlaceholder": { "name": "Use SR when" } }, "castSpell": { "spellId": { "spellId": 30823, "rank": 1 } } } }
+			]
+		},
+		{
+			"name": "Shocks",
+			"actions": [
+				{
+					"action": {
+						"condition": {
+							"and": {
+								"vals": [
+									{
+										"cmp": {
+											"op": "OpEq",
+											"lhs": { "variablePlaceholder": { "name": "Twist Flame Shock?" } },
+											"rhs": { "variableRef": { "name": "Yes" } }
+										}
+									},
+									{
+										"auraIsInactive": {
+											"sourceUnit": { "type": "CurrentTarget" },
+											"auraId": { "spellId": 25457, "tag": 1, "rank": 7 },
+											"includeReactionTime": true
+										}
+									}
+								]
+							}
+						},
+						"castSpell": { "spellId": { "spellId": 25457, "rank": 7 } }
+					}
+				},
+				{
+					"action": {
+						"condition": {
+							"cmp": {
+								"op": "OpEq",
+								"lhs": { "variablePlaceholder": { "name": "Filler Shock" } },
+								"rhs": { "variableRef": { "name": "Frost Shock" } }
+							}
+						},
+						"castSpell": { "spellId": { "spellId": 25464, "rank": 5 } }
+					}
+				},
+				{
+					"action": {
+						"condition": {
+							"cmp": {
+								"op": "OpEq",
+								"lhs": { "variablePlaceholder": { "name": "Filler Shock" } },
+								"rhs": { "variableRef": { "name": "Earth Shock" } }
+							}
+						},
+						"castSpell": { "spellId": { "spellId": 25454, "rank": 8 } }
+					}
+				}
+			]
+		}
+	],
+	"valueVariables": [
+		{ "name": "--- Toggles ---" },
+		{ "name": "Yes", "value": { "const": { "val": "true" } } },
+		{ "name": "No", "value": { "const": { "val": "false" } } },
+		{ "name": "--- WF Twisting Pause and Shamanistic Rage ---" },
+		{ "name": "Mana below 30%", "value": { "cmp": { "op": "OpLt", "lhs": { "currentManaPercent": {} }, "rhs": { "const": { "val": "30%" } } } } },
+		{ "name": "Mana below 20%", "value": { "cmp": { "op": "OpLt", "lhs": { "currentManaPercent": {} }, "rhs": { "const": { "val": "20%" } } } } },
+		{ "name": "Mana below 10%", "value": { "cmp": { "op": "OpLt", "lhs": { "currentManaPercent": {} }, "rhs": { "const": { "val": "10%" } } } } },
+		{ "name": "Mana below 5%", "value": { "cmp": { "op": "OpLt", "lhs": { "currentManaPercent": {} }, "rhs": { "const": { "val": "5%" } } } } },
+		{ "name": "--- Filler Shocks ---" },
+		{ "name": "Frost Shock", "value": { "const": { "val": "Frost Shock" } } },
+		{ "name": "Earth Shock", "value": { "const": { "val": "Earth Shock" } } },
+		{ "name": "--- Filler Fire Totems ---" },
+		{ "name": "Magma Totem", "value": { "const": { "val": "Magma" } } },
+		{ "name": "Searing Totem", "value": { "const": { "val": "Searing" } } },
+		{ "name": "--- (internal use) ---" },
+		{
+			"name": "Mana below 2x Air Twist",
+			"value": {
+				"cmp": {
+					"op": "OpLt",
+					"lhs": { "currentMana": {} },
+					"rhs": { "math": { "op": "OpMul", "lhs": { "const": { "val": "2" } }, "rhs": { "variableRef": { "name": "air_twist_mana_cost" } } } }
+				}
+			}
+		},
+		{
+			"name": "Air Twist mana cost",
+			"value": {
+				"math": {
+					"op": "OpAdd",
+					"lhs": { "spellCurrentCost": { "spellId": { "spellId": 25587, "rank": 5 } } },
+					"rhs": { "spellCurrentCost": { "spellId": { "spellId": 25359, "rank": 3 } } }
+				}
+			}
+		}
 	]
 }
