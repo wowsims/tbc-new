@@ -27,7 +27,6 @@ func (shaman *Shaman) applyNaturesGuidance() {
 	}).AttachStatsBuff(stats.Stats{
 		stats.SpellHitPercent:    value,
 		stats.PhysicalHitPercent: value,
-		stats.RangedHitPercent:   value,
 	}))
 }
 
