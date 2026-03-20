@@ -1672,6 +1672,7 @@
 				"eclipse": "Eclipse",
 				"cooldowns": "Cooldowns",
 				"potions": "Potions",
+				"conjured_items": "Conjured Items",
 				"placeholders": "Placeholders"
 			},
 			"item_swap_sets": {

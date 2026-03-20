@@ -91,12 +91,22 @@ export const ConjuredFlameCap = {
 	actionId: ActionId.fromItemId(22788),
 	value: 22788,
 };
+export const ConjuredCrackedPowerCore = {
+	actionId: ActionId.fromItemId(23334),
+	value: 23334,
+};
+export const ChippedCrackedPowerCore = {
+	actionId: ActionId.fromItemId(23381),
+	value: 23381,
+};
 
 export const CONJURED_CONFIG = [
 	{ config: ConjuredRogueThistleTea, stats: [] },
 	{ config: ConjuredHealthstone, stats: [Stat.StatStamina] },
 	{ config: ConjuredDarkRune, stats: [Stat.StatIntellect] },
 	{ config: ConjuredFlameCap, stats: [] },
+	{ config: ConjuredCrackedPowerCore, stats: [Stat.StatSpellDamage] },
+	{ config: ChippedCrackedPowerCore, stats: [Stat.StatSpellDamage] },
 ] as ConsumableStatOption<number>[];
 
 export const makeConjuredInput = makeConsumeInputFactory({ consumesFieldName: 'conjuredId' });

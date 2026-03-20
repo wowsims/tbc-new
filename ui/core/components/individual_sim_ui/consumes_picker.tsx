@@ -1,7 +1,7 @@
 import { ref } from 'tsx-vanilla';
 import { IndividualSimUI } from '../../individual_sim_ui';
 import { Player } from '../../player';
-import { Class, ConsumableType, Spec, Stat } from '../../proto/common';
+import { Class, ConsumableType, Spec } from '../../proto/common';
 import { Consumable } from '../../proto/db';
 import { Database } from '../../proto_utils/database';
 import { TypedEvent } from '../../typed_event';
@@ -66,7 +66,7 @@ export class ConsumesPicker extends Component {
 		const potionsOptions = ConsumablesInputs.makeConsumableInput(pots, { consumesFieldName: 'potId' }, i18n.t('settings_tab.consumables.potions.combat'));
 		const potionsPicker = buildIconInput(potionsElem, this.simUI.player, potionsOptions);
 
-		const conjuredOptions = ConsumablesInputs.makeConjuredInput(relevantStatOptions(ConsumablesInputs.CONJURED_CONFIG, this.simUI));
+		const conjuredOptions = ConsumablesInputs.makeConjuredInput(relevantStatOptions(ConsumablesInputs.CONJURED_CONFIG, this.simUI.individualConfig));
 		const conjuredPicker = buildIconInput(potionsElem, this.simUI.player, conjuredOptions);
 
 		const events = TypedEvent.onAny([this.simUI.player.professionChangeEmitter]).on(() => this.updateRow(row, [potionsPicker, conjuredPicker]));
@@ -131,7 +131,7 @@ export class ConsumesPicker extends Component {
 		const engiConsumesElem = engiConsumesRef.value!;
 
 		const explosivesoptions = ConsumablesInputs.makeExplosivesInput(
-			relevantStatOptions(ConsumablesInputs.EXPLOSIVE_CONFIG, this.simUI),
+			relevantStatOptions(ConsumablesInputs.EXPLOSIVE_CONFIG, this.simUI.individualConfig),
 			i18n.t('settings_tab.consumables.engineering.explosives'),
 		);
 		const explosivePicker = buildIconInput(engiConsumesElem, this.simUI.player, explosivesoptions);
@@ -181,12 +181,12 @@ export class ConsumesPicker extends Component {
 		const imbuePickerElem = imbuePickerRef.value!;
 
 		const mhImbueOptions = ConsumablesInputs.makeMHImbueInput(
-			relevantStatOptions(ConsumablesInputs.IMBUE_CONFIG_MH, this.simUI),
+			relevantStatOptions(ConsumablesInputs.IMBUE_CONFIG_MH, this.simUI.individualConfig),
 			i18n.t('settings_tab.consumables.imbue.mhImbue'),
 		);
 
 		const ohImbueOptions = ConsumablesInputs.makeOHImbueInput(
-			relevantStatOptions(ConsumablesInputs.IMBUE_CONFIG_OH, this.simUI),
+			relevantStatOptions(ConsumablesInputs.IMBUE_CONFIG_OH, this.simUI.individualConfig),
 			i18n.t('settings_tab.consumables.imbue.ohImbue'),
 		);
 
@@ -205,7 +205,7 @@ export class ConsumesPicker extends Component {
 		);
 		const drumsPickerElem = drumsPickerRef.value!;
 
-		const drumsOptions = ConsumablesInputs.makeDrumsInput(relevantStatOptions(ConsumablesInputs.DRUMS_CONFIG, this.simUI));
+		const drumsOptions = ConsumablesInputs.makeDrumsInput(relevantStatOptions(ConsumablesInputs.DRUMS_CONFIG, this.simUI.individualConfig));
 		buildIconInput(drumsPickerElem, this.simUI.player, drumsOptions);
 	}
 

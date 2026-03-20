@@ -1,4 +1,4 @@
-import { IndividualSimUI } from '../../individual_sim_ui';
+import { IndividualSimUI, IndividualSimUIConfig } from '../../individual_sim_ui';
 import { Player } from '../../player';
 import { Faction, Stat } from '../../proto/common';
 import { ActionId } from '../../proto_utils/action_id';
@@ -42,17 +42,17 @@ export type StatOptions<T, Options extends ItemStatOptions<T> | PickerStatOption
 
 export function relevantStatOptions<T, OptionsType extends ItemStatOptions<T> | PickerStatOptions>(
 	options: StatOptions<T, OptionsType>,
-	simUI: IndividualSimUI<any>,
+	individualConfig: IndividualSimUIConfig<any>,
 ): StatOptions<T, OptionsType> {
-	const displayStatSet = new Set(simUI.individualConfig.displayStats.map(us => (us.hasRootStat() ? us.getRootStat() : us.getPseudoStat())));
+	const displayStatSet = new Set(individualConfig.displayStats.map(us => (us.hasRootStat() ? us.getRootStat() : us.getPseudoStat())));
 
 	return options
 		.filter(
 			option =>
 				option.stats.length === 0 ||
 				option.stats.some(stat => displayStatSet.has(stat)) ||
-				option.stats.some(stat => simUI.individualConfig.epStats.includes(stat)) ||
-				option.stats.some(stat => simUI.individualConfig.includeBuffDebuffInputs.includes(stat)),
+				option.stats.some(stat => individualConfig.epStats.includes(stat)) ||
+				option.stats.some(stat => individualConfig.includeBuffDebuffInputs.includes(stat)),
 		)
-		.filter(option => !option.stats.some(stat => simUI.individualConfig.excludeBuffDebuffInputs.includes(stat)));
+		.filter(option => !option.stats.some(stat => individualConfig.excludeBuffDebuffInputs.includes(stat)));
 }

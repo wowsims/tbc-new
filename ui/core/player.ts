@@ -1,4 +1,6 @@
 import { CharacterStats } from './components/character_stats';
+import { CONJURED_CONFIG } from './components/inputs/consumables';
+import { relevantStatOptions } from './components/inputs/stat_options';
 import { ItemSwapSettings } from './components/item_swap_picker';
 import Toast from './components/toast';
 import * as Mechanics from './constants/mechanics';
@@ -661,10 +663,14 @@ export class Player<SpecType extends Spec> {
 	getConsumes(forSimming?: boolean): ConsumesSpec {
 		const epStats = [...(this.specConfig.consumableStats ?? []), ...this.specConfig.epStats];
 		const dbPotions = this.sim.db.getConsumablesByTypeAndStats(ConsumableType.ConsumableTypePotion, epStats);
+		const dbConjured = relevantStatOptions(CONJURED_CONFIG, this.specConfig)
+			.filter(option => (option.config.showWhen ? option.config.showWhen(this) : true))
+			.map(option => option.config.value);
 		if (forSimming) {
 			return ConsumesSpec.create({
 				...this.consumables,
 				potions: dbPotions.map(p => p.id),
+				conjuredItems: dbConjured,
 			});
 		}
 		// Make a defensive copy
