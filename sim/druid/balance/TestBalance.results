@@ -1,0 +1,874 @@
+character_stats_results: {
+ key: "TestBalance-CharacterStats-Default"
+ value: {
+  final_stats: 209.88
+  final_stats: 200.695
+  final_stats: 545.16
+  final_stats: 473.99
+  final_stats: 905.499
+  final_stats: 1044.1758
+  final_stats: 222
+  final_stats: 172
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 88
+  final_stats: 302
+  final_stats: 0
+  final_stats: 0
+  final_stats: 264.99
+  final_stats: 1299.518
+  final_stats: 389
+  final_stats: 0
+  final_stats: 0
+  final_stats: 48
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+  final_stats: 258.24787
+  final_stats: 0
+  final_stats: 0
+  final_stats: 7837.79
+  final_stats: 0
+  final_stats: 10055.6
+  final_stats: 9199.85
+  final_stats: 175.099
+  final_stats: 33.75
+  final_stats: 33.75
+  final_stats: 33.75
+  final_stats: 43.75
+  final_stats: 93.75
+  final_stats: 0
+  final_stats: 1
+  final_stats: 10.97561
+  final_stats: 16.16302
+  final_stats: 31.45582
+  final_stats: 0
+  final_stats: 0
+  final_stats: 0
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-AdamantiteScope-2722"
+ value: {
+  dps: 1144.49986
+  tps: 1151.28986
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-ArcanoweaveVestments"
+ value: {
+  dps: 981.01868
+  tps: 987.49396
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-ArgussianCompass-27770"
+ value: {
+  dps: 1125.67113
+  tps: 1132.46113
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-AshtongueTalismanofEquilibrium-32486"
+ value: {
+  dps: 1152.88277
+  tps: 1159.7036
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-BadgeoftheSwarmguard-21670"
+ value: {
+  dps: 1125.67113
+  tps: 1132.46113
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-Biznicks247x128Accurascope-2523"
+ value: {
+  dps: 1144.49986
+  tps: 1151.28986
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-BlackenedNaaruSliver-34427"
+ value: {
+  dps: 1125.67113
+  tps: 1132.46113
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-ChainoftheTwilightOwl-24121"
+ value: {
+  dps: 1136.73302
+  tps: 1143.57052
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-CommendationofKael'thas-34473"
+ value: {
+  dps: 1125.67113
+  tps: 1132.46113
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-DarkmoonCard:Crusade-31856"
+ value: {
+  dps: 1125.67113
+  tps: 1132.46113
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-DarkmoonCard:Vengeance-31858"
+ value: {
+  dps: 1125.67113
+  tps: 1132.46113
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-DarkmoonCard:Wrath-31857"
+ value: {
+  dps: 1136.60076
+  tps: 1143.39076
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-EnchantBoots-Boar'sSpeed-2940"
+ value: {
+  dps: 1144.49986
+  tps: 1151.28986
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-EnchantBoots-Cat'sSwiftness-2939"
+ value: {
+  dps: 1144.49986
+  tps: 1151.28986
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-EnchantCloak-Subtlety-2621"
+ value: {
+  dps: 1144.49986
+  tps: 1128.39986
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-EnchantGloves-Threat-2613"
+ value: {
+  dps: 1144.49986
+  tps: 1174.17985
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-EnchantWeapon-Crusader-1900"
+ value: {
+  dps: 1144.49986
+  tps: 1151.28986
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-EnchantWeapon-Deathfrost-3273"
+ value: {
+  dps: 1144.49986
+  tps: 1151.28986
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-EnchantWeapon-Executioner-3225"
+ value: {
+  dps: 1144.49986
+  tps: 1151.28986
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-EnchantWeapon-Mongoose-2673"
+ value: {
+  dps: 1144.49986
+  tps: 1151.28986
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-EyeofMagtheridon-28789"
+ value: {
+  dps: 1165.31367
+  tps: 1172.10367
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-EyeoftheNight-24116"
+ value: {
+  dps: 1121.6065
+  tps: 1128.33095
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-Figurine-DawnstoneCrab-24125"
+ value: {
+  dps: 1125.67113
+  tps: 1132.46113
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-Figurine-EmpyreanTortoise-35693"
+ value: {
+  dps: 1125.67113
+  tps: 1132.46113
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-FigurineoftheColossus-27529"
+ value: {
+  dps: 1125.67113
+  tps: 1132.46113
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-HandofJustice-11815"
+ value: {
+  dps: 1125.67113
+  tps: 1132.46113
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-HourglassoftheUnraveller-28034"
+ value: {
+  dps: 1125.67113
+  tps: 1132.46113
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-IdoloftheAvenger-31025"
+ value: {
+  dps: 1119.3405
+  tps: 1126.1305
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-ImbuedNetherweave"
+ value: {
+  dps: 1083.51761
+  tps: 1090.29594
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-KhoriumScope-2723"
+ value: {
+  dps: 1144.49986
+  tps: 1151.28986
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-MalorneRegalia"
+ value: {
+  dps: 1108.6488
+  tps: 1115.75853
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-Mana-EtchedRegalia"
+ value: {
+  dps: 996.16777
+  tps: 1001.5636
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-MementoofTyrande-32496"
+ value: {
+  dps: 1171.37754
+  tps: 1178.28309
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-NetherweaveVestments"
+ value: {
+  dps: 850.20084
+  tps: 855.96195
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-NordrassilRegalia"
+ value: {
+  dps: 1149.10322
+  tps: 1155.02322
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-PendantoftheVioletEye-28727"
+ value: {
+  dps: 1208.29591
+  tps: 1215.48785
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-PrimalIntent"
+ value: {
+  dps: 949.6613
+  tps: 956.04408
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-PrimalMooncloth"
+ value: {
+  dps: 1056.207
+  tps: 1061.6645
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-PrismofInnerCalm-30621"
+ value: {
+  dps: 1125.67113
+  tps: 1132.46113
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-RodoftheSunKing-29996"
+ value: {
+  dps: 1144.49986
+  tps: 1151.28986
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-Romulo'sPoisonVial-28579"
+ value: {
+  dps: 1125.67113
+  tps: 1132.46113
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-SextantofUnstableCurrents-30626"
+ value: {
+  dps: 1152.92913
+  tps: 1159.71913
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-Shadow'sEmbrace"
+ value: {
+  dps: 953.56385
+  tps: 958.79524
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-SoulclothEmbrace"
+ value: {
+  dps: 994.85809
+  tps: 1000.34643
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-SpellstrikeInfusion"
+ value: {
+  dps: 1074.27386
+  tps: 1079.64914
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-SpyglassoftheHiddenFleet-30620"
+ value: {
+  dps: 1125.67113
+  tps: 1132.46113
+  hps: 14.44444
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-StabilitzedEterniumScope-2724"
+ value: {
+  dps: 1144.49986
+  tps: 1151.28986
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-SwiftWindfireDiamond"
+ value: {
+  dps: 1122.85368
+  tps: 1129.64368
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-TheLightningCapacitor-28785"
+ value: {
+  dps: 1149.4252
+  tps: 1134.90556
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-ThickDraenicArmor"
+ value: {
+  dps: 857.43865
+  tps: 863.50671
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-ThunderheartRegalia"
+ value: {
+  dps: 1355.23418
+  tps: 1362.01752
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-WastewalkerArmor"
+ value: {
+  dps: 733.22356
+  tps: 737.6944
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-WhitemendWisdom"
+ value: {
+  dps: 1042.27485
+  tps: 1047.74263
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-WindhawkArmor"
+ value: {
+  dps: 1127.80568
+  tps: 1134.74068
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-WrathofSpellfire"
+ value: {
+  dps: 1098.83215
+  tps: 1105.49882
+ }
+}
+dps_results: {
+ key: "TestBalance-Average-Default"
+ value: {
+  dps: 1155.63707
+  tps: 1162.70791
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-NightElf-p1_a-Standard-default-FullBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 1144.49986
+  tps: 1280.29986
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-NightElf-p1_a-Standard-default-FullBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 1144.49986
+  tps: 1151.28986
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-NightElf-p1_a-Standard-default-FullBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 1683.44522
+  tps: 1694.32189
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-NightElf-p1_a-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 421.64317
+  tps: 435.30983
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-NightElf-p1_a-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 421.64317
+  tps: 422.3265
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-NightElf-p1_a-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 868.32434
+  tps: 869.67434
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-NightElf-p2_a-Standard-default-FullBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 1174.09338
+  tps: 1289.82115
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-NightElf-p2_a-Standard-default-FullBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 1174.09338
+  tps: 1179.87977
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-NightElf-p2_a-Standard-default-FullBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 1715.84619
+  tps: 1724.97286
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-NightElf-p2_a-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 457.03625
+  tps: 457.03625
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-NightElf-p2_a-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 457.03625
+  tps: 457.03625
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-NightElf-p2_a-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 891.84881
+  tps: 891.84881
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-NightElf-p3-Standard-default-FullBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 1435.06068
+  tps: 1565.79401
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-NightElf-p3-Standard-default-FullBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 1435.06068
+  tps: 1441.59734
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-NightElf-p3-Standard-default-FullBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 2003.66988
+  tps: 2013.25904
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-NightElf-p3-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 567.40605
+  tps: 567.40605
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-NightElf-p3-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 567.40605
+  tps: 567.40605
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-NightElf-p3-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 1035.31672
+  tps: 1035.31672
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-NightElf-p3_5-Standard-default-FullBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 1432.95212
+  tps: 1565.74101
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-NightElf-p3_5-Standard-default-FullBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 1432.95212
+  tps: 1439.59156
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-NightElf-p3_5-Standard-default-FullBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 2030.63116
+  tps: 2040.59033
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-NightElf-p3_5-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 560.7528
+  tps: 560.7528
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-NightElf-p3_5-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 560.7528
+  tps: 560.7528
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-NightElf-p3_5-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 1048.87316
+  tps: 1048.87316
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-NightElf-p4-Standard-default-FullBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 1592.62043
+  tps: 1730.75376
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-NightElf-p4-Standard-default-FullBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 1592.62043
+  tps: 1599.5271
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-NightElf-p4-Standard-default-FullBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 2337.56612
+  tps: 2347.92612
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-NightElf-p4-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 634.7612
+  tps: 634.7612
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-NightElf-p4-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 634.7612
+  tps: 634.7612
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-NightElf-p4-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 1185.88889
+  tps: 1185.88889
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-Tauren-p1_a-Standard-default-FullBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 1115.88363
+  tps: 1249.01141
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-Tauren-p1_a-Standard-default-FullBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 1115.88363
+  tps: 1122.54002
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-Tauren-p1_a-Standard-default-FullBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 1669.44685
+  tps: 1680.23102
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-Tauren-p1_a-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 420.63933
+  tps: 434.306
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-Tauren-p1_a-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 420.63933
+  tps: 421.32266
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-Tauren-p1_a-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 867.93728
+  tps: 869.28728
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-Tauren-p2_a-Standard-default-FullBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 1151.35578
+  tps: 1267.08356
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-Tauren-p2_a-Standard-default-FullBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 1151.35578
+  tps: 1157.14217
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-Tauren-p2_a-Standard-default-FullBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 1698.59297
+  tps: 1707.62714
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-Tauren-p2_a-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 452.02842
+  tps: 452.02842
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-Tauren-p2_a-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 452.02842
+  tps: 452.02842
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-Tauren-p2_a-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 891.4099
+  tps: 891.4099
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-Tauren-p3-Standard-default-FullBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 1409.24967
+  tps: 1539.36634
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-Tauren-p3-Standard-default-FullBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 1409.24967
+  tps: 1415.75551
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-Tauren-p3-Standard-default-FullBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 1979.80408
+  tps: 1989.36241
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-Tauren-p3-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 572.57731
+  tps: 572.57731
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-Tauren-p3-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 572.57731
+  tps: 572.57731
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-Tauren-p3-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 1034.30964
+  tps: 1034.30964
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-Tauren-p3_5-Standard-default-FullBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 1406.83395
+  tps: 1537.36173
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-Tauren-p3_5-Standard-default-FullBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 1406.83395
+  tps: 1413.36034
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-Tauren-p3_5-Standard-default-FullBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 2013.70891
+  tps: 2023.57558
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-Tauren-p3_5-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 569.64303
+  tps: 569.64303
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-Tauren-p3_5-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 569.64303
+  tps: 569.64303
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-Tauren-p3_5-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 1048.37066
+  tps: 1048.37066
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-Tauren-p4-Standard-default-FullBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 1573.73473
+  tps: 1710.01807
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-Tauren-p4-Standard-default-FullBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 1573.73473
+  tps: 1580.5489
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-Tauren-p4-Standard-default-FullBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 2311.77651
+  tps: 2322.10568
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-Tauren-p4-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
+ value: {
+  dps: 638.84418
+  tps: 638.84418
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-Tauren-p4-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
+ value: {
+  dps: 638.84418
+  tps: 638.84418
+ }
+}
+dps_results: {
+ key: "TestBalance-Settings-Tauren-p4-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
+ value: {
+  dps: 1185.3551
+  tps: 1185.3551
+ }
+}
+dps_results: {
+ key: "TestBalance-SwitchInFrontOfTarget-Default"
+ value: {
+  dps: 1144.49986
+  tps: 1151.28986
+ }
+}

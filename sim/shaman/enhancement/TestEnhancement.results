@@ -342,8 +342,8 @@ dps_results: {
 dps_results: {
  key: "TestEnhancement-AllItems-CycloneHarness"
  value: {
-  dps: 1834.99056
-  tps: 1703.10831
+  dps: 1827.12955
+  tps: 1695.2473
  }
 }
 dps_results: {
@@ -1133,15 +1133,15 @@ dps_results: {
 dps_results: {
  key: "TestEnhancement-AllItems-TotemofImpact-27947"
  value: {
-  dps: 1983.62166
-  tps: 1851.88884
+  dps: 1955.15481
+  tps: 1823.42199
  }
 }
 dps_results: {
  key: "TestEnhancement-AllItems-TotemofImpact-27984"
  value: {
-  dps: 1983.62166
-  tps: 1851.88884
+  dps: 1955.15481
+  tps: 1823.42199
  }
 }
 dps_results: {
