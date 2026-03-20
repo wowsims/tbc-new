@@ -213,7 +213,20 @@
 						"condition": {
 							"and": {
 								"vals": [
-									{ "cmp": { "op": "OpLe", "lhs": { "totemRemainingTime": { "totemType": "Fire" } }, "rhs": { "const": { "val": "0s" } } } },
+									{
+										"or": {
+											"vals": [
+												{
+													"cmp": {
+														"op": "OpLe",
+														"lhs": { "totemRemainingTime": { "totemType": "Fire" } },
+														"rhs": { "const": { "val": "0s" } }
+													}
+												},
+												{ "dotIsActive": { "spellId": { "spellId": 25530, "rank": 7 } } }
+											]
+										}
+									},
 									{
 										"cmp": {
 											"op": "OpEq",
