@@ -94,12 +94,11 @@ var Tier5 = core.NewItemSet(core.ItemSet{
 				FloatValue: -2,
 			})
 			setBonusAura.AttachProcTrigger(core.ProcTrigger{
-				Name:               "Deathmantle Proc Trigger",
-				ProcMask:           core.ProcMaskMelee,
-				Outcome:            core.OutcomeLanded,
-				Callback:           core.CallbackOnSpellHitDealt,
-				TriggerImmediately: true,
-				DPM:                rogue.NewLegacyPPMManager(1.0, core.ProcMaskMelee),
+				Name:     "Deathmantle Proc Trigger",
+				ProcMask: core.ProcMaskMelee,
+				Outcome:  core.OutcomeLanded,
+				Callback: core.CallbackOnSpellHitDealt,
+				DPM:      rogue.NewLegacyPPMManager(1.0, core.ProcMaskMelee),
 				Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 					mod.Activate(sim)
 				},
@@ -148,7 +147,6 @@ func init() {
 			ProcMask:           core.ProcMaskMeleeSpecial,
 			ICD:                time.Second * 30,
 			RequireDamageDealt: true,
-			TriggerImmediately: true,
 			Outcome:            core.OutcomeLanded,
 			Callback:           core.CallbackOnSpellHitDealt,
 			ProcChance:         0.25,
