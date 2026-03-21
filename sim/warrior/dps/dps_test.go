@@ -25,7 +25,7 @@ func TestDpsWarrior(t *testing.T) {
 				core.GetGearSet("../../../ui/warrior/dps/gear_sets", "p1_fury"),
 				core.GetGearSet("../../../ui/warrior/dps/gear_sets", "p1_arms"),
 			},
-			Talents:          DefaultFuryTalents,
+			Talents: DefaultFuryTalents,
 			OtherTalentSets: []core.TalentsCombo{
 				{Label: "Arms", Talents: DefaultArmsTalents},
 			},
@@ -35,7 +35,7 @@ func TestDpsWarrior(t *testing.T) {
 			Profession1:      proto.Profession_Engineering,
 			Profession2:      proto.Profession_Blacksmithing,
 
-			Rotation:       core.GetAplRotation("../../../ui/warrior/dps/apls", "fury"),
+			Rotation: core.GetAplRotation("../../../ui/warrior/dps/apls", "fury"),
 			OtherRotations: []core.RotationCombo{
 				core.GetAplRotation("../../../ui/warrior/dps/apls", "arms"),
 			},

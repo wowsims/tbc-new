@@ -363,8 +363,8 @@ dps_results: {
 dps_results: {
  key: "TestRogue-AllItems-Deathmantle"
  value: {
-  dps: 1746.30438
-  tps: 1239.87611
+  dps: 1823.59176
+  tps: 1294.75015
  }
 }
 dps_results: {
@@ -1129,6 +1129,13 @@ dps_results: {
  value: {
   dps: 1834.84039
   tps: 1302.73667
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-Warp-SpringCoil-30450"
+ value: {
+  dps: 1881.93916
+  tps: 1336.1768
  }
 }
 dps_results: {

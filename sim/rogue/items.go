@@ -83,18 +83,26 @@ var Tier5 = core.NewItemSet(core.ItemSet{
 				Label:    "Coup de Grace",
 				Duration: time.Second * 15,
 				ActionID: core.ActionID{SpellID: 37171},
+				OnApplyEffects: func(aura *core.Aura, sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+					if spell.Matches(RogueSpellFinisher) {
+						aura.Deactivate(sim)
+					}
+				},
 			}).AttachSpellMod(core.SpellModConfig{
 				Kind:       core.SpellMod_PowerCost_Pct,
 				ClassMask:  RogueSpellFinisher,
 				FloatValue: -2,
 			})
 			setBonusAura.AttachProcTrigger(core.ProcTrigger{
-				Name: "Deathmantle Proc Trigger",
-				DPM:  rogue.NewLegacyPPMManager(1.0, core.ProcMaskMelee),
+				Name:     "Deathmantle Proc Trigger",
+				ProcMask: core.ProcMaskMelee,
+				Outcome:  core.OutcomeLanded,
+				Callback: core.CallbackOnSpellHitDealt,
+				DPM:      rogue.NewLegacyPPMManager(1.0, core.ProcMaskMelee),
 				Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 					mod.Activate(sim)
 				},
-			}).ExposeToAPL(37170)
+			})
 		},
 	},
 })
@@ -120,3 +128,33 @@ var Tier6 = core.NewItemSet(core.ItemSet{
 		},
 	},
 })
+
+func init() {
+	// Warp-Spring Coil
+	core.NewItemEffect(30450, func(agent core.Agent) {
+		character := agent.GetCharacter()
+
+		aura := character.NewTemporaryStatsAura(
+			"Warp-Spring Coil",
+			core.ActionID{SpellID: 37174},
+			stats.Stats{stats.ArmorPenetration: 1000},
+			time.Second*15,
+		)
+
+		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
+			Name:               "Perceived Weakness",
+			ActionID:           core.ActionID{ItemID: 30450},
+			ProcMask:           core.ProcMaskMeleeSpecial,
+			ICD:                time.Second * 30,
+			RequireDamageDealt: true,
+			Outcome:            core.OutcomeLanded,
+			Callback:           core.CallbackOnSpellHitDealt,
+			ProcChance:         0.25,
+			Handler: func(sim *core.Simulation, _ *core.Spell, result *core.SpellResult) {
+				aura.Activate(sim)
+			},
+		})
+
+		character.ItemSwap.RegisterProc(30450, procAura)
+	})
+}

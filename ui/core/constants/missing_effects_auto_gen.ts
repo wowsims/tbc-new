@@ -2046,12 +2046,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		30450, // Warp-Spring Coil
-		[
-			"Your special attacks have a chance to give you 1000 armor penetration for 15s.", // 37174 - https://www.wowhead.com/tbc/spell=37174
-		]
-	],
-	[
 		30487, // Merciless Gladiator's Plate Gauntlets
 		[
 			"Hamstring Rage cost reduced by -3.0.", // 22778 - https://www.wowhead.com/tbc/spell=22778
