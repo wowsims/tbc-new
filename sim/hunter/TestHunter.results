@@ -205,6 +205,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestHunter-AllItems-BattlecastGarb"
+ value: {
+  dps: 2755.21404
+  tps: 1786.8306
+  dtps: 13.49831
+ }
+}
+dps_results: {
  key: "TestHunter-AllItems-Battlemaster'sAlacrity-35326"
  value: {
   dps: 3026.80845
@@ -626,6 +634,14 @@ dps_results: {
   dps: 3045.46801
   tps: 2054.44974
   dtps: 14.11082
+ }
+}
+dps_results: {
+ key: "TestHunter-AllItems-FelSkin"
+ value: {
+  dps: 2900.52398
+  tps: 1925.85743
+  dtps: 13.48761
  }
 }
 dps_results: {
@@ -1187,6 +1203,14 @@ dps_results: {
   dps: 3006.23998
   tps: 2014.57985
   dtps: 13.31673
+ }
+}
+dps_results: {
+ key: "TestHunter-AllItems-StrengthoftheClefthoof"
+ value: {
+  dps: 2728.69954
+  tps: 1768.25435
+  dtps: 13.62506
  }
 }
 dps_results: {

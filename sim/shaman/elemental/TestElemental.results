@@ -179,6 +179,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestElemental-AllItems-BattlecastGarb"
+ value: {
+  dps: 1562.9345
+  tps: 1214.98895
+ }
+}
+dps_results: {
  key: "TestElemental-AllItems-Battlemaster'sAlacrity-35326"
  value: {
   dps: 1681.686
@@ -547,6 +554,13 @@ dps_results: {
  value: {
   dps: 1703.04322
   tps: 1320.74668
+ }
+}
+dps_results: {
+ key: "TestElemental-AllItems-FelSkin"
+ value: {
+  dps: 1434.88123
+  tps: 1115.00198
  }
 }
 dps_results: {
@@ -1000,8 +1014,8 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-SpellstrikeInfusion"
  value: {
-  dps: 1563.48858
-  tps: 1211.05639
+  dps: 1557.03499
+  tps: 1205.99547
  }
 }
 dps_results: {
@@ -1045,6 +1059,13 @@ dps_results: {
  value: {
   dps: 1662.18215
   tps: 1346.14574
+ }
+}
+dps_results: {
+ key: "TestElemental-AllItems-StrengthoftheClefthoof"
+ value: {
+  dps: 1388.56885
+  tps: 1078.4356
  }
 }
 dps_results: {
