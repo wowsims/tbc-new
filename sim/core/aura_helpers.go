@@ -306,11 +306,13 @@ func MakePermanent(aura *Aura) *Aura {
 	aura.Duration = NeverExpires
 	if aura.OnReset == nil {
 		aura.OnReset = func(aura *Aura, sim *Simulation) {
+			aura.Duration = NeverExpires
 			aura.Activate(sim)
 		}
 	} else {
 		oldOnReset := aura.OnReset
 		aura.OnReset = func(aura *Aura, sim *Simulation) {
+			aura.Duration = NeverExpires
 			oldOnReset(aura, sim)
 			aura.Activate(sim)
 		}

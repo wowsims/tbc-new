@@ -749,7 +749,7 @@ func damageTakenDebuff(target *Unit, casterIndex int32, label string, spellID in
 
 		OnExpire: func(aura *Aura, sim *Simulation) {
 			for _, school := range schools {
-				target.PseudoStats.SchoolDamageTakenMultiplier[school] /= -multiplier
+				target.PseudoStats.SchoolDamageTakenMultiplier[school] /= multiplier
 			}
 		},
 	})
