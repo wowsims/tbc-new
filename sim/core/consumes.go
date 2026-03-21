@@ -212,6 +212,7 @@ func makePotionActivationSpellInternal(potion Consumable, character *Character) 
 		aura = character.NewTemporaryStatsAura(potion.Name, actionID, potion.Stats, potion.BuffDuration)
 		mcd.Spell.RelatedSelfBuff = aura.Aura
 		mcd.Type = aura.InferCDType()
+		mcd.BuffAura = aura
 	}
 	var gains []resourceGainConfig
 	resourceMetrics := make(map[proto.ResourceType]*ResourceMetrics)
