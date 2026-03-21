@@ -161,10 +161,11 @@ export class PresetConfigurationPicker extends Component {
 			if (talents) {
 				simUI.player.setTalentsString(eventID, talents.data.talentsString);
 			}
-			if (rotationType) {
+			if (rotationType && !rotation?.rotation.rotation) {
 				simUI.player.aplRotation.type = rotationType;
 				simUI.player.rotationChangeEmitter.emit(eventID);
 			} else if (rotation?.rotation.rotation) {
+				if (rotationType) simUI.player.aplRotation.type = rotationType;
 				simUI.player.setAplRotation(eventID, rotation.rotation.rotation);
 			}
 			if (epWeights) simUI.player.setEpWeights(eventID, epWeights.epWeights);

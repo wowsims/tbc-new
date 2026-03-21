@@ -2,7 +2,14 @@ import { Player } from '../../core/player';
 import * as PresetUtils from '../../core/preset_utils';
 import { ConsumesSpec, Debuffs, HandType, ItemSlot, PartyBuffs, Profession, PseudoStat, Race, Spec, Stat, TristateEffect } from '../../core/proto/common';
 import { SavedTalents } from '../../core/proto/ui';
-import { DpsWarrior_Options as WarriorOptions, WarriorShout, WarriorStance } from '../../core/proto/warrior';
+import {
+	DpsWarriorSpec,
+	DpsWarrior_Rotation,
+	DpsWarrior_Options as WarriorOptions,
+	WarriorShout,
+	WarriorStance,
+	WarriorSunder,
+} from '../../core/proto/warrior';
 import { Stats } from '../../core/proto_utils/stats';
 import * as WarriorPresets from '../presets';
 import DefaultArmsApl from './apls/arms.apl.json';
@@ -21,10 +28,20 @@ import P35FuryGear from './gear_sets/p3.5_fury.gear.json';
 import P4FuryGear from './gear_sets/p4_fury.gear.json';
 import { Phase } from '../../core/constants/other';
 import { defaultExposeWeaknessSettings } from '../../core/proto_utils/utils';
+import { APLRotation_Type } from '../../core/proto/apl';
 
 // Preset options for this spec.
 // Eventually we will import these values for the raid sim too, so its good to
 // keep them in a separate file.
+
+export const isArmsSpec = (player: Player<Spec.SpecDpsWarrior>) =>
+	player.getEquippedItem(ItemSlot.ItemSlotMainHand)?.item.handType === HandType.HandTypeTwoHand;
+
+export const isArmsKebabSpec = (player: Player<Spec.SpecDpsWarrior>) => player.getTalents().mortalStrike && isFurySpec(player);
+
+export const isFurySpec = (player: Player<Spec.SpecDpsWarrior>) =>
+	player.getEquippedItem(ItemSlot.ItemSlotMainHand)?.item.handType === HandType.HandTypeMainHand ||
+	player.getEquippedItem(ItemSlot.ItemSlotMainHand)?.item.handType === HandType.HandTypeOneHand;
 
 // Handlers for spec specific load checks
 const FURY_PRESET_OPTIONS = {
@@ -32,8 +49,7 @@ const FURY_PRESET_OPTIONS = {
 		PresetUtils.makeSpecChangeWarningToast(
 			[
 				{
-					condition: (player: Player<Spec.SpecDpsWarrior>) =>
-						player.getEquippedItem(ItemSlot.ItemSlotMainHand)?.item.handType === HandType.HandTypeTwoHand,
+					condition: isArmsSpec,
 					message: 'Check your gear: You have a two-handed weapon equipped, but the selected option is for dual wield.',
 				},
 				{
@@ -50,8 +66,7 @@ const ARMS_PRESET_OPTIONS = {
 		PresetUtils.makeSpecChangeWarningToast(
 			[
 				{
-					condition: (player: Player<Spec.SpecDpsWarrior>) =>
-						player.getEquippedItem(ItemSlot.ItemSlotMainHand)?.item.handType === HandType.HandTypeOneHand,
+					condition: isFurySpec,
 					message: 'Check your gear: You have a one-handed weapon equipped, but the selected option is for two-handed weapons.',
 				},
 			],
@@ -76,6 +91,15 @@ export const P4_BIS_ARMS_PRESET = PresetUtils.makePresetGear('P4 - Arms', P4Arms
 
 export const FURY_DEFAULT_ROTATION = PresetUtils.makePresetAPLRotation('Fury', DefaultFuryApl);
 export const ARMS_DEFAULT_ROTATION = PresetUtils.makePresetAPLRotation('Arms', DefaultArmsApl);
+
+export const SIMPLE_ROTATION = DpsWarrior_Rotation.create({
+	spec: DpsWarriorSpec.DpsWarriorSpecFury,
+	sunderArmor: WarriorSunder.WarriorSunderHelp,
+	useOverpower: true,
+	useRecklessness: false,
+	bloodlustTiming: 5,
+});
+export const SIMPLE_DEFAULT_ROTATION = PresetUtils.makePresetSimpleRotation('Simple', Spec.SpecDpsWarrior, SIMPLE_ROTATION);
 
 // Preset options for EP weights
 export const P1_FURY_EP_PRESET = PresetUtils.makePresetEpWeights(
@@ -210,17 +234,18 @@ export const OtherDefaults = {
 
 export const PRESET_BUILD_FURY = PresetUtils.makePresetBuild('Fury', {
 	talents: FuryTalents,
-	rotation: FURY_DEFAULT_ROTATION,
+	rotationType: APLRotation_Type.TypeSimple,
+	rotation: SIMPLE_DEFAULT_ROTATION,
 });
 
 export const PRESET_BUILD_ARMS = PresetUtils.makePresetBuild('Arms', {
 	talents: ArmsTalents,
-	rotation: ARMS_DEFAULT_ROTATION,
+	rotation: SIMPLE_DEFAULT_ROTATION,
 });
 
 export const PRESET_BUILD_ARMS_KEBAB = PresetUtils.makePresetBuild('Arms - Kebab', {
 	talents: ArmsKebabTalents,
-	rotation: ARMS_DEFAULT_ROTATION,
+	rotation: SIMPLE_DEFAULT_ROTATION,
 });
 
 export const P1_PLAYER_SETTINGS: PresetUtils.PresetSettings = {
@@ -300,7 +325,8 @@ export const P1_PRESET_BUILD_FURY = PresetUtils.makePresetBuild('P1 - Fury', {
 	gear: P1_BIS_FURY_PRESET,
 	talents: FuryTalents,
 	epWeights: P1_FURY_EP_PRESET,
-	rotation: FURY_DEFAULT_ROTATION,
+	rotationType: APLRotation_Type.TypeSimple,
+	rotation: SIMPLE_DEFAULT_ROTATION,
 	settings: P1_PLAYER_SETTINGS,
 });
 
@@ -308,7 +334,8 @@ export const P2_PRESET_BUILD_FURY = PresetUtils.makePresetBuild('P2 - Fury', {
 	gear: P2_BIS_FURY_PRESET,
 	talents: FuryTalents,
 	epWeights: P2_FURY_EP_PRESET,
-	rotation: FURY_DEFAULT_ROTATION,
+	rotationType: APLRotation_Type.TypeSimple,
+	rotation: SIMPLE_DEFAULT_ROTATION,
 	settings: P2_PLAYER_SETTINGS,
 });
 
@@ -316,7 +343,8 @@ export const P3_PRESET_BUILD_FURY = PresetUtils.makePresetBuild('P3 - Fury', {
 	gear: P3_BIS_FURY_PRESET,
 	talents: FuryTalents,
 	epWeights: P2_FURY_EP_PRESET,
-	rotation: FURY_DEFAULT_ROTATION,
+	rotationType: APLRotation_Type.TypeSimple,
+	rotation: SIMPLE_DEFAULT_ROTATION,
 	settings: P3_PLAYER_SETTINGS,
 });
 
@@ -324,7 +352,8 @@ export const P35_PRESET_BUILD_FURY = PresetUtils.makePresetBuild('P3.5 - Fury', 
 	gear: P35_BIS_FURY_PRESET,
 	talents: FuryTalents,
 	epWeights: P2_FURY_EP_PRESET,
-	rotation: FURY_DEFAULT_ROTATION,
+	rotationType: APLRotation_Type.TypeSimple,
+	rotation: SIMPLE_DEFAULT_ROTATION,
 	settings: P35_PLAYER_SETTINGS,
 });
 
@@ -332,7 +361,8 @@ export const P4_PRESET_BUILD_FURY = PresetUtils.makePresetBuild('P4 - Fury', {
 	gear: P4_BIS_FURY_PRESET,
 	talents: FuryTalents,
 	epWeights: P2_FURY_EP_PRESET,
-	rotation: FURY_DEFAULT_ROTATION,
+	rotationType: APLRotation_Type.TypeSimple,
+	rotation: SIMPLE_DEFAULT_ROTATION,
 	settings: P4_PLAYER_SETTINGS,
 });
 
@@ -340,7 +370,8 @@ export const P1_PRESET_BUILD_ARMS = PresetUtils.makePresetBuild('P1 - Arms', {
 	gear: P1_BIS_ARMS_PRESET,
 	talents: ArmsTalents,
 	epWeights: P1_ARMS_EP_PRESET,
-	rotation: ARMS_DEFAULT_ROTATION,
+	rotationType: APLRotation_Type.TypeSimple,
+	rotation: SIMPLE_DEFAULT_ROTATION,
 	settings: P1_PLAYER_SETTINGS,
 });
 
@@ -348,7 +379,8 @@ export const P2_PRESET_BUILD_ARMS = PresetUtils.makePresetBuild('P2 - Arms', {
 	gear: P2_BIS_ARMS_PRESET,
 	talents: ArmsTalents,
 	epWeights: P1_ARMS_EP_PRESET,
-	rotation: ARMS_DEFAULT_ROTATION,
+	rotationType: APLRotation_Type.TypeSimple,
+	rotation: SIMPLE_DEFAULT_ROTATION,
 	settings: P2_PLAYER_SETTINGS,
 });
 
@@ -356,7 +388,8 @@ export const P3_PRESET_BUILD_ARMS = PresetUtils.makePresetBuild('P3 - Arms', {
 	gear: P3_BIS_ARMS_PRESET,
 	talents: ArmsTalents,
 	epWeights: P3_ARMS_EP_PRESET,
-	rotation: ARMS_DEFAULT_ROTATION,
+	rotationType: APLRotation_Type.TypeSimple,
+	rotation: SIMPLE_DEFAULT_ROTATION,
 	settings: P3_PLAYER_SETTINGS,
 });
 
@@ -364,7 +397,8 @@ export const P35_PRESET_BUILD_ARMS = PresetUtils.makePresetBuild('P3.5 - Arms', 
 	gear: P35_BIS_ARMS_PRESET,
 	talents: ArmsTalents,
 	epWeights: P3_ARMS_EP_PRESET,
-	rotation: ARMS_DEFAULT_ROTATION,
+	rotationType: APLRotation_Type.TypeSimple,
+	rotation: SIMPLE_DEFAULT_ROTATION,
 	settings: P35_PLAYER_SETTINGS,
 });
 
@@ -372,6 +406,7 @@ export const P4_PRESET_BUILD_ARMS = PresetUtils.makePresetBuild('P4 - Arms', {
 	gear: P4_BIS_ARMS_PRESET,
 	talents: ArmsTalents,
 	epWeights: P3_ARMS_EP_PRESET,
-	rotation: ARMS_DEFAULT_ROTATION,
+	rotationType: APLRotation_Type.TypeSimple,
+	rotation: SIMPLE_DEFAULT_ROTATION,
 	settings: P4_PLAYER_SETTINGS,
 });

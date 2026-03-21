@@ -1,4 +1,16 @@
 // Set color variables which control the site theme.
 .dps-warrior-sim-ui {
 	@include theme-color($warrior, 0.95, '/tbc/assets/img/warrior_background.jpg');
+
+	.cooldown-settings {
+		display: none;
+	}
+
+	.rotation-settings {
+		.input-inline {
+			select {
+				width: min-content;
+			}
+		}
+	}
 }

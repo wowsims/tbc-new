@@ -152,7 +152,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecHunter, {
 	simpleRotation: (player: Player<Spec.SpecHunter>, simple: SpecRotation<Spec.SpecHunter>, cooldowns: Cooldowns): APLRotation => {
 		const rotation = APLRotation.clone(Presets.DefaultRotation.rotation.rotation!);
 
-		console.log(simple);
 		const {
 			viperStartManaPercent = 0.1,
 			viperStopManaPercent = 0.3,

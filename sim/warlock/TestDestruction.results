@@ -179,6 +179,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestDestruction-AllItems-BattlecastGarb"
+ value: {
+  dps: 1657.09022
+  tps: 1447.86688
+ }
+}
+dps_results: {
  key: "TestDestruction-AllItems-Battlemaster'sAlacrity-35326"
  value: {
   dps: 1858.07629
@@ -895,8 +902,8 @@ dps_results: {
 dps_results: {
  key: "TestDestruction-AllItems-SpellstrikeInfusion"
  value: {
-  dps: 1741.44527
-  tps: 1523.16557
+  dps: 1719.99393
+  tps: 1505.03883
  }
 }
 dps_results: {

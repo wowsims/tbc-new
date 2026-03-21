@@ -586,6 +586,8 @@ message ConsumesSpec {
 	int32 pet_food_id = 21;
 	// Contains all available potions
 	repeated int32 potions = 22;
+	// Contains all available conjured items
+	repeated int32 conjured_items = 23;
 }
 
 enum MobType {
@@ -728,6 +730,7 @@ enum ConsumableType {
 	ConsumableTypeGuardianElixir = 7;
 	ConsumableTypeImbue = 8;
 	ConsumableTypePetFood = 9;
+	ConsumableTypeOther = 10;
 }
 
 

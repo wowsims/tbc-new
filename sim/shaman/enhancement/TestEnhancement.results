@@ -179,6 +179,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestEnhancement-AllItems-BattlecastGarb"
+ value: {
+  dps: 1721.57738
+  tps: 1624.25862
+ }
+}
+dps_results: {
  key: "TestEnhancement-AllItems-Battlemaster'sAlacrity-35326"
  value: {
   dps: 1830.40215
@@ -540,6 +547,13 @@ dps_results: {
  value: {
   dps: 1864.22604
   tps: 1762.51025
+ }
+}
+dps_results: {
+ key: "TestEnhancement-AllItems-FelSkin"
+ value: {
+  dps: 1818.30567
+  tps: 1723.38161
  }
 }
 dps_results: {
@@ -986,8 +1000,8 @@ dps_results: {
 dps_results: {
  key: "TestEnhancement-AllItems-SpellstrikeInfusion"
  value: {
-  dps: 1737.39827
-  tps: 1630.15031
+  dps: 1736.7351
+  tps: 1629.77687
  }
 }
 dps_results: {
@@ -1031,6 +1045,13 @@ dps_results: {
  value: {
   dps: 1906.19964
   tps: 1810.07365
+ }
+}
+dps_results: {
+ key: "TestEnhancement-AllItems-StrengthoftheClefthoof"
+ value: {
+  dps: 1670.91513
+  tps: 1576.90539
  }
 }
 dps_results: {
@@ -1134,15 +1155,15 @@ dps_results: {
 dps_results: {
  key: "TestEnhancement-AllItems-TotemofImpact-27947"
  value: {
-  dps: 1898.80422
-  tps: 1800.28998
+  dps: 1879.63739
+  tps: 1781.12316
  }
 }
 dps_results: {
  key: "TestEnhancement-AllItems-TotemofImpact-27984"
  value: {
-  dps: 1898.80422
-  tps: 1800.28998
+  dps: 1879.63739
+  tps: 1781.12316
  }
 }
 dps_results: {

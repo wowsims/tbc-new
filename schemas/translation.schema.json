@@ -5843,6 +5843,9 @@
 								"potions": {
 									"type": "string"
 								},
+								"conjured_items": {
+									"type": "string"
+								},
 								"placeholders": {
 									"type": "string"
 								}
@@ -5880,6 +5883,7 @@
 								"eclipse",
 								"cooldowns",
 								"potions",
+								"conjured_items",
 								"placeholders"
 							]
 						},
@@ -6709,10 +6713,92 @@
 								"viper_start_mana_percent",
 								"viper_stop_mana_percent"
 							]
+						},
+						"warrior": {
+							"type": "object",
+							"properties": {
+								"sunder_armor": {
+									"type": "object",
+									"properties": {
+										"label": {
+											"type": "string"
+										},
+										"none": {
+											"type": "string"
+										},
+										"help": {
+											"type": "string"
+										},
+										"maintain": {
+											"type": "string"
+										}
+									},
+									"additionalProperties": false,
+									"required": ["label", "none", "help", "maintain"]
+								},
+								"bloodlust_timing": {
+									"type": "object",
+									"properties": {
+										"label": {
+											"type": "string"
+										},
+										"tooltip": {
+											"type": "string"
+										}
+									},
+									"additionalProperties": false,
+									"required": ["label", "tooltip"]
+								},
+								"dps": {
+									"type": "object",
+									"properties": {
+										"spec": {
+											"type": "object",
+											"properties": {
+												"label": {
+													"type": "string"
+												},
+												"fury": {
+													"type": "string"
+												},
+												"arms": {
+													"type": "string"
+												}
+											},
+											"additionalProperties": false,
+											"required": ["label", "fury", "arms"]
+										},
+										"use_recklessness": {
+											"type": "object",
+											"properties": {
+												"label": {
+													"type": "string"
+												}
+											},
+											"additionalProperties": false,
+											"required": ["label"]
+										},
+										"use_overpower": {
+											"type": "object",
+											"properties": {
+												"label": {
+													"type": "string"
+												}
+											},
+											"additionalProperties": false,
+											"required": ["label"]
+										}
+									},
+									"additionalProperties": false,
+									"required": ["spec", "use_recklessness", "use_overpower"]
+								}
+							},
+							"additionalProperties": false,
+							"required": ["sunder_armor", "bloodlust_timing", "dps"]
 						}
 					},
 					"additionalProperties": false,
-					"required": ["druid", "guardian", "rogue", "shaman", "warlock", "hunter"]
+					"required": ["druid", "guardian", "rogue", "shaman", "warlock", "hunter", "warrior"]
 				}
 			},
 			"additionalProperties": false,

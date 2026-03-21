@@ -449,6 +449,7 @@ message SpellStats {
 	bool has_missile_speed = 12; // Whether this spell has a missile speed
 	bool has_ranks = 13; // Whether this spell has a rank
 	bool is_potion = 14; // Whether this spell is a potion
+	bool is_conjured = 15; // Whether this spell is a conjured item
 }
 message APLValidation {
 	LogLevel log_level = 1;
