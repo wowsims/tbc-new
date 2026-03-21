@@ -1,10 +1,14 @@
 import * as OtherInputs from '../../core/components/inputs/other_inputs.js';
+import { ReforgeOptimizer } from '../../core/components/suggest_reforges_action';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui.js';
 import { Player } from '../../core/player.js';
 import { PlayerClasses } from '../../core/player_classes';
 import { APLRotation } from '../../core/proto/apl.js';
 import { Faction, ItemSlot, PseudoStat, Race, Spec, Stat } from '../../core/proto/common.js';
-import { UnitStat } from '../../core/proto_utils/stats.js';
+import { StatCapType } from '../../core/proto/ui';
+import { StatCap, Stats, UnitStat } from '../../core/proto_utils/stats.js';
+
+import * as Mechanics from '../../core/constants/mechanics';
 import * as ShamanInputs from '../inputs.js';
 import * as EnhancementInputs from './inputs.js';
 import * as Presets from './presets.js';
@@ -44,6 +48,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecEnhancementShaman, {
 			Stat.StatAgility,
 			Stat.StatIntellect,
 			Stat.StatAttackPower,
+			Stat.StatExpertiseRating,
 			Stat.StatSpellDamage,
 			Stat.StatNatureDamage,
 		],
@@ -62,6 +67,19 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecEnhancementShaman, {
 		gear: Presets.P1_PRESET.gear,
 		// Default EP weights for sorting gear in the gear picker.
 		epWeights: Presets.P1_EP_PRESET.epWeights,
+		statCaps: (() => {
+			const expCap = new Stats().withStat(Stat.StatExpertiseRating, 6.5 * 4 * Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION);
+			return expCap;
+		})(),
+		softCapBreakpoints: (() => {
+			const meleeHitSoftCapConfig = StatCap.fromPseudoStat(PseudoStat.PseudoStatMeleeHitPercent, {
+				breakpoints: [9, 20, 28],
+				capType: StatCapType.TypeSoftCap,
+				postCapEPs: [1.9 * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT, 1.73 * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT, 0],
+			});
+
+			return [meleeHitSoftCapConfig];
+		})(),
 		other: Presets.OtherDefaults,
 		// Default consumes settings.
 		consumables: Presets.DefaultConsumables,
@@ -142,5 +160,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecEnhancementShaman, {
 export class EnhancementShamanSimUI extends IndividualSimUI<Spec.SpecEnhancementShaman> {
 	constructor(parentElem: HTMLElement, player: Player<Spec.SpecEnhancementShaman>) {
 		super(parentElem, player, SPEC_CONFIG);
+
+		this.reforger = new ReforgeOptimizer(this, {});
 	}
 }
