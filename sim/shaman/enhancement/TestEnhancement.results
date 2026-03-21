@@ -43,12 +43,12 @@ character_stats_results: {
   final_stats: 33.75
   final_stats: 93.75
   final_stats: 0
-  final_stats: 12.00488
+  final_stats: 18.00488
   final_stats: 6
   final_stats: 32.47021
   final_stats: 18.77226
   final_stats: 0
-  final_stats: 3
+  final_stats: 0
   final_stats: 0
  }
 }
@@ -239,6 +239,13 @@ dps_results: {
  value: {
   dps: 1899.99481
   tps: 1800.86431
+ }
+}
+dps_results: {
+ key: "TestEnhancement-AllItems-Biznicks247x128Accurascope-2523"
+ value: {
+  dps: 1885.38704
+  tps: 1786.8728
  }
 }
 dps_results: {
@@ -963,6 +970,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestEnhancement-AllItems-ShiftingNaaruSliver-34429"
+ value: {
+  dps: 1965.81328
+  tps: 1752.37765
+ }
+}
+dps_results: {
  key: "TestEnhancement-AllItems-SkycallTotem-33506"
  value: {
   dps: 1875.64645
@@ -1014,13 +1028,6 @@ dps_results: {
 }
 dps_results: {
  key: "TestEnhancement-AllItems-StabilitzedEterniumScope-2724"
- value: {
-  dps: 1885.38704
-  tps: 1786.8728
- }
-}
-dps_results: {
- key: "TestEnhancement-AllItems-StabilizedEterniumScope-2523"
  value: {
   dps: 1885.38704
   tps: 1786.8728

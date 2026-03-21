@@ -323,7 +323,6 @@ func (war *Warrior) registerPrecision() {
 	}
 
 	war.AddStat(stats.PhysicalHitPercent, 1*float64(war.Talents.Precision))
-	war.AddStat(stats.RangedHitPercent, 1*float64(war.Talents.Precision))
 }
 
 func (war *Warrior) registerBloodthirst() {

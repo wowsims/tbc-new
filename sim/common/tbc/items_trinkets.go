@@ -747,4 +747,38 @@ func init() {
 		character.AddStatProcBuff(37656, aura, false, eligibleSlots)
 		character.ItemSwap.RegisterProc(32496, procAura)
 	})
+
+	// Shifting Naaru Sliver
+	// Use: Conjures a Power Circle lasting for 15 sec.  While standing in this circle, the caster gains up to 320 spell damage and healing.
+	core.NewItemEffect(34429, func(agent core.Agent) {
+		character := agent.GetCharacter()
+		aura := character.NewTemporaryStatsAura("Power Circle", core.ActionID{SpellID: 45042}, stats.Stats{stats.SpellDamage: 320, stats.HealingPower: 320}, time.Second*15)
+
+		spell := character.RegisterSpell(core.SpellConfig{
+			ActionID:    core.ActionID{ItemID: 34429},
+			SpellSchool: core.SpellSchoolPhysical,
+			ProcMask:    core.ProcMaskEmpty,
+
+			Cast: core.CastConfig{
+				CD: core.Cooldown{
+					Timer:    character.NewTimer(),
+					Duration: time.Minute * 2,
+				},
+				SharedCD: core.Cooldown{
+					Timer:    character.GetOffensiveTrinketCD(),
+					Duration: time.Second * 30,
+				},
+			},
+
+			ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
+				aura.Activate(sim)
+			},
+		})
+
+		character.AddMajorCooldown(core.MajorCooldown{
+			Spell:    spell,
+			Type:     core.CooldownTypeDPS,
+			BuffAura: aura,
+		})
+	})
 }

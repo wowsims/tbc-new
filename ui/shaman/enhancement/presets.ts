@@ -50,17 +50,19 @@ export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
 	Stats.fromMap(
 		{
 			// calculated in p1 bis after building out new default APL
-			[Stat.StatIntellect]: 0.1,
-			[Stat.StatAgility]: 1.62,
 			[Stat.StatStrength]: 2.2,
+			[Stat.StatAgility]: 1.62,
+			[Stat.StatIntellect]: 0.08,
+			[Stat.StatSpellDamage]: 0.56,
+			[Stat.StatNatureDamage]: 0.4, // As simulated using Fire Ele Totem Only
+			[Stat.StatSpellHitRating]: 0.55,
+			[Stat.StatSpellCritRating]: 0.13,
 			[Stat.StatAttackPower]: 1.0,
-			[Stat.StatSpellDamage]: 0.53,
-			[Stat.StatNatureDamage]: 0.39, // As simulated using Fire Ele Totem Only
-			[Stat.StatMeleeHitRating]: 1.69,
-			[Stat.StatMeleeCritRating]: 1.66,
-			[Stat.StatMeleeHasteRating]: 1.35,
+			[Stat.StatMeleeHitRating]: 1.9,
+			[Stat.StatMeleeCritRating]: 1.73,
+			[Stat.StatMeleeHasteRating]: 1.37,
 			[Stat.StatArmorPenetration]: 0.3,
-			[Stat.StatExpertiseRating]: 2.28,
+			[Stat.StatExpertiseRating]: 2.49,
 		},
 		{
 			[PseudoStat.PseudoStatMainHandDps]: 8.19,

@@ -2802,12 +2802,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		34429, // Shifting Naaru Sliver
-		[
-			"Conjures a Power Circle lasting for 15s. While standing in this circle, the caster gains up to 320 spell damage and healing.", // 45042 - https://www.wowhead.com/tbc/spell=45042
-		]
-	],
-	[
 		34430, // Glimmering Naaru Sliver
 		[
 			"Gain 250 mana each sec. for 8s. Channeled.", // 45052 - https://www.wowhead.com/tbc/spell=45052

@@ -293,6 +293,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestHunter-AllItems-Biznicks247x128Accurascope-2523"
+ value: {
+  dps: 3099.18707
+  tps: 2105.16481
+  dtps: 13.48113
+ }
+}
+dps_results: {
  key: "TestHunter-AllItems-BlackBowoftheBetrayer-32336"
  value: {
   dps: 3117.82927
@@ -1133,6 +1141,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestHunter-AllItems-ShiftingNaaruSliver-34429"
+ value: {
+  dps: 3036.83822
+  tps: 2045.88936
+  dtps: 13.25008
+ }
+}
+dps_results: {
  key: "TestHunter-AllItems-Slayer'sCrest-23041"
  value: {
   dps: 3050.98796
@@ -1163,14 +1179,6 @@ dps_results: {
   tps: 2013.44119
   dtps: 13.20515
   hps: 14.44444
- }
-}
-dps_results: {
- key: "TestHunter-AllItems-StabilizedEterniumScope-2523"
- value: {
-  dps: 3099.18707
-  tps: 2105.16481
-  dtps: 13.48113
  }
 }
 dps_results: {
