@@ -93,10 +93,6 @@ func (paladin *Paladin) registerBlessingOfWisdom() {
 // Places a Blessing on the friendly target, increasing total stats by 10% for 10 min.
 // Players may only have one Blessing on them per Paladin at any one time.
 func (paladin *Paladin) registerBlessingOfKings() {
-	if !paladin.Talents.BlessingOfKings {
-		return
-	}
-
 	actionID := core.ActionID{SpellID: 25898}
 
 	paladin.RegisterSpell(core.SpellConfig{
