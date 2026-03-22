@@ -242,13 +242,6 @@ dps_results: {
  }
 }
 dps_results: {
- key: "TestShadowPriest-AllItems-Biznicks247x128Accurascope-2523"
- value: {
-  dps: 1740.74191
-  tps: 1275.90879
- }
-}
-dps_results: {
  key: "TestShadowPriest-AllItems-BlackenedNaaruSliver-34427"
  value: {
   dps: 1711.66394

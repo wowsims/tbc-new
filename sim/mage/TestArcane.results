@@ -249,13 +249,6 @@ dps_results: {
  }
 }
 dps_results: {
- key: "TestArcane-AllItems-Biznicks247x128Accurascope-2523"
- value: {
-  dps: 1874.39965
-  tps: 1284.66602
- }
-}
-dps_results: {
  key: "TestArcane-AllItems-BlackenedNaaruSliver-34427"
  value: {
   dps: 1838.87472
