@@ -3,15 +3,18 @@ import { ReforgeOptimizer } from '../../core/components/suggest_reforges_action'
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui';
 import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
-import { APLRotation } from '../../core/proto/apl';
-import { Faction, HandType, IndividualBuffs, ItemSlot, PseudoStat, Race, Spec, Stat } from '../../core/proto/common';
+import { APLRotation, APLRotation_Type, SimpleRotation } from '../../core/proto/apl';
+import { Cooldowns, HandType, ItemSlot, PseudoStat, Spec, Stat } from '../../core/proto/common';
 import { StatCapType } from '../../core/proto/ui';
 import { DEFAULT_MELEE_GEM_STATS, StatCap, Stats, UnitStat } from '../../core/proto_utils/stats';
 
 import * as Mechanics from '../../core/constants/mechanics';
 import * as WarriorInputs from '../inputs';
+import * as DpsWarriorInputs from './inputs';
 import * as WarriorPresets from '../presets';
 import * as Presets from './presets';
+import { SpecRotation } from '../../core/proto_utils/utils';
+import { DpsWarriorSpec, WarriorSunder } from '../../core/proto/warrior';
 
 const SPEC_CONFIG = registerSpecConfig(Spec.SpecDpsWarrior, {
 	cssClass: 'dps-warrior-sim-ui',
@@ -59,6 +62,8 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecDpsWarrior, {
 
 			return [meleeHitSoftCapConfig];
 		})(),
+		rotationType: APLRotation_Type.TypeSimple,
+		simpleRotation: Presets.SIMPLE_ROTATION,
 		other: Presets.OtherDefaults,
 		// Default consumes settings.
 		consumables: Presets.DefaultConsumables,
@@ -78,6 +83,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecDpsWarrior, {
 	// Buff and Debuff inputs to include/exclude, overriding the EP-based defaults.
 	includeBuffDebuffInputs: [],
 	excludeBuffDebuffInputs: [],
+	rotationInputs: DpsWarriorInputs.RotationInputs,
 	// Inputs to include in the 'Other' section on the settings tab.
 	otherInputs: {
 		inputs: [
@@ -104,7 +110,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecDpsWarrior, {
 		// Preset talents that the user can quickly select.
 		talents: [Presets.FuryTalents, Presets.ArmsTalents, Presets.ArmsKebabTalents],
 		// Preset rotations that the user can quickly select.
-		rotations: [Presets.FURY_DEFAULT_ROTATION, Presets.ARMS_DEFAULT_ROTATION],
+		rotations: [Presets.SIMPLE_DEFAULT_ROTATION, Presets.FURY_DEFAULT_ROTATION, Presets.ARMS_DEFAULT_ROTATION],
 		// Preset gear configurations that the user can quickly select.
 		gear: [
 			Presets.P1_PRERAID_FURY_PRESET,
@@ -137,8 +143,52 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecDpsWarrior, {
 		],
 	},
 
-	autoRotation: (_player: Player<Spec.SpecDpsWarrior>): APLRotation => {
+	autoRotation: (player: Player<Spec.SpecDpsWarrior>): APLRotation => {
+		if (Presets.isArmsSpec(player) || Presets.isArmsKebabSpec(player)) {
+			return Presets.ARMS_DEFAULT_ROTATION.rotation.rotation!;
+		}
+
 		return Presets.FURY_DEFAULT_ROTATION.rotation.rotation!;
+	},
+
+	simpleRotation: (player: Player<Spec.SpecDpsWarrior>, simple: SpecRotation<Spec.SpecDpsWarrior>, _: Cooldowns): APLRotation => {
+		let { spec, sunderArmor = WarriorSunder.WarriorSunderHelp, useOverpower = true, useRecklessness = false, bloodlustTiming = 5 } = simple;
+
+		if (!spec) {
+			if (Presets.isArmsSpec(player) || Presets.isArmsKebabSpec(player)) {
+				spec = DpsWarriorSpec.DpsWarriorSpecArms;
+			} else {
+				spec = DpsWarriorSpec.DpsWarriorSpecFury;
+			}
+		}
+
+		const rotation = APLRotation.clone(
+			spec == DpsWarriorSpec.DpsWarriorSpecFury ? Presets.FURY_DEFAULT_ROTATION.rotation.rotation! : Presets.ARMS_DEFAULT_ROTATION.rotation.rotation!,
+		);
+
+		const bloodlustTimingVariable = rotation.valueVariables.find(variable => variable.name === 'Bloodlust time');
+		if (bloodlustTimingVariable && bloodlustTimingVariable.value?.value.oneofKind === 'const')
+			bloodlustTimingVariable.value.value.const.val = String(bloodlustTiming);
+
+		const recklessnessAction = rotation.priorityList.find(
+			action => action.action?.action.oneofKind === 'groupReference' && action.action.action.groupReference.groupName === 'Recklessness ON/OFF',
+		);
+		if (recklessnessAction) recklessnessAction.hide = !useRecklessness;
+
+		const sunderArmorAction = rotation.priorityList.find(
+			action => action.action?.action.oneofKind === 'groupReference' && action.action?.action.groupReference.groupName === 'Sunder Armor',
+		);
+		if (sunderArmorAction) sunderArmorAction.hide = sunderArmor == WarriorSunder.WarriorSunderNone;
+
+		const opWeaveAction = rotation.priorityList.find(
+			action => action.action?.action.oneofKind === 'groupReference' && action.action?.action.groupReference.groupName === 'Overpower Weaving',
+		);
+		if (opWeaveAction) opWeaveAction.hide = !useOverpower;
+
+		return APLRotation.create({
+			simple: SimpleRotation.create({}),
+			...rotation,
+		});
 	},
 
 	raidSimPresets: [],

@@ -29,8 +29,6 @@ import {
 	UnitReference_Type as UnitType,
 	WeaponType,
 } from './proto/common.js';
-import { Consumable } from './proto/db';
-import { SpellEffect } from './proto/spell';
 import { DatabaseFilters, RaidFilterOption, SimSettings as SimSettingsProto, SourceFilterOption } from './proto/ui.js';
 import { Database } from './proto_utils/database.js';
 import { Gear } from './proto_utils/gear';
@@ -221,9 +219,17 @@ export class Sim {
 				let gear = this.db.lookupEquipmentSpec(player.equipment);
 				let gearChanged = false;
 
+				const isEnchanter = [player.profession1, player.profession2].includes(Profession.Enchanting);
+
 				// Disable meta gem if inactive.
 				if (gear.hasInactiveMetaGem()) {
 					gear = gear.withoutMetaGem();
+					gearChanged = true;
+				}
+
+				// Remove Ring Enchants if not enchanter
+				if (!isEnchanter) {
+					gear = gear.withoutEnchanting();
 					gearChanged = true;
 				}
 

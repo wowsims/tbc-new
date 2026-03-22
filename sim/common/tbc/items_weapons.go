@@ -109,6 +109,56 @@ func init() {
 		character.ItemSwap.RegisterProc(29996, procTrigger)
 	})
 
+	// World Breaker
+	core.NewItemEffect(30090, func(agent core.Agent) {
+		character := agent.GetCharacter()
+		var aura *core.Aura
+		aura = character.RegisterAura(core.Aura{
+			Label:     "World Breaker",
+			ActionID:  core.ActionID{SpellID: 36111},
+			Duration:  time.Second * 4,
+			MaxStacks: 2,
+		}).
+			AttachStatBuff(stats.MeleeCritRating, 900).
+			AttachProcTrigger(core.ProcTrigger{
+				Name:               "World Breaker - Consume",
+				ProcMask:           core.ProcMaskMelee,
+				Callback:           core.CallbackOnSpellHitDealt,
+				TriggerImmediately: true,
+				Handler: func(sim *core.Simulation, _ *core.Spell, result *core.SpellResult) {
+					if aura.IsActive() {
+						aura.RemoveStack(sim)
+					}
+				},
+			})
+
+		getDpm := func() *core.DynamicProcManager {
+			return character.NewStaticLegacyPPMManager(
+				1,
+				*character.GetDynamicProcMaskForWeaponEffect(30090),
+			)
+		}
+
+		dpm := getDpm()
+
+		procTrigger := character.MakeProcTriggerAura(core.ProcTrigger{
+			Name:     "World Breaker - Trigger",
+			DPM:      dpm,
+			Outcome:  core.OutcomeLanded,
+			Callback: core.CallbackOnSpellHitDealt,
+			Handler: func(sim *core.Simulation, _ *core.Spell, result *core.SpellResult) {
+				aura.Activate(sim)
+				aura.AddStack(sim)
+			},
+		})
+
+		character.RegisterItemSwapCallback([]proto.ItemSlot{proto.ItemSlot_ItemSlotMainHand}, func(sim *core.Simulation, slot proto.ItemSlot) {
+			dpm = getDpm()
+		})
+
+		character.ItemSwap.RegisterProc(30090, procTrigger)
+	})
+
 	// Blinkstrike
 	core.NewItemEffect(31332, func(agent core.Agent) {
 		character := agent.GetCharacter()

@@ -76,20 +76,9 @@ export const simLaunchStatuses: Record<Spec, SimStatus> = {
 		oldSimLink: 'https://wowsims.github.io/tbc/retribution_paladin/',
 	},
 	// Priest
-	[Spec.SpecDisciplinePriest]: {
+	[Spec.SpecPriest]: {
 		phase: Phase.Phase1,
-		status: LaunchStatus.Unlaunched,
-		oldSimLink: 'https://wowsims.github.io/tbc/smite_priest/',
-	},
-	[Spec.SpecHolyPriest]: {
-		phase: Phase.Phase1,
-		status: LaunchStatus.Unlaunched,
-		oldSimLink: 'https://wowsims.github.io/tbc/smite_priest/',
-	},
-	[Spec.SpecShadowPriest]: {
-		phase: Phase.Phase1,
-		status: LaunchStatus.Unlaunched,
-		oldSimLink: 'https://wowsims.github.io/tbc/shadow_priest/',
+		status: LaunchStatus.Alpha,
 	},
 	// Rogue
 	[Spec.SpecRogue]: {
@@ -103,8 +92,7 @@ export const simLaunchStatuses: Record<Spec, SimStatus> = {
 	},
 	[Spec.SpecEnhancementShaman]: {
 		phase: Phase.Phase1,
-		status: LaunchStatus.Unlaunched,
-		oldSimLink: 'https://wowsims.github.io/tbc/enhancement_shaman/',
+		status: LaunchStatus.Alpha,
 	},
 	[Spec.SpecRestorationShaman]: {
 		phase: Phase.Phase1,

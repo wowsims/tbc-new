@@ -1,8 +1,10 @@
 import * as InputHelpers from '../../core/components/input_helpers';
-import { Spec } from '../../core/proto/common';
+import { Player } from '../../core/player';
+import { HandType, ItemSlot, Spec } from '../../core/proto/common';
 import { HunterOptions_Ammo, HunterOptions_PetType, HunterOptions_QuiverBonus } from '../../core/proto/hunter';
 import { ActionId } from '../../core/proto_utils/action_id';
 import { HunterSpecs } from '../../core/proto_utils/utils';
+import { TypedEvent } from '../../core/typed_event';
 import i18n from '../../i18n/config.js';
 
 export const AmmoInput = <SpecType extends HunterSpecs>() =>
@@ -86,3 +88,57 @@ export const PetUptime = () =>
 		labelTooltip: i18n.t('settings_tab.other.pet_uptime.tooltip'),
 		percent: true,
 	});
+
+export const RotationInputs = {
+	inputs: [
+		InputHelpers.makeRotationNumberInput<Spec.SpecHunter>({
+			fieldName: 'viperStartManaPercent',
+			label: i18n.t('rotation_tab.options.hunter.viper_start_mana_percent.label'),
+			labelTooltip: i18n.t('rotation_tab.options.hunter.viper_start_mana_percent.tooltip'),
+			percent: true,
+			positive: true,
+			max: 100,
+		}),
+		InputHelpers.makeRotationNumberInput<Spec.SpecHunter>({
+			fieldName: 'viperStopManaPercent',
+			label: i18n.t('rotation_tab.options.hunter.viper_stop_mana_percent.label'),
+			labelTooltip: i18n.t('rotation_tab.options.hunter.viper_stop_mana_percent.tooltip'),
+			percent: true,
+			positive: true,
+			max: 100,
+		}),
+		InputHelpers.makeRotationBooleanInput<Spec.SpecHunter>({
+			fieldName: 'meleeWeave',
+			label: i18n.t('rotation_tab.options.hunter.melee_weave.label'),
+			labelTooltip: i18n.t('rotation_tab.options.hunter.melee_weave.tooltip'),
+			showWhen: (player: Player<Spec.SpecHunter>) => player.getEquippedItem(ItemSlot.ItemSlotMainHand)?.item?.handType === HandType.HandTypeTwoHand,
+		}),
+		InputHelpers.makeRotationBooleanInput<Spec.SpecHunter>({
+			fieldName: 'weaveOnlyRaptor',
+			label: i18n.t('rotation_tab.options.hunter.weave_only_raptor.label'),
+			labelTooltip: i18n.t('rotation_tab.options.hunter.weave_only_raptor.tooltip'),
+			showWhen: (player: Player<Spec.SpecHunter>) =>
+				player.getEquippedItem(ItemSlot.ItemSlotMainHand)?.item?.handType === HandType.HandTypeTwoHand && player.getSimpleRotation().meleeWeave,
+			changeEmitter: (player: Player<Spec.SpecHunter>) => TypedEvent.onAny([player.rotationChangeEmitter, player.gearChangeEmitter]),
+		}),
+		InputHelpers.makeRotationNumberInput<Spec.SpecHunter>({
+			fieldName: 'timeToWeave',
+			label: i18n.t('rotation_tab.options.hunter.time_to_weave.label'),
+			labelTooltip: i18n.t('rotation_tab.options.hunter.time_to_weave.tooltip'),
+			positive: true,
+			showWhen: (player: Player<Spec.SpecHunter>) =>
+				player.getEquippedItem(ItemSlot.ItemSlotMainHand)?.item?.handType === HandType.HandTypeTwoHand && player.getSimpleRotation().meleeWeave,
+			changeEmitter: (player: Player<Spec.SpecHunter>) => TypedEvent.onAny([player.rotationChangeEmitter, player.gearChangeEmitter]),
+		}),
+		InputHelpers.makeRotationBooleanInput<Spec.SpecHunter>({
+			fieldName: 'useMulti',
+			label: i18n.t('rotation_tab.options.hunter.use_multi.label'),
+			labelTooltip: i18n.t('rotation_tab.options.hunter.use_multi.tooltip'),
+		}),
+		InputHelpers.makeRotationBooleanInput<Spec.SpecHunter>({
+			fieldName: 'useArcane',
+			label: i18n.t('rotation_tab.options.hunter.use_arcane.label'),
+			labelTooltip: i18n.t('rotation_tab.options.hunter.use_arcane.tooltip'),
+		}),
+	],
+};

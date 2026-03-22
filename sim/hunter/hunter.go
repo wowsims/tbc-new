@@ -89,16 +89,18 @@ func NewHunter(character *core.Character, options *proto.Player, hunterOptions *
 		Options:   hunterOptions,
 	}
 
-	if hunter.Options.PetType == proto.HunterOptions_Bat || hunter.Options.PetType == proto.HunterOptions_Owl {
-		raid.Debuffs.Screech = false
-	}
-
-	if hunter.Talents.ExposeWeakness > 0 {
-		raid.Debuffs.ExposeWeaknessHunterAgility = 0
-		raid.Debuffs.ExposeWeaknessUptime = 0
-	}
-
 	core.FillTalentsProto(hunter.Talents.ProtoReflect(), options.TalentsString, TalentTreeSizes)
+
+	if raid.Debuffs != nil {
+		if hunter.Options.PetType == proto.HunterOptions_Bat || hunter.Options.PetType == proto.HunterOptions_Owl {
+			raid.Debuffs.Screech = false
+		}
+
+		if hunter.Talents.ExposeWeakness > 0 {
+			raid.Debuffs.ExposeWeaknessHunterAgility = 0
+			raid.Debuffs.ExposeWeaknessUptime = 0
+		}
+	}
 
 	hunter.PseudoStats.CanParry = true
 
@@ -196,18 +198,41 @@ func (hunter *Hunter) applyAmmoDPS() {
 	}
 }
 
-func (hunter *Hunter) RegisterRangedSpell(config core.SpellConfig) *core.Spell {
-	if config.Cast.ModifyCast == nil {
-		config.Cast.ModifyCast = func(sim *core.Simulation, spell *core.Spell, cast *core.Cast) {
-			cast.CastTime = spell.CastTime()
-			hunter.AutoAttacks.DelayRangedUntil(sim, sim.CurrentTime+cast.CastTime+core.SpellBatchWindow)
+func (hunter *Hunter) RegisterRangedSpell(config core.SpellConfig, canCrit bool) *core.Spell {
+	if config.MissileSpeed == 0 {
+		config.MissileSpeed = 40
+	}
+
+	config.MinRange = core.MaxMeleeRange
+	config.MaxRange = HunterBaseMaxRange
+	config.Cast.DefaultCast.GCD = core.GCDDefault
+	config.Cast.IgnoreHaste = true
+
+	if config.Cast.DefaultCast.CastTime > 0 {
+		if config.Cast.ModifyCast == nil {
+			config.Cast.ModifyCast = func(sim *core.Simulation, spell *core.Spell, cast *core.Cast) {
+				cast.CastTime = spell.CastTime()
+				hunter.AutoAttacks.DelayRangedUntil(sim, sim.CurrentTime+cast.CastTime+1)
+			}
+		}
+
+		if config.Cast.CastTime == nil {
+			config.Cast.CastTime = func(spell *core.Spell) time.Duration {
+				return time.Duration(float64(spell.DefaultCast.CastTime) / hunter.TotalRangedHasteMultiplier())
+			}
 		}
 	}
 
-	if config.Cast.CastTime == nil {
-		config.Cast.CastTime = func(spell *core.Spell) time.Duration {
-			return time.Duration(float64(spell.DefaultCast.CastTime) / hunter.TotalRangedHasteMultiplier())
+	if config.DamageMultiplier == 0 && config.DamageMultiplierAdditive == 0 {
+		config.DamageMultiplier = 1
+
+		if config.ThreatMultiplier == 0 {
+			config.ThreatMultiplier = 1
 		}
+	}
+
+	if canCrit && config.CritMultiplier == 0 {
+		config.CritMultiplier = hunter.DefaultMeleeCritMultiplier()
 	}
 
 	return hunter.RegisterSpell(config)

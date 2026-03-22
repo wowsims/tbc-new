@@ -86,8 +86,8 @@ func RegisterWarlock() {
 	core.RegisterAgentFactory(
 		proto.Player_Warlock{},
 		proto.Spec_SpecWarlock,
-		func(character *core.Character, options *proto.Player, _ *proto.Raid) core.Agent {
-			return NewWarlock(character, options, options.GetWarlock().Options.ClassOptions)
+		func(character *core.Character, options *proto.Player, raid *proto.Raid) core.Agent {
+			return NewWarlock(character, options, options.GetWarlock().Options.ClassOptions, raid)
 		},
 		func(player *proto.Player, spec interface{}) {
 			playerSpec, ok := spec.(*proto.Player_Warlock)
@@ -144,13 +144,26 @@ func (warlock *Warlock) Reset(sim *core.Simulation) {
 
 func (warlock *Warlock) OnEncounterStart(sim *core.Simulation) {}
 
-func NewWarlock(character *core.Character, options *proto.Player, warlockOptions *proto.WarlockOptions) *Warlock {
+func NewWarlock(character *core.Character, options *proto.Player, warlockOptions *proto.WarlockOptions, raid *proto.Raid) *Warlock {
 	warlock := &Warlock{
 		Character: *character,
 		Talents:   &proto.WarlockTalents{},
 		Options:   warlockOptions,
 	}
+
 	core.FillTalentsProto(warlock.Talents.ProtoReflect(), options.TalentsString, TalentTreeSizes)
+
+	if raid.Debuffs != nil {
+		switch warlock.Options.CurseOptions {
+		case proto.WarlockOptions_Elements:
+			if raid.Debuffs.CurseOfElements != proto.TristateEffect_TristateEffectMissing {
+				raid.Debuffs.CurseOfElements = proto.TristateEffect_TristateEffectMissing
+			}
+		case proto.WarlockOptions_Recklessness:
+			raid.Debuffs.CurseOfRecklessness = false
+		}
+	}
+
 	warlock.EnableManaBar()
 	warlock.AddStatDependency(stats.Strength, stats.AttackPower, 1)
 

@@ -4,11 +4,27 @@ import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_u
 import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
 import { APLRotation } from '../../core/proto/apl';
-import { Debuffs, Faction, IndividualBuffs, ItemSlot, PartyBuffs, PseudoStat, Race, RaidBuffs, Spec, Stat, TristateEffect } from '../../core/proto/common';
-import { UnitStat } from '../../core/proto_utils/stats';
+import {
+	Debuffs,
+	Drums,
+	Faction,
+	IndividualBuffs,
+	ItemSlot,
+	PartyBuffs,
+	PseudoStat,
+	Race,
+	RaidBuffs,
+	Spec,
+	Stat,
+	TristateEffect,
+} from '../../core/proto/common';
+import { StatCap, Stats, UnitStat } from '../../core/proto_utils/stats';
 import { defaultExposeWeaknessSettings, defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
 
 import * as Presets from './presets';
+import * as Mechanics from '../../core/constants/mechanics';
+import { StatCapType } from '../../core/proto/ui';
+import { ReforgeOptimizer } from '../../core/components/suggest_reforges_action';
 
 const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 	cssClass: 'rogue-sim-ui',
@@ -46,6 +62,19 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 		gear: Presets.P1_SWORDS_GEAR.gear,
 		// Default EP weights for sorting gear in the gear picker.
 		epWeights: Presets.P1_EP_PRESET.epWeights,
+		statCaps: (() => {
+			const expCap = new Stats().withStat(Stat.StatExpertiseRating, 6.5 * 4 * Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION);
+			return expCap;
+		})(),
+		softCapBreakpoints: (() => {
+			const meleeHitSoftCapConfig = StatCap.fromPseudoStat(PseudoStat.PseudoStatMeleeHitPercent, {
+				breakpoints: [9, 28],
+				capType: StatCapType.TypeSoftCap,
+				postCapEPs: [3.06 * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT, 0],
+			});
+
+			return [meleeHitSoftCapConfig];
+		})(),
 		other: Presets.OtherDefaults,
 		// Default consumes settings.
 		consumables: Presets.DefaultConsumables,
@@ -66,6 +95,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 			windfuryTotem: TristateEffect.TristateEffectImproved,
 			leaderOfThePack: TristateEffect.TristateEffectRegular,
 			totemTwisting: true,
+			drums: Drums.LesserDrumsOfBattle,
 		}),
 		individualBuffs: IndividualBuffs.create({
 			blessingOfKings: true,
@@ -92,7 +122,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 	// IconInputs to include in the 'Player' section on the settings tab.
 	playerIconInputs: [],
 	// Buff and Debuff inputs to include/exclude, overriding the EP-based defaults.
-	includeBuffDebuffInputs: [],
+	includeBuffDebuffInputs: [Stat.StatSpellHitRating],
 	excludeBuffDebuffInputs: [],
 	// Inputs to include in the 'Other' section on the settings tab.
 	otherInputs: {
@@ -147,13 +177,6 @@ export class RogueSimUI extends IndividualSimUI<Spec.SpecRogue> {
 	constructor(parentElem: HTMLElement, player: Player<Spec.SpecRogue>) {
 		super(parentElem, player, SPEC_CONFIG);
 
-		this.player.changeEmitter.on(c => {
-			const options = this.player.getSpecOptions();
-			this.player.setSpecOptions(c, options);
-		});
-		this.sim.encounter.changeEmitter.on(c => {
-			const options = this.player.getSpecOptions();
-			this.player.setSpecOptions(c, options);
-		});
+		this.reforger = new ReforgeOptimizer(this, {});
 	}
 }

@@ -22,6 +22,9 @@ type ItemSet struct {
 	// Optional field to override the DefaultItemSetSlots
 	// For Example: The set contains of 2 weapons
 	Slots []proto.ItemSlot
+
+	// If set, the character must have this profession for the set bonuses to activate.
+	RequiredProfession proto.Profession
 }
 
 func DefaultItemSetSlots() []proto.ItemSlot {
@@ -104,6 +107,9 @@ type SetBonus struct {
 	// Optional field to override the DefaultItemSetSlots
 	// For Example: The set contains of 2 weapons
 	Slots []proto.ItemSlot
+
+	// If set, the character must have this profession for the bonus to activate.
+	RequiredProfession proto.Profession
 }
 
 type SetBonusCollection []SetBonus
@@ -143,10 +149,11 @@ func (equipment *Equipment) getSetBonuses() SetBonusCollection {
 			setItemCount[foundSet]++
 			if bonusEffect, ok := foundSet.Bonuses[setItemCount[foundSet]]; ok {
 				activeBonuses = append(activeBonuses, SetBonus{
-					Name:        foundSet.Name,
-					NumPieces:   setItemCount[foundSet],
-					BonusEffect: bonusEffect,
-					Slots:       foundSet.Slots,
+					Name:               foundSet.Name,
+					NumPieces:          setItemCount[foundSet],
+					BonusEffect:        bonusEffect,
+					Slots:              foundSet.Slots,
+					RequiredProfession: foundSet.RequiredProfession,
 				})
 			}
 		}
@@ -207,6 +214,10 @@ func (character *Character) applyItemSetBonusEffects(agent Agent) {
 	activeSetBonuses := character.getActiveSetBonuses()
 
 	for _, activeSetBonus := range activeSetBonuses {
+		if activeSetBonus.RequiredProfession != proto.Profession_ProfessionUnknown &&
+			!character.HasProfession(activeSetBonus.RequiredProfession) {
+			continue
+		}
 		setBonusAura := character.makeSetBonusStatusAura(activeSetBonus.Name, activeSetBonus.NumPieces, activeSetBonus.Slots, true)
 		activeSetBonus.BonusEffect(agent, setBonusAura)
 	}
@@ -214,6 +225,10 @@ func (character *Character) applyItemSetBonusEffects(agent Agent) {
 	if character.ItemSwap.IsEnabled() {
 		for _, unequippedSetBonus := range character.getUnequippedSetBonuses() {
 			if activeSetBonuses.ContainsBonus(unequippedSetBonus.Name, unequippedSetBonus.NumPieces) {
+				continue
+			}
+			if unequippedSetBonus.RequiredProfession != proto.Profession_ProfessionUnknown &&
+				!character.HasProfession(unequippedSetBonus.RequiredProfession) {
 				continue
 			}
 			setBonusAura := character.makeSetBonusStatusAura(unequippedSetBonus.Name, unequippedSetBonus.NumPieces, unequippedSetBonus.Slots, false)

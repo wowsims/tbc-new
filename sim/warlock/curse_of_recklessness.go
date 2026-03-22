@@ -6,7 +6,7 @@ import (
 
 func (warlock *Warlock) registerCurseOfRecklessness() {
 	warlock.CurseOfRecklessnessAuras = warlock.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {
-		return core.CurseOfRecklessnessAura(target)
+		return core.CurseOfRecklessnessAura(target, 1)
 	})
 	warlock.CurseOfRecklessness = warlock.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 27226},

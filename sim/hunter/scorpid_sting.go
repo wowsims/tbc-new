@@ -11,31 +11,16 @@ func (hunter *Hunter) registerScorpidStingSpell() {
 		return aura
 	})
 
-	hunter.ScorpidSting = hunter.RegisterSpell(core.SpellConfig{
+	hunter.ScorpidSting = hunter.RegisterRangedSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 3043},
 		SpellSchool:    core.SpellSchoolNature,
 		ProcMask:       core.ProcMaskProc,
 		ClassSpellMask: HunterSpellScorpidSting,
 		Flags:          core.SpellFlagAPL,
 
-		MissileSpeed: 40,
-		MinRange:     core.MaxMeleeRange,
-		MaxRange:     HunterBaseMaxRange,
-
 		ManaCost: core.ManaCostOptions{
 			BaseCostPercent: 9,
 		},
-
-		Cast: core.CastConfig{
-			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
-			},
-			IgnoreHaste: true,
-		},
-
-		DamageMultiplier: 1,
-		CritMultiplier:   0,
-		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			result := spell.CalcOutcome(sim, target, spell.OutcomeRangedHit)
@@ -52,5 +37,5 @@ func (hunter *Hunter) registerScorpidStingSpell() {
 				spell.DealOutcome(sim, result)
 			})
 		},
-	})
+	}, false)
 }

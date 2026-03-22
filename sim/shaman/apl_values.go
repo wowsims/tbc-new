@@ -19,8 +19,9 @@ func (shaman *Shaman) NewAPLValue(rot *core.APLRotation, config *proto.APLValue)
 
 type APLValueTotemRemainingTime struct {
 	core.DefaultAPLValueImpl
-	shaman    *Shaman
-	totemType proto.ShamanTotems_TotemType
+	shaman              *Shaman
+	totemType           proto.ShamanTotems_TotemType
+	includeReactionTime bool
 }
 
 func (shaman *Shaman) newValueTotemRemainingTime(rot *core.APLRotation, config *proto.APLValueTotemRemainingTime, uuid *proto.UUID) core.APLValue {
@@ -29,23 +30,25 @@ func (shaman *Shaman) newValueTotemRemainingTime(rot *core.APLRotation, config *
 		return nil
 	}
 	return &APLValueTotemRemainingTime{
-		shaman:    shaman,
-		totemType: config.TotemType,
+		shaman:              shaman,
+		totemType:           config.TotemType,
+		includeReactionTime: config.IncludeReactionTime,
 	}
 }
 func (value *APLValueTotemRemainingTime) Type() proto.APLValueType {
 	return proto.APLValueType_ValueTypeDuration
 }
 func (value *APLValueTotemRemainingTime) GetDuration(sim *core.Simulation) time.Duration {
+	delay := core.TernaryDuration(value.includeReactionTime, value.shaman.ReactionTime, 0)
 	switch value.totemType {
 	case proto.ShamanTotems_Earth:
-		return max(0, value.shaman.TotemExpirations[EarthTotem]-sim.CurrentTime)
+		return max(0, value.shaman.TotemExpirations[EarthTotem]+delay-sim.CurrentTime)
 	case proto.ShamanTotems_Air:
-		return max(0, value.shaman.TotemExpirations[AirTotem]-sim.CurrentTime)
+		return max(0, value.shaman.TotemExpirations[AirTotem]+delay-sim.CurrentTime)
 	case proto.ShamanTotems_Fire:
-		return max(0, value.shaman.TotemExpirations[FireTotem]-sim.CurrentTime)
+		return max(0, value.shaman.TotemExpirations[FireTotem]+delay-sim.CurrentTime)
 	case proto.ShamanTotems_Water:
-		return max(0, value.shaman.TotemExpirations[WaterTotem]-sim.CurrentTime)
+		return max(0, value.shaman.TotemExpirations[WaterTotem]+delay-sim.CurrentTime)
 	default:
 		return 0
 	}

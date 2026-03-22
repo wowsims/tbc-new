@@ -1,5 +1,5 @@
 import { Player } from '../../player';
-import { Class, ConsumesSpec, ItemSlot, Profession, Spec, Stat, TristateEffect } from '../../proto/common';
+import { Class, ConsumesSpec, Drums, ItemSlot, Profession, Spec, Stat, TristateEffect } from '../../proto/common';
 import { Consumable } from '../../proto/db';
 import { ActionId } from '../../proto_utils/action_id';
 import { EventID, TypedEvent } from '../../typed_event';
@@ -8,6 +8,7 @@ import { IconEnumValueConfig } from '../pickers/icon_enum_picker';
 import { ActionInputConfig, ItemStatOption } from './stat_options';
 import i18n from '../../../i18n/config.js';
 import { makeBooleanConsumeInput } from '../icon_inputs';
+import { CURRENT_PHASE, Phase } from '../../constants/other';
 
 export interface ConsumableInputConfig<T> extends ActionInputConfig<T> {
 	value: T;
@@ -91,12 +92,22 @@ export const ConjuredFlameCap = {
 	actionId: ActionId.fromItemId(22788),
 	value: 22788,
 };
+export const ConjuredCrackedPowerCore = {
+	actionId: ActionId.fromItemId(23334),
+	value: 23334,
+};
+export const ChippedCrackedPowerCore = {
+	actionId: ActionId.fromItemId(23381),
+	value: 23381,
+};
 
 export const CONJURED_CONFIG = [
 	{ config: ConjuredRogueThistleTea, stats: [] },
 	{ config: ConjuredHealthstone, stats: [Stat.StatStamina] },
 	{ config: ConjuredDarkRune, stats: [Stat.StatIntellect] },
 	{ config: ConjuredFlameCap, stats: [] },
+	{ config: ConjuredCrackedPowerCore, stats: [Stat.StatSpellDamage] },
+	{ config: ChippedCrackedPowerCore, stats: [Stat.StatSpellDamage] },
 ] as ConsumableStatOption<number>[];
 
 export const makeConjuredInput = makeConsumeInputFactory({ consumesFieldName: 'conjuredId' });
@@ -290,28 +301,43 @@ export const makeOHImbueInput = makeConsumeInputFactory({
 //                               	DRUMS
 ///////////////////////////////////////////////////////////////////////////
 
-export const GreaterDrumsBattle = {
-	actionId: ActionId.fromItemId(185848),
-	value: 351355,
+export const DrumsBattle = {
+	...(CURRENT_PHASE >= Phase.Phase4
+		? { actionId: ActionId.fromItemId(185848), value: Drums.GreaterDrumsOfBattle }
+		: {
+				actionId: ActionId.fromItemId(29529),
+				value: Drums.LesserDrumsOfBattle,
+			}),
 };
 
-export const GreaterDrumsRestoration = {
-	actionId: ActionId.fromItemId(185850),
-	value: 351358,
+export const DrumsRestoration = {
+	...(CURRENT_PHASE >= Phase.Phase4
+		? { actionId: ActionId.fromItemId(185850), value: Drums.GreaterDrumsOfRestoration }
+		: {
+				actionId: ActionId.fromItemId(29531),
+				value: Drums.LesserDrumsOfRestoration,
+			}),
 };
 
-export const GreaterDrumsWar = {
-	actionId: ActionId.fromItemId(185852),
-	value: 351360,
+export const DrumsWar = {
+	...(CURRENT_PHASE >= Phase.Phase4
+		? { actionId: ActionId.fromItemId(185852), value: Drums.GreaterDrumsOfWar }
+		: {
+				actionId: ActionId.fromItemId(29528),
+				value: Drums.LesserDrumsOfWar,
+			}),
 };
 
 export const DRUMS_CONFIG = [
-	{ config: GreaterDrumsBattle, stats: [] },
-	{ config: GreaterDrumsRestoration, stats: [Stat.StatMana] },
-	{ config: GreaterDrumsWar, stats: [Stat.StatAttackPower, Stat.StatSpellDamage] },
+	{ config: DrumsBattle, stats: [] },
+	{ config: DrumsRestoration, stats: [Stat.StatMana] },
+	{ config: DrumsWar, stats: [Stat.StatAttackPower, Stat.StatSpellDamage] },
 ] as ConsumableStatOption<number>[];
 
-export const makeDrumsInput = makeConsumeInputFactory({ consumesFieldName: 'drumsId' });
+export const makeDrumsInput = makeConsumeInputFactory({
+	consumesFieldName: 'drumsId',
+	showWhen: (player: Player<any>) => player.hasProfession(Profession.Leatherworking),
+});
 
 ///////////////////////////////////////////////////////////////////////////
 //                                   PET
@@ -320,13 +346,13 @@ export const makeDrumsInput = makeConsumeInputFactory({ consumesFieldName: 'drum
 export const PetScrollAgi = makeBooleanConsumeInput({
 	actionId: () => ActionId.fromItemId(27498),
 	fieldName: 'petScrollAgi',
-	showWhen: (player: Player<any>) => [Spec.SpecHunter, Spec.SpecWarlock, Spec.SpecShadowPriest].includes(player.getSpec()),
+	showWhen: (player: Player<any>) => [Spec.SpecHunter, Spec.SpecWarlock, Spec.SpecPriest].includes(player.getSpec()),
 });
 
 export const PetScrollStr = makeBooleanConsumeInput({
 	actionId: () => ActionId.fromItemId(27503),
 	fieldName: 'petScrollStr',
-	showWhen: (player: Player<any>) => [Spec.SpecHunter, Spec.SpecWarlock, Spec.SpecShadowPriest].includes(player.getSpec()),
+	showWhen: (player: Player<any>) => [Spec.SpecHunter, Spec.SpecWarlock, Spec.SpecPriest].includes(player.getSpec()),
 });
 
 ///////////////////////////////////////////////////////////////////////////

@@ -335,7 +335,7 @@ func applyRaceEffects(agent Agent) {
 				Spell: berserkingSpell,
 				Type:  CooldownTypeDPS,
 				ShouldActivate: func(sim *Simulation, character *Character) bool {
-					return false
+					return tag == 1
 				},
 			})
 

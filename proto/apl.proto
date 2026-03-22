@@ -753,6 +753,7 @@ message APLValueSequenceTimeToReady {
 
 message APLValueTotemRemainingTime {
     ShamanTotems.TotemType totem_type = 1;
+	bool include_reaction_time = 2;
 }
 message APLValueCatExcessEnergy {}
 message APLValueCatNewSavageRoarDuration {}

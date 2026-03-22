@@ -430,10 +430,14 @@ export class CharacterStats extends Component {
 	private statDisplayString(deltaStats: Stats, unitStat: UnitStat, includeBase?: boolean): string {
 		const rootStat = unitStat.hasRootStat() ? unitStat.getRootStat() : null;
 		let rootRatingValue = rootStat !== null ? deltaStats.getStat(rootStat) : null;
+		let percentDecimals = 2;
 		let derivedPercentOrPointsValue = unitStat.convertDefaultUnitsToPercent(deltaStats.getUnitStat(unitStat));
-		const displaySuffix = unitStat.equalsStat(Stat.StatDefenseRating) ? '' : i18n.t('sidebar.character_stats.percent_suffix');
+		let displayPrefix = '';
+		let displaySuffix = i18n.t('sidebar.character_stats.percent_suffix');
 
 		if (unitStat.equalsStat(Stat.StatDefenseRating) && includeBase) {
+			displaySuffix = '';
+			percentDecimals = 0;
 			derivedPercentOrPointsValue! += this.player.getBaseDefense();
 		} else if (rootStat === Stat.StatMeleeHitRating && includeBase && this.hasRacialHitBonus) {
 			// Remove the rating display and only show %
@@ -459,9 +463,9 @@ export class CharacterStats extends Component {
 			) {
 				const hideRootRating = rootRatingValue === null || (rootRatingValue === 0 && derivedPercentOrPointsValue !== null);
 				const rootRatingString = hideRootRating ? '' : String(Math.round(rootRatingValue!));
-				const mhPercentString = `${derivedPercentOrPointsValue!.toFixed(2)}` + displaySuffix;
+				const mhPercentString = `${derivedPercentOrPointsValue!.toFixed(percentDecimals)}` + displaySuffix;
 				const ohPercentValue = derivedPercentOrPointsValue! + (ohWeaponExpertiseActive ? 1 : -1);
-				const ohPercentString = `${ohPercentValue.toFixed(2)}` + displaySuffix;
+				const ohPercentString = `${ohPercentValue.toFixed(percentDecimals)}` + displaySuffix;
 				const wrappedPercentString = hideRootRating ? `${mhPercentString} / ${ohPercentString}` : ` (${mhPercentString} / ${ohPercentString})`;
 				return rootRatingString + wrappedPercentString;
 			}
@@ -469,15 +473,26 @@ export class CharacterStats extends Component {
 			if (rootRatingValue !== null && rootRatingValue > 0) {
 				rootRatingValue *= deltaStats.getPseudoStat(PseudoStat.PseudoStatBlockValueMultiplier) || 1;
 			}
+		} else if (
+			rootStat &&
+			[Stat.StatArcaneDamage, Stat.StatFireDamage, Stat.StatFrostDamage, Stat.StatHolyDamage, Stat.StatNatureDamage, Stat.StatShadowDamage].includes(
+				rootStat,
+			)
+		) {
+			if (rootRatingValue !== null) {
+				displayPrefix = '+';
+				displaySuffix = '';
+				percentDecimals = 0;
+				derivedPercentOrPointsValue = rootRatingValue;
+				rootRatingValue += deltaStats.getStat(Stat.StatSpellDamage);
+			}
 		}
 
 		const hideRootRating =
 			(rootRatingValue === null || (rootRatingValue === 0 && derivedPercentOrPointsValue !== null)) && !unitStat.equalsStat(Stat.StatDefenseRating);
 		const rootRatingString = hideRootRating ? '' : String(Math.round(rootRatingValue!));
 		const percentOrPointsString =
-			derivedPercentOrPointsValue === null
-				? ''
-				: `${derivedPercentOrPointsValue.toFixed(unitStat.equalsStat(Stat.StatDefenseRating) ? 0 : 2)}` + displaySuffix;
+			derivedPercentOrPointsValue === null ? '' : displayPrefix + `${derivedPercentOrPointsValue.toFixed(percentDecimals)}` + displaySuffix;
 		const wrappedPercentOrPointsString = hideRootRating || derivedPercentOrPointsValue === null ? percentOrPointsString : ` (${percentOrPointsString})`;
 		return rootRatingString + wrappedPercentOrPointsString;
 	}

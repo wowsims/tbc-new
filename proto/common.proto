@@ -25,7 +25,7 @@ message ProtoVersion {
 	// protos need to define an api_version field so that the UI code knows
 	// to up-convert these protos to the new format whenever api_version is
 	// missing (0) or lower than current_version_number.
-	option (current_version_number) = 5;
+	option (current_version_number) = 7;
 
 	// The actual field value is only used within unit tests.
 	int32 saved_version_number = 1;
@@ -55,20 +55,18 @@ enum Spec {
 	SpecProtectionPaladin = 8;
 	SpecRetributionPaladin = 9;
 
-	SpecDisciplinePriest = 10;
-	SpecHolyPriest = 11;
-	SpecShadowPriest = 12;
+	SpecPriest = 10;
 
-	SpecRogue = 13;
+	SpecRogue = 11;
 
-	SpecElementalShaman = 14;
-	SpecEnhancementShaman = 15;
-	SpecRestorationShaman = 16;
+	SpecElementalShaman = 12;
+	SpecEnhancementShaman = 13;
+	SpecRestorationShaman = 14;
 
-	SpecWarlock = 17;
+	SpecWarlock = 15;
 
-	SpecDpsWarrior = 18;
-	SpecProtectionWarrior = 19;
+	SpecDpsWarrior = 16;
+	SpecProtectionWarrior = 17;
 }
 
 enum Race {
@@ -431,9 +429,12 @@ enum TristateEffect {
 
 enum Drums {
 	DrumsUnknown = 0;
-	DrumsOfBattle = 1;
-	DrumsOfRestoration = 2;
-	DrumsOfWar = 3;
+	GreaterDrumsOfBattle = 1;
+	GreaterDrumsOfRestoration = 2;
+	GreaterDrumsOfWar = 3;
+	LesserDrumsOfBattle = 4;
+	LesserDrumsOfRestoration = 5;
+	LesserDrumsOfWar = 6;
 }
 
 enum StrengthOfEarthType {
@@ -576,7 +577,7 @@ message ConsumesSpec {
 	bool goblinSapper = 9;
 	int32 mhImbue_id = 10;
 	int32 ohImbue_id = 11;
-	int32 drums_id = 12;
+	Drums drums_id = 12;
 	bool scroll_agi = 13;
 	bool scroll_str = 14;
 	bool scroll_int = 15;
@@ -586,6 +587,10 @@ message ConsumesSpec {
 	bool pet_scroll_str = 19;
 	bool nightmare_seed = 20;
 	int32 pet_food_id = 21;
+	// Contains all available potions
+	repeated int32 potions = 22;
+	// Contains all available conjured items
+	repeated int32 conjured_items = 23;
 }
 
 enum MobType {
@@ -728,6 +733,7 @@ enum ConsumableType {
 	ConsumableTypeGuardianElixir = 7;
 	ConsumableTypeImbue = 8;
 	ConsumableTypePetFood = 9;
+	ConsumableTypeOther = 10;
 }
 
 

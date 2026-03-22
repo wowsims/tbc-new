@@ -4,8 +4,13 @@ import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
 )
+
+///////////////////////////////////////////////////////////////////////////
+//							Dungeon
+///////////////////////////////////////////////////////////////////////////
 
 // Dungeon Set 3 - DPS - Plate
 var ItemSetDoomplateBattlegear = core.NewItemSet(core.ItemSet{
@@ -102,9 +107,14 @@ var ItemSetManaEtchedRegalia = core.NewItemSet(core.ItemSet{
 	},
 })
 
+///////////////////////////////////////////////////////////////////////////
+//							Blacksmithing
+///////////////////////////////////////////////////////////////////////////
+
 // Blacksmithing - Plate
 var ItemSetBurningRage = core.NewItemSet(core.ItemSet{
-	Name: "Burning Rage",
+	Name:               "Burning Rage",
+	RequiredProfession: proto.Profession_Blacksmithing,
 	Bonuses: map[int32]core.ApplySetBonus{
 		2: func(agent core.Agent, setBonusAura *core.Aura) {
 			setBonusAura.
@@ -113,6 +123,24 @@ var ItemSetBurningRage = core.NewItemSet(core.ItemSet{
 		},
 	},
 })
+
+// Blacksmithing - Plate
+var ItemSetKhoriumWard = core.NewItemSet(core.ItemSet{
+	ID:                 565,
+	Name:               "Khorium Ward",
+	RequiredProfession: proto.Profession_Blacksmithing,
+	Bonuses: map[int32]core.ApplySetBonus{
+		3: func(agent core.Agent, setBonusAura *core.Aura) {
+			setBonusAura.
+				AttachStatsBuff(stats.Stats{stats.HealingPower: 55, stats.SpellDamage: 19}).
+				ExposeToAPL(41783)
+		},
+	},
+})
+
+///////////////////////////////////////////////////////////////////////////
+//							Leatherworking
+///////////////////////////////////////////////////////////////////////////
 
 // Leatherworking - Dragonscale
 var ItemSetNetherstrikeArmor = core.NewItemSet(core.ItemSet{
@@ -199,14 +227,57 @@ var ItemSetThickDraenicArmor = core.NewItemSet(core.ItemSet{
 	},
 })
 
+// Leatherworking - Fel Skin
+var ItemSetFelSkin = core.NewItemSet(core.ItemSet{
+	ID:                 573,
+	Name:               "Fel Skin",
+	RequiredProfession: proto.Profession_Leatherworking,
+	Bonuses: map[int32]core.ApplySetBonus{
+		3: func(agent core.Agent, setBonusAura *core.Aura) {
+			setBonusAura.
+				AttachStatBuff(stats.DodgeRating, 20).
+				ExposeToAPL(41746)
+		},
+	},
+})
+
+// Leatherworking - Strength of the Clefthoof
+var ItemSetStrengthOfTheClefthoof = core.NewItemSet(core.ItemSet{
+	ID:                 574,
+	Name:               "Strength of the Clefthoof",
+	RequiredProfession: proto.Profession_Leatherworking,
+	Bonuses: map[int32]core.ApplySetBonus{
+		3: func(agent core.Agent, setBonusAura *core.Aura) {
+			setBonusAura.
+				AttachStatBuff(stats.Strength, 20).
+				ExposeToAPL(41846)
+		},
+	},
+})
+
 ///////////////////////////////////////////////////////////////////////////
 //							Tailoring
 ///////////////////////////////////////////////////////////////////////////
 
+// Tailoring - Battlecast
+var ItemSetBattlecastGarb = core.NewItemSet(core.ItemSet{
+	ID:                 572,
+	Name:               "Battlecast Garb",
+	RequiredProfession: proto.Profession_Tailoring,
+	Bonuses: map[int32]core.ApplySetBonus{
+		2: func(agent core.Agent, setBonusAura *core.Aura) {
+			// Increases the chance spell pushback and spell interrupt will be resisted by 5%.
+			// Not modeled in the sim.
+			setBonusAura.ExposeToAPL(41660)
+		},
+	},
+})
+
 // Tailoring - Spellstrike
 var ItemSetSpellstrikeInfusion = core.NewItemSet(core.ItemSet{
-	ID:   559,
-	Name: "Spellstrike Infusion",
+	ID:                 559,
+	Name:               "Spellstrike Infusion",
+	RequiredProfession: proto.Profession_Tailoring,
 	Bonuses: map[int32]core.ApplySetBonus{
 		2: func(agent core.Agent, setBonusAura *core.Aura) {
 			// Gives a chance when your harmful spells land to increase the damage of your spells and effects by 92 for 10 sec.
@@ -244,8 +315,9 @@ var ItemSetWrathOfSpellfire = core.NewItemSet(core.ItemSet{
 
 // Tailoring - Whitemend
 var ItemSetWhitemendWisdom = core.NewItemSet(core.ItemSet{
-	ID:   571,
-	Name: "Whitemend Wisdom",
+	ID:                 571,
+	Name:               "Whitemend Wisdom",
+	RequiredProfession: proto.Profession_Tailoring,
 	Bonuses: map[int32]core.ApplySetBonus{
 		2: func(agent core.Agent, setBonusAura *core.Aura) {
 			// Increases healing by up to 10% of your total Intellect.

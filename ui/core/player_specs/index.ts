@@ -31,9 +31,7 @@ const specToPlayerSpec: Record<Spec, PlayerSpec<any> | undefined> = {
 	[Spec.SpecProtectionPaladin]: PaladinSpecs.ProtectionPaladin,
 	[Spec.SpecRetributionPaladin]: PaladinSpecs.RetributionPaladin,
 	// Priest
-	[Spec.SpecDisciplinePriest]: PriestSpecs.DisciplinePriest,
-	[Spec.SpecHolyPriest]: PriestSpecs.HolyPriest,
-	[Spec.SpecShadowPriest]: PriestSpecs.ShadowPriest,
+	[Spec.SpecPriest]: PriestSpecs.Priest,
 	// Rogue
 	[Spec.SpecRogue]: RogueSpecs.Rogue,
 	// Shaman

@@ -30,6 +30,8 @@ const (
 
 const CharacterBuildPhaseAll = CharacterBuildPhaseBase | CharacterBuildPhaseGear | CharacterBuildPhaseTalents | CharacterBuildPhaseBuffs | CharacterBuildPhaseConsumes
 
+type RotationTransformation func(raid *proto.Raid, rotation *proto.APLRotation)
+
 // Character is a data structure to hold all the shared values that all
 // class logic shares.
 // All players have stats, equipment, auras, etc
@@ -83,6 +85,9 @@ type Character struct {
 	spellCategoryTimers map[int32]*Timer
 
 	Pets []*Pet // cached in AddPet, for advance()
+
+	// Used for manually modifying a rotation before it's constructed
+	rotationTransformations []RotationTransformation
 }
 
 func NewCharacter(party *Party, partyIndex int, player *proto.Player) Character {
@@ -104,6 +109,7 @@ func NewCharacter(party *Party, partyIndex int, player *proto.Player) Character 
 			ReactionTime:            time.Duration(max(player.ReactionTimeMs, 10)) * time.Millisecond,
 			ChannelClipDelay:        max(0, time.Duration(player.ChannelClipDelayMs)*time.Millisecond),
 			StartDistanceFromTarget: player.DistanceFromTarget,
+			DistanceFromTarget:      player.DistanceFromTarget,
 		},
 
 		Name:  player.Name,
@@ -750,4 +756,8 @@ func FillTalentsProto(data protoreflect.Message, talentsStr string, treeSizes [3
 		}
 		offset += treeSizes[treeIdx]
 	}
+}
+
+func (character *Character) RegisterRotationTransformation(transformation RotationTransformation) {
+	character.rotationTransformations = append(character.rotationTransformations, transformation)
 }

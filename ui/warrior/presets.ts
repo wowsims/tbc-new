@@ -1,5 +1,5 @@
 import { Phase } from '../core/constants/other';
-import { Class, ConsumesSpec, Debuffs, IndividualBuffs, PartyBuffs, RaidBuffs, TristateEffect } from '../core/proto/common';
+import { Class, ConsumesSpec, Debuffs, Drums, IndividualBuffs, PartyBuffs, RaidBuffs, TristateEffect } from '../core/proto/common';
 import { defaultExposeWeaknessSettings, defaultRaidBuffMajorDamageCooldowns } from '../core/proto_utils/utils';
 
 export const DefaultIndividualBuffs = IndividualBuffs.create({
@@ -16,6 +16,7 @@ export const DefaultPartyBuffs = PartyBuffs.create({
 	windfuryTotem: TristateEffect.TristateEffectImproved,
 	leaderOfThePack: TristateEffect.TristateEffectRegular,
 	totemTwisting: true,
+	drums: Drums.LesserDrumsOfBattle,
 });
 
 export const DefaultRaidBuffs = RaidBuffs.create({
@@ -47,7 +48,6 @@ export const DefaultConsumables = ConsumesSpec.create({
 	superSapper: true,
 	goblinSapper: true,
 	ohImbueId: 29453,
-	drumsId: 351355,
 	scrollAgi: true,
 	scrollStr: true,
 });

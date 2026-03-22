@@ -205,13 +205,13 @@ export class SettingsTab extends SimTab {
 
 		contentBlock.headerElement?.appendChild(<p className="fs-body">{i18n.t('settings_tab.raid_buffs.description')}</p>);
 
-		const buffOptions = relevantStatOptions(BuffDebuffInputs.BUFFS_CONFIG, this.simUI);
+		const buffOptions = relevantStatOptions(BuffDebuffInputs.BUFFS_CONFIG, this.simUI.individualConfig);
 		this.configureIconSection(
 			contentBlock.bodyElement,
 			buffOptions.map(options => options.picker && new options.picker(contentBlock.bodyElement, this.simUI.player, options.config as any, this.simUI)),
 		);
 
-		const partyBuffOptions = relevantStatOptions(BuffDebuffInputs.PARTY_BUFFS_CONFIG, this.simUI);
+		const partyBuffOptions = relevantStatOptions(BuffDebuffInputs.PARTY_BUFFS_CONFIG, this.simUI.individualConfig);
 		if (partyBuffOptions.length > 0) {
 			const partyContentBlock = new ContentBlock(this.column3, 'buffs-settings', {
 				header: { title: i18n.t('settings_tab.party_buffs.title'), tooltip: i18n.t('settings_tab.party_buffs.tooltip') },
@@ -233,13 +233,13 @@ export class SettingsTab extends SimTab {
 			header: { title: i18n.t('settings_tab.debuffs.title'), tooltip: i18n.t('settings_tab.debuffs.tooltip') },
 		});
 
-		const debuffOptions = relevantStatOptions(BuffDebuffInputs.DEBUFFS_CONFIG, this.simUI);
+		const debuffOptions = relevantStatOptions(BuffDebuffInputs.DEBUFFS_CONFIG, this.simUI.individualConfig);
 		this.configureIconSection(
 			contentBlock.bodyElement,
 			debuffOptions.map(options => options.picker && new options.picker(contentBlock.bodyElement, this.simUI.player, options.config as any, this.simUI)),
 		);
 
-		const miscDebuffOptions = relevantStatOptions(BuffDebuffInputs.DEBUFFS_MISC_CONFIG, this.simUI);
+		const miscDebuffOptions = relevantStatOptions(BuffDebuffInputs.DEBUFFS_MISC_CONFIG, this.simUI.individualConfig);
 		if (miscDebuffOptions.length) {
 			new MultiIconPicker(
 				contentBlock.bodyElement,

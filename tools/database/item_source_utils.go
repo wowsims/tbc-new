@@ -41,10 +41,10 @@ func InferPhase(item *proto.UIItem) int32 {
 			if ilvl <= 127 {
 				return 1
 			}
-			if ilvl == 146 || ilvl == 136 { // T5 + Vortex BoP Crafts
+			if ilvl == 128 || ilvl == 146 || ilvl == 136 { // T5 + Vortex BoP Crafts
 				return 2
 			}
-			if ilvl >= 128 && ilvl <= 141 { // T6 Crafts
+			if ilvl > 128 && ilvl <= 141 { // T6 Crafts
 				return 3
 			}
 			if ilvl == 159 { // SWP Crafts

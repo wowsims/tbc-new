@@ -92,6 +92,8 @@ var FullPartyBuffs = &proto.PartyBuffs{
 
 	BattleShout:     proto.TristateEffect_TristateEffectImproved,
 	CommandingShout: proto.TristateEffect_TristateEffectImproved,
+
+	Drums: proto.Drums_LesserDrumsOfBattle,
 }
 
 var FullIndividualBuffs = &proto.IndividualBuffs{
@@ -409,13 +411,7 @@ func getPlayerSpecOptions(player *proto.Player) interface{} {
 	if playerSpec, ok := player.Spec.(*proto.Player_RetributionPaladin); ok {
 		return playerSpec
 	}
-	if playerSpec, ok := player.Spec.(*proto.Player_DisciplinePriest); ok {
-		return playerSpec
-	}
-	if playerSpec, ok := player.Spec.(*proto.Player_HolyPriest); ok {
-		return playerSpec
-	}
-	if playerSpec, ok := player.Spec.(*proto.Player_ShadowPriest); ok {
+	if playerSpec, ok := player.Spec.(*proto.Player_Priest); ok {
 		return playerSpec
 	}
 	if playerSpec, ok := player.Spec.(*proto.Player_Rogue); ok {

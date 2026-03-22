@@ -1,4 +1,6 @@
 import { CharacterStats } from './components/character_stats';
+import { CONJURED_CONFIG } from './components/inputs/consumables';
+import { relevantStatOptions } from './components/inputs/stat_options';
 import { ItemSwapSettings } from './components/item_swap_picker';
 import Toast from './components/toast';
 import * as Mechanics from './constants/mechanics';
@@ -21,6 +23,7 @@ import {
 import { APLRotation, APLRotation_Type as APLRotationType, SimpleRotation } from './proto/apl';
 import {
 	Class,
+	ConsumableType,
 	ConsumesSpec,
 	Cooldowns,
 	Faction,
@@ -48,6 +51,8 @@ import {
 	UIGem as Gem,
 	UIItem as Item,
 	UIItem_FactionRestriction,
+	IndividualSimSettings,
+	ReforgeSettings,
 } from './proto/ui';
 import { ActionId } from './proto_utils/action_id';
 import { Database } from './proto_utils/database';
@@ -66,7 +71,9 @@ import {
 	getMetaGemEffectEP,
 	getTalentTreePoints,
 	isPVPItem,
+	migrateOldProto,
 	newUnitReference,
+	ProtoConversionMap,
 	raceToFaction,
 	SpecClasses,
 	SpecOptions,
@@ -462,7 +469,7 @@ export class Player<SpecType extends Spec> {
 
 	// Returns all enchants that this player can wear in the given slot.
 	getEnchants(slot: ItemSlot): Array<Enchant> {
-		return this.sim.db.getEnchants(slot).filter(enchant => canEquipEnchant(enchant, this.playerSpec));
+		return this.sim.db.getEnchants(slot).filter(enchant => canEquipEnchant(enchant, this));
 	}
 
 	// Returns all gems that this player can wear of the given color.
@@ -657,7 +664,19 @@ export class Player<SpecType extends Spec> {
 		this.buffsChangeEmitter.emit(eventID);
 	}
 
-	getConsumes(): ConsumesSpec {
+	getConsumes(forSimming?: boolean): ConsumesSpec {
+		const epStats = [...(this.specConfig.consumableStats ?? []), ...this.specConfig.epStats];
+		const dbPotions = this.sim.db.getConsumablesByTypeAndStats(ConsumableType.ConsumableTypePotion, epStats);
+		const dbConjured = relevantStatOptions(CONJURED_CONFIG, this.specConfig)
+			.filter(option => (option.config.showWhen ? option.config.showWhen(this) : true))
+			.map(option => option.config.value);
+		if (forSimming) {
+			return ConsumesSpec.create({
+				...this.consumables,
+				potions: dbPotions.map(p => p.id),
+				conjuredItems: dbConjured,
+			});
+		}
 		// Make a defensive copy
 		return ConsumesSpec.clone(this.consumables);
 	}
@@ -1393,7 +1412,7 @@ export class Player<SpecType extends Spec> {
 		}
 		if (exportCategory(SimSettingCategories.Consumes)) {
 			PlayerProto.mergePartial(player, {
-				consumables: this.getConsumes(),
+				consumables: this.getConsumes(forSimming),
 			});
 		}
 		if (exportCategory(SimSettingCategories.Miscellaneous)) {
@@ -1498,8 +1517,8 @@ export class Player<SpecType extends Spec> {
 		return Mechanics.CHARACTER_LEVEL * 5;
 	}
 
-	static updateProtoVersion(proto: PlayerProto) {
-		if (!(proto.apiVersion < CURRENT_API_VERSION)) {
+	static updateProtoVersion(playerProto: PlayerProto) {
+		if (!(playerProto.apiVersion < CURRENT_API_VERSION)) {
 			return;
 		}
 	}

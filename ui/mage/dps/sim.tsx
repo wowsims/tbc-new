@@ -59,6 +59,13 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecMage, {
 			PseudoStat.PseudoStatSpellHastePercent,
 		],
 	),
+
+	modifyDisplayStats: (player: Player<Spec.SpecMage>) => {
+		return {
+			talents: new Stats().addPseudoStat(PseudoStat.PseudoStatSpellCritPercent, player.getTalents().arcaneInstability),
+		};
+	},
+
 	gemStats: DEFAULT_CASTER_GEM_STATS,
 
 	consumableStats: [

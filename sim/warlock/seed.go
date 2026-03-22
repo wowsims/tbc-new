@@ -74,7 +74,7 @@ func (warlock *Warlock) registerSeed() {
 
 	trySeedPop := func(sim *core.Simulation, target *core.Unit, dmg float64) {
 		seedPropertyTracker[target.UnitIndex].damageTaken += dmg
-		seedThreshold := seedTriggerBaseDamage + (warlock.GetStat(stats.SpellDamage) + warlock.GetStat(stats.ShadowDamage)*seedPopCoeff)
+		seedThreshold := seedTriggerBaseDamage + (warlock.GetStat(stats.SpellDamage) + warlock.GetStat(stats.ShadowDamage)*seedExplosionCoeff)
 		if seedPropertyTracker[target.UnitIndex].damageTaken >= seedThreshold {
 			spell.Dot(target).Deactivate(sim)
 			seedExplosion.Cast(sim, target)
@@ -124,6 +124,7 @@ func (warlock *Warlock) registerSeed() {
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			result := spell.CalcOutcome(sim, target, spell.OutcomeMagicHit)
 			spell.WaitTravelTime(sim, func(sim *core.Simulation) {
+				spell.DealOutcome(sim, result)
 				if result.Landed() {
 					spell.Dot(target).Apply(sim)
 				}
@@ -137,6 +138,7 @@ func (warlock *Warlock) registerSeed() {
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			result := spell.CalcOutcome(sim, target, spell.OutcomeMagicHit)
 			spell.WaitTravelTime(sim, func(sim *core.Simulation) {
+				spell.DealOutcome(sim, result)
 				if result.Landed() {
 					seedExplosion.Cast(sim, target)
 				}
@@ -154,7 +156,7 @@ func getSeedSpellConfig(config core.SpellConfig) core.SpellConfig {
 		MissileSpeed:   28,
 		ClassSpellMask: WarlockSpellSeedOfCorruption,
 
-		ManaCost: core.ManaCostOptions{BaseCostPercent: 6},
+		ManaCost: core.ManaCostOptions{FlatCost: 882},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD:      core.GCDDefault,

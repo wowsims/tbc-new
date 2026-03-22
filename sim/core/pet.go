@@ -87,6 +87,8 @@ type Pet struct {
 }
 
 func NewPet(config PetConfig) Pet {
+	distanceFromTarget := TernaryFloat64(config.StartsAtOwnerDistance, config.Owner.StartDistanceFromTarget, MaxMeleeRange)
+
 	pet := Pet{
 		Character: Character{
 			Unit: Unit{
@@ -102,7 +104,8 @@ func NewPet(config PetConfig) Pet {
 
 				ReactionTime: config.Owner.ReactionTime,
 
-				StartDistanceFromTarget: TernaryFloat64(config.StartsAtOwnerDistance, config.Owner.StartDistanceFromTarget, MaxMeleeRange),
+				StartDistanceFromTarget: distanceFromTarget,
+				DistanceFromTarget:      distanceFromTarget,
 			},
 			Name:       config.Name,
 			Party:      config.Owner.Party,

@@ -454,6 +454,37 @@
 						"generic_resource"
 					]
 				},
+				"item_qualities": {
+					"type": "object",
+					"properties": {
+						"junk": {
+							"type": "string"
+						},
+						"common": {
+							"type": "string"
+						},
+						"uncommon": {
+							"type": "string"
+						},
+						"rare": {
+							"type": "string"
+						},
+						"epic": {
+							"type": "string"
+						},
+						"legendary": {
+							"type": "string"
+						},
+						"artifact": {
+							"type": "string"
+						},
+						"heirloom": {
+							"type": "string"
+						}
+					},
+					"additionalProperties": false,
+					"required": ["junk", "common", "uncommon", "rare", "epic", "legendary", "artifact", "heirloom"]
+				},
 				"stats": {
 					"type": "object",
 					"properties": {
@@ -535,6 +566,9 @@
 						"cast_speed_multiplier": {
 							"type": "string"
 						},
+						"spell_hit": {
+							"type": "string"
+						},
 						"arcane_hit": {
 							"type": "string"
 						},
@@ -551,9 +585,6 @@
 							"type": "string"
 						},
 						"shadow_hit": {
-							"type": "string"
-						},
-						"spell_hit": {
 							"type": "string"
 						},
 						"spell_crit": {
@@ -699,18 +730,20 @@
 						"melee_speed_multiplier",
 						"ranged_speed_multiplier",
 						"cast_speed_multiplier",
+						"spell_hit",
 						"arcane_hit",
 						"fire_hit",
 						"frost_hit",
 						"holy_hit",
 						"nature_hit",
 						"shadow_hit",
-						"spell_hit",
 						"spell_crit",
 						"spell_haste",
 						"melee_hit",
 						"melee_crit",
 						"melee_haste",
+						"ranged_hit",
+						"ranged_crit",
 						"ranged_haste",
 						"healing_power",
 						"spell_damage",
@@ -903,6 +936,7 @@
 				"ranged_weapon_types",
 				"spell_schools",
 				"resource_types",
+				"item_qualities",
 				"stats",
 				"currency",
 				"copy_button",
@@ -2135,6 +2169,19 @@
 							},
 							"additionalProperties": false,
 							"required": ["label", "tooltip"]
+						},
+						"warlock_assigned_curse": {
+							"type": "object",
+							"properties": {
+								"title": {
+									"type": "string"
+								},
+								"description": {
+									"type": "string"
+								}
+							},
+							"additionalProperties": false,
+							"required": ["title", "description"]
 						}
 					},
 					"additionalProperties": false,
@@ -2178,7 +2225,8 @@
 						"enable_item_swap",
 						"item_swap",
 						"blessings",
-						"shaman_shield_procrate"
+						"shaman_shield_procrate",
+						"warlock_assigned_curse"
 					]
 				},
 				"consumables": {
@@ -5792,6 +5840,12 @@
 								"cooldowns": {
 									"type": "string"
 								},
+								"potions": {
+									"type": "string"
+								},
+								"conjured_items": {
+									"type": "string"
+								},
 								"placeholders": {
 									"type": "string"
 								}
@@ -5828,6 +5882,8 @@
 								"combo_points",
 								"eclipse",
 								"cooldowns",
+								"potions",
+								"conjured_items",
 								"placeholders"
 							]
 						},
@@ -6580,6 +6636,19 @@
 									"additionalProperties": false,
 									"required": ["label", "tooltip"]
 								},
+								"time_to_weave": {
+									"type": "object",
+									"properties": {
+										"label": {
+											"type": "string"
+										},
+										"tooltip": {
+											"type": "string"
+										}
+									},
+									"additionalProperties": false,
+									"required": ["label", "tooltip"]
+								},
 								"use_multi": {
 									"type": "object",
 									"properties": {
@@ -6638,15 +6707,98 @@
 								"sting",
 								"melee_weave",
 								"weave_only_raptor",
+								"time_to_weave",
 								"use_multi",
 								"use_arcane",
 								"viper_start_mana_percent",
 								"viper_stop_mana_percent"
 							]
+						},
+						"warrior": {
+							"type": "object",
+							"properties": {
+								"sunder_armor": {
+									"type": "object",
+									"properties": {
+										"label": {
+											"type": "string"
+										},
+										"none": {
+											"type": "string"
+										},
+										"help": {
+											"type": "string"
+										},
+										"maintain": {
+											"type": "string"
+										}
+									},
+									"additionalProperties": false,
+									"required": ["label", "none", "help", "maintain"]
+								},
+								"bloodlust_timing": {
+									"type": "object",
+									"properties": {
+										"label": {
+											"type": "string"
+										},
+										"tooltip": {
+											"type": "string"
+										}
+									},
+									"additionalProperties": false,
+									"required": ["label", "tooltip"]
+								},
+								"dps": {
+									"type": "object",
+									"properties": {
+										"spec": {
+											"type": "object",
+											"properties": {
+												"label": {
+													"type": "string"
+												},
+												"fury": {
+													"type": "string"
+												},
+												"arms": {
+													"type": "string"
+												}
+											},
+											"additionalProperties": false,
+											"required": ["label", "fury", "arms"]
+										},
+										"use_recklessness": {
+											"type": "object",
+											"properties": {
+												"label": {
+													"type": "string"
+												}
+											},
+											"additionalProperties": false,
+											"required": ["label"]
+										},
+										"use_overpower": {
+											"type": "object",
+											"properties": {
+												"label": {
+													"type": "string"
+												}
+											},
+											"additionalProperties": false,
+											"required": ["label"]
+										}
+									},
+									"additionalProperties": false,
+									"required": ["spec", "use_recklessness", "use_overpower"]
+								}
+							},
+							"additionalProperties": false,
+							"required": ["sunder_armor", "bloodlust_timing", "dps"]
 						}
 					},
 					"additionalProperties": false,
-					"required": ["druid", "guardian", "rogue", "shaman", "warlock", "hunter"]
+					"required": ["druid", "guardian", "rogue", "shaman", "warlock", "hunter", "warrior"]
 				}
 			},
 			"additionalProperties": false,
@@ -8119,6 +8271,12 @@
 								},
 								"max_gem_phase": {
 									"type": "string"
+								},
+								"max_gem_quality": {
+									"type": "string"
+								},
+								"disable_unique_gems": {
+									"type": "string"
 								}
 							},
 							"additionalProperties": false,
@@ -8147,7 +8305,9 @@
 								"hard_cap_info",
 								"edit_weights",
 								"freeze_item_slots",
-								"max_gem_phase"
+								"max_gem_phase",
+								"max_gem_quality",
+								"disable_unique_gems"
 							]
 						}
 					},

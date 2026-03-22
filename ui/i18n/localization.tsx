@@ -1,6 +1,19 @@
 import { PlayerClass } from '../core/player_class';
 import { PlayerSpec } from '../core/player_spec';
-import { ArmorType, MobType, PseudoStat, Race, Profession, SpellSchool, Stat, WeaponType, RangedWeaponType, Spec, ItemSlot } from '../core/proto/common';
+import {
+	ArmorType,
+	MobType,
+	PseudoStat,
+	Race,
+	Profession,
+	SpellSchool,
+	Stat,
+	WeaponType,
+	RangedWeaponType,
+	Spec,
+	ItemSlot,
+	ItemQuality,
+} from '../core/proto/common';
 import { ResourceType } from '../core/proto/spell';
 import { RaidFilterOption, SourceFilterOption } from '../core/proto/ui';
 import { LaunchStatus } from '../core/launched_sims';
@@ -31,6 +44,7 @@ import {
 	getBulkSlotI18nKey,
 	getPresetConfigurationCategoryI18nKey,
 	classNameToClassKey,
+	itemQualityI18nKeys,
 } from './entity_mapping';
 import { getLang, setLang, supportedLanguages } from './locale_service';
 
@@ -123,6 +137,12 @@ export const translateRangedWeaponType = (rangedWeaponType: RangedWeaponType): s
 export const translateResourceType = (resourceType: ResourceType): string => {
 	return i18n.t(`common.resource_types.${resourceTypeI18nKeys[resourceType] || ResourceType[resourceType].toLowerCase()}`, {
 		defaultValue: ResourceType[resourceType],
+	});
+};
+
+export const translateItemQuality = (itemQuality: ItemQuality): string => {
+	return i18n.t(`common.item_qualities.${itemQualityI18nKeys[itemQuality] || ItemQuality[itemQuality].toLowerCase()}`, {
+		defaultValue: ItemQuality[itemQuality],
 	});
 };
 

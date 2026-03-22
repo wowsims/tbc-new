@@ -2,6 +2,7 @@ package database
 
 import (
 	"regexp"
+	"time"
 
 	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
@@ -43,7 +44,10 @@ var IgnoreSpellEffectBySpellEffectType = map[dbc.SpellEffectType][]int{
 }
 
 var OtherItemIdsToFetch = []string{}
-var ConsumableOverrides = []*proto.Consumable{}
+var ConsumableOverrides = []*proto.Consumable{
+	{Id: 23334, CooldownDuration: int32(time.Hour.Seconds())}, // Cracked Power Core
+	{Id: 23381, CooldownDuration: int32(time.Hour.Seconds())}, // Chipped Power Core
+}
 var ItemOverrides = []*proto.UIItem{
 	{Id: 32658, Phase: 2}, // Badge of Tenacity
 
@@ -186,8 +190,11 @@ var ConsumableAllowList = []int32{
 	13442, // Migty Rage Potion
 	13452, // Elixir of the Mongoose
 	12662, // Demonic Rune
+	22105, // Master Healthstone
 	22788, // Flamecap
 	22797, // Nightmare Seed
+	23334, // Cracked Power Core
+	23381, // Chipped Power Core
 }
 var ConsumableDenyList = []int32{
 	32762, // Rulkster's Brain Juice

@@ -380,3 +380,13 @@ const (
 	RATING_MOD_VERS_HEAL   = 0x20000000
 	RATING_MOD_VERS_MITIG  = 0x40000000
 )
+
+type SpellItemEnchantmentFlags uint32
+
+const (
+	SOULBOUND SpellItemEnchantmentFlags = 0x00000001
+)
+
+func (f SpellItemEnchantmentFlags) Has(flag SpellItemEnchantmentFlags) bool {
+	return f&flag != 0
+}

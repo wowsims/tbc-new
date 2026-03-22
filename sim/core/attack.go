@@ -580,9 +580,9 @@ func (aa *AutoAttacks) reset(_ *Simulation) {
 		aa.mh.swingAt = 0
 
 		if aa.IsDualWielding {
-			aa.oh.updateSwingDuration(aa.mh.curSwingSpeed)
+			aa.oh.updateSwingDuration(aa.oh.unit.TotalMeleeHasteMultiplier())
 			aa.oh.previousSwing = -aa.OffhandSwingSpeed()
-			aa.oh.swingAt = DurationFromSeconds(aa.mh.SwingSpeed / 2)
+			aa.oh.swingAt = DurationFromSeconds(aa.oh.SwingSpeed / 2)
 		}
 
 	}
@@ -616,14 +616,13 @@ func (aa *AutoAttacks) startPull(sim *Simulation) {
 		}
 
 		if aa.IsDualWielding {
-			if aa.oh.swingAt == NeverExpires {
-				aa.oh.swingAt = DurationFromSeconds(aa.mh.SwingSpeed / 2)
-			}
 			if aa.oh.IsInRange() {
 				aa.oh.enabled = true
-				aa.oh.addWeaponAttack(sim, aa.mh.curSwingSpeed)
+				aa.oh.addWeaponAttack(sim, aa.oh.unit.TotalMeleeHasteMultiplier())
 			}
-
+			if aa.oh.swingAt == NeverExpires {
+				aa.oh.swingAt = DurationFromSeconds(aa.oh.curSwingSpeed / 2)
+			}
 		}
 
 		if aa.mh.IsInRange() {
@@ -680,7 +679,7 @@ func (aa *AutoAttacks) EnableMeleeSwing(sim *Simulation) {
 		aa.oh.swingAt = max(aa.oh.swingAt, sim.CurrentTime, 0)
 		if aa.oh.IsInRange() {
 			aa.oh.enabled = true
-			aa.oh.addWeaponAttack(sim, aa.mh.unit.TotalMeleeHasteMultiplier())
+			aa.oh.addWeaponAttack(sim, aa.oh.unit.TotalMeleeHasteMultiplier())
 		}
 	}
 
@@ -779,7 +778,7 @@ func (aa *AutoAttacks) UpdateSwingTimers(sim *Simulation) {
 		sim.rescheduleWeaponAttack(aa.mh.swingAt)
 
 		if aa.IsDualWielding && aa.oh.enabled {
-			aa.oh.updateSwingDuration(aa.mh.curSwingSpeed)
+			aa.oh.updateSwingDuration(aa.oh.unit.TotalMeleeHasteMultiplier())
 
 			if remainingSwingTime := aa.oh.swingAt - sim.CurrentTime; remainingSwingTime > 0 {
 				aa.oh.swingAt = sim.CurrentTime + time.Duration(float64(remainingSwingTime)*f)
@@ -883,12 +882,11 @@ func (aa *AutoAttacks) NextAnyAttackAt() time.Duration {
 // Used to prevent artificial Haste breakpoints arising from APL evaluations after autos occurring at
 // locally optimal timings.
 func (aa *AutoAttacks) RandomizeMeleeTiming(sim *Simulation) {
-	if !aa.AutoSwingMelee {
+	if !aa.AutoSwingMelee || aa.character.DistanceFromTarget > MaxMeleeRange {
 		return
 	}
 
-	swingDur := aa.MainhandSwingSpeed()
-	randomAutoOffset := DurationFromSeconds(sim.RandomFloat("Melee Timing") * swingDur.Seconds() / 2)
+	randomAutoOffset := time.Duration(sim.RandomFloat("Melee Timing")*float64(aa.character.ReactionTime.Milliseconds())) * time.Millisecond
 	aa.DelayMeleeBy(sim, randomAutoOffset)
 }
 

@@ -212,7 +212,17 @@ export class Database {
 			stats.push(Stat.StatShadowResistance);
 		}
 
+		const hasAttackPowerStat = stats.find(stat => stat === Stat.StatAttackPower);
+
 		return this.getConsumablesByType(type).filter(consume => {
+			// Manually configure Elixirs that buff MobType Attack Power
+			if (type == ConsumableType.ConsumableTypeBattleElixir && hasAttackPowerStat) {
+				// Elixir of Demon Slaying
+				if (consume.id == 9224) {
+					return true;
+				}
+			}
+
 			// Add consumables that buff Mana as a resource
 			let includesResourceType = false;
 			if (stats.includes(Stat.StatMana) || stats.includes(Stat.StatMP5)) {

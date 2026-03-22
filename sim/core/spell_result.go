@@ -194,12 +194,12 @@ func (spell *Spell) PhysicalCritCheck(sim *Simulation, attackTable *AttackTable)
 }
 
 func (spell *Spell) BonusDamage(attackTable *AttackTable) float64 {
-	bonusDamage := 0.0
+	bonusDamage := spell.BonusBaseDamage
 
 	if spell.SpellSchool.Matches(SpellSchoolPhysical) {
-		bonusDamage = spell.Unit.stats[stats.PhysicalDamage]
+		bonusDamage += spell.Unit.stats[stats.PhysicalDamage]
 	} else {
-		bonusDamage = spell.SpellDamage(attackTable.Defender) + attackTable.MobTypeBonusStats[attackTable.Defender.MobType][stats.SpellDamage]
+		bonusDamage += spell.SpellDamage(attackTable.Defender) + attackTable.MobTypeBonusStats[attackTable.Defender.MobType][stats.SpellDamage]
 	}
 
 	return bonusDamage
@@ -305,7 +305,7 @@ func (spell *Spell) CalcOutcome(sim *Simulation, target *Unit, outcomeApplier Ou
 func (spell *Spell) calcDamageInternal(sim *Simulation, target *Unit, baseDamage float64, attackerMultiplier float64, isPeriodic bool, outcomeApplier OutcomeApplier) *SpellResult {
 	attackTable := spell.Unit.AttackTables[target.UnitIndex]
 	result := spell.NewResult(target)
-	result.Damage = baseDamage + spell.BonusBaseDamage
+	result.Damage = baseDamage
 
 	if sim.Log == nil {
 		result.Damage *= attackerMultiplier

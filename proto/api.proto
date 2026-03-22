@@ -56,9 +56,7 @@ message Player {
 		ProtectionPaladin protection_paladin = 22;
 		RetributionPaladin retribution_paladin = 23;
 
-		DisciplinePriest discipline_priest = 24;
-		HolyPriest holy_priest = 25;
-		ShadowPriest shadow_priest = 26;
+		Priest priest = 24;
 
 		Rogue rogue = 29;
 
@@ -450,6 +448,8 @@ message SpellStats {
 	bool has_expected_tick = 11; // Whether this spell supports expected damage calculations
 	bool has_missile_speed = 12; // Whether this spell has a missile speed
 	bool has_ranks = 13; // Whether this spell has a rank
+	bool is_potion = 14; // Whether this spell is a potion
+	bool is_conjured = 15; // Whether this spell is a conjured item
 }
 message APLValidation {
 	LogLevel log_level = 1;

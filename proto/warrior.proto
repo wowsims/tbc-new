@@ -2,6 +2,8 @@ syntax = "proto3";
 package proto;
 
 option go_package = "./proto";
+
+import "common.proto";
 // DO NOT REMOVE THE COMMENTS
 // BEGIN GENERATED
 // WarriorTalents message.
@@ -104,8 +106,28 @@ message WarriorOptions {
 	bool has_bs_t2 = 7;
 }
 
+enum DpsWarriorSpec {
+	DpsWarriorSpecNone = 0;
+	DpsWarriorSpecFury = 1;
+	DpsWarriorSpecArms = 2;
+}
+
+enum WarriorSunder {
+	WarriorSunderNone = 0;
+	WarriorSunderHelp = 1;
+	WarriorSunderMaintain = 2;
+}
+
 message DpsWarrior {
-	message Rotation {}
+	message Rotation {
+		RotationType type = 1;
+
+		DpsWarriorSpec spec = 2;
+		bool use_recklessness = 3;
+		bool use_overpower = 4;
+		WarriorSunder sunder_armor = 5;
+		int32 bloodlust_timing = 6;
+	}
 
 	message Options {
 		WarriorOptions class_options = 1;

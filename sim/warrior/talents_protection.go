@@ -416,8 +416,6 @@ func (war *Warrior) registerDevastate() {
 		return
 	}
 
-	bonusThreat := 301.5
-
 	war.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 30022},
 		ClassSpellMask: SpellMaskDevastate,
@@ -443,20 +441,13 @@ func (war *Warrior) registerDevastate() {
 		FlatThreatBonus:  100,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := war.MHWeaponDamage(sim, spell.MeleeAttackPower(target)) * 0.5
+			baseDamage := war.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower(target)) * 0.5
 			sunderStacks := war.SunderArmorAuras.Get(target).GetStacks()
-			canApplySunderStack := war.CanApplySunderAura(target) && sunderStacks < 5
 			sunderDamage := core.TernaryFloat64(war.CanApplySunderAura(target), float64(sunderStacks)*35, 0)
-			if canApplySunderStack {
-				spell.FlatThreatBonus += bonusThreat
-			}
 			result := spell.CalcAndDealDamage(sim, target, baseDamage+sunderDamage, spell.OutcomeMeleeSpecialHitAndCrit)
-			if canApplySunderStack {
-				spell.FlatThreatBonus -= bonusThreat
-			}
 
 			if result.Landed() {
-				war.TryApplySunderArmorEffect(sim, target)
+				war.SunderArmorDevastate.Cast(sim, target)
 			} else {
 				spell.IssueRefund(sim)
 			}

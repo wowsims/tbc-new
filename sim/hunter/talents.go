@@ -56,6 +56,10 @@ func (hunter *Hunter) ApplyTalents() {
 	hunter.registerExposeWeakness()
 	hunter.registerMasterTactician()
 	hunter.registerReadiness()
+
+	if hunter.Pet != nil {
+		hunter.Pet.ApplyTalents()
+	}
 }
 
 func (hunter *Hunter) registerImprovedAspectOfTheHawk() {
@@ -318,32 +322,20 @@ func (hunter *Hunter) registerAimedShot() {
 		ProcMask:       core.ProcMaskRangedSpecial,
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
 
-		MissileSpeed: 40,
-		MinRange:     core.MaxMeleeRange,
-		MaxRange:     HunterBaseMaxRange,
-
 		ManaCost: core.ManaCostOptions{
 			FlatCost: 370,
 		},
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD:      core.GCDDefault,
 				CastTime: time.Millisecond * 3000,
 			},
 			CD: core.Cooldown{
 				Timer:    hunter.NewTimer(),
 				Duration: time.Second * 6,
 			},
-			IgnoreHaste: true,
-			CastTime: func(spell *core.Spell) time.Duration {
-				return time.Duration(float64(spell.DefaultCast.CastTime) / hunter.TotalRangedHasteMultiplier())
-			},
 		},
 
-		DamageMultiplier: 1,
-		CritMultiplier:   hunter.DefaultMeleeCritMultiplier(),
-		ThreatMultiplier: 1,
 		BonusCoefficient: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
@@ -358,7 +350,7 @@ func (hunter *Hunter) registerAimedShot() {
 				spell.DealDamage(sim, result)
 			})
 		},
-	})
+	}, true)
 }
 
 func (hunter *Hunter) registerRapidKilling() {

@@ -538,6 +538,7 @@ const (
 	OutcomeSpellNoCrit
 	OutcomeSpellNoMissCanCrit
 	OutcomeRangedCanCrit
+	OutcomeAlwaysHit
 )
 
 type ProcDamageEffect struct {
@@ -572,6 +573,8 @@ func GetOutcome(spell *core.Spell, outcome OutcomeType) core.OutcomeApplier {
 		return spell.OutcomeMagicHit
 	case OutcomeRangedCanCrit:
 		return spell.OutcomeRangedHitAndCrit
+	case OutcomeAlwaysHit:
+		return spell.OutcomeAlwaysHit
 	default:
 		return spell.OutcomeMagicHitAndCrit
 	}
@@ -801,6 +804,7 @@ type SpellRankConfig struct {
 	Coefficient      float64
 	ThreatMultiplier float64
 	FlatThreatBonus  float64
+	CastTimeSeconds  float64 // Optional: specify only if overriding default cast time
 }
 
 type SpellRankMap []SpellRankConfig

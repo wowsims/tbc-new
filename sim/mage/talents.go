@@ -415,16 +415,17 @@ func (mage *Mage) registerPyromaniac() {
 		return
 	}
 
-	percent := 1 * float64(mage.Talents.Pyromaniac)
+	points := float64(mage.Talents.Pyromaniac)
+
 	mage.AddStaticMod(core.SpellModConfig{
 		School:     core.SpellSchoolFire,
-		FloatValue: percent,
+		FloatValue: 1 * points,
 		Kind:       core.SpellMod_BonusCrit_Percent,
 	})
 
 	mage.AddStaticMod(core.SpellModConfig{
 		School:     core.SpellSchoolFire,
-		FloatValue: -percent,
+		FloatValue: -0.01 * points,
 		Kind:       core.SpellMod_PowerCost_Pct,
 	})
 }

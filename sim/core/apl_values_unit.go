@@ -33,7 +33,7 @@ type APLValueUnitDistance struct {
 	unit *Unit
 }
 
-func (rot *APLRotation) newValueUnitDistance(config *proto.APLValueUnitDistance, _ *proto.UUID) APLValue {
+func (rot *APLRotation) newValueUnitDistance(_ *proto.APLValueUnitDistance, _ *proto.UUID) APLValue {
 	return &APLValueUnitDistance{
 		unit: rot.unit,
 	}

@@ -114,6 +114,7 @@ type Warrior struct {
 	MortalStrike                    *core.Spell
 	DevastateSunder                 *core.Spell
 	SweepingStrikesNormalizedAttack *core.Spell
+	SunderArmorDevastate            *core.Spell
 
 	HeroicStrike       *core.Spell
 	Cleave             *core.Spell

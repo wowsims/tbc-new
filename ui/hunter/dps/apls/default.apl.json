@@ -1,0 +1,319 @@
+{
+	"type": "TypeAPL",
+	"prepullActions": [
+		{ "action": { "castSpell": { "spellId": { "spellId": 27044, "rank": 8 } } }, "doAtValue": { "const": { "val": "-20s" } } },
+		{ "action": { "groupReference": { "groupName": "Move to starting range" } }, "doAtValue": { "const": { "val": "-19s" } } }
+	],
+	"priorityList": [
+		{ "action": { "groupReference": { "groupName": "Mana management" } } },
+		{
+			"action": {
+				"condition": { "cmp": { "op": "OpGe", "lhs": { "currentTime": {} }, "rhs": { "const": { "val": "5s" } } } },
+				"autocastOtherCooldowns": {}
+			}
+		},
+		{ "action": { "castSpell": { "spellId": { "spellId": 34026 } } } },
+		{ "action": { "condition": { "variableRef": { "name": "Melee weave" } }, "groupReference": { "groupName": "Weave" } } },
+		{
+			"action": {
+				"condition": { "cmp": { "op": "OpLe", "lhs": { "currentTime": {} }, "rhs": { "const": { "val": "0.5s" } } } },
+				"castSpell": { "spellId": { "spellId": 34120, "rank": 1 } }
+			}
+		},
+		{
+			"action": {
+				"condition": {
+					"and": {
+						"vals": [
+							{ "variableRef": { "name": "Use Multi-Shot" } },
+							{ "variableRef": { "name": "Melee weave" } },
+							{
+								"cmp": {
+									"op": "OpLe",
+									"lhs": { "spellCastTime": { "spellId": { "spellId": 34120, "rank": 1 } } },
+									"rhs": { "variableRef": { "name": "Time until auto with buffer" } }
+								}
+							},
+							{
+								"cmp": {
+									"op": "OpLe",
+									"lhs": { "spellCastTime": { "spellId": { "spellId": 27021, "rank": 6 } } },
+									"rhs": { "variableRef": { "name": "Time until auto with buffer" } }
+								}
+							},
+							{
+								"cmp": {
+									"op": "OpGt",
+									"lhs": { "variableRef": { "name": "Next cycle gap after steady" } },
+									"rhs": { "const": { "val": "0.1s" } }
+								}
+							},
+							{
+								"cmp": {
+									"op": "OpLt",
+									"lhs": { "variableRef": { "name": "Next cycle gap after steady" } },
+									"rhs": { "spellCastTime": { "spellId": { "spellId": 27021, "rank": 6 } } }
+								}
+							}
+						]
+					}
+				},
+				"castSpell": { "spellId": { "spellId": 27021, "rank": 6 } }
+			}
+		},
+		{
+			"action": {
+				"condition": {
+					"and": {
+						"vals": [
+							{ "variableRef": { "name": "Use Arcane Shot" } },
+							{ "variableRef": { "name": "Melee weave" } },
+							{
+								"cmp": {
+									"op": "OpLe",
+									"lhs": { "spellCastTime": { "spellId": { "spellId": 34120, "rank": 1 } } },
+									"rhs": { "variableRef": { "name": "Time until auto with buffer" } }
+								}
+							},
+							{
+								"cmp": {
+									"op": "OpGt",
+									"lhs": { "variableRef": { "name": "Next cycle gap after steady" } },
+									"rhs": { "const": { "val": "0.1s" } }
+								}
+							}
+						]
+					}
+				},
+				"castSpell": { "spellId": { "spellId": 27019, "rank": 9 } }
+			}
+		},
+		{
+			"action": {
+				"condition": {
+					"cmp": {
+						"op": "OpLe",
+						"lhs": { "spellCastTime": { "spellId": { "spellId": 34120, "rank": 1 } } },
+						"rhs": { "variableRef": { "name": "Time until auto with buffer" } }
+					}
+				},
+				"castSpell": { "spellId": { "spellId": 34120, "rank": 1 } }
+			}
+		},
+		{
+			"action": {
+				"condition": {
+					"and": {
+						"vals": [
+							{ "variableRef": { "name": "Use Multi-Shot" } },
+							{
+								"cmp": {
+									"op": "OpLe",
+									"lhs": { "spellCastTime": { "spellId": { "spellId": 27021, "rank": 6 } } },
+									"rhs": { "variableRef": { "name": "Time until auto with buffer" } }
+								}
+							}
+						]
+					}
+				},
+				"castSpell": { "spellId": { "spellId": 27021, "rank": 6 } }
+			}
+		},
+		{ "action": { "condition": { "variableRef": { "name": "Use Arcane Shot" } }, "castSpell": { "spellId": { "spellId": 27019, "rank": 9 } } } }
+	],
+	"groups": [
+		{
+			"name": "Mana management",
+			"actions": [
+				{
+					"hide": true,
+					"action": {
+						"condition": {
+							"and": {
+								"vals": [
+									{ "auraIsInactive": { "auraId": { "spellId": 34074 } } },
+									{
+										"cmp": {
+											"op": "OpLe",
+											"lhs": { "currentManaPercent": {} },
+											"rhs": {
+												"math": {
+													"op": "OpAdd",
+													"lhs": { "variableRef": { "name": "Viper start" } },
+													"rhs": { "const": { "val": "5%" } }
+												}
+											}
+										}
+									}
+								]
+							}
+						},
+						"castSpell": { "spellId": { "itemId": 22832 } }
+					}
+				},
+				{
+					"action": {
+						"condition": {
+							"and": {
+								"vals": [
+									{ "auraIsInactive": { "auraId": { "spellId": 34074 } } },
+									{ "cmp": { "op": "OpLt", "lhs": { "currentManaPercent": {} }, "rhs": { "variableRef": { "name": "Viper start" } } } }
+								]
+							}
+						},
+						"castSpell": { "spellId": { "spellId": 34074 } }
+					}
+				},
+				{
+					"action": {
+						"condition": {
+							"and": {
+								"vals": [
+									{ "auraIsInactive": { "auraId": { "spellId": 27044, "rank": 8 } } },
+									{ "cmp": { "op": "OpGe", "lhs": { "currentManaPercent": {} }, "rhs": { "variableRef": { "name": "Viper stop" } } } }
+								]
+							}
+						},
+						"castSpell": { "spellId": { "spellId": 27044, "rank": 8 } }
+					}
+				}
+			]
+		},
+		{
+			"name": "Weave",
+			"actions": [
+				{
+					"action": {
+						"condition": { "cmp": { "op": "OpGe", "lhs": { "autoTimeSinceLast": { "autoType": "MeleeAuto" } }, "rhs": { "inputDelay": {} } } },
+						"move": { "rangeFromTarget": { "variableRef": { "name": "Starting weave distance" } } }
+					}
+				},
+				{
+					"action": {
+						"condition": {
+							"and": {
+								"vals": [
+									{
+										"cmp": {
+											"op": "OpGe",
+											"lhs": { "autoTimeToNext": { "autoType": "RangedAuto" } },
+											"rhs": { "variableRef": { "name": "Actual time to weave" } }
+										}
+									},
+									{
+										"cmp": {
+											"op": "OpLe",
+											"lhs": { "autoTimeToNext": { "autoType": "MeleeAuto" } },
+											"rhs": { "variableRef": { "name": "Closing time" } }
+										}
+									},
+									{ "not": { "val": { "gcdIsReady": {} } } },
+									{
+										"or": {
+											"vals": [
+												{ "not": { "val": { "variableRef": { "name": "Raptor only" } } } },
+												{
+													"and": {
+														"vals": [
+															{
+																"auraIcdIsReady": {
+																	"auraId": { "spellId": 27014, "tag": 2, "rank": 9 },
+																	"includeReactionTime": true
+																}
+															},
+															{ "cmp": { "op": "OpGe", "lhs": { "currentMana": {} }, "rhs": { "const": { "val": "120" } } } }
+														]
+													}
+												}
+											]
+										}
+									}
+								]
+							}
+						},
+						"move": { "rangeFromTarget": { "variableRef": { "name": "Melee range" } } }
+					}
+				}
+			]
+		},
+		{
+			"name": "Move to starting range",
+			"actions": [
+				{
+					"action": {
+						"condition": { "variableRef": { "name": "Melee weave" } },
+						"move": { "rangeFromTarget": { "variableRef": { "name": "Starting weave distance" } } }
+					}
+				}
+			]
+		}
+	],
+	"valueVariables": [
+		{ "name": "Viper start", "value": { "const": { "val": "10%" } } },
+		{ "name": "Viper stop", "value": { "const": { "val": "30%" } } },
+		{ "name": "Melee weave", "value": { "const": { "val": "true" } } },
+		{ "name": "Raptor only", "value": { "const": { "val": "false" } } },
+		{ "name": "Time to weave", "value": { "const": { "val": "400ms" } } },
+		{ "name": "Use Multi-Shot", "value": { "const": { "val": "true" } } },
+		{ "name": "Use Arcane Shot", "value": { "const": { "val": "true" } } },
+		{ "name": "Melee range", "value": { "const": { "val": "5.00" } } },
+		{
+			"name": "Starting weave distance",
+			"value": {
+				"math": {
+					"op": "OpAdd",
+					"lhs": { "math": { "op": "OpMul", "lhs": { "variableRef": { "name": "Closing time" } }, "rhs": { "const": { "val": "7" } } } },
+					"rhs": { "variableRef": { "name": "Melee range" } }
+				}
+			}
+		},
+		{
+			"name": "Closing time",
+			"value": {
+				"math": {
+					"op": "OpDiv",
+					"lhs": { "math": { "op": "OpSub", "lhs": { "variableRef": { "name": "Actual time to weave" } }, "rhs": { "inputDelay": {} } } },
+					"rhs": { "const": { "val": "2s" } }
+				}
+			}
+		},
+		{
+			"name": "Buffer",
+			"value": {
+				"min": {
+					"vals": [
+						{ "const": { "val": "0.3s" } },
+						{ "math": { "op": "OpMul", "lhs": { "autoSwingTime": { "autoType": "Ranged" } }, "rhs": { "const": { "val": "0.15" } } } }
+					]
+				}
+			}
+		},
+		{
+			"name": "Time until auto with buffer",
+			"value": { "math": { "op": "OpAdd", "lhs": { "autoTimeToNext": { "autoType": "RangedAuto" } }, "rhs": { "variableRef": { "name": "Buffer" } } } }
+		},
+		{
+			"name": "Next cycle gap after steady",
+			"value": {
+				"math": {
+					"op": "OpSub",
+					"lhs": {
+						"math": {
+							"op": "OpAdd",
+							"lhs": {
+								"math": {
+									"op": "OpSub",
+									"lhs": { "autoTimeToNext": { "autoType": "RangedAuto" } },
+									"rhs": { "spellCastTime": { "spellId": { "spellId": 34120, "rank": 1 } } }
+								}
+							},
+							"rhs": { "autoSwingTime": { "autoType": "Ranged" } }
+						}
+					},
+					"rhs": { "const": { "val": "1.5s" } }
+				}
+			}
+		},
+		{ "name": "Actual time to weave", "value": { "max": { "vals": [{ "variableRef": { "name": "Time to weave" } }, { "const": { "val": "101ms" } }] } } }
+	]
+}

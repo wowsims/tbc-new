@@ -163,9 +163,7 @@ const fullTypeToSpec: Record<string, Spec> = {
 	PaladinJusticar: Spec.SpecProtectionPaladin,
 	PaladinProtection: Spec.SpecProtectionPaladin,
 	PaladinRetribution: Spec.SpecRetributionPaladin,
-	PriestHoly: Spec.SpecHolyPriest,
-	PriestDiscipline: Spec.SpecDisciplinePriest,
-	PriestShadow: Spec.SpecShadowPriest,
+	Priest: Spec.SpecPriest, //CHECKTHIS
 	// 'PriestSmite': Spec.SpecSmitePriest,
 	// RogueAssassination: Spec.SpecAssassinationRogue,
 	// RogueCombat: Spec.SpecCombatRogue,

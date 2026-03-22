@@ -1,6 +1,6 @@
 import { InputConfig } from '../individual_sim_ui';
 import { Player } from '../player.js';
-import { Spec, TristateEffect } from '../proto/common.js';
+import { PartyBuffs, Spec, TristateEffect } from '../proto/common.js';
 import { ActionId } from '../proto_utils/action_id.js';
 import { ClassOptions, SpecOptions, SpecRotation } from '../proto_utils/utils.js';
 import { EventID, TypedEvent } from '../typed_event.js';
@@ -439,13 +439,14 @@ function makeWrappedIconInput<SpecType extends Spec, ModObject, T>(
 		states: config.states,
 		changedEvent: (player: Player<SpecType>) => config.changedEvent(getModObject(player)),
 		showWhen: (player: Player<SpecType>) => !config.showWhen || (config.showWhen(getModObject(player)) as any),
+		enableWhen: (player: Player<SpecType>) => !config.enableWhen || (config.enableWhen(getModObject(player)) as any),
 		getValue: (player: Player<SpecType>) => config.getValue(getModObject(player)),
 		setValue: (eventID: EventID, player: Player<SpecType>, newValue: T) => config.setValue(eventID, getModObject(player), newValue),
 		extraCssClasses: config.extraCssClasses,
 	};
 }
 
-interface WrappedTypedInputConfig<Message, ModObject, T> extends Pick<IconPickerConfig<ModObject, T>, 'label' | 'labelTooltip'> {
+export interface WrappedTypedInputConfig<Message, ModObject, T> extends Pick<IconPickerConfig<ModObject, T>, 'label' | 'labelTooltip'> {
 	getModObject: (player: Player<any>) => ModObject;
 	getValue: (modObj: ModObject) => Message;
 	setValue: (eventID: EventID, modObj: ModObject, messageVal: Message) => void;
@@ -453,6 +454,7 @@ interface WrappedTypedInputConfig<Message, ModObject, T> extends Pick<IconPicker
 	extraCssClasses?: Array<string>;
 
 	showWhen?: (obj: ModObject) => boolean;
+	enableWhen?: (obj: ModObject) => boolean;
 	getFieldValue?: (modObj: ModObject) => T;
 	setFieldValue?: (eventID: EventID, modObj: ModObject, newValue: T) => void;
 }
@@ -471,6 +473,7 @@ export function makeBooleanIconInput<SpecType extends Spec, Message, ModObject>(
 		states: 2,
 		changedEvent: config.changeEmitter,
 		showWhen: config.showWhen,
+		enableWhen: config.enableWhen,
 		getValue:
 			config.getFieldValue ||
 			((modObj: ModObject) =>
@@ -556,6 +559,8 @@ function makeNumberIconInput<SpecType extends Spec, Message, ModObject>(
 		labelTooltip: config.labelTooltip,
 		states: 0, // Must be assigned externally.
 		changedEvent: config.changeEmitter,
+		showWhen: config.showWhen,
+		enableWhen: config.enableWhen,
 		getValue: (modObj: ModObject) => {
 			const value = config.getValue(modObj);
 			const fieldNameValue = value[fieldName];
@@ -729,5 +734,30 @@ export function makeRotationEnumIconInput<SpecType extends Spec, T>(
 			}),
 		changedEvent: config.changeEmitter || ((player: Player<SpecType>) => player.rotationChangeEmitter),
 		extraCssClasses: config.extraCssClasses,
+	});
+}
+
+export function makePartyBuffEnumIconInput<SpecType extends Spec, T>(
+	config: PlayerEnumIconInputConfig<SpecType, PartyBuffs, T>,
+): TypedIconEnumPickerConfig<Player<SpecType>, T> {
+	return makeWrappedEnumIconInput<SpecType, Player<SpecType>, T>({
+		numColumns: config.numColumns || 1,
+		values: config.values,
+		equals: (a: T, b: T) => a == b,
+		showWhen: config.showWhen,
+		zeroValue: 0 as unknown as T,
+		getModObject: (player: Player<SpecType>) => player,
+		getValue: config.getValue || ((player: Player<SpecType>) => player.getParty()?.getBuffs()[config.fieldName] as unknown as T),
+		setValue:
+			config.setValue ||
+			((eventID: EventID, player: Player<SpecType>, newVal: T) => {
+				const newMessage = player.getParty()?.getBuffs() || PartyBuffs.create();
+				(newMessage[config.fieldName] as unknown as T) = newVal;
+				player.getParty()?.setBuffs(eventID, newMessage);
+			}),
+		changedEvent: config.changeEmitter || ((player: Player<SpecType>) => player.getParty()!.buffsChangeEmitter),
+		extraCssClasses: config.extraCssClasses,
+		label: config.label,
+		labelTooltip: config.labelTooltip,
 	});
 }

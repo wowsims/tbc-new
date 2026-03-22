@@ -35,6 +35,26 @@ var ItemSetBoldArmor = core.NewItemSet(core.ItemSet{
 	},
 })
 
+// PVP - PvP Rare Set 2
+var ItemSetOathboundsSavagePlateBattlegear = core.NewItemSet(core.ItemSet{
+	ID:   2014,
+	Name: "Oathbound's Savage Plate Battlegear",
+	Bonuses: map[int32]core.ApplySetBonus{
+		2: func(agent core.Agent, setBonusAura *core.Aura) {
+			setBonusAura.
+				AttachStatBuff(stats.ResilienceRating, 35)
+		},
+		4: func(agent core.Agent, setBonusAura *core.Aura) {
+			setBonusAura.
+				AttachSpellMod(core.SpellModConfig{
+					ClassMask: SpellMaskIntercept,
+					Kind:      core.SpellMod_Cooldown_Flat,
+					TimeValue: -3 * time.Second,
+				})
+		},
+	},
+})
+
 // T4 - DPS
 var ItemSetWarbringerBattlegear = core.NewItemSet(core.ItemSet{
 	Name: "Warbringer Battlegear",
@@ -158,7 +178,7 @@ var ItemSetDestroyerBattlegear = core.NewItemSet(core.ItemSet{
 						aura.Activate(sim)
 					},
 				}).
-				ExposeToAPL(actionID.SpellID)
+				ExposeToAPL(37528)
 		},
 		4: func(agent core.Agent, setBonusAura *core.Aura) {
 			setBonusAura.

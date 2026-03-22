@@ -161,10 +161,11 @@ export class PresetConfigurationPicker extends Component {
 			if (talents) {
 				simUI.player.setTalentsString(eventID, talents.data.talentsString);
 			}
-			if (rotationType) {
+			if (rotationType && !rotation?.rotation.rotation) {
 				simUI.player.aplRotation.type = rotationType;
 				simUI.player.rotationChangeEmitter.emit(eventID);
 			} else if (rotation?.rotation.rotation) {
+				if (rotationType) simUI.player.aplRotation.type = rotationType;
 				simUI.player.setAplRotation(eventID, rotation.rotation.rotation);
 			}
 			if (epWeights) simUI.player.setEpWeights(eventID, epWeights.epWeights);
@@ -239,7 +240,9 @@ export class PresetConfigurationPicker extends Component {
 			hasRotation = isEqualAPLRotation(this.simUI.player, activeRotation, rotation.rotation.rotation);
 		}
 		const hasEpWeights = epWeights ? this.simUI.player.getEpWeights().equals(epWeights.epWeights) : true;
-		const hasEncounter = encounter?.encounter ? Encounter.equals(encounter.encounter, this.simUI.sim.encounter.toProto()) : true;
+		const hasEncounter = encounter?.encounter
+			? Encounter.equals({ ...encounter.encounter, apiVersion: 0 }, { ...this.simUI.sim.encounter.toProto(), apiVersion: 0 })
+			: true;
 		const hasHealingModel = encounter?.healingModel ? HealingModel.equals(encounter.healingModel, this.simUI.player.getHealingModel()) : true;
 
 		const hasRace = settings?.race ? this.simUI.player.getRace() === settings.race : true;
@@ -253,7 +256,7 @@ export class PresetConfigurationPicker extends Component {
 			this.simUI.player.itemSwapSettings.getEnableItemSwap() === settings.playerOptions.enableItemSwap;
 		const hasItemSwap =
 			settings?.playerOptions?.itemSwap === undefined ||
-			ItemSwap.equals(this.simUI.player.itemSwapSettings?.toProto(), settings?.playerOptions?.itemSwap);
+			ItemSwap.equals(stripItemSwapApiVersion(this.simUI.player.itemSwapSettings?.toProto()), stripItemSwapApiVersion(settings?.playerOptions?.itemSwap));
 		const hasSpecOptions = settings?.specOptions ? JSON.stringify(this.simUI.player.getSpecOptions()) == JSON.stringify(settings.specOptions) : true;
 		const hasConsumables = settings?.consumables ? ConsumesSpec.equals(this.simUI.player.getConsumes(), settings.consumables) : true;
 		const hasPartyBuffs = settings?.partyBuffs ? PartyBuffs.equals(this.simUI.player.getParty()?.getBuffs(), settings.partyBuffs) : true;
@@ -282,4 +285,13 @@ export class PresetConfigurationPicker extends Component {
 			hasDebuffs
 		);
 	}
+}
+
+/** Strips apiVersion from an ItemSwap and its nested UnitStats so preset comparisons aren't version-sensitive. */
+function stripItemSwapApiVersion(swap: ItemSwap | undefined): ItemSwap | undefined {
+	if (!swap) return swap;
+	return {
+		...swap,
+		prepullBonusStats: swap.prepullBonusStats ? { ...swap.prepullBonusStats, apiVersion: 0 } : swap.prepullBonusStats,
+	};
 }

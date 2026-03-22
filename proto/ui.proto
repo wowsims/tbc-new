@@ -345,6 +345,8 @@ message ReforgeSettings {
 	UnitStats stat_caps = 5;
 	UnitStats breakpoint_limits = 6;
 	int32 max_gem_phase = 7;
+	ItemQuality max_gem_quality = 8;
+	bool disable_unique_gems = 9;
 }
 
 message StatCapConfig {

@@ -1,5 +1,19 @@
 import { LaunchStatus } from '../core/launched_sims';
-import { ArmorType, Class, MobType, PseudoStat, Race, Profession, Spec, Stat, SpellSchool, WeaponType, RangedWeaponType, ItemSlot } from '../core/proto/common';
+import {
+	ArmorType,
+	Class,
+	MobType,
+	PseudoStat,
+	Race,
+	Profession,
+	Spec,
+	Stat,
+	SpellSchool,
+	WeaponType,
+	RangedWeaponType,
+	ItemSlot,
+	ItemQuality,
+} from '../core/proto/common';
 import { ResourceType } from '../core/proto/spell';
 import { RaidFilterOption, SourceFilterOption } from '../core/proto/ui';
 import { BulkSimItemSlot } from '../core/components/individual_sim_ui/bulk/utils';
@@ -129,7 +143,7 @@ export const pseudoStatI18nKeys: Record<PseudoStat, string> = {
 	[PseudoStat.PseudoStatSchoolHitPercentShadow]: 'shadow_hit',
 	[PseudoStat.PseudoStatBlockValuePerStrength]: 'block_per_strength',
 	[PseudoStat.PseudoStatRangedHitPercent]: 'ranged_hit',
-	[PseudoStat.PseudoStatRangedCritPercent]: 'ranged_crit'
+	[PseudoStat.PseudoStatRangedCritPercent]: 'ranged_crit',
 };
 
 export const spellSchoolI18nKeys: Record<SpellSchool, string> = {
@@ -178,6 +192,17 @@ export const resourceTypeI18nKeys: Record<ResourceType, string> = {
 	[ResourceType.ResourceTypeGenericResource]: 'generic_resource',
 };
 
+export const itemQualityI18nKeys: Record<ItemQuality, string> = {
+	[ItemQuality.ItemQualityJunk]: 'junk',
+	[ItemQuality.ItemQualityCommon]: 'common',
+	[ItemQuality.ItemQualityUncommon]: 'uncommon',
+	[ItemQuality.ItemQualityRare]: 'rare',
+	[ItemQuality.ItemQualityEpic]: 'epic',
+	[ItemQuality.ItemQualityLegendary]: 'legendary',
+	[ItemQuality.ItemQualityArtifact]: 'artifact',
+	[ItemQuality.ItemQualityHeirloom]: 'heirloom',
+};
+
 // standardize keys regardless they are from backend or frontend
 export const backendMetricI18nKeys: Record<string, string> = {
 	'Chance of Death': 'cod',
@@ -207,9 +232,7 @@ export const specI18nKeys: Record<Spec, string> = {
 	[Spec.SpecProtectionPaladin]: 'protection',
 	[Spec.SpecRetributionPaladin]: 'retribution',
 	// Priest
-	[Spec.SpecDisciplinePriest]: 'discipline',
-	[Spec.SpecHolyPriest]: 'holy',
-	[Spec.SpecShadowPriest]: 'shadow',
+	[Spec.SpecPriest]: 'priest',
 	// Rogue
 	[Spec.SpecRogue]: 'rogue',
 	// Shaman

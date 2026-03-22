@@ -46,13 +46,11 @@ func (shaman *Shaman) applyDualWieldSpecialization() {
 		return
 	}
 	DWaura := shaman.RegisterAura(core.Aura{
-		Label:    "Dual Wield Specialization",
-		ActionID: core.ActionID{SpellID: 30819},
-	}).AttachSpellMod(core.SpellModConfig{
-		ProcMask:   core.ProcMaskMeleeOrRanged,
-		Kind:       core.SpellMod_BonusHit_Percent,
-		FloatValue: 2 * float64(shaman.Talents.DualWieldSpecialization),
-	})
+		Label:      "Dual Wield Specialization",
+		ActionID:   core.ActionID{SpellID: 30819},
+		BuildPhase: core.CharacterBuildPhaseTalents,
+	}).AttachStatBuff(stats.PhysicalHitPercent, 2*float64(shaman.Talents.DualWieldSpecialization))
+
 	if shaman.AutoAttacks.IsDualWielding {
 		core.MakePermanent(DWaura)
 	}
@@ -142,6 +140,7 @@ func (shaman *Shaman) applyImprovedLightningShield() {
 	shaman.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
 		FloatValue: 0.05 * float64(shaman.Talents.ImprovedLightningShield),
+		ClassMask:  SpellMaskLightningShield,
 	})
 }
 

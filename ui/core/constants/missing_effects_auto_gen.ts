@@ -2040,12 +2040,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		30450, // Warp-Spring Coil
-		[
-			"Your special attacks have a chance to give you 1000 armor penetration for 15s.", // 37174 - https://www.wowhead.com/tbc/spell=37174
-		]
-	],
-	[
 		30487, // Merciless Gladiator's Plate Gauntlets
 		[
 			"Hamstring Rage cost reduced by -3.0.", // 22778 - https://www.wowhead.com/tbc/spell=22778
@@ -2787,12 +2781,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		33953, // Vengeful Gladiator's Totem of Survival
 		[
 			"Your Earth Shock, Flame Shock, and Frost Shock abilities also grant you 34 resilience rating for 6s.", // 43862 - https://www.wowhead.com/tbc/spell=43862
-		]
-	],
-	[
-		34429, // Shifting Naaru Sliver
-		[
-			"Conjures a Power Circle lasting for 15s. While standing in this circle, the caster gains up to 320 spell damage and healing.", // 45042 - https://www.wowhead.com/tbc/spell=45042
 		]
 	],
 	[

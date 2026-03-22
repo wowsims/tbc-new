@@ -85,10 +85,14 @@ func (hp *HunterPet) ApplyTalents() {
 	core.MakePermanent(hp.RegisterAura(core.Aura{
 		Label:    "Cobra Reflexes",
 		ActionID: core.ActionID{SpellID: 25076},
+		OnGain: func(aura *core.Aura, sim *core.Simulation) {
+			hp.AutoAttacks.MHAuto().DamageMultiplier *= 0.85
+		},
+		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
+			hp.AutoAttacks.MHAuto().DamageMultiplier /= 0.85
+		},
 	}).AttachMultiplicativePseudoStatBuff(
 		&hp.PseudoStats.MeleeSpeedMultiplier, 1.3,
-	).AttachMultiplicativePseudoStatBuff(
-		&hp.AutoAttacks.MHAuto().DamageMultiplier, 0.85,
 	))
 }
 

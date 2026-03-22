@@ -74,7 +74,6 @@ func RegisterAllOnUseCds() {
 	// shared.NewSimpleStatActive(32539) // Skyguard's Drape - https://www.wowhead.com/tbc/spell=12438
 	// shared.NewSimpleStatActive(33808) // The Horseman's Helm - https://www.wowhead.com/tbc/spell=43873
 	// shared.NewSimpleStatActive(33820) // Weather-Beaten Fishing Hat - https://www.wowhead.com/tbc/spell=43699
-	// shared.NewSimpleStatActive(34429) // Shifting Naaru Sliver - https://www.wowhead.com/tbc/spell=45042
 	// shared.NewSimpleStatActive(34430) // Glimmering Naaru Sliver - https://www.wowhead.com/tbc/spell=45052
 	// shared.NewSimpleStatActive(34471) // Vial of the Sunwell - https://www.wowhead.com/tbc/spell=45064
 	// shared.NewSimpleStatActive(35275) // Orb of the Sin'dorei - https://www.wowhead.com/tbc/spell=46354
@@ -184,9 +183,6 @@ func RegisterAllOnUseCds() {
 	// Health / Strength
 	shared.NewSimpleStatActive(28484) // Bulwark of Kings - https://www.wowhead.com/tbc/spell=34511
 	shared.NewSimpleStatActive(28485) // Bulwark of the Ancient Kings - https://www.wowhead.com/tbc/spell=34511
-
-	// MeleeCritRating
-	shared.NewSimpleStatActive(24114) // Braided Eternium Chain - https://www.wowhead.com/tbc/spell=31025
 
 	// MeleeHasteRating
 	shared.NewSimpleStatActive(22954) // Kiss of the Spider - https://www.wowhead.com/tbc/spell=28866

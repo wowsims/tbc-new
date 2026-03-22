@@ -6,7 +6,7 @@ import (
 
 func (warlock *Warlock) registerCurseOfElements() {
 	warlock.CurseOfElementsAuras = warlock.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {
-		return core.CurseOfElementsAura(target, warlock.Talents.Malediction)
+		return core.CurseOfElementsAura(target, 1, warlock.Talents.Malediction)
 	})
 	warlock.CurseOfElements = warlock.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 27228},

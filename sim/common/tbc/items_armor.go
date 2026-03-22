@@ -35,4 +35,22 @@ func init() {
 
 		character.ItemSwap.RegisterProc(32375, procAura)
 	})
+
+	// Eye of the Night
+	core.NewItemEffect(24116, func(agent core.Agent) {
+		character := agent.GetCharacter()
+		core.EyeOfTheNightAura(character)
+	})
+
+	// Chain of the Twilight Owl
+	core.NewItemEffect(24121, func(agent core.Agent) {
+		character := agent.GetCharacter()
+		core.ChainOfTheTwilightOwlAura(character)
+	})
+
+	// Braided Eternium Chain
+	core.NewItemEffect(24114, func(agent core.Agent) {
+		character := agent.GetCharacter()
+		core.BraidedEterniumChainAura(character)
+	})
 }

@@ -12,7 +12,20 @@
 		{ "action": { "autocastOtherCooldowns": {} } },
 		{
 			"action": {
-				"condition": { "cmp": { "op": "OpGe", "lhs": { "currentManaPercent": {} }, "rhs": { "const": { "val": "30%" } } } },
+				"condition": {
+					"and": {
+						"vals": [
+							{ "cmp": { "op": "OpGe", "lhs": { "currentManaPercent": {} }, "rhs": { "const": { "val": "30%" } } } },
+							{
+								"cmp": {
+									"op": "OpGe",
+									"lhs": { "spellCastTime": { "spellId": { "spellId": 25442, "rank": 6 } } },
+									"rhs": { "const": { "val": "1s" } }
+								}
+							}
+						]
+					}
+				},
 				"castSpell": { "spellId": { "spellId": 25442 } }
 			}
 		},
@@ -31,7 +44,7 @@
 									{
 										"cmp": {
 											"op": "OpLe",
-											"lhs": { "auraRemainingTime": { "auraId": { "spellId": 25528 } } },
+											"lhs": { "totemRemainingTime": { "totemType": "Earth", "includeReactionTime": true } },
 											"rhs": { "const": { "val": "5s" } }
 										}
 									},
@@ -51,7 +64,7 @@
 									{
 										"cmp": {
 											"op": "OpLe",
-											"lhs": { "auraRemainingTime": { "auraId": { "spellId": 25570 } } },
+											"lhs": { "totemRemainingTime": { "totemType": "Water", "includeReactionTime": true } },
 											"rhs": { "const": { "val": "5s" } }
 										}
 									}
@@ -69,7 +82,7 @@
 									{
 										"cmp": {
 											"op": "OpLe",
-											"lhs": { "auraRemainingTime": { "auraId": { "spellId": 30706, "rank": 1 } } },
+											"lhs": { "totemRemainingTime": { "totemType": "Fire", "includeReactionTime": true } },
 											"rhs": { "const": { "val": "5s" } }
 										}
 									},
@@ -85,27 +98,17 @@
 						"condition": {
 							"cmp": {
 								"op": "OpLe",
-								"lhs": { "auraRemainingTime": { "auraId": { "spellId": 3738, "rank": 1 } } },
+								"lhs": { "totemRemainingTime": { "totemType": "Air", "includeReactionTime": true } },
 								"rhs": { "const": { "val": "5s" } }
 							}
 						},
 						"castSpell": { "spellId": { "spellId": 3738, "rank": 1 } }
 					}
 				},
+				{ "action": { "condition": { "variableRef": { "name": "Use Earth Elemental" } }, "castSpell": { "spellId": { "spellId": 2062, "rank": 1 } } } },
 				{
-					"hide": true,
 					"action": {
-						"strictSequence": {
-							"actions": [
-								{ "castAllStatBuffCooldowns": { "statType1": 5, "statType2": -1, "statType3": -1 } },
-								{ "castSpell": { "spellId": { "spellId": 2062, "rank": 1 } } }
-							]
-						}
-					}
-				},
-				{
-					"hide": true,
-					"action": {
+						"condition": { "variableRef": { "name": "Use Fire Elemental" } },
 						"strictSequence": {
 							"actions": [
 								{ "castAllStatBuffCooldowns": { "statType1": 5, "statType2": -1, "statType3": -1 } },
@@ -116,5 +119,9 @@
 				}
 			]
 		}
+	],
+	"valueVariables": [
+		{ "name": "Use Earth Elemental", "value": { "const": { "val": "false" } } },
+		{ "name": "Use Fire Elemental", "value": { "const": { "val": "false" } } }
 	]
 }

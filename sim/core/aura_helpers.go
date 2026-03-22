@@ -24,6 +24,7 @@ const (
 	CallbackOnPeriodicHealDealt
 	CallbackOnCastComplete
 	CallbackOnApplyEffects
+	CallbackOnPeriodicDamageTaken
 
 	CallbackLast
 )
@@ -217,6 +218,9 @@ func (procAura *Aura) AttachProcTriggerCallback(unit *Unit, config ProcTrigger) 
 			applyHandler(sim, spell, emptyResult)
 		}
 	}
+	if config.Callback.Matches(CallbackOnPeriodicDamageTaken) {
+		procAura.OnPeriodicDamageTaken = callback
+	}
 }
 
 func (unit *Unit) MakeProcTriggerAura(config ProcTrigger) *Aura {
@@ -302,11 +306,13 @@ func MakePermanent(aura *Aura) *Aura {
 	aura.Duration = NeverExpires
 	if aura.OnReset == nil {
 		aura.OnReset = func(aura *Aura, sim *Simulation) {
+			aura.Duration = NeverExpires
 			aura.Activate(sim)
 		}
 	} else {
 		oldOnReset := aura.OnReset
 		aura.OnReset = func(aura *Aura, sim *Simulation) {
+			aura.Duration = NeverExpires
 			oldOnReset(aura, sim)
 			aura.Activate(sim)
 		}

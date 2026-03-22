@@ -3,12 +3,13 @@ import * as other_inputs from '../../core/components/inputs/other_inputs';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui';
 import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
-import { APLRotation } from '../../core/proto/apl';
-import { Faction, HandType, ItemSlot, PseudoStat, Race, Spec, Stat } from '../../core/proto/common';
+import { APLRotation, APLRotation_Type, APLValueVariable, SimpleRotation } from '../../core/proto/apl';
+import { Cooldowns, Faction, HandType, ItemSlot, PseudoStat, Race, RotationType, Spec, Stat } from '../../core/proto/common';
 import { StatCapType } from '../../core/proto/ui';
 import { StatCap, UnitStat } from '../../core/proto_utils/stats';
 import * as HunterInputs from './inputs';
 import * as Presets from './presets';
+import { SpecRotation } from 'ui/core/proto_utils/utils';
 
 const SPEC_CONFIG = registerSpecConfig(Spec.SpecHunter, {
 	cssClass: 'hunter-sim-ui',
@@ -70,6 +71,8 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecHunter, {
 				postCapEPs: [0],
 			}),
 		],
+		rotationType: APLRotation_Type.TypeSimple,
+		simpleRotation: Presets.WeaveRotation,
 		other: Presets.OtherDefaults,
 		// Default consumes settings.
 		consumables: Presets.DefaultConsumables,
@@ -89,6 +92,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecHunter, {
 	// Buff and Debuff inputs to include/exclude, overriding the EP-based defaults.
 	includeBuffDebuffInputs: [Stat.StatSpirit, Stat.StatSpellCritRating],
 	excludeBuffDebuffInputs: [],
+	rotationInputs: HunterInputs.RotationInputs,
 	// Inputs to include in the 'Other' section on the settings tab.
 	otherInputs: {
 		inputs: [
@@ -110,7 +114,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecHunter, {
 		// Preset talents that the user can quickly select.
 		talents: [Presets.BMTalents, Presets.SVTalents],
 		// Preset rotations that the user can quickly select.
-		rotations: [Presets.WEAVE_APL, Presets.TURRET_APL],
+		rotations: [Presets.WeaveSimple, Presets.TurretSimple, Presets.DefaultRotation],
 		// Preset gear configurations that the user can quickly select.
 		builds: [
 			Presets.P1_PRESET_BUILD_PRE_RAID,
@@ -133,34 +137,86 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecHunter, {
 	},
 
 	autoRotation: (player: Player<Spec.SpecHunter>): APLRotation => {
+		const rotation = APLRotation.clone(Presets.DefaultRotation.rotation.rotation!);
 		const gear = player.getGear();
 		const mainHandType = gear.getEquippedItem(ItemSlot.ItemSlotMainHand)?.item.handType;
-		return mainHandType == HandType.HandTypeTwoHand ? Presets.WEAVE_APL.rotation.rotation! : Presets.TURRET_APL.rotation.rotation!;
+		if (mainHandType !== HandType.HandTypeTwoHand) {
+			rotation.valueVariables[2] = APLValueVariable.fromJson({
+				name: 'Melee weave',
+				value: { const: { val: 'false' } },
+			});
+		}
+		return rotation;
 	},
 
-	raidSimPresets: [
-		{
-			spec: Spec.SpecHunter,
-			talents: Presets.BMTalents.data,
-			specOptions: Presets.DefaultOptions,
-			consumables: Presets.DefaultConsumables,
-			defaultFactionRaces: {
-				[Faction.Unknown]: Race.RaceUnknown,
-				[Faction.Alliance]: Race.RaceNightElf,
-				[Faction.Horde]: Race.RaceOrc,
-			},
-			defaultGear: {
-				[Faction.Unknown]: {},
-				[Faction.Alliance]: {
-					1: Presets.P1_BM_2H_6P_GEARSET.gear,
-				},
-				[Faction.Horde]: {
-					1: Presets.P1_BM_2H_6P_GEARSET.gear,
-				},
-			},
-			otherDefaults: Presets.OtherDefaults,
-		},
-	],
+	simpleRotation: (player: Player<Spec.SpecHunter>, simple: SpecRotation<Spec.SpecHunter>, cooldowns: Cooldowns): APLRotation => {
+		const rotation = APLRotation.clone(Presets.DefaultRotation.rotation.rotation!);
+
+		const {
+			viperStartManaPercent = 0.1,
+			viperStopManaPercent = 0.3,
+			meleeWeave = player.getEquippedItem(ItemSlot.ItemSlotMainHand)?.item.handType === HandType.HandTypeTwoHand,
+			weaveOnlyRaptor = false,
+			useMulti = true,
+			useArcane = true,
+			timeToWeave = 400,
+		} = simple;
+
+		const viperStartManaPercentValue = APLValueVariable.fromJson({
+			name: 'Viper start',
+			value: { const: { val: `${viperStartManaPercent * 100}%` } },
+		});
+
+		const viperStopManaPercentValue = APLValueVariable.fromJson({
+			name: 'Viper stop',
+			value: { const: { val: `${viperStopManaPercent * 100}%` } },
+		});
+
+		const meleeWeaveValue = APLValueVariable.fromJson({
+			name: 'Melee weave',
+			value: { const: { val: String(meleeWeave) } },
+		});
+
+		const weaveOnlyRaptorValue = APLValueVariable.fromJson({
+			name: 'Raptor only',
+			value: { const: { val: String(weaveOnlyRaptor) } },
+		});
+
+		const useMultiValue = APLValueVariable.fromJson({
+			name: 'Use Multi-Shot',
+			value: { const: { val: String(useMulti) } },
+		});
+
+		const useArcaneValue = APLValueVariable.fromJson({
+			name: 'Use Arcane Shot',
+			value: { const: { val: String(useArcane) } },
+		});
+
+		const timeToWeaveValue = APLValueVariable.fromJson({
+			name: 'Time to weave',
+			value: { const: { val: `${timeToWeave}ms` } },
+		});
+
+		rotation.valueVariables[0] = viperStartManaPercentValue;
+		rotation.valueVariables[1] = viperStopManaPercentValue;
+		rotation.valueVariables[2] = meleeWeaveValue;
+		rotation.valueVariables[3] = weaveOnlyRaptorValue;
+		rotation.valueVariables[4] = timeToWeaveValue;
+		rotation.valueVariables[5] = useMultiValue;
+		rotation.valueVariables[6] = useArcaneValue;
+
+		return APLRotation.create({
+			simple: SimpleRotation.create({
+				cooldowns: Cooldowns.create(),
+			}),
+			prepullActions: rotation.prepullActions,
+			priorityList: rotation.priorityList,
+			groups: rotation.groups,
+			valueVariables: rotation.valueVariables,
+		});
+	},
+
+	raidSimPresets: [],
 });
 
 export class HunterSimUI extends IndividualSimUI<Spec.SpecHunter> {

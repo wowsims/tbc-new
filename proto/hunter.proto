@@ -132,6 +132,7 @@ message Hunter {
 
 		bool melee_weave = 1;
 		bool weave_only_raptor = 2;
+		int32 time_to_weave = 8;
 		bool use_multi = 3;
 		bool use_arcane = 4;
 

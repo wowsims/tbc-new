@@ -34,6 +34,7 @@ interface BooleanInputConfig<T> {
 	label?: string;
 	faction?: Faction;
 	showWhen?: (player: Player<any>) => boolean;
+	enableWhen?: (player: Player<any>) => boolean;
 }
 
 export function makeBooleanRaidBuffInput<SpecType extends Spec>(
@@ -46,6 +47,7 @@ export function makeBooleanRaidBuffInput<SpecType extends Spec>(
 			getValue: (player: Player<SpecType>) => player.getRaid()!.getBuffs(),
 			setValue: (eventID: EventID, player: Player<SpecType>, newVal: RaidBuffs) => player.getRaid()!.setBuffs(eventID, newVal),
 			changeEmitter: (player: Player<SpecType>) => TypedEvent.onAny([player.getRaid()!.buffsChangeEmitter, player.raceChangeEmitter]),
+			enableWhen: config.enableWhen,
 			label: config.label,
 		},
 		config.actionId,
@@ -101,6 +103,7 @@ export function makeBooleanIndividualBuffInput<SpecType extends Spec>(
 			getValue: (player: Player<SpecType>) => player.getBuffs(),
 			setValue: (eventID: EventID, player: Player<SpecType>, newVal: IndividualBuffs) => player.setBuffs(eventID, newVal),
 			changeEmitter: (player: Player<SpecType>) => TypedEvent.onAny([player.buffsChangeEmitter, player.raceChangeEmitter]),
+			enableWhen: config.enableWhen,
 			label: config.label,
 		},
 		config.actionId,
@@ -118,6 +121,7 @@ export function makeBooleanConsumeInput<SpecType extends Spec>(
 			getValue: (player: Player<SpecType>) => player.getConsumes(),
 			setValue: (eventID: EventID, player: Player<SpecType>, newVal: ConsumesSpec) => player.setConsumes(eventID, newVal),
 			changeEmitter: (player: Player<SpecType>) => TypedEvent.onAny([player.consumesChangeEmitter, player.professionChangeEmitter]),
+			enableWhen: config.enableWhen,
 			showWhen: (player: Player<SpecType>) => !config.showWhen || config.showWhen(player),
 		},
 		config.actionId,
@@ -133,7 +137,8 @@ export function makeBooleanDebuffInput<SpecType extends Spec>(
 			getModObject: (player: Player<SpecType>) => player,
 			getValue: (player: Player<SpecType>) => player.getRaid()!.getDebuffs(),
 			setValue: (eventID: EventID, player: Player<SpecType>, newVal: Debuffs) => player.getRaid()!.setDebuffs(eventID, newVal),
-			changeEmitter: (player: Player<SpecType>) => TypedEvent.onAny([player.getRaid()!.debuffsChangeEmitter]),
+			changeEmitter: (player: Player<SpecType>) => TypedEvent.onAny([player.specOptionsChangeEmitter, player.getRaid()!.debuffsChangeEmitter]),
+			enableWhen: config.enableWhen,
 			label: config.label,
 		},
 		config.actionId,
@@ -142,16 +147,17 @@ export function makeBooleanDebuffInput<SpecType extends Spec>(
 	);
 }
 
-interface TristateInputConfig<T> {
+interface TristateInputConfig<T, ModObject> {
 	actionId: () => ActionId;
 	impId: ActionId;
 	fieldName: keyof T;
 	faction?: Faction;
 	label?: string;
+	enableWhen?: (obj: ModObject) => boolean;
 }
 
 export function makeTristateRaidBuffInput<SpecType extends Spec>(
-	config: TristateInputConfig<RaidBuffs>,
+	config: TristateInputConfig<RaidBuffs, Player<SpecType>>,
 ): InputHelpers.TypedIconPickerConfig<Player<SpecType>, number> {
 	return InputHelpers.makeTristateIconInput<any, RaidBuffs, Player<SpecType>>(
 		{
@@ -169,7 +175,7 @@ export function makeTristateRaidBuffInput<SpecType extends Spec>(
 }
 
 export function makeTristatePartyBuffInput<SpecType extends Spec>(
-	config: TristateInputConfig<PartyBuffs>,
+	config: TristateInputConfig<PartyBuffs, Player<SpecType>>,
 ): InputHelpers.TypedIconPickerConfig<Player<SpecType>, number> {
 	return InputHelpers.makeTristateIconInput<any, PartyBuffs, Player<SpecType>>(
 		{
@@ -187,7 +193,7 @@ export function makeTristatePartyBuffInput<SpecType extends Spec>(
 }
 
 export function makeTristateIndividualBuffInput<SpecType extends Spec>(
-	config: TristateInputConfig<IndividualBuffs>,
+	config: TristateInputConfig<IndividualBuffs, Player<SpecType>>,
 ): InputHelpers.TypedIconPickerConfig<Player<SpecType>, number> {
 	return InputHelpers.makeTristateIconInput<any, IndividualBuffs, Player<SpecType>>(
 		{
@@ -205,15 +211,16 @@ export function makeTristateIndividualBuffInput<SpecType extends Spec>(
 }
 
 export function makeTristateDebuffInput<SpecType extends Spec>(
-	config: TristateInputConfig<Debuffs>,
+	config: TristateInputConfig<Debuffs, Player<SpecType>>,
 ): InputHelpers.TypedIconPickerConfig<Player<SpecType>, number> {
-	return InputHelpers.makeTristateIconInput<any, Debuffs, Raid>(
+	return InputHelpers.makeTristateIconInput<any, Debuffs, Player<SpecType>>(
 		{
-			getModObject: (player: Player<SpecType>) => player.getRaid()!,
-			getValue: (raid: Raid) => raid.getDebuffs(),
-			setValue: (eventID: EventID, raid: Raid, newVal: Debuffs) => raid.setDebuffs(eventID, newVal),
-			changeEmitter: (raid: Raid) => raid.debuffsChangeEmitter,
+			getModObject: (player: Player<SpecType>) => player,
+			getValue: (player: Player<SpecType>) => player.getRaid()!.getDebuffs(),
+			setValue: (eventID: EventID, player: Player<SpecType>, newVal: Debuffs) => player.getRaid()!.setDebuffs(eventID, newVal),
+			changeEmitter: (player: Player<SpecType>) => TypedEvent.onAny([player.specOptionsChangeEmitter, player.getRaid()!.debuffsChangeEmitter]),
 			label: config.label,
+			enableWhen: config.enableWhen,
 		},
 		config.actionId,
 		config.impId,

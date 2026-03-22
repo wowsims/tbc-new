@@ -44,11 +44,20 @@
 	}
 
 	.buffs-settings,
+	.assigned-curse-settings,
 	.debuffs-settings {
 		.content-block-header {
 			flex-direction: column;
 		}
 
+		.icon-enum-picker-root {
+			flex-direction: row-reverse !important;
+			justify-content: flex-end;
+		}
+	}
+
+	.buffs-settings,
+	.debuffs-settings {
 		.content-block-body {
 			--column-count: 3;
 			display: grid;

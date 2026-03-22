@@ -1,25 +1,36 @@
 import { Phase } from '../../core/constants/other';
 import * as PresetUtils from '../../core/preset_utils';
-import { APLRotation_Type } from '../../core/proto/apl';
 import {
 	Class,
 	ConsumesSpec,
 	Debuffs,
+	Drums,
 	IndividualBuffs,
 	PartyBuffs,
 	Profession,
 	PseudoStat,
 	Race,
 	RaidBuffs,
+	Spec,
 	Stat,
 	TristateEffect,
 } from '../../core/proto/common';
-import { HunterOptions_PetType as PetType, Hunter_Options as HunterOptions, HunterOptions_Ammo, HunterOptions_QuiverBonus } from '../../core/proto/hunter';
+import {
+	HunterOptions_PetType as PetType,
+	Hunter_Options as HunterOptions,
+	HunterOptions_Ammo,
+	HunterOptions_QuiverBonus,
+	Hunter_Rotation,
+} from '../../core/proto/hunter';
 import { SavedTalents } from '../../core/proto/ui';
 import { Stats } from '../../core/proto_utils/stats';
 import { defaultExposeWeaknessSettings, defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
-import TurretAPL from './apls/turret.apl.json';
-import WeaveAPL from './apls/weave.apl.json';
+import DefaultAPL from './apls/default.apl.json';
+import P1PreRaidBuild from './builds/p1_pre_raid.build.json';
+import P1BM2HBuild from './builds/p1_bm_2h.build.json';
+import P1BMDWBuild from './builds/p1_bm_dw.build.json';
+import P1SV2HBuild from './builds/p1_sv_2h.build.json';
+import P1SVDWBuild from './builds/p1_sv_dw.build.json';
 import P1PreRaidGear from './gear_sets/p1_pre_raid.gear.json';
 import P1BMDW6PGear from './gear_sets/p1_bm_dw_6p.gear.json';
 import P1BMDW9PGear from './gear_sets/p1_bm_dw_9p.gear.json';
@@ -30,8 +41,29 @@ import P1SVDW6PGear from './gear_sets/p1_sv_dw_6p.gear.json';
 import P1SV2H3PGear from './gear_sets/p1_sv_2h_3p.gear.json';
 import P1SV2H6PGear from './gear_sets/p1_sv_2h_6p.gear.json';
 
-export const TURRET_APL = PresetUtils.makePresetAPLRotation('Turret', TurretAPL);
-export const WEAVE_APL = PresetUtils.makePresetAPLRotation('Weave', WeaveAPL);
+export const DefaultRotation = PresetUtils.makePresetAPLRotation('APL', DefaultAPL);
+
+export const TurretRotation = Hunter_Rotation.create({
+	viperStartManaPercent: 0.1,
+	viperStopManaPercent: 0.3,
+	meleeWeave: false,
+	weaveOnlyRaptor: false,
+	timeToWeave: 400,
+	useMulti: true,
+	useArcane: true,
+});
+export const TurretSimple = PresetUtils.makePresetSimpleRotation('Turret', Spec.SpecHunter, TurretRotation);
+
+export const WeaveRotation = Hunter_Rotation.create({
+	viperStartManaPercent: 0.1,
+	viperStopManaPercent: 0.3,
+	meleeWeave: true,
+	weaveOnlyRaptor: false,
+	timeToWeave: 400,
+	useMulti: true,
+	useArcane: true,
+});
+export const WeaveSimple = PresetUtils.makePresetSimpleRotation('Weave', Spec.SpecHunter, WeaveRotation);
 
 export const P1_PreRaid_GEARSET = PresetUtils.makePresetGear('P1 - Pre-raid', P1PreRaidGear);
 export const P1_BM_DW_6P_GEARSET = PresetUtils.makePresetGear('P1 - BM - DW (imp. FF)', P1BMDW6PGear);
@@ -125,12 +157,7 @@ export const DefaultPartyBuffs = PartyBuffs.create({
 	strengthOfEarthTotem: TristateEffect.TristateEffectImproved,
 	totemTwisting: true,
 	windfuryTotem: TristateEffect.TristateEffectImproved,
-});
-
-export const DefaultPartyBuffsDW = PartyBuffs.create({
-	...DefaultPartyBuffs,
-	totemTwisting: false,
-	windfuryTotem: TristateEffect.TristateEffectMissing,
+	drums: Drums.LesserDrumsOfBattle,
 });
 
 export const DefaultRaidBuffs = RaidBuffs.create({
@@ -142,12 +169,12 @@ export const DefaultRaidBuffs = RaidBuffs.create({
 	shadowProtection: true,
 });
 
-export const DefaultDebuffsNoImpFF = Debuffs.create({
+export const DefaultDebuffs = Debuffs.create({
 	bloodFrenzy: true,
 	curseOfRecklessness: true,
 	exposeArmor: TristateEffect.TristateEffectImproved,
 	...defaultExposeWeaknessSettings(Phase.Phase1),
-	faerieFire: TristateEffect.TristateEffectRegular,
+	faerieFire: TristateEffect.TristateEffectImproved,
 	giftOfArthas: true,
 	huntersMark: TristateEffect.TristateEffectImproved,
 	improvedSealOfTheCrusader: true,
@@ -159,11 +186,6 @@ export const DefaultDebuffsNoImpFF = Debuffs.create({
 	sunderArmor: true,
 });
 
-export const DefaultDebuffs = Debuffs.create({
-	...DefaultDebuffsNoImpFF,
-	faerieFire: TristateEffect.TristateEffectImproved,
-});
-
 export const DefaultConsumables = ConsumesSpec.create({
 	battleElixirId: 22831, // Elixir of Major Agility
 	guardianElixirId: 22840, // Elixir of Major Mageblood
@@ -171,7 +193,6 @@ export const DefaultConsumables = ConsumesSpec.create({
 	potId: 22838, // Haste Potion
 	conjuredId: 12662,
 	explosiveId: 30217,
-	drumsId: 351355,
 	petFoodId: 33874, // Kibler's Bits
 	petScrollAgi: true,
 	petScrollStr: true,
@@ -179,13 +200,6 @@ export const DefaultConsumables = ConsumesSpec.create({
 	goblinSapper: true,
 	scrollAgi: true,
 	scrollStr: true,
-});
-
-export const DefaultConsumablesDW = ConsumesSpec.create({
-	...DefaultConsumables,
-	// Doesn't work right now, requires pressing the preset twice...
-	// mhImbueId: 34340,
-	// ohImbueId: 29453,
 });
 
 export const OtherDefaults = {
@@ -196,98 +210,8 @@ export const OtherDefaults = {
 	race: Race.RaceOrc,
 };
 
-export const P1_PLAYER_SETTINGS_2H: PresetUtils.PresetSettings = {
-	name: 'P1 - 2H',
-	consumables: DefaultConsumables,
-	debuffs: DefaultDebuffsNoImpFF,
-	partyBuffs: DefaultPartyBuffs,
-	playerOptions: OtherDefaults,
-	reforgeSettings: {
-		maxGemPhase: Phase.Phase1,
-	},
-};
-
-export const P1_PLAYER_SETTINGS_IMP_FF_2H: PresetUtils.PresetSettings = {
-	name: 'P1 (Improved Faerie Fire) - 2H',
-	consumables: DefaultConsumables,
-	debuffs: DefaultDebuffs,
-	partyBuffs: DefaultPartyBuffs,
-	playerOptions: OtherDefaults,
-	reforgeSettings: {
-		maxGemPhase: Phase.Phase1,
-	},
-};
-
-export const P1_PLAYER_SETTINGS_DW: PresetUtils.PresetSettings = {
-	name: 'P1 - DW',
-	consumables: DefaultConsumablesDW,
-	debuffs: DefaultDebuffsNoImpFF,
-	partyBuffs: DefaultPartyBuffsDW,
-	playerOptions: OtherDefaults,
-	reforgeSettings: {
-		maxGemPhase: Phase.Phase1,
-	},
-};
-
-export const P1_PLAYER_SETTINGS_IMP_FF_DW: PresetUtils.PresetSettings = {
-	name: 'P1 (Improved Faerie Fire) - DW',
-	consumables: DefaultConsumablesDW,
-	debuffs: DefaultDebuffs,
-	partyBuffs: DefaultPartyBuffsDW,
-	playerOptions: OtherDefaults,
-	reforgeSettings: {
-		maxGemPhase: Phase.Phase1,
-	},
-};
-
-export const P1_PRESET_BUILD_PRE_RAID = PresetUtils.makePresetBuild('P1 - Pre-Raid', {
-	gear: P1_PreRaid_GEARSET,
-	epWeights: P1_BM_EP_PRESET,
-	rotationType: APLRotation_Type.TypeAuto,
-	rotation: WEAVE_APL,
-	settings: P1_PLAYER_SETTINGS_2H,
-	talents: BMTalents,
-});
-
-export const P1_PRESET_BUILD_BM_2H = PresetUtils.makePresetBuild('P1 - BM - 2H', {
-	gear: P1_BM_2H_6P_GEARSET,
-	epWeights: P1_BM_EP_PRESET,
-	rotationType: APLRotation_Type.TypeAuto,
-	rotation: WEAVE_APL,
-	settings: P1_PLAYER_SETTINGS_IMP_FF_2H,
-	talents: BMTalents,
-});
-
-export const P1_PRESET_BUILD_BM_DW = PresetUtils.makePresetBuild('P1 - BM - DW', {
-	gear: P1_BM_DW_6P_GEARSET,
-	epWeights: P1_BM_EP_PRESET,
-	rotationType: APLRotation_Type.TypeAuto,
-	rotation: TURRET_APL,
-	settings: P1_PLAYER_SETTINGS_IMP_FF_DW,
-	talents: BMTalents,
-});
-
-const Custom_Surefooted_Talents = {
-	name: 'SV',
-	data: SavedTalents.create({
-		talentsString: '502-0550201205-333200023002223005103',
-	}),
-};
-
-export const P1_PRESET_BUILD_SV_2H = PresetUtils.makePresetBuild('P1 - SV - 2H', {
-	gear: P1_SV_2H_3P_GEARSET,
-	epWeights: P1_SV_EP_PRESET,
-	rotationType: APLRotation_Type.TypeAuto,
-	rotation: WEAVE_APL,
-	settings: P1_PLAYER_SETTINGS_IMP_FF_2H,
-	talents: Custom_Surefooted_Talents,
-});
-
-export const P1_PRESET_BUILD_SV_DW = PresetUtils.makePresetBuild('P1 - SV - DW', {
-	gear: P1_SV_DW_3P_GEARSET,
-	epWeights: P1_SV_EP_PRESET,
-	rotationType: APLRotation_Type.TypeAuto,
-	rotation: TURRET_APL,
-	settings: P1_PLAYER_SETTINGS_IMP_FF_DW,
-	talents: Custom_Surefooted_Talents,
-});
+export const P1_PRESET_BUILD_PRE_RAID = PresetUtils.makePresetBuildFromJSON('P1 - Pre-Raid', Spec.SpecHunter, P1PreRaidBuild);
+export const P1_PRESET_BUILD_BM_2H = PresetUtils.makePresetBuildFromJSON('P1 - BM - 2H', Spec.SpecHunter, P1BM2HBuild);
+export const P1_PRESET_BUILD_BM_DW = PresetUtils.makePresetBuildFromJSON('P1 - BM - DW', Spec.SpecHunter, P1BMDWBuild);
+export const P1_PRESET_BUILD_SV_2H = PresetUtils.makePresetBuildFromJSON('P1 - SV - 2H', Spec.SpecHunter, P1SV2HBuild);
+export const P1_PRESET_BUILD_SV_DW = PresetUtils.makePresetBuildFromJSON('P1 - SV - DW', Spec.SpecHunter, P1SVDWBuild);

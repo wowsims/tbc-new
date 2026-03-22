@@ -330,6 +330,8 @@ func (effect *SpellEffect) ParseStatEffect(scalesWithIlvl bool, ilvl int) *stats
 			break
 		}
 		effectStats[proto.Stat_StatMP5] = float64(effect.EffectBasePoints + effect.EffectDieSides)
+	case effect.EffectAura == A_MOD_SPELL_CRIT_CHANCE:
+		effectStats[proto.Stat_StatSpellCritRating] = float64(effect.EffectBasePoints+effect.EffectDieSides) * core.SpellCritRatingPerCritPercent
 	}
 
 	return effectStats

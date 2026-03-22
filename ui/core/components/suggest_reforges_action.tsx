@@ -12,12 +12,12 @@ import { EquippedItem } from '../proto_utils/equipped_item';
 import { Gear } from '../proto_utils/gear';
 import { gemColorsToMatchingSocket, gemMatchesSocket, getEmptyGemSocketIconUrl, getMetaGemCondition } from '../proto_utils/gems';
 import { statCapTypeNames } from '../proto_utils/names';
-import { translateSlotName } from '../../i18n/localization';
-import { pseudoStatIsCapped, StatCap, statIsCapped, Stats, UnitStat, UnitStatPresets } from '../proto_utils/stats';
+import { translateItemQuality, translateSlotName } from '../../i18n/localization';
+import { pseudoStatHasCap, pseudoStatIsCapped, StatCap, statHasCap, statIsCapped, Stats, UnitStat, UnitStatPresets } from '../proto_utils/stats';
 import { Sim } from '../sim';
 import { ActionGroupItem } from '../sim_ui';
 import { EventID, TypedEvent } from '../typed_event';
-import { isDevMode, phasesEnumToNumber, sleep, sum } from '../utils';
+import { isDevMode, phasesEnumToNumber, sleep } from '../utils';
 import { BooleanPicker } from './pickers/boolean_picker';
 import { EnumPicker } from './pickers/enum_picker';
 import { NumberPicker, NumberPickerConfig } from './pickers/number_picker';
@@ -28,7 +28,7 @@ import { ReforgeWorkerPool, getReforgeWorkerPool } from '../reforge_worker_pool'
 import type { LPModel, LPSolution, SerializedConstraints, SerializedVariables } from '../../worker/reforge_types';
 import { ProgressTrackerModal } from './progress_tracker_modal';
 import { getEmptySlotIconUrl } from './gear_picker/utils';
-import { CURRENT_PHASE } from '../constants/other';
+import { CURRENT_PHASE, Phase } from '../constants/other';
 import { CharacterStats } from './character_stats';
 
 type YalpsCoefficients = Map<string, number>;
@@ -141,6 +141,8 @@ export class ReforgeOptimizer {
 	protected freezeItemSlots = false;
 	protected frozenItemSlots = new Set<ItemSlot>();
 	protected maxGemPhase = CURRENT_PHASE;
+	protected maxGemQuality = ItemQuality.ItemQualityEpic;
+	protected disableUniqueGems = false;
 	protected undershootCaps = new Stats();
 	protected isCancelling: boolean = false;
 	protected pendingWorker: ReforgeWorkerPool | null = null;
@@ -154,6 +156,8 @@ export class ReforgeOptimizer {
 	readonly breakpointLimitsChangeEmitter = new TypedEvent<void>('BreakpointLimits');
 	readonly freezeItemSlotsChangeEmitter = new TypedEvent<void>('FreezeItemSlots');
 	readonly maxGemPhaseEmitter = new TypedEvent<void>('MaxGemPhase');
+	readonly maxGemQualityEmitter = new TypedEvent<void>('MaxGemQuality');
+	readonly disableUniqueGemsChangeEmitter = new TypedEvent<void>('DisableUniqueGems');
 	readonly undershootCapsChangeEmitter = new TypedEvent<void>('UndershootCaps');
 
 	// Emits when any of the above emitters emit.
@@ -164,7 +168,7 @@ export class ReforgeOptimizer {
 		this.player = simUI.player;
 		this.playerClass = this.player.getClass();
 		this.isExperimental = options?.experimental;
-		this.isHybridCaster = [Spec.SpecBalanceDruid, Spec.SpecShadowPriest, Spec.SpecElementalShaman].includes(this.player.getSpec());
+		this.isHybridCaster = [Spec.SpecBalanceDruid, Spec.SpecPriest, Spec.SpecElementalShaman].includes(this.player.getSpec());
 		this.isTankSpec = this.player.getPlayerSpec().isTankSpec;
 		this.sim = simUI.sim;
 		this.defaults = simUI.individualConfig.defaults;
@@ -289,6 +293,8 @@ export class ReforgeOptimizer {
 				this.breakpointLimitsChangeEmitter,
 				this.freezeItemSlotsChangeEmitter,
 				this.maxGemPhaseEmitter,
+				this.maxGemQualityEmitter,
+				this.disableUniqueGemsChangeEmitter,
 				this.undershootCapsChangeEmitter,
 			],
 			'ReforgeSettingsChange',
@@ -392,7 +398,7 @@ export class ReforgeOptimizer {
 
 			// If all children have 0 EP, then loop through children and check whether a cap has been configured for that child.
 			for (const childStat of children) {
-				if (pseudoStatIsCapped(childStat, reforgeCaps, reforgeSoftCaps)) {
+				if (pseudoStatHasCap(childStat, reforgeCaps, reforgeSoftCaps)) {
 					// The first time a cap is detected, set EP for that child to re-scaled parent Rating EP, set parent Rating EP
 					// to 0, and break.
 					const rescaledWeight = UnitStat.fromPseudoStat(childStat).convertPercentToRating(weights.getStat(parentStat));
@@ -404,6 +410,28 @@ export class ReforgeOptimizer {
 		}
 
 		return validatedWeights;
+	}
+
+	static includesStatWithCap(coefficients: YalpsCoefficients, reforgeCaps: Stats, reforgeSoftCaps: StatCap[]): boolean {
+		for (const coefficientKey of coefficients.keys()) {
+			if (coefficientKey.includes('PseudoStat')) {
+				const statKey = PseudoStat[coefficientKey as keyof typeof PseudoStat];
+
+				if (pseudoStatHasCap(statKey, reforgeCaps, reforgeSoftCaps)) {
+					return true;
+				}
+			} else if (coefficientKey.includes('Stat')) {
+				const statKey = Stat[coefficientKey as keyof typeof Stat];
+
+				if (statHasCap(statKey, reforgeCaps, reforgeSoftCaps)) {
+					return true;
+				}
+			} else if (coefficientKey.includes('Minus')) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	static includesCappedStat(coefficients: YalpsCoefficients, reforgeCaps: Stats, reforgeSoftCaps: StatCap[]): boolean {
@@ -435,13 +463,13 @@ export class ReforgeOptimizer {
 			if (coefficientKey.includes('PseudoStat')) {
 				const statKey = PseudoStat[coefficientKey as keyof typeof PseudoStat];
 
-				if (pseudoStatIsCapped(statKey, reforgeCaps, reforgeSoftCaps)) {
+				if (pseudoStatHasCap(statKey, reforgeCaps, reforgeSoftCaps)) {
 					cappedStatKeys.push(coefficientKey);
 				}
 			} else if (coefficientKey.includes('Stat')) {
 				const statKey = Stat[coefficientKey as keyof typeof Stat];
 
-				if (statIsCapped(statKey, reforgeCaps, reforgeSoftCaps)) {
+				if (statHasCap(statKey, reforgeCaps, reforgeSoftCaps)) {
 					cappedStatKeys.push(coefficientKey);
 				}
 			}
@@ -574,6 +602,16 @@ export class ReforgeOptimizer {
 		this.maxGemPhaseEmitter.emit(eventID);
 	}
 
+	setMaxGemQuality(eventID: EventID, quality: ItemQuality): void {
+		this.maxGemQuality = quality;
+		this.maxGemQualityEmitter.emit(eventID);
+	}
+
+	setDisableUniqueGems(eventID: EventID, disableUniqueGems: boolean): void {
+		this.disableUniqueGems = disableUniqueGems;
+		this.disableUniqueGemsChangeEmitter.emit(eventID);
+	}
+
 	buildContextMenu(button: HTMLButtonElement) {
 		const instance = tippy(button, {
 			interactive: true,
@@ -600,6 +638,7 @@ export class ReforgeOptimizer {
 						this.setUseCustomEPValues(eventID, newValue);
 					},
 				});
+
 				let useSoftCapBreakpointsInput: BooleanPicker<Player<any>> | null = null;
 				if (this.softCapsConfig?.length) {
 					useSoftCapBreakpointsInput = new BooleanPicker(null, this.player, {
@@ -621,6 +660,24 @@ export class ReforgeOptimizer {
 					});
 				}
 
+				const disableUniqueGems = new BooleanPicker(null, this.player, {
+					extraCssClasses: ['mb-2'],
+					id: 'reforge-optimizer-disable-unique-gems',
+					label: i18n.t('sidebar.buttons.suggest_reforges.disable_unique_gems'),
+					inline: true,
+					changedEvent: () => this.disableUniqueGemsChangeEmitter,
+					getValue: () => this.disableUniqueGems,
+					setValue: (eventID, _player, newValue) => {
+						trackEvent({
+							action: 'settings',
+							category: 'reforging',
+							label: 'disable_unique_gems',
+							value: newValue,
+						});
+						this.setDisableUniqueGems(eventID, newValue);
+					},
+				});
+
 				const maxGemPhaseInput = new EnumPicker(null, this.player, {
 					extraCssClasses: ['mb-2'],
 					id: 'reforge-optimizer-max-gem-phase',
@@ -631,11 +688,39 @@ export class ReforgeOptimizer {
 						value: phaseIndex,
 					})),
 					changedEvent: () => this.maxGemPhaseEmitter,
-					getValue: () => {
-						return this.maxGemPhase;
-					},
+					getValue: () => this.maxGemPhase,
 					setValue: (_eventID, _player, newValue) => {
+						trackEvent({
+							action: 'settings',
+							category: 'reforging',
+							label: 'max_gem_phase',
+							value: newValue,
+						});
 						this.setMaxGemPhase(TypedEvent.nextEventID(), newValue);
+					},
+				});
+
+				const maxGemQualityInput = new EnumPicker(null, this.player, {
+					extraCssClasses: ['mb-2'],
+					id: 'reforge-optimizer-max-gem-quality',
+					label: i18n.t('sidebar.buttons.suggest_reforges.max_gem_quality'),
+					defaultValue: this.maxGemQuality,
+					values: Object.values(ItemQuality)
+						.filter((q): q is number => typeof q === 'number' && q >= ItemQuality.ItemQualityUncommon && q <= ItemQuality.ItemQualityEpic)
+						.map(quality => ({
+							name: translateItemQuality(quality),
+							value: quality,
+						})),
+					changedEvent: () => this.maxGemQualityEmitter,
+					getValue: () => this.maxGemQuality,
+					setValue: (_eventID, _player, newValue) => {
+						trackEvent({
+							action: 'settings',
+							category: 'reforging',
+							label: 'max_gem_quality',
+							value: newValue,
+						});
+						this.setMaxGemQuality(TypedEvent.nextEventID(), newValue);
 					},
 				});
 
@@ -673,7 +758,9 @@ export class ReforgeOptimizer {
 						})}
 						{useSoftCapBreakpointsInput?.rootElem}
 						{this.buildSoftCapBreakpointsLimiter({ useSoftCapBreakpointsInput })}
+						{disableUniqueGems.rootElem}
 						{maxGemPhaseInput.rootElem}
+						{maxGemQualityInput.rootElem}
 						{freezeItemSlotsInput.rootElem}
 						{this.buildFrozenSlotsInputs()}
 						{this.buildEPWeightsToggle({ useCustomEPValuesInput: useCustomEPValuesInput })}
@@ -1189,8 +1276,11 @@ export class ReforgeOptimizer {
 			for (const [stat, value] of distributedSocketBonus.entries()) {
 				this.applyReforgeStat(socketBonusAsCoeff, stat, value, preCapEPs);
 			}
-
-			if (ReforgeOptimizer.includesCappedStat(socketBonusAsCoeff, reforgeCaps, reforgeSoftCaps) && socketBonusNormalization > 1) {
+			if (
+				ReforgeOptimizer.includesStatWithCap(socketBonusAsCoeff, reforgeCaps, reforgeSoftCaps) &&
+				!ReforgeOptimizer.includesCappedStat(socketBonusAsCoeff, reforgeCaps, reforgeSoftCaps) &&
+				socketBonusNormalization > 1
+			) {
 				forceSocketBonus = true;
 			}
 
@@ -1226,7 +1316,7 @@ export class ReforgeOptimizer {
 
 			if (
 				scoredDummyVariables.get('matched')!.get('score')! >= scoredDummyVariables.get('unmatched')!.get('score')! &&
-				(socketBonusNormalization > 1 || !ReforgeOptimizer.includesCappedStat(scoredDummyVariables.get('matched')!, reforgeCaps, reforgeSoftCaps))
+				(socketBonusNormalization > 1 || !ReforgeOptimizer.includesStatWithCap(scoredDummyVariables.get('matched')!, reforgeCaps, reforgeSoftCaps))
 			) {
 				forceSocketBonus = true;
 			}
@@ -1330,11 +1420,12 @@ export class ReforgeOptimizer {
 				const isJC = gem.requiredProfession == Profession.Jewelcrafting;
 				const statCount = gem.stats.filter(stat => stat > 0).length;
 				if (
+					(this.disableUniqueGems && gem.unique && !isJC) ||
 					(isJC && !hasJC) ||
 					!gemMatchesSocket(gem, socketColor) ||
 					statCount == 0 ||
 					gem.phase > this.maxGemPhase ||
-					gem.quality < ItemQuality.ItemQualityRare
+					gem.quality > this.maxGemQuality
 				) {
 					continue;
 				}
@@ -1443,7 +1534,7 @@ export class ReforgeOptimizer {
 		if (metaGem?.id) {
 			const { minBlue, minRed, minYellow, compareColorGreater, compareColorLesser } = getMetaGemCondition(metaGem?.id);
 			if (compareColorGreater && compareColorLesser) {
-				constraints.set(`GemColorCompare_${compareColorGreater}_${compareColorLesser}`, greaterEq(2));
+				constraints.set(`GemColorCompare_${compareColorGreater}_${compareColorLesser}`, greaterEq(1));
 			}
 			if (minBlue) {
 				constraints.set(`GemColor_${GemColor.GemColorBlue}`, greaterEq(minBlue));
@@ -1923,7 +2014,9 @@ export class ReforgeOptimizer {
 			this.setFreezeItemSlots(eventID, proto.freezeItemSlots);
 			this.setFrozenItemSlots(eventID, proto.frozenItemSlots);
 			this.setBreakpointLimits(eventID, Stats.fromProto(proto.breakpointLimits));
-			this.setMaxGemPhase(eventID, proto.maxGemPhase);
+			this.setDisableUniqueGems(eventID, proto.disableUniqueGems);
+			this.setMaxGemPhase(eventID, proto.maxGemPhase || Phase.Phase1);
+			this.setMaxGemQuality(eventID, proto.maxGemQuality || ItemQuality.ItemQualityEpic);
 		});
 	}
 	toProto(): ReforgeSettings {
@@ -1934,7 +2027,9 @@ export class ReforgeOptimizer {
 			frozenItemSlots: [...this.frozenItemSlots],
 			breakpointLimits: this.breakpointLimits.toProto(),
 			statCaps: this.statCaps.toProto(),
+			disableUniqueGems: this.disableUniqueGems,
 			maxGemPhase: this.maxGemPhase,
+			maxGemQuality: this.maxGemQuality,
 		});
 	}
 	applyDefaults(eventID: EventID) {
@@ -1945,7 +2040,9 @@ export class ReforgeOptimizer {
 			this.setStatCaps(eventID, this.simUI.individualConfig.defaults.statCaps || new Stats());
 			this.setBreakpointLimits(eventID, this.simUI.individualConfig.defaults.breakpointLimits || new Stats());
 			this.setSoftCapBreakpoints(eventID, this.simUI.individualConfig.defaults.softCapBreakpoints || []);
+			this.setDisableUniqueGems(eventID, false);
 			this.setMaxGemPhase(eventID, this.sim.getPhase());
+			this.setMaxGemQuality(eventID, ItemQuality.ItemQualityEpic);
 		});
 	}
 }

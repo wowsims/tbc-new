@@ -147,6 +147,8 @@ export class IconPicker<ModObject, ValueType> extends Input<ModObject, ValueType
 	}
 
 	handleLeftClick() {
+		if (!this.enabled) return;
+
 		if (this.config.states == 0 || this.currentValue + 1 < this.config.states) {
 			this.currentValue++;
 			this.inputChanged(TypedEvent.nextEventID());
@@ -158,6 +160,8 @@ export class IconPicker<ModObject, ValueType> extends Input<ModObject, ValueType
 	}
 
 	handleRightClick() {
+		if (!this.enabled) return;
+
 		if (this.currentValue > 0) {
 			this.currentValue--;
 		} else {
