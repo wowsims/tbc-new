@@ -93,6 +93,10 @@ export class ActionId {
 					name += ' (Blinkstrike)';
 				} else if (this.tag == 17257) {
 					name += ' (Magtheridon)';
+				} else if (this.tag == 21213) {
+					name += ' (Morrogrim Tidewalker)';
+				} else if (this.tag == 21213 + 18943) {
+					name += ' (Morrogrim Tidewalker) - Thrash';
 				} else if (this.tag == 99999) {
 					name += ' (Boss)';
 				} else if (this.tag == 99998) {
