@@ -421,37 +421,16 @@ func ImprovedScorchAura(target *Unit) *Aura {
 }
 
 func ImprovedSealOfTheCrusaderAura(target *Unit, points int32) *Aura {
-
-	dynamicMods := make(map[int32]*SpellMod, len(target.Env.AllUnits))
-
-	for _, unit := range target.Env.AllUnits {
-		if unit.Type == PlayerUnit || unit.Type == PetUnit {
-			dynamicMods[unit.UnitIndex] = unit.AddDynamicMod(SpellModConfig{
-				SpellFlag:  ^SpellFlagHelpful,
-				Kind:       SpellMod_BonusSpellDamage_Flat,
-				FloatValue: 219, //assumed max rank
-				School:     SpellSchoolHoly,
-			})
-		}
-	}
-
+	holySpellDamageBonus := 219.0 //assumed Max Rank Seal Of Crusader (Rank 7)
 	return target.GetOrRegisterAura(Aura{
 		Label:    "Improved Seal of the Crusader",
 		ActionID: ActionID{SpellID: 20337},
 		Duration: time.Second * 20,
 		OnGain: func(aura *Aura, sim *Simulation) {
-			for _, unit := range sim.AllUnits {
-				if unit.Type == PlayerUnit || unit.Type == PetUnit {
-					dynamicMods[unit.UnitIndex].Activate()
-				}
-			}
+			target.PseudoStats.SchoolBonusSpellDamage[stats.SchoolIndexHoly] += holySpellDamageBonus
 		},
 		OnExpire: func(aura *Aura, sim *Simulation) {
-			for _, unit := range sim.AllUnits {
-				if unit.Type == PlayerUnit || unit.Type == PetUnit {
-					dynamicMods[unit.UnitIndex].Deactivate()
-				}
-			}
+			target.PseudoStats.SchoolBonusSpellDamage[stats.SchoolIndexHoly] -= holySpellDamageBonus
 		},
 	}).AttachAdditivePseudoStatBuff(&target.PseudoStats.ReducedCritTakenChance, float64(-1*points))
 }

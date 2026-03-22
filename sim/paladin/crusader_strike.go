@@ -42,20 +42,10 @@ func (paladin *Paladin) registerCrusaderStrike() {
 			baseDamage := spell.Unit.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower(target))
 			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeWeaponSpecialHitAndCrit)
 			if result.Landed() {
-				if jolAura := paladin.JudgementOfLightAuras.Get(target); jolAura.IsActive() {
-					jolAura.Refresh(sim)
-				}
-
-				if jowAura := paladin.JudgementOfWisdomAuras.Get(target); jowAura.IsActive() {
-					jowAura.Refresh(sim)
-				}
-
-				if jojAura := paladin.JudgementOfJusticeAuras.Get(target); jojAura.IsActive() {
-					jojAura.Refresh(sim)
-				}
-
-				if jocAura := paladin.JudgementOfTheCrusaderAuras.Get(target); jocAura.IsActive() {
-					jocAura.Refresh(sim)
+				for _, auraArray := range paladin.JudgementAuras {
+					if aura := auraArray.Get(target); aura.IsActive() {
+						aura.Refresh(sim)
+					}
 				}
 			}
 		},

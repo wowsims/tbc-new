@@ -501,7 +501,7 @@ type PseudoStats struct {
 
 	DamageTakenMultiplier       float64            // All damage
 	SchoolDamageTakenMultiplier [SchoolLen]float64 // For specific spell schools (arcane, fire, shadow, etc.)
-	SchoolDamageTakenAdditive   [SchoolLen]float64 // Judgement of the Crusader
+	SchoolBonusSpellDamage      [SchoolLen]float64 // Bonus SpellDamage against Target, ex: Judgement Of The Crusader + HolySpellDamage
 	SchoolBonusHitChance        [SchoolLen]float64 // Spell school-specific hit bonuses such as Arcane Focus or Elemental Precision - only applied to spells with a non-zero class spell mask
 
 	DiseaseDamageTakenMultiplier          float64

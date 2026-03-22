@@ -481,6 +481,7 @@ func (paladin *Paladin) registerSealOfJustice(seal seal) {
 	}
 
 	paladin.JudgementOfJusticeAuras = paladin.NewEnemyAuraArray(func(target *core.Unit) *core.Aura { return registerJoJDebuff(target) })
+	paladin.JudgementAuras = append(paladin.JudgementAuras, paladin.JudgementOfJusticeAuras)
 	judgeSpell := paladin.RegisterSpell(core.SpellConfig{
 		ActionID:         core.ActionID{SpellID: seal.judge.spellID},
 		SpellSchool:      core.SpellSchoolHoly,
