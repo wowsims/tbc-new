@@ -85,6 +85,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecEnhancementShaman, {
 		consumables: Presets.DefaultConsumables,
 		// Default talents.
 		talents: Presets.SubRestoIWT.data,
+		itemSwap: Presets.P1_TRUNCHEON_ITEMSWAP_PRESET.itemSwap,
 		// Default spec-specific settings.
 		specOptions: Presets.DefaultOptions,
 		// Default raid/party buffs settings.
@@ -125,7 +126,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecEnhancementShaman, {
 		// Preset gear configurations that the user can quickly select.
 		gear: [Presets.PRERAID_PRESET, Presets.P1_PRESET, Presets.P2_PRESET, Presets.P3_PRESET, Presets.P4_PRESET, Presets.P5_PRESET],
 
-		itemSwaps: [Presets.P1_ITEMSWAP_PRESET],
+		itemSwaps: [Presets.P1_BADGEOH_ITEMSWAP_PRESET, Presets.P1_TRUNCHEON_ITEMSWAP_PRESET, Presets.P1_BIS_ITEMSWAP_PRESET],
 	},
 
 	autoRotation: (_: Player<Spec.SpecEnhancementShaman>): APLRotation => {

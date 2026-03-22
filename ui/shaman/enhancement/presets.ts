@@ -23,7 +23,9 @@ import P2Gear from './gear_sets/p2.gear.json';
 import P3Gear from './gear_sets/p3.gear.json';
 import P4Gear from './gear_sets/p4.gear.json';
 import P5Gear from './gear_sets/p5.gear.json';
-import P1ItemSwap from './gear_sets/p1.itemswap.json';
+import P1KhadgarsItemSwap from './gear_sets/p1.khadgars.itemswap.json';
+import P1TruncheonItemSwap from './gear_sets/p1.truncheon.itemswap.json';
+import P1BisItemSwap from './gear_sets/p1.bis.itemswap.json';
 import PreraidGear from './gear_sets/preraid.gear.json';
 import { Phase } from '../../core/constants/other';
 
@@ -39,7 +41,9 @@ export const P3_PRESET = PresetUtils.makePresetGear('P3 Preset', P3Gear);
 export const P4_PRESET = PresetUtils.makePresetGear('P4 Preset', P4Gear);
 export const P5_PRESET = PresetUtils.makePresetGear('P5 Preset', P5Gear);
 
-export const P1_ITEMSWAP_PRESET = PresetUtils.makePresetItemSwapGear('P1 ItemSwap Preset', P1ItemSwap);
+export const P1_BADGEOH_ITEMSWAP_PRESET = PresetUtils.makePresetItemSwapGear('P1 FireEle Swap (Badge OH)', P1KhadgarsItemSwap);
+export const P1_TRUNCHEON_ITEMSWAP_PRESET = PresetUtils.makePresetItemSwapGear('P1 FireEle Swap (Weapon OH)', P1TruncheonItemSwap);
+export const P1_BIS_ITEMSWAP_PRESET = PresetUtils.makePresetItemSwapGear('P1 FireEle Swap (BIS)', P1BisItemSwap);
 
 export const ROTATION_PRESET_DEFAULT = PresetUtils.makePresetAPLRotation('Default', DefaultApl);
 
