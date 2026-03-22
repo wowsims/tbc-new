@@ -11046,6 +11046,7 @@
 {"id":26985,"name":"Wrath","icon":"spell_nature_abolishmagic","rank":10},
 {"id":26986,"name":"Starfire","icon":"spell_arcane_starfire","rank":8},
 {"id":26988,"name":"Moonfire","icon":"spell_nature_starfall","rank":12,"hasBuff":true},
+{"id":26993,"name":"Faerie Fire","icon":"spell_nature_faeriefire","rank":5,"hasBuff":true},
 {"id":27013,"name":"Insect Swarm","icon":"spell_nature_insectswarm","rank":6,"hasBuff":true},
 {"id":27014,"name":"Raptor Strike","icon":"ability_meleedamage","rank":9},
 {"id":27016,"name":"Serpent Sting","icon":"ability_hunter_quickshot","rank":10,"hasBuff":true},

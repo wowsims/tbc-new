@@ -242,13 +242,6 @@ dps_results: {
  }
 }
 dps_results: {
- key: "TestEnhancement-AllItems-Biznicks247x128Accurascope-2523"
- value: {
-  dps: 1894.21991
-  tps: 1795.58183
- }
-}
-dps_results: {
  key: "TestEnhancement-AllItems-BlackenedNaaruSliver-34427"
  value: {
   dps: 1977.5249
@@ -1028,6 +1021,13 @@ dps_results: {
 }
 dps_results: {
  key: "TestEnhancement-AllItems-StabilitzedEterniumScope-2724"
+ value: {
+  dps: 1894.21991
+  tps: 1795.58183
+ }
+}
+dps_results: {
+ key: "TestEnhancement-AllItems-StabilizedEterniumScope-2523"
  value: {
   dps: 1894.21991
   tps: 1795.58183
