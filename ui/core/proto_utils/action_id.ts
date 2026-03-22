@@ -1,4 +1,5 @@
 import { CHARACTER_LEVEL } from '../constants/mechanics';
+import { CURRENT_PHASE, Phase } from '../constants/other';
 import { APLActionItemSwap_SwapSet } from '../proto/apl';
 import { ActionID as ActionIdProto, ItemRandomSuffix, OtherAction } from '../proto/common';
 import { ResourceType } from '../proto/spell';
@@ -597,6 +598,16 @@ export class ActionId {
 			case 'Raptor Strike':
 				if (tag == 2) {
 					name += ' (Cooldown)';
+				}
+				break;
+			case 'Drums of War':
+			case 'Drums of Battle':
+			case 'Drums of Restoration':
+				if (CURRENT_PHASE >= Phase.Phase4) {
+					name = 'Greater ' + name;
+				}
+				if (tag === -1) {
+					name += ' (External)';
 				}
 				break;
 			default:

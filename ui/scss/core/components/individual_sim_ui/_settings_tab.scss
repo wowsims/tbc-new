@@ -49,6 +49,11 @@
 		.content-block-header {
 			flex-direction: column;
 		}
+
+		.icon-enum-picker-root {
+			flex-direction: row-reverse !important;
+			justify-content: flex-end;
+		}
 	}
 
 	.buffs-settings,

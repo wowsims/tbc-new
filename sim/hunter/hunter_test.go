@@ -95,14 +95,13 @@ var DefaultBMTalents = "512002005250122431051-0505201205"
 var DefaultSVTalents = "502-0550201205-333200022003223005103"
 
 var DefaultConsumables = &proto.ConsumesSpec{
-	BattleElixirId:   22831,  // Elixir of Major Agility
-	GuardianElixirId: 22840,  // Elixir of Major Mageblood
-	FoodId:           27659,  // Warp Burger
-	PotId:            22838,  // Haste Potion
-	ConjuredId:       12662,  // Demonic Rune
-	ExplosiveId:      30217,  // Adamantite Grenade
-	DrumsId:          351355, // Greater Drums of Battle
-	PetFoodId:        33874,  // Kibler's Bits
+	BattleElixirId:   22831, // Elixir of Major Agility
+	GuardianElixirId: 22840, // Elixir of Major Mageblood
+	FoodId:           27659, // Warp Burger
+	PotId:            22838, // Haste Potion
+	ConjuredId:       12662, // Demonic Rune
+	ExplosiveId:      30217, // Adamantite Grenade
+	PetFoodId:        33874, // Kibler's Bits
 	PetScrollAgi:     true,
 	PetScrollStr:     true,
 	SuperSapper:      true,

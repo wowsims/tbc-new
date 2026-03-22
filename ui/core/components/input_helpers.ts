@@ -1,6 +1,6 @@
 import { InputConfig } from '../individual_sim_ui';
 import { Player } from '../player.js';
-import { Spec, TristateEffect } from '../proto/common.js';
+import { PartyBuffs, Spec, TristateEffect } from '../proto/common.js';
 import { ActionId } from '../proto_utils/action_id.js';
 import { ClassOptions, SpecOptions, SpecRotation } from '../proto_utils/utils.js';
 import { EventID, TypedEvent } from '../typed_event.js';
@@ -734,5 +734,30 @@ export function makeRotationEnumIconInput<SpecType extends Spec, T>(
 			}),
 		changedEvent: config.changeEmitter || ((player: Player<SpecType>) => player.rotationChangeEmitter),
 		extraCssClasses: config.extraCssClasses,
+	});
+}
+
+export function makePartyBuffEnumIconInput<SpecType extends Spec, T>(
+	config: PlayerEnumIconInputConfig<SpecType, PartyBuffs, T>,
+): TypedIconEnumPickerConfig<Player<SpecType>, T> {
+	return makeWrappedEnumIconInput<SpecType, Player<SpecType>, T>({
+		numColumns: config.numColumns || 1,
+		values: config.values,
+		equals: (a: T, b: T) => a == b,
+		showWhen: config.showWhen,
+		zeroValue: 0 as unknown as T,
+		getModObject: (player: Player<SpecType>) => player,
+		getValue: config.getValue || ((player: Player<SpecType>) => player.getParty()?.getBuffs()[config.fieldName] as unknown as T),
+		setValue:
+			config.setValue ||
+			((eventID: EventID, player: Player<SpecType>, newVal: T) => {
+				const newMessage = player.getParty()?.getBuffs() || PartyBuffs.create();
+				(newMessage[config.fieldName] as unknown as T) = newVal;
+				player.getParty()?.setBuffs(eventID, newMessage);
+			}),
+		changedEvent: config.changeEmitter || ((player: Player<SpecType>) => player.getParty()!.buffsChangeEmitter),
+		extraCssClasses: config.extraCssClasses,
+		label: config.label,
+		labelTooltip: config.labelTooltip,
 	});
 }

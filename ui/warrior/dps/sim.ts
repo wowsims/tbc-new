@@ -183,7 +183,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecDpsWarrior, {
 		const opWeaveAction = rotation.priorityList.find(
 			action => action.action?.action.oneofKind === 'groupReference' && action.action?.action.groupReference.groupName === 'Overpower Weaving',
 		);
-		if (opWeaveAction && (Presets.isArmsSpec(player) || Presets.isArmsKebabSpec(player))) opWeaveAction.hide = !useOverpower;
+		if (opWeaveAction) opWeaveAction.hide = !useOverpower;
 
 		return APLRotation.create({
 			simple: SimpleRotation.create({}),

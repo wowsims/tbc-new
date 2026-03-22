@@ -4,7 +4,6 @@ import {
 	makeBooleanDebuffInput,
 	makeBooleanIndividualBuffInput,
 	makeBooleanRaidBuffInput,
-	makeEnumValuePartyBuffInput,
 	makeMultistateIndividualBuffInput,
 	makeMultistatePartyBuffInput,
 	makeTristateRaidBuffInput,
@@ -15,8 +14,12 @@ import {
 	makeQuadstatePartyBuffInput,
 } from '../icon_inputs';
 import { IconPicker } from '../pickers/icon_picker';
+import * as InputHelpers from '../input_helpers';
 import { IconPickerStatOption, PickerStatOptions } from './stat_options';
 import { Party } from '../../party';
+import { IconEnumPicker } from '../pickers/icon_enum_picker';
+import { DrumsBattle, DrumsRestoration, DrumsWar } from './consumables';
+import { CURRENT_PHASE, Phase } from '../../constants/other';
 
 ///////////////////////////////////////////////////////////////////////////
 //                                 RAID BUFFS
@@ -176,9 +179,11 @@ export const WindfuryTotem = makeTristatePartyBuffInput({
 	fieldName: 'windfuryTotem',
 	label: 'Windfury Totem',
 });
-
-export const DrumsOfBattleBuff = makeEnumValuePartyBuffInput(ActionId.fromItemId(185848), 'drums', Drums.DrumsOfBattle);
-export const DrumsOfRestorationBuff = makeEnumValuePartyBuffInput(ActionId.fromItemId(185850), 'drums', Drums.DrumsOfRestoration);
+export const DrumsBuff = InputHelpers.makePartyBuffEnumIconInput({
+	fieldName: 'drums',
+	values: [{ color: 'gray', value: Drums.DrumsUnknown }, DrumsBattle, DrumsWar, DrumsRestoration],
+	label: 'Drums',
+});
 
 // Individual Buffs
 export const BlessingOfKings = makeBooleanIndividualBuffInput({
@@ -367,6 +372,11 @@ export const PARTY_BUFFS_CONFIG = [
 		config: WindfuryTotem,
 		picker: IconPicker,
 		stats: [Stat.StatAttackPower],
+	},
+	{
+		config: DrumsBuff,
+		picker: IconEnumPicker,
+		stats: [],
 	},
 ] as PickerStatOptions[];
 

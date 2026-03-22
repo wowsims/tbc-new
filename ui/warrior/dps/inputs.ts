@@ -38,7 +38,7 @@ export const RotationInputs = {
 		InputHelpers.makeRotationBooleanInput<Spec.SpecDpsWarrior>({
 			fieldName: 'useOverpower',
 			label: i18n.t('rotation_tab.options.warrior.dps.use_overpower.label'),
-			showWhen: player => (player.getSimpleRotation().spec == DpsWarriorSpec.DpsWarriorSpecFury && isFurySpec(player)) || isArmsKebabSpec(player),
+			showWhen: player => isFurySpec(player) || isArmsKebabSpec(player),
 			changeEmitter: player => TypedEvent.onAny([player.rotationChangeEmitter, player.talentsChangeEmitter, player.gearChangeEmitter]),
 		}),
 	],

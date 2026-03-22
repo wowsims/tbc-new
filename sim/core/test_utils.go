@@ -92,6 +92,8 @@ var FullPartyBuffs = &proto.PartyBuffs{
 
 	BattleShout:     proto.TristateEffect_TristateEffectImproved,
 	CommandingShout: proto.TristateEffect_TristateEffectImproved,
+
+	Drums: proto.Drums_LesserDrumsOfBattle,
 }
 
 var FullIndividualBuffs = &proto.IndividualBuffs{

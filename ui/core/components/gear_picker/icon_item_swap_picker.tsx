@@ -37,6 +37,7 @@ export default class IconItemSwapPicker extends Component {
 		const selectorModal = new SelectorModal(simUI.rootElem, simUI, this.player);
 
 		player.sim.waitForInit().then(() => {
+			this.update(player.itemSwapSettings.getGear().getEquippedItem(slot));
 			this.iconAnchor.addEventListener('click', (event: Event) => {
 				event.preventDefault();
 				selectorModal.openTab(this.slot, SelectorModalTabs.Items, this.createGearData());

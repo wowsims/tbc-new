@@ -4,6 +4,7 @@ import {
 	Class,
 	ConsumesSpec,
 	Debuffs,
+	Drums,
 	IndividualBuffs,
 	PartyBuffs,
 	Profession,
@@ -156,6 +157,7 @@ export const DefaultPartyBuffs = PartyBuffs.create({
 	strengthOfEarthTotem: TristateEffect.TristateEffectImproved,
 	totemTwisting: true,
 	windfuryTotem: TristateEffect.TristateEffectImproved,
+	drums: Drums.LesserDrumsOfBattle,
 });
 
 export const DefaultRaidBuffs = RaidBuffs.create({
@@ -191,7 +193,6 @@ export const DefaultConsumables = ConsumesSpec.create({
 	potId: 22838, // Haste Potion
 	conjuredId: 12662,
 	explosiveId: 30217,
-	drumsId: 351355,
 	petFoodId: 33874, // Kibler's Bits
 	petScrollAgi: true,
 	petScrollStr: true,

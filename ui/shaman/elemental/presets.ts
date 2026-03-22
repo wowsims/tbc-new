@@ -4,6 +4,7 @@ import {
 	Class,
 	ConsumesSpec,
 	Debuffs,
+	Drums,
 	IndividualBuffs,
 	PartyBuffs,
 	Profession,
@@ -117,7 +118,7 @@ export const DefaultDebuffs = Debuffs.create({
 
 export const DefaultConsumables = ConsumesSpec.create({
 	conjuredId: 12662, // Demonic Rune
-	drumsId: 351355, // Greater Drums of Battle
+	drumsId: Drums.LesserDrumsOfBattle,
 	flaskId: 22861, // Flask of Blinding Light
 	foodId: 27657, // Blackened Basilisk
 	mhImbueId: 25122, // Brilliant Wizard Oil

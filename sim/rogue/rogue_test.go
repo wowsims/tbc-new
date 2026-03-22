@@ -65,5 +65,4 @@ var DefaultConsumables = &proto.ConsumesSpec{
 	PotId:      22838,
 	ConjuredId: 7676,
 	OhImbueId:  27186,
-	DrumsId:    351355,
 }
