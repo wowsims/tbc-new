@@ -31,7 +31,8 @@
 		"braidedEterniumChain": true,
 		"graceOfAirTotem": "TristateEffectImproved",
 		"strengthOfEarthTotem": "TristateEffectImproved",
-		"battleShout": "TristateEffectImproved"
+		"battleShout": "TristateEffectImproved",
+		"drums": 4
 	},
 	"player": {
 		"name": "Player",
@@ -69,7 +70,6 @@
 			"goblinSapper": true,
 			"mhImbueId": 34340,
 			"ohImbueId": 29453,
-			"drumsId": 351355,
 			"scrollAgi": true,
 			"scrollStr": true,
 			"petScrollAgi": true,

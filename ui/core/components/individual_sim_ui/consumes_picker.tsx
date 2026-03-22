@@ -198,7 +198,7 @@ export class ConsumesPicker extends Component {
 
 	private buildDrumsPicker(): void {
 		const drumsPickerRef = ref<HTMLDivElement>();
-		const row = this.rootElem.appendChild(
+		this.rootElem.appendChild(
 			<ConsumeRow label="Drums">
 				<div ref={drumsPickerRef} className="picker-group icon-group consumes-row-inputs consumes-drums"></div>
 			</ConsumeRow>,

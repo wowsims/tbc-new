@@ -76,7 +76,6 @@ var DefaultConsumables = &proto.ConsumesSpec{
 	ExplosiveId:      30217,
 	SuperSapper:      true,
 	OhImbueId:        29453,
-	DrumsId:          351355,
 	ScrollAgi:        true,
 	ScrollStr:        true,
 	ScrollArm:        true,

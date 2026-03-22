@@ -1,5 +1,5 @@
 import * as PresetUtils from '../../core/preset_utils';
-import { ConsumesSpec, Debuffs, IndividualBuffs, PartyBuffs, Profession, RaidBuffs, Stat, TristateEffect, PseudoStat } from '../../core/proto/common';
+import { ConsumesSpec, Debuffs, IndividualBuffs, PartyBuffs, Profession, RaidBuffs, Stat, TristateEffect, PseudoStat, Drums } from '../../core/proto/common';
 import { Priest_Options as Options } from '../../core/proto/priest';
 import { SavedTalents } from '../../core/proto/ui';
 import { Stats } from '../../core/proto_utils/stats';
@@ -59,7 +59,6 @@ export const DefaultConsumables = ConsumesSpec.create({
 	conjuredId: 12662, // Demonic Rune
 	mhImbueId: 25122, // Brilliant Wizard Oil
 	potId: 22839, // Destruction Potion
-	drumsId: 351355, // Greater Drums of Battle
 	explosiveId: 30217,
 });
 
@@ -76,6 +75,7 @@ export const DefaultPartyBuffs = PartyBuffs.create({
 	wrathOfAirTotem: TristateEffect.TristateEffectImproved,
 	eyeOfTheNight: true,
 	chainOfTheTwilightOwl: true,
+	drums: Drums.LesserDrumsOfBattle,
 });
 
 export const DefaultIndividualBuffs = IndividualBuffs.create({

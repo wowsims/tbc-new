@@ -1,5 +1,5 @@
 import * as PresetUtils from '../../core/preset_utils';
-import { Debuffs, PseudoStat, RaidBuffs, Stat, ConsumesSpec, TristateEffect, PartyBuffs, IndividualBuffs, Profession } from '../../core/proto/common';
+import { Debuffs, PseudoStat, RaidBuffs, Stat, ConsumesSpec, TristateEffect, PartyBuffs, IndividualBuffs, Profession, Drums } from '../../core/proto/common';
 import { defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
 import { Stats } from '../../core/proto_utils/stats';
 import { SavedTalents } from '../../core/proto/ui';
@@ -73,7 +73,6 @@ export const DefaultConsumables = ConsumesSpec.create({
 	foodId: 27657, // Blackened Basilisk
 	mhImbueId: 25122, // Brilliant Wizard Oil
 	potId: 22839, // Destruction Potion
-	drumsId: 351355, // Greater Drums of Battle
 });
 
 export const DefaultRaidBuffs = RaidBuffs.create({
@@ -89,6 +88,7 @@ export const DefaultPartyBuffs = PartyBuffs.create({
 	manaSpringTotem: 2,
 	manaTideTotems: 1,
 	wrathOfAirTotem: 1,
+	drums: Drums.LesserDrumsOfBattle,
 });
 
 export const DefaultIndividualBuffs = IndividualBuffs.create({

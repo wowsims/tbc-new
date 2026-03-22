@@ -42,6 +42,7 @@ import {
 	ConsumesSpec,
 	Cooldowns,
 	Debuffs,
+	Drums,
 	Encounter as EncounterProto,
 	EquipmentSpec,
 	Faction,
@@ -68,6 +69,7 @@ import { isDevMode } from './utils';
 import { CURRENT_API_VERSION } from './constants/other';
 import { CHARACTER_LEVEL } from './constants/mechanics';
 import { ReforgeOptimizer } from './components/suggest_reforges_action';
+import Toast from './components/toast';
 
 const SAVED_GEAR_STORAGE_KEY = '__savedGear__';
 const SAVED_EP_WEIGHTS_STORAGE_KEY = '__savedEPWeights__';
@@ -513,19 +515,33 @@ export abstract class IndividualSimUI<SpecType extends Spec> extends SimUI {
 		if (!(settingsProto.apiVersion < CURRENT_API_VERSION)) {
 			return;
 		}
-
 		const conversionMap: ProtoConversionMap<IndividualSimSettings> = new Map([
 			[
-				2,
+				7,
 				(oldProto: IndividualSimSettings) => {
-					oldProto.apiVersion = 2;
+					oldProto.apiVersion = 7;
+					const oldPartyDrums = oldProto.player?.consumables?.drumsId as number;
+					if (oldPartyDrums && oldProto.partyBuffs) {
+						switch (oldPartyDrums) {
+							case 351355: // Greater Drums of Battle
+								oldProto.partyBuffs.drums = Drums.LesserDrumsOfBattle;
+								break;
+							case 351360: // Greater Drums of War
+								oldProto.partyBuffs.drums = Drums.LesserDrumsOfWar;
+								break;
+							case 351358: // Greater Drums of Restoration
+								oldProto.partyBuffs.drums = Drums.LesserDrumsOfRestoration;
+								break;
+						}
 
-					oldProto.reforgeSettings = ReforgeSettings.create({
-						useCustomEpValues: oldProto.settings?.useCustomEpValues,
-						useSoftCapBreakpoints: oldProto.settings?.useSoftCapBreakpoints,
-						statCaps: oldProto.statCaps,
-						breakpointLimits: oldProto.breakpointLimits,
-					});
+						if (oldProto.player?.consumables) oldProto.player.consumables.drumsId = 0;
+
+						new Toast({
+							delay: 8000,
+							variant: 'warning',
+							body: <>{i18n.t('protoVersion.7.body', { ns: 'updates' })}</>,
+						});
+					}
 
 					return oldProto;
 				},
