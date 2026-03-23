@@ -126,22 +126,10 @@ func (druid *Druid) GetCharacter() *core.Character {
 	return &druid.Character
 }
 
-// func (druid *Druid) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
-// 	if druid.InForm(Cat|Bear) && druid.Talents.LeaderOfThePack {
-// 		raidBuffs.LeaderOfThePack = true
-// 	}
-
-// 	if druid.InForm(Moonkin) {
-// 		raidBuffs.MoonkinForm = true
-// 	}
-
-// 	raidBuffs.MarkOfTheWild = true
-// }
-
 func (druid *Druid) AddPartyBuffs(partyBuffs *proto.PartyBuffs) {
 	if druid.InForm(Cat|Bear) && druid.Talents.LeaderOfThePack {
 		partyBuffs.LeaderOfThePack = core.Ternary(druid.HasItemEquipped(32387, []proto.ItemSlot{proto.ItemSlot_ItemSlotRanged}), proto.TristateEffect_TristateEffectImproved, proto.TristateEffect_TristateEffectRegular)
-	} else if druid.InForm(Moonkin) {
+	} else if druid.InForm(Moonkin) && druid.Talents.MoonkinForm {
 		partyBuffs.MoonkinAura = core.Ternary(druid.HasItemEquipped(32387, []proto.ItemSlot{proto.ItemSlot_ItemSlotRanged}), proto.TristateEffect_TristateEffectImproved, proto.TristateEffect_TristateEffectRegular)
 	}
 }
@@ -212,7 +200,7 @@ func (druid *Druid) RegisterBaselineSpells() {
 	// druid.registerRejuvenationSpell()
 
 	// druid.registerRebirthSpell()
-	// druid.registerInnervateCD()
+	druid.registerInnervateCD()
 }
 
 func (druid *Druid) RegisterFeralCatSpells() {

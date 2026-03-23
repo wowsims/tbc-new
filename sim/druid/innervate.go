@@ -9,7 +9,7 @@ import (
 func (druid *Druid) registerInnervateCD() {
 	innervateTarget := druid.GetUnit(druid.SelfBuffs.InnervateTarget)
 	if innervateTarget == nil {
-		return
+		innervateTarget = &druid.Unit
 	}
 	innervateTargetChar := druid.Env.Raid.GetPlayerFromUnit(innervateTarget).GetCharacter()
 
@@ -23,12 +23,10 @@ func (druid *Druid) registerInnervateCD() {
 		amount = 0.2 + float64(druid.Talents.Dreamstate)*0.15
 	}
 
-	var innervateAura = core.InnervateAura(innervateTargetChar, actionID.Tag, amount)
-	innervateManaThreshold := core.InnervateManaThreshold(innervateTargetChar)
+	var innervateAura = core.InnervateAura(innervateTargetChar, amount, actionID.Tag)
 
 	innervateSpell = druid.RegisterSpell(Humanoid|Moonkin|Tree, core.SpellConfig{
 		ActionID: actionID,
-		Flags:    core.SpellFlagReadinessTrinket,
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD: core.GCDDefault,
@@ -51,11 +49,8 @@ func (druid *Druid) registerInnervateCD() {
 		Spell: innervateSpell.Spell,
 		Type:  core.CooldownTypeMana,
 		ShouldActivate: func(sim *core.Simulation, character *core.Character) bool {
-			// Innervate needs to be activated as late as possible to maximize DPS. The issue is that
-			// innervate gives so much mana that it can cause Super Mana Potion or Dark Rune usages
-			// to be delayed, if they come off CD soon after innervate. This delay is minimized by
-			// activating innervate from the smallest amount of mana possible.
-			return innervateTarget.CurrentMana() <= innervateManaThreshold
+			// Require manual APL usage
+			return false
 		},
 	})
 }

@@ -259,6 +259,10 @@ func (druid *Druid) registerBearFormSpell() {
 }
 
 func (druid *Druid) RegisterMoonkinFormAura() {
+	if !druid.Talents.MoonkinForm {
+		return
+	}
+
 	druid.MoonkinFormAura = druid.RegisterAura(core.Aura{
 		Label:      "Moonkin Form",
 		ActionID:   core.ActionID{SpellID: 24858},
@@ -298,6 +302,10 @@ func (druid *Druid) RegisterMoonkinFormAura() {
 }
 
 func (druid *Druid) RegisterMoonkinFormSpell() {
+	if !druid.Talents.MoonkinForm {
+		return
+	}
+
 	druid.MoonkinForm = druid.RegisterSpell(Any, core.SpellConfig{
 		ActionID: core.ActionID{SpellID: 24858},
 		Flags:    core.SpellFlagNoOnCastComplete | core.SpellFlagAPL,
