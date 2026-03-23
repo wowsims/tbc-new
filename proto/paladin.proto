@@ -95,7 +95,7 @@ enum PaladinSeal {
 	Justice = 5;
 	Crusader = 6;
 	Blood = 7;
-	Vengeance = 8; 
+	Vengeance = 8;
 }
 
 message PaladinOptions {
@@ -103,7 +103,10 @@ message PaladinOptions {
 }
 
 message RetributionPaladin {
-	message Rotation {}
+	message Rotation {
+		bool useExorcism = 1;
+		bool useConsecrate = 2;
+	}
 
 	message Options {
 		PaladinOptions class_options = 1;

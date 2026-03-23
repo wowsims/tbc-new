@@ -3,11 +3,14 @@ import * as OtherInputs from '../../core/components/inputs/other_inputs.js';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui.js';
 import { Player } from '../../core/player.js';
 import { PlayerClasses } from '../../core/player_classes';
-import { APLRotation, APLRotation_Type } from '../../core/proto/apl.js';
-import { Debuffs, Faction, IndividualBuffs, PartyBuffs, PseudoStat, Race, RaidBuffs, Spec, Stat, UnitStats } from '../../core/proto/common.js';
+import { APLRotation, APLRotation_Type, APLValueVariable, SimpleRotation } from '../../core/proto/apl.js';
+import { Cooldowns, Debuffs, Faction, IndividualBuffs, PartyBuffs, PseudoStat, Race, RaidBuffs, Spec, Stat, UnitStats } from '../../core/proto/common.js';
 import { Stats, UnitStat } from '../../core/proto_utils/stats.js';
-import { DefaultDebuffs, DefaultRaidBuffs, DefaultPartyBuffs, DefaultIndividualBuffs, DefaultConsumables } from './presets';
+import { DefaultDebuffs, DefaultRaidBuffs, DefaultPartyBuffs, DefaultIndividualBuffs, DefaultConsumables, DefaultSimpleRotation } from './presets';
 import * as Presets from './presets.js';
+import * as Inputs from './inputs.js';
+import { validateFunctionCode } from 'ajv/dist/compile/validate';
+import { RetributionPaladin_Rotation } from '../../core/proto/paladin';
 
 const SPEC_CONFIG = registerSpecConfig(Spec.SpecRetributionPaladin, {
 	cssClass: 'retribution-paladin-sim-ui',
@@ -74,11 +77,14 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRetributionPaladin, {
 		individualBuffs: DefaultIndividualBuffs,
 		debuffs: DefaultDebuffs,
 
-		rotationType: APLRotation_Type.TypeAuto,
+		rotationType: APLRotation_Type.TypeSimple,
+		//simpleRotation: Presets.DefaultSimpleRotation,
+		//simpleRotation: DefaultSimpleRotation,
 	},
 
 	// IconInputs to include in the 'Player' section on the settings tab.
 	playerIconInputs: [],
+	rotationInputs: Inputs.PaladinRotationConfig,
 	// Buff and Debuff inputs to include/exclude, overriding the EP-based defaults.
 	includeBuffDebuffInputs: [Stat.StatMP5],
 	excludeBuffDebuffInputs: [],
@@ -93,7 +99,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRetributionPaladin, {
 
 	presets: {
 		epWeights: [Presets.P1_EP_PRESET],
-		rotations: [Presets.APL_PRESET],
+		rotations: [Presets.APL_PRESET, Presets.APL_SIMPLE],
 		// Preset talents that the user can quickly select.
 		talents: [Presets.DefaultTalents, Presets.NoKingsTalents, Presets.ImpMightTalents],
 		// Preset gear configurations that the user can quickly select.
@@ -103,6 +109,10 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRetributionPaladin, {
 
 	autoRotation: (_: Player<Spec.SpecRetributionPaladin>): APLRotation => {
 		return Presets.APL_PRESET.rotation.rotation!;
+	},
+
+	simpleRotation: (player, simple): APLRotation => {
+		return Presets.APL_SIMPLE.rotation.rotation!;
 	},
 
 	raidSimPresets: [

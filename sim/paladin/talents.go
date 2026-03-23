@@ -532,10 +532,11 @@ func (paladin *Paladin) applySanctifiedJudgement() {
 	sancJudgementManaMetric := paladin.NewManaMetrics(core.ActionID{SpellID: 31878})
 
 	paladin.MakeProcTriggerAura(core.ProcTrigger{
-		Name:           "Sanctified Judgement - Trigger",
-		ClassSpellMask: SpellMaskAllJudgements,
-		Callback:       core.CallbackOnCastComplete,
-		ProcChance:     procChance,
+		Name:               "Sanctified Judgement - Trigger",
+		ClassSpellMask:     SpellMaskAllJudgements,
+		Callback:           core.CallbackOnSpellHitDealt,
+		ProcChance:         procChance,
+		TriggerImmediately: true,
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			paladin.AddMana(sim, paladin.Judgement.CurCast.Cost*.8, sancJudgementManaMetric)
 		},

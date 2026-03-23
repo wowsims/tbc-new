@@ -1,16 +1,24 @@
+import { RetributionPaladin } from '../../core/player_specs/paladin';
 import * as PresetUtils from '../../core/preset_utils.js';
-import { ConsumesSpec, Debuffs, RaidBuffs, Profession, PseudoStat, PartyBuffs, IndividualBuffs, Race, Stat } from '../../core/proto/common.js';
-import { RetributionPaladin_Options as RetributionPaladinOptions } from '../../core/proto/paladin.js';
+import { ConsumesSpec, Debuffs, RaidBuffs, Profession, PseudoStat, PartyBuffs, IndividualBuffs, Race, Stat, Spec } from '../../core/proto/common.js';
+import { RetributionPaladin_Options as RetributionPaladinOptions, RetributionPaladin_Rotation as PaladinRotation } from '../../core/proto/paladin.js';
 import { SavedTalents } from '../../core/proto/ui.js';
 import { Stats } from '../../core/proto_utils/stats';
 import DefaultApl from './apls/default.apl.json';
+import SimpleApl from './apls/simple.apl.json';
 import P1_Gear from './gear_sets/p1.gear.json';
 import Preraid_Gear from './gear_sets/preraid.gear.json';
 
 export const P1_GEAR_PRESET = PresetUtils.makePresetGear('P1', P1_Gear);
 export const PRERAID_GEAR_PRESET = PresetUtils.makePresetGear('Pre-raid', Preraid_Gear);
 
+export const DefaultSimpleRotation = PaladinRotation.create({
+	useExorcism: false,
+	useConsecrate: false,
+});
+
 export const APL_PRESET = PresetUtils.makePresetAPLRotation('Default', DefaultApl);
+export const APL_SIMPLE = PresetUtils.makePresetSimpleRotation('Simple', Spec.SpecRetributionPaladin, DefaultSimpleRotation);
 
 export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
 	'P1',
