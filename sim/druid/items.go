@@ -44,6 +44,7 @@ func init() {
 		if druid.Talents.MoonkinForm {
 			buffAuras[Moonkin] = druid.NewTemporaryStatsAura("Living Root Moonkin Proc", core.ActionID{SpellID: 37343}, stats.Stats{stats.SpellDamage: 209}, time.Second*15)
 		}
+		buffAuras[Humanoid] = druid.NewTemporaryStatsAura("Living Root Humanoid Proc", core.ActionID{SpellID: 37344}, stats.Stats{stats.SpellDamage: 175}, time.Second*15)
 		buffAuras[Bear] = druid.NewTemporaryStatsAura("Living Root Bear Proc", core.ActionID{SpellID: 37340}, stats.Stats{stats.Armor: 4070}, time.Second*15)
 		buffAuras[Cat] = druid.NewTemporaryStatsAura("Living Root Cat Proc", core.ActionID{SpellID: 37341}, stats.Stats{stats.Strength: 64}, time.Second*15)
 
@@ -54,10 +55,6 @@ func init() {
 			ProcMask:   core.ProcMaskDirect,
 			ProcChance: 0.03,
 			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-				if druid.form.Matches(Humanoid) {
-					return
-				}
-
 				buffAuras[druid.form].Activate(sim)
 			},
 		}))
