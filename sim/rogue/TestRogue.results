@@ -1225,22 +1225,22 @@ dps_results: {
 dps_results: {
  key: "TestRogue-Settings-Human-p1-Rogue-swords-NoBuffs-0.0yards-LongMultiTarget"
  value: {
-  dps: 810.93352
-  tps: 575.7628
+  dps: 798.45176
+  tps: 566.90075
  }
 }
 dps_results: {
  key: "TestRogue-Settings-Human-p1-Rogue-swords-NoBuffs-0.0yards-LongSingleTarget"
  value: {
-  dps: 681.68595
-  tps: 483.99703
+  dps: 671.54079
+  tps: 476.79396
  }
 }
 dps_results: {
  key: "TestRogue-Settings-Human-p1-Rogue-swords-NoBuffs-0.0yards-ShortSingleTarget"
  value: {
-  dps: 719.0825
-  tps: 510.54858
+  dps: 706.73124
+  tps: 501.77918
  }
 }
 dps_results: {
@@ -1267,22 +1267,22 @@ dps_results: {
 dps_results: {
  key: "TestRogue-Settings-Human-preraid-Rogue-swords-NoBuffs-0.0yards-LongMultiTarget"
  value: {
-  dps: 731.99059
-  tps: 519.71332
+  dps: 720.6501
+  tps: 511.66157
  }
 }
 dps_results: {
  key: "TestRogue-Settings-Human-preraid-Rogue-swords-NoBuffs-0.0yards-LongSingleTarget"
  value: {
-  dps: 611.33908
-  tps: 434.05075
+  dps: 601.97989
+  tps: 427.40572
  }
 }
 dps_results: {
  key: "TestRogue-Settings-Human-preraid-Rogue-swords-NoBuffs-0.0yards-ShortSingleTarget"
  value: {
-  dps: 649.79847
-  tps: 461.35691
+  dps: 637.85749
+  tps: 452.87882
  }
 }
 dps_results: {
@@ -1309,22 +1309,22 @@ dps_results: {
 dps_results: {
  key: "TestRogue-Settings-Orc-p1-Rogue-swords-NoBuffs-0.0yards-LongMultiTarget"
  value: {
-  dps: 823.6486
-  tps: 584.79051
+  dps: 812.09786
+  tps: 576.58948
  }
 }
 dps_results: {
  key: "TestRogue-Settings-Orc-p1-Rogue-swords-NoBuffs-0.0yards-LongSingleTarget"
  value: {
-  dps: 684.81297
-  tps: 486.21721
+  dps: 675.52396
+  tps: 479.62201
  }
 }
 dps_results: {
  key: "TestRogue-Settings-Orc-p1-Rogue-swords-NoBuffs-0.0yards-ShortSingleTarget"
  value: {
-  dps: 727.46543
-  tps: 516.50046
+  dps: 717.45202
+  tps: 509.39093
  }
 }
 dps_results: {
@@ -1351,22 +1351,22 @@ dps_results: {
 dps_results: {
  key: "TestRogue-Settings-Orc-preraid-Rogue-swords-NoBuffs-0.0yards-LongMultiTarget"
  value: {
-  dps: 744.0248
-  tps: 528.25761
+  dps: 732.63096
+  tps: 520.16798
  }
 }
 dps_results: {
  key: "TestRogue-Settings-Orc-preraid-Rogue-swords-NoBuffs-0.0yards-LongSingleTarget"
  value: {
-  dps: 613.99179
-  tps: 435.93417
+  dps: 604.93419
+  tps: 429.50328
  }
 }
 dps_results: {
  key: "TestRogue-Settings-Orc-preraid-Rogue-swords-NoBuffs-0.0yards-ShortSingleTarget"
  value: {
-  dps: 661.57006
-  tps: 469.71475
+  dps: 648.29722
+  tps: 460.29103
  }
 }
 dps_results: {
