@@ -101,6 +101,10 @@ export class ActionId {
 					name += ' (Boss)';
 				} else if (this.tag == 99998) {
 					name += ' (Add)';
+				} else if (this.tag == 100000) {
+					name += ' (Custom Boss)';
+				} else if (this.tag == 100000 + 1) {
+					name += ' (Custom Boss) - Thrash';
 				}
 				break;
 			case OtherAction.OtherActionShoot:
@@ -612,6 +616,15 @@ export class ActionId {
 				}
 				if (tag === -1) {
 					name += ' (External)';
+				}
+				break;
+			case 'Dummy Spell':
+				if (tag === 100000) {
+					['Arcane', 'Fire', 'Frost', 'Holy', 'Shadow', 'Nature'].forEach((school, index) => {
+						if (tag === 100000 + index) {
+							name += ` (${school})`;
+						}
+					});
 				}
 				break;
 			default:

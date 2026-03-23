@@ -12,6 +12,7 @@ func init() {
 	AddDefaultPresetEncounter()
 	addMovementAI()
 	addDynamicAddsAI()
+	addCustomBossAI()
 	magtheridonslair.Register()
 	serpentshrinecavern.Register()
 }

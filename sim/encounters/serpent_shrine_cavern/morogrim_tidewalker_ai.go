@@ -120,7 +120,7 @@ func (ai *MorogrimAI) registerTidalWave(disableSlow bool) {
 		ActionID:    core.ActionID{SpellID: 37730},
 		SpellSchool: core.SpellSchoolFrost,
 		ProcMask:    core.ProcMaskEmpty,
-		Flags:       core.SpellFlagBinary,
+		Flags:       core.SpellFlagBinary | core.SpellFlagAPL,
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
@@ -192,7 +192,7 @@ func (ai *MorogrimAI) registerThrash() {
 	var thrashSpell *core.Spell
 
 	procTrigger := ai.Target.MakeProcTriggerAura(core.ProcTrigger{
-		Name:               "Thrash Listener",
+		Name:               "Thrash - Listener",
 		ProcChance:         0.5,
 		ICD:                time.Second * 3,
 		ProcMask:           core.ProcMaskMeleeWhiteHit,
