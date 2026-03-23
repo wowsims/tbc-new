@@ -1,0 +1,68 @@
+{
+	"apiVersion": 7,
+	"tanks": [
+		{
+			"type": "Player"
+		}
+	],
+	"player": {
+		"name": "Player",
+		"race": "RaceOrc",
+		"class": "ClassWarrior",
+		"protectionWarrior": {
+			"options": {
+				"classOptions": {
+					"defaultShout": "WarriorShoutCommanding",
+					"defaultStance": "WarriorStanceDefensive",
+					"startingRage": 100,
+					"queueDelay": 250,
+					"stanceSnapshot": true,
+					"hasBsT2": true
+				}
+			}
+		},
+		"profession1": "Engineering",
+		"profession2": "Blacksmithing",
+		"reactionTimeMs": 100,
+		"inFrontOfTarget": true,
+		"healingModel": {
+			"hps": 3300,
+			"cadenceSeconds": 1.5,
+			"cadenceVariation": 1,
+			"absorbFrac": 0.02,
+			"burstWindow": 6,
+			"inspirationUptime": 0.12
+		}
+	},
+	"encounter": {
+		"apiVersion": 7,
+		"duration": 180,
+		"durationVariation": 30,
+		"executeProportion20": 0.2,
+		"executeProportion25": 0.25,
+		"executeProportion35": 0.35,
+		"executeProportion45": 0.45,
+		"executeProportion90": 0.9,
+		"targets": [
+			{
+				"id": 21213,
+				"name": "Morogrim Tidewalker 25",
+				"level": 73,
+				"mobType": "MobTypeGiant",
+				"stats": [
+					0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 320, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7685, 0, 5691000, 0, 0, 0, 0, 0, 0, 0, 0
+				],
+				"minBaseDamage": 12744,
+				"damageSpread": 0.413,
+				"swingSpeed": 1.6,
+				"parryHaste": true,
+				"targetInputs": [
+					{
+						"label": "Disable Tidal Wave 400% Attack Speed Slow",
+						"tooltip": "This will disable the attack speed slow from Tidal Wave."
+					}
+				]
+			}
+		]
+	}
+}
