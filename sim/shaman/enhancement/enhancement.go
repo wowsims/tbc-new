@@ -90,46 +90,67 @@ func (enh *EnhancementShaman) Reset(sim *core.Simulation) {
 	enh.Shaman.Reset(sim)
 }
 
-func (enh *EnhancementShaman) AutoSyncWeapons() proto.ShamanSyncType {
-	if mh, oh := enh.MainHand(), enh.OffHand(); mh.SwingSpeed != oh.SwingSpeed {
-		return proto.ShamanSyncType_NoSync
-	}
-	return proto.ShamanSyncType_DelayOffhandSwings
-}
-
 func (enh *EnhancementShaman) ApplySyncType(syncType proto.ShamanSyncType) {
 	const FlurryICD = time.Millisecond * 500
 
-	if syncType == proto.ShamanSyncType_Auto {
-		syncType = enh.AutoSyncWeapons()
-	}
-
 	switch syncType {
+	case proto.ShamanSyncType_Auto:
+		enh.AutoSyncWeapons(FlurryICD)
 	case proto.ShamanSyncType_SyncMainhandOffhandSwings:
-		enh.AutoAttacks.SetReplaceMHSwing(func(sim *core.Simulation, mhSwingSpell *core.Spell) *core.Spell {
-			if aa := &enh.AutoAttacks; aa.OffhandSwingAt()-sim.CurrentTime > FlurryICD {
-				if nextMHSwingAt := sim.CurrentTime + aa.MainhandSwingSpeed(); nextMHSwingAt != aa.OffhandSwingAt() {
-					aa.SetOffhandSwingAt(nextMHSwingAt)
-					if sim.Log != nil {
-						enh.Unit.Log(sim, "(Weapon Sync) Syncing OH with MH, setting next OH swing to %s", nextMHSwingAt)
-					}
-				}
-			}
-			return mhSwingSpell
-		})
+		enh.SyncMainhandOffhandSwings(FlurryICD)
 	case proto.ShamanSyncType_DelayOffhandSwings:
-		enh.AutoAttacks.SetReplaceMHSwing(func(sim *core.Simulation, mhSwingSpell *core.Spell) *core.Spell {
-			if aa := &enh.AutoAttacks; aa.OffhandSwingAt()-sim.CurrentTime > FlurryICD {
-				if nextMHSwingAt := sim.CurrentTime + aa.MainhandSwingSpeed() + 100*time.Millisecond; nextMHSwingAt > aa.OffhandSwingAt() {
-					aa.SetOffhandSwingAt(nextMHSwingAt)
-					if sim.Log != nil {
-						enh.Unit.Log(sim, "(Weapon Sync) Delaying OH swing, setting next OH swing to %s", nextMHSwingAt)
-					}
-				}
-			}
-			return mhSwingSpell
-		})
+		enh.DelayOffhandSwing(FlurryICD)
 	default:
 		enh.AutoAttacks.SetReplaceMHSwing(nil)
 	}
+}
+
+// Automatically sync weapons to 'None' sync type for mismatched weapon speeds or to
+// delayed offhand sync type for matching weapon speeds
+func (enh *EnhancementShaman) AutoSyncWeapons(FlurryICD time.Duration) {
+	enh.AutoAttacks.SetReplaceMHSwing(func(sim *core.Simulation, mhSwingSpell *core.Spell) *core.Spell {
+		if mh, oh := enh.MainHand(), enh.OffHand(); mh.SwingSpeed != oh.SwingSpeed {
+
+			return mhSwingSpell
+		}
+		return delayOffhandSwing(enh, sim, FlurryICD, mhSwingSpell)
+	})
+}
+
+func (enh *EnhancementShaman) SyncMainhandOffhandSwings(FlurryICD time.Duration) {
+	enh.AutoAttacks.SetReplaceMHSwing(func(sim *core.Simulation, mhSwingSpell *core.Spell) *core.Spell {
+		return syncMainhandOffhandSwings(enh, sim, FlurryICD, mhSwingSpell)
+	})
+}
+
+func syncMainhandOffhandSwings(enh *EnhancementShaman, sim *core.Simulation, FlurryICD time.Duration, mhSwingSpell *core.Spell) *core.Spell {
+	if aa := &enh.AutoAttacks; aa.OffhandSwingAt()-sim.CurrentTime > FlurryICD {
+		if nextMHSwingAt := sim.CurrentTime + aa.MainhandSwingSpeed(); nextMHSwingAt != aa.OffhandSwingAt() {
+			aa.SetOffhandSwingAt(nextMHSwingAt)
+			if sim.Log != nil {
+				enh.Unit.Log(sim, "(Weapon Sync for %s/%s) Syncing OH with MH, setting next OH swing to %s",
+					aa.MainhandSwingSpeed().Truncate(time.Millisecond), aa.OffhandSwingSpeed().Truncate(time.Millisecond), nextMHSwingAt)
+			}
+		}
+	}
+	return mhSwingSpell
+}
+
+func (enh *EnhancementShaman) DelayOffhandSwing(FlurryICD time.Duration) {
+	enh.AutoAttacks.SetReplaceMHSwing(func(sim *core.Simulation, mhSwingSpell *core.Spell) *core.Spell {
+		return delayOffhandSwing(enh, sim, FlurryICD, mhSwingSpell)
+	})
+}
+
+func delayOffhandSwing(enh *EnhancementShaman, sim *core.Simulation, FlurryICD time.Duration, mhSwingSpell *core.Spell) *core.Spell {
+	if aa := &enh.AutoAttacks; aa.OffhandSwingAt()-sim.CurrentTime > FlurryICD {
+		if nextMHSwingAt := sim.CurrentTime + aa.MainhandSwingSpeed() + 100*time.Millisecond; nextMHSwingAt > aa.OffhandSwingAt() {
+			aa.SetOffhandSwingAt(nextMHSwingAt)
+			if sim.Log != nil {
+				enh.Unit.Log(sim, "(Weapon Sync for %s/%s) Delaying OH swing, setting next OH swing to %s",
+					aa.MainhandSwingSpeed().Truncate(time.Millisecond), aa.OffhandSwingSpeed().Truncate(time.Millisecond), nextMHSwingAt)
+			}
+		}
+	}
+	return mhSwingSpell
 }
