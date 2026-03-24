@@ -282,8 +282,8 @@
 			"value": {
 				"min": {
 					"vals": [
-						{ "const": { "val": "0.3s" } },
-						{ "math": { "op": "OpMul", "lhs": { "autoSwingTime": { "autoType": "Ranged" } }, "rhs": { "const": { "val": "0.15" } } } }
+						{ "const": { "val": "0.5s" } },
+						{ "math": { "op": "OpMul", "lhs": { "autoSwingTime": { "autoType": "Ranged" } }, "rhs": { "const": { "val": "0.25" } } } }
 					]
 				}
 			}
