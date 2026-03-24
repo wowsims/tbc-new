@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
@@ -115,10 +116,14 @@ func (fireElemental *FireElemental) TryCast(sim *core.Simulation, target *core.U
 }
 
 func (shaman *Shaman) fireElementalBaseStats() stats.Stats {
-	return stats.Stats{
-		stats.Mana:    3130,
-		stats.Stamina: 323,
-	}
+	// Assuming warrior stats for now with 5% of each crit type.
+	// Logs suggest at least the crit chances are probably correct
+	// and damage value are looking reliable right now
+	return core.ClassBaseStats[proto.Class_ClassWarrior].Add(stats.Stats{
+		stats.Mana:                4910, // Confirmed in-game level 70
+		stats.PhysicalCritPercent: 5,
+		stats.SpellCritPercent:    5,
+	})
 }
 
 func (shaman *Shaman) fireElementalStatInheritance() core.PetStatInheritance {

@@ -28,6 +28,10 @@ func (shaman *Shaman) NewEarthElemental() *EarthElemental {
 		}),
 		shamanOwner: shaman,
 	}
+
+	earthElemental.AddStatDependency(stats.Strength, stats.AttackPower, 2)
+	earthElemental.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiMaxLevel[proto.Class_ClassWarrior])
+
 	earthElemental.EnableAutoAttacks(earthElemental, core.AutoAttackOptions{
 		MainHand: core.Weapon{
 			// https://discord.com/channels/260297137554849794/1474479843428139101/1480955121394520237
@@ -83,14 +87,17 @@ func (earthElemental *EarthElemental) TryCast(sim *core.Simulation, target *core
 }
 
 func (shaman *Shaman) earthElementalBaseStats() stats.Stats {
-	return stats.Stats{
-		stats.Stamina: 323, // Un-tested copied from fele
-	}
+	// Assuming warrior stats for now with 5% of each crit type.
+	// Logs suggest at least the crit chances are probably correct
+	// and damage value are looking reliable right now
+	return core.ClassBaseStats[proto.Class_ClassWarrior].Add(stats.Stats{
+		stats.PhysicalCritPercent: 5,
+	})
 }
 
 func (shaman *Shaman) earthElementalStatInheritance() core.PetStatInheritance {
 	return func(ownerStats stats.Stats) stats.Stats {
-		power := core.TernaryFloat64(shaman.Spec == proto.Spec_SpecEnhancementShaman, ownerStats[stats.AttackPower]*0.65, ownerStats[stats.SpellDamage])
+		power := ownerStats[stats.AttackPower] * 0.65
 
 		return stats.Stats{
 			stats.Stamina:     ownerStats[stats.Stamina],
