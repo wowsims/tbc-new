@@ -146,7 +146,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRetributionPaladin, {
 	},
 
 	//Handled by APL for major cds
-	hiddenMCDs: [2825, 28730, 31884, 351355, 22838, 23827, 29383, 12662],
+	hiddenMCDs: [2825, 28730, 31884, 351355, 22838, 23827, 12662, 29383, 22788, 22105, 23334, 23381, 35476],
 
 	raidSimPresets: [
 		{

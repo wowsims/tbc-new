@@ -1,6 +1,6 @@
 import { RetributionPaladin } from '../../core/player_specs/paladin';
 import * as PresetUtils from '../../core/preset_utils.js';
-import { ConsumesSpec, Debuffs, RaidBuffs, Profession, PseudoStat, PartyBuffs, IndividualBuffs, Race, Stat, Spec } from '../../core/proto/common.js';
+import { ConsumesSpec, Debuffs, RaidBuffs, Profession, PseudoStat, PartyBuffs, IndividualBuffs, Race, Stat, Spec, Drums } from '../../core/proto/common.js';
 import { RetributionPaladin_Options as RetributionPaladinOptions, RetributionPaladin_Rotation as PaladinRotation } from '../../core/proto/paladin.js';
 import { SavedTalents } from '../../core/proto/ui.js';
 import { Stats } from '../../core/proto_utils/stats';
@@ -70,7 +70,7 @@ export const DefaultConsumables = ConsumesSpec.create({
 	foodId: 27658,
 	conjuredId: 12662,
 	superSapper: true,
-	drumsId: 351355,
+	drumsId: Drums.GreaterDrumsOfBattle,
 	scrollAgi: true,
 	scrollStr: true,
 });
