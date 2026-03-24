@@ -49,6 +49,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecEnhancementShaman, {
 			Stat.StatIntellect,
 			Stat.StatAttackPower,
 			Stat.StatExpertiseRating,
+			Stat.StatArmorPenetration,
 			Stat.StatSpellDamage,
 			Stat.StatNatureDamage,
 		],
