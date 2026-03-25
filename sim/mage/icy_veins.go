@@ -11,24 +11,11 @@ func (mage *Mage) registerIcyVeinsSpell() {
 		return
 	}
 
-	icyVeinsMod := mage.AddDynamicMod(core.SpellModConfig{
-		ClassMask:  MageSpellsAll,
-		FloatValue: -.2,
-		Kind:       core.SpellMod_CastTime_Pct,
-	})
-
 	mage.IcyVeinsAura = mage.RegisterAura(core.Aura{
 		Label:    "Icy Veins",
 		ActionID: core.ActionID{SpellID: 12472},
 		Duration: time.Second * 20,
-		OnGain: func(aura *core.Aura, sim *core.Simulation) {
-			icyVeinsMod.Activate()
-		},
-		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
-			aura.Deactivate(sim)
-			icyVeinsMod.Deactivate()
-		},
-	})
+	}).AttachMultiplyCastSpeed(1.2)
 
 	mage.IcyVeins = mage.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 12472},
@@ -53,7 +40,7 @@ func (mage *Mage) registerIcyVeinsSpell() {
 		Spell: mage.IcyVeins,
 		Type:  core.CooldownTypeDPS,
 		ShouldActivate: func(sim *core.Simulation, character *core.Character) bool {
-			if icyVeinsMod.IsActive {
+			if mage.IcyVeinsAura.IsActive() {
 				return false
 			}
 
