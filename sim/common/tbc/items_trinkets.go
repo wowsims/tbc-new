@@ -556,15 +556,16 @@ func init() {
 		})
 
 		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:     "Battle Trance",
-			ActionID: core.ActionID{SpellID: 45040},
-			Duration: time.Second * 20,
-			ProcMask: core.ProcMaskMeleeOrRanged,
-			Outcome:  core.OutcomeLanded,
-			Callback: core.CallbackOnSpellHitDealt,
+			Name:            "Battle Trance",
+			MetricsActionID: core.ActionID{SpellID: 45040},
+			Duration:        time.Second * 20,
+			ProcMask:        core.ProcMaskMeleeOrRanged,
+			Outcome:         core.OutcomeLanded,
+			Callback:        core.CallbackOnSpellHitDealt,
 			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-				aura.Activate(sim)
-				aura.AddStack(sim)
+				if aura.IsActive() {
+					aura.AddStack(sim)
+				}
 			},
 		})
 
@@ -577,6 +578,7 @@ func init() {
 			Outcome:    core.OutcomeLanded,
 			Callback:   core.CallbackOnSpellHitDealt,
 			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+				aura.Activate(sim)
 				procAura.Activate(sim)
 			},
 		})

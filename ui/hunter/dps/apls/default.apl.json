@@ -197,7 +197,7 @@
 										"cmp": {
 											"op": "OpGe",
 											"lhs": { "autoTimeToNext": { "autoType": "RangedAuto" } },
-											"rhs": { "variableRef": { "name": "Actual time to weave" } }
+											"rhs": { "variableRef": { "name": "Weave ranged threshold" } }
 										}
 									},
 									{
@@ -207,7 +207,33 @@
 											"rhs": { "variableRef": { "name": "Closing time" } }
 										}
 									},
-									{ "not": { "val": { "gcdIsReady": {} } } },
+									{
+										"or": {
+											"vals": [
+												{
+													"cmp": {
+														"op": "OpGe",
+														"lhs": { "gcdTimeToReady": {} },
+														"rhs": { "variableRef": { "name": "Actual time to weave" } }
+													}
+												},
+												{
+													"and": {
+														"vals": [
+															{ "gcdIsReady": {} },
+															{
+																"cmp": {
+																	"op": "OpGe",
+																	"lhs": { "autoTimeToNext": { "autoType": "RangedAuto" } },
+																	"rhs": { "variableRef": { "name": "Weave before cast threshold" } }
+																}
+															}
+														]
+													}
+												}
+											]
+										}
+									},
 									{
 										"or": {
 											"vals": [
@@ -249,8 +275,8 @@
 		}
 	],
 	"valueVariables": [
-		{ "name": "Viper start", "value": { "const": { "val": "10%" } } },
-		{ "name": "Viper stop", "value": { "const": { "val": "30%" } } },
+		{ "name": "Viper start", "value": { "const": { "val": "5%" } } },
+		{ "name": "Viper stop", "value": { "const": { "val": "25%" } } },
 		{ "name": "Melee weave", "value": { "const": { "val": "true" } } },
 		{ "name": "Raptor only", "value": { "const": { "val": "false" } } },
 		{ "name": "Time to weave", "value": { "const": { "val": "400ms" } } },
@@ -282,8 +308,8 @@
 			"value": {
 				"min": {
 					"vals": [
-						{ "const": { "val": "0.3s" } },
-						{ "math": { "op": "OpMul", "lhs": { "autoSwingTime": { "autoType": "Ranged" } }, "rhs": { "const": { "val": "0.15" } } } }
+						{ "const": { "val": "0.5s" } },
+						{ "math": { "op": "OpMul", "lhs": { "autoSwingTime": { "autoType": "Ranged" } }, "rhs": { "const": { "val": "0.25" } } } }
 					]
 				}
 			}
@@ -314,6 +340,26 @@
 				}
 			}
 		},
-		{ "name": "Actual time to weave", "value": { "max": { "vals": [{ "variableRef": { "name": "Time to weave" } }, { "const": { "val": "101ms" } }] } } }
+		{ "name": "Actual time to weave", "value": { "max": { "vals": [{ "variableRef": { "name": "Time to weave" } }, { "const": { "val": "101ms" } }] } } },
+		{
+			"name": "Weave ranged threshold",
+			"value": {
+				"math": {
+					"op": "OpAdd",
+					"lhs": { "variableRef": { "name": "Actual time to weave" } },
+					"rhs": { "spellCastTime": { "spellId": { "spellId": 27021, "rank": 6 } } }
+				}
+			}
+		},
+		{
+			"name": "Weave before cast threshold",
+			"value": {
+				"math": {
+					"op": "OpAdd",
+					"lhs": { "variableRef": { "name": "Weave ranged threshold" } },
+					"rhs": { "spellCastTime": { "spellId": { "spellId": 34120, "rank": 1 } } }
+				}
+			}
+		}
 	]
 }

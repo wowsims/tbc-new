@@ -153,8 +153,8 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecHunter, {
 		const rotation = APLRotation.clone(Presets.DefaultRotation.rotation.rotation!);
 
 		const {
-			viperStartManaPercent = 0.1,
-			viperStopManaPercent = 0.3,
+			viperStartManaPercent = 0.05,
+			viperStopManaPercent = 0.25,
 			meleeWeave = player.getEquippedItem(ItemSlot.ItemSlotMainHand)?.item.handType === HandType.HandTypeTwoHand,
 			weaveOnlyRaptor = false,
 			useMulti = true,

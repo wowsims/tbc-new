@@ -44,8 +44,8 @@ import P1SV2H6PGear from './gear_sets/p1_sv_2h_6p.gear.json';
 export const DefaultRotation = PresetUtils.makePresetAPLRotation('APL', DefaultAPL);
 
 export const TurretRotation = Hunter_Rotation.create({
-	viperStartManaPercent: 0.1,
-	viperStopManaPercent: 0.3,
+	viperStartManaPercent: 0.05,
+	viperStopManaPercent: 0.25,
 	meleeWeave: false,
 	weaveOnlyRaptor: false,
 	timeToWeave: 400,
@@ -55,8 +55,8 @@ export const TurretRotation = Hunter_Rotation.create({
 export const TurretSimple = PresetUtils.makePresetSimpleRotation('Turret', Spec.SpecHunter, TurretRotation);
 
 export const WeaveRotation = Hunter_Rotation.create({
-	viperStartManaPercent: 0.1,
-	viperStopManaPercent: 0.3,
+	viperStartManaPercent: 0.05,
+	viperStopManaPercent: 0.25,
 	meleeWeave: true,
 	weaveOnlyRaptor: false,
 	timeToWeave: 400,
@@ -121,7 +121,7 @@ export const P1_SV_EP_PRESET = PresetUtils.makePresetEpWeights(
 export const BMTalents = {
 	name: 'BM',
 	data: SavedTalents.create({
-		talentsString: '522002005150122431051-0550201205',
+		talentsString: '522002005150122431051-0505201205',
 	}),
 };
 export const SVTalents = {

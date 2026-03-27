@@ -172,6 +172,9 @@ func buildStatWeightRequests(swr *proto.StatWeightsRequest) *proto.StatWeightReq
 		statMod := defaultStatMod
 		if stat.EqualsStat(stats.Armor) || stat.EqualsStat(stats.BonusArmor) || stat.EqualsStat(stats.ArmorPenetration) {
 			statMod = defaultStatMod * 10
+		} else if stat.EqualsStat(stats.ExpertiseRating) {
+			// Increment Expertise by 0.50%
+			statMod = ExpertisePerQuarterPercentReduction * 2
 		}
 		statModsHigh[stat] = statMod
 		statModsLow[stat] = -statMod

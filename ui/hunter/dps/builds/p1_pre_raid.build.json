@@ -105,14 +105,14 @@
 				}
 			}
 		},
-		"talentsString": "522002005150122431051-0550201205",
+		"talentsString": "522002005150122431051-0505201205",
 		"profession1": "Engineering",
 		"profession2": "Blacksmithing",
 		"cooldowns": {},
 		"rotation": {
 			"type": "TypeSimple",
 			"simple": {
-				"specRotationJson": "{\"meleeWeave\":true,\"timeToWeave\":400,\"useMulti\":true,\"useArcane\":true,\"viperStartManaPercent\":0.1,\"viperStopManaPercent\":0.3}",
+				"specRotationJson": "{\"meleeWeave\":true,\"timeToWeave\":400,\"useMulti\":true,\"useArcane\":true,\"viperStartManaPercent\":0.05,\"viperStopManaPercent\":0.25}",
 				"cooldowns": {}
 			}
 		},

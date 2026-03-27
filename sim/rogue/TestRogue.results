@@ -237,8 +237,8 @@ dps_results: {
 dps_results: {
  key: "TestRogue-AllItems-BlackenedNaaruSliver-34427"
  value: {
-  dps: 1985.49155
-  tps: 1409.699
+  dps: 1924.15175
+  tps: 1366.14774
  }
 }
 dps_results: {
@@ -1020,6 +1020,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRogue-AllItems-SyphonoftheNathrezim-32262"
+ value: {
+  dps: 1864.704
+  tps: 1323.93984
+ }
+}
+dps_results: {
  key: "TestRogue-AllItems-TalismanofAscendance-22678"
  value: {
   dps: 1813.24487
@@ -1197,8 +1204,8 @@ dps_results: {
 dps_results: {
  key: "TestRogue-Average-Default"
  value: {
-  dps: 1878.49494
-  tps: 1333.7314
+  dps: 1878.49307
+  tps: 1333.73008
  }
 }
 dps_results: {

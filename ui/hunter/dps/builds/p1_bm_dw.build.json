@@ -112,7 +112,7 @@
 		"rotation": {
 			"type": "TypeSimple",
 			"simple": {
-				"specRotationJson": "{\"timeToWeave\":400,\"useMulti\":true,\"useArcane\":true,\"viperStartManaPercent\":0.1,\"viperStopManaPercent\":0.3}",
+				"specRotationJson": "{\"timeToWeave\":400,\"useMulti\":true,\"useArcane\":true,\"viperStartManaPercent\":0.05,\"viperStopManaPercent\":0.25}",
 				"cooldowns": {}
 			}
 		},

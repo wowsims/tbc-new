@@ -46,6 +46,7 @@ func (hunter *Hunter) NewHunterPet() *HunterPet {
 		},
 		StatInheritance:       hunter.makeStatInheritance(),
 		EnabledOnStart:        true,
+		IsDynamic:             true,
 		IsGuardian:            false,
 		StartsAtOwnerDistance: true,
 	}

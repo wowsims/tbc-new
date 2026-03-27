@@ -234,7 +234,7 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 	}
 
 	if partyBuffs.ManaSpringTotem != proto.TristateEffect_TristateEffectMissing {
-		ManaSpringTotemAura(char, IsImproved(partyBuffs.ManaSpringTotem))
+		MakePermanent(ManaSpringTotemAura(char, IsImproved(partyBuffs.ManaSpringTotem)))
 	}
 
 	if partyBuffs.ManaTideTotems > 0 {
@@ -1731,8 +1731,8 @@ func registerManaTideTotemCD(char *Character, numManaTideTotems int32) {
 	mttAura = ManaTideTotemAura(char, -1)
 
 	char.Env.RegisterPostFinalizeEffect(func() {
-		// Use first MTT at 60s, or halfway through the fight, whichever comes first.
-		initialDelay = min(char.Env.BaseDuration/2, time.Second*60)
+		// Use first MTT at 40s, or halfway through the fight, whichever comes first.
+		initialDelay = min(char.Env.BaseDuration/2, time.Second*40)
 	})
 
 	registerExternalConsecutiveCDApproximation(
@@ -1758,11 +1758,21 @@ func registerManaTideTotemCD(char *Character, numManaTideTotems int32) {
 
 func ManaTideTotemAura(character *Character, actionTag int32) *Aura {
 	actionID := ManaTideTotemActionID.WithTag(actionTag)
-	dep := character.NewDynamicMultiplyStat(stats.Spirit, 2)
+	manaTideManaMetrics := character.NewManaMetrics(actionID)
+
 	return character.GetOrRegisterAura(Aura{
 		Label:    "ManaTideTotem-" + actionID.String(),
 		Tag:      ManaTideTotemAuraTag,
 		ActionID: actionID,
 		Duration: ManaTideTotemDuration,
-	}).AttachStatDependency(dep)
+		OnGain: func(aura *Aura, sim *Simulation) {
+			StartPeriodicAction(sim, PeriodicActionOptions{
+				Period:   ManaTideTotemDuration / 4,
+				NumTicks: 4,
+				OnAction: func(s *Simulation) {
+					character.AddMana(sim, 0.06*character.MaxMana(), manaTideManaMetrics)
+				},
+			})
+		},
+	})
 }

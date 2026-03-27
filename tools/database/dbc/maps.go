@@ -405,12 +405,14 @@ var MapItemIdToPPM = map[int32]float64{
 	29693: 0.5, // Khorium Champion
 	29962: 1,   // Heartrazor
 	29996: 1,   // Rod of the sun king
-	31331: 2,   // The Night blade
+	30090: 1,   // World Breaker
 	30311: 2,   // Warp Slicer
 	30316: 2,   // Devastation
-	30090: 1,   // World Breaker
-	32505: 1,   // Madness of the Betrayer
+	31323: 1,   // Don Santos' Famous Hunting Rifle
+	31331: 2,   // The Night blade
 	31859: 1,   // Darkmoon Card: Madness
+	32262: 1,   // Syphon of the Nathrezim
+	32505: 1,   // Madness of the Betrayer
 }
 
 func getPPMForItemID(itemID int32) float64 {

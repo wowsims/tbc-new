@@ -7,7 +7,7 @@ import { REPO_RELEASES_URL } from '../../constants/other';
 import { IndividualSimUI } from '../../individual_sim_ui';
 import i18n from '../../../i18n/config';
 import { BulkSettings, DistributionMetrics, ProgressMetrics } from '../../proto/api';
-import { Class, GemColor, HandType, ItemRandomSuffix, ItemSlot, ItemSpec, RangedWeaponType } from '../../proto/common';
+import { GemColor, HandType, ItemRandomSuffix, ItemSlot, ItemSpec, RangedWeaponType } from '../../proto/common';
 import { ItemEffectRandPropPoints, SimDatabase, SimEnchant, SimGem, SimItem } from '../../proto/db';
 import { UIEnchant, UIGem, UIItem } from '../../proto/ui';
 import { ActionId } from '../../proto_utils/action_id';
@@ -38,6 +38,7 @@ import {
 import { BulkGearJsonImporter } from './importers';
 import { trackEvent } from '../../../tracking/utils';
 import { EnumPicker } from '../pickers/enum_picker';
+import { translateBulkSlotName } from '../../../i18n/localization';
 
 const WEB_DEFAULT_ITERATIONS = 1000;
 const WEB_ITERATIONS_LIMIT = 50_000;
@@ -532,7 +533,7 @@ export class BulkTab extends SimTab {
 
 			if ([BulkSimItemSlot.ItemSlotFinger, BulkSimItemSlot.ItemSlotTrinket].includes(bulkItemSlot)) {
 				if (numOptions < 2) {
-					throw 'At least 2 items must be selected for ' + BulkSimItemSlot[bulkItemSlot];
+					throw `At least 2 items must be selected for ${translateBulkSlotName(bulkItemSlot)}`;
 				}
 
 				let pairsForSlot = getAllPairs(optionsForSlot);
@@ -729,11 +730,16 @@ export class BulkTab extends SimTab {
 
 				this.resetResultsTabContent();
 				this.calculateBulkCombinations();
-				await this.simUI.runSim((progressMetrics: ProgressMetrics) => {
+				const response = await this.simUI.runSimLightweight(this.originalGear, (progressMetrics: ProgressMetrics) => {
 					const msSinceStart = new Date().getTime() - simStart;
 					this.setSimProgress(progressMetrics, msSinceStart / 1000, 0, this.combinations);
 				});
-				const referenceDpsMetrics = this.simUI.raidSimResultsManager!.currentData!.simResult!.getFirstPlayer()!.dps;
+				if (!response || (response && 'type' in response)) {
+					throw new Error(response?.message);
+				}
+
+				const [_, result] = response;
+				const referenceDpsMetrics = result!.raidMetrics!.dps!;
 
 				const allItemCombos: Map<ItemSlot, EquippedItem>[] = [];
 
@@ -820,6 +826,12 @@ export class BulkTab extends SimTab {
 				this.buildResultsTabContent();
 			} catch (error) {
 				console.error(error);
+				if (!isAborted && typeof error === 'string') {
+					new Toast({
+						variant: 'error',
+						body: error,
+					});
+				}
 				await this.simUI.player.setGearAsync(TypedEvent.nextEventID(), this.originalGear!);
 			} finally {
 				this.isRunning = false;

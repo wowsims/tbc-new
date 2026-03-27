@@ -198,6 +198,49 @@ func init() {
 		character.ItemSwap.RegisterProc(31332, procTrigger)
 	})
 
+	// Syphon of the Nathrezim
+	core.NewItemEffect(32262, func(agent core.Agent) {
+		character := agent.GetCharacter()
+		spell := character.GetOrRegisterSpell(core.SpellConfig{
+			ActionID:    core.ActionID{SpellID: 40293},
+			SpellSchool: core.SpellSchoolShadow,
+			ProcMask:    core.ProcMaskEmpty,
+			Flags:       core.SpellFlagPassiveSpell,
+
+			DamageMultiplier: 1,
+			CritMultiplier:   character.DefaultSpellCritMultiplier(),
+
+			ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+				spell.CalcAndDealDamage(sim, target, 20, spell.OutcomeAlwaysHit)
+			},
+		})
+
+		aura := character.MakeProcTriggerAura(core.ProcTrigger{
+			Name:            "Siphon Essence",
+			MetricsActionID: core.ActionID{SpellID: 40293},
+			Duration:        time.Second * 6,
+			ProcMask:        core.ProcMaskMelee,
+			Callback:        core.CallbackOnSpellHitDealt,
+			Handler: func(sim *core.Simulation, _ *core.Spell, result *core.SpellResult) {
+				spell.Cast(sim, result.Target)
+			},
+		})
+
+		dpm := character.NewDynamicLegacyProcForWeapon(32262, 1, 0)
+
+		procTrigger := character.MakeProcTriggerAura(core.ProcTrigger{
+			Name:     "Syphon of the Nathrezim - Trigger",
+			DPM:      dpm,
+			Outcome:  core.OutcomeLanded,
+			Callback: core.CallbackOnSpellHitDealt,
+			Handler: func(sim *core.Simulation, _ *core.Spell, result *core.SpellResult) {
+				aura.Activate(sim)
+			},
+		})
+
+		character.ItemSwap.RegisterProc(32262, procTrigger)
+	})
+
 	// Warglaives of Azzinoth
 	core.NewItemSet(core.ItemSet{
 		Name: "The Twin Blades of Azzinoth",

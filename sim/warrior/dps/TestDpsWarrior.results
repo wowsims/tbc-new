@@ -263,8 +263,8 @@ dps_results: {
 dps_results: {
  key: "TestDpsWarrior-AllItems-BlackenedNaaruSliver-34427"
  value: {
-  dps: 2148.45555
-  tps: 1621.55696
+  dps: 2058.99233
+  tps: 1554.44407
   dtps: 7.2778
  }
 }
@@ -1146,6 +1146,14 @@ dps_results: {
   dps: 1966.59184
   tps: 1485.97489
   dtps: 7.21755
+ }
+}
+dps_results: {
+ key: "TestDpsWarrior-AllItems-SyphonoftheNathrezim-32262"
+ value: {
+  dps: 2005.73982
+  tps: 1516.10815
+  dtps: 7.2778
  }
 }
 dps_results: {

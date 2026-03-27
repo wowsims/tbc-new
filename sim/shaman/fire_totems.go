@@ -101,7 +101,7 @@ func (shaman *Shaman) registerMagmaTotemSpell() {
 
 			OnTick: func(sim *core.Simulation, _ *core.Unit, dot *core.Dot) {
 				baseDamage := 97.0
-				dot.Spell.CalcPeriodicAoeDamage(sim, baseDamage, dot.Spell.OutcomeMagicHitAndCrit)
+				dot.Spell.CalcPeriodicAoeDamage(sim, baseDamage, dot.Spell.OutcomeTickMagicHitAndCrit)
 				dot.Spell.DealBatchedPeriodicDamage(sim)
 			},
 		},

@@ -118,7 +118,7 @@ export const P1_FURY_EP_PRESET = PresetUtils.makePresetEpWeights(
 			[Stat.StatMeleeCritRating]: 0.92,
 			[Stat.StatMeleeHasteRating]: 0.81,
 			[Stat.StatArmorPenetration]: 0.15,
-			[Stat.StatExpertiseRating]: 1.03,
+			[Stat.StatExpertiseRating]: 1.31,
 		},
 		{
 			[PseudoStat.PseudoStatMainHandDps]: 2.79,
@@ -160,7 +160,7 @@ export const P1_ARMS_EP_PRESET = PresetUtils.makePresetEpWeights(
 			[Stat.StatMeleeCritRating]: 0.95,
 			[Stat.StatMeleeHasteRating]: 0.8,
 			[Stat.StatArmorPenetration]: 0.19,
-			[Stat.StatExpertiseRating]: 1.46,
+			[Stat.StatExpertiseRating]: 1.78,
 		},
 		{
 			[PseudoStat.PseudoStatMainHandDps]: 5.85,
@@ -180,7 +180,7 @@ export const P3_ARMS_EP_PRESET = PresetUtils.makePresetEpWeights(
 			[Stat.StatMeleeCritRating]: 1.05,
 			[Stat.StatMeleeHasteRating]: 0.85,
 			[Stat.StatArmorPenetration]: 0.23,
-			[Stat.StatExpertiseRating]: 1.66,
+			[Stat.StatExpertiseRating]: 1.78,
 		},
 		{
 			[PseudoStat.PseudoStatMainHandDps]: 6.0,
