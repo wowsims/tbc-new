@@ -45,12 +45,27 @@ func (shaman *Shaman) applyDualWieldSpecialization() {
 	if shaman.Talents.DualWieldSpecialization == 0 {
 		return
 	}
+	value := 2 * float64(shaman.Talents.DualWieldSpecialization)
+	buffed := false
 	DWaura := shaman.RegisterAura(core.Aura{
 		Label:      "Dual Wield Specialization",
 		ActionID:   core.ActionID{SpellID: 30819},
 		BuildPhase: core.CharacterBuildPhaseTalents,
 		Duration:   core.NeverExpires,
-	}).AttachStatBuff(stats.PhysicalHitPercent, 2*float64(shaman.Talents.DualWieldSpecialization))
+		OnGain: func(_ *core.Aura, sim *core.Simulation) {
+			//Can't use AttachStatBuff since it will activate in BuildPhaseTalent even when not dual wielding
+			if shaman.AutoAttacks.IsDualWielding && !buffed {
+				shaman.AddStatDynamic(sim, stats.PhysicalHitPercent, value)
+				buffed = true
+			}
+		},
+		OnExpire: func(_ *core.Aura, sim *core.Simulation) {
+			if buffed {
+				shaman.AddStatDynamic(sim, stats.PhysicalHitPercent, -value)
+				buffed = false
+			}
+		},
+	})
 
 	if shaman.AutoAttacks.IsDualWielding {
 		core.MakePermanent(DWaura)
