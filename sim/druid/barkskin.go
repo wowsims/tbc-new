@@ -51,5 +51,8 @@ func (druid *Druid) registerBarkskin() {
 	druid.AddMajorCooldown(core.MajorCooldown{
 		Spell: druid.Barkskin.Spell,
 		Type:  core.CooldownTypeSurvival,
+		ShouldActivate: func(sim *core.Simulation, character *core.Character) bool {
+			return false // Require manual usage
+		},
 	})
 }
