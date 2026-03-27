@@ -49,6 +49,7 @@ func (shaman *Shaman) applyDualWieldSpecialization() {
 		Label:      "Dual Wield Specialization",
 		ActionID:   core.ActionID{SpellID: 30819},
 		BuildPhase: core.CharacterBuildPhaseTalents,
+		Duration:   core.NeverExpires,
 	}).AttachStatBuff(stats.PhysicalHitPercent, 2*float64(shaman.Talents.DualWieldSpecialization))
 
 	if shaman.AutoAttacks.IsDualWielding {
