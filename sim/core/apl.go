@@ -339,18 +339,30 @@ func (rot *APLRotation) getStats() *proto.APLStats {
 	}
 }
 
+func getAllActionsSafe(action *APLAction) []*APLAction {
+	// Check if action is nil before calling GetAllActions
+	if action == nil {
+		return []*APLAction{}
+	}
+	return action.GetAllActions()
+}
+
 func (rot *APLRotation) allAPLActions() []*APLAction {
 	if rot == nil || rot.priorityList == nil {
 		return []*APLAction{}
 	}
 
-	return Flatten(MapSlice(rot.priorityList, func(action *APLAction) []*APLAction {
-		// Check if action is nil before calling GetAllActions
-		if action == nil {
-			return []*APLAction{}
+	actions := Flatten(MapSlice(rot.priorityList, getAllActionsSafe))
+
+	//Grab rot.groups actions as well
+	if rot.groups != nil {
+		for _, group := range rot.groups {
+			groupActions := Flatten(MapSlice(group.actions, getAllActionsSafe))
+			actions = append(actions, groupActions...)
 		}
-		return action.GetAllActions()
-	}))
+	}
+
+	return actions
 }
 
 // Returns all action objects from the prepull as an unstructured list. Used for easily finding specific actions.
