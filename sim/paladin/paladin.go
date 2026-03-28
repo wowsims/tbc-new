@@ -20,8 +20,10 @@ type Paladin struct {
 
 	PreviousSeal      *core.Aura
 	PreviousJudgement *core.Spell
+	PreviousSealSpell *core.Spell
 	CurrentSeal       *core.Aura
 	CurrentJudgement  *core.Spell
+	CurrentSealSpell  *core.Spell
 
 	// Timers for spells with multiple ranks
 	consecrationTimer   *core.Timer

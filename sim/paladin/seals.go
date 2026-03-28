@@ -133,7 +133,7 @@ const TwistTag = "Twistable"
 // Light -> X
 
 // Justice -> X
-func (paladin *Paladin) applySeal(newSeal *core.Aura, judgement *core.Spell, sim *core.Simulation) {
+func (paladin *Paladin) applySeal(newSeal *core.Aura, sealSpell *core.Spell, judgement *core.Spell, sim *core.Simulation) {
 	if paladin.CurrentSeal != nil {
 		newSealLabel := newSeal.ActionID.SpellID
 		if newSealLabel == 0 {
@@ -146,7 +146,7 @@ func (paladin *Paladin) applySeal(newSeal *core.Aura, judgement *core.Spell, sim
 		}
 		// If they are recasting the same seal, we just refresh the duration
 		if newSealLabel == currentSealLabel {
-			paladin.CurrentSeal.Activate(sim)
+			paladin.CurrentSeal.Refresh(sim)
 			return
 		}
 	}
@@ -154,6 +154,7 @@ func (paladin *Paladin) applySeal(newSeal *core.Aura, judgement *core.Spell, sim
 	// Twisting only occurs when current seal is Command or Righteousness
 	if paladin.CurrentSeal.IsActive() {
 		if paladin.CurrentSeal.Tag == TwistTag {
+			paladin.PreviousSealSpell = sealSpell
 			paladin.PreviousSeal = paladin.CurrentSeal
 			paladin.PreviousJudgement = paladin.CurrentJudgement
 			pendingAction := core.NewDelayedAction(core.DelayedActionOptions{
@@ -169,6 +170,7 @@ func (paladin *Paladin) applySeal(newSeal *core.Aura, judgement *core.Spell, sim
 		}
 	}
 
+	paladin.CurrentSealSpell = sealSpell
 	paladin.CurrentSeal = newSeal
 	paladin.CurrentJudgement = judgement
 	paladin.CurrentSeal.Activate(sim)
@@ -301,7 +303,7 @@ func (paladin *Paladin) registerSealOfRighteousness(seal seal) {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			paladin.applySeal(aura, judgeSpell, sim)
+			paladin.applySeal(aura, spell, judgeSpell, sim)
 		},
 	})
 
@@ -376,7 +378,7 @@ func (paladin *Paladin) registerSealOfLight(seal seal) {
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			paladin.applySeal(aura, judgeSpell, sim)
+			paladin.applySeal(aura, spell, judgeSpell, sim)
 		},
 	})
 
@@ -450,7 +452,7 @@ func (paladin *Paladin) registerSealOfWisdom(seal seal) {
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			paladin.applySeal(aura, judgeSpell, sim)
+			paladin.applySeal(aura, spell, judgeSpell, sim)
 		},
 	})
 	paladin.addSealRank(&paladin.SealOfWisdom, &paladin.SealOfWisdomJudgements, &paladin.SealOfWisdomAuras, sealSpell, judgeSpell, aura)
@@ -524,7 +526,7 @@ func (paladin *Paladin) registerSealOfJustice(seal seal) {
 		Flags:          core.SpellFlagAPL,
 		Rank:           seal.rank,
 		ManaCost: core.ManaCostOptions{
-			FlatCost: int32(seal.manaCost),
+			BaseCostPercent: seal.manaCost,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{GCD: core.GCDDefault},
@@ -532,7 +534,7 @@ func (paladin *Paladin) registerSealOfJustice(seal seal) {
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			paladin.applySeal(aura, judgeSpell, sim)
+			paladin.applySeal(aura, spell, judgeSpell, sim)
 		},
 	})
 	paladin.addSealRank(&paladin.SealOfJustice, &paladin.SealOfJusticeJudgements, &paladin.SealOfJusticeAuras, sealSpell, judgeSpell, aura)
@@ -597,7 +599,7 @@ func (paladin *Paladin) registerSealOfTheCrusader(seal seal) {
 			DefaultCast: core.Cast{GCD: core.GCDDefault},
 		},
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			paladin.applySeal(aura, judgeSpell, sim)
+			paladin.applySeal(aura, spell, judgeSpell, sim)
 		},
 	})
 	paladin.addSealRank(&paladin.SealOfTheCrusader, &paladin.SealOfTheCrusaderJudgements, &paladin.SealOfTheCrusaderAuras, sealSpell, judgeSpell, aura)
@@ -690,7 +692,7 @@ func (paladin *Paladin) registerSealOfBlood(seal seal) {
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			paladin.applySeal(aura, judgeSpell, sim)
+			paladin.applySeal(aura, spell, judgeSpell, sim)
 		},
 	})
 	paladin.addSealRank(&paladin.SealOfBlood, &paladin.SealOfBloodJudgements, &paladin.SealOfBloodAuras, sealSpell, judgeSpell, aura)
@@ -807,7 +809,7 @@ func (paladin *Paladin) registerSealOfVengeance(seal seal) {
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			paladin.applySeal(aura, judgeSpell, sim)
+			paladin.applySeal(aura, spell, judgeSpell, sim)
 		},
 	})
 	paladin.addSealRank(&paladin.SealOfVengeance, &paladin.SealOfVengeanceJudgements, &paladin.SealOfVengeanceAuras, sealSpell, judgeSpell, aura)
@@ -903,7 +905,7 @@ func (paladin *Paladin) registerSealOfCommandRank(seal seal) {
 			DefaultCast: core.Cast{GCD: core.GCDDefault},
 		},
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			paladin.applySeal(aura, judgeSpell, sim)
+			paladin.applySeal(aura, spell, judgeSpell, sim)
 		},
 	})
 	paladin.addSealRank(&paladin.SealOfCommand, &paladin.SealOfCommandJudgements, &paladin.SealOfCommandAuras, sealSpell, judgeSpell, aura)

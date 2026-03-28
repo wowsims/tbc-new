@@ -90,7 +90,6 @@ export const DefaultRaidBuffs = RaidBuffs.create({
 
 export const DefaultPartyBuffs = PartyBuffs.create({
 	manaSpringTotem: 1,
-	wrathOfAirTotem: 1,
 	leaderOfThePack: 2,
 	battleShout: 2,
 	strengthOfEarthTotem: 2,

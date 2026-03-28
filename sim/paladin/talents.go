@@ -461,7 +461,7 @@ func (paladin *Paladin) applyImprovedRetributionAura() {
 	// TODO: Implement aura modifier
 }
 
-// Crusade - Increases all damage caused by 1/2/3% and all damage caused against Humanoids, Demons, Undead and Elementals by an additional 1/2/3%
+// Crusade - Increases all damage caused by 1/2/3% against Humanoids, Demons, Undead and Elementals
 func (paladin *Paladin) applyCrusade() {
 	paladin.Env.RegisterPostFinalizeEffect(func() {
 		for _, at := range paladin.AttackTables {
@@ -479,6 +479,12 @@ func (paladin *Paladin) applyTwoHandedWeaponSpecialization() {
 		ProcMask:   core.ProcMaskMelee,
 		FloatValue: 0.02 * float64(paladin.Talents.TwoHandedWeaponSpecialization),
 	})
+
+	// paladin.AddStaticMod(core.SpellModConfig{
+	// 	Kind:       core.SpellMod_DamageDone_Pct,
+	// 	ClassMask:  SpellMaskJudgementOfBlood | SpellMaskJudgementOfCommand,
+	// 	FloatValue: 0.02 * float64(paladin.Talents.TwoHandedWeaponSpecialization),
+	// })
 }
 
 // Improved Sanctity Aura - Increases the damage caused by all party members within 30 yards of the Paladin with Sanctity Aura active by 1/2%
@@ -526,7 +532,7 @@ func (paladin *Paladin) applyVengeance() {
 	})
 }
 
-// Sanctified Judgement - Gives your Judgement spell a 33/66/100% chance to return 80% of the mana cost of the Judgement
+// Sanctified Judgement - Gives your Judgement spell a 33/66/100% chance to return 80% of the mana cost of the Judged Seal
 func (paladin *Paladin) applySanctifiedJudgement() {
 	procChance := []float64{0, 0.33, 0.66, 1}[paladin.Talents.SanctifiedJudgement]
 	sancJudgementManaMetric := paladin.NewManaMetrics(core.ActionID{SpellID: 31878})
@@ -538,7 +544,11 @@ func (paladin *Paladin) applySanctifiedJudgement() {
 		ProcChance:         procChance,
 		TriggerImmediately: true,
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			paladin.AddMana(sim, paladin.Judgement.CurCast.Cost*.8, sancJudgementManaMetric)
+			if paladin.PreviousSeal.IsActive() {
+				paladin.AddMana(sim, paladin.PreviousSealSpell.CurCast.Cost*.8, sancJudgementManaMetric)
+			} else {
+				paladin.AddMana(sim, paladin.CurrentSealSpell.CurCast.Cost*.8, sancJudgementManaMetric)
+			}
 		},
 	})
 }
