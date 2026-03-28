@@ -206,8 +206,8 @@
 {"effectId":2591,"itemId":19790,"spellId":24159,"name":"Animist's Caress","icon":"spell_nature_reincarnation","type":1,"extraTypes":[9],"stats":[0,0,10,10,24,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"quality":3},
 {"effectId":2603,"itemId":19971,"spellId":24303,"name":"Eternium Fishing Line","icon":"inv_fabric_mageweave_02","type":13,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"quality":2},
 {"effectId":3269,"itemId":34836,"spellId":45698,"name":"Truesilver Fishing Line","icon":"inv_misc_thread_01","type":13,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"quality":2},
-{"effectId":3289,"spellId":48557,"name":"Riding Crop","icon":"trade_engraving","type":13,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"quality":1},
 {"effectId":3289,"spellId":48555,"name":"Skybreaker Whip","icon":"trade_engraving","type":13,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"quality":1},
+{"effectId":3289,"spellId":48557,"name":"Riding Crop","icon":"trade_engraving","type":13,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"quality":1},
 {"effectId":3315,"itemId":37312,"spellId":48401,"name":"Carrot on a Stick","icon":"inv_misc_food_54","type":13,"stats":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"quality":2}
 ],
 "gems":[

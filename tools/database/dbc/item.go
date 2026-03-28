@@ -128,7 +128,7 @@ func (item *Item) GetStats(itemLevel int) *stats.Stats {
 		stats[proto.Stat_StatArmor] = float64(armor)
 	}
 
-	if item.QualityModifier > 0 {
+	if item.ItemClass == ITEM_CLASS_ARMOR && item.QualityModifier > 0 {
 		stats[proto.Stat_StatBonusArmor] = item.QualityModifier
 	}
 
