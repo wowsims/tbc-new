@@ -161,7 +161,13 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionWarrior, {
 		rotations: [Presets.ROTATION_DEFAULT],
 		// Preset gear configurations that the user can quickly select.
 		gear: [Presets.PRERAID_BALANCED_PRESET, Presets.P1_PRESET, Presets.P2_PRESET, Presets.P3_PRESET, Presets.P35_PRESET, Presets.P4_PRESET],
-		builds: [Presets.DEFAULT_PRESET_BUILD, Presets.MAGTHERIDON_PRESET_BUILD, Presets.MOROGRIM_PRESET_BUILD, Presets.P1_PRESET_BUILD],
+		builds: [
+			Presets.DEFAULT_PRESET_BUILD,
+			Presets.KARAZHAN_PRESET_BUILD,
+			Presets.MAGTHERIDON_PRESET_BUILD,
+			Presets.MOROGRIM_PRESET_BUILD,
+			Presets.P1_PRESET_BUILD,
+		],
 	},
 
 	autoRotation: (_player: Player<Spec.SpecProtectionWarrior>): APLRotation => {

@@ -177,9 +177,8 @@ export class PresetConfigurationPicker extends Component {
 				if (settings.playerOptions?.profession2) simUI.player.setProfession2(eventID, settings.playerOptions.profession2);
 				if (typeof settings.playerOptions?.distanceFromTarget === 'number')
 					simUI.player.setDistanceFromTarget(eventID, settings.playerOptions.distanceFromTarget);
-				if (typeof settings.playerOptions?.reactionTimeMs === 'number') simUI.player.setReactionTime(eventID, settings.playerOptions.reactionTimeMs);
-				if (typeof settings.playerOptions?.channelClipDelayMs === 'number')
-					simUI.player.setChannelClipDelay(eventID, settings.playerOptions.channelClipDelayMs);
+				if (settings.playerOptions?.reactionTimeMs) simUI.player.setReactionTime(eventID, settings.playerOptions.reactionTimeMs);
+				if (settings.playerOptions?.channelClipDelayMs) simUI.player.setChannelClipDelay(eventID, settings.playerOptions.channelClipDelayMs);
 				if (typeof settings.playerOptions?.inFrontOfTarget === 'boolean')
 					simUI.player.setInFrontOfTarget(eventID, settings.playerOptions.inFrontOfTarget);
 				if (settings.playerOptions?.enableItemSwap !== undefined && settings.playerOptions?.itemSwap) {
