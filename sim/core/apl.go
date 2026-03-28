@@ -344,13 +344,25 @@ func (rot *APLRotation) allAPLActions() []*APLAction {
 		return []*APLAction{}
 	}
 
-	return Flatten(MapSlice(rot.priorityList, func(action *APLAction) []*APLAction {
+	actionFunc := func(action *APLAction) []*APLAction {
 		// Check if action is nil before calling GetAllActions
 		if action == nil {
 			return []*APLAction{}
 		}
 		return action.GetAllActions()
-	}))
+	}
+
+	actions := Flatten(MapSlice(rot.priorityList, actionFunc))
+
+	//Grab rot.groups actions as well
+	if rot.groups != nil {
+		for _, group := range rot.groups {
+			groupActions := Flatten(MapSlice(group.actions, actionFunc))
+			actions = append(actions, groupActions...)
+		}
+	}
+
+	return actions
 }
 
 // Returns all action objects from the prepull as an unstructured list. Used for easily finding specific actions.
