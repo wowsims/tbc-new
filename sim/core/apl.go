@@ -339,25 +339,25 @@ func (rot *APLRotation) getStats() *proto.APLStats {
 	}
 }
 
+func getAllActionsSafe(action *APLAction) []*APLAction {
+	// Check if action is nil before calling GetAllActions
+	if action == nil {
+		return []*APLAction{}
+	}
+	return action.GetAllActions()
+}
+
 func (rot *APLRotation) allAPLActions() []*APLAction {
 	if rot == nil || rot.priorityList == nil {
 		return []*APLAction{}
 	}
 
-	actionFunc := func(action *APLAction) []*APLAction {
-		// Check if action is nil before calling GetAllActions
-		if action == nil {
-			return []*APLAction{}
-		}
-		return action.GetAllActions()
-	}
-
-	actions := Flatten(MapSlice(rot.priorityList, actionFunc))
+	actions := Flatten(MapSlice(rot.priorityList, getAllActionsSafe))
 
 	//Grab rot.groups actions as well
 	if rot.groups != nil {
 		for _, group := range rot.groups {
-			groupActions := Flatten(MapSlice(group.actions, actionFunc))
+			groupActions := Flatten(MapSlice(group.actions, getAllActionsSafe))
 			actions = append(actions, groupActions...)
 		}
 	}
