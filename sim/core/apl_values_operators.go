@@ -916,6 +916,18 @@ func (rot *APLRotation) newValueAnd(config *proto.APLValueAnd, _ *proto.UUID, gr
 	} else if len(vals) == 1 {
 		return vals[0]
 	}
+	// Short-circuit: if any child is const false, the whole And is false.
+	// Orphan the other children so they still get Finalize() called.
+	for _, val := range vals {
+		if constVal, ok := val.(*APLValueConst); ok && constVal.valType == proto.APLValueType_ValueTypeBool && !constVal.boolVal {
+			for _, other := range vals {
+				if other != val {
+					rot.orphanValue(other)
+				}
+			}
+			return constVal
+		}
+	}
 	return &APLValueAnd{
 		vals: vals,
 	}
@@ -931,6 +943,18 @@ func (rot *APLRotation) newValueOr(config *proto.APLValueOr, _ *proto.UUID, grou
 	} else if len(vals) == 1 {
 		return vals[0]
 	}
+	// Short-circuit: if any child is const true, the whole Or is true.
+	// Orphan the other children so they still get Finalize() called.
+	for _, val := range vals {
+		if constVal, ok := val.(*APLValueConst); ok && constVal.valType == proto.APLValueType_ValueTypeBool && constVal.boolVal {
+			for _, other := range vals {
+				if other != val {
+					rot.orphanValue(other)
+				}
+			}
+			return constVal
+		}
+	}
 	return &APLValueOr{
 		vals: vals,
 	}
@@ -940,6 +964,12 @@ func (rot *APLRotation) newValueNot(config *proto.APLValueNot, _ *proto.UUID, gr
 	val := rot.coerceTo(rot.newAPLValueWithContext(config.Val, groupVariables), proto.APLValueType_ValueTypeBool)
 	if val == nil {
 		return nil
+	}
+	// Fold Not(const) → flipped const
+	if constVal, ok := val.(*APLValueConst); ok && constVal.valType == proto.APLValueType_ValueTypeBool {
+		constVal.boolVal = !constVal.boolVal
+		constVal.stringVal = Ternary(constVal.boolVal, "true", "false")
+		return constVal
 	}
 	return &APLValueNot{
 		val: val,

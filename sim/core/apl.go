@@ -19,6 +19,14 @@ type APLRotation struct {
 	variableCaches map[string]*variableCache
 	evalGeneration uint32
 
+	// Values orphaned by compile-time constant folding (e.g. And/Or short-circuit).
+	// These still need Finalize() called on them.
+	orphanedValues []APLValue
+
+	// Actions pruned by compile-time constant folding (const false condition).
+	// Their spells still need to be removed from MCD auto-casting.
+	prunedActions []APLActionImpl
+
 	// Action currently controlling this rotation (only used for certain actions, such as StrictSequence).
 	controllingActions []APLActionImpl
 
@@ -260,19 +268,22 @@ func (unit *Unit) newAPLRotation(config *proto.APLRotation) *APLRotation {
 		})
 	}
 
+	// Finalize orphaned values from compile-time constant folding.
+	for _, value := range rotation.orphanedValues {
+		value.Finalize(rotation)
+	}
+
 	agent := unit.Env.GetAgentFromUnit(unit)
 	if agent != nil {
 		character := agent.GetCharacter()
 
-		// Remove MCDs that are referenced by APL actions, so that the Autocast Other Cooldowns
-		// action does not include them.
+		// Remove MCDs that are referenced by APL actions (including pruned ones),
+		// so that the Autocast Other Cooldowns action does not include them.
 		for _, action := range rotation.allAPLActions() {
-			if castSpellAction, ok := action.impl.(*APLActionCastSpell); ok {
-				character.removeInitialMajorCooldown(castSpellAction.spell.ActionID)
-			}
-			if castFriendlySpellAction, ok := action.impl.(*APLActionCastFriendlySpell); ok {
-				character.removeInitialMajorCooldown(castFriendlySpellAction.spell.ActionID)
-			}
+			removeFromMajorCooldowns(action.impl, character)
+		}
+		for _, impl := range rotation.prunedActions {
+			removeFromMajorCooldowns(impl, character)
 		}
 
 		// If user has Item Swapping enabled and hasn't swapped back to the main set do it here.
@@ -553,4 +564,17 @@ func (rot *APLRotation) reResolveVariableRefs(value APLValue, groupVars map[stri
 	}
 
 	return value
+}
+
+// orphanValue collects a value and all its descendants into orphanedValues
+// so they still get Finalize() called even though they've been removed from
+// the active APL tree by compile-time constant folding.
+func (rot *APLRotation) orphanValue(value APLValue) {
+	if value == nil {
+		return
+	}
+	rot.orphanedValues = append(rot.orphanedValues, value)
+	for _, inner := range value.GetInnerValues() {
+		rot.orphanValue(inner)
+	}
 }
