@@ -1,4 +1,3 @@
-import { Phase } from '../core/constants/other';
 import { Class, ConsumesSpec, Debuffs, Drums, IndividualBuffs, PartyBuffs, RaidBuffs, TristateEffect } from '../core/proto/common';
 import { defaultExposeWeaknessSettings, defaultRaidBuffMajorDamageCooldowns } from '../core/proto_utils/utils';
 
@@ -26,7 +25,7 @@ export const DefaultRaidBuffs = RaidBuffs.create({
 });
 
 export const DefaultDebuffs = Debuffs.create({
-	...defaultExposeWeaknessSettings(Phase.Phase1),
+	...defaultExposeWeaknessSettings(),
 	improvedSealOfTheCrusader: true,
 	misery: true,
 	bloodFrenzy: true,

@@ -1,6 +1,6 @@
 import * as PresetUtils from '../../core/preset_utils';
-import { ConsumesSpec, Debuffs, Drums, IndividualBuffs, PartyBuffs, Profession, PseudoStat, RaidBuffs, Stat, TristateEffect } from '../../core/proto/common';
-import { Warlock, Warlock_Options as WarlockOptions, WarlockOptions_Armor, WarlockOptions_CurseOptions, WarlockOptions_Summon } from '../../core/proto/warlock';
+import { ConsumesSpec, Debuffs, Drums, IndividualBuffs, PartyBuffs, Profession, RaidBuffs, Stat, TristateEffect } from '../../core/proto/common';
+import { Warlock_Options as WarlockOptions, WarlockOptions_Armor, WarlockOptions_CurseOptions, WarlockOptions_Summon } from '../../core/proto/warlock';
 import { SavedTalents } from '../../core/proto/ui';
 import { Stats } from '../../core/proto_utils/stats';
 import BlankAPL from './apls/blank.apl.json';
@@ -17,8 +17,7 @@ import AfflictionRot from './apls/affliction.apl.json';
 import DemoRot from './apls/demonology.apl.json';
 import DestroRot from './apls/destruction.apl.json';
 import DestroFireRot from './apls/destro_fire.apl.json';
-import { defaultExposeWeaknessSettings, defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
-import { Phase } from '../../core/constants/other';
+import { defaultExposeWeaknessSettings, defaultImprovedShadowBoltSettings, defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
 
 // Preset options for this spec.
 // Eventually we will import these values for the raid sim too, so its good to
@@ -154,7 +153,8 @@ export const DefaultIndividualBuffs = IndividualBuffs.create({
 });
 
 export const DefaultDebuffs = Debuffs.create({
-	...defaultExposeWeaknessSettings(Phase.Phase1),
+	...defaultExposeWeaknessSettings(),
+	...defaultImprovedShadowBoltSettings(),
 	improvedSealOfTheCrusader: true,
 	judgementOfWisdom: true,
 	misery: true,
@@ -170,7 +170,6 @@ export const DefaultDebuffs = Debuffs.create({
 	mangle: true,
 	exposeArmor: TristateEffect.TristateEffectImproved,
 	huntersMark: TristateEffect.TristateEffectImproved,
-	isbUptime: 0.52,
 });
 
 export const P1_DEFAULT_SETTINGS: PresetUtils.PresetSettings = {

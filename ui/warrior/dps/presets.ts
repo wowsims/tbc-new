@@ -258,7 +258,10 @@ export const PRESET_BUILD_ARMS_KEBAB = PresetUtils.makePresetBuild('Arms - Kebab
 export const P1_PLAYER_SETTINGS: PresetUtils.PresetSettings = {
 	name: 'P1',
 	playerOptions: OtherDefaults,
-	debuffs: WarriorPresets.DefaultDebuffs,
+	debuffs: Debuffs.create({
+		...WarriorPresets.DefaultDebuffs,
+		...defaultExposeWeaknessSettings(Phase.Phase1),
+	}),
 	reforgeSettings: {
 		maxGemPhase: Phase.Phase1,
 	},

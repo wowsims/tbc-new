@@ -3,7 +3,7 @@ import { ConsumesSpec, Debuffs, IndividualBuffs, PartyBuffs, Profession, RaidBuf
 import { Priest_Options as Options } from '../../core/proto/priest';
 import { SavedTalents } from '../../core/proto/ui';
 import { Stats } from '../../core/proto_utils/stats';
-import { defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
+import { defaultImprovedShadowBoltSettings, defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
 import DefaultApl from './apls/default.apl.json';
 import P1Gear from './gear_sets/p1.gear.json';
 import P2Gear from './gear_sets/p2.gear.json';
@@ -93,7 +93,7 @@ export const DefaultDebuffs = Debuffs.create({
 	shadowEmbrace: true,
 	curseOfElements: TristateEffect.TristateEffectImproved,
 	exposeArmor: TristateEffect.TristateEffectImproved,
-	isbUptime: 0.52,
+	...defaultImprovedShadowBoltSettings(),
 });
 
 export const OtherDefaults = {

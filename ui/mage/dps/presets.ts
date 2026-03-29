@@ -1,6 +1,6 @@
 import * as PresetUtils from '../../core/preset_utils';
-import { Debuffs, PseudoStat, RaidBuffs, Stat, ConsumesSpec, TristateEffect, PartyBuffs, IndividualBuffs, Profession, Drums } from '../../core/proto/common';
-import { defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
+import { Debuffs, PseudoStat, RaidBuffs, Stat, ConsumesSpec, PartyBuffs, IndividualBuffs, Profession, Drums } from '../../core/proto/common';
+import { defaultImprovedShadowBoltSettings } from '../../core/proto_utils/utils';
 import { Stats } from '../../core/proto_utils/stats';
 import { SavedTalents } from '../../core/proto/ui';
 import { MageArmor, Mage_Options as MageOptions } from '../../core/proto/mage';
@@ -104,5 +104,5 @@ export const DefaultDebuffs = Debuffs.create({
 	curseOfElements: 2,
 	improvedSealOfTheCrusader: true,
 	judgementOfWisdom: true,
-	isbUptime: 0.52,
+	...defaultImprovedShadowBoltSettings(),
 });
