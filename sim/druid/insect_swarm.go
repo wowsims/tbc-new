@@ -18,7 +18,7 @@ func (druid *Druid) registerInsectSwarmSpell() {
 		SpellSchool:    core.SpellSchoolArcane | core.SpellSchoolNature,
 		ProcMask:       core.ProcMaskSpellDamage,
 		ClassSpellMask: DruidSpellInsectSwarm,
-		Flags:          core.SpellFlagAPL,
+		Flags:          core.SpellFlagAPL | core.SpellFlagBinary,
 
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,

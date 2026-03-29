@@ -14,7 +14,7 @@ func (warlock *Warlock) registerShadowBurn() {
 		ActionID:       core.ActionID{SpellID: 30546},
 		SpellSchool:    core.SpellSchoolShadow,
 		ProcMask:       core.ProcMaskSpellDamage,
-		Flags:          core.SpellFlagAPL,
+		Flags:          core.SpellFlagAPL | core.SpellFlagBinary,
 		ClassSpellMask: WarlockSpellShadowBurn,
 
 		ManaCost: core.ManaCostOptions{FlatCost: 515},
