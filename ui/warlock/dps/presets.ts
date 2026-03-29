@@ -18,7 +18,6 @@ import DemoRot from './apls/demonology.apl.json';
 import DestroRot from './apls/destruction.apl.json';
 import DestroFireRot from './apls/destro_fire.apl.json';
 import { defaultExposeWeaknessSettings, defaultImprovedShadowBoltSettings, defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
-import { CURRENT_PHASE } from '../../core/constants/other';
 
 // Preset options for this spec.
 // Eventually we will import these values for the raid sim too, so its good to
@@ -154,7 +153,8 @@ export const DefaultIndividualBuffs = IndividualBuffs.create({
 });
 
 export const DefaultDebuffs = Debuffs.create({
-	...defaultExposeWeaknessSettings(CURRENT_PHASE),
+	...defaultExposeWeaknessSettings(),
+	...defaultImprovedShadowBoltSettings(),
 	improvedSealOfTheCrusader: true,
 	judgementOfWisdom: true,
 	misery: true,
@@ -170,7 +170,6 @@ export const DefaultDebuffs = Debuffs.create({
 	mangle: true,
 	exposeArmor: TristateEffect.TristateEffectImproved,
 	huntersMark: TristateEffect.TristateEffectImproved,
-	...defaultImprovedShadowBoltSettings(CURRENT_PHASE),
 });
 
 export const P1_DEFAULT_SETTINGS: PresetUtils.PresetSettings = {

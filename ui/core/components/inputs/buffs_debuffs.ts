@@ -19,7 +19,6 @@ import { IconPickerStatOption, PickerStatOptions } from './stat_options';
 import { Party } from '../../party';
 import { IconEnumPicker } from '../pickers/icon_enum_picker';
 import { DrumsBattle, DrumsRestoration, DrumsWar } from './consumables';
-import { CURRENT_PHASE, Phase } from '../../constants/other';
 
 ///////////////////////////////////////////////////////////////////////////
 //                                 RAID BUFFS

@@ -9,7 +9,6 @@ import BlankGear from './gear_sets/blank.gear.json';
 import ArcaneApl from './apls/arcane.apl.json';
 import PreBISArcaneGear from './gear_sets/preBisArcane.gear.json';
 import P1BISArcaneGear from './gear_sets/p1Arcane.gear.json';
-import { CURRENT_PHASE } from '../../core/constants/other';
 
 // Preset options for this spec.
 // Eventually we will import these values for the raid sim too, so its good to
@@ -105,5 +104,5 @@ export const DefaultDebuffs = Debuffs.create({
 	curseOfElements: 2,
 	improvedSealOfTheCrusader: true,
 	judgementOfWisdom: true,
-	...defaultImprovedShadowBoltSettings(CURRENT_PHASE),
+	...defaultImprovedShadowBoltSettings(),
 });

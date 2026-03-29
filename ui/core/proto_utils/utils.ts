@@ -1,4 +1,4 @@
-import { CURRENT_API_VERSION, Phase, REPO_NAME } from '../constants/other.js';
+import { CURRENT_API_VERSION, CURRENT_PHASE, Phase, REPO_NAME } from '../constants/other.js';
 import { Player } from '../player';
 import { PlayerClass } from '../player_class.js';
 import { PlayerClasses } from '../player_classes';
@@ -1309,7 +1309,7 @@ const exposeWeaknessPhaseSettings: Map<Phase, Pick<Debuffs, 'exposeWeaknessUptim
 	[Phase.Phase4, { exposeWeaknessUptime: 0.9, exposeWeaknessHunterAgility: 1150 }],
 	[Phase.Phase5, { exposeWeaknessUptime: 0.9, exposeWeaknessHunterAgility: 1250 }],
 ]);
-export const defaultExposeWeaknessSettings = (phase?: Phase) => exposeWeaknessPhaseSettings.get(phase || Phase.Phase1);
+export const defaultExposeWeaknessSettings = (phase?: Phase) => exposeWeaknessPhaseSettings.get(phase || CURRENT_PHASE);
 
 const improvedShadowBoltPhaseSettings: Map<Phase, Pick<Debuffs, 'isbUptime'>> = new Map([
 	[Phase.Phase1, { isbUptime: 0.52 }],
@@ -1318,7 +1318,7 @@ const improvedShadowBoltPhaseSettings: Map<Phase, Pick<Debuffs, 'isbUptime'>> = 
 	[Phase.Phase4, { isbUptime: 0.72 }],
 	[Phase.Phase5, { isbUptime: 0.8 }],
 ]);
-export const defaultImprovedShadowBoltSettings = (phase?: Phase) => improvedShadowBoltPhaseSettings.get(phase || Phase.Phase1);
+export const defaultImprovedShadowBoltSettings = (phase?: Phase) => improvedShadowBoltPhaseSettings.get(phase || CURRENT_PHASE);
 
 // Adds missing Consumables and SpellEffects to the given player proto.
 export const extendPlayerProtoWithMissingEffects = (playerProto: PlayerProto, db: Database) => {

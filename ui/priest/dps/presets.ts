@@ -1,4 +1,3 @@
-import { CURRENT_PHASE } from '../../core/constants/other';
 import * as PresetUtils from '../../core/preset_utils';
 import { ConsumesSpec, Debuffs, IndividualBuffs, PartyBuffs, Profession, RaidBuffs, Stat, TristateEffect, PseudoStat, Drums } from '../../core/proto/common';
 import { Priest_Options as Options } from '../../core/proto/priest';
@@ -94,7 +93,7 @@ export const DefaultDebuffs = Debuffs.create({
 	shadowEmbrace: true,
 	curseOfElements: TristateEffect.TristateEffectImproved,
 	exposeArmor: TristateEffect.TristateEffectImproved,
-	...defaultImprovedShadowBoltSettings(CURRENT_PHASE),
+	...defaultImprovedShadowBoltSettings(),
 });
 
 export const OtherDefaults = {
