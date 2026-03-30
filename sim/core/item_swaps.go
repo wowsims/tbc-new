@@ -197,11 +197,6 @@ func (swap *ItemSwap) registerProcInternal(config ItemSwapProcConfig) {
 			}
 		} else {
 			config.Aura.Deactivate(sim)
-			if swap.initialized {
-				// This is a hack to block ActivateAura APL
-				// actions from executing for unequipped items.
-				config.Aura.Icd.Set(NeverExpires)
-			}
 		}
 	})
 }
