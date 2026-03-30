@@ -93,8 +93,6 @@ type Paladin struct {
 	JudgementOfJusticeAuras     core.AuraArray
 	JudgementOfTheCrusaderAuras core.AuraArray
 	JudgementAuras              []core.AuraArray
-
-	JusticarBattlegear2PcAura *core.Aura
 }
 
 // Implemented by each Paladin spec.

@@ -557,9 +557,9 @@ func (paladin *Paladin) registerSealOfTheCrusader(seal seal) {
 
 	percentBonus := core.Ternary(paladin.CouldHaveSetBonus(ItemSetJusticarBattlegear, 2), 1.15, 1.0)
 	flatBonus := 0.0
-	if paladin.Ranged().ID == 23203 {
+	if paladin.Ranged().ID == 23203 { //https://www.wowhead.com/tbc/item=23203/libram-of-fervor
 		flatBonus += 33.0
-	} else if paladin.Ranged().ID == 27949 {
+	} else if paladin.Ranged().ID == 27949 { //https://www.wowhead.com/tbc/item=27949/libram-of-zeal
 		flatBonus += 47.0
 	}
 
