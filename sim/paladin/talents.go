@@ -476,7 +476,7 @@ func (paladin *Paladin) applyCrusade() {
 func (paladin *Paladin) applyTwoHandedWeaponSpecialization() {
 	paladin.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Pct,
-		ProcMask:   core.ProcMaskMelee,
+		ProcMask:   core.ProcMaskMeleeOrMeleeProc,
 		FloatValue: 0.02 * float64(paladin.Talents.TwoHandedWeaponSpecialization),
 	})
 }

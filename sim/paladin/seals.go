@@ -660,7 +660,7 @@ func (paladin *Paladin) registerSealOfBlood(seal seal) {
 		ActionID:         core.ActionID{SpellID: seal.proc.spellID},
 		ClassSpellMask:   SpellMaskSealOfBlood,
 		SpellSchool:      core.SpellSchoolHoly,
-		ProcMask:         core.ProcMaskMeleeMHSpecial | core.ProcMaskProc,
+		ProcMask:         core.ProcMaskMeleeProc,
 		Flags:            core.SpellFlagMeleeMetrics,
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
