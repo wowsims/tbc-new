@@ -846,7 +846,7 @@ func (paladin *Paladin) registerSealOfCommandRank(seal seal) {
 	judgeSpell := paladin.RegisterSpell(core.SpellConfig{
 		ActionID:         core.ActionID{SpellID: seal.judge.spellID},
 		SpellSchool:      core.SpellSchoolHoly,
-		ProcMask:         core.ProcMaskMeleeOrRangedSpecial,
+		ProcMask:         core.ProcMaskMeleeMHSpecial,
 		Flags:            core.SpellFlagMeleeMetrics | core.SpellFlagBinary,
 		ClassSpellMask:   SpellMaskJudgementOfCommand,
 		DamageMultiplier: 1,
