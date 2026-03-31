@@ -124,6 +124,7 @@ export const pseudoStatI18nKeys: Record<PseudoStat, string> = {
 	[PseudoStat.PseudoStatDodgePercent]: 'dodge',
 	[PseudoStat.PseudoStatParryPercent]: 'parry',
 	[PseudoStat.PseudoStatBlockPercent]: 'block',
+	[PseudoStat.PseudoStatReducedCritTakenPercent]: 'reduced_crit_taken',
 	[PseudoStat.PseudoStatMeleeSpeedMultiplier]: 'melee_speed_multiplier',
 	[PseudoStat.PseudoStatRangedSpeedMultiplier]: 'ranged_speed_multiplier',
 	[PseudoStat.PseudoStatCastSpeedMultiplier]: 'cast_speed_multiplier',

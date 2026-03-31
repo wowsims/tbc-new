@@ -436,7 +436,7 @@ func ImprovedSealOfTheCrusaderAura(target *Unit) *Aura {
 		Label:    "Improved Seal of the Crusader",
 		ActionID: ActionID{SpellID: 20337},
 		Duration: time.Second * 60,
-	}).AttachAdditivePseudoStatBuff(&target.PseudoStats.ReducedCritTakenChance, -3)
+	}).AttachReducedCritTakenPercentBuff(-3)
 }
 
 func ImprovedShadowBoltAura(target *Unit, uptime float64, points int32) *Aura {

@@ -29,6 +29,7 @@ import type { LPModel, LPSolution, SerializedConstraints, SerializedVariables } 
 import { ProgressTrackerModal } from './progress_tracker_modal';
 import { getEmptySlotIconUrl } from './gear_picker/utils';
 import { CURRENT_PHASE, Phase } from '../constants/other';
+import * as Mechanics from '../constants/mechanics';
 import { CharacterStats } from './character_stats';
 
 type YalpsCoefficients = Map<string, number>;
@@ -66,6 +67,7 @@ const INCLUDED_STATS: UnitStat[] = [
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatSchoolHitPercentHoly),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatSchoolHitPercentNature),
 	UnitStat.fromPseudoStat(PseudoStat.PseudoStatSchoolHitPercentShadow),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatReducedCritTakenPercent),
 	UnitStat.fromStat(Stat.StatSpellCritRating),
 	UnitStat.fromStat(Stat.StatSpellHasteRating),
 	UnitStat.fromStat(Stat.StatMeleeHitRating),
@@ -75,6 +77,8 @@ const INCLUDED_STATS: UnitStat[] = [
 	UnitStat.fromStat(Stat.StatArmorPenetration),
 	UnitStat.fromStat(Stat.StatDodgeRating),
 	UnitStat.fromStat(Stat.StatParryRating),
+	UnitStat.fromStat(Stat.StatDefenseRating),
+	UnitStat.fromStat(Stat.StatResilienceRating),
 ];
 
 type StatTooltipContent = { [key in Stat]?: () => Element | string };
@@ -361,7 +365,7 @@ export class ReforgeOptimizer {
 	static checkWeights(weights: Stats, reforgeCaps: Stats, reforgeSoftCaps: StatCap[]): Stats {
 		let validatedWeights = weights;
 
-		// Loop through Hit/Crit/Haste pure Rating stats.
+		// Loop through Hit/Crit/Haste/Defense/Resilience pure Rating stats.
 		for (const parentStat of [
 			Stat.StatMeleeHitRating,
 			Stat.StatSpellHitRating,
@@ -369,9 +373,11 @@ export class ReforgeOptimizer {
 			Stat.StatSpellCritRating,
 			Stat.StatMeleeHasteRating,
 			Stat.StatSpellHasteRating,
+			Stat.StatDefenseRating,
+			Stat.StatResilienceRating,
 		]) {
 			const children = UnitStat.getChildren(parentStat);
-			const specificSchoolWeights = children.map(childStat => weights.getPseudoStat(childStat));
+			const specificSchoolWeights = children.map(childStat => validatedWeights.getPseudoStat(childStat));
 			// If any of the children have non-zero EP, then set pure Rating EP
 			// to 0 and continue.
 			if (
@@ -399,11 +405,17 @@ export class ReforgeOptimizer {
 			// If all children have 0 EP, then loop through children and check whether a cap has been configured for that child.
 			for (const childStat of children) {
 				if (pseudoStatHasCap(childStat, reforgeCaps, reforgeSoftCaps)) {
-					// The first time a cap is detected, set EP for that child to re-scaled parent Rating EP, set parent Rating EP
-					// to 0, and break.
-					const rescaledWeight = UnitStat.fromPseudoStat(childStat).convertPercentToRating(weights.getStat(parentStat));
-					validatedWeights = validatedWeights.withPseudoStat(childStat, rescaledWeight!);
-					validatedWeights = validatedWeights.withStat(parentStat, 0);
+					// When a cap is detected, convert parent Rating EP to child percent EP and accumulate.
+					// We accumulate (not set) because multiple parent stats can share the same child
+					// (e.g., DefenseRating and ResilienceRating both contribute to ReducedCritTakenPercent).
+					const conversionFactor = ReforgeOptimizer.getConversionFactorToPercent(parentStat, childStat);
+					if (conversionFactor !== null) {
+						const parentEP = validatedWeights.getStat(parentStat);
+						const existingChildEP = validatedWeights.getPseudoStat(childStat);
+						const rescaledWeight = parentEP * conversionFactor;
+						validatedWeights = validatedWeights.withPseudoStat(childStat, existingChildEP + rescaledWeight);
+						validatedWeights = validatedWeights.withStat(parentStat, 0);
+					}
 					break;
 				}
 			}
@@ -476,6 +488,26 @@ export class ReforgeOptimizer {
 		}
 
 		return cappedStatKeys;
+	}
+
+	// Returns the conversion factor from parent rating stat EP to child percent stat EP.
+	// For most stats this is a simple rating-per-percent conversion, but some like
+	// Defense -> ReducedCritTakenPercent require parent-specific logic.
+	static getConversionFactorToPercent(parentStat: Stat, childStat: PseudoStat): number | null {
+		if (childStat === PseudoStat.PseudoStatReducedCritTakenPercent) {
+			// Defense: 1 rating = 1/2.365385 defense skill = (1/2.365385)*0.04% crit reduction
+			// So 1% crit reduction = 2.365385/0.04 = 59.13 defense rating
+			if (parentStat === Stat.StatDefenseRating) {
+				return Mechanics.DEFENSE_RATING_PER_DEFENSE_LEVEL / Mechanics.MISS_DODGE_PARRY_BLOCK_CRIT_CHANCE_PER_DEFENSE;
+			}
+			// Resilience: 1 rating = 1/39.4231% crit reduction
+			// So 1% crit reduction = 39.4231 resilience rating
+			if (parentStat === Stat.StatResilienceRating) {
+				return Mechanics.RESILIENCE_RATING_PER_CRIT_REDUCTION_CHANCE;
+			}
+		}
+		// Fall back to standard conversion (1 percent -> X rating)
+		return UnitStat.fromPseudoStat(childStat).convertPercentToRating(1);
 	}
 
 	buildReforgeButtonTooltip() {
@@ -1513,9 +1545,30 @@ export class ReforgeOptimizer {
 		for (const childStat of UnitStat.getChildren(stat)) {
 			// Only add a dependency if the child has an EP value associated with it
 			if (preCapEPs.getPseudoStat(childStat) != 0) {
-				this.setPseudoStatCoefficient(coefficients, childStat, UnitStat.fromPseudoStat(childStat).convertRatingToPercent(amount)!);
+				const convertedAmount = this.convertStatToChildPseudoStat(stat, childStat, amount);
+				if (convertedAmount !== null) {
+					this.setPseudoStatCoefficient(coefficients, childStat, convertedAmount);
+				}
 			}
 		}
+	}
+
+	// Converts a parent stat rating to its child pseudo stat percentage contribution
+	convertStatToChildPseudoStat(parentStat: Stat, childStat: PseudoStat, amount: number): number | null {
+		// Special handling for ReducedCritTakenPercent which has two parents with different conversion rates
+		if (childStat === PseudoStat.PseudoStatReducedCritTakenPercent) {
+			if (parentStat === Stat.StatDefenseRating) {
+				// Defense contribution: Use linear approximation for LP solver consistency
+				// 1 defense rating = (1/DEFENSE_RATING_PER_DEFENSE_LEVEL) * MISS_DODGE_PARRY_BLOCK_CRIT_CHANCE_PER_DEFENSE % crit reduction
+				return (amount / Mechanics.DEFENSE_RATING_PER_DEFENSE_LEVEL) * Mechanics.MISS_DODGE_PARRY_BLOCK_CRIT_CHANCE_PER_DEFENSE;
+			} else if (parentStat === Stat.StatResilienceRating) {
+				// Resilience contribution: rating / RESILIENCE_RATING_PER_CRIT_REDUCTION_CHANCE
+				return amount / Mechanics.RESILIENCE_RATING_PER_CRIT_REDUCTION_CHANCE;
+			}
+		}
+
+		// Default: use the child's conversion method
+		return UnitStat.fromPseudoStat(childStat).convertRatingToPercent(amount);
 	}
 
 	setStatCoefficient(coefficients: YalpsCoefficients, stat: Stat, amount: number) {

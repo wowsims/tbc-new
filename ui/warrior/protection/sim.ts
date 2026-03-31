@@ -81,8 +81,9 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionWarrior, {
 		statCaps: (() => {
 			const hitCap = new Stats().withPseudoStat(PseudoStat.PseudoStatMeleeHitPercent, 9);
 			const expCap = new Stats().withStat(Stat.StatExpertiseRating, 6.5 * 4 * Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION);
+			const critImmunityCap = new Stats().withPseudoStat(PseudoStat.PseudoStatReducedCritTakenPercent, 5.6);
 
-			return hitCap.add(expCap);
+			return hitCap.add(expCap).add(critImmunityCap);
 		})(),
 		other: Presets.OtherDefaults,
 		// Default consumes settings.

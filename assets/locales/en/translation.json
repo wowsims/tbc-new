@@ -170,6 +170,7 @@
 			"off_hand_dps": "Off Hand DPS",
 			"ranged_dps": "Ranged DPS",
 			"block": "Block",
+			"reduced_crit_taken": "Reduced Crit Taken",
 			"melee_speed_multiplier": "Melee Speed Multiplier",
 			"ranged_speed_multiplier": "Ranged Speed Multiplier",
 			"cast_speed_multiplier": "Cast Speed Multiplier",

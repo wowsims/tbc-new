@@ -90,8 +90,7 @@ export class UnitStat {
 
 	// Convert a UnitStat value from its Rating representation to a percentage representation
 	// (0-100). If a percentage representation does not make sense for the stat in question
-	// (Strength for example), then null is returned. Mastery is special cased to return
-	// Mastery points rather than %.
+	// (Strength for example), then null is returned.
 	convertRatingToPercent(ratingValue: number): number | null {
 		if (this.linkedToStat(Stat.StatSpellHitRating)) {
 			return ratingValue / Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT;
@@ -134,8 +133,7 @@ export class UnitStat {
 
 	// Convert a UnitStat value from its percentage representation (0-100) to the equivalent amount of
 	// Rating. If a Rating representation does not make sense for the stat in question (Block in Cata
-	// for example), then null is returned. Mastery is special cased to assume a Mastery points input
-	// rather than a percentage.
+	// for example), then null is returned.
 	convertPercentToRating(percentOrPointsValue: number): number | null {
 		if (this.linkedToStat(Stat.StatSpellHitRating)) {
 			return percentOrPointsValue * Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT;
@@ -342,6 +340,8 @@ export class UnitStat {
 			return Stat.StatMeleeHasteRating;
 		} else if (pseudoStatName.includes('Hit')) {
 			return Stat.StatMeleeHitRating;
+		} else if (pseudoStatName.includes('ReducedCritTaken')) {
+			return null;
 		} else if (pseudoStatName.includes('Crit')) {
 			return Stat.StatMeleeCritRating;
 		} else {
@@ -372,6 +372,10 @@ export class UnitStat {
 				return [PseudoStat.PseudoStatSpellCritPercent];
 			case Stat.StatSpellHasteRating:
 				return [PseudoStat.PseudoStatSpellHastePercent];
+			case Stat.StatResilienceRating:
+				return [PseudoStat.PseudoStatReducedCritTakenPercent];
+			case Stat.StatDefenseRating:
+				return [PseudoStat.PseudoStatReducedCritTakenPercent];
 			default:
 				return [];
 		}

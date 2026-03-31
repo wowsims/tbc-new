@@ -781,7 +781,7 @@ func (result *SpellResult) applyEnemyAttackTableCrit(spell *Spell, _ *AttackTabl
 	}
 
 	critChance := critPercent / 100
-	critChance -= result.Target.GetCritImmunityPercent()
+	critChance -= result.Target.PseudoStats.ReducedCritTakenPercent
 	*chance += max(0, critChance)
 
 	if roll < *chance {
@@ -793,7 +793,7 @@ func (result *SpellResult) applyEnemyAttackTableCrit(spell *Spell, _ *AttackTabl
 				spell.SpellMetrics[result.Target.UnitIndex].ResistedCrits++
 			}
 		}
-		resilCritMultiplier := 1 - (max(0, result.Target.GetStat(stats.ResilienceRating)/ResilienceRatingPerCritReductionChance/2/100))
+		resilCritMultiplier := 1 - (max(0, result.Target.GetResilienceReduction()/2))
 		result.Damage *= 2 * resilCritMultiplier
 		return true
 	}
