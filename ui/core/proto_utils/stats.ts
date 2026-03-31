@@ -134,7 +134,8 @@ export class UnitStat {
 	// Convert a UnitStat value from its percentage representation (0-100) to the equivalent amount of
 	// Rating. If a Rating representation does not make sense for the stat in question (Block in Cata
 	// for example), then null is returned.
-	convertPercentToRating(percentOrPointsValue: number): number | null {
+	// For PseudoStatReducedCritTakenPercent, parentStat specifies the source (DefenseRating or ResilienceRating).
+	convertPercentToRating(percentOrPointsValue: number, parentStat?: Stat): number | null {
 		if (this.linkedToStat(Stat.StatSpellHitRating)) {
 			return percentOrPointsValue * Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT;
 		} else if (this.linkedToStat(Stat.StatSpellCritRating)) {
@@ -169,6 +170,13 @@ export class UnitStat {
 			this.equalsPseudoStat(PseudoStat.PseudoStatSchoolHitPercentShadow)
 		) {
 			return percentOrPointsValue * Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT;
+		} else if (this.equalsPseudoStat(PseudoStat.PseudoStatReducedCritTakenPercent)) {
+			if (parentStat === Stat.StatDefenseRating) {
+				return percentOrPointsValue * (Mechanics.DEFENSE_RATING_PER_DEFENSE_LEVEL / Mechanics.MISS_DODGE_PARRY_BLOCK_CRIT_CHANCE_PER_DEFENSE);
+			} else if (parentStat === Stat.StatResilienceRating) {
+				return percentOrPointsValue * Mechanics.RESILIENCE_RATING_PER_CRIT_REDUCTION_CHANCE;
+			}
+			return null;
 		} else {
 			return null;
 		}

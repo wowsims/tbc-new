@@ -408,7 +408,7 @@ export class ReforgeOptimizer {
 					// When a cap is detected, convert parent Rating EP to child percent EP and accumulate.
 					// We accumulate (not set) because multiple parent stats can share the same child
 					// (e.g., DefenseRating and ResilienceRating both contribute to ReducedCritTakenPercent).
-					const conversionFactor = ReforgeOptimizer.getConversionFactorToPercent(parentStat, childStat);
+					const conversionFactor = UnitStat.fromPseudoStat(childStat).convertPercentToRating(1, parentStat);
 					if (conversionFactor !== null) {
 						const parentEP = validatedWeights.getStat(parentStat);
 						const existingChildEP = validatedWeights.getPseudoStat(childStat);
@@ -488,26 +488,6 @@ export class ReforgeOptimizer {
 		}
 
 		return cappedStatKeys;
-	}
-
-	// Returns the conversion factor from parent rating stat EP to child percent stat EP.
-	// For most stats this is a simple rating-per-percent conversion, but some like
-	// Defense -> ReducedCritTakenPercent require parent-specific logic.
-	static getConversionFactorToPercent(parentStat: Stat, childStat: PseudoStat): number | null {
-		if (childStat === PseudoStat.PseudoStatReducedCritTakenPercent) {
-			// Defense: 1 rating = 1/2.365385 defense skill = (1/2.365385)*0.04% crit reduction
-			// So 1% crit reduction = 2.365385/0.04 = 59.13 defense rating
-			if (parentStat === Stat.StatDefenseRating) {
-				return Mechanics.DEFENSE_RATING_PER_DEFENSE_LEVEL / Mechanics.MISS_DODGE_PARRY_BLOCK_CRIT_CHANCE_PER_DEFENSE;
-			}
-			// Resilience: 1 rating = 1/39.4231% crit reduction
-			// So 1% crit reduction = 39.4231 resilience rating
-			if (parentStat === Stat.StatResilienceRating) {
-				return Mechanics.RESILIENCE_RATING_PER_CRIT_REDUCTION_CHANCE;
-			}
-		}
-		// Fall back to standard conversion (1 percent -> X rating)
-		return UnitStat.fromPseudoStat(childStat).convertPercentToRating(1);
 	}
 
 	buildReforgeButtonTooltip() {
