@@ -8,6 +8,7 @@ import { Stats } from '../../core/proto_utils/stats';
 import DefaultApl from './apls/default.apl.json';
 import P1_Gear from './gear_sets/p1.gear.json';
 import Preraid_Gear from './gear_sets/preraid.gear.json';
+import { defaultExposeWeaknessSettings } from '../../core/proto_utils/utils';
 
 export const P1_GEAR_PRESET = PresetUtils.makePresetGear('P1', P1_Gear);
 export const PRERAID_GEAR_PRESET = PresetUtils.makePresetGear('Pre-raid', Preraid_Gear);
@@ -118,6 +119,7 @@ export const DefaultDebuffs = Debuffs.create({
 	sunderArmor: true,
 	faerieFire: 2,
 	exposeArmor: 2,
+	...defaultExposeWeaknessSettings(),
 });
 
 export const OtherDefaults = {
