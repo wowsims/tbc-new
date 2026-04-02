@@ -91,16 +91,16 @@ var ItemSetTempestRegalia = core.NewItemSet(core.ItemSet{
 
 func init() {
 	core.NewItemEffect(30720, func(agent core.Agent) {
-		character := agent.GetCharacter()
+		mage := agent.(MageAgent).GetMage()
 
-		aura := character.NewTemporaryStatsAura(
+		aura := mage.NewTemporaryStatsAura(
 			"Mana Surge",
 			core.ActionID{SpellID: 37445},
 			stats.Stats{stats.SpellDamage: 225},
 			time.Second*15,
 		)
 
-		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
+		mage.SerpentCoilBraid = mage.MakeProcTriggerAura(core.ProcTrigger{
 			Name:           "Serpent-Coil Braid",
 			ActionID:       core.ActionID{ItemID: 30720},
 			ClassSpellMask: MageSpellManaGem,
@@ -110,8 +110,8 @@ func init() {
 			},
 		})
 
-		eligibleSlots := character.ItemSwap.EligibleSlotsForItem(30720)
-		character.AddStatProcBuff(30720, aura, false, eligibleSlots)
-		character.ItemSwap.RegisterProc(30720, procAura)
+		eligibleSlots := mage.ItemSwap.EligibleSlotsForItem(30720)
+		mage.AddStatProcBuff(30720, aura, false, eligibleSlots)
+		mage.ItemSwap.RegisterProc(30720, mage.SerpentCoilBraid)
 	})
 }

@@ -839,8 +839,8 @@ dps_results: {
 dps_results: {
  key: "TestArcane-AllItems-Serpent-CoilBraid-30720"
  value: {
-  dps: 1931.56692
-  tps: 1361.38444
+  dps: 1952.01348
+  tps: 1374.33749
  }
 }
 dps_results: {

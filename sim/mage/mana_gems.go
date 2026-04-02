@@ -47,6 +47,9 @@ func (mage *Mage) registerManaGems() {
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {
 			manaGemAura.RemoveStack(sim)
 			manaGain = sim.Roll(minManaGain, maxManaGain)
+			if mage.SerpentCoilBraid.IsActive() {
+				manaGain *= 1.25
+			}
 			mage.AddMana(sim, manaGain, manaMetrics)
 		},
 	})
