@@ -461,7 +461,7 @@ func ImprovedSealOfTheCrusaderAura(target *Unit, casterIndex, points int32, flat
 	})
 
 	aura.NewExclusiveEffect("Improved Seal of the Crusader", true, ExclusiveEffect{
-		Priority: holySpellDamageBonus,
+		Priority: holySpellDamageBonus + float64(casterIndex),
 	})
 
 	return aura
