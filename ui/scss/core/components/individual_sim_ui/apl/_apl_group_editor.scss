@@ -13,6 +13,12 @@
 	}
 }
 
+.apl-placeholder-name-picker-root .apl-name-display {
+	.apl-name-value {
+		font-size: var(--btn-font-size);
+	}
+}
+
 .apl-group-editor-root {
 	.apl-action-picker-root {
 		width: 100%;

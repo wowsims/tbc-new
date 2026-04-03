@@ -994,6 +994,10 @@
 					"value": "The value expression that this variable represents."
 				}
 			},
+			"variablePlaceholder": {
+				"name": "Placeholder",
+				"nameLabel": "Placeholder Name"
+			},
 			"prepull_actions": {
 				"title": "Prepull Actions",
 				"tooltip": "Actions to perform before the pull.",

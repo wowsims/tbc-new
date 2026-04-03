@@ -1574,7 +1574,7 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 		includeIf: (_player: Player<any>, isPrepull: boolean, isGroup: boolean) => !isPrepull && isGroup, // Only show in groups, not prepull or priority list
 		newValue: () => ({ name: '' }),
 		fields: [
-			AplHelpers.stringFieldConfig('name', {
+			AplHelpers.placeholderNameFieldConfig('name', {
 				labelTooltip: 'Name of the variable placeholder to expose. This name will be used when referencing the group.',
 			}),
 		],
