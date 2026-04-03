@@ -135,6 +135,12 @@ func registerPotionCD(agent Agent, consumes *proto.ConsumesSpec) {
 	defaultPotion := consumes.PotId
 
 	for _, potionId := range consumes.Potions {
+		if potionId == 31677 {
+			if defaultPotion == 31677 {
+				registerFelManaPotionCD(character)
+			}
+			continue
+		}
 		potion := ConsumablesByID[potionId]
 		if potion.Type == proto.ConsumableType_ConsumableTypePotion {
 			potMCD := makePotionActivationSpell(potion.Id, character)
@@ -144,6 +150,59 @@ func registerPotionCD(agent Agent, consumes *proto.ConsumesSpec) {
 			}
 		}
 	}
+}
+
+// registerFelManaPotionCD handles Fel Mana Potion (31677): restores 3200 mana over 24s,
+// but reduces spell damage by 25 and healing done by 50 for 15 min.
+func registerFelManaPotionCD(character *Character) {
+	actionID := ActionID{ItemID: 31677}
+	manaMetrics := character.NewManaMetrics(actionID)
+
+	debuffAura := character.NewTemporaryStatsAura(
+		"Fel Mana Potion Debuff",
+		ActionID{SpellID: 38927},
+		stats.Stats{stats.SpellDamage: -25, stats.HealingPower: -50},
+		time.Minute*15,
+	)
+
+	spell := character.GetOrRegisterSpell(SpellConfig{
+		ActionID: actionID,
+		Flags:    SpellFlagNoOnCastComplete | SpellFlagCombatPotion | SpellFlagEncounterOnly | SpellFlagPotion,
+		Cast: CastConfig{
+			CD: Cooldown{
+				Timer:    character.NewTimer(),
+				Duration: time.Minute * 2,
+			},
+			SharedCD: Cooldown{
+				Timer:    character.GetPotionCD(),
+				Duration: time.Minute * 2,
+			},
+		},
+		ApplyEffects: func(sim *Simulation, _ *Unit, spell *Spell) {
+			debuffAura.Activate(sim)
+			StartPeriodicAction(sim, PeriodicActionOptions{
+				Period:   time.Second * 3,
+				NumTicks: 8,
+				Priority: ActionPriorityDOT,
+				OnAction: func(sim *Simulation) {
+					character.AddMana(sim, 400, manaMetrics)
+				},
+			})
+			if sim.CurrentTime < 0 {
+				spell.SharedCD.Set(sim.CurrentTime + time.Minute*2)
+				character.UpdateMajorCooldowns()
+			}
+		},
+	})
+
+	character.AddMajorCooldown(MajorCooldown{
+		Spell: spell,
+		Type:  CooldownTypeMana,
+		ShouldActivate: func(sim *Simulation, character *Character) bool {
+			totalRegen := character.ManaRegenPerSecondWhileCasting() * 5
+			return character.MaxMana()-(character.CurrentMana()+totalRegen) >= 3200
+		},
+	})
 }
 
 var AlchStoneItemIDs = []int32{136197, 80508, 96252, 96253, 96254, 44322, 44323, 44324}
