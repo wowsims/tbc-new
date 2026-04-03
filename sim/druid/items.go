@@ -76,10 +76,44 @@ func init() {
 		character.ItemSwap.RegisterProc(31025, aura)
 	})
 
+	// Staff of Natural Fury
+	core.NewItemEffect(31334, func(agent core.Agent) {
+		// Reduces the base Mana cost of your shapeshifting spells by 200.
+		character := agent.GetCharacter()
+		aura := core.MakePermanent(character.RegisterAura(core.Aura{
+			Label: "Staff of Natural Fury",
+		}).AttachSpellMod(core.SpellModConfig{
+			ClassMask: DruidSpellCatForm | DruidSpellBearForm,
+			Kind:      core.SpellMod_PowerCost_Flat,
+			IntValue:  -200,
+		}))
+		character.ItemSwap.RegisterProc(31334, aura)
+	})
+
+	// Idol of the Beast (25667): Increases the damage dealt by Ferocious Bite by 14 per combo point.
+	// Implemented inline in ferocious_bite.go.
+	core.NewItemEffect(25667, func(agent core.Agent) {})
+
+	// Idol of the Wild (28064): Increases the damage dealt by Mangle by 24 (Cat) or 52 (Bear).
+	// Implemented inline in mangle.go.
+	core.NewItemEffect(28064, func(agent core.Agent) {})
+
+	// Idol of Feral Shadows (28372): Increases the damage dealt by Rip by 7 per combo point per tick.
+	// Implemented inline in rip.go.
+	core.NewItemEffect(28372, func(agent core.Agent) {})
+
+	// Everbloom Idol (29390): Increases the damage dealt by Shred by 88.
+	// Implemented inline in shred.go.
+	core.NewItemEffect(29390, func(agent core.Agent) {})
+
 	// Idol of the Raven Goddess
 	core.NewItemEffect(32387, func(agent core.Agent) {
 		// Implemented naively in druid.go
 	})
+
+	// Idol of Ursoc (27744): Increases the damage dealt by Lacerate by 8 per tick per stack.
+	// Implemented inline in lacerate.go.
+	core.NewItemEffect(27744, func(agent core.Agent) {})
 
 	// Ashtongue Talisman of Equilibrium
 	core.NewItemEffect(32486, func(agent core.Agent) {

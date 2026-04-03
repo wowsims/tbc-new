@@ -19,20 +19,22 @@ type Druid struct {
 	Treants Treants
 
 	BleedsActive      map[*core.Unit]int32
-	AssumeBleedActive bool
 	CannotShredTarget bool
 	RipBaseNumTicks   int32
 	RipMaxNumTicks    int32
+
+	ShredFlatBonus    float64 // Nordrassil Harness 4P: +75
+	LacerateTickBonus float64 // Nordrassil Harness 4P: +15 per stack per tick
 
 	MHAutoSpell *core.Spell
 
 	Barkskin             *DruidSpell
 	Dash                 *DruidSpell
 	FaerieFire           *DruidSpell
+	FaerieFireFeral      *DruidSpell
 	FerociousBite        *DruidSpell
 	ForceOfNature        *DruidSpell
 	FrenziedRegeneration *DruidSpell
-	HealingTouch         *DruidSpell
 	Hurricane            *DruidSpell
 	Innervate            *DruidSpell
 	InsectSwarm          *DruidSpell
@@ -47,6 +49,7 @@ type Druid struct {
 	Ravage               *DruidSpell
 	Rejuvenation         *DruidSpell
 	Rip                  *DruidSpell
+	Shred                *DruidSpell
 	Starfire             *DruidSpell
 	Swipe                *DruidSpell
 	Wrath                *DruidSpell
@@ -57,8 +60,11 @@ type Druid struct {
 
 	BearFormAura             *core.Aura
 	CatFormAura              *core.Aura
+	ClearcastingAura         *core.Aura
 	DashAura                 *core.Aura
 	FrenziedRegenerationAura *core.Aura
+	FaerieFireAuras          core.AuraArray
+	MangleAuras              core.AuraArray
 	MoonkinFormAura          *core.Aura
 	ProwlAura                *core.Aura
 
@@ -66,9 +72,8 @@ type Druid struct {
 }
 
 const (
-	DruidSpellFlagNone int64 = 0
-	DruidSpellBarkskin int64 = 1 << iota
-	DruidSpellEntanglingRoots
+	DruidSpellFlagNone        int64 = 0
+	DruidSpellEntanglingRoots int64 = 1 << iota
 	DruidSpellFaerieFire
 	DruidSpellFaerieFireFeral
 	DruidSpellForceOfNature
@@ -89,9 +94,10 @@ const (
 	DruidSpellShred
 	DruidSpellStarfire
 	DruidSpellSwipe
-	DruidSpellTigersFury
 	DruidSpellThorns
 	DruidSpellWrath
+	DruidSpellCatForm
+	DruidSpellBearForm
 
 	DruidSpellHealingTouch
 	DruidSpellRegrowth
@@ -108,7 +114,7 @@ const (
 	DruidSpellMoonfire           = DruidSpellMoonfireInitial | DruidSpellMoonfireDoT
 	DruidSpellDoT                = DruidSpellMoonfireDoT | DruidSpellInsectSwarm
 	DruidSpellHoT                = DruidSpellRejuvenation | DruidSpellLifebloom | DruidSpellRegrowth
-	DruidSpellInstant            = DruidSpellBarkskin | DruidSpellMoonfire | DruidSpellFaerieFire | DruidSpellBarkskin
+	DruidSpellInstant            = DruidSpellMoonfire | DruidSpellFaerieFire
 	DruidSpellMangle             = DruidSpellMangleBear | DruidSpellMangleCat
 	DruidSpellBuilder            = DruidSpellMangleCat | DruidSpellShred | DruidSpellRake | DruidSpellRavage
 	DruidSpellFinisher           = DruidSpellFerociousBite | DruidSpellRip
@@ -186,48 +192,31 @@ func (druid *Druid) Initialize() {
 
 func (druid *Druid) RegisterBaselineSpells() {
 	// Balance
-	druid.registerBarkskin()
 
 	druid.registerStarfireSpell()
 	druid.registerMoonfireSpell()
 	druid.registerWrathSpell()
 
-	// druid.registerHealingTouchSpell()
 	druid.registerHurricaneSpell()
-	// druid.registerNaturesSwiftness()
 	druid.registerFaerieFireSpell()
-	// druid.registerFaerieFireFeralSpell()
-	// druid.registerTranquilityCD()
-	// druid.registerRejuvenationSpell()
-
-	// druid.registerRebirthSpell()
 	druid.registerInnervateCD()
 }
 
 func (druid *Druid) RegisterFeralCatSpells() {
-	// druid.registerBearFormSpell()
-	// druid.registerBerserkCD()
-	// // druid.registerCatCharge()
-	// druid.registerCatFormSpell()
-	// druid.registerDashCD()
-	// druid.registerFerociousBiteSpell()
-	// druid.registerLacerateSpell()
-	// druid.registerMangleBearSpell()
-	// druid.registerMangleCatSpell()
-	// druid.registerMaulSpell()
-	// druid.registerProwlSpell()
-	// druid.registerRakeSpell()
-	// druid.registerRavageSpell()
-	// druid.registerRipSpell()
-	// druid.registerSwipeBearSpell()
-	// druid.registerSwipeCatSpell()
-	// druid.registerThrashBearSpell()
-	// druid.registerThrashCatSpell()
+	druid.registerCatFormSpell()
+
+	druid.registerMangleCatSpell()
+	druid.registerRakeSpell()
+	druid.registerRipSpell()
+	druid.registerFerociousBiteSpell()
+	druid.registerFaerieFireFeralSpell()
+	druid.registerShredSpell()
+	druid.applyOmenOfClarity()
 }
 
 func (druid *Druid) RegisterFeralTankSpells() {
-	// druid.registerBarkskinCD()
-	// druid.registerBearFormSpell()
+	druid.registerBearFormSpell()
+	druid.registerBarkskin()
 	// druid.registerBerserkCD()
 	// druid.registerCatFormSpell()
 	// druid.registerFrenziedRegenerationSpell()
@@ -235,7 +224,7 @@ func (druid *Druid) RegisterFeralTankSpells() {
 	// druid.registerMangleCatSpell()
 	// druid.registerMaulSpell()
 	// druid.registerMightOfUrsocCD()
-	// druid.registerLacerateSpell()
+	//druid.registerLacerateSpell()
 	// druid.registerRakeSpell()
 	// druid.registerRipSpell()
 	// druid.registerSurvivalInstinctsCD()
