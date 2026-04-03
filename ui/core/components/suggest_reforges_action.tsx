@@ -69,6 +69,7 @@ const INCLUDED_STATS: UnitStat[] = [
 	UnitStat.fromStat(Stat.StatSpellCritRating),
 	UnitStat.fromStat(Stat.StatSpellHasteRating),
 	UnitStat.fromStat(Stat.StatMeleeHitRating),
+	UnitStat.fromPseudoStat(PseudoStat.PseudoStatMeleeHitPercent),
 	UnitStat.fromStat(Stat.StatMeleeCritRating),
 	UnitStat.fromStat(Stat.StatMeleeHasteRating),
 	UnitStat.fromStat(Stat.StatExpertiseRating),
