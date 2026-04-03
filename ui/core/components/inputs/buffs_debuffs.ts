@@ -370,7 +370,10 @@ export const PARTY_BUFFS_CONFIG = [
 	{
 		config: WindfuryTotem,
 		picker: IconPicker,
-		stats: [Stat.StatAttackPower],
+		// Stat.StatParryRating is used as an exclusion sentinel: specs that add
+		// StatParryRating to excludeBuffDebuffInputs will not see Windfury Totem.
+		// Feral cats cannot proc Windfury, so they exclude it this way.
+		stats: [Stat.StatAttackPower, Stat.StatParryRating],
 	},
 	{
 		config: DrumsBuff,
