@@ -9,13 +9,13 @@ import (
 
 func RegisterFeralBearDruid() {
 	core.RegisterAgentFactory(
-		proto.Player_GuardianDruid{},
+		proto.Player_FeralBearDruid{},
 		proto.Spec_SpecFeralBearDruid,
 		func(character *core.Character, options *proto.Player, _ *proto.Raid) core.Agent {
 			return NewFeralBearDruid(character, options)
 		},
 		func(player *proto.Player, spec interface{}) {
-			playerSpec, ok := spec.(*proto.Player_GuardianDruid)
+			playerSpec, ok := spec.(*proto.Player_FeralBearDruid)
 			if !ok {
 				panic("Invalid spec value for Guardian Druid!")
 			}
@@ -25,7 +25,7 @@ func RegisterFeralBearDruid() {
 }
 
 func NewFeralBearDruid(character *core.Character, options *proto.Player) *GuardianDruid {
-	tankOptions := options.GetGuardianDruid()
+	tankOptions := options.GetFeralBearDruid()
 	selfBuffs := druid.SelfBuffs{}
 
 	bear := &GuardianDruid{
@@ -86,7 +86,7 @@ func (bear *GuardianDruid) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
 }
 
 func (bear *GuardianDruid) ApplyTalents() {
-	bear.Druid.ApplyTalents()
+	bear.Druid.ApplyFeralTalents()
 	bear.applySpecTalents()
 	//bear.applyMastery()
 	bear.applyThickHide()
