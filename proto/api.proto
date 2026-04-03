@@ -44,8 +44,8 @@ message Player {
 
 	oneof spec {
 		BalanceDruid balance_druid = 12;
-		FeralCatDruid feral_druid = 13;
-		FeralBearDruid guardian_druid = 53;
+		FeralCatDruid feral_cat_druid = 13;
+		FeralBearDruid feral_bear_druid = 53;
 		RestorationDruid restoration_druid = 14;
 
 		Hunter hunter = 17;
