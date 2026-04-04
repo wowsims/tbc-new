@@ -51,6 +51,7 @@ type Druid struct {
 	Rip                  *DruidSpell
 	Shred                *DruidSpell
 	Starfire             *DruidSpell
+	TigersFury           *DruidSpell
 	Swipe                *DruidSpell
 	Wrath                *DruidSpell
 
@@ -67,6 +68,7 @@ type Druid struct {
 	MangleAuras              core.AuraArray
 	MoonkinFormAura          *core.Aura
 	ProwlAura                *core.Aura
+	TigersFuryAura           *core.Aura
 
 	form DruidForm
 }
@@ -96,6 +98,7 @@ const (
 	DruidSpellSwipe
 	DruidSpellThorns
 	DruidSpellWrath
+	DruidSpellTigersFury
 	DruidSpellCatForm
 	DruidSpellBearForm
 
@@ -211,6 +214,7 @@ func (druid *Druid) RegisterFeralCatSpells() {
 	druid.registerFerociousBiteSpell()
 	druid.registerFaerieFireFeralSpell()
 	druid.registerShredSpell()
+	druid.registerTigersFurySpell()
 	druid.applyOmenOfClarity()
 }
 

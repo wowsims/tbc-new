@@ -141,6 +141,10 @@ func (druid *Druid) RegisterCatFormAura() {
 			druid.DisableBuildPhaseStatDep(sim, strApDep)
 			druid.DisableBuildPhaseStatDep(sim, feralApDep)
 
+			if druid.TigersFuryAura != nil {
+				druid.TigersFuryAura.Deactivate(sim)
+			}
+
 			if !druid.Env.MeasuringStats {
 				druid.AutoAttacks.SetMH(druid.WeaponFromMainHand(druid.DefaultMeleeCritMultiplier()))
 				druid.AutoAttacks.EnableAutoSwing(sim)
