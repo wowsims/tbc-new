@@ -288,6 +288,8 @@ enum PseudoStat {
 
 	PseudoStatRangedHitPercent = 24;
 	PseudoStatRangedCritPercent = 25;
+
+	PseudoStatReducedCritTakenPercent = 26;
 }
 
 message UnitStats {

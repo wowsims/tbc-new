@@ -453,11 +453,11 @@ func ImprovedSealOfTheCrusaderAura(target *Unit, points int32, flatBonus, percen
 	effect = aura.NewExclusiveEffect("Improved Seal of the Crusader", true, ExclusiveEffect{
 		Priority: priority,
 		OnGain: func(ee *ExclusiveEffect, sim *Simulation) {
-			target.PseudoStats.ReducedCritTakenChance += float64(-1 * points)
+			target.AddReducedCritTakenPercent(float64(-1 * points))
 			target.PseudoStats.SchoolBonusSpellDamage[stats.SchoolIndexHoly] += holySpellDamageBonus
 		},
 		OnExpire: func(ee *ExclusiveEffect, sim *Simulation) {
-			target.PseudoStats.ReducedCritTakenChance -= float64(-1.0 * points)
+			target.AddReducedCritTakenPercent(float64(1 * points))
 			target.PseudoStats.SchoolBonusSpellDamage[stats.SchoolIndexHoly] -= holySpellDamageBonus
 		},
 	})

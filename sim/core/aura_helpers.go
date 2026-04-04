@@ -563,6 +563,24 @@ func (parentAura *Aura) AttachAdditivePseudoStatBuff(fieldPointer *float64, bonu
 	return parentAura
 }
 
+// Attaches a ReducedCritTakenPercent buff that updates the base and recalculates totals.
+// Returns parent aura for chaining.
+func (parentAura *Aura) AttachReducedCritTakenPercentBuff(bonus float64) *Aura {
+	parentAura.ApplyOnGain(func(_ *Aura, _ *Simulation) {
+		parentAura.Unit.AddReducedCritTakenPercent(bonus)
+	})
+
+	parentAura.ApplyOnExpire(func(_ *Aura, _ *Simulation) {
+		parentAura.Unit.AddReducedCritTakenPercent(-bonus)
+	})
+
+	if parentAura.IsActive() {
+		parentAura.Unit.AddReducedCritTakenPercent(bonus)
+	}
+
+	return parentAura
+}
+
 func (parentAura *Aura) AttachMultiplyCastSpeed(multiplier float64) *Aura {
 	parentAura.ApplyOnGain(func(_ *Aura, sim *Simulation) {
 		parentAura.Unit.MultiplyCastSpeed(sim, multiplier)
