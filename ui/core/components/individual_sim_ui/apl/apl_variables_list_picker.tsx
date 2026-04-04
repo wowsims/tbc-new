@@ -3,6 +3,7 @@ import { IndividualSimUI } from '../../../individual_sim_ui';
 import { Player } from '../../../player';
 import { APLValueVariable } from '../../../proto/apl';
 import { UUID } from '../../../proto/common';
+import { renameAPLReference } from '../../../proto_utils/apl_utils';
 import { EventID, TypedEvent } from '../../../typed_event';
 import { randomUUID } from '../../../utils';
 import { Component } from '../../component';
@@ -115,13 +116,14 @@ class APLValueVariablePicker extends Input<Player<any>, APLValueVariable> {
 		nameContainer.querySelector('.apl-name-rename')!.addEventListener('click', () => {
 			const sourceValue = this.getSourceValue();
 			if (!sourceValue) return;
-			new APLNameModal(document.body, {
+			new APLNameModal(this.rootElem.closest('.individual-sim-ui') as HTMLElement ?? document.body, {
 				title: i18n.t('rotation_tab.apl.nameModal.rename', { itemName: i18n.t('rotation_tab.apl.variables.name') }),
 				inputLabel: i18n.t('rotation_tab.apl.variables.attributes.name'),
 				confirmButtonLabel: i18n.t('rotation_tab.apl.nameModal.renameConfirm'),
 				defaultValue: sourceValue.name,
 				existingNames: () => (player.aplRotation.valueVariables || []).filter(v => v !== sourceValue).map(v => v.name),
 				onSubmit: (name: string) => {
+					renameAPLReference(player.aplRotation, { type: 'variable', oldName: sourceValue.name, newName: name });
 					sourceValue.name = name;
 					player.rotationChangeEmitter.emit(TypedEvent.nextEventID());
 				},

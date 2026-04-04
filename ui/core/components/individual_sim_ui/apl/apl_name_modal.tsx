@@ -11,6 +11,7 @@ type APLNameModalConfig = {
 	defaultValue?: string;
 	existingNames: string[] | (() => string[]);
 	onSubmit: (name: string) => void;
+	onCancel?: () => void;
 };
 
 export class APLNameModal extends BaseModal {
@@ -77,10 +78,12 @@ export class APLNameModal extends BaseModal {
 		input.addEventListener('input', validate);
 		validate();
 
+		let submitted = false;
 		const submit = () => {
 			const name = input.value.trim();
 			if (!name) return;
 			if (getExistingNames().some(n => n === name)) return;
+			submitted = true;
 			config.onSubmit(name);
 			this.close();
 		};
@@ -91,6 +94,12 @@ export class APLNameModal extends BaseModal {
 				submit();
 			}
 		});
+
+		if (config.onCancel) {
+			this.addOnHideCallback(() => {
+				if (!submitted) config.onCancel!();
+			});
+		}
 
 		this.open();
 

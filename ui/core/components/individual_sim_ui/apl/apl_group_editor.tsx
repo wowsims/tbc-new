@@ -2,6 +2,7 @@ import i18n from '../../../../i18n/config';
 import { Player } from '../../../player';
 import { APLAction, APLGroup, APLListItem } from '../../../proto/apl';
 import { UUID } from '../../../proto/common';
+import { renameAPLReference } from '../../../proto_utils/apl_utils';
 import { EventID, TypedEvent } from '../../../typed_event';
 import { randomUUID } from '../../../utils';
 import { Input, InputConfig } from '../../input';
@@ -42,13 +43,14 @@ export class APLGroupEditor extends Input<Player<any>, APLGroup> {
 		nameContainer.querySelector('.apl-name-rename')!.addEventListener('click', () => {
 			const group = this.getSourceValue();
 			if (!group) return;
-			new APLNameModal(document.body, {
+			new APLNameModal(this.rootElem.closest('.individual-sim-ui') as HTMLElement ?? document.body, {
 				title: i18n.t('rotation_tab.apl.nameModal.rename', { itemName: i18n.t('rotation_tab.apl.actionGroups.name') }),
 				inputLabel: i18n.t('rotation_tab.apl.actionGroups.attributes.name'),
 				confirmButtonLabel: i18n.t('rotation_tab.apl.nameModal.renameConfirm'),
 				defaultValue: group.name,
 				existingNames: () => (player.aplRotation.groups || []).filter(g => g !== group).map(g => g.name),
 				onSubmit: (name: string) => {
+					renameAPLReference(player.aplRotation, { type: 'group', oldName: group.name, newName: name });
 					group.name = name;
 					player.rotationChangeEmitter.emit(TypedEvent.nextEventID());
 				},
@@ -95,7 +97,7 @@ export class APLGroupEditor extends Input<Player<any>, APLGroup> {
 					(actionIndex, ref) => {
 						this.getSourceValue()!.actions[actionIndex].action!.condition = ref;
 					},
-					document.body,
+					this.rootElem.closest('.individual-sim-ui') as HTMLElement ?? document.body,
 				),
 			],
 		});
