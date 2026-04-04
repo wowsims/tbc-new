@@ -799,9 +799,6 @@ func WindfuryTotemAura(char *Character, isImpoved bool) *Aura {
 		Handler: func(sim *Simulation, spell *Spell, result *SpellResult) {
 			if wfProcAura.IsActive() && !spell.ProcMask.Matches(ProcMaskMeleeSpecial) {
 				wfProcAura.RemoveStack(sim)
-				if wfProcAura.GetStacks() == 0 {
-					wfProcAura.Deactivate(sim)
-				}
 			}
 		},
 	})
