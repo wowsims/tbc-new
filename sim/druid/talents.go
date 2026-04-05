@@ -43,9 +43,6 @@ func (druid *Druid) ApplyFeralTalents() {
 	druid.applyIntensity()
 	druid.applyPrimalFury()
 	druid.applyLeaderOfThePack()
-	druid.applyPredatoryStrikes()
-	druid.applySharpenedClaws()
-	druid.applyFeralSwiftness()
 	druid.applyHeartOfTheWild()
 	druid.applySurvivalOfTheFittest()
 }
@@ -302,45 +299,15 @@ func (druid *Druid) applyIntensity() {
 	druid.PseudoStats.SpiritRegenRateCasting += float64(druid.Talents.Intensity) * 0.1
 }
 
-func (druid *Druid) applyPredatoryStrikes() {
-	if druid.Talents.PredatoryStrikes == 0 || !druid.InForm(Bear|Cat) {
-		return
-	}
-
-	druid.AddStat(stats.AttackPower, float64(druid.Talents.PredatoryStrikes)*0.5*core.CharacterLevel)
-}
-
-func (druid *Druid) applySharpenedClaws() {
-	if druid.Talents.SharpenedClaws == 0 || !druid.InForm(Bear|Cat) {
-		return
-	}
-
-	druid.AddStat(stats.PhysicalCritPercent, float64(druid.Talents.SharpenedClaws)*2.0)
-}
-
-func (druid *Druid) applyFeralSwiftness() {
-	if druid.Talents.FeralSwiftness == 0 || !druid.InForm(Bear|Cat) {
-		return
-	}
-
-	druid.AddStat(stats.DodgeRating, core.DodgeRatingPerDodgePercent*2.0*float64(druid.Talents.FeralSwiftness))
-}
-
 func (druid *Druid) applyHeartOfTheWild() {
 	if druid.Talents.HeartOfTheWild == 0 {
 		return
 	}
 
-	ranks := float64(druid.Talents.HeartOfTheWild)
-	// +4% Intellect per rank (all forms)
-	druid.MultiplyStat(stats.Intellect, 1+0.04*ranks)
-	if druid.InForm(Cat) {
-		// +2% Attack Power per rank in Cat Form (+10% at 5/5)
-		druid.MultiplyStat(stats.AttackPower, 1+0.02*ranks)
-	} else if druid.InForm(Bear) {
-		// +4% Stamina per rank in Bear Form (+20% at 5/5)
-		druid.MultiplyStat(stats.Stamina, 1+0.04*ranks)
-	}
+	// +4% Intellect per rank (all forms, always active).
+	// The Cat/Bear form-specific bonuses (+2% AP, +4% Stamina) are handled
+	// dynamically in RegisterCatFormAura / RegisterBearFormAura.
+	druid.MultiplyStat(stats.Intellect, 1+0.04*float64(druid.Talents.HeartOfTheWild))
 }
 
 func (druid *Druid) applySurvivalOfTheFittest() {
