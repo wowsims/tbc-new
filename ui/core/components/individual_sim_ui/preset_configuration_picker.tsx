@@ -12,6 +12,7 @@ import { Stats } from '../../proto_utils/stats';
 import { TypedEvent } from '../../typed_event';
 import { Component } from '../component';
 import { ContentBlock } from '../content_block';
+import { PresetGroupPicker, PresetGroupItem } from './preset_group_picker';
 
 export enum PresetConfigurationCategory {
 	EPWeights = 'epWeights',
@@ -26,12 +27,14 @@ export enum PresetConfigurationCategory {
 export class PresetConfigurationPicker extends Component {
 	readonly simUI: IndividualSimUI<Spec>;
 	readonly builds: Array<PresetBuild>;
+	private readonly types?: PresetConfigurationCategory[];
 
 	constructor(parentElem: HTMLElement, simUI: IndividualSimUI<Spec>, types?: PresetConfigurationCategory[]) {
 		super(parentElem, 'preset-configuration-picker-root');
 		this.rootElem.classList.add('saved-data-manager-root');
 
 		this.simUI = simUI;
+		this.types = types;
 		this.builds = (this.simUI.individualConfig.presets.builds ?? []).filter(build =>
 			Object.keys(build).some(category => types?.includes(category as PresetConfigurationCategory) && !!build[category as PresetConfigurationCategory]),
 		);
@@ -41,6 +44,31 @@ export class PresetConfigurationPicker extends Component {
 			return;
 		}
 
+		const hasGrouping = this.builds.some(b => b.phase !== undefined || b.group !== undefined);
+		if (hasGrouping) {
+			this.buildGrouped();
+		} else {
+			this.buildFlat();
+		}
+	}
+
+	private buildGrouped() {
+		const groupPicker = new PresetGroupPicker(this.rootElem, {
+			storageKey: this.simUI.getPresetFilterStorageKey(),
+		});
+
+		this.simUI.sim.waitForInit().then(() => {
+			const buildItems: PresetGroupItem[] = this.builds.map(build => ({
+				phase: build.phase,
+				group: build.group,
+				elem: this.makeBuildChip(build, groupPicker),
+			}));
+			groupPicker.addSection(i18n.t('gear_tab.preset_configurations.title'), buildItems);
+			groupPicker.init();
+		});
+	}
+
+	private buildFlat() {
 		const contentBlock = new ContentBlock(this.rootElem, 'saved-data', {
 			header: {
 				title: i18n.t('gear_tab.preset_configurations.title'),
@@ -58,87 +86,92 @@ export class PresetConfigurationPicker extends Component {
 
 		this.simUI.sim.waitForInit().then(() => {
 			this.builds.forEach(build => {
-				const dataElemRef = ref<HTMLButtonElement>();
-				buildsContainerRef.value!.appendChild(
-					<button className="saved-data-set-chip badge rounded-pill" ref={dataElemRef}>
-						<span
-							className="saved-data-set-name"
-							attributes={{ role: 'button' }}
-							onclick={() => {
-								const eventID = TypedEvent.nextEventID();
-
-								PresetConfigurationPicker.applyBuild(eventID, build, this.simUI);
-							}}>
-							{build.name}
-						</span>
-					</button>,
-				);
-
-				let categories: string[] = [];
-
-				// Add main categories from build keys
-				Object.keys(build).forEach(c => {
-					if (!['name', 'encounter', 'settings'].includes(c) && build[c as PresetConfigurationCategory]) {
-						const category = c as PresetConfigurationCategory;
-						categories.push(translatePresetConfigurationCategory(category));
-					}
-				});
-
-				if (build.encounter?.encounter) {
-					categories.push(translatePresetConfigurationCategory(PresetConfigurationCategory.Encounter));
-				}
-
-				if (build.epWeights) {
-					categories.push(i18n.t('common.preset.stat_weights'));
-				}
-
-				if (build.settings) {
-					Object.keys(build.settings).forEach(c => {
-						if (c === 'name') {
-							return;
-						} else if (c === 'specOptions') {
-							categories.push(i18n.t('common.preset.class_spec_options'));
-						} else if (c === 'consumables') {
-							categories.push(i18n.t('common.preset.consumables'));
-						} else if (c === 'reforgeSettings') {
-							categories.push(i18n.t('common.preset.reforge_settings'));
-						} else if (c === 'debuffs') {
-							categories.push(i18n.t('common.preset.debuffs'));
-						} else if (['buffs', 'raidBuffs', 'partyBuffs'].includes(c)) {
-							categories.push(i18n.t('common.preset.buffs'));
-						} else {
-							categories.push(i18n.t('common.preset.other_settings'));
-						}
-					});
-				}
-
-				categories = [...new Set(categories)].sort();
-
-				tippy(dataElemRef.value!, {
-					content: (
-						<>
-							<p className="mb-1">{i18n.t('common.preset.description')}</p>
-							<ul className="mb-0">
-								{categories.map(category => (
-									<li>{category}</li>
-								))}
-							</ul>
-						</>
-					),
-				});
-
-				const checkActive = () => dataElemRef.value!.classList[this.isBuildActive(build) ? 'add' : 'remove']('active');
-
-				checkActive();
-				TypedEvent.onAny([
-					this.simUI.player.changeEmitter,
-					this.simUI.sim.settingsChangeEmitter,
-					this.simUI.sim.raid.changeEmitter,
-					this.simUI.sim.encounter.changeEmitter,
-				]).on(checkActive);
+				buildsContainerRef.value!.appendChild(this.makeBuildChip(build));
 			});
 			contentBlock.bodyElement.replaceChildren(container);
 		});
+	}
+
+	private makeBuildChip(build: PresetBuild, groupPicker?: PresetGroupPicker): HTMLElement {
+		const dataElemRef = ref<HTMLButtonElement>();
+		const chip = (
+			<button className="saved-data-set-chip badge rounded-pill" ref={dataElemRef}>
+				<span
+					className="saved-data-set-name"
+					attributes={{ role: 'button' }}
+					onclick={() => {
+						PresetConfigurationPicker.applyBuild(TypedEvent.nextEventID(), build, this.simUI);
+						groupPicker?.setFilter(build.phase);
+					}}>
+					{build.name}
+				</span>
+			</button>
+		);
+
+		let categories: string[] = [];
+
+		// Add main categories from build keys
+		Object.keys(build).forEach(c => {
+			if (!['name', 'encounter', 'settings'].includes(c) && build[c as PresetConfigurationCategory]) {
+				const category = c as PresetConfigurationCategory;
+				categories.push(translatePresetConfigurationCategory(category));
+			}
+		});
+
+		if (build.encounter?.encounter) {
+			categories.push(translatePresetConfigurationCategory(PresetConfigurationCategory.Encounter));
+		}
+
+		if (build.epWeights) {
+			categories.push(i18n.t('common.preset.stat_weights'));
+		}
+
+		if (build.settings) {
+			Object.keys(build.settings).forEach(c => {
+				if (c === 'name') {
+					return;
+				} else if (c === 'specOptions') {
+					categories.push(i18n.t('common.preset.class_spec_options'));
+				} else if (c === 'consumables') {
+					categories.push(i18n.t('common.preset.consumables'));
+				} else if (c === 'reforgeSettings') {
+					categories.push(i18n.t('common.preset.reforge_settings'));
+				} else if (c === 'debuffs') {
+					categories.push(i18n.t('common.preset.debuffs'));
+				} else if (['buffs', 'raidBuffs', 'partyBuffs'].includes(c)) {
+					categories.push(i18n.t('common.preset.buffs'));
+				} else {
+					categories.push(i18n.t('common.preset.other_settings'));
+				}
+			});
+		}
+
+		categories = [...new Set(categories)].sort();
+
+		tippy(dataElemRef.value!, {
+			content: (
+				<>
+					<p className="mb-1">{i18n.t('common.preset.description')}</p>
+					<ul className="mb-0">
+						{categories.map(category => (
+							<li>{category}</li>
+						))}
+					</ul>
+				</>
+			),
+		});
+
+		const checkActive = () => dataElemRef.value!.classList[this.isBuildActive(build) ? 'add' : 'remove']('active');
+
+		checkActive();
+		TypedEvent.onAny([
+			this.simUI.player.changeEmitter,
+			this.simUI.sim.settingsChangeEmitter,
+			this.simUI.sim.raid.changeEmitter,
+			this.simUI.sim.encounter.changeEmitter,
+		]).on(checkActive);
+
+		return chip as HTMLElement;
 	}
 
 	static applyBuild(
@@ -222,49 +255,80 @@ export class PresetConfigurationPicker extends Component {
 	}
 
 	private isBuildActive({ gear, rotation, rotationType, talents, epWeights, encounter, settings }: PresetBuild): boolean {
-		const hasGear = gear ? EquipmentSpec.equals(gear.gear, this.simUI.player.getGear().asSpec()) : true;
-		const hasTalents = talents
-			? SavedTalents.equals(
-					talents.data,
-					SavedTalents.create({
-						talentsString: this.simUI.player.getTalentsString(),
-					}),
-				)
+		const types = this.types;
+		const checkAll = !types;
+
+		const hasGear = (checkAll || types.includes(PresetConfigurationCategory.Gear))
+			? (gear ? EquipmentSpec.equals(gear.gear, this.simUI.player.getGear().asSpec()) : true)
+			: true;
+		const hasTalents = (checkAll || types.includes(PresetConfigurationCategory.Talents))
+			? (talents
+				? SavedTalents.equals(
+						talents.data,
+						SavedTalents.create({
+							talentsString: this.simUI.player.getTalentsString(),
+						}),
+					)
+				: true)
 			: true;
 		let hasRotation = true;
-		if (rotationType) {
-			hasRotation = rotationType === this.simUI.player.getRotationType();
-		} else if (rotation?.rotation.rotation) {
-			const activeRotation = this.simUI.player.getResolvedAplRotation();
-			hasRotation = isEqualAPLRotation(this.simUI.player, activeRotation, rotation.rotation.rotation);
+		if (checkAll || types.includes(PresetConfigurationCategory.Rotation) || types.includes(PresetConfigurationCategory.RotationType)) {
+			if (rotationType) {
+				hasRotation = rotationType === this.simUI.player.getRotationType();
+			} else if (rotation?.rotation.rotation) {
+				const activeRotation = this.simUI.player.getResolvedAplRotation();
+				hasRotation = isEqualAPLRotation(this.simUI.player, activeRotation, rotation.rotation.rotation);
+			}
 		}
-		const hasEpWeights = epWeights ? this.simUI.player.getEpWeights().equals(epWeights.epWeights) : true;
-		const hasEncounter = encounter?.encounter
-			? Encounter.equals({ ...encounter.encounter, apiVersion: 0 }, { ...this.simUI.sim.encounter.toProto(), apiVersion: 0 })
+		const hasEpWeights = (checkAll || types.includes(PresetConfigurationCategory.EPWeights))
+			? (epWeights ? this.simUI.player.getEpWeights().equals(epWeights.epWeights) : true)
 			: true;
-		const hasHealingModel = encounter?.healingModel ? HealingModel.equals(encounter.healingModel, this.simUI.player.getHealingModel()) : true;
 
-		const hasRace = settings?.race ? this.simUI.player.getRace() === settings.race : true;
-		const hasProfession1 = settings?.playerOptions?.profession1 === undefined || this.simUI.player.getProfession1() === settings.playerOptions.profession1;
-		const hasProfession2 = settings?.playerOptions?.profession2 === undefined || this.simUI.player.getProfession2() === settings.playerOptions.profession2;
-		const hasDistanceFromTarget =
-			settings?.playerOptions?.distanceFromTarget === undefined ||
-			this.simUI.player.getDistanceFromTarget() === settings.playerOptions.distanceFromTarget;
-		const hasEnableItemSwap =
-			settings?.playerOptions?.enableItemSwap === undefined ||
-			this.simUI.player.itemSwapSettings.getEnableItemSwap() === settings.playerOptions.enableItemSwap;
-		const hasItemSwap =
-			settings?.playerOptions?.itemSwap === undefined ||
-			ItemSwap.equals(stripItemSwapApiVersion(this.simUI.player.itemSwapSettings?.toProto()), stripItemSwapApiVersion(settings?.playerOptions?.itemSwap));
-		const hasSpecOptions =
-			settings?.specOptions && Object.keys(settings.specOptions).length
-				? JSON.stringify(this.simUI.player.getSpecOptions()) == JSON.stringify(settings.specOptions)
+		let hasEncounter = true;
+		let hasHealingModel = true;
+		if (checkAll || types.includes(PresetConfigurationCategory.Encounter)) {
+			hasEncounter = encounter?.encounter
+				? Encounter.equals({ ...encounter.encounter, apiVersion: 0 }, { ...this.simUI.sim.encounter.toProto(), apiVersion: 0 })
 				: true;
-		const hasConsumables = settings?.consumables ? ConsumesSpec.equals(this.simUI.player.getConsumes(), settings.consumables) : true;
-		const hasPartyBuffs = settings?.partyBuffs ? PartyBuffs.equals(this.simUI.player.getParty()?.getBuffs(), settings.partyBuffs) : true;
-		const hasRaidBuffs = settings?.raidBuffs ? RaidBuffs.equals(this.simUI.sim.raid.getBuffs(), settings.raidBuffs) : true;
-		const hasBuffs = settings?.buffs ? IndividualBuffs.equals(this.simUI.player.getBuffs(), settings.buffs) : true;
-		const hasDebuffs = settings?.debuffs ? Debuffs.equals(this.simUI.sim.raid.getDebuffs(), settings.debuffs) : true;
+			hasHealingModel = encounter?.healingModel ? HealingModel.equals(encounter.healingModel, this.simUI.player.getHealingModel()) : true;
+		}
+
+		let hasRace = true;
+		let hasProfession1 = true;
+		let hasProfession2 = true;
+		let hasDistanceFromTarget = true;
+		let hasEnableItemSwap = true;
+		let hasItemSwap = true;
+		let hasSpecOptions = true;
+		let hasConsumables = true;
+		let hasPartyBuffs = true;
+		let hasRaidBuffs = true;
+		let hasBuffs = true;
+		let hasDebuffs = true;
+		if (checkAll || types.includes(PresetConfigurationCategory.Settings)) {
+			hasRace = settings?.race ? this.simUI.player.getRace() === settings.race : true;
+			hasProfession1 = settings?.playerOptions?.profession1 === undefined || this.simUI.player.getProfession1() === settings.playerOptions.profession1;
+			hasProfession2 = settings?.playerOptions?.profession2 === undefined || this.simUI.player.getProfession2() === settings.playerOptions.profession2;
+			hasDistanceFromTarget =
+				settings?.playerOptions?.distanceFromTarget === undefined ||
+				this.simUI.player.getDistanceFromTarget() === settings.playerOptions.distanceFromTarget;
+			hasEnableItemSwap =
+				settings?.playerOptions?.enableItemSwap === undefined ||
+				this.simUI.player.itemSwapSettings.getEnableItemSwap() === settings.playerOptions.enableItemSwap;
+			hasItemSwap =
+				settings?.playerOptions?.itemSwap === undefined ||
+				(!settings?.playerOptions?.enableItemSwap && !this.simUI.player.itemSwapSettings.getEnableItemSwap()) ||
+				ItemSwap.equals(stripItemSwapApiVersion(this.simUI.player.itemSwapSettings?.toProto()), stripItemSwapApiVersion(settings?.playerOptions?.itemSwap));
+			hasSpecOptions =
+				settings?.specOptions && Object.keys(settings.specOptions).length
+					? JSON.stringify(this.simUI.player.getSpecOptions()) == JSON.stringify(settings.specOptions)
+					: true;
+			hasConsumables = settings?.consumables ? ConsumesSpec.equals(this.simUI.player.getConsumes(), settings.consumables) : true;
+			hasPartyBuffs = settings?.partyBuffs ? PartyBuffs.equals(this.simUI.player.getParty()?.getBuffs(), settings.partyBuffs) : true;
+			hasRaidBuffs = settings?.raidBuffs ? RaidBuffs.equals(this.simUI.sim.raid.getBuffs(), settings.raidBuffs) : true;
+			hasBuffs = settings?.buffs ? IndividualBuffs.equals(this.simUI.player.getBuffs(), settings.buffs) : true;
+			hasDebuffs = settings?.debuffs ? Debuffs.equals(this.simUI.sim.raid.getDebuffs(), settings.debuffs) : true;
+		}
 
 		return (
 			hasGear &&

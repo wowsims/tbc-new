@@ -1,7 +1,6 @@
 import i18n from '../i18n/config';
-import { IndividualLinkImporter } from './components/individual_sim_ui/importers';
 import Toast, { ToastOptions } from './components/toast';
-import { Encounter } from './encounter';
+import { Phase } from './constants/other';
 import { Player } from './player';
 import { Player as PlayerProto } from './proto/api.js';
 import { APLRotation, APLRotation_Type as APLRotationType } from './proto/apl';
@@ -31,10 +30,14 @@ interface PresetBase {
 	tooltip?: string;
 	enableWhen?: (obj: Player<any>) => boolean;
 	onLoad?: (player: Player<any>) => void;
+	phase?: Phase;
+	group?: string;
 }
 
 interface PresetOptionsBase extends Pick<PresetBase, 'onLoad'> {
 	customCondition?: (player: Player<any>) => boolean;
+	phase?: Phase;
+	group?: string;
 }
 
 export interface PresetGear extends PresetBase {
@@ -99,6 +102,8 @@ export interface PresetSettings extends PresetBase {
 
 export interface PresetBuild {
 	name: string;
+	phase?: Phase;
+	group?: string;
 	gear?: PresetGear;
 	itemSwap?: PresetItemSwap;
 	talents?: PresetTalents;
@@ -132,6 +137,8 @@ const makePresetGearHelper = (name: string, gear: EquipmentSpec, options: Preset
 		gear,
 		enableWhen: !!conditions.length ? (player: Player<any>) => conditions.every(cond => cond(player)) : undefined,
 		onLoad: options?.onLoad,
+		phase: options.phase,
+		group: options.group,
 	};
 };
 
