@@ -557,6 +557,9 @@
 						"block": {
 							"type": "string"
 						},
+						"reduced_crit_taken": {
+							"type": "string"
+						},
 						"melee_speed_multiplier": {
 							"type": "string"
 						},
@@ -727,6 +730,7 @@
 						"off_hand_dps",
 						"ranged_dps",
 						"block",
+						"reduced_crit_taken",
 						"melee_speed_multiplier",
 						"ranged_speed_multiplier",
 						"cast_speed_multiplier",

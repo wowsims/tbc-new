@@ -55,7 +55,7 @@ func (bear *GuardianDruid) registerEnrageSpell() {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {
-			bear.AddRage(sim, 20, rageMetrics)
+			bear.AddRage(sim, 20+bear.IntensityEnrageRageBonus, rageMetrics)
 			bear.EnrageAura.Activate(sim)
 		},
 	})

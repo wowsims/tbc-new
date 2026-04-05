@@ -116,9 +116,6 @@ func (bear *GuardianDruid) applyThickHide() {
 
 	// Physical DR
 	bear.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexPhysical] *= 0.88
-
-	// Crit immunity
-	bear.PseudoStats.ReducedCritTakenChance += 0.06
 }
 
 func (bear *GuardianDruid) Initialize() {

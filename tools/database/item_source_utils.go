@@ -109,6 +109,10 @@ func InferPhase(item *proto.UIItem) int32 {
 		return 2
 	}
 
+	if strings.Contains(item.Name, "Band of Eternity") && ilvl == 128 { // Hyjal Rep Ring - Neutral
+		return 2
+	}
+
 	if strings.Contains(item.Name, "Band of Eternity") || strings.Contains(item.Name, "Band of the Eternal") { // Hyjal Rep Rings
 		return 3
 	}

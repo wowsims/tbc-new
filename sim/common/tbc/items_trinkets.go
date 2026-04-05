@@ -457,7 +457,7 @@ func init() {
 			Outcome:  core.OutcomeLanded,
 			Callback: core.CallbackOnSpellHitDealt,
 			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-				aura := core.Ternary(spell.ProcMask.Matches(core.ProcMaskSpellDamageProc), casterAura, meleeAura)
+				aura := core.Ternary(spell.ProcMask.Matches(core.ProcMaskSpellDamage), casterAura, meleeAura)
 				aura.Activate(sim)
 				aura.AddStack(sim)
 			},

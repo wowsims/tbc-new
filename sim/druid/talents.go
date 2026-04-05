@@ -32,6 +32,9 @@ func (druid *Druid) ApplyBalanceTalents() {
 	druid.applyImprovedFaerieFire()
 	druid.applyWrathOfCenarius()
 	druid.applyForceOfNature()
+
+	// Restoration
+	druid.applyIntensity()
 }
 
 // ApplyFeralTalents applies Feral tree talents and Restoration tree talents used by
@@ -243,6 +246,19 @@ func (druid *Druid) applyFocusedStarlight() {
 	})
 }
 
+func (druid *Druid) applyIntensity() {
+	if druid.Talents.Intensity == 0 {
+		return
+	}
+
+	// Allows 10% per rank of mana regeneration to continue while casting
+	druid.PseudoStats.SpiritRegenRateCasting += 0.10 * float64(druid.Talents.Intensity)
+	druid.UpdateManaRegenRates()
+
+	// Enrage instantly generates additional rage per rank (4/7/10)
+	druid.IntensityEnrageRageBonus = []float64{0, 4, 7, 10}[druid.Talents.Intensity]
+}
+
 func (druid *Druid) applyImprovedMoonfire() {
 	if druid.Talents.ImprovedMoonfire == 0 {
 		return
@@ -291,14 +307,6 @@ func (druid *Druid) applyNaturalist() {
 	druid.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexPhysical] *= 1 + 0.02*float64(druid.Talents.Naturalist)
 }
 
-func (druid *Druid) applyIntensity() {
-	if druid.Talents.Intensity == 0 {
-		return
-	}
-
-	druid.PseudoStats.SpiritRegenRateCasting += float64(druid.Talents.Intensity) * 0.1
-}
-
 func (druid *Druid) applyHeartOfTheWild() {
 	if druid.Talents.HeartOfTheWild == 0 {
 		return
@@ -319,7 +327,7 @@ func (druid *Druid) applySurvivalOfTheFittest() {
 	for _, s := range []stats.Stat{stats.Stamina, stats.Strength, stats.Agility, stats.Intellect, stats.Spirit} {
 		druid.MultiplyStat(s, mult)
 	}
-	druid.PseudoStats.ReducedCritTakenChance += 0.01 * float64(druid.Talents.SurvivalOfTheFittest)
+	druid.AddReducedCritTakenPercent(0.01 * float64(druid.Talents.SurvivalOfTheFittest))
 }
 
 func (druid *Druid) applyPrimalFury() {

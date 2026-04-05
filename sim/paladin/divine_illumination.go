@@ -22,7 +22,7 @@ func (paladin *Paladin) registerDivineIllumination() {
 	})
 
 	paladin.DivineIlluminationSpell = paladin.RegisterSpell(core.SpellConfig{
-		ActionID: actionId,
+		ActionID:       actionId,
 		SpellSchool:    core.SpellSchoolHoly,
 		ProcMask:       core.ProcMaskEmpty,
 		Flags:          core.SpellFlagAPL,

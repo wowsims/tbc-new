@@ -71,6 +71,8 @@ type Druid struct {
 	TigersFuryAura           *core.Aura
 
 	form DruidForm
+
+	IntensityEnrageRageBonus float64
 }
 
 const (

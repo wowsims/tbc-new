@@ -121,10 +121,11 @@ func init() {
 		}).
 			AttachStatBuff(stats.MeleeCritRating, 900).
 			AttachProcTrigger(core.ProcTrigger{
-				Name:               "World Breaker - Consume",
-				ProcMask:           core.ProcMaskMelee,
-				Callback:           core.CallbackOnSpellHitDealt,
-				TriggerImmediately: true,
+				Name:     "World Breaker - Consume",
+				ProcMask: core.ProcMaskMelee,
+				Callback: core.CallbackOnSpellHitDealt,
+				// TriggerImmediately ommited: World Breaker aura lingers affecting all spells
+				// in the batch similar to Windfury
 				Handler: func(sim *core.Simulation, _ *core.Spell, result *core.SpellResult) {
 					if aura.IsActive() {
 						aura.RemoveStack(sim)
@@ -142,11 +143,12 @@ func init() {
 		dpm := getDpm()
 
 		procTrigger := character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:     "World Breaker - Trigger",
-			DPM:      dpm,
-			Outcome:  core.OutcomeLanded,
-			Callback: core.CallbackOnSpellHitDealt,
-			Handler: func(sim *core.Simulation, _ *core.Spell, result *core.SpellResult) {
+			Name:               "World Breaker - Trigger",
+			DPM:                dpm,
+			Outcome:            core.OutcomeLanded,
+			Callback:           core.CallbackOnSpellHitDealt,
+			TriggerImmediately: true,
+			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 				aura.Activate(sim)
 				aura.AddStack(sim)
 			},

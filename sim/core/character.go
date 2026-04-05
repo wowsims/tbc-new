@@ -154,6 +154,7 @@ func NewCharacter(party *Party, partyIndex int, player *proto.Player) Character 
 			character.bonusMHDps = ps[proto.PseudoStat_PseudoStatMainHandDps]
 			character.bonusOHDps = ps[proto.PseudoStat_PseudoStatOffHandDps]
 			character.bonusRangedDps = ps[proto.PseudoStat_PseudoStatRangedDps]
+			character.PseudoStats.BaseReducedCritTakenPercent = ps[proto.PseudoStat_PseudoStatReducedCritTakenPercent] / 100
 			character.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexArcane] = ps[proto.PseudoStat_PseudoStatSchoolHitPercentArcane]
 			character.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexFire] = ps[proto.PseudoStat_PseudoStatSchoolHitPercentFire]
 			character.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexFrost] = ps[proto.PseudoStat_PseudoStatSchoolHitPercentFrost]
@@ -656,10 +657,11 @@ func (character *Character) GetPseudoStatsProto() []float64 {
 		proto.PseudoStat_PseudoStatRangedDps:   character.AutoAttacks.Ranged().DPS(),
 
 		// Base values are modified by Enemy attackTables, but we display for LVL 70 enemy as paperdoll default
-		proto.PseudoStat_PseudoStatDodgePercent:         (character.PseudoStats.BaseDodgeChance + character.GetDodgeFromRating() + character.GetDefenseReduction()) * 100,
-		proto.PseudoStat_PseudoStatParryPercent:         Ternary(character.PseudoStats.CanParry, (character.PseudoStats.BaseParryChance+character.GetParryFromRating()+character.GetDefenseReduction())*100, 0),
-		proto.PseudoStat_PseudoStatBlockPercent:         Ternary(character.PseudoStats.CanBlock, (character.PseudoStats.BaseBlockChance+character.GetBlockFromRating()+character.GetDefenseReduction())*100, 0),
-		proto.PseudoStat_PseudoStatBlockValueMultiplier: character.PseudoStats.BlockValueMultiplier,
+		proto.PseudoStat_PseudoStatDodgePercent:            (character.PseudoStats.BaseDodgeChance + character.GetDodgeFromRating() + character.GetDefenseReduction()) * 100,
+		proto.PseudoStat_PseudoStatParryPercent:            Ternary(character.PseudoStats.CanParry, (character.PseudoStats.BaseParryChance+character.GetParryFromRating()+character.GetDefenseReduction())*100, 0),
+		proto.PseudoStat_PseudoStatBlockPercent:            Ternary(character.PseudoStats.CanBlock, (character.PseudoStats.BaseBlockChance+character.GetBlockFromRating()+character.GetDefenseReduction())*100, 0),
+		proto.PseudoStat_PseudoStatBlockValueMultiplier:    character.PseudoStats.BlockValueMultiplier,
+		proto.PseudoStat_PseudoStatReducedCritTakenPercent: character.PseudoStats.ReducedCritTakenPercent * 100,
 
 		// Used by UI to incorporate multiplicative Haste buffs into final character stats display.
 		proto.PseudoStat_PseudoStatRangedSpeedMultiplier: character.PseudoStats.RangedSpeedMultiplier * character.PseudoStats.AttackSpeedMultiplier,

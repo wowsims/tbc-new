@@ -290,6 +290,13 @@ func (unit *Unit) AddDynamicHealingTakenModifier(dhtm DynamicHealingTakenModifie
 	unit.DynamicHealingTakenModifiers = append(unit.DynamicHealingTakenModifiers, dhtm)
 }
 
+// AddReducedCritTakenPercent adds to the base crit reduction and recalculates the total.
+// Use this for dynamic changes during simulation (e.g., auras).
+func (unit *Unit) AddReducedCritTakenPercent(amount float64) {
+	unit.PseudoStats.BaseReducedCritTakenPercent += amount
+	unit.updateReducedCritTakenPercent()
+}
+
 func (unit *Unit) AddOnMasteryStatChanged(omsc OnMasteryStatChanged) {
 	if unit.Env != nil && unit.Env.IsFinalized() {
 		panic("Already finalized, cannot add on mastery stat changed callback!")
@@ -375,6 +382,9 @@ func (unit *Unit) processDynamicBonus(sim *Simulation, bonus stats.Stats) {
 	}
 	if bonus[stats.SpellHasteRating] != 0 {
 		unit.updateCastSpeed()
+	}
+	if bonus[stats.DefenseRating] != 0 || bonus[stats.ResilienceRating] != 0 {
+		unit.updateReducedCritTakenPercent()
 	}
 
 	// Higher performance than calling TriggerDelayedPetInheritance()
@@ -679,6 +689,7 @@ func (unit *Unit) finalize() {
 	unit.updateCastSpeed()
 	unit.updateAttackSpeed()
 	unit.updateMeleeAndRangedHaste()
+	unit.updateReducedCritTakenPercent()
 	unit.initMovement()
 
 	// All stats added up to this point are part of the 'initial' stats.
@@ -899,11 +910,14 @@ func (unit *Unit) GetTotalBlockChanceAsDefender(atkTable *AttackTable) float64 {
 func (unit *Unit) GetDefenseReduction() float64 {
 	return math.Floor(unit.stats[stats.DefenseRating]/DefenseRatingPerDefenseLevel) * MissDodgeParryBlockCritChancePerDefense / 100
 }
+func (unit *Unit) GetResilienceReduction() float64 {
+	return unit.GetStat(stats.ResilienceRating) / ResilienceRatingPerCritReductionChance / 100
+}
 
-func (unit *Unit) GetCritImmunityPercent() float64 {
-	return unit.GetDefenseReduction() +
-		unit.GetStat(stats.ResilienceRating)/ResilienceRatingPerCritReductionChance/100 +
-		unit.PseudoStats.ReducedCritTakenChance
+func (unit *Unit) updateReducedCritTakenPercent() {
+	unit.PseudoStats.ReducedCritTakenPercent = unit.PseudoStats.BaseReducedCritTakenPercent +
+		unit.GetDefenseReduction() +
+		unit.GetResilienceReduction()
 }
 
 func (unit *Unit) GetTotalAvoidanceChance(spell *Spell, atkTable *AttackTable) float64 {

@@ -4,7 +4,7 @@
 	{"action":{"castSpell":{"spellId":{"spellId":34917}}},"doAtValue":{"const":{"val":"-1.5s"}}}
 	],
 	"priorityList": [
-	{"action":{"condition":{"variableRef":{"name":"Short Fight"}},"castSpell":{"spellId":{"spellId":34433,"rank":1}}}},
+	{"action":{"condition":{"or":{"vals":[{"variableRef":{"name":"Short Fight"}},{"variableRef":{"name":"OOM"}}]}},"castSpell":{"spellId":{"spellId":34433,"rank":1}}}},
 	{"action":{"autocastOtherCooldowns":{}}},
 	{"action":{"condition":{"variableRef":{"name":"Troll"}},"castSpell":{"spellId":{"spellId":20554,"tag":1}}}},
 	{"action":{"condition":{"and":{"vals":[{"variableRef":{"name":"Long Fight"}},{"and":{"vals":[{"dotIsActive":{"spellId":{"spellId":25368,"rank":10}}},{"cmp":{"op":"OpGe","lhs":{"dotRemainingTime":{"spellId":{"spellId":25368,"rank":10}}},"rhs":{"spellGcdHastedDuration":{"spellId":{"spellId":34433,"rank":1}}}}}]}},{"dotIsActive":{"spellId":{"spellId":34917}}}]}},"castSpell":{"spellId":{"spellId":34433,"rank":1}}}},
@@ -16,13 +16,15 @@
 	{"action":{"condition":{"or":{"vals":[{"spellIsReady":{"spellId":{"spellId":25467}}},{"not":{"val":{"spellIsReady":{"spellId":{"spellId":25372,"rank":10}}}}}]}},"castSpell":{"spellId":{"spellId":14751}}}},
 	{"action":{"condition":{"variableRef":{"name":"Undead"}},"castSpell":{"spellId":{"spellId":25467}}}},
 	{"action":{"castSpell":{"spellId":{"spellId":32996}}}},
-	{"action":{"condition":{"and":{"vals":[{"cmp":{"op":"OpGe","lhs":{"dotRemainingTime":{"spellId":{"spellId":25368,"rank":10}}},"rhs":{"const":{"val":"0.7s"}}}}]}},"channelSpell":{"spellId":{"spellId":25387,"rank":7},"interruptIf":{"cmp":{"op":"OpGe","lhs":{"spellChanneledTicks":{"spellId":{"spellId":25387}}},"rhs":{"const":{"val":"2"}}}}}}}
+	{"action":{"condition":{"and":{"vals":[{"cmp":{"op":"OpGe","lhs":{"dotRemainingTime":{"spellId":{"spellId":25368,"rank":10}}},"rhs":{"const":{"val":"0.7s"}}}}]}},"channelSpell":{"spellId":{"spellId":25387,"rank":7},"interruptIf":{"variableRef":{"name":"Mind Flay Clip"}}}}}
 	],
 	"valueVariables": [
 	{"name":"Night Elf","value":{"spellIsKnown":{"spellId":{"spellId":25446}}}},
 	{"name":"Undead","value":{"spellIsKnown":{"spellId":{"spellId":25467}}}},
 	{"name":"Troll","value":{"or":{"vals":[{"spellIsKnown":{"spellId":{"spellId":20554,"tag":1}}},{"spellIsKnown":{"spellId":{"spellId":20554,"tag":2}}},{"spellIsKnown":{"spellId":{"spellId":20554,"tag":3}}},{"spellIsKnown":{"spellId":{"spellId":20554,"tag":4}}},{"spellIsKnown":{"spellId":{"spellId":20554,"tag":5}}}]}}},
 	{"name":"Short Fight","value":{"and":{"vals":[{"cmp":{"op":"OpLe","lhs":{"remainingTime":{}},"rhs":{"const":{"val":"120s"}}}},{"cmp":{"op":"OpLe","lhs":{"currentTime":{}},"rhs":{"const":{"val":"3s"}}}}]}}},
-	{"name":"Long Fight","value":{"or":{"vals":[{"and":{"vals":[{"cmp":{"op":"OpGe","lhs":{"currentTime":{}},"rhs":{"const":{"val":"118s"}}}},{"or":{"vals":[{"and":{"vals":[{"auraIsKnown":{"auraId":{"itemId":22839}}},{"or":{"vals":[{"spellIsReady":{"spellId":{"itemId":22839}}},{"auraIsActive":{"auraId":{"itemId":22839},"includeReactionTime":true}}]}}]}},{"and":{"vals":[{"not":{"val":{"auraIsKnown":{"auraId":{"itemId":22839}}}}},{"auraIsActive":{"auraId":{"spellId":35476,"tag":-1}}}]}},{"and":{"vals":[{"not":{"val":{"auraIsKnown":{"auraId":{"spellId":35476,"tag":-1}}}}},{"cmp":{"op":"OpGe","lhs":{"currentTime":{}},"rhs":{"const":{"val":"118s"}}}}]}},{"cmp":{"op":"OpGe","lhs":{"currentTime":{}},"rhs":{"const":{"val":"118s"}}}}]}}]}}]}}}
+	{"name":"Long Fight","value":{"or":{"vals":[{"and":{"vals":[{"cmp":{"op":"OpGe","lhs":{"currentTime":{}},"rhs":{"const":{"val":"118s"}}}},{"or":{"vals":[{"and":{"vals":[{"auraIsKnown":{"auraId":{"itemId":22839}}},{"or":{"vals":[{"spellIsReady":{"spellId":{"itemId":22839}}},{"auraIsActive":{"auraId":{"itemId":22839},"includeReactionTime":true}}]}}]}},{"and":{"vals":[{"not":{"val":{"auraIsKnown":{"auraId":{"itemId":22839}}}}},{"auraIsActive":{"auraId":{"spellId":35476,"tag":-1}}}]}},{"and":{"vals":[{"not":{"val":{"auraIsKnown":{"auraId":{"spellId":35476,"tag":-1}}}}},{"cmp":{"op":"OpGe","lhs":{"currentTime":{}},"rhs":{"const":{"val":"118s"}}}}]}},{"cmp":{"op":"OpGe","lhs":{"currentTime":{}},"rhs":{"const":{"val":"118s"}}}}]}}]}}]}}},
+	{"name":"OOM","value":{"cmp":{"op":"OpLe","lhs":{"currentManaPercent":{}},"rhs":{"const":{"val":"5%"}}}}},
+	{"name":"Mind Flay Clip","value":{"and":{"vals":[{"cmp":{"op":"OpEq","lhs":{"spellChanneledTicks":{"spellId":{"spellId":25387}}},"rhs":{"const":{"val":"2"}}}},{"or":{"vals":[{"spellCanCast":{"spellId":{"spellId":25368,"rank":10}}},{"spellCanCast":{"spellId":{"spellId":32996,"rank":2}}},{"spellCanCast":{"spellId":{"spellId":25372,"rank":10}}},{"spellCanCast":{"spellId":{"spellId":34917}}}]}}]}}}
 	]
 }
