@@ -10,7 +10,7 @@ import (
 // FeralCritMultiplier returns the melee crit multiplier for cat/bear form abilities,
 // including the bonus from Predatory Instincts (+2% crit damage per rank).
 func (druid *Druid) FeralCritMultiplier() float64 {
-	return druid.DefaultMeleeCritMultiplier() + 0.02*float64(druid.Talents.PredatoryInstincts)
+	return druid.DefaultMeleeCritMultiplier() * (1 + 0.02*float64(druid.Talents.PredatoryInstincts))
 }
 
 // ApplyBalanceTalents applies all Balance tree talents. Call this from Balance spec only.
