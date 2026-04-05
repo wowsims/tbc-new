@@ -11,13 +11,7 @@ func (druid *Druid) registerMangleAuras() {
 	if druid.MangleAuras != nil {
 		return
 	}
-	druid.MangleAuras = druid.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {
-		return target.GetOrRegisterAura(core.Aura{
-			Label:    "Mangle",
-			ActionID: core.ActionID{SpellID: 33876},
-			Duration: time.Second * 12,
-		})
-	})
+	druid.MangleAuras = druid.NewEnemyAuraArray(core.MangleAura)
 }
 
 func (druid *Druid) registerMangleCatSpell() {
