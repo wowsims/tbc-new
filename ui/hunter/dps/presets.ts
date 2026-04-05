@@ -26,10 +26,28 @@ import { Stats } from '../../core/proto_utils/stats';
 import { defaultExposeWeaknessSettings, defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
 import DefaultAPL from './apls/default.apl.json';
 import P1PreRaidBuild from './builds/p1_pre_raid.build.json';
-import P1BM2HBuild from './builds/p1_bm_2h.build.json';
-import P1BMDWBuild from './builds/p1_bm_dw.build.json';
-import P1SV2HBuild from './builds/p1_sv_2h.build.json';
-import P1SVDWBuild from './builds/p1_sv_dw.build.json';
+import P1BM2H6PBuild from './builds/p1_bm_2h_6p.build.json';
+import P1BM2H9PBuild from './builds/p1_bm_2h_9p.build.json';
+import P1BMDW6PBuild from './builds/p1_bm_dw_6p.build.json';
+import P1BMDW9PBuild from './builds/p1_bm_dw_9p.build.json';
+import P1SV2H6PBuild from './builds/p1_sv_2h_6p.build.json';
+import P1SV2H9PBuild from './builds/p1_sv_2h_9p.build.json';
+import P1SVDW6PBuild from './builds/p1_sv_dw_6p.build.json';
+import P1SVDW9PBuild from './builds/p1_sv_dw_9p.build.json';
+import P2BM2H6PBuild from './builds/p2_bm_2h_6p.build.json';
+import P2BM2H9PBuild from './builds/p2_bm_2h_9p.build.json';
+import P2BMDW6PBuild from './builds/p2_bm_dw_6p.build.json';
+import P2BMDW9PBuild from './builds/p2_bm_dw_9p.build.json';
+import P2SV2H6PBuild from './builds/p2_sv_2h_6p.build.json';
+import P2SVDW6PBuild from './builds/p2_sv_dw_6p.build.json';
+import P3BM2H6PBuild from './builds/p3_bm_2h_6p.build.json';
+import P3BM2H9PBuild from './builds/p3_bm_2h_9p.build.json';
+import P3BMDW6PBuild from './builds/p3_bm_dw_6p.build.json';
+import P3BMDW9PBuild from './builds/p3_bm_dw_9p.build.json';
+import P3SV2H6PBuild from './builds/p3_sv_2h_6p.build.json';
+import P3SV2H9PBuild from './builds/p3_sv_2h_9p.build.json';
+import P3SVDW6PBuild from './builds/p3_sv_dw_6p.build.json';
+import P3SVDW9PBuild from './builds/p3_sv_dw_9p.build.json';
 import P1PreRaidGear from './gear_sets/p1_pre_raid.gear.json';
 import P1BMDW6PGear from './gear_sets/p1_bm_dw_6p.gear.json';
 import P1BMDW9PGear from './gear_sets/p1_bm_dw_9p.gear.json';
@@ -39,6 +57,20 @@ import P1SVDW3PGear from './gear_sets/p1_sv_dw_3p.gear.json';
 import P1SVDW6PGear from './gear_sets/p1_sv_dw_6p.gear.json';
 import P1SV2H3PGear from './gear_sets/p1_sv_2h_3p.gear.json';
 import P1SV2H6PGear from './gear_sets/p1_sv_2h_6p.gear.json';
+import P2BMDW6PGear from './gear_sets/p2_bm_dw_6p.gear.json';
+import P2BMDW9PGear from './gear_sets/p2_bm_dw_9p.gear.json';
+import P2BM2H6PGear from './gear_sets/p2_bm_2h_6p.gear.json';
+import P2BM2H9PGear from './gear_sets/p2_bm_2h_9p.gear.json';
+import P2SVDW6PGear from './gear_sets/p2_sv_dw_6p.gear.json';
+import P2SV2H6PGear from './gear_sets/p2_sv_2h_6p.gear.json';
+import P3BMDW6PGear from './gear_sets/p3_bm_dw_6p.gear.json';
+import P3BMDW9PGear from './gear_sets/p3_bm_dw_9p.gear.json';
+import P3BM2H6PGear from './gear_sets/p3_bm_2h_6p.gear.json';
+import P3BM2H9PGear from './gear_sets/p3_bm_2h_9p.gear.json';
+import P3SVDW6PGear from './gear_sets/p3_sv_dw_6p.gear.json';
+import P3SVDW9PGear from './gear_sets/p3_sv_dw_9p.gear.json';
+import P3SV2H6PGear from './gear_sets/p3_sv_2h_6p.gear.json';
+import P3SV2H9PGear from './gear_sets/p3_sv_2h_9p.gear.json';
 
 export const DefaultRotation = PresetUtils.makePresetAPLRotation('APL', DefaultAPL);
 
@@ -64,15 +96,31 @@ export const WeaveRotation = Hunter_Rotation.create({
 });
 export const WeaveSimple = PresetUtils.makePresetSimpleRotation('Weave', Spec.SpecHunter, WeaveRotation);
 
-export const P1_PreRaid_GEARSET = PresetUtils.makePresetGear('P1 - Pre-raid', P1PreRaidGear);
-export const P1_BM_DW_6P_GEARSET = PresetUtils.makePresetGear('P1 - BM - DW (imp. FF)', P1BMDW6PGear);
-export const P1_BM_DW_9P_GEARSET = PresetUtils.makePresetGear('P1 - BM - DW (no imp. FF)', P1BMDW9PGear);
-export const P1_BM_2H_6P_GEARSET = PresetUtils.makePresetGear('P1 - BM - 2H (imp. FF)', P1BM2H6PGear);
-export const P1_BM_2H_9P_GEARSET = PresetUtils.makePresetGear('P1 - BM - 2H (no imp. FF)', P1BM2H9PGear);
-export const P1_SV_DW_3P_GEARSET = PresetUtils.makePresetGear('P1 - SV - DW (imp. FF)', P1SVDW3PGear);
-export const P1_SV_DW_6P_GEARSET = PresetUtils.makePresetGear('P1 - SV - DW (no imp. FF)', P1SVDW6PGear);
-export const P1_SV_2H_3P_GEARSET = PresetUtils.makePresetGear('P1 - SV - 2H (imp. FF)', P1SV2H3PGear);
-export const P1_SV_2H_6P_GEARSET = PresetUtils.makePresetGear('P1 - SV - 2H (no imp. FF)', P1SV2H6PGear);
+export const P1_PreRaid_GEARSET = PresetUtils.makePresetGear('Pre-Raid', P1PreRaidGear, { phase: 1, group: 'Beast Mastery' });
+export const P1_BM_DW_6P_GEARSET = PresetUtils.makePresetGear('DW - 6% hit', P1BMDW6PGear, { phase: 1, group: 'Beast Mastery' });
+export const P1_BM_DW_9P_GEARSET = PresetUtils.makePresetGear('DW - 9% hit', P1BMDW9PGear, { phase: 1, group: 'Beast Mastery' });
+export const P1_BM_2H_6P_GEARSET = PresetUtils.makePresetGear('2H - 6% hit', P1BM2H6PGear, { phase: 1, group: 'Beast Mastery' });
+export const P1_BM_2H_9P_GEARSET = PresetUtils.makePresetGear('2H - 9% hit', P1BM2H9PGear, { phase: 1, group: 'Beast Mastery' });
+export const P1_SV_DW_3P_GEARSET = PresetUtils.makePresetGear('DW - 6% hit', P1SVDW3PGear, { phase: 1, group: 'Survival' });
+export const P1_SV_DW_6P_GEARSET = PresetUtils.makePresetGear('DW - 9% hit', P1SVDW6PGear, { phase: 1, group: 'Survival' });
+export const P1_SV_2H_3P_GEARSET = PresetUtils.makePresetGear('2H - 6% hit', P1SV2H3PGear, { phase: 1, group: 'Survival' });
+export const P1_SV_2H_6P_GEARSET = PresetUtils.makePresetGear('2H - 9% hit', P1SV2H6PGear, { phase: 1, group: 'Survival' });
+
+export const P2_BM_DW_6P_GEARSET = PresetUtils.makePresetGear('DW - 6% hit', P2BMDW6PGear, { phase: 2, group: 'Beast Mastery' });
+export const P2_BM_DW_9P_GEARSET = PresetUtils.makePresetGear('DW - 9% hit', P2BMDW9PGear, { phase: 2, group: 'Beast Mastery' });
+export const P2_BM_2H_6P_GEARSET = PresetUtils.makePresetGear('2H - 6% hit', P2BM2H6PGear, { phase: 2, group: 'Beast Mastery' });
+export const P2_BM_2H_9P_GEARSET = PresetUtils.makePresetGear('2H - 9% hit', P2BM2H9PGear, { phase: 2, group: 'Beast Mastery' });
+export const P2_SV_DW_6P_GEARSET = PresetUtils.makePresetGear('DW - 6% hit', P2SVDW6PGear, { phase: 2, group: 'Survival' });
+export const P2_SV_2H_6P_GEARSET = PresetUtils.makePresetGear('2H - 6% hit', P2SV2H6PGear, { phase: 2, group: 'Survival' });
+
+export const P3_BM_DW_6P_GEARSET = PresetUtils.makePresetGear('DW - 6% hit', P3BMDW6PGear, { phase: 3, group: 'Beast Mastery' });
+export const P3_BM_DW_9P_GEARSET = PresetUtils.makePresetGear('DW - 9% hit', P3BMDW9PGear, { phase: 3, group: 'Beast Mastery' });
+export const P3_BM_2H_6P_GEARSET = PresetUtils.makePresetGear('2H - 6% hit', P3BM2H6PGear, { phase: 3, group: 'Beast Mastery' });
+export const P3_BM_2H_9P_GEARSET = PresetUtils.makePresetGear('2H - 9% hit', P3BM2H9PGear, { phase: 3, group: 'Beast Mastery' });
+export const P3_SV_DW_6P_GEARSET = PresetUtils.makePresetGear('DW - 6% hit', P3SVDW6PGear, { phase: 3, group: 'Survival' });
+export const P3_SV_DW_9P_GEARSET = PresetUtils.makePresetGear('DW - 9% hit', P3SVDW9PGear, { phase: 3, group: 'Survival' });
+export const P3_SV_2H_6P_GEARSET = PresetUtils.makePresetGear('2H - 6% hit', P3SV2H6PGear, { phase: 3, group: 'Survival' });
+export const P3_SV_2H_9P_GEARSET = PresetUtils.makePresetGear('2H - 9% hit', P3SV2H9PGear, { phase: 3, group: 'Survival' });
 
 export const P1_BM_EP_PRESET = PresetUtils.makePresetEpWeights(
 	'P1 BM',
@@ -209,8 +257,28 @@ export const OtherDefaults = {
 	race: Race.RaceOrc,
 };
 
-export const P1_PRESET_BUILD_PRE_RAID = PresetUtils.makePresetBuildFromJSON('P1 - Pre-Raid', Spec.SpecHunter, P1PreRaidBuild);
-export const P1_PRESET_BUILD_BM_2H = PresetUtils.makePresetBuildFromJSON('P1 - BM - 2H', Spec.SpecHunter, P1BM2HBuild);
-export const P1_PRESET_BUILD_BM_DW = PresetUtils.makePresetBuildFromJSON('P1 - BM - DW', Spec.SpecHunter, P1BMDWBuild);
-export const P1_PRESET_BUILD_SV_2H = PresetUtils.makePresetBuildFromJSON('P1 - SV - 2H', Spec.SpecHunter, P1SV2HBuild);
-export const P1_PRESET_BUILD_SV_DW = PresetUtils.makePresetBuildFromJSON('P1 - SV - DW', Spec.SpecHunter, P1SVDWBuild);
+export const P1_PRESET_BUILD_PRE_RAID = PresetUtils.makePresetBuildFromJSON('Pre-Raid', Spec.SpecHunter, P1PreRaidBuild, { phase: 1, group: 'Beast Mastery' });
+export const P1_PRESET_BUILD_BM_2H_6P = PresetUtils.makePresetBuildFromJSON('2H - 6% hit', Spec.SpecHunter, P1BM2H6PBuild, { phase: 1, group: 'Beast Mastery' });
+export const P1_PRESET_BUILD_BM_2H_9P = PresetUtils.makePresetBuildFromJSON('2H - 9% hit', Spec.SpecHunter, P1BM2H9PBuild, { phase: 1, group: 'Beast Mastery' });
+export const P1_PRESET_BUILD_BM_DW_6P = PresetUtils.makePresetBuildFromJSON('DW - 6% hit', Spec.SpecHunter, P1BMDW6PBuild, { phase: 1, group: 'Beast Mastery' });
+export const P1_PRESET_BUILD_BM_DW_9P = PresetUtils.makePresetBuildFromJSON('DW - 9% hit', Spec.SpecHunter, P1BMDW9PBuild, { phase: 1, group: 'Beast Mastery' });
+export const P1_PRESET_BUILD_SV_2H_6P = PresetUtils.makePresetBuildFromJSON('2H - 6% hit', Spec.SpecHunter, P1SV2H6PBuild, { phase: 1, group: 'Survival' });
+export const P1_PRESET_BUILD_SV_2H_9P = PresetUtils.makePresetBuildFromJSON('2H - 9% hit', Spec.SpecHunter, P1SV2H9PBuild, { phase: 1, group: 'Survival' });
+export const P1_PRESET_BUILD_SV_DW_6P = PresetUtils.makePresetBuildFromJSON('DW - 6% hit', Spec.SpecHunter, P1SVDW6PBuild, { phase: 1, group: 'Survival' });
+export const P1_PRESET_BUILD_SV_DW_9P = PresetUtils.makePresetBuildFromJSON('DW - 9% hit', Spec.SpecHunter, P1SVDW9PBuild, { phase: 1, group: 'Survival' });
+
+export const P2_PRESET_BUILD_BM_2H_6P = PresetUtils.makePresetBuildFromJSON('2H - 6% hit', Spec.SpecHunter, P2BM2H6PBuild, { phase: 2, group: 'Beast Mastery' });
+export const P2_PRESET_BUILD_BM_2H_9P = PresetUtils.makePresetBuildFromJSON('2H - 9% hit', Spec.SpecHunter, P2BM2H9PBuild, { phase: 2, group: 'Beast Mastery' });
+export const P2_PRESET_BUILD_BM_DW_6P = PresetUtils.makePresetBuildFromJSON('DW - 6% hit', Spec.SpecHunter, P2BMDW6PBuild, { phase: 2, group: 'Beast Mastery' });
+export const P2_PRESET_BUILD_BM_DW_9P = PresetUtils.makePresetBuildFromJSON('DW - 9% hit', Spec.SpecHunter, P2BMDW9PBuild, { phase: 2, group: 'Beast Mastery' });
+export const P2_PRESET_BUILD_SV_2H_6P = PresetUtils.makePresetBuildFromJSON('2H - 6% hit', Spec.SpecHunter, P2SV2H6PBuild, { phase: 2, group: 'Survival' });
+export const P2_PRESET_BUILD_SV_DW_6P = PresetUtils.makePresetBuildFromJSON('DW - 6% hit', Spec.SpecHunter, P2SVDW6PBuild, { phase: 2, group: 'Survival' });
+
+export const P3_PRESET_BUILD_BM_2H_6P = PresetUtils.makePresetBuildFromJSON('2H - 6% hit', Spec.SpecHunter, P3BM2H6PBuild, { phase: 3, group: 'Beast Mastery' });
+export const P3_PRESET_BUILD_BM_2H_9P = PresetUtils.makePresetBuildFromJSON('2H - 9% hit', Spec.SpecHunter, P3BM2H9PBuild, { phase: 3, group: 'Beast Mastery' });
+export const P3_PRESET_BUILD_BM_DW_6P = PresetUtils.makePresetBuildFromJSON('DW - 6% hit', Spec.SpecHunter, P3BMDW6PBuild, { phase: 3, group: 'Beast Mastery' });
+export const P3_PRESET_BUILD_BM_DW_9P = PresetUtils.makePresetBuildFromJSON('DW - 9% hit', Spec.SpecHunter, P3BMDW9PBuild, { phase: 3, group: 'Beast Mastery' });
+export const P3_PRESET_BUILD_SV_2H_6P = PresetUtils.makePresetBuildFromJSON('2H - 6% hit', Spec.SpecHunter, P3SV2H6PBuild, { phase: 3, group: 'Survival' });
+export const P3_PRESET_BUILD_SV_2H_9P = PresetUtils.makePresetBuildFromJSON('2H - 9% hit', Spec.SpecHunter, P3SV2H9PBuild, { phase: 3, group: 'Survival' });
+export const P3_PRESET_BUILD_SV_DW_6P = PresetUtils.makePresetBuildFromJSON('DW - 6% hit', Spec.SpecHunter, P3SVDW6PBuild, { phase: 3, group: 'Survival' });
+export const P3_PRESET_BUILD_SV_DW_9P = PresetUtils.makePresetBuildFromJSON('DW - 9% hit', Spec.SpecHunter, P3SVDW9PBuild, { phase: 3, group: 'Survival' });

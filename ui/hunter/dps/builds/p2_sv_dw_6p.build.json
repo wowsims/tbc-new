@@ -1,0 +1,148 @@
+{
+	"apiVersion": 6,
+	"raidBuffs": {
+		"arcaneBrilliance": true,
+		"powerWordFortitude": "TristateEffectImproved",
+		"shadowProtection": true,
+		"divineSpirit": "TristateEffectImproved",
+		"giftOfTheWild": "TristateEffectImproved",
+		"bloodlust": true
+	},
+	"debuffs": {
+		"judgementOfWisdom": true,
+		"judgementOfLight": true,
+		"improvedSealOfTheCrusader": "TristateEffectImproved",
+		"misery": true,
+		"bloodFrenzy": true,
+		"giftOfArthas": true,
+		"mangle": true,
+		"exposeArmor": "TristateEffectImproved",
+		"faerieFire": "TristateEffectImproved",
+		"sunderArmor": true,
+		"curseOfRecklessness": true,
+		"huntersMark": "TristateEffectImproved",
+		"exposeWeaknessUptime": 0.9,
+		"exposeWeaknessHunterAgility": 1080,
+		"insectSwarm": true
+	},
+	"partyBuffs": {
+		"ferociousInspiration": 1,
+		"leaderOfThePack": "TristateEffectImproved",
+		"braidedEterniumChain": true,
+		"graceOfAirTotem": "TristateEffectImproved",
+		"strengthOfEarthTotem": "TristateEffectImproved",
+		"battleShout": "TristateEffectImproved",
+		"drums": 4
+	},
+	"player": {
+		"name": "Player",
+		"race": "RaceOrc",
+		"class": "ClassHunter",
+		"equipment": {
+			"items": [
+				{ "id": 30141, "enchant": 3003, "gems": [ 24028, 32409 ] },
+				{ "id": 30017 },
+				{ "id": 30143, "enchant": 2986, "gems": [ 24028, 24028 ] },
+				{ "id": 29994, "enchant": 368 },
+				{ "id": 30054, "enchant": 2661, "gems": [ 24028, 24028, 24028 ] },
+				{ "id": 29966, "enchant": 1593, "gems": [ 24028 ] },
+				{ "id": 28506, "enchant": 2564, "gems": [ 24028, 24028 ] },
+				{ "id": 30040, "gems": [ 24028, 24028 ] },
+				{ "id": 29985, "enchant": 3012, "gems": [ 24028, 30556, 30549 ] },
+				{ "id": 30104, "enchant": 2657, "gems": [ 30602, 24028 ] },
+				{ "id": 28791 },
+				{ "id": 29298 },
+				{ "id": 29383 },
+				{ "id": 28830 },
+				{ "id": 29924, "enchant": 2564 },
+				{ "id": 29948, "enchant": 2564 },
+				{ "id": 30105, "enchant": 2724 }
+			]
+		},
+		"consumables": {
+			"potId": 22838,
+			"battleElixirId": 22831,
+			"guardianElixirId": 22840,
+			"foodId": 27659,
+			"conjuredId": 12662,
+			"explosiveId": 30217,
+			"superSapper": true,
+			"goblinSapper": true,
+			"mhImbueId": 29453,
+			"ohImbueId": 34340,
+			"scrollAgi": true,
+			"scrollStr": true,
+			"petScrollAgi": true,
+			"petScrollStr": true,
+			"petFoodId": 33874
+		},
+		"bonusStats": {
+			"apiVersion": 6,
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+		},
+		"itemSwap": {
+			"items": [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+			"prepullBonusStats": {
+				"apiVersion": 6,
+				"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+				"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+			}
+		},
+		"buffs": {
+			"blessingOfKings": true,
+			"blessingOfWisdom": "TristateEffectImproved",
+			"blessingOfMight": "TristateEffectImproved",
+			"unleashedRage": true
+		},
+		"hunter": {
+			"options": {
+				"classOptions": {
+					"quiverBonus": "Speed15",
+					"ammo": "WardensArrow",
+					"petType": "Ravager",
+					"petUptime": 1
+				}
+			}
+		},
+		"talentsString": "502-0550201205-333200022003223005103",
+		"profession1": "Engineering",
+		"profession2": "Blacksmithing",
+		"cooldowns": {},
+		"rotation": {
+			"type": "TypeSimple",
+			"simple": {
+				"specRotationJson": "{\"timeToWeave\":400,\"useMulti\":true,\"useArcane\":true,\"viperStartManaPercent\":0.05,\"viperStopManaPercent\":0.25}",
+				"cooldowns": {}
+			}
+		},
+		"reactionTimeMs": 100,
+		"distanceFromTarget": 7,
+		"healingModel": {}
+	},
+	"encounter": {
+		"apiVersion": 6,
+		"duration": 180,
+		"durationVariation": 5,
+		"executeProportion20": 0.2,
+		"executeProportion25": 0.25,
+		"executeProportion35": 0.35,
+		"executeProportion45": 0.45,
+		"executeProportion90": 0.9,
+		"targets": [
+			{
+				"id": 31146,
+				"name": "Raid Target",
+				"level": 73,
+				"mobType": "MobTypeMechanical",
+				"stats": [
+					0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 320, 0, 0, 0, 0, 0, 0, 0, 0, 0, 54, 0, 0, 0, 7685, 0, 6070400, 0, 0, 0, 0, 0, 0, 0, 0
+				],
+				"minBaseDamage": 15113,
+				"damageSpread": 0.5,
+				"swingSpeed": 2,
+				"parryHaste": true
+			}
+		]
+	}
+}
