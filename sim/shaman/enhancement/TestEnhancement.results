@@ -384,8 +384,8 @@ dps_results: {
 dps_results: {
  key: "TestEnhancement-AllItems-DarkmoonCard:Crusade-31856"
  value: {
-  dps: 1845.21879
-  tps: 1758.54058
+  dps: 1849.70969
+  tps: 1761.46275
  }
 }
 dps_results: {

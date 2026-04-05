@@ -377,8 +377,8 @@ dps_results: {
 dps_results: {
  key: "TestAffliction-AllItems-DarkmoonCard:Crusade-31856"
  value: {
-  dps: 1911.15344
-  tps: 1187.18385
+  dps: 1991.46354
+  tps: 1241.48395
  }
 }
 dps_results: {

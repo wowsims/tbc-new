@@ -349,8 +349,8 @@ dps_results: {
 dps_results: {
  key: "TestShadowPriest-AllItems-DarkmoonCard:Crusade-31856"
  value: {
-  dps: 1706.9972
-  tps: 1252.93743
+  dps: 1757.20796
+  tps: 1288.81614
  }
 }
 dps_results: {
