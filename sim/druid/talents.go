@@ -365,32 +365,45 @@ func (druid *Druid) applyPrimalFury() {
 	rageMetrics := druid.NewRageMetrics(actionID)
 	cpMetrics := druid.NewComboPointMetrics(actionID)
 
-	druid.RegisterAura(core.Aura{
-		Label:    "Primal Fury",
-		Duration: core.NeverExpires,
-
-		OnReset: func(aura *core.Aura, sim *core.Simulation) {
-			aura.Activate(sim)
+	// Cat form: +1 combo point on builder crits.
+	druid.MakeProcTriggerAura(core.ProcTrigger{
+		Name:           "Primal Fury (Cat)",
+		ActionID:       actionID,
+		Callback:       core.CallbackOnSpellHitDealt,
+		ClassSpellMask: DruidSpellBuilder,
+		Outcome:        core.OutcomeCrit,
+		ProcChance:     procChance,
+		Handler: func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
+			druid.AddComboPoints(sim, 1, cpMetrics)
 		},
+	})
 
-		OnSpellHitDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			if !result.DidCrit() {
-				return
-			}
+	// Bear form: +5 rage on Mangle crits.
+	druid.MakeProcTriggerAura(core.ProcTrigger{
+		Name:           "Primal Fury (Bear Mangle)",
+		ActionID:       actionID,
+		Callback:       core.CallbackOnSpellHitDealt,
+		ClassSpellMask: DruidSpellMangleBear,
+		Outcome:        core.OutcomeCrit,
+		ProcChance:     procChance,
+		Handler: func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
+			druid.AddRage(sim, 5, rageMetrics)
+		},
+	})
 
-			if druid.InForm(Bear) {
-				if spell == druid.MHAutoSpell || (druid.MangleBear != nil && druid.MangleBear.IsEqual(spell)) {
-					if procChance == 1 || sim.RandomFloat("Primal Fury") < procChance {
-						druid.AddRage(sim, 5, rageMetrics)
-					}
-				}
-			} else if druid.InForm(Cat) {
-				if spell.Matches(DruidSpellBuilder) {
-					if procChance == 1 || sim.RandomFloat("Primal Fury") < procChance {
-						druid.AddComboPoints(sim, 1, cpMetrics)
-					}
-				}
-			}
+	// Bear form: +5 rage on auto-attack crits.
+	druid.MakeProcTriggerAura(core.ProcTrigger{
+		Name:       "Primal Fury (Bear Auto)",
+		ActionID:   actionID,
+		Callback:   core.CallbackOnSpellHitDealt,
+		ProcMask:   core.ProcMaskMeleeMHAuto,
+		Outcome:    core.OutcomeCrit,
+		ProcChance: procChance,
+		ExtraCondition: func(_ *core.Simulation, _ *core.Spell, _ *core.SpellResult) bool {
+			return druid.InForm(Bear)
+		},
+		Handler: func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
+			druid.AddRage(sim, 5, rageMetrics)
 		},
 	})
 }
@@ -406,11 +419,6 @@ func (druid *Druid) applyLeaderOfThePack() {
 	// Improved LotP: crits heal the druid for 4% max health, 6s ICD.
 	healthRestore := 0.04
 
-	icd := core.Cooldown{
-		Timer:    druid.NewTimer(),
-		Duration: time.Second * 6,
-	}
-
 	healingSpell := druid.RegisterSpell(Cat|Bear, core.SpellConfig{
 		ActionID:         core.ActionID{SpellID: 34299},
 		SpellSchool:      core.SpellSchoolPhysical,
@@ -424,29 +432,16 @@ func (druid *Druid) applyLeaderOfThePack() {
 		},
 	})
 
-	druid.RegisterAura(core.Aura{
-		Icd:      &icd,
-		Label:    "Improved Leader of the Pack",
-		Duration: core.NeverExpires,
-
-		OnReset: func(aura *core.Aura, sim *core.Simulation) {
-			aura.Activate(sim)
+	druid.MakeProcTriggerAura(core.ProcTrigger{
+		Name:     "Improved Leader of the Pack",
+		Callback: core.CallbackOnSpellHitDealt,
+		ProcMask: core.ProcMaskMeleeOrRanged,
+		Outcome:  core.OutcomeCrit,
+		ICD:      time.Second * 6,
+		ExtraCondition: func(_ *core.Simulation, _ *core.Spell, _ *core.SpellResult) bool {
+			return druid.InForm(Cat | Bear)
 		},
-
-		OnSpellHitDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			if !result.Landed() || !result.Outcome.Matches(core.OutcomeCrit) {
-				return
-			}
-			if !spell.ProcMask.Matches(core.ProcMaskMeleeOrRanged) {
-				return
-			}
-			if !icd.IsReady(sim) {
-				return
-			}
-			if !druid.InForm(Cat | Bear) {
-				return
-			}
-			icd.Use(sim)
+		Handler: func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
 			healingSpell.Cast(sim, &druid.Unit)
 		},
 	})
