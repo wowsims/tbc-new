@@ -783,6 +783,10 @@ export abstract class IndividualSimUI<SpecType extends Spec> extends SimUI {
 		return this.getStorageKey(SAVED_GEAR_STORAGE_KEY);
 	}
 
+	getPresetFilterStorageKey(): string {
+		return this.getStorageKey('__presetFilters__');
+	}
+
 	getSavedEPWeightsStorageKey(): string {
 		return this.getStorageKey(SAVED_EP_WEIGHTS_STORAGE_KEY);
 	}

@@ -31,10 +31,16 @@ interface PresetBase {
 	tooltip?: string;
 	enableWhen?: (obj: Player<any>) => boolean;
 	onLoad?: (player: Player<any>) => void;
+	phase?: number;
+	group?: string;
+
 }
 
 interface PresetOptionsBase extends Pick<PresetBase, 'onLoad'> {
 	customCondition?: (player: Player<any>) => boolean;
+	phase?: number;
+	group?: string;
+
 }
 
 export interface PresetGear extends PresetBase {
@@ -99,6 +105,9 @@ export interface PresetSettings extends PresetBase {
 
 export interface PresetBuild {
 	name: string;
+	phase?: number;
+	group?: string;
+
 	gear?: PresetGear;
 	itemSwap?: PresetItemSwap;
 	talents?: PresetTalents;
@@ -132,6 +141,8 @@ const makePresetGearHelper = (name: string, gear: EquipmentSpec, options: Preset
 		gear,
 		enableWhen: !!conditions.length ? (player: Player<any>) => conditions.every(cond => cond(player)) : undefined,
 		onLoad: options?.onLoad,
+		phase: options.phase,
+		group: options.group,
 	};
 };
 
