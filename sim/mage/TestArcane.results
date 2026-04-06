@@ -929,6 +929,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestArcane-AllItems-StabilizedEterniumScope-2523"
+ value: {
+  dps: 1917.53688
+  tps: 1310.10664
+ }
+}
+dps_results: {
  key: "TestArcane-AllItems-StaffoftheQirajiProphets-21128"
  value: {
   dps: 1911.74819

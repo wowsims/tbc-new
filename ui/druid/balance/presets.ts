@@ -95,7 +95,7 @@ export const DefaultDebuffs = Debuffs.create({
 	exposeArmor: TristateEffect.TristateEffectImproved,
 	giftOfArthas: true,
 	huntersMark: TristateEffect.TristateEffectImproved,
-	improvedSealOfTheCrusader: true,
+	improvedSealOfTheCrusader: TristateEffect.TristateEffectImproved,
 	judgementOfWisdom: true,
 	mangle: true,
 	misery: true,

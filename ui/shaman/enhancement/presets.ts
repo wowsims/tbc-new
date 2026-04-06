@@ -171,7 +171,7 @@ export const DefaultRaidBuffs = RaidBuffs.create({
 
 export const DefaultDebuffs = Debuffs.create({
 	...defaultExposeWeaknessSettings(),
-	improvedSealOfTheCrusader: true,
+	improvedSealOfTheCrusader: TristateEffect.TristateEffectImproved,
 	judgementOfWisdom: true,
 	screech: true,
 	misery: true,

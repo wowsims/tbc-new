@@ -336,6 +336,7 @@ export class ActionId {
 			case 'Pain Suppression':
 			case 'Curse of the Elements':
 			case 'Curse of Recklessness':
+			case 'Improved Seal of the Crusader':
 			case 'Unleashed Rage':
 				if (tag === -1) {
 					name += ' (External)';

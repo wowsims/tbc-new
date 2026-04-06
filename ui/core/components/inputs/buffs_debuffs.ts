@@ -12,6 +12,7 @@ import {
 	makeTristateIndividualBuffInput,
 	makeBooleanPartyBuffInput,
 	makeQuadstatePartyBuffInput,
+	makeQuadstateDebuffInput,
 } from '../icon_inputs';
 import { IconPicker } from '../pickers/icon_picker';
 import * as InputHelpers from '../input_helpers';
@@ -460,10 +461,13 @@ export const HuntersMark = makeTristateDebuffInput({
 	label: "Hunter's Mark",
 });
 export const ImprovedScorch = makeBooleanDebuffInput({ actionId: () => ActionId.fromSpellId(12873), fieldName: 'improvedScorch', label: 'Improved Scorch' });
-export const ImprovedSealOfTheCrusader = makeBooleanDebuffInput({
-	actionId: () => ActionId.fromSpellId(20337),
+export const ImprovedSealOfTheCrusader = makeQuadstateDebuffInput({
+	actionId: () => ActionId.fromSpellId(27158),
+	impId: ActionId.fromSpellId(20337),
+	impId2: ActionId.fromSpellId(37186),
 	fieldName: 'improvedSealOfTheCrusader',
-	label: 'Improved Seal of the Crusader',
+	fieldNameImp2: 'jocRetribution2Pt4',
+	label: 'Seal of the Crusader',
 });
 export const JudgementOfWisdom = makeBooleanDebuffInput({
 	actionId: () => ActionId.fromSpellId(27164),

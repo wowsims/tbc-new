@@ -26,7 +26,7 @@ export const DefaultRaidBuffs = RaidBuffs.create({
 
 export const DefaultDebuffs = Debuffs.create({
 	...defaultExposeWeaknessSettings(),
-	improvedSealOfTheCrusader: true,
+	improvedSealOfTheCrusader: TristateEffect.TristateEffectImproved,
 	misery: true,
 	bloodFrenzy: true,
 	giftOfArthas: true,

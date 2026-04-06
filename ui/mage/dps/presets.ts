@@ -1,5 +1,5 @@
 import * as PresetUtils from '../../core/preset_utils';
-import { Debuffs, PseudoStat, RaidBuffs, Stat, ConsumesSpec, PartyBuffs, IndividualBuffs, Profession, Drums } from '../../core/proto/common';
+import { Debuffs, PseudoStat, RaidBuffs, Stat, ConsumesSpec, PartyBuffs, IndividualBuffs, TristateEffect, Profession, Drums } from '../../core/proto/common';
 import { defaultImprovedShadowBoltSettings } from '../../core/proto_utils/utils';
 import { Stats } from '../../core/proto_utils/stats';
 import { SavedTalents } from '../../core/proto/ui';
@@ -102,7 +102,7 @@ export const DefaultIndividualBuffs = IndividualBuffs.create({
 export const DefaultDebuffs = Debuffs.create({
 	misery: true,
 	curseOfElements: 2,
-	improvedSealOfTheCrusader: true,
+	improvedSealOfTheCrusader: TristateEffect.TristateEffectImproved,
 	judgementOfWisdom: true,
 	...defaultImprovedShadowBoltSettings(),
 });

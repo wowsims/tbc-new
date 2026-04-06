@@ -11,7 +11,7 @@
 	"debuffs": {
 		"judgementOfWisdom": true,
 		"judgementOfLight": true,
-		"improvedSealOfTheCrusader": true,
+		"improvedSealOfTheCrusader": "TristateEffectImproved",
 		"misery": true,
 		"bloodFrenzy": true,
 		"giftOfArthas": true,

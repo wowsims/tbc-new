@@ -1,7 +1,20 @@
 import { DrumsBattle } from '../../core/components/inputs/consumables';
 import { RetributionPaladin } from '../../core/player_specs/paladin';
 import * as PresetUtils from '../../core/preset_utils.js';
-import { ConsumesSpec, Debuffs, RaidBuffs, Profession, PseudoStat, PartyBuffs, IndividualBuffs, Race, Stat, Spec, Drums } from '../../core/proto/common.js';
+import {
+	ConsumesSpec,
+	Debuffs,
+	RaidBuffs,
+	Profession,
+	PseudoStat,
+	PartyBuffs,
+	IndividualBuffs,
+	TristateEffect,
+	Race,
+	Stat,
+	Spec,
+	Drums,
+} from '../../core/proto/common.js';
 import { RetributionPaladin_Options as RetributionPaladinOptions, RetributionPaladin_Rotation as PaladinRotation } from '../../core/proto/paladin.js';
 import { SavedTalents } from '../../core/proto/ui.js';
 import { Stats } from '../../core/proto_utils/stats';
@@ -111,7 +124,8 @@ export const DefaultIndividualBuffs = IndividualBuffs.create({
 export const DefaultDebuffs = Debuffs.create({
 	misery: true,
 	curseOfElements: 2,
-	improvedSealOfTheCrusader: true,
+	improvedSealOfTheCrusader: TristateEffect.TristateEffectImproved,
+	jocRetribution2Pt4: true,
 	judgementOfWisdom: true,
 	bloodFrenzy: true,
 	huntersMark: 2,

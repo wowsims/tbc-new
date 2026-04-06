@@ -106,7 +106,7 @@ var FullIndividualBuffs = &proto.IndividualBuffs{
 var FullDebuffs = &proto.Debuffs{
 	JudgementOfWisdom:         true,
 	JudgementOfLight:          true,
-	ImprovedSealOfTheCrusader: true,
+	ImprovedSealOfTheCrusader: proto.TristateEffect_TristateEffectImproved,
 	Misery:                    true,
 	CurseOfElements:           proto.TristateEffect_TristateEffectImproved,
 	IsbUptime:                 1,

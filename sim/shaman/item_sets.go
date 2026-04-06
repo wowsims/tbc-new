@@ -52,8 +52,8 @@ var ItemSetCycloneRegalia = core.NewItemSet(core.ItemSet{
 					aura.Deactivate(sim)
 				},
 			}).AttachSpellMod(core.SpellModConfig{
-				Kind:       core.SpellMod_PowerCost_Flat,
-				FloatValue: -270,
+				Kind:     core.SpellMod_PowerCost_Flat,
+				IntValue: -270,
 			})
 
 			setBonusAura.AttachProcTrigger(core.ProcTrigger{

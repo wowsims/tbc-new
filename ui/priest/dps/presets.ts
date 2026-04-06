@@ -85,7 +85,7 @@ export const DefaultIndividualBuffs = IndividualBuffs.create({
 });
 
 export const DefaultDebuffs = Debuffs.create({
-	improvedSealOfTheCrusader: true,
+	improvedSealOfTheCrusader: TristateEffect.TristateEffectImproved,
 	judgementOfWisdom: true,
 	misery: false,
 	shadowWeaving: false,

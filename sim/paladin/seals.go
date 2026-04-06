@@ -563,7 +563,7 @@ func (paladin *Paladin) registerSealOfTheCrusader(seal seal) {
 	}
 
 	paladin.JudgementOfTheCrusaderAuras = paladin.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {
-		return core.ImprovedSealOfTheCrusaderAura(target, paladin.Talents.ImprovedSealOfTheCrusader, flatBonus, percentBonus)
+		return core.ImprovedSealOfTheCrusaderAura(target, 1, paladin.Talents.ImprovedSealOfTheCrusader, flatBonus, percentBonus)
 	})
 
 	paladin.JudgementAuras = append(paladin.JudgementAuras, paladin.JudgementOfTheCrusaderAuras)

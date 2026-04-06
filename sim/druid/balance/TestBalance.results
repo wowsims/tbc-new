@@ -488,6 +488,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestBalance-AllItems-StabilizedEterniumScope-2523"
+ value: {
+  dps: 1423.45311
+  tps: 1350.64882
+ }
+}
+dps_results: {
  key: "TestBalance-AllItems-StrengthoftheClefthoof"
  value: {
   dps: 1118.22607

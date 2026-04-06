@@ -37,23 +37,33 @@ var ItemSetBoldArmor = core.NewItemSet(core.ItemSet{
 
 // PVP - PvP Rare Set 2
 var ItemSetOathboundsSavagePlateBattlegear = core.NewItemSet(core.ItemSet{
-	ID:   2014,
-	Name: "Oathbound's Savage Plate Battlegear",
-	Bonuses: map[int32]core.ApplySetBonus{
-		2: func(agent core.Agent, setBonusAura *core.Aura) {
-			setBonusAura.
-				AttachStatBuff(stats.ResilienceRating, 35)
-		},
-		4: func(agent core.Agent, setBonusAura *core.Aura) {
-			setBonusAura.
-				AttachSpellMod(core.SpellModConfig{
-					ClassMask: SpellMaskIntercept,
-					Kind:      core.SpellMod_Cooldown_Flat,
-					TimeValue: -3 * time.Second,
-				})
-		},
-	},
+	ID:      2014,
+	Name:    "Oathbound's Savage Plate Battlegear",
+	Bonuses: sharedPvpSetBonus,
 })
+
+// PVP - Arena Season 1 Set
+// Merciless, Vengeful and Brutal Gladiator's Battlegear all share the same set bonuses
+var ItemSetGladiatorsBattlegear = core.NewItemSet(core.ItemSet{
+	ID:      567,
+	Name:    "Gladiator's Battlegear ",
+	Bonuses: sharedPvpSetBonus,
+})
+
+var sharedPvpSetBonus = map[int32]core.ApplySetBonus{
+	2: func(agent core.Agent, setBonusAura *core.Aura) {
+		setBonusAura.
+			AttachStatBuff(stats.ResilienceRating, 35)
+	},
+	4: func(agent core.Agent, setBonusAura *core.Aura) {
+		setBonusAura.
+			AttachSpellMod(core.SpellModConfig{
+				ClassMask: SpellMaskIntercept,
+				Kind:      core.SpellMod_Cooldown_Flat,
+				TimeValue: -5 * time.Second,
+			})
+	},
+}
 
 // T4 - DPS
 var ItemSetWarbringerBattlegear = core.NewItemSet(core.ItemSet{
@@ -306,4 +316,14 @@ func init() {
 	// Empty function to remove the warning from the UI
 	// because this effect has been implemented in buffs.go
 	core.NewItemEffect(30446, func(agent core.Agent) {})
+}
+
+func (warrior *Warrior) addPvpGloves() {
+	warrior.RegisterPvPGloveMod(
+		[]int32{24549, 28700, 28852, 30487, 32164, 33729, 35408, 35067},
+		core.SpellModConfig{
+			Kind:      core.SpellMod_PowerCost_Flat,
+			ClassMask: SpellMaskHamstring,
+			IntValue:  -3,
+		})
 }

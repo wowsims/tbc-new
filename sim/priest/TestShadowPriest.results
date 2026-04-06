@@ -908,6 +908,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestShadowPriest-AllItems-StabilizedEterniumScope-2523"
+ value: {
+  dps: 1762.8375
+  tps: 1293.02925
+ }
+}
+dps_results: {
  key: "TestShadowPriest-AllItems-StaffoftheQirajiProphets-21128"
  value: {
   dps: 1760.12319

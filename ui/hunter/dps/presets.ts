@@ -176,7 +176,7 @@ export const DefaultDebuffs = Debuffs.create({
 	faerieFire: TristateEffect.TristateEffectImproved,
 	giftOfArthas: true,
 	huntersMark: TristateEffect.TristateEffectImproved,
-	improvedSealOfTheCrusader: true,
+	improvedSealOfTheCrusader: TristateEffect.TristateEffectImproved,
 	insectSwarm: true,
 	judgementOfLight: true,
 	judgementOfWisdom: true,

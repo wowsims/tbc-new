@@ -147,7 +147,6 @@ func (warrior *Warrior) AddPartyBuffs(_ *proto.PartyBuffs) {
 }
 
 func (warrior *Warrior) Initialize() {
-
 	warrior.registerRecklessness()
 	warrior.registerShieldWall()
 	warrior.registerRetaliation()
@@ -174,6 +173,8 @@ func (warrior *Warrior) Initialize() {
 
 	warrior.registerStances()
 	warrior.registerShouts()
+
+	warrior.addPvpGloves()
 }
 
 func (warrior *Warrior) Reset(_ *core.Simulation) {

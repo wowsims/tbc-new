@@ -363,8 +363,8 @@ dps_results: {
 dps_results: {
  key: "TestEnhancement-AllItems-CycloneRegalia"
  value: {
-  dps: 1523.43764
-  tps: 1427.96873
+  dps: 1525.69317
+  tps: 1429.28097
  }
 }
 dps_results: {
@@ -1031,6 +1031,13 @@ dps_results: {
  value: {
   dps: 1851.02174
   tps: 1765.42021
+ }
+}
+dps_results: {
+ key: "TestEnhancement-AllItems-StabilizedEterniumScope-2523"
+ value: {
+  dps: 1853.82176
+  tps: 1766.81992
  }
 }
 dps_results: {

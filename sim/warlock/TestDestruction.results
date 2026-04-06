@@ -936,6 +936,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestDestruction-AllItems-StabilizedEterniumScope-2523"
+ value: {
+  dps: 1877.69609
+  tps: 1642.46537
+ }
+}
+dps_results: {
  key: "TestDestruction-AllItems-StaffoftheQirajiProphets-21128"
  value: {
   dps: 1862.40842

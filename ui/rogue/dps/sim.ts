@@ -105,7 +105,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 			...defaultExposeWeaknessSettings(),
 			bloodFrenzy: true,
 			huntersMark: TristateEffect.TristateEffectImproved,
-			improvedSealOfTheCrusader: true,
+			improvedSealOfTheCrusader: TristateEffect.TristateEffectImproved,
 			mangle: true,
 			misery: true,
 			curseOfRecklessness: true,

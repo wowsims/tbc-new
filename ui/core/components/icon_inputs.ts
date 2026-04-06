@@ -258,6 +258,25 @@ export function makeQuadstatePartyBuffInput<SpecType extends Spec>(
 	);
 }
 
+export function makeQuadstateDebuffInput<SpecType extends Spec>(
+	config: QuadStateInputConfig<Debuffs>,
+): InputHelpers.TypedIconPickerConfig<Player<SpecType>, number> {
+	return InputHelpers.makeQuadstateIconInput<any, Debuffs, Player<SpecType>>(
+		{
+			getModObject: (player: Player<SpecType>) => player,
+			getValue: (player: Player<SpecType>) => player.getRaid()!.getDebuffs(),
+			setValue: (eventID: EventID, player: Player<SpecType>, newVal: Debuffs) => player.getRaid()!.setDebuffs(eventID, newVal),
+			changeEmitter: (player: Player<SpecType>) => TypedEvent.onAny([player.specOptionsChangeEmitter, player.getRaid()!.debuffsChangeEmitter]),
+			label: config.label,
+		},
+		config.actionId,
+		config.impId,
+		config.impId2,
+		config.fieldName,
+		config.fieldNameImp2,
+	);
+}
+
 interface MultiStateInputConfig<T> {
 	actionId: () => ActionId;
 	label?: string;
