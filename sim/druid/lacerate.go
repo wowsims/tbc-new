@@ -16,8 +16,6 @@ func (druid *Druid) registerLacerateSpell() {
 		tickDamageBase += 8
 	}
 
-	rageCost := int32(15) - int32(druid.Talents.ShreddingAttacks)
-
 	druid.Lacerate = druid.RegisterSpell(Bear, core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 33745},
 		SpellSchool:    core.SpellSchoolPhysical,
@@ -26,7 +24,7 @@ func (druid *Druid) registerLacerateSpell() {
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
 
 		RageCost: core.RageCostOptions{
-			Cost:   rageCost,
+			Cost:   15,
 			Refund: 0.8,
 		},
 		Cast: core.CastConfig{

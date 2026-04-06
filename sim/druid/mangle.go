@@ -35,7 +35,7 @@ func (druid *Druid) registerMangleCatSpell() {
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
 
 		EnergyCost: core.EnergyCostOptions{
-			Cost:   int32(45) - int32(druid.Talents.Ferocity),
+			Cost:   45,
 			Refund: 0.8,
 		},
 		Cast: core.CastConfig{
@@ -45,7 +45,7 @@ func (druid *Druid) registerMangleCatSpell() {
 			IgnoreHaste: true,
 		},
 
-		DamageMultiplier: 1.6 * (1.0 + 0.1*float64(druid.Talents.SavageFury)),
+		DamageMultiplier: 1.6,
 		CritMultiplier:   druid.FeralCritMultiplier(),
 		ThreatMultiplier: 1,
 		MaxRange:         core.MaxMeleeRange,
@@ -90,7 +90,7 @@ func (druid *Druid) registerMangleBearSpell() {
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
 
 		RageCost: core.RageCostOptions{
-			Cost:   int32(20) - int32(druid.Talents.Ferocity),
+			Cost:   20,
 			Refund: 0.8,
 		},
 		Cast: core.CastConfig{

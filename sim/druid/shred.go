@@ -8,8 +8,6 @@ import (
 )
 
 func (druid *Druid) registerShredSpell() {
-	energyCost := int32(60) - int32(9)*int32(druid.Talents.ShreddingAttacks)
-
 	// Flat damage bonus from gear/idols.
 	// Nordrassil Harness 4pc: +75 (applied post-registration via druid.ShredFlatBonus).
 	// Everbloom Idol (29390): +88.
@@ -26,7 +24,7 @@ func (druid *Druid) registerShredSpell() {
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
 
 		EnergyCost: core.EnergyCostOptions{
-			Cost:   energyCost,
+			Cost:   60,
 			Refund: 0.8,
 		},
 		Cast: core.CastConfig{

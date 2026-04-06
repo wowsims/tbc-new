@@ -44,6 +44,10 @@ func (druid *Druid) ApplyFeralTalents() {
 	druid.applySubtlety()
 	druid.applyNaturalist()
 	druid.applyIntensity()
+	druid.applyFerocity()
+	druid.applySavageFury()
+	druid.applyFeralAggression()
+	druid.applyShreddingAttacks()
 	druid.applyPrimalFury()
 	druid.applyLeaderOfThePack()
 	druid.applyHeartOfTheWild()
@@ -328,6 +332,66 @@ func (druid *Druid) applySurvivalOfTheFittest() {
 		druid.MultiplyStat(s, mult)
 	}
 	druid.AddReducedCritTakenPercent(0.01 * float64(druid.Talents.SurvivalOfTheFittest))
+}
+
+func (druid *Druid) applyFerocity() {
+	if druid.Talents.Ferocity == 0 {
+		return
+	}
+
+	druid.AddStaticMod(core.SpellModConfig{
+		ClassMask: DruidSpellRake | DruidSpellMangleCat | DruidSpellFerociousBite,
+		Kind:      core.SpellMod_PowerCost_Flat,
+		IntValue:  -druid.Talents.Ferocity,
+	})
+
+	druid.AddStaticMod(core.SpellModConfig{
+		ClassMask: DruidSpellMangleBear | DruidSpellMaul | DruidSpellSwipe,
+		Kind:      core.SpellMod_PowerCost_Flat,
+		IntValue:  -druid.Talents.Ferocity,
+	})
+}
+
+func (druid *Druid) applySavageFury() {
+	if druid.Talents.SavageFury == 0 {
+		return
+	}
+
+	druid.AddStaticMod(core.SpellModConfig{
+		ClassMask:  DruidSpellMangleCat | DruidSpellRake,
+		Kind:       core.SpellMod_DamageDone_Flat,
+		FloatValue: 0.1 * float64(druid.Talents.SavageFury),
+	})
+}
+
+func (druid *Druid) applyFeralAggression() {
+	if druid.Talents.FeralAggression == 0 {
+		return
+	}
+
+	druid.AddStaticMod(core.SpellModConfig{
+		ClassMask:  DruidSpellFerociousBite,
+		Kind:       core.SpellMod_DamageDone_Flat,
+		FloatValue: 0.03 * float64(druid.Talents.FeralAggression),
+	})
+}
+
+func (druid *Druid) applyShreddingAttacks() {
+	if druid.Talents.ShreddingAttacks == 0 {
+		return
+	}
+
+	druid.AddStaticMod(core.SpellModConfig{
+		ClassMask: DruidSpellShred,
+		Kind:      core.SpellMod_PowerCost_Flat,
+		IntValue:  -9 * druid.Talents.ShreddingAttacks,
+	})
+
+	druid.AddStaticMod(core.SpellModConfig{
+		ClassMask: DruidSpellLacerate,
+		Kind:      core.SpellMod_PowerCost_Flat,
+		IntValue:  -druid.Talents.ShreddingAttacks,
+	})
 }
 
 func (druid *Druid) applyPrimalFury() {

@@ -15,7 +15,7 @@ func (druid *Druid) registerRakeSpell() {
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
 
 		EnergyCost: core.EnergyCostOptions{
-			Cost:   int32(40) - int32(druid.Talents.Ferocity),
+			Cost:   40,
 			Refund: 0.8,
 		},
 		Cast: core.CastConfig{
@@ -25,7 +25,7 @@ func (druid *Druid) registerRakeSpell() {
 			IgnoreHaste: true,
 		},
 
-		DamageMultiplier: 1 + 0.1*float64(druid.Talents.SavageFury),
+		DamageMultiplier: 1,
 		CritMultiplier:   druid.FeralCritMultiplier(),
 		ThreatMultiplier: 1,
 		MaxRange:         core.MaxMeleeRange,

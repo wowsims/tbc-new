@@ -35,7 +35,7 @@ func (druid *Druid) registerFerociousBiteSpell() {
 			return druid.ComboPoints() > 0
 		},
 
-		DamageMultiplier: 1 + 0.03*float64(druid.Talents.FeralAggression),
+		DamageMultiplier: 1,
 		CritMultiplier:   druid.FeralCritMultiplier(),
 		ThreatMultiplier: 1,
 		MaxRange:         core.MaxMeleeRange,
