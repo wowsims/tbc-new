@@ -12,16 +12,11 @@ func (druid *Druid) applyOmenOfClarity() {
 		return
 	}
 
-	icd := core.Cooldown{
-		Timer:    druid.NewTimer(),
-		Duration: time.Second * 10,
-	}
-
 	const ppm = 2.0
+	const clearcastingSpells = DruidSpellMangleCat | DruidSpellRake | DruidSpellRip | DruidSpellFerociousBite | DruidSpellShred
 
 	// For feral druids in cat form, white auto attacks use the cat paw speed (1.0s),
-	// but yellow special attacks (Shred, Mangle, etc.) use the actual equipped weapon
-	// swing speed
+	// but yellow special attacks (Shred, Mangle, etc.) use the actual equipped weapon swing speed.
 	autoProcChance := ppm * druid.AutoAttacks.MH().SwingSpeed / 60.0
 	specialProcChance := autoProcChance
 
@@ -34,60 +29,29 @@ func (druid *Druid) applyOmenOfClarity() {
 	}
 	updateSpecialProcChance()
 
-	var affectedSpells []*DruidSpell
-
 	druid.ClearcastingAura = druid.RegisterAura(core.Aura{
 		Label:    "Clearcasting",
 		ActionID: core.ActionID{SpellID: 16870},
 		Duration: time.Second * 15,
 
-		OnInit: func(_ *core.Aura, _ *core.Simulation) {
-			affectedSpells = core.FilterSlice([]*DruidSpell{
-				druid.MangleCat,
-				druid.Rake,
-				druid.Rip,
-				druid.FerociousBite,
-				druid.Shred,
-			}, func(spell *DruidSpell) bool { return spell != nil })
-		},
-
-		OnGain: func(_ *core.Aura, _ *core.Simulation) {
-			for _, spell := range affectedSpells {
-				spell.Cost.PercentModifier *= -1
-			}
-		},
-
-		OnExpire: func(_ *core.Aura, _ *core.Simulation) {
-			for _, spell := range affectedSpells {
-				spell.Cost.PercentModifier /= -1
-			}
-		},
-
 		OnCastComplete: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell) {
-			for _, as := range affectedSpells {
-				if as.IsEqual(spell) {
-					aura.Deactivate(sim)
-					break
-				}
+			if spell.Matches(clearcastingSpells) {
+				aura.Deactivate(sim)
 			}
 		},
+	}).AttachSpellMod(core.SpellModConfig{
+		Kind:       core.SpellMod_PowerCost_Pct,
+		ClassMask:  clearcastingSpells,
+		FloatValue: -2,
 	})
 
-	druid.RegisterAura(core.Aura{
-		Label:    "Omen of Clarity",
+	druid.MakeProcTriggerAura(core.ProcTrigger{
+		Name:     "Omen of Clarity",
 		ActionID: core.ActionID{SpellID: 16864},
-		Duration: core.NeverExpires,
-
-		OnReset: func(aura *core.Aura, sim *core.Simulation) {
-			aura.Activate(sim)
-			updateSpecialProcChance()
-		},
-
-		OnSpellHitDealt: func(_ *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			if !result.Landed() || !spell.ProcMask.Matches(core.ProcMaskMelee) || !icd.IsReady(sim) {
-				return
-			}
-
+		Callback: core.CallbackOnSpellHitDealt,
+		ProcMask: core.ProcMaskMelee,
+		ICD:      time.Second * 10,
+		ExtraCondition: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) bool {
 			// Yellow specials use the equipped weapon swing speed (not cat paw speed).
 			// White auto attacks use the cat paw swing speed.
 			var procChance float64
@@ -96,11 +60,10 @@ func (druid *Druid) applyOmenOfClarity() {
 			} else {
 				procChance = specialProcChance
 			}
-
-			if sim.RandomFloat("Omen of Clarity") < procChance {
-				icd.Use(sim)
-				druid.ClearcastingAura.Activate(sim)
-			}
+			return sim.RandomFloat("Omen of Clarity") < procChance
+		},
+		Handler: func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
+			druid.ClearcastingAura.Activate(sim)
 		},
 	})
 
