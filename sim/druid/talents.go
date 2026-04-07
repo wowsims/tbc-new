@@ -40,18 +40,19 @@ func (druid *Druid) ApplyBalanceTalents() {
 // ApplyFeralTalents applies Feral tree talents and Restoration tree talents used by
 // feral specs (cat and bear). Call this from FeralCat and FeralBear specs.
 func (druid *Druid) ApplyFeralTalents() {
-	druid.applyNaturalShapeshifter()
-	druid.applySubtlety()
-	druid.applyNaturalist()
-	druid.applyIntensity()
 	druid.applyFerocity()
-	druid.applySavageFury()
 	druid.applyFeralAggression()
 	druid.applyShreddingAttacks()
 	druid.applyPrimalFury()
+	druid.applySavageFury()
 	druid.applyLeaderOfThePack()
 	druid.applyHeartOfTheWild()
 	druid.applySurvivalOfTheFittest()
+
+	//Restoration
+	druid.applyNaturalShapeshifter()
+	druid.applyNaturalist()
+	druid.applyIntensity()
 }
 
 func (druid *Druid) applyForceOfNature() {
@@ -293,14 +294,6 @@ func (druid *Druid) applyNaturalShapeshifter() {
 		Kind:       core.SpellMod_PowerCost_Pct,
 		FloatValue: -0.1 * float64(druid.Talents.NaturalShapeshifter),
 	})
-}
-
-func (druid *Druid) applySubtlety() {
-	if druid.Talents.Subtlety == 0 {
-		return
-	}
-
-	druid.PseudoStats.ThreatMultiplier *= 1 - 0.04*float64(druid.Talents.Subtlety)
 }
 
 func (druid *Druid) applyNaturalist() {
