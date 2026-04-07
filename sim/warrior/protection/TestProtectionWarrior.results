@@ -717,6 +717,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestProtectionWarrior-AllItems-Gladiator'sBattlegear"
+ value: {
+  dps: 898.93251
+  tps: 1602.43421
+  dtps: 1525.19284
+ }
+}
+dps_results: {
  key: "TestProtectionWarrior-AllItems-GlowingCrystalInsignia-25619"
  value: {
   dps: 734.59055

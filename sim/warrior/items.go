@@ -46,7 +46,7 @@ var ItemSetOathboundsSavagePlateBattlegear = core.NewItemSet(core.ItemSet{
 // Merciless, Vengeful and Brutal Gladiator's Battlegear all share the same set bonuses
 var ItemSetGladiatorsBattlegear = core.NewItemSet(core.ItemSet{
 	ID:      567,
-	Name:    "Gladiator's Battlegear ",
+	Name:    "Gladiator's Battlegear",
 	Bonuses: sharedPvpSetBonus,
 })
 

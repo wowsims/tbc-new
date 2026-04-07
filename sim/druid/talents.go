@@ -105,7 +105,7 @@ func (druid *Druid) applyMoonfury() {
 
 	druid.AddStaticMod(core.SpellModConfig{
 		ClassMask:  DruidSpellWrath | DruidSpellStarfire | DruidSpellMoonfire,
-		Kind:       core.SpellMod_DamageDone_Pct,
+		Kind:       core.SpellMod_DamageDone_Flat,
 		FloatValue: 0.02 * float64(druid.Talents.Moonfury),
 	})
 }
