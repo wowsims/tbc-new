@@ -43,7 +43,7 @@ export class GemSummary extends Component {
 		this.rootElem.classList[!hasGems ? 'add' : 'remove']('hide');
 
 		if (hasGems) {
-			const gemCounts: Record<string, GemSummaryData> = {};
+			let gemCounts: Record<string, GemSummaryData> = {};
 
 			for (const gem of fullGemList) {
 				if (gemCounts[gem.name]) {
@@ -56,7 +56,9 @@ export class GemSummary extends Component {
 				}
 			}
 
-			for (const gemName of Object.keys(gemCounts)) {
+			const sortedGemNames = Object.keys(gemCounts).sort((a, b) => a.localeCompare(b));
+
+			for (const gemName of sortedGemNames) {
 				const gemData = gemCounts[gemName];
 				const linkRef = ref<HTMLAnchorElement>();
 				const iconRef = ref<HTMLImageElement>();
