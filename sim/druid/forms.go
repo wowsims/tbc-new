@@ -90,18 +90,6 @@ func (druid *Druid) RegisterCatFormAura() {
 	// Feral Attack Power (weapon/item feral-specific AP) converts 1:1 to AP in Cat Form.
 	feralApDep := druid.NewDynamicStatDependency(stats.FeralAttackPower, stats.AttackPower, 1)
 
-	// Talent: Predatory Strikes — flat AP bonus while in Cat/Bear form.
-	predatoryStrikesBonus := stats.Stats{
-		stats.AttackPower: float64(druid.Talents.PredatoryStrikes) * 0.5 * core.CharacterLevel,
-	}
-	// Talent: Sharpened Claws — flat crit bonus while in Cat/Bear form.
-	sharpenedClawsBonus := stats.Stats{
-		stats.PhysicalCritPercent: float64(druid.Talents.SharpenedClaws) * 2.0,
-	}
-	// Talent: Feral Swiftness — dodge bonus while in Cat/Bear form.
-	feralSwiftnessBonus := stats.Stats{
-		stats.DodgeRating: core.DodgeRatingPerDodgePercent * 2.0 * float64(druid.Talents.FeralSwiftness),
-	}
 	// Talent: Heart of the Wild — +2% AP per rank while in Cat form.
 	var hotWCatApDep *stats.StatDependency
 	if druid.Talents.HeartOfTheWild > 0 {
@@ -128,9 +116,6 @@ func (druid *Druid) RegisterCatFormAura() {
 			druid.EnableBuildPhaseStatDep(sim, agiApDep)
 			druid.EnableBuildPhaseStatDep(sim, strApDep)
 			druid.EnableBuildPhaseStatDep(sim, feralApDep)
-			druid.AddStatsDynamic(sim, predatoryStrikesBonus)
-			druid.AddStatsDynamic(sim, sharpenedClawsBonus)
-			druid.AddStatsDynamic(sim, feralSwiftnessBonus)
 			if hotWCatApDep != nil {
 				druid.EnableBuildPhaseStatDep(sim, hotWCatApDep)
 			}
@@ -164,9 +149,6 @@ func (druid *Druid) RegisterCatFormAura() {
 			druid.DisableBuildPhaseStatDep(sim, agiApDep)
 			druid.DisableBuildPhaseStatDep(sim, strApDep)
 			druid.DisableBuildPhaseStatDep(sim, feralApDep)
-			druid.AddStatsDynamic(sim, predatoryStrikesBonus.Invert())
-			druid.AddStatsDynamic(sim, sharpenedClawsBonus.Invert())
-			druid.AddStatsDynamic(sim, feralSwiftnessBonus.Invert())
 			if hotWCatApDep != nil {
 				druid.DisableBuildPhaseStatDep(sim, hotWCatApDep)
 			}
@@ -225,18 +207,6 @@ func (druid *Druid) RegisterBearFormAura() {
 	critDep := druid.NewDynamicMultiplyStat(stats.MeleeCritRating, 1.5)
 	hasteDep := druid.NewDynamicMultiplyStat(stats.MeleeHasteRating, 1.5)
 
-	// Talent: Predatory Strikes — flat AP bonus while in Cat/Bear form.
-	predatoryStrikesBonus := stats.Stats{
-		stats.AttackPower: float64(druid.Talents.PredatoryStrikes) * 0.5 * core.CharacterLevel,
-	}
-	// Talent: Sharpened Claws — flat crit bonus while in Cat/Bear form.
-	sharpenedClawsBonus := stats.Stats{
-		stats.PhysicalCritPercent: float64(druid.Talents.SharpenedClaws) * 2.0,
-	}
-	// Talent: Feral Swiftness — dodge bonus while in Cat/Bear form.
-	feralSwiftnessBonus := stats.Stats{
-		stats.DodgeRating: core.DodgeRatingPerDodgePercent * 2.0 * float64(druid.Talents.FeralSwiftness),
-	}
 	// Talent: Heart of the Wild — +4% Stamina per rank while in Bear form.
 	var hotWBearStamDep *stats.StatDependency
 	if druid.Talents.HeartOfTheWild > 0 {
@@ -266,9 +236,6 @@ func (druid *Druid) RegisterBearFormAura() {
 			druid.EnableBuildPhaseStatDep(sim, feralApDep)
 			druid.EnableBuildPhaseStatDep(sim, critDep)
 			druid.EnableBuildPhaseStatDep(sim, hasteDep)
-			druid.AddStatsDynamic(sim, predatoryStrikesBonus)
-			druid.AddStatsDynamic(sim, sharpenedClawsBonus)
-			druid.AddStatsDynamic(sim, feralSwiftnessBonus)
 
 			// Preserve fraction of max health when shifting
 			healthFrac := druid.CurrentHealth() / druid.MaxHealth()
@@ -296,9 +263,6 @@ func (druid *Druid) RegisterBearFormAura() {
 			druid.DisableBuildPhaseStatDep(sim, feralApDep)
 			druid.DisableBuildPhaseStatDep(sim, critDep)
 			druid.DisableBuildPhaseStatDep(sim, hasteDep)
-			druid.AddStatsDynamic(sim, predatoryStrikesBonus.Invert())
-			druid.AddStatsDynamic(sim, sharpenedClawsBonus.Invert())
-			druid.AddStatsDynamic(sim, feralSwiftnessBonus.Invert())
 
 			healthFrac := druid.CurrentHealth() / druid.MaxHealth()
 			druid.DisableBuildPhaseStatDep(sim, stamDep)

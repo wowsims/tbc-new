@@ -26,6 +26,13 @@ type Druid struct {
 	ShredFlatBonus    float64 // Nordrassil Harness 4P: +75
 	LacerateTickBonus float64 // Nordrassil Harness 4P: +15 per stack per tick
 
+	IdolFerociousBiteBonus float64 // Idol of the Beast (25667): +14 per combo point
+	IdolMangleCatBonus     float64 // Idol of the Wild (28064): +24 flat to Mangle Cat
+	IdolMangleBearBonus    float64 // Idol of the Wild (28064): +52 flat to Mangle Bear
+	IdolShredBonus         float64 // Everbloom Idol (29390): +88 flat to Shred
+	IdolRipBonus           float64 // Idol of Feral Shadows (28372): +7 per combo point per tick
+	IdolLacerateBonus      float64 // Idol of Ursoc (27744): +8 per tick per stack
+
 	MHAutoSpell *core.Spell
 
 	Barkskin             *DruidSpell
@@ -196,15 +203,15 @@ func (druid *Druid) Initialize() {
 }
 
 func (druid *Druid) RegisterBaselineSpells() {
-	// Balance
+	druid.registerInnervateCD()
+}
 
+func (druid *Druid) RegisterBalanceSpells() {
 	druid.registerStarfireSpell()
 	druid.registerMoonfireSpell()
 	druid.registerWrathSpell()
-
 	druid.registerHurricaneSpell()
 	druid.registerFaerieFireSpell()
-	druid.registerInnervateCD()
 }
 
 func (druid *Druid) RegisterFeralCatSpells() {

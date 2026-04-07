@@ -91,20 +91,66 @@ func init() {
 	})
 
 	// Idol of the Beast (25667): Increases the damage dealt by Ferocious Bite by 14 per combo point.
-	// Implemented inline in ferocious_bite.go.
-	core.NewItemEffect(25667, func(agent core.Agent) {})
+	core.NewItemEffect(25667, func(agent core.Agent) {
+		druid := agent.(DruidAgent).GetDruid()
+		aura := core.MakePermanent(druid.RegisterAura(core.Aura{
+			Label: "Idol of the Beast",
+			OnGain: func(_ *core.Aura, _ *core.Simulation) {
+				druid.IdolFerociousBiteBonus = 14
+			},
+			OnExpire: func(_ *core.Aura, _ *core.Simulation) {
+				druid.IdolFerociousBiteBonus = 0
+			},
+		}))
+		druid.ItemSwap.RegisterProc(25667, aura)
+	})
 
 	// Idol of the Wild (28064): Increases the damage dealt by Mangle by 24 (Cat) or 52 (Bear).
-	// Implemented inline in mangle.go.
-	core.NewItemEffect(28064, func(agent core.Agent) {})
+	core.NewItemEffect(28064, func(agent core.Agent) {
+		druid := agent.(DruidAgent).GetDruid()
+		aura := core.MakePermanent(druid.RegisterAura(core.Aura{
+			Label: "Idol of the Wild",
+			OnGain: func(_ *core.Aura, _ *core.Simulation) {
+				druid.IdolMangleCatBonus = 24
+				druid.IdolMangleBearBonus = 52
+			},
+			OnExpire: func(_ *core.Aura, _ *core.Simulation) {
+				druid.IdolMangleCatBonus = 0
+				druid.IdolMangleBearBonus = 0
+			},
+		}))
+		druid.ItemSwap.RegisterProc(28064, aura)
+	})
 
 	// Idol of Feral Shadows (28372): Increases the damage dealt by Rip by 7 per combo point per tick.
-	// Implemented inline in rip.go.
-	core.NewItemEffect(28372, func(agent core.Agent) {})
+	core.NewItemEffect(28372, func(agent core.Agent) {
+		druid := agent.(DruidAgent).GetDruid()
+		aura := core.MakePermanent(druid.RegisterAura(core.Aura{
+			Label: "Idol of Feral Shadows",
+			OnGain: func(_ *core.Aura, _ *core.Simulation) {
+				druid.IdolRipBonus = 7
+			},
+			OnExpire: func(_ *core.Aura, _ *core.Simulation) {
+				druid.IdolRipBonus = 0
+			},
+		}))
+		druid.ItemSwap.RegisterProc(28372, aura)
+	})
 
 	// Everbloom Idol (29390): Increases the damage dealt by Shred by 88.
-	// Implemented inline in shred.go.
-	core.NewItemEffect(29390, func(agent core.Agent) {})
+	core.NewItemEffect(29390, func(agent core.Agent) {
+		druid := agent.(DruidAgent).GetDruid()
+		aura := core.MakePermanent(druid.RegisterAura(core.Aura{
+			Label: "Everbloom Idol",
+			OnGain: func(_ *core.Aura, _ *core.Simulation) {
+				druid.IdolShredBonus = 88
+			},
+			OnExpire: func(_ *core.Aura, _ *core.Simulation) {
+				druid.IdolShredBonus = 0
+			},
+		}))
+		druid.ItemSwap.RegisterProc(29390, aura)
+	})
 
 	// Idol of the Raven Goddess
 	core.NewItemEffect(32387, func(agent core.Agent) {
@@ -112,8 +158,19 @@ func init() {
 	})
 
 	// Idol of Ursoc (27744): Increases the damage dealt by Lacerate by 8 per tick per stack.
-	// Implemented inline in lacerate.go.
-	core.NewItemEffect(27744, func(agent core.Agent) {})
+	core.NewItemEffect(27744, func(agent core.Agent) {
+		druid := agent.(DruidAgent).GetDruid()
+		aura := core.MakePermanent(druid.RegisterAura(core.Aura{
+			Label: "Idol of Ursoc",
+			OnGain: func(_ *core.Aura, _ *core.Simulation) {
+				druid.IdolLacerateBonus = 8
+			},
+			OnExpire: func(_ *core.Aura, _ *core.Simulation) {
+				druid.IdolLacerateBonus = 0
+			},
+		}))
+		druid.ItemSwap.RegisterProc(27744, aura)
+	})
 
 	// Ashtongue Talisman of Equilibrium
 	core.NewItemEffect(32486, func(agent core.Agent) {

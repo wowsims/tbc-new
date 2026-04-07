@@ -7,6 +7,26 @@ import (
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
+// Healer Dungeon Set 3
+var ItemSetMoongladeRaiment = core.NewItemSet(core.ItemSet{
+	ID:   637,
+	Name: "Moonglade Raiment",
+	Bonuses: map[int32]core.ApplySetBonus{
+		// Your Rejuvenation spell now also grants 35 dodge rating.
+		2: func(agent core.Agent, setBonusAura *core.Aura) {
+			// TODO: Not implemented (Spell ID 37286)
+		},
+		// Reduces the mana cost of all shapeshifting by 25%.
+		4: func(agent core.Agent, setBonusAura *core.Aura) {
+			setBonusAura.AttachSpellMod(core.SpellModConfig{
+				ClassMask:  DruidSpellCatForm | DruidSpellBearForm,
+				Kind:       core.SpellMod_PowerCost_Pct,
+				FloatValue: -0.25,
+			})
+		},
+	},
+})
+
 // Feral T4
 var ItemSetMalorneHarness = core.NewItemSet(core.ItemSet{
 	ID:   640,

@@ -4,17 +4,11 @@ import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
-	"github.com/wowsims/tbc/sim/core/proto"
 )
 
 func (druid *Druid) registerRipSpell() {
-	// Idol of Feral Shadows (28372) adds 7 damage per combo point per tick.
-	hasIdolOfFeralShadows := druid.HasItemEquipped(28372, []proto.ItemSlot{proto.ItemSlot_ItemSlotRanged})
 	idolBonus := func(cp int32) float64 {
-		if hasIdolOfFeralShadows {
-			return 7 * float64(cp)
-		}
-		return 0
+		return druid.IdolRipBonus * float64(cp)
 	}
 
 	druid.Rip = druid.RegisterSpell(Cat, core.SpellConfig{

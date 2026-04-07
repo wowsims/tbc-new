@@ -1,4 +1,5 @@
 import * as InputHelpers from '../../core/components/input_helpers.js';
+import i18n from '../../i18n/config.js';
 import { Player } from '../../core/player.js';
 import { Spec } from '../../core/proto/common.js';
 import {
@@ -10,38 +11,38 @@ import {
 
 export const CannotShredTarget = InputHelpers.makeSpecOptionsBooleanInput<Spec.SpecFeralCatDruid>({
 	fieldName: 'cannotShredTarget',
-	label: 'Cannot Shred Target',
-	labelTooltip: 'Prevent the sim from casting Shred (e.g. when you cannot get behind the target).',
+	label: i18n.t('settings_tab.other.cannot_shred_target.label'),
+	labelTooltip: i18n.t('settings_tab.other.cannot_shred_target.tooltip'),
 });
 
 export const FeralDruidRotationConfig = {
 	inputs: [
 		InputHelpers.makeRotationEnumInput<Spec.SpecFeralCatDruid, FinishingMove>({
 			fieldName: 'finishingMove',
-			label: 'Finishing Move',
-			labelTooltip: 'Choose whether Rip or Ferocious Bite is the primary finisher in the rotation.',
+			label: i18n.t('rotation_tab.options.druid.feral_cat.finishing_move.label'),
+			labelTooltip: i18n.t('rotation_tab.options.druid.feral_cat.finishing_move.tooltip'),
 			values: [
-				{ name: 'Rip', value: FinishingMove.Rip },
-				{ name: 'Ferocious Bite', value: FinishingMove.Bite },
-				{ name: 'None', value: FinishingMove.None },
+				{ name: i18n.t('rotation_tab.options.druid.feral_cat.finishing_move.values.rip'), value: FinishingMove.Rip },
+				{ name: i18n.t('rotation_tab.options.druid.feral_cat.finishing_move.values.bite'), value: FinishingMove.Bite },
+				{ name: i18n.t('rotation_tab.options.druid.feral_cat.finishing_move.values.none'), value: FinishingMove.None },
 			],
 		}),
 		InputHelpers.makeRotationBooleanInput<Spec.SpecFeralCatDruid>({
 			fieldName: 'biteweave',
-			label: 'Enable Bite-weaving',
-			labelTooltip: 'Spend Combo Points on Ferocious Bite when Rip is already active on the target.',
+			label: i18n.t('rotation_tab.options.druid.feral_cat.biteweave.label'),
+			labelTooltip: i18n.t('rotation_tab.options.druid.feral_cat.biteweave.tooltip'),
 			showWhen: (player: Player<Spec.SpecFeralCatDruid>) => player.getSimpleRotation().finishingMove === FinishingMove.Rip,
 		}),
 		InputHelpers.makeRotationBooleanInput<Spec.SpecFeralCatDruid>({
 			fieldName: 'ripweave',
-			label: 'Enable Rip-weaving',
-			labelTooltip: 'Spend Combo Points on Rip when at 52 Energy or above, even when Bite is the primary finisher.',
+			label: i18n.t('rotation_tab.options.druid.feral_cat.ripweave.label'),
+			labelTooltip: i18n.t('rotation_tab.options.druid.feral_cat.ripweave.tooltip'),
 			showWhen: (player: Player<Spec.SpecFeralCatDruid>) => player.getSimpleRotation().finishingMove === FinishingMove.Bite,
 		}),
 		InputHelpers.makeRotationEnumInput<Spec.SpecFeralCatDruid, number>({
 			fieldName: 'ripMinComboPoints',
-			label: 'Rip CP Threshold',
-			labelTooltip: 'Minimum Combo Points to accumulate before casting Rip.',
+			label: i18n.t('rotation_tab.options.druid.feral_cat.rip_min_combo_points.label'),
+			labelTooltip: i18n.t('rotation_tab.options.druid.feral_cat.rip_min_combo_points.tooltip'),
 			values: [
 				{ name: '4', value: 4 },
 				{ name: '5', value: 5 },
@@ -53,8 +54,8 @@ export const FeralDruidRotationConfig = {
 		}),
 		InputHelpers.makeRotationEnumInput<Spec.SpecFeralCatDruid, number>({
 			fieldName: 'biteMinComboPoints',
-			label: 'Bite CP Threshold',
-			labelTooltip: 'Minimum Combo Points to accumulate before casting Ferocious Bite.',
+			label: i18n.t('rotation_tab.options.druid.feral_cat.bite_min_combo_points.label'),
+			labelTooltip: i18n.t('rotation_tab.options.druid.feral_cat.bite_min_combo_points.tooltip'),
 			values: [
 				{ name: '4', value: 4 },
 				{ name: '5', value: 5 },
@@ -66,20 +67,18 @@ export const FeralDruidRotationConfig = {
 		}),
 		InputHelpers.makeRotationBooleanInput<Spec.SpecFeralCatDruid>({
 			fieldName: 'mangleTrick',
-			label: 'Use Mangle trick',
-			labelTooltip:
-				'Cast Mangle rather than Shred when between 50–56 Energy with 2pT6, or 60–61 Energy without, with less than 1 second until the next Energy tick.',
+			label: i18n.t('rotation_tab.options.druid.feral_cat.mangle_trick.label'),
+			labelTooltip: i18n.t('rotation_tab.options.druid.feral_cat.mangle_trick.tooltip'),
 		}),
 		InputHelpers.makeRotationBooleanInput<Spec.SpecFeralCatDruid>({
 			fieldName: 'rakeTrick',
-			label: 'Use Rake/Bite tricks',
-			labelTooltip:
-				'Cast Rake or Ferocious Bite rather than powershifting when between 35–39 Energy without 2pT6, with more than 1 second until the next Energy tick.',
+			label: i18n.t('rotation_tab.options.druid.feral_cat.rake_trick.label'),
+			labelTooltip: i18n.t('rotation_tab.options.druid.feral_cat.rake_trick.tooltip'),
 		}),
 		InputHelpers.makeRotationBooleanInput<Spec.SpecFeralCatDruid>({
 			fieldName: 'maintainFaerieFire',
-			label: 'Maintain Faerie Fire',
-			labelTooltip: 'Use Faerie Fire (Feral) whenever it is not active on the target.',
+			label: i18n.t('rotation_tab.options.druid.feral_cat.maintain_faerie_fire.label'),
+			labelTooltip: i18n.t('rotation_tab.options.druid.feral_cat.maintain_faerie_fire.tooltip'),
 		}),
 	],
 };

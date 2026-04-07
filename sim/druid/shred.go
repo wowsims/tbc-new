@@ -4,18 +4,9 @@ import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
-	"github.com/wowsims/tbc/sim/core/proto"
 )
 
 func (druid *Druid) registerShredSpell() {
-	// Flat damage bonus from gear/idols.
-	// Nordrassil Harness 4pc: +75 (applied post-registration via druid.ShredFlatBonus).
-	// Everbloom Idol (29390): +88.
-	flatDamageBonus := 405.0
-	if druid.HasItemEquipped(29390, []proto.ItemSlot{proto.ItemSlot_ItemSlotRanged}) {
-		flatDamageBonus += 88
-	}
-
 	druid.Shred = druid.RegisterSpell(Cat, core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 27002},
 		SpellSchool:    core.SpellSchoolPhysical,
@@ -45,7 +36,7 @@ func (druid *Druid) registerShredSpell() {
 		MaxRange:         core.MaxMeleeRange,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := (flatDamageBonus+druid.ShredFlatBonus)/2.25 + spell.Unit.MHWeaponDamage(sim, spell.MeleeAttackPower(target))
+			baseDamage := (405.0+druid.IdolShredBonus+druid.ShredFlatBonus)/2.25 + spell.Unit.MHWeaponDamage(sim, spell.MeleeAttackPower(target))
 			if druid.MangleAuras != nil && druid.MangleAuras.Get(target).IsActive() {
 				baseDamage *= 1.3
 			}
@@ -60,7 +51,7 @@ func (druid *Druid) registerShredSpell() {
 		},
 
 		ExpectedInitialDamage: func(sim *core.Simulation, target *core.Unit, spell *core.Spell, _ bool) *core.SpellResult {
-			baseDamage := (flatDamageBonus+druid.ShredFlatBonus)/2.25 + spell.Unit.AutoAttacks.MH().CalculateAverageWeaponDamage(spell.MeleeAttackPower(target))
+			baseDamage := (405.0+druid.IdolShredBonus+druid.ShredFlatBonus)/2.25 + spell.Unit.AutoAttacks.MH().CalculateAverageWeaponDamage(spell.MeleeAttackPower(target))
 			if druid.MangleAuras != nil && druid.MangleAuras.Get(target).IsActive() {
 				baseDamage *= 1.3
 			}

@@ -4,15 +4,9 @@ import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
-	"github.com/wowsims/tbc/sim/core/proto"
 )
 
 func (druid *Druid) registerFerociousBiteSpell() {
-	// Idol of the Beast (25667) adds 14 damage per combo point.
-	dmgPerCP := 169.0
-	if druid.HasItemEquipped(25667, []proto.ItemSlot{proto.ItemSlot_ItemSlotRanged}) {
-		dmgPerCP += 14
-	}
 
 	druid.FerociousBite = druid.RegisterSpell(Cat, core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 24248},
@@ -54,6 +48,7 @@ func (druid *Druid) registerFerociousBiteSpell() {
 				druid.SpendEnergy(sim, excessEnergy, spell.EnergyMetrics())
 			}
 
+			dmgPerCP := 169.0 + druid.IdolFerociousBiteBonus
 			baseDamage := 57 + dmgPerCP*cp + 4.1*excessEnergy + 0.05*cp*ap
 			baseDamage += sim.RandomFloat("Ferocious Bite") * 66
 
@@ -68,6 +63,7 @@ func (druid *Druid) registerFerociousBiteSpell() {
 			cp := float64(druid.ComboPoints())
 			ap := spell.MeleeAttackPower(target)
 			// Expected value: midpoint of random roll, no excess energy assumed.
+			dmgPerCP := 169.0 + druid.IdolFerociousBiteBonus
 			baseDamage := 57 + dmgPerCP*cp + 33 + 0.05*cp*ap
 			return spell.CalcDamage(sim, target, baseDamage, spell.OutcomeExpectedMeleeWeaponSpecialHitAndCrit)
 		},

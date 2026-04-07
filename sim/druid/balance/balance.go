@@ -56,6 +56,7 @@ func (moonkin *BalanceDruid) GetDruid() *druid.Druid {
 
 func (moonkin *BalanceDruid) Initialize() {
 	moonkin.Druid.Initialize()
+	moonkin.Druid.RegisterBalanceSpells()
 	moonkin.ManaMetric = moonkin.NewManaMetrics(core.ActionID{SpellID: 81070 /* Eclipse */})
 }
 

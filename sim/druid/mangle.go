@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
-	"github.com/wowsims/tbc/sim/core/proto"
 )
 
 func (druid *Druid) registerMangleAuras() {
@@ -20,12 +19,6 @@ func (druid *Druid) registerMangleCatSpell() {
 	}
 
 	druid.registerMangleAuras()
-
-	// Idol of the Wild (28064): +24 flat damage to Mangle (Cat).
-	flatDamageBonus := 264.0
-	if druid.HasItemEquipped(28064, []proto.ItemSlot{proto.ItemSlot_ItemSlotRanged}) {
-		flatDamageBonus += 24
-	}
 
 	druid.MangleCat = druid.RegisterSpell(Cat, core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 33983},
@@ -51,7 +44,7 @@ func (druid *Druid) registerMangleCatSpell() {
 		MaxRange:         core.MaxMeleeRange,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := flatDamageBonus/1.6 + spell.Unit.MHWeaponDamage(sim, spell.MeleeAttackPower(target))
+			baseDamage := (264.0+druid.IdolMangleCatBonus)/1.6 + spell.Unit.MHWeaponDamage(sim, spell.MeleeAttackPower(target))
 			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeWeaponSpecialHitAndCrit)
 
 			if result.Landed() {
@@ -63,7 +56,7 @@ func (druid *Druid) registerMangleCatSpell() {
 		},
 
 		ExpectedInitialDamage: func(sim *core.Simulation, target *core.Unit, spell *core.Spell, _ bool) *core.SpellResult {
-			baseDamage := flatDamageBonus/1.6 + spell.Unit.AutoAttacks.MH().CalculateAverageWeaponDamage(spell.MeleeAttackPower(target))
+			baseDamage := (264.0+druid.IdolMangleCatBonus)/1.6 + spell.Unit.AutoAttacks.MH().CalculateAverageWeaponDamage(spell.MeleeAttackPower(target))
 			return spell.CalcDamage(sim, target, baseDamage, spell.OutcomeExpectedMeleeWeaponSpecialHitAndCrit)
 		},
 	})
@@ -75,12 +68,6 @@ func (druid *Druid) registerMangleBearSpell() {
 	}
 
 	druid.registerMangleAuras()
-
-	// Idol of the Wild (28064): +52 flat damage to Mangle (Bear).
-	flatDamageBonus := 155.0
-	if druid.HasItemEquipped(28064, []proto.ItemSlot{proto.ItemSlot_ItemSlotRanged}) {
-		flatDamageBonus += 52
-	}
 
 	druid.MangleBear = druid.RegisterSpell(Bear, core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 33987},
@@ -110,7 +97,7 @@ func (druid *Druid) registerMangleBearSpell() {
 		MaxRange:         core.MaxMeleeRange,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := flatDamageBonus/1.15 + spell.Unit.MHWeaponDamage(sim, spell.MeleeAttackPower(target))
+			baseDamage := (155.0+druid.IdolMangleBearBonus)/1.15 + spell.Unit.MHWeaponDamage(sim, spell.MeleeAttackPower(target))
 			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeWeaponSpecialHitAndCrit)
 
 			if result.Landed() {

@@ -40,12 +40,16 @@ func (druid *Druid) ApplyBalanceTalents() {
 // ApplyFeralTalents applies Feral tree talents and Restoration tree talents used by
 // feral specs (cat and bear). Call this from FeralCat and FeralBear specs.
 func (druid *Druid) ApplyFeralTalents() {
+	druid.applySharpenedClaws()
+	druid.applyFeralSwiftness()
+	druid.applyPredatoryStrikes()
 	druid.applyFerocity()
 	druid.applyFeralAggression()
 	druid.applyShreddingAttacks()
 	druid.applyPrimalFury()
 	druid.applySavageFury()
 	druid.applyLeaderOfThePack()
+	druid.applyImprovedLeaderOfThePack()
 	druid.applyHeartOfTheWild()
 	druid.applySurvivalOfTheFittest()
 
@@ -327,6 +331,39 @@ func (druid *Druid) applySurvivalOfTheFittest() {
 	druid.AddReducedCritTakenPercent(0.01 * float64(druid.Talents.SurvivalOfTheFittest))
 }
 
+func (druid *Druid) applySharpenedClaws() {
+	if druid.Talents.SharpenedClaws == 0 {
+		return
+	}
+	bonus := stats.Stats{
+		stats.PhysicalCritPercent: float64(druid.Talents.SharpenedClaws) * 2.0,
+	}
+	druid.CatFormAura.AttachStatsBuff(bonus)
+	druid.BearFormAura.AttachStatsBuff(bonus)
+}
+
+func (druid *Druid) applyFeralSwiftness() {
+	if druid.Talents.FeralSwiftness == 0 {
+		return
+	}
+	bonus := stats.Stats{
+		stats.DodgeRating: core.DodgeRatingPerDodgePercent * 2.0 * float64(druid.Talents.FeralSwiftness),
+	}
+	druid.CatFormAura.AttachStatsBuff(bonus)
+	druid.BearFormAura.AttachStatsBuff(bonus)
+}
+
+func (druid *Druid) applyPredatoryStrikes() {
+	if druid.Talents.PredatoryStrikes == 0 {
+		return
+	}
+	bonus := stats.Stats{
+		stats.AttackPower: float64(druid.Talents.PredatoryStrikes) * 0.5 * core.CharacterLevel,
+	}
+	druid.CatFormAura.AttachStatsBuff(bonus)
+	druid.BearFormAura.AttachStatsBuff(bonus)
+}
+
 func (druid *Druid) applyFerocity() {
 	if druid.Talents.Ferocity == 0 {
 		return
@@ -441,16 +478,20 @@ func (druid *Druid) applyPrimalFury() {
 }
 
 func (druid *Druid) applyLeaderOfThePack() {
+	// Leader of the Pack: passive aura that grants the party +5% melee crit.
+	// The party buff is handled via AddPartyBuffs in the spec; no sim-side
+	// aura registration is needed here beyond the talent gate.
 	if !druid.Talents.LeaderOfThePack {
 		return
 	}
-	if druid.Talents.ImprovedLeaderOfThePack == 0 {
+}
+
+func (druid *Druid) applyImprovedLeaderOfThePack() {
+	if !druid.Talents.LeaderOfThePack || druid.Talents.ImprovedLeaderOfThePack == 0 {
 		return
 	}
 
 	// Improved LotP: crits heal the druid for 4% max health, 6s ICD.
-	healthRestore := 0.04
-
 	healingSpell := druid.RegisterSpell(Cat|Bear, core.SpellConfig{
 		ActionID:         core.ActionID{SpellID: 34299},
 		SpellSchool:      core.SpellSchoolPhysical,
@@ -460,7 +501,7 @@ func (druid *Druid) applyLeaderOfThePack() {
 		ThreatMultiplier: 0,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			spell.CalcAndDealHealing(sim, target, healthRestore*spell.Unit.MaxHealth(), spell.OutcomeHealing)
+			spell.CalcAndDealHealing(sim, target, 0.04*spell.Unit.MaxHealth(), spell.OutcomeHealing)
 		},
 	})
 
