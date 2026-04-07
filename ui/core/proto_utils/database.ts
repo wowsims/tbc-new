@@ -212,7 +212,7 @@ export class Database {
 			stats.push(Stat.StatShadowResistance);
 		}
 
-		const manaRelevant = stats.includes(Stat.StatMana) || stats.includes(Stat.StatMP5);
+		const hasManaStat = stats.includes(Stat.StatMana) || stats.includes(Stat.StatMP5);
 		// Fel Mana Potion (31677) restores mana but has no effectIds in the DB; include it manually.
 		const MANA_POTION_WHITELIST = [31677];
 		const hasAttackPowerStat = stats.find(stat => stat === Stat.StatAttackPower);
@@ -228,7 +228,7 @@ export class Database {
 
 			// Add consumables that buff Mana as a resource
 			let includesResourceType = false;
-			if (manaRelevant) {
+			if (hasManaStat) {
 				includesResourceType =
 					MANA_POTION_WHITELIST.includes(consume.id) ||
 					consume.effectIds.some(effectId => {
