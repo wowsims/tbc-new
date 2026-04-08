@@ -121,13 +121,13 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecMage, {
 	},
 
 	presets: {
-		epWeights: [Presets.P1_EP_PRESET],
+		epWeights: [Presets.P1_EP_PRESET, Presets.P2_EP_PRESET],
 		// Preset rotations that the user can quickly select.
 		rotations: [Presets.ROTATION_PRESET_ARCANE],
 		// Preset talents that the user can quickly select.
 		talents: [Presets.ARCANE_TALENTS],
 		// Preset gear configurations that the user can quickly select.
-		gear: [Presets.PREBIS_ARCANE, Presets.P1_BIS_ARCANE],
+		gear: [Presets.PREBIS_ARCANE, Presets.P1_BIS_ARCANE, Presets.P2_BIS_ARCANE],
 
 		builds: [],
 	},
