@@ -96,10 +96,10 @@ func init() {
 		aura := core.MakePermanent(druid.RegisterAura(core.Aura{
 			Label: "Idol of the Beast",
 			OnGain: func(_ *core.Aura, _ *core.Simulation) {
-				druid.IdolFerociousBiteBonus = 14
+				druid.IdolFerociousBiteBonus += 14
 			},
 			OnExpire: func(_ *core.Aura, _ *core.Simulation) {
-				druid.IdolFerociousBiteBonus = 0
+				druid.IdolFerociousBiteBonus -= 14
 			},
 		}))
 		druid.ItemSwap.RegisterProc(25667, aura)
@@ -111,12 +111,12 @@ func init() {
 		aura := core.MakePermanent(druid.RegisterAura(core.Aura{
 			Label: "Idol of the Wild",
 			OnGain: func(_ *core.Aura, _ *core.Simulation) {
-				druid.IdolMangleCatBonus = 24
-				druid.IdolMangleBearBonus = 52
+				druid.IdolMangleCatBonus += 24
+				druid.IdolMangleBearBonus += 52
 			},
 			OnExpire: func(_ *core.Aura, _ *core.Simulation) {
-				druid.IdolMangleCatBonus = 0
-				druid.IdolMangleBearBonus = 0
+				druid.IdolMangleCatBonus -= 24
+				druid.IdolMangleBearBonus -= 52
 			},
 		}))
 		druid.ItemSwap.RegisterProc(28064, aura)
@@ -128,10 +128,10 @@ func init() {
 		aura := core.MakePermanent(druid.RegisterAura(core.Aura{
 			Label: "Idol of Feral Shadows",
 			OnGain: func(_ *core.Aura, _ *core.Simulation) {
-				druid.IdolRipBonus = 7
+				druid.IdolRipBonus += 7
 			},
 			OnExpire: func(_ *core.Aura, _ *core.Simulation) {
-				druid.IdolRipBonus = 0
+				druid.IdolRipBonus -= 7
 			},
 		}))
 		druid.ItemSwap.RegisterProc(28372, aura)
@@ -143,10 +143,10 @@ func init() {
 		aura := core.MakePermanent(druid.RegisterAura(core.Aura{
 			Label: "Everbloom Idol",
 			OnGain: func(_ *core.Aura, _ *core.Simulation) {
-				druid.IdolShredBonus = 88
+				druid.IdolShredBonus += 88
 			},
 			OnExpire: func(_ *core.Aura, _ *core.Simulation) {
-				druid.IdolShredBonus = 0
+				druid.IdolShredBonus -= 88
 			},
 		}))
 		druid.ItemSwap.RegisterProc(29390, aura)
@@ -163,10 +163,10 @@ func init() {
 		aura := core.MakePermanent(druid.RegisterAura(core.Aura{
 			Label: "Idol of Ursoc",
 			OnGain: func(_ *core.Aura, _ *core.Simulation) {
-				druid.IdolLacerateBonus = 8
+				druid.IdolLacerateBonus += 8
 			},
 			OnExpire: func(_ *core.Aura, _ *core.Simulation) {
-				druid.IdolLacerateBonus = 0
+				druid.IdolLacerateBonus -= 8
 			},
 		}))
 		druid.ItemSwap.RegisterProc(27744, aura)

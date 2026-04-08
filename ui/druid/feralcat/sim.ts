@@ -58,18 +58,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralCatDruid, {
 				.withPseudoStat(PseudoStat.PseudoStatMeleeHitPercent, 9)
 				.withStat(Stat.StatExpertiseRating, 6.5 * 4 * Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION);
 		})(),
-		softCapBreakpoints: [
-			StatCap.fromPseudoStat(PseudoStat.PseudoStatMeleeHitPercent, {
-				breakpoints: [9],
-				capType: StatCapType.TypeSoftCap,
-				postCapEPs: [0],
-			}),
-			StatCap.fromStat(Stat.StatExpertiseRating, {
-				breakpoints: [164],
-				capType: StatCapType.TypeSoftCap,
-				postCapEPs: [0],
-			}),
-		],
 		other: Presets.OtherDefaults,
 		// Default consumes settings.
 		consumables: Presets.DefaultConsumables,

@@ -7,7 +7,7 @@ import (
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
-// Healer Dungeon Set 3
+// Druid Dungeon Set
 var ItemSetMoongladeRaiment = core.NewItemSet(core.ItemSet{
 	ID:   637,
 	Name: "Moonglade Raiment",
@@ -58,11 +58,8 @@ var ItemSetMalorneHarness = core.NewItemSet(core.ItemSet{
 		// Increases your armor by 1400 in Bear Form and Dire Bear Form.
 		4: func(agent core.Agent, setBonusAura *core.Aura) {
 			druid := agent.(DruidAgent).GetDruid()
-			if druid.InForm(Bear) {
-				druid.AddStat(stats.Armor, 1400)
-			} else if druid.InForm(Cat) {
-				druid.AddStat(stats.Strength, 30)
-			}
+			druid.CatFormAura.AttachStatsBuff(stats.Stats{stats.Strength: 30})
+			druid.BearFormAura.AttachStatsBuff(stats.Stats{stats.Armor: 1400})
 		},
 	},
 })

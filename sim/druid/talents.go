@@ -53,7 +53,7 @@ func (druid *Druid) ApplyFeralTalents() {
 	druid.applyHeartOfTheWild()
 	druid.applySurvivalOfTheFittest()
 
-	//Restoration
+	// Restoration
 	druid.applyNaturalShapeshifter()
 	druid.applyNaturalist()
 	druid.applyIntensity()
