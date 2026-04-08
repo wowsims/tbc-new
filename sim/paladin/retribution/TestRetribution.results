@@ -391,8 +391,8 @@ dps_results: {
 dps_results: {
  key: "TestRetribution-AllItems-DarkmoonCard:Crusade-31856"
  value: {
-  dps: 1765.53442
-  tps: 1387.02179
+  dps: 1764.33291
+  tps: 1386.09811
  }
 }
 dps_results: {
