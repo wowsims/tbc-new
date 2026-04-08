@@ -343,7 +343,7 @@ const actionKindFactories: { [f in NonNullable<APLActionKind>]: ActionKindConfig
 		shortDescription: i18n.t('rotation_tab.apl.actions.cast_at_player.tooltip'),
 		newValue: APLActionCastFriendlySpell.create,
 		fields: [AplHelpers.actionIdFieldConfig('spellId', 'friendly_spells', ''), AplHelpers.unitFieldConfig('target', 'players')],
-		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getRaid()!.size() > 1 || player.shouldEnableTargetDummies(),
+		includeIf: (player: Player<any>, _isPrepull: boolean) => player.getRaid()!.size() > 1,
 	}),
 	['multidot']: inputBuilder({
 		label: i18n.t('rotation_tab.apl.actions.multi_dot.label'),

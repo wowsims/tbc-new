@@ -115,27 +115,6 @@ export class EncounterPicker extends Component {
 			//	});
 			//}
 
-			if (simUI.isIndividualSim() && (simUI as IndividualSimUI<any>).player.canEnableTargetDummies()) {
-				const player = (simUI as IndividualSimUI<any>).player;
-				new NumberPicker(this.rootElem, simUI.sim.raid, {
-					id: 'encounter-num-allies',
-					label: i18n.t('settings_tab.encounter.num_allies.label'),
-					labelTooltip: i18n.t('settings_tab.encounter.num_allies.tooltip'),
-					changedEvent: (raid: Raid) => TypedEvent.onAny([raid.targetDummiesChangeEmitter, player.itemSwapSettings.changeEmitter]),
-					getValue: (raid: Raid) => raid.getTargetDummies(),
-					setValue: (eventID: EventID, raid: Raid, newValue: number) => {
-						raid.setTargetDummies(eventID, newValue);
-					},
-					showWhen: (raid: Raid) => {
-						const shouldEnable = player.shouldEnableTargetDummies();
-						if (!shouldEnable) {
-							raid.setTargetDummies(TypedEvent.nextEventID(), 0);
-						}
-
-						return shouldEnable;
-					},
-				});
-			}
 
 			if (simUI.isIndividualSim() && (simUI as IndividualSimUI<any>).player.getPlayerSpec().isTankSpec) {
 				new NumberPicker(this.rootElem, modEncounter, {

@@ -122,8 +122,6 @@ message Raid {
 	// Staggers Stormstrike casts across Enhance Shaman to maximize charge usage.
 	bool stagger_stormstrikes = 3;
 
-	// Extra fake players to add. Currently only used by healing sims.
-	int32 target_dummies = 6;
 }
 
 message SimOptions {

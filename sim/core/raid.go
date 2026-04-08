@@ -119,9 +119,8 @@ type Raid struct {
 	dpsMetrics DistributionMetrics
 	hpsMetrics DistributionMetrics
 
-	AllPlayerUnits   []*Unit // Cached list of all Players in the raid.
-	AllUnits         []*Unit // Cached list of all Units (players and pets) in the raid.
-	NumTargetDummies int     // Number of player units that are dummy targets for heals.
+	AllPlayerUnits []*Unit // Cached list of all Players in the raid.
+	AllUnits       []*Unit // Cached list of all Units (players and pets) in the raid.
 
 	nextPetIndex int32
 
@@ -179,13 +178,6 @@ func NewRaid(raidConfig *proto.Raid) *Raid {
 		}
 	}
 
-	raid.NumTargetDummies = min(24, int(raidConfig.TargetDummies))
-	for i := 0; i < raid.NumTargetDummies; i++ {
-		party, partyIndex := raid.GetFirstEmptyRaidIndex()
-		dummy := NewTargetDummy(i, party, partyIndex)
-		party.Players = append(party.Players, dummy)
-	}
-
 	return raid
 }
 
@@ -218,31 +210,6 @@ func (raid *Raid) GetFirstEmptyRaidIndex() (*Party, int) {
 	}
 
 	panic("Raid is full")
-}
-
-func (raid *Raid) GetTargetDummies() []*TargetDummy {
-	var targetDummies = []*TargetDummy{}
-	for _, party := range raid.Parties {
-		for _, player := range party.Players {
-			dummy, ok := player.(*TargetDummy)
-			if ok {
-				targetDummies = append(targetDummies, dummy)
-			}
-		}
-	}
-	return targetDummies
-}
-
-func (raid *Raid) GetFirstTargetDummy() *TargetDummy {
-	for _, party := range raid.Parties {
-		for _, player := range party.Players {
-			dummy, ok := player.(*TargetDummy)
-			if ok {
-				return dummy
-			}
-		}
-	}
-	return nil
 }
 
 func (raid *Raid) getNextPetIndex() int32 {

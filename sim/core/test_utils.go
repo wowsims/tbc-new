@@ -354,7 +354,6 @@ func GetTestBuildFromJSON(class proto.Class, dir string, file string, itemFilter
 		Cooldowns:       simSettings.Player.Cooldowns,
 
 		InFrontOfTarget: simSettings.Player.InFrontOfTarget,
-		TargetDummies:   simSettings.TargetDummies,
 		HealingModel:    simSettings.Player.HealingModel,
 
 		ItemFilter: itemFilter,
