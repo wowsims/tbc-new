@@ -29,7 +29,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRetributionPaladin, {
 		Stat.StatMeleeHitRating,
 		Stat.StatMeleeHasteRating,
 		Stat.StatMeleeCritRating,
-		Stat.StatArmorPenetration,
 		Stat.StatExpertiseRating,
 		Stat.StatMana,
 	],

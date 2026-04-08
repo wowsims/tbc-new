@@ -31,7 +31,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecDpsWarrior, {
 		Stat.StatMeleeHitRating,
 		Stat.StatMeleeHasteRating,
 		Stat.StatMeleeCritRating,
-		Stat.StatArmorPenetration,
 		Stat.StatExpertiseRating,
 	],
 	epPseudoStats: [PseudoStat.PseudoStatMainHandDps, PseudoStat.PseudoStatOffHandDps],

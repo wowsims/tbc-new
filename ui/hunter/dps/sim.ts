@@ -29,7 +29,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecHunter, {
 		Stat.StatMeleeHitRating,
 		Stat.StatMeleeHasteRating,
 		Stat.StatMeleeCritRating,
-		Stat.StatArmorPenetration,
 		Stat.StatExpertiseRating,
 		Stat.StatPhysicalDamage,
 	],
