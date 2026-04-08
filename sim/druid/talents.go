@@ -87,11 +87,24 @@ func (druid *Druid) applyBalanceOfPower() {
 		return
 	}
 
-	druid.AddStaticMod(core.SpellModConfig{
+	core.MakePermanent(druid.RegisterAura(core.Aura{
+		Label:      "Balance of Power",
+		BuildPhase: core.CharacterBuildPhaseTalents,
+		ActionID:   core.ActionID{SpellID: 33596},
+	}).AttachSpellMod(core.SpellModConfig{
 		// See https://www.wowhead.com/tbc/spell=33596/balance-of-power
+		// Importantly does not seem to affect Insect Swarm
 		ClassMask:  DruidSpellWrath | DruidSpellStarfire | DruidSpellMoonfire,
 		Kind:       core.SpellMod_BonusHit_Percent,
 		FloatValue: 2.0 * float64(druid.Talents.BalanceOfPower),
+	})).ApplyOnGain(func(aura *core.Aura, sim *core.Simulation) {
+		if druid.Env.MeasuringStats {
+			druid.AddStatDynamic(sim, stats.SpellHitPercent, 4)
+		}
+	}).ApplyOnExpire(func(aura *core.Aura, sim *core.Simulation) {
+		if druid.Env.MeasuringStats {
+			druid.AddStatDynamic(sim, stats.SpellHitPercent, -4)
+		}
 	})
 }
 
