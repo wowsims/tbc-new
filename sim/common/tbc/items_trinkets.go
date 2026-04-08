@@ -450,23 +450,36 @@ func init() {
 			BonusPerStack: stats.Stats{stats.SpellDamage: 8},
 		})
 
-		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:     "Darkmoon Card: Crusade",
-			ActionID: core.ActionID{ItemID: 31856},
-			ProcMask: core.ProcMaskDirect | core.ProcMaskProc,
+		meleeProcAura := character.MakeProcTriggerAura(core.ProcTrigger{
+			Name:     "Darkmoon Card: Crusade (Melee)",
+			ActionID: core.ActionID{SpellID: 39438},
+			ProcMask: core.ProcMaskMeleeOrRanged,
 			Outcome:  core.OutcomeLanded,
 			Callback: core.CallbackOnSpellHitDealt,
 			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-				aura := core.Ternary(spell.ProcMask.Matches(core.ProcMaskSpellDamage), casterAura, meleeAura)
-				aura.Activate(sim)
-				aura.AddStack(sim)
+				meleeAura.Activate(sim)
+				meleeAura.AddStack(sim)
+			},
+		})
+
+		casterProcAura := character.MakeProcTriggerAura(core.ProcTrigger{
+			Name:            "Darkmoon Card: Crusade (Caster)",
+			ActionID:        core.ActionID{SpellID: 39440},
+			ProcMask:        core.ProcMaskSpellOrSpellProc,
+			ClassSpellsOnly: true,
+			Outcome:         core.OutcomeLanded,
+			Callback:        core.CallbackOnSpellHitDealt,
+			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+				casterAura.Activate(sim)
+				casterAura.AddStack(sim)
 			},
 		})
 
 		eligibleSlots := character.ItemSwap.EligibleSlotsForItem(31856)
 		character.AddStatProcBuff(39438, meleeAura, false, eligibleSlots)
 		character.AddStatProcBuff(39441, casterAura, false, eligibleSlots)
-		character.ItemSwap.RegisterProc(31856, procAura)
+		character.ItemSwap.RegisterProc(31856, meleeProcAura)
+		character.ItemSwap.RegisterProc(31856, casterProcAura)
 	})
 
 	// Darkmoon Card: Wrath
