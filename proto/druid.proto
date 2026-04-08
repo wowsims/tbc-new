@@ -119,16 +119,22 @@ message FeralCatDruid {
 
 message FeralBearDruid {
   message Rotation {
-		bool maintain_faerie_fire = 1;
-		bool maintain_demoralizing_roar = 2;
-		double demo_time = 3;
-		double pulverize_time = 4;
-		bool prepull_stampede = 5;
+    bool maintain_faerie_fire = 1;
+    bool maintain_demoralizing_roar = 2;
+    int32 maul_rage_threshold = 3;
+
+    enum SwipeUsage {
+      SwipeUsage_Never = 0;
+      SwipeUsage_WithEnoughAP = 1;
+      SwipeUsage_Spam = 2;
+    }
+    SwipeUsage swipe_usage = 4;
+    int32 swipe_ap_threshold = 5;
   }
 
   message Options {
     DruidOptions class_options = 1;
-    Class symbiosis_target = 2;
+    double starting_rage = 2;
   }
   Options options = 3;
 }

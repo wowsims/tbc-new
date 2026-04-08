@@ -95,13 +95,6 @@ dps_results: {
  }
 }
 dps_results: {
- key: "TestBalance-AllItems-Biznicks247x128Accurascope-2523"
- value: {
-  dps: 1412.39069
-  tps: 1339.58641
- }
-}
-dps_results: {
  key: "TestBalance-AllItems-BlackenedNaaruSliver-34427"
  value: {
   dps: 1386.60943
@@ -270,7 +263,21 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestBalance-AllItems-IdolofBrutality-23198"
+ value: {
+  dps: 1378.07495
+  tps: 1305.27067
+ }
+}
+dps_results: {
  key: "TestBalance-AllItems-IdolofFeralShadows-28372"
+ value: {
+  dps: 1378.07495
+  tps: 1305.27067
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-IdolofTerror-33509"
  value: {
   dps: 1378.07495
   tps: 1305.27067
@@ -309,6 +316,13 @@ dps_results: {
  value: {
   dps: 1387.27891
   tps: 1314.47463
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-IdoloftheWhiteStag-32257"
+ value: {
+  dps: 1378.07495
+  tps: 1305.27067
  }
 }
 dps_results: {
@@ -482,6 +496,13 @@ dps_results: {
 }
 dps_results: {
  key: "TestBalance-AllItems-StabilitzedEterniumScope-2724"
+ value: {
+  dps: 1412.39069
+  tps: 1339.58641
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-StabilizedEterniumScope-2523"
  value: {
   dps: 1412.39069
   tps: 1339.58641

@@ -43,7 +43,7 @@ export const simLaunchStatuses: Record<Spec, SimStatus> = {
 	},
 	[Spec.SpecFeralBearDruid]: {
 		phase: Phase.Phase1,
-		status: LaunchStatus.Unlaunched,
+		status: LaunchStatus.Alpha,
 		oldSimLink: 'https://wowsims.github.io/tbc/feral_tank_druid/',
 	},
 	[Spec.SpecRestorationDruid]: {

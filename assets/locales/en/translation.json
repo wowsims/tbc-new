@@ -1822,6 +1822,33 @@
 						"label": "Maintain Faerie Fire",
 						"tooltip": "Use Faerie Fire (Feral) whenever it is not active on the target."
 					}
+				},
+				"feral_bear": {
+					"maul_rage_threshold": {
+						"label": "Maul Rage Threshold",
+						"tooltip": "Use Maul when current Rage is at or above this value."
+					},
+					"swipe_usage": {
+						"label": "Swipe Usage",
+						"tooltip": "When to use Swipe in the rotation.",
+						"values": {
+							"never": "Never",
+							"with_enough_ap": "With Enough AP",
+							"spam": "Spam"
+						}
+					},
+					"swipe_ap_threshold": {
+						"label": "Swipe AP Threshold",
+						"tooltip": "Minimum Attack Power required before Swipe is used in the rotation."
+					},
+					"maintain_demo_roar": {
+						"label": "Maintain Demo Roar",
+						"tooltip": "Keep Demoralizing Roar active on the primary target."
+					},
+					"maintain_faerie_fire": {
+						"label": "Maintain Faerie Fire",
+						"tooltip": "Use Faerie Fire (Feral) whenever it is not active on the target."
+					}
 				}
 			},
 			"guardian": {

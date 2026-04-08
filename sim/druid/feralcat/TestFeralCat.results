@@ -32,7 +32,7 @@ character_stats_results: {
   final_stats: 1213.51657
   final_stats: 0
   final_stats: 0
-  final_stats: 5862.8997
+  final_stats: 6065.2997
   final_stats: 406
   final_stats: 11724.758
   final_stats: 6921.3386
@@ -319,14 +319,6 @@ dps_results: {
  value: {
   dps: 705.63696
   tps: 501.00224
-  hps: 68.65497
- }
-}
-dps_results: {
- key: "TestFeralCat-AllItems-Biznicks247x128Accurascope-2523"
- value: {
-  dps: 703.38848
-  tps: 499.40582
   hps: 68.65497
  }
 }
@@ -795,7 +787,23 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestFeralCat-AllItems-IdolofBrutality-23198"
+ value: {
+  dps: 703.38848
+  tps: 499.40582
+  hps: 68.65497
+ }
+}
+dps_results: {
  key: "TestFeralCat-AllItems-IdolofFeralShadows-28372"
+ value: {
+  dps: 703.38848
+  tps: 499.40582
+  hps: 68.65497
+ }
+}
+dps_results: {
+ key: "TestFeralCat-AllItems-IdolofTerror-33509"
  value: {
   dps: 703.38848
   tps: 499.40582
@@ -836,6 +844,14 @@ dps_results: {
 }
 dps_results: {
  key: "TestFeralCat-AllItems-IdoloftheRavenGoddess-32387"
+ value: {
+  dps: 703.38848
+  tps: 499.40582
+  hps: 68.65497
+ }
+}
+dps_results: {
+ key: "TestFeralCat-AllItems-IdoloftheWhiteStag-32257"
  value: {
   dps: 703.38848
   tps: 499.40582
@@ -1236,6 +1252,14 @@ dps_results: {
 }
 dps_results: {
  key: "TestFeralCat-AllItems-StabilitzedEterniumScope-2724"
+ value: {
+  dps: 703.38848
+  tps: 499.40582
+  hps: 68.65497
+ }
+}
+dps_results: {
+ key: "TestFeralCat-AllItems-StabilizedEterniumScope-2523"
  value: {
   dps: 703.38848
   tps: 499.40582

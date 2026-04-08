@@ -3,7 +3,6 @@ package feralbear
 import (
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
-	"github.com/wowsims/tbc/sim/core/stats"
 	"github.com/wowsims/tbc/sim/druid"
 )
 
@@ -33,21 +32,20 @@ func NewFeralBearDruid(character *core.Character, options *proto.Player) *Guardi
 		Options: tankOptions.Options,
 	}
 
-	//bear.registerTreants()
-
 	bear.EnableEnergyBar(core.EnergyBarOptions{
-		MaxComboPoints:        5,
-		MaxEnergy:             100,
-		UnitClass:             proto.Class_ClassDruid,
-		HasHasteRatingScaling: true,
+		MaxComboPoints: 5,
+		MaxEnergy:      100,
+		UnitClass:      proto.Class_ClassDruid,
 	})
 	bear.EnableRageBar(core.RageBarOptions{
 		BaseRageMultiplier: 2.5,
+		StartingRage:       tankOptions.Options.GetStartingRage(),
 	})
 	bear.EnableAutoAttacks(bear, core.AutoAttackOptions{
 		// Base paw weapon.
 		MainHand:       bear.GetBearWeapon(),
 		AutoSwingMelee: true,
+		ReplaceMHSwing: bear.TryMaul,
 	})
 
 	bear.RegisterBearFormAura()
@@ -59,23 +57,8 @@ func NewFeralBearDruid(character *core.Character, options *proto.Player) *Guardi
 type GuardianDruid struct {
 	*druid.Druid
 
-	Options *proto.FeralBearDruid_Options
-
-	// Aura references
-	DreamOfCenariusAura      *core.Aura
-	EnrageAura               *core.Aura
-	HeartOfTheWildAura       *core.Aura
-	ImprovedRegenerationAura *core.Aura
-	SavageDefenseAura        *core.Aura
-	SonOfUrsocAura           *core.Aura
-	ToothAndClawBuff         *core.Aura
-	ToothAndClawDebuffs      core.AuraArray
-
-	// Spell references
-	Enrage         *druid.DruidSpell
-	HeartOfTheWild *druid.DruidSpell
-	SavageDefense  *druid.DruidSpell
-	SonOfUrsoc     *druid.DruidSpell
+	Options      *proto.FeralBearDruid_Options
+	BearRotation BearRotation
 }
 
 func (bear *GuardianDruid) GetDruid() *druid.Druid {
@@ -87,50 +70,22 @@ func (bear *GuardianDruid) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
 
 func (bear *GuardianDruid) ApplyTalents() {
 	bear.Druid.ApplyTalents()
-	bear.applySpecTalents()
-	//bear.applyMastery()
-	bear.applyThickHide()
-
-	// MoP Classic balancing
-	bear.BearFormAura.AttachMultiplicativePseudoStatBuff(&bear.PseudoStats.DamageDealtMultiplier, 1.15)
 }
 
-func (bear *GuardianDruid) applyThickHide() {
-	// Back out the additional multiplier needed to reach 4.3x total (+330%)
-	const thickHideBearMulti = 4.3 / druid.BaseBearArmorMulti
-	bear.BearFormAura.ApplyOnGain(func(_ *core.Aura, sim *core.Simulation) {
-		bear.ApplyDynamicEquipScaling(sim, stats.Armor, thickHideBearMulti)
-	})
-	bear.BearFormAura.ApplyOnExpire(func(_ *core.Aura, sim *core.Simulation) {
-		bear.RemoveDynamicEquipScaling(sim, stats.Armor, thickHideBearMulti)
-	})
-	bear.ApplyEquipScaling(stats.Armor, thickHideBearMulti)
+// Bear druids do not proc Windfury Totem. Strip the aura so the sim never
+// registers WF procs, while keeping TotemTwisting intact so that Grace of
+// Air receives the correct ~90% uptime when twisting is enabled.
+func (bear *GuardianDruid) AddPartyBuffs(partyBuffs *proto.PartyBuffs) {
+	partyBuffs.WindfuryTotem = proto.TristateEffect_TristateEffectMissing
+}
 
-	// Magical DR
-	bear.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexArcane] *= 0.75
-	bear.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexFire] *= 0.75
-	bear.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexFrost] *= 0.75
-	bear.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexHoly] *= 0.75
-	bear.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexNature] *= 0.75
-	bear.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexShadow] *= 0.75
-
-	// Physical DR
-	bear.PseudoStats.SchoolDamageTakenMultiplier[stats.SchoolIndexPhysical] *= 0.88
+func (bear *GuardianDruid) ApplyTalents() {
+	bear.Druid.ApplyFeralTalents()
 }
 
 func (bear *GuardianDruid) Initialize() {
 	bear.Druid.Initialize()
 	bear.RegisterFeralTankSpells()
-	// bear.registerEnrageSpell()
-	// bear.registerSavageDefenseSpell()
-	// bear.registerToothAndClawPassive()
-	// bear.ApplyPrimalFury()
-	// bear.ApplyLeaderOfThePack()
-	// bear.ApplyNurturingInstinct()
-	// bear.registerSymbiosis()
-}
-
-func (bear *GuardianDruid) registerSymbiosis() {
 }
 
 func (bear *GuardianDruid) Reset(sim *core.Simulation) {

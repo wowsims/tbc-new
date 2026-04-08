@@ -37,6 +37,7 @@ func (druid *Druid) ApplyTalents() {
 	druid.applyFerocity()
 	druid.applyFeralAggression()
 	druid.applyFeralInstincts()
+	druid.applyThickHide()
 	druid.applyFeralSwiftness()
 	druid.applySharpenedClaws()
 	druid.applyShreddingAttacks()
@@ -56,6 +57,18 @@ func (druid *Druid) ApplyTalents() {
 	druid.applyOmenOfClarity()
 	druid.applyLivingSpirit()
 	druid.applyNaturalPerfection()
+}
+
+// applyThickHide increases armor contribution from items by 4/7/10% (ranks 1/2/3).
+// Applies as a static equip scaling — works correctly in humanoid/cat (10%) and bear (5x * 1.1 = 5.5x total).
+func (druid *Druid) applyThickHide() {
+	if druid.Talents.ThickHide == 0 {
+		return
+	}
+
+	bonusByRank := [3]float64{0.04, 0.07, 0.10}
+	bonus := bonusByRank[druid.Talents.ThickHide-1]
+	druid.ApplyEquipScaling(stats.Armor, 1.0+bonus)
 }
 
 func (druid *Druid) applyForceOfNature() {

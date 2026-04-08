@@ -22,7 +22,7 @@ const AnimalSpiritRegenSuppression = 0.911337
 
 // Thick Hide contribution handled separately in talents code for cleanliness
 // and UI stats display.
-const BaseBearArmorMulti = 2.2
+const BaseBearArmorMulti = 5.0
 
 func (form DruidForm) Matches(other DruidForm) bool {
 	return (form & other) != 0
@@ -194,7 +194,7 @@ func (druid *Druid) registerCatFormSpell() {
 }
 
 func (druid *Druid) RegisterBearFormAura() {
-	actionID := core.ActionID{SpellID: 5487}
+	actionID := core.ActionID{SpellID: 9634} // Dire Bear Form
 	healthMetrics := druid.NewHealthMetrics(actionID)
 
 	statBonus := stats.Stats{
@@ -203,10 +203,7 @@ func (druid *Druid) RegisterBearFormAura() {
 
 	strApDep := druid.NewDynamicStatDependency(stats.Strength, stats.AttackPower, 1)
 	feralApDep := druid.NewDynamicStatDependency(stats.FeralAttackPower, stats.AttackPower, 1)
-	stamDep := druid.NewDynamicMultiplyStat(stats.Stamina, 1.4)
-	critDep := druid.NewDynamicMultiplyStat(stats.MeleeCritRating, 1.5)
-	hasteDep := druid.NewDynamicMultiplyStat(stats.MeleeHasteRating, 1.5)
-
+	stamDep := druid.NewDynamicMultiplyStat(stats.Stamina, 1.25)
 	// Talent: Heart of the Wild — +4% Stamina per rank while in Bear form.
 	var hotWBearStamDep *stats.StatDependency
 	if druid.Talents.HeartOfTheWild > 0 {
@@ -232,10 +229,9 @@ func (druid *Druid) RegisterBearFormAura() {
 
 			druid.AddStatsDynamic(sim, statBonus)
 			druid.ApplyDynamicEquipScaling(sim, stats.Armor, BaseBearArmorMulti)
+			druid.ApplyDynamicEquipScaling(sim, stats.BonusArmor, BaseBearArmorMulti)
 			druid.EnableBuildPhaseStatDep(sim, strApDep)
 			druid.EnableBuildPhaseStatDep(sim, feralApDep)
-			druid.EnableBuildPhaseStatDep(sim, critDep)
-			druid.EnableBuildPhaseStatDep(sim, hasteDep)
 
 			// Preserve fraction of max health when shifting
 			healthFrac := druid.CurrentHealth() / druid.MaxHealth()
@@ -259,10 +255,9 @@ func (druid *Druid) RegisterBearFormAura() {
 
 			druid.AddStatsDynamic(sim, statBonus.Invert())
 			druid.RemoveDynamicEquipScaling(sim, stats.Armor, BaseBearArmorMulti)
+			druid.RemoveDynamicEquipScaling(sim, stats.BonusArmor, BaseBearArmorMulti)
 			druid.DisableBuildPhaseStatDep(sim, strApDep)
 			druid.DisableBuildPhaseStatDep(sim, feralApDep)
-			druid.DisableBuildPhaseStatDep(sim, critDep)
-			druid.DisableBuildPhaseStatDep(sim, hasteDep)
 
 			healthFrac := druid.CurrentHealth() / druid.MaxHealth()
 			druid.DisableBuildPhaseStatDep(sim, stamDep)
@@ -281,7 +276,7 @@ func (druid *Druid) RegisterBearFormAura() {
 }
 
 func (druid *Druid) registerBearFormSpell() {
-	actionID := core.ActionID{SpellID: 5487}
+	actionID := core.ActionID{SpellID: 9634} // Dire Bear Form
 	rageMetrics := druid.NewRageMetrics(actionID)
 
 	druid.BearForm = druid.RegisterSpell(Any, core.SpellConfig{

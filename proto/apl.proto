@@ -88,6 +88,7 @@ message APLAction {
 
         // Class or Spec-specific actions
         APLActionCatOptimalRotationAction cat_optimal_rotation_action = 18;
+        APLActionBearOptimalRotationAction bear_optimal_rotation_action = 30;
         APLActionGuardianHotwDpsRotation guardian_hotw_dps_rotation = 27;
 		APLActionCastWarlockAssignedCurse cast_warlock_assigned_curse = 29;
 
@@ -374,6 +375,14 @@ message APLActionCatOptimalRotationAction {
     bool mangle_trick = 6;
     bool rake_trick = 7;
     bool maintain_faerie_fire = 8;
+}
+
+message APLActionBearOptimalRotationAction {
+    bool maintain_faerie_fire = 1;
+    bool maintain_demoralizing_roar = 2;
+    int32 maul_rage_threshold = 3;
+    FeralBearDruid.Rotation.SwipeUsage swipe_usage = 4;
+    int32 swipe_ap_threshold = 5;
 }
 
 message APLActionGuardianHotwDpsRotation {

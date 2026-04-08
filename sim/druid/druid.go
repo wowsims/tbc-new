@@ -32,11 +32,14 @@ type Druid struct {
 	IdolShredBonus         float64 // Everbloom Idol (29390): +88 flat to Shred
 	IdolRipBonus           float64 // Idol of Feral Shadows (28372): +7 per combo point per tick
 	IdolLacerateBonus      float64 // Idol of Ursoc (27744): +8 per tick per stack
+	IdolMaulBonus          float64 // Idol of Brutality (23198): +50 flat to Maul
+	IdolSwipeBonus         float64 // Idol of Brutality (23198): +10 flat to Swipe
 
 	MHAutoSpell *core.Spell
 
 	Barkskin             *DruidSpell
 	Dash                 *DruidSpell
+	DemoralizingRoar     *DruidSpell
 	FaerieFire           *DruidSpell
 	FaerieFireFeral      *DruidSpell
 	FerociousBite        *DruidSpell
@@ -71,6 +74,7 @@ type Druid struct {
 	ClearcastingAura         *core.Aura
 	DashAura                 *core.Aura
 	FrenziedRegenerationAura *core.Aura
+	DemoralizingRoarAuras    core.AuraArray
 	FaerieFireAuras          core.AuraArray
 	MangleAuras              core.AuraArray
 	MoonkinFormAura          *core.Aura
@@ -80,11 +84,17 @@ type Druid struct {
 	form DruidForm
 
 	IntensityEnrageRageBonus float64
+
+	// Maul queue (fires on next auto-attack swing, like warrior Heroic Strike)
+	maulQueueAura  *core.Aura
+	maulQueueSpell *core.Spell
+	maulRealismICD *core.Cooldown
 }
 
 const (
 	DruidSpellFlagNone        int64 = 0
 	DruidSpellEntanglingRoots int64 = 1 << iota
+	DruidSpellDemoralizingRoar
 	DruidSpellFaerieFire
 	DruidSpellFaerieFireFeral
 	DruidSpellForceOfNature
@@ -229,19 +239,13 @@ func (druid *Druid) RegisterFeralCatSpells() {
 func (druid *Druid) RegisterFeralTankSpells() {
 	druid.registerBearFormSpell()
 	druid.registerBarkskin()
-	// druid.registerBerserkCD()
-	// druid.registerCatFormSpell()
-	// druid.registerFrenziedRegenerationSpell()
-	// druid.registerMangleBearSpell()
-	// druid.registerMangleCatSpell()
-	// druid.registerMaulSpell()
-	// druid.registerMightOfUrsocCD()
-	//druid.registerLacerateSpell()
-	// druid.registerRakeSpell()
-	// druid.registerRipSpell()
-	// druid.registerSurvivalInstinctsCD()
-	// druid.registerSwipeBearSpell()
-	// druid.registerThrashBearSpell()
+	druid.registerDemoralizingRoarSpell()
+	druid.registerFaerieFireFeralSpell()
+	druid.registerFrenziedRegenerationSpell()
+	druid.registerLacerateSpell()
+	druid.registerMangleBearSpell()
+	druid.registerMaulSpell()
+	druid.registerSwipeBearSpell()
 }
 
 func (druid *Druid) Reset(_ *core.Simulation) {
@@ -275,6 +279,9 @@ func New(char *core.Character, form DruidForm, selfBuffs SelfBuffs, talents stri
 	druid.AddStatDependency(stats.BonusArmor, stats.Armor, 1)
 	druid.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiMaxLevel[char.Class])
 	druid.AddStatDependency(stats.Agility, stats.DodgeRating, 1.0/14.7059*core.DodgeRatingPerDodgePercent)
+
+	// TBC: Druids have a -1.87% base dodge correction to match in-game values.
+	druid.PseudoStats.BaseDodgeChance -= 0.0187
 
 	if druid.Talents.ForceOfNature {
 		druid.registerTreants()
