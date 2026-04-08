@@ -1822,62 +1822,6 @@
 						"label": "Maintain Faerie Fire",
 						"tooltip": "Use Faerie Fire (Feral) whenever it is not active on the target."
 					}
-				},
-				"feral": {
-					"target_type": {
-						"label": "Target Type",
-						"single_target": "Single Target",
-						"aoe": "AoE"
-					},
-					"bear_weave": {
-						"label": "Enable bear-weaving",
-						"tooltip": "Weave into Bear Form while pooling Energy"
-					},
-					"snek_weave": {
-						"label": "Use Albino Snake",
-						"tooltip": "Reset swing timer at the end of bear-weaves using Albino Snake pet"
-					},
-					"use_ns": {
-						"label": "Use Nature's Swiftness",
-						"tooltip": "Use Nature's Swiftness to fill gaps in Predatory Swiftness uptime"
-					},
-					"manual_params": {
-						"label": "Manual Advanced Parameters",
-						"tooltip": "Manually specify advanced parameters, otherwise will use preset defaults"
-					},
-					"hotw_strategy": {
-						"label": "Heart of the Wild usage",
-						"tooltip": "How to use Heart of the Wild",
-						"values": {
-							"passives_only": "Passives only",
-							"enhanced_bear_weaving": "Enhanced bear-weaving",
-							"wrath_weaving": "Wrath-weaving"
-						}
-					},
-					"allow_aoe_berserk": {
-						"label": "Allow AoE Berserk",
-						"tooltip": "Allow Berserk usage in AoE rotation"
-					},
-					"roar_offset": {
-						"label": "Roar Offset",
-						"tooltip": "Minimum offset gained between current Rip and new Roar to allow a Roar clip"
-					},
-					"rip_leeway": {
-						"label": "Rip Leeway",
-						"tooltip": "Minimum tolerated gap between current Rip and current Roar expiration times before kicking in emergency measures"
-					},
-					"bite_during_rotation": {
-						"label": "Bite during rotation",
-						"tooltip": "Use Bite during rotation rather than just for Rip maintenance during Execute"
-					},
-					"bite_time": {
-						"label": "Bite Time",
-						"tooltip": "Minimum seconds remaining before Rip or Roar should ideally be refreshed (including planned early clips) to allow a Bite"
-					},
-					"berserk_bite_time": {
-						"label": "Bite Time during Berserk",
-						"tooltip": "More aggressive threshold when Berserk is active"
-					}
 				}
 			},
 			"guardian": {
