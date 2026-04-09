@@ -58,8 +58,12 @@ var ItemSetMalorneHarness = core.NewItemSet(core.ItemSet{
 		// Increases your armor by 1400 in Bear Form and Dire Bear Form.
 		4: func(agent core.Agent, setBonusAura *core.Aura) {
 			druid := agent.(DruidAgent).GetDruid()
-			druid.CatFormAura.AttachStatsBuff(stats.Stats{stats.Strength: 30})
-			druid.BearFormAura.AttachStatsBuff(stats.Stats{stats.Armor: 1400})
+			if druid.CatFormAura != nil {
+				druid.CatFormAura.AttachStatsBuff(stats.Stats{stats.Strength: 30})
+			}
+			if druid.BearFormAura != nil {
+				druid.BearFormAura.AttachStatsBuff(stats.Stats{stats.Armor: 1400})
+			}
 		},
 	},
 })
