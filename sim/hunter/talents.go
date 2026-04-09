@@ -624,7 +624,7 @@ func (hunter *Hunter) registerMasterTactician() {
 		time.Second*8)
 
 	hunter.MakeProcTriggerAura(core.ProcTrigger{
-		Name:       "Master Tactician",
+		Name:       "Master Tactician Trigger",
 		Callback:   core.CallbackOnSpellHitDealt,
 		ProcMask:   core.ProcMaskRanged,
 		Outcome:    core.OutcomeLanded,
