@@ -284,13 +284,31 @@ func (mcdm *majorCooldownManager) GetInitialMajorCooldown(actionID ActionID) Maj
 }
 
 func (mcdm *majorCooldownManager) removeInitialMajorCooldown(actionID ActionID) {
-	// Use SameActionIgnoreTag so that all tagged variants sharing the same
-	// base spell (e.g. Berserking 10%/15%/20%/25%/30%) are removed when any
-	// one variant is manually cast in the APL.  These variants share a CD, so
-	// auto-casting one while the player controls another would be wrong.
-	// Iterate backwards to safely remove multiple entries in one pass.
+	// First, find and remove the exact match.
+	removedIdx := -1
+	var removedTimer *Timer
+	for i, mcd := range mcdm.initialMajorCooldowns {
+		if mcd.Spell.SameAction(actionID) {
+			removedTimer = mcd.Spell.CD.Timer
+			mcdm.initialMajorCooldowns = append(mcdm.initialMajorCooldowns[:i], mcdm.initialMajorCooldowns[i+1:]...)
+			mcdm.majorCooldowns = mcdm.majorCooldowns[:len(mcdm.majorCooldowns)-1]
+			removedIdx = i
+			break
+		}
+	}
+
+	if removedIdx < 0 || removedTimer == nil {
+		return
+	}
+
+	// Also remove any other MCDs that share the same CD timer pointer (e.g.
+	// Berserking 10%/15%/20%/25%/30% all share one timer).  This prevents
+	// auto-casting a different variant while the player controls one manually.
+	// Spells with independent timers (e.g. Bloodlust from different casters)
+	// are left alone.
 	for i := len(mcdm.initialMajorCooldowns) - 1; i >= 0; i-- {
-		if mcdm.initialMajorCooldowns[i].Spell.SameActionIgnoreTag(actionID) {
+		mcd := &mcdm.initialMajorCooldowns[i]
+		if mcd.Spell.CD.Timer == removedTimer && mcd.Spell.SameActionIgnoreTag(actionID) {
 			mcdm.initialMajorCooldowns = append(mcdm.initialMajorCooldowns[:i], mcdm.initialMajorCooldowns[i+1:]...)
 			mcdm.majorCooldowns = mcdm.majorCooldowns[:len(mcdm.majorCooldowns)-1]
 		}
