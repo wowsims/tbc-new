@@ -550,6 +550,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRogue-AllItems-Figurine-NightseyePanther-24128"
+ value: {
+  dps: 1843.82486
+  tps: 1309.11565
+ }
+}
+dps_results: {
  key: "TestRogue-AllItems-FigurineoftheColossus-27529"
  value: {
   dps: 1813.24487

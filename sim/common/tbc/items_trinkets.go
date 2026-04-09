@@ -47,6 +47,46 @@ func init() {
 		})
 	})
 
+	// Figurine - Nightseye Panther
+	// Use: Increases attack power by 320 for 12 sec. (3 Min Cooldown)
+	core.NewItemEffect(24128, func(agent core.Agent) {
+		character := agent.GetCharacter()
+		duration := time.Second * 12
+		aura := character.NewTemporaryStatsAura(
+			"Nightseye Panther",
+			core.ActionID{SpellID: 31047},
+			stats.Stats{stats.AttackPower: 320, stats.RangedAttackPower: 320},
+			duration,
+		)
+
+		spell := character.RegisterSpell(core.SpellConfig{
+			ActionID:    core.ActionID{ItemID: 24128},
+			SpellSchool: core.SpellSchoolPhysical,
+			ProcMask:    core.ProcMaskEmpty,
+
+			Cast: core.CastConfig{
+				CD: core.Cooldown{
+					Timer:    character.NewTimer(),
+					Duration: time.Minute * 3,
+				},
+				SharedCD: core.Cooldown{
+					Timer:    character.GetOffensiveTrinketCD(),
+					Duration: duration,
+				},
+			},
+
+			ApplyEffects: func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {
+				aura.Activate(sim)
+			},
+		})
+
+		character.AddMajorCooldown(core.MajorCooldown{
+			Spell:    spell,
+			Type:     core.CooldownTypeDPS,
+			BuffAura: aura,
+		})
+	})
+
 	// Figurine of the Colossus
 	core.NewItemEffect(27529, func(agent core.Agent) {
 		character := agent.GetCharacter()

@@ -522,6 +522,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestAffliction-AllItems-Figurine-NightseyePanther-24128"
+ value: {
+  dps: 1911.15344
+  tps: 1187.18385
+ }
+}
+dps_results: {
  key: "TestAffliction-AllItems-FigurineoftheColossus-27529"
  value: {
   dps: 1911.15344

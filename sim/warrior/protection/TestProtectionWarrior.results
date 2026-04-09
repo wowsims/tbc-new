@@ -701,6 +701,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestProtectionWarrior-AllItems-Figurine-NightseyePanther-24128"
+ value: {
+  dps: 743.82097
+  tps: 1373.40852
+  dtps: 1419.21608
+ }
+}
+dps_results: {
  key: "TestProtectionWarrior-AllItems-FigurineoftheColossus-27529"
  value: {
   dps: 734.61846

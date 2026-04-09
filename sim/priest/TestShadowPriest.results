@@ -508,6 +508,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestShadowPriest-AllItems-Figurine-NightseyePanther-24128"
+ value: {
+  dps: 1706.9972
+  tps: 1252.93743
+ }
+}
+dps_results: {
  key: "TestShadowPriest-AllItems-FigurineoftheColossus-27529"
  value: {
   dps: 1548.02985
