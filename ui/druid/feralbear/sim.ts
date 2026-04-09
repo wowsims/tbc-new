@@ -79,8 +79,8 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralBearDruid, {
 		})(),
 		other: Presets.OtherDefaults,
 		consumables: Presets.DefaultConsumables,
-		rotationType: APLRotationType.TypeSimple,
-		simpleRotation: Presets.DefaultSimpleRotation,
+		rotationType: APLRotationType.TypeAPL,
+		aplRotation: Presets.ROTATION_DEFAULT.rotation.rotation!,
 		talents: Presets.StandardTalents.data,
 		specOptions: Presets.DefaultOptions,
 		// Default encounter
@@ -148,6 +148,8 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralBearDruid, {
 		],
 	},
 	itemSwapSlots: [ItemSlot.ItemSlotTrinket1, ItemSlot.ItemSlotTrinket2, ItemSlot.ItemSlotMainHand, ItemSlot.ItemSlotRanged],
+	defaultBuild: Presets.MAGTHERIDON_PRESET_BUILD,
+
 	encounterPicker: {
 		showExecuteProportion: false,
 	},
@@ -169,7 +171,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralBearDruid, {
 	},
 
 	autoRotation: (_player: Player<Spec.SpecFeralBearDruid>): APLRotation => {
-		return APLRotation.create();
+		return Presets.ROTATION_DEFAULT.rotation.rotation!;
 	},
 
 	simpleRotation: (_player: Player<Spec.SpecFeralBearDruid>, simple: DruidRotation, _cooldowns: Cooldowns): APLRotation => {

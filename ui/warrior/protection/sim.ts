@@ -149,6 +149,8 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionWarrior, {
 		],
 	},
 	itemSwapSlots: [ItemSlot.ItemSlotTrinket1, ItemSlot.ItemSlotTrinket2, ItemSlot.ItemSlotMainHand, ItemSlot.ItemSlotOffHand],
+	defaultBuild: Presets.MAGTHERIDON_PRESET_BUILD,
+
 	encounterPicker: {
 		// Whether to include 'Execute DuratFion (%)' in the 'Encounter' section of the settings tab.
 		showExecuteProportion: false,
