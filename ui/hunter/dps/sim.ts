@@ -3,9 +3,10 @@ import * as other_inputs from '../../core/components/inputs/other_inputs';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui';
 import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
-import { APLRotation, APLRotation_Type, APLValueVariable, SimpleRotation } from '../../core/proto/apl';
-import { Cooldowns, Faction, HandType, ItemSlot, PseudoStat, Race, RotationType, Spec, Stat } from '../../core/proto/common';
+import { APLListItem, APLRotation, APLRotation_Type, APLValueVariable } from '../../core/proto/apl';
+import { Cooldowns, HandType, ItemSlot, PseudoStat, Spec, Stat } from '../../core/proto/common';
 import { StatCapType } from '../../core/proto/ui';
+import * as AplUtils from '../../core/proto_utils/apl_utils';
 import { StatCap, UnitStat } from '../../core/proto_utils/stats';
 import * as HunterInputs from './inputs';
 import * as Presets from './presets';
@@ -116,13 +117,47 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecHunter, {
 		rotations: [Presets.WeaveSimple, Presets.TurretSimple, Presets.DefaultRotation],
 		// Preset gear configurations that the user can quickly select.
 		builds: [
+			// Phase 1
 			Presets.P1_PRESET_BUILD_PRE_RAID,
-			Presets.P1_PRESET_BUILD_BM_2H,
-			Presets.P1_PRESET_BUILD_BM_DW,
-			Presets.P1_PRESET_BUILD_SV_2H,
-			Presets.P1_PRESET_BUILD_SV_DW,
+			Presets.P1_PRESET_BUILD_BM_2H_6P,
+			Presets.P1_PRESET_BUILD_BM_2H_9P,
+			Presets.P1_PRESET_BUILD_BM_DW_6P,
+			Presets.P1_PRESET_BUILD_BM_DW_9P,
+			Presets.P1_PRESET_BUILD_SV_2H_6P,
+			Presets.P1_PRESET_BUILD_SV_2H_9P,
+			Presets.P1_PRESET_BUILD_SV_DW_6P,
+			Presets.P1_PRESET_BUILD_SV_DW_9P,
+
+			// Phase 2
+			Presets.P2_PRESET_BUILD_BM_2H_6P,
+			Presets.P2_PRESET_BUILD_BM_2H_9P,
+			Presets.P2_PRESET_BUILD_BM_DW_6P,
+			Presets.P2_PRESET_BUILD_BM_DW_9P,
+			Presets.P2_PRESET_BUILD_SV_2H_6P,
+			Presets.P2_PRESET_BUILD_SV_DW_6P,
+
+			// Phase 3
+			Presets.P3_PRESET_BUILD_BM_2H_6P,
+			Presets.P3_PRESET_BUILD_BM_2H_9P,
+			Presets.P3_PRESET_BUILD_BM_DW_6P,
+			Presets.P3_PRESET_BUILD_BM_DW_9P,
+			Presets.P3_PRESET_BUILD_SV_2H_6P,
+			Presets.P3_PRESET_BUILD_SV_2H_9P,
+			Presets.P3_PRESET_BUILD_SV_DW_6P,
+			Presets.P3_PRESET_BUILD_SV_DW_9P,
+
+			// Phase 4
+			Presets.P4_PRESET_BUILD_BM_2H_6P,
+			Presets.P4_PRESET_BUILD_BM_2H_9P,
+			Presets.P4_PRESET_BUILD_BM_DW_6P,
+			Presets.P4_PRESET_BUILD_BM_DW_9P,
+			Presets.P4_PRESET_BUILD_SV_2H_6P,
+			Presets.P4_PRESET_BUILD_SV_2H_9P,
+			Presets.P4_PRESET_BUILD_SV_DW_6P,
+			Presets.P4_PRESET_BUILD_SV_DW_9P,
 		],
 		gear: [
+			// Phase 1
 			Presets.P1_PreRaid_GEARSET,
 			Presets.P1_BM_2H_6P_GEARSET,
 			Presets.P1_BM_2H_9P_GEARSET,
@@ -132,6 +167,34 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecHunter, {
 			Presets.P1_SV_2H_6P_GEARSET,
 			Presets.P1_SV_DW_3P_GEARSET,
 			Presets.P1_SV_DW_6P_GEARSET,
+
+			// Phase 2
+			Presets.P2_BM_2H_6P_GEARSET,
+			Presets.P2_BM_2H_9P_GEARSET,
+			Presets.P2_BM_DW_6P_GEARSET,
+			Presets.P2_BM_DW_9P_GEARSET,
+			Presets.P2_SV_2H_6P_GEARSET,
+			Presets.P2_SV_DW_6P_GEARSET,
+
+			// Phase 3
+			Presets.P3_BM_2H_6P_GEARSET,
+			Presets.P3_BM_2H_9P_GEARSET,
+			Presets.P3_BM_DW_6P_GEARSET,
+			Presets.P3_BM_DW_9P_GEARSET,
+			Presets.P3_SV_2H_6P_GEARSET,
+			Presets.P3_SV_2H_9P_GEARSET,
+			Presets.P3_SV_DW_6P_GEARSET,
+			Presets.P3_SV_DW_9P_GEARSET,
+
+			// Phase 4
+			Presets.P4_BM_2H_6P_GEARSET,
+			Presets.P4_BM_2H_9P_GEARSET,
+			Presets.P4_BM_DW_6P_GEARSET,
+			Presets.P4_BM_DW_9P_GEARSET,
+			Presets.P4_SV_2H_6P_GEARSET,
+			Presets.P4_SV_2H_9P_GEARSET,
+			Presets.P4_SV_DW_6P_GEARSET,
+			Presets.P4_SV_DW_9P_GEARSET,
 		],
 	},
 
@@ -149,6 +212,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecHunter, {
 	},
 
 	simpleRotation: (player: Player<Spec.SpecHunter>, simple: SpecRotation<Spec.SpecHunter>, cooldowns: Cooldowns): APLRotation => {
+		const actions = AplUtils.simpleCooldownActions(cooldowns);
 		const rotation = APLRotation.clone(Presets.DefaultRotation.rotation.rotation!);
 
 		const {
@@ -205,11 +269,15 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecHunter, {
 		rotation.valueVariables[6] = useArcaneValue;
 
 		return APLRotation.create({
-			simple: SimpleRotation.create({
-				cooldowns: Cooldowns.create(),
-			}),
 			prepullActions: rotation.prepullActions,
-			priorityList: rotation.priorityList,
+			priorityList: [
+				...actions.map(action =>
+					APLListItem.create({
+						action: action,
+					}),
+				),
+				...rotation.priorityList,
+			],
 			groups: rotation.groups,
 			valueVariables: rotation.valueVariables,
 		});

@@ -284,11 +284,15 @@ func (mcdm *majorCooldownManager) GetInitialMajorCooldown(actionID ActionID) Maj
 }
 
 func (mcdm *majorCooldownManager) removeInitialMajorCooldown(actionID ActionID) {
-	for i, mcd := range mcdm.initialMajorCooldowns {
-		if mcd.Spell.SameAction(actionID) {
+	// Use SameActionIgnoreTag so that all tagged variants sharing the same
+	// base spell (e.g. Berserking 10%/15%/20%/25%/30%) are removed when any
+	// one variant is manually cast in the APL.  These variants share a CD, so
+	// auto-casting one while the player controls another would be wrong.
+	// Iterate backwards to safely remove multiple entries in one pass.
+	for i := len(mcdm.initialMajorCooldowns) - 1; i >= 0; i-- {
+		if mcdm.initialMajorCooldowns[i].Spell.SameActionIgnoreTag(actionID) {
 			mcdm.initialMajorCooldowns = append(mcdm.initialMajorCooldowns[:i], mcdm.initialMajorCooldowns[i+1:]...)
 			mcdm.majorCooldowns = mcdm.majorCooldowns[:len(mcdm.majorCooldowns)-1]
-			return
 		}
 	}
 }

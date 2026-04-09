@@ -29,7 +29,7 @@ func (hunter *Hunter) registerRapidFireCD() {
 		},
 
 		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
-			return hunter.GCD.IsReady(sim)
+			return hunter.GCD.IsReady(sim) && !hunter.RapidFire.RelatedSelfBuff.IsActive()
 		},
 
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
@@ -46,5 +46,9 @@ func (hunter *Hunter) registerRapidFireCD() {
 	hunter.AddMajorCooldown(core.MajorCooldown{
 		Spell: hunter.RapidFire,
 		Type:  core.CooldownTypeDPS,
+
+		ShouldActivate: func(s *core.Simulation, c *core.Character) bool {
+			return !hunter.RapidFire.RelatedSelfBuff.IsActive()
+		},
 	})
 }

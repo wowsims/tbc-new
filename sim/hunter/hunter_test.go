@@ -35,7 +35,7 @@ func TestHunter(t *testing.T) {
 			Class:      proto.Class_ClassHunter,
 			Race:       proto.Race_RaceOrc,
 			OtherRaces: []proto.Race{proto.Race_RaceNightElf},
-			GearSet:    core.GetGearSet("../../ui/hunter/dps/gear_sets", "p1_bm_2h_6p"),
+			GearSet:    core.GetGearSet("../../ui/hunter/dps/gear_sets/phase_1/bm", "2h_6p"),
 			Talents:    DefaultBMTalents,
 			OtherTalentSets: []core.TalentsCombo{
 				{Label: "SV", Talents: DefaultSVTalents},

@@ -51,7 +51,6 @@ type Hunter struct {
 	AspectOfTheHawkAura  *core.Aura
 	AspectOfTheViperAura *core.Aura
 	GronnStalker2PcAura  *core.Aura
-	RapidFireAura        *core.Aura
 	TalonOfAlarAura      *core.Aura
 	TheBeastWithinAura   *core.Aura
 	quiverBonusAura      *core.Aura

@@ -17,7 +17,7 @@
 		"giftOfArthas": true,
 		"mangle": true,
 		"exposeArmor": "TristateEffectImproved",
-		"faerieFire": "TristateEffectImproved",
+		"faerieFire": "TristateEffectRegular",
 		"sunderArmor": true,
 		"curseOfRecklessness": true,
 		"huntersMark": "TristateEffectImproved",
@@ -31,8 +31,6 @@
 		"braidedEterniumChain": true,
 		"graceOfAirTotem": "TristateEffectImproved",
 		"strengthOfEarthTotem": "TristateEffectImproved",
-		"windfuryTotem": "TristateEffectImproved",
-		"totemTwisting": true,
 		"battleShout": "TristateEffectImproved",
 		"drums": 4
 	},
@@ -42,23 +40,23 @@
 		"class": "ClassHunter",
 		"equipment": {
 			"items": [
-				{ "id": 28275, "enchant": 3003, "gems": [30556, 32409] },
-				{ "id": 28343 },
-				{ "id": 27801, "enchant": 2986, "gems": [24028, 24028] },
-				{ "id": 29382, "enchant": 368 },
-				{ "id": 28228, "enchant": 2661, "gems": [24028, 24028, 30549] },
-				{ "id": 25697, "enchant": 1593, "gems": [30550] },
-				{ "id": 27474, "enchant": 2564, "gems": [24028, 24055] },
-				{ "id": 28750, "gems": [24028, 24028] },
-				{ "id": 28741, "enchant": 3012, "gems": [24028, 24028, 24028] },
-				{ "id": 28545, "enchant": 2657, "gems": [24028, 24028] },
-				{ "id": 28791 },
-				{ "id": 31277 },
-				{ "id": 29383 },
+				{ "id": 32235, "enchant": 3003, "gems": [32409, 32194] },
+				{ "id": 32591 },
+				{ "id": 31006, "enchant": 2986, "gems": [32194, 32194] },
+				{ "id": 32323, "enchant": 368 },
+				{ "id": 31004, "enchant": 2661, "gems": [32194, 32226, 32226] },
+				{ "id": 32324, "enchant": 1593, "gems": [32220] },
+				{ "id": 31001, "enchant": 2564, "gems": [32194] },
+				{ "id": 32346 },
+				{ "id": 31005, "enchant": 3012, "gems": [32194] },
+				{ "id": 32366, "enchant": 2657, "gems": [32194, 32220] },
+				{ "id": 29301 },
+				{ "id": 32497 },
+				{ "id": 32505 },
 				{ "id": 28830 },
-				{ "id": 28587, "enchant": 2670 },
-				{},
-				{ "id": 28772, "enchant": 2724 }
+				{ "id": 30901, "enchant": 3222 },
+				{ "id": 30881, "enchant": 3222 },
+				{ "id": 30906, "enchant": 2724 }
 			]
 		},
 		"consumables": {
@@ -70,6 +68,8 @@
 			"explosiveId": 30217,
 			"superSapper": true,
 			"goblinSapper": true,
+			"mhImbueId": 29453,
+			"ohImbueId": 29453,
 			"scrollAgi": true,
 			"scrollStr": true,
 			"petScrollAgi": true,
@@ -99,20 +99,20 @@
 			"options": {
 				"classOptions": {
 					"quiverBonus": "Speed15",
-					"ammo": "WardensArrow",
+					"ammo": "TimelessArrow",
 					"petType": "Ravager",
 					"petUptime": 1
 				}
 			}
 		},
-		"talentsString": "502-0550201205-333200023002223005103",
+		"talentsString": "522002005150122431051-0550201205",
 		"profession1": "Engineering",
 		"profession2": "Blacksmithing",
 		"cooldowns": {},
 		"rotation": {
 			"type": "TypeSimple",
 			"simple": {
-				"specRotationJson": "{\"meleeWeave\":true,\"timeToWeave\":400,\"useMulti\":true,\"useArcane\":true,\"viperStartManaPercent\":0.05,\"viperStopManaPercent\":0.25}",
+				"specRotationJson": "{\"timeToWeave\":400,\"useMulti\":true,\"useArcane\":true,\"viperStartManaPercent\":0.05,\"viperStopManaPercent\":0.25}",
 				"cooldowns": {}
 			}
 		},
