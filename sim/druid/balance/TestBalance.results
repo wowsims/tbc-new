@@ -298,6 +298,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestBalance-AllItems-JomGabbar-23570"
+ value: {
+  dps: 1395.90755
+  tps: 1323.2478
+ }
+}
+dps_results: {
  key: "TestBalance-AllItems-KhoriumScope-2723"
  value: {
   dps: 1421.88236

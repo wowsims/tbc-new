@@ -641,6 +641,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestArcane-AllItems-JomGabbar-23570"
+ value: {
+  dps: 1866.40586
+  tps: 1316.50823
+ }
+}
+dps_results: {
  key: "TestArcane-AllItems-KhoriumScope-2723"
  value: {
   dps: 1917.53688

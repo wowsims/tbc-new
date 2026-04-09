@@ -648,6 +648,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestDestruction-AllItems-JomGabbar-23570"
+ value: {
+  dps: 1834.90625
+  tps: 1602.09435
+ }
+}
+dps_results: {
  key: "TestDestruction-AllItems-KhoriumScope-2723"
  value: {
   dps: 1877.69609

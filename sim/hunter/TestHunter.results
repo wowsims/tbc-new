@@ -837,6 +837,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestHunter-AllItems-JomGabbar-23570"
+ value: {
+  dps: 3085.45068
+  tps: 2075.83657
+  dtps: 13.56956
+ }
+}
+dps_results: {
  key: "TestHunter-AllItems-KhoriumScope-2723"
  value: {
   dps: 3147.63907

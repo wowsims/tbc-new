@@ -1288,12 +1288,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		23570, // Jom Gabbar
-		[
-			"Increases attack power by 65 and an additional 65 every 2.0 sec. Lasts 20s.", // 29602 - https://www.wowhead.com/tbc/spell=29602
-		]
-	],
-	[
 		23587, // Mirren's Drinking Hat
 		[
 			"Reach into the hat for a drink.", // 29830 - https://www.wowhead.com/tbc/spell=29830

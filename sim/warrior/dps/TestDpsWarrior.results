@@ -765,6 +765,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestDpsWarrior-AllItems-JomGabbar-23570"
+ value: {
+  dps: 1955.47583
+  tps: 1477.83845
+  dtps: 7.2778
+ }
+}
+dps_results: {
  key: "TestDpsWarrior-AllItems-KhoriumScope-2723"
  value: {
   dps: 2005.73982

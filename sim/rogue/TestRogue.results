@@ -690,6 +690,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRogue-AllItems-JomGabbar-23570"
+ value: {
+  dps: 1842.75571
+  tps: 1308.35655
+ }
+}
+dps_results: {
  key: "TestRogue-AllItems-KhoriumScope-2723"
  value: {
   dps: 1864.704

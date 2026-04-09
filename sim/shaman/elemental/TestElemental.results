@@ -725,6 +725,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestElemental-AllItems-JomGabbar-23570"
+ value: {
+  dps: 1709.82659
+  tps: 1392.90221
+ }
+}
+dps_results: {
  key: "TestElemental-AllItems-KhoriumScope-2723"
  value: {
   dps: 1792.41642

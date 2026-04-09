@@ -725,6 +725,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRetribution-AllItems-JomGabbar-23570"
+ value: {
+  dps: 1755.53168
+  tps: 1379.06234
+ }
+}
+dps_results: {
  key: "TestRetribution-AllItems-JusticarBattlegear"
  value: {
   dps: 1631.0192
