@@ -3,9 +3,10 @@ import * as other_inputs from '../../core/components/inputs/other_inputs';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui';
 import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
-import { APLRotation, APLRotation_Type, APLValueVariable, SimpleRotation } from '../../core/proto/apl';
-import { Cooldowns, Faction, HandType, ItemSlot, PseudoStat, Race, RotationType, Spec, Stat } from '../../core/proto/common';
+import { APLListItem, APLRotation, APLRotation_Type, APLValueVariable } from '../../core/proto/apl';
+import { Cooldowns, HandType, ItemSlot, PseudoStat, Spec, Stat } from '../../core/proto/common';
 import { StatCapType } from '../../core/proto/ui';
+import * as AplUtils from '../../core/proto_utils/apl_utils';
 import { StatCap, UnitStat } from '../../core/proto_utils/stats';
 import * as HunterInputs from './inputs';
 import * as Presets from './presets';
@@ -212,6 +213,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecHunter, {
 	},
 
 	simpleRotation: (player: Player<Spec.SpecHunter>, simple: SpecRotation<Spec.SpecHunter>, cooldowns: Cooldowns): APLRotation => {
+		const actions = AplUtils.simpleCooldownActions(cooldowns);
 		const rotation = APLRotation.clone(Presets.DefaultRotation.rotation.rotation!);
 
 		const {
@@ -268,11 +270,15 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecHunter, {
 		rotation.valueVariables[6] = useArcaneValue;
 
 		return APLRotation.create({
-			simple: SimpleRotation.create({
-				cooldowns: Cooldowns.create(),
-			}),
 			prepullActions: rotation.prepullActions,
-			priorityList: rotation.priorityList,
+			priorityList: [
+				...actions.map(action =>
+					APLListItem.create({
+						action: action,
+					}),
+				),
+				...rotation.priorityList,
+			],
 			groups: rotation.groups,
 			valueVariables: rotation.valueVariables,
 		});
