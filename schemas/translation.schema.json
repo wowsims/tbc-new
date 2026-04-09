@@ -6367,10 +6367,60 @@
 									},
 									"additionalProperties": false,
 									"required": ["finishing_move", "biteweave", "ripweave", "rip_min_combo_points", "bite_min_combo_points", "mangle_trick", "rake_trick", "maintain_faerie_fire"]
+								},
+								"feral_bear": {
+									"type": "object",
+									"properties": {
+										"maul_rage_threshold": {
+											"type": "object",
+											"properties": {"label": {"type": "string"}, "tooltip": {"type": "string"}},
+											"additionalProperties": false,
+											"required": ["label", "tooltip"]
+										},
+										"swipe_usage": {
+											"type": "object",
+											"properties": {
+												"label": {"type": "string"},
+												"tooltip": {"type": "string"},
+												"values": {
+													"type": "object",
+													"properties": {
+														"never": {"type": "string"},
+														"with_enough_ap": {"type": "string"},
+														"spam": {"type": "string"}
+													},
+													"additionalProperties": false,
+													"required": ["never", "with_enough_ap", "spam"]
+												}
+											},
+											"additionalProperties": false,
+											"required": ["label", "tooltip", "values"]
+										},
+										"swipe_ap_threshold": {
+											"type": "object",
+											"properties": {"label": {"type": "string"}, "tooltip": {"type": "string"}},
+											"additionalProperties": false,
+											"required": ["label", "tooltip"]
+										},
+										"maintain_demo_roar": {
+											"type": "object",
+											"properties": {"label": {"type": "string"}, "tooltip": {"type": "string"}},
+											"additionalProperties": false,
+											"required": ["label", "tooltip"]
+										},
+										"maintain_faerie_fire": {
+											"type": "object",
+											"properties": {"label": {"type": "string"}, "tooltip": {"type": "string"}},
+											"additionalProperties": false,
+											"required": ["label", "tooltip"]
+										}
+									},
+									"additionalProperties": false,
+									"required": ["maul_rage_threshold", "swipe_usage", "swipe_ap_threshold", "maintain_demo_roar", "maintain_faerie_fire"]
 								}
 							},
 							"additionalProperties": false,
-							"required": ["feral_cat"]
+							"required": ["feral_cat", "feral_bear"]
 						},
 						"guardian": {
 							"type": "object",
