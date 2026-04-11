@@ -192,7 +192,9 @@ func (paladin *Paladin) ApplyTalents() {
 	}
 
 	// Improved Holy Shield (Tier 8) - Increases damage caused by Holy Shield by 10/20% and increases the number of charges by 2/4
-	// TODO: Implement when Holy Shield is added
+	if paladin.Talents.HolyShield && paladin.Talents.ImprovedHolyShield > 0 {
+		paladin.applyImprovedHolyShield()
+	}
 
 	// Ardent Defender (Tier 8) - When you have less than 35% health, all damage taken is reduced by 6/12/18/24/30%
 	if paladin.Talents.ArdentDefender > 0 {
@@ -403,6 +405,16 @@ func (paladin *Paladin) applySacredDuty() {
 // One-Handed Weapon Specialization - Increases all damage you deal when a one-handed melee weapon is equipped by 1/2/3/4/5%
 func (paladin *Paladin) applyOneHandedWeaponSpecialization() {
 	// TODO: Implement damage modifier for one-handed weapons
+}
+
+// Improved Holy Shield - Increases damage caused by Holy Shield by 10/20% and increases the number of charges by 2/4
+func (paladin *Paladin) applyImprovedHolyShield() {
+	// Number of charges handled in holy_shield.go
+	paladin.AddStaticMod(core.SpellModConfig{
+		Kind:       core.SpellMod_DamageDone_Pct,
+		ClassMask:  SpellMaskHolyShieldProc,
+		FloatValue: 0.1 * float64(paladin.Talents.ImprovedHolyShield),
+	})
 }
 
 // Ardent Defender - When you have less than 35% health, all damage taken is reduced by 6/12/18/24/30%
