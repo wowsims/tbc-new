@@ -291,6 +291,20 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRetribution-AllItems-BrutalGladiator'sLibramofFortitude-35039"
+ value: {
+  dps: 1810.3527
+  tps: 1420.73596
+ }
+}
+dps_results: {
+ key: "TestRetribution-AllItems-BrutalGladiator'sLibramofVengeance-35041"
+ value: {
+  dps: 1810.3527
+  tps: 1420.73596
+ }
+}
+dps_results: {
  key: "TestRetribution-AllItems-BulwarkofKings-28484"
  value: {
   dps: 1811.88389
@@ -613,6 +627,20 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRetribution-AllItems-Gladiator'sLibramofFortitude-33936"
+ value: {
+  dps: 1810.3527
+  tps: 1420.73596
+ }
+}
+dps_results: {
+ key: "TestRetribution-AllItems-Gladiator'sLibramofVengeance-33948"
+ value: {
+  dps: 1810.3527
+  tps: 1420.73596
+ }
+}
+dps_results: {
  key: "TestRetribution-AllItems-GlowingCrystalInsignia-25619"
  value: {
   dps: 1736.02976
@@ -760,6 +788,76 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRetribution-AllItems-LibramofDivineJudgement-33503"
+ value: {
+  dps: 1810.3527
+  tps: 1420.73596
+ }
+}
+dps_results: {
+ key: "TestRetribution-AllItems-LibramofDivinePurpose-33504"
+ value: {
+  dps: 1810.3527
+  tps: 1420.73596
+ }
+}
+dps_results: {
+ key: "TestRetribution-AllItems-LibramofFervor-23203"
+ value: {
+  dps: 1815.14929
+  tps: 1424.09358
+ }
+}
+dps_results: {
+ key: "TestRetribution-AllItems-LibramofHope-22401"
+ value: {
+  dps: 1810.3527
+  tps: 1419.89642
+ }
+}
+dps_results: {
+ key: "TestRetribution-AllItems-LibramofRepentance-29388"
+ value: {
+  dps: 1810.3527
+  tps: 1420.73596
+ }
+}
+dps_results: {
+ key: "TestRetribution-AllItems-LibramofRighteousPower-31033"
+ value: {
+  dps: 1818.70069
+  tps: 1426.57956
+ }
+}
+dps_results: {
+ key: "TestRetribution-AllItems-LibramofWracking-28065"
+ value: {
+  dps: 1810.3527
+  tps: 1420.73596
+ }
+}
+dps_results: {
+ key: "TestRetribution-AllItems-LibramofZeal-27949"
+ value: {
+  dps: 1817.18421
+  tps: 1425.51802
+ }
+}
+dps_results: {
+ key: "TestRetribution-AllItems-LibramofZeal-27983"
+ value: {
+  dps: 1817.18421
+  tps: 1425.51802
+ }
+}
+dps_results: {
+ key: "TestRetribution-AllItems-LibramoftheEternalRest-27917"
+ value: {
+  dps: 1810.3527
+  tps: 1420.73596
+ }
+}
+dps_results: {
  key: "TestRetribution-AllItems-LionheartExecutioner-28430"
  value: {
   dps: 1889.18264
@@ -799,6 +897,20 @@ dps_results: {
  value: {
   dps: 1734.20559
   tps: 1362.12595
+ }
+}
+dps_results: {
+ key: "TestRetribution-AllItems-MercilessGladiator'sLibramofFortitude-33937"
+ value: {
+  dps: 1810.3527
+  tps: 1420.73596
+ }
+}
+dps_results: {
+ key: "TestRetribution-AllItems-MercilessGladiator'sLibramofVengeance-33949"
+ value: {
+  dps: 1810.3527
+  tps: 1420.73596
  }
 }
 dps_results: {
@@ -1192,6 +1304,20 @@ dps_results: {
  value: {
   dps: 1732.24443
   tps: 1360.76357
+ }
+}
+dps_results: {
+ key: "TestRetribution-AllItems-VengefulGladiator'sLibramofFortitude-33938"
+ value: {
+  dps: 1810.3527
+  tps: 1420.73596
+ }
+}
+dps_results: {
+ key: "TestRetribution-AllItems-VengefulGladiator'sLibramofVengeance-33950"
+ value: {
+  dps: 1810.3527
+  tps: 1420.73596
  }
 }
 dps_results: {

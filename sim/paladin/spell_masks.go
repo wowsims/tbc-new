@@ -63,6 +63,7 @@ const (
 	SpellMaskDivineIllumination
 	SpellMaskHolyShock
 	SpellMaskHolyShield
+	SpellMaskHolyShieldProc
 	SpellMaskAvengersShield
 	SpellMaskCrusaderStrike
 	SpellMaskRepentance

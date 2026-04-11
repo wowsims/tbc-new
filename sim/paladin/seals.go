@@ -558,7 +558,7 @@ func (paladin *Paladin) registerSealOfTheCrusader(seal seal) {
 	flatBonus := 0.0
 	if paladin.Ranged().ID == 23203 { //https://www.wowhead.com/tbc/item=23203/libram-of-fervor
 		flatBonus += 33.0
-	} else if paladin.Ranged().ID == 27949 { //https://www.wowhead.com/tbc/item=27949/libram-of-zeal
+	} else if paladin.Ranged().ID == 27949 || paladin.Ranged().ID == 27983 { //https://www.wowhead.com/tbc/item=27949/libram-of-zeal
 		flatBonus += 47.0
 	}
 
@@ -614,6 +614,7 @@ func (paladin *Paladin) registerSealOfTheCrusader(seal seal) {
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
 			paladin.applySeal(aura, spell, judgeSpell, sim)
 		},
+		RelatedSelfBuff: aura,
 	})
 	paladin.addSealRank(&paladin.SealOfTheCrusader, &paladin.SealOfTheCrusaderJudgements, &paladin.SealOfTheCrusaderAuras, sealSpell, judgeSpell, aura)
 }
