@@ -382,6 +382,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRetribution-AllItems-CrystalforgeBattlegear"
+ value: {
+  dps: 1664.306
+  tps: 1308.62785
+  hps: 1.27724
+ }
+}
+dps_results: {
  key: "TestRetribution-AllItems-CrystalforgedTrinket-32654"
  value: {
   dps: 1747.4405
@@ -855,6 +863,13 @@ dps_results: {
  value: {
   dps: 1810.3527
   tps: 1420.73596
+ }
+}
+dps_results: {
+ key: "TestRetribution-AllItems-LightbringerBattlegear"
+ value: {
+  dps: 1861.26126
+  tps: 1467.50914
  }
 }
 dps_results: {
