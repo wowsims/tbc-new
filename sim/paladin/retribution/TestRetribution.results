@@ -866,6 +866,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRetribution-AllItems-LightbringerBattlegear"
+ value: {
+  dps: 1861.26126
+  tps: 1467.50914
+ }
+}
+dps_results: {
  key: "TestRetribution-AllItems-LionheartExecutioner-28430"
  value: {
   dps: 1889.18264

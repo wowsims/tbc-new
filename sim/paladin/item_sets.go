@@ -70,3 +70,35 @@ var ItemSetCrystalforgeBattlegear = core.NewItemSet(core.ItemSet{
 		},
 	},
 })
+
+// T6 Ret - Lightbringer Battlegear
+// (2) Set: Your melee attacks have a chance to grant you 50 mana.
+// (4) Set: Increases the damage dealt by your Hammer of Wrath ability by 10%.
+var ItemSetLightbringerBattlegear = core.NewItemSet(core.ItemSet{
+	ID:   680,
+	Name: "Lightbringer Battlegear",
+	Bonuses: map[int32]core.ApplySetBonus{
+		2: func(agent core.Agent, setBonusAura *core.Aura) {
+			paladin := agent.(PaladinAgent).GetPaladin()
+			manaMetrics := paladin.NewManaMetrics(core.ActionID{SpellID: 38428})
+
+			setBonusAura.AttachProcTrigger(core.ProcTrigger{
+				Name:       "Mana Regen Proc",
+				Callback:   core.CallbackOnSpellHitDealt,
+				ProcMask:   core.ProcMaskMelee,
+				ProcChance: 0.20,
+
+				Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+					paladin.AddMana(sim, 50, manaMetrics)
+				},
+			}).ExposeToAPL(38427)
+		},
+		4: func(agent core.Agent, setBonusAura *core.Aura) {
+			setBonusAura.AttachSpellMod(core.SpellModConfig{
+				Kind:       core.SpellMod_DamageDone_Flat,
+				ClassMask:  SpellMaskHammerOfWrath,
+				FloatValue: 0.10,
+			}).ExposeToAPL(38424)
+		},
+	},
+})
