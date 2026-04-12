@@ -23,7 +23,6 @@ import {
 	Profession,
 	PseudoStat,
 	RangedWeaponType,
-	Spec,
 	Stat,
 	UnitReference,
 	UnitReference_Type as UnitType,
@@ -644,10 +643,7 @@ export class Sim {
 	}
 
 	getShowHealingMetrics(): boolean {
-		return (
-			this.showHealingMetrics ||
-			(this.showThreatMetrics && [Spec.SpecFeralBearDruid, Spec.SpecProtectionPaladin].includes(this.raid.getPlayer(0)?.playerSpec.specID))
-		);
+		return this.showHealingMetrics;
 	}
 	setShowHealingMetrics(eventID: EventID, newShowHealingMetrics: boolean) {
 		if (newShowHealingMetrics != this.showHealingMetrics) {

@@ -5,6 +5,8 @@ import (
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
+const auraEffectCategory = "PaladinAura"
+
 func (paladin *Paladin) registerAuras() {
 	paladin.registerDevotionAura()
 	paladin.registerRetributionAura()
@@ -17,10 +19,20 @@ func (paladin *Paladin) registerAuras() {
 // Devotion Aura
 // https://www.wowhead.com/tbc/spell=27149
 //
-// Gives additional armor to party members within 30 yards.
+// Gives 861 additional armor to party members within 30 yards.
+// Improved Devotion Aura talent increases the armor bonus by up to 40%.
 // Players may only have one Aura on them per Paladin at any one time.
 func (paladin *Paladin) registerDevotionAura() {
 	actionID := core.ActionID{SpellID: 27149}
+	armorBuff := 861.0 * (1 + 0.08*float64(paladin.Talents.ImprovedDevotionAura))
+
+	aura := paladin.RegisterAura(core.Aura{
+		Label:    "Devotion Aura" + paladin.Label,
+		ActionID: actionID,
+		Duration: core.NeverExpires,
+	}).AttachStatBuff(stats.BonusArmor, armorBuff)
+
+	aura.NewExclusiveEffect(auraEffectCategory, true, core.ExclusiveEffect{})
 
 	paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
@@ -29,9 +41,6 @@ func (paladin *Paladin) registerDevotionAura() {
 		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
 		ClassSpellMask: SpellMaskDevotionAura,
 
-		DamageMultiplier: 1,
-		ThreatMultiplier: 1,
-
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD: core.GCDDefault,
@@ -39,7 +48,7 @@ func (paladin *Paladin) registerDevotionAura() {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			// TODO: Implement aura activation
+			aura.Activate(sim)
 		},
 	})
 }
@@ -47,10 +56,43 @@ func (paladin *Paladin) registerDevotionAura() {
 // Retribution Aura
 // https://www.wowhead.com/tbc/spell=27150
 //
-// Causes Holy damage to any creature that strikes a party member within 30 yards.
+// Causes 26 Holy damage to any creature that strikes a party member within 30 yards.
+// Improved Retribution Aura talent increases damage by up to 50%.
 // Players may only have one Aura on them per Paladin at any one time.
 func (paladin *Paladin) registerRetributionAura() {
 	actionID := core.ActionID{SpellID: 27150}
+	impRetAuraMultiplier := 1 + 0.25*float64(paladin.Talents.ImprovedRetributionAura)
+
+	procSpell := paladin.RegisterSpell(core.SpellConfig{
+		ActionID:    actionID,
+		SpellSchool: core.SpellSchoolHoly,
+		ProcMask:    core.ProcMaskEmpty,
+		Flags:       core.SpellFlagBinary | core.SpellFlagPassiveSpell,
+
+		DamageMultiplier: 1,
+		ThreatMultiplier: 1,
+
+		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+			spell.CalcAndDealDamage(sim, target, 26*impRetAuraMultiplier, spell.OutcomeAlwaysHit)
+		},
+	})
+
+	aura := paladin.RegisterAura(core.Aura{
+		Label:    "Retribution Aura" + paladin.Label,
+		ActionID: actionID,
+		Duration: core.NeverExpires,
+	}).AttachProcTrigger(core.ProcTrigger{
+		Name:     "Retribution Aura Damage",
+		Callback: core.CallbackOnSpellHitTaken,
+		Outcome:  core.OutcomeLanded,
+		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+			if spell.SpellSchool == core.SpellSchoolPhysical {
+				procSpell.Cast(sim, spell.Unit)
+			}
+		},
+	})
+
+	aura.NewExclusiveEffect(auraEffectCategory, true, core.ExclusiveEffect{})
 
 	paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
@@ -59,9 +101,6 @@ func (paladin *Paladin) registerRetributionAura() {
 		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
 		ClassSpellMask: SpellMaskRetributionAura,
 
-		DamageMultiplier: 1,
-		ThreatMultiplier: 1,
-
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD: core.GCDDefault,
@@ -69,7 +108,7 @@ func (paladin *Paladin) registerRetributionAura() {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			// TODO: Implement aura activation
+			aura.Activate(sim)
 		},
 	})
 }
@@ -82,15 +121,20 @@ func (paladin *Paladin) registerRetributionAura() {
 func (paladin *Paladin) registerConcentrationAura() {
 	actionID := core.ActionID{SpellID: 19746}
 
+	aura := paladin.RegisterAura(core.Aura{
+		Label:    "Concentration Aura" + paladin.Label,
+		ActionID: actionID,
+		Duration: core.NeverExpires,
+	})
+
+	aura.NewExclusiveEffect(auraEffectCategory, true, core.ExclusiveEffect{})
+
 	paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
 		SpellSchool:    core.SpellSchoolHoly,
 		ProcMask:       core.ProcMaskEmpty,
 		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
 		ClassSpellMask: SpellMaskConcentrationAura,
-
-		DamageMultiplier: 1,
-		ThreatMultiplier: 1,
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
@@ -99,18 +143,23 @@ func (paladin *Paladin) registerConcentrationAura() {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			// TODO: Implement aura activation
+			aura.Activate(sim)
 		},
 	})
 }
 
 // Fire Resistance Aura
 // https://www.wowhead.com/tbc/spell=27153
-//
-// Gives additional Fire resistance to all party members within 30 yards.
-// Players may only have one Aura on them per Paladin at any one time.
 func (paladin *Paladin) registerFireResistanceAura() {
 	actionID := core.ActionID{SpellID: 27153}
+
+	aura := paladin.RegisterAura(core.Aura{
+		Label:    "Fire Resistance Aura" + paladin.Label,
+		ActionID: actionID,
+		Duration: core.NeverExpires,
+	}).AttachStatBuff(stats.FireResistance, 70)
+
+	aura.NewExclusiveEffect(auraEffectCategory, true, core.ExclusiveEffect{})
 
 	paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
@@ -119,9 +168,6 @@ func (paladin *Paladin) registerFireResistanceAura() {
 		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
 		ClassSpellMask: SpellMaskFireResistanceAura,
 
-		DamageMultiplier: 1,
-		ThreatMultiplier: 1,
-
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD: core.GCDDefault,
@@ -129,18 +175,23 @@ func (paladin *Paladin) registerFireResistanceAura() {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			// TODO: Implement aura activation
+			aura.Activate(sim)
 		},
 	})
 }
 
 // Frost Resistance Aura
 // https://www.wowhead.com/tbc/spell=27152
-//
-// Gives additional Frost resistance to all party members within 30 yards.
-// Players may only have one Aura on them per Paladin at any one time.
 func (paladin *Paladin) registerFrostResistanceAura() {
 	actionID := core.ActionID{SpellID: 27152}
+
+	aura := paladin.RegisterAura(core.Aura{
+		Label:    "Frost Resistance Aura" + paladin.Label,
+		ActionID: actionID,
+		Duration: core.NeverExpires,
+	}).AttachStatBuff(stats.FrostResistance, 70)
+
+	aura.NewExclusiveEffect(auraEffectCategory, true, core.ExclusiveEffect{})
 
 	paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
@@ -149,9 +200,6 @@ func (paladin *Paladin) registerFrostResistanceAura() {
 		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
 		ClassSpellMask: SpellMaskFrostResistanceAura,
 
-		DamageMultiplier: 1,
-		ThreatMultiplier: 1,
-
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD: core.GCDDefault,
@@ -159,18 +207,23 @@ func (paladin *Paladin) registerFrostResistanceAura() {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			// TODO: Implement aura activation
+			aura.Activate(sim)
 		},
 	})
 }
 
 // Shadow Resistance Aura
 // https://www.wowhead.com/tbc/spell=27151
-//
-// Gives additional Shadow resistance to all party members within 30 yards.
-// Players may only have one Aura on them per Paladin at any one time.
 func (paladin *Paladin) registerShadowResistanceAura() {
 	actionID := core.ActionID{SpellID: 27151}
+
+	aura := paladin.RegisterAura(core.Aura{
+		Label:    "Shadow Resistance Aura" + paladin.Label,
+		ActionID: actionID,
+		Duration: core.NeverExpires,
+	}).AttachStatBuff(stats.ShadowResistance, 70)
+
+	aura.NewExclusiveEffect(auraEffectCategory, true, core.ExclusiveEffect{})
 
 	paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
@@ -179,9 +232,6 @@ func (paladin *Paladin) registerShadowResistanceAura() {
 		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
 		ClassSpellMask: SpellMaskShadowResistanceAura,
 
-		DamageMultiplier: 1,
-		ThreatMultiplier: 1,
-
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD: core.GCDDefault,
@@ -189,7 +239,7 @@ func (paladin *Paladin) registerShadowResistanceAura() {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			// TODO: Implement aura activation
+			aura.Activate(sim)
 		},
 	})
 }
@@ -209,6 +259,8 @@ func (paladin *Paladin) registerSanctityAura() {
 	}).AttachMultiplicativePseudoStatBuff(
 		&paladin.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexHoly], 1.1,
 	)
+
+	aura.NewExclusiveEffect(auraEffectCategory, true, core.ExclusiveEffect{})
 
 	paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,

@@ -2,11 +2,11 @@ import * as OtherInputs from '../../core/components/inputs/other_inputs.js';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui.js';
 import { Player } from '../../core/player.js';
 import { PlayerClasses } from '../../core/player_classes';
-import { APLRotation, APLRotation_Type } from '../../core/proto/apl.js';
-import { Debuffs, Faction, IndividualBuffs, PartyBuffs, PseudoStat, Race, RaidBuffs, Spec, Stat, UnitStats } from '../../core/proto/common.js';
+import { APLRotation, APLRotation_Type, APLValueVariable, SimpleRotation } from '../../core/proto/apl.js';
+import { Cooldowns, Faction, PseudoStat, Race, Spec, Stat } from '../../core/proto/common.js';
 import { Stats, UnitStat } from '../../core/proto_utils/stats.js';
-import { defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
 import * as Presets from './presets.js';
+import * as ProtPaladinInputs from './inputs.js';
 import * as Mechanics from '../../core/constants/mechanics';
 import { ReforgeOptimizer } from '../../core/components/suggest_reforges_action';
 
@@ -15,7 +15,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 	cssScheme: PlayerClasses.getCssClass(PlayerClasses.Paladin),
 	// List any known bugs / issues here and they'll be shown on the site.
 	knownIssues: [],
-	consumableStats: [Stat.StatMana],
+	consumableStats: [Stat.StatStamina, Stat.StatHealth, Stat.StatMana],
 
 	// All stats for which EP should be calculated.
 	epStats: [
@@ -35,6 +35,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 		Stat.StatParryRating,
 		Stat.StatArmor,
 		Stat.StatBonusArmor,
+		Stat.StatExpertiseRating,
 	],
 	epPseudoStats: [PseudoStat.PseudoStatMainHandDps],
 	// Reference stat against which to calculate EP. I think all classes use either spell power or attack power.
@@ -59,6 +60,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 			Stat.StatFrostResistance,
 			Stat.StatNatureResistance,
 			Stat.StatShadowResistance,
+			Stat.StatExpertiseRating,
 		],
 		[
 			PseudoStat.PseudoStatMeleeHitPercent,
@@ -74,16 +76,17 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 
 	defaults: {
 		// Default equipped gear.
-		gear: Presets.P1_BALANCED_GEAR_PRESET.gear,
+		gear: Presets.P1_GEAR_PRESET.gear,
 		statCaps: (() => {
 			const hitCap = new Stats().withPseudoStat(PseudoStat.PseudoStatMeleeHitPercent, 9);
 			const expCap = new Stats().withStat(Stat.StatExpertiseRating, 6.5 * 4 * Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION);
+			const critImmunityCap = new Stats().withPseudoStat(PseudoStat.PseudoStatReducedCritTakenPercent, 5.6);
 
-			return hitCap.add(expCap);
+			return hitCap.add(expCap).add(critImmunityCap);
 		})(),
 		// Default EP weights for sorting gear in the gear picker.
 		// Values for now are pre-Cata initial WAG
-		epWeights: Presets.P1_BALANCED_EP_PRESET.epWeights,
+		epWeights: Presets.P4_EP_PRESET.epWeights,
 		// Default consumes settings.
 		consumables: Presets.DefaultConsumables,
 		// Default talents.
@@ -92,26 +95,27 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 		specOptions: Presets.DefaultOptions,
 		other: Presets.OtherDefaults,
 		// Default raid/party buffs settings.
-		raidBuffs: RaidBuffs.create({
-			...defaultRaidBuffMajorDamageCooldowns(),
-		}),
-		partyBuffs: PartyBuffs.create({}),
-		individualBuffs: IndividualBuffs.create({}),
-		debuffs: Debuffs.create({}),
-		rotationType: APLRotation_Type.TypeAuto,
+		raidBuffs: Presets.DefaultRaidBuffs,
+		partyBuffs: Presets.DefaultPartyBuffs,
+		individualBuffs: Presets.DefaultIndividualBuffs,
+		debuffs: Presets.DefaultDebuffs,
+		simpleRotation: Presets.DefaultSimpleRotation,
+		rotationType: APLRotation_Type.TypeSimple,
 		encounter: "Magtheridon's Lair/Magtheridon 25",
 	},
 
+	rotationInputs: ProtPaladinInputs.PaladinRotationConfig,
 	// IconInputs to include in the 'Player' section on the settings tab.
 	playerIconInputs: [],
 	// Buff and Debuff inputs to include/exclude, overriding the EP-based defaults.
-	includeBuffDebuffInputs: [Stat.StatMP5],
+	includeBuffDebuffInputs: [Stat.StatMP5, Stat.StatIntellect],
 	excludeBuffDebuffInputs: [],
 	// Inputs to include in the 'Other' section on the settings tab.
 	otherInputs: {
 		inputs: [
 			OtherInputs.InputDelay,
 			OtherInputs.TankAssignment,
+			OtherInputs.InspirationUptime,
 			OtherInputs.IncomingHps,
 			OtherInputs.HealingCadence,
 			OtherInputs.HealingCadenceVariation,
@@ -127,42 +131,51 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 	},
 
 	presets: {
-		epWeights: [Presets.P1_BALANCED_EP_PRESET],
+		epWeights: [Presets.P4_EP_PRESET],
 		// Preset talents that the user can quickly select.
 		talents: [Presets.DefaultTalents],
 		// Preset rotations that the user can quickly select.
-		rotations: [Presets.APL_PRESET],
+		rotations: [Presets.APL_SIMPLE, Presets.APL_PRESET],
 		// Preset gear configurations that the user can quickly select.
-		gear: [Presets.P1_BALANCED_GEAR_PRESET],
-		builds: [Presets.P1_BALANCED_BUILD_PRESET],
+		gear: [Presets.P1_GEAR_PRESET, Presets.P2_GEAR_PRESET, Presets.P3_GEAR_PRESET, Presets.P4_GEAR_PRESET, Presets.P5_GEAR_PRESET],
+		builds: [],
 	},
 
 	autoRotation: (_player: Player<Spec.SpecProtectionPaladin>): APLRotation => {
 		return Presets.APL_PRESET.rotation.rotation!;
 	},
 
-	raidSimPresets: [
-		{
-			spec: Spec.SpecProtectionPaladin,
-			talents: Presets.DefaultTalents.data,
-			specOptions: Presets.DefaultOptions,
-			consumables: Presets.DefaultConsumables,
-			defaultFactionRaces: {
-				[Faction.Unknown]: Race.RaceUnknown,
-				[Faction.Alliance]: Race.RaceHuman,
-				[Faction.Horde]: Race.RaceBloodElf,
-			},
-			defaultGear: {
-				[Faction.Unknown]: {},
-				[Faction.Alliance]: {
-					1: Presets.P1_BALANCED_GEAR_PRESET.gear,
-				},
-				[Faction.Horde]: {
-					1: Presets.P1_BALANCED_GEAR_PRESET.gear,
-				},
-			},
-		},
-	],
+	simpleRotation: (_player, simple): APLRotation => {
+		const rotation = APLRotation.clone(Presets.APL_PRESET.rotation.rotation!);
+
+		const {
+			prioritizeHolyShield = true,
+			useConsecrate = true,
+			useExorcism = false,
+			useAvengersShield = true,
+			maintainJudgementOfWisdom = true
+		} = simple;
+
+		rotation.valueVariables = [
+			APLValueVariable.fromJson({ name: 'Prioritize Holy Shield', value: { const: { val: String(prioritizeHolyShield) } } }),
+			APLValueVariable.fromJson({ name: 'Use Consecrate', value: { const: { val: String(useConsecrate) } } }),
+			APLValueVariable.fromJson({ name: 'Use Exorcism', value: { const: { val: String(useExorcism) } } }),
+			APLValueVariable.fromJson({ name: "Use Avenger's Shield", value: { const: { val: String(useAvengersShield) } } }),
+			APLValueVariable.fromJson({ name: 'Maintain Judgement of Wisdom', value: { const: { val: String(maintainJudgementOfWisdom) } } }),
+		];
+
+		return APLRotation.create({
+			simple: SimpleRotation.create({
+				cooldowns: Cooldowns.create(),
+			}),
+			prepullActions: rotation.prepullActions,
+			priorityList: rotation.priorityList,
+			groups: rotation.groups,
+			valueVariables: rotation.valueVariables,
+		});
+	},
+
+	raidSimPresets: [],
 });
 
 export class ProtectionPaladinSimUI extends IndividualSimUI<Spec.SpecProtectionPaladin> {

@@ -86,6 +86,7 @@ type Paladin struct {
 	AvengersShields         []*core.Spell
 	CrusaderStrike          *core.Spell
 	Repentance              *core.Spell
+	RighteousFury           *core.Spell
 	HolyShocks              []*core.Spell
 
 	JudgementOfLightAuras       core.AuraArray
@@ -116,6 +117,7 @@ func (paladin *Paladin) AddPartyBuffs(_ *proto.PartyBuffs) {
 
 func (paladin *Paladin) Initialize() {
 	paladin.registerSpells()
+	paladin.RegisterSpiritualAttunement()
 }
 
 func (paladin *Paladin) registerSpells() {
@@ -126,6 +128,7 @@ func (paladin *Paladin) registerSpells() {
 	HolyWrathRankMap.RegisterAll(paladin.registerHolyWrath)
 	ExorcismRankMap.RegisterAll(paladin.registerExorcism)
 	paladin.registerAvengingWrath()
+	paladin.registerRighteousFury()
 
 	paladin.registerForbearance()
 
@@ -133,7 +136,7 @@ func (paladin *Paladin) registerSpells() {
 	paladin.registerSeals()
 
 	// Auras
-	// paladin.registerAuras()
+	paladin.registerAuras()
 
 	// // Blessings
 	// paladin.registerBlessings()

@@ -117,7 +117,13 @@ message RetributionPaladin {
 }
 
 message ProtectionPaladin {
-	message Rotation {}
+	message Rotation {
+		bool prioritizeHolyShield = 1;
+		bool useConsecrate = 2;
+		bool useExorcism = 3;
+		bool useAvengersShield = 4;
+		bool maintainJudgementOfWisdom = 5;
+	}
 
 	message Options {
 		PaladinOptions class_options = 1;

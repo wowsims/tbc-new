@@ -89,6 +89,8 @@ export class ActionId {
 					name += ' (Sword Specialization)';
 				} else if (this.tag == 25584) {
 					name += ' (Windfury)';
+				} else if (this.tag == 20182) {
+					name += ' (Reckoning)';
 				} else if (this.tag == 31332) {
 					name += ' (Blinkstrike)';
 				} else if (this.tag == 17257) {
