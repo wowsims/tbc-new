@@ -33,10 +33,11 @@ func (paladin *Paladin) registerDivineFavor() {
 	})
 
 	divineFavor := paladin.RegisterSpell(core.SpellConfig{
-		ActionID:       actionID,
-		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
-		ClassSpellMask: SpellMaskDivineFavor,
-
+		ActionID:         actionID,
+		Flags:            core.SpellFlagAPL | core.SpellFlagHelpful,
+		ClassSpellMask:   SpellMaskDivineFavor,
+		SpellSchool:      core.SpellSchoolHoly,
+		ProcMask:         core.ProcMaskEmpty,
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
 
