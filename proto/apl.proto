@@ -366,18 +366,14 @@ message APLActionItemSwap {
 }
 
 message APLActionCatOptimalRotationAction {
-    FeralCatDruid.Rotation.AplType rotation_type = 1;
-    bool bear_weave = 2;
-    bool snek_weave = 3;
-    bool allow_aoe_berserk = 4;
-    bool manual_params = 5;
-    double min_roar_offset = 6;
-    double rip_leeway = 7;
-    bool use_bite = 8;
-    double bite_time = 9;
-    double berserk_bite_time = 10;
-    bool use_ns = 11;
-    bool wrath_weave = 12;
+    FeralCatDruid.Rotation.FinishingMove finishing_move = 1;
+    bool biteweave = 2;
+    bool ripweave = 3;
+    int32 rip_min_combo_points = 4;
+    int32 bite_min_combo_points = 5;
+    bool mangle_trick = 6;
+    bool rake_trick = 7;
+    bool maintain_faerie_fire = 8;
 }
 
 message APLActionGuardianHotwDpsRotation {

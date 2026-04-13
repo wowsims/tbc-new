@@ -72,6 +72,7 @@ var ItemAllowList = map[int32]struct{}{
 	1168:   {}, // Skullflame Shield
 	2140:   {},
 	2505:   {},
+	8345:   {}, // Wolfshead Helm
 	11815:  {}, // Hand of Justice
 	18168:  {}, // Force Reactive Disk
 	19337:  {}, // The Black Book

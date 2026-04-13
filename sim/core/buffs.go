@@ -581,7 +581,6 @@ func LeaderOfThePackAura(char *Character, improved bool) *Aura {
 
 	if improved {
 		statsConfig = append(statsConfig, StatConfig{stats.MeleeCritRating, 20, false})
-		statsConfig = append(statsConfig, StatConfig{stats.SpellCritRating, 20, false})
 	}
 
 	return makeStatBuff(char, BuffConfig{

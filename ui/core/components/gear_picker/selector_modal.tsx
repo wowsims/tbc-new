@@ -414,7 +414,7 @@ export default class SelectorModal extends BaseModal {
 					},
 				};
 			}),
-			computeEP: (randomSuffix: ItemRandomSuffix) => this.player.computeRandomSuffixEP(randomSuffix),
+			computeEP: (randomSuffix: ItemRandomSuffix) => (this.player.computeRandomSuffixEP(randomSuffix) * itemProto.randPropPoints) / 10000,
 			equippedToItemFn: (equippedItem: EquippedItem | null) => equippedItem?.randomSuffix,
 			onRemove: (eventID: number) => {
 				const equippedItem = gearData.getEquippedItem();

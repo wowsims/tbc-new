@@ -1518,7 +1518,7 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 	}),
 	catExcessEnergy: inputBuilder({
 		label: i18n.t('rotation_tab.apl.values.cat_excess_energy.label'),
-		submenu: ['feral_druid'],
+		submenu: ['feral_cat_druid'],
 		shortDescription: i18n.t('rotation_tab.apl.values.cat_excess_energy.tooltip'),
 		newValue: APLValueCatExcessEnergy.create,
 		includeIf: (player: Player<any>, isPrepull: boolean) => !isPrepull && player.getSpec() == Spec.SpecFeralCatDruid,
@@ -1526,7 +1526,7 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 	}),
 	catNewSavageRoarDuration: inputBuilder({
 		label: i18n.t('rotation_tab.apl.values.cat_new_savage_roar_duration.label'),
-		submenu: ['feral_druid'],
+		submenu: ['feral_cat_druid'],
 		shortDescription: i18n.t('rotation_tab.apl.values.cat_new_savage_roar_duration.tooltip'),
 		newValue: APLValueCatNewSavageRoarDuration.create,
 		includeIf: (player: Player<any>, isPrepull: boolean) => !isPrepull && player.getSpec() == Spec.SpecFeralCatDruid,

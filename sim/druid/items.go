@@ -76,9 +76,100 @@ func init() {
 		character.ItemSwap.RegisterProc(31025, aura)
 	})
 
+	// Staff of Natural Fury
+	core.NewItemEffect(31334, func(agent core.Agent) {
+		// Reduces the base Mana cost of your shapeshifting spells by 200.
+		character := agent.GetCharacter()
+		aura := core.MakePermanent(character.RegisterAura(core.Aura{
+			Label: "Staff of Natural Fury",
+		}).AttachSpellMod(core.SpellModConfig{
+			ClassMask: DruidSpellCatForm | DruidSpellBearForm,
+			Kind:      core.SpellMod_PowerCost_Flat,
+			IntValue:  -200,
+		}))
+		character.ItemSwap.RegisterProc(31334, aura)
+	})
+
+	// Idol of the Beast (25667): Increases the damage dealt by Ferocious Bite by 14 per combo point.
+	core.NewItemEffect(25667, func(agent core.Agent) {
+		druid := agent.(DruidAgent).GetDruid()
+		aura := core.MakePermanent(druid.RegisterAura(core.Aura{
+			Label: "Idol of the Beast",
+			OnGain: func(_ *core.Aura, _ *core.Simulation) {
+				druid.IdolFerociousBiteBonus += 14
+			},
+			OnExpire: func(_ *core.Aura, _ *core.Simulation) {
+				druid.IdolFerociousBiteBonus -= 14
+			},
+		}))
+		druid.ItemSwap.RegisterProc(25667, aura)
+	})
+
+	// Idol of the Wild (28064): Increases the damage dealt by Mangle by 24 (Cat) or 52 (Bear).
+	core.NewItemEffect(28064, func(agent core.Agent) {
+		druid := agent.(DruidAgent).GetDruid()
+		aura := core.MakePermanent(druid.RegisterAura(core.Aura{
+			Label: "Idol of the Wild",
+			OnGain: func(_ *core.Aura, _ *core.Simulation) {
+				druid.IdolMangleCatBonus += 24
+				druid.IdolMangleBearBonus += 52
+			},
+			OnExpire: func(_ *core.Aura, _ *core.Simulation) {
+				druid.IdolMangleCatBonus -= 24
+				druid.IdolMangleBearBonus -= 52
+			},
+		}))
+		druid.ItemSwap.RegisterProc(28064, aura)
+	})
+
+	// Idol of Feral Shadows (28372): Increases the damage dealt by Rip by 7 per combo point per tick.
+	core.NewItemEffect(28372, func(agent core.Agent) {
+		druid := agent.(DruidAgent).GetDruid()
+		aura := core.MakePermanent(druid.RegisterAura(core.Aura{
+			Label: "Idol of Feral Shadows",
+			OnGain: func(_ *core.Aura, _ *core.Simulation) {
+				druid.IdolRipBonus += 7
+			},
+			OnExpire: func(_ *core.Aura, _ *core.Simulation) {
+				druid.IdolRipBonus -= 7
+			},
+		}))
+		druid.ItemSwap.RegisterProc(28372, aura)
+	})
+
+	// Everbloom Idol (29390): Increases the damage dealt by Shred by 88.
+	core.NewItemEffect(29390, func(agent core.Agent) {
+		druid := agent.(DruidAgent).GetDruid()
+		aura := core.MakePermanent(druid.RegisterAura(core.Aura{
+			Label: "Everbloom Idol",
+			OnGain: func(_ *core.Aura, _ *core.Simulation) {
+				druid.IdolShredBonus += 88
+			},
+			OnExpire: func(_ *core.Aura, _ *core.Simulation) {
+				druid.IdolShredBonus -= 88
+			},
+		}))
+		druid.ItemSwap.RegisterProc(29390, aura)
+	})
+
 	// Idol of the Raven Goddess
 	core.NewItemEffect(32387, func(agent core.Agent) {
 		// Implemented naively in druid.go
+	})
+
+	// Idol of Ursoc (27744): Increases the damage dealt by Lacerate by 8 per tick per stack.
+	core.NewItemEffect(27744, func(agent core.Agent) {
+		druid := agent.(DruidAgent).GetDruid()
+		aura := core.MakePermanent(druid.RegisterAura(core.Aura{
+			Label: "Idol of Ursoc",
+			OnGain: func(_ *core.Aura, _ *core.Simulation) {
+				druid.IdolLacerateBonus += 8
+			},
+			OnExpire: func(_ *core.Aura, _ *core.Simulation) {
+				druid.IdolLacerateBonus -= 8
+			},
+		}))
+		druid.ItemSwap.RegisterProc(27744, aura)
 	})
 
 	// Ashtongue Talisman of Equilibrium

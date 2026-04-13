@@ -493,8 +493,8 @@ export const specTypeFunctions: Record<Spec, SpecTypeFunctions<any>> = {
 		optionsToJson: a => FeralCatDruid_Options.toJson(a as FeralCatDruid_Options),
 		optionsFromJson: obj => FeralCatDruid_Options.fromJson(obj),
 		optionsFromPlayer: player =>
-			player.spec.oneofKind == 'feralDruid'
-				? player.spec.feralDruid.options || FeralCatDruid_Options.create()
+			player.spec.oneofKind == 'feralCatDruid'
+				? player.spec.feralCatDruid.options || FeralCatDruid_Options.create()
 				: FeralCatDruid_Options.create({ classOptions: {} }),
 	},
 	[Spec.SpecFeralBearDruid]: {
@@ -516,8 +516,8 @@ export const specTypeFunctions: Record<Spec, SpecTypeFunctions<any>> = {
 		optionsToJson: a => FeralBearDruid_Options.toJson(a as FeralBearDruid_Options),
 		optionsFromJson: obj => FeralBearDruid_Options.fromJson(obj),
 		optionsFromPlayer: player =>
-			player.spec.oneofKind == 'guardianDruid'
-				? player.spec.guardianDruid.options || FeralBearDruid_Options.create()
+			player.spec.oneofKind == 'feralBearDruid'
+				? player.spec.feralBearDruid.options || FeralBearDruid_Options.create()
 				: FeralBearDruid_Options.create({ classOptions: {} }),
 	},
 	[Spec.SpecRestorationDruid]: {
@@ -874,16 +874,16 @@ export function withSpec<SpecType extends Spec>(spec: Spec, player: PlayerProto,
 			return copy;
 		case Spec.SpecFeralCatDruid:
 			copy.spec = {
-				oneofKind: 'feralDruid',
-				feralDruid: FeralCatDruid.create({
+				oneofKind: 'feralCatDruid',
+				feralCatDruid: FeralCatDruid.create({
 					options: specOptions as FeralCatDruid_Options,
 				}),
 			};
 			return copy;
 		case Spec.SpecFeralBearDruid:
 			copy.spec = {
-				oneofKind: 'guardianDruid',
-				guardianDruid: FeralBearDruid.create({
+				oneofKind: 'feralBearDruid',
+				feralBearDruid: FeralBearDruid.create({
 					options: specOptions as FeralBearDruid_Options,
 				}),
 			};

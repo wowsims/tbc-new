@@ -386,10 +386,10 @@ func getPlayerSpecOptions(player *proto.Player) interface{} {
 	if playerSpec, ok := player.Spec.(*proto.Player_BalanceDruid); ok {
 		return playerSpec
 	}
-	if playerSpec, ok := player.Spec.(*proto.Player_FeralDruid); ok {
+	if playerSpec, ok := player.Spec.(*proto.Player_FeralCatDruid); ok {
 		return playerSpec
 	}
-	if playerSpec, ok := player.Spec.(*proto.Player_GuardianDruid); ok {
+	if playerSpec, ok := player.Spec.(*proto.Player_FeralBearDruid); ok {
 		return playerSpec
 	}
 	if playerSpec, ok := player.Spec.(*proto.Player_RestorationDruid); ok {

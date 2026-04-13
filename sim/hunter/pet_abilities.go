@@ -16,6 +16,7 @@ const (
 	Gore
 	LightningBreath
 	Screech
+	FireBreath
 )
 
 func (hp *HunterPet) NewPetAbility(abilityType PetAbilityType) *core.Spell {
@@ -31,6 +32,8 @@ func (hp *HunterPet) NewPetAbility(abilityType PetAbilityType) *core.Spell {
 		return hp.newLightningBreath()
 	case Screech:
 		return hp.newScreech()
+	case FireBreath:
+		return hp.newFireBreath()
 
 	case Unknown:
 		return nil
@@ -203,6 +206,63 @@ func (hp *HunterPet) newLightningBreath() *core.Spell {
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			baseDamage := hp.CalcAndRollDamageRange(sim, 101, 116)
 			spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
+		},
+	})
+}
+
+func (hp *HunterPet) newFireBreath() *core.Spell {
+	baseDmg := 43.5 // 37 + 0.65 * (pet level - spell level)
+
+	return hp.RegisterSpell(core.SpellConfig{
+		ActionID:    core.ActionID{SpellID: 35323},
+		SpellSchool: core.SpellSchoolFire,
+		ProcMask:    core.ProcMaskSpellDamage,
+		MaxRange:    10,
+
+		FocusCost: core.FocusCostOptions{
+			Cost: 50,
+		},
+		Cast: core.CastConfig{
+			DefaultCast: core.Cast{
+				GCD: core.GCDDefault,
+			},
+			CD: core.Cooldown{
+				Timer:    hp.NewTimer(),
+				Duration: time.Second * 10,
+			},
+			IgnoreHaste: true,
+		},
+
+		Dot: core.DotConfig{
+			Aura: core.Aura{
+				Label: "Fire Breath",
+			},
+
+			NumberOfTicks:    2,
+			TickLength:       time.Second * 1,
+			IsAOE:            true,
+			BonusCoefficient: 0.05,
+
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
+				dot.Snapshot(target, baseDmg)
+			},
+			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
+				dot.Spell.CalcAndDealPeriodicAoeDamage(sim, baseDmg, dot.OutcomeTick)
+			},
+		},
+
+		DamageMultiplier: 1,
+		ThreatMultiplier: 1,
+		BonusCoefficient: 0.05,
+
+		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
+			return hp.IsEnabled()
+		},
+
+		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+			dot := spell.AOEDot()
+			dot.Apply(sim)
+			dot.TickOnce(sim)
 		},
 	})
 }

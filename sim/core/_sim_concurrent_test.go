@@ -55,7 +55,7 @@ func getTestPlayerMM() *proto.Player {
 func getTestPlayerFeralCat() *proto.Player {
 	var StandardTalents = "-2320322312012121202301-020301"
 
-	var PlayerOptionsMonoCat = &proto.Player_FeralDruid{
+	var PlayerOptionsMonoCat = &proto.Player_FeralCatDruid{
 		FeralDruid: &proto.FeralDruid{
 			Options: &proto.FeralDruid_Options{
 				AssumeBleedActive: true,

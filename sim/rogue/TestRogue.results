@@ -14,7 +14,7 @@ character_stats_results: {
   final_stats: 0
   final_stats: 0
   final_stats: 0
-  final_stats: 68
+  final_stats: 48
   final_stats: 0
   final_stats: 0
   final_stats: 185.009
@@ -46,7 +46,7 @@ character_stats_results: {
   final_stats: 26.03902
   final_stats: 4
   final_stats: 32.45941
-  final_stats: 13.08014
+  final_stats: 12.17422
   final_stats: 0
   final_stats: 0
   final_stats: 0
@@ -482,8 +482,8 @@ dps_results: {
 dps_results: {
  key: "TestRogue-AllItems-EnchantWeapon-Deathfrost-3273"
  value: {
-  dps: 1809.12023
-  tps: 1284.47536
+  dps: 1809.09193
+  tps: 1284.45527
  }
 }
 dps_results: {

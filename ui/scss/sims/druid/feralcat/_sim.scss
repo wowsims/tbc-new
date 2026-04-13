@@ -1,4 +1,9 @@
 // Set color variables which control the site theme.
 .feral-druid-sim-ui {
 	@include theme-color($druid, 0.95, '/tbc/assets/img/feral_druid_background.jpg');
+
+	// Widen the Finishing Move dropdown to accommodate "Ferocious Bite".
+	#finishingMove {
+		width: 10rem;
+	}
 }

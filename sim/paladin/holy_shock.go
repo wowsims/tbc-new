@@ -67,7 +67,7 @@ func (paladin *Paladin) registerHolyShock(rankConfig shared.SpellRankConfig) {
 		BonusCoefficient: coefficient,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			if target.IsOpponent(target) {
+			if spell.Unit.IsOpponent(target) {
 				damage := sim.Roll(minDamage, maxDamage)
 				spell.CalcAndDealDamage(sim, target, damage, spell.OutcomeMagicHitAndCrit)
 			} else {

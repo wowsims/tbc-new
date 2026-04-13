@@ -1799,10 +1799,13 @@
 								},
 								"wind_serpent": {
 									"type": "string"
+								},
+								"dragonhawk": {
+									"type": "string"
 								}
 							},
 							"additionalProperties": false,
-							"required": ["label", "tooltip", "no_pet", "bat", "bear", "cat", "crab", "owl", "raptor", "ravager", "wind_serpent"]
+							"required": ["label", "tooltip", "no_pet", "bat", "bear", "cat", "crab", "owl", "raptor", "ravager", "wind_serpent", "dragonhawk"]
 						},
 						"ammo": {
 							"type": "object",
@@ -6300,204 +6303,77 @@
 						"druid": {
 							"type": "object",
 							"properties": {
-								"feral": {
+								"feral_cat": {
 									"type": "object",
 									"properties": {
-										"target_type": {
+										"finishing_move": {
 											"type": "object",
 											"properties": {
-												"label": {
-													"type": "string"
-												},
-												"single_target": {
-													"type": "string"
-												},
-												"aoe": {
-													"type": "string"
-												}
-											},
-											"additionalProperties": false,
-											"required": ["label", "single_target", "aoe"]
-										},
-										"bear_weave": {
-											"type": "object",
-											"properties": {
-												"label": {
-													"type": "string"
-												},
-												"tooltip": {
-													"type": "string"
-												}
-											},
-											"additionalProperties": false,
-											"required": ["label", "tooltip"]
-										},
-										"snek_weave": {
-											"type": "object",
-											"properties": {
-												"label": {
-													"type": "string"
-												},
-												"tooltip": {
-													"type": "string"
-												}
-											},
-											"additionalProperties": false,
-											"required": ["label", "tooltip"]
-										},
-										"use_ns": {
-											"type": "object",
-											"properties": {
-												"label": {
-													"type": "string"
-												},
-												"tooltip": {
-													"type": "string"
-												}
-											},
-											"additionalProperties": false,
-											"required": ["label", "tooltip"]
-										},
-										"manual_params": {
-											"type": "object",
-											"properties": {
-												"label": {
-													"type": "string"
-												},
-												"tooltip": {
-													"type": "string"
-												}
-											},
-											"additionalProperties": false,
-											"required": ["label", "tooltip"]
-										},
-										"hotw_strategy": {
-											"type": "object",
-											"properties": {
-												"label": {
-													"type": "string"
-												},
-												"tooltip": {
-													"type": "string"
-												},
+												"label": {"type": "string"},
+												"tooltip": {"type": "string"},
 												"values": {
 													"type": "object",
 													"properties": {
-														"passives_only": {
-															"type": "string"
-														},
-														"enhanced_bear_weaving": {
-															"type": "string"
-														},
-														"wrath_weaving": {
-															"type": "string"
-														}
+														"rip": {"type": "string"},
+														"bite": {"type": "string"},
+														"none": {"type": "string"}
 													},
 													"additionalProperties": false,
-													"required": ["passives_only", "enhanced_bear_weaving", "wrath_weaving"]
+													"required": ["rip", "bite", "none"]
 												}
 											},
 											"additionalProperties": false,
 											"required": ["label", "tooltip", "values"]
 										},
-										"allow_aoe_berserk": {
+										"biteweave": {
 											"type": "object",
-											"properties": {
-												"label": {
-													"type": "string"
-												},
-												"tooltip": {
-													"type": "string"
-												}
-											},
+											"properties": {"label": {"type": "string"}, "tooltip": {"type": "string"}},
 											"additionalProperties": false,
 											"required": ["label", "tooltip"]
 										},
-										"roar_offset": {
+										"ripweave": {
 											"type": "object",
-											"properties": {
-												"label": {
-													"type": "string"
-												},
-												"tooltip": {
-													"type": "string"
-												}
-											},
+											"properties": {"label": {"type": "string"}, "tooltip": {"type": "string"}},
 											"additionalProperties": false,
 											"required": ["label", "tooltip"]
 										},
-										"rip_leeway": {
+										"rip_min_combo_points": {
 											"type": "object",
-											"properties": {
-												"label": {
-													"type": "string"
-												},
-												"tooltip": {
-													"type": "string"
-												}
-											},
+											"properties": {"label": {"type": "string"}, "tooltip": {"type": "string"}},
 											"additionalProperties": false,
 											"required": ["label", "tooltip"]
 										},
-										"bite_during_rotation": {
+										"bite_min_combo_points": {
 											"type": "object",
-											"properties": {
-												"label": {
-													"type": "string"
-												},
-												"tooltip": {
-													"type": "string"
-												}
-											},
+											"properties": {"label": {"type": "string"}, "tooltip": {"type": "string"}},
 											"additionalProperties": false,
 											"required": ["label", "tooltip"]
 										},
-										"bite_time": {
+										"mangle_trick": {
 											"type": "object",
-											"properties": {
-												"label": {
-													"type": "string"
-												},
-												"tooltip": {
-													"type": "string"
-												}
-											},
+											"properties": {"label": {"type": "string"}, "tooltip": {"type": "string"}},
 											"additionalProperties": false,
 											"required": ["label", "tooltip"]
 										},
-										"berserk_bite_time": {
+										"rake_trick": {
 											"type": "object",
-											"properties": {
-												"label": {
-													"type": "string"
-												},
-												"tooltip": {
-													"type": "string"
-												}
-											},
+											"properties": {"label": {"type": "string"}, "tooltip": {"type": "string"}},
+											"additionalProperties": false,
+											"required": ["label", "tooltip"]
+										},
+										"maintain_faerie_fire": {
+											"type": "object",
+											"properties": {"label": {"type": "string"}, "tooltip": {"type": "string"}},
 											"additionalProperties": false,
 											"required": ["label", "tooltip"]
 										}
 									},
 									"additionalProperties": false,
-									"required": [
-										"target_type",
-										"bear_weave",
-										"snek_weave",
-										"use_ns",
-										"manual_params",
-										"hotw_strategy",
-										"allow_aoe_berserk",
-										"roar_offset",
-										"rip_leeway",
-										"bite_during_rotation",
-										"bite_time",
-										"berserk_bite_time"
-									]
+									"required": ["finishing_move", "biteweave", "ripweave", "rip_min_combo_points", "bite_min_combo_points", "mangle_trick", "rake_trick", "maintain_faerie_fire"]
 								}
 							},
 							"additionalProperties": false,
-							"required": ["feral"]
+							"required": ["feral_cat"]
 						},
 						"guardian": {
 							"type": "object",

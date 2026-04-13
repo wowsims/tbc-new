@@ -118,6 +118,7 @@ message HunterOptions {
 		Raptor      = 6;
 		Ravager     = 7;
 		WindSerpent = 8;
+		Dragonhawk  = 9;
 	}
 	PetType pet_type = 3;
 

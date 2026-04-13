@@ -38,7 +38,7 @@ export const simLaunchStatuses: Record<Spec, SimStatus> = {
 	},
 	[Spec.SpecFeralCatDruid]: {
 		phase: Phase.Phase1,
-		status: LaunchStatus.Unlaunched,
+		status: LaunchStatus.Alpha,
 		oldSimLink: 'https://wowsims.github.io/tbc/feral_druid/',
 	},
 	[Spec.SpecFeralBearDruid]: {

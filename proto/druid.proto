@@ -93,36 +93,26 @@ message BalanceDruid {
 
 message FeralCatDruid {
   message Rotation {
-    enum AplType {
-	SingleTarget = 0;
-	Aoe = 1;
+    enum FinishingMove {
+      Rip = 0;
+      Bite = 1;
+      None = 2;
     }
 
-    enum HotwStrategy {
-        PassivesOnly = 0;
-        Bear = 1;
-        Wrath = 2;
-    }
-
-    AplType rotation_type = 1;
-    bool bear_weave = 2;
-    bool snek_weave = 3;
-    bool allow_aoe_berserk = 4;
-    bool manual_params = 5;
-    double min_roar_offset = 6;
-    double rip_leeway = 7;
-    bool use_bite = 8;
-    double bite_time = 9;
-    double berserk_bite_time = 10;
-    bool use_ns = 11;
-    HotwStrategy hotw_strategy = 12;
+    FinishingMove finishing_move = 2;
+    bool biteweave = 3;
+    bool ripweave = 4;
+    int32 rip_min_combo_points = 5;
+    int32 bite_min_combo_points = 6;
+    bool mangle_trick = 7;
+    bool rake_trick = 8;
+    bool maintain_faerie_fire = 9;
   }
   Rotation rotation = 1;
 
   message Options {
     DruidOptions class_options = 1;
     bool cannot_shred_target = 2;
-    bool assume_bleed_active = 4;
   }
   Options options = 3;
 }
