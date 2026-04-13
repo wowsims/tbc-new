@@ -1799,10 +1799,13 @@
 								},
 								"wind_serpent": {
 									"type": "string"
+								},
+								"dragonhawk": {
+									"type": "string"
 								}
 							},
 							"additionalProperties": false,
-							"required": ["label", "tooltip", "no_pet", "bat", "bear", "cat", "crab", "owl", "raptor", "ravager", "wind_serpent"]
+							"required": ["label", "tooltip", "no_pet", "bat", "bear", "cat", "crab", "owl", "raptor", "ravager", "wind_serpent", "dragonhawk"]
 						},
 						"ammo": {
 							"type": "object",

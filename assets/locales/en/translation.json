@@ -510,7 +510,8 @@
 				"owl": "Owl",
 				"raptor": "Raptor",
 				"ravager": "Ravager",
-				"wind_serpent": "Wind Serpent"
+				"wind_serpent": "Wind Serpent",
+				"dragonhawk": "Dragonhawk"
 			},
 			"ammo": {
 				"label": "Ammo",
