@@ -140,6 +140,11 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 		MakePermanent(ShadowProtectionAura(char))
 	}
 
+	if raidBuffs.Thorns != proto.TristateEffect_TristateEffectMissing {
+		// Improved tristate assumes a Druid with 3/3 Brambles talent (+75% Thorns dmg).
+		MakePermanent(ThornsAura(char, TernaryInt32(IsImproved(raidBuffs.Thorns), 3, 0)))
+	}
+
 	if raidBuffs.Bloodlust {
 		registerBloodlustCD(char)
 	}
