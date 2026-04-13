@@ -734,6 +734,8 @@ export function makeRotationEnumIconInput<SpecType extends Spec, T>(
 			}),
 		changedEvent: config.changeEmitter || ((player: Player<SpecType>) => player.rotationChangeEmitter),
 		extraCssClasses: config.extraCssClasses,
+		label: config.label,
+		labelTooltip: config.labelTooltip,
 	});
 }
 

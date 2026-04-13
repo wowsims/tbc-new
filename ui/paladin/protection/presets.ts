@@ -13,7 +13,11 @@ import {
 	Stat,
 	TristateEffect,
 } from '../../core/proto/common.js';
-import { ProtectionPaladin_Options as ProtectionPaladinOptions, ProtectionPaladin_Rotation as ProtectionPaladinRotation } from '../../core/proto/paladin.js';
+import {
+	PaladinJudgement,
+	ProtectionPaladin_Options as ProtectionPaladinOptions,
+	ProtectionPaladin_Rotation as ProtectionPaladinRotation,
+} from '../../core/proto/paladin.js';
 import { SavedTalents } from '../../core/proto/ui.js';
 import { Stats } from '../../core/proto_utils/stats';
 import { defaultExposeWeaknessSettings } from '../../core/proto_utils/utils';
@@ -38,10 +42,10 @@ export const APL_PRESET = PresetUtils.makePresetAPLRotation('Default', DefaultAp
 
 export const DefaultSimpleRotation = ProtectionPaladinRotation.create({
 	prioritizeHolyShield: true,
-	useConsecrate: true,
+	consecrationRank: 6,
 	useExorcism: false,
 	useAvengersShield: true,
-	maintainJudgementOfWisdom: true,
+	maintainJudgement: PaladinJudgement.JudgementNone,
 });
 
 export const APL_SIMPLE = PresetUtils.makePresetSimpleRotation('Simple', Spec.SpecProtectionPaladin, DefaultSimpleRotation);

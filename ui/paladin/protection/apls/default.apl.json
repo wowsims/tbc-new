@@ -7,11 +7,12 @@
 		{"action":{"castSpell":{"spellId":{"spellId":27179,"rank":4}}},"doAtValue":{"const":{"val":"-1.5s"}}}
 	],
 	"priorityList": [
+		{"action":{"condition":{"and":{"vals":[{"const":{"val":"false"}},{"auraIsActive":{"auraId":{"spellId":27166,"rank":4}}},{"auraIsInactive":{"auraId":{"spellId":27155,"rank":9}}}]}},"castSpell":{"spellId":{"spellId":20271}}}},
 		{"action":{"autocastOtherCooldowns":{}}},
-		{"action":{"condition":{"and":{"vals":[{"auraIsInactive":{"auraId":{"spellId":27155,"rank":9}}},{"auraIsInactive":{"auraId":{"spellId":27166,"rank":4}}}]}},"castSpell":{"spellId":{"spellId":27155,"rank":9}}}},
+		{"action":{"condition":{"and":{"vals":[{"const":{"val":"false"}},{"auraIsInactive":{"auraId":{"spellId":27166,"rank":4}}},{"auraIsInactive":{"sourceUnit":{"type":"CurrentTarget"},"auraId":{"spellId":27164}}},{"spellIsReady":{"spellId":{"spellId":20271}}}]}},"castSpell":{"spellId":{"spellId":27166,"rank":4}}}},
+		{"action":{"condition":{"auraIsInactive":{"auraId":{"spellId":27155,"rank":9}}},"castSpell":{"spellId":{"spellId":27155,"rank":9}}}},
 		{"action":{"condition":{"variableRef":{"name":"Prioritize Holy Shield"}},"castSpell":{"spellId":{"spellId":27179,"rank":4}}}},
-		{"action":{"condition":{"and":{"vals":[{"variableRef":{"name":"Maintain Judgement of Wisdom"}},{"auraIsInactive":{"sourceUnit":{"type":"CurrentTarget"},"auraId":{"spellId":27164}}}]}},"strictSequence":{"actions":[{"castSpell":{"spellId":{"spellId":20271}}},{"castSpell":{"spellId":{"spellId":27155,"rank":9}}}]}}},
-		{"action":{"condition":{"variableRef":{"name":"Use Consecrate"}},"castSpell":{"spellId":{"spellId":27173,"rank":6}}}},
+		{"action":{"castSpell":{"spellId":{"spellId":27173,"rank":6}}}},
 		{"action":{"strictSequence":{"actions":[{"castSpell":{"spellId":{"spellId":20271}}},{"castSpell":{"spellId":{"spellId":27155,"rank":9}}}]}}},
 		{"action":{"condition":{"variableRef":{"name":"Use Exorcism"}},"castSpell":{"spellId":{"spellId":27138,"rank":7}}}},
 		{"action":{"condition":{"not":{"val":{"variableRef":{"name":"Prioritize Holy Shield"}}}},"castSpell":{"spellId":{"spellId":27179,"rank":4}}}},
@@ -19,9 +20,7 @@
 	],
 	"valueVariables": [
 		{"name":"Prioritize Holy Shield","value":{"const":{"val":"true"}}},
-		{"name":"Use Consecrate","value":{"const":{"val":"true"}}},
 		{"name":"Use Exorcism","value":{"const":{"val":"false"}}},
-		{"name":"Use Avenger's Shield","value":{"const":{"val":"true"}}},
-		{"name":"Maintain Judgement of Wisdom","value":{"const":{"val":"true"}}}
+		{"name":"Use Avenger's Shield","value":{"const":{"val":"true"}}}
 	]
 }

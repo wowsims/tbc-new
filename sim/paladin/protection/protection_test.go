@@ -17,16 +17,16 @@ func init() {
 func TestProtection(t *testing.T) {
 	core.RunTestSuite(t, t.Name(), core.FullCharacterTestSuiteGenerator([]core.CharacterSuiteConfig{
 		{
-			Class:      proto.Class_ClassPaladin,
-			Race:       proto.Race_RaceBloodElf,
-			OtherRaces: []proto.Race{proto.Race_RaceHuman},
-			GearSet:    core.GetGearSet("../../../ui/paladin/protection/gear_sets", "p4"),
-			Talents:    DefaultProtectionTalents,
-			Consumables: DefaultConsumables,
-			SpecOptions: core.SpecOptionsCombo{Label: "Protection", SpecOptions: DefaultOptions},
+			Class:            proto.Class_ClassPaladin,
+			Race:             proto.Race_RaceBloodElf,
+			OtherRaces:       []proto.Race{proto.Race_RaceHuman},
+			GearSet:          core.GetGearSet("../../../ui/paladin/protection/gear_sets", "p1"),
+			Talents:          DefaultProtectionTalents,
+			Consumables:      DefaultConsumables,
+			SpecOptions:      core.SpecOptionsCombo{Label: "Protection", SpecOptions: DefaultOptions},
 			StartingDistance: 5,
-			Profession1: proto.Profession_Engineering,
-			Profession2: proto.Profession_Enchanting,
+			Profession1:      proto.Profession_Engineering,
+			Profession2:      proto.Profession_Enchanting,
 
 			Rotation: core.GetAplRotation("../../../ui/paladin/protection/apls", "default"),
 
@@ -36,8 +36,8 @@ func TestProtection(t *testing.T) {
 			ItemFilter: core.ItemFilter{
 				ArmorType: proto.ArmorType_ArmorTypePlate,
 				WeaponTypes: []proto.WeaponType{
+					proto.WeaponType_WeaponTypeAxe,
 					proto.WeaponType_WeaponTypeSword,
-					proto.WeaponType_WeaponTypePolearm,
 					proto.WeaponType_WeaponTypeMace,
 					proto.WeaponType_WeaponTypeShield,
 				},

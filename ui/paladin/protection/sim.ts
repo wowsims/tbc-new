@@ -2,13 +2,38 @@ import * as OtherInputs from '../../core/components/inputs/other_inputs.js';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui.js';
 import { Player } from '../../core/player.js';
 import { PlayerClasses } from '../../core/player_classes';
-import { APLRotation, APLRotation_Type, APLValueVariable, SimpleRotation } from '../../core/proto/apl.js';
+import { APLRotation, APLRotation_Type, APLValueAnd, APLValueVariable, SimpleRotation } from '../../core/proto/apl.js';
 import { Cooldowns, Faction, PseudoStat, Race, Spec, Stat } from '../../core/proto/common.js';
+import { PaladinJudgement } from '../../core/proto/paladin.js';
 import { Stats, UnitStat } from '../../core/proto_utils/stats.js';
 import * as Presets from './presets.js';
 import * as ProtPaladinInputs from './inputs.js';
 import * as Mechanics from '../../core/constants/mechanics';
 import { ReforgeOptimizer } from '../../core/components/suggest_reforges_action';
+
+// Spell IDs for each rank of Consecration.
+const CONSECRATION_RANK_SPELL_IDS: Record<number, number> = {
+	1: 26573,
+	2: 20116,
+	3: 20922,
+	4: 20923,
+	5: 20924,
+	6: 27173,
+};
+
+// Fixed indices into the default APL (apls/default.apl.json). simpleRotation
+// relies on these — if you reorder the APL, update these too.
+const PREPULL_SEAL_INDEX = 2; // Seal of Righteousness at -3s
+const PRIORITY_JUDGE_ON_SEAL_INDEX = 0; // Const-false-gated: when maintenance seal is up, judge it
+const PRIORITY_SWAP_SEAL_INDEX = 2; // Const-false-gated: when maintenance seal is down, JoX is down, and Judgement is ready, swap to maintenance seal
+const PRIORITY_CONSECRATION_INDEX = 5; // Consecration rank 6
+
+type JudgementSpec = { sealSpellId: number; sealRank: number; judgementAuraSpellId: number; judgementAuraRank: number };
+const JUDGEMENT_CONFIG: Record<PaladinJudgement, JudgementSpec | null> = {
+	[PaladinJudgement.JudgementNone]: null,
+	[PaladinJudgement.JudgementOfLight]: { sealSpellId: 27160, sealRank: 5, judgementAuraSpellId: 27163, judgementAuraRank: 0 },
+	[PaladinJudgement.JudgementOfWisdom]: { sealSpellId: 27166, sealRank: 4, judgementAuraSpellId: 27164, judgementAuraRank: 0 },
+};
 
 const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 	cssClass: 'protection-paladin-sim-ui',
@@ -150,26 +175,86 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 
 		const {
 			prioritizeHolyShield = true,
-			useConsecrate = true,
+			consecrationRank = 6,
 			useExorcism = false,
 			useAvengersShield = true,
-			maintainJudgementOfWisdom = true
+			maintainJudgement = PaladinJudgement.JudgementNone,
 		} = simple;
 
 		rotation.valueVariables = [
 			APLValueVariable.fromJson({ name: 'Prioritize Holy Shield', value: { const: { val: String(prioritizeHolyShield) } } }),
-			APLValueVariable.fromJson({ name: 'Use Consecrate', value: { const: { val: String(useConsecrate) } } }),
 			APLValueVariable.fromJson({ name: 'Use Exorcism', value: { const: { val: String(useExorcism) } } }),
 			APLValueVariable.fromJson({ name: "Use Avenger's Shield", value: { const: { val: String(useAvengersShield) } } }),
-			APLValueVariable.fromJson({ name: 'Maintain Judgement of Wisdom', value: { const: { val: String(maintainJudgementOfWisdom) } } }),
 		];
+
+		const judgementConfig = JUDGEMENT_CONFIG[maintainJudgement];
+
+		// For Light/Wisdom we activate the two maintenance actions that are
+		// dormant in the default APL:
+		//   - Judge-on-seal (action 0): [Const:false AND SoW active] -> Cast
+		//     Judgement. Drop the Const:false so the action fires whenever the
+		//     maintenance seal is up, consuming it to apply the Judgement
+		//     debuff ASAP (before Holy Shield/Consecration).
+		//   - Swap-seal (action 2): [Const:false AND SoW inactive AND JoW
+		//     missing AND Judgement ready] -> Cast SoW. Drop the Const:false
+		//     so the action prepares the maintenance seal whenever it's time
+		//     to refresh the debuff.
+		// Both actions also need the Seal of Wisdom / Judgement of Wisdom
+		// references rewritten when the user picked Judgement of Light. The
+		// prepull seal (SoR by default) is also swapped so combat starts with
+		// the maintenance seal up and a free Judgement applies the debuff.
+		//
+		// For JudgementNone the Const:false keeps both actions dormant; no
+		// mutation is needed.
+		if (judgementConfig) {
+			const prepullSealCast = (rotation.prepullActions[PREPULL_SEAL_INDEX].action!.action as any).castSpell;
+			prepullSealCast.spellId.rawId = { oneofKind: 'spellId', spellId: judgementConfig.sealSpellId };
+			prepullSealCast.spellId.rank = judgementConfig.sealRank;
+
+			// Judge-on-seal: unwrap the AND keeping only the auraIsActive(SoW) clause, then swap its aura to the chosen seal.
+			const judgeEntry = rotation.priorityList[PRIORITY_JUDGE_ON_SEAL_INDEX];
+			const judgeCondition = (judgeEntry.action!.condition!.value as any).and;
+			const sealActiveCheck = judgeCondition.vals[1];
+			const sealActiveAuraId = (sealActiveCheck.value as any).auraIsActive.auraId;
+			sealActiveAuraId.rawId = { oneofKind: 'spellId', spellId: judgementConfig.sealSpellId };
+			sealActiveAuraId.rank = judgementConfig.sealRank;
+			judgeCondition.vals = judgeCondition.vals.slice(1);
+
+			// Swap-seal: unwrap the AND keeping [SoW inactive, JoX missing, Judgement ready]. Swap the seal and debuff auras.
+			const swapEntry = rotation.priorityList[PRIORITY_SWAP_SEAL_INDEX];
+			const swapAndVals = (swapEntry.action!.condition!.value as any).and.vals;
+			const sealInactiveAuraId = (swapAndVals[1].value as any).auraIsInactive.auraId;
+			sealInactiveAuraId.rawId = { oneofKind: 'spellId', spellId: judgementConfig.sealSpellId };
+			sealInactiveAuraId.rank = judgementConfig.sealRank;
+			const judgementInactiveAuraId = (swapAndVals[2].value as any).auraIsInactive.auraId;
+			judgementInactiveAuraId.rawId = { oneofKind: 'spellId', spellId: judgementConfig.judgementAuraSpellId };
+			judgementInactiveAuraId.rank = judgementConfig.judgementAuraRank;
+			(swapEntry.action!.condition!.value as any).and.vals = swapAndVals.slice(1);
+			const swapSealCast = (swapEntry.action!.action as any).castSpell;
+			swapSealCast.spellId.rawId = { oneofKind: 'spellId', spellId: judgementConfig.sealSpellId };
+			swapSealCast.spellId.rank = judgementConfig.sealRank;
+		}
+
+		// Consecration rank swap (removal handled by the filter below).
+		if (consecrationRank !== 0) {
+			const consecrationCast = (rotation.priorityList[PRIORITY_CONSECRATION_INDEX].action!.action as any).castSpell;
+			consecrationCast.spellId.rawId = { oneofKind: 'spellId', spellId: CONSECRATION_RANK_SPELL_IDS[consecrationRank] };
+			consecrationCast.spellId.rank = consecrationRank;
+		}
+
+		// Drop Consecration when disabled. (The maintenance actions stay in
+		// place for JudgementNone — their Const:false keeps them dormant.)
+		const priorityList = rotation.priorityList.filter((_, i) => {
+			if (i === PRIORITY_CONSECRATION_INDEX && consecrationRank === 0) return false;
+			return true;
+		});
 
 		return APLRotation.create({
 			simple: SimpleRotation.create({
 				cooldowns: Cooldowns.create(),
 			}),
 			prepullActions: rotation.prepullActions,
-			priorityList: rotation.priorityList,
+			priorityList: priorityList,
 			groups: rotation.groups,
 			valueVariables: rotation.valueVariables,
 		});

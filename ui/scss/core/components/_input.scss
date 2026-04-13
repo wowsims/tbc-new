@@ -50,6 +50,22 @@
 	select {
 		width: 5rem;
 	}
+
+	// Let enum dropdowns grow to fit their option labels instead of clipping.
+	.enum-picker-selector {
+		width: auto;
+		min-width: 5rem;
+		max-width: 100%;
+	}
+
+	// Inline icon-enum pickers (e.g. Maintain Judgement in the Rotation tab)
+	// are wrapped with `.icon-picker`, which styles its label with a
+	// `margin-left`. That indents the label relative to the other inline
+	// inputs — override it so the label sits flush on the left.
+	&.icon-picker > label:first-child {
+		margin-left: 0;
+		margin-right: var(--spacer-2);
+	}
 }
 
 .input-description {

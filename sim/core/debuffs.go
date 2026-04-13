@@ -541,9 +541,10 @@ func JudgementOfWisdomAura(target *Unit) *Aura {
 	actionId := ActionID{SpellID: 27164}
 	var aura *Aura
 	aura = target.MakeProcTriggerAura(ProcTrigger{
-		Name:       "Judgement of Wisdom",
-		ActionID:   actionId,
-		Duration:   time.Second * 20,
+		Name:            "Judgement of Wisdom",
+		ActionID:        actionId,
+		MetricsActionID: actionId,
+		Duration:        time.Second * 20,
 		ProcChance: 0.5,
 		ProcMask:   ProcMaskDirect,
 		Callback:   CallbackOnSpellHitTaken,

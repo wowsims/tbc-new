@@ -98,6 +98,12 @@ enum PaladinSeal {
 	Vengeance = 8;
 }
 
+enum PaladinJudgement {
+	JudgementNone = 0;
+	JudgementOfLight = 1;
+	JudgementOfWisdom = 2;
+}
+
 message PaladinOptions {
 	PaladinSeal seal = 2;
 }
@@ -119,10 +125,10 @@ message RetributionPaladin {
 message ProtectionPaladin {
 	message Rotation {
 		bool prioritizeHolyShield = 1;
-		bool useConsecrate = 2;
+		int32 consecrationRank = 2;
 		bool useExorcism = 3;
 		bool useAvengersShield = 4;
-		bool maintainJudgementOfWisdom = 5;
+		PaladinJudgement maintainJudgement = 5;
 	}
 
 	message Options {
