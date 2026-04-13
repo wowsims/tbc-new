@@ -550,6 +550,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRogue-AllItems-Figurine-NightseyePanther-24128"
+ value: {
+  dps: 1843.82486
+  tps: 1309.11565
+ }
+}
+dps_results: {
  key: "TestRogue-AllItems-FigurineoftheColossus-27529"
  value: {
   dps: 1813.24487
@@ -680,6 +687,13 @@ dps_results: {
  value: {
   dps: 1608.13454
   tps: 1141.77553
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-JomGabbar-23570"
+ value: {
+  dps: 1842.75571
+  tps: 1308.35655
  }
 }
 dps_results: {

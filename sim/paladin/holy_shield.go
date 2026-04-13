@@ -38,10 +38,11 @@ func (paladin *Paladin) registerHolyShield(rankConfig shared.SpellRankConfig) {
 	actionID := core.ActionID{SpellID: spellID}
 
 	procSpell := paladin.RegisterSpell(core.SpellConfig{
-		ActionID:    actionID,
-		SpellSchool: core.SpellSchoolHoly,
-		ProcMask:    core.ProcMaskEmpty,
-		Flags:       core.SpellFlagNoOnCastComplete | core.SpellFlagPassiveSpell,
+		ActionID:       actionID,
+		SpellSchool:    core.SpellSchoolHoly,
+		ProcMask:       core.ProcMaskEmpty,
+		ClassSpellMask: SpellMaskHolyShieldProc,
+		Flags:          core.SpellFlagNoOnCastComplete | core.SpellFlagPassiveSpell,
 
 		BonusCoefficient: coefficient,
 		DamageMultiplier: 1,
@@ -52,17 +53,21 @@ func (paladin *Paladin) registerHolyShield(rankConfig shared.SpellRankConfig) {
 		},
 	})
 
-	holyShieldAura := paladin.RegisterAura(core.Aura{
+	maxStacks := []int32{4, 6, 8}[paladin.Talents.ImprovedHolyShield]
+
+	var holyShieldAura *core.Aura
+	holyShieldAura = paladin.RegisterAura(core.Aura{
 		Label:     "Holy Shield" + paladin.Label + " " + rankConfig.GetRankLabel(),
 		ActionID:  actionID,
 		Duration:  time.Second * 10,
-		MaxStacks: 4,
+		MaxStacks: maxStacks,
+	}).AttachProcTrigger(core.ProcTrigger{
+		Callback: core.CallbackOnSpellHitTaken,
+		Outcome:  core.OutcomeBlock,
 
-		OnSpellHitTaken: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			if result.Outcome.Matches(core.OutcomeBlock) {
-				procSpell.Cast(sim, spell.Unit)
-				aura.RemoveStack(sim)
-			}
+		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+			procSpell.Cast(sim, spell.Unit)
+			holyShieldAura.RemoveStack(sim)
 		},
 	}).AttachStatBuff(stats.BlockPercent, 0.3)
 
@@ -91,9 +96,11 @@ func (paladin *Paladin) registerHolyShield(rankConfig shared.SpellRankConfig) {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			holyShieldAura.SetStacks(sim, 4)
 			holyShieldAura.Activate(sim)
+			holyShieldAura.SetStacks(sim, maxStacks)
 		},
+
+		RelatedSelfBuff: holyShieldAura,
 	})
 
 	paladin.HolyShieldAuras = append(paladin.HolyShieldAuras, holyShieldAura)

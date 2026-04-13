@@ -988,12 +988,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		22401, // Libram of Hope
-		[
-			"Reduces the base mana cost of your Seal spells by 20.", // 27848 - https://www.wowhead.com/tbc/spell=27848
-		]
-	],
-	[
 		22402, // Libram of Grace
 		[
 			"Reduces the mana cost of your Cleanse spell by 25.", // 27847 - https://www.wowhead.com/tbc/spell=27847
@@ -1198,12 +1192,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		23203, // Libram of Fervor
-		[
-			"Increases the melee attack power bonus of your Seal of the Crusader by 48 and the Holy damage increase of your Judgement of the Crusader by 33.", // 28852 - https://www.wowhead.com/tbc/spell=28852
-		]
-	],
-	[
 		23206, // Mark of the Champion
 		[
 			"Increases attack power by 150 when fighting Undead and Demons. It also allows the acquisition of Scourgestones on behalf of the Argent Dawn.", // 29112 - https://www.wowhead.com/tbc/spell=29112
@@ -1285,12 +1273,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		23565, // Embrace of the Twisting Nether
 		[
 			"You are protected from all physical attacks for 6s, but cannot attack or use physical abilities.", // 34518 - https://www.wowhead.com/tbc/spell=34518
-		]
-	],
-	[
-		23570, // Jom Gabbar
-		[
-			"Increases attack power by 65 and an additional 65 every 2.0 sec. Lasts 20s.", // 29602 - https://www.wowhead.com/tbc/spell=29602
 		]
 	],
 	[
@@ -1552,12 +1534,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		27917, // Libram of the Eternal Rest
-		[
-			"Increases the damage of your Consecration spell by up to 47.", // 34252 - https://www.wowhead.com/tbc/spell=34252
-		]
-	],
-	[
 		27920, // Mark of Conquest
 		[
 			"Sometimes heals bearer of 120 damage when damaging an enemy in melee and chance on ranged hit to restore 172 mana to the bearer.", // 33504 - https://www.wowhead.com/tbc/spell=33504
@@ -1596,18 +1572,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		27949, // Libram of Zeal
-		[
-			"Increases the melee attack power bonus of your Seal of the Crusader by 68 and the Holy damage increase of your Judgement of the Crusader by 47.", // 33557 - https://www.wowhead.com/tbc/spell=33557
-		]
-	],
-	[
-		27983, // Libram of Zeal
-		[
-			"Increases the melee attack power bonus of your Seal of the Crusader by 68 and the Holy damage increase of your Judgement of the Crusader by 47.", // 33557 - https://www.wowhead.com/tbc/spell=33557
-		]
-	],
-	[
 		27989, // Idol of Savagery
 		[
 			"Increases the damage of your Claw and Rake abilites by 30.", // 33565 - https://www.wowhead.com/tbc/spell=33565
@@ -1617,12 +1581,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		27990, // Idol of Savagery
 		[
 			"Increases the damage of your Claw and Rake abilites by 30.", // 33565 - https://www.wowhead.com/tbc/spell=33565
-		]
-	],
-	[
-		28065, // Libram of Wracking
-		[
-			"Increases the damage done by your Exorcism and Holy Wrath spells by up to 120.", // 33695 - https://www.wowhead.com/tbc/spell=33695
 		]
 	],
 	[
@@ -1896,12 +1854,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		29388, // Libram of Repentance
-		[
-			"Increases your block rating by 42 while Holy Shield is active.", // 37742 - https://www.wowhead.com/tbc/spell=37742
-		]
-	],
-	[
 		29389, // Totem of the Pulsing Earth
 		[
 			"Reduces the mana cost of Lightning Bolt by 27.", // 37740 - https://www.wowhead.com/tbc/spell=37740
@@ -2055,12 +2007,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		31031, // Stormfury Totem
 		[
 			"Reduces the mana cost of Stormstrike by 22.", // 37762 - https://www.wowhead.com/tbc/spell=37762
-		]
-	],
-	[
-		31033, // Libram of Righteous Power
-		[
-			"Increases the damage dealt by Crusader Strike by 36.", // 37763 - https://www.wowhead.com/tbc/spell=37763
 		]
 	],
 	[
@@ -2442,18 +2388,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		33503, // Libram of Divine Judgement
-		[
-			"Your Judgement of Command ability has a chance to grant 200 attack power for 10s.", // 43747 - https://www.wowhead.com/tbc/spell=43747
-		]
-	],
-	[
-		33504, // Libram of Divine Purpose
-		[
-			"Increases the damage done by your Seal of Righteousness and Judgement of Righteousness abilities by up to 94.", // 43743 - https://www.wowhead.com/tbc/spell=43743
-		]
-	],
-	[
 		33505, // Totem of Living Water
 		[
 			"Reduces the base mana cost of Chain Heal by 20.", // 43752 - https://www.wowhead.com/tbc/spell=43752
@@ -2616,24 +2550,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		33936, // Gladiator's Libram of Fortitude
-		[
-			"Your Judgement ability also grants you 26 resilience rating for 6s.", // 43850 - https://www.wowhead.com/tbc/spell=43850
-		]
-	],
-	[
-		33937, // Merciless Gladiator's Libram of Fortitude
-		[
-			"Your Judgement ability also grants you 31 resilience rating for 6s.", // 43851 - https://www.wowhead.com/tbc/spell=43851
-		]
-	],
-	[
-		33938, // Vengeful Gladiator's Libram of Fortitude
-		[
-			"Your Judgement ability also grants you 34 resilience rating for 6s.", // 43852 - https://www.wowhead.com/tbc/spell=43852
-		]
-	],
-	[
 		33939, // Gladiator's Totem of Indomitability
 		[
 			"Your Stormstrike ability also grants you 26 resilience rating for 6s.", // 43857 - https://www.wowhead.com/tbc/spell=43857
@@ -2685,24 +2601,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		33947, // Vengeful Gladiator's Idol of Resolve
 		[
 			"Your Mangle ability also grants you 34 resilience rating for 6s.", // 43843 - https://www.wowhead.com/tbc/spell=43843
-		]
-	],
-	[
-		33948, // Gladiator's Libram of Vengeance
-		[
-			"Your Holy Shield ability also grants you 26 resilience rating for 6s.", // 43854 - https://www.wowhead.com/tbc/spell=43854
-		]
-	],
-	[
-		33949, // Merciless Gladiator's Libram of Vengeance
-		[
-			"Your Holy Shield ability also grants you 31 resilience rating for 6s.", // 43855 - https://www.wowhead.com/tbc/spell=43855
-		]
-	],
-	[
-		33950, // Vengeful Gladiator's Libram of Vengeance
-		[
-			"Your Holy Shield ability also grants you 34 resilience rating for 6s.", // 43856 - https://www.wowhead.com/tbc/spell=43856
 		]
 	],
 	[
@@ -2827,21 +2725,9 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		35039, // Brutal Gladiator's Libram of Fortitude
-		[
-			"Your Judgement ability also grants you 39 resilience rating for 6s.", // 46091 - https://www.wowhead.com/tbc/spell=46091
-		]
-	],
-	[
 		35040, // Brutal Gladiator's Libram of Justice
 		[
 			"Causes your Flash of Light to increase the target's Resilience rating by 39 for 6s.", // 46093 - https://www.wowhead.com/tbc/spell=46093
-		]
-	],
-	[
-		35041, // Brutal Gladiator's Libram of Vengeance
-		[
-			"Your Holy Shield ability also grants you 39 resilience rating for 6s.", // 46095 - https://www.wowhead.com/tbc/spell=46095
 		]
 	],
 	[

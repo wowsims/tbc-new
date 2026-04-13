@@ -41,7 +41,6 @@ func RegisterAllOnUseCds() {
 	// shared.NewSimpleStatActive(23558) // The Burrower's Shell - https://www.wowhead.com/tbc/spell=29506
 	// shared.NewSimpleStatActive(23564) // Twisting Nether Chain Shirt - https://www.wowhead.com/tbc/spell=34518
 	// shared.NewSimpleStatActive(23565) // Embrace of the Twisting Nether - https://www.wowhead.com/tbc/spell=34518
-	// shared.NewSimpleStatActive(23570) // Jom Gabbar - https://www.wowhead.com/tbc/spell=29602
 	// shared.NewSimpleStatActive(23587) // Mirren's Drinking Hat - https://www.wowhead.com/tbc/spell=29830
 	// shared.NewSimpleStatActive(23824) // Rocket Boots Xtreme - https://www.wowhead.com/tbc/spell=51582
 	// shared.NewSimpleStatActive(23825) // Nigh Invulnerability Belt - https://www.wowhead.com/tbc/spell=30458

@@ -522,6 +522,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestDestruction-AllItems-Figurine-NightseyePanther-24128"
+ value: {
+  dps: 1818.01969
+  tps: 1587.17792
+ }
+}
+dps_results: {
  key: "TestDestruction-AllItems-FigurineoftheColossus-27529"
  value: {
   dps: 1818.01969
@@ -638,6 +645,13 @@ dps_results: {
  value: {
   dps: 1707.7479
   tps: 1488.2447
+ }
+}
+dps_results: {
+ key: "TestDestruction-AllItems-JomGabbar-23570"
+ value: {
+  dps: 1818.01969
+  tps: 1587.17792
  }
 }
 dps_results: {

@@ -9,6 +9,7 @@ import BlankGear from './gear_sets/blank.gear.json';
 import ArcaneApl from './apls/arcane.apl.json';
 import PreBISArcaneGear from './gear_sets/preBisArcane.gear.json';
 import P1BISArcaneGear from './gear_sets/p1Arcane.gear.json';
+import P2BISArcaneGear from './gear_sets/p2Arcane.gear.json';
 
 // Preset options for this spec.
 // Eventually we will import these values for the raid sim too, so its good to
@@ -17,7 +18,7 @@ import P1BISArcaneGear from './gear_sets/p1Arcane.gear.json';
 export const BLANK_APL = PresetUtils.makePresetAPLRotation('Blank', BlankAPL);
 export const PREBIS_ARCANE = PresetUtils.makePresetGear('Arcane PreRaid - BIS', PreBISArcaneGear);
 export const P1_BIS_ARCANE = PresetUtils.makePresetGear('Arcane P1 - BIS', P1BISArcaneGear);
-//export const P2_BIS_ARCANE = PresetUtils.makePresetGear('Arcane P2 - BIS', P2BISArcaneGear);
+export const P2_BIS_ARCANE = PresetUtils.makePresetGear('Arcane P2 - BIS', P2BISArcaneGear);
 //export const P3_BIS_ARCANE = PresetUtils.makePresetGear('Arcane P3 - BIS', P3BISArcaneGear);
 
 export const ARCANE_TALENTS = PresetUtils.makePresetTalents('Arcane', SavedTalents.create({ talentsString: '2500052300030150330125--053500031003001' }));
@@ -29,21 +30,44 @@ export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
 	'P1 - Arcane',
 	Stats.fromMap(
 		{
-			[Stat.StatMana]: 0.02,
-			[Stat.StatIntellect]: 1.01,
-			[Stat.StatSpirit]: 0.6,
+			[Stat.StatMana]: 0.03,
+			[Stat.StatIntellect]: 1.52,
+			[Stat.StatSpirit]: 1,
 			[Stat.StatSpellDamage]: 1,
-			[Stat.StatArcaneDamage]: 0.96,
-			[Stat.StatFrostDamage]: 0.01,
-			[Stat.StatSpellHitRating]: 2.27,
-			[Stat.StatSpellCritRating]: 0.76,
-			[Stat.StatSpellHasteRating]: 0.78,
+			[Stat.StatArcaneDamage]: 0.92,
+			[Stat.StatFrostDamage]: 0.08,
+			[Stat.StatSpellHitRating]: 2.36,
+			[Stat.StatSpellCritRating]: 0.83,
+			[Stat.StatSpellHasteRating]: 0.53,
 			[Stat.StatSpellPenetration]: 0,
-			[Stat.StatMP5]: 0.29,
+			[Stat.StatMP5]: 0.56,
 		},
 		{
-			[PseudoStat.PseudoStatSchoolHitPercentArcane]: 2.24,
-			[PseudoStat.PseudoStatSchoolHitPercentFrost]: 0.03,
+			[PseudoStat.PseudoStatSchoolHitPercentArcane]: 2.14,
+			[PseudoStat.PseudoStatSchoolHitPercentFrost]: 0.15,
+		},
+	),
+);
+
+export const P2_EP_PRESET = PresetUtils.makePresetEpWeights(
+	'P2 - Arcane',
+	Stats.fromMap(
+		{
+			[Stat.StatMana]: 0.03,
+			[Stat.StatIntellect]: 1.31,
+			[Stat.StatSpirit]: 0.9,
+			[Stat.StatSpellDamage]: 1,
+			[Stat.StatArcaneDamage]: 0.9,
+			[Stat.StatFrostDamage]: 0.1,
+			[Stat.StatSpellHitRating]: 2.3,
+			[Stat.StatSpellCritRating]: 0.77,
+			[Stat.StatSpellHasteRating]: 0.55,
+			[Stat.StatSpellPenetration]: 0,
+			[Stat.StatMP5]: 0.48,
+		},
+		{
+			[PseudoStat.PseudoStatSchoolHitPercentArcane]: 2.09,
+			[PseudoStat.PseudoStatSchoolHitPercentFrost]: 0.2,
 		},
 	),
 );

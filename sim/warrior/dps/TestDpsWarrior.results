@@ -621,6 +621,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestDpsWarrior-AllItems-Figurine-NightseyePanther-24128"
+ value: {
+  dps: 1977.94271
+  tps: 1495.06612
+  dtps: 7.2778
+ }
+}
+dps_results: {
  key: "TestDpsWarrior-AllItems-FigurineoftheColossus-27529"
  value: {
   dps: 1955.47583
@@ -753,6 +761,14 @@ dps_results: {
  value: {
   dps: 1707.85037
   tps: 1292.87996
+  dtps: 7.2778
+ }
+}
+dps_results: {
+ key: "TestDpsWarrior-AllItems-JomGabbar-23570"
+ value: {
+  dps: 1955.47583
+  tps: 1477.83845
   dtps: 7.2778
  }
 }

@@ -118,12 +118,16 @@ func applyRaceEffects(agent Agent) {
 			return ranged != nil && (ranged.RangedWeaponType == proto.RangedWeaponType_RangedWeaponTypeGun)
 		}
 
-		aura := character.GetOrRegisterAura(Aura{
+		aura := character.RegisterAura(Aura{
 			Label:      "Gun Specialization",
 			ActionID:   ActionID{SpellID: 20595},
 			Duration:   NeverExpires,
 			BuildPhase: Ternary(hasGunEquipped(), CharacterBuildPhaseBase, CharacterBuildPhaseNone),
 		}).AttachStatBuff(stats.RangedCritPercent, 1)
+
+		if hasGunEquipped() {
+			MakePermanent(aura)
+		}
 
 		character.RegisterItemSwapCallback([]proto.ItemSlot{proto.ItemSlot_ItemSlotRanged}, func(sim *Simulation, slot proto.ItemSlot) {
 			if hasGunEquipped() {
@@ -237,24 +241,32 @@ func applyRaceEffects(agent Agent) {
 			return ranged != nil && (ranged.RangedWeaponType == proto.RangedWeaponType_RangedWeaponTypeBow)
 		}
 
-		bowAura := character.GetOrRegisterAura(Aura{
+		bowAura := character.RegisterAura(Aura{
 			Label:      "Bow Specialization",
 			ActionID:   ActionID{SpellID: 26290},
 			Duration:   NeverExpires,
 			BuildPhase: Ternary(hasBowEquipped(), CharacterBuildPhaseBase, CharacterBuildPhaseNone),
 		}).AttachStatBuff(stats.RangedCritPercent, 1)
 
+		if hasBowEquipped() {
+			MakePermanent(bowAura)
+		}
+
 		hasThrowingEquipped := func() bool {
 			ranged := character.Ranged()
 			return ranged != nil && (ranged.RangedWeaponType == proto.RangedWeaponType_RangedWeaponTypeThrown)
 		}
 
-		throwingAura := character.GetOrRegisterAura(Aura{
+		throwingAura := character.RegisterAura(Aura{
 			Label:      "Throwing Specialization",
 			ActionID:   ActionID{SpellID: 20558},
 			Duration:   NeverExpires,
 			BuildPhase: Ternary(hasThrowingEquipped(), CharacterBuildPhaseBase, CharacterBuildPhaseNone),
 		}).AttachStatBuff(stats.RangedCritPercent, 1)
+
+		if hasThrowingEquipped() {
+			MakePermanent(throwingAura)
+		}
 
 		character.RegisterItemSwapCallback([]proto.ItemSlot{proto.ItemSlot_ItemSlotRanged}, func(sim *Simulation, slot proto.ItemSlot) {
 			if hasBowEquipped() {

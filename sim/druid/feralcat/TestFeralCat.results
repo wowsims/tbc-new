@@ -667,6 +667,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestFeralCat-AllItems-Figurine-NightseyePanther-24128"
+ value: {
+  dps: 701.14
+  tps: 497.8094
+  hps: 68.65497
+ }
+}
+dps_results: {
  key: "TestFeralCat-AllItems-FigurineoftheColossus-27529"
  value: {
   dps: 694.39457
@@ -863,6 +871,14 @@ dps_results: {
  value: {
   dps: 703.38848
   tps: 499.40582
+  hps: 68.65497
+ }
+}
+dps_results: {
+ key: "TestFeralCat-AllItems-JomGabbar-23570"
+ value: {
+  dps: 694.39457
+  tps: 493.02014
   hps: 68.65497
  }
 }
