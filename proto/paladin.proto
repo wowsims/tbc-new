@@ -104,6 +104,16 @@ enum PaladinJudgement {
 	JudgementOfWisdom = 2;
 }
 
+enum PaladinAura {
+	AuraNone = 0;
+	DevotionAura = 1;
+	RetributionAura = 2;
+	ConcentrationAura = 3;
+	FireResistanceAura = 4;
+	FrostResistanceAura = 5;
+	ShadowResistanceAura = 6;
+}
+
 message PaladinOptions {
 	PaladinSeal seal = 2;
 }
@@ -129,6 +139,7 @@ message ProtectionPaladin {
 		bool useExorcism = 3;
 		bool useAvengersShield = 4;
 		PaladinJudgement maintainJudgement = 5;
+		PaladinAura aura = 6;
 	}
 
 	message Options {

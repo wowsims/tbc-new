@@ -14,6 +14,7 @@ import {
 	TristateEffect,
 } from '../../core/proto/common.js';
 import {
+	PaladinAura,
 	PaladinJudgement,
 	ProtectionPaladin_Options as ProtectionPaladinOptions,
 	ProtectionPaladin_Rotation as ProtectionPaladinRotation,
@@ -46,6 +47,7 @@ export const DefaultSimpleRotation = ProtectionPaladinRotation.create({
 	useExorcism: false,
 	useAvengersShield: true,
 	maintainJudgement: PaladinJudgement.JudgementNone,
+	aura: PaladinAura.DevotionAura,
 });
 
 export const APL_SIMPLE = PresetUtils.makePresetSimpleRotation('Simple', Spec.SpecProtectionPaladin, DefaultSimpleRotation);

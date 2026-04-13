@@ -4,7 +4,7 @@ import { Player } from '../../core/player.js';
 import { PlayerClasses } from '../../core/player_classes';
 import { APLRotation, APLRotation_Type, APLValueAnd, APLValueVariable, SimpleRotation } from '../../core/proto/apl.js';
 import { Cooldowns, Faction, PseudoStat, Race, Spec, Stat } from '../../core/proto/common.js';
-import { PaladinJudgement } from '../../core/proto/paladin.js';
+import { PaladinAura, PaladinJudgement } from '../../core/proto/paladin.js';
 import { Stats, UnitStat } from '../../core/proto_utils/stats.js';
 import * as Presets from './presets.js';
 import * as ProtPaladinInputs from './inputs.js';
@@ -23,10 +23,22 @@ const CONSECRATION_RANK_SPELL_IDS: Record<number, number> = {
 
 // Fixed indices into the default APL (apls/default.apl.json). simpleRotation
 // relies on these — if you reorder the APL, update these too.
+const PREPULL_AURA_INDEX = 1; // Devotion Aura at -18.5s
 const PREPULL_SEAL_INDEX = 2; // Seal of Righteousness at -3s
 const PRIORITY_JUDGE_ON_SEAL_INDEX = 0; // Const-false-gated: when maintenance seal is up, judge it
 const PRIORITY_SWAP_SEAL_INDEX = 2; // Const-false-gated: when maintenance seal is down, JoX is down, and Judgement is ready, swap to maintenance seal
 const PRIORITY_CONSECRATION_INDEX = 5; // Consecration rank 6
+
+// SpellIDs for each paladin aura option.
+const AURA_SPELL_IDS: Record<PaladinAura, number | null> = {
+	[PaladinAura.AuraNone]: null,
+	[PaladinAura.DevotionAura]: 27149,
+	[PaladinAura.RetributionAura]: 27150,
+	[PaladinAura.ConcentrationAura]: 19746,
+	[PaladinAura.FireResistanceAura]: 27153,
+	[PaladinAura.FrostResistanceAura]: 27152,
+	[PaladinAura.ShadowResistanceAura]: 27151,
+};
 
 type JudgementSpec = { sealSpellId: number; sealRank: number; judgementAuraSpellId: number; judgementAuraRank: number };
 const JUDGEMENT_CONFIG: Record<PaladinJudgement, JudgementSpec | null> = {
@@ -179,6 +191,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 			useExorcism = false,
 			useAvengersShield = true,
 			maintainJudgement = PaladinJudgement.JudgementNone,
+			aura = PaladinAura.DevotionAura,
 		} = simple;
 
 		rotation.valueVariables = [
@@ -242,10 +255,24 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 			consecrationCast.spellId.rank = consecrationRank;
 		}
 
-		// Drop Consecration when disabled. (The maintenance actions stay in
-		// place for JudgementNone — their Const:false keeps them dormant.)
+		// Aura swap: replace the SpellID of the prepull aura cast. If None is
+		// picked the action is filtered out entirely.
+		const auraSpellId = AURA_SPELL_IDS[aura];
+		if (auraSpellId !== null) {
+			const auraCast = (rotation.prepullActions[PREPULL_AURA_INDEX].action!.action as any).castSpell;
+			auraCast.spellId.rawId = { oneofKind: 'spellId', spellId: auraSpellId };
+			auraCast.spellId.rank = 0;
+		}
+
+		// Drop Consecration when disabled, and the prepull aura when the user
+		// picked None. (The maintenance actions stay in place for
+		// JudgementNone — their Const:false keeps them dormant.)
 		const priorityList = rotation.priorityList.filter((_, i) => {
 			if (i === PRIORITY_CONSECRATION_INDEX && consecrationRank === 0) return false;
+			return true;
+		});
+		const prepullActions = rotation.prepullActions.filter((_, i) => {
+			if (i === PREPULL_AURA_INDEX && auraSpellId === null) return false;
 			return true;
 		});
 
@@ -253,7 +280,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 			simple: SimpleRotation.create({
 				cooldowns: Cooldowns.create(),
 			}),
-			prepullActions: rotation.prepullActions,
+			prepullActions: prepullActions,
 			priorityList: priorityList,
 			groups: rotation.groups,
 			valueVariables: rotation.valueVariables,

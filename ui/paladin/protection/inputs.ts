@@ -2,7 +2,7 @@
 // These don't need to be in a separate file but it keeps things cleaner.
 import * as InputHelpers from '../../core/components/input_helpers';
 import { Spec } from '../../core/proto/common';
-import { PaladinJudgement } from '../../core/proto/paladin';
+import { PaladinAura, PaladinJudgement } from '../../core/proto/paladin';
 import { ActionId } from '../../core/proto_utils/action_id';
 
 export const PaladinRotationConfig = {
@@ -56,6 +56,22 @@ export const PaladinRotationConfig = {
 			],
 			changeEmitter: player => player.rotationChangeEmitter,
 			getValue: player => player.getSimpleRotation().maintainJudgement,
+		}),
+		InputHelpers.makeRotationEnumIconInput<Spec.SpecProtectionPaladin, PaladinAura>({
+			fieldName: 'aura',
+			label: 'Aura',
+			labelTooltip: 'Which paladin aura to activate in the prepull. Pick <b>None</b> to skip casting an aura.',
+			values: [
+				{ color: 'grey', value: PaladinAura.AuraNone, tooltip: 'None' },
+				{ actionId: ActionId.fromSpellId(27149), value: PaladinAura.DevotionAura, tooltip: 'Devotion Aura' },
+				{ actionId: ActionId.fromSpellId(27150), value: PaladinAura.RetributionAura, tooltip: 'Retribution Aura' },
+				{ actionId: ActionId.fromSpellId(19746), value: PaladinAura.ConcentrationAura, tooltip: 'Concentration Aura' },
+				{ actionId: ActionId.fromSpellId(27153), value: PaladinAura.FireResistanceAura, tooltip: 'Fire Resistance Aura' },
+				{ actionId: ActionId.fromSpellId(27152), value: PaladinAura.FrostResistanceAura, tooltip: 'Frost Resistance Aura' },
+				{ actionId: ActionId.fromSpellId(27151), value: PaladinAura.ShadowResistanceAura, tooltip: 'Shadow Resistance Aura' },
+			],
+			changeEmitter: player => TypedEvent.onAny([player.rotationChangeEmitter, player.talentsChangeEmitter]),
+			getValue: player => player.getSimpleRotation().aura,
 		}),
 	],
 };
