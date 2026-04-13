@@ -43,3 +43,5 @@ wowsimtbc*.h
 wowsims.db
 assets/db_inputs/dbc/
 tbc.sln
+
+.claude

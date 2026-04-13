@@ -202,7 +202,7 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 	}
 
 	if partyBuffs.DevotionAura != proto.TristateEffect_TristateEffectMissing {
-		MakePermanent(DevotionAuraBuff(char, IsImproved(partyBuffs.DevotionAura)))
+		MakePermanent(DevotionAuraBuff(char, false, TernaryInt32(IsImproved(partyBuffs.DevotionAura), 5, 0)))
 	}
 
 	if partyBuffs.DraeneiRacialCaster {
@@ -246,7 +246,7 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 	}
 
 	if partyBuffs.RetributionAura != proto.TristateEffect_TristateEffectMissing {
-		MakePermanent(RetributionAuraBuff(char, IsImproved(partyBuffs.RetributionAura), 5))
+		MakePermanent(RetributionAuraBuff(char, false, TernaryInt32(IsImproved(partyBuffs.RetributionAura), 2, 0)))
 	}
 
 	if partyBuffs.SanctityAura != proto.TristateEffect_TristateEffectMissing {
@@ -352,7 +352,7 @@ func ThornsAura(char *Character, points int32) *Aura {
 				procSpell.Cast(sim, spell.Unit)
 			}
 		},
-	}).AttachMultiplicativePseudoStatBuff(&char.PseudoStats.BonusPhysicalDamageTaken, -80)
+	})
 }
 
 func ArcaneBrillianceAura(char *Character) *Aura {
@@ -549,19 +549,50 @@ func CommandingShoutAura(char *Character, isPlayer bool, boomingVoicePoints int3
 	return aura
 }
 
-func DevotionAuraBuff(char *Character, improved bool) *Aura {
-	armorBuff := 861.0
-	if improved {
-		armorBuff *= 1.40
-	}
+var (
+	PaladinAuraCategory     = "PaladinAura"
+	DevotionAuraCategory    = "DevotionAura"
+	RetributionAuraCategory = "RetributionAura"
+)
 
-	return makeStatBuff(char, BuffConfig{
-		Label:    "Devotion Aura",
-		ActionID: ActionID{SpellID: 27149},
-		Stats: []StatConfig{
-			{stats.Armor, armorBuff, false},
+// paladinAuraPriority returns the exclusivity priority used for self/external
+// variants of the same paladin aura. Self-cast always wins over party-buff-
+// applied (external) versions so they never stack.
+func paladinAuraPriority(isPlayer bool) float64 {
+	return TernaryFloat64(isPlayer, 1, 0)
+}
+
+func DevotionAuraBuff(char *Character, isPlayer bool, impDevotionAuraRank int32) *Aura {
+	armorBuff := 861.0 * (1 + 0.08*float64(impDevotionAuraRank))
+
+	// Self-cast: Tag=0 matches the paladin's castable spell and only applies when the APL
+	// triggers it. External: Tag=-1 is auto-applied in the Buffs build phase and the UI
+	// conventionally renders Tag=-1 auras as "(External)" (see action_id.ts).
+	aura := char.GetOrRegisterAura(Aura{
+		Label:      fmt.Sprintf("Devotion Aura (%s)", Ternary(isPlayer, "Player", "External")),
+		ActionID:   ActionID{SpellID: 27149}.WithTag(TernaryInt32(isPlayer, 0, -1)),
+		Duration:   NeverExpires,
+		BuildPhase: Ternary(isPlayer, CharacterBuildPhaseNone, CharacterBuildPhaseBuffs),
+	})
+
+	// Self and external share DevotionAuraCategory (SingleAura) so they don't stack
+	// and self wins via higher priority. Armor flows through OnGain/OnExpire so it's
+	// applied/removed alongside the exclusive effect switch.
+	aura.NewExclusiveEffect(DevotionAuraCategory, true, ExclusiveEffect{
+		Priority: paladinAuraPriority(isPlayer),
+		OnGain: func(ee *ExclusiveEffect, sim *Simulation) {
+			ee.Aura.Unit.AddStatDynamic(sim, stats.Armor, armorBuff)
+		},
+		OnExpire: func(ee *ExclusiveEffect, sim *Simulation) {
+			ee.Aura.Unit.AddStatDynamic(sim, stats.Armor, -armorBuff)
 		},
 	})
+
+	if isPlayer {
+		aura.NewExclusiveEffect(PaladinAuraCategory, true, ExclusiveEffect{})
+	}
+
+	return aura
 }
 
 func FerociousInspiration(char *Character, count int32) *Aura {
@@ -605,33 +636,51 @@ func MoonkinAuraBuff(char *Character, improved bool) *Aura {
 	})
 }
 
-func RetributionAuraBuff(char *Character, improved bool, points int32) *Aura {
-	actionID := ActionID{SpellID: 27150}
+func RetributionAuraBuff(char *Character, isPlayer bool, impRetributionAuraRank int32) *Aura {
+	actionID := ActionID{SpellID: 27150}.WithTag(TernaryInt32(isPlayer, 0, -1))
+	impMultiplier := 1 + 0.25*float64(impRetributionAuraRank)
 
 	procSpell := char.RegisterSpell(SpellConfig{
 		ActionID:    actionID,
 		SpellSchool: SpellSchoolHoly,
-		Flags:       SpellFlagBinary,
+		ProcMask:    ProcMaskEmpty,
+		Flags:       SpellFlagBinary | SpellFlagPassiveSpell,
+
+		DamageMultiplier: 1,
+		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
-			baseDamage := 26 * (1 + 0.25*float64(points))
-			if improved {
-				baseDamage *= 1.50
-			}
-			result := spell.CalcDamage(sim, target, baseDamage, spell.OutcomeAlwaysHit)
-			spell.DealDamage(sim, result)
+			spell.CalcAndDealDamage(sim, target, 26*impMultiplier, spell.OutcomeAlwaysHit)
 		},
 	})
 
-	return MakePermanent(char.RegisterAura(Aura{
-		Label:    "Retribution Aura",
-		ActionID: actionID,
-		OnSpellHitTaken: func(aura *Aura, sim *Simulation, spell *Spell, result *SpellResult) {
-			if result.Landed() && spell.SpellSchool == SpellSchoolPhysical {
+	aura := char.GetOrRegisterAura(Aura{
+		Label:      fmt.Sprintf("Retribution Aura (%s)", Ternary(isPlayer, "Player", "External")),
+		ActionID:   actionID,
+		Duration:   NeverExpires,
+		BuildPhase: Ternary(isPlayer, CharacterBuildPhaseNone, CharacterBuildPhaseBuffs),
+	}).AttachProcTrigger(ProcTrigger{
+		Name:     "Retribution Aura Damage",
+		Callback: CallbackOnSpellHitTaken,
+		Outcome:  OutcomeLanded,
+		Handler: func(sim *Simulation, spell *Spell, result *SpellResult) {
+			if spell.SpellSchool.Matches(SpellSchoolPhysical) {
 				procSpell.Cast(sim, spell.Unit)
 			}
 		},
-	}))
+	})
+
+	// Self and external share RetributionAuraCategory (SingleAura) so only one
+	// variant's proc trigger fires at a time; self wins via higher priority.
+	aura.NewExclusiveEffect(RetributionAuraCategory, true, ExclusiveEffect{
+		Priority: paladinAuraPriority(isPlayer),
+	})
+
+	if isPlayer {
+		aura.NewExclusiveEffect(PaladinAuraCategory, true, ExclusiveEffect{})
+	}
+
+	return aura
 }
 
 func SanctityAuraBuff(char *Character, improved bool) *Aura {

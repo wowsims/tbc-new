@@ -13,12 +13,13 @@ func (paladin *Paladin) RegisterSpiritualAttunement() {
 
 	manaMetrics := paladin.NewManaMetrics(core.ActionID{SpellID: 33776})
 
-	core.MakePermanent(paladin.RegisterAura(core.Aura{
-		Label: "Spiritual Attunement",
-		OnSpellHitTaken: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			if result.Damage > 0 {
-				paladin.AddMana(sim, result.Damage*coeff, manaMetrics)
-			}
+	paladin.MakeProcTriggerAura(core.ProcTrigger{
+		Name:               "Spiritual Attunement",
+		ActionID:           core.ActionID{SpellID: 33776},
+		Callback:           core.CallbackOnSpellHitTaken,
+		RequireDamageDealt: true,
+		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+			paladin.AddMana(sim, result.Damage*coeff, manaMetrics)
 		},
-	}))
+	})
 }

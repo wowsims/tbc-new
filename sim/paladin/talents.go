@@ -528,14 +528,13 @@ func (paladin *Paladin) applyReckoning() {
 	})
 
 	paladin.MakeProcTriggerAura(core.ProcTrigger{
-		Name:       "Reckoning",
-		Callback:   core.CallbackOnSpellHitTaken,
-		ProcChance: 0.02 * float64(paladin.Talents.Reckoning),
+		Name:               "Reckoning",
+		Callback:           core.CallbackOnSpellHitTaken,
+		ProcChance:         0.02 * float64(paladin.Talents.Reckoning),
+		RequireDamageDealt: true,
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			if result.Damage > 0 {
-				procAura.Activate(sim)
-				procAura.SetStacks(sim, 4)
-			}
+			procAura.Activate(sim)
+			procAura.SetStacks(sim, 4)
 		},
 	})
 }
