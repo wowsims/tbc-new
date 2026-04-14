@@ -18,10 +18,7 @@ type Druid struct {
 
 	Treants Treants
 
-	BleedsActive      map[*core.Unit]int32
 	CannotShredTarget bool
-	RipBaseNumTicks   int32
-	RipMaxNumTicks    int32
 
 	ShredFlatBonus    float64 // Nordrassil Harness 4P: +75
 	LacerateTickBonus float64 // Nordrassil Harness 4P: +15 per stack per tick
@@ -277,10 +274,6 @@ func (druid *Druid) RegisterFeralTankSpells() {
 
 func (druid *Druid) Reset(_ *core.Simulation) {
 	druid.form = druid.StartingForm
-
-	for target := range druid.BleedsActive {
-		druid.BleedsActive[target] = 0
-	}
 }
 
 func (druid *Druid) OnEncounterStart(sim *core.Simulation) {
@@ -288,16 +281,12 @@ func (druid *Druid) OnEncounterStart(sim *core.Simulation) {
 
 func New(char *core.Character, form DruidForm, selfBuffs SelfBuffs, talents string) *Druid {
 	druid := &Druid{
-		Character:       *char,
-		SelfBuffs:       selfBuffs,
-		Talents:         &proto.DruidTalents{},
-		StartingForm:    form,
-		form:            form,
-		BleedsActive:    make(map[*core.Unit]int32),
-		RipBaseNumTicks: 8,
+		Character:    *char,
+		SelfBuffs:    selfBuffs,
+		Talents:      &proto.DruidTalents{},
+		StartingForm: form,
+		form:         form,
 	}
-
-	druid.RipMaxNumTicks = druid.RipBaseNumTicks + 3
 
 	core.FillTalentsProto(druid.Talents.ProtoReflect(), talents, TalentTreeSizes)
 	druid.EnableManaBar()
