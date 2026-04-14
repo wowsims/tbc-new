@@ -179,6 +179,7 @@ func (ai *HydrossAI) registerMark() {
 
 func (ai *HydrossAI) Reset(sim *core.Simulation) {
 	ai.Target.Enable(sim)
+	ai.Target.PseudoStats.CanCrush = false
 }
 
 func (ai *HydrossAI) ExecuteCustomRotation(sim *core.Simulation) {
