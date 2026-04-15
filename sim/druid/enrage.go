@@ -18,13 +18,7 @@ func (druid *Druid) registerEnrageSpell() {
 		Label:    "Enrage",
 		ActionID: actionID,
 		Duration: 10 * time.Second,
-		OnGain: func(aura *core.Aura, sim *core.Simulation) {
-			druid.PseudoStats.ArmorMultiplier *= (1 - armorReduction)
-		},
-		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
-			druid.PseudoStats.ArmorMultiplier /= (1 - armorReduction)
-		},
-	})
+	}).AttachMultiplicativePseudoStatBuff(&druid.PseudoStats.ArmorMultiplier, 1-armorReduction)
 
 	// Deactivate Enrage when leaving Bear Form.
 	druid.BearFormAura.ApplyOnExpire(func(_ *core.Aura, sim *core.Simulation) {

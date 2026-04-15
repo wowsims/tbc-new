@@ -9,7 +9,7 @@ import (
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
-const hydrossMeleeDamageSpread = 0.293
+const hydrossMeleeDamageSpread = 0.413
 const hydrossTheUnstableID int32 = 21216
 const hydrossMarkInterval = time.Second * 15
 
@@ -100,6 +100,7 @@ type HydrossAI struct {
 	Target       *core.Target
 	BossUnit     *core.Unit
 	MainTank     *core.Unit
+	OffTank      *core.Unit
 	markSpellIDs []int32
 	markSpell    *core.Spell
 }

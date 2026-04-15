@@ -18,9 +18,7 @@ func (druid *Druid) registerFrenziedRegenerationSpell() {
 
 	// Deactivate when leaving Bear Form.
 	druid.BearFormAura.ApplyOnExpire(func(_ *core.Aura, sim *core.Simulation) {
-		if !druid.Env.MeasuringStats {
-			druid.FrenziedRegenerationAura.Deactivate(sim)
-		}
+		druid.FrenziedRegenerationAura.Deactivate(sim)
 	})
 
 	druid.FrenziedRegeneration = druid.RegisterSpell(Bear, core.SpellConfig{
