@@ -7,6 +7,9 @@ import (
 )
 
 func (druid *Druid) registerFerociousBiteSpell() {
+	const baseCost = 35
+
+	var energyMetrics *core.ResourceMetrics
 
 	druid.FerociousBite = druid.RegisterSpell(Cat, core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 24248},
@@ -16,8 +19,7 @@ func (druid *Druid) registerFerociousBiteSpell() {
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
 
 		EnergyCost: core.EnergyCostOptions{
-			Cost: 35,
-			// Ferocious Bite consumes ALL available energy; refund is not applicable.
+			Cost: baseCost,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
@@ -37,15 +39,10 @@ func (druid *Druid) registerFerociousBiteSpell() {
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			cp := float64(druid.ComboPoints())
 			ap := spell.MeleeAttackPower(target)
-			// Energy above the base 35 is consumed for bonus damage at 4.1 per energy.
-			excessEnergy := druid.CurrentEnergy() - 35
-			if excessEnergy < 0 {
-				excessEnergy = 0
-			}
-
-			// Spend all energy before dealing damage.
+			excessEnergy := druid.CurrentEnergy()
 			if excessEnergy > 0 {
-				druid.SpendEnergy(sim, excessEnergy, spell.EnergyMetrics())
+				druid.SpendEnergy(sim, excessEnergy, energyMetrics)
+				energyMetrics.Events--
 			}
 
 			dmgPerCP := 169.0 + druid.IdolFerociousBiteBonus
@@ -62,12 +59,13 @@ func (druid *Druid) registerFerociousBiteSpell() {
 		ExpectedInitialDamage: func(sim *core.Simulation, target *core.Unit, spell *core.Spell, _ bool) *core.SpellResult {
 			cp := float64(druid.ComboPoints())
 			ap := spell.MeleeAttackPower(target)
-			// Expected value: midpoint of random roll, no excess energy assumed.
 			dmgPerCP := 169.0 + druid.IdolFerociousBiteBonus
 			baseDamage := 57 + dmgPerCP*cp + 33 + 0.05*cp*ap
 			return spell.CalcDamage(sim, target, baseDamage, spell.OutcomeExpectedMeleeWeaponSpecialHitAndCrit)
 		},
 	})
+
+	energyMetrics = druid.FerociousBite.Cost.ResourceCostImpl.(*core.EnergyCost).ResourceMetrics
 }
 
 func (druid *Druid) CurrentFerociousBiteCost() float64 {

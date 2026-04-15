@@ -46,7 +46,6 @@ func (druid *Druid) ApplyTalents() {
 	druid.applySavageFury()
 	druid.applyHeartOfTheWild()
 	druid.applySurvivalOfTheFittest()
-	druid.applyLeaderOfThePack()
 	druid.applyImprovedLeaderOfThePack()
 
 	// Restoration
@@ -396,7 +395,7 @@ func (druid *Druid) applyFerocity() {
 	}
 
 	druid.AddStaticMod(core.SpellModConfig{
-		ClassMask: DruidSpellRake | DruidSpellMangleCat | DruidSpellFerociousBite,
+		ClassMask: DruidSpellRake | DruidSpellMangleCat,
 		Kind:      core.SpellMod_PowerCost_Flat,
 		IntValue:  -druid.Talents.Ferocity,
 	})
@@ -501,15 +500,6 @@ func (druid *Druid) applyPrimalFury() {
 			druid.AddRage(sim, 5, rageMetrics)
 		},
 	})
-}
-
-func (druid *Druid) applyLeaderOfThePack() {
-	// Leader of the Pack: passive aura that grants the party +5% melee crit.
-	// The party buff is handled via AddPartyBuffs in the spec; no sim-side
-	// aura registration is needed here beyond the talent gate.
-	if !druid.Talents.LeaderOfThePack {
-		return
-	}
 }
 
 func (druid *Druid) applyImprovedLeaderOfThePack() {
