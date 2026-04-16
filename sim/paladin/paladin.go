@@ -13,7 +13,6 @@ const JudgementAuraTag = "JudgementAura"
 type Paladin struct {
 	core.Character
 
-	Seal    proto.PaladinSeal
 	Talents *proto.PaladinTalents
 
 	Forbearance *core.Aura
@@ -80,7 +79,6 @@ type Paladin struct {
 	DivineFavorAura         *core.Aura
 	DivineIlluminationSpell *core.Spell
 	DivineIlluminationAura  *core.Aura
-	SanctityAura            *core.Aura
 	HolyShields             []*core.Spell
 	HolyShieldAuras         []*core.Aura
 	AvengersShields         []*core.Spell
@@ -157,7 +155,6 @@ func NewPaladin(character *core.Character, talentsStr string, options *proto.Pal
 	paladin := &Paladin{
 		Character: *character,
 		Talents:   &proto.PaladinTalents{},
-		Seal:      options.Seal,
 	}
 
 	core.FillTalentsProto(paladin.Talents.ProtoReflect(), talentsStr, TalentTreeSizes)

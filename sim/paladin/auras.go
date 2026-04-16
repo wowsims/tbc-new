@@ -82,17 +82,21 @@ func (paladin *Paladin) registerConcentrationAura() {
 
 // Fire Resistance Aura
 // https://www.wowhead.com/tbc/spell=27153
+//
+// Gives 70 fire resistance to party members within 30 yards.
+// Players may only have one Aura on them per Paladin at any one time.
 func (paladin *Paladin) registerFireResistanceAura() {
-	aura := paladin.registerSelfCastAura("Fire Resistance Aura", core.ActionID{SpellID: 27153}).
-		AttachStatBuff(stats.FireResistance, 70)
+	aura := core.FireResistanceAuraBuff(&paladin.Character, true)
 	paladin.registerAuraSpell(aura, SpellMaskFireResistanceAura)
 }
 
 // Frost Resistance Aura
 // https://www.wowhead.com/tbc/spell=27152
+//
+// Gives 70 frost resistance to party members within 30 yards.
+// Players may only have one Aura on them per Paladin at any one time.
 func (paladin *Paladin) registerFrostResistanceAura() {
-	aura := paladin.registerSelfCastAura("Frost Resistance Aura", core.ActionID{SpellID: 27152}).
-		AttachStatBuff(stats.FrostResistance, 70)
+	aura := core.FrostResistanceAuraBuff(&paladin.Character, true)
 	paladin.registerAuraSpell(aura, SpellMaskFrostResistanceAura)
 }
 
@@ -108,11 +112,9 @@ func (paladin *Paladin) registerShadowResistanceAura() {
 // https://www.wowhead.com/tbc/spell=20218
 //
 // Increases Holy damage done by party members within 30 yards by 10%.
+// Improved Sanctity Aura talent adds a 1/2% bonus to all damage dealt.
 // Players may only have one Aura on them per Paladin at any one time.
 func (paladin *Paladin) registerSanctityAura() {
-	aura := paladin.registerSelfCastAura("Sanctity Aura", core.ActionID{SpellID: 20218}).
-		AttachMultiplicativePseudoStatBuff(
-			&paladin.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexHoly], 1.1,
-		)
+	aura := core.SanctityAuraBuff(&paladin.Character, true, paladin.Talents.ImprovedSanctityAura)
 	paladin.registerAuraSpell(aura, SpellMaskSanctityAura)
 }

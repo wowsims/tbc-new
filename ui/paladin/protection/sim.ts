@@ -2,8 +2,8 @@ import * as OtherInputs from '../../core/components/inputs/other_inputs.js';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui.js';
 import { Player } from '../../core/player.js';
 import { PlayerClasses } from '../../core/player_classes';
-import { APLRotation, APLRotation_Type, APLValueAnd, APLValueVariable, SimpleRotation } from '../../core/proto/apl.js';
-import { Cooldowns, Faction, PseudoStat, Race, Spec, Stat } from '../../core/proto/common.js';
+import { APLRotation, APLRotation_Type, APLValueVariable, SimpleRotation } from '../../core/proto/apl.js';
+import { Cooldowns, PseudoStat, Spec, Stat } from '../../core/proto/common.js';
 import { PaladinAura, PaladinJudgement } from '../../core/proto/paladin.js';
 import { Stats, UnitStat } from '../../core/proto_utils/stats.js';
 import * as Presets from './presets.js';
@@ -38,6 +38,7 @@ const AURA_SPELL_IDS: Record<PaladinAura, number | null> = {
 	[PaladinAura.FireResistanceAura]: 27153,
 	[PaladinAura.FrostResistanceAura]: 27152,
 	[PaladinAura.ShadowResistanceAura]: 27151,
+	[PaladinAura.SanctityAura]: 20218,
 };
 
 type JudgementSpec = { sealSpellId: number; sealRank: number; judgementAuraSpellId: number; judgementAuraRank: number };
@@ -182,7 +183,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 		return Presets.APL_PRESET.rotation.rotation!;
 	},
 
-	simpleRotation: (_player, simple): APLRotation => {
+	simpleRotation: (player, simple): APLRotation => {
 		const rotation = APLRotation.clone(Presets.APL_PRESET.rotation.rotation!);
 
 		const {
@@ -191,8 +192,12 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 			useExorcism = false,
 			useAvengersShield = true,
 			maintainJudgement = PaladinJudgement.JudgementNone,
-			aura = PaladinAura.DevotionAura,
+			aura: rawAura = PaladinAura.DevotionAura,
 		} = simple;
+
+		// Sanctity Aura requires the talent. If the user picked it without the
+		// talent (e.g. dropped the point after selecting), fall back to None.
+		const aura = rawAura === PaladinAura.SanctityAura && !player.getTalents().sanctityAura ? PaladinAura.AuraNone : rawAura;
 
 		rotation.valueVariables = [
 			APLValueVariable.fromJson({ name: 'Prioritize Holy Shield', value: { const: { val: String(prioritizeHolyShield) } } }),

@@ -1,6 +1,7 @@
 {
 	"type": "TypeAPL",
 	"prepullActions": [
+		{"action":{"castSpell":{"spellId":{"spellId":20218}}},"doAtValue":{"const":{"val":"-18.5s"}}},
 		{"action":{"groupReference":{"groupName":"PrepullSeal"}},"doAtValue":{"const":{"val":"-1.5s"}}},
         {"action":{"groupReference":{"groupName":"PrepullJudge"}},"doAtValue":{"const":{"val":"0s"}}},
         {"action":{"groupReference":{"groupName":"PullSeal"}},"doAtValue":{"const":{"val":"0s"}}}

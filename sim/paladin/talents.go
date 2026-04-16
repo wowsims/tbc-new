@@ -33,9 +33,9 @@ func (paladin *Paladin) registerTalentSpells() {
 	if paladin.Talents.SealOfCommand {
 		SealOfCommandRanks.RegisterAll(paladin.registerSealOfCommandRank)
 	}
-	// if paladin.Talents.SanctityAura {
-	// 	paladin.registerSanctityAura()
-	// }
+	if paladin.Talents.SanctityAura {
+		paladin.registerSanctityAura()
+	}
 	// if paladin.Talents.Repentance {
 	// 	paladin.registerRepentance()
 	// }
@@ -637,8 +637,7 @@ func (paladin *Paladin) applyTwoHandedWeaponSpecialization() {
 
 // Improved Sanctity Aura - Increases the damage caused by all party members within 30 yards of the Paladin with Sanctity Aura active by 1/2%
 func (paladin *Paladin) applyImprovedSanctityAura() {
-	// TODO: Implement aura modifier (combined with Sanctity Aura registration)
-	// Assumed to be set in settings
+	// Handled in registerSanctityAura() where the talent points are read directly.
 }
 
 // Vengeance - Gives you a 1/2/3/4/5% bonus to Physical and Holy damage you deal for 30 sec after dealing a critical strike from a weapon swing, spell, or ability

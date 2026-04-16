@@ -4,6 +4,7 @@ import * as InputHelpers from '../../core/components/input_helpers';
 import { Spec } from '../../core/proto/common';
 import { PaladinAura, PaladinJudgement } from '../../core/proto/paladin';
 import { ActionId } from '../../core/proto_utils/action_id';
+import { TypedEvent } from '../../core/typed_event';
 
 export const PaladinRotationConfig = {
 	inputs: [
@@ -69,6 +70,12 @@ export const PaladinRotationConfig = {
 				{ actionId: ActionId.fromSpellId(27153), value: PaladinAura.FireResistanceAura, tooltip: 'Fire Resistance Aura' },
 				{ actionId: ActionId.fromSpellId(27152), value: PaladinAura.FrostResistanceAura, tooltip: 'Frost Resistance Aura' },
 				{ actionId: ActionId.fromSpellId(27151), value: PaladinAura.ShadowResistanceAura, tooltip: 'Shadow Resistance Aura' },
+				{
+					actionId: ActionId.fromSpellId(20218),
+					value: PaladinAura.SanctityAura,
+					tooltip: 'Sanctity Aura',
+					showWhen: player => player.getTalents().sanctityAura,
+				},
 			],
 			changeEmitter: player => TypedEvent.onAny([player.rotationChangeEmitter, player.talentsChangeEmitter]),
 			getValue: player => player.getSimpleRotation().aura,

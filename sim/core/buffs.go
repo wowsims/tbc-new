@@ -142,7 +142,7 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 
 	if raidBuffs.Thorns != proto.TristateEffect_TristateEffectMissing {
 		// Improved tristate assumes a Druid with 3/3 Brambles talent (+75% Thorns dmg).
-		MakePermanent(ThornsAura(char, TernaryInt32(IsImproved(raidBuffs.Thorns), 3, 0)))
+		MakePermanent(ThornsAura(char, GetTristateValueInt32(raidBuffs.Thorns, 0, 3)))
 	}
 
 	if raidBuffs.Bloodlust {
@@ -172,7 +172,7 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 			char,
 			false,
 			boomingVoicePoints,
-			TernaryFloat64(IsImproved(partyBuffs.BattleShout), 1.25, 1.0),
+			GetTristateValueFloat(partyBuffs.BattleShout, 1.0, 1.25),
 			partyBuffs.BsSolarianSapphire,
 			false,
 		)
@@ -199,7 +199,7 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 			char,
 			false,
 			boomingVoicePoints,
-			TernaryFloat64(IsImproved(partyBuffs.CommandingShout), 1.25, 1.0),
+			GetTristateValueFloat(partyBuffs.CommandingShout, 1.0, 1.25),
 			false,
 		))
 
@@ -207,7 +207,7 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 	}
 
 	if partyBuffs.DevotionAura != proto.TristateEffect_TristateEffectMissing {
-		MakePermanent(DevotionAuraBuff(char, false, TernaryInt32(IsImproved(partyBuffs.DevotionAura), 5, 0)))
+		MakePermanent(DevotionAuraBuff(char, false, GetTristateValueInt32(partyBuffs.DevotionAura, 0, 5)))
 	}
 
 	if partyBuffs.DraeneiRacialCaster {
@@ -251,15 +251,23 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 	}
 
 	if partyBuffs.RetributionAura != proto.TristateEffect_TristateEffectMissing {
-		MakePermanent(RetributionAuraBuff(char, false, TernaryInt32(IsImproved(partyBuffs.RetributionAura), 2, 0)))
+		MakePermanent(RetributionAuraBuff(char, false, GetTristateValueInt32(partyBuffs.RetributionAura, 0, 2)))
 	}
 
 	if partyBuffs.SanctityAura != proto.TristateEffect_TristateEffectMissing {
-		MakePermanent(SanctityAuraBuff(char, IsImproved(partyBuffs.SanctityAura)))
+		MakePermanent(SanctityAuraBuff(char, false, GetTristateValueInt32(partyBuffs.SanctityAura, 0, 2)))
+	}
+
+	if partyBuffs.FireResistanceAura {
+		MakePermanent(FireResistanceAuraBuff(char, false))
+	}
+
+	if partyBuffs.FrostResistanceAura {
+		MakePermanent(FrostResistanceAuraBuff(char, false))
 	}
 
 	if partyBuffs.StrengthOfEarthTotem != proto.TristateEffect_TristateEffectMissing {
-		MakePermanent(StrengthOfEarthTotemAura(char, TernaryInt32(IsImproved(partyBuffs.StrengthOfEarthTotem), 2, 0), partyBuffs.SoeEnhancement_2Pt4))
+		MakePermanent(StrengthOfEarthTotemAura(char, GetTristateValueInt32(partyBuffs.StrengthOfEarthTotem, 0, 2), partyBuffs.SoeEnhancement_2Pt4))
 	}
 
 	if partyBuffs.TotemOfWrath > 0 {
@@ -555,9 +563,12 @@ func CommandingShoutAura(char *Character, isPlayer bool, boomingVoicePoints int3
 }
 
 var (
-	PaladinAuraCategory     = "PaladinAura"
-	DevotionAuraCategory    = "DevotionAura"
-	RetributionAuraCategory = "RetributionAura"
+	PaladinAuraCategory         = "PaladinAura"
+	DevotionAuraCategory        = "DevotionAura"
+	RetributionAuraCategory     = "RetributionAura"
+	SanctityAuraCategory        = "SanctityAura"
+	FireResistanceAuraCategory  = "FireResistanceAura"
+	FrostResistanceAuraCategory = "FrostResistanceAura"
 )
 
 // paladinAuraPriority returns the exclusivity priority used for self/external
@@ -688,14 +699,68 @@ func RetributionAuraBuff(char *Character, isPlayer bool, impRetributionAuraRank 
 	return aura
 }
 
-func SanctityAuraBuff(char *Character, improved bool) *Aura {
-	aura := MakePermanent(char.GetOrRegisterAura(Aura{
-		Label:    "Sanctity Aura",
-		ActionID: ActionID{SpellID: 20218},
-	}).AttachMultiplicativePseudoStatBuff(&char.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexHoly], 1.1))
+func FireResistanceAuraBuff(char *Character, isPlayer bool) *Aura {
+	actionID := ActionID{SpellID: 27153}.WithTag(TernaryInt32(isPlayer, 0, -1))
 
-	if improved {
-		aura.AttachMultiplicativePseudoStatBuff(&char.PseudoStats.DamageDealtMultiplier, 1.02)
+	aura := char.GetOrRegisterAura(Aura{
+		Label:      fmt.Sprintf("Fire Resistance Aura (%s)", Ternary(isPlayer, "Player", "External")),
+		ActionID:   actionID,
+		Duration:   NeverExpires,
+		BuildPhase: Ternary(isPlayer, CharacterBuildPhaseNone, CharacterBuildPhaseBuffs),
+	}).AttachStatBuff(stats.FireResistance, 70)
+
+	aura.NewExclusiveEffect(FireResistanceAuraCategory, true, ExclusiveEffect{
+		Priority: paladinAuraPriority(isPlayer),
+	})
+
+	if isPlayer {
+		aura.NewExclusiveEffect(PaladinAuraCategory, true, ExclusiveEffect{})
+	}
+
+	return aura
+}
+
+func FrostResistanceAuraBuff(char *Character, isPlayer bool) *Aura {
+	actionID := ActionID{SpellID: 27152}.WithTag(TernaryInt32(isPlayer, 0, -1))
+
+	aura := char.GetOrRegisterAura(Aura{
+		Label:      fmt.Sprintf("Frost Resistance Aura (%s)", Ternary(isPlayer, "Player", "External")),
+		ActionID:   actionID,
+		Duration:   NeverExpires,
+		BuildPhase: Ternary(isPlayer, CharacterBuildPhaseNone, CharacterBuildPhaseBuffs),
+	}).AttachStatBuff(stats.FrostResistance, 70)
+
+	aura.NewExclusiveEffect(FrostResistanceAuraCategory, true, ExclusiveEffect{
+		Priority: paladinAuraPriority(isPlayer),
+	})
+
+	if isPlayer {
+		aura.NewExclusiveEffect(PaladinAuraCategory, true, ExclusiveEffect{})
+	}
+
+	return aura
+}
+
+func SanctityAuraBuff(char *Character, isPlayer bool, impSanctityAuraRank int32) *Aura {
+	actionID := ActionID{SpellID: 20218}.WithTag(TernaryInt32(isPlayer, 0, -1))
+
+	aura := char.GetOrRegisterAura(Aura{
+		Label:      fmt.Sprintf("Sanctity Aura (%s)", Ternary(isPlayer, "Player", "External")),
+		ActionID:   actionID,
+		Duration:   NeverExpires,
+		BuildPhase: Ternary(isPlayer, CharacterBuildPhaseNone, CharacterBuildPhaseBuffs),
+	}).AttachMultiplicativePseudoStatBuff(&char.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexHoly], 1.1)
+
+	if impSanctityAuraRank > 0 {
+		aura.AttachMultiplicativePseudoStatBuff(&char.PseudoStats.DamageDealtMultiplier, 1+0.01*float64(impSanctityAuraRank))
+	}
+
+	aura.NewExclusiveEffect(SanctityAuraCategory, true, ExclusiveEffect{
+		Priority: paladinAuraPriority(isPlayer),
+	})
+
+	if isPlayer {
+		aura.NewExclusiveEffect(PaladinAuraCategory, true, ExclusiveEffect{})
 	}
 
 	return aura
