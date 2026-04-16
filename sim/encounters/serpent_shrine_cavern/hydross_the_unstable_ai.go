@@ -12,30 +12,31 @@ import (
 const hydrossMeleeDamageSpread = 0.413
 const hydrossTheUnstableID int32 = 21216
 const hydrossMarkInterval = time.Second * 15
+const hydrossDefaultPhaseShift = 60.0
 
-// Each stack replaces the previous — these are the absolute multipliers on base damage.
-// 10% / 25% / 50% / 100% / 250% / 500% increased damage = ×1.10 / ×1.25 / ×1.50 / ×2.00 / ×3.50 / ×6.00
-var hydrossFrostMarkSpellIDs = []int32{38215, 38216, 38217, 38218, 38231, 40584}
-var hydrossNatureMarkSpellIDs = []int32{38219, 38220, 38221, 38222, 38230, 40583}
+const hydrossFrostMarkSpellID int32 = 38215
+const hydrossNatureMarkSpellID int32 = 38219
+
+// Damage multipliers per stack (10% / 25% / 50% / 100% / 250% / 500%).
 var hydrossMarkMultipliers = []float64{1.10, 1.25, 1.50, 2.00, 3.50, 6.00}
 
 func addHydrossTheUnstable(raidPrefix string) {
-	createHydrossPreset(raidPrefix, 25, 3_380_792, 7_035)
+	createHydrossPreset(raidPrefix, 25, 3_380_792, 5_974)
 }
 
 func createHydrossPreset(raidPrefix string, raidSize int32, bossHealth float64, bossMinBaseDamage float64) {
 	bossName := fmt.Sprintf("Hydross the Unstable %d", raidSize)
 
-	// Frost form
 	core.AddPresetTarget(&core.PresetTarget{
 		PathPrefix: raidPrefix,
 
 		Config: &proto.Target{
-			Id:        hydrossTheUnstableID,
-			Name:      bossName + " (Frost)",
-			Level:     73,
-			MobType:   proto.MobType_MobTypeElemental,
-			TankIndex: 0,
+			Id:              hydrossTheUnstableID,
+			Name:            bossName,
+			Level:           73,
+			MobType:         proto.MobType_MobTypeElemental,
+			TankIndex:       0, //Main Tank (tanks Frost phase).
+			SecondTankIndex: 1, //Off Tank (tanks Nature phase).
 
 			Stats: stats.Stats{
 				stats.Health:      bossHealth,
@@ -43,66 +44,55 @@ func createHydrossPreset(raidPrefix string, raidSize int32, bossHealth float64, 
 				stats.AttackPower: 320,
 			}.ToProtoArray(),
 
+			// Starts in Frost phase; AI switches school on each phase shift.
 			SpellSchool:   proto.SpellSchool_SpellSchoolFrost,
 			SwingSpeed:    1.5,
 			MinBaseDamage: bossMinBaseDamage,
 			DamageSpread:  hydrossMeleeDamageSpread,
 
 			ParryHaste: true,
+
+			TargetInputs: hydrossTargetInputs(),
 		},
 
-		AI: makeHydrossAI(hydrossFrostMarkSpellIDs),
+		AI: makeHydrossAI(),
 	})
 
-	// Nature form
-	core.AddPresetTarget(&core.PresetTarget{
-		PathPrefix: raidPrefix,
-
-		Config: &proto.Target{
-			Id:        hydrossTheUnstableID,
-			Name:      bossName + " (Nature)",
-			Level:     73,
-			MobType:   proto.MobType_MobTypeElemental,
-			TankIndex: 0,
-
-			Stats: stats.Stats{
-				stats.Health:      bossHealth,
-				stats.Armor:       7685,
-				stats.AttackPower: 320,
-			}.ToProtoArray(),
-
-			SpellSchool:   proto.SpellSchool_SpellSchoolNature,
-			SwingSpeed:    1.5,
-			MinBaseDamage: bossMinBaseDamage,
-			DamageSpread:  hydrossMeleeDamageSpread,
-
-			ParryHaste: true,
-		},
-
-		AI: makeHydrossAI(hydrossNatureMarkSpellIDs),
-	})
-
-	core.AddPresetEncounter(bossName+" (Frost)", []string{
-		raidPrefix + "/" + bossName + " (Frost)",
-	})
-	core.AddPresetEncounter(bossName+" (Nature)", []string{
-		raidPrefix + "/" + bossName + " (Nature)",
+	core.AddPresetEncounter(bossName, []string{
+		raidPrefix + "/" + bossName,
 	})
 }
 
-func makeHydrossAI(markSpellIDs []int32) core.AIFactory {
+func hydrossTargetInputs() []*proto.TargetInput {
+	return []*proto.TargetInput{
+		{
+			Label:       "Phase Shift Interval",
+			Tooltip:     "Time (in seconds) between Frost and Nature phase shifts. Marks reset on each shift and resume stacking 15s later.",
+			InputType:   proto.InputType_Number,
+			NumberValue: hydrossDefaultPhaseShift,
+		},
+	}
+}
+
+func makeHydrossAI() core.AIFactory {
 	return func() core.TargetAI {
-		return &HydrossAI{markSpellIDs: markSpellIDs}
+		return &HydrossAI{}
 	}
 }
 
 type HydrossAI struct {
-	Target       *core.Target
-	BossUnit     *core.Unit
-	MainTank     *core.Unit
-	OffTank      *core.Unit
-	markSpellIDs []int32
-	markSpell    *core.Spell
+	Target     *core.Target
+	BossUnit   *core.Unit
+	MainTank   *core.Unit
+	SecondTank *core.Unit
+
+	phaseShiftInterval time.Duration
+	inFrostPhase       bool
+
+	frostMarkSpell  *core.Spell
+	natureMarkSpell *core.Spell
+
+	nextPhaseShift *core.PendingAction
 }
 
 func (ai *HydrossAI) Initialize(target *core.Target, config *proto.Target) {
@@ -110,82 +100,191 @@ func (ai *HydrossAI) Initialize(target *core.Target, config *proto.Target) {
 	ai.Target.AutoAttacks.MHConfig().ActionID.Tag = hydrossTheUnstableID
 	ai.BossUnit = &target.Unit
 	ai.MainTank = ai.BossUnit.CurrentTarget
+	ai.SecondTank = ai.BossUnit.SecondaryTarget
 
-	ai.registerMark()
+	phaseShiftSeconds := hydrossDefaultPhaseShift
+	if len(config.TargetInputs) > 0 {
+		phaseShiftSeconds = config.TargetInputs[0].NumberValue
+	}
+	ai.phaseShiftInterval = core.DurationFromSeconds(phaseShiftSeconds)
+
+	ai.registerMarks()
 }
 
-func (ai *HydrossAI) registerMark() {
-	currentStack := 0
+func (ai *HydrossAI) registerMarks() {
+	maxStacks := int32(len(hydrossMarkMultipliers))
 
-	// Each aura only applies/removes its own multiplier. The mark spell
-	// explicitly deactivates the previous stack before activating the next,
-	// so OnExpire cleans up before OnGain runs — no double-division.
-	markAuras := make([]*core.Aura, len(hydrossMarkMultipliers))
-	for i := range hydrossMarkMultipliers {
-		stack := i // capture
-		markAuras[i] = ai.MainTank.GetOrRegisterAura(core.Aura{
-			Label:    fmt.Sprintf("Mark of Hydross - Stack %d", stack+1),
-			ActionID: core.ActionID{SpellID: ai.markSpellIDs[stack]},
-			Duration: core.NeverExpires,
-			OnGain: func(aura *core.Aura, sim *core.Simulation) {
-				ai.BossUnit.PseudoStats.DamageDealtMultiplier *= hydrossMarkMultipliers[stack]
-			},
-			OnExpire: func(aura *core.Aura, sim *core.Simulation) {
-				ai.BossUnit.PseudoStats.DamageDealtMultiplier /= hydrossMarkMultipliers[stack]
+	// Build a stacking mark aura on a unit. OnStacksChange multiplies/divides
+	// boss damage dealt by the appropriate multiplier for the current stack count.
+	registerMarkAura := func(unit *core.Unit, spellID int32, label string) *core.Aura {
+		return unit.GetOrRegisterAura(core.Aura{
+			Label:     label,
+			ActionID:  core.ActionID{SpellID: spellID},
+			Duration:  core.NeverExpires,
+			MaxStacks: maxStacks,
+			OnStacksChange: func(aura *core.Aura, sim *core.Simulation, oldStacks, newStacks int32) {
+				if oldStacks > 0 {
+					ai.BossUnit.PseudoStats.DamageDealtMultiplier /= hydrossMarkMultipliers[oldStacks-1]
+				}
+				if newStacks > 0 {
+					ai.BossUnit.PseudoStats.DamageDealtMultiplier *= hydrossMarkMultipliers[newStacks-1]
+				}
 			},
 		})
 	}
 
-	// The spell is registered once with stack-1's SpellID. Updating ActionID per
-	// cast would require mutating spell.ActionID before Cast() is called (the log
-	// fires before ApplyEffects), which would mean promoting currentStack to a
-	// HydrossAI field. The cosmetic benefit doesn't justify the refactor.
-	ai.markSpell = ai.BossUnit.RegisterSpell(core.SpellConfig{
-		ActionID:    core.ActionID{SpellID: ai.markSpellIDs[0]},
-		SpellSchool: core.SpellSchoolPhysical,
+	markTargets := ai.BossUnit.Env.Raid.AllPlayerUnits
+
+	frostMarkAuras := make([]*core.Aura, len(markTargets))
+	natureMarkAuras := make([]*core.Aura, len(markTargets))
+	for i, unit := range markTargets {
+		frostMarkAuras[i] = registerMarkAura(unit, hydrossFrostMarkSpellID, "Mark of Hydross (Frost)")
+		natureMarkAuras[i] = registerMarkAura(unit, hydrossNatureMarkSpellID, "Mark of Hydross (Nature)")
+	}
+
+	applyMarkStack := func(sim *core.Simulation, auras []*core.Aura) {
+		for _, aura := range auras {
+			if aura.GetStacks() < maxStacks {
+				aura.Activate(sim)
+				aura.AddStack(sim)
+			}
+		}
+	}
+
+	dropMarks := func(sim *core.Simulation, auras []*core.Aura) {
+		for _, aura := range auras {
+			aura.Deactivate(sim)
+		}
+	}
+
+	// Frost mark spell — cast every 15s while in Frost phase.
+	ai.frostMarkSpell = ai.BossUnit.RegisterSpell(core.SpellConfig{
+		ActionID:    core.ActionID{SpellID: hydrossFrostMarkSpellID},
+		SpellSchool: core.SpellSchoolFrost,
 		ProcMask:    core.ProcMaskEmpty,
 		Flags:       core.SpellFlagAPL,
-
 		Cast: core.CastConfig{
-			DefaultCast: core.Cast{
-				GCD: core.BossGCD,
-			},
+			DefaultCast: core.Cast{GCD: core.BossGCD},
 			CD: core.Cooldown{
 				Timer:    ai.BossUnit.NewTimer(),
 				Duration: hydrossMarkInterval,
 			},
 			IgnoreHaste: true,
 		},
+		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {
+			applyMarkStack(sim, frostMarkAuras)
+		},
+	})
 
-		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			// Deactivate previous stack aura if any
-			if currentStack > 0 {
-				markAuras[currentStack-1].Deactivate(sim)
-			}
-			if currentStack < len(markAuras) {
-				markAuras[currentStack].Activate(sim)
-				currentStack++
-			}
+	// Nature mark spell — cast every 15s while in Nature phase.
+	ai.natureMarkSpell = ai.BossUnit.RegisterSpell(core.SpellConfig{
+		ActionID:    core.ActionID{SpellID: hydrossNatureMarkSpellID},
+		SpellSchool: core.SpellSchoolNature,
+		ProcMask:    core.ProcMaskEmpty,
+		Flags:       core.SpellFlagAPL,
+		Cast: core.CastConfig{
+			DefaultCast: core.Cast{GCD: core.BossGCD},
+			CD: core.Cooldown{
+				Timer:    ai.BossUnit.NewTimer(),
+				Duration: hydrossMarkInterval,
+			},
+			IgnoreHaste: true,
+		},
+		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {
+			applyMarkStack(sim, natureMarkAuras)
 		},
 	})
 
 	ai.BossUnit.RegisterResetEffect(func(sim *core.Simulation) {
-		if currentStack > 0 {
-			markAuras[currentStack-1].Deactivate(sim)
+		dropMarks(sim, frostMarkAuras)
+		dropMarks(sim, natureMarkAuras)
+		// Both mark CDs start at full so first stack lands 15s into the fight.
+		ai.frostMarkSpell.CD.Set(sim.CurrentTime + hydrossMarkInterval)
+		ai.natureMarkSpell.CD.Set(sim.CurrentTime + hydrossMarkInterval)
+		ai.inFrostPhase = true
+		ai.BossUnit.AutoAttacks.MHAuto().SpellSchool = core.SpellSchoolFrost
+		ai.BossUnit.CurrentTarget = ai.MainTank
+		// If no main tank is assigned, suppress auto-attacks until a valid target exists.
+		if ai.MainTank == nil {
+			ai.BossUnit.AutoAttacks.CancelMeleeSwing(sim)
 		}
-		currentStack = 0
-		ai.markSpell.CD.Set(hydrossMarkInterval)
+		if ai.nextPhaseShift != nil {
+			ai.nextPhaseShift.Cancel(sim)
+			ai.nextPhaseShift = nil
+		}
 	})
+
+	ai.BossUnit.RegisterResetEffect(func(sim *core.Simulation) {
+		ai.schedulePhaseShift(sim, frostMarkAuras, natureMarkAuras, dropMarks)
+	})
+}
+
+func (ai *HydrossAI) schedulePhaseShift(
+	sim *core.Simulation,
+	frostMarkAuras []*core.Aura,
+	natureMarkAuras []*core.Aura,
+	dropMarks func(*core.Simulation, []*core.Aura),
+) {
+	ai.nextPhaseShift = &core.PendingAction{
+		NextActionAt: sim.CurrentTime + ai.phaseShiftInterval,
+		Priority:     core.ActionPriorityAuto,
+		OnAction: func(sim *core.Simulation) {
+			if ai.inFrostPhase {
+				// Shift to Nature: drop frost marks, switch to Nature attacks,
+				// point boss at the off-tank. First nature mark lands 15s later.
+				dropMarks(sim, frostMarkAuras)
+				ai.BossUnit.AutoAttacks.MHAuto().SpellSchool = core.SpellSchoolNature
+				ai.BossUnit.CurrentTarget = ai.SecondTank
+				if ai.SecondTank != nil {
+					ai.BossUnit.AutoAttacks.EnableMeleeSwing(sim)
+				} else {
+					ai.BossUnit.AutoAttacks.CancelMeleeSwing(sim)
+				}
+				ai.natureMarkSpell.CD.Set(sim.CurrentTime + hydrossMarkInterval)
+				ai.inFrostPhase = false
+			} else {
+				// Shift to Frost: drop nature marks, switch to Frost attacks,
+				// point boss at the main tank. First frost mark lands 15s later.
+				dropMarks(sim, natureMarkAuras)
+				ai.BossUnit.AutoAttacks.MHAuto().SpellSchool = core.SpellSchoolFrost
+				ai.BossUnit.CurrentTarget = ai.MainTank
+				if ai.MainTank != nil {
+					ai.BossUnit.AutoAttacks.EnableMeleeSwing(sim)
+				} else {
+					ai.BossUnit.AutoAttacks.CancelMeleeSwing(sim)
+				}
+				ai.frostMarkSpell.CD.Set(sim.CurrentTime + hydrossMarkInterval)
+				ai.inFrostPhase = true
+			}
+			ai.schedulePhaseShift(sim, frostMarkAuras, natureMarkAuras, dropMarks)
+		},
+	}
+	sim.AddPendingAction(ai.nextPhaseShift)
 }
 
 func (ai *HydrossAI) Reset(sim *core.Simulation) {
 	ai.Target.Enable(sim)
 	ai.Target.PseudoStats.CanCrush = false
+	ai.inFrostPhase = true
 }
 
 func (ai *HydrossAI) ExecuteCustomRotation(sim *core.Simulation) {
-	if ai.markSpell.CanCast(sim, ai.MainTank) {
-		ai.markSpell.Cast(sim, ai.MainTank)
+	// Marks apply to all players regardless of tank assignment.
+	// Use the current target as the spell target; fall back to MainTank if current target is nil.
+	castTarget := ai.BossUnit.CurrentTarget
+	if castTarget == nil {
+		castTarget = ai.MainTank
+	}
+	if castTarget != nil {
+		if ai.inFrostPhase {
+			if ai.frostMarkSpell.CanCast(sim, castTarget) {
+				ai.frostMarkSpell.Cast(sim, castTarget)
+			}
+		} else {
+			if ai.natureMarkSpell.CanCast(sim, castTarget) {
+				ai.natureMarkSpell.Cast(sim, castTarget)
+			}
+		}
 	}
 	ai.Target.ExtendGCDUntil(sim, sim.CurrentTime+core.BossGCD)
 }

@@ -293,9 +293,15 @@ export const IMBUE_CONFIG_OH = [
 	{ config: ShamanImbueWindfury, stats: [] },
 ] as ConsumableStatOption<number>[];
 
+// Specs that doesn't use Windfury and should always show imbues.
+const specsWithoutWindfury = [Spec.SpecFeralBearDruid, Spec.SpecFeralCatDruid];
+
 export const makeMHImbueInput = makeConsumeInputFactory({
 	consumesFieldName: 'mhImbueId',
-	showWhen: (player: Player<any>) => !player.getParty() || player.getParty()!.getBuffs().windfuryTotem == TristateEffect.TristateEffectMissing,
+	showWhen: (player: Player<any>) =>
+		specsWithoutWindfury.includes(player.getSpec()) ||
+		!player.getParty() ||
+		player.getParty()!.getBuffs().windfuryTotem == TristateEffect.TristateEffectMissing,
 	changedEvent: (player: Player<any>) => TypedEvent.onAny([player.getParty()!.changeEmitter]),
 });
 export const makeOHImbueInput = makeConsumeInputFactory({

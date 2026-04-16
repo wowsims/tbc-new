@@ -6,7 +6,6 @@ import { PlayerClasses } from '../../core/player_classes';
 import { APLAction, APLListItem, APLRotation, APLRotation_Type as APLRotationType } from '../../core/proto/apl.js';
 import { Cooldowns, Debuffs, Drums, Faction, IndividualBuffs, ItemSlot, PartyBuffs, PseudoStat, Race, RaidBuffs, Spec, Stat, TristateEffect } from '../../core/proto/common.js';
 import { defaultExposeWeaknessSettings } from '../../core/proto_utils/utils.js';
-import { Phase } from '../../core/constants/other.js';
 import { FeralBearDruid_Rotation as DruidRotation } from '../../core/proto/druid.js';
 import { ReforgeOptimizer } from '../../core/components/suggest_reforges_action';
 import { Stats, UnitStat } from '../../core/proto_utils/stats.js';
@@ -131,12 +130,13 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralBearDruid, {
 	playerIconInputs: [],
 	rotationInputs: FeralBearInputs.FeralBearRotationConfig,
 	includeBuffDebuffInputs: [Stat.StatStamina, Stat.StatArmor],
-	excludeBuffDebuffInputs: [],
+	excludeBuffDebuffInputs: [Stat.StatParryRating],
 	otherInputs: {
 		inputs: [
 			OtherInputs.TotemTwisting,
 			FeralBearInputs.StartingRage,
 			OtherInputs.InputDelay,
+			OtherInputs.TankAssignment,
 			OtherInputs.InspirationUptime,
 			OtherInputs.IncomingHps,
 			OtherInputs.HealingCadence,
@@ -167,8 +167,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralBearDruid, {
 				Presets.KARAZHAN_PRESET_BUILD,
 				Presets.MAGTHERIDON_PRESET_BUILD,
 				Presets.MOROGRIM_PRESET_BUILD,
-				Presets.HYDROSS_FROST_PRESET_BUILD,
-				Presets.HYDROSS_NATURE_PRESET_BUILD,
+				Presets.HYDROSS_PRESET_BUILD,
 			],
 	},
 

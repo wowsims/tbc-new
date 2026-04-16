@@ -27,14 +27,12 @@ import DefaultBuild from './builds/default_encounter_only.build.json';
 import MagtheridonBuild from './builds/magtheridon_encounter_only.build.json';
 import KarazhanBuild from './builds/karazhan_encounter_only.build.json';
 import MorogrimBuild from './builds/morogrim_encounter_only.build.json';
-import HydrossFrostBuild from './builds/hydross_frost_encounter_only.build.json';
-import HydrossNatureBuild from './builds/hydross_nature_encounter_only.build.json';
+import HydrossBuild from './builds/hydross_encounter_only.build.json';
 export const DEFAULT_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Default', Spec.SpecFeralBearDruid, DefaultBuild);
 export const MAGTHERIDON_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Magtheridon', Spec.SpecFeralBearDruid, MagtheridonBuild);
 export const KARAZHAN_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Karazhan (Boss Average)', Spec.SpecFeralBearDruid, KarazhanBuild);
 export const MOROGRIM_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Morogrim', Spec.SpecFeralBearDruid, MorogrimBuild);
-export const HYDROSS_FROST_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Hydross (Frost)', Spec.SpecFeralBearDruid, HydrossFrostBuild);
-export const HYDROSS_NATURE_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Hydross (Nature)', Spec.SpecFeralBearDruid, HydrossNatureBuild);
+export const HYDROSS_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Hydross', Spec.SpecFeralBearDruid, HydrossBuild);
 
 // Preset options for EP weights
 export const SURVIVAL_EP_PRESET = PresetUtils.makePresetEpWeights(
@@ -101,6 +99,7 @@ export const DefaultConsumables = ConsumesSpec.create({
 	foodId: 27667,          // Spicy Crawdad
 	potId: 22849,           // Ironshield Potion
 	conjuredId: 22105,      // Healthstone
+    mhImbueId: 34340,       // Adamantite Weightstone
 	goblinSapper: true,
 	superSapper: true,
 	scrollAgi: true,

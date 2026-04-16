@@ -16,8 +16,7 @@ import DefaultBuild from './builds/default_encounter_only.build.json';
 import MagtheridonBuild from './builds/magtheridon_encounter_only.build.json';
 import KarazhanBuild from './builds/karazhan_encounter_only.build.json';
 import MorogrimBuild from './builds/morogrim_encounter_only.build.json';
-import HydrossFrostBuild from './builds/hydross_frost_encounter_only.build.json';
-import HydrossNatureBuild from './builds/hydross_nature_encounter_only.build.json';
+import HydrossBuild from './builds/hydross_encounter_only.build.json';
 
 // Preset options for this spec.
 // Eventually we will import these values for the raid sim too, so its good to
@@ -129,5 +128,4 @@ export const DEFAULT_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Default
 export const MAGTHERIDON_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Magtheridon', Spec.SpecProtectionWarrior, MagtheridonBuild);
 export const KARAZHAN_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Karazhan (Boss Average)', Spec.SpecProtectionWarrior, KarazhanBuild);
 export const MOROGRIM_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Morogrim', Spec.SpecProtectionWarrior, MorogrimBuild);
-export const HYDROSS_FROST_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Hydross (Frost)', Spec.SpecProtectionWarrior, HydrossFrostBuild);
-export const HYDROSS_NATURE_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Hydross (Nature)', Spec.SpecProtectionWarrior, HydrossNatureBuild);
+export const HYDROSS_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Hydross', Spec.SpecProtectionWarrior, HydrossBuild);
