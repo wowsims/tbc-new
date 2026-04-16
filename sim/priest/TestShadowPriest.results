@@ -60,6 +60,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestShadowPriest-AllItems-AbsolutionRegalia"
+ value: {
+  dps: 1715.01438
+  tps: 1254.47802
+ }
+}
+dps_results: {
  key: "TestShadowPriest-AllItems-AdamantineFigurine-27891"
  value: {
   dps: 1704.37623
@@ -127,6 +134,13 @@ dps_results: {
  value: {
   dps: 1550.47718
   tps: 1140.07472
+ }
+}
+dps_results: {
+ key: "TestShadowPriest-AllItems-AvatarRegalia"
+ value: {
+  dps: 1643.87252
+  tps: 1204.4114
  }
 }
 dps_results: {
