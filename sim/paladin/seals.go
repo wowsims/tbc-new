@@ -244,8 +244,8 @@ func (paladin *Paladin) registerSealOfRighteousness(seal seal) {
 	procSpell := paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: seal.proc.spellID},
 		SpellSchool:    core.SpellSchoolHoly,
-		ProcMask:       core.ProcMaskMeleeMHSpecial, //changed to ProcMaskMeleeMHSpecial, to allow procs from weapons/oils which do proc from SoR, -- TODO: Verify in TBC
-		Flags:          core.SpellFlagMeleeMetrics,  // | core.SpellFlagSuppressEquipProcs | core.SpellFlagBatchStartAttackMacro, // but Wild Strikes does not proc, nor equip procs
+		ProcMask:       core.ProcMaskMeleeMHSpecial,                             //changed to ProcMaskMeleeMHSpecial, to allow procs from weapons/oils which do proc from SoR, -- TODO: Verify in TBC
+		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagPassiveSpell, // | core.SpellFlagSuppressEquipProcs | core.SpellFlagBatchStartAttackMacro, // but Wild Strikes does not proc, nor equip procs
 		ClassSpellMask: SpellMaskSealOfRighteousness,
 
 		DamageMultiplier: 1,
@@ -346,7 +346,7 @@ func (paladin *Paladin) registerSealOfLight(seal seal) {
 		ClassSpellMask:   SpellMaskSealOfLight,
 		SpellSchool:      core.SpellSchoolHoly,
 		ProcMask:         core.ProcMaskSpellHealing,
-		Flags:            core.SpellFlagHelpful,
+		Flags:            core.SpellFlagHelpful | core.SpellFlagPassiveSpell,
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
@@ -422,7 +422,7 @@ func (paladin *Paladin) registerSealOfWisdom(seal seal) {
 		ClassSpellMask:   SpellMaskSealOfWisdom,
 		SpellSchool:      core.SpellSchoolHoly,
 		ProcMask:         core.ProcMaskEmpty,
-		Flags:            core.SpellFlagHelpful,
+		Flags:            core.SpellFlagHelpful | core.SpellFlagPassiveSpell,
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
@@ -509,7 +509,7 @@ func (paladin *Paladin) registerSealOfJustice(seal seal) {
 		ClassSpellMask:   SpellMaskSealOfJustice,
 		SpellSchool:      core.SpellSchoolHoly,
 		ProcMask:         core.ProcMaskEmpty,
-		Flags:            core.SpellFlagMeleeMetrics,
+		Flags:            core.SpellFlagMeleeMetrics | core.SpellFlagPassiveSpell,
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
@@ -665,7 +665,7 @@ func (paladin *Paladin) registerSealOfBlood(seal seal) {
 		ClassSpellMask:   SpellMaskSealOfBlood,
 		SpellSchool:      core.SpellSchoolHoly,
 		ProcMask:         core.ProcMaskMeleeProc,
-		Flags:            core.SpellFlagMeleeMetrics,
+		Flags:            core.SpellFlagMeleeMetrics | core.SpellFlagPassiveSpell,
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
 		CritMultiplier:   paladin.DefaultMeleeCritMultiplier(),
@@ -877,7 +877,7 @@ func (paladin *Paladin) registerSealOfCommandRank(seal seal) {
 		ClassSpellMask:   SpellMaskSealOfCommand,
 		SpellSchool:      core.SpellSchoolHoly,
 		ProcMask:         core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeProc,
-		Flags:            core.SpellFlagMeleeMetrics,
+		Flags:            core.SpellFlagMeleeMetrics | core.SpellFlagPassiveSpell,
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
 		CritMultiplier:   paladin.DefaultMeleeCritMultiplier(),

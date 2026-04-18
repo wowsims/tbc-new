@@ -342,7 +342,7 @@ func ThornsAura(char *Character, points int32) *Aura {
 	procSpell := char.RegisterSpell(SpellConfig{
 		ActionID:    actionID,
 		SpellSchool: SpellSchoolNature,
-		Flags:       SpellFlagBinary,
+		Flags:       SpellFlagBinary | SpellFlagPassiveSpell,
 		ProcMask:    ProcMaskEmpty,
 
 		DamageMultiplier: 1,
@@ -1335,7 +1335,7 @@ func BlessingOfSanctuaryAura(char *Character) *Aura {
 	procSpell := char.RegisterSpell(SpellConfig{
 		ActionID:    actionID,
 		SpellSchool: SpellSchoolHoly,
-		Flags:       SpellFlagBinary,
+		Flags:       SpellFlagBinary | SpellFlagPassiveSpell,
 		ProcMask:    ProcMaskEmpty,
 
 		DamageMultiplier: 1,
