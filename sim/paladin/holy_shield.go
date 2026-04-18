@@ -38,18 +38,18 @@ func (paladin *Paladin) registerHolyShield(rankConfig shared.SpellRankConfig) {
 	actionID := core.ActionID{SpellID: spellID}
 
 	procSpell := paladin.RegisterSpell(core.SpellConfig{
-		ActionID:       actionID,
+		ActionID:       actionID.WithTag(2),
 		SpellSchool:    core.SpellSchoolHoly,
 		ProcMask:       core.ProcMaskEmpty,
 		ClassSpellMask: SpellMaskHolyShieldProc,
-		Flags:          core.SpellFlagNoOnCastComplete | core.SpellFlagPassiveSpell,
+		Flags:          core.SpellFlagNoOnCastComplete | core.SpellFlagPassiveSpell | core.SpellFlagBinary,
 
 		BonusCoefficient: coefficient,
 		DamageMultiplier: 1,
 		ThreatMultiplier: threatMultiplier,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			spell.CalcAndDealDamage(sim, target, value, spell.OutcomeAlwaysHit)
+			spell.CalcAndDealDamage(sim, target, value, spell.OutcomeMagicHit)
 		},
 	})
 
@@ -75,7 +75,7 @@ func (paladin *Paladin) registerHolyShield(rankConfig shared.SpellRankConfig) {
 		ActionID:       actionID,
 		SpellSchool:    core.SpellSchoolHoly,
 		ProcMask:       core.ProcMaskEmpty,
-		Flags:          core.SpellFlagAPL,
+		Flags:          core.SpellFlagAPL | core.SpellFlagMeleeMetrics,
 		ClassSpellMask: SpellMaskHolyShield,
 		Rank:           rankConfig.Rank,
 

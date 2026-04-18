@@ -350,7 +350,7 @@ func ThornsAura(char *Character, points int32) *Aura {
 
 		ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
 			baseDamage := 25 * (1 + 0.25*float64(points))
-			spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeAlwaysHit)
+			spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMagicHit)
 		},
 	})
 
@@ -657,7 +657,7 @@ func RetributionAuraBuff(char *Character, isPlayer bool, impRetributionAuraRank 
 	impMultiplier := 1 + 0.25*float64(impRetributionAuraRank)
 
 	procSpell := char.RegisterSpell(SpellConfig{
-		ActionID:    actionID,
+		ActionID:    actionID.WithTag(2),
 		SpellSchool: SpellSchoolHoly,
 		ProcMask:    ProcMaskEmpty,
 		Flags:       SpellFlagBinary | SpellFlagPassiveSpell,
@@ -1342,7 +1342,7 @@ func BlessingOfSanctuaryAura(char *Character) *Aura {
 		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
-			spell.CalcAndDealDamage(sim, target, 46, spell.OutcomeAlwaysHit)
+			spell.CalcAndDealDamage(sim, target, 46, spell.OutcomeMagicHit)
 		},
 	})
 

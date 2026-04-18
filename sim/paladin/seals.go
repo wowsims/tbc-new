@@ -250,7 +250,6 @@ func (paladin *Paladin) registerSealOfRighteousness(seal seal) {
 
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
-		CritMultiplier:   paladin.DefaultSpellCritMultiplier(),
 		BonusCoefficient: seal.proc.coeff,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
@@ -258,7 +257,7 @@ func (paladin *Paladin) registerSealOfRighteousness(seal seal) {
 			// x := spell.Unit.PseudoStats.BonusDamage + spell.Unit.GetStat(stats.HolyDamage) + spell.Unit.GetStat(stats.SpellDamage) + spell.Unit.PseudoStats.MobTypeSpellDamage
 			// baseDamage := damage + spell.BonusCoefficient*(x+target.GetSchoolBonusDamageTaken(spell))
 
-			result := spell.CalcDamage(sim, target, damage, spell.OutcomeMeleeSpecialCritOnly)
+			result := spell.CalcDamage(sim, target, damage, spell.OutcomeAlwaysHit)
 
 			action := core.NewDelayedAction(core.DelayedActionOptions{
 				DoAt:     sim.CurrentTime + core.SpellBatchWindow,
@@ -852,7 +851,7 @@ func (paladin *Paladin) registerSealOfCommandRank(seal seal) {
 		ActionID:         core.ActionID{SpellID: seal.judge.spellID},
 		SpellSchool:      core.SpellSchoolHoly,
 		ProcMask:         core.ProcMaskMeleeMHSpecial,
-		Flags:            core.SpellFlagMeleeMetrics | core.SpellFlagBinary,
+		Flags:            core.SpellFlagMeleeMetrics,
 		ClassSpellMask:   SpellMaskJudgementOfCommand,
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
