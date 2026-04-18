@@ -17,8 +17,8 @@ const hydrossDefaultPhaseShift = 60.0
 const hydrossFrostMarkSpellID int32 = 38215
 const hydrossNatureMarkSpellID int32 = 38219
 
-// Damage multipliers per stack (10% / 25% / 50% / 100% / 250% / 500%).
-var hydrossMarkMultipliers = []float64{1.10, 1.25, 1.50, 2.00, 3.50, 6.00}
+// Damage bonuses per stack (+10% / +25% / +50% / +100% / +250% / +500%).
+var hydrossMarkDamageBonuses = []float64{0.10, 0.25, 0.50, 1.00, 2.50, 5.00}
 
 func addHydrossTheUnstable(raidPrefix string) {
 	createHydrossPreset(raidPrefix, 25, 3_380_792, 5_974)
@@ -89,6 +89,7 @@ type HydrossAI struct {
 	phaseShiftInterval time.Duration
 	inFrostPhase       bool
 
+	markDamageMod   *core.SpellMod
 	frostMarkSpell  *core.Spell
 	natureMarkSpell *core.Spell
 
@@ -112,38 +113,45 @@ func (ai *HydrossAI) Initialize(target *core.Target, config *proto.Target) {
 }
 
 func (ai *HydrossAI) registerMarks() {
-	maxStacks := int32(len(hydrossMarkMultipliers))
+	maxStacks := int32(len(hydrossMarkDamageBonuses))
 
 	// Build a stacking mark aura on a unit. OnStacksChange multiplies/divides
 	// boss damage dealt by the appropriate multiplier for the current stack count.
-	registerMarkAura := func(unit *core.Unit, spellID int32, label string) *core.Aura {
+	registerMarkAura := func(unit *core.Unit, spellID int32, spellSchool core.SpellSchool, label string) *core.Aura {
+		var markDamageMod = ai.BossUnit.AddDynamicMod(core.SpellModConfig{
+			Kind:       core.SpellMod_DamageDone_Pct,
+			School:     spellSchool,
+			FloatValue: 0,
+		})
 		return unit.GetOrRegisterAura(core.Aura{
 			Label:     label,
 			ActionID:  core.ActionID{SpellID: spellID},
 			Duration:  core.NeverExpires,
 			MaxStacks: maxStacks,
 			OnStacksChange: func(aura *core.Aura, sim *core.Simulation, oldStacks, newStacks int32) {
-				if oldStacks > 0 {
-					ai.BossUnit.PseudoStats.DamageDealtMultiplier /= hydrossMarkMultipliers[oldStacks-1]
+				if newStacks == 0 {
+					markDamageMod.Deactivate()
+					return
 				}
-				if newStacks > 0 {
-					ai.BossUnit.PseudoStats.DamageDealtMultiplier *= hydrossMarkMultipliers[newStacks-1]
-				}
+				markDamageMod.UpdateFloatValue(hydrossMarkDamageBonuses[newStacks-1])
+				markDamageMod.Activate()
 			},
 		})
 	}
 
-	markTargets := ai.BossUnit.Env.Raid.AllPlayerUnits
+	frostMarkAuras := ai.BossUnit.NewAllyAuraArray(func(allyUnit *core.Unit) *core.Aura {
+		return registerMarkAura(allyUnit, hydrossFrostMarkSpellID, core.SpellSchoolFrost, "Mark of Hydross")
+	})
 
-	frostMarkAuras := make([]*core.Aura, len(markTargets))
-	natureMarkAuras := make([]*core.Aura, len(markTargets))
-	for i, unit := range markTargets {
-		frostMarkAuras[i] = registerMarkAura(unit, hydrossFrostMarkSpellID, "Mark of Hydross (Frost)")
-		natureMarkAuras[i] = registerMarkAura(unit, hydrossNatureMarkSpellID, "Mark of Hydross (Nature)")
-	}
+	natureMarkAuras := ai.BossUnit.NewAllyAuraArray(func(allyUnit *core.Unit) *core.Aura {
+		return registerMarkAura(allyUnit, hydrossNatureMarkSpellID, core.SpellSchoolNature, "Mark of Corruption")
+	})
 
 	applyMarkStack := func(sim *core.Simulation, auras []*core.Aura) {
 		for _, aura := range auras {
+			if aura == nil {
+				continue
+			}
 			if aura.GetStacks() < maxStacks {
 				aura.Activate(sim)
 				aura.AddStack(sim)
@@ -153,6 +161,9 @@ func (ai *HydrossAI) registerMarks() {
 
 	dropMarks := func(sim *core.Simulation, auras []*core.Aura) {
 		for _, aura := range auras {
+			if aura == nil {
+				continue
+			}
 			aura.Deactivate(sim)
 		}
 	}

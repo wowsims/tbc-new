@@ -10,12 +10,12 @@
 		"class": "ClassWarrior",
 		"inFrontOfTarget": true,
 		"healingModel": {
-			"hps": 3300,
+			"hps": 2244,
 			"cadenceSeconds": 1.5,
 			"cadenceVariation": 1,
 			"absorbFrac": 0.02,
 			"burstWindow": 6,
-			"inspirationUptime": 0.12
+			"inspirationUptime": 0.13
 		}
 	},
 	"encounter": {
