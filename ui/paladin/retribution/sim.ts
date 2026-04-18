@@ -1,15 +1,15 @@
-import { stat } from 'node:fs';
-import * as OtherInputs from '../../core/components/inputs/other_inputs.js';
-import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui.js';
-import { Player } from '../../core/player.js';
+import * as OtherInputs from '../../core/components/inputs/other_inputs';
+import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui';
+import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
-import { APLRotation, APLRotation_Type, APLValueVariable, SimpleRotation } from '../../core/proto/apl.js';
-import { Cooldowns, Debuffs, Faction, IndividualBuffs, PartyBuffs, PseudoStat, Race, RaidBuffs, Spec, Stat, UnitStats } from '../../core/proto/common.js';
-import { PaladinAura } from '../../core/proto/paladin.js';
-import { Stats, UnitStat } from '../../core/proto_utils/stats.js';
-import { DefaultDebuffs, DefaultRaidBuffs, DefaultPartyBuffs, DefaultIndividualBuffs, DefaultConsumables, DefaultSimpleRotation } from './presets';
-import * as Presets from './presets.js';
-import * as Inputs from './inputs.js';
+import { APLListItem, APLRotation, APLRotation_Type, APLValueVariable } from '../../core/proto/apl';
+import { Cooldowns, PseudoStat, Spec, Stat } from '../../core/proto/common';
+import { PaladinAura } from '../../core/proto/paladin';
+import * as AplUtils from '../../core/proto_utils/apl_utils';
+import { Stats, UnitStat } from '../../core/proto_utils/stats';
+import { SpecRotation } from '../../core/proto_utils/utils';
+import * as Presets from './presets';
+import * as Inputs from './inputs';
 import * as Mechanics from '../../core/constants/mechanics';
 import { ReforgeOptimizer } from '../../core/components/suggest_reforges_action';
 
@@ -99,20 +99,20 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRetributionPaladin, {
 			return hitCap.add(expCap);
 		})(),
 		// Default consumes settings.
-		consumables: DefaultConsumables,
+		consumables: Presets.DefaultConsumables,
 		// Default talents.
 		talents: Presets.DefaultTalents.data,
 		// Default spec-specific settings.
 		specOptions: Presets.DefaultOptions,
 		other: Presets.OtherDefaults,
 		// Default raid/party buffs settings.
-		raidBuffs: DefaultRaidBuffs,
-		partyBuffs: DefaultPartyBuffs,
-		individualBuffs: DefaultIndividualBuffs,
-		debuffs: DefaultDebuffs,
+		raidBuffs: Presets.DefaultRaidBuffs,
+		partyBuffs: Presets.DefaultPartyBuffs,
+		individualBuffs: Presets.DefaultIndividualBuffs,
+		debuffs: Presets.DefaultDebuffs,
 
 		rotationType: APLRotation_Type.TypeSimple,
-		simpleRotation: DefaultSimpleRotation,
+		simpleRotation: Presets.DefaultSimpleRotation,
 	},
 
 	// IconInputs to include in the 'Player' section on the settings tab.
@@ -123,7 +123,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRetributionPaladin, {
 	excludeBuffDebuffInputs: [],
 	// Inputs to include in the 'Other' section on the settings tab.
 	otherInputs: {
-		inputs: [OtherInputs.InputDelay, OtherInputs.TankAssignment, OtherInputs.InFrontOfTarget],
+		inputs: [OtherInputs.TotemTwisting, OtherInputs.InputDelay, OtherInputs.TankAssignment, OtherInputs.InFrontOfTarget],
 	},
 	encounterPicker: {
 		// Whether to include 'Execute Duration (%)' in the 'Encounter' section of the settings tab.
@@ -144,7 +144,8 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRetributionPaladin, {
 		return Presets.APL_PRESET.rotation.rotation!;
 	},
 
-	simpleRotation: (player, simple): APLRotation => {
+	simpleRotation: (player: Player<Spec.SpecRetributionPaladin>, simple: SpecRotation<Spec.SpecRetributionPaladin>, cooldowns: Cooldowns): APLRotation => {
+		const actions = AplUtils.simpleCooldownActions(cooldowns);
 		const rotation = APLRotation.clone(Presets.APL_PRESET.rotation.rotation!);
 
 		const { useExorcism = false, consecrationRank = 0, delayMajorCDs = 11, prepullSotC = true, aura: rawAura = PaladinAura.SanctityAura } = simple;
@@ -205,41 +206,21 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRetributionPaladin, {
 		});
 
 		return APLRotation.create({
-			simple: SimpleRotation.create({
-				cooldowns: Cooldowns.create(),
-			}),
 			prepullActions: prepullActions,
-			priorityList: rotation.priorityList,
+			priorityList: [
+				...actions.map(action =>
+					APLListItem.create({
+						action: action,
+					}),
+				),
+				...rotation.priorityList,
+			],
 			groups: rotation.groups,
 			valueVariables: rotation.valueVariables,
 		});
 	},
 
-	//Handled by APL for major cds
-	hiddenMCDs: [2825, 28730, 31884, 351355, 22838, 23827, 12662, 29383, 22788, 22105, 23334, 23381, 35476, 23737, 10646],
-
-	raidSimPresets: [
-		{
-			spec: Spec.SpecRetributionPaladin,
-			talents: Presets.DefaultTalents.data,
-			specOptions: Presets.DefaultOptions,
-			consumables: Presets.DefaultConsumables,
-			defaultFactionRaces: {
-				[Faction.Unknown]: Race.RaceUnknown,
-				[Faction.Alliance]: Race.RaceHuman,
-				[Faction.Horde]: Race.RaceBloodElf,
-			},
-			defaultGear: {
-				[Faction.Unknown]: {},
-				[Faction.Alliance]: {
-					1: Presets.PRERAID_GEAR_PRESET.gear,
-				},
-				[Faction.Horde]: {
-					1: Presets.PRERAID_GEAR_PRESET.gear,
-				},
-			},
-		},
-	],
+	raidSimPresets: [],
 });
 
 export class RetributionPaladinSimUI extends IndividualSimUI<Spec.SpecRetributionPaladin> {
