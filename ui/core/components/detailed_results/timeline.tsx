@@ -1340,40 +1340,124 @@ const idToCategoryMap: Record<number, number> = {
 	[3043]: MELEE_ACTION_CATEGORY + 0.31, // Scorpid Sting
 
 	// Paladin
-	[76672]: MELEE_ACTION_CATEGORY + 0.01, // Hand of Light (mastery)
-	[35395]: MELEE_ACTION_CATEGORY + 0.02, // Crusader Strike
-	[53595]: MELEE_ACTION_CATEGORY + 0.04, // Hammer of the Righteous (Physical)
-	[88263]: MELEE_ACTION_CATEGORY + 0.05, // Hammer of the Righteous (Holy)
-	[53385]: MELEE_ACTION_CATEGORY + 0.06, // Divine Storm
-	[85256]: MELEE_ACTION_CATEGORY + 0.07, // Templar's Verdict
-	[20271]: MELEE_ACTION_CATEGORY + 0.08, // Judgment
-	[42463]: MELEE_ACTION_CATEGORY + 0.09, // Seal of Truth (on-hit)
-	[31803]: MELEE_ACTION_CATEGORY + 0.1, // Censure (Seal of Truth)
-	[101423]: MELEE_ACTION_CATEGORY + 0.11, // Seal of Righteousness
-	[53600]: MELEE_ACTION_CATEGORY + 0.12, // Shield of the Righteous
-	[879]: MELEE_ACTION_CATEGORY + 0.15, // Exorcism
-	[26573]: MELEE_ACTION_CATEGORY + 0.16, // Consecration
-	[119072]: MELEE_ACTION_CATEGORY + 0.17, // Holy Wrath
-	[24275]: MELEE_ACTION_CATEGORY + 0.18, // Hammer of Wrath
-	[114852]: MELEE_ACTION_CATEGORY + 0.19, // Holy Prism (Damage)
-	[114919]: MELEE_ACTION_CATEGORY + 0.19, // Arcing Light (Damage)
-	[114916]: MELEE_ACTION_CATEGORY + 0.19, // Execution Sentence
-	[114871]: MELEE_ACTION_CATEGORY + 0.2, // Holy Prism (Heal)
-	[119952]: MELEE_ACTION_CATEGORY + 0.2, // Arcing Light (Heal)
-	[146586]: MELEE_ACTION_CATEGORY + 0.2, // Stay of Execution
-	[84963]: SPELL_ACTION_CATEGORY + 0.01, // Inquisition
-	[54428]: SPELL_ACTION_CATEGORY + 0.02, // Divine Plea
-	[498]: SPELL_ACTION_CATEGORY + 0.03, // Divine Protection
-	[66233]: SPELL_ACTION_CATEGORY + 0.05, // Ardent Defender
-	[31884]: SPELL_ACTION_CATEGORY + 0.06, // Avenging Wrath
-	[114232]: SPELL_ACTION_CATEGORY + 0.07, // Sanctified Wrath
-	[105809]: SPELL_ACTION_CATEGORY + 0.08, // Holy Avenger,
-	[86698]: SPELL_ACTION_CATEGORY + 0.09, // Guardian of Ancient Kings
-	[86704]: SPELL_ACTION_CATEGORY + 0.1, // Ancient Fury
-	[20925]: SPELL_ACTION_CATEGORY + 0.11, // Sacred Shield (Ret / Prot)
-	[148039]: SPELL_ACTION_CATEGORY + 0.11, // Sacred Shield (Holy)
-	[65148]: SPELL_ACTION_CATEGORY + 0.12, // Sacred Shield (Absorb)
-	[114039]: SPELL_ACTION_CATEGORY + 0.13, // Hand of Purity
+	[31893]: MELEE_ACTION_CATEGORY + 0.001, // Seal of Blood proc
+	[20424]: MELEE_ACTION_CATEGORY + 0.002, // Seal of Command proc
+	[25742]: MELEE_ACTION_CATEGORY + 0.003, // Seal of Righteousness proc (Rank 1)
+	[25740]: MELEE_ACTION_CATEGORY + 0.0031, // Seal of Righteousness proc (Rank 2)
+	[25739]: MELEE_ACTION_CATEGORY + 0.0032, // Seal of Righteousness proc (Rank 3)
+	[25738]: MELEE_ACTION_CATEGORY + 0.0033, // Seal of Righteousness proc (Rank 4)
+	[25737]: MELEE_ACTION_CATEGORY + 0.0034, // Seal of Righteousness proc (Rank 5)
+	[25736]: MELEE_ACTION_CATEGORY + 0.0035, // Seal of Righteousness proc (Rank 6)
+	[25735]: MELEE_ACTION_CATEGORY + 0.0036, // Seal of Righteousness proc (Rank 7)
+	[25713]: MELEE_ACTION_CATEGORY + 0.0037, // Seal of Righteousness proc (Rank 8)
+	[27156]: MELEE_ACTION_CATEGORY + 0.0038, // Seal of Righteousness proc (Rank 9)
+	[31803]: MELEE_ACTION_CATEGORY + 0.004, // Seal of Vengeance proc
+	[20167]: MELEE_ACTION_CATEGORY + 0.005, // Seal of Light proc (Rank 1)
+	[20333]: MELEE_ACTION_CATEGORY + 0.0051, // Seal of Light proc (Rank 2)
+	[20334]: MELEE_ACTION_CATEGORY + 0.0052, // Seal of Light proc (Rank 3)
+	[20340]: MELEE_ACTION_CATEGORY + 0.0053, // Seal of Light proc (Rank 4)
+	[27161]: MELEE_ACTION_CATEGORY + 0.0054, // Seal of Light proc (Rank 5)
+	[20168]: MELEE_ACTION_CATEGORY + 0.006, // Seal of Wisdom proc (Rank 1)
+	[20350]: MELEE_ACTION_CATEGORY + 0.0061, // Seal of Wisdom proc (Rank 2)
+	[20351]: MELEE_ACTION_CATEGORY + 0.0062, // Seal of Wisdom proc (Rank 3)
+	[27167]: MELEE_ACTION_CATEGORY + 0.0063, // Seal of Wisdom proc (Rank 4)
+	[20170]: MELEE_ACTION_CATEGORY + 0.007, // Seal of Justice proc
+	[31892]: MELEE_ACTION_CATEGORY + 0.02, // Seal of Blood
+	[20375]: MELEE_ACTION_CATEGORY + 0.021, // Seal of Command (Rank 1)
+	[20915]: MELEE_ACTION_CATEGORY + 0.0211, // Seal of Command (Rank 2)
+	[20918]: MELEE_ACTION_CATEGORY + 0.0212, // Seal of Command (Rank 3)
+	[20919]: MELEE_ACTION_CATEGORY + 0.0213, // Seal of Command (Rank 4)
+	[20920]: MELEE_ACTION_CATEGORY + 0.0214, // Seal of Command (Rank 5)
+	[27170]: MELEE_ACTION_CATEGORY + 0.0215, // Seal of Command (Rank 6)
+	[21084]: MELEE_ACTION_CATEGORY + 0.022, // Seal of Righteousness (Rank 1)
+	[20287]: MELEE_ACTION_CATEGORY + 0.0221, // Seal of Righteousness (Rank 2)
+	[20288]: MELEE_ACTION_CATEGORY + 0.0222, // Seal of Righteousness (Rank 3)
+	[20289]: MELEE_ACTION_CATEGORY + 0.0223, // Seal of Righteousness (Rank 4)
+	[20290]: MELEE_ACTION_CATEGORY + 0.0224, // Seal of Righteousness (Rank 5)
+	[20291]: MELEE_ACTION_CATEGORY + 0.0225, // Seal of Righteousness (Rank 6)
+	[20292]: MELEE_ACTION_CATEGORY + 0.0226, // Seal of Righteousness (Rank 7)
+	[20293]: MELEE_ACTION_CATEGORY + 0.0227, // Seal of Righteousness (Rank 8)
+	[27155]: MELEE_ACTION_CATEGORY + 0.0228, // Seal of Righteousness (Rank 9)
+	[31801]: MELEE_ACTION_CATEGORY + 0.0229, // Seal of Vengeance
+	[20165]: MELEE_ACTION_CATEGORY + 0.02291, // Seal of Light (Rank 1)
+	[20347]: MELEE_ACTION_CATEGORY + 0.022911, // Seal of Light (Rank 2)
+	[20348]: MELEE_ACTION_CATEGORY + 0.022912, // Seal of Light (Rank 3)
+	[20349]: MELEE_ACTION_CATEGORY + 0.022913, // Seal of Light (Rank 4)
+	[27160]: MELEE_ACTION_CATEGORY + 0.022914, // Seal of Light (Rank 5)
+	[20166]: MELEE_ACTION_CATEGORY + 0.02292, // Seal of Wisdom (Rank 1)
+	[20356]: MELEE_ACTION_CATEGORY + 0.022921, // Seal of Wisdom (Rank 2)
+	[20357]: MELEE_ACTION_CATEGORY + 0.022922, // Seal of Wisdom (Rank 3)
+	[27166]: MELEE_ACTION_CATEGORY + 0.022923, // Seal of Wisdom (Rank 4)
+	[20164]: MELEE_ACTION_CATEGORY + 0.02293, // Seal of Justice (Rank 1)
+	[31895]: MELEE_ACTION_CATEGORY + 0.022931, // Seal of Justice (Rank 2)
+	[20271]: MELEE_ACTION_CATEGORY + 0.03, // Judgement
+	[31898]: MELEE_ACTION_CATEGORY + 0.04, // Judgement of Blood
+	[20425]: MELEE_ACTION_CATEGORY + 0.041, // Judgement of Command (Rank 1)
+	[20962]: MELEE_ACTION_CATEGORY + 0.0411, // Judgement of Command (Rank 2)
+	[20961]: MELEE_ACTION_CATEGORY + 0.0412, // Judgement of Command (Rank 3)
+	[20967]: MELEE_ACTION_CATEGORY + 0.0413, // Judgement of Command (Rank 4)
+	[20968]: MELEE_ACTION_CATEGORY + 0.0414, // Judgement of Command (Rank 5)
+	[27172]: MELEE_ACTION_CATEGORY + 0.0415, // Judgement of Command (Rank 6)
+	[20187]: MELEE_ACTION_CATEGORY + 0.042, // Judgement of Righteousness (Rank 1)
+	[20280]: MELEE_ACTION_CATEGORY + 0.0421, // Judgement of Righteousness (Rank 2)
+	[20281]: MELEE_ACTION_CATEGORY + 0.0422, // Judgement of Righteousness (Rank 3)
+	[20282]: MELEE_ACTION_CATEGORY + 0.0423, // Judgement of Righteousness (Rank 4)
+	[20283]: MELEE_ACTION_CATEGORY + 0.0424, // Judgement of Righteousness (Rank 5)
+	[20284]: MELEE_ACTION_CATEGORY + 0.0425, // Judgement of Righteousness (Rank 6)
+	[20285]: MELEE_ACTION_CATEGORY + 0.0426, // Judgement of Righteousness (Rank 7)
+	[20286]: MELEE_ACTION_CATEGORY + 0.0427, // Judgement of Righteousness (Rank 8)
+	[27157]: MELEE_ACTION_CATEGORY + 0.0428, // Judgement of Righteousness (Rank 9)
+	[31804]: MELEE_ACTION_CATEGORY + 0.043, // Judgement of Vengeance
+	[21183]: MELEE_ACTION_CATEGORY + 0.044, // Judgement of the Crusader (Rank 1)
+	[20188]: MELEE_ACTION_CATEGORY + 0.0441, // Judgement of the Crusader (Rank 2)
+	[20300]: MELEE_ACTION_CATEGORY + 0.0442, // Judgement of the Crusader (Rank 3)
+	[20301]: MELEE_ACTION_CATEGORY + 0.0443, // Judgement of the Crusader (Rank 4)
+	[20302]: MELEE_ACTION_CATEGORY + 0.0444, // Judgement of the Crusader (Rank 5)
+	[20303]: MELEE_ACTION_CATEGORY + 0.0445, // Judgement of the Crusader (Rank 6)
+	[27159]: MELEE_ACTION_CATEGORY + 0.0446, // Judgement of the Crusader (Rank 7)
+	[20185]: MELEE_ACTION_CATEGORY + 0.045, // Judgement of Light (Rank 1)
+	[20344]: MELEE_ACTION_CATEGORY + 0.0451, // Judgement of Light (Rank 2)
+	[20345]: MELEE_ACTION_CATEGORY + 0.0452, // Judgement of Light (Rank 3)
+	[20346]: MELEE_ACTION_CATEGORY + 0.0453, // Judgement of Light (Rank 4)
+	[27162]: MELEE_ACTION_CATEGORY + 0.0454, // Judgement of Light (Rank 5)
+	[20186]: MELEE_ACTION_CATEGORY + 0.046, // Judgement of Wisdom (Rank 1)
+	[20354]: MELEE_ACTION_CATEGORY + 0.0461, // Judgement of Wisdom (Rank 2)
+	[20355]: MELEE_ACTION_CATEGORY + 0.0462, // Judgement of Wisdom (Rank 3)
+	[27164]: MELEE_ACTION_CATEGORY + 0.0463, // Judgement of Wisdom (Rank 4)
+	[20184]: MELEE_ACTION_CATEGORY + 0.047, // Judgement of Justice (Rank 1)
+	[31896]: MELEE_ACTION_CATEGORY + 0.0471, // Judgement of Justice (Rank 2)
+	[35395]: MELEE_ACTION_CATEGORY + 0.05, // Crusader Strike
+	[31935]: MELEE_ACTION_CATEGORY + 0.05, // Avenger's Shield (Rank 1)
+	[32699]: MELEE_ACTION_CATEGORY + 0.051, // Avenger's Shield (Rank 2)
+	[32700]: MELEE_ACTION_CATEGORY + 0.052, // Avenger's Shield (Rank 3)
+	[879]: MELEE_ACTION_CATEGORY + 0.06, // Exorcism (Rank 1)
+	[5614]: MELEE_ACTION_CATEGORY + 0.061, // Exorcism (Rank 2)
+	[5615]: MELEE_ACTION_CATEGORY + 0.062, // Exorcism (Rank 3)
+	[10312]: MELEE_ACTION_CATEGORY + 0.063, // Exorcism (Rank 4)
+	[10313]: MELEE_ACTION_CATEGORY + 0.064, // Exorcism (Rank 5)
+	[10314]: MELEE_ACTION_CATEGORY + 0.065, // Exorcism (Rank 6)
+	[27138]: MELEE_ACTION_CATEGORY + 0.066, // Exorcism (Rank 7)
+	[26573]: MELEE_ACTION_CATEGORY + 0.07, // Consecration (Rank 1)
+	[20116]: MELEE_ACTION_CATEGORY + 0.071, // Consecration (Rank 2)
+	[20922]: MELEE_ACTION_CATEGORY + 0.072, // Consecration (Rank 3)
+	[20923]: MELEE_ACTION_CATEGORY + 0.073, // Consecration (Rank 4)
+	[20924]: MELEE_ACTION_CATEGORY + 0.074, // Consecration (Rank 5)
+	[27173]: MELEE_ACTION_CATEGORY + 0.075, // Consecration (Rank 6)
+	[2812]: MELEE_ACTION_CATEGORY + 0.08, // Holy Wrath (Rank 1)
+	[10318]: MELEE_ACTION_CATEGORY + 0.081, // Holy Wrath (Rank 2)
+	[27139]: MELEE_ACTION_CATEGORY + 0.082, // Holy Wrath (Rank 3)
+	[24275]: MELEE_ACTION_CATEGORY + 0.09, // Hammer of Wrath (Rank 1)
+	[24274]: MELEE_ACTION_CATEGORY + 0.091, // Hammer of Wrath (Rank 2)
+	[24239]: MELEE_ACTION_CATEGORY + 0.092, // Hammer of Wrath (Rank 3)
+	[27180]: MELEE_ACTION_CATEGORY + 0.093, // Hammer of Wrath (Rank 4)
+	[31884]: SPELL_ACTION_CATEGORY + 0.01, // Avenging Wrath
+	[25780]: SPELL_ACTION_CATEGORY + 0.94, // Righteous Fury
+	[27149]: SPELL_ACTION_CATEGORY + 0.941, // Devotion Aura
+	[19746]: SPELL_ACTION_CATEGORY + 0.942, // Concentration Aura
+	[27153]: SPELL_ACTION_CATEGORY + 0.943, // Fire Resistance Aura
+	[27152]: SPELL_ACTION_CATEGORY + 0.944, // Frost Resistance Aura
+	[27151]: SPELL_ACTION_CATEGORY + 0.945, // Shadow Resistance Aura
+	[20218]: SPELL_ACTION_CATEGORY + 0.946, // Sanctity Aura
 
 	// Priest
 	[48300]: SPELL_ACTION_CATEGORY + 0.11, // Devouring Plague
@@ -1490,8 +1574,13 @@ const idToCategoryMap: Record<number, number> = {
 	[469]: DEFAULT_ACTION_CATEGORY + 0.1, // Commanding Shout
 
 	// Generic
-	[53307]: SPELL_ACTION_CATEGORY + 0.931, // Thorns
+	[20925]: SPELL_ACTION_CATEGORY + 0.931, // Holy Shield (Rank 1)
+	[20927]: SPELL_ACTION_CATEGORY + 0.931, // Holy Shield (Rank 2)
+	[20928]: SPELL_ACTION_CATEGORY + 0.931, // Holy Shield (Rank 3)
+	[27179]: SPELL_ACTION_CATEGORY + 0.931, // Holy Shield (Rank 4)
 	[27150]: SPELL_ACTION_CATEGORY + 0.932, // Retribution Aura
+	[27169]: SPELL_ACTION_CATEGORY + 0.933, // Blessing of Sanctuary
+	[26992]: SPELL_ACTION_CATEGORY + 0.934, // Thorns
 	[23827]: SPELL_ACTION_CATEGORY + 0.941, // Super Sapper
 	[10646]: SPELL_ACTION_CATEGORY + 0.941, // Goblin Sapper
 	[23736]: SPELL_ACTION_CATEGORY + 0.942, // Fel Iron Bomb

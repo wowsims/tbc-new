@@ -622,6 +622,12 @@ export class ActionId {
 					name += ' (External)';
 				}
 				break;
+			case 'Retribution Aura':
+			case 'Holy Shield':
+				if (tag == 2) {
+					name += ' (Hit)';
+				}
+				break;
 			case 'Dummy Spell':
 				if (tag === 100000) {
 					['Arcane', 'Fire', 'Frost', 'Holy', 'Shadow', 'Nature'].forEach((school, index) => {
