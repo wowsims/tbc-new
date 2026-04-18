@@ -739,6 +739,7 @@ enum ConsumableType {
 	ConsumableTypeImbue = 8;
 	ConsumableTypePetFood = 9;
 	ConsumableTypeOther = 10;
+	ConsumableTypeHerb = 11;
 }
 
 
