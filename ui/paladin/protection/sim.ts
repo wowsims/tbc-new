@@ -1,15 +1,17 @@
-import * as OtherInputs from '../../core/components/inputs/other_inputs.js';
-import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui.js';
-import { Player } from '../../core/player.js';
-import { PlayerClasses } from '../../core/player_classes';
-import { APLRotation, APLRotation_Type, APLValueVariable, SimpleRotation } from '../../core/proto/apl.js';
-import { Cooldowns, PseudoStat, Spec, Stat } from '../../core/proto/common.js';
-import { PaladinAura, PaladinJudgement } from '../../core/proto/paladin.js';
-import { Stats, UnitStat } from '../../core/proto_utils/stats.js';
-import * as Presets from './presets.js';
-import * as ProtPaladinInputs from './inputs.js';
-import * as Mechanics from '../../core/constants/mechanics';
+import * as OtherInputs from '../../core/components/inputs/other_inputs';
 import { ReforgeOptimizer } from '../../core/components/suggest_reforges_action';
+import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui';
+import { Player } from '../../core/player';
+import { PlayerClasses } from '../../core/player_classes';
+import { APLListItem, APLRotation, APLRotation_Type, APLValueVariable } from '../../core/proto/apl';
+import { Cooldowns, PseudoStat, Spec, Stat } from '../../core/proto/common';
+import { PaladinAura, PaladinJudgement } from '../../core/proto/paladin';
+import { StatCapType } from '../../core/proto/ui';
+import * as AplUtils from '../../core/proto_utils/apl_utils';
+import { StatCap, UnitStat } from '../../core/proto_utils/stats';
+import { SpecRotation } from '../../core/proto_utils/utils';
+import * as Presets from './presets';
+import * as ProtPaladinInputs from './inputs';
 
 // Spell IDs for each rank of Consecration.
 const CONSECRATION_RANK_SPELL_IDS: Record<number, number> = {
@@ -115,13 +117,13 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 	defaults: {
 		// Default equipped gear.
 		gear: Presets.P1_GEAR_PRESET.gear,
-		statCaps: (() => {
-			const hitCap = new Stats().withPseudoStat(PseudoStat.PseudoStatMeleeHitPercent, 9);
-			const expCap = new Stats().withStat(Stat.StatExpertiseRating, 6.5 * 4 * Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION);
-			const critImmunityCap = new Stats().withPseudoStat(PseudoStat.PseudoStatReducedCritTakenPercent, 5.6);
-
-			return hitCap.add(expCap).add(critImmunityCap);
-		})(),
+		softCapBreakpoints: [
+			StatCap.fromPseudoStat(PseudoStat.PseudoStatReducedCritTakenPercent, {
+				breakpoints: [5.6],
+				capType: StatCapType.TypeSoftCap,
+				postCapEPs: [0],
+			}),
+		],
 		// Default EP weights for sorting gear in the gear picker.
 		// Values for now are pre-Cata initial WAG
 		epWeights: Presets.P4_EP_PRESET.epWeights,
@@ -151,6 +153,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 	// Inputs to include in the 'Other' section on the settings tab.
 	otherInputs: {
 		inputs: [
+			OtherInputs.TotemTwisting,
 			OtherInputs.InputDelay,
 			OtherInputs.TankAssignment,
 			OtherInputs.InspirationUptime,
@@ -183,7 +186,8 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 		return Presets.APL_PRESET.rotation.rotation!;
 	},
 
-	simpleRotation: (player, simple): APLRotation => {
+	simpleRotation: (player: Player<Spec.SpecProtectionPaladin>, simple: SpecRotation<Spec.SpecProtectionPaladin>, cooldowns: Cooldowns): APLRotation => {
+		const actions = AplUtils.simpleCooldownActions(cooldowns);
 		const rotation = APLRotation.clone(Presets.APL_PRESET.rotation.rotation!);
 
 		const {
@@ -282,11 +286,15 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 		});
 
 		return APLRotation.create({
-			simple: SimpleRotation.create({
-				cooldowns: Cooldowns.create(),
-			}),
 			prepullActions: prepullActions,
-			priorityList: priorityList,
+			priorityList: [
+				...actions.map(action =>
+					APLListItem.create({
+						action: action,
+					}),
+				),
+				...priorityList,
+			],
 			groups: rotation.groups,
 			valueVariables: rotation.valueVariables,
 		});

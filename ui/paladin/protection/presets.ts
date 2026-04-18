@@ -1,4 +1,4 @@
-import * as PresetUtils from '../../core/preset_utils.js';
+import * as PresetUtils from '../../core/preset_utils';
 import {
 	ConsumesSpec,
 	Debuffs,
@@ -12,14 +12,14 @@ import {
 	Spec,
 	Stat,
 	TristateEffect,
-} from '../../core/proto/common.js';
+} from '../../core/proto/common';
 import {
 	PaladinAura,
 	PaladinJudgement,
 	ProtectionPaladin_Options as ProtectionPaladinOptions,
 	ProtectionPaladin_Rotation as ProtectionPaladinRotation,
-} from '../../core/proto/paladin.js';
-import { SavedTalents } from '../../core/proto/ui.js';
+} from '../../core/proto/paladin';
+import { SavedTalents } from '../../core/proto/ui';
 import { Stats } from '../../core/proto_utils/stats';
 import { defaultExposeWeaknessSettings } from '../../core/proto_utils/utils';
 import DefaultApl from './apls/default.apl.json';
@@ -44,8 +44,8 @@ export const APL_PRESET = PresetUtils.makePresetAPLRotation('Default', DefaultAp
 export const DefaultSimpleRotation = ProtectionPaladinRotation.create({
 	prioritizeHolyShield: true,
 	consecrationRank: 6,
-	useExorcism: false,
-	useAvengersShield: true,
+	useExorcism: true,
+	useAvengersShield: false,
 	maintainJudgement: PaladinJudgement.JudgementNone,
 	aura: PaladinAura.DevotionAura,
 });
