@@ -683,6 +683,30 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestFeralCat-AllItems-Gladiator'sRefuge"
+ value: {
+  dps: 553.94955
+  tps: 393.30418
+  hps: 72.95004
+ }
+}
+dps_results: {
+ key: "TestFeralCat-AllItems-Gladiator'sSanctuary"
+ value: {
+  dps: 719.89995
+  tps: 511.12897
+  hps: 80.2899
+ }
+}
+dps_results: {
+ key: "TestFeralCat-AllItems-Gladiator'sWildhide"
+ value: {
+  dps: 553.94955
+  tps: 393.30418
+  hps: 72.4096
+ }
+}
+dps_results: {
  key: "TestFeralCat-AllItems-GlowingCrystalInsignia-25619"
  value: {
   dps: 694.39457
@@ -1056,6 +1080,30 @@ dps_results: {
   dps: 553.94955
   tps: 393.30418
   hps: 64.72332
+ }
+}
+dps_results: {
+ key: "TestFeralCat-AllItems-Oathbound'sDragonhideBattlegear"
+ value: {
+  dps: 614.23023
+  tps: 436.10346
+  hps: 65.42818
+ }
+}
+dps_results: {
+ key: "TestFeralCat-AllItems-Oathbound'sKodohideBattlegear"
+ value: {
+  dps: 553.94955
+  tps: 393.30418
+  hps: 64.18288
+ }
+}
+dps_results: {
+ key: "TestFeralCat-AllItems-Oathbound'sWyrmhideBattlegear"
+ value: {
+  dps: 553.94955
+  tps: 393.30418
+  hps: 63.64244
  }
 }
 dps_results: {

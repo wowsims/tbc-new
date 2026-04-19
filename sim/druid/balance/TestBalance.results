@@ -263,6 +263,27 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestBalance-AllItems-Gladiator'sRefuge"
+ value: {
+  dps: 1289.83258
+  tps: 1217.40116
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-Gladiator'sSanctuary"
+ value: {
+  dps: 1089.87638
+  tps: 1016.50813
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-Gladiator'sWildhide"
+ value: {
+  dps: 1384.02344
+  tps: 1310.56806
+ }
+}
+dps_results: {
  key: "TestBalance-AllItems-HandofJustice-11815"
  value: {
   dps: 1386.60943
@@ -435,6 +456,27 @@ dps_results: {
  value: {
   dps: 1512.23972
   tps: 1439.17121
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-Oathbound'sDragonhideBattlegear"
+ value: {
+  dps: 1044.68667
+  tps: 970.11069
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-Oathbound'sKodohideBattlegear"
+ value: {
+  dps: 1131.29577
+  tps: 1057.26791
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-Oathbound'sWyrmhideBattlegear"
+ value: {
+  dps: 1147.6657
+  tps: 1073.10457
  }
 }
 dps_results: {

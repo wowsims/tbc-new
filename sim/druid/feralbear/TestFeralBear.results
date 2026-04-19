@@ -755,6 +755,33 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestFeralBear-AllItems-Gladiator'sRefuge"
+ value: {
+  dps: 354.69211
+  tps: 2911.05937
+  dtps: 1818.53218
+  hps: 65.57083
+ }
+}
+dps_results: {
+ key: "TestFeralBear-AllItems-Gladiator'sSanctuary"
+ value: {
+  dps: 447.02392
+  tps: 3643.90018
+  dtps: 1421.29589
+  hps: 77.22305
+ }
+}
+dps_results: {
+ key: "TestFeralBear-AllItems-Gladiator'sWildhide"
+ value: {
+  dps: 354.69211
+  tps: 2911.05937
+  dtps: 1818.53218
+  hps: 65.07117
+ }
+}
+dps_results: {
  key: "TestFeralBear-AllItems-GlowingCrystalInsignia-25619"
  value: {
   dps: 438.28069
@@ -1175,6 +1202,33 @@ dps_results: {
   tps: 2911.05937
   dtps: 1994.11954
   hps: 57.965
+ }
+}
+dps_results: {
+ key: "TestFeralBear-AllItems-Oathbound'sDragonhideBattlegear"
+ value: {
+  dps: 390.30757
+  tps: 3191.54597
+  dtps: 1824.75137
+  hps: 60.51237
+ }
+}
+dps_results: {
+ key: "TestFeralBear-AllItems-Oathbound'sKodohideBattlegear"
+ value: {
+  dps: 354.69211
+  tps: 2911.05937
+  dtps: 2105.88264
+  hps: 57.46534
+ }
+}
+dps_results: {
+ key: "TestFeralBear-AllItems-Oathbound'sWyrmhideBattlegear"
+ value: {
+  dps: 354.69211
+  tps: 2911.05937
+  dtps: 2105.88264
+  hps: 56.96569
  }
 }
 dps_results: {

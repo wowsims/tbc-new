@@ -7,6 +7,52 @@ import (
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
+// PVP - S1, S2, S3, S4 Sets
+var ItemSetGladiatorsSanctuary = core.NewItemSet(core.ItemSet{
+	ID:      584,
+	Name:    "Gladiator's Sanctuary",
+	Bonuses: pvpResilience2PBonus(32145),
+})
+
+var ItemSetGladiatorsRefuge = core.NewItemSet(core.ItemSet{
+	ID:      685,
+	Name:    "Gladiator's Refuge",
+	Bonuses: pvpResilience2PBonus(40043),
+})
+
+var ItemSetGladiatorsWildhide = core.NewItemSet(core.ItemSet{
+	ID:      585,
+	Name:    "Gladiator's Wildhide",
+	Bonuses: pvpResilience2PBonus(40042),
+})
+
+// PVP - PvP Rare Set
+var ItemSetOathboundsKodohideBattlegear = core.NewItemSet(core.ItemSet{
+	ID:      2027,
+	Name:    "Oathbound's Kodohide Battlegear",
+	Bonuses: pvpResilience2PBonus(46437),
+})
+
+var ItemSetOathboundsDragonhideBattlegear = core.NewItemSet(core.ItemSet{
+	ID:      2025,
+	Name:    "Oathbound's Dragonhide Battlegear",
+	Bonuses: pvpResilience2PBonus(46435),
+})
+
+var ItemSetOathboundsWyrmhideBattlegear = core.NewItemSet(core.ItemSet{
+	ID:      2026,
+	Name:    "Oathbound's Wyrmhide Battlegear",
+	Bonuses: pvpResilience2PBonus(46436),
+})
+
+func pvpResilience2PBonus(spellID int32) map[int32]core.ApplySetBonus {
+	return map[int32]core.ApplySetBonus{
+		2: func(agent core.Agent, setBonusAura *core.Aura) {
+			setBonusAura.AttachStatBuff(stats.ResilienceRating, 35).ExposeToAPL(spellID)
+		},
+	}
+}
+
 // Druid Dungeon Set
 var ItemSetMoongladeRaiment = core.NewItemSet(core.ItemSet{
 	ID:   637,
