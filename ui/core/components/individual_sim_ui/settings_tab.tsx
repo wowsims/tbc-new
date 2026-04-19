@@ -1,7 +1,7 @@
 import i18n from '../../../i18n/config';
 import { Encounter } from '../../encounter.js';
 import { IndividualSimUI, InputSection } from '../../individual_sim_ui.jsx';
-import { ConsumesSpec, Debuffs, HealingModel, IndividualBuffs, ItemSwap, PartyBuffs, Profession, RaidBuffs } from '../../proto/common.js';
+import { ConsumesSpec, Debuffs, HealingModel, IndividualBuffs, ItemSwap, PartyBuffs, Profession, RaidBuffs, TristateEffect } from '../../proto/common.js';
 import { SavedEncounter, SavedSettings } from '../../proto/ui.js';
 import { translateRace, translateProfession } from '../../../i18n/localization.js';
 import { Stats } from '../../proto_utils/stats.js';
@@ -324,7 +324,10 @@ export class SettingsTab extends SimTab {
 			],
 			equals: (a: SavedSettings, b: SavedSettings) => SavedSettings.equals(a, b),
 			toJson: (a: SavedSettings) => SavedSettings.toJson(a),
-			fromJson: (obj: any) => SavedSettings.fromJson(obj),
+			fromJson: (obj: any) => {
+				SettingsTab.updateSavedSettings(obj);
+				return SavedSettings.fromJson(obj);
+			},
 		});
 
 		this.simUI.sim.waitForInit().then(() => {
@@ -415,5 +418,15 @@ export class SettingsTab extends SimTab {
 				sectionElem.style.gridTemplateColumns = `repeat(${Math.ceil(iconPickers.length / 2)}, 1fr)`;
 			}
 		}
+	}
+
+	static updateSavedSettings(savedSettingsJson: SavedSettings) {
+		if (savedSettingsJson?.debuffs) {
+			const oldimprovedSealOfTheCrusader = savedSettingsJson.debuffs.improvedSealOfTheCrusader as unknown as boolean;
+			if (oldimprovedSealOfTheCrusader) {
+				savedSettingsJson.debuffs.improvedSealOfTheCrusader = TristateEffect.TristateEffectImproved;
+			}
+		}
+		return savedSettingsJson;
 	}
 }
