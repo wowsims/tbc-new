@@ -196,4 +196,5 @@ var DefaultPetConfigs = [...]PetConfig{
 	proto.HunterOptions_Raptor:      {Name: "Raptor", DamageMultiplier: 1.1, PrimaryAbility: Bite, SecondaryAbility: Claw},
 	proto.HunterOptions_Ravager:     {Name: "Ravager", DamageMultiplier: 1.1, PrimaryAbility: Bite, SecondaryAbility: Gore},
 	proto.HunterOptions_WindSerpent: {Name: "Wind Serpent", DamageMultiplier: 1.07, PrimaryAbility: Bite, SecondaryAbility: LightningBreath},
+	proto.HunterOptions_Dragonhawk:  {Name: "Dragonhawk", DamageMultiplier: 1.0, PrimaryAbility: Bite, SecondaryAbility: FireBreath},
 }

@@ -71,6 +71,11 @@ export const PetTypeInput = <SpecType extends HunterSpecs>() =>
 				actionId: ActionId.fromPetName('Wind Serpent'),
 				tooltip: i18n.t('settings_tab.other.pet_type.wind_serpent'),
 			},
+			{
+				value: HunterOptions_PetType.Dragonhawk,
+				actionId: ActionId.fromPetName('Dragonhawk'),
+				tooltip: i18n.t('settings_tab.other.pet_type.dragonhawk'),
+			},
 		],
 	});
 
