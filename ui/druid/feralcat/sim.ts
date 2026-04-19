@@ -48,7 +48,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralCatDruid, {
 
 	defaults: {
 		// Default equipped gear.
-		gear: Presets.P1_GEARSET.gear,
+		gear: Presets.P1_REALISTIC_6P_GEARSET.gear,
 		// Default EP weights for sorting gear in the gear picker.
 		epWeights: Presets.P1_EP_PRESET.epWeights,
 		statCaps: (() => {
@@ -135,7 +135,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralCatDruid, {
 		talents: [Presets.StandardTalents, Presets.MonocatTalents],
 		rotations: [Presets.SIMPLE, Presets.APL],
 		// Preset gear configurations that the user can quickly select.
-		gear: [Presets.PRE_RAID_GEARSET, Presets.P1_GEARSET, Presets.P2_GEARSET, Presets.P3_GEARSET, Presets.P4_GEARSET, Presets.P5_GEARSET],
+		gear: [Presets.PRE_RAID_GEARSET, Presets.P1_REALISTIC_6P_GEARSET, Presets.P1_REALISTIC_9P_GEARSET, Presets.P1_BIS_6P_GEARSET, Presets.P1_BIS_9P_GEARSET, Presets.P1_ALT_6P_GEARSET, Presets.P1_ALT_9P_GEARSET, Presets.P2_6P_GEARSET, Presets.P2_9P_GEARSET, Presets.P2_ALT_6P_GEARSET, Presets.P2_ALT_9P_GEARSET, Presets.P3_GEARSET, Presets.P4_GEARSET, Presets.P5_GEARSET],
 		itemSwaps: [],
 		builds: [],
 	},
