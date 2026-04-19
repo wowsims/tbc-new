@@ -46,6 +46,7 @@ export const isFurySpec = (player: Player<Spec.SpecDpsWarrior>) =>
 
 // Handlers for spec specific load checks
 const FURY_PRESET_OPTIONS = {
+	group: 'Fury',
 	onLoad: (player: Player<Spec.SpecDpsWarrior>) => {
 		PresetUtils.makeSpecChangeWarningToast(
 			[
@@ -63,6 +64,7 @@ const FURY_PRESET_OPTIONS = {
 	},
 };
 const ARMS_PRESET_OPTIONS = {
+	group: 'Arms',
 	onLoad: (player: Player<any>) => {
 		PresetUtils.makeSpecChangeWarningToast(
 			[
@@ -76,19 +78,19 @@ const ARMS_PRESET_OPTIONS = {
 	},
 };
 
-export const P1_PRERAID_FURY_PRESET = PresetUtils.makePresetGear('Preraid - Fury', PreraidFuryGear, FURY_PRESET_OPTIONS);
-export const P1_BIS_FURY_PRESET = PresetUtils.makePresetGear('P1 - Fury', P1FuryGear, FURY_PRESET_OPTIONS);
-export const P2_BIS_FURY_PRESET = PresetUtils.makePresetGear('P2 - Fury', P2FuryGear, FURY_PRESET_OPTIONS);
-export const P3_BIS_FURY_PRESET = PresetUtils.makePresetGear('P3 - Fury', P3FuryGear, FURY_PRESET_OPTIONS);
-export const P35_BIS_FURY_PRESET = PresetUtils.makePresetGear('P3.5 - Fury', P35FuryGear, FURY_PRESET_OPTIONS);
-export const P4_BIS_FURY_PRESET = PresetUtils.makePresetGear('P4 - Fury', P4FuryGear, FURY_PRESET_OPTIONS);
+export const P1_PRERAID_FURY_PRESET = PresetUtils.makePresetGear('Preraid', PreraidFuryGear, { phase: Phase.Phase1, ...FURY_PRESET_OPTIONS });
+export const P1_BIS_FURY_PRESET = PresetUtils.makePresetGear('BIS', P1FuryGear, { phase: Phase.Phase1, ...FURY_PRESET_OPTIONS });
+export const P2_BIS_FURY_PRESET = PresetUtils.makePresetGear('BIS', P2FuryGear, { phase: Phase.Phase2, ...FURY_PRESET_OPTIONS });
+export const P3_BIS_FURY_PRESET = PresetUtils.makePresetGear('BIS', P3FuryGear, { phase: Phase.Phase3, ...FURY_PRESET_OPTIONS });
+export const P35_BIS_FURY_PRESET = PresetUtils.makePresetGear('BIS', P35FuryGear, { phase: Phase.Phase4, ...FURY_PRESET_OPTIONS });
+export const P4_BIS_FURY_PRESET = PresetUtils.makePresetGear('BIS', P4FuryGear, { phase: Phase.Phase5, ...FURY_PRESET_OPTIONS });
 
-export const P1_PRERAID_ARMS_PRESET = PresetUtils.makePresetGear('Preraid - Arms', PreraidArmsGear, ARMS_PRESET_OPTIONS);
-export const P1_BIS_ARMS_PRESET = PresetUtils.makePresetGear('P1 - Arms', P1ArmsGear, ARMS_PRESET_OPTIONS);
-export const P2_BIS_ARMS_PRESET = PresetUtils.makePresetGear('P2 - Arms', P2ArmsGear, ARMS_PRESET_OPTIONS);
-export const P3_BIS_ARMS_PRESET = PresetUtils.makePresetGear('P3 - Arms', P3ArmsGear, ARMS_PRESET_OPTIONS);
-export const P35_BIS_ARMS_PRESET = PresetUtils.makePresetGear('P3.5 - Arms', P35ArmsGear, ARMS_PRESET_OPTIONS);
-export const P4_BIS_ARMS_PRESET = PresetUtils.makePresetGear('P4 - Arms', P4ArmsGear, ARMS_PRESET_OPTIONS);
+export const P1_PRERAID_ARMS_PRESET = PresetUtils.makePresetGear('Preraid', PreraidArmsGear, { phase: Phase.Phase1, ...ARMS_PRESET_OPTIONS });
+export const P1_BIS_ARMS_PRESET = PresetUtils.makePresetGear('BIS', P1ArmsGear, { phase: Phase.Phase1, ...ARMS_PRESET_OPTIONS });
+export const P2_BIS_ARMS_PRESET = PresetUtils.makePresetGear('BIS', P2ArmsGear, { phase: Phase.Phase2, ...ARMS_PRESET_OPTIONS });
+export const P3_BIS_ARMS_PRESET = PresetUtils.makePresetGear('BIS', P3ArmsGear, { phase: Phase.Phase3, ...ARMS_PRESET_OPTIONS });
+export const P35_BIS_ARMS_PRESET = PresetUtils.makePresetGear('BIS', P35ArmsGear, { phase: Phase.Phase4, ...ARMS_PRESET_OPTIONS });
+export const P4_BIS_ARMS_PRESET = PresetUtils.makePresetGear('BIS', P4ArmsGear, { phase: Phase.Phase5, ...ARMS_PRESET_OPTIONS });
 
 export const FURY_DEFAULT_ROTATION = PresetUtils.makePresetAPLRotation('Fury', DefaultFuryApl);
 export const ARMS_DEFAULT_ROTATION = PresetUtils.makePresetAPLRotation('Arms', DefaultArmsApl);
@@ -331,7 +333,9 @@ export const P4_PLAYER_SETTINGS: PresetUtils.PresetSettings = {
 	},
 };
 
-export const P1_PRESET_BUILD_FURY = PresetUtils.makePresetBuild('P1 - Fury', {
+export const P1_PRESET_BUILD_FURY = PresetUtils.makePresetBuild('Fury', {
+	group: 'Fury',
+	phase: Phase.Phase1,
 	gear: P1_BIS_FURY_PRESET,
 	talents: FuryTalents,
 	epWeights: P1_FURY_EP_PRESET,
@@ -340,7 +344,9 @@ export const P1_PRESET_BUILD_FURY = PresetUtils.makePresetBuild('P1 - Fury', {
 	settings: P1_PLAYER_SETTINGS,
 });
 
-export const P2_PRESET_BUILD_FURY = PresetUtils.makePresetBuild('P2 - Fury', {
+export const P2_PRESET_BUILD_FURY = PresetUtils.makePresetBuild('Fury', {
+	group: 'Fury',
+	phase: Phase.Phase2,
 	gear: P2_BIS_FURY_PRESET,
 	talents: FuryTalents,
 	epWeights: P2_FURY_EP_PRESET,
@@ -349,7 +355,9 @@ export const P2_PRESET_BUILD_FURY = PresetUtils.makePresetBuild('P2 - Fury', {
 	settings: P2_PLAYER_SETTINGS,
 });
 
-export const P3_PRESET_BUILD_FURY = PresetUtils.makePresetBuild('P3 - Fury', {
+export const P3_PRESET_BUILD_FURY = PresetUtils.makePresetBuild('Fury', {
+	group: 'Fury',
+	phase: Phase.Phase3,
 	gear: P3_BIS_FURY_PRESET,
 	talents: FuryTalents,
 	epWeights: P2_FURY_EP_PRESET,
@@ -358,7 +366,9 @@ export const P3_PRESET_BUILD_FURY = PresetUtils.makePresetBuild('P3 - Fury', {
 	settings: P3_PLAYER_SETTINGS,
 });
 
-export const P35_PRESET_BUILD_FURY = PresetUtils.makePresetBuild('P3.5 - Fury', {
+export const P35_PRESET_BUILD_FURY = PresetUtils.makePresetBuild('Fury', {
+	group: 'Fury',
+	phase: Phase.Phase4,
 	gear: P35_BIS_FURY_PRESET,
 	talents: FuryTalents,
 	epWeights: P2_FURY_EP_PRESET,
@@ -367,7 +377,9 @@ export const P35_PRESET_BUILD_FURY = PresetUtils.makePresetBuild('P3.5 - Fury', 
 	settings: P35_PLAYER_SETTINGS,
 });
 
-export const P4_PRESET_BUILD_FURY = PresetUtils.makePresetBuild('P4 - Fury', {
+export const P4_PRESET_BUILD_FURY = PresetUtils.makePresetBuild('Fury', {
+	group: 'Fury',
+	phase: Phase.Phase5,
 	gear: P4_BIS_FURY_PRESET,
 	talents: FuryTalents,
 	epWeights: P2_FURY_EP_PRESET,
@@ -376,7 +388,9 @@ export const P4_PRESET_BUILD_FURY = PresetUtils.makePresetBuild('P4 - Fury', {
 	settings: P4_PLAYER_SETTINGS,
 });
 
-export const P1_PRESET_BUILD_ARMS = PresetUtils.makePresetBuild('P1 - Arms', {
+export const P1_PRESET_BUILD_ARMS = PresetUtils.makePresetBuild('Arms', {
+	group: 'Arms',
+	phase: Phase.Phase1,
 	gear: P1_BIS_ARMS_PRESET,
 	talents: ArmsTalents,
 	epWeights: P1_ARMS_EP_PRESET,
@@ -385,7 +399,9 @@ export const P1_PRESET_BUILD_ARMS = PresetUtils.makePresetBuild('P1 - Arms', {
 	settings: P1_PLAYER_SETTINGS,
 });
 
-export const P2_PRESET_BUILD_ARMS = PresetUtils.makePresetBuild('P2 - Arms', {
+export const P2_PRESET_BUILD_ARMS = PresetUtils.makePresetBuild('Arms', {
+	group: 'Arms',
+	phase: Phase.Phase2,
 	gear: P2_BIS_ARMS_PRESET,
 	talents: ArmsTalents,
 	epWeights: P1_ARMS_EP_PRESET,
@@ -394,7 +410,9 @@ export const P2_PRESET_BUILD_ARMS = PresetUtils.makePresetBuild('P2 - Arms', {
 	settings: P2_PLAYER_SETTINGS,
 });
 
-export const P3_PRESET_BUILD_ARMS = PresetUtils.makePresetBuild('P3 - Arms', {
+export const P3_PRESET_BUILD_ARMS = PresetUtils.makePresetBuild('Arms', {
+	group: 'Arms',
+	phase: Phase.Phase3,
 	gear: P3_BIS_ARMS_PRESET,
 	talents: ArmsTalents,
 	epWeights: P3_ARMS_EP_PRESET,
@@ -403,7 +421,9 @@ export const P3_PRESET_BUILD_ARMS = PresetUtils.makePresetBuild('P3 - Arms', {
 	settings: P3_PLAYER_SETTINGS,
 });
 
-export const P35_PRESET_BUILD_ARMS = PresetUtils.makePresetBuild('P3.5 - Arms', {
+export const P35_PRESET_BUILD_ARMS = PresetUtils.makePresetBuild('Arms', {
+	group: 'Arms',
+	phase: Phase.Phase4,
 	gear: P35_BIS_ARMS_PRESET,
 	talents: ArmsTalents,
 	epWeights: P3_ARMS_EP_PRESET,
@@ -412,7 +432,9 @@ export const P35_PRESET_BUILD_ARMS = PresetUtils.makePresetBuild('P3.5 - Arms', 
 	settings: P35_PLAYER_SETTINGS,
 });
 
-export const P4_PRESET_BUILD_ARMS = PresetUtils.makePresetBuild('P4 - Arms', {
+export const P4_PRESET_BUILD_ARMS = PresetUtils.makePresetBuild('Arms', {
+	group: 'Arms',
+	phase: Phase.Phase5,
 	gear: P4_BIS_ARMS_PRESET,
 	talents: ArmsTalents,
 	epWeights: P3_ARMS_EP_PRESET,

@@ -696,9 +696,13 @@ func (result *SpellResult) applyAttackTableCritSeparateRoll(sim *Simulation, spe
 }
 
 func (result *SpellResult) applyAttackTableHit(spell *Spell, countHits bool) {
+	isPartialResist := result.DidResist()
 	result.Outcome = OutcomeHit
 	if countHits {
 		spell.SpellMetrics[result.Target.UnitIndex].Hits++
+		if isPartialResist {
+			spell.SpellMetrics[result.Target.UnitIndex].ResistedHits++
+		}
 	}
 }
 
@@ -720,7 +724,7 @@ func (result *SpellResult) applyEnemyAttackTableMiss(spell *Spell, attackTable *
 }
 
 func (result *SpellResult) applyEnemyAttackTableBlock(sim *Simulation, spell *Spell, attackTable *AttackTable, roll float64, chance *float64) bool {
-	if !result.Target.PseudoStats.CanBlock || result.Target.PseudoStats.Stunned {
+	if !result.Target.PseudoStats.CanBlock || result.Target.PseudoStats.Stunned || !spell.SpellSchool.Matches(SpellSchoolPhysical) {
 		return false
 	}
 

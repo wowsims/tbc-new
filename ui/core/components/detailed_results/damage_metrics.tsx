@@ -135,7 +135,7 @@ export class DamageMetricsTable extends MetricsTable<ActionMetrics> {
 									data: [
 										{
 											name: i18n.t('results_tab.details.attack_types.hit'),
-											value: metric.landedHits || metric.casts - metric.totalMisses - metric.blocks - metric.blockedCrits,
+											value: (metric.landedHits || metric.casts - metric.totalMisses) - metric.blocks - metric.blockedCrits,
 											percentage: relativeHitPercent,
 										},
 										{
