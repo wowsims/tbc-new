@@ -23,13 +23,13 @@ import HydrossBuild from './builds/hydross_encounter_only.build.json';
 // Eventually we will import these values for the raid sim too, so its good to
 // keep them in a separate file.
 
-export const PRERAID_BALANCED_PRESET = PresetUtils.makePresetGear('Pre-raid', PreraidBISGear);
-export const P1_PRESET = PresetUtils.makePresetGear('P1 - BIS', P1BISGear);
-export const P2_PRESET = PresetUtils.makePresetGear('P2 - BIS', P2BISGear);
-export const P2_HYDROSS_PRESET = PresetUtils.makePresetGear('P2 - Hydross (Frost Resist)', P2HydrossGear);
-export const P3_PRESET = PresetUtils.makePresetGear('P3 - BIS', P3BISGear);
-export const P35_PRESET = PresetUtils.makePresetGear('P3.5 - BIS', P35BISGear);
-export const P4_PRESET = PresetUtils.makePresetGear('P4 - BIS', P4BISGear);
+export const PRERAID_BALANCED_PRESET = PresetUtils.makePresetGear('Pre-raid', PreraidBISGear, { group: 'Default' });
+export const P1_PRESET = PresetUtils.makePresetGear('P1 - BIS', P1BISGear, { group: 'Default' });
+export const P2_PRESET = PresetUtils.makePresetGear('P2 - BIS', P2BISGear, { group: 'Default' });
+export const P2_HYDROSS_PRESET = PresetUtils.makePresetGear('P2 - Hydross (Frost Resist)', P2HydrossGear, { group: 'Encounter specific' });
+export const P3_PRESET = PresetUtils.makePresetGear('P3 - BIS', P3BISGear, { group: 'Default' });
+export const P35_PRESET = PresetUtils.makePresetGear('P3.5 - BIS', P35BISGear, { group: 'Default' });
+export const P4_PRESET = PresetUtils.makePresetGear('P4 - BIS', P4BISGear, { group: 'Default' });
 
 export const ROTATION_DEFAULT = PresetUtils.makePresetAPLRotation('Generic', GenericApl);
 
