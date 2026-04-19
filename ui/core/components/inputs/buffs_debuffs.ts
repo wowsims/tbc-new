@@ -109,6 +109,16 @@ export const DraeneiRacialMelee = makeBooleanPartyBuffInput({
 });
 export const EyeOfTheNight = makeBooleanPartyBuffInput({ actionId: () => ActionId.fromSpellId(31033), fieldName: 'eyeOfTheNight', label: 'Eye of the Night' });
 export const FerociousInspiration = makeMultistatePartyBuffInput(ActionId.fromSpellId(34460), 5, 'ferociousInspiration', 'Ferocious Inspiratation');
+export const FireResistanceAura = makeBooleanPartyBuffInput({
+	actionId: () => ActionId.fromSpellId(27153),
+	fieldName: 'fireResistanceAura',
+	label: 'Fire Resistance Aura',
+});
+export const FrostResistanceAura = makeBooleanPartyBuffInput({
+	actionId: () => ActionId.fromSpellId(27152),
+	fieldName: 'frostResistanceAura',
+	label: 'Frost Resistance Aura',
+});
 export const GraceOfAirTotem = makeTristatePartyBuffInput({
 	actionId: () => ActionId.fromSpellId(25359),
 	impId: ActionId.fromSpellId(16295),
@@ -297,6 +307,16 @@ export const PARTY_BUFFS_CONFIG = [
 		config: SanctityAura,
 		picker: IconPicker,
 		stats: [],
+	},
+	{
+		config: FireResistanceAura,
+		picker: IconPicker,
+		stats: [Stat.StatFireResistance],
+	},
+	{
+		config: FrostResistanceAura,
+		picker: IconPicker,
+		stats: [Stat.StatFrostResistance],
 	},
 	{
 		config: TotemOfWrath,

@@ -13,7 +13,6 @@ const JudgementAuraTag = "JudgementAura"
 type Paladin struct {
 	core.Character
 
-	Seal    proto.PaladinSeal
 	Talents *proto.PaladinTalents
 
 	Forbearance *core.Aura
@@ -80,12 +79,12 @@ type Paladin struct {
 	DivineFavorAura         *core.Aura
 	DivineIlluminationSpell *core.Spell
 	DivineIlluminationAura  *core.Aura
-	SanctityAura            *core.Aura
 	HolyShields             []*core.Spell
 	HolyShieldAuras         []*core.Aura
 	AvengersShields         []*core.Spell
 	CrusaderStrike          *core.Spell
 	Repentance              *core.Spell
+	RighteousFury           *core.Spell
 	HolyShocks              []*core.Spell
 
 	JudgementOfLightAuras       core.AuraArray
@@ -116,6 +115,7 @@ func (paladin *Paladin) AddPartyBuffs(_ *proto.PartyBuffs) {
 
 func (paladin *Paladin) Initialize() {
 	paladin.registerSpells()
+	paladin.RegisterSpiritualAttunement()
 }
 
 func (paladin *Paladin) registerSpells() {
@@ -126,6 +126,7 @@ func (paladin *Paladin) registerSpells() {
 	HolyWrathRankMap.RegisterAll(paladin.registerHolyWrath)
 	ExorcismRankMap.RegisterAll(paladin.registerExorcism)
 	paladin.registerAvengingWrath()
+	paladin.registerRighteousFury()
 
 	paladin.registerForbearance()
 
@@ -133,7 +134,7 @@ func (paladin *Paladin) registerSpells() {
 	paladin.registerSeals()
 
 	// Auras
-	// paladin.registerAuras()
+	paladin.registerAuras()
 
 	// // Blessings
 	// paladin.registerBlessings()
@@ -154,7 +155,6 @@ func NewPaladin(character *core.Character, talentsStr string, options *proto.Pal
 	paladin := &Paladin{
 		Character: *character,
 		Talents:   &proto.PaladinTalents{},
-		Seal:      options.Seal,
 	}
 
 	core.FillTalentsProto(paladin.Talents.ProtoReflect(), talentsStr, TalentTreeSizes)

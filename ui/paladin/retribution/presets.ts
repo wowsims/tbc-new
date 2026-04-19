@@ -1,6 +1,4 @@
-import { DrumsBattle } from '../../core/components/inputs/consumables';
-import { RetributionPaladin } from '../../core/player_specs/paladin';
-import * as PresetUtils from '../../core/preset_utils.js';
+import * as PresetUtils from '../../core/preset_utils';
 import {
 	ConsumesSpec,
 	Debuffs,
@@ -14,9 +12,13 @@ import {
 	Stat,
 	Spec,
 	Drums,
-} from '../../core/proto/common.js';
-import { RetributionPaladin_Options as RetributionPaladinOptions, RetributionPaladin_Rotation as PaladinRotation } from '../../core/proto/paladin.js';
-import { SavedTalents } from '../../core/proto/ui.js';
+} from '../../core/proto/common';
+import {
+	PaladinAura,
+	RetributionPaladin_Options as RetributionPaladinOptions,
+	RetributionPaladin_Rotation as PaladinRotation,
+} from '../../core/proto/paladin';
+import { SavedTalents } from '../../core/proto/ui';
 import { Stats } from '../../core/proto_utils/stats';
 import DefaultApl from './apls/default.apl.json';
 import P1_Gear from './gear_sets/p1.gear.json';
@@ -28,9 +30,10 @@ export const PRERAID_GEAR_PRESET = PresetUtils.makePresetGear('Pre-raid', Prerai
 
 export const DefaultSimpleRotation = PaladinRotation.create({
 	useExorcism: false,
-	useConsecrate: false,
+	consecrationRank: 0,
 	delayMajorCDs: 11,
 	prepullSotC: true,
+	aura: PaladinAura.SanctityAura,
 });
 
 export const APL_PRESET = PresetUtils.makePresetAPLRotation('Default', DefaultApl);
@@ -95,44 +98,45 @@ export const DefaultConsumables = ConsumesSpec.create({
 
 export const DefaultRaidBuffs = RaidBuffs.create({
 	bloodlust: true,
-	divineSpirit: 2,
+	divineSpirit: TristateEffect.TristateEffectImproved,
 	arcaneBrilliance: true,
-	giftOfTheWild: 2,
-	powerWordFortitude: 2,
+	giftOfTheWild: TristateEffect.TristateEffectImproved,
+	powerWordFortitude: TristateEffect.TristateEffectImproved,
 	shadowProtection: true,
-	thorns: 2,
+	thorns: TristateEffect.TristateEffectImproved,
 });
 
 export const DefaultPartyBuffs = PartyBuffs.create({
-	manaSpringTotem: 1,
-	leaderOfThePack: 2,
-	battleShout: 2,
-	strengthOfEarthTotem: 2,
-	windfuryTotem: 2,
-	graceOfAirTotem: 2,
+	manaSpringTotem: TristateEffect.TristateEffectRegular,
+	leaderOfThePack: TristateEffect.TristateEffectImproved,
+	battleShout: TristateEffect.TristateEffectImproved,
+	strengthOfEarthTotem: TristateEffect.TristateEffectImproved,
+	totemTwisting: true,
+	windfuryTotem: TristateEffect.TristateEffectImproved,
+	graceOfAirTotem: TristateEffect.TristateEffectImproved,
 	drums: Drums.LesserDrumsOfBattle,
-	sanctityAura: 2,
+	sanctityAura: TristateEffect.TristateEffectImproved,
 });
 
 export const DefaultIndividualBuffs = IndividualBuffs.create({
 	blessingOfKings: true,
-	blessingOfWisdom: 2,
-	blessingOfMight: 2,
+	blessingOfWisdom: TristateEffect.TristateEffectImproved,
+	blessingOfMight: TristateEffect.TristateEffectImproved,
 	unleashedRage: true,
 });
 
 export const DefaultDebuffs = Debuffs.create({
 	misery: true,
-	curseOfElements: 2,
+	curseOfElements: TristateEffect.TristateEffectImproved,
 	improvedSealOfTheCrusader: TristateEffect.TristateEffectImproved,
 	jocRetribution2Pt4: true,
 	judgementOfWisdom: true,
 	bloodFrenzy: true,
-	huntersMark: 2,
+	huntersMark: TristateEffect.TristateEffectImproved,
 	curseOfRecklessness: true,
 	sunderArmor: true,
-	faerieFire: 2,
-	exposeArmor: 2,
+	faerieFire: TristateEffect.TristateEffectImproved,
+	exposeArmor: TristateEffect.TristateEffectImproved,
 	...defaultExposeWeaknessSettings(),
 });
 

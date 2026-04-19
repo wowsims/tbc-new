@@ -1,3 +1,4 @@
+import i18n from '../i18n/config';
 import { CharacterStats } from './components/character_stats';
 import { CONJURED_CONFIG } from './components/inputs/consumables';
 import { relevantStatOptions } from './components/inputs/stat_options';
@@ -1386,6 +1387,7 @@ export class Player<SpecType extends Spec> {
 		const aplRotation = forSimming ? this.getResolvedAplRotation(forSimming) : omitDeep(this.aplRotation, ['uuid']);
 
 		let player = PlayerProto.create({
+			apiVersion: CURRENT_API_VERSION,
 			class: this.getClass(),
 			database: forExport ? undefined : this.toDatabase(),
 		});
@@ -1521,6 +1523,53 @@ export class Player<SpecType extends Spec> {
 		if (!(playerProto.apiVersion < CURRENT_API_VERSION)) {
 			return;
 		}
+
+		const conversionMap: ProtoConversionMap<PlayerProto> = new Map([
+			[
+				11,
+				(oldProto: PlayerProto) => {
+					oldProto.apiVersion = 12;
+
+					// v12: ret paladin useConsecrate(bool) → consecrationRank(int32).
+					if (playerProto.spec?.oneofKind === 'retributionPaladin') {
+						const jsonStr = playerProto.rotation?.simple?.specRotationJson;
+						if (jsonStr) {
+							try {
+								const parsed = JSON.parse(jsonStr);
+
+								if (!parsed.aura) {
+									parsed.aura = 'SanctityAura';
+								}
+
+								if (parsed.useConsecrate) {
+									parsed.consecrationRank = 6;
+								}
+
+								delete parsed.useConsecrate;
+
+								playerProto.rotation!.simple!.specRotationJson = JSON.stringify(parsed);
+
+								new Toast({
+									delay: 8000,
+									variant: 'info',
+									body: <>{i18n.t('protoVersion.12.body', { ns: 'updates' })}</>,
+								});
+							} catch {
+								// Malformed JSON — nothing to migrate.
+							}
+						}
+					}
+
+					return oldProto;
+				},
+			],
+		]);
+
+		// Run the migration utility using the above map.
+		migrateOldProto<PlayerProto>(playerProto, playerProto.apiVersion, conversionMap);
+
+		// Flag the version as up-to-date once all migrations are done.
+		playerProto.apiVersion = CURRENT_API_VERSION;
 	}
 
 	getSpecConfig(): IndividualSimUIConfig<SpecType> {

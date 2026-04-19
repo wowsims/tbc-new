@@ -86,28 +86,33 @@ enum Blessings {
 	BlessingOfSanctuary = 5;
 }
 
-enum PaladinSeal {
-	SealUnknown = 0;
-	Righteousness = 1;
-	Command = 2;
-	Light = 3;
-	Wisdom = 4;
-	Justice = 5;
-	Crusader = 6;
-	Blood = 7;
-	Vengeance = 8;
+enum PaladinJudgement {
+	JudgementNone = 0;
+	JudgementOfLight = 1;
+	JudgementOfWisdom = 2;
+}
+
+enum PaladinAura {
+	AuraNone = 0;
+	DevotionAura = 1;
+	RetributionAura = 2;
+	ConcentrationAura = 3;
+	FireResistanceAura = 4;
+	FrostResistanceAura = 5;
+	ShadowResistanceAura = 6;
+	SanctityAura = 7;
 }
 
 message PaladinOptions {
-	PaladinSeal seal = 2;
 }
 
 message RetributionPaladin {
 	message Rotation {
 		bool useExorcism = 1;
-		bool useConsecrate = 2;
+		int32 consecrationRank = 2;
 		int32 delayMajorCDs = 3;
 		bool prepullSotC = 4;
+		PaladinAura aura = 5;
 	}
 
 	message Options {
@@ -117,7 +122,14 @@ message RetributionPaladin {
 }
 
 message ProtectionPaladin {
-	message Rotation {}
+	message Rotation {
+		bool prioritizeHolyShield = 1;
+		int32 consecrationRank = 2;
+		bool useExorcism = 3;
+		bool useAvengersShield = 4;
+		PaladinJudgement maintainJudgement = 5;
+		PaladinAura aura = 6;
+	}
 
 	message Options {
 		PaladinOptions class_options = 1;

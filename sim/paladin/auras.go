@@ -14,208 +14,15 @@ func (paladin *Paladin) registerAuras() {
 	paladin.registerShadowResistanceAura()
 }
 
-// Devotion Aura
-// https://www.wowhead.com/tbc/spell=27149
-//
-// Gives additional armor to party members within 30 yards.
-// Players may only have one Aura on them per Paladin at any one time.
-func (paladin *Paladin) registerDevotionAura() {
-	actionID := core.ActionID{SpellID: 27149}
-
+// registerAuraSpell wires up a castable paladin aura spell that toggles the
+// given self-cast aura (which must already be in the PaladinAuraCategory).
+func (paladin *Paladin) registerAuraSpell(aura *core.Aura, classSpellMask int64) {
 	paladin.RegisterSpell(core.SpellConfig{
-		ActionID:       actionID,
+		ActionID:       aura.ActionID,
 		SpellSchool:    core.SpellSchoolHoly,
 		ProcMask:       core.ProcMaskEmpty,
 		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
-		ClassSpellMask: SpellMaskDevotionAura,
-
-		DamageMultiplier: 1,
-		ThreatMultiplier: 1,
-
-		Cast: core.CastConfig{
-			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
-			},
-		},
-
-		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			// TODO: Implement aura activation
-		},
-	})
-}
-
-// Retribution Aura
-// https://www.wowhead.com/tbc/spell=27150
-//
-// Causes Holy damage to any creature that strikes a party member within 30 yards.
-// Players may only have one Aura on them per Paladin at any one time.
-func (paladin *Paladin) registerRetributionAura() {
-	actionID := core.ActionID{SpellID: 27150}
-
-	paladin.RegisterSpell(core.SpellConfig{
-		ActionID:       actionID,
-		SpellSchool:    core.SpellSchoolHoly,
-		ProcMask:       core.ProcMaskEmpty,
-		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
-		ClassSpellMask: SpellMaskRetributionAura,
-
-		DamageMultiplier: 1,
-		ThreatMultiplier: 1,
-
-		Cast: core.CastConfig{
-			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
-			},
-		},
-
-		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			// TODO: Implement aura activation
-		},
-	})
-}
-
-// Concentration Aura
-// https://www.wowhead.com/tbc/spell=19746
-//
-// All party members within 30 yards lose 35% less casting or channeling time
-// when damaged. Players may only have one Aura on them per Paladin at any one time.
-func (paladin *Paladin) registerConcentrationAura() {
-	actionID := core.ActionID{SpellID: 19746}
-
-	paladin.RegisterSpell(core.SpellConfig{
-		ActionID:       actionID,
-		SpellSchool:    core.SpellSchoolHoly,
-		ProcMask:       core.ProcMaskEmpty,
-		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
-		ClassSpellMask: SpellMaskConcentrationAura,
-
-		DamageMultiplier: 1,
-		ThreatMultiplier: 1,
-
-		Cast: core.CastConfig{
-			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
-			},
-		},
-
-		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			// TODO: Implement aura activation
-		},
-	})
-}
-
-// Fire Resistance Aura
-// https://www.wowhead.com/tbc/spell=27153
-//
-// Gives additional Fire resistance to all party members within 30 yards.
-// Players may only have one Aura on them per Paladin at any one time.
-func (paladin *Paladin) registerFireResistanceAura() {
-	actionID := core.ActionID{SpellID: 27153}
-
-	paladin.RegisterSpell(core.SpellConfig{
-		ActionID:       actionID,
-		SpellSchool:    core.SpellSchoolHoly,
-		ProcMask:       core.ProcMaskEmpty,
-		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
-		ClassSpellMask: SpellMaskFireResistanceAura,
-
-		DamageMultiplier: 1,
-		ThreatMultiplier: 1,
-
-		Cast: core.CastConfig{
-			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
-			},
-		},
-
-		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			// TODO: Implement aura activation
-		},
-	})
-}
-
-// Frost Resistance Aura
-// https://www.wowhead.com/tbc/spell=27152
-//
-// Gives additional Frost resistance to all party members within 30 yards.
-// Players may only have one Aura on them per Paladin at any one time.
-func (paladin *Paladin) registerFrostResistanceAura() {
-	actionID := core.ActionID{SpellID: 27152}
-
-	paladin.RegisterSpell(core.SpellConfig{
-		ActionID:       actionID,
-		SpellSchool:    core.SpellSchoolHoly,
-		ProcMask:       core.ProcMaskEmpty,
-		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
-		ClassSpellMask: SpellMaskFrostResistanceAura,
-
-		DamageMultiplier: 1,
-		ThreatMultiplier: 1,
-
-		Cast: core.CastConfig{
-			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
-			},
-		},
-
-		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			// TODO: Implement aura activation
-		},
-	})
-}
-
-// Shadow Resistance Aura
-// https://www.wowhead.com/tbc/spell=27151
-//
-// Gives additional Shadow resistance to all party members within 30 yards.
-// Players may only have one Aura on them per Paladin at any one time.
-func (paladin *Paladin) registerShadowResistanceAura() {
-	actionID := core.ActionID{SpellID: 27151}
-
-	paladin.RegisterSpell(core.SpellConfig{
-		ActionID:       actionID,
-		SpellSchool:    core.SpellSchoolHoly,
-		ProcMask:       core.ProcMaskEmpty,
-		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
-		ClassSpellMask: SpellMaskShadowResistanceAura,
-
-		DamageMultiplier: 1,
-		ThreatMultiplier: 1,
-
-		Cast: core.CastConfig{
-			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
-			},
-		},
-
-		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			// TODO: Implement aura activation
-		},
-	})
-}
-
-// Sanctity Aura (Talent)
-// https://www.wowhead.com/tbc/spell=20218
-//
-// Increases Holy damage done by party members within 30 yards by 10%.
-// Players may only have one Aura on them per Paladin at any one time.
-func (paladin *Paladin) registerSanctityAura() {
-	actionID := core.ActionID{SpellID: 20218}
-
-	aura := paladin.RegisterAura(core.Aura{
-		Label:    "Sanctity Aura" + paladin.Label,
-		ActionID: actionID,
-		Duration: core.NeverExpires,
-	}).AttachMultiplicativePseudoStatBuff(
-		&paladin.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexHoly], 1.1,
-	)
-
-	paladin.RegisterSpell(core.SpellConfig{
-		ActionID:       actionID,
-		SpellSchool:    core.SpellSchoolHoly,
-		ProcMask:       core.ProcMaskEmpty,
-		Flags:          core.SpellFlagAPL,
-		ClassSpellMask: SpellMaskSanctityAura,
+		ClassSpellMask: classSpellMask,
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
@@ -227,4 +34,87 @@ func (paladin *Paladin) registerSanctityAura() {
 			aura.Activate(sim)
 		},
 	})
+}
+
+// Devotion Aura
+// https://www.wowhead.com/tbc/spell=27149
+//
+// Gives 861 additional armor to party members within 30 yards.
+// Improved Devotion Aura talent increases the armor bonus by up to 40%.
+// Players may only have one Aura on them per Paladin at any one time.
+func (paladin *Paladin) registerDevotionAura() {
+	aura := core.DevotionAuraBuff(&paladin.Character, true, paladin.Talents.ImprovedDevotionAura)
+	paladin.registerAuraSpell(aura, SpellMaskDevotionAura)
+}
+
+// Retribution Aura
+// https://www.wowhead.com/tbc/spell=27150
+//
+// Causes 26 Holy damage to any creature that strikes a party member within 30 yards.
+// Improved Retribution Aura talent increases damage by up to 50%.
+// Players may only have one Aura on them per Paladin at any one time.
+func (paladin *Paladin) registerRetributionAura() {
+	aura := core.RetributionAuraBuff(&paladin.Character, true, paladin.Talents.ImprovedRetributionAura)
+	paladin.registerAuraSpell(aura, SpellMaskRetributionAura)
+}
+
+// registerSelfCastAura creates a self-cast paladin aura with the standard
+// PaladinAuraCategory exclusivity and returns the aura for further configuration.
+func (paladin *Paladin) registerSelfCastAura(label string, actionID core.ActionID) *core.Aura {
+	aura := paladin.RegisterAura(core.Aura{
+		Label:    label + " (Player)" + paladin.Label,
+		ActionID: actionID,
+		Duration: core.NeverExpires,
+	})
+	aura.NewExclusiveEffect(core.PaladinAuraCategory, true, core.ExclusiveEffect{})
+	return aura
+}
+
+// Concentration Aura
+// https://www.wowhead.com/tbc/spell=19746
+//
+// All party members within 30 yards lose 35% less casting or channeling time
+// when damaged. Players may only have one Aura on them per Paladin at any one time.
+func (paladin *Paladin) registerConcentrationAura() {
+	aura := paladin.registerSelfCastAura("Concentration Aura", core.ActionID{SpellID: 19746})
+	paladin.registerAuraSpell(aura, SpellMaskConcentrationAura)
+}
+
+// Fire Resistance Aura
+// https://www.wowhead.com/tbc/spell=27153
+//
+// Gives 70 fire resistance to party members within 30 yards.
+// Players may only have one Aura on them per Paladin at any one time.
+func (paladin *Paladin) registerFireResistanceAura() {
+	aura := core.FireResistanceAuraBuff(&paladin.Character, true)
+	paladin.registerAuraSpell(aura, SpellMaskFireResistanceAura)
+}
+
+// Frost Resistance Aura
+// https://www.wowhead.com/tbc/spell=27152
+//
+// Gives 70 frost resistance to party members within 30 yards.
+// Players may only have one Aura on them per Paladin at any one time.
+func (paladin *Paladin) registerFrostResistanceAura() {
+	aura := core.FrostResistanceAuraBuff(&paladin.Character, true)
+	paladin.registerAuraSpell(aura, SpellMaskFrostResistanceAura)
+}
+
+// Shadow Resistance Aura
+// https://www.wowhead.com/tbc/spell=27151
+func (paladin *Paladin) registerShadowResistanceAura() {
+	aura := paladin.registerSelfCastAura("Shadow Resistance Aura", core.ActionID{SpellID: 27151}).
+		AttachStatBuff(stats.ShadowResistance, 70)
+	paladin.registerAuraSpell(aura, SpellMaskShadowResistanceAura)
+}
+
+// Sanctity Aura (Talent)
+// https://www.wowhead.com/tbc/spell=20218
+//
+// Increases Holy damage done by party members within 30 yards by 10%.
+// Improved Sanctity Aura talent adds a 1/2% bonus to all damage dealt.
+// Players may only have one Aura on them per Paladin at any one time.
+func (paladin *Paladin) registerSanctityAura() {
+	aura := core.SanctityAuraBuff(&paladin.Character, true, paladin.Talents.ImprovedSanctityAura)
+	paladin.registerAuraSpell(aura, SpellMaskSanctityAura)
 }
