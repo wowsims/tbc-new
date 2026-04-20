@@ -149,6 +149,7 @@ func (war *Warrior) makeQueueSpellsAndAura(srcSpell *core.Spell) *core.Spell {
 // Returns true if the regular melee swing should be used, false otherwise.
 func (war *Warrior) TryHSOrCleave(sim *core.Simulation, mhSwingSpell *core.Spell) *core.Spell {
 	if !war.curQueueAura.IsActive() || (mhSwingSpell.ActionID.Tag != 1 && mhSwingSpell.ActionID.Tag != 12281) {
+		war.PseudoStats.DisableDWMissPenalty = false
 		return mhSwingSpell
 	}
 
