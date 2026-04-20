@@ -30,7 +30,7 @@ func init() {
 			ActionID:    procActionID.WithTag(1),
 			SpellSchool: core.SpellSchoolNature,
 			ProcMask:    core.ProcMaskSpellProc | core.ProcMaskSpellDamageProc,
-			Flags:       core.SpellFlagSuppressEquipProcs,
+			Flags:       core.SpellFlagSuppressWeaponProcs,
 
 			DamageMultiplier: 1,
 			CritMultiplier:   character.DefaultSpellCritMultiplier(),
