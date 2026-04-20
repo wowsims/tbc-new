@@ -255,11 +255,12 @@ func init() {
 		manaMetrics := hunter.NewManaMetrics(core.ActionID{SpellID: 29471})
 
 		procAura := hunter.MakeProcTriggerAura(core.ProcTrigger{
-			Name:            "Black Bow of the Betrayer",
-			MetricsActionID: core.ActionID{ItemID: 46939},
-			Callback:        core.CallbackOnSpellHitDealt,
-			Outcome:         core.OutcomeLanded,
-			ProcMask:        core.ProcMaskRanged,
+			Name:              "Black Bow of the Betrayer",
+			MetricsActionID:   core.ActionID{ItemID: 46939},
+			SpellFlagsExclude: core.SpellFlagSuppressWeaponProcs,
+			Callback:          core.CallbackOnSpellHitDealt,
+			Outcome:           core.OutcomeLanded,
+			ProcMask:          core.ProcMaskRanged,
 
 			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 				hunter.AddMana(sim, 8, manaMetrics)

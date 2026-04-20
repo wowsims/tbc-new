@@ -207,7 +207,7 @@ func (paladin *Paladin) registerSealOfRighteousness(seal seal) {
 		ActionID:       core.ActionID{SpellID: seal.judge.spellID},
 		SpellSchool:    core.SpellSchoolHoly,
 		ProcMask:       core.ProcMaskSpellDamage,
-		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagBinary, // | core.SpellFlagSuppressWeaponProcs | core.SpellFlagSuppressEquipProcs
+		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagBinary | core.SpellFlagSuppressEquipProcs,
 		ClassSpellMask: SpellMaskJudgementOfRighteousness,
 
 		DamageMultiplier: 1,
@@ -241,7 +241,7 @@ func (paladin *Paladin) registerSealOfRighteousness(seal seal) {
 		ActionID:       core.ActionID{SpellID: seal.proc.spellID},
 		SpellSchool:    core.SpellSchoolHoly,
 		ProcMask:       core.ProcMaskMeleeMHSpecial, //changed to ProcMaskMeleeMHSpecial, to allow procs from weapons/oils which do proc from SoR, -- TODO: Verify in TBC
-		Flags:          core.SpellFlagMeleeMetrics,  // | core.SpellFlagSuppressEquipProcs | core.SpellFlagBatchStartAttackMacro, // but Wild Strikes does not proc, nor equip procs
+		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagSuppressEquipProcs,
 		ClassSpellMask: SpellMaskSealOfRighteousness,
 
 		DamageMultiplier: 1,
@@ -661,7 +661,7 @@ func (paladin *Paladin) registerSealOfBlood(seal seal) {
 		ClassSpellMask:   SpellMaskSealOfBlood,
 		SpellSchool:      core.SpellSchoolHoly,
 		ProcMask:         core.ProcMaskMeleeProc,
-		Flags:            core.SpellFlagMeleeMetrics,
+		Flags:            core.SpellFlagMeleeMetrics | core.SpellFlagSuppressEquipProcs,
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
 		CritMultiplier:   paladin.DefaultMeleeCritMultiplier(),

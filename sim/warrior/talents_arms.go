@@ -412,6 +412,8 @@ func (war *Warrior) registerSwordSpecialization() {
 
 	procTrigger := war.MakeProcTriggerAura(core.ProcTrigger{
 		Name:               "Sword Specialization",
+		ProcMask:           core.ProcMaskMelee,
+		SpellFlagsExclude:  core.SpellFlagSuppressEquipProcs,
 		DPM:                dpm,
 		ICD:                time.Millisecond * 500,
 		TriggerImmediately: true,

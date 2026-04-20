@@ -29,7 +29,8 @@ func init() {
 		singleTargetSpell := character.RegisterSpell(core.SpellConfig{
 			ActionID:    procActionID.WithTag(1),
 			SpellSchool: core.SpellSchoolNature,
-			ProcMask:    core.ProcMaskEmpty,
+			ProcMask:    core.ProcMaskSpellProc | core.ProcMaskSpellDamageProc,
+			Flags:       core.SpellFlagSuppressEquipProcs,
 
 			DamageMultiplier: 1,
 			CritMultiplier:   character.DefaultSpellCritMultiplier(),

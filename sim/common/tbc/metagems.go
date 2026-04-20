@@ -21,10 +21,12 @@ func init() {
 		procAura := character.NewTemporaryStatsAura("Focus", core.ActionID{SpellID: 18803}, stats.Stats{stats.SpellHasteRating: 320}, time.Second*4)
 
 		character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:       "Mystical Skyfire Diamond",
-			ProcChance: 0.15,
-			ICD:        time.Second * 35,
-			Callback:   core.CallbackOnCastComplete,
+			Name:              "Mystical Skyfire Diamond",
+			SpellFlagsExclude: core.SpellFlagSuppressEquipProcs,
+			ProcChance:        0.15,
+			ClassSpellsOnly:   true,
+			ICD:               time.Second * 35,
+			Callback:          core.CallbackOnCastComplete,
 			Handler: func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
 				procAura.Activate(sim)
 			},
@@ -76,11 +78,12 @@ func init() {
 		procAura := character.NewTemporaryStatsAura("Skyfire Swiftness", core.ActionID{SpellID: 39959}, stats.Stats{stats.MeleeHasteRating: 240}, time.Second*6)
 
 		character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:     "Thundering Skyfire Diamond",
-			DPM:      character.NewLegacyPPMManager(1.5, core.ProcMaskWhiteHit),
-			ICD:      time.Second * 40,
-			Outcome:  core.OutcomeLanded,
-			Callback: core.CallbackOnSpellHitDealt,
+			Name:              "Thundering Skyfire Diamond",
+			SpellFlagsExclude: core.SpellFlagSuppressEquipProcs,
+			DPM:               character.NewLegacyPPMManager(1.5, core.ProcMaskWhiteHit),
+			ICD:               time.Second * 40,
+			Outcome:           core.OutcomeLanded,
+			Callback:          core.CallbackOnSpellHitDealt,
 			Handler: func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
 				procAura.Activate(sim)
 			},
