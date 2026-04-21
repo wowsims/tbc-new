@@ -29,7 +29,9 @@ func (druid *Druid) registerSwipeBearSpell() {
 		MaxRange:         core.MaxMeleeRange,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			for _, aoeTarget := range druid.Env.Encounter.AllTargetUnits {
+			numHits := min(3, len(druid.Env.Encounter.AllTargetUnits))
+			for i := 0; i < numHits; i++ {
+				aoeTarget := druid.Env.Encounter.AllTargetUnits[i]
 				baseDamage := 84 + druid.IdolSwipeBonus + 0.07*spell.MeleeAttackPower(aoeTarget)
 				spell.CalcAndDealDamage(sim, aoeTarget, baseDamage, spell.OutcomeMeleeWeaponSpecialHitAndCrit)
 			}
