@@ -43,7 +43,7 @@ export class GemSummary extends Component {
 		this.rootElem.classList[!hasGems ? 'add' : 'remove']('hide');
 
 		if (hasGems) {
-			let gemCounts: Record<string, GemSummaryData> = {};
+			const gemCounts: Record<string, GemSummaryData> = {};
 
 			for (const gem of fullGemList) {
 				if (gemCounts[gem.name]) {
