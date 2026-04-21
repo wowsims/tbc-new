@@ -64,10 +64,10 @@ type MagtheridonAI struct {
 	MainTank *core.Unit
 
 	// Spell + aura references
-	Cleave          *core.Spell
-	Quake           *core.Spell
-	BlastNova       *core.Spell
-	ShadowGraspAura *core.Aura
+	Cleave         *core.Spell
+	Quake          *core.Spell
+	BlastNova      *core.Spell
+	ShadowCageAura *core.Aura
 }
 
 func (ai *MagtheridonAI) Initialize(target *core.Target, config *proto.Target) {
@@ -88,12 +88,12 @@ func (ai *MagtheridonAI) Initialize(target *core.Target, config *proto.Target) {
 }
 
 func (ai *MagtheridonAI) registerBlastNova() {
-	ai.ShadowGraspAura = ai.BossUnit.RegisterAura(core.Aura{
-		Label:    "Shadow Grasp",
-		ActionID: core.ActionID{SpellID: 30410},
+	ai.ShadowCageAura = ai.BossUnit.RegisterAura(core.Aura{
+		Label:    "Shadow Cage",
+		ActionID: core.ActionID{SpellID: 30168},
 		Duration: time.Second * 10,
 	}).
-		AttachMultiplicativePseudoStatBuff(&ai.BossUnit.PseudoStats.DamageTakenMultiplier, 3)
+		AttachMultiplicativePseudoStatBuff(&ai.BossUnit.PseudoStats.DamageTakenMultiplier, 2)
 
 	ai.BlastNova = ai.BossUnit.RegisterSpell(core.SpellConfig{
 		ActionID:    core.ActionID{SpellID: 30616},
@@ -107,7 +107,7 @@ func (ai *MagtheridonAI) registerBlastNova() {
 
 			ModifyCast: func(sim *core.Simulation, spell *core.Spell, cast *core.Cast) {
 				cast.CastTime = core.DurationFromSeconds(sim.Roll(0.2, 2))
-				meleeDelay := sim.CurrentTime + cast.CastTime + ai.ShadowGraspAura.Duration
+				meleeDelay := sim.CurrentTime + cast.CastTime + ai.ShadowCageAura.Duration
 				spell.Unit.AutoAttacks.StopMeleeUntil(sim, meleeDelay)
 				cleaveDelay := max(
 					spell.Unit.AutoAttacks.MainhandSwingSpeed()+1,
@@ -126,7 +126,7 @@ func (ai *MagtheridonAI) registerBlastNova() {
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			spell.CalcAndDealOutcome(sim, target, spell.OutcomeAlwaysMiss)
-			ai.ShadowGraspAura.Activate(sim)
+			ai.ShadowCageAura.Activate(sim)
 		},
 	})
 

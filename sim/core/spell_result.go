@@ -135,6 +135,10 @@ func (result *SpellResult) DidDodge() bool {
 	return result.Outcome.Matches(OutcomeDodge)
 }
 
+func (result *SpellResult) DidCrush() bool {
+	return result.Outcome.Matches(OutcomeCrush)
+}
+
 func (result *SpellResult) DamageString() string {
 	outcomeStr := result.Outcome.String()
 	if !result.Landed() {
@@ -436,6 +440,8 @@ func (spell *Spell) dealDamageInternal(sim *Simulation, isPeriodic bool, result 
 			spell.SpellMetrics[result.Target.UnitIndex].TotalGlanceDamage += result.Damage
 		} else if result.DidBlock() {
 			spell.SpellMetrics[result.Target.UnitIndex].TotalBlockDamage += result.Damage
+		} else if result.DidCrush() {
+			spell.SpellMetrics[result.Target.UnitIndex].TotalCrushDamage += result.Damage
 		}
 		spell.SpellMetrics[result.Target.UnitIndex].TotalThreat += result.Threat
 	}
