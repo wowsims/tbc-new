@@ -374,7 +374,7 @@ func (priest *Priest) applyShadowPower() {
 
 	priest.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
-		FloatValue: 2.0 * float64(priest.Talents.ShadowPower),
+		FloatValue: 3.0 * float64(priest.Talents.ShadowPower),
 		ClassMask:  PriestSpellMindBlast | PriestSpellShadowWordDeath,
 	})
 }
@@ -384,9 +384,7 @@ func (priest *Priest) applyShadowWeaving() {
 		return
 	}
 
-	swAuras := priest.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {
-		return core.ShadowWeavingAura(target)
-	})
+	swAuras := priest.NewEnemyAuraArray(core.ShadowWeavingAura)
 
 	priest.MakeProcTriggerAura(core.ProcTrigger{
 		Name:           "Shadow Weaving Trigger",
