@@ -294,7 +294,7 @@ func (war *Warrior) registerFlurry() {
 	war.MakeProcTriggerAura(core.ProcTrigger{
 		Name:               "Flurry - Trigger",
 		ActionID:           core.ActionID{SpellID: 12974},
-		ProcMask:           core.ProcMaskMelee,
+		ProcMask:           core.ProcMaskMeleeOrMeleeProc,
 		TriggerImmediately: true,
 		Callback:           core.CallbackOnSpellHitDealt,
 		Outcome:            core.OutcomeLanded,
@@ -425,6 +425,7 @@ func (war *Warrior) registerRampage() {
 	war.MakeProcTriggerAura(core.ProcTrigger{
 		Name:               "Rampage - Trigger",
 		TriggerImmediately: true,
+		ProcMask:           core.ProcMaskMeleeOrMeleeProc,
 		Outcome:            core.OutcomeLanded,
 		Callback:           core.CallbackOnSpellHitDealt,
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {

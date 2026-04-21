@@ -25,6 +25,7 @@ func init() {
 
 		procTrigger := character.MakeProcTriggerAura(core.ProcTrigger{
 			Name:               "Hand Of Justice",
+			SpellFlagsExclude:  core.SpellFlagSuppressEquipProcs,
 			DPM:                dpm,
 			ICD:                time.Second * 2,
 			TriggerImmediately: true,
@@ -70,6 +71,7 @@ func init() {
 		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
 			Name:               "Badge of the Swarmguard",
 			MetricsActionID:    core.ActionID{SpellID: 26480},
+			SpellFlagsExclude:  core.SpellFlagSuppressEquipProcs,
 			DPM:                character.NewLegacyPPMManager(10, core.ProcMaskMeleeOrRanged),
 			Duration:           duration,
 			Outcome:            core.OutcomeLanded,

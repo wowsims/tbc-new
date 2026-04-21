@@ -200,6 +200,8 @@ const (
 	SpellFlagNoSpellMods                                    // Indicates that no spell mods should be applied to this spell
 	SpellFlagCanCastWhileMoving                             // Allows the cast to be casted while moving
 	SpellFlagPassiveSpell                                   // Indicates this spell is applied/cast as a result of another spell
+	SpellFlagSuppressWeaponProcs                            // Indicates this spell cannot proc weapon chance on hits or enchants
+	SpellFlagSuppressEquipProcs                             // Indicates this spell cannot proc Equip procs
 	SpellFlagSupressDoTApply                                // If present this spell will not apply dots (Used for DTR dot supression)
 	SpellFlagSwapped                                        // Indicates that this spell is not useable because it is from a currently swapped item
 

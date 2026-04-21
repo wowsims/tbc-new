@@ -172,10 +172,11 @@ func (priest *Priest) applySurgeOfLight() {
 	procChance := 0.25 * float64(priest.Talents.SurgeOfLight)
 
 	priest.MakeProcTriggerAura(core.ProcTrigger{
-		Name:       "Surge of Light Trigger",
-		Callback:   core.CallbackOnSpellHitDealt,
-		Outcome:    core.OutcomeCrit,
-		ProcChance: procChance,
+		Name:            "Surge of Light Trigger",
+		ClassSpellsOnly: true,
+		Outcome:         core.OutcomeCrit,
+		ProcChance:      procChance,
+		Callback:        core.CallbackOnSpellHitDealt,
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			solAura.Activate(sim)
 		},

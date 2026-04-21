@@ -260,6 +260,7 @@ func (rogue *Rogue) registerSwordSpecialization() {
 	procTrigger := rogue.MakeProcTriggerAura(core.ProcTrigger{
 		Name:               "Sword Spec Proc Trigger",
 		ActionID:           core.ActionID{SpellID: 13964},
+		SpellFlagsExclude:  core.SpellFlagSuppressEquipProcs,
 		Callback:           core.CallbackOnSpellHitDealt,
 		Outcome:            core.OutcomeLanded,
 		ICD:                time.Millisecond * 500,
