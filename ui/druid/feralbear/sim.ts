@@ -35,6 +35,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralBearDruid, {
 		Stat.StatMeleeCritRating,
 		Stat.StatExpertiseRating,
         Stat.StatResilienceRating,
+		Stat.StatPhysicalDamage,
 	],
 	epPseudoStats: [PseudoStat.PseudoStatMainHandDps],
 	epReferenceStat: Stat.StatAgility,

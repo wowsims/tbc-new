@@ -30,6 +30,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralCatDruid, {
 		Stat.StatAgility,
 		Stat.StatAttackPower,
 		Stat.StatFeralAttackPower,
+		Stat.StatPhysicalDamage,
 		Stat.StatMeleeHitRating,
 		Stat.StatExpertiseRating,
 		Stat.StatMeleeCritRating,
