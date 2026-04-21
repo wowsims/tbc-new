@@ -318,7 +318,7 @@ func FaerieFireAura(target *Unit, improvedPoints float64) *Aura {
 	}).AttachStatBuff(stats.Armor, -armorValue)
 
 	if improvedPoints > 0 {
-		aura.AttachAdditivePseudoStatBuff(&target.PseudoStats.ReducedPhysicalHitTakenChance, 1*improvedPoints)
+		aura.AttachAdditivePseudoStatBuff(&target.PseudoStats.ReducedPhysicalHitTakenChance, -1*improvedPoints)
 	}
 
 	effect = aura.NewExclusiveEffect("FaerieFireAura", true, ExclusiveEffect{
@@ -613,7 +613,7 @@ func ScorpidStingAura(target *Unit) *Aura {
 		Label:    "Scorpid Sting",
 		ActionID: ActionID{SpellID: 3043},
 		Duration: time.Second * 20,
-	}).AttachAdditivePseudoStatBuff(&target.PseudoStats.ReducedPhysicalHitTakenChance, 5)
+	}).AttachAdditivePseudoStatBuff(&target.PseudoStats.ReducedPhysicalHitTakenChance, -5)
 }
 
 func ScreechAura(target *Unit) *Aura {
