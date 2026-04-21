@@ -25,7 +25,7 @@ func (druid *Druid) registerSwipeBearSpell() {
 
 		DamageMultiplier: 1,
 		CritMultiplier:   druid.FeralCritMultiplier(),
-		ThreatMultiplier: 1.75,
+		ThreatMultiplier: 1,
 		MaxRange:         core.MaxMeleeRange,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {

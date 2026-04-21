@@ -226,7 +226,7 @@ func (druid *Druid) RegisterBearFormAura() {
 			druid.form = Bear
 			druid.SetCurrentPowerBar(core.RageBar)
 
-			druid.PseudoStats.ThreatMultiplier *= 7
+			druid.PseudoStats.ThreatMultiplier *= 1.3
 			druid.PseudoStats.SpiritRegenMultiplier *= AnimalSpiritRegenSuppression
 
 			druid.AddStatsDynamic(sim, statBonus)
@@ -252,7 +252,7 @@ func (druid *Druid) RegisterBearFormAura() {
 		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
 			druid.form = Humanoid
 
-			druid.PseudoStats.ThreatMultiplier /= 7
+			druid.PseudoStats.ThreatMultiplier /= 1.3
 			druid.PseudoStats.SpiritRegenMultiplier /= AnimalSpiritRegenSuppression
 
 			druid.AddStatsDynamic(sim, statBonus.Invert())

@@ -22,7 +22,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralBearDruid, {
 	epRatios: [0, 0, 0.6, 0, 1.0, 0],
 	// All stats for which EP should be calculated.
 	epStats: [
-		Stat.StatHealth,
 		Stat.StatStamina,
 		Stat.StatAgility,
 		Stat.StatStrength,
@@ -33,9 +32,11 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralBearDruid, {
 		Stat.StatDefenseRating,
 		Stat.StatMeleeHitRating,
 		Stat.StatMeleeCritRating,
+        Stat.StatMeleeHasteRating,
 		Stat.StatExpertiseRating,
         Stat.StatResilienceRating,
 		Stat.StatPhysicalDamage,
+        Stat.StatArmorPenetration,
 	],
 	epPseudoStats: [PseudoStat.PseudoStatMainHandDps],
 	epReferenceStat: Stat.StatAgility,
@@ -138,7 +139,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralBearDruid, {
 			OtherInputs.InputDelay,
 			OtherInputs.TankAssignment,
 			OtherInputs.InspirationUptime,
-			OtherInputs.IncomingHps,
+            OtherInputs.IncomingHps,
 			OtherInputs.HealingCadence,
 			OtherInputs.HealingCadenceVariation,
 			OtherInputs.AbsorbFrac,

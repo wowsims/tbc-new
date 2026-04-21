@@ -28,8 +28,8 @@ func (druid *Druid) registerMaulSpell() {
 
 		DamageMultiplier: 1,
 		CritMultiplier:   druid.FeralCritMultiplier(),
-		ThreatMultiplier: 1.75,
-		FlatThreatBonus:  176,
+		ThreatMultiplier: 1,
+		FlatThreatBonus:  344,
 		MaxRange:         core.MaxMeleeRange,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
