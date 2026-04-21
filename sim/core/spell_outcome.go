@@ -707,7 +707,7 @@ func (result *SpellResult) applyAttackTableHit(spell *Spell, countHits bool) {
 }
 
 func (result *SpellResult) applyEnemyAttackTableMiss(spell *Spell, attackTable *AttackTable, roll float64, chance *float64) bool {
-	missChance := result.Target.GetTotalChanceToBeMissedAsDefender(attackTable)
+	missChance := result.Target.GetTotalChanceToBeMissedAsDefender(attackTable) - spell.Unit.GetStat(stats.PhysicalHitPercent)/100
 
 	if spell.Unit.AutoAttacks.IsDualWielding && !spell.Unit.PseudoStats.DisableDWMissPenalty {
 		missChance += 0.19

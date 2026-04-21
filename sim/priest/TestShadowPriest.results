@@ -636,8 +636,8 @@ dps_results: {
 dps_results: {
  key: "TestShadowPriest-AllItems-IceGuard-2682"
  value: {
-  dps: 1745.27621
-  tps: 1280.48085
+  dps: 1755.17181
+  tps: 1287.60525
  }
 }
 dps_results: {
@@ -839,8 +839,8 @@ dps_results: {
 dps_results: {
  key: "TestShadowPriest-AllItems-SavageGuard-2681"
  value: {
-  dps: 1745.27621
-  tps: 1280.48085
+  dps: 1755.17181
+  tps: 1287.60525
  }
 }
 dps_results: {

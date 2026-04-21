@@ -636,8 +636,8 @@ dps_results: {
 dps_results: {
  key: "TestDestruction-AllItems-IceGuard-2682"
  value: {
-  dps: 1822.56857
-  tps: 1592.59981
+  dps: 1848.00317
+  tps: 1617.38098
  }
 }
 dps_results: {
@@ -853,8 +853,8 @@ dps_results: {
 dps_results: {
  key: "TestDestruction-AllItems-SavageGuard-2681"
  value: {
-  dps: 1822.56857
-  tps: 1592.59981
+  dps: 1848.00317
+  tps: 1617.38098
  }
 }
 dps_results: {
