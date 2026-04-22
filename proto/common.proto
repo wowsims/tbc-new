@@ -512,13 +512,14 @@ message PartyBuffs {
 	// Mitigation buffs
 	TristateEffect commanding_shout = 33;
 
-	// Resistance aura/totems
+	// Resistance aura/totems/aspect
 	bool frost_resistance_aura = 38;
 	bool frost_resistance_totem = 39;
 	bool nature_resistance_totem = 40;
 	bool fire_resistance_totem = 41;
 	bool fire_resistance_aura = 42;
 	bool shadow_resistance_aura = 43;
+	bool aspect_of_the_wild = 44;
 }
 
 // These are usually individual actions taken by other Characters.

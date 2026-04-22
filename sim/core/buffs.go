@@ -302,6 +302,10 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 		MakePermanent(TrueShotAuraBuff(char))
 	}
 
+	if partyBuffs.AspectOfTheWild {
+		MakePermanent(AspectOfTheWildAura(char))
+	}
+
 	if partyBuffs.WindfuryTotem != proto.TristateEffect_TristateEffectMissing {
 		WindfuryTotemAura(char, IsImproved(partyBuffs.WindfuryTotem))
 	}
@@ -510,6 +514,17 @@ func NatureResistanceTotemAura(char *Character) *Aura {
 	return makeStatBuff(char, BuffConfig{
 		Label:             "Nature Resistance Totem",
 		ActionID:          ActionID{SpellID: 25574},
+		ExclusiveCategory: ResistanceCategoryNature,
+		Stats: []StatConfig{
+			{stats.NatureResistance, 70, false},
+		},
+	})
+}
+
+func AspectOfTheWildAura(char *Character) *Aura {
+	return makeStatBuff(char, BuffConfig{
+		Label:             "Aspect of the Wild",
+		ActionID:          ActionID{SpellID: 27045},
 		ExclusiveCategory: ResistanceCategoryNature,
 		Stats: []StatConfig{
 			{stats.NatureResistance, 70, false},

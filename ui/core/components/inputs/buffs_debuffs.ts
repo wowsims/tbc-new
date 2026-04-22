@@ -176,6 +176,11 @@ export const StrengthOfEarthTotem = makeQuadstatePartyBuffInput({
 });
 export const TotemOfWrath = makeMultistatePartyBuffInput(ActionId.fromSpellId(30706), 5, 'totemOfWrath', 'Totem of Wrath');
 export const TrueshotAura = makeBooleanPartyBuffInput({ actionId: () => ActionId.fromSpellId(27066), fieldName: 'trueshotAura', label: 'Trueshot Aura' });
+export const AspectOfTheWild = makeBooleanPartyBuffInput({
+	actionId: () => ActionId.fromSpellId(27045),
+	fieldName: 'aspectOfTheWild',
+	label: 'Aspect of the Wild',
+});
 export const FrostResistanceTotem = makeBooleanPartyBuffInput({
 	actionId: () => ActionId.fromSpellId(25560),
 	fieldName: 'frostResistanceTotem',
@@ -440,6 +445,11 @@ export const PARTY_BUFFS_CONFIG = [
 		config: ShadowResistanceAura,
 		picker: IconPicker,
 		stats: [Stat.StatShadowResistance],
+	},
+    {
+		config: AspectOfTheWild,
+		picker: IconPicker,
+		stats: [Stat.StatNatureResistance],
 	},
 ] as PickerStatOptions[];
 
