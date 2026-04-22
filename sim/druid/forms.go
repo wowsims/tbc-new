@@ -98,6 +98,10 @@ func (druid *Druid) RegisterCatFormAura() {
 
 	clawWeapon := druid.GetCatWeapon()
 
+	statBonus := stats.Stats{
+		stats.AttackPower: 2 * float64(core.CharacterLevel),
+	}
+
 	druid.CatFormAura = druid.RegisterAura(core.Aura{
 		Label:      "Cat Form",
 		ActionID:   actionID,
@@ -113,6 +117,7 @@ func (druid *Druid) RegisterCatFormAura() {
 			druid.PseudoStats.ThreatMultiplier *= 0.71
 			druid.PseudoStats.SpiritRegenMultiplier *= AnimalSpiritRegenSuppression
 
+			druid.AddStatsDynamic(sim, statBonus)
 			druid.EnableBuildPhaseStatDep(sim, agiApDep)
 			druid.EnableBuildPhaseStatDep(sim, strApDep)
 			druid.EnableBuildPhaseStatDep(sim, feralApDep)
@@ -148,6 +153,7 @@ func (druid *Druid) RegisterCatFormAura() {
 			druid.PseudoStats.ThreatMultiplier /= 0.71
 			druid.PseudoStats.SpiritRegenMultiplier /= AnimalSpiritRegenSuppression
 
+			druid.AddStatsDynamic(sim, statBonus.Invert())
 			druid.DisableBuildPhaseStatDep(sim, agiApDep)
 			druid.DisableBuildPhaseStatDep(sim, strApDep)
 			druid.DisableBuildPhaseStatDep(sim, feralApDep)
@@ -200,7 +206,7 @@ func (druid *Druid) RegisterBearFormAura() {
 	healthMetrics := druid.NewHealthMetrics(actionID)
 
 	statBonus := stats.Stats{
-		stats.AttackPower: float64(core.CharacterLevel),
+		stats.AttackPower: 3 * float64(core.CharacterLevel),
 	}
 
 	strApDep := druid.NewDynamicStatDependency(stats.Strength, stats.AttackPower, 1)
@@ -226,7 +232,7 @@ func (druid *Druid) RegisterBearFormAura() {
 			druid.form = Bear
 			druid.SetCurrentPowerBar(core.RageBar)
 
-			druid.PseudoStats.ThreatMultiplier *= 7
+			druid.PseudoStats.ThreatMultiplier *= 1.3
 			druid.PseudoStats.SpiritRegenMultiplier *= AnimalSpiritRegenSuppression
 
 			druid.AddStatsDynamic(sim, statBonus)
@@ -252,7 +258,7 @@ func (druid *Druid) RegisterBearFormAura() {
 		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
 			druid.form = Humanoid
 
-			druid.PseudoStats.ThreatMultiplier /= 7
+			druid.PseudoStats.ThreatMultiplier /= 1.3
 			druid.PseudoStats.SpiritRegenMultiplier /= AnimalSpiritRegenSuppression
 
 			druid.AddStatsDynamic(sim, statBonus.Invert())
