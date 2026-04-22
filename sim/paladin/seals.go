@@ -146,7 +146,7 @@ func (paladin *Paladin) applySeal(newSeal *core.Aura, sealSpell *core.Spell, jud
 		}
 		// If they are recasting the same seal, we just refresh the duration
 		if newSealLabel == currentSealLabel {
-			paladin.CurrentSeal.Refresh(sim)
+			paladin.CurrentSeal.Activate(sim)
 			return
 		}
 	}
