@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
@@ -891,6 +892,30 @@ func init() {
 			Spell:    spell,
 			Type:     core.CooldownTypeDPS,
 			BuffAura: aura,
+		})
+	})
+
+	// Mark of the Champion (physical): +150 AP vs Undead and Demons.
+	core.NewItemEffect(23206, func(agent core.Agent) {
+		character := agent.GetCharacter()
+		character.Env.RegisterPostFinalizeEffect(func() {
+			for _, at := range character.AttackTables {
+				bonus := stats.Stats{stats.AttackPower: 150, stats.RangedAttackPower: 150}
+				at.MobTypeBonusStats[proto.MobType_MobTypeUndead] = at.MobTypeBonusStats[proto.MobType_MobTypeUndead].Add(bonus)
+				at.MobTypeBonusStats[proto.MobType_MobTypeDemon] = at.MobTypeBonusStats[proto.MobType_MobTypeDemon].Add(bonus)
+			}
+		})
+	})
+
+	// Mark of the Champion (spell): +85 spell damage vs Undead and Demons.
+	core.NewItemEffect(23207, func(agent core.Agent) {
+		character := agent.GetCharacter()
+		character.Env.RegisterPostFinalizeEffect(func() {
+			for _, at := range character.AttackTables {
+				bonus := stats.Stats{stats.SpellDamage: 85}
+				at.MobTypeBonusStats[proto.MobType_MobTypeUndead] = at.MobTypeBonusStats[proto.MobType_MobTypeUndead].Add(bonus)
+				at.MobTypeBonusStats[proto.MobType_MobTypeDemon] = at.MobTypeBonusStats[proto.MobType_MobTypeDemon].Add(bonus)
+			}
 		})
 	})
 }

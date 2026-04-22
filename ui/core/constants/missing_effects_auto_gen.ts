@@ -1186,18 +1186,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		23206, // Mark of the Champion
-		[
-			"Increases attack power by 150 when fighting Undead and Demons. It also allows the acquisition of Scourgestones on behalf of the Argent Dawn.", // 29112 - https://www.wowhead.com/tbc/spell=29112
-		]
-	],
-	[
-		23207, // Mark of the Champion
-		[
-			"Increases damage done to Undead and Demons by magical spells and effects by up to 85. It also allows the acquisition of Scourgestones on behalf of the Argent Dawn.", // 29113 - https://www.wowhead.com/tbc/spell=29113
-		]
-	],
-	[
 		23221, // Misplaced Servo Arm
 		[
 			"Chance to discharge electricity causing 150 Nature damage to your target.", // 29151 - https://www.wowhead.com/tbc/spell=29151

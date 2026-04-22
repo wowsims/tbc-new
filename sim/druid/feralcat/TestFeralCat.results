@@ -323,14 +323,6 @@ dps_results: {
  }
 }
 dps_results: {
- key: "TestFeralCat-AllItems-Biznicks247x128Accurascope-2523"
- value: {
-  dps: 703.38848
-  tps: 499.40582
-  hps: 68.65497
- }
-}
-dps_results: {
  key: "TestFeralCat-AllItems-BlackenedNaaruSliver-34427"
  value: {
   dps: 736.37292
@@ -1003,6 +995,22 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestFeralCat-AllItems-MarkoftheChampion-23206"
+ value: {
+  dps: 694.39457
+  tps: 493.02014
+  hps: 68.65497
+ }
+}
+dps_results: {
+ key: "TestFeralCat-AllItems-MarkoftheChampion-23207"
+ value: {
+  dps: 694.39457
+  tps: 493.02014
+  hps: 68.65497
+ }
+}
+dps_results: {
  key: "TestFeralCat-AllItems-MasqueradeGown-28578"
  value: {
   dps: 663.47084
@@ -1340,6 +1348,14 @@ dps_results: {
 }
 dps_results: {
  key: "TestFeralCat-AllItems-StabilitzedEterniumScope-2724"
+ value: {
+  dps: 703.38848
+  tps: 499.40582
+  hps: 68.65497
+ }
+}
+dps_results: {
+ key: "TestFeralCat-AllItems-StabilizedEterniumScope-2523"
  value: {
   dps: 703.38848
   tps: 499.40582

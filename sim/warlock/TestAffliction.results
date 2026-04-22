@@ -242,13 +242,6 @@ dps_results: {
  }
 }
 dps_results: {
- key: "TestAffliction-AllItems-Biznicks247x128Accurascope-2523"
- value: {
-  dps: 1951.85696
-  tps: 1221.88347
- }
-}
-dps_results: {
  key: "TestAffliction-AllItems-BlackenedNaaruSliver-34427"
  value: {
   dps: 1927.38464
@@ -718,6 +711,20 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestAffliction-AllItems-MarkoftheChampion-23206"
+ value: {
+  dps: 1927.38464
+  tps: 1200.39599
+ }
+}
+dps_results: {
+ key: "TestAffliction-AllItems-MarkoftheChampion-23207"
+ value: {
+  dps: 1927.38464
+  tps: 1200.39599
+ }
+}
+dps_results: {
  key: "TestAffliction-AllItems-MasqueradeGown-28578"
  value: {
   dps: 1899.0806
@@ -958,6 +965,13 @@ dps_results: {
 }
 dps_results: {
  key: "TestAffliction-AllItems-StabilitzedEterniumScope-2724"
+ value: {
+  dps: 1951.85696
+  tps: 1221.88347
+ }
+}
+dps_results: {
+ key: "TestAffliction-AllItems-StabilizedEterniumScope-2523"
  value: {
   dps: 1951.85696
   tps: 1221.88347
