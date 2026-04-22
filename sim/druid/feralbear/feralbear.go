@@ -32,6 +32,13 @@ func NewFeralBearDruid(character *core.Character, options *proto.Player) *Guardi
 		Options: tankOptions.Options,
 	}
 
+	healingModel := options.HealingModel
+	if healingModel != nil {
+		if healingModel.InspirationUptime > 0.0 {
+			core.ApplyInspiration(bear.GetCharacter(), healingModel.InspirationUptime)
+		}
+	}
+
 	bear.EnableEnergyBar(core.EnergyBarOptions{
 		MaxComboPoints: 5,
 		MaxEnergy:      100,
