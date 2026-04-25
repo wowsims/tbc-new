@@ -141,6 +141,16 @@ func init() {
 		})
 	})
 
+	// Savage Guard - +10 Nature Resistance (item 22635)
+	core.NewEnchantEffect(2681, func(agent core.Agent) {
+		agent.GetCharacter().AddStat(stats.NatureResistance, 10)
+	})
+
+	// Ice Guard - +10 Frost Resistance (item 22636)
+	core.NewEnchantEffect(2682, func(agent core.Agent) {
+		agent.GetCharacter().AddStat(stats.FrostResistance, 10)
+	})
+
 	// Scopes
 	core.NewEnchantEffect(2523, func(agent core.Agent) {
 		character := agent.GetCharacter()

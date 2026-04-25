@@ -1,6 +1,8 @@
 package feralcat
 
 import (
+	"time"
+
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/druid"
@@ -107,4 +109,24 @@ func (cat *FeralDruid) Reset(sim *core.Simulation) {
 	cat.CatFormAura.Activate(sim)
 	cat.readyToShift = false
 	cat.waitingForTick = false
+
+	cat.scheduleFixedMCD(sim, 35476, 0)                                      // Drums of Battle at 0s
+	cat.scheduleFixedMCD(sim, core.BloodlustActionID.SpellID, 5*time.Second) // Bloodlust at 5s
+}
+
+// scheduleFixedMCD schedules a one-shot firing of the MCD with the given spellID
+// at the given sim time. Used to pin Drums and Bloodlust activation times for the
+// non-APL rotation (APL handles this via currentTime conditions).
+func (cat *FeralDruid) scheduleFixedMCD(sim *core.Simulation, spellID int32, fireAt time.Duration) {
+	sim.AddPendingAction(&core.PendingAction{
+		NextActionAt: fireAt,
+		OnAction: func(sim *core.Simulation) {
+			for _, mcd := range cat.GetMajorCooldowns() {
+				if mcd.Spell.ActionID.SpellID == spellID && mcd.IsReady(sim) {
+					mcd.TryActivate(sim, &cat.Character)
+					return
+				}
+			}
+		},
+	})
 }

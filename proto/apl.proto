@@ -88,6 +88,7 @@ message APLAction {
 
         // Class or Spec-specific actions
         APLActionCatOptimalRotationAction cat_optimal_rotation_action = 18;
+        APLActionBearOptimalRotationAction bear_optimal_rotation_action = 30;
         APLActionGuardianHotwDpsRotation guardian_hotw_dps_rotation = 27;
 		APLActionCastWarlockAssignedCurse cast_warlock_assigned_curse = 29;
 
@@ -223,9 +224,7 @@ message APLValue {
 
         // Class or Spec-specific values
         APLValueTotemRemainingTime totem_remaining_time = 49;
-        APLValueCatExcessEnergy cat_excess_energy = 52;
-        APLValueCatNewSavageRoarDuration cat_new_savage_roar_duration = 61;
-		APLValueWarlockAssignedCurseIsActive warlock_assigned_curse_is_active = 59;
+APLValueWarlockAssignedCurseIsActive warlock_assigned_curse_is_active = 59;
 		APLValueWarlockIsAssignedCurse warlock_is_assigned_curse = 129;
         APLValueCurrentEclipsePhase druid_current_eclipse_phase = 70;
 		APLValueProtectionPaladinDamageTakenLastGlobal protection_paladin_damage_taken_last_global = 100;
@@ -374,6 +373,14 @@ message APLActionCatOptimalRotationAction {
     bool mangle_trick = 6;
     bool rake_trick = 7;
     bool maintain_faerie_fire = 8;
+}
+
+message APLActionBearOptimalRotationAction {
+    bool maintain_faerie_fire = 1;
+    bool maintain_demoralizing_roar = 2;
+    int32 maul_rage_threshold = 3;
+    FeralBearDruid.Rotation.SwipeUsage swipe_usage = 4;
+    int32 swipe_ap_threshold = 5;
 }
 
 message APLActionGuardianHotwDpsRotation {
@@ -751,8 +758,6 @@ message APLValueTotemRemainingTime {
     ShamanTotems.TotemType totem_type = 1;
 	bool include_reaction_time = 2;
 }
-message APLValueCatExcessEnergy {}
-message APLValueCatNewSavageRoarDuration {}
 message APLValueWarlockAssignedCurseIsActive {
 	UnitReference target_unit = 1;
 }

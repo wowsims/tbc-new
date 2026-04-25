@@ -414,6 +414,12 @@ export class CharacterStats extends Component {
 						<span>Resilience:</span>
 						<span>{`${critImmunityInfo.resilience.toFixed(2)}%`}</span>
 					</div>
+					{critImmunityInfo.talents > 0 && (
+						<div className="character-stats-tooltip-row">
+							<span>Talents:</span>
+							<span>{`${critImmunityInfo.talents.toFixed(2)}%`}</span>
+						</div>
+					)}
 					<div className="character-stats-tooltip-row">
 						<span>Total:</span>
 						<span>{`${critImmunityInfo.total.toFixed(2)}%`}</span>

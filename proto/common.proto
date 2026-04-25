@@ -25,7 +25,7 @@ message ProtoVersion {
 	// protos need to define an api_version field so that the UI code knows
 	// to up-convert these protos to the new format whenever api_version is
 	// missing (0) or lower than current_version_number.
-	option (current_version_number) = 11;
+	option (current_version_number) = 12;
 
 	// The actual field value is only used within unit tests.
 	int32 saved_version_number = 1;
@@ -511,6 +511,15 @@ message PartyBuffs {
 
 	// Mitigation buffs
 	TristateEffect commanding_shout = 33;
+
+	// Resistance aura/totems/aspect
+	bool frost_resistance_aura = 38;
+	bool frost_resistance_totem = 39;
+	bool nature_resistance_totem = 40;
+	bool fire_resistance_totem = 41;
+	bool fire_resistance_aura = 42;
+	bool shadow_resistance_aura = 43;
+	bool aspect_of_the_wild = 44;
 }
 
 // These are usually individual actions taken by other Characters.

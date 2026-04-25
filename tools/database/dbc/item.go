@@ -22,6 +22,11 @@ type Item struct {
 	StatAlloc              []float64
 	BonusStat              []int
 	ArmorValue             int
+	FireResistance         int
+	NatureResistance       int
+	FrostResistance        int
+	ShadowResistance       int
+	ArcaneResistance       int
 	SocketEnchantmentId    int
 	Flags0                 ItemStaticFlags0
 	Flags1                 ItemStaticFlags1
@@ -126,6 +131,22 @@ func (item *Item) GetStats(itemLevel int) *stats.Stats {
 	armor := item.GetArmorValue(itemLevel)
 	if armor > 0 {
 		stats[proto.Stat_StatArmor] = float64(armor)
+	}
+
+	if item.FireResistance > 0 {
+		stats[proto.Stat_StatFireResistance] = float64(item.FireResistance)
+	}
+	if item.NatureResistance > 0 {
+		stats[proto.Stat_StatNatureResistance] = float64(item.NatureResistance)
+	}
+	if item.FrostResistance > 0 {
+		stats[proto.Stat_StatFrostResistance] = float64(item.FrostResistance)
+	}
+	if item.ShadowResistance > 0 {
+		stats[proto.Stat_StatShadowResistance] = float64(item.ShadowResistance)
+	}
+	if item.ArcaneResistance > 0 {
+		stats[proto.Stat_StatArcaneResistance] = float64(item.ArcaneResistance)
 	}
 
 	if item.ItemClass == ITEM_CLASS_ARMOR && item.QualityModifier > 0 {

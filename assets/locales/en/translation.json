@@ -1572,14 +1572,6 @@
 					"label": "Totem Remaining Time",
 					"tooltip": "Returns the amount of time remaining until the totem will expire."
 				},
-				"cat_excess_energy": {
-					"label": "Excess Energy",
-					"tooltip": "Returns the amount of excess energy available, after subtracting energy that will be needed to maintain DoTs."
-				},
-				"cat_new_savage_roar_duration": {
-					"label": "New Savage Roar Duration",
-					"tooltip": "Returns duration of savage roar based on current combo points"
-				},
 				"warlock_assigned_curse_is_active": {
 					"label": "Assigned Curse Is Active",
 					"tooltip": "Returns true is assigned curse is active on target"
@@ -1818,6 +1810,33 @@
 					"rake_trick": {
 						"label": "Use Rake/Bite tricks",
 						"tooltip": "Cast Rake or Ferocious Bite rather than powershifting when between 35–39 Energy without 2pT6, with more than 1 second until the next Energy tick."
+					},
+					"maintain_faerie_fire": {
+						"label": "Maintain Faerie Fire",
+						"tooltip": "Use Faerie Fire (Feral) whenever it is not active on the target."
+					}
+				},
+				"feral_bear": {
+					"maul_rage_threshold": {
+						"label": "Maul Rage Threshold",
+						"tooltip": "Use Maul when current Rage is at or above this value."
+					},
+					"swipe_usage": {
+						"label": "Swipe Usage",
+						"tooltip": "When to use Swipe in the rotation.",
+						"values": {
+							"never": "Never",
+							"with_enough_ap": "With Enough AP",
+							"spam": "Spam"
+						}
+					},
+					"swipe_ap_threshold": {
+						"label": "Swipe AP Threshold",
+						"tooltip": "Minimum Attack Power required before Swipe is used in the rotation."
+					},
+					"maintain_demo_roar": {
+						"label": "Maintain Demo Roar",
+						"tooltip": "Keep Demoralizing Roar active on the primary target."
 					},
 					"maintain_faerie_fire": {
 						"label": "Maintain Faerie Fire",

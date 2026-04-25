@@ -18,7 +18,7 @@ character_stats_results: {
   final_stats: 0
   final_stats: 0
   final_stats: 264.99
-  final_stats: 1211.518
+  final_stats: 1057.518
   final_stats: 389
   final_stats: 0
   final_stats: 0
@@ -41,7 +41,7 @@ character_stats_results: {
   final_stats: 33.75
   final_stats: 33.75
   final_stats: 43.75
-  final_stats: 93.75
+  final_stats: 70
   final_stats: 0
   final_stats: 1
   final_stats: 14.97561
@@ -256,6 +256,27 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestBalance-AllItems-Gladiator'sRefuge"
+ value: {
+  dps: 1289.83258
+  tps: 1217.40116
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-Gladiator'sSanctuary"
+ value: {
+  dps: 1089.87638
+  tps: 1016.50813
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-Gladiator'sWildhide"
+ value: {
+  dps: 1384.02344
+  tps: 1310.56806
+ }
+}
+dps_results: {
  key: "TestBalance-AllItems-HandofJustice-11815"
  value: {
   dps: 1386.60943
@@ -270,7 +291,28 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestBalance-AllItems-IceGuard-2682"
+ value: {
+  dps: 1412.39069
+  tps: 1339.58641
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-IdolofBrutality-23198"
+ value: {
+  dps: 1378.07495
+  tps: 1305.27067
+ }
+}
+dps_results: {
  key: "TestBalance-AllItems-IdolofFeralShadows-28372"
+ value: {
+  dps: 1378.07495
+  tps: 1305.27067
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-IdolofTerror-33509"
  value: {
   dps: 1378.07495
   tps: 1305.27067
@@ -309,6 +351,13 @@ dps_results: {
  value: {
   dps: 1387.27891
   tps: 1314.47463
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-IdoloftheWhiteStag-32257"
+ value: {
+  dps: 1378.07495
+  tps: 1305.27067
  }
 }
 dps_results: {
@@ -368,6 +417,20 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestBalance-AllItems-MarkoftheChampion-23206"
+ value: {
+  dps: 1386.60943
+  tps: 1313.94968
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-MarkoftheChampion-23207"
+ value: {
+  dps: 1386.60943
+  tps: 1313.94968
+ }
+}
+dps_results: {
  key: "TestBalance-AllItems-MementoofTyrande-32496"
  value: {
   dps: 1440.22597
@@ -400,6 +463,27 @@ dps_results: {
  value: {
   dps: 1512.23972
   tps: 1439.17121
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-Oathbound'sDragonhideBattlegear"
+ value: {
+  dps: 1044.68667
+  tps: 970.11069
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-Oathbound'sKodohideBattlegear"
+ value: {
+  dps: 1131.29577
+  tps: 1057.26791
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-Oathbound'sWyrmhideBattlegear"
+ value: {
+  dps: 1147.6657
+  tps: 1073.10457
  }
 }
 dps_results: {
@@ -442,6 +526,13 @@ dps_results: {
  value: {
   dps: 1386.60943
   tps: 1313.94968
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-SavageGuard-2681"
+ value: {
+  dps: 1412.39069
+  tps: 1339.58641
  }
 }
 dps_results: {

@@ -1,0 +1,55 @@
+{
+	"apiVersion": 7,
+	"tanks": [
+		{
+			"type": "Player"
+		}
+	],
+	"player": {
+		"name": "Player",
+		"class": "ClassDruid",
+		"inFrontOfTarget": true,
+		"healingModel": {
+			"hps": 2244,
+			"cadenceSeconds": 1.5,
+			"cadenceVariation": 1,
+			"absorbFrac": 0.02,
+			"burstWindow": 6,
+			"inspirationUptime": 0.13
+		}
+	},
+	"encounter": {
+		"apiVersion": 7,
+		"duration": 180,
+		"durationVariation": 5,
+		"executeProportion20": 0.2,
+		"executeProportion25": 0.25,
+		"executeProportion35": 0.35,
+		"executeProportion45": 0.45,
+		"executeProportion90": 0.9,
+		"targets": [
+			{
+				"id": 21216,
+				"name": "Hydross the Unstable 25",
+				"level": 73,
+				"mobType": "MobTypeElemental",
+				"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 320, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7685, 0, 3380792, 0, 0, 0, 0, 0, 0, 0, 0],
+				"minBaseDamage": 5974,
+				"damageSpread": 0.413,
+				"swingSpeed": 1.5,
+				"parryHaste": true,
+				"spellSchool": "SpellSchoolFrost",
+				"tankIndex": 0,
+				"secondTankIndex": 1,
+				"targetInputs": [
+					{
+						"label": "Phase Shift Interval",
+						"tooltip": "Time (in seconds) between Frost and Nature phase shifts. Marks reset on each shift and resume stacking 15s later.",
+						"inputType": "Number",
+						"numberValue": 60
+					}
+				]
+			}
+		]
+	}
+}

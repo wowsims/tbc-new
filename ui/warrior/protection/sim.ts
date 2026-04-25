@@ -137,7 +137,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionWarrior, {
 			WarriorInputs.StanceSnapshot(),
 			WarriorInputs.QueueDelay(),
 			OtherInputs.InputDelay,
-			// OtherInputs.TankAssignment,
+			OtherInputs.TankAssignment,
 			OtherInputs.InspirationUptime,
 			OtherInputs.IncomingHps,
 			OtherInputs.HealingCadence,
@@ -149,6 +149,8 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionWarrior, {
 		],
 	},
 	itemSwapSlots: [ItemSlot.ItemSlotTrinket1, ItemSlot.ItemSlotTrinket2, ItemSlot.ItemSlotMainHand, ItemSlot.ItemSlotOffHand],
+	defaultBuild: Presets.MAGTHERIDON_PRESET_BUILD,
+
 	encounterPicker: {
 		// Whether to include 'Execute DuratFion (%)' in the 'Encounter' section of the settings tab.
 		showExecuteProportion: false,
@@ -161,12 +163,21 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionWarrior, {
 		// Preset rotations that the user can quickly select.
 		rotations: [Presets.ROTATION_DEFAULT],
 		// Preset gear configurations that the user can quickly select.
-		gear: [Presets.PRERAID_BALANCED_PRESET, Presets.P1_PRESET, Presets.P2_PRESET, Presets.P3_PRESET, Presets.P35_PRESET, Presets.P4_PRESET],
+		gear: [
+			Presets.PRERAID_BALANCED_PRESET,
+			Presets.P1_PRESET,
+			Presets.P2_PRESET,
+			Presets.P2_HYDROSS_PRESET,
+			Presets.P3_PRESET,
+			Presets.P35_PRESET,
+			Presets.P4_PRESET,
+		],
 		builds: [
 			Presets.DEFAULT_PRESET_BUILD,
 			Presets.KARAZHAN_PRESET_BUILD,
 			Presets.MAGTHERIDON_PRESET_BUILD,
 			Presets.MOROGRIM_PRESET_BUILD,
+			Presets.HYDROSS_PRESET_BUILD,
 			Presets.P1_PRESET_BUILD,
 		],
 	},

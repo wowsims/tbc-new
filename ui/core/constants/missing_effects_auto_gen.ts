@@ -1174,12 +1174,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		23198, // Idol of Brutality
-		[
-			"Increases the damage dealt by your Maul ability by 50 and Swipe ability by 10.", // 28855 - https://www.wowhead.com/tbc/spell=28855
-		]
-	],
-	[
 		23200, // Totem of Sustaining
 		[
 			"Increases healing done by Lesser Healing Wave by up to 53.", // 28856 - https://www.wowhead.com/tbc/spell=28856
@@ -1189,18 +1183,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		23201, // Libram of Divinity
 		[
 			"Increases healing done by Flash of Light by up to 53.", // 28853 - https://www.wowhead.com/tbc/spell=28853
-		]
-	],
-	[
-		23206, // Mark of the Champion
-		[
-			"Increases attack power by 150 when fighting Undead and Demons. It also allows the acquisition of Scourgestones on behalf of the Argent Dawn.", // 29112 - https://www.wowhead.com/tbc/spell=29112
-		]
-	],
-	[
-		23207, // Mark of the Champion
-		[
-			"Increases damage done to Undead and Demons by magical spells and effects by up to 85. It also allows the acquisition of Scourgestones on behalf of the Argent Dawn.", // 29113 - https://www.wowhead.com/tbc/spell=29113
 		]
 	],
 	[
@@ -2292,12 +2274,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		32257, // Idol of the White Stag
-		[
-			"Your Mangle ability also increases your attack power by 94 for 20s.", // 41037 - https://www.wowhead.com/tbc/spell=41037
-		]
-	],
-	[
 		32368, // Tome of the Lightbringer
 		[
 			"Your Judgement ability also increases your shield block value by 186 for 5s.", // 41042 - https://www.wowhead.com/tbc/spell=41042
@@ -2403,12 +2379,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		33508, // Idol of Budding Life
 		[
 			"Reduces the mana cost of Rejuvenation by 36.", // 43736 - https://www.wowhead.com/tbc/spell=43736
-		]
-	],
-	[
-		33509, // Idol of Terror
-		[
-			"Your Mangle ability has a chance to grant 65 agility for 10s.", // 43738 - https://www.wowhead.com/tbc/spell=43738
 		]
 	],
 	[

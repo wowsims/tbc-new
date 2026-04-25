@@ -41,7 +41,7 @@ character_stats_results: {
   final_stats: 38.75
   final_stats: 38.75
   final_stats: 38.75
-  final_stats: 98.75
+  final_stats: 75
   final_stats: 0
   final_stats: 6.80488
   final_stats: 6
@@ -733,6 +733,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRetribution-AllItems-IceGuard-2682"
+ value: {
+  dps: 1807.32045
+  tps: 1418.34452
+ }
+}
+dps_results: {
  key: "TestRetribution-AllItems-IconofUnyieldingCourage-28121"
  value: {
   dps: 1739.37536
@@ -891,6 +898,20 @@ dps_results: {
  value: {
   dps: 1389.83937
   tps: 1091.55459
+ }
+}
+dps_results: {
+ key: "TestRetribution-AllItems-MarkoftheChampion-23206"
+ value: {
+  dps: 1728.9753
+  tps: 1358.46474
+ }
+}
+dps_results: {
+ key: "TestRetribution-AllItems-MarkoftheChampion-23207"
+ value: {
+  dps: 1728.9753
+  tps: 1358.46474
  }
 }
 dps_results: {
@@ -1066,6 +1087,13 @@ dps_results: {
  value: {
   dps: 1735.76496
   tps: 1363.7633
+ }
+}
+dps_results: {
+ key: "TestRetribution-AllItems-SavageGuard-2681"
+ value: {
+  dps: 1807.32045
+  tps: 1418.34452
  }
 }
 dps_results: {

@@ -22,7 +22,7 @@ const AnimalSpiritRegenSuppression = 0.911337
 
 // Thick Hide contribution handled separately in talents code for cleanliness
 // and UI stats display.
-const BaseBearArmorMulti = 2.2
+const BaseBearArmorMulti = 5.0
 
 func (form DruidForm) Matches(other DruidForm) bool {
 	return (form & other) != 0
@@ -98,6 +98,10 @@ func (druid *Druid) RegisterCatFormAura() {
 
 	clawWeapon := druid.GetCatWeapon()
 
+	statBonus := stats.Stats{
+		stats.AttackPower: 2 * float64(core.CharacterLevel),
+	}
+
 	druid.CatFormAura = druid.RegisterAura(core.Aura{
 		Label:      "Cat Form",
 		ActionID:   actionID,
@@ -113,6 +117,7 @@ func (druid *Druid) RegisterCatFormAura() {
 			druid.PseudoStats.ThreatMultiplier *= 0.71
 			druid.PseudoStats.SpiritRegenMultiplier *= AnimalSpiritRegenSuppression
 
+			druid.AddStatsDynamic(sim, statBonus)
 			druid.EnableBuildPhaseStatDep(sim, agiApDep)
 			druid.EnableBuildPhaseStatDep(sim, strApDep)
 			druid.EnableBuildPhaseStatDep(sim, feralApDep)
@@ -125,18 +130,20 @@ func (druid *Druid) RegisterCatFormAura() {
 				druid.AutoAttacks.EnableAutoSwing(sim)
 				druid.UpdateManaRegenRates()
 
-				// On entering Cat Form, energy resets to 0 (game behavior).
-				if cur := druid.CurrentEnergy(); cur > 0 {
-					druid.SpendEnergy(sim, cur, energyMetrics)
-				}
-				// Wolfshead Helm: +20 energy on shift into Cat.
-				energyGain := core.TernaryFloat64(wolfsheadEquipped, 20.0, 0.0)
-				// Furor: 20% chance per rank (rank 5 = 100%) to gain 40 energy on shift.
-				if furorProcChance == 1 || (furorProcChance > 0 && sim.RandomFloat("Furor") < furorProcChance) {
-					energyGain += 40.0
-				}
-				if energyGain > 0 {
-					druid.AddEnergy(sim, energyGain, energyMetrics)
+				if sim.CurrentTime > 0 {
+					if cur := druid.CurrentEnergy(); cur > 0 {
+						//Resets energy to 0 when entering cat form
+						druid.SpendEnergy(sim, cur, energyMetrics)
+					}
+					// Wolfshead Helm: +20 energy on shift into Cat.
+					energyGain := core.TernaryFloat64(wolfsheadEquipped, 20.0, 0.0)
+					// Furor: 20% chance per rank (rank 5 = 100%) to gain 40 energy on shift.
+					if furorProcChance == 1 || (furorProcChance > 0 && sim.RandomFloat("Furor") < furorProcChance) {
+						energyGain += 40.0
+					}
+					if energyGain > 0 {
+						druid.AddEnergy(sim, energyGain, energyMetrics)
+					}
 				}
 			}
 		},
@@ -146,6 +153,7 @@ func (druid *Druid) RegisterCatFormAura() {
 			druid.PseudoStats.ThreatMultiplier /= 0.71
 			druid.PseudoStats.SpiritRegenMultiplier /= AnimalSpiritRegenSuppression
 
+			druid.AddStatsDynamic(sim, statBonus.Invert())
 			druid.DisableBuildPhaseStatDep(sim, agiApDep)
 			druid.DisableBuildPhaseStatDep(sim, strApDep)
 			druid.DisableBuildPhaseStatDep(sim, feralApDep)
@@ -194,19 +202,16 @@ func (druid *Druid) registerCatFormSpell() {
 }
 
 func (druid *Druid) RegisterBearFormAura() {
-	actionID := core.ActionID{SpellID: 5487}
+	actionID := core.ActionID{SpellID: 9634} // Dire Bear Form
 	healthMetrics := druid.NewHealthMetrics(actionID)
 
 	statBonus := stats.Stats{
-		stats.AttackPower: float64(core.CharacterLevel),
+		stats.AttackPower: 3 * float64(core.CharacterLevel),
 	}
 
 	strApDep := druid.NewDynamicStatDependency(stats.Strength, stats.AttackPower, 1)
 	feralApDep := druid.NewDynamicStatDependency(stats.FeralAttackPower, stats.AttackPower, 1)
-	stamDep := druid.NewDynamicMultiplyStat(stats.Stamina, 1.4)
-	critDep := druid.NewDynamicMultiplyStat(stats.MeleeCritRating, 1.5)
-	hasteDep := druid.NewDynamicMultiplyStat(stats.MeleeHasteRating, 1.5)
-
+	stamDep := druid.NewDynamicMultiplyStat(stats.Stamina, 1.25)
 	// Talent: Heart of the Wild — +4% Stamina per rank while in Bear form.
 	var hotWBearStamDep *stats.StatDependency
 	if druid.Talents.HeartOfTheWild > 0 {
@@ -227,15 +232,14 @@ func (druid *Druid) RegisterBearFormAura() {
 			druid.form = Bear
 			druid.SetCurrentPowerBar(core.RageBar)
 
-			druid.PseudoStats.ThreatMultiplier *= 7
+			druid.PseudoStats.ThreatMultiplier *= 1.3
 			druid.PseudoStats.SpiritRegenMultiplier *= AnimalSpiritRegenSuppression
 
 			druid.AddStatsDynamic(sim, statBonus)
 			druid.ApplyDynamicEquipScaling(sim, stats.Armor, BaseBearArmorMulti)
+			druid.ApplyDynamicEquipScaling(sim, stats.BonusArmor, BaseBearArmorMulti)
 			druid.EnableBuildPhaseStatDep(sim, strApDep)
 			druid.EnableBuildPhaseStatDep(sim, feralApDep)
-			druid.EnableBuildPhaseStatDep(sim, critDep)
-			druid.EnableBuildPhaseStatDep(sim, hasteDep)
 
 			// Preserve fraction of max health when shifting
 			healthFrac := druid.CurrentHealth() / druid.MaxHealth()
@@ -254,15 +258,14 @@ func (druid *Druid) RegisterBearFormAura() {
 		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
 			druid.form = Humanoid
 
-			druid.PseudoStats.ThreatMultiplier /= 7
+			druid.PseudoStats.ThreatMultiplier /= 1.3
 			druid.PseudoStats.SpiritRegenMultiplier /= AnimalSpiritRegenSuppression
 
 			druid.AddStatsDynamic(sim, statBonus.Invert())
 			druid.RemoveDynamicEquipScaling(sim, stats.Armor, BaseBearArmorMulti)
+			druid.RemoveDynamicEquipScaling(sim, stats.BonusArmor, BaseBearArmorMulti)
 			druid.DisableBuildPhaseStatDep(sim, strApDep)
 			druid.DisableBuildPhaseStatDep(sim, feralApDep)
-			druid.DisableBuildPhaseStatDep(sim, critDep)
-			druid.DisableBuildPhaseStatDep(sim, hasteDep)
 
 			healthFrac := druid.CurrentHealth() / druid.MaxHealth()
 			druid.DisableBuildPhaseStatDep(sim, stamDep)
@@ -281,7 +284,7 @@ func (druid *Druid) RegisterBearFormAura() {
 }
 
 func (druid *Druid) registerBearFormSpell() {
-	actionID := core.ActionID{SpellID: 5487}
+	actionID := core.ActionID{SpellID: 9634} // Dire Bear Form
 	rageMetrics := druid.NewRageMetrics(actionID)
 
 	druid.BearForm = druid.RegisterSpell(Any, core.SpellConfig{

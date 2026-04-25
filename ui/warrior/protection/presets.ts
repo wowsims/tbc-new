@@ -8,6 +8,7 @@ import * as WarriorPresets from '../presets';
 import GenericApl from './apls/default.apl.json';
 import P1BISGear from './gear_sets/p1_bis.gear.json';
 import P2BISGear from './gear_sets/p2_bis.gear.json';
+import P2HydrossGear from './gear_sets/p2_hydross.gear.json';
 import P3BISGear from './gear_sets/p3_bis.gear.json';
 import P35BISGear from './gear_sets/p35_bis.gear.json';
 import P4BISGear from './gear_sets/p4_bis.gear.json';
@@ -16,17 +17,19 @@ import DefaultBuild from './builds/default_encounter_only.build.json';
 import MagtheridonBuild from './builds/magtheridon_encounter_only.build.json';
 import KarazhanBuild from './builds/karazhan_encounter_only.build.json';
 import MorogrimBuild from './builds/morogrim_encounter_only.build.json';
+import HydrossBuild from './builds/hydross_encounter_only.build.json';
 
 // Preset options for this spec.
 // Eventually we will import these values for the raid sim too, so its good to
 // keep them in a separate file.
 
-export const PRERAID_BALANCED_PRESET = PresetUtils.makePresetGear('Pre-raid', PreraidBISGear);
-export const P1_PRESET = PresetUtils.makePresetGear('P1 - BIS', P1BISGear);
-export const P2_PRESET = PresetUtils.makePresetGear('P2 - BIS', P2BISGear);
-export const P3_PRESET = PresetUtils.makePresetGear('P3 - BIS', P3BISGear);
-export const P35_PRESET = PresetUtils.makePresetGear('P3.5 - BIS', P35BISGear);
-export const P4_PRESET = PresetUtils.makePresetGear('P4 - BIS', P4BISGear);
+export const PRERAID_BALANCED_PRESET = PresetUtils.makePresetGear('Pre-raid', PreraidBISGear, { group: 'Default' });
+export const P1_PRESET = PresetUtils.makePresetGear('P1 - BIS', P1BISGear, { group: 'Default' });
+export const P2_PRESET = PresetUtils.makePresetGear('P2 - BIS', P2BISGear, { group: 'Default' });
+export const P2_HYDROSS_PRESET = PresetUtils.makePresetGear('P2 - Hydross (Frost Resist)', P2HydrossGear, { group: 'Encounter specific' });
+export const P3_PRESET = PresetUtils.makePresetGear('P3 - BIS', P3BISGear, { group: 'Default' });
+export const P35_PRESET = PresetUtils.makePresetGear('P3.5 - BIS', P35BISGear, { group: 'Default' });
+export const P4_PRESET = PresetUtils.makePresetGear('P4 - BIS', P4BISGear, { group: 'Default' });
 
 export const ROTATION_DEFAULT = PresetUtils.makePresetAPLRotation('Generic', GenericApl);
 
@@ -123,7 +126,12 @@ export const P1_PRESET_BUILD = PresetUtils.makePresetBuild('P1', {
 	rotation: ROTATION_DEFAULT,
 });
 
-export const DEFAULT_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Default', Spec.SpecProtectionWarrior, DefaultBuild);
-export const MAGTHERIDON_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Magtheridon', Spec.SpecProtectionWarrior, MagtheridonBuild);
-export const KARAZHAN_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Karazhan (Boss Average)', Spec.SpecProtectionWarrior, KarazhanBuild);
-export const MOROGRIM_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Morogrim', Spec.SpecProtectionWarrior, MorogrimBuild);
+export const DEFAULT_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Default', Spec.SpecProtectionWarrior, DefaultBuild, { group: 'Encounters' });
+export const MAGTHERIDON_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Magtheridon', Spec.SpecProtectionWarrior, MagtheridonBuild, {
+	group: 'Encounters',
+});
+export const KARAZHAN_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Karazhan (Boss Average)', Spec.SpecProtectionWarrior, KarazhanBuild, {
+	group: 'Encounters',
+});
+export const MOROGRIM_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Morogrim', Spec.SpecProtectionWarrior, MorogrimBuild, { group: 'Encounters' });
+export const HYDROSS_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Hydross', Spec.SpecProtectionWarrior, HydrossBuild, { group: 'Encounters' });

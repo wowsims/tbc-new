@@ -208,6 +208,7 @@ func NewTarget(options *proto.Target, targetIndex int32) *Target {
 
 	target.PseudoStats.CanBlock = true
 	target.PseudoStats.CanParry = true
+	target.PseudoStats.CanCrush = target.Level == 73
 	target.PseudoStats.ParryHaste = options.ParryHaste
 	target.PseudoStats.InFrontOfTarget = true
 	target.PseudoStats.DamageSpread = options.DamageSpread

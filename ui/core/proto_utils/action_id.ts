@@ -97,6 +97,10 @@ export class ActionId {
 					name += ' (Morrogrim Tidewalker)';
 				} else if (this.tag == 21213 + 18943) {
 					name += ' (Morrogrim Tidewalker) - Thrash';
+				} else if (this.tag == 21216) {
+					name += ' (Hydross the Unstable) - Frost';
+				} else if (this.tag == 21216 + 1) {
+					name += ' (Hydross the Unstable) - Nature';
 				} else if (this.tag == 99999) {
 					name += ' (Boss)';
 				} else if (this.tag == 99998) {

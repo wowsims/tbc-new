@@ -41,7 +41,7 @@ character_stats_results: {
   final_stats: 33.75
   final_stats: 33.75
   final_stats: 33.75
-  final_stats: 93.75
+  final_stats: 70
   final_stats: 0
   final_stats: 6.0878
   final_stats: 3
@@ -805,6 +805,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestHunter-AllItems-IceGuard-2682"
+ value: {
+  dps: 3122.11562
+  tps: 2111.99402
+  dtps: 13.02939
+ }
+}
+dps_results: {
  key: "TestHunter-AllItems-IconofUnyieldingCourage-28121"
  value: {
   dps: 3066.55545
@@ -873,7 +881,7 @@ dps_results: {
  value: {
   dps: 3048.57525
   tps: 2043.6102
-  dtps: 12.27881
+  dtps: 11.76057
  }
 }
 dps_results: {
@@ -890,6 +898,22 @@ dps_results: {
   dps: 2593.32423
   tps: 1638.30864
   dtps: 13.81297
+ }
+}
+dps_results: {
+ key: "TestHunter-AllItems-MarkoftheChampion-23206"
+ value: {
+  dps: 3048.57525
+  tps: 2043.6102
+  dtps: 13.13388
+ }
+}
+dps_results: {
+ key: "TestHunter-AllItems-MarkoftheChampion-23207"
+ value: {
+  dps: 3048.57525
+  tps: 2043.6102
+  dtps: 13.13388
  }
 }
 dps_results: {
@@ -1077,6 +1101,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestHunter-AllItems-SavageGuard-2681"
+ value: {
+  dps: 3122.11562
+  tps: 2111.99402
+  dtps: 13.02939
+ }
+}
+dps_results: {
  key: "TestHunter-AllItems-ScarabofDisplacement-30629"
  value: {
   dps: 3029.0881
@@ -1202,7 +1234,7 @@ dps_results: {
  value: {
   dps: 3181.99338
   tps: 2172.7864
-  dtps: 12.81704
+  dtps: 12.78312
  }
 }
 dps_results: {

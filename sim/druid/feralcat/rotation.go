@@ -74,9 +74,17 @@ func (cat *FeralDruid) shift(sim *core.Simulation) bool {
 	// immediately reshift. Mirrors PowerShiftCat from the old TBC sim.
 	cat.ClearForm(sim)
 	for _, mcd := range cat.GetMajorCooldowns() {
-		if mcd.IsReady(sim) {
-			mcd.TryActivate(sim, &cat.Character)
+		if !mcd.IsReady(sim) {
+			continue
 		}
+		// Drums and Bloodlust are fired at fixed times (0s and 5s) via scheduled
+		// pending actions — skip them here so they don't fire opportunistically
+		// during powershifts.
+		spellID := mcd.Spell.ActionID.SpellID
+		if spellID == core.BloodlustActionID.SpellID || spellID == 35476 {
+			continue
+		}
+		mcd.TryActivate(sim, &cat.Character)
 	}
 
 	if !cat.GCD.IsReady(sim) {

@@ -11,6 +11,15 @@ import (
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
+// Exclusive categories for resistance buffs — ensures only the highest value applies per school.
+const (
+	ResistanceCategoryArcane = "ResistanceArcane"
+	ResistanceCategoryFire   = "ResistanceFire"
+	ResistanceCategoryFrost  = "ResistanceFrost"
+	ResistanceCategoryNature = "ResistanceNature"
+	ResistanceCategoryShadow = "ResistanceShadow"
+)
+
 type BuffConfig struct {
 	Label             string
 	ActionID          ActionID
@@ -265,8 +274,36 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 		MakePermanent(TranquilAirTotemAura(char))
 	}
 
+	if partyBuffs.FrostResistanceTotem {
+		MakePermanent(FrostResistanceTotemAura(char))
+	}
+
+	if partyBuffs.NatureResistanceTotem {
+		MakePermanent(NatureResistanceTotemAura(char))
+	}
+
+	if partyBuffs.FireResistanceTotem {
+		MakePermanent(FireResistanceTotemAura(char))
+	}
+
+	if partyBuffs.FrostResistanceAura {
+		MakePermanent(FrostResistanceAura(char))
+	}
+
+	if partyBuffs.FireResistanceAura {
+		MakePermanent(FireResistanceAura(char))
+	}
+
+	if partyBuffs.ShadowResistanceAura {
+		MakePermanent(ShadowResistanceAura(char))
+	}
+
 	if partyBuffs.TrueshotAura {
 		MakePermanent(TrueShotAuraBuff(char))
+	}
+
+	if partyBuffs.AspectOfTheWild {
+		MakePermanent(AspectOfTheWildAura(char))
 	}
 
 	if partyBuffs.WindfuryTotem != proto.TristateEffect_TristateEffectMissing {
@@ -401,7 +438,7 @@ func GiftOfTheWildAura(char *Character, improved bool) *Aura {
 		mod = 1.35
 	}
 
-	return makeStatBuff(char, BuffConfig{
+	aura := makeStatBuff(char, BuffConfig{
 		Label:    "Gift of the Wild",
 		ActionID: ActionID{SpellID: 26991},
 		Stats: []StatConfig{
@@ -411,13 +448,18 @@ func GiftOfTheWildAura(char *Character, improved bool) *Aura {
 			{stats.Agility, 14 * mod, false},
 			{stats.Intellect, 14 * mod, false},
 			{stats.Spirit, 14 * mod, false},
-			{stats.ArcaneResistance, 25 * mod, false},
-			{stats.FireResistance, 25 * mod, false},
-			{stats.FrostResistance, 25 * mod, false},
-			{stats.NatureResistance, 25 * mod, false},
-			{stats.ShadowResistance, 25 * mod, false},
 		},
 	})
+	// Resistance stats use exclusive categories so they don't stack with
+	// dedicated resistance buffs (Shadow Protection, Frost/Nature Resistance
+	// Aura/Totem). Only the highest value applies per school.
+	resistMod := 25 * mod
+	makeExclusiveFlatStatBuff(aura, stats.ArcaneResistance, resistMod, ResistanceCategoryArcane)
+	makeExclusiveFlatStatBuff(aura, stats.FireResistance, resistMod, ResistanceCategoryFire)
+	makeExclusiveFlatStatBuff(aura, stats.FrostResistance, resistMod, ResistanceCategoryFrost)
+	makeExclusiveFlatStatBuff(aura, stats.NatureResistance, resistMod, ResistanceCategoryNature)
+	makeExclusiveFlatStatBuff(aura, stats.ShadowResistance, resistMod, ResistanceCategoryShadow)
+	return aura
 }
 
 func PowerWordFortitudeAura(char *Character, improved bool) *Aura {
@@ -437,10 +479,88 @@ func PowerWordFortitudeAura(char *Character, improved bool) *Aura {
 
 func ShadowProtectionAura(char *Character) *Aura {
 	return makeStatBuff(char, BuffConfig{
-		Label:    "Shadow Protection",
-		ActionID: ActionID{SpellID: 10958},
+		Label:             "Shadow Protection",
+		ActionID:          ActionID{SpellID: 25433},
+		ExclusiveCategory: ResistanceCategoryShadow,
 		Stats: []StatConfig{
-			{stats.ShadowResistance, 60, false},
+			{stats.ShadowResistance, 70, false},
+		},
+	})
+}
+
+func FrostResistanceAura(char *Character) *Aura {
+	return makeStatBuff(char, BuffConfig{
+		Label:             "Frost Resistance Aura",
+		ActionID:          ActionID{SpellID: 27152},
+		ExclusiveCategory: ResistanceCategoryFrost,
+		Stats: []StatConfig{
+			{stats.FrostResistance, 70, false},
+		},
+	})
+}
+
+func FrostResistanceTotemAura(char *Character) *Aura {
+	return makeStatBuff(char, BuffConfig{
+		Label:             "Frost Resistance Totem",
+		ActionID:          ActionID{SpellID: 25560},
+		ExclusiveCategory: ResistanceCategoryFrost,
+		Stats: []StatConfig{
+			{stats.FrostResistance, 70, false},
+		},
+	})
+}
+
+func NatureResistanceTotemAura(char *Character) *Aura {
+	return makeStatBuff(char, BuffConfig{
+		Label:             "Nature Resistance Totem",
+		ActionID:          ActionID{SpellID: 25574},
+		ExclusiveCategory: ResistanceCategoryNature,
+		Stats: []StatConfig{
+			{stats.NatureResistance, 70, false},
+		},
+	})
+}
+
+func AspectOfTheWildAura(char *Character) *Aura {
+	return makeStatBuff(char, BuffConfig{
+		Label:             "Aspect of the Wild",
+		ActionID:          ActionID{SpellID: 27045},
+		ExclusiveCategory: ResistanceCategoryNature,
+		Stats: []StatConfig{
+			{stats.NatureResistance, 70, false},
+		},
+	})
+}
+
+func FireResistanceTotemAura(char *Character) *Aura {
+	return makeStatBuff(char, BuffConfig{
+		Label:             "Fire Resistance Totem",
+		ActionID:          ActionID{SpellID: 10538},
+		ExclusiveCategory: ResistanceCategoryFire,
+		Stats: []StatConfig{
+			{stats.FireResistance, 70, false},
+		},
+	})
+}
+
+func FireResistanceAura(char *Character) *Aura {
+	return makeStatBuff(char, BuffConfig{
+		Label:             "Fire Resistance Aura",
+		ActionID:          ActionID{SpellID: 27153},
+		ExclusiveCategory: ResistanceCategoryFire,
+		Stats: []StatConfig{
+			{stats.FireResistance, 70, false},
+		},
+	})
+}
+
+func ShadowResistanceAura(char *Character) *Aura {
+	return makeStatBuff(char, BuffConfig{
+		Label:             "Shadow Resistance Aura",
+		ActionID:          ActionID{SpellID: 27151},
+		ExclusiveCategory: ResistanceCategoryShadow,
+		Stats: []StatConfig{
+			{stats.ShadowResistance, 70, false},
 		},
 	})
 }

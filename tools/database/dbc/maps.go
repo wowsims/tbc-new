@@ -6,8 +6,19 @@ func MapResistanceToStat(index int) (proto.Stat, bool) {
 	switch index {
 	case 0:
 		return proto.Stat_StatBonusArmor, true
+	// 1 = Holy (no proto stat)
+	case 2:
+		return proto.Stat_StatFireResistance, true
+	case 3:
+		return proto.Stat_StatNatureResistance, true
+	case 4:
+		return proto.Stat_StatFrostResistance, true
+	case 5:
+		return proto.Stat_StatShadowResistance, true
+	case 6:
+		return proto.Stat_StatArcaneResistance, true
 	}
-	return proto.Stat_StatBonusArmor, false
+	return 0, false
 }
 
 var MapArmorSubclassToArmorType = map[int]proto.ArmorType{

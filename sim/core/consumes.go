@@ -387,10 +387,6 @@ func registerConjuredCD(agent Agent, consumes *proto.ConsumesSpec) {
 			conjuredMCD = makeConjuredActivationSpell(conjuredId, character)
 		}
 
-		if consumes.NightmareSeed {
-			conjuredMCD = makeConjuredActivationSpell(22797, character)
-		}
-
 		if conjuredMCD.Spell != nil {
 			oldShouldActivate := conjuredMCD.ShouldActivate
 			conjuredMCD.ShouldActivate = func(sim *Simulation, character *Character) bool {
@@ -585,6 +581,7 @@ func (character *Character) newBasicExplosiveSpellConfig(sharedTimer *Timer, act
 		ActionID:     actionID,
 		SpellSchool:  school,
 		ProcMask:     ProcMaskEmpty,
+		Flags:        SpellFlagExplosive,
 		MissileSpeed: speed,
 
 		Cast: CastConfig{

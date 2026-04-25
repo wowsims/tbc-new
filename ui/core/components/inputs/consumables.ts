@@ -100,10 +100,16 @@ export const ChippedCrackedPowerCore = {
 	actionId: ActionId.fromItemId(23381),
 	value: 23381,
 };
+export const ConjuredNightmareSeed = {
+	actionId: ActionId.fromItemId(22797),
+	value: 22797,
+	showWhen: <SpecType extends Spec>(player: Player<SpecType>) => player.getPlayerSpec().isTankSpec,
+};
 
 export const CONJURED_CONFIG = [
 	{ config: ConjuredRogueThistleTea, stats: [] },
 	{ config: ConjuredHealthstone, stats: [Stat.StatStamina] },
+	{ config: ConjuredNightmareSeed, stats: [Stat.StatStamina] },
 	{ config: ConjuredDarkRune, stats: [Stat.StatIntellect] },
 	{ config: ConjuredFlameCap, stats: [] },
 	{ config: ConjuredCrackedPowerCore, stats: [Stat.StatSpellDamage] },
@@ -287,9 +293,15 @@ export const IMBUE_CONFIG_OH = [
 	{ config: ShamanImbueWindfury, stats: [] },
 ] as ConsumableStatOption<number>[];
 
+// Specs that doesn't use Windfury and should always show imbues.
+const specsWithoutWindfury = [Spec.SpecFeralBearDruid, Spec.SpecFeralCatDruid];
+
 export const makeMHImbueInput = makeConsumeInputFactory({
 	consumesFieldName: 'mhImbueId',
-	showWhen: (player: Player<any>) => !player.getParty() || player.getParty()!.getBuffs().windfuryTotem == TristateEffect.TristateEffectMissing,
+	showWhen: (player: Player<any>) =>
+		specsWithoutWindfury.includes(player.getSpec()) ||
+		!player.getParty() ||
+		player.getParty()!.getBuffs().windfuryTotem == TristateEffect.TristateEffectMissing,
 	changedEvent: (player: Player<any>) => TypedEvent.onAny([player.getParty()!.changeEmitter]),
 });
 export const makeOHImbueInput = makeConsumeInputFactory({

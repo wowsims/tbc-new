@@ -41,7 +41,7 @@ character_stats_results: {
   final_stats: 33.75
   final_stats: 33.75
   final_stats: 33.75
-  final_stats: 93.75
+  final_stats: 70
   final_stats: 0
   final_stats: 9.19512
   final_stats: 3
@@ -733,6 +733,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestDpsWarrior-AllItems-IceGuard-2682"
+ value: {
+  dps: 1966.82827
+  tps: 1484.76234
+  dtps: 7.2778
+ }
+}
+dps_results: {
  key: "TestDpsWarrior-AllItems-IconofUnyieldingCourage-28121"
  value: {
   dps: 1970.86728
@@ -799,9 +807,9 @@ dps_results: {
 dps_results: {
  key: "TestDpsWarrior-AllItems-Loatheb'sReflection-23042"
  value: {
-  dps: 1934.06267
-  tps: 1464.25604
-  dtps: 7.2778
+  dps: 1932.67589
+  tps: 1464.03591
+  dtps: 7.1912
  }
 }
 dps_results: {
@@ -818,6 +826,22 @@ dps_results: {
   dps: 1456.1319
   tps: 1103.21692
   dtps: 7.88953
+ }
+}
+dps_results: {
+ key: "TestDpsWarrior-AllItems-MarkoftheChampion-23206"
+ value: {
+  dps: 1934.06267
+  tps: 1464.25604
+  dtps: 7.2778
+ }
+}
+dps_results: {
+ key: "TestDpsWarrior-AllItems-MarkoftheChampion-23207"
+ value: {
+  dps: 1934.06267
+  tps: 1464.25604
+  dtps: 7.2778
  }
 }
 dps_results: {
@@ -985,6 +1009,14 @@ dps_results: {
  value: {
   dps: 1934.06267
   tps: 1464.25604
+  dtps: 7.2778
+ }
+}
+dps_results: {
+ key: "TestDpsWarrior-AllItems-SavageGuard-2681"
+ value: {
+  dps: 1966.82827
+  tps: 1484.76234
   dtps: 7.2778
  }
 }

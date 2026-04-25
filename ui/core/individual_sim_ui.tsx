@@ -174,6 +174,7 @@ export interface IndividualSimUIConfig<SpecType extends Spec> extends PlayerConf
 
 		rotationType?: APLRotationType;
 		simpleRotation?: SpecRotation<SpecType>;
+		aplRotation?: APLRotation;
 
 		encounter?: string;
 		other?: OtherDefaults;
@@ -478,6 +479,15 @@ export abstract class IndividualSimUI<SpecType extends Spec> extends SimUI {
 	applyDefaultRotation(eventID: EventID) {
 		TypedEvent.freezeAllAndDo(() => {
 			const defaultRotationType = this.individualConfig.defaults.rotationType || APLRotationType.TypeAuto;
+
+			if (defaultRotationType === APLRotationType.TypeAPL && this.individualConfig.defaults.aplRotation) {
+				this.player.setAplRotation(
+					eventID,
+					APLRotation.create(this.individualConfig.defaults.aplRotation),
+				);
+				return;
+			}
+
 			this.player.setAplRotation(
 				eventID,
 				APLRotation.create({
