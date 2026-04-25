@@ -58,7 +58,7 @@ func (raw RandomSuffix) ToProto() *proto.ItemRandomSuffix {
 				}
 				if spellEffect.EffectType == E_APPLY_AURA && spellEffect.EffectAura == A_MOD_STAT {
 					suffix.Stats[spellEffect.EffectMiscValues[0]] += amount
-				} else if spellEffect.EffectType == E_APPLY_AURA && spellEffect.EffectAura == A_MOD_RESISTANCE && (spellEffect.EffectMiscValues[0] == 126 || spellEffect.EffectMiscValues[0] == 124) {
+				} else if spellEffect.EffectType == E_APPLY_AURA && spellEffect.EffectAura == A_MOD_RESISTANCE && (SpellSchool(spellEffect.EffectMiscValues[0]) == ALL_SPELL_DAMAGE || SpellSchool(spellEffect.EffectMiscValues[0]) == SPELL_PENETRATION) {
 					suffix.Stats[proto.Stat_StatArcaneResistance] += amount
 					suffix.Stats[proto.Stat_StatFireResistance] += amount
 					suffix.Stats[proto.Stat_StatFrostResistance] += amount

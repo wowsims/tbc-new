@@ -6489,8 +6489,9 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Collects 100 Holy Energy from healing spells you cast. Cannot collect more than 2000 Holy Energy.
-	// https://www.wowhead.com/tbc/spell=45062
+	// Release all accumulated Holy Energy to instantly heal current friendly target by the amount of Holy Energy
+	// accumulated.
+	// https://www.wowhead.com/tbc/spell=45064
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
 	//	ProcMask:           core.ProcMaskUnknown,

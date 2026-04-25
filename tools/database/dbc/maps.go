@@ -230,7 +230,15 @@ type EnchantMetaType struct {
 	WeaponType proto.WeaponType
 }
 
-var SpellSchoolToStat = map[SpellSchool]proto.Stat{
+var SpellSchoolToSpellDamageStat = map[SpellSchool]proto.Stat{
+	FIRE:     proto.Stat_StatFireDamage,
+	ARCANE:   proto.Stat_StatArcaneDamage,
+	NATURE:   proto.Stat_StatNatureDamage,
+	FROST:    proto.Stat_StatFrostDamage,
+	SHADOW:   proto.Stat_StatShadowDamage,
+	PHYSICAL: proto.Stat_StatPhysicalDamage,
+}
+var SpellSchoolToResistanceStat = map[SpellSchool]proto.Stat{
 	FIRE:     proto.Stat_StatFireResistance,
 	ARCANE:   proto.Stat_StatArcaneResistance,
 	NATURE:   proto.Stat_StatNatureResistance,
@@ -238,6 +246,7 @@ var SpellSchoolToStat = map[SpellSchool]proto.Stat{
 	SHADOW:   proto.Stat_StatShadowResistance,
 	PHYSICAL: proto.Stat_StatArmor,
 }
+
 var MapInventoryTypeToEnchantMetaType = map[InventoryTypeFlag]EnchantMetaType{
 	HEAD:     {ItemType: proto.ItemType_ItemTypeHead, WeaponType: proto.WeaponType_WeaponTypeUnknown},
 	NECK:     {ItemType: proto.ItemType_ItemTypeNeck, WeaponType: proto.WeaponType_WeaponTypeUnknown},
