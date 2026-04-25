@@ -140,7 +140,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 		// Preset rotations that the user can quickly select.
 		rotations: [Presets.SINSITER_APL],
 		// Preset gear configurations that the user can quickly select.
-		gear: [Presets.PREARAID_SWORDS_GEAR, Presets.P1_SWORDS_GEAR],
+		gear: [Presets.PREARAID_SWORDS_GEAR, Presets.P1_SWORDS_GEAR, Presets.P2_SWORDS_GEAR],
 	},
 
 	autoRotation: (player: Player<Spec.SpecRogue>): APLRotation => {

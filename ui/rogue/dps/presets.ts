@@ -6,6 +6,7 @@ import { Stats } from '../../core/proto_utils/stats';
 import SinisterAPL from './apls/swords.apl.json';
 import PreraidSwordsGear from './gear_sets/preraid.gear.json';
 import P1SwordsGear from './gear_sets/p1.gear.json';
+import P2SwordsGear from './gear_sets/p2.gear.json';
 
 // Preset options for this spec.
 // Eventually we will import these values for the raid sim too, so its good to
@@ -14,6 +15,7 @@ import P1SwordsGear from './gear_sets/p1.gear.json';
 export const SINSITER_APL = PresetUtils.makePresetAPLRotation('SS/Hemo/Shiv', SinisterAPL);
 
 export const P1_SWORDS_GEAR = PresetUtils.makePresetGear('P1 Swords', P1SwordsGear);
+export const P2_SWORDS_GEAR = PresetUtils.makePresetGear('P2 Swords', P2SwordsGear);
 export const PREARAID_SWORDS_GEAR = PresetUtils.makePresetGear('Preraid Swords', PreraidSwordsGear);
 
 // Preset options for EP weights
