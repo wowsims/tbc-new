@@ -272,13 +272,27 @@ func (effect *SpellEffect) ParseStatEffect(scalesWithIlvl bool, ilvl int) *stats
 		// if Coefficient is not set, we fall back to EffectBasePoints
 		effectStats[stat] = float64(effect.EffectBasePoints + effect.EffectDieSides)
 	case effect.EffectAura == A_MOD_DAMAGE_DONE && effect.EffectType == E_APPLY_AURA:
-		stat := ConvertEffectAuraToStatIndex(effect.EffectAura, effect.EffectMiscValues[0])
-		if effect.Coefficient != 0 && effect.ScalingType != 0 {
-			effectStats[stat] = effect.CalcCoefficientStatValue(core.TernaryInt(scalesWithIlvl, ilvl, 0))
-			break
+		school := SpellSchool(effect.EffectMiscValues[0])
+		if school == ALL_SPELL_DAMAGE {
+			stat := ConvertEffectAuraToStatIndex(effect.EffectAura, effect.EffectMiscValues[0])
+			if effect.Coefficient != 0 && effect.ScalingType != 0 {
+				effectStats[stat] = effect.CalcCoefficientStatValue(core.TernaryInt(scalesWithIlvl, ilvl, 0))
+				break
+			}
+			// Apply spell power, A_MOD_HEALING_DONE is also a possibility for healing power
+			effectStats[stat] += float64(effect.EffectBasePoints + effect.EffectDieSides)
+		} else {
+			for schoolType, stat := range SpellSchoolToSpellDamageStat {
+				if school.Has(schoolType) && stat > -1 {
+					if effect.Coefficient != 0 && effect.ScalingType != 0 {
+						effectStats[stat] = effect.CalcCoefficientStatValue(core.TernaryInt(scalesWithIlvl, ilvl, 0))
+						continue
+					}
+					// Apply spell power, A_MOD_HEALING_DONE is also a possibility for healing power
+					effectStats[stat] += float64(effect.EffectBasePoints + effect.EffectDieSides)
+				}
+			}
 		}
-		// Apply spell power, A_MOD_HEALING_DONE is also a possibility for healing power
-		effectStats[stat] = float64(effect.EffectBasePoints + effect.EffectDieSides)
 	case effect.EffectAura == A_MOD_HEALING_DONE && effect.EffectType == E_APPLY_AURA:
 		if effect.Coefficient != 0 && effect.ScalingType != 0 {
 			effectStats[proto.Stat_StatHealingPower] = effect.CalcCoefficientStatValue(core.TernaryInt(scalesWithIlvl, ilvl, 0))
@@ -288,11 +302,11 @@ func (effect *SpellEffect) ParseStatEffect(scalesWithIlvl bool, ilvl int) *stats
 		effectStats[proto.Stat_StatHealingPower] = float64(effect.EffectBasePoints + effect.EffectDieSides)
 	case effect.EffectAura == A_MOD_RESISTANCE:
 		school := SpellSchool(effect.EffectMiscValues[0])
-		for schoolType, stat := range SpellSchoolToStat {
+		for schoolType, stat := range SpellSchoolToResistanceStat {
 			if school.Has(schoolType) && stat > -1 {
 				if effect.Coefficient != 0 && scalesWithIlvl {
 					effectStats[stat] = effect.CalcCoefficientStatValue(ilvl)
-					break
+					continue
 				}
 				// Armor/Spell Pen is negative in the DB, so Subtract it
 				effectStats[stat] += float64(effect.EffectBasePoints + effect.EffectDieSides)
