@@ -20,11 +20,14 @@ import { SavedTalents } from '../../core/proto/ui.js';
 import { Stats } from '../../core/proto_utils/stats';
 import DefaultApl from './apls/default.apl.json';
 import P1_Gear from './gear_sets/p1.gear.json';
+import P2_Gear from './gear_sets/p2.gear.json';
 import Preraid_Gear from './gear_sets/preraid.gear.json';
 import { defaultExposeWeaknessSettings } from '../../core/proto_utils/utils';
+import { Phase } from '../../core/constants/other';
 
-export const P1_GEAR_PRESET = PresetUtils.makePresetGear('P1', P1_Gear);
-export const PRERAID_GEAR_PRESET = PresetUtils.makePresetGear('Pre-raid', Preraid_Gear);
+export const P1_GEAR_PRESET = PresetUtils.makePresetGear('P1', P1_Gear, { phase: Phase.Phase1 });
+export const P2_GEAR_PRESET = PresetUtils.makePresetGear('P2', P2_Gear, { phase: Phase.Phase2 });
+export const PRERAID_GEAR_PRESET = PresetUtils.makePresetGear('Pre-raid', Preraid_Gear, { phase: Phase.Phase1 });
 
 export const DefaultSimpleRotation = PaladinRotation.create({
 	useExorcism: false,
@@ -52,6 +55,26 @@ export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
 		},
 		{
 			[PseudoStat.PseudoStatMainHandDps]: 5.88,
+		},
+	),
+);
+
+export const P2_EP_PRESET = PresetUtils.makePresetEpWeights(
+	'P2',
+	Stats.fromMap(
+		{
+			[Stat.StatStrength]: 1.0,
+			[Stat.StatAgility]: 0.75,
+			[Stat.StatAttackPower]: 0.41,
+			[Stat.StatMeleeHitRating]: 2.15,
+			[Stat.StatMeleeCritRating]: 0.77,
+			[Stat.StatMeleeHasteRating]: 1.17,
+			[Stat.StatArmorPenetration]: 0.1,
+			[Stat.StatExpertiseRating]: 2.14,
+			[Stat.StatSpellDamage]: 0.17,
+		},
+		{
+			[PseudoStat.PseudoStatMainHandDps]: 5.34,
 		},
 	),
 );
