@@ -24,6 +24,7 @@ import P2_Gear from './gear_sets/p2.gear.json';
 import Preraid_Gear from './gear_sets/preraid.gear.json';
 import { defaultExposeWeaknessSettings } from '../../core/proto_utils/utils';
 import { Phase } from '../../core/constants/other';
+import { APLRotation_Type } from '../../core/proto/apl';
 
 export const P1_GEAR_PRESET = PresetUtils.makePresetGear('P1', P1_Gear, { phase: Phase.Phase1 });
 export const P2_GEAR_PRESET = PresetUtils.makePresetGear('P2', P2_Gear, { phase: Phase.Phase2 });
@@ -167,3 +168,53 @@ export const OtherDefaults = {
 	iterationCount: 25000,
 	race: Race.RaceBloodElf,
 };
+
+export const P1_PLAYER_SETTINGS: PresetUtils.PresetSettings = {
+	name: 'P1',
+	playerOptions: OtherDefaults,
+	debuffs: Debuffs.create({
+		...DefaultDebuffs,
+		...defaultExposeWeaknessSettings(Phase.Phase1),
+	}),
+	reforgeSettings: {
+		maxGemPhase: Phase.Phase1,
+	},
+};
+
+export const P2_PLAYER_SETTINGS: PresetUtils.PresetSettings = {
+	name: 'P2',
+	playerOptions: OtherDefaults,
+	partyBuffs: PartyBuffs.create({
+		...DefaultPartyBuffs,
+		leaderOfThePack: TristateEffect.TristateEffectImproved,
+	}),
+	debuffs: Debuffs.create({
+		...DefaultDebuffs,
+		...defaultExposeWeaknessSettings(Phase.Phase2),
+	}),
+	reforgeSettings: {
+		maxGemPhase: Phase.Phase2,
+	},
+};
+
+export const P1_PRESET_BUILD_RET = PresetUtils.makePresetBuild('P1', {
+	group: 'Retribution',
+	phase: Phase.Phase1,
+	gear: P1_GEAR_PRESET,
+	talents: DefaultTalents,
+	epWeights: P1_EP_PRESET,
+	rotationType: APLRotation_Type.TypeSimple,
+	rotation: APL_SIMPLE,
+	settings: P1_PLAYER_SETTINGS,
+});
+
+export const P2_PRESET_BUILD_RET = PresetUtils.makePresetBuild('P2', {
+	group: 'Retribution',
+	phase: Phase.Phase2,
+	gear: P2_GEAR_PRESET,
+	talents: DefaultTalents,
+	epWeights: P2_EP_PRESET,
+	rotationType: APLRotation_Type.TypeSimple,
+	rotation: APL_SIMPLE,
+	settings: P2_PLAYER_SETTINGS,
+});

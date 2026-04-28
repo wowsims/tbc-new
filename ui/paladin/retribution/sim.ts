@@ -109,7 +109,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRetributionPaladin, {
 		talents: [Presets.DefaultTalents, Presets.NoKingsTalents, Presets.ImpMightTalents],
 		// Preset gear configurations that the user can quickly select.
 		gear: [Presets.PRERAID_GEAR_PRESET, Presets.P1_GEAR_PRESET, Presets.P2_GEAR_PRESET],
-		builds: [],
+		builds: [Presets.P1_PRESET_BUILD_RET, Presets.P2_PRESET_BUILD_RET],
 	},
 
 	autoRotation: (_: Player<Spec.SpecRetributionPaladin>): APLRotation => {
