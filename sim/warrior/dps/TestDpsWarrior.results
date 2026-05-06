@@ -391,8 +391,8 @@ dps_results: {
 dps_results: {
  key: "TestDpsWarrior-AllItems-DarkmoonCard:Crusade-31856"
  value: {
-  dps: 1993.30433
-  tps: 1505.94843
+  dps: 1994.80809
+  tps: 1507.42177
   dtps: 7.2778
  }
 }
@@ -1367,8 +1367,8 @@ dps_results: {
 dps_results: {
  key: "TestDpsWarrior-Average-Default"
  value: {
-  dps: 2003.89544
-  tps: 1512.4788
+  dps: 2003.85526
+  tps: 1512.44686
   dtps: 7.30748
  }
 }
@@ -1600,8 +1600,8 @@ dps_results: {
 dps_results: {
  key: "TestDpsWarrior-Settings-Human-p1_fury-Arms-Fury-fury-FullBuffs-25.0yards-LongMultiTarget"
  value: {
-  dps: 3451.28739
-  tps: 3026.33232
+  dps: 3451.3427
+  tps: 3026.37658
   dtps: 6.54531
  }
 }
@@ -1915,8 +1915,8 @@ dps_results: {
 dps_results: {
  key: "TestDpsWarrior-Settings-Orc-p1_arms-Arms-Fury-arms-FullBuffs-25.0yards-LongMultiTarget"
  value: {
-  dps: 3940.66041
-  tps: 3374.11438
+  dps: 3934.26912
+  tps: 3369.13635
   dtps: 6.54531
  }
 }

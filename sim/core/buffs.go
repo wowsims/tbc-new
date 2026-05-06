@@ -162,7 +162,7 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 	}
 
 	if partyBuffs.BattleShout != proto.TristateEffect_TristateEffectMissing {
-		boomingVoicePoints := int32(5)
+		boomingVoicePoints := int32(0)
 		aura := BattleShoutAura(
 			char,
 			false,
@@ -172,7 +172,7 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 			false,
 		)
 
-		ApplyFixedUptimeAura(aura, 1, aura.Duration+1, -1)
+		ApplyFixedShoutAura(char, aura, BattleShoutCategory)
 	}
 
 	if partyBuffs.BloodPact != proto.TristateEffect_TristateEffectMissing {
@@ -188,17 +188,17 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 	}
 
 	if partyBuffs.CommandingShout != proto.TristateEffect_TristateEffectMissing {
-		boomingVoicePoints := int32(5)
+		boomingVoicePoints := int32(0)
 
-		aura := MakePermanent(CommandingShoutAura(
+		aura := CommandingShoutAura(
 			char,
 			false,
 			boomingVoicePoints,
 			TernaryFloat64(IsImproved(partyBuffs.CommandingShout), 1.25, 1.0),
 			false,
-		))
+		)
 
-		ApplyFixedUptimeAura(aura, 1, aura.Duration, -1)
+		ApplyFixedShoutAura(char, aura, CommandingShoutCategory)
 	}
 
 	if partyBuffs.DevotionAura != proto.TristateEffect_TristateEffectMissing {
@@ -473,6 +473,7 @@ func BattleShoutAura(char *Character, isPlayer bool, boomingVoicePoints int32, c
 	var ee *ExclusiveEffect
 	aura := char.GetOrRegisterAura(Aura{
 		Label:      fmt.Sprintf("Battle Shout (%s)", Ternary(isPlayer, "Player", "External")),
+		Tag:        BattleShoutCategory,
 		ActionID:   ActionID{SpellID: 2048}.WithTag(TernaryInt32(isPlayer, 0, 1)),
 		Duration:   time.Duration(float64(time.Minute*2) * (1 + 0.1*float64(boomingVoicePoints))),
 		BuildPhase: CharacterBuildPhaseBuffs,
@@ -492,6 +493,42 @@ func BattleShoutAura(char *Character, isPlayer bool, boomingVoicePoints int32, c
 	})
 
 	return aura
+}
+
+func ApplyFixedShoutAura(char *Character, aura *Aura, category string) {
+	aura.ApplyOnInit(func(aura *Aura, sim *Simulation) {
+		auras := char.GetAurasWithTag(category)
+		var playerAura *Aura
+		for _, bsAura := range auras {
+			if bsAura.ActionID.Tag == 0 {
+				playerAura = bsAura
+				break
+			}
+		}
+
+		if playerAura == nil {
+			return
+		}
+
+		playerAura.ApplyOnGain(func(_ *Aura, _ *Simulation) {
+			pa := sim.GetConsumedPendingActionFromPool()
+			pa.NextActionAt = playerAura.ExpiresAt() + char.ReactionTime
+			pa.OnAction = func(sim *Simulation) {
+				aura.Activate(sim)
+
+				StartPeriodicAction(sim, PeriodicActionOptions{
+					Period:   aura.Duration + 1,
+					NumTicks: 1,
+					OnAction: func(sim *Simulation) {
+						aura.Activate(sim)
+					},
+				})
+			}
+			sim.AddPendingAction(pa)
+		})
+	})
+
+	ApplyFixedUptimeAura(aura, 1, aura.Duration+1, -1)
 }
 
 func BloodPactAura(char *Character, improved bool) *Aura {
@@ -528,6 +565,7 @@ func CommandingShoutAura(char *Character, isPlayer bool, boomingVoicePoints int3
 	var ee *ExclusiveEffect
 	aura := char.GetOrRegisterAura(Aura{
 		Label:      fmt.Sprintf("Commanding Shout (%s)", Ternary(isPlayer, "Player", "External")),
+		Tag:        CommandingShoutCategory,
 		ActionID:   ActionID{SpellID: 469}.WithTag(TernaryInt32(isPlayer, 0, 1)),
 		Duration:   time.Duration(float64(time.Minute*2) * (1 + 0.1*float64(boomingVoicePoints))),
 		BuildPhase: CharacterBuildPhaseBuffs,

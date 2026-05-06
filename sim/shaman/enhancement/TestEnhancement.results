@@ -1400,7 +1400,7 @@ dps_results: {
 dps_results: {
  key: "TestEnhancement-Settings-Draenei-p1-Sub-Elemental-Standard-default-FullBuffs-0.0yards-LongSingleTarget"
  value: {
-  dps: 1902.08445
+  dps: 1902.08163
   tps: 1806.80429
  }
 }
@@ -1442,7 +1442,7 @@ dps_results: {
 dps_results: {
  key: "TestEnhancement-Settings-Draenei-p1-Sub-Elemental-Sync OH Swings-default-FullBuffs-0.0yards-LongSingleTarget"
  value: {
-  dps: 1871.20436
+  dps: 1871.20155
   tps: 1775.80211
  }
 }

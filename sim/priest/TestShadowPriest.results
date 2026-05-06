@@ -132,8 +132,8 @@ dps_results: {
 dps_results: {
  key: "TestShadowPriest-AllItems-ArgussianCompass-27770"
  value: {
-  dps: 1557.75216
-  tps: 1145.33757
+  dps: 1548.49868
+  tps: 1138.69929
  }
 }
 dps_results: {
@@ -503,15 +503,15 @@ dps_results: {
 dps_results: {
  key: "TestShadowPriest-AllItems-Figurine-DawnstoneCrab-24125"
  value: {
-  dps: 1714.23094
-  tps: 1258.17593
+  dps: 1714.12235
+  tps: 1258.08584
  }
 }
 dps_results: {
  key: "TestShadowPriest-AllItems-Figurine-EmpyreanTortoise-35693"
  value: {
-  dps: 1714.23094
-  tps: 1258.17593
+  dps: 1714.12235
+  tps: 1258.08584
  }
 }
 dps_results: {
@@ -524,8 +524,8 @@ dps_results: {
 dps_results: {
  key: "TestShadowPriest-AllItems-FigurineoftheColossus-27529"
  value: {
-  dps: 1554.30538
-  tps: 1142.85754
+  dps: 1545.53106
+  tps: 1136.57571
  }
 }
 dps_results: {
