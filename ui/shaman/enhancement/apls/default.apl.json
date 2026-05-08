@@ -69,10 +69,17 @@
 				{
 					"action": {
 						"condition": {
-							"cmp": {
-								"op": "OpEq",
-								"lhs": { "variablePlaceholder": { "name": "Enable Fire Elemental?" } },
-								"rhs": { "variableRef": { "name": "Yes" } }
+							"and": {
+								"vals": [
+									{
+										"cmp": {
+											"op": "OpEq",
+											"lhs": { "variablePlaceholder": { "name": "Enable Fire Elemental?" } },
+											"rhs": { "variableRef": { "name": "Yes" } }
+										}
+									},
+									{ "spellIsReady": { "spellId": { "spellId": 2894, "rank": 1 } } }
+								]
 							}
 						},
 						"strictSequence": {

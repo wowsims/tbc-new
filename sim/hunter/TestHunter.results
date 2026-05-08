@@ -151,7 +151,7 @@ dps_results: {
 dps_results: {
  key: "TestHunter-AllItems-AshtongueTalismanofSwiftness-32487"
  value: {
-  dps: 3099.30374
+  dps: 3099.26736
   tps: 2086.26188
   dtps: 13.13388
  }
@@ -1005,6 +1005,46 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestHunter-AllItems-PendantofFrozenFlame-24092"
+ value: {
+  dps: 3102.37798
+  tps: 2097.28237
+  dtps: 12.07896
+ }
+}
+dps_results: {
+ key: "TestHunter-AllItems-PendantofShadow'sEnd-24097"
+ value: {
+  dps: 3102.37798
+  tps: 2097.28237
+  dtps: 13.05875
+ }
+}
+dps_results: {
+ key: "TestHunter-AllItems-PendantofThawing-24093"
+ value: {
+  dps: 3102.37798
+  tps: 2097.28237
+  dtps: 13.05875
+ }
+}
+dps_results: {
+ key: "TestHunter-AllItems-PendantofWithering-24095"
+ value: {
+  dps: 3102.37798
+  tps: 2097.28237
+  dtps: 13.05875
+ }
+}
+dps_results: {
+ key: "TestHunter-AllItems-PendantoftheNullRune-24098"
+ value: {
+  dps: 3102.37798
+  tps: 2097.28237
+  dtps: 13.05875
+ }
+}
+dps_results: {
  key: "TestHunter-AllItems-PendantoftheVioletEye-28727"
  value: {
   dps: 3048.57525
@@ -1488,8 +1528,8 @@ dps_results: {
 dps_results: {
  key: "TestHunter-Average-Default"
  value: {
-  dps: 3138.29224
-  tps: 2130.78664
+  dps: 3138.27834
+  tps: 2130.77577
   dtps: 12.64579
  }
 }

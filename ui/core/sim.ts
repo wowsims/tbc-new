@@ -193,7 +193,7 @@ export class Sim {
 	 * Whether the current environment should use wasm/worker concurrency methods.
 	 * @returns true if running wasm workers and concurrency setting is active.
 	 */
-	private async shouldUseWasmConcurrency() {
+	async shouldUseWasmConcurrency() {
 		return (await this.isWasm()) && this.getWasmConcurrency() >= 2 && this.workerPool.getNumWorkers() >= 2;
 	}
 

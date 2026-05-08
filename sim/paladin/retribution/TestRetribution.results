@@ -1006,6 +1006,41 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRetribution-AllItems-PendantofFrozenFlame-24092"
+ value: {
+  dps: 1787.76575
+  tps: 1403.30778
+ }
+}
+dps_results: {
+ key: "TestRetribution-AllItems-PendantofShadow'sEnd-24097"
+ value: {
+  dps: 1787.76575
+  tps: 1403.30778
+ }
+}
+dps_results: {
+ key: "TestRetribution-AllItems-PendantofThawing-24093"
+ value: {
+  dps: 1787.76575
+  tps: 1403.30778
+ }
+}
+dps_results: {
+ key: "TestRetribution-AllItems-PendantofWithering-24095"
+ value: {
+  dps: 1787.76575
+  tps: 1403.30778
+ }
+}
+dps_results: {
+ key: "TestRetribution-AllItems-PendantoftheNullRune-24098"
+ value: {
+  dps: 1787.76575
+  tps: 1403.30778
+ }
+}
+dps_results: {
  key: "TestRetribution-AllItems-PendantoftheVioletEye-28727"
  value: {
   dps: 1728.9753

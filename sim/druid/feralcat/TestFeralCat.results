@@ -1131,6 +1131,46 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestFeralCat-AllItems-PendantofFrozenFlame-24092"
+ value: {
+  dps: 738.47782
+  tps: 524.31926
+  hps: 69.71661
+ }
+}
+dps_results: {
+ key: "TestFeralCat-AllItems-PendantofShadow'sEnd-24097"
+ value: {
+  dps: 738.47782
+  tps: 524.31926
+  hps: 69.71661
+ }
+}
+dps_results: {
+ key: "TestFeralCat-AllItems-PendantofThawing-24093"
+ value: {
+  dps: 738.47782
+  tps: 524.31926
+  hps: 69.71661
+ }
+}
+dps_results: {
+ key: "TestFeralCat-AllItems-PendantofWithering-24095"
+ value: {
+  dps: 738.47782
+  tps: 524.31926
+  hps: 69.71661
+ }
+}
+dps_results: {
+ key: "TestFeralCat-AllItems-PendantoftheNullRune-24098"
+ value: {
+  dps: 738.47782
+  tps: 524.31926
+  hps: 69.71661
+ }
+}
+dps_results: {
  key: "TestFeralCat-AllItems-PendantoftheVioletEye-28727"
  value: {
   dps: 748.68139

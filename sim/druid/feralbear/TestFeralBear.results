@@ -1268,6 +1268,51 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestFeralBear-AllItems-PendantofFrozenFlame-24092"
+ value: {
+  dps: 412.12058
+  tps: 636.50056
+  dtps: 1115.83375
+  hps: 73.69274
+ }
+}
+dps_results: {
+ key: "TestFeralBear-AllItems-PendantofShadow'sEnd-24097"
+ value: {
+  dps: 412.12058
+  tps: 636.50056
+  dtps: 1115.83375
+  hps: 73.69274
+ }
+}
+dps_results: {
+ key: "TestFeralBear-AllItems-PendantofThawing-24093"
+ value: {
+  dps: 412.12058
+  tps: 636.50056
+  dtps: 1115.83375
+  hps: 73.69274
+ }
+}
+dps_results: {
+ key: "TestFeralBear-AllItems-PendantofWithering-24095"
+ value: {
+  dps: 412.12058
+  tps: 636.50056
+  dtps: 1115.83375
+  hps: 73.69274
+ }
+}
+dps_results: {
+ key: "TestFeralBear-AllItems-PendantoftheNullRune-24098"
+ value: {
+  dps: 412.12058
+  tps: 636.50056
+  dtps: 1115.83375
+  hps: 73.69274
+ }
+}
+dps_results: {
  key: "TestFeralBear-AllItems-PendantoftheVioletEye-28727"
  value: {
   dps: 421.70348

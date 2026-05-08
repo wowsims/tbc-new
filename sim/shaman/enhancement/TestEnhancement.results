@@ -851,6 +851,41 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestEnhancement-AllItems-PendantofFrozenFlame-24092"
+ value: {
+  dps: 1807.84491
+  tps: 1721.95739
+ }
+}
+dps_results: {
+ key: "TestEnhancement-AllItems-PendantofShadow'sEnd-24097"
+ value: {
+  dps: 1807.84491
+  tps: 1721.95739
+ }
+}
+dps_results: {
+ key: "TestEnhancement-AllItems-PendantofThawing-24093"
+ value: {
+  dps: 1807.84491
+  tps: 1721.95739
+ }
+}
+dps_results: {
+ key: "TestEnhancement-AllItems-PendantofWithering-24095"
+ value: {
+  dps: 1807.84491
+  tps: 1721.95739
+ }
+}
+dps_results: {
+ key: "TestEnhancement-AllItems-PendantoftheNullRune-24098"
+ value: {
+  dps: 1807.84491
+  tps: 1721.95739
+ }
+}
+dps_results: {
  key: "TestEnhancement-AllItems-PendantoftheVioletEye-28727"
  value: {
   dps: 1797.80117
@@ -1428,7 +1463,7 @@ dps_results: {
 dps_results: {
  key: "TestEnhancement-Settings-Draenei-p1-Sub-Elemental-Standard-default-FullBuffs-0.0yards-LongSingleTarget"
  value: {
-  dps: 1902.08445
+  dps: 1902.08163
   tps: 1806.80429
  }
 }
@@ -1470,7 +1505,7 @@ dps_results: {
 dps_results: {
  key: "TestEnhancement-Settings-Draenei-p1-Sub-Elemental-Sync OH Swings-default-FullBuffs-0.0yards-LongSingleTarget"
  value: {
-  dps: 1871.20436
+  dps: 1871.20155
   tps: 1775.80211
  }
 }

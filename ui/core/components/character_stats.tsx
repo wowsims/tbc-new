@@ -6,7 +6,7 @@ import i18n from '../../i18n/config.js';
 import * as Mechanics from '../constants/mechanics.js';
 import { IndividualSimUI } from '../individual_sim_ui';
 import { Player } from '../player.js';
-import { ItemSlot, PseudoStat, Race, Spec, Stat, TristateEffect, WeaponType } from '../proto/common.js';
+import { Class, ItemSlot, PseudoStat, Race, RangedWeaponType, Spec, Stat, TristateEffect, WeaponType } from '../proto/common.js';
 import { Stats, UnitStat } from '../proto_utils/stats.js';
 import { EventID, TypedEvent } from '../typed_event.js';
 import { Component } from './component.js';
@@ -196,6 +196,8 @@ export class CharacterStats extends Component {
 
 	private updateStats(player: Player<any>) {
 		const playerStats = player.getCurrentStats();
+		const gear = player.getGear();
+		const rangedWeapon = gear.getEquippedItem(ItemSlot.ItemSlotRanged);
 		const statMods = this.modifyDisplayStats ? this.modifyDisplayStats(this.player) : {};
 		this.hasRacialHitBonus = this.player.getRace() === Race.RaceDraenei;
 		this.activeRacialExpertiseBonuses = this.player.getActiveRacialExpertiseBonuses();
@@ -264,7 +266,7 @@ export class CharacterStats extends Component {
 			const valueElem = (
 				<div className="stat-value-link-container">
 					<button ref={statLinkElemRef} className={clsx('stat-value-link', contextualClass)}>
-						{`${this.statDisplayString(finalStats, unitStat, true)} `}
+						{`${this.statDisplayString(finalStats, unitStat, true, true)} `}
 					</button>
 				</div>
 			);
@@ -281,7 +283,7 @@ export class CharacterStats extends Component {
 					</div>
 					<div className="character-stats-tooltip-row">
 						<span>{i18n.t('sidebar.character_stats.tooltip.gear')}</span>
-						<span>{this.statDisplayString(gearDelta, unitStat)}</span>
+						<span>{this.statDisplayString(gearDelta, unitStat, false, true)}</span>
 					</div>
 					<div className="character-stats-tooltip-row">
 						<span>{i18n.t('sidebar.character_stats.tooltip.talents')}</span>
@@ -307,10 +309,27 @@ export class CharacterStats extends Component {
 					)}
 					<div className="character-stats-tooltip-row">
 						<span>{i18n.t('sidebar.character_stats.tooltip.total')}</span>
-						<span>{this.statDisplayString(finalStats, unitStat, true)}</span>
+						<span>{this.statDisplayString(finalStats, unitStat, true, true)}</span>
 					</div>
 				</div>
 			);
+
+			const hunterRangedTypes = [RangedWeaponType.RangedWeaponTypeBow, RangedWeaponType.RangedWeaponTypeCrossbow, RangedWeaponType.RangedWeaponTypeGun];
+			if (
+				player.getClass() === Class.ClassHunter &&
+				unitStat.isPseudoStat() &&
+				unitStat.getPseudoStat() === PseudoStat.PseudoStatRangedHastePercent &&
+				rangedWeapon &&
+				hunterRangedTypes.includes(rangedWeapon.item.rangedWeaponType)
+			) {
+				const speedStat = 1 + finalStats.getPseudoStat(PseudoStat.PseudoStatRangedHastePercent) / 100;
+				tooltipContent.appendChild(
+					<div className="character-stats-tooltip-row">
+						<span>{i18n.t('sidebar.character_stats.tooltip.eWS')}</span>
+						<span>{(rangedWeapon.item.weaponSpeed / speedStat).toFixed(2)}s</span>
+					</div>,
+				);
+			}
 
 			tippy(statLinkElem, {
 				content: tooltipContent,
@@ -433,7 +452,7 @@ export class CharacterStats extends Component {
 		}
 	}
 
-	private statDisplayString(deltaStats: Stats, unitStat: UnitStat, includeBase?: boolean): string {
+	private statDisplayString(deltaStats: Stats, unitStat: UnitStat, includeBase?: boolean, includeGear?: boolean): string {
 		const rootStat = unitStat.hasRootStat() ? unitStat.getRootStat() : null;
 		let rootRatingValue = rootStat !== null ? deltaStats.getStat(rootStat) : null;
 		let percentDecimals = 2;
@@ -474,6 +493,14 @@ export class CharacterStats extends Component {
 				const ohPercentString = `${ohPercentValue.toFixed(percentDecimals)}` + displaySuffix;
 				const wrappedPercentString = hideRootRating ? `${mhPercentString} / ${ohPercentString}` : ` (${mhPercentString} / ${ohPercentString})`;
 				return rootRatingString + wrappedPercentString;
+			}
+		} else if (includeGear && rootRatingValue !== null && unitStat.equalsPseudoStat(PseudoStat.PseudoStatRangedHitPercent)) {
+			if (this.player.getEquippedItem(ItemSlot.ItemSlotRanged)?.enchant?.effectId === 2523) {
+				rootRatingValue += 30;
+			}
+		} else if (includeGear && rootRatingValue !== null && unitStat.equalsPseudoStat(PseudoStat.PseudoStatRangedCritPercent)) {
+			if (this.player.getEquippedItem(ItemSlot.ItemSlotRanged)?.enchant?.effectId === 2724) {
+				rootRatingValue += 28;
 			}
 		} else if (rootStat == Stat.StatBlockValue) {
 			if (rootRatingValue !== null && rootRatingValue > 0) {

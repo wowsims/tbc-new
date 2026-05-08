@@ -33,7 +33,10 @@ func (hunter *Hunter) registerSteadyShotSpell() {
 			} else if ranged != nil && ranged.Enchant.EffectID == 2723 {
 				weaponDamage -= 12
 			}
-			if hunter.Consumables.OhImbueId == 34340 || (hunter.Consumables.MhImbueId == 34340 && !hunter.windFuryEnabled) {
+			if hunter.Consumables.OhImbueId == 34340 || hunter.Consumables.OhImbueId == 29453 {
+				weaponDamage -= 12
+			}
+			if (hunter.Consumables.MhImbueId == 34340 || hunter.Consumables.MhImbueId == 29453) && !hunter.windFuryEnabled {
 				weaponDamage -= 12
 			}
 

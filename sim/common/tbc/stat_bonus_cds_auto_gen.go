@@ -46,11 +46,6 @@ func RegisterAllOnUseCds() {
 	// shared.NewSimpleStatActive(23825) // Nigh Invulnerability Belt - https://www.wowhead.com/tbc/spell=30458
 	// shared.NewSimpleStatActive(23835) // Gnomish Poultryizer - https://www.wowhead.com/tbc/spell=30507
 	// shared.NewSimpleStatActive(23836) // Goblin Rocket Launcher - https://www.wowhead.com/tbc/spell=46567
-	// shared.NewSimpleStatActive(24092) // Pendant of Frozen Flame - https://www.wowhead.com/tbc/spell=30997
-	// shared.NewSimpleStatActive(24093) // Pendant of Thawing - https://www.wowhead.com/tbc/spell=30994
-	// shared.NewSimpleStatActive(24095) // Pendant of Withering - https://www.wowhead.com/tbc/spell=30999
-	// shared.NewSimpleStatActive(24097) // Pendant of Shadow's End - https://www.wowhead.com/tbc/spell=31000
-	// shared.NewSimpleStatActive(24098) // Pendant of the Null Rune - https://www.wowhead.com/tbc/spell=31002
 	// shared.NewSimpleStatActive(24106) // Thick Felsteel Necklace - https://www.wowhead.com/tbc/spell=31023
 	// shared.NewSimpleStatActive(24110) // Living Ruby Pendant - https://www.wowhead.com/tbc/spell=31024
 	// shared.NewSimpleStatActive(24117) // Embrace of the Dawn - https://www.wowhead.com/tbc/spell=31026

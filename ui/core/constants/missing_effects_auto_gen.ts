@@ -1288,36 +1288,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		24092, // Pendant of Frozen Flame
-		[
-			"Absorbs 2700 fire damage on all nearby party members. Lasts 5min.", // 30997 - https://www.wowhead.com/tbc/spell=30997
-		]
-	],
-	[
-		24093, // Pendant of Thawing
-		[
-			"Absorbs 2700 frost damage on all nearby party members. Lasts 5min.", // 30994 - https://www.wowhead.com/tbc/spell=30994
-		]
-	],
-	[
-		24095, // Pendant of Withering
-		[
-			"Absorbs 2700 nature damage on all nearby party members. Lasts 5min.", // 30999 - https://www.wowhead.com/tbc/spell=30999
-		]
-	],
-	[
-		24097, // Pendant of Shadow's End
-		[
-			"Absorbs 2700 shadow damage on all nearby party members. Lasts 5min.", // 31000 - https://www.wowhead.com/tbc/spell=31000
-		]
-	],
-	[
-		24098, // Pendant of the Null Rune
-		[
-			"Absorbs 2700 arcane damage on all nearby party members. Lasts 5min.", // 31002 - https://www.wowhead.com/tbc/spell=31002
-		]
-	],
-	[
 		24106, // Thick Felsteel Necklace
 		[
 			"Increases Stamina of nearby party members by 20 for 30min.", // 31023 - https://www.wowhead.com/tbc/spell=31023

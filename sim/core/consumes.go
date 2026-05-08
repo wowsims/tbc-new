@@ -695,9 +695,13 @@ func registerStaticImbue(agent Agent, imbueId int32, isMH bool) {
 			character.AutoAttacks.OH().BaseDamageMin += 12
 		}
 
-		if imbueId == 34340 && character.AutoAttacks.Ranged() != nil {
+		if character.AutoAttacks.Ranged() != nil {
 			character.AutoAttacks.Ranged().BaseDamageMin += 12
 			character.AutoAttacks.Ranged().BaseDamageMax += 12
+
+			if imbueId == 29453 {
+				character.AddStat(stats.RangedCritPercent, -(14 / PhysicalCritRatingPerCritPercent))
+			}
 		}
 	case 28891: // Consecrated Sharpening Stone
 		character.Env.RegisterPostFinalizeEffect(func() {

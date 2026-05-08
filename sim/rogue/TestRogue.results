@@ -816,6 +816,41 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRogue-AllItems-PendantofFrozenFlame-24092"
+ value: {
+  dps: 1848.4973
+  tps: 1312.43308
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-PendantofShadow'sEnd-24097"
+ value: {
+  dps: 1848.4973
+  tps: 1312.43308
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-PendantofThawing-24093"
+ value: {
+  dps: 1848.4973
+  tps: 1312.43308
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-PendantofWithering-24095"
+ value: {
+  dps: 1848.4973
+  tps: 1312.43308
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-PendantoftheNullRune-24098"
+ value: {
+  dps: 1848.4973
+  tps: 1312.43308
+ }
+}
+dps_results: {
  key: "TestRogue-AllItems-PendantoftheVioletEye-28727"
  value: {
   dps: 1824.90376

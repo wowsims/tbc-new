@@ -302,7 +302,7 @@ function actionListFieldConfig(field: string): AplHelpers.APLPickerBuilderFieldC
 					index: number,
 					config: ListItemPickerConfig<Player<any>, APLAction>,
 				) => new APLActionPicker(parent, player, config),
-				allowedActions: ['create', 'delete', 'move'],
+				allowedActions: ['create', 'copy', 'delete', 'move'],
 				actions: {
 					create: {
 						useIcon: true,
