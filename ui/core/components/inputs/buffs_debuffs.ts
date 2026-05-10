@@ -334,16 +334,6 @@ export const PARTY_BUFFS_CONFIG = [
 		stats: [],
 	},
 	{
-		config: FireResistanceAura,
-		picker: IconPicker,
-		stats: [Stat.StatFireResistance],
-	},
-	{
-		config: FrostResistanceAura,
-		picker: IconPicker,
-		stats: [Stat.StatFrostResistance],
-	},
-	{
 		config: TotemOfWrath,
 		picker: IconPicker,
 		stats: [Stat.StatSpellCritRating, Stat.StatSpellHitRating],
