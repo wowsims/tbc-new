@@ -67,7 +67,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 	cssScheme: PlayerClasses.getCssClass(PlayerClasses.Paladin),
 	// List any known bugs / issues here and they'll be shown on the site.
 	knownIssues: [],
-	consumableStats: [Stat.StatStamina, Stat.StatHealth, Stat.StatMana],
+	consumableStats: [Stat.StatStamina, Stat.StatHealth, Stat.StatMana, Stat.StatSpellDamage, Stat.StatHolyDamage],
 
 	// All stats for which EP should be calculated.
 	epStats: [
@@ -102,6 +102,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 			Stat.StatStamina,
 			Stat.StatStrength,
 			Stat.StatSpellDamage,
+			Stat.StatHolyDamage,
 			Stat.StatAgility,
 			Stat.StatAttackPower,
 			Stat.StatBlockValue,
