@@ -208,8 +208,6 @@ func (druid *Druid) applyCelestialFocus() {
 	if druid.Talents.CelestialFocus == 0 {
 		return
 	}
-
-	panic("unimplemented")
 }
 
 func (druid *Druid) applyVengeance() {

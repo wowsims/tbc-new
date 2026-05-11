@@ -323,6 +323,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestFeralCat-AllItems-Biznicks247x128Accurascope-2523"
+ value: {
+  dps: 753.72208
+  tps: 535.14268
+  hps: 68.5247
+ }
+}
+dps_results: {
  key: "TestFeralCat-AllItems-BlackenedNaaruSliver-34427"
  value: {
   dps: 784.71848
@@ -1388,14 +1396,6 @@ dps_results: {
 }
 dps_results: {
  key: "TestFeralCat-AllItems-StabilitzedEterniumScope-2724"
- value: {
-  dps: 753.72208
-  tps: 535.14268
-  hps: 68.5247
- }
-}
-dps_results: {
- key: "TestFeralCat-AllItems-StabilizedEterniumScope-2523"
  value: {
   dps: 753.72208
   tps: 535.14268
