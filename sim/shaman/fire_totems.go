@@ -30,7 +30,6 @@ func (shaman *Shaman) registerSearingTotemSpell() {
 
 		DamageMultiplier: 1,
 		CritMultiplier:   shaman.DefaultSpellCritMultiplier(),
-		BonusCoefficient: 0.16699999571,
 		Dot: core.DotConfig{
 			Aura: core.Aura{
 				Label: "Searing Totem",
@@ -39,7 +38,8 @@ func (shaman *Shaman) registerSearingTotemSpell() {
 			// Derived from analysing 100 logs - 1200+ events
 			// | Min ms | Avg ms | Median ms | Max ms | Total Delays |
 			// | 2001.0 | 2435.6 | 2430.0    | 2954.0 | 1223         |
-			TickLength: time.Millisecond * (2400 + 30),
+			TickLength:       time.Millisecond * (2400 + 30),
+			BonusCoefficient: 0.16699999571,
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				baseDamage := shaman.CalcAndRollDamageRange(sim, 50, 66)
 				result := dot.Spell.CalcPeriodicDamage(sim, target, baseDamage, dot.Spell.OutcomeTickMagicHitAndCrit)
