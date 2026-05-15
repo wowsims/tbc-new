@@ -518,6 +518,15 @@ func (unit *Unit) EnableAutoAttacks(agent Agent, options AutoAttackOptions) {
 
 			ModifyCast: func(sim *Simulation, spell *Spell, cast *Cast) {
 				cast.CastTime = spell.CastTime()
+
+				// Emit an "auto delayed" log line whenever the ranged auto fired
+				// later than it would have in an uncontested rotation. Below 1ms
+				// is treated as rounding noise so the common case stays silent.
+				delay := unit.AutoAttacks.RangedPendingSwingDelay()
+				readyAt := sim.CurrentTime - delay
+				if sim.Log != nil && delay > time.Millisecond && readyAt > 0 {
+					spell.Unit.Log(sim, "%s delayed by %s, was ready at %s", spell.ActionID, delay, readyAt)
+				}
 			},
 
 			CastTime: func(spell *Spell) time.Duration {
@@ -532,13 +541,6 @@ func (unit *Unit) EnableAutoAttacks(agent Agent, options AutoAttackOptions) {
 		BonusCoefficient:         1,
 
 		ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
-			// Emit an "auto delayed" log line whenever the ranged auto fired
-			// later than it would have in an uncontested rotation. Below 1ms
-			// is treated as rounding noise so the common case stays silent.
-			if sim.Log != nil && !spell.Flags.Matches(SpellFlagNoLogs) && unit.AutoAttacks.ranged.pendingSwingDelay > time.Millisecond {
-				spell.Unit.Log(sim, "%s delayed by %s", spell.ActionID, unit.AutoAttacks.ranged.pendingSwingDelay)
-			}
-
 			baseDamage := spell.Unit.RangedWeaponDamage(sim, spell.RangedAttackPower(target))
 
 			result := spell.CalcDamage(sim, target, baseDamage, spell.OutcomeRangedHitAndCrit)
@@ -602,6 +604,7 @@ func (aa *AutoAttacks) reset(_ *Simulation) {
 		aa.mh.updateSwingDuration(aa.mh.unit.TotalMeleeHasteMultiplier())
 		aa.mh.previousSwing = -aa.MainhandSwingSpeed()
 		aa.mh.swingAt = 0
+		aa.mh.naturalReadyAt = 0
 
 		if aa.IsDualWielding {
 			aa.oh.updateSwingDuration(aa.oh.unit.TotalMeleeHasteMultiplier())
@@ -638,6 +641,7 @@ func (aa *AutoAttacks) startPull(sim *Simulation) {
 	if aa.AutoSwingMelee {
 		if aa.mh.swingAt == NeverExpires {
 			aa.mh.swingAt = 0
+			aa.mh.naturalReadyAt = 0
 		}
 
 		if aa.IsDualWielding {
@@ -665,7 +669,6 @@ func (aa *AutoAttacks) startPull(sim *Simulation) {
 			aa.ranged.enabled = true
 			aa.ranged.addWeaponAttack(sim, aa.ranged.unit.TotalRangedHasteMultiplier())
 		}
-
 	}
 }
 
@@ -770,6 +773,14 @@ func (aa *AutoAttacks) OffhandSwingSpeed() time.Duration {
 // The amount of time between two Ranged swings.
 func (aa *AutoAttacks) RangedSwingSpeed() time.Duration {
 	return aa.ranged.curSwingDuration
+}
+
+func (aa *AutoAttacks) MainHandPendingSwingDelay() time.Duration {
+	return aa.mh.pendingSwingDelay
+}
+
+func (aa *AutoAttacks) RangedPendingSwingDelay() time.Duration {
+	return aa.ranged.pendingSwingDelay
 }
 
 // Optionally replaces the given swing spell with an Agent-specified MH Swing replacer.

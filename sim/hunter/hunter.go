@@ -126,6 +126,20 @@ func NewHunter(character *core.Character, options *proto.Player, hunterOptions *
 		AutoSwingMelee:  true,
 	})
 
+	mhConfig := hunter.AutoAttacks.MHConfig()
+	applyEffects := mhConfig.ApplyEffects
+	mhConfig.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+		// Emit an "auto delayed" log line whenever the mh auto fired
+		// later than it would have in an uncontested rotation. Below 1ms
+		// is treated as rounding noise so the common case stays silent.
+		delay := hunter.AutoAttacks.MainHandPendingSwingDelay()
+		if sim.Log != nil && spell.ActionID.Tag == 1 && delay > time.Millisecond {
+			hunter.Log(sim, "%s delayed by %s, was ready at %s", spell.ActionID, delay, sim.CurrentTime-delay)
+		}
+
+		applyEffects(sim, target, spell)
+	}
+
 	rangedConfig := hunter.AutoAttacks.RangedConfig()
 	rangedConfig.MaxRange = HunterBaseMaxRange
 

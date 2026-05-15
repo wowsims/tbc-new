@@ -7,7 +7,6 @@
 	--timeline-cast-delay-bg: rgba(220, 80, 80, 0.35);
 	--timeline-gcd-bg: rgba(80, 180, 235, 0.55);
 	--timeline-gcd-extension-bg: rgba(80, 180, 235, 0.22);
-	--timeline-gcd-strip-empty-bg: rgba(255, 255, 255, 0.04);
 }
 
 .threat .series-color,
@@ -337,17 +336,10 @@
 	z-index: 0;
 }
 
-// Continuous strip near the top of the timeline showing every GCD.
-// Height is inherited from .rotation-row (28px) so the corresponding label
-// cell stays aligned with the rest of the timeline.
-.rotation-timeline-gcd-strip {
-	background-color: var(--timeline-gcd-strip-empty-bg);
-}
-
 .rotation-timeline-gcd-segment {
 	position: absolute;
 	top: 6px;
-	height: 16px;
+	height: 12px;
 	background-color: var(--timeline-gcd-bg);
 	border-right: 1px solid rgba(0, 0, 0, 0.35);
 	z-index: 1;

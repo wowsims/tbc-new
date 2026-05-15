@@ -35,6 +35,15 @@ func (hunter *Hunter) registerRaptorStrikeSpell() {
 		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+			// Emit an "auto delayed" log line whenever the mh auto fired
+			// later than it would have in an uncontested rotation. Below 1ms
+			// is treated as rounding noise so the common case stays silent.
+			delay := hunter.AutoAttacks.MainHandPendingSwingDelay()
+			readyAt := sim.CurrentTime - delay
+			if sim.Log != nil && delay > time.Millisecond && readyAt > 0 {
+				hunter.Log(sim, "%s delayed by %s, was ready at %s", spell.ActionID, delay, readyAt)
+			}
+
 			baseDamage := hunter.MHWeaponDamage(sim, spell.MeleeAttackPower(target)) + 170
 			spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialHitAndCrit)
 		},

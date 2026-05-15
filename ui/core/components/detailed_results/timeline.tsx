@@ -960,7 +960,7 @@ export class Timeline extends ResultComponent {
 					placement: 'bottom',
 					content: (
 						<div className="timeline-tooltip">
-							<span>Auto delayed by {castLog.delayText}</span>
+							<span>Auto delayed by {castLog.delayText}, was ready at {castLog.readyAtText}</span>
 						</div>
 					),
 				});
