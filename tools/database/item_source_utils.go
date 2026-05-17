@@ -121,7 +121,11 @@ func InferPhase(item *proto.UIItem) int32 {
 		return 4
 	}
 
-	if ilvl >= 159 || ilvl == 141 || ilvl == 146 || ilvl == 135 || item.Id == 34407 { // SWP Mote Turn-ins, SWP Badge Armor, SWP Badge Weapons, The 2 Ring, Tranquil Moonlight Wraps (SWP Mote item but lower ilvl???)
+	if item.Id == 34837 { // The 2 Ring - Available in P1
+		return 1
+	}
+
+	if ilvl >= 159 || ilvl == 141 || ilvl == 146 || ilvl == 135 || item.Id == 34407 { // SWP Mote Turn-ins, SWP Badge Armor, SWP Badge Weapons, Tranquil Moonlight Wraps (SWP Mote item but lower ilvl???)
 		return 5
 	}
 

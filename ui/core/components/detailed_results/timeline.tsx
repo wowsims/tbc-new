@@ -875,6 +875,29 @@ export class Timeline extends ResultComponent {
 
 		const rowElem = this.makeRowElem(actionId, duration);
 		castLogs.forEach(castLog => {
+			if (castLog.delay > 0) {
+				const delayElem = (
+					<div
+						className="rotation-timeline-cast-delay"
+						style={{
+							left: this.timeToPx(Math.max(0, castLog.timestamp - castLog.delay)),
+							width: this.timeToPx(castLog.delay),
+						}}
+					/>
+				) as HTMLElement;
+				rowElem.appendChild(delayElem);
+
+				const delayTooltip = tippy(delayElem, {
+					placement: 'bottom',
+					content: (
+						<div className="timeline-tooltip">
+							<span>Auto delayed by {castLog.delayText}</span>
+						</div>
+					),
+				});
+				this.addOnResetCallback(() => delayTooltip.destroy());
+			}
+
 			const castElem = (
 				<div
 					className="rotation-timeline-cast"

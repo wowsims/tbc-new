@@ -235,6 +235,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRogue-AllItems-Biznicks247x128Accurascope-2523"
+ value: {
+  dps: 1875.62717
+  tps: 1331.69529
+ }
+}
+dps_results: {
  key: "TestRogue-AllItems-BlackenedNaaruSliver-34427"
  value: {
   dps: 1921.77146
@@ -1049,13 +1056,6 @@ dps_results: {
 }
 dps_results: {
  key: "TestRogue-AllItems-StabilitzedEterniumScope-2724"
- value: {
-  dps: 1875.62717
-  tps: 1331.69529
- }
-}
-dps_results: {
- key: "TestRogue-AllItems-StabilizedEterniumScope-2523"
  value: {
   dps: 1875.62717
   tps: 1331.69529

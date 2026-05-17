@@ -315,6 +315,15 @@ type WeaponAttack struct {
 	swingAt       time.Duration
 	previousSwing time.Duration
 
+	// When the next swing would naturally be ready in an uncontested
+	// rotation, ignoring DelayRangedUntil / DelayMeleeBy / PauseMeleeBy.
+	// Used to compute the "auto delay" reported on the timeline.
+	naturalReadyAt time.Duration
+
+	// Set by swing() immediately before firing the cast, read by the ranged
+	// auto-attack ModifyCast to populate cast.AutoSwingDelay.
+	pendingSwingDelay time.Duration
+
 	curSwingSpeed    float64
 	curSwingDuration time.Duration
 	enabled          bool
@@ -356,6 +365,14 @@ func (wa *WeaponAttack) swing(sim *Simulation) time.Duration {
 	// if the attack causes APL evaluations (e.g. from rage gain).
 	wa.previousSwing = wa.swingAt
 	wa.swingAt = sim.CurrentTime + wa.curSwingDuration
+
+	// Capture how late this swing is vs. when it would have been ready in an
+	// uncontested rotation, then advance naturalReadyAt for the next cycle.
+	// Clamped to >=0 because PauseMelee / haste re-scheduling can in principle
+	// produce a negative diff.
+	wa.pendingSwingDelay = max(0, sim.CurrentTime-wa.naturalReadyAt)
+	wa.naturalReadyAt = wa.swingAt
+
 	attackSpell.Cast(sim, wa.unit.CurrentTarget)
 
 	if !sim.Options.Interactive && (wa.unit.Rotation != nil) && !wa.unit.Metrics.isTanking {
@@ -515,6 +532,13 @@ func (unit *Unit) EnableAutoAttacks(agent Agent, options AutoAttackOptions) {
 		BonusCoefficient:         1,
 
 		ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
+			// Emit an "auto delayed" log line whenever the ranged auto fired
+			// later than it would have in an uncontested rotation. Below 1ms
+			// is treated as rounding noise so the common case stays silent.
+			if sim.Log != nil && !spell.Flags.Matches(SpellFlagNoLogs) && unit.AutoAttacks.ranged.pendingSwingDelay > time.Millisecond {
+				spell.Unit.Log(sim, "%s delayed by %s", spell.ActionID, unit.AutoAttacks.ranged.pendingSwingDelay)
+			}
+
 			baseDamage := spell.Unit.RangedWeaponDamage(sim, spell.RangedAttackPower(target))
 
 			result := spell.CalcDamage(sim, target, baseDamage, spell.OutcomeRangedHitAndCrit)
@@ -594,6 +618,7 @@ func (aa *AutoAttacks) reset(_ *Simulation) {
 		aa.ranged.updateSwingDuration(aa.ranged.unit.TotalRangedHasteMultiplier())
 		aa.ranged.previousSwing = -aa.RangedSwingSpeed()
 		aa.ranged.swingAt = 0
+		aa.ranged.naturalReadyAt = 0
 	}
 }
 
@@ -634,6 +659,7 @@ func (aa *AutoAttacks) startPull(sim *Simulation) {
 	if aa.AutoSwingRanged {
 		if aa.ranged.swingAt == NeverExpires {
 			aa.ranged.swingAt = 0
+			aa.ranged.naturalReadyAt = 0
 		}
 		if aa.ranged.IsInRange() {
 			aa.ranged.enabled = true
@@ -699,6 +725,7 @@ func (aa *AutoAttacks) EnableRangedSwing(sim *Simulation) {
 	}
 
 	aa.ranged.swingAt = max(aa.ranged.swingAt, sim.CurrentTime, 0)
+	aa.ranged.naturalReadyAt = aa.ranged.swingAt
 	if aa.ranged.IsInRange() {
 		aa.ranged.enabled = true
 		aa.ranged.addWeaponAttack(sim, aa.ranged.unit.TotalRangedHasteMultiplier())

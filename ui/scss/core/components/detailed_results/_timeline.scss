@@ -4,6 +4,7 @@
 	--timeline-cast-cancel-bg: rgb(230, 128, 102, 0.7);
 	--timeline-aura-bg: rgba(0, 0, 255, 0.52);
 	--timeline-travel-time-bg: rgb(249, 192, 255, 0.6);
+	--timeline-cast-delay-bg: rgba(220, 80, 80, 0.35);
 }
 
 .threat .series-color,
@@ -293,6 +294,13 @@
 	position: absolute;
 	height: 24px;
 	background-color: var(--timeline-travel-time-bg);
+}
+
+.rotation-timeline-cast-delay {
+	position: absolute;
+	height: 24px;
+	background-color: var(--timeline-cast-delay-bg);
+	z-index: 0;
 }
 
 .rotation-timeline-tick {

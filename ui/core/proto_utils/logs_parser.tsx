@@ -253,6 +253,7 @@ export class SimLog {
 					MajorCooldownUsedLog.parse(params) ||
 					CastBeganLog.parse(params) ||
 					CastCompletedLog.parse(params) ||
+					AutoDelayLog.parse(params) ||
 					StatChangeLog.parse(params) ||
 					Promise.resolve(new SimLog(params))
 				);
@@ -290,6 +291,10 @@ export class SimLog {
 
 	isCastCancelled(): this is CastCancelledLog {
 		return this instanceof CastCancelledLog;
+	}
+
+	isAutoDelay(): this is AutoDelayLog {
+		return this instanceof AutoDelayLog;
 	}
 
 	isStatChange(): this is StatChangeLog {
@@ -1059,11 +1064,55 @@ export class CastCompletedLog extends SimLog {
 	}
 }
 
+// AutoDelayLog records the gap between when a ranged auto-attack would
+// naturally have fired and when it actually did, emitted from the ranged
+// auto's ApplyEffects when the delay exceeds 1ms. Attached to the matching
+// CastLog at construction time.
+export class AutoDelayLog extends SimLog {
+	readonly delay: number; // seconds, used for block width math
+	readonly delayText: string; // pre-formatted for display: rounded ms below 1s, 2-decimal s at 1s+
+
+	constructor(params: SimLogParams, delay: number, delayText: string) {
+		super(params);
+		this.delay = delay;
+		this.delayText = delayText;
+	}
+
+	toHTML(includeTimestamp = true) {
+		return this.cacheOutput(includeTimestamp, () => (
+			<>
+				{this.toPrefix(includeTimestamp)} {this.newActionIdLink()} delayed by {this.delayText}.
+			</>
+		));
+	}
+
+	static parse(params: SimLogParams): Promise<AutoDelayLog> | null {
+		const match = params.raw.match(/] (.*?) delayed by (\d+\.?\d*)(m?s)/);
+		if (match) {
+			let delay = parseFloat(match[2]);
+			if (match[3] == 'ms') {
+				delay /= 1000;
+			}
+			const delayText = delay >= 1 ? `${delay.toFixed(2)}s` : `${Math.round(delay * 1000)}ms`;
+			return ActionId.fromLogString(match[1])
+				.fill(params.source?.index)
+				.then(castId => {
+					params.actionId = castId;
+					return new AutoDelayLog(params, delay, delayText);
+				});
+		} else {
+			return null;
+		}
+	}
+}
+
 export class CastLog extends SimLog {
 	readonly castTime: number;
 	readonly effectiveTime: number;
 	readonly travelTime: number;
 	readonly cancelTime: number;
+	readonly delay: number;
+	readonly delayText: string;
 
 	readonly castBeganLog: CastBeganLog;
 	readonly castCancelledLog: CastCancelledLog | null;
@@ -1076,6 +1125,7 @@ export class CastLog extends SimLog {
 		castBeganLog: CastBeganLog,
 		castCompletedLog: CastCompletedLog | null,
 		castCancelledLog: CastCancelledLog | null,
+		autoDelayLog: AutoDelayLog | null,
 		damageDealtLogs: Array<DamageDealtLog>,
 	) {
 		super({
@@ -1091,6 +1141,8 @@ export class CastLog extends SimLog {
 		this.castTime = castBeganLog.castTime;
 		this.effectiveTime = castBeganLog.effectiveTime;
 		this.cancelTime = castCancelledLog?.cancelTime || 0;
+		this.delay = autoDelayLog?.delay ?? 0;
+		this.delayText = autoDelayLog?.delayText ?? '';
 
 		this.castBeganLog = castBeganLog;
 		this.castCompletedLog = castCompletedLog;
@@ -1133,6 +1185,7 @@ export class CastLog extends SimLog {
 		const castCompletedLogs = logs.filter((log): log is CastCompletedLog => log.isCastCompleted());
 		const castCancelledLogs = logs.filter((log): log is CastCancelledLog => log.isCastCancelled());
 		const damageDealtLogs = logs.filter((log): log is DamageDealtLog => log.isDamageDealt());
+		const autoDelayLogs = logs.filter((log): log is AutoDelayLog => log.isAutoDelay());
 
 		const toBucketKey = (actionId: ActionId) => {
 			if (actionId.spellId == 30451 || actionId.spellId == 127632) {
@@ -1148,6 +1201,7 @@ export class CastLog extends SimLog {
 		const castCompletedLogsByAbility = bucket(castCompletedLogs, log => toBucketKey(log.actionId!));
 		const castCancelledLogsByAbility = bucket(castCancelledLogs, log => toBucketKey(log.actionId!));
 		const damageDealtLogsByAbility = bucket(damageDealtLogs, log => toBucketKey(log.actionId!));
+		const autoDelayLogsByAbility = bucket(autoDelayLogs, log => toBucketKey(log.actionId!));
 
 		const castLogs: Array<CastLog> = [];
 		Object.keys(castBeganLogsByAbility).forEach(bucketKey => {
@@ -1155,8 +1209,10 @@ export class CastLog extends SimLog {
 			const abilityCastsCompleted = castCompletedLogsByAbility[bucketKey];
 			const abilityCastsCancelled = castCancelledLogsByAbility[bucketKey];
 			const abilityDamageDealt = damageDealtLogsByAbility[bucketKey];
+			const abilityAutoDelay = autoDelayLogsByAbility[bucketKey];
 
 			let ddIdx = 0;
+			let adIdx = 0;
 			let castSkipIdx = 0;
 			for (let cbIdx = 0; cbIdx < abilityCastsBegan.length; cbIdx++) {
 				const cbLog = abilityCastsBegan[cbIdx];
@@ -1199,7 +1255,21 @@ export class CastLog extends SimLog {
 					ddLogs.push(abilityDamageDealt[ddIdx]);
 					ddIdx++;
 				}
-				castLogs.push(new CastLog(cbLog, ccLog, cCancelLog, ddLogs));
+
+				// At most one AutoDelay log per cast; pick the next one inside this cast's window.
+				const nextCbLog = abilityCastsBegan[cbIdx + 1];
+				let adLog: AutoDelayLog | null = null;
+				if (
+					abilityAutoDelay &&
+					adIdx < abilityAutoDelay.length &&
+					abilityAutoDelay[adIdx].timestamp >= cbLog.timestamp &&
+					(!nextCbLog || abilityAutoDelay[adIdx].timestamp < nextCbLog.timestamp)
+				) {
+					adLog = abilityAutoDelay[adIdx];
+					adIdx++;
+				}
+
+				castLogs.push(new CastLog(cbLog, ccLog, cCancelLog, adLog, ddLogs));
 			}
 		});
 

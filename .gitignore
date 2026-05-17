@@ -10,6 +10,9 @@ ui/*/*/index.html
 .history
 .vscode
 
+# Claude Code worktrees and per-project state
+.claude
+
 # binaries
 dist
 binary_dist
