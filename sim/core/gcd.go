@@ -70,6 +70,12 @@ func (unit *Unit) ReactToEvent(sim *Simulation, randomizeReactionTime bool, addR
 	// If the next rotation action was already scheduled for this timestep then execute it now
 	unit.Rotation.DoNextAction(sim)
 
+	// A blocking controlling action (Wait / WaitUntil) has set the rotation timer
+	// to when it wants to wake; don't shrink it based on reaction time.
+	if unit.Rotation.HasBlockingControllingAction() {
+		return
+	}
+
 	// Otherwise schedule an evaluation based on reaction time
 	newEvaluationTime := sim.CurrentTime
 	if addReactionTime {

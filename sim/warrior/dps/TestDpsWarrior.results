@@ -159,8 +159,8 @@ dps_results: {
 dps_results: {
  key: "TestDpsWarrior-AllItems-BandoftheEternalChampion-29301"
  value: {
-  dps: 2014.93323
-  tps: 1522.60131
+  dps: 2014.92834
+  tps: 1522.59703
   dtps: 7.2778
  }
 }
@@ -1439,8 +1439,8 @@ dps_results: {
 dps_results: {
  key: "TestDpsWarrior-Average-Default"
  value: {
-  dps: 2004.55064
-  tps: 1513.01227
+  dps: 2004.48511
+  tps: 1512.96424
   dtps: 7.30748
  }
 }

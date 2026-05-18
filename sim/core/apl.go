@@ -464,6 +464,21 @@ func (apl *APLRotation) getNextAction(sim *Simulation) *APLAction {
 	return nil
 }
 
+// HasBlockingControllingAction reports whether the rotation is currently parked
+// in a controlling action that has set the rotation timer to a specific wake
+// time and must not be cut short by reaction-time-based shrinks (Wait, WaitUntil).
+// Cooperative controllers like StrictSequence return false.
+func (apl *APLRotation) HasBlockingControllingAction() bool {
+	if apl == nil || len(apl.controllingActions) == 0 {
+		return false
+	}
+	switch apl.controllingActions[len(apl.controllingActions)-1].(type) {
+	case *APLActionWait, *APLActionWaitUntil:
+		return true
+	}
+	return false
+}
+
 func (apl *APLRotation) pushControllingAction(ca APLActionImpl) {
 	apl.controllingActions = append(apl.controllingActions, ca)
 }
