@@ -15,11 +15,13 @@ import (
 type OnCastComplete func(aura *Aura, sim *Simulation, spell *Spell)
 
 type Hardcast struct {
-	Expires    time.Duration
-	ActionID   ActionID
-	OnComplete func(*Simulation, *Unit)
-	Target     *Unit
-	CanMove    bool
+	Expires     time.Duration
+	ActionID    ActionID
+	OnComplete  func(*Simulation, *Unit)
+	Target      *Unit
+	CanMove     bool
+	IsChanneled bool
+	CastTime    time.Duration
 }
 
 // Input for constructing the CastSpell function for a spell.
@@ -163,10 +165,11 @@ func (spell *Spell) makeCastFunc(config CastConfig) CastSuccessFunc {
 			return spell.castFailureHelper(sim, "casting/channeling while moving not allowed!")
 		}
 
+		isChanneled := spell.Flags.Matches(SpellFlagChanneled)
 		if effectiveTime := spell.CurCast.EffectiveTime(); effectiveTime != 0 {
 			// do not add channeled time here as they have variable cast length
 			// cast time for channels is handled in dot.OnExpire
-			if !spell.Flags.Matches(SpellFlagChanneled) {
+			if !isChanneled {
 				spell.SpellMetrics[target.UnitIndex].TotalCastTime += effectiveTime
 			}
 
@@ -216,8 +219,10 @@ func (spell *Spell) makeCastFunc(config CastConfig) CastSuccessFunc {
 						spell.Unit.OnCastComplete(sim, spell)
 					}
 				},
-				Target:  target,
-				CanMove: spell.Flags&SpellFlagCanCastWhileMoving > 0,
+				Target:      target,
+				CanMove:     spell.Flags&SpellFlagCanCastWhileMoving > 0,
+				IsChanneled: isChanneled,
+				CastTime:    spell.CurCast.CastTime,
 			}
 
 			spell.Unit.newHardcastAction(sim)

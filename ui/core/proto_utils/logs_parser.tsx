@@ -257,6 +257,7 @@ export class SimLog {
 					StatChangeLog.parse(params) ||
 					SpellQueuedLog.parse(params) ||
 					CastFailedLog.parse(params) ||
+					CastPushbackLog.parse(params) ||
 					Promise.resolve(new SimLog(params))
 				);
 			}),
@@ -1443,6 +1444,55 @@ export class CastFailedLog extends SimLog {
 					return new CastFailedLog(params, reason.replace(/[.!?]$/, ''));
 				},
 			);
+		} else {
+			return null;
+		}
+	}
+}
+
+// Records pushback events emitted when the player takes damage while
+// hardcasting or channeling, delaying the cast or shortening the channel.
+export class CastPushbackLog extends SimLog {
+	readonly pushback: number; // seconds
+	readonly pushbackText: string; // pre-formatted for display
+	readonly isChanneling: boolean;
+
+	constructor(params: SimLogParams, pushback: number, pushbackText: string, isChanneling: boolean) {
+		super(params);
+		this.pushback = pushback;
+		this.pushbackText = pushbackText;
+		this.isChanneling = isChanneling;
+	}
+
+	toHTML(includeTimestamp = true) {
+		return this.cacheOutput(includeTimestamp, () =>
+			this.isChanneling ? (
+				<>
+					{this.toPrefix(includeTimestamp)} {this.newActionIdLink()} lost {this.pushbackText} while channeling due to pushback.
+				</>
+			) : (
+				<>
+					{this.toPrefix(includeTimestamp)} {this.newActionIdLink()} pushed back {this.pushbackText} while casting.
+				</>
+			),
+		);
+	}
+
+	static parse(params: SimLogParams): Promise<CastPushbackLog> | null {
+		const match = params.raw.match(/] (.*?) pushed back (\d+\.?\d*)(m?s) while ((casting)|(channeling))/);
+		if (match) {
+			let pushback = parseFloat(match[2]);
+			if (match[3] == 'ms') {
+				pushback /= 1000;
+			}
+			const pushbackText = pushback >= 1 ? `${pushback.toFixed(2)}s` : `${Math.round(pushback * 1000)}ms`;
+
+			return ActionId.fromLogString(match[1])
+				.fill(params.source?.index)
+				.then(actionId => {
+					params.actionId = actionId;
+					return new CastPushbackLog(params, pushback, pushbackText, match[4] == 'channeling');
+				});
 		} else {
 			return null;
 		}
