@@ -33,7 +33,7 @@ func (paladin *Paladin) registerConsecration(rankConfig shared.SpellRankConfig) 
 	minDamage := rankConfig.MinDamage
 	coefficient := rankConfig.Coefficient
 
-	consecration := paladin.RegisterSpell(core.SpellConfig{
+	paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: spellID},
 		SpellSchool:    core.SpellSchoolHoly,
 		ProcMask:       core.ProcMaskSpellDamage,
@@ -77,6 +77,4 @@ func (paladin *Paladin) registerConsecration(rankConfig shared.SpellRankConfig) 
 			spell.AOEDot().Apply(sim)
 		},
 	})
-
-	paladin.Consecrations = append(paladin.Consecrations, consecration)
 }

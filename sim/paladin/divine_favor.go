@@ -15,7 +15,8 @@ import (
 func (paladin *Paladin) registerDivineFavor() {
 	actionID := core.ActionID{SpellID: 20216}
 
-	paladin.DivineFavorAura = paladin.RegisterAura(core.Aura{
+	var divineFavorAura *core.Aura
+	divineFavorAura = paladin.RegisterAura(core.Aura{
 		Label:    "Divine Favor" + paladin.Label,
 		ActionID: actionID,
 		Duration: core.NeverExpires,
@@ -28,7 +29,7 @@ func (paladin *Paladin) registerDivineFavor() {
 		ClassSpellMask:     SpellMaskHolyLight | SpellMaskFlashOfLight | SpellMaskHolyShock,
 		TriggerImmediately: true,
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			paladin.DivineFavorAura.Deactivate(sim)
+			divineFavorAura.Deactivate(sim)
 		},
 	})
 
@@ -55,7 +56,7 @@ func (paladin *Paladin) registerDivineFavor() {
 			spell.RelatedSelfBuff.Activate(sim)
 		},
 
-		RelatedSelfBuff: paladin.DivineFavorAura,
+		RelatedSelfBuff: divineFavorAura,
 	})
 
 	paladin.AddMajorCooldown(core.MajorCooldown{

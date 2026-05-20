@@ -67,6 +67,7 @@ const (
 	SpellMaskAvengersShield
 	SpellMaskCrusaderStrike
 	SpellMaskRepentance
+	SpellMaskRighteousFury
 )
 
 // Composite masks

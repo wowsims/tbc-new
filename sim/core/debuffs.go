@@ -513,12 +513,11 @@ func InsectSwarmAura(target *Unit) *Aura {
 }
 
 func JudgementOfLightAura(target *Unit) *Aura {
-	actionId := ActionID{SpellID: 27163}
-	healthMetrics := target.NewHealthMetrics(actionId)
+	healthMetrics := target.NewHealthMetrics(ActionID{SpellID: 27163})
 
 	return target.GetOrRegisterAura(Aura{
 		Label:    "Judgement of Light",
-		ActionID: actionId,
+		ActionID: ActionID{SpellID: 27162},
 		Duration: time.Second * 20,
 		OnSpellHitTaken: func(aura *Aura, sim *Simulation, spell *Spell, result *SpellResult) {
 
@@ -541,12 +540,13 @@ func JudgementOfWisdomAura(target *Unit) *Aura {
 	actionId := ActionID{SpellID: 27164}
 	var aura *Aura
 	aura = target.MakeProcTriggerAura(ProcTrigger{
-		Name:       "Judgement of Wisdom",
-		ActionID:   actionId,
-		Duration:   time.Second * 20,
-		ProcChance: 0.5,
-		ProcMask:   ProcMaskDirect,
-		Callback:   CallbackOnSpellHitTaken,
+		Name:            "Judgement of Wisdom",
+		ActionID:        actionId,
+		MetricsActionID: actionId,
+		Duration:        time.Second * 20,
+		ProcChance:      0.5,
+		ProcMask:        ProcMaskDirect,
+		Callback:        CallbackOnSpellHitTaken,
 		Handler: func(sim *Simulation, spell *Spell, result *SpellResult) {
 			// Melee claim that wisdom can proc on misses.
 			if !spell.ProcMask.Matches(ProcMaskMeleeOrRanged) && !result.Landed() {

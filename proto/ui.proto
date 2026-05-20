@@ -45,7 +45,7 @@ message UINPC {
 // Contains all information about an Item needed by the UI.
 // Generally this will include everything needed by the sim, plus some
 // additional data for displaying / filtering.
-// Next tag: 32.
+// Next tag: 34.
 message UIItem {
 	int32 id = 1;
 	string name = 2;
@@ -63,7 +63,6 @@ message UIItem {
 	repeated int32 random_suffix_options = 26;
 	int32 rand_prop_points = 27;
 
-
 	// Weapon stats, needed for computing proper EP for melee weapons
 	double weapon_damage_min = 12;
 	double weapon_damage_max = 13;
@@ -72,6 +71,7 @@ message UIItem {
 	int32 ilvl = 15;
 	int32 phase = 16;
 	ItemQuality quality = 17;
+	double quality_modifier = 33; // Negative for caster weapons; used by Seal of Righteousness proc among others.
 	bool unique = 18;
 	// How many of that item can be equipped at once.
 	int32 limit_category = 32;

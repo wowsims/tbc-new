@@ -11,6 +11,7 @@ import * as IconInputs from '../icon_inputs';
 import { Input } from '../input';
 import { BooleanPicker } from '../pickers/boolean_picker';
 import { EnumPicker } from '../pickers/enum_picker';
+import { IconEnumPicker } from '../pickers/icon_enum_picker';
 import { NumberPicker } from '../pickers/number_picker';
 import { SavedDataManager } from '../saved_data_manager';
 import { SimTab } from '../sim_tab';
@@ -201,6 +202,8 @@ export class RotationTab extends SimTab {
 				new BooleanPicker(sectionElem, this.simUI.player, { ...inputConfig, inline: true, reverse: true });
 			} else if (inputConfig.type == 'enum') {
 				new EnumPicker(sectionElem, this.simUI.player, { ...inputConfig, inline: true });
+			} else if (inputConfig.type == 'iconEnum') {
+				new IconEnumPicker(sectionElem, this.simUI.player, { ...inputConfig, inline: true });
 			}
 		});
 	}

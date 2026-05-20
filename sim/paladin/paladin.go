@@ -13,7 +13,6 @@ const JudgementAuraTag = "JudgementAura"
 type Paladin struct {
 	core.Character
 
-	Seal    proto.PaladinSeal
 	Talents *proto.PaladinTalents
 
 	Forbearance *core.Aura
@@ -34,65 +33,9 @@ type Paladin struct {
 	exorcismTimer       *core.Timer
 	avengersShieldTimer *core.Timer
 
-	// Shared spells
-	Judgement         *core.Spell
-	Consecrations     []*core.Spell
-	Exorcisms         []*core.Spell
-	HammerOfWraths    []*core.Spell
-	HolyWraths        []*core.Spell
-	HolyLights        []*core.Spell
-	FlashOfLights     []*core.Spell
-	LayOnHands        []*core.Spell
-	AvengingWrath     *core.Spell
-	AvengingWrathAura *core.Aura
+	JudgementAuras []core.AuraArray
 
-	// Seal Auras
-	SealOfRighteousnessAuras []*core.Aura
-	SealOfCommandAuras       []*core.Aura
-	SealOfLightAuras         []*core.Aura
-	SealOfWisdomAuras        []*core.Aura
-	SealOfJusticeAuras       []*core.Aura
-	SealOfTheCrusaderAuras   []*core.Aura
-	SealOfBloodAuras         []*core.Aura
-	SealOfVengeanceAuras     []*core.Aura
-
-	// Seals
-	SealOfRighteousness []*core.Spell
-	SealOfCommand       []*core.Spell
-	SealOfLight         []*core.Spell
-	SealOfWisdom        []*core.Spell
-	SealOfJustice       []*core.Spell
-	SealOfTheCrusader   []*core.Spell
-	SealOfBlood         []*core.Spell
-	SealOfVengeance     []*core.Spell
-
-	// Seal Judgements
-	SealOfRighteousnessJudgements []*core.Spell
-	SealOfCommandJudgements       []*core.Spell
-	SealOfLightJudgements         []*core.Spell
-	SealOfWisdomJudgements        []*core.Spell
-	SealOfJusticeJudgements       []*core.Spell
-	SealOfTheCrusaderJudgements   []*core.Spell
-	SealOfBloodJudgements         []*core.Spell
-	SealOfVengeanceJudgements     []*core.Spell
-
-	// Talent-specific auras and spells
-	DivineFavorAura         *core.Aura
-	DivineIlluminationSpell *core.Spell
-	DivineIlluminationAura  *core.Aura
-	SanctityAura            *core.Aura
-	HolyShields             []*core.Spell
-	HolyShieldAuras         []*core.Aura
-	AvengersShields         []*core.Spell
-	CrusaderStrike          *core.Spell
-	Repentance              *core.Spell
-	HolyShocks              []*core.Spell
-
-	JudgementOfLightAuras       core.AuraArray
-	JudgementOfWisdomAuras      core.AuraArray
-	JudgementOfJusticeAuras     core.AuraArray
-	JudgementOfTheCrusaderAuras core.AuraArray
-	JudgementAuras              []core.AuraArray
+	T6_4pcAura *core.Aura
 }
 
 // Implemented by each Paladin spec.
@@ -116,6 +59,7 @@ func (paladin *Paladin) AddPartyBuffs(_ *proto.PartyBuffs) {
 
 func (paladin *Paladin) Initialize() {
 	paladin.registerSpells()
+	paladin.RegisterSpiritualAttunement()
 }
 
 func (paladin *Paladin) registerSpells() {
@@ -126,6 +70,7 @@ func (paladin *Paladin) registerSpells() {
 	HolyWrathRankMap.RegisterAll(paladin.registerHolyWrath)
 	ExorcismRankMap.RegisterAll(paladin.registerExorcism)
 	paladin.registerAvengingWrath()
+	paladin.registerRighteousFury()
 
 	paladin.registerForbearance()
 
@@ -133,7 +78,7 @@ func (paladin *Paladin) registerSpells() {
 	paladin.registerSeals()
 
 	// Auras
-	// paladin.registerAuras()
+	paladin.registerAuras()
 
 	// // Blessings
 	// paladin.registerBlessings()
@@ -154,7 +99,6 @@ func NewPaladin(character *core.Character, talentsStr string, options *proto.Pal
 	paladin := &Paladin{
 		Character: *character,
 		Talents:   &proto.PaladinTalents{},
-		Seal:      options.Seal,
 	}
 
 	core.FillTalentsProto(paladin.Talents.ProtoReflect(), talentsStr, TalentTreeSizes)

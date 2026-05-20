@@ -26,9 +26,12 @@ func TestRetribution(t *testing.T) {
 					},
 				},
 			}},
-			GearSet:  core.GetGearSet("../../../ui/paladin/retribution/gear_sets", "p1"),
-			Talents:  "5-053201-0523005120033125331051",
-			Rotation: core.GetAplRotation("../../../ui/paladin/retribution/apls", "default"),
+			Consumables: DefaultConsumables,
+			Profession1: proto.Profession_Engineering,
+			Profession2: proto.Profession_Blacksmithing,
+			GearSet:     core.GetGearSet("../../../ui/paladin/retribution/gear_sets", "p1"),
+			Talents:     "5-053201-0523005120033125331051",
+			Rotation:    core.GetAplRotation("../../../ui/paladin/retribution/apls", "default"),
 			ItemFilter: core.ItemFilter{
 				WeaponTypes: []proto.WeaponType{
 					proto.WeaponType_WeaponTypePolearm,
@@ -37,10 +40,23 @@ func TestRetribution(t *testing.T) {
 					proto.WeaponType_WeaponTypeMace,
 				},
 				ArmorType: proto.ArmorType_ArmorTypePlate,
+				HandTypes: []proto.HandType{proto.HandType_HandTypeTwoHand},
 				RangedWeaponTypes: []proto.RangedWeaponType{
 					proto.RangedWeaponType_RangedWeaponTypeLibram,
 				},
 			},
 		},
 	}))
+}
+
+var DefaultConsumables = &proto.ConsumesSpec{
+	PotId:        22838,
+	FlaskId:      22854,
+	FoodId:       27658,
+	ConjuredId:   12662,
+	SuperSapper:  true,
+	GoblinSapper: true,
+	ScrollAgi:    true,
+	ScrollStr:    true,
+	ExplosiveId:  30217,
 }

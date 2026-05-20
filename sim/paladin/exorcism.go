@@ -36,7 +36,7 @@ func (paladin *Paladin) registerExorcism(rankConfig shared.SpellRankConfig) {
 	maxDamage := rankConfig.MaxDamage
 	coefficient := rankConfig.Coefficient
 
-	exorcism := paladin.RegisterSpell(core.SpellConfig{
+	paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: spellID},
 		SpellSchool:    core.SpellSchoolHoly,
 		ProcMask:       core.ProcMaskSpellDamage,
@@ -73,6 +73,4 @@ func (paladin *Paladin) registerExorcism(rankConfig shared.SpellRankConfig) {
 			spell.CalcAndDealDamage(sim, target, sim.Roll(minDamage, maxDamage), spell.OutcomeMagicHitAndCrit)
 		},
 	})
-
-	paladin.Exorcisms = append(paladin.Exorcisms, exorcism)
 }

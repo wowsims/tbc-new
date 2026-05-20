@@ -156,6 +156,8 @@ type Unit struct {
 	//  For channeled spells, only Expires is set.
 	// No more than one cast may be active at any given time.
 	Hardcast Hardcast
+	// Aura that reduces dodge/parry/block to 0 while casting.
+	HardcastAvoidanceAura *Aura
 
 	// Rotation-related PendingActions.
 	rotationAction *PendingAction

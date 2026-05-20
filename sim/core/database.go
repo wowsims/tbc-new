@@ -129,6 +129,7 @@ type Item struct {
 	WeaponDamageMin  float64
 	WeaponDamageMax  float64
 	SwingSpeed       float64
+	QualityModifier  float64 // Per-item offset to weapon "average damage"; negative for caster weapons.
 
 	Name    string
 	Stats   stats.Stats // Stats applied to wearer
@@ -161,6 +162,7 @@ func ItemFromProto(pData *proto.SimItem) Item {
 		HandType:         pData.HandType,
 		RangedWeaponType: pData.RangedWeaponType,
 		SwingSpeed:       pData.WeaponSpeed,
+		QualityModifier:  pData.QualityModifier,
 		GemSockets:       pData.GemSockets,
 		SocketBonus:      stats.FromProtoArray(pData.SocketBonus),
 		SetName:          pData.SetName,

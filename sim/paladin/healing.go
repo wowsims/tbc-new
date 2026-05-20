@@ -38,7 +38,7 @@ func (paladin *Paladin) registerHolyLight(rankConfig shared.SpellRankConfig) {
 	maxHealing := rankConfig.MaxDamage
 	coefficient := rankConfig.Coefficient
 
-	holyLight := paladin.RegisterSpell(core.SpellConfig{
+	paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: spellID},
 		SpellSchool:    core.SpellSchoolHoly,
 		ProcMask:       core.ProcMaskSpellHealing,
@@ -68,8 +68,6 @@ func (paladin *Paladin) registerHolyLight(rankConfig shared.SpellRankConfig) {
 			spell.CalcAndDealHealing(sim, target, sim.Roll(minHealing, maxHealing), spell.OutcomeHealingCrit)
 		},
 	})
-
-	paladin.HolyLights = append(paladin.HolyLights, holyLight)
 }
 
 var FlashOfLightRankMap = shared.SpellRankMap{
@@ -93,7 +91,7 @@ func (paladin *Paladin) registerFlashOfLight(rankConfig shared.SpellRankConfig) 
 	maxHealing := rankConfig.MaxDamage
 	coefficient := rankConfig.Coefficient
 
-	flashOfLight := paladin.RegisterSpell(core.SpellConfig{
+	paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: spellID},
 		SpellSchool:    core.SpellSchoolHoly,
 		ProcMask:       core.ProcMaskSpellHealing,
@@ -123,8 +121,6 @@ func (paladin *Paladin) registerFlashOfLight(rankConfig shared.SpellRankConfig) 
 			spell.CalcAndDealHealing(sim, target, sim.Roll(minHealing, maxHealing), spell.OutcomeHealingCrit)
 		},
 	})
-
-	paladin.FlashOfLights = append(paladin.FlashOfLights, flashOfLight)
 }
 
 var LayOnHandsRankMap = shared.SpellRankMap{
@@ -150,7 +146,7 @@ func (paladin *Paladin) registerLayOnHands(rankConfig shared.SpellRankConfig) {
 
 	manaMetrics := paladin.NewManaMetrics(core.ActionID{SpellID: spellID})
 
-	paladin.LayOnHands = append(paladin.LayOnHands, paladin.RegisterSpell(core.SpellConfig{
+	paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: spellID},
 		SpellSchool:    core.SpellSchoolHoly,
 		ProcMask:       core.ProcMaskSpellHealing,
@@ -179,5 +175,5 @@ func (paladin *Paladin) registerLayOnHands(rankConfig shared.SpellRankConfig) {
 			target.AddMana(sim, manaRestore, manaMetrics)
 			spell.CalcAndDealHealing(sim, target, spell.Unit.MaxHealth(), spell.OutcomeHealingCrit)
 		},
-	}))
+	})
 }

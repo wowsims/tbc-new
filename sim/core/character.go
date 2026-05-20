@@ -421,6 +421,17 @@ func (character *Character) Finalize() {
 
 	character.PseudoStats.ParryHaste = character.PseudoStats.CanParry
 
+	character.HardcastAvoidanceAura = character.RegisterAura(Aura{
+		Label:    "Reduced avoidance",
+		Duration: NeverExpires,
+		OnGain: func(aura *Aura, sim *Simulation) {
+			character.PseudoStats.Stunned = true
+		},
+		OnExpire: func(aura *Aura, sim *Simulation) {
+			character.PseudoStats.Stunned = false
+		},
+	})
+
 	character.Unit.finalize()
 
 	character.majorCooldownManager.finalize()

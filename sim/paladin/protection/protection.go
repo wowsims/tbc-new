@@ -30,6 +30,13 @@ func NewProtectionPaladin(character *core.Character, options *proto.Player) *Pro
 		Paladin: paladin.NewPaladin(character, options.TalentsString, protOptions.Options.ClassOptions),
 	}
 
+	healingModel := options.HealingModel
+	if healingModel != nil {
+		if healingModel.InspirationUptime > 0.0 {
+			core.ApplyInspiration(prot.GetCharacter(), healingModel.InspirationUptime)
+		}
+	}
+
 	return prot
 }
 

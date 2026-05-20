@@ -80,6 +80,7 @@ var FullPartyBuffs = &proto.PartyBuffs{
 	EyeOfTheNight:         true,
 	ChainOfTheTwilightOwl: true,
 	JadePendantOfBlasting: true,
+	TotemTwisting:         true,
 
 	ManaSpringTotem:      proto.TristateEffect_TristateEffectImproved,
 	ManaTideTotems:       1,

@@ -188,9 +188,11 @@ var ExtraItemIcons = []int32{
 var ConsumableAllowList = []int32{
 	7676,  // Thisle Tea
 	9088,  // Gift of Arthas
+	9155,  // Arcane Elixir
 	9224,  // Elixir of Demonslaying
 	13442, // Migty Rage Potion
 	13452, // Elixir of the Mongoose
+	13454, // Greater Arcane Elixir
 	12662, // Demonic Rune
 	22105, // Master Healthstone
 	22788, // Flamecap
@@ -343,6 +345,7 @@ var DenyListNameRegexes = []*regexp.Regexp{
 	regexp.MustCompile(`Zyanite`),
 	regexp.MustCompile(`zzold`),
 	regexp.MustCompile(`Tom's`),
+	regexp.MustCompile(`Stabilized Eternium Scope`),
 }
 
 // Allows manual overriding for Gem fields in case WowHead is wrong.

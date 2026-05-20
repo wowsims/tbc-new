@@ -6,6 +6,9 @@ import (
 
 // Note that this is only used when the hardcast and GCD actions happen at different times.
 func (unit *Unit) newHardcastAction(sim *Simulation) {
+	// While casting, the players dodge, parry and block gets reduced to 0
+	unit.HardcastAvoidanceAura.Activate(sim)
+
 	if (unit.hardcastAction != nil) && !unit.hardcastAction.consumed {
 		unit.hardcastAction.Cancel(sim)
 	}
@@ -98,6 +101,7 @@ func (unit *Unit) CancelGCDTimer(sim *Simulation) {
 }
 
 func (unit *Unit) CancelHardcast(sim *Simulation) {
+	unit.HardcastAvoidanceAura.Deactivate(sim)
 	unit.Hardcast.Expires = startingCDTime
 	unit.SetGCDTimer(sim, sim.CurrentTime+unit.ReactionTime)
 }

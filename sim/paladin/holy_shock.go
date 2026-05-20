@@ -37,7 +37,7 @@ func (paladin *Paladin) registerHolyShock(rankConfig shared.SpellRankConfig) {
 	// Holy Shock heals for 1.267x the damage component of the spell.
 	healingCoeff := 1.267
 
-	holyShock := paladin.RegisterSpell(core.SpellConfig{
+	paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: spellID},
 		SpellSchool:    core.SpellSchoolHoly,
 		ProcMask:       core.ProcMaskSpellDamage,
@@ -86,6 +86,4 @@ func (paladin *Paladin) registerHolyShock(rankConfig shared.SpellRankConfig) {
 			}
 		},
 	})
-
-	paladin.HolyShocks = append(paladin.HolyShocks, holyShock)
 }

@@ -37,6 +37,7 @@ message SimItem {
 	RangedWeaponType ranged_weapon_type = 7;
 	repeated GemColor gem_sockets = 8;
 	repeated double socketBonus = 9;
+	double quality_modifier = 15; // Negative for caster weapons; used by Seal of Righteousness proc among others.
 
 	double weapon_speed = 10;
 

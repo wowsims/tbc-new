@@ -1058,6 +1058,7 @@ const (
 	ITEM_ENHANCEMENT
 	BANDAGE
 	OTHER
+	HERB
 )
 
 type RPPMModifierType int

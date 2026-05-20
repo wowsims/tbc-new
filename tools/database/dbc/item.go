@@ -74,6 +74,7 @@ func (item *Item) ToScaledUIItem(itemLevel int) *proto.UIItem {
 		SocketBonus:         NullFloat(item.GetGemBonus().ToProtoArray()),
 		NameDescription:     item.NameDescription,
 		LimitCategory:       int32(item.LimitCategory),
+		QualityModifier:     item.GetWeaponQualityModifier(),
 	}
 
 	item.ParseItemFlags(uiItem)
@@ -160,6 +161,16 @@ func (item *Item) GetStats(itemLevel int) *stats.Stats {
 
 	return stats
 }
+
+// GetWeaponQualityModifier returns the per-item damage offset for weapons.
+// For armor the value is repurposed as bonus armor (see GetStats), so don't expose it as a weapon quality modifier.
+func (item *Item) GetWeaponQualityModifier() float64 {
+	if item.ItemClass != ITEM_CLASS_WEAPON {
+		return 0
+	}
+	return item.QualityModifier
+}
+
 func (item *Item) GetRandPropPoints(itemLevel int) int32 {
 	suffixType := item.GetRandomSuffixType()
 	randomProperty := GetDBC().RandomPropertiesByIlvl[itemLevel]

@@ -33,7 +33,7 @@ func (paladin *Paladin) registerHammerOfWrath(rankConfig shared.SpellRankConfig)
 	maxDamage := rankConfig.MaxDamage
 	coefficient := rankConfig.Coefficient
 
-	hammerOfWrath := paladin.RegisterSpell(core.SpellConfig{
+	paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: spellID},
 		SpellSchool:    core.SpellSchoolHoly,
 		ProcMask:       core.ProcMaskRangedSpecial,
@@ -44,19 +44,25 @@ func (paladin *Paladin) registerHammerOfWrath(rankConfig shared.SpellRankConfig)
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
 
-		MaxRange: 30,
+		MaxRange:     30,
+		MissileSpeed: 35,
 
 		ManaCost: core.ManaCostOptions{
 			FlatCost: cost,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
+				GCDMin:   time.Millisecond * 500,
 				GCD:      time.Millisecond * 500,
 				CastTime: time.Millisecond * 500,
 			},
 			CD: core.Cooldown{
 				Timer:    paladin.getHammerOfWrathTimer(),
 				Duration: time.Second * 6,
+			},
+			ModifyCast: func(sim *core.Simulation, spell *core.Spell, cast *core.Cast) {
+				castTime := paladin.ApplyCastSpeedForSpell(cast.CastTime, spell)
+				paladin.AutoAttacks.StopMeleeUntil(sim, sim.CurrentTime+castTime)
 			},
 		},
 
@@ -68,9 +74,10 @@ func (paladin *Paladin) registerHammerOfWrath(rankConfig shared.SpellRankConfig)
 		},
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			spell.CalcAndDealDamage(sim, target, sim.Roll(minDamage, maxDamage), spell.OutcomeMeleeSpecialHitAndCrit)
+			result := spell.CalcDamage(sim, target, sim.Roll(minDamage, maxDamage), spell.OutcomeRangedHitAndCrit)
+			spell.WaitTravelTime(sim, func(sim *core.Simulation) {
+				spell.DealDamage(sim, result)
+			})
 		},
 	})
-
-	paladin.HammerOfWraths = append(paladin.HammerOfWraths, hammerOfWrath)
 }

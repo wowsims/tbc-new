@@ -11,9 +11,8 @@ import (
 //
 // An instant strike that causes 110% weapon damage and refreshes all Judgements on the target.
 func (paladin *Paladin) registerCrusaderStrike() {
-	actionID := core.ActionID{SpellID: 35395}
-	paladin.CrusaderStrike = paladin.RegisterSpell(core.SpellConfig{
-		ActionID:       actionID,
+	paladin.RegisterSpell(core.SpellConfig{
+		ActionID:       core.ActionID{SpellID: 35395},
 		SpellSchool:    core.SpellSchoolPhysical,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
 		Flags:          core.SpellFlagAPL | core.SpellFlagMeleeMetrics | core.SpellFlagNoOnCastComplete,

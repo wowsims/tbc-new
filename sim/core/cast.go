@@ -188,6 +188,8 @@ func (spell *Spell) makeCastFunc(config CastConfig) CastSuccessFunc {
 						spell.Unit.Log(sim, "Completed cast %s", spell.ActionID)
 					}
 
+					spell.Unit.HardcastAvoidanceAura.Deactivate(sim)
+
 					if !spell.CanCompleteCast(sim, target, true) {
 						return
 					}
