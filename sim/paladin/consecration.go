@@ -74,6 +74,10 @@ func (paladin *Paladin) registerConsecration(rankConfig shared.SpellRankConfig) 
 		},
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+			// Consecration does one hit check on cast but the ground effect will still be applied
+			// meaning it's only needed to proc things like Eye of Magtheridon (procs on resist)
+			spell.CalcAndDealOutcome(sim, target, spell.OutcomeMagicHit)
+
 			dot := spell.AOEDot()
 			dot.Apply(sim)
 			dot.Spell.CalcAndDealPeriodicAoeDamage(sim, minDamage, dot.OutcomeTickMagicHit)
