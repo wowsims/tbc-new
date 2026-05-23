@@ -29,10 +29,11 @@ func (warlock *Warlock) registerSeed() {
 		Flags:          core.SpellFlagPassiveSpell | core.SpellFlagIgnoreAttackerModifiers,
 		ClassSpellMask: WarlockSpellSeedOfCorruptionExplosion,
 
-		DamageMultiplier: 1,
-		CritMultiplier:   warlock.DefaultSpellCritMultiplier(),
-		ThreatMultiplier: 1,
-		BonusCoefficient: 0,
+		DamageMultiplier:       1,
+		CritMultiplier:         warlock.DefaultSpellCritMultiplier(),
+		ThreatMultiplier:       1,
+		BonusCoefficient:       0,
+		TargetBonusCoefficient: seedPopCoeff,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			targetCount := sim.Environment.ActiveTargetCount()
