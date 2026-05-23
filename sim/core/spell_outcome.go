@@ -39,6 +39,21 @@ func (dot *Dot) OutcomeTick(sim *Simulation, result *SpellResult, _ *AttackTable
 	}
 }
 
+func (dot *Dot) OutcomeTickMagicHit(sim *Simulation, result *SpellResult, attackTable *AttackTable) {
+	if dot.Spell.MagicHitCheck(sim, attackTable) {
+		isPartialResist := result.DidResist()
+		result.Outcome = OutcomeHit
+		dot.Spell.SpellMetrics[result.Target.UnitIndex].Ticks++
+		if isPartialResist {
+			dot.Spell.SpellMetrics[result.Target.UnitIndex].ResistedTicks++
+		}
+	} else {
+		result.Outcome = OutcomeMiss
+		result.Damage = 0
+		dot.Spell.SpellMetrics[result.Target.UnitIndex].Misses++
+	}
+}
+
 func (spell *Spell) OutcomeMagicHitAndCrit(sim *Simulation, result *SpellResult, attackTable *AttackTable) {
 	spell.outcomeMagicHitAndCrit(sim, result, attackTable, true)
 }
@@ -146,7 +161,7 @@ func (spell *Spell) outcomeHealingCrit(sim *Simulation, result *SpellResult, att
 	}
 }
 
-func (spell *Spell) OutcomeTickMagicHit(sim *Simulation, result *SpellResult, attackTable *AttackTable) {
+func (spell *Spell) OutcomeTickMagicHitNoHitCounter(sim *Simulation, result *SpellResult, attackTable *AttackTable) {
 	if spell.MagicHitCheck(sim, attackTable) {
 		result.Outcome = OutcomeHit
 	} else {
