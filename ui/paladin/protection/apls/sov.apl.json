@@ -1,0 +1,23 @@
+{
+	"type": "TypeAPL",
+	"prepullActions": [
+		{"action":{"castSpell":{"spellId":{"spellId":25780}}},"doAtValue":{"const":{"val":"-20s"}}},
+		{"action":{"castSpell":{"spellId":{"spellId":27149}}},"doAtValue":{"const":{"val":"-18.5s"}}},
+		{"action":{"castSpell":{"spellId":{"spellId":31801,"rank":1}}},"doAtValue":{"const":{"val":"-4.5s"}}},
+		{"action":{"castSpell":{"spellId":{"spellId":27179,"rank":4}}},"doAtValue":{"const":{"val":"-2.5s"}}},
+		{"action":{"castSpell":{"spellId":{"spellId":32700,"rank":3}}},"doAtValue":{"const":{"val":"-0.99s"}}}
+	],
+	"priorityList": [
+		{"action":{"autocastOtherCooldowns":{}}},
+		{"action":{"condition":{"cmp":{"op":"OpLe","lhs":{"currentTime":{}},"rhs":{"const":{"val":"0.5s"}}}},"castSpell":{"spellId":{"spellId":20271}}}},
+		{"action":{"condition":{"cmp":{"op":"OpLe","lhs":{"auraRemainingTime":{"auraId":{"spellId":27179,"rank":4}}},"rhs":{"const":{"val":"1.5s"}}}},"wait":{"duration":{"auraRemainingTime":{"auraId":{"spellId":27179,"rank":4}}}}}},
+		{"action":{"castSpell":{"spellId":{"spellId":27179,"rank":4}}}},
+		{"action":{"condition":{"and":{"vals":[{"auraIsInactive":{"auraId":{"spellId":31801,"rank":1}}},{"cmp":{"op":"OpGt","lhs":{"auraRemainingTime":{"auraId":{"spellId":27179,"rank":4}}},"rhs":{"spellGcdHastedDuration":{"spellId":{"spellId":31801,"rank":1}}}}}]}},"castSpell":{"spellId":{"spellId":31801,"rank":1}}}},
+		{"action":{"condition":{"cmp":{"op":"OpGt","lhs":{"auraRemainingTime":{"auraId":{"spellId":27179,"rank":4}}},"rhs":{"spellGcdHastedDuration":{"spellId":{"spellId":27173,"rank":6}}}}},"castSpell":{"spellId":{"spellId":27173,"rank":6}}}},
+		{"action":{"condition":{"and":{"vals":[{"auraIsActive":{"auraId":{"spellId":31801,"rank":1},"includeReactionTime":true}},{"cmp":{"op":"OpGt","lhs":{"auraRemainingTime":{"auraId":{"spellId":27179,"rank":4}}},"rhs":{"spellGcdHastedDuration":{"spellId":{"spellId":31801,"rank":1}}}}}]}},"strictSequence":{"actions":[{"castSpell":{"spellId":{"spellId":20271}}},{"castSpell":{"spellId":{"spellId":31801,"rank":1}}}]}}},
+		{"action":{"condition":{"cmp":{"op":"OpGt","lhs":{"auraRemainingTime":{"auraId":{"spellId":27179,"rank":4}}},"rhs":{"spellGcdHastedDuration":{"spellId":{"spellId":27138,"rank":7}}}}},"castSpell":{"spellId":{"spellId":27138,"rank":7}}}},
+		{"action":{"castSpell":{"spellId":{"spellId":27179,"rank":4}}}},
+		{"action":{"condition":{"cmp":{"op":"OpGt","lhs":{"auraRemainingTime":{"auraId":{"spellId":27179,"rank":4}}},"rhs":{"spellGcdHastedDuration":{"spellId":{"spellId":27180,"rank":4}}}}},"castSpell":{"spellId":{"spellId":27180,"rank":4}}}},
+		{"action":{"condition":{"or":{"vals":[{"not":{"val":{"variableRef":{"name":"Prioritize Holy Shield"}}}},{"cmp":{"op":"OpGt","lhs":{"auraRemainingTime":{"auraId":{"spellId":27179,"rank":4}}},"rhs":{"spellGcdHastedDuration":{"spellId":{"spellId":32700,"rank":3}}}}}]}},"castSpell":{"spellId":{"spellId":32700,"rank":3}}}}
+	]
+}

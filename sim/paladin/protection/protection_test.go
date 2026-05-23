@@ -53,6 +53,9 @@ func TestProtection(t *testing.T) {
 			Profession2:      proto.Profession_Enchanting,
 
 			Rotation: apl,
+			OtherRotations: []core.RotationCombo{
+				core.GetAplRotation("../../../ui/paladin/protection/apls", "sov"),
+			},
 
 			IsTank:          true,
 			InFrontOfTarget: true,

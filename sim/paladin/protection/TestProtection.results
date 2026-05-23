@@ -1744,6 +1744,54 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestProtection-Settings-BloodElf-p2-Protection-sov-FullBuffs-5.0yards-LongMultiTarget"
+ value: {
+  dps: 1207.45722
+  tps: 1577.29524
+  dtps: 54125.99793
+ }
+}
+dps_results: {
+ key: "TestProtection-Settings-BloodElf-p2-Protection-sov-FullBuffs-5.0yards-LongSingleTarget"
+ value: {
+  dps: 858.67232
+  tps: 1492.34481
+  dtps: 1270.90438
+ }
+}
+dps_results: {
+ key: "TestProtection-Settings-BloodElf-p2-Protection-sov-FullBuffs-5.0yards-ShortSingleTarget"
+ value: {
+  dps: 928.61344
+  tps: 1585.99998
+  dtps: 1349.94412
+ }
+}
+dps_results: {
+ key: "TestProtection-Settings-BloodElf-p2-Protection-sov-NoBuffs-5.0yards-LongMultiTarget"
+ value: {
+  dps: 82.5979
+  tps: 119.05922
+  dtps: 85976.50048
+ }
+}
+dps_results: {
+ key: "TestProtection-Settings-BloodElf-p2-Protection-sov-NoBuffs-5.0yards-LongSingleTarget"
+ value: {
+  dps: 380.22823
+  tps: 803.64675
+  dtps: 2259.04906
+ }
+}
+dps_results: {
+ key: "TestProtection-Settings-BloodElf-p2-Protection-sov-NoBuffs-5.0yards-ShortSingleTarget"
+ value: {
+  dps: 393.51361
+  tps: 831.1617
+  dtps: 2332.67192
+ }
+}
+dps_results: {
  key: "TestProtection-Settings-Human-p2-Protection-default-FullBuffs-5.0yards-LongMultiTarget"
  value: {
   dps: 2479.04709
@@ -1789,6 +1837,54 @@ dps_results: {
   dps: 443.6182
   tps: 924.07299
   dtps: 2347.48218
+ }
+}
+dps_results: {
+ key: "TestProtection-Settings-Human-p2-Protection-sov-FullBuffs-5.0yards-LongMultiTarget"
+ value: {
+  dps: 1227.27066
+  tps: 1597.33192
+  dtps: 54134.64766
+ }
+}
+dps_results: {
+ key: "TestProtection-Settings-Human-p2-Protection-sov-FullBuffs-5.0yards-LongSingleTarget"
+ value: {
+  dps: 871.9415
+  tps: 1510.50762
+  dtps: 1271.11463
+ }
+}
+dps_results: {
+ key: "TestProtection-Settings-Human-p2-Protection-sov-FullBuffs-5.0yards-ShortSingleTarget"
+ value: {
+  dps: 944.95278
+  tps: 1604.04391
+  dtps: 1350.16771
+ }
+}
+dps_results: {
+ key: "TestProtection-Settings-Human-p2-Protection-sov-NoBuffs-5.0yards-LongMultiTarget"
+ value: {
+  dps: 84.29195
+  tps: 120.80606
+  dtps: 85989.4733
+ }
+}
+dps_results: {
+ key: "TestProtection-Settings-Human-p2-Protection-sov-NoBuffs-5.0yards-LongSingleTarget"
+ value: {
+  dps: 380.89485
+  tps: 803.11531
+  dtps: 2259.40047
+ }
+}
+dps_results: {
+ key: "TestProtection-Settings-Human-p2-Protection-sov-NoBuffs-5.0yards-ShortSingleTarget"
+ value: {
+  dps: 395.3309
+  tps: 833.90807
+  dtps: 2333.03499
  }
 }
 dps_results: {
