@@ -1,4 +1,5 @@
 import { LOCAL_STORAGE_PREFIX, REPO_RELEASES_URL } from '../../constants/other';
+import type { Sim } from '../../sim';
 import { isDevMode, isLocal } from '../../utils';
 import { Component } from '../component';
 import Toast from '../toast';
@@ -7,11 +8,30 @@ import i18n from '../../../i18n/config';
 export class NoticeLocalSim extends Component {
 	container: HTMLElement;
 	toast: Toast | null = null;
-	constructor(parent: HTMLElement) {
+	constructor(parent: HTMLElement, sim: Sim) {
 		super(null);
 		this.container = parent;
 
-		if (this.hasSeenNotice || isLocal() || isDevMode()) return;
+		// Synchronous opt-outs: already dismissed, or a local dev build.
+		if (this.hasSeenNotice || isDevMode()) return;
+
+		this.maybeRender(sim);
+	}
+
+	// Only recommend the native download when simulations actually run
+	// in-browser via WASM. Server-hosted instances (and the downloaded app) use
+	// net workers, which already compute at native speed, so the download
+	// wouldn't help — regardless of whether the host is "localhost".
+	private async maybeRender(sim: Sim) {
+		let usingWasm: boolean;
+		try {
+			usingWasm = await sim.isWasm();
+		} catch {
+			// Workers not ready/available yet: fall back to the hostname guess so
+			// we still nudge users of the public (non-local) web build.
+			usingWasm = !isLocal();
+		}
+		if (!usingWasm || this.hasSeenNotice) return;
 
 		this.render();
 

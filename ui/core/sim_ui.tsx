@@ -233,7 +233,7 @@ export abstract class SimUI extends Component {
 	}
 
 	addNoticeForLocalSim() {
-		new NoticeLocalSim(this.simActionsContainer);
+		new NoticeLocalSim(this.simActionsContainer, this.sim);
 	}
 
 	addAction(label: string, cssClass: string, onClick: (event: MouseEvent) => void): HTMLButtonElement {

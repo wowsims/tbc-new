@@ -169,7 +169,21 @@ export class SimHeader extends Component {
 		const icon = 'fas fa-gauge-high fa-lg';
 		const parent = this.simToolbar;
 
-		if (isLocal()) {
+		// The "faster simulating" prompt only makes sense when sims run
+		// in-browser via WASM. Native sims (the downloaded app or a self-hosted
+		// server using net workers) are already fast, so for those we only show
+		// the button to flag that a newer version is available.
+		const addFasterSimLink = () => {
+			this.addToolbarLink({
+				href: href,
+				parent: parent,
+				icon: icon,
+				tooltip: 'Download simulator for faster simulating',
+				classes: 'downbin',
+			});
+		};
+
+		const addOutdatedLinkIfNeeded = () => {
 			fetch('/version')
 				.then(resp => {
 					resp.json()
@@ -189,15 +203,13 @@ export class SimHeader extends Component {
 						});
 				})
 				.catch(noop);
-		} else {
-			this.addToolbarLink({
-				href: href,
-				parent: parent,
-				icon: icon,
-				tooltip: 'Download simulator for faster simulating',
-				classes: 'downbin',
-			});
-		}
+		};
+
+		this.simUI.sim
+			.isWasm()
+			.then(isWasm => (isWasm ? addFasterSimLink() : addOutdatedLinkIfNeeded()))
+			// Worker type unknown: fall back to the old hostname heuristic.
+			.catch(() => (isLocal() ? addOutdatedLinkIfNeeded() : addFasterSimLink()));
 	}
 
 	private addSimOptionsLink() {

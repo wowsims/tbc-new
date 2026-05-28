@@ -98,11 +98,33 @@ export class BulkTab extends SimTab {
 	protected originalGear: Gear | null = null;
 	protected originalGearResults: TopGearResult | null = null;
 
+	// Whether sims run in-browser via WASM (vs the native engine — a self-hosted
+	// server or the downloaded app). Gates web-vs-native batch limits/defaults
+	// and the "download for speed" prompt. Seeded from the hostname guess, then
+	// corrected once a worker reports its type (see the constructor).
+	private isWasmSim = isExternal();
+
 	constructor(parentElem: HTMLElement, simUI: IndividualSimUI<any>) {
 		super(parentElem, simUI, { identifier: 'bulk-tab', title: i18n.t('bulk_tab.title') });
 
 		this.simUI = simUI;
 		this.playerCanDualWield = this.simUI.player.getPlayerSpec().canDualWield;
+
+		// Correct the web-vs-native gating once a worker reports whether it's
+		// WASM. A self-hosted server (net workers) is as fast as the downloaded
+		// app, so it should get native limits and no "download for speed" prompt.
+		this.simUI.sim
+			.isWasm()
+			.then(isWasm => {
+				this.isWasmSim = isWasm;
+				const notice = this.setupTabElem.querySelector<HTMLElement>('.bulk-download-local-notice');
+				if (notice) notice.hidden = !isWasm;
+			})
+			.catch(() => {
+				// Worker type unknown: fall back to the hostname heuristic.
+				const notice = this.setupTabElem.querySelector<HTMLElement>('.bulk-download-local-notice');
+				if (notice) notice.hidden = !isExternal();
+			});
 
 		const setupTabBtnRef = ref<HTMLButtonElement>();
 		const setupTabRef = ref<HTMLDivElement>();
@@ -320,7 +342,7 @@ export class BulkTab extends SimTab {
 	}
 
 	private getDefaultIterationsCount(): number {
-		if (isExternal()) return WEB_DEFAULT_ITERATIONS;
+		if (this.isWasmSim) return WEB_DEFAULT_ITERATIONS;
 
 		return this.simUI.sim.getIterations();
 	}
@@ -699,14 +721,14 @@ export class BulkTab extends SimTab {
 			<>
 				{/* // TODO: Remove once we're more comfortable with the state of Batch sim */}
 				<p className="mb-0" innerHTML={i18n.t('bulk_tab.description')} />
-				{isExternal() && (
-					<p className="mb-0">
-						<a href={REPO_RELEASES_URL} target="_blank">
-							<i className="fas fa-gauge-high me-1" />
-							{i18n.t('bulk_tab.download_local')}
-						</a>
-					</p>
-				)}
+				{/* Rendered for all hosts; hidden unless sims run in-browser via WASM
+				    (toggled by the isWasm() resolver in the constructor). */}
+				<p className="mb-0 bulk-download-local-notice">
+					<a href={REPO_RELEASES_URL} target="_blank">
+						<i className="fas fa-gauge-high me-1" />
+						{i18n.t('bulk_tab.download_local')}
+					</a>
+				</p>
 				<div className="bulk-gear-actions">
 					<button className="btn btn-secondary" ref={bagImportBtnRef}>
 						<i className="fa fa-download me-1" /> {i18n.t('bulk_tab.actions.import_bags')}
@@ -1132,11 +1154,11 @@ export class BulkTab extends SimTab {
 	}
 
 	private getIterationsLimit(): number {
-		return isExternal() ? WEB_ITERATIONS_LIMIT : LOCAL_ITERATIONS_LIMIT;
+		return this.isWasmSim ? WEB_ITERATIONS_LIMIT : LOCAL_ITERATIONS_LIMIT;
 	}
 
 	private getCombinationsLimit(): number {
-		return isExternal() ? WEB_COMBINATIONS_LIMIT : LOCAL_COMBINATIONS_LIMIT;
+		return this.isWasmSim ? WEB_COMBINATIONS_LIMIT : LOCAL_COMBINATIONS_LIMIT;
 	}
 
 	private setReforgeProgress(currentRound: number, rounds: number) {
