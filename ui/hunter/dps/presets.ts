@@ -197,6 +197,7 @@ export const DefaultRaidBuffs = RaidBuffs.create({
 
 export const DefaultDebuffs = Debuffs.create({
 	bloodFrenzy: true,
+	curseOfElements: TristateEffect.TristateEffectImproved,
 	curseOfRecklessness: true,
 	exposeArmor: TristateEffect.TristateEffectImproved,
 	...defaultExposeWeaknessSettings(),
