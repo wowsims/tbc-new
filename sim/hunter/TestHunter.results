@@ -485,6 +485,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestHunter-AllItems-Devastation-30316"
+ value: {
+  dps: 4025.10143
+  tps: 3001.15493
+  dtps: 12.9095
+ }
+}
+dps_results: {
  key: "TestHunter-AllItems-DirebrewHops-38288"
  value: {
   dps: 3391.12231
@@ -842,6 +850,14 @@ dps_results: {
   dps: 3078.07719
   tps: 2084.48796
   dtps: 13.26708
+ }
+}
+dps_results: {
+ key: "TestHunter-AllItems-InfinityBlade-30312"
+ value: {
+  dps: 3589.53657
+  tps: 2570.37577
+  dtps: 13.5277
  }
 }
 dps_results: {
@@ -1467,6 +1483,14 @@ dps_results: {
   dps: 3391.12231
   tps: 2364.34375
   dtps: 13.14818
+ }
+}
+dps_results: {
+ key: "TestHunter-AllItems-WarpSlicer-30311"
+ value: {
+  dps: 3723.743
+  tps: 2699.27151
+  dtps: 12.85343
  }
 }
 dps_results: {

@@ -655,6 +655,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestDestruction-AllItems-InfinityBlade-30312"
+ value: {
+  dps: 1876.24353
+  tps: 1642.37572
+ }
+}
+dps_results: {
  key: "TestDestruction-AllItems-JomGabbar-23570"
  value: {
   dps: 1835.1301
@@ -1171,6 +1178,13 @@ dps_results: {
  value: {
   dps: 1859.39166
   tps: 1622.66364
+ }
+}
+dps_results: {
+ key: "TestDestruction-AllItems-WarpSlicer-30311"
+ value: {
+  dps: 1876.24353
+  tps: 1642.37572
  }
 }
 dps_results: {

@@ -923,6 +923,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestFeralCat-AllItems-InfinityBlade-30312"
+ value: {
+  dps: 776.66449
+  tps: 551.43179
+  hps: 71.38104
+ }
+}
+dps_results: {
  key: "TestFeralCat-AllItems-IvoryIdoloftheMoongoddess-27518"
  value: {
   dps: 759.93015

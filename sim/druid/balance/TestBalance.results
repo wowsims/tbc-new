@@ -382,6 +382,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestBalance-AllItems-InfinityBlade-30312"
+ value: {
+  dps: 1463.89703
+  tps: 1392.51832
+ }
+}
+dps_results: {
  key: "TestBalance-AllItems-JomGabbar-23570"
  value: {
   dps: 1436.67683

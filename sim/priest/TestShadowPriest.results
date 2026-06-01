@@ -662,6 +662,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestShadowPriest-AllItems-InfinityBlade-30312"
+ value: {
+  dps: 1764.53923
+  tps: 1294.26289
+ }
+}
+dps_results: {
  key: "TestShadowPriest-AllItems-JomGabbar-23570"
  value: {
   dps: 1708.43988

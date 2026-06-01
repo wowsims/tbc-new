@@ -655,6 +655,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestAffliction-AllItems-InfinityBlade-30312"
+ value: {
+  dps: 1949.14325
+  tps: 1218.76623
+ }
+}
+dps_results: {
  key: "TestAffliction-AllItems-JomGabbar-23570"
  value: {
   dps: 1927.99109
@@ -1171,6 +1178,13 @@ dps_results: {
  value: {
   dps: 1939.92352
   tps: 1207.87125
+ }
+}
+dps_results: {
+ key: "TestAffliction-AllItems-WarpSlicer-30311"
+ value: {
+  dps: 1949.14325
+  tps: 1218.76623
  }
 }
 dps_results: {

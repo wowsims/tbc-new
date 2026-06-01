@@ -1034,6 +1034,15 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestFeralBear-AllItems-InfinityBlade-30312"
+ value: {
+  dps: 447.645
+  tps: 690.52098
+  dtps: 1113.60006
+  hps: 77.47595
+ }
+}
+dps_results: {
  key: "TestFeralBear-AllItems-IvoryIdoloftheMoongoddess-27518"
  value: {
   dps: 436.78239

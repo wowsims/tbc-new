@@ -429,6 +429,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestDpsWarrior-AllItems-Devastation-30316"
+ value: {
+  dps: 1985.35272
+  tps: 1500.03997
+  dtps: 7.2778
+ }
+}
+dps_results: {
  key: "TestDpsWarrior-AllItems-DirebrewHops-38288"
  value: {
   dps: 1914.94366
@@ -1369,6 +1377,14 @@ dps_results: {
  value: {
   dps: 1914.94366
   tps: 1448.79242
+  dtps: 7.2778
+ }
+}
+dps_results: {
+ key: "TestDpsWarrior-AllItems-WarpSlicer-30311"
+ value: {
+  dps: 1985.35272
+  tps: 1500.03997
   dtps: 7.2778
  }
 }

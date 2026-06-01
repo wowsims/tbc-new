@@ -403,6 +403,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestEnhancement-AllItems-Devastation-30316"
+ value: {
+  dps: 1850.55425
+  tps: 1764.95272
+ }
+}
+dps_results: {
  key: "TestEnhancement-AllItems-DirebrewHops-38288"
  value: {
   dps: 1916.96463
@@ -722,6 +729,13 @@ dps_results: {
  value: {
   dps: 1644.01672
   tps: 1558.46424
+ }
+}
+dps_results: {
+ key: "TestEnhancement-AllItems-InfinityBlade-30312"
+ value: {
+  dps: 1850.55425
+  tps: 1764.95272
  }
 }
 dps_results: {

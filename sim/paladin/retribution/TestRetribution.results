@@ -478,6 +478,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRetribution-AllItems-Devastation-30316"
+ value: {
+  dps: 1996.98961
+  tps: 1573.18351
+  dtps: 14.53862
+ }
+}
+dps_results: {
  key: "TestRetribution-AllItems-DirebrewHops-38288"
  value: {
   dps: 1837.00838

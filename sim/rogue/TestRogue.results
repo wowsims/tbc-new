@@ -697,6 +697,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRogue-AllItems-InfinityBlade-30312"
+ value: {
+  dps: 1866.37677
+  tps: 1325.1275
+ }
+}
+dps_results: {
  key: "TestRogue-AllItems-JomGabbar-23570"
  value: {
   dps: 1845.90547
@@ -1227,6 +1234,13 @@ dps_results: {
  value: {
   dps: 1862.48086
   tps: 1322.36141
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-WarpSlicer-30311"
+ value: {
+  dps: 1866.37677
+  tps: 1325.1275
  }
 }
 dps_results: {

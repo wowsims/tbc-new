@@ -1518,6 +1518,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestProtectionWarrior-AllItems-WarpSlicer-30311"
+ value: {
+  dps: 775.0039
+  tps: 1423.57408
+  dtps: 1294.99259
+ }
+}
+dps_results: {
  key: "TestProtectionWarrior-AllItems-WastewalkerArmor"
  value: {
   dps: 826.53527

@@ -648,6 +648,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestArcane-AllItems-InfinityBlade-30312"
+ value: {
+  dps: 1944.26562
+  tps: 1322.02423
+ }
+}
+dps_results: {
  key: "TestArcane-AllItems-JomGabbar-23570"
  value: {
   dps: 1889.33666
@@ -1150,6 +1157,13 @@ dps_results: {
  value: {
   dps: 1917.95882
   tps: 1341.83873
+ }
+}
+dps_results: {
+ key: "TestArcane-AllItems-WarpSlicer-30311"
+ value: {
+  dps: 1944.26562
+  tps: 1322.02423
  }
 }
 dps_results: {
