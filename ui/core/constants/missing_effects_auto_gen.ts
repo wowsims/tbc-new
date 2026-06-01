@@ -1878,18 +1878,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		30311, // Warp Slicer
-		[
-			"Increases your movement speed by 50%, and your melee attack speed by 20% for 30s.", // 36479 - https://www.wowhead.com/tbc/spell=36479
-		]
-	],
-	[
-		30316, // Devastation
-		[
-			"Increases your movement speed by 50%, and your melee attack speed by 20% for 30s.", // 36479 - https://www.wowhead.com/tbc/spell=36479
-		]
-	],
-	[
 		30317, // Cosmic Infuser
 		[
 			"Friendly targets of the caster's heals gain an effect that reduces the damage taken by Fire and Shadow spells by 50% for 30s.", // 36483 - https://www.wowhead.com/tbc/spell=36483

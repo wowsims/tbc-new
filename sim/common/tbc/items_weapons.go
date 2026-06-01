@@ -161,6 +161,98 @@ func init() {
 		character.ItemSwap.RegisterProc(30090, procTrigger)
 	})
 
+	newSpeedInfusionWeaponEffect := func(itemID int32, itemName string) {
+		core.NewItemEffect(itemID, func(agent core.Agent) {
+			character := agent.GetCharacter()
+
+			getDpm := func() *core.DynamicProcManager {
+				return character.NewStaticLegacyPPMManager(
+					2,
+					*character.GetDynamicProcMaskForWeaponEffect(itemID),
+				)
+			}
+
+			dpm := getDpm()
+
+			aura := character.RegisterAura(core.Aura{
+				Label:    "Speed Infusion",
+				ActionID: core.ActionID{SpellID: 36479},
+				Duration: time.Second * 30,
+			}).AttachMultiplyAttackSpeed(1.2)
+
+			aura.NewActiveMovementSpeedEffect(0.5)
+
+			procTrigger := character.MakeProcTriggerAura(core.ProcTrigger{
+				Name:     itemName,
+				DPM:      dpm,
+				Outcome:  core.OutcomeLanded,
+				Callback: core.CallbackOnSpellHitDealt,
+				Handler: func(sim *core.Simulation, _ *core.Spell, result *core.SpellResult) {
+					aura.Activate(sim)
+				},
+			})
+
+			character.RegisterItemSwapCallback(core.AllMeleeWeaponSlots(), func(sim *core.Simulation, slot proto.ItemSlot) {
+				dpm = getDpm()
+			})
+
+			character.ItemSwap.RegisterProc(itemID, procTrigger)
+		})
+	}
+
+	newSpeedInfusionWeaponEffect(30311, "Warp Slicer")
+	newSpeedInfusionWeaponEffect(30316, "Devastation")
+
+	// Infinity Blade
+	core.NewItemEffect(30312, func(agent core.Agent) {
+		character := agent.GetCharacter()
+		schools := []stats.SchoolIndex{
+			stats.SchoolIndexArcane, stats.SchoolIndexFire, stats.SchoolIndexFrost,
+			stats.SchoolIndexHoly, stats.SchoolIndexNature, stats.SchoolIndexShadow,
+		}
+
+		getDpm := func() *core.DynamicProcManager {
+			return character.NewStaticLegacyPPMManager(
+				2,
+				*character.GetDynamicProcMaskForWeaponEffect(30312),
+			)
+		}
+
+		dpm := getDpm()
+
+		auras := character.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {
+			return target.GetOrRegisterAura(core.Aura{
+				Label:     "Magic Disruption",
+				ActionID:  core.ActionID{SpellID: 36478},
+				Duration:  time.Second * 30,
+				MaxStacks: 5,
+				OnStacksChange: func(aura *core.Aura, sim *core.Simulation, oldStacks int32, newStacks int32) {
+					for _, school := range schools {
+						target.PseudoStats.SchoolDamageTakenMultiplier[school] *= (1.0 + 0.05*float64(newStacks)) / (1.0 + 0.05*float64(oldStacks))
+					}
+				},
+			})
+		})
+
+		procTrigger := character.MakeProcTriggerAura(core.ProcTrigger{
+			Name:     "Infinity Blade",
+			DPM:      dpm,
+			Outcome:  core.OutcomeLanded,
+			Callback: core.CallbackOnSpellHitDealt,
+			Handler: func(sim *core.Simulation, _ *core.Spell, result *core.SpellResult) {
+				aura := auras.Get(result.Target)
+				aura.Activate(sim)
+				aura.AddStack(sim)
+			},
+		})
+
+		character.RegisterItemSwapCallback(core.AllMeleeWeaponSlots(), func(sim *core.Simulation, slot proto.ItemSlot) {
+			dpm = getDpm()
+		})
+
+		character.ItemSwap.RegisterProc(30312, procTrigger)
+	})
+
 	// Blinkstrike
 	core.NewItemEffect(31332, func(agent core.Agent) {
 		character := agent.GetCharacter()
