@@ -20,10 +20,15 @@ func TestDpsWarrior(t *testing.T) {
 			Class:      proto.Class_ClassWarrior,
 			Race:       proto.Race_RaceOrc,
 			OtherRaces: []proto.Race{proto.Race_RaceHuman},
-			GearSet:    core.GetGearSet("../../../ui/warrior/dps/gear_sets", "preraid_fury"),
+			GearSet:    core.GetGearSet("../../../ui/warrior/dps/gear_sets", "p1_fury"),
 			OtherGearSets: []core.GearSetCombo{
-				core.GetGearSet("../../../ui/warrior/dps/gear_sets", "p1_fury"),
 				core.GetGearSet("../../../ui/warrior/dps/gear_sets", "p1_arms"),
+				core.GetGearSet("../../../ui/warrior/dps/gear_sets", "p2_fury"),
+				core.GetGearSet("../../../ui/warrior/dps/gear_sets", "p2_arms"),
+				core.GetGearSet("../../../ui/warrior/dps/gear_sets", "p3_fury"),
+				core.GetGearSet("../../../ui/warrior/dps/gear_sets", "p3_arms"),
+				core.GetGearSet("../../../ui/warrior/dps/gear_sets", "p4_fury"),
+				core.GetGearSet("../../../ui/warrior/dps/gear_sets", "p4_arms"),
 			},
 			Talents: DefaultFuryTalents,
 			OtherTalentSets: []core.TalentsCombo{

@@ -171,12 +171,22 @@ var ItemSetDestroyerBattlegear = core.NewItemSet(core.ItemSet{
 			warrior := agent.(WarriorAgent).GetWarrior()
 			actionID := core.ActionID{SpellID: 37529}
 
-			aura := warrior.NewTemporaryStatsAura(
+			var aura *core.Aura
+			aura = warrior.NewTemporaryStatsAura(
 				"Overpower",
 				actionID,
 				stats.Stats{stats.AttackPower: 100},
 				time.Second*5,
-			)
+			).AttachProcTrigger(core.ProcTrigger{
+				Name:               "Destroyer Battlegear - 2PC - Consume",
+				ProcMask:           core.ProcMaskMeleeSpecial,
+				Callback:           core.CallbackOnSpellHitDealt,
+				Outcome:            core.OutcomeLanded,
+				TriggerImmediately: true,
+				Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+					aura.Deactivate(sim)
+				},
+			})
 
 			setBonusAura.
 				AttachProcTrigger(core.ProcTrigger{
@@ -185,16 +195,6 @@ var ItemSetDestroyerBattlegear = core.NewItemSet(core.ItemSet{
 					Callback:       core.CallbackOnSpellHitDealt,
 					Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 						aura.Activate(sim)
-					},
-				}).
-				AttachProcTrigger(core.ProcTrigger{
-					Name:               "Destroyer Battlegear - 2PC - Consume",
-					ProcMask:           core.ProcMaskMeleeSpecial,
-					Callback:           core.CallbackOnSpellHitDealt,
-					Outcome:            core.OutcomeLanded,
-					TriggerImmediately: true,
-					Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-						aura.Deactivate(sim)
 					},
 				}).
 				ExposeToAPL(37528)
