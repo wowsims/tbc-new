@@ -1006,4 +1006,5 @@ export const resourceTypeToIcon: Record<ResourceType, string> = {
 export const buffAuraToSpellIdMap: Record<number, ActionId> = {
 	34471: ActionId.fromSpellId(19574), // Bestial Wrath -> The Beast Within
 	31047: ActionId.fromItemId(24128), // Nightseye Panther -> Figurine - Nightseye Panther
+	37198: ActionId.fromItemId(30447), // Blessing of Righteousness -> Tome of Fiery Redemption
 };

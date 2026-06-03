@@ -1890,12 +1890,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		30447, // Tome of Fiery Redemption
-		[
-			"Each time you cast a spell, there is chance you will gain up to 290 spell damage and healing.", // 37198 - https://www.wowhead.com/tbc/spell=37198
-		]
-	],
-	[
 		30487, // Merciless Gladiator's Plate Gauntlets
 		[
 			"Hamstring Rage cost reduced by -3.0.", // 22778 - https://www.wowhead.com/tbc/spell=22778

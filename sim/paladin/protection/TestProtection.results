@@ -1584,6 +1584,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestProtection-AllItems-TomeofFieryRedemption-30447"
+ value: {
+  dps: 914.63292
+  tps: 1640.57913
+  dtps: 1294.28455
+ }
+}
+dps_results: {
  key: "TestProtection-AllItems-TsunamiTalisman-30627"
  value: {
   dps: 894.55749
