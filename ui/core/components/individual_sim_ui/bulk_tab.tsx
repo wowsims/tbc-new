@@ -382,10 +382,12 @@ export class BulkTab extends SimTab {
 					// Avoid duplicating rings/trinkets/weapons
 					if (this.isSecondaryItemSlot(slot) || !canEquipItem(equippedItem.item, this.simUI.player.getPlayerSpec(), slot)) return;
 
-					const idx = this.items.push(item) - 1;
 					const bulkSlot = getBulkItemSlotFromSlot(slot, this.playerCanDualWield);
 					const group = this.pickerGroups.get(bulkSlot)!;
-					group.add(idx, equippedItem, silent);
+					const idx = this.items.push(item) - 1;
+					if (!group.add(idx, equippedItem, silent)) {
+						this.items.pop();
+					}
 				});
 			}
 		});
@@ -401,7 +403,9 @@ export class BulkTab extends SimTab {
 
 			const idx = this.items.push(item) - 1;
 			const group = this.pickerGroups.get(bulkSlot)!;
-			group.add(idx, equippedItem);
+			if (!group.add(idx, equippedItem)) {
+				this.items.pop();
+			}
 			this.itemsChangedEmitter.emit(TypedEvent.nextEventID());
 		}
 	}
