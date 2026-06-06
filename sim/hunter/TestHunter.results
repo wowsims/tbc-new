@@ -341,6 +341,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestHunter-AllItems-BloodGuard'sChainVices-22862"
+ value: {
+  dps: 3400.99072
+  tps: 2375.25007
+  dtps: 12.71805
+ }
+}
+dps_results: {
  key: "TestHunter-AllItems-BraidedEterniumChain-24114"
  value: {
   dps: 3444.11553
@@ -354,6 +362,14 @@ dps_results: {
   dps: 3391.12231
   tps: 2364.65418
   dtps: 13.14818
+ }
+}
+dps_results: {
+ key: "TestHunter-AllItems-BrutalGladiator'sChainGauntlets-34991"
+ value: {
+  dps: 3466.32389
+  tps: 2435.75139
+  dtps: 13.03484
  }
 }
 dps_results: {
@@ -701,6 +717,22 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestHunter-AllItems-General'sChainGloves-16571"
+ value: {
+  dps: 3423.82381
+  tps: 2396.91931
+  dtps: 12.71805
+ }
+}
+dps_results: {
+ key: "TestHunter-AllItems-Gladiator'sChainGauntlets-28335"
+ value: {
+  dps: 3434.16821
+  tps: 2406.27033
+  dtps: 13.03484
+ }
+}
+dps_results: {
  key: "TestHunter-AllItems-GlowingCrystalInsignia-25619"
  value: {
   dps: 3391.10033
@@ -722,6 +754,14 @@ dps_results: {
   dps: 3391.12231
   tps: 2364.65418
   dtps: 13.14818
+ }
+}
+dps_results: {
+ key: "TestHunter-AllItems-GrandMarshal'sChainGauntlets-28614"
+ value: {
+  dps: 3424.78726
+  tps: 2397.90559
+  dtps: 12.71805
  }
 }
 dps_results: {
@@ -813,6 +853,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestHunter-AllItems-HighWarlord'sChainGauntlets-28806"
+ value: {
+  dps: 3424.78726
+  tps: 2397.90559
+  dtps: 12.71805
+ }
+}
+dps_results: {
  key: "TestHunter-AllItems-HourglassoftheUnraveller-28034"
  value: {
   dps: 3435.99498
@@ -885,6 +933,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestHunter-AllItems-Knight-Lieutenant'sChainVices-23279"
+ value: {
+  dps: 3400.99072
+  tps: 2375.25007
+  dtps: 12.71805
+ }
+}
+dps_results: {
  key: "TestHunter-AllItems-LionheartChampion-28429"
  value: {
   dps: 3734.13122
@@ -941,6 +997,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestHunter-AllItems-Marshal'sChainGrips-16463"
+ value: {
+  dps: 3423.82381
+  tps: 2396.91931
+  dtps: 12.71805
+ }
+}
+dps_results: {
  key: "TestHunter-AllItems-MasqueradeGown-28578"
  value: {
   dps: 3336.05586
@@ -954,6 +1018,14 @@ dps_results: {
   dps: 3391.12231
   tps: 2364.65418
   dtps: 13.14818
+ }
+}
+dps_results: {
+ key: "TestHunter-AllItems-MercilessGladiator'sChainGauntlets-31961"
+ value: {
+  dps: 3448.65962
+  tps: 2419.59633
+  dtps: 13.03484
  }
 }
 dps_results: {
@@ -1294,6 +1366,22 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestHunter-AllItems-Stalker'sChainGauntlets-35377"
+ value: {
+  dps: 3424.78726
+  tps: 2397.90559
+  dtps: 12.71805
+ }
+}
+dps_results: {
+ key: "TestHunter-AllItems-Stalker'sChainGauntlets-35475"
+ value: {
+  dps: 3424.78726
+  tps: 2397.90559
+  dtps: 12.71805
+ }
+}
+dps_results: {
  key: "TestHunter-AllItems-Starkiller'sBauble-30340"
  value: {
   dps: 3390.55294
@@ -1475,6 +1563,14 @@ dps_results: {
   dps: 3390.55294
   tps: 2364.49105
   dtps: 13.35753
+ }
+}
+dps_results: {
+ key: "TestHunter-AllItems-VengefulGladiator'sChainGauntlets-33665"
+ value: {
+  dps: 3455.55352
+  tps: 2425.84344
+  dtps: 13.03484
  }
 }
 dps_results: {

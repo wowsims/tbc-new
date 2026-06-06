@@ -325,11 +325,17 @@ func init() {
 	// Empty function to remove the warning from the UI
 	// because this effect has been implemented in buffs.go
 	core.NewItemEffect(30446, func(agent core.Agent) {})
+
+	for _, itemID := range pvpGloveItemIDs {
+		core.NewItemEffect(itemID, func(_ core.Agent) {})
+	}
 }
+
+var pvpGloveItemIDs = []int32{24549, 28700, 28852, 30487, 32164, 33729, 35408, 35067}
 
 func (warrior *Warrior) addPvpGloves() {
 	warrior.RegisterPvPGloveMod(
-		[]int32{24549, 28700, 28852, 30487, 32164, 33729, 35408, 35067},
+		pvpGloveItemIDs,
 		core.SpellModConfig{
 			Kind:      core.SpellMod_PowerCost_Flat,
 			ClassMask: SpellMaskHamstring,

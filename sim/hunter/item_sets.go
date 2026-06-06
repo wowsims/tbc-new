@@ -327,6 +327,10 @@ func init() {
 
 		hunter.ItemSwap.RegisterProc(TalonOfAlarItemID, procAura)
 	})
+
+	for _, itemID := range pvpGloveItemIDs {
+		core.NewItemEffect(itemID, func(_ core.Agent) {})
+	}
 }
 
 func (hunter *Hunter) talonOfAlarBonus() float64 {
@@ -336,9 +340,11 @@ func (hunter *Hunter) talonOfAlarBonus() float64 {
 	return 0
 }
 
+var pvpGloveItemIDs = []int32{23279, 22862, 16463, 16571, 35475, 35377, 28806, 28614, 28335, 31961, 33665, 34991}
+
 func (hunter *Hunter) addPvpGloves() {
 	hunter.RegisterPvPGloveMod(
-		[]int32{23279, 22862, 16463, 16571, 35475, 35377, 28806, 28614, 28335, 31961, 33665, 34991},
+		pvpGloveItemIDs,
 		core.SpellModConfig{
 			Kind:       core.SpellMod_DamageDone_Pct,
 			ClassMask:  HunterSpellMultiShot,

@@ -341,6 +341,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestProtectionWarrior-AllItems-BrutalGladiator'sPlateGauntlets-35067"
+ value: {
+  dps: 785.01512
+  tps: 1411.76334
+  dtps: 1320.19615
+ }
+}
+dps_results: {
  key: "TestProtectionWarrior-AllItems-BulwarkofAzzinoth-32375"
  value: {
   dps: 777.35078
@@ -378,6 +386,14 @@ dps_results: {
   dps: 776.11843
   tps: 1426.19698
   dtps: 1311.31098
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-Chancellor'sPlateGauntlets-32164"
+ value: {
+  dps: 775.25648
+  tps: 1396.74656
+  dtps: 1334.89227
  }
 }
 dps_results: {
@@ -733,6 +749,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestProtectionWarrior-AllItems-Gladiator'sPlateGauntlets-24549"
+ value: {
+  dps: 778.60006
+  tps: 1401.75039
+  dtps: 1327.71813
+ }
+}
+dps_results: {
  key: "TestProtectionWarrior-AllItems-GlowingCrystalInsignia-25619"
  value: {
   dps: 747.07856
@@ -754,6 +778,14 @@ dps_results: {
   dps: 761.26892
   tps: 1397.50141
   dtps: 1278.93434
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-GrandMarshal'sPlateGauntlets-28700"
+ value: {
+  dps: 774.97629
+  tps: 1396.02211
+  dtps: 1341.51176
  }
 }
 dps_results: {
@@ -826,6 +858,14 @@ dps_results: {
   dps: 747.07856
   tps: 1375.83781
   dtps: 1295.45955
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-HighWarlord'sPlateGauntlets-28852"
+ value: {
+  dps: 774.97629
+  tps: 1396.02211
+  dtps: 1341.51176
  }
 }
 dps_results: {
@@ -946,6 +986,14 @@ dps_results: {
   dps: 747.07856
   tps: 1375.83781
   dtps: 1295.45955
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-MercilessGladiator'sPlateGauntlets-30487"
+ value: {
+  dps: 780.98561
+  tps: 1405.1447
+  dtps: 1327.4462
  }
 }
 dps_results: {
@@ -1186,6 +1234,14 @@ dps_results: {
   dps: 777.17988
   tps: 1426.95233
   dtps: 1299.54573
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-SavagePlateGauntlets-35408"
+ value: {
+  dps: 774.97629
+  tps: 1396.02211
+  dtps: 1341.51176
  }
 }
 dps_results: {
@@ -1491,6 +1547,14 @@ dps_results: {
   dps: 747.07856
   tps: 1375.83781
   dtps: 1295.45955
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-VengefulGladiator'sPlateGauntlets-33729"
+ value: {
+  dps: 783.20942
+  tps: 1409.12359
+  dtps: 1323.83952
  }
 }
 dps_results: {
