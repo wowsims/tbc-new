@@ -6,13 +6,13 @@ import i18n from '../../i18n/config.js';
 import { SimSettingCategories } from '../constants/sim_settings';
 import { IndividualSimUI } from '../individual_sim_ui';
 import { Player } from '../player';
-import { Player as PlayerProtoMessageType, ReforgeOptimizeRequest, ReforgeSettings, StatCapType } from '../proto/api';
-import { Class, Debuffs, GemColor, ItemQuality, ItemSlot, PartyBuffs, Profession, PseudoStat, Race, RaidBuffs, Spec, Stat } from '../proto/common';
+import { Player as PlayerProtoMessageType, ReforgeOptimizeMode, ReforgeOptimizeRequest, ReforgeSettings, StatCapType } from '../proto/api';
+import { Class, Debuffs, GemColor, ItemQuality, ItemSlot, PartyBuffs, Profession, PseudoStat, RaidBuffs, Spec, Stat } from '../proto/common';
 import { UIGem as Gem } from '../proto/ui';
 import { ReforgeGearCache } from '../reforge_cache';
 import { EquippedItem } from '../proto_utils/equipped_item';
 import { Gear } from '../proto_utils/gear';
-import { gemColorsToMatchingSocket, gemMatchesSocket, getEmptyGemSocketIconUrl, getMetaGemCondition } from '../proto_utils/gems';
+import { getEmptyGemSocketIconUrl } from '../proto_utils/gems';
 import { statCapTypeNames } from '../proto_utils/names';
 import { translateItemQuality, translateSlotName } from '../../i18n/localization';
 import { StatCap, Stats, UnitStat, UnitStatPresets } from '../proto_utils/stats';
@@ -30,7 +30,6 @@ import { trackEvent, trackPageView } from '../../tracking/utils';
 import { ProgressTrackerModal } from './progress_tracker_modal';
 import { getEmptySlotIconUrl } from './gear_picker/utils';
 import { CURRENT_PHASE, Phase } from '../constants/other';
-import * as Mechanics from '../constants/mechanics';
 import { CharacterStats } from './character_stats';
 
 const INCLUDED_STATS: UnitStat[] = [
@@ -1011,7 +1010,7 @@ export class ReforgeOptimizer {
 		};
 	}
 
-	static async getBulkSimReforgeCacheConfigHash({
+	static async getConfigHash({
 		player,
 		reforgeRequest,
 		raidBuffs,
@@ -1037,9 +1036,12 @@ export class ReforgeOptimizer {
 		playerProto.distanceFromTarget = 0;
 		playerProto.healingModel = undefined;
 
-		const optimizerForHash = ReforgeOptimizeRequest.clone(reforgeRequest);
-		optimizerForHash.requestId = '';
-		optimizerForHash.raid = undefined;
+		const reforgeOptimizerConfigForHash = ReforgeOptimizeRequest.clone(reforgeRequest);
+		reforgeOptimizerConfigForHash.requestId = '';
+		reforgeOptimizerConfigForHash.raid = undefined;
+		reforgeOptimizerConfigForHash.debug = false;
+		reforgeOptimizerConfigForHash.mode = ReforgeOptimizeMode.ReforgeOptimizeModeSingle;
+		reforgeOptimizerConfigForHash.gemOptions = reforgeOptimizerConfigForHash.gemOptions.sort((a, b) => a.id - b.id);
 
 		return ReforgeGearCache.getHash({
 			player: PlayerProtoMessageType.toJsonString(playerProto),
@@ -1048,23 +1050,13 @@ export class ReforgeOptimizer {
 				partyBuffs: partyBuffs ? PartyBuffs.toJsonString(partyBuffs) : null,
 				debuffs: Debuffs.toJsonString(debuffs),
 			},
-			optimizer: ReforgeOptimizeRequest.toJsonString(optimizerForHash),
+			optimizer: ReforgeOptimizeRequest.toJsonString(reforgeOptimizerConfigForHash),
 		});
 	}
 
 	getReforgeRequestForHash(config: ReforgeOptimizeConfig): ReforgeOptimizeRequest {
 		return ReforgeOptimizeRequest.create({
 			...ReforgeOptimizer.makeReforgeConfigRequestFields(config, this.sim.db),
-		});
-	}
-
-	async getReforgeConfigHash(config: ReforgeOptimizeConfig): Promise<string> {
-		return ReforgeOptimizer.getBulkSimReforgeCacheConfigHash({
-			player: this.player,
-			reforgeRequest: this.getReforgeRequestForHash(config),
-			raidBuffs: this.sim.raid.getBuffs(),
-			partyBuffs: this.player.getParty()?.getBuffs(),
-			debuffs: this.sim.raid.getDebuffs(),
 		});
 	}
 
@@ -1075,8 +1067,14 @@ export class ReforgeOptimizer {
 		this.previousGear = previousGear;
 		const config = this.getReforgeOptimizeConfig(previousGear);
 		const cache = ReforgeGearCache.get(this.player.getPlayerSpec());
-		const configHash = await this.getReforgeConfigHash(config);
-		const cacheKey = await ReforgeGearCache.getKey(previousGear.asSpec(), configHash);
+		const configHash = await ReforgeOptimizer.getConfigHash({
+			player: this.player,
+			reforgeRequest: this.getReforgeRequestForHash(config),
+			raidBuffs: this.sim.raid.getBuffs(),
+			partyBuffs: this.player.getParty()?.getBuffs(),
+			debuffs: this.sim.raid.getDebuffs(),
+		});
+		const cacheKey = await ReforgeGearCache.getKey(previousGear.getGearKey(), configHash);
 		const cachedGear = await cache.get(cacheKey);
 		if (cachedGear) {
 			if (isDevMode()) console.log('Reforge optimization: cache hit.');

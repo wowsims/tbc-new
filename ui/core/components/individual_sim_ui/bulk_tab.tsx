@@ -22,23 +22,15 @@ import BulkItemPickerGroup from './bulk/bulk_item_picker_group';
 import BulkItemSearch from './bulk/bulk_item_search';
 import BulkSimResultRenderer from './bulk/bulk_sim_results_renderer';
 import { BulkSimItemSlot } from './bulk/constants_auto_gen';
-import {
-	BULK_SIM_ITEM_SLOT_TO_ITEM_SLOT_PAIRS,
-	BULK_SIM_ITEM_SLOT_TO_SINGLE_ITEM_SLOT,
-	BulkSimReforgeCacheProgress,
-	dedupeGearSets,
-	getBulkItemSlotFromSlot,
-	getGearKey,
-} from './bulk/utils';
+import { BULK_SIM_ITEM_SLOT_TO_ITEM_SLOT_PAIRS, BulkSimReforgeCacheProgress, dedupeGearSets, getBulkItemSlotFromSlot } from './bulk/utils';
 import { runCoreBulkSim } from './bulk/core_sim';
 import { BulkGearJsonImporter } from './importers';
 import { trackEvent } from '../../../tracking/utils';
 import { EnumPicker } from '../pickers/enum_picker';
-import { translateBulkSlotName, translateWeaponType } from '../../../i18n/localization';
+import { translateWeaponType } from '../../../i18n/localization';
 import { BooleanPicker } from '../pickers/boolean_picker';
 import { ProgressTrackerModal } from '../progress_tracker_modal';
 import {
-	BULK_OPTIMISATION_MIN_COMBINATIONS,
 	BulkSimProgressConfig,
 	NATIVE_COMBINATIONS_LIMIT,
 	NATIVE_ITERATIONS_LIMIT,
@@ -46,10 +38,6 @@ import {
 	WEB_COMBINATIONS_LIMIT,
 	WEB_ITERATIONS_LIMIT,
 } from './bulk/types';
-
-const BULK_OPTIMISATION_AGGRESSIVE_CULLING_COEFFICIENT = 1.35;
-const BULK_OPTIMISATION_CONSERVATIVE_ERROR_THRESHOLD = 2.5;
-const BULK_CANDIDATE_GEAR_BUILD_CHUNK_SIZE = 250;
 
 export class BulkTab extends SimTab {
 	readonly simUI: IndividualSimUI<any>;
@@ -1055,8 +1043,8 @@ export class BulkTab extends SimTab {
 				backendBulkSettings,
 			);
 
-			const originalGearKey = getGearKey(this.originalGear);
-			this.topGearResults = topGearResults.filter(result => getGearKey(result.gear) !== originalGearKey);
+			const originalGearKey = this.originalGear.getGearKey();
+			this.topGearResults = topGearResults.filter(result => result.gear.getGearKey() !== originalGearKey);
 			this.originalGearResults = {
 				gear: this.originalGear,
 				dpsMetrics: referenceDpsMetrics,
