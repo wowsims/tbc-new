@@ -190,7 +190,7 @@ func (optimization *reforgeOptimization) searchState() *reforgeSearchState {
 }
 
 func (optimization *reforgeOptimization) optimizedGear(choices []reforgeChoice) *proto.EquipmentSpec {
-	gearEditor := newReforgeGearEditor(optimization.baseGear, optimization.originalGear, optimization.player, optimization.settings)
+	gearEditor := newReforgeGearEditor(optimization.baseGear, optimization.originalGear, optimization.player, optimization.settings, optimization.request.GetGemOptions())
 	gearEditor.applyChoices(choices)
 	gearEditor.minimizeRegems()
 	return gearEditor.equipment()

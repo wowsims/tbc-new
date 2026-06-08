@@ -14,11 +14,14 @@ func cloneEquipmentSpec(equipment *proto.EquipmentSpec) *proto.EquipmentSpec {
 }
 
 type reforgeGearEditor struct {
-	gear         *core.Equipment
-	originalGear *core.Equipment
-	player       *proto.Player
-	settings     *proto.ReforgeSettings
-	frozenSlots  map[proto.ItemSlot]bool
+	gear          *core.Equipment
+	originalGear  *core.Equipment
+	player        *proto.Player
+	settings      *proto.ReforgeSettings
+	frozenSlots   map[proto.ItemSlot]bool
+	gemOptions    map[int32]*proto.ReforgeGemOption
+	maxGemPhase   int32
+	maxGemQuality proto.ItemQuality
 }
 
 type reforgeSocketKey struct {
@@ -26,13 +29,24 @@ type reforgeSocketKey struct {
 	socketIdx int
 }
 
-func newReforgeGearEditor(gear *proto.EquipmentSpec, originalGear *proto.EquipmentSpec, player *proto.Player, settings *proto.ReforgeSettings) *reforgeGearEditor {
+func newReforgeGearEditor(gear *proto.EquipmentSpec, originalGear *proto.EquipmentSpec, player *proto.Player, settings *proto.ReforgeSettings, gemOptions []*proto.ReforgeGemOption) *reforgeGearEditor {
+	gemOptionMap := make(map[int32]*proto.ReforgeGemOption, len(gemOptions))
+	for _, gemOption := range gemOptions {
+		if gemOption == nil {
+			continue
+		}
+		gemOptionMap[gemOption.GetId()] = gemOption
+	}
+
 	editor := &reforgeGearEditor{
-		gear:         equipmentFromProto(gear),
-		originalGear: optionalEquipmentFromProto(originalGear),
-		player:       player,
-		settings:     settings,
-		frozenSlots:  frozenItemSlots(settings),
+		gear:          equipmentFromProto(gear),
+		originalGear:  optionalEquipmentFromProto(originalGear),
+		player:        player,
+		settings:      settings,
+		frozenSlots:   frozenItemSlots(settings),
+		gemOptions:    gemOptionMap,
+		maxGemPhase:   settings.GetMaxGemPhase(),
+		maxGemQuality: settings.GetMaxGemQuality(),
 	}
 	return editor
 }
@@ -68,74 +82,161 @@ func (editor *reforgeGearEditor) applyChoices(choices []reforgeChoice) {
 }
 
 func (editor *reforgeGearEditor) minimizeRegems() {
-	if editor == nil || editor.gear == nil || editor.originalGear == nil || editor.player == nil {
+	if editor == nil || editor.gear == nil || editor.originalGear == nil {
 		return
 	}
-	protectSocketMatchSwaps := hasSpellHitStatCap(editor.settings)
-	for slotIdx := range editor.gear {
-		newItem := &editor.gear[slotIdx]
-		originalItem := &editor.originalGear[slotIdx]
-		if newItem.ID == 0 || originalItem.ID == 0 {
+
+	finalized := make(map[reforgeSocketKey]struct{})
+	for slotIdx, item := range editor.gear {
+		slot := proto.ItemSlot(slotIdx)
+		if item.ID == 0 {
 			continue
 		}
-		socketColors := currentSocketColors(*newItem)
+
+		currentItem := editor.gear.GetItemBySlot(slot)
+		originalItem := editor.originalGear.GetItemBySlot(slot)
+		if originalItem == nil || originalItem.ID == 0 {
+			continue
+		}
+
+		newGemIDs := make([]int32, len(currentItem.Gems))
+		newGemColors := make([]proto.GemColor, len(currentItem.Gems))
+		for idx := range currentItem.Gems {
+			newGemIDs[idx] = currentItem.Gems[idx].ID
+			newGemColors[idx] = currentItem.Gems[idx].Color
+		}
+		originalGemIDs := make([]int32, len(originalItem.Gems))
+		originalGemColors := make([]proto.GemColor, len(originalItem.Gems))
+		for idx := range originalItem.Gems {
+			originalGemIDs[idx] = originalItem.Gems[idx].ID
+			originalGemColors[idx] = originalItem.Gems[idx].Color
+		}
+
+		socketColors := currentSocketColors(item)
 		for socketIdx, socketColor := range socketColors {
-			if socketColor == proto.GemColor_GemColorMeta {
-				restoreMetaSocketGem(newItem, originalItem, socketIdx)
+			socketKey := reforgeSocketKey{slot: slot, socketIdx: socketIdx}
+			if _, ok := finalized[socketKey]; ok {
+				continue
 			}
+			finalized[socketKey] = struct{}{}
+
+			if socketColor == proto.GemColor_GemColorMeta {
+				continue
+			}
+
+			desiredGemID := int32(0)
+			if socketIdx < len(originalGemIDs) {
+				desiredGemID = originalGemIDs[socketIdx]
+			}
+			currentGemID := int32(0)
+			currentGemColor := proto.GemColor_GemColorUnknown
+			if socketIdx < len(newGemIDs) {
+				currentGemID = newGemIDs[socketIdx]
+				currentGemColor = newGemColors[socketIdx]
+			}
+			desiredGemColor := proto.GemColor_GemColorUnknown
+			if socketIdx < len(originalGemColors) {
+				desiredGemColor = originalGemColors[socketIdx]
+			}
+			if desiredGemID == 0 || currentGemID == 0 || desiredGemID == currentGemID {
+				continue
+			}
+
+			editor.forEachGemSocketWithCurrentGem(desiredGemID, slot, socketIdx, func(matched reforgeSocketKey) bool {
+				matchedKey := reforgeSocketKey{slot: matched.slot, socketIdx: matched.socketIdx}
+				if _, ok := finalized[matchedKey]; ok {
+					return false
+				}
+
+				matchedItem := editor.gear.GetItemBySlot(matched.slot)
+				if matchedItem == nil {
+					return false
+				}
+				otherGemID := gemIDAt(matchedItem, matched.socketIdx)
+				if otherGemID == 0 {
+					return false
+				}
+
+				if !swapPreservesSocketMatches(currentGemColor, desiredGemColor, socketColor, matchedItem, matched.socketIdx) {
+					return false
+				}
+
+				finalized[matchedKey] = struct{}{}
+				setGemIDAt(currentItem, socketIdx, desiredGemID)
+				setGemIDAt(matchedItem, matched.socketIdx, currentGemID)
+				return true
+			})
 		}
 	}
 
-	for slotIdx := range editor.gear {
+	editor.restoreNonHitOriginalGems()
+}
+
+func swapPreservesSocketMatches(currentGemColor proto.GemColor, desiredGemColor proto.GemColor, currentSocketColor proto.GemColor, matchedItem *core.Item, matchedSocketIdx int) bool {
+
+	matchedSocketColor := proto.GemColor_GemColorUnknown
+	matchedSocketColors := currentSocketColors(*matchedItem)
+	if matchedSocketIdx < len(matchedSocketColors) {
+		matchedSocketColor = matchedSocketColors[matchedSocketIdx]
+	}
+
+	currentBefore := gemMatchesSocket(currentGemColor, currentSocketColor)
+	currentAfter := gemMatchesSocket(desiredGemColor, currentSocketColor)
+	matchedBefore := gemMatchesSocket(desiredGemColor, matchedSocketColor)
+	matchedAfter := gemMatchesSocket(currentGemColor, matchedSocketColor)
+
+	return currentBefore == currentAfter && matchedBefore == matchedAfter
+}
+
+func (editor *reforgeGearEditor) restoreNonHitOriginalGems() {
+	if editor == nil || editor.gear == nil || editor.originalGear == nil {
+		return
+	}
+
+	for slotIdx, item := range editor.gear {
 		slot := proto.ItemSlot(slotIdx)
-		if editor.frozenSlots[slot] {
+		if editor.frozenSlots[slot] || item.ID == 0 {
 			continue
 		}
-		newItem := &editor.gear[slotIdx]
-		originalItem := &editor.originalGear[slotIdx]
-		if newItem.ID == 0 || originalItem.ID == 0 {
-			continue
-		}
-		socketColors := currentSocketColors(*newItem)
+		currentItem := editor.gear.GetItemBySlot(slot)
+		originalItem := editor.originalGear.GetItemBySlot(slot)
+		socketColors := currentSocketColors(item)
 		for socketIdx, socketColor := range socketColors {
 			if socketColor == proto.GemColor_GemColorMeta {
 				continue
 			}
-			desiredGemID := gemIDAt(originalItem, socketIdx)
-			currentGemID := gemIDAt(newItem, socketIdx)
-			if currentGemID == desiredGemID {
+			currentGemID := gemIDAt(currentItem, socketIdx)
+			originalGemID := gemIDAt(originalItem, socketIdx)
+			if originalGemID == 0 {
 				continue
 			}
-			if protectSocketMatchSwaps {
-				currentGem, currentGemOk := core.GemsByID[currentGemID]
-				desiredGem, desiredGemOk := core.GemsByID[desiredGemID]
-				if currentGemOk && desiredGemOk && gemMatchesSocket(currentGem.Color, socketColor) && !gemMatchesSocket(desiredGem.Color, socketColor) {
-					continue
-				}
-			}
-			matchedSlot, matchedSocketIdx, ok := editor.findGemSocketWithCurrentGem(desiredGemID, slot, socketIdx)
-			if !ok {
+			if currentGemID == originalGemID {
 				continue
 			}
-			if protectSocketMatchSwaps {
-				matchedItem := editor.gear.GetItemBySlot(matchedSlot)
-				matchedSocketColor := proto.GemColor_GemColorUnknown
-				matchedSocketColors := currentSocketColors(*matchedItem)
-				if matchedSocketIdx < len(matchedSocketColors) {
-					matchedSocketColor = matchedSocketColors[matchedSocketIdx]
-				}
-				currentGem, currentGemOk := core.GemsByID[currentGemID]
-				desiredGem, desiredGemOk := core.GemsByID[desiredGemID]
-				if currentGemOk && desiredGemOk && gemMatchesSocket(desiredGem.Color, matchedSocketColor) && !gemMatchesSocket(currentGem.Color, matchedSocketColor) {
-					continue
-				}
+			if !editor.gemAllowedBySettings(originalGemID) {
+				continue
 			}
-			otherItem := editor.gear.GetItemBySlot(matchedSlot)
-			otherGemID := gemIDAt(otherItem, matchedSocketIdx)
-			setGemIDAt(newItem, socketIdx, otherGemID)
-			setGemIDAt(otherItem, matchedSocketIdx, currentGemID)
+
+			setGemIDAt(currentItem, socketIdx, originalGemID)
 		}
 	}
+}
+
+func (editor *reforgeGearEditor) gemAllowedBySettings(gemID int32) bool {
+	if editor == nil || editor.settings == nil || gemID == 0 {
+		return true
+	}
+	gemOption, ok := editor.gemOptions[gemID]
+	if !ok || gemOption == nil {
+		return true
+	}
+	if gemOption.GetPhase() > editor.maxGemPhase {
+		return false
+	}
+	if gemOption.GetQuality() > editor.maxGemQuality {
+		return false
+	}
+	return true
 }
 
 func hasSpellHitStatCap(settings *proto.ReforgeSettings) bool {
@@ -154,7 +255,7 @@ func restoreMetaSocketGem(newItem *core.Item, originalItem *core.Item, socketIdx
 	}
 }
 
-func (editor *reforgeGearEditor) findGemSocketWithCurrentGem(gemID int32, skipSlot proto.ItemSlot, skipSocketIdx int) (proto.ItemSlot, int, bool) {
+func (editor *reforgeGearEditor) forEachGemSocketWithCurrentGem(gemID int32, skipSlot proto.ItemSlot, skipSocketIdx int, visit func(reforgeSocketKey) bool) {
 	for slotIdx, item := range editor.gear {
 		slot := proto.ItemSlot(slotIdx)
 		if item.ID == 0 || editor.frozenSlots[slot] {
@@ -166,11 +267,12 @@ func (editor *reforgeGearEditor) findGemSocketWithCurrentGem(gemID int32, skipSl
 				continue
 			}
 			if gemIDAt(&item, socketIdx) == gemID {
-				return slot, socketIdx, true
+				if visit(reforgeSocketKey{slot: slot, socketIdx: socketIdx}) {
+					return
+				}
 			}
 		}
 	}
-	return proto.ItemSlot_ItemSlotHead, 0, false
 }
 
 func gemIDAt(item *core.Item, socketIdx int) int32 {

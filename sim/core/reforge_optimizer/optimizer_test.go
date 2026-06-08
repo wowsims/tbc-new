@@ -26,6 +26,8 @@ func TestReforgerOptimizer(t *testing.T) {
 		{name: "reference-4", fileName: "reforge-reference-4.json"},
 		{name: "reference-5", fileName: "reforge-reference-5.json"},
 		{name: "reference-6", fileName: "reforge-reference-6.json"},
+		{name: "reference-7", fileName: "reforge-reference-7.json"},
+		{name: "reference-8", fileName: "reforge-reference-8.json"},
 	}
 
 	for _, tc := range testCases {
@@ -49,6 +51,53 @@ func TestReforgerOptimizer(t *testing.T) {
 				t.Fatalf("optimized gear does not match expected gear\n%s", formatGearDiff(expectedGear, optimizedGear))
 			}
 		})
+	}
+}
+
+func TestReforgerOptimizerReference9RespectsMaxGemPhase(t *testing.T) {
+	sim.RegisterAll()
+
+	request := loadPreset(t, "reforge-reference-9.json")
+	originalGear := request.GetRaid().GetParties()[0].GetPlayers()[0].GetEquipment()
+	if originalGear == nil {
+		t.Fatal("reference-9 fixture has no input gear")
+	}
+
+	result := Optimize(request)
+	if err := result.GetError(); err != nil {
+		t.Fatalf("Optimize returned error: %s", err.GetMessage())
+	}
+	optimizedGear := result.GetOptimizedGear()
+	if optimizedGear == nil {
+		t.Fatal("Optimize returned no optimized gear")
+	}
+
+	if protopkg.Equal(originalGear, optimizedGear) {
+		t.Fatal("reference-9 optimization unexpectedly made no gear changes")
+	}
+
+	maxGemPhase := request.GetSettings().GetMaxGemPhase()
+	gemPhaseByID := map[int32]int32{}
+	for _, gemOption := range request.GetGemOptions() {
+		gemPhaseByID[gemOption.GetId()] = gemOption.GetPhase()
+	}
+
+	for slotIdx, item := range optimizedGear.GetItems() {
+		if item == nil {
+			continue
+		}
+		for socketIdx, gemID := range item.GetGems() {
+			if gemID == 0 {
+				continue
+			}
+			phase, ok := gemPhaseByID[gemID]
+			if !ok {
+				continue
+			}
+			if phase > maxGemPhase {
+				t.Fatalf("slot %d socket %d gem %d has phase %d > maxGemPhase %d", slotIdx, socketIdx, gemID, phase, maxGemPhase)
+			}
+		}
 	}
 }
 
