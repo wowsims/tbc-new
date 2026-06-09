@@ -14,11 +14,9 @@ import (
 	"runtime/pprof"
 	"strings"
 	"sync"
-	"sync/atomic"
 	"syscall"
 	"time"
 
-	uuid "github.com/google/uuid"
 	"github.com/pkg/browser"
 	dist "github.com/wowsims/tbc/binary_dist"
 	"github.com/wowsims/tbc/sim"
@@ -173,25 +171,6 @@ type asyncAPIHandler struct {
 	handle func(googleProto.Message, chan *proto.ProgressMetrics, string)
 }
 
-type asyncProgress struct {
-	id             string
-	latestProgress atomic.Value
-}
-
-func (s *server) addNewSim() *asyncProgress {
-	newID := uuid.NewString()
-	simProgress := &asyncProgress{
-		id: newID,
-	}
-	simProgress.latestProgress.Store(&proto.ProgressMetrics{})
-
-	s.progMut.Lock()
-	s.asyncProgresses[newID] = simProgress
-	s.progMut.Unlock()
-
-	return simProgress
-}
-
 func (s *server) handleAsyncAPI(w http.ResponseWriter, r *http.Request) {
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
@@ -239,7 +218,14 @@ func (s *server) handleAsyncAPI(w http.ResponseWriter, r *http.Request) {
 				if progMetric == nil {
 					return
 				}
-				simProgress.latestProgress.Store(progMetric)
+				if progMetric.BulkStage == proto.BulkSimStage_BulkSimStageReforge && len(progMetric.OptimizedCandidates) > 0 {
+					simProgress.appendPendingOptimizedCandidates(progMetric.OptimizedCandidates)
+					storedProgress := googleProto.Clone(progMetric).(*proto.ProgressMetrics)
+					storedProgress.OptimizedCandidates = nil
+					simProgress.latestProgress.Store(storedProgress)
+				} else {
+					simProgress.latestProgress.Store(progMetric)
+				}
 				if progMetric.FinalRaidResult != nil || progMetric.FinalWeightResult != nil || progMetric.FinalBulkSimResult != nil || progMetric.FinalReforgeResult != nil {
 					return
 				}
@@ -307,6 +293,19 @@ func (s *server) setupAsyncServer() {
 			return
 		}
 		latest := progress.latestProgress.Load().(*proto.ProgressMetrics)
+		pendingOptimizedCandidates := progress.takePendingOptimizedCandidates()
+		if latest.FinalBulkSimResult != nil && len(latest.FinalBulkSimResult.OptimizedCandidates) > 0 {
+			remainingOptimizedCandidates := progress.filterUndeliveredOptimizedCandidates(latest.FinalBulkSimResult.OptimizedCandidates)
+			latestWithFilteredFinal := googleProto.Clone(latest).(*proto.ProgressMetrics)
+			latestWithFilteredFinal.FinalBulkSimResult = googleProto.Clone(latest.FinalBulkSimResult).(*proto.BulkSimResult)
+			latestWithFilteredFinal.FinalBulkSimResult.OptimizedCandidates = remainingOptimizedCandidates
+			latest = latestWithFilteredFinal
+		}
+		if len(pendingOptimizedCandidates) > 0 {
+			latestWithPending := googleProto.Clone(latest).(*proto.ProgressMetrics)
+			latestWithPending.OptimizedCandidates = pendingOptimizedCandidates
+			latest = latestWithPending
+		}
 		outbytes, err := googleProto.Marshal(latest)
 		if err != nil {
 			log.Printf("[ERROR] Failed to marshal result: %s", err.Error())
