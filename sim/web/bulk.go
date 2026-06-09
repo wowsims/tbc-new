@@ -32,7 +32,7 @@ type bulkSimReforgeOptimizer struct {
 	templateRequest    *proto.ReforgeOptimizeRequest
 	templateRaid       *proto.Raid
 	optimizedGearByKey map[bulkSimReforgeCandidateCacheKey]*proto.EquipmentSpec
-	cacheMu            sync.Mutex
+	cacheMu            sync.RWMutex
 }
 
 func ensureBulkSimCandidatesGenerated(request *proto.BulkSimRequest) error {
@@ -57,6 +57,11 @@ func BulkSimAsync(request *proto.BulkSimRequest, progress chan *proto.ProgressMe
 			len(request.GetCandidates()) == 0 &&
 			len(request.GetOptimizedCandidates()) > 0
 	if !fullyCachedReforgeRequest {
+		shouldLogReforgeStages := request.GetReforgeRequest() != nil
+		candidateGenerationStartedAt := time.Now()
+		if shouldLogReforgeStages {
+			log.Printf("[Bulk Sim] Candidate generation started")
+		}
 		if err := ensureBulkSimCandidatesGenerated(request); err != nil {
 			progress <- &proto.ProgressMetrics{
 				BulkStage: proto.BulkSimStage_BulkSimStageError,
@@ -67,6 +72,11 @@ func BulkSimAsync(request *proto.BulkSimRequest, progress chan *proto.ProgressMe
 			close(progress)
 			return
 		}
+		if shouldLogReforgeStages {
+			log.Printf("[Bulk Sim] Candidate generation completed total=%s candidates=%d optimizedCandidates=%d", time.Since(candidateGenerationStartedAt), len(request.GetCandidates()), len(request.GetOptimizedCandidates()))
+		}
+	} else {
+		log.Printf("[Bulk Sim] Candidate generation skipped optimizedCandidates=%d", len(request.GetOptimizedCandidates()))
 	}
 	if request.GetReforgeRequest() == nil {
 		bulk.BulkSimAsync(request, progress, requestId)
@@ -261,9 +271,10 @@ func warmBulkSimReforgeDatabase(request *proto.BulkSimRequest) {
 	}
 }
 
-func optimizeBulkSimReforgeCandidateTask(optimizer *bulkSimReforgeOptimizer, reforgeRequest *proto.ReforgeOptimizeRequest, candidate *proto.BulkGearCandidate, signals simsignals.Signals) (time.Duration, bool) {
+func optimizeBulkSimReforgeCandidateTask(optimizer *bulkSimReforgeOptimizer, _ *proto.ReforgeOptimizeRequest, candidate *proto.BulkGearCandidate, signals simsignals.Signals) (time.Duration, bool) {
 	startedAt := time.Now()
-	optimizedGear := optimizer.optimize(candidate.Gear, signals)
+	gearKey := bulkSimReforgeGearKey(candidate.Gear)
+	optimizedGear := optimizer.optimizeWithKey(candidate.Gear, gearKey, signals)
 	if optimizedGear == nil {
 		if signals.Abort.IsTriggered() {
 			return time.Since(startedAt), false
@@ -313,14 +324,14 @@ func getBulkSimRequestBaselineGear(request *proto.BulkSimRequest) *proto.Equipme
 	return players[0].GetEquipment()
 }
 
-func (optimizer *bulkSimReforgeOptimizer) optimize(gear *proto.EquipmentSpec, signals simsignals.Signals) *proto.EquipmentSpec {
-	key := bulkSimReforgeCandidateCacheKey{gearKey: bulkSimReforgeGearKey(gear)}
-	optimizer.cacheMu.Lock()
+func (optimizer *bulkSimReforgeOptimizer) optimizeWithKey(gear *proto.EquipmentSpec, gearKey bulkSimReforgeGearHash, signals simsignals.Signals) *proto.EquipmentSpec {
+	key := bulkSimReforgeCandidateCacheKey{gearKey: gearKey}
+	optimizer.cacheMu.RLock()
 	if optimizedGear, ok := optimizer.optimizedGearByKey[key]; ok {
-		optimizer.cacheMu.Unlock()
-		return cloneEquipmentSpecOrNil(optimizedGear)
+		optimizer.cacheMu.RUnlock()
+		return optimizedGear
 	}
-	optimizer.cacheMu.Unlock()
+	optimizer.cacheMu.RUnlock()
 
 	reforgeRequest := optimizer.optimizeRequest(gear)
 	if reforgeRequest == nil {
@@ -371,9 +382,9 @@ func cloneEquipmentSpecOrNil(gear *proto.EquipmentSpec) *proto.EquipmentSpec {
 }
 
 func dedupeBulkSimReforgeCandidates(baselineGear *proto.EquipmentSpec, candidates []*proto.BulkGearCandidate) []*proto.BulkGearCandidate {
-	seen := make(map[bulkSimReforgeGearHash]bool, len(candidates)+1)
+	seen := make(map[bulkSimReforgeGearHash]struct{}, len(candidates)+1)
 	if baselineGear != nil {
-		seen[bulkSimReforgeGearKey(baselineGear)] = true
+		seen[bulkSimReforgeGearKey(baselineGear)] = struct{}{}
 	}
 
 	deduped := make([]*proto.BulkGearCandidate, 0, len(candidates))
@@ -383,10 +394,10 @@ func dedupeBulkSimReforgeCandidates(baselineGear *proto.EquipmentSpec, candidate
 		}
 
 		key := bulkSimReforgeGearKey(candidate.Gear)
-		if seen[key] {
+		if _, ok := seen[key]; ok {
 			continue
 		}
-		seen[key] = true
+		seen[key] = struct{}{}
 		deduped = append(deduped, candidate)
 	}
 	return deduped
@@ -403,13 +414,31 @@ func compactBulkGearCandidates(candidates []*proto.BulkGearCandidate) []*proto.B
 	return compacted
 }
 
+var deterministicProtoMarshalOptions = googleProto.MarshalOptions{Deterministic: true}
+var bulkSimReforgeMarshalBufferPool = sync.Pool{
+	New: func() any {
+		buf := make([]byte, 0, 1024)
+		return &buf
+	},
+}
+
 func bulkSimReforgeGearKey(gear *proto.EquipmentSpec) bulkSimReforgeGearHash {
-	data, err := googleProto.MarshalOptions{Deterministic: true}.Marshal(gear)
+	if gear == nil {
+		return sha256.Sum256(nil)
+	}
+
+	bufferPtr := bulkSimReforgeMarshalBufferPool.Get().(*[]byte)
+	buffer := (*bufferPtr)[:0]
+	data, err := deterministicProtoMarshalOptions.MarshalAppend(buffer, gear)
 	if err != nil {
-		if gear == nil {
-			return sha256.Sum256(nil)
-		}
+		bulkSimReforgeMarshalBufferPool.Put(bufferPtr)
 		return sha256.Sum256([]byte(gear.String()))
 	}
-	return sha256.Sum256(data)
+
+	hash := sha256.Sum256(data)
+	if cap(data) <= 64*1024 {
+		*bufferPtr = data[:0]
+		bulkSimReforgeMarshalBufferPool.Put(bufferPtr)
+	}
+	return hash
 }
