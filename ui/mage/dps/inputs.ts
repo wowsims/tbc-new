@@ -15,3 +15,41 @@ export const MageArmorInputs = <SpecType extends MageSpecs>() =>
 			{ actionId: ActionId.fromSpellId(30482), value: MageArmor.MageArmorMoltenArmor },
 		],
 	});
+
+export const ArcaneMageRotationConfig = {
+	inputs: [
+		InputHelpers.makeRotationNumberInput<MageSpecs>({
+			fieldName: 'conserveStart',
+			label: 'Start Conserve Rotation %',
+			labelTooltip: 'Starts the conserve mana rotation at %',
+			changeEmitter: player => player.rotationChangeEmitter,
+			getValue: player => player.getSimpleRotation().conserveStart,
+			positive: true,
+		}),
+		InputHelpers.makeRotationNumberInput<MageSpecs>({
+			fieldName: 'conserveEnd',
+			label: 'End Conserve Rotation %',
+			labelTooltip: 'Ends the conserve mana rotation once mana reaches this threshold %',
+			changeEmitter: player => player.rotationChangeEmitter,
+			getValue: player => player.getSimpleRotation().conserveEnd,
+			positive: true,
+		}),
+		InputHelpers.makeRotationNumberInput<MageSpecs>({
+			fieldName: 'timeRemainingAB',
+			label: 'Arcane Blast Burn',
+			labelTooltip:
+				'Cast Arcane Blast continuously for the remainder of the encounter based on time remaining %, ignoring normal mana conservation rules.',
+			changeEmitter: player => player.rotationChangeEmitter,
+			getValue: player => player.getSimpleRotation().timeRemainingAB,
+			positive: true,
+		}),
+		InputHelpers.makeRotationNumberInput<MageSpecs>({
+			fieldName: 'delayMajorCDs',
+			label: 'Delay Major CDs',
+			labelTooltip: 'Delays the first automatic use of major cooldowns (e.g. Bloodlust, Drums) by the specified number of seconds.',
+			changeEmitter: player => player.rotationChangeEmitter,
+			getValue: player => player.getSimpleRotation().delayMajorCDs,
+			positive: true,
+		}),
+	],
+};
