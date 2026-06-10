@@ -1307,6 +1307,10 @@
 					"label": "Max Mana",
 					"tooltip": "Maximum mana of the unit"
 				},
+				"current_mana_regen": {
+					"label": "Current Mana Regen",
+					"tooltip": "Current Mana Regen while casting"
+				},
 				"current_rage": {
 					"label": "Current Rage",
 					"tooltip": "Amount of currently available Rage."

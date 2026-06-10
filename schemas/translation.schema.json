@@ -5427,6 +5427,22 @@
                     "tooltip"
                   ]
                 },
+                "current_mana_regen": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    },
+                    "tooltip": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "label",
+                    "tooltip"
+                  ]
+                },
                 "current_rage": {
                   "type": "object",
                   "properties": {
@@ -6725,6 +6741,7 @@
                 "current_mana",
                 "current_mana_percent",
                 "max_mana",
+				"current_mana_regen",
                 "current_rage",
                 "max_rage",
                 "current_focus",

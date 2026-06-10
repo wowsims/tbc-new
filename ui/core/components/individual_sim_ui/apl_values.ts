@@ -101,6 +101,7 @@ import {
 	APLValueAutoTimeSinceLast,
 	APLValueWarlockAssignedCurseIsActive,
 	APLValueWarlockIsAssignedCurse,
+	APLValueCurrentManaRegen,
 } from '../../proto/apl.js';
 import { Class, Spec } from '../../proto/common.js';
 import { ShamanTotems_TotemType as TotemType } from '../../proto/shaman.js';
@@ -526,7 +527,7 @@ export function valueListFieldConfig(field: string): AplHelpers.APLPickerBuilder
 				extraActions: [
 					AplHelpers.extractToVariableAction(
 						player,
-						(index) => (config.getValue(player) as Array<APLValue | undefined>)[index],
+						index => (config.getValue(player) as Array<APLValue | undefined>)[index],
 						(index, ref) => {
 							const values = config.getValue(player) as Array<APLValue | undefined>;
 							values[index] = ref;
@@ -774,6 +775,17 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 		submenu: ['resources', 'mana'],
 		shortDescription: i18n.t('rotation_tab.apl.values.max_mana.tooltip'),
 		newValue: APLValueMaxMana.create,
+		includeIf(player: Player<any>, isPrepull: boolean) {
+			const clss = player.getClass();
+			return !isPrepull && clss !== Class.ClassRogue && clss !== Class.ClassWarrior;
+		},
+		fields: [],
+	}),
+	currentManaRegen: inputBuilder({
+		label: i18n.t('rotation_tab.apl.values.current_mana_regen.label'),
+		submenu: ['resources', 'mana'],
+		shortDescription: i18n.t('rotation_tab.apl.values.current_mana_regen.tooltip'),
+		newValue: APLValueCurrentManaRegen.create,
 		includeIf(player: Player<any>, isPrepull: boolean) {
 			const clss = player.getClass();
 			return !isPrepull && clss !== Class.ClassRogue && clss !== Class.ClassWarrior;

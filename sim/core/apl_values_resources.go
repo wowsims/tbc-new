@@ -176,6 +176,31 @@ func (value *APLValueMaxMana) String() string {
 	return "Max Mana"
 }
 
+type APLValueCurrentManaRegen struct {
+	DefaultAPLValueImpl
+	unit *Unit
+}
+
+func (rot *APLRotation) newValueCurrentManaRegen(_ *proto.APLValueCurrentManaRegen, uuid *proto.UUID) APLValue {
+	unit := rot.unit
+	if !unit.HasManaBar() {
+		rot.ValidationMessageByUUID(uuid, proto.LogLevel_Warning, "%s does not use Mana", unit.Label)
+		return nil
+	}
+	return &APLValueCurrentManaRegen{
+		unit: unit,
+	}
+}
+func (value *APLValueCurrentManaRegen) Type() proto.APLValueType {
+	return proto.APLValueType_ValueTypeFloat
+}
+func (value *APLValueCurrentManaRegen) GetFloat(sim *Simulation) float64 {
+	return value.unit.manaTickWhileCasting
+}
+func (value *APLValueCurrentManaRegen) String() string {
+	return "Mana Regen while casting"
+}
+
 type APLValueCurrentRage struct {
 	DefaultAPLValueImpl
 	unit *Unit
