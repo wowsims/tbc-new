@@ -27,7 +27,7 @@ export abstract class Exporter extends BaseModal {
 
 		new CopyButton(this.footer!, {
 			extraCssClasses: ['btn-primary'],
-			getContent: () => this.textElem.innerHTML,
+			getContent: () => this.textElem.textContent || '',
 			text: i18n.t('export.json.copy_button'),
 			tooltip: i18n.t('export.json.copy_tooltip'),
 		});
