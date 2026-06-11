@@ -29,18 +29,10 @@ export const ArcaneMageRotationConfig = {
 		InputHelpers.makeRotationNumberInput<MageSpecs>({
 			fieldName: 'conserveEnd',
 			label: 'End Conserve Rotation %',
-			labelTooltip: 'Ends the conserve mana rotation once mana reaches this threshold %',
+			labelTooltip:
+				'Ends the conserve mana rotation once mana reaches this threshold %, Conserve Rotation stops if its possible to spam AB till the end of the fight.',
 			changeEmitter: player => player.rotationChangeEmitter,
 			getValue: player => player.getSimpleRotation().conserveEnd,
-			positive: true,
-		}),
-		InputHelpers.makeRotationNumberInput<MageSpecs>({
-			fieldName: 'timeRemainingAB',
-			label: 'Arcane Blast Burn',
-			labelTooltip:
-				'Cast Arcane Blast continuously for the remainder of the encounter based on time remaining %, ignoring normal mana conservation rules.',
-			changeEmitter: player => player.rotationChangeEmitter,
-			getValue: player => player.getSimpleRotation().timeRemainingAB,
 			positive: true,
 		}),
 		InputHelpers.makeRotationNumberInput<MageSpecs>({

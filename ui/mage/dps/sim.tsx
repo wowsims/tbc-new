@@ -151,7 +151,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecMage, {
 		const actions = AplUtils.simpleCooldownActions(cooldowns);
 		const rotation = APLRotation.clone(Presets.ROTATION_PRESET_ARCANE.rotation.rotation!);
 
-		const { conserveStart = 20, conserveEnd = 30, timeRemainingAB = 8, delayMajorCDs = 10 } = simple;
+		const { conserveStart = 20, conserveEnd = 30, delayMajorCDs = 10 } = simple;
 
 		const conserveStartString = APLValueVariable.fromJson({
 			name: 'Conserve Start',
@@ -163,11 +163,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecMage, {
 			value: { const: { val: String(conserveEnd) + '%' } },
 		});
 
-		const timeRemainingABString = APLValueVariable.fromJson({
-			name: 'Time Remaining AB',
-			value: { const: { val: String(timeRemainingAB) + '%' } },
-		});
-
 		const delayMajorCDsString = APLValueVariable.fromJson({
 			name: 'Delay Major CDs',
 			value: { const: { val: String(delayMajorCDs) + 's' } },
@@ -175,8 +170,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecMage, {
 
 		rotation.valueVariables[0] = conserveStartString;
 		rotation.valueVariables[1] = conserveEndString;
-		rotation.valueVariables[2] = timeRemainingABString;
-		rotation.valueVariables[3] = delayMajorCDsString;
+		rotation.valueVariables[2] = delayMajorCDsString;
 
 		return APLRotation.create({
 			prepullActions: rotation.prepullActions,

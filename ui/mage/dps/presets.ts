@@ -42,7 +42,6 @@ export const BLANK_GEARSET = PresetUtils.makePresetGear('Blank', BlankGear);
 export const ArcaneMageSimpleRotation = Mage_Rotation.create({
 	conserveStart: 20,
 	conserveEnd: 30,
-	timeRemainingAB: 8,
 	delayMajorCDs: 10,
 });
 

@@ -95,8 +95,7 @@ message Mage {
 	message Rotation {
 		int32 conserveStart = 1;
 		int32 conserveEnd = 2;
-		int32 timeRemainingAB = 3;
-		int32 delayMajorCDs = 4;
+		int32 delayMajorCDs = 3;
 	}
 
 	message Options {
