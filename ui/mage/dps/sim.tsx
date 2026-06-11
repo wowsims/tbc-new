@@ -129,7 +129,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecMage, {
 	presets: {
 		epWeights: [Presets.P1_EP_PRESET, Presets.P2_EP_PRESET],
 		// Preset rotations that the user can quickly select.
-		rotations: [Presets.ROTATION_PRESET_ARCANE],
+		rotations: [Presets.ROTATION_PRESET_ARCANE, Presets.APL_ARCANE_SIMPLE],
 		// Preset talents that the user can quickly select.
 		talents: [Presets.ARCANE_TALENTS],
 		// Preset gear configurations that the user can quickly select.
@@ -149,7 +149,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecMage, {
 
 	simpleRotation: (player: Player<Spec.SpecMage>, simple: SpecRotation<Spec.SpecMage>, cooldowns: Cooldowns): APLRotation => {
 		const actions = AplUtils.simpleCooldownActions(cooldowns);
-		const rotation = APLRotation.clone(Presets.APL_ARCANE_SIMPLE.rotation.rotation!);
+		const rotation = APLRotation.clone(Presets.ROTATION_PRESET_ARCANE.rotation.rotation!);
 
 		const { conserveStart = 20, conserveEnd = 30, timeRemainingAB = 8, delayMajorCDs = 10 } = simple;
 
@@ -173,10 +173,10 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecMage, {
 			value: { const: { val: String(delayMajorCDs) + 's' } },
 		});
 
-		rotation.valueVariables[2] = conserveStartString;
-		rotation.valueVariables[3] = conserveEndString;
-		rotation.valueVariables[4] = timeRemainingABString;
-		rotation.valueVariables[5] = delayMajorCDsString;
+		rotation.valueVariables[0] = conserveStartString;
+		rotation.valueVariables[1] = conserveEndString;
+		rotation.valueVariables[2] = timeRemainingABString;
+		rotation.valueVariables[3] = delayMajorCDsString;
 
 		return APLRotation.create({
 			prepullActions: rotation.prepullActions,
