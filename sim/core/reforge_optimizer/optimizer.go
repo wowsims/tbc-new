@@ -171,10 +171,15 @@ func newReforgeOptimization(request *proto.ReforgeOptimizeRequest, normalizedCon
 }
 
 func computeReforgeStats(request *proto.ComputeStatsRequest) *proto.ComputeStatsResult {
+	request.SkipRotation = true
 	return core.ComputeStats(request)
 }
 
 func (optimization *reforgeOptimization) searchState() *reforgeSearchState {
+	choiceVarIdx := make([][]int, len(optimization.slotChoices))
+	for i, slot := range optimization.slotChoices {
+		choiceVarIdx[i] = make([]int, len(slot.choices))
+	}
 	return &reforgeSearchState{
 		request:        optimization.request,
 		baseRaid:       optimization.baseRaid,
@@ -186,6 +191,8 @@ func (optimization *reforgeOptimization) searchState() *reforgeSearchState {
 		hardCapsByStat: reforgeHardCapsByStat(optimization.hardCaps),
 		softCaps:       optimization.softCaps,
 		softCapsByStat: reforgeSoftCapsByStat(optimization.softCaps),
+		choiceVarIdx:   choiceVarIdx,
+		uniqueGemIDs:   buildUniqueGemLimitIDs(optimization.slotChoices),
 	}
 }
 

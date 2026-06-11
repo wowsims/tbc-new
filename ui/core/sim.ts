@@ -34,7 +34,6 @@ import {
 import {
 	ArmorType,
 	Faction,
-	ItemSpec,
 	Profession,
 	PseudoStat,
 	RangedWeaponType,
@@ -44,8 +43,8 @@ import {
 	UnitReference_Type as UnitType,
 	WeaponType,
 } from './proto/common.js';
-import { UIItem, DatabaseFilters, RaidFilterOption, SimSettings as SimSettingsProto, SourceFilterOption } from './proto/ui.js';
-import { ItemEffectRandPropPoints, SimGem, SimItem, SimDatabase } from './proto/db.js';
+import { DatabaseFilters, RaidFilterOption, SimSettings as SimSettingsProto, SourceFilterOption } from './proto/ui.js';
+import { SimGem } from './proto/db.js';
 import { Database } from './proto_utils/database.js';
 import { Gear } from './proto_utils/gear';
 import { SimResult } from './proto_utils/sim_result.js';
@@ -57,9 +56,10 @@ import { RequestTypes, SimSignalManager } from './sim_signal_manager';
 import { EventID, TypedEvent } from './typed_event.js';
 import { distinct, getEnumValues, isExternal, noop, sleep } from './utils.js';
 import { runConcurrentBulkSim } from './wasm';
-import { makeBulkGearDatabase } from './wasm/bulk_sim';
 import {
 	getBulkSimReforgeCacheData,
+	makeBulkGearDatabase,
+	makeBulkItemDatabaseFromSpecs,
 	type BulkSimReforgeCacheProgress,
 	throwIfAborted,
 	writeBulkSimReforgeCacheResults,
@@ -94,40 +94,6 @@ export type ReforgeOptimizeConfig = {
 	debug?: boolean;
 };
 
-const makeBulkItemDatabaseFromSpecs = (db: Database, baselineGear: Gear, itemSpecs: readonly ItemSpec[]): SimDatabase => {
-	const gearSets = [baselineGear];
-	const selectedItems = itemSpecs
-		.map(itemSpec => (itemSpec ? db.lookupItemSpec(itemSpec) : null))
-		.filter((item): item is NonNullable<typeof item> => item != null);
-	const simDatabase = makeBulkGearDatabase(db, gearSets);
-
-	for (const selectedItem of selectedItems) {
-		simDatabase.items.push(SimItem.fromJson(UIItem.toJson(selectedItem.item), { ignoreUnknownFields: true }));
-		const scalingIlvls = new Set<number>([selectedItem.ilvl]);
-		Object.values(selectedItem.item.scalingOptions ?? {}).forEach(scalingOption => {
-			if (scalingOption?.ilvl) {
-				scalingIlvls.add(scalingOption.ilvl);
-			}
-		});
-		scalingIlvls.forEach(ilvl => {
-			const ieRpp = db.getItemEffectRandPropPoints(ilvl);
-			if (ieRpp) {
-				simDatabase.itemEffectRandPropPoints.push(ItemEffectRandPropPoints.create(ieRpp));
-			}
-		});
-		if (selectedItem.randomSuffix) {
-			simDatabase.randomSuffixes.push(selectedItem.randomSuffix);
-		}
-	}
-
-	return SimDatabase.create({
-		items: distinct(simDatabase.items, (a, b) => a.id == b.id),
-		randomSuffixes: distinct(simDatabase.randomSuffixes, (a, b) => a.id == b.id),
-		itemEffectRandPropPoints: distinct(simDatabase.itemEffectRandPropPoints, (a, b) => a.ilvl == b.ilvl),
-		enchants: distinct(simDatabase.enchants, (a, b) => a.effectId == b.effectId),
-		gems: distinct(simDatabase.gems, (a, b) => a.id == b.id),
-	});
-};
 const WASM_CONCURRENCY_STORAGE_KEY = `${LOCAL_STORAGE_PREFIX}_wasmconcurrency`;
 
 // Core Sim module which deals only with api types, no UI-related stuff.

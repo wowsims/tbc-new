@@ -99,4 +99,8 @@ type reforgeSearchState struct {
 	hardCapsByStat map[stats.UnitStat]reforgeHardCap
 	softCaps       []reforgeSoftCap
 	softCapsByStat map[stats.UnitStat]reforgeSoftCap
+
+	// Pre-allocated per-solve working state — avoids repeated allocations across solver passes.
+	choiceVarIdx [][]int // reused across buildChoiceMIPModel calls
+	uniqueGemIDs []int32 // cached once; gem choices never change
 }

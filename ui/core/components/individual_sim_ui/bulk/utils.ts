@@ -2,9 +2,11 @@ import type { Player } from '../../../player';
 import { ReforgeOptimizer } from '../../suggest_reforges_action';
 import { ReforgeGearCache } from '../../../reforge_cache';
 import { BulkGearCandidate, BulkSimResult, BulkSimStage, DistributionMetrics, ReforgeOptimizeRequest } from '../../../proto/api';
-import { Debuffs, EquipmentSpec, PartyBuffs, RaidBuffs } from '../../../proto/common';
-import { ItemSlot } from '../../../proto/common';
+import { Debuffs, EquipmentSpec, ItemRandomSuffix, ItemSlot, ItemSpec, PartyBuffs, RaidBuffs } from '../../../proto/common';
+import { ItemEffectRandPropPoints, SimDatabase, SimEnchant, SimGem, SimItem } from '../../../proto/db';
+import { UIEnchant as Enchant, UIGem as Gem, UIItem as Item } from '../../../proto/ui';
 import { Database } from '../../../proto_utils/database';
+import { EquippedItem } from '../../../proto_utils/equipped_item';
 import { Gear } from '../../../proto_utils/gear';
 import { getGearKeyFromSpec } from '../../../proto_utils/utils';
 import { sleep } from '../../../utils';
@@ -52,6 +54,62 @@ export type BulkSimReforgeCacheProgress = {
 	current: number;
 	total: number;
 	message?: string;
+};
+
+export const makeBulkGearDatabase = (db: Database, gearSets: Gear[], extraItems: EquippedItem[] = []): SimDatabase => {
+	const items = new Map<number, Item>();
+	const randomSuffixes = new Map<number, ItemRandomSuffix>();
+	const itemEffectRandPropPoints = new Map<number, ItemEffectRandPropPoints>();
+	const enchants = new Map<number, Enchant>();
+	const gems = new Map<number, Gem>();
+
+	const addEquippedItem = (equippedItem: EquippedItem) => {
+		const item = equippedItem.item;
+		items.set(item.id, item);
+
+		const randomSuffix = equippedItem.randomSuffix;
+		if (randomSuffix) randomSuffixes.set(randomSuffix.id, randomSuffix);
+
+		const scalingIlvls = new Set([equippedItem.ilvl]);
+		Object.values(item.scalingOptions ?? {}).forEach(opt => {
+			if (opt?.ilvl) scalingIlvls.add(opt.ilvl);
+		});
+		scalingIlvls.forEach(ilvl => {
+			const rpp = db.getItemEffectRandPropPoints(ilvl);
+			if (rpp) itemEffectRandPropPoints.set(rpp.ilvl, rpp);
+		});
+
+		const enchant = equippedItem.enchant;
+		if (enchant) enchants.set(enchant.effectId, enchant);
+
+		for (const gem of equippedItem.gems) {
+			if (gem) gems.set(gem.id, gem);
+		}
+	};
+
+	for (const gearSet of gearSets) {
+		for (const equippedItem of gearSet.asArray()) {
+			if (equippedItem) addEquippedItem(equippedItem);
+		}
+	}
+	for (const equippedItem of extraItems) {
+		addEquippedItem(equippedItem);
+	}
+
+	return SimDatabase.create({
+		items: Array.from(items.values()).map(item => SimItem.fromJson(Item.toJson(item), { ignoreUnknownFields: true })),
+		randomSuffixes: Array.from(randomSuffixes.values()),
+		itemEffectRandPropPoints: Array.from(itemEffectRandPropPoints.values()),
+		enchants: Array.from(enchants.values()).map(enchant => SimEnchant.fromJson(Enchant.toJson(enchant), { ignoreUnknownFields: true })),
+		gems: Array.from(gems.values()).map(gem => SimGem.fromJson(Gem.toJson(gem), { ignoreUnknownFields: true })),
+	});
+};
+
+export const makeBulkItemDatabaseFromSpecs = (db: Database, baselineGear: Gear, itemSpecs: readonly ItemSpec[]): SimDatabase => {
+	const extraItems = itemSpecs
+		.map(itemSpec => (itemSpec ? db.lookupItemSpec(itemSpec) : null))
+		.filter((item): item is EquippedItem => item != null);
+	return makeBulkGearDatabase(db, [baselineGear], extraItems);
 };
 
 type BulkSimReforgeCacheData = {
@@ -124,16 +182,19 @@ export async function getBulkSimReforgeCacheData({
 
 	let processedCandidates = 0;
 	let restoredCandidates = 0;
+	const shouldLookupCache = await cache.hasEntries();
 
 	const flushPendingEntries = async () => {
 		if (!pendingEntries.length) {
 			return;
 		}
 
-		const cachedGearByKey = await cache.getMany(
-			pendingEntries.map(entry => entry.cacheKey),
-			signal,
-		);
+		const cachedGearByKey = shouldLookupCache
+			? await cache.getMany(
+					pendingEntries.map(entry => entry.cacheKey),
+					signal,
+				)
+			: new Map<string, EquipmentSpec>();
 		for (const entry of pendingEntries) {
 			throwIfAborted(signal);
 			const cachedGear = cachedGearByKey.get(entry.cacheKey);

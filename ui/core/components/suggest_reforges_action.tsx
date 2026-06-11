@@ -910,7 +910,7 @@ export class ReforgeOptimizer {
 					{this.softCapsConfig
 						.filter(
 							config =>
-								(config.capType === StatCapType.TypeThreshold || config.capType === StatCapType.TypeSoftCap) && config.breakpoints.length > 1,
+								(config.capType === StatCapType.TypeThreshold || config.capType === StatCapType.TypeSoftCap) && config.breakpoints.length > 0,
 						)
 						.map(({ breakpoints, unitStat }) => {
 							if (!INCLUDED_STATS.some(us => us.equals(unitStat))) return;

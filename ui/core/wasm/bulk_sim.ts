@@ -16,11 +16,7 @@ import {
 	ReforgeOptimizeMode,
 	ReforgeOptimizeRequest,
 } from '../proto/api';
-import { EquipmentSpec, ItemRandomSuffix } from '../proto/common';
-import { ItemEffectRandPropPoints, SimDatabase, SimEnchant, SimGem, SimItem } from '../proto/db';
-import { UIEnchant as Enchant, UIGem as Gem, UIItem as Item } from '../proto/ui';
-import { Database } from '../proto_utils/database';
-import { Gear } from '../proto_utils/gear';
+import { EquipmentSpec } from '../proto/common';
 import { SimSignals } from '../sim_signal_manager';
 import { isDevMode, noop } from '../utils';
 import { WorkerPool, WorkerProgressCallback } from '../worker_pool';
@@ -28,52 +24,6 @@ import { optimizeReforgeGear, reforgeGearKey } from './reforge_optimizer';
 import { runConcurrentSim } from './sim';
 
 const BULK_SIM_DEFAULT_TOP_RESULTS = 5;
-
-export const makeBulkGearDatabase = (db: Database, gearSets: Gear[]): SimDatabase => {
-	const items = new Map<number, Item>();
-	const randomSuffixes = new Map<number, ItemRandomSuffix>();
-	const itemEffectRandPropPoints = new Map<number, ItemEffectRandPropPoints>();
-	const enchants = new Map<number, Enchant>();
-	const gems = new Map<number, Gem>();
-	// TBC SimDatabase intentionally has no reforge stats field and no tinker payload.
-	// Keep the DB payload aligned with schema: items, suffixes, enchants, gems, and ilvl scaling points.
-
-	for (const gearSet of gearSets) {
-		for (const equippedItem of gearSet.asArray()) {
-			if (!equippedItem) continue;
-
-			const item = equippedItem.item;
-			items.set(item.id, item);
-
-			const randomSuffix = equippedItem.randomSuffix;
-			if (randomSuffix) {
-				randomSuffixes.set(randomSuffix.id, randomSuffix);
-			}
-
-			const randPropPoints = db.getItemEffectRandPropPoints(equippedItem.ilvl);
-			if (randPropPoints) {
-				itemEffectRandPropPoints.set(randPropPoints.ilvl, randPropPoints);
-			}
-
-			const enchant = equippedItem.enchant;
-			if (enchant) {
-				enchants.set(enchant.effectId, enchant);
-			}
-
-			for (const gem of equippedItem.gems) {
-				if (gem) gems.set(gem.id, gem);
-			}
-		}
-	}
-
-	return SimDatabase.create({
-		items: Array.from(items.values()).map(item => SimItem.fromJson(Item.toJson(item), { ignoreUnknownFields: true })),
-		randomSuffixes: Array.from(randomSuffixes.values()),
-		itemEffectRandPropPoints: Array.from(itemEffectRandPropPoints.values()),
-		enchants: Array.from(enchants.values()).map(enchant => SimEnchant.fromJson(Enchant.toJson(enchant), { ignoreUnknownFields: true })),
-		gems: Array.from(gems.values()).map(gem => SimGem.fromJson(Gem.toJson(gem), { ignoreUnknownFields: true })),
-	});
-};
 
 type ConcurrentBulkSimCandidate = {
 	index: number;
