@@ -32,8 +32,10 @@ func TestFeralCat(t *testing.T) {
 				core.GetGearSet("../../../ui/druid/feralcat/gear_sets", "p2_9p"),
 				core.GetGearSet("../../../ui/druid/feralcat/gear_sets", "p2_alt_6p"),
 				core.GetGearSet("../../../ui/druid/feralcat/gear_sets", "p2_alt_9p"),
-				core.GetGearSet("../../../ui/druid/feralcat/gear_sets", "p3"),
-				core.GetGearSet("../../../ui/druid/feralcat/gear_sets", "p4"),
+				core.GetGearSet("../../../ui/druid/feralcat/gear_sets", "p3_6p"),
+				core.GetGearSet("../../../ui/druid/feralcat/gear_sets", "p3_9p"),
+				core.GetGearSet("../../../ui/druid/feralcat/gear_sets", "p4_6p"),
+				core.GetGearSet("../../../ui/druid/feralcat/gear_sets", "p4_9p"),
 				core.GetGearSet("../../../ui/druid/feralcat/gear_sets", "p5"),
 			},
 
