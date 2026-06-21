@@ -71,6 +71,11 @@ func InferPhase(item *proto.UIItem) int32 {
 				return 1
 			}
 		}
+		if rep := src.GetRep(); rep != nil {
+			if rep.RepFactionId == 1012 {
+				return 3
+			}
+		}
 	}
 
 	// PvP Sets

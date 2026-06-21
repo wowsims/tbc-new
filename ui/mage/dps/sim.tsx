@@ -3,10 +3,12 @@ import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_u
 import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
 import { Mage } from '../../core/player_classes/mage';
-import { APLRotation } from '../../core/proto/apl';
-import { Faction, ItemSlot, PseudoStat, Race, Spec, Stat } from '../../core/proto/common';
+import { APLListItem, APLRotation, APLRotation_Type, APLValueVariable } from '../../core/proto/apl';
+import { Cooldowns, Faction, ItemSlot, PseudoStat, Race, Spec, Stat } from '../../core/proto/common';
 import { DEFAULT_CASTER_GEM_STATS, Stats, UnitStat } from '../../core/proto_utils/stats';
 import { DefaultDebuffs, DefaultRaidBuffs, DefaultPartyBuffs, DefaultIndividualBuffs, DefaultConsumables } from './presets';
+import { SpecRotation } from '../../core/proto_utils/utils';
+import * as AplUtils from '../../core/proto_utils/apl_utils';
 import * as Presets from './presets';
 import * as MageInputs from './inputs';
 import { Mage_Rotation } from '../../core/proto/mage';
@@ -102,11 +104,15 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecMage, {
 
 		partyBuffs: DefaultPartyBuffs,
 		individualBuffs: DefaultIndividualBuffs,
+
+		rotationType: APLRotation_Type.TypeSimple,
+		simpleRotation: Presets.ArcaneMageSimpleRotation,
 		debuffs: DefaultDebuffs,
 	},
 
 	// IconInputs to include in the 'Player' section on the settings tab.
 	playerIconInputs: [MageInputs.MageArmorInputs()],
+	rotationInputs: MageInputs.ArcaneMageRotationConfig,
 	// Buff and Debuff inputs to include/exclude, overriding the EP-based defaults.
 	includeBuffDebuffInputs: [Stat.StatMP5],
 	excludeBuffDebuffInputs: [],
@@ -123,13 +129,13 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecMage, {
 	presets: {
 		epWeights: [Presets.P1_EP_PRESET, Presets.P2_EP_PRESET],
 		// Preset rotations that the user can quickly select.
-		rotations: [Presets.ROTATION_PRESET_ARCANE],
+		rotations: [Presets.ROTATION_PRESET_ARCANE, Presets.APL_ARCANE_SIMPLE],
 		// Preset talents that the user can quickly select.
 		talents: [Presets.ARCANE_TALENTS],
 		// Preset gear configurations that the user can quickly select.
 		gear: [Presets.PREBIS_ARCANE, Presets.P1_BIS_ARCANE, Presets.P2_BIS_ARCANE],
 
-		builds: [],
+		builds: [Presets.P1_PRESET_BUILD_ARC, Presets.P2_PRESET_BUILD_ARC],
 	},
 
 	autoRotation: (player: Player<Spec.SpecMage>): APLRotation => {
@@ -139,6 +145,46 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecMage, {
 		// } else {
 		return Presets.ROTATION_PRESET_ARCANE.rotation.rotation!;
 		// }
+	},
+
+	simpleRotation: (player: Player<Spec.SpecMage>, simple: SpecRotation<Spec.SpecMage>, cooldowns: Cooldowns): APLRotation => {
+		const actions = AplUtils.simpleCooldownActions(cooldowns);
+		const rotation = APLRotation.clone(Presets.ROTATION_PRESET_ARCANE.rotation.rotation!);
+
+		const { conserveStart = 20, conserveEnd = 30, delayMajorCDs = 10 } = simple;
+
+		const conserveStartString = APLValueVariable.fromJson({
+			name: 'Conserve Start',
+			value: { const: { val: String(conserveStart) + '%' } },
+		});
+
+		const conserveEndString = APLValueVariable.fromJson({
+			name: 'Conserve End',
+			value: { const: { val: String(conserveEnd) + '%' } },
+		});
+
+		const delayMajorCDsString = APLValueVariable.fromJson({
+			name: 'Delay Major CDs',
+			value: { const: { val: String(delayMajorCDs) + 's' } },
+		});
+
+		rotation.valueVariables[0] = conserveStartString;
+		rotation.valueVariables[1] = conserveEndString;
+		rotation.valueVariables[2] = delayMajorCDsString;
+
+		return APLRotation.create({
+			prepullActions: rotation.prepullActions,
+			priorityList: [
+				...actions.map(action =>
+					APLListItem.create({
+						action: action,
+					}),
+				),
+				...rotation.priorityList,
+			],
+			groups: rotation.groups,
+			valueVariables: rotation.valueVariables,
+		});
 	},
 
 	raidSimPresets: [
