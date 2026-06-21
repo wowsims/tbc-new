@@ -384,7 +384,7 @@ func (generator *bulkSimCandidateGenerator) initFrozenSettings() {
 
 func (generator *bulkSimCandidateGenerator) initSelectedItems() error {
 	equippedItemsBySlot := make(map[proto.ItemSlot]*core.Item)
-	equippedIDs := make(map[int32]bool)
+	equippedCounts := make(map[int32]int)
 	for slot := proto.ItemSlot_ItemSlotHead; slot < core.NumItemSlots; slot++ {
 		equippedItem := generator.baseEquipment.GetItemBySlot(slot)
 		if equippedItem == nil || equippedItem.ID == 0 {
@@ -392,15 +392,30 @@ func (generator *bulkSimCandidateGenerator) initSelectedItems() error {
 		}
 		itemCopy := *equippedItem
 		equippedItemsBySlot[slot] = &itemCopy
-		equippedIDs[equippedItem.ID] = true
+		equippedCounts[equippedItem.ID]++
 	}
 
 	for _, selectedItem := range generator.settings.GetItems() {
 		if selectedItem == nil || selectedItem.GetId() == 0 {
 			continue
 		}
-		if equippedIDs[selectedItem.GetId()] {
-			continue
+		if equippedCounts[selectedItem.GetId()] > 0 {
+			// For dual-wield weapons, equipped and user-added copies stack:
+			// 1 equipped + 1 added = 2 total, enabling same-weapon combos like [Sp,Sp].
+			// For all other slots a user-added duplicate of an equipped item is redundant.
+			// Fast path: non-dual-wield players can never benefit from stacking, skip lookup.
+			skip := !generator.playerCanDualWield
+			if !skip {
+				baseItem := core.GetItemByID(selectedItem.GetId())
+				skip = baseItem == nil ||
+					baseItem.Type != proto.ItemType_ItemTypeWeapon ||
+					baseItem.HandType == proto.HandType_HandTypeTwoHand
+			}
+			if skip {
+				equippedCounts[selectedItem.GetId()]--
+				continue
+			}
+			// dual-wield 1H weapon: fall through to add it alongside the equipped copy
 		}
 		baseItem := core.GetItemByID(selectedItem.GetId())
 		if baseItem == nil {
@@ -648,29 +663,42 @@ func (generator *bulkSimCandidateGenerator) getAllWeaponCombos() [][2]*bulkSimCa
 
 	oneHandOptions := generator.selectedByBulkSlot[BulkSimItemSlotHandWeapon]
 	if len(oneHandOptions) > 0 {
-		filtered := make([]bulkSimCandidateOption, 0, len(oneHandOptions))
+		type weaponEntry struct {
+			option bulkSimCandidateOption
+			count  int
+		}
+		unique := make([]weaponEntry, 0, len(oneHandOptions))
 		for _, option := range oneHandOptions {
 			if optionsContainEquivalent(all2HWeapons, option) {
 				continue
 			}
-			filtered = append(filtered, option)
+			found := false
+			for k := range unique {
+				if candidateOptionsEqual(unique[k].option, option) {
+					unique[k].count++
+					found = true
+					break
+				}
+			}
+			if !found {
+				unique = append(unique, weaponEntry{option: option, count: 1})
+			}
 		}
 
-		for i := range filtered {
-			if optionsContainEquivalent(filtered[:i], filtered[i]) {
-				continue
+		for i := range unique {
+			iCanMH := unique[i].option.item.HandType != proto.HandType_HandTypeOffHand
+			iCanOH := unique[i].option.item.HandType != proto.HandType_HandTypeMainHand
+			if unique[i].count >= 2 && iCanMH && iCanOH {
+				allWeaponCombos = append(allWeaponCombos, [2]*bulkSimCandidateOption{&unique[i].option, &unique[i].option})
 			}
-			hasDuplicate := optionsContainEquivalent(filtered[i+1:], filtered[i])
-			if filtered[i].item.WeaponType != proto.WeaponType_WeaponTypeUnknown && !hasDuplicate {
-				allWeaponCombos = append(allWeaponCombos, [2]*bulkSimCandidateOption{&filtered[i], &filtered[i]})
-			}
-			for j := i + 1; j < len(filtered); j++ {
-				if optionsContainEquivalent(filtered[i+1:j], filtered[j]) {
-					continue
+			for j := i + 1; j < len(unique); j++ {
+				jCanMH := unique[j].option.item.HandType != proto.HandType_HandTypeOffHand
+				jCanOH := unique[j].option.item.HandType != proto.HandType_HandTypeMainHand
+				if iCanMH && jCanOH {
+					allWeaponCombos = append(allWeaponCombos, [2]*bulkSimCandidateOption{&unique[i].option, &unique[j].option})
 				}
-				allWeaponCombos = append(allWeaponCombos, [2]*bulkSimCandidateOption{&filtered[i], &filtered[j]})
-				if !candidateOptionsEqual(filtered[i], filtered[j]) {
-					allWeaponCombos = append(allWeaponCombos, [2]*bulkSimCandidateOption{&filtered[j], &filtered[i]})
+				if jCanMH && iCanOH {
+					allWeaponCombos = append(allWeaponCombos, [2]*bulkSimCandidateOption{&unique[j].option, &unique[i].option})
 				}
 			}
 		}

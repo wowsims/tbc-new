@@ -6,7 +6,7 @@ import { ref } from 'tsx-vanilla';
 import { REPO_RELEASES_URL } from '../../constants/other';
 import { IndividualSimUI } from '../../individual_sim_ui';
 import i18n from '../../../i18n/config';
-import { BulkRequiredSetBonus, BulkSettings, ProgressMetrics } from '../../proto/api';
+import { BulkRequiredSetBonus, BulkSettings, BulkSimStage, ProgressMetrics } from '../../proto/api';
 import { Class, ItemSlot, ItemSpec, WeaponType } from '../../proto/common';
 import { EquippedItem } from '../../proto_utils/equipped_item';
 import { Gear } from '../../proto_utils/gear';
@@ -889,31 +889,43 @@ export class BulkTab extends SimTab {
 	}
 
 	private setSimProgress(progress: ProgressMetrics, config: BulkSimProgressConfig) {
-		const title = config.title || (config.currentRound === 1 ? i18n.t('bulk_tab.progress.baseline_round') : i18n.t('bulk_tab.progress.refining_rounds'));
-		const roundFraction = progress.totalIterations > 0 ? progress.completedIterations / progress.totalIterations : 0;
-		const current = config.currentRound - 1 + roundFraction;
-		const total = config.totalRounds;
-
-		const totalElapsedSeconds =
-			((config.aggregateStartedAt ?? this.simStart) > 0 ? new Date().getTime() - (config.aggregateStartedAt ?? this.simStart) : 0) / 1000;
-		const completed = config.useSimCountProgress && progress.totalSims > 0 ? progress.completedSims : progress.completedIterations;
-		const completeTotal = config.useSimCountProgress && progress.totalSims > 0 ? progress.totalSims : progress.totalIterations;
-		const fraction = completeTotal > 0 ? completed / completeTotal : 0;
-		const secondsRemaining = fraction > 0 ? (totalElapsedSeconds / fraction) * (1 - fraction) : 0;
+		const stageCurrentRound = config.stageCurrentRound ?? config.currentRound;
+		const stageRounds = config.stageRounds ?? config.totalRounds;
+		const isBaselineRound = stageCurrentRound === 1;
+		const stage = progress.bulkStage == BulkSimStage.BulkSimStageReforge ? 'reforging' : 'sim';
+		const totalElapsedSeconds = (new Date().getTime() - (config.aggregateStartedAt ?? this.simStart)) / 1000;
+		const completedIterations = config.aggregateCompletedIterations ?? progress.completedIterations;
+		const totalIterations = config.aggregateTotalIterations ?? progress.totalIterations;
+		const completedRoundsFromIterations = Math.max(
+			0,
+			config.aggregateTotalIterations && config.aggregateTotalIterations > 0
+				? (completedIterations / config.aggregateTotalIterations) * stageRounds
+				: stageCurrentRound - 1 + (progress.totalIterations > 0 ? progress.completedIterations / progress.totalIterations : 0),
+		);
+		const completedSimsFromIterations =
+			config.useSimCountProgress && progress.totalSims > 0 && progress.totalIterations > 0
+				? (progress.completedIterations / progress.totalIterations) * progress.totalSims
+				: 0;
+		const completedRounds =
+			config.useSimCountProgress && progress.totalSims > 0
+				? Math.max(progress.completedSims, completedSimsFromIterations)
+				: completedRoundsFromIterations;
+		const totalRounds = config.useSimCountProgress && progress.totalSims > 0 ? progress.totalSims : stageRounds;
+		const secondsRemaining = completedRounds > 0 ? (totalElapsedSeconds / completedRounds) * Math.max(0, totalRounds - completedRounds) : 0;
 
 		if (isNaN(Number(secondsRemaining))) return;
 
 		this.progressTrackerModal.updateProgress({
-			stage: 'sim',
-			title,
-			current,
-			total,
+			stage,
+			title: config.title ?? (isBaselineRound ? i18n.t('bulk_tab.progress.baseline_round') : i18n.t('bulk_tab.progress.refining_rounds')),
+			current: completedRounds,
+			total: totalRounds,
 			message: (
 				<div className="results-sim">
 					<div
 						innerHTML={i18n.t('bulk_tab.progress.iterations_complete', {
-							completed,
-							total: completeTotal,
+							completed: completedIterations,
+							total: totalIterations,
 						})}
 					/>
 					<div>{i18n.t('bulk_tab.progress.time_remaining', { time: formatDurationSeconds(secondsRemaining) })}</div>
