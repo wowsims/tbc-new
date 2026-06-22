@@ -536,6 +536,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestShadowPriest-AllItems-FrostscytheofLordAhune-278953"
+ value: {
+  dps: 1764.53923
+  tps: 1294.26289
+ }
+}
+dps_results: {
  key: "TestShadowPriest-AllItems-GlowingCrystalInsignia-25619"
  value: {
   dps: 1744.14687

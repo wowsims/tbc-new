@@ -529,6 +529,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestArcane-AllItems-FrostscytheofLordAhune-278953"
+ value: {
+  dps: 1944.82108
+  tps: 1315.80191
+ }
+}
+dps_results: {
  key: "TestArcane-AllItems-GlowingCrystalInsignia-25619"
  value: {
   dps: 1929.21316

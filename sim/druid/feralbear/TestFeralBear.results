@@ -764,6 +764,15 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestFeralBear-AllItems-FrostscytheofLordAhune-278953"
+ value: {
+  dps: 436.78239
+  tps: 673.95688
+  dtps: 1113.60006
+  hps: 76.80815
+ }
+}
+dps_results: {
  key: "TestFeralBear-AllItems-Gladiator'sRefuge"
  value: {
   dps: 358.8819

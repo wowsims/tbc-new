@@ -49,7 +49,16 @@ var ConsumableOverrides = []*proto.Consumable{
 	{Id: 23381, CooldownDuration: int32(time.Hour.Seconds())}, // Chipped Power Core
 }
 var ItemOverrides = []*proto.UIItem{
-	{Id: 32658, Phase: 2}, // Badge of Tenacity
+	{Id: 32658, Phase: 2},  // Badge of Tenacity
+	{Id: 278774, Phase: 2}, // Cloak of the Frigid Winds (ilvl 128)
+	{Id: 278819, Phase: 2}, // The Frost Lord's War Cloak (ilvl 128)
+	{Id: 278823, Phase: 2}, // Icebound Cloak (ilvl 128)
+	{Id: 278827, Phase: 2}, // Amulet of Bitter Hatred (ilvl 128)
+	{Id: 278833, Phase: 2}, // Choker of the Arctic Flow (ilvl 128)
+	{Id: 278838, Phase: 2}, // Amulet of Glacial Tranquility (ilvl 128)
+	{Id: 278847, Phase: 2}, // Hailstone Pendant (ilvl 128)
+	{Id: 278953, Phase: 2}, // Frostscythe of Lord Ahune (ilvl 128)
+	{Id: 279240, Phase: 2}, // Shroud of Winter's Chill (ilvl 128)
 
 	{Id: 34665, Phase: 5},
 	{Id: 34666, Phase: 5},
@@ -103,6 +112,44 @@ var ItemDenyList = map[int32]struct{}{
 	34578: {}, // Battlemaster's Determination
 	34579: {}, // Battlemaster's Audacity
 	34580: {}, // Battlemaster's Perseverence
+
+	// Ahune items with the wrong ilvl
+	35494:  {}, // Shroud of Winter's Chill (ilvl 110)
+	35495:  {}, // The Frost Lord's War Cloak (ilvl 110)
+	35496:  {}, // Icebound Cloak (ilvl 110)
+	35497:  {}, // Cloak of the Frigid Winds (ilvl 110)
+	35507:  {}, // Amulet of Bitter Hatred (ilvl 110)
+	35508:  {}, // Choker of the Arctic Flow (ilvl 110)
+	35509:  {}, // Amulet of Glacial Tranquility (ilvl 110)
+	35511:  {}, // Hailstone Pendant (ilvl 110)
+	35514:  {}, // Frostscythe of Lord Ahune (ilvl 110)
+	278752: {}, // Cloak of the Frigid Winds (ilvl 115)
+	278775: {}, // Cloak of the Frigid Winds (ilvl 141)
+	278807: {}, // Cloak of the Frigid Winds (ilvl 154)
+	278817: {}, // The Frost Lord's War Cloak (ilvl 115)
+	278820: {}, // The Frost Lord's War Cloak (ilvl 141)
+	278821: {}, // The Frost Lord's War Cloak (ilvl 154)
+	278822: {}, // Icebound Cloak (ilvl 115)
+	278824: {}, // Icebound Cloak (ilvl 141)
+	278825: {}, // Icebound Cloak (ilvl 154)
+	278826: {}, // Amulet of Bitter Hatred (ilvl 115)
+	278828: {}, // Amulet of Bitter Hatred (ilvl 141)
+	278829: {}, // Amulet of Bitter Hatred (ilvl 154)
+	278832: {}, // Choker of the Arctic Flow (ilvl 115)
+	278834: {}, // Choker of the Arctic Flow (ilvl 141)
+	278835: {}, // Choker of the Arctic Flow (ilvl 154)
+	278837: {}, // Amulet of Glacial Tranquility (ilvl 115)
+	278839: {}, // Amulet of Glacial Tranquility (ilvl 141)
+	278840: {}, // Amulet of Glacial Tranquility (ilvl 154)
+	278846: {}, // Hailstone Pendant (ilvl 115)
+	278949: {}, // Hailstone Pendant (ilvl 141)
+	278950: {}, // Hailstone Pendant (ilvl 154)
+	278952: {}, // Frostscythe of Lord Ahune (ilvl 115)
+	278954: {}, // Frostscythe of Lord Ahune (ilvl 141)
+	278955: {}, // Frostscythe of Lord Ahune (ilvl 154)
+	279239: {}, // Shroud of Winter's Chill (ilvl 115)
+	279241: {}, // Shroud of Winter's Chill (ilvl 141)
+	279242: {}, // Shroud of Winter's Chill (ilvl 154)
 }
 
 // Item icons to include in the DB, so they don't need to be separately loaded in the UI.

@@ -71,7 +71,6 @@ func RegisterAllOnUseCds() {
 	// shared.NewSimpleStatActive(34430) // Glimmering Naaru Sliver - https://www.wowhead.com/tbc/spell=45052
 	// shared.NewSimpleStatActive(34471) // Vial of the Sunwell - https://www.wowhead.com/tbc/spell=45064
 	// shared.NewSimpleStatActive(35275) // Orb of the Sin'dorei - https://www.wowhead.com/tbc/spell=46354
-	// shared.NewSimpleStatActive(35514) // Frostscythe of Lord Ahune - https://www.wowhead.com/tbc/spell=46643
 	// shared.NewSimpleStatActive(35581) // Rocket Boots Xtreme Lite - https://www.wowhead.com/tbc/spell=51582
 	// shared.NewSimpleStatActive(35703) // Figurine - Seaspray Albatross - https://www.wowhead.com/tbc/spell=46785
 	// shared.NewSimpleStatActive(38175) // The Horseman's Blade - https://www.wowhead.com/tbc/spell=50070

@@ -2737,12 +2737,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		35514, // Frostscythe of Lord Ahune
-		[
-			"", // 46643 - https://www.wowhead.com/tbc/spell=46643
-		]
-	],
-	[
 		35581, // Rocket Boots Xtreme Lite
 		[
 			"Engage the rocket boots to greatly increase your speed... most of the time.", // 51582 - https://www.wowhead.com/tbc/spell=51582

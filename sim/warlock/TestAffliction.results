@@ -536,6 +536,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestAffliction-AllItems-FrostscytheofLordAhune-278953"
+ value: {
+  dps: 1949.14325
+  tps: 1218.76623
+ }
+}
+dps_results: {
  key: "TestAffliction-AllItems-GlowingCrystalInsignia-25619"
  value: {
   dps: 1973.56792
