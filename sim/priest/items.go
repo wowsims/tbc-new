@@ -140,7 +140,6 @@ var ItemSetAbsolutionRegalia = core.NewItemSet(core.ItemSet{
 })
 
 func init() {
-
 	// Ashtongue Talisman of Acumen
 	core.NewItemEffect(32490, func(agent core.Agent) {
 		character := agent.GetCharacter()
