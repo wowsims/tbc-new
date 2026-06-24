@@ -2178,12 +2178,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		32490, // Ashtongue Talisman of Acumen
-		[
-			"Each time your Shadow Word: Pain deals damage, it has a 10% chance to grant you 220 spell damage for 10s and each time your Renew heals, it has a 10% chance to grant you 220 healing for 5s.", // 40438 - https://www.wowhead.com/tbc/spell=40438
-		]
-	],
-	[
 		32491, // Ashtongue Talisman of Vision
 		[
 			"Lesser Healing Wave has a 10% chance to grant 170 mana, Lightning Bolt has a 15% chance to grant up to 170 mana, and Stormstrike has a 50% chance to grant up to 275 attack power for 10s.", // 40463 - https://www.wowhead.com/tbc/spell=40463
