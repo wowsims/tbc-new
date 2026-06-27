@@ -1,3 +1,4 @@
+import { Phase } from '../../core/constants/other';
 import { OtherDefaults as SimUIOtherDefaults } from '../../core/individual_sim_ui';
 import * as PresetUtils from '../../core/preset_utils.js';
 import { ConsumesSpec, HealingModel, Profession, Race, Spec, Stat } from '../../core/proto/common';
@@ -6,7 +7,10 @@ import { SavedTalents } from '../../core/proto/ui.js';
 import { Stats } from '../../core/proto_utils/stats';
 import PreraidGear from './gear_sets/preraid.gear.json';
 import P1Gear from './gear_sets/p1.gear.json';
-import P2Gear from './gear_sets/p2.gear.json';
+import P2SurvivalGear from './gear_sets/p2_survival.gear.json';
+import P2BalancedGear from './gear_sets/p2_balanced.gear.json';
+import P2OffensiveGear from './gear_sets/p2_offensive.gear.json';
+import P2WardenGear from './gear_sets/p2_warden.gear.json';
 import P3Gear from './gear_sets/p3.gear.json';
 import P4Gear from './gear_sets/p4.gear.json';
 import P5Gear from './gear_sets/p5.gear.json';
@@ -14,14 +18,17 @@ import P2HydrossFrostGear from './gear_sets/p2_hydross_frost.gear.json';
 import P2HydrossNatureGear from './gear_sets/p2_hydross_nature.gear.json';
 
 // Preset options for this spec.
-export const PRERAID_PRESET = PresetUtils.makePresetGear('Pre-Raid', PreraidGear, { group: 'Default' });
-export const P1_PRESET = PresetUtils.makePresetGear('P1', P1Gear, { group: 'Default' });
-export const P2_PRESET = PresetUtils.makePresetGear('P2', P2Gear, { group: 'Default' });
-export const P3_PRESET = PresetUtils.makePresetGear('P3', P3Gear, { group: 'Default' });
-export const P4_PRESET = PresetUtils.makePresetGear('P4', P4Gear, { group: 'Default' });
-export const P5_PRESET = PresetUtils.makePresetGear('P5', P5Gear, { group: 'Default' });
-export const P2_HYDROSS_FROST_PRESET = PresetUtils.makePresetGear('Hydross (Frost Resist)', P2HydrossFrostGear, { group: 'Encounter specific' });
-export const P2_HYDROSS_NATURE_PRESET = PresetUtils.makePresetGear('Hydross (Nature Resist)', P2HydrossNatureGear, { group: 'Encounter specific' });
+export const PRERAID_PRESET = PresetUtils.makePresetGear('Pre-Raid', PreraidGear, { phase: Phase.Phase1 });
+export const P1_PRESET = PresetUtils.makePresetGear('BiS', P1Gear, { phase: Phase.Phase1 });
+export const P2_SURVIVAL_PRESET = PresetUtils.makePresetGear('Survival', P2SurvivalGear, { phase: Phase.Phase2 });
+export const P2_BALANCED_PRESET = PresetUtils.makePresetGear('Balanced', P2BalancedGear, { phase: Phase.Phase2 });
+export const P2_OFFENSIVE_PRESET = PresetUtils.makePresetGear('Offensive', P2OffensiveGear, { phase: Phase.Phase2 });
+export const P2_WARDEN_PRESET = PresetUtils.makePresetGear('Warden', P2WardenGear, { phase: Phase.Phase2 });
+export const P2_HYDROSS_FROST_PRESET = PresetUtils.makePresetGear('Frost Resist', P2HydrossFrostGear, { phase: Phase.Phase2 });
+export const P2_HYDROSS_NATURE_PRESET = PresetUtils.makePresetGear('Nature Resist', P2HydrossNatureGear, { phase: Phase.Phase2 });
+export const P3_PRESET = PresetUtils.makePresetGear('BiS', P3Gear, { phase: Phase.Phase3 });
+export const P4_PRESET = PresetUtils.makePresetGear('BiS', P4Gear, { phase: Phase.Phase4 });
+export const P5_PRESET = PresetUtils.makePresetGear('BiS', P5Gear, { phase: Phase.Phase5 });
 
 export const DefaultSimpleRotation = DruidRotation.create({
 	maintainFaerieFire: true,
