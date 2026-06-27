@@ -36,6 +36,8 @@ func init() {
 			SocketBonus:      item.SocketBonus,
 			WeaponSpeed:      item.WeaponSpeed,
 			QualityModifier:  item.QualityModifier,
+			Unique:           item.Unique,
+			LimitCategory:    item.LimitCategory,
 			SetName:          item.SetName,
 			SetId:            item.SetId,
 			ScalingOptions:   item.ScalingOptions,

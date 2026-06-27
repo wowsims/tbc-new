@@ -2,7 +2,7 @@ import i18n from '../i18n/config';
 import Toast, { ToastOptions } from './components/toast';
 import { Phase } from './constants/other';
 import { Player } from './player';
-import { Player as PlayerProto } from './proto/api.js';
+import { Player as PlayerProto, ReforgeSettings } from './proto/api.js';
 import { APLRotation, APLRotation_Type as APLRotationType } from './proto/apl';
 import {
 	ConsumesSpec,
@@ -21,7 +21,7 @@ import {
 	Spec,
 	UnitReference,
 } from './proto/common';
-import { IndividualSimSettings, ReforgeSettings, SavedRotation, SavedTalents } from './proto/ui';
+import { IndividualSimSettings, SavedRotation, SavedTalents } from './proto/ui';
 import { Stats } from './proto_utils/stats';
 import { SpecOptions, SpecRotation, specTypeFunctions } from './proto_utils/utils';
 

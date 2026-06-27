@@ -50,14 +50,14 @@ type Environment struct {
 	heartbeatOffset time.Duration
 }
 
-func NewEnvironment(raidProto *proto.Raid, encounterProto *proto.Encounter, runFakePrepull bool) (*Environment, *proto.RaidStats, *proto.EncounterStats) {
+func NewEnvironment(raidProto *proto.Raid, encounterProto *proto.Encounter, runFakePrepull bool, skipRotation bool) (*Environment, *proto.RaidStats, *proto.EncounterStats) {
 	env := &Environment{
 		State: Created,
 	}
 
 	env.construct(raidProto, encounterProto)
 	raidStats := env.initialize(raidProto, encounterProto)
-	env.finalize(raidProto, encounterProto, raidStats, runFakePrepull)
+	env.finalize(raidProto, encounterProto, raidStats, runFakePrepull, skipRotation)
 
 	encounterStats := &proto.EncounterStats{}
 	for _, target := range env.Encounter.AllTargets {
@@ -141,7 +141,7 @@ func (env *Environment) initialize(raidProto *proto.Raid, encounterProto *proto.
 }
 
 // The finalization phase.
-func (env *Environment) finalize(raidProto *proto.Raid, _ *proto.Encounter, raidStats *proto.RaidStats, runFakePrepull bool) {
+func (env *Environment) finalize(raidProto *proto.Raid, _ *proto.Encounter, raidStats *proto.RaidStats, runFakePrepull bool, skipRotation bool) {
 	for _, finalizeEffect := range env.preFinalizeEffects {
 		finalizeEffect()
 	}
@@ -165,21 +165,23 @@ func (env *Environment) finalize(raidProto *proto.Raid, _ *proto.Encounter, raid
 		}
 	}
 
-	for partyIdx, party := range env.Raid.Parties {
-		partyProto := raidProto.Parties[partyIdx]
-		for playerIdx, player := range party.Players {
-			if playerIdx >= len(partyProto.Players) {
-				// This happens for target dummies.
-				continue
-			}
-			playerProto := partyProto.Players[playerIdx]
-			char := player.GetCharacter()
+	if !skipRotation {
+		for partyIdx, party := range env.Raid.Parties {
+			partyProto := raidProto.Parties[partyIdx]
+			for playerIdx, player := range party.Players {
+				if playerIdx >= len(partyProto.Players) {
+					// This happens for target dummies.
+					continue
+				}
+				playerProto := partyProto.Players[playerIdx]
+				char := player.GetCharacter()
 
-			for _, rotationTransformation := range char.rotationTransformations {
-				rotationTransformation(raidProto, playerProto.Rotation)
-			}
+				for _, rotationTransformation := range char.rotationTransformations {
+					rotationTransformation(raidProto, playerProto.Rotation)
+				}
 
-			char.Rotation = char.newAPLRotation(playerProto.Rotation)
+				char.Rotation = char.newAPLRotation(playerProto.Rotation)
+			}
 		}
 	}
 
@@ -205,7 +207,7 @@ func (env *Environment) finalize(raidProto *proto.Raid, _ *proto.Encounter, raid
 		}
 	}
 
-	if runFakePrepull {
+	if !skipRotation && runFakePrepull {
 		// Runs prepull only, for a single iteration. This lets us detect misconfigured
 		// prepull spells (e.g. GCD not available) in APL.
 		sim := newSimWithEnv(env, &proto.SimOptions{

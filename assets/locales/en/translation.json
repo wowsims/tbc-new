@@ -269,7 +269,7 @@
 		"description": "{{spec}} {{class}} simulations for World of Warcraft® The Burning Crusade Classic.",
 		"basic_bis_disclaimer": "<p>Preset gear lists are intended as rough approximations of BIS, and will often not be the absolute highest-DPS setup for you. Your optimal gear setup will depend on many factors; that's why we have a sim!</p><p>Items may also be omitted from the presets if they are highly contested and clearly better utilized on other classes, to encourage equitable gearing for the raid as a whole.</p>",
 		"healing_sim_disclaimer": "*** WARNING - USE AT YOUR OWN RISK ***\n\nThe entire concept of a healing sim is EXPERIMENTAL. All results should be taken with an EXTREMELY large grain of salt.\n\nThis tool is currently more similar to a spreadsheet than a true sim. Options for specifying incoming damage profiles in order to have proper reactive rotations have not yet been added.",
-		"notice_local_download": {
+		"notice_native_download": {
 			"title": "Did you know?",
 			"message": "You can download our local sim to speed up your simulations significantly?",
 			"download_button": "Download"
@@ -446,10 +446,6 @@
 		},
 		"other": {
 			"title": "Other",
-			"challenge_mode": {
-				"label": "Challenge Mode",
-				"tooltip": "Enables Challenge Mode"
-			},
 			"input_delay": {
 				"label": "Input Delay",
 				"tooltip": "Player input delay, in milliseconds. Specifies the maximum delay on actions that cannot be spell queued, such as spell casts that are waiting on resource gains or waiting for a cooldown to expire. Also used with certain APL values (such as 'Aura Is Active With Reaction Time'). Roughly models the sum of reaction time + server latency."
@@ -855,7 +851,7 @@
 	"bulk_tab": {
 		"title": "Batch (<span class=\"text-success\">New</span>)",
 		"description": "<span className=\"bold\">Batch Simming</span> is a new feature akin to the <span className=\"bold\">Top Gear</span> sim on <a href=\"https://raidbots.com\" target=\"_blank\">Raidbots.com</a> that allows you to select multiple items and sim them find the best combinations.<br />This is an <span className=\"text-brand\">Alpha</span> feature, so if you have feedback or find a bug, please report it!",
-		"download_local": "Download the local sim for faster results.",
+		"download_native": "Download the local sim for faster results.",
 		"tabs": {
 			"setup": "Setup",
 			"results": "Results"
@@ -879,13 +875,12 @@
 			"item_unique": "{{itemName}} is unique and already added."
 		},
 		"settings": {
-			"combinations_count": "{{count}} Combinations",
+			"combinations_count": "{{amount}} Combinations",
 			"combination_singular": "1 Combination",
 			"iterations": "Iterations",
-			"fallback_gems": "Fallback Gems",
-			"inherit_upgrades": {
-				"label": "Inherit Upgrades",
-				"tooltip": "When enabled, items will inherit upgrades from the equipped item. Otherwise, items will be simmed without any upgrades."
+			"use_legacy_bulk_sim": {
+				"label": "Use legacy single-stage sim",
+				"tooltip": "By default, Bulk Sim runs large batches in multiple stages: a low-iteration pass to find likely contenders, a medium-iteration refinement pass, and a final high-iteration pass for the best remaining gear sets. Enable this only to force the legacy high-stage-only behavior."
 			},
 			"freeze_ring": {
 				"label": "Freeze ring slot",
@@ -907,11 +902,17 @@
 		},
 		"progress": {
 			"total_combinations": "{{count}} total combinations.",
-			"reforging_rounds": "Optimizing gems",
+			"restoring_reforges_from_cache": "Restoring gemmed gear sets from cache",
+			"building_candidate_gear_sets": "Building candidate gear sets",
+			"reforging_iteration_rounds": "Optimizing gems",
 			"baseline_round": "Running baseline round",
 			"refining_rounds": "Running refining rounds",
+			"low_iteration_rounds": "Running low iteration rounds",
+			"medium_iteration_rounds": "Running medium iteration rounds",
+			"high_iteration_rounds": "Running high iteration rounds",
 			"iterations_complete": "{{completed}} / {{total}}<br />iterations complete",
-			"seconds_remaining": "{{seconds}} seconds remaining"
+			"seconds_remaining": "{{seconds}} seconds remaining",
+			"time_remaining": "{{time}} remaining"
 		},
 		"notifications": {
 			"bulk_sim_cancelled": "Bulk sim cancelled.",
@@ -931,9 +932,6 @@
 			"equip_button": "Equip",
 			"gear_equipped": "Batch gear equipped!",
 			"current_gear": "Current Gear"
-		},
-		"gem_selector": {
-			"title": "Choose fallback Gem"
 		},
 		"import_modal": {
 			"title": "Bag Item Import",
@@ -2362,7 +2360,7 @@
 				"enable_modification": "This will enable modification of the default EP weights and setting custom stat caps.",
 				"modify_in_editor": "Ep weights can be modified in the Stat Weights editor.",
 				"hard_cap_info": "If you want to hard cap a stat make sure to put the EP for that stat higher.",
-				"edit_weights": "Edit weights",
+				"edit_weights": "Change weights",
 				"freeze_item_slots": "Freeze item slots",
 				"max_gem_phase": "Max Gem Phase",
 				"max_gem_quality": "Max Gem Quality",
