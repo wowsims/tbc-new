@@ -2160,27 +2160,9 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		32485, // Ashtongue Talisman of Valor
-		[
-			"Your Mortal Strike, Bloodthirst, and Shield Slam attacks have a 25% chance to heal you for 330 and grant 55 Strength for 12s.", // 40459 - https://www.wowhead.com/tbc/spell=40459
-		]
-	],
-	[
-		32488, // Ashtongue Talisman of Insight
-		[
-			"Your spell critical strikes have a 50% chance to grant you 145 spell haste rating for 5s.", // 40483 - https://www.wowhead.com/tbc/spell=40483
-		]
-	],
-	[
 		32489, // Ashtongue Talisman of Zeal
 		[
 			"Flash of Light and Holy Light have a 15% chance to grant your target 0 healing over 12s, and your Judgements have a 50% chance to inflict 0 damage on their target over 8s.", // 40470 - https://www.wowhead.com/tbc/spell=40470
-		]
-	],
-	[
-		32490, // Ashtongue Talisman of Acumen
-		[
-			"Each time your Shadow Word: Pain deals damage, it has a 10% chance to grant you 220 spell damage for 10s and each time your Renew heals, it has a 10% chance to grant you 220 healing for 5s.", // 40438 - https://www.wowhead.com/tbc/spell=40438
 		]
 	],
 	[

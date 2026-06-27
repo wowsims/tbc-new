@@ -902,10 +902,9 @@
 		},
 		"progress": {
 			"total_combinations": "{{count}} total combinations.",
-			"reforging_rounds": "Running regems",
-			"restoring_reforges_from_cache": "Restoring reforges from cache",
+			"restoring_reforges_from_cache": "Restoring gemmed gear sets from cache",
 			"building_candidate_gear_sets": "Building candidate gear sets",
-			"reforging_iteration_rounds": "Running reforges",
+			"reforging_iteration_rounds": "Optimizing gems",
 			"baseline_round": "Running baseline round",
 			"refining_rounds": "Running refining rounds",
 			"low_iteration_rounds": "Running low iteration rounds",

@@ -114,4 +114,34 @@ func init() {
 		mage.AddStatProcBuff(30720, aura, false, eligibleSlots)
 		mage.ItemSwap.RegisterProc(30720, mage.SerpentCoilBraid)
 	})
+
+	// Ashtongue Talisman of Insight
+	core.NewItemEffect(32488, func(agent core.Agent) {
+		character := agent.GetCharacter()
+		duration := time.Second * 5
+		value := 145.0
+
+		aura := character.NewTemporaryStatsAura(
+			"Ashtongue Talisman of Insight - Proc",
+			core.ActionID{SpellID: 40483},
+			stats.Stats{stats.SpellHasteRating: value},
+			duration,
+		)
+
+		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
+			Name:            "Ashtongue Talisman of Insight - Trigger",
+			ActionID:        core.ActionID{ItemID: 32488},
+			ProcChance:      0.5,
+			ClassSpellsOnly: true,
+			Outcome:         core.OutcomeCrit,
+			Callback:        core.CallbackOnSpellHitDealt,
+			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+				aura.Activate(sim)
+			},
+		})
+
+		eligibleSlots := character.ItemSwap.EligibleSlotsForItem(32488)
+		character.AddStatProcBuff(32488, aura, false, eligibleSlots)
+		character.ItemSwap.RegisterProc(32488, procAura)
+	})
 }

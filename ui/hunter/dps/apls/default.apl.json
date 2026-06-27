@@ -111,10 +111,16 @@
 														"cmp": {
 															"op": "OpLe",
 															"lhs": { "spellCastTime": { "spellId": { "spellId": 34120, "rank": 1 } } },
-															"rhs": { "autoTimeToNext": { "autoType": "MeleeAuto" } }
+															"rhs": { "autoTimeToNext": { "autoType": "MainHandAuto" } }
 														}
 													},
-													{ "cmp": { "op": "OpGt", "lhs": { "unitDistance": {} }, "rhs": { "variableRef": { "name": "Melee range" } } } }
+													{
+														"cmp": {
+															"op": "OpGt",
+															"lhs": { "unitDistance": {} },
+															"rhs": { "variableRef": { "name": "Melee range" } }
+														}
+													}
 												]
 											}
 										}
@@ -151,10 +157,16 @@
 														"cmp": {
 															"op": "OpLe",
 															"lhs": { "spellCastTime": { "spellId": { "spellId": 27021, "rank": 6 } } },
-															"rhs": { "autoTimeToNext": { "autoType": "MeleeAuto" } }
+															"rhs": { "autoTimeToNext": { "autoType": "MainHandAuto" } }
 														}
 													},
-													{ "cmp": { "op": "OpGt", "lhs": { "unitDistance": {} }, "rhs": { "variableRef": { "name": "Melee range" } } } }
+													{
+														"cmp": {
+															"op": "OpGt",
+															"lhs": { "unitDistance": {} },
+															"rhs": { "variableRef": { "name": "Melee range" } }
+														}
+													}
 												]
 											}
 										}
@@ -232,13 +244,19 @@
 			"actions": [
 				{
 					"action": {
-						"condition": { "cmp": { "op": "OpLt", "lhs": { "autoTimeSinceLast": { "autoType": "MeleeAuto" } }, "rhs": { "variableRef": { "name": "Wait at melee" } } } },
+						"condition": {
+							"cmp": {
+								"op": "OpLt",
+								"lhs": { "autoTimeSinceLast": { "autoType": "MainHandAuto" } },
+								"rhs": { "variableRef": { "name": "Wait at melee" } }
+							}
+						},
 						"wait": {
 							"duration": {
 								"math": {
 									"op": "OpSub",
 									"lhs": { "variableRef": { "name": "Wait at melee" } },
-									"rhs": { "autoTimeSinceLast": { "autoType": "MeleeAuto" } }
+									"rhs": { "autoTimeSinceLast": { "autoType": "MainHandAuto" } }
 								}
 							}
 						}
@@ -249,8 +267,20 @@
 						"condition": {
 							"and": {
 								"vals": [
-									{ "cmp": { "op": "OpGe", "lhs": { "autoTimeSinceLast": { "autoType": "MeleeAuto" } }, "rhs": { "variableRef": { "name": "Wait at melee" } } } },
-									{ "cmp": { "op": "OpGt", "lhs": { "autoTimeToNext": { "autoType": "MeleeAuto" } }, "rhs": { "const": { "val": "0ms" } } } }
+									{
+										"cmp": {
+											"op": "OpGe",
+											"lhs": { "autoTimeSinceLast": { "autoType": "MainHandAuto" } },
+											"rhs": { "variableRef": { "name": "Wait at melee" } }
+										}
+									},
+									{
+										"cmp": {
+											"op": "OpGt",
+											"lhs": { "autoTimeToNext": { "autoType": "MainHandAuto" } },
+											"rhs": { "const": { "val": "0ms" } }
+										}
+									}
 								]
 							}
 						},
@@ -265,7 +295,7 @@
 									{
 										"cmp": {
 											"op": "OpLe",
-											"lhs": { "autoTimeToNext": { "autoType": "MeleeAuto" } },
+											"lhs": { "autoTimeToNext": { "autoType": "MainHandAuto" } },
 											"rhs": { "variableRef": { "name": "Move duration" } }
 										}
 									},
@@ -313,10 +343,23 @@
 													}
 												},
 												{
-													"cmp": {
-														"op": "OpGt",
-														"lhs": { "autoTimeSinceLast": { "autoType": "MeleeAuto" } },
-														"rhs": { "autoSwingTime": { "autoType": "MainHand" } }
+													"and": {
+														"vals": [
+															{
+																"cmp": {
+																	"op": "OpGt",
+																	"lhs": { "autoTimeSinceLast": { "autoType": "MainHandAuto" } },
+																	"rhs": { "autoSwingTime": { "autoType": "MainHand" } }
+																}
+															},
+															{
+																"cmp": {
+																	"op": "OpGe",
+																	"lhs": { "autoTimeToNext": { "autoType": "RangedAuto" } },
+																	"rhs": { "variableRef": { "name": "Move duration" } }
+																}
+															}
+														]
 													}
 												}
 											]
@@ -380,13 +423,7 @@
 					"lhs": {
 						"math": {
 							"op": "OpMul",
-							"lhs": {
-								"math": {
-									"op": "OpDiv",
-									"lhs": { "variableRef": { "name": "Move duration" } },
-									"rhs": { "const": { "val": "1s" } }
-								}
-							},
+							"lhs": { "math": { "op": "OpDiv", "lhs": { "variableRef": { "name": "Move duration" } }, "rhs": { "const": { "val": "1s" } } } },
 							"rhs": { "const": { "val": "7" } }
 						}
 					},

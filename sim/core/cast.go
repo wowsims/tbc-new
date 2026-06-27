@@ -218,6 +218,10 @@ func (spell *Spell) makeCastFunc(config CastConfig) CastSuccessFunc {
 					if !spell.Flags.Matches(SpellFlagNoOnCastComplete) {
 						spell.Unit.OnCastComplete(sim, spell)
 					}
+
+					// A hardcast shorter than the GCD leaves a weaver free to move
+					// before the GCD frees; wake the rotation to land a pending swing.
+					spell.Unit.AutoAttacks.weaveWakeupAfterCast(sim)
 				},
 				Target:      target,
 				CanMove:     spell.Flags&SpellFlagCanCastWhileMoving > 0,

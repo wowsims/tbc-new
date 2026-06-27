@@ -138,3 +138,36 @@ var ItemSetAbsolutionRegalia = core.NewItemSet(core.ItemSet{
 		},
 	},
 })
+
+func init() {
+	// Ashtongue Talisman of Acumen
+	core.NewItemEffect(32490, func(agent core.Agent) {
+		character := agent.GetCharacter()
+		duration := time.Second * 10
+		value := 220.0
+
+		aura := character.NewTemporaryStatsAura(
+			"Ashtongue Talisman of Acumen - Proc",
+			core.ActionID{SpellID: 40438},
+			stats.Stats{stats.SpellDamage: value},
+			duration,
+		)
+
+		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
+			Name:           "Ashtongue Talisman of Acumen - Trigger",
+			ActionID:       core.ActionID{ItemID: 32490},
+			ProcChance:     0.1,
+			ClassSpellMask: PriestSpellShadowWordPain,
+			Outcome:        core.OutcomeLanded,
+			Callback:       core.CallbackOnPeriodicDamageDealt,
+			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+				aura.Activate(sim)
+			},
+		})
+
+		eligibleSlots := character.ItemSwap.EligibleSlotsForItem(32490)
+		character.AddStatProcBuff(32490, aura, false, eligibleSlots)
+		character.ItemSwap.RegisterProc(32490, procAura)
+	})
+
+}

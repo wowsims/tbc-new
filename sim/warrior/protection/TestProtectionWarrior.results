@@ -149,6 +149,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestProtectionWarrior-AllItems-AshtongueTalismanofValor-32485"
+ value: {
+  dps: 753.02054
+  tps: 1384.9881
+  dtps: 1298.25286
+ }
+}
+dps_results: {
  key: "TestProtectionWarrior-AllItems-BadgeofTenacity-32658"
  value: {
   dps: 753.83267

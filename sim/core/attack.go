@@ -409,6 +409,9 @@ type AutoAttacks struct {
 	mh     WeaponAttack
 	oh     WeaponAttack
 	ranged WeaponAttack
+
+	// Wakes a melee-weaver's rotation when an out-of-range MH swing comes ready.
+	meleeWeaveWakeup *PendingAction
 }
 
 // Options for initializing auto attacks.
@@ -591,6 +594,8 @@ func (aa *AutoAttacks) reset(_ *Simulation) {
 		return
 	}
 
+	aa.meleeWeaveWakeup = nil
+
 	aa.mh.enabled = false
 	aa.oh.enabled = false
 	aa.ranged.enabled = false
@@ -705,7 +710,13 @@ func (aa *AutoAttacks) EnableMeleeSwing(sim *Simulation) {
 	}
 
 	if aa.IsDualWielding && !aa.oh.enabled {
-		aa.oh.swingAt = max(aa.oh.swingAt, sim.CurrentTime, 0)
+		var offset time.Duration
+		// When entering melee range from ranged, the offhand will start at half the swing duration
+		if aa.AutoSwingRanged {
+			aa.oh.updateSwingDuration(aa.oh.unit.TotalMeleeHasteMultiplier())
+			offset = aa.oh.curSwingDuration / 2
+		}
+		aa.oh.swingAt = max(aa.oh.swingAt, sim.CurrentTime+offset, 0)
 		if aa.oh.IsInRange() {
 			aa.oh.enabled = true
 			aa.oh.addWeaponAttack(sim, aa.oh.unit.TotalMeleeHasteMultiplier())
@@ -758,6 +769,43 @@ func (aa *AutoAttacks) CancelRangedSwing(sim *Simulation) {
 
 	aa.ranged.enabled = false
 	sim.removeWeaponAttack(&aa.ranged)
+}
+
+// scheduleMeleeWeaveWakeup wakes the rotation when the out-of-range MH swing comes
+// ready, so a weaver parked behind its GCD can move back into melee on time.
+func (aa *AutoAttacks) scheduleMeleeWeaveWakeup(sim *Simulation) {
+	if !aa.AutoSwingMelee || !aa.AutoSwingRanged {
+		return
+	}
+	aa.cancelMeleeWeaveWakeup(sim)
+	pa := &PendingAction{
+		NextActionAt: max(aa.mh.swingAt, sim.CurrentTime),
+		Priority:     ActionPriorityAuto,
+		OnAction: func(sim *Simulation) {
+			if !aa.mh.IsInRange() {
+				aa.mh.unit.ReactToEvent(sim, false, true)
+			}
+		},
+	}
+	aa.meleeWeaveWakeup = pa
+	sim.AddPendingAction(pa)
+}
+
+func (aa *AutoAttacks) cancelMeleeWeaveWakeup(sim *Simulation) {
+	if aa.meleeWeaveWakeup != nil && !aa.meleeWeaveWakeup.consumed {
+		aa.meleeWeaveWakeup.Cancel(sim)
+	}
+	aa.meleeWeaveWakeup = nil
+}
+
+// weaveWakeupAfterCast wakes the rotation the instant a hardcast finishes so a
+// weaver can move in for a pending out-of-range swing during GCD downtime. Gated
+// on an outstanding weave wakeup, which is only scheduled for ranged-swing units
+// mid-excursion (so turret/non-weaving units are never woken).
+func (aa *AutoAttacks) weaveWakeupAfterCast(sim *Simulation) {
+	if aa.meleeWeaveWakeup != nil && aa.mh.swingAt <= sim.CurrentTime {
+		aa.mh.unit.ReactToEvent(sim, false, true)
+	}
 }
 
 // The amount of time between two MH swings.

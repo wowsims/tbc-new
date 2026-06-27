@@ -42,9 +42,12 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecHunter, {
 	displayStats: UnitStat.createDisplayStatArray(
 		[
 			Stat.StatHealth,
+			Stat.StatMana,
 			Stat.StatStamina,
 			Stat.StatStrength,
 			Stat.StatAgility,
+			Stat.StatIntellect,
+			Stat.StatMP5,
 			Stat.StatAttackPower,
 			Stat.StatRangedAttackPower,
 			Stat.StatExpertiseRating,

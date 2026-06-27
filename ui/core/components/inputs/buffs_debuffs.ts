@@ -302,7 +302,7 @@ export const PARTY_BUFFS_CONFIG = [
 	{
 		config: FerociousInspiration,
 		picker: IconPicker,
-		stats: [Stat.StatAttackPower, Stat.StatRangedAttackPower],
+		stats: [],
 	},
 	{
 		config: LeaderOfThePack,
