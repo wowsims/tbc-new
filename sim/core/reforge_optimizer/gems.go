@@ -59,7 +59,7 @@ func logTopGemOptions(socketColor proto.GemColor, options []reforgeGemOption, we
 	}
 }
 
-func forEachGemOptionForSocket(gemOptions map[proto.GemColor][]reforgeGemOption, socketColor proto.GemColor, forceSocketBonus bool, visit func(reforgeGemOption)) {
+func forEachGemOptionForSocket(gemOptions map[proto.GemColor][]reforgeGemOption, socketColor proto.GemColor, visit func(reforgeGemOption)) {
 	var gemColorKeys [2]proto.GemColor
 	gemColorKeyCount := 0
 	switch socketColor {
@@ -69,9 +69,6 @@ func forEachGemOptionForSocket(gemOptions map[proto.GemColor][]reforgeGemOption,
 	case proto.GemColor_GemColorRed, proto.GemColor_GemColorBlue, proto.GemColor_GemColorYellow:
 		gemColorKeys[gemColorKeyCount] = socketColor
 		gemColorKeyCount++
-		if forceSocketBonus {
-			break
-		}
 		gemColorKeys[gemColorKeyCount] = proto.GemColor_GemColorPrismatic
 		gemColorKeyCount++
 	default:

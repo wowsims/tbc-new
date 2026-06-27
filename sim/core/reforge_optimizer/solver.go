@@ -140,8 +140,7 @@ func trySolveWithHiGHS(search *reforgeSearchState, signals simsignals.Signals) (
 		statConstraints = nextStatConstraints
 		// Rebuild slot choices whenever a new cap constraint is added.
 		// Adding a constraint means a hard cap or soft cap breakpoint just fired,
-		// which changes EP weights and which stats are capped — both affect
-		// shouldForceSocketBonus and cappedGemStats. Constraint-tightening passes
+		// which changes EP weights and cappedGemStats. Constraint-tightening passes
 		// update existing entries (no count change) and do not require a rebuild.
 		if len(statConstraints) > prevConstraintCount {
 			if newSlots, err := buildReforgeSlotChoices(search.request, search.baseRaid, search.baseGear, search.capBaseStats, weights, weights, search.hardCaps, softCaps, search.statDeps, statConstraints); err == nil {

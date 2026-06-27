@@ -28,22 +28,13 @@ func buildReforgeSlotChoices(request *proto.ReforgeOptimizeRequest, baseRaid *pr
 		}
 
 		socketColors := currentSocketColors(*item)
-		forceSocketBonus := shouldForceSocketBonus(*item, socketColors, gemOptions, weights, hardCaps, softCaps)
-		socketBonusSocketCount := socketBonusNormalization(socketColors)
-		distributedSocketBonusDelta := core.NewUnitStats()
-		distributedSocketBonusObjectiveDelta := core.NewUnitStats()
-		if forceSocketBonus && socketBonusSocketCount > 0 {
-			distributedSocketBonus := item.SocketBonus.Multiply(1 / float64(socketBonusSocketCount))
-			distributedSocketBonusDelta = resolveStatDelta(statDeps, baseStats, rawUnitStatsFromStats(distributedSocketBonus))
-			distributedSocketBonusObjectiveDelta = unitStatsFromStats(distributedSocketBonus, weights)
-		}
 		variableSocketIdxs := make([]int, 0, len(socketColors))
 		for socketIdx, socketColor := range socketColors {
 			if socketColor == proto.GemColor_GemColorMeta {
 				continue
 			}
 			gemChoices := []reforgeChoice{{slot: slot, gems: []reforgeGemChoice{{socketIdx: socketIdx, gemID: 0}}, socketChoice: true, socketIdx: socketIdx}}
-			forEachGemOptionForSocket(gemOptions, socketColor, forceSocketBonus, func(gemOption reforgeGemOption) {
+			forEachGemOptionForSocket(gemOptions, socketColor, func(gemOption reforgeGemOption) {
 				if !gemEligibleForSocket(gemOption.color, socketColor) {
 					return
 				}
@@ -54,10 +45,6 @@ func buildReforgeSlotChoices(request *proto.ReforgeOptimizeRequest, baseRaid *pr
 					socketIdx:      socketIdx,
 					socketMatches:  gemMatchesSocket(gemOption.color, socketColor),
 					objectiveDelta: gemOption.objectiveDelta,
-				}
-				if forceSocketBonus && choice.socketMatches {
-					choice.forcedBonusDelta = distributedSocketBonusDelta
-					choice.objectiveDelta = addUnitStats(choice.objectiveDelta, distributedSocketBonusObjectiveDelta)
 				}
 				choice.score = dotUnitStats(choice.objectiveDelta, weights)
 				if gemOption.isJewelcrafting {
@@ -73,7 +60,7 @@ func buildReforgeSlotChoices(request *proto.ReforgeOptimizeRequest, baseRaid *pr
 				variableSocketIdxs = append(variableSocketIdxs, socketIdx)
 			}
 		}
-		if !forceSocketBonus && len(variableSocketIdxs) > 0 && hasSocketBonus(*item) {
+		if len(variableSocketIdxs) > 0 && hasSocketBonus(*item) {
 			socketBonusDelta := resolveStatDelta(statDeps, baseStats, rawUnitStatsFromStats(item.SocketBonus))
 			socketBonusObjectiveDelta := unitStatsFromStats(item.SocketBonus, weights)
 			allSlots = append(allSlots, reforgeSlotChoices{slot: slot, choices: []reforgeChoice{
@@ -112,9 +99,6 @@ func computeChoiceDeltas(baseGear *proto.EquipmentSpec, allSlots []reforgeSlotCh
 				continue
 			}
 			choice.delta = resolveStatDelta(sdm, baseStats, rawChoiceDelta(choice))
-			if !isEmptyUnitStats(choice.forcedBonusDelta) {
-				choice.delta = addUnitStats(choice.delta, choice.forcedBonusDelta)
-			}
 		}
 	}
 }
@@ -158,79 +142,6 @@ func equipmentSpecWithChoices(baseEquipment core.Equipment, choices []reforgeCho
 func hasSocketBonus(item core.Item) bool {
 	for _, value := range item.SocketBonus {
 		if value != 0 {
-			return true
-		}
-	}
-	return false
-}
-
-func shouldForceSocketBonus(item core.Item, socketColors []proto.GemColor, gemOptions map[proto.GemColor][]reforgeGemOption, weights core.UnitStats, hardCaps []reforgeHardCap, softCaps []reforgeSoftCap) bool {
-	if !hasSocketBonus(item) {
-		return false
-	}
-	normalization := socketBonusNormalization(socketColors)
-	if normalization == 0 {
-		return false
-	}
-	distributedSocketBonus := item.SocketBonus.Multiply(1 / float64(normalization))
-	socketBonusDelta := unitStatsFromStats(distributedSocketBonus, weights)
-	if isEmptyUnitStats(socketBonusDelta) {
-		return false
-	}
-
-	matchedDelta := core.NewUnitStats()
-	unmatchedDelta := core.NewUnitStats()
-	for _, socketColor := range socketColors {
-		if socketColor != proto.GemColor_GemColorRed && socketColor != proto.GemColor_GemColorBlue && socketColor != proto.GemColor_GemColorYellow && socketColor != proto.GemColor_GemColorPrismatic {
-			break
-		}
-
-		matchedOptions := gemOptions[socketColor]
-		unmatchedOptions := gemOptions[proto.GemColor_GemColorPrismatic]
-		if len(matchedOptions) == 0 || len(unmatchedOptions) == 0 {
-			return false
-		}
-
-		matchedDelta = addUnitStats(matchedDelta, matchedOptions[0].objectiveDelta)
-		matchedDelta = addUnitStats(matchedDelta, socketBonusDelta)
-
-		unmatchedDelta = addUnitStats(unmatchedDelta, unmatchedOptions[0].objectiveDelta)
-	}
-
-	if dotUnitStats(matchedDelta, weights) > dotUnitStats(unmatchedDelta, weights) && (normalization > 1 || (includesStatWithCap(socketBonusDelta, hardCaps, softCaps) && !includesCappedStat(socketBonusDelta, hardCaps))) {
-		return true
-	}
-	return false
-}
-
-func socketBonusNormalization(socketColors []proto.GemColor) int {
-	normalization := len(socketColors)
-	if normalization == 0 {
-		return 1
-	}
-	if normalization > 1 && socketColors[0] == proto.GemColor_GemColorMeta {
-		normalization--
-	}
-	return normalization
-}
-
-func includesStatWithCap(delta core.UnitStats, hardCaps []reforgeHardCap, softCaps []reforgeSoftCap) bool {
-	for _, hardCap := range hardCaps {
-		if getUnitStat(delta, hardCap.unitStat) != 0 {
-			return true
-		}
-	}
-	for _, softCap := range softCaps {
-		if getUnitStat(delta, softCap.unitStat) != 0 {
-			return true
-		}
-	}
-	return false
-}
-
-func includesCappedStat(delta core.UnitStats, hardCaps []reforgeHardCap) bool {
-	for _, hardCap := range hardCaps {
-		if hardCap.undershoot && getUnitStat(delta, hardCap.unitStat) != 0 {
 			return true
 		}
 	}

@@ -161,30 +161,6 @@ func TestSolveMIPWithHiGHSCountsGemReplacementsForMetaActivation(t *testing.T) {
 	}
 }
 
-func TestShouldForceSocketBonusDoesNotAutoForceCappedHitBonus(t *testing.T) {
-	const blueGemID int32 = 91007
-	const yellowGemID int32 = 91008
-	const redGemID int32 = 91009
-
-	item := core.Item{GemSockets: []proto.GemColor{proto.GemColor_GemColorBlue, proto.GemColor_GemColorYellow}}
-	item.SocketBonus = stats.Stats{}
-	item.SocketBonus[stats.SpellHitRating] = 3
-
-	weights := core.NewUnitStats()
-	weights = setUnitStat(weights, stats.UnitStatFromPseudoStat(proto.PseudoStat_PseudoStatSchoolHitPercentShadow), 1)
-	weights = setUnitStat(weights, stats.UnitStatFromStat(stats.Intellect), 0.1)
-
-	gemOptions := map[proto.GemColor][]reforgeGemOption{
-		proto.GemColor_GemColorBlue:      {{id: blueGemID, objectiveDelta: unitStatsFromStats(stats.Stats{stats.Intellect: 1}, weights)}},
-		proto.GemColor_GemColorYellow:    {{id: yellowGemID, objectiveDelta: unitStatsFromStats(stats.Stats{stats.Intellect: 1}, weights)}},
-		proto.GemColor_GemColorPrismatic: {{id: redGemID, objectiveDelta: unitStatsFromStats(stats.Stats{stats.Intellect: 100}, weights)}},
-	}
-
-	if got := shouldForceSocketBonus(item, item.GemSockets, gemOptions, weights, []reforgeHardCap{{unitStat: stats.UnitStatFromPseudoStat(proto.PseudoStat_PseudoStatSchoolHitPercentShadow), cap: 1}}, nil); got {
-		t.Fatal("expected capped hit socket bonus to rely on EP comparison rather than be auto-forced")
-	}
-}
-
 func TestBuildChoiceMIPModelUsesAnalyticChoiceDeltaForObjective(t *testing.T) {
 	exactDelta := core.NewUnitStats()
 	exactDelta = setUnitStat(exactDelta, stats.UnitStatFromStat(stats.SpellHasteRating), 10)

@@ -20,7 +20,6 @@ type reforgeChoice struct {
 	socketMatches     bool
 	socketBonus       bool
 	bonusSocketIdxs   []int
-	forcedBonusDelta  core.UnitStats
 	jewelcraftingGems int
 	uniqueGemIDs      []int32
 	delta             core.UnitStats

@@ -1,5 +1,5 @@
 {
-	"requestId": "reforgeOptimizeAsync-66183de539b3e0fe",
+	"requestId": "reforgeOptimizeAsync-d2f8d082b9ff58a9",
 	"raid": {
 		"parties": [
 			{
@@ -7,38 +7,92 @@
 					{
 						"apiVersion": 14,
 						"name": "Player",
-						"race": "RaceHuman",
-						"class": "ClassRogue",
+						"race": "RaceNightElf",
+						"class": "ClassDruid",
 						"equipment": {
 							"items": [
-								{ "id": 30146, "enchant": 3003, "gems": [32409, 30553] },
-								{ "id": 29381 },
-								{ "id": 30149, "enchant": 2986, "gems": [24051, 24051] },
-								{ "id": 28672, "enchant": 368 },
-								{ "id": 30101, "enchant": 2661, "gems": [24051, 24051, 31118] },
-								{ "id": 29966, "enchant": 1593, "gems": [30549] },
-								{ "id": 30145, "enchant": 2564 },
-								{ "id": 28750, "gems": [24051, 24051] },
-								{ "id": 30148, "enchant": 3012, "gems": [24051] },
-								{ "id": 28545, "enchant": 2939, "gems": [30556, 24051] },
-								{ "id": 28649, "enchant": 2929 },
-								{ "id": 28757, "enchant": 2929 },
-								{ "id": 29383 },
-								{ "id": 30450 },
-								{ "id": 30082, "enchant": 2673 },
-								{ "id": 32027, "enchant": 2673 },
-								{ "id": 29949 }
+								{
+									"id": 8345,
+									"enchant": 3003
+								},
+								{
+									"id": 30017
+								},
+								{
+									"id": 31048,
+									"enchant": 2986,
+									"gems": [32194, 32194]
+								},
+								{
+									"id": 29994,
+									"enchant": 368
+								},
+								{
+									"id": 31042,
+									"enchant": 2661,
+									"gems": [32194, 32194, 32194]
+								},
+								{
+									"id": 33881,
+									"enchant": 2647,
+									"gems": [32194]
+								},
+								{
+									"id": 31034,
+									"enchant": 2564,
+									"gems": [32194]
+								},
+								{
+									"id": 30106,
+									"gems": [32194, 32194]
+								},
+								{
+									"id": 31044,
+									"enchant": 3012,
+									"gems": [32194]
+								},
+								{
+									"id": 32366,
+									"enchant": 2939,
+									"gems": [32194, 32194]
+								},
+								{
+									"id": 30052,
+									"enchant": 2931
+								},
+								{
+									"id": 29301,
+									"enchant": 2931
+								},
+								{
+									"id": 30627
+								},
+								{
+									"id": 29383
+								},
+								{
+									"id": 33716,
+									"enchant": 2670
+								},
+								{},
+								{
+									"id": 32387
+								}
 							]
 						},
 						"consumables": {
 							"potId": 22838,
 							"battleElixirId": 22831,
-							"guardianElixirId": 32062,
-							"conjuredId": 7676,
-							"ohImbueId": 27186,
-							"drumsId": "LesserDrumsOfBattle",
-							"potions": [13442, 22828, 22837, 22838],
-							"conjuredItems": [7676, 22105, 22788]
+							"guardianElixirId": 32067,
+							"foodId": 27664,
+							"conjuredId": 12662,
+							"superSapper": true,
+							"goblinSapper": true,
+							"mhImbueId": 34340,
+							"scrollAgi": true,
+							"scrollStr": true,
+							"potions": [13442, 18253, 22828, 22832, 22837, 22838, 22850, 28101, 31677, 32948, 33935, 34440],
+							"conjuredItems": [22105, 12662, 22788]
 						},
 						"bonusStats": {
 							"apiVersion": 14,
@@ -62,17 +116,14 @@
 							"blessingOfMight": "TristateEffectImproved",
 							"unleashedRage": true
 						},
-						"rogue": {
-							"options": {
-								"classOptions": {}
-							}
+						"feralCatDruid": {
+							"options": {}
 						},
-						"talentsString": "0053201252-023305200005015002321151",
-						"profession1": "Leatherworking",
+						"talentsString": "-503032132322105301251-05503301",
+						"profession1": "Engineering",
 						"profession2": "Enchanting",
 						"cooldowns": {},
-						"reactionTimeMs": 100,
-						"distanceFromTarget": 5,
+						"reactionTimeMs": 250,
 						"healingModel": {}
 					},
 					{},
@@ -81,8 +132,9 @@
 					{}
 				],
 				"buffs": {
-					"ferociousInspiration": 1,
-					"leaderOfThePack": "TristateEffectRegular",
+					"ferociousInspiration": 2,
+					"drums": "LesserDrumsOfBattle",
+					"manaSpringTotem": "TristateEffectRegular",
 					"graceOfAirTotem": "TristateEffectImproved",
 					"strengthOfEarthTotem": "TristateEffectImproved",
 					"windfuryTotem": "TristateEffectImproved",
@@ -109,15 +161,20 @@
 		],
 		"numActiveParties": 5,
 		"buffs": {
+			"arcaneBrilliance": true,
+			"powerWordFortitude": "TristateEffectImproved",
+			"shadowProtection": true,
+			"divineSpirit": "TristateEffectImproved",
 			"giftOfTheWild": "TristateEffectImproved",
 			"bloodlust": true
 		},
 		"debuffs": {
+			"judgementOfWisdom": true,
 			"improvedSealOfTheCrusader": "TristateEffectImproved",
 			"misery": true,
 			"bloodFrenzy": true,
 			"giftOfArthas": true,
-			"mangle": true,
+			"exposeArmor": "TristateEffectImproved",
 			"faerieFire": "TristateEffectImproved",
 			"sunderArmor": true,
 			"curseOfRecklessness": true,
@@ -129,41 +186,31 @@
 	"preCapEpWeights": {
 		"apiVersion": 14,
 		"stats": [
-			1.1, 2.17, 0.01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 3.06, 1.7, 2.19, 0.3, 3.47, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8.47
+			0.78, 1.16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.35, 0, 0.35, 1.02, 0.77, 0.41, 0.16, 1.02, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 3.13
 		],
-		"pseudoStats": [9.34, 3.4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+		"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 	},
 	"undershootCaps": {
 		"apiVersion": 14,
 		"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-		"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+		"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 	},
 	"settings": {
-		"useSoftCapBreakpoints": true,
+		"useCustomEpValues": true,
 		"statCaps": {
 			"apiVersion": 14,
 			"stats": [
 				0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 102.50000800000001, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 			],
-			"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+			"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 		},
 		"breakpointLimits": {
 			"apiVersion": 14,
 			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 			"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 		},
-		"maxGemPhase": 2,
+		"maxGemPhase": 3,
 		"maxGemQuality": "ItemQualityEpic"
-	},
-	"softCaps": [
-		{
-			"unitStat": {
-				"apiVersion": 14,
-				"pseudoStat": "PseudoStatMeleeHitPercent"
-			},
-			"breakpoints": [9, 28],
-			"capType": "TypeSoftCap",
-			"postCapEPs": [48.25385298, 0]
-		}
-	]
+	}
 }

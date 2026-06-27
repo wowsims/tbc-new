@@ -34,6 +34,7 @@ func TestReforgerOptimizer(t *testing.T) {
 		{name: "reference-7", fileName: "reference-7.test.json"},
 		{name: "reference-8", fileName: "reference-8.test.json"},
 		{name: "reference-9", fileName: "reference-9.test.json"},
+		{name: "reference-10", fileName: "reference-10.test.json"},
 	}
 
 	for _, tc := range testCases {
