@@ -84,11 +84,10 @@ func init() {
 		dpm := getDpm()
 
 		procTrigger := character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:               "Bonereaver's Edge Trigger",
-			DPM:                dpm,
-			Outcome:            core.OutcomeLanded,
-			Callback:           core.CallbackOnSpellHitDealt,
-			TriggerImmediately: true,
+			Name:     "Bonereaver's Edge Trigger",
+			DPM:      dpm,
+			Outcome:  core.OutcomeLanded,
+			Callback: core.CallbackOnSpellHitDealt,
 			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 				arpAura.Activate(sim)
 				arpAura.AddStack(sim)
