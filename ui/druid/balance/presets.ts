@@ -34,22 +34,101 @@ export const Phase5PresetGear = PresetUtils.makePresetGear('Phase 5', Phase5Gear
 
 export const StandardRotation = PresetUtils.makePresetAPLRotation('Default', DefaultAPL);
 
-export const StandardEPWeights = PresetUtils.makePresetEpWeights(
-	'Standard',
+// Pre-raid and Phase 1 weights are very close together, so in theory, both could be comined into one preset.
+// But since all other phases have (just) distinct enough weights that they should be kept seperate,
+// I decided keep pre-raid and P1 separate for consistency as well.
+
+export const PreRaidEPWeights = PresetUtils.makePresetEpWeights(
+	'Pre-raid',
 	Stats.fromMap({
-		[Stat.StatIntellect]: 1,
-		[Stat.StatSpirit]: 1,
+		[Stat.StatIntellect]: 0.61,
 		[Stat.StatSpellDamage]: 1,
-		[Stat.StatNatureDamage]: 1,
-		[Stat.StatArcaneDamage]: 1,
-		[Stat.StatSpellHitRating]: 1,
-		[Stat.StatSpellCritRating]: 1,
-		[Stat.StatSpellHasteRating]: 1,
-		[Stat.StatSpellPenetration]: 1,
-		[Stat.StatMana]: 1,
+		[Stat.StatArcaneDamage]: 0.99,
+		[Stat.StatNatureDamage]: 0.01,
+		[Stat.StatSpellHitRating]: 1.76,
+		[Stat.StatSpellCritRating]: 0.67,
+		[Stat.StatSpellHasteRating]: 1.24,
+		[Stat.StatSpirit]: 0.13,
+		[Stat.StatMP5]: 0.05,
 	}),
 );
 
+export const Phase1EPWeights = PresetUtils.makePresetEpWeights(
+	'Phase 1',
+	Stats.fromMap({
+		[Stat.StatIntellect]: 0.65,
+		[Stat.StatSpellDamage]: 1,
+		[Stat.StatArcaneDamage]: 0.99,
+		[Stat.StatNatureDamage]: 0.01,
+		[Stat.StatSpellHitRating]: 1.85,
+		[Stat.StatSpellCritRating]: 0.75,
+		[Stat.StatSpellHasteRating]: 1.27,
+		[Stat.StatSpirit]: 0.13,
+		[Stat.StatMP5]: 0.06,
+	}),
+);
+
+export const Phase2EPWeights = PresetUtils.makePresetEpWeights(
+	'Phase 2',
+	Stats.fromMap({
+		[Stat.StatIntellect]: 0.56,
+		[Stat.StatSpellDamage]: 1,
+		[Stat.StatArcaneDamage]: 1,
+		[Stat.StatNatureDamage]: 0.0,
+		[Stat.StatSpellHitRating]: 1.86,
+		[Stat.StatSpellCritRating]: 0.69,
+		[Stat.StatSpellHasteRating]: 1.29,
+		[Stat.StatSpirit]: 0.12,
+		[Stat.StatMP5]: 0.04,
+	}),
+);
+
+export const Phase3EPWeights = PresetUtils.makePresetEpWeights(
+	'Phase 3',
+	Stats.fromMap({
+		[Stat.StatIntellect]: 0.57,
+		[Stat.StatSpellDamage]: 1,
+		[Stat.StatArcaneDamage]: 1,
+		[Stat.StatNatureDamage]: 0,
+		[Stat.StatSpellHitRating]: 1.91,
+		[Stat.StatSpellCritRating]: 0.73,
+		[Stat.StatSpellHasteRating]: 0.53,
+		[Stat.StatSpirit]: 0.11,
+		[Stat.StatMP5]: 0.02,
+	}),
+);
+
+export const Phase3_5EPWeights = PresetUtils.makePresetEpWeights(
+	'Phase 3.5',
+	Stats.fromMap({
+		[Stat.StatIntellect]: 0.58,
+		[Stat.StatSpellDamage]: 1,
+		[Stat.StatArcaneDamage]: 1,
+		[Stat.StatNatureDamage]: 0,
+		[Stat.StatSpellHitRating]: 1.46,
+		[Stat.StatSpellCritRating]: 0.74,
+		[Stat.StatSpellHasteRating]: 1.09,
+		[Stat.StatSpirit]: 0.12,
+		[Stat.StatMP5]: 0.05,
+	}),
+);
+
+export const Phase4EPWeights = PresetUtils.makePresetEpWeights(
+	'Phase 4',
+	Stats.fromMap({
+		[Stat.StatIntellect]: 0.59,
+		[Stat.StatSpellDamage]: 1,
+		[Stat.StatArcaneDamage]: 1,
+		[Stat.StatNatureDamage]: 0,
+		[Stat.StatSpellHitRating]: 2.03,
+		[Stat.StatSpellCritRating]: 0.77,
+		[Stat.StatSpellHasteRating]: 1.29,
+		[Stat.StatSpirit]: 0.15,
+		[Stat.StatMP5]: 0.11,
+	}),
+);
+
+export const DefaultEPWeights = PresetUtils.makePresetEpWeights('Default (P2)', Phase2EPWeights.epWeights);
 // Default talents. Uses the wowhead calculator format, make the talents on
 // https://wowhead.com/tbc/talent-calc and copy the numbers in the url.
 export const StandardTalents = {
