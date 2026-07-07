@@ -45,6 +45,7 @@ func FreshDefaultTargetConfig() *proto.Target {
 		SwingSpeed:    2,
 		MinBaseDamage: 15113,
 		ParryHaste:    true,
+		CanCrush:      true,
 		DamageSpread:  0.5,
 	}
 }

@@ -41,6 +41,7 @@ func createMagtheridonPreset(raidPrefix string, raidSize int32, bossHealth float
 			DamageSpread:  magtheridonMeleeDamageSpread,
 
 			ParryHaste: true,
+			CanCrush:   true,
 		},
 
 		AI: makeMagtheridonAI(),

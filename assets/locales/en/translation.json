@@ -793,6 +793,10 @@
 				"label": "Parry Haste",
 				"tooltip": "Whether this enemy will gain parry haste when parrying attacks."
 			},
+			"can_crush": {
+				"label": "Can Crush",
+				"tooltip": "Whether this enemy can land Crushing Blows (150% damage) against players below its level. Enabled by default for level 73 targets."
+			},
 			"spell_school": {
 				"label": "Spell School",
 				"tooltip": "Type of damage caused by auto attacks. This is usually Physical, but some enemies have elemental attacks."
