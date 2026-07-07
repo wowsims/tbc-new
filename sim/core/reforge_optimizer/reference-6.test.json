@@ -1,0 +1,1738 @@
+{
+	"requestId": "reforgeOptimizeAsync-2eafbf2622abd940",
+	"raid": {
+		"parties": [
+			{
+				"players": [
+					{
+						"apiVersion": 13,
+						"name": "Player",
+						"race": "RaceOrc",
+						"class": "ClassWarlock",
+						"equipment": {
+							"items": [
+								{ "id": 28963, "enchant": 3002, "gems": [34220, 24030] },
+								{ "id": 28530 },
+								{ "id": 28967, "enchant": 2982, "gems": [30606, 30564] },
+								{ "id": 28766, "enchant": 2621 },
+								{ "id": 28964, "enchant": 2661, "gems": [24030, 24030, 24030] },
+								{ "id": 24250, "enchant": 2650, "gems": [30588] },
+								{ "id": 28968, "enchant": 2937 },
+								{ "id": 24256, "gems": [28118, 28123] },
+								{ "id": 24262, "enchant": 2748, "gems": [24030, 24030, 24030] },
+								{ "id": 21870, "enchant": 2940, "gems": [31867, 31116] },
+								{ "id": 28793 },
+								{ "id": 28753 },
+								{ "id": 27683 },
+								{ "id": 29370 },
+								{ "id": 28802, "enchant": 2672 },
+								{ "id": 28734 },
+								{ "id": 28673 }
+							]
+						},
+						"consumables": {
+							"potId": 22839,
+							"flaskId": 22866,
+							"foodId": 27657,
+							"conjuredId": 12662,
+							"explosiveId": 30217,
+							"mhImbueId": 25122,
+							"petScrollAgi": true,
+							"petScrollStr": true,
+							"potions": [18253, 22832, 22837, 22839, 22850, 28101, 31677, 32948, 33935, 34440],
+							"conjuredItems": [22105, 12662, 22788, 23334, 23381]
+						},
+						"bonusStats": {
+							"apiVersion": 13,
+							"stats": [
+								0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+							],
+							"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+						},
+						"itemSwap": {
+							"items": [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+							"prepullBonusStats": {
+								"apiVersion": 13,
+								"stats": [
+									0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+								],
+								"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+							}
+						},
+						"buffs": {
+							"blessingOfKings": true,
+							"blessingOfWisdom": "TristateEffectImproved"
+						},
+						"warlock": {
+							"options": {
+								"classOptions": {
+									"summon": "Succubus",
+									"sacrificeSummon": true,
+									"armor": "FelArmor",
+									"curseOptions": "Recklessness"
+								}
+							}
+						},
+						"talentsString": "-20500301332101-50500051220051053105",
+						"profession1": "Engineering",
+						"profession2": "Tailoring",
+						"cooldowns": {},
+						"reactionTimeMs": 100,
+						"distanceFromTarget": 20,
+						"healingModel": {}
+					},
+					{},
+					{},
+					{},
+					{}
+				],
+				"buffs": {
+					"moonkinAura": "TristateEffectRegular",
+					"drums": "LesserDrumsOfBattle",
+					"eyeOfTheNight": true,
+					"chainOfTheTwilightOwl": true,
+					"manaSpringTotem": "TristateEffectRegular",
+					"totemOfWrath": 1,
+					"wrathOfAirTotem": "TristateEffectImproved"
+				}
+			},
+			{
+				"players": [{}, {}, {}, {}, {}],
+				"buffs": {}
+			},
+			{
+				"players": [{}, {}, {}, {}, {}],
+				"buffs": {}
+			},
+			{
+				"players": [{}, {}, {}, {}, {}],
+				"buffs": {}
+			},
+			{
+				"players": [{}, {}, {}, {}, {}],
+				"buffs": {}
+			}
+		],
+		"numActiveParties": 5,
+		"buffs": {
+			"arcaneBrilliance": true,
+			"powerWordFortitude": "TristateEffectImproved",
+			"divineSpirit": "TristateEffectImproved",
+			"giftOfTheWild": "TristateEffectImproved",
+			"bloodlust": true
+		},
+		"debuffs": {
+			"judgementOfWisdom": true,
+			"improvedSealOfTheCrusader": "TristateEffectImproved",
+			"misery": true,
+			"curseOfElements": "TristateEffectImproved",
+			"isbUptime": 0.59,
+			"shadowWeaving": true,
+			"bloodFrenzy": true,
+			"giftOfArthas": true,
+			"mangle": true,
+			"exposeArmor": "TristateEffectImproved",
+			"faerieFire": "TristateEffectImproved",
+			"sunderArmor": true,
+			"curseOfRecklessness": true,
+			"huntersMark": "TristateEffectImproved",
+			"exposeWeaknessUptime": 0.9,
+			"exposeWeaknessHunterAgility": 1150,
+			"shadowEmbrace": true,
+			"screech": true
+		}
+	},
+	"preCapEpWeights": {
+		"apiVersion": 13,
+		"stats": [
+			0, 0, 0, 0.38, 0, 1, 0, 0.07, 0, 0, 0, 0.92, 1.73, 0.82, 1.21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.29, 0, 0, 0, 0, 0, 0
+		],
+		"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+	},
+	"undershootCaps": {
+		"apiVersion": 13,
+		"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+	},
+	"settings": {
+		"statCaps": {
+			"apiVersion": 13,
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+		},
+		"breakpointLimits": {
+			"apiVersion": 13,
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+		},
+		"maxGemPhase": 2,
+		"maxGemQuality": "ItemQualityEpic"
+	},
+	"gemOptions": [
+		{
+			"id": 22459,
+			"name": "Void Sphere",
+			"color": "GemColorPrismatic",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 0],
+			"icon": "inv_enchant_voidsphere",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 22460,
+			"name": "Prismatic Sphere",
+			"color": "GemColorPrismatic",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 0],
+			"icon": "inv_enchant_prismaticsphere",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 24027,
+			"name": "Bold Living Ruby",
+			"color": "GemColorRed",
+			"stats": [8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_livingruby_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 24028,
+			"name": "Delicate Living Ruby",
+			"color": "GemColorRed",
+			"stats": [0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_livingruby_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 24029,
+			"name": "Teardrop Living Ruby",
+			"color": "GemColorRed",
+			"stats": [0, 0, 0, 0, 18, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_livingruby_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 24030,
+			"name": "Runed Living Ruby",
+			"color": "GemColorRed",
+			"stats": [0, 0, 0, 0, 9, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_livingruby_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 24031,
+			"name": "Bright Living Ruby",
+			"color": "GemColorRed",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_livingruby_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 24032,
+			"name": "Subtle Living Ruby",
+			"color": "GemColorRed",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_livingruby_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 24033,
+			"name": "Solid Star of Elune",
+			"color": "GemColorBlue",
+			"stats": [0, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_starofelune_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 24035,
+			"name": "Sparkling Star of Elune",
+			"color": "GemColorBlue",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_starofelune_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 24036,
+			"name": "Flashing Living Ruby",
+			"color": "GemColorRed",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_livingruby_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 24037,
+			"name": "Lustrous Star of Elune",
+			"color": "GemColorBlue",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_starofelune_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 24039,
+			"name": "Stormy Star of Elune",
+			"color": "GemColorBlue",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_starofelune_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 24047,
+			"name": "Brilliant Dawnstone",
+			"color": "GemColorYellow",
+			"stats": [0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_dawnstone_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 24048,
+			"name": "Smooth Dawnstone",
+			"color": "GemColorYellow",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_dawnstone_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 24050,
+			"name": "Gleaming Dawnstone",
+			"color": "GemColorYellow",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_dawnstone_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 24051,
+			"name": "Rigid Dawnstone",
+			"color": "GemColorYellow",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_dawnstone_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 24052,
+			"name": "Thick Dawnstone",
+			"color": "GemColorYellow",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_dawnstone_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 24053,
+			"name": "Mystic Dawnstone",
+			"color": "GemColorYellow",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_dawnstone_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 24054,
+			"name": "Sovereign Nightseye",
+			"color": "GemColorPurple",
+			"stats": [4, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_nightseye_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 24055,
+			"name": "Shifting Nightseye",
+			"color": "GemColorPurple",
+			"stats": [0, 4, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_nightseye_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 24056,
+			"name": "Glowing Nightseye",
+			"color": "GemColorPurple",
+			"stats": [0, 0, 6, 0, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_nightseye_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 24057,
+			"name": "Royal Nightseye",
+			"color": "GemColorPurple",
+			"stats": [0, 0, 0, 0, 9, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_nightseye_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 24058,
+			"name": "Inscribed Noble Topaz",
+			"color": "GemColorOrange",
+			"stats": [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_nobletopaz_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 24059,
+			"name": "Potent Noble Topaz",
+			"color": "GemColorOrange",
+			"stats": [0, 0, 0, 0, 5, 5, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_nobletopaz_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 24060,
+			"name": "Luminous Noble Topaz",
+			"color": "GemColorOrange",
+			"stats": [0, 0, 0, 4, 9, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_nobletopaz_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 24061,
+			"name": "Glinting Noble Topaz",
+			"color": "GemColorOrange",
+			"stats": [0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_nobletopaz_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 24062,
+			"name": "Enduring Talasite",
+			"color": "GemColorGreen",
+			"stats": [0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_talasite_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 24065,
+			"name": "Dazzling Talasite",
+			"color": "GemColorGreen",
+			"stats": [0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_talasite_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 24066,
+			"name": "Radiant Talasite",
+			"color": "GemColorGreen",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_talasite_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 24067,
+			"name": "Jagged Talasite",
+			"color": "GemColorGreen",
+			"stats": [0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_talasite_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 27679,
+			"name": "Sublime Mystic Dawnstone",
+			"color": "GemColorYellow",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_misc_gem_topaz_01",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 27777,
+			"name": "Stark Blood Garnet",
+			"color": "GemColorRed",
+			"stats": [0, 0, 0, 0, 8, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_misc_gem_ruby_01",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 27785,
+			"name": "Notched Deep Peridot",
+			"color": "GemColorGreen",
+			"stats": [0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_misc_gem_deepperidot_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 27786,
+			"name": "Barbed Deep Peridot",
+			"color": "GemColorGreen",
+			"stats": [0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_misc_gem_deepperidot_01",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 27809,
+			"name": "Barbed Deep Peridot",
+			"color": "GemColorGreen",
+			"stats": [0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_misc_gem_deepperidot_01",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 27812,
+			"name": "Stark Blood Garnet",
+			"color": "GemColorRed",
+			"stats": [0, 0, 0, 0, 8, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_misc_gem_ruby_01",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 27820,
+			"name": "Notched Deep Peridot",
+			"color": "GemColorGreen",
+			"stats": [0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_misc_gem_deepperidot_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 28118,
+			"name": "Runed Ornate Ruby",
+			"color": "GemColorRed",
+			"stats": [0, 0, 0, 0, 12, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_misc_gem_bloodstone_01",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 28119,
+			"name": "Smooth Ornate Dawnstone",
+			"color": "GemColorYellow",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_misc_gem_topaz_01",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 28120,
+			"name": "Gleaming Ornate Dawnstone",
+			"color": "GemColorYellow",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_misc_gem_topaz_02",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 28123,
+			"name": "Potent Ornate Topaz",
+			"color": "GemColorOrange",
+			"stats": [0, 0, 0, 0, 6, 6, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_misc_gem_opal_02",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 28360,
+			"name": "Mighty Blood Garnet",
+			"color": "GemColorRed",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_misc_gem_bloodstone_02",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 28361,
+			"name": "Mighty Blood Garnet",
+			"color": "GemColorRed",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_misc_gem_bloodstone_02",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 28362,
+			"name": "Bold Ornate Ruby",
+			"color": "GemColorRed",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_misc_gem_ruby_02",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 28363,
+			"name": "Inscribed Ornate Topaz",
+			"color": "GemColorOrange",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_misc_gem_opal_01",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30546,
+			"name": "Sovereign Tanzanite",
+			"color": "GemColorPurple",
+			"stats": [5, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nightseye_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30547,
+			"name": "Luminous Fire Opal",
+			"color": "GemColorOrange",
+			"stats": [0, 0, 0, 4, 11, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nobletopaz_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30548,
+			"name": "Polished Chrysoprase",
+			"color": "GemColorGreen",
+			"stats": [0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_talasite_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30549,
+			"name": "Shifting Tanzanite",
+			"color": "GemColorPurple",
+			"stats": [0, 5, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nightseye_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30550,
+			"name": "Sundered Chrysoprase",
+			"color": "GemColorGreen",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_talasite_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30551,
+			"name": "Infused Fire Opal",
+			"color": "GemColorOrange",
+			"stats": [0, 0, 0, 4, 6, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nobletopaz_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30552,
+			"name": "Blessed Tanzanite",
+			"color": "GemColorPurple",
+			"stats": [0, 0, 6, 0, 11, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nightseye_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30553,
+			"name": "Pristine Fire Opal",
+			"color": "GemColorOrange",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 10, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nobletopaz_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30554,
+			"name": "Stalwart Fire Opal",
+			"color": "GemColorOrange",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nobletopaz_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30555,
+			"name": "Glowing Tanzanite",
+			"color": "GemColorPurple",
+			"stats": [0, 0, 6, 0, 6, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nightseye_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30556,
+			"name": "Glinting Fire Opal",
+			"color": "GemColorOrange",
+			"stats": [0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nobletopaz_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30558,
+			"name": "Glimmering Fire Opal",
+			"color": "GemColorOrange",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nobletopaz_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30559,
+			"name": "Etched Fire Opal",
+			"color": "GemColorOrange",
+			"stats": [5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nobletopaz_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30560,
+			"name": "Rune Covered Chrysoprase",
+			"color": "GemColorGreen",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_talasite_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30563,
+			"name": "Regal Tanzanite",
+			"color": "GemColorPurple",
+			"stats": [0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nightseye_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30564,
+			"name": "Shining Fire Opal",
+			"color": "GemColorOrange",
+			"stats": [0, 0, 0, 0, 6, 6, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nobletopaz_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30565,
+			"name": "Assassin's Fire Opal",
+			"color": "GemColorOrange",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nobletopaz_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30566,
+			"name": "Defender's Tanzanite",
+			"color": "GemColorPurple",
+			"stats": [0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nightseye_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30571,
+			"name": "Don Rodrigo's Heart",
+			"color": "GemColorRed",
+			"stats": [8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_misc_gem_ruby_01",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 30572,
+			"name": "Imperial Tanzanite",
+			"color": "GemColorPurple",
+			"stats": [0, 0, 0, 0, 9, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nightseye_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30573,
+			"name": "Mysterious Fire Opal",
+			"color": "GemColorOrange",
+			"stats": [0, 0, 0, 0, 6, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nobletopaz_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30574,
+			"name": "Brutal Tanzanite",
+			"color": "GemColorPurple",
+			"stats": [0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nightseye_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30575,
+			"name": "Nimble Fire Opal",
+			"color": "GemColorOrange",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nobletopaz_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30581,
+			"name": "Durable Fire Opal",
+			"color": "GemColorOrange",
+			"stats": [0, 0, 0, 0, 11, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nobletopaz_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30582,
+			"name": "Deadly Fire Opal",
+			"color": "GemColorOrange",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nobletopaz_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30583,
+			"name": "Timeless Chrysoprase",
+			"color": "GemColorGreen",
+			"stats": [0, 0, 6, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_talasite_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30584,
+			"name": "Enscribed Fire Opal",
+			"color": "GemColorOrange",
+			"stats": [5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nobletopaz_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30585,
+			"name": "Glistening Fire Opal",
+			"color": "GemColorOrange",
+			"stats": [0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nobletopaz_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30586,
+			"name": "Seer's Chrysoprase",
+			"color": "GemColorGreen",
+			"stats": [0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_talasite_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30587,
+			"name": "Champion's Fire Opal",
+			"color": "GemColorOrange",
+			"stats": [5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nobletopaz_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30588,
+			"name": "Potent Fire Opal",
+			"color": "GemColorOrange",
+			"stats": [0, 0, 0, 0, 6, 6, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nobletopaz_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30589,
+			"name": "Dazzling Chrysoprase",
+			"color": "GemColorGreen",
+			"stats": [0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_talasite_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30590,
+			"name": "Enduring Chrysoprase",
+			"color": "GemColorGreen",
+			"stats": [0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_talasite_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30591,
+			"name": "Empowered Fire Opal",
+			"color": "GemColorOrange",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nobletopaz_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30592,
+			"name": "Steady Chrysoprase",
+			"color": "GemColorGreen",
+			"stats": [0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_talasite_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30593,
+			"name": "Iridescent Fire Opal",
+			"color": "GemColorOrange",
+			"stats": [0, 0, 0, 0, 11, 4, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nobletopaz_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30594,
+			"name": "Effulgent Chrysoprase",
+			"color": "GemColorGreen",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_talasite_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30598,
+			"name": "Don Amancio's Heart",
+			"color": "GemColorRed",
+			"stats": [8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_misc_gem_ruby_01",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 30600,
+			"name": "Fluorescent Tanzanite",
+			"color": "GemColorPurple",
+			"stats": [0, 0, 0, 0, 6, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nightseye_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30601,
+			"name": "Beaming Fire Opal",
+			"color": "GemColorOrange",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nobletopaz_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30602,
+			"name": "Jagged Chrysoprase",
+			"color": "GemColorGreen",
+			"stats": [0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_talasite_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30603,
+			"name": "Royal Tanzanite",
+			"color": "GemColorPurple",
+			"stats": [0, 0, 0, 0, 11, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nightseye_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30604,
+			"name": "Resplendent Fire Opal",
+			"color": "GemColorOrange",
+			"stats": [5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nobletopaz_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30605,
+			"name": "Vivid Chrysoprase",
+			"color": "GemColorGreen",
+			"stats": [0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_talasite_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30606,
+			"name": "Lambent Chrysoprase",
+			"color": "GemColorGreen",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_talasite_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30607,
+			"name": "Splendid Fire Opal",
+			"color": "GemColorOrange",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nobletopaz_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 30608,
+			"name": "Radiant Chrysoprase",
+			"color": "GemColorGreen",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_talasite_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 31116,
+			"name": "Infused Amethyst",
+			"color": "GemColorPurple",
+			"stats": [0, 0, 6, 0, 6, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nightseye_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 31117,
+			"name": "Soothing Amethyst",
+			"color": "GemColorPurple",
+			"stats": [0, 0, 6, 0, 11, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nightseye_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 31118,
+			"name": "Pulsing Amethyst",
+			"color": "GemColorPurple",
+			"stats": [0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nightseye_03",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 31861,
+			"name": "Great Dawnstone",
+			"color": "GemColorYellow",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_dawnstone_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 31863,
+			"name": "Balanced Nightseye",
+			"color": "GemColorPurple",
+			"stats": [0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_nightseye_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 31865,
+			"name": "Infused Nightseye",
+			"color": "GemColorPurple",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_nightseye_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 31867,
+			"name": "Veiled Noble Topaz",
+			"color": "GemColorOrange",
+			"stats": [0, 0, 0, 0, 5, 5, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_nobletopaz_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 31868,
+			"name": "Wicked Noble Topaz",
+			"color": "GemColorOrange",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_nobletopaz_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 32193,
+			"name": "Bold Crimson Spinel",
+			"color": "GemColorRed",
+			"stats": [10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_crimsonspinel_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 32194,
+			"name": "Delicate Crimson Spinel",
+			"color": "GemColorRed",
+			"stats": [0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_crimsonspinel_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 32195,
+			"name": "Teardrop Crimson Spinel",
+			"color": "GemColorRed",
+			"stats": [0, 0, 0, 0, 22, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_crimsonspinel_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 32196,
+			"name": "Runed Crimson Spinel",
+			"color": "GemColorRed",
+			"stats": [0, 0, 0, 0, 12, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_crimsonspinel_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 32197,
+			"name": "Bright Crimson Spinel",
+			"color": "GemColorRed",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_crimsonspinel_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 32198,
+			"name": "Subtle Crimson Spinel",
+			"color": "GemColorRed",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_crimsonspinel_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 32199,
+			"name": "Flashing Crimson Spinel",
+			"color": "GemColorRed",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_crimsonspinel_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 32200,
+			"name": "Solid Empyrean Sapphire",
+			"color": "GemColorBlue",
+			"stats": [0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_empyreansapphire_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 32201,
+			"name": "Sparkling Empyrean Sapphire",
+			"color": "GemColorBlue",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_empyreansapphire_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 32202,
+			"name": "Lustrous Empyrean Sapphire",
+			"color": "GemColorBlue",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_empyreansapphire_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 32203,
+			"name": "Stormy Empyrean Sapphire",
+			"color": "GemColorBlue",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_empyreansapphire_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 32204,
+			"name": "Brilliant Lionseye",
+			"color": "GemColorYellow",
+			"stats": [0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_lionseye_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 32205,
+			"name": "Smooth Lionseye",
+			"color": "GemColorYellow",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_lionseye_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 32206,
+			"name": "Rigid Lionseye",
+			"color": "GemColorYellow",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_lionseye_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 32207,
+			"name": "Gleaming Lionseye",
+			"color": "GemColorYellow",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_lionseye_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 32208,
+			"name": "Thick Lionseye",
+			"color": "GemColorYellow",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_lionseye_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 32209,
+			"name": "Mystic Lionseye",
+			"color": "GemColorYellow",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_lionseye_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 32210,
+			"name": "Great Lionseye",
+			"color": "GemColorYellow",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_lionseye_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 32211,
+			"name": "Sovereign Shadowsong Amethyst",
+			"color": "GemColorPurple",
+			"stats": [5, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_shadowsongamethyst_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 32212,
+			"name": "Shifting Shadowsong Amethyst",
+			"color": "GemColorPurple",
+			"stats": [0, 5, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_shadowsongamethyst_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 32213,
+			"name": "Balanced Shadowsong Amethyst",
+			"color": "GemColorPurple",
+			"stats": [0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_shadowsongamethyst_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 32214,
+			"name": "Infused Shadowsong Amethyst",
+			"color": "GemColorPurple",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_shadowsongamethyst_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 32215,
+			"name": "Glowing Shadowsong Amethyst",
+			"color": "GemColorPurple",
+			"stats": [0, 0, 7, 0, 6, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_shadowsongamethyst_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 32216,
+			"name": "Royal Shadowsong Amethyst",
+			"color": "GemColorPurple",
+			"stats": [0, 0, 0, 0, 11, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_shadowsongamethyst_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 32217,
+			"name": "Inscribed Pyrestone",
+			"color": "GemColorOrange",
+			"stats": [5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_pyrestone_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 32218,
+			"name": "Potent Pyrestone",
+			"color": "GemColorOrange",
+			"stats": [0, 0, 0, 0, 6, 6, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_pyrestone_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 32219,
+			"name": "Luminous Pyrestone",
+			"color": "GemColorOrange",
+			"stats": [0, 0, 0, 5, 11, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_pyrestone_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 32220,
+			"name": "Glinting Pyrestone",
+			"color": "GemColorOrange",
+			"stats": [0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_pyrestone_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 32221,
+			"name": "Veiled Pyrestone",
+			"color": "GemColorOrange",
+			"stats": [0, 0, 0, 0, 6, 6, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_pyrestone_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 32222,
+			"name": "Wicked Pyrestone",
+			"color": "GemColorOrange",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_pyrestone_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 32223,
+			"name": "Enduring Seaspray Emerald",
+			"color": "GemColorGreen",
+			"stats": [0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_seasprayemerald_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 32224,
+			"name": "Radiant Seaspray Emerald",
+			"color": "GemColorGreen",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_seasprayemerald_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 32225,
+			"name": "Dazzling Seaspray Emerald",
+			"color": "GemColorGreen",
+			"stats": [0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_seasprayemerald_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 32226,
+			"name": "Jagged Seaspray Emerald",
+			"color": "GemColorGreen",
+			"stats": [0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_seasprayemerald_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 32634,
+			"name": "Unstable Amethyst",
+			"color": "GemColorPurple",
+			"stats": [0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_shadowsongamethyst_01",
+			"phase": 2,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 32635,
+			"name": "Unstable Peridot",
+			"color": "GemColorGreen",
+			"stats": [0, 0, 6, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_misc_gem_deepperidot_03",
+			"phase": 2,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 32636,
+			"name": "Unstable Sapphire",
+			"color": "GemColorPurple",
+			"stats": [0, 0, 0, 0, 9, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_misc_gem_sapphire_02",
+			"phase": 2,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 32637,
+			"name": "Unstable Citrine",
+			"color": "GemColorOrange",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_misc_gem_opal_01",
+			"phase": 2,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 32638,
+			"name": "Unstable Topaz",
+			"color": "GemColorOrange",
+			"stats": [0, 0, 0, 4, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_nobletopaz_02",
+			"phase": 2,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 32639,
+			"name": "Unstable Talasite",
+			"color": "GemColorGreen",
+			"stats": [0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_talasite_01",
+			"phase": 2,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 32836,
+			"name": "Purified Shadow Pearl",
+			"color": "GemColorPurple",
+			"stats": [0, 0, 0, 0, 9, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_misc_gem_pearl_07",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 33131,
+			"name": "Crimson Sun",
+			"color": "GemColorRed",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 32, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"requiredProfession": "Jewelcrafting",
+			"icon": "inv_jewelcrafting_crimsonspinel_02",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 33133,
+			"name": "Don Julio's Heart",
+			"color": "GemColorRed",
+			"stats": [0, 0, 0, 0, 14, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"requiredProfession": "Jewelcrafting",
+			"icon": "inv_jewelcrafting_crimsonspinel_02",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 33134,
+			"name": "Kailee's Rose",
+			"color": "GemColorRed",
+			"stats": [0, 0, 0, 0, 26, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"requiredProfession": "Jewelcrafting",
+			"icon": "inv_jewelcrafting_crimsonspinel_02",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 33135,
+			"name": "Falling Star",
+			"color": "GemColorBlue",
+			"stats": [0, 0, 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"requiredProfession": "Jewelcrafting",
+			"icon": "inv_jewelcrafting_empyreansapphire_02",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 33140,
+			"name": "Blood of Amber",
+			"color": "GemColorYellow",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"requiredProfession": "Jewelcrafting",
+			"icon": "inv_jewelcrafting_lionseye_02",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 33143,
+			"name": "Stone of Blades",
+			"color": "GemColorYellow",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"requiredProfession": "Jewelcrafting",
+			"icon": "inv_jewelcrafting_lionseye_02",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 33144,
+			"name": "Facet of Eternity",
+			"color": "GemColorYellow",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"requiredProfession": "Jewelcrafting",
+			"icon": "inv_jewelcrafting_lionseye_02",
+			"phase": 1,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 33782,
+			"name": "Steady Talasite",
+			"color": "GemColorGreen",
+			"stats": [0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_talasite_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 34256,
+			"name": "Charmed Amani Jewel",
+			"color": "GemColorBlue",
+			"stats": [0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_misc_gem_pearl_07",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 34627,
+			"name": "Heavy Tonk Armor",
+			"color": "GemColorYellow",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_stone_weightstone_05",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 34831,
+			"name": "Eye of the Sea",
+			"color": "GemColorBlue",
+			"stats": [0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_starofelune_01",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 35315,
+			"name": "Quick Dawnstone",
+			"color": "GemColorYellow",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_dawnstone_03",
+			"phase": 5,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 35316,
+			"name": "Reckless Noble Topaz",
+			"color": "GemColorOrange",
+			"stats": [0, 0, 0, 0, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_nobletopaz_03",
+			"phase": 5,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 35318,
+			"name": "Forceful Talasite",
+			"color": "GemColorGreen",
+			"stats": [0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_talasite_03",
+			"phase": 5,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 35487,
+			"name": "Bright Crimson Spinel",
+			"color": "GemColorRed",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_crimsonspinel_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 35488,
+			"name": "Runed Crimson Spinel",
+			"color": "GemColorRed",
+			"stats": [0, 0, 0, 0, 12, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"unique": true,
+			"icon": "inv_jewelcrafting_crimsonspinel_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 35707,
+			"name": "Regal Nightseye",
+			"color": "GemColorPurple",
+			"stats": [0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_nightseye_03",
+			"phase": 1,
+			"quality": "ItemQualityRare"
+		},
+		{
+			"id": 35758,
+			"name": "Steady Seaspray Emerald",
+			"color": "GemColorGreen",
+			"stats": [0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_seasprayemerald_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 35759,
+			"name": "Forceful Seaspray Emerald",
+			"color": "GemColorGreen",
+			"stats": [0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_seasprayemerald_02",
+			"phase": 5,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 35760,
+			"name": "Reckless Pyrestone",
+			"color": "GemColorOrange",
+			"stats": [0, 0, 0, 0, 6, 6, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_pyrestone_02",
+			"phase": 5,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 35761,
+			"name": "Quick Lionseye",
+			"color": "GemColorYellow",
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_lionseye_02",
+			"phase": 5,
+			"quality": "ItemQualityEpic"
+		},
+		{
+			"id": 37503,
+			"name": "Purified Shadowsong Amethyst",
+			"color": "GemColorPurple",
+			"stats": [0, 0, 0, 0, 11, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"icon": "inv_jewelcrafting_shadowsongamethyst_02",
+			"phase": 3,
+			"quality": "ItemQualityEpic"
+		}
+	]
+}

@@ -1,0 +1,183 @@
+{
+	"requestId": "reforgeOptimizeAsync-95cd355a73e51207",
+	"raid": {
+		"parties": [
+			{
+				"players": [
+					{
+						"apiVersion": 14,
+						"name": "Player",
+						"race": "RaceOrc",
+						"class": "ClassWarrior",
+						"equipment": {
+							"items": [
+								{ "id": 29021, "enchant": 3003, "gems": [32409, 28119] },
+								{ "id": 29349 },
+								{ "id": 29023, "enchant": 2997, "gems": [24027, 24027] },
+								{ "id": 24259, "enchant": 368, "gems": [28362] },
+								{ "id": 29019, "enchant": 2661, "gems": [24027, 24027, 24027] },
+								{ "id": 28795, "enchant": 2647, "gems": [30602, 24027] },
+								{ "id": 28824, "enchant": 684, "gems": [30546, 30584] },
+								{ "id": 28779, "gems": [24027, 24027] },
+								{ "id": 28741, "enchant": 3012, "gems": [24027, 24027, 24027] },
+								{ "id": 28608, "enchant": 2939, "gems": [28363, 30582] },
+								{ "id": 28730 },
+								{ "id": 28757 },
+								{ "id": 21670 },
+								{ "id": 28830 },
+								{ "id": 28438, "enchant": 2673 },
+								{ "id": 28729, "enchant": 2673 },
+								{ "id": 28772 }
+							]
+						},
+						"consumables": {
+							"potId": 22838,
+							"flaskId": 22854,
+							"foodId": 27658,
+							"conjuredId": 22788,
+							"explosiveId": 30217,
+							"superSapper": true,
+							"goblinSapper": true,
+							"scrollAgi": true,
+							"scrollStr": true,
+							"potions": [13442, 22828, 22837, 22838],
+							"conjuredItems": [22105, 22788]
+						},
+						"bonusStats": {
+							"apiVersion": 14,
+							"stats": [
+								0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+							],
+							"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+						},
+						"itemSwap": {
+							"items": [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+							"prepullBonusStats": {
+								"apiVersion": 14,
+								"stats": [
+									0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+								],
+								"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+							}
+						},
+						"buffs": {
+							"blessingOfKings": true,
+							"blessingOfMight": "TristateEffectImproved",
+							"unleashedRage": true
+						},
+						"dpsWarrior": {
+							"options": {
+								"classOptions": {
+									"defaultShout": "WarriorShoutBattle",
+									"defaultStance": "WarriorStanceBerserker",
+									"startingRage": 50,
+									"queueDelay": 250,
+									"hasBsSolarianSapphire": true,
+									"hasBsT2": true
+								}
+							}
+						},
+						"talentsString": "3400502130201-05050005505012050115",
+						"profession1": "Engineering",
+						"profession2": "Blacksmithing",
+						"cooldowns": {},
+						"reactionTimeMs": 100,
+						"distanceFromTarget": 25,
+						"healingModel": {}
+					},
+					{},
+					{},
+					{},
+					{}
+				],
+				"buffs": {
+					"ferociousInspiration": 2,
+					"leaderOfThePack": "TristateEffectImproved",
+					"drums": "LesserDrumsOfBattle",
+					"braidedEterniumChain": true,
+					"graceOfAirTotem": "TristateEffectImproved",
+					"strengthOfEarthTotem": "TristateEffectImproved",
+					"windfuryTotem": "TristateEffectImproved",
+					"totemTwisting": true
+				}
+			},
+			{
+				"players": [{}, {}, {}, {}, {}],
+				"buffs": {}
+			},
+			{
+				"players": [{}, {}, {}, {}, {}],
+				"buffs": {}
+			},
+			{
+				"players": [{}, {}, {}, {}, {}],
+				"buffs": {}
+			},
+			{
+				"players": [{}, {}, {}, {}, {}],
+				"buffs": {}
+			}
+		],
+		"numActiveParties": 5,
+		"buffs": {
+			"powerWordFortitude": "TristateEffectImproved",
+			"shadowProtection": true,
+			"giftOfTheWild": "TristateEffectImproved",
+			"bloodlust": true
+		},
+		"debuffs": {
+			"improvedSealOfTheCrusader": "TristateEffectImproved",
+			"misery": true,
+			"bloodFrenzy": true,
+			"giftOfArthas": true,
+			"mangle": true,
+			"exposeArmor": "TristateEffectImproved",
+			"faerieFire": "TristateEffectImproved",
+			"sunderArmor": true,
+			"curseOfRecklessness": true,
+			"huntersMark": "TristateEffectImproved",
+			"exposeWeaknessUptime": 0.9,
+			"exposeWeaknessHunterAgility": 1080
+		}
+	},
+	"preCapEpWeights": {
+		"apiVersion": 14,
+		"stats": [
+			1, 0.68, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.45, 0, 0, 1.45, 0.92, 0.81, 0.15, 1.31, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+		],
+		"pseudoStats": [2.79, 1.47, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+	},
+	"undershootCaps": {
+		"apiVersion": 14,
+		"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+	},
+	"settings": {
+		"useSoftCapBreakpoints": true,
+		"statCaps": {
+			"apiVersion": 14,
+			"stats": [
+				0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 102.50000800000001, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+			],
+			"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+		},
+		"breakpointLimits": {
+			"apiVersion": 14,
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+		},
+		"maxGemPhase": 1,
+		"maxGemQuality": "ItemQualityEpic"
+	},
+	"softCaps": [
+		{
+			"unitStat": {
+				"apiVersion": 14,
+				"pseudoStat": "PseudoStatMeleeHitPercent"
+			},
+			"breakpoints": [9, 28],
+			"capType": "TypeSoftCap",
+			"postCapEPs": [8.98846281, 0]
+		}
+	]
+}

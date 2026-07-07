@@ -36,7 +36,7 @@ import { simLaunchStatuses } from './launched_sims';
 import { Player, PlayerConfig, registerSpecConfig as registerPlayerConfig } from './player';
 import { PlayerSpecs } from './player_specs';
 import { PresetBuild, PresetEncounter, PresetEpWeights, PresetGear, PresetItemSwap, PresetRotation, PresetSettings } from './preset_utils';
-import { StatWeightsResult } from './proto/api';
+import { ReforgeSettings, StatWeightsResult } from './proto/api';
 import { APLRotation, APLRotation_Type as APLRotationType } from './proto/apl';
 import {
 	ConsumesSpec,
@@ -58,7 +58,7 @@ import {
 	Spec,
 	Stat,
 } from './proto/common';
-import { IndividualSimSettings, ReforgeSettings, SavedTalents } from './proto/ui';
+import { IndividualSimSettings, SavedTalents } from './proto/ui';
 import { getMetaGemConditionDescription } from './proto_utils/gems';
 import { professionNames } from './proto_utils/names';
 import { pseudoStatHasCap, StatCap, Stats, UnitStat } from './proto_utils/stats';
@@ -481,10 +481,7 @@ export abstract class IndividualSimUI<SpecType extends Spec> extends SimUI {
 			const defaultRotationType = this.individualConfig.defaults.rotationType || APLRotationType.TypeAuto;
 
 			if (defaultRotationType === APLRotationType.TypeAPL && this.individualConfig.defaults.aplRotation) {
-				this.player.setAplRotation(
-					eventID,
-					APLRotation.create(this.individualConfig.defaults.aplRotation),
-				);
+				this.player.setAplRotation(eventID, APLRotation.create(this.individualConfig.defaults.aplRotation));
 				return;
 			}
 

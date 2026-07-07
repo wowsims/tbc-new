@@ -22,7 +22,7 @@ import { defaultExposeWeaknessSettings, defaultRaidBuffMajorDamageCooldowns } fr
 
 import * as Presets from './presets';
 import * as Mechanics from '../../core/constants/mechanics';
-import { StatCapType } from '../../core/proto/ui';
+import { StatCapType } from '../../core/proto/api';
 import { ReforgeOptimizer } from '../../core/components/suggest_reforges_action';
 
 const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {

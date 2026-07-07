@@ -16,7 +16,7 @@ func applyConsumeEffects(agent Agent, partyBuffs *proto.PartyBuffs) {
 	}
 
 	if consumables.FlaskId != 0 {
-		flask := ConsumablesByID[consumables.FlaskId]
+		flask := GetConsumableByID(consumables.FlaskId)
 		character.AddStats(flask.Stats)
 	}
 
@@ -32,7 +32,7 @@ func applyConsumeEffects(agent Agent, partyBuffs *proto.PartyBuffs) {
 				}
 			})
 		} else {
-			elixir := ConsumablesByID[consumables.BattleElixirId]
+			elixir := GetConsumableByID(consumables.BattleElixirId)
 			character.AddStats(elixir.Stats)
 		}
 	}
@@ -68,12 +68,12 @@ func applyConsumeEffects(agent Agent, partyBuffs *proto.PartyBuffs) {
 				},
 			})
 		} else {
-			elixir := ConsumablesByID[consumables.GuardianElixirId]
+			elixir := GetConsumableByID(consumables.GuardianElixirId)
 			character.AddStats(elixir.Stats)
 		}
 	}
 	if consumables.FoodId != 0 {
-		food := ConsumablesByID[consumables.FoodId]
+		food := GetConsumableByID(consumables.FoodId)
 		character.AddStats(food.Stats)
 	}
 
@@ -115,7 +115,7 @@ func applyConsumeEffects(agent Agent, partyBuffs *proto.PartyBuffs) {
 			pet.AddStat(stats.Strength, 20)
 		}
 		if consumables.PetFoodId != 0 {
-			petFood := ConsumablesByID[consumables.PetFoodId]
+			petFood := GetConsumableByID(consumables.PetFoodId)
 			pet.AddStats(petFood.Stats)
 		}
 	}
@@ -141,7 +141,7 @@ func registerPotionCD(agent Agent, consumes *proto.ConsumesSpec) {
 			}
 			continue
 		}
-		potion := ConsumablesByID[potionId]
+		potion := GetConsumableByID(potionId)
 		if potion.Type == proto.ConsumableType_ConsumableTypePotion {
 			potMCD := makePotionActivationSpell(potion.Id, character)
 			if defaultPotion == potion.Id {
@@ -216,7 +216,7 @@ func (character *Character) HasAlchStone() bool {
 }
 
 func makePotionActivationSpell(potionId int32, character *Character) MajorCooldown {
-	potion := ConsumablesByID[potionId]
+	potion := GetConsumableByID(potionId)
 	categoryCooldownDuration := TernaryDuration(potion.CategoryCooldownDuration > 0, potion.CategoryCooldownDuration, time.Minute*2)
 	mcd := makePotionActivationSpellInternal(potion, character)
 
@@ -279,7 +279,7 @@ func makePotionActivationSpellInternal(potion Consumable, character *Character) 
 	resourceMetrics := make(map[proto.ResourceType]*ResourceMetrics)
 
 	for _, effectID := range potion.EffectIds {
-		e := SpellEffectsById[effectID]
+		e := GetSpellEffectByID(effectID)
 		resourceType := e.GetResourceType()
 		if e.Type == proto.EffectType_EffectTypeResourceGain && resourceType != 0 {
 			if resourceType == proto.ResourceType_ResourceTypeMana && mcd.Type != CooldownTypeSurvival {
@@ -399,7 +399,7 @@ func registerConjuredCD(agent Agent, consumes *proto.ConsumesSpec) {
 }
 
 func makeConjuredActivationSpell(conjuredId int32, character *Character) MajorCooldown {
-	conjured := ConsumablesByID[conjuredId]
+	conjured := GetConsumableByID(conjuredId)
 	categoryCooldownDuration := TernaryDuration(conjured.CategoryCooldownDuration > 0, conjured.CategoryCooldownDuration, time.Minute*2)
 	mcd := makeConjuredActivationSpellInternal(conjured, character)
 
@@ -451,7 +451,7 @@ func makeConjuredActivationSpellInternal(conjured Consumable, character *Charact
 	resourceMetrics := make(map[proto.ResourceType]*ResourceMetrics)
 
 	for _, effectID := range conjured.EffectIds {
-		e := SpellEffectsById[effectID]
+		e := GetSpellEffectByID(effectID)
 		resourceType := e.GetResourceType()
 		if e.Type == proto.EffectType_EffectTypeResourceGain && resourceType != 0 {
 			if resourceType == proto.ResourceType_ResourceTypeMana && mcd.Type != CooldownTypeSurvival {

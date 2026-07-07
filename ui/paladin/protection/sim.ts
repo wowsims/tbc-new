@@ -6,7 +6,7 @@ import { PlayerClasses } from '../../core/player_classes';
 import { APLListItem, APLRotation, APLRotation_Type, APLValueVariable } from '../../core/proto/apl';
 import { Cooldowns, PseudoStat, Spec, Stat } from '../../core/proto/common';
 import { PaladinAura, PaladinJudgement } from '../../core/proto/paladin';
-import { StatCapType } from '../../core/proto/ui';
+import { StatCapType } from '../../core/proto/api';
 import * as AplUtils from '../../core/proto_utils/apl_utils';
 import { StatCap, UnitStat } from '../../core/proto_utils/stats';
 import { SpecRotation } from '../../core/proto_utils/utils';

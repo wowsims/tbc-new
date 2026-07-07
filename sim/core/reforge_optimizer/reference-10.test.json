@@ -1,0 +1,216 @@
+{
+	"requestId": "reforgeOptimizeAsync-d2f8d082b9ff58a9",
+	"raid": {
+		"parties": [
+			{
+				"players": [
+					{
+						"apiVersion": 14,
+						"name": "Player",
+						"race": "RaceNightElf",
+						"class": "ClassDruid",
+						"equipment": {
+							"items": [
+								{
+									"id": 8345,
+									"enchant": 3003
+								},
+								{
+									"id": 30017
+								},
+								{
+									"id": 31048,
+									"enchant": 2986,
+									"gems": [32194, 32194]
+								},
+								{
+									"id": 29994,
+									"enchant": 368
+								},
+								{
+									"id": 31042,
+									"enchant": 2661,
+									"gems": [32194, 32194, 32194]
+								},
+								{
+									"id": 33881,
+									"enchant": 2647,
+									"gems": [32194]
+								},
+								{
+									"id": 31034,
+									"enchant": 2564,
+									"gems": [32194]
+								},
+								{
+									"id": 30106,
+									"gems": [32194, 32194]
+								},
+								{
+									"id": 31044,
+									"enchant": 3012,
+									"gems": [32194]
+								},
+								{
+									"id": 32366,
+									"enchant": 2939,
+									"gems": [32194, 32194]
+								},
+								{
+									"id": 30052,
+									"enchant": 2931
+								},
+								{
+									"id": 29301,
+									"enchant": 2931
+								},
+								{
+									"id": 30627
+								},
+								{
+									"id": 29383
+								},
+								{
+									"id": 33716,
+									"enchant": 2670
+								},
+								{},
+								{
+									"id": 32387
+								}
+							]
+						},
+						"consumables": {
+							"potId": 22838,
+							"battleElixirId": 22831,
+							"guardianElixirId": 32067,
+							"foodId": 27664,
+							"conjuredId": 12662,
+							"superSapper": true,
+							"goblinSapper": true,
+							"mhImbueId": 34340,
+							"scrollAgi": true,
+							"scrollStr": true,
+							"potions": [13442, 18253, 22828, 22832, 22837, 22838, 22850, 28101, 31677, 32948, 33935, 34440],
+							"conjuredItems": [22105, 12662, 22788]
+						},
+						"bonusStats": {
+							"apiVersion": 14,
+							"stats": [
+								0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+							],
+							"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+						},
+						"itemSwap": {
+							"items": [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+							"prepullBonusStats": {
+								"apiVersion": 14,
+								"stats": [
+									0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+								],
+								"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+							}
+						},
+						"buffs": {
+							"blessingOfKings": true,
+							"blessingOfMight": "TristateEffectImproved",
+							"unleashedRage": true
+						},
+						"feralCatDruid": {
+							"options": {}
+						},
+						"talentsString": "-503032132322105301251-05503301",
+						"profession1": "Engineering",
+						"profession2": "Enchanting",
+						"cooldowns": {},
+						"reactionTimeMs": 250,
+						"healingModel": {}
+					},
+					{},
+					{},
+					{},
+					{}
+				],
+				"buffs": {
+					"ferociousInspiration": 2,
+					"drums": "LesserDrumsOfBattle",
+					"manaSpringTotem": "TristateEffectRegular",
+					"graceOfAirTotem": "TristateEffectImproved",
+					"strengthOfEarthTotem": "TristateEffectImproved",
+					"windfuryTotem": "TristateEffectImproved",
+					"totemTwisting": true,
+					"battleShout": "TristateEffectImproved"
+				}
+			},
+			{
+				"players": [{}, {}, {}, {}, {}],
+				"buffs": {}
+			},
+			{
+				"players": [{}, {}, {}, {}, {}],
+				"buffs": {}
+			},
+			{
+				"players": [{}, {}, {}, {}, {}],
+				"buffs": {}
+			},
+			{
+				"players": [{}, {}, {}, {}, {}],
+				"buffs": {}
+			}
+		],
+		"numActiveParties": 5,
+		"buffs": {
+			"arcaneBrilliance": true,
+			"powerWordFortitude": "TristateEffectImproved",
+			"shadowProtection": true,
+			"divineSpirit": "TristateEffectImproved",
+			"giftOfTheWild": "TristateEffectImproved",
+			"bloodlust": true
+		},
+		"debuffs": {
+			"judgementOfWisdom": true,
+			"improvedSealOfTheCrusader": "TristateEffectImproved",
+			"misery": true,
+			"bloodFrenzy": true,
+			"giftOfArthas": true,
+			"exposeArmor": "TristateEffectImproved",
+			"faerieFire": "TristateEffectImproved",
+			"sunderArmor": true,
+			"curseOfRecklessness": true,
+			"huntersMark": "TristateEffectImproved",
+			"exposeWeaknessUptime": 0.9,
+			"exposeWeaknessHunterAgility": 1080
+		}
+	},
+	"preCapEpWeights": {
+		"apiVersion": 14,
+		"stats": [
+			0.78, 1.16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.35, 0, 0.35, 1.02, 0.77, 0.41, 0.16, 1.02, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 3.13
+		],
+		"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+	},
+	"undershootCaps": {
+		"apiVersion": 14,
+		"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+	},
+	"settings": {
+		"useCustomEpValues": true,
+		"statCaps": {
+			"apiVersion": 14,
+			"stats": [
+				0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 102.50000800000001, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+			],
+			"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+		},
+		"breakpointLimits": {
+			"apiVersion": 14,
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+		},
+		"maxGemPhase": 3,
+		"maxGemQuality": "ItemQualityEpic"
+	}
+}

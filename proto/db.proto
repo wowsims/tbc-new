@@ -46,6 +46,9 @@ message SimItem {
 
 	map<int32, ScalingItemProperties> scaling_options = 13; // keys are the all ItemLevelState variants that this item could potentially have
 	repeated ItemEffect item_effects = 14;
+
+	int32 limit_category = 16;
+	bool unique = 17;
 }
 
 message Consumable {
@@ -76,5 +79,4 @@ message SimGem {
 	string name = 2;
 	GemColor color = 3;
 	repeated double stats = 4;
-	bool disabled_in_challenge_mode = 5;
 }

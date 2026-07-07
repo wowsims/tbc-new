@@ -5,7 +5,7 @@ import { Player } from '../../core/player.js';
 import { PlayerClasses } from '../../core/player_classes';
 import { APLRotation } from '../../core/proto/apl.js';
 import { Faction, ItemSlot, PseudoStat, Race, Spec, Stat } from '../../core/proto/common.js';
-import { StatCapType } from '../../core/proto/ui';
+import { StatCapType } from '../../core/proto/api';
 import { StatCap, Stats, UnitStat } from '../../core/proto_utils/stats.js';
 
 import * as Mechanics from '../../core/constants/mechanics';
