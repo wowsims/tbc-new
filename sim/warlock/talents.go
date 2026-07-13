@@ -271,7 +271,7 @@ func (warlock *Warlock) applyDemonicEmbrace() {
 	}
 
 	warlock.MultiplyStat(stats.Stamina, 1.0+(0.03)*float64(warlock.Talents.DemonicEmbrace))
-	warlock.MultiplyStat(stats.Spirit, 1.0-(0.03)*float64(warlock.Talents.DemonicEmbrace))
+	warlock.MultiplyStat(stats.Spirit, 1.0-(0.01)*float64(warlock.Talents.DemonicEmbrace))
 }
 
 func (warlock *Warlock) applyFelIntellect() {

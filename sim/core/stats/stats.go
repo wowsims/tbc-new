@@ -297,6 +297,37 @@ func (stats Stats) Floor() Stats {
 	return stats
 }
 
+// Stats the game stores as rounded-down integers on the unit: the five
+// attributes. The game floors these after resolving percentage multipliers
+// (e.g. Blessing of Kings), and derived values consume the floored integers
+// (health from floored Stamina, dodge from floored Agility). Verified against
+// live character sheets.
+//
+// Unlike attributes, combat ratings must NOT be floored here: the sim uses
+// rating stats as mixed accumulators that include fractional conversions from
+// talents and racials (e.g. dodge% talents stored as DodgeRating), and TBC has
+// no rating multipliers, so real rating totals are already integers.
+var flooredGameStats = []Stat{
+	Strength, Agility, Stamina, Intellect, Spirit,
+}
+
+var isFlooredGameStat = func() [SimStatsLen]bool {
+	var m [SimStatsLen]bool
+	for _, s := range flooredGameStats {
+		m[s] = true
+	}
+	return m
+}()
+
+// Rounds attributes down to integers, matching how the game stores them.
+// Must be applied after stat dependencies are resolved.
+func (stats Stats) FloorGameStats() Stats {
+	for _, k := range flooredGameStats {
+		stats[k] = math.Floor(stats[k])
+	}
+	return stats
+}
+
 func (stats Stats) Multiply(multiplier float64) Stats {
 	for k := range stats {
 		stats[k] *= multiplier
