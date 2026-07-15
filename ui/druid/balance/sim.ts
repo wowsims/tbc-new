@@ -51,7 +51,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecBalanceDruid, {
 
 	defaults: {
 		// Default equipped gear.
-		gear: Presets.Phase1AlliancePresetGear.gear,
+		gear: Presets.Phase2PresetGear.gear,
 		// Default EP weights for sorting gear in the gear picker.
 		epWeights: Presets.DefaultEPWeights.epWeights,
 		// Default stat caps for stat weights tab. (also needed for reforging since we don't want to reforge above stat caps)
@@ -104,8 +104,8 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecBalanceDruid, {
 		// Preset gear configurations that the user can quickly select.
 		gear: [
 			Presets.PreraidPresetGear,
-			Presets.Phase1AlliancePresetGear,
-			Presets.Phase2AlliancePresetGear,
+			Presets.Phase1PresetGear,
+			Presets.Phase2PresetGear,
 			Presets.Phase3PresetGear,
 			Presets.Phase4PresetGear,
 			Presets.Phase5PresetGear,
@@ -132,10 +132,10 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecBalanceDruid, {
 			defaultGear: {
 				[Faction.Unknown]: {},
 				[Faction.Alliance]: {
-					1: Presets.Phase2AlliancePresetGear.gear,
+					1: Presets.Phase2PresetGear.gear,
 				},
 				[Faction.Horde]: {
-					1: Presets.Phase2AlliancePresetGear.gear,
+					1: Presets.Phase2PresetGear.gear,
 				},
 			},
 		},
