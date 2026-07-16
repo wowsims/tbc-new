@@ -153,7 +153,11 @@ func processEnchantmentEffects(
 					continue
 				}
 				if spellEffect.EffectType == E_APPLY_AURA && spellEffect.EffectAura == A_MOD_STAT {
-					outStats[spellEffect.EffectMiscValues[0]] += float64(spellEffect.EffectBasePoints + 1)
+					stat, ok := MapMainStatToStat(spellEffect.EffectMiscValues[0])
+					if !ok {
+						continue
+					}
+					outStats[stat] += float64(spellEffect.EffectBasePoints + 1)
 				} else if spellEffect.EffectType == E_APPLY_AURA && spellEffect.EffectAura == A_MOD_RESISTANCE && (SpellSchool(spellEffect.EffectMiscValues[0]) == ALL_SPELL_DAMAGE || SpellSchool(spellEffect.EffectMiscValues[0]) == SPELL_PENETRATION) {
 					outStats[proto.Stat_StatArcaneResistance] += float64(spellEffect.EffectBasePoints + 1)
 					outStats[proto.Stat_StatFireResistance] += float64(spellEffect.EffectBasePoints + 1)
