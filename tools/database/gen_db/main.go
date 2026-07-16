@@ -142,7 +142,7 @@ func main() {
 	db := database.NewWowDatabase()
 	db.Encounters = core.PresetEncounters
 
-	iconsMap, err := database.LoadArtTexturePaths("./tools/DB2ToSqlite/listfile.csv")
+	iconsMap, err := database.LoadArtTexturePaths("./tools/db2tool/listfile.csv")
 	if err != nil {
 		panic(fmt.Sprintf("Error loading icon paths %v", err))
 	}
