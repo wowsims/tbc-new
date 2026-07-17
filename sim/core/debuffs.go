@@ -678,10 +678,10 @@ func ExposeArmorAura(target *Unit, getComboPoints func() int32, talents int32) *
 	effect = aura.NewExclusiveEffect(MajorArmorReductionEffectCategory, true, ExclusiveEffect{
 		Priority: 0,
 		OnGain: func(ee *ExclusiveEffect, s *Simulation) {
-			ee.Aura.Unit.stats[stats.Armor] -= ee.Priority
+			ee.Aura.Unit.AddStatDynamic(s, stats.Armor, -ee.Priority)
 		},
 		OnExpire: func(ee *ExclusiveEffect, s *Simulation) {
-			ee.Aura.Unit.stats[stats.Armor] += ee.Priority
+			ee.Aura.Unit.AddStatDynamic(s, stats.Armor, ee.Priority)
 		},
 	})
 
@@ -704,10 +704,10 @@ func SunderArmorAura(target *Unit) *Aura {
 	effect = aura.NewExclusiveEffect(MajorArmorReductionEffectCategory, true, ExclusiveEffect{
 		Priority: 0,
 		OnGain: func(ee *ExclusiveEffect, sim *Simulation) {
-			ee.Aura.Unit.stats[stats.Armor] += ee.Priority
+			ee.Aura.Unit.AddStatDynamic(sim, stats.Armor, ee.Priority)
 		},
 		OnExpire: func(ee *ExclusiveEffect, sim *Simulation) {
-			ee.Aura.Unit.stats[stats.Armor] -= ee.Priority
+			ee.Aura.Unit.AddStatDynamic(sim, stats.Armor, -ee.Priority)
 		},
 	})
 
