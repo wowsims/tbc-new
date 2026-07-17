@@ -1,0 +1,34 @@
+{
+	"type": "TypeSimple",
+	"simple": {
+		"specRotationJson": "{\"conserveStart\":20,\"conserveEnd\":30,\"delayMajorCDs\":10}",
+		"cooldowns": {
+			"cooldowns": [
+				{
+					"id": {
+						"itemId": 22044
+					},
+					"timings": [15, 135, 255]
+				},
+				{
+					"id": {
+						"spellId": 12042
+					},
+					"timings": [15, 135, 255]
+				},
+				{
+					"id": {
+						"itemId": 29370
+					},
+					"timings": [15, 135, 255]
+				},
+				{
+					"id": {
+						"itemId": 22839
+					},
+					"timings": [15, 135, 255]
+				}
+			]
+		}
+	}
+}

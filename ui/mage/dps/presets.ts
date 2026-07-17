@@ -19,6 +19,7 @@ import { Mage_Rotation, MageArmor, Mage_Options as MageOptions } from '../../cor
 import BlankAPL from './apls/blank.apl.json';
 import BlankGear from './gear_sets/blank.gear.json';
 import ArcaneApl from './apls/arcane.apl.json';
+import ArcaneBraidApl from './apls/arcaneBraid.apl.json';
 import PreBISArcaneGear from './gear_sets/preBisArcane.gear.json';
 import P1BISArcaneGear from './gear_sets/p1Arcane.gear.json';
 import P2BISArcaneGear from './gear_sets/p2Arcane.gear.json';
@@ -37,6 +38,7 @@ export const P2_BIS_ARCANE = PresetUtils.makePresetGear('Arcane - BIS', P2BISArc
 
 export const ARCANE_TALENTS = PresetUtils.makePresetTalents('Arcane', SavedTalents.create({ talentsString: '2500052300030150330125--053500031003001' }));
 export const ROTATION_PRESET_ARCANE = PresetUtils.makePresetAPLRotation('Arcane', ArcaneApl);
+export const ROTATION_PRESET_ARCANEBRAID = PresetUtils.makePresetAPLRotation('BraidSimple', ArcaneBraidApl);
 export const BLANK_GEARSET = PresetUtils.makePresetGear('Blank', BlankGear);
 
 export const ArcaneMageSimpleRotation = Mage_Rotation.create({
@@ -45,7 +47,7 @@ export const ArcaneMageSimpleRotation = Mage_Rotation.create({
 	delayMajorCDs: 10,
 });
 
-export const APL_ARCANE_SIMPLE = PresetUtils.makePresetSimpleRotation('Arcane Simple', Spec.SpecMage, ArcaneMageSimpleRotation);
+export const APL_ARCANE_SIMPLE = PresetUtils.makePresetSimpleRotation('Simple', Spec.SpecMage, ArcaneMageSimpleRotation);
 
 // Preset options for EP weights
 export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
@@ -196,6 +198,6 @@ export const P2_PRESET_BUILD_ARC = PresetUtils.makePresetBuild('P2', {
 	talents: ARCANE_TALENTS,
 	epWeights: P2_EP_PRESET,
 	rotationType: APLRotation_Type.TypeSimple,
-	rotation: APL_ARCANE_SIMPLE,
+	rotation: ROTATION_PRESET_ARCANEBRAID,
 	settings: P2_PLAYER_SETTINGS,
 });

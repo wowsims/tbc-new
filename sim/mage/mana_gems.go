@@ -23,7 +23,7 @@ func (mage *Mage) registerManaGems() {
 		aura.SetStacks(sim, 3)
 	})
 
-	mage.RegisterSpell(core.SpellConfig{
+	manaGem := mage.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
 		ProcMask:       core.ProcMaskEmpty,
 		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
@@ -55,6 +55,19 @@ func (mage *Mage) registerManaGems() {
 				manaGain *= 1.25
 			}
 			mage.AddMana(sim, manaGain, manaMetrics)
+		},
+	})
+
+	mage.AddMajorCooldown(core.MajorCooldown{
+		Spell: manaGem,
+		Type:  core.CooldownTypeMana,
+		ShouldActivate: func(sim *core.Simulation, char *core.Character) bool {
+			manaGain = sim.Roll(minManaGain, maxManaGain)
+			if mage.SerpentCoilBraid.IsActive() {
+				manaGain *= 1.25
+			}
+
+			return char.CurrentMana()+manaGain+char.SpiritManaRegenPerSecond() <= char.MaxMana()
 		},
 	})
 }

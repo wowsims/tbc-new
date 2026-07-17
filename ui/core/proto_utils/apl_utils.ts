@@ -87,7 +87,8 @@ export const isEqualAPLRotation = (player: Player<Spec>, rotation?: APLRotation,
 			player.specTypeFunctions.rotationEquals(
 				player.specTypeFunctions.rotationFromJson(JSON.parse(clonedOtherRotation.simple.specRotationJson)),
 				player.specTypeFunctions.rotationFromJson(JSON.parse(clonedRotation.simple.specRotationJson)),
-			)
+			) &&
+			Cooldowns.equals(clonedOtherRotation.simple.cooldowns, clonedRotation.simple.cooldowns) //For Simple Rotations we also want to compare if cooldown timings are different.
 		);
 	} else {
 		return APLRotation.equals(clonedOtherRotation, clonedRotation);
