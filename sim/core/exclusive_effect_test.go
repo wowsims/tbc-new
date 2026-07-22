@@ -168,6 +168,18 @@ func TestDemoralizingRoarSharedAura(t *testing.T) {
 	}
 }
 
+// Demoralizing Roar and Demoralizing Shout are mutually exclusive — the
+// stronger of the two wins via shared category priority.
+func TestDemoralizingRoarAndShoutShareCategory(t *testing.T) {
+	target := newExclusiveTestTarget()
+	roar := DemoralizingRoarAura(target, 5)
+	shout := DemoralizingShoutAura(target, 0, 5)
+
+	if roar.ExclusiveEffects[0].Category != shout.ExclusiveEffects[0].Category {
+		t.Fatalf("expected Demoralizing Roar and Shout to share an exclusive category")
+	}
+}
+
 // Regression: the config's Demoralizing Shout registered first and clobbered a
 // talented warrior's stronger values via the shared-label dedup.
 func TestDemoralizingShoutTalentsSurviveDedup(t *testing.T) {

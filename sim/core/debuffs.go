@@ -253,7 +253,7 @@ func DemoralizingRoarAura(target *Unit, feralAggressionPoints int32) *Aura {
 		Duration: time.Second * 30,
 	})
 
-	effect := aura.NewExclusiveEffect("DemoralizingRoar", true, ExclusiveEffect{
+	effect := aura.NewExclusiveEffect(DemoralizingEffectCategory, true, ExclusiveEffect{
 		Priority: apReduction,
 		OnGain: func(ee *ExclusiveEffect, sim *Simulation) {
 			ee.Aura.Unit.AddStatDynamic(sim, stats.AttackPower, -ee.Priority)
@@ -280,7 +280,7 @@ func DemoralizingShoutAura(target *Unit, boomingVoicePoints int32, improvedDemoS
 		Duration: duration,
 	})
 
-	effect := aura.NewExclusiveEffect("DemoralizingShout", true, ExclusiveEffect{
+	effect := aura.NewExclusiveEffect(DemoralizingEffectCategory, true, ExclusiveEffect{
 		Priority: apReduction,
 		OnGain: func(ee *ExclusiveEffect, sim *Simulation) {
 			ee.Aura.Unit.AddStatDynamic(sim, stats.AttackPower, -ee.Priority)
@@ -717,6 +717,10 @@ func StormstrikeAura(target *Unit, uptime float64) *Aura {
 }
 
 var MajorArmorReductionEffectCategory = "MajorArmorReduction"
+
+// Demoralizing Roar and Demoralizing Shout are mutually exclusive; other AP
+// reduction debuffs (Screech, Curse of Recklessness, ...) stack with them.
+var DemoralizingEffectCategory = "Demoralizing"
 
 func ExposeArmorAura(target *Unit, getComboPoints func() int32, talents int32) *Aura {
 
