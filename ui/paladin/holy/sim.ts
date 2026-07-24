@@ -20,7 +20,20 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecHolyPaladin, {
 	epReferenceStat: Stat.StatSpellDamage,
 	// Which stats to display in the Character Stats section, at the bottom of the left-hand sidebar.
 	displayStats: UnitStat.createDisplayStatArray(
-		[Stat.StatHealth, Stat.StatMana, Stat.StatIntellect, Stat.StatSpirit, Stat.StatSpellDamage, Stat.StatArmor, Stat.StatStamina],
+		[
+			Stat.StatHealth,
+			Stat.StatMana,
+			Stat.StatIntellect,
+			Stat.StatSpirit,
+			Stat.StatSpellDamage,
+			Stat.StatArmor,
+			Stat.StatStamina,
+			Stat.StatArcaneResistance,
+			Stat.StatFireResistance,
+			Stat.StatFrostResistance,
+			Stat.StatNatureResistance,
+			Stat.StatShadowResistance,
+		],
 		[PseudoStat.PseudoStatSpellHastePercent, PseudoStat.PseudoStatSpellCritPercent, PseudoStat.PseudoStatSpellHitPercent],
 	),
 	gemStats: DEFAULT_HYBRID_CASTER_GEM_STATS,
