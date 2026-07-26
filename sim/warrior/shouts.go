@@ -18,8 +18,6 @@ type ShoutHelperConfig struct {
 }
 
 func (warrior *Warrior) MakeShoutSpellHelper(config ShoutHelperConfig) *core.Spell {
-	duration := time.Minute * 1
-
 	return warrior.RegisterSpell(core.SpellConfig{
 		ActionID:       config.ActionID,
 		ClassSpellMask: config.SpellMask,
@@ -36,10 +34,6 @@ func (warrior *Warrior) MakeShoutSpellHelper(config ShoutHelperConfig) *core.Spe
 				GCD: core.GCDDefault,
 			},
 			IgnoreHaste: true,
-			CD: core.Cooldown{
-				Timer:    warrior.sharedShoutsCD,
-				Duration: duration,
-			},
 		},
 
 		ThreatMultiplier: 1,
