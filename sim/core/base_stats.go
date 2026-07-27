@@ -168,7 +168,7 @@ var ClassBaseStats = map[proto.Class]stats.Stats{
 		stats.Stamina:   51,
 	},
 	proto.Class_ClassWarlock: {
-		stats.Health:      3300,
+		stats.Health:      3310,
 		stats.Agility:     58,
 		stats.Strength:    51,
 		stats.Intellect:   133,
@@ -177,7 +177,7 @@ var ClassBaseStats = map[proto.Class]stats.Stats{
 		stats.AttackPower: -10,
 	},
 	proto.Class_ClassDruid: {
-		stats.Health:      3614,
+		stats.Health:      3434,
 		stats.Agility:     71,
 		stats.Strength:    77,
 		stats.Intellect:   120,
