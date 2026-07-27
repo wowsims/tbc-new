@@ -120,7 +120,7 @@ export function makeBooleanConsumeInput<SpecType extends Spec>(
 			getModObject: (player: Player<SpecType>) => player,
 			getValue: (player: Player<SpecType>) => player.getConsumes(),
 			setValue: (eventID: EventID, player: Player<SpecType>, newVal: ConsumesSpec) => player.setConsumes(eventID, newVal),
-			changeEmitter: (player: Player<SpecType>) => TypedEvent.onAny([player.consumesChangeEmitter, player.professionChangeEmitter]),
+			changeEmitter: (player: Player<SpecType>) => TypedEvent.onAny([player.consumesChangeEmitter, player.professionChangeEmitter, player.raceChangeEmitter]),
 			enableWhen: config.enableWhen,
 			showWhen: (player: Player<SpecType>) => !config.showWhen || config.showWhen(player),
 		},
