@@ -269,7 +269,6 @@ func (character *Character) applyEquipment() {
 
 func (character *Character) addUniversalStatDependencies() {
 	character.Unit.addUniversalStatDependencies()
-	character.AddStat(stats.Health, 20-10*20)
 	character.AddStatDependency(stats.Stamina, stats.Health, 10)
 	character.AddStatDependency(stats.Agility, stats.Armor, 2)
 }
@@ -280,7 +279,7 @@ func (character *Character) applyAllEffects(agent Agent, raidBuffs *proto.RaidBu
 
 	measureStats := func() *proto.UnitStats {
 		baseStats := character.GetStats()
-		character.stats = character.SortAndApplyStatDependencies(character.stats)
+		character.stats = character.SortAndApplyStatDependencies(character.stats).FloorGameStats()
 		measuredStatsProto := &proto.UnitStats{
 			Stats:       character.GetStats().ToProtoArray(),
 			PseudoStats: character.GetPseudoStatsProto(),

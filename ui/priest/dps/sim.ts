@@ -49,6 +49,11 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecPriest, {
 			Stat.StatSpellDamage,
 			Stat.StatShadowDamage,
 			Stat.StatHolyDamage,
+			Stat.StatArcaneResistance,
+			Stat.StatFireResistance,
+			Stat.StatFrostResistance,
+			Stat.StatNatureResistance,
+			Stat.StatShadowResistance,
 		],
 		[
 			PseudoStat.PseudoStatSpellHitPercent,

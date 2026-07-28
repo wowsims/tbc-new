@@ -41,6 +41,7 @@ func createMorogrimPreset(raidPrefix string, raidSize int32, bossHealth float64,
 			DamageSpread:  morogrimMeleeDamageSpread,
 
 			ParryHaste: true,
+			CanCrush:   true,
 
 			TargetInputs: morogrimTargetInputs(),
 		},

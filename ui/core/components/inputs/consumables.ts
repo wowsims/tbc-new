@@ -1,5 +1,5 @@
 import { Player } from '../../player';
-import { Class, ConsumesSpec, Drums, ItemSlot, Profession, Spec, Stat, TristateEffect } from '../../proto/common';
+import { Class, ConsumesSpec, Drums, ItemSlot, Profession, Race, Spec, Stat, TristateEffect } from '../../proto/common';
 import { Consumable } from '../../proto/db';
 import { ActionId } from '../../proto_utils/action_id';
 import { EventID, TypedEvent } from '../../typed_event';
@@ -409,6 +409,12 @@ export const NightmareSeed = makeBooleanConsumeInput({
 	actionId: () => ActionId.fromItemId(22797),
 	fieldName: 'nightmareSeed',
 	showWhen: (player: Player<any>) => player.getPlayerSpec().isTankSpec,
+});
+
+export const Bloodthistle = makeBooleanConsumeInput({
+	actionId: () => ActionId.fromItemId(22710),
+	fieldName: 'bloodthistle',
+	showWhen: (player: Player<any>) => player.getRace() === Race.RaceBloodElf,
 });
 
 ///////////////////////////////////////////////////////////////////////////

@@ -238,9 +238,13 @@ export class ConsumesPicker extends Component {
 		const miscElem = miscRef.value!;
 
 		const nightmareSeed = buildIconInput(miscElem, this.simUI.player, ConsumablesInputs.NightmareSeed);
+		const bloodthistle = buildIconInput(miscElem, this.simUI.player, ConsumablesInputs.Bloodthistle);
+
+		const events = this.simUI.player.raceChangeEmitter.on(() => this.updateRow(row, [nightmareSeed, bloodthistle]));
+		this.addOnDisposeCallback(() => events.dispose());
 
 		// Initial update of row based on current state.
-		this.updateRow(row, [nightmareSeed]);
+		this.updateRow(row, [nightmareSeed, bloodthistle]);
 	}
 
 	private updateRow(rowElem: Element, pickers: (IconPicker<Player<any>, any> | IconEnumPicker<Player<any>, any>)[]) {

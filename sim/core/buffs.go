@@ -2,6 +2,7 @@ package core
 
 import (
 	"fmt"
+	"math"
 	"slices"
 	"time"
 
@@ -447,22 +448,25 @@ func GiftOfTheWildAura(char *Character, improved bool) *Aura {
 		mod = 1.35
 	}
 
+	// The game truncates talent-modified aura amounts to integers, so
+	// improved GotW grants 18 stats (14*1.35=18.9), not 18.9.
+	statMod := math.Floor(14 * mod)
 	aura := makeStatBuff(char, BuffConfig{
 		Label:    "Gift of the Wild",
 		ActionID: ActionID{SpellID: 26991},
 		Stats: []StatConfig{
-			{stats.Armor, 340 * mod, false},
-			{stats.Stamina, 14 * mod, false},
-			{stats.Strength, 14 * mod, false},
-			{stats.Agility, 14 * mod, false},
-			{stats.Intellect, 14 * mod, false},
-			{stats.Spirit, 14 * mod, false},
+			{stats.Armor, math.Floor(340 * mod), false},
+			{stats.Stamina, statMod, false},
+			{stats.Strength, statMod, false},
+			{stats.Agility, statMod, false},
+			{stats.Intellect, statMod, false},
+			{stats.Spirit, statMod, false},
 		},
 	})
 	// Resistance stats use exclusive categories so they don't stack with
 	// dedicated resistance buffs (Shadow Protection, Frost/Nature Resistance
 	// Aura/Totem). Only the highest value applies per school.
-	resistMod := 25 * mod
+	resistMod := math.Floor(25 * mod)
 	makeExclusiveFlatStatBuff(aura, stats.ArcaneResistance, resistMod, ResistanceCategoryArcane)
 	makeExclusiveFlatStatBuff(aura, stats.FireResistance, resistMod, ResistanceCategoryFire)
 	makeExclusiveFlatStatBuff(aura, stats.FrostResistance, resistMod, ResistanceCategoryFrost)
@@ -474,7 +478,8 @@ func GiftOfTheWildAura(char *Character, improved bool) *Aura {
 func PowerWordFortitudeAura(char *Character, improved bool) *Aura {
 	stat := 79.0
 	if improved {
-		stat *= 1.3
+		// Truncated like the game: 79*1.3=102.7 -> 102.
+		stat = math.Floor(stat * 1.3)
 	}
 
 	return makeStatBuff(char, BuffConfig{
@@ -622,7 +627,8 @@ func GetBattleShoutValue(boomingVoicePoints int32, commandingPresenceMultiplier 
 			apBuff += 30
 		}
 	}
-	return apBuff * commandingPresenceMultiplier
+	// Truncated like the game: 306*1.25=382.5 -> 382.
+	return math.Floor(apBuff * commandingPresenceMultiplier)
 }
 
 func BattleShoutAura(char *Character, isPlayer bool, boomingVoicePoints int32, commandingPresenceMultiplier float64, hasSolarianSapphire bool, hasT2 bool) *Aura {
@@ -714,7 +720,7 @@ func GetCommandingShoutValue(boomingVoicePoints int32, commandingPresenceMultipl
 			baseHpBuff += 170
 		}
 	}
-	return baseHpBuff * commandingPresenceMultiplier
+	return math.Floor(baseHpBuff * commandingPresenceMultiplier)
 }
 
 func CommandingShoutAura(char *Character, isPlayer bool, boomingVoicePoints int32, commandingPresenceMultiplier float64, hasT6Tank2P bool) *Aura {
@@ -765,7 +771,8 @@ func paladinAuraPriority(isPlayer bool) float64 {
 }
 
 func DevotionAuraBuff(char *Character, isPlayer bool, impDevotionAuraRank int32) *Aura {
-	armorBuff := 861.0 * (1 + 0.08*float64(impDevotionAuraRank))
+	// Truncated like the game: e.g. 861*1.24=1067.64 -> 1067.
+	armorBuff := math.Floor(861.0 * (1 + 0.08*float64(impDevotionAuraRank)))
 
 	// Self-cast: Tag=0 matches the paladin's castable spell and only applies when the APL
 	// triggers it. External: Tag=-1 is auto-applied in the Buffs build phase and the UI
@@ -975,7 +982,8 @@ var GraceOfAirTotemCategory = "GraceOfAirTotem"
 func GraceOfAirTotemAura(char *Character, improved bool, wfActive bool) *Aura {
 	agiBuff := 77.0
 	if improved {
-		agiBuff *= 1.15
+		// Truncated like the game: 77*1.15=88.55 -> 88.
+		agiBuff = math.Floor(agiBuff * 1.15)
 	}
 
 	duration := NeverExpires
@@ -1011,6 +1019,8 @@ var ManaSpringTotemCategory = "ManaSpringTotem"
 func ManaSpringTotemAura(char *Character, improved bool) *Aura {
 	mp5Buff := 50.0
 	if improved {
+		// No truncation here: the aura's native amount is mana per 2-sec tick
+		// (20*1.25=25, an exact integer), so the effective 62.5 MP5 is real.
 		mp5Buff *= 1.25
 	}
 
@@ -1033,7 +1043,8 @@ const (
 var StrengthOfEarthMultipliers = []float64{1, 1.08, 1.15}
 
 func StrengthOfEarthTotemValue(enhancingTotemsPoints int32, hasEnh2pT4 bool) float64 {
-	return (86.0 + TernaryFloat64(hasEnh2pT4, StrengthOfEarthTotemImprovedValue, 0)) * StrengthOfEarthMultipliers[enhancingTotemsPoints]
+	// Truncated like the game: e.g. 86*1.15=98.9 -> 98.
+	return math.Floor((86.0 + TernaryFloat64(hasEnh2pT4, StrengthOfEarthTotemImprovedValue, 0)) * StrengthOfEarthMultipliers[enhancingTotemsPoints])
 }
 
 func StrengthOfEarthTotemAura(char *Character, enhancingTotemsPoints int32, hasEnh2pT4 bool) *Aura {
@@ -1072,7 +1083,8 @@ var WindfuryTotemCategory = "WindfuryTotem"
 func WindfuryTotemAura(char *Character, isImpoved bool) *Aura {
 	apBonus := 445.0
 	if isImpoved {
-		apBonus *= 1.3
+		// Truncated like the game: 445*1.3=578.5 -> 578.
+		apBonus = math.Floor(apBonus * 1.3)
 	}
 	// Chance on MH Auto Attack to instantly attack with another AA with apBonus.
 	// AP bonus lingers until 2 auto attacks are performed.
@@ -1533,7 +1545,9 @@ func BlessingOfSanctuaryAura(char *Character) *Aura {
 func BlessingOfWisdomAura(char *Character, improved bool) *Aura {
 	mp5Buff := 41.0
 	if improved {
-		mp5Buff *= 1.20
+		// Truncated like the game: 41*1.2=49.2 -> 49 (the aura's native
+		// amount is mana per 5 sec).
+		mp5Buff = math.Floor(mp5Buff * 1.20)
 	}
 
 	return makeStatBuff(char, BuffConfig{

@@ -41,6 +41,7 @@ func createDynamicAddsAIPreset() {
 			MinBaseDamage: 15113,
 			DamageSpread:  0.5,
 			ParryHaste:    true,
+			CanCrush:      true,
 			TargetInputs:  dynamicAddsTargetInputs(),
 		},
 

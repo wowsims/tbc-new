@@ -364,26 +364,6 @@
 												}
 											]
 										}
-									},
-									{
-										"or": {
-											"vals": [
-												{ "not": { "val": { "variableRef": { "name": "Raptor only" } } } },
-												{
-													"and": {
-														"vals": [
-															{
-																"auraIcdIsReady": {
-																	"auraId": { "spellId": 27014, "tag": 2, "rank": 9 },
-																	"includeReactionTime": true
-																}
-															},
-															{ "cmp": { "op": "OpGe", "lhs": { "currentMana": {} }, "rhs": { "const": { "val": "120" } } } }
-														]
-													}
-												}
-											]
-										}
 									}
 								]
 							}
@@ -409,7 +389,6 @@
 		{ "name": "Viper start", "value": { "const": { "val": "5%" } } },
 		{ "name": "Viper stop", "value": { "const": { "val": "25%" } } },
 		{ "name": "Melee weave", "value": { "const": { "val": "true" } } },
-		{ "name": "Raptor only", "value": { "const": { "val": "false" } } },
 		{ "name": "Time to weave", "value": { "const": { "val": "400ms" } } },
 		{ "name": "Move duration", "value": { "const": { "val": "100ms" } } },
 		{ "name": "Use Multi-Shot", "value": { "const": { "val": "true" } } },

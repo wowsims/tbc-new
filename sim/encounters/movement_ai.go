@@ -30,6 +30,7 @@ func addMovementAI() {
 			DamageSpread:     0.5,
 			SuppressDodge:    false,
 			ParryHaste:       true,
+			CanCrush:         true,
 			DualWield:        false,
 			DualWieldPenalty: false,
 			TargetInputs: []*proto.TargetInput{

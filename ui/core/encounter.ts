@@ -203,6 +203,7 @@ export class Encounter {
 			swingSpeed: 2,
 			suppressDodge: false,
 			parryHaste: true,
+			canCrush: true,
 			dualWield: false,
 			dualWieldPenalty: false,
 			spellSchool: SpellSchool.SpellSchoolPhysical,

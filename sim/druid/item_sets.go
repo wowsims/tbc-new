@@ -155,7 +155,7 @@ var ItemSetNordrassilHarness = core.NewItemSet(core.ItemSet{
 		4: func(agent core.Agent, setBonusAura *core.Aura) {
 			druid := agent.(DruidAgent).GetDruid()
 			druid.ShredFlatBonus += 75
-			druid.LacerateTickBonus += 15
+			druid.LacerateTickBonus += 3
 		},
 	},
 })

@@ -277,6 +277,7 @@ class TargetPicker extends Input<Encounter, TargetProto> {
 	private readonly dualWieldPicker: Input<null, boolean>;
 	private readonly dwMissPenaltyPicker: Input<null, boolean>;
 	private readonly parryHastePicker: Input<null, boolean>;
+	private readonly canCrushPicker: Input<null, boolean>;
 	private readonly spellSchoolPicker: Input<null, number>;
 	private readonly damageSpreadPicker: Input<null, number>;
 	private readonly targetInputPickers: ListPicker<Encounter, TargetInput>;
@@ -558,6 +559,25 @@ class TargetPicker extends Input<Encounter, TargetProto> {
 				encounter.targetsChangeEmitter.emit(eventID);
 			},
 		});
+		this.canCrushPicker = new BooleanPicker(section3, null, {
+			id: `target-${this.targetIndex}-picker-can-crush`,
+			label: i18n.t('settings_tab.encounter.can_crush.label'),
+			labelTooltip: i18n.t('settings_tab.encounter.can_crush.tooltip'),
+			inline: true,
+			reverse: true,
+			changedEvent: () => encounter.targetsChangeEmitter,
+			getValue: () => this.getTarget().canCrush,
+			setValue: (eventID: EventID, _: null, newValue: boolean) => {
+				trackEvent({
+					action: 'settings',
+					category: 'targets',
+					label: 'can_crush',
+					value: newValue,
+				});
+				this.getTarget().canCrush = newValue;
+				encounter.targetsChangeEmitter.emit(eventID);
+			},
+		});
 		this.spellSchoolPicker = new EnumPicker<null>(section3, null, {
 			id: `target-${this.targetIndex}-picker-spell-school`,
 			label: i18n.t('settings_tab.encounter.spell_school.label'),
@@ -602,6 +622,7 @@ class TargetPicker extends Input<Encounter, TargetProto> {
 			dualWield: this.dualWieldPicker.getInputValue(),
 			dualWieldPenalty: this.dwMissPenaltyPicker.getInputValue(),
 			parryHaste: this.parryHastePicker.getInputValue(),
+			canCrush: this.canCrushPicker.getInputValue(),
 			spellSchool: this.spellSchoolPicker.getInputValue(),
 			damageSpread: this.damageSpreadPicker.getInputValue(),
 			stats: this.statPickers
@@ -625,6 +646,7 @@ class TargetPicker extends Input<Encounter, TargetProto> {
 		this.dualWieldPicker.setInputValue(newValue.dualWield);
 		this.dwMissPenaltyPicker.setInputValue(newValue.dualWieldPenalty);
 		this.parryHastePicker.setInputValue(newValue.parryHaste);
+		this.canCrushPicker.setInputValue(newValue.canCrush);
 		this.spellSchoolPicker.setInputValue(newValue.spellSchool);
 		this.damageSpreadPicker.setInputValue(newValue.damageSpread);
 		ALL_TARGET_STATS.forEach((statData, i) => this.statPickers[i].setInputValue(newValue.stats[statData.stat]));

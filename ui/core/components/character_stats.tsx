@@ -603,7 +603,7 @@ export class CharacterStats extends Component {
 
 			// Remove the rating display and only show %
 			if (rootRatingValue !== null && rootRatingValue > 0 && mhWeaponExpertiseActive) {
-				rootRatingValue -= Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION * 4;
+				rootRatingValue -= Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION * 5;
 			}
 
 			const matchesBothHands = mhWeaponExpertiseActive && ohWeaponExpertiseActive;
@@ -618,7 +618,8 @@ export class CharacterStats extends Component {
 				const hideRootRating = rootRatingValue === null || (rootRatingValue === 0 && derivedPercentOrPointsValue !== null);
 				const rootRatingString = hideRootRating ? '' : String(Math.round(rootRatingValue!));
 				const mhPercentString = `${derivedPercentOrPointsValue!.toFixed(percentDecimals)}` + displaySuffix;
-				const ohPercentValue = derivedPercentOrPointsValue! + (ohWeaponExpertiseActive ? 1 : -1);
+				const racialExpertisePercent = 5 * 0.25;
+				const ohPercentValue = derivedPercentOrPointsValue! + (ohWeaponExpertiseActive ? racialExpertisePercent : -racialExpertisePercent);
 				const ohPercentString = `${ohPercentValue.toFixed(percentDecimals)}` + displaySuffix;
 				const wrappedPercentString = hideRootRating ? `${mhPercentString} / ${ohPercentString}` : ` (${mhPercentString} / ${ohPercentString})`;
 				return rootRatingString + wrappedPercentString;

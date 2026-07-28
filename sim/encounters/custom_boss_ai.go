@@ -37,6 +37,7 @@ func createCustomBossPreset() {
 			MinBaseDamage: 15113,
 			DamageSpread:  0.413,
 			ParryHaste:    true,
+			CanCrush:      true,
 			TargetInputs:  defaultTankTargetInputs(),
 		},
 

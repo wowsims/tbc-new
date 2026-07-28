@@ -875,7 +875,7 @@ func (aa *AutoAttacks) UpdateSwingTimers(sim *Simulation) {
 	}
 }
 
-// Desyncss the offhand swing
+// Desyncs the offhand swing
 func (aa *AutoAttacks) DesyncOffHand(sim *Simulation, readyAt time.Duration) {
 	if !aa.AutoSwingMelee { // if not auto swinging, don't auto restart.
 		return
@@ -898,7 +898,8 @@ func (aa *AutoAttacks) StopMeleeUntil(sim *Simulation, readyAt time.Duration) {
 	sim.rescheduleWeaponAttack(aa.mh.swingAt)
 
 	if aa.IsDualWielding {
-		aa.DesyncOffHand(sim, readyAt)
+		aa.oh.swingAt = readyAt + aa.oh.curSwingDuration
+		sim.rescheduleWeaponAttack(aa.oh.swingAt)
 	}
 }
 

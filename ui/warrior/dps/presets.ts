@@ -217,7 +217,7 @@ export const FuryTalents = {
 export const ArmsTalents = {
 	name: 'Arms',
 	data: SavedTalents.create({
-		talentsString: '32005020352010500221-0550000500521203',
+		talentsString: '32005011352010500221-0550000500521203',
 	}),
 	...ARMS_PRESET_OPTIONS,
 };

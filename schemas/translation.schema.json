@@ -2764,6 +2764,19 @@
 							"additionalProperties": false,
 							"required": ["label", "tooltip"]
 						},
+						"can_crush": {
+							"type": "object",
+							"properties": {
+								"label": {
+									"type": "string"
+								},
+								"tooltip": {
+									"type": "string"
+								}
+							},
+							"additionalProperties": false,
+							"required": ["label", "tooltip"]
+						},
 						"spell_school": {
 							"type": "object",
 							"properties": {
@@ -2826,6 +2839,7 @@
 						"dual_wield",
 						"dual_wield_penalty",
 						"parry_haste",
+						"can_crush",
 						"spell_school",
 						"damage_spread",
 						"suppress_dodge",

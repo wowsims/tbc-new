@@ -118,14 +118,6 @@ export const RotationInputs = {
 			labelTooltip: i18n.t('rotation_tab.options.hunter.melee_weave.tooltip'),
 			showWhen: (player: Player<Spec.SpecHunter>) => player.getEquippedItem(ItemSlot.ItemSlotMainHand)?.item?.handType === HandType.HandTypeTwoHand,
 		}),
-		InputHelpers.makeRotationBooleanInput<Spec.SpecHunter>({
-			fieldName: 'weaveOnlyRaptor',
-			label: i18n.t('rotation_tab.options.hunter.weave_only_raptor.label'),
-			labelTooltip: i18n.t('rotation_tab.options.hunter.weave_only_raptor.tooltip'),
-			showWhen: (player: Player<Spec.SpecHunter>) =>
-				player.getEquippedItem(ItemSlot.ItemSlotMainHand)?.item?.handType === HandType.HandTypeTwoHand && player.getSimpleRotation().meleeWeave,
-			changeEmitter: (player: Player<Spec.SpecHunter>) => TypedEvent.onAny([player.rotationChangeEmitter, player.gearChangeEmitter]),
-		}),
 		InputHelpers.makeRotationNumberInput<Spec.SpecHunter>({
 			fieldName: 'timeToWeave',
 			label: i18n.t('rotation_tab.options.hunter.time_to_weave.label'),
