@@ -28,7 +28,7 @@ func (war *Warrior) registerRecklessness() {
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				NonEmpty: true,
+				GCD: core.GCDDefault,
 			},
 			CD: core.Cooldown{
 				Timer:    war.NewTimer(),

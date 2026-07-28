@@ -32,7 +32,7 @@
 	{"action":{"castSpell":{"spellId":{"spellId":30330}}}},
 	{"action":{"castSpell":{"spellId":{"spellId":30357}}}},
 	{"action":{"condition":{"and":{"vals":[{"cmp":{"op":"OpGt","lhs":{"numberTargets":{}},"rhs":{"const":{"val":"1"}}}}]}},"castSpell":{"spellId":{"spellId":25264,"rank":7}}}},
-	{"action":{"condition":{"and":{"vals":[{"cmp":{"op":"OpLe","lhs":{"auraRemainingTime":{"sourceUnit":{"type":"CurrentTarget"},"auraId":{"spellId":25203}}},"rhs":{"const":{"val":"6s"}}}}]}},"castSpell":{"spellId":{"spellId":25203}}}},
+	{"action":{"condition":{"and":{"vals":[{"auraShouldRefresh":{"sourceUnit":{"type":"CurrentTarget"},"auraId":{"spellId":25203},"maxOverlap":{"const":{"val":"6s"}}}}]}},"castSpell":{"spellId":{"spellId":25203}}}},
 	{"action":{"condition":{"and":{"vals":[{"auraIsInactive":{"sourceUnit":{"type":"CurrentTarget"},"auraId":{"spellId":27648}}},{"cmp":{"op":"OpLe","lhs":{"auraRemainingTime":{"sourceUnit":{"type":"CurrentTarget"},"auraId":{"spellId":25264,"rank":7}}},"rhs":{"const":{"val":"6s"}}}}]}},"castSpell":{"spellId":{"spellId":25264,"rank":7}}}},
 	{"action":{"condition":{"and":{"vals":[{"not":{"val":{"auraIsKnown":{"auraId":{"spellId":469,"tag":1,"rank":1}}}}},{"cmp":{"op":"OpLe","lhs":{"auraRemainingTime":{"auraId":{"spellId":469}}},"rhs":{"const":{"val":"10s"}}}}]}},"castSpell":{"spellId":{"spellId":469}}}},
 	{"hide":true,"action":{"condition":{"and":{"vals":[{"auraIsInactive":{"sourceUnit":{"type":"CurrentTarget"},"auraId":{"spellId":25208,"rank":8},"includeReactionTime":true}},{"or":{"vals":[{"and":{"vals":[{"not":{"val":{"variableRef":{"name":"Shield Equipped"}}}}]}},{"and":{"vals":[{"variableRef":{"name":"Shield Equipped"}},{"variableRef":{"name":"Delay Check"}}]}}]}}]}},"castSpell":{"spellId":{"spellId":25208,"rank":8}}}},

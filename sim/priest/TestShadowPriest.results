@@ -34,7 +34,7 @@ character_stats_results: {
   final_stats: 27
   final_stats: 3044
   final_stats: 0
-  final_stats: 10171
+  final_stats: 10351
   final_stats: 7515
   final_stats: 122.5
   final_stats: 33
@@ -132,8 +132,8 @@ dps_results: {
 dps_results: {
  key: "TestShadowPriest-AllItems-ArgussianCompass-27770"
  value: {
-  dps: 1536.46618
-  tps: 1130.4355
+  dps: 1538.33378
+  tps: 1131.77939
  }
 }
 dps_results: {
@@ -538,8 +538,8 @@ dps_results: {
 dps_results: {
  key: "TestShadowPriest-AllItems-FigurineoftheColossus-27529"
  value: {
-  dps: 1533.406
-  tps: 1128.25194
+  dps: 1535.42488
+  tps: 1129.69488
  }
 }
 dps_results: {

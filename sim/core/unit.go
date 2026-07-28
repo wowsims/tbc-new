@@ -903,8 +903,9 @@ func (unit *Unit) GetTotalParryChanceAsDefender(spell *Spell, atkTable *AttackTa
 }
 
 func (unit *Unit) GetTotalChanceToBeMissedAsDefender(atkTable *AttackTable) float64 {
+	// ReducedPhysicalHitTakenChance is stored in percent points, BaseMissChance as a fraction.
 	chance := atkTable.BaseMissChance +
-		unit.PseudoStats.ReducedPhysicalHitTakenChance
+		unit.PseudoStats.ReducedPhysicalHitTakenChance/100
 	return math.Max(chance, 0.0)
 }
 

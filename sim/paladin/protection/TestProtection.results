@@ -34,7 +34,7 @@ character_stats_results: {
   final_stats: 0
   final_stats: 18741.8
   final_stats: 0
-  final_stats: 19097
+  final_stats: 19277
   final_stats: 7368
   final_stats: 122.5
   final_stats: 38
@@ -704,17 +704,17 @@ dps_results: {
 dps_results: {
  key: "TestProtection-AllItems-Figurine-DawnstoneCrab-24125"
  value: {
-  dps: 868.3372
-  tps: 1552.97918
-  dtps: 1225.54009
+  dps: 868.58535
+  tps: 1553.64865
+  dtps: 1231.1729
  }
 }
 dps_results: {
  key: "TestProtection-AllItems-Figurine-EmpyreanTortoise-35693"
  value: {
-  dps: 862.65282
-  tps: 1542.75805
-  dtps: 1199.31803
+  dps: 862.96913
+  tps: 1543.52488
+  dtps: 1204.95084
  }
 }
 dps_results: {
@@ -731,7 +731,7 @@ dps_results: {
   dps: 878.40306
   tps: 1572.11387
   dtps: 1293.05591
-  hps: 4.7
+  hps: 4.66667
  }
 }
 dps_results: {

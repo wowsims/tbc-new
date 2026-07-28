@@ -6,7 +6,21 @@ import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_u
 import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
 import { APLAction, APLListItem, APLRotation, APLRotation_Type as APLRotationType } from '../../core/proto/apl';
-import { Cooldowns, Debuffs, Drums, Faction, IndividualBuffs, ItemSlot, PartyBuffs, PseudoStat, Race, RaidBuffs, Spec, Stat, TristateEffect } from '../../core/proto/common';
+import {
+	Cooldowns,
+	Debuffs,
+	Drums,
+	Faction,
+	IndividualBuffs,
+	ItemSlot,
+	PartyBuffs,
+	PseudoStat,
+	Race,
+	RaidBuffs,
+	Spec,
+	Stat,
+	TristateEffect,
+} from '../../core/proto/common';
 import { FeralCatDruid_Rotation as DruidRotation } from '../../core/proto/druid';
 import { StatCap, Stats, UnitStat } from '../../core/proto_utils/stats';
 import { StatCapType } from '../../core/proto/ui';
@@ -43,7 +57,23 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralCatDruid, {
 	epReferenceStat: Stat.StatAgility,
 	// Which stats to display in the Character Stats section, at the bottom of the left-hand sidebar.
 	displayStats: UnitStat.createDisplayStatArray(
-		[Stat.StatHealth, Stat.StatStrength, Stat.StatAgility, Stat.StatStamina, Stat.StatIntellect, Stat.StatSpirit, Stat.StatAttackPower, Stat.StatMana, Stat.StatExpertiseRating, Stat.StatArmorPenetration],
+		[
+			Stat.StatHealth,
+			Stat.StatStrength,
+			Stat.StatAgility,
+			Stat.StatStamina,
+			Stat.StatIntellect,
+			Stat.StatSpirit,
+			Stat.StatAttackPower,
+			Stat.StatMana,
+			Stat.StatExpertiseRating,
+			Stat.StatArmorPenetration,
+			Stat.StatArcaneResistance,
+			Stat.StatFireResistance,
+			Stat.StatFrostResistance,
+			Stat.StatNatureResistance,
+			Stat.StatShadowResistance,
+		],
 		[PseudoStat.PseudoStatMeleeHitPercent, PseudoStat.PseudoStatMeleeCritPercent, PseudoStat.PseudoStatMeleeHastePercent],
 	),
 
@@ -71,10 +101,10 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralCatDruid, {
 		raidBuffs: RaidBuffs.create({
 			...defaultRaidBuffMajorDamageCooldowns(),
 			arcaneBrilliance: true,
-            divineSpirit: TristateEffect.TristateEffectImproved,
+			divineSpirit: TristateEffect.TristateEffectImproved,
 			giftOfTheWild: TristateEffect.TristateEffectImproved,
 			powerWordFortitude: TristateEffect.TristateEffectImproved,
-            shadowProtection: true,
+			shadowProtection: true,
 		}),
 		partyBuffs: PartyBuffs.create({
 			drums: Drums.LesserDrumsOfBattle,
@@ -137,22 +167,23 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralCatDruid, {
 		rotations: [Presets.SIMPLE, Presets.APL],
 		// Preset gear configurations that the user can quickly select.
 		gear: [
-            Presets.PRE_RAID_GEARSET, 
-            Presets.P1_REALISTIC_6P_GEARSET, 
-            Presets.P1_REALISTIC_9P_GEARSET, 
-            Presets.P1_BIS_6P_GEARSET, 
-            Presets.P1_BIS_9P_GEARSET, 
-            Presets.P1_ALT_6P_GEARSET, 
-            Presets.P1_ALT_9P_GEARSET, 
-            Presets.P2_6P_GEARSET, 
-            Presets.P2_9P_GEARSET, 
-            Presets.P2_ALT_6P_GEARSET, 
-            Presets.P2_ALT_9P_GEARSET, 
-            Presets.P3_6P_GEARSET, 
-            Presets.P3_9P_GEARSET, 
-            Presets.P4_6P_GEARSET, 
-            Presets.P4_9P_GEARSET, 
-            Presets.P5_GEARSET],
+			Presets.PRE_RAID_GEARSET,
+			Presets.P1_REALISTIC_6P_GEARSET,
+			Presets.P1_REALISTIC_9P_GEARSET,
+			Presets.P1_BIS_6P_GEARSET,
+			Presets.P1_BIS_9P_GEARSET,
+			Presets.P1_ALT_6P_GEARSET,
+			Presets.P1_ALT_9P_GEARSET,
+			Presets.P2_6P_GEARSET,
+			Presets.P2_9P_GEARSET,
+			Presets.P2_ALT_6P_GEARSET,
+			Presets.P2_ALT_9P_GEARSET,
+			Presets.P3_6P_GEARSET,
+			Presets.P3_9P_GEARSET,
+			Presets.P4_6P_GEARSET,
+			Presets.P4_9P_GEARSET,
+			Presets.P5_GEARSET,
+		],
 		itemSwaps: [],
 		builds: [],
 	},

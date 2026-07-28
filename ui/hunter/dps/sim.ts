@@ -52,6 +52,11 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecHunter, {
 			Stat.StatRangedAttackPower,
 			Stat.StatExpertiseRating,
 			Stat.StatArmorPenetration,
+			Stat.StatArcaneResistance,
+			Stat.StatFireResistance,
+			Stat.StatFrostResistance,
+			Stat.StatNatureResistance,
+			Stat.StatShadowResistance,
 		],
 		[
 			PseudoStat.PseudoStatMeleeHitPercent,
