@@ -81,7 +81,7 @@ func (shaman *Shaman) newStormstrikeSpellConfig(spellID int32, ssDebuffAuras *co
 		},
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			shaman.StormstrikeCastResult = spell.CalcOutcome(sim, target, spell.OutcomeMeleeSpecialHitNoHitCounter)
+			shaman.StormstrikeCastResult = spell.CalcAndDealOutcome(sim, target, spell.OutcomeMeleeSpecialHitNoHitCounter)
 			if shaman.StormstrikeCastResult.Landed() {
 				ssDebuffAura := ssDebuffAuras.Get(target)
 				ssDebuffAura.Activate(sim)

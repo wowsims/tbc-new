@@ -2166,12 +2166,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		32491, // Ashtongue Talisman of Vision
-		[
-			"Lesser Healing Wave has a 10% chance to grant 170 mana, Lightning Bolt has a 15% chance to grant up to 170 mana, and Stormstrike has a 50% chance to grant up to 275 attack power for 10s.", // 40463 - https://www.wowhead.com/tbc/spell=40463
-		]
-	],
-	[
 		32492, // Ashtongue Talisman of Lethality
 		[
 			"20% chance per combo point for your finishing moves to grant 145 critical strike rating for 10s.", // 40460 - https://www.wowhead.com/tbc/spell=40460

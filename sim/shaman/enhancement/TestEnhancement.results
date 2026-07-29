@@ -137,6 +137,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestEnhancement-AllItems-AshtongueTalismanofVision-32491"
+ value: {
+  dps: 1931.04475
+  tps: 1735.80627
+ }
+}
+dps_results: {
  key: "TestEnhancement-AllItems-BadgeofTenacity-32658"
  value: {
   dps: 1909.25192
@@ -1323,8 +1330,8 @@ dps_results: {
 dps_results: {
  key: "TestEnhancement-AllItems-WastewalkerArmor"
  value: {
-  dps: 1798.82988
-  tps: 1609.27867
+  dps: 1799.66286
+  tps: 1610.14539
  }
 }
 dps_results: {
