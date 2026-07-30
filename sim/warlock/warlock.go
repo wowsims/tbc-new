@@ -166,6 +166,7 @@ func NewWarlock(character *core.Character, options *proto.Player, warlockOptions
 
 	warlock.EnableManaBar()
 	warlock.AddStatDependency(stats.Strength, stats.AttackPower, 1)
+	warlock.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiMaxLevel[character.Class])
 
 	if !warlock.Options.SacrificeSummon {
 		warlock.registerPets()
