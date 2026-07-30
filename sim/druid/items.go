@@ -238,18 +238,14 @@ func init() {
 		aura := core.MakePermanent(druid.RegisterAura(core.Aura{
 			Label: "Ashtongue Talisman of Equilibrium",
 		}).AttachProcTrigger(core.ProcTrigger{
-			ClassSpellMask: DruidSpellMangle,
+			ClassSpellMask: DruidSpellMangle | DruidSpellStarfire,
 			Callback:       core.CallbackOnSpellHitDealt,
-			ProcChance:     0.4,
 			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-				ashtongueAuraMangle.Activate(sim)
-			},
-		}).AttachProcTrigger(core.ProcTrigger{
-			ClassSpellMask: DruidSpellStarfire,
-			Callback:       core.CallbackOnSpellHitDealt,
-			ProcChance:     0.25,
-			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-				ashtongueAuraStarfire.Activate(sim)
+				if spell.Matches(DruidSpellMangle) && sim.Proc(0.4, "Ashtongue Talisman of Equilibrium (Mangle)") {
+					ashtongueAuraMangle.Activate(sim)
+				} else if spell.Matches(DruidSpellStarfire) && sim.Proc(0.25, "Ashtongue Talisman of Equilibrium (Starfire)") {
+					ashtongueAuraStarfire.Activate(sim)
+				}
 			},
 		}))
 

@@ -140,25 +140,24 @@ var ItemSetWarbringerArmor = core.NewItemSet(core.ItemSet{
 
 			setBonusAura.
 				AttachProcTrigger(core.ProcTrigger{
-					Name:               "Warbringer Armor 4PC - Trigger",
-					TriggerImmediately: true,
-					ClassSpellMask:     SpellMaskRevenge,
-					Callback:           core.CallbackOnSpellHitDealt,
-					Outcome:            core.OutcomeLanded,
-					Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-						revengeMod.Activate()
-					},
-				}).
-				AttachProcTrigger(core.ProcTrigger{
-					Name:               "Warbringer Armor 4PC - Deactivate",
+					Name:               "Warbringer Armor 4PC",
 					TriggerImmediately: true,
 					ClassSpellMask:     SpellMaskDirectDamageSpells,
 					Callback:           core.CallbackOnSpellHitDealt,
+					Outcome:            core.OutcomeLanded,
 					Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-						revengeMod.Deactivate()
+						if spell.Matches(SpellMaskRevenge) && !revengeMod.IsActive {
+							revengeMod.Activate()
+						} else {
+							revengeMod.Deactivate()
+						}
 					},
 				}).
 				ExposeToAPL(38407)
+
+			warrior.RegisterResetEffect(func(sim *core.Simulation) {
+				revengeMod.Deactivate()
+			})
 		},
 	},
 })
@@ -217,32 +216,27 @@ var ItemSetDestroyerArmor = core.NewItemSet(core.ItemSet{
 	Bonuses: map[int32]core.ApplySetBonus{
 		2: func(agent core.Agent, setBonusAura *core.Aura) {
 			warrior := agent.(WarriorAgent).GetWarrior()
-			actionID := core.ActionID{SpellID: 37523}
+			actionID := core.ActionID{SpellID: 37522}
 
 			aura := warrior.NewTemporaryStatsAura(
 				"Reinforced Shield",
-				actionID,
+				core.ActionID{SpellID: 37523},
 				stats.Stats{stats.BlockValue: 100},
 				time.Second*6,
 			)
 
 			setBonusAura.
 				AttachProcTrigger(core.ProcTrigger{
-					Name:               "Destroyer Armor - 2PC - Trigger",
-					ClassSpellMask:     SpellMaskShieldBlock,
+					Name:               "Destroyer Armor - 2PC",
+					ActionID:           actionID,
 					TriggerImmediately: true,
-					Callback:           core.CallbackOnSpellHitDealt,
+					Callback:           core.CallbackOnCastComplete | core.CallbackOnSpellHitTaken,
 					Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-						aura.Activate(sim)
-					},
-				}).
-				AttachProcTrigger(core.ProcTrigger{
-					Name:               "Destroyer Armor - 2PC - Consume",
-					TriggerImmediately: true,
-					Outcome:            core.OutcomeBlock,
-					Callback:           core.CallbackOnSpellHitTaken,
-					Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-						aura.Deactivate(sim)
+						if spell.Matches(SpellMaskShieldBlock) {
+							aura.Activate(sim)
+						} else if result != nil && result.Target == &warrior.Unit && result.Damage > 0 {
+							aura.Deactivate(sim)
+						}
 					},
 				}).
 				ExposeToAPL(actionID.SpellID)

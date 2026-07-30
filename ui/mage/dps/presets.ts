@@ -11,6 +11,7 @@ import {
 	Profession,
 	Drums,
 	Spec,
+	ItemSlot,
 } from '../../core/proto/common';
 import { defaultImprovedShadowBoltSettings } from '../../core/proto_utils/utils';
 import { Stats } from '../../core/proto_utils/stats';
@@ -25,6 +26,7 @@ import P1BISArcaneGear from './gear_sets/p1Arcane.gear.json';
 import P2BISArcaneGear from './gear_sets/p2Arcane.gear.json';
 import { Phase } from '../../core/constants/other';
 import { APLRotation_Type } from '../../core/proto/apl';
+import { Player } from '../../core/player';
 
 // Preset options for this spec.
 // Eventually we will import these values for the raid sim too, so its good to
@@ -38,7 +40,21 @@ export const P2_BIS_ARCANE = PresetUtils.makePresetGear('Arcane - BIS', P2BISArc
 
 export const ARCANE_TALENTS = PresetUtils.makePresetTalents('Arcane', SavedTalents.create({ talentsString: '2500052300030150330125--053500031003001' }));
 export const ROTATION_PRESET_ARCANE = PresetUtils.makePresetAPLRotation('Arcane', ArcaneApl);
-export const ROTATION_PRESET_ARCANEBRAID = PresetUtils.makePresetAPLRotation('BraidSimple', ArcaneBraidApl);
+export const doesNotHaveSerpentCoilBraid = (player: Player<Spec.SpecMage>) =>
+	player.getEquippedItem(ItemSlot.ItemSlotTrinket1)?.id != 30720 && player.getEquippedItem(ItemSlot.ItemSlotTrinket2)?.id != 30720;
+export const ROTATION_PRESET_ARCANEBRAID = PresetUtils.makePresetAPLRotation('BraidSimple', ArcaneBraidApl, {
+	onLoad(player: Player<Spec.SpecMage>) {
+		PresetUtils.makeSpecChangeWarningToast(
+			[
+				{
+					condition: doesNotHaveSerpentCoilBraid,
+					message: 'Check your gear: You do not have Serpent-Coil Braid equipped, but the selected option is for Serpent-Coil Braid.',
+				},
+			],
+			player,
+		);
+	},
+});
 export const BLANK_GEARSET = PresetUtils.makePresetGear('Blank', BlankGear);
 
 export const ArcaneMageSimpleRotation = Mage_Rotation.create({

@@ -137,6 +137,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestElemental-AllItems-AshtongueTalismanofVision-32491"
+ value: {
+  dps: 1702.73177
+  tps: 1395.26946
+ }
+}
+dps_results: {
  key: "TestElemental-AllItems-BadgeofTenacity-32658"
  value: {
   dps: 1697.97679

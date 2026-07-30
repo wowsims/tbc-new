@@ -511,9 +511,9 @@ dps_results: {
 dps_results: {
  key: "TestProtectionWarrior-AllItems-DestroyerArmor"
  value: {
-  dps: 829.37922
-  tps: 1482.02546
-  dtps: 1096.7562
+  dps: 842.28467
+  tps: 1501.52436
+  dtps: 1078.34715
  }
 }
 dps_results: {
@@ -1568,8 +1568,8 @@ dps_results: {
 dps_results: {
  key: "TestProtectionWarrior-AllItems-WarbringerArmor"
  value: {
-  dps: 796.27019
-  tps: 1428.13574
+  dps: 803.81485
+  tps: 1439.41502
   dtps: 1133.44441
  }
 }
