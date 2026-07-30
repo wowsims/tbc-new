@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 	"testing"
 
@@ -17,32 +18,29 @@ import (
 	protopkg "google.golang.org/protobuf/proto"
 )
 
+// fixturesDir holds the committed spec-based parity fixtures (<spec>.test.json), each
+// generated from master gear by TestGenerateReforgeFixtures (fixture_support_test.go).
+// Enumerating by glob keeps this suite self-contained: it does not depend on the
+// fixture_*_test.go generators. If no fixtures are present, skip rather than fail so the
+// package's other tests still run.
+const fixturesDir = "test-fixtures"
+
 func TestReforgerOptimizer(t *testing.T) {
 	sim.RegisterAll()
 
-	testCases := []struct {
-		name     string
-		fileName string
-		skip     bool
-	}{
-		{name: "reference-1", fileName: "reference-1.test.json"},
-		{name: "reference-2", fileName: "reference-2.test.json"},
-		{name: "reference-3", fileName: "reference-3.test.json"},
-		{name: "reference-4", fileName: "reference-4.test.json"},
-		{name: "reference-5", fileName: "reference-5.test.json"},
-		{name: "reference-6", fileName: "reference-6.test.json"},
-		{name: "reference-7", fileName: "reference-7.test.json"},
-		{name: "reference-8", fileName: "reference-8.test.json"},
-		{name: "reference-9", fileName: "reference-9.test.json"},
-		{name: "reference-10", fileName: "reference-10.test.json"},
+	paths, err := filepath.Glob(filepath.Join(fixturesDir, "*.test.json"))
+	if err != nil {
+		t.Fatalf("globbing fixtures: %v", err)
 	}
+	if len(paths) == 0 {
+		t.Skip("no fixtures in " + fixturesDir)
+	}
+	sort.Strings(paths)
 
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			if tc.skip {
-				t.Skip("skipping test case")
-			}
-			request := loadPreset(t, tc.fileName)
+	for _, path := range paths {
+		fileName := filepath.Base(path)
+		t.Run(strings.TrimSuffix(fileName, ".test.json"), func(t *testing.T) {
+			request := loadPreset(t, fileName)
 			expectedGear := request.GetRaid().GetParties()[0].GetPlayers()[0].GetEquipment()
 			if expectedGear == nil {
 				t.Fatal("preset has no player equipment to compare against")
@@ -57,11 +55,6 @@ func TestReforgerOptimizer(t *testing.T) {
 				t.Fatal("Optimize returned no optimized gear")
 			}
 
-			if os.Getenv("UPDATE_FIXTURES") != "" {
-				updateFixture(t, tc.fileName, request, optimizedGear)
-				return
-			}
-
 			expectedRaid := protopkg.Clone(request.Raid).(*proto.Raid)
 			expectedRaid.Parties[0].Players[0].Equipment = expectedGear
 			expectedResult := computeReforgeStats(&proto.ComputeStatsRequest{Raid: expectedRaid})
@@ -71,8 +64,7 @@ func TestReforgerOptimizer(t *testing.T) {
 			expStats := protoToCoreUnitStats(expectedResult.RaidStats.Parties[0].Players[0].FinalStats)
 			optStats := protoToCoreUnitStats(result.GetOptimizedPlayerStats().GetFinalStats())
 			diff := subtractUnitStats(optStats, expStats)
-			statsDiffer := !isEmptyUnitStats(diff)
-			if statsDiffer {
+			if !isEmptyUnitStats(diff) {
 				for i, expItem := range expectedGear.GetItems() {
 					var optItem *proto.ItemSpec
 					if i < len(optimizedGear.GetItems()) {
@@ -105,37 +97,17 @@ func TestReforgerOptimizer(t *testing.T) {
 	}
 }
 
-func updateFixture(t testing.TB, fileName string, request *proto.ReforgeOptimizeRequest, optimizedGear *proto.EquipmentSpec) {
-	t.Helper()
-
-	updated := protopkg.Clone(request).(*proto.ReforgeOptimizeRequest)
-	updated.Raid.Parties[0].Players[0].Equipment = optimizedGear
-
-	out, err := (protojson.MarshalOptions{Multiline: true, Indent: "\t", EmitUnpopulated: false}).Marshal(updated)
-	if err != nil {
-		t.Fatalf("failed marshalling updated fixture %s: %v", fileName, err)
-	}
-	if err := os.WriteFile(filepath.Join(".", fileName), out, 0644); err != nil {
-		t.Fatalf("failed writing updated fixture %s: %v", fileName, err)
-	}
-	t.Logf("updated fixture %s", fileName)
-}
-
-// loadReforgeGemOptionsFromDB loads gem options from the embedded asset database,
-// mirroring the UI's getReforgeGemOptions: quality >= Rare, no "Perfect" gems,
-// all non-meta socket colors (Red/Blue/Yellow/Orange/Green/Purple/Prismatic).
+// loadReforgeGemOptionsFromDB loads gem options from the embedded asset database, mirroring the
+// gem list the UI hands the reforger: every non-meta socket colour, with NO lower quality bound.
+// Quality is gated inside buildGemOptions via the request's max_gem_quality (an upper bound), so
+// filtering out Uncommon gems here would starve the solver of candidates the reference reforger
+// considers and change which equally-scoring solution it settles on.
 func loadReforgeGemOptionsFromDB() []*proto.ReforgeGemOption {
 	uiDB := assetsdb.Load()
 	seen := make(map[int32]struct{})
 	var options []*proto.ReforgeGemOption
 	for _, gem := range uiDB.GetGems() {
 		if gem.GetId() == 0 {
-			continue
-		}
-		if gem.GetQuality() < proto.ItemQuality_ItemQualityRare {
-			continue
-		}
-		if strings.Contains(gem.GetName(), "Perfect") {
 			continue
 		}
 		c := gem.GetColor()
@@ -164,7 +136,7 @@ func loadReforgeGemOptionsFromDB() []*proto.ReforgeGemOption {
 func loadPreset(t *testing.T, fileName string) *proto.ReforgeOptimizeRequest {
 	t.Helper()
 
-	data, err := os.ReadFile(filepath.Join(".", fileName))
+	data, err := os.ReadFile(filepath.Join(fixturesDir, fileName))
 	if err != nil {
 		t.Fatalf("failed reading preset %s: %v", fileName, err)
 	}

@@ -283,8 +283,7 @@ export class ReforgeOptimizer {
 
 		this.simUI.addWarning({
 			updateOn: TypedEvent.onAny([this.player.epWeightsChangeEmitter, this.useCustomEPValuesChangeEmitter]),
-			getContent: () =>
-				this.player.hasCustomEPWeights() && !this.useCustomEPValues ? i18n.t('sidebar.warnings.custom_ep_not_enabled') : '',
+			getContent: () => (this.player.hasCustomEPWeights() && !this.useCustomEPValues ? i18n.t('sidebar.warnings.custom_ep_not_enabled') : ''),
 		});
 	}
 
@@ -1377,6 +1376,10 @@ export class ReforgeOptimizer {
 			disableUniqueGems: this.disableUniqueGems,
 			maxGemPhase: this.maxGemPhase,
 			maxGemQuality: this.maxGemQuality,
+			// The stats this spec is willing to gem for. A gem is only a candidate if every stat it carries
+			// is in this list, so specs list stats they weight at 0 (Stamina, spell penetration) to keep
+			// those gems selectable. It cannot be derived from the pre-cap EPs for exactly that reason.
+			epStats: [...this.simUI.individualConfig.epStats],
 		});
 	}
 

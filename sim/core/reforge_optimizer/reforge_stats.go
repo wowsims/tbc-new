@@ -155,3 +155,93 @@ func isEmptyUnitStats(unitStats core.UnitStats) bool {
 	}
 	return true
 }
+
+// eachUnitStat invokes fn for every stat and pseudo-stat index in the vector.
+func eachUnitStat(vec core.UnitStats, fn func(unitStat stats.UnitStat, value float64)) {
+	for statIdx := 0; statIdx < int(stats.ProtoStatsLen); statIdx++ {
+		fn(stats.UnitStatFromStat(stats.Stat(statIdx)), vec.Stats[statIdx])
+	}
+	for pseudoStatIdx := 0; pseudoStatIdx < int(stats.PseudoStatsLen); pseudoStatIdx++ {
+		value := 0.0
+		if pseudoStatIdx < len(vec.PseudoStats) {
+			value = vec.PseudoStats[pseudoStatIdx]
+		}
+		fn(stats.UnitStatFromPseudoStat(proto.PseudoStat(pseudoStatIdx)), value)
+	}
+}
+
+// computeGapToCap returns the remaining room from the current sheet value to cap. A gap of
+// exactly 0 is returned as 1e-12 so the cap still registers as configured (a zero entry means
+// "no cap").
+func computeGapToCap(baseStats core.UnitStats, unitStat stats.UnitStat, cap float64) float64 {
+	statDelta := cap - getUnitStat(baseStats, unitStat)
+	if statDelta == 0 {
+		return 1e-12
+	}
+	return statDelta
+}
+
+// computeStatCapsDelta returns the per-unit-stat gap-to-cap, but only for caps whose configured
+// value is > 0 (a cap of 0 maps to 0 and means "no cap").
+func computeStatCapsDelta(baseStats core.UnitStats, statCaps core.UnitStats) core.UnitStats {
+	result := core.NewUnitStats()
+	for statIdx := 0; statIdx < int(stats.ProtoStatsLen); statIdx++ {
+		if cap := statCaps.Stats[statIdx]; cap > 0 {
+			unitStat := stats.UnitStatFromStat(stats.Stat(statIdx))
+			result = setUnitStat(result, unitStat, computeGapToCap(baseStats, unitStat, cap))
+		}
+	}
+	for pseudoStatIdx := 0; pseudoStatIdx < int(stats.PseudoStatsLen); pseudoStatIdx++ {
+		cap := 0.0
+		if pseudoStatIdx < len(statCaps.PseudoStats) {
+			cap = statCaps.PseudoStats[pseudoStatIdx]
+		}
+		if cap > 0 {
+			unitStat := stats.UnitStatFromPseudoStat(proto.PseudoStat(pseudoStatIdx))
+			result = setUnitStat(result, unitStat, computeGapToCap(baseStats, unitStat, cap))
+		}
+	}
+	return result
+}
+
+// ---------------------------------------------------------------------------
+// LP coefficient-key scheme
+// ---------------------------------------------------------------------------
+//
+// Coefficients are keyed by the proto enum NAME (e.g. "StatMeleeHitRating",
+// "PseudoStatSpellHitPercent", "ItemSlotHead") so checkCaps can recover the stat from a key.
+// Slot keys ("ItemSlot...") and special keys (SocketBonusLink_*, JewelcraftingGem, unique-gem
+// IDs, score) are not stat names and parse to (_, false).
+
+func statCoeffKey(stat proto.Stat) string {
+	return proto.Stat_name[int32(stat)]
+}
+
+func pseudoStatCoeffKey(pseudoStat proto.PseudoStat) string {
+	return proto.PseudoStat_name[int32(pseudoStat)]
+}
+
+func slotCoeffKey(slot proto.ItemSlot) string {
+	return proto.ItemSlot_name[int32(slot)]
+}
+
+// unitStatFromCoeffKey recovers the stat from a coefficient key, or (_, false) for non-stat
+// keys. PseudoStat and Stat names occupy disjoint namespaces so lookup order is irrelevant.
+func unitStatFromCoeffKey(key string) (stats.UnitStat, bool) {
+	if value, ok := proto.PseudoStat_value[key]; ok {
+		return stats.UnitStatFromPseudoStat(proto.PseudoStat(value)), true
+	}
+	if value, ok := proto.Stat_value[key]; ok {
+		return stats.UnitStatFromStat(stats.Stat(value)), true
+	}
+	return 0, false
+}
+
+// coeffKeyForUnitStat returns the coefficient/constraint key for a unit stat: its proto enum
+// name.
+func coeffKeyForUnitStat(unitStat stats.UnitStat) string {
+	if unitStat.IsStat() {
+		return statCoeffKey(proto.Stat(unitStat.StatIdx()))
+	}
+	return pseudoStatCoeffKey(proto.PseudoStat(unitStat.PseudoStatIdx()))
+}

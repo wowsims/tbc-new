@@ -472,6 +472,10 @@ message ReforgeSettings {
 	int32 max_gem_phase = 7;
 	ItemQuality max_gem_quality = 8;
 	bool disable_unique_gems = 9;
+	// The stats this spec is willing to gem for. A gem is only a candidate if every stat it carries
+	// is in this list, so specs list stats they weight at 0 (Stamina, spell penetration) to keep
+	// those gems selectable. It cannot be derived from the pre-cap EPs for exactly that reason.
+	repeated Stat ep_stats = 10;
 }
 
 message ReforgeGemOption {

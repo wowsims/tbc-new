@@ -1,10 +1,180 @@
 package reforgeoptimizer
 
 import (
+	"strconv"
+	"strings"
+
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
 	googleProto "google.golang.org/protobuf/proto"
 )
+
+// gemLocation identifies one socket of one equipped item.
+type gemLocation struct {
+	slot      proto.ItemSlot
+	socketIdx int
+}
+
+// applyLPSolutionGear rebuilds the equipment from the solver's selected variables. Gem variables
+// are keyed "<slot>_<socketIdx>_<gemID>"; every other selected variable (the SocketBonus_<slot>
+// indicators) carries no gem and is skipped.
+func applyLPSolutionGear(strippedGear *proto.EquipmentSpec, originalEquipment *core.Equipment, selectedVars []string, frozen map[proto.ItemSlot]bool) *proto.EquipmentSpec {
+	gear := equipmentFromProto(strippedGear)
+
+	for _, variableKey := range selectedVars {
+		parts := strings.Split(variableKey, "_")
+		if len(parts) <= 2 {
+			continue
+		}
+		slotIdx, err := strconv.Atoi(parts[0])
+		if err != nil || slotIdx < 0 || slotIdx >= int(core.NumItemSlots) {
+			continue
+		}
+		item := gear.GetItemBySlot(proto.ItemSlot(slotIdx))
+		if item.ID == 0 {
+			continue
+		}
+		socketIdx, socketErr := strconv.Atoi(parts[1])
+		gemID, gemErr := strconv.Atoi(parts[2])
+		if socketErr != nil || gemErr != nil {
+			continue
+		}
+		setGemIDAt(item, socketIdx, int32(gemID))
+	}
+
+	minimizeRegemsLP(gear, originalEquipment, frozen)
+	return gear.ToEquipmentSpecProto()
+}
+
+// minimizeRegemsLP cuts the number of gems the player must actually buy. For each socket the
+// solver changed, it locates where that socket's original gem now lives and swaps the two gems
+// back — reusing a gem the player already owns instead of buying a new one — unless doing so would
+// drop a socket-color match the solver found.
+func minimizeRegemsLP(newGear *core.Equipment, originalGear *core.Equipment, frozen map[proto.ItemSlot]bool) {
+	if originalGear == nil {
+		return
+	}
+
+	finalizedSocketKeys := map[reforgeSocketKey]bool{}
+	for slotIdx := 0; slotIdx < int(core.NumItemSlots); slotIdx++ {
+		slot := proto.ItemSlot(slotIdx)
+		newItem := newGear.GetItemBySlot(slot)
+		originalItem := originalGear.GetItemBySlot(slot)
+		if newItem.ID == 0 || originalItem.ID == 0 {
+			continue
+		}
+
+		for socketIdx, socketColor := range currentSocketColors(*newItem) {
+			socketKey := reforgeSocketKey{slot: slot, socketIdx: socketIdx}
+			if finalizedSocketKeys[socketKey] {
+				continue
+			}
+			finalizedSocketKeys[socketKey] = true
+
+			newGemID := gemIDAt(newItem, socketIdx)
+			originalGemID := gemIDAt(originalItem, socketIdx)
+			if newGemID == 0 || originalGemID == 0 || newGemID == originalGemID {
+				continue
+			}
+			newGem := gemFromID(newGemID)
+			originalGem := gemFromID(originalGemID)
+
+			for _, loc := range findGemLP(newGear, originalGear, originalGemID) {
+				if frozen[loc.slot] {
+					continue
+				}
+				matchedKey := reforgeSocketKey{slot: loc.slot, socketIdx: loc.socketIdx}
+				if finalizedSocketKeys[matchedKey] {
+					continue
+				}
+				matchedItem := newGear.GetItemBySlot(loc.slot)
+				matchedColors := currentSocketColors(*matchedItem)
+				if loc.socketIdx >= len(matchedColors) {
+					continue
+				}
+				matchedSocketColor := matchedColors[loc.socketIdx]
+				// Restore the original gem here only if it does not reduce the total socket-color
+				// matches across BOTH sockets involved. Weighing both sockets (not just the one the
+				// gem moved to) preserves a genuine color-match upgrade the solver found while still
+				// undoing a match-neutral shuffle that would otherwise be a pointless regem.
+				matchesIfSwapped := boolToInt(gemMatchesSocket(originalGem.Color, socketColor)) + boolToInt(gemMatchesSocket(newGem.Color, matchedSocketColor))
+				matchesIfKept := boolToInt(gemMatchesSocket(newGem.Color, socketColor)) + boolToInt(gemMatchesSocket(originalGem.Color, matchedSocketColor))
+				if matchesIfSwapped < matchesIfKept {
+					continue
+				}
+
+				// A socket bonus is all-or-nothing per item, so a match-count-neutral swap can still
+				// deactivate one item's bonus while gaining a match on another. Apply the swap, then
+				// keep it only if no socket bonus was lost.
+				bonusesBefore := boolToInt(socketBonusActive(newItem)) + boolToInt(socketBonusActive(matchedItem))
+				setGemIDAt(newItem, socketIdx, originalGemID)
+				setGemIDAt(matchedItem, loc.socketIdx, newGemID)
+				if boolToInt(socketBonusActive(newItem))+boolToInt(socketBonusActive(matchedItem)) < bonusesBefore {
+					setGemIDAt(newItem, socketIdx, newGemID)
+					setGemIDAt(matchedItem, loc.socketIdx, originalGemID)
+					continue
+				}
+
+				finalizedSocketKeys[matchedKey] = true
+				break
+			}
+		}
+	}
+}
+
+// findGemLP returns every socket into which the SOLVER moved gemID — i.e. a socket now holding
+// gemID whose own original gem was something else. Sockets the solver never changed are skipped:
+// they hold their rightful gem and must not be disturbed.
+func findGemLP(equipment *core.Equipment, originalGear *core.Equipment, gemID int32) []gemLocation {
+	var locations []gemLocation
+	for slotIdx := 0; slotIdx < int(core.NumItemSlots); slotIdx++ {
+		slot := proto.ItemSlot(slotIdx)
+		item := equipment.GetItemBySlot(slot)
+		if item.ID == 0 {
+			continue
+		}
+		var originalItem *core.Item
+		if originalGear != nil {
+			originalItem = originalGear.GetItemBySlot(slot)
+		}
+		for socketIdx := range currentSocketColors(*item) {
+			if gemIDAt(item, socketIdx) != gemID {
+				continue
+			}
+			if originalItem != nil && gemIDAt(originalItem, socketIdx) == gemID {
+				continue
+			}
+			locations = append(locations, gemLocation{slot: slot, socketIdx: socketIdx})
+		}
+	}
+	return locations
+}
+
+func boolToInt(b bool) int {
+	if b {
+		return 1
+	}
+	return 0
+}
+
+// socketBonusActive reports whether an item's socket bonus is currently earned: the item must have
+// a socket bonus and every gemmable socket must hold a colour-matching gem. The bonus is
+// all-or-nothing, which is why a single mismatched gem forfeits it entirely.
+func socketBonusActive(item *core.Item) bool {
+	if item == nil || item.ID == 0 || !hasSocketBonus(*item) {
+		return false
+	}
+	for socketIdx, socketColor := range currentSocketColors(*item) {
+		if !isGemmableSocketColor(socketColor) {
+			continue
+		}
+		gemID := gemIDAt(item, socketIdx)
+		if gemID == 0 || !gemMatchesSocket(gemFromID(gemID).Color, socketColor) {
+			return false
+		}
+	}
+	return true
+}
 
 func cloneEquipmentSpec(equipment *proto.EquipmentSpec) *proto.EquipmentSpec {
 	if equipment == nil {

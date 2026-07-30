@@ -49,25 +49,8 @@ func OptimizeAsync(request *proto.ReforgeOptimizeRequest, signals simsignals.Sig
 		return optimizeAborted()
 	}
 
-	optimization, err := newReforgeOptimization(request, normalizedConfig, signals)
-	if err != nil {
-		if errors.Is(err, context.Canceled) {
-			if logAbort {
-				log.Printf("[reforgeOptimize:%d] aborted initializing after %s", requestID, time.Since(startedAt))
-			}
-			return optimizeAborted()
-		}
-		log.Printf("[reforgeOptimize:%d] failed initializing after %s: %s", requestID, time.Since(startedAt), err.Error())
-		return optimizeError(err.Error())
-	}
-	if debug {
-		log.Printf("[reforgeOptimize:%d] computed baseline stats in %s", requestID, time.Since(startedAt))
-		log.Printf("[reforgeOptimize:%d] built %d choice groups / %d choices in %s", requestID, len(optimization.slotChoices), countReforgeChoices(optimization.slotChoices), time.Since(startedAt))
-	}
-
-	search := optimization.searchState()
 	solveStartedAt := time.Now()
-	choices, score, solved, err := trySolveWithHiGHS(search, signals)
+	optimized, err := optimizeReforgesLP(request, normalizedConfig, signals)
 	if err != nil {
 		if errors.Is(err, context.Canceled) {
 			if logAbort {
@@ -80,12 +63,7 @@ func OptimizeAsync(request *proto.ReforgeOptimizeRequest, signals simsignals.Sig
 		log.Printf("[reforgeOptimize:%d] HiGHS failed after %s: %s gear=%s", requestID, time.Since(solveStartedAt), err.Error(), gearJSON)
 		return optimizeError(fmt.Sprintf("HiGHS reforge optimizer failed: %s", err.Error()))
 	}
-	if !solved {
-		gear := request.GetRaid().GetParties()[0].GetPlayers()[0].GetEquipment()
-		gearJSON, _ := protojson.Marshal(gear)
-		log.Printf("[reforgeOptimize:%d] HiGHS did not return a solution after %s gear=%s", requestID, time.Since(solveStartedAt), gearJSON)
-		return optimizeError("HiGHS reforge optimizer did not return a solution.")
-	}
+	score := optimized.score
 	if debug {
 		log.Printf("[reforgeOptimize:%d] HiGHS solved in %s score=%.3f", requestID, time.Since(solveStartedAt), score)
 	}
@@ -96,7 +74,7 @@ func OptimizeAsync(request *proto.ReforgeOptimizeRequest, signals simsignals.Sig
 		return optimizeAborted()
 	}
 
-	optimizedGear := optimization.optimizedGear(choices)
+	optimizedGear := optimized.gear
 
 	isBulk := request.GetMode() == proto.ReforgeOptimizeMode_ReforgeOptimizeModeBulk
 	var optimizedPlayerStats *proto.PlayerStats
@@ -109,20 +87,12 @@ func OptimizeAsync(request *proto.ReforgeOptimizeRequest, signals simsignals.Sig
 			return optimizeError(optimizedResult.ErrorResult)
 		}
 		optimizedPlayerStats = optimizedResult.RaidStats.Parties[0].Players[0]
-		optimizedStats := protoToCoreUnitStats(optimizedPlayerStats.FinalStats)
-		optimizedCapStats := optimizedStats
-		optimizedDelta := subtractUnitStats(optimizedCapStats, optimization.capBaseStats)
 		if debug {
 			logOptimizedGearSummary(requestID, optimizedGear)
-			logCapEvaluation(requestID, search.hardCaps, search.softCaps, optimizedDelta)
 		}
 	}
 	if !isBulk {
 		log.Printf("[Reforge Optimizer] Reforge optimization completed requestID=%d total=%s score=%.3f", requestID, time.Since(startedAt), score)
-	}
-	if debug {
-		log.Printf("[reforgeOptimize:%d] selectedChoices=%d", requestID, len(choices))
-		logSelectedChoices(requestID, choices, optimization.weights)
 	}
 
 	return &proto.ReforgeOptimizeResult{
@@ -131,6 +101,64 @@ func OptimizeAsync(request *proto.ReforgeOptimizeRequest, signals simsignals.Sig
 		Score:                score,
 		PassesDone:           1,
 	}
+}
+
+// lpOptimizeResult is the outcome of one LP optimization run.
+type lpOptimizeResult struct {
+	gear         *proto.EquipmentSpec
+	score        float64
+	capBaseStats core.UnitStats
+}
+
+// optimizeReforgesLP runs the gem/socket-bonus optimization: compute the baseline stats with gems
+// stripped, convert the configured caps into gap-to-cap form, build the LP model, solve it with
+// cap refinement, then apply the winning gems back onto the gear.
+func optimizeReforgesLP(request *proto.ReforgeOptimizeRequest, normalizedConfig *normalizedReforgeOptimizeConfig, signals simsignals.Signals) (*lpOptimizeResult, error) {
+	request = googleProto.Clone(request).(*proto.ReforgeOptimizeRequest)
+	request.Settings = normalizedConfig.settings
+	settings := normalizedConfig.settings
+	baseRaid := googleProto.Clone(request.Raid).(*proto.Raid)
+	originalGear := cloneEquipmentSpec(baseRaid.Parties[0].Players[0].Equipment)
+	baseGear := cloneEquipmentSpec(originalGear)
+	clearGems(baseGear, settings)
+	player := baseRaid.Parties[0].Players[0]
+	player.Equipment = baseGear
+
+	baseResult := computeReforgeStats(&proto.ComputeStatsRequest{Raid: baseRaid})
+	if baseResult.ErrorResult != "" {
+		return nil, errors.New(baseResult.ErrorResult)
+	}
+	if signals.Abort.IsTriggered() {
+		return nil, context.Canceled
+	}
+
+	baseStats := protoToCoreUnitStats(baseResult.RaidStats.Parties[0].Players[0].FinalStats)
+	capBaseStats := addUnitStats(baseStats, buildDebuffUnitStats(request.Raid))
+
+	reforgeCaps := computeStatCapsDelta(capBaseStats, protoToCoreUnitStats(settings.GetStatCaps()))
+	reforgeSoftCaps := computeReforgeSoftCaps(capBaseStats, normalizedConfig.softCaps)
+	undershootCaps := protoToCoreUnitStats(request.UndershootCaps)
+	weights := checkWeights(protoToCoreUnitStats(request.PreCapEpWeights), reforgeCaps, reforgeSoftCaps)
+
+	equipment := core.ProtoToEquipment(baseGear)
+	frozen := frozenItemSlots(settings)
+	isTank := playerIsTankSpec(player)
+
+	variables := buildYalpsVariables(equipment, request.GetGemOptions(), player, weights, reforgeCaps, reforgeSoftCaps, undershootCaps, settings, isTank)
+	constraints := buildYalpsConstraints(equipment, frozen)
+	addStructuralConstraints(variables, constraints)
+
+	selectedVars, score, err := solveModel(weights, reforgeCaps, reforgeSoftCaps, variables, constraints, undershootCaps, optimizerTimeout.Seconds(), signals)
+	if err != nil {
+		return nil, err
+	}
+
+	originalEquipment := core.ProtoToEquipment(originalGear)
+	return &lpOptimizeResult{
+		gear:         applyLPSolutionGear(baseGear, &originalEquipment, selectedVars, frozen),
+		score:        score,
+		capBaseStats: capBaseStats,
+	}, nil
 }
 
 func newReforgeOptimization(request *proto.ReforgeOptimizeRequest, normalizedConfig *normalizedReforgeOptimizeConfig, signals simsignals.Signals) (*reforgeOptimization, error) {

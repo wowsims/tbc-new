@@ -84,7 +84,7 @@ func writeLPConstraint(builder *strings.Builder, constraintIdx int, constraint m
 	line.WriteByte(' ')
 	line.WriteString(operator)
 	line.WriteByte(' ')
-	line.WriteString(formatLPNumber(bound))
+	line.WriteString(formatMIPLPNumber(bound))
 	for _, wrappedLine := range wrapLPLine(line.String()) {
 		builder.WriteString(wrappedLine)
 		builder.WriteByte('\n')
@@ -103,12 +103,15 @@ func writeLPTerm(builder *strings.Builder, first bool, coefficient float64, vari
 	} else {
 		builder.WriteString(" + ")
 	}
-	builder.WriteString(formatLPNumber(math.Abs(coefficient)))
+	builder.WriteString(formatMIPLPNumber(math.Abs(coefficient)))
 	builder.WriteString(" x")
 	builder.WriteString(strconv.Itoa(variableIdx))
 }
 
-func formatLPNumber(value float64) string {
+// formatMIPLPNumber is the legacy MIP-path number formatter. It differs from the reference
+// formatLPNumber (lp.go) in that it does not trim trailing zeros and has no NaN handling; it is
+// retained only while the MIP path still exists and is removed with it.
+func formatMIPLPNumber(value float64) string {
 	if math.IsInf(value, 1) {
 		return "1e30"
 	}

@@ -21,11 +21,12 @@ import (
 )
 
 const (
-	highsStatusOK             = 0
-	highsStatusWarning        = 1
-	highsModelStatusOptimal   = 7
-	highsModelStatusTimeLimit = 13
+	highsStatusOK      = 0
+	highsStatusWarning = 1
 )
+
+// The HiGHS model-status codes live in solver.go so both runtime backends (this native wazero
+// runner and the js/wasm bridge) can see them.
 
 type highsWasmModule struct {
 	runtime wazero.Runtime
@@ -155,6 +156,99 @@ func solveMIPWithHiGHS(model mipModel, timeout time.Duration, mipRelGap float64)
 		return mipSolution{}, false, err
 	}
 	return solution, true, nil
+}
+
+// runHiGHSLP runs the given CPLEX LP text through the pooled HiGHS wasm runtime. It returns the
+// per-variable primal values (indexed by x{i}), the HiGHS model status, and any error. A terminal
+// non-optimal status (e.g. infeasible) is returned as a status with nil values rather than an
+// error, so the caller can map it onto the solution status.
+func runHiGHSLP(lpString string, numVars int, timeout time.Duration, mipRelGap float64) ([]float64, int32, error) {
+	wasmRuntime, err := acquireHiGHSWasmRuntime()
+	if err != nil {
+		return nil, 0, err
+	}
+	defer releaseHiGHSWasmRuntime(wasmRuntime)
+
+	wasmRuntime.paths["/m.lp"] = []byte(lpString)
+	wasmRuntime.paths["m.lp"] = wasmRuntime.paths["/m.lp"]
+
+	if !wasmRuntime.runtimeInitialized {
+		if _, err := wasmRuntime.runtimeInit.Call(wasmRuntime.ctx); err != nil {
+			return nil, 0, fmt.Errorf("initializing HiGHS wasm runtime: %w", err)
+		}
+		wasmRuntime.runtimeInitialized = true
+	}
+
+	highs, err := callI32(wasmRuntime.ctx, wasmRuntime.highsCreate)
+	if err != nil {
+		return nil, 0, fmt.Errorf("creating HiGHS wasm instance: %w", err)
+	}
+	if highs == 0 {
+		return nil, 0, fmt.Errorf("failed to create HiGHS wasm instance")
+	}
+	defer wasmRuntime.highsDestroy.Call(wasmRuntime.ctx, uint64(uint32(highs)))
+
+	modelPath, err := wasmRuntime.writeCString("m.lp")
+	if err != nil {
+		return nil, 0, err
+	}
+	if status, err := callI32(wasmRuntime.ctx, wasmRuntime.highsReadModel, wasmI32(highs), wasmI32(modelPath)); err != nil {
+		return nil, 0, fmt.Errorf("reading HiGHS LP model: %w", err)
+	} else if !isHighsSuccess(status) {
+		return nil, 0, fmt.Errorf("failed reading HiGHS LP model: %d", status)
+	}
+
+	if err := wasmRuntime.setStringOption(highs, "presolve", "on"); err != nil {
+		return nil, 0, err
+	}
+	// HiGHS rejects a non-positive time_limit; skip it (run unbounded) rather than erroring when the
+	// caller's budget is already spent.
+	if secs := timeout.Seconds(); secs > 0 {
+		if err := wasmRuntime.setDoubleOption(highs, "time_limit", secs); err != nil {
+			return nil, 0, err
+		}
+	}
+	if mipRelGap > 0 {
+		if err := wasmRuntime.setDoubleOption(highs, "mip_rel_gap", mipRelGap); err != nil {
+			return nil, 0, err
+		}
+	}
+
+	if status, err := callI32(wasmRuntime.ctx, wasmRuntime.highsRun, wasmI32(highs)); err != nil {
+		return nil, 0, fmt.Errorf("running HiGHS wasm solve: %w", err)
+	} else if !isHighsSuccess(status) {
+		return nil, 0, fmt.Errorf("HiGHS wasm solve failed: %d", status)
+	}
+
+	modelStatus, err := callI32(wasmRuntime.ctx, wasmRuntime.highsGetModelStatus, wasmI32(highs))
+	if err != nil {
+		return nil, 0, fmt.Errorf("reading HiGHS wasm model status: %w", err)
+	}
+	if modelStatus != highsModelStatusOptimal && modelStatus != highsModelStatusTimeLimit {
+		// Infeasible or another terminal status: no solution to parse.
+		return nil, modelStatus, nil
+	}
+
+	wasmRuntime.stdout.Reset()
+	wasmRuntime.stderr.Reset()
+	emptyPath, err := wasmRuntime.writeCString("")
+	if err != nil {
+		return nil, 0, err
+	}
+	if status, err := callI32(wasmRuntime.ctx, wasmRuntime.highsWriteSolutionPretty, wasmI32(highs), wasmI32(emptyPath)); err != nil {
+		return nil, 0, fmt.Errorf("writing HiGHS wasm solution: %w", err)
+	} else if !isHighsSuccess(status) {
+		return nil, 0, fmt.Errorf("failed writing HiGHS wasm solution: %d", status)
+	}
+
+	solution, err := parseHiGHSWasmSolution(wasmRuntime.stdout.String(), numVars)
+	if err != nil {
+		if modelStatus == highsModelStatusTimeLimit {
+			return nil, modelStatus, nil
+		}
+		return nil, 0, err
+	}
+	return solution.values, modelStatus, nil
 }
 
 func getHiGHSWasmRuntimeConcurrency() int {
