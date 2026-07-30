@@ -95,35 +95,6 @@ func TestMergeBulkSimDistributionMetrics(t *testing.T) {
 	}
 }
 
-func TestMergeBulkSimCandidateResultSlicesPreservesResultOrder(t *testing.T) {
-	results := []*BulkSimCandidateResult{
-		newBulkSimTestCandidateResult(2, []float64{8, 12}),
-		newBulkSimTestCandidateResult(1, []float64{18, 22}),
-	}
-	additionalResults := []*BulkSimCandidateResult{
-		newBulkSimTestCandidateResult(1, []float64{20, 24}),
-		newBulkSimTestCandidateResult(2, []float64{10, 14}),
-	}
-
-	merged := mergeBulkSimCandidateResultSlices(results, additionalResults)
-
-	if len(merged) != len(results) {
-		t.Fatalf("expected %d merged results, got %d", len(results), len(merged))
-	}
-	if merged[0].Candidate.Index != 2 || merged[1].Candidate.Index != 1 {
-		t.Fatalf("expected result order [2, 1], got [%d, %d]", merged[0].Candidate.Index, merged[1].Candidate.Index)
-	}
-	assertFloatEqual(t, "candidate 2 avg", merged[0].DpsMetrics.Avg, 11)
-	assertFloatEqual(t, "candidate 1 avg", merged[1].DpsMetrics.Avg, 21)
-}
-
-func newBulkSimTestCandidateResult(index int32, values []float64) *BulkSimCandidateResult {
-	return &BulkSimCandidateResult{
-		Candidate:  BulkSimCandidate{Index: index},
-		DpsMetrics: newBulkSimTestDistributionMetrics(values),
-	}
-}
-
 func newBulkSimTestDistributionMetrics(values []float64) *proto.DistributionMetrics {
 	metrics := &proto.DistributionMetrics{
 		Min:            math.MaxFloat64,

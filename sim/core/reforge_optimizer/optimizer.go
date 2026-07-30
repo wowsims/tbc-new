@@ -25,16 +25,11 @@ func Optimize(request *proto.ReforgeOptimizeRequest) *proto.ReforgeOptimizeResul
 func OptimizeAsync(request *proto.ReforgeOptimizeRequest, signals simsignals.Signals) *proto.ReforgeOptimizeResult {
 	requestID := reforgeOptimizeRequestID.Add(1)
 	startedAt := time.Now()
-	normalizedConfig, err := validateReforgeOptimizeSettings(request)
-	if err != nil {
-		log.Printf("[reforgeOptimize:%d] failed validating settings after %s: %s", requestID, time.Since(startedAt), err.Error())
-		return optimizeError(err.Error())
-	}
 	debug := request.GetDebug()
 	logAbort := request.GetMode() != proto.ReforgeOptimizeMode_ReforgeOptimizeModeBulk || debug
 	if debug {
 		log.Printf("[reforgeOptimize:%d] started debug=%t", requestID, debug)
-		logRequestInput(requestID, request, normalizedConfig)
+		logRequestInput(requestID, request)
 	}
 
 	if request.Raid == nil || len(request.Raid.Parties) == 0 || len(request.Raid.Parties[0].Players) == 0 {
@@ -50,7 +45,12 @@ func OptimizeAsync(request *proto.ReforgeOptimizeRequest, signals simsignals.Sig
 	}
 
 	solveStartedAt := time.Now()
-	optimized, err := optimizeReforgesLP(request, normalizedConfig, signals)
+	optimizer, err := newReforgeOptimizer(request, signals)
+	var optimizedGear *proto.EquipmentSpec
+	var score float64
+	if err == nil {
+		optimizedGear, score, err = optimizer.optimizeReforges()
+	}
 	if err != nil {
 		if errors.Is(err, context.Canceled) {
 			if logAbort {
@@ -63,7 +63,6 @@ func OptimizeAsync(request *proto.ReforgeOptimizeRequest, signals simsignals.Sig
 		log.Printf("[reforgeOptimize:%d] HiGHS failed after %s: %s gear=%s", requestID, time.Since(solveStartedAt), err.Error(), gearJSON)
 		return optimizeError(fmt.Sprintf("HiGHS reforge optimizer failed: %s", err.Error()))
 	}
-	score := optimized.score
 	if debug {
 		log.Printf("[reforgeOptimize:%d] HiGHS solved in %s score=%.3f", requestID, time.Since(solveStartedAt), score)
 	}
@@ -73,8 +72,6 @@ func OptimizeAsync(request *proto.ReforgeOptimizeRequest, signals simsignals.Sig
 		}
 		return optimizeAborted()
 	}
-
-	optimizedGear := optimized.gear
 
 	isBulk := request.GetMode() == proto.ReforgeOptimizeMode_ReforgeOptimizeModeBulk
 	var optimizedPlayerStats *proto.PlayerStats
@@ -103,28 +100,55 @@ func OptimizeAsync(request *proto.ReforgeOptimizeRequest, signals simsignals.Sig
 	}
 }
 
-// lpOptimizeResult is the outcome of one LP optimization run.
-type lpOptimizeResult struct {
-	gear         *proto.EquipmentSpec
-	score        float64
+type reforgeOptimizer struct {
+	request  *proto.ReforgeOptimizeRequest
+	settings *proto.ReforgeSettings
+	player   *proto.Player
+	signals  simsignals.Signals
+
+	isTankSpec bool
+
+	frozenSlots    map[proto.ItemSlot]bool
+	undershootCaps core.UnitStats
+	gemOptions     []*proto.ReforgeGemOption
+
+	// statDeps is the player's build-phase StatDependencyManager (ComputeStatDependencies). It
+	// resolves every stat conversion the sim models and is used by resolveStatDelta to compute
+	// each LP variable's cap-space coefficients (the FULL dependency graph), separately from the
+	// EP-calibrated objective coefficients produced by applyReforgeStat.
+	statDeps *stats.StatDependencyManager
+
+	baseRaidProto     *proto.Raid
+	baseStrippedGear  *proto.EquipmentSpec
+	originalEquipment *core.Equipment
+	baseStats         core.UnitStats
+	// capBaseStats adds the raid's debuffs on top of baseStats; caps are evaluated against it.
 	capBaseStats core.UnitStats
 }
 
-// optimizeReforgesLP runs the gem/socket-bonus optimization: compute the baseline stats with gems
-// stripped, convert the configured caps into gap-to-cap form, build the LP model, solve it with
-// cap refinement, then apply the winning gems back onto the gear.
-func optimizeReforgesLP(request *proto.ReforgeOptimizeRequest, normalizedConfig *normalizedReforgeOptimizeConfig, signals simsignals.Signals) (*lpOptimizeResult, error) {
+// newReforgeOptimizer builds the optimizer context from the request: strips gems for the
+// baseline, computes base stats and the stat dependency manager, and derives the player flags.
+func newReforgeOptimizer(request *proto.ReforgeOptimizeRequest, signals simsignals.Signals) (*reforgeOptimizer, error) {
+	settings := request.GetSettings()
+	if settings == nil {
+		settings = &proto.ReforgeSettings{}
+	} else {
+		settings = googleProto.Clone(settings).(*proto.ReforgeSettings)
+	}
+
 	request = googleProto.Clone(request).(*proto.ReforgeOptimizeRequest)
-	request.Settings = normalizedConfig.settings
-	settings := normalizedConfig.settings
+	request.Settings = settings
+
 	baseRaid := googleProto.Clone(request.Raid).(*proto.Raid)
 	originalGear := cloneEquipmentSpec(baseRaid.Parties[0].Players[0].Equipment)
-	baseGear := cloneEquipmentSpec(originalGear)
-	clearGems(baseGear, settings)
+	baseStrippedGear := cloneEquipmentSpec(originalGear)
+	clearGems(baseStrippedGear, settings)
 	player := baseRaid.Parties[0].Players[0]
-	player.Equipment = baseGear
+	player.Equipment = baseStrippedGear
 
-	baseResult := computeReforgeStats(&proto.ComputeStatsRequest{Raid: baseRaid})
+	// One environment build yields both FinalStats and the finalized StatDependencyManager,
+	// instead of building the character twice for the same base raid.
+	baseResult, baseSDM := computeReforgeStatsAndDeps(&proto.ComputeStatsRequest{Raid: baseRaid})
 	if baseResult.ErrorResult != "" {
 		return nil, errors.New(baseResult.ErrorResult)
 	}
@@ -133,81 +157,60 @@ func optimizeReforgesLP(request *proto.ReforgeOptimizeRequest, normalizedConfig 
 	}
 
 	baseStats := protoToCoreUnitStats(baseResult.RaidStats.Parties[0].Players[0].FinalStats)
-	capBaseStats := addUnitStats(baseStats, buildDebuffUnitStats(request.Raid))
-
-	reforgeCaps := computeStatCapsDelta(capBaseStats, protoToCoreUnitStats(settings.GetStatCaps()))
-	reforgeSoftCaps := computeReforgeSoftCaps(capBaseStats, normalizedConfig.softCaps)
-	undershootCaps := protoToCoreUnitStats(request.UndershootCaps)
-	weights := checkWeights(protoToCoreUnitStats(request.PreCapEpWeights), reforgeCaps, reforgeSoftCaps)
-
-	equipment := core.ProtoToEquipment(baseGear)
-	frozen := frozenItemSlots(settings)
-	isTank := playerIsTankSpec(player)
-
-	variables := buildYalpsVariables(equipment, request.GetGemOptions(), player, weights, reforgeCaps, reforgeSoftCaps, undershootCaps, settings, isTank)
-	constraints := buildYalpsConstraints(equipment, frozen)
-	addStructuralConstraints(variables, constraints)
-
-	selectedVars, score, err := solveModel(weights, reforgeCaps, reforgeSoftCaps, variables, constraints, undershootCaps, optimizerTimeout.Seconds(), signals)
-	if err != nil {
-		return nil, err
-	}
-
 	originalEquipment := core.ProtoToEquipment(originalGear)
-	return &lpOptimizeResult{
-		gear:         applyLPSolutionGear(baseGear, &originalEquipment, selectedVars, frozen),
-		score:        score,
-		capBaseStats: capBaseStats,
+
+	return &reforgeOptimizer{
+		request:  request,
+		settings: settings,
+		player:   player,
+		signals:  signals,
+
+		isTankSpec: playerIsTankSpec(player),
+
+		frozenSlots:    frozenItemSlots(settings),
+		undershootCaps: protoToCoreUnitStats(request.GetUndershootCaps()),
+		gemOptions:     request.GetGemOptions(),
+
+		statDeps: baseSDM,
+
+		baseRaidProto:     baseRaid,
+		baseStrippedGear:  baseStrippedGear,
+		originalEquipment: &originalEquipment,
+		baseStats:         baseStats,
+		capBaseStats:      addUnitStats(baseStats, buildDebuffUnitStats(request.Raid)),
 	}, nil
 }
 
-func newReforgeOptimization(request *proto.ReforgeOptimizeRequest, normalizedConfig *normalizedReforgeOptimizeConfig, signals simsignals.Signals) (*reforgeOptimization, error) {
-	request = googleProto.Clone(request).(*proto.ReforgeOptimizeRequest)
-	request.Settings = normalizedConfig.settings
-	settings := normalizedConfig.settings
-	baseRaid := googleProto.Clone(request.Raid).(*proto.Raid)
-	originalGear := cloneEquipmentSpec(baseRaid.Parties[0].Players[0].Equipment)
-	baseGear := cloneEquipmentSpec(originalGear)
-	clearGems(baseGear, settings)
-	player := baseRaid.Parties[0].Players[0]
-	player.Equipment = baseGear
+// optimizeReforges runs the gem/socket-bonus optimization: convert the configured caps into
+// gap-to-cap form, build the LP model, solve it with cap refinement, then apply the winning gems
+// back onto the gear.
+func (o *reforgeOptimizer) optimizeReforges() (*proto.EquipmentSpec, float64, error) {
+	reforgeCaps := computeStatCapsDelta(o.capBaseStats, protoToCoreUnitStats(o.settings.GetStatCaps()))
 
-	baseResult, statDeps := computeReforgeStatsAndDeps(&proto.ComputeStatsRequest{Raid: baseRaid})
-	if baseResult.ErrorResult != "" {
-		return nil, errors.New(baseResult.ErrorResult)
+	var softCapConfigs []*proto.StatCapConfig
+	if o.settings.GetUseSoftCapBreakpoints() {
+		softCapConfigs = o.request.GetSoftCaps()
 	}
-	if signals.Abort.IsTriggered() {
-		return nil, context.Canceled
+	reforgeSoftCaps := computeReforgeSoftCaps(o.capBaseStats, softCapConfigs)
+
+	weights := checkWeights(protoToCoreUnitStats(o.request.GetPreCapEpWeights()), reforgeCaps, reforgeSoftCaps)
+
+	equipment := core.ProtoToEquipment(o.baseStrippedGear)
+	variables := o.buildYalpsVariables(equipment, weights, reforgeCaps, reforgeSoftCaps)
+	constraints := o.buildYalpsConstraints(equipment)
+	addStructuralConstraints(variables, constraints)
+
+	timeoutSeconds := optimizerTimeout.Seconds()
+	if o.request.GetMode() == proto.ReforgeOptimizeMode_ReforgeOptimizeModeBulk {
+		timeoutSeconds /= 4
 	}
 
-	basePlayerStats := baseResult.RaidStats.Parties[0].Players[0]
-	baseStats := protoToCoreUnitStats(basePlayerStats.FinalStats)
-	capBaseStats := addUnitStats(baseStats, buildDebuffUnitStats(request.Raid))
-	weights := validateReforgeWeights(protoToCoreUnitStats(request.PreCapEpWeights), settings, normalizedConfig.softCaps)
-
-	hardCaps := buildReforgeHardCaps(capBaseStats, settings, protoToCoreUnitStats(request.UndershootCaps))
-	softCaps := buildReforgeSoftCaps(capBaseStats, normalizedConfig.softCaps)
-	gemSortWeights := weights
-
-	slotChoices, err := buildReforgeSlotChoices(request, baseRaid, baseGear, baseStats, weights, gemSortWeights, hardCaps, softCaps, statDeps, nil)
+	selectedVars, score, err := o.solveModel(weights, reforgeCaps, reforgeSoftCaps, variables, constraints, timeoutSeconds)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
-	return &reforgeOptimization{
-		request:      request,
-		settings:     settings,
-		player:       player,
-		baseRaid:     baseRaid,
-		originalGear: originalGear,
-		baseGear:     baseGear,
-		capBaseStats: capBaseStats,
-		weights:      weights,
-		hardCaps:     hardCaps,
-		softCaps:     softCaps,
-		slotChoices:  slotChoices,
-		statDeps:     statDeps,
-	}, nil
+	return o.applyLPSolution(selectedVars), score, nil
 }
 
 func computeReforgeStats(request *proto.ComputeStatsRequest) *proto.ComputeStatsResult {
@@ -218,46 +221,6 @@ func computeReforgeStats(request *proto.ComputeStatsRequest) *proto.ComputeStats
 func computeReforgeStatsAndDeps(request *proto.ComputeStatsRequest) (*proto.ComputeStatsResult, *stats.StatDependencyManager) {
 	request.SkipRotation = true
 	return core.ComputeStatsAndDeps(request)
-}
-
-func (optimization *reforgeOptimization) searchState() *reforgeSearchState {
-	choiceVarIdx := make([][]int, len(optimization.slotChoices))
-	for i, slot := range optimization.slotChoices {
-		choiceVarIdx[i] = make([]int, len(slot.choices))
-	}
-	return &reforgeSearchState{
-		request:        optimization.request,
-		baseRaid:       optimization.baseRaid,
-		baseEquipment:  core.ProtoToEquipment(optimization.baseGear),
-		baseGear:       optimization.baseGear,
-		capBaseStats:   optimization.capBaseStats,
-		statDeps:       optimization.statDeps,
-		slots:          optimization.slotChoices,
-		weights:        optimization.weights,
-		hardCaps:       optimization.hardCaps,
-		hardCapsByStat: reforgeHardCapsByStat(optimization.hardCaps),
-		softCaps:       optimization.softCaps,
-		softCapsByStat: reforgeSoftCapsByStat(optimization.softCaps),
-		choiceVarIdx:   choiceVarIdx,
-		uniqueGemIDs:   buildUniqueGemLimitIDs(optimization.slotChoices),
-	}
-}
-
-func (optimization *reforgeOptimization) optimizedGear(choices []reforgeChoice) *proto.EquipmentSpec {
-	gearEditor := newReforgeGearEditor(optimization.baseGear, optimization.originalGear, optimization.player, optimization.settings, optimization.request.GetGemOptions())
-	gearEditor.applyChoices(choices)
-	// minimizeRegems is temporarily disabled until the swap logic is fixed to
-	// never change which gems are present, only permute their socket positions.
-	gearEditor.minimizeRegems()
-	return gearEditor.equipment()
-}
-
-func countReforgeChoices(slots []reforgeSlotChoices) int {
-	count := 0
-	for _, slot := range slots {
-		count += len(slot.choices)
-	}
-	return count
 }
 
 func optimizeError(message string) *proto.ReforgeOptimizeResult {
@@ -276,3 +239,7 @@ func optimizeAborted() *proto.ReforgeOptimizeResult {
 		},
 	}
 }
+
+const (
+	optimizerTimeout = 30 * time.Second
+)

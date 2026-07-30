@@ -81,6 +81,14 @@ func main() {
 		}()
 	}
 
+	// Warm up the reforge optimizer's HiGHS WASM runtime in the background so the one-time
+	// module compile happens at startup instead of stalling the first /reforgeOptimizeAsync request.
+	go func() {
+		if err := reforgeoptimizer.WarmUp(); err != nil {
+			fmt.Printf("reforge optimizer warm-up failed: %v\n", err)
+		}
+	}()
+
 	s := &server{
 		progMut:         sync.RWMutex{},
 		asyncProgresses: map[string]*asyncProgress{},
@@ -220,9 +228,19 @@ func (s *server) handleAsyncAPI(w http.ResponseWriter, r *http.Request) {
 				}
 				if progMetric.BulkStage == proto.BulkSimStage_BulkSimStageReforge && len(progMetric.OptimizedCandidates) > 0 {
 					simProgress.appendPendingOptimizedCandidates(progMetric.OptimizedCandidates)
-					storedProgress := googleProto.Clone(progMetric).(*proto.ProgressMetrics)
-					storedProgress.OptimizedCandidates = nil
-					simProgress.latestProgress.Store(storedProgress)
+					// Build the candidate-free copy directly: cloning the message first would
+					// deep-copy the whole candidate batch just to drop it again.
+					simProgress.latestProgress.Store(&proto.ProgressMetrics{
+						BulkStage:           progMetric.BulkStage,
+						CompletedSims:       progMetric.CompletedSims,
+						TotalSims:           progMetric.TotalSims,
+						CompletedIterations: progMetric.CompletedIterations,
+						TotalIterations:     progMetric.TotalIterations,
+						Dps:                 progMetric.Dps,
+						Hps:                 progMetric.Hps,
+						PresimRunning:       progMetric.PresimRunning,
+						FinalBulkSimResult:  progMetric.FinalBulkSimResult,
+					})
 				} else {
 					simProgress.latestProgress.Store(progMetric)
 				}

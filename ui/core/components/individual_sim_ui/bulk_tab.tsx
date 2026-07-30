@@ -6,7 +6,7 @@ import { ref } from 'tsx-vanilla';
 import { REPO_RELEASES_URL } from '../../constants/other';
 import { IndividualSimUI } from '../../individual_sim_ui';
 import i18n from '../../../i18n/config';
-import { BulkRequiredSetBonus, BulkSettings, BulkSimStage, ProgressMetrics } from '../../proto/api';
+import { BulkSettings, BulkSimStage, ProgressMetrics } from '../../proto/api';
 import { Class, ItemSlot, ItemSpec, WeaponType } from '../../proto/common';
 import { EquippedItem } from '../../proto_utils/equipped_item';
 import { Gear } from '../../proto_utils/gear';
@@ -83,7 +83,6 @@ export class BulkTab extends SimTab {
 		[ItemSlot.ItemSlotOffHand, []],
 	]);
 	useLegacyBulkSim: boolean = false;
-	requiredSetBonuses: BulkRequiredSetBonus[] = [];
 
 	protected topGearResults: TopGearResult[] | null = null;
 	protected originalGear: Gear | null = null;
@@ -259,7 +258,6 @@ export class BulkTab extends SimTab {
 			this.setWeaponTypeFilter(ItemSlot.ItemSlotMainHand, settings.freezeMainhandWeaponSlots);
 			this.setWeaponTypeFilter(ItemSlot.ItemSlotOffHand, settings.freezeOffhandWeaponSlots);
 			this.useLegacyBulkSim = settings.useLegacyBulkSim;
-			this.requiredSetBonuses = settings.requiredSetBonuses.slice();
 		}
 	}
 
@@ -285,7 +283,6 @@ export class BulkTab extends SimTab {
 			freezeMainhandWeaponSlots: this.weaponTypeFilters.get(ItemSlot.ItemSlotMainHand)?.slice(),
 			freezeOffhandWeaponSlots: this.weaponTypeFilters.get(ItemSlot.ItemSlotOffHand)?.slice(),
 			useLegacyBulkSim: this.useLegacyBulkSim,
-			requiredSetBonuses: this.requiredSetBonuses.slice(),
 		});
 	}
 

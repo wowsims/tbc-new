@@ -74,90 +74,6 @@ type highsWasmFile struct {
 	position int64
 }
 
-func solveMIPWithHiGHS(model mipModel, timeout time.Duration, mipRelGap float64) (mipSolution, bool, error) {
-	wasmRuntime, err := acquireHiGHSWasmRuntime()
-	if err != nil {
-		return mipSolution{}, false, err
-	}
-	defer releaseHiGHSWasmRuntime(wasmRuntime)
-
-	wasmRuntime.paths["/m.lp"] = []byte(modelToHiGHSLP(model))
-	wasmRuntime.paths["m.lp"] = wasmRuntime.paths["/m.lp"]
-
-	if !wasmRuntime.runtimeInitialized {
-		if _, err := wasmRuntime.runtimeInit.Call(wasmRuntime.ctx); err != nil {
-			return mipSolution{}, false, fmt.Errorf("initializing HiGHS wasm runtime: %w", err)
-		}
-		wasmRuntime.runtimeInitialized = true
-	}
-
-	highs, err := callI32(wasmRuntime.ctx, wasmRuntime.highsCreate)
-	if err != nil {
-		return mipSolution{}, false, fmt.Errorf("creating HiGHS wasm instance: %w", err)
-	}
-	if highs == 0 {
-		return mipSolution{}, false, fmt.Errorf("failed to create HiGHS wasm instance")
-	}
-	defer wasmRuntime.highsDestroy.Call(wasmRuntime.ctx, uint64(uint32(highs)))
-
-	modelPath, err := wasmRuntime.writeCString("m.lp")
-	if err != nil {
-		return mipSolution{}, false, err
-	}
-	if status, err := callI32(wasmRuntime.ctx, wasmRuntime.highsReadModel, wasmI32(highs), wasmI32(modelPath)); err != nil {
-		return mipSolution{}, false, fmt.Errorf("reading HiGHS LP model: %w", err)
-	} else if !isHighsSuccess(status) {
-		return mipSolution{}, false, fmt.Errorf("failed reading HiGHS LP model: %d", status)
-	}
-
-	if err := wasmRuntime.setStringOption(highs, "presolve", "on"); err != nil {
-		return mipSolution{}, false, err
-	}
-	if err := wasmRuntime.setDoubleOption(highs, "time_limit", timeout.Seconds()); err != nil {
-		return mipSolution{}, false, err
-	}
-	if mipRelGap > 0 {
-		if err := wasmRuntime.setDoubleOption(highs, "mip_rel_gap", mipRelGap); err != nil {
-			return mipSolution{}, false, err
-		}
-	}
-
-	if status, err := callI32(wasmRuntime.ctx, wasmRuntime.highsRun, wasmI32(highs)); err != nil {
-		return mipSolution{}, false, fmt.Errorf("running HiGHS wasm solve: %w", err)
-	} else if !isHighsSuccess(status) {
-		return mipSolution{}, false, fmt.Errorf("HiGHS wasm solve failed: %d", status)
-	}
-
-	modelStatus, err := callI32(wasmRuntime.ctx, wasmRuntime.highsGetModelStatus, wasmI32(highs))
-	if err != nil {
-		return mipSolution{}, false, fmt.Errorf("reading HiGHS wasm model status: %w", err)
-	}
-	if modelStatus != highsModelStatusOptimal && modelStatus != highsModelStatusTimeLimit {
-		return mipSolution{}, false, fmt.Errorf("HiGHS wasm returned model status %d", modelStatus)
-	}
-
-	wasmRuntime.stdout.Reset()
-	wasmRuntime.stderr.Reset()
-	emptyPath, err := wasmRuntime.writeCString("")
-	if err != nil {
-		return mipSolution{}, false, err
-	}
-	if status, err := callI32(wasmRuntime.ctx, wasmRuntime.highsWriteSolutionPretty, wasmI32(highs), wasmI32(emptyPath)); err != nil {
-		return mipSolution{}, false, fmt.Errorf("writing HiGHS wasm solution: %w", err)
-	} else if !isHighsSuccess(status) {
-		return mipSolution{}, false, fmt.Errorf("failed writing HiGHS wasm solution: %d", status)
-	}
-
-	solution, err := parseHiGHSWasmSolution(wasmRuntime.stdout.String(), len(model.variables))
-	if err != nil {
-		if modelStatus == highsModelStatusTimeLimit {
-			return mipSolution{}, false, nil
-		}
-		return mipSolution{}, false, err
-	}
-	return solution, true, nil
-}
-
 // runHiGHSLP runs the given CPLEX LP text through the pooled HiGHS wasm runtime. It returns the
 // per-variable primal values (indexed by x{i}), the HiGHS model status, and any error. A terminal
 // non-optimal status (e.g. infeasible) is returned as a status with nil values rather than an
@@ -169,8 +85,8 @@ func runHiGHSLP(lpString string, numVars int, timeout time.Duration, mipRelGap f
 	}
 	defer releaseHiGHSWasmRuntime(wasmRuntime)
 
+	// Keyed by the absolute path only: openAt normalizes every lookup to a leading "/".
 	wasmRuntime.paths["/m.lp"] = []byte(lpString)
-	wasmRuntime.paths["m.lp"] = wasmRuntime.paths["/m.lp"]
 
 	if !wasmRuntime.runtimeInitialized {
 		if _, err := wasmRuntime.runtimeInit.Call(wasmRuntime.ctx); err != nil {
@@ -248,7 +164,16 @@ func runHiGHSLP(lpString string, numVars int, timeout time.Duration, mipRelGap f
 		}
 		return nil, 0, err
 	}
-	return solution.values, modelStatus, nil
+	return solution, modelStatus, nil
+}
+
+// WarmUp eagerly compiles the embedded HiGHS WASM module, instantiates a runtime, runs its
+// startup and solves a trivial LP, so the one-time compile cost is paid at process start
+// instead of stalling the first optimize request.
+func WarmUp() error {
+	const trivialLP = "Maximize\n obj: 1 x0\nBinary\n x0\nEnd"
+	_, _, err := runHiGHSLP(trivialLP, 1, 5*time.Second, 0)
+	return err
 }
 
 func getHiGHSWasmRuntimeConcurrency() int {
@@ -674,9 +599,9 @@ func isHighsSuccess(status int32) bool {
 	return status == highsStatusOK || status == highsStatusWarning
 }
 
-func parseHiGHSWasmSolution(output string, variableCount int) (mipSolution, error) {
+func parseHiGHSWasmSolution(output string, variableCount int) ([]float64, error) {
 	lines := strings.Split(output, "\n")
-	solution := mipSolution{values: make([]float64, variableCount)}
+	values := make([]float64, variableCount)
 	inColumns := false
 	parsedColumns := 0
 	for _, line := range lines {
@@ -713,15 +638,15 @@ func parseHiGHSWasmSolution(output string, variableCount int) (mipSolution, erro
 		}
 		primal, err := parseHiGHSNumber(fields[primalIdx])
 		if err != nil {
-			return mipSolution{}, fmt.Errorf("parsing HiGHS wasm solution value for %s: %w", name, err)
+			return nil, fmt.Errorf("parsing HiGHS wasm solution value for %s: %w", name, err)
 		}
-		solution.values[variableIdx] = primal
+		values[variableIdx] = primal
 		parsedColumns++
 	}
 	if parsedColumns == 0 && variableCount > 0 {
-		return mipSolution{}, fmt.Errorf("HiGHS wasm solution did not include any columns")
+		return nil, fmt.Errorf("HiGHS wasm solution did not include any columns")
 	}
-	return solution, nil
+	return values, nil
 }
 
 func parseHiGHSNumber(value string) (float64, error) {

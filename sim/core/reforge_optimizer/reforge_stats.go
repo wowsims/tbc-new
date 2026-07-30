@@ -8,6 +8,79 @@ import (
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
+func protoToCoreUnitStats(protoStats *proto.UnitStats) core.UnitStats {
+	if protoStats == nil {
+		return core.NewUnitStats()
+	}
+	return core.UnitStats{
+		Stats:       stats.FromUnitStatsProto(protoStats),
+		PseudoStats: slices.Clone(protoStats.PseudoStats),
+	}
+}
+
+func getUnitStat(unitStats core.UnitStats, unitStat stats.UnitStat) float64 {
+	if unitStat.IsStat() {
+		return unitStats.Stats[unitStat.StatIdx()]
+	}
+	pseudoStatIdx := int(unitStat.PseudoStatIdx())
+	if pseudoStatIdx >= len(unitStats.PseudoStats) {
+		return 0
+	}
+	return unitStats.PseudoStats[pseudoStatIdx]
+}
+
+func setUnitStat(unitStats core.UnitStats, unitStat stats.UnitStat, value float64) core.UnitStats {
+	if unitStat.IsStat() {
+		unitStats.Stats[unitStat.StatIdx()] = value
+		return unitStats
+	}
+	pseudoStatIdx := int(unitStat.PseudoStatIdx())
+	for len(unitStats.PseudoStats) <= pseudoStatIdx {
+		unitStats.PseudoStats = append(unitStats.PseudoStats, 0)
+	}
+	unitStats.PseudoStats[pseudoStatIdx] = value
+	return unitStats
+}
+
+// subtractUnitStats is used by the fixture parity test to diff expected against optimized stats.
+func subtractUnitStats(unitStats core.UnitStats, other core.UnitStats) core.UnitStats {
+	result := unitStats
+	result.Stats = unitStats.Stats.Subtract(other.Stats)
+	maxLen := max(len(unitStats.PseudoStats), len(other.PseudoStats))
+	result.PseudoStats = make([]float64, maxLen)
+	copy(result.PseudoStats, unitStats.PseudoStats)
+	for idx, value := range other.PseudoStats {
+		result.PseudoStats[idx] -= value
+	}
+	return result
+}
+
+func addUnitStats(unitStats core.UnitStats, other core.UnitStats) core.UnitStats {
+	result := unitStats
+	result.Stats = unitStats.Stats.Add(other.Stats)
+	maxLen := max(len(unitStats.PseudoStats), len(other.PseudoStats))
+	result.PseudoStats = make([]float64, maxLen)
+	copy(result.PseudoStats, unitStats.PseudoStats)
+	for idx, value := range other.PseudoStats {
+		result.PseudoStats[idx] += value
+	}
+	return result
+}
+
+func isEmptyUnitStats(unitStats core.UnitStats) bool {
+	for statIdx := 0; statIdx < int(stats.ProtoStatsLen); statIdx++ {
+		if unitStats.Stats[statIdx] != 0 {
+			return false
+		}
+	}
+	for _, value := range unitStats.PseudoStats {
+		if value != 0 {
+			return false
+		}
+	}
+	return true
+}
+
 // hasteRatingSpeedMultiplierPairs maps each (haste rating stat, haste% pseudo-stat) to its
 // speed multiplier pseudo-stat for the analytical haste delta calculation.
 // Δhaste% = speedMult × ΔHasteRating / HasteRatingPerHastePercent
@@ -20,6 +93,18 @@ var hasteRatingSpeedMultiplierPairs = [3]struct {
 	{stats.MeleeHasteRating, proto.PseudoStat_PseudoStatMeleeHastePercent, proto.PseudoStat_PseudoStatMeleeSpeedMultiplier, core.PhysicalHasteRatingPerHastePercent},
 	{stats.MeleeHasteRating, proto.PseudoStat_PseudoStatRangedHastePercent, proto.PseudoStat_PseudoStatRangedSpeedMultiplier, core.PhysicalHasteRatingPerHastePercent},
 	{stats.SpellHasteRating, proto.PseudoStat_PseudoStatSpellHastePercent, proto.PseudoStat_PseudoStatCastSpeedMultiplier, core.SpellHasteRatingPerHastePercent},
+}
+
+func rawUnitStatsFromStats(statValues stats.Stats) core.UnitStats {
+	unitStats := core.NewUnitStats()
+	for statIdx := 0; statIdx < int(stats.ProtoStatsLen); statIdx++ {
+		amount := statValues[statIdx]
+		if amount == 0 {
+			continue
+		}
+		unitStats.Stats[statIdx] += amount
+	}
+	return unitStats
 }
 
 // resolveStatDelta applies the character's stat dependency graph to delta, resolving
@@ -71,91 +156,6 @@ func resolveStatDelta(sdm *stats.StatDependencyManager, baseStats core.UnitStats
 	return delta
 }
 
-func protoToCoreUnitStats(protoStats *proto.UnitStats) core.UnitStats {
-	if protoStats == nil {
-		return core.NewUnitStats()
-	}
-	return core.UnitStats{
-		Stats:       stats.FromUnitStatsProto(protoStats),
-		PseudoStats: slices.Clone(protoStats.PseudoStats),
-	}
-}
-
-func addUnitStats(unitStats core.UnitStats, other core.UnitStats) core.UnitStats {
-	result := unitStats
-	result.Stats = unitStats.Stats.Add(other.Stats)
-	maxLen := max(len(unitStats.PseudoStats), len(other.PseudoStats))
-	result.PseudoStats = make([]float64, maxLen)
-	copy(result.PseudoStats, unitStats.PseudoStats)
-	for idx, value := range other.PseudoStats {
-		result.PseudoStats[idx] += value
-	}
-	return result
-}
-
-func subtractUnitStats(unitStats core.UnitStats, other core.UnitStats) core.UnitStats {
-	result := unitStats
-	result.Stats = unitStats.Stats.Subtract(other.Stats)
-	maxLen := max(len(unitStats.PseudoStats), len(other.PseudoStats))
-	result.PseudoStats = make([]float64, maxLen)
-	copy(result.PseudoStats, unitStats.PseudoStats)
-	for idx, value := range other.PseudoStats {
-		result.PseudoStats[idx] -= value
-	}
-	return result
-}
-
-func dotUnitStats(unitStats core.UnitStats, weights core.UnitStats) float64 {
-	score := 0.0
-	for statIdx := 0; statIdx < int(stats.ProtoStatsLen); statIdx++ {
-		score += unitStats.Stats[statIdx] * weights.Stats[statIdx]
-	}
-	for idx, value := range unitStats.PseudoStats {
-		if idx < len(weights.PseudoStats) {
-			score += value * weights.PseudoStats[idx]
-		}
-	}
-	return score
-}
-
-func getUnitStat(unitStats core.UnitStats, unitStat stats.UnitStat) float64 {
-	if unitStat.IsStat() {
-		return unitStats.Stats[unitStat.StatIdx()]
-	}
-	pseudoStatIdx := int(unitStat.PseudoStatIdx())
-	if pseudoStatIdx >= len(unitStats.PseudoStats) {
-		return 0
-	}
-	return unitStats.PseudoStats[pseudoStatIdx]
-}
-
-func setUnitStat(unitStats core.UnitStats, unitStat stats.UnitStat, value float64) core.UnitStats {
-	if unitStat.IsStat() {
-		unitStats.Stats[unitStat.StatIdx()] = value
-		return unitStats
-	}
-	pseudoStatIdx := int(unitStat.PseudoStatIdx())
-	for len(unitStats.PseudoStats) <= pseudoStatIdx {
-		unitStats.PseudoStats = append(unitStats.PseudoStats, 0)
-	}
-	unitStats.PseudoStats[pseudoStatIdx] = value
-	return unitStats
-}
-
-func isEmptyUnitStats(unitStats core.UnitStats) bool {
-	for statIdx := 0; statIdx < int(stats.ProtoStatsLen); statIdx++ {
-		if unitStats.Stats[statIdx] != 0 {
-			return false
-		}
-	}
-	for _, value := range unitStats.PseudoStats {
-		if value != 0 {
-			return false
-		}
-	}
-	return true
-}
-
 // eachUnitStat invokes fn for every stat and pseudo-stat index in the vector.
 func eachUnitStat(vec core.UnitStats, fn func(unitStat stats.UnitStat, value float64)) {
 	for statIdx := 0; statIdx < int(stats.ProtoStatsLen); statIdx++ {
@@ -167,6 +167,68 @@ func eachUnitStat(vec core.UnitStats, fn func(unitStat stats.UnitStat, value flo
 			value = vec.PseudoStats[pseudoStatIdx]
 		}
 		fn(stats.UnitStatFromPseudoStat(proto.PseudoStat(pseudoStatIdx)), value)
+	}
+}
+
+func childPseudoStats(parent stats.Stat) []proto.PseudoStat {
+	switch parent {
+	case stats.MeleeHitRating:
+		return []proto.PseudoStat{proto.PseudoStat_PseudoStatMeleeHitPercent, proto.PseudoStat_PseudoStatRangedHitPercent}
+	case stats.SpellHitRating:
+		return []proto.PseudoStat{
+			proto.PseudoStat_PseudoStatSpellHitPercent,
+			proto.PseudoStat_PseudoStatSchoolHitPercentArcane,
+			proto.PseudoStat_PseudoStatSchoolHitPercentFire,
+			proto.PseudoStat_PseudoStatSchoolHitPercentFrost,
+			proto.PseudoStat_PseudoStatSchoolHitPercentHoly,
+			proto.PseudoStat_PseudoStatSchoolHitPercentNature,
+			proto.PseudoStat_PseudoStatSchoolHitPercentShadow,
+		}
+	case stats.MeleeCritRating:
+		return []proto.PseudoStat{proto.PseudoStat_PseudoStatMeleeCritPercent, proto.PseudoStat_PseudoStatRangedCritPercent}
+	case stats.SpellCritRating:
+		return []proto.PseudoStat{proto.PseudoStat_PseudoStatSpellCritPercent}
+	case stats.MeleeHasteRating:
+		return []proto.PseudoStat{proto.PseudoStat_PseudoStatMeleeHastePercent, proto.PseudoStat_PseudoStatRangedHastePercent}
+	case stats.SpellHasteRating:
+		return []proto.PseudoStat{proto.PseudoStat_PseudoStatSpellHastePercent}
+	case stats.ResilienceRating, stats.DefenseRating:
+		return []proto.PseudoStat{proto.PseudoStat_PseudoStatReducedCritTakenPercent}
+	default:
+		return nil
+	}
+}
+
+func ratingPerPseudoStatPercent(pseudoStat proto.PseudoStat, parent stats.Stat) float64 {
+	switch pseudoStat {
+	case proto.PseudoStat_PseudoStatMeleeHitPercent:
+		return core.PhysicalHitRatingPerHitPercent
+	case proto.PseudoStat_PseudoStatRangedHitPercent:
+		return core.PhysicalHitRatingPerHitPercent
+	case proto.PseudoStat_PseudoStatSpellHitPercent:
+		return core.SpellHitRatingPerHitPercent
+	case proto.PseudoStat_PseudoStatSchoolHitPercentArcane, proto.PseudoStat_PseudoStatSchoolHitPercentFire, proto.PseudoStat_PseudoStatSchoolHitPercentFrost, proto.PseudoStat_PseudoStatSchoolHitPercentHoly, proto.PseudoStat_PseudoStatSchoolHitPercentNature, proto.PseudoStat_PseudoStatSchoolHitPercentShadow:
+		return core.SpellHitRatingPerHitPercent
+	case proto.PseudoStat_PseudoStatMeleeCritPercent:
+		return core.PhysicalCritRatingPerCritPercent
+	case proto.PseudoStat_PseudoStatRangedCritPercent:
+		return core.PhysicalCritRatingPerCritPercent
+	case proto.PseudoStat_PseudoStatSpellCritPercent:
+		return core.SpellCritRatingPerCritPercent
+	case proto.PseudoStat_PseudoStatMeleeHastePercent, proto.PseudoStat_PseudoStatRangedHastePercent:
+		return core.PhysicalHasteRatingPerHastePercent
+	case proto.PseudoStat_PseudoStatSpellHastePercent:
+		return core.SpellHasteRatingPerHastePercent
+	case proto.PseudoStat_PseudoStatReducedCritTakenPercent:
+		if parent == stats.DefenseRating {
+			return core.DefenseRatingPerDefenseLevel / core.MissDodgeParryBlockCritChancePerDefense
+		}
+		if parent == stats.ResilienceRating {
+			return core.ResilienceRatingPerCritReductionChance
+		}
+		return 1
+	default:
+		return 1
 	}
 }
 
@@ -202,6 +264,20 @@ func computeStatCapsDelta(baseStats core.UnitStats, statCaps core.UnitStats) cor
 		}
 	}
 	return result
+}
+
+func unitStatFromUIStat(uiStat *proto.UIStat) (stats.UnitStat, bool) {
+	if uiStat == nil {
+		return 0, false
+	}
+	switch unitStat := uiStat.UnitStat.(type) {
+	case *proto.UIStat_Stat:
+		return stats.UnitStatFromStat(stats.Stat(unitStat.Stat)), true
+	case *proto.UIStat_PseudoStat:
+		return stats.UnitStatFromPseudoStat(unitStat.PseudoStat), true
+	default:
+		return 0, false
+	}
 }
 
 // ---------------------------------------------------------------------------

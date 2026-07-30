@@ -116,7 +116,7 @@ func TestBulkSimEnchantAppliesToItem_RejectsNonMatchingItemTypes(t *testing.T) {
 	}
 }
 
-func TestReorganizeGems_PersistsHeadMetaAndReassignsOtherGems(t *testing.T) {
+func TestApplyMetaGem_PersistsHeadMetaAndClearsOtherGems(t *testing.T) {
 	existing := core.Item{
 		Type:       proto.ItemType_ItemTypeHead,
 		GemSockets: []proto.GemColor{proto.GemColor_GemColorMeta, proto.GemColor_GemColorRed},
@@ -130,19 +130,19 @@ func TestReorganizeGems_PersistsHeadMetaAndReassignsOtherGems(t *testing.T) {
 		GemSockets: []proto.GemColor{proto.GemColor_GemColorMeta, proto.GemColor_GemColorBlue},
 	}
 
-	gems := reorganizeGems(existing, newItem)
+	gems := applyMetaGem(existing, newItem)
 	if len(gems) != 2 {
 		t.Fatalf("expected 2 gem slots, got %d", len(gems))
 	}
 	if gems[0] != 1001 {
 		t.Fatalf("expected meta gem to persist in meta socket, got %d", gems[0])
 	}
-	if gems[1] != 1002 {
-		t.Fatalf("expected non-meta gem to be reassigned to eligible socket, got %d", gems[1])
+	if gems[1] != 0 {
+		t.Fatalf("expected non-meta gem to be cleared, got %d", gems[1])
 	}
 }
 
-func TestReorganizeGems_KeepsNonHeadGems(t *testing.T) {
+func TestApplyMetaGem_DropsNonHeadGems(t *testing.T) {
 	existing := core.Item{
 		Type:       proto.ItemType_ItemTypeHands,
 		GemSockets: []proto.GemColor{proto.GemColor_GemColorRed},
@@ -155,11 +155,11 @@ func TestReorganizeGems_KeepsNonHeadGems(t *testing.T) {
 		GemSockets: []proto.GemColor{proto.GemColor_GemColorRed},
 	}
 
-	gems := reorganizeGems(existing, newItem)
+	gems := applyMetaGem(existing, newItem)
 	if len(gems) != 1 {
 		t.Fatalf("expected 1 gem slot, got %d", len(gems))
 	}
-	if gems[0] != 2001 {
-		t.Fatalf("expected non-head gem to be preserved in matching socket, got %d", gems[0])
+	if gems[0] != 0 {
+		t.Fatalf("expected non-head gems to be cleared, got %d", gems[0])
 	}
 }

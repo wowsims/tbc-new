@@ -19,6 +19,10 @@ type highsJSSolution struct {
 // runHiGHSLP runs the given CPLEX LP text through the browser's highs.wasm via the
 // __wowsimsSolveHiGHSLP bridge the host page exposes. Returns per-variable primal values (indexed
 // by x{i}), the HiGHS model status, and any error.
+// WarmUp is a no-op on js/wasm: the browser compiles the HiGHS solver lazily, and there is no
+// embedded module to precompile here.
+func WarmUp() error { return nil }
+
 func runHiGHSLP(lpString string, numVars int, timeout time.Duration, mipRelGap float64) ([]float64, int32, error) {
 	solve := js.Global().Get("__wowsimsSolveHiGHSLP")
 	if solve.Type() != js.TypeFunction {
@@ -64,39 +68,4 @@ func runHiGHSLP(lpString string, numVars int, timeout time.Duration, mipRelGap f
 		values[variableIdx] = value
 	}
 	return values, modelStatus, nil
-}
-
-func solveMIPWithHiGHS(model mipModel, timeout time.Duration, mipRelGap float64) (mipSolution, bool, error) {
-	solve := js.Global().Get("__wowsimsSolveHiGHSLP")
-	if solve.Type() != js.TypeFunction {
-		return mipSolution{}, false, fmt.Errorf("HiGHS JavaScript solver bridge is not available")
-	}
-
-	result := solve.Invoke(modelToHiGHSLP(model), timeout.Seconds(), mipRelGap)
-	if result.Type() != js.TypeString {
-		return mipSolution{}, false, fmt.Errorf("HiGHS JavaScript solver bridge returned %s, expected string", result.Type().String())
-	}
-
-	var highsSolution highsJSSolution
-	if err := json.Unmarshal([]byte(result.String()), &highsSolution); err != nil {
-		return mipSolution{}, false, fmt.Errorf("parsing HiGHS JavaScript solver result: %w", err)
-	}
-	if highsSolution.Error != "" {
-		return mipSolution{}, false, fmt.Errorf("HiGHS JavaScript solve failed: %s", highsSolution.Error)
-	}
-
-	solved := highsSolution.Status == "Optimal" || strings.EqualFold(highsSolution.Status, "Time limit reached")
-	if !solved {
-		return mipSolution{}, false, nil
-	}
-
-	solution := mipSolution{values: make([]float64, len(model.variables))}
-	for variableIdx := range model.variables {
-		value, ok := highsSolution.Values[fmt.Sprintf("x%d", variableIdx)]
-		if !ok {
-			return mipSolution{}, false, fmt.Errorf("HiGHS JavaScript solution missing variable x%d", variableIdx)
-		}
-		solution.values[variableIdx] = value
-	}
-	return solution, true, nil
 }
