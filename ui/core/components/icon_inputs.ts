@@ -99,7 +99,8 @@ export function makeBooleanIndividualBuffInput<SpecType extends Spec>(
 	return InputHelpers.makeBooleanIconInput<any, IndividualBuffs, Player<SpecType>>(
 		{
 			getModObject: (player: Player<SpecType>) => player,
-			showWhen: (player: Player<SpecType>) => !config.faction || config.faction == player.getFaction(),
+			showWhen: (player: Player<SpecType>) =>
+				(!config.faction || config.faction == player.getFaction()) && (!config.showWhen || config.showWhen(player)),
 			getValue: (player: Player<SpecType>) => player.getBuffs(),
 			setValue: (eventID: EventID, player: Player<SpecType>, newVal: IndividualBuffs) => player.setBuffs(eventID, newVal),
 			changeEmitter: (player: Player<SpecType>) => TypedEvent.onAny([player.buffsChangeEmitter, player.raceChangeEmitter]),
