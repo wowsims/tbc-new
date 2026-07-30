@@ -53,6 +53,8 @@ func TestFeralBear(t *testing.T) {
 			Profession1: proto.Profession_Engineering,
 			Profession2: proto.Profession_Enchanting,
 
+			IndividualBuffs: core.FullTankIndividualBuffs,
+
 			IsTank:          true,
 			InFrontOfTarget: true,
 

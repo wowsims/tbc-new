@@ -33,6 +33,8 @@ func TestProtectionWarrior(t *testing.T) {
 
 			Rotation: core.GetAplRotation("../../../ui/warrior/protection/apls", "default"),
 
+			IndividualBuffs: core.FullTankIndividualBuffs,
+
 			IsTank:          true,
 			InFrontOfTarget: true,
 

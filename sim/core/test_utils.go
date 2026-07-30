@@ -100,6 +100,15 @@ var FullPartyBuffs = &proto.PartyBuffs{
 
 var FullIndividualBuffs = &proto.IndividualBuffs{
 	BlessingOfKings:     true,
+	BlessingOfSalvation: true,
+	BlessingOfSanctuary: true,
+	BlessingOfWisdom:    proto.TristateEffect_TristateEffectImproved,
+	BlessingOfMight:     proto.TristateEffect_TristateEffectImproved,
+	UnleashedRage:       true,
+}
+
+var FullTankIndividualBuffs = &proto.IndividualBuffs{
+	BlessingOfKings:     true,
 	BlessingOfSanctuary: true,
 	BlessingOfWisdom:    proto.TristateEffect_TristateEffectImproved,
 	BlessingOfMight:     proto.TristateEffect_TristateEffectImproved,
