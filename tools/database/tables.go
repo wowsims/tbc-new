@@ -140,7 +140,7 @@ func LoadAndWriteRawItems(dbHelper *DBHelper, filter string, inputsDir string) (
 			COALESCE(itemset.Name_lang, '') as ItemSetName,
 			COALESCE(itemset.ID, 0) as ItemSetID,
 			s.AllowableClass as ClassMask,
-			s.AllowableRace as RaceMask,
+			s.AllowableRace_0 as RaceMask,
 			s.QualityModifier,
 			(
 				SELECT group_concat(-ench, ',')
@@ -546,7 +546,7 @@ func LoadAndWriteRawEnchants(dbHelper *DBHelper, inputsDir string) ([]dbc.Enchan
 				ELSE se.SpellID
 			END AS spellId,
 			COALESCE(ie.ParentItemID, 0) as ItemId,
-			sie.Field_1_15_3_55112_014 as professionId,
+			sie.RequiredSkillID as professionId,
 			sie.Effect as Effect,
 			sie.EffectPointsMin as EffectPoints,
 			group_concat(ese.EffectBasePoints+1) as SpellEffectPoints,
@@ -576,14 +576,14 @@ func LoadAndWriteRawEnchants(dbHelper *DBHelper, inputsDir string) ([]dbc.Enchan
 			WHERE se.Effect = 53
 				AND (
 					(
-						sie.Field_1_15_3_55112_014 > 0
+						sie.RequiredSkillID > 0
 						OR sla.ID               IS NOT NULL
-						OR sie.Field_1_15_3_55112_015 IS NOT NULL
+						OR sie.RequiredSkillRank IS NOT NULL
 					)
 					OR
-					sie.Field_1_15_3_55112_014 = 0
+					sie.RequiredSkillID = 0
 					OR
-					sie.Field_1_15_3_55112_014 = 773
+					sie.RequiredSkillID = 773
 				)
 		GROUP BY name `
 	items, err := LoadRows(dbHelper.db, query, ScanEnchantsTable)
@@ -1601,7 +1601,7 @@ func LoadRepItems(dbHelper *DBHelper) (
 	sourcesByItem map[int][]*proto.RepSource,
 ) {
 	const query = `
-		SELECT isp.ID, fa.ID, COALESCE(fa.ReputationRaceMask_0, 0) AS ReputationRaceMask, isp.MinReputation FROM ItemSparse isp
+		SELECT isp.ID, fa.ID, COALESCE(fa.ReputationRaceMasks0_0, 0) AS ReputationRaceMask, isp.MinReputation FROM ItemSparse isp
 		LEFT JOIN Faction fa on fa.ID = isp.MinFactionID
 		WHERE fa.ParentFactionID=980
     `

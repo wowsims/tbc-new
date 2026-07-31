@@ -157,4 +157,32 @@ func init() {
 
 		character.ItemSwap.RegisterProc(30450, procAura)
 	})
+
+	// Ashtongue Talisman of Lethality
+	core.NewItemEffect(32492, func(agent core.Agent) {
+		rogue := agent.(RogueAgent).GetRogue()
+
+		aura := rogue.NewTemporaryStatsAura(
+			"Rogue Tier 6 Trinket",
+			core.ActionID{SpellID: 40460},
+			stats.Stats{stats.MeleeCritRating: 145},
+			time.Second*10,
+		)
+
+		procAura := rogue.MakeProcTriggerAura(core.ProcTrigger{
+			Name:               "Ashtongue Talisman of Lethality",
+			ActionID:           core.ActionID{ItemID: 32492},
+			RequireDamageDealt: false,
+			Callback:           core.CallbackOnCastComplete,
+			ClassSpellMask:     RogueSpellFinisher,
+			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+				chance := 0.2 * float64(rogue.ComboPoints())
+				if chance == 1 || sim.Proc(chance, "Ashtongue Talisman of Lethality") {
+					aura.Activate(sim)
+				}
+			},
+		})
+
+		rogue.ItemSwap.RegisterProc(32492, procAura)
+	})
 }
