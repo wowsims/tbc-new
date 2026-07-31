@@ -146,7 +146,7 @@ message APLValue {
 		APLValueMaxComboPoints max_combo_points = 93;
 		APLValueMaxEnergy max_energy = 87;
 		APLValueMaxRage max_rage = 102;
-		APLValueEnergyRegenPerSecond energy_regen_per_second = 89;
+		APLValueTimeToNextEnergyTick time_to_next_energy_tick = 89;
 		APLValueEnergyTimeToTarget energy_time_to_target = 91;
 
 		// Unit values
@@ -528,7 +528,7 @@ message APLValueMaxMana {}
 message APLValueMaxComboPoints {}
 message APLValueMaxEnergy {}
 message APLValueMaxRage {}
-message APLValueEnergyRegenPerSecond {}
+message APLValueTimeToNextEnergyTick {}
 message APLValueEnergyTimeToTarget {
 	APLValue target_energy = 1;
 }
