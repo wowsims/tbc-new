@@ -153,7 +153,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 		// Preset rotations that the user can quickly select.
 		rotations: [Presets.SINSITER_APL],
 		// Preset gear configurations that the user can quickly select.
-		gear: [Presets.PREARAID_SWORDS_GEAR, Presets.P1_SWORDS_GEAR, Presets.P2_SWORDS_GEAR],
+		gear: [Presets.PREARAID_SWORDS_GEAR, Presets.P1_SWORDS_GEAR, Presets.P2_SWORDS_GEAR, Presets.P3_SWORDS_GEAR],
 	},
 
 	autoRotation: (player: Player<Spec.SpecRogue>): APLRotation => {
@@ -174,10 +174,10 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 			defaultGear: {
 				[Faction.Unknown]: {},
 				[Faction.Alliance]: {
-					1: Presets.P2_SWORDS_GEAR.gear,
+					1: Presets.P3_SWORDS_GEAR.gear,
 				},
 				[Faction.Horde]: {
-					1: Presets.P2_SWORDS_GEAR.gear,
+					1: Presets.P3_SWORDS_GEAR.gear,
 				},
 			},
 			otherDefaults: Presets.OtherDefaults,
