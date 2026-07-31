@@ -177,7 +177,10 @@ export abstract class SimUI extends Component {
 		new SimTitleDropdown(titleElem, config.spec, { noDropdown: this.isWithinRaidSim });
 
 		this.simActionsContainer = this.rootElem.querySelector('.sim-sidebar-actions') as HTMLElement;
-		this.addNoticeForLocalSim();
+
+		this.sim.waitForInit().then(() => {
+			this.addNoticeForLocalSim();
+		});
 
 		this.iterationsPicker = new NumberPicker(this.simActionsContainer, this.sim, {
 			id: 'simui-iterations',
@@ -233,7 +236,7 @@ export abstract class SimUI extends Component {
 	}
 
 	addNoticeForLocalSim() {
-		new NoticeLocalSim(this.simActionsContainer);
+		new NoticeLocalSim(this.simActionsContainer, this.sim);
 	}
 
 	addAction(label: string, cssClass: string, onClick: (event: MouseEvent) => void): HTMLButtonElement {

@@ -1,8 +1,9 @@
-import { EligibleWeaponType, IconSize, PlayerClass } from '../player_class';
+import { IconSize, PlayerClass } from '../player_class';
 import { PlayerSpec } from '../player_spec';
 import { Mage as MageSpec } from '../player_specs/mage';
-import { ArmorType, Class, Race, RangedWeaponType, WeaponType } from '../proto/common';
+import { Class } from '../proto/common';
 import { MageSpecs } from '../proto_utils/utils';
+import { getClassArmorTypes, getClassRaces, getClassRangedWeaponTypes, getClassWeaponTypes } from './capabilities';
 
 export class Mage extends PlayerClass<Class.ClassMage> {
 	static classID = Class.ClassMage as Class.ClassMage;
@@ -11,26 +12,10 @@ export class Mage extends PlayerClass<Class.ClassMage> {
 	static specs: Record<string, PlayerSpec<MageSpecs>> = {
 		[Mage.friendlyName]: MageSpec,
 	};
-	static races: Race[] = [
-		// [H]
-		Race.RaceTroll,
-		Race.RaceOrc,
-		Race.RaceUndead,
-		Race.RaceBloodElf,
-		// [A]
-		Race.RaceGnome,
-		Race.RaceHuman,
-		Race.RaceDwarf,
-		Race.RaceDraenei,
-	];
-	static armorTypes: ArmorType[] = [ArmorType.ArmorTypeCloth];
-	static weaponTypes: EligibleWeaponType[] = [
-		{ weaponType: WeaponType.WeaponTypeDagger },
-		{ weaponType: WeaponType.WeaponTypeOffHand },
-		{ weaponType: WeaponType.WeaponTypeStaff, canUseTwoHand: true },
-		{ weaponType: WeaponType.WeaponTypeSword },
-	];
-	static rangedWeaponTypes: RangedWeaponType[] = [RangedWeaponType.RangedWeaponTypeWand];
+	static races = getClassRaces(Mage.classID);
+	static armorTypes = getClassArmorTypes(Mage.classID);
+	static weaponTypes = getClassWeaponTypes(Mage.classID);
+	static rangedWeaponTypes = getClassRangedWeaponTypes(Mage.classID);
 
 	readonly classID = Mage.classID;
 	readonly friendlyName = Mage.name;

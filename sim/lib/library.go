@@ -116,6 +116,8 @@ func getDatabase(itemIds *int32, numItems int32, enchantIds *int32, numEnchants 
 			GemSockets:       item.GemSockets,
 			SocketBonus:      item.SocketBonus[:],
 			WeaponSpeed:      item.SwingSpeed,
+			Unique:           item.Unique,
+			LimitCategory:    item.LimitCategory,
 			SetName:          item.SetName,
 			SetId:            item.SetID,
 			ScalingOptions:   item.ScalingOptions,
@@ -130,6 +132,8 @@ func getDatabase(itemIds *int32, numItems int32, enchantIds *int32, numEnchants 
 			EnchantEffects: enchant.EnchantEffects,
 			Name:           enchant.Name,
 			Type:           enchant.Type,
+			EnchantType:    enchant.EnchantType,
+			ExtraTypes:     enchant.ExtraTypes,
 		}
 	}
 	for i, gemId := range gids {

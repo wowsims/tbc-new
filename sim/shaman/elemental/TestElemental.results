@@ -1435,15 +1435,15 @@ dps_results: {
 dps_results: {
  key: "TestElemental-Settings-Draenei-p1_a-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
  value: {
-  dps: 916.91961
-  tps: 702.7159
+  dps: 919.62836
+  tps: 705.05969
  }
 }
 dps_results: {
  key: "TestElemental-Settings-Draenei-p1_a-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
  value: {
-  dps: 790.49626
-  tps: 613.56309
+  dps: 791.89164
+  tps: 614.63154
  }
 }
 dps_results: {
@@ -1855,15 +1855,15 @@ dps_results: {
 dps_results: {
  key: "TestElemental-Settings-Troll-p1_a-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
  value: {
-  dps: 899.31064
-  tps: 690.32401
+  dps: 900.7252
+  tps: 690.92595
  }
 }
 dps_results: {
  key: "TestElemental-Settings-Troll-p1_a-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
  value: {
-  dps: 785.4088
-  tps: 609.875
+  dps: 785.9062
+  tps: 610.53402
  }
 }
 dps_results: {

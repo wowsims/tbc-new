@@ -1,6 +1,19 @@
 import { Player } from '../../core/player';
 import * as PresetUtils from '../../core/preset_utils';
-import { ConsumesSpec, Debuffs, HandType, ItemSlot, PartyBuffs, Profession, PseudoStat, Race, Spec, Stat, TristateEffect } from '../../core/proto/common';
+import {
+	ConsumesSpec,
+	Debuffs,
+	HandType,
+	ItemQuality,
+	ItemSlot,
+	PartyBuffs,
+	Profession,
+	PseudoStat,
+	Race,
+	Spec,
+	Stat,
+	TristateEffect,
+} from '../../core/proto/common';
 import { SavedTalents } from '../../core/proto/ui';
 import {
 	DpsWarriorSpec,
@@ -266,6 +279,7 @@ export const P1_PLAYER_SETTINGS: PresetUtils.PresetSettings = {
 	}),
 	reforgeSettings: {
 		maxGemPhase: Phase.Phase1,
+		maxGemQuality: ItemQuality.ItemQualityEpic,
 	},
 };
 
@@ -282,6 +296,7 @@ export const P2_PLAYER_SETTINGS: PresetUtils.PresetSettings = {
 	}),
 	reforgeSettings: {
 		maxGemPhase: Phase.Phase2,
+		maxGemQuality: ItemQuality.ItemQualityEpic,
 	},
 };
 
@@ -298,6 +313,7 @@ export const P3_PLAYER_SETTINGS: PresetUtils.PresetSettings = {
 	}),
 	reforgeSettings: {
 		maxGemPhase: Phase.Phase3,
+		maxGemQuality: ItemQuality.ItemQualityEpic,
 	},
 };
 
@@ -314,6 +330,7 @@ export const P4_PLAYER_SETTINGS: PresetUtils.PresetSettings = {
 	}),
 	reforgeSettings: {
 		maxGemPhase: Phase.Phase4,
+		maxGemQuality: ItemQuality.ItemQualityEpic,
 	},
 };
 
@@ -330,6 +347,7 @@ export const P5_PLAYER_SETTINGS: PresetUtils.PresetSettings = {
 	}),
 	reforgeSettings: {
 		maxGemPhase: Phase.Phase5,
+		maxGemQuality: ItemQuality.ItemQualityEpic,
 	},
 };
 

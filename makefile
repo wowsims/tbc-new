@@ -6,6 +6,8 @@ ASSETS := $(patsubst assets/%,$(OUT_DIR)/assets/%,$(ASSETS_INPUT))
 rwildcard = $(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
 GOROOT := $(shell go env GOROOT)
 UI_SRC := $(shell find ui -name '*.ts' -o -name '*.tsx' -o -name '*.scss' -o -name '*.html')
+AUTO_GEN_FILES_TS := ui/core/player_classes/capabilities_auto_gen.ts ui/core/components/individual_sim_ui/bulk/constants_auto_gen.ts
+AUTO_GEN_FILES_TS_DEPS := sim/core/base_stats.go sim/core/bulk/candidates.go tools/database/gen_character_constants_ts.go tools/database/gen_bulksim_constants.ts.go sim/core/proto/api.pb.go
 PAGE_INDECES := ui/druid/balance/index.html \
 				ui/druid/feralcat/index.html \
 				ui/druid/feralbear/index.html \
@@ -35,6 +37,7 @@ $(OUT_DIR)/.dirstamp: \
 $(OUT_DIR)/bundle/.dirstamp: \
   $(UI_SRC) \
   $(PAGE_INDECES) \
+  $(AUTO_GEN_FILES_TS) \
   vite.config.mts \
   vite.build-workers.mts \
   node_modules \
@@ -104,7 +107,7 @@ node_modules: package-lock.json
 
 # Generic rule for hosting any class directory
 .PHONY: host_%
-host_%: $(OUT_DIR) node_modules
+host_%: $(OUT_DIR) node_modules $(AUTO_GEN_FILES_TS)
 	npx http-server $(OUT_DIR)/..
 
 # Generic rule for building index.html for any class directory
@@ -156,9 +159,9 @@ proto: sim/core/proto/api.pb.go ui/core/proto/api.ts
 wowsimtbc: binary_dist devserver
 
 .PHONY: devserver
-devserver: sim/core/proto/api.pb.go sim/web/main.go binary_dist/dist.go
+devserver: sim/core/proto/api.pb.go sim/web/*.go binary_dist/dist.go
 	@echo "Starting server compile now..."
-	@if go build -o wowsimtbc ./sim/web/main.go ; then \
+	@if go build -o wowsimtbc ./sim/web ; then \
 		printf "\033[1;32mBuild Completed Successfully\033[0m\n"; \
 	else \
 		printf "\033[1;31mBUILD FAILED\033[0m\n"; \
@@ -174,7 +177,7 @@ ifeq ($(WATCH), 1)
 	fi
 endif
 
-rundevserver: air devserver
+rundevserver: air devserver $(AUTO_GEN_FILES_TS)
 ifeq ($(WATCH), 1)
 	npx tsx vite.build-workers.mts & npx vite build -m development --watch &
 	ulimit -n 10240 && air -tmp_dir "/tmp" -build.include_ext "go,proto" -build.args_bin "--usefs=true --launch=false" -build.bin "./wowsimtbc" -build.cmd "make devserver" -build.exclude_dir "assets,dist,node_modules,ui,tools"
@@ -192,10 +195,10 @@ wowsimtbc-windows.exe: wowsimtbc
 	mv ./cmd/wowsimcli/wowsimcli-windows.exe ./wowsimcli-windows.exe
 
 release: wowsimtbc wowsimtbc-windows.exe
-	GOOS=darwin GOARCH=amd64 GOAMD64=v2 go build -o wowsimtbc-amd64-darwin -ldflags="-X 'main.Version=$(VERSION)' -s -w" ./sim/web/main.go
-	GOOS=darwin GOARCH=arm64 go build -o wowsimtbc-arm64-darwin -ldflags="-X 'main.Version=$(VERSION)' -s -w" ./sim/web/main.go
+	GOOS=darwin GOARCH=amd64 GOAMD64=v2 go build -o wowsimtbc-amd64-darwin -ldflags="-X 'main.Version=$(VERSION)' -s -w" ./sim/web
+	GOOS=darwin GOARCH=arm64 go build -o wowsimtbc-arm64-darwin -ldflags="-X 'main.Version=$(VERSION)' -s -w" ./sim/web
 	GOOS=darwin GOARCH=arm64 go build -o wowsimcli-arm64-darwin --tags=with_db -ldflags="-X 'main.Version=$(VERSION)' -s -w" ./cmd/wowsimcli/cli_main.go
-	GOOS=linux GOARCH=amd64 GOAMD64=v2 go build -o wowsimtbc-amd64-linux   -ldflags="-X 'main.Version=$(VERSION)' -s -w" ./sim/web/main.go
+	GOOS=linux GOARCH=amd64 GOAMD64=v2 go build -o wowsimtbc-amd64-linux   -ldflags="-X 'main.Version=$(VERSION)' -s -w" ./sim/web
 	GOOS=linux GOARCH=amd64 GOAMD64=v2 go build -o wowsimcli-amd64-linux --tags=with_db -ldflags="-X 'main.Version=$(VERSION)' -s -w" ./cmd/wowsimcli/cli_main.go
 # Now compress into a zip because the files are getting large.
 	zip wowsimtbc-windows.exe.zip wowsimtbc-windows.exe
@@ -208,6 +211,15 @@ release: wowsimtbc wowsimtbc-windows.exe
 
 sim/core/proto/api.pb.go: proto/*.proto
 	protoc -I=./proto --go_out=./sim/core ./proto/*.proto
+
+$(AUTO_GEN_FILES_TS): $(AUTO_GEN_FILES_TS_DEPS)
+	go run ./tools/database/gen_db -gen=go-to-ts
+
+.PHONY: go-to-ts
+go-to-ts: $(AUTO_GEN_FILES_TS)
+
+.PHONY: character-constants-ts
+character-constants-ts: go-to-ts
 
 # Only useful for building the lib on a host platform that matches the target platform
 .PHONY: locallib
