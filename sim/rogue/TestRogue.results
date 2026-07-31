@@ -123,6 +123,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRogue-AllItems-AshtongueTalismanofLethality-32492"
+ value: {
+  dps: 1827.10748
+  tps: 908.07242
+ }
+}
+dps_results: {
  key: "TestRogue-AllItems-AssassinationArmor"
  value: {
   dps: 1605.35051
