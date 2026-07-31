@@ -71,7 +71,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 
 	defaults: {
 		// Default equipped gear.
-		gear: Presets.P1_SWORDS_GEAR.gear,
+		gear: Presets.P3_SWORDS_GEAR.gear,
 		// Default EP weights for sorting gear in the gear picker.
 		epWeights: Presets.P1_EP_PRESET.epWeights,
 		statCaps: (() => {
