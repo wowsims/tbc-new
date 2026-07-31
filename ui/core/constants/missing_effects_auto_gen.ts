@@ -2166,12 +2166,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		32492, // Ashtongue Talisman of Lethality
-		[
-			"20% chance per combo point for your finishing moves to grant 145 critical strike rating for 10s.", // 40460 - https://www.wowhead.com/tbc/spell=40460
-		]
-	],
-	[
 		32500, // Crystal Spire of Karabor
 		[
 			"If your target is below 50% health, your direct healing spells will cause your target to be healed for an additional 220 health.", // 40972 - https://www.wowhead.com/tbc/spell=40972
