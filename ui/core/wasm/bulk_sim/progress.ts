@@ -65,7 +65,7 @@ export const makeBulkSimStageProgressEmitter = (
 		emitBulkSimStageProgress(onProgress, stage, completedSims, totalSims, completedIterations, totalIterations, dps),
 });
 
-export const emitBulkSimStageProgress = (
+const emitBulkSimStageProgress = (
 	onProgress: WorkerProgressCallback,
 	bulkStage: BulkSimStage,
 	completedSims: number,

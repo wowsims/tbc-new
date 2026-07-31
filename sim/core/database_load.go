@@ -60,6 +60,8 @@ func init() {
 			EnchantEffects: enchant.EnchantEffects,
 			Name:           enchant.Name,
 			Type:           enchant.Type,
+			EnchantType:    enchant.EnchantType,
+			ExtraTypes:     enchant.ExtraTypes,
 		}
 	}
 

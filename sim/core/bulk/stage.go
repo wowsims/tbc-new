@@ -83,7 +83,7 @@ func GetBulkSimStageConcurrency(request *proto.BulkSimRequest, config BulkSimSta
 // N always uses seed RandomSeed+N.
 func runBulkSimStage(request *proto.BulkSimRequest, candidates []BulkSimCandidate, config BulkSimStageConfig, carry *bulkSimStageCarryOver, progress chan *proto.ProgressMetrics, signals simsignals.Signals) BulkSimStageResult {
 	startedAt := time.Now()
-	minIterations := getBulkSimStageMinIterations(request, config)
+	minIterations := getBulkSimStageMinIterations(request.HighStageIterations, config)
 	concurrency := GetBulkSimStageConcurrency(request, config)
 	concurrency = max(1, min(concurrency, len(candidates)))
 	if !carry.covers(candidates) {
@@ -198,11 +198,7 @@ func bulkSimStageMetrics(config BulkSimStageConfig, candidates []BulkSimCandidat
 	}
 }
 
-func getBulkSimStageMinIterations(request *proto.BulkSimRequest, config BulkSimStageConfig) int32 {
-	return getBulkSimStageMinIterationsFromFloor(request.HighStageIterations, config)
-}
-
-func getBulkSimStageMinIterationsFromFloor(highStageIterations int32, config BulkSimStageConfig) int32 {
+func getBulkSimStageMinIterations(highStageIterations int32, config BulkSimStageConfig) int32 {
 	if config.Stage == proto.BulkSimStage_BulkSimStageHigh && highStageIterations > 0 {
 		return highStageIterations
 	}
@@ -210,7 +206,7 @@ func getBulkSimStageMinIterationsFromFloor(highStageIterations int32, config Bul
 }
 
 func getBulkSimStageIterations(request *proto.BulkSimRequest, config BulkSimStageConfig, baselineMetrics *proto.DistributionMetrics, candidateCount int) int32 {
-	minIterations := getBulkSimStageMinIterations(request, config)
+	minIterations := getBulkSimStageMinIterations(request.HighStageIterations, config)
 	// The user-defined high-stage iteration count is a floor, not a cap. Every
 	// stage still uses enough iterations to satisfy its target error when needed.
 	targetIterations := getBulkSimTargetIterations(config.TargetErrorPct, baselineMetrics, candidateCount)

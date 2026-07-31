@@ -20,8 +20,7 @@ type gemLocation struct {
 // are keyed "<slot>_<socketIdx>_<gemID>"; every other selected variable (the SocketBonus_<slot>
 // indicators) carries no gem and is skipped.
 func (o *reforgeOptimizer) applyLPSolution(selectedVars []string) *proto.EquipmentSpec {
-	strippedGear := o.baseStrippedGear
-	gear := equipmentFromProto(strippedGear)
+	gear := equipmentFromProto(o.baseStrippedGear)
 
 	for _, variableKey := range selectedVars {
 		parts := strings.Split(variableKey, "_")
@@ -53,8 +52,7 @@ func (o *reforgeOptimizer) applyLPSolution(selectedVars []string) *proto.Equipme
 // back — reusing a gem the player already owns instead of buying a new one — unless doing so would
 // drop a socket-color match the solver found.
 func (o *reforgeOptimizer) minimizeRegems(newGear *core.Equipment) {
-	originalGear, frozen := o.originalEquipment, o.frozenSlots
-	if originalGear == nil {
+	if o.originalEquipment == nil {
 		return
 	}
 
@@ -62,7 +60,7 @@ func (o *reforgeOptimizer) minimizeRegems(newGear *core.Equipment) {
 	for slotIdx := 0; slotIdx < int(core.NumItemSlots); slotIdx++ {
 		slot := proto.ItemSlot(slotIdx)
 		newItem := newGear.GetItemBySlot(slot)
-		originalItem := originalGear.GetItemBySlot(slot)
+		originalItem := o.originalEquipment.GetItemBySlot(slot)
 		if newItem.ID == 0 || originalItem.ID == 0 {
 			continue
 		}
@@ -83,7 +81,7 @@ func (o *reforgeOptimizer) minimizeRegems(newGear *core.Equipment) {
 			originalGem := gemFromID(originalGemID)
 
 			for _, loc := range o.findGem(newGear, originalGemID) {
-				if frozen[loc.slot] {
+				if o.frozenSlots[loc.slot] {
 					continue
 				}
 				matchedKey := reforgeSocketKey{slot: loc.slot, socketIdx: loc.socketIdx}
@@ -129,7 +127,6 @@ func (o *reforgeOptimizer) minimizeRegems(newGear *core.Equipment) {
 // gemID whose own original gem was something else. Sockets the solver never changed are skipped:
 // they hold their rightful gem and must not be disturbed.
 func (o *reforgeOptimizer) findGem(equipment *core.Equipment, gemID int32) []gemLocation {
-	originalGear := o.originalEquipment
 	var locations []gemLocation
 	for slotIdx := 0; slotIdx < int(core.NumItemSlots); slotIdx++ {
 		slot := proto.ItemSlot(slotIdx)
@@ -138,8 +135,8 @@ func (o *reforgeOptimizer) findGem(equipment *core.Equipment, gemID int32) []gem
 			continue
 		}
 		var originalItem *core.Item
-		if originalGear != nil {
-			originalItem = originalGear.GetItemBySlot(slot)
+		if o.originalEquipment != nil {
+			originalItem = o.originalEquipment.GetItemBySlot(slot)
 		}
 		for socketIdx := range currentSocketColors(*item) {
 			if gemIDAt(item, socketIdx) != gemID {

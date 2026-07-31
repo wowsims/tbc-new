@@ -101,7 +101,7 @@ export const runBulkSimCandidateBatchOnWorkers = async (
 	const candidateQueue = queue<ConcurrentBulkSimCandidateTask, Error>(async ({ candidate, idx }) => {
 		if (signals.abort.isTriggered()) return;
 
-		const simmed = await runSingleBulkSimCandidate(
+		const deltaResult = await runSingleBulkSimCandidate(
 			request,
 			candidate,
 			iterations,
@@ -120,7 +120,7 @@ export const runBulkSimCandidateBatchOnWorkers = async (
 			batchConfig.seedOffset,
 		);
 
-		const candidateResult = mergeBulkSimCandidateResults(carriedByCandidate?.get(candidate.index), simmed);
+		const candidateResult = mergeBulkSimCandidateResults(carriedByCandidate?.get(candidate.index), deltaResult);
 		updateCandidateIterations(idx, iterations);
 		completedCandidates++;
 		batchConfig.emitter.report(

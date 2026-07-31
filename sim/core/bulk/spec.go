@@ -7,6 +7,10 @@ import (
 )
 
 func getPlayerSpec(player *proto.Player) (proto.Spec, error) {
+	if player == nil {
+		return proto.Spec_SpecUnknown, fmt.Errorf("unsupported player spec for backend bulk candidate generation")
+	}
+
 	switch {
 	case player.GetBalanceDruid() != nil:
 		return proto.Spec_SpecBalanceDruid, nil

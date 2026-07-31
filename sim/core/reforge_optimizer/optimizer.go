@@ -225,9 +225,7 @@ func computeReforgeStatsAndDeps(request *proto.ComputeStatsRequest) (*proto.Comp
 
 func optimizeError(message string) *proto.ReforgeOptimizeResult {
 	return &proto.ReforgeOptimizeResult{
-		Error: &proto.ErrorOutcome{
-			Message: message,
-		},
+		Error: &proto.ErrorOutcome{Message: message},
 	}
 }
 

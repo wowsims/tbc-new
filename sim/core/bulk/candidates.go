@@ -148,15 +148,15 @@ func EnsureBulkSimCandidatesGenerated(request *proto.BulkSimRequest) error {
 
 func getPlayer(request *proto.BulkSimRequest) (*proto.Player, error) {
 	if request == nil || request.GetBaseRequest() == nil || request.GetBaseRequest().GetRaid() == nil {
-		return nil, fmt.Errorf("bulk request is missing base raid")
+		return nil, fmt.Errorf("bulk sim request is missing base raid")
 	}
 	parties := request.GetBaseRequest().GetRaid().GetParties()
 	if len(parties) == 0 || parties[0] == nil {
-		return nil, fmt.Errorf("bulk request raid is missing parties")
+		return nil, fmt.Errorf("bulk sim request raid is missing parties")
 	}
 	players := parties[0].GetPlayers()
 	if len(players) == 0 || players[0] == nil {
-		return nil, fmt.Errorf("bulk request raid is missing player")
+		return nil, fmt.Errorf("bulk sim request raid is missing player")
 	}
 	return players[0], nil
 }

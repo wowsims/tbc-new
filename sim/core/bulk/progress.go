@@ -73,11 +73,11 @@ func (tracker *BulkSimStageProgressTracker) report(position int, completedIterat
 	}
 
 	tracker.mutex.Lock()
-	shouldEmit := candidateFinished || tracker.shouldEmitProgressLocked(false)
+	shouldEmit := candidateFinished || tracker.shouldEmitProgressLocked()
 	if completedIterations > tracker.completedIterationsByCandidate[position] {
 		tracker.completedCandidateIterations += completedIterations - tracker.completedIterationsByCandidate[position]
 		tracker.completedIterationsByCandidate[position] = completedIterations
-		shouldEmit = shouldEmit || tracker.shouldEmitProgressLocked(false)
+		shouldEmit = shouldEmit || tracker.shouldEmitProgressLocked()
 	}
 	if candidateFinished {
 		tracker.completedCandidates++
@@ -95,8 +95,8 @@ func (tracker *BulkSimStageProgressTracker) report(position int, completedIterat
 	tracker.emitter.report(completedSims, totalCompletedIterations, dps)
 }
 
-func (tracker *BulkSimStageProgressTracker) shouldEmitProgressLocked(force bool) bool {
-	return force || tracker.lastProgressEmit.IsZero() || time.Since(tracker.lastProgressEmit) >= bulkSimProgressThrottle
+func (tracker *BulkSimStageProgressTracker) shouldEmitProgressLocked() bool {
+	return tracker.lastProgressEmit.IsZero() || time.Since(tracker.lastProgressEmit) >= bulkSimProgressThrottle
 }
 
 func setBulkSimStageTiming(timings *proto.BulkSimTimings, stage proto.BulkSimStage, durationSeconds float64) {

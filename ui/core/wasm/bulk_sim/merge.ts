@@ -75,6 +75,9 @@ const mergeBulkSimDistributionMetrics = (
 
 const getBulkSimDistributionMetricsAggregatorData = (metrics: DistributionMetrics): { n: number; sumSq: number } => {
 	if (metrics.aggregatorData && metrics.aggregatorData.n > 0) return metrics.aggregatorData;
+	// Fabricating n=1 makes a merge silently mis-weight the two runs, so surface it
+	// instead of letting a wrong average through unnoticed.
+	console.warn('[Bulk Sim] distribution metrics are missing aggregator data; merged mean/stdev will be weighted as a single sample');
 	const n = 1;
 	return {
 		n,

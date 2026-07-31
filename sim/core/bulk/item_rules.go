@@ -34,6 +34,14 @@ func createSelectedItem(option bulkSimCandidateOption) core.Item {
 	})
 }
 
+// Gems are NOT carried over to the replacing item: the gem/reforge pre-pass re-gems every
+// candidate anyway, and inheriting the old item's gems would only guess at socket colours it
+// cannot satisfy. The head META gem is the exception - it is preserved across a head swap,
+// matching what clearGems keeps in the reforge optimizer.
+//
+// Mirrors MoP. NOTE the shared consequence: specs with no ReforgeOptimizer (druid/restoration,
+// paladin/holy, shaman/restoration here; five specs in MoP) get no pre-pass, so their bulk
+// candidates are simmed with only the head meta gem.
 func applyMetaGem(item core.Item, newItem core.Item) []int32 {
 	newGems := make([]int32, len(newItem.GemSockets))
 
@@ -82,13 +90,18 @@ func enchantAppliesToItem(effectID int32, item core.Item) bool {
 }
 
 func getEligibleEnchantSlots(enchant core.Enchant) []proto.ItemSlot {
-	if slots, ok := itemTypeToSlotsMap[enchant.Type]; ok {
-		return slots
+	types := append([]proto.ItemType{enchant.Type}, enchant.ExtraTypes...)
+	slots := make([]proto.ItemSlot, 0, len(types)*2)
+	for _, itemType := range types {
+		if typeSlots, ok := itemTypeToSlotsMap[itemType]; ok {
+			slots = append(slots, typeSlots...)
+			continue
+		}
+		if itemType == proto.ItemType_ItemTypeWeapon {
+			slots = append(slots, proto.ItemSlot_ItemSlotMainHand, proto.ItemSlot_ItemSlotOffHand)
+		}
 	}
-	if enchant.Type == proto.ItemType_ItemTypeWeapon {
-		return []proto.ItemSlot{proto.ItemSlot_ItemSlotMainHand, proto.ItemSlot_ItemSlotOffHand}
-	}
-	return nil
+	return slots
 }
 
 func getEligibleItemSlots(item core.Item, isFuryWarrior bool) []proto.ItemSlot {

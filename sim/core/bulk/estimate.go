@@ -29,7 +29,7 @@ func getBulkSimOptimisationIterationsUpperBound(highStageIterations int32, candi
 			continue
 		}
 
-		stageIterations := getBulkSimStageMinIterationsFromFloor(highStageIterations, stageConfig)
+		stageIterations := getBulkSimStageMinIterations(highStageIterations, stageConfig)
 		iterations += int64(stageIterations) * int64(remainingCandidates+1)
 		remainingCandidates = min(remainingCandidates, getBulkSimStageMaxSurvivors(stageConfig, remainingCandidates))
 	}

@@ -129,16 +129,8 @@ func getBulkItemSlotFromSlot(slot proto.ItemSlot, playerCanDualWield bool) BulkS
 	if playerCanDualWield && (slot == proto.ItemSlot_ItemSlotMainHand || slot == proto.ItemSlot_ItemSlotOffHand) {
 		return BulkSimItemSlotHandWeapon
 	}
-	for bulkSlot, singleSlot := range BulkSimItemSlotToSingleItemSlot {
-		if singleSlot == slot {
-			return bulkSlot
-		}
-	}
-	if slot == proto.ItemSlot_ItemSlotFinger1 || slot == proto.ItemSlot_ItemSlotFinger2 {
-		return BulkSimItemSlotFinger
-	}
-	if slot == proto.ItemSlot_ItemSlotTrinket1 || slot == proto.ItemSlot_ItemSlotTrinket2 {
-		return BulkSimItemSlotTrinket
+	if bulkSlot, ok := ItemSlotToBulkSimItemSlot[slot]; ok {
+		return bulkSlot
 	}
 	return BulkSimItemSlotHead
 }

@@ -12,6 +12,7 @@ import (
 
 	assetsdb "github.com/wowsims/tbc/assets/database"
 	"github.com/wowsims/tbc/sim"
+	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
 	"google.golang.org/protobuf/encoding/protojson"
@@ -153,4 +154,17 @@ func loadPreset(t *testing.T, fileName string) *proto.ReforgeOptimizeRequest {
 	}
 
 	return request
+}
+
+// subtractUnitStats is used by the fixture parity test to diff expected against optimized stats.
+func subtractUnitStats(a core.UnitStats, b core.UnitStats) core.UnitStats {
+	result := a
+	result.Stats = a.Stats.Subtract(b.Stats)
+	maxLen := max(len(a.PseudoStats), len(b.PseudoStats))
+	result.PseudoStats = make([]float64, maxLen)
+	copy(result.PseudoStats, a.PseudoStats)
+	for idx, value := range b.PseudoStats {
+		result.PseudoStats[idx] -= value
+	}
+	return result
 }

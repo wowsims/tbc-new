@@ -74,13 +74,13 @@ func computeCoeffScore(coeffs map[string]float64, weights core.UnitStats) float6
 func (o *reforgeOptimizer) updateReforgeScores(variables *lpVariables, weights core.UnitStats) *lpVariables {
 	updated := newLPVariables()
 	variables.each(func(name string, coeffs map[string]float64) {
-		updatedCoeffs := make(map[string]float64, len(coeffs)+1)
+		out := make(map[string]float64, len(coeffs)+1)
 		for key, value := range coeffs {
-			updatedCoeffs[key] = value
+			out[key] = value
 		}
 		objCoeffs := variables.getObj(name)
-		updatedCoeffs[scoreCoeffKey] = computeCoeffScore(objCoeffs, weights)
-		updated.set(name, updatedCoeffs)
+		out[scoreCoeffKey] = computeCoeffScore(objCoeffs, weights)
+		updated.set(name, out)
 		// Carry the objective coefficients forward so the cap-refinement recursion (which re-invokes
 		// updateReforgeScores on this returned value) can re-score against the tightened weights
 		// instead of collapsing every score to zero.
@@ -149,10 +149,9 @@ func (o *reforgeOptimizer) applyPositiveReforgeStats(coeffs map[string]float64, 
 // (Intellect -> SpellCrit%, Agility -> PhysicalCrit%/Dodge%, the haste speed multiplier) counts
 // toward the caps. The racial stat multipliers live in the dependency manager, so rawStats must be
 // passed through unscaled.
-func (o *reforgeOptimizer) resolveCapCoeffs(rawStats stats.Stats) map[string]float64 {
-	statDeps, baseStats := o.statDeps, o.baseStats
-	resolved := resolveStatDelta(statDeps, baseStats, rawUnitStatsFromStats(rawStats))
-	coeffs := make(map[string]float64)
+func (o *reforgeOptimizer) resolveCapCoeffs(rawDelta stats.Stats) map[string]float64 {
+	resolved := resolveStatDelta(o.statDeps, o.baseStats, rawUnitStatsFromStats(rawDelta))
+	coeffs := map[string]float64{}
 	eachUnitStat(resolved, func(unitStat stats.UnitStat, value float64) {
 		if value != 0 {
 			coeffs[coeffKeyForUnitStat(unitStat)] = value
@@ -221,15 +220,14 @@ func gemStatIsAllowed(stat stats.Stat, statCount int, epStats map[stats.Stat]boo
 // buildGemOptions builds the per-socket-color candidate gem lists, sorted by descending pre-cap EP
 // and pruned once an uncapped normal gem (and an uncapped Jewelcrafting gem) has been found.
 func (o *reforgeOptimizer) buildGemOptions(preCapEPs core.UnitStats, reforgeCaps core.UnitStats, softCaps []*reforgeSoftCap) map[proto.GemColor][]gemData {
-	gemOptions, settings, isTank := o.gemOptions, o.settings, o.isTankSpec
 	gemsToInclude := make(map[proto.GemColor][]gemData)
 	hasJC := playerHasProfession(o.player, proto.Profession_Jewelcrafting)
-	epStats := epRelevantStats(preCapEPs, settings)
+	epStats := epRelevantStats(preCapEPs, o.settings)
 
 	for _, socketColor := range gemBuildSocketColors {
 		var filtered []gemData
 
-		for _, gem := range gemOptions {
+		for _, gem := range o.gemOptions {
 			isJC := gem.GetRequiredProfession() == proto.Profession_Jewelcrafting
 			statCount := 0
 			for _, value := range gem.GetStats() {
@@ -238,12 +236,12 @@ func (o *reforgeOptimizer) buildGemOptions(preCapEPs core.UnitStats, reforgeCaps
 				}
 			}
 
-			if (settings.GetDisableUniqueGems() && gem.GetUnique() && !isJC) ||
+			if (o.settings.GetDisableUniqueGems() && gem.GetUnique() && !isJC) ||
 				(isJC && !hasJC) ||
 				!gemMatchesSocket(gem.GetColor(), socketColor) ||
 				statCount == 0 ||
-				gem.GetPhase() > settings.GetMaxGemPhase() ||
-				gem.GetQuality() > settings.GetMaxGemQuality() {
+				gem.GetPhase() > o.settings.GetMaxGemPhase() ||
+				gem.GetQuality() > o.settings.GetMaxGemQuality() {
 				continue
 			}
 
@@ -254,7 +252,7 @@ func (o *reforgeOptimizer) buildGemOptions(preCapEPs core.UnitStats, reforgeCaps
 					continue
 				}
 				stat := stats.Stat(statIdx)
-				if !gemStatIsAllowed(stat, statCount, epStats, isTank) {
+				if !gemStatIsAllowed(stat, statCount, epStats, o.isTankSpec) {
 					allStatsValid = false
 					break
 				}
@@ -374,10 +372,9 @@ func scaleStats(statValues stats.Stats, factor float64) stats.Stats {
 // buildYalpsVariables builds one binary variable per (socket, candidate gem) plus an optional
 // all-or-nothing socket-bonus variable per item.
 func (o *reforgeOptimizer) buildYalpsVariables(equipment core.Equipment, preCapEPs core.UnitStats, reforgeCaps core.UnitStats, softCaps []*reforgeSoftCap) *lpVariables {
-	settings, undershootCaps := o.settings, o.undershootCaps
 	variables := newLPVariables()
 	gemsToInclude := o.buildGemOptions(preCapEPs, reforgeCaps, softCaps)
-	frozen := frozenItemSlots(settings)
+	frozen := frozenItemSlots(o.settings)
 
 	// setVar stores a variable's two coefficient spaces: capCoeffs (stat-dependency-resolved stats
 	// plus the structural/constraint keys) in byName, and objCoeffs (the EP-calibrated
@@ -421,12 +418,12 @@ func (o *reforgeOptimizer) buildYalpsVariables(equipment core.Equipment, preCapE
 				continue
 			}
 			stat := stats.Stat(statIdx)
-			if getUnitStat(undershootCaps, stats.UnitStatFromStat(stat)) != 0 {
+			if getUnitStat(o.undershootCaps, stats.UnitStatFromStat(stat)) != 0 {
 				continue
 			}
 			undershot := false
 			for _, child := range childPseudoStats(stat) {
-				if getUnitStat(undershootCaps, stats.UnitStatFromPseudoStat(child)) != 0 {
+				if getUnitStat(o.undershootCaps, stats.UnitStatFromPseudoStat(child)) != 0 {
 					undershot = true
 					break
 				}
@@ -583,7 +580,6 @@ func gemColorCompareKey(greater, lesser proto.GemColor) string {
 // one-hot rows. The UniqueGem_* (<=1) and SocketBonusLink_* (<=0) rows are added by the caller
 // once the variables are known, mirroring the reference.
 func (o *reforgeOptimizer) buildYalpsConstraints(equipment core.Equipment) *lpConstraints {
-	frozenSlots := o.frozenSlots
 	constraints := newLPConstraints()
 
 	if metaConstraint, ok := equippedMetaGemConstraint(equipment); ok {
@@ -614,7 +610,7 @@ func (o *reforgeOptimizer) buildYalpsConstraints(equipment core.Equipment) *lpCo
 	for slot, item := range equipment {
 		itemSlot := proto.ItemSlot(slot)
 		constraints.set(slotCoeffKey(itemSlot), lessEq(1))
-		if frozenSlots[itemSlot] {
+		if o.frozenSlots[itemSlot] {
 			continue
 		}
 		for socketIdx := range currentSocketColors(item) {

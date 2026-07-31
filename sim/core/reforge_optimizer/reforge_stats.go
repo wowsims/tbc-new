@@ -42,19 +42,6 @@ func setUnitStat(unitStats core.UnitStats, unitStat stats.UnitStat, value float6
 	return unitStats
 }
 
-// subtractUnitStats is used by the fixture parity test to diff expected against optimized stats.
-func subtractUnitStats(unitStats core.UnitStats, other core.UnitStats) core.UnitStats {
-	result := unitStats
-	result.Stats = unitStats.Stats.Subtract(other.Stats)
-	maxLen := max(len(unitStats.PseudoStats), len(other.PseudoStats))
-	result.PseudoStats = make([]float64, maxLen)
-	copy(result.PseudoStats, unitStats.PseudoStats)
-	for idx, value := range other.PseudoStats {
-		result.PseudoStats[idx] -= value
-	}
-	return result
-}
-
 func addUnitStats(unitStats core.UnitStats, other core.UnitStats) core.UnitStats {
 	result := unitStats
 	result.Stats = unitStats.Stats.Add(other.Stats)
@@ -98,11 +85,9 @@ var hasteRatingSpeedMultiplierPairs = [3]struct {
 func rawUnitStatsFromStats(statValues stats.Stats) core.UnitStats {
 	unitStats := core.NewUnitStats()
 	for statIdx := 0; statIdx < int(stats.ProtoStatsLen); statIdx++ {
-		amount := statValues[statIdx]
-		if amount == 0 {
-			continue
+		if statValues[statIdx] != 0 {
+			unitStats.Stats[statIdx] = statValues[statIdx]
 		}
-		unitStats.Stats[statIdx] += amount
 	}
 	return unitStats
 }
