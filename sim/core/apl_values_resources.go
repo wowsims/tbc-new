@@ -301,29 +301,29 @@ func (value *APLValueMaxEnergy) String() string {
 	return "Max Energy"
 }
 
-type APLValueEnergyRegenPerSecond struct {
+type APLValueTimeToNextEnergyTick struct {
 	DefaultAPLValueImpl
 	unit *Unit
 }
 
-func (rot *APLRotation) newValueEnergyRegenPerSecond(_ *proto.APLValueEnergyRegenPerSecond, uuid *proto.UUID) APLValue {
+func (rot *APLRotation) newValueTimeToNextEnergyTick(_ *proto.APLValueTimeToNextEnergyTick, uuid *proto.UUID) APLValue {
 	unit := rot.unit
 	if !unit.HasEnergyBar() {
 		rot.ValidationMessageByUUID(uuid, proto.LogLevel_Warning, "%s does not use Energy", unit.Label)
 		return nil
 	}
-	return &APLValueEnergyRegenPerSecond{
+	return &APLValueTimeToNextEnergyTick{
 		unit: unit,
 	}
 }
-func (value *APLValueEnergyRegenPerSecond) Type() proto.APLValueType {
-	return proto.APLValueType_ValueTypeFloat
+func (value *APLValueTimeToNextEnergyTick) Type() proto.APLValueType {
+	return proto.APLValueType_ValueTypeDuration
 }
-func (value *APLValueEnergyRegenPerSecond) GetFloat(sim *Simulation) float64 {
-	return value.unit.EnergyRegenPerSecond()
+func (value *APLValueTimeToNextEnergyTick) GetDuration(sim *Simulation) time.Duration {
+	return value.unit.TimeToNextEnergyTick(sim)
 }
-func (value *APLValueEnergyRegenPerSecond) String() string {
-	return "Energy Regen Per Second"
+func (value *APLValueTimeToNextEnergyTick) String() string {
+	return "Time To Next Energy Tick"
 }
 
 type APLValueEnergyTimeToTarget struct {
@@ -353,7 +353,7 @@ func (value *APLValueEnergyTimeToTarget) Type() proto.APLValueType {
 	return proto.APLValueType_ValueTypeDuration
 }
 func (value *APLValueEnergyTimeToTarget) GetDuration(sim *Simulation) time.Duration {
-	return value.unit.TimeToTargetEnergy(value.targetEnergy.GetFloat(sim))
+	return value.unit.TimeToTargetEnergy(sim, value.targetEnergy.GetFloat(sim))
 }
 func (value *APLValueEnergyTimeToTarget) String() string {
 	return "Estimated Time To Target Energy"
