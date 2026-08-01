@@ -211,11 +211,21 @@ func init() {
 		// Implemented naively in druid.go
 	})
 
+	// Wolfshead Helm (8345): When shapeshifting into Cat form the Druid gains 20 energy,
+	// when shapeshifting into Bear form the Druid gains 5 rage.
 	core.NewItemEffect(8345, func(agent core.Agent) {
 		druid := agent.(DruidAgent).GetDruid()
 		core.MakePermanent(druid.RegisterAura(core.Aura{
 			Label:    "Wolfshead Helm",
 			ActionID: core.ActionID{SpellID: 17768},
+			OnGain: func(_ *core.Aura, _ *core.Simulation) {
+				druid.WolfsheadEnergyBonus += 20
+				druid.WolfsheadRageBonus += 5
+			},
+			OnExpire: func(_ *core.Aura, _ *core.Simulation) {
+				druid.WolfsheadEnergyBonus -= 20
+				druid.WolfsheadRageBonus -= 5
+			},
 		}))
 	})
 
