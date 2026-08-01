@@ -1,7 +1,9 @@
 package database
 
 import (
+	"bytes"
 	"fmt"
+	"go/format"
 	"os"
 	"regexp"
 	"slices"
@@ -19,6 +21,13 @@ import (
 
 // Sets the minimum itemlevel that should be considered for this expansions
 const MIN_EFFECT_ILVL = 50
+
+// Enchantment IDs at or below this are not generated.
+const MIN_ENCHANT_EFFECT_ID = 0
+
+func isGeneratableEnchant(effectID int32) bool {
+	return effectID > MIN_ENCHANT_EFFECT_ID
+}
 
 type ProcInfo struct {
 	Outcome             core.HitOutcome
@@ -41,6 +50,23 @@ type Entry struct {
 	Tooltip   []string
 	ProcInfo  ProcInfo
 	Supported bool
+	// What adds a stack while the window is open, for the trinkets whose effect carries a
+	// separate accumulating aura. Nil for everything else.
+	StackProcInfo *ProcInfo
+	// Set for an on-use whose window accumulates a separate aura, which needs the stacking
+	// helper rather than the flat one. Carries what that helper cannot read from the database.
+	StackingOnUse *StackingOnUse
+	// Set for effects an ignore list deliberately excludes. These emit a comment only, so that
+	// skipping them is visible in the generated file rather than silent.
+	Skipped bool
+}
+
+// The literals a stacking on-use needs in the generated call. Everything else - stacks,
+// per-stack stats, which aura is which - the helper reads from the database at runtime.
+type StackingOnUse struct {
+	Name       string
+	DurationMs int32
+	CooldownMs int32
 }
 
 // Group holds a category of effects.
@@ -84,7 +110,7 @@ func GenerateEffectsFile(groups []*Group, outFile string, templateString string)
 				return !grp.Entries[i].Supported
 			}
 
-			return grp.Entries[i].Variants[0].ID < grp.Entries[j].Variants[0].ID
+			return entryOrder(grp.Entries[i], grp.Entries[j])
 		})
 	}
 
@@ -95,16 +121,68 @@ func GenerateEffectsFile(groups []*Group, outFile string, templateString string)
 		"formatStrings":  formatStrings,
 	}
 	tmpl := template.Must(template.New("effects").Funcs(funcMap).Parse(templateString))
-	f, err := os.Create(outFile)
-	if err != nil {
-		return fmt.Errorf("failed to create file %s: %w", outFile, err)
+
+	// An empty generated file must not import anything: gen_db links sim/common, so unused
+	// imports in a file it just wrote break the very build the next run needs.
+	hasEntries := false
+	for _, grp := range groups {
+		if len(grp.Entries) > 0 {
+			hasEntries = true
+			break
+		}
 	}
-	defer f.Close()
-	if err := tmpl.Execute(f, map[string]interface{}{"Groups": groups}); err != nil {
+
+	hasStacking := false
+	for _, grp := range groups {
+		for _, entry := range grp.Entries {
+			if entry.StackingOnUse != nil {
+				hasStacking = true
+			}
+		}
+	}
+
+	var rendered bytes.Buffer
+	if err := tmpl.Execute(&rendered, map[string]interface{}{"Groups": groups, "HasEntries": hasEntries, "HasStacking": hasStacking}); err != nil {
 		return fmt.Errorf("failed to execute template: %w", err)
 	}
 
+	// The template cannot indent commented-out blocks or blank lines the way gofmt wants, so
+	// format the result. Otherwise every regeneration reverts whatever formatted the file last
+	// and the diff is hundreds of whitespace-only lines.
+	out := rendered.Bytes()
+	if formatted, err := format.Source(out); err != nil {
+		fmt.Printf("WARN: generated %s is not valid Go, writing unformatted: %v\n", outFile, err)
+	} else {
+		out = formatted
+	}
+
+	if err := os.WriteFile(outFile, out, 0644); err != nil {
+		return fmt.Errorf("failed to write file %s: %w", outFile, err)
+	}
+
 	return nil
+}
+
+// A total order over entries. Sorting on the item or enchant ID alone is not one: an item with
+// two effects yields two entries sharing that ID, and sort.Slice is not stable, so their order
+// in the generated file flipped between runs.
+func entryOrder(a *Entry, b *Entry) bool {
+	if a.Variants[0].ID != b.Variants[0].ID {
+		return a.Variants[0].ID < b.Variants[0].ID
+	}
+	return a.Variants[0].SpellID < b.Variants[0].SpellID
+}
+
+// Escapes a rendered tooltip for use inside a double-quoted TypeScript string. Tooltips
+// routinely span several lines, which would otherwise produce a file that does not parse.
+func jsString(s string) string {
+	s = strings.ReplaceAll(s, "\\", "\\\\")
+	s = strings.ReplaceAll(s, "\"", "\\\"")
+	s = strings.ReplaceAll(s, "\r\n", " ")
+	s = strings.ReplaceAll(s, "\n", " ")
+	s = strings.ReplaceAll(s, "\r", " ")
+	s = strings.ReplaceAll(s, "\t", " ")
+	return s
 }
 
 const missingEffectsFileName = "ui/core/constants/missing_effects_auto_gen.ts"
@@ -119,6 +197,7 @@ func GenerateMissingEffectsFile() error {
 		"asCoreProcMask": asCoreProcMask,
 		"asCoreOutcome":  asCoreOutcome,
 		"formatStrings":  formatStrings,
+		"jsString":       jsString,
 	}
 	tmpl := template.Must(template.New("missingEffects").Funcs(funcMap).Parse(TmplStrMissingEffects))
 	f, err := os.Create(missingEffectsFileName)
@@ -160,7 +239,46 @@ func GenerateEnchantEffects(instance *dbc.DBC, db *WowDatabase) {
 		procGroups = append(procGroups, &grp)
 	}
 
-	// GenerateEffectsFile(procGroups, "sim/common/tbc/enchants_auto_gen.go", TmplStrEnchant)
+	GenerateEffectsFile(procGroups, "sim/common/tbc/enchants_auto_gen.go", TmplStrEnchant)
+}
+
+// Names the ignore-list rule that excluded an effect, for the comment emitted in the generated
+// file. Returns "" when nothing excludes it.
+func ignoredEffectReason(instance *dbc.DBC, effectID int) string {
+	for _, effect := range instance.SpellEffectsInOrder(effectID) {
+		if params, ok := IgnoreSpellEffectByAuraType[effect.EffectAura]; ok {
+			if len(params) == 0 || slices.Contains(params, effect.EffectMiscValues[0]) {
+				return fmt.Sprintf("ignored aura type %d", effect.EffectAura)
+			}
+		}
+
+		if params, ok := IgnoreSpellEffectBySpellEffectType[effect.EffectType]; ok {
+			if len(params) == 0 || slices.Contains(params, effect.EffectMiscValues[0]) {
+				return fmt.Sprintf("ignored effect type %d", effect.EffectType)
+			}
+		}
+	}
+
+	return ""
+}
+
+// Records an effect excluded by an ignore list so the generated file documents it. Kept in its
+// own group: variant merging is per-group, so these cannot affect whether a real effect's
+// variant set is emitted live or commented.
+func storeSkippedEffect(id int32, name string, buffID int32, instance *dbc.DBC, groupMap map[string]Group) {
+	grp, exists := groupMap["Skipped"]
+	if !exists {
+		grp = Group{Name: "Skipped"}
+	}
+
+	buffName := instance.Spells[int(buffID)].NameLang
+	grp.Entries = append(grp.Entries, &Entry{
+		Skipped:  true,
+		Variants: []*Variant{{ID: int(id), Name: name, SpellID: int(buffID)}},
+		Tooltip: []string{fmt.Sprintf("%s: %q (%d) - %s",
+			name, buffName, buffID, ignoredEffectReason(instance, int(buffID)))},
+	})
+	groupMap["Skipped"] = grp
 }
 
 func ItemEffectIsSupported(instance *dbc.DBC, effectID int) bool {
@@ -203,10 +321,19 @@ func GenerateItemEffects(instance *dbc.DBC, db *WowDatabase, itemSources map[int
 
 		for _, itemEffect := range parsed.ItemEffects {
 			if !ItemEffectIsSupported(instance, int(itemEffect.BuffId)) {
+				// Commented into the generated file rather than dropped. These are deliberately
+				// out of scope - summons, teleports, created items - but an item whose only
+				// effect is skipped otherwise vanished with no trace, while a sibling marker
+				// aura on the same item got reported as missing instead.
+				skippedGroup := groupMapProc
+				if itemEffect.GetOnUse() != nil {
+					skippedGroup = groupMapOnUse
+				}
+				storeSkippedEffect(parsed.Id, parsed.Name, itemEffect.BuffId, instance, skippedGroup)
 				continue
 			}
 
-			if TryParseOnUseEffect(parsed, itemEffect, groupMapOnUse) != EffectParseResultSuccess &&
+			if TryParseOnUseEffect(parsed, itemEffect, instance, groupMapOnUse) != EffectParseResultSuccess &&
 				TryParseProcEffect(parsed, itemEffect, instance, groupMapProc) != EffectParseResultSuccess {
 				ParseTooltipForMissingEffect(parsed, itemEffect, instance, groupMapProc, "Procs")
 			}
@@ -228,7 +355,7 @@ func GenerateItemEffects(instance *dbc.DBC, db *WowDatabase, itemSources map[int
 
 		// sort entries first to make tooltip generation consistent for variants
 		sort.Slice(grp.Entries, func(i, j int) bool {
-			return grp.Entries[i].Variants[0].ID < grp.Entries[j].Variants[0].ID
+			return entryOrder(grp.Entries[i], grp.Entries[j])
 		})
 
 		for _, entry := range grp.Entries {
@@ -349,6 +476,7 @@ func TryParseProcEffect(parsed *proto.UIItem, itemEffect *proto.ItemEffect, inst
 			renderedTooltip := tooltip.String()
 			entry := Entry{Tooltip: strings.Split(renderedTooltip, "\n"), Variants: []*Variant{{ID: int(parsed.Id), Name: parsed.Name, SpellID: int(itemEffect.BuffId)}}}
 			entry.ProcInfo, entry.Supported = BuildProcInfo(parsed, int(itemEffect.BuffId), instance, renderedTooltip)
+			entry.StackProcInfo = buildStackProcInfo(itemEffect, instance, renderedTooltip)
 
 			if len(itemEffect.ScalingOptions[0].Stats) == 0 || !entry.Supported {
 				StoreMissingEffect("ItemEffects", parsed.Name, Variant{
@@ -380,7 +508,7 @@ func TryParseProcEffect(parsed *proto.UIItem, itemEffect *proto.ItemEffect, inst
 	return EffectParseResultInvalid
 }
 
-func TryParseOnUseEffect(parsed *proto.UIItem, itemEffect *proto.ItemEffect, groupMap map[string]Group) EffectParseResult {
+func TryParseOnUseEffect(parsed *proto.UIItem, itemEffect *proto.ItemEffect, instance *dbc.DBC, groupMap map[string]Group) EffectParseResult {
 	// Effect was already manually implemented
 	if core.HasItemEffect(parsed.Id) {
 		return EffectParseResultSuccess
@@ -401,6 +529,23 @@ func TryParseOnUseEffect(parsed *proto.UIItem, itemEffect *proto.ItemEffect, gro
 		grp.Entries = append(grp.Entries, entry)
 		groupMap[groupName] = grp
 
+		// A stacking on-use keeps its stats on the accumulating aura, so the flat check below
+		// would call it unsupported, and the flat helper would grant nothing.
+		stacking := itemEffect.StackingAura
+		if stacking != nil && len(stacking.ScalingOptions[0].Stats) > 0 {
+			entry.StackProcInfo = buildStackProcInfo(itemEffect, instance, "")
+			if entry.StackProcInfo == nil {
+				entry.Supported = false
+				return EffectParseResultUnsupported
+			}
+			entry.StackingOnUse = &StackingOnUse{
+				Name:       parsed.Name,
+				DurationMs: itemEffect.EffectDurationMs,
+				CooldownMs: itemEffect.GetOnUse().CooldownMs,
+			}
+			return EffectParseResultSuccess
+		}
+
 		if len(itemEffect.ScalingOptions[0].Stats) == 0 {
 			entry.Supported = false
 			return EffectParseResultUnsupported
@@ -413,7 +558,7 @@ func TryParseOnUseEffect(parsed *proto.UIItem, itemEffect *proto.ItemEffect, gro
 }
 
 func TryParseEnchantEffect(enchant *proto.UIEnchant, enchantEffect *proto.ItemEffect, groupMapProc map[string]Group, instance *dbc.DBC, enchantSpellEffects map[int]*dbc.SpellEffect) EffectParseResult {
-	if (enchantEffect.GetProc() != nil || EnchantHasDummyEffect(enchant, instance)) && enchant.EffectId > 4267 {
+	if (enchantEffect.GetProc() != nil || EnchantHasDummyEffect(enchant, instance)) && isGeneratableEnchant(enchant.EffectId) {
 
 		// Effect was already manually implemented
 		if core.HasEnchantEffect(enchant.EffectId) {
@@ -483,6 +628,15 @@ func ParseTooltipForMissingEffect(parsed *proto.UIItem, itemEffect *proto.ItemEf
 			grp.Entries = append(grp.Entries, &entry)
 			groupMap[groupMapName] = grp
 
+			// Flavour auras carry no mechanic worth implementing and only add noise to the
+			// report. Suppressing the report only, never the group entry: those
+			// Supported: false entries take part in the variant grouping that decides whether
+			// a whole variant set is emitted live or commented, so dropping one can flip a
+			// real registration.
+			if _, ignored := IgnoreMissingEffectBySpellID[int(itemEffect.BuffId)]; ignored {
+				return
+			}
+
 			if len(itemEffect.ScalingOptions[0].Stats) == 0 || !entry.Supported {
 				StoreMissingEffect("ItemEffects", parsed.Name, Variant{
 					ID:      int(parsed.Id),
@@ -498,6 +652,26 @@ var critMatcher = regexp.MustCompile(`critical ([^\s]+|damage,?)( chance)? [^fbc
 var pureHealMatcher = regexp.MustCompile(`healing spells`)
 var hasHealMatcher = regexp.MustCompile(`heal(ing)?[^,]`)
 var hasGenericMatcher = regexp.MustCompile(`a spell`)
+
+// Derives what adds a stack to an accumulating aura, from the container spell rather than from
+// the one that opens the window. buff_id is the container by then: the parser rebases the effect
+// onto it precisely because that is where the duration and these proc flags live.
+func buildStackProcInfo(itemEffect *proto.ItemEffect, instance *dbc.DBC, tooltip string) *ProcInfo {
+	if itemEffect.StackingAura == nil || itemEffect.GetStackProc() == nil {
+		return nil
+	}
+
+	container, ok := instance.Spells[int(itemEffect.BuffId)]
+	if !ok {
+		return nil
+	}
+
+	info, supported := BuildSpellProcInfo(&container, tooltip, proto.ItemType_ItemTypeUnknown)
+	if !supported {
+		return nil
+	}
+	return &info
+}
 
 func BuildProcInfo(parsed *proto.UIItem, itemEffectID int, instance *dbc.DBC, tooltip string) (ProcInfo, bool) {
 	itemEffect := dbc.GetItemEffectForBuffID(int(parsed.Id), itemEffectID)
@@ -567,7 +741,7 @@ func BuildSpellProcInfo(procSpell *dbc.Spell, tooltip string, itemType proto.Ite
 		info.ProcMask |= core.ProcMaskRanged
 	}
 
-	if procSpell.Attributes[12]&dbc.ATTR_EX_12_ONLY_PROC_FROM_CLASS_ABILITIES > 0 {
+	if procSpell.OnlyProcsFromClassAbilities() {
 		info.ClassSpellsOnly = true
 	}
 
@@ -660,16 +834,16 @@ func BuildSpellProcInfo(procSpell *dbc.Spell, tooltip string, itemType proto.Ite
 		}
 	}
 
-	if info.ProcMask.Matches(core.ProcMaskMelee) && procSpell.Attributes[3]&dbc.ATTR_EX_3_CAN_PROC_FROM_PROCS > 0 {
+	if info.ProcMask.Matches(core.ProcMaskMelee) && procSpell.CanProcFromProcs() {
 		info.ProcMask |= core.ProcMaskMeleeProc
 	}
 
-	if info.ProcMask.Matches(core.ProcMaskRanged) && procSpell.Attributes[3]&dbc.ATTR_EX_3_CAN_PROC_FROM_PROCS > 0 {
+	if info.ProcMask.Matches(core.ProcMaskRanged) && procSpell.CanProcFromProcs() {
 		info.ProcMask |= core.ProcMaskRangedProc
 	}
 
-	if info.ProcMask.Matches(core.ProcMaskSpellDamage) && procSpell.Attributes[3]&dbc.ATTR_EX_3_CAN_PROC_FROM_PROCS > 0 {
-		info.ProcMask |= core.ProcMaskSpellDamageProc
+	if info.ProcMask.Matches(core.ProcMaskSpellDamage) && procSpell.CanProcFromProcs() {
+		info.ProcMask |= core.ProcMaskSpellProc
 	}
 
 	if requiresOutcome {
@@ -686,11 +860,13 @@ func BuildSpellProcInfo(procSpell *dbc.Spell, tooltip string, itemType proto.Ite
 		info.Callback &= ^core.CallbackOnPeriodicDamageDealt
 	}
 
-	unsupported := info.Callback == core.CallbackEmpty &&
-		(requiresOutcome && info.Outcome == core.OutcomeEmpty) &&
-		info.ProcMask == core.ProcMaskEmpty
-
-	return info, !unsupported
+	// A trigger with no callback never fires, and factory_ProcStatBonusEffect returns early on
+	// exactly that, so such an effect cannot be generated. The test used to also require an
+	// empty Outcome and ProcMask, which it can never have: when requiresOutcome is true the
+	// Outcome is set a few lines up, and when it is false the whole term is false, so nothing
+	// was ever refused here and empty-callback effects were emitted as live registrations that
+	// silently did nothing.
+	return info, info.Callback != core.CallbackEmpty
 }
 
 func StoreMissingEffect(effectType string, name string, variant Variant) {

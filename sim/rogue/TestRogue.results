@@ -251,8 +251,8 @@ dps_results: {
 dps_results: {
  key: "TestRogue-AllItems-BlackenedNaaruSliver-34427"
  value: {
-  dps: 1925.48044
-  tps: 956.96378
+  dps: 1925.37576
+  tps: 956.91175
  }
 }
 dps_results: {

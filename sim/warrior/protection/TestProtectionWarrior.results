@@ -167,9 +167,9 @@ dps_results: {
 dps_results: {
  key: "TestProtectionWarrior-AllItems-BadgeoftheSwarmguard-21670"
  value: {
-  dps: 784.46802
-  tps: 1439.7121
-  dtps: 1298.81855
+  dps: 784.32191
+  tps: 1439.29834
+  dtps: 1296.58752
  }
 }
 dps_results: {
@@ -287,9 +287,9 @@ dps_results: {
 dps_results: {
  key: "TestProtectionWarrior-AllItems-BlackenedNaaruSliver-34427"
  value: {
-  dps: 782.91622
-  tps: 1436.94575
-  dtps: 1289.45718
+  dps: 783.43643
+  tps: 1438.12816
+  dtps: 1290.86803
  }
 }
 dps_results: {

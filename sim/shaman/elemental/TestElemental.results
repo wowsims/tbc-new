@@ -986,8 +986,8 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-RobeoftheElderScribes-28602"
  value: {
-  dps: 1743.12538
-  tps: 955.87147
+  dps: 1743.70843
+  tps: 956.29785
  }
 }
 dps_results: {
@@ -1077,8 +1077,8 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-Shiffar'sNexus-Horn-28418"
  value: {
-  dps: 1746.00121
-  tps: 1000.8006
+  dps: 1747.88183
+  tps: 1001.63979
  }
 }
 dps_results: {
@@ -1204,8 +1204,8 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-TalismanofAscendance-22678"
  value: {
-  dps: 1708.31388
-  tps: 979.40007
+  dps: 1739.83284
+  tps: 997.27091
  }
 }
 dps_results: {
@@ -1379,8 +1379,8 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-WrathofCenarius-21190"
  value: {
-  dps: 1746.66627
-  tps: 958.07899
+  dps: 1749.34866
+  tps: 959.68655
  }
 }
 dps_results: {

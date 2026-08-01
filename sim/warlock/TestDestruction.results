@@ -1064,8 +1064,8 @@ dps_results: {
 dps_results: {
  key: "TestDestruction-AllItems-TalismanofAscendance-22678"
  value: {
-  dps: 1850.35005
-  tps: 1150.55736
+  dps: 1878.62073
+  tps: 1166.71809
  }
 }
 dps_results: {

@@ -1498,8 +1498,8 @@ dps_results: {
 dps_results: {
  key: "TestProtection-AllItems-TalismanofAscendance-22678"
  value: {
-  dps: 880.7365
-  tps: 1576.65021
+  dps: 895.10119
+  tps: 1604.28544
   dtps: 1293.05591
  }
 }

@@ -34,12 +34,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		12344, // Seal of Ascension
-		[
-			"", // 16372 - https://www.wowhead.com/tbc/spell=16372
-		]
-	],
-	[
 		12588, // Bonespike Shoulder
 		[
 			"Deals 90 damage when you are the victim of a critical melee strike.", // 16550 - https://www.wowhead.com/tbc/spell=16550
@@ -2184,6 +2178,18 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
+		32770, // Skyguard Silver Cross
+		[
+			"50% chance to increase your attack power by 140 for 30s when you kill a target that gives experience or honor. This effect cannot occur more than once every 10 seconds.", // 41261 - https://www.wowhead.com/tbc/spell=41261
+		]
+	],
+	[
+		32771, // Airman's Ribbon of Gallantry
+		[
+			"50% chance to increase your spell damage and healing by 80 for 30s when you kill a target that gives experience or honor. This effect cannot occur more than once every 10 seconds.", // 41263 - https://www.wowhead.com/tbc/spell=41263
+		]
+	],
+	[
 		33076, // Merciless Gladiator's Idol of Tenacity
 		[
 			"Increases the final healing value of your Lifebloom by 105.", // 34128 - https://www.wowhead.com/tbc/spell=34128
@@ -2319,12 +2325,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		33767, // Vengeful Gladiator's Wyrmhide Gloves
 		[
 			"Reduces the cast time of your Cyclone spell by -0.1 sec.", // 33830 - https://www.wowhead.com/tbc/spell=33830
-		]
-	],
-	[
-		33808, // The Horseman's Helm
-		[
-			"Let the Horseman laugh through you.", // 43873 - https://www.wowhead.com/tbc/spell=43873
 		]
 	],
 	[

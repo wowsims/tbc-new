@@ -1064,8 +1064,8 @@ dps_results: {
 dps_results: {
  key: "TestArcane-AllItems-TalismanofAscendance-22678"
  value: {
-  dps: 1900.70693
-  tps: 946.42899
+  dps: 1927.59591
+  tps: 959.22587
  }
 }
 dps_results: {

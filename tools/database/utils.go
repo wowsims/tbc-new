@@ -184,52 +184,43 @@ func EnchantHasDummyEffect(enchant *proto.UIEnchant, instance *dbc.DBC) bool {
 }
 
 func SpellHasDummyEffect(spellId int, instance *dbc.DBC) bool {
-	if effects, ok := instance.SpellEffects[spellId]; ok {
-		for _, effect := range effects {
-			if effect.EffectAura == dbc.A_DUMMY ||
-				effect.EffectAura == dbc.A_PERIODIC_DUMMY {
-				return true
-			}
-		}
-	}
-
-	return false
+	return anySpellEffect(spellId, instance, isDummyAura)
 }
 
 func SpellHasTriggerEffect(spellId int, instance *dbc.DBC) bool {
-	if effects, ok := instance.SpellEffects[spellId]; ok {
-		for _, effect := range effects {
-			if effect.EffectAura == dbc.A_PROC_TRIGGER_SPELL ||
-				effect.EffectAura == dbc.A_PROC_TRIGGER_SPELL_WITH_VALUE {
-				return true
-			}
-		}
-	}
-
-	return false
+	return anySpellEffect(spellId, instance, isProcTriggerAura)
 }
 
 func SpellUsesStacks(spellId int, instance *dbc.DBC) bool {
-	if spell, ok := instance.Spells[spellId]; ok {
-		if spell.MaxCumulativeStacks > 1 {
+	if instance.Spells[spellId].MaxCumulativeStacks > 1 {
+		return true
+	}
+
+	return anySpellEffect(spellId, instance, func(effect dbc.SpellEffect) bool {
+		return isProcTriggerAura(effect) &&
+			instance.Spells[effect.EffectTriggerSpell].MaxCumulativeStacks > 1
+	})
+}
+
+// Reports whether any of the spell's effects satisfies pred. Effect order does not matter to a
+// predicate, so this reads the map directly rather than paying for a sorted copy.
+func anySpellEffect(spellId int, instance *dbc.DBC, pred func(dbc.SpellEffect) bool) bool {
+	for _, effect := range instance.SpellEffects[spellId] {
+		if pred(effect) {
 			return true
 		}
 	}
 
-	if effects, ok := instance.SpellEffects[spellId]; ok {
-		for _, effect := range effects {
-			if effect.EffectAura == dbc.A_PROC_TRIGGER_SPELL ||
-				effect.EffectAura == dbc.A_PROC_TRIGGER_SPELL_WITH_VALUE {
-				if spell, ok := instance.Spells[effect.EffectTriggerSpell]; ok {
-					if spell.MaxCumulativeStacks > 1 {
-						return true
-					}
-				}
-			}
-		}
-	}
-
 	return false
+}
+
+func isDummyAura(effect dbc.SpellEffect) bool {
+	return effect.EffectAura == dbc.A_DUMMY || effect.EffectAura == dbc.A_PERIODIC_DUMMY
+}
+
+func isProcTriggerAura(effect dbc.SpellEffect) bool {
+	return effect.EffectAura == dbc.A_PROC_TRIGGER_SPELL ||
+		effect.EffectAura == dbc.A_PROC_TRIGGER_SPELL_WITH_VALUE
 }
 
 func GetEffectStatString(itemEffect *proto.ItemEffect) string {

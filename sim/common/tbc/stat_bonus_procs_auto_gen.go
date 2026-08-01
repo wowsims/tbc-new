@@ -5374,6 +5374,38 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
+	// 50% chance to increase your attack power by 140 for 30s when you kill a target that gives experience or
+	// honor. This effect cannot occur more than once every 10 seconds.
+	// https://www.wowhead.com/tbc/spell=41261
+	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+	//	Callback:           core.CallbackEmpty,
+	//	ProcMask:           core.ProcMaskUnknown,
+	//	Outcome:            core.OutcomeEmpty,
+	//	RequireDamageDealt: false
+	// }, []shared.ItemVariant{
+	//	{ItemID: 32770, ItemName: "Skyguard Silver Cross"},
+	// })
+
+	// TODO: Manual implementation required
+	//       This can be ignored if the effect has already been implemented.
+	//       With next db run the item will be removed if implemented.
+	//
+	// 50% chance to increase your spell damage and healing by 80 for 30s when you kill a target that gives experience
+	// or honor. This effect cannot occur more than once every 10 seconds.
+	// https://www.wowhead.com/tbc/spell=41263
+	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+	//	Callback:           core.CallbackEmpty,
+	//	ProcMask:           core.ProcMaskUnknown,
+	//	Outcome:            core.OutcomeEmpty,
+	//	RequireDamageDealt: false
+	// }, []shared.ItemVariant{
+	//	{ItemID: 32771, ItemName: "Airman's Ribbon of Gallantry"},
+	// })
+
+	// TODO: Manual implementation required
+	//       This can be ignored if the effect has already been implemented.
+	//       With next db run the item will be removed if implemented.
+	//
 	// Increases the final healing value of your Lifebloom by 105.
 	// https://www.wowhead.com/tbc/spell=34128
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -6791,7 +6823,7 @@ func RegisterAllProcs() {
 	// https://www.wowhead.com/tbc/spell=25907
 	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 		Callback:           core.CallbackOnCastComplete,
-		ProcMask:           core.ProcMaskSpellDamage | core.ProcMaskSpellDamageProc,
+		ProcMask:           core.ProcMaskSpellDamage | core.ProcMaskSpellProc,
 		Outcome:            core.OutcomeEmpty,
 		RequireDamageDealt: false,
 	}, []shared.ItemVariant{
@@ -6851,7 +6883,7 @@ func RegisterAllProcs() {
 	// https://www.wowhead.com/tbc/spell=34321
 	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 		Callback:           core.CallbackOnSpellHitDealt | core.CallbackOnHealDealt,
-		ProcMask:           core.ProcMaskSpellDamage | core.ProcMaskSpellHealing | core.ProcMaskSpellDamageProc,
+		ProcMask:           core.ProcMaskSpellDamage | core.ProcMaskSpellHealing | core.ProcMaskSpellProc,
 		Outcome:            core.OutcomeCrit,
 		RequireDamageDealt: false,
 		ClassSpellsOnly:    true,
@@ -6931,7 +6963,7 @@ func RegisterAllProcs() {
 	// https://www.wowhead.com/tbc/spell=34597
 	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 		Callback:           core.CallbackOnCastComplete,
-		ProcMask:           core.ProcMaskSpellDamage | core.ProcMaskSpellDamageProc,
+		ProcMask:           core.ProcMaskSpellDamage | core.ProcMaskSpellProc,
 		Outcome:            core.OutcomeEmpty,
 		RequireDamageDealt: false,
 	}, []shared.ItemVariant{
@@ -7061,28 +7093,19 @@ func RegisterAllProcs() {
 		{ItemID: 32505, ItemName: "Madness of the Betrayer"},
 	})
 
-	// 50% chance to increase your attack power by 140 for 30s when you kill a target that gives experience or
-	// honor. This effect cannot occur more than once every 10 seconds.
-	// https://www.wowhead.com/tbc/spell=41261
+	// Chance on hit to enter a Battle Trance, during which your melee or ranged attacks will each grant 44 attack
+	// power, stacking up to 10 times. Expires after 20s.
+	// https://www.wowhead.com/tbc/spell=45040
 	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-		Callback:           core.CallbackEmpty,
-		ProcMask:           core.ProcMaskUnknown,
+		Callback:           core.CallbackOnSpellHitDealt,
+		ProcMask:           core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial | core.ProcMaskRangedAuto | core.ProcMaskRangedSpecial,
 		Outcome:            core.OutcomeLanded,
 		RequireDamageDealt: true,
+		StackCallback:      core.CallbackOnSpellHitDealt,
+		StackProcMask:      core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial | core.ProcMaskRangedAuto | core.ProcMaskRangedSpecial,
+		StackOutcome:       core.OutcomeLanded,
 	}, []shared.ItemVariant{
-		{ItemID: 32770, ItemName: "Skyguard Silver Cross"},
-	})
-
-	// 50% chance to increase your spell damage and healing by 80 for 30s when you kill a target that gives experience
-	// or honor. This effect cannot occur more than once every 10 seconds.
-	// https://www.wowhead.com/tbc/spell=41263
-	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-		Callback:           core.CallbackEmpty,
-		ProcMask:           core.ProcMaskUnknown,
-		Outcome:            core.OutcomeLanded,
-		RequireDamageDealt: true,
-	}, []shared.ItemVariant{
-		{ItemID: 32771, ItemName: "Airman's Ribbon of Gallantry"},
+		{ItemID: 34427, ItemName: "Blackened Naaru Sliver"},
 	})
 
 	// Chance on hit to increase your attack power by 230 for 20s.
@@ -7095,4 +7118,128 @@ func RegisterAllProcs() {
 	}, []shared.ItemVariant{
 		{ItemID: 34472, ItemName: "Shard of Contempt"},
 	})
+
+	// Skipped
+	// Not simulated: Pip's Skinner: "Pip's Skinner" (16718) - ignored aura type 30
+	// https://www.wowhead.com/tbc/spell=16718
+	// Not simulated: Spectral Essence: "Visions of the Past" (17623) - ignored aura type 19
+	// https://www.wowhead.com/tbc/spell=17623
+	// Not simulated: Knight-Lieutenant's Dragonhide Gloves: "Stealth Detection" (23217) - ignored aura type 17
+	// https://www.wowhead.com/tbc/spell=23217
+	// Not simulated: Marshal's Dragonhide Gauntlets: "Stealth Detection" (23217) - ignored aura type 17
+	// https://www.wowhead.com/tbc/spell=23217
+	// Not simulated: Blood Guard's Dragonhide Gauntlets: "Stealth Detection" (23217) - ignored aura type 17
+	// https://www.wowhead.com/tbc/spell=23217
+	// Not simulated: General's Dragonhide Gloves: "Stealth Detection" (23217) - ignored aura type 17
+	// https://www.wowhead.com/tbc/spell=23217
+	// Not simulated: Shard of the Defiler: "Echo of Archimonde" (21079) - ignored aura type 56
+	// https://www.wowhead.com/tbc/spell=21079
+	// Not simulated: Mark of Resolution: "Stout Heart" (21958) - ignored aura type 117
+	// https://www.wowhead.com/tbc/spell=21958
+	// Not simulated: The Eye of Divinity: "Eye of Divinity" (23101) - ignored aura type 19
+	// https://www.wowhead.com/tbc/spell=23101
+	// Not simulated: Zulian Slicer: "Improved Skinning" (24591) - ignored aura type 30
+	// https://www.wowhead.com/tbc/spell=24591
+	// Not simulated: Bloodvine Lens: "Stealth Detection" (23217) - ignored aura type 17
+	// https://www.wowhead.com/tbc/spell=23217
+	// Not simulated: Darkmantle Boots: "Stealth +8" (27037) - ignored aura type 154
+	// https://www.wowhead.com/tbc/spell=27037
+	// Not simulated: Blood Guard's Dragonhide Grips: "Stealth Detection" (23217) - ignored aura type 17
+	// https://www.wowhead.com/tbc/spell=23217
+	// Not simulated: Boots of Displacement: "Stealth +8" (27037) - ignored aura type 154
+	// https://www.wowhead.com/tbc/spell=27037
+	// Not simulated: Stygian Buckler: "Stygian Grasp" (29164) - ignored aura type 33
+	// https://www.wowhead.com/tbc/spell=29164
+	// Not simulated: Knight-Lieutenant's Dragonhide Grips: "Stealth Detection" (23217) - ignored aura type 17
+	// https://www.wowhead.com/tbc/spell=23217
+	// Not simulated: Ultra-Spectropic Detection Goggles: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Foreman's Enchanted Helmet: "Increased Stun Resist +10%" (40386) - ignored aura type 117
+	// https://www.wowhead.com/tbc/spell=40386
+	// Not simulated: Foreman's Reinforced Helmet: "Foreman's Reinforced Helmet" (30519) - ignored aura type 117
+	// https://www.wowhead.com/tbc/spell=30519
+	// Not simulated: Figurine - Nightseye Panther: "Stealth 5" (17746) - ignored aura type 154
+	// https://www.wowhead.com/tbc/spell=17746
+	// Not simulated: Riding Crop: "Mount Speed" (48776) - ignored aura type 172
+	// https://www.wowhead.com/tbc/spell=48776
+	// Not simulated: Seth's Graphite Fishing Pole: "Fishing Skill +20" (7826) - ignored aura type 30
+	// https://www.wowhead.com/tbc/spell=7826
+	// Not simulated: Silent-Strider Kneeboots: "Stealth 5" (17746) - ignored aura type 154
+	// https://www.wowhead.com/tbc/spell=17746
+	// Not simulated: Lionheart Blade: "Fear Resistance 5" (34514) - ignored aura type 117
+	// https://www.wowhead.com/tbc/spell=34514
+	// Not simulated: Lionheart Champion: "Fear Resistance 5" (34514) - ignored aura type 117
+	// https://www.wowhead.com/tbc/spell=34514
+	// Not simulated: Lionheart Executioner: "Fear Resistance 8" (34515) - ignored aura type 117
+	// https://www.wowhead.com/tbc/spell=34515
+	// Not simulated: Blade of the Unyielding: "Unyielding Knights" (38162) - ignored effect type 28
+	// https://www.wowhead.com/tbc/spell=38162
+	// Not simulated: Rod of the Unyielding: "Unyielding Knights" (38162) - ignored effect type 28
+	// https://www.wowhead.com/tbc/spell=38162
+	// Not simulated: Evoker's Helmet of Second Sight: "Spectrecles" (39841) - ignored aura type 19
+	// https://www.wowhead.com/tbc/spell=39841
+	// Not simulated: Overlord's Helmet of Second Sight: "Spectrecles" (39841) - ignored aura type 19
+	// https://www.wowhead.com/tbc/spell=39841
+	// Not simulated: Stalker's Helmet of Second Sight: "Spectrecles" (39841) - ignored aura type 19
+	// https://www.wowhead.com/tbc/spell=39841
+	// Not simulated: Shamanistic Helmet of Second Sight: "Spectrecles" (39841) - ignored aura type 19
+	// https://www.wowhead.com/tbc/spell=39841
+	// Not simulated: Stealther's Helmet of Second Sight: "Spectrecles" (39841) - ignored aura type 19
+	// https://www.wowhead.com/tbc/spell=39841
+	// Not simulated: Druidic Helmet of Second Sight: "Spectrecles" (39841) - ignored aura type 19
+	// https://www.wowhead.com/tbc/spell=39841
+	// Not simulated: The Master's Treads: "Stealth 5" (17746) - ignored aura type 154
+	// https://www.wowhead.com/tbc/spell=17746
+	// Not simulated: The Night Watchman: "Stealth Detection" (23217) - ignored aura type 17
+	// https://www.wowhead.com/tbc/spell=23217
+	// Not simulated: Furious Gizmatic Goggles: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Justicebringer 2000 Specs: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Tankatronic Goggles: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Surestrike Goggles v2.0: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Living Replicator Specs: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Gadgetstorm Goggles: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Deathblow X11 Goggles: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Wonderheal XT40 Shades: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Magnified Moon Specs: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Destruction Holo-gogs: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Powerheal 4000 Lens: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Skybreaker Whip: "Mount Speed" (48776) - ignored aura type 172
+	// https://www.wowhead.com/tbc/spell=48776
+	// Not simulated: Weather-Beaten Fishing Hat: "Fishing Skill +5" (7823) - ignored aura type 30
+	// https://www.wowhead.com/tbc/spell=7823
+	// Not simulated: Quad Deathblow X44 Goggles: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Mayhem Projection Goggles: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Lightning Etched Specs: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Surestrike Goggles v3.0: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Hard Khorium Goggles: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Annihilator Holo-Gogs: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Powerheal 9000 Lens: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Hyper-Magnified Moon Specs: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Wonderheal XT68 Shades: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Primal-Attuned Goggles: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Justicebringer 3000 Specs: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Figurine - Shadowsong Panther: "Stealth 5" (17746) - ignored aura type 154
+	// https://www.wowhead.com/tbc/spell=17746
 }

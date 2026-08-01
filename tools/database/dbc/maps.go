@@ -412,6 +412,7 @@ var Classes = []DbcClass{
 var MapItemIdToPPM = map[int32]float64{
 	12798: 1, // Annihilator
 	// 19019: 6,    // Thunderfury
+	21670: 10, // Badge of the Swarmguard
 	// 22559: 1,    // Mongoose
 	28579: 1,    // Romulo's Poison Vial
 	28429: 1,    // Lionheart Champion

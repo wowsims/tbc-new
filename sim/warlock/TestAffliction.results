@@ -1064,8 +1064,8 @@ dps_results: {
 dps_results: {
  key: "TestAffliction-AllItems-TalismanofAscendance-22678"
  value: {
-  dps: 1940.86479
-  tps: 866.20091
+  dps: 1959.20108
+  tps: 872.34099
  }
 }
 dps_results: {

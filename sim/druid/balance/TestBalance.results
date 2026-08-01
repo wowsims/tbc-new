@@ -81,13 +81,6 @@ dps_results: {
  }
 }
 dps_results: {
- key: "TestBalance-AllItems-BadgeoftheSwarmguard-21670"
- value: {
-  dps: 1423.7972
-  tps: 956.91921
- }
-}
-dps_results: {
  key: "TestBalance-AllItems-BattlecastGarb"
  value: {
   dps: 1330.28311
@@ -99,13 +92,6 @@ dps_results: {
  value: {
   dps: 1450.90432
   tps: 975.8034
- }
-}
-dps_results: {
- key: "TestBalance-AllItems-BlackenedNaaruSliver-34427"
- value: {
-  dps: 1423.7972
-  tps: 956.91921
  }
 }
 dps_results: {

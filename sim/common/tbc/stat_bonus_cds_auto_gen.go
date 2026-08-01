@@ -1,7 +1,10 @@
 package tbc
 
 import (
+	"time"
+
 	"github.com/wowsims/tbc/sim/common/shared"
+	"github.com/wowsims/tbc/sim/core"
 )
 
 func RegisterAllOnUseCds() {
@@ -94,6 +97,18 @@ func RegisterAllOnUseCds() {
 	shared.NewSimpleStatActive(33830) // Ancient Aqir Artifact - https://www.wowhead.com/tbc/spell=43713
 
 	// ArmorPenetration
+	// Badge of the Swarmguard - https://www.wowhead.com/tbc/spell=26480
+	shared.NewStackingStatBonusCD(shared.StackingStatBonusCD{
+		Name:                  "Badge of the Swarmguard",
+		ID:                    21670,
+		Duration:              time.Millisecond * 30000,
+		CD:                    time.Millisecond * 180000,
+		Callback:              core.CallbackOnSpellHitDealt,
+		ProcMask:              core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial | core.ProcMaskRangedAuto | core.ProcMaskRangedSpecial,
+		Outcome:               core.OutcomeLanded,
+		RequireDamageDealt:    true,
+		TrinketLimitsDuration: true,
+	})
 	shared.NewSimpleStatActive(28121) // Icon of Unyielding Courage - https://www.wowhead.com/tbc/spell=34106
 
 	// AttackPower / DefenseRating / RangedAttackPower
@@ -138,7 +153,18 @@ func RegisterAllOnUseCds() {
 	shared.NewSimpleStatActive(19344) // Natural Alignment Crystal - https://www.wowhead.com/tbc/spell=23734
 	shared.NewSimpleStatActive(20636) // Hibernation Crystal - https://www.wowhead.com/tbc/spell=24998
 	shared.NewSimpleStatActive(22268) // Draconic Infused Emblem - https://www.wowhead.com/tbc/spell=27675
-	shared.NewSimpleStatActive(22678) // Talisman of Ascendance - https://www.wowhead.com/tbc/spell=28200
+	// Talisman of Ascendance - https://www.wowhead.com/tbc/spell=28200
+	shared.NewStackingStatBonusCD(shared.StackingStatBonusCD{
+		Name:                  "Talisman of Ascendance",
+		ID:                    22678,
+		Duration:              time.Millisecond * 20000,
+		CD:                    time.Millisecond * 60000,
+		Callback:              core.CallbackOnSpellHitDealt,
+		ProcMask:              core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial | core.ProcMaskRangedAuto | core.ProcMaskRangedSpecial | core.ProcMaskSpellDamage,
+		Outcome:               core.OutcomeLanded,
+		RequireDamageDealt:    false,
+		TrinketLimitsDuration: true,
+	})
 	shared.NewSimpleStatActive(23046) // The Restrained Essence of Sapphiron - https://www.wowhead.com/tbc/spell=28779
 	shared.NewSimpleStatActive(23047) // Eye of the Dead - https://www.wowhead.com/tbc/spell=28780
 	shared.NewSimpleStatActive(25619) // Glowing Crystal Insignia - https://www.wowhead.com/tbc/spell=32355
@@ -183,6 +209,185 @@ func RegisterAllOnUseCds() {
 
 	// MeleeHasteRating / SpellHasteRating
 	shared.NewSimpleStatActive(19343) // Scrolls of Blinding Light - https://www.wowhead.com/tbc/spell=23733
+
+	// Skipped
+	// Not simulated: Chained Essence of Eranikus: "Poison Cloud" (12766) - ignored effect type 28
+	// https://www.wowhead.com/tbc/spell=12766
+	// Not simulated: Bloodsail Admiral's Hat: "Summon Blood Parrot" (17567) - ignored effect type 28
+	// https://www.wowhead.com/tbc/spell=17567
+	// Not simulated: Book of the Dead: "Summon Skeleton" (17490) - ignored effect type 28
+	// https://www.wowhead.com/tbc/spell=17490
+	// Not simulated: Cannonball Runner: "Summon Crimson Cannon" (6251) - ignored effect type 28
+	// https://www.wowhead.com/tbc/spell=6251
+	// Not simulated: Barov Peasant Caller: "Death by Peasant" (18307) - ignored effect type 28
+	// https://www.wowhead.com/tbc/spell=18307
+	// Not simulated: Barov Peasant Caller: "Death by Peasant" (18308) - ignored effect type 28
+	// https://www.wowhead.com/tbc/spell=18308
+	// Not simulated: Arcanite Dragonling: "Arcanite Dragonling" (19804) - ignored effect type 28
+	// https://www.wowhead.com/tbc/spell=19804
+	// Not simulated: Ancient Cornerstone Grimoire: "Summon Skeleton" (17490) - ignored effect type 28
+	// https://www.wowhead.com/tbc/spell=17490
+	// Not simulated: Frostwolf Insignia Rank 1: "Recall" (22563) - ignored effect type 252
+	// https://www.wowhead.com/tbc/spell=22563
+	// Not simulated: Stormpike Insignia Rank 1: "Recall" (22564) - ignored effect type 252
+	// https://www.wowhead.com/tbc/spell=22564
+	// Not simulated: Stormpike Insignia Rank 2: "Recall" (22564) - ignored effect type 252
+	// https://www.wowhead.com/tbc/spell=22564
+	// Not simulated: Stormpike Insignia Rank 3: "Recall" (22564) - ignored effect type 252
+	// https://www.wowhead.com/tbc/spell=22564
+	// Not simulated: Stormpike Insignia Rank 4: "Recall" (22564) - ignored effect type 252
+	// https://www.wowhead.com/tbc/spell=22564
+	// Not simulated: Stormpike Insignia Rank 5: "Recall" (22564) - ignored effect type 252
+	// https://www.wowhead.com/tbc/spell=22564
+	// Not simulated: Frostwolf Insignia Rank 2: "Recall" (22563) - ignored effect type 252
+	// https://www.wowhead.com/tbc/spell=22563
+	// Not simulated: Frostwolf Insignia Rank 3: "Recall" (22563) - ignored effect type 252
+	// https://www.wowhead.com/tbc/spell=22563
+	// Not simulated: Frostwolf Insignia Rank 4: "Recall" (22563) - ignored effect type 252
+	// https://www.wowhead.com/tbc/spell=22563
+	// Not simulated: Frostwolf Insignia Rank 5: "Recall" (22563) - ignored effect type 252
+	// https://www.wowhead.com/tbc/spell=22563
+	// Not simulated: Hook of the Master Angler: "Master Angler" (24347) - ignored aura type 56
+	// https://www.wowhead.com/tbc/spell=24347
+	// Not simulated: Defender of the Timbermaw: "Defender of the Timbermaw" (26066) - ignored effect type 28
+	// https://www.wowhead.com/tbc/spell=26066
+	// Not simulated: Vanquished Tentacle of C'Thun: "Tentacle Call" (26391) - ignored effect type 28
+	// https://www.wowhead.com/tbc/spell=26391
+	// Not simulated: Figurine - Black Diamond Crab: "Black Diamond Crab" (26609) - ignored effect type 28
+	// https://www.wowhead.com/tbc/spell=26609
+	// Not simulated: Figurine - Dark Iron Scorpid: "Dark Iron Scorpid" (26614) - ignored effect type 28
+	// https://www.wowhead.com/tbc/spell=26614
+	// Not simulated: Hyper-Vision Goggles: "Hyper Vision" (30249) - ignored aura type 17
+	// https://www.wowhead.com/tbc/spell=30249
+	// Not simulated: Figurine - Felsteel Boar: "Felsteel Boar" (31038) - ignored effect type 28
+	// https://www.wowhead.com/tbc/spell=31038
+	// Not simulated: Figurine - Dawnstone Crab: "Dawnstone Crab" (31039) - ignored effect type 28
+	// https://www.wowhead.com/tbc/spell=31039
+	// Not simulated: Figurine - Living Ruby Serpent: "Living Ruby Serpent" (31040) - ignored effect type 28
+	// https://www.wowhead.com/tbc/spell=31040
+	// Not simulated: Figurine - Nightseye Panther: "Nightseye Panther" (31047) - ignored effect type 28
+	// https://www.wowhead.com/tbc/spell=31047
+	// Not simulated: Everlasting Underspore Frond: "Everlasting Underspore Fronds" (33770) - ignored effect type 24
+	// https://www.wowhead.com/tbc/spell=33770
+	// Not simulated: Medallion of the Alliance: "PvP Trinket" (42292) - ignored aura type 77
+	// https://www.wowhead.com/tbc/spell=42292
+	// Not simulated: Medallion of the Alliance: "PvP Trinket" (42292) - ignored aura type 77
+	// https://www.wowhead.com/tbc/spell=42292
+	// Not simulated: Medallion of the Alliance: "PvP Trinket" (42292) - ignored aura type 77
+	// https://www.wowhead.com/tbc/spell=42292
+	// Not simulated: Medallion of the Alliance: "PvP Trinket" (42292) - ignored aura type 77
+	// https://www.wowhead.com/tbc/spell=42292
+	// Not simulated: Medallion of the Alliance: "PvP Trinket" (42292) - ignored aura type 77
+	// https://www.wowhead.com/tbc/spell=42292
+	// Not simulated: Medallion of the Horde: "PvP Trinket" (42292) - ignored aura type 77
+	// https://www.wowhead.com/tbc/spell=42292
+	// Not simulated: Medallion of the Horde: "PvP Trinket" (42292) - ignored aura type 77
+	// https://www.wowhead.com/tbc/spell=42292
+	// Not simulated: Medallion of the Horde: "PvP Trinket" (42292) - ignored aura type 77
+	// https://www.wowhead.com/tbc/spell=42292
+	// Not simulated: Medallion of the Horde: "PvP Trinket" (42292) - ignored aura type 77
+	// https://www.wowhead.com/tbc/spell=42292
+	// Not simulated: Medallion of the Horde: "PvP Trinket" (42292) - ignored aura type 77
+	// https://www.wowhead.com/tbc/spell=42292
+	// Not simulated: Phaseshift Bulwark: "Arcane Barrier" (36481) - ignored aura type 77
+	// https://www.wowhead.com/tbc/spell=36481
+	// Not simulated: Medallion of the Horde: "PvP Trinket" (42292) - ignored aura type 77
+	// https://www.wowhead.com/tbc/spell=42292
+	// Not simulated: Medallion of the Horde: "PvP Trinket" (42292) - ignored aura type 77
+	// https://www.wowhead.com/tbc/spell=42292
+	// Not simulated: Medallion of the Horde: "PvP Trinket" (42292) - ignored aura type 77
+	// https://www.wowhead.com/tbc/spell=42292
+	// Not simulated: Medallion of the Horde: "PvP Trinket" (42292) - ignored aura type 77
+	// https://www.wowhead.com/tbc/spell=42292
+	// Not simulated: Medallion of the Alliance: "PvP Trinket" (42292) - ignored aura type 77
+	// https://www.wowhead.com/tbc/spell=42292
+	// Not simulated: Medallion of the Alliance: "PvP Trinket" (42292) - ignored aura type 77
+	// https://www.wowhead.com/tbc/spell=42292
+	// Not simulated: Medallion of the Alliance: "PvP Trinket" (42292) - ignored aura type 77
+	// https://www.wowhead.com/tbc/spell=42292
+	// Not simulated: Medallion of the Alliance: "PvP Trinket" (42292) - ignored aura type 77
+	// https://www.wowhead.com/tbc/spell=42292
+	// Not simulated: Dimensional Ripper - Area 52: "Area52 Transporter" (36890) - ignored effect type 252
+	// https://www.wowhead.com/tbc/spell=36890
+	// Not simulated: Ultrasafe Transporter: Toshley's Station: "Toshley's Station Transporter" (36941) - ignored effect type
+	// Not simulated: 252
+	// https://www.wowhead.com/tbc/spell=36941
+	// Not simulated: Cursed Vision of Sargeras: "Sense Demons" (47524) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=47524
+	// Not simulated: Furious Gizmatic Goggles: "Longsight" (12883) - ignored aura type 76
+	// https://www.wowhead.com/tbc/spell=12883
+	// Not simulated: Justicebringer 2000 Specs: "Longsight" (12883) - ignored aura type 76
+	// https://www.wowhead.com/tbc/spell=12883
+	// Not simulated: Tankatronic Goggles: "Longsight" (12883) - ignored aura type 76
+	// https://www.wowhead.com/tbc/spell=12883
+	// Not simulated: Surestrike Goggles v2.0: "Longsight" (12883) - ignored aura type 76
+	// https://www.wowhead.com/tbc/spell=12883
+	// Not simulated: Living Replicator Specs: "Longsight" (12883) - ignored aura type 76
+	// https://www.wowhead.com/tbc/spell=12883
+	// Not simulated: Gadgetstorm Goggles: "Longsight" (12883) - ignored aura type 76
+	// https://www.wowhead.com/tbc/spell=12883
+	// Not simulated: Deathblow X11 Goggles: "Longsight" (12883) - ignored aura type 76
+	// https://www.wowhead.com/tbc/spell=12883
+	// Not simulated: Wonderheal XT40 Shades: "Longsight" (12883) - ignored aura type 76
+	// https://www.wowhead.com/tbc/spell=12883
+	// Not simulated: Magnified Moon Specs: "Longsight" (12883) - ignored aura type 76
+	// https://www.wowhead.com/tbc/spell=12883
+	// Not simulated: Destruction Holo-gogs: "Longsight" (12883) - ignored aura type 76
+	// https://www.wowhead.com/tbc/spell=12883
+	// Not simulated: Powerheal 4000 Lens: "Longsight" (12883) - ignored aura type 76
+	// https://www.wowhead.com/tbc/spell=12883
+	// Not simulated: Overseer's Badge: "Netherwing Ally" (40811) - ignored effect type 28
+	// https://www.wowhead.com/tbc/spell=40811
+	// Not simulated: Captain's Badge: "Netherwing Ally" (40815) - ignored effect type 28
+	// https://www.wowhead.com/tbc/spell=40815
+	// Not simulated: Blessed Medallion of Karabor: "Teleport: Black Temple" (41234) - ignored effect type 252
+	// https://www.wowhead.com/tbc/spell=41234
+	// Not simulated: Time-Lost Figurine: "Time-Lost Figurine" (41301) - ignored aura type 56
+	// https://www.wowhead.com/tbc/spell=41301
+	// Not simulated: Commander's Badge: "Netherwing Ally" (40815) - ignored effect type 28
+	// https://www.wowhead.com/tbc/spell=40815
+	// Not simulated: Tiny Voodoo Mask: "Death by Voodoo Gnome" (43995) - ignored effect type 28
+	// https://www.wowhead.com/tbc/spell=43995
+	// Not simulated: Quad Deathblow X44 Goggles: "Longsight" (12883) - ignored aura type 76
+	// https://www.wowhead.com/tbc/spell=12883
+	// Not simulated: Mayhem Projection Goggles: "Longsight" (12883) - ignored aura type 76
+	// https://www.wowhead.com/tbc/spell=12883
+	// Not simulated: Lightning Etched Specs: "Longsight" (12883) - ignored aura type 76
+	// https://www.wowhead.com/tbc/spell=12883
+	// Not simulated: Surestrike Goggles v3.0: "Longsight" (12883) - ignored aura type 76
+	// https://www.wowhead.com/tbc/spell=12883
+	// Not simulated: Hard Khorium Goggles: "Longsight" (12883) - ignored aura type 76
+	// https://www.wowhead.com/tbc/spell=12883
+	// Not simulated: Annihilator Holo-Gogs: "Longsight" (12883) - ignored aura type 76
+	// https://www.wowhead.com/tbc/spell=12883
+	// Not simulated: Powerheal 9000 Lens: "Longsight" (12883) - ignored aura type 76
+	// https://www.wowhead.com/tbc/spell=12883
+	// Not simulated: Hyper-Magnified Moon Specs: "Longsight" (12883) - ignored aura type 76
+	// https://www.wowhead.com/tbc/spell=12883
+	// Not simulated: Wonderheal XT68 Shades: "Longsight" (12883) - ignored aura type 76
+	// https://www.wowhead.com/tbc/spell=12883
+	// Not simulated: Primal-Attuned Goggles: "Longsight" (12883) - ignored aura type 76
+	// https://www.wowhead.com/tbc/spell=12883
+	// Not simulated: Justicebringer 3000 Specs: "Longsight" (12883) - ignored aura type 76
+	// https://www.wowhead.com/tbc/spell=12883
+	// Not simulated: Figurine - Empyrean Tortoise: "Empyrean Tortoise" (46780) - ignored effect type 28
+	// https://www.wowhead.com/tbc/spell=46780
+	// Not simulated: Figurine - Khorium Boar: "Khorium Boar" (46782) - ignored effect type 28
+	// https://www.wowhead.com/tbc/spell=46782
+	// Not simulated: Figurine - Crimson Serpent: "Crimson Serpent" (46783) - ignored effect type 28
+	// https://www.wowhead.com/tbc/spell=46783
+	// Not simulated: Figurine - Shadowsong Panther: "Shadowsong Panther" (46784) - ignored effect type 28
+	// https://www.wowhead.com/tbc/spell=46784
+	// Not simulated: Brightbrew Charm: "Summon the Brewmaiden" (48041) - ignored effect type 28
+	// https://www.wowhead.com/tbc/spell=48041
+	// Not simulated: Balebrew Charm: "Summon the Black Brewmaiden" (48042) - ignored effect type 28
+	// https://www.wowhead.com/tbc/spell=48042
+	// Not simulated: Medallion of the Alliance: "PvP Trinket" (42292) - ignored aura type 77
+	// https://www.wowhead.com/tbc/spell=42292
+	// Not simulated: Medallion of the Horde: "PvP Trinket" (42292) - ignored aura type 77
+	// https://www.wowhead.com/tbc/spell=42292
+	// Not simulated: Don Carlos' Famous Hat: "Summon Coyote Spirit" (51149) - ignored effect type 28
+	// https://www.wowhead.com/tbc/spell=51149
 
 	// SpellCritRating
 	shared.NewSimpleStatActive(19952) // Gri'lek's Charm of Valor - https://www.wowhead.com/tbc/spell=24498

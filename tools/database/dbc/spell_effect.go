@@ -314,17 +314,34 @@ func (effect *SpellEffect) ParseStatEffect(scalesWithIlvl bool, ilvl int) *stats
 		}
 
 	case effect.EffectAura == A_MOD_RATING:
+		scaled := effect.Coefficient != 0 && scalesWithIlvl
+		var scaledValue float64
+		if scaled {
+			scaledValue = effect.CalcCoefficientStatValue(ilvl)
+		}
+
 		for _, rating := range getMatchingRatingMods(effect.EffectMiscValues[0]) {
-			if statMod := RatingModToStat[rating]; statMod != -1 {
-				if effect.Coefficient != 0 && scalesWithIlvl {
-					effectStats[statMod] = effect.CalcCoefficientStatValue(ilvl)
-					break
-				}
+			statMod := RatingModToStat[rating]
+			if statMod == -1 {
+				continue
+			}
+			// Assigned rather than accumulated: several rating bits (melee/ranged/spell hit
+			// for example) map onto the same stat and must not stack. Masks that do span
+			// different stats need every one of them set, so no early exit - breaking after
+			// the first scaled stat silently dropped the rest of a multi-stat mask.
+			if scaled {
+				effectStats[statMod] = scaledValue
+			} else {
 				effectStats[statMod] = float64(effect.EffectBasePoints + effect.EffectDieSides)
 			}
 		}
 	case effect.EffectAura == A_MOD_INCREASE_ENERGY:
-		effectStats[proto.Stat_StatMana] = float64(effect.EffectBasePoints + effect.EffectDieSides)
+		// MiscValue 0 is the power type. Only mana has a matching stat; rage, focus, energy
+		// and the rest are resources the sim tracks per spec, not stats, so treating every
+		// power type as mana just invents mana out of nothing.
+		if effect.EffectMiscValues[0] == POWER_TYPE_MANA {
+			effectStats[proto.Stat_StatMana] = float64(effect.EffectBasePoints + effect.EffectDieSides)
+		}
 	case effect.EffectAura == A_MOD_INCREASE_HEALTH_2:
 		effectStats[proto.Stat_StatHealth] = float64(effect.EffectBasePoints + effect.EffectDieSides)
 	case effect.EffectAura == A_PERIODIC_TRIGGER_SPELL && effect.EffectAuraPeriod == 10000:

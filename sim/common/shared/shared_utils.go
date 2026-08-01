@@ -21,6 +21,14 @@ type ProcStatBonusEffect struct {
 	RequireDamageDealt bool
 	ClassSpellsOnly    bool
 
+	// What adds a stack while a stacking trinket's window is open. Derived from the container
+	// spell's own proc flags, which are not the ones that open the window.
+	// For example: Blackened Naaru Sliver opens on a melee hit
+	// and then stacks on every attack for the next 20s.
+	StackCallback core.AuraCallback
+	StackProcMask core.ProcMask
+	StackOutcome  core.HitOutcome
+
 	// Any other custom proc conditions not covered by the above fields.
 	CustomProcCondition core.CustomStatBuffProcCondition
 }
@@ -148,7 +156,25 @@ func factory_StatBonusEffect(config ProcStatBonusEffect, extraSpell func(agent c
 			proc := effect.GetProc()
 			procAction := core.ActionID{SpellID: effect.BuffId}
 			var procAura *core.StatBuffAura
-			if effect.MaxCumulativeStacks > 0 {
+			// Set only for the stacking trinkets, where the trigger opens a window aura that
+			// accumulates a separate stat aura. The handler activates the window rather than the
+			// stat aura, so a re-proc restarts the window instead of refreshing a duration the
+			// game does not refresh when a stack lands.
+			var windowAura *core.Aura
+			if stackingAura := effect.StackingAura; stackingAura != nil {
+				procAura, windowAura = character.NewTemporaryStatBuffWithStacks(core.TemporaryStatBuffWithStacksConfig{
+					AuraLabel:            config.Name + " Proc",
+					ActionID:             procAction,
+					Duration:             time.Millisecond * time.Duration(effect.EffectDurationMs),
+					MaxStacks:            stackingAura.MaxCumulativeStacks,
+					BonusPerStack:        stats.FromProtoMap(stackingAura.ScalingOptions[int32(0)].Stats),
+					StackingAuraActionID: core.ActionID{SpellID: stackingAura.BuffId},
+					StackingAuraLabel:    config.Name + " Stacks",
+					TimePerStack:         time.Millisecond * time.Duration(effect.GetStackPeriodMs()),
+					TickImmediately:      true,
+					StacksFromEvent:      effect.GetStackProc() != nil,
+				})
+			} else if effect.MaxCumulativeStacks > 0 {
 				procAura = core.MakeStackingAura(character, core.StackingStatAura{
 					Aura: core.Aura{
 						Label:     config.Name + " Proc",
@@ -187,7 +213,6 @@ func factory_StatBonusEffect(config ProcStatBonusEffect, extraSpell func(agent c
 					if procAura.CanProc(sim) {
 						procAura.Activate(sim)
 					} else {
-						// reset ICD condition was not fulfilled
 						if procAura.Icd != nil && procAura.Icd.Duration != 0 {
 							procAura.Icd.Reset()
 						}
@@ -203,9 +228,13 @@ func factory_StatBonusEffect(config ProcStatBonusEffect, extraSpell func(agent c
 				if customHandler != nil {
 					customHandler(sim, procAura)
 				} else {
-					procAura.Activate(sim)
-					if effect.MaxCumulativeStacks > 0 {
-						procAura.AddStack(sim)
+					if windowAura != nil {
+						windowAura.Activate(sim)
+					} else {
+						procAura.Activate(sim)
+						if effect.MaxCumulativeStacks > 0 {
+							procAura.AddStack(sim)
+						}
 					}
 					if procSpell.Spell != nil {
 						procSpell.Trigger(sim, spell, result)
@@ -226,6 +255,31 @@ func factory_StatBonusEffect(config ProcStatBonusEffect, extraSpell func(agent c
 				ICD:                time.Millisecond * time.Duration(proc.IcdMs),
 				Handler:            handler,
 			})
+
+			// Event-driven stacks come from their own trigger: the container's proc flags decide
+			// what counts, and it only does anything while the window is open. A timer-driven
+			// stacking aura fills itself and needs none of this.
+			if stackProc := effect.GetStackProc(); stackProc != nil && windowAura != nil && config.StackCallback != core.CallbackEmpty {
+				// Attached to the window rather than registered as its own aura: it is then only
+				// live while the window is open, needs no active check, and cannot outlive the
+				// item the way a permanent trigger would across an item swap.
+				stackingAura := procAura
+				windowAura.AttachProcTriggerCallback(&character.Unit, core.ProcTrigger{
+					Name:       config.Name + " Stack Trigger",
+					Callback:   config.StackCallback,
+					ProcMask:   config.StackProcMask,
+					Outcome:    config.StackOutcome,
+					ProcChance: stackProc.GetProcChance(),
+					DPM:        stackTriggerDPM(character, stackProc, config.StackProcMask),
+					ICD:        time.Millisecond * time.Duration(stackProc.IcdMs),
+					Handler: func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
+						if !stackingAura.IsActive() {
+							return
+						}
+						stackingAura.AddStack(sim)
+					},
+				})
+			}
 
 			if proc.IcdMs != 0 {
 				procAura.Icd = triggerAura.Icd
@@ -264,7 +318,6 @@ func NewProcStatBonusEffect(config ProcStatBonusEffect) {
 }
 
 func NewSimpleStatActive(itemID int32) {
-
 	// Soft fail to allow for overrides for bad effects
 	if core.HasItemEffect(itemID) {
 		return
@@ -302,8 +355,7 @@ func NewSimpleStatActive(itemID int32) {
 				Timer:    character.NewTimer(),
 				Duration: time.Duration(onUseData.CooldownMs) * time.Millisecond,
 			}
-			// if SpellCategoryID is 0 we seemingly do not share cd with anything
-			// Say Darkmoon Card: Earthquake and Ruthless Gladiator's Emblem of Cruelty even though tooltip shows as such
+
 			if onUseData.CategoryId > 0 {
 				sharedCDDuration := time.Duration(onUseData.CategoryCooldownMs) * time.Millisecond
 				if sharedCDDuration == 0 {
@@ -362,20 +414,35 @@ func NewStackingStatBonusCD(config StackingStatBonusCD) {
 				auraID = core.ActionID{ItemID: config.ID}
 			}
 
-			duration := core.TernaryDuration(config.TrinketLimitsDuration, core.NeverExpires, auraDuration)
+			// A database-resolved stacking trinket keeps the window and the stacks in separate
+			// auras, so the stacks, the per-stack stats and the stat aura's identity all come
+			// from the nested aura rather than from the effect itself. The window is then always
+			// what bounds it, whatever the config asked for.
+			statAuraID := auraID
+			maxStacks := itemEffect.MaxCumulativeStacks
+			perStack := itemEffect.ScalingOptions[int32(0)].Stats
+			windowBounded := config.TrinketLimitsDuration
+			if stackingAura := itemEffect.StackingAura; stackingAura != nil {
+				statAuraID = core.ActionID{SpellID: stackingAura.BuffId}
+				maxStacks = stackingAura.MaxCumulativeStacks
+				perStack = stackingAura.ScalingOptions[int32(0)].Stats
+				windowBounded = true
+			}
+
+			duration := core.TernaryDuration(windowBounded, core.NeverExpires, auraDuration)
 			statAura := core.MakeStackingAura(character, core.StackingStatAura{
 				Aura: core.Aura{
 					Label:     config.Name + " Proc",
-					ActionID:  auraID,
+					ActionID:  statAuraID,
 					Duration:  duration,
-					MaxStacks: itemEffect.MaxCumulativeStacks,
+					MaxStacks: maxStacks,
 				},
-				BonusPerStack: stats.FromProtoMap(itemEffect.ScalingOptions[int32(0)].Stats),
+				BonusPerStack: stats.FromProtoMap(perStack),
 			})
 
 			// If trinket limits duration create a separate proc aura
 			var procAura *core.Aura = statAura.Aura
-			if config.TrinketLimitsDuration {
+			if windowBounded {
 				procAura = character.RegisterAura(core.Aura{
 					Label:    fmt.Sprintf("%s Limit Aura %s", config.Name, itemEffect.BuffName),
 					ActionID: auraID,
@@ -386,6 +453,11 @@ func NewStackingStatBonusCD(config StackingStatBonusCD) {
 				})
 			}
 
+			var stackDPM *core.DynamicProcManager
+			if stackProc := itemEffect.GetStackProc(); stackProc != nil && stackProc.GetPpm() > 0 {
+				stackDPM = character.NewLegacyPPMManager(stackProc.GetPpm(), config.ProcMask)
+			}
+
 			procAura.AttachProcTriggerCallback(&character.Unit, core.ProcTrigger{
 				Name:               config.Name,
 				Callback:           config.Callback,
@@ -393,17 +465,33 @@ func NewStackingStatBonusCD(config StackingStatBonusCD) {
 				SpellFlags:         config.SpellFlags,
 				Outcome:            config.Outcome,
 				RequireDamageDealt: config.RequireDamageDealt,
-				ProcChance:         config.ProcChance,
+				ProcChance:         core.TernaryFloat64(stackDPM == nil, config.ProcChance, 0),
+				DPM:                stackDPM,
 				Handler: func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
-					statAura.AddStack(sim)
+					if !statAura.IsActive() {
+						return
+					}
+
+					if itemEffect.StacksDecay {
+						statAura.RemoveStack(sim)
+					} else {
+						statAura.AddStack(sim)
+					}
 				},
 			})
 
-			var sharedTimer *core.Timer
-			if config.IsDefensive {
-				sharedTimer = character.GetDefensiveTrinketCD()
-			} else {
-				sharedTimer = character.GetOffensiveTrinketCD()
+			// Only share a cooldown when the effect says it belongs to a category,
+			// the same rule NewSimpleStatActive applies.
+			var sharedCD core.Cooldown
+			if onUse := itemEffect.GetOnUse(); onUse != nil && onUse.CategoryId > 0 {
+				sharedCDDuration := time.Millisecond * time.Duration(onUse.CategoryCooldownMs)
+				if sharedCDDuration <= 0 {
+					sharedCDDuration = time.Millisecond * time.Duration(itemEffect.EffectDurationMs)
+				}
+				sharedCD = core.Cooldown{
+					Timer:    character.GetOrInitSpellCategoryTimer(onUse.CategoryId),
+					Duration: sharedCDDuration,
+				}
 			}
 
 			spell := character.RegisterSpell(core.SpellConfig{
@@ -415,22 +503,26 @@ func NewStackingStatBonusCD(config StackingStatBonusCD) {
 						Timer:    character.NewTimer(),
 						Duration: config.CD,
 					},
-					SharedCD: core.Cooldown{
-						Timer:    sharedTimer,
-						Duration: config.Duration,
-					},
+					SharedCD: sharedCD,
 				},
 
 				ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
 					statAura.Activate(sim)
+					if procAura != statAura.Aura {
+						procAura.Activate(sim)
+					}
+					if itemEffect.StacksDecay {
+						statAura.SetStacks(sim, maxStacks)
+					}
 				},
 
 				RelatedSelfBuff: statAura.Aura,
 			})
 
 			character.AddMajorCooldown(core.MajorCooldown{
-				Spell: spell,
-				Type:  core.CooldownTypeDPS,
+				Spell:    spell,
+				Type:     core.CooldownTypeDPS,
+				BuffAura: statAura,
 			})
 		}
 	})
@@ -607,12 +699,18 @@ func NewProcDamageEffect(config ProcDamageEffect) {
 
 		critMultiplier := core.TernaryFloat64(config.IsMelee, character.DefaultMeleeCritMultiplier(), character.DefaultSpellCritMultiplier())
 
-		if core.ActionID.IsEmptyAction(config.Trigger.ActionID) {
-			config.Trigger.ActionID = triggerActionID
+		// Per-character copy. config is captured once at registration and this body runs for
+		// every character the effect applies to, so filling the trigger in place would hand
+		// the second character the first one's DPM - a proc manager bound to another unit,
+		// carrying its proc timing.
+		triggerConfig := config.Trigger
+
+		if core.ActionID.IsEmptyAction(triggerConfig.ActionID) {
+			triggerConfig.ActionID = triggerActionID
 		}
 
 		if config.TriggerDPM != nil {
-			config.Trigger.DPM = config.TriggerDPM(character)
+			triggerConfig.DPM = config.TriggerDPM(character)
 		}
 
 		damageSpell := character.RegisterSpell(core.SpellConfig{
@@ -630,10 +728,14 @@ func NewProcDamageEffect(config ProcDamageEffect) {
 			},
 		})
 
-		triggerConfig := config.Trigger
 		triggerConfig.TriggerImmediately = true
-		triggerConfig.Handler = func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
-			damageSpell.Cast(sim, character.CurrentTarget)
+		triggerConfig.Handler = func(sim *core.Simulation, _ *core.Spell, result *core.SpellResult) {
+			// Land the extra damage on whatever was hit, not on the primary target.
+			target := character.CurrentTarget
+			if result != nil && result.Target != nil {
+				target = result.Target
+			}
+			damageSpell.Cast(sim, target)
 		}
 		triggerAura := character.MakeProcTriggerAura(triggerConfig)
 
@@ -820,4 +922,13 @@ func (ranks SpellRankMap) RegisterAll(factory SpellRankFactory) {
 	for _, rankConfig := range ranks {
 		factory(rankConfig)
 	}
+}
+
+// A stack rate given as PPM needs a proc manager rather than a flat chance; a chance-based rate
+// needs none.
+func stackTriggerDPM(character *core.Character, stackProc *proto.ProcEffect, mask core.ProcMask) *core.DynamicProcManager {
+	if stackProc.GetPpm() <= 0 {
+		return nil
+	}
+	return character.NewLegacyPPMManager(stackProc.GetPpm(), mask)
 }
