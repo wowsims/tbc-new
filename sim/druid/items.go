@@ -211,6 +211,14 @@ func init() {
 		// Implemented naively in druid.go
 	})
 
+	core.NewItemEffect(8345, func(agent core.Agent) {
+		druid := agent.(DruidAgent).GetDruid()
+		core.MakePermanent(druid.RegisterAura(core.Aura{
+			Label:    "Wolfshead Helm",
+			ActionID: core.ActionID{SpellID: 17768},
+		}))
+	})
+
 	// Idol of Ursoc (27744): Increases the damage dealt by Lacerate by 8 per tick per stack.
 	core.NewItemEffect(27744, func(agent core.Agent) {
 		druid := agent.(DruidAgent).GetDruid()
