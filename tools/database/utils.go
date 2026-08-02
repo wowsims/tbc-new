@@ -215,12 +215,11 @@ func anySpellEffect(spellId int, instance *dbc.DBC, pred func(dbc.SpellEffect) b
 }
 
 func isDummyAura(effect dbc.SpellEffect) bool {
-	return effect.EffectAura == dbc.A_DUMMY || effect.EffectAura == dbc.A_PERIODIC_DUMMY
+	return effect.IsDummy()
 }
 
 func isProcTriggerAura(effect dbc.SpellEffect) bool {
-	return effect.EffectAura == dbc.A_PROC_TRIGGER_SPELL ||
-		effect.EffectAura == dbc.A_PROC_TRIGGER_SPELL_WITH_VALUE
+	return effect.IsProcTrigger()
 }
 
 func GetEffectStatString(itemEffect *proto.ItemEffect) string {
@@ -228,7 +227,7 @@ func GetEffectStatString(itemEffect *proto.ItemEffect) string {
 		return ""
 	}
 
-	stats := itemEffect.ScalingOptions[int32(0)].Stats
+	stats := dbc.EffectStats(itemEffect)
 	statsString := make([]string, 0, len(stats))
 	for k := range stats {
 		stat := proto.Stat(k)

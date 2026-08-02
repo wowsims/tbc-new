@@ -129,26 +129,53 @@ func assignTrigger(e *ItemEffect, statsSpellID int, pe *proto.ItemEffect) {
 	}
 }
 
+// The stats an effect grants. A stacking effect grants nothing through the aura its trigger
+// applies - the stats it is named after live on the aura that accumulates - so an empty scaling
+// option is not the same as no stats, and no caller may read ScalingOptions directly to answer
+// this question.
+func EffectStats(effect *proto.ItemEffect) map[int32]float64 {
+	if stats := effect.GetScalingOptions()[int32(0)].GetStats(); len(stats) > 0 {
+		return stats
+	}
+
+	return effect.GetStackingAura().GetScalingOptions()[int32(0)].GetStats()
+}
+
+// On a stacking effect the aura the trigger applies grants nothing itself, so its scaling options
+// resolve to an empty message. ScalingItemEffectProperties holds only a stats map, so such an entry
+// carries no information at all - drop the whole map rather than ship an empty entry per state.
+// Readers reach the map through GetStats(), which is nil-safe.
+//
+// A no-op when anything did resolve, which keeps this honest if an effect ever carries stats on
+// both the trigger aura and the aura it accumulates.
+func dropEmptyScalingOptions(pe *proto.ItemEffect) {
+	for _, opt := range pe.ScalingOptions {
+		if len(opt.GetStats()) > 0 {
+			return
+		}
+	}
+
+	pe.ScalingOptions = nil
+}
+
 func (e *ItemEffect) ToProto(itemLevel int) (*proto.ItemEffect, bool) {
 	statsSpellID := resolveStatsSpell(e.SpellID)
 
 	pe := makeBaseProto(e, statsSpellID)
 	assignTrigger(e, statsSpellID, pe)
 
-	// build scaling properties and skip if empty
-	props := buildBaseStatScalingProps(statsSpellID, e.SpellID)
-	pe.ScalingOptions[int32(0)] = props
+	pe.ScalingOptions[int32(0)] = buildBaseStatScalingProps(statsSpellID, e.SpellID)
 
-	hasStats := len(props.Stats) > 0
+	// The stats may live on the accumulating aura rather than on the one the trigger applies, in
+	// which case the effect is real even though the scaling options above resolved to nothing.
 	if stacking := buildStackingAura(e.SpellID, statsSpellID, itemLevel, e.ParentItemID); stacking != nil {
 		stacking.Aura.ScalingOptions[int32(0)] = buildItemEffectScalingProps(int(stacking.Aura.BuffId), itemLevel)
 		applyStackingAura(pe, stacking)
-		// The stats live on the accumulating aura rather than on the one the trigger applies, so
-		// the effect is real even though scaling_options above resolved to nothing.
-		hasStats = hasStats || len(stacking.Aura.ScalingOptions[int32(0)].Stats) > 0
 	}
 
-	if !hasStats {
+	dropEmptyScalingOptions(pe)
+
+	if len(EffectStats(pe)) == 0 {
 		return nil, false
 	}
 
@@ -162,17 +189,14 @@ func resolveStatsSpell(spellID int) int {
 func (w *chainWalker) resolveStatsSpell(spellID int) int {
 	effects := w.effects(spellID)
 	for _, se := range effects {
-		switch se.EffectAura {
-		case A_MOD_STAT, A_MOD_RATING, A_MOD_RANGED_ATTACK_POWER, A_MOD_ATTACK_POWER, A_MOD_DAMAGE_DONE, A_MOD_TARGET_RESISTANCE, A_MOD_RESISTANCE, A_MOD_INCREASE_ENERGY,
-			A_MOD_INCREASE_HEALTH_2, A_PERIODIC_TRIGGER_SPELL:
+		if se.GrantsStats() {
 			return spellID
 		}
 	}
 
 	// If we cant resolve the spell in the first loop, we follow proc triggers downwards
 	for _, se := range effects {
-		switch se.EffectAura {
-		case A_PROC_TRIGGER_SPELL, A_PROC_TRIGGER_SPELL_WITH_VALUE:
+		if se.IsProcTrigger() {
 			return w.resolveStatsSpell(se.EffectTriggerSpell)
 		}
 	}
@@ -184,7 +208,7 @@ func resolveTriggerType(topType, spellID int) int {
 		return topType
 	}
 	for _, se := range dbcInstance.SpellEffectsInOrder(spellID) {
-		if se.EffectAura == A_PROC_TRIGGER_SPELL || se.EffectAura == A_PROC_TRIGGER_SPELL_WITH_VALUE {
+		if se.IsProcTrigger() {
 			return ITEM_SPELLTRIGGER_CHANCE_ON_HIT
 		}
 	}
@@ -251,14 +275,15 @@ func collectStats(spellID, itemLevel int) stats.Stats {
 }
 
 func (w *chainWalker) collectStats(spellID, itemLevel int, total *stats.Stats) {
-	var emptyStats = stats.Stats{}
-
 	sp := dbcInstance.Spells[spellID]
 	for _, se := range w.effects(spellID) {
-		s := se.ParseStatEffect(sp.ScalesWithItemLevel(), itemLevel)
-		if s != nil && *s != emptyStats {
-			total.AddInplace(s)
+		if s, resolved := se.ParseStatEffect(sp.ScalesWithItemLevel(), itemLevel); resolved {
+			total.AddInplace(&s)
 		} else if se.EffectAura == A_PROC_TRIGGER_SPELL {
+			// Deliberately narrower than IsProcTrigger: descending through an
+			// A_PROC_TRIGGER_SPELL_WITH_VALUE would collect the triggered spell's own amounts,
+			// past the point where the caller can still override them with the value the
+			// trigger carries.
 			w.collectStats(se.EffectTriggerSpell, itemLevel, total)
 		}
 	}
@@ -417,6 +442,8 @@ func MergeItemEffectsForAllStates(parsed *proto.UIItem) []*proto.ItemEffect {
 			}
 			applyStackingAura(pe, stacking)
 		}
+
+		dropEmptyScalingOptions(pe)
 
 		// Appended once per effect. Inside the loop above it appended the same pointer once
 		// per scaling state, which only stays invisible while items carry a single state.

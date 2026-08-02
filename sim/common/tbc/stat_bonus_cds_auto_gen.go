@@ -76,18 +76,6 @@ func RegisterAllOnUseCds() {
 	// shared.NewSimpleStatActive(35581) // Rocket Boots Xtreme Lite - https://www.wowhead.com/tbc/spell=51582
 	// shared.NewSimpleStatActive(35703) // Figurine - Seaspray Albatross - https://www.wowhead.com/tbc/spell=46785
 	// shared.NewSimpleStatActive(38175) // The Horseman's Blade - https://www.wowhead.com/tbc/spell=50070
-	// Zandalarian Hero Badge - https://www.wowhead.com/tbc/spell=24574
-	shared.NewStackingStatBonusCD(shared.StackingStatBonusCD{
-		Name:                  "Zandalarian Hero Badge",
-		ID:                    19948,
-		Duration:              time.Millisecond * 20000,
-		CD:                    time.Millisecond * 120000,
-		Callback:              core.CallbackOnSpellHitTaken,
-		ProcMask:              core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial | core.ProcMaskRangedAuto | core.ProcMaskRangedSpecial,
-		Outcome:               core.OutcomeLanded,
-		RequireDamageDealt:    true,
-		TrinketLimitsDuration: true,
-	})
 
 	// Agility
 	shared.NewSimpleStatActive(32658) // Badge of Tenacity - https://www.wowhead.com/tbc/spell=40729
@@ -106,6 +94,20 @@ func RegisterAllOnUseCds() {
 	shared.NewSimpleStatActive(19345) // Aegis of Preservation - https://www.wowhead.com/tbc/spell=23780
 	shared.NewSimpleStatActive(27891) // Adamantine Figurine - https://www.wowhead.com/tbc/spell=33479
 	shared.NewSimpleStatActive(33830) // Ancient Aqir Artifact - https://www.wowhead.com/tbc/spell=43713
+
+	// Armor / DefenseRating
+	// Zandalarian Hero Badge - https://www.wowhead.com/tbc/spell=24574
+	shared.NewStackingStatBonusCD(shared.StackingStatBonusCD{
+		Name:                  "Zandalarian Hero Badge",
+		ID:                    19948,
+		Duration:              time.Millisecond * 20000,
+		CD:                    time.Millisecond * 120000,
+		Callback:              core.CallbackOnSpellHitTaken,
+		ProcMask:              core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial | core.ProcMaskRangedAuto | core.ProcMaskRangedSpecial,
+		Outcome:               core.OutcomeLanded,
+		RequireDamageDealt:    true,
+		TrinketLimitsDuration: true,
+	})
 
 	// ArmorPenetration
 	// Badge of the Swarmguard - https://www.wowhead.com/tbc/spell=26480

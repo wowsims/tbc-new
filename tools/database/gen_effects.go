@@ -478,7 +478,7 @@ func TryParseProcEffect(parsed *proto.UIItem, itemEffect *proto.ItemEffect, inst
 			entry.ProcInfo, entry.Supported = BuildProcInfo(parsed, int(itemEffect.BuffId), instance, renderedTooltip)
 			entry.StackProcInfo = buildStackProcInfo(itemEffect, instance, renderedTooltip)
 
-			if len(itemEffect.ScalingOptions[0].Stats) == 0 || !entry.Supported {
+			if len(dbc.EffectStats(itemEffect)) == 0 || !entry.Supported {
 				StoreMissingEffect("ItemEffects", parsed.Name, Variant{
 					ID:      int(parsed.Id),
 					Name:    renderedTooltip,
@@ -532,7 +532,7 @@ func TryParseOnUseEffect(parsed *proto.UIItem, itemEffect *proto.ItemEffect, ins
 		// A stacking on-use keeps its stats on the accumulating aura, so the flat check below
 		// would call it unsupported, and the flat helper would grant nothing.
 		stacking := itemEffect.StackingAura
-		if stacking != nil && len(stacking.ScalingOptions[0].Stats) > 0 {
+		if stacking != nil && len(stacking.GetScalingOptions()[0].GetStats()) > 0 {
 			entry.StackProcInfo = buildStackProcInfo(itemEffect, instance, "")
 			if entry.StackProcInfo == nil {
 				entry.Supported = false
@@ -546,7 +546,7 @@ func TryParseOnUseEffect(parsed *proto.UIItem, itemEffect *proto.ItemEffect, ins
 			return EffectParseResultSuccess
 		}
 
-		if len(itemEffect.ScalingOptions[0].Stats) == 0 {
+		if len(dbc.EffectStats(itemEffect)) == 0 {
 			entry.Supported = false
 			return EffectParseResultUnsupported
 		}
@@ -637,7 +637,7 @@ func ParseTooltipForMissingEffect(parsed *proto.UIItem, itemEffect *proto.ItemEf
 				return
 			}
 
-			if len(itemEffect.ScalingOptions[0].Stats) == 0 || !entry.Supported {
+			if len(dbc.EffectStats(itemEffect)) == 0 || !entry.Supported {
 				StoreMissingEffect("ItemEffects", parsed.Name, Variant{
 					ID:      int(parsed.Id),
 					Name:    renderedTooltip,

@@ -39,8 +39,7 @@ func (enchant *Enchant) HasEnchantEffect() bool {
 			spellId := enchant.EffectArgs[idx]
 			spellEffects := dbcInstance.SpellEffects[spellId]
 			for _, spellEffect := range spellEffects {
-				if spellEffect.EffectAura == A_PROC_TRIGGER_SPELL ||
-					spellEffect.EffectAura == A_PROC_TRIGGER_SPELL_WITH_VALUE {
+				if spellEffect.IsProcTrigger() {
 					return true
 				}
 			}

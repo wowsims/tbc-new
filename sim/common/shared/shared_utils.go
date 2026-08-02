@@ -203,7 +203,7 @@ func buildProcAura(character *core.Character, config ProcStatBonusEffect, effect
 			ActionID:             action,
 			Duration:             duration,
 			MaxStacks:            stackingAura.MaxCumulativeStacks,
-			BonusPerStack:        stats.FromProtoMap(stackingAura.ScalingOptions[int32(0)].Stats),
+			BonusPerStack:        stats.FromProtoMap(stackingAura.GetScalingOptions()[int32(0)].GetStats()),
 			StackingAuraActionID: core.ActionID{SpellID: stackingAura.BuffId},
 			StackingAuraLabel:    config.Name + " Stacks",
 			TimePerStack:         time.Millisecond * time.Duration(effect.GetStackPeriodMs()),
@@ -220,11 +220,11 @@ func buildProcAura(character *core.Character, config ProcStatBonusEffect, effect
 				Duration:  duration,
 				MaxStacks: effect.MaxCumulativeStacks,
 			},
-			BonusPerStack: stats.FromProtoMap(effect.ScalingOptions[int32(0)].Stats),
+			BonusPerStack: stats.FromProtoMap(effect.GetScalingOptions()[int32(0)].GetStats()),
 		}), nil
 	}
 
-	return character.NewTemporaryStatsAura(label, action, stats.FromProtoMap(effect.ScalingOptions[int32(0)].Stats), duration), nil
+	return character.NewTemporaryStatsAura(label, action, stats.FromProtoMap(effect.GetScalingOptions()[int32(0)].GetStats()), duration), nil
 }
 
 func procDPM(character *core.Character, config ProcStatBonusEffect, source effectSource, proc *proto.ProcEffect) *core.DynamicProcManager {
@@ -325,7 +325,7 @@ func NewSimpleStatActive(itemID int32) {
 			}
 			spellConfig.Cast.SharedCD = sharedCooldown(character, itemEffect)
 
-			core.RegisterTemporaryStatsOnUseCD(character, itemEffect.BuffName, stats.FromProtoMap(itemEffect.ScalingOptions[int32(0)].Stats), time.Millisecond*time.Duration(itemEffect.EffectDurationMs), spellConfig)
+			core.RegisterTemporaryStatsOnUseCD(character, itemEffect.BuffName, stats.FromProtoMap(itemEffect.GetScalingOptions()[int32(0)].GetStats()), time.Millisecond*time.Duration(itemEffect.EffectDurationMs), spellConfig)
 		}
 	})
 }
@@ -363,7 +363,7 @@ func resolveStackingStats(effect *proto.ItemEffect, effectActionID core.ActionID
 		return stackingStats{
 			actionID:      core.ActionID{SpellID: stackingAura.BuffId},
 			maxStacks:     stackingAura.MaxCumulativeStacks,
-			perStack:      stackingAura.ScalingOptions[int32(0)].Stats,
+			perStack:      stackingAura.GetScalingOptions()[int32(0)].GetStats(),
 			windowBounded: true,
 		}
 	}
@@ -371,7 +371,7 @@ func resolveStackingStats(effect *proto.ItemEffect, effectActionID core.ActionID
 	return stackingStats{
 		actionID:      effectActionID,
 		maxStacks:     effect.MaxCumulativeStacks,
-		perStack:      effect.ScalingOptions[int32(0)].Stats,
+		perStack:      effect.GetScalingOptions()[int32(0)].GetStats(),
 		windowBounded: trinketLimitsDuration,
 	}
 }
