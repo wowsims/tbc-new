@@ -88,12 +88,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		13243, // Argent Defender
-		[
-			"Has a 1% chance when struck in combat of increasing block rating by 250 for 10 sec.", // 17351 - https://www.wowhead.com/tbc/spell=17351
-		]
-	],
-	[
 		13375, // Crest of Retribution
 		[
 			"Deals 35 damage every time you block.", // 17496 - https://www.wowhead.com/tbc/spell=17496
@@ -145,12 +139,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		14154, // Truefaith Vestments
 		[
 			"Reduces the cooldown of your Fade ability by -2.0 sec.", // 18388 - https://www.wowhead.com/tbc/spell=18388
-		]
-	],
-	[
-		14557, // The Lion Horn of Stormwind
-		[
-			"When struck in combat has a 1% chance of increasing all party member's armor by 250 for 30s.", // 18946 - https://www.wowhead.com/tbc/spell=18946
 		]
 	],
 	[
@@ -661,12 +649,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		19946, // Tigule's Harpoon
 		[
 			"Increases attack power by 60 when fighting Beasts.", // 18207 - https://www.wowhead.com/tbc/spell=18207
-		]
-	],
-	[
-		19948, // Zandalarian Hero Badge
-		[
-			"Increases your armor by 2000 and defense rating by 50 for 20s. Every time you take melee or ranged damage, this bonus is reduced by 200 armor and 5 defense rating.", // 24574 - https://www.wowhead.com/tbc/spell=24574
 		]
 	],
 	[
@@ -1719,12 +1701,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		29181, // Timelapse Shard
 		[
 			"Reduces your threat to enemy targets within 30 yards, making them less likely to attack you.", // 35352 - https://www.wowhead.com/tbc/spell=35352
-		]
-	],
-	[
-		29297, // Band of the Eternal Defender
-		[
-			"When struck in combat has a chance of increasing your armor by 800 for 10s.", // 35078 - https://www.wowhead.com/tbc/spell=35078
 		]
 	],
 	[

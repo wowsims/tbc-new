@@ -158,6 +158,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRogue-AllItems-BandoftheEternalDefender-29297"
+ value: {
+  dps: 1835.79629
+  tps: 912.39076
+ }
+}
+dps_results: {
  key: "TestRogue-AllItems-BandoftheEternalRestorer-29309"
  value: {
   dps: 1835.79629
@@ -1160,6 +1167,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRogue-AllItems-TheLionHornofStormwind-14557"
+ value: {
+  dps: 1813.79507
+  tps: 901.45615
+ }
+}
+dps_results: {
  key: "TestRogue-AllItems-TheNightBlade-31331"
  value: {
   dps: 1864.44187
@@ -1294,6 +1308,13 @@ dps_results: {
 }
 dps_results: {
  key: "TestRogue-AllItems-Xi'ri'sGift-29179"
+ value: {
+  dps: 1813.79507
+  tps: 901.45615
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-ZandalarianHeroBadge-19948"
  value: {
   dps: 1813.79507
   tps: 901.45615

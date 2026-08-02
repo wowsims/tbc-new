@@ -141,6 +141,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestProtection-AllItems-ArgentDefender-13243"
+ value: {
+  dps: 911.80628
+  tps: 1641.57411
+  dtps: 1505.88166
+ }
+}
+dps_results: {
  key: "TestProtection-AllItems-ArgussianCompass-27770"
  value: {
   dps: 875.76543
@@ -173,10 +181,18 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestProtection-AllItems-BandoftheEternalDefender-29297"
+ value: {
+  dps: 914.69825
+  tps: 1642.17677
+  dtps: 1288.24625
+ }
+}
+dps_results: {
  key: "TestProtection-AllItems-BandoftheEternalRestorer-29309"
  value: {
-  dps: 924.29461
-  tps: 1660.82084
+  dps: 924.57037
+  tps: 1661.34562
   dtps: 1315.12989
  }
 }
@@ -352,8 +368,8 @@ dps_results: {
  key: "TestProtection-AllItems-BulwarkofAzzinoth-32375"
  value: {
   dps: 911.67072
-  tps: 1637.57836
-  dtps: 1222.7848
+  tps: 1637.57477
+  dtps: 1221.88304
  }
 }
 dps_results: {
@@ -399,8 +415,8 @@ dps_results: {
 dps_results: {
  key: "TestProtection-AllItems-CircletofArcaneMight-24123"
  value: {
-  dps: 911.35837
-  tps: 1637.4955
+  dps: 911.33056
+  tps: 1637.43757
   dtps: 1409.54496
  }
 }
@@ -440,7 +456,7 @@ dps_results: {
  key: "TestProtection-AllItems-CoronetofVerdantFlame-24122"
  value: {
   dps: 907.25862
-  tps: 1628.68354
+  tps: 1628.66628
   dtps: 1409.54496
  }
 }
@@ -857,8 +873,8 @@ dps_results: {
 dps_results: {
  key: "TestProtection-AllItems-HourglassoftheUnraveller-28034"
  value: {
-  dps: 883.35357
-  tps: 1576.02271
+  dps: 883.32503
+  tps: 1575.99417
   dtps: 1293.05591
  }
 }
@@ -1073,8 +1089,8 @@ dps_results: {
 dps_results: {
  key: "TestProtection-AllItems-MasqueradeGown-28578"
  value: {
-  dps: 901.27587
-  tps: 1617.41547
+  dps: 901.29612
+  tps: 1617.46248
   dtps: 1372.76133
  }
 }
@@ -1353,8 +1369,8 @@ dps_results: {
 dps_results: {
  key: "TestProtection-AllItems-SextantofUnstableCurrents-30626"
  value: {
-  dps: 890.59587
-  tps: 1595.60139
+  dps: 879.81485
+  tps: 1574.88026
   dtps: 1293.05591
  }
 }
@@ -1536,6 +1552,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestProtection-AllItems-TheLionHornofStormwind-14557"
+ value: {
+  dps: 875.76543
+  tps: 1567.10239
+  dtps: 1292.91445
+ }
+}
+dps_results: {
  key: "TestProtection-AllItems-TheRestrainedEssenceofSapphiron-23046"
  value: {
   dps: 901.92159
@@ -1701,6 +1725,14 @@ dps_results: {
   dps: 886.52353
   tps: 1587.72904
   dtps: 1293.05591
+ }
+}
+dps_results: {
+ key: "TestProtection-AllItems-ZandalarianHeroBadge-19948"
+ value: {
+  dps: 877.52535
+  tps: 1570.25593
+  dtps: 1259.91307
  }
 }
 dps_results: {

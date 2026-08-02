@@ -24,7 +24,6 @@ func RegisterAllOnUseCds() {
 	// shared.NewSimpleStatActive(19341) // Lifegiving Gem - https://www.wowhead.com/tbc/spell=23725
 	// shared.NewSimpleStatActive(19342) // Venomous Totem - https://www.wowhead.com/tbc/spell=23726
 	// shared.NewSimpleStatActive(19930) // Mar'li's Eye - https://www.wowhead.com/tbc/spell=24268
-	// shared.NewSimpleStatActive(19948) // Zandalarian Hero Badge - https://www.wowhead.com/tbc/spell=24574
 	// shared.NewSimpleStatActive(19949) // Zandalarian Hero Medallion - https://www.wowhead.com/tbc/spell=24661
 	// shared.NewSimpleStatActive(19950) // Zandalarian Hero Charm - https://www.wowhead.com/tbc/spell=24658
 	// shared.NewSimpleStatActive(19951) // Gri'lek's Charm of Might - https://www.wowhead.com/tbc/spell=24571
@@ -77,6 +76,18 @@ func RegisterAllOnUseCds() {
 	// shared.NewSimpleStatActive(35581) // Rocket Boots Xtreme Lite - https://www.wowhead.com/tbc/spell=51582
 	// shared.NewSimpleStatActive(35703) // Figurine - Seaspray Albatross - https://www.wowhead.com/tbc/spell=46785
 	// shared.NewSimpleStatActive(38175) // The Horseman's Blade - https://www.wowhead.com/tbc/spell=50070
+	// Zandalarian Hero Badge - https://www.wowhead.com/tbc/spell=24574
+	shared.NewStackingStatBonusCD(shared.StackingStatBonusCD{
+		Name:                  "Zandalarian Hero Badge",
+		ID:                    19948,
+		Duration:              time.Millisecond * 20000,
+		CD:                    time.Millisecond * 120000,
+		Callback:              core.CallbackOnSpellHitTaken,
+		ProcMask:              core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial | core.ProcMaskRangedAuto | core.ProcMaskRangedSpecial,
+		Outcome:               core.OutcomeLanded,
+		RequireDamageDealt:    true,
+		TrinketLimitsDuration: true,
+	})
 
 	// Agility
 	shared.NewSimpleStatActive(32658) // Badge of Tenacity - https://www.wowhead.com/tbc/spell=40729

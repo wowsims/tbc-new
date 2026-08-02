@@ -61,6 +61,27 @@ func makeBaseProto(e *ItemEffect, statsSpellID int) *proto.ItemEffect {
 	return base
 }
 
+// The internal cooldown of a proc. Most spells carry it on the trigger's SpellAuraOptions, but a
+// few leave that at zero and put it on the buff's spell category instead: Bulwark of Azzinoth's
+// armor buff sits in category 30 with a 60s CategoryRecoveryTime while its trigger has nothing.
+//
+// Only a buff that is a *separate* spell from the trigger counts. Where the two are the same spell
+// the recovery being read is that spell's own cast throttle rather than a gate on re-applying the
+// buff, and in TBC that is almost always the generic 1s bucket - category 99 holds 170 spells, 101
+// of them with exactly 1000, most of them quest-reward trinkets. Reading those as internal
+// cooldowns perturbs every fixture that equips one and states nothing the game does not already do.
+func procIcdMs(trigger Spell, buff Spell) int32 {
+	if trigger.ProcCategoryRecovery > 0 {
+		return trigger.ProcCategoryRecovery
+	}
+
+	if buff.ID != trigger.ID {
+		return buff.CategoryRecoveryTime
+	}
+
+	return 0
+}
+
 func assignTrigger(e *ItemEffect, statsSpellID int, pe *proto.ItemEffect) {
 	spTop := dbcInstance.Spells[e.SpellID]
 	statsSP := dbcInstance.Spells[statsSpellID]
@@ -74,7 +95,7 @@ func assignTrigger(e *ItemEffect, statsSpellID int, pe *proto.ItemEffect) {
 		}}
 	case ITEM_SPELLTRIGGER_CHANCE_ON_HIT:
 		proc := &proto.ProcEffect{
-			IcdMs: spTop.ProcCategoryRecovery,
+			IcdMs: procIcdMs(spTop, statsSP),
 		}
 		// If proc chance is above 100 it is most likely a PPM proc
 		// Or if we manually assigned PPM

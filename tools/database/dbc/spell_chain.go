@@ -96,7 +96,7 @@ func buildStackingAura(rootSpellID, statsSpellID, itemLevel, parentItemID int) *
 	// trigger with no rate at all - worse than not generating it, so abandon and let the effect
 	// reach the missing-effects report.
 	container := dbcInstance.Spells[containerID]
-	proc := &proto.ProcEffect{IcdMs: container.ProcCategoryRecovery}
+	proc := &proto.ProcEffect{IcdMs: procIcdMs(container, dbcInstance.Spells[statAuraID])}
 	switch {
 	case container.ProcChance > 100:
 		ppm := getPPMForItemID(int32(parentItemID))

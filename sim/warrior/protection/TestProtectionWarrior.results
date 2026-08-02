@@ -141,6 +141,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestProtectionWarrior-AllItems-ArgentDefender-13243"
+ value: {
+  dps: 777.8666
+  tps: 1435.98994
+  dtps: 1481.55824
+ }
+}
+dps_results: {
  key: "TestProtectionWarrior-AllItems-ArgussianCompass-27770"
  value: {
   dps: 775.25844
@@ -178,6 +186,14 @@ dps_results: {
   dps: 812.91587
   tps: 1486.20824
   dtps: 1282.5045
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-BandoftheEternalDefender-29297"
+ value: {
+  dps: 800.51817
+  tps: 1466.12486
+  dtps: 1290.6833
  }
 }
 dps_results: {
@@ -359,9 +375,9 @@ dps_results: {
 dps_results: {
  key: "TestProtectionWarrior-AllItems-BulwarkofAzzinoth-32375"
  value: {
-  dps: 798.46687
-  tps: 1462.43653
-  dtps: 1196.42527
+  dps: 798.71183
+  tps: 1462.80758
+  dtps: 1198.62779
  }
 }
 dps_results: {
@@ -1287,9 +1303,9 @@ dps_results: {
 dps_results: {
  key: "TestProtectionWarrior-AllItems-SextantofUnstableCurrents-30626"
  value: {
-  dps: 774.35626
-  tps: 1423.59814
-  dtps: 1298.77296
+  dps: 775.25844
+  tps: 1425.13678
+  dtps: 1298.84002
  }
 }
 dps_results: {
@@ -1486,6 +1502,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestProtectionWarrior-AllItems-TheLionHornofStormwind-14557"
+ value: {
+  dps: 775.25844
+  tps: 1425.13678
+  dtps: 1298.72889
+ }
+}
+dps_results: {
  key: "TestProtectionWarrior-AllItems-TheRestrainedEssenceofSapphiron-23046"
  value: {
   dps: 775.25844
@@ -1647,6 +1671,14 @@ dps_results: {
 }
 dps_results: {
  key: "TestProtectionWarrior-AllItems-Xi'ri'sGift-29179"
+ value: {
+  dps: 775.25844
+  tps: 1425.13678
+  dtps: 1298.84002
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-ZandalarianHeroBadge-19948"
  value: {
   dps: 775.25844
   tps: 1425.13678

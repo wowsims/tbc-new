@@ -173,6 +173,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestDpsWarrior-AllItems-BandoftheEternalDefender-29297"
+ value: {
+  dps: 2044.81372
+  tps: 1081.06222
+  dtps: 7.36086
+ }
+}
+dps_results: {
  key: "TestDpsWarrior-AllItems-BandoftheEternalRestorer-29309"
  value: {
   dps: 2044.81372
@@ -1309,6 +1317,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestDpsWarrior-AllItems-TheLionHornofStormwind-14557"
+ value: {
+  dps: 2043.15491
+  tps: 1080.80984
+  dtps: 7.36086
+ }
+}
+dps_results: {
  key: "TestDpsWarrior-AllItems-TheRestrainedEssenceofSapphiron-23046"
  value: {
   dps: 2043.15491
@@ -1454,6 +1470,14 @@ dps_results: {
 }
 dps_results: {
  key: "TestDpsWarrior-AllItems-Xi'ri'sGift-29179"
+ value: {
+  dps: 2043.15491
+  tps: 1080.80984
+  dtps: 7.36086
+ }
+}
+dps_results: {
+ key: "TestDpsWarrior-AllItems-ZandalarianHeroBadge-19948"
  value: {
   dps: 2043.15491
   tps: 1080.80984

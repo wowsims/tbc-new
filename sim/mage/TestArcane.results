@@ -165,10 +165,17 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestArcane-AllItems-BandoftheEternalDefender-29297"
+ value: {
+  dps: 1879.13658
+  tps: 908.6146
+ }
+}
+dps_results: {
  key: "TestArcane-AllItems-BandoftheEternalRestorer-29309"
  value: {
-  dps: 1948.65902
-  tps: 939.01959
+  dps: 1948.69009
+  tps: 939.03237
  }
 }
 dps_results: {
@@ -321,8 +328,8 @@ dps_results: {
 dps_results: {
  key: "TestArcane-AllItems-CircletofArcaneMight-24123"
  value: {
-  dps: 1819.58798
-  tps: 880.4929
+  dps: 1819.98234
+  tps: 880.72741
  }
 }
 dps_results: {
@@ -741,8 +748,8 @@ dps_results: {
 dps_results: {
  key: "TestArcane-AllItems-MasqueradeGown-28578"
  value: {
-  dps: 1890.43256
-  tps: 913.46122
+  dps: 1890.44721
+  tps: 913.471
  }
 }
 dps_results: {
@@ -1097,6 +1104,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestArcane-AllItems-TheLionHornofStormwind-14557"
+ value: {
+  dps: 1891.02863
+  tps: 941.79043
+ }
+}
+dps_results: {
  key: "TestArcane-AllItems-TheNightBlade-31331"
  value: {
   dps: 1942.85671
@@ -1213,6 +1227,13 @@ dps_results: {
  value: {
   dps: 1924.57314
   tps: 957.42008
+ }
+}
+dps_results: {
+ key: "TestArcane-AllItems-ZandalarianHeroBadge-19948"
+ value: {
+  dps: 1891.02863
+  tps: 941.79043
  }
 }
 dps_results: {

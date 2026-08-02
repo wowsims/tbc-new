@@ -181,6 +181,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestHunter-AllItems-BandoftheEternalDefender-29297"
+ value: {
+  dps: 3497.86172
+  tps: 1739.14222
+  dtps: 13.31642
+ }
+}
+dps_results: {
  key: "TestHunter-AllItems-BandoftheEternalRestorer-29309"
  value: {
   dps: 3497.86172
@@ -1287,7 +1295,7 @@ dps_results: {
 dps_results: {
  key: "TestHunter-AllItems-SextantofUnstableCurrents-30626"
  value: {
-  dps: 3434.51391
+  dps: 3434.52044
   tps: 1693.07924
   dtps: 13.91467
  }
@@ -1486,6 +1494,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestHunter-AllItems-TheLionHornofStormwind-14557"
+ value: {
+  dps: 3434.52044
+  tps: 1693.07924
+  dtps: 13.77041
+ }
+}
+dps_results: {
  key: "TestHunter-AllItems-TheNightBlade-31331"
  value: {
   dps: 3489.08464
@@ -1651,6 +1667,14 @@ dps_results: {
   dps: 3434.45617
   tps: 1693.31531
   dtps: 13.91467
+ }
+}
+dps_results: {
+ key: "TestHunter-AllItems-ZandalarianHeroBadge-19948"
+ value: {
+  dps: 3434.52044
+  tps: 1693.07924
+  dtps: 13.77041
  }
 }
 dps_results: {

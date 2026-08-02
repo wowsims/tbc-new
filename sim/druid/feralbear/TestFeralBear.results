@@ -242,6 +242,15 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestFeralBear-AllItems-BandoftheEternalDefender-29297"
+ value: {
+  dps: 417.46712
+  tps: 644.49847
+  dtps: 1167.10076
+  hps: 74.57991
+ }
+}
+dps_results: {
  key: "TestFeralBear-AllItems-BandoftheEternalRestorer-29309"
  value: {
   dps: 417.62704
@@ -1709,6 +1718,15 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestFeralBear-AllItems-TheLionHornofStormwind-14557"
+ value: {
+  dps: 418.45366
+  tps: 646.04601
+  dtps: 1115.5952
+  hps: 71.22702
+ }
+}
+dps_results: {
  key: "TestFeralBear-AllItems-TheNightBlade-31331"
  value: {
   dps: 418.45366
@@ -1872,6 +1890,15 @@ dps_results: {
 }
 dps_results: {
  key: "TestFeralBear-AllItems-Xi'ri'sGift-29179"
+ value: {
+  dps: 418.45366
+  tps: 646.04601
+  dtps: 1115.65852
+  hps: 71.22702
+ }
+}
+dps_results: {
+ key: "TestFeralBear-AllItems-ZandalarianHeroBadge-19948"
  value: {
   dps: 418.45366
   tps: 646.04601

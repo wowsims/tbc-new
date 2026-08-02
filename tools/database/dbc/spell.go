@@ -29,6 +29,7 @@ type Spell struct {
 	ProcCharges           int32
 	ProcTypeMask          []int
 	ProcCategoryRecovery  int32
+	CategoryRecoveryTime  int32
 	EquippedItemClass     int32
 	EquippedItemInvTypes  int32
 	EquippedItemSubclass  int32

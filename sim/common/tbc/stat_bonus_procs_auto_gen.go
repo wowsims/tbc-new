@@ -240,21 +240,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Has a 1% chance when struck in combat of increasing block rating by 250 for 10 sec.
-	// https://www.wowhead.com/tbc/spell=17351
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 13243, ItemName: "Argent Defender"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Deals 35 damage every time you block.
 	// https://www.wowhead.com/tbc/spell=17496
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -384,21 +369,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 14154, ItemName: "Truefaith Vestments"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// When struck in combat has a 1% chance of increasing all party member's armor by 250 for 30s.
-	// https://www.wowhead.com/tbc/spell=18946
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 14557, ItemName: "The Lion Horn of Stormwind"},
 	// })
 
 	// TODO: Manual implementation required
@@ -1686,22 +1656,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 19946, ItemName: "Tigule's Harpoon"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Increases your armor by 2000 and defense rating by 50 for 20s. Every time you take melee or ranged damage,
-	// this bonus is reduced by 200 armor and 5 defense rating.
-	// https://www.wowhead.com/tbc/spell=24574
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 19948, ItemName: "Zandalarian Hero Badge"},
 	// })
 
 	// TODO: Manual implementation required
@@ -4218,21 +4172,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 29181, ItemName: "Timelapse Shard"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// When struck in combat has a chance of increasing your armor by 800 for 10s.
-	// https://www.wowhead.com/tbc/spell=35078
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 29297, ItemName: "Band of the Eternal Defender"},
 	// })
 
 	// TODO: Manual implementation required
@@ -6806,6 +6745,28 @@ func RegisterAllProcs() {
 		{ItemID: 12798, ItemName: "Annihilator"},
 	})
 
+	// Has a 1% chance when struck in combat of increasing block rating by 250 for 10 sec.
+	// https://www.wowhead.com/tbc/spell=17351
+	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+		Callback:           core.CallbackOnSpellHitTaken,
+		ProcMask:           core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial,
+		Outcome:            core.OutcomeLanded,
+		RequireDamageDealt: true,
+	}, []shared.ItemVariant{
+		{ItemID: 13243, ItemName: "Argent Defender"},
+	})
+
+	// When struck in combat has a 1% chance of increasing all party member's armor by 250 for 30s.
+	// https://www.wowhead.com/tbc/spell=18946
+	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+		Callback:           core.CallbackOnSpellHitTaken,
+		ProcMask:           core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial,
+		Outcome:            core.OutcomeLanded,
+		RequireDamageDealt: true,
+	}, []shared.ItemVariant{
+		{ItemID: 14557, ItemName: "The Lion Horn of Stormwind"},
+	})
+
 	// Gives a chance when your harmful spells land to reduce the magical resistances of your spell targets by
 	// 50 for 8s.
 	// https://www.wowhead.com/tbc/spell=25768
@@ -6833,9 +6794,9 @@ func RegisterAllProcs() {
 	// Chance on successful spellcast to restore 90 Mana over 10s.
 	// https://www.wowhead.com/tbc/spell=31036
 	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-		Callback:           core.CallbackOnSpellHitDealt,
+		Callback:           core.CallbackOnCastComplete,
 		ProcMask:           core.ProcMaskSpellDamage,
-		Outcome:            core.OutcomeLanded,
+		Outcome:            core.OutcomeEmpty,
 		RequireDamageDealt: false,
 		ClassSpellsOnly:    true,
 	}, []shared.ItemVariant{
@@ -6845,9 +6806,9 @@ func RegisterAllProcs() {
 	// 2% chance on successful spellcast to increase your spell damage by up to 1 for 15s.
 	// https://www.wowhead.com/tbc/spell=31037
 	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-		Callback:           core.CallbackOnSpellHitDealt,
+		Callback:           core.CallbackOnCastComplete,
 		ProcMask:           core.ProcMaskSpellDamage,
-		Outcome:            core.OutcomeLanded,
+		Outcome:            core.OutcomeEmpty,
 		RequireDamageDealt: false,
 		ClassSpellsOnly:    true,
 	}, []shared.ItemVariant{
@@ -6864,6 +6825,17 @@ func RegisterAllProcs() {
 		ClassSpellsOnly:    true,
 	}, []shared.ItemVariant{
 		{ItemID: 27683, ItemName: "Quagmirran's Eye"},
+	})
+
+	// Chance on critical hit to increase your attack power by 300 for 10 secs.
+	// https://www.wowhead.com/tbc/spell=33649
+	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+		Callback:           core.CallbackOnSpellHitDealt,
+		ProcMask:           core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial | core.ProcMaskRangedAuto | core.ProcMaskRangedSpecial,
+		Outcome:            core.OutcomeCrit,
+		RequireDamageDealt: true,
+	}, []shared.ItemVariant{
+		{ItemID: 28034, ItemName: "Hourglass of the Unraveller"},
 	})
 
 	// Your direct healing and heal over time spells have a chance to increase your spell haste rating by 320
@@ -6949,9 +6921,9 @@ func RegisterAllProcs() {
 	// Chance on spell cast to increase your Spirit by 145 for 15 secs.
 	// https://www.wowhead.com/tbc/spell=34585
 	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-		Callback:           core.CallbackOnSpellHitDealt,
+		Callback:           core.CallbackOnCastComplete,
 		ProcMask:           core.ProcMaskSpellDamage,
-		Outcome:            core.OutcomeLanded,
+		Outcome:            core.OutcomeEmpty,
 		RequireDamageDealt: false,
 		ClassSpellsOnly:    true,
 	}, []shared.ItemVariant{
@@ -6981,6 +6953,17 @@ func RegisterAllProcs() {
 		{ItemID: 28830, ItemName: "Dragonspine Trophy"},
 	})
 
+	// When struck in combat has a chance of increasing your armor by 800 for 10s.
+	// https://www.wowhead.com/tbc/spell=35078
+	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+		Callback:           core.CallbackOnSpellHitTaken,
+		ProcMask:           core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial,
+		Outcome:            core.OutcomeLanded,
+		RequireDamageDealt: true,
+	}, []shared.ItemVariant{
+		{ItemID: 29297, ItemName: "Band of the Eternal Defender"},
+	})
+
 	// Chance on hit to increase your attack power by 160 for 10 seconds.
 	// https://www.wowhead.com/tbc/spell=35081
 	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -7007,9 +6990,9 @@ func RegisterAllProcs() {
 	// 59 for 10 secs.
 	// https://www.wowhead.com/tbc/spell=35087
 	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-		Callback:           core.CallbackOnSpellHitDealt | core.CallbackOnHealDealt,
+		Callback:           core.CallbackOnCastComplete,
 		ProcMask:           core.ProcMaskSpellDamage | core.ProcMaskSpellHealing,
-		Outcome:            core.OutcomeLanded,
+		Outcome:            core.OutcomeEmpty,
 		RequireDamageDealt: false,
 	}, []shared.ItemVariant{
 		{ItemID: 29309, ItemName: "Band of the Eternal Restorer"},
@@ -7035,6 +7018,17 @@ func RegisterAllProcs() {
 		RequireDamageDealt: true,
 	}, []shared.ItemVariant{
 		{ItemID: 29962, ItemName: "Heartrazor"},
+	})
+
+	// Your spell critical strikes have a chance to increase your spell damage and healing by 190 for 15s.
+	// https://www.wowhead.com/tbc/spell=38348
+	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+		Callback:           core.CallbackOnSpellHitDealt | core.CallbackOnHealDealt,
+		ProcMask:           core.ProcMaskSpellDamage | core.ProcMaskSpellHealing | core.ProcMaskSpellProc,
+		Outcome:            core.OutcomeCrit,
+		RequireDamageDealt: false,
+	}, []shared.ItemVariant{
+		{ItemID: 30626, ItemName: "Sextant of Unstable Currents"},
 	})
 
 	// Chance on critical hit to increase your attack power by 340 for 10 secs.
@@ -7080,6 +7074,29 @@ func RegisterAllProcs() {
 		ClassSpellsOnly:    true,
 	}, []shared.ItemVariant{
 		{ItemID: 31336, ItemName: "Blade of Wizardry"},
+	})
+
+	// When struck in combat has a 2% chance of increasing your Armor by 2000 for 10 secs.
+	// https://www.wowhead.com/tbc/spell=40408
+	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+		Callback:           core.CallbackOnSpellHitTaken,
+		ProcMask:           core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial | core.ProcMaskRangedAuto | core.ProcMaskRangedSpecial,
+		Outcome:            core.OutcomeLanded,
+		RequireDamageDealt: true,
+	}, []shared.ItemVariant{
+		{ItemID: 32375, ItemName: "Bulwark of Azzinoth"},
+	})
+
+	// Each time you cast a spell, there is chance you will gain up to 76 mana per 5 for 15s.
+	// https://www.wowhead.com/tbc/spell=37656
+	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+		Callback:           core.CallbackOnCastComplete,
+		ProcMask:           core.ProcMaskSpellDamage | core.ProcMaskSpellHealing | core.ProcMaskSpellProc,
+		Outcome:            core.OutcomeEmpty,
+		RequireDamageDealt: false,
+		ClassSpellsOnly:    true,
+	}, []shared.ItemVariant{
+		{ItemID: 32496, ItemName: "Memento of Tyrande"},
 	})
 
 	// Your melee and ranged attacks have a chance allow you to ignore 300 of your enemies' armor for 10 secs.
