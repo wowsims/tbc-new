@@ -653,6 +653,10 @@ var pureHealMatcher = regexp.MustCompile(`healing spells`)
 var hasHealMatcher = regexp.MustCompile(`heal(ing)?[^,]`)
 var hasGenericMatcher = regexp.MustCompile(`a spell`)
 
+// Wording that names the cast itself as the trigger rather than the spell landing:
+// "each time you cast a spell", "chance on successful spellcast", "chance on spell cast".
+var castTriggerMatcher = regexp.MustCompile(`(?i)you cast|on spell ?cast|spellcast`)
+
 // A trigger clause restricted to one named ability: "Your Shock spells", "Your Moonfire ability".
 // The capital is what carries the meaning - an unrestricted trigger reads "your spell critical
 // strikes" or "each time you cast a spell", with nothing capitalized to name.
@@ -810,17 +814,25 @@ func BuildSpellProcInfo(procSpell *dbc.Spell, tooltip string, itemType proto.Ite
 			}
 		}
 
-		// In TBC spells whose mask carries only the spell-cast bits seem to not care about landing
-		// or not, harmful and helpful alike. A tooltip naming an outcome is the exception: a crit
-		// is only known once the hit resolves, so those stay on hit-dealt.
-		// The harmful bit has to be one of them. A helpful-only mask carries no evidence that
-		// casting is the trigger at all, and the helpful branch below already demands tooltip
-		// evidence before it believes one - the PvP Librams that buff a heal target read
-		// "Causes your Flash of Light to increase the target's Resilience" and are neither a
-		// self buff nor unrestricted.
-		castOnly := procSpell.ProcTypeMask[0]&dbc.PROC_FLAG_DEAL_HARMFUL_SPELL > 0 &&
+		// A mask made of nothing but the spell-cast bits. The harmful one has to be present: a
+		// helpful-only mask carries no evidence that casting is the trigger at all, and the helpful
+		// branch below already demands tooltip evidence before it believes one - the PvP Librams
+		// that buff a heal target read "Causes your Flash of Light to increase the target's
+		// Resilience" and are neither a self buff nor unrestricted.
+		spellCastMask := procSpell.ProcTypeMask[0]&dbc.PROC_FLAG_DEAL_HARMFUL_SPELL > 0 &&
 			procSpell.ProcTypeMask[0]&^(dbc.PROC_FLAG_DEAL_HARMFUL_SPELL|dbc.PROC_FLAG_DEAL_HELPFUL_SPELL) == 0
 
+		// Whether the cast itself is the trigger. In TBC a mask of only the harmful-spell bit does
+		// not care whether the spell landed. Adding the helpful bit settles nothing either way, and
+		// the two items that pin it down disagree despite carrying the identical mask: Memento of
+		// Tyrande procs off resists in logs, while Band of the Eternal Restorer does not proc on a
+		// miss or a full resist. What separates them is that the first names the cast as the
+		// trigger and the second does not, so for that pair the tooltip decides.
+		castOnly := spellCastMask &&
+			(procSpell.ProcTypeMask[0] == dbc.PROC_FLAG_DEAL_HARMFUL_SPELL || castTriggerMatcher.MatchString(tooltip))
+
+		// A tooltip naming an outcome is the exception to all of it: a crit is only known once the
+		// hit resolves, so those stay on hit-dealt.
 		if castOnly && !critMatcher.MatchString(tooltip) {
 			info.Callback |= core.CallbackOnCastComplete
 			info.RequireDamageDealt = false

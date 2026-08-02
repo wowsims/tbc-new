@@ -191,8 +191,8 @@ dps_results: {
 dps_results: {
  key: "TestProtection-AllItems-BandoftheEternalRestorer-29309"
  value: {
-  dps: 924.57037
-  tps: 1661.34562
+  dps: 924.29461
+  tps: 1660.82084
   dtps: 1315.12989
  }
 }

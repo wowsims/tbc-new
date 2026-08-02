@@ -174,8 +174,8 @@ dps_results: {
 dps_results: {
  key: "TestArcane-AllItems-BandoftheEternalRestorer-29309"
  value: {
-  dps: 1948.69009
-  tps: 939.03237
+  dps: 1948.65902
+  tps: 939.01959
  }
 }
 dps_results: {

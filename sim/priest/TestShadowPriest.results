@@ -181,8 +181,8 @@ dps_results: {
 dps_results: {
  key: "TestShadowPriest-AllItems-BandoftheEternalRestorer-29309"
  value: {
-  dps: 1750.268
-  tps: 906.20034
+  dps: 1750.20708
+  tps: 906.16967
  }
 }
 dps_results: {

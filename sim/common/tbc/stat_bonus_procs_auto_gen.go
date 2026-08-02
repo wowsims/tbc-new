@@ -6990,9 +6990,9 @@ func RegisterAllProcs() {
 	// 59 for 10 secs.
 	// https://www.wowhead.com/tbc/spell=35087
 	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-		Callback:           core.CallbackOnCastComplete,
+		Callback:           core.CallbackOnSpellHitDealt | core.CallbackOnHealDealt,
 		ProcMask:           core.ProcMaskSpellDamage | core.ProcMaskSpellHealing,
-		Outcome:            core.OutcomeEmpty,
+		Outcome:            core.OutcomeLanded,
 		RequireDamageDealt: false,
 	}, []shared.ItemVariant{
 		{ItemID: 29309, ItemName: "Band of the Eternal Restorer"},
