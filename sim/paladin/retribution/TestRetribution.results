@@ -293,6 +293,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRetribution-AllItems-BlazefuryMedallion-17111"
+ value: {
+  dps: 1882.13559
+  tps: 1045.84801
+  dtps: 13.84217
+ }
+}
+dps_results: {
  key: "TestRetribution-AllItems-BraidedEterniumChain-24114"
  value: {
   dps: 1880.41873
@@ -1508,6 +1516,14 @@ dps_results: {
   dps: 1713.88949
   tps: 953.23223
   dtps: 14.238
+ }
+}
+dps_results: {
+ key: "TestRetribution-AllItems-Timbal'sFocusingCrystal-34470"
+ value: {
+  dps: 1832.32552
+  tps: 1018.62018
+  dtps: 14.34107
  }
 }
 dps_results: {

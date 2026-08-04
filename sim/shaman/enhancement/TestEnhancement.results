@@ -277,6 +277,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestEnhancement-AllItems-BlazefuryMedallion-17111"
+ value: {
+  dps: 1920.90019
+  tps: 1219.12952
+ }
+}
+dps_results: {
  key: "TestEnhancement-AllItems-BraidedEterniumChain-24114"
  value: {
   dps: 1919.48643
@@ -1262,6 +1269,13 @@ dps_results: {
  value: {
   dps: 1638.67091
   tps: 1003.80029
+ }
+}
+dps_results: {
+ key: "TestEnhancement-AllItems-Timbal'sFocusingCrystal-34470"
+ value: {
+  dps: 1906.94327
+  tps: 1206.91011
  }
 }
 dps_results: {

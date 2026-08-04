@@ -284,6 +284,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestArcane-AllItems-BlazefuryMedallion-17111"
+ value: {
+  dps: 1873.16372
+  tps: 907.267
+ }
+}
+dps_results: {
  key: "TestArcane-AllItems-Blinkstrike-31332"
  value: {
   dps: 1942.85671
@@ -512,6 +519,13 @@ dps_results: {
  value: {
   dps: 1894.06571
   tps: 914.26812
+ }
+}
+dps_results: {
+ key: "TestArcane-AllItems-FieryRetributer-19968"
+ value: {
+  dps: 1942.85671
+  tps: 936.24144
  }
 }
 dps_results: {
@@ -1143,6 +1157,13 @@ dps_results: {
  value: {
   dps: 1942.85671
   tps: 936.24144
+ }
+}
+dps_results: {
+ key: "TestArcane-AllItems-Timbal'sFocusingCrystal-34470"
+ value: {
+  dps: 1927.06793
+  tps: 959.10283
  }
 }
 dps_results: {

@@ -284,6 +284,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestShadowPriest-AllItems-BlazefuryMedallion-17111"
+ value: {
+  dps: 1733.02874
+  tps: 898.33135
+ }
+}
+dps_results: {
  key: "TestShadowPriest-AllItems-BloodlustBrooch-29383"
  value: {
   dps: 1701.15974
@@ -1122,6 +1129,13 @@ dps_results: {
  value: {
   dps: 1759.23966
   tps: 911.65548
+ }
+}
+dps_results: {
+ key: "TestShadowPriest-AllItems-Timbal'sFocusingCrystal-34470"
+ value: {
+  dps: 1767.01355
+  tps: 920.24959
  }
 }
 dps_results: {

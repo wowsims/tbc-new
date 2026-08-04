@@ -355,6 +355,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestFeralCat-AllItems-BlazefuryMedallion-17111"
+ value: {
+  dps: 718.42761
+  tps: 357.05852
+  hps: 69.33849
+ }
+}
+dps_results: {
  key: "TestFeralCat-AllItems-BraidedEterniumChain-24114"
  value: {
   dps: 717.03802
@@ -1584,6 +1592,14 @@ dps_results: {
   dps: 512.73965
   tps: 254.83161
   hps: 61.99871
+ }
+}
+dps_results: {
+ key: "TestFeralCat-AllItems-Timbal'sFocusingCrystal-34470"
+ value: {
+  dps: 718.99985
+  tps: 357.34292
+  hps: 68.40338
  }
 }
 dps_results: {

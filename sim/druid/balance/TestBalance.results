@@ -270,6 +270,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestBalance-AllItems-BlazefuryMedallion-17111"
+ value: {
+  dps: 1412.12566
+  tps: 948.21488
+ }
+}
+dps_results: {
  key: "TestBalance-AllItems-BloodlustBrooch-29383"
  value: {
   dps: 1450.80551
@@ -1353,6 +1360,13 @@ dps_results: {
  value: {
   dps: 1655.62337
   tps: 1119.39396
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-Timbal'sFocusingCrystal-34470"
+ value: {
+  dps: 1504.17199
+  tps: 1013.02609
  }
 }
 dps_results: {

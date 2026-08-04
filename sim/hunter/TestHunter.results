@@ -341,6 +341,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestHunter-AllItems-BlazefuryMedallion-17111"
+ value: {
+  dps: 3500.42825
+  tps: 1741.18574
+  dtps: 13.01142
+ }
+}
+dps_results: {
  key: "TestHunter-AllItems-Blinkstrike-31332"
  value: {
   dps: 3488.19523
@@ -690,6 +698,14 @@ dps_results: {
   dps: 3234.0119
   tps: 1571.20053
   dtps: 12.56581
+ }
+}
+dps_results: {
+ key: "TestHunter-AllItems-FieryRetributer-19968"
+ value: {
+  dps: 3490.18588
+  tps: 1732.22635
+  dtps: 13.98606
  }
 }
 dps_results: {
@@ -1555,6 +1571,14 @@ dps_results: {
   dps: 3498.59738
   tps: 1736.00303
   dtps: 13.24537
+ }
+}
+dps_results: {
+ key: "TestHunter-AllItems-Timbal'sFocusingCrystal-34470"
+ value: {
+  dps: 3434.52044
+  tps: 1693.07924
+  dtps: 13.77041
  }
 }
 dps_results: {

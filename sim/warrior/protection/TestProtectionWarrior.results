@@ -325,6 +325,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestProtectionWarrior-AllItems-BlazefuryMedallion-17111"
+ value: {
+  dps: 796.40916
+  tps: 1462.12386
+  dtps: 1300.77089
+ }
+}
+dps_results: {
  key: "TestProtectionWarrior-AllItems-Blinkstrike-31332"
  value: {
   dps: 796.37712
@@ -725,6 +733,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestProtectionWarrior-AllItems-FieryRetributer-19968"
+ value: {
+  dps: 796.37712
+  tps: 1460.50314
+  dtps: 1301.68032
+ }
+}
+dps_results: {
  key: "TestProtectionWarrior-AllItems-Figurine-DawnstoneCrab-24125"
  value: {
   dps: 771.69169
@@ -802,6 +818,14 @@ dps_results: {
   dps: 793.31652
   tps: 1452.75122
   dtps: 1278.1606
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-GrandMarshal'sAegis-18825"
+ value: {
+  dps: 784.08039
+  tps: 1444.50368
+  dtps: 1393.56611
  }
 }
 dps_results: {
@@ -890,6 +914,14 @@ dps_results: {
   dps: 798.34949
   tps: 1437.55645
   dtps: 1326.78773
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-HighWarlord'sShieldWall-18826"
+ value: {
+  dps: 783.89256
+  tps: 1444.21727
+  dtps: 1393.56611
  }
 }
 dps_results: {
@@ -1547,6 +1579,14 @@ dps_results: {
   dps: 796.37712
   tps: 1460.50314
   dtps: 1301.68032
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-Timbal'sFocusingCrystal-34470"
+ value: {
+  dps: 775.25844
+  tps: 1425.13678
+  dtps: 1298.84002
  }
 }
 dps_results: {

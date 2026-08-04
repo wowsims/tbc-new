@@ -386,6 +386,15 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestFeralBear-AllItems-BlazefuryMedallion-17111"
+ value: {
+  dps: 412.76458
+  tps: 637.56145
+  dtps: 1130.35233
+  hps: 73.32827
+ }
+}
+dps_results: {
  key: "TestFeralBear-AllItems-BloodlustBrooch-29383"
  value: {
   dps: 424.96141
@@ -1778,6 +1787,15 @@ dps_results: {
   tps: 489.98306
   dtps: 1889.63435
   hps: 50.86613
+ }
+}
+dps_results: {
+ key: "TestFeralBear-AllItems-Timbal'sFocusingCrystal-34470"
+ value: {
+  dps: 418.45366
+  tps: 646.04601
+  dtps: 1115.65852
+  hps: 71.22702
  }
 }
 dps_results: {
