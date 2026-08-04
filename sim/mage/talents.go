@@ -231,7 +231,7 @@ func (mage *Mage) registerEmpoweredArcaneMissiles() {
 
 	mage.AddStaticMod(core.SpellModConfig{
 		ClassMask:  MageSpellArcaneMissilesTick,
-		FloatValue: .15 * float64(mage.Talents.EmpoweredArcaneMissiles),
+		FloatValue: .03 * float64(mage.Talents.EmpoweredArcaneMissiles),
 		Kind:       core.SpellMod_BonusCoeffecient_Flat,
 	})
 
