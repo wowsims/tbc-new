@@ -59,6 +59,15 @@ type Entry struct {
 	// Set for effects an ignore list deliberately excludes. These emit a comment only, so that
 	// skipping them is visible in the generated file rather than silent.
 	Skipped bool
+	// Set when the effect deals flat damage instead of granting stats. Those resolve no stats, so
+	// without this they are dropped before they are ever emitted.
+	Damage *dbc.DamageEffect
+	// The rate a damage proc fires at. Stat procs read theirs from the database at runtime, but the
+	// damage helper takes a plain core.ProcTrigger, so it has to be written into the call.
+	DamageProcChance float64
+	DamageIcdMs      int32
+	// Set when the damage spell is barred from critting, which picks a no-crit outcome.
+	DamageCannotCrit bool
 }
 
 // The literals a stacking on-use needs in the generated call. Everything else - stacks,
@@ -115,10 +124,11 @@ func GenerateEffectsFile(groups []*Group, outFile string, templateString string)
 	}
 
 	funcMap := map[string]any{
-		"asCoreCallback": asCoreCallback,
-		"asCoreProcMask": asCoreProcMask,
-		"asCoreOutcome":  asCoreOutcome,
-		"formatStrings":  formatStrings,
+		"asCoreCallback":    asCoreCallback,
+		"asCoreProcMask":    asCoreProcMask,
+		"asCoreOutcome":     asCoreOutcome,
+		"asCoreSpellSchool": asCoreSpellSchool,
+		"formatStrings":     formatStrings,
 	}
 	tmpl := template.Must(template.New("effects").Funcs(funcMap).Parse(templateString))
 
@@ -133,16 +143,23 @@ func GenerateEffectsFile(groups []*Group, outFile string, templateString string)
 	}
 
 	hasStacking := false
+	// Only a damage proc with an internal cooldown writes a time.Millisecond literal, so the import
+	// is gated on one existing rather than on damage procs in general.
+	hasDamageIcd := false
 	for _, grp := range groups {
 		for _, entry := range grp.Entries {
 			if entry.StackingOnUse != nil {
 				hasStacking = true
 			}
+
+			if entry.Damage != nil && entry.DamageIcdMs > 0 {
+				hasDamageIcd = true
+			}
 		}
 	}
 
 	var rendered bytes.Buffer
-	if err := tmpl.Execute(&rendered, map[string]interface{}{"Groups": groups, "HasEntries": hasEntries, "HasStacking": hasStacking}); err != nil {
+	if err := tmpl.Execute(&rendered, map[string]interface{}{"Groups": groups, "HasEntries": hasEntries, "HasStacking": hasStacking, "HasDamageIcd": hasDamageIcd}); err != nil {
 		return fmt.Errorf("failed to execute template: %w", err)
 	}
 
@@ -193,11 +210,12 @@ func GenerateMissingEffectsFile() error {
 	}
 
 	funcMap := map[string]any{
-		"asCoreCallback": asCoreCallback,
-		"asCoreProcMask": asCoreProcMask,
-		"asCoreOutcome":  asCoreOutcome,
-		"formatStrings":  formatStrings,
-		"jsString":       jsString,
+		"asCoreCallback":    asCoreCallback,
+		"asCoreProcMask":    asCoreProcMask,
+		"asCoreOutcome":     asCoreOutcome,
+		"asCoreSpellSchool": asCoreSpellSchool,
+		"formatStrings":     formatStrings,
+		"jsString":          jsString,
 	}
 	tmpl := template.Must(template.New("missingEffects").Funcs(funcMap).Parse(TmplStrMissingEffects))
 	f, err := os.Create(missingEffectsFileName)
@@ -457,6 +475,22 @@ func BuildItemDifficultyPostfix(itemSources map[int][]*proto.DropSource, itemId 
 	return difficultyPostfix
 }
 
+// Whether a damage proc's rate is actually in the data. A PPM rate needs a proc manager the
+// generated call has no way to build, and those items are held back for want of a MapItemIdToPPM
+// entry anyway. A flat 100% is only believable when the tooltip agrees: DBC writes 100 on the
+// chance-on-hit weapon procs whose real rate lives outside the spell data, the same convention as
+// the 101 sentinel, so "Chance to strike your melee target with lightning" at 100% is an unstated
+// rate rather than an every-hit proc. Blazefury Medallion, which really does add its damage to
+// every swing, claims no chance and is kept.
+func damageProcRateIsStated(proc *proto.ProcEffect, tooltip string) bool {
+	chance := proc.GetProcChance()
+	if chance <= 0 {
+		return false
+	}
+
+	return chance < 1 || !statedChanceMatcher.MatchString(tooltip)
+}
+
 func TryParseProcEffect(parsed *proto.UIItem, itemEffect *proto.ItemEffect, instance *dbc.DBC, groupMapProc map[string]Group) EffectParseResult {
 	if itemEffect.GetProc() != nil && parsed.ScalingOptions[0].Ilvl > MIN_EFFECT_ILVL {
 		// Effect was already manually implemented
@@ -478,7 +512,23 @@ func TryParseProcEffect(parsed *proto.UIItem, itemEffect *proto.ItemEffect, inst
 			entry.ProcInfo, entry.Supported = BuildProcInfo(parsed, int(itemEffect.BuffId), instance, renderedTooltip)
 			entry.StackProcInfo = buildStackProcInfo(itemEffect, instance, renderedTooltip)
 
-			if len(dbc.EffectStats(itemEffect)) == 0 || !entry.Supported {
+			// An effect that resolves no stats may still deal flat damage, which is a shape of its
+			// own rather than a reason to refuse. Only a stated flat chance is taken: a PPM rate
+			// needs a proc manager the generated call has no way to build, and those items are
+			// already held back for want of a MapItemIdToPPM entry.
+			if len(dbc.EffectStats(itemEffect)) == 0 {
+				if proc := itemEffect.GetProc(); proc != nil && damageProcRateIsStated(proc, renderedTooltip) {
+					if damage := dbc.ResolveDamageEffect(int(itemEffect.BuffId)); damage != nil {
+						damageSpell := instance.Spells[damage.SpellID]
+						entry.Damage = damage
+						entry.DamageProcChance = proc.GetProcChance()
+						entry.DamageIcdMs = proc.IcdMs
+						entry.DamageCannotCrit = damageSpell.CannotCrit()
+					}
+				}
+			}
+
+			if (len(dbc.EffectStats(itemEffect)) == 0 && entry.Damage == nil) || !entry.Supported {
 				StoreMissingEffect("ItemEffects", parsed.Name, Variant{
 					ID:      int(parsed.Id),
 					Name:    renderedTooltip,
@@ -653,6 +703,15 @@ var pureHealMatcher = regexp.MustCompile(`healing spells`)
 var hasHealMatcher = regexp.MustCompile(`heal(ing)?[^,]`)
 var hasGenericMatcher = regexp.MustCompile(`a spell`)
 
+// A trigger condition stated as an attack outcome. Deliberately matches the condition clause rather
+// than the words themselves: "increases your dodge rating" is a stat on hundreds of items, while
+// "when one of your spells is resisted" is a trigger.
+var outcomeConditionMatcher = regexp.MustCompile(`(?i)when .{0,60}?(is|are) resisted|((each|every) time|when) you (block|dodge|parry)`)
+
+// A tooltip stating that the effect only happens sometimes. Where the data pairs that with a 100%
+// rate, the real rate is the one thing the data does not carry.
+var statedChanceMatcher = regexp.MustCompile(`(?i)chance (to|of|when)|has a chance`)
+
 // Wording that names the cast itself as the trigger rather than the spell landing:
 // "each time you cast a spell", "chance on successful spellcast", "chance on spell cast".
 var castTriggerMatcher = regexp.MustCompile(`(?i)you cast|on spell ?cast|spellcast`)
@@ -761,6 +820,23 @@ func BuildSpellProcInfo(procSpell *dbc.Spell, tooltip string, itemType proto.Ite
 	// ability". Generating one anyway would proc it off every spell instead of that one.
 	if slices.ContainsFunc(procSpell.SpellClassMask, func(mask int) bool { return mask != 0 }) ||
 		namedAbilityMatcher.MatchString(tooltip) {
+		return info, false
+	}
+
+	// An outcome the client does not record. ProcTypeMask has no dodge, parry, block or resist bit -
+	// TrinityCore keeps those in a HitMask of its own - so a tooltip stating one as the trigger
+	// condition is the only evidence there is. Eye of Magtheridon fires on a resisted spell, and
+	// without this it generates as a 100%-per-cast buff. Crit is deliberately not in here: it is the
+	// one outcome the generated shape can express, and critMatcher below assigns it.
+	if outcomeConditionMatcher.MatchString(tooltip) {
+		return info, false
+	}
+
+	// A buff the game spends by charges rather than by time: World Breaker's 900 crit rating is
+	// consumed by the next two melee hits, which is ProcCharges 2 on 36111. The generated shape
+	// knows only durations, so it would hold the buff for the whole window instead. On-use effects
+	// are unaffected - their charges are uses of the item, and they do not come through here.
+	if procSpell.ProcCharges > 0 {
 		return info, false
 	}
 
@@ -939,6 +1015,30 @@ func StoreMissingEffect(effectType string, name string, variant Variant) {
 		variant,
 	)
 	missingEffectsMap[effectType][id] = itemEntry
+}
+
+// The DBC school mask and core.SpellSchool do not share a bit order - DBC's 0x2 is Holy where
+// core's is Arcane - so the two are matched by name rather than cast across.
+var coreSpellSchoolNames = map[dbc.SpellSchool]string{
+	dbc.PHYSICAL: "core.SpellSchoolPhysical",
+	dbc.HOLY:     "core.SpellSchoolHoly",
+	dbc.FIRE:     "core.SpellSchoolFire",
+	dbc.NATURE:   "core.SpellSchoolNature",
+	dbc.FROST:    "core.SpellSchoolFrost",
+	dbc.SHADOW:   "core.SpellSchoolShadow",
+	dbc.ARCANE:   "core.SpellSchoolArcane",
+}
+
+// The core constant naming a damage spell's school. A mask with more than one school set resolves
+// to its lowest bit; no item damage effect in the data carries one.
+func asCoreSpellSchool(mask int32) string {
+	for _, school := range []dbc.SpellSchool{dbc.PHYSICAL, dbc.HOLY, dbc.FIRE, dbc.NATURE, dbc.FROST, dbc.SHADOW, dbc.ARCANE} {
+		if dbc.SpellSchool(mask).Has(school) {
+			return coreSpellSchoolNames[school]
+		}
+	}
+
+	return "core.SpellSchoolPhysical"
 }
 
 func asCoreCallback(callback core.AuraCallback) string {

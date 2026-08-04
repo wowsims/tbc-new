@@ -43,6 +43,9 @@ type DamageEffect struct {
 	ProcMask         core.ProcMask
 	Outcome          OutcomeType
 	Flags            core.SpellFlag
+	// Set when the client bars the damage spell from critting, which the sim has no way to know:
+	// it is a spell attribute, so only the database generator can see it.
+	CannotCrit bool
 }
 
 type ExtraSpellInfo struct {
@@ -56,6 +59,40 @@ type ItemVariant struct {
 }
 
 type CustomProcHandler func(sim *core.Simulation, procAura *core.StatBuffAura)
+
+// Whether a proc's damage is dealt as a melee hit. The school decides it: anything non-physical
+// rolls against the spell tables and takes the spell crit multiplier. IsMelee stays honoured on top
+// of that for a caller that means physical damage without saying so through the school.
+func isMeleeDamage(school core.SpellSchool, isMelee bool) bool {
+	return isMelee || school.Matches(core.SpellSchoolPhysical)
+}
+
+func damageCritMultiplier(character *core.Character, school core.SpellSchool, isMelee bool) float64 {
+	return core.TernaryFloat64(isMeleeDamage(school, isMelee), character.DefaultMeleeCritMultiplier(), character.DefaultSpellCritMultiplier())
+}
+
+// The outcome a proc's damage rolls when the caller states none. Physical damage goes through the
+// melee table, everything else through the spell one, and a spell the client bars from critting
+// takes the no-crit variant of whichever it rolls against.
+func damageOutcome(school core.SpellSchool, isMelee bool, cannotCrit bool, outcome OutcomeType) OutcomeType {
+	if outcome != OutcomeDefault {
+		return outcome
+	}
+
+	if isMeleeDamage(school, isMelee) {
+		if cannotCrit {
+			return OutcomeMeleeNoCrit
+		}
+
+		return OutcomeMeleeCanCrit
+	}
+
+	if cannotCrit {
+		return OutcomeSpellNoCrit
+	}
+
+	return OutcomeSpellCanCrit
+}
 
 func NewProcStatBonusEffectWithDamageProc(config ProcStatBonusEffect, damage DamageEffect) {
 	procMask := core.ProcMaskEmpty
@@ -72,12 +109,12 @@ func NewProcStatBonusEffectWithDamageProc(config ProcStatBonusEffect, damage Dam
 			ProcMask:                 procMask,
 			Flags:                    core.SpellFlagNoOnCastComplete | core.SpellFlagPassiveSpell,
 			DamageMultiplier:         1,
-			CritMultiplier:           character.DefaultMeleeCritMultiplier(),
+			CritMultiplier:           damageCritMultiplier(character, damage.School, damage.IsMelee),
 			DamageMultiplierAdditive: 1,
 			ThreatMultiplier:         1,
 			BonusCoefficient:         damage.BonusCoefficient,
 			ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-				spell.CalcAndDealDamage(sim, target, sim.Roll(damage.MinDmg, damage.MaxDmg), GetOutcome(spell, damage.Outcome))
+				spell.CalcAndDealDamage(sim, target, sim.Roll(damage.MinDmg, damage.MaxDmg), GetOutcome(spell, damageOutcome(damage.School, damage.IsMelee, damage.CannotCrit, damage.Outcome)))
 			},
 		})
 
@@ -607,6 +644,9 @@ type ProcDamageEffect struct {
 	IsMelee    bool
 	Flags      core.SpellFlag
 	Outcome    OutcomeType
+	// Set when the client bars the damage spell from critting, which the sim has no way to know:
+	// it is a spell attribute, so only the database generator can see it.
+	CannotCrit bool
 }
 
 func GetOutcome(spell *core.Spell, outcome OutcomeType) core.OutcomeApplier {
@@ -657,7 +697,7 @@ func NewProcDamageEffect(config ProcDamageEffect) {
 		minDmg := config.MinDmg
 		maxDmg := config.MaxDmg
 
-		critMultiplier := core.TernaryFloat64(config.IsMelee, character.DefaultMeleeCritMultiplier(), character.DefaultSpellCritMultiplier())
+		critMultiplier := damageCritMultiplier(character, config.School, config.IsMelee)
 
 		// Per-character copy. config is captured once at registration and this body runs for
 		// every character the effect applies to, so filling the trigger in place would hand
@@ -684,7 +724,7 @@ func NewProcDamageEffect(config ProcDamageEffect) {
 			ThreatMultiplier: 1,
 
 			ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-				spell.CalcAndDealDamage(sim, target, sim.Roll(minDmg, maxDmg), GetOutcome(spell, config.Outcome))
+				spell.CalcAndDealDamage(sim, target, sim.Roll(minDmg, maxDmg), GetOutcome(spell, damageOutcome(config.School, config.IsMelee, config.CannotCrit, config.Outcome)))
 			},
 		})
 

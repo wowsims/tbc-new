@@ -310,12 +310,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		17111, // Blazefury Medallion
-		[
-			"Adds 2 fire damage to your melee attacks.", // 7712 - https://www.wowhead.com/tbc/spell=7712
-		]
-	],
-	[
 		17182, // Sulfuras, Hand of Ragnaros
 		[
 			"Deals 5 Fire damage to anyone who strikes you with a melee attack.", // 21142 - https://www.wowhead.com/tbc/spell=21142
@@ -520,18 +514,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		18825, // Grand Marshal's Aegis
-		[
-			"When struck in combat has a 5% chance of inflicting 65 Nature damage to the attacker.", // 16782 - https://www.wowhead.com/tbc/spell=16782
-		]
-	],
-	[
-		18826, // High Warlord's Shield Wall
-		[
-			"When struck in combat has a 5% chance of inflicting 65 Nature damage to the attacker.", // 16782 - https://www.wowhead.com/tbc/spell=16782
-		]
-	],
-	[
 		19287, // Darkmoon Card: Heroism
 		[
 			"Sometimes heals bearer of 180 damage when damaging an enemy in melee.", // 23682 - https://www.wowhead.com/tbc/spell=23682
@@ -703,12 +685,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		19963, // Pitchfork of Madness
 		[
 			"Increases attack power by 117 when fighting Demons.", // 14098 - https://www.wowhead.com/tbc/spell=14098
-		]
-	],
-	[
-		19968, // Fiery Retributer
-		[
-			"Adds 2 fire damage to your melee attacks.", // 7712 - https://www.wowhead.com/tbc/spell=7712
 		]
 	],
 	[
@@ -2403,12 +2379,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		34430, // Glimmering Naaru Sliver
 		[
 			"Gain 250 mana each sec. for 8s. Channeled.", // 45052 - https://www.wowhead.com/tbc/spell=45052
-		]
-	],
-	[
-		34470, // Timbal's Focusing Crystal
-		[
-			"Each time one of your spells deals periodic damage, there is a chance 475 additional damage will be dealt.", // 45055 - https://www.wowhead.com/tbc/spell=45055
 		]
 	],
 	[

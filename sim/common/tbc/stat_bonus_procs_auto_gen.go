@@ -1,6 +1,8 @@
 package tbc
 
 import (
+	"time"
+
 	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
@@ -800,21 +802,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Adds 2 fire damage to your melee attacks.
-	// https://www.wowhead.com/tbc/spell=7712
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 17111, ItemName: "Blazefury Medallion"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Deals 5 Fire damage to anyone who strikes you with a melee attack.
 	// https://www.wowhead.com/tbc/spell=21142
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -1327,36 +1314,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// When struck in combat has a 5% chance of inflicting 65 Nature damage to the attacker.
-	// https://www.wowhead.com/tbc/spell=16782
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 18825, ItemName: "Grand Marshal's Aegis"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// When struck in combat has a 5% chance of inflicting 65 Nature damage to the attacker.
-	// https://www.wowhead.com/tbc/spell=16782
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 18826, ItemName: "High Warlord's Shield Wall"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Sometimes heals bearer of 180 damage when damaging an enemy in melee.
 	// https://www.wowhead.com/tbc/spell=23682
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -1793,21 +1750,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 19963, ItemName: "Pitchfork of Madness"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Adds 2 fire damage to your melee attacks.
-	// https://www.wowhead.com/tbc/spell=7712
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 19968, ItemName: "Fiery Retributer"},
 	// })
 
 	// TODO: Manual implementation required
@@ -5962,21 +5904,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Each time one of your spells deals periodic damage, there is a chance 475 additional damage will be dealt.
-	// https://www.wowhead.com/tbc/spell=45055
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 34470, ItemName: "Timbal's Focusing Crystal"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Collects 100 Holy Energy from healing spells you cast. Cannot collect more than 2000 Holy Energy.
 	// https://www.wowhead.com/tbc/spell=45062
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -6767,6 +6694,86 @@ func RegisterAllProcs() {
 		{ItemID: 14557, ItemName: "The Lion Horn of Stormwind"},
 	})
 
+	// Adds 2 fire damage to your melee attacks.
+	// https://www.wowhead.com/tbc/spell=7712
+	shared.NewProcDamageEffect(shared.ProcDamageEffect{
+		ItemID:  17111,
+		SpellID: 7712,
+		School:  core.SpellSchoolFire,
+		MinDmg:  2,
+		MaxDmg:  2,
+		Flags:   core.SpellFlagNoOnCastComplete | core.SpellFlagPassiveSpell | core.SpellFlagNoOnDamageDealt,
+		Trigger: core.ProcTrigger{
+			Name:               "Blazefury Medallion",
+			ActionID:           core.ActionID{ItemID: 17111},
+			Callback:           core.CallbackOnSpellHitDealt,
+			ProcMask:           core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial,
+			Outcome:            core.OutcomeLanded,
+			RequireDamageDealt: true,
+			ProcChance:         1,
+		},
+	})
+
+	// When struck in combat has a 5% chance of inflicting 65 Nature damage to the attacker.
+	// https://www.wowhead.com/tbc/spell=16782
+	shared.NewProcDamageEffect(shared.ProcDamageEffect{
+		ItemID:  18825,
+		SpellID: 16782,
+		School:  core.SpellSchoolNature,
+		MinDmg:  35,
+		MaxDmg:  65,
+		Flags:   core.SpellFlagNoOnCastComplete | core.SpellFlagPassiveSpell | core.SpellFlagNoOnDamageDealt,
+		Trigger: core.ProcTrigger{
+			Name:               "Grand Marshal's Aegis",
+			ActionID:           core.ActionID{ItemID: 18825},
+			Callback:           core.CallbackOnSpellHitTaken,
+			ProcMask:           core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial | core.ProcMaskRangedAuto | core.ProcMaskRangedSpecial,
+			Outcome:            core.OutcomeLanded,
+			RequireDamageDealt: true,
+			ProcChance:         0.05,
+		},
+	})
+
+	// When struck in combat has a 5% chance of inflicting 65 Nature damage to the attacker.
+	// https://www.wowhead.com/tbc/spell=16782
+	shared.NewProcDamageEffect(shared.ProcDamageEffect{
+		ItemID:  18826,
+		SpellID: 16782,
+		School:  core.SpellSchoolNature,
+		MinDmg:  35,
+		MaxDmg:  65,
+		Flags:   core.SpellFlagNoOnCastComplete | core.SpellFlagPassiveSpell | core.SpellFlagNoOnDamageDealt,
+		Trigger: core.ProcTrigger{
+			Name:               "High Warlord's Shield Wall",
+			ActionID:           core.ActionID{ItemID: 18826},
+			Callback:           core.CallbackOnSpellHitTaken,
+			ProcMask:           core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial | core.ProcMaskRangedAuto | core.ProcMaskRangedSpecial,
+			Outcome:            core.OutcomeLanded,
+			RequireDamageDealt: true,
+			ProcChance:         0.05,
+		},
+	})
+
+	// Adds 2 fire damage to your melee attacks.
+	// https://www.wowhead.com/tbc/spell=7712
+	shared.NewProcDamageEffect(shared.ProcDamageEffect{
+		ItemID:  19968,
+		SpellID: 7712,
+		School:  core.SpellSchoolFire,
+		MinDmg:  2,
+		MaxDmg:  2,
+		Flags:   core.SpellFlagNoOnCastComplete | core.SpellFlagPassiveSpell | core.SpellFlagNoOnDamageDealt,
+		Trigger: core.ProcTrigger{
+			Name:               "Fiery Retributer",
+			ActionID:           core.ActionID{ItemID: 19968},
+			Callback:           core.CallbackOnSpellHitDealt,
+			ProcMask:           core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial,
+			Outcome:            core.OutcomeLanded,
+			RequireDamageDealt: true,
+			ProcChance:         1,
+		},
+	})
+
 	// Gives a chance when your harmful spells land to reduce the magical resistances of your spell targets by
 	// 50 for 8s.
 	// https://www.wowhead.com/tbc/spell=25768
@@ -7123,6 +7130,27 @@ func RegisterAllProcs() {
 		StackOutcome:       core.OutcomeLanded,
 	}, []shared.ItemVariant{
 		{ItemID: 34427, ItemName: "Blackened Naaru Sliver"},
+	})
+
+	// Each time one of your spells deals periodic damage, there is a chance 475 additional damage will be dealt.
+	// https://www.wowhead.com/tbc/spell=45055
+	shared.NewProcDamageEffect(shared.ProcDamageEffect{
+		ItemID:  34470,
+		SpellID: 45055,
+		School:  core.SpellSchoolShadow,
+		MinDmg:  285,
+		MaxDmg:  475,
+		Flags:   core.SpellFlagNoOnCastComplete | core.SpellFlagPassiveSpell | core.SpellFlagNoOnDamageDealt,
+		Trigger: core.ProcTrigger{
+			Name:               "Timbal's Focusing Crystal",
+			ActionID:           core.ActionID{ItemID: 34470},
+			Callback:           core.CallbackOnPeriodicDamageDealt,
+			ProcMask:           core.ProcMaskSpellDamage,
+			Outcome:            core.OutcomeLanded,
+			RequireDamageDealt: true,
+			ProcChance:         0.1,
+			ICD:                time.Millisecond * 15000,
+		},
 	})
 
 	// Chance on hit to increase your attack power by 230 for 20s.

@@ -66,6 +66,14 @@ func (s *Spell) CanProcFromProcs() bool {
 	return s.HasAttributeAt(ATTR_INDEX_EX_3, ATTR_EX_3_CAN_PROC_FROM_PROCS)
 }
 
+// Reports whether the spell is barred from critically striking. Seal of Light, Judgement of Wisdom,
+// Sweeping Strikes and Vampiric Embrace are the shape: effects the client resolves at a flat amount.
+// A damage proc built from one of these has to roll an outcome that cannot crit, or it gains crit
+// damage the game never gives it.
+func (s *Spell) CannotCrit() bool {
+	return s.HasAttributeAt(ATTR_INDEX_EX_2, ATTR_EX_2_CANT_CRIT)
+}
+
 // Reports whether the spell only procs from class abilities rather than from any hit.
 func (s *Spell) OnlyProcsFromClassAbilities() bool {
 	return s.HasAttributeAt(ATTR_INDEX_EX_12, ATTR_EX_12_ONLY_PROC_FROM_CLASS_ABILITIES)

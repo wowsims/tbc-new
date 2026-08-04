@@ -58,6 +58,10 @@ func RegisterAllOnUseCds() {
 const TmplStrProc = `package tbc
 
 import (
+{{- if .HasDamageIcd }}
+	"time"
+
+{{ end }}
 	"github.com/wowsims/tbc/sim/core"
  	"github.com/wowsims/tbc/sim/common/shared"
 )
@@ -88,7 +92,34 @@ func RegisterAllProcs() {
 	// https://www.wowhead.com/tbc/spell={{.SpellID}}
 	{{- end}}
 	{{- if .Supported}}
-		{{- if gt .ProcInfo.MaxCumulativeStacks 0 }}
+		{{- if .Damage}}
+			{{- $entry := . }}
+			{{- range .Variants }}
+			shared.NewProcDamageEffect(shared.ProcDamageEffect{
+				ItemID:  {{ .ID }},
+				SpellID: {{ $entry.Damage.SpellID }},
+				School:  {{ $entry.Damage.SchoolMask | asCoreSpellSchool }},
+				MinDmg:  {{ $entry.Damage.MinDamage }},
+				MaxDmg:  {{ $entry.Damage.MaxDamage }},
+				{{- if $entry.DamageCannotCrit }}
+				CannotCrit: true,
+				{{- end}}
+				Flags:   core.SpellFlagNoOnCastComplete | core.SpellFlagPassiveSpell | core.SpellFlagNoOnDamageDealt,
+				Trigger: core.ProcTrigger{
+					Name:               "{{ .Name }}",
+					ActionID:           core.ActionID{ItemID: {{ .ID }}},
+					Callback:           {{ $entry.ProcInfo.Callback | asCoreCallback }},
+					ProcMask:           {{ $entry.ProcInfo.ProcMask | asCoreProcMask }},
+					Outcome:            {{ $entry.ProcInfo.Outcome | asCoreOutcome }},
+					RequireDamageDealt: {{ $entry.ProcInfo.RequireDamageDealt }},
+					ProcChance:         {{ $entry.DamageProcChance }},
+					{{- if $entry.DamageIcdMs }}
+					ICD:                time.Millisecond * {{ $entry.DamageIcdMs }},
+					{{- end}}
+				},
+			})
+			{{- end}}
+		{{- else if gt .ProcInfo.MaxCumulativeStacks 0 }}
 			shared.NewStackingStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 				Callback:           {{ .ProcInfo.Callback | asCoreCallback }},
 				ProcMask:           {{ .ProcInfo.ProcMask | asCoreProcMask }},
