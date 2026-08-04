@@ -575,15 +575,15 @@ func init() {
 		})
 
 		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:               "Darkmoon Card: Wrath",
+			Name:               "Darkmoon Card: Vengeance",
 			ActionID:           core.ActionID{ItemID: 31858},
 			ProcMask:           core.ProcMaskDirect,
 			ProcChance:         0.1,
 			RequireDamageDealt: true,
 			Outcome:            core.OutcomeLanded,
 			Callback:           core.CallbackOnSpellHitTaken,
-			Handler: func(sim *core.Simulation, _ *core.Spell, result *core.SpellResult) {
-				spell.Cast(sim, result.Target)
+			Handler: func(sim *core.Simulation, triggeringSpell *core.Spell, _ *core.SpellResult) {
+				spell.Cast(sim, triggeringSpell.Unit)
 			},
 		})
 

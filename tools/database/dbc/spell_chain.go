@@ -1,6 +1,7 @@
 package dbc
 
 import (
+	"fmt"
 	"regexp"
 	"strconv"
 
@@ -136,19 +137,36 @@ var stacksDecay = regexp.MustCompile(`(?i)(bonus|this) is reduced by`)
 // overwhelming majority. A description can mention spells for all sorts of reasons, so the one
 // that actually carries stats is the one being looked for.
 func referencedStatAura(containerSpellID int, itemLevel int) int {
+	// Mining the English description is the only link there is, so an ambiguous one has to be
+	// visible rather than silently resolved by ordering: a reworded or hotfixed description that
+	// happens to name another stat-resolving spell first would otherwise write the wrong buff ID
+	// and the wrong stats into the database with no diagnostic at all.
+	chosen := 0
+	// Counted per distinct spell: one aura referenced as both $24575m1 and $24575m2 is one
+	// candidate, not two.
+	resolved := map[int]bool{}
+
 	for _, match := range descriptionSpellRef.FindAllStringSubmatch(dbcInstance.Spells[containerSpellID].Description, -1) {
 		referenced, err := strconv.Atoi(match[1])
-		if err != nil || referenced == containerSpellID {
+		if err != nil || referenced == containerSpellID || resolved[referenced] {
 			continue
 		}
 		if dbcInstance.Spells[referenced].ID == 0 {
 			continue
 		}
 		if len(collectStats(referenced, itemLevel).ToProtoMap()) > 0 {
-			return referenced
+			resolved[referenced] = true
+			if chosen == 0 {
+				chosen = referenced
+			}
 		}
 	}
-	return 0
+
+	if len(resolved) > 1 {
+		fmt.Printf("WARN: spell %d's description names %d stat-resolving spells, taking the first (%d)\n", containerSpellID, len(resolved), chosen)
+	}
+
+	return chosen
 }
 
 // Finds the aura that bounds a stacking stat aura: the spell in the chain above statAuraID that

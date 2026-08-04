@@ -514,9 +514,9 @@ dps_results: {
 dps_results: {
  key: "TestFeralBear-AllItems-DarkmoonCard:Vengeance-31858"
  value: {
-  dps: 418.42934
-  tps: 645.81832
-  dtps: 1119.00572
+  dps: 422.15395
+  tps: 651.68858
+  dtps: 1115.65852
   hps: 74.39769
  }
 }

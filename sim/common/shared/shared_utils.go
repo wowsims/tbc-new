@@ -148,31 +148,38 @@ func factory_StatBonusEffect(config ProcStatBonusEffect, extraSpell func(agent c
 
 			attachStackTrigger(character, config, effect, procAura, windowAura)
 
+			// Carried on the stacking path too. Nothing in the stacking machinery reads this -
+			// CanProc consults only IsSwapped and CustomProcCondition - so it gates nothing. What
+			// it feeds is GetMatchingItemProcAuras, which drops any aura whose Icd is nil, and with
+			// it every ICD-aware APL value. Hand-written trinkets all set it, so leaving it nil
+			// would hide the generated ones from those APLs.
 			if proc.IcdMs != 0 {
 				procAura.Icd = triggerAura.Icd
 			}
 
 			source.registerProc(character, triggerAura, eligibleSlots)
+			source.registerWeaponEnchantBuff(character, procAura)
 			character.AddStatProcBuff(source.id, procAura, source.isEnchant, eligibleSlots)
 		}
 	})
 }
 
-// What the proc does when it fires. A custom condition replaces the body rather than gating it:
-// when the condition refuses, the ICD is rolled back so the next opportunity still counts instead
-// of the effect being locked out by a proc that never happened.
+// What the proc does when it fires. When a custom condition refuses, the ICD is rolled back so the
+// next opportunity still counts instead of the effect being locked out by a proc that never
+// happened.
 func procHandler(config ProcStatBonusEffect, effect *proto.ItemEffect, procAura *core.StatBuffAura, windowAura *core.Aura, procSpell ExtraSpellInfo) func(*core.Simulation, *core.Spell, *core.SpellResult) {
-	if config.CustomProcCondition != nil {
-		return func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
-			if procAura.CanProc(sim) {
-				procAura.Activate(sim)
-			} else if procAura.Icd != nil && procAura.Icd.Duration != 0 {
+	return func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+		// A custom condition gates the body rather than replacing it. Written as its own branch it
+		// skipped the window, the stack accumulation and the extra spell, so any override set on an
+		// item whose database entry resolves a stacking aura would open nothing.
+		if config.CustomProcCondition != nil && !procAura.CanProc(sim) {
+			if procAura.Icd != nil && procAura.Icd.Duration != 0 {
 				procAura.Icd.Reset()
 			}
-		}
-	}
 
-	return func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+			return
+		}
+
 		// Activating the window and not the stat aura is what makes a re-proc restart the window
 		// instead of refreshing stacks the game would not refresh.
 		if windowAura != nil {
@@ -419,8 +426,8 @@ func buildStackingCDAuras(character *core.Character, config StackingStatBonusCD,
 // then, and a decaying trinket spends a stack per event where the rest gain one.
 func attachStackingCDTrigger(character *core.Character, config StackingStatBonusCD, effect *proto.ItemEffect, statAura *core.StatBuffAura, windowAura *core.Aura) {
 	var stackDPM *core.DynamicProcManager
-	if stackProc := effect.GetStackProc(); stackProc != nil && stackProc.GetPpm() > 0 {
-		stackDPM = character.NewLegacyPPMManager(stackProc.GetPpm(), config.ProcMask)
+	if stackProc := effect.GetStackProc(); stackProc != nil {
+		stackDPM = stackTriggerDPM(character, stackProc, config.ProcMask)
 	}
 
 	windowAura.AttachProcTriggerCallback(&character.Unit, core.ProcTrigger{
@@ -682,12 +689,20 @@ func NewProcDamageEffect(config ProcDamageEffect) {
 		})
 
 		triggerConfig.TriggerImmediately = true
-		triggerConfig.Handler = func(sim *core.Simulation, _ *core.Spell, result *core.SpellResult) {
+		triggerConfig.Handler = func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			// Land the extra damage on whatever was hit, not on the primary target.
 			target := character.CurrentTarget
 			if result != nil && result.Target != nil {
 				target = result.Target
 			}
+
+			// On a hit-taken proc the wearer is what was hit - core dispatches those through
+			// result.Target.OnSpellHitTaken - so the retaliation has to go back to the attacker
+			// instead of into the wearer's own health. This is the shield spike shape.
+			if target == &character.Unit && spell != nil && spell.Unit != nil {
+				target = spell.Unit
+			}
+
 			damageSpell.Cast(sim, target)
 		}
 		triggerAura := character.MakeProcTriggerAura(triggerConfig)
@@ -878,11 +893,15 @@ func (ranks SpellRankMap) RegisterAll(factory SpellRankFactory) {
 }
 
 // A stack rate given as PPM needs a proc manager rather than a flat chance; a chance-based rate
-// needs none.
+// needs none. The mask has to be a concrete one: a PPM manager built on ProcMaskUnknown matches
+// nothing and would silently never proc. Every stack trigger the generator emits carries the mask
+// it derived from the container's own proc flags, so that does not arise today - unlike procDPM,
+// which handles the unknown case because a weapon or enchant proc can legitimately lack a mask.
 func stackTriggerDPM(character *core.Character, stackProc *proto.ProcEffect, mask core.ProcMask) *core.DynamicProcManager {
 	if stackProc.GetPpm() <= 0 {
 		return nil
 	}
+
 	return character.NewLegacyPPMManager(stackProc.GetPpm(), mask)
 }
 
@@ -958,6 +977,23 @@ func (s effectSource) procEffects() map[int32]*proto.ItemEffect {
 	}
 
 	return procEffects
+}
+
+// A weapon enchant's buff has to drop when the weapon carrying it is swapped out. AddStatProcBuff
+// only flips IsSwapped, which gates the next proc but leaves a running buff up for the rest of its
+// duration. Gated on the enchant being a weapon enchant: RegisterWeaponEnchantBuff watches the
+// weapon slots, so handing it a cloak or shield enchant would deactivate that buff on any weapon
+// swap.
+func (s effectSource) registerWeaponEnchantBuff(character *core.Character, procAura *core.StatBuffAura) {
+	if !s.isEnchant {
+		return
+	}
+
+	if ench := core.GetEnchantByEffectID(s.id); ench == nil || ench.Type != proto.ItemType_ItemTypeWeapon {
+		return
+	}
+
+	character.ItemSwap.RegisterWeaponEnchantBuff(procAura.Aura, s.id)
 }
 
 func (s effectSource) registerProc(character *core.Character, triggerAura *core.Aura, slots []proto.ItemSlot) {

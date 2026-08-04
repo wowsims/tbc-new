@@ -511,9 +511,9 @@ dps_results: {
 dps_results: {
  key: "TestProtectionWarrior-AllItems-DarkmoonCard:Vengeance-31858"
  value: {
-  dps: 778.95438
-  tps: 1430.74632
-  dtps: 1301.4699
+  dps: 782.89604
+  tps: 1436.90789
+  dtps: 1298.77296
  }
 }
 dps_results: {
