@@ -32,6 +32,9 @@ type Druid struct {
 	IdolMaulBonus          float64 // Idol of Brutality (23198): +50 flat to Maul
 	IdolSwipeBonus         float64 // Idol of Brutality (23198): +10 flat to Swipe
 
+	WolfsheadEnergyBonus float64 // Wolfshead Helm (8345): +20 energy on shift into Cat Form
+	WolfsheadRageBonus   float64 // Wolfshead Helm (8345): +5 rage on shift into Bear Form
+
 	MHAutoSpell *core.Spell
 
 	Barkskin             *DruidSpell
@@ -83,6 +86,9 @@ type Druid struct {
 	form DruidForm
 
 	IntensityEnrageRageBonus float64
+
+	// Furor: chance to gain energy/rage when shifting into Cat/Bear Form.
+	FurorProcChance float64
 
 	// Maul queue (fires on next auto-attack swing, like warrior Heroic Strike)
 	maulQueueAura  *core.Aura
