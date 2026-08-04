@@ -105,6 +105,8 @@ func assignTrigger(e *ItemEffect, statsSpellID int, pe *proto.ItemEffect) {
 				proc.ProcRate = &proto.ProcEffect_Ppm{
 					Ppm: ppm,
 				}
+			} else {
+				ReportMissingPPM(int32(e.ParentItemID), e.SpellID)
 			}
 		} else {
 			proc.ProcRate = &proto.ProcEffect_ProcChance{
@@ -207,11 +209,26 @@ func resolveTriggerType(topType, spellID int) int {
 	if topType == ITEM_SPELLTRIGGER_ON_USE || topType == ITEM_SPELLTRIGGER_CHANCE_ON_HIT {
 		return topType
 	}
+
+	// Carrying A_PROC_TRIGGER_SPELL is not on its own a proc. The client also uses that aura to hang
+	// a permanent sub-aura off an equip effect: Leggings of Beast Mastery and Void Star Talisman
+	// grant pet stats that way, with no proc mask, no chance and no duration, and promoting them
+	// emitted a proc with no rate at all. Something has to say when it would fire.
+	//
+	// The weapons whose rate lives only in MapItemIdToPPM are unaffected: the database types those
+	// CHANCE_ON_HIT itself, so they return above without being promoted here.
+	sp := dbcInstance.Spells[spellID]
+	statesAProc := slices.ContainsFunc(sp.ProcTypeMask, func(bits int) bool { return bits != 0 }) || sp.ProcChance != 0
+	if !statesAProc {
+		return topType
+	}
+
 	for _, se := range dbcInstance.SpellEffectsInOrder(spellID) {
 		if se.IsProcTrigger() {
 			return ITEM_SPELLTRIGGER_CHANCE_ON_HIT
 		}
 	}
+
 	return topType
 }
 

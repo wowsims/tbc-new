@@ -475,14 +475,18 @@ func BuildItemDifficultyPostfix(itemSources map[int][]*proto.DropSource, itemId 
 	return difficultyPostfix
 }
 
-// Whether a damage proc's rate is actually in the data. A PPM rate needs a proc manager the
-// generated call has no way to build, and those items are held back for want of a MapItemIdToPPM
-// entry anyway. A flat 100% is only believable when the tooltip agrees: DBC writes 100 on the
-// chance-on-hit weapon procs whose real rate lives outside the spell data, the same convention as
-// the 101 sentinel, so "Chance to strike your melee target with lightning" at 100% is an unstated
-// rate rather than an every-hit proc. Blazefury Medallion, which really does add its damage to
-// every swing, claims no chance and is kept.
-func damageProcRateIsStated(proc *proto.ProcEffect, tooltip string) bool {
+// Whether a proc's rate is actually in the spell data.
+//
+// A flat 100% is only believable when the tooltip agrees: DBC writes 100 on the chance-on-hit weapon
+// procs whose real rate lives outside the spell data, the same convention as the 101 sentinel, so
+// "Chance to strike your melee target with lightning" at 100% is an unstated rate rather than an
+// every-hit proc. Blazefury Medallion, which really does add its damage to every swing, claims no
+// chance and is believed.
+func procRateIsStated(proc *proto.ProcEffect, tooltip string) bool {
+	if proc.GetPpm() > 0 {
+		return true
+	}
+
 	chance := proc.GetProcChance()
 	if chance <= 0 {
 		return false
@@ -510,6 +514,13 @@ func TryParseProcEffect(parsed *proto.UIItem, itemEffect *proto.ItemEffect, inst
 			renderedTooltip := tooltip.String()
 			entry := Entry{Tooltip: strings.Split(renderedTooltip, "\n"), Variants: []*Variant{{ID: int(parsed.Id), Name: parsed.Name, SpellID: int(itemEffect.BuffId)}}}
 			entry.ProcInfo, entry.Supported = BuildProcInfo(parsed, int(itemEffect.BuffId), instance, renderedTooltip)
+
+			// Naming the items whose rate is owed. The dbc layer reports the ones whose ProcChance
+			// is 0 or the >100 sentinel; only here is the tooltip available to catch the other
+			// shape, a flat 100% the text contradicts.
+			if proc := itemEffect.GetProc(); proc != nil && !procRateIsStated(proc, renderedTooltip) {
+				dbc.ReportMissingPPM(parsed.Id, int(itemEffect.BuffId))
+			}
 			entry.StackProcInfo = buildStackProcInfo(itemEffect, instance, renderedTooltip)
 
 			// An effect that resolves no stats may still deal flat damage, which is a shape of its
@@ -517,7 +528,9 @@ func TryParseProcEffect(parsed *proto.UIItem, itemEffect *proto.ItemEffect, inst
 			// needs a proc manager the generated call has no way to build, and those items are
 			// already held back for want of a MapItemIdToPPM entry.
 			if len(dbc.EffectStats(itemEffect)) == 0 {
-				if proc := itemEffect.GetProc(); proc != nil && damageProcRateIsStated(proc, renderedTooltip) {
+				// A PPM rate is deliberately excluded: it needs a proc manager the generated call has
+				// no way to build, so only a flat chance can be written as a literal.
+				if proc := itemEffect.GetProc(); proc != nil && proc.GetProcChance() > 0 && procRateIsStated(proc, renderedTooltip) {
 					if damage := dbc.ResolveDamageEffect(int(itemEffect.BuffId)); damage != nil {
 						damageSpell := instance.Spells[damage.SpellID]
 						entry.Damage = damage

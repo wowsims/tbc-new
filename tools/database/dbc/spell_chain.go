@@ -102,6 +102,7 @@ func buildStackingAura(rootSpellID, statsSpellID, itemLevel, parentItemID int) *
 	case container.ProcChance > 100:
 		ppm := getPPMForItemID(int32(parentItemID))
 		if ppm == 0 {
+			ReportMissingPPM(int32(parentItemID), containerID)
 			return nil
 		}
 		proc.ProcRate = &proto.ProcEffect_Ppm{Ppm: ppm}

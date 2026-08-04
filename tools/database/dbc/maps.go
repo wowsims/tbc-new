@@ -1,6 +1,10 @@
 package dbc
 
-import "github.com/wowsims/tbc/sim/core/proto"
+import (
+	"strconv"
+
+	"github.com/wowsims/tbc/sim/core/proto"
+)
 
 func MapResistanceToStat(index int) (proto.Stat, bool) {
 	switch index {
@@ -411,6 +415,7 @@ var Classes = []DbcClass{
 // when parsing in item_effect.go#MergeItemEffectsForAllStates.
 var MapItemIdToPPM = map[int32]float64{
 	12798: 1, // Annihilator
+	19289: 1, // Darkmoon Card: Maelstrom
 	// 19019: 6,    // Thunderfury
 	21670: 10, // Badge of the Swarmguard
 	// 22559: 1,    // Mongoose
@@ -436,6 +441,25 @@ var MapItemIdToPPM = map[int32]float64{
 	31859: 1,   // Darkmoon Card: Madness
 	32262: 1,   // Syphon of the Nathrezim
 	32505: 1,   // Madness of the Betrayer
+}
+
+// Items whose proc rate is nowhere in the spell data - ProcChance is 0, or the >100 sentinel that
+// means the rate lives elsewhere - and that have no MapItemIdToPPM entry to supply it either. Such a
+// proc is left with no rate at all, so the effect either fires on every hit or is abandoned. Naming
+// them is the only way anyone finds out a number is owed.
+//
+// Reported once per item: the same item reaches the check from several effects, and on every
+// scaling state.
+var reportedMissingPPM = map[int32]bool{}
+
+func ReportMissingPPM(itemID int32, spellID int) {
+	if itemID == 0 || reportedMissingPPM[itemID] {
+		return
+	}
+
+	reportedMissingPPM[itemID] = true
+	println("Item needs a manual PPM: " + dbcInstance.Items[int(itemID)].Name +
+		" (" + strconv.FormatInt(int64(itemID), 10) + ") from spell " + strconv.Itoa(spellID))
 }
 
 func getPPMForItemID(itemID int32) float64 {
