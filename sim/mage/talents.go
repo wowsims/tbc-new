@@ -327,16 +327,13 @@ func (mage *Mage) registerIgnite() {
 			target := result.Target
 			dot := igniteSpell.Dot(target)
 			outstandingDamage := dot.OutstandingDmg()
-			tickCount := dot.RemainingTicks()
-			if tickCount <= 0 {
+			if dot.RemainingTicks() <= 0 {
 				outstandingDamage = 0
-				tickCount = dot.BaseTickCount
 			}
 
 			newDamage := result.Damage * igniteDamageMultiplier
 			totalDamage := outstandingDamage + newDamage
-			// Every refresh redistributes the entire outstanding bank; Ignite does not decay.
-			damagePerTick := totalDamage / float64(tickCount)
+			damagePerTick := totalDamage / float64(dot.BaseTickCount)
 
 			refreshIgnite(sim, target, damagePerTick)
 		},
