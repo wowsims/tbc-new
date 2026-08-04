@@ -719,8 +719,8 @@ func RegisterIgniteEffect(unit *core.Unit, config IgniteConfig) *core.Spell {
 		// 1st ignite application = 4s, split into 2 ticks (2s, 0s)
 		// Ignite refreshes: Duration = 4s + MODULO(remaining duration, 2), max 6s. Split damage over 3 ticks at 4s, 2s, 0s.
 		dot := igniteSpell.Dot(target)
-		dot.SnapshotBaseDamage = damagePerTick
 		igniteSpell.Cast(sim, target)
+		dot.SnapshotBaseDamage = damagePerTick
 		dot.Aura.SetStacks(sim, int32(dot.SnapshotBaseDamage))
 	}
 
