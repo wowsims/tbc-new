@@ -100,7 +100,6 @@ func RegisterAllOnUseCds() {
 	shared.NewStackingStatBonusCD(shared.StackingStatBonusCD{
 		Name:                  "Zandalarian Hero Badge",
 		ID:                    19948,
-		Duration:              time.Millisecond * 20000,
 		CD:                    time.Millisecond * 120000,
 		Callback:              core.CallbackOnSpellHitTaken,
 		ProcMask:              core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial | core.ProcMaskRangedAuto | core.ProcMaskRangedSpecial,
@@ -114,7 +113,6 @@ func RegisterAllOnUseCds() {
 	shared.NewStackingStatBonusCD(shared.StackingStatBonusCD{
 		Name:                  "Badge of the Swarmguard",
 		ID:                    21670,
-		Duration:              time.Millisecond * 30000,
 		CD:                    time.Millisecond * 180000,
 		Callback:              core.CallbackOnSpellHitDealt,
 		ProcMask:              core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial | core.ProcMaskRangedAuto | core.ProcMaskRangedSpecial,
@@ -170,7 +168,6 @@ func RegisterAllOnUseCds() {
 	shared.NewStackingStatBonusCD(shared.StackingStatBonusCD{
 		Name:                  "Talisman of Ascendance",
 		ID:                    22678,
-		Duration:              time.Millisecond * 20000,
 		CD:                    time.Millisecond * 60000,
 		Callback:              core.CallbackOnSpellHitDealt,
 		ProcMask:              core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial | core.ProcMaskRangedAuto | core.ProcMaskRangedSpecial | core.ProcMaskSpellDamage,

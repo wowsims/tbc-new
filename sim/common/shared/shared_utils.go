@@ -376,15 +376,12 @@ func NewSimpleStatActive(itemID int32) {
 type StackingStatBonusCD struct {
 	Name               string
 	ID                 int32
-	Duration           time.Duration
 	CD                 time.Duration
 	Callback           core.AuraCallback
 	ProcMask           core.ProcMask
 	SpellFlags         core.SpellFlag
 	Outcome            core.HitOutcome
 	RequireDamageDealt bool
-	ProcChance         float64
-	IsDefensive        bool
 
 	// The stacks will only be granted as long as the trinket is active
 	TrinketLimitsDuration bool
@@ -461,8 +458,15 @@ func buildStackingCDAuras(character *core.Character, config StackingStatBonusCD,
 // What moves the stack count while the window is open. Attached to the window so it is live only
 // then, and a decaying trinket spends a stack per event where the rest gain one.
 func attachStackingCDTrigger(character *core.Character, config StackingStatBonusCD, effect *proto.ItemEffect, statAura *core.StatBuffAura, windowAura *core.Aura) {
+	// Rate and lockout come off the stack proc, the same way the proc-item sibling reads them. Taken
+	// from the config instead they were always zero - the generated on-use call states neither - and
+	// a zero chance is normalised to 1, so a stack proc with a real chance or an ICD would have
+	// stacked on every qualifying event with no cooldown. The getters are nil-safe: an item effect
+	// that carries no stack proc keeps a plain always-on trigger.
+	stackProc := effect.GetStackProc()
+
 	var stackDPM *core.DynamicProcManager
-	if stackProc := effect.GetStackProc(); stackProc != nil {
+	if stackProc != nil {
 		stackDPM = stackTriggerDPM(character, stackProc, config.ProcMask)
 	}
 
@@ -473,7 +477,8 @@ func attachStackingCDTrigger(character *core.Character, config StackingStatBonus
 		SpellFlags:         config.SpellFlags,
 		Outcome:            config.Outcome,
 		RequireDamageDealt: config.RequireDamageDealt,
-		ProcChance:         core.TernaryFloat64(stackDPM == nil, config.ProcChance, 0),
+		ProcChance:         core.TernaryFloat64(stackDPM == nil, stackProc.GetProcChance(), 0),
+		ICD:                time.Millisecond * time.Duration(stackProc.GetIcdMs()),
 		DPM:                stackDPM,
 		Handler: func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
 			if !statAura.IsActive() {
@@ -494,6 +499,7 @@ func attachStackingCDTrigger(character *core.Character, config StackingStatBonus
 func NewStackingStatBonusCD(config StackingStatBonusCD) {
 	core.NewItemEffect(config.ID, func(agent core.Agent) {
 		character := agent.GetCharacter()
+		eligibleSlots := character.ItemSwap.EligibleSlotsForItem(config.ID)
 
 		for _, itemEffect := range itemEffectsFor(config.ID) {
 			stacks := resolveStackingStats(itemEffect, stackingAuraID(itemEffect, config.ID), config.TrinketLimitsDuration)
@@ -531,6 +537,13 @@ func NewStackingStatBonusCD(config StackingStatBonusCD) {
 				Type:     core.CooldownTypeDPS,
 				BuffAura: statAura,
 			})
+
+			// The stat aura and not the window: the stacks are what an APL keys off. This is the
+			// registry behind the "Item Stat Proc Check" value and the "Activate All Stat Buff Proc
+			// Auras" action, so without it an APL asking after Insight of the Qiraji stacks matches
+			// nothing. Registering the major cooldown alone leaves plain use-on-cooldown output
+			// unchanged, which is why no fixture records the difference.
+			character.AddStatProcBuff(config.ID, statAura, false, eligibleSlots)
 		}
 	})
 }
@@ -728,18 +741,34 @@ func NewProcDamageEffect(config ProcDamageEffect) {
 		})
 
 		triggerConfig.TriggerImmediately = true
-		triggerConfig.Handler = func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			// Land the extra damage on whatever was hit, not on the primary target.
-			target := character.CurrentTarget
-			if result != nil && result.Target != nil {
-				target = result.Target
-			}
 
-			// On a hit-taken proc the wearer is what was hit - core dispatches those through
-			// result.Target.OnSpellHitTaken - so the retaliation has to go back to the attacker
-			// instead of into the wearer's own health. This is the shield spike shape.
-			if target == &character.Unit && spell != nil && spell.Unit != nil {
-				target = spell.Unit
+		// What result.Target means depends on the callback, so the callback has to decide whether it
+		// may be read at all.
+		callback := triggerConfig.Callback
+
+		triggerConfig.Handler = func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+			target := character.CurrentTarget
+
+			switch {
+			case callback.Matches(core.CallbackOnSpellHitTaken):
+				// Here result.Target is the wearer - core dispatches hit-taken through
+				// result.Target.OnSpellHitTaken - so the retaliation goes to the attacker instead of
+				// into the wearer's own health. This is the shield spike shape.
+				if spell != nil && spell.Unit != nil {
+					target = spell.Unit
+				}
+
+			case callback.Matches(core.CallbackOnSpellHitDealt | core.CallbackOnPeriodicDamageDealt):
+				// Land the extra damage on whatever was hit, not on the primary target.
+				if result != nil && result.Target != nil {
+					target = result.Target
+				}
+
+			default:
+				// The heal callbacks, cast complete and apply effects carry either no result or one
+				// whose target is an ally, so nothing there can name what to damage and the current
+				// target stands. Reading result.Target regardless is what would have a heal-triggered
+				// damage proc hit the healed ally.
 			}
 
 			damageSpell.Cast(sim, target)

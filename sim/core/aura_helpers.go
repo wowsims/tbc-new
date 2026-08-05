@@ -164,6 +164,9 @@ func (procAura *Aura) AttachProcTriggerCallback(unit *Unit, config ProcTrigger) 
 			if config.ClassSpellMask > 0 && config.ClassSpellMask&spell.ClassSpellMask == 0 {
 				return
 			}
+			if config.ClassSpellsOnly && spell.ClassSpellMask == 0 {
+				return
+			}
 			if config.ProcMask != ProcMaskUnknown && !spell.ProcMask.Matches(config.ProcMask) {
 				return
 			}
@@ -189,6 +192,9 @@ func (procAura *Aura) AttachProcTriggerCallback(unit *Unit, config ProcTrigger) 
 				return
 			}
 			if config.ClassSpellMask > 0 && config.ClassSpellMask&spell.ClassSpellMask == 0 {
+				return
+			}
+			if config.ClassSpellsOnly && spell.ClassSpellMask == 0 {
 				return
 			}
 			if config.ProcMask != ProcMaskUnknown && !spell.ProcMask.Matches(config.ProcMask) {

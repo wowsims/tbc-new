@@ -450,7 +450,7 @@ func init() {
 			RequireDamageDealt: true,
 			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 				threatReduction := 150.0
-				if spell.ProcMask.Matches(core.ProcMaskSpellDamageProc) {
+				if spell.ProcMask.Matches(core.ProcMaskSpellProc) {
 					threatReduction = 1000
 				}
 				spell.FlatThreatBonus -= threatReduction

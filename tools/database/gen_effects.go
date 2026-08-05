@@ -74,7 +74,6 @@ type Entry struct {
 // per-stack stats, which aura is which - the helper reads from the database at runtime.
 type StackingOnUse struct {
 	Name       string
-	DurationMs int32
 	CooldownMs int32
 }
 
@@ -523,6 +522,16 @@ func TryParseProcEffect(parsed *proto.UIItem, itemEffect *proto.ItemEffect, inst
 			}
 			entry.StackProcInfo = buildStackProcInfo(itemEffect, instance, renderedTooltip)
 
+			// entry.Supported speaks only for the trigger that opens the window, so the stack side
+			// has to be refused separately. Without this the template omits StackCallback,
+			// attachStackTrigger early-returns on the empty callback and the stat aura activates at
+			// zero stacks with no duration of its own - a trinket whose window opens and never gains
+			// a stack, worth nothing and reported as implemented. The on-use path refuses the same
+			// shape further down.
+			if itemEffect.StackingAura != nil && itemEffect.GetStackProc() != nil && entry.StackProcInfo == nil {
+				entry.Supported = false
+			}
+
 			// An effect that resolves no stats may still deal flat damage, which is a shape of its
 			// own rather than a reason to refuse. Only a stated flat chance is taken: a PPM rate
 			// needs a proc manager the generated call has no way to build, and those items are
@@ -603,7 +612,6 @@ func TryParseOnUseEffect(parsed *proto.UIItem, itemEffect *proto.ItemEffect, ins
 			}
 			entry.StackingOnUse = &StackingOnUse{
 				Name:       parsed.Name,
-				DurationMs: itemEffect.EffectDurationMs,
 				CooldownMs: itemEffect.GetOnUse().CooldownMs,
 			}
 			return EffectParseResultSuccess
@@ -972,6 +980,12 @@ func BuildSpellProcInfo(procSpell *dbc.Spell, tooltip string, itemType proto.Ite
 		info.ProcMask |= core.ProcMaskRangedProc
 	}
 
+	// ProcMaskSpellProc and not ProcMaskSpellDamageProc, deliberately. The latter is reserved for
+	// the weapon-imbue shape - Flametongue and the rogue poisons - which is kept a distinct source
+	// on purpose, so a generated spell-damage trigger is not meant to fire off those. This narrows
+	// Shiffar's Nexus-Horn, Wrath of Cenarius and Robe of the Elder Scribes against master, where
+	// the same branch emitted ProcMaskSpellDamageProc and they proc'd off FT and poison crits
+	// instead of off Ignite, Elemental Overload and Hurricane's DoT.
 	if info.ProcMask.Matches(core.ProcMaskSpellDamage) && procSpell.CanProcFromProcs() {
 		info.ProcMask |= core.ProcMaskSpellProc
 	}

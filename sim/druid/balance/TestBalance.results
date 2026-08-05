@@ -1428,8 +1428,8 @@ dps_results: {
 dps_results: {
  key: "TestBalance-AllItems-WolfsheadHelm-8345"
  value: {
-  dps: 1290.6935
-  tps: 861.31842
+  dps: 1320.23908
+  tps: 882.01061
  }
 }
 dps_results: {

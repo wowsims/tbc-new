@@ -33,7 +33,6 @@ func RegisterAllOnUseCds() {
 	shared.NewStackingStatBonusCD(shared.StackingStatBonusCD{
 		Name:                  "{{ .StackingOnUse.Name }}",
 		ID:                    {{ (index .Variants 0).ID }},
-		Duration:              time.Millisecond * {{ .StackingOnUse.DurationMs }},
 		CD:                    time.Millisecond * {{ .StackingOnUse.CooldownMs }},
 		Callback:              {{ .StackProcInfo.Callback | asCoreCallback }},
 		ProcMask:              {{ .StackProcInfo.ProcMask | asCoreProcMask }},
