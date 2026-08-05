@@ -202,6 +202,14 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 		MakePermanent(ChainOfTheTwilightOwlAura(char))
 	}
 
+	if partyBuffs.EyeOfTheNight {
+		MakePermanent(EyeOfTheNightAura(char))
+	}
+
+	if partyBuffs.JadePendantOfBlasting {
+		MakePermanent(JadePendantOfBlastingAura(char))
+	}
+
 	if partyBuffs.CommandingShout != proto.TristateEffect_TristateEffectMissing {
 		boomingVoicePoints := int32(0)
 
@@ -228,20 +236,12 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 		DraneiRacialAura(char, false)
 	}
 
-	if partyBuffs.EyeOfTheNight {
-		MakePermanent(EyeOfTheNightAura(char))
-	}
-
 	if partyBuffs.FerociousInspiration > 0 {
 		MakePermanent(FerociousInspiration(char, partyBuffs.FerociousInspiration))
 	}
 
 	if partyBuffs.GraceOfAirTotem != proto.TristateEffect_TristateEffectMissing {
 		GraceOfAirTotemAura(char, IsImproved(partyBuffs.GraceOfAirTotem), partyBuffs.TotemTwisting)
-	}
-
-	if partyBuffs.JadePendantOfBlasting {
-		MakePermanent(JadePendantOfBlastingAura(char))
 	}
 
 	if partyBuffs.LeaderOfThePack != proto.TristateEffect_TristateEffectMissing {
@@ -1231,11 +1231,18 @@ func AtieshAura(char *Character, class proto.Class, numStaves float64) *Aura {
 
 }
 
+const (
+	BraidedEterniumChainAuraLabel  = "Braided Eternium Chain"
+	ChainOfTheTwilightOwlAuraLabel = "Chain of the Twilight Owl"
+	EyeOfTheNightAuraLabel         = "Eye of the Night"
+	JadePendantOfBlastingAuraLabel = "Jade Pendant of Blasting"
+)
+
 func BraidedEterniumChainAura(char *Character) *Aura {
 	return makeStatBuff(char, BuffConfig{
-		Label:             "Braided Eternium Chain",
+		Label:             BraidedEterniumChainAuraLabel,
 		ActionID:          ActionID{SpellID: 31025},
-		ExclusiveCategory: "Braided Eternium Chain",
+		ExclusiveCategory: BraidedEterniumChainAuraLabel,
 		Stats: []StatConfig{
 			{stats.MeleeCritRating, 28, false},
 		},
@@ -1244,11 +1251,33 @@ func BraidedEterniumChainAura(char *Character) *Aura {
 
 func ChainOfTheTwilightOwlAura(char *Character) *Aura {
 	return makeStatBuff(char, BuffConfig{
-		Label:             "Chain of the Twilight Owl",
+		Label:             ChainOfTheTwilightOwlAuraLabel,
 		ActionID:          ActionID{SpellID: 31035},
-		ExclusiveCategory: "Chain of the Twilight Owl",
+		ExclusiveCategory: ChainOfTheTwilightOwlAuraLabel,
 		Stats: []StatConfig{
 			{stats.SpellCritPercent, 2, false},
+		},
+	})
+}
+
+func EyeOfTheNightAura(char *Character) *Aura {
+	return makeStatBuff(char, BuffConfig{
+		Label:             EyeOfTheNightAuraLabel,
+		ActionID:          ActionID{SpellID: 31033},
+		ExclusiveCategory: EyeOfTheNightAuraLabel,
+		Stats: []StatConfig{
+			{stats.SpellDamage, 34, false},
+		},
+	})
+}
+
+func JadePendantOfBlastingAura(char *Character) *Aura {
+	return makeStatBuff(char, BuffConfig{
+		Label:             JadePendantOfBlastingAuraLabel,
+		ActionID:          ActionID{SpellID: 25607},
+		ExclusiveCategory: JadePendantOfBlastingAuraLabel,
+		Stats: []StatConfig{
+			{stats.SpellDamage, 15, false},
 		},
 	})
 }
@@ -1286,28 +1315,6 @@ func DraneiRacialAura(char *Character, caster bool) *Aura {
 	}
 
 	return MakePermanent(aura)
-}
-
-func EyeOfTheNightAura(char *Character) *Aura {
-	return makeStatBuff(char, BuffConfig{
-		Label:             "Eye of the Night",
-		ActionID:          ActionID{SpellID: 31033},
-		ExclusiveCategory: "Eye of the Night",
-		Stats: []StatConfig{
-			{stats.SpellDamage, 34, false},
-		},
-	})
-}
-
-func JadePendantOfBlastingAura(char *Character) *Aura {
-	return makeStatBuff(char, BuffConfig{
-		Label:             "Jade Pendant of Blasting",
-		ActionID:          ActionID{SpellID: 25607},
-		ExclusiveCategory: "Jade Pendant of Blasting",
-		Stats: []StatConfig{
-			{stats.SpellDamage, 15, false},
-		},
-	})
 }
 
 const TinnitusAuraLabel = "Tinnitus"
@@ -1774,16 +1781,19 @@ func applyPetBuffEffects(petAgent PetAgent, raidBuffs *proto.RaidBuffs, partyBuf
 	partyBuffs = googleProto.Clone(partyBuffs).(*proto.PartyBuffs)
 	// Pets can't get extra attacks, doh!
 	partyBuffs.WindfuryTotem = proto.TristateEffect_TristateEffectMissing
+	// Self-equipped party buffs also apply to the owner's pets.
+	partyBuffs.ChainOfTheTwilightOwl = partyBuffs.ChainOfTheTwilightOwl || petAgent.GetPet().Owner.HasAura(ChainOfTheTwilightOwlAuraLabel)
+	partyBuffs.EyeOfTheNight = partyBuffs.EyeOfTheNight || petAgent.GetPet().Owner.HasAura(EyeOfTheNightAuraLabel)
+	partyBuffs.BraidedEterniumChain = partyBuffs.BraidedEterniumChain || petAgent.GetPet().Owner.HasAura(BraidedEterniumChainAuraLabel)
+	partyBuffs.JadePendantOfBlasting = partyBuffs.JadePendantOfBlasting || petAgent.GetPet().Owner.HasAura(JadePendantOfBlastingAuraLabel)
 
 	individualBuffs = googleProto.Clone(individualBuffs).(*proto.IndividualBuffs)
 	individualBuffs.Innervates = 0
 	individualBuffs.PowerInfusions = 0
 
-	// Pets don't benefit from buffs that are ratings, e.g. crit rating or haste rating.
 	partyBuffs.Drums = proto.Drums_DrumsUnknown
 	partyBuffs.LeaderOfThePack = MinTristate(partyBuffs.LeaderOfThePack, proto.TristateEffect_TristateEffectRegular)
 	partyBuffs.MoonkinAura = MinTristate(partyBuffs.MoonkinAura, proto.TristateEffect_TristateEffectRegular)
-	partyBuffs.BraidedEterniumChain = false
 
 	if !petAgent.GetPet().enabledOnStart {
 		// Auras etc still apply, but not targeted buffs (usually)

@@ -11,19 +11,19 @@ func init() {
 	// Eye of the Night
 	core.NewItemEffect(24116, func(agent core.Agent) {
 		character := agent.GetCharacter()
-		core.EyeOfTheNightAura(character)
+		core.MakePermanent(core.EyeOfTheNightAura(character))
 	})
 
 	// Chain of the Twilight Owl
 	core.NewItemEffect(24121, func(agent core.Agent) {
 		character := agent.GetCharacter()
-		core.ChainOfTheTwilightOwlAura(character)
+		core.MakePermanent(core.ChainOfTheTwilightOwlAura(character))
 	})
 
 	// Braided Eternium Chain
 	core.NewItemEffect(24114, func(agent core.Agent) {
 		character := agent.GetCharacter()
-		core.BraidedEterniumChainAura(character)
+		core.MakePermanent(core.BraidedEterniumChainAura(character))
 	})
 
 	// Pendants of [School] — on-use absorb shields. Each rolls a random absorb
