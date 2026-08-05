@@ -1871,6 +1871,15 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestFeralBear-AllItems-WolfsheadHelm-8345"
+ value: {
+  dps: 390.55211
+  tps: 603.95582
+  dtps: 1237.44458
+  hps: 69.18293
+ }
+}
+dps_results: {
  key: "TestFeralBear-AllItems-WorldBreaker-30090"
  value: {
   dps: 428.75759
