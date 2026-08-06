@@ -158,6 +158,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestDestruction-AllItems-BandoftheEternalDefender-29297"
+ value: {
+  dps: 1836.37129
+  tps: 1143.03129
+ }
+}
+dps_results: {
  key: "TestDestruction-AllItems-BandoftheEternalRestorer-29309"
  value: {
   dps: 1887.93185
@@ -270,6 +277,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestDestruction-AllItems-BlazefuryMedallion-17111"
+ value: {
+  dps: 1836.67877
+  tps: 1143.21656
+ }
+}
+dps_results: {
  key: "TestDestruction-AllItems-Blinkstrike-31332"
  value: {
   dps: 1878.61671
@@ -314,8 +328,8 @@ dps_results: {
 dps_results: {
  key: "TestDestruction-AllItems-CircletofArcaneMight-24123"
  value: {
-  dps: 1736.18411
-  tps: 1080.91166
+  dps: 1735.56469
+  tps: 1080.62973
  }
 }
 dps_results: {
@@ -505,6 +519,13 @@ dps_results: {
  value: {
   dps: 1862.71791
   tps: 1159.32849
+ }
+}
+dps_results: {
+ key: "TestDestruction-AllItems-FieryRetributer-19968"
+ value: {
+  dps: 1878.61671
+  tps: 1169.21746
  }
 }
 dps_results: {
@@ -755,8 +776,8 @@ dps_results: {
 dps_results: {
  key: "TestDestruction-AllItems-MasqueradeGown-28578"
  value: {
-  dps: 1843.94136
-  tps: 1145.5707
+  dps: 1844.05157
+  tps: 1145.6341
  }
 }
 dps_results: {
@@ -1071,8 +1092,8 @@ dps_results: {
 dps_results: {
  key: "TestDestruction-AllItems-TalismanofAscendance-22678"
  value: {
-  dps: 1850.0902
-  tps: 1150.42246
+  dps: 1878.40582
+  tps: 1167.25255
  }
 }
 dps_results: {
@@ -1111,6 +1132,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestDestruction-AllItems-TheLionHornofStormwind-14557"
+ value: {
+  dps: 1836.221
+  tps: 1142.01054
+ }
+}
+dps_results: {
  key: "TestDestruction-AllItems-TheNightBlade-31331"
  value: {
   dps: 1878.61671
@@ -1143,6 +1171,13 @@ dps_results: {
  value: {
   dps: 1878.61671
   tps: 1169.21746
+ }
+}
+dps_results: {
+ key: "TestDestruction-AllItems-Timbal'sFocusingCrystal-34470"
+ value: {
+  dps: 1896.33338
+  tps: 1179.50049
  }
 }
 dps_results: {
@@ -1234,6 +1269,13 @@ dps_results: {
  value: {
   dps: 1887.77603
   tps: 1173.80218
+ }
+}
+dps_results: {
+ key: "TestDestruction-AllItems-ZandalarianHeroBadge-19948"
+ value: {
+  dps: 1836.221
+  tps: 1142.01054
  }
 }
 dps_results: {

@@ -43,6 +43,19 @@ var IgnoreSpellEffectBySpellEffectType = map[dbc.SpellEffectType][]int{
 	dbc.E_TELEPORT_UNITS: {},
 }
 
+// Spells that are flavour rather than mechanics, keyed by spell ID so that reporting them as
+// missing effects can be suppressed without hiding anything real.
+//
+// Keyed per spell on purpose. The obvious shortcut - treat an effect made only of A_DUMMY auras
+// as noise, which is what MoP does - does not hold in TBC, where A_DUMMY is how a whole class of
+// real item effects is encoded: every relic, idol, libram and totem bonus, plus Zandalarian Hero
+// Medallion, Thick Obsidian Breastplate and Ashtongue Talisman of Zeal. That rule removed 48
+// entries here and only a handful of them were noise.
+var IgnoreMissingEffectBySpellID = map[int]string{
+	16372: "Seal of Ascension - no tooltip and no mechanic",
+	43873: "Headless Horseman Laugh - holiday flavour aura",
+}
+
 var OtherItemIdsToFetch = []string{}
 var ConsumableOverrides = []*proto.Consumable{
 	{Id: 23334, CooldownDuration: int32(time.Hour.Seconds())}, // Cracked Power Core

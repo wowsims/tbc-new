@@ -165,6 +165,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestArcane-AllItems-BandoftheEternalDefender-29297"
+ value: {
+  dps: 1877.7553
+  tps: 908.60003
+ }
+}
+dps_results: {
  key: "TestArcane-AllItems-BandoftheEternalRestorer-29309"
  value: {
   dps: 1941.73497
@@ -277,6 +284,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestArcane-AllItems-BlazefuryMedallion-17111"
+ value: {
+  dps: 1869.7067
+  tps: 905.6027
+ }
+}
+dps_results: {
  key: "TestArcane-AllItems-Blinkstrike-31332"
  value: {
   dps: 1942.62177
@@ -321,8 +335,8 @@ dps_results: {
 dps_results: {
  key: "TestArcane-AllItems-CircletofArcaneMight-24123"
  value: {
-  dps: 1821.99507
-  tps: 880.73593
+  dps: 1822.18799
+  tps: 880.89026
  }
 }
 dps_results: {
@@ -505,6 +519,13 @@ dps_results: {
  value: {
   dps: 1895.60748
   tps: 916.14346
+ }
+}
+dps_results: {
+ key: "TestArcane-AllItems-FieryRetributer-19968"
+ value: {
+  dps: 1942.62177
+  tps: 938.23876
  }
 }
 dps_results: {
@@ -748,8 +769,8 @@ dps_results: {
 dps_results: {
  key: "TestArcane-AllItems-MasqueradeGown-28578"
  value: {
-  dps: 1882.19051
-  tps: 909.61691
+  dps: 1882.20516
+  tps: 909.62669
  }
 }
 dps_results: {
@@ -1071,8 +1092,8 @@ dps_results: {
 dps_results: {
  key: "TestArcane-AllItems-TalismanofAscendance-22678"
  value: {
-  dps: 1899.32551
-  tps: 947.32815
+  dps: 1926.41705
+  tps: 960.20717
  }
 }
 dps_results: {
@@ -1101,6 +1122,13 @@ dps_results: {
  value: {
   dps: 1905.47196
   tps: 951.39131
+ }
+}
+dps_results: {
+ key: "TestArcane-AllItems-TheLionHornofStormwind-14557"
+ value: {
+  dps: 1889.61738
+  tps: 942.68091
  }
 }
 dps_results: {
@@ -1136,6 +1164,13 @@ dps_results: {
  value: {
   dps: 1942.62177
   tps: 938.23876
+ }
+}
+dps_results: {
+ key: "TestArcane-AllItems-Timbal'sFocusingCrystal-34470"
+ value: {
+  dps: 1925.65597
+  tps: 960.01877
  }
 }
 dps_results: {
@@ -1220,6 +1255,13 @@ dps_results: {
  value: {
   dps: 1922.48273
   tps: 957.99116
+ }
+}
+dps_results: {
+ key: "TestArcane-AllItems-ZandalarianHeroBadge-19948"
+ value: {
+  dps: 1889.61738
+  tps: 942.68091
  }
 }
 dps_results: {

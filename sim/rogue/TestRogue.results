@@ -146,8 +146,8 @@ dps_results: {
 dps_results: {
  key: "TestRogue-AllItems-BadgeoftheSwarmguard-21670"
  value: {
-  dps: 1845.0391
-  tps: 916.98443
+  dps: 1844.6092
+  tps: 916.77077
  }
 }
 dps_results: {
@@ -155,6 +155,13 @@ dps_results: {
  value: {
   dps: 1894.9998
   tps: 941.8149
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-BandoftheEternalDefender-29297"
+ value: {
+  dps: 1838.83017
+  tps: 913.89859
  }
 }
 dps_results: {
@@ -251,8 +258,8 @@ dps_results: {
 dps_results: {
  key: "TestRogue-AllItems-BlackenedNaaruSliver-34427"
  value: {
-  dps: 1921.77529
-  tps: 955.12232
+  dps: 1921.66431
+  tps: 955.06716
  }
 }
 dps_results: {
@@ -267,6 +274,13 @@ dps_results: {
  value: {
   dps: 1630.46085
   tps: 810.33904
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-BlazefuryMedallion-17111"
+ value: {
+  dps: 1860.31285
+  tps: 924.57549
  }
 }
 dps_results: {
@@ -540,6 +554,13 @@ dps_results: {
  value: {
   dps: 1763.01152
   tps: 876.21672
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-FieryRetributer-19968"
+ value: {
+  dps: 1866.96508
+  tps: 927.88165
  }
 }
 dps_results: {
@@ -1167,6 +1188,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRogue-AllItems-TheLionHornofStormwind-14557"
+ value: {
+  dps: 1816.45939
+  tps: 902.78032
+ }
+}
+dps_results: {
  key: "TestRogue-AllItems-TheNightBlade-31331"
  value: {
   dps: 1866.96508
@@ -1206,6 +1234,13 @@ dps_results: {
  value: {
   dps: 1866.96508
   tps: 927.88165
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-Timbal'sFocusingCrystal-34470"
+ value: {
+  dps: 1816.45939
+  tps: 902.78032
  }
 }
 dps_results: {
@@ -1301,6 +1336,13 @@ dps_results: {
 }
 dps_results: {
  key: "TestRogue-AllItems-Xi'ri'sGift-29179"
+ value: {
+  dps: 1816.45939
+  tps: 902.78032
+ }
+}
+dps_results: {
+ key: "TestRogue-AllItems-ZandalarianHeroBadge-19948"
  value: {
   dps: 1816.45939
   tps: 902.78032

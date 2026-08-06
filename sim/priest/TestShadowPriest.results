@@ -172,6 +172,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestShadowPriest-AllItems-BandoftheEternalDefender-29297"
+ value: {
+  dps: 1729.86239
+  tps: 896.71331
+ }
+}
+dps_results: {
  key: "TestShadowPriest-AllItems-BandoftheEternalRestorer-29309"
  value: {
   dps: 1750.04425
@@ -277,6 +284,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestShadowPriest-AllItems-BlazefuryMedallion-17111"
+ value: {
+  dps: 1732.86591
+  tps: 898.24582
+ }
+}
+dps_results: {
  key: "TestShadowPriest-AllItems-BloodlustBrooch-29383"
  value: {
   dps: 1700.99692
@@ -314,8 +328,8 @@ dps_results: {
 dps_results: {
  key: "TestShadowPriest-AllItems-CircletofArcaneMight-24123"
  value: {
-  dps: 1703.7588
-  tps: 883.22971
+  dps: 1703.86733
+  tps: 883.28709
  }
 }
 dps_results: {
@@ -343,7 +357,7 @@ dps_results: {
  key: "TestShadowPriest-AllItems-CoronetofVerdantFlame-24122"
  value: {
   dps: 1689.50982
-  tps: 875.60609
+  tps: 875.60359
  }
 }
 dps_results: {
@@ -748,8 +762,8 @@ dps_results: {
 dps_results: {
  key: "TestShadowPriest-AllItems-MasqueradeGown-28578"
  value: {
-  dps: 1721.75747
-  tps: 892.16903
+  dps: 1721.74695
+  tps: 892.16127
  }
 }
 dps_results: {
@@ -1064,8 +1078,8 @@ dps_results: {
 dps_results: {
  key: "TestShadowPriest-AllItems-TalismanofAscendance-22678"
  value: {
-  dps: 1711.12593
-  tps: 887.30947
+  dps: 1735.67179
+  tps: 899.54941
  }
 }
 dps_results: {
@@ -1097,6 +1111,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestShadowPriest-AllItems-TheLionHornofStormwind-14557"
+ value: {
+  dps: 1700.99692
+  tps: 882.26897
+ }
+}
+dps_results: {
  key: "TestShadowPriest-AllItems-TheNightBlade-31331"
  value: {
   dps: 1756.87624
@@ -1115,6 +1136,13 @@ dps_results: {
  value: {
   dps: 1759.07769
   tps: 911.63479
+ }
+}
+dps_results: {
+ key: "TestShadowPriest-AllItems-Timbal'sFocusingCrystal-34470"
+ value: {
+  dps: 1766.84944
+  tps: 920.12796
  }
 }
 dps_results: {
@@ -1192,6 +1220,13 @@ dps_results: {
  value: {
   dps: 1724.37961
   tps: 893.81741
+ }
+}
+dps_results: {
+ key: "TestShadowPriest-AllItems-ZandalarianHeroBadge-19948"
+ value: {
+  dps: 1700.99692
+  tps: 882.26897
  }
 }
 dps_results: {

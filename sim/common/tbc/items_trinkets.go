@@ -257,37 +257,6 @@ func init() {
 		})
 	})
 
-	// Hourglass of the Unraveller
-	core.NewItemEffect(28034, func(agent core.Agent) {
-		character := agent.GetCharacter()
-		duration := time.Second * 10
-		value := 300.0
-
-		aura := character.NewTemporaryStatsAura(
-			"Rage of the Unraveller",
-			core.ActionID{SpellID: 33649},
-			stats.Stats{stats.AttackPower: value, stats.RangedAttackPower: value},
-			duration,
-		)
-
-		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:       "Hourglass of the Unraveller",
-			ActionID:   core.ActionID{ItemID: 28034},
-			ProcChance: 0.1,
-			ICD:        time.Second * 50,
-			ProcMask:   core.ProcMaskMeleeOrRanged,
-			Outcome:    core.OutcomeCrit,
-			Callback:   core.CallbackOnSpellHitDealt,
-			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-				aura.Activate(sim)
-			},
-		})
-
-		eligibleSlots := character.ItemSwap.EligibleSlotsForItem(28034)
-		character.AddStatProcBuff(28034, aura, false, eligibleSlots)
-		character.ItemSwap.RegisterProc(28034, procAura)
-	})
-
 	// Romulo's Poison Vial
 	core.NewItemEffect(28579, func(agent core.Agent) {
 		character := agent.GetCharacter()
@@ -481,7 +450,7 @@ func init() {
 			RequireDamageDealt: true,
 			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 				threatReduction := 150.0
-				if spell.ProcMask.Matches(core.ProcMaskSpellDamageProc) {
+				if spell.ProcMask.Matches(core.ProcMaskSpellProc) {
 					threatReduction = 1000
 				}
 				spell.FlatThreatBonus -= threatReduction
@@ -491,36 +460,6 @@ func init() {
 		})
 
 		character.ItemSwap.RegisterProc(30621, procAura)
-	})
-
-	// Sextant of Unstable Currents
-	core.NewItemEffect(30626, func(agent core.Agent) {
-		character := agent.GetCharacter()
-
-		value := 190.0
-		aura := character.NewTemporaryStatsAura(
-			"Unstable Currents",
-			core.ActionID{SpellID: 38348},
-			stats.Stats{stats.SpellDamage: value, stats.HealingPower: value},
-			time.Second*15,
-		)
-
-		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:               "Sextant of Unstable Currents",
-			ActionID:           core.ActionID{ItemID: 30626},
-			ProcChance:         0.2,
-			ICD:                time.Second * 45,
-			Outcome:            core.OutcomeCrit,
-			Callback:           core.CallbackOnSpellHitDealt,
-			RequireDamageDealt: true,
-			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-				aura.Activate(sim)
-			},
-		})
-
-		eligibleSlots := character.ItemSwap.EligibleSlotsForItem(30626)
-		character.AddStatProcBuff(38348, aura, false, eligibleSlots)
-		character.ItemSwap.RegisterProc(30626, procAura)
 	})
 
 	// Darkmoon Card: Crusade
@@ -636,66 +575,19 @@ func init() {
 		})
 
 		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:               "Darkmoon Card: Wrath",
+			Name:               "Darkmoon Card: Vengeance",
 			ActionID:           core.ActionID{ItemID: 31858},
 			ProcMask:           core.ProcMaskDirect,
 			ProcChance:         0.1,
 			RequireDamageDealt: true,
 			Outcome:            core.OutcomeLanded,
 			Callback:           core.CallbackOnSpellHitTaken,
-			Handler: func(sim *core.Simulation, _ *core.Spell, result *core.SpellResult) {
-				spell.Cast(sim, result.Target)
+			Handler: func(sim *core.Simulation, triggeringSpell *core.Spell, _ *core.SpellResult) {
+				spell.Cast(sim, triggeringSpell.Unit)
 			},
 		})
 
 		character.ItemSwap.RegisterProc(31858, procAura)
-	})
-
-	// Blackened Naaru Sliver
-	core.NewItemEffect(34427, func(agent core.Agent) {
-		character := agent.GetCharacter()
-
-		aura := core.MakeStackingAura(character, core.StackingStatAura{
-			Aura: core.Aura{
-				Label:     "Combat Insight",
-				ActionID:  core.ActionID{SpellID: 45041},
-				Duration:  time.Second * 20,
-				MaxStacks: 10,
-			},
-			BonusPerStack: stats.Stats{stats.AttackPower: 44, stats.RangedAttackPower: 44},
-		})
-
-		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:            "Battle Trance",
-			MetricsActionID: core.ActionID{SpellID: 45040},
-			Duration:        time.Second * 20,
-			ProcMask:        core.ProcMaskMeleeOrRanged,
-			Outcome:         core.OutcomeLanded,
-			Callback:        core.CallbackOnSpellHitDealt,
-			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-				if aura.IsActive() {
-					aura.AddStack(sim)
-				}
-			},
-		})
-
-		triggerAura := character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:       "Blackened Naaru Sliver",
-			ActionID:   core.ActionID{ItemID: 34427},
-			ICD:        time.Second * 45,
-			ProcChance: 0.1,
-			ProcMask:   core.ProcMaskMeleeOrRanged,
-			Outcome:    core.OutcomeLanded,
-			Callback:   core.CallbackOnSpellHitDealt,
-			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-				aura.Activate(sim)
-				procAura.Activate(sim)
-			},
-		})
-
-		eligibleSlots := character.ItemSwap.EligibleSlotsForItem(34427)
-		character.AddStatProcBuff(45041, aura, false, eligibleSlots)
-		character.ItemSwap.RegisterProc(34427, triggerAura)
 	})
 
 	// Commendation of Kael'thas
@@ -829,35 +721,6 @@ func init() {
 		eligibleSlots := character.ItemSwap.EligibleSlotsForItem(28727)
 		character.AddStatProcBuff(35095, stackingAura, false, eligibleSlots)
 		character.ItemSwap.RegisterProc(28727, procAura)
-	})
-
-	// Memento of Tyrande
-	core.NewItemEffect(32496, func(agent core.Agent) {
-		character := agent.GetCharacter()
-
-		aura := character.NewTemporaryStatsAura(
-			"Wisdom",
-			core.ActionID{SpellID: 37656},
-			stats.Stats{stats.MP5: 76},
-			time.Second*15,
-		)
-
-		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:            "Memento of Tyrande",
-			Callback:        core.CallbackOnCastComplete,
-			ProcMask:        core.ProcMaskSpellDamage | core.ProcMaskSpellHealing,
-			MetricsActionID: core.ActionID{SpellID: 37655},
-			ProcChance:      0.1,
-			ICD:             time.Second * 50,
-
-			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-				aura.Activate(sim)
-			},
-		})
-
-		eligibleSlots := character.ItemSwap.EligibleSlotsForItem(32496)
-		character.AddStatProcBuff(37656, aura, false, eligibleSlots)
-		character.ItemSwap.RegisterProc(32496, procAura)
 	})
 
 	// Shifting Naaru Sliver
