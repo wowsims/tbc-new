@@ -1891,8 +1891,8 @@ dps_results: {
 dps_results: {
  key: "TestFeralBear-Average-Default"
  value: {
-  dps: 424.03279
-  tps: 653.2953
+  dps: 424.02737
+  tps: 653.28703
   dtps: 1081.30155
   hps: 74.86968
  }

@@ -5,7 +5,7 @@ import * as Mechanics from '../../core/constants/mechanics';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui';
 import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
-import { APLAction, APLListItem, APLRotation, APLRotation_Type as APLRotationType } from '../../core/proto/apl';
+import { APLAction, APLListItem, APLPrepullAction, APLRotation, APLRotation_Type as APLRotationType } from '../../core/proto/apl';
 import {
 	Cooldowns,
 	Debuffs,
@@ -200,6 +200,12 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralCatDruid, {
 		);
 
 		return APLRotation.create({
+			prepullActions: [
+				APLPrepullAction.create({
+					action: APLAction.fromJsonString('{"castSpell":{"spellId":{"spellId":31025,"tag":-1}}}'),
+					doAtValue: { value: { oneofKind: 'const', const: { val: '-5s' } } },
+				}),
+			],
 			priorityList: [APLListItem.create({ action: doRotation })],
 		});
 	},
