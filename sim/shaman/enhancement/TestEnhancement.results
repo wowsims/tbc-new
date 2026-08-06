@@ -165,6 +165,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestEnhancement-AllItems-BandoftheEternalDefender-29297"
+ value: {
+  dps: 1900.12842
+  tps: 1204.69188
+ }
+}
+dps_results: {
  key: "TestEnhancement-AllItems-BandoftheEternalRestorer-29309"
  value: {
   dps: 1907.00468
@@ -270,6 +277,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestEnhancement-AllItems-BlazefuryMedallion-17111"
+ value: {
+  dps: 1920.90019
+  tps: 1219.12952
+ }
+}
+dps_results: {
  key: "TestEnhancement-AllItems-BraidedEterniumChain-24114"
  value: {
   dps: 1919.48643
@@ -314,8 +328,8 @@ dps_results: {
 dps_results: {
  key: "TestEnhancement-AllItems-CircletofArcaneMight-24123"
  value: {
-  dps: 1841.19852
-  tps: 1163.689
+  dps: 1841.52325
+  tps: 1163.93557
  }
 }
 dps_results: {
@@ -350,7 +364,7 @@ dps_results: {
  key: "TestEnhancement-AllItems-CoronetofVerdantFlame-24122"
  value: {
   dps: 1840.27701
-  tps: 1162.92274
+  tps: 1162.88778
  }
 }
 dps_results: {
@@ -804,8 +818,8 @@ dps_results: {
 dps_results: {
  key: "TestEnhancement-AllItems-MasqueradeGown-28578"
  value: {
-  dps: 1872.80169
-  tps: 1182.341
+  dps: 1872.85674
+  tps: 1182.37261
  }
 }
 dps_results: {
@@ -1035,8 +1049,8 @@ dps_results: {
 dps_results: {
  key: "TestEnhancement-AllItems-SextantofUnstableCurrents-30626"
  value: {
-  dps: 1906.46616
-  tps: 1200.57621
+  dps: 1889.93669
+  tps: 1197.47169
  }
 }
 dps_results: {
@@ -1176,8 +1190,8 @@ dps_results: {
 dps_results: {
  key: "TestEnhancement-AllItems-TalismanofAscendance-22678"
  value: {
-  dps: 1893.24466
-  tps: 1196.02427
+  dps: 1890.98093
+  tps: 1197.87407
  }
 }
 dps_results: {
@@ -1216,6 +1230,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestEnhancement-AllItems-TheLionHornofStormwind-14557"
+ value: {
+  dps: 1886.35861
+  tps: 1195.58786
+ }
+}
+dps_results: {
  key: "TestEnhancement-AllItems-TheNightBlade-31331"
  value: {
   dps: 1938.34904
@@ -1248,6 +1269,13 @@ dps_results: {
  value: {
   dps: 1638.67091
   tps: 1003.80029
+ }
+}
+dps_results: {
+ key: "TestEnhancement-AllItems-Timbal'sFocusingCrystal-34470"
+ value: {
+  dps: 1906.94327
+  tps: 1206.91011
  }
 }
 dps_results: {
@@ -1381,6 +1409,13 @@ dps_results: {
  value: {
   dps: 1914.32751
   tps: 1198.81322
+ }
+}
+dps_results: {
+ key: "TestEnhancement-AllItems-ZandalarianHeroBadge-19948"
+ value: {
+  dps: 1886.35861
+  tps: 1195.58786
  }
 }
 dps_results: {

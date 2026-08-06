@@ -172,6 +172,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestShadowPriest-AllItems-BandoftheEternalDefender-29297"
+ value: {
+  dps: 1734.98754
+  tps: 896.84688
+ }
+}
+dps_results: {
  key: "TestShadowPriest-AllItems-BandoftheEternalRestorer-29309"
  value: {
   dps: 1755.17194
@@ -277,6 +284,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestShadowPriest-AllItems-BlazefuryMedallion-17111"
+ value: {
+  dps: 1737.99165
+  tps: 898.38061
+ }
+}
+dps_results: {
  key: "TestShadowPriest-AllItems-BloodlustBrooch-29383"
  value: {
   dps: 1706.12173
@@ -314,8 +328,8 @@ dps_results: {
 dps_results: {
  key: "TestShadowPriest-AllItems-CircletofArcaneMight-24123"
  value: {
-  dps: 1708.8813
-  tps: 883.36089
+  dps: 1708.98982
+  tps: 883.41827
  }
 }
 dps_results: {
@@ -741,8 +755,8 @@ dps_results: {
 dps_results: {
  key: "TestShadowPriest-AllItems-MasqueradeGown-28578"
  value: {
-  dps: 1726.88142
-  tps: 892.29771
+  dps: 1726.8709
+  tps: 892.28763
  }
 }
 dps_results: {
@@ -1057,8 +1071,8 @@ dps_results: {
 dps_results: {
  key: "TestShadowPriest-AllItems-TalismanofAscendance-22678"
  value: {
-  dps: 1716.25074
-  tps: 887.44347
+  dps: 1740.7966
+  tps: 899.67806
  }
 }
 dps_results: {
@@ -1090,6 +1104,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestShadowPriest-AllItems-TheLionHornofStormwind-14557"
+ value: {
+  dps: 1706.12173
+  tps: 882.39304
+ }
+}
+dps_results: {
  key: "TestShadowPriest-AllItems-TheNightBlade-31331"
  value: {
   dps: 1762.006
@@ -1108,6 +1129,13 @@ dps_results: {
  value: {
   dps: 1764.27703
   tps: 911.70002
+ }
+}
+dps_results: {
+ key: "TestShadowPriest-AllItems-Timbal'sFocusingCrystal-34470"
+ value: {
+  dps: 1772.00338
+  tps: 920.27426
  }
 }
 dps_results: {
@@ -1185,6 +1213,13 @@ dps_results: {
  value: {
   dps: 1729.50442
   tps: 893.93911
+ }
+}
+dps_results: {
+ key: "TestShadowPriest-AllItems-ZandalarianHeroBadge-19948"
+ value: {
+  dps: 1706.12173
+  tps: 882.39304
  }
 }
 dps_results: {
