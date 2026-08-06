@@ -683,6 +683,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestShadowPriest-AllItems-JadePendantofBlasting-20966"
+ value: {
+  dps: 1739.30895
+  tps: 900.92563
+ }
+}
+dps_results: {
  key: "TestShadowPriest-AllItems-JomGabbar-23570"
  value: {
   dps: 1700.99692

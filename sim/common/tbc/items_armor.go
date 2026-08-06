@@ -36,9 +36,10 @@ func init() {
 		character.ItemSwap.RegisterProc(32375, procAura)
 	})
 
-	registerJewelCraftingNecklace(24116, core.EyeOfTheNightAura)
-	registerJewelCraftingNecklace(24121, core.ChainOfTheTwilightOwlAura)
-	registerJewelCraftingNecklace(24114, core.BraidedEterniumChainAura)
+	registerJewelCraftingNecklace(24116, time.Hour, core.EyeOfTheNightAura)
+	registerJewelCraftingNecklace(24121, time.Hour, core.ChainOfTheTwilightOwlAura)
+	registerJewelCraftingNecklace(24114, time.Hour, core.BraidedEterniumChainAura)
+	registerJewelCraftingNecklace(20966, time.Millisecond*1500, core.JadePendantOfBlastingAura)
 
 	// Pendants of [School] — on-use absorb shields. Each rolls a random absorb
 	// amount (900..2700) of the given school, lasts 5 minutes, and has a 1 hour
@@ -52,7 +53,7 @@ func init() {
 
 // registerJewelCraftingNecklace registers a Jewelcrafting necklace that temporarily
 // applies its party aura when used.
-func registerJewelCraftingNecklace(itemID int32, auraFactory func(*core.Character, int32) *core.Aura) {
+func registerJewelCraftingNecklace(itemID int32, cooldown time.Duration, auraFactory func(*core.Character, int32) *core.Aura) {
 	core.NewItemEffect(itemID, func(agent core.Agent) {
 		character := agent.GetCharacter()
 
@@ -65,7 +66,7 @@ func registerJewelCraftingNecklace(itemID int32, auraFactory func(*core.Characte
 				DefaultCast: core.Cast{NonEmpty: true},
 				CD: core.Cooldown{
 					Timer:    character.NewTimer(),
-					Duration: core.NecklaceBuffCooldown,
+					Duration: cooldown,
 				},
 			},
 

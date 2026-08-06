@@ -85,6 +85,7 @@ var ItemAllowList = map[int32]struct{}{
 	11815:  {}, // Hand of Justice
 	18168:  {}, // Force Reactive Disk
 	19337:  {}, // The Black Book
+	20966:  {}, // Jade Pendant of Blasting
 	32649:  {}, // Medallion of Karabor (ItemClass "Quest" in game files)
 	32757:  {}, // Blessed Medallion of Karabor (ItemClass "Quest" in game files)
 	186071: {}, // Communal Totem of Lightning
@@ -152,6 +153,60 @@ var ItemDenyList = map[int32]struct{}{
 	279239: {}, // Shroud of Winter's Chill (ilvl 115)
 	279241: {}, // Shroud of Winter's Chill (ilvl 141)
 	279242: {}, // Shroud of Winter's Chill (ilvl 154)
+
+	// TBC - Brewfest - Old items
+	// NOTE: Enable the correct ilvl once the holiday comes around
+	281726: {}, // Dark Iron Smoking Pipe (ilvl 115)
+	281734: {}, // Dark Iron Smoking Pipe (ilvl 128)
+	281735: {}, // Dark Iron Smoking Pipe (ilvl 141)
+	281736: {}, // Dark Iron Smoking Pipe (ilvl 154)
+	281737: {}, // Empty Mug of Direbrew (ilvl 115)
+	281738: {}, // Empty Mug of Direbrew (ilvl 128)
+	281739: {}, // Empty Mug of Direbrew (ilvl 141)
+	281740: {}, // Empty Mug of Direbrew (ilvl 154)
+	281741: {}, // Coren's Lucky Coin (ilvl 115)
+	281742: {}, // Coren's Lucky Coin (ilvl 128)
+	281743: {}, // Coren's Lucky Coin (ilvl 141)
+	281744: {}, // Coren's Lucky Coin (ilvl 154)
+	281745: {}, // Direbrew Hops (ilvl 115)
+	281747: {}, // Direbrew Hops (ilvl 128)
+	281748: {}, // Direbrew Hops (ilvl 141)
+	281749: {}, // Direbrew Hops (ilvl 154)
+	281892: {}, // Balebrew Charm (ilvl 128)
+	281893: {}, // Balebrew Charm (ilvl 141)
+	281894: {}, // Brightbrew Charm (ilvl 128)
+	281895: {}, // Brightbrew Charm (ilvl 141)
+	281897: {}, // Brightbrew Charm (ilvl 154)
+	281898: {}, // Brightbrew Charm (ilvl 115)
+	281899: {}, // Balebrew Charm (ilvl 154)
+	281900: {}, // Balebrew Charm (ilvl 115)
+	281901: {}, // Direbrew's Shanker (ilvl 115)
+	281902: {}, // Direbrew's Shanker (ilvl 128)
+	281903: {}, // Direbrew's Shanker (ilvl 141)
+	281904: {}, // Direbrew's Shanker (ilvl 154)
+
+	// TBC - Hallows End - Old items
+	// NOTE: Enable the correct ilvl once the holiday comes around
+	281905: {}, // Ring of Ghoulish Delight (ilvl 115)
+	281906: {}, // Ring of Ghoulish Delight (ilvl 128)
+	281907: {}, // Ring of Ghoulish Delight (ilvl 141)
+	281908: {}, // Ring of Ghoulish Delight (ilvl 154)
+	281909: {}, // The Horseman's Signet Ring (ilvl 115)
+	281910: {}, // The Horseman's Signet Ring (ilvl 128)
+	281911: {}, // The Horseman's Signet Ring (ilvl 141)
+	281912: {}, // The Horseman's Signet Ring (ilvl 154)
+	281913: {}, // Witches Band (ilvl 115)
+	281914: {}, // Witches Band (ilvl 128)
+	281915: {}, // Witches Band (ilvl 141)
+	281916: {}, // Witches Band (ilvl 154)
+	281917: {}, // The Horseman's Helm (ilvl 115)
+	281918: {}, // The Horseman's Helm (ilvl 128)
+	281919: {}, // The Horseman's Helm (ilvl 141)
+	281920: {}, // The Horseman's Helm (ilvl 154)
+	281921: {}, // The Horseman's Blade (ilvl 115)
+	281922: {}, // The Horseman's Blade (ilvl 128)
+	281923: {}, // The Horseman's Blade (ilvl 141)
+	281924: {}, // The Horseman's Blade (ilvl 154)
 }
 
 // Item icons to include in the DB, so they don't need to be separately loaded in the UI.

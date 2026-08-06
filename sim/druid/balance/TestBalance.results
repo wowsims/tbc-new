@@ -396,6 +396,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestBalance-AllItems-JadePendantofBlasting-20966"
+ value: {
+  dps: 1391.11585
+  tps: 933.57978
+ }
+}
+dps_results: {
  key: "TestBalance-AllItems-JomGabbar-23570"
  value: {
   dps: 1423.65549

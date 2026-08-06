@@ -669,6 +669,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestArcane-AllItems-JadePendantofBlasting-20966"
+ value: {
+  dps: 1870.32072
+  tps: 905.04909
+ }
+}
+dps_results: {
  key: "TestArcane-AllItems-JomGabbar-23570"
  value: {
   dps: 1889.61738

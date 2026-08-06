@@ -789,6 +789,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestDpsWarrior-AllItems-JadePendantofBlasting-20966"
+ value: {
+  dps: 2077.52623
+  tps: 1099.26926
+  dtps: 7.08808
+ }
+}
+dps_results: {
  key: "TestDpsWarrior-AllItems-JomGabbar-23570"
  value: {
   dps: 2043.58262

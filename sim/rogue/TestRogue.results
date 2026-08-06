@@ -711,6 +711,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRogue-AllItems-JadePendantofBlasting-20966"
+ value: {
+  dps: 1846.65555
+  tps: 917.78781
+ }
+}
+dps_results: {
  key: "TestRogue-AllItems-JomGabbar-23570"
  value: {
   dps: 1847.08666
