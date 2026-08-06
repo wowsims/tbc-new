@@ -165,14 +165,6 @@ dps_results: {
  }
 }
 dps_results: {
- key: "TestRetribution-AllItems-BandoftheEternalDefender-29297"
- value: {
-  dps: 1885.65944
-  tps: 1047.13339
-  dtps: 13.96558
- }
-}
-dps_results: {
  key: "TestRetribution-AllItems-BandoftheEternalRestorer-29309"
  value: {
   dps: 1888.74244
@@ -290,14 +282,6 @@ dps_results: {
   dps: 1855.80039
   tps: 1031.91609
   dtps: 14.34107
- }
-}
-dps_results: {
- key: "TestRetribution-AllItems-BlazefuryMedallion-17111"
- value: {
-  dps: 1882.13559
-  tps: 1045.84801
-  dtps: 13.84217
  }
 }
 dps_results: {
@@ -1320,8 +1304,8 @@ dps_results: {
 dps_results: {
  key: "TestRetribution-AllItems-SextantofUnstableCurrents-30626"
  value: {
-  dps: 1826.15832
-  tps: 1015.59825
+  dps: 1834.09033
+  tps: 1019.48493
   dtps: 14.34107
  }
 }
@@ -1449,8 +1433,8 @@ dps_results: {
 dps_results: {
  key: "TestRetribution-AllItems-TalismanofAscendance-22678"
  value: {
-  dps: 1831.47651
-  tps: 1018.18289
+  dps: 1828.08098
+  tps: 1016.54035
   dtps: 14.34107
  }
 }
@@ -1487,14 +1471,6 @@ dps_results: {
  }
 }
 dps_results: {
- key: "TestRetribution-AllItems-TheLionHornofStormwind-14557"
- value: {
-  dps: 1826.15832
-  tps: 1015.59825
-  dtps: 14.34107
- }
-}
-dps_results: {
  key: "TestRetribution-AllItems-TheRestrainedEssenceofSapphiron-23046"
  value: {
   dps: 1836.08129
@@ -1516,14 +1492,6 @@ dps_results: {
   dps: 1713.88949
   tps: 953.23223
   dtps: 14.238
- }
-}
-dps_results: {
- key: "TestRetribution-AllItems-Timbal'sFocusingCrystal-34470"
- value: {
-  dps: 1832.32552
-  tps: 1018.62018
-  dtps: 14.34107
  }
 }
 dps_results: {
@@ -1651,14 +1619,6 @@ dps_results: {
  value: {
   dps: 1829.81611
   tps: 1017.387
-  dtps: 14.34107
- }
-}
-dps_results: {
- key: "TestRetribution-AllItems-ZandalarianHeroBadge-19948"
- value: {
-  dps: 1826.15832
-  tps: 1015.59825
   dtps: 14.34107
  }
 }

@@ -158,13 +158,6 @@ dps_results: {
  }
 }
 dps_results: {
- key: "TestAffliction-AllItems-BandoftheEternalDefender-29297"
- value: {
-  dps: 1913.23949
-  tps: 852.48631
- }
-}
-dps_results: {
  key: "TestAffliction-AllItems-BandoftheEternalRestorer-29309"
  value: {
   dps: 1949.22842
@@ -277,13 +270,6 @@ dps_results: {
  }
 }
 dps_results: {
- key: "TestAffliction-AllItems-BlazefuryMedallion-17111"
- value: {
-  dps: 1915.77199
-  tps: 853.66742
- }
-}
-dps_results: {
  key: "TestAffliction-AllItems-Blinkstrike-31332"
  value: {
   dps: 1945.76237
@@ -328,8 +314,8 @@ dps_results: {
 dps_results: {
  key: "TestAffliction-AllItems-CircletofArcaneMight-24123"
  value: {
-  dps: 1817.29976
-  tps: 794.77862
+  dps: 1819.55124
+  tps: 796.25185
  }
 }
 dps_results: {
@@ -356,8 +342,8 @@ dps_results: {
 dps_results: {
  key: "TestAffliction-AllItems-CoronetofVerdantFlame-24122"
  value: {
-  dps: 1792.41937
-  tps: 780.61123
+  dps: 1793.16779
+  tps: 781.36669
  }
 }
 dps_results: {
@@ -519,13 +505,6 @@ dps_results: {
  value: {
   dps: 1937.54283
   tps: 866.95909
- }
-}
-dps_results: {
- key: "TestAffliction-AllItems-FieryRetributer-19968"
- value: {
-  dps: 1945.76237
-  tps: 870.02966
  }
 }
 dps_results: {
@@ -769,8 +748,8 @@ dps_results: {
 dps_results: {
  key: "TestAffliction-AllItems-MasqueradeGown-28578"
  value: {
-  dps: 1904.537
-  tps: 850.07543
+  dps: 1904.47264
+  tps: 850.01794
  }
 }
 dps_results: {
@@ -1085,8 +1064,8 @@ dps_results: {
 dps_results: {
  key: "TestAffliction-AllItems-TalismanofAscendance-22678"
  value: {
-  dps: 1959.20108
-  tps: 872.34099
+  dps: 1940.86479
+  tps: 866.20091
  }
 }
 dps_results: {
@@ -1125,13 +1104,6 @@ dps_results: {
  }
 }
 dps_results: {
- key: "TestAffliction-AllItems-TheLionHornofStormwind-14557"
- value: {
-  dps: 1924.09839
-  tps: 857.25527
- }
-}
-dps_results: {
  key: "TestAffliction-AllItems-TheNightBlade-31331"
  value: {
   dps: 1945.76237
@@ -1164,13 +1136,6 @@ dps_results: {
  value: {
   dps: 1945.76237
   tps: 870.02966
- }
-}
-dps_results: {
- key: "TestAffliction-AllItems-Timbal'sFocusingCrystal-34470"
- value: {
-  dps: 1983.42181
-  tps: 891.60229
  }
 }
 dps_results: {
@@ -1262,13 +1227,6 @@ dps_results: {
  value: {
   dps: 1966.75803
   tps: 880.20477
- }
-}
-dps_results: {
- key: "TestAffliction-AllItems-ZandalarianHeroBadge-19948"
- value: {
-  dps: 1924.09839
-  tps: 857.25527
  }
 }
 dps_results: {

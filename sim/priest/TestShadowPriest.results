@@ -172,13 +172,6 @@ dps_results: {
  }
 }
 dps_results: {
- key: "TestShadowPriest-AllItems-BandoftheEternalDefender-29297"
- value: {
-  dps: 1729.86239
-  tps: 896.71331
- }
-}
-dps_results: {
  key: "TestShadowPriest-AllItems-BandoftheEternalRestorer-29309"
  value: {
   dps: 1755.17194
@@ -281,13 +274,6 @@ dps_results: {
  value: {
   dps: 1706.12173
   tps: 882.39304
- }
-}
-dps_results: {
- key: "TestShadowPriest-AllItems-BlazefuryMedallion-17111"
- value: {
-  dps: 1732.86591
-  tps: 898.24582
  }
 }
 dps_results: {
@@ -1104,13 +1090,6 @@ dps_results: {
  }
 }
 dps_results: {
- key: "TestShadowPriest-AllItems-TheLionHornofStormwind-14557"
- value: {
-  dps: 1700.99692
-  tps: 882.26897
- }
-}
-dps_results: {
  key: "TestShadowPriest-AllItems-TheNightBlade-31331"
  value: {
   dps: 1762.006
@@ -1129,13 +1108,6 @@ dps_results: {
  value: {
   dps: 1764.27703
   tps: 911.70002
- }
-}
-dps_results: {
- key: "TestShadowPriest-AllItems-Timbal'sFocusingCrystal-34470"
- value: {
-  dps: 1766.84944
-  tps: 920.12796
  }
 }
 dps_results: {
@@ -1213,13 +1185,6 @@ dps_results: {
  value: {
   dps: 1729.50442
   tps: 893.93911
- }
-}
-dps_results: {
- key: "TestShadowPriest-AllItems-ZandalarianHeroBadge-19948"
- value: {
-  dps: 1700.99692
-  tps: 882.26897
  }
 }
 dps_results: {

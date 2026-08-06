@@ -53,20 +53,6 @@ character_stats_results: {
  }
 }
 dps_results: {
- key: "TestBalance-AllItems-AbacusofViolentOdds-28288"
- value: {
-  dps: 1450.6638
-  tps: 975.76264
- }
-}
-dps_results: {
- key: "TestBalance-AllItems-AdamantineFigurine-27891"
- value: {
-  dps: 1450.6638
-  tps: 975.76264
- }
-}
-dps_results: {
  key: "TestBalance-AllItems-AdamantiteScope-2722"
  value: {
   dps: 1450.90432
@@ -784,22 +770,22 @@ dps_results: {
 dps_results: {
  key: "TestBalance-Settings-NightElf-p1_a-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
  value: {
-  dps: 767.02313
-  tps: 737.87003
+  dps: 722.22706
+  tps: 692.96396
  }
 }
 dps_results: {
  key: "TestBalance-Settings-NightElf-p1_a-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
  value: {
-  dps: 467.3776
-  tps: 423.99783
+  dps: 465.27683
+  tps: 422.08039
  }
 }
 dps_results: {
  key: "TestBalance-Settings-NightElf-p1_a-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
  value: {
-  dps: 958.08783
-  tps: 819.96852
+  dps: 930.38669
+  tps: 792.06738
  }
 }
 dps_results: {
@@ -826,22 +812,22 @@ dps_results: {
 dps_results: {
  key: "TestBalance-Settings-NightElf-p2_a-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
  value: {
-  dps: 866.15183
-  tps: 821.32294
+  dps: 808.66001
+  tps: 763.90446
  }
 }
 dps_results: {
  key: "TestBalance-Settings-NightElf-p2_a-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
  value: {
-  dps: 531.46296
-  tps: 486.70741
+  dps: 536.1651
+  tps: 491.55621
  }
 }
 dps_results: {
  key: "TestBalance-Settings-NightElf-p2_a-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
  value: {
-  dps: 1015.64002
-  tps: 874.11336
+  dps: 983.94881
+  tps: 842.42215
  }
 }
 dps_results: {
@@ -868,22 +854,22 @@ dps_results: {
 dps_results: {
  key: "TestBalance-Settings-NightElf-p3-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
  value: {
-  dps: 1383.39764
-  tps: 1338.12351
+  dps: 1085.3405
+  tps: 1040.17777
  }
 }
 dps_results: {
  key: "TestBalance-Settings-NightElf-p3-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
  value: {
-  dps: 686.59034
-  tps: 641.79287
+  dps: 688.12461
+  tps: 643.10854
  }
 }
 dps_results: {
  key: "TestBalance-Settings-NightElf-p3-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
  value: {
-  dps: 1151.84456
-  tps: 1009.42217
+  dps: 1112.67417
+  tps: 970.36598
  }
 }
 dps_results: {
@@ -910,22 +896,22 @@ dps_results: {
 dps_results: {
  key: "TestBalance-Settings-NightElf-p4-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
  value: {
-  dps: 1437.95329
-  tps: 1392.65446
+  dps: 1386.62542
+  tps: 1341.28993
  }
 }
 dps_results: {
  key: "TestBalance-Settings-NightElf-p4-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
  value: {
-  dps: 713.52606
-  tps: 668.52056
+  dps: 699.12253
+  tps: 654.11703
  }
 }
 dps_results: {
  key: "TestBalance-Settings-NightElf-p4-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
  value: {
-  dps: 1177.09529
-  tps: 1034.4888
+  dps: 1122.75661
+  tps: 980.15012
  }
 }
 dps_results: {
@@ -952,22 +938,22 @@ dps_results: {
 dps_results: {
  key: "TestBalance-Settings-NightElf-p5-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
  value: {
-  dps: 1512.62402
-  tps: 1467.00589
+  dps: 1657.25457
+  tps: 1611.56311
  }
 }
 dps_results: {
  key: "TestBalance-Settings-NightElf-p5-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
  value: {
-  dps: 791.35658
-  tps: 746.14179
+  dps: 800.16895
+  tps: 755.06416
  }
 }
 dps_results: {
  key: "TestBalance-Settings-NightElf-p5-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
  value: {
-  dps: 1355.36248
-  tps: 1211.68809
+  dps: 1331.81308
+  tps: 1188.1387
  }
 }
 dps_results: {
@@ -994,22 +980,22 @@ dps_results: {
 dps_results: {
  key: "TestBalance-Settings-Tauren-p1_a-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
  value: {
-  dps: 764.15633
-  tps: 734.89661
+  dps: 718.95187
+  tps: 689.32216
  }
 }
 dps_results: {
  key: "TestBalance-Settings-Tauren-p1_a-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
  value: {
-  dps: 466.43877
-  tps: 423.17239
+  dps: 464.73131
+  tps: 421.46494
  }
 }
 dps_results: {
  key: "TestBalance-Settings-Tauren-p1_a-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
  value: {
-  dps: 957.00484
-  tps: 818.84571
+  dps: 929.7809
+  tps: 791.47176
  }
 }
 dps_results: {
@@ -1036,22 +1022,22 @@ dps_results: {
 dps_results: {
  key: "TestBalance-Settings-Tauren-p2_a-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
  value: {
-  dps: 863.69389
-  tps: 818.83099
+  dps: 806.9906
+  tps: 762.2377
  }
 }
 dps_results: {
  key: "TestBalance-Settings-Tauren-p2_a-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
  value: {
-  dps: 529.69883
-  tps: 484.9826
+  dps: 534.67247
+  tps: 489.95623
  }
 }
 dps_results: {
  key: "TestBalance-Settings-Tauren-p2_a-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
  value: {
-  dps: 1015.11863
-  tps: 873.59992
+  dps: 983.42986
+  tps: 841.91116
  }
 }
 dps_results: {
@@ -1078,22 +1064,22 @@ dps_results: {
 dps_results: {
  key: "TestBalance-Settings-Tauren-p3-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
  value: {
-  dps: 1379.4924
-  tps: 1334.25758
+  dps: 1077.46483
+  tps: 1032.26809
  }
 }
 dps_results: {
  key: "TestBalance-Settings-Tauren-p3-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
  value: {
-  dps: 689.34304
-  tps: 644.54823
+  dps: 691.00655
+  tps: 646.13981
  }
 }
 dps_results: {
  key: "TestBalance-Settings-Tauren-p3-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
  value: {
-  dps: 1151.27725
-  tps: 1008.86281
+  dps: 1110.2162
+  tps: 967.91596
  }
 }
 dps_results: {
@@ -1120,22 +1106,22 @@ dps_results: {
 dps_results: {
  key: "TestBalance-Settings-Tauren-p4-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
  value: {
-  dps: 1399.41545
-  tps: 1354.15594
+  dps: 1326.54843
+  tps: 1281.21559
  }
 }
 dps_results: {
  key: "TestBalance-Settings-Tauren-p4-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
  value: {
-  dps: 711.2712
-  tps: 666.48836
+  dps: 692.86062
+  tps: 647.52777
  }
 }
 dps_results: {
  key: "TestBalance-Settings-Tauren-p4-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
  value: {
-  dps: 1176.5212
-  tps: 1033.92266
+  dps: 1122.19166
+  tps: 979.59312
  }
 }
 dps_results: {
@@ -1162,22 +1148,22 @@ dps_results: {
 dps_results: {
  key: "TestBalance-Settings-Tauren-p5-Standard-default-NoBuffs-0.0yards-LongMultiTarget"
  value: {
-  dps: 1511.93565
-  tps: 1466.35684
+  dps: 1637.01774
+  tps: 1591.3656
  }
 }
 dps_results: {
  key: "TestBalance-Settings-Tauren-p5-Standard-default-NoBuffs-0.0yards-LongSingleTarget"
  value: {
-  dps: 784.25909
-  tps: 739.19362
+  dps: 792.4837
+  tps: 747.19822
  }
 }
 dps_results: {
  key: "TestBalance-Settings-Tauren-p5-Standard-default-NoBuffs-0.0yards-ShortSingleTarget"
  value: {
-  dps: 1352.2416
-  tps: 1208.57518
+  dps: 1331.20854
+  tps: 1187.54211
  }
 }
 dps_results: {

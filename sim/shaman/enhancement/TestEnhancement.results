@@ -165,13 +165,6 @@ dps_results: {
  }
 }
 dps_results: {
- key: "TestEnhancement-AllItems-BandoftheEternalDefender-29297"
- value: {
-  dps: 1899.80342
-  tps: 1204.69188
- }
-}
-dps_results: {
  key: "TestEnhancement-AllItems-BandoftheEternalRestorer-29309"
  value: {
   dps: 1907.00468
@@ -274,13 +267,6 @@ dps_results: {
  value: {
   dps: 1916.77468
   tps: 1216.07899
- }
-}
-dps_results: {
- key: "TestEnhancement-AllItems-BlazefuryMedallion-17111"
- value: {
-  dps: 1920.57435
-  tps: 1219.12898
  }
 }
 dps_results: {
@@ -1230,13 +1216,6 @@ dps_results: {
  }
 }
 dps_results: {
- key: "TestEnhancement-AllItems-TheLionHornofStormwind-14557"
- value: {
-  dps: 1886.03435
-  tps: 1195.58786
- }
-}
-dps_results: {
  key: "TestEnhancement-AllItems-TheNightBlade-31331"
  value: {
   dps: 1938.34904
@@ -1269,13 +1248,6 @@ dps_results: {
  value: {
   dps: 1638.67091
   tps: 1003.80029
- }
-}
-dps_results: {
- key: "TestEnhancement-AllItems-Timbal'sFocusingCrystal-34470"
- value: {
-  dps: 1906.61546
-  tps: 1206.91011
  }
 }
 dps_results: {
@@ -1409,13 +1381,6 @@ dps_results: {
  value: {
   dps: 1914.32751
   tps: 1198.81322
- }
-}
-dps_results: {
- key: "TestEnhancement-AllItems-ZandalarianHeroBadge-19948"
- value: {
-  dps: 1886.03435
-  tps: 1195.58786
  }
 }
 dps_results: {

@@ -158,13 +158,6 @@ dps_results: {
  }
 }
 dps_results: {
- key: "TestRogue-AllItems-BandoftheEternalDefender-29297"
- value: {
-  dps: 1838.83017
-  tps: 913.89859
- }
-}
-dps_results: {
  key: "TestRogue-AllItems-BandoftheEternalRestorer-29309"
  value: {
   dps: 1835.79629
@@ -274,13 +267,6 @@ dps_results: {
  value: {
   dps: 1627.11694
   tps: 808.67712
- }
-}
-dps_results: {
- key: "TestRogue-AllItems-BlazefuryMedallion-17111"
- value: {
-  dps: 1860.31285
-  tps: 924.57549
  }
 }
 dps_results: {
@@ -554,13 +540,6 @@ dps_results: {
  value: {
   dps: 1749.36989
   tps: 869.43684
- }
-}
-dps_results: {
- key: "TestRogue-AllItems-FieryRetributer-19968"
- value: {
-  dps: 1866.96508
-  tps: 927.88165
  }
 }
 dps_results: {
@@ -1181,13 +1160,6 @@ dps_results: {
  }
 }
 dps_results: {
- key: "TestRogue-AllItems-TheLionHornofStormwind-14557"
- value: {
-  dps: 1816.45939
-  tps: 902.78032
- }
-}
-dps_results: {
  key: "TestRogue-AllItems-TheNightBlade-31331"
  value: {
   dps: 1864.44187
@@ -1227,13 +1199,6 @@ dps_results: {
  value: {
   dps: 1864.44187
   tps: 926.62761
- }
-}
-dps_results: {
- key: "TestRogue-AllItems-Timbal'sFocusingCrystal-34470"
- value: {
-  dps: 1816.45939
-  tps: 902.78032
  }
 }
 dps_results: {
@@ -1332,13 +1297,6 @@ dps_results: {
  value: {
   dps: 1813.79507
   tps: 901.45615
- }
-}
-dps_results: {
- key: "TestRogue-AllItems-ZandalarianHeroBadge-19948"
- value: {
-  dps: 1816.45939
-  tps: 902.78032
  }
 }
 dps_results: {
