@@ -344,10 +344,6 @@ export class ActionId {
 			case 'Curse of Recklessness':
 			case 'Improved Seal of the Crusader':
 			case 'Unleashed Rage':
-			case 'Braided Eternium Chain':
-			case 'Chain of the Twilight Owl':
-			case 'Eye of the Night':
-			case 'Jade Pendant of Blasting':
 				if (tag === -1) {
 					name += ' (External)';
 				} else {

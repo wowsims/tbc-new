@@ -1,8 +1,6 @@
 {
       "type": "TypeAPL",
       "prepullActions": [
-        {"action":{"castSpell":{"spellId":{"spellId":31033,"tag":-1}}},"doAtValue":{"const":{"val":"-5s"}}},
-        {"action":{"castSpell":{"spellId":{"spellId":31035,"tag":-1}}},"doAtValue":{"const":{"val":"-5s"}}},
         {"action":{"castSpell":{"spellId":{"itemId":29370}}},"doAtValue":{"const":{"val":"-1s"}}},
         {"action":{"castSpell":{"spellId":{"spellId":33697}}},"doAtValue":{"const":{"val":"-1s"}}}
       ],

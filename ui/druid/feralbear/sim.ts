@@ -3,7 +3,7 @@ import * as Mechanics from '../../core/constants/mechanics.js';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui.js';
 import { Player } from '../../core/player.js';
 import { PlayerClasses } from '../../core/player_classes';
-import { APLAction, APLListItem, APLPrepullAction, APLRotation, APLRotation_Type as APLRotationType } from '../../core/proto/apl.js';
+import { APLAction, APLListItem, APLRotation, APLRotation_Type as APLRotationType } from '../../core/proto/apl.js';
 import { Cooldowns, Debuffs, Drums, Faction, IndividualBuffs, ItemSlot, PartyBuffs, PseudoStat, Race, RaidBuffs, Spec, Stat, TristateEffect } from '../../core/proto/common.js';
 import { defaultExposeWeaknessSettings } from '../../core/proto_utils/utils.js';
 import { FeralBearDruid_Rotation as DruidRotation } from '../../core/proto/druid.js';
@@ -194,12 +194,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralBearDruid, {
 			`{"bearOptimalRotationAction":{"maintainFaerieFire":${simple.maintainFaerieFire},"maintainDemoralizingRoar":${simple.maintainDemoralizingRoar},"maulRageThreshold":${simple.maulRageThreshold},"swipeUsage":${simple.swipeUsage},"swipeApThreshold":${simple.swipeApThreshold}}}`,
 		);
 		return APLRotation.create({
-			prepullActions: [
-				APLPrepullAction.create({
-					action: APLAction.fromJsonString('{"castSpell":{"spellId":{"spellId":31025,"tag":-1}}}'),
-					doAtValue: { value: { oneofKind: 'const', const: { val: '-5s' } } },
-				}),
-			],
 			priorityList: [APLListItem.create({ action: doRotation })],
 		});
 	},

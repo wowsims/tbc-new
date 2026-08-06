@@ -1079,15 +1079,6 @@ dps_results: {
  }
 }
 dps_results: {
- key: "TestFeralBear-AllItems-JadePendantofBlasting-20966"
- value: {
-  dps: 410.11519
-  tps: 633.59758
-  dtps: 1136.89636
-  hps: 72.23667
- }
-}
-dps_results: {
  key: "TestFeralBear-AllItems-JomGabbar-23570"
  value: {
   dps: 418.45366
@@ -1945,8 +1936,8 @@ dps_results: {
 dps_results: {
  key: "TestFeralBear-Average-Default"
  value: {
-  dps: 424.02737
-  tps: 653.28703
+  dps: 424.03279
+  tps: 653.2953
   dtps: 1081.30155
   hps: 74.86968
  }

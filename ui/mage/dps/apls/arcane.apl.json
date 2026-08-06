@@ -1,8 +1,6 @@
 {
 	"type": "TypeAPL",
 	"prepullActions": [
-		{"action":{"castSpell":{"spellId":{"spellId":25607,"tag":-1}}},"doAtValue":{"const":{"val":"-5s"}}},
-		{"action":{"castSpell":{"spellId":{"spellId":31033,"tag":-1}}},"doAtValue":{"const":{"val":"-5s"}}},
 		{"action":{"castSpell":{"spellId":{"spellId":30451}}},"doAtValue":{"const":{"val":"-2.5s"}}}
 	],
 	"priorityList": [
