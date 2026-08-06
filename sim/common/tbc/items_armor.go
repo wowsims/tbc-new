@@ -62,6 +62,7 @@ func registerJewelCraftingNecklace(itemID int32, auraFactory func(*core.Characte
 			ProcMask:    core.ProcMaskEmpty,
 
 			Cast: core.CastConfig{
+				DefaultCast: core.Cast{NonEmpty: true},
 				CD: core.Cooldown{
 					Timer:    character.NewTimer(),
 					Duration: core.NecklaceBuffCooldown,

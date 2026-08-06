@@ -1929,6 +1929,7 @@ func registerExternalConsecutiveCDApproximation(char *Character, config external
 		Flags:    SpellFlagAPL | SpellFlagNoOnCastComplete | SpellFlagNoMetrics | SpellFlagNoLogs,
 
 		Cast: CastConfig{
+			DefaultCast: Cast{NonEmpty: true},
 			CD: Cooldown{
 				Timer:    sharedTimer,
 				Duration: config.AuraDuration, // Assumes that multiple buffs are different sources.
