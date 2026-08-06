@@ -1,6 +1,7 @@
 {
 	"type": "TypeAPL",
 	"prepullActions": [
+	{"action":{"castSpell":{"spellId":{"spellId":31025,"tag":-1}}},"doAtValue":{"const":{"val":"-5s"}}},
 	{"action":{"castSpell":{"spellId":{"spellId":2687}}},"doAtValue":{"const":{"val":"-1.5s"}}},
 	{"action":{"castSpell":{"spellId":{"spellId":469}}},"doAtValue":{"const":{"val":"-1.5s"}}},
 	{"action":{"castSpell":{"spellId":{"otherId":"OtherActionPotion"}}},"doAtValue":{"const":{"val":"-1.5s"}}}

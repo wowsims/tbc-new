@@ -343,8 +343,8 @@ dps_results: {
 dps_results: {
  key: "TestHunter-AllItems-BlazefuryMedallion-17111"
  value: {
-  dps: 3510.93698
-  tps: 1737.61955
+  dps: 3510.93616
+  tps: 1737.61898
   dtps: 13.01133
  }
 }
@@ -703,8 +703,8 @@ dps_results: {
 dps_results: {
  key: "TestHunter-AllItems-FieryRetributer-19968"
  value: {
-  dps: 3517.93987
-  tps: 1739.67321
+  dps: 3517.93905
+  tps: 1739.67264
   dtps: 14.02958
  }
 }
@@ -938,6 +938,14 @@ dps_results: {
   dps: 3576.46982
   tps: 1777.0897
   dtps: 13.2517
+ }
+}
+dps_results: {
+ key: "TestHunter-AllItems-JadePendantofBlasting-20966"
+ value: {
+  dps: 3495.5167
+  tps: 1728.27466
+  dtps: 13.2423
  }
 }
 dps_results: {

@@ -143,6 +143,33 @@ var FullDebuffs = &proto.Debuffs{
 	HemorrhageUptime: 1,
 }
 
+// ExternalJewelcraftingNecklacePrepullActions returns the external necklace
+// uses expected by tests that run with FullPartyBuffs.
+func ExternalJewelcraftingNecklacePrepullActions() []*proto.APLPrepullAction {
+	const prepullTime = "-5s"
+	necklaceSpellIDs := []int32{31025, 31033, 31035, 25607}
+	actions := make([]*proto.APLPrepullAction, 0, len(necklaceSpellIDs))
+
+	for _, spellID := range necklaceSpellIDs {
+		actions = append(actions, &proto.APLPrepullAction{
+			Action: &proto.APLAction{
+				Action: &proto.APLAction_CastSpell{
+					CastSpell: &proto.APLActionCastSpell{
+						SpellId: ActionID{SpellID: spellID, Tag: -1}.ToProto(),
+					},
+				},
+			},
+			DoAtValue: &proto.APLValue{
+				Value: &proto.APLValue_Const{
+					Const: &proto.APLValueConst{Val: prepullTime},
+				},
+			},
+		})
+	}
+
+	return actions
+}
+
 func NewDefaultTarget() *proto.Target {
 	return DefaultTargetProto // seems to be read-only
 }

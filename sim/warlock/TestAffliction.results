@@ -690,6 +690,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestAffliction-AllItems-JadePendantofBlasting-20966"
+ value: {
+  dps: 1928.86405
+  tps: 861.47961
+ }
+}
+dps_results: {
  key: "TestAffliction-AllItems-JomGabbar-23570"
  value: {
   dps: 1924.09839

@@ -7083,17 +7083,6 @@ func RegisterAllProcs() {
 		{ItemID: 31336, ItemName: "Blade of Wizardry"},
 	})
 
-	// When struck in combat has a 2% chance of increasing your Armor by 2000 for 10 secs.
-	// https://www.wowhead.com/tbc/spell=40408
-	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-		Callback:           core.CallbackOnSpellHitTaken,
-		ProcMask:           core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial | core.ProcMaskRangedAuto | core.ProcMaskRangedSpecial,
-		Outcome:            core.OutcomeLanded,
-		RequireDamageDealt: true,
-	}, []shared.ItemVariant{
-		{ItemID: 32375, ItemName: "Bulwark of Azzinoth"},
-	})
-
 	// Each time you cast a spell, there is chance you will gain up to 76 mana per 5 for 15s.
 	// https://www.wowhead.com/tbc/spell=37656
 	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{

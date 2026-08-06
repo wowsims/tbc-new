@@ -376,8 +376,8 @@ dps_results: {
  key: "TestProtection-AllItems-BulwarkofAzzinoth-32375"
  value: {
   dps: 911.67072
-  tps: 1637.57477
-  dtps: 1221.88304
+  tps: 1637.57836
+  dtps: 1222.7848
  }
 }
 dps_results: {
@@ -932,6 +932,14 @@ dps_results: {
   dps: 909.61698
   tps: 1637.91052
   dtps: 1573.82623
+ }
+}
+dps_results: {
+ key: "TestProtection-AllItems-JadePendantofBlasting-20966"
+ value: {
+  dps: 921.51546
+  tps: 1656.53381
+  dtps: 1326.8412
  }
 }
 dps_results: {
