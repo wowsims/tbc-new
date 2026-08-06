@@ -49,8 +49,7 @@ func TestFeralCat(t *testing.T) {
 			Rotation: core.RotationCombo{
 				Label: "Default",
 				Rotation: &proto.APLRotation{
-					Type:           proto.APLRotation_TypeSimple,
-					PrepullActions: core.ExternalJewelcraftingNecklacePrepullActions(),
+					Type: proto.APLRotation_TypeSimple,
 				},
 			},
 
@@ -99,11 +98,10 @@ func BenchmarkSimulate(b *testing.B) {
 				Consumables:   DefaultConsumables,
 				Spec:          DefaultSpecOptions,
 				Rotation: &proto.APLRotation{
-					Type:           proto.APLRotation_TypeSimple,
-					PrepullActions: core.ExternalJewelcraftingNecklacePrepullActions(),
+					Type: proto.APLRotation_TypeSimple,
 				},
 			},
-			core.FullPartyBuffs, nil, nil,
+			nil, nil, nil,
 		),
 		Encounter: &proto.Encounter{
 			Duration: 300,

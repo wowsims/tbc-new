@@ -2,8 +2,7 @@
 	"type": "TypeAPL",
 	"prepullActions": [
 		{ "action": { "castSpell": { "spellId": { "spellId": 27044, "rank": 8 } } }, "doAtValue": { "const": { "val": "-20s" } } },
-		{ "action": { "groupReference": { "groupName": "Move to starting range" } }, "doAtValue": { "const": { "val": "-19s" } } },
-		{ "action": { "castSpell": { "spellId": { "spellId": 31025, "tag": -1 } } }, "doAtValue": { "const": { "val": "-5s" } } }
+		{ "action": { "groupReference": { "groupName": "Move to starting range" } }, "doAtValue": { "const": { "val": "-19s" } } }
 	],
 	"priorityList": [
 		{ "action": { "groupReference": { "groupName": "Mana management" } } },

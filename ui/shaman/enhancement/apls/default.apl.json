@@ -2,9 +2,6 @@
 	"type": "TypeAPL",
 	"prepullActions": [
 	{"action":{"castSpell":{"spellId":{"spellId":25587,"rank":5}}},"doAtValue":{"const":{"val":"-8s"}}},
-	{"action":{"castSpell":{"spellId":{"spellId":31025,"tag":-1}}},"doAtValue":{"const":{"val":"-5s"}}},
-	{"action":{"castSpell":{"spellId":{"spellId":31033,"tag":-1}}},"doAtValue":{"const":{"val":"-5s"}}},
-	{"action":{"castSpell":{"spellId":{"spellId":25607,"tag":-1}}},"doAtValue":{"const":{"val":"-5s"}}},
 	{"action":{"castSpell":{"spellId":{"spellId":25528,"rank":6}}},"doAtValue":{"const":{"val":"-5s"}}},
 	{"action":{"castSpell":{"spellId":{"spellId":25570,"rank":5}}},"doAtValue":{"const":{"val":"-4s"}}},
 	{"action":{"castSpell":{"spellId":{"spellId":25537,"rank":7}}},"doAtValue":{"const":{"val":"-3s"}}},

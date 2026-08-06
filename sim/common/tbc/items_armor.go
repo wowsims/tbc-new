@@ -36,10 +36,23 @@ func init() {
 		character.ItemSwap.RegisterProc(32375, procAura)
 	})
 
-	registerJewelCraftingNecklace(24116, time.Hour, core.EyeOfTheNightAura)
-	registerJewelCraftingNecklace(24121, time.Hour, core.ChainOfTheTwilightOwlAura)
-	registerJewelCraftingNecklace(24114, time.Hour, core.BraidedEterniumChainAura)
-	registerJewelCraftingNecklace(20966, time.Millisecond*1500, core.JadePendantOfBlastingAura)
+	// Eye of the Night
+	core.NewItemEffect(24116, func(agent core.Agent) {
+		character := agent.GetCharacter()
+		core.MakePermanent(core.EyeOfTheNightAura(character))
+	})
+
+	// Chain of the Twilight Owl
+	core.NewItemEffect(24121, func(agent core.Agent) {
+		character := agent.GetCharacter()
+		core.MakePermanent(core.ChainOfTheTwilightOwlAura(character))
+	})
+
+	// Braided Eternium Chain
+	core.NewItemEffect(24114, func(agent core.Agent) {
+		character := agent.GetCharacter()
+		core.MakePermanent(core.BraidedEterniumChainAura(character))
+	})
 
 	// Pendants of [School] — on-use absorb shields. Each rolls a random absorb
 	// amount (900..2700) of the given school, lasts 5 minutes, and has a 1 hour
@@ -49,37 +62,6 @@ func init() {
 	registerPendantAbsorb(24095, "Pendant of Withering", 30999, core.SpellSchoolNature)
 	registerPendantAbsorb(24097, "Pendant of Shadow's End", 31000, core.SpellSchoolShadow)
 	registerPendantAbsorb(24098, "Pendant of the Null Rune", 31002, core.SpellSchoolArcane)
-}
-
-// registerJewelCraftingNecklace registers a Jewelcrafting necklace that temporarily
-// applies its party aura when used.
-func registerJewelCraftingNecklace(itemID int32, cooldown time.Duration, auraFactory func(*core.Character, int32) *core.Aura) {
-	core.NewItemEffect(itemID, func(agent core.Agent) {
-		character := agent.GetCharacter()
-
-		spell := character.RegisterSpell(core.SpellConfig{
-			ActionID:    core.ActionID{ItemID: itemID},
-			SpellSchool: core.SpellSchoolPhysical,
-			ProcMask:    core.ProcMaskEmpty,
-
-			Cast: core.CastConfig{
-				DefaultCast: core.Cast{NonEmpty: true},
-				CD: core.Cooldown{
-					Timer:    character.NewTimer(),
-					Duration: cooldown,
-				},
-			},
-
-			ApplyEffects: func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {
-				core.ActivatePartyNecklaceAura(sim, character, 1, auraFactory)
-			},
-		})
-
-		character.AddMajorCooldown(core.MajorCooldown{
-			Spell: spell,
-			Type:  core.CooldownTypeDPS,
-		})
-	})
 }
 
 // registerPendantAbsorb registers an on-use damage absorption shield for a

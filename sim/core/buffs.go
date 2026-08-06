@@ -128,7 +128,6 @@ func makeStatBuff(char *Character, config BuffConfig) *Aura {
 // Applies buffs that affect individual players.
 func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto.PartyBuffs, individual *proto.IndividualBuffs) {
 	char := agent.GetCharacter()
-	registerNecklaceAuras(char)
 
 	// Raid Buffs
 	if raidBuffs.ArcaneBrilliance {
@@ -196,19 +195,19 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 	}
 
 	if partyBuffs.BraidedEterniumChain {
-		registerNecklaceExternalCD(char, ActionID{SpellID: 31025}, BraidedEterniumChainAura)
+		MakePermanent(BraidedEterniumChainAura(char))
 	}
 
 	if partyBuffs.ChainOfTheTwilightOwl {
-		registerNecklaceExternalCD(char, ActionID{SpellID: 31035}, ChainOfTheTwilightOwlAura)
+		MakePermanent(ChainOfTheTwilightOwlAura(char))
 	}
 
 	if partyBuffs.EyeOfTheNight {
-		registerNecklaceExternalCD(char, ActionID{SpellID: 31033}, EyeOfTheNightAura)
+		MakePermanent(EyeOfTheNightAura(char))
 	}
 
 	if partyBuffs.JadePendantOfBlasting {
-		registerNecklaceExternalCD(char, ActionID{SpellID: 25607}, JadePendantOfBlastingAura)
+		MakePermanent(JadePendantOfBlastingAura(char))
 	}
 
 	if partyBuffs.CommandingShout != proto.TristateEffect_TristateEffectMissing {
@@ -1239,119 +1238,48 @@ const (
 	JadePendantOfBlastingAuraLabel = "Jade Pendant of Blasting"
 )
 
-const (
-	NecklaceBuffDuration = time.Minute * 30
-	NecklaceBuffCooldown = time.Hour
-)
-
-// ActivatePartyNecklaceAura applies a necklace aura to party members and pets
-// that are already active. Pets summoned later do not inherit the aura.
-func ActivatePartyNecklaceAura(sim *Simulation, source *Character, casterIdx int32, auraFactory func(*Character, int32) *Aura) {
-	if source.Party == nil {
-		auraFactory(source, casterIdx).Activate(sim)
-		return
-	}
-
-	for _, agent := range source.Party.Players {
-		character := agent.GetCharacter()
-		auraFactory(character, casterIdx).Activate(sim)
-
-		for _, petAgent := range character.PetAgents {
-			pet := petAgent.GetPet()
-			if pet.IsEnabled() && !pet.IsGuardian() {
-				auraFactory(petAgent.GetCharacter(), casterIdx).Activate(sim)
-			}
-		}
-	}
-}
-
-func registerNecklaceAuras(character *Character) {
-	for _, casterIdx := range []int32{-1, 1} {
-		BraidedEterniumChainAura(character, casterIdx)
-		ChainOfTheTwilightOwlAura(character, casterIdx)
-		EyeOfTheNightAura(character, casterIdx)
-		JadePendantOfBlastingAura(character, casterIdx)
-	}
-}
-
-func registerNecklaceExternalCD(character *Character, actionID ActionID, auraFactory func(*Character, int32) *Aura) {
-	aura := auraFactory(character, -1)
-
-	registerExternalConsecutiveCDApproximation(
-		character,
-		externalConsecutiveCDApproximation{
-			ActionID:         actionID.WithTag(-1),
-			AuraTag:          aura.Tag,
-			CooldownPriority: CooldownPriorityDefault,
-			AuraDuration:     NecklaceBuffDuration,
-			AuraCD:           NecklaceBuffCooldown,
-			RelatedSelfBuff:  aura,
-			Type:             CooldownTypeDPS,
-			ShouldActivate: func(_ *Simulation, _ *Character) bool {
-				return true
-			},
-			AddAura: func(sim *Simulation, character *Character) {
-				ActivatePartyNecklaceAura(sim, character, -1, auraFactory)
-			},
-		},
-		1,
-	)
-}
-
-func BraidedEterniumChainAura(char *Character, casterIdx int32) *Aura {
-	aura := makeStatBuff(char, BuffConfig{
-		Label:             fmt.Sprintf("%s-%d", BraidedEterniumChainAuraLabel, casterIdx),
-		ActionID:          ActionID{SpellID: 31025}.WithTag(casterIdx),
-		Duration:          NecklaceBuffDuration,
+func BraidedEterniumChainAura(char *Character) *Aura {
+	return makeStatBuff(char, BuffConfig{
+		Label:             BraidedEterniumChainAuraLabel,
+		ActionID:          ActionID{SpellID: 31025},
 		ExclusiveCategory: BraidedEterniumChainAuraLabel,
 		Stats: []StatConfig{
 			{stats.MeleeCritRating, 28, false},
 		},
 	})
-	aura.Tag = BraidedEterniumChainAuraLabel
-	return aura
 }
 
-func ChainOfTheTwilightOwlAura(char *Character, casterIdx int32) *Aura {
-	aura := makeStatBuff(char, BuffConfig{
-		Label:             fmt.Sprintf("%s-%d", ChainOfTheTwilightOwlAuraLabel, casterIdx),
-		ActionID:          ActionID{SpellID: 31035}.WithTag(casterIdx),
-		Duration:          NecklaceBuffDuration,
+func ChainOfTheTwilightOwlAura(char *Character) *Aura {
+	return makeStatBuff(char, BuffConfig{
+		Label:             ChainOfTheTwilightOwlAuraLabel,
+		ActionID:          ActionID{SpellID: 31035},
 		ExclusiveCategory: ChainOfTheTwilightOwlAuraLabel,
 		Stats: []StatConfig{
 			{stats.SpellCritPercent, 2, false},
 		},
 	})
-	aura.Tag = ChainOfTheTwilightOwlAuraLabel
-	return aura
 }
 
-func EyeOfTheNightAura(char *Character, casterIdx int32) *Aura {
-	aura := makeStatBuff(char, BuffConfig{
-		Label:             fmt.Sprintf("%s-%d", EyeOfTheNightAuraLabel, casterIdx),
-		ActionID:          ActionID{SpellID: 31033}.WithTag(casterIdx),
-		Duration:          NecklaceBuffDuration,
+func EyeOfTheNightAura(char *Character) *Aura {
+	return makeStatBuff(char, BuffConfig{
+		Label:             EyeOfTheNightAuraLabel,
+		ActionID:          ActionID{SpellID: 31033},
 		ExclusiveCategory: EyeOfTheNightAuraLabel,
 		Stats: []StatConfig{
 			{stats.SpellDamage, 34, false},
 		},
 	})
-	aura.Tag = EyeOfTheNightAuraLabel
-	return aura
 }
 
-func JadePendantOfBlastingAura(char *Character, casterIdx int32) *Aura {
-	aura := makeStatBuff(char, BuffConfig{
-		Label:             fmt.Sprintf("%s-%d", JadePendantOfBlastingAuraLabel, casterIdx),
-		ActionID:          ActionID{SpellID: 25607}.WithTag(casterIdx),
-		Duration:          NecklaceBuffDuration,
+func JadePendantOfBlastingAura(char *Character) *Aura {
+	return makeStatBuff(char, BuffConfig{
+		Label:             JadePendantOfBlastingAuraLabel,
+		ActionID:          ActionID{SpellID: 25607},
 		ExclusiveCategory: JadePendantOfBlastingAuraLabel,
 		Stats: []StatConfig{
 			{stats.SpellDamage, 15, false},
 		},
 	})
-	aura.Tag = JadePendantOfBlastingAuraLabel
-	return aura
 }
 
 func DraneiRacialAura(char *Character, caster bool) *Aura {
@@ -1853,11 +1781,11 @@ func applyPetBuffEffects(petAgent PetAgent, raidBuffs *proto.RaidBuffs, partyBuf
 	partyBuffs = googleProto.Clone(partyBuffs).(*proto.PartyBuffs)
 	// Pets can't get extra attacks, doh!
 	partyBuffs.WindfuryTotem = proto.TristateEffect_TristateEffectMissing
-	// Necklace buffs are applied to active pets when the source cooldown is used.
-	partyBuffs.ChainOfTheTwilightOwl = false
-	partyBuffs.EyeOfTheNight = false
-	partyBuffs.BraidedEterniumChain = false
-	partyBuffs.JadePendantOfBlasting = false
+	// Neck auras are automatically inherited when a unit gets into range (40 yds)
+	partyBuffs.ChainOfTheTwilightOwl = partyBuffs.ChainOfTheTwilightOwl || petAgent.GetPet().Owner.HasAura(ChainOfTheTwilightOwlAuraLabel)
+	partyBuffs.EyeOfTheNight = partyBuffs.EyeOfTheNight || petAgent.GetPet().Owner.HasAura(EyeOfTheNightAuraLabel)
+	partyBuffs.BraidedEterniumChain = partyBuffs.BraidedEterniumChain || petAgent.GetPet().Owner.HasAura(BraidedEterniumChainAuraLabel)
+	partyBuffs.JadePendantOfBlasting = partyBuffs.JadePendantOfBlasting || petAgent.GetPet().Owner.HasAura(JadePendantOfBlastingAuraLabel)
 
 	individualBuffs = googleProto.Clone(individualBuffs).(*proto.IndividualBuffs)
 	individualBuffs.Innervates = 0
@@ -1926,10 +1854,9 @@ func registerExternalConsecutiveCDApproximation(char *Character, config external
 
 	spell := char.RegisterSpell(SpellConfig{
 		ActionID: config.ActionID,
-		Flags:    SpellFlagAPL | SpellFlagNoOnCastComplete | SpellFlagNoMetrics | SpellFlagNoLogs,
+		Flags:    SpellFlagNoOnCastComplete | SpellFlagNoMetrics | SpellFlagNoLogs,
 
 		Cast: CastConfig{
-			DefaultCast: Cast{NonEmpty: true},
 			CD: Cooldown{
 				Timer:    sharedTimer,
 				Duration: config.AuraDuration, // Assumes that multiple buffs are different sources.
