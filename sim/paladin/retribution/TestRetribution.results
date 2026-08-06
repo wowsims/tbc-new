@@ -838,6 +838,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRetribution-AllItems-JadePendantofBlasting-20966"
+ value: {
+  dps: 1877.72477
+  tps: 1043.44064
+  dtps: 14.15789
+ }
+}
+dps_results: {
  key: "TestRetribution-AllItems-JomGabbar-23570"
  value: {
   dps: 1853.02163

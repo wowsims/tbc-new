@@ -947,6 +947,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestFeralCat-AllItems-JadePendantofBlasting-20966"
+ value: {
+  dps: 709.70642
+  tps: 352.72409
+  hps: 68.27333
+ }
+}
+dps_results: {
  key: "TestFeralCat-AllItems-JomGabbar-23570"
  value: {
   dps: 718.99985

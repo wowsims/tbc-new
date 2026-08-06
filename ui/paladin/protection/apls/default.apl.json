@@ -3,6 +3,10 @@
 	"prepullActions": [
 		{"action":{"castSpell":{"spellId":{"spellId":25780}}},"doAtValue":{"const":{"val":"-20s"}}},
 		{"action":{"castSpell":{"spellId":{"spellId":27149}}},"doAtValue":{"const":{"val":"-18.5s"}}},
+		{"action":{"castSpell":{"spellId":{"spellId":31025,"tag":-1}}},"doAtValue":{"const":{"val":"-5s"}}},
+		{"action":{"castSpell":{"spellId":{"spellId":31033,"tag":-1}}},"doAtValue":{"const":{"val":"-5s"}}},
+		{"action":{"castSpell":{"spellId":{"spellId":31035,"tag":-1}}},"doAtValue":{"const":{"val":"-5s"}}},
+		{"action":{"castSpell":{"spellId":{"spellId":25607,"tag":-1}}},"doAtValue":{"const":{"val":"-5s"}}},
 		{"action":{"castSpell":{"spellId":{"spellId":27155,"rank":9}}},"doAtValue":{"const":{"val":"-3s"}}},
 		{"action":{"castSpell":{"spellId":{"spellId":27179,"rank":4}}},"doAtValue":{"const":{"val":"-1.5s"}}},
 		{"hide":true,"action":{"castSpell":{"spellId":{"spellId":32700,"rank":3}}},"doAtValue":{"const":{"val":"-0.99s"}}}
