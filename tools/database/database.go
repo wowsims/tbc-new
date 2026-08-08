@@ -249,7 +249,13 @@ func (db *WowDatabase) ToUIProto() *proto.UIDatabase {
 		if v1.Type != v2.Type {
 			return int(v1.Type - v2.Type)
 		}
-		return int(v1.SpellId - v2.SpellId)
+		if v1.SpellId != v2.SpellId {
+			return int(v1.SpellId - v2.SpellId)
+		}
+		if v1.EnchantType != v2.EnchantType {
+			return int(v1.EnchantType - v2.EnchantType)
+		}
+		return int(v1.ItemId - v2.ItemId)
 	})
 
 	return &proto.UIDatabase{
