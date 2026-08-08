@@ -62,7 +62,9 @@ var ConsumableOverrides = []*proto.Consumable{
 	{Id: 23381, CooldownDuration: int32(time.Hour.Seconds())}, // Chipped Power Core
 }
 var ItemOverrides = []*proto.UIItem{
+	{Id: 32649, Phase: 3},  // Medallion of Karabor
 	{Id: 32658, Phase: 2},  // Badge of Tenacity
+	{Id: 32757, Phase: 3},  // Blessed Medallion of Karabor
 	{Id: 278774, Phase: 2}, // Cloak of the Frigid Winds (ilvl 128)
 	{Id: 278819, Phase: 2}, // The Frost Lord's War Cloak (ilvl 128)
 	{Id: 278823, Phase: 2}, // Icebound Cloak (ilvl 128)
