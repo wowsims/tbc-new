@@ -70,8 +70,7 @@ make wowsimtbc
 make simdb
 
 # Generate data from WoW client files
-# Requires dotnet 9 to run
-# https://learn.microsoft.com/en-us/dotnet/
+# Requires a local WoW install; point Settings.BaseDir in the settings file at it
 # Uses tools/database/generator-settings.json for settings
 # Also runs make simdb
 # This is what you will use most of the time for generation
