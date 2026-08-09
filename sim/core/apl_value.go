@@ -136,8 +136,8 @@ func (rot *APLRotation) newAPLValueWithContext(config *proto.APLValue, groupVari
 		value = rot.newValueMaxEnergy(config.GetMaxEnergy(), config.Uuid)
 	case *proto.APLValue_MaxRage:
 		value = rot.newValueMaxRage(config.GetMaxRage(), config.Uuid)
-	case *proto.APLValue_EnergyRegenPerSecond:
-		value = rot.newValueEnergyRegenPerSecond(config.GetEnergyRegenPerSecond(), config.Uuid)
+	case *proto.APLValue_TimeToNextEnergyTick:
+		value = rot.newValueTimeToNextEnergyTick(config.GetTimeToNextEnergyTick(), config.Uuid)
 	case *proto.APLValue_EnergyTimeToTarget:
 		value = rot.newValueEnergyTimeToTarget(config.GetEnergyTimeToTarget(), config.Uuid)
 

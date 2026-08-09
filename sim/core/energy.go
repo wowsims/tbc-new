@@ -2,6 +2,7 @@ package core
 
 import (
 	"fmt"
+	"math"
 	"time"
 
 	"github.com/wowsims/tbc/sim/core/proto"
@@ -20,24 +21,21 @@ type energyBar struct {
 	EnergyTickDuration time.Duration
 	EnergyPerTick      float64
 
-	// These two terms are multiplied together to scale the total Energy regen from ticks.
+	// Scales the total Energy regen from ticks.
 	energyRegenMultiplier float64
-	hasteRatingMultiplier float64
 
 	regenMetrics          *ResourceMetrics
 	EncounterStartMetrics *ResourceMetrics
 	EnergyRefundMetrics   *ResourceMetrics
 
-	ownerClass            proto.Class
-	hasNoRegen            bool // some units have an energy bar but do not require regen ticks
-	hasHasteRatingScaling bool
+	ownerClass proto.Class
+	hasNoRegen bool // some units have an energy bar but do not require regen ticks
 }
 type EnergyBarOptions struct {
-	MaxComboPoints        int32
-	MaxEnergy             float64
-	UnitClass             proto.Class
-	HasNoRegen            bool
-	HasHasteRatingScaling bool
+	MaxComboPoints int32
+	MaxEnergy      float64
+	UnitClass      proto.Class
+	HasNoRegen     bool
 }
 
 func (unit *Unit) EnableEnergyBar(options EnergyBarOptions) {
@@ -47,10 +45,9 @@ func (unit *Unit) EnableEnergyBar(options EnergyBarOptions) {
 		unit:                  unit,
 		maxEnergy:             max(10, options.MaxEnergy),
 		maxComboPoints:        options.MaxComboPoints,
-		EnergyTickDuration:    time.Second * 2,
-		EnergyPerTick:         20.0,
+		EnergyTickDuration:    time.Millisecond * 2020,
+		EnergyPerTick:         20.2,
 		energyRegenMultiplier: 1,
-		hasteRatingMultiplier: 1,
 		regenMetrics:          unit.NewEnergyMetrics(ActionID{OtherID: proto.OtherAction_OtherActionEnergyRegen}),
 		EnergyRefundMetrics:   unit.NewEnergyMetrics(ActionID{OtherID: proto.OtherAction_OtherActionRefund}),
 		EncounterStartMetrics: unit.NewEnergyMetrics(ActionID{OtherID: proto.OtherAction_OtherActionEncounterStart}),
@@ -81,16 +78,24 @@ func (eb *energyBar) MultiplyEnergyRegenSpeed(sim *Simulation, multiplier float6
 	eb.energyRegenMultiplier *= multiplier
 }
 
-func (eb *energyBar) EnergyRegenPerSecond() float64 {
-	return 10.0 * eb.hasteRatingMultiplier * eb.energyRegenMultiplier
+func (eb *energyBar) TimeToNextEnergyTick(sim *Simulation) time.Duration {
+	return max(eb.nextEnergyTick-sim.CurrentTime, 0)
 }
 
-func (eb *energyBar) TimeToTargetEnergy(targetEnergy float64) time.Duration {
+func (eb *energyBar) TimeToTargetEnergy(sim *Simulation, targetEnergy float64) time.Duration {
 	if eb.currentEnergy >= targetEnergy {
 		return time.Duration(0)
 	}
 
-	return DurationFromSeconds((targetEnergy - eb.currentEnergy) / eb.EnergyRegenPerSecond())
+	energyPerTick := eb.EnergyPerTick * eb.energyRegenMultiplier
+	if !eb.IsTicking(sim) || energyPerTick <= 0 || targetEnergy > eb.maxEnergy {
+		return NeverExpires
+	}
+
+	// Energy only arrives in discrete ticks, so round up to the first tick that
+	// puts us at or above the target.
+	ticksNeeded := math.Ceil((targetEnergy - eb.currentEnergy) / energyPerTick)
+	return eb.TimeToNextEnergyTick(sim) + time.Duration(ticksNeeded-1)*eb.EnergyTickDuration
 }
 
 func (eb *energyBar) CurrentEnergyRegenMultiplier() float64 {
@@ -157,7 +162,7 @@ func (eb *energyBar) ResetEnergyTick(sim *Simulation) {
 	}
 
 	timeSinceLastTick := max(sim.CurrentTime-(eb.NextEnergyTickAt()-eb.EnergyTickDuration), 0)
-	partialTickAmount := (eb.EnergyPerTick * eb.hasteRatingMultiplier * eb.energyRegenMultiplier) * (float64(timeSinceLastTick) / float64(eb.EnergyTickDuration))
+	partialTickAmount := eb.EnergyPerTick * eb.energyRegenMultiplier * (float64(timeSinceLastTick) / float64(eb.EnergyTickDuration))
 	eb.AddEnergy(sim, partialTickAmount, eb.regenMetrics)
 	eb.nextEnergyTick = sim.CurrentTime + eb.EnergyTickDuration
 	sim.RescheduleTask(eb.nextEnergyTick)
@@ -220,7 +225,7 @@ func (eb *energyBar) RunTask(sim *Simulation) time.Duration {
 		return eb.nextEnergyTick
 	}
 
-	eb.AddEnergy(sim, eb.EnergyPerTick*eb.hasteRatingMultiplier*eb.energyRegenMultiplier, eb.regenMetrics)
+	eb.AddEnergy(sim, eb.EnergyPerTick*eb.energyRegenMultiplier, eb.regenMetrics)
 	eb.nextEnergyTick = sim.CurrentTime + eb.EnergyTickDuration
 	return eb.nextEnergyTick
 }
@@ -240,8 +245,6 @@ func (eb *energyBar) reset(sim *Simulation) {
 
 	eb.currentEnergy = eb.maxEnergy
 	eb.comboPoints = 0
-	eb.hasteRatingMultiplier = 1.0
-
 	eb.energyRegenMultiplier = 1.0
 
 	if eb.unit.Type != PetUnit {

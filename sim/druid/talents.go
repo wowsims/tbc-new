@@ -34,6 +34,7 @@ func (druid *Druid) ApplyTalents() {
 	druid.applyForceOfNature()
 
 	// Feral
+	druid.applyFuror()
 	druid.applyFerocity()
 	druid.applyFeralAggression()
 	druid.applyFeralInstincts()
@@ -385,6 +386,16 @@ func (druid *Druid) applyPredatoryStrikes() {
 	}
 	druid.CatFormAura.AttachStatsBuff(bonus)
 	druid.BearFormAura.AttachStatsBuff(bonus)
+}
+
+// applyFuror gives a 20% chance per rank to gain 40 energy when shifting into
+// Cat Form, or 10 rage when shifting into Bear Form.
+func (druid *Druid) applyFuror() {
+	if druid.Talents.Furor == 0 {
+		return
+	}
+
+	druid.FurorProcChance = 0.2 * float64(druid.Talents.Furor)
 }
 
 func (druid *Druid) applyFerocity() {

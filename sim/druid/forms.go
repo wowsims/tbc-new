@@ -2,7 +2,6 @@ package druid
 
 import (
 	"github.com/wowsims/tbc/sim/core"
-	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
@@ -88,9 +87,6 @@ func (druid *Druid) RegisterCatFormAura() {
 	actionID := core.ActionID{SpellID: 768}
 	energyMetrics := druid.NewEnergyMetrics(actionID)
 
-	furorProcChance := 0.2 * float64(druid.Talents.Furor)
-	wolfsheadEquipped := druid.HasItemEquipped(8345, []proto.ItemSlot{proto.ItemSlot_ItemSlotHead})
-
 	// In Cat Form each point of Agility gives 1 AP.
 	agiApDep := druid.NewDynamicStatDependency(stats.Agility, stats.AttackPower, 1)
 	// In Cat Form each point of Strength gives 2 AP (vs 1 AP in humanoid form).
@@ -145,9 +141,9 @@ func (druid *Druid) RegisterCatFormAura() {
 						druid.SpendEnergy(sim, cur, energyMetrics)
 					}
 					// Wolfshead Helm: +20 energy on shift into Cat.
-					energyGain := core.TernaryFloat64(wolfsheadEquipped, 20.0, 0.0)
+					energyGain := druid.WolfsheadEnergyBonus
 					// Furor: 20% chance per rank (rank 5 = 100%) to gain 40 energy on shift.
-					if furorProcChance == 1 || (furorProcChance > 0 && sim.RandomFloat("Furor") < furorProcChance) {
+					if druid.FurorProcChance == 1 || (druid.FurorProcChance > 0 && sim.RandomFloat("Furor") < druid.FurorProcChance) {
 						energyGain += 40.0
 					}
 					if energyGain > 0 {
@@ -312,11 +308,18 @@ func (druid *Druid) registerBearFormSpell() {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {
-			rageDelta := 10.0 - druid.CurrentRage()
-			if rageDelta > 0 {
-				druid.AddRage(sim, rageDelta, rageMetrics)
-			} else if rageDelta < 0 {
-				druid.SpendRage(sim, -rageDelta, rageMetrics)
+			if cur := druid.CurrentRage(); cur > 0 {
+				// Resets rage to 0 when entering bear form
+				druid.SpendRage(sim, cur, rageMetrics)
+			}
+			// Wolfshead Helm: +5 rage on shift into Bear.
+			rageGain := druid.WolfsheadRageBonus
+			// Furor: 20% chance per rank (rank 5 = 100%) to gain 10 rage on shift.
+			if druid.FurorProcChance == 1 || (druid.FurorProcChance > 0 && sim.RandomFloat("Furor") < druid.FurorProcChance) {
+				rageGain += 10.0
+			}
+			if rageGain > 0 {
+				druid.AddRage(sim, rageGain, rageMetrics)
 			}
 			druid.BearFormAura.Activate(sim)
 		},

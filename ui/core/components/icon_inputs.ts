@@ -182,7 +182,7 @@ export function makeTristatePartyBuffInput<SpecType extends Spec>(
 		{
 			getModObject: (player: Player<SpecType>) => player,
 			showWhen: (player: Player<SpecType>) => !config.faction || config.faction == player.getFaction(),
-			getValue: (player: Player<SpecType>) => player.getParty()?.getBuffs()!!,
+			getValue: (player: Player<SpecType>) => player.getParty()!.getBuffs(),
 			setValue: (eventID: EventID, player: Player<SpecType>, newVal: PartyBuffs) => player.getParty()?.setBuffs(eventID, newVal),
 			changeEmitter: (player: Player<SpecType>) => TypedEvent.onAny([player.getParty()!.buffsChangeEmitter, player.raceChangeEmitter]),
 			label: config.label,
@@ -246,7 +246,7 @@ export function makeQuadstatePartyBuffInput<SpecType extends Spec>(
 		{
 			getModObject: (player: Player<SpecType>) => player,
 			showWhen: (player: Player<SpecType>) => !config.faction || config.faction == player.getFaction(),
-			getValue: (player: Player<SpecType>) => player.getParty()?.getBuffs()!!,
+			getValue: (player: Player<SpecType>) => player.getParty()!.getBuffs(),
 			setValue: (eventID: EventID, player: Player<SpecType>, newVal: PartyBuffs) => player.getParty()?.setBuffs(eventID, newVal),
 			changeEmitter: (player: Player<SpecType>) => TypedEvent.onAny([player.getParty()!.buffsChangeEmitter, player.raceChangeEmitter]),
 			label: config.label,

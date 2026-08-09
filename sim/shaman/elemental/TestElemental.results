@@ -130,6 +130,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestElemental-AllItems-ArgentDefender-13243"
+ value: {
+  dps: 1732.54986
+  tps: 949.8517
+ }
+}
+dps_results: {
  key: "TestElemental-AllItems-ArgussianCompass-27770"
  value: {
   dps: 1697.97679
@@ -159,6 +166,13 @@ dps_results: {
 }
 dps_results: {
  key: "TestElemental-AllItems-BandoftheEternalChampion-29301"
+ value: {
+  dps: 1721.40105
+  tps: 943.80221
+ }
+}
+dps_results: {
+ key: "TestElemental-AllItems-BandoftheEternalDefender-29297"
  value: {
   dps: 1721.40105
   tps: 943.80221
@@ -270,6 +284,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestElemental-AllItems-BlazefuryMedallion-17111"
+ value: {
+  dps: 1731.14715
+  tps: 950.18474
+ }
+}
+dps_results: {
  key: "TestElemental-AllItems-BloodlustBrooch-29383"
  value: {
   dps: 1697.97679
@@ -328,8 +349,8 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-CircletofArcaneMight-24123"
  value: {
-  dps: 1659.65863
-  tps: 911.19232
+  dps: 1659.73251
+  tps: 911.26633
  }
 }
 dps_results: {
@@ -655,6 +676,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestElemental-AllItems-GrandMarshal'sAegis-18825"
+ value: {
+  dps: 1732.54986
+  tps: 949.8517
+ }
+}
+dps_results: {
  key: "TestElemental-AllItems-Gri'lek'sCharmofValor-19952"
  value: {
   dps: 1711.72059
@@ -722,6 +750,13 @@ dps_results: {
  value: {
   dps: 1714.93594
   tps: 983.03955
+ }
+}
+dps_results: {
+ key: "TestElemental-AllItems-HighWarlord'sShieldWall-18826"
+ value: {
+  dps: 1732.54986
+  tps: 949.8517
  }
 }
 dps_results: {
@@ -818,15 +853,15 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-MasqueradeGown-28578"
  value: {
-  dps: 1708.87967
-  tps: 937.83724
+  dps: 1708.87813
+  tps: 937.83629
  }
 }
 dps_results: {
  key: "TestElemental-AllItems-MementoofTyrande-32496"
  value: {
-  dps: 1728.00796
-  tps: 990.87739
+  dps: 1727.83045
+  tps: 990.69212
  }
 }
 dps_results: {
@@ -986,8 +1021,8 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-RobeoftheElderScribes-28602"
  value: {
-  dps: 1743.12538
-  tps: 955.87147
+  dps: 1743.70843
+  tps: 956.29785
  }
 }
 dps_results: {
@@ -1077,8 +1112,8 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-Shiffar'sNexus-Horn-28418"
  value: {
-  dps: 1746.00121
-  tps: 1000.8006
+  dps: 1747.88183
+  tps: 1001.63979
  }
 }
 dps_results: {
@@ -1204,8 +1239,8 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-TalismanofAscendance-22678"
  value: {
-  dps: 1708.31388
-  tps: 979.40007
+  dps: 1739.83284
+  tps: 997.27091
  }
 }
 dps_results: {
@@ -1234,6 +1269,13 @@ dps_results: {
  value: {
   dps: 1563.1283
   tps: 855.82275
+ }
+}
+dps_results: {
+ key: "TestElemental-AllItems-TheLionHornofStormwind-14557"
+ value: {
+  dps: 1697.97679
+  tps: 973.61815
  }
 }
 dps_results: {
@@ -1269,6 +1311,13 @@ dps_results: {
  value: {
   dps: 1454.42942
   tps: 799.78113
+ }
+}
+dps_results: {
+ key: "TestElemental-AllItems-Timbal'sFocusingCrystal-34470"
+ value: {
+  dps: 1732.96904
+  tps: 993.31308
  }
 }
 dps_results: {
@@ -1379,8 +1428,8 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-WrathofCenarius-21190"
  value: {
-  dps: 1746.66627
-  tps: 958.07899
+  dps: 1749.34866
+  tps: 959.68655
  }
 }
 dps_results: {
@@ -1402,6 +1451,13 @@ dps_results: {
  value: {
   dps: 1736.18109
   tps: 995.27566
+ }
+}
+dps_results: {
+ key: "TestElemental-AllItems-ZandalarianHeroBadge-19948"
+ value: {
+  dps: 1697.97679
+  tps: 973.61815
  }
 }
 dps_results: {

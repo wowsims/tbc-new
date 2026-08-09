@@ -40,7 +40,6 @@ import {
 	APLValueDotPercentIncrease,
 	APLValueDotRemainingTime,
 	APLValueDotTickFrequency,
-	APLValueEnergyRegenPerSecond,
 	APLValueEnergyTimeToTarget,
 	APLValueFrontOfTarget,
 	APLValueGCDIsReady,
@@ -80,6 +79,7 @@ import {
 	APLValueSpellTimeToCharge,
 	APLValueSpellTimeToReady,
 	APLValueSpellTravelTime,
+	APLValueTimeToNextEnergyTick,
 	APLValueTotemRemainingTime,
 	APLValueItemProcsMaxRemainingICD,
 	APLValueItemProcsMinRemainingTime,
@@ -840,11 +840,11 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 		},
 		fields: [],
 	}),
-	energyRegenPerSecond: inputBuilder({
-		label: i18n.t('rotation_tab.apl.values.energy_regen_per_second.label'),
+	timeToNextEnergyTick: inputBuilder({
+		label: i18n.t('rotation_tab.apl.values.time_to_next_energy_tick.label'),
 		submenu: ['resources', 'energy'],
-		shortDescription: i18n.t('rotation_tab.apl.values.energy_regen_per_second.tooltip'),
-		newValue: APLValueEnergyRegenPerSecond.create,
+		shortDescription: i18n.t('rotation_tab.apl.values.time_to_next_energy_tick.tooltip'),
+		newValue: APLValueTimeToNextEnergyTick.create,
 		includeIf(player: Player<any>, isPrepull: boolean) {
 			const clss = player.getClass();
 			const spec = player.getSpec();

@@ -141,6 +141,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestProtectionWarrior-AllItems-ArgentDefender-13243"
+ value: {
+  dps: 777.8666
+  tps: 1435.98994
+  dtps: 1481.55824
+ }
+}
+dps_results: {
  key: "TestProtectionWarrior-AllItems-ArgussianCompass-27770"
  value: {
   dps: 775.25844
@@ -167,9 +175,9 @@ dps_results: {
 dps_results: {
  key: "TestProtectionWarrior-AllItems-BadgeoftheSwarmguard-21670"
  value: {
-  dps: 784.46802
-  tps: 1439.7121
-  dtps: 1298.81855
+  dps: 784.32191
+  tps: 1439.29834
+  dtps: 1296.58752
  }
 }
 dps_results: {
@@ -178,6 +186,14 @@ dps_results: {
   dps: 812.91587
   tps: 1486.20824
   dtps: 1282.5045
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-BandoftheEternalDefender-29297"
+ value: {
+  dps: 800.51817
+  tps: 1466.12486
+  dtps: 1290.6833
  }
 }
 dps_results: {
@@ -287,9 +303,9 @@ dps_results: {
 dps_results: {
  key: "TestProtectionWarrior-AllItems-BlackenedNaaruSliver-34427"
  value: {
-  dps: 782.91622
-  tps: 1436.94575
-  dtps: 1289.45718
+  dps: 783.43643
+  tps: 1438.12816
+  dtps: 1290.86803
  }
 }
 dps_results: {
@@ -306,6 +322,14 @@ dps_results: {
   dps: 697.63454
   tps: 1338.64223
   dtps: 1368.30881
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-BlazefuryMedallion-17111"
+ value: {
+  dps: 796.40916
+  tps: 1462.12386
+  dtps: 1300.77089
  }
 }
 dps_results: {
@@ -495,9 +519,9 @@ dps_results: {
 dps_results: {
  key: "TestProtectionWarrior-AllItems-DarkmoonCard:Vengeance-31858"
  value: {
-  dps: 778.95438
-  tps: 1430.74632
-  dtps: 1301.4699
+  dps: 782.89604
+  tps: 1436.90789
+  dtps: 1298.77296
  }
 }
 dps_results: {
@@ -709,6 +733,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestProtectionWarrior-AllItems-FieryRetributer-19968"
+ value: {
+  dps: 796.37712
+  tps: 1460.50314
+  dtps: 1301.68032
+ }
+}
+dps_results: {
  key: "TestProtectionWarrior-AllItems-Figurine-DawnstoneCrab-24125"
  value: {
   dps: 771.69169
@@ -786,6 +818,14 @@ dps_results: {
   dps: 793.31652
   tps: 1452.75122
   dtps: 1278.1606
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-GrandMarshal'sAegis-18825"
+ value: {
+  dps: 784.08039
+  tps: 1444.50368
+  dtps: 1393.56611
  }
 }
 dps_results: {
@@ -874,6 +914,14 @@ dps_results: {
   dps: 798.34949
   tps: 1437.55645
   dtps: 1326.78773
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-HighWarlord'sShieldWall-18826"
+ value: {
+  dps: 783.89256
+  tps: 1444.21727
+  dtps: 1393.56611
  }
 }
 dps_results: {
@@ -1287,9 +1335,9 @@ dps_results: {
 dps_results: {
  key: "TestProtectionWarrior-AllItems-SextantofUnstableCurrents-30626"
  value: {
-  dps: 774.35626
-  tps: 1423.59814
-  dtps: 1298.77296
+  dps: 775.25844
+  tps: 1425.13678
+  dtps: 1298.84002
  }
 }
 dps_results: {
@@ -1486,6 +1534,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestProtectionWarrior-AllItems-TheLionHornofStormwind-14557"
+ value: {
+  dps: 775.25844
+  tps: 1425.13678
+  dtps: 1298.72889
+ }
+}
+dps_results: {
  key: "TestProtectionWarrior-AllItems-TheRestrainedEssenceofSapphiron-23046"
  value: {
   dps: 775.25844
@@ -1523,6 +1579,14 @@ dps_results: {
   dps: 796.37712
   tps: 1460.50314
   dtps: 1301.68032
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-Timbal'sFocusingCrystal-34470"
+ value: {
+  dps: 775.25844
+  tps: 1425.13678
+  dtps: 1298.84002
  }
 }
 dps_results: {
@@ -1647,6 +1711,14 @@ dps_results: {
 }
 dps_results: {
  key: "TestProtectionWarrior-AllItems-Xi'ri'sGift-29179"
+ value: {
+  dps: 775.25844
+  tps: 1425.13678
+  dtps: 1298.84002
+ }
+}
+dps_results: {
+ key: "TestProtectionWarrior-AllItems-ZandalarianHeroBadge-19948"
  value: {
   dps: 775.25844
   tps: 1425.13678
