@@ -1,5 +1,5 @@
-import { ReforgeOptimizer } from '../../core/components/suggest_reforges_action';
 import * as other_inputs from '../../core/components/inputs/other_inputs';
+import { ReforgeOptimizer } from '../../core/components/suggest_reforges_action';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui';
 import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
@@ -8,9 +8,9 @@ import { APLListItem, APLRotation, APLRotation_Type, APLValueVariable } from '..
 import { Cooldowns, HandType, ItemSlot, PseudoStat, Spec, Stat } from '../../core/proto/common';
 import * as AplUtils from '../../core/proto_utils/apl_utils';
 import { StatCap, UnitStat } from '../../core/proto_utils/stats';
+import { SpecRotation } from '../../core/proto_utils/utils';
 import * as HunterInputs from './inputs';
 import * as Presets from './presets';
-import { SpecRotation } from 'ui/core/proto_utils/utils';
 
 const SPEC_CONFIG = registerSpecConfig(Spec.SpecHunter, {
 	cssClass: 'hunter-sim-ui',

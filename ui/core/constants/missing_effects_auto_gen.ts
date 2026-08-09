@@ -34,12 +34,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		12344, // Seal of Ascension
-		[
-			"", // 16372 - https://www.wowhead.com/tbc/spell=16372
-		]
-	],
-	[
 		12588, // Bonespike Shoulder
 		[
 			"Deals 90 damage when you are the victim of a critical melee strike.", // 16550 - https://www.wowhead.com/tbc/spell=16550
@@ -94,12 +88,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		13243, // Argent Defender
-		[
-			"Has a 1% chance when struck in combat of increasing block rating by 250 for 10 sec.", // 17351 - https://www.wowhead.com/tbc/spell=17351
-		]
-	],
-	[
 		13375, // Crest of Retribution
 		[
 			"Deals 35 damage every time you block.", // 17496 - https://www.wowhead.com/tbc/spell=17496
@@ -151,12 +139,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		14154, // Truefaith Vestments
 		[
 			"Reduces the cooldown of your Fade ability by -2.0 sec.", // 18388 - https://www.wowhead.com/tbc/spell=18388
-		]
-	],
-	[
-		14557, // The Lion Horn of Stormwind
-		[
-			"When struck in combat has a 1% chance of increasing all party member's armor by 250 for 30s.", // 18946 - https://www.wowhead.com/tbc/spell=18946
 		]
 	],
 	[
@@ -325,12 +307,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		17104, // Spinal Reaper
 		[
 			"Restores 150 mana or 20 rage when you kill a target that gives experience; this effect cannot occur more than once every 10 seconds.", // 21186 - https://www.wowhead.com/tbc/spell=21186
-		]
-	],
-	[
-		17111, // Blazefury Medallion
-		[
-			"Adds 2 fire damage to your melee attacks.", // 7712 - https://www.wowhead.com/tbc/spell=7712
 		]
 	],
 	[
@@ -538,18 +514,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		18825, // Grand Marshal's Aegis
-		[
-			"When struck in combat has a 5% chance of inflicting 65 Nature damage to the attacker.", // 16782 - https://www.wowhead.com/tbc/spell=16782
-		]
-	],
-	[
-		18826, // High Warlord's Shield Wall
-		[
-			"When struck in combat has a 5% chance of inflicting 65 Nature damage to the attacker.", // 16782 - https://www.wowhead.com/tbc/spell=16782
-		]
-	],
-	[
 		19287, // Darkmoon Card: Heroism
 		[
 			"Sometimes heals bearer of 180 damage when damaging an enemy in melee.", // 23682 - https://www.wowhead.com/tbc/spell=23682
@@ -670,12 +634,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		19948, // Zandalarian Hero Badge
-		[
-			"Increases your armor by 2000 and defense rating by 50 for 20s. Every time you take melee or ranged damage, this bonus is reduced by 200 armor and 5 defense rating.", // 24574 - https://www.wowhead.com/tbc/spell=24574
-		]
-	],
-	[
 		19949, // Zandalarian Hero Medallion
 		[
 			"Increases your melee and ranged damage by 40 for 20s. Every time you hit a target, this bonus is reduced by 2.", // 24661 - https://www.wowhead.com/tbc/spell=24661
@@ -727,12 +685,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		19963, // Pitchfork of Madness
 		[
 			"Increases attack power by 117 when fighting Demons.", // 14098 - https://www.wowhead.com/tbc/spell=14098
-		]
-	],
-	[
-		19968, // Fiery Retributer
-		[
-			"Adds 2 fire damage to your melee attacks.", // 7712 - https://www.wowhead.com/tbc/spell=7712
 		]
 	],
 	[
@@ -1728,12 +1680,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		29297, // Band of the Eternal Defender
-		[
-			"When struck in combat has a chance of increasing your armor by 800 for 10s.", // 35078 - https://www.wowhead.com/tbc/spell=35078
-		]
-	],
-	[
 		29347, // Talisman of the Breaker
 		[
 			"Reduces the duration of any Silence or Interrupt effects used against the wearer by 20%. This effect does not stack with other similar effects.", // 35126 - https://www.wowhead.com/tbc/spell=35126
@@ -2166,12 +2112,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		32492, // Ashtongue Talisman of Lethality
-		[
-			"20% chance per combo point for your finishing moves to grant 145 critical strike rating for 10s.", // 40460 - https://www.wowhead.com/tbc/spell=40460
-		]
-	],
-	[
 		32500, // Crystal Spire of Karabor
 		[
 			"If your target is below 50% health, your direct healing spells will cause your target to be healed for an additional 220 health.", // 40972 - https://www.wowhead.com/tbc/spell=40972
@@ -2187,6 +2127,18 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		32539, // Skyguard's Drape
 		[
 			"Reduces your fall speed for 10s.", // 12438 - https://www.wowhead.com/tbc/spell=12438
+		]
+	],
+	[
+		32770, // Skyguard Silver Cross
+		[
+			"50% chance to increase your attack power by 140 for 30s when you kill a target that gives experience or honor. This effect cannot occur more than once every 10 seconds.", // 41261 - https://www.wowhead.com/tbc/spell=41261
+		]
+	],
+	[
+		32771, // Airman's Ribbon of Gallantry
+		[
+			"50% chance to increase your spell damage and healing by 80 for 30s when you kill a target that gives experience or honor. This effect cannot occur more than once every 10 seconds.", // 41263 - https://www.wowhead.com/tbc/spell=41263
 		]
 	],
 	[
@@ -2328,12 +2280,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		33808, // The Horseman's Helm
-		[
-			"Let the Horseman laugh through you.", // 43873 - https://www.wowhead.com/tbc/spell=43873
-		]
-	],
-	[
 		33820, // Weather-Beaten Fishing Hat
 		[
 			"Attach a lure to your equipped fishing pole, increasing Fishing by 75 for 10 min.", // 43699 - https://www.wowhead.com/tbc/spell=43699
@@ -2433,12 +2379,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		34430, // Glimmering Naaru Sliver
 		[
 			"Gain 250 mana each sec. for 8s. Channeled.", // 45052 - https://www.wowhead.com/tbc/spell=45052
-		]
-	],
-	[
-		34470, // Timbal's Focusing Crystal
-		[
-			"Each time one of your spells deals periodic damage, there is a chance 475 additional damage will be dealt.", // 45055 - https://www.wowhead.com/tbc/spell=45055
 		]
 	],
 	[

@@ -4681,7 +4681,7 @@
 									"additionalProperties": false,
 									"required": ["label", "tooltip"]
 								},
-								"energy_regen_per_second": {
+								"time_to_next_energy_tick": {
 									"type": "object",
 									"properties": {
 										"label": {
@@ -5653,7 +5653,7 @@
 								"estimated_time_to_target_focus",
 								"current_energy",
 								"max_energy",
-								"energy_regen_per_second",
+								"time_to_next_energy_tick",
 								"estimated_time_to_target_energy",
 								"current_combo_points",
 								"max_combo_points",

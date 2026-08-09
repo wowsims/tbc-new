@@ -1345,9 +1345,9 @@
 					"label": "Max Energy",
 					"tooltip": "Amount of maximum available Energy."
 				},
-				"energy_regen_per_second": {
-					"label": "Energy Regen Per Second",
-					"tooltip": "Energy regen per second."
+				"time_to_next_energy_tick": {
+					"label": "Time To Next Energy Tick",
+					"tooltip": "Time remaining until the next Energy tick."
 				},
 				"estimated_time_to_target_energy": {
 					"label": "Estimated Time To Target Energy",

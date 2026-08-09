@@ -194,6 +194,42 @@ func (s *SpellEffect) scaledMax(avg, delta float64) float64 {
 	return result
 }
 
+// Reports whether the aura fires another spell when its owner procs. Both forms are the same edge
+// for the purposes of walking a trigger chain; only the amount differs.
+func (effect *SpellEffect) IsProcTrigger() bool {
+	return effect.EffectAura == A_PROC_TRIGGER_SPELL ||
+		effect.EffectAura == A_PROC_TRIGGER_SPELL_WITH_VALUE
+}
+
+// Reports whether the aura resolves to nothing on its own. Either the client applies it as a
+// marker, or its real behaviour is server-scripted and not present in DBC at all.
+func (effect *SpellEffect) IsDummy() bool {
+	return effect.EffectAura == A_DUMMY || effect.EffectAura == A_PERIODIC_DUMMY
+}
+
+// The aura types capable of resolving to stats. resolveStatsSpell walks a trigger chain looking for
+// one of these to decide which spell an item's stats are read off, so anything ParseStatEffect
+// learns to resolve has to be listed here as well or the chain walk stops short of it. The reverse
+// need not hold: A_MOD_TARGET_RESISTANCE ends the walk on a spell ParseStatEffect then declines,
+// which is the existing behaviour.
+var statAuraTypes = map[EffectAuraType]bool{
+	A_MOD_STAT:                true,
+	A_MOD_RATING:              true,
+	A_MOD_RANGED_ATTACK_POWER: true,
+	A_MOD_ATTACK_POWER:        true,
+	A_MOD_DAMAGE_DONE:         true,
+	A_MOD_TARGET_RESISTANCE:   true,
+	A_MOD_RESISTANCE:          true,
+	A_MOD_INCREASE_ENERGY:     true,
+	A_MOD_INCREASE_HEALTH_2:   true,
+	A_PERIODIC_TRIGGER_SPELL:  true,
+}
+
+// Reports whether the effect's aura is one of the types that can carry stats.
+func (effect *SpellEffect) GrantsStats() bool {
+	return statAuraTypes[effect.EffectAura]
+}
+
 func (effect *SpellEffect) IsDirectDamageEffect() bool {
 	types := []SpellEffectType{
 		E_HEAL, E_SCHOOL_DAMAGE, E_HEALTH_LEECH,
@@ -234,8 +270,12 @@ func (effect *SpellEffect) GetScalingValue(ilvl int) float64 {
 	scale := effect.ScalingClass()
 	return dbcInstance.SpellScalings[min(spell.MaxScalingLevel, BASE_LEVEL)].Values[scale]
 }
-func (effect *SpellEffect) ParseStatEffect(scalesWithIlvl bool, ilvl int) *stats.Stats {
-	effectStats := &stats.Stats{}
+
+// The stats the effect grants, and whether it granted any. The caller needs the two apart: an
+// effect that resolves to nothing is the signal to keep walking down the trigger chain, and "all
+// zeroes" is a legitimate resolution for an aura this does not model.
+func (effect *SpellEffect) ParseStatEffect(scalesWithIlvl bool, ilvl int) (stats.Stats, bool) {
+	effectStats := stats.Stats{}
 	stat, _ := MapMainStatToStat(effect.EffectMiscValues[0])
 
 	switch {
@@ -314,22 +354,41 @@ func (effect *SpellEffect) ParseStatEffect(scalesWithIlvl bool, ilvl int) *stats
 		}
 
 	case effect.EffectAura == A_MOD_RATING:
+		scaled := effect.Coefficient != 0 && scalesWithIlvl
+		var scaledValue float64
+		if scaled {
+			scaledValue = effect.CalcCoefficientStatValue(ilvl)
+		}
+
 		for _, rating := range getMatchingRatingMods(effect.EffectMiscValues[0]) {
-			if statMod := RatingModToStat[rating]; statMod != -1 {
-				if effect.Coefficient != 0 && scalesWithIlvl {
-					effectStats[statMod] = effect.CalcCoefficientStatValue(ilvl)
-					break
-				}
+			statMod := RatingModToStat[rating]
+			if statMod == -1 {
+				continue
+			}
+			// Assigned rather than accumulated: several rating bits (melee/ranged/spell hit
+			// for example) map onto the same stat and must not stack. Masks that do span
+			// different stats need every one of them set, so no early exit - breaking after
+			// the first scaled stat silently dropped the rest of a multi-stat mask.
+			if scaled {
+				effectStats[statMod] = scaledValue
+			} else {
 				effectStats[statMod] = float64(effect.EffectBasePoints + effect.EffectDieSides)
 			}
 		}
 	case effect.EffectAura == A_MOD_INCREASE_ENERGY:
-		effectStats[proto.Stat_StatMana] = float64(effect.EffectBasePoints + effect.EffectDieSides)
+		// MiscValue 0 is the power type. Only mana has a matching stat; rage, focus, energy
+		// and the rest are resources the sim tracks per spec, not stats, so treating every
+		// power type as mana just invents mana out of nothing.
+		if effect.EffectMiscValues[0] == POWER_TYPE_MANA {
+			effectStats[proto.Stat_StatMana] = float64(effect.EffectBasePoints + effect.EffectDieSides)
+		}
 	case effect.EffectAura == A_MOD_INCREASE_HEALTH_2:
 		effectStats[proto.Stat_StatHealth] = float64(effect.EffectBasePoints + effect.EffectDieSides)
 	case effect.EffectAura == A_PERIODIC_TRIGGER_SPELL && effect.EffectAuraPeriod == 10000:
-		for _, sub := range dbcInstance.SpellEffects[effect.EffectTriggerSpell] {
-			effectStats.AddInplace(sub.ParseStatEffect(false, 0))
+		for _, sub := range dbcInstance.SpellEffectsInOrder(effect.EffectTriggerSpell) {
+			if subStats, ok := sub.ParseStatEffect(false, 0); ok {
+				effectStats.AddInplace(&subStats)
+			}
 		}
 	case effect.EffectAura == A_MOD_TARGET_RESISTANCE:
 		resist := ConvertTargetResistanceFlagToPenetrationStat(effect.EffectMiscValues[0])
@@ -348,5 +407,5 @@ func (effect *SpellEffect) ParseStatEffect(scalesWithIlvl bool, ilvl int) *stats
 		effectStats[proto.Stat_StatSpellCritRating] = float64(effect.EffectBasePoints+effect.EffectDieSides) * core.SpellCritRatingPerCritPercent
 	}
 
-	return effectStats
+	return effectStats, effectStats != stats.Stats{}
 }

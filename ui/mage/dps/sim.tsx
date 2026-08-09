@@ -51,6 +51,11 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecMage, {
 			Stat.StatFrostDamage,
 			Stat.StatFireDamage,
 			Stat.StatArcaneDamage,
+			Stat.StatArcaneResistance,
+			Stat.StatFireResistance,
+			Stat.StatFrostResistance,
+			Stat.StatNatureResistance,
+			Stat.StatShadowResistance,
 		],
 		[
 			PseudoStat.PseudoStatSpellHitPercent,

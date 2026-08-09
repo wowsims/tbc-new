@@ -242,6 +242,7 @@ export const BlessingOfSalvation = makeBooleanIndividualBuffInput({
 	actionId: () => ActionId.fromSpellId(25895),
 	fieldName: 'blessingOfSalvation',
 	label: 'Blessing of Salvation',
+	showWhen: player => !player.getPlayerSpec().isTankSpec && !player.getPlayerSpec().isHealingSpec,
 });
 export const BlessingOfSanctuary = makeBooleanIndividualBuffInput({
 	actionId: () => ActionId.fromSpellId(27169),
@@ -515,6 +516,11 @@ export const BUFFS_CONFIG = [
 		config: BlessingOfSanctuary,
 		picker: IconPicker,
 		stats: [Stat.StatStamina, Stat.StatArmor],
+	},
+	{
+		config: BlessingOfSalvation,
+		picker: IconPicker,
+		stats: [],
 	},
 	{
 		config: ShadowProtection,

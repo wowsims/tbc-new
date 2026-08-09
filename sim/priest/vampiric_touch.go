@@ -69,10 +69,9 @@ func (priest *Priest) registerVampiricTouchSpell(rankConfig shared.SpellRankConf
 		},
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			result := spell.CalcOutcome(sim, target, spell.OutcomeMagicHit)
+			result := spell.CalcAndDealOutcome(sim, target, spell.OutcomeMagicHit)
 			if result.Landed() {
 				spell.Dot(target).Apply(sim)
-				spell.DealOutcome(sim, result)
 			}
 		},
 

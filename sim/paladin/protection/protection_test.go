@@ -54,6 +54,8 @@ func TestProtection(t *testing.T) {
 
 			Rotation: apl,
 
+			IndividualBuffs: core.FullTankIndividualBuffs,
+
 			IsTank:          true,
 			InFrontOfTarget: true,
 

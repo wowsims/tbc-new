@@ -218,6 +218,12 @@ func CurseOfElementsAura(target *Unit, casterIndex int32, ranks int32) *Aura {
 		multiplier,
 		time.Minute*5,
 	)
+	aura.AttachStatsBuff(stats.Stats{
+		stats.ArcaneResistance: -88,
+		stats.FireResistance:   -88,
+		stats.FrostResistance:  -88,
+		stats.ShadowResistance: -88,
+	})
 
 	aura.NewExclusiveEffect("CurseOfElements", true, ExclusiveEffect{
 		Priority: multiplier,
