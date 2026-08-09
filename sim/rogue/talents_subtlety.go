@@ -71,7 +71,7 @@ func (rogue *Rogue) registerInitiative() {
 		ActionID:       core.ActionID{SpellID: 13980},
 		ProcChance:     0.25 * float64(rogue.Talents.Initiative),
 		Callback:       core.CallbackOnSpellHitDealt,
-		Outcome:        core.OutcomeCrit,
+		Outcome:        core.OutcomeLanded,
 		ClassSpellMask: RogueSpellGarrote | RogueSpellAmbush,
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			rogue.AddComboPoints(sim, 1, initMetrics)
