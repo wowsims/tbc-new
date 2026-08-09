@@ -212,6 +212,12 @@ func (rogue *Rogue) registerDirtyDeeds() {
 		return
 	}
 
+	rogue.AddStaticMod(core.SpellModConfig{
+		Kind:      core.SpellMod_PowerCost_Flat,
+		ClassMask: RogueSpellGarrote,
+		IntValue:  -10 * rogue.Talents.DirtyDeeds,
+	})
+
 	ddAura := rogue.GetOrRegisterAura(core.Aura{
 		Label:    "Dirty Deeds",
 		ActionID: core.ActionID{SpellID: 14083},
