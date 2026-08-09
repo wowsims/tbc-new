@@ -124,8 +124,8 @@ func runSingleBulkSimCandidate(request *proto.BulkSimRequest, candidate BulkSimC
 	}
 
 	var simResult *proto.RaidSimResult
-	if useConcurrentSim && progressCallback == nil {
-		simResult = core.RunRaidSimConcurrentWithSignals(simRequest, signals)
+	if useConcurrentSim {
+		simResult = core.RunRaidSimConcurrentWithSignals(simRequest, simProgress, signals)
 	} else {
 		simResult = core.RunSim(simRequest, simProgress, signals)
 	}

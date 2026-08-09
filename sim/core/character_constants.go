@@ -40,6 +40,14 @@ var ClassWeaponTypeCapabilities = map[proto.Class]map[proto.WeaponType]EligibleW
 		proto.WeaponType_WeaponTypeShield:  {},
 		proto.WeaponType_WeaponTypeSword:   {CanUseTwoHand: true},
 	},
+	proto.Class_ClassHunter: {
+		proto.WeaponType_WeaponTypeAxe:     {CanUseTwoHand: true},
+		proto.WeaponType_WeaponTypeDagger:  {},
+		proto.WeaponType_WeaponTypeFist:    {},
+		proto.WeaponType_WeaponTypePolearm: {CanUseTwoHand: true},
+		proto.WeaponType_WeaponTypeStaff:   {CanUseTwoHand: true},
+		proto.WeaponType_WeaponTypeSword:   {CanUseTwoHand: true},
+	},
 	proto.Class_ClassRogue: {
 		proto.WeaponType_WeaponTypeAxe:     {},
 		proto.WeaponType_WeaponTypeDagger:  {},
@@ -83,7 +91,6 @@ var ClassWeaponTypeCapabilities = map[proto.Class]map[proto.WeaponType]EligibleW
 		proto.WeaponType_WeaponTypeStaff:   {CanUseTwoHand: true},
 		proto.WeaponType_WeaponTypeSword:   {},
 	},
-	proto.Class_ClassHunter: {},
 }
 
 var ClassRangedWeaponTypeCapabilities = map[proto.Class][]proto.RangedWeaponType{

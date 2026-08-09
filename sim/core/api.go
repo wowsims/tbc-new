@@ -50,9 +50,9 @@ func ComputeStatsAndDeps(request *proto.ComputeStatsRequest) (*proto.ComputeStat
 	}
 	character := env.Raid.Parties[0].Players[0].GetCharacter()
 	// FillPlayerStats activates build-phase auras to compute FinalStats then clears them.
-	// Re-apply base-phase auras so that starting-form multipliers are active in the
-	// returned SDM without also enabling talent/gear/buff deps already handled analytically.
-	character.applyBuildPhaseAuras(CharacterBuildPhaseBase)
+	// Re-apply the build-phase dependencies used when resolving stat deltas. Talent-phase
+	// dependencies are intentionally handled separately by the reforge optimizer.
+	character.applyBuildPhaseAuras(CharacterBuildPhaseBase | CharacterBuildPhaseGear | CharacterBuildPhaseBuffs)
 	sdm := character.StatDependencyManager
 	return result, &sdm
 }
@@ -125,8 +125,8 @@ func RunRaidSimConcurrent(request *proto.RaidSimRequest) *proto.RaidSimResult {
 }
 
 // Threading does not work in WASM!
-func RunRaidSimConcurrentWithSignals(request *proto.RaidSimRequest, signals simsignals.Signals) *proto.RaidSimResult {
-	return runSimConcurrent(request, nil, signals)
+func RunRaidSimConcurrentWithSignals(request *proto.RaidSimRequest, progress chan *proto.ProgressMetrics, signals simsignals.Signals) *proto.RaidSimResult {
+	return runSimConcurrent(request, progress, signals)
 }
 
 // Threading does not work in WASM!

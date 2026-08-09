@@ -3,33 +3,31 @@ import clsx from 'clsx';
 import tippy from 'tippy.js';
 import { ref } from 'tsx-vanilla';
 
+import i18n from '../../../i18n/config';
+import { translateWeaponType } from '../../../i18n/localization';
+import { trackEvent } from '../../../tracking/utils';
 import { REPO_RELEASES_URL } from '../../constants/other';
 import { IndividualSimUI } from '../../individual_sim_ui';
-import i18n from '../../../i18n/config';
+import { isSpecDualWieldCapable } from '../../player_classes/capabilities';
 import { BulkSettings, BulkSimStage, ProgressMetrics } from '../../proto/api';
-import { Class, ItemSlot, ItemSpec, WeaponType } from '../../proto/common';
+import { ItemSlot, ItemSpec, WeaponType } from '../../proto/common';
 import { EquippedItem } from '../../proto_utils/equipped_item';
 import { Gear } from '../../proto_utils/gear';
 import { canEquipItem, getEligibleItemSlots, getGearKeyFromSpec, isSecondaryItemSlot } from '../../proto_utils/utils';
 import { RequestTypes } from '../../sim_signal_manager';
 import { TypedEvent } from '../../typed_event';
 import { formatDurationSeconds, formatToNumber, getEnumValues, isExternal } from '../../utils';
-import { isSpecDualWieldCapable } from '../../player_classes/capabilities';
 import SelectorModal from '../gear_picker/selector_modal';
+import { BooleanPicker } from '../pickers/boolean_picker';
+import { EnumPicker } from '../pickers/enum_picker';
+import { ProgressTrackerModal } from '../progress_tracker_modal';
 import { SimTab } from '../sim_tab';
 import Toast from '../toast';
 import BulkItemPickerGroup from './bulk/bulk_item_picker_group';
 import BulkItemSearch from './bulk/bulk_item_search';
 import BulkSimResultRenderer from './bulk/bulk_sim_results_renderer';
 import { BulkSimItemSlot } from './bulk/constants_auto_gen';
-import { BULK_SIM_ITEM_SLOT_TO_ITEM_SLOT_PAIRS, BulkSimReforgeCacheProgress, dedupeGearSets, getBulkItemSlotFromSlot } from './bulk/utils';
 import { runCoreBulkSim } from './bulk/core_sim';
-import { BulkGearJsonImporter } from './importers';
-import { trackEvent } from '../../../tracking/utils';
-import { EnumPicker } from '../pickers/enum_picker';
-import { translateWeaponType } from '../../../i18n/localization';
-import { BooleanPicker } from '../pickers/boolean_picker';
-import { ProgressTrackerModal } from '../progress_tracker_modal';
 import {
 	BulkSimProgressConfig,
 	NATIVE_COMBINATIONS_LIMIT,
@@ -38,6 +36,8 @@ import {
 	WEB_COMBINATIONS_LIMIT,
 	WEB_ITERATIONS_LIMIT,
 } from './bulk/types';
+import { BULK_SIM_ITEM_SLOT_TO_ITEM_SLOT_PAIRS, BulkSimReforgeCacheProgress, dedupeGearSets, getBulkItemSlotFromSlot } from './bulk/utils';
+import { BulkGearJsonImporter } from './importers';
 
 export class BulkTab extends SimTab {
 	readonly simUI: IndividualSimUI<any>;
@@ -92,7 +92,7 @@ export class BulkTab extends SimTab {
 		super(parentElem, simUI, { identifier: 'bulk-tab', title: i18n.t('bulk_tab.title') });
 
 		this.simUI = simUI;
-		this.playerCanDualWield = isSpecDualWieldCapable(this.simUI.player.getSpec()) && this.simUI.player.getClass() !== Class.ClassHunter;
+		this.playerCanDualWield = isSpecDualWieldCapable(this.simUI.player.getSpec());
 
 		const setupTabBtnRef = ref<HTMLButtonElement>();
 		const setupTabRef = ref<HTMLDivElement>();
