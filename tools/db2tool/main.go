@@ -25,7 +25,6 @@ import (
 	"github.com/wowsims/tbc/tools/db2tool/sqlite"
 	"github.com/wowsims/tbc/tools/db2tool/tact"
 	"github.com/wowsims/tbc/tools/db2tool/wdc"
-	_ "modernc.org/sqlite"
 )
 
 func main() {
