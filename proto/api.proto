@@ -748,10 +748,6 @@ message BulkSettings {
 	int32 freeze_weapon_slot = 10;
 	repeated WeaponType freeze_mainhand_weapon_slots = 11;
 	repeated WeaponType freeze_offhand_weapon_slots = 12;
-
-	// 14 was required_set_bonuses (with a BulkRequiredSetBonus message). TBC has no UI that
-	// can populate it, so the matcher was removed; reserved so the number is never reused.
-	reserved 14;
 }
 
 message BulkGearCandidate {
