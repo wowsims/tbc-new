@@ -49,3 +49,7 @@ assets/db_inputs/dbc/
 tbc.sln
 
 .claude
+tools/db2tool/listfile.csv
+tools/db2tool/DBDCache/
+tools/db2tool/dbfilesclient/
+tools/db2tool/caches/

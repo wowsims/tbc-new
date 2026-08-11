@@ -71,7 +71,7 @@ func (rogue *Rogue) registerInitiative() {
 		ActionID:       core.ActionID{SpellID: 13980},
 		ProcChance:     0.25 * float64(rogue.Talents.Initiative),
 		Callback:       core.CallbackOnSpellHitDealt,
-		Outcome:        core.OutcomeCrit,
+		Outcome:        core.OutcomeLanded,
 		ClassSpellMask: RogueSpellGarrote | RogueSpellAmbush,
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			rogue.AddComboPoints(sim, 1, initMetrics)
@@ -211,6 +211,12 @@ func (rogue *Rogue) registerDirtyDeeds() {
 	if rogue.Talents.DirtyDeeds == 0 {
 		return
 	}
+
+	rogue.AddStaticMod(core.SpellModConfig{
+		Kind:      core.SpellMod_PowerCost_Flat,
+		ClassMask: RogueSpellGarrote,
+		IntValue:  -10 * rogue.Talents.DirtyDeeds,
+	})
 
 	ddAura := rogue.GetOrRegisterAura(core.Aura{
 		Label:    "Dirty Deeds",
