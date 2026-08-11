@@ -6675,19 +6675,6 @@
 									"additionalProperties": false,
 									"required": ["label", "tooltip"]
 								},
-								"weave_only_raptor": {
-									"type": "object",
-									"properties": {
-										"label": {
-											"type": "string"
-										},
-										"tooltip": {
-											"type": "string"
-										}
-									},
-									"additionalProperties": false,
-									"required": ["label", "tooltip"]
-								},
 								"time_to_weave": {
 									"type": "object",
 									"properties": {
@@ -6758,7 +6745,6 @@
 							"required": [
 								"sting",
 								"melee_weave",
-								"weave_only_raptor",
 								"time_to_weave",
 								"use_multi",
 								"use_arcane",
