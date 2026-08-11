@@ -7,6 +7,8 @@ import (
 	"slices"
 	"strings"
 	"sync"
+
+	"golang.org/x/sync/errgroup"
 )
 
 type DBC struct {
@@ -68,50 +70,34 @@ var (
 func InitDBC() error {
 	dbcInstance = NewDBC()
 
-	if err := dbcInstance.loadItems("./assets/db_inputs/dbc/items.json"); err != nil {
-		return fmt.Errorf("loading items: %w", err)
+	// The inputs are independent files folding into disjoint DBC fields, so they load
+	// concurrently.
+	var g errgroup.Group
+	load := func(name string, loadFn func(string) error, path string) {
+		g.Go(func() error {
+			if err := loadFn(path); err != nil {
+				return fmt.Errorf("loading %s: %w", name, err)
+			}
+			return nil
+		})
 	}
-	if err := dbcInstance.loadGems("./assets/db_inputs/dbc/gems.json"); err != nil {
-		return fmt.Errorf("loading gems: %w", err)
-	}
-	if err := dbcInstance.loadEnchants("./assets/db_inputs/dbc/enchants.json"); err != nil {
-		return fmt.Errorf("loading enchants: %w", err)
-	}
-	if err := dbcInstance.loadItemStatEffects("./assets/db_inputs/dbc/item_stat_effects.json"); err != nil {
-		return fmt.Errorf("loading item stat effects: %w", err)
-	}
-	if err := dbcInstance.loadSpellEffects("./assets/db_inputs/dbc/spell_effects.json"); err != nil {
-		return fmt.Errorf("loading spell effects: %w", err)
-	}
-	if err := dbcInstance.loadRandomSuffix("./assets/db_inputs/dbc/random_suffix.json"); err != nil {
-		return fmt.Errorf("loading random suffixes: %w", err)
-	}
-	if err := dbcInstance.loadRandomPropertiesByIlvl("./assets/db_inputs/dbc/rand_prop_points.json"); err != nil {
-		return fmt.Errorf("loading random properties: %w", err)
-	}
-	if err := dbcInstance.loadItemDamageTables("./assets/db_inputs/dbc/item_damage_tables.json"); err != nil {
-		return fmt.Errorf("loading item damage tables: %w", err)
-	}
-	if err := dbcInstance.LoadItemArmorQuality("./assets/db_inputs/dbc/item_armor_quality.json"); err != nil {
-		return fmt.Errorf("loading item armor quality: %w", err)
-	}
-	if err := dbcInstance.LoadItemArmorTotal("./assets/db_inputs/dbc/item_armor_total.json"); err != nil {
-		return fmt.Errorf("loading item armor total: %w", err)
-	}
-	// if err := dbcInstance.LoadItemArmorShield("./assets/db_inputs/dbc/item_armor_shield.json"); err != nil {
-	// 	return fmt.Errorf("loading item armor shield: %w", err)
-	// }
-	if err := dbcInstance.LoadArmorLocation("./assets/db_inputs/dbc/armor_location.json"); err != nil {
-		return fmt.Errorf("loading armor location: %w", err)
-	}
-	if err := dbcInstance.loadConsumables("./assets/db_inputs/dbc/consumables.json"); err != nil {
-		return fmt.Errorf("loading consumables: %w", err)
-	}
-	if err := dbcInstance.loadItemEffects("./assets/db_inputs/dbc/item_effects.json"); err != nil {
-		return fmt.Errorf("loading item effects: %w", err)
-	}
-	if err := dbcInstance.loadSpells("./assets/db_inputs/dbc/spells.json"); err != nil {
-		return fmt.Errorf("loading spells: %w", err)
+	load("items", dbcInstance.loadItems, "./assets/db_inputs/dbc/items.json")
+	load("gems", dbcInstance.loadGems, "./assets/db_inputs/dbc/gems.json")
+	load("enchants", dbcInstance.loadEnchants, "./assets/db_inputs/dbc/enchants.json")
+	load("item stat effects", dbcInstance.loadItemStatEffects, "./assets/db_inputs/dbc/item_stat_effects.json")
+	load("spell effects", dbcInstance.loadSpellEffects, "./assets/db_inputs/dbc/spell_effects.json")
+	load("random suffixes", dbcInstance.loadRandomSuffix, "./assets/db_inputs/dbc/random_suffix.json")
+	load("random properties", dbcInstance.loadRandomPropertiesByIlvl, "./assets/db_inputs/dbc/rand_prop_points.json")
+	load("item damage tables", dbcInstance.loadItemDamageTables, "./assets/db_inputs/dbc/item_damage_tables.json")
+	load("item armor quality", dbcInstance.LoadItemArmorQuality, "./assets/db_inputs/dbc/item_armor_quality.json")
+	load("item armor total", dbcInstance.LoadItemArmorTotal, "./assets/db_inputs/dbc/item_armor_total.json")
+	// load("item armor shield", dbcInstance.LoadItemArmorShield, "./assets/db_inputs/dbc/item_armor_shield.json")
+	load("armor location", dbcInstance.LoadArmorLocation, "./assets/db_inputs/dbc/armor_location.json")
+	load("consumables", dbcInstance.loadConsumables, "./assets/db_inputs/dbc/consumables.json")
+	load("item effects", dbcInstance.loadItemEffects, "./assets/db_inputs/dbc/item_effects.json")
+	load("spells", dbcInstance.loadSpells, "./assets/db_inputs/dbc/spells.json")
+	if err := g.Wait(); err != nil {
+		return err
 	}
 	dbcInstance.LoadSpellScaling()
 	dbcInstance.LoadShieldBlockValues()
