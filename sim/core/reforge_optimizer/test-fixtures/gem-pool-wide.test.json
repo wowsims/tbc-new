@@ -1,0 +1,294 @@
+{
+	"raid": {
+		"parties": [
+			{
+				"players": [
+					{
+						"name": "Player",
+						"race": 7,
+						"class": 9,
+						"warlock": {
+							"options": {
+								"classOptions": {
+									"summon": 3,
+									"sacrificeSummon": true,
+									"armor": 1,
+									"curseOptions": 3
+								}
+							}
+						},
+						"talentsString": "-20500301332101-50500051220051053105",
+						"profession1": 4,
+						"profession2": 11,
+						"reactionTimeMs": 100,
+						"distanceFromTarget": 20,
+						"equipment": {
+							"items": [
+								{
+									"id": 28963,
+									"enchant": 3002,
+									"gems": [34220, 24030]
+								},
+								{
+									"id": 28530
+								},
+								{
+									"id": 28967,
+									"enchant": 2982,
+									"gems": [31116, 30588]
+								},
+								{
+									"id": 28766,
+									"enchant": 2621
+								},
+								{
+									"id": 28964,
+									"enchant": 2661,
+									"gems": [30564, 28123, 24030]
+								},
+								{
+									"id": 24250,
+									"enchant": 2650,
+									"gems": [31867]
+								},
+								{
+									"id": 28968,
+									"enchant": 2937
+								},
+								{
+									"id": 24256,
+									"gems": [24030, 24030]
+								},
+								{
+									"id": 24262,
+									"enchant": 2748,
+									"gems": [24030, 24030, 28118]
+								},
+								{
+									"id": 21870,
+									"enchant": 2940,
+									"gems": [31867, 30555]
+								},
+								{
+									"id": 28793
+								},
+								{
+									"id": 28753
+								},
+								{
+									"id": 27683
+								},
+								{
+									"id": 29370
+								},
+								{
+									"id": 28802,
+									"enchant": 2672
+								},
+								{
+									"id": 28734
+								},
+								{
+									"id": 28673
+								}
+							]
+						},
+						"consumables": {
+							"potId": 22839,
+							"flaskId": 22866,
+							"foodId": 27657,
+							"conjuredId": 12662,
+							"explosiveId": 30217,
+							"mhImbueId": 25122,
+							"petScrollAgi": true,
+							"petScrollStr": true,
+							"potions": [18253, 22832, 22837, 22839, 22850, 28101, 31677, 32948, 33935, 34440],
+							"conjuredItems": [22105, 12662, 22788, 23334, 23381]
+						},
+						"bonusStats": {
+							"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+							"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+						},
+						"itemSwap": {
+							"items": [
+								{},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{}
+							],
+							"prepullBonusStats": {
+								"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+								"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+							}
+						},
+						"buffs": {
+							"blessingOfKings": true,
+							"blessingOfWisdom": 2
+						},
+						"cooldowns": {},
+						"healingModel": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					}
+				],
+				"buffs": {
+					"moonkinAura": 1,
+					"drums": 4,
+					"eyeOfTheNight": true,
+					"chainOfTheTwilightOwl": true,
+					"manaSpringTotem": 1,
+					"totemOfWrath": 1,
+					"wrathOfAirTotem": 2
+				}
+			},
+			{
+				"players": [
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					}
+				],
+				"buffs": {}
+			},
+			{
+				"players": [
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					}
+				],
+				"buffs": {}
+			},
+			{
+				"players": [
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					}
+				],
+				"buffs": {}
+			},
+			{
+				"players": [
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					}
+				],
+				"buffs": {}
+			}
+		],
+		"numActiveParties": 5,
+		"buffs": {
+			"arcaneBrilliance": true,
+			"powerWordFortitude": 2,
+			"divineSpirit": 2,
+			"giftOfTheWild": 2,
+			"bloodlust": true
+		},
+		"debuffs": {
+			"judgementOfWisdom": true,
+			"improvedSealOfTheCrusader": 2,
+			"misery": true,
+			"curseOfElements": 2,
+			"isbUptime": 0.59,
+			"shadowWeaving": true,
+			"bloodFrenzy": true,
+			"giftOfArthas": true,
+			"mangle": true,
+			"exposeArmor": 2,
+			"faerieFire": 2,
+			"sunderArmor": true,
+			"curseOfRecklessness": true,
+			"huntersMark": 2,
+			"exposeWeaknessUptime": 0.9,
+			"exposeWeaknessHunterAgility": 1150,
+			"shadowEmbrace": true,
+			"screech": true
+		}
+	},
+	"preCapEpWeights": {
+		"stats": [0, 0, 0, 0.38, 0, 1, 0, 0.07, 0, 0, 0, 0.92, 1.73, 0.82, 1.21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.29, 0, 0, 0, 0, 0, 0],
+		"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+	},
+	"undershootCaps": {
+		"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+	},
+	"settings": {
+		"statCaps": {
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+		},
+		"maxGemPhase": 2,
+		"maxGemQuality": 4,
+		"epStats": [2, 3, 5, 11, 7, 12, 13, 14, 15, 35]
+	}
+}

@@ -5,6 +5,7 @@ package reforgeoptimizer
 import (
 	"strconv"
 	"testing"
+	"time"
 )
 
 func TestHiGHSWasmRuntimeConcurrencyUsesEnvOverride(t *testing.T) {
@@ -32,5 +33,42 @@ func TestDefaultHiGHSWasmRuntimeConcurrency(t *testing.T) {
 				t.Fatalf("default concurrency for %d CPUs = %d, want %d", testCase.numCPU, got, testCase.want)
 			}
 		})
+	}
+}
+
+// tinyHiGHSWasmLP maximizes x0 + 2 x1 subject to x0 + x1 <= 1 (binary), whose optimum is
+// x0=0, x1=1.
+const tinyHiGHSWasmLP = "Maximize\n obj: 1 x0 + 2 x1\nSubject To\n c0: 1 x0 + 1 x1 <= 1\nBinary\n x0\n x1\nEnd"
+
+// TestHiGHSWasmStackDoesNotGrowAcrossSolves pins the stackAlloc bracketing in runHiGHSLP. The C
+// strings each solve passes to the Highs_* entry points are allocated on emscripten's stack and
+// never freed, so a runtime coming back out of the pool must have the same stack pointer it went
+// in with; otherwise a long-lived pool overflows its stack after enough solves.
+func TestHiGHSWasmStackDoesNotGrowAcrossSolves(t *testing.T) {
+	// Prime the pool so the loop below reuses one runtime rather than instantiating new ones.
+	if _, _, err := runHiGHSLP(tinyHiGHSWasmLP, 2, 5*time.Second, 0); err != nil {
+		t.Fatalf("runHiGHSLP warmup returned error: %v", err)
+	}
+
+	pooledStackPointer := func() int32 {
+		t.Helper()
+		runtime := <-highsWasmRuntimePool
+		defer func() { highsWasmRuntimePool <- runtime }()
+		stackPointer, err := callI32(runtime.ctx, runtime.stackSave)
+		if err != nil {
+			t.Fatalf("reading HiGHS wasm stack pointer: %v", err)
+		}
+		return stackPointer
+	}
+
+	before := pooledStackPointer()
+	for range 20 {
+		if _, _, err := runHiGHSLP(tinyHiGHSWasmLP, 2, 5*time.Second, 0); err != nil {
+			t.Fatalf("runHiGHSLP returned error: %v", err)
+		}
+	}
+	if after := pooledStackPointer(); after != before {
+		t.Errorf("HiGHS wasm stack pointer moved %d bytes over 20 solves (%d -> %d); each solve is leaking its stackAlloc'd strings",
+			before-after, before, after)
 	}
 }

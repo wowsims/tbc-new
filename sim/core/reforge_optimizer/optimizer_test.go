@@ -19,8 +19,9 @@ import (
 	protopkg "google.golang.org/protobuf/proto"
 )
 
-// fixturesDir holds the committed spec-based parity fixtures (<spec>.test.json), each
-// generated from master gear by TestGenerateReforgeFixtures (fixture_support_test.go).
+// fixturesDir holds the committed coverage fixtures (<name>.test.json) that
+// TestReforgerOptimizer runs. Each is named after the optimizer behaviour it guards rather
+// than the spec it was captured from; fixture_<class>_test.go documents the mapping.
 // Enumerating by glob keeps this suite self-contained: it does not depend on the
 // fixture_*_test.go generators. If no fixtures are present, skip rather than fail so the
 // package's other tests still run.
