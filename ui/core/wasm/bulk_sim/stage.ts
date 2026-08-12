@@ -358,13 +358,17 @@ export const runConcurrentBulkSimStage = async (
 		iterations,
 	);
 	baseline = adaptedStage.baseline;
-	// Replace in place (results is referenced by the callers below), by assignment rather
-	// than a spread: the low stage runs on the full candidate list, and one argument per
-	// candidate throws RangeError past the engine's argument limit.
-	for (let i = 0; i < adaptedStage.results.length; i++) {
-		results[i] = adaptedStage.results[i];
+	// Only a rerun produces a fresh array; every other path returns the one passed in, so
+	// the common case would copy every element onto itself. Replace in place (the callers
+	// below hold this reference) by assignment rather than a spread: the low stage runs on
+	// the full candidate list, and one argument per candidate throws RangeError past the
+	// engine's argument limit.
+	if (adaptedStage.results !== results) {
+		for (let i = 0; i < adaptedStage.results.length; i++) {
+			results[i] = adaptedStage.results[i];
+		}
+		results.length = adaptedStage.results.length;
 	}
-	results.length = adaptedStage.results.length;
 	if (baseline.error) {
 		return bulkSimStageError(config, baseline, adaptedStage.iterations);
 	}
