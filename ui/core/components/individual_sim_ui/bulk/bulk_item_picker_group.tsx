@@ -32,12 +32,11 @@ export default class BulkItemPickerGroup extends ContentBlock {
 		return !!this.pickers.get(idx);
 	}
 
-	add(idx: number, item: EquippedItem, silent = false): boolean {
-		if (!this.pickers.size) this.bodyElement.replaceChildren();
-
-		// Block duplicate items from being added.
+	// True when `item` could not be worn alongside everything already listed: it shares a limit
+	// category with one of them, or the slot already holds as many copies as can be worn.
+	// Finger/trinket/weapon map to two physical slots, so two copies of a non-unique item fit.
+	private isDuplicateOfExisting(item: EquippedItem): boolean {
 		const pickers = Array.from(this.pickers.values());
-		// Slots that map to two physical equipment slots can hold two copies of a non-unique item.
 		const isDualSlot =
 			this.bulkSlot == BulkSimItemSlot.ItemSlotHandWeapon ||
 			this.bulkSlot == BulkSimItemSlot.ItemSlotFinger ||
@@ -47,7 +46,17 @@ export default class BulkItemPickerGroup extends ContentBlock {
 			picker => picker.item._item.limitCategory != 0 && picker.item._item.limitCategory === item._item.limitCategory,
 		);
 		const hasMaxCopies = pickers.filter(picker => picker.item.id === item.id).length >= maxCopies;
-		if (hasDuplicateLimitCategory || hasMaxCopies) {
+		return hasDuplicateLimitCategory || hasMaxCopies;
+	}
+
+	// Returns false if the item was rejected, so callers can undo the entry they pushed onto
+	// the batch list; a stale one sims and counts toward combinations with no picker to remove it.
+	add(idx: number, item: EquippedItem, silent = false): boolean {
+		if (!this.pickers.size) this.bodyElement.replaceChildren();
+
+		// Equipped pickers (idx < 0) report what is worn rather than offering a choice, so they
+		// always render - the guard must never hide one.
+		if (idx >= 0 && this.isDuplicateOfExisting(item)) {
 			if (!silent)
 				new Toast({
 					delay: 1000,
