@@ -2,6 +2,7 @@ package bulk
 
 import (
 	"fmt"
+	"math"
 	"slices"
 
 	"github.com/wowsims/tbc/sim/core"
@@ -61,7 +62,10 @@ func newBulkSimCandidateGenerator(request *proto.BulkSimRequest, player *proto.P
 
 func (generator *bulkSimCandidateGenerator) buildCandidates() ([]*proto.BulkGearCandidate, error) {
 	rawCombinations := generator.rawCombinationsCount()
-	candidates := make([]*proto.BulkGearCandidate, 0, rawCombinations)
+	// Never reserve the whole raw space: it is an unbounded product over the bulk slots,
+	// so a few extra selections take it past anything that can be allocated for. Append
+	// grows geometrically from here anyway.
+	candidates := make([]*proto.BulkGearCandidate, 0, min(rawCombinations, maxBulkCandidatePreallocation))
 	for comboIdx := 0; comboIdx < rawCombinations; comboIdx++ {
 		gear, err := generator.buildGearForCombo(comboIdx)
 		if err != nil {
@@ -228,6 +232,22 @@ func (generator *bulkSimCandidateGenerator) initGroupedSlotPairs() {
 	}
 }
 
+// The raw combination space is a plain product over the bulk slots and nothing bounds it.
+// The product is clamped only to keep it inside the int32 result fields and out of
+// overflow - never to refuse the request.
+const maxBulkRawCombinations = math.MaxInt32
+const maxBulkCandidatePreallocation = 1 << 16
+
+func saturatingCombinationsMul(rawCombinations int, factor int) int {
+	if rawCombinations == 0 || factor == 0 {
+		return 0
+	}
+	if rawCombinations > maxBulkRawCombinations/factor {
+		return maxBulkRawCombinations
+	}
+	return rawCombinations * factor
+}
+
 func (generator *bulkSimCandidateGenerator) rawCombinationsCount() int {
 	rawCombinations := len(generator.getAllWeaponCombos())
 	if rawCombinations == 0 {
@@ -239,9 +259,9 @@ func (generator *bulkSimCandidateGenerator) rawCombinationsCount() int {
 		}
 		numOptions := len(generator.selectedByBulkSlot[bulkSlot])
 		if numOptions > 1 && (bulkSlot == BulkSimItemSlotFinger || bulkSlot == BulkSimItemSlotTrinket) {
-			rawCombinations *= len(generator.groupedPairsBySlot[bulkSlot])
+			rawCombinations = saturatingCombinationsMul(rawCombinations, len(generator.groupedPairsBySlot[bulkSlot]))
 		} else if numOptions > 0 {
-			rawCombinations *= numOptions
+			rawCombinations = saturatingCombinationsMul(rawCombinations, numOptions)
 		}
 	}
 	return rawCombinations

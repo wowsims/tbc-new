@@ -68,7 +68,11 @@ const mergeBulkSimDistributionMetrics = (
 	for (const [roundedDps, count] of Object.entries(additionalMetrics.hist)) {
 		merged.hist[Number(roundedDps)] = (merged.hist[Number(roundedDps)] ?? 0) + count;
 	}
-	merged.allValues.push(...additionalMetrics.allValues);
+	// One entry per iteration, so this array runs to six figures. Spreading it as call
+	// arguments throws RangeError past the engine's argument limit.
+	for (const value of additionalMetrics.allValues) {
+		merged.allValues.push(value);
+	}
 	merged.stdev = Math.sqrt(Math.max(0, merged.aggregatorData!.sumSq / totalN - merged.avg * merged.avg));
 	return merged;
 };

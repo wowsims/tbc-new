@@ -358,7 +358,13 @@ export const runConcurrentBulkSimStage = async (
 		iterations,
 	);
 	baseline = adaptedStage.baseline;
-	results.splice(0, results.length, ...adaptedStage.results);
+	// Replace in place (results is referenced by the callers below), by assignment rather
+	// than a spread: the low stage runs on the full candidate list, and one argument per
+	// candidate throws RangeError past the engine's argument limit.
+	for (let i = 0; i < adaptedStage.results.length; i++) {
+		results[i] = adaptedStage.results[i];
+	}
+	results.length = adaptedStage.results.length;
 	if (baseline.error) {
 		return bulkSimStageError(config, baseline, adaptedStage.iterations);
 	}
