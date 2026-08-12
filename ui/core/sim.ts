@@ -49,7 +49,7 @@ import { Database } from './proto_utils/database.js';
 import { Gear } from './proto_utils/gear';
 import { SimResult } from './proto_utils/sim_result.js';
 import { StatCap, Stats } from './proto_utils/stats';
-import { extendPlayerProtoWithMissingEffects, getGearKeyFromSpec } from './proto_utils/utils';
+import { extendPlayerProtoWithMissingEffects, getReforgeCacheGearKey } from './proto_utils/utils';
 import { Raid } from './raid.js';
 import { runConcurrentSim, runConcurrentStatWeights } from './sim_concurrent';
 import { RequestTypes, SimSignalManager } from './sim_signal_manager';
@@ -447,7 +447,7 @@ export class Sim {
 					const preparedSpec = preparedGear.asSpec();
 					preparedCandidateIndices.push(candidate.index);
 					preparedCandidateSpecs.push(preparedSpec);
-					preparedCandidateGearKeys.push(getGearKeyFromSpec(preparedSpec, frozenItemSlots));
+					preparedCandidateGearKeys.push(getReforgeCacheGearKey(preparedSpec, frozenItemSlots));
 					const processedCandidates = i + 1;
 					if (processedCandidates % 1024 === 0 || processedCandidates === totalCandidates) {
 						const now = performance.now();

@@ -13,15 +13,34 @@ import (
 
 var WITH_DB = false
 
-var ItemsByID = map[int32]Item{}
-var GemsByID = map[int32]Gem{}
-var RandomSuffixesByID = map[int32]RandomSuffix{}
-var EnchantsByEffectID = map[int32]Enchant{}
-var ItemEffectRandPropPointsByIlvl = map[int32]ItemEffectRandPropPoints{}
-var ConsumablesByID = map[int32]Consumable{}
-var SpellEffectsById = map[int32]*proto.SpellEffect{}
+var itemsByID = map[int32]Item{}
+var gemsByID = map[int32]Gem{}
+var randomSuffixesByID = map[int32]RandomSuffix{}
+var enchantsByEffectID = map[int32]Enchant{}
+var itemEffectRandPropPointsByIlvl = map[int32]ItemEffectRandPropPoints{}
+var consumablesByID = map[int32]Consumable{}
+var spellEffectsById = map[int32]*proto.SpellEffect{}
 
+// These maps are written at request time by AddToDatabase while other requests are
+// mid-flight, and a concurrent map read/write is an unrecoverable fatal error rather than
+// a panic something can recover from. They are unexported so every access has to go
+// through an accessor below that holds dbMu; do not export them.
 var dbMu sync.RWMutex
+
+// The only bulk scan of the item map - everything else looks items up by ID. Runs fn for
+// every item that belongs to a set, under the read lock, stopping early if fn returns false.
+func forEachSetItem(fn func(item Item) bool) {
+	dbMu.RLock()
+	defer dbMu.RUnlock()
+	for _, item := range itemsByID {
+		if item.SetName == "" {
+			continue
+		}
+		if !fn(item) {
+			return
+		}
+	}
+}
 
 func AddToDatabase(newDB *proto.SimDatabase) {
 	addToDatabase(newDB)
@@ -32,42 +51,42 @@ func addToDatabase(newDB *proto.SimDatabase) {
 	defer dbMu.Unlock()
 
 	for _, v := range newDB.Items {
-		if _, ok := ItemsByID[v.Id]; !ok {
-			ItemsByID[v.Id] = ItemFromProto(v)
+		if _, ok := itemsByID[v.Id]; !ok {
+			itemsByID[v.Id] = ItemFromProto(v)
 		}
 	}
 
 	for _, v := range newDB.RandomSuffixes {
-		if _, ok := RandomSuffixesByID[v.Id]; !ok {
-			RandomSuffixesByID[v.Id] = RandomSuffixFromProto(v)
+		if _, ok := randomSuffixesByID[v.Id]; !ok {
+			randomSuffixesByID[v.Id] = RandomSuffixFromProto(v)
 		}
 	}
 
 	for _, v := range newDB.Enchants {
-		if _, ok := EnchantsByEffectID[v.EffectId]; !ok {
-			EnchantsByEffectID[v.EffectId] = EnchantFromProto(v)
+		if _, ok := enchantsByEffectID[v.EffectId]; !ok {
+			enchantsByEffectID[v.EffectId] = EnchantFromProto(v)
 		}
 	}
 
 	for _, v := range newDB.Gems {
-		if _, ok := GemsByID[v.Id]; !ok {
-			GemsByID[v.Id] = GemFromProto(v)
+		if _, ok := gemsByID[v.Id]; !ok {
+			gemsByID[v.Id] = GemFromProto(v)
 		}
 	}
 
 	for _, v := range newDB.ItemEffectRandPropPoints {
-		if _, ok := ItemEffectRandPropPointsByIlvl[v.Ilvl]; !ok {
-			ItemEffectRandPropPointsByIlvl[v.Ilvl] = ItemEffectRandPropPointsFromProto(v)
+		if _, ok := itemEffectRandPropPointsByIlvl[v.Ilvl]; !ok {
+			itemEffectRandPropPointsByIlvl[v.Ilvl] = ItemEffectRandPropPointsFromProto(v)
 		}
 	}
 	for _, v := range newDB.Consumables {
-		if _, ok := ConsumablesByID[v.Id]; !ok {
-			ConsumablesByID[v.Id] = ConsumableFromProto(v)
+		if _, ok := consumablesByID[v.Id]; !ok {
+			consumablesByID[v.Id] = ConsumableFromProto(v)
 		}
 	}
 	for _, v := range newDB.SpellEffects {
-		if _, ok := SpellEffectsById[v.Id]; !ok {
-			SpellEffectsById[v.Id] = v
+		if _, ok := spellEffectsById[v.Id]; !ok {
+			spellEffectsById[v.Id] = v
 		}
 	}
 }
@@ -393,7 +412,7 @@ func (equipment *Equipment) containsGemInSlot(itemID int32, slot proto.ItemSlot)
 
 func GetEnchantByEffectID(effectID int32) *Enchant {
 	dbMu.RLock()
-	enchant, ok := EnchantsByEffectID[effectID]
+	enchant, ok := enchantsByEffectID[effectID]
 	dbMu.RUnlock()
 	if !ok {
 		return nil
@@ -403,28 +422,28 @@ func GetEnchantByEffectID(effectID int32) *Enchant {
 
 func GetGemByID(id int32) (Gem, bool) {
 	dbMu.RLock()
-	gem, ok := GemsByID[id]
+	gem, ok := gemsByID[id]
 	dbMu.RUnlock()
 	return gem, ok
 }
 
 func GetConsumableByID(id int32) Consumable {
 	dbMu.RLock()
-	c := ConsumablesByID[id]
+	c := consumablesByID[id]
 	dbMu.RUnlock()
 	return c
 }
 
 func GetSpellEffectByID(id int32) *proto.SpellEffect {
 	dbMu.RLock()
-	e := SpellEffectsById[id]
+	e := spellEffectsById[id]
 	dbMu.RUnlock()
 	return e
 }
 
 func GetItemEffectRandPropPointsByIlvl(ilvl int32) *ItemEffectRandPropPoints {
 	dbMu.RLock()
-	p, ok := ItemEffectRandPropPointsByIlvl[ilvl]
+	p, ok := itemEffectRandPropPointsByIlvl[ilvl]
 	dbMu.RUnlock()
 	if !ok {
 		return nil
@@ -464,7 +483,7 @@ func NewItem(itemSpec ItemSpec) Item {
 	defer dbMu.RUnlock()
 
 	item := Item{}
-	if foundItem, ok := ItemsByID[itemSpec.ID]; ok {
+	if foundItem, ok := itemsByID[itemSpec.ID]; ok {
 		item = foundItem
 	} else {
 		panic(fmt.Sprintf("No item with id: %d", itemSpec.ID))
@@ -478,7 +497,7 @@ func NewItem(itemSpec ItemSpec) Item {
 	item.RandPropPoints = scalingOptions.RandPropPoints
 
 	if itemSpec.RandomSuffix != 0 {
-		if randomSuffix, ok := RandomSuffixesByID[itemSpec.RandomSuffix]; ok {
+		if randomSuffix, ok := randomSuffixesByID[itemSpec.RandomSuffix]; ok {
 			item.RandomSuffix = randomSuffix
 		} else {
 			panic(fmt.Sprintf("No random suffix with id: %d", itemSpec.RandomSuffix))
@@ -486,7 +505,7 @@ func NewItem(itemSpec ItemSpec) Item {
 	}
 
 	if itemSpec.Enchant != 0 {
-		if enchant, ok := EnchantsByEffectID[itemSpec.Enchant]; ok {
+		if enchant, ok := enchantsByEffectID[itemSpec.Enchant]; ok {
 			item.Enchant = enchant
 		}
 		// else {
@@ -503,7 +522,7 @@ func NewItem(itemSpec ItemSpec) Item {
 
 		item.Gems = make([]Gem, numGems)
 		for gemIdx, gemID := range itemSpec.Gems {
-			if gem, ok := GemsByID[gemID]; ok {
+			if gem, ok := gemsByID[gemID]; ok {
 				item.Gems[gemIdx] = gem
 			} else {
 				if gemID != 0 {
@@ -617,7 +636,7 @@ func ItemEquipmentGemAndEnchantStats(item Item) stats.Stats {
 
 func GetItemByID(id int32) *Item {
 	dbMu.RLock()
-	item, ok := ItemsByID[id]
+	item, ok := itemsByID[id]
 	dbMu.RUnlock()
 	if !ok {
 		return nil

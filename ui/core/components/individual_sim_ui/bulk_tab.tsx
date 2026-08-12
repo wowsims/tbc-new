@@ -13,7 +13,7 @@ import { BulkSettings, BulkSimStage, ProgressMetrics } from '../../proto/api';
 import { ItemSlot, ItemSpec, WeaponType } from '../../proto/common';
 import { EquippedItem } from '../../proto_utils/equipped_item';
 import { Gear } from '../../proto_utils/gear';
-import { canEquipItem, getEligibleItemSlots, getGearKeyFromSpec, isSecondaryItemSlot } from '../../proto_utils/utils';
+import { canEquipItem, getEligibleItemSlots, getGearIdentityKey, isSecondaryItemSlot } from '../../proto_utils/utils';
 import { RequestTypes } from '../../sim_signal_manager';
 import { TypedEvent } from '../../typed_event';
 import { formatDurationSeconds, formatToNumber, getEnumValues, isExternal } from '../../utils';
@@ -1059,8 +1059,8 @@ export class BulkTab extends SimTab {
 				backendBulkSettings,
 			);
 
-			const originalGearKey = getGearKeyFromSpec(this.originalGear.asSpec());
-			this.topGearResults = topGearResults.filter(result => getGearKeyFromSpec(result.gear.asSpec()) !== originalGearKey);
+			const originalGearKey = getGearIdentityKey(this.originalGear.asSpec());
+			this.topGearResults = topGearResults.filter(result => getGearIdentityKey(result.gear.asSpec()) !== originalGearKey);
 			this.originalGearResults = {
 				gear: this.originalGear,
 				dpsMetrics: referenceDpsMetrics,

@@ -1388,7 +1388,28 @@ export function migrateOldProto<Type>(oldProto: Type, oldApiVersion: number, con
 	return migratedProto;
 }
 
-export function getGearKeyFromSpec(spec: EquipmentSpec, frozenItemSlots?: readonly ItemSlot[]): string {
+/**
+ * Fingerprint for comparing or deduplicating gear sets: item, random suffix, enchant, plus
+ * the head meta gem. Other gems are deliberately excluded — two sets differing only there
+ * are the same bulk-sim input.
+ *
+ * NOT a cache key. Use getReforgeCacheGearKey for anything that keys an optimizer result.
+ */
+export function getGearIdentityKey(spec: EquipmentSpec): string {
+	return buildGearKey(spec);
+}
+
+/**
+ * Cache key for a gem-optimizer result: everything the optimizer's output depends on. It
+ * clears every non-meta gem in a non-frozen slot before solving (see clearGems), so the
+ * equipped gems that survive — a frozen slot's full set, and the head meta — are exactly
+ * what the identity fingerprint already encodes, plus each frozen slot's frozen marker.
+ */
+export function getReforgeCacheGearKey(spec: EquipmentSpec, frozenItemSlots?: readonly ItemSlot[]): string {
+	return buildGearKey(spec, frozenItemSlots);
+}
+
+function buildGearKey(spec: EquipmentSpec, frozenItemSlots?: readonly ItemSlot[]): string {
 	const items = spec.items;
 	const frozenSlots = frozenItemSlots ?? [];
 	const frozenSlotMask = frozenSlots.length ? new Uint8Array(items.length) : undefined;
