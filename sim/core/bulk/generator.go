@@ -11,18 +11,17 @@ import (
 )
 
 type bulkSimCandidateGenerator struct {
-	settings            *proto.BulkSettings
-	playerClass         proto.Class
-	playerSpec          proto.Spec
-	playerCanDualWield  bool
-	playerIsFuryWarrior bool
-	baseEquipment       core.Equipment
-	selectedByBulkSlot  map[BulkSimItemSlot][]bulkSimCandidateOption
-	groupedPairsBySlot  map[BulkSimItemSlot][][2]bulkSimCandidateOption
-	frozenItems         map[BulkSimItemSlot]*core.Item
-	frozenWeaponSlot    proto.ItemSlot
-	weaponTypeFilters   map[proto.ItemSlot][]proto.WeaponType
-	weaponCopyCounts    map[itemSpecCacheKey]int
+	settings           *proto.BulkSettings
+	playerClass        proto.Class
+	playerSpec         proto.Spec
+	playerCanDualWield bool
+	baseEquipment      core.Equipment
+	selectedByBulkSlot map[BulkSimItemSlot][]bulkSimCandidateOption
+	groupedPairsBySlot map[BulkSimItemSlot][][2]bulkSimCandidateOption
+	frozenItems        map[BulkSimItemSlot]*core.Item
+	frozenWeaponSlot   proto.ItemSlot
+	weaponTypeFilters  map[proto.ItemSlot][]proto.WeaponType
+	weaponCopyCounts   map[itemSpecCacheKey]int
 }
 
 func newBulkSimCandidateGenerator(request *proto.BulkSimRequest, player *proto.Player) (*bulkSimCandidateGenerator, error) {
@@ -36,15 +35,14 @@ func newBulkSimCandidateGenerator(request *proto.BulkSimRequest, player *proto.P
 	}
 
 	generator := &bulkSimCandidateGenerator{
-		settings:            request.GetBulkSettings(),
-		playerClass:         player.GetClass(),
-		playerSpec:          playerSpec,
-		playerCanDualWield:  core.SpecCanDualWieldCapabilities[playerSpec],
-		playerIsFuryWarrior: playerSpec == proto.Spec_SpecDpsWarrior,
-		baseEquipment:       core.ProtoToEquipment(player.GetEquipment()),
-		selectedByBulkSlot:  make(map[BulkSimItemSlot][]bulkSimCandidateOption),
-		groupedPairsBySlot:  make(map[BulkSimItemSlot][][2]bulkSimCandidateOption),
-		frozenItems:         make(map[BulkSimItemSlot]*core.Item),
+		settings:           request.GetBulkSettings(),
+		playerClass:        player.GetClass(),
+		playerSpec:         playerSpec,
+		playerCanDualWield: core.SpecCanDualWieldCapabilities[playerSpec],
+		baseEquipment:      core.ProtoToEquipment(player.GetEquipment()),
+		selectedByBulkSlot: make(map[BulkSimItemSlot][]bulkSimCandidateOption),
+		groupedPairsBySlot: make(map[BulkSimItemSlot][][2]bulkSimCandidateOption),
+		frozenItems:        make(map[BulkSimItemSlot]*core.Item),
 		weaponTypeFilters: map[proto.ItemSlot][]proto.WeaponType{
 			proto.ItemSlot_ItemSlotMainHand: request.GetBulkSettings().GetFreezeMainhandWeaponSlots(),
 			proto.ItemSlot_ItemSlotOffHand:  request.GetBulkSettings().GetFreezeOffhandWeaponSlots(),
@@ -150,7 +148,7 @@ func (generator *bulkSimCandidateGenerator) initSelectedItems() error {
 			}),
 		}
 
-		for _, slot := range getEligibleItemSlots(option.item, generator.playerIsFuryWarrior) {
+		for _, slot := range getEligibleItemSlots(option.item) {
 			if isSecondaryItemSlot(slot, generator.playerCanDualWield) {
 				continue
 			}
@@ -281,6 +279,10 @@ func (generator *bulkSimCandidateGenerator) buildGearForCombo(comboIdx int) (*pr
 		} else {
 			gear[slot] = createSelectedItem(option)
 		}
+	}
+
+	if mh := gear.GetItemBySlot(proto.ItemSlot_ItemSlotMainHand); mh != nil && mh.HandType == proto.HandType_HandTypeTwoHand {
+		gear[proto.ItemSlot_ItemSlotOffHand] = core.Item{}
 	}
 
 	return gear.ToEquipmentSpecProto(), nil

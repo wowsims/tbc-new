@@ -86,26 +86,8 @@ func (generator *bulkSimCandidateGenerator) getAllWeaponCombos() [][2]*bulkSimCa
 		}
 	}
 
-	if generator.playerIsFuryWarrior {
-		for i := range all2HWeapons {
-			if optionsContainEquivalent(all2HWeapons[:i], all2HWeapons[i]) {
-				continue
-			}
-			allWeaponCombos = append(allWeaponCombos, [2]*bulkSimCandidateOption{&all2HWeapons[i], nil})
-			for j := i + 1; j < len(all2HWeapons); j++ {
-				if optionsContainEquivalent(all2HWeapons[i+1:j], all2HWeapons[j]) {
-					continue
-				}
-				allWeaponCombos = append(allWeaponCombos, [2]*bulkSimCandidateOption{&all2HWeapons[i], &all2HWeapons[j]})
-				if !candidateOptionsEqual(all2HWeapons[i], all2HWeapons[j]) {
-					allWeaponCombos = append(allWeaponCombos, [2]*bulkSimCandidateOption{&all2HWeapons[j], &all2HWeapons[i]})
-				}
-			}
-		}
-	} else {
-		for i := range all2HWeapons {
-			allWeaponCombos = append(allWeaponCombos, [2]*bulkSimCandidateOption{&all2HWeapons[i], nil})
-		}
+	for i := range all2HWeapons {
+		allWeaponCombos = append(allWeaponCombos, [2]*bulkSimCandidateOption{&all2HWeapons[i], nil})
 	}
 
 	mhOptions := generator.selectedByBulkSlot[BulkSimItemSlotMainHand]

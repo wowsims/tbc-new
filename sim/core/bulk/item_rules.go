@@ -77,7 +77,7 @@ func enchantAppliesToItem(effectID int32, item core.Item) bool {
 	if enchant == nil {
 		return false
 	}
-	if !core.CheckSliceOverlap(getEligibleEnchantSlots(*enchant), getEligibleItemSlots(item, false)) {
+	if !core.CheckSliceOverlap(getEligibleEnchantSlots(*enchant), getEligibleItemSlots(item)) {
 		return false
 	}
 	if enchant.Type == proto.ItemType_ItemTypeRanged {
@@ -104,14 +104,11 @@ func getEligibleEnchantSlots(enchant core.Enchant) []proto.ItemSlot {
 	return slots
 }
 
-func getEligibleItemSlots(item core.Item, isFuryWarrior bool) []proto.ItemSlot {
+func getEligibleItemSlots(item core.Item) []proto.ItemSlot {
 	if slots, ok := itemTypeToSlotsMap[item.Type]; ok {
 		return slots
 	}
 	if item.Type == proto.ItemType_ItemTypeWeapon {
-		if isFuryWarrior {
-			return []proto.ItemSlot{proto.ItemSlot_ItemSlotMainHand, proto.ItemSlot_ItemSlotOffHand}
-		}
 		switch item.HandType {
 		case proto.HandType_HandTypeMainHand:
 			return []proto.ItemSlot{proto.ItemSlot_ItemSlotMainHand}
