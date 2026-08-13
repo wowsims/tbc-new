@@ -697,13 +697,6 @@ dps_results: {
  }
 }
 dps_results: {
- key: "TestRogue-AllItems-IceGuard-2682"
- value: {
-  dps: 1851.78868
-  tps: 920.33897
- }
-}
-dps_results: {
  key: "TestRogue-AllItems-IconofUnyieldingCourage-28121"
  value: {
   dps: 1829.52556
@@ -974,13 +967,6 @@ dps_results: {
  value: {
   dps: 1821.51696
   tps: 905.29393
- }
-}
-dps_results: {
- key: "TestRogue-AllItems-SavageGuard-2681"
- value: {
-  dps: 1851.78868
-  tps: 920.33897
  }
 }
 dps_results: {

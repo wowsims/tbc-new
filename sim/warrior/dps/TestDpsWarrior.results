@@ -781,14 +781,6 @@ dps_results: {
  }
 }
 dps_results: {
- key: "TestDpsWarrior-AllItems-IceGuard-2682"
- value: {
-  dps: 2066.88312
-  tps: 1092.37779
-  dtps: 7.36086
- }
-}
-dps_results: {
  key: "TestDpsWarrior-AllItems-IconofUnyieldingCourage-28121"
  value: {
   dps: 2086.84389
@@ -1097,14 +1089,6 @@ dps_results: {
  value: {
   dps: 2043.15491
   tps: 1080.80984
-  dtps: 7.36086
- }
-}
-dps_results: {
- key: "TestDpsWarrior-AllItems-SavageGuard-2681"
- value: {
-  dps: 2066.88312
-  tps: 1092.37779
   dtps: 7.36086
  }
 }

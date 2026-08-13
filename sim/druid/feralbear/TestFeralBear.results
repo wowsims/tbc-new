@@ -944,15 +944,6 @@ dps_results: {
  }
 }
 dps_results: {
- key: "TestFeralBear-AllItems-IceGuard-2682"
- value: {
-  dps: 414.27613
-  tps: 639.71392
-  dtps: 1117.20382
-  hps: 73.80753
- }
-}
-dps_results: {
  key: "TestFeralBear-AllItems-IconofUnyieldingCourage-28121"
  value: {
   dps: 418.45366
@@ -1454,15 +1445,6 @@ dps_results: {
   tps: 646.04601
   dtps: 1115.65852
   hps: 73.08569
- }
-}
-dps_results: {
- key: "TestFeralBear-AllItems-SavageGuard-2681"
- value: {
-  dps: 414.27613
-  tps: 639.71392
-  dtps: 1117.20382
-  hps: 73.80753
  }
 }
 dps_results: {

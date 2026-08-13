@@ -933,14 +933,6 @@ dps_results: {
  }
 }
 dps_results: {
- key: "TestProtectionWarrior-AllItems-IceGuard-2682"
- value: {
-  dps: 792.00538
-  tps: 1453.90474
-  dtps: 1302.54283
- }
-}
-dps_results: {
  key: "TestProtectionWarrior-AllItems-IconoftheSilverCrescent-29370"
  value: {
   dps: 775.25844
@@ -1282,14 +1274,6 @@ dps_results: {
   dps: 775.25844
   tps: 1425.13678
   dtps: 1298.84002
- }
-}
-dps_results: {
- key: "TestProtectionWarrior-AllItems-SavageGuard-2681"
- value: {
-  dps: 792.00538
-  tps: 1453.90474
-  dtps: 1302.54283
  }
 }
 dps_results: {
