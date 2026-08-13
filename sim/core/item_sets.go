@@ -39,14 +39,12 @@ func DefaultItemSetSlots() []proto.ItemSlot {
 
 func (set ItemSet) Items() []Item {
 	var items []Item
-	for _, item := range ItemsByID {
-		if item.SetName == "" {
-			continue
-		}
+	forEachSetItem(func(item Item) bool {
 		if item.SetName == set.Name || item.SetName == set.AlternativeName {
 			items = append(items, item)
 		}
-	}
+		return true
+	})
 	// Sort so the order of IDs is always consistent, for tests.
 	slices.SortFunc(items, func(a, b Item) int {
 		return int(a.ID - b.ID)
@@ -66,17 +64,12 @@ func NewItemSet(set ItemSet) *ItemSet {
 		set.Slots = DefaultItemSetSlots()
 	}
 
-	for _, item := range ItemsByID {
-		if item.SetName == "" {
-			continue
-		}
+	forEachSetItem(func(item Item) bool {
 		foundID = foundID || (item.SetID > 0 && item.SetID == set.ID)
 		foundName = foundName || item.SetName == set.Name
 		foundAlternativeName = foundAlternativeName || item.SetName == set.AlternativeName
-		if foundID && foundName && foundAlternativeName {
-			break
-		}
-	}
+		return !(foundID && foundName && foundAlternativeName)
+	})
 
 	if WITH_DB {
 		if !foundID {

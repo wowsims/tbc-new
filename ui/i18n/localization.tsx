@@ -17,7 +17,7 @@ import {
 import { ResourceType } from '../core/proto/spell';
 import { RaidFilterOption, SourceFilterOption } from '../core/proto/ui';
 import { LaunchStatus } from '../core/launched_sims';
-import { BulkSimItemSlot } from '../core/components/individual_sim_ui/bulk/utils';
+import { BulkSimItemSlot } from '../core/components/individual_sim_ui/bulk/constants_auto_gen';
 import { PresetConfigurationCategory } from '../core/components/individual_sim_ui/preset_configuration_picker';
 import i18n from './config';
 import {

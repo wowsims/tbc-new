@@ -1,8 +1,9 @@
-import { EligibleWeaponType, IconSize, PlayerClass } from '../player_class';
+import { IconSize, PlayerClass } from '../player_class';
 import { PlayerSpec } from '../player_spec';
 import { Priest as PriestSpec } from '../player_specs/priest';
-import { ArmorType, Class, Race, RangedWeaponType, WeaponType } from '../proto/common';
+import { Class } from '../proto/common';
 import { PriestSpecs } from '../proto_utils/utils';
+import { getClassArmorTypes, getClassRaces, getClassRangedWeaponTypes, getClassWeaponTypes } from './capabilities';
 
 export class Priest extends PlayerClass<Class.ClassPriest> {
 	static classID = Class.ClassPriest as Class.ClassPriest;
@@ -11,26 +12,10 @@ export class Priest extends PlayerClass<Class.ClassPriest> {
 	static specs: Record<string, PlayerSpec<PriestSpecs>> = {
 		[PriestSpec.friendlyName]: PriestSpec,
 	};
-	static races: Race[] = [
-		// [H]
-		Race.RaceTroll,
-		Race.RaceUndead,
-		Race.RaceBloodElf,
-		// [A]
-		Race.RaceHuman,
-		Race.RaceDwarf,
-		Race.RaceNightElf,
-		Race.RaceGnome,
-		Race.RaceDraenei,
-	];
-	static armorTypes: ArmorType[] = [ArmorType.ArmorTypeCloth];
-	static weaponTypes: EligibleWeaponType[] = [
-		{ weaponType: WeaponType.WeaponTypeDagger },
-		{ weaponType: WeaponType.WeaponTypeMace },
-		{ weaponType: WeaponType.WeaponTypeOffHand },
-		{ weaponType: WeaponType.WeaponTypeStaff, canUseTwoHand: true },
-	];
-	static rangedWeaponTypes: RangedWeaponType[] = [RangedWeaponType.RangedWeaponTypeWand];
+	static races = getClassRaces(Priest.classID);
+	static armorTypes = getClassArmorTypes(Priest.classID);
+	static weaponTypes = getClassWeaponTypes(Priest.classID);
+	static rangedWeaponTypes = getClassRangedWeaponTypes(Priest.classID);
 
 	readonly classID = Priest.classID;
 	readonly friendlyName = Priest.name;

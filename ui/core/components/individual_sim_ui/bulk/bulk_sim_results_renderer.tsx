@@ -8,7 +8,7 @@ import { formatDeltaTextElem, formatToNumber } from '../../../utils';
 import { Component } from '../../component';
 import { ItemRenderer } from '../../gear_picker/gear_picker';
 import Toast from '../../toast';
-import { TopGearResult } from '../bulk_tab';
+import { TopGearResult } from './types';
 import { RaidSimResultsManager } from '../../raid_sim_action';
 import { ItemSlot, ItemSpec } from '../../../proto/common';
 
@@ -32,7 +32,11 @@ export default class BulkSimResultRenderer extends Component {
 					<div className="results-sim-dps damage-metrics">
 						<span className="topline-result-avg">{this.formatDps(result.dpsMetrics.avg)}</span>
 						<div className="results-reference">
-							{isBaseResult ? <span className="fw-bold">{i18n.t('bulk_tab.results.current_gear')}</span> : <span ref={dpsDeltaRef} className="results-reference-diff" />}
+							{isBaseResult ? (
+								<span className="fw-bold">{i18n.t('bulk_tab.results.current_gear')}</span>
+							) : (
+								<span ref={dpsDeltaRef} className="results-reference-diff" />
+							)}
 						</div>
 					</div>
 				</div>
@@ -90,9 +94,15 @@ export default class BulkSimResultRenderer extends Component {
 				shouldRenderItem = false;
 			} else if (!ItemSpec.equals(spec, originalEquipmentSpec.items[idx])) {
 				shouldRenderItem = true;
-			} else if ([ItemSlot.ItemSlotFinger1, ItemSlot.ItemSlotTrinket1].includes(idx) && !ItemSpec.equals(resultAsSpec.items[idx + 1], originalEquipmentSpec.items[idx + 1])) {
+			} else if (
+				[ItemSlot.ItemSlotFinger1, ItemSlot.ItemSlotTrinket1].includes(idx) &&
+				!ItemSpec.equals(resultAsSpec.items[idx + 1], originalEquipmentSpec.items[idx + 1])
+			) {
 				shouldRenderItem = true;
-			} else if ([ItemSlot.ItemSlotFinger2, ItemSlot.ItemSlotTrinket2].includes(idx) && !ItemSpec.equals(resultAsSpec.items[idx - 1], originalEquipmentSpec.items[idx - 1])) {
+			} else if (
+				[ItemSlot.ItemSlotFinger2, ItemSlot.ItemSlotTrinket2].includes(idx) &&
+				!ItemSpec.equals(resultAsSpec.items[idx - 1], originalEquipmentSpec.items[idx - 1])
+			) {
 				shouldRenderItem = true;
 			} else {
 				shouldRenderItem = false;

@@ -986,7 +986,7 @@
 				"healing_sim_disclaimer": {
 					"type": "string"
 				},
-				"notice_local_download": {
+				"notice_native_download": {
 					"type": "object",
 					"properties": {
 						"title": {
@@ -1073,7 +1073,7 @@
 				"description",
 				"basic_bis_disclaimer",
 				"healing_sim_disclaimer",
-				"notice_local_download",
+				"notice_native_download",
 				"crash_modal",
 				"unlaunched",
 				"notifications",
@@ -1591,19 +1591,6 @@
 					"properties": {
 						"title": {
 							"type": "string"
-						},
-						"challenge_mode": {
-							"type": "object",
-							"properties": {
-								"label": {
-									"type": "string"
-								},
-								"tooltip": {
-									"type": "string"
-								}
-							},
-							"additionalProperties": false,
-							"required": ["label", "tooltip"]
 						},
 						"input_delay": {
 							"type": "object",
@@ -2217,7 +2204,6 @@
 					"additionalProperties": false,
 					"required": [
 						"title",
-						"challenge_mode",
 						"input_delay",
 						"channel_clip_delay",
 						"in_front_of_target",
@@ -3036,7 +3022,7 @@
 				"description": {
 					"type": "string"
 				},
-				"download_local": {
+				"download_native": {
 					"type": "string"
 				},
 				"tabs": {
@@ -3131,10 +3117,7 @@
 						"iterations": {
 							"type": "string"
 						},
-						"fallback_gems": {
-							"type": "string"
-						},
-						"inherit_upgrades": {
+						"use_legacy_bulk_sim": {
 							"type": "object",
 							"properties": {
 								"label": {
@@ -3208,8 +3191,7 @@
 						"combinations_count",
 						"combination_singular",
 						"iterations",
-						"fallback_gems",
-						"inherit_upgrades",
+						"use_legacy_bulk_sim",
 						"freeze_ring",
 						"freeze_trinket",
 						"freeze_weapon",
@@ -3222,7 +3204,13 @@
 						"total_combinations": {
 							"type": "string"
 						},
-						"reforging_rounds": {
+						"restoring_reforges_from_cache": {
+							"type": "string"
+						},
+						"building_candidate_gear_sets": {
+							"type": "string"
+						},
+						"reforging_iteration_rounds": {
 							"type": "string"
 						},
 						"baseline_round": {
@@ -3231,15 +3219,40 @@
 						"refining_rounds": {
 							"type": "string"
 						},
+						"low_iteration_rounds": {
+							"type": "string"
+						},
+						"medium_iteration_rounds": {
+							"type": "string"
+						},
+						"high_iteration_rounds": {
+							"type": "string"
+						},
 						"iterations_complete": {
 							"type": "string"
 						},
 						"seconds_remaining": {
 							"type": "string"
+						},
+						"time_remaining": {
+							"type": "string"
 						}
 					},
 					"additionalProperties": false,
-					"required": ["total_combinations", "reforging_rounds", "baseline_round", "refining_rounds", "iterations_complete", "seconds_remaining"]
+					"required": [
+						"total_combinations",
+						"restoring_reforges_from_cache",
+						"building_candidate_gear_sets",
+						"reforging_iteration_rounds",
+						"baseline_round",
+						"refining_rounds",
+						"low_iteration_rounds",
+						"medium_iteration_rounds",
+						"high_iteration_rounds",
+						"iterations_complete",
+						"seconds_remaining",
+						"time_remaining"
+					]
 				},
 				"notifications": {
 					"type": "object",
@@ -3302,16 +3315,6 @@
 					"additionalProperties": false,
 					"required": ["run_simulation", "equip_button", "gear_equipped", "current_gear"]
 				},
-				"gem_selector": {
-					"type": "object",
-					"properties": {
-						"title": {
-							"type": "string"
-						}
-					},
-					"additionalProperties": false,
-					"required": ["title"]
-				},
 				"import_modal": {
 					"type": "object",
 					"properties": {
@@ -3333,7 +3336,7 @@
 			"required": [
 				"title",
 				"description",
-				"download_local",
+				"download_native",
 				"tabs",
 				"actions",
 				"search",
@@ -3343,7 +3346,6 @@
 				"warning",
 				"picker",
 				"results",
-				"gem_selector",
 				"import_modal"
 			]
 		},

@@ -23,7 +23,7 @@ import {
 } from '../../core/proto/common';
 import { FeralCatDruid_Rotation as DruidRotation } from '../../core/proto/druid';
 import { StatCap, Stats, UnitStat } from '../../core/proto_utils/stats';
-import { StatCapType } from '../../core/proto/ui';
+import { StatCapType } from '../../core/proto/api';
 import { defaultExposeWeaknessSettings, defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
 import * as FeralInputs from './inputs';
 import * as Presets from './presets';
