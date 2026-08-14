@@ -132,15 +132,15 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecMage, {
 	},
 
 	presets: {
-		epWeights: [Presets.P1_EP_PRESET, Presets.P2_EP_PRESET],
+		epWeights: [Presets.P1_EP_PRESET, Presets.P2_EP_PRESET, Presets.P3_EP_PRESET],
 		// Preset rotations that the user can quickly select.
 		rotations: [Presets.ROTATION_PRESET_ARCANE, Presets.APL_ARCANE_SIMPLE, Presets.ROTATION_PRESET_ARCANEBRAID],
 		// Preset talents that the user can quickly select.
 		talents: [Presets.ARCANE_TALENTS],
 		// Preset gear configurations that the user can quickly select.
-		gear: [Presets.PREBIS_ARCANE, Presets.P1_BIS_ARCANE, Presets.P2_BIS_ARCANE],
+		gear: [Presets.PREBIS_ARCANE, Presets.P1_BIS_ARCANE, Presets.P2_BIS_ARCANE, Presets.P3_BIS_ARCANE_STAFF, Presets.P3_BIS_ARCANE_SWORD],
 
-		builds: [Presets.P1_PRESET_BUILD_ARC, Presets.P2_PRESET_BUILD_ARC],
+		builds: [Presets.P1_PRESET_BUILD_ARC, Presets.P2_PRESET_BUILD_ARC, Presets.P3_PRESET_BUILD_ARC_STAFF, Presets.P3_PRESET_BUILD_ARC_SWORD],
 	},
 
 	autoRotation: (player: Player<Spec.SpecMage>): APLRotation => {
