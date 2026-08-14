@@ -21,7 +21,7 @@ type bulkSimCandidateGenerator struct {
 	frozenItems        map[BulkSimItemSlot]*core.Item
 	frozenWeaponSlot   proto.ItemSlot
 	weaponTypeFilters  map[proto.ItemSlot][]proto.WeaponType
-	weaponCopyCounts   map[itemSpecCacheKey]int
+	copyCounts         map[itemSpecCacheKey]int
 }
 
 func newBulkSimCandidateGenerator(request *proto.BulkSimRequest, player *proto.Player) (*bulkSimCandidateGenerator, error) {
@@ -116,22 +116,15 @@ func (generator *bulkSimCandidateGenerator) initSelectedItems() error {
 		}
 		selectedFingerprint := buildItemSpecFingerprintKey(selectedItem)
 		if equippedCounts[selectedFingerprint] > 0 {
-			// For dual-wield weapons, equipped and user-added copies stack:
-			// 1 equipped + 1 added = 2 total, enabling same-weapon combos like [Sp,Sp].
-			// For all other slots a user-added duplicate of an equipped item is redundant.
-			// Fast path: non-dual-wield players can never benefit from stacking, skip lookup.
-			skip := !generator.playerCanDualWield
-			if !skip {
-				baseItem := core.GetItemByID(selectedItem.GetId())
-				skip = baseItem == nil ||
-					baseItem.Type != proto.ItemType_ItemTypeWeapon ||
-					baseItem.HandType == proto.HandType_HandTypeTwoHand
-			}
-			if skip {
+			// Items filling a pair of slots stack: 1 equipped + 1 added = 2 total, enabling
+			// same-item combos like [Sp,Sp] or two Rings of Ancient Knowledge. For single-slot
+			// items a user-added duplicate of an equipped item is redundant.
+			baseItem := core.GetItemByID(selectedItem.GetId())
+			if baseItem == nil || !canStackTwoCopies(*baseItem, generator.playerCanDualWield) {
 				equippedCounts[selectedFingerprint]--
 				continue
 			}
-			// dual-wield 1H weapon: fall through to add it alongside the equipped copy
+			// paired slot: fall through to add it alongside the equipped copy
 		}
 		baseItem := core.GetItemByID(selectedItem.GetId())
 		if baseItem == nil {
@@ -148,14 +141,20 @@ func (generator *bulkSimCandidateGenerator) initSelectedItems() error {
 			}),
 		}
 
+		// Several physical slots can share one bulk slot (Finger1/Finger2, and both hands for a
+		// dual-wielder), so dedupe on the bulk slot rather than skipping the secondary physical
+		// slot: an off-hand-only item has no other eligible slot, and skipping it dropped the
+		// item from the batch entirely.
+		addedBulkSlots := make(map[BulkSimItemSlot]struct{}, 2)
 		for _, slot := range getEligibleItemSlots(option.item) {
-			if isSecondaryItemSlot(slot, generator.playerCanDualWield) {
-				continue
-			}
 			if !canEquipItem(option.item, generator.playerClass, generator.playerSpec, slot) {
 				continue
 			}
 			bulkSlot := getBulkItemSlotFromSlot(slot, generator.playerCanDualWield)
+			if _, added := addedBulkSlots[bulkSlot]; added {
+				continue
+			}
+			addedBulkSlots[bulkSlot] = struct{}{}
 			generator.selectedByBulkSlot[bulkSlot] = append(generator.selectedByBulkSlot[bulkSlot], option)
 		}
 	}
@@ -172,21 +171,47 @@ func (generator *bulkSimCandidateGenerator) initSelectedItems() error {
 		})
 	}
 
-	generator.initWeaponCopyCounts()
+	generator.initCopyCounts()
 	for bulkSlot, options := range generator.selectedByBulkSlot {
 		generator.selectedByBulkSlot[bulkSlot] = dedupeCandidateOptions(options)
 	}
 	return nil
 }
 
-// Capture how many copies of each 1H weapon are available (selected + equipped)
-// before dedup collapses them. A weapon may only occupy both hands when at least
-// two copies exist.
-func (generator *bulkSimCandidateGenerator) initWeaponCopyCounts() {
-	generator.weaponCopyCounts = make(map[itemSpecCacheKey]int)
-	for _, option := range generator.selectedByBulkSlot[BulkSimItemSlotHandWeapon] {
-		generator.weaponCopyCounts[buildItemSpecKey(option.spec)]++
+// canStackTwoCopies reports whether both of an item's slots can hold it at once, which is what
+// makes a same-item combo (two identical rings, or one weapon in each hand) a valid input.
+func canStackTwoCopies(item core.Item, playerCanDualWield bool) bool {
+	if item.Unique || item.LimitCategory != 0 {
+		return false
 	}
+	switch item.Type {
+	case proto.ItemType_ItemTypeFinger, proto.ItemType_ItemTypeTrinket:
+		return true
+	case proto.ItemType_ItemTypeWeapon:
+		return playerCanDualWield &&
+			item.HandType != proto.HandType_HandTypeTwoHand &&
+			item.HandType != proto.HandType_HandTypeMainHand &&
+			item.HandType != proto.HandType_HandTypeOffHand
+	default:
+		return false
+	}
+}
+
+// Capture how many copies of each item are available (selected + equipped) before dedup
+// collapses them. An item may only fill both of its slots when at least two copies exist.
+func (generator *bulkSimCandidateGenerator) initCopyCounts() {
+	generator.copyCounts = make(map[itemSpecCacheKey]int)
+	for _, bulkSlot := range []BulkSimItemSlot{BulkSimItemSlotHandWeapon, BulkSimItemSlotFinger, BulkSimItemSlotTrinket} {
+		for _, option := range generator.selectedByBulkSlot[bulkSlot] {
+			generator.copyCounts[buildItemSpecKey(option.spec)]++
+		}
+	}
+}
+
+// hasTwoCopies reports whether this item may occupy both of its slots at once: the item allows it
+// and the batch actually holds two copies.
+func (generator *bulkSimCandidateGenerator) hasTwoCopies(option bulkSimCandidateOption, item core.Item) bool {
+	return canStackTwoCopies(item, generator.playerCanDualWield) && generator.copyCounts[buildItemSpecKey(option.spec)] >= 2
 }
 
 func (generator *bulkSimCandidateGenerator) initGroupedSlotPairs() {
@@ -200,7 +225,8 @@ func (generator *bulkSimCandidateGenerator) initGroupedSlotPairs() {
 			pairs = make([][2]bulkSimCandidateOption, 0, len(options))
 			frozenSpec := frozenItem.ToItemSpecProto()
 			for _, option := range options {
-				if candidateOptionEqualsItem(option, *frozenItem) {
+				if candidateOptionEqualsItem(option, *frozenItem) &&
+					!generator.hasTwoCopies(option, *frozenItem) {
 					continue
 				}
 				if frozenItem.Unique && frozenItem.ID == option.item.ID {
@@ -214,6 +240,11 @@ func (generator *bulkSimCandidateGenerator) initGroupedSlotPairs() {
 		} else {
 			pairs = make([][2]bulkSimCandidateOption, 0, len(options)*(len(options)-1)/2)
 			for i := 0; i < len(options); i++ {
+				// Wearing two copies of the same item is a valid input, but only when two copies
+				// were actually selected.
+				if generator.hasTwoCopies(options[i], options[i].item) {
+					pairs = append(pairs, [2]bulkSimCandidateOption{options[i], options[i]})
+				}
 				for j := i + 1; j < len(options); j++ {
 					if options[i].item.Unique && options[i].item.ID == options[j].item.ID {
 						continue

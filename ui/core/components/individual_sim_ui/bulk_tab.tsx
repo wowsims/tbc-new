@@ -299,11 +299,7 @@ export class BulkTab extends SimTab {
 		items.forEach(item => {
 			const equippedItem = this.simUI.sim.db.lookupItemSpec(item)?.withDynamicStats();
 			if (equippedItem) {
-				getEligibleItemSlots(equippedItem.item).forEach(slot => {
-					// Avoid duplicating rings/trinkets/weapons
-					if (this.isSecondaryItemSlot(slot) || !canEquipItem(equippedItem.item, this.simUI.player.getPlayerSpec(), slot)) return;
-
-					const bulkSlot = getBulkItemSlotFromSlot(slot, this.playerCanDualWield);
+				this.eligibleBulkSlots(equippedItem).forEach(bulkSlot => {
 					const group = this.pickerGroups.get(bulkSlot)!;
 					const idx = this.items.push(item) - 1;
 					if (!group.add(idx, equippedItem, silent)) {
@@ -336,17 +332,28 @@ export class BulkTab extends SimTab {
 		if (equippedItem) {
 			this.items[idx] = newItem;
 
-			getEligibleItemSlots(equippedItem.item).forEach(slot => {
-				// Avoid duplicating rings/trinkets/weapons
-				if (this.isSecondaryItemSlot(slot) || !canEquipItem(equippedItem.item, this.simUI.player.getPlayerSpec(), slot)) return;
-
-				const bulkSlot = getBulkItemSlotFromSlot(slot, this.playerCanDualWield);
+			this.eligibleBulkSlots(equippedItem).forEach(bulkSlot => {
 				const group = this.pickerGroups.get(bulkSlot)!;
 				group.update(idx, equippedItem);
 			});
 		}
 
 		this.itemsChangedEmitter.emit(TypedEvent.nextEventID());
+	}
+
+	// The bulk slots an item can be batched into, one entry each. Finger1/Finger2 - and both hands
+	// for a dual-wielder - share a bulk slot, so dedupe on the bulk slot instead of skipping the
+	// secondary physical slot: an off-hand-only item has no other eligible slot, and skipping it
+	// dropped shields and off-hand weapons from the batch entirely. Mirrors initSelectedItems.
+	private eligibleBulkSlots(equippedItem: EquippedItem): BulkSimItemSlot[] {
+		const bulkSlots: BulkSimItemSlot[] = [];
+		getEligibleItemSlots(equippedItem.item).forEach(slot => {
+			if (!canEquipItem(equippedItem.item, this.simUI.player.getPlayerSpec(), slot)) return;
+
+			const bulkSlot = getBulkItemSlotFromSlot(slot, this.playerCanDualWield);
+			if (!bulkSlots.includes(bulkSlot)) bulkSlots.push(bulkSlot);
+		});
+		return bulkSlots;
 	}
 
 	removeItem(item: ItemSpec) {

@@ -1,5 +1,6 @@
 import i18n from '../../../../i18n/config';
 import { IndividualSimUI } from '../../../individual_sim_ui';
+import { HandType } from '../../../proto/common';
 import { EquippedItem } from '../../../proto_utils/equipped_item';
 import { ContentBlock } from '../../content_block';
 import Toast from '../../toast';
@@ -32,30 +33,59 @@ export default class BulkItemPickerGroup extends ContentBlock {
 		return !!this.pickers.get(idx);
 	}
 
-	// True when `item` could not be worn alongside everything already listed: it shares a limit
-	// category with one of them, or the slot already holds as many copies as can be worn.
-	// Finger/trinket/weapon map to two physical slots, so two copies of a non-unique item fit.
+	// Whether both of this bulk slot's physical slots can hold the same item at once, which is
+	// what makes a same-item combo (two identical rings, one weapon in each hand) a valid input.
+	// Mirrors canStackTwoCopies in the backend.
+	private canStackTwoCopies(item: EquippedItem): boolean {
+		if (item._item.unique || item._item.limitCategory != 0) return false;
+		switch (this.bulkSlot) {
+			case BulkSimItemSlot.ItemSlotFinger:
+			case BulkSimItemSlot.ItemSlotTrinket:
+				return true;
+			case BulkSimItemSlot.ItemSlotHandWeapon:
+				return item._item.handType == HandType.HandTypeOneHand;
+			default:
+				return false;
+		}
+	}
+
+	// True when the slot already lists as many copies of this exact item as can be worn.
+	// Items sharing a limit category are NOT rejected: only one of them can be worn at a time,
+	// but listing several is how you compare them, and the candidate generator drops the
+	// conflicting pairings itself.
 	private isDuplicateOfExisting(item: EquippedItem): boolean {
 		const pickers = Array.from(this.pickers.values());
-		const isDualSlot =
-			this.bulkSlot == BulkSimItemSlot.ItemSlotHandWeapon ||
-			this.bulkSlot == BulkSimItemSlot.ItemSlotFinger ||
-			this.bulkSlot == BulkSimItemSlot.ItemSlotTrinket;
-		const maxCopies = isDualSlot && !item._item.unique ? 2 : 1;
-		const hasDuplicateLimitCategory = pickers.some(
-			picker => picker.item._item.limitCategory != 0 && picker.item._item.limitCategory === item._item.limitCategory,
-		);
-		const hasMaxCopies = pickers.filter(picker => picker.item.id === item.id).length >= maxCopies;
-		return hasDuplicateLimitCategory || hasMaxCopies;
+		const maxCopies = this.canStackTwoCopies(item) ? 2 : 1;
+		return pickers.filter(picker => picker.item.id === item.id).length >= maxCopies;
+	}
+
+	// An equipped item is already part of every candidate, so a batch entry for the same item is
+	// redundant and renders as a phantom duplicate. Mirrors the backend, which drops the
+	// user-added copy in initSelectedItems - except where equipped + added is what makes a
+	// same-item-in-both-slots combo possible.
+	private evictRedundantAddedCopies(equippedItem: EquippedItem) {
+		if (this.canStackTwoCopies(equippedItem)) {
+			return;
+		}
+		for (const [idx, picker] of Array.from(this.pickers.entries())) {
+			if (idx >= 0 && picker.item.id === equippedItem.id) {
+				this.bulkUI.removeItemByIndex(idx, true);
+			}
+		}
 	}
 
 	// Returns false if the item was rejected, so callers can undo the entry they pushed onto
 	// the batch list; a stale one sims and counts toward combinations with no picker to remove it.
 	add(idx: number, item: EquippedItem, silent = false): boolean {
+		// Equipped pickers (idx < 0) report what is worn rather than offering a choice, so they
+		// always render - the guard must never hide one. They evict redundant batch entries instead.
+		if (idx < 0) {
+			this.evictRedundantAddedCopies(item);
+		}
+
+		// After eviction: a group emptied by it re-rendered its "no items" placeholder.
 		if (!this.pickers.size) this.bodyElement.replaceChildren();
 
-		// Equipped pickers (idx < 0) report what is worn rather than offering a choice, so they
-		// always render - the guard must never hide one.
 		if (idx >= 0 && this.isDuplicateOfExisting(item)) {
 			if (!silent)
 				new Toast({
