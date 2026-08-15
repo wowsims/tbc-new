@@ -1,8 +1,6 @@
 package core
 
-import (
-	"github.com/wowsims/tbc/sim/core/stats"
-)
+import "github.com/wowsims/tbc/sim/core/stats"
 
 // This function should do 3 things:
 //  1. Set the Outcome of the hit effect.
@@ -792,16 +790,25 @@ func (result *SpellResult) applyEnemyAttackTableParry(spell *Spell, attackTable 
 	return false
 }
 
-func (result *SpellResult) applyEnemyAttackTableCrit(spell *Spell, _ *AttackTable, roll float64, chance *float64, countHits bool) bool {
-	critPercent := spell.Unit.GetStat(stats.PhysicalCritPercent) + spell.BonusCritPercent
-
+func (result *SpellResult) applyEnemyAttackTableCrit(spell *Spell, attackTable *AttackTable, roll float64, chance *float64, countHits bool) bool {
+	critPercent := spell.Unit.stats[stats.PhysicalCritPercent] + spell.BonusCritPercent
 	if spell.ProcMask.Matches(ProcMaskRanged) {
-		critPercent += spell.Unit.GetStat(stats.RangedCritPercent)
+		critPercent += spell.Unit.stats[stats.RangedCritPercent]
+	}
+	chances := getCritChances(critPercent/100-attackTable.MeleeCritSuppression, result.Target)
+	*chance += chances.suppressed
+	if roll < *chance {
+		result.Outcome = OutcomeSuppressedCrit
+		if countHits {
+			spell.SpellMetrics[result.Target.UnitIndex].Hits++
+			if result.DidResist() {
+				spell.SpellMetrics[result.Target.UnitIndex].ResistedHits++
+			}
+		}
+		return true
 	}
 
-	critChance := critPercent / 100
-	critChance -= result.Target.PseudoStats.ReducedCritTakenPercent
-	*chance += max(0, critChance)
+	*chance += chances.actual
 
 	if roll < *chance {
 		isPartialResist := result.DidResist()
