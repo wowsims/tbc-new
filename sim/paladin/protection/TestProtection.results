@@ -369,7 +369,7 @@ dps_results: {
  value: {
   dps: 913.30249
   tps: 1639.39611
-  dtps: 1293.87804
+  dtps: 1293.05591
  }
 }
 dps_results: {
@@ -787,7 +787,7 @@ dps_results: {
  value: {
   dps: 913.30249
   tps: 1639.39611
-  dtps: 1293.87804
+  dtps: 1293.05591
  }
 }
 dps_results: {
@@ -1139,7 +1139,7 @@ dps_results: {
  value: {
   dps: 913.30249
   tps: 1639.39611
-  dtps: 1293.87804
+  dtps: 1293.05591
  }
 }
 dps_results: {
@@ -1676,7 +1676,7 @@ dps_results: {
  value: {
   dps: 913.30249
   tps: 1639.39611
-  dtps: 1293.87804
+  dtps: 1293.05591
  }
 }
 dps_results: {

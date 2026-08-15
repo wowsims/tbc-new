@@ -1,6 +1,7 @@
 package core
 
 import (
+	"math"
 	"testing"
 
 	"github.com/wowsims/tbc/sim/core/stats"
@@ -11,32 +12,35 @@ func TestCritChancesSeparateResilienceFromDefense(t *testing.T) {
 		name                 string
 		rawChance            float64
 		reducedCritTaken     float64
+		defenseReduction     float64
 		resilienceReduction  float64
 		wantActual, wantSupp float64
 	}{
 		{
+			name:             "defense immunity",
+			rawChance:        0.05,
+			reducedCritTaken: 0.05,
+			defenseReduction: 0.05,
+			wantActual:       0,
+			wantSupp:         0,
+		},
+		{
 			name:                "resilience immunity",
 			rawChance:           0.05,
 			reducedCritTaken:    0.05,
+			defenseReduction:    0,
 			resilienceReduction: 0.05,
 			wantActual:          0,
 			wantSupp:            0.05,
 		},
 		{
-			name:                "defense immunity",
-			rawChance:           0.05,
-			reducedCritTaken:    0.05,
-			resilienceReduction: 0,
-			wantActual:          0,
-			wantSupp:            0,
-		},
-		{
 			name:                "mixed reduction",
 			rawChance:           0.05,
 			reducedCritTaken:    0.06,
+			defenseReduction:    0.03,
 			resilienceReduction: 0.03,
 			wantActual:          0,
-			wantSupp:            0.03,
+			wantSupp:            0.02,
 		},
 	}
 
@@ -44,10 +48,15 @@ func TestCritChancesSeparateResilienceFromDefense(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			target := &Unit{PseudoStats: stats.NewPseudoStats()}
 			target.PseudoStats.ReducedCritTakenPercent = test.reducedCritTaken
+			defenseRating := 0.0
+			if test.defenseReduction > 0 {
+				defenseRating = test.defenseReduction/(MissDodgeParryBlockCritChancePerDefense/100)*DefenseRatingPerDefenseLevel + 1
+			}
+			target.AddStats(stats.Stats{stats.DefenseRating: defenseRating})
 			target.AddStats(stats.Stats{stats.ResilienceRating: test.resilienceReduction * ResilienceRatingPerCritReductionChance * 100})
 
 			actual := getCritChances(test.rawChance, target)
-			if actual.actual != test.wantActual || actual.suppressed != test.wantSupp {
+			if math.Abs(actual.actual-test.wantActual) > 1e-9 || math.Abs(actual.suppressed-test.wantSupp) > 1e-9 {
 				t.Fatalf("got actual=%v, suppressed=%v; want actual=%v, suppressed=%v", actual.actual, actual.suppressed, test.wantActual, test.wantSupp)
 			}
 		})
