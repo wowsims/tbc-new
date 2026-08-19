@@ -56,6 +56,11 @@ func (se *SpellEffect) ToProto() *proto.SpellEffect {
 		Type:          proto.EffectType(se.EffectType),
 		EffectSpread:  math.Round(se.Delta(BASE_LEVEL, BASE_LEVEL)),
 		MinEffectSize: math.Round(se.Min(BASE_LEVEL, BASE_LEVEL)),
+		AuraPeriodMs:  int32(se.EffectAuraPeriod),
+		DurationMs:    int32(dbcInstance.Spells[se.SpellID].Duration),
+	}
+	if effectStats, ok := se.ParseStatEffect(false, 0); ok {
+		spellEffect.Stats = effectStats.ToProtoArray()
 	}
 	if spellEffect.EffectSpread == 0 {
 		spellEffect.EffectSpread = float64(se.EffectDieSides)
@@ -65,6 +70,12 @@ func (se *SpellEffect) ToProto() *proto.SpellEffect {
 		spellEffect.MiscValue0 = &proto.SpellEffect_ResourceType{ResourceType: MapPowerTypeEnumToResourceType[int32(se.EffectMiscValues[0])]}
 	case E_HEAL:
 		spellEffect.MiscValue0 = &proto.SpellEffect_ResourceType{ResourceType: proto.ResourceType_ResourceTypeHealth}
+	case E_APPLY_AURA:
+		if se.EffectAura == A_PERIODIC_ENERGIZE {
+			spellEffect.MiscValue0 = &proto.SpellEffect_ResourceType{ResourceType: MapPowerTypeEnumToResourceType[int32(se.EffectMiscValues[0])]}
+		} else if se.EffectAura == A_PERIODIC_HEAL {
+			spellEffect.MiscValue0 = &proto.SpellEffect_ResourceType{ResourceType: proto.ResourceType_ResourceTypeHealth}
+		}
 	}
 
 	return spellEffect

@@ -109,8 +109,17 @@ func (consumable *Consumable) GetNonStatEffectIds() []int32 {
 		if effect.ID != 0 {
 			if spellEffects, ok := dbcInstance.SpellEffects[effect.SpellID]; ok {
 				for _, spellEffect := range spellEffects {
-					if consumableRestoreEffectTypes[spellEffect.EffectType] {
+					if consumableRestoreEffectTypes[spellEffect.EffectType] || spellEffect.EffectAura == A_PERIODIC_ENERGIZE || spellEffect.EffectAura == A_PERIODIC_HEAL {
 						effectIds = append(effectIds, int32(spellEffect.ID))
+					}
+					// Aura effects triggered on use (e.g. Fel Mana Potion's spell damage
+					// reduction) carry the stats the sim applies as a temporary aura.
+					if spellEffect.EffectType == E_TRIGGER_SPELL {
+						for _, subEffect := range dbcInstance.SpellEffects[spellEffect.EffectTriggerSpell] {
+							if _, ok := subEffect.ParseStatEffect(false, 0); ok {
+								effectIds = append(effectIds, int32(subEffect.ID))
+							}
+						}
 					}
 				}
 			}
