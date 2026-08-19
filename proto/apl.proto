@@ -244,6 +244,10 @@ APLValueWarlockAssignedCurseIsActive warlock_assigned_curse_is_active = 59;
 
 		// Misc
 		APLValueMultipleCdUsages multiple_cd_usages = 60;
+
+		// Consumables
+		APLValueSelectedPotion selected_potion = 131;
+		APLValueSelectedConjured selected_conjured = 132;
 	}
 }
 
@@ -807,6 +811,14 @@ message APLValueActionGroupUsed {
 
 message APLValueActiveItemSwapSet {
     APLActionItemSwap.SwapSet swap_set = 1;
+}
+
+message APLValueSelectedPotion {
+	ActionID potion_id = 1;
+}
+
+message APLValueSelectedConjured {
+	ActionID conjured_id = 1;
 }
 
 message APLValueMultipleCdUsages {

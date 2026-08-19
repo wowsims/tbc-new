@@ -43,7 +43,9 @@ export type ACTION_ID_SET =
 	| 'non_instant_spells'
 	| 'friendly_spells'
 	| 'expected_dot_spells'
-	| 'spells_with_travelTime';
+	| 'spells_with_travelTime'
+	| 'potions'
+	| 'conjured_items';
 
 const actionIdSets: Record<
 	ACTION_ID_SET,
@@ -249,6 +251,30 @@ const actionIdSets: Record<
 		defaultLabel: i18n.t('rotation_tab.apl.helpers.action_id_sets.channel_spells'),
 		getActionIDs: async metadata => {
 			const spells = metadata.getSpells().filter(spell => spell.data.isCastable && spell.data.isChanneled);
+			return spells.map(actionId => {
+				return {
+					value: actionId.id,
+					submenu: createSpellSubmenu(actionId.id, spells),
+				};
+			});
+		},
+	},
+	potions: {
+		defaultLabel: i18n.t('rotation_tab.apl.submenus.potions'),
+		getActionIDs: async metadata => {
+			const spells = metadata.getSpells().filter(spell => spell.data.isPotion);
+			return spells.map(actionId => {
+				return {
+					value: actionId.id,
+					submenu: createSpellSubmenu(actionId.id, spells),
+				};
+			});
+		},
+	},
+	conjured_items: {
+		defaultLabel: i18n.t('rotation_tab.apl.submenus.conjured_items'),
+		getActionIDs: async metadata => {
+			const spells = metadata.getSpells().filter(spell => spell.data.isConjured);
 			return spells.map(actionId => {
 				return {
 					value: actionId.id,
