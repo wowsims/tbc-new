@@ -546,4 +546,12 @@ var EnchantAllowList = []int32{
 
 // Note: EffectId is required for all enchants, because they are
 // used by various importers/exporters
-var EnchantOverrides = []*proto.UIEnchant{}
+// Note: ItemId, SpellId and Name are part of the enchant DB key, so they must
+// match the generated enchant or the override is added as a separate entry.
+var EnchantOverrides = []*proto.UIEnchant{
+	// The head/leg resistance kits grant their stats through an equip spell that no
+	// longer exists in the client data, so they have to be filled in by hand.
+	{EffectId: 2681, ItemId: 22635, SpellId: 28162, Name: "Savage Guard", Stats: stats.Stats{stats.NatureResistance: 10}.ToProtoArray()},
+	{EffectId: 2682, ItemId: 22636, SpellId: 28164, Name: "Ice Guard", Stats: stats.Stats{stats.FrostResistance: 10}.ToProtoArray()},
+	{EffectId: 2683, ItemId: 22638, SpellId: 28166, Name: "Shadow Guard", Stats: stats.Stats{stats.ShadowResistance: 10}.ToProtoArray()},
+}

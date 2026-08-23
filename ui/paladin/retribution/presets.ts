@@ -19,6 +19,8 @@ import { Stats } from '../../core/proto_utils/stats';
 import DefaultApl from './apls/default.apl.json';
 import P1_Gear from './gear_sets/p1.gear.json';
 import P2_Gear from './gear_sets/p2.gear.json';
+import P3_Gear from './gear_sets/p3.gear.json';
+import P3_Bulwark_Gear from './gear_sets/p3Bulwark.gear.json';
 import Preraid_Gear from './gear_sets/preraid.gear.json';
 import { defaultExposeWeaknessSettings } from '../../core/proto_utils/utils';
 import { Phase } from '../../core/constants/other';
@@ -26,6 +28,8 @@ import { APLRotation_Type } from '../../core/proto/apl';
 
 export const P1_GEAR_PRESET = PresetUtils.makePresetGear('P1', P1_Gear, { phase: Phase.Phase1 });
 export const P2_GEAR_PRESET = PresetUtils.makePresetGear('P2', P2_Gear, { phase: Phase.Phase2 });
+export const P3_GEAR_PRESET = PresetUtils.makePresetGear('P3', P3_Gear, { phase: Phase.Phase3 });
+export const P3BULWARK_GEAR_PRESET = PresetUtils.makePresetGear('Bulwark', P3_Bulwark_Gear, { phase: Phase.Phase3 });
 export const PRERAID_GEAR_PRESET = PresetUtils.makePresetGear('Pre-raid', Preraid_Gear, { phase: Phase.Phase1 });
 
 export const DefaultSimpleRotation = PaladinRotation.create({
@@ -75,6 +79,26 @@ export const P2_EP_PRESET = PresetUtils.makePresetEpWeights(
 		},
 		{
 			[PseudoStat.PseudoStatMainHandDps]: 5.34,
+		},
+	),
+);
+
+export const P3_EP_PRESET = PresetUtils.makePresetEpWeights(
+	'P3',
+	Stats.fromMap(
+		{
+			[Stat.StatStrength]: 1.0,
+			[Stat.StatAgility]: 0.73,
+			[Stat.StatAttackPower]: 0.42,
+			[Stat.StatMeleeHitRating]: 2.15,
+			[Stat.StatMeleeCritRating]: 0.80,
+			[Stat.StatMeleeHasteRating]: 1.22,
+			[Stat.StatArmorPenetration]: 0.1,
+			[Stat.StatExpertiseRating]: 2.15,
+			[Stat.StatSpellDamage]: 0.16,
+		},
+		{
+			[PseudoStat.PseudoStatMainHandDps]: 5.43,
 		},
 	),
 );
@@ -196,6 +220,22 @@ export const P2_PLAYER_SETTINGS: PresetUtils.PresetSettings = {
 	},
 };
 
+export const P3_PLAYER_SETTINGS: PresetUtils.PresetSettings = {
+	name: 'P3',
+	playerOptions: OtherDefaults,
+	partyBuffs: PartyBuffs.create({
+		...DefaultPartyBuffs,
+		leaderOfThePack: TristateEffect.TristateEffectImproved,
+	}),
+	debuffs: Debuffs.create({
+		...DefaultDebuffs,
+		...defaultExposeWeaknessSettings(Phase.Phase3),
+	}),
+	reforgeSettings: {
+		maxGemPhase: Phase.Phase3,
+	},
+};
+
 export const P1_PRESET_BUILD_RET = PresetUtils.makePresetBuild('P1', {
 	group: 'Retribution',
 	phase: Phase.Phase1,
@@ -216,4 +256,15 @@ export const P2_PRESET_BUILD_RET = PresetUtils.makePresetBuild('P2', {
 	rotationType: APLRotation_Type.TypeSimple,
 	rotation: APL_SIMPLE,
 	settings: P2_PLAYER_SETTINGS,
+});
+
+export const P3_PRESET_BUILD_RET = PresetUtils.makePresetBuild('P3', {
+	group: 'Retribution',
+	phase: Phase.Phase3,
+	gear: P3_GEAR_PRESET,
+	talents: DefaultTalents,
+	epWeights: P3_EP_PRESET,
+	rotationType: APLRotation_Type.TypeSimple,
+	rotation: APL_SIMPLE,
+	settings: P3_PLAYER_SETTINGS,
 });

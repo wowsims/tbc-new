@@ -1,20 +1,29 @@
-import { Player } from '../../player.js';
+import i18n from '../../../i18n/config';
 import { itemSwapEnabledSpecs } from '../../individual_sim_ui.js';
+import { Player } from '../../player.js';
 import {
 	APLValue,
+	APLValueActionGroupUsed,
+	APLValueActiveItemSwapSet,
 	APLValueAllItemStatProcsActive,
-	APLValueAnyItemStatProcsAvailable,
 	APLValueAnd,
+	APLValueAnyItemStatProcsActive,
+	APLValueAnyItemStatProcsAvailable,
 	APLValueAnyStatBuffCooldownsActive,
 	APLValueAnyStatBuffCooldownsMinDuration,
-	APLValueAnyItemStatProcsActive,
+	APLValueAuraDuration,
+	APLValueAuraICDIsReady,
 	APLValueAuraInternalCooldown,
 	APLValueAuraIsActive,
+	APLValueAuraIsInactive,
 	APLValueAuraIsKnown,
 	APLValueAuraNumStacks,
 	APLValueAuraRemainingTime,
 	APLValueAuraShouldRefresh,
+	APLValueAutoSwingTime,
+	APLValueAutoTimeSinceLast,
 	APLValueAutoTimeToNext,
+	APLValueBossCurrentTarget,
 	APLValueBossSpellIsCasting,
 	APLValueBossSpellTimeToReady,
 	APLValueChannelClipDelay,
@@ -30,16 +39,19 @@ import {
 	APLValueCurrentLunarEnergy,
 	APLValueCurrentMana,
 	APLValueCurrentManaPercent,
+	APLValueCurrentManaRegen,
 	APLValueCurrentRage,
 	APLValueCurrentSolarEnergy,
 	APLValueCurrentTime,
 	APLValueCurrentTimePercent,
+	APLValueDotBaseDuration,
 	APLValueDotIsActive,
 	APLValueDotIsActiveOnAllTargets,
 	APLValueDotLowestRemainingTime,
 	APLValueDotPercentIncrease,
 	APLValueDotRemainingTime,
 	APLValueDotTickFrequency,
+	APLValueDotTimeToNextTick,
 	APLValueEnergyTimeToTarget,
 	APLValueFrontOfTarget,
 	APLValueGCDIsReady,
@@ -47,6 +59,8 @@ import {
 	APLValueInputDelay,
 	APLValueIsExecutePhase,
 	APLValueIsExecutePhase_ExecutePhaseThreshold as ExecutePhaseThreshold,
+	APLValueItemProcsMaxRemainingICD,
+	APLValueItemProcsMinRemainingTime,
 	APLValueMath,
 	APLValueMath_MathOperator as MathOperator,
 	APLValueMax,
@@ -56,6 +70,7 @@ import {
 	APLValueMaxMana,
 	APLValueMaxRage,
 	APLValueMin,
+	APLValueMultipleCdUsages,
 	APLValueNot,
 	APLValueNumberTargets,
 	APLValueNumEquippedStatProcItems,
@@ -64,6 +79,8 @@ import {
 	APLValueProtectionPaladinDamageTakenLastGlobal,
 	APLValueRemainingTime,
 	APLValueRemainingTimePercent,
+	APLValueSelectedConjured,
+	APLValueSelectedPotion,
 	APLValueSequenceIsComplete,
 	APLValueSequenceIsReady,
 	APLValueSequenceTimeToReady,
@@ -72,6 +89,9 @@ import {
 	APLValueSpellChanneledTicks,
 	APLValueSpellCPM,
 	APLValueSpellCurrentCost,
+	APLValueSpellFullCooldown,
+	APLValueSpellGCDHastedDuration,
+	APLValueSpellInFlight,
 	APLValueSpellIsChanneling,
 	APLValueSpellIsKnown,
 	APLValueSpellIsReady,
@@ -81,38 +101,20 @@ import {
 	APLValueSpellTravelTime,
 	APLValueTimeToNextEnergyTick,
 	APLValueTotemRemainingTime,
-	APLValueItemProcsMaxRemainingICD,
-	APLValueItemProcsMinRemainingTime,
 	APLValueUnitDistance,
 	APLValueUnitIsMoving,
-	APLValueAuraIsInactive,
-	APLValueAuraICDIsReady,
-	APLValueActiveItemSwapSet,
-	APLValueDotBaseDuration,
-	APLValueSpellGCDHastedDuration,
-	APLValueSpellFullCooldown,
-	APLValueDotTimeToNextTick,
-	APLValueSpellInFlight,
-	APLValueBossCurrentTarget,
-	APLValueAuraDuration,
-	APLValueMultipleCdUsages,
-	APLValueActionGroupUsed,
-	APLValueAutoSwingTime,
-	APLValueAutoTimeSinceLast,
 	APLValueWarlockAssignedCurseIsActive,
 	APLValueWarlockIsAssignedCurse,
-	APLValueCurrentManaRegen,
 } from '../../proto/apl.js';
 import { Class, Spec } from '../../proto/common.js';
 import { ShamanTotems_TotemType as TotemType } from '../../proto/shaman.js';
+import { WarlockOptions_CurseOptions } from '../../proto/warlock';
 import { EventID, TypedEvent } from '../../typed_event.js';
 import { randomUUID } from '../../utils';
 import { Input, InputConfig } from '../input.js';
 import { TextDropdownPicker, TextDropdownValueConfig } from '../pickers/dropdown_picker.jsx';
 import { ListItemPickerConfig, ListPicker } from '../pickers/list_picker.jsx';
-import i18n from '../../../i18n/config';
 import * as AplHelpers from './apl_helpers.js';
-import { WarlockOptions_CurseOptions } from '../../proto/warlock';
 
 export interface APLValuePickerConfig extends InputConfig<Player<any>, APLValue | undefined> {}
 
@@ -1588,6 +1590,22 @@ const valueKindFactories: { [f in ValidAPLValueKind]: ValueKindConfig<APLValueIm
 		includeIf: (player: Player<any>, isPrepull: boolean) => !isPrepull && itemSwapEnabledSpecs.includes(player.getSpec()),
 		newValue: APLValueActiveItemSwapSet.create,
 		fields: [AplHelpers.itemSwapSetFieldConfig('swapSet')],
+	}),
+	selectedPotion: inputBuilder({
+		label: i18n.t('rotation_tab.apl.values.selected_potion.label'),
+		submenu: ['Misc'],
+		shortDescription: i18n.t('rotation_tab.apl.values.selected_potion.tooltip'),
+		newValue: APLValueSelectedPotion.create,
+		includeIf: (_: Player<any>, isPrepull: boolean) => !isPrepull,
+		fields: [AplHelpers.actionIdFieldConfig('potionId', 'potions')],
+	}),
+	selectedConjured: inputBuilder({
+		label: i18n.t('rotation_tab.apl.values.selected_conjured.label'),
+		submenu: ['Misc'],
+		shortDescription: i18n.t('rotation_tab.apl.values.selected_conjured.tooltip'),
+		newValue: APLValueSelectedConjured.create,
+		includeIf: (_: Player<any>, isPrepull: boolean) => !isPrepull,
+		fields: [AplHelpers.actionIdFieldConfig('conjuredId', 'conjured_items')],
 	}),
 	multipleCdUsages: inputBuilder({
 		label: i18n.t('rotation_tab.apl.values.multiple_cd_usages.label'),

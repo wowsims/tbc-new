@@ -822,14 +822,6 @@ dps_results: {
  }
 }
 dps_results: {
- key: "TestRetribution-AllItems-IceGuard-2682"
- value: {
-  dps: 1899.72111
-  tps: 1055.064
-  dtps: 14.15789
- }
-}
-dps_results: {
  key: "TestRetribution-AllItems-IconofUnyieldingCourage-28121"
  value: {
   dps: 1837.10262
@@ -1275,14 +1267,6 @@ dps_results: {
   dps: 1832.97189
   tps: 1019.32498
   dtps: 14.34107
- }
-}
-dps_results: {
- key: "TestRetribution-AllItems-SavageGuard-2681"
- value: {
-  dps: 1899.72111
-  tps: 1055.064
-  dtps: 14.15789
  }
 }
 dps_results: {

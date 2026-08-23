@@ -5597,6 +5597,32 @@
 										"align_cd_end_tooltip"
 									]
 								},
+								"selected_potion": {
+									"type": "object",
+									"properties": {
+										"label": {
+											"type": "string"
+										},
+										"tooltip": {
+											"type": "string"
+										}
+									},
+									"additionalProperties": false,
+									"required": ["label", "tooltip"]
+								},
+								"selected_conjured": {
+									"type": "object",
+									"properties": {
+										"label": {
+											"type": "string"
+										},
+										"tooltip": {
+											"type": "string"
+										}
+									},
+									"additionalProperties": false,
+									"required": ["label", "tooltip"]
+								},
 								"offset": {
 									"type": "object",
 									"properties": {
@@ -5720,6 +5746,8 @@
 								"aura_icd_is_ready_with_reaction_time",
 								"overlap",
 								"multiple_cd_usages",
+								"selected_potion",
+								"selected_conjured",
 								"offset"
 							]
 						},

@@ -1,6 +1,7 @@
 package core
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/wowsims/tbc/sim/core/proto"
@@ -141,12 +142,6 @@ func registerPotionCD(agent Agent, consumes *proto.ConsumesSpec) {
 	defaultPotion := consumes.PotId
 
 	for _, potionId := range consumes.Potions {
-		if potionId == 31677 {
-			if defaultPotion == 31677 {
-				registerFelManaPotionCD(character)
-			}
-			continue
-		}
 		potion := GetConsumableByID(potionId)
 		if potion.Type == proto.ConsumableType_ConsumableTypePotion {
 			potMCD := makePotionActivationSpell(potion.Id, character)
@@ -156,59 +151,6 @@ func registerPotionCD(agent Agent, consumes *proto.ConsumesSpec) {
 			}
 		}
 	}
-}
-
-// registerFelManaPotionCD handles Fel Mana Potion (31677): restores 3200 mana over 24s,
-// but reduces spell damage by 25 and healing done by 50 for 15 min.
-func registerFelManaPotionCD(character *Character) {
-	actionID := ActionID{ItemID: 31677}
-	manaMetrics := character.NewManaMetrics(actionID)
-
-	debuffAura := character.NewTemporaryStatsAura(
-		"Fel Mana Potion Debuff",
-		ActionID{SpellID: 38927},
-		stats.Stats{stats.SpellDamage: -25, stats.HealingPower: -50},
-		time.Minute*15,
-	)
-
-	spell := character.GetOrRegisterSpell(SpellConfig{
-		ActionID: actionID,
-		Flags:    SpellFlagNoOnCastComplete | SpellFlagCombatPotion | SpellFlagEncounterOnly | SpellFlagPotion,
-		Cast: CastConfig{
-			CD: Cooldown{
-				Timer:    character.NewTimer(),
-				Duration: time.Minute * 2,
-			},
-			SharedCD: Cooldown{
-				Timer:    character.GetPotionCD(),
-				Duration: time.Minute * 2,
-			},
-		},
-		ApplyEffects: func(sim *Simulation, _ *Unit, spell *Spell) {
-			debuffAura.Activate(sim)
-			StartPeriodicAction(sim, PeriodicActionOptions{
-				Period:   time.Second * 3,
-				NumTicks: 8,
-				Priority: ActionPriorityDOT,
-				OnAction: func(sim *Simulation) {
-					character.AddMana(sim, 400, manaMetrics)
-				},
-			})
-			if sim.CurrentTime < 0 {
-				spell.SharedCD.Set(sim.CurrentTime + time.Minute*2)
-				character.UpdateMajorCooldowns()
-			}
-		},
-	})
-
-	character.AddMajorCooldown(MajorCooldown{
-		Spell: spell,
-		Type:  CooldownTypeMana,
-		ShouldActivate: func(sim *Simulation, character *Character) bool {
-			totalRegen := character.ManaRegenPerSecondWhileCasting() * 5
-			return character.MaxMana()-(character.CurrentMana()+totalRegen) >= 3200
-		},
-	})
 }
 
 var AlchStoneItemIDs = []int32{136197, 80508, 96252, 96253, 96254, 44322, 44323, 44324}
@@ -245,9 +187,11 @@ func makePotionActivationSpell(potionId int32, character *Character) MajorCooldo
 }
 
 type resourceGainConfig struct {
-	resType proto.ResourceType
-	min     float64
-	spread  float64
+	resType  proto.ResourceType
+	min      float64
+	spread   float64
+	period   time.Duration // Duration between ticks; 0 for one-shot gains.
+	duration time.Duration // Total duration of periodic gains.
 }
 
 func makePotionActivationSpellInternal(potion Consumable, character *Character) MajorCooldown {
@@ -284,10 +228,17 @@ func makePotionActivationSpellInternal(potion Consumable, character *Character) 
 	var gains []resourceGainConfig
 	resourceMetrics := make(map[proto.ResourceType]*ResourceMetrics)
 
+	// Stats applied by triggered auras (e.g. Fel Mana Potion's spell damage reduction).
+	// These may be positive or negative.
+	var auraStats stats.Stats
+	var auraDuration time.Duration
+	var auraSpellId int32
+
 	for _, effectID := range potion.EffectIds {
 		e := GetSpellEffectByID(effectID)
 		resourceType := e.GetResourceType()
-		if e.Type == proto.EffectType_EffectTypeResourceGain && resourceType != 0 {
+		isPeriodic := e.AuraPeriodMs > 0
+		if resourceType != 0 && (isPeriodic || e.Type == proto.EffectType_EffectTypeResourceGain) {
 			if resourceType == proto.ResourceType_ResourceTypeMana && mcd.Type != CooldownTypeSurvival {
 				mcd.Type = CooldownTypeMana
 			} else if resourceType == proto.ResourceType_ResourceTypeHealth {
@@ -296,9 +247,11 @@ func makePotionActivationSpellInternal(potion Consumable, character *Character) 
 				mcd.Type = CooldownTypeDPS
 			}
 			gains = append(gains, resourceGainConfig{
-				resType: resourceType,
-				min:     e.MinEffectSize,
-				spread:  e.EffectSpread,
+				resType:  resourceType,
+				min:      e.MinEffectSize,
+				spread:   e.EffectSpread,
+				period:   time.Duration(e.AuraPeriodMs) * time.Millisecond,
+				duration: time.Duration(e.DurationMs) * time.Millisecond,
 			})
 			if _, exists := resourceMetrics[resourceType]; !exists {
 				resourceMetrics[resourceType] = character.Metrics.NewResourceMetrics(actionID, resourceType)
@@ -307,20 +260,41 @@ func makePotionActivationSpellInternal(potion Consumable, character *Character) 
 			if resourceMetrics[resourceType] == nil {
 				resourceMetrics[resourceType] = character.Metrics.NewResourceMetrics(actionID, resourceType)
 			}
+			continue
 		}
+		if effectStats := stats.FromProtoArray(e.Stats); effectStats != (stats.Stats{}) {
+			auraStats = auraStats.Add(effectStats)
+			auraDuration = max(auraDuration, time.Duration(e.DurationMs)*time.Millisecond)
+			if auraSpellId == 0 {
+				auraSpellId = e.SpellId
+			}
+		}
+	}
+
+	var debuffAura *StatBuffAura
+	if auraDuration > 0 && auraStats != (stats.Stats{}) {
+		debuffAura = character.NewTemporaryStatsAura(fmt.Sprintf("%s Debuff (%d)", potion.Name, auraSpellId), ActionID{SpellID: auraSpellId}, auraStats, auraDuration)
 	}
 
 	mcd.Spell.ApplyEffects = func(sim *Simulation, _ *Unit, _ *Spell) {
 		if aura != nil {
 			aura.Activate(sim)
 		}
+		if debuffAura != nil {
+			debuffAura.Activate(sim)
+		}
 		for _, config := range gains {
 			gain := config.min + sim.RandomFloat(potion.Name)*config.spread
 			gain *= stoneMul
-			if config.resType == proto.ResourceType_ResourceTypeHealth {
-				gain *= character.PseudoStats.HealingTakenMultiplier
+			if config.period > 0 {
+				// Periodic gains (e.g. Fel Mana Potion) tick over the effect's duration.
+				startPeriodicResourceGain(sim, character, config, gain, resourceMetrics[config.resType])
+			} else {
+				if config.resType == proto.ResourceType_ResourceTypeHealth {
+					gain *= character.PseudoStats.HealingTakenMultiplier
+				}
+				character.ExecuteResourceGain(sim, config.resType, gain, resourceMetrics[config.resType])
 			}
-			character.ExecuteResourceGain(sim, config.resType, gain, resourceMetrics[config.resType])
 		}
 	}
 
@@ -332,6 +306,9 @@ func makePotionActivationSpellInternal(potion Consumable, character *Character) 
 				totalRegen := character.ManaRegenPerSecondWhileCasting() * 5
 				manaGain := config.min + config.spread
 				manaGain *= stoneMul
+				if config.period > 0 {
+					manaGain *= float64(startPeriodicResourceGainTicks(config))
+				}
 				shouldActivate = character.MaxMana()-(character.CurrentMana()+totalRegen) >= manaGain
 			}
 		}
@@ -340,6 +317,29 @@ func makePotionActivationSpellInternal(potion Consumable, character *Character) 
 
 	return mcd
 
+}
+
+// startPeriodicResourceGain ticks a periodic resource gain (e.g. Fel Mana Potion's mana over
+// time) across the effect's duration.
+func startPeriodicResourceGain(sim *Simulation, character *Character, config resourceGainConfig, gainPerTick float64, metrics *ResourceMetrics) {
+	if config.resType != proto.ResourceType_ResourceTypeMana && config.resType != proto.ResourceType_ResourceTypeHealth {
+		return
+	}
+	if config.resType == proto.ResourceType_ResourceTypeHealth {
+		gainPerTick *= character.PseudoStats.HealingTakenMultiplier
+	}
+	StartPeriodicAction(sim, PeriodicActionOptions{
+		Period:   config.period,
+		NumTicks: int(startPeriodicResourceGainTicks(config)),
+		Priority: ActionPriorityDOT,
+		OnAction: func(sim *Simulation) {
+			character.ExecuteResourceGain(sim, config.resType, gainPerTick, metrics)
+		},
+	})
+}
+
+func startPeriodicResourceGainTicks(config resourceGainConfig) int32 {
+	return int32(config.duration / config.period)
 }
 
 var ConjuredAuraTag = "Conjured"

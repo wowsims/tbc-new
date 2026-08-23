@@ -84,6 +84,8 @@ func InferPhase(item *proto.UIItem) int32 {
 		case strings.Contains(name, "Merciless Gladiator"),
 			strings.Contains(name, "Veteran's"):
 			return 2
+		case strings.Contains(name, "Vindicator's") && item.ScalingOptions[int32(0)].Stats[int32(proto.Stat_StatSpellHasteRating)] > 0:
+			return 4
 		case strings.Contains(name, "Vengeful Gladiator"),
 			strings.Contains(name, "Vindicator's"):
 			return 3

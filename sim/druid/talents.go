@@ -171,7 +171,7 @@ func (druid *Druid) applyNaturesGrace() {
 	aura := druid.RegisterAura(core.Aura{
 		Label:    "Nature's Grace",
 		ActionID: core.ActionID{SpellID: 16886},
-		Duration: time.Second * 3,
+		Duration: time.Second * 15,
 		OnCastComplete: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell) {
 			if spell.CurCast.CastTime == 0 {
 				return

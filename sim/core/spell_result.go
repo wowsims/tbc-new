@@ -111,6 +111,10 @@ func (result *SpellResult) DidCrit() bool {
 	return result.Outcome.Matches(OutcomeCrit)
 }
 
+func (result *SpellResult) DidSuppressedCrit() bool {
+	return result.Outcome.Matches(OutcomeSuppressedCrit)
+}
+
 func (result *SpellResult) DidGlance() bool {
 	return result.Outcome.Matches(OutcomeGlance)
 }
@@ -271,6 +275,20 @@ func (spell *Spell) SpellCritChance(target *Unit) float64 {
 func (spell *Spell) MagicCritCheck(sim *Simulation, target *Unit) bool {
 	critChance := spell.SpellCritChance(target)
 	return sim.RandomFloat("Magical Crit Roll") < critChance
+}
+
+type critChances struct {
+	actual     float64
+	suppressed float64
+}
+
+func getCritChances(rawChance float64, target *Unit) critChances {
+	actual := max(rawChance-target.PseudoStats.ReducedCritTakenPercent, 0)
+	resilienceSuppression := max(rawChance-target.GetDefenseReduction(), 0)
+	return critChances{
+		actual:     actual,
+		suppressed: min(resilienceSuppression, target.GetResilienceReduction()),
+	}
 }
 
 func (spell *Spell) HealingPower(target *Unit) float64 {
