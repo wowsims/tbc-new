@@ -1,4 +1,6 @@
 OUT_DIR := dist/tbc
+# Windows won't launch an extensionless binary -- air just pops a file-association prompt.
+BIN_EXT := $(shell go env GOEXE)
 TS_CORE_SRC := $(shell find ui/core -name '*.ts' -type f)
 ASSETS_INPUT := $(shell find assets/ -type f)
 ASSETS := $(patsubst assets/%,$(OUT_DIR)/assets/%,$(ASSETS_INPUT))
@@ -59,7 +61,7 @@ ui/core/index.ts: $(TS_CORE_SRC)
 clean:
 	rm -rf ui/core/proto/*.ts \
 	  sim/core/proto/*.pb.go \
-	  wowsimtbc \
+	  wowsimtbc$(BIN_EXT) \
 	  wowsimtbc-windows.exe \
 	  wowsimtbc-amd64-darwin \
 	  wowsimtbc-arm64-darwin \
@@ -123,7 +125,7 @@ wasm: $(OUT_DIR)/lib.wasm
 # Builds the generic .wasm, with all items included.
 $(OUT_DIR)/lib.wasm: sim/wasm/* sim/core/proto/api.pb.go $(filter-out sim/core/items/all_items.go, $(call rwildcard,sim,*.go))
 	@echo "Starting webassembly compile now..."
-	@if GOOS=js GOARCH=wasm go build -o ./$(OUT_DIR)/lib.wasm ./sim/wasm/; then \
+	@if GOOS=js GOARCH=wasm go build -ldflags "-w -s" -o ./$(OUT_DIR)/lib.wasm ./sim/wasm/; then \
 		printf "\033[1;32mWASM compile successful.\033[0m\n"; \
 	else \
 		printf "\033[1;31mWASM COMPILE FAILED\033[0m\n"; \
@@ -161,7 +163,7 @@ wowsimtbc: binary_dist devserver
 .PHONY: devserver
 devserver: sim/core/proto/api.pb.go sim/web/*.go binary_dist/dist.go
 	@echo "Starting server compile now..."
-	@if go build -o wowsimtbc ./sim/web ; then \
+	@if go build -o wowsimtbc$(BIN_EXT) ./sim/web ; then \
 		printf "\033[1;32mBuild Completed Successfully\033[0m\n"; \
 	else \
 		printf "\033[1;31mBUILD FAILED\033[0m\n"; \
@@ -180,9 +182,9 @@ endif
 rundevserver: air devserver $(AUTO_GEN_FILES_TS)
 ifeq ($(WATCH), 1)
 	npx tsx vite.build-workers.mts & npx vite build -m development --watch &
-	ulimit -n 10240 && air -tmp_dir "/tmp" -build.include_ext "go,proto" -build.args_bin "--usefs=true --launch=false" -build.bin "./wowsimtbc" -build.cmd "make devserver" -build.exclude_dir "assets,dist,node_modules,ui,tools"
+	ulimit -n 10240 && air -tmp_dir "/tmp" -build.include_ext "go,proto" -build.args_bin "--usefs=true --launch=false" -build.bin "./wowsimtbc$(BIN_EXT)" -build.cmd "make devserver" -build.exclude_dir "assets,dist,node_modules,ui,tools"
 else
-	./wowsimtbc --usefs=true --launch=false --host=":3333"
+	./wowsimtbc$(BIN_EXT) --usefs=true --launch=false --host=":3333"
 endif
 
 wowsimtbc-windows.exe: wowsimtbc
@@ -312,7 +314,7 @@ setup:
 
 # Host a local server, for dev testing
 .PHONY: host
-host: air $(OUT_DIR)/.dirstamp node_modules
+host: air $(OUT_DIR)/.dirstamp node_modules $(AUTO_GEN_FILES_TS)
 ifeq ($(WATCH), 1)
 	ulimit -n 10240 && air -tmp_dir "/tmp" -build.include_ext "go,ts,js,html" -build.bin "npx" -build.args_bin "http-server $(OUT_DIR)/.." -build.cmd "make" -build.exclude_dir "dist,node_modules,tools"
 else
@@ -321,12 +323,12 @@ else
 	npx http-server $(OUT_DIR)/..
 endif
 
-devmode: air devserver
+devmode: air devserver $(AUTO_GEN_FILES_TS) $(PAGE_INDECES)
 ifeq ($(WATCH), 1)
 	npx tsx vite.build-workers.mts & npx vite serve --host &
-	air -tmp_dir "/tmp" -build.include_ext "go,proto" -build.args_bin "--usefs=true --launch=false --wasm=false" -build.bin "./wowsimtbc" -build.cmd "make devserver" -build.exclude_dir "assets,dist,node_modules,ui,tools"
+	air -tmp_dir "/tmp" -build.include_ext "go,proto" -build.args_bin "--usefs=true --launch=false --wasm=false" -build.bin "./wowsimtbc$(BIN_EXT)" -build.cmd "make devserver" -build.exclude_dir "assets,dist,node_modules,ui,tools"
 else
-	./wowsimtbc --usefs=true --launch=false --host=":3333"
+	./wowsimtbc$(BIN_EXT) --usefs=true --launch=false --host=":3333"
 endif
 
 webworkers:
