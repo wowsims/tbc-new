@@ -8,6 +8,20 @@ import (
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
+// Scrolls share StatBuffCategory with the raid buffs granting the same stat, so a
+// scroll doesn't stack with e.g. Arcane Brilliance or Divine Spirit; only the
+// strongest source of that stat applies.
+func registerScrollAura(character *Character, label string, itemID int32, stat stats.Stat, amount float64) *Aura {
+	aura := character.GetOrRegisterAura(Aura{
+		Label:      label,
+		ActionID:   ActionID{ItemID: itemID},
+		Duration:   NeverExpires,
+		BuildPhase: CharacterBuildPhaseConsumes,
+	})
+	makeExclusiveFlatStatBuff(aura, stat, amount, StatBuffCategory)
+	return MakePermanent(aura)
+}
+
 // Registers all consume-related effects to the Agent.
 func applyConsumeEffects(agent Agent, partyBuffs *proto.PartyBuffs) {
 	character := agent.GetCharacter()
@@ -88,19 +102,19 @@ func applyConsumeEffects(agent Agent, partyBuffs *proto.PartyBuffs) {
 
 	// Scrolls
 	if consumables.ScrollAgi {
-		character.AddStat(stats.Agility, 20)
+		registerScrollAura(character, "Scroll of Agility", 27498, stats.Agility, 20)
 	}
 	if consumables.ScrollStr {
-		character.AddStat(stats.Strength, 20)
+		registerScrollAura(character, "Scroll of Strength", 27503, stats.Strength, 20)
 	}
 	if consumables.ScrollInt {
-		character.AddStat(stats.Intellect, 20)
+		registerScrollAura(character, "Scroll of Intellect", 27499, stats.Intellect, 20)
 	}
 	if consumables.ScrollSpi {
-		character.AddStat(stats.Spirit, 30)
+		registerScrollAura(character, "Scroll of Spirit", 27501, stats.Spirit, 30)
 	}
 	if consumables.ScrollArm {
-		character.AddStat(stats.Armor, 300)
+		registerScrollAura(character, "Scroll of Protection", 27500, stats.Armor, 300)
 	}
 
 	// Bloodthistle (Blood Elf only): +10 spell damage and healing for 10 min.
