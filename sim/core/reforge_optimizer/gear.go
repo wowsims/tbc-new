@@ -98,8 +98,8 @@ func (o *reforgeOptimizer) minimizeRegems(newGear *core.Equipment) {
 				// matches across BOTH sockets involved. Weighing both sockets (not just the one the
 				// gem moved to) preserves a genuine color-match upgrade the solver found while still
 				// undoing a match-neutral shuffle that would otherwise be a pointless regem.
-				matchesIfSwapped := boolToInt(gemMatchesSocket(originalGem.Color, socketColor)) + boolToInt(gemMatchesSocket(newGem.Color, matchedSocketColor))
-				matchesIfKept := boolToInt(gemMatchesSocket(newGem.Color, socketColor)) + boolToInt(gemMatchesSocket(originalGem.Color, matchedSocketColor))
+				matchesIfSwapped := boolToInt(core.GemMatchesSocket(originalGem.Color, socketColor)) + boolToInt(core.GemMatchesSocket(newGem.Color, matchedSocketColor))
+				matchesIfKept := boolToInt(core.GemMatchesSocket(newGem.Color, socketColor)) + boolToInt(core.GemMatchesSocket(originalGem.Color, matchedSocketColor))
 				if matchesIfSwapped < matchesIfKept {
 					continue
 				}
@@ -170,7 +170,7 @@ func socketBonusActive(item *core.Item) bool {
 			continue
 		}
 		gemID := gemIDAt(item, socketIdx)
-		if gemID == 0 || !gemMatchesSocket(gemFromID(gemID).Color, socketColor) {
+		if gemID == 0 || !core.GemMatchesSocket(gemFromID(gemID).Color, socketColor) {
 			return false
 		}
 	}
@@ -242,24 +242,6 @@ func hasSocketBonus(item core.Item) bool {
 		}
 	}
 	return false
-}
-
-func gemMatchesSocket(gemColor proto.GemColor, socketColor proto.GemColor) bool {
-	if gemColor == socketColor {
-		return true
-	}
-	switch socketColor {
-	case proto.GemColor_GemColorBlue:
-		return gemColor == proto.GemColor_GemColorPurple || gemColor == proto.GemColor_GemColorGreen || gemColor == proto.GemColor_GemColorPrismatic
-	case proto.GemColor_GemColorRed:
-		return gemColor == proto.GemColor_GemColorPurple || gemColor == proto.GemColor_GemColorOrange || gemColor == proto.GemColor_GemColorPrismatic
-	case proto.GemColor_GemColorYellow:
-		return gemColor == proto.GemColor_GemColorOrange || gemColor == proto.GemColor_GemColorGreen || gemColor == proto.GemColor_GemColorPrismatic
-	case proto.GemColor_GemColorPrismatic:
-		return gemColor == proto.GemColor_GemColorRed || gemColor == proto.GemColor_GemColorOrange || gemColor == proto.GemColor_GemColorYellow || gemColor == proto.GemColor_GemColorGreen || gemColor == proto.GemColor_GemColorBlue || gemColor == proto.GemColor_GemColorPurple
-	default:
-		return false
-	}
 }
 
 func currentSocketColors(item core.Item) []proto.GemColor {

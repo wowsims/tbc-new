@@ -120,7 +120,7 @@ func TestBulkSimEnchantAppliesToItem_RejectsNonMatchingItemTypes(t *testing.T) {
 	}
 }
 
-func TestApplyMetaGem_PersistsHeadMetaAndClearsOtherGems(t *testing.T) {
+func TestMergeGems_RehomesReplacedItemGems(t *testing.T) {
 	existing := core.Item{
 		Type:       proto.ItemType_ItemTypeHead,
 		GemSockets: []proto.GemColor{proto.GemColor_GemColorMeta, proto.GemColor_GemColorRed},
@@ -134,19 +134,19 @@ func TestApplyMetaGem_PersistsHeadMetaAndClearsOtherGems(t *testing.T) {
 		GemSockets: []proto.GemColor{proto.GemColor_GemColorMeta, proto.GemColor_GemColorBlue},
 	}
 
-	gems := applyMetaGem(existing, newItem)
+	gems := mergeGems(existing, bulkSimCandidateOption{spec: &proto.ItemSpec{}}, newItem)
 	if len(gems) != 2 {
 		t.Fatalf("expected 2 gem slots, got %d", len(gems))
 	}
 	if gems[0] != 1001 {
 		t.Fatalf("expected meta gem to persist in meta socket, got %d", gems[0])
 	}
-	if gems[1] != 0 {
-		t.Fatalf("expected non-meta gem to be cleared, got %d", gems[1])
+	if gems[1] != 1002 {
+		t.Fatalf("expected red gem to be re-homed into the blue socket, got %d", gems[1])
 	}
 }
 
-func TestApplyMetaGem_DropsNonHeadGems(t *testing.T) {
+func TestMergeGems_KeepsNonHeadGems(t *testing.T) {
 	existing := core.Item{
 		Type:       proto.ItemType_ItemTypeHands,
 		GemSockets: []proto.GemColor{proto.GemColor_GemColorRed},
@@ -159,16 +159,49 @@ func TestApplyMetaGem_DropsNonHeadGems(t *testing.T) {
 		GemSockets: []proto.GemColor{proto.GemColor_GemColorRed},
 	}
 
-	gems := applyMetaGem(existing, newItem)
+	gems := mergeGems(existing, bulkSimCandidateOption{spec: &proto.ItemSpec{}}, newItem)
 	if len(gems) != 1 {
 		t.Fatalf("expected 1 gem slot, got %d", len(gems))
 	}
-	if gems[0] != 0 {
-		t.Fatalf("expected non-head gems to be cleared, got %d", gems[0])
+	if gems[0] != 2001 {
+		t.Fatalf("expected gem to be carried over into the matching socket, got %d", gems[0])
 	}
 }
 
-// Weapon combination generation.
+func TestMergeGems_MetaGemNeedsMetaSocket(t *testing.T) {
+	existing := core.Item{
+		Type:       proto.ItemType_ItemTypeHead,
+		GemSockets: []proto.GemColor{proto.GemColor_GemColorMeta},
+		Gems:       []core.Gem{{ID: 3001, Color: proto.GemColor_GemColorMeta}},
+	}
+	newItem := core.Item{
+		Type:       proto.ItemType_ItemTypeHead,
+		GemSockets: []proto.GemColor{proto.GemColor_GemColorRed},
+	}
+
+	gems := mergeGems(existing, bulkSimCandidateOption{spec: &proto.ItemSpec{}}, newItem)
+	if gems[0] != 0 {
+		t.Fatalf("expected meta gem to be dropped when there is no meta socket, got %d", gems[0])
+	}
+}
+
+func TestMergeGems_BulkItemGemsWin(t *testing.T) {
+	existing := core.Item{
+		Type:       proto.ItemType_ItemTypeHands,
+		GemSockets: []proto.GemColor{proto.GemColor_GemColorRed},
+		Gems:       []core.Gem{{ID: 4001, Color: proto.GemColor_GemColorRed}},
+	}
+	newItem := core.Item{
+		Type:       proto.ItemType_ItemTypeHands,
+		GemSockets: []proto.GemColor{proto.GemColor_GemColorRed},
+	}
+	option := bulkSimCandidateOption{spec: &proto.ItemSpec{Gems: []int32{4002}}}
+
+	gems := mergeGems(existing, option, newItem)
+	if gems[0] != 4002 {
+		t.Fatalf("expected the gem picked for the bulk item to win, got %d", gems[0])
+	}
+}
 
 func oneHandOption(id int32, gems ...int32) bulkSimCandidateOption {
 	return bulkSimCandidateOption{

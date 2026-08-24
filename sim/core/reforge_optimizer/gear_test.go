@@ -3,6 +3,7 @@ package reforgeoptimizer
 import (
 	"testing"
 
+	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
 )
 
@@ -25,8 +26,8 @@ func TestGemMatchesSocketSecondaryColors(t *testing.T) {
 
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
-			if got := gemMatchesSocket(testCase.gemColor, testCase.socketColor); got != testCase.want {
-				t.Fatalf("gemMatchesSocket(%s, %s) = %t, want %t", testCase.gemColor, testCase.socketColor, got, testCase.want)
+			if got := core.GemMatchesSocket(testCase.gemColor, testCase.socketColor); got != testCase.want {
+				t.Fatalf("core.GemMatchesSocket(%s, %s) = %t, want %t", testCase.gemColor, testCase.socketColor, got, testCase.want)
 			}
 		})
 	}

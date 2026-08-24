@@ -238,7 +238,7 @@ func (o *reforgeOptimizer) buildGemOptions(preCapEPs core.UnitStats, reforgeCaps
 
 			if (o.settings.GetDisableUniqueGems() && gem.GetUnique() && !isJC) ||
 				(isJC && !hasJC) ||
-				!gemMatchesSocket(gem.GetColor(), socketColor) ||
+				!core.GemMatchesSocket(gem.GetColor(), socketColor) ||
 				statCount == 0 ||
 				gem.GetPhase() > o.settings.GetMaxGemPhase() ||
 				gem.GetQuality() > o.settings.GetMaxGemQuality() {
@@ -495,7 +495,7 @@ func (o *reforgeOptimizer) buildYalpsVariables(equipment core.Equipment, preCapE
 					rawStats := candidate.rawStats
 					socketBonusAdded := false
 					useSocketBonusLink := false
-					if gemMatchesSocket(candidate.gem.GetColor(), socketColor) {
+					if core.GemMatchesSocket(candidate.gem.GetColor(), socketColor) {
 						if forceSocketBonus {
 							o.applyPositiveReforgeStats(objCoeffs, distributedSocketBonus, preCapEPs)
 							rawStats = rawStats.Add(distributedSocketBonus)

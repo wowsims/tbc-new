@@ -11,6 +11,7 @@ import (
 	_ "net/http/pprof"
 	"os"
 	"os/signal"
+	"runtime/debug"
 	"runtime/pprof"
 	"strings"
 	"sync"
@@ -141,6 +142,8 @@ var asyncAPIHandlers = map[string]asyncAPIHandler{
 	}},
 }
 
+const asyncProgressSilenceTimeout = 10 * time.Minute
+
 func ReforgeOptimizeAsync(request *proto.ReforgeOptimizeRequest, progress chan *proto.ProgressMetrics, requestId string) {
 	if requestId == "" {
 		requestId = request.GetRequestId()
@@ -159,6 +162,15 @@ func ReforgeOptimizeAsync(request *proto.ReforgeOptimizeRequest, progress chan *
 	go func() {
 		defer simsignals.UnregisterId(requestId)
 		defer close(progress)
+		defer func() {
+			if err := recover(); err != nil {
+				errStr := fmt.Sprint(err) + "\nStack Trace:\n" + string(debug.Stack())
+				log.Printf("[ERROR] Reforge optimization panicked: %s", errStr)
+				progress <- &proto.ProgressMetrics{
+					FinalReforgeResult: &proto.ReforgeOptimizeResult{Error: &proto.ErrorOutcome{Message: errStr}},
+				}
+			}
+		}()
 		progress <- &proto.ProgressMetrics{
 			FinalReforgeResult: reforgeoptimizer.OptimizeAsync(request, signals),
 		}
@@ -206,7 +218,8 @@ func (s *server) handleAsyncAPI(w http.ResponseWriter, r *http.Request) {
 	//  as the simulation advances it will push changes to the channel
 	//  these changes will be consumed by the goroutine below so the asyncProgress endpoint can fetch the results.
 	reporter := make(chan *proto.ProgressMetrics, 100)
-	handler.handle(msg, reporter, r.URL.Query().Get("requestId"))
+	requestId := r.URL.Query().Get("requestId")
+	handler.handle(msg, reporter, requestId)
 
 	// Generate a new async simulation
 	simProgress := s.addNewSim()
@@ -216,8 +229,12 @@ func (s *server) handleAsyncAPI(w http.ResponseWriter, r *http.Request) {
 	go func() {
 		for {
 			select {
-			case <-time.After(time.Minute * 10):
-				// if we get no progress after 10 minutes, delete the pending sim and exit.
+			case <-time.After(asyncProgressSilenceTimeout):
+				// Nothing drains reporter after this, so the pipeline behind it would block
+				// on a full buffer for the process lifetime.
+				if requestId != "" {
+					simsignals.AbortById(requestId)
+				}
 				s.progMut.Lock()
 				delete(s.asyncProgresses, simProgress.id)
 				s.progMut.Unlock()

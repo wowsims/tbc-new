@@ -390,8 +390,8 @@ export class Sim {
 
 			const baselineGear = prepareGear(this.raid.getActivePlayers()[0].getGear());
 			const bulkReforgeRequest = reforgeConfig ? this.makeBulkSimReforgeRequest(reforgeConfig) : undefined;
-			const useWasmConcurrency = await this.shouldUseWasmConcurrency();
-			const backendBuildCandidates = !useWasmConcurrency && !!bulkSettings;
+			const useWasmBulkSim = await this.isWasm();
+			const backendBuildCandidates = !useWasmBulkSim && !!bulkSettings;
 			let preparedGearSets = gearSets.map(prepareGear);
 			let preparedCandidateSpecs: EquipmentSpec[] | undefined = undefined;
 			let preparedCandidateGearKeys: string[] | undefined = undefined;
@@ -540,7 +540,7 @@ export class Sim {
 			});
 
 			let result: BulkSimResult;
-			if (useWasmConcurrency) {
+			if (useWasmBulkSim) {
 				const cacheWrites: Promise<void>[] = [];
 				const onReforgeCandidateOptimized = (candidate: BulkGearCandidate, optimizedGear: EquipmentSpec) => {
 					const cacheKey = bulkReforgeCacheData?.cacheKeysByCandidateIndex.get(candidate.index);

@@ -1039,6 +1039,9 @@ export class ReforgeOptimizer {
 			SimSettingCategories.External,
 			SimSettingCategories.Miscellaneous,
 		]);
+		playerProto.bonusStats = player.getBonusStats().toProto();
+		playerProto.enableItemSwap = player.itemSwapSettings.getEnableItemSwap();
+		playerProto.itemSwap = player.itemSwapSettings.toProto();
 		playerProto.equipment = undefined;
 		playerProto.database = undefined;
 		playerProto.channelClipDelayMs = 0;

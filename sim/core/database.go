@@ -719,6 +719,35 @@ func eligibleSlotsForItem(item *Item) []proto.ItemSlot {
 	return nil
 }
 
+// GemEligibleForSocket reports whether a gem may be placed in a socket of the given color
+// (a meta socket takes only meta gems, and a meta gem fits nowhere else).
+func GemEligibleForSocket(gemColor proto.GemColor, socketColor proto.GemColor) bool {
+	if socketColor == proto.GemColor_GemColorMeta {
+		return gemColor == proto.GemColor_GemColorMeta
+	}
+	return gemColor != proto.GemColor_GemColorMeta
+}
+
+// GemMatchesSocket reports whether a gem's color counts as a match for the socket's color (for
+// the purpose of earning the item's socket bonus).
+func GemMatchesSocket(gemColor proto.GemColor, socketColor proto.GemColor) bool {
+	if gemColor == socketColor {
+		return true
+	}
+	switch socketColor {
+	case proto.GemColor_GemColorBlue:
+		return gemColor == proto.GemColor_GemColorPurple || gemColor == proto.GemColor_GemColorGreen || gemColor == proto.GemColor_GemColorPrismatic
+	case proto.GemColor_GemColorRed:
+		return gemColor == proto.GemColor_GemColorPurple || gemColor == proto.GemColor_GemColorOrange || gemColor == proto.GemColor_GemColorPrismatic
+	case proto.GemColor_GemColorYellow:
+		return gemColor == proto.GemColor_GemColorOrange || gemColor == proto.GemColor_GemColorGreen || gemColor == proto.GemColor_GemColorPrismatic
+	case proto.GemColor_GemColorPrismatic:
+		return gemColor == proto.GemColor_GemColorRed || gemColor == proto.GemColor_GemColorOrange || gemColor == proto.GemColor_GemColorYellow || gemColor == proto.GemColor_GemColorGreen || gemColor == proto.GemColor_GemColorBlue || gemColor == proto.GemColor_GemColorPurple
+	default:
+		return false
+	}
+}
+
 func ColorIntersects(g proto.GemColor, o proto.GemColor) bool {
 	if g == o {
 		return true

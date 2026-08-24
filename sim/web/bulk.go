@@ -2,7 +2,9 @@ package main
 
 import (
 	"crypto/sha256"
+	"fmt"
 	"log"
+	"runtime/debug"
 	"slices"
 	"sync"
 	"time"
@@ -72,6 +74,16 @@ func finishBulkSim(progress chan *proto.ProgressMetrics, stage proto.BulkSimStag
 }
 
 func runBulkSimAsync(request *proto.BulkSimRequest, progress chan *proto.ProgressMetrics, requestId string) {
+	defer func() {
+		if err := recover(); err != nil {
+			errStr := fmt.Sprint(err) + "\nStack Trace:\n" + string(debug.Stack())
+			log.Printf("[ERROR] Bulk sim panicked: %s", errStr)
+			finishBulkSim(progress, proto.BulkSimStage_BulkSimStageError, &proto.BulkSimResult{
+				Error: &proto.ErrorOutcome{Message: errStr},
+			})
+		}
+	}()
+
 	// Registered before generation, not after: generation can take minutes, and the
 	// client already holds its progress id, so an abort arriving in that window has to
 	// land somewhere. bulk.BulkSimAsync registers the same id itself, so the id is
