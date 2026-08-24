@@ -21,6 +21,10 @@ const (
 	ResistanceCategoryShadow = "ResistanceShadow"
 )
 
+// Exclusive category for flat stat buffs which don't stack with each other
+// e.g. Arcane Brilliance vs Scroll of Intellect.
+const StatBuffCategory = "StatBuff"
+
 type BuffConfig struct {
 	Label             string
 	ActionID          ActionID
@@ -409,23 +413,21 @@ func ArcaneBrillianceAura(char *Character) *Aura {
 		Stats: []StatConfig{
 			{stats.Intellect, 40, false},
 		},
+		ExclusiveCategory: StatBuffCategory,
 	})
 }
 
 func DivineSpiritAura(char *Character, improved bool) *Aura {
-	spiritBuff := stats.Stats{stats.Spirit: 50}
-
 	dsSDStatDep := char.NewDynamicStatDependency(stats.Spirit, stats.SpellDamage, 0.1)
 	dsHPStatDep := char.NewDynamicStatDependency(stats.Spirit, stats.HealingPower, 0.1)
 
-	return char.GetOrRegisterAura(Aura{
+	aura := char.GetOrRegisterAura(Aura{
 		Label:      "Divine Spirit Buff",
 		ActionID:   ActionID{SpellID: 25312},
 		Duration:   time.Minute * 30,
 		BuildPhase: CharacterBuildPhaseBuffs,
 
 		OnGain: func(aura *Aura, sim *Simulation) {
-			char.AddStatsDynamic(sim, spiritBuff)
 			if improved {
 				char.EnableBuildPhaseStatDep(sim, dsSDStatDep)
 				char.EnableBuildPhaseStatDep(sim, dsHPStatDep)
@@ -433,13 +435,18 @@ func DivineSpiritAura(char *Character, improved bool) *Aura {
 		},
 
 		OnExpire: func(aura *Aura, sim *Simulation) {
-			char.AddStatsDynamic(sim, spiritBuff.Invert())
 			if improved {
 				char.DisableBuildPhaseStatDep(sim, dsSDStatDep)
 				char.DisableBuildPhaseStatDep(sim, dsHPStatDep)
 			}
 		},
 	})
+
+	// The Spirit is exclusive with other flat Spirit buffs (Scroll of Spirit), so
+	// only the strongest source applies. The Imp. DS conversion is DS-only and stays
+	// tied to the aura itself.
+	makeExclusiveFlatStatBuff(aura, stats.Spirit, 50, StatBuffCategory)
+	return aura
 }
 
 func GiftOfTheWildAura(char *Character, improved bool) *Aura {
