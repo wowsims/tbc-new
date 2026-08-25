@@ -524,8 +524,8 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-Enchant2HWeapon-GreaterImpact-963"
  value: {
-  dps: 1749.27315
-  tps: 959.14867
+  dps: 1749.59325
+  tps: 959.3287
  }
 }
 dps_results: {
