@@ -14,7 +14,8 @@ import (
 type DBC struct {
 	Items                  map[int]Item                       // Item ID
 	Gems                   map[int]Gem                        // Item ID
-	Enchants               map[int]Enchant                    // ItemEchantment ID
+	Enchants               map[int]Enchant                    // Index in the raw SpellItemEnchantment list
+	EnchantsByEffectId     map[int]Enchant                    // ItemEchantment ID
 	ItemStatEffects        map[int]ItemStatEffect             // ItemID? something anyway
 	SpellEffects           map[int]map[int]SpellEffect        // Search by spellID and effect index
 	SpellEffectsById       map[int]SpellEffect                // Search by effectid
@@ -43,6 +44,7 @@ func NewDBC() *DBC {
 		Items:                  make(map[int]Item),
 		Gems:                   make(map[int]Gem),
 		Enchants:               make(map[int]Enchant),
+		EnchantsByEffectId:     make(map[int]Enchant),
 		ItemStatEffects:        make(map[int]ItemStatEffect),
 		SpellEffects:           make(map[int]map[int]SpellEffect),
 		SpellEffectsById:       make(map[int]SpellEffect),
@@ -296,6 +298,7 @@ func (d *DBC) loadEnchants(filename string) error {
 			continue
 		}
 		d.Enchants[i] = ench
+		d.EnchantsByEffectId[ench.EffectId] = ench
 	}
 	return nil
 }

@@ -522,6 +522,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestElemental-AllItems-Enchant2HWeapon-GreaterImpact-963"
+ value: {
+  dps: 1749.27315
+  tps: 959.14867
+ }
+}
+dps_results: {
  key: "TestElemental-AllItems-EnchantBoots-Cat'sSwiftness-2939"
  value: {
   dps: 1781.60344

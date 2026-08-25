@@ -563,6 +563,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestFeralCat-AllItems-Enchant2HWeapon-GreaterImpact-963"
+ value: {
+  dps: 710.94389
+  tps: 353.33911
+  hps: 68.14329
+ }
+}
+dps_results: {
  key: "TestFeralCat-AllItems-EnchantBoots-Boar'sSpeed-2940"
  value: {
   dps: 725.03569

@@ -473,6 +473,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestRogue-AllItems-Enchant2HWeapon-GreaterImpact-963"
+ value: {
+  dps: 1808.48774
+  tps: 898.81841
+ }
+}
+dps_results: {
  key: "TestRogue-AllItems-EnchantBoots-Boar'sSpeed-2940"
  value: {
   dps: 1858.87285

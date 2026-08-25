@@ -534,6 +534,7 @@ var EnchantAllowList = []int32{
 	368,  // Enchant Cloak - Greater Agility
 	369,  // Enchant Bracer - Major Intellect
 	684,  // Enchant Gloves - Major Strength
+	963,  // Enchant Weapon - Major Striking
 	1593, // Bracer 24 AP
 	1594, // Gloves 26 AP
 	1900, // Enchant Weapon - Crusader

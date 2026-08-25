@@ -637,6 +637,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestProtectionWarrior-AllItems-Enchant2HWeapon-GreaterImpact-963"
+ value: {
+  dps: 785.05933
+  tps: 1442.72928
+  dtps: 1337.83344
+ }
+}
+dps_results: {
  key: "TestProtectionWarrior-AllItems-EnchantBoots-Cat'sSwiftness-2939"
  value: {
   dps: 795.51663

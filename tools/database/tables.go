@@ -1418,7 +1418,7 @@ func LoadAndWriteEnchantDescriptions(outputPath string, db *WowDatabase, instanc
 
 	dataProvider := tooltip.DBCTooltipDataProvider{DBC: instance}
 	for _, enchant := range db.Enchants {
-		dbcEnch := instance.Enchants[int(enchant.EffectId)]
+		dbcEnch := instance.EnchantsByEffectId[int(enchant.EffectId)]
 		tooltip, err := tooltip.ParseTooltip(dbcEnch.EffectName, dataProvider, int64(enchant.EffectId))
 		if err != nil {
 			fmt.Printf("Could not parse enchant (%d), '%s'\n", enchant.EffectId, dbcEnch.EffectName)

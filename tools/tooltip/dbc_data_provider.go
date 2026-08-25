@@ -429,7 +429,7 @@ func (d DBCTooltipDataProvider) KnowsSpell(spellId int64) bool {
 }
 
 func (d DBCTooltipDataProvider) GetEffectEnchantValue(enchantId int64, effectIdx int64) float64 {
-	enchantInfo, ok := d.DBC.Enchants[int(enchantId)]
+	enchantInfo, ok := d.DBC.EnchantsByEffectId[int(enchantId)]
 	if !ok {
 		return 0
 	}

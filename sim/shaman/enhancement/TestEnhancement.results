@@ -494,6 +494,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestEnhancement-AllItems-Enchant2HWeapon-GreaterImpact-963"
+ value: {
+  dps: 1946.18748
+  tps: 1236.88094
+ }
+}
+dps_results: {
  key: "TestEnhancement-AllItems-EnchantBoots-Boar'sSpeed-2940"
  value: {
   dps: 1938.34904
