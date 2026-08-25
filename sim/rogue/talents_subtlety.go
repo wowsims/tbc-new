@@ -119,7 +119,7 @@ func (rogue *Rogue) registerGhostlyStrike() {
 
 			// Dodge Aura NYI
 
-			baseDamage := rogue.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower(target))
+			baseDamage := rogue.MHWeaponDamage(sim, spell.MeleeAttackPower(target))
 			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialHitAndCrit)
 			if result.Landed() {
 				rogue.AddComboPoints(sim, 1, pointMetric)
