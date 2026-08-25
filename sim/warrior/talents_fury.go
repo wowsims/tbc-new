@@ -130,7 +130,7 @@ func (war *Warrior) registerEnrage() {
 	war.MakeProcTriggerAura(core.ProcTrigger{
 		Name:     "Enrage - Trigger",
 		ProcMask: core.ProcMaskMelee,
-		Outcome:  core.OutcomeCrit,
+		Outcome:  core.OutcomeCrit | core.OutcomeSuppressedCrit,
 		Callback: core.CallbackOnSpellHitTaken,
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			war.EnrageAura.Activate(sim)

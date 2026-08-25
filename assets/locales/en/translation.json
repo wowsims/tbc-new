@@ -1627,6 +1627,14 @@
 					"align_cd_end": "Align target spell to encounter end",
 					"align_cd_end_tooltip": "When checked will try to align the CD usage to the end of the encounter. This is useful for cooldowns/specs that benefit for example from execute."
 				},
+				"selected_potion": {
+					"label": "Selected Potion",
+					"tooltip": "Returns <b>True</b> if the selected potion is the character's default potion."
+				},
+				"selected_conjured": {
+					"label": "Selected Conjured",
+					"tooltip": "Returns <b>True</b> if the selected conjured item is the character's default conjured item."
+				},
 				"offset": {
 					"label": "Offset",
 					"tooltip": "The time offset from which when the cooldown will be triggered"

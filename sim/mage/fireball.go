@@ -33,7 +33,7 @@ func (mage *Mage) registerFireballSpell() {
 			Aura: core.Aura{
 				Label: "FireballDoT",
 			},
-			NumberOfTicks: 2,
+			NumberOfTicks: 4,
 			TickLength:    time.Second * 2,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, 21)

@@ -662,13 +662,6 @@ dps_results: {
  }
 }
 dps_results: {
- key: "TestArcane-AllItems-IceGuard-2682"
- value: {
-  dps: 1920.2847
-  tps: 927.36332
- }
-}
-dps_results: {
  key: "TestArcane-AllItems-IconofUnyieldingCourage-28121"
  value: {
   dps: 1891.02863
@@ -925,13 +918,6 @@ dps_results: {
  value: {
   dps: 1891.02863
   tps: 941.79043
- }
-}
-dps_results: {
- key: "TestArcane-AllItems-SavageGuard-2681"
- value: {
-  dps: 1920.2847
-  tps: 927.36332
  }
 }
 dps_results: {

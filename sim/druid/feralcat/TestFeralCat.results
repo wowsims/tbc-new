@@ -835,14 +835,6 @@ dps_results: {
  }
 }
 dps_results: {
- key: "TestFeralCat-AllItems-IceGuard-2682"
- value: {
-  dps: 723.86611
-  tps: 359.76146
-  hps: 68.40338
- }
-}
-dps_results: {
  key: "TestFeralCat-AllItems-IconofUnyieldingCourage-28121"
  value: {
   dps: 718.99985
@@ -1304,14 +1296,6 @@ dps_results: {
   dps: 718.99985
   tps: 357.34292
   hps: 70.39049
- }
-}
-dps_results: {
- key: "TestFeralCat-AllItems-SavageGuard-2681"
- value: {
-  dps: 723.86611
-  tps: 359.76146
-  hps: 68.40338
  }
 }
 dps_results: {

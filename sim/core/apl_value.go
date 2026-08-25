@@ -292,6 +292,12 @@ func (rot *APLRotation) newAPLValueWithContext(config *proto.APLValue, groupVari
 	case *proto.APLValue_MultipleCdUsages:
 		value = rot.newValueMultipleCdUsages(config.GetMultipleCdUsages(), config.Uuid)
 
+	// Consumables
+	case *proto.APLValue_SelectedPotion:
+		value = rot.newValueSelectedPotion(config.GetSelectedPotion(), config.Uuid)
+	case *proto.APLValue_SelectedConjured:
+		value = rot.newValueSelectedConjured(config.GetSelectedConjured(), config.Uuid)
+
 	default:
 		value = nil
 	}

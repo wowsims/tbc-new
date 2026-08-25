@@ -113,8 +113,16 @@ func (procAura *Aura) AttachProcTriggerCallback(unit *Unit, config ProcTrigger) 
 		if config.ProcMask != ProcMaskUnknown && !spell.ProcMask.Matches(config.ProcMask) {
 			return
 		}
-		if config.Outcome != OutcomeEmpty && !result.Outcome.Matches(config.Outcome) {
-			return
+		if config.Outcome != OutcomeEmpty {
+			matchesOutcome := result.Outcome.Matches(config.Outcome)
+			// Crit procs also respond to resilience-suppressed crits. DidCrit remains
+			// strict so damage and metric code can distinguish the two outcomes.
+			if result.DidSuppressedCrit() && config.Outcome.Matches(OutcomeCrit) {
+				matchesOutcome = config.Outcome&^OutcomeCrit == 0 || result.Outcome.Matches(config.Outcome&^OutcomeCrit)
+			}
+			if !matchesOutcome {
+				return
+			}
 		}
 		if config.RequireDamageDealt && result.Damage == 0 {
 			return

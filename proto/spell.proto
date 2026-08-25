@@ -79,6 +79,12 @@ message SpellEffect {
 		SpellSchool school = 8;
 		Stat stat = 9;
 	}
+	// Milliseconds between periodic aura ticks; 0 for non-periodic effects
+	int32 aura_period_ms = 10;
+	// Stats the effect grants
+	repeated double stats = 11;
+	// Duration of the effect's aura in milliseconds; 0 for instant effects
+	int32 duration_ms = 12;
 }
 
 enum EffectType {

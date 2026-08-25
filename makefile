@@ -207,7 +207,20 @@ release: wowsimtbc wowsimtbc-windows.exe
 	zip wowsimcli-windows.exe.zip wowsimcli-windows.exe
 
 sim/core/proto/api.pb.go: proto/*.proto
-	protoc -I=./proto --go_out=./sim/core ./proto/*.proto
+	@if go version -m "$$(command -v protoc-gen-go)" 2>/dev/null | grep -qE '^[[:space:]]+mod[[:space:]]+github\.com/golang/protobuf[[:space:]]'; then \
+		echo "ERROR: your protoc-gen-go is the deprecated github.com/golang/protobuf plugin;"; \
+		echo "it generates code that no longer builds against this repo's protobuf version."; \
+		echo "Fix:  go install google.golang.org/protobuf/cmd/protoc-gen-go@latest"; \
+		echo "then: rm -f sim/core/proto/*.pb.go && retry"; \
+		exit 1; \
+	fi
+# Distro protoc packages (e.g. Ubuntu/WSL's protobuf-compiler) bundle a
+# descriptor.proto whose go_package still points at the deprecated
+# github.com/golang/protobuf path, which is no longer a dependency. Pin the
+# mapping so common.proto's MessageOptions extension resolves to descriptorpb.
+	protoc -I=./proto \
+		--go_opt=Mgoogle/protobuf/descriptor.proto=google.golang.org/protobuf/types/descriptorpb \
+		--go_out=./sim/core ./proto/*.proto
 
 # Only useful for building the lib on a host platform that matches the target platform
 .PHONY: locallib
@@ -231,19 +244,26 @@ CLIENTDATA_OUTPUT   := $(shell realpath ./tools/database/wowsims.db)
 
 .PHONY: db
 db:
-	@echo "Running DB2ToSqlite for clientdata"
-	cd tools/DB2ToSqlite && dotnet run -- -s $(CLIENTDATA_SETTINGS) --output $(CLIENTDATA_OUTPUT)
+	@echo "Extracting client data"
+	go run ./tools/db2tool -s $(CLIENTDATA_SETTINGS) --output $(CLIENTDATA_OUTPUT)
 	@echo "Running DBC generation tool"
 	go run tools/database/gen_db/*.go -outDir=./assets -gen=db
 
 .PHONY: ptrdb
 ptrdb:
-	@echo "Running DB2ToSqlite for clientdata"
-	cd tools/DB2ToSqlite && dotnet run -- -s $(CLIENTDATAPTR_SETTINGS) --output $(CLIENTDATA_OUTPUT)
+	@echo "Extracting client data"
+	go run ./tools/db2tool -s $(CLIENTDATAPTR_SETTINGS) --output $(CLIENTDATA_OUTPUT)
 	@echo "Running DBC generation tool"
 	go run tools/database/gen_db/*.go -outDir=./assets -gen=db
 
 sim/core/items/all_items.go: $(call rwildcard,tools/database,*.go) $(call rwildcard,sim/core/proto,*.go)
+	@test -f tools/database/wowsims.db || { \
+		echo "ERROR: tools/database/wowsims.db is missing (gitignored, produced by 'make db')."; \
+		echo "Run 'make db' to extract it from a local WoW install."; \
+		exit 1; }
+	@test -f tools/db2tool/listfile.csv || { \
+		echo "tools/db2tool/listfile.csv is missing, downloading it..."; \
+		curl -fL -o tools/db2tool/listfile.csv https://github.com/wowdev/wow-listfile/releases/latest/download/community-listfile.csv; }
 	go run tools/database/gen_db/*.go -outDir=./assets -gen=db
 
 .PHONY: test

@@ -662,13 +662,6 @@ dps_results: {
  }
 }
 dps_results: {
- key: "TestShadowPriest-AllItems-IceGuard-2682"
- value: {
-  dps: 1747.14585
-  tps: 902.84422
- }
-}
-dps_results: {
  key: "TestShadowPriest-AllItems-IconofUnyieldingCourage-28121"
  value: {
   dps: 1706.12173
@@ -918,13 +911,6 @@ dps_results: {
  value: {
   dps: 1706.12173
   tps: 882.36221
- }
-}
-dps_results: {
- key: "TestShadowPriest-AllItems-SavageGuard-2681"
- value: {
-  dps: 1747.14585
-  tps: 902.84422
  }
 }
 dps_results: {
