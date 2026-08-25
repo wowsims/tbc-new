@@ -473,6 +473,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestShadowPriest-AllItems-Enchant2HWeapon-GreaterImpact-963"
+ value: {
+  dps: 1725.53108
+  tps: 892.12156
+ }
+}
+dps_results: {
  key: "TestShadowPriest-AllItems-EnchantBoots-Cat'sSwiftness-2939"
  value: {
   dps: 1762.006
