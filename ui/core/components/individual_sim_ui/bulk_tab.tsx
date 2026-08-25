@@ -39,6 +39,9 @@ import {
 import { BULK_SIM_ITEM_SLOT_TO_ITEM_SLOT_PAIRS, BulkSimReforgeCacheProgress, dedupeGearSets, getBulkItemSlotFromSlot } from './bulk/utils';
 import { BulkGearJsonImporter } from './importers';
 
+const BULK_SETTINGS_STORAGE_KEY = 'bulk-settings.v2';
+const LEGACY_BULK_SETTINGS_STORAGE_KEY = 'bulk-settings.v1';
+
 export class BulkTab extends SimTab {
 	readonly simUI: IndividualSimUI<any>;
 	readonly playerCanDualWield: boolean;
@@ -236,10 +239,12 @@ export class BulkTab extends SimTab {
 	}
 
 	private getSettingsKey(): string {
-		return this.simUI.getStorageKey('bulk-settings.v1');
+		return this.simUI.getStorageKey(BULK_SETTINGS_STORAGE_KEY);
 	}
 
 	private loadSettings() {
+		window.localStorage.removeItem(this.simUI.getStorageKey(LEGACY_BULK_SETTINGS_STORAGE_KEY));
+
 		const storedSettings = window.localStorage.getItem(this.getSettingsKey());
 		if (storedSettings != null) {
 			let settings: BulkSettings;
