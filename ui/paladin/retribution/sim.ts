@@ -45,7 +45,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRetributionPaladin, {
 	cssScheme: PlayerClasses.getCssClass(PlayerClasses.Paladin),
 	// List any known bugs / issues here and they'll be shown on the site.
 	knownIssues: [],
-	consumableStats: [Stat.StatMana],
+	consumableStats: [Stat.StatMana, Stat.StatMP5],
 
 	// All stats for which EP should be calculated.
 	epStats: [

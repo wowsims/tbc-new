@@ -39,7 +39,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecEnhancementShaman, {
 	epPseudoStats: [PseudoStat.PseudoStatMainHandDps, PseudoStat.PseudoStatOffHandDps],
 	// Reference stat against which to calculate EP.
 	epReferenceStat: Stat.StatAttackPower,
-	consumableStats: [Stat.StatMana],
+	consumableStats: [Stat.StatMana, Stat.StatMP5],
 	// Which stats to display in the Character Stats section, at the bottom of the left-hand sidebar.
 	displayStats: UnitStat.createDisplayStatArray(
 		[
