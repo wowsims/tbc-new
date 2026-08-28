@@ -1580,14 +1580,14 @@ func BlessingOfWisdomAura(char *Character, improved bool) *Aura {
 func ShadowPriestDPSManaAura(char *Character, dps float64) *Aura {
 	manaMetrics := char.NewManaMetrics(ActionID{SpellID: 34914})
 
-	manaGain := dps * 0.25
+	manaGain := dps * 0.05
 
 	return char.GetOrRegisterAura(Aura{
 		Label:    "Vampiric Touch",
 		ActionID: ActionID{SpellID: 34914},
 		OnGain: func(aura *Aura, sim *Simulation) {
 			StartPeriodicAction(sim, PeriodicActionOptions{
-				Period: DurationFromSeconds(5),
+				Period: DurationFromSeconds(1),
 				OnAction: func(s *Simulation) {
 					char.AddMana(sim, manaGain, manaMetrics)
 				},
