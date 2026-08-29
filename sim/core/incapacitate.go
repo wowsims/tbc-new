@@ -1,24 +1,11 @@
 package core
 
-// Incapacitate effects take control away from a unit. Fear is the only form
-// modelled so far; Sap, Incapacitate and friends belong here too.
-
 import (
 	"time"
 )
 
-// FearAuraTag marks auras that represent a Fear effect, so that immunity effects
-// such as Berserker Rage can find and break them.
 const FearAuraTag = "Fear"
 
-// RegisterFearAura registers a Fear effect on the unit. While it is active the
-// unit is uncontrollable: anything in progress is interrupted, and no swings,
-// rotation actions or casts happen until the Fear ends. Spells flagged with
-// SpellFlagCastableWhileIncapacitated remain usable, which is how effects like
-// Berserker Rage break out.
-//
-// Apply it with ApplyFear (or AuraArray.ApplyFearToAllPlayers) so that Fear
-// immunity is respected, and remove it early with Unit.BreakFear.
 func (unit *Unit) RegisterFearAura(label string, actionID ActionID, duration time.Duration) *Aura {
 	return unit.RegisterAura(Aura{
 		Label:    label,
@@ -44,8 +31,6 @@ func (unit *Unit) RegisterFearAura(label string, actionID ActionID, duration tim
 	})
 }
 
-// ApplyFear activates a Fear aura unless its unit is immune to Fear. Returns
-// whether the Fear landed.
 func ApplyFear(sim *Simulation, fearAura *Aura) bool {
 	if fearAura == nil || fearAura.Unit.PseudoStats.FearImmune {
 		return false
@@ -55,8 +40,6 @@ func ApplyFear(sim *Simulation, fearAura *Aura) bool {
 	return true
 }
 
-// ApplyFearToAllPlayers applies the Fear auras in the array to every enabled
-// player that is not immune to Fear.
 func (auras AuraArray) ApplyFearToAllPlayers(sim *Simulation) {
 	if auras == nil {
 		return
@@ -69,7 +52,19 @@ func (auras AuraArray) ApplyFearToAllPlayers(sim *Simulation) {
 	}
 }
 
-// BreakFear removes any active Fear effect from the unit, returning control.
+func (aura *Aura) AttachFearImmunity() *Aura {
+	if aura == nil {
+		return nil
+	}
+
+	return aura.ApplyOnGain(func(aura *Aura, sim *Simulation) {
+		aura.Unit.PseudoStats.FearImmune = true
+		aura.Unit.BreakFear(sim)
+	}).ApplyOnExpire(func(aura *Aura, _ *Simulation) {
+		aura.Unit.PseudoStats.FearImmune = false
+	})
+}
+
 func (unit *Unit) BreakFear(sim *Simulation) {
 	for _, aura := range unit.GetAurasWithTag(FearAuraTag) {
 		if aura.IsActive() {
