@@ -164,7 +164,7 @@ func init() {
 
 		aura := rogue.NewTemporaryStatsAura(
 			"Rogue Tier 6 Trinket",
-			core.ActionID{SpellID: 40460},
+			core.ActionID{SpellID: 40461},
 			stats.Stats{stats.MeleeCritRating: 145},
 			time.Second*10,
 		)
@@ -173,10 +173,10 @@ func init() {
 			Name:               "Ashtongue Talisman of Lethality",
 			ActionID:           core.ActionID{ItemID: 32492},
 			RequireDamageDealt: false,
-			Callback:           core.CallbackOnCastComplete,
+			Callback:           core.CallbackOnApplyEffects,
 			ClassSpellMask:     RogueSpellFinisher,
 			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-				chance := 0.2 * float64(rogue.ComboPoints())
+				chance := 0.2 * float64(rogue.LastFinisherPointSpend)
 				if chance == 1 || sim.Proc(chance, "Ashtongue Talisman of Lethality") {
 					aura.Activate(sim)
 				}
