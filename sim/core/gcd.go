@@ -102,6 +102,23 @@ func (unit *Unit) CancelGCDTimer(sim *Simulation) {
 	unit.rotationAction.Cancel(sim)
 }
 
+// Interrupt cancels any cast, channel or queued spell in progress, e.g. when the
+// unit gets crowd controlled. Does not touch the GCD; callers that also want to
+// lock the rotation should call ExtendGCDUntil afterwards.
+func (unit *Unit) Interrupt(sim *Simulation) {
+	if unit.IsChanneling() {
+		dot := unit.ChanneledDot
+		dot.tickAction.NextActionAt = NeverExpires // don't tick again in ApplyOnExpire
+		dot.Deactivate(sim)
+	}
+
+	if unit.Hardcast.Expires > sim.CurrentTime {
+		unit.CancelHardcast(sim)
+	}
+
+	unit.CancelQueuedSpell(sim)
+}
+
 func (unit *Unit) CancelHardcast(sim *Simulation) {
 	unit.HardcastAvoidanceAura.Deactivate(sim)
 	unit.Hardcast.Expires = startingCDTime

@@ -207,6 +207,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 			Presets.MAGTHERIDON_PRESET_BUILD,
 			Presets.MOROGRIM_PRESET_BUILD,
 			Presets.HYDROSS_PRESET_BUILD,
+			Presets.ARCHIMONDE_PRESET_BUILD,
 		],
 	},
 

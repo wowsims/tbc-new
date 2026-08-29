@@ -506,6 +506,13 @@ type PseudoStats struct {
 	// Only used for NPCs, governs variance in enemy auto-attack damage
 	DamageSpread float64
 
+	// If true, the unit is under crowd control (e.g. Archimonde's Fear) and
+	// cannot cast or queue any spell. Procs still fire.
+	Incapacitated bool
+
+	// If true, Fear effects cannot be applied to this unit. Berserker Rage.
+	FearImmune bool
+
 	///////////////////////////////////////////////////
 	// Effects that apply when this unit is the target.
 	///////////////////////////////////////////////////

@@ -4,7 +4,21 @@ import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_u
 import { Player } from '../../core/player.js';
 import { PlayerClasses } from '../../core/player_classes';
 import { APLAction, APLListItem, APLRotation, APLRotation_Type as APLRotationType } from '../../core/proto/apl.js';
-import { Cooldowns, Debuffs, Drums, Faction, IndividualBuffs, ItemSlot, PartyBuffs, PseudoStat, Race, RaidBuffs, Spec, Stat, TristateEffect } from '../../core/proto/common.js';
+import {
+	Cooldowns,
+	Debuffs,
+	Drums,
+	Faction,
+	IndividualBuffs,
+	ItemSlot,
+	PartyBuffs,
+	PseudoStat,
+	Race,
+	RaidBuffs,
+	Spec,
+	Stat,
+	TristateEffect,
+} from '../../core/proto/common.js';
 import { defaultExposeWeaknessSettings } from '../../core/proto_utils/utils.js';
 import { FeralBearDruid_Rotation as DruidRotation } from '../../core/proto/druid.js';
 import { ReforgeOptimizer } from '../../core/components/suggest_reforges_action';
@@ -15,7 +29,7 @@ import * as Presets from './presets.js';
 const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralBearDruid, {
 	cssClass: 'feral-bear-druid-sim-ui',
 	cssScheme: PlayerClasses.getCssClass(PlayerClasses.Druid),
-    // List any known bugs / issues here and they'll be shown on the site.
+	// List any known bugs / issues here and they'll be shown on the site.
 	knownIssues: [],
 	warnings: [],
 
@@ -33,11 +47,11 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralBearDruid, {
 		Stat.StatDefenseRating,
 		Stat.StatMeleeHitRating,
 		Stat.StatMeleeCritRating,
-        Stat.StatMeleeHasteRating,
+		Stat.StatMeleeHasteRating,
 		Stat.StatExpertiseRating,
-        Stat.StatResilienceRating,
+		Stat.StatResilienceRating,
 		Stat.StatPhysicalDamage,
-        Stat.StatArmorPenetration,
+		Stat.StatArmorPenetration,
 	],
 	epPseudoStats: [],
 	epReferenceStat: Stat.StatAgility,
@@ -54,7 +68,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralBearDruid, {
 			Stat.StatDodgeRating,
 			Stat.StatDefenseRating,
 			Stat.StatExpertiseRating,
-            Stat.StatResilienceRating,
+			Stat.StatResilienceRating,
 			Stat.StatNatureResistance,
 			Stat.StatFireResistance,
 			Stat.StatFrostResistance,
@@ -90,7 +104,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralBearDruid, {
 			arcaneBrilliance: true,
 			giftOfTheWild: TristateEffect.TristateEffectImproved,
 			powerWordFortitude: TristateEffect.TristateEffectImproved,
-            bloodlust: true,
+			bloodlust: true,
 			shadowProtection: true,
 			thorns: TristateEffect.TristateEffectRegular,
 			divineSpirit: TristateEffect.TristateEffectImproved,
@@ -112,14 +126,14 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralBearDruid, {
 			unleashedRage: true,
 		}),
 		debuffs: Debuffs.create({
-            ...defaultExposeWeaknessSettings(),
+			...defaultExposeWeaknessSettings(),
 			bloodFrenzy: true,
 			exposeArmor: TristateEffect.TristateEffectImproved,
 			faerieFire: TristateEffect.TristateEffectImproved,
 			giftOfArthas: false,
 			huntersMark: TristateEffect.TristateEffectImproved,
 			improvedSealOfTheCrusader: TristateEffect.TristateEffectImproved,
-            curseOfRecklessness: true,
+			curseOfRecklessness: true,
 			insectSwarm: true,
 			judgementOfWisdom: true,
 			misery: true,
@@ -140,7 +154,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralBearDruid, {
 			OtherInputs.InputDelay,
 			OtherInputs.TankAssignment,
 			OtherInputs.InspirationUptime,
-            OtherInputs.IncomingHps,
+			OtherInputs.IncomingHps,
 			OtherInputs.HealingCadence,
 			OtherInputs.HealingCadenceVariation,
 			OtherInputs.AbsorbFrac,
@@ -168,8 +182,8 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralBearDruid, {
 			Presets.P1_PRESET,
 			Presets.P2_SURVIVAL_PRESET,
 			Presets.P2_BALANCED_PRESET,
-            Presets.P2_OFFENSIVE_PRESET,
-            Presets.P2_WARDEN_PRESET,
+			Presets.P2_OFFENSIVE_PRESET,
+			Presets.P2_WARDEN_PRESET,
 			Presets.P2_HYDROSS_FROST_PRESET,
 			Presets.P2_HYDROSS_NATURE_PRESET,
 			Presets.P3_PRESET,
@@ -177,12 +191,13 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralBearDruid, {
 			Presets.P5_PRESET,
 		],
 		builds: [
-				Presets.DEFAULT_PRESET_BUILD,
-				Presets.KARAZHAN_PRESET_BUILD,
-				Presets.MAGTHERIDON_PRESET_BUILD,
-				Presets.MOROGRIM_PRESET_BUILD,
-				Presets.HYDROSS_PRESET_BUILD,
-			],
+			Presets.DEFAULT_PRESET_BUILD,
+			Presets.KARAZHAN_PRESET_BUILD,
+			Presets.MAGTHERIDON_PRESET_BUILD,
+			Presets.MOROGRIM_PRESET_BUILD,
+			Presets.HYDROSS_PRESET_BUILD,
+			Presets.ARCHIMONDE_PRESET_BUILD,
+		],
 	},
 
 	autoRotation: (_player: Player<Spec.SpecFeralBearDruid>): APLRotation => {

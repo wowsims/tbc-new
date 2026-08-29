@@ -2,7 +2,11 @@ import { Phase } from '../../core/constants/other';
 import { OtherDefaults as SimUIOtherDefaults } from '../../core/individual_sim_ui';
 import * as PresetUtils from '../../core/preset_utils.js';
 import { ConsumesSpec, HealingModel, Profession, Race, Spec, Stat } from '../../core/proto/common';
-import { FeralBearDruid_Options as DruidOptions, FeralBearDruid_Rotation as DruidRotation, FeralBearDruid_Rotation_SwipeUsage as SwipeUsage } from '../../core/proto/druid.js';
+import {
+	FeralBearDruid_Options as DruidOptions,
+	FeralBearDruid_Rotation as DruidRotation,
+	FeralBearDruid_Rotation_SwipeUsage as SwipeUsage,
+} from '../../core/proto/druid.js';
 import { SavedTalents } from '../../core/proto/ui.js';
 import { Stats } from '../../core/proto_utils/stats';
 import PreraidGear from './gear_sets/preraid.gear.json';
@@ -47,11 +51,15 @@ import MagtheridonBuild from './builds/magtheridon_encounter_only.build.json';
 import KarazhanBuild from './builds/karazhan_encounter_only.build.json';
 import MorogrimBuild from './builds/morogrim_encounter_only.build.json';
 import HydrossBuild from './builds/hydross_encounter_only.build.json';
+import ArchimondeBuild from './builds/archimonde_encounter_only.build.json';
 export const DEFAULT_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Default', Spec.SpecFeralBearDruid, DefaultBuild);
 export const MAGTHERIDON_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Magtheridon', Spec.SpecFeralBearDruid, MagtheridonBuild);
 export const KARAZHAN_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Karazhan (Boss Average)', Spec.SpecFeralBearDruid, KarazhanBuild);
 export const MOROGRIM_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Morogrim', Spec.SpecFeralBearDruid, MorogrimBuild);
 export const HYDROSS_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Hydross', Spec.SpecFeralBearDruid, HydrossBuild);
+export const ARCHIMONDE_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Archimonde', Spec.SpecFeralBearDruid, ArchimondeBuild, {
+	group: 'Encounters',
+});
 
 // Preset options for EP weights
 export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
@@ -60,12 +68,12 @@ export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
 		[Stat.StatStrength]: 0.452,
 		[Stat.StatAgility]: 0.763,
 		[Stat.StatStamina]: 1.025,
-		[Stat.StatAttackPower]: 0.200,
-		[Stat.StatFeralAttackPower]: 0.200,
+		[Stat.StatAttackPower]: 0.2,
+		[Stat.StatFeralAttackPower]: 0.2,
 		[Stat.StatMeleeHitRating]: 0.941,
 		[Stat.StatMeleeCritRating]: 0.373,
 		[Stat.StatMeleeHasteRating]: 0.438,
-		[Stat.StatArmorPenetration]: 0.070,
+		[Stat.StatArmorPenetration]: 0.07,
 		[Stat.StatExpertiseRating]: 2.147,
 		[Stat.StatDefenseRating]: 0.326,
 		[Stat.StatDodgeRating]: 0.228,
@@ -97,12 +105,12 @@ export const DefaultOptions = DruidOptions.create({
 });
 
 export const DefaultConsumables = ConsumesSpec.create({
-	battleElixirId: 22831,  // Elixir of Major Agility
+	battleElixirId: 22831, // Elixir of Major Agility
 	guardianElixirId: 9088, // Gift of Arthas
-	foodId: 27667,          // Spicy Crawdad
-	potId: 22849,           // Ironshield Potion
-	conjuredId: 22105,      // Healthstone
-    mhImbueId: 34340,       // Adamantite Weightstone
+	foodId: 27667, // Spicy Crawdad
+	potId: 22849, // Ironshield Potion
+	conjuredId: 22105, // Healthstone
+	mhImbueId: 34340, // Adamantite Weightstone
 	goblinSapper: true,
 	superSapper: true,
 	scrollAgi: true,
