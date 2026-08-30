@@ -110,7 +110,7 @@ func (cat *FeralDruid) Reset(sim *core.Simulation) {
 	cat.readyToShift = false
 	cat.waitingForTick = false
 
-	cat.scheduleFixedMCD(sim, 35476, 0)                                      // Drums of Battle at 0s
+	cat.scheduleRecurringMCD(sim, 35476, 0)                                  // Drums of Battle at 0s, then on cooldown
 	cat.scheduleFixedMCD(sim, core.BloodlustActionID.SpellID, 5*time.Second) // Bloodlust at 5s
 }
 
@@ -129,4 +129,32 @@ func (cat *FeralDruid) scheduleFixedMCD(sim *core.Simulation, spellID int32, fir
 			}
 		},
 	})
+}
+
+// scheduleRecurringMCD fires the MCD with the given spellID at fireAt, then
+// re-arms itself so it is used again every time the cooldown comes back up.
+func (cat *FeralDruid) scheduleRecurringMCD(sim *core.Simulation, spellID int32, fireAt time.Duration) {
+	pa := &core.PendingAction{
+		NextActionAt: fireAt,
+	}
+	pa.OnAction = func(sim *core.Simulation) {
+		for _, mcd := range cat.GetMajorCooldowns() {
+			if mcd.Spell.ActionID.SpellID != spellID {
+				continue
+			}
+			if mcd.IsReady(sim) {
+				mcd.TryActivate(sim, &cat.Character)
+			}
+			// Re-arm for the next time the cooldown is available.
+			nextAt := max(mcd.ReadyAt(), sim.CurrentTime+time.Millisecond)
+			if nextAt < sim.Duration {
+				sim.AddPendingAction(&core.PendingAction{
+					NextActionAt: nextAt,
+					OnAction:     pa.OnAction,
+				})
+			}
+			return
+		}
+	}
+	sim.AddPendingAction(pa)
 }

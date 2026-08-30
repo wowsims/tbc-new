@@ -181,19 +181,26 @@ func (cat *FeralDruid) doRotation(sim *core.Simulation) bool {
 	cat.waitingForTick = true
 	markOOM := false
 
+	// The APL opens an OOM event by attempting the shift and failing the mana
+	// check. This rotation bails out before casting, so drive the event pair
+	// explicitly to keep the measured OOM time accurate.
+	if cat.CurrentMana() < shiftCost {
+		if !cat.IsOOM() {
+			cat.StartOOMEvent(sim, shiftCost, false)
+		}
+	} else if cat.IsOOM() {
+		cat.EndOOMEvent(sim, false)
+	}
+
 	if cat.CurrentMana() < shiftCost {
 		// No-shift rotation when OOM.
 		if ripNow && (energy >= ripCost || omenProc) {
-			cat.Metrics.MarkOOM(sim)
 			return cat.Rip.Cast(sim, cat.CurrentTarget)
 		} else if mangleNow && (energy >= mangleCost || omenProc) {
-			cat.Metrics.MarkOOM(sim)
 			return cat.MangleCat.Cast(sim, cat.CurrentTarget)
 		} else if biteNow && (energy >= biteCost || omenProc) {
-			cat.Metrics.MarkOOM(sim)
 			return cat.FerociousBite.Cast(sim, cat.CurrentTarget)
 		} else if energy >= shredCost || omenProc {
-			cat.Metrics.MarkOOM(sim)
 			return cat.Shred.Cast(sim, cat.CurrentTarget)
 		} else {
 			markOOM = true

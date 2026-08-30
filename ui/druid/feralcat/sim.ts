@@ -90,7 +90,8 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralCatDruid, {
 		// Default consumes settings.
 		consumables: Presets.DefaultConsumables,
 		// Default rotation settings.
-		rotationType: APLRotationType.TypeAuto,
+		rotationType: APLRotationType.TypeAPL,
+		aplRotation: Presets.APL.rotation.rotation!,
 		// Default talents.
 		talents: Presets.StandardTalents.data,
 		// Default spec-specific settings.
