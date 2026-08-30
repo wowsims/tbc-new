@@ -105,13 +105,15 @@ func (ai *ArchimondeAI) registerFear(fearDurationSeconds float64) {
 
 	fearDuration := core.DurationFromSeconds(fearDurationSeconds)
 
-	ai.FearAuras = ai.BossUnit.NewAllyAuraArray(func(allyUnit *core.Unit) *core.Aura {
-		return allyUnit.RegisterFearAura(
-			fmt.Sprintf("Fear (%s)", archimondeName),
-			core.ActionID{SpellID: archimondeFearSpellID},
-			fearDuration,
-		)
-	})
+	if fearDuration > 0 {
+		ai.FearAuras = ai.BossUnit.NewAllyAuraArray(func(allyUnit *core.Unit) *core.Aura {
+			return allyUnit.RegisterFearAura(
+				fmt.Sprintf("Fear (%s)", archimondeName),
+				core.ActionID{SpellID: archimondeFearSpellID},
+				fearDuration,
+			)
+		})
+	}
 
 	ai.Fear = ai.BossUnit.RegisterSpell(core.SpellConfig{
 		ActionID:    core.ActionID{SpellID: archimondeFearSpellID},
