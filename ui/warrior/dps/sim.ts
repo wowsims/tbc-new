@@ -58,7 +58,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecDpsWarrior, {
 
 	defaults: {
 		// Default equipped gear.
-		gear: Presets.P2_BIS_FURY_PRESET.gear,
+		gear: Presets.P3_BIS_FURY_PRESET.gear,
 		// Default EP weights for sorting gear in the gear picker.
 		epWeights: Presets.P2_FURY_EP_PRESET.epWeights,
 		statCaps: (() => {

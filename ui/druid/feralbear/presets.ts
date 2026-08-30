@@ -51,12 +51,14 @@ import MagtheridonBuild from './builds/magtheridon_encounter_only.build.json';
 import KarazhanBuild from './builds/karazhan_encounter_only.build.json';
 import MorogrimBuild from './builds/morogrim_encounter_only.build.json';
 import HydrossBuild from './builds/hydross_encounter_only.build.json';
+import GorefiendBuild from './builds/gorefiend_encounter_only.build.json';
 import ArchimondeBuild from './builds/archimonde_encounter_only.build.json';
 export const DEFAULT_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Default', Spec.SpecFeralBearDruid, DefaultBuild);
 export const MAGTHERIDON_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Magtheridon', Spec.SpecFeralBearDruid, MagtheridonBuild);
 export const KARAZHAN_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Karazhan (Boss Average)', Spec.SpecFeralBearDruid, KarazhanBuild);
 export const MOROGRIM_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Morogrim', Spec.SpecFeralBearDruid, MorogrimBuild);
 export const HYDROSS_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Hydross', Spec.SpecFeralBearDruid, HydrossBuild);
+export const GOREFIEND_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Teron Gorefiend', Spec.SpecFeralBearDruid, GorefiendBuild);
 export const ARCHIMONDE_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Archimonde', Spec.SpecFeralBearDruid, ArchimondeBuild, {
 	group: 'Encounters',
 });
