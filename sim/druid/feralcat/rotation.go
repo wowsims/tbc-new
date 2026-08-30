@@ -98,6 +98,22 @@ func (cat *FeralDruid) doRotation(sim *core.Simulation) bool {
 		return false
 	}
 
+	// The APL opens an OOM event by attempting the shift and failing the mana
+	// check. This rotation bails out before casting, so drive the event pair
+	// explicitly to keep the measured OOM time accurate. It has to sit above the
+	// early returns below: an event opened here must be able to close on the
+	// same evaluation paths, or a reshift, a readyToShift tick or a Faerie Fire
+	// refresh leaves it open and inflates the measured OOM time.
+	shiftCost := cat.CatForm.Cost.GetCurrentCost()
+	oom := cat.CurrentMana() < shiftCost
+	if oom {
+		if !cat.IsOOM() {
+			cat.StartOOMEvent(sim, shiftCost, false)
+		}
+	} else if cat.IsOOM() {
+		cat.EndOOMEvent(sim, false)
+	}
+
 	// If we're out of form always shift back in.
 	if !cat.InForm(druid.Cat) {
 		return cat.CatForm.Cast(sim, nil)
@@ -134,7 +150,6 @@ func (cat *FeralDruid) doRotation(sim *core.Simulation) bool {
 	}
 	rakeDebuff := cat.Rake.CurDot().IsActive()
 	nextTick := cat.NextEnergyTickAt()
-	shiftCost := cat.CatForm.Cost.GetCurrentCost()
 	omenProc := cat.ClearcastingAura.IsActive()
 
 	ripCost := cat.CurrentRipCost()
@@ -179,20 +194,8 @@ func (cat *FeralDruid) doRotation(sim *core.Simulation) bool {
 
 	timeToNextTick := nextTick - sim.CurrentTime
 	cat.waitingForTick = true
-	markOOM := false
 
-	// The APL opens an OOM event by attempting the shift and failing the mana
-	// check. This rotation bails out before casting, so drive the event pair
-	// explicitly to keep the measured OOM time accurate.
-	if cat.CurrentMana() < shiftCost {
-		if !cat.IsOOM() {
-			cat.StartOOMEvent(sim, shiftCost, false)
-		}
-	} else if cat.IsOOM() {
-		cat.EndOOMEvent(sim, false)
-	}
-
-	if cat.CurrentMana() < shiftCost {
+	if oom {
 		// No-shift rotation when OOM.
 		if ripNow && (energy >= ripCost || omenProc) {
 			return cat.Rip.Cast(sim, cat.CurrentTarget)
@@ -202,8 +205,6 @@ func (cat *FeralDruid) doRotation(sim *core.Simulation) bool {
 			return cat.FerociousBite.Cast(sim, cat.CurrentTarget)
 		} else if energy >= shredCost || omenProc {
 			return cat.Shred.Cast(sim, cat.CurrentTarget)
-		} else {
-			markOOM = true
 		}
 	} else if energy < 10 {
 		cat.shift(sim)
@@ -291,9 +292,6 @@ func (cat *FeralDruid) doRotation(sim *core.Simulation) bool {
 		cat.WaitUntil(sim, sim.CurrentTime+cat.ReactionTime)
 	} else if cat.waitingForTick {
 		cat.WaitUntil(sim, sim.CurrentTime+timeToNextTick+cat.ReactionTime)
-		if markOOM {
-			cat.Metrics.MarkOOM(sim)
-		}
 	}
 
 	return false
