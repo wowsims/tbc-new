@@ -141,15 +141,21 @@ func processEnchantmentEffects(
 		case ITEM_ENCHANTMENT_EQUIP_SPELL: //Buff
 			spellEffects := dbcInstance.SpellEffects[effectArgs[i]]
 			for _, spellEffect := range spellEffects {
+				// The client rolls BasePoints + rand(1, DieSides), so DieSides 1
+				// means BasePoints is stored one below the real value while
+				// DieSides 0 means it already holds the final number. Matches
+				// how spell_effect.go reads effect values.
+				points := spellEffect.EffectBasePoints + spellEffect.EffectDieSides
+
 				if spellEffect.EffectMiscValues[0] == -1 &&
 					spellEffect.EffectType == E_APPLY_AURA &&
 					spellEffect.EffectAura == A_MOD_STAT {
 					// Apply bonus to all stats
-					outStats[proto.Stat_StatAgility] += float64(spellEffect.EffectBasePoints + 1)
-					outStats[proto.Stat_StatIntellect] += float64(spellEffect.EffectBasePoints + 1)
-					outStats[proto.Stat_StatSpirit] += float64(spellEffect.EffectBasePoints + 1)
-					outStats[proto.Stat_StatStamina] += float64(spellEffect.EffectBasePoints + 1)
-					outStats[proto.Stat_StatStrength] += float64(spellEffect.EffectBasePoints + 1)
+					outStats[proto.Stat_StatAgility] += float64(points)
+					outStats[proto.Stat_StatIntellect] += float64(points)
+					outStats[proto.Stat_StatSpirit] += float64(points)
+					outStats[proto.Stat_StatStamina] += float64(points)
+					outStats[proto.Stat_StatStrength] += float64(points)
 					continue
 				}
 				if spellEffect.EffectType == E_APPLY_AURA && spellEffect.EffectAura == A_MOD_STAT {
@@ -157,17 +163,17 @@ func processEnchantmentEffects(
 					if !ok {
 						continue
 					}
-					outStats[stat] += float64(spellEffect.EffectBasePoints + 1)
+					outStats[stat] += float64(points)
 				} else if spellEffect.EffectType == E_APPLY_AURA && spellEffect.EffectAura == A_MOD_RESISTANCE && (SpellSchool(spellEffect.EffectMiscValues[0]) == ALL_SPELL_DAMAGE || SpellSchool(spellEffect.EffectMiscValues[0]) == SPELL_PENETRATION) {
-					outStats[proto.Stat_StatArcaneResistance] += float64(spellEffect.EffectBasePoints + 1)
-					outStats[proto.Stat_StatFireResistance] += float64(spellEffect.EffectBasePoints + 1)
-					outStats[proto.Stat_StatFrostResistance] += float64(spellEffect.EffectBasePoints + 1)
-					outStats[proto.Stat_StatNatureResistance] += float64(spellEffect.EffectBasePoints + 1)
-					outStats[proto.Stat_StatShadowResistance] += float64(spellEffect.EffectBasePoints + 1)
+					outStats[proto.Stat_StatArcaneResistance] += float64(points)
+					outStats[proto.Stat_StatFireResistance] += float64(points)
+					outStats[proto.Stat_StatFrostResistance] += float64(points)
+					outStats[proto.Stat_StatNatureResistance] += float64(points)
+					outStats[proto.Stat_StatShadowResistance] += float64(points)
 				} else {
 					stat := ConvertEffectAuraToStatIndex(spellEffect.EffectAura, spellEffect.EffectMiscValues[0])
 					if stat >= 0 || stat == -2 {
-						value := float64(spellEffect.EffectBasePoints + 1)
+						value := float64(points)
 						if stat == proto.Stat_StatArmorPenetration || stat == proto.Stat_StatSpellPenetration {
 							// Make sure it's not Feral AP
 							if strings.Contains(dbcInstance.Spells[spellEffect.SpellID].Description, "forms only") {
