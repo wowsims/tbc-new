@@ -41,7 +41,10 @@ func makePvPTrinketEffect(itemID int32) core.ApplyEffect {
 			},
 
 			ApplyEffects: func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {
+				// ShouldActivate fires on any incapacitate, so break both kinds
+				// rather than burning the cooldown on nothing.
 				character.BreakFear(sim)
+				character.BreakStun(sim)
 			},
 		})
 

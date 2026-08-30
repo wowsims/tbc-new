@@ -14,7 +14,7 @@ const archimondeMeleeDamageSpread = 0.413
 const archimondeID int32 = 17968
 
 const archimondeFearSpellID int32 = 31970
-const archimondeFearCastTime = time.Millisecond * 1300
+const archimondeFearCastTime = time.Millisecond * 1500
 
 // Fear lasts 8s, but is usually broken well before that.
 const archimondeDefaultFearDuration = 3.0
@@ -104,15 +104,14 @@ func (ai *ArchimondeAI) registerFear(fearDurationSeconds float64) {
 	}
 
 	fearDuration := core.DurationFromSeconds(fearDurationSeconds)
-	if fearDuration > 0 {
-		ai.FearAuras = ai.BossUnit.NewAllyAuraArray(func(allyUnit *core.Unit) *core.Aura {
-			return allyUnit.RegisterFearAura(
-				fmt.Sprintf("Fear (%s)", archimondeName),
-				core.ActionID{SpellID: archimondeFearSpellID},
-				fearDuration,
-			)
-		})
-	}
+
+	ai.FearAuras = ai.BossUnit.NewAllyAuraArray(func(allyUnit *core.Unit) *core.Aura {
+		return allyUnit.RegisterFearAura(
+			fmt.Sprintf("Fear (%s)", archimondeName),
+			core.ActionID{SpellID: archimondeFearSpellID},
+			fearDuration,
+		)
+	})
 
 	ai.Fear = ai.BossUnit.RegisterSpell(core.SpellConfig{
 		ActionID:    core.ActionID{SpellID: archimondeFearSpellID},
@@ -140,7 +139,7 @@ func (ai *ArchimondeAI) registerFear(fearDurationSeconds float64) {
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			spell.CalcAndDealOutcome(sim, target, spell.OutcomeAlwaysHit)
-			ai.FearAuras.ApplyFearToAllPlayers(sim)
+			ai.FearAuras.ApplyFearToAllUnits(sim)
 			spell.CD.Set(sim.CurrentTime + rollFearCD(sim))
 		},
 	})

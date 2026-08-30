@@ -159,6 +159,9 @@ type Unit struct {
 	// Aura that reduces dodge/parry/block to 0 while casting.
 	HardcastAvoidanceAura *Aura
 
+	// Auras granting immunity to a crowd control kind
+	ccImmunityAuras map[string][]*Aura
+
 	// Rotation-related PendingActions.
 	rotationAction *PendingAction
 	hardcastAction *PendingAction
