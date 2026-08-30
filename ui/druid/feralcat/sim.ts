@@ -79,7 +79,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralCatDruid, {
 
 	defaults: {
 		// Default equipped gear.
-		gear: Presets.P1_REALISTIC_6P_GEARSET.gear,
+		gear: Presets.P3_6P_GEARSET.gear,
 		// Default EP weights for sorting gear in the gear picker.
 		epWeights: Presets.P1_EP_PRESET.epWeights,
 		statCaps: (() => {

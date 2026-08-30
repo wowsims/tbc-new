@@ -70,7 +70,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralBearDruid, {
 	),
 
 	defaults: {
-		gear: Presets.PRERAID_PRESET.gear,
+		gear: Presets.P3_PRESET.gear,
 		epWeights: Presets.P1_EP_PRESET.epWeights,
 		statCaps: (() => {
 			const hitCap = new Stats().withPseudoStat(PseudoStat.PseudoStatMeleeHitPercent, 9);
