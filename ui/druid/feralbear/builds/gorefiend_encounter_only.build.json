@@ -20,8 +20,8 @@
 	},
 	"encounter": {
 		"apiVersion": 7,
-		"duration": 185,
-		"durationVariation": 54,
+		"duration": 118,
+		"durationVariation": 12,
 		"executeProportion20": 0.2,
 		"executeProportion25": 0.25,
 		"executeProportion35": 0.35,
