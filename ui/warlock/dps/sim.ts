@@ -54,7 +54,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecWarlock, {
 
 	defaults: {
 		// Default equipped gear.
-		gear: Presets.T4.gear,
+		gear: Presets.T6.gear,
 
 		// Default EP weights for sorting gear in the gear picker.
 		epWeights: Presets.P1_AFFLI_DEMO_DESTRO_EP.epWeights,

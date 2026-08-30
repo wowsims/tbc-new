@@ -70,7 +70,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralBearDruid, {
 	),
 
 	defaults: {
-		gear: Presets.PRERAID_PRESET.gear,
+		gear: Presets.P3_PRESET.gear,
 		epWeights: Presets.P1_EP_PRESET.epWeights,
 		statCaps: (() => {
 			const hitCap = new Stats().withPseudoStat(PseudoStat.PseudoStatMeleeHitPercent, 9);
@@ -182,6 +182,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralBearDruid, {
 				Presets.MAGTHERIDON_PRESET_BUILD,
 				Presets.MOROGRIM_PRESET_BUILD,
 				Presets.HYDROSS_PRESET_BUILD,
+				Presets.GOREFIEND_PRESET_BUILD,
 			],
 	},
 

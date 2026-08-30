@@ -136,7 +136,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 
 	defaults: {
 		// Default equipped gear.
-		gear: Presets.P2_GEAR_PRESET.gear,
+		gear: Presets.P3_GEAR_PRESET.gear,
 		softCapBreakpoints: [
 			StatCap.fromPseudoStat(PseudoStat.PseudoStatReducedCritTakenPercent, {
 				breakpoints: [5.6],
@@ -207,6 +207,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 			Presets.MAGTHERIDON_PRESET_BUILD,
 			Presets.MOROGRIM_PRESET_BUILD,
 			Presets.HYDROSS_PRESET_BUILD,
+			Presets.GOREFIEND_PRESET_BUILD,
 		],
 	},
 

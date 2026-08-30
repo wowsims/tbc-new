@@ -1,7 +1,6 @@
 import * as OtherInputs from '../../core/components/inputs/other_inputs';
 import { ReforgeOptimizer } from '../../core/components/suggest_reforges_action';
 import * as Mechanics from '../../core/constants/mechanics';
-import { Phase } from '../../core/constants/other';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui';
 import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
@@ -79,7 +78,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralCatDruid, {
 
 	defaults: {
 		// Default equipped gear.
-		gear: Presets.P1_REALISTIC_6P_GEARSET.gear,
+		gear: Presets.P3_6P_GEARSET.gear,
 		// Default EP weights for sorting gear in the gear picker.
 		epWeights: Presets.P1_EP_PRESET.epWeights,
 		statCaps: (() => {
@@ -121,7 +120,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralCatDruid, {
 			unleashedRage: true,
 		}),
 		debuffs: Debuffs.create({
-			...defaultExposeWeaknessSettings(Phase.Phase1),
+			...defaultExposeWeaknessSettings(),
 			bloodFrenzy: true,
 			exposeArmor: TristateEffect.TristateEffectImproved,
 			huntersMark: TristateEffect.TristateEffectImproved,
