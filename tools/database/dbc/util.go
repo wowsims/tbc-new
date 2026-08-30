@@ -141,10 +141,6 @@ func processEnchantmentEffects(
 		case ITEM_ENCHANTMENT_EQUIP_SPELL: //Buff
 			spellEffects := dbcInstance.SpellEffects[effectArgs[i]]
 			for _, spellEffect := range spellEffects {
-				// The client rolls BasePoints + rand(1, DieSides), so DieSides 1
-				// means BasePoints is stored one below the real value while
-				// DieSides 0 means it already holds the final number. Matches
-				// how spell_effect.go reads effect values.
 				points := spellEffect.EffectBasePoints + spellEffect.EffectDieSides
 
 				if spellEffect.EffectMiscValues[0] == -1 &&
