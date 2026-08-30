@@ -506,12 +506,14 @@ type PseudoStats struct {
 	// Only used for NPCs, governs variance in enemy auto-attack damage
 	DamageSpread float64
 
-	// If true, the unit is under crowd control (e.g. Archimonde's Fear) and
-	// cannot cast or queue any spell. Procs still fire.
-	Incapacitated bool
+	///////////////////////////////////////////////////
+	// Crowd control effects. See sim/core/incapacitate.go.
+	///////////////////////////////////////////////////
 
-	// If true, Fear effects cannot be applied to this unit. Berserker Rage.
-	FearImmune bool
+	Incapacitated bool // Under crowd control (e.g. Archimonde's Fear); cannot cast or queue any spell. Procs still fire.
+	Stunned       bool // Prevents blocks, dodges, and parries. Read while this unit is the target.
+	FearImmune    bool // Fear effects cannot be applied to this unit. (ie. Berserker Rage)
+	StunImmune    bool // Stun effects cannot be applied to this unit.
 
 	///////////////////////////////////////////////////
 	// Effects that apply when this unit is the target.
@@ -520,7 +522,6 @@ type PseudoStats struct {
 	CanBlock bool
 	CanParry bool
 	CanCrush bool
-	Stunned  bool // prevents blocks, dodges, and parries
 
 	ParryHaste bool
 
