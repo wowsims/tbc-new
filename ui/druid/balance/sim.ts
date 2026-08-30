@@ -58,7 +58,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecBalanceDruid, {
 		// Default equipped gear.
 		gear: Presets.Phase3PresetGear.gear,
 		// Default EP weights for sorting gear in the gear picker.
-		epWeights: Presets.DefaultEPWeights.epWeights,
+		epWeights: Presets.Phase3EPWeights.epWeights,
 		// Default stat caps for stat weights tab. (also needed for reforging since we don't want to reforge above stat caps)
 		statCaps: (() => {
 			return new Stats().withPseudoStat(PseudoStat.PseudoStatSpellHitPercent, 16);
