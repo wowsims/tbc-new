@@ -956,6 +956,43 @@ func (aa *AutoAttacks) DelayRangedUntil(sim *Simulation, readyAt time.Duration) 
 	sim.rescheduleWeaponAttack(aa.ranged.swingAt)
 }
 
+// SwingAt reports when the main hand, off hand and ranged swings are due, so a
+// caller that is about to pause them can put them back if the pause ends early.
+func (aa *AutoAttacks) SwingAt() (mhAt time.Duration, ohAt time.Duration, rangedAt time.Duration) {
+	return aa.mh.swingAt, aa.oh.swingAt, aa.ranged.swingAt
+}
+
+// ResumeMeleeAt undoes the unused part of a PauseMeleeBy, restoring the swing
+// times it pushed out. The swing timer is treated as having kept running, so a
+// swing that came due during the pause fires as soon as it ends. Swings are
+// only ever moved earlier, never past their original time and never into the
+// past.
+func (aa *AutoAttacks) ResumeMeleeAt(sim *Simulation, mhAt time.Duration, ohAt time.Duration) {
+	if !aa.AutoSwingMelee {
+		return
+	}
+
+	if resumeAt := max(sim.CurrentTime, mhAt); resumeAt < aa.mh.swingAt {
+		aa.mh.swingAt = resumeAt
+		sim.rescheduleWeaponAttack(aa.mh.swingAt)
+	}
+
+	if aa.IsDualWielding {
+		if resumeAt := max(sim.CurrentTime, ohAt); resumeAt < aa.oh.swingAt {
+			aa.oh.swingAt = resumeAt
+			sim.rescheduleWeaponAttack(aa.oh.swingAt)
+		}
+	}
+}
+
+// ResumeRangedAt is ResumeMeleeAt for the ranged swing.
+func (aa *AutoAttacks) ResumeRangedAt(sim *Simulation, readyAt time.Duration) {
+	if resumeAt := max(sim.CurrentTime, readyAt); resumeAt < aa.ranged.swingAt {
+		aa.ranged.swingAt = resumeAt
+		sim.rescheduleWeaponAttack(aa.ranged.swingAt)
+	}
+}
+
 // Returns the time at which the next melee attack will occur.
 func (aa *AutoAttacks) NextAttackAt() time.Duration {
 	return min(aa.mh.swingAt, aa.oh.swingAt)

@@ -19,6 +19,7 @@ import KarazhanBuild from './builds/karazhan_encounter_only.build.json';
 import MorogrimBuild from './builds/morogrim_encounter_only.build.json';
 import HydrossBuild from './builds/hydross_encounter_only.build.json';
 import GorefiendBuild from './builds/gorefiend_encounter_only.build.json';
+import ArchimondeBuild from './builds/archimonde_encounter_only.build.json';
 
 // Preset options for this spec.
 // Eventually we will import these values for the raid sim too, so its good to
@@ -137,5 +138,8 @@ export const KARAZHAN_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Karazh
 export const MOROGRIM_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Morogrim', Spec.SpecProtectionWarrior, MorogrimBuild, { group: 'Encounters' });
 export const HYDROSS_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Hydross', Spec.SpecProtectionWarrior, HydrossBuild, { group: 'Encounters' });
 export const GOREFIEND_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Teron Gorefiend', Spec.SpecProtectionWarrior, GorefiendBuild, {
+	group: 'Encounters',
+});
+export const ARCHIMONDE_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Archimonde', Spec.SpecProtectionWarrior, ArchimondeBuild, {
 	group: 'Encounters',
 });
