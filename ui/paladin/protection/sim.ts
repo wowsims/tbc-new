@@ -70,7 +70,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 	cssScheme: PlayerClasses.getCssClass(PlayerClasses.Paladin),
 	// List any known bugs / issues here and they'll be shown on the site.
 	knownIssues: [],
-	consumableStats: [Stat.StatStamina, Stat.StatHealth, Stat.StatMana, Stat.StatSpellDamage, Stat.StatHolyDamage],
+	consumableStats: [Stat.StatStamina, Stat.StatHealth, Stat.StatMana, Stat.StatMP5, Stat.StatSpellDamage, Stat.StatHolyDamage],
 
 	// All stats for which EP should be calculated.
 	epStats: [
@@ -136,7 +136,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 
 	defaults: {
 		// Default equipped gear.
-		gear: Presets.P2_GEAR_PRESET.gear,
+		gear: Presets.P3_GEAR_PRESET.gear,
 		softCapBreakpoints: [
 			StatCap.fromPseudoStat(PseudoStat.PseudoStatReducedCritTakenPercent, {
 				breakpoints: [5.6],
@@ -207,6 +207,8 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 			Presets.MAGTHERIDON_PRESET_BUILD,
 			Presets.MOROGRIM_PRESET_BUILD,
 			Presets.HYDROSS_PRESET_BUILD,
+			Presets.GOREFIEND_PRESET_BUILD,
+			Presets.ARCHIMONDE_PRESET_BUILD,
 		],
 	},
 

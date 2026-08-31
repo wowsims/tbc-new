@@ -14,6 +14,8 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecHolyPaladin, {
 	// List any known bugs / issues here and they'll be shown on the site.
 	knownIssues: [],
 
+	consumableStats: [Stat.StatMana, Stat.StatMP5],
+
 	// All stats for which EP should be calculated.
 	epStats: [Stat.StatIntellect, Stat.StatSpirit, Stat.StatSpellDamage],
 	// Reference stat against which to calculate EP. I think all classes use either spell power or attack power.

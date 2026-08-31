@@ -1,6 +1,5 @@
 import * as OtherInputs from '../../core/components/inputs/other_inputs';
 import { ReforgeOptimizer } from '../../core/components/suggest_reforges_action';
-import { Phase } from '../../core/constants/other';
 import * as Mechanics from '../../core/constants/mechanics';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui';
 import { Player } from '../../core/player';
@@ -22,8 +21,7 @@ import {
 	TristateEffect,
 } from '../../core/proto/common';
 import { FeralCatDruid_Rotation as DruidRotation } from '../../core/proto/druid';
-import { StatCap, Stats, UnitStat } from '../../core/proto_utils/stats';
-import { StatCapType } from '../../core/proto/api';
+import { Stats, UnitStat } from '../../core/proto_utils/stats';
 import { defaultExposeWeaknessSettings, defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
 import * as FeralInputs from './inputs';
 import * as Presets from './presets';
@@ -79,7 +77,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralCatDruid, {
 
 	defaults: {
 		// Default equipped gear.
-		gear: Presets.P1_REALISTIC_6P_GEARSET.gear,
+		gear: Presets.P3_6P_GEARSET.gear,
 		// Default EP weights for sorting gear in the gear picker.
 		epWeights: Presets.P1_EP_PRESET.epWeights,
 		statCaps: (() => {
@@ -91,8 +89,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralCatDruid, {
 		// Default consumes settings.
 		consumables: Presets.DefaultConsumables,
 		// Default rotation settings.
-		rotationType: APLRotationType.TypeSimple,
-		simpleRotation: Presets.DefaultRotation,
+		rotationType: APLRotationType.TypeAuto,
 		// Default talents.
 		talents: Presets.StandardTalents.data,
 		// Default spec-specific settings.
@@ -122,7 +119,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralCatDruid, {
 			unleashedRage: true,
 		}),
 		debuffs: Debuffs.create({
-			...defaultExposeWeaknessSettings(Phase.Phase1),
+			...defaultExposeWeaknessSettings(),
 			bloodFrenzy: true,
 			exposeArmor: TristateEffect.TristateEffectImproved,
 			huntersMark: TristateEffect.TristateEffectImproved,
@@ -189,7 +186,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralCatDruid, {
 	},
 
 	autoRotation: (_player: Player<Spec.SpecFeralCatDruid>): APLRotation => {
-		return APLRotation.create();
+		return Presets.APL.rotation.rotation!;
 	},
 
 	simpleRotation: (_player: Player<Spec.SpecFeralCatDruid>, simple: DruidRotation, _cooldowns: Cooldowns): APLRotation => {

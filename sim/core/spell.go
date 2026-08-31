@@ -640,6 +640,13 @@ func (spell *Spell) CanCompleteCast(sim *Simulation, target *Unit, logCastFailur
 		return false
 	}
 
+	if spell.Unit.PseudoStats.Incapacitated && !spell.Flags.Matches(SpellFlagCastWhileIncapacitated) {
+		if logCastFailure {
+			return spell.castFailureHelper(sim, "unit is incapacitated")
+		}
+		return false
+	}
+
 	if target == nil {
 		if logCastFailure {
 			return spell.castFailureHelper(sim, "target is not set")

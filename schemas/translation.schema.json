@@ -2501,6 +2501,19 @@
 									},
 									"additionalProperties": false,
 									"required": ["label", "tooltip"]
+								},
+								"fear_duration": {
+									"type": "object",
+									"properties": {
+										"label": {
+											"type": "string"
+										},
+										"tooltip": {
+											"type": "string"
+										}
+									},
+									"additionalProperties": false,
+									"required": ["label", "tooltip"]
 								}
 							},
 							"additionalProperties": false,
@@ -2515,7 +2528,8 @@
 								"yards",
 								"adds_respawn_time",
 								"adds_lifetime",
-								"adds_spawn_delay"
+								"adds_spawn_delay",
+								"fear_duration"
 							]
 						},
 						"duration": {

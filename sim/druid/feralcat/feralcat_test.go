@@ -46,10 +46,13 @@ func TestFeralCat(t *testing.T) {
 
 			SpecOptions: core.SpecOptionsCombo{Label: "Standard", SpecOptions: DefaultSpecOptions},
 
-			Rotation: core.RotationCombo{
-				Label: "Default",
-				Rotation: &proto.APLRotation{
-					Type: proto.APLRotation_TypeSimple,
+			Rotation: core.GetAplRotation("../../../ui/druid/feralcat/apls", "default"),
+			OtherRotations: []core.RotationCombo{
+				{
+					Label: "Simple",
+					Rotation: &proto.APLRotation{
+						Type: proto.APLRotation_TypeSimple,
+					},
 				},
 			},
 

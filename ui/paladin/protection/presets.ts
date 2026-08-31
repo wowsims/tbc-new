@@ -33,6 +33,8 @@ import MagtheridonBuild from './builds/magtheridon_encounter_only.build.json';
 import KarazhanBuild from './builds/karazhan_encounter_only.build.json';
 import MorogrimBuild from './builds/morogrim_encounter_only.build.json';
 import HydrossBuild from './builds/hydross_encounter_only.build.json';
+import GorefiendBuild from './builds/gorefiend_encounter_only.build.json';
+import ArchimondeBuild from './builds/archimonde_encounter_only.build.json';
 
 // Preset options for this spec.
 // Eventually we will import these values for the raid sim too, so its good to
@@ -45,10 +47,18 @@ export const P4_GEAR_PRESET = PresetUtils.makePresetGear('P4', P4_Gear);
 export const P5_GEAR_PRESET = PresetUtils.makePresetGear('P5', P5_Gear);
 
 export const DEFAULT_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Default', Spec.SpecProtectionPaladin, DefaultBuild, { group: 'Encounters' });
-export const MAGTHERIDON_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Magtheridon', Spec.SpecProtectionPaladin, MagtheridonBuild, { group: 'Encounters' });
-export const KARAZHAN_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Karazhan (Boss Average)', Spec.SpecProtectionPaladin, KarazhanBuild, { group: 'Encounters' });
+export const MAGTHERIDON_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Magtheridon', Spec.SpecProtectionPaladin, MagtheridonBuild, {
+	group: 'Encounters',
+});
+export const KARAZHAN_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Karazhan (Boss Average)', Spec.SpecProtectionPaladin, KarazhanBuild, {
+	group: 'Encounters',
+});
 export const MOROGRIM_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Morogrim', Spec.SpecProtectionPaladin, MorogrimBuild, { group: 'Encounters' });
 export const HYDROSS_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Hydross', Spec.SpecProtectionPaladin, HydrossBuild, { group: 'Encounters' });
+export const GOREFIEND_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Teron Gorefiend', Spec.SpecProtectionPaladin, GorefiendBuild, { group: 'Encounters' });
+export const ARCHIMONDE_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Archimonde', Spec.SpecProtectionPaladin, ArchimondeBuild, {
+	group: 'Encounters',
+});
 
 export const APL_PRESET = PresetUtils.makePresetAPLRotation('Default', DefaultApl);
 
