@@ -70,6 +70,23 @@ export const SPEC_CAN_DUAL_WIELD = new Set<Spec>([
 ]);
 `
 
+func enabledSpecNames(capabilities map[proto.Spec]bool) []string {
+	specIDs := make([]proto.Spec, 0, len(capabilities))
+	for specID, enabled := range capabilities {
+		if !enabled {
+			continue
+		}
+		specIDs = append(specIDs, specID)
+	}
+	slices.Sort(specIDs)
+
+	specNames := make([]string, 0, len(specIDs))
+	for _, specID := range specIDs {
+		specNames = append(specNames, proto.Spec_name[int32(specID)])
+	}
+	return specNames
+}
+
 func GenerateCharacterConstantsTSFile() error {
 	classArmorTypes := core.ClassArmorTypeCapabilities
 	classWeaponTypes := core.ClassWeaponTypeCapabilities
@@ -121,19 +138,7 @@ func GenerateCharacterConstantsTSFile() error {
 		})
 	}
 
-	specIDs := make([]proto.Spec, 0, len(specCanDualWield))
-	for specID, canDualWield := range specCanDualWield {
-		if !canDualWield {
-			continue
-		}
-		specIDs = append(specIDs, specID)
-	}
-	slices.Sort(specIDs)
-
-	specNames := make([]string, 0, len(specIDs))
-	for _, specID := range specIDs {
-		specNames = append(specNames, proto.Spec_name[int32(specID)])
-	}
+	specNames := enabledSpecNames(specCanDualWield)
 
 	tpl, err := template.New("characterConstantsTS").Parse(characterConstantsTSTemplate)
 	if err != nil {

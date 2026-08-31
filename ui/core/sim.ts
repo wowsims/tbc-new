@@ -221,7 +221,9 @@ export class Sim {
 		try {
 			this.isNative = !(await this.isWasm());
 		} catch {
-			this.isNative = isExternal();
+			// Probe failed - fall back to the hostname heuristic (a local host runs the
+			// native sim, an external one runs wasm).
+			this.isNative = !isExternal();
 		}
 	}
 

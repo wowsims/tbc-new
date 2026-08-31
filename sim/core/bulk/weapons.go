@@ -155,18 +155,6 @@ func (generator *bulkSimCandidateGenerator) getAllWeaponCombos() [][2]*bulkSimCa
 	return filteredCombos
 }
 
-func (generator *bulkSimCandidateGenerator) getFrozenWeaponItem() *core.Item {
-	if generator.frozenWeaponSlot != proto.ItemSlot_ItemSlotMainHand && generator.frozenWeaponSlot != proto.ItemSlot_ItemSlotOffHand {
-		return nil
-	}
-	item := generator.baseEquipment.GetItemBySlot(generator.frozenWeaponSlot)
-	if item == nil || item.ID == 0 {
-		return nil
-	}
-	itemCopy := *item
-	return &itemCopy
-}
-
 func (generator *bulkSimCandidateGenerator) matchesWeaponTypeFilter(option *bulkSimCandidateOption, slot proto.ItemSlot) bool {
 	filter := generator.weaponTypeFilters[slot]
 	if len(filter) == 0 {
@@ -179,7 +167,7 @@ func (generator *bulkSimCandidateGenerator) matchesWeaponTypeFilter(option *bulk
 }
 
 func (generator *bulkSimCandidateGenerator) weaponComboMatchesSettings(mhItem *bulkSimCandidateOption, ohItem *bulkSimCandidateOption) bool {
-	frozenWeaponItem := generator.getFrozenWeaponItem()
+	frozenWeaponItem := generator.frozenWeaponItem
 	if generator.frozenWeaponSlot == proto.ItemSlot_ItemSlotMainHand && frozenWeaponItem != nil && !candidateOptionEqualsItemPtr(mhItem, frozenWeaponItem) {
 		return false
 	}

@@ -680,7 +680,7 @@ func ItemTypeToSlot(it proto.ItemType) proto.ItemSlot {
 }
 
 // See getEligibleItemSlots in proto_utils/utils.ts.
-var itemTypeToSlotsMap = map[proto.ItemType][]proto.ItemSlot{
+var ItemTypeToSlotsMap = map[proto.ItemType][]proto.ItemSlot{
 	proto.ItemType_ItemTypeHead:     {proto.ItemSlot_ItemSlotHead},
 	proto.ItemType_ItemTypeNeck:     {proto.ItemSlot_ItemSlotNeck},
 	proto.ItemType_ItemTypeShoulder: {proto.ItemSlot_ItemSlotShoulder},
@@ -697,11 +697,12 @@ var itemTypeToSlotsMap = map[proto.ItemType][]proto.ItemSlot{
 	// ItemType_ItemTypeWeapon is excluded intentionally - the slot cannot be decided based on type alone for weapons.
 }
 
-func eligibleSlotsForItem(item *Item) []proto.ItemSlot {
+// EligibleSlotsForItem returns the item slots an item can occupy.
+func EligibleSlotsForItem(item *Item) []proto.ItemSlot {
 	if item == nil {
 		return nil
 	}
-	if slots, ok := itemTypeToSlotsMap[item.Type]; ok {
+	if slots, ok := ItemTypeToSlotsMap[item.Type]; ok {
 		return slots
 	}
 

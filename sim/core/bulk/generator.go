@@ -20,6 +20,7 @@ type bulkSimCandidateGenerator struct {
 	groupedPairsBySlot map[BulkSimItemSlot][][2]bulkSimCandidateOption
 	frozenItems        map[BulkSimItemSlot]*core.Item
 	frozenWeaponSlot   proto.ItemSlot
+	frozenWeaponItem   *core.Item
 	weaponTypeFilters  map[proto.ItemSlot][]proto.WeaponType
 	copyCounts         map[itemSpecCacheKey]int
 }
@@ -29,7 +30,7 @@ func newBulkSimCandidateGenerator(request *proto.BulkSimRequest, player *proto.P
 		return nil, fmt.Errorf("bulk request is missing player equipment")
 	}
 
-	playerSpec, err := getPlayerSpec(player)
+	playerSpec, err := core.PlayerProtoToSpecSafe(player)
 	if err != nil {
 		return nil, err
 	}
@@ -109,6 +110,10 @@ func (generator *bulkSimCandidateGenerator) initFrozenSettings() {
 	}
 	if slot := generator.settings.GetFreezeWeaponSlot(); slot == int32(proto.ItemSlot_ItemSlotMainHand) || slot == int32(proto.ItemSlot_ItemSlotOffHand) {
 		generator.frozenWeaponSlot = proto.ItemSlot(slot)
+		if item := generator.baseEquipment.GetItemBySlot(generator.frozenWeaponSlot); item != nil && item.ID != 0 {
+			itemCopy := *item
+			generator.frozenWeaponItem = &itemCopy
+		}
 	}
 }
 
@@ -161,7 +166,7 @@ func (generator *bulkSimCandidateGenerator) initSelectedItems() error {
 		// slot: an off-hand-only item has no other eligible slot, and skipping it dropped the
 		// item from the batch entirely.
 		addedBulkSlots := make(map[BulkSimItemSlot]struct{}, 2)
-		for _, slot := range getEligibleItemSlots(option.item) {
+		for _, slot := range core.EligibleSlotsForItem(&option.item) {
 			if !canEquipItem(option.item, generator.playerClass, generator.playerSpec, slot) {
 				continue
 			}
@@ -297,10 +302,7 @@ func (generator *bulkSimCandidateGenerator) rawCombinationsCount() int {
 	if rawCombinations == 0 {
 		rawCombinations = 1
 	}
-	for _, bulkSlot := range bulkSimSelectedOrder {
-		if bulkSlot == BulkSimItemSlotMainHand || bulkSlot == BulkSimItemSlotOffHand || bulkSlot == BulkSimItemSlotHandWeapon {
-			continue
-		}
+	for _, bulkSlot := range bulkSimNonWeaponOrder {
 		numOptions := len(generator.selectedByBulkSlot[bulkSlot])
 		if numOptions == 0 {
 			continue
@@ -353,10 +355,7 @@ func (generator *bulkSimCandidateGenerator) populateItemsForCombo(comboIdx int) 
 		}
 	}
 
-	for _, bulkSlot := range bulkSimSelectedOrder {
-		if bulkSlot == BulkSimItemSlotMainHand || bulkSlot == BulkSimItemSlotOffHand || bulkSlot == BulkSimItemSlotHandWeapon {
-			continue
-		}
+	for _, bulkSlot := range bulkSimNonWeaponOrder {
 		options := generator.selectedByBulkSlot[bulkSlot]
 		if len(options) == 0 {
 			continue

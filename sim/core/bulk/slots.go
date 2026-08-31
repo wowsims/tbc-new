@@ -1,6 +1,7 @@
 package bulk
 
 import (
+	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
 )
 
@@ -43,6 +44,12 @@ var bulkSimSelectedOrder = []BulkSimItemSlot{
 	BulkSimItemSlotRanged,
 	BulkSimItemSlotHandWeapon,
 }
+
+// bulkSimNonWeaponOrder is bulkSimSelectedOrder minus the hand-weapon slots, which are handled
+// pairwise by getAllWeaponCombos. The ranged slot iterates normally.
+var bulkSimNonWeaponOrder = core.FilterSlice(bulkSimSelectedOrder, func(bulkSlot BulkSimItemSlot) bool {
+	return bulkSlot != BulkSimItemSlotMainHand && bulkSlot != BulkSimItemSlotOffHand && bulkSlot != BulkSimItemSlotHandWeapon
+})
 
 var BulkSimItemSlotNames = map[BulkSimItemSlot]string{
 	BulkSimItemSlotHead:       "ItemSlotHead",
@@ -103,22 +110,6 @@ var ItemSlotToBulkSimItemSlot = map[proto.ItemSlot]BulkSimItemSlot{
 	proto.ItemSlot_ItemSlotMainHand: BulkSimItemSlotMainHand,
 	proto.ItemSlot_ItemSlotOffHand:  BulkSimItemSlotOffHand,
 	proto.ItemSlot_ItemSlotRanged:   BulkSimItemSlotRanged,
-}
-
-var itemTypeToSlotsMap = map[proto.ItemType][]proto.ItemSlot{
-	proto.ItemType_ItemTypeHead:     {proto.ItemSlot_ItemSlotHead},
-	proto.ItemType_ItemTypeNeck:     {proto.ItemSlot_ItemSlotNeck},
-	proto.ItemType_ItemTypeShoulder: {proto.ItemSlot_ItemSlotShoulder},
-	proto.ItemType_ItemTypeBack:     {proto.ItemSlot_ItemSlotBack},
-	proto.ItemType_ItemTypeChest:    {proto.ItemSlot_ItemSlotChest},
-	proto.ItemType_ItemTypeWrist:    {proto.ItemSlot_ItemSlotWrist},
-	proto.ItemType_ItemTypeHands:    {proto.ItemSlot_ItemSlotHands},
-	proto.ItemType_ItemTypeWaist:    {proto.ItemSlot_ItemSlotWaist},
-	proto.ItemType_ItemTypeLegs:     {proto.ItemSlot_ItemSlotLegs},
-	proto.ItemType_ItemTypeFeet:     {proto.ItemSlot_ItemSlotFeet},
-	proto.ItemType_ItemTypeFinger:   {proto.ItemSlot_ItemSlotFinger1, proto.ItemSlot_ItemSlotFinger2},
-	proto.ItemType_ItemTypeTrinket:  {proto.ItemSlot_ItemSlotTrinket1, proto.ItemSlot_ItemSlotTrinket2},
-	proto.ItemType_ItemTypeRanged:   {proto.ItemSlot_ItemSlotRanged},
 }
 
 func getBulkItemSlotFromSlot(slot proto.ItemSlot, playerCanDualWield bool) BulkSimItemSlot {

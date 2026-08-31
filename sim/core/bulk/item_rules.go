@@ -78,7 +78,7 @@ func enchantAppliesToItem(effectID int32, item core.Item) bool {
 	if enchant == nil {
 		return false
 	}
-	if !core.CheckSliceOverlap(getEligibleEnchantSlots(*enchant), getEligibleItemSlots(item)) {
+	if !core.CheckSliceOverlap(getEligibleEnchantSlots(*enchant), core.EligibleSlotsForItem(&item)) {
 		return false
 	}
 	if enchant.Type == proto.ItemType_ItemTypeRanged {
@@ -94,7 +94,7 @@ func getEligibleEnchantSlots(enchant core.Enchant) []proto.ItemSlot {
 	types := append([]proto.ItemType{enchant.Type}, enchant.ExtraTypes...)
 	slots := make([]proto.ItemSlot, 0, len(types)*2)
 	for _, itemType := range types {
-		if typeSlots, ok := itemTypeToSlotsMap[itemType]; ok {
+		if typeSlots, ok := core.ItemTypeToSlotsMap[itemType]; ok {
 			slots = append(slots, typeSlots...)
 			continue
 		}
@@ -103,23 +103,6 @@ func getEligibleEnchantSlots(enchant core.Enchant) []proto.ItemSlot {
 		}
 	}
 	return slots
-}
-
-func getEligibleItemSlots(item core.Item) []proto.ItemSlot {
-	if slots, ok := itemTypeToSlotsMap[item.Type]; ok {
-		return slots
-	}
-	if item.Type == proto.ItemType_ItemTypeWeapon {
-		switch item.HandType {
-		case proto.HandType_HandTypeMainHand:
-			return []proto.ItemSlot{proto.ItemSlot_ItemSlotMainHand}
-		case proto.HandType_HandTypeOffHand:
-			return []proto.ItemSlot{proto.ItemSlot_ItemSlotOffHand}
-		default:
-			return []proto.ItemSlot{proto.ItemSlot_ItemSlotMainHand, proto.ItemSlot_ItemSlotOffHand}
-		}
-	}
-	return nil
 }
 
 func canEquipItem(item core.Item, playerClass proto.Class, playerSpec proto.Spec, slot proto.ItemSlot) bool {
