@@ -1678,7 +1678,7 @@ const InnervateCD = time.Minute * 6
 func InnervateManaThreshold(character *Character) float64 {
 	if character.Class == proto.Class_ClassMage {
 		// Mages burn mana really fast so they need a higher threshold.
-		return character.MaxMana() * 0.7
+		return character.MaxMana() * 0.4
 	} else {
 		return 1000
 	}

@@ -16,6 +16,7 @@ export class LogRunner extends ResultComponent {
 		search: HTMLInputElement;
 		actions: HTMLDivElement;
 		buttonToTop: HTMLButtonElement;
+		exportLog: HTMLButtonElement;
 		scrollContainer: HTMLDivElement;
 		contentContainer: HTMLTableSectionElement;
 	};
@@ -33,6 +34,7 @@ export class LogRunner extends ResultComponent {
 		const searchRef = ref<HTMLInputElement>();
 		const actionsRef = ref<HTMLDivElement>();
 		const buttonToTopRef = ref<HTMLButtonElement>();
+		const exportLogRef = ref<HTMLButtonElement>();
 		const scrollContainerRef = ref<HTMLDivElement>();
 		const contentContainerRef = ref<HTMLTableSectionElement>();
 
@@ -40,6 +42,9 @@ export class LogRunner extends ResultComponent {
 			<>
 				<div ref={actionsRef} className="log-runner-actions">
 					<input ref={searchRef} type="text" className="form-control log-search-input" placeholder={i18n.t('common.filter')} />
+					<button ref={exportLogRef} className="btn btn-primary order-last log-runner-scroll-to-top-btn me-2">
+						{i18n.t('results_tab.details.logs.export_button')}
+					</button>
 					<button ref={buttonToTopRef} className="btn btn-primary order-last log-runner-scroll-to-top-btn">
 						{i18n.t('results_tab.details.logs.top_button')}
 					</button>
@@ -64,6 +69,7 @@ export class LogRunner extends ResultComponent {
 			search: searchRef.value!,
 			actions: actionsRef.value!,
 			buttonToTop: buttonToTopRef.value!,
+			exportLog: exportLogRef.value!,
 			scrollContainer: scrollContainerRef.value!,
 			contentContainer: contentContainerRef.value!,
 		};
@@ -76,6 +82,32 @@ export class LogRunner extends ResultComponent {
 		this.ui.buttonToTop?.addEventListener('click', () => {
 			this.virtualScroll?.scrollToTop();
 		});
+
+		const getCombinedText = (): string => {
+			return this.cacheOutput.logsAsHTML!.map( element => {
+				return element.textContent;
+			})
+			.filter(text => text.length > 0)
+			.join('\n')
+		};
+
+		this.ui.exportLog?.addEventListener('click', () => {
+			console.log("Export Log")
+			try {
+				if (!navigator.clipboard) {
+					throw new Error('Clipboard API not supported in this browser');
+				}
+				const combinedText = getCombinedText();
+				navigator.clipboard.writeText(combinedText)
+					.catch((err) => {
+						console.error('Failed to copy text: ', err);
+					});
+			} catch (err) {
+				console.error('Failed to copy text: ', err);
+      			alert('Could not copy text to clipboard.');
+			}
+		});
+
 		new BooleanPicker<LogRunner>(this.ui.actions, this, {
 			id: 'log-runner-show-debug',
 			extraCssClasses: ['show-debug-picker'],
