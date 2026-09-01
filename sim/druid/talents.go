@@ -476,30 +476,20 @@ func (druid *Druid) applyPrimalFury() {
 		ClassSpellMask: DruidSpellBuilder,
 		Outcome:        core.OutcomeCrit,
 		ProcChance:     procChance,
+		ExtraCondition: func(_ *core.Simulation, _ *core.Spell, _ *core.SpellResult) bool {
+			return druid.InForm(Cat)
+		},
 		Handler: func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
 			druid.AddComboPoints(sim, 1, cpMetrics)
 		},
 	})
 
-	// Bear form: +5 rage on Mangle crits.
-	druid.MakeProcTriggerAura(core.ProcTrigger{
-		Name:           "Primal Fury (Bear Mangle)",
-		ActionID:       actionID,
-		Callback:       core.CallbackOnSpellHitDealt,
-		ClassSpellMask: DruidSpellMangleBear,
-		Outcome:        core.OutcomeCrit,
-		ProcChance:     procChance,
-		Handler: func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
-			druid.AddRage(sim, 5, rageMetrics)
-		},
-	})
-
 	// Bear form: +5 rage on auto-attack crits.
 	druid.MakeProcTriggerAura(core.ProcTrigger{
-		Name:       "Primal Fury (Bear Auto)",
+		Name:       "Primal Fury (Bear)",
 		ActionID:   actionID,
 		Callback:   core.CallbackOnSpellHitDealt,
-		ProcMask:   core.ProcMaskMeleeMHAuto,
+		ProcMask:   core.ProcMaskMelee,
 		Outcome:    core.OutcomeCrit,
 		ProcChance: procChance,
 		ExtraCondition: func(_ *core.Simulation, _ *core.Spell, _ *core.SpellResult) bool {

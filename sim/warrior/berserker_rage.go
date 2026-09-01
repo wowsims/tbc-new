@@ -14,12 +14,14 @@ func (war *Warrior) registerBerserkerRage() {
 		Label:    "Berserker Rage",
 		ActionID: actionID,
 		Duration: time.Second * 10,
-	})
+	}).
+		// Grants immunity to Fear, Sap and Incapacitate effects.
+		AttachFearImmunity()
 
 	spell := war.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
 		ClassSpellMask: SpellMaskBerserkerRage,
-		Flags:          core.SpellFlagAPL,
+		Flags:          core.SpellFlagAPL | core.SpellFlagCastWhileIncapacitated,
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{

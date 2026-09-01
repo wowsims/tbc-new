@@ -715,6 +715,10 @@
 				"adds_spawn_delay": {
 					"label": "Add(s) spawn delay",
 					"tooltip": "Initial delay before the add(s) spawn (in seconds)"
+				},
+				"fear_duration": {
+					"label": "Fear Duration",
+					"tooltip": "Time (in seconds) that Fear keeps players from acting. Fear lasts 8s, but is usually broken after ~3s. Set to 0 to disable."
 				}
 			},
 			"duration": {

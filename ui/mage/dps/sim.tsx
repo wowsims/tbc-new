@@ -91,9 +91,9 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecMage, {
 
 	defaults: {
 		// Default equipped gear.
-		gear: Presets.P1_BIS_ARCANE.gear,
+		gear: Presets.P3_BIS_ARCANE_STAFF.gear,
 		// Default EP weights for sorting gear in the gear picker.
-		epWeights: Presets.P1_EP_PRESET.epWeights,
+		epWeights: Presets.P3_EP_PRESET.epWeights,
 		statCaps: (() => {
 			return new Stats().withPseudoStat(PseudoStat.PseudoStatSchoolHitPercentArcane, 16);
 		})(),

@@ -103,6 +103,8 @@ export class ActionId {
 					name += ' (Hydross the Unstable) - Frost';
 				} else if (this.tag == 21216 + 1) {
 					name += ' (Hydross the Unstable) - Nature';
+				} else if (this.tag == 17968) {
+					name += ' (Archimonde)';
 				} else if (this.tag == 99999) {
 					name += ' (Boss)';
 				} else if (this.tag == 99998) {

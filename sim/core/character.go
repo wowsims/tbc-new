@@ -423,12 +423,15 @@ func (character *Character) Finalize() {
 	if character.Unit.Metrics.isTanking {
 		character.HardcastAvoidanceAura = character.RegisterAura(Aura{
 			Label:    "Reduced avoidance",
+			Tag:      ReducedAvoidanceAuraTag,
 			Duration: NeverExpires,
-			OnGain: func(aura *Aura, sim *Simulation) {
-				character.PseudoStats.Stunned = true
+			// Stunned is shared with the stun kind, so both derive it rather
+			// than writing it, otherwise whichever ends first clears it.
+			OnGain: func(aura *Aura, _ *Simulation) {
+				aura.Unit.refreshIncapacitateState()
 			},
-			OnExpire: func(aura *Aura, sim *Simulation) {
-				character.PseudoStats.Stunned = false
+			OnExpire: func(aura *Aura, _ *Simulation) {
+				aura.Unit.refreshIncapacitateState()
 			},
 		})
 

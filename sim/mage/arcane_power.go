@@ -12,9 +12,16 @@ func (mage *Mage) registerArcanePowerSpell() {
 	}
 
 	arcanePowerCostMod := mage.AddDynamicMod(core.SpellModConfig{
-		ClassMask:  MageSpellsAll,
+		ClassMask:  MageSpellsAll ^ MageSpellArcaneBlast,
 		FloatValue: .3,
 		Kind:       core.SpellMod_PowerCost_Pct,
+	})
+
+	// On Arcane Blast the cost increase sums with T5 2pc and Arcane Charges.
+	arcanePowerABCostMod := mage.AddDynamicMod(core.SpellModConfig{
+		ClassMask:  MageSpellArcaneBlast,
+		FloatValue: .3,
+		Kind:       core.SpellMod_PowerCost_Pct_Add,
 	})
 
 	arcanePowerDmgMod := mage.AddDynamicMod(core.SpellModConfig{
@@ -34,10 +41,12 @@ func (mage *Mage) registerArcanePowerSpell() {
 		Priority: 10,
 		OnGain: func(_ *core.ExclusiveEffect, sim *core.Simulation) {
 			arcanePowerCostMod.Activate()
+			arcanePowerABCostMod.Activate()
 			arcanePowerDmgMod.Activate()
 		},
 		OnExpire: func(_ *core.ExclusiveEffect, sim *core.Simulation) {
 			arcanePowerCostMod.Deactivate()
+			arcanePowerABCostMod.Deactivate()
 			arcanePowerDmgMod.Deactivate()
 			arcanePowerSpell.CD.Use(sim)
 		},

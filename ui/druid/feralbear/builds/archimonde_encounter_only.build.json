@@ -1,0 +1,53 @@
+{
+	"apiVersion": 7,
+	"tanks": [
+		{
+			"type": "Player"
+		}
+	],
+	"player": {
+		"name": "Player",
+		"class": "ClassDruid",
+		"inFrontOfTarget": true,
+		"healingModel": {
+			"hps": 3537,
+			"cadenceSeconds": 0.3,
+			"cadenceVariation": 0.81,
+			"absorbFrac": 0.016,
+			"burstWindow": 6,
+			"inspirationUptime": 0.18
+		}
+	},
+	"encounter": {
+		"apiVersion": 7,
+		"duration": 140,
+		"durationVariation": 22,
+		"executeProportion20": 0.2,
+		"executeProportion25": 0.25,
+		"executeProportion35": 0.35,
+		"executeProportion45": 0.45,
+		"executeProportion90": 0.9,
+		"targets": [
+			{
+				"id": 17968,
+				"name": "Archimonde 25",
+				"level": 73,
+				"mobType": "MobTypeDemon",
+				"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 320, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6193, 0, 4552500, 0, 0, 0, 0, 0, 0, 0, 0],
+				"minBaseDamage": 20304,
+				"damageSpread": 0.413,
+				"swingSpeed": 1.5,
+				"parryHaste": true,
+				"tankIndex": 0,
+				"targetInputs": [
+					{
+						"label": "Fear Duration",
+						"tooltip": "Time (in seconds) that Fear keeps players from acting. Fear lasts 8s, but is usually broken after ~3s. Set to 0 to disable.",
+						"inputType": "Number",
+						"numberValue": 3
+					}
+				]
+			}
+		]
+	}
+}

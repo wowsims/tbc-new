@@ -1092,7 +1092,7 @@ dps_results: {
  key: "TestEnhancement-AllItems-SkyshatterHarness"
  value: {
   dps: 2030.12675
-  tps: 1288.56711
+  tps: 1295.82558
  }
 }
 dps_results: {
