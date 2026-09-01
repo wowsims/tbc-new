@@ -8,7 +8,7 @@ import { TypedEvent } from '../../typed_event.js';
 import { fragmentToString } from '../../utils';
 import { BooleanPicker } from '../pickers/boolean_picker.js';
 import { ResultComponent, ResultComponentConfig, SimResultData } from './result_component.js';
-import { LogExporter } from './exporters/detailed_log_exporter';
+import { LogExporter } from '../individual_sim_ui/exporters/detailed_log_exporter';
 import { SimUI } from '../../sim_ui';
 
 export class LogRunner extends ResultComponent {
