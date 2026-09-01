@@ -55,6 +55,55 @@ func init() {
 		character.ItemSwap.RegisterProc(28573, procTrigger)
 	})
 
+	// Bonereaver's Edge
+	core.NewItemEffect(17076, func(agent core.Agent) {
+		character := agent.GetCharacter()
+
+		arpAura := core.MakeStackingAura(
+			character,
+			core.StackingStatAura{
+				Aura: core.Aura{
+					Label:     "Bonereaver's Edge",
+					ActionID:  core.ActionID{SpellID: 21153},
+					Duration:  time.Second * 10,
+					MaxStacks: 3,
+				},
+				BonusPerStack: stats.Stats{
+					stats.ArmorPenetration: 700,
+				},
+			},
+		)
+
+		getDpm := func() *core.DynamicProcManager {
+			return character.NewStaticLegacyPPMManager(
+				2,
+				*character.GetDynamicProcMaskForWeaponEffect(17076),
+			)
+		}
+
+		dpm := getDpm()
+
+		procTrigger := character.MakeProcTriggerAura(core.ProcTrigger{
+			Name:     "Bonereaver's Edge Trigger",
+			DPM:      dpm,
+			Outcome:  core.OutcomeLanded,
+			Callback: core.CallbackOnSpellHitDealt,
+			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+				arpAura.Activate(sim)
+				arpAura.AddStack(sim)
+			},
+		})
+
+		character.RegisterItemSwapCallback(
+			[]proto.ItemSlot{proto.ItemSlot_ItemSlotMainHand},
+			func(sim *core.Simulation, slot proto.ItemSlot) {
+				dpm = getDpm()
+			},
+		)
+
+		character.ItemSwap.RegisterProc(17076, procTrigger)
+	})
+
 	// Rod of the Sun King
 	core.NewItemEffect(29996, func(agent core.Agent) {
 		character := agent.GetCharacter()
