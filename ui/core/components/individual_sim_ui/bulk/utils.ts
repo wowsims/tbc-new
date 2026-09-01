@@ -106,9 +106,7 @@ export const makeBulkGearDatabase = (db: Database, gearSets: Gear[], extraItems:
 };
 
 export const makeBulkItemDatabaseFromSpecs = (db: Database, baselineGear: Gear, itemSpecs: readonly ItemSpec[]): SimDatabase => {
-	const extraItems = itemSpecs
-		.map(itemSpec => (itemSpec ? db.lookupItemSpec(itemSpec) : null))
-		.filter((item): item is EquippedItem => item != null);
+	const extraItems = itemSpecs.map(itemSpec => (itemSpec ? db.lookupItemSpec(itemSpec) : null)).filter((item): item is EquippedItem => item != null);
 	return makeBulkGearDatabase(db, [baselineGear], extraItems);
 };
 
@@ -258,7 +256,7 @@ export async function writeBulkSimReforgeCacheResults(optimizedCandidates: BulkG
 	await cacheData.cache.setGearMany(cacheEntries);
 }
 
-export const bulkSimStageToOptimisationStage = (bulkStage: BulkSimStage): 'low' | 'medium' | 'high' | undefined => {
+export const bulkSimStageToOptimisationStage = (bulkStage: BulkSimStage): 'low' | 'medium' | 'high' | 'finalist' | undefined => {
 	switch (bulkStage) {
 		case BulkSimStage.BulkSimStageLow:
 			return 'low';
@@ -266,6 +264,8 @@ export const bulkSimStageToOptimisationStage = (bulkStage: BulkSimStage): 'low' 
 			return 'medium';
 		case BulkSimStage.BulkSimStageHigh:
 			return 'high';
+		case BulkSimStage.BulkSimStageFinalist:
+			return 'finalist';
 		default:
 			return undefined;
 	}

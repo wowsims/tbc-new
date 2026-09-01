@@ -29,7 +29,7 @@ import { renderSavedEPWeights } from './saved_data_managers/ep_weights';
 import Toast from './toast';
 import { trackEvent, trackPageView } from '../../tracking/utils';
 import { ProgressTrackerModal } from './progress_tracker_modal';
-import { getEmptySlotIconUrl } from './gear_picker/utils';
+import { buildGearChangeIcon } from './gear_change_icon';
 import { CURRENT_PHASE, Phase } from '../constants/other';
 import { CharacterStats } from './character_stats';
 
@@ -1020,6 +1020,15 @@ export class ReforgeOptimizer {
 		};
 	}
 
+	static cacheRelevantReforgeRequest(reforgeRequest: ReforgeOptimizeRequest): ReforgeOptimizeRequest {
+		const configForHash = ReforgeOptimizeRequest.clone({ ...reforgeRequest, raid: undefined } as ReforgeOptimizeRequest);
+		configForHash.requestId = '';
+		configForHash.debug = false;
+		configForHash.mode = ReforgeOptimizeMode.ReforgeOptimizeModeSingle;
+		configForHash.gemOptions = configForHash.gemOptions.sort((a, b) => a.id - b.id);
+		return configForHash;
+	}
+
 	static async getConfigHash({
 		player,
 		reforgeRequest,
@@ -1049,12 +1058,7 @@ export class ReforgeOptimizer {
 		playerProto.distanceFromTarget = 0;
 		playerProto.healingModel = undefined;
 
-		const reforgeOptimizerConfigForHash = ReforgeOptimizeRequest.clone(reforgeRequest);
-		reforgeOptimizerConfigForHash.requestId = '';
-		reforgeOptimizerConfigForHash.raid = undefined;
-		reforgeOptimizerConfigForHash.debug = false;
-		reforgeOptimizerConfigForHash.mode = ReforgeOptimizeMode.ReforgeOptimizeModeSingle;
-		reforgeOptimizerConfigForHash.gemOptions = reforgeOptimizerConfigForHash.gemOptions.sort((a, b) => a.id - b.id);
+		const reforgeOptimizerConfigForHash = ReforgeOptimizer.cacheRelevantReforgeRequest(reforgeRequest);
 
 		return ReforgeGearCache.getHash({
 			player: PlayerProtoMessageType.toJsonString(playerProto),
@@ -1215,81 +1219,7 @@ export class ReforgeOptimizer {
 				<ul className="suggest-reforges-gear-list list-reset">
 					{itemSlots.map(slot => {
 						const item = changedSlots.get(slot);
-						const slotName = translateSlotName(slot);
-						const iconRef = ref<HTMLDivElement>();
-						const reforgeRef = ref<HTMLDivElement>();
-						const socketsContainerRef = ref<HTMLDivElement>();
-						const itemElement = (
-							<div className="item-picker-root">
-								<div
-									ref={iconRef}
-									className="item-picker-icon-wrapper"
-									style={{
-										backgroundImage: `url('${getEmptySlotIconUrl(slot)}')`,
-									}}>
-									<div ref={reforgeRef} className="suggest-reforges-gear-reforge interactive d-none"></div>
-									<div ref={socketsContainerRef} className="item-picker-sockets-container"></div>
-								</div>
-							</div>
-						);
-
-						if (item) {
-							item.asActionId()
-								.fill(undefined)
-								.then(filledId => {
-									filledId.setBackground(iconRef.value!);
-								});
-
-							const previousItem = this.previousGear?.getEquippedItem(slot);
-							const previousGems = previousItem?.gems;
-
-							const { gems } = item;
-
-							if (gems || previousGems) {
-								const changedGems: number[] = [];
-								previousItem?.gemSockets.forEach((_, socketIdx) => {
-									const previousGem = previousGems ? previousGems[socketIdx] : undefined;
-									const currentGem = gems ? gems[socketIdx] : undefined;
-									if (previousGem?.id !== currentGem?.id) {
-										changedGems.push(socketIdx);
-									}
-								});
-
-								item.allSocketColors().forEach((socketColor, gemIdx) => {
-									const hasChangedSocket = changedGems.includes(gemIdx);
-									const socketRef = ref<HTMLDivElement>();
-									const gemName = gems[gemIdx]?.name;
-									socketsContainerRef.value?.appendChild(
-										<div
-											ref={socketRef}
-											className={clsx('gem-socket-container', hasChangedSocket && 'interactive')}
-											style={{
-												backgroundImage: `url(${getEmptyGemSocketIconUrl(socketColor)})`,
-											}}>
-											{hasChangedSocket && (
-												<>
-													<i className={'d-block fas fa-exclamation-circle'}></i>
-												</>
-											)}
-										</div>,
-									);
-									if (hasChangedSocket && gemName)
-										tippy(socketRef.value!, {
-											content: (
-												<>
-													<strong>
-														{slotName} - Socket {gemIdx + 1}
-													</strong>
-													<br />
-													{gemName}
-												</>
-											),
-										});
-								});
-							}
-						}
-
-						return <li>{itemElement}</li>;
+						return <li>{buildGearChangeIcon(this.player, slot, item, this.previousGear?.getEquippedItem(slot) ?? undefined)}</li>;
 					})}
 				</ul>
 			</>

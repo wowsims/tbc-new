@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import tippy from 'tippy.js';
 import { ref } from 'tsx-vanilla';
 
 import i18n from '../../../../i18n/config';
@@ -15,7 +16,7 @@ import { ItemSlot, ItemSpec } from '../../../proto/common';
 export default class BulkSimResultRenderer extends Component {
 	readonly simUI: IndividualSimUI<any>;
 
-	constructor(parent: HTMLElement, simUI: IndividualSimUI<any>, result: TopGearResult, baseResult: TopGearResult) {
+	constructor(parent: HTMLElement | DocumentFragment, simUI: IndividualSimUI<any>, result: TopGearResult, baseResult: TopGearResult) {
 		super(parent, 'bulk-sim-result-root');
 
 		this.simUI = simUI;
@@ -26,6 +27,7 @@ export default class BulkSimResultRenderer extends Component {
 		const equipButtonRef = ref<HTMLButtonElement>();
 		const dpsDeltaRef = ref<HTMLDivElement>();
 		const itemsContainerRef = ref<HTMLDivElement>();
+		const marginRef = ref<HTMLSpanElement>();
 		this.rootElem.appendChild(
 			<>
 				<div className="results-sim">
@@ -48,6 +50,10 @@ export default class BulkSimResultRenderer extends Component {
 				</div>
 			</>,
 		);
+
+		if (marginRef.value) {
+			tippy(marginRef.value, { content: i18n.t('bulk_tab.results.margin_of_error') });
+		}
 
 		if (isBaseResult) return;
 

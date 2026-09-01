@@ -66,9 +66,12 @@ export async function runCoreBulkSim(
 
 	const topGearResults = result.topResults
 		.filter(topResult => topResult.gear && topResult.dpsMetrics)
-		.map(topResult => ({
+		.map((topResult, backendRank) => ({
 			gear: context.simUI.sim.db.lookupEquipmentSpec(topResult.gear!),
 			dpsMetrics: cleanBulkDpsMetrics(topResult.dpsMetrics!),
+			backendRank,
+			pairedErrorToNextResult: topResult.pairedErrorToNextResult,
+			pairedErrorToBaseline: topResult.pairedErrorToBaseline,
 		}));
 
 	context.debugOptimisationRound('core bulk sim complete', {

@@ -44,6 +44,9 @@ export const STAGE_CONFIG: Record<OptimisationStage, OptimisationStageConfig> = 
 export interface TopGearResult {
 	gear: Gear;
 	dpsMetrics: DistributionMetrics;
+	backendRank?: number;
+	pairedErrorToNextResult?: number;
+	pairedErrorToBaseline?: number;
 }
 
 export interface BulkSimRoundConfig {
