@@ -101,7 +101,6 @@ export class LogRunner extends ResultComponent {
 		};
 
 		this.ui.exportLog?.addEventListener('click', () => {
-			console.log("Export Log")
 			logExporter.open()
 		});
 
