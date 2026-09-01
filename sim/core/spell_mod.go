@@ -274,9 +274,16 @@ const (
 	SpellMod_DamageDone_Flat
 
 	// Will reduce spell.Cost.PercentModifier by % amount. -5% = -0.05
+	// Stacks multiplicatively with other pct cost mods.
 	// For 0 Mana cost use -2
 	// Uses FloatValue
 	SpellMod_PowerCost_Pct
+
+	// Adds to spell.Cost.AdditivePercentModifier. +75% = 0.75
+	// Stacks additively with other mods of this kind: bucket = 1 + sum of mods.
+	// Applied on top of (multiplied with) SpellMod_PowerCost_Pct mods.
+	// Uses FloatValue
+	SpellMod_PowerCost_Pct_Add
 
 	// Increases or decreases spell.Cost.FlatModifier by flat amount. -5 Mana = -5
 	// Uses IntValue
@@ -396,6 +403,11 @@ var spellModMap = map[SpellModType]*SpellModFunctions{
 	SpellMod_PowerCost_Pct: {
 		Apply:  applyPowerCostPercent,
 		Remove: removePowerCostPercent,
+	},
+
+	SpellMod_PowerCost_Pct_Add: {
+		Apply:  applyPowerCostPercentAdditive,
+		Remove: removePowerCostPercentAdditive,
 	},
 
 	SpellMod_PowerCost_Flat: {
@@ -555,6 +567,18 @@ func applyPowerCostPercent(mod *SpellMod, spell *Spell) {
 func removePowerCostPercent(mod *SpellMod, spell *Spell) {
 	if spell.Cost != nil {
 		spell.Cost.PercentModifier /= (1 + mod.floatValue)
+	}
+}
+
+func applyPowerCostPercentAdditive(mod *SpellMod, spell *Spell) {
+	if spell.Cost != nil {
+		spell.Cost.AdditivePercentModifier += mod.floatValue
+	}
+}
+
+func removePowerCostPercentAdditive(mod *SpellMod, spell *Spell) {
+	if spell.Cost != nil {
+		spell.Cost.AdditivePercentModifier -= mod.floatValue
 	}
 }
 

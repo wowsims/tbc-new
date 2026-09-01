@@ -39,7 +39,7 @@ var ItemSetTirisfalRegalia = core.NewItemSet(core.ItemSet{
 				FloatValue: .20,
 				ClassMask:  MageSpellArcaneBlast,
 			}).AttachSpellMod(core.SpellModConfig{
-				Kind:       core.SpellMod_PowerCost_Pct,
+				Kind:       core.SpellMod_PowerCost_Pct_Add,
 				FloatValue: .20,
 				ClassMask:  MageSpellArcaneBlast,
 			})
