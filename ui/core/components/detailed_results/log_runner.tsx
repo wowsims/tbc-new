@@ -42,7 +42,7 @@ export class LogRunner extends ResultComponent {
 		const contentContainerRef = ref<HTMLTableSectionElement>();
 
 		const logExporter = new LogExporter(
-			document.body,
+			this.rootElem,
 			simUi,
 			() => getCombinedText()
 		)
