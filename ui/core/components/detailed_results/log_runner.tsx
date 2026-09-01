@@ -98,7 +98,7 @@ export class LogRunner extends ResultComponent {
 					const cells = element.querySelectorAll('td');
 					return Array.from(cells)
 						.map(td => td.textContent?.trim() || '')
-						.join(' ; ');
+						.join(';');
 			})
 			.filter(text => text.length > 0)
 			.join('\n')
