@@ -305,6 +305,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestArcane-AllItems-Bonereaver'sEdge-17076"
+ value: {
+  dps: 1977.12945
+  tps: 943.89676
+ }
+}
+dps_results: {
  key: "TestArcane-AllItems-BraidedEterniumChain-24114"
  value: {
   dps: 1902.91131
