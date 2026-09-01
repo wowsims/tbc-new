@@ -1995,6 +1995,7 @@
 			},
 			"logs": {
 				"top_button": "Top",
+				"export_button": "Export Log",
 				"time_column": "Time",
 				"event_column": "Event",
 				"show_debug": "Show Debug Statements"

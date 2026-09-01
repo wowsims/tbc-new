@@ -303,8 +303,8 @@ export class DetailedResults extends Component {
 
 		new LogRunner({
 			parent: this.rootElem.querySelector('.log')!,
-			resultsEmitter: this.resultsEmitter,
-		});
+			resultsEmitter: this.resultsEmitter
+		}, this.simUI);
 
 		this.rootElem.classList.add('hide-threat-metrics');
 
