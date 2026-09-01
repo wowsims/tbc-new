@@ -55,6 +55,7 @@ export class BulkTab extends SimTab {
 	private readonly bulkSimButton: HTMLButtonElement;
 	private readonly settingsContainer: HTMLElement;
 
+	private setupTab: Tab;
 	private resultsTab: Tab;
 	protected progressTrackerModal: ProgressTrackerModal;
 
@@ -175,7 +176,7 @@ export class BulkTab extends SimTab {
 		this.bulkSimButton = bulkSimBtnRef.value!;
 		this.settingsContainer = settingsContainerRef.value!;
 
-		new Tab(setupTabBtnRef.value!);
+		this.setupTab = new Tab(setupTabBtnRef.value!);
 		this.resultsTab = new Tab(resultsTabBtnRef.value!);
 
 		this.selectorModal = new SelectorModal(this.simUI.rootElem, this.simUI, this.simUI.player, undefined, {
@@ -525,6 +526,7 @@ export class BulkTab extends SimTab {
 
 	private resetResultsTabContent() {
 		this.resultsTabElem.replaceChildren();
+		this.setupTab.show();
 	}
 
 	private buildResultsTabContent() {
