@@ -93,8 +93,12 @@ export class LogRunner extends ResultComponent {
 		});
 
 		const getCombinedText = (): string => {
-			return this.cacheOutput.logsAsHTML!.map( element => {
-				return element.textContent;
+			return this.cacheOutput.logsAsHTML!
+				.map( element => {
+					const cells = element.querySelectorAll('td');
+					return Array.from(cells)
+						.map(td => td.textContent?.trim() || '')
+						.join(' ; ');
 			})
 			.filter(text => text.length > 0)
 			.join('\n')
