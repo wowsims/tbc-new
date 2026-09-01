@@ -21,7 +21,8 @@ function serveExternalAssets() {
 	const workerMappings = {
 		'/tbc/sim_worker.js': '/tbc/local_worker.js',
 		'/tbc/net_worker.js': '/tbc/net_worker.js',
-		'/tbc/lib.wasm': '/tbc/lib.wasm',
+		'/tbc/lib.wasm.gz': '/tbc/lib.wasm.gz',
+		'/tbc/highs.wasm': '/tbc/highs.wasm',
 	};
 
 	return {
