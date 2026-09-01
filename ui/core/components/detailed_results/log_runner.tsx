@@ -103,26 +103,6 @@ export class LogRunner extends ResultComponent {
 		this.ui.exportLog?.addEventListener('click', () => {
 			console.log("Export Log")
 			logExporter.open()
-			/*try {
-				if (!navigator.clipboard) {
-					throw new Error('Clipboard API not supported in this browser');
-				}
-				const combinedText = getCombinedText();
-				navigator.clipboard.writeText(combinedText)
-					.then(() => {
-						new Toast({
-							delay: 8000,
-							variant: 'success',
-							body: 'Log copied to clipboard',
-						});
-					})
-					.catch((err) => {
-						console.error('Failed to copy text: ', err);
-					});
-			} catch (err) {
-				console.error('Failed to copy text: ', err);
-      			alert('Could not copy text to clipboard.');
-			}*/
 		});
 
 		new BooleanPicker<LogRunner>(this.ui.actions, this, {
