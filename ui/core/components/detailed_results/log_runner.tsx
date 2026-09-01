@@ -8,6 +8,9 @@ import { TypedEvent } from '../../typed_event.js';
 import { fragmentToString } from '../../utils';
 import { BooleanPicker } from '../pickers/boolean_picker.js';
 import { ResultComponent, ResultComponentConfig, SimResultData } from './result_component.js';
+import { LogExporter } from './exporters/detailed_log_exporter';
+import { SimUI } from '../../sim_ui';
+
 export class LogRunner extends ResultComponent {
 	private virtualScroll: CustomVirtualScroll | null = null;
 	readonly showDebugChangeEmitter = new TypedEvent<void>('Show Debug');
@@ -27,7 +30,7 @@ export class LogRunner extends ResultComponent {
 		logsAsText: string[] | null;
 	} = { cacheKey: null, logs: null, logsAsHTML: null, logsAsText: null };
 
-	constructor(config: ResultComponentConfig) {
+	constructor(config: ResultComponentConfig, simUi: SimUI) {
 		config.rootCssClass = 'log-runner-root';
 		super(config);
 
@@ -37,6 +40,12 @@ export class LogRunner extends ResultComponent {
 		const exportLogRef = ref<HTMLButtonElement>();
 		const scrollContainerRef = ref<HTMLDivElement>();
 		const contentContainerRef = ref<HTMLTableSectionElement>();
+
+		const logExporter = new LogExporter(
+			document.body,
+			simUi,
+			() => getCombinedText()
+		)
 
 		this.rootElem.appendChild(
 			<>
@@ -93,19 +102,27 @@ export class LogRunner extends ResultComponent {
 
 		this.ui.exportLog?.addEventListener('click', () => {
 			console.log("Export Log")
-			try {
+			logExporter.open()
+			/*try {
 				if (!navigator.clipboard) {
 					throw new Error('Clipboard API not supported in this browser');
 				}
 				const combinedText = getCombinedText();
 				navigator.clipboard.writeText(combinedText)
+					.then(() => {
+						new Toast({
+							delay: 8000,
+							variant: 'success',
+							body: 'Log copied to clipboard',
+						});
+					})
 					.catch((err) => {
 						console.error('Failed to copy text: ', err);
 					});
 			} catch (err) {
 				console.error('Failed to copy text: ', err);
       			alert('Could not copy text to clipboard.');
-			}
+			}*/
 		});
 
 		new BooleanPicker<LogRunner>(this.ui.actions, this, {
