@@ -22,8 +22,7 @@ PAGE_INDECES := ui/druid/balance/index.html \
 				ui/shaman/restoration/index.html \
 				ui/warlock/dps/index.html \
 				ui/warrior/dps/index.html \
-				ui/warrior/protection/index.html \
-				ui/raid/full/index.html
+				ui/warrior/protection/index.html
 
 $(OUT_DIR)/.dirstamp: \
   $(OUT_DIR)/lib.wasm \

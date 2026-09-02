@@ -45,7 +45,6 @@ import {
 	Drums,
 	Encounter as EncounterProto,
 	EquipmentSpec,
-	Faction,
 	HealingModel,
 	IndividualBuffs,
 	ItemSlot,
@@ -98,20 +97,6 @@ export interface OtherDefaults {
 	iterationCount?: number;
 	race?: Race;
 	healingModel?: HealingModel;
-}
-
-export interface RaidSimPreset<SpecType extends Spec> {
-	spec: Spec;
-	talents: SavedTalents;
-	specOptions: SpecOptions<SpecType>;
-	consumables: ConsumesSpec;
-	defaultName?: string;
-	defaultFactionRaces: Record<Faction, Race>;
-	defaultGear: Record<Faction, Record<number, EquipmentSpec>>;
-	otherDefaults?: OtherDefaults;
-
-	tooltip?: string;
-	iconUrl?: string;
 }
 
 export interface IndividualSimUIConfig<SpecType extends Spec> extends PlayerConfig<SpecType> {
@@ -206,8 +191,6 @@ export interface IndividualSimUIConfig<SpecType extends Spec> extends PlayerConf
 		builds?: Array<PresetBuild>;
 		itemSwaps?: Array<PresetItemSwap>;
 	};
-
-	raidSimPresets: Array<RaidSimPreset<SpecType>>;
 }
 
 export function registerSpecConfig<SpecType extends Spec>(spec: SpecType, config: IndividualSimUIConfig<SpecType>): IndividualSimUIConfig<SpecType> {
@@ -328,18 +311,16 @@ export abstract class IndividualSimUI<SpecType extends Spec> extends SimUI {
 
 		(config.warnings || []).forEach(warning => this.addWarning(warning(this)));
 
-		if (!this.isWithinRaidSim) {
-			// This needs to go before all the UI components so that gear loading is the
-			// first callback invoked from waitForInit().
-			this.sim.waitForInit().then(() => {
-				ItemNotice.registerSetBonusNotices(this.sim.db);
-				this.loadSettings();
+		// This needs to go before all the UI components so that gear loading is the
+		// first callback invoked from waitForInit().
+		this.sim.waitForInit().then(() => {
+			ItemNotice.registerSetBonusNotices(this.sim.db);
+			this.loadSettings();
 
-				if (this.player.getPlayerSpec().isHealingSpec && !isDevMode()) {
-					alert(i18n.t('sim.healing_sim_disclaimer'));
-				}
-			});
-		}
+			if (this.player.getPlayerSpec().isHealingSpec && !isDevMode()) {
+				alert(i18n.t('sim.healing_sim_disclaimer'));
+			}
+		});
 
 		this.addSidebarComponents();
 		this.addGearTab();
@@ -347,9 +328,7 @@ export abstract class IndividualSimUI<SpecType extends Spec> extends SimUI {
 		this.addTalentsTab();
 		this.addRotationTab();
 
-		if (!this.isWithinRaidSim) {
-			this.addDetailedResultsTab();
-		}
+		this.addDetailedResultsTab();
 
 		this.bt = this.addBulkTab();
 
@@ -463,17 +442,17 @@ export abstract class IndividualSimUI<SpecType extends Spec> extends SimUI {
 	}
 
 	private addTopbarComponents() {
-		this.simHeader.addImportLink('JSON', new IndividualJsonImporter(this.rootElem, this), true);
-		this.simHeader.addImportLink('60U TBC', new Individual60UImporter(this.rootElem, this), true);
-		this.simHeader.addImportLink('WoWHead', new IndividualWowheadGearPlannerImporter(this.rootElem, this), false, false);
-		this.simHeader.addImportLink('Addon', new IndividualAddonImporter(this.rootElem, this), true);
+		this.simHeader.addImportLink('JSON', new IndividualJsonImporter(this.rootElem, this));
+		this.simHeader.addImportLink('60U TBC', new Individual60UImporter(this.rootElem, this));
+		this.simHeader.addImportLink('WoWHead', new IndividualWowheadGearPlannerImporter(this.rootElem, this), false);
+		this.simHeader.addImportLink('Addon', new IndividualAddonImporter(this.rootElem, this));
 
-		this.simHeader.addExportLink('Link', new IndividualLinkExporter(this.rootElem, this), false);
-		this.simHeader.addExportLink('JSON', new IndividualJsonExporter(this.rootElem, this), true);
-		this.simHeader.addExportLink('WoWHead', new IndividualWowheadGearPlannerExporter(this.rootElem, this), false, false);
-		this.simHeader.addExportLink('60U TBC EP', new Individual60UEPExporter(this.rootElem, this), false);
-		this.simHeader.addExportLink('Pawn EP', new IndividualPawnEPExporter(this.rootElem, this), false);
-		this.simHeader.addExportLink('CLI', new IndividualCLIExporter(this.rootElem, this), true);
+		this.simHeader.addExportLink('Link', new IndividualLinkExporter(this.rootElem, this));
+		this.simHeader.addExportLink('JSON', new IndividualJsonExporter(this.rootElem, this));
+		this.simHeader.addExportLink('WoWHead', new IndividualWowheadGearPlannerExporter(this.rootElem, this), false);
+		this.simHeader.addExportLink('60U TBC EP', new Individual60UEPExporter(this.rootElem, this));
+		this.simHeader.addExportLink('Pawn EP', new IndividualPawnEPExporter(this.rootElem, this));
+		this.simHeader.addExportLink('CLI', new IndividualCLIExporter(this.rootElem, this));
 	}
 
 	applyDefaultRotation(eventID: EventID) {
@@ -607,43 +586,39 @@ export abstract class IndividualSimUI<SpecType extends Spec> extends SimUI {
 
 			this.tankRefStat = this.individualConfig.tankRefStat;
 
-			if (this.isWithinRaidSim) {
-				this.sim.raid.setTargetDummies(eventID, 0);
-			} else {
-				this.sim.raid.setTargetDummies(eventID, healingSpec ? 9 : 0);
-				try {
-					if (!this.individualConfig.defaults.encounter) {
-						throw new Error('No default encounter specified');
-					}
-					const presetEncounter = this.sim.db.getPresetEncounter(this.individualConfig.defaults.encounter);
-					if (!presetEncounter) {
-						throw new Error('No default encounter specified');
-					}
-
-					this.sim.encounter.applyPreset(eventID, presetEncounter);
-				} catch {
-					this.sim.encounter.applyDefaults(eventID);
+			this.sim.raid.setTargetDummies(eventID, healingSpec ? 9 : 0);
+			try {
+				if (!this.individualConfig.defaults.encounter) {
+					throw new Error('No default encounter specified');
 				}
-				this.sim.encounter.setExecuteProportion90(eventID, this.individualConfig.defaults.other?.highHpThreshold || 0.9);
-				if (this.individualConfig.defaults.other?.healingModel) {
-					this.player.setHealingModel(eventID, this.individualConfig.defaults.other?.healingModel);
+				const presetEncounter = this.sim.db.getPresetEncounter(this.individualConfig.defaults.encounter);
+				if (!presetEncounter) {
+					throw new Error('No default encounter specified');
 				}
 
-				this.sim.raid.setDebuffs(eventID, this.individualConfig.defaults.debuffs);
-				this.sim.applyDefaults(eventID, tankSpec, healingSpec);
-
-				if (this.individualConfig.defaults.other?.iterationCount) {
-					this.sim.setIterations(eventID, this.individualConfig.defaults.other!.iterationCount!);
-				}
-
-				if (tankSpec) {
-					this.sim.raid.setTanks(eventID, [this.player.makeUnitReference()]);
-				} else {
-					this.sim.raid.setTanks(eventID, []);
-				}
-
-				this.statWeightActionSettings.applyDefaults(eventID);
+				this.sim.encounter.applyPreset(eventID, presetEncounter);
+			} catch {
+				this.sim.encounter.applyDefaults(eventID);
 			}
+			this.sim.encounter.setExecuteProportion90(eventID, this.individualConfig.defaults.other?.highHpThreshold || 0.9);
+			if (this.individualConfig.defaults.other?.healingModel) {
+				this.player.setHealingModel(eventID, this.individualConfig.defaults.other?.healingModel);
+			}
+
+			this.sim.raid.setDebuffs(eventID, this.individualConfig.defaults.debuffs);
+			this.sim.applyDefaults(eventID, tankSpec, healingSpec);
+
+			if (this.individualConfig.defaults.other?.iterationCount) {
+				this.sim.setIterations(eventID, this.individualConfig.defaults.other!.iterationCount!);
+			}
+
+			if (tankSpec) {
+				this.sim.raid.setTanks(eventID, [this.player.makeUnitReference()]);
+			} else {
+				this.sim.raid.setTanks(eventID, []);
+			}
+
+			this.statWeightActionSettings.applyDefaults(eventID);
 
 			if (this.individualConfig.defaultBuild) {
 				PresetConfigurationPicker.applyBuild(eventID, this.individualConfig.defaultBuild, this);

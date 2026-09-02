@@ -18,12 +18,6 @@ export type SimStatus = {
 	oldSimLink?: string;
 };
 
-export const raidSimStatus: SimStatus = {
-	phase: Phase.Phase2,
-	status: LaunchStatus.Unlaunched,
-	oldSimLink: 'https://wowsims.github.io/tbc/raid/',
-};
-
 // This list controls which links are shown in the top-left dropdown menu.
 export const simLaunchStatuses: Record<Spec, SimStatus> = {
 	[Spec.SpecUnknown]: {

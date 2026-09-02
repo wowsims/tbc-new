@@ -6,9 +6,6 @@
 			"about": "About",
 			"toggle": "Toggle navigation"
 		},
-		"simulations": {
-			"full_raid": "Full Raid Sim"
-		},
 		"home": {
 			"title": "WoWSims - The Burning Crusade",
 			"description": "A powerful simulation tool for World of Warcraft: The Burning Crusade",
@@ -44,7 +41,6 @@
 			"5": "Phase 5"
 		},
 		"tanks": {
-			"title": "Tanks",
 			"main_tank": "Main Tank",
 			"tank_2": "Tank 2",
 			"tank_3": "Tank 3",
@@ -830,10 +826,6 @@
 			"settings": "Settings",
 			"settings_name": "Settings Name",
 			"save_settings": "Save Settings"
-		},
-		"external_buffs": {
-			"title": "External Buffs",
-			"tooltip": "Buffs provided by <strong>other</strong> party/raid members."
 		}
 	},
 	"talents_tab": {

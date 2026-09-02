@@ -353,8 +353,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 			valueVariables: rotation.valueVariables,
 		});
 	},
-
-	raidSimPresets: [],
 });
 
 export class ProtectionPaladinSimUI extends IndividualSimUI<Spec.SpecProtectionPaladin> {

@@ -202,8 +202,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecDpsWarrior, {
 			...rotation,
 		});
 	},
-
-	raidSimPresets: [],
 });
 
 export class DpsWarriorSimUI extends IndividualSimUI<Spec.SpecDpsWarrior> {

@@ -6,12 +6,10 @@ import { APLRotation } from '../../core/proto/apl';
 import {
 	Debuffs,
 	Drums,
-	Faction,
 	IndividualBuffs,
 	ItemSlot,
 	PartyBuffs,
 	PseudoStat,
-	Race,
 	RaidBuffs,
 	Spec,
 	Stat,
@@ -159,30 +157,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 	autoRotation: (player: Player<Spec.SpecRogue>): APLRotation => {
 		return Presets.SINSITER_APL.rotation.rotation!;
 	},
-
-	raidSimPresets: [
-		{
-			spec: Spec.SpecRogue,
-			talents: Presets.Talents.data,
-			specOptions: Presets.DefaultOptions,
-			consumables: Presets.DefaultConsumables,
-			defaultFactionRaces: {
-				[Faction.Unknown]: Race.RaceUnknown,
-				[Faction.Alliance]: Race.RaceHuman,
-				[Faction.Horde]: Race.RaceOrc,
-			},
-			defaultGear: {
-				[Faction.Unknown]: {},
-				[Faction.Alliance]: {
-					1: Presets.P3_SWORDS_GEAR.gear,
-				},
-				[Faction.Horde]: {
-					1: Presets.P3_SWORDS_GEAR.gear,
-				},
-			},
-			otherDefaults: Presets.OtherDefaults,
-		},
-	],
 });
 
 export class RogueSimUI extends IndividualSimUI<Spec.SpecRogue> {

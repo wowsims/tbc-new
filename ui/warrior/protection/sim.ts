@@ -187,8 +187,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionWarrior, {
 	autoRotation: (_player: Player<Spec.SpecProtectionWarrior>): APLRotation => {
 		return Presets.ROTATION_DEFAULT.rotation.rotation!;
 	},
-
-	raidSimPresets: [],
 });
 
 export class ProtectionWarriorSimUI extends IndividualSimUI<Spec.SpecProtectionWarrior> {
