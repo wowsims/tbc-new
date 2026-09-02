@@ -28,7 +28,7 @@ import { TalentsTab } from './components/individual_sim_ui/talents_tab';
 import * as InputHelpers from './components/input_helpers';
 import * as OtherInputs from './components/inputs/other_inputs';
 import { ItemNotice } from './components/item_notice/item_notice';
-import { addRaidSimAction, RaidSimResultsManager } from './components/raid_sim_action';
+import { addSimAction, SimResultsManager } from './components/sim_action';
 import { SavedDataConfig } from './components/saved_data_manager';
 import { addStatWeightsAction, EpWeightsMenu, StatWeightActionSettings } from './components/stat_weights_action';
 import { SimSettingCategories } from './constants/sim_settings';
@@ -104,7 +104,7 @@ export interface IndividualSimUIConfig<SpecType extends Spec> extends PlayerConf
 	requiredTalentRows?: number[];
 	// Additional css class to add to the root element.
 	cssClass: string;
-	// Used to generate schemed components. E.g. 'shaman', 'druid', 'raid'
+	// Used to generate schemed components. E.g. 'shaman', 'druid'
 	cssScheme: string;
 
 	knownIssues?: Array<string>;
@@ -215,7 +215,7 @@ export abstract class IndividualSimUI<SpecType extends Spec> extends SimUI {
 	readonly individualConfig: IndividualSimUIConfig<SpecType>;
 	private readonly statWeightActionSettings: StatWeightActionSettings;
 
-	raidSimResultsManager: RaidSimResultsManager | null;
+	simResultsManager: SimResultsManager | null;
 	epWeightsModal: EpWeightsMenu | null = null;
 
 	prevEpIterations: number;
@@ -235,10 +235,9 @@ export abstract class IndividualSimUI<SpecType extends Spec> extends SimUI {
 			knownIssues: config.knownIssues,
 			simStatus: simLaunchStatuses[player.getSpec()],
 		});
-		this.rootElem.classList.add('individual-sim-ui');
 		this.player = player;
 		this.individualConfig = this.applyDefaultConfigOptions(config);
-		this.raidSimResultsManager = null;
+		this.simResultsManager = null;
 		this.prevEpIterations = 0;
 		this.prevEpSimResult = null;
 		this.statWeightActionSettings = new StatWeightActionSettings(this);
@@ -393,7 +392,7 @@ export abstract class IndividualSimUI<SpecType extends Spec> extends SimUI {
 	}
 
 	private addSidebarComponents() {
-		this.raidSimResultsManager = addRaidSimAction(this);
+		this.simResultsManager = addSimAction(this);
 		this.sim.waitForInit().then(() => {
 			this.epWeightsModal = addStatWeightsAction(this, this.statWeightActionSettings);
 		});
@@ -438,7 +437,7 @@ export abstract class IndividualSimUI<SpecType extends Spec> extends SimUI {
 		const detailedResults = (<div className="detailed-results"></div>) as HTMLElement;
 		this.addTab(i18n.t('results_tab.title'), 'detailed-results-tab', detailedResults);
 
-		new DetailedResults(detailedResults, this, this.raidSimResultsManager!);
+		new DetailedResults(detailedResults, this, this.simResultsManager!);
 	}
 
 	private addTopbarComponents() {

@@ -9,7 +9,7 @@ import { Component } from '../../component';
 import { ItemRenderer } from '../../gear_picker/gear_picker';
 import Toast from '../../toast';
 import { TopGearResult } from '../bulk_tab';
-import { RaidSimResultsManager } from '../../raid_sim_action';
+import { SimResultsManager } from '../../sim_action';
 import { ItemSlot, ItemSpec } from '../../../proto/common';
 
 export default class BulkSimResultRenderer extends Component {
@@ -48,7 +48,7 @@ export default class BulkSimResultRenderer extends Component {
 		if (isBaseResult) return;
 
 		if (dpsDeltaRef.value) {
-			const isDiff = RaidSimResultsManager.applyZTestTooltip(
+			const isDiff = SimResultsManager.applyZTestTooltip(
 				dpsDeltaRef.value,
 				iterations,
 				result.dpsMetrics.avg,

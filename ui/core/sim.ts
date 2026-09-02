@@ -40,11 +40,6 @@ import { EventID, TypedEvent } from './typed_event.js';
 import { getEnumValues, noop } from './utils.js';
 import { generateRequestId, WorkerPool, WorkerProgressCallback } from './worker_pool.js';
 
-export type RaidSimData = {
-	request: RaidSimRequest;
-	result: RaidSimResult;
-};
-
 export type StatWeightsData = {
 	request: StatWeightsRequest;
 	result: StatWeightsResult;

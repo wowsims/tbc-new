@@ -281,7 +281,7 @@
 			"old_sim_message": "You can find the old Sim for this spec here:"
 		},
 		"notifications": {
-			"raid_sim_cancelled": "Raid sim cancelled.",
+			"sim_cancelled": "Sim cancelled.",
 			"simulation_failed": "The Simulation failed. Generated an error report.",
 			"failed_to_file_report": "Failed to file report... try again another time:"
 		},
@@ -750,10 +750,6 @@
 				"tooltip": "Selects a preset encounter configuration."
 			},
 			"advanced": "Advanced",
-			"use_health": {
-				"label": "Use Health",
-				"tooltip": "Uses a damage limit in place of a duration limit. Damage limit is equal to sum of all targets health."
-			},
 			"target": "Target",
 			"num_allies": {
 				"label": "Num Allies",
