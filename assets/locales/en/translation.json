@@ -1951,7 +1951,6 @@
 			"sim_1_iteration": "Sim 1 Iteration",
 			"sim_1_death": "Simulate a Death",
 			"all_targets": "All Targets",
-			"all_players": "All Players",
 			"target_number": "Target {{number}}",
 			"damage": {
 				"dps_histogram": "DPS Histogram"
@@ -2057,8 +2056,6 @@
 			},
 			"tooltips": {
 				"damage_avg_cast": "Average damage per cast",
-				"player_damage": "Player Damage / Raid Damage",
-				"player_damage_taken": "Player Damage Taken / Raid Damage Taken",
 				"damage_taken_per_encounter": "Damage Taken / Encounter Duration",
 				"healing_per_encounter": "Healing / Encounter Duration",
 				"threat_per_encounter": "Threat / Encounter Duration",
