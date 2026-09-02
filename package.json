@@ -38,6 +38,7 @@
 		"i18next-browser-languagedetector": "^8.2.0",
 		"i18next-http-backend": "^3.0.2",
 		"pako": "^2.0.4",
+		"shallow-equal": "^3.1.0",
 		"tippy.js": "^6.3.7",
 		"tsx-vanilla": "^1.2.0",
 		"uuid": "^11.1.0",
