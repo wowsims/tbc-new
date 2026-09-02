@@ -2,7 +2,7 @@ import { Hunter } from '../../player_classes/hunter';
 import { Rogue } from '../../player_classes/rogue';
 import { Warrior } from '../../player_classes/warrior';
 import { PlayerSpecs } from '../../player_specs/index';
-import { RaidSimResultsManager } from '../raid_sim_action';
+import { SimResultsManager } from '../sim_action';
 import { ResultComponent, ResultComponentConfig, SimResultData } from './result_component';
 
 export class ToplineResults extends ResultComponent {
@@ -17,7 +17,7 @@ export class ToplineResults extends ResultComponent {
 		const noManaClasses = [Rogue, Warrior, Hunter];
 		const players = resultData.result.getRaidIndexedPlayers(resultData.filter);
 
-		const content = RaidSimResultsManager.makeToplineResultsContent(resultData.result, resultData.filter, {
+		const content = SimResultsManager.makeToplineResultsContent(resultData.result, resultData.filter, {
 			showOutOfMana: players.length === 1 && !!players[0].spec && !noManaClasses.some(klass => PlayerSpecs.getPlayerClass(players[0].spec!) === klass),
 		});
 

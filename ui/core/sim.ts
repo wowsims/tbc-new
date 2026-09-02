@@ -66,11 +66,6 @@ import {
 } from './components/individual_sim_ui/bulk/utils';
 import { generateRequestId, WorkerPool, WorkerProgressCallback } from './worker_pool.js';
 
-export type RaidSimData = {
-	request: RaidSimRequest;
-	result: RaidSimResult;
-};
-
 export type StatWeightsData = {
 	request: StatWeightsRequest;
 	result: StatWeightsResult;

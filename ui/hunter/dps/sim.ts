@@ -287,8 +287,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecHunter, {
 			valueVariables: rotation.valueVariables,
 		});
 	},
-
-	raidSimPresets: [],
 });
 
 export class HunterSimUI extends IndividualSimUI<Spec.SpecHunter> {

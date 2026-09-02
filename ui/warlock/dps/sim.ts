@@ -123,8 +123,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecWarlock, {
 		return Presets.DestroAPL.rotation.rotation!;
 	},
 	customSections: [WarlockInputs.CursesSection],
-
-	raidSimPresets: [],
 });
 
 export class WarlockSimUI extends IndividualSimUI<Spec.SpecWarlock> {
