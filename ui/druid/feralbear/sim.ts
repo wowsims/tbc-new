@@ -8,12 +8,10 @@ import {
 	Cooldowns,
 	Debuffs,
 	Drums,
-	Faction,
 	IndividualBuffs,
 	ItemSlot,
 	PartyBuffs,
 	PseudoStat,
-	Race,
 	RaidBuffs,
 	Spec,
 	Stat,
@@ -213,26 +211,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralBearDruid, {
 			priorityList: [APLListItem.create({ action: doRotation })],
 		});
 	},
-
-	raidSimPresets: [
-		{
-			spec: Spec.SpecFeralBearDruid,
-			talents: Presets.StandardTalents.data,
-			specOptions: Presets.DefaultOptions,
-			consumables: Presets.DefaultConsumables,
-			defaultFactionRaces: {
-				[Faction.Unknown]: Race.RaceUnknown,
-				[Faction.Alliance]: Race.RaceNightElf,
-				[Faction.Horde]: Race.RaceTauren,
-			},
-			defaultGear: {
-				[Faction.Unknown]: {},
-				[Faction.Alliance]: {},
-				[Faction.Horde]: {},
-			},
-			otherDefaults: Presets.OtherDefaults,
-		},
-	],
 });
 
 export class FeralBearDruidSimUI extends IndividualSimUI<Spec.SpecFeralBearDruid> {

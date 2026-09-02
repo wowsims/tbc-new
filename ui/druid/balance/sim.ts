@@ -5,7 +5,7 @@ import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
 
 import { APLRotation, APLRotation_Type } from '../../core/proto/apl';
-import { Faction, ItemSlot, PseudoStat, Race, Spec, Stat } from '../../core/proto/common';
+import { ItemSlot, PseudoStat, Spec, Stat } from '../../core/proto/common';
 import { DEFAULT_HYBRID_CASTER_GEM_STATS, Stats, UnitStat } from '../../core/proto_utils/stats';
 import * as DruidInputs from '../inputs';
 import * as BalanceInputs from './inputs';
@@ -121,30 +121,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecBalanceDruid, {
 	autoRotation: (_player: Player<Spec.SpecBalanceDruid>): APLRotation => {
 		return Presets.StandardRotation.rotation.rotation!;
 	},
-
-	raidSimPresets: [
-		{
-			spec: Spec.SpecBalanceDruid,
-			talents: Presets.StandardTalents.data,
-			specOptions: Presets.DefaultOptions,
-			consumables: Presets.DefaultConsumables,
-			otherDefaults: Presets.OtherDefaults,
-			defaultFactionRaces: {
-				[Faction.Unknown]: Race.RaceUnknown,
-				[Faction.Alliance]: Race.RaceNightElf,
-				[Faction.Horde]: Race.RaceTauren,
-			},
-			defaultGear: {
-				[Faction.Unknown]: {},
-				[Faction.Alliance]: {
-					1: Presets.Phase2PresetGear.gear,
-				},
-				[Faction.Horde]: {
-					1: Presets.Phase2PresetGear.gear,
-				},
-			},
-		},
-	],
 });
 
 export class BalanceDruidSimUI extends IndividualSimUI<Spec.SpecBalanceDruid> {

@@ -107,8 +107,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecElementalShaman, {
 	autoRotation: (_player: Player<Spec.SpecElementalShaman>): APLRotation => {
 		return Presets.ROTATION_PRESET_DEFAULT.rotation.rotation!;
 	},
-
-	raidSimPresets: [],
 });
 
 export class ElementalShamanSimUI extends IndividualSimUI<Spec.SpecElementalShaman> {

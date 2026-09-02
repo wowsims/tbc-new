@@ -4,7 +4,7 @@ import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
 import { Mage } from '../../core/player_classes/mage';
 import { APLListItem, APLRotation, APLRotation_Type, APLValueVariable } from '../../core/proto/apl';
-import { Cooldowns, Faction, ItemSlot, PseudoStat, Race, Spec, Stat } from '../../core/proto/common';
+import { Cooldowns, ItemSlot, PseudoStat, Spec, Stat } from '../../core/proto/common';
 import { DEFAULT_CASTER_GEM_STATS, Stats, UnitStat } from '../../core/proto_utils/stats';
 import { DefaultDebuffs, DefaultRaidBuffs, DefaultPartyBuffs, DefaultIndividualBuffs, DefaultConsumables } from './presets';
 import { SpecRotation } from '../../core/proto_utils/utils';
@@ -191,30 +191,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecMage, {
 			valueVariables: rotation.valueVariables,
 		});
 	},
-
-	raidSimPresets: [
-		{
-			spec: Spec.SpecMage,
-			talents: Presets.Talents.data,
-			specOptions: Presets.DefaultOptions,
-			consumables: Presets.DefaultConsumables,
-			otherDefaults: Presets.OtherDefaults,
-			defaultFactionRaces: {
-				[Faction.Unknown]: Race.RaceUnknown,
-				[Faction.Alliance]: Race.RaceGnome,
-				[Faction.Horde]: Race.RaceTroll,
-			},
-			defaultGear: {
-				[Faction.Unknown]: {},
-				[Faction.Alliance]: {
-					1: Presets.BLANK_GEARSET.gear,
-				},
-				[Faction.Horde]: {
-					1: Presets.BLANK_GEARSET.gear,
-				},
-			},
-		},
-	],
 });
 
 export class MageSimUI extends IndividualSimUI<Spec.SpecMage> {
