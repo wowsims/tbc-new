@@ -2392,6 +2392,10 @@
 				"presim_running": "presimulations running",
 				"iterations_complete": "iterations complete"
 			},
+			"uncertainty": {
+				"spread": "How much individual sim runs vary around this average. Comes from sim randomness only, not from how well the sim matches the game.",
+				"precision": "How precisely this average is known. More iterations narrow it. Comes from sim randomness only, not from how well the sim matches the game."
+			},
 			"reference": {
 				"save_as_reference": "Save as Reference",
 				"use_as_reference": "Use as reference",

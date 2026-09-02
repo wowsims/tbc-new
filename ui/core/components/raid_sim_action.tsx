@@ -202,8 +202,10 @@ export class RaidSimResultsManager {
 			</div>,
 		);
 
+		// Bind to the value+label, not the whole row, so the row's ± can carry
+		// its own tooltip without both firing on the same hover.
 		const setResultTooltip = (selector: string, content: Element | HTMLElement | string) => {
-			const resultDivElem = this.simUI.resultsViewer.contentElem.querySelector<HTMLElement>(selector);
+			const resultDivElem = this.simUI.resultsViewer.contentElem.querySelector<HTMLElement>(`${selector} .topline-result-avg`);
 			if (resultDivElem) {
 				const tooltip = tippy(resultDivElem, { content, placement: 'right' });
 				this.addOnResetCallback(() => tooltip.destroy());
@@ -474,26 +476,26 @@ export class RaidSimResultsManager {
 				resultColumns.push({
 					name: i18n.t('sidebar.results.metrics.dps.label'),
 					average: dpsMetrics.avg,
-					stdev: dpsMetrics.stdev,
+					uncertainty: { value: dpsMetrics.stdev, kind: 'spread' },
 					classes: this.getResultsLineClasses('dps'),
 				});
 				resultColumns.push({
 					name: i18n.t('sidebar.results.metrics.tps.label'),
 					average: tpsMetrics.avg,
-					stdev: tpsMetrics.stdev,
+					uncertainty: { value: tpsMetrics.stdev, kind: 'spread' },
 					classes: this.getResultsLineClasses('tps'),
 				});
 				resultColumns.push({
 					name: i18n.t('sidebar.results.metrics.dtps.label'),
 					average: dtpsMetrics.avg,
-					stdev: dtpsMetrics.stdev,
+					uncertainty: { value: dtpsMetrics.stdev, kind: 'spread' },
 					classes: this.getResultsLineClasses('dtps'),
 				});
 
 				resultColumns.push({
 					name: i18n.t('sidebar.results.metrics.tmi.label'),
 					average: tmiMetrics.avg,
-					stdev: tmiMetrics.stdev,
+					uncertainty: { value: tmiMetrics.stdev, kind: 'spread' },
 					classes: this.getResultsLineClasses('tmi'),
 					unit: 'percentage',
 				});
@@ -502,7 +504,7 @@ export class RaidSimResultsManager {
 					resultColumns.push({
 						name: i18n.t('sidebar.results.metrics.cod.label'),
 						average: chanceOfDeath.avg,
-						stdev: chanceOfDeath.stdev,
+						uncertainty: { value: chanceOfDeath.stdev, kind: 'precision' },
 						classes: this.getResultsLineClasses('cod'),
 						unit: 'percentage',
 					});
@@ -544,7 +546,7 @@ export class RaidSimResultsManager {
 				resultColumns.push({
 					name: i18n.t('sidebar.results.metrics.tto.label'),
 					average: playerMetrics.tto.avg,
-					stdev: playerMetrics.tto.stdev,
+					uncertainty: { value: playerMetrics.tto.stdev, kind: 'spread' },
 					classes: this.getResultsLineClasses('tto'),
 					unit: 'seconds',
 				});
@@ -552,7 +554,7 @@ export class RaidSimResultsManager {
 				resultColumns.push({
 					name: i18n.t('sidebar.results.metrics.hps.label'),
 					average: playerMetrics.hps.avg,
-					stdev: playerMetrics.hps.stdev,
+					uncertainty: { value: playerMetrics.hps.stdev, kind: 'spread' },
 					classes: this.getResultsLineClasses('hps'),
 				});
 			}
@@ -562,7 +564,7 @@ export class RaidSimResultsManager {
 			resultColumns.push({
 				name: i18n.t('sidebar.results.metrics.dps.label'),
 				average: dpsMetrics.avg,
-				stdev: dpsMetrics.stdev,
+				uncertainty: { value: dpsMetrics.stdev, kind: 'spread' },
 				classes: this.getResultsLineClasses('dps'),
 			});
 
@@ -584,7 +586,7 @@ export class RaidSimResultsManager {
 			resultColumns.push({
 				name: i18n.t('sidebar.results.metrics.hps.label'),
 				average: hpsMetrics.avg,
-				stdev: hpsMetrics.stdev,
+				uncertainty: { value: hpsMetrics.stdev, kind: 'spread' },
 				classes: this.getResultsLineClasses('hps'),
 			});
 		}
@@ -617,6 +619,12 @@ export class RaidSimResultsManager {
 		return this.buildResultsTable(resultColumns);
 	}
 
+	private static uncertaintyTooltipRef(kind: UncertaintyKind) {
+		return (el: HTMLElement) => {
+			tippy(el, { content: i18n.t(`sidebar.results.uncertainty.${kind}`) });
+		};
+	}
+
 	private static getResultsLineClasses(metric: keyof ResultMetrics): string {
 		const classes = [this.resultMetricClasses[metric]];
 		if (this.resultMetricCategories[metric]) classes.push(this.metricsClasses[this.resultMetricCategories[metric]]);
@@ -645,7 +653,7 @@ export class RaidSimResultsManager {
 					</thead>
 					<tbody className="metrics-table-body">
 						<tr>
-							{data.map(({ average, stdev, classes, unit }) => {
+							{data.map(({ average, uncertainty, classes, unit }) => {
 								let value = '';
 								let errorDecimals = 0;
 								switch (unit) {
@@ -663,9 +671,9 @@ export class RaidSimResultsManager {
 								return (
 									<td className={clsx('text-center align-top', classes)}>
 										<div className="topline-result-avg">{value}</div>
-										{stdev ? (
-											<div className="topline-result-stdev">
-												<i className="fas fa-plus-minus fa-xs"></i> {formatToNumber(stdev, { maximumFractionDigits: errorDecimals })}
+										{uncertainty ? (
+											<div className="topline-result-stdev" ref={this.uncertaintyTooltipRef(uncertainty.kind)}>
+												<i className="fas fa-plus-minus fa-xs"></i> {formatToNumber(uncertainty.value, { maximumFractionDigits: errorDecimals })}
 											</div>
 										) : undefined}
 										<div className="results-reference hide">
@@ -698,10 +706,10 @@ export class RaidSimResultsManager {
 									{label}
 								</span>
 							</span>
-							{column.stdev && (
-								<span className="topline-result-stdev">
+							{column.uncertainty && (
+								<span className="topline-result-stdev" ref={this.uncertaintyTooltipRef(column.uncertainty.kind)}>
 									(<i className="fas fa-plus-minus fa-xs"></i>
-									{column.stdev.toFixed(errorDecimals)})
+									{column.uncertainty.value.toFixed(errorDecimals)})
 								</span>
 							)}
 							<div className="results-reference hide">
@@ -729,10 +737,19 @@ type ToplineResultOptions = {
 	asList?: boolean;
 };
 
+// What a metric's displayed ± means. Not every metric shows the same kind of
+// number, so each column states its own so the tooltip can say which it is.
+//  - 'spread':    per-iteration standard deviation; how much individual
+//                 iterations vary around the average (DPS, TPS, ...).
+//  - 'precision': standard error of the average; how well the average itself
+//                 is pinned down (Chance of Death, whose per-iteration values
+//                 are just 0 or 1, so a spread would be uninformative).
+type UncertaintyKind = 'spread' | 'precision';
+
 type ResultMetric = {
 	name: string;
 	average: number;
-	stdev?: number;
+	uncertainty?: { value: number; kind: UncertaintyKind };
 	classes?: string;
 	unit?: 'percentage' | 'number' | 'seconds' | undefined;
 };
