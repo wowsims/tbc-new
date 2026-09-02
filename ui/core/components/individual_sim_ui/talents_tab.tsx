@@ -67,7 +67,6 @@ export class TalentsTab<SpecType extends Spec> extends SimTab {
 				});
 			},
 			changeEmitters: [this.simUI.player.talentsChangeEmitter],
-			equals: (a: SavedTalents, b: SavedTalents) => SavedTalents.equals(a, b),
 			toJson: (a: SavedTalents) => SavedTalents.toJson(a),
 			fromJson: (obj: any) => SavedTalents.fromJson(obj),
 			nameLabel: i18n.t('talents_tab.saved_talents.name_label'),

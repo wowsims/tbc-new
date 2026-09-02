@@ -11,6 +11,7 @@ import { Input, InputConfig } from '../input.js';
 // ModObject is the object being modified (Sim, Player, or Target).
 // ValueType is either number or boolean.
 export interface IconPickerConfig<ModObject, ValueType> extends InputConfig<ModObject, ValueType> {
+	changedEvent: (obj: ModObject) => TypedEvent<any>;
 	actionId: (modObj: ModObject) => ActionId | null;
 
 	// The number of possible 'states' this icon can have. Most inputs will use 2
