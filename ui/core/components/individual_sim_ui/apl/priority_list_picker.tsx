@@ -39,7 +39,7 @@ export class APLPriorityListPicker extends Component {
 			extraActions: [
 				AplHelpers.extractToVariableAction(
 					simUI.player,
-					(index) => simUI.player.aplRotation.priorityList[index]?.action?.condition,
+					index => simUI.player.aplRotation.priorityList[index]?.action?.condition,
 					(index, ref) => {
 						simUI.player.aplRotation.priorityList[index].action!.condition = ref;
 					},
@@ -80,23 +80,25 @@ class APLListItemPicker extends Input<Player<any>, APLListItem> {
 			return validations;
 		});
 
-		this.hidePicker = new APLHidePicker(itemHeaderElem, player, {
-			changedEvent: () => this.player.rotationChangeEmitter,
-			getValue: () => this.getItem().hide,
-			setValue: (eventID: EventID, player: Player<any>, newValue: boolean) => {
-				this.getItem().hide = newValue;
-				this.player.rotationChangeEmitter.emit(eventID);
-			},
-		});
+		this.hidePicker = this.addChild(
+			new APLHidePicker(itemHeaderElem, player, {
+				getValue: () => this.getItem().hide,
+				setValue: (eventID: EventID, player: Player<any>, newValue: boolean) => {
+					this.getItem().hide = newValue;
+					this.player.rotationChangeEmitter.emit(eventID);
+				},
+			}),
+		);
 
-		this.actionPicker = new APLActionPicker(this.rootElem, this.player, {
-			changedEvent: () => this.player.rotationChangeEmitter,
-			getValue: () => this.getItem().action!,
-			setValue: (eventID: EventID, player: Player<any>, newValue: APLAction) => {
-				this.getItem().action = newValue;
-				this.player.rotationChangeEmitter.emit(eventID);
-			},
-		});
+		this.actionPicker = this.addChild(
+			new APLActionPicker(this.rootElem, this.player, {
+				getValue: () => this.getItem().action!,
+				setValue: (eventID: EventID, player: Player<any>, newValue: APLAction) => {
+					this.getItem().action = newValue;
+					this.player.rotationChangeEmitter.emit(eventID);
+				},
+			}),
+		);
 		this.init();
 	}
 

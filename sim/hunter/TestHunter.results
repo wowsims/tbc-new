@@ -365,6 +365,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestHunter-AllItems-Bonereaver'sEdge-17076"
+ value: {
+  dps: 3526.60446
+  tps: 1746.14026
+  dtps: 13.2517
+ }
+}
+dps_results: {
  key: "TestHunter-AllItems-BraidedEterniumChain-24114"
  value: {
   dps: 3504.08776

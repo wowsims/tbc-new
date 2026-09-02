@@ -60,11 +60,7 @@ export class GearTab extends SimTab {
 		});
 
 		const builds = (this.simUI.individualConfig.presets.builds ?? []).filter(build =>
-			Object.keys(build).some(
-				category =>
-					[PresetConfigurationCategory.Gear as string].includes(category) &&
-					!!build[category as keyof PresetBuild],
-			),
+			Object.keys(build).some(category => [PresetConfigurationCategory.Gear as string].includes(category) && !!build[category as keyof PresetBuild]),
 		);
 
 		this.simUI.sim.waitForInit().then(() => {
@@ -112,9 +108,7 @@ export class GearTab extends SimTab {
 
 		// Active state tracking
 		const checkActive = () => {
-			const isActive = build.gear
-				? EquipmentSpec.equals(build.gear.gear, this.simUI.player.getGear().asSpec())
-				: false;
+			const isActive = build.gear ? EquipmentSpec.equals(build.gear.gear, this.simUI.player.getGear().asSpec()) : false;
 			dataElem.classList[isActive ? 'add' : 'remove']('active');
 		};
 		checkActive();
@@ -192,7 +186,6 @@ export class GearTab extends SimTab {
 				});
 			},
 			changeEmitters: [this.simUI.player.changeEmitter],
-			equals: (a: SavedGearSet, b: SavedGearSet) => SavedGearSet.equals(a, b),
 			toJson: (a: SavedGearSet) => SavedGearSet.toJson(a),
 			fromJson: (obj: any) => SavedGearSet.fromJson(obj),
 		});
@@ -235,7 +228,6 @@ export class GearTab extends SimTab {
 				});
 			},
 			changeEmitters: [this.simUI.player.changeEmitter],
-			equals: (a: SavedGearSet, b: SavedGearSet) => SavedGearSet.equals(a, b),
 			toJson: (a: SavedGearSet) => SavedGearSet.toJson(a),
 			fromJson: (obj: any) => SavedGearSet.fromJson(obj),
 		});
