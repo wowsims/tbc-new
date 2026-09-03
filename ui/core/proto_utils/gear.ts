@@ -326,16 +326,6 @@ export class Gear extends BaseGear {
 		return this;
 	}
 
-	withoutMetaGem(): Gear {
-		const headItem = this.getEquippedItem(ItemSlot.ItemSlotHead);
-		const metaGem = this.getMetaGem();
-		if (headItem && metaGem) {
-			return this.withEquippedItem(ItemSlot.ItemSlotHead, headItem.removeGemsWithId(metaGem.id));
-		} else {
-			return this;
-		}
-	}
-
 	withoutGems(ignoreSlots?: Set<ItemSlot>, ignoreMeta?: boolean): Gear {
 		let curGear: Gear = this;
 		const metaGem = this.getMetaGem();

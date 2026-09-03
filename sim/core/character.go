@@ -536,7 +536,7 @@ func (character *Character) HasRingEquipped(itemID int32) bool {
 
 func (character *Character) HasMetaGemEquipped(gemID int32) bool {
 	for _, gem := range character.Head().Gems {
-		if gem.ID == gemID {
+		if gem.ID == gemID && !gem.Disabled {
 			return true
 		}
 	}

@@ -730,6 +730,9 @@ message ItemSpec {
 	int32 random_suffix = 2;
 	int32 enchant = 3;
 	repeated int32 gems = 4;
+	// Set by the UI when the socketed meta gem's requirements are not met. The gem stays in its
+	// socket so the item's socket bonus still applies, but contributes no stats and no effect.
+	bool meta_gem_disabled = 5;
 }
 
 

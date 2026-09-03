@@ -16,7 +16,7 @@ export const addQuickEnchantPopover = (player: Player<any>, tooltipElement: HTML
 		},
 		item,
 		getItems: (currentItem: EquippedItem) => {
-			const eligibleEnchants = player.sim.db.getEnchants(itemSlot);
+			const eligibleEnchants = player.getEnchants(itemSlot);
 			const favoriteEnchants = player.sim.getFilters().favoriteEnchants;
 			const eligibleFavoriteEnchants = favoriteEnchants
 				?.map(favoriteId => {
@@ -31,7 +31,11 @@ export const addQuickEnchantPopover = (player: Player<any>, tooltipElement: HTML
 			}));
 		},
 		onItemClick: clickedItem => {
-			player.equipItem(TypedEvent.nextEventID(), itemSlot, item.withEnchant(clickedItem));
+			// Read the equipped item at click time. The one captured when this popover was built
+			// goes stale as soon as the slot changes, and writing it back would revert the item.
+			const currentItem = player.getEquippedItem(itemSlot);
+			if (!currentItem) return;
+			player.equipItem(TypedEvent.nextEventID(), itemSlot, currentItem.withEnchant(clickedItem));
 		},
 		footerButton: {
 			label: i18n.t('gear_tab.gear_picker.quick_popovers.favorite_enchants.open_enchants'),
