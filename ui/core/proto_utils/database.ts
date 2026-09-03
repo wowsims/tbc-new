@@ -370,10 +370,9 @@ export class Database {
 	static async getItemIconData(itemId: number, options: { signal?: AbortSignal } = {}): Promise<IconData> {
 		const db = await Database.get({ signal: options?.signal });
 		const data = db.itemIcons[itemId];
-		const cacheKey = `item-${itemId}`;
 		if (!data?.icon) {
-			if (!iconRequestCache.has(cacheKey)) iconRequestCache.set(cacheKey, Database.getWowheadItemTooltipData(itemId, { signal: options?.signal }));
-			db.itemIcons[itemId] = await iconRequestCache.get(cacheKey)!;
+			// The request is shared between callers, so it must not inherit any one caller's signal.
+			db.itemIcons[itemId] = await Database.sharedIconRequest(`item-${itemId}`, () => Database.getWowheadItemTooltipData(itemId));
 		}
 		return db.itemIcons[itemId];
 	}
@@ -381,25 +380,37 @@ export class Database {
 	static async getSpellIconData(spellId: number, options: { signal?: AbortSignal } = {}): Promise<IconData> {
 		const db = await Database.get({ signal: options?.signal });
 		const data = db.spellIcons[spellId];
-		const cacheKey = `spell-${spellId}`;
 		if (!data?.icon) {
-			if (!iconRequestCache.has(cacheKey)) iconRequestCache.set(cacheKey, Database.getWowheadSpellTooltipData(spellId, { signal: options?.signal }));
-			db.spellIcons[spellId] = await iconRequestCache.get(cacheKey)!;
+			db.spellIcons[spellId] = await Database.sharedIconRequest(`spell-${spellId}`, () => Database.getWowheadSpellTooltipData(spellId));
 		}
 
 		return db.spellIcons[spellId];
 	}
 
-	private static async getWowheadItemTooltipData(id: number, options: { signal?: AbortSignal } = {}): Promise<IconData> {
-		return Database.getWowheadTooltipData(id, 'item', { signal: options?.signal });
+	// Dedupes concurrent lookups for the same id. A request that comes back without an icon is
+	// dropped from the cache so a transient failure isn't remembered as "this id has no icon".
+	private static sharedIconRequest(cacheKey: string, makeRequest: () => Promise<IconData>): Promise<IconData> {
+		let request = iconRequestCache.get(cacheKey);
+		if (!request) {
+			request = makeRequest().then(data => {
+				if (!data.icon) iconRequestCache.delete(cacheKey);
+				return data;
+			});
+			iconRequestCache.set(cacheKey, request);
+		}
+		return request;
 	}
-	private static async getWowheadSpellTooltipData(id: number, options: { signal?: AbortSignal } = {}): Promise<IconData> {
-		return Database.getWowheadTooltipData(id, 'spell', { signal: options?.signal });
+
+	private static async getWowheadItemTooltipData(id: number): Promise<IconData> {
+		return Database.getWowheadTooltipData(id, 'item');
 	}
-	private static async getWowheadTooltipData(id: number, tooltipPostfix: string, options: { signal?: AbortSignal } = {}): Promise<IconData> {
+	private static async getWowheadSpellTooltipData(id: number): Promise<IconData> {
+		return Database.getWowheadTooltipData(id, 'spell');
+	}
+	private static async getWowheadTooltipData(id: number, tooltipPostfix: string): Promise<IconData> {
 		const url = `https://nether.wowhead.com/tbc/tooltip/${tooltipPostfix}/${id}?lvl=${CHARACTER_LEVEL}&dataEnv=${WOWHEAD_EXPANSION_ENV}`;
 		try {
-			const response = await fetch(url, { signal: options?.signal });
+			const response = await fetch(url);
 			const json = await response.json();
 			let rank = 0;
 			if (tooltipPostfix === 'spell') {
@@ -415,9 +426,6 @@ export class Database {
 				rank,
 			});
 		} catch (e) {
-			if (e instanceof DOMException && e.name === 'AbortError') {
-				return IconData.create();
-			}
 			console.error('Error while fetching url: ' + url + '\n\n' + e);
 			return IconData.create();
 		}
