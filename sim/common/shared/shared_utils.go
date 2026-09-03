@@ -2,6 +2,7 @@ package shared
 
 import (
 	"fmt"
+	"slices"
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
@@ -168,11 +169,17 @@ func factory_StatBonusEffect(config ProcStatBonusEffect, extraSpell func(agent c
 				procSpell = extraSpell(agent)
 			}
 
+			allWeaponSlots := core.AllWeaponSlots()
+			isWeaponSlot := slices.ContainsFunc(eligibleSlots, func(s proto.ItemSlot) bool {
+				return slices.Contains(allWeaponSlots, s)
+			})
+
 			triggerAura := character.MakeProcTriggerAura(core.ProcTrigger{
 				ActionID:           triggerActionID,
 				Name:               config.Name,
 				Callback:           config.Callback,
 				ProcMask:           config.ProcMask,
+				SpellFlagsExclude:  core.Ternary(source.isEnchant || isWeaponSlot, core.SpellFlagSuppressWeaponProcs, core.SpellFlagSuppressEquipProcs),
 				Outcome:            config.Outcome,
 				RequireDamageDealt: config.RequireDamageDealt,
 				ClassSpellsOnly:    config.ClassSpellsOnly,

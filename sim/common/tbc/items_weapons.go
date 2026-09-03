@@ -39,6 +39,7 @@ func init() {
 
 		procTrigger := character.MakeProcTriggerAura(core.ProcTrigger{
 			Name:               "Despair",
+			SpellFlagsExclude:  core.SpellFlagSuppressWeaponProcs,
 			DPM:                dpm,
 			TriggerImmediately: true,
 			Outcome:            core.OutcomeLanded,
@@ -142,6 +143,7 @@ func init() {
 
 		procTrigger := character.MakeProcTriggerAura(core.ProcTrigger{
 			Name:               "Power of the Sun King",
+			SpellFlagsExclude:  core.SpellFlagSuppressWeaponProcs,
 			DPM:                dpm,
 			TriggerImmediately: true,
 			Outcome:            core.OutcomeLanded,
@@ -193,6 +195,7 @@ func init() {
 
 		procTrigger := character.MakeProcTriggerAura(core.ProcTrigger{
 			Name:               "World Breaker - Trigger",
+			SpellFlagsExclude:  core.SpellFlagSuppressWeaponProcs,
 			DPM:                dpm,
 			Outcome:            core.OutcomeLanded,
 			Callback:           core.CallbackOnSpellHitDealt,
@@ -318,6 +321,7 @@ func init() {
 
 		procTrigger := character.MakeProcTriggerAura(core.ProcTrigger{
 			Name:               "Blinkstrike",
+			SpellFlagsExclude:  core.SpellFlagSuppressWeaponProcs,
 			DPM:                dpm,
 			TriggerImmediately: true,
 			Outcome:            core.OutcomeLanded,
@@ -359,11 +363,12 @@ func init() {
 		})
 
 		aura := character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:            "Siphon Essence",
-			MetricsActionID: core.ActionID{SpellID: 40293},
-			Duration:        time.Second * 6,
-			ProcMask:        core.ProcMaskMelee,
-			Callback:        core.CallbackOnSpellHitDealt,
+			Name:              "Siphon Essence",
+			MetricsActionID:   core.ActionID{SpellID: 40293},
+			Duration:          time.Second * 6,
+			SpellFlagsExclude: core.SpellFlagSuppressWeaponProcs,
+			ProcMask:          core.ProcMaskMelee,
+			Callback:          core.CallbackOnSpellHitDealt,
 			Handler: func(sim *core.Simulation, _ *core.Spell, result *core.SpellResult) {
 				spell.Cast(sim, result.Target)
 			},
@@ -372,10 +377,11 @@ func init() {
 		dpm := character.NewDynamicLegacyProcForWeapon(32262, 1, 0)
 
 		procTrigger := character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:     "Syphon of the Nathrezim - Trigger",
-			DPM:      dpm,
-			Outcome:  core.OutcomeLanded,
-			Callback: core.CallbackOnSpellHitDealt,
+			Name:              "Syphon of the Nathrezim - Trigger",
+			SpellFlagsExclude: core.SpellFlagSuppressWeaponProcs,
+			DPM:               dpm,
+			Outcome:           core.OutcomeLanded,
+			Callback:          core.CallbackOnSpellHitDealt,
 			Handler: func(sim *core.Simulation, _ *core.Spell, result *core.SpellResult) {
 				aura.Activate(sim)
 			},
@@ -413,11 +419,12 @@ func init() {
 
 				setBonusAura.
 					AttachProcTrigger(core.ProcTrigger{
-						Name:     "The Twin Blades of Azzinoth - Trigger",
-						DPM:      dpm,
-						ICD:      time.Second * 45,
-						Outcome:  core.OutcomeLanded,
-						Callback: core.CallbackOnSpellHitDealt,
+						Name:              "The Twin Blades of Azzinoth - Trigger",
+						SpellFlagsExclude: core.SpellFlagSuppressEquipProcs,
+						DPM:               dpm,
+						ICD:               time.Second * 45,
+						Outcome:           core.OutcomeLanded,
+						Callback:          core.CallbackOnSpellHitDealt,
 						Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 							aura.Activate(sim)
 						},

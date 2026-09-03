@@ -24,6 +24,7 @@ func init() {
 
 		procTrigger := character.MakeProcTriggerAura(core.ProcTrigger{
 			Name:               "Hand Of Justice",
+			SpellFlagsExclude:  core.SpellFlagSuppressEquipProcs,
 			DPM:                dpm,
 			ICD:                time.Second * 2,
 			TriggerImmediately: true,

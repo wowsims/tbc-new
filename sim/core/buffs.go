@@ -1116,6 +1116,7 @@ func WindfuryTotemAura(char *Character, isImpoved bool) *Aura {
 	wfProcTrigger := char.MakeProcTriggerAura(ProcTrigger{
 		Name:               "Windfury Totem Trigger",
 		MetricsActionID:    ActionID{SpellID: 25580, Tag: -1},
+		SpellFlagsExclude:  SpellFlagSuppressEquipProcs,
 		ProcChance:         0.2,
 		Duration:           NeverExpires,
 		Outcome:            OutcomeLanded,

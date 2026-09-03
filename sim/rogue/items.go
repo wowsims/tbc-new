@@ -144,7 +144,7 @@ func init() {
 		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
 			Name:               "Perceived Weakness",
 			ActionID:           core.ActionID{ItemID: 30450},
-			ProcMask:           core.ProcMaskMeleeSpecial,
+			ProcMask:           core.ProcMaskMeleeSpecial | core.ProcMaskMeleeProc,
 			ICD:                time.Second * 30,
 			RequireDamageDealt: true,
 			Outcome:            core.OutcomeLanded,

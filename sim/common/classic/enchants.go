@@ -61,11 +61,12 @@ func init() {
 		ohAura := createCrusaderAuras(2)
 
 		character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:     "Enchant Weapon - Crusader",
-			ActionID: actionID,
-			DPM:      character.NewDynamicLegacyProcForEnchant(1900, 1.0, 0),
-			Outcome:  core.OutcomeLanded,
-			Callback: core.CallbackOnSpellHitDealt,
+			Name:              "Enchant Weapon - Crusader",
+			ActionID:          actionID,
+			SpellFlagsExclude: core.SpellFlagSuppressWeaponProcs,
+			DPM:               character.NewDynamicLegacyProcForEnchant(1900, 1.0, 0),
+			Outcome:           core.OutcomeLanded,
+			Callback:          core.CallbackOnSpellHitDealt,
 			Handler: func(sim *core.Simulation, spell *core.Spell, _ *core.SpellResult) {
 				core.Ternary(spell.IsOH(), ohAura, mhAura).Activate(sim)
 				character.GainHealth(sim, sim.Roll(45, 75), healthMetrics)
