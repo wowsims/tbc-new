@@ -1,5 +1,5 @@
-import { Player } from '../../player';
 import i18n from '../../../i18n/config';
+import { Player } from '../../player';
 import { ItemSlot } from '../../proto/common';
 import { EquippedItem } from '../../proto_utils/equipped_item';
 import { TypedEvent } from '../../typed_event';
@@ -35,8 +35,6 @@ export const addQuickGemPopover = (
 			}));
 		},
 		onItemClick: clickedItem => {
-			// Read the equipped item at click time. The one captured when this popover was built
-			// goes stale as soon as the slot changes, and writing it back would revert the item.
 			const currentItem = player.getEquippedItem(itemSlot);
 			if (!currentItem) return;
 			player.equipItem(TypedEvent.nextEventID(), itemSlot, currentItem.withGem(clickedItem, socketIdx));
