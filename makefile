@@ -6,23 +6,6 @@ ASSETS := $(patsubst assets/%,$(OUT_DIR)/assets/%,$(ASSETS_INPUT))
 rwildcard = $(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
 GOROOT := $(shell go env GOROOT)
 UI_SRC := $(shell find ui -name '*.ts' -o -name '*.tsx' -o -name '*.scss' -o -name '*.html')
-PAGE_INDECES := ui/druid/balance/index.html \
-				ui/druid/feralcat/index.html \
-				ui/druid/feralbear/index.html \
-				ui/druid/restoration/index.html \
-				ui/hunter/dps/index.html \
-				ui/mage/dps/index.html \
-				ui/paladin/holy/index.html \
-				ui/paladin/protection/index.html \
-				ui/paladin/retribution/index.html \
-				ui/priest/dps/index.html \
-				ui/rogue/dps/index.html \
-				ui/shaman/elemental/index.html \
-				ui/shaman/enhancement/index.html \
-				ui/shaman/restoration/index.html \
-				ui/warlock/dps/index.html \
-				ui/warrior/dps/index.html \
-				ui/warrior/protection/index.html
 
 $(OUT_DIR)/.dirstamp: \
   $(OUT_DIR)/lib.wasm \
@@ -33,9 +16,9 @@ $(OUT_DIR)/.dirstamp: \
 
 $(OUT_DIR)/bundle/.dirstamp: \
   $(UI_SRC) \
-  $(PAGE_INDECES) \
   vite.config.mts \
   vite.build-workers.mts \
+  tools/vite/spec_pages.mts \
   node_modules \
   tsconfig.json \
   ui/core/index.ts \
@@ -64,17 +47,13 @@ clean:
 	  binary_dist \
 	  ui/core/index.ts \
 	  ui/core/proto/*.ts \
-	  node_modules \
-	  $(PAGE_INDECES)
+	  node_modules
 	find . -name "*.results.tmp" -type f -delete
 
 ui/core/proto/api.ts: proto/*.proto node_modules
 	npx protoc --ts_opt generate_dependencies --ts_out ui/core/proto --proto_path proto proto/api.proto
 	npx protoc --ts_out ui/core/proto --proto_path proto proto/test.proto
 	npx protoc --ts_out ui/core/proto --proto_path proto proto/ui.proto
-
-ui/%/index.html: ui/index_template.html
-	cat ui/index_template.html | sed -e 's/@@CLASS@@/$(shell dirname $(@D) | xargs basename)/g' -e 's/@@SPEC@@/$(shell basename $(@D))/g' > $@
 
 .PHONY: package.json
 
@@ -105,13 +84,6 @@ node_modules: package-lock.json
 .PHONY: host_%
 host_%: $(OUT_DIR) node_modules
 	npx http-server $(OUT_DIR)/..
-
-# Generic rule for building index.html for any class directory
-$(OUT_DIR)/%/index.html: ui/index_template.html $(OUT_DIR)/assets
-	$(eval title := $(shell echo $(shell basename $(@D)) | sed -r 's/(^|_)([a-z])/\U \2/g' | cut -c 2-))
-	echo $(title)
-	mkdir -p $(@D)
-	cat ui/index_template.html | sed -e 's/@@CLASS@@/$(shell dirname $((@D)) | xargs basename)/g' -e 's/@@SPEC@@/$(shell basename $(@D))/g' > $@
 
 .PHONY: wasm
 wasm: $(OUT_DIR)/lib.wasm
