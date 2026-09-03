@@ -1,5 +1,3 @@
-import { ref } from 'tsx-vanilla';
-
 import { GemColor, ItemSlot } from '../../proto/common';
 import { UIGem as Gem } from '../../proto/ui';
 import { ActionId } from '../../proto_utils/action_id';
@@ -32,23 +30,30 @@ export const createNameDescriptionLabel = (nameDesc: string) => {
 	return <small className="heroic-label">({nameDesc})</small>;
 };
 
+// Points the gem icon inside a container built by createGemContainer at `gem`, or hides it when
+// the socket is empty. Resolves with the filled ActionId so callers can wire up extra state.
+export const setGemInContainer = async (container: HTMLElement, gem: Gem | null, emptySocketIconUrl: string): Promise<ActionId | null> => {
+	const gemIconElem = container.querySelector<HTMLImageElement>('.gem-icon')!;
+	if (!gem) {
+		gemIconElem.classList.add('hide');
+		gemIconElem.src = emptySocketIconUrl;
+		return null;
+	}
+
+	gemIconElem.classList.remove('hide');
+	const filledId = await ActionId.fromItemId(gem.id).fill();
+	gemIconElem.src = filledId.iconUrl;
+	return filledId;
+};
+
 export const createGemContainer = (socketColor: GemColor, gem: Gem | null, index: number) => {
-	const gemIconElem = ref<HTMLImageElement>();
-	const gemContainerElem = ref<HTMLAnchorElement>();
 	const gemContainer = (
-		<a ref={gemContainerElem} className="gem-socket-container" href="javascript:void(0)" dataset={{ socketIdx: index }}>
-			<img ref={gemIconElem} className={`gem-icon ${!gem ? 'hide' : ''}`} />
+		<a className="gem-socket-container" href="javascript:void(0)" dataset={{ socketIdx: index }}>
+			<img className="gem-icon hide" />
 			<img className="socket-icon" src={getEmptyGemSocketIconUrl(socketColor)} />
 		</a>
-	);
+	) as HTMLAnchorElement;
 
-	if (gem) {
-		ActionId.fromItemId(gem.id)
-			.fill()
-			.then(filledId => {
-				filledId.setWowheadHref(gemContainerElem.value!);
-				gemIconElem.value!.src = filledId.iconUrl;
-			});
-	}
-	return gemContainer as HTMLAnchorElement;
+	setGemInContainer(gemContainer, gem, getEmptyGemSocketIconUrl(socketColor)).then(filledId => filledId?.setWowheadHref(gemContainer));
+	return gemContainer;
 };
