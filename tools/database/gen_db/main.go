@@ -178,6 +178,9 @@ func main() {
 
 	for _, consumable := range consumables {
 		db.MergeConsumable(consumable.ToProto())
+		// The consumable proto has no icon field, so ship it in the icon table instead. Without
+		// this the UI fetches every consumable icon from nether.wowhead.com on each page load.
+		db.AddItemIcon(int32(consumable.Id), strings.ToLower(database.GetIconName(iconsMap, consumable.IconFileDataID)), consumable.Name)
 	}
 
 	for _, consumable := range database.ConsumableOverrides {

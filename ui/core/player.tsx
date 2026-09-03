@@ -1188,10 +1188,11 @@ export class Player<SpecType extends Spec> {
 		return ep;
 	}
 
-	async setWowheadData(equippedItem: EquippedItem, elem: HTMLElement) {
+	async setWowheadData(equippedItem: EquippedItem, elem: HTMLElement | HTMLElement[]) {
 		const gemIds = equippedItem.gems.length ? equippedItem.curGems().map(gem => (gem ? gem.id : 0)) : [];
 		const enchantIds = [equippedItem.enchant?.effectId].filter((id): id is number => id !== undefined);
-		equippedItem.asActionId().setWowheadDataset(elem, {
+		const elems = Array.isArray(elem) ? elem : [elem];
+		equippedItem.asActionId().setWowheadDataset(elems, {
 			gemIds,
 			itemLevel: Number(equippedItem.ilvl),
 			enchantIds: enchantIds,
@@ -1202,7 +1203,7 @@ export class Player<SpecType extends Spec> {
 				.map(ei => ei!.item.id),
 		});
 
-		elem.dataset.whtticon = 'false';
+		elems.forEach(e => (e.dataset.whtticon = 'false'));
 	}
 
 	static ARMOR_SLOTS: Array<ItemSlot> = [
