@@ -13,7 +13,7 @@ import P3SwordsGear from './gear_sets/p3.gear.json';
 // Eventually we will import these values for the raid sim too, so its good to
 // keep them in a separate file.
 
-export const SINSITER_APL = PresetUtils.makePresetAPLRotation('SS/Hemo/Shiv', SinisterAPL);
+export const SINSITER_APL = PresetUtils.makePresetAPLRotation('Rogue (Check Variables for Backstab/Shiv)', SinisterAPL);
 
 export const P1_SWORDS_GEAR = PresetUtils.makePresetGear('P1 Swords', P1SwordsGear);
 export const P2_SWORDS_GEAR = PresetUtils.makePresetGear('P2 Swords', P2SwordsGear);
