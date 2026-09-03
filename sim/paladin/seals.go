@@ -234,7 +234,7 @@ func (paladin *Paladin) registerSealOfRighteousness(seal seal) {
 		ActionID:       core.ActionID{SpellID: seal.proc.spellID},
 		SpellSchool:    core.SpellSchoolHoly,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
-		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagPassiveSpell | core.SpellFlagSuppressEquipProcs,
+		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagPassiveSpell | core.SpellFlagSuppressEquipProcs | core.SpellFlagSuppressWeaponProcs,
 		ClassSpellMask: SpellMaskSealOfRighteousness,
 
 		DamageMultiplier: 1,
@@ -653,7 +653,7 @@ func (paladin *Paladin) registerSealOfBlood() {
 		ClassSpellMask:   SpellMaskSealOfBlood,
 		SpellSchool:      core.SpellSchoolHoly,
 		ProcMask:         core.ProcMaskMeleeProc,
-		Flags:            core.SpellFlagMeleeMetrics | core.SpellFlagPassiveSpell | core.SpellFlagSuppressEquipProcs,
+		Flags:            core.SpellFlagMeleeMetrics | core.SpellFlagPassiveSpell | core.SpellFlagSuppressEquipProcs | core.SpellFlagSuppressWeaponProcs,
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
 		CritMultiplier:   paladin.DefaultMeleeCritMultiplier(),

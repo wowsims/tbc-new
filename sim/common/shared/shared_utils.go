@@ -174,12 +174,18 @@ func factory_StatBonusEffect(config ProcStatBonusEffect, extraSpell func(agent c
 				return slices.Contains(allWeaponSlots, s)
 			})
 
+			// What the effect is barred from being triggered by. An enchant or a weapon-slot item
+			// is a weapon proc, anything else is an equip proc. The stack trigger has to be handed
+			// the same value: gating only the trigger below would suppress the initial proc while
+			// still letting a suppressed spell feed the stacks.
+			suppressedBy := core.Ternary(source.isEnchant || isWeaponSlot, core.SpellFlagSuppressWeaponProcs, core.SpellFlagSuppressEquipProcs)
+
 			triggerAura := character.MakeProcTriggerAura(core.ProcTrigger{
 				ActionID:           triggerActionID,
 				Name:               config.Name,
 				Callback:           config.Callback,
 				ProcMask:           config.ProcMask,
-				SpellFlagsExclude:  core.Ternary(source.isEnchant || isWeaponSlot, core.SpellFlagSuppressWeaponProcs, core.SpellFlagSuppressEquipProcs),
+				SpellFlagsExclude:  suppressedBy,
 				Outcome:            config.Outcome,
 				RequireDamageDealt: config.RequireDamageDealt,
 				ClassSpellsOnly:    config.ClassSpellsOnly,
@@ -189,7 +195,7 @@ func factory_StatBonusEffect(config ProcStatBonusEffect, extraSpell func(agent c
 				Handler:            procHandler(config, effect, procAura, windowAura, procSpell),
 			})
 
-			attachStackTrigger(character, config, effect, procAura, windowAura)
+			attachStackTrigger(character, config, effect, procAura, windowAura, suppressedBy)
 
 			// Carried on the stacking path too. Nothing in the stacking machinery reads this -
 			// CanProc consults only IsSwapped and CustomProcCondition - so it gates nothing. What
@@ -297,7 +303,7 @@ func procDPM(character *core.Character, config ProcStatBonusEffect, source effec
 // Event-driven stacks come from their own trigger: the container's proc flags decide what counts,
 // and it only does anything while the window is open. A timer-driven stacking aura fills itself and
 // needs none of this, so this is a no-op for everything else.
-func attachStackTrigger(character *core.Character, config ProcStatBonusEffect, effect *proto.ItemEffect, statAura *core.StatBuffAura, windowAura *core.Aura) {
+func attachStackTrigger(character *core.Character, config ProcStatBonusEffect, effect *proto.ItemEffect, statAura *core.StatBuffAura, windowAura *core.Aura, suppressedBy core.SpellFlag) {
 	stackProc := effect.GetStackProc()
 	if stackProc == nil || windowAura == nil || config.StackCallback == core.CallbackEmpty {
 		return
@@ -307,13 +313,14 @@ func attachStackTrigger(character *core.Character, config ProcStatBonusEffect, e
 	// the window is open, needs no active check, and cannot outlive the item the way a permanent
 	// trigger would across an item swap.
 	windowAura.AttachProcTriggerCallback(&character.Unit, core.ProcTrigger{
-		Name:       config.Name + " Stack Trigger",
-		Callback:   config.StackCallback,
-		ProcMask:   config.StackProcMask,
-		Outcome:    config.StackOutcome,
-		ProcChance: stackProc.GetProcChance(),
-		DPM:        stackTriggerDPM(character, stackProc, config.StackProcMask),
-		ICD:        time.Millisecond * time.Duration(stackProc.IcdMs),
+		Name:              config.Name + " Stack Trigger",
+		Callback:          config.StackCallback,
+		ProcMask:          config.StackProcMask,
+		SpellFlagsExclude: suppressedBy,
+		Outcome:           config.StackOutcome,
+		ProcChance:        stackProc.GetProcChance(),
+		DPM:               stackTriggerDPM(character, stackProc, config.StackProcMask),
+		ICD:               time.Millisecond * time.Duration(stackProc.IcdMs),
 		Handler: func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
 			if !statAura.IsActive() {
 				return
@@ -482,6 +489,7 @@ func attachStackingCDTrigger(character *core.Character, config StackingStatBonus
 		Callback:           config.Callback,
 		ProcMask:           config.ProcMask,
 		SpellFlags:         config.SpellFlags,
+		SpellFlagsExclude:  core.SpellFlagSuppressEquipProcs,
 		Outcome:            config.Outcome,
 		RequireDamageDealt: config.RequireDamageDealt,
 		ProcChance:         core.TernaryFloat64(stackDPM == nil, stackProc.GetProcChance(), 0),

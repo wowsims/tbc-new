@@ -520,8 +520,8 @@ dps_results: {
 dps_results: {
  key: "TestRetribution-AllItems-DoomplateBattlegear"
  value: {
-  dps: 1667.22796
-  tps: 927.76059
+  dps: 1662.56286
+  tps: 925.2272
   dtps: 14.05926
  }
 }
@@ -616,8 +616,8 @@ dps_results: {
 dps_results: {
  key: "TestRetribution-AllItems-EnchantWeapon-Deathfrost-3273"
  value: {
-  dps: 1886.71351
-  tps: 1049.6432
+  dps: 1886.54338
+  tps: 1049.55584
   dtps: 13.46921
  }
 }
@@ -1593,8 +1593,8 @@ dps_results: {
 dps_results: {
  key: "TestRetribution-AllItems-WastewalkerArmor"
  value: {
-  dps: 1652.69272
-  tps: 919.41884
+  dps: 1648.31481
+  tps: 917.05191
   dtps: 14.05926
  }
 }

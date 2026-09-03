@@ -85,10 +85,11 @@ func init() {
 		dpm := getDpm()
 
 		procTrigger := character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:     "Bonereaver's Edge Trigger",
-			DPM:      dpm,
-			Outcome:  core.OutcomeLanded,
-			Callback: core.CallbackOnSpellHitDealt,
+			Name:              "Bonereaver's Edge Trigger",
+			SpellFlagsExclude: core.SpellFlagSuppressWeaponProcs,
+			DPM:               dpm,
+			Outcome:           core.OutcomeLanded,
+			Callback:          core.CallbackOnSpellHitDealt,
 			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 				arpAura.Activate(sim)
 				arpAura.AddStack(sim)
@@ -235,10 +236,11 @@ func init() {
 			aura.NewActiveMovementSpeedEffect(0.5)
 
 			procTrigger := character.MakeProcTriggerAura(core.ProcTrigger{
-				Name:     itemName,
-				DPM:      dpm,
-				Outcome:  core.OutcomeLanded,
-				Callback: core.CallbackOnSpellHitDealt,
+				Name:              itemName,
+				SpellFlagsExclude: core.SpellFlagSuppressWeaponProcs,
+				DPM:               dpm,
+				Outcome:           core.OutcomeLanded,
+				Callback:          core.CallbackOnSpellHitDealt,
 				Handler: func(sim *core.Simulation, _ *core.Spell, result *core.SpellResult) {
 					aura.Activate(sim)
 				},
@@ -287,10 +289,11 @@ func init() {
 		})
 
 		procTrigger := character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:     "Infinity Blade",
-			DPM:      dpm,
-			Outcome:  core.OutcomeLanded,
-			Callback: core.CallbackOnSpellHitDealt,
+			Name:              "Infinity Blade",
+			SpellFlagsExclude: core.SpellFlagSuppressWeaponProcs,
+			DPM:               dpm,
+			Outcome:           core.OutcomeLanded,
+			Callback:          core.CallbackOnSpellHitDealt,
 			Handler: func(sim *core.Simulation, _ *core.Spell, result *core.SpellResult) {
 				aura := auras.Get(result.Target)
 				aura.Activate(sim)

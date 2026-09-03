@@ -32,9 +32,10 @@ var ItemSetDoomplateBattlegear = core.NewItemSet(core.ItemSet{
 
 			setBonusAura.
 				AttachProcTrigger(core.ProcTrigger{
-					Name:       "Doomplate Battlegear - 4PC",
-					ProcChance: 0.02,
-					Callback:   core.CallbackOnSpellHitDealt,
+					Name:              "Doomplate Battlegear - 4PC",
+					SpellFlagsExclude: core.SpellFlagSuppressEquipProcs,
+					ProcChance:        0.02,
+					Callback:          core.CallbackOnSpellHitDealt,
 					Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 						aura.Activate(sim)
 					},
@@ -65,9 +66,10 @@ var ItemSetWastewalkerArmor = core.NewItemSet(core.ItemSet{
 
 			setBonusAura.
 				AttachProcTrigger(core.ProcTrigger{
-					Name:       "Wastewalker Armor - 4PC",
-					ProcChance: 0.02,
-					Callback:   core.CallbackOnSpellHitDealt,
+					Name:              "Wastewalker Armor - 4PC",
+					SpellFlagsExclude: core.SpellFlagSuppressEquipProcs,
+					ProcChance:        0.02,
+					Callback:          core.CallbackOnSpellHitDealt,
 					Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 						aura.Activate(sim)
 					},
@@ -95,10 +97,11 @@ var ItemSetManaEtchedRegalia = core.NewItemSet(core.ItemSet{
 			bonusPower := clothie.NewTemporaryStatsAura("Spell Power Bonus", core.ActionID{SpellID: 37619}, stats.Stats{stats.SpellDamage: 110, stats.HealingPower: 110}, time.Second*15)
 
 			setBonusAura.AttachProcTrigger(core.ProcTrigger{
-				Name:       "Mana Etched Regalia 4pc",
-				ProcChance: 0.02,
-				ProcMask:   core.ProcMaskSpellDamage,
-				Callback:   core.CallbackOnSpellHitDealt,
+				Name:              "Mana Etched Regalia 4pc",
+				SpellFlagsExclude: core.SpellFlagSuppressEquipProcs,
+				ProcChance:        0.02,
+				ProcMask:          core.ProcMaskSpellDamage,
+				Callback:          core.CallbackOnSpellHitDealt,
 				Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 					bonusPower.Activate(sim)
 				},
@@ -286,11 +289,12 @@ var ItemSetSpellstrikeInfusion = core.NewItemSet(core.ItemSet{
 			bonusPower := character.NewTemporaryStatsAura("Lesser Spell Blasting", core.ActionID{SpellID: 32108}, stats.Stats{stats.SpellDamage: 92}, time.Second*10)
 
 			setBonusAura.AttachProcTrigger(core.ProcTrigger{
-				Name:            "Spellstrike Infusion 2pc",
-				ProcChance:      0.05,
-				ProcMask:        core.ProcMaskSpellOrSpellProc,
-				Callback:        core.CallbackOnSpellHitDealt,
-				ClassSpellsOnly: true,
+				Name:              "Spellstrike Infusion 2pc",
+				SpellFlagsExclude: core.SpellFlagSuppressEquipProcs,
+				ProcChance:        0.05,
+				ProcMask:          core.ProcMaskSpellOrSpellProc,
+				Callback:          core.CallbackOnSpellHitDealt,
+				ClassSpellsOnly:   true,
 				Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 					bonusPower.Activate(sim)
 				},

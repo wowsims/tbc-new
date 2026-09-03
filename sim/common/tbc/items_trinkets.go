@@ -339,11 +339,12 @@ func init() {
 		})
 
 		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:     "The Lightning Capacitor",
-			ActionID: core.ActionID{ItemID: 28785},
-			ProcMask: core.ProcMaskSpellOrSpellProc,
-			Outcome:  core.OutcomeCrit,
-			Callback: core.CallbackOnSpellHitDealt,
+			Name:              "The Lightning Capacitor",
+			ActionID:          core.ActionID{ItemID: 28785},
+			SpellFlagsExclude: core.SpellFlagSuppressEquipProcs,
+			ProcMask:          core.ProcMaskSpellOrSpellProc,
+			Outcome:           core.OutcomeCrit,
+			Callback:          core.CallbackOnSpellHitDealt,
 			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 				if !icd.IsReady(sim) {
 					return
@@ -447,6 +448,7 @@ func init() {
 		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
 			Name:               "Prism of Inner Calm",
 			ActionID:           core.ActionID{ItemID: 30621},
+			SpellFlagsExclude:  core.SpellFlagSuppressEquipProcs,
 			Outcome:            core.OutcomeCrit,
 			Callback:           core.CallbackOnSpellHitDealt,
 			RequireDamageDealt: true,
@@ -502,12 +504,13 @@ func init() {
 		})
 
 		casterProcAura := character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:            "Darkmoon Card: Crusade (Caster)",
-			ActionID:        core.ActionID{SpellID: 39440},
-			ProcMask:        core.ProcMaskSpellOrSpellProc,
-			ClassSpellsOnly: true,
-			Outcome:         core.OutcomeLanded,
-			Callback:        core.CallbackOnSpellHitDealt,
+			Name:              "Darkmoon Card: Crusade (Caster)",
+			ActionID:          core.ActionID{SpellID: 39440},
+			SpellFlagsExclude: core.SpellFlagSuppressEquipProcs,
+			ProcMask:          core.ProcMaskSpellOrSpellProc,
+			ClassSpellsOnly:   true,
+			Outcome:           core.OutcomeLanded,
+			Callback:          core.CallbackOnSpellHitDealt,
 			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 				casterAura.Activate(sim)
 				casterAura.AddStack(sim)
@@ -685,8 +688,9 @@ func init() {
 				stackingAura.Deactivate(sim)
 			},
 		}).AttachProcTrigger(core.ProcTrigger{
-			Callback: core.CallbackOnCastComplete,
-			ProcMask: core.ProcMaskSpellDamage | core.ProcMaskSpellHealing,
+			Callback:          core.CallbackOnCastComplete,
+			SpellFlagsExclude: core.SpellFlagSuppressEquipProcs,
+			ProcMask:          core.ProcMaskSpellDamage | core.ProcMaskSpellHealing,
 
 			ExtraCondition: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) bool {
 				return spell.CurCast.Cost > 0

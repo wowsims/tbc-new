@@ -95,10 +95,14 @@ var Tier5 = core.NewItemSet(core.ItemSet{
 			})
 			setBonusAura.AttachProcTrigger(core.ProcTrigger{
 				Name:     "Deathmantle Proc Trigger",
-				ProcMask: core.ProcMaskMelee,
+				ProcMask: core.ProcMaskMeleeOrMeleeProc,
 				Outcome:  core.OutcomeLanded,
 				Callback: core.CallbackOnSpellHitDealt,
-				DPM:      rogue.NewLegacyPPMManager(0.5, core.ProcMaskMelee),
+				// Coup de Grace (37171) carries Can Proc From Procs, so proc-sourced melee hits
+				// count. The DPM mask has to be widened with it: DynamicProcManager.Proc looks the
+				// incoming mask up in the masks it was built from, so a proc hit that clears the
+				// trigger's ProcMask would still find no bucket and never roll.
+				DPM: rogue.NewLegacyPPMManager(0.5, core.ProcMaskMeleeOrMeleeProc),
 				Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 					mod.Activate(sim)
 				},

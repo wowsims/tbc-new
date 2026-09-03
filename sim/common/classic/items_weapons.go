@@ -78,10 +78,11 @@ func init() {
 		})
 
 		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:     "Thunderfury",
-			Callback: core.CallbackOnSpellHitDealt,
-			Outcome:  core.OutcomeLanded,
-			DPM:      character.NewDynamicLegacyProcForWeapon(19019, 6, 0),
+			Name:              "Thunderfury",
+			SpellFlagsExclude: core.SpellFlagSuppressWeaponProcs,
+			Callback:          core.CallbackOnSpellHitDealt,
+			Outcome:           core.OutcomeLanded,
+			DPM:               character.NewDynamicLegacyProcForWeapon(19019, 6, 0),
 			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 				singleTargetSpell.Cast(sim, result.Target)
 				bounceSpell.Cast(sim, result.Target)
