@@ -25,9 +25,6 @@ func (mage *Mage) registerBlizzardSpell() {
 		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			// Cannot crit. The tick spell carries SPELL_ATTR2_CANT_CRIT while the channel that
-			// casts it does not, and 384 Blizzard ticks across TBC logs land as plain hits in
-			// fights where every other AoE, Flamestrike included, crits normally.
 			spell.CalcAndDealAoeDamage(sim, 184, spell.OutcomeMagicHit)
 		},
 	})
