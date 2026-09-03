@@ -56,7 +56,9 @@ func (druid *Druid) registerHurricaneSpell() {
 		BonusCoefficient: 0.129,
 
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			spell.CalcAndDealAoeDamage(sim, 206, spell.OutcomeMagicHitAndCrit)
+			// Cannot crit, the same way Blizzard cannot. 1472 Hurricane ticks across TBC logs
+			// land as plain hits.
+			spell.CalcAndDealAoeDamage(sim, 206, spell.OutcomeMagicHit)
 		},
 	})
 }
