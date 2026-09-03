@@ -177,8 +177,7 @@ export class ItemRenderer extends Component {
 
 		setItemQualityCssClass(this.nameElem, newItem.item.quality);
 
-		this.player.setWowheadData(newItem, this.iconElem);
-		this.player.setWowheadData(newItem, this.nameElem);
+		this.player.setWowheadData(newItem, [this.iconElem, this.nameElem]);
 
 		newItem
 			.asActionId()
@@ -282,7 +281,7 @@ export class ItemPicker extends Component {
 
 		player.professionChangeEmitter.on(() => {
 			if (!!this._equippedItem) {
-				this.player.setWowheadData(this._equippedItem, this.itemElem.iconElem);
+				this.player.setWowheadData(this._equippedItem, [this.itemElem.iconElem, this.itemElem.nameElem]);
 			}
 		});
 	}
