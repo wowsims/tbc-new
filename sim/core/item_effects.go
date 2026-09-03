@@ -81,6 +81,9 @@ func (equipment *Equipment) applyItemEffects(agent Agent, registeredItemEffects 
 
 		if includeGemEffects {
 			for _, g := range eq.Gems {
+				if g.Disabled {
+					continue
+				}
 				if applyGemEffect, ok := itemEffects[g.ID]; ok {
 					applyGemEffect(agent)
 				}

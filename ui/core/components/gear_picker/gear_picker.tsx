@@ -77,6 +77,7 @@ export class ItemPicker extends Component {
 
 	private quickSwapEnchantPopover: QuickSwapList<Enchant> | null = null;
 	private quickSwapGemPopover: QuickSwapList<Gem>[] = [];
+	private simInitialized = false;
 
 	constructor(parent: HTMLElement, gearPicker: GearPicker, simUI: SimUI, player: Player<any>, slot: ItemSlot) {
 		super(parent, 'item-picker-root');
@@ -97,12 +98,15 @@ export class ItemPicker extends Component {
 
 			this.itemElem.iconElem.addEventListener('click', openGearSelector);
 			this.itemElem.nameElem.addEventListener('click', openGearSelector);
+			this.simInitialized = true;
 			this.addQuickEnchantHelpers();
 		});
 
 		player.gearChangeEmitter.on(() => {
 			this.item = this.player.getEquippedItem(this.slot);
 			if (this._equippedItem) {
+				// The slot may have been empty at sim init, in which case the popover is built here.
+				this.addQuickEnchantHelpers();
 				if (this._equippedItem !== this.quickSwapEnchantPopover?.item) {
 					this.quickSwapEnchantPopover?.update({ item: this._equippedItem });
 				}
@@ -176,7 +180,7 @@ export class ItemPicker extends Component {
 	}
 
 	private addQuickEnchantHelpers() {
-		if (!this._equippedItem) return;
+		if (!this.simInitialized || this.quickSwapEnchantPopover || !this._equippedItem) return;
 		const openEnchantSelector = () => this.openSelectorModal(SelectorModalTabs.Enchants);
 		this.itemElem.enchantElem.addEventListener('click', event => {
 			event?.preventDefault();
