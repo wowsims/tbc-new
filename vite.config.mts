@@ -18,8 +18,9 @@ export const BASE_PATH = path.resolve(__dirname, 'ui');
 export const OUT_DIR = path.join(__dirname, 'dist', 'tbc');
 
 function serveExternalAssets() {
+	const simWorker = process.env.WASM_WORKER ? '/tbc/sim_worker.js' : '/tbc/local_worker.js';
 	const workerMappings = {
-		'/tbc/sim_worker.js': '/tbc/local_worker.js',
+		'/tbc/sim_worker.js': simWorker,
 		'/tbc/net_worker.js': '/tbc/net_worker.js',
 		'/tbc/lib.wasm': '/tbc/lib.wasm',
 		'/tbc/reforge_worker.js': '/tbc/reforge_worker.js',
