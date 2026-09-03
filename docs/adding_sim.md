@@ -22,9 +22,33 @@ The UI and sim can be done in either order, but it is generally recommended to b
   - Create a directory `ui/$SPEC`. So if your Spec enum value was named, `elemental_shaman`, create a directory, `ui/elemental_shaman`.
   - Copy+paste from another spec's UI code.
   - Modify all the files for your spec; most of the settings are fairly obvious, if you need anything complex just ask and we can help!
-  - Finally, add a rule to the `makefile` for the new sim site. Just copy from the other site rules already there and change the `$SPEC` names.
 
-No .html is needed, it will be generated based on `ui/index_template.html` and the `$SPEC` name.
+No .html and no `makefile` rule are needed (they used to be; see
+[Sim pages are not files](adding_sim.md#sim-pages-are-not-real-files) if an older checkout left
+generated pages behind). `tools/vite/spec_pages.mts` generates the page for
+`/tbc/$CLASS/$SPEC/` from `ui/index_template.html`, in both `vite build` and the dev server. A
+directory is picked up as a sim page as soon as it has both of the things the template references:
+an entry point at `ui/$CLASS/$SPEC/index.ts` and a stylesheet at
+`ui/scss/sims/$CLASS/$SPEC/index.scss`.
+
+### Sim pages are not "real" files
+Each sim is served at `/tbc/$CLASS/$SPEC/` and these pages used to be written into the repository.
+
+Vite builds those pages now (`tools/vite/spec_pages.mts`), in both `vite build` and the dev
+server, so there is nothing to generate, list or ignore. A directory becomes a sim page as soon
+as it has the two files the template points at: `ui/$CLASS/$SPEC/index.ts` and
+`ui/scss/sims/$CLASS/$SPEC/index.scss`.
+
+**Changing a sim**
+If you built the site before this change, your working tree
+still holds those generated pages. They are no longer ignored, so they now show up as untracked
+files, and `make clean` no longer deletes them. Remove them once:
+
+```sh
+rm -f ui/*/*/index.html
+```
+
+*Do not delete `ui/index.html` — that is the landing page.*
 
 When you're ready to try out the site, run `make host` and navigate to `http://localhost:8080/tbc/$SPEC`.
 
