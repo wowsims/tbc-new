@@ -166,6 +166,7 @@ func NewWarlock(character *core.Character, options *proto.Player, warlockOptions
 
 	warlock.EnableManaBar()
 	warlock.AddStatDependency(stats.Strength, stats.AttackPower, 1)
+	warlock.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiMaxLevel[character.Class])
 
 	if !warlock.Options.SacrificeSummon {
 		warlock.registerPets()
@@ -243,7 +244,8 @@ const (
 	WarlockSpellAll int64 = 1<<iota - 1
 
 	WarlockShadowDamage = WarlockSpellCorruption | WarlockSpellUnstableAffliction | WarlockSpellDrainLife | WarlockSpellCurseOfAgony |
-		WarlockSpellShadowBolt | WarlockSpellSeedOfCorruptionExplosion | WarlockSpellSeedOfCorruption | WarlockSpellShadowBurn | WarlockSpellSiphonLife
+		WarlockSpellShadowBolt | WarlockSpellSeedOfCorruptionExplosion | WarlockSpellSeedOfCorruption | WarlockSpellShadowBurn | WarlockSpellSiphonLife |
+		WarlockSpellShadowFury | WarlockSpellDeathCoil
 
 	WarlockPeriodicShadowDamage = WarlockSpellCorruption | WarlockSpellUnstableAffliction |
 		WarlockSpellDrainLife | WarlockSpellCurseOfAgony

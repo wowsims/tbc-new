@@ -111,6 +111,10 @@ func (result *SpellResult) DidCrit() bool {
 	return result.Outcome.Matches(OutcomeCrit)
 }
 
+func (result *SpellResult) DidSuppressedCrit() bool {
+	return result.Outcome.Matches(OutcomeSuppressedCrit)
+}
+
 func (result *SpellResult) DidGlance() bool {
 	return result.Outcome.Matches(OutcomeGlance)
 }
@@ -133,6 +137,10 @@ func (result *SpellResult) DidParry() bool {
 
 func (result *SpellResult) DidDodge() bool {
 	return result.Outcome.Matches(OutcomeDodge)
+}
+
+func (result *SpellResult) DidCrush() bool {
+	return result.Outcome.Matches(OutcomeCrush)
 }
 
 func (result *SpellResult) DamageString() string {
@@ -240,7 +248,17 @@ func (spell *Spell) SpellHitChance(target *Unit) float64 {
 	return hitPercent / 100
 }
 func (spell *Spell) SpellChanceToMiss(attackTable *AttackTable) float64 {
-	return math.Max(0.01, attackTable.BaseSpellMissChance-spell.SpellHitChance(attackTable.Defender))
+	// https://royalgiraffe.github.io/resist-guide (Binary spells)
+	// hitChance = baseLevelHit * (1 - 0.75*resistCoeff) + spellHitBonus, capped at 99%.
+	// The level-based hit is reduced by the resistance roll first, then the spell hit
+	// bonus is added afterwards, which is why spell hit above the cap counteracts
+	// resistance for binary spells.
+	baseHitChance := 1 - attackTable.BaseSpellMissChance
+	if spell.Flags.Matches(SpellFlagBinary) {
+		baseHitChance *= attackTable.GetBinaryHitChance(spell)
+	}
+	hitChance := baseHitChance + spell.SpellHitChance(attackTable.Defender)
+	return math.Max(0.01, 1-hitChance)
 }
 func (spell *Spell) MagicHitCheck(sim *Simulation, attackTable *AttackTable) bool {
 	return sim.Proc(1.0-spell.SpellChanceToMiss(attackTable), "Magical Hit Roll")
@@ -257,6 +275,20 @@ func (spell *Spell) SpellCritChance(target *Unit) float64 {
 func (spell *Spell) MagicCritCheck(sim *Simulation, target *Unit) bool {
 	critChance := spell.SpellCritChance(target)
 	return sim.RandomFloat("Magical Crit Roll") < critChance
+}
+
+type critChances struct {
+	actual     float64
+	suppressed float64
+}
+
+func getCritChances(rawChance float64, target *Unit) critChances {
+	actual := max(rawChance-target.PseudoStats.ReducedCritTakenPercent, 0)
+	resilienceSuppression := max(rawChance-target.GetDefenseReduction(), 0)
+	return critChances{
+		actual:     actual,
+		suppressed: min(resilienceSuppression, target.GetResilienceReduction()),
+	}
 }
 
 func (spell *Spell) HealingPower(target *Unit) float64 {
@@ -436,6 +468,8 @@ func (spell *Spell) dealDamageInternal(sim *Simulation, isPeriodic bool, result 
 			spell.SpellMetrics[result.Target.UnitIndex].TotalGlanceDamage += result.Damage
 		} else if result.DidBlock() {
 			spell.SpellMetrics[result.Target.UnitIndex].TotalBlockDamage += result.Damage
+		} else if result.DidCrush() {
+			spell.SpellMetrics[result.Target.UnitIndex].TotalCrushDamage += result.Damage
 		}
 		spell.SpellMetrics[result.Target.UnitIndex].TotalThreat += result.Threat
 	}

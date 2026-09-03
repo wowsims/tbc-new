@@ -35,6 +35,7 @@ func init() {
 			GemSockets:       item.GemSockets,
 			SocketBonus:      item.SocketBonus,
 			WeaponSpeed:      item.WeaponSpeed,
+			QualityModifier:  item.QualityModifier,
 			SetName:          item.SetName,
 			SetId:            item.SetId,
 			ScalingOptions:   item.ScalingOptions,

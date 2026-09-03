@@ -23,6 +23,32 @@ message ItemEffect {
 		ProcEffect  proc   = 4;
 		OnUseEffect on_use = 5;
 	}
+
+	// A second aura this effect accumulates rather than applies, set only when the stats live
+	// there instead of in scaling_options above. Absent on the ordinary case.
+	//
+	// The aura named by buff_id lasts effect_duration_ms and grants nothing itself; it adds one
+	// stack of this one at a time, up to its own max_cumulative_stacks, and its scaling_options
+	// are the stats granted *per stack*. Gaining a stack does not refresh the window, which is
+	// why the two cannot be flattened into a single stacking aura: that lets every stack restart
+	// the duration and inflates both uptime and average stacks.
+	ItemEffect stacking_aura = 8;
+
+	// What makes the stacking aura gain a stack. Exactly one case is set whenever stacking_aura
+	// is, and they are not interchangeable: a timer keeps stacking while the player does
+	// nothing, an event does not.
+	oneof stack_trigger {
+		// A timer on the container aura: one stack every N milliseconds while the window is up.
+		int32 stack_period_ms = 9;
+		// An event: one stack per qualifying proc while the window is up.
+		// Which procs qualify is derived from the container spell.
+		ProcEffect stack_proc = 10;
+	}
+
+	// Set when the stacking aura starts at max_cumulative_stacks
+	// and loses one per event rather than building up from zero.
+	// Read from the tooltip, because the decrement is server script with no effect or flag behind it.
+	bool stacks_decay = 11;
 }
 
 message ProcEffect {
@@ -53,6 +79,12 @@ message SpellEffect {
 		SpellSchool school = 8;
 		Stat stat = 9;
 	}
+	// Milliseconds between periodic aura ticks; 0 for non-periodic effects
+	int32 aura_period_ms = 10;
+	// Stats the effect grants
+	repeated double stats = 11;
+	// Duration of the effect's aura in milliseconds; 0 for instant effects
+	int32 duration_ms = 12;
 }
 
 enum EffectType {

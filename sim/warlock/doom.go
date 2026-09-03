@@ -9,6 +9,12 @@ import (
 const doomCoeff = 2
 
 func (warlock *Warlock) registerCurseOfDoom() {
+
+	calculateBaseDamage := func() float64 {
+		damageMultiplier := core.TernaryFloat64(warlock.AmplifyCurseAura != nil && warlock.AmplifyCurseAura.IsActive(), 1.5, 1.0)
+		return 4200 * damageMultiplier
+	}
+
 	warlock.CurseOfDoom = warlock.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 30910},
 		SpellSchool:    core.SpellSchoolShadow,
@@ -51,7 +57,7 @@ func (warlock *Warlock) registerCurseOfDoom() {
 			PeriodicDamageMultiplier: 1,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.Snapshot(target, 4200)
+				dot.Snapshot(target, calculateBaseDamage())
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
@@ -61,13 +67,9 @@ func (warlock *Warlock) registerCurseOfDoom() {
 		ExpectedTickDamage: func(sim *core.Simulation, target *core.Unit, spell *core.Spell, useSnapshot bool) *core.SpellResult {
 			dot := spell.Dot(target)
 			if useSnapshot {
-				result := dot.CalcSnapshotDamage(sim, target, dot.OutcomeTick)
-				result.Damage /= dot.TickPeriod().Seconds()
-				return result
+				return dot.CalcSnapshotDamage(sim, target, dot.OutcomeTick)
 			} else {
-				result := spell.CalcPeriodicDamage(sim, target, 1000, spell.OutcomeExpectedMagicCrit)
-				result.Damage /= dot.CalcTickPeriod().Round(time.Millisecond).Seconds()
-				return result
+				return spell.CalcPeriodicDamage(sim, target, calculateBaseDamage(), spell.OutcomeExpectedMagicCrit)
 			}
 		},
 	})

@@ -67,22 +67,22 @@ var ItemSetVoidheartRaiment = core.NewItemSet(core.ItemSet{
 		2: func(agent core.Agent, setBonusAura *core.Aura) {
 			warlock := agent.(WarlockAgent).GetWarlock()
 			// Your shadow damage spells have a chance to grant you 135 bonus shadow damage for 15 sec.
-			// Shadowflame - 37377
-			shadowBonus := warlock.NewTemporaryStatsAura("Shadowflame", core.ActionID{SpellID: 37377}, stats.Stats{stats.ShadowDamage: 135}, time.Second*15)
+			// Flameshadow - 37379
+			shadowBonus := warlock.NewTemporaryStatsAura("Flameshadow", core.ActionID{SpellID: 37379}, stats.Stats{stats.ShadowDamage: 135}, time.Second*15)
 
 			// Your fire damage spells have a chance to grant you 135 bonus fire damage for 15 sec.
-			// Hellfire - 39437
-			fireBonus := warlock.NewTemporaryStatsAura("Shadowflame Hellfire", core.ActionID{SpellID: 39437}, stats.Stats{stats.FireDamage: 135}, time.Second*15)
+			// Shadowflame Hellfire and RoF - 39437
+			fireBonus := warlock.NewTemporaryStatsAura("Shadowflame Hellfire and RoF", core.ActionID{SpellID: 39437}, stats.Stats{stats.FireDamage: 135}, time.Second*15)
 
 			setBonusAura.AttachProcTrigger(core.ProcTrigger{
-				Name:       "Voidheart Raiment 2pc",
-				ProcChance: 0.05,
-				Callback:   core.CallbackOnCastComplete,
+				Name:               "Voidheart Raiment 2pc",
+				ProcChance:         0.05,
+				Callback:           core.CallbackOnSpellHitDealt,
+				RequireDamageDealt: true,
 				Handler: func(sim *core.Simulation, spell *core.Spell, _ *core.SpellResult) {
 					if spell.SpellSchool.Matches(core.SpellSchoolShadow) {
 						shadowBonus.Activate(sim)
-					}
-					if spell.SpellSchool.Matches(core.SpellSchoolFire) {
+					} else if spell.SpellSchool.Matches(core.SpellSchoolFire) {
 						fireBonus.Activate(sim)
 					}
 				},
@@ -272,22 +272,38 @@ func init() {
 		})
 	})
 
+	// Void Star Talisman
 	core.NewItemEffect(30449, func(agent core.Agent) {
-		// Void Star Talisman
-		for _, pet := range agent.(WarlockAgent).GetWarlock().Pets {
-			pet.AddStats(stats.Stats{
-				stats.SpellDamage:      48,
-				stats.ArcaneResistance: 130,
-				stats.FireResistance:   130,
-				stats.FrostResistance:  130,
-				stats.NatureResistance: 130,
-				stats.ShadowResistance: 130,
-			})
+		warlock := agent.(WarlockAgent).GetWarlock()
+		resistanceStats := stats.Stats{
+			stats.ArcaneResistance: 130.0,
+			stats.FireResistance:   130.0,
+			stats.FrostResistance:  130.0,
+			stats.NatureResistance: 130.0,
+			stats.ShadowResistance: 130.0,
 		}
+
+		applyPetStats := func(sim *core.Simulation, stats stats.Stats) {
+			for _, pet := range agent.(WarlockAgent).GetWarlock().Pets {
+				pet.AddStatsDynamic(sim, stats)
+			}
+		}
+
+		aura := core.MakePermanent(warlock.RegisterAura(core.Aura{
+			Label: "Void Star Talisman",
+			OnGain: func(aura *core.Aura, sim *core.Simulation) {
+				applyPetStats(sim, resistanceStats)
+			},
+			OnExpire: func(aura *core.Aura, sim *core.Simulation) {
+				applyPetStats(sim, resistanceStats.Invert())
+			},
+		}))
+
+		warlock.ItemSwap.RegisterProc(30449, aura)
 	})
 
+	// Ashtongue Talisman of Shadows
 	core.NewItemEffect(32493, func(agent core.Agent) {
-		// Ashtongue Talisman of Shadows
 		warlock := agent.(WarlockAgent).GetWarlock()
 		ashtongueAura := warlock.NewTemporaryStatsAura("Ashtongue Talisman of Shadows Proc", core.ActionID{SpellID: 40478}, stats.Stats{stats.SpellDamage: 220}, time.Second*5)
 		procAura := warlock.MakeProcTriggerAura(core.ProcTrigger{

@@ -1,11 +1,12 @@
 import * as OtherInputs from '../../core/components/inputs/other_inputs';
+import { ReforgeOptimizer } from '../../core/components/suggest_reforges_action';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui';
 import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
 
 import { APLRotation, APLRotation_Type } from '../../core/proto/apl';
-import { Faction, ItemSlot, PseudoStat, Race, Spec, Stat } from '../../core/proto/common';
-import { DEFAULT_HYBRID_CASTER_GEM_STATS, UnitStat } from '../../core/proto_utils/stats';
+import { ItemSlot, PseudoStat, Spec, Stat } from '../../core/proto/common';
+import { DEFAULT_HYBRID_CASTER_GEM_STATS, Stats, UnitStat } from '../../core/proto_utils/stats';
 import * as DruidInputs from '../inputs';
 import * as BalanceInputs from './inputs';
 import * as Presets from './presets';
@@ -26,6 +27,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecBalanceDruid, {
 		Stat.StatSpellCritRating,
 		Stat.StatSpellHasteRating,
 		Stat.StatMP5,
+		Stat.StatSpirit,
 	],
 	epPseudoStats: [],
 	// Reference stat against which to calculate EP. I think all classes use either spell power or attack power.
@@ -41,6 +43,12 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecBalanceDruid, {
 			Stat.StatArcaneDamage,
 			Stat.StatNatureDamage,
 			Stat.StatMP5,
+			Stat.StatSpirit,
+			Stat.StatArcaneResistance,
+			Stat.StatFireResistance,
+			Stat.StatFrostResistance,
+			Stat.StatNatureResistance,
+			Stat.StatShadowResistance,
 		],
 		[PseudoStat.PseudoStatSpellCritPercent, PseudoStat.PseudoStatSpellHastePercent, PseudoStat.PseudoStatSpellHitPercent],
 	),
@@ -48,9 +56,13 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecBalanceDruid, {
 
 	defaults: {
 		// Default equipped gear.
-		gear: Presets.Phase1AlliancePresetGear.gear,
+		gear: Presets.Phase3PresetGear.gear,
 		// Default EP weights for sorting gear in the gear picker.
-		epWeights: Presets.StandardEPWeights.epWeights,
+		epWeights: Presets.Phase3EPWeights.epWeights,
+		// Default stat caps for stat weights tab. (also needed for reforging since we don't want to reforge above stat caps)
+		statCaps: (() => {
+			return new Stats().withPseudoStat(PseudoStat.PseudoStatSpellHitPercent, 16);
+		})(),
 		// Default consumes settings.
 		consumables: Presets.DefaultConsumables,
 		// Default talents.
@@ -82,18 +94,26 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecBalanceDruid, {
 	},
 
 	presets: {
-		epWeights: [Presets.StandardEPWeights],
+		epWeights: [
+			Presets.PreRaidEPWeights,
+			Presets.Phase1EPWeights,
+			Presets.Phase2EPWeights,
+			Presets.Phase3EPWeights,
+			Presets.Phase3_5EPWeights,
+			Presets.Phase4EPWeights,
+			Presets.DefaultEPWeights,
+		],
 		// Preset talents that the user can quickly select.
 		talents: [Presets.StandardTalents],
 		rotations: [Presets.StandardRotation],
 		// Preset gear configurations that the user can quickly select.
 		gear: [
 			Presets.PreraidPresetGear,
-			Presets.Phase1AlliancePresetGear,
-			Presets.Phase2AlliancePresetGear,
+			Presets.Phase1PresetGear,
+			Presets.Phase2PresetGear,
 			Presets.Phase3PresetGear,
-			Presets.Phase3_5PresetGear,
 			Presets.Phase4PresetGear,
+			Presets.Phase5PresetGear,
 		],
 		builds: [],
 	},
@@ -101,34 +121,11 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecBalanceDruid, {
 	autoRotation: (_player: Player<Spec.SpecBalanceDruid>): APLRotation => {
 		return Presets.StandardRotation.rotation.rotation!;
 	},
-
-	raidSimPresets: [
-		{
-			spec: Spec.SpecBalanceDruid,
-			talents: Presets.StandardTalents.data,
-			specOptions: Presets.DefaultOptions,
-			consumables: Presets.DefaultConsumables,
-			otherDefaults: Presets.OtherDefaults,
-			defaultFactionRaces: {
-				[Faction.Unknown]: Race.RaceUnknown,
-				[Faction.Alliance]: Race.RaceNightElf,
-				[Faction.Horde]: Race.RaceTauren,
-			},
-			defaultGear: {
-				[Faction.Unknown]: {},
-				[Faction.Alliance]: {
-					1: Presets.PreraidPresetGear.gear,
-				},
-				[Faction.Horde]: {
-					1: Presets.PreraidPresetGear.gear,
-				},
-			},
-		},
-	],
 });
 
 export class BalanceDruidSimUI extends IndividualSimUI<Spec.SpecBalanceDruid> {
 	constructor(parentElem: HTMLElement, player: Player<Spec.SpecBalanceDruid>) {
 		super(parentElem, player, SPEC_CONFIG);
+		this.reforger = new ReforgeOptimizer(this);
 	}
 }

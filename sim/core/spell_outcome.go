@@ -1,8 +1,6 @@
 package core
 
-import (
-	"github.com/wowsims/tbc/sim/core/stats"
-)
+import "github.com/wowsims/tbc/sim/core/stats"
 
 // This function should do 3 things:
 //  1. Set the Outcome of the hit effect.
@@ -36,6 +34,21 @@ func (dot *Dot) OutcomeTick(sim *Simulation, result *SpellResult, _ *AttackTable
 	dot.Spell.SpellMetrics[result.Target.UnitIndex].Ticks++
 	if isPartialResist {
 		dot.Spell.SpellMetrics[result.Target.UnitIndex].ResistedTicks++
+	}
+}
+
+func (dot *Dot) OutcomeTickMagicHit(sim *Simulation, result *SpellResult, attackTable *AttackTable) {
+	if dot.Spell.MagicHitCheck(sim, attackTable) {
+		isPartialResist := result.DidResist()
+		result.Outcome = OutcomeHit
+		dot.Spell.SpellMetrics[result.Target.UnitIndex].Ticks++
+		if isPartialResist {
+			dot.Spell.SpellMetrics[result.Target.UnitIndex].ResistedTicks++
+		}
+	} else {
+		result.Outcome = OutcomeMiss
+		result.Damage = 0
+		dot.Spell.SpellMetrics[result.Target.UnitIndex].Misses++
 	}
 }
 
@@ -146,7 +159,7 @@ func (spell *Spell) outcomeHealingCrit(sim *Simulation, result *SpellResult, att
 	}
 }
 
-func (spell *Spell) OutcomeTickMagicHit(sim *Simulation, result *SpellResult, attackTable *AttackTable) {
+func (spell *Spell) OutcomeTickMagicHitNoHitCounter(sim *Simulation, result *SpellResult, attackTable *AttackTable) {
 	if spell.MagicHitCheck(sim, attackTable) {
 		result.Outcome = OutcomeHit
 	} else {
@@ -707,7 +720,7 @@ func (result *SpellResult) applyAttackTableHit(spell *Spell, countHits bool) {
 }
 
 func (result *SpellResult) applyEnemyAttackTableMiss(spell *Spell, attackTable *AttackTable, roll float64, chance *float64) bool {
-	missChance := result.Target.GetTotalChanceToBeMissedAsDefender(attackTable)
+	missChance := result.Target.GetTotalChanceToBeMissedAsDefender(attackTable) - spell.Unit.GetStat(stats.PhysicalHitPercent)/100
 
 	if spell.Unit.AutoAttacks.IsDualWielding && !spell.Unit.PseudoStats.DisableDWMissPenalty {
 		missChance += 0.19
@@ -777,16 +790,25 @@ func (result *SpellResult) applyEnemyAttackTableParry(spell *Spell, attackTable 
 	return false
 }
 
-func (result *SpellResult) applyEnemyAttackTableCrit(spell *Spell, _ *AttackTable, roll float64, chance *float64, countHits bool) bool {
-	critPercent := spell.Unit.GetStat(stats.PhysicalCritPercent) + spell.BonusCritPercent
-
+func (result *SpellResult) applyEnemyAttackTableCrit(spell *Spell, attackTable *AttackTable, roll float64, chance *float64, countHits bool) bool {
+	critPercent := spell.Unit.stats[stats.PhysicalCritPercent] + spell.BonusCritPercent
 	if spell.ProcMask.Matches(ProcMaskRanged) {
-		critPercent += spell.Unit.GetStat(stats.RangedCritPercent)
+		critPercent += spell.Unit.stats[stats.RangedCritPercent]
+	}
+	chances := getCritChances(critPercent/100-attackTable.MeleeCritSuppression, result.Target)
+	*chance += chances.suppressed
+	if roll < *chance {
+		result.Outcome = OutcomeSuppressedCrit
+		if countHits {
+			spell.SpellMetrics[result.Target.UnitIndex].Hits++
+			if result.DidResist() {
+				spell.SpellMetrics[result.Target.UnitIndex].ResistedHits++
+			}
+		}
+		return true
 	}
 
-	critChance := critPercent / 100
-	critChance -= result.Target.PseudoStats.ReducedCritTakenPercent
-	*chance += max(0, critChance)
+	*chance += chances.actual
 
 	if roll < *chance {
 		isPartialResist := result.DidResist()

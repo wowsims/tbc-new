@@ -88,6 +88,7 @@ message APLAction {
 
         // Class or Spec-specific actions
         APLActionCatOptimalRotationAction cat_optimal_rotation_action = 18;
+        APLActionBearOptimalRotationAction bear_optimal_rotation_action = 30;
         APLActionGuardianHotwDpsRotation guardian_hotw_dps_rotation = 27;
 		APLActionCastWarlockAssignedCurse cast_warlock_assigned_curse = 29;
 
@@ -100,7 +101,7 @@ message APLAction {
 }
 
 
-// NextIndex: 130
+// NextIndex: 131
 message APLValue {
 	UUID uuid = 85;
 
@@ -139,12 +140,13 @@ message APLValue {
         APLValueCurrentSolarEnergy current_solar_energy = 68;
         APLValueCurrentLunarEnergy current_lunar_energy = 69;
 		APLValueCurrentGenericResource current_generic_resource = 75;
+		APLValueCurrentManaRegen current_mana_regen = 130;
         APLValueMaxHealth max_health = 98;
 		APLValueMaxMana max_mana = 128;
 		APLValueMaxComboPoints max_combo_points = 93;
 		APLValueMaxEnergy max_energy = 87;
 		APLValueMaxRage max_rage = 102;
-		APLValueEnergyRegenPerSecond energy_regen_per_second = 89;
+		APLValueTimeToNextEnergyTick time_to_next_energy_tick = 89;
 		APLValueEnergyTimeToTarget energy_time_to_target = 91;
 
 		// Unit values
@@ -223,9 +225,7 @@ message APLValue {
 
         // Class or Spec-specific values
         APLValueTotemRemainingTime totem_remaining_time = 49;
-        APLValueCatExcessEnergy cat_excess_energy = 52;
-        APLValueCatNewSavageRoarDuration cat_new_savage_roar_duration = 61;
-		APLValueWarlockAssignedCurseIsActive warlock_assigned_curse_is_active = 59;
+APLValueWarlockAssignedCurseIsActive warlock_assigned_curse_is_active = 59;
 		APLValueWarlockIsAssignedCurse warlock_is_assigned_curse = 129;
         APLValueCurrentEclipsePhase druid_current_eclipse_phase = 70;
 		APLValueProtectionPaladinDamageTakenLastGlobal protection_paladin_damage_taken_last_global = 100;
@@ -244,6 +244,10 @@ message APLValue {
 
 		// Misc
 		APLValueMultipleCdUsages multiple_cd_usages = 60;
+
+		// Consumables
+		APLValueSelectedPotion selected_potion = 131;
+		APLValueSelectedConjured selected_conjured = 132;
 	}
 }
 
@@ -374,6 +378,14 @@ message APLActionCatOptimalRotationAction {
     bool mangle_trick = 6;
     bool rake_trick = 7;
     bool maintain_faerie_fire = 8;
+}
+
+message APLActionBearOptimalRotationAction {
+    bool maintain_faerie_fire = 1;
+    bool maintain_demoralizing_roar = 2;
+    int32 maul_rage_threshold = 3;
+    FeralBearDruid.Rotation.SwipeUsage swipe_usage = 4;
+    int32 swipe_ap_threshold = 5;
 }
 
 message APLActionGuardianHotwDpsRotation {
@@ -514,12 +526,13 @@ message APLValueCurrentComboPoints {}
 message APLValueCurrentSolarEnergy {}
 message APLValueCurrentLunarEnergy {}
 message APLValueCurrentGenericResource {}
+message APLValueCurrentManaRegen {}
 message APLValueMaxHealth {}
 message APLValueMaxMana {}
 message APLValueMaxComboPoints {}
 message APLValueMaxEnergy {}
 message APLValueMaxRage {}
-message APLValueEnergyRegenPerSecond {}
+message APLValueTimeToNextEnergyTick {}
 message APLValueEnergyTimeToTarget {
 	APLValue target_energy = 1;
 }
@@ -751,8 +764,6 @@ message APLValueTotemRemainingTime {
     ShamanTotems.TotemType totem_type = 1;
 	bool include_reaction_time = 2;
 }
-message APLValueCatExcessEnergy {}
-message APLValueCatNewSavageRoarDuration {}
 message APLValueWarlockAssignedCurseIsActive {
 	UnitReference target_unit = 1;
 }
@@ -800,6 +811,14 @@ message APLValueActionGroupUsed {
 
 message APLValueActiveItemSwapSet {
     APLActionItemSwap.SwapSet swap_set = 1;
+}
+
+message APLValueSelectedPotion {
+	ActionID potion_id = 1;
+}
+
+message APLValueSelectedConjured {
+	ActionID conjured_id = 1;
 }
 
 message APLValueMultipleCdUsages {

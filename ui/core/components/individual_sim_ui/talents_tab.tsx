@@ -21,7 +21,7 @@ export class TalentsTab<SpecType extends Spec> extends SimTab {
 		this.simUI = simUI;
 
 		this.leftPanel = (<div className="talents-tab-left tab-panel-left" />) as HTMLElement;
-		this.rightPanel = (<div className="talents-tab-right tab-panel-right within-raid-sim-hide" />) as HTMLElement;
+		this.rightPanel = (<div className="talents-tab-right tab-panel-right" />) as HTMLElement;
 
 		this.contentContainer.appendChild(this.leftPanel);
 		this.contentContainer.appendChild(this.rightPanel);
@@ -67,7 +67,6 @@ export class TalentsTab<SpecType extends Spec> extends SimTab {
 				});
 			},
 			changeEmitters: [this.simUI.player.talentsChangeEmitter],
-			equals: (a: SavedTalents, b: SavedTalents) => SavedTalents.equals(a, b),
 			toJson: (a: SavedTalents) => SavedTalents.toJson(a),
 			fromJson: (obj: any) => SavedTalents.fromJson(obj),
 			nameLabel: i18n.t('talents_tab.saved_talents.name_label'),

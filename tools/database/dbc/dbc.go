@@ -4,14 +4,18 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"slices"
 	"strings"
 	"sync"
+
+	"golang.org/x/sync/errgroup"
 )
 
 type DBC struct {
 	Items                  map[int]Item                       // Item ID
 	Gems                   map[int]Gem                        // Item ID
-	Enchants               map[int]Enchant                    // ItemEchantment ID
+	Enchants               map[int]Enchant                    // Index in the raw SpellItemEnchantment list
+	EnchantsByEffectId     map[int]Enchant                    // ItemEchantment ID
 	ItemStatEffects        map[int]ItemStatEffect             // ItemID? something anyway
 	SpellEffects           map[int]map[int]SpellEffect        // Search by spellID and effect index
 	SpellEffectsById       map[int]SpellEffect                // Search by effectid
@@ -28,6 +32,11 @@ type DBC struct {
 	ItemEffects           map[int]ItemEffect   // Effect ID
 	ItemEffectsByParentID map[int][]ItemEffect // ParentItemID
 	ShieldBlockValues     map[int]ShieldBlock
+
+	// Every spell's effects flattened into effect index order. Built once by indexSpellEffects and
+	// served by SpellEffectsInOrder, which every trigger chain walk goes through - sorting per call
+	// meant two allocations and a sort for each spell visited.
+	spellEffectsOrdered map[int][]SpellEffect
 }
 
 func NewDBC() *DBC {
@@ -35,6 +44,7 @@ func NewDBC() *DBC {
 		Items:                  make(map[int]Item),
 		Gems:                   make(map[int]Gem),
 		Enchants:               make(map[int]Enchant),
+		EnchantsByEffectId:     make(map[int]Enchant),
 		ItemStatEffects:        make(map[int]ItemStatEffect),
 		SpellEffects:           make(map[int]map[int]SpellEffect),
 		SpellEffectsById:       make(map[int]SpellEffect),
@@ -62,54 +72,66 @@ var (
 func InitDBC() error {
 	dbcInstance = NewDBC()
 
-	if err := dbcInstance.loadItems("./assets/db_inputs/dbc/items.json"); err != nil {
-		return fmt.Errorf("loading items: %w", err)
+	// The inputs are independent files folding into disjoint DBC fields, so they load
+	// concurrently.
+	var g errgroup.Group
+	load := func(name string, loadFn func(string) error, path string) {
+		g.Go(func() error {
+			if err := loadFn(path); err != nil {
+				return fmt.Errorf("loading %s: %w", name, err)
+			}
+			return nil
+		})
 	}
-	if err := dbcInstance.loadGems("./assets/db_inputs/dbc/gems.json"); err != nil {
-		return fmt.Errorf("loading gems: %w", err)
-	}
-	if err := dbcInstance.loadEnchants("./assets/db_inputs/dbc/enchants.json"); err != nil {
-		return fmt.Errorf("loading enchants: %w", err)
-	}
-	if err := dbcInstance.loadItemStatEffects("./assets/db_inputs/dbc/item_stat_effects.json"); err != nil {
-		return fmt.Errorf("loading item stat effects: %w", err)
-	}
-	if err := dbcInstance.loadSpellEffects("./assets/db_inputs/dbc/spell_effects.json"); err != nil {
-		return fmt.Errorf("loading spell effects: %w", err)
-	}
-	if err := dbcInstance.loadRandomSuffix("./assets/db_inputs/dbc/random_suffix.json"); err != nil {
-		return fmt.Errorf("loading random suffixes: %w", err)
-	}
-	if err := dbcInstance.loadRandomPropertiesByIlvl("./assets/db_inputs/dbc/rand_prop_points.json"); err != nil {
-		return fmt.Errorf("loading random properties: %w", err)
-	}
-	if err := dbcInstance.loadItemDamageTables("./assets/db_inputs/dbc/item_damage_tables.json"); err != nil {
-		return fmt.Errorf("loading item damage tables: %w", err)
-	}
-	if err := dbcInstance.LoadItemArmorQuality("./assets/db_inputs/dbc/item_armor_quality.json"); err != nil {
-		return fmt.Errorf("loading item armor quality: %w", err)
-	}
-	if err := dbcInstance.LoadItemArmorTotal("./assets/db_inputs/dbc/item_armor_total.json"); err != nil {
-		return fmt.Errorf("loading item armor total: %w", err)
-	}
-	// if err := dbcInstance.LoadItemArmorShield("./assets/db_inputs/dbc/item_armor_shield.json"); err != nil {
-	// 	return fmt.Errorf("loading item armor shield: %w", err)
-	// }
-	if err := dbcInstance.LoadArmorLocation("./assets/db_inputs/dbc/armor_location.json"); err != nil {
-		return fmt.Errorf("loading armor location: %w", err)
-	}
-	if err := dbcInstance.loadConsumables("./assets/db_inputs/dbc/consumables.json"); err != nil {
-		return fmt.Errorf("loading consumables: %w", err)
-	}
-	if err := dbcInstance.loadItemEffects("./assets/db_inputs/dbc/item_effects.json"); err != nil {
-		return fmt.Errorf("loading item effects: %w", err)
-	}
-	if err := dbcInstance.loadSpells("./assets/db_inputs/dbc/spells.json"); err != nil {
-		return fmt.Errorf("loading spells: %w", err)
+	load("items", dbcInstance.loadItems, "./assets/db_inputs/dbc/items.json")
+	load("gems", dbcInstance.loadGems, "./assets/db_inputs/dbc/gems.json")
+	load("enchants", dbcInstance.loadEnchants, "./assets/db_inputs/dbc/enchants.json")
+	load("item stat effects", dbcInstance.loadItemStatEffects, "./assets/db_inputs/dbc/item_stat_effects.json")
+	load("spell effects", dbcInstance.loadSpellEffects, "./assets/db_inputs/dbc/spell_effects.json")
+	load("random suffixes", dbcInstance.loadRandomSuffix, "./assets/db_inputs/dbc/random_suffix.json")
+	load("random properties", dbcInstance.loadRandomPropertiesByIlvl, "./assets/db_inputs/dbc/rand_prop_points.json")
+	load("item damage tables", dbcInstance.loadItemDamageTables, "./assets/db_inputs/dbc/item_damage_tables.json")
+	load("item armor quality", dbcInstance.LoadItemArmorQuality, "./assets/db_inputs/dbc/item_armor_quality.json")
+	load("item armor total", dbcInstance.LoadItemArmorTotal, "./assets/db_inputs/dbc/item_armor_total.json")
+	// load("item armor shield", dbcInstance.LoadItemArmorShield, "./assets/db_inputs/dbc/item_armor_shield.json")
+	load("armor location", dbcInstance.LoadArmorLocation, "./assets/db_inputs/dbc/armor_location.json")
+	load("consumables", dbcInstance.loadConsumables, "./assets/db_inputs/dbc/consumables.json")
+	load("item effects", dbcInstance.loadItemEffects, "./assets/db_inputs/dbc/item_effects.json")
+	load("spells", dbcInstance.loadSpells, "./assets/db_inputs/dbc/spells.json")
+	if err := g.Wait(); err != nil {
+		return err
 	}
 	dbcInstance.LoadSpellScaling()
 	dbcInstance.LoadShieldBlockValues()
+	dbcInstance.indexSpellEffects()
 	return nil
+}
+
+// Flattens every spell's effects into effect index order, once, after all inputs are loaded.
+// SpellEffects is keyed by index, so ranging over it directly yields a random order and makes any
+// traversal that stops at the first match non-deterministic.
+func (d *DBC) indexSpellEffects() {
+	d.spellEffectsOrdered = make(map[int][]SpellEffect, len(d.SpellEffects))
+
+	for spellID, effects := range d.SpellEffects {
+		indices := make([]int, 0, len(effects))
+		for idx := range effects {
+			indices = append(indices, idx)
+		}
+		slices.Sort(indices)
+
+		ordered := make([]SpellEffect, 0, len(effects))
+		for _, idx := range indices {
+			ordered = append(ordered, effects[idx])
+		}
+		d.spellEffectsOrdered[spellID] = ordered
+	}
+}
+
+// Returns the effects of a spell ordered by effect index, or nil if it has none. The slice is
+// shared with every other caller, so it is to be read and not written to.
+func (d *DBC) SpellEffectsInOrder(spellID int) []SpellEffect {
+	return d.spellEffectsOrdered[spellID]
 }
 
 // GetDBC returns the DBC singleton instance
@@ -276,6 +298,7 @@ func (d *DBC) loadEnchants(filename string) error {
 			continue
 		}
 		d.Enchants[i] = ench
+		d.EnchantsByEffectId[ench.EffectId] = ench
 	}
 	return nil
 }

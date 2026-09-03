@@ -602,4 +602,10 @@ message BulkSettings {
 	int32 default_yellow_gem = 5;
 	int32 default_meta_gem = 6;
 	int32 default_prismatic_gem = 7;
+
+	int32 freeze_ring_slot = 8;
+	int32 freeze_trinket_slot = 9;
+	int32 freeze_weapon_slot = 10;
+	repeated WeaponType freeze_mainhand_weapon_slots = 11;
+	repeated WeaponType freeze_offhand_weapon_slots = 12;
 }

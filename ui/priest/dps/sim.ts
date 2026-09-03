@@ -6,7 +6,7 @@ import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
 import { ReforgeOptimizer } from '../../core/components/suggest_reforges_action';
 import { APLRotation } from '../../core/proto/apl';
-import { Faction, ItemSlot, PartyBuffs, PseudoStat, Race, Spec, Stat } from '../../core/proto/common';
+import { ItemSlot, PartyBuffs, PseudoStat, Spec, Stat } from '../../core/proto/common';
 import { DEFAULT_HYBRID_CASTER_GEM_STATS, Stats, UnitStat } from '../../core/proto_utils/stats';
 import * as PriestInputs from './inputs';
 import * as Presets from './presets';
@@ -49,6 +49,11 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecPriest, {
 			Stat.StatSpellDamage,
 			Stat.StatShadowDamage,
 			Stat.StatHolyDamage,
+			Stat.StatArcaneResistance,
+			Stat.StatFireResistance,
+			Stat.StatFrostResistance,
+			Stat.StatNatureResistance,
+			Stat.StatShadowResistance,
 		],
 		[
 			PseudoStat.PseudoStatSpellHitPercent,
@@ -61,9 +66,9 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecPriest, {
 
 	defaults: {
 		// Default equipped gear.
-		gear: Presets.P1_PRESET.gear,
+		gear: Presets.P3_PRESET.gear,
 		// Default EP weights for sorting gear in the gear picker.
-		epWeights: Presets.P1_EP_PRESET.epWeights,
+		epWeights: Presets.P3_EP_PRESET.epWeights,
 		statCaps: (() => {
 			return new Stats().withPseudoStat(PseudoStat.PseudoStatSchoolHitPercentShadow, 16);
 		})(),
@@ -101,12 +106,12 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecPriest, {
 	},
 
 	presets: {
-		epWeights: [Presets.P1_EP_PRESET],
+		epWeights: [Presets.P1_EP_PRESET, Presets.P3_EP_PRESET],
 		// Preset talents that the user can quickly select.
 		talents: [Presets.StandardTalents],
 		rotations: [Presets.ROTATION_PRESET_DEFAULT],
 		// Preset gear configurations that the user can quickly select.
-		gear: [Presets.PRE_RAID_PRESET, Presets.P1_PRESET, Presets.P2_PRESET],
+		gear: [Presets.PRE_RAID_PRESET, Presets.P1_PRESET, Presets.P2_PRESET, Presets.P3_PRESET],
 		itemSwaps: [],
 		builds: [],
 	},
@@ -114,8 +119,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecPriest, {
 	autoRotation: (_: Player<Spec.SpecPriest>): APLRotation => {
 		return Presets.ROTATION_PRESET_DEFAULT.rotation.rotation!;
 	},
-
-	raidSimPresets: [],
 });
 
 export class PriestSimUI extends IndividualSimUI<Spec.SpecPriest> {

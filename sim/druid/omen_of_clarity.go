@@ -13,10 +13,15 @@ func (druid *Druid) applyOmenOfClarity() {
 	}
 
 	const ppm = 2.0
-	const clearcastingSpells = DruidSpellMangleCat | DruidSpellRake | DruidSpellRip | DruidSpellFerociousBite | DruidSpellShred
 
-	// For feral druids in cat form, white auto attacks use the cat paw speed (1.0s),
-	// but yellow special attacks (Shred, Mangle, etc.) use the actual equipped weapon swing speed.
+	const clearcastingSpells = DruidSpellMangleCat | DruidSpellRake | DruidSpellRip |
+		DruidSpellFerociousBite | DruidSpellShred |
+		DruidSpellMangleBear | DruidSpellMaul | DruidSpellLacerate |
+		DruidSpellSwipe | DruidSpellDemoralizingRoar
+
+	// White auto-attacks use the form's paw weapon speed (1.0s cat, 2.5s bear).
+	// Yellow specials use the equipped weapon's true swing speed. Cache the
+	// special proc chance and refresh on item swaps.
 	autoProcChance := ppm * druid.AutoAttacks.MH().SwingSpeed / 60.0
 	specialProcChance := autoProcChance
 
@@ -52,8 +57,8 @@ func (druid *Druid) applyOmenOfClarity() {
 		ProcMask: core.ProcMaskMelee,
 		ICD:      time.Second * 10,
 		ExtraCondition: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) bool {
-			// Yellow specials use the equipped weapon swing speed (not cat paw speed).
-			// White auto attacks use the cat paw swing speed.
+			// Yellow specials use the equipped weapon swing speed.
+			// White auto attacks use the paw swing speed.
 			var procChance float64
 			if spell.ProcMask.Matches(core.ProcMaskMeleeMHAuto) {
 				procChance = autoProcChance

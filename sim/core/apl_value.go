@@ -128,14 +128,16 @@ func (rot *APLRotation) newAPLValueWithContext(config *proto.APLValue, groupVari
 		value = rot.newValueMaxHealth(config.GetMaxHealth(), config.Uuid)
 	case *proto.APLValue_MaxMana:
 		value = rot.newValueMaxMana(config.GetMaxMana(), config.Uuid)
+	case *proto.APLValue_CurrentManaRegen:
+		value = rot.newValueCurrentManaRegen(config.GetCurrentManaRegen(), config.Uuid)
 	case *proto.APLValue_MaxComboPoints:
 		value = rot.newValueMaxComboPoints(config.GetMaxComboPoints(), config.Uuid)
 	case *proto.APLValue_MaxEnergy:
 		value = rot.newValueMaxEnergy(config.GetMaxEnergy(), config.Uuid)
 	case *proto.APLValue_MaxRage:
 		value = rot.newValueMaxRage(config.GetMaxRage(), config.Uuid)
-	case *proto.APLValue_EnergyRegenPerSecond:
-		value = rot.newValueEnergyRegenPerSecond(config.GetEnergyRegenPerSecond(), config.Uuid)
+	case *proto.APLValue_TimeToNextEnergyTick:
+		value = rot.newValueTimeToNextEnergyTick(config.GetTimeToNextEnergyTick(), config.Uuid)
 	case *proto.APLValue_EnergyTimeToTarget:
 		value = rot.newValueEnergyTimeToTarget(config.GetEnergyTimeToTarget(), config.Uuid)
 
@@ -289,6 +291,12 @@ func (rot *APLRotation) newAPLValueWithContext(config *proto.APLValue, groupVari
 
 	case *proto.APLValue_MultipleCdUsages:
 		value = rot.newValueMultipleCdUsages(config.GetMultipleCdUsages(), config.Uuid)
+
+	// Consumables
+	case *proto.APLValue_SelectedPotion:
+		value = rot.newValueSelectedPotion(config.GetSelectedPotion(), config.Uuid)
+	case *proto.APLValue_SelectedConjured:
+		value = rot.newValueSelectedConjured(config.GetSelectedConjured(), config.Uuid)
 
 	default:
 		value = nil

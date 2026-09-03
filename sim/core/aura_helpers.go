@@ -113,8 +113,16 @@ func (procAura *Aura) AttachProcTriggerCallback(unit *Unit, config ProcTrigger) 
 		if config.ProcMask != ProcMaskUnknown && !spell.ProcMask.Matches(config.ProcMask) {
 			return
 		}
-		if config.Outcome != OutcomeEmpty && !result.Outcome.Matches(config.Outcome) {
-			return
+		if config.Outcome != OutcomeEmpty {
+			matchesOutcome := result.Outcome.Matches(config.Outcome)
+			// Crit procs also respond to resilience-suppressed crits. DidCrit remains
+			// strict so damage and metric code can distinguish the two outcomes.
+			if result.DidSuppressedCrit() && config.Outcome.Matches(OutcomeCrit) {
+				matchesOutcome = config.Outcome&^OutcomeCrit == 0 || result.Outcome.Matches(config.Outcome&^OutcomeCrit)
+			}
+			if !matchesOutcome {
+				return
+			}
 		}
 		if config.RequireDamageDealt && result.Damage == 0 {
 			return
@@ -164,6 +172,9 @@ func (procAura *Aura) AttachProcTriggerCallback(unit *Unit, config ProcTrigger) 
 			if config.ClassSpellMask > 0 && config.ClassSpellMask&spell.ClassSpellMask == 0 {
 				return
 			}
+			if config.ClassSpellsOnly && spell.ClassSpellMask == 0 {
+				return
+			}
 			if config.ProcMask != ProcMaskUnknown && !spell.ProcMask.Matches(config.ProcMask) {
 				return
 			}
@@ -189,6 +200,9 @@ func (procAura *Aura) AttachProcTriggerCallback(unit *Unit, config ProcTrigger) 
 				return
 			}
 			if config.ClassSpellMask > 0 && config.ClassSpellMask&spell.ClassSpellMask == 0 {
+				return
+			}
+			if config.ClassSpellsOnly && spell.ClassSpellMask == 0 {
 				return
 			}
 			if config.ProcMask != ProcMaskUnknown && !spell.ProcMask.Matches(config.ProcMask) {
@@ -336,6 +350,11 @@ type TemporaryStatBuffWithStacksConfig struct {
 	TimePerStack         time.Duration
 	Duration             time.Duration
 	TickImmediately      bool
+	// Set when stacks come from an event rather than a timer. The window aura is still built and
+	// still bounds the stacking aura, but nothing ticks - the caller adds stacks from its own
+	// trigger. The stacking aura is then given no duration of its own and is dropped when the
+	// window ends, which is what a child aura with no duration in the client data does.
+	StacksFromEvent bool
 }
 
 func (character *Character) NewTemporaryStatBuffWithStacks(config TemporaryStatBuffWithStacksConfig) (*StatBuffAura, *Aura) {
@@ -343,30 +362,41 @@ func (character *Character) NewTemporaryStatBuffWithStacks(config TemporaryStatB
 		Aura: Aura{
 			Label:     Ternary(config.StackingAuraLabel != "", config.StackingAuraLabel, config.AuraLabel),
 			ActionID:  Ternary(!config.StackingAuraActionID.IsEmptyAction(), config.StackingAuraActionID, config.ActionID),
-			Duration:  config.Duration,
+			Duration:  Ternary(config.StacksFromEvent, NeverExpires, config.Duration),
 			MaxStacks: config.MaxStacks,
 		},
 		BonusPerStack: config.BonusPerStack,
 	})
 
-	if config.TimePerStack > 0 {
+	if config.TimePerStack > 0 || config.StacksFromEvent {
 		aura := character.RegisterAura(Aura{
 			Label:    config.AuraLabel,
 			ActionID: config.ActionID,
 			Duration: config.Duration,
 			OnGain: func(aura *Aura, sim *Simulation) {
 				stackingAura.Activate(sim)
+
+				if config.TimePerStack <= 0 {
+					return
+				}
+
 				StartPeriodicAction(sim, PeriodicActionOptions{
 					Period:          config.TimePerStack,
 					NumTicks:        int(config.MaxStacks),
 					TickImmediately: config.TickImmediately,
 					OnAction: func(sim *Simulation) {
-						// Aura might not be active because of stuff like mage alter time being cast right before this aura being activated
 						if stackingAura.IsActive() {
 							stackingAura.AddStack(sim)
 						}
 					},
 				})
+			},
+			OnExpire: func(aura *Aura, sim *Simulation) {
+				// The window owns the stacking aura's lifetime in the event case, because there
+				// the child has no duration of its own to expire on.
+				if config.StacksFromEvent {
+					stackingAura.Deactivate(sim)
+				}
 			},
 		})
 		return stackingAura, aura

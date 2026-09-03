@@ -18,14 +18,14 @@ import PreraidArmsGear from './gear_sets/preraid_arms.gear.json';
 import P1ArmsGear from './gear_sets/p1_arms.gear.json';
 import P2ArmsGear from './gear_sets/p2_arms.gear.json';
 import P3ArmsGear from './gear_sets/p3_arms.gear.json';
-import P35ArmsGear from './gear_sets/p3.5_arms.gear.json';
 import P4ArmsGear from './gear_sets/p4_arms.gear.json';
+import P5ArmsGear from './gear_sets/p5_arms.gear.json';
 import PreraidFuryGear from './gear_sets/preraid_fury.gear.json';
 import P1FuryGear from './gear_sets/p1_fury.gear.json';
 import P2FuryGear from './gear_sets/p2_fury.gear.json';
 import P3FuryGear from './gear_sets/p3_fury.gear.json';
-import P35FuryGear from './gear_sets/p3.5_fury.gear.json';
 import P4FuryGear from './gear_sets/p4_fury.gear.json';
+import P5FuryGear from './gear_sets/p5_fury.gear.json';
 import { Phase } from '../../core/constants/other';
 import { defaultExposeWeaknessSettings } from '../../core/proto_utils/utils';
 import { APLRotation_Type } from '../../core/proto/apl';
@@ -82,15 +82,15 @@ export const P1_PRERAID_FURY_PRESET = PresetUtils.makePresetGear('Preraid', Prer
 export const P1_BIS_FURY_PRESET = PresetUtils.makePresetGear('BIS', P1FuryGear, { phase: Phase.Phase1, ...FURY_PRESET_OPTIONS });
 export const P2_BIS_FURY_PRESET = PresetUtils.makePresetGear('BIS', P2FuryGear, { phase: Phase.Phase2, ...FURY_PRESET_OPTIONS });
 export const P3_BIS_FURY_PRESET = PresetUtils.makePresetGear('BIS', P3FuryGear, { phase: Phase.Phase3, ...FURY_PRESET_OPTIONS });
-export const P35_BIS_FURY_PRESET = PresetUtils.makePresetGear('BIS', P35FuryGear, { phase: Phase.Phase4, ...FURY_PRESET_OPTIONS });
-export const P4_BIS_FURY_PRESET = PresetUtils.makePresetGear('BIS', P4FuryGear, { phase: Phase.Phase5, ...FURY_PRESET_OPTIONS });
+export const P4_BIS_FURY_PRESET = PresetUtils.makePresetGear('BIS', P4FuryGear, { phase: Phase.Phase4, ...FURY_PRESET_OPTIONS });
+export const P5_BIS_FURY_PRESET = PresetUtils.makePresetGear('BIS', P5FuryGear, { phase: Phase.Phase5, ...FURY_PRESET_OPTIONS });
 
 export const P1_PRERAID_ARMS_PRESET = PresetUtils.makePresetGear('Preraid', PreraidArmsGear, { phase: Phase.Phase1, ...ARMS_PRESET_OPTIONS });
 export const P1_BIS_ARMS_PRESET = PresetUtils.makePresetGear('BIS', P1ArmsGear, { phase: Phase.Phase1, ...ARMS_PRESET_OPTIONS });
 export const P2_BIS_ARMS_PRESET = PresetUtils.makePresetGear('BIS', P2ArmsGear, { phase: Phase.Phase2, ...ARMS_PRESET_OPTIONS });
 export const P3_BIS_ARMS_PRESET = PresetUtils.makePresetGear('BIS', P3ArmsGear, { phase: Phase.Phase3, ...ARMS_PRESET_OPTIONS });
-export const P35_BIS_ARMS_PRESET = PresetUtils.makePresetGear('BIS', P35ArmsGear, { phase: Phase.Phase4, ...ARMS_PRESET_OPTIONS });
-export const P4_BIS_ARMS_PRESET = PresetUtils.makePresetGear('BIS', P4ArmsGear, { phase: Phase.Phase5, ...ARMS_PRESET_OPTIONS });
+export const P4_BIS_ARMS_PRESET = PresetUtils.makePresetGear('BIS', P4ArmsGear, { phase: Phase.Phase4, ...ARMS_PRESET_OPTIONS });
+export const P5_BIS_ARMS_PRESET = PresetUtils.makePresetGear('BIS', P5ArmsGear, { phase: Phase.Phase5, ...ARMS_PRESET_OPTIONS });
 
 export const FURY_DEFAULT_ROTATION = PresetUtils.makePresetAPLRotation('Fury', DefaultFuryApl);
 export const ARMS_DEFAULT_ROTATION = PresetUtils.makePresetAPLRotation('Arms', DefaultArmsApl);
@@ -116,7 +116,7 @@ export const P1_FURY_EP_PRESET = PresetUtils.makePresetEpWeights(
 			[Stat.StatStrength]: 1.0,
 			[Stat.StatAgility]: 0.68,
 			[Stat.StatAttackPower]: 0.45,
-			[Stat.StatMeleeHitRating]: 0.48,
+			[Stat.StatMeleeHitRating]: 1.45,
 			[Stat.StatMeleeCritRating]: 0.92,
 			[Stat.StatMeleeHasteRating]: 0.81,
 			[Stat.StatArmorPenetration]: 0.15,
@@ -131,13 +131,13 @@ export const P1_FURY_EP_PRESET = PresetUtils.makePresetEpWeights(
 );
 
 export const P2_FURY_EP_PRESET = PresetUtils.makePresetEpWeights(
-	'P2, P3 & P4 - Fury',
+	'P2, P3, P4 & P5 - Fury',
 	Stats.fromMap(
 		{
 			[Stat.StatStrength]: 1.0,
 			[Stat.StatAgility]: 0.75,
 			[Stat.StatAttackPower]: 0.45,
-			[Stat.StatMeleeHitRating]: 0.56,
+			[Stat.StatMeleeHitRating]: 1.5,
 			[Stat.StatMeleeCritRating]: 0.9,
 			[Stat.StatMeleeHasteRating]: 0.86,
 			[Stat.StatArmorPenetration]: 0.2,
@@ -158,11 +158,11 @@ export const P1_ARMS_EP_PRESET = PresetUtils.makePresetEpWeights(
 			[Stat.StatStrength]: 1.0,
 			[Stat.StatAgility]: 0.7,
 			[Stat.StatAttackPower]: 0.46,
-			[Stat.StatMeleeHitRating]: 0.5,
+			[Stat.StatMeleeHitRating]: 1.81,
 			[Stat.StatMeleeCritRating]: 0.95,
 			[Stat.StatMeleeHasteRating]: 0.8,
 			[Stat.StatArmorPenetration]: 0.19,
-			[Stat.StatExpertiseRating]: 1.78,
+			[Stat.StatExpertiseRating]: 1.81,
 		},
 		{
 			[PseudoStat.PseudoStatMainHandDps]: 5.85,
@@ -172,7 +172,7 @@ export const P1_ARMS_EP_PRESET = PresetUtils.makePresetEpWeights(
 );
 
 export const P3_ARMS_EP_PRESET = PresetUtils.makePresetEpWeights(
-	'P3 & P4 - Arms',
+	'P3, P4 & P5 - Arms',
 	Stats.fromMap(
 		{
 			[Stat.StatStrength]: 1.0,
@@ -204,7 +204,7 @@ export const FuryTalents = {
 export const ArmsTalents = {
 	name: 'Arms',
 	data: SavedTalents.create({
-		talentsString: '32005020352010500221-0550000500521203',
+		talentsString: '32005011352010500221-0550000500521203',
 	}),
 	...ARMS_PRESET_OPTIONS,
 };
@@ -301,8 +301,8 @@ export const P3_PLAYER_SETTINGS: PresetUtils.PresetSettings = {
 	},
 };
 
-export const P35_PLAYER_SETTINGS: PresetUtils.PresetSettings = {
-	name: 'P3.5',
+export const P4_PLAYER_SETTINGS: PresetUtils.PresetSettings = {
+	name: 'P4',
 	playerOptions: {
 		...OtherDefaults,
 		profession2: Profession.Jewelcrafting,
@@ -317,8 +317,8 @@ export const P35_PLAYER_SETTINGS: PresetUtils.PresetSettings = {
 	},
 };
 
-export const P4_PLAYER_SETTINGS: PresetUtils.PresetSettings = {
-	name: 'P4',
+export const P5_PLAYER_SETTINGS: PresetUtils.PresetSettings = {
+	name: 'P5',
 	playerOptions: {
 		...OtherDefaults,
 		profession2: Profession.Jewelcrafting,
@@ -366,26 +366,26 @@ export const P3_PRESET_BUILD_FURY = PresetUtils.makePresetBuild('Fury', {
 	settings: P3_PLAYER_SETTINGS,
 });
 
-export const P35_PRESET_BUILD_FURY = PresetUtils.makePresetBuild('Fury', {
-	group: 'Fury',
-	phase: Phase.Phase4,
-	gear: P35_BIS_FURY_PRESET,
-	talents: FuryTalents,
-	epWeights: P2_FURY_EP_PRESET,
-	rotationType: APLRotation_Type.TypeSimple,
-	rotation: SIMPLE_DEFAULT_ROTATION,
-	settings: P35_PLAYER_SETTINGS,
-});
-
 export const P4_PRESET_BUILD_FURY = PresetUtils.makePresetBuild('Fury', {
 	group: 'Fury',
-	phase: Phase.Phase5,
+	phase: Phase.Phase4,
 	gear: P4_BIS_FURY_PRESET,
 	talents: FuryTalents,
 	epWeights: P2_FURY_EP_PRESET,
 	rotationType: APLRotation_Type.TypeSimple,
 	rotation: SIMPLE_DEFAULT_ROTATION,
 	settings: P4_PLAYER_SETTINGS,
+});
+
+export const P5_PRESET_BUILD_FURY = PresetUtils.makePresetBuild('Fury', {
+	group: 'Fury',
+	phase: Phase.Phase5,
+	gear: P5_BIS_FURY_PRESET,
+	talents: FuryTalents,
+	epWeights: P2_FURY_EP_PRESET,
+	rotationType: APLRotation_Type.TypeSimple,
+	rotation: SIMPLE_DEFAULT_ROTATION,
+	settings: P5_PLAYER_SETTINGS,
 });
 
 export const P1_PRESET_BUILD_ARMS = PresetUtils.makePresetBuild('Arms', {
@@ -421,24 +421,24 @@ export const P3_PRESET_BUILD_ARMS = PresetUtils.makePresetBuild('Arms', {
 	settings: P3_PLAYER_SETTINGS,
 });
 
-export const P35_PRESET_BUILD_ARMS = PresetUtils.makePresetBuild('Arms', {
-	group: 'Arms',
-	phase: Phase.Phase4,
-	gear: P35_BIS_ARMS_PRESET,
-	talents: ArmsTalents,
-	epWeights: P3_ARMS_EP_PRESET,
-	rotationType: APLRotation_Type.TypeSimple,
-	rotation: SIMPLE_ARMS_DEFAULT_ROTATION,
-	settings: P35_PLAYER_SETTINGS,
-});
-
 export const P4_PRESET_BUILD_ARMS = PresetUtils.makePresetBuild('Arms', {
 	group: 'Arms',
-	phase: Phase.Phase5,
+	phase: Phase.Phase4,
 	gear: P4_BIS_ARMS_PRESET,
 	talents: ArmsTalents,
 	epWeights: P3_ARMS_EP_PRESET,
 	rotationType: APLRotation_Type.TypeSimple,
 	rotation: SIMPLE_ARMS_DEFAULT_ROTATION,
 	settings: P4_PLAYER_SETTINGS,
+});
+
+export const P5_PRESET_BUILD_ARMS = PresetUtils.makePresetBuild('Arms', {
+	group: 'Arms',
+	phase: Phase.Phase5,
+	gear: P5_BIS_ARMS_PRESET,
+	talents: ArmsTalents,
+	epWeights: P3_ARMS_EP_PRESET,
+	rotationType: APLRotation_Type.TypeSimple,
+	rotation: SIMPLE_ARMS_DEFAULT_ROTATION,
+	settings: P5_PLAYER_SETTINGS,
 });

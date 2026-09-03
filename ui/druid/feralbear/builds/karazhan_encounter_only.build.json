@@ -1,0 +1,127 @@
+{
+	"apiVersion": 7,
+	"tanks": [
+		{
+			"type": "Player"
+		}
+	],
+	"player": {
+		"name": "Player",
+		"class": "ClassDruid",
+		"inFrontOfTarget": true,
+		"healingModel": {
+			"hps": 1288,
+			"cadenceSeconds": 1.5,
+			"cadenceVariation": 1,
+			"absorbFrac": 0.02,
+			"burstWindow": 6,
+			"inspirationUptime": 0.1
+		}
+	},
+	"encounter": {
+		"apiVersion": 7,
+		"duration": 60,
+		"durationVariation": 30,
+		"executeProportion20": 0.2,
+		"executeProportion25": 0.25,
+		"executeProportion35": 0.35,
+		"executeProportion45": 0.45,
+		"executeProportion90": 0.9,
+		"targets": [
+			{
+				"id": 100000,
+				"name": "Boss",
+				"level": 73,
+				"mobType": "MobTypeMechanical",
+				"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 320, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7685, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+				"minBaseDamage": 11850,
+				"damageSpread": 0.413,
+				"swingSpeed": 2,
+				"parryHaste": true,
+				"targetInputs": [
+					{
+						"label": "Has Extra Attacks",
+						"tooltip": "Boss has extra attacks (thrash)"
+					},
+					{
+						"inputType": "Number",
+						"label": "Extra attack count",
+						"tooltip": "Number of extra attacks (thrash) the boss casts per proc",
+						"numberValue": 1
+					},
+					{
+						"inputType": "Number",
+						"label": "Extra attack proc chance %",
+						"tooltip": "Chance, in percent, for the boss to cast extra attacks (thrash). (ie. 25 = 25% chance to proc on each melee swing)",
+						"numberValue": 25
+					},
+					{
+						"inputType": "Number",
+						"label": "Extra attack cooldown",
+						"tooltip": "Internal cooldown of thrash, in seconds",
+						"numberValue": 5
+					},
+					{
+						"label": "Has Cleave",
+						"tooltip": "Boss has cleave attack"
+					},
+					{
+						"inputType": "Number",
+						"label": "Cleave cooldown",
+						"tooltip": "Internal cooldown, in seconds, for the boss to cast cleave attack",
+						"numberValue": 10
+					},
+					{
+						"inputType": "Number",
+						"label": "Cleave damage multiplier",
+						"tooltip": "Multiplier for the damage of cleave attacks. (ie. 50 = 50% of min base damage)",
+						"numberValue": 50
+					},
+					{
+						"label": "Has Magic spell",
+						"tooltip": "Boss can cast a magic spell",
+						"boolValue": true
+					},
+					{
+						"inputType": "Number",
+						"label": "Magic spell cast time",
+						"tooltip": "Cast time, in seconds, for the boss to cast the magic spell",
+						"numberValue": 2
+					},
+					{
+						"inputType": "Number",
+						"label": "Magic spell cooldown",
+						"tooltip": "Internal cooldown of the Magic spell, in seconds",
+						"numberValue": 15
+					},
+					{
+						"inputType": "Number",
+						"label": "Magic spell min damage",
+						"tooltip": "Minimum damage of the magic spell cast by the boss",
+						"numberValue": 4000
+					},
+					{
+						"inputType": "Number",
+						"label": "Magic spell max damage",
+						"tooltip": "Maximum damage of the magic spell cast by the boss",
+						"numberValue": 6000
+					},
+					{
+						"inputType": "Enum",
+						"label": "Magic Spell School",
+						"tooltip": "Spell school of the magic spell cast by the boss",
+						"enumValue": 1,
+						"enumOptions": [
+							"Arcane",
+							"Fire",
+							"Frost",
+							"Holy",
+							"Nature",
+							"Shadow"
+						]
+					}
+				]
+			}
+		]
+	}
+}

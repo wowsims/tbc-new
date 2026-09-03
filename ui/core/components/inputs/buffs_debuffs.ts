@@ -95,6 +95,21 @@ export const DevotionAura = makeTristatePartyBuffInput({
 	fieldName: 'devotionAura',
 	label: 'Devotion Aura',
 });
+export const FrostResistanceAura = makeBooleanPartyBuffInput({
+	actionId: () => ActionId.fromSpellId(27152),
+	fieldName: 'frostResistanceAura',
+	label: 'Frost Resistance Aura',
+});
+export const FireResistanceAura = makeBooleanPartyBuffInput({
+	actionId: () => ActionId.fromSpellId(27153),
+	fieldName: 'fireResistanceAura',
+	label: 'Fire Resistance Aura',
+});
+export const ShadowResistanceAura = makeBooleanPartyBuffInput({
+	actionId: () => ActionId.fromSpellId(27151),
+	fieldName: 'shadowResistanceAura',
+	label: 'Shadow Resistance Aura',
+});
 export const DraeneiRacialCaster = makeBooleanPartyBuffInput({
 	actionId: () => ActionId.fromSpellId(28878),
 	fieldName: 'draeneiRacialCaster',
@@ -145,6 +160,12 @@ export const RetributionAura = makeTristatePartyBuffInput({
 	fieldName: 'retributionAura',
 	label: 'Retribution Aura',
 });
+export const ConcentrationAura = makeTristatePartyBuffInput({
+	actionId: () => ActionId.fromSpellId(19746),
+	impId: ActionId.fromSpellId(20256),
+	fieldName: 'concentrationAura',
+	label: 'Concentration Aura',
+});
 export const SanctityAura = makeTristatePartyBuffInput({
 	actionId: () => ActionId.fromSpellId(20218),
 	impId: ActionId.fromSpellId(31870),
@@ -161,6 +182,26 @@ export const StrengthOfEarthTotem = makeQuadstatePartyBuffInput({
 });
 export const TotemOfWrath = makeMultistatePartyBuffInput(ActionId.fromSpellId(30706), 5, 'totemOfWrath', 'Totem of Wrath');
 export const TrueshotAura = makeBooleanPartyBuffInput({ actionId: () => ActionId.fromSpellId(27066), fieldName: 'trueshotAura', label: 'Trueshot Aura' });
+export const AspectOfTheWild = makeBooleanPartyBuffInput({
+	actionId: () => ActionId.fromSpellId(27045),
+	fieldName: 'aspectOfTheWild',
+	label: 'Aspect of the Wild',
+});
+export const FrostResistanceTotem = makeBooleanPartyBuffInput({
+	actionId: () => ActionId.fromSpellId(25560),
+	fieldName: 'frostResistanceTotem',
+	label: 'Frost Resistance Totem',
+});
+export const NatureResistanceTotem = makeBooleanPartyBuffInput({
+	actionId: () => ActionId.fromSpellId(25574),
+	fieldName: 'natureResistanceTotem',
+	label: 'Nature Resistance Totem',
+});
+export const FireResistanceTotem = makeBooleanPartyBuffInput({
+	actionId: () => ActionId.fromSpellId(10538),
+	fieldName: 'fireResistanceTotem',
+	label: 'Fire Resistance Totem',
+});
 export const WrathOfAirTotem = makeTristatePartyBuffInput({
 	actionId: () => ActionId.fromSpellId(3738),
 	impId: ActionId.fromSpellId(37212),
@@ -201,6 +242,7 @@ export const BlessingOfSalvation = makeBooleanIndividualBuffInput({
 	actionId: () => ActionId.fromSpellId(25895),
 	fieldName: 'blessingOfSalvation',
 	label: 'Blessing of Salvation',
+	showWhen: player => !player.getPlayerSpec().isTankSpec && !player.getPlayerSpec().isHealingSpec,
 });
 export const BlessingOfSanctuary = makeBooleanIndividualBuffInput({
 	actionId: () => ActionId.fromSpellId(27169),
@@ -231,7 +273,7 @@ export const UnleashedRage = makeBooleanIndividualBuffInput({
 	label: 'Unleashed Rage',
 });
 export const ShadowPriestDPS = makeMultistateIndividualBuffInput({
-	actionId: () => ActionId.fromSpellId(34914),
+	actionId: () => ActionId.fromSpellId(34917),
 	numStates: 1500,
 	fieldName: 'shadowPriestDps',
 	label: 'Vampiric Touch',
@@ -261,7 +303,7 @@ export const PARTY_BUFFS_CONFIG = [
 	{
 		config: FerociousInspiration,
 		picker: IconPicker,
-		stats: [Stat.StatAttackPower, Stat.StatRangedAttackPower],
+		stats: [],
 	},
 	{
 		config: LeaderOfThePack,
@@ -292,6 +334,11 @@ export const PARTY_BUFFS_CONFIG = [
 		config: RetributionAura,
 		picker: IconPicker,
 		stats: [Stat.StatResilienceRating, Stat.StatArmor, Stat.StatDefenseRating],
+	},
+	{
+		config: ConcentrationAura,
+		picker: IconPicker,
+		stats: [Stat.StatDefenseRating],
 	},
 	{
 		config: SanctityAura,
@@ -381,6 +428,41 @@ export const PARTY_BUFFS_CONFIG = [
 		picker: IconEnumPicker,
 		stats: [],
 	},
+	{
+		config: FrostResistanceTotem,
+		picker: IconPicker,
+		stats: [Stat.StatFrostResistance],
+	},
+	{
+		config: NatureResistanceTotem,
+		picker: IconPicker,
+		stats: [Stat.StatNatureResistance],
+	},
+	{
+		config: FireResistanceTotem,
+		picker: IconPicker,
+		stats: [Stat.StatFireResistance],
+	},
+	{
+		config: FrostResistanceAura,
+		picker: IconPicker,
+		stats: [Stat.StatFrostResistance],
+	},
+	{
+		config: FireResistanceAura,
+		picker: IconPicker,
+		stats: [Stat.StatFireResistance],
+	},
+	{
+		config: ShadowResistanceAura,
+		picker: IconPicker,
+		stats: [Stat.StatShadowResistance],
+	},
+	{
+		config: AspectOfTheWild,
+		picker: IconPicker,
+		stats: [Stat.StatNatureResistance],
+	},
 ] as PickerStatOptions[];
 
 export const BUFFS_CONFIG = [
@@ -434,6 +516,11 @@ export const BUFFS_CONFIG = [
 		config: BlessingOfSanctuary,
 		picker: IconPicker,
 		stats: [Stat.StatStamina, Stat.StatArmor],
+	},
+	{
+		config: BlessingOfSalvation,
+		picker: IconPicker,
+		stats: [],
 	},
 	{
 		config: ShadowProtection,

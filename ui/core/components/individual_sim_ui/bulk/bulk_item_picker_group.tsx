@@ -32,23 +32,29 @@ export default class BulkItemPickerGroup extends ContentBlock {
 		return !!this.pickers.get(idx);
 	}
 
-	add(idx: number, item: EquippedItem, silent = false) {
+	add(idx: number, item: EquippedItem, silent = false): boolean {
 		if (!this.pickers.size) this.bodyElement.replaceChildren();
 
 		// Block duplicate items from being added.
 		const pickers = Array.from(this.pickers.values());
-		if (
-			pickers.some(
-				picker => ((this.bulkSlot != BulkSimItemSlot.ItemSlotHandWeapon) && (picker.item.id === item.id)) || (picker.item._item.limitCategory != 0 && picker.item._item.limitCategory === item._item.limitCategory),
-			)
-		) {
+		// Slots that map to two physical equipment slots can hold two copies of a non-unique item.
+		const isDualSlot =
+			this.bulkSlot == BulkSimItemSlot.ItemSlotHandWeapon ||
+			this.bulkSlot == BulkSimItemSlot.ItemSlotFinger ||
+			this.bulkSlot == BulkSimItemSlot.ItemSlotTrinket;
+		const maxCopies = isDualSlot && !item._item.unique ? 2 : 1;
+		const hasDuplicateLimitCategory = pickers.some(
+			picker => picker.item._item.limitCategory != 0 && picker.item._item.limitCategory === item._item.limitCategory,
+		);
+		const hasMaxCopies = pickers.filter(picker => picker.item.id === item.id).length >= maxCopies;
+		if (hasDuplicateLimitCategory || hasMaxCopies) {
 			if (!silent)
 				new Toast({
 					delay: 1000,
 					variant: 'error',
 					body: <>{i18n.t('bulk_tab.search.item_unique', { itemName: item._item.name })}</>,
 				});
-			return;
+			return false;
 		}
 
 		if (this.pickers.has(idx)) {
@@ -65,6 +71,8 @@ export default class BulkItemPickerGroup extends ContentBlock {
 				variant: 'success',
 				body: <>{i18n.t('bulk_tab.search.item_added', { itemName: item._item.name })}</>,
 			});
+
+		return true;
 	}
 
 	update(idx: number, newItem: EquippedItem) {

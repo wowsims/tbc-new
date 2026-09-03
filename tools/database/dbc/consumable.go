@@ -50,6 +50,7 @@ func (c *Consumable) ToProto() *proto.Consumable {
 		BuffDuration:             int32(c.Duration / 1000),
 		CooldownDuration:         int32(c.CooldownDuration / 1000),
 		CategoryCooldownDuration: int32(c.CategoryCooldownDuration / 1000),
+		CategoryId:               int32(c.SpellCategoryID),
 		EffectIds:                c.GetNonStatEffectIds(),
 	}
 }
@@ -92,21 +93,33 @@ func (s ConsumableClass) ToProto() proto.ConsumableType {
 	return proto.ConsumableType_ConsumableTypeUnknown
 }
 
+// A consumable's effects that restore a resource rather than grant a stat, which the sim wires up
+// separately.
+var consumableRestoreEffectTypes = map[SpellEffectType]bool{
+	E_HEAL:     true,
+	E_ENERGIZE: true,
+}
+
 func (consumable *Consumable) GetNonStatEffectIds() []int32 {
 	var effectIds []int32
 
-	statAuraTypes := map[SpellEffectType]bool{
-		E_HEAL:     true,
-		E_ENERGIZE: true,
-	}
 	slices.Sort(consumable.ItemEffects)
 	for _, effectID := range consumable.ItemEffects {
 		effect := GetItemEffect(effectID)
 		if effect.ID != 0 {
 			if spellEffects, ok := dbcInstance.SpellEffects[effect.SpellID]; ok {
 				for _, spellEffect := range spellEffects {
-					if statAuraTypes[spellEffect.EffectType] {
+					if consumableRestoreEffectTypes[spellEffect.EffectType] || spellEffect.EffectAura == A_PERIODIC_ENERGIZE || spellEffect.EffectAura == A_PERIODIC_HEAL {
 						effectIds = append(effectIds, int32(spellEffect.ID))
+					}
+					// Aura effects triggered on use (e.g. Fel Mana Potion's spell damage
+					// reduction) carry the stats the sim applies as a temporary aura.
+					if spellEffect.EffectType == E_TRIGGER_SPELL {
+						for _, subEffect := range dbcInstance.SpellEffects[spellEffect.EffectTriggerSpell] {
+							if _, ok := subEffect.ParseStatEffect(false, 0); ok {
+								effectIds = append(effectIds, int32(subEffect.ID))
+							}
+						}
 					}
 				}
 			}
@@ -122,8 +135,9 @@ func (consumable *Consumable) GetStatModifiers() *stats.Stats {
 		if effect.ID != 0 {
 			if spellEffects, ok := dbcInstance.SpellEffects[effect.SpellID]; ok {
 				for _, spellEffect := range spellEffects {
-					stat := spellEffect.ParseStatEffect(spellEffect.Coefficient != 0, 0)
-					stats.AddInplace(stat)
+					if stat, ok := spellEffect.ParseStatEffect(spellEffect.Coefficient != 0, 0); ok {
+						stats.AddInplace(&stat)
+					}
 				}
 			}
 		}

@@ -34,12 +34,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		12344, // Seal of Ascension
-		[
-			"", // 16372 - https://www.wowhead.com/tbc/spell=16372
-		]
-	],
-	[
 		12588, // Bonespike Shoulder
 		[
 			"Deals 90 damage when you are the victim of a critical melee strike.", // 16550 - https://www.wowhead.com/tbc/spell=16550
@@ -94,12 +88,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		13243, // Argent Defender
-		[
-			"Has a 1% chance when struck in combat of increasing block rating by 250 for 10 sec.", // 17351 - https://www.wowhead.com/tbc/spell=17351
-		]
-	],
-	[
 		13375, // Crest of Retribution
 		[
 			"Deals 35 damage every time you block.", // 17496 - https://www.wowhead.com/tbc/spell=17496
@@ -151,12 +139,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		14154, // Truefaith Vestments
 		[
 			"Reduces the cooldown of your Fade ability by -2.0 sec.", // 18388 - https://www.wowhead.com/tbc/spell=18388
-		]
-	],
-	[
-		14557, // The Lion Horn of Stormwind
-		[
-			"When struck in combat has a 1% chance of increasing all party member's armor by 250 for 30s.", // 18946 - https://www.wowhead.com/tbc/spell=18946
 		]
 	],
 	[
@@ -220,12 +202,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		16463, // Marshal's Chain Grips
-		[
-			"Increases the damage done by your Multi-Shot by 5%.", // 28539 - https://www.wowhead.com/tbc/spell=28539
-		]
-	],
-	[
 		16471, // Marshal's Lamellar Gloves
 		[
 			"Increases the Holy damage bonus of your Judgement of the Crusader by 20.", // 23300 - https://www.wowhead.com/tbc/spell=23300
@@ -286,12 +262,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		16571, // General's Chain Gloves
-		[
-			"Increases the damage done by your Multi-Shot by 5%.", // 28539 - https://www.wowhead.com/tbc/spell=28539
-		]
-	],
-	[
 		16573, // General's Mail Boots
 		[
 			"Increases the speed of your Ghost Wolf ability by 15%. Does not function for players higher than level 60.", // 22801 - https://www.wowhead.com/tbc/spell=22801
@@ -337,12 +307,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		17104, // Spinal Reaper
 		[
 			"Restores 150 mana or 20 rage when you kill a target that gives experience; this effect cannot occur more than once every 10 seconds.", // 21186 - https://www.wowhead.com/tbc/spell=21186
-		]
-	],
-	[
-		17111, // Blazefury Medallion
-		[
-			"Adds 2 fire damage to your melee attacks.", // 7712 - https://www.wowhead.com/tbc/spell=7712
 		]
 	],
 	[
@@ -550,18 +514,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		18825, // Grand Marshal's Aegis
-		[
-			"When struck in combat has a 5% chance of inflicting 65 Nature damage to the attacker.", // 16782 - https://www.wowhead.com/tbc/spell=16782
-		]
-	],
-	[
-		18826, // High Warlord's Shield Wall
-		[
-			"When struck in combat has a 5% chance of inflicting 65 Nature damage to the attacker.", // 16782 - https://www.wowhead.com/tbc/spell=16782
-		]
-	],
-	[
 		19287, // Darkmoon Card: Heroism
 		[
 			"Sometimes heals bearer of 180 damage when damaging an enemy in melee.", // 23682 - https://www.wowhead.com/tbc/spell=23682
@@ -682,12 +634,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		19948, // Zandalarian Hero Badge
-		[
-			"Increases your armor by 2000 and defense rating by 50 for 20s. Every time you take melee or ranged damage, this bonus is reduced by 200 armor and 5 defense rating.", // 24574 - https://www.wowhead.com/tbc/spell=24574
-		]
-	],
-	[
 		19949, // Zandalarian Hero Medallion
 		[
 			"Increases your melee and ranged damage by 40 for 20s. Every time you hit a target, this bonus is reduced by 2.", // 24661 - https://www.wowhead.com/tbc/spell=24661
@@ -739,12 +685,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		19963, // Pitchfork of Madness
 		[
 			"Increases attack power by 117 when fighting Demons.", // 14098 - https://www.wowhead.com/tbc/spell=14098
-		]
-	],
-	[
-		19968, // Fiery Retributer
-		[
-			"Adds 2 fire damage to your melee attacks.", // 7712 - https://www.wowhead.com/tbc/spell=7712
 		]
 	],
 	[
@@ -1036,12 +976,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		22862, // Blood Guard's Chain Vices
-		[
-			"Increases the damage done by your Multi-Shot by 5%.", // 28539 - https://www.wowhead.com/tbc/spell=28539
-		]
-	],
-	[
 		22865, // Blood Guard's Dreadweave Handwraps
 		[
 			"Gives you a 50% chance to avoid interruption caused by damage while casting Searing Pain.", // 23046 - https://www.wowhead.com/tbc/spell=23046
@@ -1174,12 +1108,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		23198, // Idol of Brutality
-		[
-			"Increases the damage dealt by your Maul ability by 50 and Swipe ability by 10.", // 28855 - https://www.wowhead.com/tbc/spell=28855
-		]
-	],
-	[
 		23200, // Totem of Sustaining
 		[
 			"Increases healing done by Lesser Healing Wave by up to 53.", // 28856 - https://www.wowhead.com/tbc/spell=28856
@@ -1192,18 +1120,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		23206, // Mark of the Champion
-		[
-			"Increases attack power by 150 when fighting Undead and Demons. It also allows the acquisition of Scourgestones on behalf of the Argent Dawn.", // 29112 - https://www.wowhead.com/tbc/spell=29112
-		]
-	],
-	[
-		23207, // Mark of the Champion
-		[
-			"Increases damage done to Undead and Demons by magical spells and effects by up to 85. It also allows the acquisition of Scourgestones on behalf of the Argent Dawn.", // 29113 - https://www.wowhead.com/tbc/spell=29113
-		]
-	],
-	[
 		23221, // Misplaced Servo Arm
 		[
 			"Chance to discharge electricity causing 150 Nature damage to your target.", // 29151 - https://www.wowhead.com/tbc/spell=29151
@@ -1213,12 +1129,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		23274, // Knight-Lieutenant's Lamellar Gauntlets
 		[
 			"Increases the Holy damage bonus of your Judgement of the Crusader by 20.", // 23300 - https://www.wowhead.com/tbc/spell=23300
-		]
-	],
-	[
-		23279, // Knight-Lieutenant's Chain Vices
-		[
-			"Increases the damage done by your Multi-Shot by 5%.", // 28539 - https://www.wowhead.com/tbc/spell=28539
 		]
 	],
 	[
@@ -1306,36 +1216,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		24092, // Pendant of Frozen Flame
-		[
-			"Absorbs 2700 fire damage on all nearby party members. Lasts 5min.", // 30997 - https://www.wowhead.com/tbc/spell=30997
-		]
-	],
-	[
-		24093, // Pendant of Thawing
-		[
-			"Absorbs 2700 frost damage on all nearby party members. Lasts 5min.", // 30994 - https://www.wowhead.com/tbc/spell=30994
-		]
-	],
-	[
-		24095, // Pendant of Withering
-		[
-			"Absorbs 2700 nature damage on all nearby party members. Lasts 5min.", // 30999 - https://www.wowhead.com/tbc/spell=30999
-		]
-	],
-	[
-		24097, // Pendant of Shadow's End
-		[
-			"Absorbs 2700 shadow damage on all nearby party members. Lasts 5min.", // 31000 - https://www.wowhead.com/tbc/spell=31000
-		]
-	],
-	[
-		24098, // Pendant of the Null Rune
-		[
-			"Absorbs 2700 arcane damage on all nearby party members. Lasts 5min.", // 31002 - https://www.wowhead.com/tbc/spell=31002
-		]
-	],
-	[
 		24106, // Thick Felsteel Necklace
 		[
 			"Increases Stamina of nearby party members by 20 for 30min.", // 31023 - https://www.wowhead.com/tbc/spell=31023
@@ -1381,12 +1261,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		24413, // Totem of the Thunderhead
 		[
 			"Your Water Shield ability grants an additional 27 mana each time it triggers and an additional 2 mana per 5 sec.", // 34318 - https://www.wowhead.com/tbc/spell=34318
-		]
-	],
-	[
-		24549, // Gladiator's Plate Gauntlets
-		[
-			"Hamstring Rage cost reduced by -3.0.", // 22778 - https://www.wowhead.com/tbc/spell=22778
 		]
 	],
 	[
@@ -1614,12 +1488,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		28335, // Gladiator's Chain Gauntlets
-		[
-			"Increases the damage done by your Multi-Shot by 5%.", // 28539 - https://www.wowhead.com/tbc/spell=28539
-		]
-	],
-	[
 		28355, // Gladiator's Idol of Tenacity
 		[
 			"Increases the final healing value of your Lifebloom by 87.", // 42367 - https://www.wowhead.com/tbc/spell=42367
@@ -1668,12 +1536,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		28614, // Grand Marshal's Chain Gauntlets
-		[
-			"Increases the damage done by your Multi-Shot by 5%.", // 28539 - https://www.wowhead.com/tbc/spell=28539
-		]
-	],
-	[
 		28618, // Grand Marshal's Dragonhide Gloves
 		[
 			"Reduces the cast time of your Cyclone spell by -0.1 sec.", // 33830 - https://www.wowhead.com/tbc/spell=33830
@@ -1710,12 +1572,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		28700, // Grand Marshal's Plate Gauntlets
-		[
-			"Hamstring Rage cost reduced by -3.0.", // 22778 - https://www.wowhead.com/tbc/spell=22778
-		]
-	],
-	[
 		28704, // Grand Marshal's Satin Gloves
 		[
 			"Increases the duration of your Psychic Scream spell by 1.0 sec.", // 23044 - https://www.wowhead.com/tbc/spell=23044
@@ -1749,12 +1605,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		28774, // Glaive of the Pit
 		[
 			"Steals 315 life from target enemy.", // 34696 - https://www.wowhead.com/tbc/spell=34696
-		]
-	],
-	[
-		28806, // High Warlord's Chain Gauntlets
-		[
-			"Increases the damage done by your Multi-Shot by 5%.", // 28539 - https://www.wowhead.com/tbc/spell=28539
 		]
 	],
 	[
@@ -1800,12 +1650,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		28852, // High Warlord's Plate Gauntlets
-		[
-			"Hamstring Rage cost reduced by -3.0.", // 22778 - https://www.wowhead.com/tbc/spell=22778
-		]
-	],
-	[
 		28856, // High Warlord's Satin Gloves
 		[
 			"Increases the duration of your Psychic Scream spell by 1.0 sec.", // 23044 - https://www.wowhead.com/tbc/spell=23044
@@ -1833,12 +1677,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		29181, // Timelapse Shard
 		[
 			"Reduces your threat to enemy targets within 30 yards, making them less likely to attack you.", // 35352 - https://www.wowhead.com/tbc/spell=35352
-		]
-	],
-	[
-		29297, // Band of the Eternal Defender
-		[
-			"When struck in combat has a chance of increasing your armor by 800 for 10s.", // 35078 - https://www.wowhead.com/tbc/spell=35078
 		]
 	],
 	[
@@ -1926,18 +1764,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		30311, // Warp Slicer
-		[
-			"Increases your movement speed by 50%, and your melee attack speed by 20% for 30s.", // 36479 - https://www.wowhead.com/tbc/spell=36479
-		]
-	],
-	[
-		30316, // Devastation
-		[
-			"Increases your movement speed by 50%, and your melee attack speed by 20% for 30s.", // 36479 - https://www.wowhead.com/tbc/spell=36479
-		]
-	],
-	[
 		30317, // Cosmic Infuser
 		[
 			"Friendly targets of the caster's heals gain an effect that reduces the damage taken by Fire and Shadow spells by 50% for 30s.", // 36483 - https://www.wowhead.com/tbc/spell=36483
@@ -1947,18 +1773,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		30318, // Netherstrand Longbow
 		[
 			"Increases your ranged weapon critical strike damage bonus by 50%.", // 36413 - https://www.wowhead.com/tbc/spell=36413
-		]
-	],
-	[
-		30447, // Tome of Fiery Redemption
-		[
-			"Each time you cast a spell, there is chance you will gain up to 290 spell damage and healing.", // 37198 - https://www.wowhead.com/tbc/spell=37198
-		]
-	],
-	[
-		30487, // Merciless Gladiator's Plate Gauntlets
-		[
-			"Hamstring Rage cost reduced by -3.0.", // 22778 - https://www.wowhead.com/tbc/spell=22778
 		]
 	],
 	[
@@ -2097,12 +1911,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		31859, // Darkmoon Card: Madness
 		[
 			"Each time you land a killing blow on an enemy that yields experience or honor, you gain the Power of Madness.", // 39446 - https://www.wowhead.com/tbc/spell=39446
-		]
-	],
-	[
-		31961, // Merciless Gladiator's Chain Gauntlets
-		[
-			"Increases the damage done by your Multi-Shot by 5%.", // 28539 - https://www.wowhead.com/tbc/spell=28539
 		]
 	],
 	[
@@ -2280,21 +2088,9 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		32164, // Chancellor's Plate Gauntlets
-		[
-			"Hamstring Rage cost reduced by -3.0.", // 22778 - https://www.wowhead.com/tbc/spell=22778
-		]
-	],
-	[
 		32169, // Chancellor's Scaled Gauntlets
 		[
 			"Increases the Holy damage bonus of your Judgement of the Crusader by 20.", // 23300 - https://www.wowhead.com/tbc/spell=23300
-		]
-	],
-	[
-		32257, // Idol of the White Stag
-		[
-			"Your Mangle ability also increases your attack power by 94 for 20s.", // 41037 - https://www.wowhead.com/tbc/spell=41037
 		]
 	],
 	[
@@ -2310,39 +2106,9 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		32485, // Ashtongue Talisman of Valor
-		[
-			"Your Mortal Strike, Bloodthirst, and Shield Slam attacks have a 25% chance to heal you for 330 and grant 55 Strength for 12s.", // 40459 - https://www.wowhead.com/tbc/spell=40459
-		]
-	],
-	[
-		32488, // Ashtongue Talisman of Insight
-		[
-			"Your spell critical strikes have a 50% chance to grant you 145 spell haste rating for 5s.", // 40483 - https://www.wowhead.com/tbc/spell=40483
-		]
-	],
-	[
 		32489, // Ashtongue Talisman of Zeal
 		[
 			"Flash of Light and Holy Light have a 15% chance to grant your target 0 healing over 12s, and your Judgements have a 50% chance to inflict 0 damage on their target over 8s.", // 40470 - https://www.wowhead.com/tbc/spell=40470
-		]
-	],
-	[
-		32490, // Ashtongue Talisman of Acumen
-		[
-			"Each time your Shadow Word: Pain deals damage, it has a 10% chance to grant you 220 spell damage for 10s and each time your Renew heals, it has a 10% chance to grant you 220 healing for 5s.", // 40438 - https://www.wowhead.com/tbc/spell=40438
-		]
-	],
-	[
-		32491, // Ashtongue Talisman of Vision
-		[
-			"Lesser Healing Wave has a 10% chance to grant 170 mana, Lightning Bolt has a 15% chance to grant up to 170 mana, and Stormstrike has a 50% chance to grant up to 275 attack power for 10s.", // 40463 - https://www.wowhead.com/tbc/spell=40463
-		]
-	],
-	[
-		32492, // Ashtongue Talisman of Lethality
-		[
-			"20% chance per combo point for your finishing moves to grant 145 critical strike rating for 10s.", // 40460 - https://www.wowhead.com/tbc/spell=40460
 		]
 	],
 	[
@@ -2361,6 +2127,18 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		32539, // Skyguard's Drape
 		[
 			"Reduces your fall speed for 10s.", // 12438 - https://www.wowhead.com/tbc/spell=12438
+		]
+	],
+	[
+		32770, // Skyguard Silver Cross
+		[
+			"50% chance to increase your attack power by 140 for 30s when you kill a target that gives experience or honor. This effect cannot occur more than once every 10 seconds.", // 41261 - https://www.wowhead.com/tbc/spell=41261
+		]
+	],
+	[
+		32771, // Airman's Ribbon of Gallantry
+		[
+			"50% chance to increase your spell damage and healing by 80 for 30s when you kill a target that gives experience or honor. This effect cannot occur more than once every 10 seconds.", // 41263 - https://www.wowhead.com/tbc/spell=41263
 		]
 	],
 	[
@@ -2406,21 +2184,9 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		33509, // Idol of Terror
-		[
-			"Your Mangle ability has a chance to grant 65 agility for 10s.", // 43738 - https://www.wowhead.com/tbc/spell=43738
-		]
-	],
-	[
 		33510, // Idol of the Unseen Moon
 		[
 			"Your Moonfire ability has a chance to grant up to 140 spell damage and healing for 10s.", // 43740 - https://www.wowhead.com/tbc/spell=43740
-		]
-	],
-	[
-		33665, // Vengeful Gladiator's Chain Gauntlets
-		[
-			"Increases the damage done by your Multi-Shot by 5%.", // 28539 - https://www.wowhead.com/tbc/spell=28539
 		]
 	],
 	[
@@ -2484,12 +2250,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		33729, // Vengeful Gladiator's Plate Gauntlets
-		[
-			"Hamstring Rage cost reduced by -3.0.", // 22778 - https://www.wowhead.com/tbc/spell=22778
-		]
-	],
-	[
 		33739, // Vengeful Gladiator's Ringmail Gauntlets
 		[
 			"Improves the range of all Shock spells by 5 yards.", // 32973 - https://www.wowhead.com/tbc/spell=32973
@@ -2517,12 +2277,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		33767, // Vengeful Gladiator's Wyrmhide Gloves
 		[
 			"Reduces the cast time of your Cyclone spell by -0.1 sec.", // 33830 - https://www.wowhead.com/tbc/spell=33830
-		]
-	],
-	[
-		33808, // The Horseman's Helm
-		[
-			"Let the Horseman laugh through you.", // 43873 - https://www.wowhead.com/tbc/spell=43873
 		]
 	],
 	[
@@ -2628,12 +2382,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		34470, // Timbal's Focusing Crystal
-		[
-			"Each time one of your spells deals periodic damage, there is a chance 475 additional damage will be dealt.", // 45055 - https://www.wowhead.com/tbc/spell=45055
-		]
-	],
-	[
 		34471, // Vial of the Sunwell
 		[
 			"Collects 100 Holy Energy from healing spells you cast. Cannot collect more than 2000 Holy Energy.", // 45062 - https://www.wowhead.com/tbc/spell=45062
@@ -2662,12 +2410,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		34680, // Shattered Sun Pendant of Resolve
 		[
 			"Your melee and ranged attacks have a chance to call on the power of the Arcane if you're exalted with the Scryers, or the Light if you're exalted with the Aldor.", // 45483 - https://www.wowhead.com/tbc/spell=45483
-		]
-	],
-	[
-		34991, // Brutal Gladiator's Chain Gauntlets
-		[
-			"Increases the damage done by your Multi-Shot by 5%.", // 28539 - https://www.wowhead.com/tbc/spell=28539
 		]
 	],
 	[
@@ -2752,12 +2494,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		35060, // Brutal Gladiator's Ornamented Gloves
 		[
 			"Increases the critical effect chance of your Flash of Light by 2%.", // 38522 - https://www.wowhead.com/tbc/spell=38522
-		]
-	],
-	[
-		35067, // Brutal Gladiator's Plate Gauntlets
-		[
-			"Hamstring Rage cost reduced by -3.0.", // 22778 - https://www.wowhead.com/tbc/spell=22778
 		]
 	],
 	[
@@ -2863,12 +2599,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		35377, // Stalker's Chain Gauntlets
-		[
-			"Increases the damage done by your Multi-Shot by 5%.", // 28539 - https://www.wowhead.com/tbc/spell=28539
-		]
-	],
-	[
 		35382, // Seer's Linked Gauntlets
 		[
 			"Improves the range of all Shock spells by 5 yards.", // 32973 - https://www.wowhead.com/tbc/spell=32973
@@ -2890,12 +2620,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		35403, // Crusader's Ornamented Gloves
 		[
 			"Increases the Holy damage bonus of your Judgement of the Crusader by 20.", // 23300 - https://www.wowhead.com/tbc/spell=23300
-		]
-	],
-	[
-		35408, // Savage Plate Gauntlets
-		[
-			"Hamstring Rage cost reduced by -3.0.", // 22778 - https://www.wowhead.com/tbc/spell=22778
 		]
 	],
 	[
@@ -2923,21 +2647,9 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		35475, // Stalker's Chain Gauntlets
-		[
-			"Increases the damage done by your Multi-Shot by 5%.", // 28539 - https://www.wowhead.com/tbc/spell=28539
-		]
-	],
-	[
 		35477, // Crusader's Scaled Gauntlets
 		[
 			"Increases the Holy damage bonus of your Judgement of the Crusader by 20.", // 23300 - https://www.wowhead.com/tbc/spell=23300
-		]
-	],
-	[
-		35514, // Frostscythe of Lord Ahune
-		[
-			"", // 46643 - https://www.wowhead.com/tbc/spell=46643
 		]
 	],
 	[

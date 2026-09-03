@@ -246,7 +246,16 @@ func (db *WowDatabase) ToUIProto() *proto.UIDatabase {
 		if v1.EffectId != v2.EffectId {
 			return int(v1.EffectId - v2.EffectId)
 		}
-		return int(v1.Type - v2.Type)
+		if v1.Type != v2.Type {
+			return int(v1.Type - v2.Type)
+		}
+		if v1.SpellId != v2.SpellId {
+			return int(v1.SpellId - v2.SpellId)
+		}
+		if v1.EnchantType != v2.EnchantType {
+			return int(v1.EnchantType - v2.EnchantType)
+		}
+		return int(v1.ItemId - v2.ItemId)
 	})
 
 	return &proto.UIDatabase{
@@ -306,8 +315,22 @@ func ReadDatabaseFromJson(jsonStr string) *WowDatabase {
 }
 
 func (db *WowDatabase) WriteBinaryAndJson(binFilePath, jsonFilePath string) {
+	jsonBytes := db.toJsonBytes()
+	// The JSON covers every UIDatabase field, so unchanged JSON means unchanged
+	// contents — worth skipping because the binary's proto encoding is not
+	// byte-stable and would otherwise churn on every run. A missing binary must
+	// still be regenerated, though, so check for it before skipping.
+	if existing, err := os.ReadFile(jsonFilePath); err == nil && bytes.Equal(existing, jsonBytes) {
+		if _, err := os.Stat(binFilePath); err == nil {
+			log.Printf("No changes detected, skipping write of %s and %s", binFilePath, jsonFilePath)
+			return
+		}
+		log.Printf("%s is missing, regenerating it", binFilePath)
+	}
 	db.WriteBinary(binFilePath)
-	db.WriteJson(jsonFilePath)
+	if err := os.WriteFile(jsonFilePath, jsonBytes, 0666); err != nil {
+		log.Fatalf("[ERROR] Failed to write %s: %s", jsonFilePath, err.Error())
+	}
 }
 
 func (db *WowDatabase) WriteBinary(binFilePath string) {
@@ -318,12 +341,20 @@ func (db *WowDatabase) WriteBinary(binFilePath string) {
 	if err != nil {
 		log.Fatalf("[ERROR] Failed to marshal db: %s", err.Error())
 	}
-	os.WriteFile(binFilePath, protoBytes, 0666)
+	if err := os.WriteFile(binFilePath, protoBytes, 0666); err != nil {
+		log.Fatalf("[ERROR] Failed to write %s: %s", binFilePath, err.Error())
+	}
 }
 
 func (db *WowDatabase) WriteJson(jsonFilePath string) {
-	// Also write in JSON format, so we can manually inspect the contents.
-	// Write it out line-by-line, so we can have 1 line / item, making it more human-readable.
+	if err := os.WriteFile(jsonFilePath, db.toJsonBytes(), 0666); err != nil {
+		log.Fatalf("[ERROR] Failed to write %s: %s", jsonFilePath, err.Error())
+	}
+}
+
+// Serializes in JSON format, so we can manually inspect the contents.
+// Written out line-by-line, so we can have 1 line / item, making it more human-readable.
+func (db *WowDatabase) toJsonBytes() []byte {
 	uidb := db.ToUIProto()
 
 	buffer := new(bytes.Buffer)
@@ -354,5 +385,5 @@ func (db *WowDatabase) WriteJson(jsonFilePath string) {
 	tools.WriteProtoArrayToBuffer(uidb.SpellEffects, buffer, "spellEffects")
 	buffer.WriteString("\n")
 	buffer.WriteString("}")
-	os.WriteFile(jsonFilePath, buffer.Bytes(), 0666)
+	return buffer.Bytes()
 }

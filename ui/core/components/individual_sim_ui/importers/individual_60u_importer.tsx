@@ -8,7 +8,7 @@ import { IndividualImporter } from './individual_importer';
 
 export class Individual60UImporter<SpecType extends Spec> extends IndividualImporter<SpecType> {
 	constructor(parent: HTMLElement, simUI: IndividualSimUI<SpecType>) {
-		super(parent, simUI, { title: 'Sixty Upgrades Cataclysm Import', allowFileUpload: true });
+		super(parent, simUI, { title: 'Sixty Upgrades Import', allowFileUpload: true });
 
 		this.descriptionElem.appendChild(
 			<>

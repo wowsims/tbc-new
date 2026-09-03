@@ -99,7 +99,8 @@ export function makeBooleanIndividualBuffInput<SpecType extends Spec>(
 	return InputHelpers.makeBooleanIconInput<any, IndividualBuffs, Player<SpecType>>(
 		{
 			getModObject: (player: Player<SpecType>) => player,
-			showWhen: (player: Player<SpecType>) => !config.faction || config.faction == player.getFaction(),
+			showWhen: (player: Player<SpecType>) =>
+				(!config.faction || config.faction == player.getFaction()) && (!config.showWhen || config.showWhen(player)),
 			getValue: (player: Player<SpecType>) => player.getBuffs(),
 			setValue: (eventID: EventID, player: Player<SpecType>, newVal: IndividualBuffs) => player.setBuffs(eventID, newVal),
 			changeEmitter: (player: Player<SpecType>) => TypedEvent.onAny([player.buffsChangeEmitter, player.raceChangeEmitter]),
@@ -120,7 +121,7 @@ export function makeBooleanConsumeInput<SpecType extends Spec>(
 			getModObject: (player: Player<SpecType>) => player,
 			getValue: (player: Player<SpecType>) => player.getConsumes(),
 			setValue: (eventID: EventID, player: Player<SpecType>, newVal: ConsumesSpec) => player.setConsumes(eventID, newVal),
-			changeEmitter: (player: Player<SpecType>) => TypedEvent.onAny([player.consumesChangeEmitter, player.professionChangeEmitter]),
+			changeEmitter: (player: Player<SpecType>) => TypedEvent.onAny([player.consumesChangeEmitter, player.professionChangeEmitter, player.raceChangeEmitter]),
 			enableWhen: config.enableWhen,
 			showWhen: (player: Player<SpecType>) => !config.showWhen || config.showWhen(player),
 		},
@@ -181,7 +182,7 @@ export function makeTristatePartyBuffInput<SpecType extends Spec>(
 		{
 			getModObject: (player: Player<SpecType>) => player,
 			showWhen: (player: Player<SpecType>) => !config.faction || config.faction == player.getFaction(),
-			getValue: (player: Player<SpecType>) => player.getParty()?.getBuffs()!!,
+			getValue: (player: Player<SpecType>) => player.getParty()!.getBuffs(),
 			setValue: (eventID: EventID, player: Player<SpecType>, newVal: PartyBuffs) => player.getParty()?.setBuffs(eventID, newVal),
 			changeEmitter: (player: Player<SpecType>) => TypedEvent.onAny([player.getParty()!.buffsChangeEmitter, player.raceChangeEmitter]),
 			label: config.label,
@@ -245,7 +246,7 @@ export function makeQuadstatePartyBuffInput<SpecType extends Spec>(
 		{
 			getModObject: (player: Player<SpecType>) => player,
 			showWhen: (player: Player<SpecType>) => !config.faction || config.faction == player.getFaction(),
-			getValue: (player: Player<SpecType>) => player.getParty()?.getBuffs()!!,
+			getValue: (player: Player<SpecType>) => player.getParty()!.getBuffs(),
 			setValue: (eventID: EventID, player: Player<SpecType>, newVal: PartyBuffs) => player.getParty()?.setBuffs(eventID, newVal),
 			changeEmitter: (player: Player<SpecType>) => TypedEvent.onAny([player.getParty()!.buffsChangeEmitter, player.raceChangeEmitter]),
 			label: config.label,

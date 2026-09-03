@@ -11,7 +11,7 @@ func (mage *Mage) registerArcaneCharges() {
 	abCostMod := mage.AddDynamicMod(core.SpellModConfig{
 		ClassMask:  MageSpellArcaneBlast,
 		FloatValue: powerCostIncrease,
-		Kind:       core.SpellMod_PowerCost_Pct,
+		Kind:       core.SpellMod_PowerCost_Pct_Add,
 	})
 
 	castTimeReduction := time.Millisecond * -334

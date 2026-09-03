@@ -22,6 +22,11 @@ type Item struct {
 	StatAlloc              []float64
 	BonusStat              []int
 	ArmorValue             int
+	FireResistance         int
+	NatureResistance       int
+	FrostResistance        int
+	ShadowResistance       int
+	ArcaneResistance       int
 	SocketEnchantmentId    int
 	Flags0                 ItemStaticFlags0
 	Flags1                 ItemStaticFlags1
@@ -69,6 +74,7 @@ func (item *Item) ToScaledUIItem(itemLevel int) *proto.UIItem {
 		SocketBonus:         NullFloat(item.GetGemBonus().ToProtoArray()),
 		NameDescription:     item.NameDescription,
 		LimitCategory:       int32(item.LimitCategory),
+		QualityModifier:     item.GetWeaponQualityModifier(),
 	}
 
 	item.ParseItemFlags(uiItem)
@@ -128,6 +134,22 @@ func (item *Item) GetStats(itemLevel int) *stats.Stats {
 		stats[proto.Stat_StatArmor] = float64(armor)
 	}
 
+	if item.FireResistance > 0 {
+		stats[proto.Stat_StatFireResistance] = float64(item.FireResistance)
+	}
+	if item.NatureResistance > 0 {
+		stats[proto.Stat_StatNatureResistance] = float64(item.NatureResistance)
+	}
+	if item.FrostResistance > 0 {
+		stats[proto.Stat_StatFrostResistance] = float64(item.FrostResistance)
+	}
+	if item.ShadowResistance > 0 {
+		stats[proto.Stat_StatShadowResistance] = float64(item.ShadowResistance)
+	}
+	if item.ArcaneResistance > 0 {
+		stats[proto.Stat_StatArcaneResistance] = float64(item.ArcaneResistance)
+	}
+
 	if item.ItemClass == ITEM_CLASS_ARMOR && item.QualityModifier > 0 {
 		stats[proto.Stat_StatBonusArmor] = item.QualityModifier
 	}
@@ -139,6 +161,16 @@ func (item *Item) GetStats(itemLevel int) *stats.Stats {
 
 	return stats
 }
+
+// GetWeaponQualityModifier returns the per-item damage offset for weapons.
+// For armor the value is repurposed as bonus armor (see GetStats), so don't expose it as a weapon quality modifier.
+func (item *Item) GetWeaponQualityModifier() float64 {
+	if item.ItemClass != ITEM_CLASS_WEAPON {
+		return 0
+	}
+	return item.QualityModifier
+}
+
 func (item *Item) GetRandPropPoints(itemLevel int) int32 {
 	suffixType := item.GetRandomSuffixType()
 	randomProperty := GetDBC().RandomPropertiesByIlvl[itemLevel]
@@ -383,7 +415,8 @@ func (item *Item) GetRandomSuffixType() int {
 		case ITEM_SUBCLASS_WEAPON_THROWN,
 			ITEM_SUBCLASS_WEAPON_GUN,
 			ITEM_SUBCLASS_WEAPON_BOW,
-			ITEM_SUBCLASS_WEAPON_CROSSBOW:
+			ITEM_SUBCLASS_WEAPON_CROSSBOW,
+			ITEM_SUBCLASS_WEAPON_WAND:
 			return 4
 
 		default:

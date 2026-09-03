@@ -1,6 +1,8 @@
 package tbc
 
 import (
+	"time"
+
 	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
@@ -240,21 +242,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Has a 1% chance when struck in combat of increasing block rating by 250 for 10 sec.
-	// https://www.wowhead.com/tbc/spell=17351
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 13243, ItemName: "Argent Defender"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Deals 35 damage every time you block.
 	// https://www.wowhead.com/tbc/spell=17496
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -384,21 +371,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 14154, ItemName: "Truefaith Vestments"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// When struck in combat has a 1% chance of increasing all party member's armor by 250 for 30s.
-	// https://www.wowhead.com/tbc/spell=18946
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 14557, ItemName: "The Lion Horn of Stormwind"},
 	// })
 
 	// TODO: Manual implementation required
@@ -557,21 +529,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Increases the damage done by your Multi-Shot by 5%.
-	// https://www.wowhead.com/tbc/spell=28539
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 16463, ItemName: "Marshal's Chain Grips"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Increases the Holy damage bonus of your Judgement of the Crusader by 20.
 	// https://www.wowhead.com/tbc/spell=23300
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -723,21 +680,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Increases the damage done by your Multi-Shot by 5%.
-	// https://www.wowhead.com/tbc/spell=28539
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 16571, ItemName: "General's Chain Gloves"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Increases the speed of your Ghost Wolf ability by 15%. Does not function for players higher than level
 	// 60.
 	// https://www.wowhead.com/tbc/spell=22801
@@ -854,21 +796,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 17104, ItemName: "Spinal Reaper"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Adds 2 fire damage to your melee attacks.
-	// https://www.wowhead.com/tbc/spell=7712
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 17111, ItemName: "Blazefury Medallion"},
 	// })
 
 	// TODO: Manual implementation required
@@ -1387,36 +1314,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// When struck in combat has a 5% chance of inflicting 65 Nature damage to the attacker.
-	// https://www.wowhead.com/tbc/spell=16782
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 18825, ItemName: "Grand Marshal's Aegis"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// When struck in combat has a 5% chance of inflicting 65 Nature damage to the attacker.
-	// https://www.wowhead.com/tbc/spell=16782
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 18826, ItemName: "High Warlord's Shield Wall"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Sometimes heals bearer of 180 damage when damaging an enemy in melee.
 	// https://www.wowhead.com/tbc/spell=23682
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -1722,22 +1619,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Increases your armor by 2000 and defense rating by 50 for 20s. Every time you take melee or ranged damage,
-	// this bonus is reduced by 200 armor and 5 defense rating.
-	// https://www.wowhead.com/tbc/spell=24574
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 19948, ItemName: "Zandalarian Hero Badge"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Increases your melee and ranged damage by 40 for 20s. Every time you hit a target, this bonus is reduced
 	// by 2.
 	// https://www.wowhead.com/tbc/spell=24661
@@ -1869,21 +1750,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 19963, ItemName: "Pitchfork of Madness"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Adds 2 fire damage to your melee attacks.
-	// https://www.wowhead.com/tbc/spell=7712
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 19968, ItemName: "Fiery Retributer"},
 	// })
 
 	// TODO: Manual implementation required
@@ -2572,21 +2438,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Increases the damage done by your Multi-Shot by 5%.
-	// https://www.wowhead.com/tbc/spell=28539
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 22862, ItemName: "Blood Guard's Chain Vices"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Gives you a 50% chance to avoid interruption caused by damage while casting Searing Pain.
 	// https://www.wowhead.com/tbc/spell=23046
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -2917,21 +2768,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Increases the damage dealt by your Maul ability by 50 and Swipe ability by 10.
-	// https://www.wowhead.com/tbc/spell=28855
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 23198, ItemName: "Idol of Brutality"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Increases healing done by Lesser Healing Wave by up to 53.
 	// https://www.wowhead.com/tbc/spell=28856
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -2962,23 +2798,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Increases attack power by 150 when fighting Undead and Demons. It also allows the acquisition of Scourgestones
-	// on behalf of the Argent Dawn.
-	// https://www.wowhead.com/tbc/spell=29112
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 23206, ItemName: "Mark of the Champion"},
-	//	{ItemID: 23207, ItemName: "Mark of the Champion"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Chance to discharge electricity causing 150 Nature damage to your target.
 	// https://www.wowhead.com/tbc/spell=29151
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -2988,21 +2807,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 23221, ItemName: "Misplaced Servo Arm"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Increases the damage done by your Multi-Shot by 5%.
-	// https://www.wowhead.com/tbc/spell=28539
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 23279, ItemName: "Knight-Lieutenant's Chain Vices"},
 	// })
 
 	// TODO: Manual implementation required
@@ -3206,81 +3010,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Absorbs 2700 fire damage on all nearby party members. Lasts 5min.
-	// https://www.wowhead.com/tbc/spell=30997
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 24092, ItemName: "Pendant of Frozen Flame"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Absorbs 2700 frost damage on all nearby party members. Lasts 5min.
-	// https://www.wowhead.com/tbc/spell=30994
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 24093, ItemName: "Pendant of Thawing"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Absorbs 2700 nature damage on all nearby party members. Lasts 5min.
-	// https://www.wowhead.com/tbc/spell=30999
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 24095, ItemName: "Pendant of Withering"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Absorbs 2700 shadow damage on all nearby party members. Lasts 5min.
-	// https://www.wowhead.com/tbc/spell=31000
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 24097, ItemName: "Pendant of Shadow's End"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Absorbs 2700 arcane damage on all nearby party members. Lasts 5min.
-	// https://www.wowhead.com/tbc/spell=31002
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 24098, ItemName: "Pendant of the Null Rune"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Increases Stamina of nearby party members by 20 for 30min.
 	// https://www.wowhead.com/tbc/spell=31023
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -3396,21 +3125,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 24413, ItemName: "Totem of the Thunderhead"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Hamstring Rage cost reduced by -3.0.
-	// https://www.wowhead.com/tbc/spell=22778
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 24549, ItemName: "Gladiator's Plate Gauntlets"},
 	// })
 
 	// TODO: Manual implementation required
@@ -3922,21 +3636,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Increases the damage done by your Multi-Shot by 5%.
-	// https://www.wowhead.com/tbc/spell=28539
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 28335, ItemName: "Gladiator's Chain Gauntlets"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Increases the final healing value of your Lifebloom by 87.
 	// https://www.wowhead.com/tbc/spell=42367
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -4059,21 +3758,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Increases the damage done by your Multi-Shot by 5%.
-	// https://www.wowhead.com/tbc/spell=28539
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 28614, ItemName: "Grand Marshal's Chain Gauntlets"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Reduces the cast time of your Cyclone spell by -0.1 sec.
 	// https://www.wowhead.com/tbc/spell=33830
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -4165,21 +3849,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Hamstring Rage cost reduced by -3.0.
-	// https://www.wowhead.com/tbc/spell=22778
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 28700, ItemName: "Grand Marshal's Plate Gauntlets"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Increases the duration of your Psychic Scream spell by 1.0 sec.
 	// https://www.wowhead.com/tbc/spell=23044
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -4264,21 +3933,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 28774, ItemName: "Glaive of the Pit"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Increases the damage done by your Multi-Shot by 5%.
-	// https://www.wowhead.com/tbc/spell=28539
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 28806, ItemName: "High Warlord's Chain Gauntlets"},
 	// })
 
 	// TODO: Manual implementation required
@@ -4391,21 +4045,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Hamstring Rage cost reduced by -3.0.
-	// https://www.wowhead.com/tbc/spell=22778
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 28852, ItemName: "High Warlord's Plate Gauntlets"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Increases the duration of your Psychic Scream spell by 1.0 sec.
 	// https://www.wowhead.com/tbc/spell=23044
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -4475,21 +4114,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 29181, ItemName: "Timelapse Shard"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// When struck in combat has a chance of increasing your armor by 800 for 10s.
-	// https://www.wowhead.com/tbc/spell=35078
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 29297, ItemName: "Band of the Eternal Defender"},
 	// })
 
 	// TODO: Manual implementation required
@@ -4710,36 +4334,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Increases your movement speed by 50%, and your melee attack speed by 20% for 30s.
-	// https://www.wowhead.com/tbc/spell=36479
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 30311, ItemName: "Warp Slicer"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Increases your movement speed by 50%, and your melee attack speed by 20% for 30s.
-	// https://www.wowhead.com/tbc/spell=36479
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 30316, ItemName: "Devastation"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Friendly targets of the caster's heals gain an effect that reduces the damage taken by Fire and Shadow
 	// spells by 50% for 30s.
 	// https://www.wowhead.com/tbc/spell=36483
@@ -4765,36 +4359,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 30318, ItemName: "Netherstrand Longbow"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Each time you cast a spell, there is chance you will gain up to 290 spell damage and healing.
-	// https://www.wowhead.com/tbc/spell=37198
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 30447, ItemName: "Tome of Fiery Redemption"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Hamstring Rage cost reduced by -3.0.
-	// https://www.wowhead.com/tbc/spell=22778
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 30487, ItemName: "Merciless Gladiator's Plate Gauntlets"},
 	// })
 
 	// TODO: Manual implementation required
@@ -5141,21 +4705,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 31859, ItemName: "Darkmoon Card: Madness"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Increases the damage done by your Multi-Shot by 5%.
-	// https://www.wowhead.com/tbc/spell=28539
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 31961, ItemName: "Merciless Gladiator's Chain Gauntlets"},
 	// })
 
 	// TODO: Manual implementation required
@@ -5599,21 +5148,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Hamstring Rage cost reduced by -3.0.
-	// https://www.wowhead.com/tbc/spell=22778
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32164, ItemName: "Chancellor's Plate Gauntlets"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Increases the Holy damage bonus of your Judgement of the Crusader by 20.
 	// https://www.wowhead.com/tbc/spell=23300
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -5623,21 +5157,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 32169, ItemName: "Chancellor's Scaled Gauntlets"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Your Mangle ability also increases your attack power by 94 for 20s.
-	// https://www.wowhead.com/tbc/spell=41037
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32257, ItemName: "Idol of the White Stag"},
 	// })
 
 	// TODO: Manual implementation required
@@ -5674,37 +5193,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Your Mortal Strike, Bloodthirst, and Shield Slam attacks have a 25% chance to heal you for 330 and grant
-	// 55 Strength for 12s.
-	// https://www.wowhead.com/tbc/spell=40459
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32485, ItemName: "Ashtongue Talisman of Valor"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Your spell critical strikes have a 50% chance to grant you 145 spell haste rating for 5s.
-	// https://www.wowhead.com/tbc/spell=40483
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32488, ItemName: "Ashtongue Talisman of Insight"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Flash of Light and Holy Light have a 15% chance to grant your target 0 healing over 12s, and your Judgements
 	// have a 50% chance to inflict 0 damage on their target over 8s.
 	// https://www.wowhead.com/tbc/spell=40470
@@ -5715,53 +5203,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 32489, ItemName: "Ashtongue Talisman of Zeal"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Each time your Shadow Word: Pain deals damage, it has a 10% chance to grant you 220 spell damage for 10s
-	// and each time your Renew heals, it has a 10% chance to grant you 220 healing for 5s.
-	// https://www.wowhead.com/tbc/spell=40438
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32490, ItemName: "Ashtongue Talisman of Acumen"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Lesser Healing Wave has a 10% chance to grant 170 mana, Lightning Bolt has a 15% chance to grant up to
-	// 170 mana, and Stormstrike has a 50% chance to grant up to 275 attack power for 10s.
-	// https://www.wowhead.com/tbc/spell=40463
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32491, ItemName: "Ashtongue Talisman of Vision"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// 20% chance per combo point for your finishing moves to grant 145 critical strike rating for 10s.
-	// https://www.wowhead.com/tbc/spell=40460
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32492, ItemName: "Ashtongue Talisman of Lethality"},
 	// })
 
 	// TODO: Manual implementation required
@@ -5808,6 +5249,38 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 32539, ItemName: "Skyguard's Drape"},
+	// })
+
+	// TODO: Manual implementation required
+	//       This can be ignored if the effect has already been implemented.
+	//       With next db run the item will be removed if implemented.
+	//
+	// 50% chance to increase your attack power by 140 for 30s when you kill a target that gives experience or
+	// honor. This effect cannot occur more than once every 10 seconds.
+	// https://www.wowhead.com/tbc/spell=41261
+	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+	//	Callback:           core.CallbackEmpty,
+	//	ProcMask:           core.ProcMaskUnknown,
+	//	Outcome:            core.OutcomeEmpty,
+	//	RequireDamageDealt: false
+	// }, []shared.ItemVariant{
+	//	{ItemID: 32770, ItemName: "Skyguard Silver Cross"},
+	// })
+
+	// TODO: Manual implementation required
+	//       This can be ignored if the effect has already been implemented.
+	//       With next db run the item will be removed if implemented.
+	//
+	// 50% chance to increase your spell damage and healing by 80 for 30s when you kill a target that gives experience
+	// or honor. This effect cannot occur more than once every 10 seconds.
+	// https://www.wowhead.com/tbc/spell=41263
+	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+	//	Callback:           core.CallbackEmpty,
+	//	ProcMask:           core.ProcMaskUnknown,
+	//	Outcome:            core.OutcomeEmpty,
+	//	RequireDamageDealt: false
+	// }, []shared.ItemVariant{
+	//	{ItemID: 32771, ItemName: "Airman's Ribbon of Gallantry"},
 	// })
 
 	// TODO: Manual implementation required
@@ -5919,21 +5392,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Your Mangle ability has a chance to grant 65 agility for 10s.
-	// https://www.wowhead.com/tbc/spell=43738
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 33509, ItemName: "Idol of Terror"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Your Moonfire ability has a chance to grant up to 140 spell damage and healing for 10s.
 	// https://www.wowhead.com/tbc/spell=43740
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -5943,21 +5401,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 33510, ItemName: "Idol of the Unseen Moon"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Increases the damage done by your Multi-Shot by 5%.
-	// https://www.wowhead.com/tbc/spell=28539
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 33665, ItemName: "Vengeful Gladiator's Chain Gauntlets"},
 	// })
 
 	// TODO: Manual implementation required
@@ -6110,21 +5553,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 33723, ItemName: "Vengeful Gladiator's Ornamented Gloves"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Hamstring Rage cost reduced by -3.0.
-	// https://www.wowhead.com/tbc/spell=22778
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 33729, ItemName: "Vengeful Gladiator's Plate Gauntlets"},
 	// })
 
 	// TODO: Manual implementation required
@@ -6476,21 +5904,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Each time one of your spells deals periodic damage, there is a chance 475 additional damage will be dealt.
-	// https://www.wowhead.com/tbc/spell=45055
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 34470, ItemName: "Timbal's Focusing Crystal"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Collects 100 Holy Energy from healing spells you cast. Cannot collect more than 2000 Holy Energy.
 	// https://www.wowhead.com/tbc/spell=45062
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -6565,21 +5978,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 34680, ItemName: "Shattered Sun Pendant of Resolve"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Increases the damage done by your Multi-Shot by 5%.
-	// https://www.wowhead.com/tbc/spell=28539
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 34991, ItemName: "Brutal Gladiator's Chain Gauntlets"},
 	// })
 
 	// TODO: Manual implementation required
@@ -6792,21 +6190,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 35060, ItemName: "Brutal Gladiator's Ornamented Gloves"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Hamstring Rage cost reduced by -3.0.
-	// https://www.wowhead.com/tbc/spell=22778
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 35067, ItemName: "Brutal Gladiator's Plate Gauntlets"},
 	// })
 
 	// TODO: Manual implementation required
@@ -7071,22 +6454,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Increases the damage done by your Multi-Shot by 5%.
-	// https://www.wowhead.com/tbc/spell=28539
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 35377, ItemName: "Stalker's Chain Gauntlets"},
-	//	{ItemID: 35475, ItemName: "Stalker's Chain Gauntlets"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Improves the range of all Shock spells by 5 yards.
 	// https://www.wowhead.com/tbc/spell=32973
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -7148,21 +6515,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Hamstring Rage cost reduced by -3.0.
-	// https://www.wowhead.com/tbc/spell=22778
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 35408, ItemName: "Savage Plate Gauntlets"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Increases the Holy damage bonus of your Judgement of the Crusader by 20.
 	// https://www.wowhead.com/tbc/spell=23300
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -7173,20 +6525,6 @@ func RegisterAllProcs() {
 	// }, []shared.ItemVariant{
 	//	{ItemID: 35413, ItemName: "Crusader's Scaled Gauntlets"},
 	//	{ItemID: 35477, ItemName: "Crusader's Scaled Gauntlets"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// https://www.wowhead.com/tbc/spell=46643
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 35514, ItemName: "Frostscythe of Lord Ahune"},
 	// })
 
 	// TODO: Manual implementation required
@@ -7334,13 +6672,115 @@ func RegisterAllProcs() {
 		{ItemID: 12798, ItemName: "Annihilator"},
 	})
 
+	// Has a 1% chance when struck in combat of increasing block rating by 250 for 10 sec.
+	// https://www.wowhead.com/tbc/spell=17351
+	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+		Callback:           core.CallbackOnSpellHitTaken,
+		ProcMask:           core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial,
+		Outcome:            core.OutcomeLanded,
+		RequireDamageDealt: true,
+	}, []shared.ItemVariant{
+		{ItemID: 13243, ItemName: "Argent Defender"},
+	})
+
+	// When struck in combat has a 1% chance of increasing all party member's armor by 250 for 30s.
+	// https://www.wowhead.com/tbc/spell=18946
+	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+		Callback:           core.CallbackOnSpellHitTaken,
+		ProcMask:           core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial,
+		Outcome:            core.OutcomeLanded,
+		RequireDamageDealt: true,
+	}, []shared.ItemVariant{
+		{ItemID: 14557, ItemName: "The Lion Horn of Stormwind"},
+	})
+
+	// Adds 2 fire damage to your melee attacks.
+	// https://www.wowhead.com/tbc/spell=7712
+	shared.NewProcDamageEffect(shared.ProcDamageEffect{
+		ItemID:  17111,
+		SpellID: 7712,
+		School:  core.SpellSchoolFire,
+		MinDmg:  2,
+		MaxDmg:  2,
+		Flags:   core.SpellFlagNoOnCastComplete | core.SpellFlagPassiveSpell | core.SpellFlagNoOnDamageDealt,
+		Trigger: core.ProcTrigger{
+			Name:               "Blazefury Medallion",
+			ActionID:           core.ActionID{ItemID: 17111},
+			Callback:           core.CallbackOnSpellHitDealt,
+			ProcMask:           core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial,
+			Outcome:            core.OutcomeLanded,
+			RequireDamageDealt: true,
+			ProcChance:         1,
+		},
+	})
+
+	// When struck in combat has a 5% chance of inflicting 65 Nature damage to the attacker.
+	// https://www.wowhead.com/tbc/spell=16782
+	shared.NewProcDamageEffect(shared.ProcDamageEffect{
+		ItemID:  18825,
+		SpellID: 16782,
+		School:  core.SpellSchoolNature,
+		MinDmg:  35,
+		MaxDmg:  65,
+		Flags:   core.SpellFlagNoOnCastComplete | core.SpellFlagPassiveSpell | core.SpellFlagNoOnDamageDealt,
+		Trigger: core.ProcTrigger{
+			Name:               "Grand Marshal's Aegis",
+			ActionID:           core.ActionID{ItemID: 18825},
+			Callback:           core.CallbackOnSpellHitTaken,
+			ProcMask:           core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial | core.ProcMaskRangedAuto | core.ProcMaskRangedSpecial,
+			Outcome:            core.OutcomeLanded,
+			RequireDamageDealt: true,
+			ProcChance:         0.05,
+		},
+	})
+
+	// When struck in combat has a 5% chance of inflicting 65 Nature damage to the attacker.
+	// https://www.wowhead.com/tbc/spell=16782
+	shared.NewProcDamageEffect(shared.ProcDamageEffect{
+		ItemID:  18826,
+		SpellID: 16782,
+		School:  core.SpellSchoolNature,
+		MinDmg:  35,
+		MaxDmg:  65,
+		Flags:   core.SpellFlagNoOnCastComplete | core.SpellFlagPassiveSpell | core.SpellFlagNoOnDamageDealt,
+		Trigger: core.ProcTrigger{
+			Name:               "High Warlord's Shield Wall",
+			ActionID:           core.ActionID{ItemID: 18826},
+			Callback:           core.CallbackOnSpellHitTaken,
+			ProcMask:           core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial | core.ProcMaskRangedAuto | core.ProcMaskRangedSpecial,
+			Outcome:            core.OutcomeLanded,
+			RequireDamageDealt: true,
+			ProcChance:         0.05,
+		},
+	})
+
+	// Adds 2 fire damage to your melee attacks.
+	// https://www.wowhead.com/tbc/spell=7712
+	shared.NewProcDamageEffect(shared.ProcDamageEffect{
+		ItemID:  19968,
+		SpellID: 7712,
+		School:  core.SpellSchoolFire,
+		MinDmg:  2,
+		MaxDmg:  2,
+		Flags:   core.SpellFlagNoOnCastComplete | core.SpellFlagPassiveSpell | core.SpellFlagNoOnDamageDealt,
+		Trigger: core.ProcTrigger{
+			Name:               "Fiery Retributer",
+			ActionID:           core.ActionID{ItemID: 19968},
+			Callback:           core.CallbackOnSpellHitDealt,
+			ProcMask:           core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial,
+			Outcome:            core.OutcomeLanded,
+			RequireDamageDealt: true,
+			ProcChance:         1,
+		},
+	})
+
 	// Gives a chance when your harmful spells land to reduce the magical resistances of your spell targets by
 	// 50 for 8s.
 	// https://www.wowhead.com/tbc/spell=25768
 	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-		Callback:           core.CallbackOnSpellHitDealt,
+		Callback:           core.CallbackOnCastComplete,
 		ProcMask:           core.ProcMaskSpellDamage,
-		Outcome:            core.OutcomeLanded,
+		Outcome:            core.OutcomeEmpty,
 		RequireDamageDealt: false,
 	}, []shared.ItemVariant{
 		{ItemID: 21128, ItemName: "Staff of the Qiraji Prophets"},
@@ -7350,9 +6790,9 @@ func RegisterAllProcs() {
 	// for 10s.
 	// https://www.wowhead.com/tbc/spell=25907
 	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-		Callback:           core.CallbackOnSpellHitDealt,
-		ProcMask:           core.ProcMaskSpellDamage | core.ProcMaskSpellDamageProc,
-		Outcome:            core.OutcomeLanded,
+		Callback:           core.CallbackOnCastComplete,
+		ProcMask:           core.ProcMaskSpellDamage | core.ProcMaskSpellProc,
+		Outcome:            core.OutcomeEmpty,
 		RequireDamageDealt: false,
 	}, []shared.ItemVariant{
 		{ItemID: 21190, ItemName: "Wrath of Cenarius"},
@@ -7361,10 +6801,11 @@ func RegisterAllProcs() {
 	// Chance on successful spellcast to restore 90 Mana over 10s.
 	// https://www.wowhead.com/tbc/spell=31036
 	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-		Callback:           core.CallbackOnSpellHitDealt,
+		Callback:           core.CallbackOnCastComplete,
 		ProcMask:           core.ProcMaskSpellDamage,
-		Outcome:            core.OutcomeLanded,
+		Outcome:            core.OutcomeEmpty,
 		RequireDamageDealt: false,
+		ClassSpellsOnly:    true,
 	}, []shared.ItemVariant{
 		{ItemID: 24122, ItemName: "Coronet of Verdant Flame"},
 	})
@@ -7372,10 +6813,11 @@ func RegisterAllProcs() {
 	// 2% chance on successful spellcast to increase your spell damage by up to 1 for 15s.
 	// https://www.wowhead.com/tbc/spell=31037
 	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-		Callback:           core.CallbackOnSpellHitDealt,
+		Callback:           core.CallbackOnCastComplete,
 		ProcMask:           core.ProcMaskSpellDamage,
-		Outcome:            core.OutcomeLanded,
+		Outcome:            core.OutcomeEmpty,
 		RequireDamageDealt: false,
+		ClassSpellsOnly:    true,
 	}, []shared.ItemVariant{
 		{ItemID: 24123, ItemName: "Circlet of Arcane Might"},
 	})
@@ -7383,12 +6825,24 @@ func RegisterAllProcs() {
 	// Your harmful spells have a chance to increase your spell haste rating by 320 for 6 secs.
 	// https://www.wowhead.com/tbc/spell=33370
 	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-		Callback:           core.CallbackOnSpellHitDealt,
+		Callback:           core.CallbackOnCastComplete,
 		ProcMask:           core.ProcMaskSpellDamage,
-		Outcome:            core.OutcomeLanded,
+		Outcome:            core.OutcomeEmpty,
 		RequireDamageDealt: false,
+		ClassSpellsOnly:    true,
 	}, []shared.ItemVariant{
 		{ItemID: 27683, ItemName: "Quagmirran's Eye"},
+	})
+
+	// Chance on critical hit to increase your attack power by 300 for 10 secs.
+	// https://www.wowhead.com/tbc/spell=33649
+	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+		Callback:           core.CallbackOnSpellHitDealt,
+		ProcMask:           core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial | core.ProcMaskRangedAuto | core.ProcMaskRangedSpecial,
+		Outcome:            core.OutcomeCrit,
+		RequireDamageDealt: true,
+	}, []shared.ItemVariant{
+		{ItemID: 28034, ItemName: "Hourglass of the Unraveller"},
 	})
 
 	// Your direct healing and heal over time spells have a chance to increase your spell haste rating by 320
@@ -7399,6 +6853,7 @@ func RegisterAllProcs() {
 		ProcMask:           core.ProcMaskSpellHealing,
 		Outcome:            core.OutcomeLanded,
 		RequireDamageDealt: false,
+		ClassSpellsOnly:    true,
 	}, []shared.ItemVariant{
 		{ItemID: 28190, ItemName: "Scarab of the Infinite Cycle"},
 	})
@@ -7407,9 +6862,10 @@ func RegisterAllProcs() {
 	// https://www.wowhead.com/tbc/spell=34321
 	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 		Callback:           core.CallbackOnSpellHitDealt | core.CallbackOnHealDealt,
-		ProcMask:           core.ProcMaskSpellDamage | core.ProcMaskSpellHealing | core.ProcMaskSpellDamageProc,
+		ProcMask:           core.ProcMaskSpellDamage | core.ProcMaskSpellHealing | core.ProcMaskSpellProc,
 		Outcome:            core.OutcomeCrit,
 		RequireDamageDealt: false,
+		ClassSpellsOnly:    true,
 	}, []shared.ItemVariant{
 		{ItemID: 28418, ItemName: "Shiffar's Nexus-Horn"},
 	})
@@ -7472,10 +6928,11 @@ func RegisterAllProcs() {
 	// Chance on spell cast to increase your Spirit by 145 for 15 secs.
 	// https://www.wowhead.com/tbc/spell=34585
 	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-		Callback:           core.CallbackOnSpellHitDealt,
+		Callback:           core.CallbackOnCastComplete,
 		ProcMask:           core.ProcMaskSpellDamage,
-		Outcome:            core.OutcomeLanded,
+		Outcome:            core.OutcomeEmpty,
 		RequireDamageDealt: false,
+		ClassSpellsOnly:    true,
 	}, []shared.ItemVariant{
 		{ItemID: 28578, ItemName: "Masquerade Gown"},
 	})
@@ -7484,9 +6941,9 @@ func RegisterAllProcs() {
 	// 130 for 10s.
 	// https://www.wowhead.com/tbc/spell=34597
 	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-		Callback:           core.CallbackOnSpellHitDealt,
-		ProcMask:           core.ProcMaskSpellDamage | core.ProcMaskSpellDamageProc,
-		Outcome:            core.OutcomeLanded,
+		Callback:           core.CallbackOnCastComplete,
+		ProcMask:           core.ProcMaskSpellDamage | core.ProcMaskSpellProc,
+		Outcome:            core.OutcomeEmpty,
 		RequireDamageDealt: false,
 	}, []shared.ItemVariant{
 		{ItemID: 28602, ItemName: "Robe of the Elder Scribes"},
@@ -7503,6 +6960,17 @@ func RegisterAllProcs() {
 		{ItemID: 28830, ItemName: "Dragonspine Trophy"},
 	})
 
+	// When struck in combat has a chance of increasing your armor by 800 for 10s.
+	// https://www.wowhead.com/tbc/spell=35078
+	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+		Callback:           core.CallbackOnSpellHitTaken,
+		ProcMask:           core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial,
+		Outcome:            core.OutcomeLanded,
+		RequireDamageDealt: true,
+	}, []shared.ItemVariant{
+		{ItemID: 29297, ItemName: "Band of the Eternal Defender"},
+	})
+
 	// Chance on hit to increase your attack power by 160 for 10 seconds.
 	// https://www.wowhead.com/tbc/spell=35081
 	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -7517,9 +6985,9 @@ func RegisterAllProcs() {
 	// Your offensive spells have a chance on hit to increase your spell damage by 95 for 10 secs.
 	// https://www.wowhead.com/tbc/spell=35084
 	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-		Callback:           core.CallbackOnSpellHitDealt,
+		Callback:           core.CallbackOnCastComplete,
 		ProcMask:           core.ProcMaskSpellDamage,
-		Outcome:            core.OutcomeLanded,
+		Outcome:            core.OutcomeEmpty,
 		RequireDamageDealt: false,
 	}, []shared.ItemVariant{
 		{ItemID: 29305, ItemName: "Band of the Eternal Sage"},
@@ -7541,7 +7009,7 @@ func RegisterAllProcs() {
 	// https://www.wowhead.com/tbc/spell=35131
 	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 		Callback:           core.CallbackOnSpellHitDealt,
-		ProcMask:           core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial,
+		ProcMask:           core.ProcMaskUnknown,
 		Outcome:            core.OutcomeLanded,
 		RequireDamageDealt: true,
 	}, []shared.ItemVariant{
@@ -7552,11 +7020,22 @@ func RegisterAllProcs() {
 	// https://www.wowhead.com/tbc/spell=36041
 	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 		Callback:           core.CallbackOnSpellHitDealt,
-		ProcMask:           core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial,
+		ProcMask:           core.ProcMaskUnknown,
 		Outcome:            core.OutcomeLanded,
 		RequireDamageDealt: true,
 	}, []shared.ItemVariant{
 		{ItemID: 29962, ItemName: "Heartrazor"},
+	})
+
+	// Your spell critical strikes have a chance to increase your spell damage and healing by 190 for 15s.
+	// https://www.wowhead.com/tbc/spell=38348
+	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+		Callback:           core.CallbackOnSpellHitDealt | core.CallbackOnHealDealt,
+		ProcMask:           core.ProcMaskSpellDamage | core.ProcMaskSpellHealing | core.ProcMaskSpellProc,
+		Outcome:            core.OutcomeCrit,
+		RequireDamageDealt: false,
+	}, []shared.ItemVariant{
+		{ItemID: 30626, ItemName: "Sextant of Unstable Currents"},
 	})
 
 	// Chance on critical hit to increase your attack power by 340 for 10 secs.
@@ -7595,12 +7074,25 @@ func RegisterAllProcs() {
 	// Your harmful spells have a chance to increase your spell haste rating by 280 for 6 secs.
 	// https://www.wowhead.com/tbc/spell=38317
 	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-		Callback:           core.CallbackOnSpellHitDealt,
+		Callback:           core.CallbackOnCastComplete,
 		ProcMask:           core.ProcMaskSpellDamage,
-		Outcome:            core.OutcomeLanded,
+		Outcome:            core.OutcomeEmpty,
 		RequireDamageDealt: false,
+		ClassSpellsOnly:    true,
 	}, []shared.ItemVariant{
 		{ItemID: 31336, ItemName: "Blade of Wizardry"},
+	})
+
+	// Each time you cast a spell, there is chance you will gain up to 76 mana per 5 for 15s.
+	// https://www.wowhead.com/tbc/spell=37656
+	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+		Callback:           core.CallbackOnCastComplete,
+		ProcMask:           core.ProcMaskSpellDamage | core.ProcMaskSpellHealing | core.ProcMaskSpellProc,
+		Outcome:            core.OutcomeEmpty,
+		RequireDamageDealt: false,
+		ClassSpellsOnly:    true,
+	}, []shared.ItemVariant{
+		{ItemID: 32496, ItemName: "Memento of Tyrande"},
 	})
 
 	// Your melee and ranged attacks have a chance allow you to ignore 300 of your enemies' armor for 10 secs.
@@ -7614,28 +7106,40 @@ func RegisterAllProcs() {
 		{ItemID: 32505, ItemName: "Madness of the Betrayer"},
 	})
 
-	// 50% chance to increase your attack power by 140 for 30s when you kill a target that gives experience or
-	// honor. This effect cannot occur more than once every 10 seconds.
-	// https://www.wowhead.com/tbc/spell=41261
+	// Chance on hit to enter a Battle Trance, during which your melee or ranged attacks will each grant 44 attack
+	// power, stacking up to 10 times. Expires after 20s.
+	// https://www.wowhead.com/tbc/spell=45040
 	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-		Callback:           core.CallbackEmpty,
-		ProcMask:           core.ProcMaskUnknown,
+		Callback:           core.CallbackOnSpellHitDealt,
+		ProcMask:           core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial | core.ProcMaskRangedAuto | core.ProcMaskRangedSpecial,
 		Outcome:            core.OutcomeLanded,
 		RequireDamageDealt: true,
+		StackCallback:      core.CallbackOnSpellHitDealt,
+		StackProcMask:      core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto | core.ProcMaskMeleeMHSpecial | core.ProcMaskMeleeOHSpecial | core.ProcMaskRangedAuto | core.ProcMaskRangedSpecial,
+		StackOutcome:       core.OutcomeLanded,
 	}, []shared.ItemVariant{
-		{ItemID: 32770, ItemName: "Skyguard Silver Cross"},
+		{ItemID: 34427, ItemName: "Blackened Naaru Sliver"},
 	})
 
-	// 50% chance to increase your spell damage and healing by 80 for 30s when you kill a target that gives experience
-	// or honor. This effect cannot occur more than once every 10 seconds.
-	// https://www.wowhead.com/tbc/spell=41263
-	shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-		Callback:           core.CallbackEmpty,
-		ProcMask:           core.ProcMaskUnknown,
-		Outcome:            core.OutcomeLanded,
-		RequireDamageDealt: true,
-	}, []shared.ItemVariant{
-		{ItemID: 32771, ItemName: "Airman's Ribbon of Gallantry"},
+	// Each time one of your spells deals periodic damage, there is a chance 475 additional damage will be dealt.
+	// https://www.wowhead.com/tbc/spell=45055
+	shared.NewProcDamageEffect(shared.ProcDamageEffect{
+		ItemID:  34470,
+		SpellID: 45055,
+		School:  core.SpellSchoolShadow,
+		MinDmg:  285,
+		MaxDmg:  475,
+		Flags:   core.SpellFlagNoOnCastComplete | core.SpellFlagPassiveSpell | core.SpellFlagNoOnDamageDealt,
+		Trigger: core.ProcTrigger{
+			Name:               "Timbal's Focusing Crystal",
+			ActionID:           core.ActionID{ItemID: 34470},
+			Callback:           core.CallbackOnPeriodicDamageDealt,
+			ProcMask:           core.ProcMaskSpellDamage,
+			Outcome:            core.OutcomeLanded,
+			RequireDamageDealt: true,
+			ProcChance:         0.1,
+			ICD:                time.Millisecond * 15000,
+		},
 	})
 
 	// Chance on hit to increase your attack power by 230 for 20s.
@@ -7648,4 +7152,128 @@ func RegisterAllProcs() {
 	}, []shared.ItemVariant{
 		{ItemID: 34472, ItemName: "Shard of Contempt"},
 	})
+
+	// Skipped
+	// Not simulated: Pip's Skinner: "Pip's Skinner" (16718) - ignored aura type 30
+	// https://www.wowhead.com/tbc/spell=16718
+	// Not simulated: Spectral Essence: "Visions of the Past" (17623) - ignored aura type 19
+	// https://www.wowhead.com/tbc/spell=17623
+	// Not simulated: Knight-Lieutenant's Dragonhide Gloves: "Stealth Detection" (23217) - ignored aura type 17
+	// https://www.wowhead.com/tbc/spell=23217
+	// Not simulated: Marshal's Dragonhide Gauntlets: "Stealth Detection" (23217) - ignored aura type 17
+	// https://www.wowhead.com/tbc/spell=23217
+	// Not simulated: Blood Guard's Dragonhide Gauntlets: "Stealth Detection" (23217) - ignored aura type 17
+	// https://www.wowhead.com/tbc/spell=23217
+	// Not simulated: General's Dragonhide Gloves: "Stealth Detection" (23217) - ignored aura type 17
+	// https://www.wowhead.com/tbc/spell=23217
+	// Not simulated: Shard of the Defiler: "Echo of Archimonde" (21079) - ignored aura type 56
+	// https://www.wowhead.com/tbc/spell=21079
+	// Not simulated: Mark of Resolution: "Stout Heart" (21958) - ignored aura type 117
+	// https://www.wowhead.com/tbc/spell=21958
+	// Not simulated: The Eye of Divinity: "Eye of Divinity" (23101) - ignored aura type 19
+	// https://www.wowhead.com/tbc/spell=23101
+	// Not simulated: Zulian Slicer: "Improved Skinning" (24591) - ignored aura type 30
+	// https://www.wowhead.com/tbc/spell=24591
+	// Not simulated: Bloodvine Lens: "Stealth Detection" (23217) - ignored aura type 17
+	// https://www.wowhead.com/tbc/spell=23217
+	// Not simulated: Darkmantle Boots: "Stealth +8" (27037) - ignored aura type 154
+	// https://www.wowhead.com/tbc/spell=27037
+	// Not simulated: Blood Guard's Dragonhide Grips: "Stealth Detection" (23217) - ignored aura type 17
+	// https://www.wowhead.com/tbc/spell=23217
+	// Not simulated: Boots of Displacement: "Stealth +8" (27037) - ignored aura type 154
+	// https://www.wowhead.com/tbc/spell=27037
+	// Not simulated: Stygian Buckler: "Stygian Grasp" (29164) - ignored aura type 33
+	// https://www.wowhead.com/tbc/spell=29164
+	// Not simulated: Knight-Lieutenant's Dragonhide Grips: "Stealth Detection" (23217) - ignored aura type 17
+	// https://www.wowhead.com/tbc/spell=23217
+	// Not simulated: Ultra-Spectropic Detection Goggles: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Foreman's Enchanted Helmet: "Increased Stun Resist +10%" (40386) - ignored aura type 117
+	// https://www.wowhead.com/tbc/spell=40386
+	// Not simulated: Foreman's Reinforced Helmet: "Foreman's Reinforced Helmet" (30519) - ignored aura type 117
+	// https://www.wowhead.com/tbc/spell=30519
+	// Not simulated: Figurine - Nightseye Panther: "Stealth 5" (17746) - ignored aura type 154
+	// https://www.wowhead.com/tbc/spell=17746
+	// Not simulated: Riding Crop: "Mount Speed" (48776) - ignored aura type 172
+	// https://www.wowhead.com/tbc/spell=48776
+	// Not simulated: Seth's Graphite Fishing Pole: "Fishing Skill +20" (7826) - ignored aura type 30
+	// https://www.wowhead.com/tbc/spell=7826
+	// Not simulated: Silent-Strider Kneeboots: "Stealth 5" (17746) - ignored aura type 154
+	// https://www.wowhead.com/tbc/spell=17746
+	// Not simulated: Lionheart Blade: "Fear Resistance 5" (34514) - ignored aura type 117
+	// https://www.wowhead.com/tbc/spell=34514
+	// Not simulated: Lionheart Champion: "Fear Resistance 5" (34514) - ignored aura type 117
+	// https://www.wowhead.com/tbc/spell=34514
+	// Not simulated: Lionheart Executioner: "Fear Resistance 8" (34515) - ignored aura type 117
+	// https://www.wowhead.com/tbc/spell=34515
+	// Not simulated: Blade of the Unyielding: "Unyielding Knights" (38162) - ignored effect type 28
+	// https://www.wowhead.com/tbc/spell=38162
+	// Not simulated: Rod of the Unyielding: "Unyielding Knights" (38162) - ignored effect type 28
+	// https://www.wowhead.com/tbc/spell=38162
+	// Not simulated: Evoker's Helmet of Second Sight: "Spectrecles" (39841) - ignored aura type 19
+	// https://www.wowhead.com/tbc/spell=39841
+	// Not simulated: Overlord's Helmet of Second Sight: "Spectrecles" (39841) - ignored aura type 19
+	// https://www.wowhead.com/tbc/spell=39841
+	// Not simulated: Stalker's Helmet of Second Sight: "Spectrecles" (39841) - ignored aura type 19
+	// https://www.wowhead.com/tbc/spell=39841
+	// Not simulated: Shamanistic Helmet of Second Sight: "Spectrecles" (39841) - ignored aura type 19
+	// https://www.wowhead.com/tbc/spell=39841
+	// Not simulated: Stealther's Helmet of Second Sight: "Spectrecles" (39841) - ignored aura type 19
+	// https://www.wowhead.com/tbc/spell=39841
+	// Not simulated: Druidic Helmet of Second Sight: "Spectrecles" (39841) - ignored aura type 19
+	// https://www.wowhead.com/tbc/spell=39841
+	// Not simulated: The Master's Treads: "Stealth 5" (17746) - ignored aura type 154
+	// https://www.wowhead.com/tbc/spell=17746
+	// Not simulated: The Night Watchman: "Stealth Detection" (23217) - ignored aura type 17
+	// https://www.wowhead.com/tbc/spell=23217
+	// Not simulated: Furious Gizmatic Goggles: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Justicebringer 2000 Specs: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Tankatronic Goggles: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Surestrike Goggles v2.0: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Living Replicator Specs: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Gadgetstorm Goggles: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Deathblow X11 Goggles: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Wonderheal XT40 Shades: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Magnified Moon Specs: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Destruction Holo-gogs: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Powerheal 4000 Lens: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Skybreaker Whip: "Mount Speed" (48776) - ignored aura type 172
+	// https://www.wowhead.com/tbc/spell=48776
+	// Not simulated: Weather-Beaten Fishing Hat: "Fishing Skill +5" (7823) - ignored aura type 30
+	// https://www.wowhead.com/tbc/spell=7823
+	// Not simulated: Quad Deathblow X44 Goggles: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Mayhem Projection Goggles: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Lightning Etched Specs: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Surestrike Goggles v3.0: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Hard Khorium Goggles: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Annihilator Holo-Gogs: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Powerheal 9000 Lens: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Hyper-Magnified Moon Specs: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Wonderheal XT68 Shades: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Primal-Attuned Goggles: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Justicebringer 3000 Specs: "Gas Cloud Tracking" (30645) - ignored aura type 44
+	// https://www.wowhead.com/tbc/spell=30645
+	// Not simulated: Figurine - Shadowsong Panther: "Stealth 5" (17746) - ignored aura type 154
+	// https://www.wowhead.com/tbc/spell=17746
 }

@@ -166,4 +166,34 @@ func init() {
 
 		shaman.ItemSwap.RegisterProc(27815, aura)
 	})
+
+	// Ashtongue Talisman of Vision
+	core.NewItemEffect(32491, func(agent core.Agent) {
+		// Lesser Healing Wave has a 10% chance to grant 170 mana,
+		// Lightning Bolt has a 15% chance to grant up to 170 mana,
+		// and Stormstrike has a 50% chance to grant up to 275 attack power for 10 sec.
+		// Note: Lesser Healing Wave is not implemented
+		shaman := agent.(ShamanAgent).GetShaman()
+		ashtongueAuraSS := shaman.NewTemporaryStatsAura("Power Surge", core.ActionID{SpellID: 40466}, stats.Stats{stats.AttackPower: 275}, time.Second*10)
+		manaMetrics := shaman.NewManaMetrics(core.ActionID{SpellID: 40465})
+
+		aura := core.MakePermanent(shaman.RegisterAura(core.Aura{
+			Label:    "Ashtongue Talisman of Vision - Trigger",
+			ActionID: core.ActionID{ItemID: 32491},
+		}).AttachProcTrigger(core.ProcTrigger{
+			ClassSpellMask: SpellMaskStormstrikeCast | SpellMaskLightningBolt,
+			Callback:       core.CallbackOnSpellHitDealt,
+			Outcome:        core.OutcomeLanded,
+			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+				if spell.Matches(SpellMaskStormstrikeCast) && sim.Proc(0.5, "Ashtongue Talisman of Vision - Stormstrike") {
+					ashtongueAuraSS.Activate(sim)
+				} else if spell.Matches(SpellMaskLightningBolt) && sim.Proc(0.15, "Ashtongue Talisman of Vision - Lightning Bolt") {
+					shaman.AddMana(sim, 170, manaMetrics)
+				}
+
+			},
+		}))
+
+		shaman.ItemSwap.RegisterProc(32491, aura)
+	})
 }

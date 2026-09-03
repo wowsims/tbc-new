@@ -1,48 +1,47 @@
 import * as InputHelpers from '../../core/components/input_helpers.js';
 import { Player } from '../../core/player.js';
-import { Class, Spec } from '../../core/proto/common.js';
+import { Spec } from '../../core/proto/common.js';
+import { FeralBearDruid_Rotation_SwipeUsage as SwipeUsage } from '../../core/proto/druid.js';
 import i18n from '../../i18n/config.js';
 
-// Configuration for spec-specific UI elements on the settings tab.
-// These don't need to be in a separate file but it keeps things cleaner.
-export const SymbiosisSelection = InputHelpers.makeSpecOptionsEnumInput<Spec.SpecFeralBearDruid, Player<Spec.SpecFeralBearDruid>>({
-	fieldName: 'symbiosisTarget',
-	label: 'Symbiosis Target',
-	labelTooltip: 'Class from which to receive a Symbiosis spell',
-	values: [
-	],
+export const StartingRage = InputHelpers.makeSpecOptionsNumberInput<Spec.SpecFeralBearDruid>({
+	fieldName: 'startingRage',
+	label: i18n.t('settings_tab.other.starting_rage.label'),
+	labelTooltip: i18n.t('settings_tab.other.starting_rage.tooltip'),
 });
 
-export const GuardianDruidRotationConfig = {
+export const FeralBearRotationConfig = {
 	inputs: [
-		InputHelpers.makeRotationBooleanInput<Spec.SpecFeralBearDruid>({
-			fieldName: 'maintainFaerieFire',
-			label: i18n.t('rotation_tab.options.druid.guardian.maintain_faerie_fire.label'),
-			labelTooltip: i18n.t('rotation_tab.options.druid.guardian.maintain_faerie_fire.tooltip'),
+		InputHelpers.makeRotationNumberInput<Spec.SpecFeralBearDruid>({
+			fieldName: 'maulRageThreshold',
+			label: i18n.t('rotation_tab.options.druid.feral_bear.maul_rage_threshold.label'),
+			labelTooltip: i18n.t('rotation_tab.options.druid.feral_bear.maul_rage_threshold.tooltip'),
+		}),
+		InputHelpers.makeRotationEnumInput<Spec.SpecFeralBearDruid, SwipeUsage>({
+			fieldName: 'swipeUsage',
+			label: i18n.t('rotation_tab.options.druid.feral_bear.swipe_usage.label'),
+			labelTooltip: i18n.t('rotation_tab.options.druid.feral_bear.swipe_usage.tooltip'),
+			values: [
+				{ name: i18n.t('rotation_tab.options.druid.feral_bear.swipe_usage.values.never'), value: SwipeUsage.SwipeUsage_Never },
+				{ name: i18n.t('rotation_tab.options.druid.feral_bear.swipe_usage.values.with_enough_ap'), value: SwipeUsage.SwipeUsage_WithEnoughAP },
+				{ name: i18n.t('rotation_tab.options.druid.feral_bear.swipe_usage.values.spam'), value: SwipeUsage.SwipeUsage_Spam },
+			],
+		}),
+		InputHelpers.makeRotationNumberInput<Spec.SpecFeralBearDruid>({
+			fieldName: 'swipeApThreshold',
+			label: i18n.t('rotation_tab.options.druid.feral_bear.swipe_ap_threshold.label'),
+			labelTooltip: i18n.t('rotation_tab.options.druid.feral_bear.swipe_ap_threshold.tooltip'),
+			showWhen: (player: Player<Spec.SpecFeralBearDruid>) => player.getSimpleRotation().swipeUsage === SwipeUsage.SwipeUsage_WithEnoughAP,
 		}),
 		InputHelpers.makeRotationBooleanInput<Spec.SpecFeralBearDruid>({
 			fieldName: 'maintainDemoralizingRoar',
-			label: i18n.t('rotation_tab.options.druid.guardian.maintain_demo_roar.label'),
-			labelTooltip: i18n.t('rotation_tab.options.druid.guardian.maintain_demo_roar.tooltip'),
+			label: i18n.t('rotation_tab.options.druid.feral_bear.maintain_demo_roar.label'),
+			labelTooltip: i18n.t('rotation_tab.options.druid.feral_bear.maintain_demo_roar.tooltip'),
 		}),
-		InputHelpers.makeRotationNumberInput<Spec.SpecFeralBearDruid>({
-			fieldName: 'demoTime',
-			label: i18n.t('rotation_tab.options.druid.guardian.demo_roar_refresh_leeway.label'),
-			labelTooltip: i18n.t('rotation_tab.options.druid.guardian.demo_roar_refresh_leeway.tooltip'),
-			showWhen: (player: Player<Spec.SpecFeralBearDruid>) => player.getSimpleRotation().maintainDemoralizingRoar,
+		InputHelpers.makeRotationBooleanInput<Spec.SpecFeralBearDruid>({
+			fieldName: 'maintainFaerieFire',
+			label: i18n.t('rotation_tab.options.druid.feral_bear.maintain_faerie_fire.label'),
+			labelTooltip: i18n.t('rotation_tab.options.druid.feral_bear.maintain_faerie_fire.tooltip'),
 		}),
-		InputHelpers.makeRotationNumberInput<Spec.SpecFeralBearDruid>({
-			fieldName: 'pulverizeTime',
-			label: i18n.t('rotation_tab.options.druid.guardian.pulverize_refresh_leeway.label'),
-			labelTooltip: i18n.t('rotation_tab.options.druid.guardian.pulverize_refresh_leeway.tooltip'),
-		}),
-		// InputHelpers.makeRotationBooleanInput<Spec.SpecGuardianDruid>({
-		// 	fieldName: 'prepullStampede',
-		// 	label: 'Assume pre-pull Stampede',
-		// 	labelTooltip: 'Activate Stampede Haste buff at the start of each pull. Models the effects of initiating the pull with Feral Charge.',
-		// 	showWhen: (player: Player<Spec.SpecGuardianDruid>) =>
-		// 		player.getTalents().stampede > 0,
-		// 	changeEmitter: (player: Player<Spec.SpecGuardianDruid>) => TypedEvent.onAny([player.rotationChangeEmitter, player.talentsChangeEmitter]),
-		// }),
 	],
 };

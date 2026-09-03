@@ -253,7 +253,11 @@ export class SimLog {
 					MajorCooldownUsedLog.parse(params) ||
 					CastBeganLog.parse(params) ||
 					CastCompletedLog.parse(params) ||
+					AutoDelayLog.parse(params) ||
 					StatChangeLog.parse(params) ||
+					SpellQueuedLog.parse(params) ||
+					CastFailedLog.parse(params) ||
+					CastPushbackLog.parse(params) ||
 					Promise.resolve(new SimLog(params))
 				);
 			}),
@@ -290,6 +294,10 @@ export class SimLog {
 
 	isCastCancelled(): this is CastCancelledLog {
 		return this instanceof CastCancelledLog;
+	}
+
+	isAutoDelay(): this is AutoDelayLog {
+		return this instanceof AutoDelayLog;
 	}
 
 	isStatChange(): this is StatChangeLog {
@@ -955,12 +963,14 @@ export class MajorCooldownUsedLog extends SimLog {
 export class CastBeganLog extends SimLog {
 	readonly manaCost: number;
 	readonly castTime: number;
+	readonly gcd: number;
 	readonly effectiveTime: number;
 
-	constructor(params: SimLogParams, manaCost: number, castTime: number, effectiveTime: number) {
+	constructor(params: SimLogParams, manaCost: number, castTime: number, gcd: number, effectiveTime: number) {
 		super(params);
 		this.manaCost = manaCost;
 		this.castTime = castTime;
+		this.gcd = gcd;
 		this.effectiveTime = effectiveTime;
 	}
 
@@ -974,21 +984,27 @@ export class CastBeganLog extends SimLog {
 	}
 
 	static parse(params: SimLogParams): Promise<CastBeganLog> | null {
-		const match = params.raw.match(/Casting (.*) \(Cost = (\d+\.?\d*), Cast Time = (\d+\.?\d*)(m?s), Effective Time = (\d+\.?\d*)(m?s)\)/);
+		const match = params.raw.match(
+			/Casting (.*) \(Cost = (\d+\.?\d*), Cast Time = (\d+\.?\d*)(m?s), GCD = (\d+\.?\d*)(m?s), Effective Time = (\d+\.?\d*)(m?s)\)/,
+		);
 		if (match) {
 			let castTime = parseFloat(match[3]);
 			if (match[4] == 'ms') {
 				castTime /= 1000;
 			}
-			let effectiveTime = parseFloat(match[5]);
+			let gcd = parseFloat(match[5]);
 			if (match[6] == 'ms') {
+				gcd /= 1000;
+			}
+			let effectiveTime = parseFloat(match[7]);
+			if (match[8] == 'ms') {
 				effectiveTime /= 1000;
 			}
 			return ActionId.fromLogString(match[1])
 				.fill(params.source?.index)
 				.then(castId => {
 					params.actionId = castId;
-					return new CastBeganLog(params, parseFloat(match[2]), castTime, effectiveTime);
+					return new CastBeganLog(params, parseFloat(match[2]), castTime, gcd, effectiveTime);
 				});
 		} else {
 			return null;
@@ -1059,11 +1075,71 @@ export class CastCompletedLog extends SimLog {
 	}
 }
 
+// AutoDelayLog records the gap between when an auto-attack would
+// naturally have fired and when it actually did, emitted from the auto's
+// ApplyEffects when the delay exceeds 1ms. Attached to the matching
+// CastLog at construction time.
+export class AutoDelayLog extends SimLog {
+	readonly delay: number; // seconds, used for block width math
+	readonly delayText: string; // pre-formatted for display: rounded ms below 1s, 2-decimal s at 1s+
+	readonly readyAtLogText: string; // pre-formatted for display in log view
+	readonly readyAtTooltip: string; // pre-formatted for display in tooltip
+
+	constructor(params: SimLogParams, delay: number, delayText: string, readyAtLogText: string, readyAtTooltip: string) {
+		super(params);
+		this.delay = delay;
+		this.delayText = delayText;
+		this.readyAtLogText = readyAtLogText;
+		this.readyAtTooltip = readyAtTooltip;
+	}
+
+	toHTML(includeTimestamp = true) {
+		return this.cacheOutput(includeTimestamp, () => (
+			<>
+				{this.toPrefix(includeTimestamp)} {this.newActionIdLink()} delayed by {this.delayText}, was ready at {this.readyAtLogText}.
+			</>
+		));
+	}
+
+	static parse(params: SimLogParams): Promise<AutoDelayLog> | null {
+		const match = params.raw.match(/] (.*?) delayed by (\d+\.?\d*)(m?s), was ready at (\d*?m?)(\d+\.?\d*)(m?s)/);
+		if (match) {
+			let delay = parseFloat(match[2]);
+			if (match[3] == 'ms') {
+				delay /= 1000;
+			}
+			const delayText = delay >= 1 ? `${delay.toFixed(2)}s` : `${Math.round(delay * 1000)}ms`;
+
+			let readyAtMinute = match[4];
+			let readyAtSeconds = parseFloat(match[5]);
+			let readyAtTotal = readyAtSeconds;
+			if (readyAtMinute && readyAtMinute.endsWith('m')) {
+				readyAtTotal = parseFloat(readyAtMinute.slice(0, -1)) * 60 + readyAtSeconds;
+			}
+			const readyAtLogText = readyAtTotal >= 1 ? `${readyAtMinute}${readyAtSeconds.toFixed(2)}s` : `${Math.round(readyAtTotal * 1000)}ms`;
+			const readyAtTooltip = readyAtTotal >= 1 ? `${readyAtTotal.toFixed(2)}s` : `${Math.round(readyAtTotal * 1000)}ms`;
+
+			return ActionId.fromLogString(match[1])
+				.fill(params.source?.index)
+				.then(castId => {
+					params.actionId = castId;
+					return new AutoDelayLog(params, delay, delayText, readyAtLogText, readyAtTooltip);
+				});
+		} else {
+			return null;
+		}
+	}
+}
+
 export class CastLog extends SimLog {
 	readonly castTime: number;
+	readonly gcd: number;
 	readonly effectiveTime: number;
 	readonly travelTime: number;
 	readonly cancelTime: number;
+	readonly delay: number;
+	readonly delayText: string;
+	readonly readyAtText: string;
 
 	readonly castBeganLog: CastBeganLog;
 	readonly castCancelledLog: CastCancelledLog | null;
@@ -1076,6 +1152,7 @@ export class CastLog extends SimLog {
 		castBeganLog: CastBeganLog,
 		castCompletedLog: CastCompletedLog | null,
 		castCancelledLog: CastCancelledLog | null,
+		autoDelayLog: AutoDelayLog | null,
 		damageDealtLogs: Array<DamageDealtLog>,
 	) {
 		super({
@@ -1089,8 +1166,12 @@ export class CastLog extends SimLog {
 			threat: castCompletedLog?.threat || castCancelledLog?.threat || castBeganLog.threat,
 		});
 		this.castTime = castBeganLog.castTime;
+		this.gcd = castBeganLog.gcd;
 		this.effectiveTime = castBeganLog.effectiveTime;
 		this.cancelTime = castCancelledLog?.cancelTime || 0;
+		this.delay = autoDelayLog?.delay ?? 0;
+		this.delayText = autoDelayLog?.delayText ?? '';
+		this.readyAtText = autoDelayLog?.readyAtTooltip ?? '';
 
 		this.castBeganLog = castBeganLog;
 		this.castCompletedLog = castCompletedLog;
@@ -1099,7 +1180,6 @@ export class CastLog extends SimLog {
 
 		if (this.castCompletedLog && this.castBeganLog) {
 			this.castTime = this.castCompletedLog.timestamp - this.castBeganLog.timestamp;
-			this.effectiveTime = this.castCompletedLog.timestamp - this.castBeganLog.timestamp;
 		}
 		if (this.castCancelledLog) {
 			this.cancelTime = this.castCancelledLog.cancelTime;
@@ -1133,6 +1213,7 @@ export class CastLog extends SimLog {
 		const castCompletedLogs = logs.filter((log): log is CastCompletedLog => log.isCastCompleted());
 		const castCancelledLogs = logs.filter((log): log is CastCancelledLog => log.isCastCancelled());
 		const damageDealtLogs = logs.filter((log): log is DamageDealtLog => log.isDamageDealt());
+		const autoDelayLogs = logs.filter((log): log is AutoDelayLog => log.isAutoDelay());
 
 		const toBucketKey = (actionId: ActionId) => {
 			if (actionId.spellId == 30451 || actionId.spellId == 127632) {
@@ -1140,6 +1221,9 @@ export class CastLog extends SimLog {
 				// spell than it started (if stacks drop).
 				// Also handle Shadow's Cascade for bouncing
 				return actionId.toStringIgnoringTag();
+			} else if (actionId.spellId === 27014) {
+				// Raptor Strike should be grouped with regular melee swings
+				return 'other-3-1';
 			} else {
 				return actionId.toString();
 			}
@@ -1148,6 +1232,7 @@ export class CastLog extends SimLog {
 		const castCompletedLogsByAbility = bucket(castCompletedLogs, log => toBucketKey(log.actionId!));
 		const castCancelledLogsByAbility = bucket(castCancelledLogs, log => toBucketKey(log.actionId!));
 		const damageDealtLogsByAbility = bucket(damageDealtLogs, log => toBucketKey(log.actionId!));
+		const autoDelayLogsByAbility = bucket(autoDelayLogs, log => toBucketKey(log.actionId!));
 
 		const castLogs: Array<CastLog> = [];
 		Object.keys(castBeganLogsByAbility).forEach(bucketKey => {
@@ -1155,8 +1240,10 @@ export class CastLog extends SimLog {
 			const abilityCastsCompleted = castCompletedLogsByAbility[bucketKey];
 			const abilityCastsCancelled = castCancelledLogsByAbility[bucketKey];
 			const abilityDamageDealt = damageDealtLogsByAbility[bucketKey];
+			const abilityAutoDelay = autoDelayLogsByAbility[bucketKey];
 
 			let ddIdx = 0;
+			let adIdx = 0;
 			let castSkipIdx = 0;
 			for (let cbIdx = 0; cbIdx < abilityCastsBegan.length; cbIdx++) {
 				const cbLog = abilityCastsBegan[cbIdx];
@@ -1199,7 +1286,21 @@ export class CastLog extends SimLog {
 					ddLogs.push(abilityDamageDealt[ddIdx]);
 					ddIdx++;
 				}
-				castLogs.push(new CastLog(cbLog, ccLog, cCancelLog, ddLogs));
+
+				// At most one AutoDelay log per cast; pick the next one inside this cast's window.
+				const nextCbLog = abilityCastsBegan[cbIdx + 1];
+				let adLog: AutoDelayLog | null = null;
+				if (
+					abilityAutoDelay &&
+					adIdx < abilityAutoDelay.length &&
+					abilityAutoDelay[adIdx].timestamp >= cbLog.timestamp &&
+					(!nextCbLog || abilityAutoDelay[adIdx].timestamp < nextCbLog.timestamp)
+				) {
+					adLog = abilityAutoDelay[adIdx];
+					adIdx++;
+				}
+
+				castLogs.push(new CastLog(cbLog, ccLog, cCancelLog, adLog, ddLogs));
 			}
 		});
 
@@ -1245,6 +1346,152 @@ export class StatChangeLog extends SimLog {
 					params.actionId = effectId;
 					const sign = match[1] == 'Lost' ? -1 : 1;
 					return new StatChangeLog(params, sign == 1, match[4]);
+				});
+		} else {
+			return null;
+		}
+	}
+}
+
+// Records when a spell is queued to fire at a future time, typically right
+// before a hardcast or auto-attack completes.
+export class SpellQueuedLog extends SimLog {
+	readonly fireAt: number; // seconds
+	readonly fireAtText: string; // pre-formatted for display
+
+	constructor(params: SimLogParams, fireAt: number, fireAtText: string) {
+		super(params);
+		this.fireAt = fireAt;
+		this.fireAtText = fireAtText;
+	}
+
+	toHTML(includeTimestamp = true) {
+		return this.cacheOutput(includeTimestamp, () => (
+			<>
+				{this.toPrefix(includeTimestamp)} Queueing {this.newActionIdLink()} to cast at {this.fireAtText}.
+			</>
+		));
+	}
+
+	static parse(params: SimLogParams): Promise<SpellQueuedLog> | null {
+		const match = params.raw.match(/Queueing up (.*?) to cast at (\d*?m?)(\d+\.?\d*)(m?s)\./);
+		if (match) {
+			const minutePart = match[2];
+			const seconds = parseFloat(match[3]);
+			let fireAt = seconds;
+			if (minutePart && minutePart.endsWith('m')) {
+				fireAt = parseFloat(minutePart.slice(0, -1)) * 60 + seconds;
+			} else if (match[4] == 'ms') {
+				fireAt = seconds / 1000;
+			}
+			const fireAtText = fireAt >= 1 ? `${minutePart}${seconds.toFixed(2)}s` : `${Math.round(fireAt * 1000)}ms`;
+
+			return ActionId.fromLogString(match[1])
+				.fill(params.source?.index)
+				.then(actionId => {
+					params.actionId = actionId;
+					return new SpellQueuedLog(params, fireAt, fireAtText);
+				});
+		} else {
+			return null;
+		}
+	}
+}
+
+// Go's time.Duration.String() can emit nanosecond-precision strings like
+// "29.999999999s" or "33.217000001s". Round these to something readable
+// without disturbing already-clean values like "30s" or "1.5s".
+const reformatGoDurations = (text: string): string =>
+	text.replace(/(\d+m)?(\d+\.\d{3,})(m?s)/g, (_match, minute: string | undefined, value: string, unit: string) => {
+		const seconds = parseFloat(value);
+		if (unit === 'ms') {
+			return `${minute ?? ''}${Math.round(seconds)}ms`;
+		}
+		return `${minute ?? ''}${seconds.toFixed(2)}s`;
+	});
+
+// The sim's cast-failure reasons all append ", curTime = <duration>", which
+// is redundant with the log line's own timestamp prefix.
+const stripCurTime = (text: string): string => text.replace(/, curTime = [\dms.h]+$/, '');
+
+// Records when a cast attempt was rejected (cooldown, GCD, already casting,
+// resource cost, etc.). The reason text comes from the sim log, with the
+// redundant ", curTime = ..." stripped, durations rounded, and embedded
+// action IDs resolved to names.
+export class CastFailedLog extends SimLog {
+	readonly reason: string;
+
+	constructor(params: SimLogParams, reason: string) {
+		super(params);
+		this.reason = reason;
+	}
+
+	toHTML(includeTimestamp = true) {
+		return this.cacheOutput(includeTimestamp, () => (
+			<>
+				{this.toPrefix(includeTimestamp)} Failed to cast {this.newActionIdLink()}: {this.reason}.
+			</>
+		));
+	}
+
+	static parse(params: SimLogParams): Promise<CastFailedLog> | null {
+		const match = params.raw.match(/] (.*?) failed to cast: (.*)/);
+		if (match) {
+			const cleaned = reformatGoDurations(stripCurTime(match[2]));
+			return Promise.all([ActionId.fromLogString(match[1]).fill(params.source?.index), ActionId.replaceAllInString(cleaned)]).then(
+				([actionId, reason]) => {
+					params.actionId = actionId;
+					return new CastFailedLog(params, reason.replace(/[.!?]$/, ''));
+				},
+			);
+		} else {
+			return null;
+		}
+	}
+}
+
+// Records pushback events emitted when the player takes damage while
+// hardcasting or channeling, delaying the cast or shortening the channel.
+export class CastPushbackLog extends SimLog {
+	readonly pushback: number; // seconds
+	readonly pushbackText: string; // pre-formatted for display
+	readonly isChanneling: boolean;
+
+	constructor(params: SimLogParams, pushback: number, pushbackText: string, isChanneling: boolean) {
+		super(params);
+		this.pushback = pushback;
+		this.pushbackText = pushbackText;
+		this.isChanneling = isChanneling;
+	}
+
+	toHTML(includeTimestamp = true) {
+		return this.cacheOutput(includeTimestamp, () =>
+			this.isChanneling ? (
+				<>
+					{this.toPrefix(includeTimestamp)} {this.newActionIdLink()} lost {this.pushbackText} while channeling due to pushback.
+				</>
+			) : (
+				<>
+					{this.toPrefix(includeTimestamp)} {this.newActionIdLink()} pushed back {this.pushbackText} while casting.
+				</>
+			),
+		);
+	}
+
+	static parse(params: SimLogParams): Promise<CastPushbackLog> | null {
+		const match = params.raw.match(/] (.*?) pushed back (\d+\.?\d*)(m?s) while ((casting)|(channeling))/);
+		if (match) {
+			let pushback = parseFloat(match[2]);
+			if (match[3] == 'ms') {
+				pushback /= 1000;
+			}
+			const pushbackText = pushback >= 1 ? `${pushback.toFixed(2)}s` : `${Math.round(pushback * 1000)}ms`;
+
+			return ActionId.fromLogString(match[1])
+				.fill(params.source?.index)
+				.then(actionId => {
+					params.actionId = actionId;
+					return new CastPushbackLog(params, pushback, pushbackText, match[4] == 'channeling');
 				});
 		} else {
 			return null;

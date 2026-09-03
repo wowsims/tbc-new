@@ -3,25 +3,26 @@ package druid
 import (
 	"time"
 
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
 
-const (
-	StarfireBonusCoeff = 1
-	StarfireMinDmg     = 550
-	StarfireMaxDmg     = 647
-)
+var StarfireRankMap = shared.SpellRankMap{
+	{Rank: 6, SpellID: 9876, Cost: 315, MinDamage: 463, MaxDamage: 543, Coefficient: 1},
+	{Rank: 8, SpellID: 26986, Cost: 370, MinDamage: 550, MaxDamage: 647, Coefficient: 1},
+}
 
-func (druid *Druid) registerStarfireSpell() {
-	druid.Starfire = druid.RegisterSpell(Humanoid|Moonkin, core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 26986},
+func (druid *Druid) registerStarfireSpell(rankConfig shared.SpellRankConfig) {
+	spell := druid.RegisterSpell(Humanoid|Moonkin, core.SpellConfig{
+		ActionID:       core.ActionID{SpellID: rankConfig.SpellID},
 		SpellSchool:    core.SpellSchoolArcane,
 		ProcMask:       core.ProcMaskSpellDamage,
 		ClassSpellMask: DruidSpellStarfire,
 		Flags:          core.SpellFlagAPL,
+		Rank:           rankConfig.Rank,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 370,
+			FlatCost: rankConfig.Cost,
 		},
 
 		Cast: core.CastConfig{
@@ -31,14 +32,16 @@ func (druid *Druid) registerStarfireSpell() {
 			},
 		},
 
-		BonusCoefficient: StarfireBonusCoeff,
+		BonusCoefficient: rankConfig.Coefficient,
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
 		CritMultiplier:   druid.DefaultSpellCritMultiplier(),
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := druid.CalcAndRollDamageRange(sim, StarfireMinDmg, StarfireMaxDmg)
+			baseDamage := druid.CalcAndRollDamageRange(sim, rankConfig.MinDamage, rankConfig.MaxDamage)
 			spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
 		},
 	})
+
+	druid.Starfire = append(druid.Starfire, spell)
 }

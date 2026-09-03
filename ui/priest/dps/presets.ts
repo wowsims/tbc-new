@@ -7,6 +7,7 @@ import { defaultImprovedShadowBoltSettings, defaultRaidBuffMajorDamageCooldowns 
 import DefaultApl from './apls/default.apl.json';
 import P1Gear from './gear_sets/p1.gear.json';
 import P2Gear from './gear_sets/p2.gear.json';
+import P3Gear from './gear_sets/p3.gear.json';
 import PreRaidGear from './gear_sets/pre_raid.gear.json';
 
 // Preset options for this spec.
@@ -15,6 +16,7 @@ import PreRaidGear from './gear_sets/pre_raid.gear.json';
 export const PRE_RAID_PRESET = PresetUtils.makePresetGear('Pre Raid Preset', PreRaidGear);
 export const P1_PRESET = PresetUtils.makePresetGear('P1 Preset', P1Gear);
 export const P2_PRESET = PresetUtils.makePresetGear('P2 Preset', P2Gear);
+export const P3_PRESET = PresetUtils.makePresetGear('P3 Preset', P3Gear);
 
 export const ROTATION_PRESET_DEFAULT = PresetUtils.makePresetAPLRotation('Default', DefaultApl);
 
@@ -38,6 +40,25 @@ export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
 	),
 );
 
+export const P3_EP_PRESET = PresetUtils.makePresetEpWeights(
+	'P3',
+	Stats.fromMap(
+		{
+			[Stat.StatIntellect]: 0.06,
+			[Stat.StatSpirit]: 0.11,
+			[Stat.StatSpellDamage]: 1.0,
+			[Stat.StatShadowDamage]: 1.0,
+			[Stat.StatSpellHitRating]: 1.35,
+			[Stat.StatSpellCritRating]: 0.19,
+			[Stat.StatSpellHasteRating]: 0.88,
+			[Stat.StatMP5]: 0.01,
+		},
+		{
+			[PseudoStat.PseudoStatSchoolHitPercentShadow]: 1.41,
+		},
+	),
+);
+
 // Default talents. Uses the wowhead calculator format, make the talents on
 // https://www.wowhead.com/tbc/talent-calc/priest and copy the numbers in the url.
 export const StandardTalents = {
@@ -57,7 +78,7 @@ export const DefaultConsumables = ConsumesSpec.create({
 	flaskId: 22866, // Flask of Pure Death
 	foodId: 27657, // Blackened Basilisk
 	conjuredId: 12662, // Demonic Rune
-	mhImbueId: 25122, // Brilliant Wizard Oil
+	mhImbueId: 22522, // Superior Wizard Oil
 	potId: 22839, // Destruction Potion
 	explosiveId: 30217,
 });

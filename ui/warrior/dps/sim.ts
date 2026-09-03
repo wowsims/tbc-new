@@ -39,15 +39,28 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecDpsWarrior, {
 	gemStats: DEFAULT_MELEE_GEM_STATS,
 	// Which stats to display in the Character Stats section, at the bottom of the left-hand sidebar.
 	displayStats: UnitStat.createDisplayStatArray(
-		[Stat.StatHealth, Stat.StatStamina, Stat.StatStrength, Stat.StatAgility, Stat.StatAttackPower, Stat.StatExpertiseRating, Stat.StatArmorPenetration],
+		[
+			Stat.StatHealth,
+			Stat.StatStamina,
+			Stat.StatStrength,
+			Stat.StatAgility,
+			Stat.StatAttackPower,
+			Stat.StatExpertiseRating,
+			Stat.StatArmorPenetration,
+			Stat.StatArcaneResistance,
+			Stat.StatFireResistance,
+			Stat.StatFrostResistance,
+			Stat.StatNatureResistance,
+			Stat.StatShadowResistance,
+		],
 		[PseudoStat.PseudoStatMeleeHitPercent, PseudoStat.PseudoStatMeleeCritPercent, PseudoStat.PseudoStatMeleeHastePercent],
 	),
 
 	defaults: {
 		// Default equipped gear.
-		gear: Presets.P1_BIS_FURY_PRESET.gear,
+		gear: Presets.P3_BIS_FURY_PRESET.gear,
 		// Default EP weights for sorting gear in the gear picker.
-		epWeights: Presets.P1_FURY_EP_PRESET.epWeights,
+		epWeights: Presets.P2_FURY_EP_PRESET.epWeights,
 		statCaps: (() => {
 			const expCap = new Stats().withStat(Stat.StatExpertiseRating, 6.5 * 4 * Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION);
 			return expCap;
@@ -116,14 +129,14 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecDpsWarrior, {
 			Presets.P1_BIS_FURY_PRESET,
 			Presets.P2_BIS_FURY_PRESET,
 			Presets.P3_BIS_FURY_PRESET,
-			Presets.P35_BIS_FURY_PRESET,
 			Presets.P4_BIS_FURY_PRESET,
+			Presets.P5_BIS_FURY_PRESET,
 			Presets.P1_PRERAID_ARMS_PRESET,
 			Presets.P1_BIS_ARMS_PRESET,
 			Presets.P2_BIS_ARMS_PRESET,
 			Presets.P3_BIS_ARMS_PRESET,
-			Presets.P35_BIS_ARMS_PRESET,
 			Presets.P4_BIS_ARMS_PRESET,
+			Presets.P5_BIS_ARMS_PRESET,
 		],
 		builds: [
 			Presets.PRESET_BUILD_FURY,
@@ -132,13 +145,13 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecDpsWarrior, {
 			Presets.P1_PRESET_BUILD_FURY,
 			Presets.P2_PRESET_BUILD_FURY,
 			Presets.P3_PRESET_BUILD_FURY,
-			Presets.P35_PRESET_BUILD_FURY,
 			Presets.P4_PRESET_BUILD_FURY,
+			Presets.P5_PRESET_BUILD_FURY,
 			Presets.P1_PRESET_BUILD_ARMS,
 			Presets.P2_PRESET_BUILD_ARMS,
 			Presets.P3_PRESET_BUILD_ARMS,
-			Presets.P35_PRESET_BUILD_ARMS,
 			Presets.P4_PRESET_BUILD_ARMS,
+			Presets.P5_PRESET_BUILD_ARMS,
 		],
 	},
 
@@ -189,8 +202,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecDpsWarrior, {
 			...rotation,
 		});
 	},
-
-	raidSimPresets: [],
 });
 
 export class DpsWarriorSimUI extends IndividualSimUI<Spec.SpecDpsWarrior> {

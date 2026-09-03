@@ -1,9 +1,12 @@
 {
-	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"files.watcherExclude": {
+		"**/.git/objects/**": true,
+		"**/.git/subtree-cache/**": true,
+		"**/node_modules/*/**": true
+	},
+	"editor.defaultFormatter": "oxc.oxc-vscode",
 	"editor.formatOnSave": true,
-	"eslint.validate": ["javascript", "typescript"],
-	"eslint.nodePath": "./node_modules",
-	"eslint.workingDirectories": ["."],
+	"oxc.fmt.experimental": true,
 	"javascript.preferences.importModuleSpecifier": "relative",
 	"javascript.preferences.importModuleSpecifierEnding": "minimal",
 	"typescript.preferences.importModuleSpecifier": "relative",
@@ -14,7 +17,7 @@
 	"stylelint.validate": ["css", "scss"],
 	"[javascript][javascriptreact][typescript][typescriptreact][html]": {
 		"editor.codeActionsOnSave": {
-			"source.fixAll.eslint": "always"
+			"source.fixAll.oxc": "always"
 		}
 	},
 	"[scss]": {
@@ -27,7 +30,7 @@
 	},
 	"[json]": {
 		"editor.formatOnSave": false,
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
+		"editor.defaultFormatter": "oxc.oxc-vscode"
 	},
 	"json.schemas": [
 		{
@@ -132,6 +135,5 @@
 		"tinsert",
 		"UIParent"
 	],
-	"makefile.configureOnOpen": false,
-	"typescript.tsdk": "node_modules/typescript/lib"
+	"makefile.configureOnOpen": false
 }

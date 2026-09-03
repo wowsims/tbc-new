@@ -6,10 +6,10 @@ import { IndividualSimUI } from '../../../individual_sim_ui';
 import { TypedEvent } from '../../../typed_event';
 import { formatDeltaTextElem, formatToNumber } from '../../../utils';
 import { Component } from '../../component';
-import { ItemRenderer } from '../../gear_picker/gear_picker';
+import { ItemRenderer } from '../../gear_picker/item_renderer';
 import Toast from '../../toast';
 import { TopGearResult } from '../bulk_tab';
-import { RaidSimResultsManager } from '../../raid_sim_action';
+import { SimResultsManager } from '../../sim_action';
 import { ItemSlot, ItemSpec } from '../../../proto/common';
 
 export default class BulkSimResultRenderer extends Component {
@@ -48,7 +48,7 @@ export default class BulkSimResultRenderer extends Component {
 		if (isBaseResult) return;
 
 		if (dpsDeltaRef.value) {
-			const isDiff = RaidSimResultsManager.applyZTestTooltip(
+			const isDiff = SimResultsManager.applyZTestTooltip(
 				dpsDeltaRef.value,
 				iterations,
 				result.dpsMetrics.avg,
@@ -82,7 +82,7 @@ export default class BulkSimResultRenderer extends Component {
 				itemContainer.style.border = '3px solid transparent';
 			}
 
-			const renderer = new ItemRenderer(items, itemContainer, simUI.player);
+			const renderer = new ItemRenderer(items, itemContainer, simUI.player, { slot: idx });
 
 			var shouldRenderItem: boolean;
 
@@ -98,12 +98,7 @@ export default class BulkSimResultRenderer extends Component {
 				shouldRenderItem = false;
 			}
 
-			if (shouldRenderItem) {
-				const item = simUI.sim.db.lookupItemSpec(spec);
-				renderer.update(item!);
-			} else {
-				renderer.clear(idx);
-			}
+			renderer.render(shouldRenderItem ? simUI.sim.db.lookupItemSpec(spec) : null);
 			items.appendChild(itemContainer);
 		}
 		itemsContainerRef.value!.appendChild(items);

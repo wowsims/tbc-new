@@ -45,6 +45,7 @@ func FreshDefaultTargetConfig() *proto.Target {
 		SwingSpeed:    2,
 		MinBaseDamage: 15113,
 		ParryHaste:    true,
+		CanCrush:      true,
 		DamageSpread:  0.5,
 	}
 }
@@ -69,6 +70,7 @@ var FullPartyBuffs = &proto.PartyBuffs{
 	SanctityAura:          proto.TristateEffect_TristateEffectImproved,
 	DevotionAura:          proto.TristateEffect_TristateEffectImproved,
 	RetributionAura:       proto.TristateEffect_TristateEffectImproved,
+	ConcentrationAura:     proto.TristateEffect_TristateEffectImproved,
 	TrueshotAura:          true,
 	DraeneiRacialMelee:    true,
 	DraeneiRacialCaster:   true,
@@ -80,6 +82,7 @@ var FullPartyBuffs = &proto.PartyBuffs{
 	EyeOfTheNight:         true,
 	ChainOfTheTwilightOwl: true,
 	JadePendantOfBlasting: true,
+	TotemTwisting:         true,
 
 	ManaSpringTotem:      proto.TristateEffect_TristateEffectImproved,
 	ManaTideTotems:       1,
@@ -96,6 +99,15 @@ var FullPartyBuffs = &proto.PartyBuffs{
 }
 
 var FullIndividualBuffs = &proto.IndividualBuffs{
+	BlessingOfKings:     true,
+	BlessingOfSalvation: true,
+	BlessingOfSanctuary: true,
+	BlessingOfWisdom:    proto.TristateEffect_TristateEffectImproved,
+	BlessingOfMight:     proto.TristateEffect_TristateEffectImproved,
+	UnleashedRage:       true,
+}
+
+var FullTankIndividualBuffs = &proto.IndividualBuffs{
 	BlessingOfKings:     true,
 	BlessingOfSanctuary: true,
 	BlessingOfWisdom:    proto.TristateEffect_TristateEffectImproved,

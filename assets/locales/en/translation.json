@@ -6,9 +6,6 @@
 			"about": "About",
 			"toggle": "Toggle navigation"
 		},
-		"simulations": {
-			"full_raid": "Full Raid Sim"
-		},
 		"home": {
 			"title": "WoWSims - The Burning Crusade",
 			"description": "A powerful simulation tool for World of Warcraft: The Burning Crusade",
@@ -33,11 +30,17 @@
 			"1": "Phase 1 (2.0 - T4)",
 			"2": "Phase 2 (2.1 - T5)",
 			"3": "Phase 3 (2.2 - T6)",
-			"4": "Phase 3.5 (2.3 - ZA)",
-			"5": "Phase 4 (2.4 - SWP)"
+			"4": "Phase 4 (2.3 - ZA)",
+			"5": "Phase 5 (2.4 - SWP)"
+		},
+		"phase_names": {
+			"1": "Phase 1",
+			"2": "Phase 2",
+			"3": "Phase 3",
+			"4": "Phase 4",
+			"5": "Phase 5"
 		},
 		"tanks": {
-			"title": "Tanks",
 			"main_tank": "Main Tank",
 			"tank_2": "Tank 2",
 			"tank_3": "Tank 3",
@@ -278,7 +281,7 @@
 			"old_sim_message": "You can find the old Sim for this spec here:"
 		},
 		"notifications": {
-			"raid_sim_cancelled": "Raid sim cancelled.",
+			"sim_cancelled": "Sim cancelled.",
 			"simulation_failed": "The Simulation failed. Generated an error report.",
 			"failed_to_file_report": "Failed to file report... try again another time:"
 		},
@@ -708,6 +711,10 @@
 				"adds_spawn_delay": {
 					"label": "Add(s) spawn delay",
 					"tooltip": "Initial delay before the add(s) spawn (in seconds)"
+				},
+				"fear_duration": {
+					"label": "Fear Duration",
+					"tooltip": "Time (in seconds) that Fear keeps players from acting. Fear lasts 8s, but is usually broken after ~3s. Set to 0 to disable."
 				}
 			},
 			"duration": {
@@ -743,10 +750,6 @@
 				"tooltip": "Selects a preset encounter configuration."
 			},
 			"advanced": "Advanced",
-			"use_health": {
-				"label": "Use Health",
-				"tooltip": "Uses a damage limit in place of a duration limit. Damage limit is equal to sum of all targets health."
-			},
 			"target": "Target",
 			"num_allies": {
 				"label": "Num Allies",
@@ -786,6 +789,10 @@
 				"label": "Parry Haste",
 				"tooltip": "Whether this enemy will gain parry haste when parrying attacks."
 			},
+			"can_crush": {
+				"label": "Can Crush",
+				"tooltip": "Whether this enemy can land Crushing Blows (150% damage) against players below its level. Enabled by default for level 73 targets."
+			},
 			"spell_school": {
 				"label": "Spell School",
 				"tooltip": "Type of damage caused by auto attacks. This is usually Physical, but some enemies have elemental attacks."
@@ -815,10 +822,6 @@
 			"settings": "Settings",
 			"settings_name": "Settings Name",
 			"save_settings": "Save Settings"
-		},
-		"external_buffs": {
-			"title": "External Buffs",
-			"tooltip": "Buffs provided by <strong>other</strong> party/raid members."
 		}
 	},
 	"talents_tab": {
@@ -875,7 +878,11 @@
 			"combinations_count": "{{count}} Combinations",
 			"combination_singular": "1 Combination",
 			"iterations": "Iterations",
-			"default_gems": "Fallback Gems",
+			"fallback_gems": "Fallback Gems",
+			"inherit_upgrades": {
+				"label": "Inherit Upgrades",
+				"tooltip": "When enabled, items will inherit upgrades from the equipped item. Otherwise, items will be simmed without any upgrades."
+			},
 			"freeze_ring": {
 				"label": "Freeze ring slot",
 				"tooltip": "Freeze one equipped ring to reduce combination counts"
@@ -883,21 +890,31 @@
 			"freeze_trinket": {
 				"label": "Freeze trinket slot",
 				"tooltip": "Freeze one equipped trinket to reduce combination counts"
+			},
+			"freeze_weapon": {
+				"label": "Freeze weapon slot",
+				"tooltip": "Freeze the equipped main-hand or off-hand weapon to reduce combination counts"
+			},
+			"freeze_weapon_types": {
+				"mainhand_label": "Freeze MH weapon type",
+				"offhand_label": "Freeze OH weapon type",
+				"tooltip": "Leave all unchecked to allow any weapon type for this slot."
 			}
 		},
 		"progress": {
 			"total_combinations": "{{count}} total combinations.",
-			"refining_rounds": "{{current}} / {{total}} refining rounds",
-			"simulations_complete": "{{completed}} / {{total}}<br />simulations complete",
+			"reforging_rounds": "Optimizing gems",
+			"baseline_round": "Running baseline round",
+			"refining_rounds": "Running refining rounds",
 			"iterations_complete": "{{completed}} / {{total}}<br />iterations complete",
-			"seconds_remaining": "{{seconds}} seconds remaining."
+			"seconds_remaining": "{{seconds}} seconds remaining"
 		},
 		"notifications": {
 			"bulk_sim_cancelled": "Bulk sim cancelled.",
 			"failed_to_remove_item": "Failed to remove item, please report this issue."
 		},
 		"warning": {
-			"iterations_limit": "Simming over {{limit}} iterations in the web sim will take a long time or may not run at all. For larger batch sims we recommend using Fast Mode or downloading the executable and running on your machine."
+			"iterations_limit": "Simming over {{limit}} iterations in the sim will take a long time or may not run at all. For larger batch sims we recommend downloading the executable and running on your machine."
 		},
 		"picker": {
 			"no_items": "No items selected.",
@@ -912,7 +929,7 @@
 			"current_gear": "Current Gear"
 		},
 		"gem_selector": {
-			"title": "Choose Default Gem"
+			"title": "Choose fallback Gem"
 		},
 		"import_modal": {
 			"title": "Bag Item Import",
@@ -1164,18 +1181,6 @@
 					"label": "Custom Rotation",
 					"tooltip": "INTERNAL ONLY"
 				},
-				"optimal_rotation_action": {
-					"label": "Optimal Rotation Action",
-					"tooltip": "Executes optimized Feral DPS rotation using hardcoded algorithm.",
-					"wrath_weave": {
-						"label": "Enable Wrath-weaving",
-						"tooltip": "Cast Wrath when possible during the Heart of the Wild DPS window. Ignored if HotW is not talented."
-					}
-				},
-				"guardian_hotw_dps_rotation": {
-					"label": "HotW DPS Rotation",
-					"tooltip": "Executes optimized HotW DPS rotation using hardcoded algorithm."
-				},
 				"warlock_cast_assigned_curse": {
 					"label": "Cast Assigned Curse",
 					"tooltip": "Casts the Curse that warlock is assigned"
@@ -1298,6 +1303,10 @@
 					"label": "Max Mana",
 					"tooltip": "Maximum mana of the unit"
 				},
+				"current_mana_regen": {
+					"label": "Current Mana Regen",
+					"tooltip": "Current Mana Regen while casting"
+				},
 				"current_rage": {
 					"label": "Current Rage",
 					"tooltip": "Amount of currently available Rage."
@@ -1330,9 +1339,9 @@
 					"label": "Max Energy",
 					"tooltip": "Amount of maximum available Energy."
 				},
-				"energy_regen_per_second": {
-					"label": "Energy Regen Per Second",
-					"tooltip": "Energy regen per second."
+				"time_to_next_energy_tick": {
+					"label": "Time To Next Energy Tick",
+					"tooltip": "Time remaining until the next Energy tick."
 				},
 				"estimated_time_to_target_energy": {
 					"label": "Estimated Time To Target Energy",
@@ -1572,14 +1581,6 @@
 					"label": "Totem Remaining Time",
 					"tooltip": "Returns the amount of time remaining until the totem will expire."
 				},
-				"cat_excess_energy": {
-					"label": "Excess Energy",
-					"tooltip": "Returns the amount of excess energy available, after subtracting energy that will be needed to maintain DoTs."
-				},
-				"cat_new_savage_roar_duration": {
-					"label": "New Savage Roar Duration",
-					"tooltip": "Returns duration of savage roar based on current combo points"
-				},
 				"warlock_assigned_curse_is_active": {
 					"label": "Assigned Curse Is Active",
 					"tooltip": "Returns true is assigned curse is active on target"
@@ -1617,6 +1618,14 @@
 					"target_spell_tooltip": "The spell (ie. Death Wish) you want to fit within the cooldown of the Base Spell.",
 					"align_cd_end": "Align target spell to encounter end",
 					"align_cd_end_tooltip": "When checked will try to align the CD usage to the end of the encounter. This is useful for cooldowns/specs that benefit for example from execute."
+				},
+				"selected_potion": {
+					"label": "Selected Potion",
+					"tooltip": "Returns <b>True</b> if the selected potion is the character's default potion."
+				},
+				"selected_conjured": {
+					"label": "Selected Conjured",
+					"tooltip": "Returns <b>True</b> if the selected conjured item is the character's default conjured item."
 				},
 				"offset": {
 					"label": "Offset",
@@ -1672,7 +1681,6 @@
 				"sequences": "Sequences",
 				"misc": "Misc",
 				"feral_druid": "Feral Druid",
-				"guardian_druid": "Guardian Druid",
 				"shaman": "Shaman",
 				"warlock": "Warlock",
 				"mage": "Mage",
@@ -1823,24 +1831,33 @@
 						"label": "Maintain Faerie Fire",
 						"tooltip": "Use Faerie Fire (Feral) whenever it is not active on the target."
 					}
-				}
-			},
-			"guardian": {
-				"maintain_faerie_fire": {
-					"label": "Maintain Faerie Fire",
-					"tooltip": "Maintain Faerie Fire debuff. Overwrites any external Sunder effects specified in settings."
 				},
-				"maintain_demo_roar": {
-					"label": "Maintain Demo Roar",
-					"tooltip": "Keep Demoralizing Roar active on the primary target. If a stronger debuff is active, will not cast."
-				},
-				"demo_roar_refresh_leeway": {
-					"label": "Demo Roar refresh leeway",
-					"tooltip": "Refresh Demoralizing Roar when remaining duration is less than this value (in seconds). Larger values provide safety buffer against misses, but at the cost of lower DPS."
-				},
-				"pulverize_refresh_leeway": {
-					"label": "Pulverize refresh leeway",
-					"tooltip": "Refresh Pulverize when remaining duration is less than this value (in seconds). Note that Mangle, Thrash, and Faerie Fire usage on cooldown takes priority over this rule, unless Lacerate itself is about to fall off."
+				"feral_bear": {
+					"maul_rage_threshold": {
+						"label": "Maul Rage Threshold",
+						"tooltip": "Use Maul when current Rage is at or above this value."
+					},
+					"swipe_usage": {
+						"label": "Swipe Usage",
+						"tooltip": "When to use Swipe in the rotation.",
+						"values": {
+							"never": "Never",
+							"with_enough_ap": "With Enough AP",
+							"spam": "Spam"
+						}
+					},
+					"swipe_ap_threshold": {
+						"label": "Swipe AP Threshold",
+						"tooltip": "Minimum Attack Power required before Swipe is used in the rotation."
+					},
+					"maintain_demo_roar": {
+						"label": "Maintain Demo Roar",
+						"tooltip": "Keep Demoralizing Roar active on the primary target."
+					},
+					"maintain_faerie_fire": {
+						"label": "Maintain Faerie Fire",
+						"tooltip": "Use Faerie Fire (Feral) whenever it is not active on the target."
+					}
 				}
 			},
 			"rogue": {
@@ -1877,10 +1894,6 @@
 				"melee_weave": {
 					"label": "Melee Weaving",
 					"tooltip": "Uses melee weaving in the rotation."
-				},
-				"weave_only_raptor": {
-					"label": "Only Raptor Strike (no white hits)",
-					"tooltip": "Only perform a melee weave if Raptor Strike is ready."
 				},
 				"time_to_weave": {
 					"label": "Time to weave (ms)",
@@ -1938,7 +1951,6 @@
 			"sim_1_iteration": "Sim 1 Iteration",
 			"sim_1_death": "Simulate a Death",
 			"all_targets": "All Targets",
-			"all_players": "All Players",
 			"target_number": "Target {{number}}",
 			"damage": {
 				"dps_histogram": "DPS Histogram"
@@ -1951,6 +1963,7 @@
 					"dps": "DPS",
 					"threat": "Threat"
 				},
+				"show_gcd": "Show GCD",
 				"chart_options": {
 					"time_axis": "Time (s)",
 					"waiting_for_data": "Waiting for data..."
@@ -1969,6 +1982,7 @@
 			},
 			"logs": {
 				"top_button": "Top",
+				"export_button": "Export Log",
 				"time_column": "Time",
 				"event_column": "Event",
 				"show_debug": "Show Debug Statements"
@@ -2042,8 +2056,6 @@
 			},
 			"tooltips": {
 				"damage_avg_cast": "Average damage per cast",
-				"player_damage": "Player Damage / Raid Damage",
-				"player_damage_taken": "Player Damage Taken / Raid Damage Taken",
 				"damage_taken_per_encounter": "Damage Taken / Encounter Duration",
 				"healing_per_encounter": "Healing / Encounter Duration",
 				"threat_per_encounter": "Threat / Encounter Duration",
@@ -2228,7 +2240,8 @@
 			"meta_gem_disabled": "Meta gem disabled ({{gemName}}): {{description}}",
 			"profession_requirement": "{{itemName}} requires {{professionName}}, but it is not selected.",
 			"too_many_jc_gems": "Only 2 Jewelcrafting Gems are allowed, but {{count}} are equipped.",
-			"unspent_talent_points": "You have {{count}} unspent talent point(s)."
+			"unspent_talent_points": "You have {{count}} unspent talent point(s).",
+			"custom_ep_not_enabled": "Detected custom EPs. Enable \"Use custom EP Weights\" in the Suggest Gems settings to use them for gemming."
 		},
 		"buttons": {
 			"simulate": "Simulate",
@@ -2438,7 +2451,8 @@
 				"to_exp_cap": "To Exp Cap:",
 				"spec_offsets": "Spec Offsets:",
 				"final_crit_cap": "Final Crit Cap:",
-				"can_raise_by": "Can Raise By:"
+				"can_raise_by": "Can Raise By:",
+				"eWS": "eWS:"
 			},
 			"attack_table": {
 				"glancing": "Glancing:",

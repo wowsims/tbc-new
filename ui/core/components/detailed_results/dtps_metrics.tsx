@@ -53,6 +53,7 @@ export class DtpsMetricsTable extends MetricsTable<ActionMetrics> {
 					const glanceValues = metric.damageDone.glance;
 					const blockValues = metric.damageDone.block;
 					const blockedCritValues = metric.damageDone.blockedCrit;
+					const crushedValues = metric.damageDone.crush;
 
 					cellElem.appendChild(
 						<MetricsCombinedTooltipTable
@@ -108,6 +109,10 @@ export class DtpsMetricsTable extends MetricsTable<ActionMetrics> {
 											name: i18n.t('results_tab.details.attack_types.blocked_critical_hit'),
 											...blockedCritValues,
 										},
+										{
+											name: i18n.t('results_tab.details.attack_types.crushing_blow'),
+											...crushedValues,
+										},
 									],
 								},
 							]}
@@ -134,7 +139,8 @@ export class DtpsMetricsTable extends MetricsTable<ActionMetrics> {
 									data: [
 										{
 											name: i18n.t('results_tab.details.attack_types.hit'),
-											value: (metric.landedHits || metric.casts - metric.totalMisses) - metric.blocks - metric.blockedCrits,
+											value:
+												(metric.landedHits || metric.casts - metric.totalMisses) - metric.blocks - metric.blockedCrits - metric.crushes,
 											percentage: relativeHitPercent,
 										},
 										{
@@ -156,6 +162,11 @@ export class DtpsMetricsTable extends MetricsTable<ActionMetrics> {
 											name: i18n.t('results_tab.details.attack_types.dodge'),
 											value: metric.dodges,
 											percentage: metric.dodgePercent,
+										},
+										{
+											name: i18n.t('results_tab.details.attack_types.crushing_blow'),
+											value: metric.crushes,
+											percentage: metric.crushPercent,
 										},
 									],
 								},
@@ -203,6 +214,7 @@ export class DtpsMetricsTable extends MetricsTable<ActionMetrics> {
 					const relativeGlancePercent = (metric.glances / metric.landedHits) * 100;
 					const relativeBlockPercent = (metric.blocks / metric.landedHits) * 100;
 					const relativeBlockedCritPercent = (metric.blockedCrits / metric.landedHits) * 100;
+					const relativeCrushPercent = (metric.crushes / metric.landedHits) * 100;
 
 					cellElem.appendChild(
 						<MetricsCombinedTooltipTable
@@ -247,6 +259,11 @@ export class DtpsMetricsTable extends MetricsTable<ActionMetrics> {
 											name: i18n.t('results_tab.details.attack_types.blocked_hit'),
 											value: metric.blocks,
 											percentage: relativeBlockPercent,
+										},
+										{
+											name: i18n.t('results_tab.details.attack_types.crushing_blow'),
+											value: metric.crushes,
+											percentage: relativeCrushPercent,
 										},
 									],
 								},

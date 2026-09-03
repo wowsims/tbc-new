@@ -34,7 +34,7 @@ func (paladin *Paladin) registerHolyWrath(rankConfig shared.SpellRankConfig) {
 	maxDamage := rankConfig.MaxDamage
 	coefficient := rankConfig.Coefficient
 
-	paladin.HolyWraths = append(paladin.HolyWraths, paladin.RegisterSpell(core.SpellConfig{
+	paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: spellID},
 		SpellSchool:    core.SpellSchoolHoly,
 		ProcMask:       core.ProcMaskSpellDamage,
@@ -45,6 +45,9 @@ func (paladin *Paladin) registerHolyWrath(rankConfig shared.SpellRankConfig) {
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
 		CritMultiplier:   paladin.DefaultSpellCritMultiplier(),
+
+		MaxRange:     20,
+		MissileSpeed: 20,
 
 		ManaCost: core.ManaCostOptions{
 			FlatCost: cost,
@@ -58,17 +61,28 @@ func (paladin *Paladin) registerHolyWrath(rankConfig shared.SpellRankConfig) {
 				Timer:    paladin.getHolyWrathTimer(),
 				Duration: time.Minute,
 			},
+			ModifyCast: func(sim *core.Simulation, spell *core.Spell, cast *core.Cast) {
+				castTime := paladin.ApplyCastSpeedForSpell(cast.CastTime, spell)
+				paladin.AutoAttacks.StopMeleeUntil(sim, sim.CurrentTime+castTime)
+			},
 		},
 
 		BonusCoefficient: coefficient,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+			results := []*core.SpellResult{}
 			for _, aoeTarget := range sim.Encounter.ActiveTargetUnits {
 				if aoeTarget.MobType == proto.MobType_MobTypeUndead || aoeTarget.MobType == proto.MobType_MobTypeDemon {
 					damage := sim.Roll(minDamage, maxDamage)
-					spell.CalcAndDealDamage(sim, aoeTarget, damage, spell.OutcomeMagicHitAndCrit)
+					results = append(results, spell.CalcDamage(sim, aoeTarget, damage, spell.OutcomeMagicHitAndCrit))
 				}
 			}
+
+			spell.WaitTravelTime(sim, func(sim *core.Simulation) {
+				for _, result := range results {
+					spell.DealDamage(sim, result)
+				}
+			})
 		},
-	}))
+	})
 }

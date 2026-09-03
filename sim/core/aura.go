@@ -202,7 +202,7 @@ func (aura *Aura) SetStacks(sim *Simulation, newStacks int32) {
 		return
 	}
 
-	if sim.Log != nil {
+	if sim.Log != nil && !aura.ActionID.IsEmptyAction() {
 		aura.Unit.Log(sim, "%s stacks: %d --> %d", aura.ActionID, oldStacks, newStacks)
 	}
 	aura.stacks = newStacks
@@ -272,6 +272,10 @@ func (aura *Aura) ExpiresAt() time.Duration {
 // Adds a handler to be called OnInit, in addition to any current handlers.
 // We then return the Aura for chaining
 func (aura *Aura) ApplyOnInit(newOnInit OnInit) *Aura {
+	if aura == nil {
+		return nil
+	}
+
 	oldOnInit := aura.OnInit
 	if oldOnInit == nil {
 		aura.OnInit = newOnInit
@@ -287,6 +291,10 @@ func (aura *Aura) ApplyOnInit(newOnInit OnInit) *Aura {
 
 // Adds a handler to be called OnGain, in addition to any current handlers.
 func (aura *Aura) ApplyOnGain(newOnGain OnGain) *Aura {
+	if aura == nil {
+		return nil
+	}
+
 	oldOnGain := aura.OnGain
 	if oldOnGain == nil {
 		aura.OnGain = newOnGain
@@ -301,6 +309,10 @@ func (aura *Aura) ApplyOnGain(newOnGain OnGain) *Aura {
 }
 
 func (aura *Aura) AttachDependentAura(sibling *Aura) *Aura {
+	if aura == nil {
+		return nil
+	}
+
 	return aura.ApplyOnGain(func(aura *Aura, sim *Simulation) {
 		sibling.Activate(sim)
 	}).ApplyOnExpire(func(aura *Aura, sim *Simulation) {
@@ -316,6 +328,10 @@ func (aura *Aura) AttachDependentAura(sibling *Aura) *Aura {
 
 // Adds a handler to be called OnExpire, in addition to any current handlers.
 func (aura *Aura) ApplyOnExpire(newOnExpire OnExpire) *Aura {
+	if aura == nil {
+		return nil
+	}
+
 	oldOnExpire := aura.OnExpire
 	if oldOnExpire == nil {
 		aura.OnExpire = newOnExpire
@@ -331,6 +347,10 @@ func (aura *Aura) ApplyOnExpire(newOnExpire OnExpire) *Aura {
 
 // Adds a handler to be called OnReset, in addition to any current handlers.
 func (aura *Aura) ApplyOnReset(newOnReset OnReset) *Aura {
+	if aura == nil {
+		return nil
+	}
+
 	oldOnReset := aura.OnReset
 	if oldOnReset == nil {
 		aura.OnReset = newOnReset
@@ -347,6 +367,10 @@ func (aura *Aura) ApplyOnReset(newOnReset OnReset) *Aura {
 // Adds a handler to be called OnStacksChange, in addition to any current handlers.
 // We then return the Aura for chaining
 func (aura *Aura) ApplyOnStacksChange(newOnStacksChange OnStacksChange) *Aura {
+	if aura == nil {
+		return nil
+	}
+
 	oldOnStacksChange := aura.OnStacksChange
 	if oldOnStacksChange == nil {
 		aura.OnStacksChange = newOnStacksChange
@@ -361,6 +385,10 @@ func (aura *Aura) ApplyOnStacksChange(newOnStacksChange OnStacksChange) *Aura {
 }
 
 func (aura *Aura) ApplyOnEncounterStart(newOnEncounterStart OnEncounterStart) *Aura {
+	if aura == nil {
+		return nil
+	}
+
 	oldOnEncounterStart := aura.OnEncounterStart
 	if oldOnEncounterStart == nil {
 		aura.OnEncounterStart = newOnEncounterStart

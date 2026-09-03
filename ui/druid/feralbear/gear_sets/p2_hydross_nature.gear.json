@@ -1,0 +1,21 @@
+{
+	"items": [
+		{ "id": 8345, "enchant": 3005 },
+		{ "id": 24095 },
+		{ "id": 24804, "randomSuffix": -34, "enchant": 2998 },
+		{ "id": 25043, "randomSuffix": -34, "enchant": 2664 },
+		{ "id": 24800, "randomSuffix": -34, "enchant": 2988 },
+		{ "id": 32814, "enchant": 1891, "gems": [22459] },
+		{ "id": 24801, "randomSuffix": -34, "enchant": 2988 },
+		{ "id": 32802 },
+		{ "id": 24803, "randomSuffix": -34, "enchant": 2681 },
+		{ "id": 32790, "enchant": 2939 },
+		{ "id": 31399, "enchant": 2929 },
+		{ "id": 30834, "enchant": 2929 },
+		{ "id": 28288 },
+		{ "id": 29383 },
+		{ "id": 28476, "enchant": 2670 },
+		{},
+		{ "id": 32387 }
+	]
+}

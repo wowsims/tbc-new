@@ -26,17 +26,17 @@ var AvengersShieldRankMap = shared.SpellRankMap{
 // Hurls a holy shield at the enemy, dealing Holy damage, dazing them and
 // then jumping to additional nearby enemies. Affects 3 total targets.
 func (paladin *Paladin) registerAvengersShield(rankConfig shared.SpellRankConfig) {
-	paladin.AvengersShields = append(paladin.AvengersShields, paladin.RegisterSpell(core.SpellConfig{
+	paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: rankConfig.SpellID},
 		SpellSchool:    core.SpellSchoolHoly,
-		ProcMask:       core.ProcMaskSpellDamage,
-		Flags:          core.SpellFlagAPL,
+		ProcMask:       core.ProcMaskRangedSpecial,
+		Flags:          core.SpellFlagAPL | core.SpellFlagBinary,
 		ClassSpellMask: SpellMaskAvengersShield,
 		Rank:           rankConfig.Rank,
 
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
-		CritMultiplier:   paladin.DefaultSpellCritMultiplier(),
+		CritMultiplier:   paladin.DefaultMeleeCritMultiplier(),
 
 		MaxRange:     30,
 		MissileSpeed: 35,
@@ -53,13 +53,22 @@ func (paladin *Paladin) registerAvengersShield(rankConfig shared.SpellRankConfig
 				Timer:    paladin.getAvengersShieldTimer(),
 				Duration: time.Second * 30,
 			},
+			ModifyCast: func(sim *core.Simulation, spell *core.Spell, cast *core.Cast) {
+				castTime := paladin.ApplyCastSpeedForSpell(cast.CastTime, spell)
+				paladin.AutoAttacks.StopMeleeUntil(sim, sim.CurrentTime+castTime)
+			},
 		},
 
 		BonusCoefficient: rankConfig.Coefficient,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			damage := sim.Roll(rankConfig.MinDamage, rankConfig.MaxDamage)
-			spell.CalcAndDealCleaveDamage(sim, target, 3, damage, spell.OutcomeMagicHitAndCrit)
+			results := spell.CalcCleaveDamage(sim, target, 3, damage, spell.OutcomeRangedHitAndCrit)
+			spell.WaitTravelTime(sim, func(sim *core.Simulation) {
+				for _, result := range results {
+					spell.DealDamage(sim, result)
+				}
+			})
 		},
-	}))
+	})
 }

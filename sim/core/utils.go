@@ -151,8 +151,10 @@ func TernaryDuration(condition bool, val1 time.Duration, val2 time.Duration) tim
 	}
 }
 
-func UnitLevelFloat64(unitLevel int32, maxLevelPlus0Val float64, maxLevelPlus1Val float64, maxLevelPlus2Val float64, maxLevelPlus3Val float64) float64 {
-	if unitLevel == CharacterLevel {
+func UnitLevelFloat64(unitLevel int32, maxLevelMinus2Val float64, maxLevelPlus0Val float64, maxLevelPlus1Val float64, maxLevelPlus2Val float64, maxLevelPlus3Val float64) float64 {
+	if unitLevel == CharacterLevel-2 {
+		return maxLevelMinus2Val
+	} else if unitLevel == CharacterLevel {
 		return maxLevelPlus0Val
 	} else if unitLevel == CharacterLevel+1 {
 		return maxLevelPlus1Val

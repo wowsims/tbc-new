@@ -1,3 +1,4 @@
+import i18n from '../../../i18n/config';
 import { itemSwapEnabledSpecs } from '../../individual_sim_ui.js';
 import { Player } from '../../player.js';
 import {
@@ -10,6 +11,7 @@ import {
 	APLActionCastAllStatBuffCooldowns,
 	APLActionCastFriendlySpell,
 	APLActionCastSpell,
+	APLActionBearOptimalRotationAction,
 	APLActionCatOptimalRotationAction,
 	APLActionChangeTarget,
 	APLActionChannelSpell,
@@ -31,14 +33,13 @@ import {
 	APLActionTriggerICD,
 	APLActionWait,
 	APLActionWaitUntil,
-	APLValue,
 	APLActionCastWarlockAssignedCurse,
+	APLValue,
 } from '../../proto/apl.js';
 import { Spec } from '../../proto/common.js';
 import { EventID } from '../../typed_event.js';
 import { randomUUID } from '../../utils';
 import { Input, InputConfig } from '../input.js';
-import i18n from '../../../i18n/config';
 import { TextDropdownPicker } from '../pickers/dropdown_picker.jsx';
 import { ListItemPickerConfig, ListPicker } from '../pickers/list_picker.jsx';
 import * as AplHelpers from './apl_helpers.js';
@@ -66,25 +67,26 @@ export class APLActionPicker extends Input<Player<any>, APLAction> {
 	constructor(parent: HTMLElement, player: Player<any>, config: APLActionPickerConfig) {
 		super(parent, 'apl-action-picker-root', player, config);
 
-		this.conditionPicker = new AplValues.APLValuePicker(this.rootElem, this.modObject, {
-			label: i18n.t('rotation_tab.apl.priority_list.if_label'),
-			changedEvent: (player: Player<any>) => player.rotationChangeEmitter,
-			getValue: (_player: Player<any>) => this.getSourceValue()?.condition,
-			setValue: (eventID: EventID, player: Player<any>, newValue: APLValue | undefined) => {
-				const srcVal = this.getSourceValue();
-				if (srcVal) {
-					srcVal.condition = newValue;
-					player.rotationChangeEmitter.emit(eventID);
-				} else {
-					this.setSourceValue(
-						eventID,
-						APLAction.create({
-							condition: newValue,
-						}),
-					);
-				}
-			},
-		});
+		this.conditionPicker = this.addChild(
+			new AplValues.APLValuePicker(this.rootElem, this.modObject, {
+				label: i18n.t('rotation_tab.apl.priority_list.if_label'),
+				getValue: (_player: Player<any>) => this.getSourceValue()?.condition,
+				setValue: (eventID: EventID, player: Player<any>, newValue: APLValue | undefined) => {
+					const srcVal = this.getSourceValue();
+					if (srcVal) {
+						srcVal.condition = newValue;
+						player.rotationChangeEmitter.emit(eventID);
+					} else {
+						this.setSourceValue(
+							eventID,
+							APLAction.create({
+								condition: newValue,
+							}),
+						);
+					}
+				},
+			}),
+		);
 		this.conditionPicker.rootElem.classList.add('apl-action-condition', 'apl-priority-list-only');
 
 		this.actionDiv = document.createElement('div');
@@ -97,74 +99,78 @@ export class APLActionPicker extends Input<Player<any>, APLAction> {
 			actionKind => actionKindFactories[actionKind].includeIf?.(player, isPrepull) ?? true,
 		);
 
-		this.kindPicker = new TextDropdownPicker(this.actionDiv, player, {
-			id: randomUUID(),
-			defaultLabel: i18n.t('rotation_tab.apl.priority_list.item_label'),
-			values: allActionKinds.map(actionKind => {
-				const factory = actionKindFactories[actionKind];
-				return {
-					value: actionKind,
-					label: factory.label,
-					submenu: factory.submenu,
-					tooltip: factory.fullDescription ? `<p>${factory.shortDescription}</p> ${factory.fullDescription}` : factory.shortDescription,
-				};
-			}),
-			equals: (a, b) => a == b,
-			changedEvent: (player: Player<any>) => player.rotationChangeEmitter,
-			getValue: (_player: Player<any>) => this.getSourceValue()?.action.oneofKind,
-			setValue: (eventID: EventID, player: Player<any>, newKind: APLActionKind) => {
-				const sourceValue = this.getSourceValue();
-				const oldKind = sourceValue?.action.oneofKind;
-				if (oldKind == newKind) {
-					return;
-				}
+		this.kindPicker = this.addChild(
+			new TextDropdownPicker(this.actionDiv, player, {
+				id: randomUUID(),
+				defaultLabel: i18n.t('rotation_tab.apl.priority_list.item_label'),
+				values: allActionKinds.map(actionKind => {
+					const factory = actionKindFactories[actionKind];
+					return {
+						value: actionKind,
+						label: factory.label,
+						submenu: factory.submenu,
+						tooltip: factory.fullDescription ? `<p>${factory.shortDescription}</p> ${factory.fullDescription}` : factory.shortDescription,
+					};
+				}),
+				equals: (a, b) => a == b,
+				getValue: (_player: Player<any>) => this.getSourceValue()?.action.oneofKind,
+				setValue: (eventID: EventID, player: Player<any>, newKind: APLActionKind) => {
+					const sourceValue = this.getSourceValue();
+					const oldKind = sourceValue?.action.oneofKind;
+					if (oldKind == newKind) {
+						return;
+					}
 
-				if (newKind) {
-					const factory = actionKindFactories[newKind];
-					let newSourceValue = this.makeAPLAction(newKind, factory.newValue());
-					if (sourceValue) {
-						// Some pre-fill logic when swapping kinds.
-						if (oldKind && this.actionPicker) {
-							if (newKind == 'sequence') {
-								if (sourceValue.action.oneofKind == 'strictSequence') {
-									(newSourceValue.action as APLActionImplStruct<'sequence'>).sequence.actions = sourceValue.action.strictSequence.actions;
-								} else {
-									(newSourceValue.action as APLActionImplStruct<'sequence'>).sequence.actions = [
-										this.makeAPLAction(oldKind, this.actionPicker.getInputValue()),
-									];
+					if (newKind) {
+						const factory = actionKindFactories[newKind];
+						let newSourceValue = this.makeAPLAction(newKind, factory.newValue());
+						if (sourceValue) {
+							// Some pre-fill logic when swapping kinds.
+							if (oldKind && this.actionPicker) {
+								if (newKind == 'sequence') {
+									if (sourceValue.action.oneofKind == 'strictSequence') {
+										(newSourceValue.action as APLActionImplStruct<'sequence'>).sequence.actions = sourceValue.action.strictSequence.actions;
+									} else {
+										(newSourceValue.action as APLActionImplStruct<'sequence'>).sequence.actions = [
+											this.makeAPLAction(oldKind, this.actionPicker.getInputValue()),
+										];
+									}
+								} else if (newKind == 'strictSequence') {
+									if (sourceValue.action.oneofKind == 'sequence') {
+										(newSourceValue.action as APLActionImplStruct<'strictSequence'>).strictSequence.actions =
+											sourceValue.action.sequence.actions;
+									} else {
+										(newSourceValue.action as APLActionImplStruct<'strictSequence'>).strictSequence.actions = [
+											this.makeAPLAction(oldKind, this.actionPicker.getInputValue()),
+										];
+									}
+								} else if (
+									sourceValue.action.oneofKind == 'sequence' &&
+									sourceValue.action.sequence.actions?.[0]?.action.oneofKind == newKind
+								) {
+									newSourceValue = sourceValue.action.sequence.actions[0];
+								} else if (
+									sourceValue.action.oneofKind == 'strictSequence' &&
+									sourceValue.action.strictSequence.actions?.[0]?.action.oneofKind == newKind
+								) {
+									newSourceValue = sourceValue.action.strictSequence.actions[0];
 								}
-							} else if (newKind == 'strictSequence') {
-								if (sourceValue.action.oneofKind == 'sequence') {
-									(newSourceValue.action as APLActionImplStruct<'strictSequence'>).strictSequence.actions =
-										sourceValue.action.sequence.actions;
-								} else {
-									(newSourceValue.action as APLActionImplStruct<'strictSequence'>).strictSequence.actions = [
-										this.makeAPLAction(oldKind, this.actionPicker.getInputValue()),
-									];
-								}
-							} else if (sourceValue.action.oneofKind == 'sequence' && sourceValue.action.sequence.actions?.[0]?.action.oneofKind == newKind) {
-								newSourceValue = sourceValue.action.sequence.actions[0];
-							} else if (
-								sourceValue.action.oneofKind == 'strictSequence' &&
-								sourceValue.action.strictSequence.actions?.[0]?.action.oneofKind == newKind
-							) {
-								newSourceValue = sourceValue.action.strictSequence.actions[0];
 							}
 						}
-					}
-					if (sourceValue) {
-						sourceValue.action = newSourceValue.action;
+						if (sourceValue) {
+							sourceValue.action = newSourceValue.action;
+						} else {
+							this.setSourceValue(eventID, newSourceValue);
+						}
 					} else {
-						this.setSourceValue(eventID, newSourceValue);
+						sourceValue.action = {
+							oneofKind: newKind,
+						};
 					}
-				} else {
-					sourceValue.action = {
-						oneofKind: newKind,
-					};
-				}
-				player.rotationChangeEmitter.emit(eventID);
-			},
-		});
+					player.rotationChangeEmitter.emit(eventID);
+				},
+			}),
+		);
 
 		this.currentKind = undefined;
 		this.actionPicker = null;
@@ -228,9 +234,10 @@ export class APLActionPicker extends Input<Player<any>, APLAction> {
 			return;
 		}
 		this.currentKind = newActionKind;
+		this.kindPicker.setInputValue(newActionKind);
 
 		if (this.actionPicker) {
-			this.actionPicker.rootElem.remove();
+			this.removeChild(this.actionPicker);
 			this.actionPicker = null;
 		}
 
@@ -238,11 +245,8 @@ export class APLActionPicker extends Input<Player<any>, APLAction> {
 			return;
 		}
 
-		this.kindPicker.setInputValue(newActionKind);
-
 		const factory = actionKindFactories[newActionKind];
 		this.actionPicker = factory.factory(this.actionDiv, this.modObject, {
-			changedEvent: (player: Player<any>) => player.rotationChangeEmitter,
 			getValue: () => (this.getSourceValue()?.action as any)?.[newActionKind] || factory.newValue(),
 			setValue: (eventID: EventID, player: Player<any>, newValue: any) => {
 				const sourceValue = this.getSourceValue();
@@ -252,6 +256,7 @@ export class APLActionPicker extends Input<Player<any>, APLAction> {
 				player.rotationChangeEmitter.emit(eventID);
 			},
 		});
+		this.addChild(this.actionPicker);
 		this.actionPicker.rootElem.classList.add('apl-action-' + newActionKind);
 	}
 }
@@ -301,7 +306,7 @@ function actionListFieldConfig(field: string): AplHelpers.APLPickerBuilderFieldC
 					index: number,
 					config: ListItemPickerConfig<Player<any>, APLAction>,
 				) => new APLActionPicker(parent, player, config),
-				allowedActions: ['create', 'delete', 'move'],
+				allowedActions: ['create', 'copy', 'delete', 'move'],
 				actions: {
 					create: {
 						useIcon: true,
@@ -350,17 +355,18 @@ const actionKindFactories: { [f in NonNullable<APLActionKind>]: ActionKindConfig
 		submenu: ['casting'],
 		shortDescription: i18n.t('rotation_tab.apl.actions.multi_dot.tooltip'),
 		includeIf: (player: Player<any>, isPrepull: boolean) => !isPrepull,
-		newValue: () => APLActionMultidot.create({
-			maxDots: 3,
-			maxOverlap: {
-				value: {
-					oneofKind: 'const',
-					const: {
-						val: '0ms',
+		newValue: () =>
+			APLActionMultidot.create({
+				maxDots: 3,
+				maxOverlap: {
+					value: {
+						oneofKind: 'const',
+						const: {
+							val: '0ms',
+						},
 					},
 				},
-			},
-		}),
+			}),
 		fields: [
 			AplHelpers.actionIdFieldConfig('spellId', 'castable_dot_spells', ''),
 			AplHelpers.numberFieldConfig('maxDots', false, {
@@ -378,17 +384,18 @@ const actionKindFactories: { [f in NonNullable<APLActionKind>]: ActionKindConfig
 		submenu: ['casting'],
 		shortDescription: i18n.t('rotation_tab.apl.actions.strict_multi_dot.tooltip'),
 		includeIf: (player: Player<any>, isPrepull: boolean) => !isPrepull,
-		newValue: () => APLActionStrictMultidot.create({
-			maxDots: 3,
-			maxOverlap: {
-				value: {
-					oneofKind: 'const',
-					const: {
-						val: '0ms',
+		newValue: () =>
+			APLActionStrictMultidot.create({
+				maxDots: 3,
+				maxOverlap: {
+					value: {
+						oneofKind: 'const',
+						const: {
+							val: '0ms',
+						},
 					},
 				},
-			},
-		}),
+			}),
 		fields: [
 			AplHelpers.actionIdFieldConfig('spellId', 'castable_dot_spells', ''),
 			AplHelpers.numberFieldConfig('maxDots', false, {
@@ -406,17 +413,18 @@ const actionKindFactories: { [f in NonNullable<APLActionKind>]: ActionKindConfig
 		submenu: ['casting'],
 		shortDescription: i18n.t('rotation_tab.apl.actions.multi_shield.tooltip'),
 		includeIf: (player: Player<any>, isPrepull: boolean) => !isPrepull && player.getSpec().isHealingSpec,
-		newValue: () => APLActionMultishield.create({
-			maxShields: 3,
-			maxOverlap: {
-				value: {
-					oneofKind: 'const',
-					const: {
-						val: '0ms',
+		newValue: () =>
+			APLActionMultishield.create({
+				maxShields: 3,
+				maxOverlap: {
+					value: {
+						oneofKind: 'const',
+						const: {
+							val: '0ms',
+						},
 					},
 				},
-			},
-		}),
+			}),
 		fields: [
 			AplHelpers.actionIdFieldConfig('spellId', 'shield_spells', ''),
 			AplHelpers.numberFieldConfig('maxShields', false, {
@@ -434,14 +442,15 @@ const actionKindFactories: { [f in NonNullable<APLActionKind>]: ActionKindConfig
 		submenu: ['casting'],
 		shortDescription: i18n.t('rotation_tab.apl.actions.channel.tooltip'),
 		// fullDescription: i18n.t('rotation_tab.apl.actions.channel.full'),
-		newValue: () => APLActionChannelSpell.create({
-			interruptIf: {
-				value: {
-					oneofKind: 'gcdIsReady',
-					gcdIsReady: {},
+		newValue: () =>
+			APLActionChannelSpell.create({
+				interruptIf: {
+					value: {
+						oneofKind: 'gcdIsReady',
+						gcdIsReady: {},
+					},
 				},
-			},
-		}),
+			}),
 		fields: [
 			AplHelpers.actionIdFieldConfig('spellId', 'channel_spells', ''),
 			AplHelpers.unitFieldConfig('target', 'targets'),
@@ -459,11 +468,12 @@ const actionKindFactories: { [f in NonNullable<APLActionKind>]: ActionKindConfig
 		submenu: ['casting'],
 		shortDescription: i18n.t('rotation_tab.apl.actions.cast_all_stat_buff_cooldowns.tooltip'),
 		// fullDescription: i18n.t('rotation_tab.apl.actions.cast_all_stat_buff_cooldowns.full'),
-		newValue: () => APLActionCastAllStatBuffCooldowns.create({
-			statType1: -1,
-			statType2: -1,
-			statType3: -1,
-		}),
+		newValue: () =>
+			APLActionCastAllStatBuffCooldowns.create({
+				statType1: -1,
+				statType2: -1,
+				statType3: -1,
+			}),
 		fields: [AplHelpers.statTypeFieldConfig('statType1'), AplHelpers.statTypeFieldConfig('statType2'), AplHelpers.statTypeFieldConfig('statType3')],
 	}),
 	['autocastOtherCooldowns']: inputBuilder({
@@ -480,16 +490,17 @@ const actionKindFactories: { [f in NonNullable<APLActionKind>]: ActionKindConfig
 		submenu: ['timing'],
 		shortDescription: i18n.t('rotation_tab.apl.actions.wait.tooltip'),
 		includeIf: (player: Player<any>, isPrepull: boolean) => !isPrepull,
-		newValue: () => APLActionWait.create({
-			duration: {
-				value: {
-					oneofKind: 'const',
-					const: {
-						val: '1000ms',
+		newValue: () =>
+			APLActionWait.create({
+				duration: {
+					value: {
+						oneofKind: 'const',
+						const: {
+							val: '1000ms',
+						},
 					},
 				},
-			},
-		}),
+			}),
 		fields: [AplValues.valueFieldConfig('duration')],
 	}),
 	['waitUntil']: inputBuilder({
@@ -505,12 +516,13 @@ const actionKindFactories: { [f in NonNullable<APLActionKind>]: ActionKindConfig
 		submenu: ['timing'],
 		shortDescription: i18n.t('rotation_tab.apl.actions.scheduled_action.tooltip'),
 		includeIf: (player: Player<any>, isPrepull: boolean) => !isPrepull,
-		newValue: () => APLActionSchedule.create({
-			schedule: '0s, 60s',
-			innerAction: {
-				action: { oneofKind: 'castSpell', castSpell: {} },
-			},
-		}),
+		newValue: () =>
+			APLActionSchedule.create({
+				schedule: '0s, 60s',
+				innerAction: {
+					action: { oneofKind: 'castSpell', castSpell: {} },
+				},
+			}),
 		fields: [
 			AplHelpers.stringFieldConfig('schedule', {
 				label: i18n.t('rotation_tab.apl.actions.scheduled_action.do_at.label'),
@@ -566,9 +578,10 @@ const actionKindFactories: { [f in NonNullable<APLActionKind>]: ActionKindConfig
 		submenu: ['misc'],
 		shortDescription: i18n.t('rotation_tab.apl.actions.activate_aura_with_stacks.tooltip'),
 		includeIf: (_, isPrepull: boolean) => isPrepull,
-		newValue: () => APLActionActivateAuraWithStacks.create({
-			numStacks: 1,
-		}),
+		newValue: () =>
+			APLActionActivateAuraWithStacks.create({
+				numStacks: 1,
+			}),
 		fields: [
 			AplHelpers.actionIdFieldConfig('auraId', 'stackable_auras'),
 			AplHelpers.numberFieldConfig('numStacks', false, {
@@ -582,12 +595,13 @@ const actionKindFactories: { [f in NonNullable<APLActionKind>]: ActionKindConfig
 		submenu: ['misc'],
 		shortDescription: i18n.t('rotation_tab.apl.actions.activate_all_stat_buff_proc_auras.tooltip'),
 		includeIf: (_, isPrepull: boolean) => isPrepull,
-		newValue: () => APLActionActivateAllStatBuffProcAuras.create({
-			swapSet: ItemSwapSet.Main,
-			statType1: -1,
-			statType2: -1,
-			statType3: -1,
-		}),
+		newValue: () =>
+			APLActionActivateAllStatBuffProcAuras.create({
+				swapSet: ItemSwapSet.Main,
+				statType1: -1,
+				statType2: -1,
+				statType3: -1,
+			}),
 		fields: [
 			itemSwapSetFieldConfig('swapSet'),
 			AplHelpers.statTypeFieldConfig('statType1'),
@@ -659,10 +673,11 @@ const actionKindFactories: { [f in NonNullable<APLActionKind>]: ActionKindConfig
 			<p>Example: If you have a group named "careful_aim" with actions [serpent_sting, chimera_shot, steady_shot],
 			referencing this group will execute those three actions in sequence.</p>
 		`,
-		newValue: () => APLActionGroupReference.create({
-			groupName: '',
-			variables: [],
-		}),
+		newValue: () =>
+			APLActionGroupReference.create({
+				groupName: '',
+				variables: [],
+			}),
 		fields: [
 			AplHelpers.groupNameFieldConfig('groupName', {
 				labelTooltip: 'Name of the group to reference (must match a group defined in the Groups section)',
@@ -673,6 +688,23 @@ const actionKindFactories: { [f in NonNullable<APLActionKind>]: ActionKindConfig
 			}),
 		],
 	}),
+	bearOptimalRotationAction: {
+		label: '',
+		submenu: undefined,
+		shortDescription: '',
+		fullDescription: undefined,
+		includeIf: (_player: Player<any>, _isPrepull: boolean) => false, // Never show in UI; used internally by simple rotation
+		newValue: function (): APLActionBearOptimalRotationAction {
+			throw new Error('Function not implemented.');
+		},
+		factory: function (
+			parent: HTMLElement,
+			player: Player<any>,
+			config: InputConfig<Player<any>, APLActionBearOptimalRotationAction, APLActionBearOptimalRotationAction>,
+		): Input<Player<any>, APLActionBearOptimalRotationAction, APLActionBearOptimalRotationAction> {
+			throw new Error('Function not implemented.');
+		},
+	},
 	catOptimalRotationAction: {
 		label: '',
 		submenu: undefined,
@@ -682,9 +714,13 @@ const actionKindFactories: { [f in NonNullable<APLActionKind>]: ActionKindConfig
 		newValue: function (): APLActionCatOptimalRotationAction {
 			throw new Error('Function not implemented.');
 		},
-		factory: function (parent: HTMLElement, player: Player<any>, config: InputConfig<Player<any>, APLActionCatOptimalRotationAction, APLActionCatOptimalRotationAction>): Input<Player<any>, APLActionCatOptimalRotationAction, APLActionCatOptimalRotationAction> {
+		factory: function (
+			parent: HTMLElement,
+			player: Player<any>,
+			config: InputConfig<Player<any>, APLActionCatOptimalRotationAction, APLActionCatOptimalRotationAction>,
+		): Input<Player<any>, APLActionCatOptimalRotationAction, APLActionCatOptimalRotationAction> {
 			throw new Error('Function not implemented.');
-		}
+		},
 	},
 	guardianHotwDpsRotation: {
 		label: '',
@@ -695,9 +731,13 @@ const actionKindFactories: { [f in NonNullable<APLActionKind>]: ActionKindConfig
 		newValue: function (): APLActionGuardianHotwDpsRotation {
 			throw new Error('Function not implemented.');
 		},
-		factory: function (parent: HTMLElement, player: Player<any>, config: InputConfig<Player<any>, APLActionGuardianHotwDpsRotation, APLActionGuardianHotwDpsRotation>): Input<Player<any>, APLActionGuardianHotwDpsRotation, APLActionGuardianHotwDpsRotation> {
+		factory: function (
+			parent: HTMLElement,
+			player: Player<any>,
+			config: InputConfig<Player<any>, APLActionGuardianHotwDpsRotation, APLActionGuardianHotwDpsRotation>,
+		): Input<Player<any>, APLActionGuardianHotwDpsRotation, APLActionGuardianHotwDpsRotation> {
 			throw new Error('Function not implemented.');
-		}
+		},
 	},
 	castWarlockAssignedCurse: inputBuilder({
 		label: i18n.t('rotation_tab.apl.actions.warlock_cast_assigned_curse.label'),

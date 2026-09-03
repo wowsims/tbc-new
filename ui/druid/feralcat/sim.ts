@@ -1,15 +1,26 @@
 import * as OtherInputs from '../../core/components/inputs/other_inputs';
 import { ReforgeOptimizer } from '../../core/components/suggest_reforges_action';
-import { Phase } from '../../core/constants/other';
 import * as Mechanics from '../../core/constants/mechanics';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui';
 import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
 import { APLAction, APLListItem, APLRotation, APLRotation_Type as APLRotationType } from '../../core/proto/apl';
-import { Cooldowns, Debuffs, Drums, Faction, IndividualBuffs, ItemSlot, PartyBuffs, PseudoStat, Race, RaidBuffs, Spec, Stat, TristateEffect } from '../../core/proto/common';
+import {
+	Cooldowns,
+	Debuffs,
+	Drums,
+	IndividualBuffs,
+	ItemSlot,
+	PartyBuffs,
+	PseudoStat,
+	RaidBuffs,
+	Spec,
+	Stat,
+	TristateEffect,
+} from '../../core/proto/common';
 import { FeralCatDruid_Rotation as DruidRotation } from '../../core/proto/druid';
-import { StatCap, Stats, UnitStat } from '../../core/proto_utils/stats';
 import { StatCapType } from '../../core/proto/ui';
+import { StatCap, Stats, UnitStat } from '../../core/proto_utils/stats';
 import { defaultExposeWeaknessSettings, defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
 import * as FeralInputs from './inputs';
 import * as Presets from './presets';
@@ -30,6 +41,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralCatDruid, {
 		Stat.StatAgility,
 		Stat.StatAttackPower,
 		Stat.StatFeralAttackPower,
+		Stat.StatPhysicalDamage,
 		Stat.StatMeleeHitRating,
 		Stat.StatExpertiseRating,
 		Stat.StatMeleeCritRating,
@@ -42,13 +54,29 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralCatDruid, {
 	epReferenceStat: Stat.StatAgility,
 	// Which stats to display in the Character Stats section, at the bottom of the left-hand sidebar.
 	displayStats: UnitStat.createDisplayStatArray(
-		[Stat.StatHealth, Stat.StatStrength, Stat.StatAgility, Stat.StatStamina, Stat.StatIntellect, Stat.StatSpirit, Stat.StatAttackPower, Stat.StatMana, Stat.StatExpertiseRating, Stat.StatArmorPenetration],
+		[
+			Stat.StatHealth,
+			Stat.StatStrength,
+			Stat.StatAgility,
+			Stat.StatStamina,
+			Stat.StatIntellect,
+			Stat.StatSpirit,
+			Stat.StatAttackPower,
+			Stat.StatMana,
+			Stat.StatExpertiseRating,
+			Stat.StatArmorPenetration,
+			Stat.StatArcaneResistance,
+			Stat.StatFireResistance,
+			Stat.StatFrostResistance,
+			Stat.StatNatureResistance,
+			Stat.StatShadowResistance,
+		],
 		[PseudoStat.PseudoStatMeleeHitPercent, PseudoStat.PseudoStatMeleeCritPercent, PseudoStat.PseudoStatMeleeHastePercent],
 	),
 
 	defaults: {
 		// Default equipped gear.
-		gear: Presets.P1_GEARSET.gear,
+		gear: Presets.P3_6P_GEARSET.gear,
 		// Default EP weights for sorting gear in the gear picker.
 		epWeights: Presets.P1_EP_PRESET.epWeights,
 		statCaps: (() => {
@@ -60,8 +88,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralCatDruid, {
 		// Default consumes settings.
 		consumables: Presets.DefaultConsumables,
 		// Default rotation settings.
-		rotationType: APLRotationType.TypeSimple,
-		simpleRotation: Presets.DefaultRotation,
+		rotationType: APLRotationType.TypeAuto,
 		// Default talents.
 		talents: Presets.StandardTalents.data,
 		// Default spec-specific settings.
@@ -70,10 +97,10 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralCatDruid, {
 		raidBuffs: RaidBuffs.create({
 			...defaultRaidBuffMajorDamageCooldowns(),
 			arcaneBrilliance: true,
-            divineSpirit: TristateEffect.TristateEffectImproved,
+			divineSpirit: TristateEffect.TristateEffectImproved,
 			giftOfTheWild: TristateEffect.TristateEffectImproved,
 			powerWordFortitude: TristateEffect.TristateEffectImproved,
-            shadowProtection: true,
+			shadowProtection: true,
 		}),
 		partyBuffs: PartyBuffs.create({
 			drums: Drums.LesserDrumsOfBattle,
@@ -91,7 +118,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralCatDruid, {
 			unleashedRage: true,
 		}),
 		debuffs: Debuffs.create({
-			...defaultExposeWeaknessSettings(Phase.Phase1),
+			...defaultExposeWeaknessSettings(),
 			bloodFrenzy: true,
 			exposeArmor: TristateEffect.TristateEffectImproved,
 			huntersMark: TristateEffect.TristateEffectImproved,
@@ -135,13 +162,30 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralCatDruid, {
 		talents: [Presets.StandardTalents, Presets.MonocatTalents],
 		rotations: [Presets.SIMPLE, Presets.APL],
 		// Preset gear configurations that the user can quickly select.
-		gear: [Presets.PRE_RAID_GEARSET, Presets.P1_GEARSET, Presets.P2_GEARSET, Presets.P3_GEARSET, Presets.P4_GEARSET, Presets.P5_GEARSET],
+		gear: [
+			Presets.PRE_RAID_GEARSET,
+			Presets.P1_REALISTIC_6P_GEARSET,
+			Presets.P1_REALISTIC_9P_GEARSET,
+			Presets.P1_BIS_6P_GEARSET,
+			Presets.P1_BIS_9P_GEARSET,
+			Presets.P1_ALT_6P_GEARSET,
+			Presets.P1_ALT_9P_GEARSET,
+			Presets.P2_6P_GEARSET,
+			Presets.P2_9P_GEARSET,
+			Presets.P2_ALT_6P_GEARSET,
+			Presets.P2_ALT_9P_GEARSET,
+			Presets.P3_6P_GEARSET,
+			Presets.P3_9P_GEARSET,
+			Presets.P4_6P_GEARSET,
+			Presets.P4_9P_GEARSET,
+			Presets.P5_GEARSET,
+		],
 		itemSwaps: [],
 		builds: [],
 	},
 
 	autoRotation: (_player: Player<Spec.SpecFeralCatDruid>): APLRotation => {
-		return APLRotation.create();
+		return Presets.APL.rotation.rotation!;
 	},
 
 	simpleRotation: (_player: Player<Spec.SpecFeralCatDruid>, simple: DruidRotation, _cooldowns: Cooldowns): APLRotation => {
@@ -157,26 +201,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFeralCatDruid, {
 	},
 
 	hiddenMCDs: [],
-
-	raidSimPresets: [
-		{
-			spec: Spec.SpecFeralCatDruid,
-			talents: Presets.StandardTalents.data,
-			specOptions: Presets.DefaultOptions,
-			consumables: Presets.DefaultConsumables,
-			defaultFactionRaces: {
-				[Faction.Unknown]: Race.RaceUnknown,
-				[Faction.Alliance]: Race.RaceNightElf,
-				[Faction.Horde]: Race.RaceTauren,
-			},
-			defaultGear: {
-				[Faction.Unknown]: {},
-				[Faction.Alliance]: {},
-				[Faction.Horde]: {},
-			},
-			otherDefaults: Presets.OtherDefaults,
-		},
-	],
 });
 
 export class FeralCatDruidSimUI extends IndividualSimUI<Spec.SpecFeralCatDruid> {

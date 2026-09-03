@@ -54,7 +54,7 @@ export function makeWrappedBooleanInput<SpecType extends Spec, ModObject>(
 		label: config.label,
 		labelTooltip: config.labelTooltip,
 		description: config.description,
-		changedEvent: (player: Player<SpecType>) => config.changedEvent(getModObject(player)),
+		changedEvent: (player: Player<SpecType>) => config.changedEvent!(getModObject(player)),
 		getValue: (player: Player<SpecType>) => config.getValue(getModObject(player)),
 		setValue: (eventID: EventID, player: Player<SpecType>, newValue: boolean) => config.setValue(eventID, getModObject(player), newValue),
 		enableWhen: config.enableWhen ? (player: Player<SpecType>) => config.enableWhen!(getModObject(player)) : undefined,
@@ -165,7 +165,7 @@ function makeWrappedNumberInput<SpecType extends Spec, ModObject>(
 		showZeroes: config.showZeroes,
 		maxDecimalDigits: config.maxDecimalDigits,
 		positive: config.positive,
-		changedEvent: (player: Player<SpecType>) => config.changedEvent(getModObject(player)),
+		changedEvent: (player: Player<SpecType>) => config.changedEvent!(getModObject(player)),
 		getValue: (player: Player<SpecType>) => config.getValue(getModObject(player)),
 		setValue: (eventID: EventID, player: Player<SpecType>, newValue: number) => config.setValue(eventID, getModObject(player), newValue),
 		enableWhen: config.enableWhen ? (player: Player<SpecType>) => config.enableWhen!(getModObject(player)) : undefined,
@@ -174,7 +174,8 @@ function makeWrappedNumberInput<SpecType extends Spec, ModObject>(
 	};
 }
 export interface PlayerNumberInputConfig<SpecType extends Spec, Message>
-	extends BasePlayerConfig<SpecType, number>,
+	extends
+		BasePlayerConfig<SpecType, number>,
 		Pick<NumberPickerConfig<Player<SpecType>>, 'labelTooltip' | 'description' | 'showZeroes' | 'maxDecimalDigits' | 'float' | 'positive'> {
 	fieldName: keyof Message;
 	label: string;
@@ -325,7 +326,7 @@ function makeWrappedEnumInput<SpecType extends Spec, ModObject>(config: WrappedE
 		labelTooltip: config.labelTooltip,
 		description: config.description,
 		values: config.values,
-		changedEvent: (player: Player<SpecType>) => config.changedEvent(getModObject(player)),
+		changedEvent: (player: Player<SpecType>) => config.changedEvent!(getModObject(player)),
 		getValue: (player: Player<SpecType>) => config.getValue(getModObject(player)),
 		setValue: (eventID: EventID, player: Player<SpecType>, newValue: number) => config.setValue(eventID, getModObject(player), newValue),
 		enableWhen: config.enableWhen ? (player: Player<SpecType>) => config.enableWhen!(getModObject(player)) : undefined,
@@ -437,7 +438,7 @@ function makeWrappedIconInput<SpecType extends Spec, ModObject, T>(
 		actionId: (player: Player<SpecType>) => config.actionId(getModObject(player)),
 		label: config.label,
 		states: config.states,
-		changedEvent: (player: Player<SpecType>) => config.changedEvent(getModObject(player)),
+		changedEvent: (player: Player<SpecType>) => config.changedEvent!(getModObject(player)),
 		showWhen: (player: Player<SpecType>) => !config.showWhen || (config.showWhen(getModObject(player)) as any),
 		enableWhen: (player: Player<SpecType>) => !config.enableWhen || (config.enableWhen(getModObject(player)) as any),
 		getValue: (player: Player<SpecType>) => config.getValue(getModObject(player)),
@@ -652,7 +653,7 @@ function makeWrappedEnumIconInput<SpecType extends Spec, ModObject, T>(
 		equals: config.equals,
 		showWhen: (player: Player<SpecType>): boolean => !config.showWhen || (config.showWhen(getModObject(player)) as any),
 		zeroValue: config.zeroValue,
-		changedEvent: (player: Player<SpecType>) => config.changedEvent(getModObject(player)),
+		changedEvent: (player: Player<SpecType>) => config.changedEvent!(getModObject(player)),
 		getValue: (player: Player<SpecType>) => config.getValue(getModObject(player)),
 		setValue: (eventID: EventID, player: Player<SpecType>, newValue: T) => config.setValue(eventID, getModObject(player), newValue),
 		extraCssClasses: config.extraCssClasses,
@@ -662,8 +663,7 @@ function makeWrappedEnumIconInput<SpecType extends Spec, ModObject, T>(
 }
 
 export interface PlayerEnumIconInputConfig<SpecType extends Spec, Message, T>
-	extends BasePlayerConfig<SpecType, T>,
-		Pick<IconPickerConfig<Message, T>, 'label' | 'labelTooltip'> {
+	extends BasePlayerConfig<SpecType, T>, Pick<IconPickerConfig<Message, T>, 'label' | 'labelTooltip'> {
 	fieldName: keyof Message;
 	values: Array<IconEnumValueConfig<Player<SpecType>, T>>;
 	numColumns?: number;
@@ -734,6 +734,8 @@ export function makeRotationEnumIconInput<SpecType extends Spec, T>(
 			}),
 		changedEvent: config.changeEmitter || ((player: Player<SpecType>) => player.rotationChangeEmitter),
 		extraCssClasses: config.extraCssClasses,
+		label: config.label,
+		labelTooltip: config.labelTooltip,
 	});
 }
 

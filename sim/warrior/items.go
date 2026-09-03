@@ -140,25 +140,24 @@ var ItemSetWarbringerArmor = core.NewItemSet(core.ItemSet{
 
 			setBonusAura.
 				AttachProcTrigger(core.ProcTrigger{
-					Name:               "Warbringer Armor 4PC - Trigger",
-					TriggerImmediately: true,
-					ClassSpellMask:     SpellMaskRevenge,
-					Callback:           core.CallbackOnSpellHitDealt,
-					Outcome:            core.OutcomeLanded,
-					Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-						revengeMod.Activate()
-					},
-				}).
-				AttachProcTrigger(core.ProcTrigger{
-					Name:               "Warbringer Armor 4PC - Deactivate",
+					Name:               "Warbringer Armor 4PC",
 					TriggerImmediately: true,
 					ClassSpellMask:     SpellMaskDirectDamageSpells,
 					Callback:           core.CallbackOnSpellHitDealt,
+					Outcome:            core.OutcomeLanded,
 					Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-						revengeMod.Deactivate()
+						if spell.Matches(SpellMaskRevenge) && !revengeMod.IsActive {
+							revengeMod.Activate()
+						} else {
+							revengeMod.Deactivate()
+						}
 					},
 				}).
 				ExposeToAPL(38407)
+
+			warrior.RegisterResetEffect(func(sim *core.Simulation) {
+				revengeMod.Deactivate()
+			})
 		},
 	},
 })
@@ -171,19 +170,28 @@ var ItemSetDestroyerBattlegear = core.NewItemSet(core.ItemSet{
 			warrior := agent.(WarriorAgent).GetWarrior()
 			actionID := core.ActionID{SpellID: 37529}
 
-			aura := warrior.NewTemporaryStatsAura(
+			var aura *core.Aura
+			aura = warrior.NewTemporaryStatsAura(
 				"Overpower",
 				actionID,
 				stats.Stats{stats.AttackPower: 100},
 				time.Second*5,
-			)
+			).AttachProcTrigger(core.ProcTrigger{
+				Name:               "Destroyer Battlegear - 2PC - Consume",
+				ProcMask:           core.ProcMaskMeleeSpecial,
+				Callback:           core.CallbackOnSpellHitDealt,
+				Outcome:            core.OutcomeLanded,
+				TriggerImmediately: true,
+				Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+					aura.Deactivate(sim)
+				},
+			})
 
 			setBonusAura.
 				AttachProcTrigger(core.ProcTrigger{
-					Name:               "Destroyer Battlegear - 2PC",
-					ClassSpellMask:     SpellMaskOverpower,
-					TriggerImmediately: true,
-					Callback:           core.CallbackOnSpellHitDealt,
+					Name:           "Destroyer Battlegear - 2PC - Trigger",
+					ClassSpellMask: SpellMaskOverpower,
+					Callback:       core.CallbackOnSpellHitDealt,
 					Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 						aura.Activate(sim)
 					},
@@ -208,32 +216,27 @@ var ItemSetDestroyerArmor = core.NewItemSet(core.ItemSet{
 	Bonuses: map[int32]core.ApplySetBonus{
 		2: func(agent core.Agent, setBonusAura *core.Aura) {
 			warrior := agent.(WarriorAgent).GetWarrior()
-			actionID := core.ActionID{SpellID: 37523}
+			actionID := core.ActionID{SpellID: 37522}
 
 			aura := warrior.NewTemporaryStatsAura(
 				"Reinforced Shield",
-				actionID,
+				core.ActionID{SpellID: 37523},
 				stats.Stats{stats.BlockValue: 100},
 				time.Second*6,
 			)
 
 			setBonusAura.
 				AttachProcTrigger(core.ProcTrigger{
-					Name:               "Destroyer Armor - 2PC - Trigger",
-					ClassSpellMask:     SpellMaskShieldBlock,
+					Name:               "Destroyer Armor - 2PC",
+					ActionID:           actionID,
 					TriggerImmediately: true,
-					Callback:           core.CallbackOnSpellHitDealt,
+					Callback:           core.CallbackOnCastComplete | core.CallbackOnSpellHitTaken,
 					Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-						aura.Activate(sim)
-					},
-				}).
-				AttachProcTrigger(core.ProcTrigger{
-					Name:               "Destroyer Armor - 2PC - Consume",
-					TriggerImmediately: true,
-					Outcome:            core.OutcomeBlock,
-					Callback:           core.CallbackOnSpellHitTaken,
-					Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-						aura.Deactivate(sim)
+						if spell.Matches(SpellMaskShieldBlock) {
+							aura.Activate(sim)
+						} else if result != nil && result.Target == &warrior.Unit && result.Damage > 0 {
+							aura.Deactivate(sim)
+						}
 					},
 				}).
 				ExposeToAPL(actionID.SpellID)
@@ -316,11 +319,50 @@ func init() {
 	// Empty function to remove the warning from the UI
 	// because this effect has been implemented in buffs.go
 	core.NewItemEffect(30446, func(agent core.Agent) {})
+
+	for _, itemID := range pvpGloveItemIDs {
+		core.NewItemEffect(itemID, func(_ core.Agent) {})
+	}
+
+	// Ashtongue Talisman of Valor
+	core.NewItemEffect(32485, func(agent core.Agent) {
+		character := agent.GetCharacter()
+		duration := time.Second * 12
+		value := 55.0
+		actionID := core.ActionID{SpellID: 40459}
+		healthMetrics := character.NewHealthMetrics(actionID)
+
+		aura := character.NewTemporaryStatsAura(
+			"Ashtongue Talisman of Valor - Proc",
+			actionID,
+			stats.Stats{stats.Strength: value},
+			duration,
+		)
+
+		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
+			Name:           "Ashtongue Talisman of Valor - Trigger",
+			ActionID:       core.ActionID{ItemID: 32485},
+			ProcChance:     0.25,
+			ClassSpellMask: SpellMaskBloodthirst | SpellMaskMortalStrike | SpellMaskShieldSlam,
+			Outcome:        core.OutcomeLanded,
+			Callback:       core.CallbackOnSpellHitDealt,
+			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+				aura.Activate(sim)
+				character.GainHealth(sim, 330, healthMetrics)
+			},
+		})
+
+		eligibleSlots := character.ItemSwap.EligibleSlotsForItem(32485)
+		character.AddStatProcBuff(32485, aura, false, eligibleSlots)
+		character.ItemSwap.RegisterProc(32485, procAura)
+	})
 }
+
+var pvpGloveItemIDs = []int32{24549, 28700, 28852, 30487, 32164, 33729, 35408, 35067}
 
 func (warrior *Warrior) addPvpGloves() {
 	warrior.RegisterPvPGloveMod(
-		[]int32{24549, 28700, 28852, 30487, 32164, 33729, 35408, 35067},
+		pvpGloveItemIDs,
 		core.SpellModConfig{
 			Kind:      core.SpellMod_PowerCost_Flat,
 			ClassMask: SpellMaskHamstring,

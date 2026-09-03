@@ -31,6 +31,7 @@ func ScanRawItemData(rows *sql.Rows) (dbc.Item, error) {
 	var statValue string
 	var socketTypes string
 	var statPercentEditor string
+	var maxCount int
 	err := rows.Scan(
 		&raw.Id,
 		&raw.Name,
@@ -43,6 +44,11 @@ func ScanRawItemData(rows *sql.Rows) (dbc.Item, error) {
 		&bonusStatString,
 		&statPercentEditor,
 		&raw.ArmorValue,
+		&raw.FireResistance,
+		&raw.NatureResistance,
+		&raw.FrostResistance,
+		&raw.ShadowResistance,
+		&raw.ArcaneResistance,
 		&socketTypes,
 		&raw.SocketEnchantmentId,
 		&raw.Flags0,
@@ -62,6 +68,7 @@ func ScanRawItemData(rows *sql.Rows) (dbc.Item, error) {
 		&raw.NameDescription,
 		&raw.LimitCategory,
 		&raw.Bonding,
+		&maxCount,
 	)
 	if err != nil {
 		panic(err)
@@ -96,6 +103,12 @@ func ScanRawItemData(rows *sql.Rows) (dbc.Item, error) {
 	if err != nil {
 		return raw, fmt.Errorf("failed to parse SocketModifier: %w", err)
 	}
+	// MaxCount identifies that an item is unique
+	// this is not the same as unique-equipped but
+	// we can use this to identify items that are unique in the database
+	if maxCount > 0 {
+		raw.Flags0 |= dbc.UNIQUE_EQUIPPABLE
+	}
 	return raw, err
 }
 
@@ -113,6 +126,11 @@ func LoadAndWriteRawItems(dbHelper *DBHelper, filter string, inputsDir string) (
 			s.StatModifier_bonusStat as bonusStat,
 			s.StatPercentEditor as StatPercentEditor,
 			i.Resistances_0 as ArmorValue,
+			i.Resistances_2 as FireResistance,
+			i.Resistances_3 as NatureResistance,
+			i.Resistances_4 as FrostResistance,
+			i.Resistances_5 as ShadowResistance,
+			i.Resistances_6 as ArcaneResistance,
 			s.SocketType as SocketTypes,
 			s.Socket_match_enchantment_ID as SocketEnchantmentId,
 			s.Flags_0 as Flags_0,
@@ -122,7 +140,7 @@ func LoadAndWriteRawItems(dbHelper *DBHelper, filter string, inputsDir string) (
 			COALESCE(itemset.Name_lang, '') as ItemSetName,
 			COALESCE(itemset.ID, 0) as ItemSetID,
 			s.AllowableClass as ClassMask,
-			s.AllowableRace as RaceMask,
+			s.AllowableRace_0 as RaceMask,
 			s.QualityModifier,
 			(
 				SELECT group_concat(-ench, ',')
@@ -135,7 +153,8 @@ func LoadAndWriteRawItems(dbHelper *DBHelper, filter string, inputsDir string) (
 			 i.SubClassID,
 			 COALESCE(ind.Description_lang, ''),
 			s.LimitCategory,
-			s.Bonding
+			s.Bonding,
+			COALESCE(s.MaxCount, 0) as MaxCount
 		FROM Item i
 		JOIN ItemSparse s ON i.ID = s.ID
 		JOIN ItemClass ic ON i.ClassID = ic.ClassID
@@ -149,7 +168,16 @@ func LoadAndWriteRawItems(dbHelper *DBHelper, filter string, inputsDir string) (
 		`
 
 	if strings.TrimSpace(filter) != "" {
-		baseQuery += " WHERE " + filter
+		// Items in the allowlist always bypass the filter.
+		allowListIDs := make([]string, 0, len(ItemAllowList))
+		for id := range ItemAllowList {
+			allowListIDs = append(allowListIDs, strconv.Itoa(int(id)))
+		}
+		slices.Sort(allowListIDs)
+		baseQuery += " WHERE (" + filter + ")"
+		if len(allowListIDs) > 0 {
+			baseQuery += " OR i.ID IN (" + strings.Join(allowListIDs, ",") + ")"
+		}
 	}
 
 	items, err := LoadRows(dbHelper.db, baseQuery, ScanRawItemData)
@@ -518,7 +546,7 @@ func LoadAndWriteRawEnchants(dbHelper *DBHelper, inputsDir string) ([]dbc.Enchan
 				ELSE se.SpellID
 			END AS spellId,
 			COALESCE(ie.ParentItemID, 0) as ItemId,
-			sie.Field_1_15_3_55112_014 as professionId,
+			sie.RequiredSkillID as professionId,
 			sie.Effect as Effect,
 			sie.EffectPointsMin as EffectPoints,
 			group_concat(ese.EffectBasePoints+1) as SpellEffectPoints,
@@ -548,14 +576,14 @@ func LoadAndWriteRawEnchants(dbHelper *DBHelper, inputsDir string) ([]dbc.Enchan
 			WHERE se.Effect = 53
 				AND (
 					(
-						sie.Field_1_15_3_55112_014 > 0
+						sie.RequiredSkillID > 0
 						OR sla.ID               IS NOT NULL
-						OR sie.Field_1_15_3_55112_015 IS NOT NULL
+						OR sie.RequiredSkillRank IS NOT NULL
 					)
 					OR
-					sie.Field_1_15_3_55112_014 = 0
+					sie.RequiredSkillID = 0
 					OR
-					sie.Field_1_15_3_55112_014 = 773
+					sie.RequiredSkillID = 773
 				)
 		GROUP BY name `
 	items, err := LoadRows(dbHelper.db, query, ScanEnchantsTable)
@@ -1161,7 +1189,7 @@ LEFT JOIN SpellName sn ON sn.ID = sm.SpellID
 	return iconsByID, nil
 }
 
-var iconsMap, _ = LoadArtTexturePaths("./tools/DB2ToSqlite/listfile.csv")
+var iconsMap, _ = LoadArtTexturePaths(ListfilePath)
 
 func ScanSpells(rows *sql.Rows) (dbc.Spell, error) {
 	var spell dbc.Spell
@@ -1188,6 +1216,7 @@ func ScanSpells(rows *sql.Rows) (dbc.Spell, error) {
 		&spell.MaxLevel,
 		&spell.MaxPassiveAuraLevel,
 		&spell.Cooldown,
+		&spell.CategoryRecoveryTime,
 		&spell.GCD,
 		&spell.MinRange,
 		&spell.MaxRange,
@@ -1267,6 +1296,7 @@ func LoadAndWriteSpells(dbHelper *DBHelper, inputsDir string) ([]dbc.Spell, erro
 	COALESCE(sl.MaxLevel, 0),
 	COALESCE(sl.MaxPassiveAuraLevel, 0),
 	COALESCE(sc.RecoveryTime, 0),
+	COALESCE(sc.CategoryRecoveryTime, 0),
 	COALESCE(sc.StartRecoveryTime, 0),
 	COALESCE(sr.RangeMin_0, 0.0),
 	COALESCE(sr.RangeMax_0, 0.0),
@@ -1388,7 +1418,7 @@ func LoadAndWriteEnchantDescriptions(outputPath string, db *WowDatabase, instanc
 
 	dataProvider := tooltip.DBCTooltipDataProvider{DBC: instance}
 	for _, enchant := range db.Enchants {
-		dbcEnch := instance.Enchants[int(enchant.EffectId)]
+		dbcEnch := instance.EnchantsByEffectId[int(enchant.EffectId)]
 		tooltip, err := tooltip.ParseTooltip(dbcEnch.EffectName, dataProvider, int64(enchant.EffectId))
 		if err != nil {
 			fmt.Printf("Could not parse enchant (%d), '%s'\n", enchant.EffectId, dbcEnch.EffectName)
@@ -1573,7 +1603,7 @@ func LoadRepItems(dbHelper *DBHelper) (
 	sourcesByItem map[int][]*proto.RepSource,
 ) {
 	const query = `
-		SELECT isp.ID, fa.ID, COALESCE(fa.ReputationRaceMask_0, 0) AS ReputationRaceMask, isp.MinReputation FROM ItemSparse isp
+		SELECT isp.ID, fa.ID, COALESCE(fa.ReputationRaceMasks0_0, 0) AS ReputationRaceMask, isp.MinReputation FROM ItemSparse isp
 		LEFT JOIN Faction fa on fa.ID = isp.MinFactionID
 		WHERE fa.ParentFactionID=980
     `

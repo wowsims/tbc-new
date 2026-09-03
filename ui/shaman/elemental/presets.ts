@@ -23,8 +23,8 @@ import P1AllianceGear from './gear_sets/p1_a.gear.json';
 import P1HordeGear from './gear_sets/p1_h.gear.json';
 import P2Gear from './gear_sets/p2.gear.json';
 import P3Gear from './gear_sets/p3.gear.json';
-import P3_5Gear from './gear_sets/p3_5.gear.json';
 import P4Gear from './gear_sets/p4.gear.json';
+import P5Gear from './gear_sets/p5.gear.json';
 import PreraidGear from './gear_sets/preraid.gear.json';
 
 // Preset options for this spec.
@@ -36,8 +36,8 @@ export const P1_PRESET_A = PresetUtils.makePresetGear('Phase 1 (A)', P1AllianceG
 export const P1_PRESET_H = PresetUtils.makePresetGear('Phase 1 (H)', P1HordeGear);
 export const P2_PRESET = PresetUtils.makePresetGear('Phase 2', P2Gear);
 export const P3_PRESET = PresetUtils.makePresetGear('Phase 3', P3Gear);
-export const P3_5_PRESET = PresetUtils.makePresetGear('Phase 3.5', P3_5Gear);
 export const P4_PRESET = PresetUtils.makePresetGear('Phase 4', P4Gear);
+export const P5_PRESET = PresetUtils.makePresetGear('Phase 5', P5Gear);
 
 export const ROTATION_PRESET_DEFAULT = PresetUtils.makePresetAPLRotation('Default', DefaultApl);
 

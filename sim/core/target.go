@@ -196,7 +196,7 @@ func NewTarget(options *proto.Target, targetIndex int32) *Target {
 	// accomplished by specifying the extra (or reduced) Crit within the CritRating field of the
 	// proto stats array. Any specified CritRating will be applied as an OFFSET to the default
 	// level-based values, rather than as a replacement.
-	target.stats[stats.PhysicalCritPercent] += UnitLevelFloat64(target.Level, 5.0, 5.2, 5.4, 5.6)
+	target.stats[stats.PhysicalCritPercent] += UnitLevelFloat64(target.Level, 4.6, 5.0, 5.2, 5.4, 5.6)
 	target.stats[stats.BlockValue] = 54
 	target.addUniversalStatDependencies()
 
@@ -208,6 +208,7 @@ func NewTarget(options *proto.Target, targetIndex int32) *Target {
 
 	target.PseudoStats.CanBlock = true
 	target.PseudoStats.CanParry = true
+	target.PseudoStats.CanCrush = options.CanCrush
 	target.PseudoStats.ParryHaste = options.ParryHaste
 	target.PseudoStats.InFrontOfTarget = true
 	target.PseudoStats.DamageSpread = options.DamageSpread
@@ -389,25 +390,25 @@ func NewAttackTable(attacker *Unit, defender *Unit) *AttackTable {
 
 	if defender.Type == EnemyUnit {
 		// Assumes attacker (the Player) is level 70.
-		table.BaseSpellMissChance = UnitLevelFloat64(defender.Level, 0.04, 0.05, 0.06, 0.17)
-		table.BaseMissChance = UnitLevelFloat64(defender.Level, 0.05, 0.055, 0.06, 0.08)
+		table.BaseSpellMissChance = UnitLevelFloat64(defender.Level, 0.02, 0.04, 0.05, 0.06, 0.17)
+		table.BaseMissChance = UnitLevelFloat64(defender.Level, 0.04, 0.05, 0.055, 0.06, 0.08)
 		table.BaseBlockChance = 0.05
-		table.BaseDodgeChance = UnitLevelFloat64(defender.Level, 0.05, 0.055, 0.06, 0.065)
-		table.BaseParryChance = UnitLevelFloat64(defender.Level, 0.05, 0.055, 0.06, 0.14)
-		table.BaseGlanceChance = UnitLevelFloat64(defender.Level, 0.06, 0.12, 0.18, 0.24)
+		table.BaseDodgeChance = UnitLevelFloat64(defender.Level, 0.04, 0.05, 0.055, 0.06, 0.065)
+		table.BaseParryChance = UnitLevelFloat64(defender.Level, 0.04, 0.05, 0.055, 0.06, 0.14)
+		table.BaseGlanceChance = UnitLevelFloat64(defender.Level, 0, 0.06, 0.12, 0.18, 0.24)
 
-		table.GlanceMultiplier = UnitLevelFloat64(defender.Level, 0.95, 0.95, 0.85, 0.75)
-		table.HitSuppression = UnitLevelFloat64(defender.Level, 0, 0, 0, 0.01)
-		table.MeleeCritSuppression = UnitLevelFloat64(defender.Level, 0, 0.01, 0.02, 0.048)
-		table.SpellCritSuppression = UnitLevelFloat64(defender.Level, 0, 0, 0.003, 0.021)
+		table.GlanceMultiplier = UnitLevelFloat64(defender.Level, 0.95, 0.95, 0.95, 0.85, 0.75)
+		table.HitSuppression = UnitLevelFloat64(defender.Level, 0, 0, 0, 0, 0.01)
+		table.MeleeCritSuppression = UnitLevelFloat64(defender.Level, 0, 0, 0.01, 0.02, 0.048)
+		table.SpellCritSuppression = UnitLevelFloat64(defender.Level, 0, 0, 0, 0.003, 0.021)
 	} else {
 		// Assumes defender (the Player) is level 70.
 		table.BaseSpellMissChance = 0.05
-		table.BaseMissChance = UnitLevelFloat64(attacker.Level, 0.05, 0.048, 0.046, 0.044)
-		table.BaseBlockChance = UnitLevelFloat64(attacker.Level, 0.05, 0.048, 0.046, 0.044)
-		table.BaseDodgeChance = UnitLevelFloat64(attacker.Level, 0, -0.002, -0.004, -0.006)
-		table.BaseParryChance = UnitLevelFloat64(attacker.Level, 0.05, 0.048, 0.046, 0.044)
-		table.BaseCrushChance = UnitLevelFloat64(attacker.Level, 0.0, 0.0, 0.0, 0.15)
+		table.BaseMissChance = UnitLevelFloat64(attacker.Level, 0.054, 0.05, 0.048, 0.046, 0.044)
+		table.BaseBlockChance = UnitLevelFloat64(attacker.Level, 0.054, 0.05, 0.048, 0.046, 0.044)
+		table.BaseDodgeChance = UnitLevelFloat64(attacker.Level, 0.004, 0, -0.002, -0.004, -0.006)
+		table.BaseParryChance = UnitLevelFloat64(attacker.Level, 0.054, 0.05, 0.048, 0.046, 0.044)
+		table.BaseCrushChance = UnitLevelFloat64(attacker.Level, 0.0, 0.0, 0.0, 0.0, 0.15)
 	}
 
 	return table

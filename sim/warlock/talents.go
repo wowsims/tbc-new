@@ -112,10 +112,6 @@ func (warlock *Warlock) registerAmplifyCurse() {
 				warlock.AmplifyCurseAura.Deactivate(sim)
 			}
 		},
-	}).AttachSpellMod(core.SpellModConfig{
-		Kind:       core.SpellMod_DamageDone_Pct,
-		FloatValue: 0.5,
-		ClassMask:  WarlockSpellCurseOfAgony | WarlockSpellCurseOfDoom,
 	})
 
 	warlock.AmplifyCurse = warlock.RegisterSpell(core.SpellConfig{
@@ -275,7 +271,7 @@ func (warlock *Warlock) applyDemonicEmbrace() {
 	}
 
 	warlock.MultiplyStat(stats.Stamina, 1.0+(0.03)*float64(warlock.Talents.DemonicEmbrace))
-	warlock.MultiplyStat(stats.Spirit, 1.0-(0.03)*float64(warlock.Talents.DemonicEmbrace))
+	warlock.MultiplyStat(stats.Spirit, 1.0-(0.01)*float64(warlock.Talents.DemonicEmbrace))
 }
 
 func (warlock *Warlock) applyFelIntellect() {
@@ -345,10 +341,26 @@ func (warlock *Warlock) applyDemonicSacrifice() {
 		warlock.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexFire] *= 1.15
 	case proto.WarlockOptions_Felguard:
 		warlock.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexShadow] *= 1.10
-		warlock.AddStat(stats.MP5, warlock.GetStat(stats.Intellect)*1.25)
+		warlock.applyDemonicSacrificeManaRegen(core.ActionID{SpellID: 18788}, 0.02)
 	case proto.WarlockOptions_Felhunter:
-		warlock.AddStat(stats.MP5, warlock.GetStat(stats.Intellect)*1.6667)
+		warlock.applyDemonicSacrificeManaRegen(core.ActionID{SpellID: 18792}, 0.03)
 	}
+}
+
+// Demonic Sacrifice restores a percentage of maximum mana every 4 seconds, which is
+// independent of the sim's regular 2 second mana ticks.
+func (warlock *Warlock) applyDemonicSacrificeManaRegen(actionID core.ActionID, manaPercent float64) {
+	manaMetrics := warlock.NewManaMetrics(actionID)
+
+	warlock.RegisterResetEffect(func(sim *core.Simulation) {
+		core.StartPeriodicAction(sim, core.PeriodicActionOptions{
+			Period:   time.Second * 4,
+			Priority: core.ActionPriorityRegen,
+			OnAction: func(sim *core.Simulation) {
+				warlock.AddMana(sim, warlock.MaxMana()*manaPercent, manaMetrics)
+			},
+		})
+	})
 }
 
 func (warlock *Warlock) applyMasterDemonologist() {

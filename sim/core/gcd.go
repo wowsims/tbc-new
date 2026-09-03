@@ -6,6 +6,11 @@ import (
 
 // Note that this is only used when the hardcast and GCD actions happen at different times.
 func (unit *Unit) newHardcastAction(sim *Simulation) {
+	if unit.Metrics.isTanking {
+		// While casting, the players dodge, parry and block gets reduced to 0
+		unit.HardcastAvoidanceAura.Activate(sim)
+	}
+
 	if (unit.hardcastAction != nil) && !unit.hardcastAction.consumed {
 		unit.hardcastAction.Cancel(sim)
 	}
@@ -70,6 +75,12 @@ func (unit *Unit) ReactToEvent(sim *Simulation, randomizeReactionTime bool, addR
 	// If the next rotation action was already scheduled for this timestep then execute it now
 	unit.Rotation.DoNextAction(sim)
 
+	// A blocking controlling action (Wait / WaitUntil) has set the rotation timer
+	// to when it wants to wake; don't shrink it based on reaction time.
+	if unit.Rotation.HasBlockingControllingAction() {
+		return
+	}
+
 	// Otherwise schedule an evaluation based on reaction time
 	newEvaluationTime := sim.CurrentTime
 	if addReactionTime {
@@ -91,7 +102,25 @@ func (unit *Unit) CancelGCDTimer(sim *Simulation) {
 	unit.rotationAction.Cancel(sim)
 }
 
+// Interrupt cancels any cast, channel or queued spell in progress, e.g. when the
+// unit gets crowd controlled. Does not touch the GCD; callers that also want to
+// lock the rotation should call ExtendGCDUntil afterwards.
+func (unit *Unit) Interrupt(sim *Simulation) {
+	if unit.IsChanneling() {
+		dot := unit.ChanneledDot
+		dot.tickAction.NextActionAt = NeverExpires // don't tick again in ApplyOnExpire
+		dot.Deactivate(sim)
+	}
+
+	if unit.Hardcast.Expires > sim.CurrentTime {
+		unit.CancelHardcast(sim)
+	}
+
+	unit.CancelQueuedSpell(sim)
+}
+
 func (unit *Unit) CancelHardcast(sim *Simulation) {
+	unit.HardcastAvoidanceAura.Deactivate(sim)
 	unit.Hardcast.Expires = startingCDTime
 	unit.SetGCDTimer(sim, sim.CurrentTime+unit.ReactionTime)
 }

@@ -98,7 +98,7 @@ var Tier5 = core.NewItemSet(core.ItemSet{
 				ProcMask: core.ProcMaskMelee,
 				Outcome:  core.OutcomeLanded,
 				Callback: core.CallbackOnSpellHitDealt,
-				DPM:      rogue.NewLegacyPPMManager(1.0, core.ProcMaskMelee),
+				DPM:      rogue.NewLegacyPPMManager(0.5, core.ProcMaskMelee),
 				Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 					mod.Activate(sim)
 				},
@@ -156,5 +156,33 @@ func init() {
 		})
 
 		character.ItemSwap.RegisterProc(30450, procAura)
+	})
+
+	// Ashtongue Talisman of Lethality
+	core.NewItemEffect(32492, func(agent core.Agent) {
+		rogue := agent.(RogueAgent).GetRogue()
+
+		aura := rogue.NewTemporaryStatsAura(
+			"Rogue Tier 6 Trinket",
+			core.ActionID{SpellID: 40461},
+			stats.Stats{stats.MeleeCritRating: 145},
+			time.Second*10,
+		)
+
+		procAura := rogue.MakeProcTriggerAura(core.ProcTrigger{
+			Name:               "Ashtongue Talisman of Lethality",
+			ActionID:           core.ActionID{ItemID: 32492},
+			RequireDamageDealt: false,
+			Callback:           core.CallbackOnApplyEffects,
+			ClassSpellMask:     RogueSpellFinisher,
+			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+				chance := 0.2 * float64(rogue.LastFinisherPointSpend)
+				if chance == 1 || sim.Proc(chance, "Ashtongue Talisman of Lethality") {
+					aura.Activate(sim)
+				}
+			},
+		})
+
+		rogue.ItemSwap.RegisterProc(32492, procAura)
 	})
 }

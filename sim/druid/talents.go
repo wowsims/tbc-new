@@ -34,9 +34,11 @@ func (druid *Druid) ApplyTalents() {
 	druid.applyForceOfNature()
 
 	// Feral
+	druid.applyFuror()
 	druid.applyFerocity()
 	druid.applyFeralAggression()
 	druid.applyFeralInstincts()
+	druid.applyThickHide()
 	druid.applyFeralSwiftness()
 	druid.applySharpenedClaws()
 	druid.applyShreddingAttacks()
@@ -45,7 +47,6 @@ func (druid *Druid) ApplyTalents() {
 	druid.applySavageFury()
 	druid.applyHeartOfTheWild()
 	druid.applySurvivalOfTheFittest()
-	druid.applyLeaderOfThePack()
 	druid.applyImprovedLeaderOfThePack()
 
 	// Restoration
@@ -56,6 +57,19 @@ func (druid *Druid) ApplyTalents() {
 	druid.applyOmenOfClarity()
 	druid.applyLivingSpirit()
 	druid.applyNaturalPerfection()
+}
+
+// applyThickHide increases armor contribution from items by 4/7/10% (ranks 1/2/3).
+// Applies to both Armor and BonusArmor equip stats
+func (druid *Druid) applyThickHide() {
+	if druid.Talents.ThickHide == 0 {
+		return
+	}
+
+	bonusByRank := [3]float64{0.04, 0.07, 0.10}
+	bonus := bonusByRank[druid.Talents.ThickHide-1]
+	druid.ApplyEquipScaling(stats.Armor, 1.0+bonus)
+	druid.ApplyEquipScaling(stats.BonusArmor, 1.0+bonus)
 }
 
 func (druid *Druid) applyForceOfNature() {
@@ -154,12 +168,27 @@ func (druid *Druid) applyNaturesGrace() {
 		return
 	}
 
+	lastProcAt := time.Duration(-1)
+
 	aura := druid.RegisterAura(core.Aura{
 		Label:    "Nature's Grace",
 		ActionID: core.ActionID{SpellID: 16886},
-		Duration: time.Second * 3,
+		Duration: time.Second * 15,
+		OnReset: func(aura *core.Aura, sim *core.Simulation) {
+			lastProcAt = -1
+		},
 		OnCastComplete: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell) {
 			if spell.CurCast.CastTime == 0 {
+				return
+			}
+			// Only consume if the aura was already active when this cast started;
+			// a cast in flight when the proc landed did not benefit from it.
+			if aura.TimeActive(sim) < spell.CurCast.CastTime {
+				return
+			}
+			// A proc that landed during this cast re-arms the buff for the next
+			// cast instead of being consumed by this one.
+			if lastProcAt > sim.CurrentTime-spell.CurCast.CastTime {
 				return
 			}
 
@@ -168,15 +197,17 @@ func (druid *Druid) applyNaturesGrace() {
 	}).AttachSpellMod(core.SpellModConfig{
 		ClassMask: DruidSpellStarfire | DruidSpellWrath,
 		Kind:      core.SpellMod_CastTime_Flat,
-		TimeValue: time.Millisecond * time.Duration(-500),
+		TimeValue: time.Millisecond * -500,
 	})
 
 	druid.MakeProcTriggerAura(core.ProcTrigger{
-		Name:           "Nature's Grace Trigger",
-		Duration:       core.NeverExpires,
-		ClassSpellMask: DruidSpellWrath | DruidSpellStarfire,
-		Outcome:        core.OutcomeCrit,
+		Name:               "Nature's Grace Trigger",
+		Callback:           core.CallbackOnSpellHitDealt,
+		ClassSpellMask:     DruidSpellWrath | DruidSpellStarfire,
+		Outcome:            core.OutcomeCrit,
+		TriggerImmediately: true,
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+			lastProcAt = sim.CurrentTime
 			aura.Activate(sim)
 		},
 	})
@@ -195,8 +226,6 @@ func (druid *Druid) applyCelestialFocus() {
 	if druid.Talents.CelestialFocus == 0 {
 		return
 	}
-
-	panic("unimplemented")
 }
 
 func (druid *Druid) applyVengeance() {
@@ -376,13 +405,23 @@ func (druid *Druid) applyPredatoryStrikes() {
 	druid.BearFormAura.AttachStatsBuff(bonus)
 }
 
+// applyFuror gives a 20% chance per rank to gain 40 energy when shifting into
+// Cat Form, or 10 rage when shifting into Bear Form.
+func (druid *Druid) applyFuror() {
+	if druid.Talents.Furor == 0 {
+		return
+	}
+
+	druid.FurorProcChance = 0.2 * float64(druid.Talents.Furor)
+}
+
 func (druid *Druid) applyFerocity() {
 	if druid.Talents.Ferocity == 0 {
 		return
 	}
 
 	druid.AddStaticMod(core.SpellModConfig{
-		ClassMask: DruidSpellRake | DruidSpellMangleCat | DruidSpellFerociousBite,
+		ClassMask: DruidSpellRake | DruidSpellMangleCat,
 		Kind:      core.SpellMod_PowerCost_Flat,
 		IntValue:  -druid.Talents.Ferocity,
 	})
@@ -454,30 +493,20 @@ func (druid *Druid) applyPrimalFury() {
 		ClassSpellMask: DruidSpellBuilder,
 		Outcome:        core.OutcomeCrit,
 		ProcChance:     procChance,
+		ExtraCondition: func(_ *core.Simulation, _ *core.Spell, _ *core.SpellResult) bool {
+			return druid.InForm(Cat)
+		},
 		Handler: func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
 			druid.AddComboPoints(sim, 1, cpMetrics)
 		},
 	})
 
-	// Bear form: +5 rage on Mangle crits.
-	druid.MakeProcTriggerAura(core.ProcTrigger{
-		Name:           "Primal Fury (Bear Mangle)",
-		ActionID:       actionID,
-		Callback:       core.CallbackOnSpellHitDealt,
-		ClassSpellMask: DruidSpellMangleBear,
-		Outcome:        core.OutcomeCrit,
-		ProcChance:     procChance,
-		Handler: func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
-			druid.AddRage(sim, 5, rageMetrics)
-		},
-	})
-
 	// Bear form: +5 rage on auto-attack crits.
 	druid.MakeProcTriggerAura(core.ProcTrigger{
-		Name:       "Primal Fury (Bear Auto)",
+		Name:       "Primal Fury (Bear)",
 		ActionID:   actionID,
 		Callback:   core.CallbackOnSpellHitDealt,
-		ProcMask:   core.ProcMaskMeleeMHAuto,
+		ProcMask:   core.ProcMaskMelee,
 		Outcome:    core.OutcomeCrit,
 		ProcChance: procChance,
 		ExtraCondition: func(_ *core.Simulation, _ *core.Spell, _ *core.SpellResult) bool {
@@ -487,15 +516,6 @@ func (druid *Druid) applyPrimalFury() {
 			druid.AddRage(sim, 5, rageMetrics)
 		},
 	})
-}
-
-func (druid *Druid) applyLeaderOfThePack() {
-	// Leader of the Pack: passive aura that grants the party +5% melee crit.
-	// The party buff is handled via AddPartyBuffs in the spec; no sim-side
-	// aura registration is needed here beyond the talent gate.
-	if !druid.Talents.LeaderOfThePack {
-		return
-	}
 }
 
 func (druid *Druid) applyImprovedLeaderOfThePack() {

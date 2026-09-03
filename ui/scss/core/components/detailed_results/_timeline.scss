@@ -4,6 +4,9 @@
 	--timeline-cast-cancel-bg: rgb(230, 128, 102, 0.7);
 	--timeline-aura-bg: rgba(0, 0, 255, 0.52);
 	--timeline-travel-time-bg: rgb(249, 192, 255, 0.6);
+	--timeline-cast-delay-bg: rgba(220, 80, 80, 0.35);
+	--timeline-gcd-bg: rgba(80, 180, 235, 0.55);
+	--timeline-gcd-extension-bg: rgba(80, 180, 235, 0.22);
 }
 
 .threat .series-color,
@@ -66,9 +69,26 @@
 	display: flex;
 	align-items: flex-start;
 
+	.timeline-controls {
+		margin-left: auto;
+		display: flex;
+		align-items: center;
+		gap: var(--spacer-3);
+	}
+
 	.timeline-chart-picker {
 		width: 8rem;
-		margin-left: auto;
+	}
+
+	.timeline-show-gcd {
+		.boolean-picker-root {
+			width: unset;
+			white-space: nowrap;
+
+			label {
+				margin-left: var(--spacer-2);
+			}
+		}
 	}
 }
 
@@ -212,6 +232,13 @@
 	display: inline-flex;
 	border: 1px solid var(--bs-white);
 	margin: 3px;
+	padding: 0 0.5rem;
+	gap: 0.25rem;
+	cursor: pointer;
+
+	&:hover .fas {
+		color: var(--bs-link-danger);
+	}
 }
 
 .rotation-label-icon {
@@ -293,6 +320,36 @@
 	position: absolute;
 	height: 24px;
 	background-color: var(--timeline-travel-time-bg);
+}
+
+.rotation-timeline-cast-delay {
+	position: absolute;
+	height: 24px;
+	background-color: var(--timeline-cast-delay-bg);
+	z-index: 0;
+}
+
+// Muted-color extension after the cast block to the end of the GCD.
+.rotation-timeline-gcd-extension {
+	position: absolute;
+	height: 24px;
+	background-color: var(--timeline-gcd-extension-bg);
+	z-index: 0;
+}
+
+.rotation-timeline-gcd-segment {
+	position: absolute;
+	top: 6px;
+	height: 12px;
+	background-color: var(--timeline-gcd-bg);
+	border-right: 1px solid rgba(0, 0, 0, 0.35);
+	z-index: 1;
+}
+
+// Toggled by the "Show GCD" checkbox; visible only when .show-gcd is set.
+.rotation-plot:not(.show-gcd) .rotation-timeline-gcd-extension,
+.rotation-plot:not(.show-gcd) [data-row='gcd'] {
+	display: none;
 }
 
 .rotation-timeline-tick {

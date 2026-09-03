@@ -71,6 +71,11 @@ func InferPhase(item *proto.UIItem) int32 {
 				return 1
 			}
 		}
+		if rep := src.GetRep(); rep != nil {
+			if rep.RepFactionId == 1012 {
+				return 3
+			}
+		}
 	}
 
 	// PvP Sets
@@ -79,6 +84,8 @@ func InferPhase(item *proto.UIItem) int32 {
 		case strings.Contains(name, "Merciless Gladiator"),
 			strings.Contains(name, "Veteran's"):
 			return 2
+		case strings.Contains(name, "Vindicator's") && item.ScalingOptions[int32(0)].Stats[int32(proto.Stat_StatSpellHasteRating)] > 0:
+			return 4
 		case strings.Contains(name, "Vengeful Gladiator"),
 			strings.Contains(name, "Vindicator's"):
 			return 3
@@ -121,7 +128,11 @@ func InferPhase(item *proto.UIItem) int32 {
 		return 4
 	}
 
-	if ilvl >= 159 || ilvl == 141 || ilvl == 146 || ilvl == 135 || item.Id == 34407 { // SWP Mote Turn-ins, SWP Badge Armor, SWP Badge Weapons, The 2 Ring, Tranquil Moonlight Wraps (SWP Mote item but lower ilvl???)
+	if item.Id == 34837 { // The 2 Ring - Available in P1
+		return 1
+	}
+
+	if ilvl >= 159 || ilvl == 141 || ilvl == 146 || ilvl == 135 || item.Id == 34407 { // SWP Mote Turn-ins, SWP Badge Armor, SWP Badge Weapons, Tranquil Moonlight Wraps (SWP Mote item but lower ilvl???)
 		return 5
 	}
 

@@ -1,5 +1,6 @@
 import { ref } from 'tsx-vanilla';
 
+import i18n from '../../../i18n/config';
 import { CURRENT_PHASE } from '../../constants/other';
 import { Component } from '../component';
 
@@ -132,7 +133,7 @@ export class PresetGroupPicker extends Component {
 				<button
 					className={`preset-group-phase-tab${phase === this.filterState.phase ? ' active' : ''}`}
 					onclick={() => this.setFilter(phase)}>
-					{`Phase ${phase}`}
+					{i18n.t(`common.phase_names.${phase}`)}
 				</button>
 			);
 			this.phaseTabsContainer.appendChild(tab);

@@ -150,7 +150,7 @@ export class ReforgeOptimizer {
 	protected disableUniqueGems = false;
 	protected undershootCaps = new Stats();
 	protected isCancelling: boolean = false;
-	protected pendingWorker: ReforgeWorkerPool | null = null;
+	protected workers: ReforgeWorkerPool | null = null;
 	protected previousGear: Gear | null = null;
 	protected updatedGear: Gear | null = null;
 
@@ -198,13 +198,13 @@ export class ReforgeOptimizer {
 					<p className="mb-0">You may cancel this operation at any time using the button below.</p>
 				</>
 			),
-			onCancel: () => {
+			onCancel: async () => {
 				this.isCancelling = true;
 				if (isDevMode()) {
 					console.log('User cancelled gem optimization');
 				}
 				try {
-					this.pendingWorker?.terminate();
+					await this.abortReforgeOptimization();
 				} catch {}
 				if (this.previousGear) this.player.setGear(TypedEvent.nextEventID(), this.previousGear);
 				this.progressTrackerModal.hide();
@@ -221,6 +221,18 @@ export class ReforgeOptimizer {
 				});
 			},
 		});
+
+		const syncReforgeWorkerPoolConcurrency = async () => {
+			const isWasm = await this.sim.isWasm();
+			let workerCount = navigator.hardwareConcurrency || 4;
+			if (isWasm) {
+				workerCount = Math.min(this.sim.getWasmConcurrency(), workerCount);
+			}
+			getReforgeWorkerPool().setNumWorkers(workerCount);
+		};
+
+		syncReforgeWorkerPoolConcurrency();
+		this.sim.wasmConcurrencyChangeEmitter.on(() => syncReforgeWorkerPoolConcurrency());
 
 		// Pre-warm the worker pool
 		getReforgeWorkerPool().warmUp();
@@ -309,6 +321,12 @@ export class ReforgeOptimizer {
 			if (this.useCustomEPValues && (this.player.hasCustomEPWeights() || !this._statCaps.equals(this.defaults.statCaps || new Stats()))) {
 				this.setUseSoftCapBreakpoints(eventID, false);
 			}
+		});
+
+		this.simUI.addWarning({
+			updateOn: TypedEvent.onAny([this.player.epWeightsChangeEmitter, this.useCustomEPValuesChangeEmitter]),
+			getContent: () =>
+				this.player.hasCustomEPWeights() && !this.useCustomEPValues ? i18n.t('sidebar.warnings.custom_ep_not_enabled') : '',
 		});
 	}
 
@@ -1150,7 +1168,7 @@ export class ReforgeOptimizer {
 		return statCaps;
 	}
 
-	async optimizeReforges(gear?: Gear): Promise<Gear> {
+	async optimizeReforges(gear?: Gear, batchRun?: boolean) {
 		if (isDevMode()) console.log('Starting Gem optimization...');
 
 		// First, clear all existing Gems
@@ -1159,11 +1177,12 @@ export class ReforgeOptimizer {
 			console.log('The following slots will not be cleared:');
 			console.log(Array.from(this.frozenItemSlots.keys()).filter(key => this.getFrozenItemSlot(key)));
 		}
-		this.previousGear = gear || this.player.getGear();
 
-		this.updatedGear = this.previousGear.withoutGems(this.frozenItemSlots, true);
+		const previousGear = gear || this.player.getGear();
 
-		const baseStats = await this.updateGear(this.updatedGear);
+		let updatedGear = previousGear.withoutGems(this.frozenItemSlots, true);
+
+		const baseStats = await this.updateGear(updatedGear);
 
 		// Compute effective stat caps for just the Reforge contribution
 		let reforgeCaps = baseStats.computeStatCapsDelta(this.processedStatCaps);
@@ -1180,8 +1199,8 @@ export class ReforgeOptimizer {
 		let validatedWeights = ReforgeOptimizer.checkWeights(this.preCapEPs, reforgeCaps, reforgeSoftCaps);
 
 		// Set up YALPS model
-		const variables = this.buildYalpsVariables(this.updatedGear!, validatedWeights, reforgeCaps, reforgeSoftCaps);
-		const constraints = this.buildYalpsConstraints(this.updatedGear!, baseStats);
+		const variables = this.buildYalpsVariables(updatedGear, validatedWeights, reforgeCaps, reforgeSoftCaps);
+		const constraints = this.buildYalpsConstraints(updatedGear, baseStats);
 
 		// After building variables and constraints we check for unique gems being used
 		// and add SocketBonusLink constraints for the all-or-nothing socket bonus variables.
@@ -1197,9 +1216,16 @@ export class ReforgeOptimizer {
 		}
 
 		// Solve in multiple passes to enforce caps
-		await this.solveModel(validatedWeights, reforgeCaps, reforgeSoftCaps, variables, constraints, 3600);
+		const optimized = await this.solveModel(validatedWeights, reforgeCaps, reforgeSoftCaps, variables, constraints, updatedGear, 3600);
 
-		return this.updatedGear!;
+		updatedGear = optimized.gear;
+
+		if (!batchRun) {
+			this.previousGear = previousGear;
+			this.updatedGear = updatedGear;
+		}
+
+		return updatedGear;
 	}
 
 	async updateGear(gear: Gear): Promise<Stats> {
@@ -1240,6 +1266,37 @@ export class ReforgeOptimizer {
 		return reforgeSoftCaps;
 	}
 
+	private static getMetaGemColorCounts(gems: Array<Gem | null>): Map<GemColor, number> {
+		const counts = new Map<GemColor, number>();
+		for (const gem of gems) {
+			if (!gem) {
+				continue;
+			}
+
+			for (const color of gemColorsToMatchingSocket.get(gem.color) || []) {
+				counts.set(color, (counts.get(color) || 0) + 1);
+			}
+		}
+		return counts;
+	}
+
+	private static addMetaGemColorCoefficients(coefficients: YalpsCoefficients, gem: Gem, compareColorGreater: GemColor, compareColorLesser: GemColor) {
+		const colors = gemColorsToMatchingSocket.get(gem.color) || [];
+		for (const color of colors) {
+			coefficients.set(`GemColor_${color}`, (coefficients.get(`GemColor_${color}`) || 0) + 1);
+		}
+
+		if (compareColorGreater && compareColorLesser) {
+			let compareValue = 0;
+			if (colors.includes(compareColorGreater)) compareValue += 1;
+			if (colors.includes(compareColorLesser)) compareValue -= 1;
+			if (compareValue != 0) {
+				const key = `GemColorCompare_${compareColorGreater}_${compareColorLesser}`;
+				coefficients.set(key, (coefficients.get(key) || 0) + compareValue);
+			}
+		}
+	}
+
 	buildYalpsVariables(gear: Gear, preCapEPs: Stats, reforgeCaps: Stats, reforgeSoftCaps: StatCap[]): YalpsVariables {
 		const variables = new Map<string, YalpsCoefficients>();
 		const gemsToInclude = this.buildGemOptions(preCapEPs, reforgeCaps, reforgeSoftCaps);
@@ -1252,15 +1309,6 @@ export class ReforgeOptimizer {
 			compareColorGreater = condition.compareColorGreater || 0;
 			compareColorLesser = condition.compareColorLesser || 0;
 		}
-
-		const getColorCompareConstraint = (socketColors: GemColor[]) => {
-			let value = 0;
-			if (socketColors.filter(c => c != compareColorGreater || c != compareColorLesser).length) {
-				if (socketColors.some(c => c == compareColorGreater)) value = +1;
-				if (socketColors.some(c => c == compareColorLesser)) value = -1;
-			}
-			return value;
-		};
 
 		for (const slot of gear.getItemSlots()) {
 			const item = gear.getEquippedItem(slot);
@@ -1367,16 +1415,9 @@ export class ReforgeOptimizer {
 						const variableKey = `${constraintKey}_${gemData.gem.id}`;
 						const coefficients = new Map<string, number>(gemData.coefficients);
 						coefficients.set(constraintKey, 1);
-
-						const socketColors = gemColorsToMatchingSocket.get(gemData.gem.color) || [];
+						ReforgeOptimizer.addMetaGemColorCoefficients(coefficients, gemData.gem, compareColorGreater, compareColorLesser);
 
 						if (gemMatchesSocket(gemData.gem, socketColor)) {
-							coefficients.set(`GemColor_${socketColor}`, 1);
-							const compareValue = getColorCompareConstraint(socketColors);
-							if (compareValue != 0) {
-								coefficients.set(`GemColorCompare_${compareColorGreater}_${compareColorLesser}`, compareValue);
-							}
-
 							if (forceSocketBonus) {
 								for (const [stat, value] of distributedSocketBonus.entries()) {
 									this.applyReforgeStat(coefficients, stat, value, preCapEPs);
@@ -1384,14 +1425,6 @@ export class ReforgeOptimizer {
 							} else {
 								coefficients.set(`SocketBonusLink_${slot}_${socketIdx}`, -1);
 							}
-						} else if (!forceSocketBonus && socketColors.length) {
-							socketColors?.forEach(() => {
-								coefficients.set(`GemColor_${gemData.gem.color}`, 1);
-								const compareValue = getColorCompareConstraint(socketColors);
-								if (compareValue != 0) {
-									coefficients.set(`GemColorCompare_${compareColorGreater}_${compareColorLesser}`, compareValue);
-								}
-							});
 						}
 
 						if (gemData.isUnique) {
@@ -1579,17 +1612,32 @@ export class ReforgeOptimizer {
 		const metaGem = gear.getMetaGem();
 		if (metaGem?.id) {
 			const { minBlue, minRed, minYellow, compareColorGreater, compareColorLesser } = getMetaGemCondition(metaGem?.id);
+			const fixedGemColorCounts = ReforgeOptimizer.getMetaGemColorCounts(
+				gear
+					.getItemSlots()
+					.flatMap(slot => gear.getEquippedItem(slot)?.gems || [])
+					.filter((gem): gem is Gem => gem?.color !== GemColor.GemColorMeta),
+			);
+
 			if (compareColorGreater && compareColorLesser) {
-				constraints.set(`GemColorCompare_${compareColorGreater}_${compareColorLesser}`, greaterEq(1));
+				const fixedGreater = fixedGemColorCounts.get(compareColorGreater) || 0;
+				const fixedLesser = fixedGemColorCounts.get(compareColorLesser) || 0;
+				const remainingCompare = 1 - (fixedGreater - fixedLesser);
+				if (remainingCompare > 0) {
+					constraints.set(`GemColorCompare_${compareColorGreater}_${compareColorLesser}`, greaterEq(remainingCompare));
+				}
 			}
-			if (minBlue) {
-				constraints.set(`GemColor_${GemColor.GemColorBlue}`, greaterEq(minBlue));
+			const remainingBlue = minBlue - (fixedGemColorCounts.get(GemColor.GemColorBlue) || 0);
+			if (remainingBlue > 0) {
+				constraints.set(`GemColor_${GemColor.GemColorBlue}`, greaterEq(remainingBlue));
 			}
-			if (minRed) {
-				constraints.set(`GemColor_${GemColor.GemColorRed}`, greaterEq(minRed));
+			const remainingRed = minRed - (fixedGemColorCounts.get(GemColor.GemColorRed) || 0);
+			if (remainingRed > 0) {
+				constraints.set(`GemColor_${GemColor.GemColorRed}`, greaterEq(remainingRed));
 			}
-			if (minYellow) {
-				constraints.set(`GemColor_${GemColor.GemColorYellow}`, greaterEq(minYellow));
+			const remainingYellow = minYellow - (fixedGemColorCounts.get(GemColor.GemColorYellow) || 0);
+			if (remainingYellow > 0) {
+				constraints.set(`GemColor_${GemColor.GemColorYellow}`, greaterEq(remainingYellow));
 			}
 		}
 
@@ -1612,8 +1660,9 @@ export class ReforgeOptimizer {
 		reforgeSoftCaps: StatCap[],
 		variables: YalpsVariables,
 		constraints: YalpsConstraints,
+		currentGear: Gear,
 		maxSeconds: number,
-	): Promise<number> {
+	): Promise<{ result: number; gear: Gear }> {
 		// Calculate EP scores for each Reforge option
 		if (isDevMode()) {
 			console.log('Stat weights for this iteration:');
@@ -1636,8 +1685,8 @@ export class ReforgeOptimizer {
 
 		const startTimeMs: number = Date.now();
 
-		this.pendingWorker = getReforgeWorkerPool();
-		const solution: LPSolution = await this.pendingWorker.solve(model, {
+		this.workers = getReforgeWorkerPool();
+		const solution: LPSolution = await this.workers.solve(model, {
 			timeout: maxSeconds * 1000,
 		});
 		if (isDevMode()) {
@@ -1657,7 +1706,7 @@ export class ReforgeOptimizer {
 		}
 
 		// Apply the current solution
-		this.updatedGear = await this.applyLPSolution(this.updatedGear!, solution);
+		const solvedGear = await this.applyLPSolution(currentGear, solution);
 
 		// Check if any unconstrained stats exceeded their specified cap.
 		// If so, add these stats to the constraint list and re-run the solver.
@@ -1672,10 +1721,18 @@ export class ReforgeOptimizer {
 		);
 
 		if (!anyCapsExceeded) {
-			return solution.result;
+			return { result: solution.result, gear: solvedGear };
 		} else {
 			await sleep(100);
-			return await this.solveModel(updatedWeights, reforgeCaps, reforgeSoftCaps, updatedVariables, updatedConstraints, maxSeconds - elapsedSeconds);
+			return await this.solveModel(
+				updatedWeights,
+				reforgeCaps,
+				reforgeSoftCaps,
+				updatedVariables,
+				updatedConstraints,
+				solvedGear,
+				maxSeconds - elapsedSeconds,
+			);
 		}
 	}
 
@@ -2052,6 +2109,10 @@ export class ReforgeOptimizer {
 		});
 	}
 
+	async abortReforgeOptimization() {
+		this.workers?.abort();
+	}
+
 	fromProto(eventID: EventID, proto: ReforgeSettings) {
 		TypedEvent.freezeAllAndDo(() => {
 			this.setUseCustomEPValues(eventID, proto.useCustomEpValues);
@@ -2065,6 +2126,7 @@ export class ReforgeOptimizer {
 			this.setMaxGemQuality(eventID, proto.maxGemQuality || ItemQuality.ItemQualityEpic);
 		});
 	}
+
 	toProto(): ReforgeSettings {
 		return ReforgeSettings.create({
 			useCustomEpValues: this.useCustomEPValues,
@@ -2078,6 +2140,7 @@ export class ReforgeOptimizer {
 			maxGemQuality: this.maxGemQuality,
 		});
 	}
+
 	applyDefaults(eventID: EventID) {
 		TypedEvent.freezeAllAndDo(() => {
 			this.setUseCustomEPValues(eventID, false);

@@ -164,12 +164,6 @@ func (action *APLActionStrictSequence) IsReady(sim *Simulation) bool {
 		action.unit.Rotation.inSequence = false
 		return false
 	}
-	for _, spell := range action.subactionSpells {
-		if !spell.IsReady(sim) {
-			action.unit.Rotation.inSequence = false
-			return false
-		}
-	}
 
 	return true
 }

@@ -11,6 +11,8 @@ import (
 	"slices"
 	"strings"
 
+	"golang.org/x/sync/errgroup"
+
 	"github.com/wowsims/tbc/sim"
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
@@ -26,7 +28,7 @@ import (
 
 var outDir = flag.String("outDir", "assets", "Path to output directory for writing generated .go files.")
 var genAsset = flag.String("gen", "", "Asset to generate. Valid values are 'db', 'atlasloot', 'wowhead-items', 'wowhead-spells', 'wowhead-itemdb', 'mop-items', and 'wago-db2-items'")
-var dbPath = flag.String("dbPath", "./tools/database/wowsims.db", "Location of wowsims.db file from the DB2ToSqliteTool")
+var dbPath = flag.String("dbPath", "./tools/database/wowsims.db", "Location of the wowsims.db file produced by tools/db2tool")
 
 func main() {
 	flag.Parse()
@@ -67,85 +69,57 @@ func main() {
 		log.Fatalf("failed to run overrides: %v", err)
 	}
 
-	_, err = database.LoadAndWriteRawRandomSuffixes(helper, inputsDir)
-	if err != nil {
+	// The extractions below only read the (post-override) database and write
+	// disjoint files, so they run concurrently; everything after the Wait
+	// consumes their results.
+	var (
+		consumables     []dbc.Consumable
+		dropSources     map[int][]*proto.DropSource
+		names           map[int]string
+		craftingSources map[int][]*proto.CraftedSource
+		repSources      map[int][]*proto.RepSource
+		atlaslootDB     *database.WowDatabase
+		iconsMap        map[int]string
+		icons           map[int]database.SpellIcon
+	)
+	var g errgroup.Group
+	g.Go(func() error { _, err := database.LoadAndWriteRawRandomSuffixes(helper, inputsDir); return err })
+	g.Go(func() error {
+		_, err := database.LoadAndWriteRawItems(helper, "s.OverallQualityId != 7 AND s.Field_1_15_7_59706_054 = 0 AND s.OverallQualityId != 0 AND (i.ClassID = 2 OR i.ClassID = 4 OR (i.ClassID = 7 AND i.InventoryType = 12)) AND s.Display_lang != '' AND (s.ID != 34219 AND s.Display_lang NOT LIKE '%Test%' AND s.Display_lang NOT LIKE 'QA%' AND s.Display_lang != 'unused')", inputsDir)
+		return err
+	})
+	g.Go(func() error { _, err := database.LoadAndWriteRandomPropAllocations(helper, inputsDir); return err })
+	g.Go(func() error { _, err := database.LoadAndWriteRawGems(helper, inputsDir); return err })
+	g.Go(func() error { _, err := database.LoadAndWriteRawEnchants(helper, inputsDir); return err })
+	g.Go(func() error { _, err := database.LoadAndWriteRawSpellEffects(helper, inputsDir); return err })
+	g.Go(func() error { _, err := database.LoadAndWriteItemStatEffects(helper, inputsDir); return err })
+	g.Go(func() error { _, err := database.LoadAndWriteItemDamageTables(helper, inputsDir); return err })
+	g.Go(func() error { _, err := database.LoadAndWriteItemArmorTotal(helper, inputsDir); return err })
+	g.Go(func() error { _, err := database.LoadAndWriteItemArmorQuality(helper, inputsDir); return err })
+	g.Go(func() error { _, err := database.LoadAndWriteItemArmorShield(helper, inputsDir); return err })
+	g.Go(func() error { _, err := database.LoadAndWriteArmorLocation(helper, inputsDir); return err })
+	g.Go(func() error { _, err := database.LoadAndWriteItemEffects(helper, inputsDir); return err })
+	g.Go(func() error { _, err := database.LoadAndWriteSpells(helper, inputsDir); return err })
+	g.Go(func() (err error) { consumables, err = database.LoadAndWriteConsumables(helper, inputsDir); return })
+	g.Go(func() (err error) {
+		dropSources, names, err = database.LoadAndWriteDropSources(helper, inputsDir)
+		return
+	})
+	g.Go(func() (err error) { icons, err = database.LoadSpellIcons(helper); return })
+	g.Go(func() error { craftingSources = database.LoadCraftedItems(helper); return nil })
+	g.Go(func() error { repSources = database.LoadRepItems(helper); return nil })
+	g.Go(func() error {
+		//Todo: See if we cant get rid of these as well
+		atlaslootDB = database.ReadDatabaseFromJson(tools.ReadFile(fmt.Sprintf("%s/atlasloot_db.json", inputsDir)))
+		return nil
+	})
+	g.Go(func() (err error) { iconsMap, err = database.LoadArtTexturePaths(database.ListfilePath); return })
+	if err := g.Wait(); err != nil {
 		panic(fmt.Sprintf("Error loading DBC data %v", err))
 	}
-
-	_, err = database.LoadAndWriteRawItems(helper, "s.OverallQualityId != 7 AND s.Field_1_15_7_59706_054 = 0 AND s.OverallQualityId != 0 AND (i.ClassID = 2 OR i.ClassID = 4 OR (i.ClassID = 7 AND i.InventoryType = 12)) AND s.Display_lang != '' AND (s.ID != 34219 AND s.Display_lang NOT LIKE '%Test%' AND s.Display_lang NOT LIKE 'QA%' AND s.Display_lang != 'unused')", inputsDir)
-	if err != nil {
-		panic(fmt.Sprintf("Error loading DBC data %v", err))
-	}
-
-	_, err = database.LoadAndWriteRandomPropAllocations(helper, inputsDir)
-	if err != nil {
-		panic(fmt.Sprintf("Error loading DBC data %v", err))
-	}
-
-	_, err = database.LoadAndWriteRawGems(helper, inputsDir)
-	if err != nil {
-		panic(fmt.Sprintf("Error loading DBC data %v", err))
-	}
-	_, err = database.LoadAndWriteRawEnchants(helper, inputsDir)
-	if err != nil {
-		panic(fmt.Sprintf("Error loading DBC data %v", err))
-	}
-	_, err = database.LoadAndWriteRawSpellEffects(helper, inputsDir)
-	if err != nil {
-		panic(fmt.Sprintf("Error loading DBC data %v", err))
-	}
-	_, err = database.LoadAndWriteItemStatEffects(helper, inputsDir)
-	if err != nil {
-		panic(fmt.Sprintf("Error loading DBC data %v", err))
-	}
-	_, err = database.LoadAndWriteItemDamageTables(helper, inputsDir)
-	if err != nil {
-		panic(fmt.Sprintf("Error loading DBC data %v", err))
-	}
-	_, err = database.LoadAndWriteItemArmorTotal(helper, inputsDir)
-	if err != nil {
-		panic(fmt.Sprintf("Error loading DBC data %v", err))
-	}
-	_, err = database.LoadAndWriteItemArmorQuality(helper, inputsDir)
-	if err != nil {
-		panic(fmt.Sprintf("Error loading DBC data %v", err))
-	}
-	_, err = database.LoadAndWriteItemArmorShield(helper, inputsDir)
-	if err != nil {
-		panic(fmt.Sprintf("Error loading DBC data %v", err))
-	}
-	_, err = database.LoadAndWriteArmorLocation(helper, inputsDir)
-	if err != nil {
-		panic(fmt.Sprintf("Error loading DBC data %v", err))
-	}
-	_, err = database.LoadAndWriteItemEffects(helper, inputsDir)
-	if err != nil {
-		panic(fmt.Sprintf("Error loading DBC data %v", err))
-	}
-	_, err = database.LoadAndWriteSpells(helper, inputsDir)
-	if err != nil {
-		panic(fmt.Sprintf("Error loading DBC data %v", err))
-	}
-	consumables, err := database.LoadAndWriteConsumables(helper, inputsDir)
-	if err != nil {
-		panic(fmt.Sprintf("Error loading DBC data %v", err))
-	}
-	dropSources, names, err := database.LoadAndWriteDropSources(helper, inputsDir)
-	if err != nil {
-		panic(fmt.Sprintf("Error loading DBC data %v", err))
-	}
-	craftingSources := database.LoadCraftedItems(helper)
-	repSources := database.LoadRepItems(helper)
-	//Todo: See if we cant get rid of these as well
-	atlaslootDB := database.ReadDatabaseFromJson(tools.ReadFile(fmt.Sprintf("%s/atlasloot_db.json", inputsDir)))
 
 	db := database.NewWowDatabase()
 	db.Encounters = core.PresetEncounters
-
-	iconsMap, err := database.LoadArtTexturePaths("./tools/DB2ToSqlite/listfile.csv")
-	if err != nil {
-		panic(fmt.Sprintf("Error loading icon paths %v", err))
-	}
 
 	var instance = dbc.GetDBC()
 	instance.LoadSpellScaling()
@@ -197,6 +171,9 @@ func main() {
 
 	for _, consumable := range consumables {
 		db.MergeConsumable(consumable.ToProto())
+		// The consumable proto has no icon field, so ship it in the icon table instead. Without
+		// this the UI fetches every consumable icon from nether.wowhead.com on each page load.
+		db.AddItemIcon(int32(consumable.Id), strings.ToLower(database.GetIconName(iconsMap, consumable.IconFileDataID)), consumable.Name)
 	}
 
 	for _, consumable := range database.ConsumableOverrides {
@@ -241,11 +218,6 @@ func main() {
 		if _, exists := db.RandomSuffixes[int32(randomSuffix.ID)]; !exists {
 			db.RandomSuffixes[int32(randomSuffix.ID)] = randomSuffix.ToProto()
 		}
-	}
-
-	icons, err := database.LoadSpellIcons(helper)
-	if err != nil {
-		panic(fmt.Sprintf("error loading icons: %v", err))
 	}
 
 	addSpellIcons(db, database.SharedSpellsIcons, icons, iconsMap)
@@ -683,22 +655,22 @@ func GetAllRotationSpellIds() map[string][]int32 {
 		{Name: "balanceDruid", Raid: core.SinglePlayerRaidProto(core.WithSpec(&proto.Player{
 			Class:         proto.Class_ClassDruid,
 			Equipment:     &proto.EquipmentSpec{},
-			TalentsString: "000000",
+			TalentsString: "514322312533135231351-553232132322125331251-55553351531522531351",
 		}, &proto.Player_BalanceDruid{BalanceDruid: &proto.BalanceDruid{Options: &proto.BalanceDruid_Options{ClassOptions: &proto.DruidOptions{}}}}), nil, nil, nil)},
 		{Name: "feralCatDruid", Raid: core.SinglePlayerRaidProto(core.WithSpec(&proto.Player{
 			Class:         proto.Class_ClassDruid,
 			Equipment:     &proto.EquipmentSpec{},
-			TalentsString: "000000",
+			TalentsString: "514322312533135231351-553232132322125331251-55553351531522531351",
 		}, &proto.Player_FeralCatDruid{FeralCatDruid: &proto.FeralCatDruid{Options: &proto.FeralCatDruid_Options{ClassOptions: &proto.DruidOptions{}}, Rotation: &proto.FeralCatDruid_Rotation{}}}), nil, nil, nil)},
 		{Name: "feralBearDruid", Raid: core.SinglePlayerRaidProto(core.WithSpec(&proto.Player{
 			Class:         proto.Class_ClassDruid,
 			Equipment:     &proto.EquipmentSpec{},
-			TalentsString: "000000",
+			TalentsString: "514322312533135231351-553232132322125331251-55553351531522531351",
 		}, &proto.Player_FeralBearDruid{FeralBearDruid: &proto.FeralBearDruid{Options: &proto.FeralBearDruid_Options{ClassOptions: &proto.DruidOptions{}}}}), nil, nil, nil)},
 		{Name: "restorationDruid", Raid: core.SinglePlayerRaidProto(core.WithSpec(&proto.Player{
 			Class:         proto.Class_ClassDruid,
 			Equipment:     &proto.EquipmentSpec{},
-			TalentsString: "000000",
+			TalentsString: "514322312533135231351-553232132322125331251-55553351531522531351",
 		}, &proto.Player_RestorationDruid{RestorationDruid: &proto.RestorationDruid{Options: &proto.RestorationDruid_Options{ClassOptions: &proto.DruidOptions{}}}}), nil, nil, nil)},
 
 		// Hunter
@@ -706,7 +678,7 @@ func GetAllRotationSpellIds() map[string][]int32 {
 			Class:         proto.Class_ClassHunter,
 			Race:          proto.Race_RaceTroll,
 			Equipment:     &proto.EquipmentSpec{},
-			TalentsString: "000000",
+			TalentsString: "552332215252122531351-55552512553132531351-33323532512322313531351",
 		}, &proto.Player_Hunter{Hunter: &proto.Hunter{Options: &proto.Hunter_Options{ClassOptions: &proto.HunterOptions{}}}}), nil, nil, nil)},
 
 		// Mage
@@ -714,39 +686,39 @@ func GetAllRotationSpellIds() map[string][]int32 {
 			Class:         proto.Class_ClassMage,
 			Race:          proto.Race_RaceTroll,
 			Equipment:     &proto.EquipmentSpec{},
-			TalentsString: "000000",
+			TalentsString: "25525523122321523331251-5552323123233312531251-2535323313235313251551",
 		}, &proto.Player_Mage{Mage: &proto.Mage{Options: &proto.Mage_Options{ClassOptions: &proto.MageOptions{}}}}), nil, nil, nil)},
 
 		// Paladin
 		{Name: "holyPaladin", Raid: core.SinglePlayerRaidProto(core.WithSpec(&proto.Player{
 			Class:         proto.Class_ClassPaladin,
 			Equipment:     &proto.EquipmentSpec{},
-			TalentsString: "000000",
+			TalentsString: "55553122523132531351-5532513352332152521551-5523535132233125331351",
 		}, &proto.Player_HolyPaladin{HolyPaladin: &proto.HolyPaladin{Options: &proto.HolyPaladin_Options{ClassOptions: &proto.PaladinOptions{}}}}), nil, nil, nil)},
 		{Name: "protPaladin", Raid: core.SinglePlayerRaidProto(core.WithSpec(&proto.Player{
 			Class:         proto.Class_ClassPaladin,
 			Equipment:     &proto.EquipmentSpec{},
-			TalentsString: "000000",
+			TalentsString: "55553122523132531351-5532513352332152521551-5523535132233125331351",
 		}, &proto.Player_ProtectionPaladin{ProtectionPaladin: &proto.ProtectionPaladin{Options: &proto.ProtectionPaladin_Options{ClassOptions: &proto.PaladinOptions{}}}}), nil, nil, nil)},
 		{Name: "retPaladin", Raid: core.SinglePlayerRaidProto(core.WithSpec(&proto.Player{
 			Class:         proto.Class_ClassPaladin,
 			Race:          proto.Race_RaceBloodElf,
 			Equipment:     &proto.EquipmentSpec{},
-			TalentsString: "000000",
+			TalentsString: "55553122523132531351-5532513352332152521551-5523535132233125331351",
 		}, &proto.Player_RetributionPaladin{RetributionPaladin: &proto.RetributionPaladin{Options: &proto.RetributionPaladin_Options{ClassOptions: &proto.PaladinOptions{}}}}), nil, nil, nil)},
 
 		// Priest
 		{Name: "priest", Raid: core.SinglePlayerRaidProto(core.WithSpec(&proto.Player{
 			Class:         proto.Class_ClassPriest,
 			Equipment:     &proto.EquipmentSpec{},
-			TalentsString: "000000",
+			TalentsString: "5552323133525122531551-235551332322152531351-553252512251123251551",
 		}, &proto.Player_Priest{Priest: &proto.Priest{Options: &proto.Priest_Options{ClassOptions: &proto.PriestOptions{}}}}), nil, nil, nil)},
 
 		// Rogue
 		{Name: "rogue", Raid: core.SinglePlayerRaidProto(core.WithSpec(&proto.Player{
 			Class:         proto.Class_ClassRogue,
 			Equipment:     &proto.EquipmentSpec{},
-			TalentsString: "000000",
+			TalentsString: "325323125552132521551-325355212255515522321251-5522531332321213531351",
 		}, &proto.Player_Rogue{Rogue: &proto.Rogue{Options: &proto.Rogue_Options{ClassOptions: &proto.RogueOptions{}}}}), nil, nil, nil)},
 
 		// Shaman
@@ -754,26 +726,26 @@ func GetAllRotationSpellIds() map[string][]int32 {
 			Class:         proto.Class_ClassShaman,
 			Race:          proto.Race_RaceTroll,
 			Equipment:     &proto.EquipmentSpec{},
-			TalentsString: "000000",
+			TalentsString: "55233155233215351351-552523215552133531151-55235351355313515321",
 		}, &proto.Player_ElementalShaman{ElementalShaman: &proto.ElementalShaman{Options: &proto.ElementalShaman_Options{ClassOptions: &proto.ShamanOptions{}}}}), nil, nil, nil)},
 		{Name: "enhancementShaman", Raid: core.SinglePlayerRaidProto(core.WithSpec(&proto.Player{
 			Class:         proto.Class_ClassShaman,
 			Race:          proto.Race_RaceTroll,
 			Equipment:     &proto.EquipmentSpec{},
-			TalentsString: "000000",
+			TalentsString: "55233155233215351351-552523215552133531151-55235351355313515321",
 		}, &proto.Player_EnhancementShaman{EnhancementShaman: &proto.EnhancementShaman{Options: &proto.EnhancementShaman_Options{ClassOptions: &proto.ShamanOptions{}}}}), nil, nil, nil)},
 		{Name: "restorationShaman", Raid: core.SinglePlayerRaidProto(core.WithSpec(&proto.Player{
 			Class:         proto.Class_ClassShaman,
 			Race:          proto.Race_RaceTroll,
 			Equipment:     &proto.EquipmentSpec{},
-			TalentsString: "000000",
+			TalentsString: "55233155233215351351-552523215552133531151-55235351355313515321",
 		}, &proto.Player_RestorationShaman{RestorationShaman: &proto.RestorationShaman{Options: &proto.RestorationShaman_Options{ClassOptions: &proto.ShamanOptions{}}}}), nil, nil, nil)},
 
 		// Warlock
 		{Name: "warlock", Raid: core.SinglePlayerRaidProto(core.WithSpec(&proto.Player{
 			Class:         proto.Class_ClassWarlock,
 			Equipment:     &proto.EquipmentSpec{},
-			TalentsString: "000000",
+			TalentsString: "552222251223511551231-2352333133252123531351-555522512232513531351",
 			Profession1:   proto.Profession_Herbalism,
 		}, &proto.Player_Warlock{Warlock: &proto.Warlock{Options: &proto.Warlock_Options{ClassOptions: &proto.WarlockOptions{}}}}), nil, nil, nil)},
 
@@ -781,12 +753,12 @@ func GetAllRotationSpellIds() map[string][]int32 {
 		{Name: "DpsWarrior", Raid: core.SinglePlayerRaidProto(core.WithSpec(&proto.Player{
 			Class:         proto.Class_ClassWarrior,
 			Equipment:     &proto.EquipmentSpec{},
-			TalentsString: "000000",
+			TalentsString: "35325321352515523321251-555531355252122531251-2355511333322123531351",
 		}, &proto.Player_DpsWarrior{DpsWarrior: &proto.DpsWarrior{Options: &proto.DpsWarrior_Options{ClassOptions: &proto.WarriorOptions{}}}}), nil, nil, nil)},
 		{Name: "protectionWarrior", Raid: core.SinglePlayerRaidProto(core.WithSpec(&proto.Player{
 			Class:         proto.Class_ClassWarrior,
 			Equipment:     &proto.EquipmentSpec{},
-			TalentsString: "000000",
+			TalentsString: "35325321352515523321251-555531355252122531251-2355511333322123531351",
 		}, &proto.Player_ProtectionWarrior{ProtectionWarrior: &proto.ProtectionWarrior{Options: &proto.ProtectionWarrior_Options{ClassOptions: &proto.WarriorOptions{}}}}), nil, nil, nil)},
 	}
 

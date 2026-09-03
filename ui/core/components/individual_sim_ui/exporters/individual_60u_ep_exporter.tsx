@@ -6,7 +6,7 @@ import { IndividualExporter } from './individual_exporter';
 
 export class Individual60UEPExporter<SpecType extends Spec> extends IndividualExporter<SpecType> {
 	constructor(parent: HTMLElement, simUI: IndividualSimUI<SpecType>) {
-		super(parent, simUI, { title: 'Sixty Upgrades Cataclysm EP Export', allowDownload: true });
+		super(parent, simUI, { title: 'Sixty Upgrades EP Export', allowDownload: true });
 	}
 
 	getData(): string {

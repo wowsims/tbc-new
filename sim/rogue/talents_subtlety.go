@@ -71,7 +71,7 @@ func (rogue *Rogue) registerInitiative() {
 		ActionID:       core.ActionID{SpellID: 13980},
 		ProcChance:     0.25 * float64(rogue.Talents.Initiative),
 		Callback:       core.CallbackOnSpellHitDealt,
-		Outcome:        core.OutcomeCrit,
+		Outcome:        core.OutcomeLanded,
 		ClassSpellMask: RogueSpellGarrote | RogueSpellAmbush,
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			rogue.AddComboPoints(sim, 1, initMetrics)
@@ -119,7 +119,7 @@ func (rogue *Rogue) registerGhostlyStrike() {
 
 			// Dodge Aura NYI
 
-			baseDamage := rogue.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower(target))
+			baseDamage := rogue.MHWeaponDamage(sim, spell.MeleeAttackPower(target))
 			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialHitAndCrit)
 			if result.Landed() {
 				rogue.AddComboPoints(sim, 1, pointMetric)
@@ -212,6 +212,12 @@ func (rogue *Rogue) registerDirtyDeeds() {
 		return
 	}
 
+	rogue.AddStaticMod(core.SpellModConfig{
+		Kind:      core.SpellMod_PowerCost_Flat,
+		ClassMask: RogueSpellGarrote,
+		IntValue:  -10 * rogue.Talents.DirtyDeeds,
+	})
+
 	ddAura := rogue.GetOrRegisterAura(core.Aura{
 		Label:    "Dirty Deeds",
 		ActionID: core.ActionID{SpellID: 14083},
@@ -284,7 +290,7 @@ func (rogue *Rogue) registerMasterOfSubtlety() {
 		Label:    "Master of Subtlety",
 		ActionID: core.ActionID{SpellID: 31223},
 		Duration: time.Second * 6,
-	}).AttachAdditivePseudoStatBuff(&rogue.PseudoStats.DamageDealtMultiplier, 1+bonus)
+	}).AttachMultiplicativePseudoStatBuff(&rogue.PseudoStats.DamageDealtMultiplier, 1+bonus)
 
 	// Activated in stealth.go
 }

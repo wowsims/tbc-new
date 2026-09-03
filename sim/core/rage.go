@@ -48,7 +48,10 @@ func (unit *Unit) EnableRageBar(options RageBarOptions) {
 			if unit.GetCurrentPowerBar() != RageBar {
 				return
 			}
-			if !result.Landed() {
+			// Dodges and parries don't count as "landed", but they do still
+			// generate Rage (see below), so they can't be filtered out here.
+			// Misses generate no Rage.
+			if !result.Landed() && !result.Outcome.Matches(OutcomeDodge|OutcomeParry) {
 				return
 			}
 
@@ -240,9 +243,10 @@ func newRageCost(spell *Spell, options RageCostOptions) *SpellCost {
 	}
 
 	return &SpellCost{
-		spell:           spell,
-		BaseCost:        options.Cost,
-		PercentModifier: 1,
+		spell:                   spell,
+		BaseCost:                options.Cost,
+		PercentModifier:         1,
+		AdditivePercentModifier: 1,
 		ResourceCostImpl: &RageCost{
 			Refund:          options.Refund,
 			RefundMetrics:   options.RefundMetrics,

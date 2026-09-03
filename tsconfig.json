@@ -9,11 +9,12 @@
 		"pretty": false,
 		"allowJs": true,
 		"resolveJsonModule": true,
+		"types": ["node", "gtag.js", "golang-wasm-exec"],
 		"esModuleInterop": true,
-		"baseUrl": ".",
 		"jsx": "preserve",
 		"jsxFactory": "element",
-		"jsxFragmentFactory": "fragment"
+		"jsxFragmentFactory": "fragment",
+		"skipLibCheck": true
 	},
 	"include": ["."],
 	"exclude": ["node_modules", "dist", "binary_dist", ".history", "ui/core/index.ts", "ui/core/proto/*"]

@@ -41,6 +41,7 @@ func createMorogrimPreset(raidPrefix string, raidSize int32, bossHealth float64,
 			DamageSpread:  morogrimMeleeDamageSpread,
 
 			ParryHaste: true,
+			CanCrush:   true,
 
 			TargetInputs: morogrimTargetInputs(),
 		},
@@ -100,15 +101,16 @@ func (ai *MorogrimAI) Initialize(target *core.Target, config *proto.Target) {
 
 func (ai *MorogrimAI) registerTidalWave(disableSlow bool) {
 	duration := time.Second * 15
+	if ai.MainTank != nil {
+		ai.TidalWaveAura = ai.MainTank.RegisterAura(core.Aura{
+			Label:    "Tidal Wave",
+			ActionID: core.ActionID{SpellID: 37730},
+			Duration: duration,
+		})
 
-	ai.TidalWaveAura = ai.MainTank.RegisterAura(core.Aura{
-		Label:    "Tidal Wave",
-		ActionID: core.ActionID{SpellID: 37730},
-		Duration: duration,
-	})
-
-	if !disableSlow {
-		ai.TidalWaveAura.AttachMultiplyMeleeSpeed(1.0 / 4.0)
+		if !disableSlow {
+			ai.TidalWaveAura.AttachMultiplyMeleeSpeed(1.0 / 4.0)
+		}
 	}
 
 	rollTidalWaveCD := func(sim *core.Simulation) time.Duration {
@@ -139,8 +141,10 @@ func (ai *MorogrimAI) registerTidalWave(disableSlow bool) {
 		DamageMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			spell.CalcAndDealDamage(sim, target, sim.Roll(3938, 5062), spell.OutcomeMagicHit)
-			ai.TidalWaveAura.Activate(sim)
+			result := spell.CalcAndDealDamage(sim, target, sim.Roll(3938, 5062), spell.OutcomeMagicHit)
+			if result.Landed() && ai.TidalWaveAura != nil {
+				ai.TidalWaveAura.Activate(sim)
+			}
 			spell.CD.Set(sim.CurrentTime + rollTidalWaveCD(sim))
 		},
 	})

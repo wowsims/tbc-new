@@ -2,6 +2,7 @@
 // These don't need to be in a separate file but it keeps things cleaner.
 import * as InputHelpers from '../../core/components/input_helpers';
 import { Spec } from '../../core/proto/common';
+import * as SharedPaladinInputs from '../inputs';
 
 export const PaladinRotationConfig = {
 	inputs: [
@@ -12,13 +13,9 @@ export const PaladinRotationConfig = {
 			changeEmitter: player => player.rotationChangeEmitter,
 			getValue: player => player.getSimpleRotation().useExorcism,
 		}),
-		InputHelpers.makeRotationBooleanInput<Spec.SpecRetributionPaladin>({
-			fieldName: 'useConsecrate',
-			label: 'Use Consecrate',
-			labelTooltip: 'If <b>true</b>, will use Consecrate in rotation. Exorcism is priority',
-			changeEmitter: player => player.rotationChangeEmitter,
-			getValue: player => player.getSimpleRotation().useConsecrate,
-		}),
+		SharedPaladinInputs.ConsecrationRankInput<Spec.SpecRetributionPaladin>(
+			'Which rank of Consecration to use in the rotation. Exorcism takes priority. Select <b>Do not use</b> to disable.',
+		),
 		InputHelpers.makeRotationNumberInput<Spec.SpecRetributionPaladin>({
 			fieldName: 'delayMajorCDs',
 			label: 'Delay Major CDs',
@@ -35,5 +32,8 @@ export const PaladinRotationConfig = {
 			changeEmitter: player => player.rotationChangeEmitter,
 			getValue: player => player.getSimpleRotation().prepullSotC,
 		}),
+		SharedPaladinInputs.AuraInput<Spec.SpecRetributionPaladin>(
+			'Which paladin aura to activate in the prepull. <b>Sanctity Aura</b> requires the talent. Pick <b>None</b> to skip casting an aura.',
+		),
 	],
 };

@@ -1,5 +1,5 @@
 import { Player } from '../../player';
-import { Class, ConsumesSpec, Drums, ItemSlot, Profession, Spec, Stat, TristateEffect } from '../../proto/common';
+import { Class, ConsumesSpec, Drums, ItemSlot, Profession, Race, Spec, Stat, TristateEffect } from '../../proto/common';
 import { Consumable } from '../../proto/db';
 import { ActionId } from '../../proto_utils/action_id';
 import { EventID, TypedEvent } from '../../typed_event';
@@ -100,10 +100,16 @@ export const ChippedCrackedPowerCore = {
 	actionId: ActionId.fromItemId(23381),
 	value: 23381,
 };
+export const ConjuredNightmareSeed = {
+	actionId: ActionId.fromItemId(22797),
+	value: 22797,
+	showWhen: <SpecType extends Spec>(player: Player<SpecType>) => player.getPlayerSpec().isTankSpec,
+};
 
 export const CONJURED_CONFIG = [
 	{ config: ConjuredRogueThistleTea, stats: [] },
 	{ config: ConjuredHealthstone, stats: [Stat.StatStamina] },
+	{ config: ConjuredNightmareSeed, stats: [Stat.StatStamina] },
 	{ config: ConjuredDarkRune, stats: [Stat.StatIntellect] },
 	{ config: ConjuredFlameCap, stats: [] },
 	{ config: ConjuredCrackedPowerCore, stats: [Stat.StatSpellDamage] },
@@ -183,12 +189,12 @@ export const SupWizardOil = {
 	value: 28017,
 };
 // Stones
-export const AdamantiteSharpeningMH = {
+export const AdamantiteSharpeningStoneMH = {
 	actionId: ActionId.fromItemId(23529),
 	value: 29453,
 	showWhen: (player: Player<any>) => player.getGear().hasSharpMHWeapon(),
 };
-export const AdamantiteWeightMH = {
+export const AdamantiteWeightstoneMH = {
 	actionId: ActionId.fromItemId(28421),
 	value: 34340,
 	showWhen: (player: Player<any>) => player.getGear().hasBluntMHWeapon(),
@@ -199,12 +205,12 @@ export const ConsecratedSharpeningStoneMH = {
 	showWhen: (player: Player<any>) => player.getGear().hasMHWeapon(),
 };
 
-export const AdamantiteSharpeningOH = {
+export const AdamantiteSharpeningStoneOH = {
 	actionId: ActionId.fromItemId(23529),
 	value: 29453,
 	showWhen: (player: Player<any>) => player.getGear().hasSharpOHWeapon(),
 };
-export const AdamantiteWeightOH = {
+export const AdamantiteWeightstoneOH = {
 	actionId: ActionId.fromItemId(28421),
 	value: 34340,
 	showWhen: (player: Player<any>) => player.getGear().hasBluntOHWeapon(),
@@ -259,8 +265,8 @@ export const IMBUE_CONFIG_MH = [
 	{ config: ManaOil, stats: [Stat.StatHealingPower] },
 	{ config: BrilWizardOil, stats: [Stat.StatSpellDamage] },
 	{ config: SupWizardOil, stats: [Stat.StatSpellDamage] },
-	{ config: AdamantiteSharpeningMH, stats: [Stat.StatAttackPower] },
-	{ config: AdamantiteWeightMH, stats: [Stat.StatAttackPower] },
+	{ config: AdamantiteSharpeningStoneMH, stats: [Stat.StatAttackPower] },
+	{ config: AdamantiteWeightstoneMH, stats: [Stat.StatAttackPower] },
 	{ config: ConsecratedSharpeningStoneMH, stats: [Stat.StatAttackPower] },
 	{ config: RogueInstantPoison, stats: [] },
 	{ config: RogueDeadlyPoison, stats: [] },
@@ -275,8 +281,8 @@ export const IMBUE_CONFIG_OH = [
 	{ config: ManaOil, stats: [Stat.StatHealingPower] },
 	{ config: BrilWizardOil, stats: [Stat.StatSpellDamage] },
 	{ config: SupWizardOil, stats: [Stat.StatSpellDamage] },
-	{ config: AdamantiteSharpeningOH, stats: [Stat.StatAttackPower] },
-	{ config: AdamantiteWeightOH, stats: [Stat.StatAttackPower] },
+	{ config: AdamantiteSharpeningStoneOH, stats: [Stat.StatAttackPower] },
+	{ config: AdamantiteWeightstoneOH, stats: [Stat.StatAttackPower] },
 	{ config: ConsecratedSharpeningStoneOH, stats: [Stat.StatAttackPower] },
 	{ config: RogueInstantPoison, stats: [] },
 	{ config: RogueDeadlyPoison, stats: [] },
@@ -287,9 +293,15 @@ export const IMBUE_CONFIG_OH = [
 	{ config: ShamanImbueWindfury, stats: [] },
 ] as ConsumableStatOption<number>[];
 
+// Specs that doesn't use Windfury and should always show imbues.
+const specsWithoutWindfury = [Spec.SpecFeralBearDruid, Spec.SpecFeralCatDruid];
+
 export const makeMHImbueInput = makeConsumeInputFactory({
 	consumesFieldName: 'mhImbueId',
-	showWhen: (player: Player<any>) => !player.getParty() || player.getParty()!.getBuffs().windfuryTotem == TristateEffect.TristateEffectMissing,
+	showWhen: (player: Player<any>) =>
+		specsWithoutWindfury.includes(player.getSpec()) ||
+		!player.getParty() ||
+		player.getParty()!.getBuffs().windfuryTotem == TristateEffect.TristateEffectMissing,
 	changedEvent: (player: Player<any>) => TypedEvent.onAny([player.getParty()!.changeEmitter]),
 });
 export const makeOHImbueInput = makeConsumeInputFactory({
@@ -397,6 +409,12 @@ export const NightmareSeed = makeBooleanConsumeInput({
 	actionId: () => ActionId.fromItemId(22797),
 	fieldName: 'nightmareSeed',
 	showWhen: (player: Player<any>) => player.getPlayerSpec().isTankSpec,
+});
+
+export const Bloodthistle = makeBooleanConsumeInput({
+	actionId: () => ActionId.fromItemId(22710),
+	fieldName: 'bloodthistle',
+	showWhen: (player: Player<any>) => player.getRace() === Race.RaceBloodElf,
 });
 
 ///////////////////////////////////////////////////////////////////////////

@@ -117,12 +117,18 @@ func (mage *Mage) registerArmorSpells() {
 		},
 	})
 
-	switch mage.Options.DefaultMageArmor {
-	case proto.MageArmor_MageArmorFrostArmor:
-		core.MakePermanent(iceArmor)
-	case proto.MageArmor_MageArmorMageArmor:
-		core.MakePermanent(mageArmor)
-	case proto.MageArmor_MageArmorMoltenArmor:
-		core.MakePermanent(moltenArmor)
+	if mage.Options.DefaultMageArmor != proto.MageArmor_MageArmorNone {
+		var defaultArmor *core.Aura
+		switch mage.Options.DefaultMageArmor {
+		case proto.MageArmor_MageArmorFrostArmor:
+			defaultArmor = iceArmor
+		case proto.MageArmor_MageArmorMageArmor:
+			defaultArmor = mageArmor
+		case proto.MageArmor_MageArmorMoltenArmor:
+			defaultArmor = moltenArmor
+		}
+
+		core.MakePermanent(defaultArmor)
+		defaultArmor.BuildPhase = core.CharacterBuildPhaseBuffs
 	}
 }

@@ -23,16 +23,6 @@
 					"additionalProperties": false,
 					"required": ["home", "simulations", "about", "toggle"]
 				},
-				"simulations": {
-					"type": "object",
-					"properties": {
-						"full_raid": {
-							"type": "string"
-						}
-					},
-					"additionalProperties": false,
-					"required": ["full_raid"]
-				},
 				"home": {
 					"type": "object",
 					"properties": {
@@ -67,7 +57,7 @@
 				}
 			},
 			"additionalProperties": false,
-			"required": ["navigation", "simulations", "home", "header"]
+			"required": ["navigation", "home", "header"]
 		},
 		"common": {
 			"type": "object",
@@ -118,12 +108,31 @@
 					"additionalProperties": false,
 					"required": ["1", "2", "3", "4", "5"]
 				},
+				"phase_names": {
+					"type": "object",
+					"properties": {
+						"1": {
+							"type": "string"
+						},
+						"2": {
+							"type": "string"
+						},
+						"3": {
+							"type": "string"
+						},
+						"4": {
+							"type": "string"
+						},
+						"5": {
+							"type": "string"
+						}
+					},
+					"additionalProperties": false,
+					"required": ["1", "2", "3", "4", "5"]
+				},
 				"tanks": {
 					"type": "object",
 					"properties": {
-						"title": {
-							"type": "string"
-						},
 						"main_tank": {
 							"type": "string"
 						},
@@ -138,7 +147,7 @@
 						}
 					},
 					"additionalProperties": false,
-					"required": ["title", "main_tank", "tank_2", "tank_3", "tank_4"]
+					"required": ["main_tank", "tank_2", "tank_3", "tank_4"]
 				},
 				"status": {
 					"type": "object",
@@ -930,6 +939,7 @@
 				"melee",
 				"any",
 				"phases",
+				"phase_names",
 				"tanks",
 				"status",
 				"mob_types",
@@ -1014,7 +1024,7 @@
 				"notifications": {
 					"type": "object",
 					"properties": {
-						"raid_sim_cancelled": {
+						"sim_cancelled": {
 							"type": "string"
 						},
 						"simulation_failed": {
@@ -1025,7 +1035,7 @@
 						}
 					},
 					"additionalProperties": false,
-					"required": ["raid_sim_cancelled", "simulation_failed", "failed_to_file_report"]
+					"required": ["sim_cancelled", "simulation_failed", "failed_to_file_report"]
 				},
 				"crash_report": {
 					"type": "object",
@@ -2492,6 +2502,19 @@
 									},
 									"additionalProperties": false,
 									"required": ["label", "tooltip"]
+								},
+								"fear_duration": {
+									"type": "object",
+									"properties": {
+										"label": {
+											"type": "string"
+										},
+										"tooltip": {
+											"type": "string"
+										}
+									},
+									"additionalProperties": false,
+									"required": ["label", "tooltip"]
 								}
 							},
 							"additionalProperties": false,
@@ -2506,7 +2529,8 @@
 								"yards",
 								"adds_respawn_time",
 								"adds_lifetime",
-								"adds_spawn_delay"
+								"adds_spawn_delay",
+								"fear_duration"
 							]
 						},
 						"duration": {
@@ -2615,19 +2639,6 @@
 						},
 						"advanced": {
 							"type": "string"
-						},
-						"use_health": {
-							"type": "object",
-							"properties": {
-								"label": {
-									"type": "string"
-								},
-								"tooltip": {
-									"type": "string"
-								}
-							},
-							"additionalProperties": false,
-							"required": ["label", "tooltip"]
 						},
 						"target": {
 							"type": "string"
@@ -2755,6 +2766,19 @@
 							"additionalProperties": false,
 							"required": ["label", "tooltip"]
 						},
+						"can_crush": {
+							"type": "object",
+							"properties": {
+								"label": {
+									"type": "string"
+								},
+								"tooltip": {
+									"type": "string"
+								}
+							},
+							"additionalProperties": false,
+							"required": ["label", "tooltip"]
+						},
 						"spell_school": {
 							"type": "object",
 							"properties": {
@@ -2804,7 +2828,6 @@
 						"duration_below_high_hp",
 						"encounter_preset",
 						"advanced",
-						"use_health",
 						"target",
 						"num_allies",
 						"min_base_damage",
@@ -2817,6 +2840,7 @@
 						"dual_wield",
 						"dual_wield_penalty",
 						"parry_haste",
+						"can_crush",
 						"spell_school",
 						"damage_spread",
 						"suppress_dodge",
@@ -2880,19 +2904,6 @@
 					},
 					"additionalProperties": false,
 					"required": ["title", "settings", "settings_name", "save_settings"]
-				},
-				"external_buffs": {
-					"type": "object",
-					"properties": {
-						"title": {
-							"type": "string"
-						},
-						"tooltip": {
-							"type": "string"
-						}
-					},
-					"additionalProperties": false,
-					"required": ["title", "tooltip"]
 				}
 			},
 			"additionalProperties": false,
@@ -2908,8 +2919,7 @@
 				"encounter",
 				"player",
 				"saved_encounters",
-				"saved_settings",
-				"external_buffs"
+				"saved_settings"
 			]
 		},
 		"talents_tab": {
@@ -3094,8 +3104,21 @@
 						"iterations": {
 							"type": "string"
 						},
-						"default_gems": {
+						"fallback_gems": {
 							"type": "string"
+						},
+						"inherit_upgrades": {
+							"type": "object",
+							"properties": {
+								"label": {
+									"type": "string"
+								},
+								"tooltip": {
+									"type": "string"
+								}
+							},
+							"additionalProperties": false,
+							"required": ["label", "tooltip"]
 						},
 						"freeze_ring": {
 							"type": "object",
@@ -3122,10 +3145,49 @@
 							},
 							"additionalProperties": false,
 							"required": ["label", "tooltip"]
+						},
+						"freeze_weapon": {
+							"type": "object",
+							"properties": {
+								"label": {
+									"type": "string"
+								},
+								"tooltip": {
+									"type": "string"
+								}
+							},
+							"additionalProperties": false,
+							"required": ["label", "tooltip"]
+						},
+						"freeze_weapon_types": {
+							"type": "object",
+							"properties": {
+								"mainhand_label": {
+									"type": "string"
+								},
+								"offhand_label": {
+									"type": "string"
+								},
+								"tooltip": {
+									"type": "string"
+								}
+							},
+							"additionalProperties": false,
+							"required": ["mainhand_label", "offhand_label", "tooltip"]
 						}
 					},
 					"additionalProperties": false,
-					"required": ["combinations_count", "combination_singular", "iterations", "default_gems", "freeze_ring", "freeze_trinket"]
+					"required": [
+						"combinations_count",
+						"combination_singular",
+						"iterations",
+						"fallback_gems",
+						"inherit_upgrades",
+						"freeze_ring",
+						"freeze_trinket",
+						"freeze_weapon",
+						"freeze_weapon_types"
+					]
 				},
 				"progress": {
 					"type": "object",
@@ -3133,10 +3195,13 @@
 						"total_combinations": {
 							"type": "string"
 						},
-						"refining_rounds": {
+						"reforging_rounds": {
 							"type": "string"
 						},
-						"simulations_complete": {
+						"baseline_round": {
+							"type": "string"
+						},
+						"refining_rounds": {
 							"type": "string"
 						},
 						"iterations_complete": {
@@ -3147,7 +3212,7 @@
 						}
 					},
 					"additionalProperties": false,
-					"required": ["total_combinations", "refining_rounds", "simulations_complete", "iterations_complete", "seconds_remaining"]
+					"required": ["total_combinations", "reforging_rounds", "baseline_round", "refining_rounds", "iterations_complete", "seconds_remaining"]
 				},
 				"notifications": {
 					"type": "object",
@@ -3363,10 +3428,10 @@
 								"create": {
 									"type": "string"
 								},
-								"extract": {
+								"nameConflict": {
 									"type": "string"
 								},
-								"nameConflict": {
+								"extract": {
 									"type": "string"
 								},
 								"rename": {
@@ -3377,13 +3442,7 @@
 								}
 							},
 							"additionalProperties": false,
-							"required": [
-								"create",
-								"extract",
-								"nameConflict",
-								"rename",
-								"renameConfirm"
-							]
+							"required": ["create", "nameConflict", "extract", "rename", "renameConfirm"]
 						},
 						"prePullActions": {
 							"type": "object",
@@ -3514,10 +3573,8 @@
 									"type": "string"
 								}
 							},
-							"required": [
-								"name",
-								"nameLabel"
-							]
+							"additionalProperties": false,
+							"required": ["name", "nameLabel"]
 						},
 						"prepull_actions": {
 							"type": "object",
@@ -4056,45 +4113,6 @@
 									"additionalProperties": false,
 									"required": ["label", "tooltip"]
 								},
-								"optimal_rotation_action": {
-									"type": "object",
-									"properties": {
-										"label": {
-											"type": "string"
-										},
-										"tooltip": {
-											"type": "string"
-										},
-										"wrath_weave": {
-											"type": "object",
-											"properties": {
-												"label": {
-													"type": "string"
-												},
-												"tooltip": {
-													"type": "string"
-												}
-											},
-											"additionalProperties": false,
-											"required": ["label", "tooltip"]
-										}
-									},
-									"additionalProperties": false,
-									"required": ["label", "tooltip", "wrath_weave"]
-								},
-								"guardian_hotw_dps_rotation": {
-									"type": "object",
-									"properties": {
-										"label": {
-											"type": "string"
-										},
-										"tooltip": {
-											"type": "string"
-										}
-									},
-									"additionalProperties": false,
-									"required": ["label", "tooltip"]
-								},
 								"warlock_cast_assigned_curse": {
 									"type": "object",
 									"properties": {
@@ -4135,8 +4153,6 @@
 								"item_swap",
 								"move",
 								"custom_rotation",
-								"optimal_rotation_action",
-								"guardian_hotw_dps_rotation",
 								"warlock_cast_assigned_curse"
 							]
 						},
@@ -4519,6 +4535,19 @@
 									"additionalProperties": false,
 									"required": ["label", "tooltip"]
 								},
+								"current_mana_regen": {
+									"type": "object",
+									"properties": {
+										"label": {
+											"type": "string"
+										},
+										"tooltip": {
+											"type": "string"
+										}
+									},
+									"additionalProperties": false,
+									"required": ["label", "tooltip"]
+								},
 								"current_rage": {
 									"type": "object",
 									"properties": {
@@ -4623,7 +4652,7 @@
 									"additionalProperties": false,
 									"required": ["label", "tooltip"]
 								},
-								"energy_regen_per_second": {
+								"time_to_next_energy_tick": {
 									"type": "object",
 									"properties": {
 										"label": {
@@ -5408,32 +5437,6 @@
 									"additionalProperties": false,
 									"required": ["label", "tooltip"]
 								},
-								"cat_excess_energy": {
-									"type": "object",
-									"properties": {
-										"label": {
-											"type": "string"
-										},
-										"tooltip": {
-											"type": "string"
-										}
-									},
-									"additionalProperties": false,
-									"required": ["label", "tooltip"]
-								},
-								"cat_new_savage_roar_duration": {
-									"type": "object",
-									"properties": {
-										"label": {
-											"type": "string"
-										},
-										"tooltip": {
-											"type": "string"
-										}
-									},
-									"additionalProperties": false,
-									"required": ["label", "tooltip"]
-								},
 								"warlock_assigned_curse_is_active": {
 									"type": "object",
 									"properties": {
@@ -5565,6 +5568,32 @@
 										"align_cd_end_tooltip"
 									]
 								},
+								"selected_potion": {
+									"type": "object",
+									"properties": {
+										"label": {
+											"type": "string"
+										},
+										"tooltip": {
+											"type": "string"
+										}
+									},
+									"additionalProperties": false,
+									"required": ["label", "tooltip"]
+								},
+								"selected_conjured": {
+									"type": "object",
+									"properties": {
+										"label": {
+											"type": "string"
+										},
+										"tooltip": {
+											"type": "string"
+										}
+									},
+									"additionalProperties": false,
+									"required": ["label", "tooltip"]
+								},
 								"offset": {
 									"type": "object",
 									"properties": {
@@ -5612,6 +5641,7 @@
 								"current_mana",
 								"current_mana_percent",
 								"max_mana",
+								"current_mana_regen",
 								"current_rage",
 								"max_rage",
 								"current_focus",
@@ -5620,7 +5650,7 @@
 								"estimated_time_to_target_focus",
 								"current_energy",
 								"max_energy",
-								"energy_regen_per_second",
+								"time_to_next_energy_tick",
 								"estimated_time_to_target_energy",
 								"current_combo_points",
 								"max_combo_points",
@@ -5679,8 +5709,6 @@
 								"sequence_is_ready",
 								"sequence_time_to_ready",
 								"totem_remaining_time",
-								"cat_excess_energy",
-								"cat_new_savage_roar_duration",
 								"warlock_assigned_curse_is_active",
 								"warlock_is_assigned_curse",
 								"protection_paladin_damage_taken_last_global",
@@ -5689,6 +5717,8 @@
 								"aura_icd_is_ready_with_reaction_time",
 								"overlap",
 								"multiple_cd_usages",
+								"selected_potion",
+								"selected_conjured",
 								"offset"
 							]
 						},
@@ -5854,9 +5884,6 @@
 								"feral_druid": {
 									"type": "string"
 								},
-								"guardian_druid": {
-									"type": "string"
-								},
 								"shaman": {
 									"type": "string"
 								},
@@ -5922,7 +5949,6 @@
 								"sequences",
 								"misc",
 								"feral_druid",
-								"guardian_druid",
 								"shaman",
 								"warlock",
 								"mage",
@@ -6309,14 +6335,24 @@
 										"finishing_move": {
 											"type": "object",
 											"properties": {
-												"label": {"type": "string"},
-												"tooltip": {"type": "string"},
+												"label": {
+													"type": "string"
+												},
+												"tooltip": {
+													"type": "string"
+												},
 												"values": {
 													"type": "object",
 													"properties": {
-														"rip": {"type": "string"},
-														"bite": {"type": "string"},
-														"none": {"type": "string"}
+														"rip": {
+															"type": "string"
+														},
+														"bite": {
+															"type": "string"
+														},
+														"none": {
+															"type": "string"
+														}
 													},
 													"additionalProperties": false,
 													"required": ["rip", "bite", "none"]
@@ -6327,112 +6363,199 @@
 										},
 										"biteweave": {
 											"type": "object",
-											"properties": {"label": {"type": "string"}, "tooltip": {"type": "string"}},
+											"properties": {
+												"label": {
+													"type": "string"
+												},
+												"tooltip": {
+													"type": "string"
+												}
+											},
 											"additionalProperties": false,
 											"required": ["label", "tooltip"]
 										},
 										"ripweave": {
 											"type": "object",
-											"properties": {"label": {"type": "string"}, "tooltip": {"type": "string"}},
+											"properties": {
+												"label": {
+													"type": "string"
+												},
+												"tooltip": {
+													"type": "string"
+												}
+											},
 											"additionalProperties": false,
 											"required": ["label", "tooltip"]
 										},
 										"rip_min_combo_points": {
 											"type": "object",
-											"properties": {"label": {"type": "string"}, "tooltip": {"type": "string"}},
+											"properties": {
+												"label": {
+													"type": "string"
+												},
+												"tooltip": {
+													"type": "string"
+												}
+											},
 											"additionalProperties": false,
 											"required": ["label", "tooltip"]
 										},
 										"bite_min_combo_points": {
 											"type": "object",
-											"properties": {"label": {"type": "string"}, "tooltip": {"type": "string"}},
+											"properties": {
+												"label": {
+													"type": "string"
+												},
+												"tooltip": {
+													"type": "string"
+												}
+											},
 											"additionalProperties": false,
 											"required": ["label", "tooltip"]
 										},
 										"mangle_trick": {
 											"type": "object",
-											"properties": {"label": {"type": "string"}, "tooltip": {"type": "string"}},
+											"properties": {
+												"label": {
+													"type": "string"
+												},
+												"tooltip": {
+													"type": "string"
+												}
+											},
 											"additionalProperties": false,
 											"required": ["label", "tooltip"]
 										},
 										"rake_trick": {
 											"type": "object",
-											"properties": {"label": {"type": "string"}, "tooltip": {"type": "string"}},
+											"properties": {
+												"label": {
+													"type": "string"
+												},
+												"tooltip": {
+													"type": "string"
+												}
+											},
 											"additionalProperties": false,
 											"required": ["label", "tooltip"]
 										},
 										"maintain_faerie_fire": {
 											"type": "object",
-											"properties": {"label": {"type": "string"}, "tooltip": {"type": "string"}},
+											"properties": {
+												"label": {
+													"type": "string"
+												},
+												"tooltip": {
+													"type": "string"
+												}
+											},
 											"additionalProperties": false,
 											"required": ["label", "tooltip"]
 										}
 									},
 									"additionalProperties": false,
-									"required": ["finishing_move", "biteweave", "ripweave", "rip_min_combo_points", "bite_min_combo_points", "mangle_trick", "rake_trick", "maintain_faerie_fire"]
+									"required": [
+										"finishing_move",
+										"biteweave",
+										"ripweave",
+										"rip_min_combo_points",
+										"bite_min_combo_points",
+										"mangle_trick",
+										"rake_trick",
+										"maintain_faerie_fire"
+									]
+								},
+								"feral_bear": {
+									"type": "object",
+									"properties": {
+										"maul_rage_threshold": {
+											"type": "object",
+											"properties": {
+												"label": {
+													"type": "string"
+												},
+												"tooltip": {
+													"type": "string"
+												}
+											},
+											"additionalProperties": false,
+											"required": ["label", "tooltip"]
+										},
+										"swipe_usage": {
+											"type": "object",
+											"properties": {
+												"label": {
+													"type": "string"
+												},
+												"tooltip": {
+													"type": "string"
+												},
+												"values": {
+													"type": "object",
+													"properties": {
+														"never": {
+															"type": "string"
+														},
+														"with_enough_ap": {
+															"type": "string"
+														},
+														"spam": {
+															"type": "string"
+														}
+													},
+													"additionalProperties": false,
+													"required": ["never", "with_enough_ap", "spam"]
+												}
+											},
+											"additionalProperties": false,
+											"required": ["label", "tooltip", "values"]
+										},
+										"swipe_ap_threshold": {
+											"type": "object",
+											"properties": {
+												"label": {
+													"type": "string"
+												},
+												"tooltip": {
+													"type": "string"
+												}
+											},
+											"additionalProperties": false,
+											"required": ["label", "tooltip"]
+										},
+										"maintain_demo_roar": {
+											"type": "object",
+											"properties": {
+												"label": {
+													"type": "string"
+												},
+												"tooltip": {
+													"type": "string"
+												}
+											},
+											"additionalProperties": false,
+											"required": ["label", "tooltip"]
+										},
+										"maintain_faerie_fire": {
+											"type": "object",
+											"properties": {
+												"label": {
+													"type": "string"
+												},
+												"tooltip": {
+													"type": "string"
+												}
+											},
+											"additionalProperties": false,
+											"required": ["label", "tooltip"]
+										}
+									},
+									"additionalProperties": false,
+									"required": ["maul_rage_threshold", "swipe_usage", "swipe_ap_threshold", "maintain_demo_roar", "maintain_faerie_fire"]
 								}
 							},
 							"additionalProperties": false,
-							"required": ["feral_cat"]
-						},
-						"guardian": {
-							"type": "object",
-							"properties": {
-								"maintain_faerie_fire": {
-									"type": "object",
-									"properties": {
-										"label": {
-											"type": "string"
-										},
-										"tooltip": {
-											"type": "string"
-										}
-									},
-									"additionalProperties": false,
-									"required": ["label", "tooltip"]
-								},
-								"maintain_demo_roar": {
-									"type": "object",
-									"properties": {
-										"label": {
-											"type": "string"
-										},
-										"tooltip": {
-											"type": "string"
-										}
-									},
-									"additionalProperties": false,
-									"required": ["label", "tooltip"]
-								},
-								"demo_roar_refresh_leeway": {
-									"type": "object",
-									"properties": {
-										"label": {
-											"type": "string"
-										},
-										"tooltip": {
-											"type": "string"
-										}
-									},
-									"additionalProperties": false,
-									"required": ["label", "tooltip"]
-								},
-								"pulverize_refresh_leeway": {
-									"type": "object",
-									"properties": {
-										"label": {
-											"type": "string"
-										},
-										"tooltip": {
-											"type": "string"
-										}
-									},
-									"additionalProperties": false,
-									"required": ["label", "tooltip"]
-								}
-							},
-							"additionalProperties": false,
-							"required": ["maintain_faerie_fire", "maintain_demo_roar", "demo_roar_refresh_leeway", "pulverize_refresh_leeway"]
+							"required": ["feral_cat", "feral_bear"]
 						},
 						"rogue": {
 							"type": "object",
@@ -6551,19 +6674,6 @@
 									"additionalProperties": false,
 									"required": ["label", "tooltip"]
 								},
-								"weave_only_raptor": {
-									"type": "object",
-									"properties": {
-										"label": {
-											"type": "string"
-										},
-										"tooltip": {
-											"type": "string"
-										}
-									},
-									"additionalProperties": false,
-									"required": ["label", "tooltip"]
-								},
 								"time_to_weave": {
 									"type": "object",
 									"properties": {
@@ -6634,7 +6744,6 @@
 							"required": [
 								"sting",
 								"melee_weave",
-								"weave_only_raptor",
 								"time_to_weave",
 								"use_multi",
 								"use_arcane",
@@ -6726,7 +6835,7 @@
 						}
 					},
 					"additionalProperties": false,
-					"required": ["druid", "guardian", "rogue", "shaman", "warlock", "hunter", "warrior"]
+					"required": ["druid", "rogue", "shaman", "warlock", "hunter", "warrior"]
 				}
 			},
 			"additionalProperties": false,
@@ -6754,9 +6863,6 @@
 							"type": "string"
 						},
 						"all_targets": {
-							"type": "string"
-						},
-						"all_players": {
 							"type": "string"
 						},
 						"target_number": {
@@ -6796,6 +6902,9 @@
 									},
 									"additionalProperties": false,
 									"required": ["rotation", "dps", "threat"]
+								},
+								"show_gcd": {
+									"type": "string"
 								},
 								"chart_options": {
 									"type": "object",
@@ -6846,12 +6955,15 @@
 								}
 							},
 							"additionalProperties": false,
-							"required": ["disclaimer", "note", "chart_types", "chart_options", "tooltips"]
+							"required": ["disclaimer", "note", "chart_types", "show_gcd", "chart_options", "tooltips"]
 						},
 						"logs": {
 							"type": "object",
 							"properties": {
 								"top_button": {
+									"type": "string"
+								},
+								"export_button": {
 									"type": "string"
 								},
 								"time_column": {
@@ -7130,12 +7242,6 @@
 								"damage_avg_cast": {
 									"type": "string"
 								},
-								"player_damage": {
-									"type": "string"
-								},
-								"player_damage_taken": {
-									"type": "string"
-								},
 								"damage_taken_per_encounter": {
 									"type": "string"
 								},
@@ -7170,8 +7276,6 @@
 							"additionalProperties": false,
 							"required": [
 								"damage_avg_cast",
-								"player_damage",
-								"player_damage_taken",
 								"damage_taken_per_encounter",
 								"healing_per_encounter",
 								"threat_per_encounter",
@@ -7289,7 +7393,6 @@
 						"sim_1_iteration",
 						"sim_1_death",
 						"all_targets",
-						"all_players",
 						"target_number",
 						"damage",
 						"timeline",
@@ -7779,10 +7882,13 @@
 						},
 						"unspent_talent_points": {
 							"type": "string"
+						},
+						"custom_ep_not_enabled": {
+							"type": "string"
 						}
 					},
 					"additionalProperties": false,
-					"required": ["meta_gem_disabled", "profession_requirement", "too_many_jc_gems", "unspent_talent_points"]
+					"required": ["meta_gem_disabled", "profession_requirement", "too_many_jc_gems", "unspent_talent_points", "custom_ep_not_enabled"]
 				},
 				"buttons": {
 					"type": "object",
@@ -8509,6 +8615,9 @@
 								},
 								"can_raise_by": {
 									"type": "string"
+								},
+								"eWS": {
+									"type": "string"
 								}
 							},
 							"additionalProperties": false,
@@ -8527,7 +8636,8 @@
 								"to_exp_cap",
 								"spec_offsets",
 								"final_crit_cap",
-								"can_raise_by"
+								"can_raise_by",
+								"eWS"
 							]
 						},
 						"attack_table": {

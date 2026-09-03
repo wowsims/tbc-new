@@ -33,7 +33,7 @@ func (paladin *Paladin) registerConsecration(rankConfig shared.SpellRankConfig) 
 	minDamage := rankConfig.MinDamage
 	coefficient := rankConfig.Coefficient
 
-	consecration := paladin.RegisterSpell(core.SpellConfig{
+	paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: spellID},
 		SpellSchool:    core.SpellSchoolHoly,
 		ProcMask:       core.ProcMaskSpellDamage,
@@ -65,18 +65,22 @@ func (paladin *Paladin) registerConsecration(rankConfig shared.SpellRankConfig) 
 				ActionID: core.ActionID{SpellID: spellID},
 				Label:    "Consecration" + paladin.Label + " " + rankConfig.GetRankLabel(),
 			},
-			NumberOfTicks:    8,
+			NumberOfTicks:    7,
 			TickLength:       time.Second * 1,
 			BonusCoefficient: coefficient,
 			OnTick: func(sim *core.Simulation, _ *core.Unit, dot *core.Dot) {
-				dot.Spell.CalcAndDealPeriodicAoeDamage(sim, minDamage, dot.Spell.OutcomeAlwaysHit)
+				dot.Spell.CalcAndDealPeriodicAoeDamage(sim, minDamage, dot.OutcomeTickMagicHit)
 			},
 		},
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			spell.AOEDot().Apply(sim)
+			// Consecration does one hit check on cast but the ground effect will still be applied
+			// meaning it's only needed to proc things like Eye of Magtheridon (procs on resist)
+			spell.CalcAndDealOutcome(sim, target, spell.OutcomeMagicHit)
+
+			dot := spell.AOEDot()
+			dot.Apply(sim)
+			dot.Spell.CalcAndDealPeriodicAoeDamage(sim, minDamage, dot.OutcomeTickMagicHit)
 		},
 	})
-
-	paladin.Consecrations = append(paladin.Consecrations, consecration)
 }

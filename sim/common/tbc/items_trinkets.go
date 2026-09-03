@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
+	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
@@ -256,38 +257,6 @@ func init() {
 		})
 	})
 
-	// Hourglass of the Unraveller
-	core.NewItemEffect(28034, func(agent core.Agent) {
-		character := agent.GetCharacter()
-		duration := time.Second * 10
-		value := 300.0
-
-		aura := character.NewTemporaryStatsAura(
-			"Rage of the Unraveller",
-			core.ActionID{SpellID: 33649},
-			stats.Stats{stats.AttackPower: value, stats.RangedAttackPower: value},
-			duration,
-		)
-
-		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:              "Hourglass of the Unraveller",
-			ActionID:          core.ActionID{ItemID: 28034},
-			SpellFlagsExclude: core.SpellFlagSuppressEquipProcs,
-			ProcChance:        0.1,
-			ICD:               time.Second * 50,
-			ProcMask:          core.ProcMaskMeleeOrRanged,
-			Outcome:           core.OutcomeCrit,
-			Callback:          core.CallbackOnSpellHitDealt,
-			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-				aura.Activate(sim)
-			},
-		})
-
-		eligibleSlots := character.ItemSwap.EligibleSlotsForItem(28034)
-		character.AddStatProcBuff(28034, aura, false, eligibleSlots)
-		character.ItemSwap.RegisterProc(28034, procAura)
-	})
-
 	// Romulo's Poison Vial
 	core.NewItemEffect(28579, func(agent core.Agent) {
 		character := agent.GetCharacter()
@@ -483,7 +452,7 @@ func init() {
 			RequireDamageDealt: true,
 			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 				threatReduction := 150.0
-				if spell.ProcMask.Matches(core.ProcMaskSpellDamageProc) {
+				if spell.ProcMask.Matches(core.ProcMaskSpellProc) {
 					threatReduction = 1000
 				}
 				spell.FlatThreatBonus -= threatReduction
@@ -493,36 +462,6 @@ func init() {
 		})
 
 		character.ItemSwap.RegisterProc(30621, procAura)
-	})
-
-	// Sextant of Unstable Currents
-	core.NewItemEffect(30626, func(agent core.Agent) {
-		character := agent.GetCharacter()
-
-		value := 190.0
-		aura := character.NewTemporaryStatsAura(
-			"Unstable Currents",
-			core.ActionID{SpellID: 38348},
-			stats.Stats{stats.SpellDamage: value, stats.HealingPower: value},
-			time.Second*15,
-		)
-
-		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:               "Sextant of Unstable Currents",
-			ActionID:           core.ActionID{ItemID: 30626},
-			ProcChance:         0.2,
-			ICD:                time.Second * 45,
-			Outcome:            core.OutcomeCrit,
-			Callback:           core.CallbackOnSpellHitDealt,
-			RequireDamageDealt: true,
-			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-				aura.Activate(sim)
-			},
-		})
-
-		eligibleSlots := character.ItemSwap.EligibleSlotsForItem(30626)
-		character.AddStatProcBuff(38348, aura, false, eligibleSlots)
-		character.ItemSwap.RegisterProc(30626, procAura)
 	})
 
 	// Darkmoon Card: Crusade
@@ -647,60 +586,12 @@ func init() {
 			RequireDamageDealt: true,
 			Outcome:            core.OutcomeLanded,
 			Callback:           core.CallbackOnSpellHitTaken,
-			Handler: func(sim *core.Simulation, _ *core.Spell, result *core.SpellResult) {
-				spell.Cast(sim, result.Target)
+			Handler: func(sim *core.Simulation, triggeringSpell *core.Spell, _ *core.SpellResult) {
+				spell.Cast(sim, triggeringSpell.Unit)
 			},
 		})
 
 		character.ItemSwap.RegisterProc(31858, procAura)
-	})
-
-	// Blackened Naaru Sliver
-	core.NewItemEffect(34427, func(agent core.Agent) {
-		character := agent.GetCharacter()
-
-		aura := core.MakeStackingAura(character, core.StackingStatAura{
-			Aura: core.Aura{
-				Label:     "Combat Insight",
-				ActionID:  core.ActionID{SpellID: 45041},
-				Duration:  time.Second * 20,
-				MaxStacks: 10,
-			},
-			BonusPerStack: stats.Stats{stats.AttackPower: 44, stats.RangedAttackPower: 44},
-		})
-
-		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:            "Battle Trance",
-			MetricsActionID: core.ActionID{SpellID: 45040},
-			Duration:        time.Second * 20,
-			ProcMask:        core.ProcMaskMeleeOrRanged,
-			Outcome:         core.OutcomeLanded,
-			Callback:        core.CallbackOnSpellHitDealt,
-			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-				if aura.IsActive() {
-					aura.AddStack(sim)
-				}
-			},
-		})
-
-		triggerAura := character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:              "Blackened Naaru Sliver",
-			ActionID:          core.ActionID{ItemID: 34427},
-			SpellFlagsExclude: core.SpellFlagSuppressEquipProcs,
-			ICD:               time.Second * 45,
-			ProcChance:        0.1,
-			ProcMask:          core.ProcMaskMeleeOrRanged,
-			Outcome:           core.OutcomeLanded,
-			Callback:          core.CallbackOnSpellHitDealt,
-			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-				aura.Activate(sim)
-				procAura.Activate(sim)
-			},
-		})
-
-		eligibleSlots := character.ItemSwap.EligibleSlotsForItem(34427)
-		character.AddStatProcBuff(45041, aura, false, eligibleSlots)
-		character.ItemSwap.RegisterProc(34427, triggerAura)
 	})
 
 	// Commendation of Kael'thas
@@ -836,36 +727,6 @@ func init() {
 		character.ItemSwap.RegisterProc(28727, procAura)
 	})
 
-	// Memento of Tyrande
-	core.NewItemEffect(32496, func(agent core.Agent) {
-		character := agent.GetCharacter()
-
-		aura := character.NewTemporaryStatsAura(
-			"Wisdom",
-			core.ActionID{SpellID: 37656},
-			stats.Stats{stats.MP5: 76},
-			time.Second*15,
-		)
-
-		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:            "Memento of Tyrande",
-			Callback:        core.CallbackOnCastComplete,
-			ProcMask:        core.ProcMaskSpellDamage | core.ProcMaskSpellHealing,
-			MetricsActionID: core.ActionID{SpellID: 37655},
-			ClassSpellsOnly: true,
-			ProcChance:      0.1,
-			ICD:             time.Second * 50,
-
-			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-				aura.Activate(sim)
-			},
-		})
-
-		eligibleSlots := character.ItemSwap.EligibleSlotsForItem(32496)
-		character.AddStatProcBuff(37656, aura, false, eligibleSlots)
-		character.ItemSwap.RegisterProc(32496, procAura)
-	})
-
 	// Shifting Naaru Sliver
 	// Use: Conjures a Power Circle lasting for 15 sec.  While standing in this circle, the caster gains up to 320 spell damage and healing.
 	core.NewItemEffect(34429, func(agent core.Agent) {
@@ -899,5 +760,51 @@ func init() {
 			Type:     core.CooldownTypeDPS,
 			BuffAura: aura,
 		})
+	})
+
+	// Mark of the Champion (physical): +150 AP vs Undead and Demons.
+	core.NewItemEffect(23206, func(agent core.Agent) {
+		character := agent.GetCharacter()
+		bonus := stats.Stats{stats.AttackPower: 150, stats.RangedAttackPower: 150}
+		aura := core.MakePermanent(character.RegisterAura(core.Aura{
+			Label:    "Mark of the Champion (Physical)",
+			ActionID: core.ActionID{ItemID: 23206},
+		})).
+			ApplyOnGain(func(_ *core.Aura, _ *core.Simulation) {
+				for _, at := range character.AttackTables {
+					at.MobTypeBonusStats[proto.MobType_MobTypeUndead] = at.MobTypeBonusStats[proto.MobType_MobTypeUndead].Add(bonus)
+					at.MobTypeBonusStats[proto.MobType_MobTypeDemon] = at.MobTypeBonusStats[proto.MobType_MobTypeDemon].Add(bonus)
+				}
+			}).
+			ApplyOnExpire(func(_ *core.Aura, _ *core.Simulation) {
+				for _, at := range character.AttackTables {
+					at.MobTypeBonusStats[proto.MobType_MobTypeUndead] = at.MobTypeBonusStats[proto.MobType_MobTypeUndead].Subtract(bonus)
+					at.MobTypeBonusStats[proto.MobType_MobTypeDemon] = at.MobTypeBonusStats[proto.MobType_MobTypeDemon].Subtract(bonus)
+				}
+			})
+		character.ItemSwap.RegisterProc(23206, aura)
+	})
+
+	// Mark of the Champion (spell): +85 spell damage vs Undead and Demons.
+	core.NewItemEffect(23207, func(agent core.Agent) {
+		character := agent.GetCharacter()
+		bonus := stats.Stats{stats.SpellDamage: 85}
+		aura := core.MakePermanent(character.RegisterAura(core.Aura{
+			Label:    "Mark of the Champion (Spell)",
+			ActionID: core.ActionID{ItemID: 23207},
+		})).
+			ApplyOnGain(func(_ *core.Aura, _ *core.Simulation) {
+				for _, at := range character.AttackTables {
+					at.MobTypeBonusStats[proto.MobType_MobTypeUndead] = at.MobTypeBonusStats[proto.MobType_MobTypeUndead].Add(bonus)
+					at.MobTypeBonusStats[proto.MobType_MobTypeDemon] = at.MobTypeBonusStats[proto.MobType_MobTypeDemon].Add(bonus)
+				}
+			}).
+			ApplyOnExpire(func(_ *core.Aura, _ *core.Simulation) {
+				for _, at := range character.AttackTables {
+					at.MobTypeBonusStats[proto.MobType_MobTypeUndead] = at.MobTypeBonusStats[proto.MobType_MobTypeUndead].Subtract(bonus)
+					at.MobTypeBonusStats[proto.MobType_MobTypeDemon] = at.MobTypeBonusStats[proto.MobType_MobTypeDemon].Subtract(bonus)
+				}
+			})
+		character.ItemSwap.RegisterProc(23207, aura)
 	})
 }

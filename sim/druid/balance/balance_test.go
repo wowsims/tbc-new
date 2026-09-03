@@ -3,6 +3,7 @@ package balance
 import (
 	"testing"
 
+	"github.com/wowsims/tbc/sim/common"
 	_ "github.com/wowsims/tbc/sim/common" // imported to get caster sets included. (we use spellfire here)
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
@@ -10,6 +11,7 @@ import (
 
 func init() {
 	RegisterBalanceDruid()
+	common.RegisterAllEffects()
 }
 
 func TestBalance(t *testing.T) {
@@ -29,8 +31,8 @@ func TestBalance(t *testing.T) {
 			OtherGearSets: []core.GearSetCombo{
 				core.GetGearSet("../../../ui/druid/balance/gear_sets", "p2_a"),
 				core.GetGearSet("../../../ui/druid/balance/gear_sets", "p3"),
-				core.GetGearSet("../../../ui/druid/balance/gear_sets", "p3_5"),
 				core.GetGearSet("../../../ui/druid/balance/gear_sets", "p4"),
+				core.GetGearSet("../../../ui/druid/balance/gear_sets", "p5"),
 			},
 			Talents:  DefaultTalents,
 			Rotation: core.GetAplRotation("../../../ui/druid/balance/apls", "default"),

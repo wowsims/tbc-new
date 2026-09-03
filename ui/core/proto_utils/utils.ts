@@ -44,7 +44,6 @@ import {
 import { Hunter, Hunter_Rotation, Hunter_Options, HunterOptions, HunterTalents } from '../proto/hunter.js';
 import { Mage, Mage_Options, Mage_Rotation, MageOptions, MageTalents } from '../proto/mage.js';
 import {
-	Blessings,
 	HolyPaladin,
 	HolyPaladin_Options,
 	HolyPaladin_Rotation,
@@ -73,7 +72,7 @@ import {
 	ShamanTalents,
 } from '../proto/shaman.js';
 import { ResourceType, SpellEffect } from '../proto/spell';
-import { BlessingsAssignment, BlessingsAssignments, UIEnchant as Enchant, UIGem as Gem, UIItem as Item } from '../proto/ui.js';
+import { UIEnchant as Enchant, UIGem as Gem, UIItem as Item } from '../proto/ui.js';
 import { Warlock, Warlock_Options, Warlock_Rotation, WarlockOptions, WarlockTalents } from '../proto/warlock.js';
 import {
 	DpsWarrior,
@@ -89,9 +88,6 @@ import { getEnumValues, intersection, sum } from '../utils.js';
 import { Database } from './database';
 
 export const NUM_SPECS = getEnumValues(Spec).length;
-
-export const raidSimIcon = '/tbc/assets/img/raid_icon.png';
-export const raidSimLabel = 'Full Raid Sim';
 
 // Converts '1231321-12313123-0' to [40, 21, 0].
 export function getTalentTreePoints(talentsString: string): Array<number> {
@@ -111,7 +107,6 @@ export function getSpecSiteUrl(classString: string, specString: string): string 
 	const specSiteUrlTemplate = new URL(`${window.location.protocol}//${window.location.host}/${REPO_NAME}/CLASS/SPEC/`).toString();
 	return specSiteUrlTemplate.replace('CLASS', classString).replace('SPEC', specString);
 }
-export const raidSimSiteUrl = new URL(`${window.location.protocol}//${window.location.host}/${REPO_NAME}/raid/`).toString();
 
 export function textCssClassForClass<ClassType extends Class>(playerClass: PlayerClass<ClassType>): string {
 	return `text-${PlayerClasses.getCssClass(playerClass)}`;
@@ -1037,6 +1032,18 @@ export function isBluntWeaponType(weaponType: WeaponType): boolean {
 	return [WeaponType.WeaponTypeFist, WeaponType.WeaponTypeMace, WeaponType.WeaponTypeStaff].includes(weaponType);
 }
 
+export const ADAMANTITE_SHARPENING_STONE_ID = 29453;
+export const ADAMANTITE_WEIGHTSTONE_ID = 34340;
+
+// Returns the corrected imbue id for a slot given the equipped weapon's sharp/blunt eligibility.
+// Only rewrites the Adamantite sharpening/weightstone pair; all other imbue ids pass through unchanged.
+export function adjustWeaponImbueId(imbueId: number, hasSharp: boolean, hasBlunt: boolean): number {
+	if (imbueId !== ADAMANTITE_SHARPENING_STONE_ID && imbueId !== ADAMANTITE_WEIGHTSTONE_ID) return imbueId;
+	if (hasSharp) return ADAMANTITE_SHARPENING_STONE_ID;
+	if (hasBlunt) return ADAMANTITE_WEIGHTSTONE_ID;
+	return 0;
+}
+
 // Custom functions for determining the EP value of meta gem effects.
 // Default meta effect EP value is 0, so just handle the ones relevant to your spec.
 const metaGemEffectEPs: Partial<Record<Spec, (gem: Gem, player: Player<any>) => number>> = {
@@ -1247,40 +1254,6 @@ export function newUnitReference(raidIndex: number): UnitReference {
 
 export function emptyUnitReference(): UnitReference {
 	return UnitReference.create();
-}
-
-// Makes a new set of assignments with everything 0'd out.
-export function makeBlankBlessingsAssignments(numPaladins: number): BlessingsAssignments {
-	const assignments = BlessingsAssignments.create();
-	for (let i = 0; i < numPaladins; i++) {
-		assignments.paladins.push(
-			BlessingsAssignment.create({
-				blessings: new Array(NUM_SPECS).fill(Blessings.BlessingUnknown),
-			}),
-		);
-	}
-	return assignments;
-}
-
-export function makeBlessingsAssignments(numPaladins: number): BlessingsAssignments {
-	const assignments = makeBlankBlessingsAssignments(numPaladins);
-	for (let i = 1; i < Object.keys(Spec).length; i++) {
-		const spec = i;
-		const blessings = [Blessings.BlessingOfKings, Blessings.BlessingOfMight];
-		for (let j = 0; j < blessings.length; j++) {
-			if (j >= assignments.paladins.length) {
-				// Can't assign more blessings since we ran out of paladins
-				break;
-			}
-			assignments.paladins[j].blessings[spec] = blessings[j];
-		}
-	}
-	return assignments;
-}
-
-// Default blessings settings in the raid sim UI.
-export function makeDefaultBlessings(numPaladins: number): BlessingsAssignments {
-	return makeBlessingsAssignments(numPaladins);
 }
 
 export const orderedResourceTypes: Array<ResourceType> = [

@@ -19,11 +19,12 @@ import {
 } from './proto/api.js';
 import {
 	ArmorType,
+	EquipmentSpec,
 	Faction,
+	ItemSlot,
 	Profession,
 	PseudoStat,
 	RangedWeaponType,
-	Spec,
 	Stat,
 	UnitReference,
 	UnitReference_Type as UnitType,
@@ -40,11 +41,6 @@ import { RequestTypes, SimSignalManager } from './sim_signal_manager';
 import { EventID, TypedEvent } from './typed_event.js';
 import { getEnumValues, noop } from './utils.js';
 import { generateRequestId, WorkerPool, WorkerProgressCallback } from './worker_pool.js';
-
-export type RaidSimData = {
-	request: RaidSimRequest;
-	result: RaidSimResult;
-};
 
 export type StatWeightsData = {
 	request: StatWeightsRequest;
@@ -63,6 +59,18 @@ export type RunSimOptions = {
 const WASM_CONCURRENCY_STORAGE_KEY = `${LOCAL_STORAGE_PREFIX}_wasmconcurrency`;
 
 // Core Sim module which deals only with api types, no UI-related stuff.
+// The backend needs an inactive meta gem left in its socket so the item's socket bonus still
+// applies, while ignoring the gem's own stats and effect. Gear.asSpec() is deliberately left
+// alone so this derived flag never reaches saved settings or shared gear links.
+const gearAsBackendSpec = (gear: Gear): EquipmentSpec => {
+	const spec = gear.asSpec();
+	const headIdx = gear.getItemSlots().indexOf(ItemSlot.ItemSlotHead);
+	if (headIdx >= 0 && gear.hasInactiveMetaGem()) {
+		spec.items[headIdx].metaGemDisabled = true;
+	}
+	return spec;
+};
+
 export class Sim {
 	private readonly workerPool: WorkerPool;
 
@@ -71,7 +79,7 @@ export class Sim {
 	private phase: number = CURRENT_PHASE;
 	private faction: Faction = Faction.Alliance;
 	private fixedRngSeed = 0;
-	private filters: DatabaseFilters = Sim.defaultFilters();
+	private filters: DatabaseFilters = DatabaseFilters.create({ oneHandedWeapons: true, twoHandedWeapons: true });
 	private showDamageMetrics = true;
 	private showThreatMetrics = false;
 	private showHealingMetrics = false;
@@ -193,7 +201,7 @@ export class Sim {
 	 * Whether the current environment should use wasm/worker concurrency methods.
 	 * @returns true if running wasm workers and concurrency setting is active.
 	 */
-	private async shouldUseWasmConcurrency() {
+	async shouldUseWasmConcurrency() {
 		return (await this.isWasm()) && this.getWasmConcurrency() >= 2 && this.workerPool.getNumWorkers() >= 2;
 	}
 
@@ -221,20 +229,16 @@ export class Sim {
 
 				const isEnchanter = [player.profession1, player.profession2].includes(Profession.Enchanting);
 
-				// Disable meta gem if inactive.
-				if (gear.hasInactiveMetaGem()) {
-					gear = gear.withoutMetaGem();
-					gearChanged = true;
-				}
-
 				// Remove Ring Enchants if not enchanter
 				if (!isEnchanter) {
 					gear = gear.withoutEnchanting();
 					gearChanged = true;
 				}
 
-				if (gearChanged) {
-					player.equipment = gear.asSpec();
+				// An inactive meta gem is flagged rather than removed, so that flag still has to
+				// reach the backend even when nothing else about the gear changed.
+				if (gearChanged || gear.hasInactiveMetaGem()) {
+					player.equipment = gearAsBackendSpec(gear);
 				}
 
 				extendPlayerProtoWithMissingEffects(player, this.db);
@@ -322,14 +326,9 @@ export class Sim {
 			const request = this.makeRaidSimRequest(false);
 			const player = request.raid!.parties[0].players[0];
 
-			// Remove any inactive meta gems, since the backend doesn't have its own validation.
-			// Disable meta gem if inactive.
-			if (gear.hasInactiveMetaGem()) {
-				gear = gear.withoutMetaGem();
-			}
-
 			player.database = gear.toDatabase(this.db);
-			player.equipment = gear.asSpec();
+			player.equipment = gearAsBackendSpec(gear);
+			if (player.consumables) player.consumables = gear.adjustImbues(player.consumables);
 
 			request.raid!.parties[0].players[0] = player;
 
@@ -444,14 +443,8 @@ export class Sim {
 
 		const player = raidProto.parties[0].players[0];
 
-		// Remove any inactive meta gems, since the backend doesn't have its own validation.
-		// Disable meta gem if inactive.
-		if (gear.hasInactiveMetaGem()) {
-			gear = gear.withoutMetaGem();
-		}
-
 		player.database = gear.toDatabase(this.db);
-		player.equipment = gear.asSpec();
+		player.equipment = gearAsBackendSpec(gear);
 
 		extendPlayerProtoWithMissingEffects(player, this.db);
 		raidProto.parties[0].players[0] = player;
@@ -644,10 +637,7 @@ export class Sim {
 	}
 
 	getShowHealingMetrics(): boolean {
-		return (
-			this.showHealingMetrics ||
-			(this.showThreatMetrics && [Spec.SpecFeralBearDruid, Spec.SpecProtectionPaladin].includes(this.raid.getPlayer(0)?.playerSpec.specID))
-		);
+		return this.showHealingMetrics;
 	}
 	setShowHealingMetrics(eventID: EventID, newShowHealingMetrics: boolean) {
 		if (newShowHealingMetrics != this.showHealingMetrics) {
@@ -772,7 +762,7 @@ export class Sim {
 			this.setLanguage(eventID, proto.language);
 			this.setFaction(eventID, proto.faction || Faction.Alliance);
 
-			const filters = proto.filters || Sim.defaultFilters();
+			const filters = proto.filters || this.defaultFilters();
 			if (filters.armorTypes.length == 0) {
 				if (this.type == SimType.SimTypeIndividual) {
 					filters.armorTypes = this.raid.getActivePlayers()[0].getPlayerClass().armorTypes.slice();
@@ -808,17 +798,22 @@ export class Sim {
 				showHealingMetrics: isHealingSim,
 				showQuickSwap: true,
 				language: this.getLanguage(), // Don't change language.
-				filters: Sim.defaultFilters(),
+				filters: this.defaultFilters(),
 				showEpValues: false,
 				useSoftCapBreakpoints: true,
 			}),
 		);
 	}
 
-	static defaultFilters(): DatabaseFilters {
+	defaultFilters(): DatabaseFilters {
+		const { favoriteItems = [], favoriteGems = [], favoriteRandomSuffixes = [], favoriteEnchants = [] } = this.getFilters();
 		return DatabaseFilters.create({
 			oneHandedWeapons: true,
 			twoHandedWeapons: true,
+			favoriteItems,
+			favoriteGems,
+			favoriteEnchants,
+			favoriteRandomSuffixes,
 		});
 	}
 }

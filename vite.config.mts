@@ -1,7 +1,6 @@
 /** @type {import('vite').UserConfig} */
 
 import fs from 'fs';
-import { glob } from 'glob';
 import { IncomingMessage, ServerResponse } from 'http';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -9,6 +8,8 @@ import { ConfigEnv, defineConfig, PluginOption, UserConfigExport } from 'vite';
 import { checker } from 'vite-plugin-checker';
 import i18nextLoader from 'vite-plugin-i18next-loader';
 import stylelint from 'vite-plugin-stylelint';
+
+import { specPages } from './tools/vite/spec_pages.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -109,7 +110,7 @@ export const getBaseConfig = ({ command, mode }: ConfigEnv) =>
 		root: BASE_PATH,
 		build: {
 			outDir: OUT_DIR,
-			minify: mode === 'development' ? false : 'terser',
+			minify: mode === 'development' ? false : 'oxc',
 			sourcemap: command === 'serve' ? 'inline' : false,
 			target: ['es2020'],
 		},
@@ -122,17 +123,19 @@ export default defineConfig(({ command, mode }) => {
 		css: {
 			preprocessorOptions: {
 				scss: {
-					silenceDeprecations: ['import', 'global-builtin', 'color-functions'],
+					silenceDeprecations: ['import', 'global-builtin', 'color-functions', 'if-function'],
 				},
 			},
 		},
 		plugins: [
+			specPages(BASE_PATH),
 			i18nextLoader({ namespaceResolution: 'basename', paths: ['assets/locales'] }),
 			serveExternalAssets(),
 			checker({
 				root: BASE_PATH,
-				typescript: true,
-				enableBuild: true,
+				typescript: { root: __dirname, tsconfigPath: 'tsconfig.json' },
+				// Type-checking during build is redundant: the makefile runs `tsc --noEmit` right before `vite build`.
+				enableBuild: false,
 			}),
 			stylelint({
 				build: true,
@@ -141,19 +144,20 @@ export default defineConfig(({ command, mode }) => {
 				configFile: path.resolve(__dirname, 'stylelint.config.mjs'),
 			}),
 		],
-		esbuild: {
+		oxc: {
+			jsx: {
+				runtime: 'classic',
+				pragma: 'element',
+				pragmaFrag: 'fragment',
+			},
 			jsxInject: "import { element, fragment } from 'tsx-vanilla';",
 		},
 		build: {
 			...baseConfig.build,
 			rollupOptions: {
+				// The per-spec pages are added by the specPages plugin.
 				input: {
-					...glob.sync(path.resolve(BASE_PATH, '**/index.html').replace(/\\/g, '/')).reduce<Record<string, string>>((acc, cur) => {
-						const name = path.relative(__dirname, cur).split(path.sep).join('/');
-						acc[name] = cur;
-						return acc;
-					}, {}),
-					// Add shared.scss as a separate entry if needed or handle it separately
+					'ui/index.html': path.resolve(BASE_PATH, 'index.html'),
 				},
 				output: {
 					assetFileNames: () => 'bundle/[name]-[hash].style.css',

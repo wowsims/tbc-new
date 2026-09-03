@@ -1,7 +1,7 @@
-import { EquipmentSpec, GemColor, HandType, ItemSlot, ItemSpec, Profession, WeaponType } from '../proto/common';
+import { ConsumesSpec, EquipmentSpec, GemColor, HandType, ItemSlot, ItemSpec, Profession, WeaponType } from '../proto/common';
 import { ItemEffectRandPropPoints, SimDatabase, SimEnchant, SimGem, SimItem } from '../proto/db';
 import { UIEnchant as Enchant, UIGem as Gem, UIItem as Item } from '../proto/ui';
-import { isBluntWeaponType, isSharpWeaponType } from '../proto_utils/utils';
+import { adjustWeaponImbueId, isBluntWeaponType, isSharpWeaponType } from '../proto_utils/utils';
 import { distinct, equalsOrBothNull, getEnumValues, sum } from '../utils';
 import { Database } from './database';
 import { EquippedItem } from './equipped_item';
@@ -326,16 +326,6 @@ export class Gear extends BaseGear {
 		return this;
 	}
 
-	withoutMetaGem(): Gear {
-		const headItem = this.getEquippedItem(ItemSlot.ItemSlotHead);
-		const metaGem = this.getMetaGem();
-		if (headItem && metaGem) {
-			return this.withEquippedItem(ItemSlot.ItemSlotHead, headItem.removeGemsWithId(metaGem.id));
-		} else {
-			return this;
-		}
-	}
-
 	withoutGems(ignoreSlots?: Set<ItemSlot>, ignoreMeta?: boolean): Gear {
 		let curGear: Gear = this;
 		const metaGem = this.getMetaGem();
@@ -392,6 +382,14 @@ export class Gear extends BaseGear {
 	hasSharpOHWeapon(): boolean {
 		const weapon = this.getEquippedItem(ItemSlot.ItemSlotOffHand);
 		return weapon != null && isSharpWeaponType(weapon.item.weaponType);
+	}
+	// Rewrites the MH/OH weapon stone imbues to match the equipped weapon types, returning the
+	// original ConsumesSpec unchanged if nothing needs adjusting.
+	adjustImbues(consumes: ConsumesSpec): ConsumesSpec {
+		const mhImbueId = adjustWeaponImbueId(consumes.mhImbueId, this.hasSharpMHWeapon(), this.hasBluntMHWeapon());
+		const ohImbueId = adjustWeaponImbueId(consumes.ohImbueId, this.hasSharpOHWeapon(), this.hasBluntOHWeapon());
+		if (mhImbueId === consumes.mhImbueId && ohImbueId === consumes.ohImbueId) return consumes;
+		return ConsumesSpec.clone({ ...consumes, mhImbueId, ohImbueId });
 	}
 
 	getProfessionRequirements(): Array<Profession> {

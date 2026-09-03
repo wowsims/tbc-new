@@ -1,5 +1,5 @@
-import { Player } from '../../player';
 import i18n from '../../../i18n/config';
+import { Player } from '../../player';
 import { ItemSlot } from '../../proto/common';
 import { UIEnchant as Enchant } from '../../proto/ui.js';
 import { EquippedItem } from '../../proto_utils/equipped_item';
@@ -16,7 +16,7 @@ export const addQuickEnchantPopover = (player: Player<any>, tooltipElement: HTML
 		},
 		item,
 		getItems: (currentItem: EquippedItem) => {
-			const eligibleEnchants = player.sim.db.getEnchants(itemSlot);
+			const eligibleEnchants = player.getEnchants(itemSlot);
 			const favoriteEnchants = player.sim.getFilters().favoriteEnchants;
 			const eligibleFavoriteEnchants = favoriteEnchants
 				?.map(favoriteId => {
@@ -31,7 +31,9 @@ export const addQuickEnchantPopover = (player: Player<any>, tooltipElement: HTML
 			}));
 		},
 		onItemClick: clickedItem => {
-			player.equipItem(TypedEvent.nextEventID(), itemSlot, item.withEnchant(clickedItem));
+			const currentItem = player.getEquippedItem(itemSlot);
+			if (!currentItem) return;
+			player.equipItem(TypedEvent.nextEventID(), itemSlot, currentItem.withEnchant(clickedItem));
 		},
 		footerButton: {
 			label: i18n.t('gear_tab.gear_picker.quick_popovers.favorite_enchants.open_enchants'),

@@ -6,12 +6,10 @@ import { APLRotation } from '../../core/proto/apl';
 import {
 	Debuffs,
 	Drums,
-	Faction,
 	IndividualBuffs,
 	ItemSlot,
 	PartyBuffs,
 	PseudoStat,
-	Race,
 	RaidBuffs,
 	Spec,
 	Stat,
@@ -52,13 +50,26 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 	epReferenceStat: Stat.StatAttackPower,
 	// Which stats to display in the Character Stats section, at the bottom of the left-hand sidebar.
 	displayStats: UnitStat.createDisplayStatArray(
-		[Stat.StatHealth, Stat.StatStamina, Stat.StatAgility, Stat.StatStrength, Stat.StatAttackPower, Stat.StatArmorPenetration, Stat.StatExpertiseRating],
+		[
+			Stat.StatHealth,
+			Stat.StatStamina,
+			Stat.StatAgility,
+			Stat.StatStrength,
+			Stat.StatAttackPower,
+			Stat.StatArmorPenetration,
+			Stat.StatExpertiseRating,
+			Stat.StatArcaneResistance,
+			Stat.StatFireResistance,
+			Stat.StatFrostResistance,
+			Stat.StatNatureResistance,
+			Stat.StatShadowResistance,
+		],
 		[PseudoStat.PseudoStatMeleeHitPercent, PseudoStat.PseudoStatMeleeCritPercent, PseudoStat.PseudoStatMeleeHastePercent],
 	),
 
 	defaults: {
 		// Default equipped gear.
-		gear: Presets.P1_SWORDS_GEAR.gear,
+		gear: Presets.P3_SWORDS_GEAR.gear,
 		// Default EP weights for sorting gear in the gear picker.
 		epWeights: Presets.P1_EP_PRESET.epWeights,
 		statCaps: (() => {
@@ -140,36 +151,12 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecRogue, {
 		// Preset rotations that the user can quickly select.
 		rotations: [Presets.SINSITER_APL],
 		// Preset gear configurations that the user can quickly select.
-		gear: [Presets.PREARAID_SWORDS_GEAR, Presets.P1_SWORDS_GEAR],
+		gear: [Presets.PREARAID_SWORDS_GEAR, Presets.P1_SWORDS_GEAR, Presets.P2_SWORDS_GEAR, Presets.P3_SWORDS_GEAR],
 	},
 
 	autoRotation: (player: Player<Spec.SpecRogue>): APLRotation => {
 		return Presets.SINSITER_APL.rotation.rotation!;
 	},
-
-	raidSimPresets: [
-		{
-			spec: Spec.SpecRogue,
-			talents: Presets.Talents.data,
-			specOptions: Presets.DefaultOptions,
-			consumables: Presets.DefaultConsumables,
-			defaultFactionRaces: {
-				[Faction.Unknown]: Race.RaceUnknown,
-				[Faction.Alliance]: Race.RaceHuman,
-				[Faction.Horde]: Race.RaceOrc,
-			},
-			defaultGear: {
-				[Faction.Unknown]: {},
-				[Faction.Alliance]: {
-					1: Presets.P1_SWORDS_GEAR.gear,
-				},
-				[Faction.Horde]: {
-					1: Presets.P1_SWORDS_GEAR.gear,
-				},
-			},
-			otherDefaults: Presets.OtherDefaults,
-		},
-	],
 });
 
 export class RogueSimUI extends IndividualSimUI<Spec.SpecRogue> {

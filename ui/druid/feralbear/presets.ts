@@ -1,106 +1,138 @@
-import * as Mechanics from '../../core/constants/mechanics.js';
+import { Phase } from '../../core/constants/other';
+import { OtherDefaults as SimUIOtherDefaults } from '../../core/individual_sim_ui';
 import * as PresetUtils from '../../core/preset_utils.js';
-import { ConsumesSpec, Profession, PseudoStat, Stat } from '../../core/proto/common';
-import { FeralBearDruid_Options as DruidOptions, FeralBearDruid_Rotation as DruidRotation } from '../../core/proto/druid.js';
+import { ConsumesSpec, HealingModel, Profession, Race, Spec, Stat } from '../../core/proto/common';
+import {
+	FeralBearDruid_Options as DruidOptions,
+	FeralBearDruid_Rotation as DruidRotation,
+	FeralBearDruid_Rotation_SwipeUsage as SwipeUsage,
+} from '../../core/proto/druid.js';
 import { SavedTalents } from '../../core/proto/ui.js';
+import { Stats } from '../../core/proto_utils/stats';
 import PreraidGear from './gear_sets/preraid.gear.json';
 import P1Gear from './gear_sets/p1.gear.json';
+import P2SurvivalGear from './gear_sets/p2_survival.gear.json';
+import P2BalancedGear from './gear_sets/p2_balanced.gear.json';
+import P2OffensiveGear from './gear_sets/p2_offensive.gear.json';
+import P2WardenGear from './gear_sets/p2_warden.gear.json';
+import P3Gear from './gear_sets/p3.gear.json';
+import P4Gear from './gear_sets/p4.gear.json';
+import P5Gear from './gear_sets/p5.gear.json';
+import P2HydrossFrostGear from './gear_sets/p2_hydross_frost.gear.json';
+import P2HydrossNatureGear from './gear_sets/p2_hydross_nature.gear.json';
 
 // Preset options for this spec.
-// Eventually we will import these values for the raid sim too, so its good to
-// keep them in a separate file.
-export const PRERAID_PRESET = PresetUtils.makePresetGear('Pre-Raid', PreraidGear);
-export const P1_PRESET = PresetUtils.makePresetGear('P1', P1Gear);
+export const PRERAID_PRESET = PresetUtils.makePresetGear('Pre-Raid', PreraidGear, { phase: Phase.Phase1 });
+export const P1_PRESET = PresetUtils.makePresetGear('BiS', P1Gear, { phase: Phase.Phase1 });
+export const P2_SURVIVAL_PRESET = PresetUtils.makePresetGear('Survival', P2SurvivalGear, { phase: Phase.Phase2 });
+export const P2_BALANCED_PRESET = PresetUtils.makePresetGear('Balanced', P2BalancedGear, { phase: Phase.Phase2 });
+export const P2_OFFENSIVE_PRESET = PresetUtils.makePresetGear('Offensive', P2OffensiveGear, { phase: Phase.Phase2 });
+export const P2_WARDEN_PRESET = PresetUtils.makePresetGear('Warden', P2WardenGear, { phase: Phase.Phase2 });
+export const P2_HYDROSS_FROST_PRESET = PresetUtils.makePresetGear('Frost Resist', P2HydrossFrostGear, { phase: Phase.Phase2 });
+export const P2_HYDROSS_NATURE_PRESET = PresetUtils.makePresetGear('Nature Resist', P2HydrossNatureGear, { phase: Phase.Phase2 });
+export const P3_PRESET = PresetUtils.makePresetGear('BiS', P3Gear, { phase: Phase.Phase3 });
+export const P4_PRESET = PresetUtils.makePresetGear('BiS', P4Gear, { phase: Phase.Phase4 });
+export const P5_PRESET = PresetUtils.makePresetGear('BiS', P5Gear, { phase: Phase.Phase5 });
 
 export const DefaultSimpleRotation = DruidRotation.create({
 	maintainFaerieFire: true,
 	maintainDemoralizingRoar: true,
-	demoTime: 4.0,
-	pulverizeTime: 4.0,
-	prepullStampede: true,
+	maulRageThreshold: 50,
+	swipeUsage: SwipeUsage.SwipeUsage_WithEnoughAP,
+	swipeApThreshold: 2700,
 });
 
-import { Stats } from '../../core/proto_utils/stats';
 import DefaultApl from './apls/default.apl.json';
-export const ROTATION_DEFAULT = PresetUtils.makePresetAPLRotation('Default', DefaultApl);
+export const ROTATION_SIMPLE = PresetUtils.makePresetSimpleRotation('Simple', Spec.SpecFeralBearDruid, DefaultSimpleRotation);
+export const ROTATION_DEFAULT = PresetUtils.makePresetAPLRotation('APL', DefaultApl);
 
-//export const ROTATION_PRESET_SIMPLE = PresetUtils.makePresetSimpleRotation('Simple Default', Spec.SpecGuardianDruid, DefaultSimpleRotation);
+import DefaultBuild from './builds/default_encounter_only.build.json';
+import MagtheridonBuild from './builds/magtheridon_encounter_only.build.json';
+import KarazhanBuild from './builds/karazhan_encounter_only.build.json';
+import MorogrimBuild from './builds/morogrim_encounter_only.build.json';
+import HydrossBuild from './builds/hydross_encounter_only.build.json';
+import GorefiendBuild from './builds/gorefiend_encounter_only.build.json';
+import ArchimondeBuild from './builds/archimonde_encounter_only.build.json';
+export const DEFAULT_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Default', Spec.SpecFeralBearDruid, DefaultBuild);
+export const MAGTHERIDON_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Magtheridon', Spec.SpecFeralBearDruid, MagtheridonBuild);
+export const KARAZHAN_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Karazhan (Boss Average)', Spec.SpecFeralBearDruid, KarazhanBuild);
+export const MOROGRIM_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Morogrim', Spec.SpecFeralBearDruid, MorogrimBuild);
+export const HYDROSS_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Hydross', Spec.SpecFeralBearDruid, HydrossBuild);
+export const GOREFIEND_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Teron Gorefiend', Spec.SpecFeralBearDruid, GorefiendBuild);
+export const ARCHIMONDE_PRESET_BUILD = PresetUtils.makePresetBuildFromJSON('Archimonde', Spec.SpecFeralBearDruid, ArchimondeBuild, {
+	group: 'Encounters',
+});
 
 // Preset options for EP weights
-export const SURVIVAL_EP_PRESET = PresetUtils.makePresetEpWeights(
-	'Survival',
-	Stats.fromMap(
-		{
-			[Stat.StatHealth]: 0.17,
-			[Stat.StatStamina]: 3.93,
-			[Stat.StatAgility]: 1.0,
-			[Stat.StatArmor]: 4.81,
-			[Stat.StatBonusArmor]: 1.1,
-			[Stat.StatStrength]: 0.02,
-			[Stat.StatAttackPower]: 0.02,
-		},
-		{
-			[PseudoStat.PseudoStatMainHandDps]: 0.0,
-			[PseudoStat.PseudoStatMeleeHitPercent]: 1.07 * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT,
-			[PseudoStat.PseudoStatSpellHitPercent]: 0.01 * Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT,
-		},
-	),
+export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
+	'P1',
+	Stats.fromMap({
+		[Stat.StatStrength]: 0.452,
+		[Stat.StatAgility]: 0.763,
+		[Stat.StatStamina]: 1.025,
+		[Stat.StatAttackPower]: 0.2,
+		[Stat.StatFeralAttackPower]: 0.2,
+		[Stat.StatMeleeHitRating]: 0.941,
+		[Stat.StatMeleeCritRating]: 0.373,
+		[Stat.StatMeleeHasteRating]: 0.438,
+		[Stat.StatArmorPenetration]: 0.07,
+		[Stat.StatExpertiseRating]: 2.147,
+		[Stat.StatDefenseRating]: 0.326,
+		[Stat.StatDodgeRating]: 0.228,
+		[Stat.StatResilienceRating]: 0.388,
+		[Stat.StatArmor]: 0.135,
+		[Stat.StatBonusArmor]: 0.135,
+		[Stat.StatPhysicalDamage]: 1.203,
+	}),
 );
 
-export const BALANCED_EP_PRESET = PresetUtils.makePresetEpWeights(
-	'Balanced',
-	Stats.fromMap(
-		{
-			[Stat.StatHealth]: 0.06,
-			[Stat.StatStamina]: 1.41,
-			[Stat.StatAgility]: 1.0,
-			[Stat.StatArmor]: 1.7,
-			[Stat.StatBonusArmor]: 0.39,
-			[Stat.StatStrength]: 0.18,
-			[Stat.StatAttackPower]: 0.18,
-		},
-		{
-			[PseudoStat.PseudoStatMainHandDps]: 0.84,
-			[PseudoStat.PseudoStatMeleeHitPercent]: 1.5 * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT,
-			[PseudoStat.PseudoStatSpellHitPercent]: 0.0 * Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT,
-		},
-	),
-);
-
-export const OFFENSIVE_EP_PRESET = PresetUtils.makePresetEpWeights(
-	'Offensive',
-	Stats.fromMap(
-		{
-			[Stat.StatHealth]: 0.03,
-			[Stat.StatStamina]: 0.64,
-			[Stat.StatAgility]: 1.0,
-			[Stat.StatArmor]: 0.76,
-			[Stat.StatBonusArmor]: 0.17,
-			[Stat.StatStrength]: 0.23,
-			[Stat.StatAttackPower]: 0.22,
-		},
-		{
-			[PseudoStat.PseudoStatMainHandDps]: 1.09,
-			[PseudoStat.PseudoStatMeleeHitPercent]: 1.64 * Mechanics.PHYSICAL_HIT_RATING_PER_HIT_PERCENT,
-			[PseudoStat.PseudoStatSpellHitPercent]: 0.0 * Mechanics.SPELL_HIT_RATING_PER_HIT_PERCENT,
-		},
-	),
-);
-
-// Default talents. Uses the wowhead calculator format, make the talents on
-// https://wowhead.com/tbc/talent-calc and copy the numbers in the url.
-export const DefaultTalents = {
-	name: 'Default',
+// Default talents — Standard feral bear TBC build.
+export const StandardTalents = {
+	name: 'Standard',
 	data: SavedTalents.create({
-		talentsString: '',
+		talentsString: '-503032132322105301251-05503301',
 	}),
 };
 
-export const DefaultOptions = DruidOptions.create({});
+// Alternative talents focused on Demoralizing Roar uptime.
+export const DemoRoarTalents = {
+	name: 'DemoRoar',
+	data: SavedTalents.create({
+		talentsString: '-553032132322105301051-05503001',
+	}),
+};
 
-export const DefaultConsumables = ConsumesSpec.create({});
-export const OtherDefaults = {
-	iterationCount: 50000,
+export const DefaultOptions = DruidOptions.create({
+	startingRage: 0,
+});
+
+export const DefaultConsumables = ConsumesSpec.create({
+	battleElixirId: 22831, // Elixir of Major Agility
+	guardianElixirId: 9088, // Gift of Arthas
+	foodId: 27667, // Spicy Crawdad
+	potId: 22849, // Ironshield Potion
+	conjuredId: 22105, // Healthstone
+	mhImbueId: 34340, // Adamantite Weightstone
+	goblinSapper: true,
+	superSapper: true,
+	scrollAgi: true,
+	scrollStr: true,
+	scrollArm: true,
+	nightmareSeed: true,
+});
+
+export const OtherDefaults: Partial<SimUIOtherDefaults> = {
 	profession1: Profession.Engineering,
-	profession2: Profession.ProfessionUnknown,
+	profession2: Profession.Enchanting,
+	race: Race.RaceNightElf,
+	distanceFromTarget: 0,
+	reactionTime: 250,
+	healingModel: HealingModel.create({
+		hps: 2200,
+		cadenceSeconds: 0.4,
+		cadenceVariation: 1.2,
+		absorbFrac: 0.02,
+		burstWindow: 6,
+		inspirationUptime: 0.25,
+	}),
 };

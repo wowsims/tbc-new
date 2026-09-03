@@ -6,7 +6,7 @@ import i18n from '../../i18n/config.js';
 import * as Mechanics from '../constants/mechanics.js';
 import { IndividualSimUI } from '../individual_sim_ui';
 import { Player } from '../player.js';
-import { ItemSlot, PseudoStat, Race, Spec, Stat, TristateEffect, WeaponType } from '../proto/common.js';
+import { Class, ItemSlot, PseudoStat, Race, RangedWeaponType, Spec, Stat, TristateEffect, WeaponType } from '../proto/common.js';
 import { Stats, UnitStat } from '../proto_utils/stats.js';
 import { EventID, TypedEvent } from '../typed_event.js';
 import { Component } from './component.js';
@@ -78,8 +78,8 @@ const statGroups = new Map<string, Array<DisplayStat>>([
 		[
 			{ stat: UnitStat.fromStat(Stat.StatArmor) },
 			{ stat: UnitStat.fromStat(Stat.StatBonusArmor) },
-			{ stat: UnitStat.fromStat(Stat.StatDefenseRating) },
 			{ stat: UnitStat.fromStat(Stat.StatResilienceRating) },
+			{ stat: UnitStat.fromStat(Stat.StatDefenseRating) },
 			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatDodgePercent) },
 			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatParryPercent) },
 			{ stat: UnitStat.fromPseudoStat(PseudoStat.PseudoStatBlockPercent) },
@@ -103,6 +103,8 @@ export class CharacterStats extends Component {
 	readonly valueElems: Array<HTMLTableCellElement>;
 	readonly meleeCritCapValueElem: HTMLTableCellElement | undefined;
 	critImmunityCapValueElem: HTMLTableCellElement | undefined;
+	missValueElem: HTMLTableCellElement | undefined;
+	avoidanceValueElem: HTMLTableCellElement | undefined;
 	masteryElem: HTMLTableCellElement | undefined;
 	hasRacialHitBonus = false;
 	activeRacialExpertiseBonuses = [false, false];
@@ -161,16 +163,38 @@ export class CharacterStats extends Component {
 			});
 
 			if (key === 'Defense' && this.shouldShowCritImmunity(player)) {
-				const tableValueRef = ref<HTMLTableCellElement>();
-				const row = (
+				const missRef = ref<HTMLTableCellElement>();
+				const missRow = (
 					<tr className="character-stats-table-row">
-						<td className="character-stats-table-label">Crit Immunity</td>
-						<td className="character-stats-table-value" ref={tableValueRef}></td>
+						<td className="character-stats-table-label">Miss</td>
+						<td className="character-stats-table-value" ref={missRef}></td>
 					</tr>
 				);
 
-				body.appendChild(row);
-				this.critImmunityCapValueElem = tableValueRef.value!;
+				body.appendChild(missRow);
+				this.missValueElem = missRef.value!;
+
+				const avoidanceRef = ref<HTMLTableCellElement>();
+				const avoidanceRow = (
+					<tr className="character-stats-table-row">
+						<td className="character-stats-table-label">Total avoidance</td>
+						<td className="character-stats-table-value" ref={avoidanceRef}></td>
+					</tr>
+				);
+
+				body.appendChild(avoidanceRow);
+				this.avoidanceValueElem = avoidanceRef.value!;
+
+				const critImmunityRef = ref<HTMLTableCellElement>();
+				const critImmunityRow = (
+					<tr className="character-stats-table-row">
+						<td className="character-stats-table-label">Crit Immunity</td>
+						<td className="character-stats-table-value" ref={critImmunityRef}></td>
+					</tr>
+				);
+
+				body.appendChild(critImmunityRow);
+				this.critImmunityCapValueElem = critImmunityRef.value!;
 			}
 			table.appendChild(body);
 		});
@@ -196,6 +220,8 @@ export class CharacterStats extends Component {
 
 	private updateStats(player: Player<any>) {
 		const playerStats = player.getCurrentStats();
+		const gear = player.getGear();
+		const rangedWeapon = gear.getEquippedItem(ItemSlot.ItemSlotRanged);
 		const statMods = this.modifyDisplayStats ? this.modifyDisplayStats(this.player) : {};
 		this.hasRacialHitBonus = this.player.getRace() === Race.RaceDraenei;
 		this.activeRacialExpertiseBonuses = this.player.getActiveRacialExpertiseBonuses();
@@ -264,7 +290,7 @@ export class CharacterStats extends Component {
 			const valueElem = (
 				<div className="stat-value-link-container">
 					<button ref={statLinkElemRef} className={clsx('stat-value-link', contextualClass)}>
-						{`${this.statDisplayString(finalStats, unitStat, true)} `}
+						{`${this.statDisplayString(finalStats, unitStat, true, true)} `}
 					</button>
 				</div>
 			);
@@ -281,7 +307,7 @@ export class CharacterStats extends Component {
 					</div>
 					<div className="character-stats-tooltip-row">
 						<span>{i18n.t('sidebar.character_stats.tooltip.gear')}</span>
-						<span>{this.statDisplayString(gearDelta, unitStat)}</span>
+						<span>{this.statDisplayString(gearDelta, unitStat, false, true)}</span>
 					</div>
 					<div className="character-stats-tooltip-row">
 						<span>{i18n.t('sidebar.character_stats.tooltip.talents')}</span>
@@ -307,10 +333,27 @@ export class CharacterStats extends Component {
 					)}
 					<div className="character-stats-tooltip-row">
 						<span>{i18n.t('sidebar.character_stats.tooltip.total')}</span>
-						<span>{this.statDisplayString(finalStats, unitStat, true)}</span>
+						<span>{this.statDisplayString(finalStats, unitStat, true, true)}</span>
 					</div>
 				</div>
 			);
+
+			const hunterRangedTypes = [RangedWeaponType.RangedWeaponTypeBow, RangedWeaponType.RangedWeaponTypeCrossbow, RangedWeaponType.RangedWeaponTypeGun];
+			if (
+				player.getClass() === Class.ClassHunter &&
+				unitStat.isPseudoStat() &&
+				unitStat.getPseudoStat() === PseudoStat.PseudoStatRangedHastePercent &&
+				rangedWeapon &&
+				hunterRangedTypes.includes(rangedWeapon.item.rangedWeaponType)
+			) {
+				const speedStat = 1 + finalStats.getPseudoStat(PseudoStat.PseudoStatRangedHastePercent) / 100;
+				tooltipContent.appendChild(
+					<div className="character-stats-tooltip-row">
+						<span>{i18n.t('sidebar.character_stats.tooltip.eWS')}</span>
+						<span>{(rangedWeapon.item.weaponSpeed / speedStat).toFixed(2)}s</span>
+					</div>,
+				);
+			}
 
 			tippy(statLinkElem, {
 				content: tooltipContent,
@@ -319,7 +362,6 @@ export class CharacterStats extends Component {
 
 		if (this.meleeCritCapValueElem) {
 			const meleeCritCapInfo = player.getMeleeCritCapInfo();
-
 			const valueElem = (
 				<a href="javascript:void(0)" className="stat-value-link" attributes={{ role: 'button' }}>
 					{`${this.meleeCritCapDisplayString(player, finalStats)} `}
@@ -383,6 +425,110 @@ export class CharacterStats extends Component {
 			});
 		}
 
+		if (this.missValueElem) {
+			const missInfo = player.getMissChanceInfo();
+
+			const valueElem = (
+				<a href="javascript:void(0)" className="stat-value-link text-white" attributes={{ role: 'button' }}>
+					{`${missInfo.total.toFixed(2)}%`}
+				</a>
+			);
+
+			this.missValueElem.querySelector('.stat-value-link')?.remove();
+			this.missValueElem.prepend(valueElem);
+
+			const tooltipContent = (
+				<div>
+					<div className="character-stats-tooltip-row">
+						<span>Base:</span>
+						<span>{`${missInfo.base.toFixed(2)}%`}</span>
+					</div>
+					<div className="character-stats-tooltip-row">
+						<span>Defense:</span>
+						<span>{`${missInfo.defense.toFixed(2)}%`}</span>
+					</div>
+					<div className="character-stats-tooltip-row">
+						<span>Debuffs:</span>
+						<span>{`${missInfo.debuffs.toFixed(2)}%`}</span>
+					</div>
+					<div className="character-stats-tooltip-row">
+						<span>Total:</span>
+						<span>{`${missInfo.total.toFixed(2)}%`}</span>
+					</div>
+				</div>
+			);
+
+			tippy(valueElem, {
+				content: tooltipContent,
+			});
+		}
+
+		if (this.avoidanceValueElem) {
+			const avoidanceInfo = player.getAvoidanceInfo();
+
+			let blockString = `${avoidanceInfo.block.toFixed(2)}%`;
+			let totalString = `${avoidanceInfo.total.toFixed(2)}%`;
+			let shearString = `${avoidanceInfo.shear.toFixed(2)}%`;
+
+			if (player.isSpec(Spec.SpecProtectionPaladin)) {
+				blockString += ` (with HS)`;
+				totalString += ` (with HS)`;
+				shearString += ` (with HS)`;
+			}
+
+			const valueElem = (
+				<a href="javascript:void(0)" className="stat-value-link text-white" attributes={{ role: 'button' }}>
+					{totalString}
+				</a>
+			);
+
+			this.avoidanceValueElem.querySelector('.stat-value-link')?.remove();
+			this.avoidanceValueElem.prepend(valueElem);
+
+			const hasParry = this.stats.find(displayStat => displayStat.equalsPseudoStat(PseudoStat.PseudoStatParryPercent));
+			const hasBlock = this.stats.find(displayStat => displayStat.equalsPseudoStat(PseudoStat.PseudoStatBlockPercent));
+
+			const crushCapReached = avoidanceInfo.total >= 102.4;
+			const shearCapReached = avoidanceInfo.shear >= 101.8;
+
+			const tooltipContent = (
+				<div>
+					<div className="character-stats-tooltip-row">
+						<span>Miss:</span>
+						<span>{`${avoidanceInfo.miss.toFixed(2)}%`}</span>
+					</div>
+					<div className="character-stats-tooltip-row">
+						<span>Dodge:</span>
+						<span>{`${avoidanceInfo.dodge.toFixed(2)}%`}</span>
+					</div>
+					{hasParry && (
+						<div className="character-stats-tooltip-row">
+							<span>Parry:</span>
+							<span>{`${avoidanceInfo.parry.toFixed(2)}%`}</span>
+						</div>
+					)}
+					{hasBlock && (
+						<div className="character-stats-tooltip-row">
+							<span>Block:</span>
+							<span>{blockString}</span>
+						</div>
+					)}
+					<div className={clsx('character-stats-tooltip-row', crushCapReached ? 'text-success' : 'text-danger')}>
+						<span>Crush (102.4%):</span>
+						<span>{totalString}</span>
+					</div>
+					<div className={clsx('character-stats-tooltip-row', shearCapReached ? 'text-success' : 'text-danger')}>
+						<span>Shear (101.8%):</span>
+						<span>{shearString}</span>
+					</div>
+				</div>
+			);
+
+			tippy(valueElem, {
+				content: tooltipContent,
+			});
+		}
+
 		if (this.critImmunityCapValueElem) {
 			const critImmunityInfo = player.getCritImmunityInfo();
 
@@ -414,6 +560,12 @@ export class CharacterStats extends Component {
 						<span>Resilience:</span>
 						<span>{`${critImmunityInfo.resilience.toFixed(2)}%`}</span>
 					</div>
+					{critImmunityInfo.talents > 0 && (
+						<div className="character-stats-tooltip-row">
+							<span>Talents:</span>
+							<span>{`${critImmunityInfo.talents.toFixed(2)}%`}</span>
+						</div>
+					)}
 					<div className="character-stats-tooltip-row">
 						<span>Total:</span>
 						<span>{`${critImmunityInfo.total.toFixed(2)}%`}</span>
@@ -427,7 +579,7 @@ export class CharacterStats extends Component {
 		}
 	}
 
-	private statDisplayString(deltaStats: Stats, unitStat: UnitStat, includeBase?: boolean): string {
+	private statDisplayString(deltaStats: Stats, unitStat: UnitStat, includeBase?: boolean, includeGear?: boolean): string {
 		const rootStat = unitStat.hasRootStat() ? unitStat.getRootStat() : null;
 		let rootRatingValue = rootStat !== null ? deltaStats.getStat(rootStat) : null;
 		let percentDecimals = 2;
@@ -435,10 +587,12 @@ export class CharacterStats extends Component {
 		let displayPrefix = '';
 		let displaySuffix = i18n.t('sidebar.character_stats.percent_suffix');
 
-		if (unitStat.equalsStat(Stat.StatDefenseRating) && includeBase) {
+		if (unitStat.equalsStat(Stat.StatDefenseRating)) {
 			displaySuffix = '';
 			percentDecimals = 0;
-			derivedPercentOrPointsValue! += this.player.getBaseDefense();
+			if (includeBase) {
+				derivedPercentOrPointsValue! += this.player.getBaseDefense();
+			}
 		} else if (rootStat === Stat.StatMeleeHitRating && includeBase && this.hasRacialHitBonus) {
 			// Remove the rating display and only show %
 			if (rootRatingValue !== null && rootRatingValue > 0) {
@@ -449,7 +603,7 @@ export class CharacterStats extends Component {
 
 			// Remove the rating display and only show %
 			if (rootRatingValue !== null && rootRatingValue > 0 && mhWeaponExpertiseActive) {
-				rootRatingValue -= Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION * 4;
+				rootRatingValue -= Mechanics.EXPERTISE_PER_QUARTER_PERCENT_REDUCTION * 5;
 			}
 
 			const matchesBothHands = mhWeaponExpertiseActive && ohWeaponExpertiseActive;
@@ -464,10 +618,19 @@ export class CharacterStats extends Component {
 				const hideRootRating = rootRatingValue === null || (rootRatingValue === 0 && derivedPercentOrPointsValue !== null);
 				const rootRatingString = hideRootRating ? '' : String(Math.round(rootRatingValue!));
 				const mhPercentString = `${derivedPercentOrPointsValue!.toFixed(percentDecimals)}` + displaySuffix;
-				const ohPercentValue = derivedPercentOrPointsValue! + (ohWeaponExpertiseActive ? 1 : -1);
+				const racialExpertisePercent = 5 * 0.25;
+				const ohPercentValue = derivedPercentOrPointsValue! + (ohWeaponExpertiseActive ? racialExpertisePercent : -racialExpertisePercent);
 				const ohPercentString = `${ohPercentValue.toFixed(percentDecimals)}` + displaySuffix;
 				const wrappedPercentString = hideRootRating ? `${mhPercentString} / ${ohPercentString}` : ` (${mhPercentString} / ${ohPercentString})`;
 				return rootRatingString + wrappedPercentString;
+			}
+		} else if (includeGear && rootRatingValue !== null && unitStat.equalsPseudoStat(PseudoStat.PseudoStatRangedHitPercent)) {
+			if (this.player.getEquippedItem(ItemSlot.ItemSlotRanged)?.enchant?.effectId === 2523) {
+				rootRatingValue += 30;
+			}
+		} else if (includeGear && rootRatingValue !== null && unitStat.equalsPseudoStat(PseudoStat.PseudoStatRangedCritPercent)) {
+			if (this.player.getEquippedItem(ItemSlot.ItemSlotRanged)?.enchant?.effectId === 2724) {
+				rootRatingValue += 28;
 			}
 		} else if (rootStat == Stat.StatBlockValue) {
 			if (rootRatingValue !== null && rootRatingValue > 0) {

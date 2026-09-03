@@ -6,24 +6,6 @@ ASSETS := $(patsubst assets/%,$(OUT_DIR)/assets/%,$(ASSETS_INPUT))
 rwildcard = $(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
 GOROOT := $(shell go env GOROOT)
 UI_SRC := $(shell find ui -name '*.ts' -o -name '*.tsx' -o -name '*.scss' -o -name '*.html')
-PAGE_INDECES := ui/druid/balance/index.html \
-				ui/druid/feralcat/index.html \
-				ui/druid/feralbear/index.html \
-				ui/druid/restoration/index.html \
-				ui/hunter/dps/index.html \
-				ui/mage/dps/index.html \
-				ui/paladin/holy/index.html \
-				ui/paladin/protection/index.html \
-				ui/paladin/retribution/index.html \
-				ui/priest/dps/index.html \
-				ui/rogue/dps/index.html \
-				ui/shaman/elemental/index.html \
-				ui/shaman/enhancement/index.html \
-				ui/shaman/restoration/index.html \
-				ui/warlock/dps/index.html \
-				ui/warrior/dps/index.html \
-				ui/warrior/protection/index.html \
-				ui/raid/full/index.html
 
 $(OUT_DIR)/.dirstamp: \
   $(OUT_DIR)/lib.wasm \
@@ -34,14 +16,14 @@ $(OUT_DIR)/.dirstamp: \
 
 $(OUT_DIR)/bundle/.dirstamp: \
   $(UI_SRC) \
-  $(PAGE_INDECES) \
   vite.config.mts \
   vite.build-workers.mts \
+  tools/vite/spec_pages.mts \
   node_modules \
   tsconfig.json \
   ui/core/index.ts \
   ui/core/proto/api.ts
-	npx tsc --noEmit
+	node_modules/typescript/bin/tsc --noEmit
 	npx tsx vite.build-workers.mts
 	npx vite build
 	touch $@
@@ -65,17 +47,13 @@ clean:
 	  binary_dist \
 	  ui/core/index.ts \
 	  ui/core/proto/*.ts \
-	  node_modules \
-	  $(PAGE_INDECES)
+	  node_modules
 	find . -name "*.results.tmp" -type f -delete
 
 ui/core/proto/api.ts: proto/*.proto node_modules
 	npx protoc --ts_opt generate_dependencies --ts_out ui/core/proto --proto_path proto proto/api.proto
 	npx protoc --ts_out ui/core/proto --proto_path proto proto/test.proto
 	npx protoc --ts_out ui/core/proto --proto_path proto proto/ui.proto
-
-ui/%/index.html: ui/index_template.html
-	cat ui/index_template.html | sed -e 's/@@CLASS@@/$(shell dirname $(@D) | xargs basename)/g' -e 's/@@SPEC@@/$(shell basename $(@D))/g' > $@
 
 .PHONY: package.json
 
@@ -106,13 +84,6 @@ node_modules: package-lock.json
 .PHONY: host_%
 host_%: $(OUT_DIR) node_modules
 	npx http-server $(OUT_DIR)/..
-
-# Generic rule for building index.html for any class directory
-$(OUT_DIR)/%/index.html: ui/index_template.html $(OUT_DIR)/assets
-	$(eval title := $(shell echo $(shell basename $(@D)) | sed -r 's/(^|_)([a-z])/\U \2/g' | cut -c 2-))
-	echo $(title)
-	mkdir -p $(@D)
-	cat ui/index_template.html | sed -e 's/@@CLASS@@/$(shell dirname $((@D)) | xargs basename)/g' -e 's/@@SPEC@@/$(shell basename $(@D))/g' > $@
 
 .PHONY: wasm
 wasm: $(OUT_DIR)/lib.wasm
@@ -207,7 +178,20 @@ release: wowsimtbc wowsimtbc-windows.exe
 	zip wowsimcli-windows.exe.zip wowsimcli-windows.exe
 
 sim/core/proto/api.pb.go: proto/*.proto
-	protoc -I=./proto --go_out=./sim/core ./proto/*.proto
+	@if go version -m "$$(command -v protoc-gen-go)" 2>/dev/null | grep -qE '^[[:space:]]+mod[[:space:]]+github\.com/golang/protobuf[[:space:]]'; then \
+		echo "ERROR: your protoc-gen-go is the deprecated github.com/golang/protobuf plugin;"; \
+		echo "it generates code that no longer builds against this repo's protobuf version."; \
+		echo "Fix:  go install google.golang.org/protobuf/cmd/protoc-gen-go@latest"; \
+		echo "then: rm -f sim/core/proto/*.pb.go && retry"; \
+		exit 1; \
+	fi
+# Distro protoc packages (e.g. Ubuntu/WSL's protobuf-compiler) bundle a
+# descriptor.proto whose go_package still points at the deprecated
+# github.com/golang/protobuf path, which is no longer a dependency. Pin the
+# mapping so common.proto's MessageOptions extension resolves to descriptorpb.
+	protoc -I=./proto \
+		--go_opt=Mgoogle/protobuf/descriptor.proto=google.golang.org/protobuf/types/descriptorpb \
+		--go_out=./sim/core ./proto/*.proto
 
 # Only useful for building the lib on a host platform that matches the target platform
 .PHONY: locallib
@@ -231,19 +215,26 @@ CLIENTDATA_OUTPUT   := $(shell realpath ./tools/database/wowsims.db)
 
 .PHONY: db
 db:
-	@echo "Running DB2ToSqlite for clientdata"
-	cd tools/DB2ToSqlite && dotnet run -- -s $(CLIENTDATA_SETTINGS) --output $(CLIENTDATA_OUTPUT)
+	@echo "Extracting client data"
+	go run ./tools/db2tool -s $(CLIENTDATA_SETTINGS) --output $(CLIENTDATA_OUTPUT)
 	@echo "Running DBC generation tool"
 	go run tools/database/gen_db/*.go -outDir=./assets -gen=db
 
 .PHONY: ptrdb
 ptrdb:
-	@echo "Running DB2ToSqlite for clientdata"
-	cd tools/DB2ToSqlite && dotnet run -- -s $(CLIENTDATAPTR_SETTINGS) --output $(CLIENTDATA_OUTPUT)
+	@echo "Extracting client data"
+	go run ./tools/db2tool -s $(CLIENTDATAPTR_SETTINGS) --output $(CLIENTDATA_OUTPUT)
 	@echo "Running DBC generation tool"
 	go run tools/database/gen_db/*.go -outDir=./assets -gen=db
 
 sim/core/items/all_items.go: $(call rwildcard,tools/database,*.go) $(call rwildcard,sim/core/proto,*.go)
+	@test -f tools/database/wowsims.db || { \
+		echo "ERROR: tools/database/wowsims.db is missing (gitignored, produced by 'make db')."; \
+		echo "Run 'make db' to extract it from a local WoW install."; \
+		exit 1; }
+	@test -f tools/db2tool/listfile.csv || { \
+		echo "tools/db2tool/listfile.csv is missing, downloading it..."; \
+		curl -fL -o tools/db2tool/listfile.csv https://github.com/wowdev/wow-listfile/releases/latest/download/community-listfile.csv; }
 	go run tools/database/gen_db/*.go -outDir=./assets -gen=db
 
 .PHONY: test
@@ -262,10 +253,7 @@ fmt: tsfmt
 
 .PHONY: tsfmt
 tsfmt:
-	for dir in $$(find ./ui -maxdepth 1 -type d -not -path "./ui" -not -path "./ui/worker"); do \
-		echo $$dir; \
-		npx tsfmt -r --useTsfmt ./tsfmt.json --baseDir $$dir; \
-	done
+	npx oxfmt ui
 
 # one time setup to install pre-commit hook for gofmt and npm install needed packages
 setup:

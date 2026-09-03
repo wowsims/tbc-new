@@ -54,6 +54,8 @@ const (
 	SHADOW                           // 0x20
 	ARCANE                           // 0x40
 
+	ALL_SPELL_DAMAGE = HOLY | FIRE | NATURE | FROST | SHADOW | ARCANE // 126
+
 	SPELL_PENETRATION = FIRE | NATURE | FROST | SHADOW | ARCANE // 0x7E
 )
 

@@ -114,6 +114,7 @@ const (
 
 	// These bits are set by the crit and damage rolls.
 	OutcomeCrit
+	OutcomeSuppressedCrit // A resilience-suppressed crit does not deal crit damage, but can trigger crit procs.
 	OutcomeCrush
 
 	OutcomePartial1_4 // 1/4 of the spell was resisted.
@@ -123,7 +124,7 @@ const (
 
 const (
 	OutcomePartial = OutcomePartial1_4 | OutcomePartial2_4 | OutcomePartial3_4
-	OutcomeLanded  = OutcomeHit | OutcomeCrit | OutcomeCrush | OutcomeGlance | OutcomeBlock
+	OutcomeLanded  = OutcomeHit | OutcomeCrit | OutcomeCrush | OutcomeSuppressedCrit | OutcomeGlance | OutcomeBlock
 )
 
 func (ho HitOutcome) String() string {
@@ -141,6 +142,8 @@ func (ho HitOutcome) String() string {
 		return "Glance" + ho.PartialResistString()
 	} else if ho.Matches(OutcomeCrit) {
 		return "Crit" + ho.PartialResistString()
+	} else if ho.Matches(OutcomeSuppressedCrit) {
+		return "SuppressedCrit" + ho.PartialResistString()
 	} else if ho.Matches(OutcomeHit) {
 		return "Hit" + ho.PartialResistString()
 	} else if ho.Matches(OutcomeCrush) {
@@ -196,6 +199,7 @@ const (
 	SpellFlagEncounterOnly                                  // Indicates this spell should only be used during the encounter (not prepull). Not enforced, just a signal for the APL UI.
 	SpellFlagPotion                                         // Indicates this spell is a potion spell.
 	SpellFlagConjured                                       // Indicates this spell is a conjured item spell.
+	SpellFlagExplosive                                      // Indicates this spell is an engineering explosive.
 	SpellFlagCombatPotion                                   // Indicates this spell is the combat potion.
 	SpellFlagNoSpellMods                                    // Indicates that no spell mods should be applied to this spell
 	SpellFlagCanCastWhileMoving                             // Allows the cast to be casted while moving
@@ -204,6 +208,7 @@ const (
 	SpellFlagSuppressEquipProcs                             // Indicates this spell cannot proc Equip procs
 	SpellFlagSupressDoTApply                                // If present this spell will not apply dots (Used for DTR dot supression)
 	SpellFlagSwapped                                        // Indicates that this spell is not useable because it is from a currently swapped item
+	SpellFlagCastWhileIncapacitated                         // Allows the cast while the unit is incapacitated, e.g. Berserker Rage breaking a Fear.
 
 	// Used to let agents categorize their spells.
 	SpellFlagAgentReserved1

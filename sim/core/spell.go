@@ -640,6 +640,13 @@ func (spell *Spell) CanCompleteCast(sim *Simulation, target *Unit, logCastFailur
 		return false
 	}
 
+	if spell.Unit.PseudoStats.Incapacitated && !spell.Flags.Matches(SpellFlagCastWhileIncapacitated) {
+		if logCastFailure {
+			return spell.castFailureHelper(sim, "unit is incapacitated")
+		}
+		return false
+	}
+
 	if target == nil {
 		if logCastFailure {
 			return spell.castFailureHelper(sim, "target is not set")
@@ -796,10 +803,11 @@ type ResourceCostImpl interface {
 }
 
 type SpellCost struct {
-	BaseCost        int32   // The base power cost before all modifiers.
-	FlatModifier    int32   // Flat value added to base cost before pct mods
-	PercentModifier float64 // Multiplier for cost, as of MoP a float
-	spell           *Spell
+	BaseCost                int32   // The base power cost before all modifiers.
+	FlatModifier            int32   // Flat value added to base cost before pct mods
+	PercentModifier         float64 // Multiplier for cost, as of MoP a float
+	AdditivePercentModifier float64 // Additive pct cost bucket: defaults to 1, additive pct mods sum into it
+	spell                   *Spell
 	ResourceCostImpl
 }
 
@@ -807,7 +815,7 @@ func (sc *SpellCost) ApplyCostModifiers(cost int32) float64 {
 	spell := sc.spell
 	cost = max(0, cost+sc.FlatModifier)
 	cost = max(0, cost*spell.Unit.PseudoStats.SpellCostPercentModifier/100)
-	return max(0, float64(cost)*sc.PercentModifier)
+	return max(0, float64(cost)*sc.PercentModifier*sc.AdditivePercentModifier)
 }
 
 // Get power cost after all modifiers.

@@ -67,6 +67,7 @@ const (
 	SpellMaskAvengersShield
 	SpellMaskCrusaderStrike
 	SpellMaskRepentance
+	SpellMaskRighteousFury
 )
 
 // Composite masks
@@ -111,4 +112,21 @@ const (
 	// Spells that can trigger Seal of Command
 	SpellMaskCanTriggerSealOfCommand = SpellMaskCrusaderStrike |
 		SpellMaskJudgement
+
+	SpellMaskCanProcTome = SpellMaskAllAuras |
+		SpellMaskAllBlessings |
+		SpellMaskAllSeals |
+		SpellMaskAllJudgements |
+		SpellMaskAvengersShield |
+		SpellMaskAvengingWrath |
+		SpellMaskConsecration |
+		SpellMaskDivineFavor |
+		SpellMaskDivineIllumination |
+		SpellMaskExorcism |
+		SpellMaskHammerOfWrath |
+		SpellMaskHealingSpells |
+		SpellMaskHolyShield |
+		SpellMaskHolyShock |
+		SpellMaskHolyWrath |
+		SpellMaskRighteousFury
 )

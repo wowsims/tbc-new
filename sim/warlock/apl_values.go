@@ -44,8 +44,13 @@ func (x *APLValueWarlockAssignedCurseIsActive) Type() proto.APLValueType {
 }
 
 func (x *APLValueWarlockAssignedCurseIsActive) GetBool(sim *core.Simulation) bool {
-	aura := x.target.Get().GetAuraByID(x.spell.ActionID.WithTag(1))
-	return aura.IsActive()
+	target := x.target.Get()
+	aura := target.GetAuraByID(x.spell.ActionID.WithTag(1))
+	if aura == nil {
+		aura = target.GetAuraByID(x.spell.ActionID.WithTag(0))
+	}
+
+	return aura.IsActive() && aura.TimeActive(sim) >= x.warlock.ReactionTime
 }
 
 func (x *APLValueWarlockAssignedCurseIsActive) String() string {

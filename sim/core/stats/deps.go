@@ -2,6 +2,7 @@ package stats
 
 import (
 	"fmt"
+	"math"
 )
 
 // This stat list is arranged such that evaluating dependencies in this order
@@ -255,6 +256,11 @@ func (sdm *StatDependencyManager) ApplyStatDependencies(s Stats) Stats {
 		if dep.enabled {
 			if dep.src == dep.dst {
 				s[dep.dst] *= dep.amount
+			} else if isFlooredGameStat[dep.src] {
+				// The dep sort guarantees the source stat is final here, and
+				// the game floors attributes before dependents consume them
+				// (e.g. dodge is derived from the floored Agility).
+				s[dep.dst] += math.Floor(s[dep.src]) * dep.amount
 			} else {
 				s[dep.dst] += s[dep.src] * dep.amount
 			}

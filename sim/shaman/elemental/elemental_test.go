@@ -32,8 +32,8 @@ func TestElemental(t *testing.T) {
 			OtherGearSets: []core.GearSetCombo{
 				core.GetGearSet("../../../ui/shaman/elemental/gear_sets", "p2"),
 				core.GetGearSet("../../../ui/shaman/elemental/gear_sets", "p3"),
-				core.GetGearSet("../../../ui/shaman/elemental/gear_sets", "p3_5"),
 				core.GetGearSet("../../../ui/shaman/elemental/gear_sets", "p4"),
+				core.GetGearSet("../../../ui/shaman/elemental/gear_sets", "p5"),
 			},
 			Talents:  DefaultTalents,
 			Rotation: core.GetAplRotation("../../../ui/shaman/elemental/apls", "default"),

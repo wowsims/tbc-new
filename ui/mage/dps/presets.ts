@@ -1,29 +1,73 @@
 import * as PresetUtils from '../../core/preset_utils';
-import { Debuffs, PseudoStat, RaidBuffs, Stat, ConsumesSpec, PartyBuffs, IndividualBuffs, TristateEffect, Profession, Drums } from '../../core/proto/common';
+import {
+	Debuffs,
+	PseudoStat,
+	RaidBuffs,
+	Stat,
+	ConsumesSpec,
+	PartyBuffs,
+	IndividualBuffs,
+	TristateEffect,
+	Profession,
+	Drums,
+	Spec,
+	ItemSlot,
+	ItemQuality,
+} from '../../core/proto/common';
 import { defaultImprovedShadowBoltSettings } from '../../core/proto_utils/utils';
 import { Stats } from '../../core/proto_utils/stats';
 import { SavedTalents } from '../../core/proto/ui';
-import { MageArmor, Mage_Options as MageOptions } from '../../core/proto/mage';
+import { Mage_Rotation, MageArmor, Mage_Options as MageOptions } from '../../core/proto/mage';
 import BlankAPL from './apls/blank.apl.json';
 import BlankGear from './gear_sets/blank.gear.json';
 import ArcaneApl from './apls/arcane.apl.json';
+import ArcaneBraidApl from './apls/arcaneBraid.apl.json';
 import PreBISArcaneGear from './gear_sets/preBisArcane.gear.json';
 import P1BISArcaneGear from './gear_sets/p1Arcane.gear.json';
 import P2BISArcaneGear from './gear_sets/p2Arcane.gear.json';
+import P3BISArcaneGearStaff from './gear_sets/p3ArcaneStaff.gear.json';
+import P3BISArcaneGearSword from './gear_sets/p3ArcaneSword.gear.json';
+import { Phase } from '../../core/constants/other';
+import { APLRotation_Type } from '../../core/proto/apl';
+import { Player } from '../../core/player';
 
 // Preset options for this spec.
 // Eventually we will import these values for the raid sim too, so its good to
 // keep them in a separate file.
 
 export const BLANK_APL = PresetUtils.makePresetAPLRotation('Blank', BlankAPL);
-export const PREBIS_ARCANE = PresetUtils.makePresetGear('Arcane PreRaid - BIS', PreBISArcaneGear);
-export const P1_BIS_ARCANE = PresetUtils.makePresetGear('Arcane P1 - BIS', P1BISArcaneGear);
-export const P2_BIS_ARCANE = PresetUtils.makePresetGear('Arcane P2 - BIS', P2BISArcaneGear);
-//export const P3_BIS_ARCANE = PresetUtils.makePresetGear('Arcane P3 - BIS', P3BISArcaneGear);
+export const PREBIS_ARCANE = PresetUtils.makePresetGear('Arcane PreRaid - BIS', PreBISArcaneGear, { phase: Phase.Phase1 });
+export const P1_BIS_ARCANE = PresetUtils.makePresetGear('Arcane - BIS', P1BISArcaneGear, { phase: Phase.Phase1 });
+export const P2_BIS_ARCANE = PresetUtils.makePresetGear('Arcane - BIS', P2BISArcaneGear, { phase: Phase.Phase2 });
+export const P3_BIS_ARCANE_STAFF = PresetUtils.makePresetGear('Arcane - Staff', P3BISArcaneGearStaff, { phase: Phase.Phase3 });
+export const P3_BIS_ARCANE_SWORD = PresetUtils.makePresetGear('Arcane - Sword', P3BISArcaneGearSword, { phase: Phase.Phase3 });
 
 export const ARCANE_TALENTS = PresetUtils.makePresetTalents('Arcane', SavedTalents.create({ talentsString: '2500052300030150330125--053500031003001' }));
 export const ROTATION_PRESET_ARCANE = PresetUtils.makePresetAPLRotation('Arcane', ArcaneApl);
+export const doesNotHaveSerpentCoilBraid = (player: Player<Spec.SpecMage>) =>
+	player.getEquippedItem(ItemSlot.ItemSlotTrinket1)?.id != 30720 && player.getEquippedItem(ItemSlot.ItemSlotTrinket2)?.id != 30720;
+export const ROTATION_PRESET_ARCANEBRAID = PresetUtils.makePresetAPLRotation('BraidSimple', ArcaneBraidApl, {
+	onLoad(player: Player<Spec.SpecMage>) {
+		PresetUtils.makeSpecChangeWarningToast(
+			[
+				{
+					condition: doesNotHaveSerpentCoilBraid,
+					message: 'Check your gear: You do not have Serpent-Coil Braid equipped, but the selected option is for Serpent-Coil Braid.',
+				},
+			],
+			player,
+		);
+	},
+});
 export const BLANK_GEARSET = PresetUtils.makePresetGear('Blank', BlankGear);
+
+export const ArcaneMageSimpleRotation = Mage_Rotation.create({
+	conserveStart: 20,
+	conserveEnd: 30,
+	delayMajorCDs: 10,
+});
+
+export const APL_ARCANE_SIMPLE = PresetUtils.makePresetSimpleRotation('Simple', Spec.SpecMage, ArcaneMageSimpleRotation);
 
 // Preset options for EP weights
 export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
@@ -68,6 +112,29 @@ export const P2_EP_PRESET = PresetUtils.makePresetEpWeights(
 		{
 			[PseudoStat.PseudoStatSchoolHitPercentArcane]: 2.09,
 			[PseudoStat.PseudoStatSchoolHitPercentFrost]: 0.2,
+		},
+	),
+);
+
+export const P3_EP_PRESET = PresetUtils.makePresetEpWeights(
+	'P3 - Arcane',
+	Stats.fromMap(
+		{
+			[Stat.StatMana]: 0.03,
+			[Stat.StatIntellect]: 1.28,
+			[Stat.StatSpirit]: 0.83,
+			[Stat.StatSpellDamage]: 1,
+			[Stat.StatArcaneDamage]: 0.97,
+			[Stat.StatFrostDamage]: 0.03,
+			[Stat.StatSpellHitRating]: 2.4,
+			[Stat.StatSpellCritRating]: 0.76,
+			[Stat.StatSpellHasteRating]: 0.77,
+			[Stat.StatSpellPenetration]: 0,
+			[Stat.StatMP5]: 0.35,
+		},
+		{
+			[PseudoStat.PseudoStatSchoolHitPercentArcane]: 2.32,
+			[PseudoStat.PseudoStatSchoolHitPercentFrost]: 0.06,
 		},
 	),
 );
@@ -119,7 +186,7 @@ export const DefaultIndividualBuffs = IndividualBuffs.create({
 	blessingOfKings: true,
 	blessingOfWisdom: 2,
 	innervates: 1,
-	powerInfusions: 1,
+	blessingOfSalvation: true,
 	shadowPriestDps: 1400,
 });
 
@@ -129,4 +196,89 @@ export const DefaultDebuffs = Debuffs.create({
 	improvedSealOfTheCrusader: TristateEffect.TristateEffectImproved,
 	judgementOfWisdom: true,
 	...defaultImprovedShadowBoltSettings(),
+});
+
+export const P1_PLAYER_SETTINGS: PresetUtils.PresetSettings = {
+	name: 'P1',
+	playerOptions: OtherDefaults,
+	debuffs: Debuffs.create({
+		...DefaultDebuffs,
+	}),
+	reforgeSettings: {
+		maxGemPhase: Phase.Phase1,
+	},
+};
+
+export const P2_PLAYER_SETTINGS: PresetUtils.PresetSettings = {
+	name: 'P2',
+	playerOptions: OtherDefaults,
+	partyBuffs: PartyBuffs.create({
+		...DefaultPartyBuffs,
+	}),
+	debuffs: Debuffs.create({
+		...DefaultDebuffs,
+	}),
+	reforgeSettings: {
+		maxGemPhase: Phase.Phase2,
+	},
+};
+
+export const P3_PLAYER_SETTINGS: PresetUtils.PresetSettings = {
+	name: 'P3',
+	playerOptions: OtherDefaults,
+	partyBuffs: PartyBuffs.create({
+		...DefaultPartyBuffs,
+	}),
+	debuffs: Debuffs.create({
+		...DefaultDebuffs,
+	}),
+	reforgeSettings: {
+		maxGemPhase: Phase.Phase3,
+		disableUniqueGems: true,
+		maxGemQuality: ItemQuality.ItemQualityEpic,
+	},
+};
+
+export const P1_PRESET_BUILD_ARC = PresetUtils.makePresetBuild('P1', {
+	group: 'Arcane',
+	phase: Phase.Phase1,
+	gear: P1_BIS_ARCANE,
+	talents: ARCANE_TALENTS,
+	epWeights: P1_EP_PRESET,
+	rotationType: APLRotation_Type.TypeSimple,
+	rotation: APL_ARCANE_SIMPLE,
+	settings: P1_PLAYER_SETTINGS,
+});
+
+export const P2_PRESET_BUILD_ARC = PresetUtils.makePresetBuild('P2', {
+	group: 'Arcane',
+	phase: Phase.Phase2,
+	gear: P2_BIS_ARCANE,
+	talents: ARCANE_TALENTS,
+	epWeights: P2_EP_PRESET,
+	rotationType: APLRotation_Type.TypeSimple,
+	rotation: ROTATION_PRESET_ARCANEBRAID,
+	settings: P2_PLAYER_SETTINGS,
+});
+
+export const P3_PRESET_BUILD_ARC_STAFF = PresetUtils.makePresetBuild('P3 Staff', {
+	group: 'Arcane',
+	phase: Phase.Phase3,
+	gear: P3_BIS_ARCANE_STAFF,
+	talents: ARCANE_TALENTS,
+	epWeights: P3_EP_PRESET,
+	rotationType: APLRotation_Type.TypeSimple,
+	rotation: ROTATION_PRESET_ARCANEBRAID,
+	settings: P2_PLAYER_SETTINGS,
+});
+
+export const P3_PRESET_BUILD_ARC_SWORD = PresetUtils.makePresetBuild('P3 Sword', {
+	group: 'Arcane',
+	phase: Phase.Phase3,
+	gear: P3_BIS_ARCANE_SWORD,
+	talents: ARCANE_TALENTS,
+	epWeights: P3_EP_PRESET,
+	rotationType: APLRotation_Type.TypeSimple,
+	rotation: ROTATION_PRESET_ARCANEBRAID,
+	settings: P2_PLAYER_SETTINGS,
 });

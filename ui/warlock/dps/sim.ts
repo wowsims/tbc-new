@@ -42,6 +42,11 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecWarlock, {
 			Stat.StatFireDamage,
 			Stat.StatSpellPenetration,
 			Stat.StatMP5,
+			Stat.StatArcaneResistance,
+			Stat.StatFireResistance,
+			Stat.StatFrostResistance,
+			Stat.StatNatureResistance,
+			Stat.StatShadowResistance,
 		],
 		[PseudoStat.PseudoStatSpellHitPercent, PseudoStat.PseudoStatSpellCritPercent, PseudoStat.PseudoStatSpellHastePercent],
 	),
@@ -49,7 +54,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecWarlock, {
 
 	defaults: {
 		// Default equipped gear.
-		gear: Presets.T4.gear,
+		gear: Presets.T6.gear,
 
 		// Default EP weights for sorting gear in the gear picker.
 		epWeights: Presets.P1_AFFLI_DEMO_DESTRO_EP.epWeights,
@@ -118,8 +123,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecWarlock, {
 		return Presets.DestroAPL.rotation.rotation!;
 	},
 	customSections: [WarlockInputs.CursesSection],
-
-	raidSimPresets: [],
 });
 
 export class WarlockSimUI extends IndividualSimUI<Spec.SpecWarlock> {

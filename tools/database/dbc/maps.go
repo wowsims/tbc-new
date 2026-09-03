@@ -1,13 +1,28 @@
 package dbc
 
-import "github.com/wowsims/tbc/sim/core/proto"
+import (
+	"strconv"
+
+	"github.com/wowsims/tbc/sim/core/proto"
+)
 
 func MapResistanceToStat(index int) (proto.Stat, bool) {
 	switch index {
 	case 0:
 		return proto.Stat_StatBonusArmor, true
+	// 1 = Holy (no proto stat)
+	case 2:
+		return proto.Stat_StatFireResistance, true
+	case 3:
+		return proto.Stat_StatNatureResistance, true
+	case 4:
+		return proto.Stat_StatFrostResistance, true
+	case 5:
+		return proto.Stat_StatShadowResistance, true
+	case 6:
+		return proto.Stat_StatArcaneResistance, true
 	}
-	return proto.Stat_StatBonusArmor, false
+	return 0, false
 }
 
 var MapArmorSubclassToArmorType = map[int]proto.ArmorType{
@@ -230,7 +245,16 @@ type EnchantMetaType struct {
 	WeaponType proto.WeaponType
 }
 
-var SpellSchoolToStat = map[SpellSchool]proto.Stat{
+var SpellSchoolToSpellDamageStat = map[SpellSchool]proto.Stat{
+	FIRE:     proto.Stat_StatFireDamage,
+	ARCANE:   proto.Stat_StatArcaneDamage,
+	NATURE:   proto.Stat_StatNatureDamage,
+	FROST:    proto.Stat_StatFrostDamage,
+	SHADOW:   proto.Stat_StatShadowDamage,
+	HOLY:     proto.Stat_StatHolyDamage,
+	PHYSICAL: proto.Stat_StatPhysicalDamage,
+}
+var SpellSchoolToResistanceStat = map[SpellSchool]proto.Stat{
 	FIRE:     proto.Stat_StatFireResistance,
 	ARCANE:   proto.Stat_StatArcaneResistance,
 	NATURE:   proto.Stat_StatNatureResistance,
@@ -238,6 +262,7 @@ var SpellSchoolToStat = map[SpellSchool]proto.Stat{
 	SHADOW:   proto.Stat_StatShadowResistance,
 	PHYSICAL: proto.Stat_StatArmor,
 }
+
 var MapInventoryTypeToEnchantMetaType = map[InventoryTypeFlag]EnchantMetaType{
 	HEAD:     {ItemType: proto.ItemType_ItemTypeHead, WeaponType: proto.WeaponType_WeaponTypeUnknown},
 	NECK:     {ItemType: proto.ItemType_ItemTypeNeck, WeaponType: proto.WeaponType_WeaponTypeUnknown},
@@ -265,6 +290,7 @@ var consumableClassToProto = map[ConsumableClass]proto.ConsumableType{
 	FOOD:                   proto.ConsumableType_ConsumableTypeFood,
 	BANDAGE:                proto.ConsumableType_ConsumableTypeUnknown,
 	OTHER:                  proto.ConsumableType_ConsumableTypeOther,
+	HERB:                   proto.ConsumableType_ConsumableTypeHerb,
 }
 
 var MapPowerTypeEnumToResourceType = map[int32]proto.ResourceType{
@@ -389,7 +415,9 @@ var Classes = []DbcClass{
 // when parsing in item_effect.go#MergeItemEffectsForAllStates.
 var MapItemIdToPPM = map[int32]float64{
 	12798: 1, // Annihilator
+	19289: 1, // Darkmoon Card: Maelstrom
 	// 19019: 6,    // Thunderfury
+	21670: 10, // Badge of the Swarmguard
 	// 22559: 1,    // Mongoose
 	28579: 1,    // Romulo's Poison Vial
 	28429: 1,    // Lionheart Champion
@@ -413,6 +441,25 @@ var MapItemIdToPPM = map[int32]float64{
 	31859: 1,   // Darkmoon Card: Madness
 	32262: 1,   // Syphon of the Nathrezim
 	32505: 1,   // Madness of the Betrayer
+}
+
+// Items whose proc rate is nowhere in the spell data - ProcChance is 0, or the >100 sentinel that
+// means the rate lives elsewhere - and that have no MapItemIdToPPM entry to supply it either. Such a
+// proc is left with no rate at all, so the effect either fires on every hit or is abandoned. Naming
+// them is the only way anyone finds out a number is owed.
+//
+// Reported once per item: the same item reaches the check from several effects, and on every
+// scaling state.
+var reportedMissingPPM = map[int32]bool{}
+
+func ReportMissingPPM(itemID int32, spellID int) {
+	if itemID == 0 || reportedMissingPPM[itemID] {
+		return
+	}
+
+	reportedMissingPPM[itemID] = true
+	println("Item needs a manual PPM: " + dbcInstance.Items[int(itemID)].Name +
+		" (" + strconv.FormatInt(int64(itemID), 10) + ") from spell " + strconv.Itoa(spellID))
 }
 
 func getPPMForItemID(itemID int32) float64 {

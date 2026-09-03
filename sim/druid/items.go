@@ -8,6 +8,60 @@ import (
 )
 
 func init() {
+	// Idol of Brutality (23198): +50 flat to Maul, +10 flat to Swipe.
+	core.NewItemEffect(23198, func(agent core.Agent) {
+		druid := agent.(DruidAgent).GetDruid()
+		aura := core.MakePermanent(druid.RegisterAura(core.Aura{
+			Label: "Idol of Brutality",
+			OnGain: func(_ *core.Aura, _ *core.Simulation) {
+				druid.IdolMaulBonus += 50
+				druid.IdolSwipeBonus += 10
+			},
+			OnExpire: func(_ *core.Aura, _ *core.Simulation) {
+				druid.IdolMaulBonus -= 50
+				druid.IdolSwipeBonus -= 10
+			},
+		}))
+		druid.ItemSwap.RegisterProc(23198, aura)
+	})
+
+	// Idol of Terror (33509): Mangle has 85% chance to grant 65 agility for 10 sec (10s ICD).
+	core.NewItemEffect(33509, func(agent core.Agent) {
+		druid := agent.(DruidAgent).GetDruid()
+		procAura := druid.NewTemporaryStatsAura("Idol of Terror Proc", core.ActionID{SpellID: 43737}, stats.Stats{stats.Agility: 65}, time.Second*10)
+
+		aura := core.MakePermanent(druid.RegisterAura(core.Aura{
+			Label: "Idol of Terror",
+		}).AttachProcTrigger(core.ProcTrigger{
+			ClassSpellMask: DruidSpellMangle,
+			Callback:       core.CallbackOnSpellHitDealt,
+			ProcChance:     0.85,
+			ICD:            time.Second * 10,
+			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+				procAura.Activate(sim)
+			},
+		}))
+		druid.ItemSwap.RegisterProc(33509, aura)
+	})
+
+	// Idol of the White Stag (32257): Mangle also increases attack power by 94 for 20 sec.
+	core.NewItemEffect(32257, func(agent core.Agent) {
+		druid := agent.(DruidAgent).GetDruid()
+		procAura := druid.NewTemporaryStatsAura("Idol of the White Stag Proc", core.ActionID{SpellID: 41037}, stats.Stats{stats.AttackPower: 94}, time.Second*20)
+
+		aura := core.MakePermanent(druid.RegisterAura(core.Aura{
+			Label: "Idol of the White Stag",
+		}).AttachProcTrigger(core.ProcTrigger{
+			ClassSpellMask: DruidSpellMangle,
+			Callback:       core.CallbackOnSpellHitDealt,
+			ProcChance:     1.0,
+			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+				procAura.Activate(sim)
+			},
+		}))
+		druid.ItemSwap.RegisterProc(32257, aura)
+	})
+
 	// Idol of the Moon
 	core.NewItemEffect(23197, func(agent core.Agent) {
 		character := agent.GetCharacter()
@@ -157,6 +211,24 @@ func init() {
 		// Implemented naively in druid.go
 	})
 
+	// Wolfshead Helm (8345): When shapeshifting into Cat form the Druid gains 20 energy,
+	// when shapeshifting into Bear form the Druid gains 5 rage.
+	core.NewItemEffect(8345, func(agent core.Agent) {
+		druid := agent.(DruidAgent).GetDruid()
+		core.MakePermanent(druid.RegisterAura(core.Aura{
+			Label:    "Wolfshead Helm",
+			ActionID: core.ActionID{SpellID: 17768},
+			OnGain: func(_ *core.Aura, _ *core.Simulation) {
+				druid.WolfsheadEnergyBonus += 20
+				druid.WolfsheadRageBonus += 5
+			},
+			OnExpire: func(_ *core.Aura, _ *core.Simulation) {
+				druid.WolfsheadEnergyBonus -= 20
+				druid.WolfsheadRageBonus -= 5
+			},
+		}))
+	})
+
 	// Idol of Ursoc (27744): Increases the damage dealt by Lacerate by 8 per tick per stack.
 	core.NewItemEffect(27744, func(agent core.Agent) {
 		druid := agent.(DruidAgent).GetDruid()
@@ -184,18 +256,14 @@ func init() {
 		aura := core.MakePermanent(druid.RegisterAura(core.Aura{
 			Label: "Ashtongue Talisman of Equilibrium",
 		}).AttachProcTrigger(core.ProcTrigger{
-			ClassSpellMask: DruidSpellMangle,
+			ClassSpellMask: DruidSpellMangle | DruidSpellStarfire,
 			Callback:       core.CallbackOnSpellHitDealt,
-			ProcChance:     0.4,
 			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-				ashtongueAuraMangle.Activate(sim)
-			},
-		}).AttachProcTrigger(core.ProcTrigger{
-			ClassSpellMask: DruidSpellStarfire,
-			Callback:       core.CallbackOnSpellHitDealt,
-			ProcChance:     0.25,
-			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-				ashtongueAuraStarfire.Activate(sim)
+				if spell.Matches(DruidSpellMangle) && sim.Proc(0.4, "Ashtongue Talisman of Equilibrium (Mangle)") {
+					ashtongueAuraMangle.Activate(sim)
+				} else if spell.Matches(DruidSpellStarfire) && sim.Proc(0.25, "Ashtongue Talisman of Equilibrium (Starfire)") {
+					ashtongueAuraStarfire.Activate(sim)
+				}
 			},
 		}))
 

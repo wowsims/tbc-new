@@ -1,3 +1,4 @@
+import { Phase } from '../../core/constants/other';
 import * as PresetUtils from '../../core/preset_utils';
 import { ConsumesSpec, Drums, Profession, Race, Spec, Stat } from '../../core/proto/common';
 import {
@@ -9,10 +10,20 @@ import { SavedTalents } from '../../core/proto/ui';
 import { Stats } from '../../core/proto_utils/stats';
 import DefaultApl from './apls/default.apl.json';
 import PreRaidGear from './gear_sets/pre_raid.gear.json';
-import P1Gear from './gear_sets/p1.gear.json';
-import P2Gear from './gear_sets/p2.gear.json';
-import P3Gear from './gear_sets/p3.gear.json';
-import P4Gear from './gear_sets/p4.gear.json';
+import P1_Realistic_6P_Gear from './gear_sets/p1_realistic_6p.gear.json';
+import P1_Realistic_9P_Gear from './gear_sets/p1_realistic_9p.gear.json';
+import P1_BiS_6P_Gear from './gear_sets/p1_bis_6p.gear.json';
+import P1_BiS_9P_Gear from './gear_sets/p1_bis_9p.gear.json';
+import P1_Alt_6P_Gear from './gear_sets/p1_alt_6p.gear.json';
+import P1_Alt_9P_Gear from './gear_sets/p1_alt_9p.gear.json';
+import P2_6P_Gear from './gear_sets/p2_6p.gear.json';
+import P2_Alt_6P_Gear from './gear_sets/p2_alt_6p.gear.json';
+import P2_9P_Gear from './gear_sets/p2_9p.gear.json';
+import P2_Alt_9P_Gear from './gear_sets/p2_alt_9p.gear.json';
+import P3_6P_Gear from './gear_sets/p3_6p.gear.json';
+import P3_9P_Gear from './gear_sets/p3_9p.gear.json';
+import P4_6P_Gear from './gear_sets/p4_6p.gear.json';
+import P4_9P_Gear from './gear_sets/p4_9p.gear.json';
 import P5Gear from './gear_sets/p5.gear.json';
 
 // Default talents. Uses the wowhead calculator format, make the talents on
@@ -31,12 +42,31 @@ export const MonocatTalents = {
 	}),
 };
 
-export const PRE_RAID_GEARSET = PresetUtils.makePresetGear('Pre-Raid', PreRaidGear);
-export const P1_GEARSET = PresetUtils.makePresetGear('P1', P1Gear);
-export const P2_GEARSET = PresetUtils.makePresetGear('P2', P2Gear);
-export const P3_GEARSET = PresetUtils.makePresetGear('P3', P3Gear);
-export const P4_GEARSET = PresetUtils.makePresetGear('P4', P4Gear);
-export const P5_GEARSET = PresetUtils.makePresetGear('P5', P5Gear);
+// Phase 1
+export const PRE_RAID_GEARSET = PresetUtils.makePresetGear('Pre-Raid', PreRaidGear, { phase: Phase.Phase1 });
+export const P1_REALISTIC_6P_GEARSET = PresetUtils.makePresetGear('Realistic 6%', P1_Realistic_6P_Gear, { phase: Phase.Phase1 });
+export const P1_REALISTIC_9P_GEARSET = PresetUtils.makePresetGear('Realistic 9%', P1_Realistic_9P_Gear, { phase: Phase.Phase1 });
+export const P1_BIS_6P_GEARSET = PresetUtils.makePresetGear('BiS 6%', P1_BiS_6P_Gear, { phase: Phase.Phase1 });
+export const P1_BIS_9P_GEARSET = PresetUtils.makePresetGear('BiS 9%', P1_BiS_9P_Gear, { phase: Phase.Phase1 });
+export const P1_ALT_6P_GEARSET = PresetUtils.makePresetGear('Alt 6%', P1_Alt_6P_Gear, { phase: Phase.Phase1 });
+export const P1_ALT_9P_GEARSET = PresetUtils.makePresetGear('Alt 9%', P1_Alt_9P_Gear, { phase: Phase.Phase1 });
+
+// Phase 2
+export const P2_6P_GEARSET = PresetUtils.makePresetGear('BiS 6%', P2_6P_Gear, { phase: Phase.Phase2 });
+export const P2_ALT_6P_GEARSET = PresetUtils.makePresetGear('Alt 6%', P2_Alt_6P_Gear, { phase: Phase.Phase2 });
+export const P2_9P_GEARSET = PresetUtils.makePresetGear('BiS 9%', P2_9P_Gear, { phase: Phase.Phase2 });
+export const P2_ALT_9P_GEARSET = PresetUtils.makePresetGear('Alt 9%', P2_Alt_9P_Gear, { phase: Phase.Phase2 });
+
+// Phase 3
+export const P3_6P_GEARSET = PresetUtils.makePresetGear('BiS 6%', P3_6P_Gear, { phase: Phase.Phase3 });
+export const P3_9P_GEARSET = PresetUtils.makePresetGear('BiS 9%', P3_9P_Gear, { phase: Phase.Phase3 });
+
+// Phase 4
+export const P4_6P_GEARSET = PresetUtils.makePresetGear('BiS 6%', P4_6P_Gear, { phase: Phase.Phase4 });
+export const P4_9P_GEARSET = PresetUtils.makePresetGear('BiS 9%', P4_9P_Gear, { phase: Phase.Phase4 });
+
+// Phase 5
+export const P5_GEARSET = PresetUtils.makePresetGear('BiS', P5Gear, { phase: Phase.Phase5 });
 
 export const DefaultOptions = FeralDruidOptions.create({});
 
@@ -59,6 +89,7 @@ export const OtherDefaults = {
 	profession1: Profession.Engineering,
 	profession2: Profession.Enchanting,
 	race: Race.RaceNightElf,
+	reactionTime: 250,
 };
 
 
@@ -66,15 +97,16 @@ export const P1_EP_PRESET = PresetUtils.makePresetEpWeights(
 	'P1',
 	Stats.fromMap(
 		{
-			[Stat.StatAgility]: 1.17,
-			[Stat.StatStrength]: 0.79,
+			[Stat.StatAgility]: 1.16,
+			[Stat.StatStrength]: 0.78,
 			[Stat.StatAttackPower]: 0.35,
 			[Stat.StatFeralAttackPower]: 0.35,
-			[Stat.StatMeleeHitRating]: 0.99,
-			[Stat.StatExpertiseRating]: 1.00,
-			[Stat.StatMeleeCritRating]: 0.78,
-			[Stat.StatMeleeHasteRating]: 0.45,
-			[Stat.StatArmorPenetration]: 0.17,
+			[Stat.StatMeleeHitRating]: 1.02,
+			[Stat.StatExpertiseRating]: 1.02,
+			[Stat.StatMeleeCritRating]: 0.77,
+			[Stat.StatMeleeHasteRating]: 0.41,
+			[Stat.StatArmorPenetration]: 0.16,
+            [Stat.StatPhysicalDamage]: 3.13,
 		},
 		{},
 	),

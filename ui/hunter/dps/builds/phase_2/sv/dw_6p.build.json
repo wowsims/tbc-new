@@ -99,7 +99,7 @@
 			"options": {
 				"classOptions": {
 					"quiverBonus": "Speed15",
-					"ammo": "WardensArrow",
+					"ammo": "AdamantiteStinger",
 					"petType": "Ravager",
 					"petUptime": 1
 				}

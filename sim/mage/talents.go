@@ -1,9 +1,9 @@
 package mage
 
 import (
+	"math"
 	"time"
 
-	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/stats"
 )
@@ -231,7 +231,7 @@ func (mage *Mage) registerEmpoweredArcaneMissiles() {
 
 	mage.AddStaticMod(core.SpellModConfig{
 		ClassMask:  MageSpellArcaneMissilesTick,
-		FloatValue: .15 * float64(mage.Talents.EmpoweredArcaneMissiles),
+		FloatValue: .03 * float64(mage.Talents.EmpoweredArcaneMissiles),
 		Kind:       core.SpellMod_BonusCoeffecient_Flat,
 	})
 
@@ -280,25 +280,66 @@ func (mage *Mage) registerIgnite() {
 	if mage.Talents.Ignite == 0 {
 		return
 	}
+	igniteDamageMultiplier := float64(mage.Talents.Ignite) * .08
 
-	mage.Ignite = shared.RegisterIgniteEffect(&mage.Unit, shared.IgniteConfig{
-		ActionID:       core.ActionID{SpellID: 12846},
-		ClassSpellMask: MageSpellIgnite,
-		DotAuraLabel:   "Ignite",
-		DotAuraTag:     "IgniteDot",
+	igniteSpell := mage.RegisterSpell(core.SpellConfig{
+		ActionID:         core.ActionID{SpellID: 12846},
+		SpellSchool:      core.SpellSchoolFire,
+		ProcMask:         core.ProcMaskSpellProc,
+		ClassSpellMask:   MageSpellIgnite,
+		Flags:            core.SpellFlagIgnoreModifiers | core.SpellFlagNoSpellMods | core.SpellFlagNoOnCastComplete | core.SpellFlagIgnoreResists,
+		DamageMultiplier: 1,
+		ThreatMultiplier: 1,
 
-		ProcTrigger: core.ProcTrigger{
-			Name:           "Ignite Talent",
-			Callback:       core.CallbackOnSpellHitDealt,
-			ProcMask:       core.ProcMaskSpellDamage,
-			ClassSpellMask: FireSpellIgnitable,
-			Outcome:        core.OutcomeCrit,
+		Dot: core.DotConfig{
+			Aura: core.Aura{
+				Label:     "Ignite",
+				Tag:       "IgniteDot",
+				MaxStacks: math.MaxInt32,
+			},
+			NumberOfTicks: 2,
+			TickLength:    2 * time.Second,
+			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
+				dot.Spell.CalcAndDealPeriodicDamage(sim, target, dot.SnapshotBaseDamage, dot.OutcomeTick)
+			},
 		},
 
-		DamageCalculator: func(result *core.SpellResult) float64 {
-			return result.Damage * (float64(mage.Talents.Ignite) * .08)
+		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+			spell.Dot(target).Apply(sim)
 		},
 	})
+
+	refreshIgnite := func(sim *core.Simulation, target *core.Unit, damagePerTick float64) {
+		dot := igniteSpell.Dot(target)
+		igniteSpell.Cast(sim, target)
+		dot.SnapshotBaseDamage = damagePerTick
+		dot.Aura.SetStacks(sim, int32(dot.SnapshotBaseDamage))
+	}
+
+	procTrigger := core.ProcTrigger{
+		Name:               "Ignite Talent",
+		Callback:           core.CallbackOnSpellHitDealt,
+		ProcMask:           core.ProcMaskSpellDamage,
+		ClassSpellMask:     FireSpellIgnitable,
+		Outcome:            core.OutcomeCrit,
+		TriggerImmediately: true,
+		Handler: func(sim *core.Simulation, _ *core.Spell, result *core.SpellResult) {
+			target := result.Target
+			dot := igniteSpell.Dot(target)
+			outstandingDamage := dot.OutstandingDmg()
+			if dot.RemainingTicks() <= 0 {
+				outstandingDamage = 0
+			}
+
+			newDamage := result.Damage * igniteDamageMultiplier
+			totalDamage := outstandingDamage + newDamage
+			damagePerTick := totalDamage / float64(dot.BaseTickCount)
+
+			refreshIgnite(sim, target, damagePerTick)
+		},
+	}
+	igniteSpell.Unit.MakeProcTriggerAura(procTrigger)
+	mage.Ignite = igniteSpell
 
 	// This is needed because we want to listen for the spell "cast" event that refreshes the Dot
 	mage.Ignite.Flags ^= core.SpellFlagNoOnCastComplete

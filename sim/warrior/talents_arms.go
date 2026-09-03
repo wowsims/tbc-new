@@ -318,11 +318,14 @@ func (war *Warrior) registerDeathWish() {
 		).
 		AttachMultiplicativePseudoStatBuff(
 			&war.PseudoStats.DamageTakenMultiplier, 1.05,
-		)
+		).
+		// Grants immunity to Fear effects.
+		AttachFearImmunity()
 
 	deathWishSpell := war.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
 		ClassSpellMask: SpellMaskDeathWish,
+		Flags:          core.SpellFlagCastWhileIncapacitated,
 
 		RageCost: core.RageCostOptions{
 			Cost: 10,

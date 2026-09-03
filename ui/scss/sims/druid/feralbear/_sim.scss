@@ -1,4 +1,9 @@
 // Set color variables which control the site theme.
 .feral-bear-druid-sim-ui {
 	@include theme-color($druid, 0.95, '/tbc/assets/img/feral_druid_tank_background.jpg');
+
+	// Widen the Swipe Usage dropdown to accommodate "With Enough AP".
+	#swipeUsage {
+		width: 10rem;
+	}
 }

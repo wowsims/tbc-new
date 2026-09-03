@@ -8,14 +8,15 @@ import { EquippedItem } from '../../../proto_utils/equipped_item';
 import { getEligibleItemSlots } from '../../../proto_utils/utils';
 import { TypedEvent } from '../../../typed_event';
 import { Component } from '../../component';
-import { ItemRenderer } from '../../gear_picker/gear_picker';
+import { ItemRenderer } from '../../gear_picker/item_renderer';
 import { GearData } from '../../gear_picker/item_list';
 import { SelectorModalTabs } from '../../gear_picker/selector_modal';
 import { BulkTab } from '../bulk_tab';
-import { BulkSimItemSlot } from './utils';
+import { BulkSimItemSlot, bulkSimItemSlotToItemSlotPairs } from './utils';
 
 export default class BulkItemPicker extends Component {
 	private readonly itemElem: ItemRenderer;
+	private removeBtn: HTMLButtonElement | null = null;
 	readonly simUI: IndividualSimUI<any>;
 	readonly bulkUI: BulkTab;
 	readonly bulkSlot: BulkSimItemSlot;
@@ -36,11 +37,11 @@ export default class BulkItemPicker extends Component {
 		this.bulkSlot = bulkSlot;
 		this.index = index;
 		this.item = item;
-		this.itemElem = new ItemRenderer(parent, this.rootElem, simUI.player);
+		this.itemElem = new ItemRenderer(parent, this.rootElem, simUI.player, { slot: getEligibleItemSlots(item.item)[0] });
 		this.abortController = new AbortController();
 		this.signal = this.abortController.signal;
 
-		if (!this.isEditable()) {
+		if (!this.indexIsEditable()) {
 			this.rootElem.classList.add('bulk-item-picker-equipped');
 			parent.insertAdjacentElement('afterbegin', this.rootElem);
 		}
@@ -51,29 +52,77 @@ export default class BulkItemPicker extends Component {
 
 		this.addOnDisposeCallback(() => this.rootElem.remove());
 
-		const updateBorder = () => {
-			if (this.bulkUI.frozenItems.get(this.bulkSlot)?.equals(this.item)) {
-				this.rootElem.classList.remove('bulk-item-picker-equipped');
-				this.rootElem.classList.add('bulk-item-picker-frozen');
-			} else {
-				this.rootElem.classList.remove('bulk-item-picker-frozen');
-				this.rootElem.classList.add('bulk-item-picker-equipped');
-			}
+		const updatePickerState = () => {
+			const isFrozen = this.isFrozen();
+			const isEditable = this.isEditable();
+
+			this.rootElem.classList.toggle('bulk-item-picker-frozen', isFrozen);
+			this.rootElem.classList.toggle('bulk-item-picker-equipped', !isFrozen && !isEditable);
+			this.removeBtn?.classList.toggle('hide', !isEditable);
 		};
 
-		updateBorder();
-		TypedEvent.onAny([this.bulkUI.settingsChangedEmitter, this.bulkUI.itemsChangedEmitter]).on(() => updateBorder());
+		updatePickerState();
+		const events = TypedEvent.onAny([this.bulkUI.settingsChangedEmitter, this.bulkUI.itemsChangedEmitter]).on(() => updatePickerState());
+		this.addOnDisposeCallback(() => events.dispose());
 	}
 
 	setItem(newItem: EquippedItem) {
-		this.itemElem.clear(ItemSlot.ItemSlotHead);
-		this.itemElem.update(newItem);
+		this.itemElem.render(newItem);
 		this.item = newItem;
 		this.setupHandlers();
 	}
 
-	private isEditable(): boolean {
+	private indexIsEditable(): boolean {
 		return this.index >= 0;
+	}
+
+	private isCurrentlyEquipped(): boolean {
+		if (this.bulkSlot === BulkSimItemSlot.ItemSlotHandWeapon) {
+			return false;
+		}
+
+		return this.simUI.player.getEquippedItems().some(equippedItem => equippedItem?.id === this.item.id);
+	}
+
+	private isEditable(): boolean {
+		return this.indexIsEditable() && !this.isCurrentlyEquipped();
+	}
+
+	private getEquippedSlot(): ItemSlot | null {
+		if (this.indexIsEditable()) {
+			return null;
+		}
+
+		const slots = bulkSimItemSlotToItemSlotPairs.get(this.bulkSlot);
+		if (!slots) {
+			return null;
+		}
+
+		return this.index === -1 ? slots[0] : slots[1];
+	}
+
+	private getFrozenBulkItemSlot(): ItemSlot | null {
+		const frozenItem = this.bulkUI.frozenItems.get(this.bulkSlot);
+		const slots = bulkSimItemSlotToItemSlotPairs.get(this.bulkSlot);
+		if (!frozenItem || !slots) {
+			return null;
+		}
+
+		const gear = this.simUI.player.getGear();
+		return slots.find(slot => gear.getEquippedItem(slot) === frozenItem) ?? slots.find(slot => gear.getEquippedItem(slot)?.equals(frozenItem)) ?? null;
+	}
+
+	private isFrozen(): boolean {
+		const equippedSlot = this.getEquippedSlot();
+		if (!equippedSlot) {
+			return false;
+		}
+
+		if (equippedSlot === this.bulkUI.frozenWeaponSlot) {
+			return this.simUI.player.getGear().getEquippedItem(equippedSlot)?.equals(this.item) ?? false;
+		}
+
+		return equippedSlot === this.getFrozenBulkItemSlot();
 	}
 
 	private setupHandlers() {
@@ -132,7 +181,7 @@ export default class BulkItemPicker extends Component {
 
 		this.itemElem.rootElem.appendChild(
 			<div className="item-picker-actions-container">
-				{this.isEditable() && (
+				{this.indexIsEditable() && (
 					<button className="btn btn-link link-danger item-picker-actions-btn" ref={removeBtnRef}>
 						<i className="fas fa-times" />
 					</button>
@@ -142,6 +191,8 @@ export default class BulkItemPicker extends Component {
 
 		if (removeBtnRef.value) {
 			const removeBtn = removeBtnRef.value;
+			this.removeBtn = removeBtn;
+			this.removeBtn.classList.toggle('hide', !this.isEditable());
 			tippy(removeBtn, { content: i18n.t('bulk_tab.picker.remove_tooltip') });
 			const removeItem = () => this.bulkUI.removeItemByIndex(this.index);
 			removeBtn.addEventListener('click', removeItem);

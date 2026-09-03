@@ -4,6 +4,7 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
+	battleformounthyjal "github.com/wowsims/tbc/sim/encounters/battle_for_mount_hyjal"
 	magtheridonslair "github.com/wowsims/tbc/sim/encounters/magtheridons_lair"
 	serpentshrinecavern "github.com/wowsims/tbc/sim/encounters/serpent_shrine_cavern"
 )
@@ -15,6 +16,7 @@ func init() {
 	addCustomBossAI()
 	magtheridonslair.Register()
 	serpentshrinecavern.Register()
+	battleformounthyjal.Register()
 }
 
 func AddSingleTargetBossEncounter(presetTarget *core.PresetTarget) {
@@ -46,6 +48,7 @@ func AddDefaultPresetEncounter() {
 			DamageSpread:     0.5,
 			SuppressDodge:    false,
 			ParryHaste:       true,
+			CanCrush:         true,
 			DualWield:        false,
 			DualWieldPenalty: false,
 			TargetInputs:     []*proto.TargetInput{},

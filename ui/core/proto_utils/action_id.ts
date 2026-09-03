@@ -89,6 +89,8 @@ export class ActionId {
 					name += ' (Sword Specialization)';
 				} else if (this.tag == 25584) {
 					name += ' (Windfury)';
+				} else if (this.tag == 20182) {
+					name += ' (Reckoning)';
 				} else if (this.tag == 31332) {
 					name += ' (Blinkstrike)';
 				} else if (this.tag == 17257) {
@@ -97,6 +99,12 @@ export class ActionId {
 					name += ' (Morrogrim Tidewalker)';
 				} else if (this.tag == 21213 + 18943) {
 					name += ' (Morrogrim Tidewalker) - Thrash';
+				} else if (this.tag == 21216) {
+					name += ' (Hydross the Unstable) - Frost';
+				} else if (this.tag == 21216 + 1) {
+					name += ' (Hydross the Unstable) - Nature';
+				} else if (this.tag == 17968) {
+					name += ' (Archimonde)';
 				} else if (this.tag == 99999) {
 					name += ' (Boss)';
 				} else if (this.tag == 99998) {
@@ -230,12 +238,17 @@ export class ActionId {
 		}
 	}
 
-	async setWowheadDataset(elem: HTMLElement, params?: Omit<WowheadTooltipItemParams, 'itemId'> | Omit<WowheadTooltipSpellParams, 'spellId'>) {
+	async setWowheadDataset(
+		elem: HTMLElement | HTMLElement[],
+		params?: Omit<WowheadTooltipItemParams, 'itemId'> | Omit<WowheadTooltipSpellParams, 'spellId'>,
+	) {
 		(this.itemId
 			? ActionId.makeItemTooltipData(this.itemId, params)
 			: ActionId.makeSpellTooltipData(this.spellIdTooltipOverride || this.spellId, params)
 		).then(url => {
-			if (elem) elem.dataset.wowhead = url;
+			(Array.isArray(elem) ? elem : [elem]).forEach(e => {
+				if (e) e.dataset.wowhead = url;
+			});
 		});
 	}
 
@@ -620,6 +633,12 @@ export class ActionId {
 					name += ' (External)';
 				}
 				break;
+			case 'Retribution Aura':
+			case 'Holy Shield':
+				if (tag == 2) {
+					name += ' (Hit)';
+				}
+				break;
 			case 'Dummy Spell':
 				if (tag === 100000) {
 					['Arcane', 'Fire', 'Frost', 'Holy', 'Shadow', 'Nature'].forEach((school, index) => {
@@ -994,4 +1013,5 @@ export const resourceTypeToIcon: Record<ResourceType, string> = {
 export const buffAuraToSpellIdMap: Record<number, ActionId> = {
 	34471: ActionId.fromSpellId(19574), // Bestial Wrath -> The Beast Within
 	31047: ActionId.fromItemId(24128), // Nightseye Panther -> Figurine - Nightseye Panther
+	37198: ActionId.fromItemId(30447), // Blessing of Righteousness -> Tome of Fiery Redemption
 };

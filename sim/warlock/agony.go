@@ -9,6 +9,12 @@ import (
 const agonyCoeff = 0.1
 
 func (warlock *Warlock) registerCurseOfAgony() {
+
+	calculateBaseDamage := func(sim *core.Simulation, dot *core.Dot) float64 {
+		damageMultiplier := core.TernaryFloat64(warlock.AmplifyCurseAura != nil && warlock.AmplifyCurseAura.IsActive(), 1.5, 1.0)
+		return 1356 * damageMultiplier / float64(dot.BaseTickCount)
+	}
+
 	warlock.CurseOfAgony = warlock.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 27218},
 		Flags:          core.SpellFlagAPL,
@@ -49,7 +55,7 @@ func (warlock *Warlock) registerCurseOfAgony() {
 			PeriodicDamageMultiplier: 1,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.Snapshot(target, 1356/float64(dot.BaseTickCount))
+				dot.Snapshot(target, calculateBaseDamage(sim, dot))
 			},
 
 			BonusCoefficient: agonyCoeff,
@@ -68,7 +74,7 @@ func (warlock *Warlock) registerCurseOfAgony() {
 				result.Damage /= dot.TickPeriod().Seconds()
 				return result
 			} else {
-				result := spell.CalcPeriodicDamage(sim, target, 1356/float64(dot.BaseTickCount), spell.OutcomeExpectedMagicCrit)
+				result := spell.CalcPeriodicDamage(sim, target, calculateBaseDamage(sim, dot), spell.OutcomeExpectedMagicCrit)
 				result.Damage *= 10
 				result.Damage /= dot.CalcTickPeriod().Round(time.Millisecond).Seconds()
 				return result

@@ -1,59 +1,27 @@
 {
-	"type": "TypeAPL",
-	"prepullActions": [{ "action": { "activateAura": { "auraId": { "spellId": 24858 } } }, "doAtValue": { "const": { "val": "-10s" } } }],
-	"priorityList": [
-		{
-			"action": {
-				"condition": {
-					"and": {
-						"vals": [
-							{ "variableRef": { "name": "Use Self Innervate" } },
-							{ "cmp": { "op": "OpLe", "lhs": { "currentManaPercent": {} }, "rhs": { "const": { "val": "30%" } } } }
-						]
-					}
-				},
-				"castSpell": { "spellId": { "spellId": 29166 } }
-			}
-		},
-		{
-			"action": {
-				"condition": {
-					"and": {
-						"vals": [
-							{ "variableRef": { "name": "Use Faerie Fire" } },
-							{
-								"cmp": {
-									"op": "OpLe",
-									"lhs": { "auraRemainingTime": { "sourceUnit": { "type": "Target" }, "auraId": { "spellId": 26993, "rank": 5 } } },
-									"rhs": { "const": { "val": "5s" } }
-								}
-							}
-						]
-					}
-				},
-				"castSpell": { "spellId": { "spellId": 26993, "rank": 5 }, "target": { "type": "Target" } }
-			}
-		},
-		{
-			"action": {
-				"condition": { "variableRef": { "name": "Use Insect Swarm" } },
-				"multidot": { "spellId": { "spellId": 27013, "rank": 6 }, "maxDots": 1, "maxOverlap": { "const": { "val": "0ms" } } }
-			}
-		},
-		{ "action": { "multidot": { "spellId": { "spellId": 26988, "rank": 12 }, "maxDots": 1, "maxOverlap": { "const": { "val": "0ms" } } } } },
-		{ "action": { "autocastOtherCooldowns": {} } },
-		{ "action": { "castSpell": { "spellId": { "spellId": 33831 } } } },
-		{
-			"action": {
-				"condition": { "cmp": { "op": "OpGe", "lhs": { "numberTargets": {} }, "rhs": { "const": { "val": "4" } } } },
-				"castSpell": { "spellId": { "spellId": 27012 } }
-			}
-		},
-		{ "action": { "castSpell": { "spellId": { "spellId": 26986 } } } }
-	],
-	"valueVariables": [
-		{ "name": "Use Self Innervate", "value": { "const": { "val": "false" } } },
-		{ "name": "Use Faerie Fire", "value": { "const": { "val": "true" } } },
-		{ "name": "Use Insect Swarm", "value": { "const": { "val": "false" } } }
-	]
+      "type": "TypeAPL",
+      "prepullActions": [
+        {"action":{"activateAura":{"auraId":{"spellId":24858}}},"doAtValue":{"const":{"val":"-10s"}}}
+      ],
+      "priorityList": [
+        {"action":{"condition":{"and":{"vals":[{"variableRef":{"name":"Use Self Innervate"}},{"cmp":{"op":"OpLe","lhs":{"currentManaPercent":{}},"rhs":{"const":{"val":"30%"}}}}]}},"castSpell":{"spellId":{"spellId":29166}}}},
+        {"action":{"condition":{"and":{"vals":[{"variableRef":{"name":"Use Faerie Fire"}},{"cmp":{"op":"OpLe","lhs":{"auraRemainingTime":{"sourceUnit":{"type":"Target"},"auraId":{"spellId":26993,"rank":5}}},"rhs":{"const":{"val":"5s"}}}}]}},"castSpell":{"spellId":{"spellId":26993,"rank":5},"target":{"type":"Target"}}}},
+        {"action":{"condition":{"cmp":{"op":"OpLt","lhs":{"math":{"op":"OpAdd","lhs":{"currentMana":{}},"rhs":{"const":{"val":"1500"}}}},"rhs":{"maxMana":{}}}},"castSpell":{"spellId":{"itemId":12662}}}},
+        {"action":{"condition":{"and":{"vals":[{"cmp":{"op":"OpLt","lhs":{"math":{"op":"OpAdd","lhs":{"currentMana":{}},"rhs":{"const":{"val":"3500"}}}},"rhs":{"maxMana":{}}}},{"spellIsReady":{"spellId":{"otherId":"OtherActionPotion"}}}]}},"castSpell":{"spellId":{"itemId":22832}}}},
+        {"action":{"condition":{"variableRef":{"name":"Use Insect Swarm"}},"multidot":{"spellId":{"spellId":27013,"rank":6},"maxDots":1,"maxOverlap":{"const":{"val":"0ms"}}}}},
+        {"action":{"castSpell":{"spellId":{"spellId":33831}}}},
+        {"action":{"multidot":{"spellId":{"spellId":26988,"rank":12},"maxDots":1,"maxOverlap":{"const":{"val":"0ms"}}}}},
+        {"hide":true,"action":{"condition":{"and":{"vals":[{"and":{"vals":[{"or":{"vals":[{"cmp":{"op":"OpLt","lhs":{"remainingTime":{}},"rhs":{"spellCastTime":{"spellId":{"spellId":26986,"rank":8}}}}},{"cmp":{"op":"OpGt","lhs":{"spellCastTime":{"spellId":{"spellId":26986,"rank":8}}},"rhs":{"dotRemainingTime":{"spellId":{"spellId":26988,"tag":1,"rank":12}}}}}]}},{"auraIsActive":{"sourceUnit":{"type":"Target"},"auraId":{"spellId":37327},"includeReactionTime":true}}]}}]}},"castSpell":{"spellId":{"spellId":26988,"rank":12}}}},
+        {"action":{"condition":{"cmp":{"op":"OpLt","lhs":{"remainingTime":{}},"rhs":{"spellCastTime":{"spellId":{"spellId":26986,"rank":8}}}}},"castSpell":{"spellId":{"spellId":26988,"rank":12}}}},
+        {"action":{"autocastOtherCooldowns":{}}},
+        {"action":{"castSpell":{"spellId":{"spellId":33831}}}},
+        {"action":{"condition":{"cmp":{"op":"OpGe","lhs":{"numberTargets":{}},"rhs":{"const":{"val":"4"}}}},"castSpell":{"spellId":{"spellId":27012}}}},
+        {"action":{"condition":{"and":{"vals":[{"cmp":{"op":"OpLe","lhs":{"currentManaPercent":{}},"rhs":{"const":{"val":"75%"}}}},{"cmp":{"op":"OpGe","lhs":{"remainingTime":{}},"rhs":{"const":{"val":"45s"}}}},{"or":{"vals":[{"cmp":{"op":"OpGt","lhs":{"spellTimeToReady":{"spellId":{"itemId":22832}}},"rhs":{"const":{"val":"30s"}}}},{"cmp":{"op":"OpGt","lhs":{"spellTimeToReady":{"spellId":{"itemId":12662}}},"rhs":{"const":{"val":"30s"}}}}]}},{"not":{"val":{"auraIsActive":{"auraId":{"spellId":2825,"tag":-1,"rank":1}}}}}]}},"castSpell":{"spellId":{"spellId":9876,"rank":6},"target":{"type":"Target"}}}},
+        {"action":{"castSpell":{"spellId":{"spellId":26986},"target":{"type":"Target"}}}}
+      ],
+      "valueVariables": [
+        {"name":"Use Self Innervate","value":{"const":{"val":"false"}}},
+        {"name":"Use Faerie Fire","value":{"const":{"val":"true"}}},
+        {"name":"Use Insect Swarm","value":{"const":{"val":"false"}}}
+      ]
 }

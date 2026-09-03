@@ -10,6 +10,9 @@ ui/*/*/index.html
 .history
 .vscode
 
+# Claude Code worktrees and per-project state
+.claude
+
 # binaries
 dist
 binary_dist
@@ -43,3 +46,9 @@ wowsimtbc*.h
 wowsims.db
 assets/db_inputs/dbc/
 tbc.sln
+
+.claude
+tools/db2tool/listfile.csv
+tools/db2tool/DBDCache/
+tools/db2tool/dbfilesclient/
+tools/db2tool/caches/

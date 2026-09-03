@@ -5,7 +5,6 @@ import (
 
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
-	"github.com/wowsims/tbc/sim/core/stats"
 )
 
 func init() {
@@ -50,66 +49,4 @@ func init() {
 		character.ItemSwap.RegisterProc(11815, procTrigger)
 	})
 
-	// Badge of the Swarmguard
-	core.NewItemEffect(21670, func(agent core.Agent) {
-		character := agent.GetCharacter()
-		duration := time.Second * 30
-
-		arpAura := core.MakeStackingAura(
-			character,
-			core.StackingStatAura{
-				Aura: core.Aura{
-					Label:     "Insight of the Qiraji",
-					ActionID:  core.ActionID{SpellID: 26481},
-					Duration:  duration,
-					MaxStacks: 6,
-				},
-				BonusPerStack: stats.Stats{stats.ArmorPenetration: 200},
-			},
-		)
-
-		procAura := character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:               "Badge of the Swarmguard",
-			MetricsActionID:    core.ActionID{SpellID: 26480},
-			SpellFlagsExclude:  core.SpellFlagSuppressEquipProcs,
-			DPM:                character.NewLegacyPPMManager(10, core.ProcMaskMeleeOrRanged),
-			Duration:           duration,
-			Outcome:            core.OutcomeLanded,
-			Callback:           core.CallbackOnSpellHitDealt,
-			RequireDamageDealt: true,
-			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-				if arpAura.IsActive() && arpAura.GetStacks() == arpAura.MaxStacks {
-					return
-				}
-				arpAura.Activate(sim)
-				arpAura.AddStack(sim)
-			},
-		})
-
-		spell := character.RegisterSpell(core.SpellConfig{
-			ActionID: core.ActionID{ItemID: 21670},
-			Flags:    core.SpellFlagNoOnCastComplete,
-
-			Cast: core.CastConfig{
-				CD: core.Cooldown{
-					Timer:    character.NewTimer(),
-					Duration: time.Minute * 3,
-				},
-			},
-
-			ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-				procAura.Activate(sim)
-			},
-
-			RelatedSelfBuff: arpAura.Aura,
-		})
-
-		eligibleSlots := character.ItemSwap.EligibleSlotsForItem(21670)
-		character.AddStatProcBuff(26481, arpAura, false, eligibleSlots)
-		character.AddMajorCooldown(core.MajorCooldown{
-			Spell:    spell,
-			Type:     core.CooldownTypeDPS,
-			BuffAura: arpAura,
-		})
-	})
 }

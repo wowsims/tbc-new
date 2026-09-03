@@ -35,7 +35,7 @@ func TestHunter(t *testing.T) {
 			Class:      proto.Class_ClassHunter,
 			Race:       proto.Race_RaceOrc,
 			OtherRaces: []proto.Race{proto.Race_RaceNightElf},
-			GearSet:    core.GetGearSet("../../ui/hunter/dps/gear_sets/phase_1/bm", "2h_6p"),
+			GearSet:    core.GetGearSet("../../ui/hunter/dps/gear_sets/phase_2/bm", "2h_6p"),
 			Talents:    DefaultBMTalents,
 			OtherTalentSets: []core.TalentsCombo{
 				{Label: "SV", Talents: DefaultSVTalents},
@@ -81,7 +81,7 @@ var DefaultOptions = &proto.Player_Hunter{
 	Hunter: &proto.Hunter{
 		Options: &proto.Hunter_Options{
 			ClassOptions: &proto.HunterOptions{
-				Ammo:             proto.HunterOptions_WardensArrow,
+				Ammo:             proto.HunterOptions_AdamantiteStinger,
 				PetSingleAbility: false,
 				PetType:          proto.HunterOptions_Ravager,
 				PetUptime:        100.0,

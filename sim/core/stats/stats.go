@@ -297,6 +297,37 @@ func (stats Stats) Floor() Stats {
 	return stats
 }
 
+// Stats the game stores as rounded-down integers on the unit: the five
+// attributes. The game floors these after resolving percentage multipliers
+// (e.g. Blessing of Kings), and derived values consume the floored integers
+// (health from floored Stamina, dodge from floored Agility). Verified against
+// live character sheets.
+//
+// Unlike attributes, combat ratings must NOT be floored here: the sim uses
+// rating stats as mixed accumulators that include fractional conversions from
+// talents and racials (e.g. dodge% talents stored as DodgeRating), and TBC has
+// no rating multipliers, so real rating totals are already integers.
+var flooredGameStats = []Stat{
+	Strength, Agility, Stamina, Intellect, Spirit,
+}
+
+var isFlooredGameStat = func() [SimStatsLen]bool {
+	var m [SimStatsLen]bool
+	for _, s := range flooredGameStats {
+		m[s] = true
+	}
+	return m
+}()
+
+// Rounds attributes down to integers, matching how the game stores them.
+// Must be applied after stat dependencies are resolved.
+func (stats Stats) FloorGameStats() Stats {
+	for _, k := range flooredGameStats {
+		stats[k] = math.Floor(stats[k])
+	}
+	return stats
+}
+
 func (stats Stats) Multiply(multiplier float64) Stats {
 	for k := range stats {
 		stats[k] *= multiplier
@@ -476,13 +507,21 @@ type PseudoStats struct {
 	DamageSpread float64
 
 	///////////////////////////////////////////////////
+	// Crowd control effects. See sim/core/incapacitate.go.
+	///////////////////////////////////////////////////
+
+	Incapacitated bool // Under crowd control (e.g. Archimonde's Fear); cannot cast or queue any spell. Procs still fire.
+	Stunned       bool // Prevents blocks, dodges, and parries. Read while this unit is the target.
+	FearImmune    bool // Fear effects cannot be applied to this unit. (ie. Berserker Rage)
+	StunImmune    bool // Stun effects cannot be applied to this unit.
+
+	///////////////////////////////////////////////////
 	// Effects that apply when this unit is the target.
 	///////////////////////////////////////////////////
 
 	CanBlock bool
 	CanParry bool
 	CanCrush bool
-	Stunned  bool // prevents blocks, dodges, and parries
 
 	ParryHaste bool
 
@@ -521,6 +560,7 @@ type PseudoStats struct {
 	ExternalHealingTakenMultiplier float64 // Modulates the output of the individual tank sim healing model
 	MovementSpeedMultiplier        float64 // Multiplier for movement speed, default to 1. Player base movement 7 yards/s. All effects affecting movements are multipliers.
 	SelfHealingMultiplier          float64 // Healing from spells and abilities, only-self
+	PushbackChance                 float64 // Chance of being pushed back by a spell cast, defaults to 1.
 }
 
 func NewPseudoStats() PseudoStats {
@@ -561,6 +601,7 @@ func NewPseudoStats() PseudoStats {
 		HealingTakenMultiplier:         1,
 		ExternalHealingTakenMultiplier: 1,
 		MovementSpeedMultiplier:        1,
+		PushbackChance:                 1,
 	}
 }
 

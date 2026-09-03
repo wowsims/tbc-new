@@ -18,6 +18,7 @@ func (shaman *Shaman) registerSearingTotemSpell() {
 		ProcMask:       core.ProcMaskEmpty,
 		Flags:          core.SpellFlagAPL | SpellFlagShamanSpell | SpellFlagInstant,
 		ClassSpellMask: SpellMaskSearingTotem,
+		MissileSpeed:   19,
 		ManaCost: core.ManaCostOptions{
 			FlatCost: 205,
 		},
@@ -29,19 +30,22 @@ func (shaman *Shaman) registerSearingTotemSpell() {
 
 		DamageMultiplier: 1,
 		CritMultiplier:   shaman.DefaultSpellCritMultiplier(),
-		BonusCoefficient: 0.16699999571,
 		Dot: core.DotConfig{
 			Aura: core.Aura{
 				Label: "Searing Totem",
 			},
-			// Actual searing totem cast in game is currently 1500 milliseconds with a slight random
-			// delay inbetween each cast so using an extra 20 milliseconds to account for the delay
-			// subtracting 1 tick so that it doesn't shoot after its actual expiration
 			NumberOfTicks: searingTickCount(0),
-			TickLength:    time.Millisecond * (2500 + 20),
+			// Derived from analysing 100 logs - 1200+ events
+			// | Min ms | Avg ms | Median ms | Max ms | Total Delays |
+			// | 2001.0 | 2435.6 | 2430.0    | 2954.0 | 1223         |
+			TickLength:       time.Millisecond * (2400 + 30),
+			BonusCoefficient: 0.16699999571,
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				baseDamage := shaman.CalcAndRollDamageRange(sim, 50, 66)
-				dot.Spell.CalcAndDealDamage(sim, target, baseDamage, dot.Spell.OutcomeMagicHitAndCrit)
+				result := dot.Spell.CalcPeriodicDamage(sim, target, baseDamage, dot.Spell.OutcomeTickMagicHitAndCrit)
+				dot.Spell.WaitTravelTime(sim, func(_ *core.Simulation) {
+					dot.Spell.DealPeriodicDamage(sim, result)
+				})
 			},
 		},
 

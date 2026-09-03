@@ -1,0 +1,44 @@
+{
+	"apiVersion": 7,
+	"tanks": [
+		{
+			"type": "Player"
+		}
+	],
+	"player": {
+		"name": "Player",
+		"class": "ClassDruid",
+		"inFrontOfTarget": true,
+		"healingModel": {
+			"hps": 2200,
+			"cadenceSeconds": 0.4,
+			"cadenceVariation": 1.2,
+			"absorbFrac": 0.02,
+			"burstWindow": 6,
+			"inspirationUptime": 0.25
+		}
+	},
+	"encounter": {
+		"apiVersion": 7,
+		"duration": 180,
+		"durationVariation": 5,
+		"executeProportion20": 0.2,
+		"executeProportion25": 0.25,
+		"executeProportion35": 0.35,
+		"executeProportion45": 0.45,
+		"executeProportion90": 0.9,
+		"targets": [
+			{
+				"id": 17257,
+				"name": "Magtheridon 25",
+				"level": 73,
+				"mobType": "MobTypeDemon",
+				"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 320, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7685, 0, 4818380, 0, 0, 0, 0, 0, 0, 0, 0],
+				"minBaseDamage": 14603,
+				"damageSpread": 0.413,
+				"swingSpeed": 2,
+				"parryHaste": true
+			}
+		]
+	}
+}

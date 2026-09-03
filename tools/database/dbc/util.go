@@ -141,29 +141,35 @@ func processEnchantmentEffects(
 		case ITEM_ENCHANTMENT_EQUIP_SPELL: //Buff
 			spellEffects := dbcInstance.SpellEffects[effectArgs[i]]
 			for _, spellEffect := range spellEffects {
+				points := spellEffect.EffectBasePoints + spellEffect.EffectDieSides
+
 				if spellEffect.EffectMiscValues[0] == -1 &&
 					spellEffect.EffectType == E_APPLY_AURA &&
 					spellEffect.EffectAura == A_MOD_STAT {
 					// Apply bonus to all stats
-					outStats[proto.Stat_StatAgility] += float64(spellEffect.EffectBasePoints + 1)
-					outStats[proto.Stat_StatIntellect] += float64(spellEffect.EffectBasePoints + 1)
-					outStats[proto.Stat_StatSpirit] += float64(spellEffect.EffectBasePoints + 1)
-					outStats[proto.Stat_StatStamina] += float64(spellEffect.EffectBasePoints + 1)
-					outStats[proto.Stat_StatStrength] += float64(spellEffect.EffectBasePoints + 1)
+					outStats[proto.Stat_StatAgility] += float64(points)
+					outStats[proto.Stat_StatIntellect] += float64(points)
+					outStats[proto.Stat_StatSpirit] += float64(points)
+					outStats[proto.Stat_StatStamina] += float64(points)
+					outStats[proto.Stat_StatStrength] += float64(points)
 					continue
 				}
 				if spellEffect.EffectType == E_APPLY_AURA && spellEffect.EffectAura == A_MOD_STAT {
-					outStats[spellEffect.EffectMiscValues[0]] += float64(spellEffect.EffectBasePoints + 1)
-				} else if spellEffect.EffectType == E_APPLY_AURA && spellEffect.EffectAura == A_MOD_RESISTANCE && (spellEffect.EffectMiscValues[0] == 126 || spellEffect.EffectMiscValues[0] == 124) {
-					outStats[proto.Stat_StatArcaneResistance] += float64(spellEffect.EffectBasePoints + 1)
-					outStats[proto.Stat_StatFireResistance] += float64(spellEffect.EffectBasePoints + 1)
-					outStats[proto.Stat_StatFrostResistance] += float64(spellEffect.EffectBasePoints + 1)
-					outStats[proto.Stat_StatNatureResistance] += float64(spellEffect.EffectBasePoints + 1)
-					outStats[proto.Stat_StatShadowResistance] += float64(spellEffect.EffectBasePoints + 1)
+					stat, ok := MapMainStatToStat(spellEffect.EffectMiscValues[0])
+					if !ok {
+						continue
+					}
+					outStats[stat] += float64(points)
+				} else if spellEffect.EffectType == E_APPLY_AURA && spellEffect.EffectAura == A_MOD_RESISTANCE && (SpellSchool(spellEffect.EffectMiscValues[0]) == ALL_SPELL_DAMAGE || SpellSchool(spellEffect.EffectMiscValues[0]) == SPELL_PENETRATION) {
+					outStats[proto.Stat_StatArcaneResistance] += float64(points)
+					outStats[proto.Stat_StatFireResistance] += float64(points)
+					outStats[proto.Stat_StatFrostResistance] += float64(points)
+					outStats[proto.Stat_StatNatureResistance] += float64(points)
+					outStats[proto.Stat_StatShadowResistance] += float64(points)
 				} else {
 					stat := ConvertEffectAuraToStatIndex(spellEffect.EffectAura, spellEffect.EffectMiscValues[0])
 					if stat >= 0 || stat == -2 {
-						value := float64(spellEffect.EffectBasePoints + 1)
+						value := float64(points)
 						if stat == proto.Stat_StatArmorPenetration || stat == proto.Stat_StatSpellPenetration {
 							// Make sure it's not Feral AP
 							if strings.Contains(dbcInstance.Spells[spellEffect.SpellID].Description, "forms only") {
@@ -215,12 +221,12 @@ func ConvertEffectAuraToStatIndex(effectAura EffectAuraType, effectMisc int) pro
 
 func ConvertResistanceFlagToResistanceStat(flag int) proto.Stat {
 	school := SpellSchool(flag)
-	if school == 126 || school == 124 {
+	if school == ALL_SPELL_DAMAGE || school == SPELL_PENETRATION {
 		// All 5 Magic School resist; return -2 to be handled as special case
 		// 124 excludes "Holy" which isn't a resist anyways
 		return -2
 	}
-	for schoolType, stat := range SpellSchoolToStat {
+	for schoolType, stat := range SpellSchoolToResistanceStat {
 		if school.Has(schoolType) {
 			return stat
 		}

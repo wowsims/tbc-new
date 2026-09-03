@@ -19,8 +19,7 @@ func (druid *Druid) registerRipSpell() {
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
 
 		EnergyCost: core.EnergyCostOptions{
-			Cost:   30,
-			Refund: 0.8,
+			Cost: 30,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
@@ -72,8 +71,6 @@ func (druid *Druid) registerRipSpell() {
 			if result.Landed() {
 				spell.Dot(target).Apply(sim)
 				druid.SpendComboPoints(sim, spell.ComboPointMetrics())
-			} else {
-				spell.IssueRefund(sim)
 			}
 			spell.DealOutcome(sim, result)
 		},

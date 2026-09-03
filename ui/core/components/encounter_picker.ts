@@ -2,11 +2,10 @@ import i18n from '../../i18n/config.js';
 import { translateSpellSchool, translateStat, translateTargetInputLabel, translateTargetInputTooltip, translateMobType } from '../../i18n/localization.js';
 import { TrackEventProps, trackEvent } from '../../tracking/utils';
 import { Encounter } from '../encounter.js';
-import { IndividualSimUI } from '../individual_sim_ui.js';
+import type { IndividualSimUI } from '../individual_sim_ui.js';
 import { InputType, MobType, Spec, SpellSchool, Stat, Target, Target as TargetProto, TargetInput } from '../proto/common.js';
 import { Stats } from '../proto_utils/stats.js';
 import { Raid } from '../raid.js';
-import { SimUI } from '../sim_ui.js';
 import { EventID, TypedEvent } from '../typed_event.js';
 import { randomUUID } from '../utils';
 import { BaseModal } from './base_modal.js';
@@ -22,7 +21,7 @@ export interface EncounterPickerConfig {
 }
 
 export class EncounterPicker extends Component {
-	constructor(parent: HTMLElement, modEncounter: Encounter, config: EncounterPickerConfig, simUI: SimUI) {
+	constructor(parent: HTMLElement, modEncounter: Encounter, config: EncounterPickerConfig, simUI: IndividualSimUI<any>) {
 		super(parent, 'encounter-picker-root');
 
 		addEncounterFieldPickers(this.rootElem, modEncounter, config.showExecuteProportion);
@@ -115,8 +114,8 @@ export class EncounterPicker extends Component {
 			//	});
 			//}
 
-			if (simUI.isIndividualSim() && (simUI as IndividualSimUI<any>).player.canEnableTargetDummies()) {
-				const player = (simUI as IndividualSimUI<any>).player;
+			if (simUI.player.canEnableTargetDummies()) {
+				const player = simUI.player;
 				new NumberPicker(this.rootElem, simUI.sim.raid, {
 					id: 'encounter-num-allies',
 					label: i18n.t('settings_tab.encounter.num_allies.label'),
@@ -137,7 +136,7 @@ export class EncounterPicker extends Component {
 				});
 			}
 
-			if (simUI.isIndividualSim() && (simUI as IndividualSimUI<any>).player.getPlayerSpec().isTankSpec) {
+			if (simUI.player.getPlayerSpec().isTankSpec) {
 				new NumberPicker(this.rootElem, modEncounter, {
 					id: 'encounter-min-base-damage',
 					label: i18n.t('settings_tab.encounter.min_base_damage.label'),
@@ -164,7 +163,7 @@ export class EncounterPicker extends Component {
 
 			makeTargetInputsPicker(this.rootElem, modEncounter, 0);
 
-			const advancedModal = new AdvancedEncounterModal(simUI.rootElem, simUI, modEncounter);
+			const advancedModal = new AdvancedEncounterModal(simUI.rootElem, modEncounter);
 			const advancedButton = document.createElement('button');
 			advancedButton.classList.add('advanced-button', 'btn', 'btn-primary');
 			advancedButton.textContent = i18n.t('settings_tab.encounter.advanced');
@@ -177,7 +176,7 @@ export class EncounterPicker extends Component {
 class AdvancedEncounterModal extends BaseModal {
 	private readonly encounter: Encounter;
 
-	constructor(parent: HTMLElement, simUI: SimUI, encounter: Encounter) {
+	constructor(parent: HTMLElement, encounter: Encounter) {
 		super(parent, 'advanced-encounter-picker-modal', { disposeOnClose: false });
 
 		this.encounter = encounter;
@@ -192,19 +191,6 @@ class AdvancedEncounterModal extends BaseModal {
 		const targetsElem = this.rootElem.getElementsByClassName('encounter-targets')[0] as HTMLElement;
 
 		addEncounterFieldPickers(header, this.encounter, true);
-		if (!simUI.isIndividualSim()) {
-			new BooleanPicker<Encounter>(header, encounter, {
-				id: 'aem-use-health',
-				label: i18n.t('settings_tab.encounter.use_health.label'),
-				labelTooltip: i18n.t('settings_tab.encounter.use_health.tooltip'),
-				inline: true,
-				changedEvent: (encounter: Encounter) => encounter.changeEmitter,
-				getValue: (encounter: Encounter) => encounter.getUseHealth(),
-				setValue: (eventID: EventID, encounter: Encounter, newValue: boolean) => {
-					encounter.setUseHealth(eventID, newValue);
-				},
-			});
-		}
 		new ListPicker<Encounter, TargetProto>(targetsElem, this.encounter, {
 			extraCssClasses: ['targets-picker', 'mb-0'],
 			itemLabel: i18n.t('settings_tab.encounter.target'),
@@ -277,6 +263,7 @@ class TargetPicker extends Input<Encounter, TargetProto> {
 	private readonly dualWieldPicker: Input<null, boolean>;
 	private readonly dwMissPenaltyPicker: Input<null, boolean>;
 	private readonly parryHastePicker: Input<null, boolean>;
+	private readonly canCrushPicker: Input<null, boolean>;
 	private readonly spellSchoolPicker: Input<null, number>;
 	private readonly damageSpreadPicker: Input<null, number>;
 	private readonly targetInputPickers: ListPicker<Encounter, TargetInput>;
@@ -558,6 +545,25 @@ class TargetPicker extends Input<Encounter, TargetProto> {
 				encounter.targetsChangeEmitter.emit(eventID);
 			},
 		});
+		this.canCrushPicker = new BooleanPicker(section3, null, {
+			id: `target-${this.targetIndex}-picker-can-crush`,
+			label: i18n.t('settings_tab.encounter.can_crush.label'),
+			labelTooltip: i18n.t('settings_tab.encounter.can_crush.tooltip'),
+			inline: true,
+			reverse: true,
+			changedEvent: () => encounter.targetsChangeEmitter,
+			getValue: () => this.getTarget().canCrush,
+			setValue: (eventID: EventID, _: null, newValue: boolean) => {
+				trackEvent({
+					action: 'settings',
+					category: 'targets',
+					label: 'can_crush',
+					value: newValue,
+				});
+				this.getTarget().canCrush = newValue;
+				encounter.targetsChangeEmitter.emit(eventID);
+			},
+		});
 		this.spellSchoolPicker = new EnumPicker<null>(section3, null, {
 			id: `target-${this.targetIndex}-picker-spell-school`,
 			label: i18n.t('settings_tab.encounter.spell_school.label'),
@@ -602,6 +608,7 @@ class TargetPicker extends Input<Encounter, TargetProto> {
 			dualWield: this.dualWieldPicker.getInputValue(),
 			dualWieldPenalty: this.dwMissPenaltyPicker.getInputValue(),
 			parryHaste: this.parryHastePicker.getInputValue(),
+			canCrush: this.canCrushPicker.getInputValue(),
 			spellSchool: this.spellSchoolPicker.getInputValue(),
 			damageSpread: this.damageSpreadPicker.getInputValue(),
 			stats: this.statPickers
@@ -625,6 +632,7 @@ class TargetPicker extends Input<Encounter, TargetProto> {
 		this.dualWieldPicker.setInputValue(newValue.dualWield);
 		this.dwMissPenaltyPicker.setInputValue(newValue.dualWieldPenalty);
 		this.parryHastePicker.setInputValue(newValue.parryHaste);
+		this.canCrushPicker.setInputValue(newValue.canCrush);
 		this.spellSchoolPicker.setInputValue(newValue.spellSchool);
 		this.damageSpreadPicker.setInputValue(newValue.damageSpread);
 		ALL_TARGET_STATS.forEach((statData, i) => this.statPickers[i].setInputValue(newValue.stats[statData.stat]));
@@ -955,7 +963,13 @@ function equalTargetsIgnoreInputs(target1: TargetProto | undefined, target2: Tar
 const ALL_TARGET_STATS: Array<{ stat: Stat; tooltip: string; extraCssClasses: Array<string> }> = [
 	{ stat: Stat.StatHealth, tooltip: '', extraCssClasses: [] },
 	{ stat: Stat.StatArmor, tooltip: '', extraCssClasses: [] },
+	{ stat: Stat.StatArcaneResistance, tooltip: '', extraCssClasses: [] },
+	{ stat: Stat.StatFireResistance, tooltip: '', extraCssClasses: [] },
+	{ stat: Stat.StatFrostResistance, tooltip: '', extraCssClasses: [] },
+	{ stat: Stat.StatNatureResistance, tooltip: '', extraCssClasses: [] },
+	{ stat: Stat.StatShadowResistance, tooltip: '', extraCssClasses: [] },
 	{ stat: Stat.StatAttackPower, tooltip: '', extraCssClasses: ['threat-metrics'] },
+	{ stat: Stat.StatBlockValue, tooltip: '', extraCssClasses: ['threat-metrics'] },
 ];
 
 const mobTypeEnumValues = [

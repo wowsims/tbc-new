@@ -1,5 +1,5 @@
-import { ReforgeOptimizer } from '../../core/components/suggest_reforges_action';
 import * as other_inputs from '../../core/components/inputs/other_inputs';
+import { ReforgeOptimizer } from '../../core/components/suggest_reforges_action';
 import { IndividualSimUI, registerSpecConfig } from '../../core/individual_sim_ui';
 import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
@@ -8,9 +8,9 @@ import { Cooldowns, HandType, ItemSlot, PseudoStat, Spec, Stat } from '../../cor
 import { StatCapType } from '../../core/proto/ui';
 import * as AplUtils from '../../core/proto_utils/apl_utils';
 import { StatCap, UnitStat } from '../../core/proto_utils/stats';
+import { SpecRotation } from '../../core/proto_utils/utils';
 import * as HunterInputs from './inputs';
 import * as Presets from './presets';
-import { SpecRotation } from 'ui/core/proto_utils/utils';
 
 const SPEC_CONFIG = registerSpecConfig(Spec.SpecHunter, {
 	cssClass: 'hunter-sim-ui',
@@ -42,17 +42,26 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecHunter, {
 	displayStats: UnitStat.createDisplayStatArray(
 		[
 			Stat.StatHealth,
+			Stat.StatMana,
 			Stat.StatStamina,
 			Stat.StatStrength,
 			Stat.StatAgility,
+			Stat.StatIntellect,
+			Stat.StatMP5,
 			Stat.StatAttackPower,
 			Stat.StatRangedAttackPower,
 			Stat.StatExpertiseRating,
 			Stat.StatArmorPenetration,
+			Stat.StatArcaneResistance,
+			Stat.StatFireResistance,
+			Stat.StatFrostResistance,
+			Stat.StatNatureResistance,
+			Stat.StatShadowResistance,
 		],
 		[
 			PseudoStat.PseudoStatMeleeHitPercent,
 			PseudoStat.PseudoStatMeleeCritPercent,
+			PseudoStat.PseudoStatMeleeHastePercent,
 			PseudoStat.PseudoStatRangedHitPercent,
 			PseudoStat.PseudoStatRangedCritPercent,
 			PseudoStat.PseudoStatRangedHastePercent,
@@ -61,7 +70,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecHunter, {
 	itemSwapSlots: [ItemSlot.ItemSlotMainHand, ItemSlot.ItemSlotOffHand, ItemSlot.ItemSlotRanged, ItemSlot.ItemSlotTrinket1, ItemSlot.ItemSlotTrinket2],
 	defaults: {
 		// Default equipped gear.
-		gear: Presets.P1_BM_2H_6P_GEARSET.gear,
+		gear: Presets.P3_BM_2H_6P_GEARSET.gear,
 		// Default EP weights for sorting gear in the gear picker.
 		epWeights: Presets.P1_BM_EP_PRESET.epWeights,
 		softCapBreakpoints: [
@@ -90,7 +99,7 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecHunter, {
 	// IconInputs to include in the 'Player' section on the settings tab.
 	playerIconInputs: [HunterInputs.PetTypeInput(), HunterInputs.QuiverInput(), HunterInputs.AmmoInput()],
 	// Buff and Debuff inputs to include/exclude, overriding the EP-based defaults.
-	includeBuffDebuffInputs: [Stat.StatSpirit, Stat.StatSpellCritRating],
+	includeBuffDebuffInputs: [Stat.StatSpirit, Stat.StatSpellCritRating, Stat.StatSpellDamage],
 	excludeBuffDebuffInputs: [],
 	rotationInputs: HunterInputs.RotationInputs,
 	// Inputs to include in the 'Other' section on the settings tab.
@@ -219,7 +228,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecHunter, {
 			viperStartManaPercent = 0.05,
 			viperStopManaPercent = 0.25,
 			meleeWeave = player.getEquippedItem(ItemSlot.ItemSlotMainHand)?.item.handType === HandType.HandTypeTwoHand,
-			weaveOnlyRaptor = false,
 			useMulti = true,
 			useArcane = true,
 			timeToWeave = 400,
@@ -240,11 +248,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecHunter, {
 			value: { const: { val: String(meleeWeave) } },
 		});
 
-		const weaveOnlyRaptorValue = APLValueVariable.fromJson({
-			name: 'Raptor only',
-			value: { const: { val: String(weaveOnlyRaptor) } },
-		});
-
 		const useMultiValue = APLValueVariable.fromJson({
 			name: 'Use Multi-Shot',
 			value: { const: { val: String(useMulti) } },
@@ -260,13 +263,15 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecHunter, {
 			value: { const: { val: `${timeToWeave}ms` } },
 		});
 
-		rotation.valueVariables[0] = viperStartManaPercentValue;
-		rotation.valueVariables[1] = viperStopManaPercentValue;
-		rotation.valueVariables[2] = meleeWeaveValue;
-		rotation.valueVariables[3] = weaveOnlyRaptorValue;
-		rotation.valueVariables[4] = timeToWeaveValue;
-		rotation.valueVariables[5] = useMultiValue;
-		rotation.valueVariables[6] = useArcaneValue;
+		const overrides: Record<string, APLValueVariable> = {
+			'Viper start': viperStartManaPercentValue,
+			'Viper stop': viperStopManaPercentValue,
+			'Melee weave': meleeWeaveValue,
+			'Time to weave': timeToWeaveValue,
+			'Use Multi-Shot': useMultiValue,
+			'Use Arcane Shot': useArcaneValue,
+		};
+		rotation.valueVariables = rotation.valueVariables.map(v => overrides[v.name] ?? v);
 
 		return APLRotation.create({
 			prepullActions: rotation.prepullActions,
@@ -282,8 +287,6 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecHunter, {
 			valueVariables: rotation.valueVariables,
 		});
 	},
-
-	raidSimPresets: [],
 });
 
 export class HunterSimUI extends IndividualSimUI<Spec.SpecHunter> {

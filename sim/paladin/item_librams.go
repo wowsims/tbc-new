@@ -100,13 +100,17 @@ func init() {
 	core.NewItemEffect(27917, func(agent core.Agent) {
 		paladin := agent.(PaladinAgent).GetPaladin()
 
+		// For some ungodly reason, Libram of the Eternal Rest has its own spell coeff...
+		// This means the coef has to be divided by the default Consecration spell coefficient
+		// to get the correct damage increase when it's then being multiplied in the dmg calc...
+		coef := 0.09525 / ConsecrationRankMap[len(ConsecrationRankMap)-1].Coefficient
 		aura := core.MakePermanent(paladin.RegisterAura(core.Aura{
 			Label:    "Libram of the Eternal Rest",
 			ActionID: core.ActionID{SpellID: 34252},
 		}).AttachSpellMod(core.SpellModConfig{
 			ClassMask:  SpellMaskConsecration,
 			Kind:       core.SpellMod_BaseDamage_Flat,
-			FloatValue: 47.0,
+			FloatValue: 47.0 * coef,
 		}))
 
 		paladin.ItemSwap.RegisterProc(27917, aura)

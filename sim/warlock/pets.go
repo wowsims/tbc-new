@@ -18,44 +18,52 @@ type WarlockPet struct {
 
 var petBaseStats = map[proto.WarlockOptions_Summon]*stats.Stats{
 	proto.WarlockOptions_Imp: {
-		stats.Mana:        2988,
-		stats.Stamina:     101,
-		stats.Strength:    153, //fix these later
-		stats.Agility:     108, //fix these later
-		stats.Intellect:   327,
-		stats.Spirit:      263,
-		stats.AttackPower: 135,
-		stats.MP5:         123,
+		stats.Mana:                2988,
+		stats.Stamina:             101,
+		stats.Strength:            153, //fix these later
+		stats.Agility:             108, //fix these later
+		stats.Intellect:           327,
+		stats.Spirit:              263,
+		stats.AttackPower:         135,
+		stats.MP5:                 123,
+		stats.PhysicalCritPercent: 5,
+		stats.SpellCritPercent:    5,
 	},
 	proto.WarlockOptions_Voidwalker: {
-		stats.Stamina:     280,
-		stats.Strength:    153,
-		stats.Agility:     108,
-		stats.Intellect:   133,
-		stats.Spirit:      122,
-		stats.AttackPower: 286,
-		stats.MP5:         48,
+		stats.Stamina:             280,
+		stats.Strength:            153,
+		stats.Agility:             108,
+		stats.Intellect:           133,
+		stats.Spirit:              122,
+		stats.AttackPower:         286,
+		stats.MP5:                 48,
+		stats.PhysicalCritPercent: 5,
+		stats.SpellCritPercent:    5,
 	},
 	proto.WarlockOptions_Succubus: {
-		stats.Mana:        3862,
-		stats.Stamina:     280,
-		stats.Strength:    154,
-		stats.Agility:     108,
-		stats.Intellect:   133,
-		stats.Spirit:      122,
-		stats.AttackPower: 286,
-		stats.MP5:         48,
+		stats.Mana:                3862,
+		stats.Stamina:             280,
+		stats.Strength:            154,
+		stats.Agility:             108,
+		stats.Intellect:           133,
+		stats.Spirit:              122,
+		stats.AttackPower:         286,
+		stats.MP5:                 48,
+		stats.PhysicalCritPercent: 5,
+		stats.SpellCritPercent:    5,
 	},
 	proto.WarlockOptions_Felhunter: {},
 	proto.WarlockOptions_Felguard: {
-		stats.Stamina:     280,
-		stats.Mana:        3862,
-		stats.Strength:    153,
-		stats.Agility:     108,
-		stats.Intellect:   133,
-		stats.Spirit:      122,
-		stats.AttackPower: 286,
-		stats.MP5:         48,
+		stats.Stamina:             280,
+		stats.Mana:                3862,
+		stats.Strength:            153,
+		stats.Agility:             108,
+		stats.Intellect:           133,
+		stats.Spirit:              122,
+		stats.AttackPower:         286,
+		stats.MP5:                 48,
+		stats.PhysicalCritPercent: 5,
+		stats.SpellCritPercent:    5,
 	},
 }
 
@@ -110,6 +118,11 @@ func (warlock *Warlock) makePet(
 			IsGuardian:      isGuardian,
 		}),
 	}
+
+	pet.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiMaxLevel[proto.Class_ClassPaladin])
+
+	pet.AddStatDependency(stats.Intellect, stats.SpellCritPercent, core.CritPerIntMaxLevel[proto.Class_ClassPaladin])
+	pet.AddStatDependency(stats.Intellect, stats.Mana, 15)
 
 	// set pet class for proper scaling values
 	if enabledOnStart {
@@ -279,7 +292,7 @@ func (pet *WarlockPet) OnEncounterStart(_ *core.Simulation) {
 }
 
 func (pet *WarlockPet) ExecuteCustomRotation(sim *core.Simulation) {
-	waitUntil := time.Duration(1<<63 - 1)
+	waitUntil := time.Duration(0)
 
 	for _, spell := range pet.AutoCastAbilities {
 		if spell.CanCast(sim, pet.CurrentTarget) && pet.CurrentMana() > pet.MinMana {
@@ -289,8 +302,11 @@ func (pet *WarlockPet) ExecuteCustomRotation(sim *core.Simulation) {
 
 		// calculate energy required
 		cost := max(pet.MinMana, spell.Cost.GetCurrentCost())
-		timeTillMana := max(0, (cost-pet.CurrentMana())/pet.ManaRegenPerSecondWhileCasting())
-		waitUntil = min(waitUntil, time.Duration(float64(time.Second)*timeTillMana))
+		regen := pet.ManaRegenPerSecondWhileCasting()
+		if regen > 0 {
+			timeTillMana := max(0, (cost-pet.CurrentMana())/regen)
+			waitUntil = min(waitUntil, time.Duration(float64(time.Second)*timeTillMana))
+		}
 	}
 
 	// for now average the delay out to 100 ms so we don't need to roll random every time
@@ -312,8 +328,8 @@ func (pet *WarlockPet) registerFireboltSpell() {
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD:      time.Millisecond * 1500,
-				CastTime: time.Millisecond * 2000,
+				GCD:      core.GCDMin,
+				CastTime: time.Second * 2,
 			},
 		},
 
@@ -345,8 +361,9 @@ func (pet *WarlockPet) registerLashOfPainSpell() {
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: time.Second,
+				GCD: core.GCDDefault,
 			},
+			IgnoreHaste: true,
 			CD: core.Cooldown{
 				Timer:    pet.NewTimer(),
 				Duration: 12 * time.Second,
@@ -381,6 +398,11 @@ func (pet *WarlockPet) registerTormentSpell() {
 			DefaultCast: core.Cast{
 				GCD: core.GCDDefault,
 			},
+			IgnoreHaste: true,
+			CD: core.Cooldown{
+				Timer:    pet.NewTimer(),
+				Duration: time.Second * 5,
+			},
 		},
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			result := spell.CalcDamage(sim, target, 1000, spell.OutcomeMagicHitAndCrit)
@@ -406,6 +428,11 @@ func (pet *WarlockPet) registerCleaveSpell() {
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD: core.GCDDefault,
+			},
+			IgnoreHaste: true,
+			CD: core.Cooldown{
+				Timer:    pet.NewTimer(),
+				Duration: time.Second * 6,
 			},
 		},
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {

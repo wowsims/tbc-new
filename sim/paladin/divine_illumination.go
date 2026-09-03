@@ -12,7 +12,7 @@ import (
 // Reduces the mana cost of all spells by 50% for 15 sec.
 func (paladin *Paladin) registerDivineIllumination() {
 	actionId := core.ActionID{SpellID: 31842}
-	paladin.DivineIlluminationAura = paladin.RegisterAura(core.Aura{
+	divineIlluminationAura := paladin.RegisterAura(core.Aura{
 		Label:    "Divine Illumination" + paladin.Name,
 		ActionID: actionId,
 		Duration: time.Second * 15,
@@ -21,7 +21,7 @@ func (paladin *Paladin) registerDivineIllumination() {
 		FloatValue: -0.5,
 	})
 
-	paladin.DivineIlluminationSpell = paladin.RegisterSpell(core.SpellConfig{
+	divineIlluminationSpell := paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       actionId,
 		SpellSchool:    core.SpellSchoolHoly,
 		ProcMask:       core.ProcMaskEmpty,
@@ -36,12 +36,14 @@ func (paladin *Paladin) registerDivineIllumination() {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			paladin.DivineIlluminationAura.Activate(sim)
+			spell.RelatedSelfBuff.Activate(sim)
 		},
+
+		RelatedSelfBuff: divineIlluminationAura,
 	})
 
 	paladin.AddMajorCooldown(core.MajorCooldown{
-		Spell:    paladin.DivineIlluminationSpell,
+		Spell:    divineIlluminationSpell,
 		Priority: core.CooldownPriorityLow,
 		Type:     core.CooldownTypeMana,
 	})

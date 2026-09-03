@@ -56,6 +56,55 @@ func init() {
 		character.ItemSwap.RegisterProc(28573, procTrigger)
 	})
 
+	// Bonereaver's Edge
+	core.NewItemEffect(17076, func(agent core.Agent) {
+		character := agent.GetCharacter()
+
+		arpAura := core.MakeStackingAura(
+			character,
+			core.StackingStatAura{
+				Aura: core.Aura{
+					Label:     "Bonereaver's Edge",
+					ActionID:  core.ActionID{SpellID: 21153},
+					Duration:  time.Second * 10,
+					MaxStacks: 3,
+				},
+				BonusPerStack: stats.Stats{
+					stats.ArmorPenetration: 700,
+				},
+			},
+		)
+
+		getDpm := func() *core.DynamicProcManager {
+			return character.NewStaticLegacyPPMManager(
+				2,
+				*character.GetDynamicProcMaskForWeaponEffect(17076),
+			)
+		}
+
+		dpm := getDpm()
+
+		procTrigger := character.MakeProcTriggerAura(core.ProcTrigger{
+			Name:     "Bonereaver's Edge Trigger",
+			DPM:      dpm,
+			Outcome:  core.OutcomeLanded,
+			Callback: core.CallbackOnSpellHitDealt,
+			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+				arpAura.Activate(sim)
+				arpAura.AddStack(sim)
+			},
+		})
+
+		character.RegisterItemSwapCallback(
+			[]proto.ItemSlot{proto.ItemSlot_ItemSlotMainHand},
+			func(sim *core.Simulation, slot proto.ItemSlot) {
+				dpm = getDpm()
+			},
+		)
+
+		character.ItemSwap.RegisterProc(17076, procTrigger)
+	})
+
 	// Rod of the Sun King
 	core.NewItemEffect(29996, func(agent core.Agent) {
 		character := agent.GetCharacter()
@@ -162,6 +211,98 @@ func init() {
 		})
 
 		character.ItemSwap.RegisterProc(30090, procTrigger)
+	})
+
+	newSpeedInfusionWeaponEffect := func(itemID int32, itemName string) {
+		core.NewItemEffect(itemID, func(agent core.Agent) {
+			character := agent.GetCharacter()
+
+			getDpm := func() *core.DynamicProcManager {
+				return character.NewStaticLegacyPPMManager(
+					2,
+					*character.GetDynamicProcMaskForWeaponEffect(itemID),
+				)
+			}
+
+			dpm := getDpm()
+
+			aura := character.RegisterAura(core.Aura{
+				Label:    "Speed Infusion",
+				ActionID: core.ActionID{SpellID: 36479},
+				Duration: time.Second * 30,
+			}).AttachMultiplyAttackSpeed(1.2)
+
+			aura.NewActiveMovementSpeedEffect(0.5)
+
+			procTrigger := character.MakeProcTriggerAura(core.ProcTrigger{
+				Name:     itemName,
+				DPM:      dpm,
+				Outcome:  core.OutcomeLanded,
+				Callback: core.CallbackOnSpellHitDealt,
+				Handler: func(sim *core.Simulation, _ *core.Spell, result *core.SpellResult) {
+					aura.Activate(sim)
+				},
+			})
+
+			character.RegisterItemSwapCallback(core.AllMeleeWeaponSlots(), func(sim *core.Simulation, slot proto.ItemSlot) {
+				dpm = getDpm()
+			})
+
+			character.ItemSwap.RegisterProc(itemID, procTrigger)
+		})
+	}
+
+	newSpeedInfusionWeaponEffect(30311, "Warp Slicer")
+	newSpeedInfusionWeaponEffect(30316, "Devastation")
+
+	// Infinity Blade
+	core.NewItemEffect(30312, func(agent core.Agent) {
+		character := agent.GetCharacter()
+		schools := []stats.SchoolIndex{
+			stats.SchoolIndexArcane, stats.SchoolIndexFire, stats.SchoolIndexFrost,
+			stats.SchoolIndexHoly, stats.SchoolIndexNature, stats.SchoolIndexShadow,
+		}
+
+		getDpm := func() *core.DynamicProcManager {
+			return character.NewStaticLegacyPPMManager(
+				2,
+				*character.GetDynamicProcMaskForWeaponEffect(30312),
+			)
+		}
+
+		dpm := getDpm()
+
+		auras := character.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {
+			return target.GetOrRegisterAura(core.Aura{
+				Label:     "Magic Disruption",
+				ActionID:  core.ActionID{SpellID: 36478},
+				Duration:  time.Second * 30,
+				MaxStacks: 5,
+				OnStacksChange: func(aura *core.Aura, sim *core.Simulation, oldStacks int32, newStacks int32) {
+					for _, school := range schools {
+						target.PseudoStats.SchoolDamageTakenMultiplier[school] *= (1.0 + 0.05*float64(newStacks)) / (1.0 + 0.05*float64(oldStacks))
+					}
+				},
+			})
+		})
+
+		procTrigger := character.MakeProcTriggerAura(core.ProcTrigger{
+			Name:     "Infinity Blade",
+			DPM:      dpm,
+			Outcome:  core.OutcomeLanded,
+			Callback: core.CallbackOnSpellHitDealt,
+			Handler: func(sim *core.Simulation, _ *core.Spell, result *core.SpellResult) {
+				aura := auras.Get(result.Target)
+				aura.Activate(sim)
+				aura.AddStack(sim)
+			},
+		})
+
+		character.RegisterItemSwapCallback(core.AllMeleeWeaponSlots(), func(sim *core.Simulation, slot proto.ItemSlot) {
+			dpm = getDpm()
+		})
+
+		character.ItemSwap.RegisterProc(30312, procTrigger)
 	})
 
 	// Blinkstrike
@@ -313,4 +454,5 @@ func init() {
 		},
 	})
 
+	core.NewItemEffect(278953, func(_ core.Agent) {}) // Frostscythe of Lord Ahune - https://www.wowhead.com/tbc/spell=46643
 }
