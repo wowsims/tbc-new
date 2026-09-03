@@ -36,6 +36,8 @@ func init() {
 			SocketBonus:      item.SocketBonus,
 			WeaponSpeed:      item.WeaponSpeed,
 			QualityModifier:  item.QualityModifier,
+			Unique:           item.Unique,
+			LimitCategory:    item.LimitCategory,
 			SetName:          item.SetName,
 			SetId:            item.SetId,
 			ScalingOptions:   item.ScalingOptions,
@@ -58,6 +60,8 @@ func init() {
 			EnchantEffects: enchant.EnchantEffects,
 			Name:           enchant.Name,
 			Type:           enchant.Type,
+			EnchantType:    enchant.EnchantType,
+			ExtraTypes:     enchant.ExtraTypes,
 		}
 	}
 

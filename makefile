@@ -1,4 +1,10 @@
+# A partially written target (e.g. the two-step wasm gzip recipe killed mid-write) must
+# not be treated as up to date on the next run.
+.DELETE_ON_ERROR:
+
 OUT_DIR := dist/tbc
+# Windows won't launch an extensionless binary -- air just pops a file-association prompt.
+BIN_EXT := $(shell go env GOEXE)
 TS_CORE_SRC := $(shell find ui/core -name '*.ts' -type f)
 ASSETS_INPUT := $(shell find assets/ -type f)
 ASSETS := $(patsubst assets/%,$(OUT_DIR)/assets/%,$(ASSETS_INPUT))
@@ -6,9 +12,11 @@ ASSETS := $(patsubst assets/%,$(OUT_DIR)/assets/%,$(ASSETS_INPUT))
 rwildcard = $(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
 GOROOT := $(shell go env GOROOT)
 UI_SRC := $(shell find ui -name '*.ts' -o -name '*.tsx' -o -name '*.scss' -o -name '*.html')
+AUTO_GEN_FILES_TS := ui/core/player_classes/capabilities_auto_gen.ts ui/core/components/individual_sim_ui/bulk/constants_auto_gen.ts
+AUTO_GEN_FILES_TS_DEPS := sim/core/base_stats.go sim/core/bulk/candidates.go tools/database/gen_character_constants_ts.go tools/database/gen_bulksim_constants.ts.go sim/core/proto/api.pb.go
 
 $(OUT_DIR)/.dirstamp: \
-  $(OUT_DIR)/lib.wasm \
+  $(OUT_DIR)/lib.wasm.gz \
   ui/core/proto/api.ts \
   $(ASSETS) \
   $(OUT_DIR)/bundle/.dirstamp
@@ -16,6 +24,7 @@ $(OUT_DIR)/.dirstamp: \
 
 $(OUT_DIR)/bundle/.dirstamp: \
   $(UI_SRC) \
+  $(AUTO_GEN_FILES_TS) \
   vite.config.mts \
   vite.build-workers.mts \
   tools/vite/spec_pages.mts \
@@ -38,7 +47,7 @@ ui/core/index.ts: $(TS_CORE_SRC)
 clean:
 	rm -rf ui/core/proto/*.ts \
 	  sim/core/proto/*.pb.go \
-	  wowsimtbc \
+	  wowsimtbc$(BIN_EXT) \
 	  wowsimtbc-windows.exe \
 	  wowsimtbc-amd64-darwin \
 	  wowsimtbc-arm64-darwin \
@@ -82,21 +91,25 @@ node_modules: package-lock.json
 
 # Generic rule for hosting any class directory
 .PHONY: host_%
-host_%: $(OUT_DIR) node_modules
+host_%: $(OUT_DIR) node_modules $(AUTO_GEN_FILES_TS)
 	npx http-server $(OUT_DIR)/..
 
 .PHONY: wasm
-wasm: $(OUT_DIR)/lib.wasm
+wasm: $(OUT_DIR)/lib.wasm.gz
 
 # Builds the generic .wasm, with all items included.
-$(OUT_DIR)/lib.wasm: sim/wasm/* sim/core/proto/api.pb.go $(filter-out sim/core/items/all_items.go, $(call rwildcard,sim,*.go))
+# Published gzipped: Cloudflare Pages caps files at 25 MiB.
+# The main thread decompresses and compiles it once (see getSharedWasmModule in
+# ui/core/worker_pool.ts) and shares the compiled module with every worker.
+$(OUT_DIR)/lib.wasm.gz: sim/wasm/* sim/core/proto/api.pb.go $(filter-out sim/core/items/all_items.go, $(call rwildcard,sim,*.go))
 	@echo "Starting webassembly compile now..."
-	@if GOOS=js GOARCH=wasm go build -o ./$(OUT_DIR)/lib.wasm ./sim/wasm/; then \
+	@if GOOS=js GOARCH=wasm go build -ldflags "-w -s" -o ./$(OUT_DIR)/lib.wasm ./sim/wasm/; then \
 		printf "\033[1;32mWASM compile successful.\033[0m\n"; \
 	else \
 		printf "\033[1;31mWASM COMPILE FAILED\033[0m\n"; \
 		exit 1; \
 	fi
+	gzip -9 -f -n $(OUT_DIR)/lib.wasm
 
 $(OUT_DIR)/assets/%: assets/%
 	mkdir -p $(@D)
@@ -113,7 +126,7 @@ binary_dist: $(OUT_DIR)/.dirstamp
 	rm -rf binary_dist
 	mkdir -p binary_dist
 	cp -r $(OUT_DIR) binary_dist/
-	rm binary_dist/tbc/lib.wasm
+	rm -f binary_dist/tbc/lib.wasm binary_dist/tbc/lib.wasm.gz
 	rm -rf binary_dist/tbc/assets/db_inputs
 	rm binary_dist/tbc/assets/database/db.bin
 	rm binary_dist/tbc/assets/database/leftover_db.bin
@@ -127,9 +140,9 @@ proto: sim/core/proto/api.pb.go ui/core/proto/api.ts
 wowsimtbc: binary_dist devserver
 
 .PHONY: devserver
-devserver: sim/core/proto/api.pb.go sim/web/main.go binary_dist/dist.go
+devserver: sim/core/proto/api.pb.go sim/web/*.go binary_dist/dist.go
 	@echo "Starting server compile now..."
-	@if go build -o wowsimtbc ./sim/web/main.go ; then \
+	@if go build -o wowsimtbc$(BIN_EXT) ./sim/web ; then \
 		printf "\033[1;32mBuild Completed Successfully\033[0m\n"; \
 	else \
 		printf "\033[1;31mBUILD FAILED\033[0m\n"; \
@@ -145,12 +158,12 @@ ifeq ($(WATCH), 1)
 	fi
 endif
 
-rundevserver: air devserver
+rundevserver: air devserver $(AUTO_GEN_FILES_TS)
 ifeq ($(WATCH), 1)
 	npx tsx vite.build-workers.mts & npx vite build -m development --watch &
-	ulimit -n 10240 && air -tmp_dir "/tmp" -build.include_ext "go,proto" -build.args_bin "--usefs=true --launch=false" -build.bin "./wowsimtbc" -build.cmd "make devserver" -build.exclude_dir "assets,dist,node_modules,ui,tools"
+	ulimit -n 10240 && air -tmp_dir "/tmp" -build.include_ext "go,proto" -build.args_bin "--usefs=true --launch=false" -build.bin "./wowsimtbc$(BIN_EXT)" -build.cmd "make devserver" -build.exclude_dir "assets,dist,node_modules,ui,tools"
 else
-	./wowsimtbc --usefs=true --launch=false --host=":3333"
+	./wowsimtbc$(BIN_EXT) --usefs=true --launch=false --host=":3333"
 endif
 
 wowsimtbc-windows.exe: wowsimtbc
@@ -163,10 +176,10 @@ wowsimtbc-windows.exe: wowsimtbc
 	mv ./cmd/wowsimcli/wowsimcli-windows.exe ./wowsimcli-windows.exe
 
 release: wowsimtbc wowsimtbc-windows.exe
-	GOOS=darwin GOARCH=amd64 GOAMD64=v2 go build -o wowsimtbc-amd64-darwin -ldflags="-X 'main.Version=$(VERSION)' -s -w" ./sim/web/main.go
-	GOOS=darwin GOARCH=arm64 go build -o wowsimtbc-arm64-darwin -ldflags="-X 'main.Version=$(VERSION)' -s -w" ./sim/web/main.go
+	GOOS=darwin GOARCH=amd64 GOAMD64=v2 go build -o wowsimtbc-amd64-darwin -ldflags="-X 'main.Version=$(VERSION)' -s -w" ./sim/web
+	GOOS=darwin GOARCH=arm64 go build -o wowsimtbc-arm64-darwin -ldflags="-X 'main.Version=$(VERSION)' -s -w" ./sim/web
 	GOOS=darwin GOARCH=arm64 go build -o wowsimcli-arm64-darwin --tags=with_db -ldflags="-X 'main.Version=$(VERSION)' -s -w" ./cmd/wowsimcli/cli_main.go
-	GOOS=linux GOARCH=amd64 GOAMD64=v2 go build -o wowsimtbc-amd64-linux   -ldflags="-X 'main.Version=$(VERSION)' -s -w" ./sim/web/main.go
+	GOOS=linux GOARCH=amd64 GOAMD64=v2 go build -o wowsimtbc-amd64-linux   -ldflags="-X 'main.Version=$(VERSION)' -s -w" ./sim/web
 	GOOS=linux GOARCH=amd64 GOAMD64=v2 go build -o wowsimcli-amd64-linux --tags=with_db -ldflags="-X 'main.Version=$(VERSION)' -s -w" ./cmd/wowsimcli/cli_main.go
 # Now compress into a zip because the files are getting large.
 	zip wowsimtbc-windows.exe.zip wowsimtbc-windows.exe
@@ -192,6 +205,15 @@ sim/core/proto/api.pb.go: proto/*.proto
 	protoc -I=./proto \
 		--go_opt=Mgoogle/protobuf/descriptor.proto=google.golang.org/protobuf/types/descriptorpb \
 		--go_out=./sim/core ./proto/*.proto
+
+$(AUTO_GEN_FILES_TS): $(AUTO_GEN_FILES_TS_DEPS)
+	go run ./tools/database/gen_db -gen=go-to-ts
+
+.PHONY: go-to-ts
+go-to-ts: $(AUTO_GEN_FILES_TS)
+
+.PHONY: character-constants-ts
+character-constants-ts: go-to-ts
 
 # Only useful for building the lib on a host platform that matches the target platform
 .PHONY: locallib
@@ -237,8 +259,16 @@ sim/core/items/all_items.go: $(call rwildcard,tools/database,*.go) $(call rwildc
 		curl -fL -o tools/db2tool/listfile.csv https://github.com/wowdev/wow-listfile/releases/latest/download/community-listfile.csv; }
 	go run tools/database/gen_db/*.go -outDir=./assets -gen=db
 
+# Syncs the HiGHS solver artifacts from the pinned npm `highs` package: copies its wasm to
+# ui/worker/highs.wasm (which the Go backend go:embeds) and regenerates the minified-name map the
+# wazero host looks its imports and exports up through. Run after changing the pinned version in
+# package.json, and commit both outputs. TestHiGHSArtifactsMatchPinnedVersion fails if you don't.
+.PHONY: update-highs
+update-highs: node_modules
+	go run ./tools/gen_highs
+
 .PHONY: test
-test: $(OUT_DIR)/lib.wasm binary_dist/dist.go
+test: $(OUT_DIR)/lib.wasm.gz binary_dist/dist.go
 	GOARCH=amd64 go test --tags=with_db ./sim/...
 
 .PHONY: update-tests
@@ -263,7 +293,7 @@ setup:
 
 # Host a local server, for dev testing
 .PHONY: host
-host: air $(OUT_DIR)/.dirstamp node_modules
+host: air $(OUT_DIR)/.dirstamp node_modules $(AUTO_GEN_FILES_TS)
 ifeq ($(WATCH), 1)
 	ulimit -n 10240 && air -tmp_dir "/tmp" -build.include_ext "go,ts,js,html" -build.bin "npx" -build.args_bin "http-server $(OUT_DIR)/.." -build.cmd "make" -build.exclude_dir "dist,node_modules,tools"
 else
@@ -272,12 +302,12 @@ else
 	npx http-server $(OUT_DIR)/..
 endif
 
-devmode: air devserver
+devmode: air devserver $(AUTO_GEN_FILES_TS)
 ifeq ($(WATCH), 1)
 	npx tsx vite.build-workers.mts & npx vite serve --host &
-	air -tmp_dir "/tmp" -build.include_ext "go,proto" -build.args_bin "--usefs=true --launch=false --wasm=false" -build.bin "./wowsimtbc" -build.cmd "make devserver" -build.exclude_dir "assets,dist,node_modules,ui,tools"
+	air -tmp_dir "/tmp" -build.include_ext "go,proto" -build.args_bin "--usefs=true --launch=false --wasm=false" -build.bin "./wowsimtbc$(BIN_EXT)" -build.cmd "make devserver" -build.exclude_dir "assets,dist,node_modules,ui,tools"
 else
-	./wowsimtbc --usefs=true --launch=false --host=":3333"
+	./wowsimtbc$(BIN_EXT) --usefs=true --launch=false --host=":3333"
 endif
 
 webworkers:

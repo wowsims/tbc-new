@@ -19,8 +19,7 @@ import {
 	TristateEffect,
 } from '../../core/proto/common';
 import { FeralCatDruid_Rotation as DruidRotation } from '../../core/proto/druid';
-import { StatCapType } from '../../core/proto/ui';
-import { StatCap, Stats, UnitStat } from '../../core/proto_utils/stats';
+import { Stats, UnitStat } from '../../core/proto_utils/stats';
 import { defaultExposeWeaknessSettings, defaultRaidBuffMajorDamageCooldowns } from '../../core/proto_utils/utils';
 import * as FeralInputs from './inputs';
 import * as Presets from './presets';

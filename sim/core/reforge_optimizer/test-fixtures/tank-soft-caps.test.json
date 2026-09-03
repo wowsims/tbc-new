@@ -1,0 +1,318 @@
+{
+	"raid": {
+		"parties": [
+			{
+				"players": [
+					{
+						"name": "Player",
+						"race": 1,
+						"class": 2,
+						"protectionPaladin": {
+							"options": {
+								"classOptions": {}
+							}
+						},
+						"talentsString": "-0530513050000142521051-052050003003",
+						"profession1": 4,
+						"profession2": 3,
+						"reactionTimeMs": 100,
+						"inFrontOfTarget": true,
+						"equipment": {
+							"items": [
+								{
+									"id": 30125,
+									"enchant": 2999,
+									"gems": [31116, 25896]
+								},
+								{
+									"id": 30007
+								},
+								{
+									"id": 29070,
+									"enchant": 2991,
+									"gems": [34831, 24033]
+								},
+								{
+									"id": 29925,
+									"enchant": 2622
+								},
+								{
+									"id": 29066,
+									"enchant": 2659,
+									"gems": [30555, 24033, 30602]
+								},
+								{
+									"id": 32515,
+									"enchant": 2649
+								},
+								{
+									"id": 30124,
+									"enchant": 2937
+								},
+								{
+									"id": 30096,
+									"gems": [30563, 24033]
+								},
+								{
+									"id": 30126,
+									"enchant": 3013,
+									"gems": [24033]
+								},
+								{
+									"id": 32267,
+									"enchant": 2940,
+									"gems": [24033, 24033]
+								},
+								{
+									"id": 30083,
+									"enchant": 2928
+								},
+								{
+									"id": 28407,
+									"enchant": 2928
+								},
+								{
+									"id": 29370
+								},
+								{
+									"id": 28789
+								},
+								{
+									"id": 30095,
+									"enchant": 2669
+								},
+								{
+									"id": 28825,
+									"enchant": 1071,
+									"gems": [24033]
+								},
+								{
+									"id": 27917
+								}
+							]
+						},
+						"consumables": {
+							"potId": 22849,
+							"flaskId": 22861,
+							"foodId": 27657,
+							"conjuredId": 12662,
+							"explosiveId": 30217,
+							"superSapper": true,
+							"goblinSapper": true,
+							"mhImbueId": 28017,
+							"scrollAgi": true,
+							"scrollStr": true,
+							"scrollArm": true,
+							"nightmareSeed": true,
+							"potions": [13442, 18253, 22828, 22832, 22837, 22838, 22839, 22849, 22850, 28101, 31677, 32948, 33935, 34440],
+							"conjuredItems": [22105, 22797, 12662, 22788, 23334, 23381]
+						},
+						"bonusStats": {
+							"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+							"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+						},
+						"itemSwap": {
+							"items": [
+								{},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{}
+							],
+							"prepullBonusStats": {
+								"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+								"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+							}
+						},
+						"buffs": {
+							"blessingOfKings": true,
+							"blessingOfSanctuary": true,
+							"blessingOfWisdom": 2,
+							"blessingOfMight": 2
+						},
+						"cooldowns": {
+							"hpPercentForDefensives": 0.4
+						},
+						"healingModel": {
+							"hps": 2200,
+							"cadenceSeconds": 0.4,
+							"cadenceVariation": 1.2,
+							"absorbFrac": 0.02,
+							"burstWindow": 6,
+							"inspirationUptime": 0.25
+						}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					}
+				],
+				"buffs": {
+					"drums": 4,
+					"manaSpringTotem": 1,
+					"wrathOfAirTotem": 1,
+					"strengthOfEarthTotem": 2
+				}
+			},
+			{
+				"players": [
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					}
+				],
+				"buffs": {}
+			},
+			{
+				"players": [
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					}
+				],
+				"buffs": {}
+			},
+			{
+				"players": [
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					}
+				],
+				"buffs": {}
+			},
+			{
+				"players": [
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					}
+				],
+				"buffs": {}
+			}
+		],
+		"numActiveParties": 5,
+		"tanks": [
+			{
+				"type": 1
+			}
+		],
+		"buffs": {
+			"arcaneBrilliance": true,
+			"powerWordFortitude": 2,
+			"shadowProtection": true,
+			"divineSpirit": 2,
+			"giftOfTheWild": 2,
+			"thorns": 2,
+			"bloodlust": true
+		},
+		"debuffs": {
+			"judgementOfWisdom": true,
+			"judgementOfLight": true,
+			"improvedSealOfTheCrusader": 2,
+			"misery": true,
+			"curseOfElements": 2,
+			"bloodFrenzy": true,
+			"exposeArmor": 2,
+			"faerieFire": 2,
+			"sunderArmor": true,
+			"curseOfRecklessness": true,
+			"huntersMark": 2,
+			"exposeWeaknessUptime": 0.9,
+			"exposeWeaknessHunterAgility": 1150,
+			"insectSwarm": true
+		}
+	},
+	"preCapEpWeights": {
+		"stats": [0.33, 0.6, 1.5, 0, 0, 0.67, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.17, 0, 0, 0.54, 0.32, 0.18, 0, 0.67, 0.8, 0.5, 0.4, 0.7, 0.65, 0.3, 0.05, 0.05, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		"pseudoStats": [0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+	},
+	"undershootCaps": {
+		"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+	},
+	"settings": {
+		"statCaps": {
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+		},
+		"maxGemPhase": 2,
+		"maxGemQuality": 4,
+		"epStats": [2, 0, 5, 1, 17, 20, 22, 21, 23, 24, 30, 25, 28, 29, 31, 32, 24],
+		"useSoftCapBreakpoints": true
+	},
+	"softCaps": [
+		{
+			"unitStat": {
+				"pseudoStat": 26
+			},
+			"breakpoints": [5.6],
+			"capType": 2,
+			"postCapEPs": [0]
+		}
+	]
+}

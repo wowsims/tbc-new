@@ -2,16 +2,13 @@
 node_modules
 
 ui/core/index.ts
+ui/core/**/*_auto_gen.ts
 ui/*/*/index.html
 .dirstamp
 
 # IDE folders
 .idea
 .history
-.vscode
-
-# Claude Code worktrees and per-project state
-.claude
 
 # binaries
 dist
@@ -33,7 +30,7 @@ wowsimtbc
 # old result file
 TestAPL.results
 
-#macos
+# macos
 .DS_Store
 
 # air tmp dir
@@ -47,7 +44,10 @@ wowsims.db
 assets/db_inputs/dbc/
 tbc.sln
 
+# agents
+graphify-out
 .claude
+CLAUDE.md
 tools/db2tool/listfile.csv
 tools/db2tool/DBDCache/
 tools/db2tool/dbfilesclient/

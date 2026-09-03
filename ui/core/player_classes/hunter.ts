@@ -1,8 +1,9 @@
-import { EligibleWeaponType, IconSize, PlayerClass } from '../player_class';
+import { IconSize, PlayerClass } from '../player_class';
 import { PlayerSpec } from '../player_spec';
 import { Hunter as HunterSpec } from '../player_specs/hunter';
-import { ArmorType, Class, Race, RangedWeaponType, WeaponType } from '../proto/common';
+import { Class } from '../proto/common';
 import { HunterSpecs } from '../proto_utils/utils';
+import { getClassArmorTypes, getClassRaces, getClassRangedWeaponTypes, getClassWeaponTypes } from './capabilities';
 
 export class Hunter extends PlayerClass<Class.ClassHunter> {
 	static classID = Class.ClassHunter as Class.ClassHunter;
@@ -11,32 +12,10 @@ export class Hunter extends PlayerClass<Class.ClassHunter> {
 	static specs: Record<string, PlayerSpec<HunterSpecs>> = {
 		[HunterSpec.friendlyName]: HunterSpec,
 	};
-	static races: Race[] = [
-		// [A]
-		Race.RaceDwarf,
-		Race.RaceNightElf,
-		Race.RaceDraenei,
-		// [H]
-		Race.RaceOrc,
-		Race.RaceTauren,
-		Race.RaceTroll,
-		Race.RaceBloodElf,
-	];
-	static armorTypes: ArmorType[] = [ArmorType.ArmorTypeMail, ArmorType.ArmorTypeLeather, ArmorType.ArmorTypeCloth];
-	static weaponTypes: EligibleWeaponType[] = [
-		{ weaponType: WeaponType.WeaponTypeDagger },
-		{ weaponType: WeaponType.WeaponTypeFist },
-		{ weaponType: WeaponType.WeaponTypeAxe, canUseTwoHand: true },
-		{ weaponType: WeaponType.WeaponTypeOffHand },
-		{ weaponType: WeaponType.WeaponTypeSword, canUseTwoHand: true },
-		{ weaponType: WeaponType.WeaponTypeStaff, canUseTwoHand: true },
-		{ weaponType: WeaponType.WeaponTypePolearm, canUseTwoHand: true },
-	];
-	static rangedWeaponTypes: RangedWeaponType[] = [
-		RangedWeaponType.RangedWeaponTypeBow,
-		RangedWeaponType.RangedWeaponTypeCrossbow,
-		RangedWeaponType.RangedWeaponTypeGun,
-	];
+	static races = getClassRaces(Hunter.classID);
+	static armorTypes = getClassArmorTypes(Hunter.classID);
+	static weaponTypes = getClassWeaponTypes(Hunter.classID);
+	static rangedWeaponTypes = getClassRangedWeaponTypes(Hunter.classID);
 
 	readonly classID = Hunter.classID;
 	readonly friendlyName = Hunter.name;

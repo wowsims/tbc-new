@@ -301,7 +301,7 @@ func (swap *ItemSwap) GetUnequippedItemBySlot(slot proto.ItemSlot) *Item {
 }
 
 func (swap *ItemSwap) EligibleSlotsForItem(itemID int32) []proto.ItemSlot {
-	eligibleSlots := eligibleSlotsForItem(GetItemByID(itemID))
+	eligibleSlots := EligibleSlotsForItem(GetItemByID(itemID))
 
 	if len(eligibleSlots) == 0 {
 		return []proto.ItemSlot{}

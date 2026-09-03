@@ -13,58 +13,80 @@ import (
 
 var WITH_DB = false
 
-var ItemsByID = map[int32]Item{}
-var GemsByID = map[int32]Gem{}
-var RandomSuffixesByID = map[int32]RandomSuffix{}
-var EnchantsByEffectID = map[int32]Enchant{}
-var ItemEffectRandPropPointsByIlvl = map[int32]ItemEffectRandPropPoints{}
-var ConsumablesByID = map[int32]Consumable{}
-var SpellEffectsById = map[int32]*proto.SpellEffect{}
+var itemsByID = map[int32]Item{}
+var gemsByID = map[int32]Gem{}
+var randomSuffixesByID = map[int32]RandomSuffix{}
+var enchantsByEffectID = map[int32]Enchant{}
+var itemEffectRandPropPointsByIlvl = map[int32]ItemEffectRandPropPoints{}
+var consumablesByID = map[int32]Consumable{}
+var spellEffectsById = map[int32]*proto.SpellEffect{}
 
-var mutex = &sync.Mutex{}
+// These maps are written at request time by AddToDatabase while other requests are
+// mid-flight, and a concurrent map read/write is an unrecoverable fatal error rather than
+// a panic something can recover from. They are unexported so every access has to go
+// through an accessor below that holds dbMu; do not export them.
+var dbMu sync.RWMutex
+
+// The only bulk scan of the item map - everything else looks items up by ID. Runs fn for
+// every item that belongs to a set, under the read lock, stopping early if fn returns false.
+func forEachSetItem(fn func(item Item) bool) {
+	dbMu.RLock()
+	defer dbMu.RUnlock()
+	for _, item := range itemsByID {
+		if item.SetName == "" {
+			continue
+		}
+		if !fn(item) {
+			return
+		}
+	}
+}
+
+func AddToDatabase(newDB *proto.SimDatabase) {
+	addToDatabase(newDB)
+}
 
 func addToDatabase(newDB *proto.SimDatabase) {
-	// create mutex lock here and lock it
-	// defer unlock it
-	mutex.Lock()
-	defer mutex.Unlock()
+	dbMu.Lock()
+	defer dbMu.Unlock()
 
 	for _, v := range newDB.Items {
-		if _, ok := ItemsByID[v.Id]; !ok {
-			ItemsByID[v.Id] = ItemFromProto(v)
+		if _, ok := itemsByID[v.Id]; !ok {
+			itemsByID[v.Id] = ItemFromProto(v)
 		}
 	}
 
 	for _, v := range newDB.RandomSuffixes {
-		if _, ok := RandomSuffixesByID[v.Id]; !ok {
-			RandomSuffixesByID[v.Id] = RandomSuffixFromProto(v)
+		if _, ok := randomSuffixesByID[v.Id]; !ok {
+			randomSuffixesByID[v.Id] = RandomSuffixFromProto(v)
 		}
 	}
 
 	for _, v := range newDB.Enchants {
-		if _, ok := EnchantsByEffectID[v.EffectId]; !ok {
-			EnchantsByEffectID[v.EffectId] = EnchantFromProto(v)
+		if _, ok := enchantsByEffectID[v.EffectId]; !ok {
+			enchantsByEffectID[v.EffectId] = EnchantFromProto(v)
 		}
 	}
 
 	for _, v := range newDB.Gems {
-		if _, ok := GemsByID[v.Id]; !ok {
-			GemsByID[v.Id] = GemFromProto(v)
+		if _, ok := gemsByID[v.Id]; !ok {
+			gemsByID[v.Id] = GemFromProto(v)
 		}
 	}
+
 	for _, v := range newDB.ItemEffectRandPropPoints {
-		if _, ok := ItemEffectRandPropPointsByIlvl[v.Ilvl]; !ok {
-			ItemEffectRandPropPointsByIlvl[v.Ilvl] = ItemEffectRandPropPointsFromProto(v)
+		if _, ok := itemEffectRandPropPointsByIlvl[v.Ilvl]; !ok {
+			itemEffectRandPropPointsByIlvl[v.Ilvl] = ItemEffectRandPropPointsFromProto(v)
 		}
 	}
 	for _, v := range newDB.Consumables {
-		if _, ok := ConsumablesByID[v.Id]; !ok {
-			ConsumablesByID[v.Id] = ConsumableFromProto(v)
+		if _, ok := consumablesByID[v.Id]; !ok {
+			consumablesByID[v.Id] = ConsumableFromProto(v)
 		}
 	}
 	for _, v := range newDB.SpellEffects {
-		if _, ok := SpellEffectsById[v.Id]; !ok {
-			SpellEffectsById[v.Id] = v
+		if _, ok := spellEffectsById[v.Id]; !ok {
+			spellEffectsById[v.Id] = v
 		}
 	}
 }
@@ -131,11 +153,13 @@ type Item struct {
 	SwingSpeed       float64
 	QualityModifier  float64 // Per-item offset to weapon "average damage"; negative for caster weapons.
 
-	Name    string
-	Stats   stats.Stats // Stats applied to wearer
-	Quality proto.ItemQuality
-	SetName string // Empty string if not part of a set.
-	SetID   int32  // 0 if not part of a set.
+	Name          string
+	Stats         stats.Stats // Stats applied to wearer
+	Quality       proto.ItemQuality
+	Unique        bool
+	LimitCategory int32
+	SetName       string // Empty string if not part of a set.
+	SetID         int32  // 0 if not part of a set.
 
 	GemSockets  []proto.GemColor
 	SocketBonus stats.Stats
@@ -165,6 +189,8 @@ func ItemFromProto(pData *proto.SimItem) Item {
 		QualityModifier:  pData.QualityModifier,
 		GemSockets:       pData.GemSockets,
 		SocketBonus:      stats.FromProtoArray(pData.SocketBonus),
+		Unique:           pData.Unique,
+		LimitCategory:    pData.LimitCategory,
 		SetName:          pData.SetName,
 		SetID:            pData.SetId,
 		ScalingOptions:   pData.ScalingOptions,
@@ -203,6 +229,8 @@ type Enchant struct {
 	EnchantEffects []*proto.ItemEffect
 	Name           string         // Only needed for unit tests
 	Type           proto.ItemType // Only needed for unit tests
+	EnchantType    proto.EnchantType
+	ExtraTypes     []proto.ItemType
 }
 
 func EnchantFromProto(pData *proto.SimEnchant) Enchant {
@@ -212,6 +240,8 @@ func EnchantFromProto(pData *proto.SimEnchant) Enchant {
 		EnchantEffects: pData.EnchantEffects,
 		Name:           pData.Name,
 		Type:           pData.Type,
+		EnchantType:    pData.EnchantType,
+		ExtraTypes:     append([]proto.ItemType(nil), pData.ExtraTypes...),
 	}
 }
 
@@ -381,10 +411,44 @@ func (equipment *Equipment) containsGemInSlot(itemID int32, slot proto.ItemSlot)
 }
 
 func GetEnchantByEffectID(effectID int32) *Enchant {
-	if enchant, ok := EnchantsByEffectID[effectID]; ok {
-		return &enchant
+	dbMu.RLock()
+	enchant, ok := enchantsByEffectID[effectID]
+	dbMu.RUnlock()
+	if !ok {
+		return nil
 	}
-	return nil
+	return &enchant
+}
+
+func GetGemByID(id int32) (Gem, bool) {
+	dbMu.RLock()
+	gem, ok := gemsByID[id]
+	dbMu.RUnlock()
+	return gem, ok
+}
+
+func GetConsumableByID(id int32) Consumable {
+	dbMu.RLock()
+	c := consumablesByID[id]
+	dbMu.RUnlock()
+	return c
+}
+
+func GetSpellEffectByID(id int32) *proto.SpellEffect {
+	dbMu.RLock()
+	e := spellEffectsById[id]
+	dbMu.RUnlock()
+	return e
+}
+
+func GetItemEffectRandPropPointsByIlvl(ilvl int32) *ItemEffectRandPropPoints {
+	dbMu.RLock()
+	p, ok := itemEffectRandPropPointsByIlvl[ilvl]
+	dbMu.RUnlock()
+	if !ok {
+		return nil
+	}
+	return &p
 }
 
 func (equipment *Equipment) ToEquipmentSpecProto() *proto.EquipmentSpec {
@@ -412,8 +476,14 @@ func ProtoToEquipmentSpec(es *proto.EquipmentSpec) EquipmentSpec {
 }
 
 func NewItem(itemSpec ItemSpec) Item {
+	// AddToDatabase writes these maps while other requests are mid-flight, so every
+	// lookup below has to be under the lock. Held across the whole function rather
+	// than reacquired per lookup; nothing in here takes dbMu again.
+	dbMu.RLock()
+	defer dbMu.RUnlock()
+
 	item := Item{}
-	if foundItem, ok := ItemsByID[itemSpec.ID]; ok {
+	if foundItem, ok := itemsByID[itemSpec.ID]; ok {
 		item = foundItem
 	} else {
 		panic(fmt.Sprintf("No item with id: %d", itemSpec.ID))
@@ -427,7 +497,7 @@ func NewItem(itemSpec ItemSpec) Item {
 	item.RandPropPoints = scalingOptions.RandPropPoints
 
 	if itemSpec.RandomSuffix != 0 {
-		if randomSuffix, ok := RandomSuffixesByID[itemSpec.RandomSuffix]; ok {
+		if randomSuffix, ok := randomSuffixesByID[itemSpec.RandomSuffix]; ok {
 			item.RandomSuffix = randomSuffix
 		} else {
 			panic(fmt.Sprintf("No random suffix with id: %d", itemSpec.RandomSuffix))
@@ -435,7 +505,7 @@ func NewItem(itemSpec ItemSpec) Item {
 	}
 
 	if itemSpec.Enchant != 0 {
-		if enchant, ok := EnchantsByEffectID[itemSpec.Enchant]; ok {
+		if enchant, ok := enchantsByEffectID[itemSpec.Enchant]; ok {
 			item.Enchant = enchant
 		}
 		// else {
@@ -452,7 +522,7 @@ func NewItem(itemSpec ItemSpec) Item {
 
 		item.Gems = make([]Gem, numGems)
 		for gemIdx, gemID := range itemSpec.Gems {
-			if gem, ok := GemsByID[gemID]; ok {
+			if gem, ok := gemsByID[gemID]; ok {
 				item.Gems[gemIdx] = gem
 			} else {
 				if gemID != 0 {
@@ -565,10 +635,13 @@ func ItemEquipmentGemAndEnchantStats(item Item) stats.Stats {
 }
 
 func GetItemByID(id int32) *Item {
-	if item, ok := ItemsByID[id]; ok {
-		return &item
+	dbMu.RLock()
+	item, ok := itemsByID[id]
+	dbMu.RUnlock()
+	if !ok {
+		return nil
 	}
-	return nil
+	return &item
 }
 
 func ItemTypeToSlot(it proto.ItemType) proto.ItemSlot {
@@ -607,7 +680,7 @@ func ItemTypeToSlot(it proto.ItemType) proto.ItemSlot {
 }
 
 // See getEligibleItemSlots in proto_utils/utils.ts.
-var itemTypeToSlotsMap = map[proto.ItemType][]proto.ItemSlot{
+var ItemTypeToSlotsMap = map[proto.ItemType][]proto.ItemSlot{
 	proto.ItemType_ItemTypeHead:     {proto.ItemSlot_ItemSlotHead},
 	proto.ItemType_ItemTypeNeck:     {proto.ItemSlot_ItemSlotNeck},
 	proto.ItemType_ItemTypeShoulder: {proto.ItemSlot_ItemSlotShoulder},
@@ -624,11 +697,12 @@ var itemTypeToSlotsMap = map[proto.ItemType][]proto.ItemSlot{
 	// ItemType_ItemTypeWeapon is excluded intentionally - the slot cannot be decided based on type alone for weapons.
 }
 
-func eligibleSlotsForItem(item *Item) []proto.ItemSlot {
+// EligibleSlotsForItem returns the item slots an item can occupy.
+func EligibleSlotsForItem(item *Item) []proto.ItemSlot {
 	if item == nil {
 		return nil
 	}
-	if slots, ok := itemTypeToSlotsMap[item.Type]; ok {
+	if slots, ok := ItemTypeToSlotsMap[item.Type]; ok {
 		return slots
 	}
 
@@ -644,6 +718,35 @@ func eligibleSlotsForItem(item *Item) []proto.ItemSlot {
 	}
 
 	return nil
+}
+
+// GemEligibleForSocket reports whether a gem may be placed in a socket of the given color
+// (a meta socket takes only meta gems, and a meta gem fits nowhere else).
+func GemEligibleForSocket(gemColor proto.GemColor, socketColor proto.GemColor) bool {
+	if socketColor == proto.GemColor_GemColorMeta {
+		return gemColor == proto.GemColor_GemColorMeta
+	}
+	return gemColor != proto.GemColor_GemColorMeta
+}
+
+// GemMatchesSocket reports whether a gem's color counts as a match for the socket's color (for
+// the purpose of earning the item's socket bonus).
+func GemMatchesSocket(gemColor proto.GemColor, socketColor proto.GemColor) bool {
+	if gemColor == socketColor {
+		return true
+	}
+	switch socketColor {
+	case proto.GemColor_GemColorBlue:
+		return gemColor == proto.GemColor_GemColorPurple || gemColor == proto.GemColor_GemColorGreen || gemColor == proto.GemColor_GemColorPrismatic
+	case proto.GemColor_GemColorRed:
+		return gemColor == proto.GemColor_GemColorPurple || gemColor == proto.GemColor_GemColorOrange || gemColor == proto.GemColor_GemColorPrismatic
+	case proto.GemColor_GemColorYellow:
+		return gemColor == proto.GemColor_GemColorOrange || gemColor == proto.GemColor_GemColorGreen || gemColor == proto.GemColor_GemColorPrismatic
+	case proto.GemColor_GemColorPrismatic:
+		return gemColor == proto.GemColor_GemColorRed || gemColor == proto.GemColor_GemColorOrange || gemColor == proto.GemColor_GemColorYellow || gemColor == proto.GemColor_GemColorGreen || gemColor == proto.GemColor_GemColorBlue || gemColor == proto.GemColor_GemColorPurple
+	default:
+		return false
+	}
 }
 
 func ColorIntersects(g proto.GemColor, o proto.GemColor) bool {

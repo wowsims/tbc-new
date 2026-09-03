@@ -5,7 +5,7 @@ import { Player } from '../../core/player';
 import { PlayerClasses } from '../../core/player_classes';
 import { APLRotation, APLRotation_Type, SimpleRotation } from '../../core/proto/apl';
 import { Cooldowns, HandType, ItemSlot, PseudoStat, Spec, Stat } from '../../core/proto/common';
-import { StatCapType } from '../../core/proto/ui';
+import { StatCapType } from '../../core/proto/api';
 import { DEFAULT_MELEE_GEM_STATS, StatCap, Stats, UnitStat } from '../../core/proto_utils/stats';
 
 import * as Mechanics from '../../core/constants/mechanics';

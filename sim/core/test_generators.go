@@ -280,7 +280,9 @@ func (filter *ItemFilter) Matches(item Item, equipChecksOnly bool) bool {
 func (filter *ItemFilter) FindAllItems() []Item {
 	var filteredItems []Item
 
-	for _, item := range ItemsByID {
+	dbMu.RLock()
+	defer dbMu.RUnlock()
+	for _, item := range itemsByID {
 		if filter.Matches(item, false) {
 			filteredItems = append(filteredItems, item)
 		}
@@ -306,7 +308,9 @@ func (filter *ItemFilter) FindAllSets() []*ItemSet {
 func (filter *ItemFilter) FindAllMetaGems() []Gem {
 	var filteredGems []Gem
 
-	for _, gem := range GemsByID {
+	dbMu.RLock()
+	defer dbMu.RUnlock()
+	for _, gem := range gemsByID {
 		if gem.Color == proto.GemColor_GemColorMeta {
 			if !strings.Contains(gem.Name, "Skyfire") &&
 				!strings.Contains(gem.Name, "Earthstorm") &&
@@ -326,13 +330,12 @@ func (filter *ItemFilter) FindAllEnchants() []Enchant {
 	})
 
 	return MapSlice(filteredEnchantIDs, func(id int32) Enchant {
-		enchant, ok := EnchantsByEffectID[id]
-
-		if !ok {
+		enchant := GetEnchantByEffectID(id)
+		if enchant == nil {
 			panic(fmt.Sprintf("No DB data for enchant with id: %d", id))
 		}
 
-		return enchant
+		return *enchant
 	})
 }
 

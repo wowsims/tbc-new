@@ -1,0 +1,290 @@
+{
+	"raid": {
+		"parties": [
+			{
+				"players": [
+					{
+						"name": "Player",
+						"race": 5,
+						"class": 4,
+						"rogue": {
+							"options": {
+								"classOptions": {}
+							}
+						},
+						"talentsString": "0053201252-023305200005015002321151",
+						"profession1": 4,
+						"profession2": 7,
+						"reactionTimeMs": 100,
+						"distanceFromTarget": 5,
+						"equipment": {
+							"items": [
+								{
+									"id": 29044,
+									"enchant": 3003,
+									"gems": [32409, 30556]
+								},
+								{
+									"id": 24114
+								},
+								{
+									"id": 27797,
+									"enchant": 2986,
+									"gems": [33131, 30549]
+								},
+								{
+									"id": 28672,
+									"enchant": 368
+								},
+								{
+									"id": 29045,
+									"enchant": 2661,
+									"gems": [28362, 24051, 31118]
+								},
+								{
+									"id": 29246,
+									"enchant": 1593
+								},
+								{
+									"id": 27531,
+									"enchant": 2564,
+									"gems": [24051, 24051]
+								},
+								{
+									"id": 29247
+								},
+								{
+									"id": 28741,
+									"enchant": 3012,
+									"gems": [24051, 24051, 24051]
+								},
+								{
+									"id": 28545,
+									"enchant": 2939,
+									"gems": [30553, 33143]
+								},
+								{
+									"id": 28757
+								},
+								{
+									"id": 28649
+								},
+								{
+									"id": 28830
+								},
+								{
+									"id": 29383
+								},
+								{
+									"id": 28295,
+									"enchant": 2673
+								},
+								{
+									"id": 28189,
+									"enchant": 2673
+								},
+								{
+									"id": 28772
+								}
+							]
+						},
+						"consumables": {
+							"potId": 22838,
+							"battleElixirId": 22831,
+							"guardianElixirId": 32062,
+							"foodId": 33872,
+							"conjuredId": 7676,
+							"ohImbueId": 27186,
+							"potions": [13442, 22828, 22837, 22838],
+							"conjuredItems": [7676, 22105, 22788]
+						},
+						"bonusStats": {
+							"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+							"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+						},
+						"itemSwap": {
+							"items": [
+								{},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{}
+							],
+							"prepullBonusStats": {
+								"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+								"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+							}
+						},
+						"buffs": {
+							"blessingOfKings": true,
+							"blessingOfMight": 2,
+							"unleashedRage": true
+						},
+						"cooldowns": {},
+						"healingModel": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					}
+				],
+				"buffs": {
+					"ferociousInspiration": 1,
+					"leaderOfThePack": 1,
+					"drums": 4,
+					"graceOfAirTotem": 2,
+					"strengthOfEarthTotem": 2,
+					"windfuryTotem": 2,
+					"totemTwisting": true,
+					"battleShout": 2
+				}
+			},
+			{
+				"players": [
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					}
+				],
+				"buffs": {}
+			},
+			{
+				"players": [
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					}
+				],
+				"buffs": {}
+			},
+			{
+				"players": [
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					}
+				],
+				"buffs": {}
+			},
+			{
+				"players": [
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					},
+					{
+						"spec": {}
+					}
+				],
+				"buffs": {}
+			}
+		],
+		"numActiveParties": 5,
+		"buffs": {
+			"giftOfTheWild": 2,
+			"bloodlust": true
+		},
+		"debuffs": {
+			"improvedSealOfTheCrusader": 2,
+			"misery": true,
+			"bloodFrenzy": true,
+			"giftOfArthas": true,
+			"mangle": true,
+			"faerieFire": 2,
+			"sunderArmor": true,
+			"curseOfRecklessness": true,
+			"huntersMark": 2,
+			"exposeWeaknessUptime": 0.9,
+			"exposeWeaknessHunterAgility": 1150
+		}
+	},
+	"preCapEpWeights": {
+		"stats": [1.1, 2.17, 0.01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 3.06, 1.7, 2.19, 0.3, 3.47, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8.47],
+		"pseudoStats": [9.34, 3.4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+	},
+	"undershootCaps": {
+		"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+	},
+	"settings": {
+		"statCaps": {
+			"stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 102.50000800000001, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"pseudoStats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+		},
+		"maxGemPhase": 2,
+		"maxGemQuality": 4,
+		"epStats": [2, 1, 0, 21, 22, 20, 23, 24, 17, 41],
+		"useSoftCapBreakpoints": true
+	},
+	"softCaps": [
+		{
+			"unitStat": {
+				"pseudoStat": 12
+			},
+			"breakpoints": [9, 28],
+			"capType": 2,
+			"postCapEPs": [48.25385298, 0]
+		}
+	]
+}
