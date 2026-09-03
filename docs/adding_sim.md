@@ -31,26 +31,27 @@ directory is picked up as a sim page as soon as it has both of the things the te
 an entry point at `ui/$CLASS/$SPEC/index.ts` and a stylesheet at
 `ui/scss/sims/$CLASS/$SPEC/index.scss`.
 
+When you're ready to try out the site, run `make host` and navigate to `http://localhost:8080/tbc/$SPEC`.
+
 ### Sim pages are not "real" files
 Each sim is served at `/tbc/$CLASS/$SPEC/` and these pages used to be written into the repository.
 
 Vite builds those pages now (`tools/vite/spec_pages.mts`), in both `vite build` and the dev
-server, so there is nothing to generate, list or ignore. A directory becomes a sim page as soon
-as it has the two files the template points at: `ui/$CLASS/$SPEC/index.ts` and
+server, so there is nothing to generate or list. A directory becomes a sim page as soon as it has
+the two files the template points at: `ui/$CLASS/$SPEC/index.ts` and
 `ui/scss/sims/$CLASS/$SPEC/index.scss`.
 
 **Changing a sim**
-If you built the site before this change, your working tree
-still holds those generated pages. They are no longer ignored, so they now show up as untracked
-files, and `make clean` no longer deletes them. Remove them once:
+If you built the site before this change, your working tree still holds those generated pages.
+They stay gitignored, and they are inert: in both `vite build` and the dev server the plugin
+answers before the file on disk is ever looked at. You can leave them. `make clean` no longer
+removes them, so if you want them gone, do it once:
 
 ```sh
 rm -f ui/*/*/index.html
 ```
 
-*Do not delete `ui/index.html` — that is the landing page.*
-
-When you're ready to try out the site, run `make host` and navigate to `http://localhost:8080/tbc/$SPEC`.
+*Do not delete `ui/index.html`: that is the landing page.*
 
 ## Implement the Sim
 This step is where most of the magic happens. A few highlights to start understanding the sim code:
