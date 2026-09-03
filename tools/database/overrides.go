@@ -421,6 +421,118 @@ var SharedSpellsIcons = []int32{
 	27013,
 
 	30708,
+	// Raid buffs, debuffs and shared consumables.
+	603,    // Curse of Doom
+	688,    // Summon Imp
+	691,    // Summon Felhunter
+	697,    // Summon Voidwalker
+	704,    // Curse of Recklessness
+	706,    // Demon Armor
+	712,    // Summon Succubus
+	6117,   // Mage Armor
+	7302,   // Ice Armor
+	8024,   // Flametongue Weapon
+	8033,   // Frostbrand Weapon
+	8232,   // Windfury Weapon
+	10538,  // Fire Resistance Totem
+	12470,  // Fire Nova
+	13339,  // Fire Blast
+	13376,  // Fire Shield
+	13889,  // Minor Speed
+	14325,  // Hunter's Mark
+	17768,  // Wolfshead Helm
+	18803,  // Focus
+	19615,  // Frenzy Effect
+	20574,  // Axe Specialization
+	20575,  // Command
+	20576,  // Command
+	20594,  // Stoneform
+	20595,  // Gun Specialization
+	20597,  // Sword Specialization
+	20864,  // Mace Specialization
+	23110,  // Dash
+	23563,  // Enhanced Battle Shout
+	25076,  // Cobra Reflexes
+	25312,  // Divine Spirit
+	25389,  // Power Word: Fortitude
+	25433,  // Shadow Protection
+	25485,  // Rockbiter Weapon
+	25489,  // Flametongue Weapon
+	25500,  // Frostbrand Weapon
+	25505,  // Windfury Weapon
+	25560,  // Frost Resistance Totem
+	25574,  // Nature Resistance Totem
+	25607,  // Jade Pendant of Blasting
+	25894,  // Greater Blessing of Wisdom
+	25895,  // Greater Blessing of Salvation
+	26654,  // Sweeping Strikes
+	26991,  // Gift of the Wild
+	26992,  // Thorns
+	27045,  // Aspect of the Wild
+	27050,  // Bite
+	27051,  // Screech
+	27141,  // Greater Blessing of Might
+	27143,  // Greater Blessing of Wisdom
+	27163,  // Judgement of Light
+	27169,  // Greater Blessing of Sanctuary
+	27187,  // Deadly Poison VII
+	27267,  // Firebolt
+	27268,  // Blood Pact
+	27270,  // Torment
+	27274,  // Lash of Pain
+	28093,  // Lightning Speed
+	28142,  // Power of the Guardian
+	28143,  // Power of the Guardian
+	28878,  // Inspiring Presence
+	28880,  // Gift of the Naaru
+	29414,  // Haste
+	30168,  // Shadow Cage
+	30223,  // Cleave
+	30576,  // Quake
+	30616,  // Blast Nova
+	30619,  // Cleave
+	32176,  // Stormstrike
+	32850,  // Demonic Frenzy
+	33697,  // Blood Fury
+	33876,  // Mangle (Cat)
+	34026,  // Kill Command
+	34027,  // Kill Command
+	34258,  // Justice
+	34260,  // Justice
+	34471,  // The Beast Within
+	34775,  // Haste
+	35081,  // Band of the Eternal Champion
+	35084,  // Band of the Eternal Sage
+	35298,  // Gore
+	35476,  // Drums of Battle
+	37174,  // Perceived Weakness
+	37186,  // Increased Judgement of Crusader
+	37212,  // Improved Wrath of Air Totem
+	37223,  // Improved Strength of Earth
+	37444,  // Arcane Madness
+	37445,  // Mana Surge
+	37658,  // Electrical Charge
+	37661,  // Lightning Bolt
+	38390,  // Improved Aspect of the Viper
+	38392,  // Improved Steady Shot
+	38393,  // Improved Shadow Bolt and Incinerate
+	38398,  // Reduced Cleave Cost
+	38421,  // Improved Spiritual Attunement
+	38422,  // Improved Consecration
+	38436,  // Improved Lightning Bolt
+	38437,  // Totemic Mastery
+	38447,  // Improved Mangle
+	38927,  // Fel Ache
+	39374,  // Prayer of Shadow Protection
+	39445,  // Vengeance
+	40293,  // Siphon Essence
+	40407,  // Illidan Tank Shield
+	40477,  // Forceful Strike
+	41434,  // The Twin Blades of Azzinoth
+	41435,  // The Twin Blades of Azzinoth
+	42084,  // Fury of the Crashing Waves
+	44949,  // Whirlwind
+	369770, // Tinnitus
 }
 
 // If any of these match the item name, don't include it.
