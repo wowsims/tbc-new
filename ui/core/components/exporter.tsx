@@ -2,7 +2,7 @@ import { ref } from 'tsx-vanilla';
 
 import { SimUI } from '../sim_ui';
 import { TypedEvent } from '../typed_event';
-import { downloadString } from '../utils';
+import { downloadString, kebabCase } from '../utils';
 import { BaseModal } from './base_modal';
 import { CopyButton } from './copy_button';
 import i18n from '../../i18n/config';
@@ -50,7 +50,7 @@ export abstract class Exporter extends BaseModal {
 	}
 
 	open() {
-		const titleAsSlug = this.header?.title.toLowerCase().replaceAll(' ', '-');
+		const titleAsSlug = this.header && kebabCase(this.header.title);
 		trackPageView(this.header!.title, `/export/${titleAsSlug}`);
 		super.open();
 		this.init();

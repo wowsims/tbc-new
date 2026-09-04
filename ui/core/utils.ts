@@ -16,6 +16,9 @@ export const cloneChildren = (element: HTMLElement) => [...(element.childNodes |
 
 export const sanitizeId = (id: string) => id.split(' ').join('').toLocaleLowerCase();
 
+/** Lower-cases and hyphenates a display name, for use as a CSS class or slug. */
+export const kebabCase = (text: string): string => text.toLowerCase().replaceAll(' ', '-');
+
 export const omitDeep = <T>(collection: T, excludeKeys: string[]): T => {
 	const clonedCollection = cloneDeep(collection);
 
