@@ -275,6 +275,8 @@ const (
 
 	// Will reduce spell.Cost.PercentModifier by % amount. -5% = -0.05
 	// Stacks multiplicatively with other pct cost mods.
+	// Use for effects that are SPELL_AURA_MOD_POWER_COST_SCHOOL_PCT (aura 72)
+	// in DBC, e.g. Elemental Precision, Pyromaniac, The Beast Within.
 	// For 0 Mana cost use -2
 	// Uses FloatValue
 	SpellMod_PowerCost_Pct
@@ -282,6 +284,9 @@ const (
 	// Adds to spell.Cost.AdditivePercentModifier. +75% = 0.75
 	// Stacks additively with other mods of this kind: bucket = 1 + sum of mods.
 	// Applied on top of (multiplied with) SpellMod_PowerCost_Pct mods.
+	// Use for effects that are SPELL_AURA_ADD_PCT_MODIFIER (aura 108) with
+	// EffectMiscValue SPELLMOD_COST (14) in DBC — the common case for talents,
+	// set bonuses and procs.
 	// Uses FloatValue
 	SpellMod_PowerCost_Pct_Add
 

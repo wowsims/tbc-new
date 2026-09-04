@@ -201,7 +201,9 @@ var ItemSetSkyshatterHarness = core.NewItemSet(core.ItemSet{
 		2: func(agent core.Agent, setBonusAura *core.Aura) {
 			// Your Earth Shock, Flame Shock, and Frost Shock abilities cost 10% less mana.
 			setBonusAura.AttachSpellMod(core.SpellModConfig{
-				Kind:       core.SpellMod_PowerCost_Pct,
+				// Stacks additively with Convection: Earth Shock costs 428 = 535 * (1 - 0.10 - 0.10)
+				// with 5/5 Convection + 2pc (confirmed in-game).
+				Kind:       core.SpellMod_PowerCost_Pct_Add,
 				FloatValue: -0.1,
 				ClassMask:  SpellMaskShock,
 			}).ExposeToAPL(38429)

@@ -11,15 +11,10 @@ func (mage *Mage) registerArcanePowerSpell() {
 		return
 	}
 
+	// Sums with T5 2pc and Arcane Charges on Arcane Blast, and with
+	// Frost Channeling / Empowered Arcane Missiles where those overlap.
 	arcanePowerCostMod := mage.AddDynamicMod(core.SpellModConfig{
-		ClassMask:  MageSpellsAll ^ MageSpellArcaneBlast,
-		FloatValue: .3,
-		Kind:       core.SpellMod_PowerCost_Pct,
-	})
-
-	// On Arcane Blast the cost increase sums with T5 2pc and Arcane Charges.
-	arcanePowerABCostMod := mage.AddDynamicMod(core.SpellModConfig{
-		ClassMask:  MageSpellArcaneBlast,
+		ClassMask:  MageSpellsAll,
 		FloatValue: .3,
 		Kind:       core.SpellMod_PowerCost_Pct_Add,
 	})
@@ -41,12 +36,10 @@ func (mage *Mage) registerArcanePowerSpell() {
 		Priority: 10,
 		OnGain: func(_ *core.ExclusiveEffect, sim *core.Simulation) {
 			arcanePowerCostMod.Activate()
-			arcanePowerABCostMod.Activate()
 			arcanePowerDmgMod.Activate()
 		},
 		OnExpire: func(_ *core.ExclusiveEffect, sim *core.Simulation) {
 			arcanePowerCostMod.Deactivate()
-			arcanePowerABCostMod.Deactivate()
 			arcanePowerDmgMod.Deactivate()
 			arcanePowerSpell.CD.Use(sim)
 		},
