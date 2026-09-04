@@ -202,8 +202,10 @@ export class SimLog {
 		) as HTMLAnchorElement;
 		this.actionId?.setBackground(iconElem);
 		this.actionId?.setWowheadHref(actionAnchor);
-		this.actionId?.setWowheadDataset(actionAnchor, { useBuffAura: isAura });
-		if (cacheKey) cachedActionIdLink.set(cacheKey, actionAnchor.cloneNode(true) as HTMLAnchorElement);
+		const datasetSet = this.actionId?.setWowheadDataset(actionAnchor, { useBuffAura: isAura }) ?? Promise.resolve();
+		if (cacheKey) {
+			datasetSet.then(() => cachedActionIdLink.set(cacheKey, actionAnchor.cloneNode(true) as HTMLAnchorElement)).catch(() => {});
+		}
 		return actionAnchor;
 	}
 
