@@ -238,17 +238,12 @@ export class ActionId {
 		}
 	}
 
-	async setWowheadDataset(
-		elem: HTMLElement | HTMLElement[],
-		params?: Omit<WowheadTooltipItemParams, 'itemId'> | Omit<WowheadTooltipSpellParams, 'spellId'>,
-	) {
-		(this.itemId
+	async setWowheadDataset(elem: HTMLElement | HTMLElement[], params?: Omit<WowheadTooltipItemParams, 'itemId'> | Omit<WowheadTooltipSpellParams, 'spellId'>) {
+		const url = await (this.itemId
 			? ActionId.makeItemTooltipData(this.itemId, params)
-			: ActionId.makeSpellTooltipData(this.spellIdTooltipOverride || this.spellId, params)
-		).then(url => {
-			(Array.isArray(elem) ? elem : [elem]).forEach(e => {
-				if (e) e.dataset.wowhead = url;
-			});
+			: ActionId.makeSpellTooltipData(this.spellIdTooltipOverride || this.spellId, params));
+		(Array.isArray(elem) ? elem : [elem]).forEach(e => {
+			if (e) e.dataset.wowhead = url;
 		});
 	}
 
