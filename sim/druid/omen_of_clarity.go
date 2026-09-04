@@ -45,9 +45,9 @@ func (druid *Druid) applyOmenOfClarity() {
 			}
 		},
 	}).AttachSpellMod(core.SpellModConfig{
-		Kind:       core.SpellMod_PowerCost_Pct_Add,
+		Kind:       core.SpellMod_PowerCost_Pct,
 		ClassMask:  clearcastingSpells,
-		FloatValue: -1,
+		FloatValue: -2,
 	})
 
 	druid.MakeProcTriggerAura(core.ProcTrigger{

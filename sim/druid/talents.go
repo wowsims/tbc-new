@@ -159,7 +159,7 @@ func (druid *Druid) applyMoonglow() {
 	druid.AddStaticMod(core.SpellModConfig{
 		ClassMask:  DruidSpellMoonfire | DruidSpellStarfire | DruidSpellWrath | DruidSpellHealingTouch | DruidSpellRegrowth | DruidSpellRejuvenation,
 		FloatValue: -0.03 * float64(druid.Talents.Moonglow),
-		Kind:       core.SpellMod_PowerCost_Pct_Add,
+		Kind:       core.SpellMod_PowerCost_Pct,
 	})
 }
 
@@ -336,7 +336,7 @@ func (druid *Druid) applyNaturalShapeshifter() {
 
 	druid.AddStaticMod(core.SpellModConfig{
 		ClassMask:  DruidSpellCatForm | DruidSpellBearForm,
-		Kind:       core.SpellMod_PowerCost_Pct_Add,
+		Kind:       core.SpellMod_PowerCost_Pct,
 		FloatValue: -0.1 * float64(druid.Talents.NaturalShapeshifter),
 	})
 }
