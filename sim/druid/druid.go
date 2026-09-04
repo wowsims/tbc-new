@@ -220,6 +220,7 @@ func (druid *Druid) Initialize() {
 
 func (druid *Druid) RegisterBaselineSpells() {
 	druid.registerInnervateCD()
+	druid.registerThornsSpell()
 	druid.registerFormBreakingConsumes()
 }
 

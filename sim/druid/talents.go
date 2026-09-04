@@ -18,7 +18,7 @@ func (druid *Druid) ApplyTalents() {
 	druid.applyStarlightWrath()
 	druid.applyFocusedStarlight()
 	druid.applyImprovedMoonfire()
-	druid.applyBrambles()
+	// Brambles: applied as Thorns aura points in thorns.go
 	druid.applyInsectSwarm()
 	druid.applyNaturesReach()
 	druid.applyVengeance()
@@ -258,18 +258,6 @@ func (druid *Druid) applyInsectSwarm() {
 	}
 
 	druid.registerInsectSwarmSpell()
-}
-
-func (druid *Druid) applyBrambles() {
-	if druid.Talents.Brambles == 0 {
-		return
-	}
-
-	druid.AddStaticMod(core.SpellModConfig{
-		ClassMask:  DruidSpellThorns | DruidSpellEntanglingRoots,
-		Kind:       core.SpellMod_DamageDone_Flat,
-		FloatValue: 0.25 * float64(druid.Talents.Brambles),
-	})
 }
 
 func (druid *Druid) applyStarlightWrath() {
