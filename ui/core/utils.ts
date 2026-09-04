@@ -14,12 +14,6 @@ export const existsInDOM = (element: HTMLElement | null) => document.body.contai
 
 export const cloneChildren = (element: HTMLElement) => [...(element.childNodes || [])].map(child => child.cloneNode(true));
 
-export const fragmentToString = (element: Node | Element) => {
-	const div = document.createElement('div');
-	div.appendChild(element.cloneNode(true));
-	return div.innerHTML;
-};
-
 export const sanitizeId = (id: string) => id.split(' ').join('').toLocaleLowerCase();
 
 export const omitDeep = <T>(collection: T, excludeKeys: string[]): T => {
@@ -90,11 +84,6 @@ export function sortByProperty(objArray: any[], prop: string) {
 
 export function sum(arr: Array<number>): number {
 	return arr.reduce((total, cur) => total + cur, 0);
-}
-
-// Returns the index of maximum value, or null if empty.
-export function maxIndex(arr: Array<number>): number | null {
-	return arr.reduce((cur, v, i, arr) => (v > arr[cur] ? i : cur), 0);
 }
 
 // Swaps two elements in the given array.

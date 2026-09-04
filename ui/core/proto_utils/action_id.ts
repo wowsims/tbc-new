@@ -174,11 +174,20 @@ export class ActionId {
 		return this.equalsIgnoringTag(other) && this.tag == other.tag;
 	}
 
+	// Every field these read is readonly and set in the constructor, so the string cannot go stale.
+	private cachedEqualityKey?: string;
+	private cachedEqualityKeyIgnoringTag?: string;
+
 	// A string form of exactly what equals() compares, for use as a Map/Set key. Keep in step
 	// with equalsIgnoringTag below; toString() is not a substitute, as it reports only the
 	// first non-zero of itemId/spellId/otherId and drops randomSuffixId.
 	equalityKey(): string {
-		return `${this.itemId}|${this.randomSuffixId}|${this.spellId}|${this.otherId}|${this.tag}`;
+		return (this.cachedEqualityKey ??= `${this.equalityKeyIgnoringTag()}|${this.tag}`);
+	}
+
+	// equalityKey() without the tag, matching equalsIgnoringTag below.
+	equalityKeyIgnoringTag(): string {
+		return (this.cachedEqualityKeyIgnoringTag ??= `${this.itemId}|${this.randomSuffixId}|${this.spellId}|${this.otherId}`);
 	}
 
 	equalsIgnoringTag(other: ActionId): boolean {
