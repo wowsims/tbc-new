@@ -259,7 +259,7 @@ func (warlock *Warlock) appyImprovedImp() {
 	}
 
 	warlock.Imp.AddStaticMod(core.SpellModConfig{
-		Kind:       core.SpellMod_DamageDone_Pct,
+		Kind:       core.SpellMod_DamageDone_Flat,
 		FloatValue: 0.1 * float64(warlock.Talents.ImprovedImp),
 		ClassMask:  WarlockSpellImpFireBolt,
 	})
@@ -293,7 +293,7 @@ func (warlock *Warlock) applyImprovedSayaad() {
 
 	//This might not actually increase the damage, find a source to prove this
 	warlock.Succubus.AddStaticMod(core.SpellModConfig{
-		Kind:       core.SpellMod_DamageDone_Pct,
+		Kind:       core.SpellMod_DamageDone_Flat,
 		FloatValue: 0.1 * float64(warlock.Talents.ImprovedSayaad),
 		ClassMask:  WarlockSpellSuccubusLashOfPain,
 	})
@@ -323,7 +323,7 @@ func (warlock *Warlock) applyUnholyPower() {
 	}
 
 	warlock.Imp.AddStaticMod(core.SpellModConfig{
-		Kind:       core.SpellMod_DamageDone_Pct,
+		Kind:       core.SpellMod_DamageDone_Flat,
 		FloatValue: 0.04 * float64(warlock.Talents.UnholyPower),
 		ClassMask:  WarlockSpellImpFireBolt,
 	})

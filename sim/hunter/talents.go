@@ -371,7 +371,7 @@ func (hunter *Hunter) registerImprovedStings() {
 	}
 
 	hunter.AddStaticMod(core.SpellModConfig{
-		Kind:       core.SpellMod_DamageDone_Pct,
+		Kind:       core.SpellMod_DamageDone_Flat,
 		ClassMask:  HunterSpellSerpentSting,
 		FloatValue: 0.06 * float64(hunter.Talents.ImprovedStings),
 	})
@@ -395,7 +395,7 @@ func (hunter *Hunter) registerBarrage() {
 	}
 
 	hunter.AddStaticMod(core.SpellModConfig{
-		Kind:       core.SpellMod_DamageDone_Pct,
+		Kind:       core.SpellMod_DamageDone_Flat,
 		ClassMask:  HunterSpellMultiShot | HunterSpellVolley,
 		FloatValue: 0.04 * float64(hunter.Talents.Barrage),
 	})

@@ -316,7 +316,7 @@ func (paladin *Paladin) applyDivineIntellect() {
 // Improved Seal of Righteousness - Increases the damage done by your Seal of Righteousness and its Judgement by 3/6/9/12/15%
 func (paladin *Paladin) applyImprovedSealOfRighteousness() {
 	paladin.AddStaticMod(core.SpellModConfig{
-		Kind:       core.SpellMod_DamageDone_Pct,
+		Kind:       core.SpellMod_DamageDone_Flat,
 		FloatValue: 0.03 * float64(paladin.Talents.ImprovedSealOfRighteousness),
 		ClassMask:  SpellMaskSealOfRighteousness | SpellMaskJudgementOfRighteousness,
 	})
@@ -325,7 +325,7 @@ func (paladin *Paladin) applyImprovedSealOfRighteousness() {
 // Healing Light - Increases the amount healed by your Holy Light and Flash of Light spells by 4/8/12%
 func (paladin *Paladin) applyHealingLight() {
 	paladin.AddStaticMod(core.SpellModConfig{
-		Kind:       core.SpellMod_DamageDone_Pct,
+		Kind:       core.SpellMod_DamageDone_Flat,
 		FloatValue: 0.04 * float64(paladin.Talents.HealingLight),
 		ClassMask:  SpellMaskHolyLight | SpellMaskFlashOfLight,
 	})
@@ -562,7 +562,7 @@ func (paladin *Paladin) applyOneHandedWeaponSpecialization() {
 func (paladin *Paladin) applyImprovedHolyShield() {
 	// Number of charges handled in holy_shield.go
 	paladin.AddStaticMod(core.SpellModConfig{
-		Kind:       core.SpellMod_DamageDone_Pct,
+		Kind:       core.SpellMod_DamageDone_Flat,
 		ClassMask:  SpellMaskHolyShieldProc,
 		FloatValue: 0.1 * float64(paladin.Talents.ImprovedHolyShield),
 	})

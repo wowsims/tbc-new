@@ -173,7 +173,7 @@ var ItemSetGronnstalkersArmor = core.NewItemSet(core.ItemSet{
 		},
 		4: func(agent core.Agent, setBonusAura *core.Aura) {
 			setBonusAura.AttachSpellMod(core.SpellModConfig{
-				Kind:       core.SpellMod_DamageDone_Pct,
+				Kind:       core.SpellMod_DamageDone_Flat,
 				ClassMask:  HunterSpellSteadyShot,
 				FloatValue: 0.1,
 			}).ExposeToAPL(38392)
@@ -347,7 +347,7 @@ func (hunter *Hunter) addPvpGloves() {
 	hunter.RegisterPvPGloveMod(
 		pvpGloveItemIDs,
 		core.SpellModConfig{
-			Kind:       core.SpellMod_DamageDone_Pct,
+			Kind:       core.SpellMod_DamageDone_Flat,
 			ClassMask:  HunterSpellMultiShot,
 			FloatValue: 0.05,
 		})

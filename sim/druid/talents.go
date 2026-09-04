@@ -267,7 +267,7 @@ func (druid *Druid) applyBrambles() {
 
 	druid.AddStaticMod(core.SpellModConfig{
 		ClassMask:  DruidSpellThorns | DruidSpellEntanglingRoots,
-		Kind:       core.SpellMod_DamageDone_Pct,
+		Kind:       core.SpellMod_DamageDone_Flat,
 		FloatValue: 0.25 * float64(druid.Talents.Brambles),
 	})
 }

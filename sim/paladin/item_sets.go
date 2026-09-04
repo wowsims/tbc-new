@@ -115,7 +115,7 @@ var ItemSetJusticarArmor = core.NewItemSet(core.ItemSet{
 	Bonuses: map[int32]core.ApplySetBonus{
 		2: func(agent core.Agent, setBonusAura *core.Aura) {
 			setBonusAura.AttachSpellMod(core.SpellModConfig{
-				Kind:       core.SpellMod_DamageDone_Pct,
+				Kind:       core.SpellMod_DamageDone_Flat,
 				FloatValue: 0.10,
 				ClassMask:  SpellMaskSealOfRighteousness | SpellMaskSealOfVengeance | SpellMaskSealOfBlood,
 			}).ExposeToAPL(37184)
@@ -189,7 +189,7 @@ var ItemSetLightbringerArmor = core.NewItemSet(core.ItemSet{
 		},
 		4: func(agent core.Agent, setBonusAura *core.Aura) {
 			setBonusAura.AttachSpellMod(core.SpellModConfig{
-				Kind:       core.SpellMod_DamageDone_Pct,
+				Kind:       core.SpellMod_DamageDone_Flat,
 				FloatValue: 0.10,
 				ClassMask:  SpellMaskConsecration,
 			}).ExposeToAPL(38422)
