@@ -1,7 +1,13 @@
+import { ref } from 'tsx-vanilla';
+
+import i18n from '../../i18n/config';
+import { trackEvent } from '../../tracking/utils';
+import { IndividualSimUI } from '../individual_sim_ui';
 import { SimRun, SimRunData } from '../proto/ui';
 import { SimResult } from '../proto_utils/sim_result';
 import { SimUI } from '../sim_ui';
 import { TypedEvent } from '../typed_event';
+import { isDevMode } from '../utils';
 import { Component } from './component';
 import { AuraMetricsTable } from './detailed_results/aura_metrics';
 import { CastMetricsTable } from './detailed_results/cast_metrics';
@@ -11,17 +17,13 @@ import { DtpsMetricsTable } from './detailed_results/dtps_metrics';
 import { HealingMetricsTable } from './detailed_results/healing_metrics';
 import { LogRunner } from './detailed_results/log_runner';
 import { ResourceMetricsTable } from './detailed_results/resource_metrics';
-import { SimResultData } from './detailed_results/result_component';
+import { ResultComponent, SimResultData } from './detailed_results/result_component';
 import { ResultsFilter } from './detailed_results/results_filter';
 import { Timeline } from './detailed_results/timeline';
+import { ThreatMetricsTable } from './detailed_results/threat_metrics';
 import { ToplineResults } from './detailed_results/topline_results';
 import { SimResultsManager } from './sim_action';
 import { StickyToolbar } from './sticky_toolbar';
-import i18n from '../../i18n/config';
-import { ref } from 'tsx-vanilla';
-import { isDevMode } from '../utils';
-import { trackEvent } from '../../tracking/utils';
-import { ThreatMetricsTable } from './detailed_results/threat_metrics';
 
 type Tab = {
 	isActive?: boolean;
@@ -94,6 +96,10 @@ export class DetailedResults extends Component {
 
 		this.simUI = simUI;
 
+		// Kept as the tabs are built, below. Looking them up afterwards meant a document-wide
+		// querySelector per tab, matching on the data attribute Bootstrap uses.
+		const tabButtons = new Map<string, HTMLButtonElement>();
+
 		this.rootDiv = (
 			<div className="dr-root dr-no-results">
 				<div className="dr-toolbar">
@@ -103,6 +109,7 @@ export class DetailedResults extends Component {
 						{tabs.map(({ label, targetId, isActive, classes }) => (
 							<li className={`nav-item dr-tab-tab ${classes?.join(' ') || ''}`} attributes={{ role: 'presentation' }}>
 								<button
+									ref={elem => tabButtons.set(targetId, elem)}
 									className={`nav-link${isActive ? ' active' : ''}`}
 									type="button"
 									attributes={{
@@ -272,20 +279,34 @@ export class DetailedResults extends Component {
 			resultsEmitter: this.resultsEmitter,
 		});
 
+		// Tabs whose contents are expensive hold their results until first shown; see
+		// ResultComponent's deferUntilShown.
+		const deferUntilShown = (component: ResultComponent, tabId: string) => {
+			const button = tabButtons.get(tabId);
+			if (!button) {
+				console.error(`No tab button for ${tabId}; its deferred contents will never render.`);
+				return;
+			}
+			button.addEventListener('shown.bs.tab', () => component.onTabShown());
+			button.addEventListener('hide.bs.tab', () => component.onTabHidden());
+		};
+
 		const timeline = new Timeline({
 			parent: this.rootElem.querySelector('.timeline')!,
 			resultsEmitter: this.resultsEmitter,
+			deferUntilShown: true,
 		});
+		deferUntilShown(timeline, 'timelineTab');
 
-		const tabEl = document.querySelector('button[data-bs-target="#timelineTab"]');
-		tabEl?.addEventListener('shown.bs.tab', () => {
-			timeline.render();
-		});
-
-		new LogRunner({
-			parent: this.rootElem.querySelector('.log')!,
-			resultsEmitter: this.resultsEmitter
-		}, this.simUI);
+		const logRunner = new LogRunner(
+			{
+				parent: this.rootElem.querySelector('.log')!,
+				resultsEmitter: this.resultsEmitter,
+				deferUntilShown: true,
+			},
+			this.simUI,
+		);
+		deferUntilShown(logRunner, 'logTab');
 
 		this.rootElem.classList.add('hide-threat-metrics');
 
