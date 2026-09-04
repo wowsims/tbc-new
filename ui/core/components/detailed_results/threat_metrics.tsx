@@ -1,10 +1,10 @@
-import i18n from "../../../i18n/config";
-import { ActionMetrics } from "../../proto_utils/sim_result";
-import { bucket, formatToCompactNumber, formatToNumber, formatToPercent } from "../../utils";
-import { MetricsCombinedTooltipTable } from "./metrics_table/metrics_combined_tooltip_table";
-import { ColumnSortType, MetricsTable } from "./metrics_table/metrics_table";
-import { MetricsTotalBar } from "./metrics_table/metrics_total_bar";
-import { ResultComponentConfig, SimResultData } from "./result_component";
+import i18n from '../../../i18n/config';
+import { ActionMetrics } from '../../proto_utils/sim_result';
+import { bucket, formatToCompactNumber, formatToNumber, formatToPercent } from '../../utils';
+import { MetricsCombinedTooltipTable } from './metrics_table/metrics_combined_tooltip_table';
+import { ColumnSortType, MetricsTable } from './metrics_table/metrics_table';
+import { MetricsTotalBar } from './metrics_table/metrics_total_bar';
+import { ResultComponentConfig, SimResultData } from './result_component';
 
 export class ThreatMetricsTable extends MetricsTable<ActionMetrics> {
 	maxThreatAmount: number | null = null;
@@ -309,7 +309,7 @@ export class ThreatMetricsTable extends MetricsTable<ActionMetrics> {
 
 	getGroupedMetrics(resultData: SimResultData): Array<Array<ActionMetrics>> {
 		const players = resultData.result.getRaidIndexedPlayers(resultData.filter);
-		if (players.length != 1) {
+		if (!players.length) {
 			return [];
 		}
 		const player = players[0];
