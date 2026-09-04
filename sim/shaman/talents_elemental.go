@@ -167,8 +167,8 @@ func (shaman *Shaman) applyElementalMastery() {
 		FloatValue: 100,
 		ClassMask:  SpellMaskFire | SpellMaskFrost | SpellMaskNature,
 	}).AttachSpellMod(core.SpellModConfig{
-		Kind:       core.SpellMod_PowerCost_Pct,
-		FloatValue: -2,
+		Kind:       core.SpellMod_PowerCost_Pct_Add,
+		FloatValue: -1,
 		ClassMask:  SpellMaskFire | SpellMaskFrost | SpellMaskNature,
 	})
 

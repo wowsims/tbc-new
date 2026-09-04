@@ -89,9 +89,9 @@ var Tier5 = core.NewItemSet(core.ItemSet{
 					}
 				},
 			}).AttachSpellMod(core.SpellModConfig{
-				Kind:       core.SpellMod_PowerCost_Pct,
+				Kind:       core.SpellMod_PowerCost_Pct_Add,
 				ClassMask:  RogueSpellFinisher,
-				FloatValue: -2,
+				FloatValue: -1,
 			})
 			setBonusAura.AttachProcTrigger(core.ProcTrigger{
 				Name:     "Deathmantle Proc Trigger",

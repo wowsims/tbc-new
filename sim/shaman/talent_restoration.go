@@ -88,7 +88,7 @@ func (shaman *Shaman) applyTotemicFocus() {
 		return
 	}
 	shaman.AddStaticMod(core.SpellModConfig{
-		Kind:       core.SpellMod_PowerCost_Pct,
+		Kind:       core.SpellMod_PowerCost_Pct_Add,
 		FloatValue: -0.05 * float64(shaman.Talents.TotemicFocus),
 		ClassMask:  SpellMaskTotem,
 	})
