@@ -177,7 +177,7 @@ func (shaman *Shaman) applyMentalQuickness() {
 		return
 	}
 	shaman.AddStaticMod(core.SpellModConfig{
-		Kind:       core.SpellMod_PowerCost_Pct,
+		Kind:       core.SpellMod_PowerCost_Pct_Add,
 		FloatValue: -0.02 * float64(shaman.Talents.MentalQuickness),
 		SpellFlag:  SpellFlagInstant,
 	})
@@ -196,7 +196,7 @@ func (shaman *Shaman) applyShamanisticFocus() {
 		ActionID: core.ActionID{SpellID: 43339},
 		Duration: time.Second * 15,
 	}).AttachSpellMod(core.SpellModConfig{
-		Kind:       core.SpellMod_PowerCost_Pct,
+		Kind:       core.SpellMod_PowerCost_Pct_Add,
 		FloatValue: -0.6,
 		ClassMask:  SpellMaskShock,
 	})

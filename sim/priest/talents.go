@@ -136,7 +136,7 @@ func (priest *Priest) applySurgeOfLight() {
 		ClassMask:  PriestSpellSmite,
 	})
 	manaCostMod := priest.AddDynamicMod(core.SpellModConfig{
-		Kind:       core.SpellMod_PowerCost_Pct,
+		Kind:       core.SpellMod_PowerCost_Pct_Add,
 		FloatValue: -1.0, // -100% = free
 		ClassMask:  PriestSpellSmite,
 	})
@@ -302,7 +302,7 @@ func (priest *Priest) applyMentalAgility() {
 	}
 
 	priest.AddStaticMod(core.SpellModConfig{
-		Kind:       core.SpellMod_PowerCost_Pct,
+		Kind:       core.SpellMod_PowerCost_Pct_Add,
 		FloatValue: -0.02 * float64(priest.Talents.MentalAgility),
 		ClassMask:  PriestSpellInstant,
 	})
@@ -347,7 +347,7 @@ func (priest *Priest) applyFocusedMind() {
 	}
 
 	priest.AddStaticMod(core.SpellModConfig{
-		Kind:       core.SpellMod_PowerCost_Pct,
+		Kind:       core.SpellMod_PowerCost_Pct_Add,
 		FloatValue: -0.05 * float64(priest.Talents.FocusedMind),
 		ClassMask:  PriestSpellMindBlast | PriestSpellMindFlay,
 	})

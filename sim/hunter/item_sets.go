@@ -122,7 +122,7 @@ var ItemSetDemonStalkerArmor = core.NewItemSet(core.ItemSet{
 		},
 		4: func(agent core.Agent, setBonusAura *core.Aura) {
 			setBonusAura.AttachSpellMod(core.SpellModConfig{
-				Kind:       core.SpellMod_PowerCost_Pct,
+				Kind:       core.SpellMod_PowerCost_Pct_Add,
 				ClassMask:  HunterSpellMultiShot,
 				FloatValue: -0.1,
 			}).ExposeToAPL(37485)

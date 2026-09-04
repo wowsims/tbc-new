@@ -353,7 +353,7 @@ func (paladin *Paladin) applySanctifiedLight() {
 // Purifying Power - Reduces the mana cost of your Cleanse and Consecration spells by 5/10%, and increases the critical strike chance of your Exorcism and Holy Wrath spells by 10/20%
 func (paladin *Paladin) applyPurifyingPower() {
 	paladin.AddStaticMod(core.SpellModConfig{
-		Kind:       core.SpellMod_PowerCost_Pct,
+		Kind:       core.SpellMod_PowerCost_Pct_Add,
 		FloatValue: -0.05 * float64(paladin.Talents.PurifyingPower),
 		ClassMask:  SpellMaskConsecration, // Cleanse not modeled
 	})
@@ -590,7 +590,7 @@ func (paladin *Paladin) applyImprovedBlessingOfMight() {
 func (paladin *Paladin) applyBenediction() {
 	paladin.AddStaticMod(core.SpellModConfig{
 		ClassMask:  SpellMaskAllSeals | SpellMaskJudgement,
-		Kind:       core.SpellMod_PowerCost_Pct,
+		Kind:       core.SpellMod_PowerCost_Pct_Add,
 		FloatValue: -.03 * float64(paladin.Talents.Benediction),
 	})
 }

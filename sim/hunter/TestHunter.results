@@ -512,7 +512,7 @@ dps_results: {
  key: "TestHunter-AllItems-DemonStalkerArmor"
  value: {
   dps: 3153.05131
-  tps: 1509.4136
+  tps: 1509.38488
   dtps: 13.12555
  }
 }

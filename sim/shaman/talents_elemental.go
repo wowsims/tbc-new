@@ -60,7 +60,7 @@ func (shaman *Shaman) applyConvection() {
 		return
 	}
 	shaman.AddStaticMod(core.SpellModConfig{
-		Kind:       core.SpellMod_PowerCost_Pct,
+		Kind:       core.SpellMod_PowerCost_Pct_Add,
 		FloatValue: -0.02 * float64(shaman.Talents.Convection),
 		ClassMask:  SpellMaskLightningBolt | SpellMaskChainLightning | SpellMaskOverload | SpellMaskShock,
 	})
@@ -115,7 +115,7 @@ func (shaman *Shaman) applyElementalFocus() {
 			aura.RemoveStack(sim)
 		},
 	}).AttachSpellMod(core.SpellModConfig{
-		Kind:       core.SpellMod_PowerCost_Pct,
+		Kind:       core.SpellMod_PowerCost_Pct_Add,
 		ClassMask:  canConsumeSpells,
 		FloatValue: -0.4,
 	})
@@ -167,8 +167,8 @@ func (shaman *Shaman) applyElementalMastery() {
 		FloatValue: 100,
 		ClassMask:  SpellMaskFire | SpellMaskFrost | SpellMaskNature,
 	}).AttachSpellMod(core.SpellModConfig{
-		Kind:       core.SpellMod_PowerCost_Pct,
-		FloatValue: -2,
+		Kind:       core.SpellMod_PowerCost_Pct_Add,
+		FloatValue: -1,
 		ClassMask:  SpellMaskFire | SpellMaskFrost | SpellMaskNature,
 	})
 

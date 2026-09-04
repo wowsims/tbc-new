@@ -238,7 +238,7 @@ func (mage *Mage) registerEmpoweredArcaneMissiles() {
 	mage.AddStaticMod(core.SpellModConfig{
 		ClassMask:  MageSpellArcaneMissilesCast,
 		FloatValue: .02 * float64(mage.Talents.EmpoweredArcaneMissiles),
-		Kind:       core.SpellMod_PowerCost_Pct,
+		Kind:       core.SpellMod_PowerCost_Pct_Add,
 	})
 }
 
@@ -579,7 +579,7 @@ func (mage *Mage) registerFrostChanneling() {
 	mage.AddStaticMod(core.SpellModConfig{
 		ClassMask:  MageSpellFrost,
 		FloatValue: -.05 * float64(mage.Talents.FrostChanneling),
-		Kind:       core.SpellMod_PowerCost_Pct,
+		Kind:       core.SpellMod_PowerCost_Pct_Add,
 	})
 
 	threatMod := []float64{.04, .07, .1}

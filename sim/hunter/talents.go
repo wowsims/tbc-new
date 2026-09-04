@@ -275,7 +275,7 @@ func (hunter *Hunter) registerEfficiency() {
 	}
 
 	hunter.AddStaticMod(core.SpellModConfig{
-		Kind:       core.SpellMod_PowerCost_Pct,
+		Kind:       core.SpellMod_PowerCost_Pct_Add,
 		ClassMask:  HunterSpellsShotsAndStings,
 		FloatValue: -0.02 * float64(hunter.Talents.Efficiency),
 	})
@@ -549,7 +549,7 @@ func (hunter *Hunter) registerResourcefulness() {
 	}
 
 	hunter.AddStaticMod(core.SpellModConfig{
-		Kind:       core.SpellMod_PowerCost_Pct,
+		Kind:       core.SpellMod_PowerCost_Pct_Add,
 		ClassMask:  HunterSpellRaptorStrike,
 		FloatValue: -0.2 * float64(hunter.Talents.Resourcefulness),
 	})
