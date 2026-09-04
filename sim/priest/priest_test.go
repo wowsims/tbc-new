@@ -40,7 +40,7 @@ func TestShadowPriest(t *testing.T) {
 			// Primary gear set — update path when higher phase sets are added.
 			GearSet: core.GetGearSet("../../ui/priest/dps/gear_sets", "pre_raid"),
 			OtherGearSets: []core.GearSetCombo{
-				core.GetGearSet("../../ui/priest/dps/gear_sets", "p1"),
+				core.GetGearSet("../../ui/priest/dps/gear_sets", "p3"),
 			},
 
 			Talents: defaultTalents,
