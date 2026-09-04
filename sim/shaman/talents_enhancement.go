@@ -176,8 +176,6 @@ func (shaman *Shaman) applyMentalQuickness() {
 	if shaman.Talents.MentalQuickness == 0 {
 		return
 	}
-	// Stacks additively with Shamanistic Focus: 535 base Earth Shock is
-	// 182 = 535 * (1 - 0.60 - 0.06) with both up (confirmed in-game).
 	shaman.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_PowerCost_Pct_Add,
 		FloatValue: -0.02 * float64(shaman.Talents.MentalQuickness),

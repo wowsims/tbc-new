@@ -59,8 +59,6 @@ func (shaman *Shaman) applyConvection() {
 	if shaman.Talents.Convection == 0 {
 		return
 	}
-	// Stacks additively with Elemental Focus: LB R12 costs 150 = 300 * (1 - 0.10 - 0.40)
-	// with 5/5 Convection + Clearcasting (confirmed in-game).
 	shaman.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_PowerCost_Pct_Add,
 		FloatValue: -0.02 * float64(shaman.Talents.Convection),

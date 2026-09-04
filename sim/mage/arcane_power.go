@@ -11,8 +11,6 @@ func (mage *Mage) registerArcanePowerSpell() {
 		return
 	}
 
-	// Sums with T5 2pc and Arcane Charges on Arcane Blast, and with
-	// Frost Channeling / Empowered Arcane Missiles where those overlap.
 	arcanePowerCostMod := mage.AddDynamicMod(core.SpellModConfig{
 		ClassMask:  MageSpellsAll,
 		FloatValue: .3,

@@ -576,8 +576,6 @@ func (mage *Mage) registerFrostChanneling() {
 		return
 	}
 
-	// Multiplies against Elemental Precision: Frostbolt costs 272 = 330 * 0.97 * 0.85
-	// with 3/3 EP + 3/3 FC (confirmed in-game).
 	mage.AddStaticMod(core.SpellModConfig{
 		ClassMask:  MageSpellFrost,
 		FloatValue: -.05 * float64(mage.Talents.FrostChanneling),
