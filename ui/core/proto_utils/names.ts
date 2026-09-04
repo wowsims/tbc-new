@@ -146,14 +146,17 @@ export const resourceColors: Map<ResourceType, string> = new Map([
 	[ResourceType.ResourceTypeGenericResource, '#ffffff'],
 ]);
 
-export function stringToResourceType(str: string): [ResourceType] {
+// Built once: this runs for every resource line the combat log parser sees.
+const resourceTypesByLowerName = (() => {
+	const byName = new Map<string, [ResourceType]>();
 	for (const [key, val] of resourceNames) {
-		if (val.toLowerCase() == str.toLowerCase()) {
-			return [key];
-		}
+		byName.set(val.toLowerCase(), [key]);
 	}
+	return byName;
+})();
 
-	return [ResourceType.ResourceTypeNone];
+export function stringToResourceType(str: string): [ResourceType] {
+	return resourceTypesByLowerName.get(str.toLowerCase()) ?? [ResourceType.ResourceTypeNone];
 }
 
 export const difficultyNames: Map<DungeonDifficulty, string> = new Map([
