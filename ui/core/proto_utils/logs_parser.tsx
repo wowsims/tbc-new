@@ -405,24 +405,24 @@ export class DamageDealtLog extends SimLog {
 						{this.miss
 							? 'Miss'
 							: this.dodge
-							? 'Dodge'
-							: this.parry
-							? 'Parry'
-							: this.block
-							? this.crit
-								? 'Critical Block'
-								: this.glance
-								? 'Blocked Glance'
-								: 'Block'
-							: this.glance
-							? 'Glance'
-							: this.crit
-							? 'Crit'
-							: this.crush
-							? 'Crush'
-							: this.tick
-							? 'Tick'
-							: 'Hit'}
+								? 'Dodge'
+								: this.parry
+									? 'Parry'
+									: this.block
+										? this.crit
+											? 'Critical Block'
+											: this.glance
+												? 'Blocked Glance'
+												: 'Block'
+										: this.glance
+											? 'Glance'
+											: this.crit
+												? 'Crit'
+												: this.crush
+													? 'Crush'
+													: this.tick
+														? 'Tick'
+														: 'Hit'}
 					</>
 				)}
 				{` `}
@@ -803,14 +803,7 @@ export class ResourceChangedLog extends SimLog {
 	readonly isSpend: boolean;
 	readonly total: number;
 
-	constructor(
-		params: SimLogParams,
-		resourceType: ResourceType,
-		valueBefore: number,
-		valueAfter: number,
-		isSpend: boolean,
-		total: number,
-	) {
+	constructor(params: SimLogParams, resourceType: ResourceType, valueBefore: number, valueAfter: number, isSpend: boolean, total: number) {
 		super(params);
 		this.resourceType = resourceType;
 		this.valueBefore = valueBefore;

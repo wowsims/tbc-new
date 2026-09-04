@@ -238,10 +238,7 @@ export class ActionId {
 		}
 	}
 
-	async setWowheadDataset(
-		elem: HTMLElement | HTMLElement[],
-		params?: Omit<WowheadTooltipItemParams, 'itemId'> | Omit<WowheadTooltipSpellParams, 'spellId'>,
-	) {
+	async setWowheadDataset(elem: HTMLElement | HTMLElement[], params?: Omit<WowheadTooltipItemParams, 'itemId'> | Omit<WowheadTooltipSpellParams, 'spellId'>) {
 		const url = await (this.itemId
 			? ActionId.makeItemTooltipData(this.itemId, params)
 			: ActionId.makeSpellTooltipData(this.spellIdTooltipOverride || this.spellId, params));
