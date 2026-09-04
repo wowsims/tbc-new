@@ -95,6 +95,16 @@ func (paladin *Paladin) Reset(sim *core.Simulation) {
 func (paladin *Paladin) OnEncounterStart(sim *core.Simulation) {
 }
 
+func (paladin *Paladin) GetMainHandType() proto.HandType {
+	mh := paladin.GetMHWeapon()
+
+	if mh != nil && (mh.HandType == proto.HandType_HandTypeTwoHand) {
+		return proto.HandType_HandTypeTwoHand
+	}
+
+	return proto.HandType_HandTypeOneHand
+}
+
 func NewPaladin(character *core.Character, talentsStr string, options *proto.PaladinOptions) *Paladin {
 	paladin := &Paladin{
 		Character: *character,
