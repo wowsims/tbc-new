@@ -103,35 +103,37 @@ export class Timeline extends ResultComponent {
 
 		this.rootElem.appendChild(
 			<div className="timeline-disclaimer">
-				<div className="d-flex flex-column">
+				<div className="timeline-disclaimer-text d-flex flex-column">
 					<p>
 						<i className="warning fa fa-exclamation-triangle fa-xl me-2"></i>
 						{i18n.t('results_tab.details.timeline.disclaimer')}
 					</p>
 					<p>{i18n.t('results_tab.details.timeline.note')}</p>
 				</div>
-				{/* Two of the three are ever offered at once - rotation and threat swap depending
-				    on whether the result has one player - so a radio group reads better than a
-				    dropdown for what is always a two-way choice. */}
-				<div className="timeline-show-gcd" ref={showGcdContainerRef} />
-				<div ref={chartPickerRef} className="timeline-chart-picker btn-group" attributes={{ role: 'group' }}>
-					{chartViewRefs.map(({ value, input, label }) => (
-						<>
-							<input
-								ref={input}
-								type="radio"
-								className={`btn-check ${value}-option`}
-								name="timeline-chart-view"
-								id={`timeline-chart-view-${value}`}
-								value={value}
-								autocomplete="off"
-								checked={value === 'rotation'}
-							/>
-							<label ref={label} className={`btn btn-sm btn-outline-primary ${value}-option`} htmlFor={`timeline-chart-view-${value}`}>
-								{chartViewLabels[value]}
-							</label>
-						</>
-					))}
+				<div className="timeline-controls">
+					<div className="timeline-show-gcd" ref={showGcdContainerRef} />
+					{/* Two of the three are ever offered at once - rotation and threat swap depending
+					    on whether the result has one player - so a radio group reads better than a
+					    dropdown for what is always a two-way choice. */}
+					<div ref={chartPickerRef} className="timeline-chart-picker btn-group" attributes={{ role: 'group' }}>
+						{chartViewRefs.map(({ value, input, label }) => (
+							<>
+								<input
+									ref={input}
+									type="radio"
+									className={`btn-check ${value}-option`}
+									name="timeline-chart-view"
+									id={`timeline-chart-view-${value}`}
+									value={value}
+									autocomplete="off"
+									checked={value === 'rotation'}
+								/>
+								<label ref={label} className={`btn btn-sm btn-outline-primary ${value}-option`} htmlFor={`timeline-chart-view-${value}`}>
+									{chartViewLabels[value]}
+								</label>
+							</>
+						))}
+					</div>
 				</div>
 			</div>,
 		);
