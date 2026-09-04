@@ -1198,10 +1198,10 @@ dps_results: {
 dps_results: {
  key: "TestFeralCat-AllItems-MoongladeRaiment"
  value: {
-  dps: 1954.87733
-  tps: 999.87805
+  dps: 1955.17543
+  tps: 999.87601
   dtps: 12.00914
-  hps: 64.34071
+  hps: 64.46787
  }
 }
 dps_results: {
