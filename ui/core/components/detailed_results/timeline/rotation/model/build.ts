@@ -3,6 +3,7 @@ import { ActionId, buffAuraToSpellIdMap, resourceTypeToIcon } from '../../../../
 import type { AuraUptimeLog, CastLog, ResourceChangedLogGroup } from '../../../../../proto_utils/logs_parser';
 import { resourceNames } from '../../../../../proto_utils/names';
 import type { UnitMetrics } from '../../../../../proto_utils/sim_result';
+import { kebabCase } from '../../../../../utils';
 import {
 	actionBucketKey,
 	AURA_AS_RESOURCE,
@@ -196,7 +197,7 @@ export function buildRotationModel({ player, targets, duration, showGcd }: Build
 			height: ROW_HEIGHTS.resource,
 			label,
 			icon,
-			cssName: resourceNames.get(resourceType)!.toLowerCase().replaceAll(' ', '-'),
+			cssName: kebabCase(resourceNames.get(resourceType)!),
 			items,
 			maxRightUpTo: sortAndPrefixMax(items),
 		});
