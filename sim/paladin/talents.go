@@ -632,10 +632,22 @@ func (paladin *Paladin) applyCrusade() {
 
 // Two-Handed Weapon Specialization - Increases the damage you deal with two-handed melee weapons by 2/4/6%
 func (paladin *Paladin) applyTwoHandedWeaponSpecialization() {
-	paladin.AddStaticMod(core.SpellModConfig{
+	weaponMod := paladin.AddDynamicMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Pct,
 		ProcMask:   core.ProcMaskMeleeOrMeleeProc,
 		FloatValue: 0.02 * float64(paladin.Talents.TwoHandedWeaponSpecialization),
+	})
+
+	if paladin.GetMainHandType() == proto.HandType_HandTypeTwoHand {
+		weaponMod.Activate()
+	}
+
+	paladin.RegisterItemSwapCallback(core.AllMeleeWeaponSlots(), func(sim *core.Simulation, slot proto.ItemSlot) {
+		if paladin.GetMainHandType() == proto.HandType_HandTypeTwoHand {
+			weaponMod.Activate()
+		} else {
+			weaponMod.Deactivate()
+		}
 	})
 }
 
