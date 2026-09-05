@@ -134,5 +134,6 @@ func (at *AttackTable) GetArmorDamageModifier(spell *Spell) float64 {
 	defenderArmor := at.Defender.Armor() - (at.Defender.Armor() * ignoreArmorFactor)
 	// TBC ANNI: Apply flat ArP
 	defenderArmor = max(defenderArmor-at.Attacker.stats[stats.ArmorPenetration], 0)
-	return 1 - defenderArmor/(defenderArmor+armorConstant)
+	// Damage reduction from armor is capped at 75%.
+	return max(1-defenderArmor/(defenderArmor+armorConstant), 0.25)
 }
