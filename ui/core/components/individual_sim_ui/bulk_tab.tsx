@@ -26,14 +26,7 @@ import BulkItemPickerGroup from './bulk/bulk_item_picker_group';
 import BulkItemSearch from './bulk/bulk_item_search';
 import BulkSimResultRenderer from './bulk/bulk_sim_results_renderer';
 import GemSelectorModal from './bulk/gem_selector_modal';
-import {
-	binomialCoefficient,
-	BulkSimItemSlot,
-	bulkSimItemSlotToSingleItemSlot,
-	bulkSimItemSlotToItemSlotPairs,
-	getAllPairs,
-	getBulkItemSlotFromSlot,
-} from './bulk/utils';
+import { BulkSimItemSlot, bulkSimItemSlotToSingleItemSlot, bulkSimItemSlotToItemSlotPairs, getBulkItemSlotFromSlot } from './bulk/utils';
 import { BulkGearJsonImporter } from './importers';
 import { trackEvent } from '../../../tracking/utils';
 import { EnumPicker } from '../pickers/enum_picker';
@@ -378,11 +371,7 @@ export class BulkTab extends SimTab {
 		items.forEach(item => {
 			const equippedItem = this.simUI.sim.db.lookupItemSpec(item)?.withDynamicStats();
 			if (equippedItem) {
-				getEligibleItemSlots(equippedItem.item).forEach(slot => {
-					// Avoid duplicating rings/trinkets/weapons
-					if (this.isSecondaryItemSlot(slot) || !canEquipItem(equippedItem.item, this.simUI.player.getPlayerSpec(), slot)) return;
-
-					const bulkSlot = getBulkItemSlotFromSlot(slot, this.playerCanDualWield);
+				this.eligibleBulkSlots(equippedItem).forEach(bulkSlot => {
 					const group = this.pickerGroups.get(bulkSlot)!;
 					const idx = this.items.push(item) - 1;
 					if (!group.add(idx, equippedItem, silent)) {
@@ -415,11 +404,7 @@ export class BulkTab extends SimTab {
 		if (equippedItem) {
 			this.items[idx] = newItem;
 
-			getEligibleItemSlots(equippedItem.item).forEach(slot => {
-				// Avoid duplicating rings/trinkets/weapons
-				if (this.isSecondaryItemSlot(slot) || !canEquipItem(equippedItem.item, this.simUI.player.getPlayerSpec(), slot)) return;
-
-				const bulkSlot = getBulkItemSlotFromSlot(slot, this.playerCanDualWield);
+			this.eligibleBulkSlots(equippedItem).forEach(bulkSlot => {
 				const group = this.pickerGroups.get(bulkSlot)!;
 				group.update(idx, equippedItem);
 			});
@@ -543,26 +528,98 @@ export class BulkTab extends SimTab {
 				.map(picker => picker.item)
 				.filter(item => !all2HWeapons.includes(item));
 
-			for (let i = 0; i < allOneHandWeapons.length; i++) {
-				if (allOneHandWeapons.slice(0, i).some((item: EquippedItem) => item.equals(allOneHandWeapons[i], true, true))) {
-					continue;
+			// Two copies of one weapon are listed as two pickers; collapse them so a pairing isn't
+			// generated twice, and wield the same weapon in both hands only when a second copy
+			// was actually selected.
+			const hasTwoCopies = (item: EquippedItem) => allOneHandWeapons.filter(other => other.equals(item, true, true)).length >= 2;
+			const options: EquippedItem[] = [];
+			allOneHandWeapons.forEach(item => {
+				if (!options.some(other => other.equals(item, true, true))) options.push(item);
+			});
+
+			// Main-hand-only and off-hand-only weapons can't be swapped between slots.
+			const canGoMainHand = (item: EquippedItem) => item.item.handType != HandType.HandTypeOffHand;
+			const canGoOffHand = (item: EquippedItem) => item.item.handType != HandType.HandTypeMainHand;
+			const canFillBothHands = (item: EquippedItem) =>
+				item.item.handType == HandType.HandTypeOneHand && !item.item.unique && item.item.limitCategory == 0;
+
+			for (let i = 0; i < options.length; i++) {
+				if (canFillBothHands(options[i]) && hasTwoCopies(options[i])) {
+					allWeaponCombos.push([options[i], options[i]]);
 				}
 
-				for (let j = i + 1; j < allOneHandWeapons.length; j++) {
-					if (allOneHandWeapons.slice(i + 1, j).some((item: EquippedItem) => item.equals(allOneHandWeapons[j], true, true))) {
-						continue;
+				for (let j = i + 1; j < options.length; j++) {
+					if (canGoMainHand(options[i]) && canGoOffHand(options[j])) {
+						allWeaponCombos.push([options[i], options[j]]);
 					}
-
-					allWeaponCombos.push([allOneHandWeapons[i], allOneHandWeapons[j]]);
-
-					if (!allOneHandWeapons[i].equals(allOneHandWeapons[j], true, true)) {
-						allWeaponCombos.push([allOneHandWeapons[j], allOneHandWeapons[i]]);
+					if (canGoMainHand(options[j]) && canGoOffHand(options[i])) {
+						allWeaponCombos.push([options[j], options[i]]);
 					}
 				}
 			}
 		}
 
 		return allWeaponCombos.filter(([mhItem, ohItem]) => this.weaponComboMatchesSettings(mhItem, ohItem));
+	}
+
+	// Every wearable pairing for a slot that maps to two physical slots (rings, trinkets).
+	// Two copies of one item are listed as two pickers; collapse them so the same pairing isn't
+	// generated twice, and offer the same item in both slots only when a second copy was
+	// actually selected. Items that can't be worn together - the same unique item, or two items
+	// sharing a limit category - are dropped here rather than blocked from the batch list, so
+	// they can still be compared against each other.
+	// A grouped slot with no wearable pairing contributes zero combinations, which would leave the
+	// batch silently doing nothing. Fail up front with the reason instead.
+	private validateGroupedSlots() {
+		for (const bulkItemSlot of [BulkSimItemSlot.ItemSlotFinger, BulkSimItemSlot.ItemSlotTrinket]) {
+			const pickerGroup = this.pickerGroups.get(bulkItemSlot);
+			if (!pickerGroup?.pickers.size) continue;
+
+			if (pickerGroup.pickers.size < 2) {
+				throw `At least 2 items must be selected for ${translateBulkSlotName(bulkItemSlot)}`;
+			}
+			if (!this.getGroupedSlotPairs(bulkItemSlot).length) {
+				throw `No wearable pair of items is available for ${translateBulkSlotName(bulkItemSlot)}`;
+			}
+		}
+	}
+
+	private getGroupedSlotPairs(bulkItemSlot: BulkSimItemSlot): [EquippedItem, EquippedItem][] {
+		const pickerGroup = this.pickerGroups.get(bulkItemSlot);
+		if (!pickerGroup) return [];
+
+		const allOptions: EquippedItem[] = Array.from(pickerGroup.pickers.values()).map(picker => picker.item);
+		const hasTwoCopies = (option: EquippedItem) => allOptions.filter(other => other.equals(option, true, true)).length >= 2;
+		const options: EquippedItem[] = [];
+		allOptions.forEach(option => {
+			if (!options.some(other => other.equals(option, true, true))) options.push(option);
+		});
+
+		const canWearTogether = (first: EquippedItem, second: EquippedItem) => {
+			if (first.item.unique && first.item.id === second.item.id) return false;
+			if (first.item.limitCategory != 0 && first.item.limitCategory === second.item.limitCategory) return false;
+			return true;
+		};
+
+		const frozenItem = this.frozenItems.get(bulkItemSlot);
+		if (frozenItem) {
+			return options
+				.filter(option => (!frozenItem.equals(option, true, true) || hasTwoCopies(option)) && canWearTogether(frozenItem, option))
+				.map(option => [frozenItem, option]);
+		}
+
+		const pairs: [EquippedItem, EquippedItem][] = [];
+		for (let i = 0; i < options.length; i++) {
+			if (hasTwoCopies(options[i]) && canWearTogether(options[i], options[i])) {
+				pairs.push([options[i], options[i]]);
+			}
+			for (let j = i + 1; j < options.length; j++) {
+				if (canWearTogether(options[i], options[j])) {
+					pairs.push([options[i], options[j]]);
+				}
+			}
+		}
+		return pairs;
 	}
 
 	protected getItemsForCombo(comboIdx: number): Map<ItemSlot, EquippedItem> {
@@ -602,14 +659,12 @@ export class BulkTab extends SimTab {
 					throw `At least 2 items must be selected for ${translateBulkSlotName(bulkItemSlot)}`;
 				}
 
-				let pairsForSlot = getAllPairs(optionsForSlot);
-				const frozenItem = this.frozenItems.get(bulkItemSlot);
-
-				if (frozenItem) {
-					pairsForSlot = optionsForSlot.filter(option => !frozenItem.equals(option)).map(option => [frozenItem, option]);
+				const pairsForSlot = this.getGroupedSlotPairs(bulkItemSlot);
+				const numPairs = pairsForSlot.length;
+				if (!numPairs) {
+					throw `No wearable pair of items is available for ${translateBulkSlotName(bulkItemSlot)}`;
 				}
 
-				const numPairs = pairsForSlot.length;
 				const pairIdx = comboIdx % numPairs;
 				comboIdx = Math.floor(comboIdx / numPairs);
 				const pairToUse = pairsForSlot[pairIdx];
@@ -662,7 +717,8 @@ export class BulkTab extends SimTab {
 
 	protected calculateBulkCombinations() {
 		try {
-			let numCombinations: number = this.getAllWeaponCombos().length;
+			// A player with no weapon options at all still has one combination: their current gear.
+			let numCombinations: number = this.getAllWeaponCombos().length || 1;
 
 			for (const [bulkItemSlot, pickerGroup] of this.pickerGroups.entries()) {
 				if ([BulkSimItemSlot.ItemSlotMainHand, BulkSimItemSlot.ItemSlotOffHand, BulkSimItemSlot.ItemSlotHandWeapon].includes(bulkItemSlot)) {
@@ -672,11 +728,7 @@ export class BulkTab extends SimTab {
 				const numOptions: number = pickerGroup.pickers.size;
 
 				if (numOptions > 1 && [BulkSimItemSlot.ItemSlotFinger, BulkSimItemSlot.ItemSlotTrinket].includes(bulkItemSlot)) {
-					if (this.frozenItems.get(bulkItemSlot)) {
-						numCombinations *= numOptions - 1;
-					} else {
-						numCombinations *= binomialCoefficient(numOptions, 2);
-					}
+					numCombinations *= this.getGroupedSlotPairs(bulkItemSlot).length;
 				} else {
 					numCombinations *= Math.max(numOptions, 1);
 				}
@@ -770,6 +822,21 @@ export class BulkTab extends SimTab {
 
 	// Return whether or not the slot is considered secondary and the item should be grouped
 	// This includes items in the Finger2 or Trinket2 slots, or OffHand for dual-wield specs
+	// The bulk slots an item can be batched into, one entry each. Finger1/Finger2 - and both hands
+	// for a dual-wielder - share a bulk slot, so dedupe on the bulk slot instead of skipping the
+	// secondary physical slot: an off-hand-only item has no other eligible slot, and skipping it
+	// dropped shields and off-hand weapons from the batch entirely.
+	private eligibleBulkSlots(equippedItem: EquippedItem): BulkSimItemSlot[] {
+		const bulkSlots: BulkSimItemSlot[] = [];
+		getEligibleItemSlots(equippedItem.item).forEach(slot => {
+			if (!canEquipItem(equippedItem.item, this.simUI.player.getPlayerSpec(), slot)) return;
+
+			const bulkSlot = getBulkItemSlotFromSlot(slot, this.playerCanDualWield);
+			if (!bulkSlots.includes(bulkSlot)) bulkSlots.push(bulkSlot);
+		});
+		return bulkSlots;
+	}
+
 	private isSecondaryItemSlot(slot: ItemSlot) {
 		return isSecondaryItemSlot(slot) || (this.playerCanDualWield && slot === ItemSlot.ItemSlotOffHand);
 	}
@@ -1213,6 +1280,7 @@ export class BulkTab extends SimTab {
 			let topGearResults: TopGearResult[] = [];
 
 			this.resetResultsTabContent();
+			this.validateGroupedSlots();
 			this.calculateBulkCombinations();
 
 			const allItemCombos: Map<ItemSlot, EquippedItem>[] = [];

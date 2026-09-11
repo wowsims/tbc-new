@@ -69,24 +69,3 @@ export const getBulkItemSlotFromSlot = (slot: ItemSlot, canDualWield = false): B
 
 	return itemSlotToBulkSimItemSlot.get(slot)!;
 };
-
-export const binomialCoefficient = (n: number, k: number): number => {
-	if (Number.isNaN(n) || Number.isNaN(k)) return NaN;
-	if (k < 0 || k > n) return 0;
-	if (k === 0 || k === n) return 1;
-	if (k === 1 || k === n - 1) return n;
-	if (n - k < k) k = n - k;
-	let res = n;
-	for (let j = 2; j <= k; j++) res *= (n - j + 1) / j;
-	return Math.round(res);
-};
-
-export function getAllPairs<T>(arr: T[]): [T, T][] {
-	const pairs: [T, T][] = [];
-	for (let i = 0; i < arr.length; i++) {
-		for (let j = i + 1; j < arr.length; j++) {
-			pairs.push([arr[i], arr[j]]);
-		}
-	}
-	return pairs;
-}
