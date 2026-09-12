@@ -3,6 +3,7 @@ package tbc
 import (
 	"time"
 
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
@@ -48,45 +49,12 @@ func init() {
 		})
 	})
 
-	// Figurine - Nightseye Panther
-	// Use: Increases attack power by 320 for 12 sec. (3 Min Cooldown)
-	core.NewItemEffect(24128, func(agent core.Agent) {
-		character := agent.GetCharacter()
-		duration := time.Second * 12
-		aura := character.NewTemporaryStatsAura(
-			"Nightseye Panther",
-			core.ActionID{SpellID: 31047},
-			stats.Stats{stats.AttackPower: 320, stats.RangedAttackPower: 320},
-			duration,
-		)
-
-		spell := character.RegisterSpell(core.SpellConfig{
-			ActionID:    core.ActionID{ItemID: 24128},
-			SpellSchool: core.SpellSchoolPhysical,
-			ProcMask:    core.ProcMaskEmpty,
-
-			Cast: core.CastConfig{
-				CD: core.Cooldown{
-					Timer:    character.NewTimer(),
-					Duration: time.Minute * 3,
-				},
-				SharedCD: core.Cooldown{
-					Timer:    character.GetOffensiveTrinketCD(),
-					Duration: duration,
-				},
-			},
-
-			ApplyEffects: func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {
-				aura.Activate(sim)
-			},
-		})
-
-		character.AddMajorCooldown(core.MajorCooldown{
-			Spell:    spell,
-			Type:     core.CooldownTypeDPS,
-			BuffAura: aura,
-		})
-	})
+	// Summoning figurines. The generator skips a spell with a summon effect (type 28) outright,
+	// which also drops the stat buff the same spell carries. Only the buff is simulated.
+	shared.NewSimpleStatActive(24126) // Figurine - Living Ruby Serpent - https://www.wowhead.com/tbc/spell=31040
+	shared.NewSimpleStatActive(24128) // Figurine - Nightseye Panther - https://www.wowhead.com/tbc/spell=31047
+	shared.NewSimpleStatActive(35700) // Figurine - Crimson Serpent - https://www.wowhead.com/tbc/spell=46783
+	shared.NewSimpleStatActive(35702) // Figurine - Shadowsong Panther - https://www.wowhead.com/tbc/spell=46784
 
 	// Jom Gabbar
 	// Use: Increases attack power by 65 and an additional 65 every 2 sec. Lasts 20 sec. (2 Min Cooldown)

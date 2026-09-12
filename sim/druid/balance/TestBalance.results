@@ -578,6 +578,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestBalance-AllItems-Figurine-CrimsonSerpent-35700"
+ value: {
+  dps: 1562.60853
+  tps: 1054.88887
+ }
+}
+dps_results: {
  key: "TestBalance-AllItems-Figurine-DawnstoneCrab-24125"
  value: {
   dps: 1469.10245
@@ -592,10 +599,24 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestBalance-AllItems-Figurine-LivingRubySerpent-24126"
+ value: {
+  dps: 1530.85778
+  tps: 1032.44254
+ }
+}
+dps_results: {
  key: "TestBalance-AllItems-Figurine-NightseyePanther-24128"
  value: {
   dps: 1469.10245
   tps: 988.60205
+ }
+}
+dps_results: {
+ key: "TestBalance-AllItems-Figurine-ShadowsongPanther-35702"
+ value: {
+  dps: 1468.80392
+  tps: 988.39308
  }
 }
 dps_results: {

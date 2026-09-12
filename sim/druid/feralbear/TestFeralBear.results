@@ -764,6 +764,15 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestFeralBear-AllItems-Figurine-CrimsonSerpent-35700"
+ value: {
+  dps: 418.45366
+  tps: 646.03212
+  dtps: 1118.05732
+  hps: 74.28836
+ }
+}
+dps_results: {
  key: "TestFeralBear-AllItems-Figurine-DawnstoneCrab-24125"
  value: {
   dps: 418.2812
@@ -782,10 +791,28 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestFeralBear-AllItems-Figurine-LivingRubySerpent-24126"
+ value: {
+  dps: 418.45366
+  tps: 646.03212
+  dtps: 1118.05732
+  hps: 73.26791
+ }
+}
+dps_results: {
  key: "TestFeralBear-AllItems-Figurine-NightseyePanther-24128"
  value: {
   dps: 423.33447
   tps: 653.47471
+  dtps: 1118.05732
+  hps: 71.22702
+ }
+}
+dps_results: {
+ key: "TestFeralBear-AllItems-Figurine-ShadowsongPanther-35702"
+ value: {
+  dps: 425.68449
+  tps: 657.05818
   dtps: 1118.05732
   hps: 71.22702
  }
