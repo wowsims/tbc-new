@@ -22,7 +22,8 @@
 		"fmt": "npx oxfmt ui --check",
 		"fmt:fix": "npx oxfmt ui",
 		"type-check": "node_modules/typescript/bin/tsc --noEmit",
-		"test:locales": "node ./test-locales.mjs"
+		"test:locales": "node ./test-locales.mjs",
+		"test:ui": "node --import tsx --test \"ui/**/*.test.ts\""
 	},
 	"dependencies": {
 		"@popperjs/core": "^2.11.8",
@@ -66,6 +67,7 @@
 		"stylelint": "^16.22.0",
 		"stylelint-scss": "^6.12.1",
 		"stylelint-selector-bem-pattern": "^4.0.1",
+		"tsx": "^4.23.13",
 		"typescript": "^7.0.2",
 		"vite": "^8.2.0",
 		"vite-plugin-checker": "^0.14.5",

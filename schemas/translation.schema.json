@@ -3174,6 +3174,31 @@
 							},
 							"additionalProperties": false,
 							"required": ["mainhand_label", "offhand_label", "tooltip"]
+						},
+						"stat_constraints": {
+							"type": "object",
+							"properties": {
+								"label": {
+									"type": "string"
+								},
+								"tooltip": {
+									"type": "string"
+								},
+								"empty": {
+									"type": "string"
+								},
+								"add": {
+									"type": "string"
+								},
+								"remove": {
+									"type": "string"
+								},
+								"crit_reduction_hint": {
+									"type": "string"
+								}
+							},
+							"additionalProperties": false,
+							"required": ["label", "tooltip", "empty", "add", "remove", "crit_reduction_hint"]
 						}
 					},
 					"additionalProperties": false,
@@ -3186,7 +3211,8 @@
 						"freeze_ring",
 						"freeze_trinket",
 						"freeze_weapon",
-						"freeze_weapon_types"
+						"freeze_weapon_types",
+						"stat_constraints"
 					]
 				},
 				"progress": {
@@ -3196,6 +3222,9 @@
 							"type": "string"
 						},
 						"reforging_rounds": {
+							"type": "string"
+						},
+						"checking_constraints": {
 							"type": "string"
 						},
 						"baseline_round": {
@@ -3212,7 +3241,7 @@
 						}
 					},
 					"additionalProperties": false,
-					"required": ["total_combinations", "reforging_rounds", "baseline_round", "refining_rounds", "iterations_complete", "seconds_remaining"]
+					"required": ["total_combinations", "reforging_rounds", "checking_constraints", "baseline_round", "refining_rounds", "iterations_complete", "seconds_remaining"]
 				},
 				"notifications": {
 					"type": "object",
@@ -3270,10 +3299,42 @@
 						},
 						"current_gear": {
 							"type": "string"
+						},
+						"skipped_by_constraints": {
+							"type": "string"
+						},
+						"timings": {
+							"type": "object",
+							"properties": {
+								"title": { "type": "string" },
+								"phase": { "type": "string" },
+								"duration": { "type": "string" },
+								"count": { "type": "string" },
+								"per_item": { "type": "string" },
+								"phases": {
+									"type": "object",
+									"properties": {
+										"build": { "type": "string" },
+										"gems": { "type": "string" },
+										"constraints": { "type": "string" },
+										"baselineSim": { "type": "string" },
+										"candidateSims": { "type": "string" },
+										"total": { "type": "string" }
+									},
+									"additionalProperties": false,
+									"required": ["build", "gems", "constraints", "baselineSim", "candidateSims", "total"]
+								},
+								"sims": { "type": "string" },
+								"polls": { "type": "string" },
+								"stat_computations": { "type": "string" },
+								"copy_json": { "type": "string" }
+							},
+							"additionalProperties": false,
+							"required": ["title", "phase", "duration", "count", "per_item", "phases", "sims", "polls", "stat_computations", "copy_json"]
 						}
 					},
 					"additionalProperties": false,
-					"required": ["run_simulation", "equip_button", "gear_equipped", "current_gear"]
+					"required": ["run_simulation", "equip_button", "gear_equipped", "current_gear", "skipped_by_constraints", "timings"]
 				},
 				"gem_selector": {
 					"type": "object",

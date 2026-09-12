@@ -329,6 +329,9 @@ export class Sim {
 			player.database = gear.toDatabase(this.db);
 			player.equipment = gearAsBackendSpec(gear);
 			if (player.consumables) player.consumables = gear.adjustImbues(player.consumables);
+			// Re-add consumable/effect data dropped by replacing the database above, so a
+			// server that has not seen them yet (no with_db build) still applies them.
+			extendPlayerProtoWithMissingEffects(player, this.db);
 
 			request.raid!.parties[0].players[0] = player;
 

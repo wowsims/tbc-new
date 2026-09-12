@@ -608,4 +608,26 @@ message BulkSettings {
 	int32 freeze_weapon_slot = 10;
 	repeated WeaponType freeze_mainhand_weapon_slots = 11;
 	repeated WeaponType freeze_offhand_weapon_slots = 12;
+
+	// Only combinations whose final stats satisfy every constraint are simmed.
+	repeated BulkStatConstraint stat_constraints = 13;
+}
+
+enum BulkStatConstraintOp {
+	BulkStatConstraintOpGreaterThan = 0;
+	BulkStatConstraintOpGreaterThanOrEqual = 1;
+	BulkStatConstraintOpEqual = 2;
+	BulkStatConstraintOpLessThanOrEqual = 3;
+	BulkStatConstraintOpLessThan = 4;
+}
+
+// A batch sim stat constraint, e.g. Fire Resistance > 175 or
+// Reduced Crit Taken >= 5.6. Evaluated against the character's final stats.
+message BulkStatConstraint {
+	oneof unit_stat {
+		Stat stat = 1;
+		PseudoStat pseudo_stat = 4;
+	}
+	BulkStatConstraintOp op = 2;
+	double value = 3;
 }

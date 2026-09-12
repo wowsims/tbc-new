@@ -57,6 +57,10 @@ jobs:
               run: |
                   make dist/tbc/.dirstamp
 
+            # UI unit tests import generated protos, so they run after the build.
+            - name: Test UI 🧪
+              run: npm run test:ui
+
     test:
         runs-on: ubuntu-latest
         timeout-minutes: 30

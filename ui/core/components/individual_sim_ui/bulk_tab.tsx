@@ -6,8 +6,8 @@ import { ref } from 'tsx-vanilla';
 import { REPO_RELEASES_URL } from '../../constants/other';
 import { IndividualSimUI } from '../../individual_sim_ui';
 import i18n from '../../../i18n/config';
-import { BulkSettings, DistributionMetrics, ProgressMetrics, RaidSimResult } from '../../proto/api';
-import { GemColor, HandType, ItemRandomSuffix, ItemSlot, ItemSpec, RangedWeaponType, WeaponType } from '../../proto/common';
+import { BulkSettings, BulkStatConstraint, DistributionMetrics, ProgressMetrics, RaidSimResult } from '../../proto/api';
+import { GemColor, HandType, ItemRandomSuffix, ItemSlot, ItemSpec, RangedWeaponType, UnitStats, WeaponType } from '../../proto/common';
 import { ItemEffectRandPropPoints, SimDatabase, SimEnchant, SimGem, SimItem } from '../../proto/db';
 import { UIEnchant, UIGem, UIItem } from '../../proto/ui';
 import { ActionId } from '../../proto_utils/action_id';
@@ -25,6 +25,10 @@ import Toast from '../toast';
 import BulkItemPickerGroup from './bulk/bulk_item_picker_group';
 import BulkItemSearch from './bulk/bulk_item_search';
 import BulkSimResultRenderer from './bulk/bulk_sim_results_renderer';
+import BulkStatConstraintsPicker from './bulk/bulk_stat_constraints';
+import { BULK_PHASES, BulkSimTimings, BulkTimingReport, formatDurationMs } from './bulk/bulk_timings';
+import { filterByStatConstraints } from './bulk/stat_constraints';
+import { CopyButton } from '../copy_button';
 import GemSelectorModal from './bulk/gem_selector_modal';
 import { BulkSimItemSlot, bulkSimItemSlotToSingleItemSlot, bulkSimItemSlotToItemSlotPairs, getBulkItemSlotFromSlot } from './bulk/utils';
 import { BulkGearJsonImporter } from './importers';
@@ -84,6 +88,15 @@ export class BulkTab extends SimTab {
 		[ItemSlot.ItemSlotMainHand, []],
 		[ItemSlot.ItemSlotOffHand, []],
 	]);
+	// Stat constraints that a gear combination must satisfy to be simmed,
+	// e.g. Fire Resistance > 175. Checked against the character's final stats
+	// (the same totals the stats panel shows) in runBatchSim, after gems are
+	// filled in and before the combination is simmed. See BulkStatConstraintsPicker.
+	statConstraints: BulkStatConstraint[] = [];
+	// How many combinations the last run skipped for failing a constraint.
+	protected skippedByConstraints = 0;
+	// Phase timing of the last completed run, shown in the results tab.
+	protected lastTimings: BulkTimingReport | null = null;
 	fallbackGems: SimGem[];
 	gemIconElements: HTMLImageElement[];
 
@@ -244,6 +257,11 @@ export class BulkTab extends SimTab {
 		return this.simUI.getStorageKey('bulk-settings.v1');
 	}
 
+	// Key used by the prototype before constraints joined BulkSettings.
+	private getLegacyStatConstraintsKey(): string {
+		return this.simUI.getStorageKey('bulk-stat-constraints.v1');
+	}
+
 	private loadSettings() {
 		const storedSettings = window.localStorage.getItem(this.getSettingsKey());
 		if (storedSettings != null) {
@@ -262,6 +280,7 @@ export class BulkTab extends SimTab {
 			this.setFrozenWeaponSlot(settings.freezeWeaponSlot);
 			this.setWeaponTypeFilter(ItemSlot.ItemSlotMainHand, settings.freezeMainhandWeaponSlots);
 			this.setWeaponTypeFilter(ItemSlot.ItemSlotOffHand, settings.freezeOffhandWeaponSlots);
+			this.setStatConstraints(settings.statConstraints.length ? settings.statConstraints : this.loadLegacyStatConstraints());
 			this.fallbackGems = new Array<SimGem>(
 				SimGem.create({ id: settings.defaultRedGem }),
 				SimGem.create({ id: settings.defaultYellowGem }),
@@ -288,11 +307,34 @@ export class BulkTab extends SimTab {
 		const setStr = BulkSettings.toJsonString(settings, { enumAsInteger: true });
 		try {
 			window.localStorage.setItem(this.getSettingsKey(), setStr);
+			window.localStorage.removeItem(this.getLegacyStatConstraintsKey());
 		} catch (e) {
 			if (e && e instanceof DOMException && e.name === 'QuotaExceededError') {
 				window.localStorage.removeItem(this.getSettingsKey());
 			}
 		}
+	}
+
+	// One-time migration from the prototype's separate storage key. The key is
+	// removed the next time settings are stored.
+	private loadLegacyStatConstraints(): BulkStatConstraint[] {
+		const stored = window.localStorage.getItem(this.getLegacyStatConstraintsKey());
+		if (stored == null) return [];
+
+		try {
+			const parsed: unknown = JSON.parse(stored);
+			if (!Array.isArray(parsed)) return [];
+			return parsed
+				.filter(c => !!c && typeof c === 'object' && typeof c.stat === 'number' && typeof c.op === 'number' && typeof c.value === 'number')
+				.map(c => BulkStatConstraint.create({ unitStat: { oneofKind: 'stat', stat: c.stat }, op: c.op, value: c.value }));
+		} catch {
+			return [];
+		}
+	}
+
+	setStatConstraints(constraints: BulkStatConstraint[], eventID = TypedEvent.nextEventID()) {
+		this.statConstraints = constraints.map(c => BulkStatConstraint.clone(c));
+		this.settingsChangedEmitter.emit(eventID);
 	}
 
 	protected createBulkSettings(): BulkSettings {
@@ -309,6 +351,7 @@ export class BulkTab extends SimTab {
 			freezeWeaponSlot: this.frozenWeaponSlot,
 			freezeMainhandWeaponSlots: this.weaponTypeFilters.get(ItemSlot.ItemSlotMainHand)?.slice(),
 			freezeOffhandWeaponSlots: this.weaponTypeFilters.get(ItemSlot.ItemSlotOffHand)?.slice(),
+			statConstraints: this.statConstraints.map(c => BulkStatConstraint.clone(c)),
 		});
 	}
 
@@ -813,11 +856,91 @@ export class BulkTab extends SimTab {
 			return;
 		}
 
+		if (this.skippedByConstraints > 0) {
+			this.resultsTabElem.appendChild(
+				<div className="bulk-results-constraints-note">
+					<i className="fas fa-filter me-1" />
+					{i18n.t('bulk_tab.results.skipped_by_constraints', { skipped: this.skippedByConstraints, total: this.combinations })}
+				</div>,
+			);
+		}
+
 		for (const topGearResult of this.topGearResults) {
 			new BulkSimResultRenderer(this.resultsTabElem, this.simUI, topGearResult, this.originalGearResults);
 		}
 
+		if (this.lastTimings) {
+			this.buildTimingsBlock(this.lastTimings);
+		}
+
 		this.resultsTab.show();
+	}
+
+	// Phase timing of the last run, for comparing batch implementations.
+	private buildTimingsBlock(report: BulkTimingReport) {
+		const t = (key: string, options?: Record<string, unknown>) => i18n.t(`bulk_tab.results.timings.${key}`, options);
+		const perItem = (ms: number, count: number) => (count > 0 ? formatDurationMs(ms / count) : '');
+		const avg = (ms: number, count: number) => formatDurationMs(count > 0 ? ms / count : 0);
+		const copyRef = ref<HTMLDivElement>();
+
+		this.resultsTabElem.appendChild(
+			<div className="bulk-results-timings">
+				<div className="bulk-results-timings__header">
+					<h6 className="mb-0">{t('title')}</h6>
+					<div ref={copyRef} />
+				</div>
+				<table className="bulk-results-timings__table">
+					<thead>
+						<tr>
+							<th>{t('phase')}</th>
+							<th>{t('duration')}</th>
+							<th>{t('count')}</th>
+							<th>{t('per_item')}</th>
+						</tr>
+					</thead>
+					<tbody>
+						{BULK_PHASES.map(phase => (
+							<tr>
+								<td>{t(`phases.${phase}`)}</td>
+								<td>{formatDurationMs(report.phases[phase].ms)}</td>
+								<td>{report.phases[phase].count || ''}</td>
+								<td>{perItem(report.phases[phase].ms, report.phases[phase].count)}</td>
+							</tr>
+						))}
+						<tr className="bulk-results-timings__total">
+							<td>{t('phases.total')}</td>
+							<td>{formatDurationMs(report.totalMs)}</td>
+							<td>{report.combinations}</td>
+							<td>{perItem(report.totalMs, report.combinations)}</td>
+						</tr>
+					</tbody>
+				</table>
+				<div className="fs-content">
+					{t('sims', {
+						count: report.sims.count,
+						iterations: report.iterationsPerSim,
+						wall: formatDurationMs(report.sims.wallMs),
+						avg: avg(report.sims.wallMs, report.sims.count),
+					})}
+				</div>
+				<div className="fs-content">{t('polls', { polls: report.sims.pollsBeforeFinal })}</div>
+				{report.statComputations.count > 0 && (
+					<div className="fs-content">
+						{t('stat_computations', {
+							count: report.statComputations.count,
+							wall: formatDurationMs(report.statComputations.wallMs),
+							avg: avg(report.statComputations.wallMs, report.statComputations.count),
+						})}
+					</div>
+				)}
+			</div>,
+		);
+
+		new CopyButton(copyRef.value!, {
+			extraCssClasses: ['btn-sm', 'btn-outline-primary'],
+			text: t('copy_json'),
+			getContent: () => JSON.stringify(report, null, 2),
+		});
 	}
 
 	// Return whether or not the slot is considered secondary and the item should be grouped
@@ -976,6 +1099,7 @@ export class BulkTab extends SimTab {
 		const frozenWeaponDiv = ref<HTMLDivElement>();
 		const mainHandWeaponTypesDiv = ref<HTMLDivElement>();
 		const offHandWeaponTypesDiv = ref<HTMLDivElement>();
+		const statConstraintsDiv = ref<HTMLDivElement>();
 
 		this.settingsContainer.appendChild(
 			<>
@@ -992,8 +1116,11 @@ export class BulkTab extends SimTab {
 						<div ref={offHandWeaponTypesDiv}></div>
 					</>
 				)}
+				<div ref={statConstraintsDiv}></div>
 			</>,
 		);
+
+		if (statConstraintsDiv.value) this.addChild(new BulkStatConstraintsPicker(statConstraintsDiv.value, this.simUI, this));
 
 		if (frozenRingDiv.value)
 			new EnumPicker<BulkTab>(frozenRingDiv.value, this, {
@@ -1220,6 +1347,36 @@ export class BulkTab extends SimTab {
 		});
 	}
 
+	private setConstraintsProgress(checked: number, total: number) {
+		this.progressTrackerModal.updateProgress({
+			stage: 'constraints',
+			title: i18n.t('bulk_tab.progress.checking_constraints'),
+			current: checked,
+			total,
+			message: undefined,
+		});
+	}
+
+	// Drops gear sets whose final stats fail any constraint. Stats come from the
+	// same server computation the character stats panel displays, so a passing
+	// gear set shows matching numbers there once equipped.
+	private async filterGearSetsByConstraints(gearSets: Gear[], concurrency: number, abortSignal: AbortSignal, timings: BulkSimTimings): Promise<Gear[]> {
+		const getFinalStats = async (gear: Gear): Promise<UnitStats> => {
+			this.throwIfBulkAborted(abortSignal);
+			const playerStats = await timings.timeStatComputation(() =>
+				this.runWithBulkAbort(this.simUI.sim.getCharacterStatsForGear(TypedEvent.nextEventID(), gear), abortSignal),
+			);
+			return playerStats.finalStats ?? UnitStats.create();
+		};
+
+		const { passing, skipped } = await filterByStatConstraints(gearSets, this.statConstraints, getFinalStats, {
+			concurrency,
+			onProgress: (checked, total) => this.setConstraintsProgress(checked, total),
+		});
+		this.skippedByConstraints = skipped;
+		return passing;
+	}
+
 	private setSimProgress(progress: ProgressMetrics, currentRound: number, rounds: number) {
 		const isBaselineRound = currentRound === 1;
 		const totalElapsedSeconds = (new Date().getTime() - this.simStart) / 1000;
@@ -1269,6 +1426,11 @@ export class BulkTab extends SimTab {
 		this.bulkSimButton.disabled = true;
 		this.topGearResults = null;
 		this.originalGearResults = null;
+		this.lastTimings = null;
+
+		const timings = new BulkSimTimings();
+		timings.start();
+		timings.iterationsPerSim = this.simUI.sim.getIterations();
 
 		const candidateGearSets: Gear[] = [];
 		const reforgedGearSets: Gear[] = [];
@@ -1282,7 +1444,9 @@ export class BulkTab extends SimTab {
 			this.resetResultsTabContent();
 			this.validateGroupedSlots();
 			this.calculateBulkCombinations();
+			timings.combinations = this.combinations;
 
+			timings.startPhase('build');
 			const allItemCombos: Map<ItemSlot, EquippedItem>[] = [];
 
 			for (let comboIdx = 0; comboIdx < this.combinations; comboIdx++) {
@@ -1325,7 +1489,9 @@ export class BulkTab extends SimTab {
 
 				candidateGearSets.push(reforgeGear);
 			}
+			timings.endPhase('build', candidateGearSets.length);
 
+			timings.startPhase('gems');
 			let completedReforges = 1;
 			this.setReforgeProgress(completedReforges, candidateGearSets.length);
 			await sleep(400);
@@ -1348,17 +1514,25 @@ export class BulkTab extends SimTab {
 				.map(result => result.value);
 
 			reforgedGearSets.push(...reforgeResults.filter((gear): gear is Gear => !!gear));
+			timings.endPhase('gems', reforgedGearSets.length);
+
+			timings.startPhase('constraints');
+			const gearSetsToSim = await this.filterGearSetsByConstraints(reforgedGearSets, concurrency, abortSignal, timings);
+			timings.endPhase('constraints', this.statConstraints.length > 0 ? reforgedGearSets.length : 0);
 
 			this.simStart = new Date().getTime();
-			const totalSimRounds = reforgedGearSets.length + 1;
-			const result = await this.runWithBulkAbort(this.runSingleGearSim(this.originalGear, 1, totalSimRounds), abortSignal);
+			const totalSimRounds = gearSetsToSim.length + 1;
+			timings.startPhase('baselineSim');
+			const result = await this.runWithBulkAbort(this.runSingleGearSim(this.originalGear, 1, totalSimRounds, timings), abortSignal);
+			timings.endPhase('baselineSim', 1);
 			const referenceDpsMetrics = result!.raidMetrics!.dps!;
 
-			for (let comboIdx = 0; comboIdx < reforgedGearSets.length; comboIdx++) {
+			timings.startPhase('candidateSims');
+			for (let comboIdx = 0; comboIdx < gearSetsToSim.length; comboIdx++) {
 				this.throwIfBulkAborted(abortSignal);
 
-				const reforgedGear = reforgedGearSets[comboIdx];
-				const result = await this.runWithBulkAbort(this.runSingleGearSim(reforgedGear, comboIdx + 2, totalSimRounds), abortSignal);
+				const reforgedGear = gearSetsToSim[comboIdx];
+				const result = await this.runWithBulkAbort(this.runSingleGearSim(reforgedGear, comboIdx + 2, totalSimRounds, timings), abortSignal);
 
 				const isOriginalGear = this.originalGear.equals(reforgedGear);
 				if (!isOriginalGear) {
@@ -1374,6 +1548,7 @@ export class BulkTab extends SimTab {
 				topGearResults.sort((a, b) => b.dpsMetrics.avg - a.dpsMetrics.avg);
 				if (topGearResults.length > 5) topGearResults.pop();
 			}
+			timings.endPhase('candidateSims', gearSetsToSim.length);
 
 			this.topGearResults = topGearResults;
 			this.originalGearResults = {
@@ -1383,6 +1558,10 @@ export class BulkTab extends SimTab {
 
 			this.topGearResults.push(this.originalGearResults);
 			this.topGearResults.sort((a, b) => b.dpsMetrics.avg - a.dpsMetrics.avg);
+
+			timings.finish();
+			this.lastTimings = timings.report();
+			console.log('Batch sim timing', this.lastTimings);
 
 			this.buildResultsTabContent();
 		} catch (error) {
@@ -1408,10 +1587,13 @@ export class BulkTab extends SimTab {
 		}
 	}
 
-	private async runSingleGearSim(gear: Gear, currentRound: number, totalRounds: number): Promise<RaidSimResult> {
-		const response = await this.simUI.runSimLightweight(gear, (progressMetrics: ProgressMetrics) => {
-			this.setSimProgress(progressMetrics, currentRound, totalRounds);
-		});
+	private async runSingleGearSim(gear: Gear, currentRound: number, totalRounds: number, timings: BulkSimTimings): Promise<RaidSimResult> {
+		const response = await timings.timeSim(onProgressPayload =>
+			this.simUI.runSimLightweight(gear, (progressMetrics: ProgressMetrics) => {
+				onProgressPayload();
+				this.setSimProgress(progressMetrics, currentRound, totalRounds);
+			}),
+		);
 		if (!response || (response && 'type' in response)) {
 			throw new Error(response?.message);
 		}

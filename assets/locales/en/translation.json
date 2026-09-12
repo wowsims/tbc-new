@@ -899,11 +899,20 @@
 				"mainhand_label": "Freeze MH weapon type",
 				"offhand_label": "Freeze OH weapon type",
 				"tooltip": "Leave all unchecked to allow any weapon type for this slot."
+			},
+			"stat_constraints": {
+				"label": "Stat constraints",
+				"tooltip": "Only combinations whose final stats (as shown in the Stats panel) satisfy every row will be simulated.",
+				"empty": "No constraints. All combinations will be simulated.",
+				"add": "Add constraint",
+				"remove": "Remove constraint",
+				"crit_reduction_hint": "Defense, resilience and talents combined; 5.6% or more is crit immune against a level 73 boss"
 			}
 		},
 		"progress": {
 			"total_combinations": "{{count}} total combinations.",
 			"reforging_rounds": "Optimizing gems",
+			"checking_constraints": "Checking stat constraints",
 			"baseline_round": "Running baseline round",
 			"refining_rounds": "Running refining rounds",
 			"iterations_complete": "{{completed}} / {{total}}<br />iterations complete",
@@ -926,7 +935,27 @@
 			"run_simulation": "Run a simulation to view results",
 			"equip_button": "Equip",
 			"gear_equipped": "Batch gear equipped!",
-			"current_gear": "Current Gear"
+			"current_gear": "Current Gear",
+			"skipped_by_constraints": "{{skipped}} of {{total}} combinations skipped for failing a stat constraint.",
+			"timings": {
+				"title": "Batch timing",
+				"phase": "Phase",
+				"duration": "Duration",
+				"count": "Items",
+				"per_item": "Per item",
+				"phases": {
+					"build": "Build candidate gear sets",
+					"gems": "Optimize gems",
+					"constraints": "Check stat constraints",
+					"baselineSim": "Baseline sim",
+					"candidateSims": "Candidate sims",
+					"total": "Total"
+				},
+				"sims": "Sims: {{count}} at {{iterations}} iterations, {{wall}} waiting on the backend ({{avg}} avg)",
+				"polls": "Progress polls before a sim's final result: {{polls}}, each one a full poll interval of waiting",
+				"stat_computations": "Stat computations for constraints: {{count}} concurrent calls, {{wall}} summed wait on the backend ({{avg}} avg per call)",
+				"copy_json": "Copy as JSON"
+			}
 		},
 		"gem_selector": {
 			"title": "Choose fallback Gem"

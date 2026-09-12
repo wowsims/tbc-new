@@ -84,6 +84,61 @@
 		grid-template-columns: repeat(2, 1fr);
 	}
 
+	.bulk-stat-constraints {
+		display: flex;
+		flex-direction: column;
+
+		&__list {
+			display: flex;
+			flex-direction: column;
+			gap: var(--spacer-2);
+		}
+
+		&__row {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr) auto auto auto;
+			gap: var(--spacer-1);
+			align-items: center;
+		}
+
+		&__stat,
+		&__op {
+			// Tighter than Bootstrap's default so the row fits the sidebar.
+			padding-left: var(--spacer-2);
+			padding-right: 1.4rem;
+			background-position: right 0.35rem center;
+		}
+
+		&__op {
+			width: 3rem;
+			padding-left: var(--spacer-2);
+			text-align: center;
+		}
+
+		&__value {
+			width: 4rem;
+			padding-left: var(--spacer-2);
+			padding-right: var(--spacer-2);
+			// Hide the number spinner; it hides a digit at this width.
+			appearance: textfield;
+
+			&::-webkit-inner-spin-button,
+			&::-webkit-outer-spin-button {
+				appearance: none;
+				margin: 0;
+			}
+		}
+
+		&__remove {
+			padding: 0 var(--spacer-1);
+		}
+
+		&__add {
+			align-self: flex-start;
+			margin-top: var(--spacer-2);
+		}
+	}
+
 	.item-picker-root {
 		padding: var(--spacer-2);
 		margin-bottom: 0 !important;
@@ -126,6 +181,56 @@
 					text-overflow: ellipsis;
 				}
 			}
+		}
+	}
+}
+
+#bulkResultsTab {
+	.bulk-results-constraints-note {
+		padding: var(--spacer-2) var(--spacer-3);
+		border: var(--border-default);
+		background: var(--bs-body-bg);
+	}
+
+	.bulk-results-timings {
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacer-2);
+		margin-top: var(--gap-width);
+		padding: var(--spacer-3);
+		border: var(--border-default);
+		background: var(--bs-body-bg);
+
+		&__header {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: var(--spacer-2);
+		}
+
+		&__table {
+			border-collapse: collapse;
+
+			th,
+			td {
+				padding: var(--spacer-1) var(--spacer-3) var(--spacer-1) 0;
+				text-align: left;
+				white-space: nowrap;
+			}
+
+			th {
+				font-weight: normal;
+				opacity: 0.7;
+			}
+
+			td:nth-child(n + 2) {
+				font-variant-numeric: tabular-nums;
+			}
+		}
+
+		&__total td {
+			border-top: var(--border-default);
+			font-weight: bold;
 		}
 	}
 }
