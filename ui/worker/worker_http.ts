@@ -35,7 +35,7 @@ export const setupHttpWorker = (baseURL: string) => {
 			const ab = await progressResponse.arrayBuffer();
 			outputData = new Uint8Array(ab);
 			progress(outputData);
-			await sleep(500);
+			await sleep(50);
 		}
 		return outputData;
 	};
