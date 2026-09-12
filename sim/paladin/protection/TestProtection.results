@@ -157,6 +157,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestProtection-AllItems-AshtongueTalismanofZeal-32489"
+ value: {
+  dps: 899.80652
+  tps: 1612.78045
+  dtps: 1293.05591
+ }
+}
+dps_results: {
  key: "TestProtection-AllItems-BadgeofTenacity-32658"
  value: {
   dps: 871.88956
@@ -1653,6 +1661,14 @@ dps_results: {
   dps: 909.99983
   tps: 1632.97211
   dtps: 1293.05591
+ }
+}
+dps_results: {
+ key: "TestProtection-AllItems-TomeoftheLightbringer-32368"
+ value: {
+  dps: 908.60446
+  tps: 1630.23159
+  dtps: 1277.29758
  }
 }
 dps_results: {

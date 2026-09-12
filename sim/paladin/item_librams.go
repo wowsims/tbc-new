@@ -181,6 +181,33 @@ func init() {
 		paladin.ItemSwap.RegisterProc(31033, aura)
 	})
 
+	// https://www.wowhead.com/tbc/item=32368/tome-of-the-lightbringer
+	// Your Judgement ability also increases your shield block value by 186 for 5s.
+	core.NewItemEffect(32368, func(agent core.Agent) {
+		paladin := agent.(PaladinAgent).GetPaladin()
+
+		buffAura := paladin.NewTemporaryStatsAura(
+			"Judgement Block Value",
+			core.ActionID{SpellID: 41042},
+			stats.Stats{stats.BlockValue: 186},
+			time.Second*5,
+		)
+
+		aura := core.MakePermanent(paladin.RegisterAura(core.Aura{
+			Label:    "Tome of the Lightbringer",
+			ActionID: core.ActionID{ItemID: 32368},
+		}).AttachProcTrigger(core.ProcTrigger{
+			Callback:       core.CallbackOnSpellHitDealt,
+			ClassSpellMask: SpellMaskAllJudgements,
+
+			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+				buffAura.Activate(sim)
+			},
+		}))
+
+		paladin.ItemSwap.RegisterProc(32368, aura)
+	})
+
 	// https://www.wowhead.com/tbc/item=33503/libram-of-divine-judgement
 	// Your Judgement of Command ability has a chance to grant 200 attack power for 10s.
 	core.NewItemEffect(33503, func(agent core.Agent) {

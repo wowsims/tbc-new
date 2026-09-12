@@ -12,6 +12,7 @@ ui/*/*/index.html
 
 # Claude Code worktrees and per-project state
 .claude
+.clinerules
 
 # binaries
 dist
