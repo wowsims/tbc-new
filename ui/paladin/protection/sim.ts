@@ -31,8 +31,9 @@ const PREPULL_HOLY_SHIELD_INDEX = 3; // Holy Shield at -1.5s (shifted to -2.5s w
 const PREPULL_AVENGERS_SHIELD_INDEX = 4; // Avenger's Shield at -0.99s (hidden by default)
 const PRIORITY_JUDGE_ON_SEAL_INDEX = 1; // First-global judge, and maintenance-seal judge once SoR is consumed
 const PRIORITY_SWAP_SEAL_INDEX = 4; // When maintenance seal is down, JoX is down, and Judgement is ready, swap to maintenance seal
-const PRIORITY_RIGHTEOUSNESS_JUDGE_INDEX = 7; // Judge -> Re-seal Righteousness
-const PRIORITY_CONSECRATION_INDEX = 6; // Consecration rank 6
+const PRIORITY_OFF_GCD_JUDGE_INDEX = 5; // Off-GCD Judge: judge SoR when the next swing lands after the GCD, keeping JoX up
+const PRIORITY_CONSECRATION_INDEX = 7; // Consecration rank 6
+const PRIORITY_RIGHTEOUSNESS_JUDGE_INDEX = 8; // Judge -> Re-seal Righteousness
 
 // SpellIDs for each paladin aura option.
 const AURA_SPELL_IDS: Record<PaladinAura, number | null> = {
@@ -301,13 +302,16 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecProtectionPaladin, {
 			swapSealCast.spellId.rawId = { oneofKind: 'spellId', spellId: judgementConfig.sealSpellId };
 			swapSealCast.spellId.rank = judgementConfig.sealRank;
 
-			// Righteousness judge: replace target aura spell check with judgement aura
-			const righteousnessJudgeEntry = rotation.priorityList[PRIORITY_RIGHTEOUSNESS_JUDGE_INDEX];
-			const judgeAndVals = (righteousnessJudgeEntry.action!.condition!.value as any).and.vals;
-			const orVals = (judgeAndVals[2].value as any).or.vals;
-			const auraRemainingTime = (orVals[1].value as any).cmp.lhs.value.auraRemainingTime.auraId;
-			auraRemainingTime.rawId = { oneofKind: 'spellId', spellId: judgementConfig.judgementAuraSpellId };
-			auraRemainingTime.rank = judgementConfig.judgementAuraRank;
+			// Off-GCD judge and Righteousness judge: both guard on
+			// auraRemainingTime(JoW on target) >= Judgement cooldown inside
+			// the third AND val's OR; swap the debuff aura to the picked one.
+			for (const index of [PRIORITY_OFF_GCD_JUDGE_INDEX, PRIORITY_RIGHTEOUSNESS_JUDGE_INDEX]) {
+				const judgeAndVals = (rotation.priorityList[index].action!.condition!.value as any).and.vals;
+				const orVals = (judgeAndVals[2].value as any).or.vals;
+				const auraRemainingTime = (orVals[1].value as any).cmp.lhs.value.auraRemainingTime.auraId;
+				auraRemainingTime.rawId = { oneofKind: 'spellId', spellId: judgementConfig.judgementAuraSpellId };
+				auraRemainingTime.rank = judgementConfig.judgementAuraRank;
+			}
 		}
 
 		// Consecration rank swap (removal handled by the filter below).
