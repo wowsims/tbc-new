@@ -5163,21 +5163,6 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Your Judgement ability also increases your shield block value by 186 for 5s.
-	// https://www.wowhead.com/tbc/spell=41042
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32368, ItemName: "Tome of the Lightbringer"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
 	// Increases speed in Flight Form and Swift Flight Form by 10%.
 	// https://www.wowhead.com/tbc/spell=48403
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -5187,22 +5172,6 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 32481, ItemName: "Charm of Swift Flight"},
-	// })
-
-	// TODO: Manual implementation required
-	//       This can be ignored if the effect has already been implemented.
-	//       With next db run the item will be removed if implemented.
-	//
-	// Flash of Light and Holy Light have a 15% chance to grant your target 0 healing over 12s, and your Judgements
-	// have a 50% chance to inflict 0 damage on their target over 8s.
-	// https://www.wowhead.com/tbc/spell=40470
-	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
-	//	Callback:           core.CallbackEmpty,
-	//	ProcMask:           core.ProcMaskUnknown,
-	//	Outcome:            core.OutcomeEmpty,
-	//	RequireDamageDealt: false
-	// }, []shared.ItemVariant{
-	//	{ItemID: 32489, ItemName: "Ashtongue Talisman of Zeal"},
 	// })
 
 	// TODO: Manual implementation required
