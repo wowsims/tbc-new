@@ -6,25 +6,28 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var hurricaneRank = genRanks.Hurricane.BySpellID(27012)
+
 func (druid *Druid) registerHurricaneSpell() {
 	druid.Hurricane = druid.RegisterSpell(Humanoid|Moonkin, core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 27012},
+		ActionID:       core.ActionID{SpellID: hurricaneRank.SpellID},
 		SpellSchool:    core.SpellSchoolNature,
 		DefenseType:    core.DefenseTypeMagic,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagChanneled | core.SpellFlagAPL,
 		ClassSpellMask: DruidSpellHurricane,
+		MaxRange:       hurricaneRank.MaxRange,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 1905,
+			FlatCost: hurricaneRank.Cost,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: hurricaneRank.GCD,
 			},
 			CD: core.Cooldown{
 				Timer:    druid.NewTimer(),
-				Duration: time.Second * 60,
+				Duration: hurricaneRank.Cooldown,
 			},
 		},
 		Dot: core.DotConfig{
@@ -56,10 +59,10 @@ func (druid *Druid) registerHurricaneSpell() {
 
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
-		BonusCoefficient: 0.129,
+		BonusCoefficient: hurricaneRank.Direct.BonusCoefficient(),
 
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			spell.CalcAndDealAoeDamage(sim, 206, spell.OutcomeMagicHit)
+			spell.CalcAndDealAoeDamage(sim, hurricaneRank.Direct.Damage(sim), spell.OutcomeMagicHit)
 		},
 	})
 }

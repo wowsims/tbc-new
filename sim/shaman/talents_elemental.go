@@ -7,6 +7,8 @@ import (
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
+var totemOfWrathRank = genRanks.TotemOfWrath.BySpellID(30706)
+
 func (shaman *Shaman) ApplyElementalTalents() {
 	shaman.applyCallOfFlame()
 	shaman.applyCallOfThunder()
@@ -255,7 +257,7 @@ func (shaman *Shaman) applyTotemOfWrath() {
 	}
 	duration := time.Second * 120
 	value := 3.0
-	config := shaman.newTotemSpellConfig(int32(shaman.GetInitialStat(stats.Mana)*0.05), 30706, SpellMaskBasicTotem)
+	config := shaman.newTotemSpellConfig(int32(shaman.GetInitialStat(stats.Mana)*0.05), totemOfWrathRank.SpellID, SpellMaskBasicTotem, totemOfWrathRank.GCD)
 	buffAura := shaman.RegisterAura(core.Aura{
 		Label:      "Totem Of Wrath (Self)",
 		ActionID:   config.ActionID,

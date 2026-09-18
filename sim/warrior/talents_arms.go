@@ -506,13 +506,15 @@ func (war *Warrior) registerBloodFrenzy() {
 	})
 }
 
+var mortalStrikeRank = genRanks.MortalStrike.BySpellID(30330)
+
 func (war *Warrior) registerMortalStrike() {
 	if !war.Talents.MortalStrike {
 		return
 	}
 
 	war.MortalStrike = war.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 30330},
+		ActionID:       core.ActionID{SpellID: mortalStrikeRank.SpellID},
 		SpellSchool:    core.SpellSchoolPhysical,
 		DefenseType:    core.DefenseTypeMelee,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
@@ -521,17 +523,17 @@ func (war *Warrior) registerMortalStrike() {
 		MaxRange:       core.MaxMeleeRange,
 
 		RageCost: core.RageCostOptions{
-			Cost:   30,
+			Cost:   mortalStrikeRank.Cost,
 			Refund: 0.8,
 		},
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: mortalStrikeRank.GCD,
 			},
 			CD: core.Cooldown{
 				Timer:    war.NewTimer(),
-				Duration: time.Second * 6,
+				Duration: mortalStrikeRank.Cooldown,
 			},
 			IgnoreHaste: true,
 		},
@@ -540,7 +542,8 @@ func (war *Warrior) registerMortalStrike() {
 		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := 210 + spell.Unit.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower(target))
+			mortalStrikeVal, _ := mortalStrikeRank.Direct.Range()
+			baseDamage := mortalStrikeVal + spell.Unit.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower(target))
 			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeWeaponSpecialHitAndCrit)
 
 			if !result.Landed() {

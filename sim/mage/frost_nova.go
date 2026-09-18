@@ -1,10 +1,10 @@
 package mage
 
 import (
-	"time"
-
 	"github.com/wowsims/tbc/sim/core"
 )
+
+var frostNovaRank = genRanks.FrostNova.BySpellID(27088)
 
 func (mage *Mage) registerFrostNovaSpell() {
 
@@ -19,16 +19,16 @@ func (mage *Mage) registerFrostNovaSpell() {
 		ClassSpellMask: MageSpellFrostNova,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 185,
+			FlatCost: frostNovaRank.Cost,
 		},
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: frostNovaRank.GCD,
 			},
 			CD: core.Cooldown{
 				Timer:    mage.NewTimer(),
-				Duration: 25 * time.Second,
+				Duration: frostNovaRank.Cooldown,
 			},
 		},
 
@@ -37,7 +37,7 @@ func (mage *Mage) registerFrostNovaSpell() {
 		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			baseDamage := mage.CalcAndRollDamageRange(sim, 100, 113)
+			baseDamage := frostNovaRank.Direct.Damage(sim)
 			spell.CalcAndDealAoeDamage(sim, baseDamage, spell.OutcomeMagicHitAndCrit)
 		},
 	})

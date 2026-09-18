@@ -19,6 +19,7 @@ func (priest *Priest) registerMindFlaySpell(rank shared.SpellRank) {
 		Flags:          core.SpellFlagChanneled | core.SpellFlagAPL,
 		ClassSpellMask: PriestSpellMindFlay,
 		Rank:           rank.Rank,
+		MaxRange:       rank.MaxRange,
 
 		ManaCost: core.ManaCostOptions{
 			FlatCost: rank.Cost,
@@ -42,7 +43,7 @@ func (priest *Priest) registerMindFlaySpell(rank shared.SpellRank) {
 			TickLength:           time.Second,
 			AffectedByCastSpeed:  true,
 			HasteReducesDuration: true,
-			BonusCoefficient:     shared.SpellRankCoef(rank.Periodic),
+			BonusCoefficient:     rank.Periodic.BonusCoefficient(),
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, shared.SpellRankMin(rank.Periodic))

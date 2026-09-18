@@ -1,16 +1,17 @@
 package mage
 
 import (
-	"time"
-
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
+
+var pyroblastRank = genRanks.Pyroblast.BySpellID(33938)
 
 func (mage *Mage) registerPyroblastSpell() {
 	actionID := core.ActionID{SpellID: 33938}
 
-	pyroblastCoefficient := 1.14999997616 // Per https://wago.tools/db2/SpellEffect?build=2.5.5.65295&filter%5BSpellID%5D=11366 Field: "BonusCoefficient"
 	pyroblastDotCoefficient := 0.05000000075
+	pyroblastTick := pyroblastRank.Periodic.(shared.SpellRankPeriodic)
 
 	mage.Pyroblast = mage.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
@@ -22,21 +23,21 @@ func (mage *Mage) registerPyroblastSpell() {
 		MissileSpeed:   24,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 500,
+			FlatCost: pyroblastRank.Cost,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD:      core.GCDDefault,
-				CastTime: time.Millisecond * 6000,
+				GCD:      pyroblastRank.GCD,
+				CastTime: pyroblastRank.CastTime,
 			},
 		},
 
 		DamageMultiplier: 1,
-		BonusCoefficient: pyroblastCoefficient,
+		BonusCoefficient: pyroblastRank.Direct.BonusCoefficient(),
 		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := mage.CalcAndRollDamageRange(sim, 939, 1191)
+			baseDamage := pyroblastRank.Direct.Damage(sim)
 			result := spell.CalcDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
 
 			spell.WaitTravelTime(sim, func(s *core.Simulation) {
@@ -63,8 +64,8 @@ func (mage *Mage) registerPyroblastSpell() {
 			Aura: core.Aura{
 				Label: "PyroblastDoT",
 			},
-			NumberOfTicks:    4,
-			TickLength:       time.Second * 3,
+			NumberOfTicks:    pyroblastTick.Ticks,
+			TickLength:       pyroblastTick.Period,
 			BonusCoefficient: pyroblastDotCoefficient,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, 89)

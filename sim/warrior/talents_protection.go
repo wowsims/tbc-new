@@ -344,13 +344,16 @@ func (war *Warrior) registerImprovedDefensiveStance() {
 	})
 }
 
+var shieldSlamRank = genRanks.ShieldSlam.BySpellID(30356)
+var devastateRank = genRanks.Devastate.BySpellID(30022)
+
 func (war *Warrior) registerShieldSlam() {
 	if !war.Talents.ShieldSlam {
 		return
 	}
 
 	war.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 30356},
+		ActionID:       core.ActionID{SpellID: shieldSlamRank.SpellID},
 		ClassSpellMask: SpellMaskShieldSlam,
 		SpellSchool:    core.SpellSchoolPhysical,
 		DefenseType:    core.DefenseTypeMelee,
@@ -359,17 +362,17 @@ func (war *Warrior) registerShieldSlam() {
 		MaxRange:       core.MaxMeleeRange,
 
 		RageCost: core.RageCostOptions{
-			Cost:   20,
+			Cost:   shieldSlamRank.Cost,
 			Refund: 0.8,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: shieldSlamRank.GCD,
 			},
 			IgnoreHaste: true,
 			CD: core.Cooldown{
 				Timer:    war.NewTimer(),
-				Duration: time.Second * 6,
+				Duration: shieldSlamRank.Cooldown,
 			},
 		},
 		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
@@ -381,7 +384,7 @@ func (war *Warrior) registerShieldSlam() {
 		FlatThreatBonus:  305,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := sim.Roll(381, 399) + war.BlockDamageReduction()
+			baseDamage := shieldSlamRank.Direct.Damage(sim) + war.BlockDamageReduction()
 			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialHitAndCrit)
 
 			if !result.Landed() {
@@ -418,7 +421,7 @@ func (war *Warrior) registerDevastate() {
 	}
 
 	war.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 30022},
+		ActionID:       core.ActionID{SpellID: devastateRank.SpellID},
 		ClassSpellMask: SpellMaskDevastate,
 		SpellSchool:    core.SpellSchoolPhysical,
 		DefenseType:    core.DefenseTypeMelee,
@@ -427,12 +430,12 @@ func (war *Warrior) registerDevastate() {
 		MaxRange:       core.MaxMeleeRange,
 
 		RageCost: core.RageCostOptions{
-			Cost:   15,
+			Cost:   devastateRank.Cost,
 			Refund: 0.8,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: devastateRank.GCD,
 			},
 			IgnoreHaste: true,
 		},

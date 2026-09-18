@@ -4,9 +4,11 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var swipeRank = genRanks.Swipe.BySpellID(26997)
+
 func (druid *Druid) registerSwipeBearSpell() {
 	druid.Swipe = druid.RegisterSpell(Bear, core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 26997},
+		ActionID:       core.ActionID{SpellID: swipeRank.SpellID},
 		SpellSchool:    core.SpellSchoolPhysical,
 		DefenseType:    core.DefenseTypeMelee,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
@@ -14,12 +16,12 @@ func (druid *Druid) registerSwipeBearSpell() {
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
 
 		RageCost: core.RageCostOptions{
-			Cost:   20,
+			Cost:   swipeRank.Cost,
 			Refund: 0.8,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: swipeRank.GCD,
 			},
 			IgnoreHaste: true,
 		},
@@ -32,7 +34,7 @@ func (druid *Druid) registerSwipeBearSpell() {
 			numHits := min(3, len(druid.Env.Encounter.AllTargetUnits))
 			for i := 0; i < numHits; i++ {
 				aoeTarget := druid.Env.Encounter.AllTargetUnits[i]
-				baseDamage := 84 + druid.IdolSwipeBonus + 0.07*spell.MeleeAttackPower(aoeTarget)
+				baseDamage := swipeRank.Direct.Damage(sim) + druid.IdolSwipeBonus + 0.07*spell.MeleeAttackPower(aoeTarget)
 				spell.CalcAndDealDamage(sim, aoeTarget, baseDamage, spell.OutcomeMeleeWeaponSpecialHitAndCrit)
 			}
 		},

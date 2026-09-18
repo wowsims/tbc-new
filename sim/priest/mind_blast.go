@@ -1,8 +1,6 @@
 package priest
 
 import (
-	"time"
-
 	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
@@ -19,27 +17,28 @@ func (priest *Priest) registerMindBlastSpell(rank shared.SpellRank, cdTimer *cor
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: PriestSpellMindBlast,
 		Rank:           rank.Rank,
+		MaxRange:       rank.MaxRange,
 		ManaCost: core.ManaCostOptions{
 			FlatCost: rank.Cost,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD:      core.GCDDefault,
-				CastTime: 1500 * time.Millisecond,
+				CastTime: rank.CastTime,
 			},
 			CD: core.Cooldown{
 				Timer:    cdTimer,
-				Duration: 8 * time.Second,
+				Duration: rank.Cooldown,
 			},
 		},
 
 		DamageMultiplier:         1,
 		DamageMultiplierAdditive: 1,
-		BonusCoefficient:         shared.SpellRankCoef(rank.Direct),
+		BonusCoefficient:         rank.Direct.BonusCoefficient(),
 		ThreatMultiplier:         1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := priest.CalcAndRollDamageRange(sim, shared.SpellRankMin(rank.Direct), shared.SpellRankMax(rank.Direct))
+			baseDamage := rank.Direct.Damage(sim)
 			result := spell.CalcDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
 			spell.DealDamage(sim, result)
 		},

@@ -1,14 +1,13 @@
 package mage
 
 import (
-	"time"
-
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var scorchRank = genRanks.Scorch.BySpellID(27074)
+
 func (mage *Mage) registerScorchSpell() {
 
-	scorchCoefficient := 0.42899999022 // Per https://wago.tools/db2/SpellEffect?build=2.5.5.65295&filter%5BSpellID%5D=exact%253A2948 Field: "BonusCoefficient"
 	procChance := []float64{0, 0.33, 0.66, 1}[mage.Talents.ImprovedScorch]
 
 	mage.RegisterSpell(core.SpellConfig{
@@ -20,21 +19,21 @@ func (mage *Mage) registerScorchSpell() {
 		ClassSpellMask: MageSpellScorch,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 180,
+			FlatCost: scorchRank.Cost,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD:      core.GCDDefault,
-				CastTime: time.Millisecond * 1500,
+				GCD:      scorchRank.GCD,
+				CastTime: scorchRank.CastTime,
 			},
 		},
 
 		DamageMultiplierAdditive: 1,
-		BonusCoefficient:         scorchCoefficient,
+		BonusCoefficient:         scorchRank.Direct.BonusCoefficient(),
 		ThreatMultiplier:         1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := mage.CalcAndRollDamageRange(sim, 304, 361)
+			baseDamage := scorchRank.Direct.Damage(sim)
 			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
 			if result.Landed() && mage.Talents.ImprovedScorch > 0 {
 				if sim.Proc(procChance, "Improved Scorch") {

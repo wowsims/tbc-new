@@ -238,14 +238,16 @@ func (rogue *Rogue) registerDirtyDeeds() {
 	})
 }
 
+var hemorrhageRank = genRanks.Hemorrhage.BySpellID(26864)
+
 func (rogue *Rogue) registerHemorrhage() {
 	if !rogue.Talents.Hemorrhage {
 		return
 	}
 
-	pointMetric := rogue.NewComboPointMetrics(core.ActionID{SpellID: 26864})
+	pointMetric := rogue.NewComboPointMetrics(core.ActionID{SpellID: hemorrhageRank.SpellID})
 	rogue.Hemorrhage = rogue.GetOrRegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 26864},
+		ActionID:       core.ActionID{SpellID: hemorrhageRank.SpellID},
 		ClassSpellMask: RogueSpellHemorrhage,
 		SpellSchool:    core.SpellSchoolPhysical,
 		DefenseType:    core.DefenseTypeMelee,
@@ -255,19 +257,19 @@ func (rogue *Rogue) registerHemorrhage() {
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: time.Second,
+				GCD: hemorrhageRank.GCD,
 			},
 			IgnoreHaste: true,
 		},
 		EnergyCost: core.EnergyCostOptions{
-			Cost:   35,
+			Cost:   hemorrhageRank.Cost,
 			Refund: 0.8,
 		},
 
 		DamageMultiplier: 1.1,
 		ThreatMultiplier: 1,
 
-		BonusCoefficient: 1,
+		BonusCoefficient: hemorrhageRank.Direct.BonusCoefficient(),
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			rogue.BreakStealth(sim)

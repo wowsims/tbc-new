@@ -1,12 +1,11 @@
 package warlock
 
 import (
-	"time"
-
 	"github.com/wowsims/tbc/sim/core"
 )
 
-var shadowBurnCoeff = 0.429
+var shadowBurnRank = genRanks.Shadowburn.BySpellID(30546)
+var shadowBurnCoeff = shadowBurnRank.Direct.BonusCoefficient()
 
 func (warlock *Warlock) registerShadowBurn() {
 
@@ -17,14 +16,14 @@ func (warlock *Warlock) registerShadowBurn() {
 		Flags:          core.SpellFlagAPL | core.SpellFlagBinary,
 		ClassSpellMask: WarlockSpellShadowBurn,
 
-		ManaCost: core.ManaCostOptions{FlatCost: 515},
+		ManaCost: core.ManaCostOptions{FlatCost: shadowBurnRank.Cost},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: shadowBurnRank.GCD,
 			},
 			CD: core.Cooldown{
 				Timer:    warlock.NewTimer(),
-				Duration: time.Second * 15,
+				Duration: shadowBurnRank.Cooldown,
 			},
 		},
 
@@ -34,7 +33,7 @@ func (warlock *Warlock) registerShadowBurn() {
 		BonusCoefficient: shadowBurnCoeff,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			dmgRoll := warlock.CalcAndRollDamageRange(sim, 597, 665)
+			dmgRoll := shadowBurnRank.Direct.Damage(sim)
 			spell.CalcAndDealDamage(sim, target, dmgRoll, spell.OutcomeMagicHitAndCrit)
 
 		},

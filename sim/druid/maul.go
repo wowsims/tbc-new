@@ -6,10 +6,12 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var maulRank = genRanks.Maul.BySpellID(26996)
+
 func (druid *Druid) registerMaulSpell() {
 	// The actual Maul spell that fires on the next auto-attack swing.
 	maulSpell := druid.RegisterSpell(Bear, core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 26996},
+		ActionID:       core.ActionID{SpellID: maulRank.SpellID},
 		SpellSchool:    core.SpellSchoolPhysical,
 		DefenseType:    core.DefenseTypeMelee,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
@@ -17,7 +19,7 @@ func (druid *Druid) registerMaulSpell() {
 		Flags:          core.SpellFlagMeleeMetrics,
 
 		RageCost: core.RageCostOptions{
-			Cost:   15,
+			Cost:   maulRank.Cost,
 			Refund: 0.8,
 		},
 
@@ -33,7 +35,7 @@ func (druid *Druid) registerMaulSpell() {
 		MaxRange:         core.MaxMeleeRange,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := 176 + druid.IdolMaulBonus + spell.Unit.MHWeaponDamage(sim, spell.MeleeAttackPower(target))
+			baseDamage := maulRank.Direct.Damage(sim) + druid.IdolMaulBonus + spell.Unit.MHWeaponDamage(sim, spell.MeleeAttackPower(target))
 			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeWeaponSpecialHitAndCrit)
 			if !result.Landed() {
 				spell.IssueRefund(sim)
@@ -44,7 +46,7 @@ func (druid *Druid) registerMaulSpell() {
 		},
 
 		ExpectedInitialDamage: func(sim *core.Simulation, target *core.Unit, spell *core.Spell, _ bool) *core.SpellResult {
-			baseDamage := 176 + druid.IdolMaulBonus + spell.Unit.AutoAttacks.MH().CalculateAverageWeaponDamage(spell.MeleeAttackPower(target))
+			baseDamage := maulRank.Direct.Damage(sim) + druid.IdolMaulBonus + spell.Unit.AutoAttacks.MH().CalculateAverageWeaponDamage(spell.MeleeAttackPower(target))
 			return spell.CalcDamage(sim, target, baseDamage, spell.OutcomeExpectedMeleeWeaponSpecialHitAndCrit)
 		},
 	})

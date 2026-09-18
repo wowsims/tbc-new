@@ -6,10 +6,12 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var stealthRank = genRanks.Stealth.BySpellID(1784)
+
 func (rogue *Rogue) registerStealthAura() {
 	rogue.StealthAura = rogue.RegisterAura(core.Aura{
 		Label:    "Stealth",
-		ActionID: core.ActionID{SpellID: 1784},
+		ActionID: core.ActionID{SpellID: stealthRank.SpellID},
 		Duration: core.NeverExpires,
 		OnGain: func(aura *core.Aura, sim *core.Simulation) {
 			// Stealth triggered auras
@@ -30,7 +32,7 @@ func (rogue *Rogue) registerStealthAura() {
 	})
 
 	rogue.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 1784},
+		ActionID:       core.ActionID{SpellID: stealthRank.SpellID},
 		SpellSchool:    core.SpellSchoolPhysical,
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: RogueSpellStealth,
@@ -38,7 +40,7 @@ func (rogue *Rogue) registerStealthAura() {
 		Cast: core.CastConfig{
 			CD: core.Cooldown{
 				Timer:    rogue.NewTimer(),
-				Duration: time.Second * 10,
+				Duration: stealthRank.Cooldown,
 			},
 		},
 		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {

@@ -1,14 +1,14 @@
 package mage
 
 import (
-	"time"
-
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
 
-func (mage *Mage) registerFireballSpell() {
+var fireballRank = genRanks.Fireball.BySpellID(27070)
 
-	fireBallCoefficient := 1.0 // Per https://wago.tools/db2/SpellEffect?build=2.5.5.65295&filter%5BSpellID%5D=exact%253A133 Field: "BonusCoefficient"
+func (mage *Mage) registerFireballSpell() {
+	fireballTick := fireballRank.Periodic.(shared.SpellRankPeriodic)
 
 	mage.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 27070},
@@ -20,13 +20,13 @@ func (mage *Mage) registerFireballSpell() {
 		MissileSpeed:   24,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 425,
+			FlatCost: fireballRank.Cost,
 		},
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD:      core.GCDDefault,
-				CastTime: time.Millisecond * 3500,
+				GCD:      fireballRank.GCD,
+				CastTime: fireballRank.CastTime,
 			},
 		},
 
@@ -34,8 +34,8 @@ func (mage *Mage) registerFireballSpell() {
 			Aura: core.Aura{
 				Label: "FireballDoT",
 			},
-			NumberOfTicks: 4,
-			TickLength:    time.Second * 2,
+			NumberOfTicks: fireballTick.Ticks,
+			TickLength:    fireballTick.Period,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, 21)
 			},
@@ -45,11 +45,11 @@ func (mage *Mage) registerFireballSpell() {
 		},
 
 		DamageMultiplier: 1,
-		BonusCoefficient: fireBallCoefficient,
+		BonusCoefficient: fireballRank.Direct.BonusCoefficient(),
 		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := mage.CalcAndRollDamageRange(sim, 649, 821)
+			baseDamage := fireballRank.Direct.Damage(sim)
 			result := spell.CalcDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
 
 			spell.WaitTravelTime(sim, func(s *core.Simulation) {

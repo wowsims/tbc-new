@@ -258,6 +258,8 @@ func (rogue *Rogue) registerFindWeakness() {
 
 const MutilateSpellID int32 = 34413
 
+var mutilateRank = genRanks.Mutilate.BySpellID(MutilateSpellID)
+
 func (rogue *Rogue) registerMutilate() {
 	if !rogue.Talents.Mutilate {
 		return
@@ -275,12 +277,12 @@ func (rogue *Rogue) registerMutilate() {
 		ClassSpellMask: RogueSpellMutilate,
 
 		EnergyCost: core.EnergyCostOptions{
-			Cost:   60,
+			Cost:   mutilateRank.Cost,
 			Refund: 0.8,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: time.Second,
+				GCD: mutilateRank.GCD,
 			},
 			IgnoreHaste: true,
 		},

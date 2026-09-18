@@ -6,7 +6,8 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
-const soulfireCoeff = 1.15
+var soulfireRank = genRanks.SoulFire.BySpellID(30545)
+var soulfireCoeff = soulfireRank.Direct.BonusCoefficient()
 
 func (warlock *Warlock) registerSoulfire() {
 	warlock.Soulfire = warlock.RegisterSpell(core.SpellConfig{
@@ -17,16 +18,16 @@ func (warlock *Warlock) registerSoulfire() {
 		ClassSpellMask: WarlockSpellSoulFire,
 		MissileSpeed:   21,
 
-		ManaCost: core.ManaCostOptions{FlatCost: 250},
+		ManaCost: core.ManaCostOptions{FlatCost: soulfireRank.Cost},
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD:      core.GCDDefault,
-				CastTime: time.Millisecond*6000 - time.Duration(400*warlock.Talents.Bane),
+				GCD:      soulfireRank.GCD,
+				CastTime: soulfireRank.CastTime - time.Duration(400*warlock.Talents.Bane),
 			},
 			CD: core.Cooldown{
 				Timer:    warlock.NewTimer(),
-				Duration: 1 * time.Minute,
+				Duration: soulfireRank.Cooldown,
 			},
 		},
 
@@ -36,7 +37,7 @@ func (warlock *Warlock) registerSoulfire() {
 		BonusCoefficient: soulfireCoeff,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			dmgRoll := warlock.CalcAndRollDamageRange(sim, 1003, 1257)
+			dmgRoll := soulfireRank.Direct.Damage(sim)
 			result := spell.CalcDamage(sim, target, dmgRoll, spell.OutcomeMagicHitAndCrit)
 			spell.WaitTravelTime(sim, func(sim *core.Simulation) {
 				spell.DealDamage(sim, result)

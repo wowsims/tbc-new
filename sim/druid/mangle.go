@@ -1,10 +1,11 @@
 package druid
 
 import (
-	"time"
-
 	"github.com/wowsims/tbc/sim/core"
 )
+
+var mangleCatRank = genRanks.MangleCat.BySpellID(33983)
+var mangleBearRank = genRanks.MangleBear.BySpellID(33987)
 
 func (druid *Druid) registerMangleAuras() {
 	if druid.MangleAuras != nil {
@@ -21,7 +22,7 @@ func (druid *Druid) registerMangleCatSpell() {
 	druid.registerMangleAuras()
 
 	druid.MangleCat = druid.RegisterSpell(Cat, core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 33983},
+		ActionID:       core.ActionID{SpellID: mangleCatRank.SpellID},
 		SpellSchool:    core.SpellSchoolPhysical,
 		DefenseType:    core.DefenseTypeMelee,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
@@ -29,12 +30,12 @@ func (druid *Druid) registerMangleCatSpell() {
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
 
 		EnergyCost: core.EnergyCostOptions{
-			Cost:   45,
+			Cost:   mangleCatRank.Cost,
 			Refund: 0.8,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: time.Second,
+				GCD: mangleCatRank.GCD,
 			},
 			IgnoreHaste: true,
 		},
@@ -44,7 +45,10 @@ func (druid *Druid) registerMangleCatSpell() {
 		MaxRange:         core.MaxMeleeRange,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := (264.0+druid.IdolMangleCatBonus)/1.6 + spell.Unit.MHWeaponDamage(sim, spell.MeleeAttackPower(target))
+			// mangleCatRank.Direct is the pre-multiplier flat value (165); the idol
+			// bonus is historically expressed post-multiplier, so scale up and back
+			// down around it to keep the result identical.
+			baseDamage := (mangleCatRank.Direct.Damage(sim)*1.6+druid.IdolMangleCatBonus)/1.6 + spell.Unit.MHWeaponDamage(sim, spell.MeleeAttackPower(target))
 			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeWeaponSpecialHitAndCrit)
 
 			if result.Landed() {
@@ -56,7 +60,7 @@ func (druid *Druid) registerMangleCatSpell() {
 		},
 
 		ExpectedInitialDamage: func(sim *core.Simulation, target *core.Unit, spell *core.Spell, _ bool) *core.SpellResult {
-			baseDamage := (264.0+druid.IdolMangleCatBonus)/1.6 + spell.Unit.AutoAttacks.MH().CalculateAverageWeaponDamage(spell.MeleeAttackPower(target))
+			baseDamage := (mangleCatRank.Direct.Damage(sim)*1.6+druid.IdolMangleCatBonus)/1.6 + spell.Unit.AutoAttacks.MH().CalculateAverageWeaponDamage(spell.MeleeAttackPower(target))
 			return spell.CalcDamage(sim, target, baseDamage, spell.OutcomeExpectedMeleeWeaponSpecialHitAndCrit)
 		},
 	})
@@ -70,7 +74,7 @@ func (druid *Druid) registerMangleBearSpell() {
 	druid.registerMangleAuras()
 
 	druid.MangleBear = druid.RegisterSpell(Bear, core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 33987},
+		ActionID:       core.ActionID{SpellID: mangleBearRank.SpellID},
 		SpellSchool:    core.SpellSchoolPhysical,
 		DefenseType:    core.DefenseTypeMelee,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
@@ -78,17 +82,17 @@ func (druid *Druid) registerMangleBearSpell() {
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
 
 		RageCost: core.RageCostOptions{
-			Cost:   20,
+			Cost:   mangleBearRank.Cost,
 			Refund: 0.8,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: mangleBearRank.GCD,
 			},
 			IgnoreHaste: true,
 			CD: core.Cooldown{
 				Timer:    druid.NewTimer(),
-				Duration: time.Second * 6,
+				Duration: mangleBearRank.Cooldown,
 			},
 		},
 
@@ -97,7 +101,7 @@ func (druid *Druid) registerMangleBearSpell() {
 		MaxRange:         core.MaxMeleeRange,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := (155.0+druid.IdolMangleBearBonus)/1.15 + spell.Unit.MHWeaponDamage(sim, spell.MeleeAttackPower(target))
+			baseDamage := (mangleBearRank.Direct.Damage(sim)*1.15+druid.IdolMangleBearBonus)/1.15 + spell.Unit.MHWeaponDamage(sim, spell.MeleeAttackPower(target))
 			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeWeaponSpecialHitAndCrit)
 
 			if result.Landed() {

@@ -27,7 +27,7 @@ func (paladin *Paladin) registerHolyShield(rankConfig shared.SpellRank) {
 	spellID := rankConfig.SpellID
 	cost := rankConfig.Cost
 	value := shared.SpellRankMin(rankConfig.Direct)
-	coefficient := shared.SpellRankCoef(rankConfig.Direct)
+	coefficient := rankConfig.Direct.BonusCoefficient()
 
 	actionID := core.ActionID{SpellID: spellID}
 
@@ -87,7 +87,7 @@ func (paladin *Paladin) registerHolyShield(rankConfig shared.SpellRank) {
 			},
 			CD: core.Cooldown{
 				Timer:    paladin.getHolyShieldTimer(),
-				Duration: time.Second * 10,
+				Duration: rankConfig.Cooldown,
 			},
 		},
 

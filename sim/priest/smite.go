@@ -1,25 +1,13 @@
 package priest
 
 import (
-	"time"
-
 	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
 
 var SmiteRankMap = genRanks.Smite
 
-var smiteCastTimes = map[int32]time.Duration{
-	1: 1500 * time.Millisecond,
-	2: 2000 * time.Millisecond,
-}
-
 func (priest *Priest) registerSmiteSpell(rank shared.SpellRank) {
-	castTime := 2500 * time.Millisecond
-	if ct, ok := smiteCastTimes[rank.Rank]; ok {
-		castTime = ct
-	}
-
 	priest.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: rank.SpellID},
 		SpellSchool:    core.SpellSchoolHoly,
@@ -28,22 +16,23 @@ func (priest *Priest) registerSmiteSpell(rank shared.SpellRank) {
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: PriestSpellSmite,
 		Rank:           rank.Rank,
+		MaxRange:       rank.MaxRange,
 		ManaCost: core.ManaCostOptions{
 			FlatCost: rank.Cost,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD:      core.GCDDefault,
-				CastTime: castTime,
+				CastTime: rank.CastTime,
 			},
 		},
 
 		DamageMultiplier: 1,
-		BonusCoefficient: shared.SpellRankCoef(rank.Direct),
+		BonusCoefficient: rank.Direct.BonusCoefficient(),
 		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := priest.CalcAndRollDamageRange(sim, shared.SpellRankMin(rank.Direct), shared.SpellRankMax(rank.Direct))
+			baseDamage := rank.Direct.Damage(sim)
 			spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
 		},
 	})

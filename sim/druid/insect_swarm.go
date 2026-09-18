@@ -1,20 +1,16 @@
 package druid
 
 import (
-	"time"
-
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
 
-const (
-	InsectSwarmBonusCoeff    = 0.12700000405
-	InsectSwarmNumberOfTicks = 6
-	InsectSwarmTickLength    = time.Second * 2
-)
+var insectSwarmRank = genRanks.InsectSwarm.BySpellID(27013)
+var insectSwarmTick = insectSwarmRank.Periodic.(shared.SpellRankPeriodic)
 
 func (druid *Druid) registerInsectSwarmSpell() {
 	druid.InsectSwarm = druid.RegisterSpell(Humanoid|Moonkin, core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 27013},
+		ActionID:       core.ActionID{SpellID: insectSwarmRank.SpellID},
 		SpellSchool:    core.SpellSchoolNature,
 		DefenseType:    core.DefenseTypeMagic,
 		ProcMask:       core.ProcMaskSpellDamage,
@@ -23,13 +19,14 @@ func (druid *Druid) registerInsectSwarmSpell() {
 
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
+		MaxRange:         insectSwarmRank.MaxRange,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 175,
+			FlatCost: insectSwarmRank.Cost,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: insectSwarmRank.GCD,
 			},
 		},
 
@@ -38,13 +35,13 @@ func (druid *Druid) registerInsectSwarmSpell() {
 				Label: "Insect Swarm",
 			},
 
-			NumberOfTicks:       InsectSwarmNumberOfTicks,
-			TickLength:          InsectSwarmTickLength,
+			NumberOfTicks:       insectSwarmTick.Ticks,
+			TickLength:          insectSwarmTick.Period,
 			AffectedByCastSpeed: false,
-			BonusCoefficient:    InsectSwarmBonusCoeff,
+			BonusCoefficient:    insectSwarmTick.Coef,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.Snapshot(target, 132)
+				dot.Snapshot(target, insectSwarmTick.Tick)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)

@@ -1,10 +1,10 @@
 package warlock
 
 import (
-	"time"
-
 	"github.com/wowsims/tbc/sim/core"
 )
+
+var deathCoilRank = genRanks.DeathCoil.BySpellID(27223)
 
 func (warlock *Warlock) registerDeathCoil() {
 
@@ -16,16 +16,16 @@ func (warlock *Warlock) registerDeathCoil() {
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: WarlockSpellDeathCoil,
 		MissileSpeed:   24,
-		MaxRange:       30,
+		MaxRange:       deathCoilRank.MaxRange,
 
-		ManaCost: core.ManaCostOptions{FlatCost: 600},
+		ManaCost: core.ManaCostOptions{FlatCost: deathCoilRank.Cost},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: deathCoilRank.GCD,
 			},
 			CD: core.Cooldown{
 				Timer:    warlock.NewTimer(),
-				Duration: time.Minute * 2,
+				Duration: deathCoilRank.Cooldown,
 			},
 		},
 

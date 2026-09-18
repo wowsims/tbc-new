@@ -1,20 +1,14 @@
 package druid
 
 import (
-	"time"
-
 	"github.com/wowsims/tbc/sim/core"
 )
 
-const (
-	WrathBonusCoeff = 0.57099997997
-	WrathMinDmg     = 383
-	WrathMaxDmg     = 432
-)
+var wrathRank = genRanks.Wrath.BySpellID(26985)
 
 func (druid *Druid) registerWrathSpell() {
 	druid.Wrath = druid.RegisterSpell(Humanoid|Moonkin, core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 26985},
+		ActionID:       core.ActionID{SpellID: wrathRank.SpellID},
 		SpellSchool:    core.SpellSchoolNature,
 		DefenseType:    core.DefenseTypeMagic,
 		ProcMask:       core.ProcMaskSpellDamage,
@@ -23,22 +17,23 @@ func (druid *Druid) registerWrathSpell() {
 		MissileSpeed:   20,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 255,
+			FlatCost: wrathRank.Cost,
 		},
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD:      core.GCDDefault,
-				CastTime: time.Millisecond * 2000,
+				GCD:      wrathRank.GCD,
+				CastTime: wrathRank.CastTime,
 			},
 		},
 
-		BonusCoefficient: WrathBonusCoeff,
+		BonusCoefficient: wrathRank.Direct.BonusCoefficient(),
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
+		MaxRange:         wrathRank.MaxRange,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := druid.CalcAndRollDamageRange(sim, WrathMinDmg, WrathMaxDmg)
+			baseDamage := wrathRank.Direct.Damage(sim)
 			result := spell.CalcDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
 
 			spell.WaitTravelTime(sim, func(sim *core.Simulation) {

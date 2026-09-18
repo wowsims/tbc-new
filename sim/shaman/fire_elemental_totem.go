@@ -6,9 +6,11 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var fireElementalTotemRank = genRanks.FireElementalTotem.BySpellID(2894)
+
 func (shaman *Shaman) registerFireElementalTotem() {
 
-	actionID := core.ActionID{SpellID: 2894}
+	actionID := core.ActionID{SpellID: fireElementalTotemRank.SpellID}
 
 	totalDuration := time.Second * 120
 
@@ -27,15 +29,15 @@ func (shaman *Shaman) registerFireElementalTotem() {
 		Flags:          core.SpellFlagAPL | SpellFlagInstant,
 		ClassSpellMask: SpellMaskFireElementalTotem,
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 680,
+			FlatCost: fireElementalTotemRank.Cost,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: time.Second * 1,
+				GCD: fireElementalTotemRank.GCD,
 			},
 			CD: core.Cooldown{
 				Timer:    shaman.NewTimer(),
-				Duration: time.Minute * 20,
+				Duration: fireElementalTotemRank.Cooldown,
 			},
 			SharedCD: core.Cooldown{
 				Timer:    shaman.GetOrInitTimer(&shaman.ElementalSharedCDTimer),

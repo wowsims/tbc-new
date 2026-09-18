@@ -6,8 +6,10 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var shadowfiendRank = genRanks.Shadowfiend.BySpellID(34433)
+
 func (priest *Priest) registerShadowfiendSpell() {
-	actionID := core.ActionID{SpellID: 34433}
+	actionID := core.ActionID{SpellID: shadowfiendRank.SpellID}
 
 	// Timeline aura
 	priest.ShadowfiendAura = priest.RegisterAura(core.Aura{
@@ -22,6 +24,7 @@ func (priest *Priest) registerShadowfiendSpell() {
 		ProcMask:       core.ProcMaskEmpty,
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: PriestSpellShadowFiend,
+		Rank:           shadowfiendRank.Rank,
 
 		ManaCost: core.ManaCostOptions{
 			BaseCostPercent: 6,
@@ -29,7 +32,7 @@ func (priest *Priest) registerShadowfiendSpell() {
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: shadowfiendRank.GCD,
 			},
 			CD: core.Cooldown{
 				Timer:    priest.NewTimer(),

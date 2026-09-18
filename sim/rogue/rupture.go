@@ -1,18 +1,19 @@
 package rogue
 
 import (
-	"time"
-
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
 
-const RuptureEnergyCost = 25.0
 const RuptureSpellID = 26867
 
+var ruptureRank = genRanks.Rupture.BySpellID(RuptureSpellID)
+
 func (rogue *Rogue) registerRupture() {
+	tick := ruptureRank.Periodic.(shared.SpellRankPeriodic)
 
 	rogue.Rupture = rogue.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: RuptureSpellID},
+		ActionID:       core.ActionID{SpellID: ruptureRank.SpellID},
 		SpellSchool:    core.SpellSchoolPhysical,
 		DefenseType:    core.DefenseTypeMelee,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
@@ -21,13 +22,13 @@ func (rogue *Rogue) registerRupture() {
 		ClassSpellMask: RogueSpellRupture,
 
 		EnergyCost: core.EnergyCostOptions{
-			Cost:          RuptureEnergyCost,
+			Cost:          ruptureRank.Cost,
 			Refund:        0.4 * float64(rogue.Talents.QuickRecovery),
 			RefundMetrics: rogue.EnergyRefundMetrics,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: time.Second,
+				GCD: ruptureRank.GCD,
 			},
 			IgnoreHaste: true,
 			ModifyCast: func(sim *core.Simulation, spell *core.Spell, cast *core.Cast) {
@@ -47,10 +48,10 @@ func (rogue *Rogue) registerRupture() {
 				Tag:   RogueBleedTag,
 			},
 			NumberOfTicks: 0, // Set dynamically
-			TickLength:    time.Second * 2,
+			TickLength:    tick.Period,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.SnapshotPhysical(target, rogue.ruptureDamage(target, rogue.ComboPoints(), 70, 11))
+				dot.SnapshotPhysical(target, rogue.ruptureDamage(target, rogue.ComboPoints(), tick.Tick, 11))
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
@@ -62,7 +63,7 @@ func (rogue *Rogue) registerRupture() {
 			result := spell.CalcOutcome(sim, target, spell.OutcomeMeleeSpecialHit)
 			if result.Landed() {
 				dot := spell.Dot(target)
-				dot.BaseTickCount = 3 + rogue.ComboPoints()
+				dot.BaseTickCount = tick.Ticks + rogue.ComboPoints()
 				dot.Apply(sim)
 				rogue.ApplyFinisher(sim, spell)
 				spell.DealOutcome(sim, result)

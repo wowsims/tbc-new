@@ -11,6 +11,7 @@ const ShoutExpirationThreshold = time.Second * 3
 
 type ShoutHelperConfig struct {
 	ActionID           core.ActionID
+	RageCost           int32
 	SpellMask          int64
 	ThreatBonus        float64
 	AllyAuras          core.AuraArray
@@ -26,7 +27,7 @@ func (warrior *Warrior) MakeShoutSpellHelper(config ShoutHelperConfig) *core.Spe
 		ProcMask:       core.ProcMaskEmpty,
 
 		RageCost: core.RageCostOptions{
-			Cost: 10,
+			Cost: config.RageCost,
 		},
 
 		Cast: core.CastConfig{
@@ -52,6 +53,9 @@ func (warrior *Warrior) MakeShoutSpellHelper(config ShoutHelperConfig) *core.Spe
 	})
 }
 
+var battleShoutRank = genRanks.BattleShout.BySpellID(2048)
+var commandingShoutRank = genRanks.CommandingShout.BySpellID(469)
+
 func (warrior *Warrior) registerShouts() {
 	commandingPresenceMultiplier := 1.0 + 0.05*float64(warrior.Talents.CommandingPresence)
 
@@ -71,7 +75,8 @@ func (warrior *Warrior) registerShouts() {
 	})
 
 	warrior.BattleShout = warrior.MakeShoutSpellHelper(ShoutHelperConfig{
-		ActionID:    core.ActionID{SpellID: 2048},
+		ActionID:    core.ActionID{SpellID: battleShoutRank.SpellID},
+		RageCost:    battleShoutRank.Cost,
 		SpellMask:   SpellMaskBattleShout,
 		ThreatBonus: 69,
 		ExtraCastCondition: func(sim *core.Simulation, _ *core.Unit) bool {
@@ -95,7 +100,8 @@ func (warrior *Warrior) registerShouts() {
 	})
 
 	warrior.CommandingShout = warrior.MakeShoutSpellHelper(ShoutHelperConfig{
-		ActionID:    core.ActionID{SpellID: 469},
+		ActionID:    core.ActionID{SpellID: commandingShoutRank.SpellID},
+		RageCost:    commandingShoutRank.Cost,
 		SpellMask:   SpellMaskCommandingShout,
 		ThreatBonus: 68,
 		ExtraCastCondition: func(sim *core.Simulation, _ *core.Unit) bool {

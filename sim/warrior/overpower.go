@@ -6,8 +6,10 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var overpowerRank = genRanks.Overpower.BySpellID(11585)
+
 func (war *Warrior) registerOverpower() {
-	actionID := core.ActionID{SpellID: 11585}
+	actionID := core.ActionID{SpellID: overpowerRank.SpellID}
 
 	aura := war.RegisterAura(core.Aura{
 		ActionID: actionID,
@@ -35,16 +37,16 @@ func (war *Warrior) registerOverpower() {
 		MaxRange:       core.MaxMeleeRange,
 
 		RageCost: core.RageCostOptions{
-			Cost:   5,
+			Cost:   overpowerRank.Cost,
 			Refund: 0.8,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: overpowerRank.GCD,
 			},
 			CD: core.Cooldown{
 				Timer:    war.NewTimer(),
-				Duration: 5 * time.Second,
+				Duration: overpowerRank.Cooldown,
 			},
 			IgnoreHaste: true,
 		},
@@ -57,7 +59,8 @@ func (war *Warrior) registerOverpower() {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := 35 + spell.Unit.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower(target))
+			overpowerVal, _ := overpowerRank.Direct.Range()
+			baseDamage := overpowerVal + spell.Unit.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower(target))
 			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialNoBlockDodgeParry)
 			aura.Deactivate(sim)
 

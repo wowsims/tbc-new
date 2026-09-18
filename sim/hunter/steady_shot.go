@@ -6,6 +6,8 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var steadyShotRank = genRanks.SteadyShot.BySpellID(34120)
+
 func (hunter *Hunter) registerSteadyShotSpell() {
 	hunter.SteadyShot = hunter.RegisterRangedSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 34120},
@@ -16,7 +18,7 @@ func (hunter *Hunter) registerSteadyShotSpell() {
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 110,
+			FlatCost: steadyShotRank.Cost,
 		},
 
 		Cast: core.CastConfig{
@@ -44,7 +46,7 @@ func (hunter *Hunter) registerSteadyShotSpell() {
 			baseDamage := 0.2*spell.RangedAttackPower(target) +
 				weaponDamage*2.8/hunter.AutoAttacks.Ranged().SwingSpeed +
 				hunter.talonOfAlarBonus() +
-				150
+				steadyShotRank.Direct.Damage(sim)
 
 			result := spell.CalcDamage(sim, target, baseDamage, spell.OutcomeRangedHitAndCrit)
 

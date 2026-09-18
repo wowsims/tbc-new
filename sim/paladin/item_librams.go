@@ -3,7 +3,6 @@ package paladin
 import (
 	"time"
 
-	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/stats"
 )
@@ -104,7 +103,7 @@ func init() {
 		// For some ungodly reason, Libram of the Eternal Rest has its own spell coeff...
 		// This means the coef has to be divided by the default Consecration spell coefficient
 		// to get the correct damage increase when it's then being multiplied in the dmg calc...
-		coef := 0.09525 / shared.SpellRankCoef(ConsecrationRankMap.Max().Periodic)
+		coef := 0.09525 / ConsecrationRankMap.HighestRank().Periodic.BonusCoefficient()
 		aura := core.MakePermanent(paladin.RegisterAura(core.Aura{
 			Label:    "Libram of the Eternal Rest",
 			ActionID: core.ActionID{SpellID: 34252},

@@ -24,6 +24,7 @@ func (priest *Priest) registerDevouringPlagueSpell(rank shared.SpellRank, cdTime
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: PriestSpellDevouringPlague,
 		Rank:           rank.Rank,
+		MaxRange:       rank.MaxRange,
 
 		ManaCost: core.ManaCostOptions{
 			FlatCost: rank.Cost,
@@ -35,7 +36,7 @@ func (priest *Priest) registerDevouringPlagueSpell(rank shared.SpellRank, cdTime
 			},
 			CD: core.Cooldown{
 				Timer:    cdTimer,
-				Duration: 180 * time.Second,
+				Duration: rank.Cooldown,
 			},
 		},
 
@@ -61,7 +62,7 @@ func (priest *Priest) registerDevouringPlagueSpell(rank shared.SpellRank, cdTime
 			NumberOfTicks:       8,
 			TickLength:          3 * time.Second,
 			AffectedByCastSpeed: false,
-			BonusCoefficient:    shared.SpellRankCoef(rank.Periodic),
+			BonusCoefficient:    rank.Periodic.BonusCoefficient(),
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, shared.SpellRankMin(rank.Periodic))

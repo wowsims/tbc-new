@@ -1,16 +1,17 @@
 package rogue
 
 import (
-	"time"
-
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var garroteRank = genRanks.Garrote.BySpellID(26884)
+
 func (rogue *Rogue) registerGarrote() {
-	baseDamage := 135.0
+	tick := garroteRank.Periodic.(shared.SpellRankPeriodic)
 
 	rogue.Garrote = rogue.GetOrRegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 26884},
+		ActionID:       core.ActionID{SpellID: garroteRank.SpellID},
 		SpellSchool:    core.SpellSchoolPhysical,
 		DefenseType:    core.DefenseTypeMelee,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
@@ -18,12 +19,12 @@ func (rogue *Rogue) registerGarrote() {
 		ClassSpellMask: RogueSpellGarrote,
 
 		EnergyCost: core.EnergyCostOptions{
-			Cost:   50,
+			Cost:   garroteRank.Cost,
 			Refund: 0.8,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: time.Second,
+				GCD: garroteRank.GCD,
 			},
 			IgnoreHaste: true,
 		},
@@ -40,10 +41,10 @@ func (rogue *Rogue) registerGarrote() {
 				Label: "Garrote",
 				Tag:   RogueBleedTag,
 			},
-			NumberOfTicks: 6,
-			TickLength:    time.Second * 3,
+			NumberOfTicks: tick.Ticks,
+			TickLength:    tick.Period,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.SnapshotPhysical(target, baseDamage+dot.Spell.MeleeAttackPower(target)*0.03)
+				dot.SnapshotPhysical(target, tick.Tick+dot.Spell.MeleeAttackPower(target)*0.03)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)

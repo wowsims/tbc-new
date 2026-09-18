@@ -6,8 +6,10 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var interceptRank = genRanks.Intercept.BySpellID(25275)
+
 func (war *Warrior) registerIntercept() {
-	actionID := core.ActionID{SpellID: 25275}
+	actionID := core.ActionID{SpellID: interceptRank.SpellID}
 	chargeMinRange := 8.0
 
 	var spell *core.Spell
@@ -38,12 +40,12 @@ func (war *Warrior) registerIntercept() {
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: SpellMaskIntercept,
 		MinRange:       chargeMinRange,
-		MaxRange:       25,
+		MaxRange:       interceptRank.MaxRange,
 
 		Cast: core.CastConfig{
 			CD: core.Cooldown{
 				Timer:    war.NewTimer(),
-				Duration: 30 * time.Second,
+				Duration: interceptRank.Cooldown,
 			},
 			IgnoreHaste: true,
 		},

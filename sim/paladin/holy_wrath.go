@@ -1,8 +1,6 @@
 package paladin
 
 import (
-	"time"
-
 	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
@@ -28,7 +26,7 @@ func (paladin *Paladin) registerHolyWrath(rankConfig shared.SpellRank) {
 	cost := rankConfig.Cost
 	minDamage := shared.SpellRankMin(rankConfig.Direct)
 	maxDamage := shared.SpellRankMax(rankConfig.Direct)
-	coefficient := shared.SpellRankCoef(rankConfig.Direct)
+	coefficient := rankConfig.Direct.BonusCoefficient()
 
 	paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: spellID},
@@ -51,11 +49,11 @@ func (paladin *Paladin) registerHolyWrath(rankConfig shared.SpellRank) {
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD:      core.GCDDefault,
-				CastTime: time.Second * 2,
+				CastTime: rankConfig.CastTime,
 			},
 			CD: core.Cooldown{
 				Timer:    paladin.getHolyWrathTimer(),
-				Duration: time.Minute,
+				Duration: rankConfig.Cooldown,
 			},
 			ModifyCast: func(sim *core.Simulation, spell *core.Spell, cast *core.Cast) {
 				castTime := paladin.ApplyCastSpeedForSpell(cast.CastTime, spell)

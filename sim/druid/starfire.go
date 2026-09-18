@@ -1,8 +1,6 @@
 package druid
 
 import (
-	"time"
-
 	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
@@ -18,6 +16,7 @@ func (druid *Druid) registerStarfireSpell(rankConfig shared.SpellRank) {
 		ClassSpellMask: DruidSpellStarfire,
 		Flags:          core.SpellFlagAPL,
 		Rank:           rankConfig.Rank,
+		MaxRange:       rankConfig.MaxRange,
 
 		ManaCost: core.ManaCostOptions{
 			FlatCost: rankConfig.Cost,
@@ -26,16 +25,16 @@ func (druid *Druid) registerStarfireSpell(rankConfig shared.SpellRank) {
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD:      core.GCDDefault,
-				CastTime: time.Millisecond * 3500,
+				CastTime: rankConfig.CastTime,
 			},
 		},
 
-		BonusCoefficient: shared.SpellRankCoef(rankConfig.Direct),
+		BonusCoefficient: rankConfig.Direct.BonusCoefficient(),
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := druid.CalcAndRollDamageRange(sim, shared.SpellRankMin(rankConfig.Direct), shared.SpellRankMax(rankConfig.Direct))
+			baseDamage := rankConfig.Direct.Damage(sim)
 			spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
 		},
 	})

@@ -24,7 +24,7 @@ func (paladin *Paladin) registerConsecration(rankConfig shared.SpellRank) {
 	spellID := rankConfig.SpellID
 	cost := rankConfig.Cost
 	minDamage := shared.SpellRankMin(rankConfig.Periodic)
-	coefficient := shared.SpellRankCoef(rankConfig.Periodic)
+	coefficient := rankConfig.Periodic.BonusCoefficient()
 
 	paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: spellID},
@@ -49,7 +49,7 @@ func (paladin *Paladin) registerConsecration(rankConfig shared.SpellRank) {
 			},
 			CD: core.Cooldown{
 				Timer:    paladin.getConsecrationTimer(),
-				Duration: 8 * time.Second,
+				Duration: rankConfig.Cooldown,
 			},
 		},
 

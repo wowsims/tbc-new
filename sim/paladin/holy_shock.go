@@ -1,8 +1,6 @@
 package paladin
 
 import (
-	"time"
-
 	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
@@ -26,7 +24,7 @@ func (paladin *Paladin) registerHolyShock(rankConfig shared.SpellRank) {
 	cost := rankConfig.Cost
 	minDamage := shared.SpellRankMin(rankConfig.Direct)
 	maxDamage := shared.SpellRankMax(rankConfig.Direct)
-	coefficient := shared.SpellRankCoef(rankConfig.Direct)
+	coefficient := rankConfig.Direct.BonusCoefficient()
 
 	// Holy Shock heals for 1.267x the damage component of the spell.
 	healingCoeff := 1.267
@@ -45,7 +43,7 @@ func (paladin *Paladin) registerHolyShock(rankConfig shared.SpellRank) {
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
 
-		MaxRange: 20,
+		MaxRange: rankConfig.MaxRange,
 
 		ManaCost: core.ManaCostOptions{
 			FlatCost: cost,
@@ -56,7 +54,7 @@ func (paladin *Paladin) registerHolyShock(rankConfig shared.SpellRank) {
 			},
 			CD: core.Cooldown{
 				Timer:    paladin.getHolyShockTimer(),
-				Duration: time.Second * 15,
+				Duration: rankConfig.Cooldown,
 			},
 		},
 

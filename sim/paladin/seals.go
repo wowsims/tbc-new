@@ -32,6 +32,8 @@ type seal struct {
 
 func (seal seal) GetRank() int32 { return seal.rank }
 
+func (seal seal) GetSpellID() int32 { return seal.spellID }
+
 func (seal seal) GetRankLabel() string {
 	return fmt.Sprintf("Rank %d", seal.rank)
 }

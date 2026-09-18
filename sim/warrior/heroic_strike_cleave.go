@@ -4,9 +4,12 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var heroicStrikeRank = genRanks.HeroicStrike.BySpellID(29707)
+var cleaveRank = genRanks.Cleave.BySpellID(25231)
+
 func (war *Warrior) registerHeroicStrike() {
 	spell := war.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 29707},
+		ActionID:       core.ActionID{SpellID: heroicStrikeRank.SpellID},
 		SpellSchool:    core.SpellSchoolPhysical,
 		DefenseType:    core.DefenseTypeMelee,
 		ProcMask:       core.ProcMaskMeleeMH,
@@ -15,7 +18,7 @@ func (war *Warrior) registerHeroicStrike() {
 		MaxRange:       core.MaxMeleeRange,
 
 		RageCost: core.RageCostOptions{
-			Cost:   15,
+			Cost:   heroicStrikeRank.Cost,
 			Refund: 0.8,
 		},
 
@@ -30,7 +33,8 @@ func (war *Warrior) registerHeroicStrike() {
 		FlatThreatBonus:  194,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := 176 + war.MHWeaponDamage(sim, spell.MeleeAttackPower(target))
+			heroicStrikeVal, _ := heroicStrikeRank.Direct.Range()
+			baseDamage := heroicStrikeVal + war.MHWeaponDamage(sim, spell.MeleeAttackPower(target))
 			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeWeaponSpecialHitAndCrit)
 
 			if !result.Landed() {
@@ -47,10 +51,11 @@ func (war *Warrior) registerHeroicStrike() {
 
 func (war *Warrior) registerCleave() {
 	const maxTargets int32 = 2
-	flatDamage := 70 * (1 + 0.4*float64(war.Talents.ImprovedCleave))
+	cleaveVal, _ := cleaveRank.Direct.Range()
+	flatDamage := cleaveVal * (1 + 0.4*float64(war.Talents.ImprovedCleave))
 
 	spell := war.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 25231},
+		ActionID:       core.ActionID{SpellID: cleaveRank.SpellID},
 		SpellSchool:    core.SpellSchoolPhysical,
 		DefenseType:    core.DefenseTypeMelee,
 		ProcMask:       core.ProcMaskMeleeMH,
@@ -59,7 +64,7 @@ func (war *Warrior) registerCleave() {
 		MaxRange:       core.MaxMeleeRange,
 
 		RageCost: core.RageCostOptions{
-			Cost: 20,
+			Cost: cleaveRank.Cost,
 		},
 
 		Cast: core.CastConfig{

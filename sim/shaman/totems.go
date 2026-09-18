@@ -8,7 +8,13 @@ import (
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
-func (shaman *Shaman) newTotemSpellConfig(flatCost int32, spellID int32, spellMask int64) core.SpellConfig {
+var windfuryTotemRank = genRanks.WindfuryTotem.BySpellID(25587)
+var strengthOfEarthTotemRank = genRanks.StrengthOfEarthTotem.BySpellID(25528)
+var graceOfAirTotemRank = genRanks.GraceOfAirTotem.BySpellID(25359)
+var wrathOfAirTotemRank = genRanks.WrathOfAirTotem.BySpellID(3738)
+var manaSpringTotemRank = genRanks.ManaSpringTotem.BySpellID(25570)
+
+func (shaman *Shaman) newTotemSpellConfig(flatCost int32, spellID int32, spellMask int64, gcd time.Duration) core.SpellConfig {
 	return core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: spellID},
 		DefenseType:    core.DefenseTypeMagic,
@@ -20,7 +26,7 @@ func (shaman *Shaman) newTotemSpellConfig(flatCost int32, spellID int32, spellMa
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: time.Second,
+				GCD: gcd,
 			},
 		},
 	}
@@ -47,7 +53,7 @@ func (shaman *Shaman) registerWindfuryTotemSpell() {
 		},
 	})
 
-	config := shaman.newTotemSpellConfig(325, 25587, SpellMaskBasicTotem)
+	config := shaman.newTotemSpellConfig(windfuryTotemRank.Cost, windfuryTotemRank.SpellID, SpellMaskBasicTotem, windfuryTotemRank.GCD)
 
 	var windfurySpell *core.Spell
 	wfProcTrigger := shaman.MakeProcTriggerAura(core.ProcTrigger{
@@ -131,7 +137,7 @@ func (shaman *Shaman) registerWindfuryTotemSpell() {
 func (shaman *Shaman) registerStrengthOfEarthTotemSpell() {
 	duration := time.Second * 120
 	value := core.StrengthOfEarthTotemValue(shaman.Talents.EnhancingTotems, shaman.CouldHaveSetBonus(ItemSetCycloneHarness, 2))
-	config := shaman.newTotemSpellConfig(300, 25528, SpellMaskBasicTotem)
+	config := shaman.newTotemSpellConfig(strengthOfEarthTotemRank.Cost, strengthOfEarthTotemRank.SpellID, SpellMaskBasicTotem, strengthOfEarthTotemRank.GCD)
 	buffAura := shaman.RegisterAura(core.Aura{
 		Label:    "Strength Of Earth Totem (Self)",
 		ActionID: config.ActionID,
@@ -160,7 +166,7 @@ func (shaman *Shaman) registerStrengthOfEarthTotemSpell() {
 func (shaman *Shaman) registerGraceOfAirTotemSpell() {
 	duration := time.Second * 120
 	value := 77 * []float64{1, 1.08, 1.15}[shaman.Talents.EnhancingTotems]
-	config := shaman.newTotemSpellConfig(310, 25359, SpellMaskBasicTotem)
+	config := shaman.newTotemSpellConfig(graceOfAirTotemRank.Cost, graceOfAirTotemRank.SpellID, SpellMaskBasicTotem, graceOfAirTotemRank.GCD)
 	buffAura := shaman.RegisterAura(core.Aura{
 		Label:    "Grace Of Air Totem (Self)",
 		ActionID: config.ActionID,
@@ -190,7 +196,7 @@ func (shaman *Shaman) registerWrathOfAirTotemSpell() {
 	value := core.WrathOfAirTotemValue(shaman.Character.CouldHaveSetBonus(ItemSetCycloneRegalia, 2))
 
 	duration := time.Second * 120
-	config := shaman.newTotemSpellConfig(320, 3738, SpellMaskBasicTotem)
+	config := shaman.newTotemSpellConfig(wrathOfAirTotemRank.Cost, wrathOfAirTotemRank.SpellID, SpellMaskBasicTotem, wrathOfAirTotemRank.GCD)
 	buffAura := shaman.RegisterAura(core.Aura{
 		Label:    "Wrath Of Air Totem (Self)",
 		ActionID: config.ActionID,
@@ -230,7 +236,7 @@ func (shaman *Shaman) registerWrathOfAirTotemSpell() {
 func (shaman *Shaman) registerManaSpringTotemSpell() {
 	duration := time.Second * 120
 	value := 50 * (1 + 0.05*float64(shaman.Talents.RestorativeTotems))
-	config := shaman.newTotemSpellConfig(120, 25570, SpellMaskBasicTotem)
+	config := shaman.newTotemSpellConfig(manaSpringTotemRank.Cost, manaSpringTotemRank.SpellID, SpellMaskBasicTotem, manaSpringTotemRank.GCD)
 	buffAura := shaman.RegisterAura(core.Aura{
 		Label:    "Mana Spring Totem (Self)",
 		ActionID: config.ActionID,
@@ -257,7 +263,7 @@ func (shaman *Shaman) registerManaSpringTotemSpell() {
 }
 
 /* func (shaman *Shaman) registerHealingStreamTotemSpell() {
-	config := shaman.newTotemSpellConfig(3, 5394, SpellMaskBasicTotem)
+	config := shaman.newTotemSpellConfig(3, 5394, SpellMaskBasicTotem, time.Second)
 	hsHeal := shaman.RegisterSpell(core.SpellConfig{
 		ActionID:         core.ActionID{SpellID: 5394},
 		SpellSchool:      core.SpellSchoolNature,

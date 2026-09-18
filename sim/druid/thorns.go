@@ -4,6 +4,8 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var thornsRank = genRanks.Thorns.BySpellID(26992)
+
 // Self-cast Thorns (rank 7). Reuses the core raid-buff aura, passing the
 // druid's own Brambles talent points. If the Thorns raid buff is selected it
 // is already registered (buffs apply before Initialize) and wins; otherwise
@@ -15,19 +17,20 @@ func (druid *Druid) registerThornsSpell() {
 	}
 
 	druid.RegisterSpell(Humanoid, core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 26992},
+		ActionID:       core.ActionID{SpellID: thornsRank.SpellID},
 		SpellSchool:    core.SpellSchoolNature,
 		DefenseType:    core.DefenseTypeMagic,
 		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
 		ClassSpellMask: DruidSpellThorns,
 		ProcMask:       core.ProcMaskEmpty,
+		MaxRange:       thornsRank.MaxRange,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 400,
+			FlatCost: thornsRank.Cost,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: thornsRank.GCD,
 			},
 		},
 

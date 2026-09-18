@@ -4,6 +4,8 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var bloodlustRank = genRanks.Bloodlust.BySpellID(2825)
+
 func (shaman *Shaman) BloodlustActionID() core.ActionID {
 	return core.ActionID{
 		SpellID: 2825,
@@ -27,11 +29,11 @@ func (shaman *Shaman) registerBloodlustCD() {
 		ClassSpellMask: SpellMaskBloodlust,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 750,
+			FlatCost: bloodlustRank.Cost,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: bloodlustRank.GCD,
 			},
 			CD: core.Cooldown{
 				Timer:    shaman.NewTimer(),

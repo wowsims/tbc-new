@@ -3,9 +3,12 @@ package hunter
 import (
 	"math"
 
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/stats"
 )
+
+var aspectOfTheHawkRank = genRanks.AspectOfTheHawk.BySpellID(27044)
 
 func (hunter *Hunter) registerAspectOfTheHawkSpell() {
 	actionID := core.ActionID{SpellID: 27044}
@@ -14,7 +17,7 @@ func (hunter *Hunter) registerAspectOfTheHawkSpell() {
 		Label:      "Aspect of the Hawk",
 		ActionID:   actionID,
 		BuildPhase: core.CharacterBuildPhaseBase,
-	}).AttachStatBuff(stats.RangedAttackPower, 155))
+	}).AttachStatBuff(stats.RangedAttackPower, shared.SpellRankMin(aspectOfTheHawkRank.Direct)))
 
 	hunter.AspectOfTheHawk = hunter.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
@@ -24,12 +27,12 @@ func (hunter *Hunter) registerAspectOfTheHawkSpell() {
 		Flags:          core.SpellFlagAPL,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 140,
+			FlatCost: aspectOfTheHawkRank.Cost,
 		},
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: aspectOfTheHawkRank.GCD,
 			},
 			IgnoreHaste: true,
 		},
@@ -63,6 +66,9 @@ func (hunter *Hunter) registerAspectOfTheViper() {
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
+				// Aspect of the Viper has no generated row - it carries no "Rank N" subtext, so the
+				// ladder discovery never sees it. See the not-generated list at the head of
+				// spell_ranks_auto_gen.go.
 				GCD: core.GCDDefault,
 			},
 			IgnoreHaste: true,

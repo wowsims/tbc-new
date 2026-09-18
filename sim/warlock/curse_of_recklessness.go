@@ -4,6 +4,8 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var curseOfRecklessnessRank = genRanks.CurseOfRecklessness.BySpellID(27226)
+
 func (warlock *Warlock) registerCurseOfRecklessness() {
 	warlock.CurseOfRecklessnessAuras = warlock.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {
 		return core.CurseOfRecklessnessAura(target, 1)
@@ -17,11 +19,11 @@ func (warlock *Warlock) registerCurseOfRecklessness() {
 		ClassSpellMask: WarlockSpellCurseOfRecklessness,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 160,
+			FlatCost: curseOfRecklessnessRank.Cost,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: curseOfRecklessnessRank.GCD,
 			},
 		},
 

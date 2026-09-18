@@ -21,6 +21,7 @@ func (priest *Priest) registerVampiricTouchSpell(rank shared.SpellRank) {
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: PriestSpellVampiricTouch,
 		Rank:           rank.Rank,
+		MaxRange:       rank.MaxRange,
 
 		ManaCost: core.ManaCostOptions{
 			FlatCost: rank.Cost,
@@ -29,7 +30,7 @@ func (priest *Priest) registerVampiricTouchSpell(rank shared.SpellRank) {
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD:      core.GCDDefault,
-				CastTime: 1500 * time.Millisecond,
+				CastTime: rank.CastTime,
 			},
 		},
 
@@ -56,7 +57,7 @@ func (priest *Priest) registerVampiricTouchSpell(rank shared.SpellRank) {
 			NumberOfTicks:       5,
 			TickLength:          3 * time.Second,
 			AffectedByCastSpeed: false,
-			BonusCoefficient:    shared.SpellRankCoef(rank.Periodic),
+			BonusCoefficient:    rank.Periodic.BonusCoefficient(),
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, shared.SpellRankMin(rank.Periodic))

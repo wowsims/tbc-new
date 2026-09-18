@@ -3,15 +3,18 @@ package druid
 import (
 	"time"
 
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var tigersFuryRank = genRanks.TigersFury.BySpellID(9846)
+
 func (druid *Druid) registerTigersFurySpell() {
-	const weaponDamageBonus = 40.0
+	weaponDamageBonus := shared.SpellRankMin(tigersFuryRank.Direct)
 
 	druid.TigersFuryAura = druid.RegisterAura(core.Aura{
 		Label:    "Tiger's Fury",
-		ActionID: core.ActionID{SpellID: 9846},
+		ActionID: core.ActionID{SpellID: tigersFuryRank.SpellID},
 		Duration: time.Second * 6,
 
 		OnGain: func(aura *core.Aura, sim *core.Simulation) {
@@ -25,18 +28,18 @@ func (druid *Druid) registerTigersFurySpell() {
 	})
 
 	druid.TigersFury = druid.RegisterSpell(Cat, core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 9846},
+		ActionID:       core.ActionID{SpellID: tigersFuryRank.SpellID},
 		ClassSpellMask: DruidSpellTigersFury,
 		Flags:          core.SpellFlagAPL,
 
 		EnergyCost: core.EnergyCostOptions{
-			Cost: 30,
+			Cost: tigersFuryRank.Cost,
 		},
 		Cast: core.CastConfig{
 			IgnoreHaste: true,
 			CD: core.Cooldown{
 				Timer:    druid.NewTimer(),
-				Duration: time.Second,
+				Duration: tigersFuryRank.Cooldown,
 			},
 		},
 

@@ -223,11 +223,13 @@ func (shaman *Shaman) applyShamanisticFocus() {
 	})
 }
 
+var shamanisticRageRank = genRanks.ShamanisticRage.BySpellID(30823)
+
 func (shaman *Shaman) applyShamanisticRage() {
 	if !shaman.Talents.ShamanisticRage {
 		return
 	}
-	actionId := core.ActionID{SpellID: 30823}
+	actionId := core.ActionID{SpellID: shamanisticRageRank.SpellID}
 	srManaMetric := shaman.NewManaMetrics(actionId)
 	shamRageAura := shaman.MakeProcTriggerAura(core.ProcTrigger{
 		Name:               "Shamanistic Rage",
@@ -250,11 +252,11 @@ func (shaman *Shaman) applyShamanisticRage() {
 		ClassSpellMask: SpellMaskShamanisticRage,
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: shamanisticRageRank.GCD,
 			},
 			CD: core.Cooldown{
 				Timer:    shaman.NewTimer(),
-				Duration: time.Second * 120,
+				Duration: shamanisticRageRank.Cooldown,
 			},
 		},
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {

@@ -19,6 +19,7 @@ func (priest *Priest) registerShadowWordPainSpell(rank shared.SpellRank) {
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: PriestSpellShadowWordPain,
 		Rank:           rank.Rank,
+		MaxRange:       rank.MaxRange,
 
 		ManaCost: core.ManaCostOptions{
 			FlatCost: rank.Cost,
@@ -41,7 +42,7 @@ func (priest *Priest) registerShadowWordPainSpell(rank shared.SpellRank) {
 			NumberOfTicks:       6,
 			TickLength:          3 * time.Second,
 			AffectedByCastSpeed: false, // DoT ticks not haste-affected in TBC
-			BonusCoefficient:    shared.SpellRankCoef(rank.Periodic),
+			BonusCoefficient:    rank.Periodic.BonusCoefficient(),
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, shared.SpellRankMin(rank.Periodic))

@@ -1,12 +1,11 @@
 package warlock
 
 import (
-	"time"
-
 	"github.com/wowsims/tbc/sim/core"
 )
 
-const incinerateCoeff = 0.714
+var incinerateRank = genRanks.Incinerate.BySpellID(32231)
+var incinerateCoeff = incinerateRank.Direct.BonusCoefficient()
 
 func (warlock *Warlock) registerIncinerate() {
 	warlock.RegisterSpell(core.SpellConfig{
@@ -17,11 +16,11 @@ func (warlock *Warlock) registerIncinerate() {
 		MissileSpeed:   24,
 		ClassSpellMask: WarlockSpellIncinerate,
 
-		ManaCost: core.ManaCostOptions{FlatCost: 355},
+		ManaCost: core.ManaCostOptions{FlatCost: incinerateRank.Cost},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD:      core.GCDDefault,
-				CastTime: 2500 * time.Millisecond,
+				GCD:      incinerateRank.GCD,
+				CastTime: incinerateRank.CastTime,
 			},
 		},
 
@@ -31,7 +30,7 @@ func (warlock *Warlock) registerIncinerate() {
 		BonusCoefficient:         incinerateCoeff,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := warlock.CalcAndRollDamageRange(sim, 444, 514)
+			baseDamage := incinerateRank.Direct.Damage(sim)
 			if warlock.Immolate.Dot(target).IsActive() {
 				baseDamage += sim.Roll(111, 128)
 			}

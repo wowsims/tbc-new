@@ -3,10 +3,13 @@ package warlock
 import (
 	"time"
 
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
 
-const uaCoeff = 0.2
+var uaRank = genRanks.UnstableAffliction.BySpellID(30405)
+var uaTick = uaRank.Periodic.(shared.SpellRankPeriodic)
+var uaCoeff = uaTick.Coef
 
 func (warlock *Warlock) registerUnstableAffliction() {
 	warlock.UnstableAffliction = warlock.RegisterSpell(core.SpellConfig{
@@ -17,11 +20,11 @@ func (warlock *Warlock) registerUnstableAffliction() {
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: WarlockSpellUnstableAffliction,
 
-		ManaCost: core.ManaCostOptions{FlatCost: 400},
+		ManaCost: core.ManaCostOptions{FlatCost: uaRank.Cost},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD:      core.GCDDefault,
-				CastTime: 1500 * time.Millisecond,
+				GCD:      uaRank.GCD,
+				CastTime: uaRank.CastTime,
 			},
 		},
 
@@ -41,12 +44,12 @@ func (warlock *Warlock) registerUnstableAffliction() {
 				Tag:      "Affliction",
 				ActionID: core.ActionID{SpellID: 30108},
 			},
-			NumberOfTicks:    6,
-			TickLength:       3 * time.Second,
+			NumberOfTicks:    uaTick.Ticks,
+			TickLength:       uaTick.Period,
 			BonusCoefficient: uaCoeff,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.Snapshot(target, 1050/float64(dot.BaseTickCount))
+				dot.Snapshot(target, uaTick.Tick)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
@@ -60,7 +63,7 @@ func (warlock *Warlock) registerUnstableAffliction() {
 				result.Damage /= dot.TickPeriod().Seconds()
 				return result
 			} else {
-				result := spell.CalcPeriodicDamage(sim, target, 1050, spell.OutcomeExpectedMagicHit)
+				result := spell.CalcPeriodicDamage(sim, target, uaTick.Tick*float64(uaTick.Ticks), spell.OutcomeExpectedMagicHit)
 				result.Damage /= dot.CalcTickPeriod().Round(time.Millisecond).Seconds()
 				return result
 			}

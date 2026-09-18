@@ -10,9 +10,13 @@ import "github.com/wowsims/tbc/sim/core"
 func (paladin *Paladin) registerRighteousFury() {
 	actionID := core.ActionID{SpellID: 25780}
 
-	// Base RF = 60% threat. Improved RF multiplies this by (1 + rank/6):
-	// Rank 0: 60%, Rank 1: 70%, Rank 2: 80%, Rank 3: 90%
-	threatBonus := 0.6 * (1 + float64(paladin.Talents.ImprovedRighteousFury)/6)
+	// Base RF = 60% threat, which Improved Righteous Fury raises by the talent's own per-rank
+	// percentage: 16 / 33 / 50, so 69.6% / 79.8% / 90%.
+	threatBonus := 0.6
+	if rank := paladin.Talents.ImprovedRighteousFury; rank > 0 {
+		pct, _ := genRanks.ImprovedRighteousFury.ByRank(rank).Direct.Range()
+		threatBonus *= 1 + pct/100
+	}
 
 	rfAura := paladin.RegisterAura(core.Aura{
 		Label:    "Righteous Fury",

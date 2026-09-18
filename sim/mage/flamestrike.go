@@ -57,7 +57,7 @@ func (mage *Mage) registerFlamestrike(rankConfig shared.SpellRank) {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			baseDamage := mage.CalcAndRollDamageRange(sim, shared.SpellRankMin(rankConfig.Direct), shared.SpellRankMax(rankConfig.Direct))
+			baseDamage := rankConfig.Direct.Damage(sim)
 			spell.CalcAndDealAoeDamage(sim, baseDamage, spell.OutcomeMagicHitAndCrit)
 			spell.AOEDot().Apply(sim)
 		},

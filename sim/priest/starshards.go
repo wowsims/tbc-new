@@ -22,6 +22,7 @@ func (priest *Priest) registerStarshardsSpell(rank shared.SpellRank, cdTimer *co
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: PriestSpellStarshards,
 		Rank:           rank.Rank,
+		MaxRange:       rank.MaxRange,
 
 		ManaCost: core.ManaCostOptions{
 			FlatCost: 0,
@@ -33,7 +34,7 @@ func (priest *Priest) registerStarshardsSpell(rank shared.SpellRank, cdTimer *co
 			},
 			CD: core.Cooldown{
 				Timer:    cdTimer,
-				Duration: 30 * time.Second,
+				Duration: rank.Cooldown,
 			},
 		},
 
@@ -48,7 +49,7 @@ func (priest *Priest) registerStarshardsSpell(rank shared.SpellRank, cdTimer *co
 			NumberOfTicks:       5,
 			TickLength:          3 * time.Second,
 			AffectedByCastSpeed: false,
-			BonusCoefficient:    shared.SpellRankCoef(rank.Periodic),
+			BonusCoefficient:    rank.Periodic.BonusCoefficient(),
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, shared.SpellRankMin(rank.Periodic))

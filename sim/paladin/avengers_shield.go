@@ -1,8 +1,6 @@
 package paladin
 
 import (
-	"time"
-
 	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
@@ -34,7 +32,7 @@ func (paladin *Paladin) registerAvengersShield(rankConfig shared.SpellRank) {
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
 
-		MaxRange:     30,
+		MaxRange:     rankConfig.MaxRange,
 		MissileSpeed: 35,
 
 		ManaCost: core.ManaCostOptions{
@@ -42,12 +40,12 @@ func (paladin *Paladin) registerAvengersShield(rankConfig shared.SpellRank) {
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD:      time.Second,
-				CastTime: time.Second,
+				GCD:      rankConfig.GCD,
+				CastTime: rankConfig.CastTime,
 			},
 			CD: core.Cooldown{
 				Timer:    paladin.getAvengersShieldTimer(),
-				Duration: time.Second * 30,
+				Duration: rankConfig.Cooldown,
 			},
 			ModifyCast: func(sim *core.Simulation, spell *core.Spell, cast *core.Cast) {
 				castTime := paladin.ApplyCastSpeedForSpell(cast.CastTime, spell)
@@ -55,10 +53,10 @@ func (paladin *Paladin) registerAvengersShield(rankConfig shared.SpellRank) {
 			},
 		},
 
-		BonusCoefficient: shared.SpellRankCoef(rankConfig.Direct),
+		BonusCoefficient: rankConfig.Direct.BonusCoefficient(),
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			damage := sim.Roll(shared.SpellRankMin(rankConfig.Direct), shared.SpellRankMax(rankConfig.Direct))
+			damage := rankConfig.Direct.Damage(sim)
 			results := spell.CalcCleaveDamage(sim, target, 3, damage, spell.OutcomeRangedHitAndCrit)
 			spell.WaitTravelTime(sim, func(sim *core.Simulation) {
 				for _, result := range results {

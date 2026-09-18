@@ -1,14 +1,12 @@
 package mage
 
 import (
-	"time"
-
 	"github.com/wowsims/tbc/sim/core"
 )
 
-func (mage *Mage) registerFireBlastSpell() {
+var fireBlastRank = genRanks.FireBlast.BySpellID(27079)
 
-	fireBlastCoefficient := 0.42899999022 // Per https://wago.tools/db2/SpellEffect?build=2.5.5.65295&filter%5BSpellID%5D=exact%253A2136 Field: "BonusCoefficient"
+func (mage *Mage) registerFireBlastSpell() {
 
 	mage.FireBlast = mage.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 27079},
@@ -19,23 +17,23 @@ func (mage *Mage) registerFireBlastSpell() {
 		ClassSpellMask: MageSpellFireBlast,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 465,
+			FlatCost: fireBlastRank.Cost,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: fireBlastRank.GCD,
 			},
 			CD: core.Cooldown{
 				Timer:    mage.NewTimer(),
-				Duration: time.Second * 8,
+				Duration: fireBlastRank.Cooldown,
 			},
 		},
 
 		DamageMultiplier: 1,
-		BonusCoefficient: fireBlastCoefficient,
+		BonusCoefficient: fireBlastRank.Direct.BonusCoefficient(),
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := mage.CalcAndRollDamageRange(sim, 664, 786)
+			baseDamage := fireBlastRank.Direct.Damage(sim)
 			spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
 		},
 	})

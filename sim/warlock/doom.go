@@ -1,18 +1,19 @@
 package warlock
 
 import (
-	"time"
-
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
 
-const doomCoeff = 2
+var doomRank = genRanks.CurseOfDoom.BySpellID(30910)
+var doomTick = doomRank.Periodic.(shared.SpellRankPeriodic)
+var doomCoeff = doomTick.Coef
 
 func (warlock *Warlock) registerCurseOfDoom() {
 
 	calculateBaseDamage := func() float64 {
 		damageMultiplier := core.TernaryFloat64(warlock.AmplifyCurseAura != nil && warlock.AmplifyCurseAura.IsActive(), 1.5, 1.0)
-		return 4200 * damageMultiplier
+		return doomTick.Tick * damageMultiplier
 	}
 
 	warlock.CurseOfDoom = warlock.RegisterSpell(core.SpellConfig{
@@ -25,11 +26,11 @@ func (warlock *Warlock) registerCurseOfDoom() {
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: doomRank.GCD,
 			},
 			CD: core.Cooldown{
 				Timer:    warlock.NewTimer(),
-				Duration: time.Second * 60,
+				Duration: doomRank.Cooldown,
 			},
 		},
 
@@ -51,8 +52,8 @@ func (warlock *Warlock) registerCurseOfDoom() {
 				Label: "Doom",
 				Tag:   "Affliction",
 			},
-			NumberOfTicks:            1,
-			TickLength:               1 * time.Minute,
+			NumberOfTicks:            doomTick.Ticks,
+			TickLength:               doomTick.Period,
 			BonusCoefficient:         doomCoeff,
 			PeriodicDamageMultiplier: 1,
 

@@ -3,11 +3,15 @@ package druid
 import (
 	"time"
 
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var frenziedRegenerationRank = genRanks.FrenziedRegeneration.BySpellID(26999)
+var frenziedRegenerationTick = frenziedRegenerationRank.Periodic.(shared.SpellRankPeriodic)
+
 func (druid *Druid) registerFrenziedRegenerationSpell() {
-	actionID := core.ActionID{SpellID: 26999}
+	actionID := core.ActionID{SpellID: frenziedRegenerationRank.SpellID}
 	rageMetrics := druid.NewRageMetrics(actionID)
 
 	druid.FrenziedRegenerationAura = druid.RegisterAura(core.Aura{
@@ -31,11 +35,11 @@ func (druid *Druid) registerFrenziedRegenerationSpell() {
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: frenziedRegenerationRank.GCD,
 			},
 			CD: core.Cooldown{
 				Timer:    druid.NewTimer(),
-				Duration: 3 * time.Minute,
+				Duration: frenziedRegenerationRank.Cooldown,
 			},
 			IgnoreHaste: true,
 		},
@@ -44,14 +48,14 @@ func (druid *Druid) registerFrenziedRegenerationSpell() {
 			druid.FrenziedRegenerationAura.Activate(sim)
 			// Converts up to 10 rage per second into 25 health per rage, for 10 sec.
 			core.StartPeriodicAction(sim, core.PeriodicActionOptions{
-				Period:   time.Second,
-				NumTicks: 10,
+				Period:   frenziedRegenerationTick.Period,
+				NumTicks: int(frenziedRegenerationTick.Ticks),
 				Priority: core.ActionPriorityDOT,
 				OnAction: func(sim *core.Simulation) {
 					rage := min(druid.CurrentRage(), 10)
 					if rage > 0 {
 						druid.SpendRage(sim, rage, rageMetrics)
-						spell.CalcAndDealPeriodicHealing(sim, &druid.Unit, rage*25, spell.OutcomeHealing)
+						spell.CalcAndDealPeriodicHealing(sim, &druid.Unit, rage*frenziedRegenerationTick.Tick, spell.OutcomeHealing)
 					}
 				},
 			})

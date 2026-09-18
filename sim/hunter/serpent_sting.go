@@ -1,12 +1,15 @@
 package hunter
 
 import (
-	"time"
-
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var serpentStingRank = genRanks.SerpentSting.BySpellID(27016)
+
 func (hunter *Hunter) registerSerpentStingSpell() {
+	serpentStingTick := serpentStingRank.Periodic.(shared.SpellRankPeriodic)
+
 	hunter.SerpentSting = hunter.RegisterRangedSpell(core.SpellConfig{
 		ActionID:    core.ActionID{SpellID: 27016},
 		SpellSchool: core.SpellSchoolNature,
@@ -19,7 +22,7 @@ func (hunter *Hunter) registerSerpentStingSpell() {
 		Flags:          core.SpellFlagAPL,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 275,
+			FlatCost: serpentStingRank.Cost,
 		},
 
 		Dot: core.DotConfig{
@@ -28,10 +31,10 @@ func (hunter *Hunter) registerSerpentStingSpell() {
 				Tag:   "Sting",
 			},
 
-			NumberOfTicks: 5,
-			TickLength:    time.Second * 3,
+			NumberOfTicks: serpentStingTick.Ticks,
+			TickLength:    serpentStingTick.Period,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				baseDmg := dot.Spell.RangedAttackPower(target)*0.02 + 132
+				baseDmg := dot.Spell.RangedAttackPower(target)*0.02 + serpentStingRank.Periodic.Damage(sim)
 				dot.Snapshot(target, baseDmg)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {

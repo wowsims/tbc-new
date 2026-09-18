@@ -2,12 +2,14 @@ package warlock
 
 import (
 	"math"
-	"time"
 
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
 
-const drainLifeCoeff = 0.143
+var drainLifeRank = genRanks.DrainLife.BySpellID(27220)
+var drainLifeTick = drainLifeRank.Periodic.(shared.SpellRankPeriodic)
+var drainLifeCoeff = drainLifeTick.Coef
 
 func (warlock *Warlock) registerDrainLife() {
 	healthMetric := warlock.NewHealthMetrics(core.ActionID{SpellID: 27220})
@@ -26,8 +28,8 @@ func (warlock *Warlock) registerDrainLife() {
 		Flags:          core.SpellFlagChanneled | core.SpellFlagAPL,
 		ClassSpellMask: WarlockSpellDrainLife,
 
-		ManaCost: core.ManaCostOptions{FlatCost: 425},
-		Cast:     core.CastConfig{DefaultCast: core.Cast{GCD: core.GCDDefault}},
+		ManaCost: core.ManaCostOptions{FlatCost: drainLifeRank.Cost},
+		Cast:     core.CastConfig{DefaultCast: core.Cast{GCD: drainLifeRank.GCD}},
 
 		DamageMultiplierAdditive: 1,
 		ThreatMultiplier:         1,
@@ -35,13 +37,13 @@ func (warlock *Warlock) registerDrainLife() {
 
 		Dot: core.DotConfig{
 			Aura:                 core.Aura{Label: "Drain Life"},
-			NumberOfTicks:        5,
-			TickLength:           1 * time.Second,
+			NumberOfTicks:        drainLifeTick.Ticks,
+			TickLength:           drainLifeTick.Period,
 			AffectedByCastSpeed:  true,
 			HasteReducesDuration: true,
 			BonusCoefficient:     drainLifeCoeff,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.Snapshot(target, 108)
+				dot.Snapshot(target, drainLifeTick.Tick)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.PeriodicDamageMultiplier = math.Max(1, math.Min(1+(0.02*float64(warlock.Talents.SoulSiphon)*warlock.AfflictionCount(target)), cappedDmgBonus))

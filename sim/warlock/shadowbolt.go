@@ -1,12 +1,11 @@
 package warlock
 
 import (
-	"time"
-
 	"github.com/wowsims/tbc/sim/core"
 )
 
-const shadowBoltCoeff = 0.857
+var shadowBoltRank = genRanks.ShadowBolt.BySpellID(27209)
+var shadowBoltCoeff = shadowBoltRank.Direct.BonusCoefficient()
 
 func (warlock *Warlock) registerShadowBolt() {
 
@@ -18,11 +17,11 @@ func (warlock *Warlock) registerShadowBolt() {
 		ClassSpellMask: WarlockSpellShadowBolt,
 		MissileSpeed:   20,
 
-		ManaCost: core.ManaCostOptions{FlatCost: 420},
+		ManaCost: core.ManaCostOptions{FlatCost: shadowBoltRank.Cost},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD:      core.GCDDefault,
-				CastTime: 3000 * time.Millisecond,
+				GCD:      shadowBoltRank.GCD,
+				CastTime: shadowBoltRank.CastTime,
 			},
 		},
 
@@ -32,7 +31,7 @@ func (warlock *Warlock) registerShadowBolt() {
 		BonusCoefficient:         shadowBoltCoeff,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			dmgRoll := warlock.CalcAndRollDamageRange(sim, 544, 607)
+			dmgRoll := shadowBoltRank.Direct.Damage(sim)
 			result := spell.CalcDamage(sim, target, dmgRoll, spell.OutcomeMagicHitAndCrit)
 			existingAura := target.GetAurasWithTag("ImprovedShadowBolt")
 

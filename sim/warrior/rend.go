@@ -1,14 +1,17 @@
 package warrior
 
 import (
-	"time"
-
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var rendRank = genRanks.Rend.BySpellID(25208)
+
 func (war *Warrior) registerRend() {
+	tick := rendRank.Periodic.(shared.SpellRankPeriodic)
+
 	war.Rend = war.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 25208},
+		ActionID:       core.ActionID{SpellID: rendRank.SpellID},
 		SpellSchool:    core.SpellSchoolPhysical,
 		DefenseType:    core.DefenseTypeMelee,
 		ClassSpellMask: SpellMaskRend,
@@ -16,12 +19,12 @@ func (war *Warrior) registerRend() {
 		Flags:          core.SpellFlagNoOnCastComplete | core.SpellFlagAPL,
 
 		RageCost: core.RageCostOptions{
-			Cost:   10,
+			Cost:   rendRank.Cost,
 			Refund: 0.8,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: rendRank.GCD,
 			},
 			IgnoreHaste: true,
 		},
@@ -37,10 +40,10 @@ func (war *Warrior) registerRend() {
 			Aura: core.Aura{
 				Label: "Rend",
 			},
-			NumberOfTicks: 7,
-			TickLength:    time.Second * 3,
+			NumberOfTicks: tick.Ticks,
+			TickLength:    tick.Period,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.SnapshotBaseDamage = float64(182/dot.BaseTickCount) + war.AutoAttacks.MH().CalculateAverageWeaponDamage(dot.Spell.MeleeAttackPower(target))*0.00743
+				dot.SnapshotBaseDamage = tick.Tick + war.AutoAttacks.MH().CalculateAverageWeaponDamage(dot.Spell.MeleeAttackPower(target))*0.00743
 				dot.SnapshotAttackerMultiplier = dot.Spell.AttackerDamageMultiplier(dot.Spell.Unit.AttackTables[target.UnitIndex], true)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {

@@ -1,10 +1,10 @@
 package mage
 
 import (
-	"time"
-
 	"github.com/wowsims/tbc/sim/core"
 )
+
+var arcaneBlastRank = genRanks.ArcaneBlast.BySpellID(30451)
 
 func (mage *Mage) registerArcaneBlastSpell() {
 
@@ -19,12 +19,12 @@ func (mage *Mage) registerArcaneBlastSpell() {
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: MageSpellArcaneBlast,
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 195,
+			FlatCost: arcaneBlastRank.Cost,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD:      core.GCDDefault,
-				CastTime: time.Millisecond * 2500,
+				GCD:      arcaneBlastRank.GCD,
+				CastTime: arcaneBlastRank.CastTime,
 			},
 		},
 
@@ -33,7 +33,7 @@ func (mage *Mage) registerArcaneBlastSpell() {
 		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := mage.CalcAndRollDamageRange(sim, 668, 772)
+			baseDamage := arcaneBlastRank.Direct.Damage(sim)
 			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
 			if result.Landed() {
 				mage.ArcaneChargesAura.Activate(sim)

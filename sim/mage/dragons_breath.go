@@ -1,12 +1,12 @@
 package mage
 
 import (
-	"time"
-
 	"github.com/wowsims/tbc/sim/core"
 )
 
 const dragonsBreathCoefficient = 0.1930000037
+
+var dragonsBreathRank = genRanks.DragonsBreath.BySpellID(33043)
 
 func (mage *Mage) registerDragonsBreathSpell() {
 	if !mage.Talents.DragonsBreath {
@@ -22,25 +22,25 @@ func (mage *Mage) registerDragonsBreathSpell() {
 		ClassSpellMask: MageSpellDragonsBreath,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 700,
+			FlatCost: dragonsBreathRank.Cost,
 		},
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: dragonsBreathRank.GCD,
 			},
 			CD: core.Cooldown{
 				Timer:    mage.NewTimer(),
-				Duration: time.Second * 20,
+				Duration: dragonsBreathRank.Cooldown,
 			},
 		},
 
 		DamageMultiplier: 1,
-		BonusCoefficient: dragonsBreathCoefficient,
+		BonusCoefficient: dragonsBreathRank.Direct.BonusCoefficient(),
 		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			baseDamage := mage.CalcAndRollDamageRange(sim, 680, 790)
+			baseDamage := dragonsBreathRank.Direct.Damage(sim)
 			spell.CalcAndDealAoeDamage(sim, baseDamage, spell.OutcomeMagicHitAndCrit)
 		},
 	})

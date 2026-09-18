@@ -314,6 +314,8 @@ func (hunter *Hunter) registerImprovedArcaneShot() {
 	})
 }
 
+var aimedShotRank = genRanks.AimedShot.BySpellID(27065)
+
 func (hunter *Hunter) registerAimedShot() {
 	hunter.AimedShot = hunter.RegisterRangedSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 27065},
@@ -324,7 +326,7 @@ func (hunter *Hunter) registerAimedShot() {
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 370,
+			FlatCost: aimedShotRank.Cost,
 		},
 
 		Cast: core.CastConfig{
@@ -333,17 +335,17 @@ func (hunter *Hunter) registerAimedShot() {
 			},
 			CD: core.Cooldown{
 				Timer:    hunter.NewTimer(),
-				Duration: time.Second * 6,
+				Duration: aimedShotRank.Cooldown,
 			},
 		},
 
-		BonusCoefficient: 1,
+		BonusCoefficient: aimedShotRank.Direct.BonusCoefficient(),
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			baseDamage := 0.2*spell.RangedAttackPower(target) +
 				hunter.AutoAttacks.Ranged().BaseDamage(sim) +
 				hunter.talonOfAlarBonus() +
-				870
+				aimedShotRank.Direct.Damage(sim)
 
 			result := spell.CalcDamage(sim, target, baseDamage, spell.OutcomeRangedHitAndCrit)
 

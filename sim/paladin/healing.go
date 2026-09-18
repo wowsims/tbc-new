@@ -24,7 +24,7 @@ func (paladin *Paladin) registerHolyLight(rankConfig shared.SpellRank) {
 	cost := rankConfig.Cost
 	minHealing := shared.SpellRankMin(rankConfig.Heal)
 	maxHealing := shared.SpellRankMax(rankConfig.Heal)
-	coefficient := shared.SpellRankCoef(rankConfig.Heal)
+	coefficient := rankConfig.Heal.BonusCoefficient()
 
 	paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: spellID},
@@ -38,7 +38,7 @@ func (paladin *Paladin) registerHolyLight(rankConfig shared.SpellRank) {
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
 
-		MaxRange: 40,
+		MaxRange: rankConfig.MaxRange,
 
 		ManaCost: core.ManaCostOptions{
 			FlatCost: cost,
@@ -46,7 +46,7 @@ func (paladin *Paladin) registerHolyLight(rankConfig shared.SpellRank) {
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD:      core.GCDDefault,
-				CastTime: time.Millisecond * 2500,
+				CastTime: rankConfig.CastTime,
 			},
 		},
 
@@ -69,7 +69,7 @@ func (paladin *Paladin) registerFlashOfLight(rankConfig shared.SpellRank) {
 	cost := rankConfig.Cost
 	minHealing := shared.SpellRankMin(rankConfig.Heal)
 	maxHealing := shared.SpellRankMax(rankConfig.Heal)
-	coefficient := shared.SpellRankCoef(rankConfig.Heal)
+	coefficient := rankConfig.Heal.BonusCoefficient()
 
 	paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: spellID},
@@ -83,7 +83,7 @@ func (paladin *Paladin) registerFlashOfLight(rankConfig shared.SpellRank) {
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
 
-		MaxRange: 40,
+		MaxRange: rankConfig.MaxRange,
 
 		ManaCost: core.ManaCostOptions{
 			FlatCost: cost,
@@ -91,7 +91,7 @@ func (paladin *Paladin) registerFlashOfLight(rankConfig shared.SpellRank) {
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD:      core.GCDDefault,
-				CastTime: time.Millisecond * 1500,
+				CastTime: rankConfig.CastTime,
 			},
 		},
 
@@ -133,7 +133,7 @@ func (paladin *Paladin) registerLayOnHands(rankConfig shared.SpellRank) {
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
 
-		MaxRange: 40,
+		MaxRange: rankConfig.MaxRange,
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{

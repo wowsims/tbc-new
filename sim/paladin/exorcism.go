@@ -1,8 +1,6 @@
 package paladin
 
 import (
-	"time"
-
 	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
@@ -26,7 +24,7 @@ func (paladin *Paladin) registerExorcism(rankConfig shared.SpellRank) {
 	cost := rankConfig.Cost
 	minDamage := shared.SpellRankMin(rankConfig.Direct)
 	maxDamage := shared.SpellRankMax(rankConfig.Direct)
-	coefficient := shared.SpellRankCoef(rankConfig.Direct)
+	coefficient := rankConfig.Direct.BonusCoefficient()
 
 	paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: spellID},
@@ -40,7 +38,7 @@ func (paladin *Paladin) registerExorcism(rankConfig shared.SpellRank) {
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
 
-		MaxRange: 30,
+		MaxRange: rankConfig.MaxRange,
 
 		ManaCost: core.ManaCostOptions{
 			FlatCost: cost,
@@ -51,7 +49,7 @@ func (paladin *Paladin) registerExorcism(rankConfig shared.SpellRank) {
 			},
 			CD: core.Cooldown{
 				Timer:    paladin.getExorcismTimer(),
-				Duration: time.Second * 15,
+				Duration: rankConfig.Cooldown,
 			},
 		},
 

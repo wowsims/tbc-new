@@ -3,12 +3,16 @@ package druid
 import (
 	"time"
 
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var rakeRank = genRanks.Rake.BySpellID(27003)
+var rakeTick = rakeRank.Periodic.(shared.SpellRankPeriodic)
+
 func (druid *Druid) registerRakeSpell() {
 	druid.Rake = druid.RegisterSpell(Cat, core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 27003},
+		ActionID:       core.ActionID{SpellID: rakeRank.SpellID},
 		SpellSchool:    core.SpellSchoolPhysical,
 		DefenseType:    core.DefenseTypeMelee,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
@@ -16,12 +20,12 @@ func (druid *Druid) registerRakeSpell() {
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
 
 		EnergyCost: core.EnergyCostOptions{
-			Cost:   40,
+			Cost:   rakeRank.Cost,
 			Refund: 0.8,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: time.Second,
+				GCD: rakeRank.GCD,
 			},
 			IgnoreHaste: true,
 		},
@@ -35,11 +39,11 @@ func (druid *Druid) registerRakeSpell() {
 				Label:    "Rake",
 				Duration: time.Second * 9,
 			},
-			NumberOfTicks: 3,
-			TickLength:    time.Second * 3,
+			NumberOfTicks: rakeTick.Ticks,
+			TickLength:    rakeTick.Period,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.SnapshotPhysical(target, 36+0.02*dot.Spell.MeleeAttackPower(target))
+				dot.SnapshotPhysical(target, rakeTick.Tick+0.02*dot.Spell.MeleeAttackPower(target))
 				druid.UpdateBleedPower(druid.Rake, sim, target, true, true)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
@@ -48,7 +52,7 @@ func (druid *Druid) registerRakeSpell() {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := 78.0 + 0.01*spell.MeleeAttackPower(target)
+			baseDamage := rakeRank.Direct.Damage(sim) + 0.01*spell.MeleeAttackPower(target)
 			if druid.MangleAuras != nil && druid.MangleAuras.Get(target).IsActive() {
 				baseDamage *= 1.3
 			}
@@ -68,7 +72,7 @@ func (druid *Druid) registerRakeSpell() {
 				dot := spell.Dot(target)
 				return dot.CalcSnapshotDamage(sim, target, dot.OutcomeTick)
 			}
-			tickBase := 36 + 0.02*spell.MeleeAttackPower(target)
+			tickBase := rakeTick.Tick + 0.02*spell.MeleeAttackPower(target)
 			ticks := spell.CalcPeriodicDamage(sim, target, tickBase, spell.OutcomeExpectedMagicAlwaysHit)
 			attackTable := spell.Unit.AttackTables[target.UnitIndex]
 			critChance := spell.PhysicalCritChance(attackTable)

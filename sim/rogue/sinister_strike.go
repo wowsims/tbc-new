@@ -1,16 +1,16 @@
 package rogue
 
 import (
-	"time"
-
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var sinisterStrikeRank = genRanks.SinisterStrike.BySpellID(26862)
+
 func (rogue *Rogue) registerSinisterStrikeSpell() {
-	baseDamage := 98.0
+	baseDamage, _ := sinisterStrikeRank.Direct.Range()
 
 	rogue.SinisterStrike = rogue.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 26862},
+		ActionID:       core.ActionID{SpellID: sinisterStrikeRank.SpellID},
 		SpellSchool:    core.SpellSchoolPhysical,
 		DefenseType:    core.DefenseTypeMelee,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
@@ -18,12 +18,12 @@ func (rogue *Rogue) registerSinisterStrikeSpell() {
 		ClassSpellMask: RogueSpellSinisterStrike,
 
 		EnergyCost: core.EnergyCostOptions{
-			Cost:   45,
+			Cost:   sinisterStrikeRank.Cost,
 			Refund: 0.8,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: time.Second,
+				GCD: sinisterStrikeRank.GCD,
 			},
 			IgnoreHaste: true,
 		},
@@ -32,7 +32,7 @@ func (rogue *Rogue) registerSinisterStrikeSpell() {
 		DamageMultiplierAdditive: 1,
 		ThreatMultiplier:         1,
 
-		BonusCoefficient: 1,
+		BonusCoefficient: sinisterStrikeRank.Direct.BonusCoefficient(),
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			rogue.BreakStealth(sim)

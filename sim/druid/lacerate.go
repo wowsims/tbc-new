@@ -3,15 +3,18 @@ package druid
 import (
 	"time"
 
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var lacerateRank = genRanks.Lacerate.BySpellID(33745)
+var lacerateTick = lacerateRank.Periodic.(shared.SpellRankPeriodic)
+
 func (druid *Druid) registerLacerateSpell() {
-	// Base: 155 damage over 5 ticks = 31 per tick per stack.
-	tickDamageBase := 155.0 / 5
+	tickDamageBase := lacerateTick.Tick
 
 	druid.Lacerate = druid.RegisterSpell(Bear, core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 33745},
+		ActionID:       core.ActionID{SpellID: lacerateRank.SpellID},
 		SpellSchool:    core.SpellSchoolPhysical,
 		DefenseType:    core.DefenseTypeMelee,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
@@ -19,12 +22,12 @@ func (druid *Druid) registerLacerateSpell() {
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
 
 		RageCost: core.RageCostOptions{
-			Cost:   15,
+			Cost:   lacerateRank.Cost,
 			Refund: 0.8,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: lacerateRank.GCD,
 			},
 			IgnoreHaste: true,
 		},
@@ -40,8 +43,8 @@ func (druid *Druid) registerLacerateSpell() {
 				MaxStacks: 5,
 				Duration:  time.Second * 15,
 			},
-			NumberOfTicks: 5,
-			TickLength:    time.Second * 3,
+			NumberOfTicks: lacerateTick.Ticks,
+			TickLength:    lacerateTick.Period,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				perStack := tickDamageBase + druid.IdolLacerateBonus + druid.LacerateTickBonus + 0.01*dot.Spell.MeleeAttackPower(target)

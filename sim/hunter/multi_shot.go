@@ -6,6 +6,8 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var multiShotRank = genRanks.MultiShot.BySpellID(27021)
+
 func (hunter *Hunter) registerMultiShotSpell() {
 	hunter.MultiShot = hunter.RegisterRangedSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 27021},
@@ -18,7 +20,7 @@ func (hunter *Hunter) registerMultiShotSpell() {
 		MissileSpeed: 30,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 275,
+			FlatCost: multiShotRank.Cost,
 		},
 
 		Cast: core.CastConfig{
@@ -27,17 +29,17 @@ func (hunter *Hunter) registerMultiShotSpell() {
 			},
 			CD: core.Cooldown{
 				Timer:    hunter.NewTimer(),
-				Duration: time.Second * 10,
+				Duration: multiShotRank.Cooldown,
 			},
 		},
 
-		BonusCoefficient: 1,
+		BonusCoefficient: multiShotRank.Direct.BonusCoefficient(),
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			baseDamage := spell.RangedAttackPower(target)*0.2 +
 				hunter.AutoAttacks.Ranged().BaseDamage(sim) +
 				hunter.talonOfAlarBonus() +
-				205
+				multiShotRank.Direct.Damage(sim)
 
 			spell.CalcAoeDamage(sim, baseDamage, spell.OutcomeRangedHitAndCrit)
 

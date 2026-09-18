@@ -1,14 +1,14 @@
 package warrior
 
 import (
-	"time"
-
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var pummelRank = genRanks.Pummel.BySpellID(6554)
+
 func (war *Warrior) registerPummel() {
 	war.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 6554},
+		ActionID:       core.ActionID{SpellID: pummelRank.SpellID},
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
 		ClassSpellMask: SpellMaskPummel,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
@@ -17,14 +17,14 @@ func (war *Warrior) registerPummel() {
 		MaxRange:       core.MaxMeleeRange,
 
 		RageCost: core.RageCostOptions{
-			Cost:   10,
+			Cost:   pummelRank.Cost,
 			Refund: 0.8,
 		},
 
 		Cast: core.CastConfig{
 			CD: core.Cooldown{
 				Timer:    war.NewTimer(),
-				Duration: time.Second * 10,
+				Duration: pummelRank.Cooldown,
 			},
 		},
 
@@ -36,7 +36,7 @@ func (war *Warrior) registerPummel() {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := 50.0
+			baseDamage, _ := pummelRank.Direct.Range()
 			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialHitAndCrit)
 
 			if !result.Landed() {

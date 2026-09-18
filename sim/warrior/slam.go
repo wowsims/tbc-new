@@ -1,14 +1,14 @@
 package warrior
 
 import (
-	"time"
-
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var slamRank = genRanks.Slam.BySpellID(25242)
+
 func (war *Warrior) registerSlam() {
 
-	actionID := core.ActionID{SpellID: 25242}
+	actionID := core.ActionID{SpellID: slamRank.SpellID}
 
 	war.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
@@ -20,13 +20,13 @@ func (war *Warrior) registerSlam() {
 		MaxRange:       core.MaxMeleeRange,
 
 		RageCost: core.RageCostOptions{
-			Cost:   15,
+			Cost:   slamRank.Cost,
 			Refund: 0.8,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD:      core.GCDDefault,
-				CastTime: time.Millisecond * 1500,
+				GCD:      slamRank.GCD,
+				CastTime: slamRank.CastTime,
 			},
 			IgnoreHaste: true,
 			ModifyCast: func(sim *core.Simulation, spell *core.Spell, cast *core.Cast) {
@@ -40,7 +40,8 @@ func (war *Warrior) registerSlam() {
 		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := 140 + spell.Unit.MHWeaponDamage(sim, spell.MeleeAttackPower(target))
+			slamVal, _ := slamRank.Direct.Range()
+			baseDamage := slamVal + spell.Unit.MHWeaponDamage(sim, spell.MeleeAttackPower(target))
 			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeWeaponSpecialHitAndCrit)
 
 			if !result.Landed() {

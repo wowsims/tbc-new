@@ -6,8 +6,10 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var chargeRank = genRanks.Charge.BySpellID(11578)
+
 func (war *Warrior) registerCharge() {
-	actionID := core.ActionID{SpellID: 11578}
+	actionID := core.ActionID{SpellID: chargeRank.SpellID}
 	metrics := war.NewRageMetrics(actionID)
 
 	chargeMinRange := 8.0
@@ -36,12 +38,12 @@ func (war *Warrior) registerCharge() {
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: SpellMaskCharge,
 		MinRange:       chargeMinRange,
-		MaxRange:       25,
+		MaxRange:       chargeRank.MaxRange,
 
 		Cast: core.CastConfig{
 			CD: core.Cooldown{
 				Timer:    war.NewTimer(),
-				Duration: 15 * time.Second,
+				Duration: chargeRank.Cooldown,
 			},
 			IgnoreHaste: true,
 		},

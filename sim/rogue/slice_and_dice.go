@@ -6,8 +6,10 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var sliceAndDiceRank = genRanks.SliceAndDice.BySpellID(6774)
+
 func (rogue *Rogue) registerSliceAndDice() {
-	actionID := core.ActionID{SpellID: 6774}
+	actionID := core.ActionID{SpellID: sliceAndDiceRank.SpellID}
 
 	rogue.SliceAndDiceBonusFlat = 0.3
 	rogue.sliceAndDiceDurations = [6]time.Duration{
@@ -44,11 +46,11 @@ func (rogue *Rogue) registerSliceAndDice() {
 		ClassSpellMask: RogueSpellSliceAndDice,
 
 		EnergyCost: core.EnergyCostOptions{
-			Cost: 25,
+			Cost: sliceAndDiceRank.Cost,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: time.Second,
+				GCD: sliceAndDiceRank.GCD,
 			},
 			IgnoreHaste: true,
 			ModifyCast: func(sim *core.Simulation, spell *core.Spell, cast *core.Cast) {

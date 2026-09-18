@@ -1,10 +1,11 @@
 package druid
 
 import (
-	"time"
-
 	"github.com/wowsims/tbc/sim/core"
 )
+
+var faerieFireRank = genRanks.FaerieFire.BySpellID(26993)
+var faerieFireFeralRank = genRanks.FaerieFireFeral.BySpellID(27011)
 
 func (druid *Druid) registerFaerieFireSpell() {
 	auras := druid.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {
@@ -13,23 +14,24 @@ func (druid *Druid) registerFaerieFireSpell() {
 
 	druid.FaerieFire = druid.RegisterSpell(Humanoid|Moonkin, core.SpellConfig{
 		ClassSpellMask: DruidSpellFaerieFire,
-		ActionID:       core.ActionID{SpellID: 26993},
+		ActionID:       core.ActionID{SpellID: faerieFireRank.SpellID},
 		SpellSchool:    core.SpellSchoolNature,
 		DefenseType:    core.DefenseTypeMagic,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 145,
+			FlatCost: faerieFireRank.Cost,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: faerieFireRank.GCD,
 			},
 		},
 
 		ThreatMultiplier: 1,
 		FlatThreatBonus:  132,
+		MaxRange:         faerieFireRank.MaxRange,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			result := spell.CalcAndDealOutcome(sim, target, spell.OutcomeMagicHit)
@@ -54,7 +56,7 @@ func (druid *Druid) registerFaerieFireFeralSpell() {
 
 	druid.FaerieFireFeral = druid.RegisterSpell(Cat|Bear, core.SpellConfig{
 		ClassSpellMask: DruidSpellFaerieFireFeral,
-		ActionID:       core.ActionID{SpellID: 27011},
+		ActionID:       core.ActionID{SpellID: faerieFireFeralRank.SpellID},
 		SpellSchool:    core.SpellSchoolNature,
 		DefenseType:    core.DefenseTypeMagic,
 		ProcMask:       core.ProcMaskSpellDamage,
@@ -62,17 +64,18 @@ func (druid *Druid) registerFaerieFireFeralSpell() {
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDMin,
+				GCD: faerieFireFeralRank.GCD,
 			},
 			IgnoreHaste: true,
 			CD: core.Cooldown{
 				Timer:    druid.NewTimer(),
-				Duration: time.Second * 6,
+				Duration: faerieFireFeralRank.Cooldown,
 			},
 		},
 
 		ThreatMultiplier: 1,
 		FlatThreatBonus:  132,
+		MaxRange:         faerieFireFeralRank.MaxRange,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			result := spell.CalcAndDealOutcome(sim, target, spell.OutcomeMagicHit)

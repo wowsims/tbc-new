@@ -3,14 +3,17 @@ package warlock
 import (
 	"time"
 
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
 
-const siphonLifeCoeff = 0.1
+var siphonLifeRank = genRanks.SiphonLife.BySpellID(30911)
+var siphonLifeTick = siphonLifeRank.Periodic.(shared.SpellRankPeriodic)
+var siphonLifeCoeff = siphonLifeTick.Coef
 
 func (warlock *Warlock) registerSiphonLifeSpell() {
 	actionID := core.ActionID{SpellID: 30911}
-	baseCost := 410.0
+	baseCost := float64(siphonLifeRank.Cost)
 
 	healthMetrics := warlock.NewHealthMetrics(actionID)
 
@@ -25,11 +28,11 @@ func (warlock *Warlock) registerSiphonLifeSpell() {
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				Cost: baseCost,
-				GCD:  core.GCDDefault,
+				GCD:  siphonLifeRank.GCD,
 			},
 		},
 		DamageMultiplier: 1,
-		BonusCoefficient: 0.1,
+		BonusCoefficient: siphonLifeCoeff,
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			result := spell.CalcOutcome(sim, target, spell.OutcomeMagicHit)
 
@@ -44,12 +47,12 @@ func (warlock *Warlock) registerSiphonLifeSpell() {
 				Label: "SiphonLife",
 				Tag:   "Affliction",
 			},
-			NumberOfTicks:    10,
-			TickLength:       3 * time.Second,
-			BonusCoefficient: 0.1,
+			NumberOfTicks:    siphonLifeTick.Ticks,
+			TickLength:       siphonLifeTick.Period,
+			BonusCoefficient: siphonLifeCoeff,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.Snapshot(target, 63)
+				dot.Snapshot(target, siphonLifeTick.Tick)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				result := dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
@@ -67,7 +70,7 @@ func (warlock *Warlock) registerSiphonLifeSpell() {
 				result.Damage /= dot.TickPeriod().Seconds()
 				return result
 			} else {
-				result := spell.CalcPeriodicDamage(sim, target, 840, spell.OutcomeExpectedMagicHit)
+				result := spell.CalcPeriodicDamage(sim, target, siphonLifeTick.Tick*float64(siphonLifeTick.Ticks), spell.OutcomeExpectedMagicHit)
 				result.Damage /= dot.CalcTickPeriod().Round(time.Millisecond).Seconds()
 				return result
 			}

@@ -4,6 +4,8 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var curseOfElementsRank = genRanks.CurseOfTheElements.BySpellID(27228)
+
 func (warlock *Warlock) registerCurseOfElements() {
 	warlock.CurseOfElementsAuras = warlock.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {
 		return core.CurseOfElementsAura(target, 1, warlock.Talents.Malediction)
@@ -17,11 +19,11 @@ func (warlock *Warlock) registerCurseOfElements() {
 		ClassSpellMask: WarlockSpellCurseOfElements,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 260,
+			FlatCost: curseOfElementsRank.Cost,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: curseOfElementsRank.GCD,
 			},
 		},
 

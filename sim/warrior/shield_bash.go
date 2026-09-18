@@ -1,13 +1,13 @@
 package warrior
 
 import (
-	"time"
-
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var shieldBashRank = genRanks.ShieldBash.BySpellID(29704)
+
 func (war *Warrior) registerShieldBash() {
-	actionID := core.ActionID{SpellID: 29704}
+	actionID := core.ActionID{SpellID: shieldBashRank.SpellID}
 
 	war.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
@@ -19,17 +19,17 @@ func (war *Warrior) registerShieldBash() {
 		MaxRange:       core.MaxMeleeRange,
 
 		RageCost: core.RageCostOptions{
-			Cost:   10,
+			Cost:   shieldBashRank.Cost,
 			Refund: 0.8,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: shieldBashRank.GCD,
 			},
 			IgnoreHaste: true,
 			CD: core.Cooldown{
 				Timer:    war.NewTimer(),
-				Duration: time.Second * 12,
+				Duration: shieldBashRank.Cooldown,
 			},
 		},
 
@@ -42,7 +42,7 @@ func (war *Warrior) registerShieldBash() {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := 45.0
+			baseDamage := shieldBashRank.Direct.Damage(sim)
 			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialHitAndCrit)
 
 			if !result.Landed() {

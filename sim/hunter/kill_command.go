@@ -6,6 +6,8 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var killCommandRank = genRanks.KillCommand.BySpellID(34026)
+
 func (hunter *Hunter) registerKillCommandSpell() {
 	if hunter.Pet == nil {
 		return
@@ -31,10 +33,10 @@ func (hunter *Hunter) registerKillCommandSpell() {
 		ClassSpellMask: HunterSpellKillCommand,
 		Flags:          core.SpellFlagAPL | core.SpellFlagMeleeMetrics,
 
-		MaxRange: 45,
+		MaxRange: killCommandRank.MaxRange,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 75,
+			FlatCost: killCommandRank.Cost,
 		},
 
 		Cast: core.CastConfig{
@@ -43,7 +45,7 @@ func (hunter *Hunter) registerKillCommandSpell() {
 			},
 			CD: core.Cooldown{
 				Timer:    hunter.NewTimer(),
-				Duration: time.Second * 5,
+				Duration: killCommandRank.Cooldown,
 			},
 		},
 

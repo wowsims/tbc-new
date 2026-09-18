@@ -1,18 +1,18 @@
 package druid
 
 import (
-	"time"
-
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var prowlRank = genRanks.Prowl.BySpellID(5215)
+
 func (druid *Druid) registerProwlSpell() {
-	actionID := core.ActionID{SpellID: 5215}
+	actionID := core.ActionID{SpellID: prowlRank.SpellID}
 	movementSpeedMultiplier := 0.7
 
 	icd := core.Cooldown{
 		Timer:    druid.NewTimer(),
-		Duration: time.Second * 10,
+		Duration: prowlRank.Cooldown,
 	}
 
 	druid.ProwlAura = druid.RegisterAura(core.Aura{

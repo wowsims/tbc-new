@@ -1,12 +1,11 @@
 package warlock
 
 import (
-	"time"
-
 	"github.com/wowsims/tbc/sim/core"
 )
 
-const conflagrateCoeff = 0.429
+var conflagrateRank = genRanks.Conflagrate.BySpellID(30912)
+var conflagrateCoeff = conflagrateRank.Direct.BonusCoefficient()
 
 func (warlock *Warlock) registerConflagrate() {
 
@@ -21,13 +20,13 @@ func (warlock *Warlock) registerConflagrate() {
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: WarlockSpellConflagrate,
 
-		ManaCost: core.ManaCostOptions{FlatCost: 305},
+		ManaCost: core.ManaCostOptions{FlatCost: conflagrateRank.Cost},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: conflagrateRank.GCD,
 			},
 			CD: core.Cooldown{
-				Duration: time.Second * 10,
+				Duration: conflagrateRank.Cooldown,
 			},
 		},
 		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
@@ -40,7 +39,7 @@ func (warlock *Warlock) registerConflagrate() {
 		BonusCoefficient: conflagrateCoeff,
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			//tie this to landed/hit
-			dmgRoll := warlock.CalcAndRollDamageRange(sim, 579, 721)
+			dmgRoll := conflagrateRank.Direct.Damage(sim)
 			result := spell.CalcAndDealDamage(sim, target, dmgRoll, spell.OutcomeMagicHitAndCrit)
 
 			if result.Landed() || result.DidResist() {

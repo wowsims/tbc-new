@@ -26,7 +26,7 @@ func (paladin *Paladin) registerHammerOfWrath(rankConfig shared.SpellRank) {
 	cost := rankConfig.Cost
 	minDamage := shared.SpellRankMin(rankConfig.Direct)
 	maxDamage := shared.SpellRankMax(rankConfig.Direct)
-	coefficient := shared.SpellRankCoef(rankConfig.Direct)
+	coefficient := rankConfig.Direct.BonusCoefficient()
 
 	paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: spellID},
@@ -40,7 +40,7 @@ func (paladin *Paladin) registerHammerOfWrath(rankConfig shared.SpellRank) {
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
 
-		MaxRange:     30,
+		MaxRange:     rankConfig.MaxRange,
 		MissileSpeed: 35,
 
 		ManaCost: core.ManaCostOptions{
@@ -49,12 +49,12 @@ func (paladin *Paladin) registerHammerOfWrath(rankConfig shared.SpellRank) {
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCDMin:   time.Millisecond * 500,
-				GCD:      time.Millisecond * 500,
-				CastTime: time.Millisecond * 500,
+				GCD:      rankConfig.GCD,
+				CastTime: rankConfig.CastTime,
 			},
 			CD: core.Cooldown{
 				Timer:    paladin.getHammerOfWrathTimer(),
-				Duration: time.Second * 6,
+				Duration: rankConfig.Cooldown,
 			},
 			ModifyCast: func(sim *core.Simulation, spell *core.Spell, cast *core.Cast) {
 				castTime := paladin.ApplyCastSpeedForSpell(cast.CastTime, spell)

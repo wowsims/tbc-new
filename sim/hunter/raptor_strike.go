@@ -6,6 +6,8 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var raptorStrikeRank = genRanks.RaptorStrike.BySpellID(27014)
+
 func (hunter *Hunter) registerRaptorStrikeSpell() {
 	hunter.RaptorStrike = hunter.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 27014},
@@ -18,7 +20,7 @@ func (hunter *Hunter) registerRaptorStrikeSpell() {
 		MaxRange: core.MaxMeleeRange,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 120,
+			FlatCost: raptorStrikeRank.Cost,
 		},
 
 		Cast: core.CastConfig{
@@ -27,7 +29,7 @@ func (hunter *Hunter) registerRaptorStrikeSpell() {
 			},
 			CD: core.Cooldown{
 				Timer:    hunter.NewTimer(),
-				Duration: time.Second * 6,
+				Duration: raptorStrikeRank.Cooldown,
 			},
 		},
 
@@ -44,7 +46,7 @@ func (hunter *Hunter) registerRaptorStrikeSpell() {
 				hunter.Log(sim, "%s delayed by %s, was ready at %s", spell.ActionID, delay, readyAt)
 			}
 
-			baseDamage := hunter.MHWeaponDamage(sim, spell.MeleeAttackPower(target)) + 170
+			baseDamage := hunter.MHWeaponDamage(sim, spell.MeleeAttackPower(target)) + raptorStrikeRank.Direct.Damage(sim)
 			spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialHitAndCrit)
 		},
 	})

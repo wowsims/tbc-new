@@ -6,6 +6,8 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var arcaneMissilesRank = genRanks.ArcaneMissiles.BySpellID(38699)
+
 func (mage *Mage) registerArcaneMissilesSpell() {
 	// Values found at https://wago.tools/db2/SpellEffect?build=2.5.5.65295&filter%5BSpellID%5D=exact%253A7268
 	arcaneMissilesCoefficient := 0.28600001335
@@ -40,12 +42,12 @@ func (mage *Mage) registerArcaneMissilesSpell() {
 		DamageMultiplier: 0,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 740,
+			FlatCost: arcaneMissilesRank.Cost,
 		},
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: arcaneMissilesRank.GCD,
 			},
 		},
 

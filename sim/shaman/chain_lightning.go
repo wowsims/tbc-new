@@ -28,7 +28,7 @@ func (shaman *Shaman) newChainLightningSpell(config shared.SpellRank, isElementa
 		Rank:                config.Rank,
 		IsElementalOverload: isElementalOverload,
 		BaseFlatCost:        config.Cost,
-		BonusCoefficient:    shared.SpellRankCoef(config.Direct),
+		BonusCoefficient:    config.Direct.BonusCoefficient(),
 		SpellSchool:         core.SpellSchoolNature,
 		Overloads:           shaman.ChainLightningOverloads,
 		BounceReduction:     0.7 + core.TernaryFloat64(shaman.CouldHaveSetBonus(ItemSetTidefuryRaiment, 2), 0.13, 0),
@@ -53,7 +53,7 @@ func (shaman *Shaman) newChainLightningSpell(config shared.SpellRank, isElementa
 		numHits := min(maxHits, shaman.Env.ActiveTargetCount())
 		results := make([]*core.SpellResult, numHits)
 		for hitIndex := range numHits {
-			baseDamage := shaman.CalcAndRollDamageRange(sim, shared.SpellRankMin(config.Direct), shared.SpellRankMax(config.Direct))
+			baseDamage := config.Direct.Damage(sim)
 			results[hitIndex] = spell.CalcDamage(sim, curTarget, baseDamage, spell.OutcomeMagicHitAndCrit)
 
 			curTarget = sim.Environment.NextActiveTargetUnit(curTarget)

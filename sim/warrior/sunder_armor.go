@@ -5,8 +5,10 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var sunderArmorRank = genRanks.SunderArmor.BySpellID(25225)
+
 func (war *Warrior) registerSunderArmor() {
-	actionId := core.ActionID{SpellID: 25225}
+	actionId := core.ActionID{SpellID: sunderArmorRank.SpellID}
 
 	war.SunderArmorAuras = war.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {
 		return core.SunderArmorAura(target)
@@ -55,12 +57,12 @@ func (war *Warrior) registerSunderArmor() {
 		Flags:    core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
 
 		RageCost: core.RageCostOptions{
-			Cost:   15,
+			Cost:   sunderArmorRank.Cost,
 			Refund: 0.8,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: sunderArmorRank.GCD,
 			},
 			IgnoreHaste: true,
 		},

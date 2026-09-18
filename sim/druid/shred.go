@@ -1,14 +1,14 @@
 package druid
 
 import (
-	"time"
-
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var shredRank = genRanks.Shred.BySpellID(27002)
+
 func (druid *Druid) registerShredSpell() {
 	druid.Shred = druid.RegisterSpell(Cat, core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 27002},
+		ActionID:       core.ActionID{SpellID: shredRank.SpellID},
 		SpellSchool:    core.SpellSchoolPhysical,
 		DefenseType:    core.DefenseTypeMelee,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
@@ -16,12 +16,12 @@ func (druid *Druid) registerShredSpell() {
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
 
 		EnergyCost: core.EnergyCostOptions{
-			Cost:   60,
+			Cost:   shredRank.Cost,
 			Refund: 0.8,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: time.Second,
+				GCD: shredRank.GCD,
 			},
 			IgnoreHaste: true,
 		},
@@ -36,7 +36,10 @@ func (druid *Druid) registerShredSpell() {
 		MaxRange:         core.MaxMeleeRange,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := (405.0+druid.IdolShredBonus+druid.ShredFlatBonus)/2.25 + spell.Unit.MHWeaponDamage(sim, spell.MeleeAttackPower(target))
+			// shredRank.Direct is the pre-multiplier flat value (180); the idol/flat
+			// bonuses are historically expressed post-multiplier, so scale up and back
+			// down around them to keep the result identical.
+			baseDamage := (shredRank.Direct.Damage(sim)*2.25+druid.IdolShredBonus+druid.ShredFlatBonus)/2.25 + spell.Unit.MHWeaponDamage(sim, spell.MeleeAttackPower(target))
 			if druid.MangleAuras != nil && druid.MangleAuras.Get(target).IsActive() {
 				baseDamage *= 1.3
 			}
@@ -51,7 +54,7 @@ func (druid *Druid) registerShredSpell() {
 		},
 
 		ExpectedInitialDamage: func(sim *core.Simulation, target *core.Unit, spell *core.Spell, _ bool) *core.SpellResult {
-			baseDamage := (405.0+druid.IdolShredBonus+druid.ShredFlatBonus)/2.25 + spell.Unit.AutoAttacks.MH().CalculateAverageWeaponDamage(spell.MeleeAttackPower(target))
+			baseDamage := (shredRank.Direct.Damage(sim)*2.25+druid.IdolShredBonus+druid.ShredFlatBonus)/2.25 + spell.Unit.AutoAttacks.MH().CalculateAverageWeaponDamage(spell.MeleeAttackPower(target))
 			if druid.MangleAuras != nil && druid.MangleAuras.Get(target).IsActive() {
 				baseDamage *= 1.3
 			}
