@@ -26,10 +26,19 @@ type generatedRow struct {
 	MinRange     float64
 	MaxRange     float64
 	MissileSpeed float64
+	Effects      []generatedEffect
 	Direct       *generatedAmount
 	Heal         *generatedAmount
 	Periodic     *generatedAmount
 	Energize     *generatedAmount
+}
+
+type generatedEffect struct {
+	Index  int32
+	Effect int32
+	Aura   int32
+	Misc   int32
+	Value  float64
 }
 
 type generatedAmount struct {
@@ -348,6 +357,13 @@ func buildRow(db *sql.DB, rank int32, spellID int32, mask int) (generatedRow, er
 		return a
 	}
 
+	for _, e := range spell.Effects {
+		min, _ := DeriveRankAmount(e, spell.SpellLevel, spell.MaxLevel)
+		row.Effects = append(row.Effects, generatedEffect{
+			Index: e.Index, Effect: e.Effect, Aura: e.Aura, Misc: e.MiscValue, Value: min,
+		})
+	}
+
 	for _, e := range candidates {
 		switch {
 		case (e.Effect == effSchoolDamage || IsWeaponDamageEffect(e.Effect)) && row.Direct == nil:
@@ -512,6 +528,14 @@ func formatRow(row generatedRow) string {
 	}
 	if row.MissileSpeed > 0 {
 		parts = append(parts, fmt.Sprintf("MissileSpeed: %s", num(row.MissileSpeed)))
+	}
+	if len(row.Effects) > 0 {
+		var es []string
+		for _, e := range row.Effects {
+			es = append(es, fmt.Sprintf("{Index: %d, Effect: %d, Aura: %d, Misc: %d, Value: %s}",
+				e.Index, e.Effect, e.Aura, e.Misc, num(e.Value)))
+		}
+		parts = append(parts, "Effects: []shared.SpellRankEffect{"+strings.Join(es, ", ")+"}")
 	}
 	for _, role := range []struct {
 		name  string

@@ -145,7 +145,51 @@ type SpellRank struct {
 	Periodic     SpellRankValue
 	Energize     SpellRankValue
 
+	// Every effect the client states, in index order.
+	//
+	// The role fields above describe one effect each, which is all a castable spell needs. A talent
+	// routinely carries two or three that the sim reads separately: Improved Righteous Fury raises
+	// threat on aura 108 and cuts damage taken on aura 107, and only one of them can be Direct.
+	Effects []SpellRankEffect
+
 	FlatThreatBonus float64
+}
+
+// One effect of a rank, as the client states it, so a caller can name the one it means instead of
+// depending on which effect the generator happened to file under a role.
+type SpellRankEffect struct {
+	Index  int32
+	Effect int32
+	Aura   int32
+	Misc   int32
+
+	// The client's own number, in the client's own units. A percentage is an integer here - Improved
+	// Righteous Fury's threat bonus reads 16, not 0.16 - and the conversion stays at the call site,
+	// because whether a value is a percentage depends on the aura rather than on the field.
+	Value float64
+}
+
+// The one effect with this aura and misc value.
+//
+// Panics when there is no such effect, and panics when there are two: 186 ranked spells in this build
+// carry a duplicate pair, and silently returning the first is how a caller ends up reading the wrong
+// half of a talent. Reach for Effects by index when the pair cannot tell them apart.
+func (r SpellRank) Effect(aura int32, misc int32) SpellRankEffect {
+	found := -1
+	for i, e := range r.Effects {
+		if e.Aura == aura && e.Misc == misc {
+			if found >= 0 {
+				panic(fmt.Sprintf("spell %d rank %d has %d effects with aura %d misc %d - index them instead",
+					r.SpellID, r.Rank, 2, aura, misc))
+			}
+			found = i
+		}
+	}
+	if found < 0 {
+		panic(fmt.Sprintf("spell %d rank %d has no effect with aura %d misc %d, in %d effects",
+			r.SpellID, r.Rank, aura, misc, len(r.Effects)))
+	}
+	return r.Effects[found]
 }
 
 func (r SpellRank) GetRank() int32 { return r.Rank }

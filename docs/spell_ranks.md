@@ -114,6 +114,32 @@ A rank also carries what the client knows about casting it:
 and moves goldens, so check the sim is not already modelling it elsewhere. Arcane Missiles is the case
 to know - the channel carries no speed because the missile spell does, and that one is not a ranked row.
 
+## Reaching a single effect
+
+The role fields describe one effect each, which is all a castable spell needs. A talent routinely
+carries two or three that the sim reads separately, and only one of them can be `Direct`:
+
+```go
+irf := genRanks.ImprovedRighteousFury.ByRank(3)
+
+irf.Effect(108, 8).Value    //  50  threat bonus, aura 108 (SPELLMOD) misc 8
+irf.Effect(107, 12).Value   //  -6  damage taken, aura 107
+irf.Effects[1].Value        //  -6  the same effect, by index
+```
+
+Name the effect by aura rather than reading `Direct` whenever a spell has more than one. Which effect
+lands in `Direct` is the generator's choice, not a promise, so a caller that depends on it breaks
+silently the day the ordering changes.
+
+`Effect` panics when nothing matches, and also when **two** effects match: 186 ranked spells carry a
+duplicate aura/misc pair, and returning the first is how a caller ends up reading the wrong half of a
+talent. Index into `Effects` where the pair cannot tell them apart.
+
+**The value is in the client's units.** A percentage is an integer here - Improved Righteous Fury's
+threat bonus reads `16`, not `0.16` - so the `/100` stays at the call site. It is deliberately not
+folded into the generator the way the rage `/10` is: whether a value is a percentage depends on the
+aura, so a blanket rule would be wrong for some rows and invisible when it was.
+
 ## Worked examples
 
 ### Direct damage

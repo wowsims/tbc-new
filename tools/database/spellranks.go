@@ -54,6 +54,7 @@ type RankEffect struct {
 	PointsPerLvl float64
 	Coefficient  float64
 	APCoef       float64
+	MiscValue    int32
 	AuraPeriod   int32
 	OwnerSpellID int32
 }
@@ -167,7 +168,7 @@ func LoadRankSpell(db *sql.DB, spellID int32) (RankSpell, error) {
 	// RangeMin is nonzero on only 212 spells in this build - the dead zone on a charge, and a handful
 	// of ranged abilities - but where it exists core gates the cast on it exactly as it does MaxRange.
 	if err := scanOptional(db, `
-		SELECT COALESCE(r.RangeMin_1, 0), COALESCE(r.RangeMax_1, 0)
+		SELECT COALESCE(r.RangeMin_0, 0), COALESCE(r.RangeMax_0, 0)
 		FROM SpellMisc m JOIN SpellRange r ON r.ID = m.RangeIndex
 		WHERE m.SpellID = ?`, spellID, &s.MinRange, &s.MaxRange); err != nil {
 		return s, fmt.Errorf("range for spell %d: %w", spellID, err)
@@ -206,7 +207,8 @@ func scanOptional(db *sql.DB, query string, spellID int32, dest ...any) error {
 func RankEffectsOf(db *sql.DB, spellID int32) ([]RankEffect, error) {
 	rows, err := db.Query(`
 		SELECT EffectIndex, Effect, EffectAura, EffectBasePoints, EffectDieSides,
-		       EffectRealPointsPerLevel, EffectBonusCoefficient, BonusCoefficientFromAP, EffectAuraPeriod
+		       EffectRealPointsPerLevel, EffectBonusCoefficient, BonusCoefficientFromAP, EffectAuraPeriod,
+		       COALESCE(EffectMiscValue_0, 0)
 		FROM SpellEffect WHERE SpellID = ? ORDER BY EffectIndex`, spellID)
 	if err != nil {
 		return nil, err
@@ -216,7 +218,7 @@ func RankEffectsOf(db *sql.DB, spellID int32) ([]RankEffect, error) {
 	var out []RankEffect
 	for rows.Next() {
 		e := RankEffect{OwnerSpellID: spellID}
-		if err := rows.Scan(&e.Index, &e.Effect, &e.Aura, &e.BasePoints, &e.DieSides, &e.PointsPerLvl, &e.Coefficient, &e.APCoef, &e.AuraPeriod); err != nil {
+		if err := rows.Scan(&e.Index, &e.Effect, &e.Aura, &e.BasePoints, &e.DieSides, &e.PointsPerLvl, &e.Coefficient, &e.APCoef, &e.AuraPeriod, &e.MiscValue); err != nil {
 			return nil, err
 		}
 		out = append(out, e)

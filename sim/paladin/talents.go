@@ -477,9 +477,11 @@ func (paladin *Paladin) applyImprovedRighteousFury() {
 			return
 		}
 
+		// The client states this as a negative percentage per rank: -2 / -4 / -6.
+		reduction := genRanks.ImprovedRighteousFury.ByRank(paladin.Talents.ImprovedRighteousFury).Effect(107, 12).Value
 		spell.RelatedSelfBuff.AttachMultiplicativePseudoStatBuff(
 			&paladin.PseudoStats.DamageTakenMultiplier,
-			1-0.02*float64(paladin.Talents.ImprovedRighteousFury),
+			1+reduction/100,
 		)
 	})
 }
