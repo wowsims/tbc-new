@@ -16,7 +16,8 @@ func (warlock *Warlock) registerSoulfire() {
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: WarlockSpellSoulFire,
-		MissileSpeed:   21,
+		// The client says 24; 21 is kept until someone reconciles it against a log.
+		MissileSpeed: 21,
 
 		ManaCost: core.ManaCostOptions{FlatCost: soulfireRank.Cost},
 

@@ -123,11 +123,19 @@ type SpellRank struct {
 	CastTime time.Duration
 	GCD      time.Duration
 	Cooldown time.Duration
+
+	// MinRange gates a cast from too close - the dead zone on a charge - the way MaxRange gates it
+	// from too far. Zero means ungated, which is what core reads a zero as.
+	MinRange float64
 	MaxRange float64
-	Direct   SpellRankValue
-	Heal     SpellRankValue
-	Periodic SpellRankValue
-	Energize SpellRankValue
+
+	// Yards per second the projectile travels, which core turns into the delay before the damage
+	// lands. Zero is an instant hit.
+	MissileSpeed float64
+	Direct       SpellRankValue
+	Heal         SpellRankValue
+	Periodic     SpellRankValue
+	Energize     SpellRankValue
 
 	FlatThreatBonus float64
 }

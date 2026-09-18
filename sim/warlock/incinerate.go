@@ -13,7 +13,7 @@ func (warlock *Warlock) registerIncinerate() {
 		SpellSchool:    core.SpellSchoolFire,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL,
-		MissileSpeed:   24,
+		MissileSpeed:   incinerateRank.MissileSpeed,
 		ClassSpellMask: WarlockSpellIncinerate,
 
 		ManaCost: core.ManaCostOptions{FlatCost: incinerateRank.Cost},

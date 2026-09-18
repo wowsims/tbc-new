@@ -70,8 +70,13 @@ type RankSpell struct {
 	CastTimeMs int32
 	GCDMs      int32
 	CooldownMs int32
+	MinRange   float64
 	MaxRange   float64
-	Effects    []RankEffect
+
+	// How fast the projectile flies, in yards per second, which core turns into the delay between
+	// the cast landing and the damage arriving. Zero for a spell that hits the instant it is cast.
+	MissileSpeed float64
+	Effects      []RankEffect
 }
 
 // SpellCastTimes resolves SpellMisc.CastingTimeIndex and is absent from this build's database - the
@@ -148,10 +153,14 @@ func LoadRankSpell(db *sql.DB, spellID int32) (RankSpell, error) {
 		SELECT COALESCE(max(RecoveryTime, CategoryRecoveryTime), 0), COALESCE(StartRecoveryTime, 0)
 		FROM SpellCooldowns WHERE SpellID = ?`, spellID).Scan(&s.CooldownMs, &s.GCDMs)
 
+	// RangeMin is nonzero on only 212 spells in this build - the dead zone on a charge, and a handful
+	// of ranged abilities - but where it exists core gates the cast on it exactly as it does MaxRange.
 	_ = db.QueryRow(`
-		SELECT COALESCE(r.RangeMax_1, 0)
+		SELECT COALESCE(r.RangeMin_1, 0), COALESCE(r.RangeMax_1, 0)
 		FROM SpellMisc m JOIN SpellRange r ON r.ID = m.RangeIndex
-		WHERE m.SpellID = ?`, spellID).Scan(&s.MaxRange)
+		WHERE m.SpellID = ?`, spellID).Scan(&s.MinRange, &s.MaxRange)
+
+	_ = db.QueryRow(`SELECT COALESCE(Speed, 0) FROM SpellMisc WHERE SpellID = ?`, spellID).Scan(&s.MissileSpeed)
 
 	if castTimesAvailable(db) {
 		_ = db.QueryRow(`

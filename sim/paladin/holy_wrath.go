@@ -41,7 +41,7 @@ func (paladin *Paladin) registerHolyWrath(rankConfig shared.SpellRank) {
 		ThreatMultiplier: 1,
 
 		MaxRange:     20,
-		MissileSpeed: 20,
+		MissileSpeed: rankConfig.MissileSpeed,
 
 		ManaCost: core.ManaCostOptions{
 			FlatCost: cost,

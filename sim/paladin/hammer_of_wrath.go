@@ -41,7 +41,7 @@ func (paladin *Paladin) registerHammerOfWrath(rankConfig shared.SpellRank) {
 		ThreatMultiplier: 1,
 
 		MaxRange:     rankConfig.MaxRange,
-		MissileSpeed: 35,
+		MissileSpeed: rankConfig.MissileSpeed,
 
 		ManaCost: core.ManaCostOptions{
 			FlatCost: cost,

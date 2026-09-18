@@ -20,7 +20,7 @@ func (mage *Mage) registerPyroblastSpell() {
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: MageSpellPyroblast,
-		MissileSpeed:   24,
+		MissileSpeed:   pyroblastRank.MissileSpeed,
 
 		ManaCost: core.ManaCostOptions{
 			FlatCost: pyroblastRank.Cost,

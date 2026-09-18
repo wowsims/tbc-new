@@ -126,9 +126,9 @@ var genRanks = generatedRanks{
 		{Rank: 5, SpellID: 31854},
 	},
 	AvengersShield: shared.SpellRankTable{
-		{Rank: 1, SpellID: 31935, Cost: 500, CastTime: 1000 * time.Millisecond, GCD: 1000 * time.Millisecond, Cooldown: 30000 * time.Millisecond, MaxRange: 30, Direct: shared.SpellRankRange{Min: 270, Max: 330, Coef: 0.19300000369548798}},
-		{Rank: 2, SpellID: 32699, Cost: 615, CastTime: 1000 * time.Millisecond, GCD: 1000 * time.Millisecond, Cooldown: 30000 * time.Millisecond, MaxRange: 30, Direct: shared.SpellRankRange{Min: 370, Max: 452, Coef: 0.19300000369548798}},
-		{Rank: 3, SpellID: 32700, Cost: 780, CastTime: 1000 * time.Millisecond, GCD: 1000 * time.Millisecond, Cooldown: 30000 * time.Millisecond, MaxRange: 30, Direct: shared.SpellRankRange{Min: 494, Max: 602, Coef: 0.19300000369548798}},
+		{Rank: 1, SpellID: 31935, Cost: 500, CastTime: 1000 * time.Millisecond, GCD: 1000 * time.Millisecond, Cooldown: 30000 * time.Millisecond, MaxRange: 30, MissileSpeed: 35, Direct: shared.SpellRankRange{Min: 270, Max: 330, Coef: 0.19300000369548798}},
+		{Rank: 2, SpellID: 32699, Cost: 615, CastTime: 1000 * time.Millisecond, GCD: 1000 * time.Millisecond, Cooldown: 30000 * time.Millisecond, MaxRange: 30, MissileSpeed: 35, Direct: shared.SpellRankRange{Min: 370, Max: 452, Coef: 0.19300000369548798}},
+		{Rank: 3, SpellID: 32700, Cost: 780, CastTime: 1000 * time.Millisecond, GCD: 1000 * time.Millisecond, Cooldown: 30000 * time.Millisecond, MaxRange: 30, MissileSpeed: 35, Direct: shared.SpellRankRange{Min: 494, Max: 602, Coef: 0.19300000369548798}},
 	},
 	Benediction: shared.SpellRankTable{
 		{Rank: 1, SpellID: 20101},
@@ -311,10 +311,10 @@ var genRanks = generatedRanks{
 		{Rank: 4, SpellID: 10308, Cost: 100, GCD: 1500 * time.Millisecond, Cooldown: 60000 * time.Millisecond, MaxRange: 10},
 	},
 	HammerOfWrath: shared.SpellRankTable{
-		{Rank: 1, SpellID: 24275, Cost: 235, CastTime: 500 * time.Millisecond, GCD: 500 * time.Millisecond, Cooldown: 6000 * time.Millisecond, MaxRange: 30, Direct: shared.SpellRankRange{Min: 316, Max: 348, Coef: 0.42899999022483826}},
-		{Rank: 2, SpellID: 24274, Cost: 290, CastTime: 500 * time.Millisecond, GCD: 500 * time.Millisecond, Cooldown: 6000 * time.Millisecond, MaxRange: 30, Direct: shared.SpellRankRange{Min: 412, Max: 455, Coef: 0.42899999022483826}},
-		{Rank: 3, SpellID: 24239, Cost: 340, CastTime: 500 * time.Millisecond, GCD: 500 * time.Millisecond, Cooldown: 6000 * time.Millisecond, MaxRange: 30, Direct: shared.SpellRankRange{Min: 519, Max: 572, Coef: 0.42899999022483826}},
-		{Rank: 4, SpellID: 27180, Cost: 440, CastTime: 500 * time.Millisecond, GCD: 500 * time.Millisecond, Cooldown: 6000 * time.Millisecond, MaxRange: 30, Direct: shared.SpellRankRange{Min: 672, Max: 742, Coef: 0.42899999022483826}},
+		{Rank: 1, SpellID: 24275, Cost: 235, CastTime: 500 * time.Millisecond, GCD: 500 * time.Millisecond, Cooldown: 6000 * time.Millisecond, MaxRange: 30, MissileSpeed: 35, Direct: shared.SpellRankRange{Min: 316, Max: 348, Coef: 0.42899999022483826}},
+		{Rank: 2, SpellID: 24274, Cost: 290, CastTime: 500 * time.Millisecond, GCD: 500 * time.Millisecond, Cooldown: 6000 * time.Millisecond, MaxRange: 30, MissileSpeed: 35, Direct: shared.SpellRankRange{Min: 412, Max: 455, Coef: 0.42899999022483826}},
+		{Rank: 3, SpellID: 24239, Cost: 340, CastTime: 500 * time.Millisecond, GCD: 500 * time.Millisecond, Cooldown: 6000 * time.Millisecond, MaxRange: 30, MissileSpeed: 35, Direct: shared.SpellRankRange{Min: 519, Max: 572, Coef: 0.42899999022483826}},
+		{Rank: 4, SpellID: 27180, Cost: 440, CastTime: 500 * time.Millisecond, GCD: 500 * time.Millisecond, Cooldown: 6000 * time.Millisecond, MaxRange: 30, MissileSpeed: 35, Direct: shared.SpellRankRange{Min: 672, Max: 742, Coef: 0.42899999022483826}},
 	},
 	HolyGuidance: shared.SpellRankTable{
 		{Rank: 1, SpellID: 31837, Direct: shared.SpellRankFlat{Value: 7, Coef: 0}},
@@ -360,9 +360,9 @@ var genRanks = generatedRanks{
 		{Rank: 1, SpellID: 31803, MaxRange: 100, Periodic: shared.SpellRankPeriodic{Tick: 30, Coef: 0.03400000184774399, Period: 3000 * time.Millisecond, Ticks: 5}},
 	},
 	HolyWrath: shared.SpellRankTable{
-		{Rank: 1, SpellID: 2812, Cost: 550, CastTime: 2000 * time.Millisecond, GCD: 1500 * time.Millisecond, Cooldown: 60000 * time.Millisecond, Direct: shared.SpellRankRange{Min: 368, Max: 435, Coef: 0.28600001335144043}},
-		{Rank: 2, SpellID: 10318, Cost: 685, CastTime: 2000 * time.Millisecond, GCD: 1500 * time.Millisecond, Cooldown: 60000 * time.Millisecond, Direct: shared.SpellRankRange{Min: 497, Max: 584, Coef: 0.28600001335144043}},
-		{Rank: 3, SpellID: 27139, Cost: 825, CastTime: 2000 * time.Millisecond, GCD: 1500 * time.Millisecond, Cooldown: 60000 * time.Millisecond, Direct: shared.SpellRankRange{Min: 637, Max: 748, Coef: 0.28600001335144043}},
+		{Rank: 1, SpellID: 2812, Cost: 550, CastTime: 2000 * time.Millisecond, GCD: 1500 * time.Millisecond, Cooldown: 60000 * time.Millisecond, MissileSpeed: 20, Direct: shared.SpellRankRange{Min: 368, Max: 435, Coef: 0.28600001335144043}},
+		{Rank: 2, SpellID: 10318, Cost: 685, CastTime: 2000 * time.Millisecond, GCD: 1500 * time.Millisecond, Cooldown: 60000 * time.Millisecond, MissileSpeed: 20, Direct: shared.SpellRankRange{Min: 497, Max: 584, Coef: 0.28600001335144043}},
+		{Rank: 3, SpellID: 27139, Cost: 825, CastTime: 2000 * time.Millisecond, GCD: 1500 * time.Millisecond, Cooldown: 60000 * time.Millisecond, MissileSpeed: 20, Direct: shared.SpellRankRange{Min: 637, Max: 748, Coef: 0.28600001335144043}},
 	},
 	ImprovedBlessingOfMight: shared.SpellRankTable{
 		{Rank: 1, SpellID: 20042, Direct: shared.SpellRankFlat{Value: 4, Coef: 1}},

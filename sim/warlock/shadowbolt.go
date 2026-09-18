@@ -15,7 +15,7 @@ func (warlock *Warlock) registerShadowBolt() {
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: WarlockSpellShadowBolt,
-		MissileSpeed:   20,
+		MissileSpeed:   shadowBoltRank.MissileSpeed,
 
 		ManaCost: core.ManaCostOptions{FlatCost: shadowBoltRank.Cost},
 		Cast: core.CastConfig{

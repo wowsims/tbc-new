@@ -196,7 +196,7 @@ var genRanks = generatedRanks{
 		{Rank: 1, SpellID: 2835, CastTime: 3000 * time.Millisecond},
 	},
 	DeadlyThrow: shared.SpellRankTable{
-		{Rank: 1, SpellID: 26679, Cost: 35, GCD: 1000 * time.Millisecond, MaxRange: 30, Direct: shared.SpellRankRange{Min: 59, Max: 75, Coef: 0}},
+		{Rank: 1, SpellID: 26679, Cost: 35, GCD: 1000 * time.Millisecond, MaxRange: 30, MissileSpeed: 35, Direct: shared.SpellRankRange{Min: 59, Max: 75, Coef: 0}},
 	},
 	Deflection: shared.SpellRankTable{
 		{Rank: 1, SpellID: 13713},

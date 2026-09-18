@@ -14,7 +14,7 @@ func (druid *Druid) registerWrathSpell() {
 		ProcMask:       core.ProcMaskSpellDamage,
 		ClassSpellMask: DruidSpellWrath,
 		Flags:          core.SpellFlagAPL,
-		MissileSpeed:   20,
+		MissileSpeed:   wrathRank.MissileSpeed,
 
 		ManaCost: core.ManaCostOptions{
 			FlatCost: wrathRank.Cost,

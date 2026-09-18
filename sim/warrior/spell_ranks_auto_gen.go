@@ -141,9 +141,9 @@ var genRanks = generatedRanks{
 		{Rank: 5, SpellID: 12838, Direct: shared.SpellRankFlat{Value: 50, Coef: 0}},
 	},
 	Charge: shared.SpellRankTable{
-		{Rank: 1, SpellID: 100, Cooldown: 15000 * time.Millisecond, MaxRange: 25},
-		{Rank: 2, SpellID: 6178, Cooldown: 15000 * time.Millisecond, MaxRange: 25},
-		{Rank: 3, SpellID: 11578, Cooldown: 15000 * time.Millisecond, MaxRange: 25},
+		{Rank: 1, SpellID: 100, Cooldown: 15000 * time.Millisecond, MinRange: 8, MaxRange: 25},
+		{Rank: 2, SpellID: 6178, Cooldown: 15000 * time.Millisecond, MinRange: 8, MaxRange: 25},
+		{Rank: 3, SpellID: 11578, Cooldown: 15000 * time.Millisecond, MinRange: 8, MaxRange: 25},
 	},
 	ChargeRageBonusEffect: shared.SpellRankTable{
 		{Rank: 1, SpellID: 12695, Energize: shared.SpellRankFlat{Value: 30, Coef: 0}},
@@ -383,11 +383,11 @@ var genRanks = generatedRanks{
 		{Rank: 2, SpellID: 29776},
 	},
 	Intercept: shared.SpellRankTable{
-		{Rank: 1, SpellID: 20252, Cost: 10, Cooldown: 30000 * time.Millisecond, MaxRange: 25},
-		{Rank: 2, SpellID: 20616, Cost: 10, Cooldown: 30000 * time.Millisecond, MaxRange: 25},
-		{Rank: 3, SpellID: 20617, Cost: 10, Cooldown: 30000 * time.Millisecond, MaxRange: 25},
-		{Rank: 4, SpellID: 25272, Cost: 10, Cooldown: 30000 * time.Millisecond, MaxRange: 25},
-		{Rank: 5, SpellID: 25275, Cost: 10, Cooldown: 30000 * time.Millisecond, MaxRange: 25},
+		{Rank: 1, SpellID: 20252, Cost: 10, Cooldown: 30000 * time.Millisecond, MinRange: 8, MaxRange: 25},
+		{Rank: 2, SpellID: 20616, Cost: 10, Cooldown: 30000 * time.Millisecond, MinRange: 8, MaxRange: 25},
+		{Rank: 3, SpellID: 20617, Cost: 10, Cooldown: 30000 * time.Millisecond, MinRange: 8, MaxRange: 25},
+		{Rank: 4, SpellID: 25272, Cost: 10, Cooldown: 30000 * time.Millisecond, MinRange: 8, MaxRange: 25},
+		{Rank: 5, SpellID: 25275, Cost: 10, Cooldown: 30000 * time.Millisecond, MinRange: 8, MaxRange: 25},
 	},
 	IronWill: shared.SpellRankTable{
 		{Rank: 1, SpellID: 12300, Direct: shared.SpellRankFlat{Value: 3, Coef: 0}},

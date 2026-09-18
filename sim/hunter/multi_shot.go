@@ -17,7 +17,7 @@ func (hunter *Hunter) registerMultiShotSpell() {
 		ClassSpellMask: HunterSpellMultiShot,
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
 
-		MissileSpeed: 30,
+		MissileSpeed: multiShotRank.MissileSpeed,
 
 		ManaCost: core.ManaCostOptions{
 			FlatCost: multiShotRank.Cost,

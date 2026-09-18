@@ -17,17 +17,19 @@ import (
 var rankSubtext = regexp.MustCompile(`^Rank (\d+)$`)
 
 type generatedRow struct {
-	Rank       int32
-	SpellID    int32
-	Cost       int32
-	CastTimeMs int32
-	GCDMs      int32
-	CooldownMs int32
-	MaxRange   float64
-	Direct     *generatedAmount
-	Heal       *generatedAmount
-	Periodic   *generatedAmount
-	Energize   *generatedAmount
+	Rank         int32
+	SpellID      int32
+	Cost         int32
+	CastTimeMs   int32
+	GCDMs        int32
+	CooldownMs   int32
+	MinRange     float64
+	MaxRange     float64
+	MissileSpeed float64
+	Direct       *generatedAmount
+	Heal         *generatedAmount
+	Periodic     *generatedAmount
+	Energize     *generatedAmount
 }
 
 type generatedAmount struct {
@@ -336,7 +338,7 @@ func buildRow(db *sql.DB, rank int32, spellID int32, mask int) (generatedRow, er
 	row := generatedRow{
 		Rank: rank, SpellID: spellID,
 		CastTimeMs: spell.CastTimeMs, GCDMs: spell.GCDMs, CooldownMs: spell.CooldownMs,
-		MaxRange: spell.MaxRange,
+		MinRange: spell.MinRange, MaxRange: spell.MaxRange, MissileSpeed: spell.MissileSpeed,
 	}
 	if spell.ManaCost.Valid {
 		row.Cost = NormalizePowerCost(int32(spell.ManaCost.Int64), spell.PowerType)
@@ -509,8 +511,14 @@ func formatRow(row generatedRow) string {
 	if row.CooldownMs > 0 {
 		parts = append(parts, fmt.Sprintf("Cooldown: %s", millis(row.CooldownMs)))
 	}
+	if row.MinRange > 0 {
+		parts = append(parts, fmt.Sprintf("MinRange: %s", num(row.MinRange)))
+	}
 	if row.MaxRange > 0 {
 		parts = append(parts, fmt.Sprintf("MaxRange: %s", num(row.MaxRange)))
+	}
+	if row.MissileSpeed > 0 {
+		parts = append(parts, fmt.Sprintf("MissileSpeed: %s", num(row.MissileSpeed)))
 	}
 	for _, role := range []struct {
 		name  string

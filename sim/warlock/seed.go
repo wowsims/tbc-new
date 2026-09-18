@@ -155,7 +155,7 @@ func getSeedSpellConfig(config core.SpellConfig) core.SpellConfig {
 		DefenseType:    core.DefenseTypeMagic,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL,
-		MissileSpeed:   28,
+		MissileSpeed:   seedRank.MissileSpeed,
 		ClassSpellMask: WarlockSpellSeedOfCorruption,
 
 		ManaCost: core.ManaCostOptions{FlatCost: seedRank.Cost},

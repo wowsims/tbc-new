@@ -101,8 +101,18 @@ p.Period   // time.Duration
 p.Ticks    // Duration / Period, as the client states them
 ```
 
-A rank also carries what the client knows about casting it: `Cost`, `CostPct`, `CastTime`, `GCD`,
-`Cooldown` and `MaxRange`.
+A rank also carries what the client knows about casting it:
+
+| | |
+|---|---|
+| `Cost`, `CostPct` | in the units the sim uses - see the rage trap below |
+| `CastTime`, `GCD`, `Cooldown` | zero for a channel, whose duration carries it |
+| `MinRange`, `MaxRange` | `core` gates the cast on both; zero means ungated. `MinRange` is the dead zone on a charge, and is nonzero on only 212 spells in the build |
+| `MissileSpeed` | yards per second, which `core` turns into the delay before the damage lands. Zero is an instant hit |
+
+`MissileSpeed` is the one to be careful with: giving a spell a speed it did not have delays its damage
+and moves goldens, so check the sim is not already modelling it elsewhere. Arcane Missiles is the case
+to know - the channel carries no speed because the missile spell does, and that one is not a ranked row.
 
 ## Worked examples
 
@@ -116,7 +126,7 @@ func (paladin *Paladin) registerExorcism() {
 		ActionID:         core.ActionID{SpellID: exorcismRanks.SpellID},
 		Rank:             exorcismRanks.Rank,
 		ManaCost:         core.ManaCostOptions{FlatCost: exorcismRanks.Cost},
-		BonusCoefficient: shared.SpellRankCoef(exorcismRanks.Direct),
+		BonusCoefficient: exorcismRanks.Direct.BonusCoefficient(),
 		MaxRange:         exorcismRanks.MaxRange,
 
 		Cast: core.CastConfig{

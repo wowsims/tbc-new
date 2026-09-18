@@ -15,7 +15,7 @@ func (warlock *Warlock) registerDeathCoil() {
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: WarlockSpellDeathCoil,
-		MissileSpeed:   24,
+		MissileSpeed:   deathCoilRank.MissileSpeed,
 		MaxRange:       deathCoilRank.MaxRange,
 
 		ManaCost: core.ManaCostOptions{FlatCost: deathCoilRank.Cost},

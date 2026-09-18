@@ -33,7 +33,7 @@ func (paladin *Paladin) registerAvengersShield(rankConfig shared.SpellRank) {
 		ThreatMultiplier: 1,
 
 		MaxRange:     rankConfig.MaxRange,
-		MissileSpeed: 35,
+		MissileSpeed: rankConfig.MissileSpeed,
 
 		ManaCost: core.ManaCostOptions{
 			FlatCost: rankConfig.Cost,

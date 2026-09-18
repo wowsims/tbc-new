@@ -12,7 +12,7 @@ func (war *Warrior) registerCharge() {
 	actionID := core.ActionID{SpellID: chargeRank.SpellID}
 	metrics := war.NewRageMetrics(actionID)
 
-	chargeMinRange := 8.0
+	chargeMinRange := chargeRank.MinRange
 
 	aura := war.RegisterAura(core.Aura{
 		Label:    "Charge",

@@ -10,7 +10,7 @@ var interceptRank = genRanks.Intercept.BySpellID(25275)
 
 func (war *Warrior) registerIntercept() {
 	actionID := core.ActionID{SpellID: interceptRank.SpellID}
-	chargeMinRange := 8.0
+	chargeMinRange := interceptRank.MinRange
 
 	var spell *core.Spell
 	var interceptTarget *core.Unit
