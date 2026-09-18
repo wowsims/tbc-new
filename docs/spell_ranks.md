@@ -122,10 +122,16 @@ carries two or three that the sim reads separately, and only one of them can be 
 ```go
 irf := genRanks.ImprovedRighteousFury.ByRank(3)
 
-irf.Effect(108, 8).Value    //  50  threat bonus, aura 108 (SPELLMOD) misc 8
-irf.Effect(107, 12).Value   //  -6  damage taken, aura 107
-irf.Effects[1].Value        //  -6  the same effect, by index
+irf.Effect(shared.A_ADD_PCT_MODIFIER, 8).Value    //  50  threat bonus
+irf.Effect(shared.A_ADD_FLAT_MODIFIER, 12).Value  //  -6  damage taken
+irf.Effects[1].Value                              //  -6  the same effect, by index
 ```
+
+The aura and effect names are generated into `sim/common/shared/spell_rank_enums_auto_gen.go`, mirrored
+from `tools/database/dbc/enums.go` and holding only the values the tables use, so the two cannot drift.
+`Misc` stays a plain int: what it selects depends on the aura - a modified spell property for
+`A_ADD_PCT_MODIFIER`, a stat for `A_MOD_TOTAL_STAT_PERCENTAGE`, a school mask for `A_MOD_DAMAGE_DONE` -
+so there is no single enum to name it with.
 
 Name the effect by aura rather than reading `Direct` whenever a spell has more than one. Which effect
 lands in `Direct` is the generator's choice, not a promise, so a caller that depends on it breaks

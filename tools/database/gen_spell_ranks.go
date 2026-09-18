@@ -424,10 +424,15 @@ func GenerateSpellRankFiles(helper *DBHelper) error {
 
 	// Rendered in full before anything is written, so a class that fails validation cannot leave half
 	// the packages regenerated and half stale.
+	namer, err := newRankEnumNamer()
+	if err != nil {
+		return err
+	}
+
 	rendered := map[string][]byte{}
 	for _, class := range dbc.Classes {
 		pkg := strings.ToLower(dbc.ClassNameFromDBC(class))
-		out, err := renderClassFile(helper.db, pkg, class)
+		out, err := renderClassFile(helper.db, pkg, class, namer)
 		if err != nil {
 			return fmt.Errorf("%s: %w", pkg, err)
 		}
@@ -439,10 +444,16 @@ func GenerateSpellRankFiles(helper *DBHelper) error {
 			return err
 		}
 	}
-	return nil
+
+	// Written last: it holds exactly the names the class files above turned out to reference.
+	enums, err := namer.render()
+	if err != nil {
+		return err
+	}
+	return os.WriteFile("sim/common/shared/spell_rank_enums_auto_gen.go", enums, 0644)
 }
 
-func renderClassFile(db *sql.DB, pkg string, class dbc.DbcClass) ([]byte, error) {
+func renderClassFile(db *sql.DB, pkg string, class dbc.DbcClass, namer *rankEnumNamer) ([]byte, error) {
 	ladders, skipped, err := discoverLadders(db, class)
 	if err != nil {
 		return nil, err
@@ -480,7 +491,7 @@ func renderClassFile(db *sql.DB, pkg string, class dbc.DbcClass) ([]byte, error)
 			if err != nil {
 				return nil, fmt.Errorf("%s rank %d: %w", l.Name, rank, err)
 			}
-			fmt.Fprintf(&b, "\t\t%s\n", formatRow(row))
+			fmt.Fprintf(&b, "\t\t%s\n", formatRow(row, namer))
 		}
 		b.WriteString("\t},\n")
 	}
@@ -506,7 +517,7 @@ func renderClassFile(db *sql.DB, pkg string, class dbc.DbcClass) ([]byte, error)
 	return out, nil
 }
 
-func formatRow(row generatedRow) string {
+func formatRow(row generatedRow, namer *rankEnumNamer) string {
 	parts := []string{fmt.Sprintf("Rank: %d", row.Rank), fmt.Sprintf("SpellID: %d", row.SpellID)}
 	if row.Cost > 0 {
 		parts = append(parts, fmt.Sprintf("Cost: %d", row.Cost))
@@ -532,8 +543,8 @@ func formatRow(row generatedRow) string {
 	if len(row.Effects) > 0 {
 		var es []string
 		for _, e := range row.Effects {
-			es = append(es, fmt.Sprintf("{Index: %d, Effect: %d, Aura: %d, Misc: %d, Value: %s}",
-				e.Index, e.Effect, e.Aura, e.Misc, num(e.Value)))
+			es = append(es, fmt.Sprintf("{Index: %d, Effect: %s, Aura: %s, Misc: %d, Value: %s}",
+				e.Index, namer.Effect(e.Effect), namer.Aura(e.Aura), e.Misc, num(e.Value)))
 		}
 		parts = append(parts, "Effects: []shared.SpellRankEffect{"+strings.Join(es, ", ")+"}")
 	}

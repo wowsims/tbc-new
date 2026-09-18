@@ -1,6 +1,9 @@
 package paladin
 
-import "github.com/wowsims/tbc/sim/core"
+import (
+	"github.com/wowsims/tbc/sim/common/shared"
+	"github.com/wowsims/tbc/sim/core"
+)
 
 // Righteous Fury
 // https://www.wowhead.com/tbc/spell=25780
@@ -16,7 +19,7 @@ func (paladin *Paladin) registerRighteousFury() {
 	if rank := paladin.Talents.ImprovedRighteousFury; rank > 0 {
 		// Named by aura rather than read out of Direct: the talent's other effect cuts damage taken,
 		// and which of the two lands in Direct is the generator's choice, not a promise.
-		threatBonus *= 1 + genRanks.ImprovedRighteousFury.ByRank(rank).Effect(108, 8).Value/100
+		threatBonus *= 1 + genRanks.ImprovedRighteousFury.ByRank(rank).Effect(shared.A_ADD_PCT_MODIFIER, 8).Value/100
 	}
 
 	rfAura := paladin.RegisterAura(core.Aura{

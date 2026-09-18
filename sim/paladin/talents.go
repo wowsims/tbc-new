@@ -1,6 +1,7 @@
 package paladin
 
 import (
+	"github.com/wowsims/tbc/sim/common/shared"
 	"slices"
 	"time"
 
@@ -478,7 +479,7 @@ func (paladin *Paladin) applyImprovedRighteousFury() {
 		}
 
 		// The client states this as a negative percentage per rank: -2 / -4 / -6.
-		reduction := genRanks.ImprovedRighteousFury.ByRank(paladin.Talents.ImprovedRighteousFury).Effect(107, 12).Value
+		reduction := genRanks.ImprovedRighteousFury.ByRank(paladin.Talents.ImprovedRighteousFury).Effect(shared.A_ADD_FLAT_MODIFIER, 12).Value
 		spell.RelatedSelfBuff.AttachMultiplicativePseudoStatBuff(
 			&paladin.PseudoStats.DamageTakenMultiplier,
 			1+reduction/100,

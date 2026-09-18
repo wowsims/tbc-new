@@ -52,8 +52,8 @@ func effectTestRank() SpellRank {
 	return SpellRank{
 		Rank: 3, SpellID: 20470,
 		Effects: []SpellRankEffect{
-			{Index: 0, Effect: 6, Aura: 108, Misc: 8, Value: 50},
-			{Index: 1, Effect: 6, Aura: 107, Misc: 12, Value: -6},
+			{Index: 0, Effect: E_APPLY_AURA, Aura: A_ADD_PCT_MODIFIER, Misc: 8, Value: 50},
+			{Index: 1, Effect: E_APPLY_AURA, Aura: A_ADD_FLAT_MODIFIER, Misc: 12, Value: -6},
 		},
 		Direct: SpellRankFlat{Value: 50, Coef: 1},
 	}
@@ -61,10 +61,10 @@ func effectTestRank() SpellRank {
 
 func TestEffectPicksByAura(t *testing.T) {
 	rank := effectTestRank()
-	if got := rank.Effect(108, 8).Value; got != 50 {
+	if got := rank.Effect(A_ADD_PCT_MODIFIER, 8).Value; got != 50 {
 		t.Errorf("threat effect: want 50, got %v", got)
 	}
-	if got := rank.Effect(107, 12).Value; got != -6 {
+	if got := rank.Effect(A_ADD_FLAT_MODIFIER, 12).Value; got != -6 {
 		t.Errorf("damage-taken effect: want -6, got %v", got)
 	}
 }
@@ -75,7 +75,7 @@ func TestEffectMissingPanics(t *testing.T) {
 			t.Error("expected a panic for an aura the rank does not carry")
 		}
 	}()
-	effectTestRank().Effect(79, 0)
+	effectTestRank().Effect(A_MOD_DAMAGE_PERCENT_DONE, 0)
 }
 
 // 186 ranked spells in this build carry two effects with the same aura and misc value. Returning the
@@ -84,8 +84,8 @@ func TestEffectAmbiguousPanics(t *testing.T) {
 	rank := SpellRank{
 		Rank: 1, SpellID: 1,
 		Effects: []SpellRankEffect{
-			{Index: 0, Effect: 6, Aura: 79, Misc: 0, Value: 10},
-			{Index: 1, Effect: 6, Aura: 79, Misc: 0, Value: 20},
+			{Index: 0, Effect: E_APPLY_AURA, Aura: A_MOD_DAMAGE_PERCENT_DONE, Misc: 0, Value: 10},
+			{Index: 1, Effect: E_APPLY_AURA, Aura: A_MOD_DAMAGE_PERCENT_DONE, Misc: 0, Value: 20},
 		},
 	}
 	defer func() {
@@ -93,5 +93,5 @@ func TestEffectAmbiguousPanics(t *testing.T) {
 			t.Error("expected a panic for two effects sharing an aura and misc value")
 		}
 	}()
-	rank.Effect(79, 0)
+	rank.Effect(A_MOD_DAMAGE_PERCENT_DONE, 0)
 }
