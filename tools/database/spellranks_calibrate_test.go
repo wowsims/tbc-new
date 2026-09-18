@@ -191,19 +191,19 @@ func compareRow(t *testing.T, db *sql.DB, fam calibFamily, row shared.SpellRank)
 	if row.Direct != nil {
 		out = append(out, matchPair(base, "Direct.Min", "Direct.Max", shared.SpellRankMin(row.Direct), shared.SpellRankMax(row.Direct),
 			directCandidates(candidates), spell)...)
-		coef = shared.SpellRankCoef(row.Direct)
+		coef = row.Direct.BonusCoefficient()
 	}
 
 	if row.Heal != nil {
 		out = append(out, matchPair(base, "Heal.Min", "Heal.Max", shared.SpellRankMin(row.Heal), shared.SpellRankMax(row.Heal),
 			directCandidates(candidates), spell)...)
-		coef = shared.SpellRankCoef(row.Heal)
+		coef = row.Heal.BonusCoefficient()
 	}
 
 	if row.Periodic != nil {
 		out = append(out, matchTick(base, shared.SpellRankMin(row.Periodic), periodicCandidates(candidates), spell))
-		if shared.SpellRankCoef(row.Periodic) > 0 {
-			coef = shared.SpellRankCoef(row.Periodic)
+		if row.Periodic.BonusCoefficient() > 0 {
+			coef = row.Periodic.BonusCoefficient()
 		}
 	}
 
