@@ -148,7 +148,7 @@ func resolveLadder(db *sql.DB, fam RankFamily) (map[int32]int32, error) {
 				list = append(list, strconv.Itoa(int(id)))
 			}
 			sort.Strings(list)
-			return nil, fmt.Errorf("%s rank %d is ambiguous between spells %s - pin it in the manifest",
+			return nil, fmt.Errorf("%s rank %d is ambiguous between spells %s - pin it in the config",
 				fam.Name, rank, strings.Join(list, ", "))
 		}
 		ladder[rank] = chosen[0].SpellID
@@ -193,7 +193,7 @@ func validateLadder(fam RankFamily, ladder map[int32]int32) error {
 		}
 	}
 	if ladder[maxRank] != fam.Anchor {
-		return fmt.Errorf("%s: manifest anchor is %d but the highest resolved rank (%d) is spell %d",
+		return fmt.Errorf("%s: config anchor is %d but the highest resolved rank (%d) is spell %d",
 			fam.Name, fam.Anchor, maxRank, ladder[maxRank])
 	}
 	return nil
@@ -267,7 +267,7 @@ func (row generatedRow) hasValue() bool {
 
 func GenerateSpellRankFiles(helper *DBHelper) error {
 	byClass := map[string][]RankFamily{}
-	for _, fam := range SpellRankManifest {
+	for _, fam := range SpellRankConfigs {
 		byClass[fam.Class] = append(byClass[fam.Class], fam)
 	}
 
@@ -301,7 +301,7 @@ func renderClassFile(db *sql.DB, class string, families []RankFamily) ([]byte, e
 	fmt.Fprintf(&b, "import \"github.com/wowsims/tbc/sim/common/shared\"\n\n")
 
 	// One typed struct holding every table, rather than a package-level var per family: a spell reaches
-	// its ranks through genRanks.Consecration, so a family renamed or dropped in the manifest breaks the
+	// its ranks through genRanks.Consecration, so a family renamed or dropped in the config breaks the
 	// build at the use site instead of leaving an orphaned global behind.
 	b.WriteString("type generatedRanks struct {\n")
 	for _, fam := range families {

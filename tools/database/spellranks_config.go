@@ -4,9 +4,9 @@ import "strings"
 
 // Which spell families get generated rank tables, and for which class.
 //
-// This is the spec: one line per family, anchored on the max-rank spell ID that is already registered
-// in the sim. The anchor is identity - the ladder is rebuilt from that spell's name and skill lines,
-// and the generator hard-fails if the anchor does not come back as the highest rank it found.
+// One line per family, anchored on the max-rank spell ID that is already registered in the sim. The
+// anchor is identity - the ladder is rebuilt from that spell's name and skill lines, and the generator
+// hard-fails if the anchor does not come back as the highest rank it found.
 //
 // SkillLineAbility.SupercedesSpell is 0 for every caster spell in this build, so the chain cannot be
 // walked; name plus "Rank N" plus the class bit is what there is.
@@ -40,7 +40,7 @@ const (
 	ClassBitDruid   = 1024
 )
 
-var SpellRankManifest = []RankFamily{
+var SpellRankConfigs = []RankFamily{
 	{Var: "genConsecrationRanks", Class: "paladin", ClassBit: ClassBitPaladin, Name: "Consecration", Anchor: 27173},
 	{Var: "genHammerOfWrathRanks", Class: "paladin", ClassBit: ClassBitPaladin, Name: "Hammer of Wrath", Anchor: 27180},
 	{Var: "genHolyWrathRanks", Class: "paladin", ClassBit: ClassBitPaladin, Name: "Holy Wrath", Anchor: 27139},
