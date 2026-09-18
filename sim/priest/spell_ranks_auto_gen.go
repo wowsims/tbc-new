@@ -12,74 +12,98 @@ import "github.com/wowsims/tbc/sim/common/shared"
 //   Surge of Light: rank 1 is ambiguous between spells 33150, 33151
 
 type generatedRanks struct {
-	Absolution               shared.SpellRankTable
-	Blackout                 shared.SpellRankTable
-	Chastise                 shared.SpellRankTable
-	CircleOfHealing          shared.SpellRankTable
-	Darkness                 shared.SpellRankTable
-	DesperatePrayer          shared.SpellRankTable
-	DevouringPlague          shared.SpellRankTable
-	DispelMagic              shared.SpellRankTable
-	DivineSpirit             shared.SpellRankTable
-	EmpoweredHealing         shared.SpellRankTable
-	Enlightenment            shared.SpellRankTable
-	Fade                     shared.SpellRankTable
-	Feedback                 shared.SpellRankTable
-	FlashHeal                shared.SpellRankTable
-	FocusedCasting           shared.SpellRankTable
-	FocusedMind              shared.SpellRankTable
-	FocusedPower             shared.SpellRankTable
-	GreaterHeal              shared.SpellRankTable
-	Heal                     shared.SpellRankTable
-	HexOfWeakness            shared.SpellRankTable
-	HolyConcentration        shared.SpellRankTable
-	HolyFire                 shared.SpellRankTable
-	HolyNova                 shared.SpellRankTable
-	HolyReach                shared.SpellRankTable
-	ImprovedDivineSpirit     shared.SpellRankTable
-	ImprovedFade             shared.SpellRankTable
-	ImprovedMindBlast        shared.SpellRankTable
-	ImprovedPsychicScream    shared.SpellRankTable
-	ImprovedShadowWordPain   shared.SpellRankTable
-	ImprovedVampiricEmbrace  shared.SpellRankTable
-	InnerFire                shared.SpellRankTable
-	LesserHeal               shared.SpellRankTable
-	Lightwell                shared.SpellRankTable
-	LightwellRenew           shared.SpellRankTable
-	ManaBurn                 shared.SpellRankTable
-	Martyrdom                shared.SpellRankTable
-	MindBlast                shared.SpellRankTable
-	MindControl              shared.SpellRankTable
-	MindFlay                 shared.SpellRankTable
-	MindSoothe               shared.SpellRankTable
-	MindVision               shared.SpellRankTable
-	PowerWordFortitude       shared.SpellRankTable
-	PowerWordShield          shared.SpellRankTable
-	PrayerOfFortitude        shared.SpellRankTable
-	PrayerOfHealing          shared.SpellRankTable
-	PrayerOfShadowProtection shared.SpellRankTable
-	PrayerOfSpirit           shared.SpellRankTable
-	PsychicScream            shared.SpellRankTable
-	ReflectiveShield         shared.SpellRankTable
-	Renew                    shared.SpellRankTable
-	Resurrection             shared.SpellRankTable
-	ShackleUndead            shared.SpellRankTable
-	ShadowAffinity           shared.SpellRankTable
-	ShadowFocus              shared.SpellRankTable
-	ShadowPower              shared.SpellRankTable
-	ShadowProtection         shared.SpellRankTable
-	ShadowReach              shared.SpellRankTable
-	ShadowResilience         shared.SpellRankTable
-	ShadowWeaving            shared.SpellRankTable
-	ShadowWordDeath          shared.SpellRankTable
-	ShadowWordPain           shared.SpellRankTable
-	Shadowguard              shared.SpellRankTable
-	Smite                    shared.SpellRankTable
-	SpellWarding             shared.SpellRankTable
-	SpiritTap                shared.SpellRankTable
-	Starshards               shared.SpellRankTable
-	TouchOfWeakness          shared.SpellRankTable
-	VampiricTouch            shared.SpellRankTable
+	Absolution                 shared.SpellRankTable
+	BindingHeal                shared.SpellRankTable
+	Blackout                   shared.SpellRankTable
+	Chastise                   shared.SpellRankTable
+	CircleOfHealing            shared.SpellRankTable
+	Darkness                   shared.SpellRankTable
+	DesperatePrayer            shared.SpellRankTable
+	DevouringPlague            shared.SpellRankTable
+	DispelMagic                shared.SpellRankTable
+	DivineFury                 shared.SpellRankTable
+	DivineSpirit               shared.SpellRankTable
+	EmpoweredHealing           shared.SpellRankTable
+	Enlightenment              shared.SpellRankTable
+	Fade                       shared.SpellRankTable
+	Feedback                   shared.SpellRankTable
+	FlashHeal                  shared.SpellRankTable
+	FocusedCasting             shared.SpellRankTable
+	FocusedMind                shared.SpellRankTable
+	FocusedPower               shared.SpellRankTable
+	ForceOfWill                shared.SpellRankTable
+	GreaterHeal                shared.SpellRankTable
+	Heal                       shared.SpellRankTable
+	HealingFocus               shared.SpellRankTable
+	HealingPrayers             shared.SpellRankTable
+	HexOfWeakness              shared.SpellRankTable
+	HolyConcentration          shared.SpellRankTable
+	HolyFire                   shared.SpellRankTable
+	HolyNova                   shared.SpellRankTable
+	HolyReach                  shared.SpellRankTable
+	HolySpecialization         shared.SpellRankTable
+	ImprovedDivineSpirit       shared.SpellRankTable
+	ImprovedFade               shared.SpellRankTable
+	ImprovedHealing            shared.SpellRankTable
+	ImprovedInnerFire          shared.SpellRankTable
+	ImprovedManaBurn           shared.SpellRankTable
+	ImprovedMindBlast          shared.SpellRankTable
+	ImprovedPowerWordFortitude shared.SpellRankTable
+	ImprovedPowerWordShield    shared.SpellRankTable
+	ImprovedPsychicScream      shared.SpellRankTable
+	ImprovedRenew              shared.SpellRankTable
+	ImprovedShadowWordPain     shared.SpellRankTable
+	ImprovedVampiricEmbrace    shared.SpellRankTable
+	InnerFire                  shared.SpellRankTable
+	Inspiration                shared.SpellRankTable
+	LesserHeal                 shared.SpellRankTable
+	Lightwell                  shared.SpellRankTable
+	LightwellRenew             shared.SpellRankTable
+	ManaBurn                   shared.SpellRankTable
+	Martyrdom                  shared.SpellRankTable
+	Meditation                 shared.SpellRankTable
+	MentalAgility              shared.SpellRankTable
+	MentalStrength             shared.SpellRankTable
+	MindBlast                  shared.SpellRankTable
+	MindControl                shared.SpellRankTable
+	MindFlay                   shared.SpellRankTable
+	MindSoothe                 shared.SpellRankTable
+	MindVision                 shared.SpellRankTable
+	PowerWordFortitude         shared.SpellRankTable
+	PowerWordShield            shared.SpellRankTable
+	PrayerOfFortitude          shared.SpellRankTable
+	PrayerOfHealing            shared.SpellRankTable
+	PrayerOfMending            shared.SpellRankTable
+	PrayerOfShadowProtection   shared.SpellRankTable
+	PrayerOfSpirit             shared.SpellRankTable
+	PsychicScream              shared.SpellRankTable
+	ReflectiveShield           shared.SpellRankTable
+	Renew                      shared.SpellRankTable
+	Resurrection               shared.SpellRankTable
+	SearingLight               shared.SpellRankTable
+	ShackleUndead              shared.SpellRankTable
+	ShadowAffinity             shared.SpellRankTable
+	ShadowFocus                shared.SpellRankTable
+	ShadowPower                shared.SpellRankTable
+	ShadowProtection           shared.SpellRankTable
+	ShadowReach                shared.SpellRankTable
+	ShadowResilience           shared.SpellRankTable
+	ShadowWeaving              shared.SpellRankTable
+	ShadowWordDeath            shared.SpellRankTable
+	ShadowWordPain             shared.SpellRankTable
+	Shadowfiend                shared.SpellRankTable
+	Shadowguard                shared.SpellRankTable
+	SilentResolve              shared.SpellRankTable
+	Smite                      shared.SpellRankTable
+	SpellWarding               shared.SpellRankTable
+	SpiritTap                  shared.SpellRankTable
+	SpiritualGuidance          shared.SpellRankTable
+	SpiritualHealing           shared.SpellRankTable
+	Starshards                 shared.SpellRankTable
+	TouchOfWeakness            shared.SpellRankTable
+	UnbreakableWill            shared.SpellRankTable
+	VampiricTouch              shared.SpellRankTable
+	WandSpecialization         shared.SpellRankTable
 }
 
 var genRanks = generatedRanks{
@@ -87,6 +111,9 @@ var genRanks = generatedRanks{
 		{Rank: 1, SpellID: 33167},
 		{Rank: 2, SpellID: 33171},
 		{Rank: 3, SpellID: 33172},
+	},
+	BindingHeal: shared.SpellRankTable{
+		{Rank: 1, SpellID: 32546, Cost: 705, Heal: &shared.SpellRankAmount{Min: 1053, Max: 1350, Coef: 0.42899999022483826}},
 	},
 	Blackout: shared.SpellRankTable{
 		{Rank: 1, SpellID: 15268},
@@ -139,6 +166,13 @@ var genRanks = generatedRanks{
 	DispelMagic: shared.SpellRankTable{
 		{Rank: 1, SpellID: 527},
 		{Rank: 2, SpellID: 988},
+	},
+	DivineFury: shared.SpellRankTable{
+		{Rank: 1, SpellID: 18530},
+		{Rank: 2, SpellID: 18531},
+		{Rank: 3, SpellID: 18533},
+		{Rank: 4, SpellID: 18534},
+		{Rank: 5, SpellID: 18535},
 	},
 	DivineSpirit: shared.SpellRankTable{
 		{Rank: 1, SpellID: 14752, Cost: 250, Direct: &shared.SpellRankAmount{Min: 17, Max: 17, Coef: 0}},
@@ -202,6 +236,13 @@ var genRanks = generatedRanks{
 		{Rank: 1, SpellID: 33186, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 0}},
 		{Rank: 2, SpellID: 33190, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 0}},
 	},
+	ForceOfWill: shared.SpellRankTable{
+		{Rank: 1, SpellID: 18544},
+		{Rank: 2, SpellID: 18547, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 1}},
+		{Rank: 3, SpellID: 18548, Direct: &shared.SpellRankAmount{Min: 3, Max: 3, Coef: 1}},
+		{Rank: 4, SpellID: 18549, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 1}},
+		{Rank: 5, SpellID: 18550, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 1}},
+	},
 	GreaterHeal: shared.SpellRankTable{
 		{Rank: 1, SpellID: 2060, Cost: 370, Heal: &shared.SpellRankAmount{Min: 924, Max: 1039, Coef: 0.8569999933242798}},
 		{Rank: 2, SpellID: 10963, Cost: 455, Heal: &shared.SpellRankAmount{Min: 1178, Max: 1318, Coef: 0.8569999933242798}},
@@ -216,6 +257,14 @@ var genRanks = generatedRanks{
 		{Rank: 2, SpellID: 2055, Cost: 205, Heal: &shared.SpellRankAmount{Min: 445, Max: 507, Coef: 0.8569999933242798}},
 		{Rank: 3, SpellID: 6063, Cost: 255, Heal: &shared.SpellRankAmount{Min: 586, Max: 662, Coef: 0.8569999933242798}},
 		{Rank: 4, SpellID: 6064, Cost: 305, Heal: &shared.SpellRankAmount{Min: 734, Max: 827, Coef: 0.8569999933242798}},
+	},
+	HealingFocus: shared.SpellRankTable{
+		{Rank: 1, SpellID: 14913, Direct: &shared.SpellRankAmount{Min: 35, Max: 35, Coef: 0}},
+		{Rank: 2, SpellID: 15012, Direct: &shared.SpellRankAmount{Min: 70, Max: 70, Coef: 0}},
+	},
+	HealingPrayers: shared.SpellRankTable{
+		{Rank: 1, SpellID: 14911},
+		{Rank: 2, SpellID: 15018},
 	},
 	HexOfWeakness: shared.SpellRankTable{
 		{Rank: 1, SpellID: 9035, Cost: 35},
@@ -255,6 +304,13 @@ var genRanks = generatedRanks{
 		{Rank: 1, SpellID: 27789, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 0}},
 		{Rank: 2, SpellID: 27790, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 0}},
 	},
+	HolySpecialization: shared.SpellRankTable{
+		{Rank: 1, SpellID: 14889},
+		{Rank: 2, SpellID: 15008, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 0}},
+		{Rank: 3, SpellID: 15009, Direct: &shared.SpellRankAmount{Min: 3, Max: 3, Coef: 0}},
+		{Rank: 4, SpellID: 15010, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 0}},
+		{Rank: 5, SpellID: 15011, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 0}},
+	},
 	ImprovedDivineSpirit: shared.SpellRankTable{
 		{Rank: 1, SpellID: 33174, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 0}},
 		{Rank: 2, SpellID: 33182, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 0}},
@@ -263,6 +319,20 @@ var genRanks = generatedRanks{
 		{Rank: 1, SpellID: 15274},
 		{Rank: 2, SpellID: 15311},
 	},
+	ImprovedHealing: shared.SpellRankTable{
+		{Rank: 1, SpellID: 14912},
+		{Rank: 2, SpellID: 15013},
+		{Rank: 3, SpellID: 15014},
+	},
+	ImprovedInnerFire: shared.SpellRankTable{
+		{Rank: 1, SpellID: 14747, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 0}},
+		{Rank: 2, SpellID: 14770, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 0}},
+		{Rank: 3, SpellID: 14771, Direct: &shared.SpellRankAmount{Min: 30, Max: 30, Coef: 0}},
+	},
+	ImprovedManaBurn: shared.SpellRankTable{
+		{Rank: 1, SpellID: 14750},
+		{Rank: 2, SpellID: 14772},
+	},
 	ImprovedMindBlast: shared.SpellRankTable{
 		{Rank: 1, SpellID: 15273},
 		{Rank: 2, SpellID: 15312},
@@ -270,9 +340,23 @@ var genRanks = generatedRanks{
 		{Rank: 4, SpellID: 15314},
 		{Rank: 5, SpellID: 15316},
 	},
+	ImprovedPowerWordFortitude: shared.SpellRankTable{
+		{Rank: 1, SpellID: 14749, Direct: &shared.SpellRankAmount{Min: 15, Max: 15, Coef: 0}},
+		{Rank: 2, SpellID: 14767, Direct: &shared.SpellRankAmount{Min: 30, Max: 30, Coef: 0}},
+	},
+	ImprovedPowerWordShield: shared.SpellRankTable{
+		{Rank: 1, SpellID: 14748, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 0}},
+		{Rank: 2, SpellID: 14768, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 0}},
+		{Rank: 3, SpellID: 14769, Direct: &shared.SpellRankAmount{Min: 15, Max: 15, Coef: 0}},
+	},
 	ImprovedPsychicScream: shared.SpellRankTable{
 		{Rank: 1, SpellID: 15392},
 		{Rank: 2, SpellID: 15448},
+	},
+	ImprovedRenew: shared.SpellRankTable{
+		{Rank: 1, SpellID: 14908, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 0}},
+		{Rank: 2, SpellID: 15020, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 0}},
+		{Rank: 3, SpellID: 17191, Direct: &shared.SpellRankAmount{Min: 15, Max: 15, Coef: 0}},
 	},
 	ImprovedShadowWordPain: shared.SpellRankTable{
 		{Rank: 1, SpellID: 15275, Direct: &shared.SpellRankAmount{Min: 3000, Max: 3000, Coef: 0}},
@@ -290,6 +374,11 @@ var genRanks = generatedRanks{
 		{Rank: 5, SpellID: 10951, Cost: 235, Direct: &shared.SpellRankAmount{Min: 1170, Max: 1170, Coef: 0}},
 		{Rank: 6, SpellID: 10952, Cost: 315, Direct: &shared.SpellRankAmount{Min: 1395, Max: 1395, Coef: 0}},
 		{Rank: 7, SpellID: 25431, Cost: 375, Direct: &shared.SpellRankAmount{Min: 1580, Max: 1580, Coef: 0}},
+	},
+	Inspiration: shared.SpellRankTable{
+		{Rank: 1, SpellID: 14892},
+		{Rank: 2, SpellID: 15362},
+		{Rank: 3, SpellID: 15363},
 	},
 	LesserHeal: shared.SpellRankTable{
 		{Rank: 1, SpellID: 2050, Cost: 30, Heal: &shared.SpellRankAmount{Min: 47, Max: 58, Coef: 0.12300000339746475}},
@@ -320,6 +409,25 @@ var genRanks = generatedRanks{
 	Martyrdom: shared.SpellRankTable{
 		{Rank: 1, SpellID: 14531},
 		{Rank: 2, SpellID: 14774},
+	},
+	Meditation: shared.SpellRankTable{
+		{Rank: 1, SpellID: 14521, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 0}},
+		{Rank: 2, SpellID: 14776, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 0}},
+		{Rank: 3, SpellID: 14777, Direct: &shared.SpellRankAmount{Min: 30, Max: 30, Coef: 0}},
+	},
+	MentalAgility: shared.SpellRankTable{
+		{Rank: 1, SpellID: 14520},
+		{Rank: 2, SpellID: 14780},
+		{Rank: 3, SpellID: 14781},
+		{Rank: 4, SpellID: 14782},
+		{Rank: 5, SpellID: 14783},
+	},
+	MentalStrength: shared.SpellRankTable{
+		{Rank: 1, SpellID: 18551, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 1}},
+		{Rank: 2, SpellID: 18552, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 1}},
+		{Rank: 3, SpellID: 18553, Direct: &shared.SpellRankAmount{Min: 6, Max: 6, Coef: 1}},
+		{Rank: 4, SpellID: 18554, Direct: &shared.SpellRankAmount{Min: 8, Max: 8, Coef: 1}},
+		{Rank: 5, SpellID: 18555, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
 	},
 	MindBlast: shared.SpellRankTable{
 		{Rank: 1, SpellID: 8092, Cost: 50, Direct: &shared.SpellRankAmount{Min: 42, Max: 46, Coef: 0.2680000066757202}},
@@ -394,6 +502,9 @@ var genRanks = generatedRanks{
 		{Rank: 5, SpellID: 25316, Cost: 1070, Heal: &shared.SpellRankAmount{Min: 1019, Max: 1076, Coef: 0.42899999022483826}},
 		{Rank: 6, SpellID: 25308, Cost: 1255, Heal: &shared.SpellRankAmount{Min: 1251, Max: 1322, Coef: 0.42899999022483826}},
 	},
+	PrayerOfMending: shared.SpellRankTable{
+		{Rank: 1, SpellID: 33076, Cost: 390},
+	},
 	PrayerOfShadowProtection: shared.SpellRankTable{
 		{Rank: 1, SpellID: 27683, Cost: 1300, Direct: &shared.SpellRankAmount{Min: 60, Max: 60, Coef: 0}},
 		{Rank: 2, SpellID: 39374, Cost: 1620, Direct: &shared.SpellRankAmount{Min: 70, Max: 70, Coef: 0}},
@@ -436,6 +547,10 @@ var genRanks = generatedRanks{
 		{Rank: 4, SpellID: 10881},
 		{Rank: 5, SpellID: 20770},
 		{Rank: 6, SpellID: 25435},
+	},
+	SearingLight: shared.SpellRankTable{
+		{Rank: 1, SpellID: 14909, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 0}},
+		{Rank: 2, SpellID: 15017, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 0}},
 	},
 	ShackleUndead: shared.SpellRankTable{
 		{Rank: 1, SpellID: 9484, Cost: 90},
@@ -498,6 +613,9 @@ var genRanks = generatedRanks{
 		{Rank: 9, SpellID: 25367, Cost: 510, Periodic: &shared.SpellRankPeriodic{Tick: 167, Coef: 0.18299999833106995}},
 		{Rank: 10, SpellID: 25368, Cost: 575, Periodic: &shared.SpellRankPeriodic{Tick: 206, Coef: 0.18299999833106995}},
 	},
+	Shadowfiend: shared.SpellRankTable{
+		{Rank: 1, SpellID: 34433},
+	},
 	Shadowguard: shared.SpellRankTable{
 		{Rank: 1, SpellID: 18137, Cost: 50, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 0.2669999897480011}},
 		{Rank: 2, SpellID: 19308, Cost: 85, Direct: &shared.SpellRankAmount{Min: 35, Max: 35, Coef: 0.2669999897480011}},
@@ -506,6 +624,13 @@ var genRanks = generatedRanks{
 		{Rank: 5, SpellID: 19311, Cost: 200, Direct: &shared.SpellRankAmount{Min: 90, Max: 90, Coef: 0.2669999897480011}},
 		{Rank: 6, SpellID: 19312, Cost: 250, Direct: &shared.SpellRankAmount{Min: 116, Max: 116, Coef: 0.2669999897480011}},
 		{Rank: 7, SpellID: 25477, Cost: 270, Direct: &shared.SpellRankAmount{Min: 130, Max: 130, Coef: 0.2669999897480011}},
+	},
+	SilentResolve: shared.SpellRankTable{
+		{Rank: 1, SpellID: 14523, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 0}},
+		{Rank: 2, SpellID: 14784, Direct: &shared.SpellRankAmount{Min: 8, Max: 8, Coef: 0}},
+		{Rank: 3, SpellID: 14785, Direct: &shared.SpellRankAmount{Min: 12, Max: 12, Coef: 0}},
+		{Rank: 4, SpellID: 14786, Direct: &shared.SpellRankAmount{Min: 16, Max: 16, Coef: 0}},
+		{Rank: 5, SpellID: 14787, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 0}},
 	},
 	Smite: shared.SpellRankTable{
 		{Rank: 1, SpellID: 585, Cost: 20, Direct: &shared.SpellRankAmount{Min: 15, Max: 20, Coef: 0.12300000339746475}},
@@ -533,6 +658,20 @@ var genRanks = generatedRanks{
 		{Rank: 4, SpellID: 15337},
 		{Rank: 5, SpellID: 15338},
 	},
+	SpiritualGuidance: shared.SpellRankTable{
+		{Rank: 1, SpellID: 14901, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 0}},
+		{Rank: 2, SpellID: 15028, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 0}},
+		{Rank: 3, SpellID: 15029, Direct: &shared.SpellRankAmount{Min: 15, Max: 15, Coef: 0}},
+		{Rank: 4, SpellID: 15030, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 0}},
+		{Rank: 5, SpellID: 15031, Direct: &shared.SpellRankAmount{Min: 25, Max: 25, Coef: 0}},
+	},
+	SpiritualHealing: shared.SpellRankTable{
+		{Rank: 1, SpellID: 14898, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 1}},
+		{Rank: 2, SpellID: 15349, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 1}},
+		{Rank: 3, SpellID: 15354, Direct: &shared.SpellRankAmount{Min: 6, Max: 6, Coef: 1}},
+		{Rank: 4, SpellID: 15355, Direct: &shared.SpellRankAmount{Min: 8, Max: 8, Coef: 1}},
+		{Rank: 5, SpellID: 15356, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+	},
 	Starshards: shared.SpellRankTable{
 		{Rank: 1, SpellID: 10797, Periodic: &shared.SpellRankPeriodic{Tick: 12, Coef: 0.16699999570846558}},
 		{Rank: 2, SpellID: 19296, Periodic: &shared.SpellRankPeriodic{Tick: 23, Coef: 0.16699999570846558}},
@@ -552,9 +691,23 @@ var genRanks = generatedRanks{
 		{Rank: 6, SpellID: 19266, Cost: 195, Direct: &shared.SpellRankAmount{Min: 64, Max: 64, Coef: 0.10700000077486038}},
 		{Rank: 7, SpellID: 25461, Cost: 235, Direct: &shared.SpellRankAmount{Min: 80, Max: 80, Coef: 0.10700000077486038}},
 	},
+	UnbreakableWill: shared.SpellRankTable{
+		{Rank: 1, SpellID: 14522, Direct: &shared.SpellRankAmount{Min: 3, Max: 3, Coef: 0}},
+		{Rank: 2, SpellID: 14788, Direct: &shared.SpellRankAmount{Min: 6, Max: 6, Coef: 0}},
+		{Rank: 3, SpellID: 14789, Direct: &shared.SpellRankAmount{Min: 9, Max: 9, Coef: 0}},
+		{Rank: 4, SpellID: 14790, Direct: &shared.SpellRankAmount{Min: 12, Max: 12, Coef: 0}},
+		{Rank: 5, SpellID: 14791, Direct: &shared.SpellRankAmount{Min: 15, Max: 15, Coef: 0}},
+	},
 	VampiricTouch: shared.SpellRankTable{
 		{Rank: 1, SpellID: 34914, Cost: 325, Periodic: &shared.SpellRankPeriodic{Tick: 90, Coef: 0.20000000298023224}},
 		{Rank: 2, SpellID: 34916, Cost: 400, Periodic: &shared.SpellRankPeriodic{Tick: 120, Coef: 0.20000000298023224}},
 		{Rank: 3, SpellID: 34917, Cost: 425, Periodic: &shared.SpellRankPeriodic{Tick: 130, Coef: 0.20000000298023224}},
+	},
+	WandSpecialization: shared.SpellRankTable{
+		{Rank: 1, SpellID: 14524, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 0}},
+		{Rank: 2, SpellID: 14525, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 0}},
+		{Rank: 3, SpellID: 14526, Direct: &shared.SpellRankAmount{Min: 15, Max: 15, Coef: 0}},
+		{Rank: 4, SpellID: 14527, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 0}},
+		{Rank: 5, SpellID: 14528, Direct: &shared.SpellRankAmount{Min: 25, Max: 25, Coef: 0}},
 	},
 }

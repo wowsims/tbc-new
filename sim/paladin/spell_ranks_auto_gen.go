@@ -6,76 +6,104 @@ import "github.com/wowsims/tbc/sim/common/shared"
 
 // Not generated:
 //   Eye for an Eye: rank 1 is ambiguous between spells 25997, 9799
+//   Judgement of Command: rank 1 is ambiguous between spells 20425, 20467
 //   Seal of Righteousness: rank 1 is ambiguous between spells 20154, 21084
 //   Vindication: rank 1 is ambiguous between spells 67, 9452
 
 type generatedRanks struct {
-	Anticipation               shared.SpellRankTable
-	ArdentDefender             shared.SpellRankTable
-	AvengersShield             shared.SpellRankTable
-	BlessedLife                shared.SpellRankTable
-	BlessingOfLight            shared.SpellRankTable
-	BlessingOfMight            shared.SpellRankTable
-	BlessingOfProtection       shared.SpellRankTable
-	BlessingOfSacrifice        shared.SpellRankTable
-	BlessingOfSanctuary        shared.SpellRankTable
-	BlessingOfWisdom           shared.SpellRankTable
-	CombatExpertise            shared.SpellRankTable
-	Consecration               shared.SpellRankTable
-	Crusade                    shared.SpellRankTable
-	DevotionAura               shared.SpellRankTable
-	DivineProtection           shared.SpellRankTable
-	DivinePurpose              shared.SpellRankTable
-	DivineShield               shared.SpellRankTable
-	Exorcism                   shared.SpellRankTable
-	Fanaticism                 shared.SpellRankTable
-	FireResistanceAura         shared.SpellRankTable
-	FlashOfLight               shared.SpellRankTable
-	FrostResistanceAura        shared.SpellRankTable
-	GreaterBlessingOfLight     shared.SpellRankTable
-	GreaterBlessingOfMight     shared.SpellRankTable
-	GreaterBlessingOfSanctuary shared.SpellRankTable
-	GreaterBlessingOfWisdom    shared.SpellRankTable
-	HammerOfJustice            shared.SpellRankTable
-	HammerOfWrath              shared.SpellRankTable
-	HolyGuidance               shared.SpellRankTable
-	HolyLight                  shared.SpellRankTable
-	HolyPower                  shared.SpellRankTable
-	HolyShield                 shared.SpellRankTable
-	HolyShock                  shared.SpellRankTable
-	HolyWrath                  shared.SpellRankTable
-	ImprovedConcentrationAura  shared.SpellRankTable
-	ImprovedHolyShield         shared.SpellRankTable
-	ImprovedJudgement          shared.SpellRankTable
-	ImprovedSanctityAura       shared.SpellRankTable
-	JudgementOfJustice         shared.SpellRankTable
-	JudgementOfLight           shared.SpellRankTable
-	JudgementOfRighteousness   shared.SpellRankTable
-	JudgementOfWisdom          shared.SpellRankTable
-	JudgementOfTheCrusader     shared.SpellRankTable
-	LayOnHands                 shared.SpellRankTable
-	LightsGrace                shared.SpellRankTable
-	Precision                  shared.SpellRankTable
-	PureOfHeart                shared.SpellRankTable
-	PurifyingPower             shared.SpellRankTable
-	PursuitOfJustice           shared.SpellRankTable
-	Redemption                 shared.SpellRankTable
-	RetributionAura            shared.SpellRankTable
-	SacredDuty                 shared.SpellRankTable
-	SanctifiedJudgement        shared.SpellRankTable
-	SanctifiedLight            shared.SpellRankTable
-	SanctifiedSeals            shared.SpellRankTable
-	SealOfCommand              shared.SpellRankTable
-	SealOfJustice              shared.SpellRankTable
-	SealOfLight                shared.SpellRankTable
-	SealOfWisdom               shared.SpellRankTable
-	SealOfTheCrusader          shared.SpellRankTable
-	ShadowResistanceAura       shared.SpellRankTable
-	SpellWarding               shared.SpellRankTable
-	SpiritualAttunement        shared.SpellRankTable
-	Stoicism                   shared.SpellRankTable
-	TurnUndead                 shared.SpellRankTable
-	UnyieldingFaith            shared.SpellRankTable
+	Anticipation                  shared.SpellRankTable
+	ArdentDefender                shared.SpellRankTable
+	AvengersShield                shared.SpellRankTable
+	Benediction                   shared.SpellRankTable
+	BlessedLife                   shared.SpellRankTable
+	BlessingOfLight               shared.SpellRankTable
+	BlessingOfMight               shared.SpellRankTable
+	BlessingOfProtection          shared.SpellRankTable
+	BlessingOfSacrifice           shared.SpellRankTable
+	BlessingOfSanctuary           shared.SpellRankTable
+	BlessingOfWisdom              shared.SpellRankTable
+	BloodCorruption               shared.SpellRankTable
+	CombatExpertise               shared.SpellRankTable
+	Consecration                  shared.SpellRankTable
+	Conviction                    shared.SpellRankTable
+	Crusade                       shared.SpellRankTable
+	Deflection                    shared.SpellRankTable
+	DevotionAura                  shared.SpellRankTable
+	DivineProtection              shared.SpellRankTable
+	DivinePurpose                 shared.SpellRankTable
+	DivineShield                  shared.SpellRankTable
+	Exorcism                      shared.SpellRankTable
+	Fanaticism                    shared.SpellRankTable
+	FireResistanceAura            shared.SpellRankTable
+	FlashOfLight                  shared.SpellRankTable
+	FrostResistanceAura           shared.SpellRankTable
+	GreaterBlessingOfLight        shared.SpellRankTable
+	GreaterBlessingOfMight        shared.SpellRankTable
+	GreaterBlessingOfSanctuary    shared.SpellRankTable
+	GreaterBlessingOfWisdom       shared.SpellRankTable
+	GuardiansFavor                shared.SpellRankTable
+	HammerOfJustice               shared.SpellRankTable
+	HammerOfWrath                 shared.SpellRankTable
+	HolyGuidance                  shared.SpellRankTable
+	HolyLight                     shared.SpellRankTable
+	HolyPower                     shared.SpellRankTable
+	HolyShield                    shared.SpellRankTable
+	HolyShock                     shared.SpellRankTable
+	HolyVengeance                 shared.SpellRankTable
+	HolyWrath                     shared.SpellRankTable
+	ImprovedBlessingOfMight       shared.SpellRankTable
+	ImprovedConcentrationAura     shared.SpellRankTable
+	ImprovedDevotionAura          shared.SpellRankTable
+	ImprovedHammerOfJustice       shared.SpellRankTable
+	ImprovedHolyShield            shared.SpellRankTable
+	ImprovedJudgement             shared.SpellRankTable
+	ImprovedRetributionAura       shared.SpellRankTable
+	ImprovedRighteousFury         shared.SpellRankTable
+	ImprovedSanctityAura          shared.SpellRankTable
+	ImprovedSealOfTheCrusader     shared.SpellRankTable
+	JudgementOfBlood              shared.SpellRankTable
+	JudgementOfCorruption         shared.SpellRankTable
+	JudgementOfJustice            shared.SpellRankTable
+	JudgementOfLight              shared.SpellRankTable
+	JudgementOfRighteousness      shared.SpellRankTable
+	JudgementOfVengeance          shared.SpellRankTable
+	JudgementOfWisdom             shared.SpellRankTable
+	JudgementOfTheCrusader        shared.SpellRankTable
+	LayOnHands                    shared.SpellRankTable
+	LightsGrace                   shared.SpellRankTable
+	OneHandedWeaponSpecialization shared.SpellRankTable
+	Precision                     shared.SpellRankTable
+	PureOfHeart                   shared.SpellRankTable
+	PurifyingPower                shared.SpellRankTable
+	PursuitOfJustice              shared.SpellRankTable
+	Reckoning                     shared.SpellRankTable
+	Redemption                    shared.SpellRankTable
+	Redoubt                       shared.SpellRankTable
+	RetributionAura               shared.SpellRankTable
+	SacredDuty                    shared.SpellRankTable
+	SanctifiedJudgement           shared.SpellRankTable
+	SanctifiedLight               shared.SpellRankTable
+	SanctifiedSeals               shared.SpellRankTable
+	SealOfBlood                   shared.SpellRankTable
+	SealOfCommand                 shared.SpellRankTable
+	SealOfCorruption              shared.SpellRankTable
+	SealOfJustice                 shared.SpellRankTable
+	SealOfLight                   shared.SpellRankTable
+	SealOfVengeance               shared.SpellRankTable
+	SealOfWisdom                  shared.SpellRankTable
+	SealOfTheCrusader             shared.SpellRankTable
+	SealOfTheMartyr               shared.SpellRankTable
+	ShadowResistanceAura          shared.SpellRankTable
+	ShieldSpecialization          shared.SpellRankTable
+	SpellWarding                  shared.SpellRankTable
+	SpiritualAttunement           shared.SpellRankTable
+	Stoicism                      shared.SpellRankTable
+	Toughness                     shared.SpellRankTable
+	TurnEvil                      shared.SpellRankTable
+	TurnUndead                    shared.SpellRankTable
+	TwoHandedWeaponSpecialization shared.SpellRankTable
+	UnyieldingFaith               shared.SpellRankTable
+	Vengeance                     shared.SpellRankTable
 }
 
 var genRanks = generatedRanks{
@@ -97,6 +125,13 @@ var genRanks = generatedRanks{
 		{Rank: 1, SpellID: 31935, Cost: 500, Direct: &shared.SpellRankAmount{Min: 270, Max: 330, Coef: 0.19300000369548798}},
 		{Rank: 2, SpellID: 32699, Cost: 615, Direct: &shared.SpellRankAmount{Min: 370, Max: 452, Coef: 0.19300000369548798}},
 		{Rank: 3, SpellID: 32700, Cost: 780, Direct: &shared.SpellRankAmount{Min: 494, Max: 602, Coef: 0.19300000369548798}},
+	},
+	Benediction: shared.SpellRankTable{
+		{Rank: 1, SpellID: 20101},
+		{Rank: 2, SpellID: 20102},
+		{Rank: 3, SpellID: 20103},
+		{Rank: 4, SpellID: 20104},
+		{Rank: 5, SpellID: 20105},
 	},
 	BlessedLife: shared.SpellRankTable{
 		{Rank: 1, SpellID: 31828},
@@ -146,6 +181,9 @@ var genRanks = generatedRanks{
 		{Rank: 6, SpellID: 25290, Cost: 125, Direct: &shared.SpellRankAmount{Min: 33, Max: 33, Coef: 0}},
 		{Rank: 7, SpellID: 27142, Cost: 150, Direct: &shared.SpellRankAmount{Min: 41, Max: 41, Coef: 0}},
 	},
+	BloodCorruption: shared.SpellRankTable{
+		{Rank: 1, SpellID: 356110, Periodic: &shared.SpellRankPeriodic{Tick: 30, Coef: 0.03400000184774399}},
+	},
 	CombatExpertise: shared.SpellRankTable{
 		{Rank: 1, SpellID: 31858, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 0}},
 		{Rank: 2, SpellID: 31859, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 0}},
@@ -161,10 +199,24 @@ var genRanks = generatedRanks{
 		{Rank: 5, SpellID: 20924, Cost: 505, Periodic: &shared.SpellRankPeriodic{Tick: 48, Coef: 0.11900000274181366}},
 		{Rank: 6, SpellID: 27173, Cost: 660, Periodic: &shared.SpellRankPeriodic{Tick: 64, Coef: 0.11900000274181366}},
 	},
+	Conviction: shared.SpellRankTable{
+		{Rank: 1, SpellID: 20117},
+		{Rank: 2, SpellID: 20118, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 0}},
+		{Rank: 3, SpellID: 20119, Direct: &shared.SpellRankAmount{Min: 3, Max: 3, Coef: 0}},
+		{Rank: 4, SpellID: 20120, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 0}},
+		{Rank: 5, SpellID: 20121, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 0}},
+	},
 	Crusade: shared.SpellRankTable{
 		{Rank: 1, SpellID: 31866},
 		{Rank: 2, SpellID: 31867, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 1}},
 		{Rank: 3, SpellID: 31868, Direct: &shared.SpellRankAmount{Min: 3, Max: 3, Coef: 1}},
+	},
+	Deflection: shared.SpellRankTable{
+		{Rank: 1, SpellID: 20060},
+		{Rank: 2, SpellID: 20061, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 1}},
+		{Rank: 3, SpellID: 20062, Direct: &shared.SpellRankAmount{Min: 3, Max: 3, Coef: 1}},
+		{Rank: 4, SpellID: 20063, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 1}},
+		{Rank: 5, SpellID: 20064, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 1}},
 	},
 	DevotionAura: shared.SpellRankTable{
 		{Rank: 1, SpellID: 465, Direct: &shared.SpellRankAmount{Min: 55, Max: 55, Coef: 0}},
@@ -244,6 +296,10 @@ var genRanks = generatedRanks{
 		{Rank: 2, SpellID: 25918, Cost: 250, Direct: &shared.SpellRankAmount{Min: 33, Max: 33, Coef: 0}},
 		{Rank: 3, SpellID: 27143, Cost: 310, Direct: &shared.SpellRankAmount{Min: 41, Max: 41, Coef: 0}},
 	},
+	GuardiansFavor: shared.SpellRankTable{
+		{Rank: 1, SpellID: 20174, Direct: &shared.SpellRankAmount{Min: 2000, Max: 2000, Coef: 1}},
+		{Rank: 2, SpellID: 20175, Direct: &shared.SpellRankAmount{Min: 4000, Max: 4000, Coef: 1}},
+	},
 	HammerOfJustice: shared.SpellRankTable{
 		{Rank: 1, SpellID: 853, Cost: 30},
 		{Rank: 2, SpellID: 5588, Cost: 50},
@@ -296,15 +352,37 @@ var genRanks = generatedRanks{
 		{Rank: 4, SpellID: 27174, Cost: 575, Direct: &shared.SpellRankAmount{Min: 614, Max: 664, Coef: 0.42899999022483826}, Heal: &shared.SpellRankAmount{Min: 777, Max: 841, Coef: 0.42899999022483826}},
 		{Rank: 5, SpellID: 33072, Cost: 650, Direct: &shared.SpellRankAmount{Min: 721, Max: 779, Coef: 0.42899999022483826}, Heal: &shared.SpellRankAmount{Min: 913, Max: 987, Coef: 0.42899999022483826}},
 	},
+	HolyVengeance: shared.SpellRankTable{
+		{Rank: 1, SpellID: 31803, Periodic: &shared.SpellRankPeriodic{Tick: 30, Coef: 0.03400000184774399}},
+	},
 	HolyWrath: shared.SpellRankTable{
 		{Rank: 1, SpellID: 2812, Cost: 550, Direct: &shared.SpellRankAmount{Min: 368, Max: 435, Coef: 0.28600001335144043}},
 		{Rank: 2, SpellID: 10318, Cost: 685, Direct: &shared.SpellRankAmount{Min: 497, Max: 584, Coef: 0.28600001335144043}},
 		{Rank: 3, SpellID: 27139, Cost: 825, Direct: &shared.SpellRankAmount{Min: 637, Max: 748, Coef: 0.28600001335144043}},
 	},
+	ImprovedBlessingOfMight: shared.SpellRankTable{
+		{Rank: 1, SpellID: 20042, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 1}},
+		{Rank: 2, SpellID: 20045, Direct: &shared.SpellRankAmount{Min: 8, Max: 8, Coef: 1}},
+		{Rank: 3, SpellID: 20046, Direct: &shared.SpellRankAmount{Min: 12, Max: 12, Coef: 1}},
+		{Rank: 4, SpellID: 20047, Direct: &shared.SpellRankAmount{Min: 16, Max: 16, Coef: 1}},
+		{Rank: 5, SpellID: 20048, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 1}},
+	},
 	ImprovedConcentrationAura: shared.SpellRankTable{
 		{Rank: 1, SpellID: 20254, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 1}},
 		{Rank: 2, SpellID: 20255, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
 		{Rank: 3, SpellID: 20256, Direct: &shared.SpellRankAmount{Min: 15, Max: 15, Coef: 1}},
+	},
+	ImprovedDevotionAura: shared.SpellRankTable{
+		{Rank: 1, SpellID: 20138, Direct: &shared.SpellRankAmount{Min: 8, Max: 8, Coef: 1}},
+		{Rank: 2, SpellID: 20139, Direct: &shared.SpellRankAmount{Min: 16, Max: 16, Coef: 1}},
+		{Rank: 3, SpellID: 20140, Direct: &shared.SpellRankAmount{Min: 24, Max: 24, Coef: 1}},
+		{Rank: 4, SpellID: 20141, Direct: &shared.SpellRankAmount{Min: 32, Max: 32, Coef: 1}},
+		{Rank: 5, SpellID: 20142, Direct: &shared.SpellRankAmount{Min: 40, Max: 40, Coef: 1}},
+	},
+	ImprovedHammerOfJustice: shared.SpellRankTable{
+		{Rank: 1, SpellID: 20487},
+		{Rank: 2, SpellID: 20488},
+		{Rank: 3, SpellID: 20489},
 	},
 	ImprovedHolyShield: shared.SpellRankTable{
 		{Rank: 1, SpellID: 41021, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 0}},
@@ -314,9 +392,29 @@ var genRanks = generatedRanks{
 		{Rank: 1, SpellID: 25956},
 		{Rank: 2, SpellID: 25957},
 	},
+	ImprovedRetributionAura: shared.SpellRankTable{
+		{Rank: 1, SpellID: 20091, Direct: &shared.SpellRankAmount{Min: 25, Max: 25, Coef: 1}},
+		{Rank: 2, SpellID: 20092, Direct: &shared.SpellRankAmount{Min: 50, Max: 50, Coef: 1}},
+	},
+	ImprovedRighteousFury: shared.SpellRankTable{
+		{Rank: 1, SpellID: 20468, Direct: &shared.SpellRankAmount{Min: 16, Max: 16, Coef: 1}},
+		{Rank: 2, SpellID: 20469, Direct: &shared.SpellRankAmount{Min: 33, Max: 33, Coef: 1}},
+		{Rank: 3, SpellID: 20470, Direct: &shared.SpellRankAmount{Min: 50, Max: 50, Coef: 1}},
+	},
 	ImprovedSanctityAura: shared.SpellRankTable{
 		{Rank: 1, SpellID: 31869},
 		{Rank: 2, SpellID: 31870, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 1}},
+	},
+	ImprovedSealOfTheCrusader: shared.SpellRankTable{
+		{Rank: 1, SpellID: 20335},
+		{Rank: 2, SpellID: 20336, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 1}},
+		{Rank: 3, SpellID: 20337, Direct: &shared.SpellRankAmount{Min: 3, Max: 3, Coef: 1}},
+	},
+	JudgementOfBlood: shared.SpellRankTable{
+		{Rank: 1, SpellID: 31898, Direct: &shared.SpellRankAmount{Min: 331, Max: 362, Coef: 0.42899999022483826}},
+	},
+	JudgementOfCorruption: shared.SpellRankTable{
+		{Rank: 1, SpellID: 356112, Direct: &shared.SpellRankAmount{Min: 120, Max: 120, Coef: 0.42899999022483826}},
 	},
 	JudgementOfJustice: shared.SpellRankTable{
 		{Rank: 1, SpellID: 20184},
@@ -339,6 +437,9 @@ var genRanks = generatedRanks{
 		{Rank: 7, SpellID: 20285, Direct: &shared.SpellRankAmount{Min: 155, Max: 168, Coef: 0.7279999852180481}},
 		{Rank: 8, SpellID: 20286, Direct: &shared.SpellRankAmount{Min: 186, Max: 203, Coef: 0.7279999852180481}},
 		{Rank: 9, SpellID: 27157, Direct: &shared.SpellRankAmount{Min: 225, Max: 246, Coef: 0.7279999852180481}},
+	},
+	JudgementOfVengeance: shared.SpellRankTable{
+		{Rank: 1, SpellID: 31804, Direct: &shared.SpellRankAmount{Min: 120, Max: 120, Coef: 0.42899999022483826}},
 	},
 	JudgementOfWisdom: shared.SpellRankTable{
 		{Rank: 1, SpellID: 20186},
@@ -366,6 +467,13 @@ var genRanks = generatedRanks{
 		{Rank: 2, SpellID: 31835},
 		{Rank: 3, SpellID: 31836},
 	},
+	OneHandedWeaponSpecialization: shared.SpellRankTable{
+		{Rank: 1, SpellID: 20196},
+		{Rank: 2, SpellID: 20197, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 0}},
+		{Rank: 3, SpellID: 20198, Direct: &shared.SpellRankAmount{Min: 3, Max: 3, Coef: 0}},
+		{Rank: 4, SpellID: 20199, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 0}},
+		{Rank: 5, SpellID: 20200, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 0}},
+	},
 	Precision: shared.SpellRankTable{
 		{Rank: 1, SpellID: 20189},
 		{Rank: 2, SpellID: 20192, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 1}},
@@ -385,12 +493,26 @@ var genRanks = generatedRanks{
 		{Rank: 2, SpellID: 26023, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
 		{Rank: 3, SpellID: 44414, Direct: &shared.SpellRankAmount{Min: 15, Max: 15, Coef: 1}},
 	},
+	Reckoning: shared.SpellRankTable{
+		{Rank: 1, SpellID: 20177},
+		{Rank: 2, SpellID: 20179},
+		{Rank: 3, SpellID: 20181},
+		{Rank: 4, SpellID: 20180},
+		{Rank: 5, SpellID: 20182},
+	},
 	Redemption: shared.SpellRankTable{
 		{Rank: 1, SpellID: 7328},
 		{Rank: 2, SpellID: 10322},
 		{Rank: 3, SpellID: 10324},
 		{Rank: 4, SpellID: 20772},
 		{Rank: 5, SpellID: 20773},
+	},
+	Redoubt: shared.SpellRankTable{
+		{Rank: 1, SpellID: 20127},
+		{Rank: 2, SpellID: 20130},
+		{Rank: 3, SpellID: 20135},
+		{Rank: 4, SpellID: 20136},
+		{Rank: 5, SpellID: 20137},
 	},
 	RetributionAura: shared.SpellRankTable{
 		{Rank: 1, SpellID: 7294, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 0}},
@@ -419,6 +541,9 @@ var genRanks = generatedRanks{
 		{Rank: 2, SpellID: 35396, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 1}},
 		{Rank: 3, SpellID: 35397, Direct: &shared.SpellRankAmount{Min: 3, Max: 3, Coef: 1}},
 	},
+	SealOfBlood: shared.SpellRankTable{
+		{Rank: 1, SpellID: 31892, Cost: 210, Direct: &shared.SpellRankAmount{Min: 40, Max: 40, Coef: 0}},
+	},
 	SealOfCommand: shared.SpellRankTable{
 		{Rank: 1, SpellID: 20375, Cost: 65, Direct: &shared.SpellRankAmount{Min: 20425, Max: 20425, Coef: 0}},
 		{Rank: 2, SpellID: 20915, Cost: 110, Direct: &shared.SpellRankAmount{Min: 20962, Max: 20962, Coef: 0}},
@@ -426,6 +551,9 @@ var genRanks = generatedRanks{
 		{Rank: 4, SpellID: 20919, Cost: 180, Direct: &shared.SpellRankAmount{Min: 20967, Max: 20967, Coef: 0}},
 		{Rank: 5, SpellID: 20920, Cost: 210, Direct: &shared.SpellRankAmount{Min: 20968, Max: 20968, Coef: 0}},
 		{Rank: 6, SpellID: 27170, Cost: 280, Direct: &shared.SpellRankAmount{Min: 27172, Max: 27172, Coef: 0}},
+	},
+	SealOfCorruption: shared.SpellRankTable{
+		{Rank: 1, SpellID: 348704, Cost: 250, Direct: &shared.SpellRankAmount{Min: 356113, Max: 356113, Coef: 0}},
 	},
 	SealOfJustice: shared.SpellRankTable{
 		{Rank: 1, SpellID: 20164, Direct: &shared.SpellRankAmount{Min: 20184, Max: 20184, Coef: 0}},
@@ -437,6 +565,9 @@ var genRanks = generatedRanks{
 		{Rank: 3, SpellID: 20348, Cost: 180, Direct: &shared.SpellRankAmount{Min: 20345, Max: 20345, Coef: 0}},
 		{Rank: 4, SpellID: 20349, Cost: 210, Direct: &shared.SpellRankAmount{Min: 20346, Max: 20346, Coef: 0}},
 		{Rank: 5, SpellID: 27160, Cost: 280, Direct: &shared.SpellRankAmount{Min: 27162, Max: 27162, Coef: 0}},
+	},
+	SealOfVengeance: shared.SpellRankTable{
+		{Rank: 1, SpellID: 31801, Cost: 250, Direct: &shared.SpellRankAmount{Min: 31804, Max: 31804, Coef: 0}},
 	},
 	SealOfWisdom: shared.SpellRankTable{
 		{Rank: 1, SpellID: 20166, Cost: 135, Direct: &shared.SpellRankAmount{Min: 20186, Max: 20186, Coef: 0}},
@@ -453,11 +584,19 @@ var genRanks = generatedRanks{
 		{Rank: 6, SpellID: 20308, Cost: 160, Direct: &shared.SpellRankAmount{Min: 371, Max: 372, Coef: 0}},
 		{Rank: 7, SpellID: 27158, Cost: 210, Direct: &shared.SpellRankAmount{Min: 494, Max: 495, Coef: 0}},
 	},
+	SealOfTheMartyr: shared.SpellRankTable{
+		{Rank: 1, SpellID: 348700, Cost: 210, Direct: &shared.SpellRankAmount{Min: 40, Max: 40, Coef: 0}},
+	},
 	ShadowResistanceAura: shared.SpellRankTable{
 		{Rank: 1, SpellID: 19876, Direct: &shared.SpellRankAmount{Min: 30, Max: 30, Coef: 0}},
 		{Rank: 2, SpellID: 19895, Direct: &shared.SpellRankAmount{Min: 45, Max: 45, Coef: 0}},
 		{Rank: 3, SpellID: 19896, Direct: &shared.SpellRankAmount{Min: 60, Max: 60, Coef: 0}},
 		{Rank: 4, SpellID: 27151, Direct: &shared.SpellRankAmount{Min: 70, Max: 70, Coef: 0}},
+	},
+	ShieldSpecialization: shared.SpellRankTable{
+		{Rank: 1, SpellID: 20148, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 0}},
+		{Rank: 2, SpellID: 20149, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 0}},
+		{Rank: 3, SpellID: 20150, Direct: &shared.SpellRankAmount{Min: 30, Max: 30, Coef: 0}},
 	},
 	SpellWarding: shared.SpellRankTable{
 		{Rank: 1, SpellID: 31846},
@@ -471,12 +610,34 @@ var genRanks = generatedRanks{
 		{Rank: 1, SpellID: 31844, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 0}},
 		{Rank: 2, SpellID: 31845, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 0}},
 	},
+	Toughness: shared.SpellRankTable{
+		{Rank: 1, SpellID: 20143, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 0}},
+		{Rank: 2, SpellID: 20144, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 0}},
+		{Rank: 3, SpellID: 20145, Direct: &shared.SpellRankAmount{Min: 6, Max: 6, Coef: 0}},
+		{Rank: 4, SpellID: 20146, Direct: &shared.SpellRankAmount{Min: 8, Max: 8, Coef: 0}},
+		{Rank: 5, SpellID: 20147, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 0}},
+	},
+	TurnEvil: shared.SpellRankTable{
+		{Rank: 1, SpellID: 10326, Cost: 75, Direct: &shared.SpellRankAmount{Min: 25, Max: 25, Coef: 0}},
+	},
 	TurnUndead: shared.SpellRankTable{
 		{Rank: 1, SpellID: 2878, Cost: 35, Direct: &shared.SpellRankAmount{Min: 25, Max: 25, Coef: 0}},
 		{Rank: 2, SpellID: 5627, Cost: 50, Direct: &shared.SpellRankAmount{Min: 25, Max: 25, Coef: 0}},
 	},
+	TwoHandedWeaponSpecialization: shared.SpellRankTable{
+		{Rank: 1, SpellID: 20111, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 0}},
+		{Rank: 2, SpellID: 20112, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 0}},
+		{Rank: 3, SpellID: 20113, Direct: &shared.SpellRankAmount{Min: 6, Max: 6, Coef: 0}},
+	},
 	UnyieldingFaith: shared.SpellRankTable{
 		{Rank: 1, SpellID: 9453, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 1}},
 		{Rank: 2, SpellID: 25836, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+	},
+	Vengeance: shared.SpellRankTable{
+		{Rank: 1, SpellID: 20049},
+		{Rank: 2, SpellID: 20056},
+		{Rank: 3, SpellID: 20057},
+		{Rank: 4, SpellID: 20058},
+		{Rank: 5, SpellID: 20059},
 	},
 }

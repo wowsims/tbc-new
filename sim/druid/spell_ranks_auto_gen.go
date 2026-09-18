@@ -10,40 +10,68 @@ import "github.com/wowsims/tbc/sim/common/shared"
 type generatedRanks struct {
 	BalanceOfPower          shared.SpellRankTable
 	Bash                    shared.SpellRankTable
+	BloodFrenzy             shared.SpellRankTable
+	Brambles                shared.SpellRankTable
+	BrutalImpact            shared.SpellRankTable
+	CelestialFocus          shared.SpellRankTable
 	Claw                    shared.SpellRankTable
+	ControlOfNature         shared.SpellRankTable
 	Cower                   shared.SpellRankTable
 	Dash                    shared.SpellRankTable
 	DemoralizingRoar        shared.SpellRankTable
 	Dreamstate              shared.SpellRankTable
 	EmpoweredRejuvenation   shared.SpellRankTable
 	EmpoweredTouch          shared.SpellRankTable
+	EnragedDefense          shared.SpellRankTable
 	EntanglingRoots         shared.SpellRankTable
 	FaerieFire              shared.SpellRankTable
 	FaerieFireFeral         shared.SpellRankTable
+	FeralAggression         shared.SpellRankTable
+	FeralInstinct           shared.SpellRankTable
 	FerociousBite           shared.SpellRankTable
+	Ferocity                shared.SpellRankTable
 	FrenziedRegeneration    shared.SpellRankTable
+	Furor                   shared.SpellRankTable
 	GiftOfNature            shared.SpellRankTable
 	GiftOfTheWild           shared.SpellRankTable
 	HealingTouch            shared.SpellRankTable
+	HeartOfTheWild          shared.SpellRankTable
 	Hibernate               shared.SpellRankTable
 	Hurricane               shared.SpellRankTable
 	ImprovedFaerieFire      shared.SpellRankTable
 	ImprovedLeaderOfThePack shared.SpellRankTable
+	ImprovedMarkOfTheWild   shared.SpellRankTable
+	ImprovedMoonfire        shared.SpellRankTable
+	ImprovedNaturesGrasp    shared.SpellRankTable
+	ImprovedRegrowth        shared.SpellRankTable
+	ImprovedRejuvenation    shared.SpellRankTable
+	ImprovedTranquility     shared.SpellRankTable
 	InsectSwarm             shared.SpellRankTable
+	Intensity               shared.SpellRankTable
+	Lacerate                shared.SpellRankTable
+	Lifebloom               shared.SpellRankTable
 	LivingSpirit            shared.SpellRankTable
 	LunarGuidance           shared.SpellRankTable
+	Maim                    shared.SpellRankTable
+	Mangle                  shared.SpellRankTable
 	MangleBear              shared.SpellRankTable
 	MangleCat               shared.SpellRankTable
 	MarkOfTheWild           shared.SpellRankTable
 	Maul                    shared.SpellRankTable
 	Moonfire                shared.SpellRankTable
+	Moonfury                shared.SpellRankTable
+	Moonglow                shared.SpellRankTable
 	NaturalPerfection       shared.SpellRankTable
 	NaturalShapeshifter     shared.SpellRankTable
+	Naturalist              shared.SpellRankTable
+	NaturesFocus            shared.SpellRankTable
 	NaturesGrasp            shared.SpellRankTable
+	NaturesReach            shared.SpellRankTable
 	NurturingInstinct       shared.SpellRankTable
 	Pounce                  shared.SpellRankTable
 	PounceBleed             shared.SpellRankTable
 	PredatoryInstincts      shared.SpellRankTable
+	PredatoryStrikes        shared.SpellRankTable
 	PrimalFury              shared.SpellRankTable
 	PrimalTenacity          shared.SpellRankTable
 	Prowl                   shared.SpellRankTable
@@ -53,15 +81,22 @@ type generatedRanks struct {
 	Regrowth                shared.SpellRankTable
 	Rejuvenation            shared.SpellRankTable
 	Rip                     shared.SpellRankTable
+	SavageFury              shared.SpellRankTable
+	SharpenedClaws          shared.SpellRankTable
 	Shred                   shared.SpellRankTable
+	ShreddingAttacks        shared.SpellRankTable
 	SootheAnimal            shared.SpellRankTable
 	Starfire                shared.SpellRankTable
+	StarlightWrath          shared.SpellRankTable
+	Subtlety                shared.SpellRankTable
 	SurvivalOfTheFittest    shared.SpellRankTable
 	Swipe                   shared.SpellRankTable
+	ThickHide               shared.SpellRankTable
 	Thorns                  shared.SpellRankTable
 	TigersFury              shared.SpellRankTable
 	TranquilSpirit          shared.SpellRankTable
 	Tranquility             shared.SpellRankTable
+	Vengeance               shared.SpellRankTable
 	Wrath                   shared.SpellRankTable
 	WrathOfCenarius         shared.SpellRankTable
 }
@@ -76,6 +111,24 @@ var genRanks = generatedRanks{
 		{Rank: 2, SpellID: 6798, Cost: 100},
 		{Rank: 3, SpellID: 8983, Cost: 100},
 	},
+	BloodFrenzy: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16952},
+		{Rank: 2, SpellID: 16954},
+	},
+	Brambles: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16836, Direct: &shared.SpellRankAmount{Min: 25, Max: 25, Coef: 1}},
+		{Rank: 2, SpellID: 16839, Direct: &shared.SpellRankAmount{Min: 50, Max: 50, Coef: 1}},
+		{Rank: 3, SpellID: 16840, Direct: &shared.SpellRankAmount{Min: 75, Max: 75, Coef: 1}},
+	},
+	BrutalImpact: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16940, Direct: &shared.SpellRankAmount{Min: 500, Max: 500, Coef: 1}},
+		{Rank: 2, SpellID: 16941, Direct: &shared.SpellRankAmount{Min: 1000, Max: 1000, Coef: 1}},
+	},
+	CelestialFocus: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16850, Direct: &shared.SpellRankAmount{Min: 25, Max: 25, Coef: 0}},
+		{Rank: 2, SpellID: 16923, Direct: &shared.SpellRankAmount{Min: 50, Max: 50, Coef: 0}},
+		{Rank: 3, SpellID: 16924, Direct: &shared.SpellRankAmount{Min: 70, Max: 70, Coef: 0}},
+	},
 	Claw: shared.SpellRankTable{
 		{Rank: 1, SpellID: 1082, Cost: 45},
 		{Rank: 2, SpellID: 3029, Cost: 45},
@@ -83,6 +136,11 @@ var genRanks = generatedRanks{
 		{Rank: 4, SpellID: 9849, Cost: 45},
 		{Rank: 5, SpellID: 9850, Cost: 45},
 		{Rank: 6, SpellID: 27000, Cost: 45},
+	},
+	ControlOfNature: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16918, Direct: &shared.SpellRankAmount{Min: 40, Max: 40, Coef: 1}},
+		{Rank: 2, SpellID: 16919, Direct: &shared.SpellRankAmount{Min: 70, Max: 70, Coef: 1}},
+		{Rank: 3, SpellID: 16920, Direct: &shared.SpellRankAmount{Min: 100, Max: 100, Coef: 1}},
 	},
 	Cower: shared.SpellRankTable{
 		{Rank: 1, SpellID: 8998, Cost: 20},
@@ -120,6 +178,9 @@ var genRanks = generatedRanks{
 		{Rank: 1, SpellID: 33879, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
 		{Rank: 2, SpellID: 33880, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 1}},
 	},
+	EnragedDefense: shared.SpellRankTable{
+		{Rank: 1, SpellID: 6542},
+	},
 	EntanglingRoots: shared.SpellRankTable{
 		{Rank: 1, SpellID: 339, Cost: 50, Periodic: &shared.SpellRankPeriodic{Tick: 5, Coef: 0.054999999701976776}},
 		{Rank: 2, SpellID: 1062, Cost: 65, Periodic: &shared.SpellRankPeriodic{Tick: 10, Coef: 0.09300000220537186}},
@@ -143,6 +204,18 @@ var genRanks = generatedRanks{
 		{Rank: 4, SpellID: 17392},
 		{Rank: 5, SpellID: 27011},
 	},
+	FeralAggression: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16858, Direct: &shared.SpellRankAmount{Min: 8, Max: 8, Coef: 1}},
+		{Rank: 2, SpellID: 16859, Direct: &shared.SpellRankAmount{Min: 16, Max: 16, Coef: 1}},
+		{Rank: 3, SpellID: 16860, Direct: &shared.SpellRankAmount{Min: 24, Max: 24, Coef: 1}},
+		{Rank: 4, SpellID: 16861, Direct: &shared.SpellRankAmount{Min: 32, Max: 32, Coef: 1}},
+		{Rank: 5, SpellID: 16862, Direct: &shared.SpellRankAmount{Min: 40, Max: 40, Coef: 1}},
+	},
+	FeralInstinct: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16947, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 1}},
+		{Rank: 2, SpellID: 16948, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+		{Rank: 3, SpellID: 16949, Direct: &shared.SpellRankAmount{Min: 15, Max: 15, Coef: 1}},
+	},
 	FerociousBite: shared.SpellRankTable{
 		{Rank: 1, SpellID: 22568, Cost: 35, Direct: &shared.SpellRankAmount{Min: 14, Max: 30, Coef: 1}},
 		{Rank: 2, SpellID: 22827, Cost: 35, Direct: &shared.SpellRankAmount{Min: 20, Max: 44, Coef: 1}},
@@ -151,11 +224,25 @@ var genRanks = generatedRanks{
 		{Rank: 5, SpellID: 31018, Cost: 35, Direct: &shared.SpellRankAmount{Min: 52, Max: 112, Coef: 1}},
 		{Rank: 6, SpellID: 24248, Cost: 35, Direct: &shared.SpellRankAmount{Min: 57, Max: 123, Coef: 0}},
 	},
+	Ferocity: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16934},
+		{Rank: 2, SpellID: 16935},
+		{Rank: 3, SpellID: 16936},
+		{Rank: 4, SpellID: 16937},
+		{Rank: 5, SpellID: 16938},
+	},
 	FrenziedRegeneration: shared.SpellRankTable{
 		{Rank: 1, SpellID: 22842, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 0}},
 		{Rank: 2, SpellID: 22895, Direct: &shared.SpellRankAmount{Min: 15, Max: 15, Coef: 0}},
 		{Rank: 3, SpellID: 22896, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 0}},
 		{Rank: 4, SpellID: 26999, Direct: &shared.SpellRankAmount{Min: 25, Max: 25, Coef: 0}},
+	},
+	Furor: shared.SpellRankTable{
+		{Rank: 1, SpellID: 17056, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 1}},
+		{Rank: 2, SpellID: 17058, Direct: &shared.SpellRankAmount{Min: 40, Max: 40, Coef: 1}},
+		{Rank: 3, SpellID: 17059, Direct: &shared.SpellRankAmount{Min: 60, Max: 60, Coef: 1}},
+		{Rank: 4, SpellID: 17060, Direct: &shared.SpellRankAmount{Min: 80, Max: 80, Coef: 1}},
+		{Rank: 5, SpellID: 17061, Direct: &shared.SpellRankAmount{Min: 100, Max: 100, Coef: 1}},
 	},
 	GiftOfNature: shared.SpellRankTable{
 		{Rank: 1, SpellID: 17104, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 1}},
@@ -184,6 +271,13 @@ var genRanks = generatedRanks{
 		{Rank: 12, SpellID: 26978, Cost: 820, Heal: &shared.SpellRankAmount{Min: 2401, Max: 2827, Coef: 1}},
 		{Rank: 13, SpellID: 26979, Cost: 935, Heal: &shared.SpellRankAmount{Min: 2715, Max: 3206, Coef: 1}},
 	},
+	HeartOfTheWild: shared.SpellRankTable{
+		{Rank: 1, SpellID: 17003, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 1}},
+		{Rank: 2, SpellID: 17004, Direct: &shared.SpellRankAmount{Min: 8, Max: 8, Coef: 1}},
+		{Rank: 3, SpellID: 17005, Direct: &shared.SpellRankAmount{Min: 12, Max: 12, Coef: 1}},
+		{Rank: 4, SpellID: 17006, Direct: &shared.SpellRankAmount{Min: 16, Max: 16, Coef: 1}},
+		{Rank: 5, SpellID: 24894, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 1}},
+	},
 	Hibernate: shared.SpellRankTable{
 		{Rank: 1, SpellID: 2637, Cost: 90},
 		{Rank: 2, SpellID: 18657, Cost: 120},
@@ -204,6 +298,39 @@ var genRanks = generatedRanks{
 		{Rank: 1, SpellID: 34297, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 0}},
 		{Rank: 2, SpellID: 34300, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 0}},
 	},
+	ImprovedMarkOfTheWild: shared.SpellRankTable{
+		{Rank: 1, SpellID: 17050, Direct: &shared.SpellRankAmount{Min: 7, Max: 7, Coef: 1}},
+		{Rank: 2, SpellID: 17051, Direct: &shared.SpellRankAmount{Min: 14, Max: 14, Coef: 1}},
+		{Rank: 3, SpellID: 17053, Direct: &shared.SpellRankAmount{Min: 21, Max: 21, Coef: 1}},
+		{Rank: 4, SpellID: 17054, Direct: &shared.SpellRankAmount{Min: 28, Max: 28, Coef: 1}},
+		{Rank: 5, SpellID: 17055, Direct: &shared.SpellRankAmount{Min: 35, Max: 35, Coef: 1}},
+	},
+	ImprovedMoonfire: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16821, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 1}},
+		{Rank: 2, SpellID: 16822, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+	},
+	ImprovedNaturesGrasp: shared.SpellRankTable{
+		{Rank: 1, SpellID: 17245, Direct: &shared.SpellRankAmount{Min: 15, Max: 15, Coef: 1}},
+		{Rank: 2, SpellID: 17247, Direct: &shared.SpellRankAmount{Min: 30, Max: 30, Coef: 1}},
+		{Rank: 3, SpellID: 17248, Direct: &shared.SpellRankAmount{Min: 45, Max: 45, Coef: 1}},
+		{Rank: 4, SpellID: 17249, Direct: &shared.SpellRankAmount{Min: 65, Max: 65, Coef: 1}},
+	},
+	ImprovedRegrowth: shared.SpellRankTable{
+		{Rank: 1, SpellID: 17074, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+		{Rank: 2, SpellID: 17075, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 1}},
+		{Rank: 3, SpellID: 17076, Direct: &shared.SpellRankAmount{Min: 30, Max: 30, Coef: 1}},
+		{Rank: 4, SpellID: 17077, Direct: &shared.SpellRankAmount{Min: 40, Max: 40, Coef: 1}},
+		{Rank: 5, SpellID: 17078, Direct: &shared.SpellRankAmount{Min: 50, Max: 50, Coef: 1}},
+	},
+	ImprovedRejuvenation: shared.SpellRankTable{
+		{Rank: 1, SpellID: 17111, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 1}},
+		{Rank: 2, SpellID: 17112, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+		{Rank: 3, SpellID: 17113, Direct: &shared.SpellRankAmount{Min: 15, Max: 15, Coef: 1}},
+	},
+	ImprovedTranquility: shared.SpellRankTable{
+		{Rank: 1, SpellID: 17123},
+		{Rank: 2, SpellID: 17124},
+	},
 	InsectSwarm: shared.SpellRankTable{
 		{Rank: 1, SpellID: 5570, Cost: 50, Periodic: &shared.SpellRankPeriodic{Tick: 18, Coef: 0.12700000405311584}},
 		{Rank: 2, SpellID: 24974, Cost: 85, Periodic: &shared.SpellRankPeriodic{Tick: 32, Coef: 0.12700000405311584}},
@@ -211,6 +338,17 @@ var genRanks = generatedRanks{
 		{Rank: 4, SpellID: 24976, Cost: 135, Periodic: &shared.SpellRankPeriodic{Tick: 72, Coef: 0.12700000405311584}},
 		{Rank: 5, SpellID: 24977, Cost: 155, Periodic: &shared.SpellRankPeriodic{Tick: 99, Coef: 0.12700000405311584}},
 		{Rank: 6, SpellID: 27013, Cost: 175, Periodic: &shared.SpellRankPeriodic{Tick: 132, Coef: 0.12700000405311584}},
+	},
+	Intensity: shared.SpellRankTable{
+		{Rank: 1, SpellID: 17106, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+		{Rank: 2, SpellID: 17107, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 1}},
+		{Rank: 3, SpellID: 17108, Direct: &shared.SpellRankAmount{Min: 30, Max: 30, Coef: 1}},
+	},
+	Lacerate: shared.SpellRankTable{
+		{Rank: 1, SpellID: 33745, Cost: 150, Direct: &shared.SpellRankAmount{Min: 31, Max: 31, Coef: 0}, Periodic: &shared.SpellRankPeriodic{Tick: 31, Coef: 0}},
+	},
+	Lifebloom: shared.SpellRankTable{
+		{Rank: 1, SpellID: 33763, Cost: 220, Direct: &shared.SpellRankAmount{Min: 39, Max: 39, Coef: 0.07419999688863754}},
 	},
 	LivingSpirit: shared.SpellRankTable{
 		{Rank: 1, SpellID: 34151, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 1}},
@@ -221,6 +359,12 @@ var genRanks = generatedRanks{
 		{Rank: 1, SpellID: 33589, Direct: &shared.SpellRankAmount{Min: 8, Max: 8, Coef: 1}},
 		{Rank: 2, SpellID: 33590, Direct: &shared.SpellRankAmount{Min: 16, Max: 16, Coef: 1}},
 		{Rank: 3, SpellID: 33591, Direct: &shared.SpellRankAmount{Min: 25, Max: 25, Coef: 1}},
+	},
+	Maim: shared.SpellRankTable{
+		{Rank: 1, SpellID: 22570, Cost: 35},
+	},
+	Mangle: shared.SpellRankTable{
+		{Rank: 1, SpellID: 33917},
 	},
 	MangleBear: shared.SpellRankTable{
 		{Rank: 1, SpellID: 33878, Cost: 200, Direct: &shared.SpellRankAmount{Min: 30, Max: 30, Coef: 0}},
@@ -266,6 +410,18 @@ var genRanks = generatedRanks{
 		{Rank: 11, SpellID: 26987, Cost: 430, Direct: &shared.SpellRankAmount{Min: 238, Max: 276, Coef: 0.15000000596046448}, Periodic: &shared.SpellRankPeriodic{Tick: 111, Coef: 0.12999999523162842}},
 		{Rank: 12, SpellID: 26988, Cost: 495, Direct: &shared.SpellRankAmount{Min: 305, Max: 357, Coef: 0.15000000596046448}, Periodic: &shared.SpellRankPeriodic{Tick: 150, Coef: 0.12999999523162842}},
 	},
+	Moonfury: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16896, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 1}},
+		{Rank: 2, SpellID: 16897, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 1}},
+		{Rank: 3, SpellID: 16899, Direct: &shared.SpellRankAmount{Min: 6, Max: 6, Coef: 1}},
+		{Rank: 4, SpellID: 16900, Direct: &shared.SpellRankAmount{Min: 8, Max: 8, Coef: 1}},
+		{Rank: 5, SpellID: 16901, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+	},
+	Moonglow: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16845},
+		{Rank: 2, SpellID: 16846},
+		{Rank: 3, SpellID: 16847},
+	},
 	NaturalPerfection: shared.SpellRankTable{
 		{Rank: 1, SpellID: 33881},
 		{Rank: 2, SpellID: 33882, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 0}},
@@ -276,6 +432,20 @@ var genRanks = generatedRanks{
 		{Rank: 2, SpellID: 16834},
 		{Rank: 3, SpellID: 16835},
 	},
+	Naturalist: shared.SpellRankTable{
+		{Rank: 1, SpellID: 17069, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 0}},
+		{Rank: 2, SpellID: 17070, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 0}},
+		{Rank: 3, SpellID: 17071, Direct: &shared.SpellRankAmount{Min: 6, Max: 6, Coef: 0}},
+		{Rank: 4, SpellID: 17072, Direct: &shared.SpellRankAmount{Min: 8, Max: 8, Coef: 0}},
+		{Rank: 5, SpellID: 17073, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 0}},
+	},
+	NaturesFocus: shared.SpellRankTable{
+		{Rank: 1, SpellID: 17063, Direct: &shared.SpellRankAmount{Min: 14, Max: 14, Coef: 1}},
+		{Rank: 2, SpellID: 17065, Direct: &shared.SpellRankAmount{Min: 28, Max: 28, Coef: 1}},
+		{Rank: 3, SpellID: 17066, Direct: &shared.SpellRankAmount{Min: 42, Max: 42, Coef: 1}},
+		{Rank: 4, SpellID: 17067, Direct: &shared.SpellRankAmount{Min: 56, Max: 56, Coef: 1}},
+		{Rank: 5, SpellID: 17068, Direct: &shared.SpellRankAmount{Min: 70, Max: 70, Coef: 1}},
+	},
 	NaturesGrasp: shared.SpellRankTable{
 		{Rank: 1, SpellID: 16689},
 		{Rank: 2, SpellID: 16810},
@@ -284,6 +454,10 @@ var genRanks = generatedRanks{
 		{Rank: 5, SpellID: 16813},
 		{Rank: 6, SpellID: 17329},
 		{Rank: 7, SpellID: 27009},
+	},
+	NaturesReach: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16819, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+		{Rank: 2, SpellID: 16820, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 1}},
 	},
 	NurturingInstinct: shared.SpellRankTable{
 		{Rank: 1, SpellID: 33872, Direct: &shared.SpellRankAmount{Min: 50, Max: 50, Coef: 1}},
@@ -307,6 +481,11 @@ var genRanks = generatedRanks{
 		{Rank: 3, SpellID: 33867, Direct: &shared.SpellRankAmount{Min: 6, Max: 6, Coef: 1}},
 		{Rank: 4, SpellID: 33868, Direct: &shared.SpellRankAmount{Min: 8, Max: 8, Coef: 1}},
 		{Rank: 5, SpellID: 33869, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+	},
+	PredatoryStrikes: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16972, Direct: &shared.SpellRankAmount{Min: 50, Max: 50, Coef: 1}},
+		{Rank: 2, SpellID: 16974, Direct: &shared.SpellRankAmount{Min: 100, Max: 100, Coef: 1}},
+		{Rank: 3, SpellID: 16975, Direct: &shared.SpellRankAmount{Min: 150, Max: 150, Coef: 1}},
 	},
 	PrimalFury: shared.SpellRankTable{
 		{Rank: 1, SpellID: 37116},
@@ -380,6 +559,15 @@ var genRanks = generatedRanks{
 		{Rank: 6, SpellID: 9896, Cost: 30, Periodic: &shared.SpellRankPeriodic{Tick: 17, Coef: 0}},
 		{Rank: 7, SpellID: 27008, Cost: 30, Periodic: &shared.SpellRankPeriodic{Tick: 24, Coef: 0}},
 	},
+	SavageFury: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16998, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+		{Rank: 2, SpellID: 16999, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 1}},
+	},
+	SharpenedClaws: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16942, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 1}},
+		{Rank: 2, SpellID: 16943, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 1}},
+		{Rank: 3, SpellID: 16944, Direct: &shared.SpellRankAmount{Min: 6, Max: 6, Coef: 1}},
+	},
 	Shred: shared.SpellRankTable{
 		{Rank: 1, SpellID: 5221, Cost: 60},
 		{Rank: 2, SpellID: 6800, Cost: 60},
@@ -388,6 +576,10 @@ var genRanks = generatedRanks{
 		{Rank: 5, SpellID: 9830, Cost: 60},
 		{Rank: 6, SpellID: 27001, Cost: 60},
 		{Rank: 7, SpellID: 27002, Cost: 60},
+	},
+	ShreddingAttacks: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16966},
+		{Rank: 2, SpellID: 16968},
 	},
 	SootheAnimal: shared.SpellRankTable{
 		{Rank: 1, SpellID: 2908, Cost: 50},
@@ -405,6 +597,20 @@ var genRanks = generatedRanks{
 		{Rank: 7, SpellID: 25298, Cost: 340, Direct: &shared.SpellRankAmount{Min: 514, Max: 603, Coef: 1}},
 		{Rank: 8, SpellID: 26986, Cost: 370, Direct: &shared.SpellRankAmount{Min: 550, Max: 647, Coef: 1}},
 	},
+	StarlightWrath: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16814},
+		{Rank: 2, SpellID: 16815},
+		{Rank: 3, SpellID: 16816},
+		{Rank: 4, SpellID: 16817},
+		{Rank: 5, SpellID: 16818},
+	},
+	Subtlety: shared.SpellRankTable{
+		{Rank: 1, SpellID: 17118, Direct: &shared.SpellRankAmount{Min: 6, Max: 6, Coef: 0}},
+		{Rank: 2, SpellID: 17119, Direct: &shared.SpellRankAmount{Min: 12, Max: 12, Coef: 0}},
+		{Rank: 3, SpellID: 17120, Direct: &shared.SpellRankAmount{Min: 18, Max: 18, Coef: 0}},
+		{Rank: 4, SpellID: 17121, Direct: &shared.SpellRankAmount{Min: 24, Max: 24, Coef: 0}},
+		{Rank: 5, SpellID: 17122, Direct: &shared.SpellRankAmount{Min: 30, Max: 30, Coef: 0}},
+	},
 	SurvivalOfTheFittest: shared.SpellRankTable{
 		{Rank: 1, SpellID: 33853},
 		{Rank: 2, SpellID: 33855, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 1}},
@@ -417,6 +623,11 @@ var genRanks = generatedRanks{
 		{Rank: 4, SpellID: 9754, Cost: 200, Direct: &shared.SpellRankAmount{Min: 41, Max: 41, Coef: 1}},
 		{Rank: 5, SpellID: 9908, Cost: 200, Direct: &shared.SpellRankAmount{Min: 60, Max: 60, Coef: 1}},
 		{Rank: 6, SpellID: 26997, Cost: 200, Direct: &shared.SpellRankAmount{Min: 84, Max: 84, Coef: 1}},
+	},
+	ThickHide: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16929, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 0}},
+		{Rank: 2, SpellID: 16930, Direct: &shared.SpellRankAmount{Min: 7, Max: 7, Coef: 0}},
+		{Rank: 3, SpellID: 16931, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 0}},
 	},
 	Thorns: shared.SpellRankTable{
 		{Rank: 1, SpellID: 467, Cost: 35, Direct: &shared.SpellRankAmount{Min: 3, Max: 3, Coef: 0}},
@@ -446,6 +657,13 @@ var genRanks = generatedRanks{
 		{Rank: 3, SpellID: 9862, Cost: 975, Direct: &shared.SpellRankAmount{Min: 785, Max: 786, Coef: 0.28600001335144043}},
 		{Rank: 4, SpellID: 9863, Cost: 1295, Direct: &shared.SpellRankAmount{Min: 1119, Max: 1120, Coef: 0.28600001335144043}},
 		{Rank: 5, SpellID: 26983, Cost: 1650, Direct: &shared.SpellRankAmount{Min: 1518, Max: 1518, Coef: 0.28600001335144043}},
+	},
+	Vengeance: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16909, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 1}},
+		{Rank: 2, SpellID: 16910, Direct: &shared.SpellRankAmount{Min: 40, Max: 40, Coef: 1}},
+		{Rank: 3, SpellID: 16911, Direct: &shared.SpellRankAmount{Min: 60, Max: 60, Coef: 1}},
+		{Rank: 4, SpellID: 16912, Direct: &shared.SpellRankAmount{Min: 80, Max: 80, Coef: 1}},
+		{Rank: 5, SpellID: 16913, Direct: &shared.SpellRankAmount{Min: 100, Max: 100, Coef: 1}},
 	},
 	Wrath: shared.SpellRankTable{
 		{Rank: 1, SpellID: 5176, Cost: 20, Direct: &shared.SpellRankAmount{Min: 13, Max: 16, Coef: 0.12300000339746475}},

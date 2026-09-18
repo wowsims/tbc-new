@@ -37,6 +37,7 @@ type rankCandidate struct {
 	SpellID   int32
 	Rank      int32
 	ClassMask int
+	SkillLine int32
 }
 
 type rankLadder struct {
@@ -87,8 +88,13 @@ func fieldNameOf(spellName string) string {
 func discoverLadders(db *sql.DB, class dbc.DbcClass) ([]rankLadder, []string, error) {
 	mask := classMaskOf(class)
 
+	exclusive, err := exclusiveSkillLines(db, mask)
+	if err != nil {
+		return nil, nil, err
+	}
+
 	rows, err := db.Query(`
-		SELECT n.Name_lang, sla.Spell, s.NameSubtext_lang, sla.ClassMask
+		SELECT n.Name_lang, sla.Spell, s.NameSubtext_lang, sla.ClassMask, sla.SkillLine
 		FROM SkillLineAbility sla
 		JOIN SpellName n ON n.ID = sla.Spell
 		JOIN Spell s ON s.ID = sla.Spell
@@ -109,7 +115,7 @@ func discoverLadders(db *sql.DB, class dbc.DbcClass) ([]rankLadder, []string, er
 	for rows.Next() {
 		var name, subtext string
 		var c rankCandidate
-		if err := rows.Scan(&name, &c.SpellID, &subtext, &c.ClassMask); err != nil {
+		if err := rows.Scan(&name, &c.SpellID, &subtext, &c.ClassMask, &c.SkillLine); err != nil {
 			return nil, nil, err
 		}
 		m := rankSubtext.FindStringSubmatch(subtext)
@@ -148,7 +154,7 @@ func discoverLadders(db *sql.DB, class dbc.DbcClass) ([]rankLadder, []string, er
 			continue
 		}
 
-		if !claimedByClass(byName[name], mask) {
+		if !claimedByClass(byName[name], mask, exclusive) {
 			continue
 		}
 
@@ -157,7 +163,7 @@ func discoverLadders(db *sql.DB, class dbc.DbcClass) ([]rankLadder, []string, er
 			skipped = append(skipped, fmt.Sprintf("%s: %s", name, err))
 			continue
 		}
-		if len(ladder) < 2 {
+		if len(ladder) == 0 {
 			continue
 		}
 
@@ -168,14 +174,49 @@ func discoverLadders(db *sql.DB, class dbc.DbcClass) ([]rankLadder, []string, er
 	return ladders, skipped, nil
 }
 
-// A class skill line can hold abilities belonging to other classes, so membership of the line is not
-// enough on its own: paladin Holy Shock reached the priest file that way. A family counts as the
-// class's only if at least one of its ranks carries the class bit - talent ranks, which carry
-// ClassMask 0, then ride along inside a family that qualified.
-func claimedByClass(byRank map[int32][]rankCandidate, mask int) bool {
+// The skill lines only this class appears in.
+//
+// Most are exclusive - "Fire" carries the mage bit and nothing else - but 11 are shared, and "Holy"
+// holding both the paladin and the priest bit is how paladin Holy Shock first reached the priest file.
+// Inside an exclusive line a ClassMask-0 spell can only be this class's, which is what makes a pure
+// talent ladder like Ignite - every rank ClassMask 0 - attributable at all.
+func exclusiveSkillLines(db *sql.DB, mask int) (map[int32]bool, error) {
+	rows, err := db.Query(`
+		SELECT SkillLine, group_concat(DISTINCT ClassMask)
+		FROM SkillLineAbility WHERE ClassMask != 0 GROUP BY SkillLine`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	lines := map[int32]bool{}
+	for rows.Next() {
+		var line int32
+		var masks string
+		if err := rows.Scan(&line, &masks); err != nil {
+			return nil, err
+		}
+		union := 0
+		for _, part := range strings.Split(masks, ",") {
+			m, err := strconv.Atoi(part)
+			if err != nil {
+				continue
+			}
+			union |= m
+		}
+		if union == mask {
+			lines[line] = true
+		}
+	}
+	return lines, rows.Err()
+}
+
+// A family is this class's if one of its ranks carries the class bit, or if its ranks sit in a skill
+// line no other class appears in.
+func claimedByClass(byRank map[int32][]rankCandidate, mask int, exclusive map[int32]bool) bool {
 	for _, cands := range byRank {
 		for _, c := range cands {
-			if c.ClassMask&mask != 0 {
+			if c.ClassMask&mask != 0 || exclusive[c.SkillLine] {
 				return true
 			}
 		}

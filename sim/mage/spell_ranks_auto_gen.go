@@ -9,12 +9,21 @@ import "github.com/wowsims/tbc/sim/common/shared"
 
 type generatedRanks struct {
 	AmplifyMagic            shared.SpellRankTable
+	ArcaneBlast             shared.SpellRankTable
 	ArcaneBrilliance        shared.SpellRankTable
+	ArcaneConcentration     shared.SpellRankTable
 	ArcaneExplosion         shared.SpellRankTable
+	ArcaneFocus             shared.SpellRankTable
+	ArcaneImpact            shared.SpellRankTable
+	ArcaneInstability       shared.SpellRankTable
 	ArcaneIntellect         shared.SpellRankTable
+	ArcaneMeditation        shared.SpellRankTable
+	ArcaneMind              shared.SpellRankTable
+	ArcaneMissile           shared.SpellRankTable
 	ArcaneMissiles          shared.SpellRankTable
 	ArcanePotency           shared.SpellRankTable
 	ArcaneSubtlety          shared.SpellRankTable
+	ArcticReach             shared.SpellRankTable
 	ArcticWinds             shared.SpellRankTable
 	BlastWave               shared.SpellRankTable
 	BlazingSpeed            shared.SpellRankTable
@@ -48,22 +57,31 @@ type generatedRanks struct {
 	IceArmor                shared.SpellRankTable
 	IceBarrier              shared.SpellRankTable
 	IceFloes                shared.SpellRankTable
+	IceLance                shared.SpellRankTable
 	IceShards               shared.SpellRankTable
+	Ignite                  shared.SpellRankTable
+	ImprovedArcaneMissiles  shared.SpellRankTable
 	ImprovedBlink           shared.SpellRankTable
 	ImprovedBlizzard        shared.SpellRankTable
 	ImprovedConeOfCold      shared.SpellRankTable
+	ImprovedCounterspell    shared.SpellRankTable
 	ImprovedFireBlast       shared.SpellRankTable
 	ImprovedFireball        shared.SpellRankTable
 	ImprovedFlamestrike     shared.SpellRankTable
 	ImprovedFrostNova       shared.SpellRankTable
 	ImprovedFrostbolt       shared.SpellRankTable
+	ImprovedManaShield      shared.SpellRankTable
 	ImprovedScorch          shared.SpellRankTable
+	Incineration            shared.SpellRankTable
 	MageArmor               shared.SpellRankTable
 	MagicAbsorption         shared.SpellRankTable
+	MagicAttunement         shared.SpellRankTable
 	ManaShield              shared.SpellRankTable
 	MasterOfElements        shared.SpellRankTable
 	MindMastery             shared.SpellRankTable
+	MoltenArmor             shared.SpellRankTable
 	MoltenFury              shared.SpellRankTable
+	MoltenShields           shared.SpellRankTable
 	Permafrost              shared.SpellRankTable
 	PiercingIce             shared.SpellRankTable
 	PlayingWithFire         shared.SpellRankTable
@@ -71,9 +89,11 @@ type generatedRanks struct {
 	PrismaticCloak          shared.SpellRankTable
 	Pyroblast               shared.SpellRankTable
 	Pyromaniac              shared.SpellRankTable
+	RitualOfRefreshment     shared.SpellRankTable
 	Scorch                  shared.SpellRankTable
 	Shatter                 shared.SpellRankTable
 	SpellPower              shared.SpellRankTable
+	WandSpecialization      shared.SpellRankTable
 	WintersChill            shared.SpellRankTable
 }
 
@@ -86,9 +106,19 @@ var genRanks = generatedRanks{
 		{Rank: 5, SpellID: 27130, Cost: 500, Direct: &shared.SpellRankAmount{Min: 90, Max: 90, Coef: 0}},
 		{Rank: 6, SpellID: 33946, Cost: 600, Direct: &shared.SpellRankAmount{Min: 120, Max: 120, Coef: 0}},
 	},
+	ArcaneBlast: shared.SpellRankTable{
+		{Rank: 1, SpellID: 30451, Cost: 195, Direct: &shared.SpellRankAmount{Min: 668, Max: 772, Coef: 0.7139999866485596}},
+	},
 	ArcaneBrilliance: shared.SpellRankTable{
 		{Rank: 1, SpellID: 23028, Cost: 1500, Direct: &shared.SpellRankAmount{Min: 31, Max: 31, Coef: 0}},
 		{Rank: 2, SpellID: 27127, Cost: 1800, Direct: &shared.SpellRankAmount{Min: 40, Max: 40, Coef: 0}},
+	},
+	ArcaneConcentration: shared.SpellRankTable{
+		{Rank: 1, SpellID: 11213},
+		{Rank: 2, SpellID: 12574},
+		{Rank: 3, SpellID: 12575},
+		{Rank: 4, SpellID: 12576},
+		{Rank: 5, SpellID: 12577},
 	},
 	ArcaneExplosion: shared.SpellRankTable{
 		{Rank: 1, SpellID: 1449, Cost: 75, Direct: &shared.SpellRankAmount{Min: 34, Max: 38, Coef: 0.16599999368190765}},
@@ -100,6 +130,23 @@ var genRanks = generatedRanks{
 		{Rank: 7, SpellID: 27080, Cost: 465, Direct: &shared.SpellRankAmount{Min: 313, Max: 338, Coef: 0.21400000154972076}},
 		{Rank: 8, SpellID: 27082, Cost: 545, Direct: &shared.SpellRankAmount{Min: 377, Max: 407, Coef: 0.21400000154972076}},
 	},
+	ArcaneFocus: shared.SpellRankTable{
+		{Rank: 1, SpellID: 11222, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 0}},
+		{Rank: 2, SpellID: 12839, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 0}},
+		{Rank: 3, SpellID: 12840, Direct: &shared.SpellRankAmount{Min: 6, Max: 6, Coef: 0}},
+		{Rank: 4, SpellID: 12841, Direct: &shared.SpellRankAmount{Min: 8, Max: 8, Coef: 0}},
+		{Rank: 5, SpellID: 12842, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 0}},
+	},
+	ArcaneImpact: shared.SpellRankTable{
+		{Rank: 1, SpellID: 11242, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 0}},
+		{Rank: 2, SpellID: 12467, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 0}},
+		{Rank: 3, SpellID: 12469, Direct: &shared.SpellRankAmount{Min: 6, Max: 6, Coef: 0}},
+	},
+	ArcaneInstability: shared.SpellRankTable{
+		{Rank: 1, SpellID: 15058},
+		{Rank: 2, SpellID: 15059, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 1}},
+		{Rank: 3, SpellID: 15060, Direct: &shared.SpellRankAmount{Min: 3, Max: 3, Coef: 1}},
+	},
 	ArcaneIntellect: shared.SpellRankTable{
 		{Rank: 1, SpellID: 1459, Cost: 25, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 0}},
 		{Rank: 2, SpellID: 1460, Cost: 100, Direct: &shared.SpellRankAmount{Min: 7, Max: 7, Coef: 0}},
@@ -107,6 +154,21 @@ var genRanks = generatedRanks{
 		{Rank: 4, SpellID: 10156, Cost: 415, Direct: &shared.SpellRankAmount{Min: 22, Max: 22, Coef: 0}},
 		{Rank: 5, SpellID: 10157, Cost: 575, Direct: &shared.SpellRankAmount{Min: 31, Max: 31, Coef: 0}},
 		{Rank: 6, SpellID: 27126, Cost: 700, Direct: &shared.SpellRankAmount{Min: 40, Max: 40, Coef: 0}},
+	},
+	ArcaneMeditation: shared.SpellRankTable{
+		{Rank: 1, SpellID: 18462, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+		{Rank: 2, SpellID: 18463, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 1}},
+		{Rank: 3, SpellID: 18464, Direct: &shared.SpellRankAmount{Min: 30, Max: 30, Coef: 1}},
+	},
+	ArcaneMind: shared.SpellRankTable{
+		{Rank: 1, SpellID: 11232, Direct: &shared.SpellRankAmount{Min: 3, Max: 3, Coef: 0}},
+		{Rank: 2, SpellID: 12500, Direct: &shared.SpellRankAmount{Min: 6, Max: 6, Coef: 0}},
+		{Rank: 3, SpellID: 12501, Direct: &shared.SpellRankAmount{Min: 9, Max: 9, Coef: 0}},
+		{Rank: 4, SpellID: 12502, Direct: &shared.SpellRankAmount{Min: 12, Max: 12, Coef: 0}},
+		{Rank: 5, SpellID: 12503, Direct: &shared.SpellRankAmount{Min: 15, Max: 15, Coef: 0}},
+	},
+	ArcaneMissile: shared.SpellRankTable{
+		{Rank: 1, SpellID: 7268, Direct: &shared.SpellRankAmount{Min: 25, Max: 26, Coef: 0.15700000524520874}},
 	},
 	ArcaneMissiles: shared.SpellRankTable{
 		{Rank: 1, SpellID: 5143, Cost: 85},
@@ -129,6 +191,10 @@ var genRanks = generatedRanks{
 	ArcaneSubtlety: shared.SpellRankTable{
 		{Rank: 1, SpellID: 11210},
 		{Rank: 2, SpellID: 12592},
+	},
+	ArcticReach: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16757, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+		{Rank: 2, SpellID: 16758, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 1}},
 	},
 	ArcticWinds: shared.SpellRankTable{
 		{Rank: 1, SpellID: 31674},
@@ -369,12 +435,29 @@ var genRanks = generatedRanks{
 		{Rank: 1, SpellID: 31670},
 		{Rank: 2, SpellID: 31672},
 	},
+	IceLance: shared.SpellRankTable{
+		{Rank: 1, SpellID: 30455, Cost: 150, Direct: &shared.SpellRankAmount{Min: 173, Max: 200, Coef: 0.14300000667572021}},
+	},
 	IceShards: shared.SpellRankTable{
 		{Rank: 1, SpellID: 11207, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 0}},
 		{Rank: 2, SpellID: 12672, Direct: &shared.SpellRankAmount{Min: 40, Max: 40, Coef: 0}},
 		{Rank: 3, SpellID: 15047, Direct: &shared.SpellRankAmount{Min: 60, Max: 60, Coef: 0}},
 		{Rank: 4, SpellID: 15052, Direct: &shared.SpellRankAmount{Min: 80, Max: 80, Coef: 0}},
 		{Rank: 5, SpellID: 15053, Direct: &shared.SpellRankAmount{Min: 100, Max: 100, Coef: 0}},
+	},
+	Ignite: shared.SpellRankTable{
+		{Rank: 1, SpellID: 11119},
+		{Rank: 2, SpellID: 11120},
+		{Rank: 3, SpellID: 12846},
+		{Rank: 4, SpellID: 12847},
+		{Rank: 5, SpellID: 12848},
+	},
+	ImprovedArcaneMissiles: shared.SpellRankTable{
+		{Rank: 1, SpellID: 11237, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 0}},
+		{Rank: 2, SpellID: 12463, Direct: &shared.SpellRankAmount{Min: 40, Max: 40, Coef: 0}},
+		{Rank: 3, SpellID: 12464, Direct: &shared.SpellRankAmount{Min: 60, Max: 60, Coef: 0}},
+		{Rank: 4, SpellID: 16769, Direct: &shared.SpellRankAmount{Min: 80, Max: 80, Coef: 0}},
+		{Rank: 5, SpellID: 16770, Direct: &shared.SpellRankAmount{Min: 100, Max: 100, Coef: 0}},
 	},
 	ImprovedBlink: shared.SpellRankTable{
 		{Rank: 1, SpellID: 31569},
@@ -389,6 +472,10 @@ var genRanks = generatedRanks{
 		{Rank: 1, SpellID: 11190, Direct: &shared.SpellRankAmount{Min: 15, Max: 15, Coef: 0}},
 		{Rank: 2, SpellID: 12489, Direct: &shared.SpellRankAmount{Min: 25, Max: 25, Coef: 0}},
 		{Rank: 3, SpellID: 12490, Direct: &shared.SpellRankAmount{Min: 35, Max: 35, Coef: 0}},
+	},
+	ImprovedCounterspell: shared.SpellRankTable{
+		{Rank: 1, SpellID: 11255},
+		{Rank: 2, SpellID: 12598},
 	},
 	ImprovedFireBlast: shared.SpellRankTable{
 		{Rank: 1, SpellID: 11078},
@@ -418,10 +505,18 @@ var genRanks = generatedRanks{
 		{Rank: 4, SpellID: 16765},
 		{Rank: 5, SpellID: 16766},
 	},
+	ImprovedManaShield: shared.SpellRankTable{
+		{Rank: 1, SpellID: 11252},
+		{Rank: 2, SpellID: 12605},
+	},
 	ImprovedScorch: shared.SpellRankTable{
 		{Rank: 1, SpellID: 11095, Direct: &shared.SpellRankAmount{Min: 33, Max: 33, Coef: 0}},
 		{Rank: 2, SpellID: 12872, Direct: &shared.SpellRankAmount{Min: 66, Max: 66, Coef: 0}},
 		{Rank: 3, SpellID: 12873, Direct: &shared.SpellRankAmount{Min: 100, Max: 100, Coef: 0}},
+	},
+	Incineration: shared.SpellRankTable{
+		{Rank: 1, SpellID: 18459, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 1}},
+		{Rank: 2, SpellID: 18460, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 1}},
 	},
 	MageArmor: shared.SpellRankTable{
 		{Rank: 1, SpellID: 6117, Cost: 270, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 0}},
@@ -435,6 +530,10 @@ var genRanks = generatedRanks{
 		{Rank: 3, SpellID: 29445, Direct: &shared.SpellRankAmount{Min: 3, Max: 3, Coef: 0}},
 		{Rank: 4, SpellID: 29446, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 0}},
 		{Rank: 5, SpellID: 29447, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 0}},
+	},
+	MagicAttunement: shared.SpellRankTable{
+		{Rank: 1, SpellID: 11247, Direct: &shared.SpellRankAmount{Min: 25, Max: 25, Coef: 0}},
+		{Rank: 2, SpellID: 12606, Direct: &shared.SpellRankAmount{Min: 50, Max: 50, Coef: 0}},
 	},
 	ManaShield: shared.SpellRankTable{
 		{Rank: 1, SpellID: 1463, Cost: 40, Direct: &shared.SpellRankAmount{Min: 120, Max: 120, Coef: 0}},
@@ -457,9 +556,16 @@ var genRanks = generatedRanks{
 		{Rank: 4, SpellID: 31587, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 0}},
 		{Rank: 5, SpellID: 31588, Direct: &shared.SpellRankAmount{Min: 25, Max: 25, Coef: 0}},
 	},
+	MoltenArmor: shared.SpellRankTable{
+		{Rank: 1, SpellID: 30482, Cost: 630, Direct: &shared.SpellRankAmount{Min: 3, Max: 3, Coef: 0}},
+	},
 	MoltenFury: shared.SpellRankTable{
 		{Rank: 1, SpellID: 31679, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
 		{Rank: 2, SpellID: 31680, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 1}},
+	},
+	MoltenShields: shared.SpellRankTable{
+		{Rank: 1, SpellID: 11094},
+		{Rank: 2, SpellID: 13043},
 	},
 	Permafrost: shared.SpellRankTable{
 		{Rank: 1, SpellID: 11175, Direct: &shared.SpellRankAmount{Min: 1000, Max: 1000, Coef: 0}},
@@ -503,6 +609,9 @@ var genRanks = generatedRanks{
 		{Rank: 2, SpellID: 34295, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 0}},
 		{Rank: 3, SpellID: 34296, Direct: &shared.SpellRankAmount{Min: 3, Max: 3, Coef: 0}},
 	},
+	RitualOfRefreshment: shared.SpellRankTable{
+		{Rank: 1, SpellID: 43987},
+	},
 	Scorch: shared.SpellRankTable{
 		{Rank: 1, SpellID: 2948, Cost: 50, Direct: &shared.SpellRankAmount{Min: 56, Max: 69, Coef: 0.42899999022483826}},
 		{Rank: 2, SpellID: 8444, Cost: 65, Direct: &shared.SpellRankAmount{Min: 81, Max: 98, Coef: 0.42899999022483826}},
@@ -524,6 +633,10 @@ var genRanks = generatedRanks{
 	SpellPower: shared.SpellRankTable{
 		{Rank: 1, SpellID: 35578, Direct: &shared.SpellRankAmount{Min: 25, Max: 25, Coef: 0}},
 		{Rank: 2, SpellID: 35581, Direct: &shared.SpellRankAmount{Min: 50, Max: 50, Coef: 0}},
+	},
+	WandSpecialization: shared.SpellRankTable{
+		{Rank: 1, SpellID: 6057, Direct: &shared.SpellRankAmount{Min: 13, Max: 13, Coef: 0}},
+		{Rank: 2, SpellID: 6085, Direct: &shared.SpellRankAmount{Min: 25, Max: 25, Coef: 0}},
 	},
 	WintersChill: shared.SpellRankTable{
 		{Rank: 1, SpellID: 11180},

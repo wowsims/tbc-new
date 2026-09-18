@@ -11,35 +11,55 @@ import "github.com/wowsims/tbc/sim/common/shared"
 type generatedRanks struct {
 	AncestralFortitude      shared.SpellRankTable
 	AncestralHealing        shared.SpellRankTable
+	AncestralKnowledge      shared.SpellRankTable
 	AncestralSpirit         shared.SpellRankTable
+	Anticipation            shared.SpellRankTable
+	Bloodlust               shared.SpellRankTable
+	CallOfFlame             shared.SpellRankTable
+	CallOfThunder           shared.SpellRankTable
 	ChainHeal               shared.SpellRankTable
 	ChainLightning          shared.SpellRankTable
+	Concussion              shared.SpellRankTable
+	Convection              shared.SpellRankTable
 	DualWieldSpecialization shared.SpellRankTable
+	EarthElementalTotem     shared.SpellRankTable
 	EarthShield             shared.SpellRankTable
 	EarthShock              shared.SpellRankTable
+	EarthsGrasp             shared.SpellRankTable
 	ElementalPrecision      shared.SpellRankTable
 	ElementalShields        shared.SpellRankTable
 	ElementalWarding        shared.SpellRankTable
 	ElementalWeapons        shared.SpellRankTable
+	EnhancingTotems         shared.SpellRankTable
 	EyeOfTheStorm           shared.SpellRankTable
+	FireElementalTotem      shared.SpellRankTable
 	FireNovaTotem           shared.SpellRankTable
 	FireResistanceTotem     shared.SpellRankTable
 	FlameShock              shared.SpellRankTable
 	FlametongueTotem        shared.SpellRankTable
 	FlametongueWeapon       shared.SpellRankTable
+	Flurry                  shared.SpellRankTable
 	FocusedMind             shared.SpellRankTable
 	FrostResistanceTotem    shared.SpellRankTable
 	FrostShock              shared.SpellRankTable
 	FrostbrandWeapon        shared.SpellRankTable
 	GraceOfAirTotem         shared.SpellRankTable
+	GuardianTotems          shared.SpellRankTable
+	HealingFocus            shared.SpellRankTable
 	HealingGrace            shared.SpellRankTable
 	HealingStreamTotem      shared.SpellRankTable
 	HealingWave             shared.SpellRankTable
 	HealingWay              shared.SpellRankTable
 	ImprovedChainHeal       shared.SpellRankTable
+	ImprovedFireTotems      shared.SpellRankTable
+	ImprovedGhostWolf       shared.SpellRankTable
+	ImprovedHealingWave     shared.SpellRankTable
+	ImprovedLightningShield shared.SpellRankTable
+	ImprovedReincarnation   shared.SpellRankTable
 	ImprovedWeaponTotems    shared.SpellRankTable
 	LesserHealingWave       shared.SpellRankTable
 	LightningBolt           shared.SpellRankTable
+	LightningMastery        shared.SpellRankTable
 	LightningOverload       shared.SpellRankTable
 	LightningShield         shared.SpellRankTable
 	MagmaTotem              shared.SpellRankTable
@@ -48,19 +68,32 @@ type generatedRanks struct {
 	NatureResistanceTotem   shared.SpellRankTable
 	NaturesBlessing         shared.SpellRankTable
 	NaturesGuardian         shared.SpellRankTable
+	NaturesGuidance         shared.SpellRankTable
 	Purge                   shared.SpellRankTable
+	Purification            shared.SpellRankTable
+	RestorativeTotems       shared.SpellRankTable
+	Reverberation           shared.SpellRankTable
 	RockbiterWeapon         shared.SpellRankTable
 	SearingTotem            shared.SpellRankTable
+	ShamanisticRage         shared.SpellRankTable
+	ShieldSpecialization    shared.SpellRankTable
 	StoneclawTotem          shared.SpellRankTable
 	StoneskinTotem          shared.SpellRankTable
 	StormReach              shared.SpellRankTable
 	StrengthOfEarthTotem    shared.SpellRankTable
+	ThunderingStrikes       shared.SpellRankTable
+	TidalFocus              shared.SpellRankTable
+	TidalMastery            shared.SpellRankTable
+	TotemOfWrath            shared.SpellRankTable
+	TotemicFocus            shared.SpellRankTable
+	Toughness               shared.SpellRankTable
 	UnrelentingStorm        shared.SpellRankTable
 	WaterShield             shared.SpellRankTable
 	WeaponMastery           shared.SpellRankTable
 	WindfuryTotem           shared.SpellRankTable
 	WindfuryWeapon          shared.SpellRankTable
 	WindwallTotem           shared.SpellRankTable
+	WrathOfAirTotem         shared.SpellRankTable
 }
 
 var genRanks = generatedRanks{
@@ -74,12 +107,41 @@ var genRanks = generatedRanks{
 		{Rank: 2, SpellID: 16235},
 		{Rank: 3, SpellID: 16240},
 	},
+	AncestralKnowledge: shared.SpellRankTable{
+		{Rank: 1, SpellID: 17485},
+		{Rank: 2, SpellID: 17486, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 1}},
+		{Rank: 3, SpellID: 17487, Direct: &shared.SpellRankAmount{Min: 3, Max: 3, Coef: 1}},
+		{Rank: 4, SpellID: 17488, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 1}},
+		{Rank: 5, SpellID: 17489, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 1}},
+	},
 	AncestralSpirit: shared.SpellRankTable{
 		{Rank: 1, SpellID: 2008},
 		{Rank: 2, SpellID: 20609},
 		{Rank: 3, SpellID: 20610},
 		{Rank: 4, SpellID: 20776},
 		{Rank: 5, SpellID: 20777},
+	},
+	Anticipation: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16254},
+		{Rank: 2, SpellID: 16271, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 0}},
+		{Rank: 3, SpellID: 16272, Direct: &shared.SpellRankAmount{Min: 3, Max: 3, Coef: 0}},
+		{Rank: 4, SpellID: 16273, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 0}},
+		{Rank: 5, SpellID: 16274, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 0}},
+	},
+	Bloodlust: shared.SpellRankTable{
+		{Rank: 1, SpellID: 2825, Cost: 750, Direct: &shared.SpellRankAmount{Min: 30, Max: 30, Coef: 1}},
+	},
+	CallOfFlame: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16038, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 1}},
+		{Rank: 2, SpellID: 16160, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+		{Rank: 3, SpellID: 16161, Direct: &shared.SpellRankAmount{Min: 15, Max: 15, Coef: 1}},
+	},
+	CallOfThunder: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16041},
+		{Rank: 2, SpellID: 16117, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 1}},
+		{Rank: 3, SpellID: 16118, Direct: &shared.SpellRankAmount{Min: 3, Max: 3, Coef: 1}},
+		{Rank: 4, SpellID: 16119, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 1}},
+		{Rank: 5, SpellID: 16120, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 1}},
 	},
 	ChainHeal: shared.SpellRankTable{
 		{Rank: 1, SpellID: 1064, Cost: 260, Heal: &shared.SpellRankAmount{Min: 332, Max: 381, Coef: 0.7139999866485596}},
@@ -96,10 +158,27 @@ var genRanks = generatedRanks{
 		{Rank: 5, SpellID: 25439, Cost: 650, Direct: &shared.SpellRankAmount{Min: 620, Max: 705, Coef: 0.6510000228881836}},
 		{Rank: 6, SpellID: 25442, Cost: 760, Direct: &shared.SpellRankAmount{Min: 734, Max: 838, Coef: 0.6510000228881836}},
 	},
+	Concussion: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16035},
+		{Rank: 2, SpellID: 16105, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 1}},
+		{Rank: 3, SpellID: 16106, Direct: &shared.SpellRankAmount{Min: 3, Max: 3, Coef: 1}},
+		{Rank: 4, SpellID: 16107, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 1}},
+		{Rank: 5, SpellID: 16108, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 1}},
+	},
+	Convection: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16039},
+		{Rank: 2, SpellID: 16109},
+		{Rank: 3, SpellID: 16110},
+		{Rank: 4, SpellID: 16111},
+		{Rank: 5, SpellID: 16112},
+	},
 	DualWieldSpecialization: shared.SpellRankTable{
 		{Rank: 1, SpellID: 30816, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 1}},
 		{Rank: 2, SpellID: 30818, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 1}},
 		{Rank: 3, SpellID: 30819, Direct: &shared.SpellRankAmount{Min: 6, Max: 6, Coef: 1}},
+	},
+	EarthElementalTotem: shared.SpellRankTable{
+		{Rank: 1, SpellID: 2062, Cost: 705},
 	},
 	EarthShield: shared.SpellRankTable{
 		{Rank: 1, SpellID: 974, Cost: 300, Direct: &shared.SpellRankAmount{Min: 150, Max: 150, Coef: 1}},
@@ -115,6 +194,10 @@ var genRanks = generatedRanks{
 		{Rank: 6, SpellID: 10413, Cost: 345, Direct: &shared.SpellRankAmount{Min: 372, Max: 394, Coef: 0.38600000739097595}},
 		{Rank: 7, SpellID: 10414, Cost: 450, Direct: &shared.SpellRankAmount{Min: 532, Max: 561, Coef: 0.38600000739097595}},
 		{Rank: 8, SpellID: 25454, Cost: 535, Direct: &shared.SpellRankAmount{Min: 661, Max: 696, Coef: 0.38600000739097595}},
+	},
+	EarthsGrasp: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16043, Direct: &shared.SpellRankAmount{Min: 25, Max: 25, Coef: 1}},
+		{Rank: 2, SpellID: 16130, Direct: &shared.SpellRankAmount{Min: 50, Max: 50, Coef: 1}},
 	},
 	ElementalPrecision: shared.SpellRankTable{
 		{Rank: 1, SpellID: 30672, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 1}},
@@ -136,10 +219,17 @@ var genRanks = generatedRanks{
 		{Rank: 2, SpellID: 29079, Direct: &shared.SpellRankAmount{Min: 14, Max: 14, Coef: 1}},
 		{Rank: 3, SpellID: 29080, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 1}},
 	},
+	EnhancingTotems: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16259, Direct: &shared.SpellRankAmount{Min: 8, Max: 8, Coef: 1}},
+		{Rank: 2, SpellID: 16295, Direct: &shared.SpellRankAmount{Min: 15, Max: 15, Coef: 1}},
+	},
 	EyeOfTheStorm: shared.SpellRankTable{
 		{Rank: 1, SpellID: 29062},
 		{Rank: 2, SpellID: 29064},
 		{Rank: 3, SpellID: 29065},
+	},
+	FireElementalTotem: shared.SpellRankTable{
+		{Rank: 1, SpellID: 2894, Cost: 680},
 	},
 	FireNovaTotem: shared.SpellRankTable{
 		{Rank: 1, SpellID: 1535, Cost: 95},
@@ -181,6 +271,13 @@ var genRanks = generatedRanks{
 		{Rank: 6, SpellID: 16342, Cost: 155},
 		{Rank: 7, SpellID: 25489, Cost: 180},
 	},
+	Flurry: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16256},
+		{Rank: 2, SpellID: 16281},
+		{Rank: 3, SpellID: 16282},
+		{Rank: 4, SpellID: 16283},
+		{Rank: 5, SpellID: 16284},
+	},
 	FocusedMind: shared.SpellRankTable{
 		{Rank: 1, SpellID: 30864},
 		{Rank: 2, SpellID: 30865},
@@ -211,6 +308,17 @@ var genRanks = generatedRanks{
 		{Rank: 1, SpellID: 8835, Cost: 155},
 		{Rank: 2, SpellID: 10627, Cost: 250},
 		{Rank: 3, SpellID: 25359, Cost: 310},
+	},
+	GuardianTotems: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16258, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+		{Rank: 2, SpellID: 16293, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 1}},
+	},
+	HealingFocus: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16181, Direct: &shared.SpellRankAmount{Min: 14, Max: 14, Coef: 0}},
+		{Rank: 2, SpellID: 16230, Direct: &shared.SpellRankAmount{Min: 28, Max: 28, Coef: 0}},
+		{Rank: 3, SpellID: 16232, Direct: &shared.SpellRankAmount{Min: 42, Max: 42, Coef: 0}},
+		{Rank: 4, SpellID: 16233, Direct: &shared.SpellRankAmount{Min: 56, Max: 56, Coef: 0}},
+		{Rank: 5, SpellID: 16234, Direct: &shared.SpellRankAmount{Min: 70, Max: 70, Coef: 0}},
 	},
 	HealingGrace: shared.SpellRankTable{
 		{Rank: 1, SpellID: 29187, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 0}},
@@ -248,6 +356,30 @@ var genRanks = generatedRanks{
 		{Rank: 1, SpellID: 30872, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
 		{Rank: 2, SpellID: 30873, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 1}},
 	},
+	ImprovedFireTotems: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16086},
+		{Rank: 2, SpellID: 16544},
+	},
+	ImprovedGhostWolf: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16262},
+		{Rank: 2, SpellID: 16287},
+	},
+	ImprovedHealingWave: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16182},
+		{Rank: 2, SpellID: 16226},
+		{Rank: 3, SpellID: 16227},
+		{Rank: 4, SpellID: 16228},
+		{Rank: 5, SpellID: 16229},
+	},
+	ImprovedLightningShield: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16261, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 1}},
+		{Rank: 2, SpellID: 16290, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+		{Rank: 3, SpellID: 16291, Direct: &shared.SpellRankAmount{Min: 15, Max: 15, Coef: 1}},
+	},
+	ImprovedReincarnation: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16184, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 0}},
+		{Rank: 2, SpellID: 16209, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 0}},
+	},
 	ImprovedWeaponTotems: shared.SpellRankTable{
 		{Rank: 1, SpellID: 29192, Direct: &shared.SpellRankAmount{Min: 15, Max: 15, Coef: 1}},
 		{Rank: 2, SpellID: 29193, Direct: &shared.SpellRankAmount{Min: 30, Max: 30, Coef: 1}},
@@ -274,6 +406,13 @@ var genRanks = generatedRanks{
 		{Rank: 10, SpellID: 15208, Cost: 240, Direct: &shared.SpellRankAmount{Min: 431, Max: 479, Coef: 0.7940000295639038}},
 		{Rank: 11, SpellID: 25448, Cost: 275, Direct: &shared.SpellRankAmount{Min: 505, Max: 576, Coef: 0.7940000295639038}},
 		{Rank: 12, SpellID: 25449, Cost: 300, Direct: &shared.SpellRankAmount{Min: 571, Max: 652, Coef: 0.7940000295639038}},
+	},
+	LightningMastery: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16578},
+		{Rank: 2, SpellID: 16579},
+		{Rank: 3, SpellID: 16580},
+		{Rank: 4, SpellID: 16581},
+		{Rank: 5, SpellID: 16582},
 	},
 	LightningOverload: shared.SpellRankTable{
 		{Rank: 1, SpellID: 30675, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 1}},
@@ -330,9 +469,35 @@ var genRanks = generatedRanks{
 		{Rank: 4, SpellID: 30885, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 0}},
 		{Rank: 5, SpellID: 30886, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 0}},
 	},
+	NaturesGuidance: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16180},
+		{Rank: 2, SpellID: 16196, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 1}},
+		{Rank: 3, SpellID: 16198, Direct: &shared.SpellRankAmount{Min: 3, Max: 3, Coef: 1}},
+	},
 	Purge: shared.SpellRankTable{
 		{Rank: 1, SpellID: 370},
 		{Rank: 2, SpellID: 8012},
+	},
+	Purification: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16178, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 0}},
+		{Rank: 2, SpellID: 16210, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 0}},
+		{Rank: 3, SpellID: 16211, Direct: &shared.SpellRankAmount{Min: 6, Max: 6, Coef: 0}},
+		{Rank: 4, SpellID: 16212, Direct: &shared.SpellRankAmount{Min: 8, Max: 8, Coef: 0}},
+		{Rank: 5, SpellID: 16213, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 0}},
+	},
+	RestorativeTotems: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16187, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 1}},
+		{Rank: 2, SpellID: 16205, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+		{Rank: 3, SpellID: 16206, Direct: &shared.SpellRankAmount{Min: 15, Max: 15, Coef: 1}},
+		{Rank: 4, SpellID: 16207, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 1}},
+		{Rank: 5, SpellID: 16208, Direct: &shared.SpellRankAmount{Min: 25, Max: 25, Coef: 1}},
+	},
+	Reverberation: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16040},
+		{Rank: 2, SpellID: 16113},
+		{Rank: 3, SpellID: 16114},
+		{Rank: 4, SpellID: 16115},
+		{Rank: 5, SpellID: 16116},
 	},
 	RockbiterWeapon: shared.SpellRankTable{
 		{Rank: 1, SpellID: 8017, Cost: 15},
@@ -353,6 +518,16 @@ var genRanks = generatedRanks{
 		{Rank: 5, SpellID: 10437, Cost: 145},
 		{Rank: 6, SpellID: 10438, Cost: 170},
 		{Rank: 7, SpellID: 25533, Cost: 205},
+	},
+	ShamanisticRage: shared.SpellRankTable{
+		{Rank: 1, SpellID: 30823, Direct: &shared.SpellRankAmount{Min: 30, Max: 30, Coef: 0}},
+	},
+	ShieldSpecialization: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16253, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 0}},
+		{Rank: 2, SpellID: 16298, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 0}},
+		{Rank: 3, SpellID: 16299, Direct: &shared.SpellRankAmount{Min: 3, Max: 3, Coef: 0}},
+		{Rank: 4, SpellID: 16300, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 0}},
+		{Rank: 5, SpellID: 16301, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 0}},
 	},
 	StoneclawTotem: shared.SpellRankTable{
 		{Rank: 1, SpellID: 5730, Cost: 15},
@@ -384,6 +559,44 @@ var genRanks = generatedRanks{
 		{Rank: 4, SpellID: 10442, Cost: 225},
 		{Rank: 5, SpellID: 25361, Cost: 275},
 		{Rank: 6, SpellID: 25528, Cost: 300},
+	},
+	ThunderingStrikes: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16255},
+		{Rank: 2, SpellID: 16302, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 0}},
+		{Rank: 3, SpellID: 16303, Direct: &shared.SpellRankAmount{Min: 3, Max: 3, Coef: 0}},
+		{Rank: 4, SpellID: 16304, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 0}},
+		{Rank: 5, SpellID: 16305, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 0}},
+	},
+	TidalFocus: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16179},
+		{Rank: 2, SpellID: 16214},
+		{Rank: 3, SpellID: 16215},
+		{Rank: 4, SpellID: 16216},
+		{Rank: 5, SpellID: 16217},
+	},
+	TidalMastery: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16194},
+		{Rank: 2, SpellID: 16218, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 1}},
+		{Rank: 3, SpellID: 16219, Direct: &shared.SpellRankAmount{Min: 3, Max: 3, Coef: 1}},
+		{Rank: 4, SpellID: 16220, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 1}},
+		{Rank: 5, SpellID: 16221, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 1}},
+	},
+	TotemOfWrath: shared.SpellRankTable{
+		{Rank: 1, SpellID: 30706},
+	},
+	TotemicFocus: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16173},
+		{Rank: 2, SpellID: 16222},
+		{Rank: 3, SpellID: 16223},
+		{Rank: 4, SpellID: 16224},
+		{Rank: 5, SpellID: 16225},
+	},
+	Toughness: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16252, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 0}},
+		{Rank: 2, SpellID: 16306, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 0}},
+		{Rank: 3, SpellID: 16307, Direct: &shared.SpellRankAmount{Min: 6, Max: 6, Coef: 0}},
+		{Rank: 4, SpellID: 16308, Direct: &shared.SpellRankAmount{Min: 8, Max: 8, Coef: 0}},
+		{Rank: 5, SpellID: 16309, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 0}},
 	},
 	UnrelentingStorm: shared.SpellRankTable{
 		{Rank: 1, SpellID: 30664, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 1}},
@@ -422,5 +635,8 @@ var genRanks = generatedRanks{
 		{Rank: 2, SpellID: 15111, Cost: 170},
 		{Rank: 3, SpellID: 15112, Cost: 225},
 		{Rank: 4, SpellID: 25577, Cost: 265},
+	},
+	WrathOfAirTotem: shared.SpellRankTable{
+		{Rank: 1, SpellID: 3738, Cost: 320},
 	},
 }

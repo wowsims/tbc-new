@@ -5,50 +5,103 @@ package warrior
 import "github.com/wowsims/tbc/sim/common/shared"
 
 // Not generated:
+//   Flurry: rank 1 is ambiguous between spells 12319, 12966
 //   Rampage: rank 1 is ambiguous between spells 29801, 30029
 //   Second Wind: rank 1 is ambiguous between spells 29834, 29841
 //   Sweeping Strikes: rank 1 is ambiguous between spells 12723, 26654
+//   Unbridled Wrath: rank 1 is ambiguous between spells 12322, 12964
 
 type generatedRanks struct {
-	BattleShout             shared.SpellRankTable
-	BloodFrenzy             shared.SpellRankTable
-	Bloodthirst             shared.SpellRankTable
-	Charge                  shared.SpellRankTable
-	Cleave                  shared.SpellRankTable
-	DemoralizingShout       shared.SpellRankTable
-	Devastate               shared.SpellRankTable
-	DualWieldSpecialization shared.SpellRankTable
-	Execute                 shared.SpellRankTable
-	FocusedRage             shared.SpellRankTable
-	Hamstring               shared.SpellRankTable
-	HeroicStrike            shared.SpellRankTable
-	ImprovedBerserkerStance shared.SpellRankTable
-	ImprovedDefensiveStance shared.SpellRankTable
-	ImprovedDisciplines     shared.SpellRankTable
-	ImprovedIntercept       shared.SpellRankTable
-	ImprovedMortalStrike    shared.SpellRankTable
-	ImprovedWhirlwind       shared.SpellRankTable
-	Intercept               shared.SpellRankTable
-	IronWill                shared.SpellRankTable
-	MockingBlow             shared.SpellRankTable
-	MortalStrike            shared.SpellRankTable
-	Overpower               shared.SpellRankTable
-	Precision               shared.SpellRankTable
-	Pummel                  shared.SpellRankTable
-	Rend                    shared.SpellRankTable
-	Revenge                 shared.SpellRankTable
-	ShieldBash              shared.SpellRankTable
-	ShieldMastery           shared.SpellRankTable
-	ShieldSlam              shared.SpellRankTable
-	Slam                    shared.SpellRankTable
-	SunderArmor             shared.SpellRankTable
-	TacticalMastery         shared.SpellRankTable
-	ThunderClap             shared.SpellRankTable
-	Vitality                shared.SpellRankTable
-	WeaponMastery           shared.SpellRankTable
+	Anticipation                  shared.SpellRankTable
+	BattleShout                   shared.SpellRankTable
+	BloodCraze                    shared.SpellRankTable
+	BloodFrenzy                   shared.SpellRankTable
+	Bloodthirst                   shared.SpellRankTable
+	BoomingVoice                  shared.SpellRankTable
+	Charge                        shared.SpellRankTable
+	ChargeRageBonusEffect         shared.SpellRankTable
+	Cleave                        shared.SpellRankTable
+	CommandingPresence            shared.SpellRankTable
+	CommandingShout               shared.SpellRankTable
+	Cruelty                       shared.SpellRankTable
+	DeepWounds                    shared.SpellRankTable
+	Defiance                      shared.SpellRankTable
+	Deflection                    shared.SpellRankTable
+	DemoralizingShout             shared.SpellRankTable
+	Devastate                     shared.SpellRankTable
+	DualWieldSpecialization       shared.SpellRankTable
+	Enrage                        shared.SpellRankTable
+	Execute                       shared.SpellRankTable
+	FocusedRage                   shared.SpellRankTable
+	Hamstring                     shared.SpellRankTable
+	HeroicStrike                  shared.SpellRankTable
+	Impale                        shared.SpellRankTable
+	ImprovedBerserkerRage         shared.SpellRankTable
+	ImprovedBerserkerStance       shared.SpellRankTable
+	ImprovedBloodrage             shared.SpellRankTable
+	ImprovedChallengingShout      shared.SpellRankTable
+	ImprovedCharge                shared.SpellRankTable
+	ImprovedCleave                shared.SpellRankTable
+	ImprovedDefensiveStance       shared.SpellRankTable
+	ImprovedDemoralizingShout     shared.SpellRankTable
+	ImprovedDisarm                shared.SpellRankTable
+	ImprovedDisciplines           shared.SpellRankTable
+	ImprovedExecute               shared.SpellRankTable
+	ImprovedHamstring             shared.SpellRankTable
+	ImprovedHeroicStrike          shared.SpellRankTable
+	ImprovedIntercept             shared.SpellRankTable
+	ImprovedIntimidatingShout     shared.SpellRankTable
+	ImprovedMortalStrike          shared.SpellRankTable
+	ImprovedOverpower             shared.SpellRankTable
+	ImprovedRend                  shared.SpellRankTable
+	ImprovedRevenge               shared.SpellRankTable
+	ImprovedShieldBash            shared.SpellRankTable
+	ImprovedShieldBlock           shared.SpellRankTable
+	ImprovedShieldWall            shared.SpellRankTable
+	ImprovedSlam                  shared.SpellRankTable
+	ImprovedSunderArmor           shared.SpellRankTable
+	ImprovedTaunt                 shared.SpellRankTable
+	ImprovedThunderClap           shared.SpellRankTable
+	ImprovedWhirlwind             shared.SpellRankTable
+	Intercept                     shared.SpellRankTable
+	IronWill                      shared.SpellRankTable
+	LongDaze                      shared.SpellRankTable
+	MaceSpecialization            shared.SpellRankTable
+	MaceStunEffect                shared.SpellRankTable
+	MockingBlow                   shared.SpellRankTable
+	MortalStrike                  shared.SpellRankTable
+	OneHandedWeaponSpecialization shared.SpellRankTable
+	Overpower                     shared.SpellRankTable
+	PoleaxeSpecialization         shared.SpellRankTable
+	Precision                     shared.SpellRankTable
+	Pummel                        shared.SpellRankTable
+	Rend                          shared.SpellRankTable
+	Revenge                       shared.SpellRankTable
+	RevengeStun                   shared.SpellRankTable
+	ShieldBash                    shared.SpellRankTable
+	ShieldMastery                 shared.SpellRankTable
+	ShieldSlam                    shared.SpellRankTable
+	ShieldSpecialization          shared.SpellRankTable
+	Slam                          shared.SpellRankTable
+	SunderArmor                   shared.SpellRankTable
+	SwordSpecialization           shared.SpellRankTable
+	TacticalMastery               shared.SpellRankTable
+	ThunderClap                   shared.SpellRankTable
+	Toughness                     shared.SpellRankTable
+	TwoHandedWeaponSpecialization shared.SpellRankTable
+	VictoryRush                   shared.SpellRankTable
+	Vitality                      shared.SpellRankTable
+	WeaponMastery                 shared.SpellRankTable
 }
 
 var genRanks = generatedRanks{
+	Anticipation: shared.SpellRankTable{
+		{Rank: 1, SpellID: 12297, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 0}},
+		{Rank: 2, SpellID: 12750, Direct: &shared.SpellRankAmount{Min: 8, Max: 8, Coef: 0}},
+		{Rank: 3, SpellID: 12751, Direct: &shared.SpellRankAmount{Min: 12, Max: 12, Coef: 0}},
+		{Rank: 4, SpellID: 12752, Direct: &shared.SpellRankAmount{Min: 16, Max: 16, Coef: 0}},
+		{Rank: 5, SpellID: 12753, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 0}},
+	},
 	BattleShout: shared.SpellRankTable{
 		{Rank: 1, SpellID: 6673, Cost: 100, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 0}},
 		{Rank: 2, SpellID: 5242, Cost: 100, Direct: &shared.SpellRankAmount{Min: 39, Max: 40, Coef: 0}},
@@ -58,6 +111,11 @@ var genRanks = generatedRanks{
 		{Rank: 6, SpellID: 11551, Cost: 100, Direct: &shared.SpellRankAmount{Min: 194, Max: 194, Coef: 0}},
 		{Rank: 7, SpellID: 25289, Cost: 100, Direct: &shared.SpellRankAmount{Min: 240, Max: 240, Coef: 0}},
 		{Rank: 8, SpellID: 2048, Cost: 100, Direct: &shared.SpellRankAmount{Min: 306, Max: 306, Coef: 1}},
+	},
+	BloodCraze: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16487},
+		{Rank: 2, SpellID: 16489},
+		{Rank: 3, SpellID: 16492},
 	},
 	BloodFrenzy: shared.SpellRankTable{
 		{Rank: 1, SpellID: 29836, Direct: &shared.SpellRankAmount{Min: 100, Max: 100, Coef: 0}},
@@ -71,10 +129,21 @@ var genRanks = generatedRanks{
 		{Rank: 5, SpellID: 25251, Cost: 300, Direct: &shared.SpellRankAmount{Min: 45, Max: 45, Coef: 1}},
 		{Rank: 6, SpellID: 30335, Cost: 300, Direct: &shared.SpellRankAmount{Min: 45, Max: 45, Coef: 1}},
 	},
+	BoomingVoice: shared.SpellRankTable{
+		{Rank: 1, SpellID: 12321, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 0}},
+		{Rank: 2, SpellID: 12835, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 0}},
+		{Rank: 3, SpellID: 12836, Direct: &shared.SpellRankAmount{Min: 30, Max: 30, Coef: 0}},
+		{Rank: 4, SpellID: 12837, Direct: &shared.SpellRankAmount{Min: 40, Max: 40, Coef: 0}},
+		{Rank: 5, SpellID: 12838, Direct: &shared.SpellRankAmount{Min: 50, Max: 50, Coef: 0}},
+	},
 	Charge: shared.SpellRankTable{
 		{Rank: 1, SpellID: 100},
 		{Rank: 2, SpellID: 6178},
 		{Rank: 3, SpellID: 11578},
+	},
+	ChargeRageBonusEffect: shared.SpellRankTable{
+		{Rank: 1, SpellID: 12695, Energize: 30},
+		{Rank: 2, SpellID: 12696, Energize: 60},
 	},
 	Cleave: shared.SpellRankTable{
 		{Rank: 1, SpellID: 845, Cost: 200},
@@ -83,6 +152,40 @@ var genRanks = generatedRanks{
 		{Rank: 4, SpellID: 11609, Cost: 200},
 		{Rank: 5, SpellID: 20569, Cost: 200},
 		{Rank: 6, SpellID: 25231, Cost: 200},
+	},
+	CommandingPresence: shared.SpellRankTable{
+		{Rank: 1, SpellID: 12318, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 0}},
+		{Rank: 2, SpellID: 12857, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 0}},
+		{Rank: 3, SpellID: 12858, Direct: &shared.SpellRankAmount{Min: 15, Max: 15, Coef: 0}},
+		{Rank: 4, SpellID: 12860, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 0}},
+		{Rank: 5, SpellID: 12861, Direct: &shared.SpellRankAmount{Min: 25, Max: 25, Coef: 0}},
+	},
+	CommandingShout: shared.SpellRankTable{
+		{Rank: 1, SpellID: 469, Cost: 100, Direct: &shared.SpellRankAmount{Min: 1080, Max: 1080, Coef: 1}},
+	},
+	Cruelty: shared.SpellRankTable{
+		{Rank: 1, SpellID: 12320},
+		{Rank: 2, SpellID: 12852, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 0}},
+		{Rank: 3, SpellID: 12853, Direct: &shared.SpellRankAmount{Min: 3, Max: 3, Coef: 0}},
+		{Rank: 4, SpellID: 12855, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 0}},
+		{Rank: 5, SpellID: 12856, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 0}},
+	},
+	DeepWounds: shared.SpellRankTable{
+		{Rank: 1, SpellID: 12834},
+		{Rank: 2, SpellID: 12849},
+		{Rank: 3, SpellID: 12867},
+	},
+	Defiance: shared.SpellRankTable{
+		{Rank: 1, SpellID: 12303, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 0}},
+		{Rank: 2, SpellID: 12788, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 0}},
+		{Rank: 3, SpellID: 12789, Direct: &shared.SpellRankAmount{Min: 15, Max: 15, Coef: 0}},
+	},
+	Deflection: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16462},
+		{Rank: 2, SpellID: 16463, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 1}},
+		{Rank: 3, SpellID: 16464, Direct: &shared.SpellRankAmount{Min: 3, Max: 3, Coef: 1}},
+		{Rank: 4, SpellID: 16465, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 1}},
+		{Rank: 5, SpellID: 16466, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 1}},
 	},
 	DemoralizingShout: shared.SpellRankTable{
 		{Rank: 1, SpellID: 1160, Cost: 100},
@@ -104,6 +207,13 @@ var genRanks = generatedRanks{
 		{Rank: 3, SpellID: 23586, Direct: &shared.SpellRankAmount{Min: 15, Max: 15, Coef: 1}},
 		{Rank: 4, SpellID: 23587, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 1}},
 		{Rank: 5, SpellID: 23588, Direct: &shared.SpellRankAmount{Min: 25, Max: 25, Coef: 1}},
+	},
+	Enrage: shared.SpellRankTable{
+		{Rank: 1, SpellID: 12317},
+		{Rank: 2, SpellID: 13045},
+		{Rank: 3, SpellID: 13046},
+		{Rank: 4, SpellID: 13047},
+		{Rank: 5, SpellID: 13048},
 	},
 	Execute: shared.SpellRankTable{
 		{Rank: 1, SpellID: 5308, Cost: 150},
@@ -138,6 +248,14 @@ var genRanks = generatedRanks{
 		{Rank: 10, SpellID: 29707, Cost: 150},
 		{Rank: 11, SpellID: 30324, Cost: 150},
 	},
+	Impale: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16493, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+		{Rank: 2, SpellID: 16494, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 1}},
+	},
+	ImprovedBerserkerRage: shared.SpellRankTable{
+		{Rank: 1, SpellID: 20500},
+		{Rank: 2, SpellID: 20501},
+	},
 	ImprovedBerserkerStance: shared.SpellRankTable{
 		{Rank: 1, SpellID: 29759, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 1}},
 		{Rank: 2, SpellID: 29760, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 1}},
@@ -145,19 +263,66 @@ var genRanks = generatedRanks{
 		{Rank: 4, SpellID: 29762, Direct: &shared.SpellRankAmount{Min: 8, Max: 8, Coef: 1}},
 		{Rank: 5, SpellID: 29763, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
 	},
+	ImprovedBloodrage: shared.SpellRankTable{
+		{Rank: 1, SpellID: 12301, Direct: &shared.SpellRankAmount{Min: 30, Max: 30, Coef: 0}},
+		{Rank: 2, SpellID: 12818, Direct: &shared.SpellRankAmount{Min: 60, Max: 60, Coef: 0}},
+	},
+	ImprovedChallengingShout: shared.SpellRankTable{
+		{Rank: 1, SpellID: 12327},
+		{Rank: 2, SpellID: 12886},
+	},
+	ImprovedCharge: shared.SpellRankTable{
+		{Rank: 1, SpellID: 12285, Direct: &shared.SpellRankAmount{Min: 30, Max: 30, Coef: 0}},
+		{Rank: 2, SpellID: 12697, Direct: &shared.SpellRankAmount{Min: 60, Max: 60, Coef: 0}},
+	},
+	ImprovedCleave: shared.SpellRankTable{
+		{Rank: 1, SpellID: 12329, Direct: &shared.SpellRankAmount{Min: 40, Max: 40, Coef: 0}},
+		{Rank: 2, SpellID: 12950, Direct: &shared.SpellRankAmount{Min: 80, Max: 80, Coef: 0}},
+		{Rank: 3, SpellID: 20496, Direct: &shared.SpellRankAmount{Min: 120, Max: 120, Coef: 0}},
+	},
 	ImprovedDefensiveStance: shared.SpellRankTable{
 		{Rank: 1, SpellID: 29593},
 		{Rank: 2, SpellID: 29594},
 		{Rank: 3, SpellID: 29595},
+	},
+	ImprovedDemoralizingShout: shared.SpellRankTable{
+		{Rank: 1, SpellID: 12324, Direct: &shared.SpellRankAmount{Min: 8, Max: 8, Coef: 0}},
+		{Rank: 2, SpellID: 12876, Direct: &shared.SpellRankAmount{Min: 16, Max: 16, Coef: 0}},
+		{Rank: 3, SpellID: 12877, Direct: &shared.SpellRankAmount{Min: 24, Max: 24, Coef: 0}},
+		{Rank: 4, SpellID: 12878, Direct: &shared.SpellRankAmount{Min: 32, Max: 32, Coef: 0}},
+		{Rank: 5, SpellID: 12879, Direct: &shared.SpellRankAmount{Min: 40, Max: 40, Coef: 0}},
+	},
+	ImprovedDisarm: shared.SpellRankTable{
+		{Rank: 1, SpellID: 12313, Direct: &shared.SpellRankAmount{Min: 1000, Max: 1000, Coef: 0}},
+		{Rank: 2, SpellID: 12804, Direct: &shared.SpellRankAmount{Min: 2000, Max: 2000, Coef: 0}},
+		{Rank: 3, SpellID: 12807, Direct: &shared.SpellRankAmount{Min: 3000, Max: 3000, Coef: 0}},
 	},
 	ImprovedDisciplines: shared.SpellRankTable{
 		{Rank: 1, SpellID: 29723, Direct: &shared.SpellRankAmount{Min: 2000, Max: 2000, Coef: 0}},
 		{Rank: 2, SpellID: 29724, Direct: &shared.SpellRankAmount{Min: 4000, Max: 4000, Coef: 0}},
 		{Rank: 3, SpellID: 29725, Direct: &shared.SpellRankAmount{Min: 6000, Max: 6000, Coef: 0}},
 	},
+	ImprovedExecute: shared.SpellRankTable{
+		{Rank: 1, SpellID: 20502},
+		{Rank: 2, SpellID: 20503},
+	},
+	ImprovedHamstring: shared.SpellRankTable{
+		{Rank: 1, SpellID: 12289},
+		{Rank: 2, SpellID: 12668},
+		{Rank: 3, SpellID: 23695},
+	},
+	ImprovedHeroicStrike: shared.SpellRankTable{
+		{Rank: 1, SpellID: 12282},
+		{Rank: 2, SpellID: 12663},
+		{Rank: 3, SpellID: 12664},
+	},
 	ImprovedIntercept: shared.SpellRankTable{
 		{Rank: 1, SpellID: 29888},
 		{Rank: 2, SpellID: 29889},
+	},
+	ImprovedIntimidatingShout: shared.SpellRankTable{
+		{Rank: 1, SpellID: 19870, Direct: &shared.SpellRankAmount{Min: 1000, Max: 1000, Coef: 1}},
+		{Rank: 2, SpellID: 19871, Direct: &shared.SpellRankAmount{Min: 2000, Max: 2000, Coef: 1}},
 	},
 	ImprovedMortalStrike: shared.SpellRankTable{
 		{Rank: 1, SpellID: 35446},
@@ -165,6 +330,49 @@ var genRanks = generatedRanks{
 		{Rank: 3, SpellID: 35449, Direct: &shared.SpellRankAmount{Min: 3, Max: 3, Coef: 0}},
 		{Rank: 4, SpellID: 35450, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 0}},
 		{Rank: 5, SpellID: 35451, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 0}},
+	},
+	ImprovedOverpower: shared.SpellRankTable{
+		{Rank: 1, SpellID: 12290, Direct: &shared.SpellRankAmount{Min: 25, Max: 25, Coef: 0}},
+		{Rank: 2, SpellID: 12963, Direct: &shared.SpellRankAmount{Min: 50, Max: 50, Coef: 0}},
+	},
+	ImprovedRend: shared.SpellRankTable{
+		{Rank: 1, SpellID: 12286, Direct: &shared.SpellRankAmount{Min: 25, Max: 25, Coef: 0}},
+		{Rank: 2, SpellID: 12658, Direct: &shared.SpellRankAmount{Min: 50, Max: 50, Coef: 0}},
+		{Rank: 3, SpellID: 12659, Direct: &shared.SpellRankAmount{Min: 75, Max: 75, Coef: 0}},
+	},
+	ImprovedRevenge: shared.SpellRankTable{
+		{Rank: 1, SpellID: 12797},
+		{Rank: 2, SpellID: 12799},
+		{Rank: 3, SpellID: 12800},
+	},
+	ImprovedShieldBash: shared.SpellRankTable{
+		{Rank: 1, SpellID: 12311},
+		{Rank: 2, SpellID: 12958},
+	},
+	ImprovedShieldBlock: shared.SpellRankTable{
+		{Rank: 1, SpellID: 12945, Direct: &shared.SpellRankAmount{Min: 1000, Max: 1000, Coef: 0}},
+	},
+	ImprovedShieldWall: shared.SpellRankTable{
+		{Rank: 1, SpellID: 12312, Direct: &shared.SpellRankAmount{Min: 3000, Max: 3000, Coef: 0}},
+		{Rank: 2, SpellID: 12803, Direct: &shared.SpellRankAmount{Min: 5000, Max: 5000, Coef: 0}},
+	},
+	ImprovedSlam: shared.SpellRankTable{
+		{Rank: 1, SpellID: 12862},
+		{Rank: 2, SpellID: 12330},
+	},
+	ImprovedSunderArmor: shared.SpellRankTable{
+		{Rank: 1, SpellID: 12308},
+		{Rank: 2, SpellID: 12810},
+		{Rank: 3, SpellID: 12811},
+	},
+	ImprovedTaunt: shared.SpellRankTable{
+		{Rank: 1, SpellID: 12302},
+		{Rank: 2, SpellID: 12765},
+	},
+	ImprovedThunderClap: shared.SpellRankTable{
+		{Rank: 1, SpellID: 12287, Direct: &shared.SpellRankAmount{Min: 40, Max: 40, Coef: 0}},
+		{Rank: 2, SpellID: 12665, Direct: &shared.SpellRankAmount{Min: 70, Max: 70, Coef: 0}},
+		{Rank: 3, SpellID: 12666, Direct: &shared.SpellRankAmount{Min: 100, Max: 100, Coef: 0}},
 	},
 	ImprovedWhirlwind: shared.SpellRankTable{
 		{Rank: 1, SpellID: 29721},
@@ -184,6 +392,19 @@ var genRanks = generatedRanks{
 		{Rank: 4, SpellID: 12961, Direct: &shared.SpellRankAmount{Min: 12, Max: 12, Coef: 0}},
 		{Rank: 5, SpellID: 12962, Direct: &shared.SpellRankAmount{Min: 15, Max: 15, Coef: 0}},
 	},
+	LongDaze: shared.SpellRankTable{
+		{Rank: 1, SpellID: 12705},
+	},
+	MaceSpecialization: shared.SpellRankTable{
+		{Rank: 1, SpellID: 12284},
+		{Rank: 2, SpellID: 12701},
+		{Rank: 3, SpellID: 12702},
+		{Rank: 4, SpellID: 12703},
+		{Rank: 5, SpellID: 12704},
+	},
+	MaceStunEffect: shared.SpellRankTable{
+		{Rank: 1, SpellID: 5530, Energize: 70},
+	},
 	MockingBlow: shared.SpellRankTable{
 		{Rank: 1, SpellID: 694, Cost: 100, Direct: &shared.SpellRankAmount{Min: 22, Max: 22, Coef: 1}},
 		{Rank: 2, SpellID: 7400, Cost: 100, Direct: &shared.SpellRankAmount{Min: 31, Max: 31, Coef: 1}},
@@ -200,11 +421,25 @@ var genRanks = generatedRanks{
 		{Rank: 5, SpellID: 25248, Cost: 300},
 		{Rank: 6, SpellID: 30330, Cost: 300},
 	},
+	OneHandedWeaponSpecialization: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16538, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 0}},
+		{Rank: 2, SpellID: 16539, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 0}},
+		{Rank: 3, SpellID: 16540, Direct: &shared.SpellRankAmount{Min: 6, Max: 6, Coef: 0}},
+		{Rank: 4, SpellID: 16541, Direct: &shared.SpellRankAmount{Min: 8, Max: 8, Coef: 0}},
+		{Rank: 5, SpellID: 16542, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 0}},
+	},
 	Overpower: shared.SpellRankTable{
 		{Rank: 1, SpellID: 7384, Cost: 50},
 		{Rank: 2, SpellID: 7887, Cost: 50},
 		{Rank: 3, SpellID: 11584, Cost: 50},
 		{Rank: 4, SpellID: 11585, Cost: 50},
+	},
+	PoleaxeSpecialization: shared.SpellRankTable{
+		{Rank: 1, SpellID: 12700},
+		{Rank: 2, SpellID: 12781, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 0}},
+		{Rank: 3, SpellID: 12783, Direct: &shared.SpellRankAmount{Min: 3, Max: 3, Coef: 0}},
+		{Rank: 4, SpellID: 12784, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 0}},
+		{Rank: 5, SpellID: 12785, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 0}},
 	},
 	Precision: shared.SpellRankTable{
 		{Rank: 1, SpellID: 29590},
@@ -235,6 +470,9 @@ var genRanks = generatedRanks{
 		{Rank: 7, SpellID: 25269, Cost: 50, Direct: &shared.SpellRankAmount{Min: 360, Max: 440, Coef: 1}},
 		{Rank: 8, SpellID: 30357, Cost: 50, Direct: &shared.SpellRankAmount{Min: 414, Max: 506, Coef: 1}},
 	},
+	RevengeStun: shared.SpellRankTable{
+		{Rank: 1, SpellID: 12798, Direct: &shared.SpellRankAmount{Min: 100, Max: 100, Coef: 0}},
+	},
 	ShieldBash: shared.SpellRankTable{
 		{Rank: 1, SpellID: 72, Cost: 100, Direct: &shared.SpellRankAmount{Min: 6, Max: 6, Coef: 1}},
 		{Rank: 2, SpellID: 1671, Cost: 100, Direct: &shared.SpellRankAmount{Min: 18, Max: 18, Coef: 1}},
@@ -254,6 +492,13 @@ var genRanks = generatedRanks{
 		{Rank: 5, SpellID: 25258, Cost: 200, Direct: &shared.SpellRankAmount{Min: 381, Max: 399, Coef: 1}},
 		{Rank: 6, SpellID: 30356, Cost: 200, Direct: &shared.SpellRankAmount{Min: 420, Max: 440, Coef: 1}},
 	},
+	ShieldSpecialization: shared.SpellRankTable{
+		{Rank: 1, SpellID: 12298},
+		{Rank: 2, SpellID: 12724, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 0}},
+		{Rank: 3, SpellID: 12725, Direct: &shared.SpellRankAmount{Min: 3, Max: 3, Coef: 0}},
+		{Rank: 4, SpellID: 12726, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 0}},
+		{Rank: 5, SpellID: 12727, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 0}},
+	},
 	Slam: shared.SpellRankTable{
 		{Rank: 1, SpellID: 1464, Cost: 150},
 		{Rank: 2, SpellID: 8820, Cost: 150},
@@ -270,6 +515,13 @@ var genRanks = generatedRanks{
 		{Rank: 5, SpellID: 11597, Cost: 150},
 		{Rank: 6, SpellID: 25225, Cost: 150},
 	},
+	SwordSpecialization: shared.SpellRankTable{
+		{Rank: 1, SpellID: 12281},
+		{Rank: 2, SpellID: 12812},
+		{Rank: 3, SpellID: 12813},
+		{Rank: 4, SpellID: 12814},
+		{Rank: 5, SpellID: 12815},
+	},
 	TacticalMastery: shared.SpellRankTable{
 		{Rank: 1, SpellID: 12295, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 0}},
 		{Rank: 2, SpellID: 12676, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 0}},
@@ -283,6 +535,23 @@ var genRanks = generatedRanks{
 		{Rank: 5, SpellID: 11580, Cost: 200, Direct: &shared.SpellRankAmount{Min: 82, Max: 82, Coef: 0}},
 		{Rank: 6, SpellID: 11581, Cost: 200, Direct: &shared.SpellRankAmount{Min: 103, Max: 103, Coef: 0}},
 		{Rank: 7, SpellID: 25264, Cost: 200, Direct: &shared.SpellRankAmount{Min: 123, Max: 123, Coef: 0}},
+	},
+	Toughness: shared.SpellRankTable{
+		{Rank: 1, SpellID: 12299, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 0}},
+		{Rank: 2, SpellID: 12761, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 0}},
+		{Rank: 3, SpellID: 12762, Direct: &shared.SpellRankAmount{Min: 6, Max: 6, Coef: 0}},
+		{Rank: 4, SpellID: 12763, Direct: &shared.SpellRankAmount{Min: 8, Max: 8, Coef: 0}},
+		{Rank: 5, SpellID: 12764, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 0}},
+	},
+	TwoHandedWeaponSpecialization: shared.SpellRankTable{
+		{Rank: 1, SpellID: 12163},
+		{Rank: 2, SpellID: 12711, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 0}},
+		{Rank: 3, SpellID: 12712, Direct: &shared.SpellRankAmount{Min: 3, Max: 3, Coef: 0}},
+		{Rank: 4, SpellID: 12713, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 0}},
+		{Rank: 5, SpellID: 12714, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 0}},
+	},
+	VictoryRush: shared.SpellRankTable{
+		{Rank: 1, SpellID: 34428, Direct: &shared.SpellRankAmount{Min: 45, Max: 45, Coef: 1}},
 	},
 	Vitality: shared.SpellRankTable{
 		{Rank: 1, SpellID: 29140, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 0}},

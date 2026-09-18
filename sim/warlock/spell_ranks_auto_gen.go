@@ -5,70 +5,131 @@ package warlock
 import "github.com/wowsims/tbc/sim/common/shared"
 
 type generatedRanks struct {
-	Backlash             shared.SpellRankTable
-	Banish               shared.SpellRankTable
-	Conflagrate          shared.SpellRankTable
-	Contagion            shared.SpellRankTable
-	Corruption           shared.SpellRankTable
-	CreateFirestone      shared.SpellRankTable
-	CreateHealthstone    shared.SpellRankTable
-	CreateSoulstone      shared.SpellRankTable
-	CreateSpellstone     shared.SpellRankTable
-	CurseOfAgony         shared.SpellRankTable
-	CurseOfDoom          shared.SpellRankTable
-	CurseOfRecklessness  shared.SpellRankTable
-	CurseOfTongues       shared.SpellRankTable
-	CurseOfWeakness      shared.SpellRankTable
-	CurseOfTheElements   shared.SpellRankTable
-	DarkPact             shared.SpellRankTable
-	DeathCoil            shared.SpellRankTable
-	DemonArmor           shared.SpellRankTable
-	DemonSkin            shared.SpellRankTable
-	DemonicAegis         shared.SpellRankTable
-	DemonicKnowledge     shared.SpellRankTable
-	DemonicResilience    shared.SpellRankTable
-	DemonicTactics       shared.SpellRankTable
-	DrainLife            shared.SpellRankTable
-	DrainMana            shared.SpellRankTable
-	DrainSoul            shared.SpellRankTable
-	EmpoweredCorruption  shared.SpellRankTable
-	Fear                 shared.SpellRankTable
-	FelArmor             shared.SpellRankTable
-	HealthFunnel         shared.SpellRankTable
-	Hellfire             shared.SpellRankTable
-	HellfireEffect       shared.SpellRankTable
-	HowlOfTerror         shared.SpellRankTable
-	Immolate             shared.SpellRankTable
-	ImprovedHowlOfTerror shared.SpellRankTable
-	Incinerate           shared.SpellRankTable
-	LifeTap              shared.SpellRankTable
-	Malediction          shared.SpellRankTable
-	ManaFeed             shared.SpellRankTable
-	NetherProtection     shared.SpellRankTable
-	RainOfFire           shared.SpellRankTable
-	SearingPain          shared.SpellRankTable
-	ShadowBolt           shared.SpellRankTable
-	ShadowEmbrace        shared.SpellRankTable
-	ShadowWard           shared.SpellRankTable
-	ShadowAndFlame       shared.SpellRankTable
-	Shadowburn           shared.SpellRankTable
-	Shadowfury           shared.SpellRankTable
-	SiphonLife           shared.SpellRankTable
-	SoulFire             shared.SpellRankTable
-	SoulLeech            shared.SpellRankTable
-	SubjugateDemon       shared.SpellRankTable
-	UnstableAffliction   shared.SpellRankTable
+	Aftermath               shared.SpellRankTable
+	Backlash                shared.SpellRankTable
+	Bane                    shared.SpellRankTable
+	Banish                  shared.SpellRankTable
+	Cataclysm               shared.SpellRankTable
+	Conflagrate             shared.SpellRankTable
+	Contagion               shared.SpellRankTable
+	Corruption              shared.SpellRankTable
+	CreateFirestone         shared.SpellRankTable
+	CreateHealthstone       shared.SpellRankTable
+	CreateSoulstone         shared.SpellRankTable
+	CreateSpellstone        shared.SpellRankTable
+	CurseOfAgony            shared.SpellRankTable
+	CurseOfDoom             shared.SpellRankTable
+	CurseOfIdiocy           shared.SpellRankTable
+	CurseOfRecklessness     shared.SpellRankTable
+	CurseOfTongues          shared.SpellRankTable
+	CurseOfWeakness         shared.SpellRankTable
+	CurseOfTheElements      shared.SpellRankTable
+	DarkPact                shared.SpellRankTable
+	DeathCoil               shared.SpellRankTable
+	DemonArmor              shared.SpellRankTable
+	DemonSkin               shared.SpellRankTable
+	DemonicAegis            shared.SpellRankTable
+	DemonicEmbrace          shared.SpellRankTable
+	DemonicKnowledge        shared.SpellRankTable
+	DemonicResilience       shared.SpellRankTable
+	DemonicTactics          shared.SpellRankTable
+	DestructiveReach        shared.SpellRankTable
+	Devastation             shared.SpellRankTable
+	DrainLife               shared.SpellRankTable
+	DrainMana               shared.SpellRankTable
+	DrainSoul               shared.SpellRankTable
+	Emberstorm              shared.SpellRankTable
+	EmpoweredCorruption     shared.SpellRankTable
+	Fear                    shared.SpellRankTable
+	FelArmor                shared.SpellRankTable
+	FelConcentration        shared.SpellRankTable
+	FelIntellect            shared.SpellRankTable
+	FelStamina              shared.SpellRankTable
+	GrimReach               shared.SpellRankTable
+	HealthFunnel            shared.SpellRankTable
+	Hellfire                shared.SpellRankTable
+	HellfireEffect          shared.SpellRankTable
+	HowlOfTerror            shared.SpellRankTable
+	Immolate                shared.SpellRankTable
+	ImprovedCorruption      shared.SpellRankTable
+	ImprovedCurseOfAgony    shared.SpellRankTable
+	ImprovedCurseOfWeakness shared.SpellRankTable
+	ImprovedDrainSoul       shared.SpellRankTable
+	ImprovedFirebolt        shared.SpellRankTable
+	ImprovedHealthFunnel    shared.SpellRankTable
+	ImprovedHealthstone     shared.SpellRankTable
+	ImprovedHowlOfTerror    shared.SpellRankTable
+	ImprovedImmolate        shared.SpellRankTable
+	ImprovedImp             shared.SpellRankTable
+	ImprovedLashOfPain      shared.SpellRankTable
+	ImprovedLifeTap         shared.SpellRankTable
+	ImprovedSayaad          shared.SpellRankTable
+	ImprovedSearingPain     shared.SpellRankTable
+	ImprovedShadowBolt      shared.SpellRankTable
+	ImprovedSubjugateDemon  shared.SpellRankTable
+	ImprovedVoidwalker      shared.SpellRankTable
+	Incinerate              shared.SpellRankTable
+	Intensity               shared.SpellRankTable
+	LifeTap                 shared.SpellRankTable
+	Malediction             shared.SpellRankTable
+	ManaFeed                shared.SpellRankTable
+	MasterConjuror          shared.SpellRankTable
+	MasterSummoner          shared.SpellRankTable
+	NetherProtection        shared.SpellRankTable
+	Nightfall               shared.SpellRankTable
+	Pyroclasm               shared.SpellRankTable
+	RainOfFire              shared.SpellRankTable
+	RitualOfSouls           shared.SpellRankTable
+	Ruin                    shared.SpellRankTable
+	SearingPain             shared.SpellRankTable
+	SeedOfCorruption        shared.SpellRankTable
+	ShadowBolt              shared.SpellRankTable
+	ShadowEmbrace           shared.SpellRankTable
+	ShadowMastery           shared.SpellRankTable
+	ShadowWard              shared.SpellRankTable
+	ShadowAndFlame          shared.SpellRankTable
+	Shadowburn              shared.SpellRankTable
+	Shadowfury              shared.SpellRankTable
+	SiphonLife              shared.SpellRankTable
+	SoulFire                shared.SpellRankTable
+	SoulLeech               shared.SpellRankTable
+	SoulSiphon              shared.SpellRankTable
+	SubjugateDemon          shared.SpellRankTable
+	Suppression             shared.SpellRankTable
+	UnholyPower             shared.SpellRankTable
+	UnstableAffliction      shared.SpellRankTable
 }
 
 var genRanks = generatedRanks{
+	Aftermath: shared.SpellRankTable{
+		{Rank: 1, SpellID: 18119},
+		{Rank: 2, SpellID: 18120},
+		{Rank: 3, SpellID: 18121},
+		{Rank: 4, SpellID: 18122},
+		{Rank: 5, SpellID: 18123},
+	},
 	Backlash: shared.SpellRankTable{
 		{Rank: 1, SpellID: 34935},
 		{Rank: 2, SpellID: 34938, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 0}},
 		{Rank: 3, SpellID: 34939, Direct: &shared.SpellRankAmount{Min: 3, Max: 3, Coef: 0}},
 	},
+	Bane: shared.SpellRankTable{
+		{Rank: 1, SpellID: 17788},
+		{Rank: 2, SpellID: 17789},
+		{Rank: 3, SpellID: 17790},
+		{Rank: 4, SpellID: 17791},
+		{Rank: 5, SpellID: 17792},
+	},
 	Banish: shared.SpellRankTable{
 		{Rank: 1, SpellID: 710, Cost: 100},
 		{Rank: 2, SpellID: 18647, Cost: 200},
+	},
+	Cataclysm: shared.SpellRankTable{
+		{Rank: 1, SpellID: 17778},
+		{Rank: 2, SpellID: 17779},
+		{Rank: 3, SpellID: 17780},
+		{Rank: 4, SpellID: 17781},
+		{Rank: 5, SpellID: 17782},
 	},
 	Conflagrate: shared.SpellRankTable{
 		{Rank: 1, SpellID: 17962, Cost: 165, Direct: &shared.SpellRankAmount{Min: 249, Max: 316, Coef: 0.42899999022483826}},
@@ -137,6 +198,9 @@ var genRanks = generatedRanks{
 		{Rank: 1, SpellID: 603, Cost: 300, Periodic: &shared.SpellRankPeriodic{Tick: 3200, Coef: 2}},
 		{Rank: 2, SpellID: 30910, Cost: 380, Periodic: &shared.SpellRankPeriodic{Tick: 4200, Coef: 2}},
 	},
+	CurseOfIdiocy: shared.SpellRankTable{
+		{Rank: 1, SpellID: 1010, Cost: 110},
+	},
 	CurseOfRecklessness: shared.SpellRankTable{
 		{Rank: 1, SpellID: 704, Cost: 35, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 0}},
 		{Rank: 2, SpellID: 7658, Cost: 60, Direct: &shared.SpellRankAmount{Min: 45, Max: 45, Coef: 0}},
@@ -193,6 +257,13 @@ var genRanks = generatedRanks{
 		{Rank: 2, SpellID: 30144, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 1}},
 		{Rank: 3, SpellID: 30145, Direct: &shared.SpellRankAmount{Min: 30, Max: 30, Coef: 1}},
 	},
+	DemonicEmbrace: shared.SpellRankTable{
+		{Rank: 1, SpellID: 18697, Direct: &shared.SpellRankAmount{Min: 3, Max: 3, Coef: 1}},
+		{Rank: 2, SpellID: 18698, Direct: &shared.SpellRankAmount{Min: 6, Max: 6, Coef: 1}},
+		{Rank: 3, SpellID: 18699, Direct: &shared.SpellRankAmount{Min: 9, Max: 9, Coef: 1}},
+		{Rank: 4, SpellID: 18700, Direct: &shared.SpellRankAmount{Min: 12, Max: 12, Coef: 1}},
+		{Rank: 5, SpellID: 18701, Direct: &shared.SpellRankAmount{Min: 15, Max: 15, Coef: 1}},
+	},
 	DemonicKnowledge: shared.SpellRankTable{
 		{Rank: 1, SpellID: 35691, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 1}},
 		{Rank: 2, SpellID: 35692, Direct: &shared.SpellRankAmount{Min: 8, Max: 8, Coef: 1}},
@@ -209,6 +280,17 @@ var genRanks = generatedRanks{
 		{Rank: 3, SpellID: 30246, Direct: &shared.SpellRankAmount{Min: 3, Max: 3, Coef: 1}},
 		{Rank: 4, SpellID: 30247, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 1}},
 		{Rank: 5, SpellID: 30248, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 1}},
+	},
+	DestructiveReach: shared.SpellRankTable{
+		{Rank: 1, SpellID: 17917, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+		{Rank: 2, SpellID: 17918, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 1}},
+	},
+	Devastation: shared.SpellRankTable{
+		{Rank: 1, SpellID: 18130},
+		{Rank: 2, SpellID: 18131, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 1}},
+		{Rank: 3, SpellID: 18132, Direct: &shared.SpellRankAmount{Min: 3, Max: 3, Coef: 1}},
+		{Rank: 4, SpellID: 18133, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 1}},
+		{Rank: 5, SpellID: 18134, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 1}},
 	},
 	DrainLife: shared.SpellRankTable{
 		{Rank: 1, SpellID: 689, Cost: 55, Periodic: &shared.SpellRankPeriodic{Tick: 10, Coef: 0.11100000143051147}},
@@ -235,6 +317,13 @@ var genRanks = generatedRanks{
 		{Rank: 4, SpellID: 11675, Cost: 290, Periodic: &shared.SpellRankPeriodic{Tick: 91, Coef: 0.42899999022483826}},
 		{Rank: 5, SpellID: 27217, Cost: 360, Periodic: &shared.SpellRankPeriodic{Tick: 124, Coef: 0.42899999022483826}},
 	},
+	Emberstorm: shared.SpellRankTable{
+		{Rank: 1, SpellID: 17954, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 1}},
+		{Rank: 2, SpellID: 17955, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 1}},
+		{Rank: 3, SpellID: 17956, Direct: &shared.SpellRankAmount{Min: 6, Max: 6, Coef: 1}},
+		{Rank: 4, SpellID: 17957, Direct: &shared.SpellRankAmount{Min: 8, Max: 8, Coef: 1}},
+		{Rank: 5, SpellID: 17958, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+	},
 	EmpoweredCorruption: shared.SpellRankTable{
 		{Rank: 1, SpellID: 32381, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 1}},
 		{Rank: 2, SpellID: 32382, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 1}},
@@ -248,6 +337,27 @@ var genRanks = generatedRanks{
 	FelArmor: shared.SpellRankTable{
 		{Rank: 1, SpellID: 28176, Cost: 637, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 0}},
 		{Rank: 2, SpellID: 28189, Cost: 725, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 0}},
+	},
+	FelConcentration: shared.SpellRankTable{
+		{Rank: 1, SpellID: 17783, Direct: &shared.SpellRankAmount{Min: 14, Max: 14, Coef: 1}},
+		{Rank: 2, SpellID: 17784, Direct: &shared.SpellRankAmount{Min: 28, Max: 28, Coef: 1}},
+		{Rank: 3, SpellID: 17785, Direct: &shared.SpellRankAmount{Min: 42, Max: 42, Coef: 1}},
+		{Rank: 4, SpellID: 17786, Direct: &shared.SpellRankAmount{Min: 56, Max: 56, Coef: 1}},
+		{Rank: 5, SpellID: 17787, Direct: &shared.SpellRankAmount{Min: 70, Max: 70, Coef: 1}},
+	},
+	FelIntellect: shared.SpellRankTable{
+		{Rank: 1, SpellID: 18731, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 1}},
+		{Rank: 2, SpellID: 18743, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+		{Rank: 3, SpellID: 18744, Direct: &shared.SpellRankAmount{Min: 15, Max: 15, Coef: 1}},
+	},
+	FelStamina: shared.SpellRankTable{
+		{Rank: 1, SpellID: 18748, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 1}},
+		{Rank: 2, SpellID: 18749, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+		{Rank: 3, SpellID: 18750, Direct: &shared.SpellRankAmount{Min: 15, Max: 15, Coef: 1}},
+	},
+	GrimReach: shared.SpellRankTable{
+		{Rank: 1, SpellID: 18218, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+		{Rank: 2, SpellID: 18219, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 1}},
 	},
 	HealthFunnel: shared.SpellRankTable{
 		{Rank: 1, SpellID: 755, Cost: 11, Direct: &shared.SpellRankAmount{Min: 12, Max: 12, Coef: 0.20000000298023224}},
@@ -286,13 +396,94 @@ var genRanks = generatedRanks{
 		{Rank: 8, SpellID: 25309, Cost: 380, Direct: &shared.SpellRankAmount{Min: 298, Max: 299, Coef: 0.20000000298023224}, Periodic: &shared.SpellRankPeriodic{Tick: 102, Coef: 0.12999999523162842}},
 		{Rank: 9, SpellID: 27215, Cost: 445, Direct: &shared.SpellRankAmount{Min: 331, Max: 332, Coef: 0.20000000298023224}, Periodic: &shared.SpellRankPeriodic{Tick: 123, Coef: 0.12999999523162842}},
 	},
+	ImprovedCorruption: shared.SpellRankTable{
+		{Rank: 1, SpellID: 17810},
+		{Rank: 2, SpellID: 17811},
+		{Rank: 3, SpellID: 17812},
+		{Rank: 4, SpellID: 17813},
+		{Rank: 5, SpellID: 17814},
+	},
+	ImprovedCurseOfAgony: shared.SpellRankTable{
+		{Rank: 1, SpellID: 18827, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 1}},
+		{Rank: 2, SpellID: 18829, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+	},
+	ImprovedCurseOfWeakness: shared.SpellRankTable{
+		{Rank: 1, SpellID: 18179, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+		{Rank: 2, SpellID: 18180, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 1}},
+	},
+	ImprovedDrainSoul: shared.SpellRankTable{
+		{Rank: 1, SpellID: 18213, Direct: &shared.SpellRankAmount{Min: 100, Max: 100, Coef: 1}},
+		{Rank: 2, SpellID: 18372, Direct: &shared.SpellRankAmount{Min: 100, Max: 100, Coef: 1}},
+	},
+	ImprovedFirebolt: shared.SpellRankTable{
+		{Rank: 1, SpellID: 18126},
+		{Rank: 2, SpellID: 18127},
+	},
+	ImprovedHealthFunnel: shared.SpellRankTable{
+		{Rank: 1, SpellID: 18703, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+		{Rank: 2, SpellID: 18704, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 1}},
+	},
+	ImprovedHealthstone: shared.SpellRankTable{
+		{Rank: 1, SpellID: 18692, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+		{Rank: 2, SpellID: 18693, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 1}},
+	},
 	ImprovedHowlOfTerror: shared.SpellRankTable{
 		{Rank: 1, SpellID: 30054},
 		{Rank: 2, SpellID: 30057},
 	},
+	ImprovedImmolate: shared.SpellRankTable{
+		{Rank: 1, SpellID: 17815, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 1}},
+		{Rank: 2, SpellID: 17833, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+		{Rank: 3, SpellID: 17834, Direct: &shared.SpellRankAmount{Min: 15, Max: 15, Coef: 1}},
+		{Rank: 4, SpellID: 17835, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 1}},
+		{Rank: 5, SpellID: 17836, Direct: &shared.SpellRankAmount{Min: 25, Max: 25, Coef: 1}},
+	},
+	ImprovedImp: shared.SpellRankTable{
+		{Rank: 1, SpellID: 18694, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+		{Rank: 2, SpellID: 18695, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 1}},
+		{Rank: 3, SpellID: 18696, Direct: &shared.SpellRankAmount{Min: 30, Max: 30, Coef: 1}},
+	},
+	ImprovedLashOfPain: shared.SpellRankTable{
+		{Rank: 1, SpellID: 18128},
+		{Rank: 2, SpellID: 18129},
+	},
+	ImprovedLifeTap: shared.SpellRankTable{
+		{Rank: 1, SpellID: 18182, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+		{Rank: 2, SpellID: 18183, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 1}},
+	},
+	ImprovedSayaad: shared.SpellRankTable{
+		{Rank: 1, SpellID: 18754, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+		{Rank: 2, SpellID: 18755, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 1}},
+		{Rank: 3, SpellID: 18756, Direct: &shared.SpellRankAmount{Min: 30, Max: 30, Coef: 1}},
+	},
+	ImprovedSearingPain: shared.SpellRankTable{
+		{Rank: 1, SpellID: 17927, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 1}},
+		{Rank: 2, SpellID: 17929, Direct: &shared.SpellRankAmount{Min: 7, Max: 7, Coef: 1}},
+		{Rank: 3, SpellID: 17930, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+	},
+	ImprovedShadowBolt: shared.SpellRankTable{
+		{Rank: 1, SpellID: 17793},
+		{Rank: 2, SpellID: 17796},
+		{Rank: 3, SpellID: 17801},
+		{Rank: 4, SpellID: 17802},
+		{Rank: 5, SpellID: 17803},
+	},
+	ImprovedSubjugateDemon: shared.SpellRankTable{
+		{Rank: 1, SpellID: 18821, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 1}},
+		{Rank: 2, SpellID: 18822, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+	},
+	ImprovedVoidwalker: shared.SpellRankTable{
+		{Rank: 1, SpellID: 18705, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+		{Rank: 2, SpellID: 18706, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 1}},
+		{Rank: 3, SpellID: 18707, Direct: &shared.SpellRankAmount{Min: 30, Max: 30, Coef: 1}},
+	},
 	Incinerate: shared.SpellRankTable{
 		{Rank: 1, SpellID: 29722, Cost: 325, Direct: &shared.SpellRankAmount{Min: 416, Max: 480, Coef: 0.7139999866485596}},
 		{Rank: 2, SpellID: 32231, Cost: 355, Direct: &shared.SpellRankAmount{Min: 444, Max: 514, Coef: 0.7139999866485596}},
+	},
+	Intensity: shared.SpellRankTable{
+		{Rank: 1, SpellID: 18135, Direct: &shared.SpellRankAmount{Min: 35, Max: 35, Coef: 1}},
+		{Rank: 2, SpellID: 18136, Direct: &shared.SpellRankAmount{Min: 70, Max: 70, Coef: 1}},
 	},
 	LifeTap: shared.SpellRankTable{
 		{Rank: 1, SpellID: 1454},
@@ -313,10 +504,26 @@ var genRanks = generatedRanks{
 		{Rank: 2, SpellID: 30327, Direct: &shared.SpellRankAmount{Min: 66, Max: 66, Coef: 1}},
 		{Rank: 3, SpellID: 30328, Direct: &shared.SpellRankAmount{Min: 100, Max: 100, Coef: 0}},
 	},
+	MasterConjuror: shared.SpellRankTable{
+		{Rank: 1, SpellID: 18767, Direct: &shared.SpellRankAmount{Min: 15, Max: 15, Coef: 1}},
+		{Rank: 2, SpellID: 18768, Direct: &shared.SpellRankAmount{Min: 30, Max: 30, Coef: 1}},
+	},
+	MasterSummoner: shared.SpellRankTable{
+		{Rank: 1, SpellID: 18709},
+		{Rank: 2, SpellID: 18710},
+	},
 	NetherProtection: shared.SpellRankTable{
 		{Rank: 1, SpellID: 30299},
 		{Rank: 2, SpellID: 30301},
 		{Rank: 3, SpellID: 30302},
+	},
+	Nightfall: shared.SpellRankTable{
+		{Rank: 1, SpellID: 18094},
+		{Rank: 2, SpellID: 18095},
+	},
+	Pyroclasm: shared.SpellRankTable{
+		{Rank: 1, SpellID: 18096},
+		{Rank: 2, SpellID: 18073},
 	},
 	RainOfFire: shared.SpellRankTable{
 		{Rank: 1, SpellID: 5740, Cost: 295, Direct: &shared.SpellRankAmount{Min: 43, Max: 44, Coef: 0.28600001335144043}},
@@ -324,6 +531,12 @@ var genRanks = generatedRanks{
 		{Rank: 3, SpellID: 11677, Cost: 885, Direct: &shared.SpellRankAmount{Min: 157, Max: 158, Coef: 0.28600001335144043}},
 		{Rank: 4, SpellID: 11678, Cost: 1185, Direct: &shared.SpellRankAmount{Min: 229, Max: 229, Coef: 0.28600001335144043}},
 		{Rank: 5, SpellID: 27212, Cost: 1480, Direct: &shared.SpellRankAmount{Min: 303, Max: 304, Coef: 0.28600001335144043}},
+	},
+	RitualOfSouls: shared.SpellRankTable{
+		{Rank: 1, SpellID: 29893},
+	},
+	Ruin: shared.SpellRankTable{
+		{Rank: 1, SpellID: 17959, Direct: &shared.SpellRankAmount{Min: 100, Max: 100, Coef: 1}},
 	},
 	SearingPain: shared.SpellRankTable{
 		{Rank: 1, SpellID: 5676, Cost: 45, Direct: &shared.SpellRankAmount{Min: 38, Max: 47, Coef: 0.3959999978542328}},
@@ -334,6 +547,9 @@ var genRanks = generatedRanks{
 		{Rank: 6, SpellID: 17923, Cost: 168, Direct: &shared.SpellRankAmount{Min: 216, Max: 252, Coef: 0.42899999022483826}},
 		{Rank: 7, SpellID: 27210, Cost: 191, Direct: &shared.SpellRankAmount{Min: 252, Max: 297, Coef: 0.42899999022483826}},
 		{Rank: 8, SpellID: 30459, Cost: 205, Direct: &shared.SpellRankAmount{Min: 270, Max: 320, Coef: 0.42899999022483826}},
+	},
+	SeedOfCorruption: shared.SpellRankTable{
+		{Rank: 1, SpellID: 27243, Cost: 882, Periodic: &shared.SpellRankPeriodic{Tick: 174, Coef: 0.25}},
 	},
 	ShadowBolt: shared.SpellRankTable{
 		{Rank: 1, SpellID: 686, Cost: 25, Direct: &shared.SpellRankAmount{Min: 13, Max: 18, Coef: 0.14000000059604645}},
@@ -354,6 +570,13 @@ var genRanks = generatedRanks{
 		{Rank: 3, SpellID: 32392},
 		{Rank: 4, SpellID: 32393},
 		{Rank: 5, SpellID: 32394},
+	},
+	ShadowMastery: shared.SpellRankTable{
+		{Rank: 1, SpellID: 18271, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 1}},
+		{Rank: 2, SpellID: 18272, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 1}},
+		{Rank: 3, SpellID: 18273, Direct: &shared.SpellRankAmount{Min: 6, Max: 6, Coef: 1}},
+		{Rank: 4, SpellID: 18274, Direct: &shared.SpellRankAmount{Min: 8, Max: 8, Coef: 1}},
+		{Rank: 5, SpellID: 18275, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
 	},
 	ShadowWard: shared.SpellRankTable{
 		{Rank: 1, SpellID: 6229, Cost: 135, Direct: &shared.SpellRankAmount{Min: 290, Max: 290, Coef: 0}},
@@ -402,10 +625,28 @@ var genRanks = generatedRanks{
 		{Rank: 2, SpellID: 30295, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 1}},
 		{Rank: 3, SpellID: 30296, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 1}},
 	},
+	SoulSiphon: shared.SpellRankTable{
+		{Rank: 1, SpellID: 17804, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 1}},
+		{Rank: 2, SpellID: 17805, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 1}},
+	},
 	SubjugateDemon: shared.SpellRankTable{
 		{Rank: 1, SpellID: 1098, Cost: 300, Direct: &shared.SpellRankAmount{Min: 45, Max: 45, Coef: 0}},
 		{Rank: 2, SpellID: 11725, Cost: 500, Direct: &shared.SpellRankAmount{Min: 59, Max: 59, Coef: 0}},
 		{Rank: 3, SpellID: 11726, Cost: 700, Direct: &shared.SpellRankAmount{Min: 74, Max: 74, Coef: 0}},
+	},
+	Suppression: shared.SpellRankTable{
+		{Rank: 1, SpellID: 18174, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 1}},
+		{Rank: 2, SpellID: 18175, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 1}},
+		{Rank: 3, SpellID: 18176, Direct: &shared.SpellRankAmount{Min: 6, Max: 6, Coef: 1}},
+		{Rank: 4, SpellID: 18177, Direct: &shared.SpellRankAmount{Min: 8, Max: 8, Coef: 1}},
+		{Rank: 5, SpellID: 18178, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+	},
+	UnholyPower: shared.SpellRankTable{
+		{Rank: 1, SpellID: 18769, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 1}},
+		{Rank: 2, SpellID: 18770, Direct: &shared.SpellRankAmount{Min: 8, Max: 8, Coef: 1}},
+		{Rank: 3, SpellID: 18771, Direct: &shared.SpellRankAmount{Min: 12, Max: 12, Coef: 1}},
+		{Rank: 4, SpellID: 18772, Direct: &shared.SpellRankAmount{Min: 16, Max: 16, Coef: 1}},
+		{Rank: 5, SpellID: 18773, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 1}},
 	},
 	UnstableAffliction: shared.SpellRankTable{
 		{Rank: 1, SpellID: 30108, Cost: 270, Periodic: &shared.SpellRankPeriodic{Tick: 110, Coef: 0.20000000298023224}},
