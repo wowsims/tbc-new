@@ -21,6 +21,9 @@ type generatedRow struct {
 	SpellID    int32
 	Cost       int32
 	CastTimeMs int32
+	GCDMs      int32
+	CooldownMs int32
+	MaxRange   float64
 	Direct     *generatedAmount
 	Heal       *generatedAmount
 	Periodic   *generatedAmount
@@ -330,9 +333,13 @@ func buildRow(db *sql.DB, rank int32, spellID int32, mask int) (generatedRow, er
 		return generatedRow{}, err
 	}
 
-	row := generatedRow{Rank: rank, SpellID: spellID, CastTimeMs: spell.CastTimeMs}
+	row := generatedRow{
+		Rank: rank, SpellID: spellID,
+		CastTimeMs: spell.CastTimeMs, GCDMs: spell.GCDMs, CooldownMs: spell.CooldownMs,
+		MaxRange: spell.MaxRange,
+	}
 	if spell.ManaCost.Valid {
-		row.Cost = int32(spell.ManaCost.Int64)
+		row.Cost = NormalizePowerCost(int32(spell.ManaCost.Int64), spell.PowerType)
 	}
 
 	amountOf := func(e RankEffect) *generatedAmount {
@@ -352,7 +359,7 @@ func buildRow(db *sql.DB, rank int32, spellID int32, mask int) (generatedRow, er
 
 	for _, e := range candidates {
 		switch {
-		case e.Effect == effSchoolDamage && row.Direct == nil:
+		case (e.Effect == effSchoolDamage || IsWeaponDamageEffect(e.Effect)) && row.Direct == nil:
 			row.Direct = amountOf(e)
 		case e.Effect == effHeal && row.Heal == nil:
 			row.Heal = amountOf(e)
@@ -363,13 +370,24 @@ func buildRow(db *sql.DB, rank int32, spellID int32, mask int) (generatedRow, er
 		}
 	}
 
+	// An aura effect reached by the fallbacks below still lands in the role its shape says it has:
+	// Frenzied Regeneration's aura ticks every second, and filing that under Direct would hand the
+	// call site a periodic value through a field that promises a direct one.
+	fallback := func(e RankEffect) {
+		if e.AuraPeriod > 0 {
+			row.Periodic = amountOf(e)
+		} else {
+			row.Direct = amountOf(e)
+		}
+	}
+
 	// Holy Shield keeps its per-block damage on an aura effect that is none of the roles above, and it
 	// is not the only aura effect on the spell: one index holds the block value and another the damage.
 	// The damage is the one that scales with spell power, so a nonzero coefficient is what picks it.
 	if !row.hasValue() {
 		for _, e := range candidates {
 			if e.Aura != 0 && e.BasePoints > 0 && e.Coefficient > 0 {
-				row.Direct = amountOf(e)
+				fallback(e)
 				break
 			}
 		}
@@ -377,7 +395,7 @@ func buildRow(db *sql.DB, rank int32, spellID int32, mask int) (generatedRow, er
 	if !row.hasValue() {
 		for _, e := range candidates {
 			if e.Aura != 0 && e.BasePoints > 0 {
-				row.Direct = amountOf(e)
+				fallback(e)
 				break
 			}
 		}
@@ -484,6 +502,15 @@ func formatRow(row generatedRow) string {
 	}
 	if row.CastTimeMs > 0 {
 		parts = append(parts, fmt.Sprintf("CastTime: %s", millis(row.CastTimeMs)))
+	}
+	if row.GCDMs > 0 {
+		parts = append(parts, fmt.Sprintf("GCD: %s", millis(row.GCDMs)))
+	}
+	if row.CooldownMs > 0 {
+		parts = append(parts, fmt.Sprintf("Cooldown: %s", millis(row.CooldownMs)))
+	}
+	if row.MaxRange > 0 {
+		parts = append(parts, fmt.Sprintf("MaxRange: %s", num(row.MaxRange)))
 	}
 	for _, role := range []struct {
 		name  string

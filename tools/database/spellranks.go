@@ -9,13 +9,37 @@ import (
 
 const RankLevel = 70
 
+// The client stores rage in tenths - Heroic Strike costs 150, not 15 - because the server tracks a
+// 0-1000 bar where the UI shows 0-100. Mana, energy and focus are stated as the player sees them, so
+// rage is the one power type a cost has to be divided through. Confirmed on every warrior and bear
+// ability in this build: each one is exactly ten times the sim's hand-written cost.
+const powerTypeRage = 1
+
+func NormalizePowerCost(cost int32, powerType int32) int32 {
+	if powerType == powerTypeRage {
+		return cost / 10
+	}
+	return cost
+}
+
 const (
 	effSchoolDamage      = 2
 	effHeal              = 10
 	effEnergize          = 30
 	effAuraPeriodic      = 3
 	effAuraPeriodicLeech = 53
+
+	// A melee ability states its bonus as weapon damage rather than school damage: Sinister Strike's
+	// +98 is E_NORMALIZED_WEAPON_DMG, not E_SCHOOL_DAMAGE. E_WEAPON_PERCENT_DAMAGE is deliberately
+	// absent - it is a multiplier on the weapon swing, not an amount a rank can carry.
+	effWeaponDamageNoSchool = 17
+	effWeaponDamage         = 58
+	effNormalizedWeaponDmg  = 121
 )
+
+func IsWeaponDamageEffect(effect int32) bool {
+	return effect == effWeaponDamageNoSchool || effect == effWeaponDamage || effect == effNormalizedWeaponDmg
+}
 
 // Devouring Plague ticks as a leech rather than as plain periodic damage, so "is this a DoT" cannot be
 // a single aura check.
@@ -41,8 +65,12 @@ type RankSpell struct {
 	SpellLevel int32
 	MaxLevel   int32
 	ManaCost   sql.NullInt64
+	PowerType  int32
 	DurationMs int32
 	CastTimeMs int32
+	GCDMs      int32
+	CooldownMs int32
+	MaxRange   float64
 	Effects    []RankEffect
 }
 
@@ -94,8 +122,9 @@ func LoadRankSpell(db *sql.DB, spellID int32) (RankSpell, error) {
 	s := RankSpell{SpellID: spellID}
 	err := db.QueryRow(`
 		SELECT l.SpellLevel, l.MaxLevel,
-		       (SELECT ManaCost FROM SpellPower WHERE SpellID = l.SpellID ORDER BY OrderIndex LIMIT 1)
-		FROM SpellLevels l WHERE l.SpellID = ?`, spellID).Scan(&s.SpellLevel, &s.MaxLevel, &s.ManaCost)
+		       (SELECT ManaCost FROM SpellPower WHERE SpellID = l.SpellID ORDER BY OrderIndex LIMIT 1),
+		       COALESCE((SELECT PowerType FROM SpellPower WHERE SpellID = l.SpellID ORDER BY OrderIndex LIMIT 1), 0)
+		FROM SpellLevels l WHERE l.SpellID = ?`, spellID).Scan(&s.SpellLevel, &s.MaxLevel, &s.ManaCost, &s.PowerType)
 	switch {
 	case errors.Is(err, sql.ErrNoRows):
 		// Passive talents such as the warrior's Blood Craze have no SpellLevels row at all. No level
@@ -110,6 +139,19 @@ func LoadRankSpell(db *sql.DB, spellID int32) (RankSpell, error) {
 		SELECT COALESCE(d.Duration, 0)
 		FROM SpellMisc m LEFT JOIN SpellDuration d ON d.ID = m.DurationIndex
 		WHERE m.SpellID = ?`, spellID).Scan(&s.DurationMs)
+
+	// The GCD, the cooldown and the range are all reachable from tables already extracted. Cooldown
+	// takes whichever of the two recovery times is longer: RecoveryTime is the spell's own, while
+	// CategoryRecoveryTime is the shared category one that Fire Blast and Cone of Cold actually use,
+	// and Cast.CD in the sim models whichever applies.
+	_ = db.QueryRow(`
+		SELECT COALESCE(max(RecoveryTime, CategoryRecoveryTime), 0), COALESCE(StartRecoveryTime, 0)
+		FROM SpellCooldowns WHERE SpellID = ?`, spellID).Scan(&s.CooldownMs, &s.GCDMs)
+
+	_ = db.QueryRow(`
+		SELECT COALESCE(r.RangeMax_1, 0)
+		FROM SpellMisc m JOIN SpellRange r ON r.ID = m.RangeIndex
+		WHERE m.SpellID = ?`, spellID).Scan(&s.MaxRange)
 
 	if castTimesAvailable(db) {
 		_ = db.QueryRow(`
@@ -187,7 +229,8 @@ func SiblingRankEffects(db *sql.DB, spellID int32, classBit int) ([]RankEffect, 
 
 func HasValueEffect(effects []RankEffect) bool {
 	for _, e := range effects {
-		if e.Effect == effSchoolDamage || e.Effect == effHeal || e.Effect == effEnergize || IsPeriodicAura(e.Aura) {
+		if e.Effect == effSchoolDamage || e.Effect == effHeal || e.Effect == effEnergize ||
+			IsWeaponDamageEffect(e.Effect) || IsPeriodicAura(e.Aura) {
 			return true
 		}
 	}
