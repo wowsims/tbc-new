@@ -7,17 +7,19 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var ChainLightningRankMap = shared.SpellRankMap{
+	{Rank: 1, SpellID: 421, Cost: 255, MinDamage: 200, MaxDamage: 227, Coefficient: 0.65100002289},
+	{Rank: 2, SpellID: 930, Cost: 345, MinDamage: 288, MaxDamage: 323, Coefficient: 0.65100002289},
+	{Rank: 3, SpellID: 2860, Cost: 445, MinDamage: 391, MaxDamage: 438, Coefficient: 0.65100002289},
+	{Rank: 4, SpellID: 10605, Cost: 550, MinDamage: 508, MaxDamage: 567, Coefficient: 0.65100002289},
+	{Rank: 5, SpellID: 25439, Cost: 650, MinDamage: 620, MaxDamage: 705, Coefficient: 0.65100002289},
+	{Rank: 6, SpellID: 25442, Cost: 760, MinDamage: 734, MaxDamage: 838, Coefficient: 0.65100002289},
+}
+
 func (shaman *Shaman) registerChainLightningSpell() {
 	maxHits := min(3, shaman.Env.TotalTargetCount())
 	sharedCDTimer := shaman.NewTimer()
-	shared.SpellRankMap{
-		{Rank: 1, SpellID: 421, Cost: 255, MinDamage: 200, MaxDamage: 227, Coefficient: 0.65100002289},
-		{Rank: 2, SpellID: 930, Cost: 345, MinDamage: 288, MaxDamage: 323, Coefficient: 0.65100002289},
-		{Rank: 3, SpellID: 2860, Cost: 445, MinDamage: 391, MaxDamage: 438, Coefficient: 0.65100002289},
-		{Rank: 4, SpellID: 10605, Cost: 550, MinDamage: 508, MaxDamage: 567, Coefficient: 0.65100002289},
-		{Rank: 5, SpellID: 25439, Cost: 650, MinDamage: 620, MaxDamage: 705, Coefficient: 0.65100002289},
-		{Rank: 6, SpellID: 25442, Cost: 760, MinDamage: 734, MaxDamage: 838, Coefficient: 0.65100002289},
-	}.RegisterAll(func(config shared.SpellRankConfig) {
+	ChainLightningRankMap.RegisterAll(func(config shared.SpellRankConfig) {
 		shaman.ChainLightnings = append(shaman.ChainLightnings, shaman.newChainLightningSpell(config, false, sharedCDTimer))
 		shaman.ChainLightningOverloads = append(shaman.ChainLightningOverloads, []*core.Spell{})
 		for range maxHits {
