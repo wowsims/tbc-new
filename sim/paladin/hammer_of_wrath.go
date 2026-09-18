@@ -1,8 +1,6 @@
 package paladin
 
 import (
-	"time"
-
 	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
@@ -48,7 +46,9 @@ func (paladin *Paladin) registerHammerOfWrath(rankConfig shared.SpellRank) {
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCDMin:   time.Millisecond * 500,
+				// The client's 500ms is below core's 1s floor, so it has to be named as the floor
+				// too or GCDTime clamps it straight back up.
+				GCDMin:   rankConfig.GCD,
 				GCD:      rankConfig.GCD,
 				CastTime: rankConfig.CastTime,
 			},

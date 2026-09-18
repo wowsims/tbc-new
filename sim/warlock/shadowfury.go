@@ -1,8 +1,6 @@
 package warlock
 
 import (
-	"time"
-
 	"github.com/wowsims/tbc/sim/core"
 )
 
@@ -21,8 +19,9 @@ func (warlock *Warlock) registerShadowfury() {
 		ManaCost: core.ManaCostOptions{FlatCost: shadowFuryRank.Cost},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD:      shadowFuryRank.GCD,
-				GCDMin:   500 * time.Millisecond,
+				GCD: shadowFuryRank.GCD,
+				// Below core's 1s floor, so it has to be named as the floor too - see GCDTime.
+				GCDMin:   shadowFuryRank.GCD,
 				CastTime: shadowFuryRank.CastTime,
 			},
 			CD: core.Cooldown{
