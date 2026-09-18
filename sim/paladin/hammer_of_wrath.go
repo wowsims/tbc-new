@@ -21,7 +21,7 @@ var HammerOfWrathRankMap = genRanks.HammerOfWrath
 //
 // Hurls a hammer that strikes an enemy for Holy damage.
 // Only usable on enemies that have 20% or less health.
-func (paladin *Paladin) registerHammerOfWrath(rankConfig shared.RankRow) {
+func (paladin *Paladin) registerHammerOfWrath(rankConfig shared.SpellRank) {
 	spellID := rankConfig.SpellID
 	cost := rankConfig.Cost
 	minDamage := rankConfig.Direct.Min

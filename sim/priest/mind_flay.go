@@ -10,7 +10,7 @@ import (
 
 var MindFlayRankMap = genRanks.MindFlay
 
-func (priest *Priest) registerMindFlaySpell(rank shared.RankRow) {
+func (priest *Priest) registerMindFlaySpell(rank shared.SpellRank) {
 	priest.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: rank.SpellID},
 		SpellSchool:    core.SpellSchoolShadow,

@@ -12,7 +12,7 @@ import (
 // Arcane school DoT, 0 mana cost, 30s cooldown, 15s duration
 var StarshardsRankMap = genRanks.Starshards
 
-func (priest *Priest) registerStarshardsSpell(rank shared.RankRow, cdTimer *core.Timer) {
+func (priest *Priest) registerStarshardsSpell(rank shared.SpellRank, cdTimer *core.Timer) {
 
 	priest.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: rank.SpellID},

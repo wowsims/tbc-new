@@ -382,7 +382,7 @@ func renderClassFile(db *sql.DB, pkg string, class dbc.DbcClass) ([]byte, error)
 
 	b.WriteString("type generatedRanks struct {\n")
 	for _, l := range ladders {
-		fmt.Fprintf(&b, "\t%s shared.RankTable\n", l.Field)
+		fmt.Fprintf(&b, "\t%s shared.SpellRankTable\n", l.Field)
 	}
 	b.WriteString("}\n\nvar genRanks = generatedRanks{\n")
 
@@ -394,7 +394,7 @@ func renderClassFile(db *sql.DB, pkg string, class dbc.DbcClass) ([]byte, error)
 		}
 		sort.Slice(ranks, func(i, j int) bool { return ranks[i] < ranks[j] })
 
-		fmt.Fprintf(&b, "\t%s: shared.RankTable{\n", l.Field)
+		fmt.Fprintf(&b, "\t%s: shared.SpellRankTable{\n", l.Field)
 		for _, rank := range ranks {
 			row, err := buildRow(db, rank, l.Ranks[rank], mask)
 			if err != nil {
@@ -427,10 +427,10 @@ func formatRow(row generatedRow) string {
 	}
 	if row.Periodic != nil {
 		if row.Periodic.APCoef > 0 {
-			parts = append(parts, fmt.Sprintf("Periodic: &shared.Periodic{Tick: %s, Coef: %s, APCoef: %s}",
+			parts = append(parts, fmt.Sprintf("Periodic: &shared.SpellRankPeriodic{Tick: %s, Coef: %s, APCoef: %s}",
 				num(row.Periodic.Min), num(row.Periodic.Coef), num(row.Periodic.APCoef)))
 		} else {
-			parts = append(parts, fmt.Sprintf("Periodic: &shared.Periodic{Tick: %s, Coef: %s}",
+			parts = append(parts, fmt.Sprintf("Periodic: &shared.SpellRankPeriodic{Tick: %s, Coef: %s}",
 				num(row.Periodic.Min), num(row.Periodic.Coef)))
 		}
 	}
@@ -442,10 +442,10 @@ func formatRow(row generatedRow) string {
 
 func formatAmount(a generatedAmount) string {
 	if a.APCoef > 0 {
-		return fmt.Sprintf("&shared.Amount{Min: %s, Max: %s, Coef: %s, APCoef: %s}",
+		return fmt.Sprintf("&shared.SpellRankAmount{Min: %s, Max: %s, Coef: %s, APCoef: %s}",
 			num(a.Min), num(a.Max), num(a.Coef), num(a.APCoef))
 	}
-	return fmt.Sprintf("&shared.Amount{Min: %s, Max: %s, Coef: %s}", num(a.Min), num(a.Max), num(a.Coef))
+	return fmt.Sprintf("&shared.SpellRankAmount{Min: %s, Max: %s, Coef: %s}", num(a.Min), num(a.Max), num(a.Coef))
 }
 
 func num(f float64) string {

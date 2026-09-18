@@ -38,7 +38,7 @@ type calibFamily struct {
 	Name     string
 	File     string
 	ClassBit int
-	Table    shared.RankTable
+	Table    shared.SpellRankTable
 }
 
 // The two shaman tables were inline anonymous literals until they were hoisted to package vars so this
@@ -162,7 +162,7 @@ func TestSpellRankCalibration(t *testing.T) {
 	}
 }
 
-func compareRow(t *testing.T, db *sql.DB, fam calibFamily, row shared.RankRow) []comparison {
+func compareRow(t *testing.T, db *sql.DB, fam calibFamily, row shared.SpellRank) []comparison {
 	t.Helper()
 
 	spell, candidates, err := RankCandidates(db, row.SpellID, fam.ClassBit)

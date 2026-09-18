@@ -13,7 +13,7 @@ func (shaman *Shaman) registerChainLightningSpell() {
 	maxHits := min(3, shaman.Env.TotalTargetCount())
 	sharedCDTimer := shaman.NewTimer()
 	shaman.ChainLightningOverloads = make(map[int32][]*core.Spell, len(ChainLightningRankMap))
-	ChainLightningRankMap.RegisterAll(func(config shared.RankRow) {
+	ChainLightningRankMap.RegisterAll(func(config shared.SpellRank) {
 		shaman.newChainLightningSpell(config, false, sharedCDTimer)
 		for range maxHits {
 			shaman.ChainLightningOverloads[config.Rank] = append(shaman.ChainLightningOverloads[config.Rank], shaman.newChainLightningSpell(config, true, nil))
@@ -22,7 +22,7 @@ func (shaman *Shaman) registerChainLightningSpell() {
 
 }
 
-func (shaman *Shaman) newChainLightningSpell(config shared.RankRow, isElementalOverload bool, sharedCDTimer *core.Timer) *core.Spell {
+func (shaman *Shaman) newChainLightningSpell(config shared.SpellRank, isElementalOverload bool, sharedCDTimer *core.Timer) *core.Spell {
 	shamConfig := ShamSpellConfig{
 		ActionID:            core.ActionID{SpellID: config.SpellID},
 		Rank:                config.Rank,

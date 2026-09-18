@@ -11,13 +11,13 @@ var LightningBoltRankMap = genRanks.LightningBolt
 
 func (shaman *Shaman) registerLightningBoltSpell() {
 	shaman.LightningBoltOverloads = make(map[int32]*core.Spell, len(LightningBoltRankMap))
-	LightningBoltRankMap.RegisterAll(func(config shared.RankRow) {
+	LightningBoltRankMap.RegisterAll(func(config shared.SpellRank) {
 		shaman.RegisterSpell(shaman.newLightningBoltSpellConfig(config, false))
 		shaman.LightningBoltOverloads[config.Rank] = shaman.RegisterSpell(shaman.newLightningBoltSpellConfig(config, true))
 	})
 }
 
-func (shaman *Shaman) newLightningBoltSpellConfig(config shared.RankRow, isElementalOverload bool) core.SpellConfig {
+func (shaman *Shaman) newLightningBoltSpellConfig(config shared.SpellRank, isElementalOverload bool) core.SpellConfig {
 	shamConfig := ShamSpellConfig{
 		ActionID:            core.ActionID{SpellID: config.SpellID},
 		Rank:                config.Rank,

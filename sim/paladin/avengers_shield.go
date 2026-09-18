@@ -21,7 +21,7 @@ var AvengersShieldRankMap = genRanks.AvengersShield
 //
 // Hurls a holy shield at the enemy, dealing Holy damage, dazing them and
 // then jumping to additional nearby enemies. Affects 3 total targets.
-func (paladin *Paladin) registerAvengersShield(rankConfig shared.RankRow) {
+func (paladin *Paladin) registerAvengersShield(rankConfig shared.SpellRank) {
 	paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: rankConfig.SpellID},
 		SpellSchool:    core.SpellSchoolHoly,

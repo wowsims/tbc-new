@@ -21,7 +21,7 @@ var HolyShockRankMap = genRanks.HolyShock
 //
 // Blasts the target with Holy energy, causing X to Y Holy damage to an enemy,
 // or X*1.267 to Y*1.267 healing to an ally.
-func (paladin *Paladin) registerHolyShock(rankConfig shared.RankRow) {
+func (paladin *Paladin) registerHolyShock(rankConfig shared.SpellRank) {
 	spellID := rankConfig.SpellID
 	cost := rankConfig.Cost
 	minDamage := rankConfig.Direct.Min

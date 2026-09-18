@@ -20,7 +20,7 @@ var ConsecrationRankMap = genRanks.Consecration
 // https://www.wowhead.com/tbc/spell=26573
 //
 // Consecrates the land beneath the Paladin, doing X Holy damage over 8 sec to enemies who enter the area.
-func (paladin *Paladin) registerConsecration(rankConfig shared.RankRow) {
+func (paladin *Paladin) registerConsecration(rankConfig shared.SpellRank) {
 	spellID := rankConfig.SpellID
 	cost := rankConfig.Cost
 	minDamage := rankConfig.Periodic.Tick

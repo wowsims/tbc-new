@@ -19,7 +19,7 @@ var HolyLightRankMap = genRanks.HolyLight
 // https://www.wowhead.com/tbc/spell=27136
 //
 // Heals a friendly target for a large amount.
-func (paladin *Paladin) registerHolyLight(rankConfig shared.RankRow) {
+func (paladin *Paladin) registerHolyLight(rankConfig shared.SpellRank) {
 	spellID := rankConfig.SpellID
 	cost := rankConfig.Cost
 	minHealing := rankConfig.Heal.Min
@@ -64,7 +64,7 @@ var FlashOfLightRankMap = genRanks.FlashOfLight
 // https://www.wowhead.com/tbc/spell=27137
 //
 // Heals a friendly target for a small amount.
-func (paladin *Paladin) registerFlashOfLight(rankConfig shared.RankRow) {
+func (paladin *Paladin) registerFlashOfLight(rankConfig shared.SpellRank) {
 	spellID := rankConfig.SpellID
 	cost := rankConfig.Cost
 	minHealing := rankConfig.Heal.Min
@@ -110,7 +110,7 @@ var LayOnHandsRankMap = genRanks.LayOnHands
 //
 // Heals a friendly target for an amount equal to the Paladin's maximum health
 // and restores mana to the target. Causes Forbearance for 1 min.
-func (paladin *Paladin) registerLayOnHands(rankConfig shared.RankRow) {
+func (paladin *Paladin) registerLayOnHands(rankConfig shared.SpellRank) {
 	spellID := rankConfig.SpellID
 	manaRestore := rankConfig.Energize
 

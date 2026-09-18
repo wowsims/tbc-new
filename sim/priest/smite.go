@@ -14,7 +14,7 @@ var smiteCastTimes = map[int32]time.Duration{
 	2: 2000 * time.Millisecond,
 }
 
-func (priest *Priest) registerSmiteSpell(rank shared.RankRow) {
+func (priest *Priest) registerSmiteSpell(rank shared.SpellRank) {
 	castTime := 2500 * time.Millisecond
 	if ct, ok := smiteCastTimes[rank.Rank]; ok {
 		castTime = ct

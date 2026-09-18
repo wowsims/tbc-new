@@ -10,7 +10,7 @@ import (
 
 var FlameStrikeRankMap = genRanks.Flamestrike.Ranks(7, 6)
 
-func (mage *Mage) registerFlamestrike(rankConfig shared.RankRow) {
+func (mage *Mage) registerFlamestrike(rankConfig shared.SpellRank) {
 	flameStrikeCoefficient := 0.23600000143 // Per https://wago.tools/db2/SpellEffect?build=2.5.5.65295&filter%5BSpellID%5D=exact%253A2120 Field: "BonusCoefficient"
 	flameStrikeDotCoefficient := 0.02999999933
 

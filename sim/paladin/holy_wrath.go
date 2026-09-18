@@ -23,7 +23,7 @@ var HolyWrathRankMap = genRanks.HolyWrath
 // Sends bolts of holy power in all directions, causing Holy damage
 // to all Undead and Demon targets within 20 yds.
 // 2 sec cast, 1 min cooldown.
-func (paladin *Paladin) registerHolyWrath(rankConfig shared.RankRow) {
+func (paladin *Paladin) registerHolyWrath(rankConfig shared.SpellRank) {
 	spellID := rankConfig.SpellID
 	cost := rankConfig.Cost
 	minDamage := rankConfig.Direct.Min

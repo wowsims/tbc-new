@@ -10,7 +10,7 @@ import (
 
 var ShadowWordPainRankMap = genRanks.ShadowWordPain
 
-func (priest *Priest) registerShadowWordPainSpell(rank shared.RankRow) {
+func (priest *Priest) registerShadowWordPainSpell(rank shared.SpellRank) {
 	priest.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: rank.SpellID},
 		SpellSchool:    core.SpellSchoolShadow,

@@ -10,7 +10,7 @@ import (
 
 var VampiricTouchRankMap = genRanks.VampiricTouch
 
-func (priest *Priest) registerVampiricTouchSpell(rank shared.RankRow) {
+func (priest *Priest) registerVampiricTouchSpell(rank shared.SpellRank) {
 	manaMetrics := priest.NewManaMetrics(core.ActionID{SpellID: rank.SpellID}.WithTag(1))
 
 	priest.RegisterSpell(core.SpellConfig{

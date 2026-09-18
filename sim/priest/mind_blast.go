@@ -9,7 +9,7 @@ import (
 
 var MindBlastRankMap = genRanks.MindBlast
 
-func (priest *Priest) registerMindBlastSpell(rank shared.RankRow, cdTimer *core.Timer) {
+func (priest *Priest) registerMindBlastSpell(rank shared.SpellRank, cdTimer *core.Timer) {
 
 	priest.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: rank.SpellID},

@@ -23,7 +23,7 @@ var HolyShieldRankMap = genRanks.HolyShield
 // Increases chance to block by 30% for 10 sec, and deals Holy damage
 // for each attack blocked while active. Damage caused by Holy Shield causes
 // 35% additional threat. Each block expends a charge. 4 charges.
-func (paladin *Paladin) registerHolyShield(rankConfig shared.RankRow) {
+func (paladin *Paladin) registerHolyShield(rankConfig shared.SpellRank) {
 	spellID := rankConfig.SpellID
 	cost := rankConfig.Cost
 	value := rankConfig.Direct.Min

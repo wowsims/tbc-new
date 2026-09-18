@@ -9,7 +9,7 @@ import (
 
 var StarfireRankMap = genRanks.Starfire.Ranks(6, 8)
 
-func (druid *Druid) registerStarfireSpell(rankConfig shared.RankRow) {
+func (druid *Druid) registerStarfireSpell(rankConfig shared.SpellRank) {
 	spell := druid.RegisterSpell(Humanoid|Moonkin, core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: rankConfig.SpellID},
 		SpellSchool:    core.SpellSchoolArcane,

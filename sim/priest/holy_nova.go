@@ -7,7 +7,7 @@ import (
 
 var HolyNovaRankMap = genRanks.HolyNova
 
-func (priest *Priest) registerHolyNovaSpell(rank shared.RankRow) {
+func (priest *Priest) registerHolyNovaSpell(rank shared.SpellRank) {
 	priest.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: rank.SpellID},
 		SpellSchool:    core.SpellSchoolHoly,

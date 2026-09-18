@@ -13,7 +13,7 @@ import (
 
 var DevouringPlagueRankMap = genRanks.DevouringPlague
 
-func (priest *Priest) registerDevouringPlagueSpell(rank shared.RankRow, cdTimer *core.Timer) {
+func (priest *Priest) registerDevouringPlagueSpell(rank shared.SpellRank, cdTimer *core.Timer) {
 	healthMetrics := priest.NewHealthMetrics(core.ActionID{SpellID: rank.SpellID}.WithTag(1))
 
 	priest.RegisterSpell(core.SpellConfig{

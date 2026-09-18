@@ -28,41 +28,41 @@ import "github.com/wowsims/tbc/sim/common/shared"
 //   Wound Poison V: missing rank 1 of 5
 
 type generatedRanks struct {
-	Ambush            shared.RankTable
-	Backstab          shared.RankTable
-	BladeTwisting     shared.RankTable
-	CheatDeath        shared.RankTable
-	CombatPotency     shared.RankTable
-	DeadenedNerves    shared.RankTable
-	EnvelopingShadows shared.RankTable
-	Evasion           shared.RankTable
-	Eviscerate        shared.RankTable
-	ExposeArmor       shared.RankTable
-	Feint             shared.RankTable
-	FleetFooted       shared.RankTable
-	Garrote           shared.RankTable
-	Gouge             shared.RankTable
-	Hemorrhage        shared.RankTable
-	Kick              shared.RankTable
-	KidneyShot        shared.RankTable
-	MasterPoisoner    shared.RankTable
-	MasterOfSubtlety  shared.RankTable
-	Mutilate          shared.RankTable
-	NervesOfSteel     shared.RankTable
-	QuickRecovery     shared.RankTable
-	Rupture           shared.RankTable
-	Sap               shared.RankTable
-	SinisterCalling   shared.RankTable
-	SinisterStrike    shared.RankTable
-	SliceAndDice      shared.RankTable
-	Sprint            shared.RankTable
-	Stealth           shared.RankTable
-	Vanish            shared.RankTable
-	Vitality          shared.RankTable
+	Ambush            shared.SpellRankTable
+	Backstab          shared.SpellRankTable
+	BladeTwisting     shared.SpellRankTable
+	CheatDeath        shared.SpellRankTable
+	CombatPotency     shared.SpellRankTable
+	DeadenedNerves    shared.SpellRankTable
+	EnvelopingShadows shared.SpellRankTable
+	Evasion           shared.SpellRankTable
+	Eviscerate        shared.SpellRankTable
+	ExposeArmor       shared.SpellRankTable
+	Feint             shared.SpellRankTable
+	FleetFooted       shared.SpellRankTable
+	Garrote           shared.SpellRankTable
+	Gouge             shared.SpellRankTable
+	Hemorrhage        shared.SpellRankTable
+	Kick              shared.SpellRankTable
+	KidneyShot        shared.SpellRankTable
+	MasterPoisoner    shared.SpellRankTable
+	MasterOfSubtlety  shared.SpellRankTable
+	Mutilate          shared.SpellRankTable
+	NervesOfSteel     shared.SpellRankTable
+	QuickRecovery     shared.SpellRankTable
+	Rupture           shared.SpellRankTable
+	Sap               shared.SpellRankTable
+	SinisterCalling   shared.SpellRankTable
+	SinisterStrike    shared.SpellRankTable
+	SliceAndDice      shared.SpellRankTable
+	Sprint            shared.SpellRankTable
+	Stealth           shared.SpellRankTable
+	Vanish            shared.SpellRankTable
+	Vitality          shared.SpellRankTable
 }
 
 var genRanks = generatedRanks{
-	Ambush: shared.RankTable{
+	Ambush: shared.SpellRankTable{
 		{Rank: 1, SpellID: 8676, Cost: 60},
 		{Rank: 2, SpellID: 8724, Cost: 60},
 		{Rank: 3, SpellID: 8725, Cost: 60},
@@ -71,7 +71,7 @@ var genRanks = generatedRanks{
 		{Rank: 6, SpellID: 11269, Cost: 60},
 		{Rank: 7, SpellID: 27441, Cost: 60},
 	},
-	Backstab: shared.RankTable{
+	Backstab: shared.SpellRankTable{
 		{Rank: 1, SpellID: 53, Cost: 60},
 		{Rank: 2, SpellID: 2589, Cost: 60},
 		{Rank: 3, SpellID: 2590, Cost: 60},
@@ -83,51 +83,51 @@ var genRanks = generatedRanks{
 		{Rank: 9, SpellID: 25300, Cost: 60},
 		{Rank: 10, SpellID: 26863, Cost: 60},
 	},
-	BladeTwisting: shared.RankTable{
+	BladeTwisting: shared.SpellRankTable{
 		{Rank: 1, SpellID: 31124},
 		{Rank: 2, SpellID: 31126},
 	},
-	CheatDeath: shared.RankTable{
-		{Rank: 1, SpellID: 31228, Direct: &shared.Amount{Min: 33, Max: 33, Coef: 0}},
-		{Rank: 2, SpellID: 31229, Direct: &shared.Amount{Min: 66, Max: 66, Coef: 0}},
-		{Rank: 3, SpellID: 31230, Direct: &shared.Amount{Min: 100, Max: 100, Coef: 0}},
+	CheatDeath: shared.SpellRankTable{
+		{Rank: 1, SpellID: 31228, Direct: &shared.SpellRankAmount{Min: 33, Max: 33, Coef: 0}},
+		{Rank: 2, SpellID: 31229, Direct: &shared.SpellRankAmount{Min: 66, Max: 66, Coef: 0}},
+		{Rank: 3, SpellID: 31230, Direct: &shared.SpellRankAmount{Min: 100, Max: 100, Coef: 0}},
 	},
-	CombatPotency: shared.RankTable{
+	CombatPotency: shared.SpellRankTable{
 		{Rank: 1, SpellID: 35541},
 		{Rank: 2, SpellID: 35550},
 		{Rank: 3, SpellID: 35551},
 		{Rank: 4, SpellID: 35552},
 		{Rank: 5, SpellID: 35553},
 	},
-	DeadenedNerves: shared.RankTable{
+	DeadenedNerves: shared.SpellRankTable{
 		{Rank: 1, SpellID: 31380},
 		{Rank: 2, SpellID: 31382},
 		{Rank: 3, SpellID: 31383},
 		{Rank: 4, SpellID: 31384},
 		{Rank: 5, SpellID: 31385},
 	},
-	EnvelopingShadows: shared.RankTable{
-		{Rank: 1, SpellID: 31211, Direct: &shared.Amount{Min: 5, Max: 5, Coef: 0}},
-		{Rank: 2, SpellID: 31212, Direct: &shared.Amount{Min: 10, Max: 10, Coef: 0}},
-		{Rank: 3, SpellID: 31213, Direct: &shared.Amount{Min: 15, Max: 15, Coef: 0}},
+	EnvelopingShadows: shared.SpellRankTable{
+		{Rank: 1, SpellID: 31211, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 0}},
+		{Rank: 2, SpellID: 31212, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 0}},
+		{Rank: 3, SpellID: 31213, Direct: &shared.SpellRankAmount{Min: 15, Max: 15, Coef: 0}},
 	},
-	Evasion: shared.RankTable{
-		{Rank: 1, SpellID: 5277, Direct: &shared.Amount{Min: 50, Max: 50, Coef: 0}},
-		{Rank: 2, SpellID: 26669, Direct: &shared.Amount{Min: 50, Max: 50, Coef: 0}},
+	Evasion: shared.SpellRankTable{
+		{Rank: 1, SpellID: 5277, Direct: &shared.SpellRankAmount{Min: 50, Max: 50, Coef: 0}},
+		{Rank: 2, SpellID: 26669, Direct: &shared.SpellRankAmount{Min: 50, Max: 50, Coef: 0}},
 	},
-	Eviscerate: shared.RankTable{
-		{Rank: 1, SpellID: 2098, Cost: 35, Direct: &shared.Amount{Min: 1, Max: 5, Coef: 1}},
-		{Rank: 2, SpellID: 6760, Cost: 35, Direct: &shared.Amount{Min: 3, Max: 11, Coef: 1}},
-		{Rank: 3, SpellID: 6761, Cost: 35, Direct: &shared.Amount{Min: 6, Max: 20, Coef: 1}},
-		{Rank: 4, SpellID: 6762, Cost: 35, Direct: &shared.Amount{Min: 10, Max: 30, Coef: 1}},
-		{Rank: 5, SpellID: 8623, Cost: 35, Direct: &shared.Amount{Min: 15, Max: 45, Coef: 1}},
-		{Rank: 6, SpellID: 8624, Cost: 35, Direct: &shared.Amount{Min: 22, Max: 66, Coef: 1}},
-		{Rank: 7, SpellID: 11299, Cost: 35, Direct: &shared.Amount{Min: 34, Max: 102, Coef: 1}},
-		{Rank: 8, SpellID: 11300, Cost: 35, Direct: &shared.Amount{Min: 48, Max: 144, Coef: 1}},
-		{Rank: 9, SpellID: 31016, Cost: 35, Direct: &shared.Amount{Min: 54, Max: 162, Coef: 1}},
-		{Rank: 10, SpellID: 26865, Cost: 35, Direct: &shared.Amount{Min: 60, Max: 180, Coef: 1}},
+	Eviscerate: shared.SpellRankTable{
+		{Rank: 1, SpellID: 2098, Cost: 35, Direct: &shared.SpellRankAmount{Min: 1, Max: 5, Coef: 1}},
+		{Rank: 2, SpellID: 6760, Cost: 35, Direct: &shared.SpellRankAmount{Min: 3, Max: 11, Coef: 1}},
+		{Rank: 3, SpellID: 6761, Cost: 35, Direct: &shared.SpellRankAmount{Min: 6, Max: 20, Coef: 1}},
+		{Rank: 4, SpellID: 6762, Cost: 35, Direct: &shared.SpellRankAmount{Min: 10, Max: 30, Coef: 1}},
+		{Rank: 5, SpellID: 8623, Cost: 35, Direct: &shared.SpellRankAmount{Min: 15, Max: 45, Coef: 1}},
+		{Rank: 6, SpellID: 8624, Cost: 35, Direct: &shared.SpellRankAmount{Min: 22, Max: 66, Coef: 1}},
+		{Rank: 7, SpellID: 11299, Cost: 35, Direct: &shared.SpellRankAmount{Min: 34, Max: 102, Coef: 1}},
+		{Rank: 8, SpellID: 11300, Cost: 35, Direct: &shared.SpellRankAmount{Min: 48, Max: 144, Coef: 1}},
+		{Rank: 9, SpellID: 31016, Cost: 35, Direct: &shared.SpellRankAmount{Min: 54, Max: 162, Coef: 1}},
+		{Rank: 10, SpellID: 26865, Cost: 35, Direct: &shared.SpellRankAmount{Min: 60, Max: 180, Coef: 1}},
 	},
-	ExposeArmor: shared.RankTable{
+	ExposeArmor: shared.SpellRankTable{
 		{Rank: 1, SpellID: 8647, Cost: 25},
 		{Rank: 2, SpellID: 8649, Cost: 25},
 		{Rank: 3, SpellID: 8650, Cost: 25},
@@ -135,7 +135,7 @@ var genRanks = generatedRanks{
 		{Rank: 5, SpellID: 11198, Cost: 25},
 		{Rank: 6, SpellID: 26866, Cost: 25},
 	},
-	Feint: shared.RankTable{
+	Feint: shared.SpellRankTable{
 		{Rank: 1, SpellID: 1966, Cost: 20},
 		{Rank: 2, SpellID: 6768, Cost: 20},
 		{Rank: 3, SpellID: 8637, Cost: 20},
@@ -143,90 +143,90 @@ var genRanks = generatedRanks{
 		{Rank: 5, SpellID: 25302, Cost: 20},
 		{Rank: 6, SpellID: 27448, Cost: 20},
 	},
-	FleetFooted: shared.RankTable{
-		{Rank: 1, SpellID: 31208, Direct: &shared.Amount{Min: 5, Max: 5, Coef: 0}},
-		{Rank: 2, SpellID: 31209, Direct: &shared.Amount{Min: 10, Max: 10, Coef: 0}},
+	FleetFooted: shared.SpellRankTable{
+		{Rank: 1, SpellID: 31208, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 0}},
+		{Rank: 2, SpellID: 31209, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 0}},
 	},
-	Garrote: shared.RankTable{
-		{Rank: 1, SpellID: 703, Cost: 50, Periodic: &shared.Periodic{Tick: 24, Coef: 0}},
-		{Rank: 2, SpellID: 8631, Cost: 50, Periodic: &shared.Periodic{Tick: 34, Coef: 0}},
-		{Rank: 3, SpellID: 8632, Cost: 50, Periodic: &shared.Periodic{Tick: 47, Coef: 0}},
-		{Rank: 4, SpellID: 8633, Cost: 50, Periodic: &shared.Periodic{Tick: 59, Coef: 0}},
-		{Rank: 5, SpellID: 11289, Cost: 50, Periodic: &shared.Periodic{Tick: 74, Coef: 0}},
-		{Rank: 6, SpellID: 11290, Cost: 50, Periodic: &shared.Periodic{Tick: 92, Coef: 0}},
-		{Rank: 7, SpellID: 26839, Cost: 50, Periodic: &shared.Periodic{Tick: 111, Coef: 0}},
-		{Rank: 8, SpellID: 26884, Cost: 50, Periodic: &shared.Periodic{Tick: 135, Coef: 0}},
+	Garrote: shared.SpellRankTable{
+		{Rank: 1, SpellID: 703, Cost: 50, Periodic: &shared.SpellRankPeriodic{Tick: 24, Coef: 0}},
+		{Rank: 2, SpellID: 8631, Cost: 50, Periodic: &shared.SpellRankPeriodic{Tick: 34, Coef: 0}},
+		{Rank: 3, SpellID: 8632, Cost: 50, Periodic: &shared.SpellRankPeriodic{Tick: 47, Coef: 0}},
+		{Rank: 4, SpellID: 8633, Cost: 50, Periodic: &shared.SpellRankPeriodic{Tick: 59, Coef: 0}},
+		{Rank: 5, SpellID: 11289, Cost: 50, Periodic: &shared.SpellRankPeriodic{Tick: 74, Coef: 0}},
+		{Rank: 6, SpellID: 11290, Cost: 50, Periodic: &shared.SpellRankPeriodic{Tick: 92, Coef: 0}},
+		{Rank: 7, SpellID: 26839, Cost: 50, Periodic: &shared.SpellRankPeriodic{Tick: 111, Coef: 0}},
+		{Rank: 8, SpellID: 26884, Cost: 50, Periodic: &shared.SpellRankPeriodic{Tick: 135, Coef: 0}},
 	},
-	Gouge: shared.RankTable{
-		{Rank: 1, SpellID: 1776, Cost: 45, Direct: &shared.Amount{Min: 10, Max: 10, Coef: 1}},
-		{Rank: 2, SpellID: 1777, Cost: 45, Direct: &shared.Amount{Min: 20, Max: 20, Coef: 1}},
-		{Rank: 3, SpellID: 8629, Cost: 45, Direct: &shared.Amount{Min: 32, Max: 32, Coef: 1}},
-		{Rank: 4, SpellID: 11285, Cost: 45, Direct: &shared.Amount{Min: 55, Max: 55, Coef: 1}},
-		{Rank: 5, SpellID: 11286, Cost: 45, Direct: &shared.Amount{Min: 75, Max: 75, Coef: 1}},
-		{Rank: 6, SpellID: 38764, Cost: 45, Direct: &shared.Amount{Min: 105, Max: 105, Coef: 1}},
+	Gouge: shared.SpellRankTable{
+		{Rank: 1, SpellID: 1776, Cost: 45, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 1}},
+		{Rank: 2, SpellID: 1777, Cost: 45, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 1}},
+		{Rank: 3, SpellID: 8629, Cost: 45, Direct: &shared.SpellRankAmount{Min: 32, Max: 32, Coef: 1}},
+		{Rank: 4, SpellID: 11285, Cost: 45, Direct: &shared.SpellRankAmount{Min: 55, Max: 55, Coef: 1}},
+		{Rank: 5, SpellID: 11286, Cost: 45, Direct: &shared.SpellRankAmount{Min: 75, Max: 75, Coef: 1}},
+		{Rank: 6, SpellID: 38764, Cost: 45, Direct: &shared.SpellRankAmount{Min: 105, Max: 105, Coef: 1}},
 	},
-	Hemorrhage: shared.RankTable{
-		{Rank: 1, SpellID: 16511, Cost: 35, Direct: &shared.Amount{Min: 13, Max: 13, Coef: 0}},
-		{Rank: 2, SpellID: 17347, Cost: 35, Direct: &shared.Amount{Min: 21, Max: 21, Coef: 0}},
-		{Rank: 3, SpellID: 17348, Cost: 35, Direct: &shared.Amount{Min: 29, Max: 29, Coef: 0}},
-		{Rank: 4, SpellID: 26864, Cost: 35, Direct: &shared.Amount{Min: 42, Max: 42, Coef: 0}},
+	Hemorrhage: shared.SpellRankTable{
+		{Rank: 1, SpellID: 16511, Cost: 35, Direct: &shared.SpellRankAmount{Min: 13, Max: 13, Coef: 0}},
+		{Rank: 2, SpellID: 17347, Cost: 35, Direct: &shared.SpellRankAmount{Min: 21, Max: 21, Coef: 0}},
+		{Rank: 3, SpellID: 17348, Cost: 35, Direct: &shared.SpellRankAmount{Min: 29, Max: 29, Coef: 0}},
+		{Rank: 4, SpellID: 26864, Cost: 35, Direct: &shared.SpellRankAmount{Min: 42, Max: 42, Coef: 0}},
 	},
-	Kick: shared.RankTable{
-		{Rank: 1, SpellID: 1766, Cost: 25, Direct: &shared.Amount{Min: 15, Max: 15, Coef: 1}},
-		{Rank: 2, SpellID: 1767, Cost: 25, Direct: &shared.Amount{Min: 30, Max: 30, Coef: 1}},
-		{Rank: 3, SpellID: 1768, Cost: 25, Direct: &shared.Amount{Min: 45, Max: 45, Coef: 1}},
-		{Rank: 4, SpellID: 1769, Cost: 25, Direct: &shared.Amount{Min: 80, Max: 80, Coef: 1}},
-		{Rank: 5, SpellID: 38768, Cost: 25, Direct: &shared.Amount{Min: 110, Max: 110, Coef: 1}},
+	Kick: shared.SpellRankTable{
+		{Rank: 1, SpellID: 1766, Cost: 25, Direct: &shared.SpellRankAmount{Min: 15, Max: 15, Coef: 1}},
+		{Rank: 2, SpellID: 1767, Cost: 25, Direct: &shared.SpellRankAmount{Min: 30, Max: 30, Coef: 1}},
+		{Rank: 3, SpellID: 1768, Cost: 25, Direct: &shared.SpellRankAmount{Min: 45, Max: 45, Coef: 1}},
+		{Rank: 4, SpellID: 1769, Cost: 25, Direct: &shared.SpellRankAmount{Min: 80, Max: 80, Coef: 1}},
+		{Rank: 5, SpellID: 38768, Cost: 25, Direct: &shared.SpellRankAmount{Min: 110, Max: 110, Coef: 1}},
 	},
-	KidneyShot: shared.RankTable{
+	KidneyShot: shared.SpellRankTable{
 		{Rank: 1, SpellID: 408, Cost: 25},
 		{Rank: 2, SpellID: 8643, Cost: 25},
 	},
-	MasterPoisoner: shared.RankTable{
-		{Rank: 1, SpellID: 31226, Direct: &shared.Amount{Min: 5, Max: 5, Coef: 0}},
-		{Rank: 2, SpellID: 31227, Direct: &shared.Amount{Min: 10, Max: 10, Coef: 0}},
+	MasterPoisoner: shared.SpellRankTable{
+		{Rank: 1, SpellID: 31226, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 0}},
+		{Rank: 2, SpellID: 31227, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 0}},
 	},
-	MasterOfSubtlety: shared.RankTable{
-		{Rank: 1, SpellID: 31221, Direct: &shared.Amount{Min: 4, Max: 4, Coef: 0}},
-		{Rank: 2, SpellID: 31222, Direct: &shared.Amount{Min: 7, Max: 7, Coef: 0}},
-		{Rank: 3, SpellID: 31223, Direct: &shared.Amount{Min: 10, Max: 10, Coef: 0}},
+	MasterOfSubtlety: shared.SpellRankTable{
+		{Rank: 1, SpellID: 31221, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 0}},
+		{Rank: 2, SpellID: 31222, Direct: &shared.SpellRankAmount{Min: 7, Max: 7, Coef: 0}},
+		{Rank: 3, SpellID: 31223, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 0}},
 	},
-	Mutilate: shared.RankTable{
+	Mutilate: shared.SpellRankTable{
 		{Rank: 1, SpellID: 1329, Cost: 60},
 		{Rank: 2, SpellID: 34411, Cost: 60},
 		{Rank: 3, SpellID: 34412, Cost: 60},
 		{Rank: 4, SpellID: 34413, Cost: 60},
 	},
-	NervesOfSteel: shared.RankTable{
-		{Rank: 1, SpellID: 31130, Direct: &shared.Amount{Min: 5, Max: 5, Coef: 0}},
-		{Rank: 2, SpellID: 31131, Direct: &shared.Amount{Min: 10, Max: 10, Coef: 0}},
+	NervesOfSteel: shared.SpellRankTable{
+		{Rank: 1, SpellID: 31130, Direct: &shared.SpellRankAmount{Min: 5, Max: 5, Coef: 0}},
+		{Rank: 2, SpellID: 31131, Direct: &shared.SpellRankAmount{Min: 10, Max: 10, Coef: 0}},
 	},
-	QuickRecovery: shared.RankTable{
-		{Rank: 1, SpellID: 31244, Direct: &shared.Amount{Min: 40, Max: 40, Coef: 0}},
-		{Rank: 2, SpellID: 31245, Direct: &shared.Amount{Min: 80, Max: 80, Coef: 0}},
+	QuickRecovery: shared.SpellRankTable{
+		{Rank: 1, SpellID: 31244, Direct: &shared.SpellRankAmount{Min: 40, Max: 40, Coef: 0}},
+		{Rank: 2, SpellID: 31245, Direct: &shared.SpellRankAmount{Min: 80, Max: 80, Coef: 0}},
 	},
-	Rupture: shared.RankTable{
-		{Rank: 1, SpellID: 1943, Cost: 25, Periodic: &shared.Periodic{Tick: 8, Coef: 0}},
-		{Rank: 2, SpellID: 8639, Cost: 25, Periodic: &shared.Periodic{Tick: 12, Coef: 0}},
-		{Rank: 3, SpellID: 8640, Cost: 25, Periodic: &shared.Periodic{Tick: 18, Coef: 0}},
-		{Rank: 4, SpellID: 11273, Cost: 25, Periodic: &shared.Periodic{Tick: 27, Coef: 0}},
-		{Rank: 5, SpellID: 11274, Cost: 25, Periodic: &shared.Periodic{Tick: 37, Coef: 0}},
-		{Rank: 6, SpellID: 11275, Cost: 25, Periodic: &shared.Periodic{Tick: 60, Coef: 0}},
-		{Rank: 7, SpellID: 26867, Cost: 25, Periodic: &shared.Periodic{Tick: 70, Coef: 0}},
+	Rupture: shared.SpellRankTable{
+		{Rank: 1, SpellID: 1943, Cost: 25, Periodic: &shared.SpellRankPeriodic{Tick: 8, Coef: 0}},
+		{Rank: 2, SpellID: 8639, Cost: 25, Periodic: &shared.SpellRankPeriodic{Tick: 12, Coef: 0}},
+		{Rank: 3, SpellID: 8640, Cost: 25, Periodic: &shared.SpellRankPeriodic{Tick: 18, Coef: 0}},
+		{Rank: 4, SpellID: 11273, Cost: 25, Periodic: &shared.SpellRankPeriodic{Tick: 27, Coef: 0}},
+		{Rank: 5, SpellID: 11274, Cost: 25, Periodic: &shared.SpellRankPeriodic{Tick: 37, Coef: 0}},
+		{Rank: 6, SpellID: 11275, Cost: 25, Periodic: &shared.SpellRankPeriodic{Tick: 60, Coef: 0}},
+		{Rank: 7, SpellID: 26867, Cost: 25, Periodic: &shared.SpellRankPeriodic{Tick: 70, Coef: 0}},
 	},
-	Sap: shared.RankTable{
+	Sap: shared.SpellRankTable{
 		{Rank: 1, SpellID: 6770, Cost: 65},
 		{Rank: 2, SpellID: 2070, Cost: 65},
 		{Rank: 3, SpellID: 11297, Cost: 65},
 	},
-	SinisterCalling: shared.RankTable{
-		{Rank: 1, SpellID: 31216, Direct: &shared.Amount{Min: 3, Max: 3, Coef: 0}},
-		{Rank: 2, SpellID: 31217, Direct: &shared.Amount{Min: 6, Max: 6, Coef: 0}},
-		{Rank: 3, SpellID: 31218, Direct: &shared.Amount{Min: 9, Max: 9, Coef: 0}},
-		{Rank: 4, SpellID: 31219, Direct: &shared.Amount{Min: 12, Max: 12, Coef: 0}},
-		{Rank: 5, SpellID: 31220, Direct: &shared.Amount{Min: 15, Max: 15, Coef: 0}},
+	SinisterCalling: shared.SpellRankTable{
+		{Rank: 1, SpellID: 31216, Direct: &shared.SpellRankAmount{Min: 3, Max: 3, Coef: 0}},
+		{Rank: 2, SpellID: 31217, Direct: &shared.SpellRankAmount{Min: 6, Max: 6, Coef: 0}},
+		{Rank: 3, SpellID: 31218, Direct: &shared.SpellRankAmount{Min: 9, Max: 9, Coef: 0}},
+		{Rank: 4, SpellID: 31219, Direct: &shared.SpellRankAmount{Min: 12, Max: 12, Coef: 0}},
+		{Rank: 5, SpellID: 31220, Direct: &shared.SpellRankAmount{Min: 15, Max: 15, Coef: 0}},
 	},
-	SinisterStrike: shared.RankTable{
+	SinisterStrike: shared.SpellRankTable{
 		{Rank: 1, SpellID: 1752, Cost: 45},
 		{Rank: 2, SpellID: 1757, Cost: 45},
 		{Rank: 3, SpellID: 1758, Cost: 45},
@@ -238,28 +238,28 @@ var genRanks = generatedRanks{
 		{Rank: 9, SpellID: 26861, Cost: 45},
 		{Rank: 10, SpellID: 26862, Cost: 45},
 	},
-	SliceAndDice: shared.RankTable{
-		{Rank: 1, SpellID: 5171, Cost: 25, Direct: &shared.Amount{Min: 20, Max: 20, Coef: 0}},
-		{Rank: 2, SpellID: 6774, Cost: 25, Direct: &shared.Amount{Min: 30, Max: 30, Coef: 0}},
+	SliceAndDice: shared.SpellRankTable{
+		{Rank: 1, SpellID: 5171, Cost: 25, Direct: &shared.SpellRankAmount{Min: 20, Max: 20, Coef: 0}},
+		{Rank: 2, SpellID: 6774, Cost: 25, Direct: &shared.SpellRankAmount{Min: 30, Max: 30, Coef: 0}},
 	},
-	Sprint: shared.RankTable{
-		{Rank: 1, SpellID: 2983, Direct: &shared.Amount{Min: 50, Max: 50, Coef: 0}},
-		{Rank: 2, SpellID: 8696, Direct: &shared.Amount{Min: 60, Max: 60, Coef: 0}},
-		{Rank: 3, SpellID: 11305, Direct: &shared.Amount{Min: 70, Max: 70, Coef: 0}},
+	Sprint: shared.SpellRankTable{
+		{Rank: 1, SpellID: 2983, Direct: &shared.SpellRankAmount{Min: 50, Max: 50, Coef: 0}},
+		{Rank: 2, SpellID: 8696, Direct: &shared.SpellRankAmount{Min: 60, Max: 60, Coef: 0}},
+		{Rank: 3, SpellID: 11305, Direct: &shared.SpellRankAmount{Min: 70, Max: 70, Coef: 0}},
 	},
-	Stealth: shared.RankTable{
-		{Rank: 1, SpellID: 1784, Direct: &shared.Amount{Min: 95, Max: 95, Coef: 0}},
-		{Rank: 2, SpellID: 1785, Direct: &shared.Amount{Min: 195, Max: 195, Coef: 0}},
-		{Rank: 3, SpellID: 1786, Direct: &shared.Amount{Min: 295, Max: 295, Coef: 0}},
-		{Rank: 4, SpellID: 1787, Direct: &shared.Amount{Min: 350, Max: 350, Coef: 0}},
+	Stealth: shared.SpellRankTable{
+		{Rank: 1, SpellID: 1784, Direct: &shared.SpellRankAmount{Min: 95, Max: 95, Coef: 0}},
+		{Rank: 2, SpellID: 1785, Direct: &shared.SpellRankAmount{Min: 195, Max: 195, Coef: 0}},
+		{Rank: 3, SpellID: 1786, Direct: &shared.SpellRankAmount{Min: 295, Max: 295, Coef: 0}},
+		{Rank: 4, SpellID: 1787, Direct: &shared.SpellRankAmount{Min: 350, Max: 350, Coef: 0}},
 	},
-	Vanish: shared.RankTable{
+	Vanish: shared.SpellRankTable{
 		{Rank: 1, SpellID: 1856},
 		{Rank: 2, SpellID: 1857},
 		{Rank: 3, SpellID: 26889},
 	},
-	Vitality: shared.RankTable{
-		{Rank: 1, SpellID: 31122, Direct: &shared.Amount{Min: 2, Max: 2, Coef: 0}},
-		{Rank: 2, SpellID: 31123, Direct: &shared.Amount{Min: 4, Max: 4, Coef: 0}},
+	Vitality: shared.SpellRankTable{
+		{Rank: 1, SpellID: 31122, Direct: &shared.SpellRankAmount{Min: 2, Max: 2, Coef: 0}},
+		{Rank: 2, SpellID: 31123, Direct: &shared.SpellRankAmount{Min: 4, Max: 4, Coef: 0}},
 	},
 }
