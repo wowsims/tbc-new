@@ -15,12 +15,7 @@ func (paladin *Paladin) getHolyShieldTimer() *core.Timer {
 	return paladin.holyShieldTimer
 }
 
-var HolyShieldRankMap = shared.RankTable{
-	{Rank: 1, SpellID: 20925, Cost: 135, Direct: &shared.Amount{Min: 59, Coef: 0.05}},
-	{Rank: 2, SpellID: 20927, Cost: 175, Direct: &shared.Amount{Min: 86, Coef: 0.05}},
-	{Rank: 3, SpellID: 20928, Cost: 215, Direct: &shared.Amount{Min: 117, Coef: 0.05}},
-	{Rank: 4, SpellID: 27179, Cost: 280, Direct: &shared.Amount{Min: 155, Coef: 0.05}},
-}
+var HolyShieldRankMap = genRanks.HolyShield
 
 // Holy Shield (Talent)
 // https://www.wowhead.com/tbc/spell=20925

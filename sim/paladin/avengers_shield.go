@@ -14,11 +14,7 @@ func (paladin *Paladin) getAvengersShieldTimer() *core.Timer {
 	return paladin.avengersShieldTimer
 }
 
-var AvengersShieldRankMap = shared.RankTable{
-	{Rank: 1, SpellID: 31935, Cost: 500, Direct: &shared.Amount{Min: 270, Max: 330, Coef: 0.193}},
-	{Rank: 2, SpellID: 32699, Cost: 615, Direct: &shared.Amount{Min: 370, Max: 452, Coef: 0.193}},
-	{Rank: 3, SpellID: 32700, Cost: 780, Direct: &shared.Amount{Min: 494, Max: 602, Coef: 0.193}},
-}
+var AvengersShieldRankMap = genRanks.AvengersShield
 
 // Avenger's Shield (Talent)
 // https://www.wowhead.com/tbc/spell=31935

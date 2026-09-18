@@ -10,16 +10,7 @@ import (
 
 // Starshards - Night Elf Racial
 // Arcane school DoT, 0 mana cost, 30s cooldown, 15s duration
-var StarshardsRankMap = shared.RankTable{
-	{Rank: 1, SpellID: 10797, Cost: 0, Periodic: &shared.Periodic{Tick: 12, Coef: 0.167}},
-	{Rank: 2, SpellID: 19296, Cost: 0, Periodic: &shared.Periodic{Tick: 23, Coef: 0.167}},
-	{Rank: 3, SpellID: 19299, Cost: 0, Periodic: &shared.Periodic{Tick: 40, Coef: 0.167}},
-	{Rank: 4, SpellID: 19302, Cost: 0, Periodic: &shared.Periodic{Tick: 58, Coef: 0.167}},
-	{Rank: 5, SpellID: 19303, Cost: 0, Periodic: &shared.Periodic{Tick: 79, Coef: 0.167}},
-	{Rank: 6, SpellID: 19304, Cost: 0, Periodic: &shared.Periodic{Tick: 105, Coef: 0.167}},
-	{Rank: 7, SpellID: 19305, Cost: 0, Periodic: &shared.Periodic{Tick: 130, Coef: 0.167}},
-	{Rank: 8, SpellID: 25446, Cost: 0, Periodic: &shared.Periodic{Tick: 157, Coef: 0.167}},
-}
+var StarshardsRankMap = genRanks.Starshards
 
 func (priest *Priest) registerStarshardsSpell(rank shared.RankRow, cdTimer *core.Timer) {
 

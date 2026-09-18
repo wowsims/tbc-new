@@ -7,10 +7,7 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
-var StarfireRankMap = shared.RankTable{
-	{Rank: 6, SpellID: 9876, Cost: 315, Direct: &shared.Amount{Min: 463, Max: 543, Coef: 1}},
-	{Rank: 8, SpellID: 26986, Cost: 370, Direct: &shared.Amount{Min: 550, Max: 647, Coef: 1}},
-}
+var StarfireRankMap = genRanks.Starfire.Ranks(6, 8)
 
 func (druid *Druid) registerStarfireSpell(rankConfig shared.RankRow) {
 	spell := druid.RegisterSpell(Humanoid|Moonkin, core.SpellConfig{

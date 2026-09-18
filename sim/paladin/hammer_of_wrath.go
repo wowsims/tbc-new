@@ -14,12 +14,7 @@ func (paladin *Paladin) getHammerOfWrathTimer() *core.Timer {
 	return paladin.hammerOfWrathTimer
 }
 
-var HammerOfWrathRankMap = shared.RankTable{
-	{Rank: 1, SpellID: 24275, Cost: 235, Direct: &shared.Amount{Min: 316, Max: 348, Coef: 0.429}},
-	{Rank: 2, SpellID: 24274, Cost: 290, Direct: &shared.Amount{Min: 412, Max: 455, Coef: 0.429}},
-	{Rank: 3, SpellID: 24239, Cost: 340, Direct: &shared.Amount{Min: 519, Max: 572, Coef: 0.429}},
-	{Rank: 4, SpellID: 27180, Cost: 440, Direct: &shared.Amount{Min: 672, Max: 742, Coef: 0.429}},
-}
+var HammerOfWrathRankMap = genRanks.HammerOfWrath
 
 // Hammer of Wrath
 // https://www.wowhead.com/tbc/spell=27180

@@ -7,14 +7,7 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
-var ChainLightningRankMap = shared.RankTable{
-	{Rank: 1, SpellID: 421, Cost: 255, Direct: &shared.Amount{Min: 200, Max: 227, Coef: 0.65100002289}},
-	{Rank: 2, SpellID: 930, Cost: 345, Direct: &shared.Amount{Min: 288, Max: 323, Coef: 0.65100002289}},
-	{Rank: 3, SpellID: 2860, Cost: 445, Direct: &shared.Amount{Min: 391, Max: 438, Coef: 0.65100002289}},
-	{Rank: 4, SpellID: 10605, Cost: 550, Direct: &shared.Amount{Min: 508, Max: 567, Coef: 0.65100002289}},
-	{Rank: 5, SpellID: 25439, Cost: 650, Direct: &shared.Amount{Min: 620, Max: 705, Coef: 0.65100002289}},
-	{Rank: 6, SpellID: 25442, Cost: 760, Direct: &shared.Amount{Min: 734, Max: 838, Coef: 0.65100002289}},
-}
+var ChainLightningRankMap = genRanks.ChainLightning
 
 func (shaman *Shaman) registerChainLightningSpell() {
 	maxHits := min(3, shaman.Env.TotalTargetCount())

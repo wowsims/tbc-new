@@ -11,15 +11,7 @@ import (
 // Devouring Plague - Undead Racial
 // Shadow school DoT, 3 min cooldown, 24s duration
 
-var DevouringPlagueRankMap = shared.RankTable{
-	{Rank: 1, SpellID: 2944, Cost: 215, Periodic: &shared.Periodic{Tick: 19, Coef: 0.1}},
-	{Rank: 2, SpellID: 19276, Cost: 350, Periodic: &shared.Periodic{Tick: 34, Coef: 0.1}},
-	{Rank: 3, SpellID: 19277, Cost: 495, Periodic: &shared.Periodic{Tick: 50, Coef: 0.1}},
-	{Rank: 4, SpellID: 19278, Cost: 645, Periodic: &shared.Periodic{Tick: 68, Coef: 0.1}},
-	{Rank: 5, SpellID: 19279, Cost: 810, Periodic: &shared.Periodic{Tick: 89, Coef: 0.1}},
-	{Rank: 6, SpellID: 19280, Cost: 985, Periodic: &shared.Periodic{Tick: 113, Coef: 0.1}},
-	{Rank: 7, SpellID: 25467, Cost: 1145, Periodic: &shared.Periodic{Tick: 152, Coef: 0.1}},
-}
+var DevouringPlagueRankMap = genRanks.DevouringPlague
 
 func (priest *Priest) registerDevouringPlagueSpell(rank shared.RankRow, cdTimer *core.Timer) {
 	healthMetrics := priest.NewHealthMetrics(core.ActionID{SpellID: rank.SpellID}.WithTag(1))

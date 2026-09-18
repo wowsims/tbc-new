@@ -14,13 +14,7 @@ func (paladin *Paladin) getHolyShockTimer() *core.Timer {
 	return paladin.holyShockTimer
 }
 
-var HolyShockRankMap = shared.RankTable{
-	{Rank: 1, SpellID: 20473, Cost: 335, Direct: &shared.Amount{Min: 277, Max: 299, Coef: 0.429}},
-	{Rank: 2, SpellID: 20929, Cost: 410, Direct: &shared.Amount{Min: 379, Max: 409, Coef: 0.429}},
-	{Rank: 3, SpellID: 20930, Cost: 485, Direct: &shared.Amount{Min: 496, Max: 628, Coef: 0.429}},
-	{Rank: 4, SpellID: 27174, Cost: 575, Direct: &shared.Amount{Min: 614, Max: 664, Coef: 0.429}},
-	{Rank: 5, SpellID: 33072, Cost: 650, Direct: &shared.Amount{Min: 721, Max: 779, Coef: 0.429}},
-}
+var HolyShockRankMap = genRanks.HolyShock
 
 // Holy Shock
 // https://www.wowhead.com/tbc/spell=20473

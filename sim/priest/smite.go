@@ -7,18 +7,7 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
-var SmiteRankMap = shared.RankTable{
-	{Rank: 1, SpellID: 585, Cost: 20, Direct: &shared.Amount{Min: 15, Max: 20, Coef: 0.123}},
-	{Rank: 2, SpellID: 591, Cost: 30, Direct: &shared.Amount{Min: 28, Max: 34, Coef: 0.271}},
-	{Rank: 3, SpellID: 598, Cost: 60, Direct: &shared.Amount{Min: 58, Max: 67, Coef: 0.554}},
-	{Rank: 4, SpellID: 984, Cost: 95, Direct: &shared.Amount{Min: 97, Max: 112, Coef: 0.714}},
-	{Rank: 5, SpellID: 1004, Cost: 140, Direct: &shared.Amount{Min: 158, Max: 178, Coef: 0.714}},
-	{Rank: 6, SpellID: 6060, Cost: 185, Direct: &shared.Amount{Min: 222, Max: 250, Coef: 0.714}},
-	{Rank: 7, SpellID: 10933, Cost: 230, Direct: &shared.Amount{Min: 298, Max: 335, Coef: 0.714}},
-	{Rank: 8, SpellID: 10934, Cost: 280, Direct: &shared.Amount{Min: 384, Max: 429, Coef: 0.714}},
-	{Rank: 9, SpellID: 25363, Cost: 300, Direct: &shared.Amount{Min: 422, Max: 470, Coef: 0.714}},
-	{Rank: 10, SpellID: 25364, Cost: 385, Direct: &shared.Amount{Min: 549, Max: 616, Coef: 0.714}},
-}
+var SmiteRankMap = genRanks.Smite
 
 var smiteCastTimes = map[int32]time.Duration{
 	1: 1500 * time.Millisecond,

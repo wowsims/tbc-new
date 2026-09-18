@@ -15,11 +15,7 @@ func (paladin *Paladin) getHolyWrathTimer() *core.Timer {
 	return paladin.holyWrathTimer
 }
 
-var HolyWrathRankMap = shared.RankTable{
-	{Rank: 1, SpellID: 2812, Cost: 550, Direct: &shared.Amount{Min: 368, Max: 435, Coef: 0.286}},
-	{Rank: 2, SpellID: 10318, Cost: 685, Direct: &shared.Amount{Min: 497, Max: 584, Coef: 0.286}},
-	{Rank: 3, SpellID: 27139, Cost: 825, Direct: &shared.Amount{Min: 637, Max: 748, Coef: 0.286}},
-}
+var HolyWrathRankMap = genRanks.HolyWrath
 
 // Holy Wrath
 // https://www.wowhead.com/tbc/spell=2812/holy-wrath

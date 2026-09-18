@@ -8,11 +8,7 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
-var VampiricTouchRankMap = shared.RankTable{
-	{Rank: 1, SpellID: 34914, Cost: 325, Periodic: &shared.Periodic{Tick: 90, Coef: 0.2}},
-	{Rank: 2, SpellID: 34916, Cost: 400, Periodic: &shared.Periodic{Tick: 120, Coef: 0.2}},
-	{Rank: 3, SpellID: 34917, Cost: 425, Periodic: &shared.Periodic{Tick: 130, Coef: 0.2}},
-}
+var VampiricTouchRankMap = genRanks.VampiricTouch
 
 func (priest *Priest) registerVampiricTouchSpell(rank shared.RankRow) {
 	manaMetrics := priest.NewManaMetrics(core.ActionID{SpellID: rank.SpellID}.WithTag(1))

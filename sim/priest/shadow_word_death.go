@@ -7,10 +7,7 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
-var ShadowWordDeathRankMap = shared.RankTable{
-	{Rank: 1, SpellID: 32379, Cost: 243, Direct: &shared.Amount{Min: 450, Max: 522, Coef: 0.429}},
-	{Rank: 2, SpellID: 32996, Cost: 309, Direct: &shared.Amount{Min: 572, Max: 664, Coef: 0.429}},
-}
+var ShadowWordDeathRankMap = genRanks.ShadowWordDeath
 
 func (priest *Priest) registerShadowWordDeathSpell(rank shared.RankRow, cdTimer *core.Timer) {
 	priest.RegisterSpell(core.SpellConfig{

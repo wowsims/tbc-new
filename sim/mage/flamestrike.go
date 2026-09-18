@@ -8,10 +8,7 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
-var FlameStrikeRankMap = shared.RankTable{
-	{Rank: 7, SpellID: 27086, Cost: 1175, Direct: &shared.Amount{Min: 480, Max: 585}, Periodic: &shared.Periodic{Tick: 106}},
-	{Rank: 6, SpellID: 10216, Cost: 990, Direct: &shared.Amount{Min: 383, Max: 468}, Periodic: &shared.Periodic{Tick: 85}},
-}
+var FlameStrikeRankMap = genRanks.Flamestrike.Ranks(7, 6)
 
 func (mage *Mage) registerFlamestrike(rankConfig shared.RankRow) {
 	flameStrikeCoefficient := 0.23600000143 // Per https://wago.tools/db2/SpellEffect?build=2.5.5.65295&filter%5BSpellID%5D=exact%253A2120 Field: "BonusCoefficient"

@@ -14,14 +14,7 @@ func (paladin *Paladin) getConsecrationTimer() *core.Timer {
 	return paladin.consecrationTimer
 }
 
-var ConsecrationRankMap = shared.RankTable{
-	{Rank: 1, SpellID: 26573, Cost: 120, Periodic: &shared.Periodic{Tick: 8, Coef: 0.119}},
-	{Rank: 2, SpellID: 20116, Cost: 205, Periodic: &shared.Periodic{Tick: 15, Coef: 0.119}},
-	{Rank: 3, SpellID: 20922, Cost: 290, Periodic: &shared.Periodic{Tick: 24, Coef: 0.119}},
-	{Rank: 4, SpellID: 20923, Cost: 390, Periodic: &shared.Periodic{Tick: 35, Coef: 0.119}},
-	{Rank: 5, SpellID: 20924, Cost: 505, Periodic: &shared.Periodic{Tick: 48, Coef: 0.119}},
-	{Rank: 6, SpellID: 27173, Cost: 660, Periodic: &shared.Periodic{Tick: 64, Coef: 0.119}},
-}
+var ConsecrationRankMap = genRanks.Consecration
 
 // Consecration
 // https://www.wowhead.com/tbc/spell=26573

@@ -8,15 +8,7 @@ import (
 	"github.com/wowsims/tbc/sim/core/proto"
 )
 
-var ExorcismRankMap = shared.RankTable{
-	{Rank: 1, SpellID: 879, Cost: 70, Direct: &shared.Amount{Min: 90, Max: 102, Coef: 0.429}},
-	{Rank: 2, SpellID: 5614, Cost: 115, Direct: &shared.Amount{Min: 160, Max: 180, Coef: 0.429}},
-	{Rank: 3, SpellID: 5615, Cost: 155, Direct: &shared.Amount{Min: 227, Max: 255, Coef: 0.429}},
-	{Rank: 4, SpellID: 10312, Cost: 200, Direct: &shared.Amount{Min: 316, Max: 354, Coef: 0.429}},
-	{Rank: 5, SpellID: 10313, Cost: 240, Direct: &shared.Amount{Min: 453, Max: 507, Coef: 0.429}},
-	{Rank: 6, SpellID: 10314, Cost: 295, Direct: &shared.Amount{Min: 521, Max: 579, Coef: 0.429}},
-	{Rank: 7, SpellID: 27138, Cost: 340, Direct: &shared.Amount{Min: 626, Max: 698, Coef: 0.429}},
-}
+var ExorcismRankMap = genRanks.Exorcism
 
 func (paladin *Paladin) getExorcismTimer() *core.Timer {
 	if paladin.exorcismTimer == nil {

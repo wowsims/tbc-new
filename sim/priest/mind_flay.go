@@ -2,24 +2,13 @@ package priest
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
-	"time"
 )
 
-var MindFlayRankMap = shared.RankTable{
-	{Rank: 1, SpellID: 15407, Cost: 45, Periodic: &shared.Periodic{Tick: 25}},
-	{Rank: 2, SpellID: 17311, Cost: 70, Periodic: &shared.Periodic{Tick: 42}},
-	{Rank: 3, SpellID: 17312, Cost: 100, Periodic: &shared.Periodic{Tick: 62}},
-	{Rank: 4, SpellID: 17313, Cost: 135, Periodic: &shared.Periodic{Tick: 87}},
-	{Rank: 5, SpellID: 17314, Cost: 165, Periodic: &shared.Periodic{Tick: 110}},
-	{Rank: 6, SpellID: 18807, Cost: 205, Periodic: &shared.Periodic{Tick: 142}},
-	{Rank: 7, SpellID: 25387, Cost: 230, Periodic: &shared.Periodic{Tick: 176}},
-}
-
-// mindFlayTickCoefficient is the SP coefficient applied per tick.
-// Total channel coefficient ~0.57 split across 3 ticks.
-const mindFlayTickCoefficient = 0.1905
+var MindFlayRankMap = genRanks.MindFlay
 
 func (priest *Priest) registerMindFlaySpell(rank shared.RankRow) {
 	priest.RegisterSpell(core.SpellConfig{
@@ -53,7 +42,7 @@ func (priest *Priest) registerMindFlaySpell(rank shared.RankRow) {
 			TickLength:           time.Second,
 			AffectedByCastSpeed:  true,
 			HasteReducesDuration: true,
-			BonusCoefficient:     mindFlayTickCoefficient,
+			BonusCoefficient:     rank.Periodic.Coef,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, rank.Periodic.Tick)
