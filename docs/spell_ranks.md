@@ -4,12 +4,12 @@ Every ranked spell in the game has a table generated from the client database, c
 `sim/<class>/spell_ranks_auto_gen.go`. A spell reads its numbers from that table instead of carrying
 hand-transcribed literals.
 
- - [Using a rank](#using-a-rank)
- - [The value shapes](#the-value-shapes)
- - [Worked examples](#worked-examples)
- - [Attack power](#attack-power)
- - [Regenerating](#regenerating)
- - [Traps](#traps)
+- [Using a rank](#using-a-rank)
+- [The value shapes](#the-value-shapes)
+- [Worked examples](#worked-examples)
+- [Attack power](#attack-power)
+- [Regenerating](#regenerating)
+- [Traps](#traps)
 
 ## Using a rank
 
@@ -32,13 +32,13 @@ fails loudly instead of quietly substituting another.
 
 The other accessors:
 
-| | |
-|---|---|
-| `BySpellID(27138)` | the rank registered under that spell ID. Prefer this. |
-| `ByRank(6)` | the rank numbered 6 |
-| `Ranks(6, 8)` | a subset, **in the order given**, which is registration order |
-| `HighestRank()` | the highest rank *in the data*, which is not always one the game grants - see [Traps](#traps) |
-| `RegisterAll(f)` | calls `f` once per rank, in declaration order |
+|                    |                                                                                               |
+| ------------------ | --------------------------------------------------------------------------------------------- |
+| `BySpellID(27138)` | the rank registered under that spell ID. Prefer this.                                         |
+| `ByRank(6)`        | the rank numbered 6                                                                           |
+| `Ranks(6, 8)`      | a subset, **in the order given**, which is registration order                                 |
+| `HighestRank()`    | the highest rank _in the data_, which is not always one the game grants - see [Traps](#traps) |
+| `RegisterAll(f)`   | calls `f` once per rank, in declaration order                                                 |
 
 ## The value shapes
 
@@ -103,12 +103,12 @@ p.Ticks    // Duration / Period, as the client states them
 
 A rank also carries what the client knows about casting it:
 
-| | |
-|---|---|
-| `Cost`, `CostPct` | in the units the sim uses - see the rage trap below |
-| `CastTime`, `GCD`, `Cooldown` | zero for a channel, whose duration carries it |
-| `MinRange`, `MaxRange` | `core` gates the cast on both; zero means ungated. `MinRange` is the dead zone on a charge, and is nonzero on only 212 spells in the build |
-| `MissileSpeed` | yards per second, which `core` turns into the delay before the damage lands. Zero is an instant hit |
+|                               |                                                                                                                                            |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `Cost`, `CostPct`             | in the units the sim uses - see the rage trap below                                                                                        |
+| `CastTime`, `GCD`, `Cooldown` | zero for a channel, whose duration carries it                                                                                              |
+| `MinRange`, `MaxRange`        | `core` gates the cast on both; zero means ungated. `MinRange` is the dead zone on a charge, and is nonzero on only 212 spells in the build |
+| `MissileSpeed`                | yards per second, which `core` turns into the delay before the damage lands. Zero is an instant hit                                        |
 
 `MissileSpeed` is the one to be careful with: giving a spell a speed it did not have delays its damage
 and moves goldens, so check the sim is not already modelling it elsewhere. Arcane Missiles is the case
@@ -224,15 +224,15 @@ var ruptureRanks = shared.WithSpellRankPeriodicAPCoefs(genRanks.Rupture, map[int
 off nothing, and naming a rank the ladder does not have panics too - so a ladder that gains a rank in a
 later client build fails loudly instead of quietly mis-scaling.
 
-| | |
-|---|---|
-| `WithSpellRankAPCoef(t, c)` | one coefficient, on `Direct` |
-| `WithSpellRankPeriodicAPCoef(t, c)` | one coefficient, on `Periodic` |
-| `WithSpellRankAPCoefs(t, map)` | per rank, on `Direct` |
-| `WithSpellRankPeriodicAPCoefs(t, map)` | per rank, on `Periodic` |
+|                                        |                                |
+| -------------------------------------- | ------------------------------ |
+| `WithSpellRankAPCoef(t, c)`            | one coefficient, on `Direct`   |
+| `WithSpellRankPeriodicAPCoef(t, c)`    | one coefficient, on `Periodic` |
+| `WithSpellRankAPCoefs(t, map)`         | per rank, on `Direct`          |
+| `WithSpellRankPeriodicAPCoefs(t, map)` | per rank, on `Periodic`        |
 
 All four return a copy and panic if the role is nil on any rank, so check the generated table first -
-`genRanks.Mangle`, for instance, is the *learn-spell* entry (`Effect = 36`) and carries no value at
+`genRanks.Mangle`, for instance, is the _learn-spell_ entry (`Effect = 36`) and carries no value at
 all.
 
 Both return a copy, so the generated table keeps what the database said, and both panic if that table
