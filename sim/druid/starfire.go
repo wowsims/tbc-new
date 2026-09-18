@@ -7,12 +7,12 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
-var StarfireRankMap = shared.SpellRankMap{
-	{Rank: 6, SpellID: 9876, Cost: 315, MinDamage: 463, MaxDamage: 543, Coefficient: 1},
-	{Rank: 8, SpellID: 26986, Cost: 370, MinDamage: 550, MaxDamage: 647, Coefficient: 1},
+var StarfireRankMap = shared.RankTable{
+	{Rank: 6, SpellID: 9876, Cost: 315, Direct: &shared.Amount{Min: 463, Max: 543, Coef: 1}},
+	{Rank: 8, SpellID: 26986, Cost: 370, Direct: &shared.Amount{Min: 550, Max: 647, Coef: 1}},
 }
 
-func (druid *Druid) registerStarfireSpell(rankConfig shared.SpellRankConfig) {
+func (druid *Druid) registerStarfireSpell(rankConfig shared.RankRow) {
 	spell := druid.RegisterSpell(Humanoid|Moonkin, core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: rankConfig.SpellID},
 		SpellSchool:    core.SpellSchoolArcane,
@@ -33,12 +33,12 @@ func (druid *Druid) registerStarfireSpell(rankConfig shared.SpellRankConfig) {
 			},
 		},
 
-		BonusCoefficient: rankConfig.Coefficient,
+		BonusCoefficient: rankConfig.Direct.Coef,
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := druid.CalcAndRollDamageRange(sim, rankConfig.MinDamage, rankConfig.MaxDamage)
+			baseDamage := druid.CalcAndRollDamageRange(sim, rankConfig.Direct.Min, rankConfig.Direct.Max)
 			spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
 		},
 	})

@@ -10,27 +10,27 @@ import (
 
 // Starshards - Night Elf Racial
 // Arcane school DoT, 0 mana cost, 30s cooldown, 15s duration
-var StarshardsRankMap = shared.SpellRankMap{
-	{Rank: 1, SpellID: 10797, Cost: 0, DotTickDamage: 12, Coefficient: 0.167},
-	{Rank: 2, SpellID: 19296, Cost: 0, DotTickDamage: 23, Coefficient: 0.167},
-	{Rank: 3, SpellID: 19299, Cost: 0, DotTickDamage: 40, Coefficient: 0.167},
-	{Rank: 4, SpellID: 19302, Cost: 0, DotTickDamage: 58, Coefficient: 0.167},
-	{Rank: 5, SpellID: 19303, Cost: 0, DotTickDamage: 79, Coefficient: 0.167},
-	{Rank: 6, SpellID: 19304, Cost: 0, DotTickDamage: 105, Coefficient: 0.167},
-	{Rank: 7, SpellID: 19305, Cost: 0, DotTickDamage: 130, Coefficient: 0.167},
-	{Rank: 8, SpellID: 25446, Cost: 0, DotTickDamage: 157, Coefficient: 0.167},
+var StarshardsRankMap = shared.RankTable{
+	{Rank: 1, SpellID: 10797, Cost: 0, Periodic: &shared.Periodic{Tick: 12, Coef: 0.167}},
+	{Rank: 2, SpellID: 19296, Cost: 0, Periodic: &shared.Periodic{Tick: 23, Coef: 0.167}},
+	{Rank: 3, SpellID: 19299, Cost: 0, Periodic: &shared.Periodic{Tick: 40, Coef: 0.167}},
+	{Rank: 4, SpellID: 19302, Cost: 0, Periodic: &shared.Periodic{Tick: 58, Coef: 0.167}},
+	{Rank: 5, SpellID: 19303, Cost: 0, Periodic: &shared.Periodic{Tick: 79, Coef: 0.167}},
+	{Rank: 6, SpellID: 19304, Cost: 0, Periodic: &shared.Periodic{Tick: 105, Coef: 0.167}},
+	{Rank: 7, SpellID: 19305, Cost: 0, Periodic: &shared.Periodic{Tick: 130, Coef: 0.167}},
+	{Rank: 8, SpellID: 25446, Cost: 0, Periodic: &shared.Periodic{Tick: 157, Coef: 0.167}},
 }
 
-func (priest *Priest) registerStarshardsSpell(rankConfig shared.SpellRankConfig, cdTimer *core.Timer) {
+func (priest *Priest) registerStarshardsSpell(rank shared.RankRow, cdTimer *core.Timer) {
 
-	spell := priest.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: rankConfig.SpellID},
+	priest.RegisterSpell(core.SpellConfig{
+		ActionID:       core.ActionID{SpellID: rank.SpellID},
 		SpellSchool:    core.SpellSchoolArcane,
 		DefenseType:    core.DefenseTypeMagic,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: PriestSpellStarshards,
-		Rank:           rankConfig.Rank,
+		Rank:           rank.Rank,
 
 		ManaCost: core.ManaCostOptions{
 			FlatCost: 0,
@@ -52,15 +52,15 @@ func (priest *Priest) registerStarshardsSpell(rankConfig shared.SpellRankConfig,
 
 		Dot: core.DotConfig{
 			Aura: core.Aura{
-				Label: fmt.Sprintf("Starshards-%d", rankConfig.Rank),
+				Label: fmt.Sprintf("Starshards-%d", rank.Rank),
 			},
 			NumberOfTicks:       5,
 			TickLength:          3 * time.Second,
 			AffectedByCastSpeed: false,
-			BonusCoefficient:    rankConfig.Coefficient,
+			BonusCoefficient:    rank.Periodic.Coef,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.Snapshot(target, rankConfig.DotTickDamage)
+				dot.Snapshot(target, rank.Periodic.Tick)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
@@ -80,9 +80,7 @@ func (priest *Priest) registerStarshardsSpell(rankConfig shared.SpellRankConfig,
 				dot := spell.Dot(target)
 				return dot.CalcSnapshotDamage(sim, target, spell.OutcomeExpectedMagicHit)
 			}
-			return spell.CalcPeriodicDamage(sim, target, rankConfig.DotTickDamage, spell.OutcomeExpectedMagicHit)
+			return spell.CalcPeriodicDamage(sim, target, rank.Periodic.Tick, spell.OutcomeExpectedMagicHit)
 		},
 	})
-
-	priest.Starshards = append(priest.Starshards, spell)
 }

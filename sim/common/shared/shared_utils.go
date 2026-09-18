@@ -823,32 +823,6 @@ func NewProcDamageEffect(config ProcDamageEffect) {
 	})
 }
 
-type SpellRankConfig struct {
-	Rank             int32
-	SpellID          int32
-	Cost             int32
-	MinDamage        float64
-	MaxDamage        float64
-	DotTickDamage    float64
-	Coefficient      float64
-	ThreatMultiplier float64
-	FlatThreatBonus  float64
-	CastTimeSeconds  float64 // Optional: specify only if overriding default cast time
-}
-
-type SpellRankMap []SpellRankConfig
-type SpellRankFactory func(config SpellRankConfig)
-
-func (spell SpellRankConfig) GetRankLabel() string {
-	return fmt.Sprintf("Rank %d", spell.Rank)
-}
-
-func (ranks SpellRankMap) RegisterAll(factory SpellRankFactory) {
-	for _, rankConfig := range ranks {
-		factory(rankConfig)
-	}
-}
-
 // A stack rate given as PPM needs a proc manager rather than a flat chance; a chance-based rate
 // needs none. The mask has to be a concrete one: a PPM manager built on ProcMaskUnknown matches
 // nothing and would silently never proc. Every stack trigger the generator emits carries the mask

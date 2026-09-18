@@ -14,13 +14,14 @@ const (
 
 type ShamSpellConfig struct {
 	ActionID            core.ActionID
+	Rank                int32
 	BaseFlatCost        int32
 	BaseCastTime        time.Duration
 	IsElementalOverload bool
 	BonusCoefficient    float64
 	BounceReduction     float64
 	SpellSchool         core.SpellSchool
-	Overloads           *[][]*core.Spell
+	Overloads           map[int32][]*core.Spell
 	ClassSpellMask      int64
 }
 
@@ -41,6 +42,7 @@ func (shaman *Shaman) newElectricSpellConfig(config ShamSpellConfig) core.SpellC
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          flags,
 		ClassSpellMask: config.ClassSpellMask,
+		Rank:           config.Rank,
 
 		ManaCost: core.ManaCostOptions{
 			FlatCost: core.TernaryInt32(config.IsElementalOverload, 0, config.BaseFlatCost),

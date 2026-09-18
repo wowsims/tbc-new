@@ -14,12 +14,12 @@ func (paladin *Paladin) getHolyShockTimer() *core.Timer {
 	return paladin.holyShockTimer
 }
 
-var HolyShockRankMap = shared.SpellRankMap{
-	{Rank: 1, SpellID: 20473, Cost: 335, MinDamage: 277, MaxDamage: 299, Coefficient: 0.429},
-	{Rank: 2, SpellID: 20929, Cost: 410, MinDamage: 379, MaxDamage: 409, Coefficient: 0.429},
-	{Rank: 3, SpellID: 20930, Cost: 485, MinDamage: 496, MaxDamage: 628, Coefficient: 0.429},
-	{Rank: 4, SpellID: 27174, Cost: 575, MinDamage: 614, MaxDamage: 664, Coefficient: 0.429},
-	{Rank: 5, SpellID: 33072, Cost: 650, MinDamage: 721, MaxDamage: 779, Coefficient: 0.429},
+var HolyShockRankMap = shared.RankTable{
+	{Rank: 1, SpellID: 20473, Cost: 335, Direct: &shared.Amount{Min: 277, Max: 299, Coef: 0.429}},
+	{Rank: 2, SpellID: 20929, Cost: 410, Direct: &shared.Amount{Min: 379, Max: 409, Coef: 0.429}},
+	{Rank: 3, SpellID: 20930, Cost: 485, Direct: &shared.Amount{Min: 496, Max: 628, Coef: 0.429}},
+	{Rank: 4, SpellID: 27174, Cost: 575, Direct: &shared.Amount{Min: 614, Max: 664, Coef: 0.429}},
+	{Rank: 5, SpellID: 33072, Cost: 650, Direct: &shared.Amount{Min: 721, Max: 779, Coef: 0.429}},
 }
 
 // Holy Shock
@@ -27,12 +27,12 @@ var HolyShockRankMap = shared.SpellRankMap{
 //
 // Blasts the target with Holy energy, causing X to Y Holy damage to an enemy,
 // or X*1.267 to Y*1.267 healing to an ally.
-func (paladin *Paladin) registerHolyShock(rankConfig shared.SpellRankConfig) {
+func (paladin *Paladin) registerHolyShock(rankConfig shared.RankRow) {
 	spellID := rankConfig.SpellID
 	cost := rankConfig.Cost
-	minDamage := rankConfig.MinDamage
-	maxDamage := rankConfig.MaxDamage
-	coefficient := rankConfig.Coefficient
+	minDamage := rankConfig.Direct.Min
+	maxDamage := rankConfig.Direct.Max
+	coefficient := rankConfig.Direct.Coef
 
 	// Holy Shock heals for 1.267x the damage component of the spell.
 	healingCoeff := 1.267

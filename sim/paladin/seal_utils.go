@@ -1,12 +1,5 @@
 package paladin
 
-type sealRankMap []seal
-type sealRankFactory func(seal)
+import "github.com/wowsims/tbc/sim/common/shared"
 
-func (ranks sealRankMap) RegisterAll(factory sealRankFactory) {
-	for rank := 1; rank < len(ranks); rank++ {
-		rankConfig := ranks[rank]
-		rankConfig.rank = int32(rank)
-		factory(rankConfig)
-	}
-}
+type sealRankMap = shared.RankedTable[seal]

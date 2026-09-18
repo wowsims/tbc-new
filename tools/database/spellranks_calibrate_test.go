@@ -47,7 +47,7 @@ type calibFamily struct {
 	Name     string
 	File     string
 	ClassBit int
-	Table    shared.SpellRankMap
+	Table    shared.RankTable
 }
 
 // The two shaman tables were inline anonymous literals until they were hoisted to package vars so this
@@ -89,11 +89,11 @@ type knownResidual struct {
 }
 
 var knownResiduals = []knownResidual{
-	{10313, "MinDamage", "hand row wrong",
+	{10313, "Direct.Min", "hand row wrong",
 		"Exorcism r5. The hand min (453) is the DB's max, a column slip, and the hand spread of 54 breaks " +
 			"the die-sides ladder (r4 38, r5 46, r6 58)."},
-	{10313, "MaxDamage", "hand row wrong", "Exorcism r5, same column slip as above."},
-	{20930, "MaxDamage", "hand row wrong",
+	{10313, "Direct.Max", "hand row wrong", "Exorcism r5, same column slip as above."},
+	{20930, "Direct.Max", "hand row wrong",
 		"Holy Shock r3. 628 is heal spell 25903's min (bp 627 + 1); the damage spell 25902 is bp 495 / ds 41 " +
 			"= 496-536. Ranks 1, 2, 4 and 5 are exact."},
 }
@@ -324,7 +324,7 @@ func TestSpellRankCalibration(t *testing.T) {
 	}
 }
 
-func compareRow(t *testing.T, db *sql.DB, fam calibFamily, row shared.SpellRankConfig) []comparison {
+func compareRow(t *testing.T, db *sql.DB, fam calibFamily, row shared.RankRow) []comparison {
 	t.Helper()
 
 	spell, err := loadSpell(db, row.SpellID)
@@ -355,19 +355,36 @@ func compareRow(t *testing.T, db *sql.DB, fam calibFamily, row shared.SpellRankC
 		out = append(out, finish(c))
 	}
 
-	// Direct damage / heal / energize: whichever effect reproduces the pair. Reporting which one matched
-	// is the point - it is the evidence the generator's role rules get built from.
-	if row.MinDamage > 0 || row.MaxDamage > 0 {
-		out = append(out, matchPair(base, "MinDamage", "MaxDamage", row.MinDamage, row.MaxDamage,
+	// Reporting which effect reproduced each value is the point, not a nicety: it is the evidence the
+	// generator's role rules get built from, and it is how a value that turns out to belong to a
+	// sibling spell (Holy Shock's damage, Lay on Hands' energize) shows itself.
+	coef := 0.0
+	if row.Direct != nil {
+		out = append(out, matchPair(base, "Direct.Min", "Direct.Max", row.Direct.Min, row.Direct.Max,
+			directCandidates(candidates), spell)...)
+		coef = row.Direct.Coef
+	}
+
+	if row.Heal != nil {
+		out = append(out, matchPair(base, "Heal.Min", "Heal.Max", row.Heal.Min, row.Heal.Max,
+			directCandidates(candidates), spell)...)
+		coef = row.Heal.Coef
+	}
+
+	if row.Periodic != nil {
+		out = append(out, matchTick(base, row.Periodic.Tick, periodicCandidates(candidates), spell))
+		if row.Periodic.Coef > 0 {
+			coef = row.Periodic.Coef
+		}
+	}
+
+	if row.Energize > 0 {
+		out = append(out, matchPair(base, "Energize", "", row.Energize, 0,
 			directCandidates(candidates), spell)...)
 	}
 
-	if row.DotTickDamage > 0 {
-		out = append(out, matchTick(base, row.DotTickDamage, periodicCandidates(candidates), spell))
-	}
-
-	if row.Coefficient > 0 {
-		out = append(out, matchCoefficient(base, row.Coefficient, candidates))
+	if coef > 0 {
+		out = append(out, matchCoefficient(base, coef, candidates))
 	}
 
 	return out

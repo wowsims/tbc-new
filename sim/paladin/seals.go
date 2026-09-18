@@ -24,19 +24,19 @@ type judge struct {
 
 type seal struct {
 	rank     int32
-	level    int32
 	spellID  int32
 	manaCost float64
 	proc     proc
 	judge    judge
 }
 
+func (seal seal) GetRank() int32 { return seal.rank }
+
 func (seal seal) GetRankLabel() string {
 	return fmt.Sprintf("Rank %d", seal.rank)
 }
 
 var SealOfRighteousnessRanks = sealRankMap{
-	{},
 	{rank: 1, spellID: 21084, manaCost: 20, proc: proc{spellID: 25742, value: 216, coeff: 0.029}, judge: judge{spellID: 20187, minDamage: 26, maxDamage: 26, coeff: 0.209}},
 	{rank: 2, spellID: 20287, manaCost: 40, proc: proc{spellID: 25740, value: 318, coeff: 0.063}, judge: judge{spellID: 20280, minDamage: 36, maxDamage: 39, coeff: 0.455}},
 	{rank: 3, spellID: 20288, manaCost: 60, proc: proc{spellID: 25739, value: 490, coeff: 0.093}, judge: judge{spellID: 20281, minDamage: 53, maxDamage: 58, coeff: 0.674}},
@@ -49,7 +49,6 @@ var SealOfRighteousnessRanks = sealRankMap{
 }
 
 var SealOfLightRanks = sealRankMap{
-	{},
 	{rank: 1, spellID: 20165, manaCost: 110, proc: proc{spellID: 20167, value: 39, coeff: 0.0}, judge: judge{spellID: 20185, minDamage: 25, maxDamage: 25, coeff: 0.0}},
 	{rank: 2, spellID: 20347, manaCost: 140, proc: proc{spellID: 20333, value: 53, coeff: 0.0}, judge: judge{spellID: 20344, minDamage: 34, maxDamage: 34, coeff: 0.0}},
 	{rank: 3, spellID: 20348, manaCost: 180, proc: proc{spellID: 20334, value: 76, coeff: 0.0}, judge: judge{spellID: 20345, minDamage: 49, maxDamage: 49, coeff: 0.0}},
@@ -58,7 +57,6 @@ var SealOfLightRanks = sealRankMap{
 }
 
 var SealOfWisdomRanks = sealRankMap{
-	{},
 	{rank: 1, spellID: 20166, manaCost: 135, proc: proc{spellID: 20168, value: 50, coeff: 0.0}, judge: judge{spellID: 20186, minDamage: 33, maxDamage: 33, coeff: 0.0}},
 	{rank: 2, spellID: 20356, manaCost: 170, proc: proc{spellID: 20350, value: 71, coeff: 0.0}, judge: judge{spellID: 20354, minDamage: 46, maxDamage: 46, coeff: 0.0}},
 	{rank: 3, spellID: 20357, manaCost: 200, proc: proc{spellID: 20351, value: 90, coeff: 0.0}, judge: judge{spellID: 20355, minDamage: 59, maxDamage: 59, coeff: 0.0}},
@@ -66,13 +64,11 @@ var SealOfWisdomRanks = sealRankMap{
 }
 
 var SealOfJusticeRanks = sealRankMap{
-	{},
 	{rank: 1, spellID: 20164, manaCost: 10, proc: proc{spellID: 20170, value: 0, coeff: 0.0}, judge: judge{spellID: 20184, minDamage: 0, maxDamage: 0, coeff: 0.0}},
 	{rank: 2, spellID: 31895, manaCost: 10, proc: proc{spellID: 20170, value: 0, coeff: 0.0}, judge: judge{spellID: 31896, minDamage: 0, maxDamage: 0, coeff: 0.0}},
 }
 
 var SealOfTheCrusaderRanks = sealRankMap{
-	{},
 	{rank: 1, spellID: 21082, manaCost: 25, proc: proc{spellID: 21082, value: 41}, judge: judge{spellID: 21183, minDamage: 23}},
 	{rank: 2, spellID: 20162, manaCost: 40, proc: proc{spellID: 21082, value: 68}, judge: judge{spellID: 20188, minDamage: 35}},
 	{rank: 3, spellID: 20305, manaCost: 65, proc: proc{spellID: 21082, value: 122}, judge: judge{spellID: 20300, minDamage: 58}},
@@ -83,7 +79,6 @@ var SealOfTheCrusaderRanks = sealRankMap{
 }
 
 var SealOfCommandRanks = sealRankMap{
-	{},
 	{rank: 1, spellID: 20375, manaCost: 65, proc: proc{spellID: 20424, value: 0.70, coeff: 0.29}, judge: judge{spellID: 20425, minDamage: 68, maxDamage: 73, coeff: 0.429}},
 	{rank: 2, spellID: 20915, manaCost: 110, proc: proc{spellID: 20424, value: 0.70, coeff: 0.29}, judge: judge{spellID: 20962, minDamage: 97, maxDamage: 105, coeff: 0.429}},
 	{rank: 3, spellID: 20918, manaCost: 140, proc: proc{spellID: 20424, value: 0.70, coeff: 0.29}, judge: judge{spellID: 20961, minDamage: 124, maxDamage: 135, coeff: 0.429}},

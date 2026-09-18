@@ -8,26 +8,26 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
-var VampiricTouchRankMap = shared.SpellRankMap{
-	{Rank: 1, SpellID: 34914, Cost: 325, DotTickDamage: 90, Coefficient: 0.2},
-	{Rank: 2, SpellID: 34916, Cost: 400, DotTickDamage: 120, Coefficient: 0.2},
-	{Rank: 3, SpellID: 34917, Cost: 425, DotTickDamage: 130, Coefficient: 0.2},
+var VampiricTouchRankMap = shared.RankTable{
+	{Rank: 1, SpellID: 34914, Cost: 325, Periodic: &shared.Periodic{Tick: 90, Coef: 0.2}},
+	{Rank: 2, SpellID: 34916, Cost: 400, Periodic: &shared.Periodic{Tick: 120, Coef: 0.2}},
+	{Rank: 3, SpellID: 34917, Cost: 425, Periodic: &shared.Periodic{Tick: 130, Coef: 0.2}},
 }
 
-func (priest *Priest) registerVampiricTouchSpell(rankConfig shared.SpellRankConfig) {
-	manaMetrics := priest.NewManaMetrics(core.ActionID{SpellID: rankConfig.SpellID}.WithTag(1))
+func (priest *Priest) registerVampiricTouchSpell(rank shared.RankRow) {
+	manaMetrics := priest.NewManaMetrics(core.ActionID{SpellID: rank.SpellID}.WithTag(1))
 
-	spell := priest.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: rankConfig.SpellID},
+	priest.RegisterSpell(core.SpellConfig{
+		ActionID:       core.ActionID{SpellID: rank.SpellID},
 		SpellSchool:    core.SpellSchoolShadow,
 		DefenseType:    core.DefenseTypeMagic,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: PriestSpellVampiricTouch,
-		Rank:           rankConfig.Rank,
+		Rank:           rank.Rank,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: rankConfig.Cost,
+			FlatCost: rank.Cost,
 		},
 
 		Cast: core.CastConfig{
@@ -43,7 +43,7 @@ func (priest *Priest) registerVampiricTouchSpell(rankConfig shared.SpellRankConf
 
 		Dot: core.DotConfig{
 			Aura: core.Aura{
-				Label: fmt.Sprintf("VampiricTouch-%d", rankConfig.Rank),
+				Label: fmt.Sprintf("VampiricTouch-%d", rank.Rank),
 				OnInit: func(aura *core.Aura, sim *core.Simulation) {
 					aura.AttachProcTrigger(core.ProcTrigger{
 						Name:               "VampiricTouch-ManaReturn",
@@ -60,10 +60,10 @@ func (priest *Priest) registerVampiricTouchSpell(rankConfig shared.SpellRankConf
 			NumberOfTicks:       5,
 			TickLength:          3 * time.Second,
 			AffectedByCastSpeed: false,
-			BonusCoefficient:    rankConfig.Coefficient,
+			BonusCoefficient:    rank.Periodic.Coef,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.Snapshot(target, rankConfig.DotTickDamage)
+				dot.Snapshot(target, rank.Periodic.Tick)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
@@ -82,9 +82,7 @@ func (priest *Priest) registerVampiricTouchSpell(rankConfig shared.SpellRankConf
 				dot := spell.Dot(target)
 				return dot.CalcSnapshotDamage(sim, target, spell.OutcomeExpectedMagicHit)
 			}
-			return spell.CalcPeriodicDamage(sim, target, rankConfig.DotTickDamage, spell.OutcomeExpectedMagicHit)
+			return spell.CalcPeriodicDamage(sim, target, rank.Periodic.Tick, spell.OutcomeExpectedMagicHit)
 		},
 	})
-
-	priest.VampiricTouch = append(priest.VampiricTouch, spell)
 }

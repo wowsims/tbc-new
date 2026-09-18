@@ -5,28 +5,28 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
-var HolyNovaRankMap = shared.SpellRankMap{
-	{Rank: 1, SpellID: 15237, Cost: 185, MinDamage: 29, MaxDamage: 34, Coefficient: 0.161},
-	{Rank: 2, SpellID: 15430, Cost: 290, MinDamage: 52, MaxDamage: 61, Coefficient: 0.161},
-	{Rank: 3, SpellID: 15431, Cost: 400, MinDamage: 79, MaxDamage: 92, Coefficient: 0.161},
-	{Rank: 4, SpellID: 27799, Cost: 520, MinDamage: 110, MaxDamage: 127, Coefficient: 0.161},
-	{Rank: 5, SpellID: 27800, Cost: 635, MinDamage: 146, MaxDamage: 168, Coefficient: 0.161},
-	{Rank: 6, SpellID: 27801, Cost: 750, MinDamage: 188, MaxDamage: 217, Coefficient: 0.161},
-	{Rank: 7, SpellID: 25331, Cost: 875, MinDamage: 244, MaxDamage: 283, Coefficient: 0.161},
+var HolyNovaRankMap = shared.RankTable{
+	{Rank: 1, SpellID: 15237, Cost: 185, Direct: &shared.Amount{Min: 29, Max: 34, Coef: 0.161}},
+	{Rank: 2, SpellID: 15430, Cost: 290, Direct: &shared.Amount{Min: 52, Max: 61, Coef: 0.161}},
+	{Rank: 3, SpellID: 15431, Cost: 400, Direct: &shared.Amount{Min: 79, Max: 92, Coef: 0.161}},
+	{Rank: 4, SpellID: 27799, Cost: 520, Direct: &shared.Amount{Min: 110, Max: 127, Coef: 0.161}},
+	{Rank: 5, SpellID: 27800, Cost: 635, Direct: &shared.Amount{Min: 146, Max: 168, Coef: 0.161}},
+	{Rank: 6, SpellID: 27801, Cost: 750, Direct: &shared.Amount{Min: 188, Max: 217, Coef: 0.161}},
+	{Rank: 7, SpellID: 25331, Cost: 875, Direct: &shared.Amount{Min: 244, Max: 283, Coef: 0.161}},
 }
 
-func (priest *Priest) registerHolyNovaSpell(rankConfig shared.SpellRankConfig) {
-	spell := priest.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: rankConfig.SpellID},
+func (priest *Priest) registerHolyNovaSpell(rank shared.RankRow) {
+	priest.RegisterSpell(core.SpellConfig{
+		ActionID:       core.ActionID{SpellID: rank.SpellID},
 		SpellSchool:    core.SpellSchoolHoly,
 		DefenseType:    core.DefenseTypeMagic,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: PriestSpellHolyNova,
-		Rank:           rankConfig.Rank,
+		Rank:           rank.Rank,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: rankConfig.Cost,
+			FlatCost: rank.Cost,
 		},
 
 		Cast: core.CastConfig{
@@ -37,17 +37,15 @@ func (priest *Priest) registerHolyNovaSpell(rankConfig shared.SpellRankConfig) {
 
 		DamageMultiplier:         1,
 		DamageMultiplierAdditive: 1,
-		BonusCoefficient:         rankConfig.Coefficient,
+		BonusCoefficient:         rank.Direct.Coef,
 		ThreatMultiplier:         0,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := priest.CalcAndRollDamageRange(sim, rankConfig.MinDamage, rankConfig.MaxDamage)
+			baseDamage := priest.CalcAndRollDamageRange(sim, rank.Direct.Min, rank.Direct.Max)
 			spell.CalcAndDealAoeDamage(sim, baseDamage, spell.OutcomeMagicHitAndCrit)
 
-			baseHeal := priest.CalcAndRollDamageRange(sim, rankConfig.MinDamage, rankConfig.MaxDamage)
+			baseHeal := priest.CalcAndRollDamageRange(sim, rank.Direct.Min, rank.Direct.Max)
 			spell.CalcAndDealHealing(sim, spell.Unit, baseHeal, spell.OutcomeHealing)
 		},
 	})
-
-	priest.HolyNova = append(priest.HolyNova, spell)
 }

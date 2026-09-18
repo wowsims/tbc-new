@@ -14,11 +14,11 @@ func (paladin *Paladin) getHammerOfWrathTimer() *core.Timer {
 	return paladin.hammerOfWrathTimer
 }
 
-var HammerOfWrathRankMap = shared.SpellRankMap{
-	{Rank: 1, SpellID: 24275, Cost: 235, MinDamage: 316, MaxDamage: 348, Coefficient: 0.429},
-	{Rank: 2, SpellID: 24274, Cost: 290, MinDamage: 412, MaxDamage: 455, Coefficient: 0.429},
-	{Rank: 3, SpellID: 24239, Cost: 340, MinDamage: 519, MaxDamage: 572, Coefficient: 0.429},
-	{Rank: 4, SpellID: 27180, Cost: 440, MinDamage: 672, MaxDamage: 742, Coefficient: 0.429},
+var HammerOfWrathRankMap = shared.RankTable{
+	{Rank: 1, SpellID: 24275, Cost: 235, Direct: &shared.Amount{Min: 316, Max: 348, Coef: 0.429}},
+	{Rank: 2, SpellID: 24274, Cost: 290, Direct: &shared.Amount{Min: 412, Max: 455, Coef: 0.429}},
+	{Rank: 3, SpellID: 24239, Cost: 340, Direct: &shared.Amount{Min: 519, Max: 572, Coef: 0.429}},
+	{Rank: 4, SpellID: 27180, Cost: 440, Direct: &shared.Amount{Min: 672, Max: 742, Coef: 0.429}},
 }
 
 // Hammer of Wrath
@@ -26,12 +26,12 @@ var HammerOfWrathRankMap = shared.SpellRankMap{
 //
 // Hurls a hammer that strikes an enemy for Holy damage.
 // Only usable on enemies that have 20% or less health.
-func (paladin *Paladin) registerHammerOfWrath(rankConfig shared.SpellRankConfig) {
+func (paladin *Paladin) registerHammerOfWrath(rankConfig shared.RankRow) {
 	spellID := rankConfig.SpellID
 	cost := rankConfig.Cost
-	minDamage := rankConfig.MinDamage
-	maxDamage := rankConfig.MaxDamage
-	coefficient := rankConfig.Coefficient
+	minDamage := rankConfig.Direct.Min
+	maxDamage := rankConfig.Direct.Max
+	coefficient := rankConfig.Direct.Coef
 
 	paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: spellID},

@@ -14,10 +14,10 @@ func (paladin *Paladin) getAvengersShieldTimer() *core.Timer {
 	return paladin.avengersShieldTimer
 }
 
-var AvengersShieldRankMap = shared.SpellRankMap{
-	{Rank: 1, SpellID: 31935, Cost: 500, MinDamage: 270, MaxDamage: 330, Coefficient: 0.193},
-	{Rank: 2, SpellID: 32699, Cost: 615, MinDamage: 370, MaxDamage: 452, Coefficient: 0.193},
-	{Rank: 3, SpellID: 32700, Cost: 780, MinDamage: 494, MaxDamage: 602, Coefficient: 0.193},
+var AvengersShieldRankMap = shared.RankTable{
+	{Rank: 1, SpellID: 31935, Cost: 500, Direct: &shared.Amount{Min: 270, Max: 330, Coef: 0.193}},
+	{Rank: 2, SpellID: 32699, Cost: 615, Direct: &shared.Amount{Min: 370, Max: 452, Coef: 0.193}},
+	{Rank: 3, SpellID: 32700, Cost: 780, Direct: &shared.Amount{Min: 494, Max: 602, Coef: 0.193}},
 }
 
 // Avenger's Shield (Talent)
@@ -25,7 +25,7 @@ var AvengersShieldRankMap = shared.SpellRankMap{
 //
 // Hurls a holy shield at the enemy, dealing Holy damage, dazing them and
 // then jumping to additional nearby enemies. Affects 3 total targets.
-func (paladin *Paladin) registerAvengersShield(rankConfig shared.SpellRankConfig) {
+func (paladin *Paladin) registerAvengersShield(rankConfig shared.RankRow) {
 	paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: rankConfig.SpellID},
 		SpellSchool:    core.SpellSchoolHoly,
@@ -59,10 +59,10 @@ func (paladin *Paladin) registerAvengersShield(rankConfig shared.SpellRankConfig
 			},
 		},
 
-		BonusCoefficient: rankConfig.Coefficient,
+		BonusCoefficient: rankConfig.Direct.Coef,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			damage := sim.Roll(rankConfig.MinDamage, rankConfig.MaxDamage)
+			damage := sim.Roll(rankConfig.Direct.Min, rankConfig.Direct.Max)
 			results := spell.CalcCleaveDamage(sim, target, 3, damage, spell.OutcomeRangedHitAndCrit)
 			spell.WaitTravelTime(sim, func(sim *core.Simulation) {
 				for _, result := range results {

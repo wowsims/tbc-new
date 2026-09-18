@@ -8,12 +8,12 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
-var FlameStrikeRankMap = shared.SpellRankMap{
-	{Rank: 7, SpellID: 27086, Cost: 1175, MinDamage: 480, MaxDamage: 585, DotTickDamage: 106, ThreatMultiplier: 1},
-	{Rank: 6, SpellID: 10216, Cost: 990, MinDamage: 383, MaxDamage: 468, DotTickDamage: 85, ThreatMultiplier: 1},
+var FlameStrikeRankMap = shared.RankTable{
+	{Rank: 7, SpellID: 27086, Cost: 1175, Direct: &shared.Amount{Min: 480, Max: 585}, Periodic: &shared.Periodic{Tick: 106}},
+	{Rank: 6, SpellID: 10216, Cost: 990, Direct: &shared.Amount{Min: 383, Max: 468}, Periodic: &shared.Periodic{Tick: 85}},
 }
 
-func (mage *Mage) registerFlamestrike(rankConfig shared.SpellRankConfig) {
+func (mage *Mage) registerFlamestrike(rankConfig shared.RankRow) {
 	flameStrikeCoefficient := 0.23600000143 // Per https://wago.tools/db2/SpellEffect?build=2.5.5.65295&filter%5BSpellID%5D=exact%253A2120 Field: "BonusCoefficient"
 	flameStrikeDotCoefficient := 0.02999999933
 
@@ -38,7 +38,7 @@ func (mage *Mage) registerFlamestrike(rankConfig shared.SpellRankConfig) {
 
 		DamageMultiplier: 1,
 		BonusCoefficient: flameStrikeCoefficient,
-		ThreatMultiplier: rankConfig.ThreatMultiplier,
+		ThreatMultiplier: 1,
 
 		Dot: core.DotConfig{
 			IsAOE: true,
@@ -50,7 +50,7 @@ func (mage *Mage) registerFlamestrike(rankConfig shared.SpellRankConfig) {
 			BonusCoefficient: flameStrikeDotCoefficient,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.Snapshot(target, rankConfig.DotTickDamage)
+				dot.Snapshot(target, rankConfig.Periodic.Tick)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				for _, aoeTarget := range sim.Encounter.ActiveTargetUnits {
@@ -60,7 +60,7 @@ func (mage *Mage) registerFlamestrike(rankConfig shared.SpellRankConfig) {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			baseDamage := mage.CalcAndRollDamageRange(sim, rankConfig.MinDamage, rankConfig.MaxDamage)
+			baseDamage := mage.CalcAndRollDamageRange(sim, rankConfig.Direct.Min, rankConfig.Direct.Max)
 			spell.CalcAndDealAoeDamage(sim, baseDamage, spell.OutcomeMagicHitAndCrit)
 			spell.AOEDot().Apply(sim)
 		},

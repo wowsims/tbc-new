@@ -15,11 +15,11 @@ func (paladin *Paladin) getHolyShieldTimer() *core.Timer {
 	return paladin.holyShieldTimer
 }
 
-var HolyShieldRankMap = shared.SpellRankMap{
-	{Rank: 1, SpellID: 20925, Cost: 135, MinDamage: 59, Coefficient: 0.05, ThreatMultiplier: 1.35},
-	{Rank: 2, SpellID: 20927, Cost: 175, MinDamage: 86, Coefficient: 0.05, ThreatMultiplier: 1.35},
-	{Rank: 3, SpellID: 20928, Cost: 215, MinDamage: 117, Coefficient: 0.05, ThreatMultiplier: 1.35},
-	{Rank: 4, SpellID: 27179, Cost: 280, MinDamage: 155, Coefficient: 0.05, ThreatMultiplier: 1.35},
+var HolyShieldRankMap = shared.RankTable{
+	{Rank: 1, SpellID: 20925, Cost: 135, Direct: &shared.Amount{Min: 59, Coef: 0.05}},
+	{Rank: 2, SpellID: 20927, Cost: 175, Direct: &shared.Amount{Min: 86, Coef: 0.05}},
+	{Rank: 3, SpellID: 20928, Cost: 215, Direct: &shared.Amount{Min: 117, Coef: 0.05}},
+	{Rank: 4, SpellID: 27179, Cost: 280, Direct: &shared.Amount{Min: 155, Coef: 0.05}},
 }
 
 // Holy Shield (Talent)
@@ -28,12 +28,11 @@ var HolyShieldRankMap = shared.SpellRankMap{
 // Increases chance to block by 30% for 10 sec, and deals Holy damage
 // for each attack blocked while active. Damage caused by Holy Shield causes
 // 35% additional threat. Each block expends a charge. 4 charges.
-func (paladin *Paladin) registerHolyShield(rankConfig shared.SpellRankConfig) {
+func (paladin *Paladin) registerHolyShield(rankConfig shared.RankRow) {
 	spellID := rankConfig.SpellID
 	cost := rankConfig.Cost
-	value := rankConfig.MinDamage
-	coefficient := rankConfig.Coefficient
-	threatMultiplier := rankConfig.ThreatMultiplier
+	value := rankConfig.Direct.Min
+	coefficient := rankConfig.Direct.Coef
 
 	actionID := core.ActionID{SpellID: spellID}
 
@@ -47,7 +46,7 @@ func (paladin *Paladin) registerHolyShield(rankConfig shared.SpellRankConfig) {
 
 		BonusCoefficient: coefficient,
 		DamageMultiplier: 1,
-		ThreatMultiplier: threatMultiplier,
+		ThreatMultiplier: 1.35,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			spell.CalcAndDealDamage(sim, target, value, spell.OutcomeMagicHit)

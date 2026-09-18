@@ -14,24 +14,24 @@ func (paladin *Paladin) getConsecrationTimer() *core.Timer {
 	return paladin.consecrationTimer
 }
 
-var ConsecrationRankMap = shared.SpellRankMap{
-	{Rank: 1, SpellID: 26573, Cost: 120, MinDamage: 8, MaxDamage: 8, Coefficient: 0.119},
-	{Rank: 2, SpellID: 20116, Cost: 205, MinDamage: 15, MaxDamage: 15, Coefficient: 0.119},
-	{Rank: 3, SpellID: 20922, Cost: 290, MinDamage: 24, MaxDamage: 24, Coefficient: 0.119},
-	{Rank: 4, SpellID: 20923, Cost: 390, MinDamage: 35, MaxDamage: 35, Coefficient: 0.119},
-	{Rank: 5, SpellID: 20924, Cost: 505, MinDamage: 48, MaxDamage: 48, Coefficient: 0.119},
-	{Rank: 6, SpellID: 27173, Cost: 660, MinDamage: 64, MaxDamage: 64, Coefficient: 0.119},
+var ConsecrationRankMap = shared.RankTable{
+	{Rank: 1, SpellID: 26573, Cost: 120, Periodic: &shared.Periodic{Tick: 8, Coef: 0.119}},
+	{Rank: 2, SpellID: 20116, Cost: 205, Periodic: &shared.Periodic{Tick: 15, Coef: 0.119}},
+	{Rank: 3, SpellID: 20922, Cost: 290, Periodic: &shared.Periodic{Tick: 24, Coef: 0.119}},
+	{Rank: 4, SpellID: 20923, Cost: 390, Periodic: &shared.Periodic{Tick: 35, Coef: 0.119}},
+	{Rank: 5, SpellID: 20924, Cost: 505, Periodic: &shared.Periodic{Tick: 48, Coef: 0.119}},
+	{Rank: 6, SpellID: 27173, Cost: 660, Periodic: &shared.Periodic{Tick: 64, Coef: 0.119}},
 }
 
 // Consecration
 // https://www.wowhead.com/tbc/spell=26573
 //
 // Consecrates the land beneath the Paladin, doing X Holy damage over 8 sec to enemies who enter the area.
-func (paladin *Paladin) registerConsecration(rankConfig shared.SpellRankConfig) {
+func (paladin *Paladin) registerConsecration(rankConfig shared.RankRow) {
 	spellID := rankConfig.SpellID
 	cost := rankConfig.Cost
-	minDamage := rankConfig.MinDamage
-	coefficient := rankConfig.Coefficient
+	minDamage := rankConfig.Periodic.Tick
+	coefficient := rankConfig.Periodic.Coef
 
 	paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: spellID},

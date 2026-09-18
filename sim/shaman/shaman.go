@@ -86,11 +86,9 @@ type Shaman struct {
 	// The expiration time of each totem (earth, air, fire, water).
 	TotemExpirations [4]time.Duration
 
-	LightningBolts         []*core.Spell
-	LightningBoltOverloads []*core.Spell
+	LightningBoltOverloads map[int32]*core.Spell
 
-	ChainLightnings         []*core.Spell
-	ChainLightningOverloads [][]*core.Spell
+	ChainLightningOverloads map[int32][]*core.Spell
 
 	Stormstrike           *core.Spell
 	StormstrikeCastResult *core.SpellResult

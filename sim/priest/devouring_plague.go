@@ -11,30 +11,30 @@ import (
 // Devouring Plague - Undead Racial
 // Shadow school DoT, 3 min cooldown, 24s duration
 
-var DevouringPlagueRankMap = shared.SpellRankMap{
-	{Rank: 1, SpellID: 2944, Cost: 215, DotTickDamage: 19, Coefficient: 0.1},
-	{Rank: 2, SpellID: 19276, Cost: 350, DotTickDamage: 34, Coefficient: 0.1},
-	{Rank: 3, SpellID: 19277, Cost: 495, DotTickDamage: 50, Coefficient: 0.1},
-	{Rank: 4, SpellID: 19278, Cost: 645, DotTickDamage: 68, Coefficient: 0.1},
-	{Rank: 5, SpellID: 19279, Cost: 810, DotTickDamage: 89, Coefficient: 0.1},
-	{Rank: 6, SpellID: 19280, Cost: 985, DotTickDamage: 113, Coefficient: 0.1},
-	{Rank: 7, SpellID: 25467, Cost: 1145, DotTickDamage: 152, Coefficient: 0.1},
+var DevouringPlagueRankMap = shared.RankTable{
+	{Rank: 1, SpellID: 2944, Cost: 215, Periodic: &shared.Periodic{Tick: 19, Coef: 0.1}},
+	{Rank: 2, SpellID: 19276, Cost: 350, Periodic: &shared.Periodic{Tick: 34, Coef: 0.1}},
+	{Rank: 3, SpellID: 19277, Cost: 495, Periodic: &shared.Periodic{Tick: 50, Coef: 0.1}},
+	{Rank: 4, SpellID: 19278, Cost: 645, Periodic: &shared.Periodic{Tick: 68, Coef: 0.1}},
+	{Rank: 5, SpellID: 19279, Cost: 810, Periodic: &shared.Periodic{Tick: 89, Coef: 0.1}},
+	{Rank: 6, SpellID: 19280, Cost: 985, Periodic: &shared.Periodic{Tick: 113, Coef: 0.1}},
+	{Rank: 7, SpellID: 25467, Cost: 1145, Periodic: &shared.Periodic{Tick: 152, Coef: 0.1}},
 }
 
-func (priest *Priest) registerDevouringPlagueSpell(rankConfig shared.SpellRankConfig, cdTimer *core.Timer) {
-	healthMetrics := priest.NewHealthMetrics(core.ActionID{SpellID: rankConfig.SpellID}.WithTag(1))
+func (priest *Priest) registerDevouringPlagueSpell(rank shared.RankRow, cdTimer *core.Timer) {
+	healthMetrics := priest.NewHealthMetrics(core.ActionID{SpellID: rank.SpellID}.WithTag(1))
 
-	spell := priest.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: rankConfig.SpellID},
+	priest.RegisterSpell(core.SpellConfig{
+		ActionID:       core.ActionID{SpellID: rank.SpellID},
 		SpellSchool:    core.SpellSchoolShadow,
 		DefenseType:    core.DefenseTypeMagic,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: PriestSpellDevouringPlague,
-		Rank:           rankConfig.Rank,
+		Rank:           rank.Rank,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: rankConfig.Cost,
+			FlatCost: rank.Cost,
 		},
 
 		Cast: core.CastConfig{
@@ -53,7 +53,7 @@ func (priest *Priest) registerDevouringPlagueSpell(rankConfig shared.SpellRankCo
 
 		Dot: core.DotConfig{
 			Aura: core.Aura{
-				Label: fmt.Sprintf("DevouringPlague-%d", rankConfig.Rank),
+				Label: fmt.Sprintf("DevouringPlague-%d", rank.Rank),
 				OnInit: func(aura *core.Aura, sim *core.Simulation) {
 					aura.AttachProcTrigger(core.ProcTrigger{
 						Name:               "DevouringPlague-Heal",
@@ -69,10 +69,10 @@ func (priest *Priest) registerDevouringPlagueSpell(rankConfig shared.SpellRankCo
 			NumberOfTicks:       8,
 			TickLength:          3 * time.Second,
 			AffectedByCastSpeed: false,
-			BonusCoefficient:    rankConfig.Coefficient,
+			BonusCoefficient:    rank.Periodic.Coef,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.Snapshot(target, rankConfig.DotTickDamage)
+				dot.Snapshot(target, rank.Periodic.Tick)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
@@ -93,9 +93,7 @@ func (priest *Priest) registerDevouringPlagueSpell(rankConfig shared.SpellRankCo
 				dot := spell.Dot(target)
 				return dot.CalcSnapshotDamage(sim, target, spell.OutcomeExpectedMagicHit)
 			}
-			return spell.CalcPeriodicDamage(sim, target, rankConfig.DotTickDamage, spell.OutcomeExpectedMagicHit)
+			return spell.CalcPeriodicDamage(sim, target, rank.Periodic.Tick, spell.OutcomeExpectedMagicHit)
 		},
 	})
-
-	priest.DevouringPlague = append(priest.DevouringPlague, spell)
 }

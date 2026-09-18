@@ -15,10 +15,10 @@ func (paladin *Paladin) getHolyWrathTimer() *core.Timer {
 	return paladin.holyWrathTimer
 }
 
-var HolyWrathRankMap = shared.SpellRankMap{
-	{Rank: 1, SpellID: 2812, Cost: 550, MinDamage: 368, MaxDamage: 435, Coefficient: 0.286},
-	{Rank: 2, SpellID: 10318, Cost: 685, MinDamage: 497, MaxDamage: 584, Coefficient: 0.286},
-	{Rank: 3, SpellID: 27139, Cost: 825, MinDamage: 637, MaxDamage: 748, Coefficient: 0.286},
+var HolyWrathRankMap = shared.RankTable{
+	{Rank: 1, SpellID: 2812, Cost: 550, Direct: &shared.Amount{Min: 368, Max: 435, Coef: 0.286}},
+	{Rank: 2, SpellID: 10318, Cost: 685, Direct: &shared.Amount{Min: 497, Max: 584, Coef: 0.286}},
+	{Rank: 3, SpellID: 27139, Cost: 825, Direct: &shared.Amount{Min: 637, Max: 748, Coef: 0.286}},
 }
 
 // Holy Wrath
@@ -27,12 +27,12 @@ var HolyWrathRankMap = shared.SpellRankMap{
 // Sends bolts of holy power in all directions, causing Holy damage
 // to all Undead and Demon targets within 20 yds.
 // 2 sec cast, 1 min cooldown.
-func (paladin *Paladin) registerHolyWrath(rankConfig shared.SpellRankConfig) {
+func (paladin *Paladin) registerHolyWrath(rankConfig shared.RankRow) {
 	spellID := rankConfig.SpellID
 	cost := rankConfig.Cost
-	minDamage := rankConfig.MinDamage
-	maxDamage := rankConfig.MaxDamage
-	coefficient := rankConfig.Coefficient
+	minDamage := rankConfig.Direct.Min
+	maxDamage := rankConfig.Direct.Max
+	coefficient := rankConfig.Direct.Coef
 
 	paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: spellID},

@@ -22,16 +22,7 @@ type Priest struct {
 	Shadowfiend    *core.Spell
 	InnerFocusAura *core.Aura
 
-	ShadowWordPain  []*core.Spell
-	MindBlast       []*core.Spell
-	MindFlay        []*core.Spell
-	ShadowWordDeath []*core.Spell
-	DevouringPlague []*core.Spell
 	VampiricEmbrace *core.Spell
-	VampiricTouch   []*core.Spell
-	Smite           []*core.Spell
-	Starshards      []*core.Spell
-	HolyNova        []*core.Spell
 }
 
 type SelfBuffs struct {
@@ -53,26 +44,26 @@ func (priest *Priest) Initialize() {
 	mindblastCDTimer := priest.NewTimer()
 	shadowWordDeathCDTimer := priest.NewTimer()
 
-	MindBlastRankMap.RegisterAll(func(rankConfig shared.SpellRankConfig) {
-		priest.registerMindBlastSpell(rankConfig, mindblastCDTimer)
+	MindBlastRankMap.RegisterAll(func(rank shared.RankRow) {
+		priest.registerMindBlastSpell(rank, mindblastCDTimer)
 	})
 	ShadowWordPainRankMap.RegisterAll(priest.registerShadowWordPainSpell)
-	ShadowWordDeathRankMap.RegisterAll(func(rankConfig shared.SpellRankConfig) {
-		priest.registerShadowWordDeathSpell(rankConfig, shadowWordDeathCDTimer)
+	ShadowWordDeathRankMap.RegisterAll(func(rank shared.RankRow) {
+		priest.registerShadowWordDeathSpell(rank, shadowWordDeathCDTimer)
 	})
 	SmiteRankMap.RegisterAll(priest.registerSmiteSpell)
 	priest.registerShadowfiendSpell()
 
 	if priest.Race == proto.Race_RaceNightElf {
 		starshardsCDTimer := priest.NewTimer()
-		StarshardsRankMap.RegisterAll(func(rankConfig shared.SpellRankConfig) {
-			priest.registerStarshardsSpell(rankConfig, starshardsCDTimer)
+		StarshardsRankMap.RegisterAll(func(rank shared.RankRow) {
+			priest.registerStarshardsSpell(rank, starshardsCDTimer)
 		})
 	}
 	if priest.Race == proto.Race_RaceUndead {
 		devouringPlagueCDTimer := priest.NewTimer()
-		DevouringPlagueRankMap.RegisterAll(func(rankConfig shared.SpellRankConfig) {
-			priest.registerDevouringPlagueSpell(rankConfig, devouringPlagueCDTimer)
+		DevouringPlagueRankMap.RegisterAll(func(rank shared.RankRow) {
+			priest.registerDevouringPlagueSpell(rank, devouringPlagueCDTimer)
 		})
 	}
 }
