@@ -27,7 +27,7 @@ import (
 // go run ./tools/database/gen_db -outDir=assets -gen=db
 
 var outDir = flag.String("outDir", "assets", "Path to output directory for writing generated .go files.")
-var genAsset = flag.String("gen", "", "Asset to generate. Valid values are 'db', 'atlasloot' and 'go-to-ts'")
+var genAsset = flag.String("gen", "", "Asset to generate. Valid values are 'db', 'atlasloot', 'spellranks' and 'go-to-ts'")
 var dbPath = flag.String("dbPath", "./tools/database/wowsims.db", "Location of the wowsims.db file produced by tools/db2tool")
 
 func main() {
@@ -62,6 +62,17 @@ func main() {
 
 		db := database.ReadAtlasLootData(helper)
 		db.WriteJson(fmt.Sprintf("%s/atlasloot_db.json", inputsDir))
+		return
+	} else if *genAsset == "spellranks" {
+		helper, err := database.NewDBHelper()
+		if err != nil {
+			log.Fatalf("failed to initialize database: %v", err)
+		}
+		defer helper.Close()
+
+		if err := database.GenerateSpellRankFiles(helper); err != nil {
+			log.Fatalf("failed to generate spell rank tables: %v", err)
+		}
 		return
 	} else if *genAsset != "db" {
 		panic("Invalid gen value")

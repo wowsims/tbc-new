@@ -33,8 +33,6 @@ import (
 
 var updateReport = flag.Bool("update", false, "rewrite spellranks_calibration.md instead of only checking it")
 
-const calibLevel = 70
-
 const (
 	classPaladin = 2
 	classPriest  = 16
@@ -110,142 +108,11 @@ func init() {
 	}
 }
 
-const (
-	effSchoolDamage = 2
-	effHeal         = 10
-	effEnergize     = 30
-	effAuraPeriodic = 3
-)
-
 // Literal rounding in the hand tables: 0.429 stands in for 0.428999990224838, a 2.3e-8 difference.
 // Deliberately far tighter than the gap between a rounded literal and a genuinely different number -
 // Mind Blast's 0.42857 (3/7) against the DB's 0.429 is 4.3e-4 and has to surface as a residual, not be
 // waved through as precision.
 const coefRoundingTolerance = 1e-5
-
-type dbEffect struct {
-	Index        int32
-	Effect       int32
-	Aura         int32
-	BasePoints   int32
-	DieSides     int32
-	PointsPerLvl float64
-	Coefficient  float64
-	OwnerSpellID int32
-}
-
-type dbSpell struct {
-	SpellLevel int32
-	MaxLevel   int32
-	ManaCost   sql.NullInt64
-	Effects    []dbEffect
-}
-
-// derive applies the calibrated rule. Kept as one named function precisely so it can be swapped
-// deliberately: the TBC server roll is plausibly trunc(base)+1 .. trunc(base)+dieSides, one lower on max
-// for a fractional base, and this reproduces the tooltip values rather than proving the server's.
-//
-// float32 throughout is load-bearing, not incidental: EffectRealPointsPerLevel is a float32 widened into
-// the DB (3.79999995231628), and doing the multiply in float64 breaks 6 rows that float32 gets right.
-func derive(e dbEffect, spellLevel, maxLevel int32) (min float64, max float64) {
-	cap := maxLevel
-	if cap <= 0 {
-		cap = calibLevel
-	}
-	lvl := int32(calibLevel)
-	if cap < lvl {
-		lvl = cap
-	}
-	delta := lvl - spellLevel
-	if delta < 0 {
-		delta = 0
-	}
-
-	base := float32(e.BasePoints) + float32(float32(delta)*float32(e.PointsPerLvl))
-	min = math.Floor(float64(base)) + 1
-	max = math.Ceil(float64(base)) + float64(e.DieSides)
-	if e.DieSides <= 0 {
-		max = min
-	}
-	return min, max
-}
-
-func loadSpell(db *sql.DB, spellID int32) (dbSpell, error) {
-	var s dbSpell
-	err := db.QueryRow(`
-		SELECT l.SpellLevel, l.MaxLevel,
-		       (SELECT ManaCost FROM SpellPower WHERE SpellID = l.SpellID ORDER BY OrderIndex LIMIT 1)
-		FROM SpellLevels l WHERE l.SpellID = ?`, spellID).Scan(&s.SpellLevel, &s.MaxLevel, &s.ManaCost)
-	if err != nil {
-		return s, fmt.Errorf("levels for spell %d: %w", spellID, err)
-	}
-
-	s.Effects, err = effectsOf(db, spellID)
-	return s, err
-}
-
-func effectsOf(db *sql.DB, spellID int32) ([]dbEffect, error) {
-	rows, err := db.Query(`
-		SELECT EffectIndex, Effect, EffectAura, EffectBasePoints, EffectDieSides,
-		       EffectRealPointsPerLevel, EffectBonusCoefficient
-		FROM SpellEffect WHERE SpellID = ? ORDER BY EffectIndex`, spellID)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	var out []dbEffect
-	for rows.Next() {
-		e := dbEffect{OwnerSpellID: spellID}
-		if err := rows.Scan(&e.Index, &e.Effect, &e.Aura, &e.BasePoints, &e.DieSides, &e.PointsPerLvl, &e.Coefficient); err != nil {
-			return nil, err
-		}
-		out = append(out, e)
-	}
-	return out, rows.Err()
-}
-
-// Holy Shock's registered spells carry only Effect=3 (dummy) and have no EffectTriggerSpell edge to the
-// damage and heal spells that share their name and rank - the association exists nowhere but the name.
-// So when a registered spell has no value-bearing effect of its own, look at its same-name/same-rank
-// siblings, restricted to the family's class so an NPC copy cannot be picked up.
-func siblingEffects(db *sql.DB, spellID int32, classBit int) ([]dbEffect, error) {
-	rows, err := db.Query(`
-		SELECT DISTINCT sla.Spell
-		FROM SkillLineAbility sla
-		JOIN SpellName n ON n.ID = sla.Spell
-		JOIN Spell s ON s.ID = sla.Spell
-		WHERE n.Name_lang = (SELECT Name_lang FROM SpellName WHERE ID = ?)
-		  AND s.NameSubtext_lang = (SELECT NameSubtext_lang FROM Spell WHERE ID = ?)
-		  AND (sla.ClassMask & ?) != 0
-		  AND sla.Spell != ?`, spellID, spellID, classBit, spellID)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	var ids []int32
-	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
-			return nil, err
-		}
-		ids = append(ids, id)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-
-	var out []dbEffect
-	for _, id := range ids {
-		effs, err := effectsOf(db, id)
-		if err != nil {
-			return nil, err
-		}
-		out = append(out, effs...)
-	}
-	return out, nil
-}
 
 type comparison struct {
 	Family  string
@@ -327,18 +194,9 @@ func TestSpellRankCalibration(t *testing.T) {
 func compareRow(t *testing.T, db *sql.DB, fam calibFamily, row shared.RankRow) []comparison {
 	t.Helper()
 
-	spell, err := loadSpell(db, row.SpellID)
+	spell, candidates, err := RankCandidates(db, row.SpellID, fam.ClassBit)
 	if err != nil {
 		t.Fatalf("%s rank %d: %v", fam.Name, row.Rank, err)
-	}
-
-	candidates := spell.Effects
-	if !hasValueEffect(candidates) {
-		sibs, err := siblingEffects(db, row.SpellID, fam.ClassBit)
-		if err != nil {
-			t.Fatalf("%s rank %d siblings: %v", fam.Name, row.Rank, err)
-		}
-		candidates = append(candidates, sibs...)
 	}
 
 	base := comparison{Family: fam.Name, File: fam.File, Rank: row.Rank, SpellID: row.SpellID}
@@ -390,17 +248,8 @@ func compareRow(t *testing.T, db *sql.DB, fam calibFamily, row shared.RankRow) [
 	return out
 }
 
-func hasValueEffect(effects []dbEffect) bool {
-	for _, e := range effects {
-		if e.Effect == effSchoolDamage || e.Effect == effHeal || e.Effect == effEnergize || e.Aura == effAuraPeriodic {
-			return true
-		}
-	}
-	return false
-}
-
-func directCandidates(effects []dbEffect) []dbEffect {
-	var out []dbEffect
+func directCandidates(effects []RankEffect) []RankEffect {
+	var out []RankEffect
 	for _, e := range effects {
 		switch e.Effect {
 		case effSchoolDamage, effHeal, effEnergize:
@@ -417,8 +266,8 @@ func directCandidates(effects []dbEffect) []dbEffect {
 	return out
 }
 
-func periodicCandidates(effects []dbEffect) []dbEffect {
-	var out []dbEffect
+func periodicCandidates(effects []RankEffect) []RankEffect {
+	var out []RankEffect
 	for _, e := range effects {
 		if e.Aura == effAuraPeriodic {
 			out = append(out, e)
@@ -430,10 +279,10 @@ func periodicCandidates(effects []dbEffect) []dbEffect {
 	return out
 }
 
-func matchPair(base comparison, minField, maxField string, handMin, handMax float64, cands []dbEffect, spell dbSpell) []comparison {
+func matchPair(base comparison, minField, maxField string, handMin, handMax float64, cands []RankEffect, spell RankSpell) []comparison {
 	bestMin, bestMax, bestSrc, found := 0.0, 0.0, "no candidate effect", false
 	for _, e := range cands {
-		dMin, dMax := derive(e, spell.SpellLevel, spell.MaxLevel)
+		dMin, dMax := DeriveRankAmount(e, spell.SpellLevel, spell.MaxLevel)
 		src := fmt.Sprintf("spell %d effect %d (Effect=%d, Aura=%d)", e.OwnerSpellID, e.Index, e.Effect, e.Aura)
 		if dMin == handMin && (handMax == 0 || dMax == handMax) {
 			out := []comparison{finishWith(base, minField, handMin, dMin, src)}
@@ -455,10 +304,10 @@ func matchPair(base comparison, minField, maxField string, handMin, handMax floa
 	return out
 }
 
-func matchTick(base comparison, handTick float64, cands []dbEffect, spell dbSpell) comparison {
+func matchTick(base comparison, handTick float64, cands []RankEffect, spell RankSpell) comparison {
 	bestTick, bestSrc := 0.0, "no periodic effect"
 	for _, e := range cands {
-		dMin, _ := derive(e, spell.SpellLevel, spell.MaxLevel)
+		dMin, _ := DeriveRankAmount(e, spell.SpellLevel, spell.MaxLevel)
 		src := fmt.Sprintf("spell %d effect %d (periodic)", e.OwnerSpellID, e.Index)
 		if dMin == handTick {
 			return finishWith(base, "DotTickDamage", handTick, dMin, src)
@@ -470,7 +319,7 @@ func matchTick(base comparison, handTick float64, cands []dbEffect, spell dbSpel
 	return finishWith(base, "DotTickDamage", handTick, bestTick, bestSrc)
 }
 
-func matchCoefficient(base comparison, handCoef float64, cands []dbEffect) comparison {
+func matchCoefficient(base comparison, handCoef float64, cands []RankEffect) comparison {
 	best, bestSrc := 0.0, "no candidate effect"
 	for _, e := range cands {
 		if e.Coefficient <= 0 {
@@ -569,13 +418,13 @@ func writeReport(all []comparison) error {
 			status = "MATCH (" + c.Note + ")"
 		}
 		fmt.Fprintf(&b, "| %s | %d | %d | %s | %s | %s | %s | %s |\n",
-			c.Family, c.Rank, c.SpellID, c.Field, num(c.Hand), num(c.Derived), status, c.Source)
+			c.Family, c.Rank, c.SpellID, c.Field, reportNum(c.Hand), reportNum(c.Derived), status, c.Source)
 	}
 
 	return os.WriteFile("spellranks_calibration.md", []byte(b.String()), 0644)
 }
 
-func num(f float64) string {
+func reportNum(f float64) string {
 	if f == math.Trunc(f) && math.Abs(f) < 1e9 {
 		return fmt.Sprintf("%d", int64(f))
 	}
