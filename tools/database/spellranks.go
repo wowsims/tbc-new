@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"math"
 )
@@ -79,7 +80,12 @@ func LoadRankSpell(db *sql.DB, spellID int32) (RankSpell, error) {
 		SELECT l.SpellLevel, l.MaxLevel,
 		       (SELECT ManaCost FROM SpellPower WHERE SpellID = l.SpellID ORDER BY OrderIndex LIMIT 1)
 		FROM SpellLevels l WHERE l.SpellID = ?`, spellID).Scan(&s.SpellLevel, &s.MaxLevel, &s.ManaCost)
-	if err != nil {
+	switch {
+	case errors.Is(err, sql.ErrNoRows):
+		// Passive talents such as the warrior's Blood Craze have no SpellLevels row at all. No level
+		// data means no level scaling, which is what setting the spell's own level to the cap gives.
+		s.SpellLevel = RankLevel
+	case err != nil:
 		return s, fmt.Errorf("levels for spell %d: %w", spellID, err)
 	}
 
@@ -120,7 +126,8 @@ func SiblingRankEffects(db *sql.DB, spellID int32, classBit int) ([]RankEffect, 
 		WHERE n.Name_lang = (SELECT Name_lang FROM SpellName WHERE ID = ?)
 		  AND s.NameSubtext_lang = (SELECT NameSubtext_lang FROM Spell WHERE ID = ?)
 		  AND (sla.ClassMask & ?) != 0
-		  AND sla.Spell != ?`, spellID, spellID, classBit, spellID)
+		  AND sla.Spell != ?
+		ORDER BY sla.Spell`, spellID, spellID, classBit, spellID)
 	if err != nil {
 		return nil, err
 	}

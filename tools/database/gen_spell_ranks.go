@@ -9,6 +9,9 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"unicode"
+
+	"github.com/wowsims/tbc/tools/database/dbc"
 )
 
 var rankSubtext = regexp.MustCompile(`^Rank (\d+)$`)
@@ -33,89 +36,175 @@ type rankCandidate struct {
 	SpellID   int32
 	Rank      int32
 	ClassMask int
-	SkillLine int32
 }
 
-// The skill lines the anchor spell itself belongs to. A talent rank carries ClassMask 0, so the class
-// bit alone cannot find it; sharing a skill line with the max rank is what identifies it as part of the
-// same family rather than some other class's spell of the same name.
-func anchorSkillLines(db *sql.DB, anchor int32) (map[int32]bool, error) {
-	rows, err := db.Query(`SELECT DISTINCT SkillLine FROM SkillLineAbility WHERE Spell = ?`, anchor)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
+type rankLadder struct {
+	Name  string
+	Field string
+	Ranks map[int32]int32
+}
 
-	lines := map[int32]bool{}
-	for rows.Next() {
-		var line int32
-		if err := rows.Scan(&line); err != nil {
-			return nil, err
+// SkillLineAbility.ClassMask is a bitmask over the class index dbc.Classes already carries, so the bit
+// is that index shifted rather than a second table to keep in step with it.
+func classMaskOf(class dbc.DbcClass) int {
+	return 1 << (class.ID - 1)
+}
+
+// The Go identifier a family is reached by: "Shadow Word: Pain" -> ShadowWordPain.
+func fieldNameOf(spellName string) string {
+	var b strings.Builder
+	upper := true
+	for _, r := range spellName {
+		switch {
+		case r == '\'' || r == '\u2019':
+			// Dropped without breaking the word, so "Avenger's Shield" is AvengersShield rather than
+			// AvengerSShield.
+		case unicode.IsLetter(r) || unicode.IsDigit(r):
+			if upper {
+				b.WriteRune(unicode.ToUpper(r))
+				upper = false
+			} else {
+				b.WriteRune(r)
+			}
+		default:
+			upper = true
 		}
-		lines[line] = true
 	}
-	if err := rows.Err(); err != nil {
-		return nil, err
+
+	name := b.String()
+	if name == "" || unicode.IsDigit(rune(name[0])) {
+		return ""
 	}
-	if len(lines) == 0 {
-		return nil, fmt.Errorf("anchor spell %d is in no skill line", anchor)
-	}
-	return lines, nil
+	return name
 }
 
-// Rebuilds a family's ladder as rank number -> spell ID.
+// Every spell family a class can learn that has more than one rank.
 //
-// Two candidates can share a name and a rank. Lightning Bolt's Elemental Overload twins (45284-45293)
-// share the name, the skill line, the spell class set and even have SkillLineAbility rows; they are
-// separated only by carrying ClassMask 0 where the real ladder carries the class bit. So the class bit
-// wins wherever it exists, and a ClassMask-0 candidate is accepted only when no real one was found -
-// which is what makes talent ranks like Holy Shield 1-3 resolvable.
-func resolveLadder(db *sql.DB, fam RankFamily) (map[int32]int32, error) {
-	lines, err := anchorSkillLines(db, fam.Anchor)
-	if err != nil {
-		return nil, err
-	}
+// Driven entirely off the client data - the class's own skill lines, every spell in them whose subtext
+// reads "Rank N", grouped by name - so nothing here is hand-maintained and a family the sim has not
+// implemented yet still gets a table, ready for whoever wants it.
+func discoverLadders(db *sql.DB, class dbc.DbcClass) ([]rankLadder, []string, error) {
+	mask := classMaskOf(class)
 
 	rows, err := db.Query(`
-		SELECT sla.Spell, s.NameSubtext_lang, sla.ClassMask, sla.SkillLine
+		SELECT n.Name_lang, sla.Spell, s.NameSubtext_lang, sla.ClassMask
 		FROM SkillLineAbility sla
 		JOIN SpellName n ON n.ID = sla.Spell
 		JOIN Spell s ON s.ID = sla.Spell
-		WHERE n.Name_lang = ?`, fam.Name)
+		WHERE sla.SkillLine IN (
+			SELECT DISTINCT sla2.SkillLine
+			FROM SkillLineAbility sla2
+			JOIN SkillLine sl2 ON sl2.ID = sla2.SkillLine AND sl2.CategoryID = 7
+			WHERE (sla2.ClassMask & ?) != 0
+		)
+		AND s.NameSubtext_lang LIKE 'Rank %'
+		ORDER BY n.Name_lang, sla.Spell`, mask)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	defer rows.Close()
 
-	byRank := map[int32][]rankCandidate{}
+	byName := map[string]map[int32][]rankCandidate{}
 	for rows.Next() {
+		var name, subtext string
 		var c rankCandidate
-		var subtext string
-		if err := rows.Scan(&c.SpellID, &subtext, &c.ClassMask, &c.SkillLine); err != nil {
-			return nil, err
+		if err := rows.Scan(&name, &c.SpellID, &subtext, &c.ClassMask); err != nil {
+			return nil, nil, err
 		}
 		m := rankSubtext.FindStringSubmatch(subtext)
-		if m == nil || !lines[c.SkillLine] {
+		if m == nil {
 			continue
 		}
 		rank, _ := strconv.Atoi(m[1])
 		c.Rank = int32(rank)
-		byRank[c.Rank] = append(byRank[c.Rank], c)
+		if byName[name] == nil {
+			byName[name] = map[int32][]rankCandidate{}
+		}
+		byName[name][c.Rank] = append(byName[name][c.Rank], c)
 	}
 	if err := rows.Err(); err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	ladder := map[int32]int32{}
-	for rank, cands := range byRank {
-		if pinned, ok := fam.Pin[rank]; ok {
-			ladder[rank] = pinned
+	names := make([]string, 0, len(byName))
+	for name := range byName {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+
+	var ladders []rankLadder
+	var skipped []string
+	taken := map[string]string{}
+
+	for _, name := range names {
+		field := fieldNameOf(name)
+		if field == "" {
+			skipped = append(skipped, fmt.Sprintf("%s: no usable Go identifier", name))
+			continue
+		}
+		if owner, clash := taken[field]; clash {
+			skipped = append(skipped, fmt.Sprintf("%s: identifier %s already taken by %s", name, field, owner))
 			continue
 		}
 
+		if !claimedByClass(byName[name], mask) {
+			continue
+		}
+
+		ladder, err := resolveLadder(db, byName[name], mask)
+		if err != nil {
+			skipped = append(skipped, fmt.Sprintf("%s: %s", name, err))
+			continue
+		}
+		if len(ladder) < 2 {
+			continue
+		}
+
+		taken[field] = name
+		ladders = append(ladders, rankLadder{Name: name, Field: field, Ranks: ladder})
+	}
+
+	return ladders, skipped, nil
+}
+
+// A class skill line can hold abilities belonging to other classes, so membership of the line is not
+// enough on its own: paladin Holy Shock reached the priest file that way. A family counts as the
+// class's only if at least one of its ranks carries the class bit - talent ranks, which carry
+// ClassMask 0, then ride along inside a family that qualified.
+func claimedByClass(byRank map[int32][]rankCandidate, mask int) bool {
+	for _, cands := range byRank {
+		for _, c := range cands {
+			if c.ClassMask&mask != 0 {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+// Picks one spell per rank number.
+//
+// Two candidates can share a name and a rank. Lightning Bolt's Elemental Overload twins (45284-45293)
+// share the name, the skill line and the spell class set, and even have SkillLineAbility rows; they are
+// separated only by carrying ClassMask 0 where the real ladder carries the class bit. So the class bit
+// wins wherever it exists, and a ClassMask-0 candidate is accepted only when no real one was found -
+// which is what makes talent ranks like Holy Shield 1-3 resolvable.
+func resolveLadder(db *sql.DB, byRank map[int32][]rankCandidate, mask int) (map[int32]int32, error) {
+	ladder := map[int32]int32{}
+
+	// Sorted, so that when several ranks are ambiguous the one named in the skipped list is always the
+	// lowest rather than whichever the map handed over first.
+	rankNums := make([]int32, 0, len(byRank))
+	for rank := range byRank {
+		rankNums = append(rankNums, rank)
+	}
+	sort.Slice(rankNums, func(i, j int) bool { return rankNums[i] < rankNums[j] })
+
+	for _, rank := range rankNums {
+		cands := byRank[rank]
 		var chosen []rankCandidate
 		for _, c := range cands {
-			if c.ClassMask&fam.ClassBit != 0 {
+			if c.ClassMask&mask != 0 {
 				chosen = append(chosen, c)
 			}
 		}
@@ -148,13 +237,23 @@ func resolveLadder(db *sql.DB, fam RankFamily) (map[int32]int32, error) {
 				list = append(list, strconv.Itoa(int(id)))
 			}
 			sort.Strings(list)
-			return nil, fmt.Errorf("%s rank %d is ambiguous between spells %s - pin it in the config",
-				fam.Name, rank, strings.Join(list, ", "))
+			return nil, fmt.Errorf("rank %d is ambiguous between spells %s", rank, strings.Join(list, ", "))
 		}
 		ladder[rank] = chosen[0].SpellID
 	}
 
-	return ladder, validateLadder(fam, ladder)
+	maxRank := int32(0)
+	for rank := range ladder {
+		if rank > maxRank {
+			maxRank = rank
+		}
+	}
+	for rank := int32(1); rank <= maxRank; rank++ {
+		if _, ok := ladder[rank]; !ok {
+			return nil, fmt.Errorf("missing rank %d of %d", rank, maxRank)
+		}
+	}
+	return ladder, nil
 }
 
 // The one spell among these that has a mana cost, or 0 when that does not single one out.
@@ -176,37 +275,11 @@ func castableOf(db *sql.DB, ids map[int32]bool) (int32, error) {
 	return found, nil
 }
 
-func validateLadder(fam RankFamily, ladder map[int32]int32) error {
-	if len(ladder) == 0 {
-		return fmt.Errorf("%s resolved no ranks", fam.Name)
-	}
-
-	maxRank := int32(0)
-	for rank := range ladder {
-		if rank > maxRank {
-			maxRank = rank
-		}
-	}
-	for rank := int32(1); rank <= maxRank; rank++ {
-		if _, ok := ladder[rank]; !ok {
-			return fmt.Errorf("%s is missing rank %d of %d", fam.Name, rank, maxRank)
-		}
-	}
-	if ladder[maxRank] != fam.Anchor {
-		return fmt.Errorf("%s: config anchor is %d but the highest resolved rank (%d) is spell %d",
-			fam.Name, fam.Anchor, maxRank, ladder[maxRank])
-	}
-	return nil
-}
-
 // Which effect supplies which field. Derived from the effect types rather than declared per family,
 // because the client data already says it: a SCHOOL_DAMAGE effect is direct damage, a HEAL effect is a
 // heal, an ENERGIZE effect is Lay on Hands' mana restore, a periodic aura is a tick.
-//
-// The fallback matters for exactly one shape in the sim today: Holy Shield keeps its per-block damage
-// on an aura effect (EffectAura 43) that is none of the above.
-func buildRow(db *sql.DB, fam RankFamily, rank int32, spellID int32) (generatedRow, error) {
-	spell, candidates, err := RankCandidates(db, spellID, fam.ClassBit)
+func buildRow(db *sql.DB, rank int32, spellID int32, mask int) (generatedRow, error) {
+	spell, candidates, err := RankCandidates(db, spellID, mask)
 	if err != nil {
 		return generatedRow{}, err
 	}
@@ -236,9 +309,9 @@ func buildRow(db *sql.DB, fam RankFamily, rank int32, spellID int32) (generatedR
 	}
 
 	// Holy Shield keeps its per-block damage on an aura effect that is none of the roles above, and it
-	// is not the only aura effect on the spell: index 0 is the block value and index 1 is the damage.
+	// is not the only aura effect on the spell: one index holds the block value and another the damage.
 	// The damage is the one that scales with spell power, so a nonzero coefficient is what picks it.
-	if row.Direct == nil && row.Heal == nil && row.Periodic == nil && row.Energize == 0 {
+	if !row.hasValue() {
 		for _, e := range candidates {
 			if e.Aura != 0 && e.BasePoints > 0 && e.Coefficient > 0 {
 				row.Direct = amountOf(e)
@@ -246,7 +319,7 @@ func buildRow(db *sql.DB, fam RankFamily, rank int32, spellID int32) (generatedR
 			}
 		}
 	}
-	if row.Direct == nil && row.Heal == nil && row.Periodic == nil && row.Energize == 0 {
+	if !row.hasValue() {
 		for _, e := range candidates {
 			if e.Aura != 0 && e.BasePoints > 0 {
 				row.Direct = amountOf(e)
@@ -259,82 +332,74 @@ func buildRow(db *sql.DB, fam RankFamily, rank int32, spellID int32) (generatedR
 }
 
 // A low rank can legitimately carry no numbers at all - Lay on Hands rank 1 heals a share of max health
-// and restores no mana, so it has no ENERGIZE effect where ranks 2-4 do. An empty MAX rank is the real
-// failure, because it means the payload was never found.
+// and restores no mana, so it has no ENERGIZE effect where ranks 2-4 do.
 func (row generatedRow) hasValue() bool {
 	return row.Direct != nil || row.Heal != nil || row.Periodic != nil || row.Energize != 0
 }
 
 func GenerateSpellRankFiles(helper *DBHelper) error {
-	byClass := map[string][]RankFamily{}
-	for _, fam := range SpellRankConfigs {
-		byClass[fam.Class] = append(byClass[fam.Class], fam)
-	}
-
-	classes := make([]string, 0, len(byClass))
-	for class := range byClass {
-		classes = append(classes, class)
-	}
-	sort.Strings(classes)
-
+	// Rendered in full before anything is written, so a class that fails validation cannot leave half
+	// the packages regenerated and half stale.
 	rendered := map[string][]byte{}
-	for _, class := range classes {
-		out, err := renderClassFile(helper.db, class, byClass[class])
+	for _, class := range dbc.Classes {
+		pkg := strings.ToLower(dbc.ClassNameFromDBC(class))
+		out, err := renderClassFile(helper.db, pkg, class)
 		if err != nil {
-			return err
+			return fmt.Errorf("%s: %w", pkg, err)
 		}
-		rendered[class] = out
+		rendered[pkg] = out
 	}
 
-	for _, class := range classes {
-		if err := os.WriteFile(fmt.Sprintf("sim/%s/spell_ranks_auto_gen.go", class), rendered[class], 0644); err != nil {
+	for pkg, out := range rendered {
+		if err := os.WriteFile(fmt.Sprintf("sim/%s/spell_ranks_auto_gen.go", pkg), out, 0644); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-func renderClassFile(db *sql.DB, class string, families []RankFamily) ([]byte, error) {
+func renderClassFile(db *sql.DB, pkg string, class dbc.DbcClass) ([]byte, error) {
+	ladders, skipped, err := discoverLadders(db, class)
+	if err != nil {
+		return nil, err
+	}
+
 	var b strings.Builder
 	fmt.Fprintf(&b, "// Code generated by tools/database/gen_db -gen=spellranks. DO NOT EDIT.\n\n")
-	fmt.Fprintf(&b, "package %s\n\n", class)
+	fmt.Fprintf(&b, "package %s\n\n", pkg)
 	fmt.Fprintf(&b, "import \"github.com/wowsims/tbc/sim/common/shared\"\n\n")
 
-	// One typed struct holding every table, rather than a package-level var per family: a spell reaches
-	// its ranks through genRanks.Consecration, so a family renamed or dropped in the config breaks the
-	// build at the use site instead of leaving an orphaned global behind.
+	// Named rather than dropped silently, so a family the resolver could not make sense of is visible
+	// here instead of merely absent.
+	if len(skipped) > 0 {
+		b.WriteString("// Not generated:\n")
+		for _, s := range skipped {
+			fmt.Fprintf(&b, "//   %s\n", s)
+		}
+		b.WriteString("\n")
+	}
+
 	b.WriteString("type generatedRanks struct {\n")
-	for _, fam := range families {
-		fmt.Fprintf(&b, "\t%s shared.RankTable\n", fam.Field())
+	for _, l := range ladders {
+		fmt.Fprintf(&b, "\t%s shared.RankTable\n", l.Field)
 	}
 	b.WriteString("}\n\nvar genRanks = generatedRanks{\n")
 
-	for _, fam := range families {
-		ladder, err := resolveLadder(db, fam)
-		if err != nil {
-			return nil, err
-		}
-
-		ranks := make([]int32, 0, len(ladder))
-		for rank := range ladder {
+	mask := classMaskOf(class)
+	for _, l := range ladders {
+		ranks := make([]int32, 0, len(l.Ranks))
+		for rank := range l.Ranks {
 			ranks = append(ranks, rank)
 		}
 		sort.Slice(ranks, func(i, j int) bool { return ranks[i] < ranks[j] })
 
-		fmt.Fprintf(&b, "\t%s: shared.RankTable{\n", fam.Field())
-		maxRankHasValue := false
+		fmt.Fprintf(&b, "\t%s: shared.RankTable{\n", l.Field)
 		for _, rank := range ranks {
-			row, err := buildRow(db, fam, rank, ladder[rank])
+			row, err := buildRow(db, rank, l.Ranks[rank], mask)
 			if err != nil {
-				return nil, err
-			}
-			if rank == ranks[len(ranks)-1] {
-				maxRankHasValue = row.hasValue()
+				return nil, fmt.Errorf("%s rank %d: %w", l.Name, rank, err)
 			}
 			fmt.Fprintf(&b, "\t\t%s\n", formatRow(row))
-		}
-		if !maxRankHasValue {
-			return nil, fmt.Errorf("%s: the max rank carries no value - the payload effect was not found", fam.Name)
 		}
 		b.WriteString("\t},\n")
 	}
@@ -342,7 +407,7 @@ func renderClassFile(db *sql.DB, class string, families []RankFamily) ([]byte, e
 
 	out, err := format.Source([]byte(b.String()))
 	if err != nil {
-		return nil, fmt.Errorf("generated %s file does not parse, refusing to write it: %w", class, err)
+		return nil, fmt.Errorf("generated %s file does not parse, refusing to write it: %w", pkg, err)
 	}
 	return out, nil
 }

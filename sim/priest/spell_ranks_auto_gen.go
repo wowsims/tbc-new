@@ -4,19 +4,323 @@ package priest
 
 import "github.com/wowsims/tbc/sim/common/shared"
 
+// Not generated:
+//   Blessed Recovery: rank 1 is ambiguous between spells 27811, 27813
+//   Blessed Resilience: rank 1 is ambiguous between spells 33142, 33143
+//   Focused Will: rank 1 is ambiguous between spells 45234, 45237
+//   Misery: rank 1 is ambiguous between spells 33191, 33196
+//   Surge of Light: rank 1 is ambiguous between spells 33150, 33151
+
 type generatedRanks struct {
-	MindBlast       shared.RankTable
-	MindFlay        shared.RankTable
-	ShadowWordPain  shared.RankTable
-	ShadowWordDeath shared.RankTable
-	Smite           shared.RankTable
-	DevouringPlague shared.RankTable
-	HolyNova        shared.RankTable
-	Starshards      shared.RankTable
-	VampiricTouch   shared.RankTable
+	Absolution               shared.RankTable
+	Blackout                 shared.RankTable
+	Chastise                 shared.RankTable
+	CircleOfHealing          shared.RankTable
+	Darkness                 shared.RankTable
+	DesperatePrayer          shared.RankTable
+	DevouringPlague          shared.RankTable
+	DispelMagic              shared.RankTable
+	DivineSpirit             shared.RankTable
+	EmpoweredHealing         shared.RankTable
+	Enlightenment            shared.RankTable
+	Fade                     shared.RankTable
+	Feedback                 shared.RankTable
+	FlashHeal                shared.RankTable
+	FocusedCasting           shared.RankTable
+	FocusedMind              shared.RankTable
+	FocusedPower             shared.RankTable
+	GreaterHeal              shared.RankTable
+	Heal                     shared.RankTable
+	HexOfWeakness            shared.RankTable
+	HolyConcentration        shared.RankTable
+	HolyFire                 shared.RankTable
+	HolyNova                 shared.RankTable
+	HolyReach                shared.RankTable
+	ImprovedDivineSpirit     shared.RankTable
+	ImprovedFade             shared.RankTable
+	ImprovedMindBlast        shared.RankTable
+	ImprovedPsychicScream    shared.RankTable
+	ImprovedShadowWordPain   shared.RankTable
+	ImprovedVampiricEmbrace  shared.RankTable
+	InnerFire                shared.RankTable
+	LesserHeal               shared.RankTable
+	Lightwell                shared.RankTable
+	LightwellRenew           shared.RankTable
+	ManaBurn                 shared.RankTable
+	Martyrdom                shared.RankTable
+	MindBlast                shared.RankTable
+	MindControl              shared.RankTable
+	MindFlay                 shared.RankTable
+	MindSoothe               shared.RankTable
+	MindVision               shared.RankTable
+	PowerWordFortitude       shared.RankTable
+	PowerWordShield          shared.RankTable
+	PrayerOfFortitude        shared.RankTable
+	PrayerOfHealing          shared.RankTable
+	PrayerOfShadowProtection shared.RankTable
+	PrayerOfSpirit           shared.RankTable
+	PsychicScream            shared.RankTable
+	ReflectiveShield         shared.RankTable
+	Renew                    shared.RankTable
+	Resurrection             shared.RankTable
+	ShackleUndead            shared.RankTable
+	ShadowAffinity           shared.RankTable
+	ShadowFocus              shared.RankTable
+	ShadowPower              shared.RankTable
+	ShadowProtection         shared.RankTable
+	ShadowReach              shared.RankTable
+	ShadowResilience         shared.RankTable
+	ShadowWeaving            shared.RankTable
+	ShadowWordDeath          shared.RankTable
+	ShadowWordPain           shared.RankTable
+	Shadowguard              shared.RankTable
+	Smite                    shared.RankTable
+	SpellWarding             shared.RankTable
+	SpiritTap                shared.RankTable
+	Starshards               shared.RankTable
+	TouchOfWeakness          shared.RankTable
+	VampiricTouch            shared.RankTable
 }
 
 var genRanks = generatedRanks{
+	Absolution: shared.RankTable{
+		{Rank: 1, SpellID: 33167},
+		{Rank: 2, SpellID: 33171},
+		{Rank: 3, SpellID: 33172},
+	},
+	Blackout: shared.RankTable{
+		{Rank: 1, SpellID: 15268},
+		{Rank: 2, SpellID: 15323},
+		{Rank: 3, SpellID: 15324},
+		{Rank: 4, SpellID: 15325},
+		{Rank: 5, SpellID: 15326},
+	},
+	Chastise: shared.RankTable{
+		{Rank: 1, SpellID: 44041, Cost: 50, Direct: &shared.Amount{Min: 47, Max: 53, Coef: 0.14300000667572021}},
+		{Rank: 2, SpellID: 44043, Cost: 100, Direct: &shared.Amount{Min: 93, Max: 107, Coef: 0.14300000667572021}},
+		{Rank: 3, SpellID: 44044, Cost: 135, Direct: &shared.Amount{Min: 139, Max: 161, Coef: 0.14300000667572021}},
+		{Rank: 4, SpellID: 44045, Cost: 180, Direct: &shared.Amount{Min: 209, Max: 241, Coef: 0}},
+		{Rank: 5, SpellID: 44046, Cost: 225, Direct: &shared.Amount{Min: 278, Max: 322, Coef: 0.14300000667572021}},
+		{Rank: 6, SpellID: 44047, Cost: 300, Direct: &shared.Amount{Min: 370, Max: 430, Coef: 0.14300000667572021}},
+	},
+	CircleOfHealing: shared.RankTable{
+		{Rank: 1, SpellID: 34861, Cost: 300, Heal: &shared.Amount{Min: 250, Max: 274, Coef: 0.21400000154972076}},
+		{Rank: 2, SpellID: 34863, Cost: 337, Heal: &shared.Amount{Min: 292, Max: 323, Coef: 0.21400000154972076}},
+		{Rank: 3, SpellID: 34864, Cost: 375, Heal: &shared.Amount{Min: 332, Max: 367, Coef: 0.21400000154972076}},
+		{Rank: 4, SpellID: 34865, Cost: 412, Heal: &shared.Amount{Min: 376, Max: 415, Coef: 0.21400000154972076}},
+		{Rank: 5, SpellID: 34866, Cost: 450, Heal: &shared.Amount{Min: 409, Max: 451, Coef: 0.21400000154972076}},
+	},
+	Darkness: shared.RankTable{
+		{Rank: 1, SpellID: 15259, Direct: &shared.Amount{Min: 2, Max: 2, Coef: 0}},
+		{Rank: 2, SpellID: 15307, Direct: &shared.Amount{Min: 4, Max: 4, Coef: 1}},
+		{Rank: 3, SpellID: 15308, Direct: &shared.Amount{Min: 6, Max: 6, Coef: 1}},
+		{Rank: 4, SpellID: 15309, Direct: &shared.Amount{Min: 8, Max: 8, Coef: 1}},
+		{Rank: 5, SpellID: 15310, Direct: &shared.Amount{Min: 10, Max: 10, Coef: 1}},
+	},
+	DesperatePrayer: shared.RankTable{
+		{Rank: 1, SpellID: 13908, Heal: &shared.Amount{Min: 148, Max: 185, Coef: 0.2680000066757202}},
+		{Rank: 2, SpellID: 19236, Heal: &shared.Amount{Min: 283, Max: 346, Coef: 0.3959999978542328}},
+		{Rank: 3, SpellID: 19238, Heal: &shared.Amount{Min: 474, Max: 570, Coef: 0.42899999022483826}},
+		{Rank: 4, SpellID: 19240, Heal: &shared.Amount{Min: 619, Max: 740, Coef: 0.42899999022483826}},
+		{Rank: 5, SpellID: 19241, Heal: &shared.Amount{Min: 872, Max: 1033, Coef: 0.42899999022483826}},
+		{Rank: 6, SpellID: 19242, Heal: &shared.Amount{Min: 1145, Max: 1350, Coef: 0.42899999022483826}},
+		{Rank: 7, SpellID: 19243, Heal: &shared.Amount{Min: 1373, Max: 1612, Coef: 0.42899999022483826}},
+		{Rank: 8, SpellID: 25437, Heal: &shared.Amount{Min: 1637, Max: 1924, Coef: 0.42899999022483826}},
+	},
+	DevouringPlague: shared.RankTable{
+		{Rank: 1, SpellID: 2944, Cost: 215, Periodic: &shared.Periodic{Tick: 19, Coef: 0.10000000149011612}},
+		{Rank: 2, SpellID: 19276, Cost: 350, Periodic: &shared.Periodic{Tick: 34, Coef: 0.10000000149011612}},
+		{Rank: 3, SpellID: 19277, Cost: 495, Periodic: &shared.Periodic{Tick: 50, Coef: 0.10000000149011612}},
+		{Rank: 4, SpellID: 19278, Cost: 645, Periodic: &shared.Periodic{Tick: 68, Coef: 0.10000000149011612}},
+		{Rank: 5, SpellID: 19279, Cost: 810, Periodic: &shared.Periodic{Tick: 89, Coef: 0.10000000149011612}},
+		{Rank: 6, SpellID: 19280, Cost: 985, Periodic: &shared.Periodic{Tick: 113, Coef: 0.10000000149011612}},
+		{Rank: 7, SpellID: 25467, Cost: 1145, Periodic: &shared.Periodic{Tick: 152, Coef: 0.10000000149011612}},
+	},
+	DispelMagic: shared.RankTable{
+		{Rank: 1, SpellID: 527},
+		{Rank: 2, SpellID: 988},
+	},
+	DivineSpirit: shared.RankTable{
+		{Rank: 1, SpellID: 14752, Cost: 250, Direct: &shared.Amount{Min: 17, Max: 17, Coef: 0}},
+		{Rank: 2, SpellID: 14818, Cost: 350, Direct: &shared.Amount{Min: 23, Max: 23, Coef: 0}},
+		{Rank: 3, SpellID: 14819, Cost: 450, Direct: &shared.Amount{Min: 33, Max: 33, Coef: 0}},
+		{Rank: 4, SpellID: 27841, Cost: 555, Direct: &shared.Amount{Min: 40, Max: 40, Coef: 0}},
+		{Rank: 5, SpellID: 25312, Cost: 680, Direct: &shared.Amount{Min: 50, Max: 50, Coef: 0}},
+	},
+	EmpoweredHealing: shared.RankTable{
+		{Rank: 1, SpellID: 33158, Direct: &shared.Amount{Min: 4, Max: 4, Coef: 1}},
+		{Rank: 2, SpellID: 33159, Direct: &shared.Amount{Min: 8, Max: 8, Coef: 1}},
+		{Rank: 3, SpellID: 33160, Direct: &shared.Amount{Min: 12, Max: 12, Coef: 1}},
+		{Rank: 4, SpellID: 33161, Direct: &shared.Amount{Min: 16, Max: 16, Coef: 1}},
+		{Rank: 5, SpellID: 33162, Direct: &shared.Amount{Min: 20, Max: 20, Coef: 1}},
+	},
+	Enlightenment: shared.RankTable{
+		{Rank: 1, SpellID: 34908},
+		{Rank: 2, SpellID: 34909, Direct: &shared.Amount{Min: 2, Max: 2, Coef: 1}},
+		{Rank: 3, SpellID: 34910, Direct: &shared.Amount{Min: 3, Max: 3, Coef: 1}},
+		{Rank: 4, SpellID: 34911, Direct: &shared.Amount{Min: 4, Max: 4, Coef: 1}},
+		{Rank: 5, SpellID: 34912, Direct: &shared.Amount{Min: 5, Max: 5, Coef: 1}},
+	},
+	Fade: shared.RankTable{
+		{Rank: 1, SpellID: 586, Cost: 40},
+		{Rank: 2, SpellID: 9578, Cost: 75},
+		{Rank: 3, SpellID: 9579, Cost: 125},
+		{Rank: 4, SpellID: 9592, Cost: 175},
+		{Rank: 5, SpellID: 10941, Cost: 225},
+		{Rank: 6, SpellID: 10942, Cost: 275},
+		{Rank: 7, SpellID: 25429, Cost: 330},
+	},
+	Feedback: shared.RankTable{
+		{Rank: 1, SpellID: 13896, Cost: 140},
+		{Rank: 2, SpellID: 19271, Cost: 245},
+		{Rank: 3, SpellID: 19273, Cost: 355},
+		{Rank: 4, SpellID: 19274, Cost: 470},
+		{Rank: 5, SpellID: 19275, Cost: 580},
+		{Rank: 6, SpellID: 25441, Cost: 705},
+	},
+	FlashHeal: shared.RankTable{
+		{Rank: 1, SpellID: 2061, Cost: 125, Heal: &shared.Amount{Min: 202, Max: 247, Coef: 0.42899999022483826}},
+		{Rank: 2, SpellID: 9472, Cost: 155, Heal: &shared.Amount{Min: 269, Max: 325, Coef: 0.42899999022483826}},
+		{Rank: 3, SpellID: 9473, Cost: 185, Heal: &shared.Amount{Min: 339, Max: 406, Coef: 0.42899999022483826}},
+		{Rank: 4, SpellID: 9474, Cost: 215, Heal: &shared.Amount{Min: 414, Max: 492, Coef: 0.42899999022483826}},
+		{Rank: 5, SpellID: 10915, Cost: 265, Heal: &shared.Amount{Min: 534, Max: 633, Coef: 0.42899999022483826}},
+		{Rank: 6, SpellID: 10916, Cost: 315, Heal: &shared.Amount{Min: 662, Max: 783, Coef: 0.42899999022483826}},
+		{Rank: 7, SpellID: 10917, Cost: 380, Heal: &shared.Amount{Min: 833, Max: 979, Coef: 0.42899999022483826}},
+		{Rank: 8, SpellID: 25233, Cost: 400, Heal: &shared.Amount{Min: 931, Max: 1078, Coef: 0.42899999022483826}},
+		{Rank: 9, SpellID: 25235, Cost: 470, Heal: &shared.Amount{Min: 1116, Max: 1295, Coef: 0.42899999022483826}},
+	},
+	FocusedCasting: shared.RankTable{
+		{Rank: 1, SpellID: 14743, Direct: &shared.Amount{Min: 100, Max: 100, Coef: 0}},
+		{Rank: 2, SpellID: 27828, Direct: &shared.Amount{Min: 100, Max: 100, Coef: 0}},
+	},
+	FocusedMind: shared.RankTable{
+		{Rank: 1, SpellID: 33213},
+		{Rank: 2, SpellID: 33214},
+		{Rank: 3, SpellID: 33215},
+	},
+	FocusedPower: shared.RankTable{
+		{Rank: 1, SpellID: 33186, Direct: &shared.Amount{Min: 2, Max: 2, Coef: 0}},
+		{Rank: 2, SpellID: 33190, Direct: &shared.Amount{Min: 4, Max: 4, Coef: 0}},
+	},
+	GreaterHeal: shared.RankTable{
+		{Rank: 1, SpellID: 2060, Cost: 370, Heal: &shared.Amount{Min: 924, Max: 1039, Coef: 0.8569999933242798}},
+		{Rank: 2, SpellID: 10963, Cost: 455, Heal: &shared.Amount{Min: 1178, Max: 1318, Coef: 0.8569999933242798}},
+		{Rank: 3, SpellID: 10964, Cost: 545, Heal: &shared.Amount{Min: 1470, Max: 1642, Coef: 0.8569999933242798}},
+		{Rank: 4, SpellID: 10965, Cost: 655, Heal: &shared.Amount{Min: 1835, Max: 2044, Coef: 0.8569999933242798}},
+		{Rank: 5, SpellID: 25314, Cost: 710, Heal: &shared.Amount{Min: 2006, Max: 2235, Coef: 0.8569999933242798}},
+		{Rank: 6, SpellID: 25210, Cost: 750, Heal: &shared.Amount{Min: 2107, Max: 2444, Coef: 0.8569999933242798}},
+		{Rank: 7, SpellID: 25213, Cost: 825, Heal: &shared.Amount{Min: 2414, Max: 2803, Coef: 0.8569999933242798}},
+	},
+	Heal: shared.RankTable{
+		{Rank: 1, SpellID: 2054, Cost: 155, Heal: &shared.Amount{Min: 307, Max: 353, Coef: 0.7289999723434448}},
+		{Rank: 2, SpellID: 2055, Cost: 205, Heal: &shared.Amount{Min: 445, Max: 507, Coef: 0.8569999933242798}},
+		{Rank: 3, SpellID: 6063, Cost: 255, Heal: &shared.Amount{Min: 586, Max: 662, Coef: 0.8569999933242798}},
+		{Rank: 4, SpellID: 6064, Cost: 305, Heal: &shared.Amount{Min: 734, Max: 827, Coef: 0.8569999933242798}},
+	},
+	HexOfWeakness: shared.RankTable{
+		{Rank: 1, SpellID: 9035, Cost: 35},
+		{Rank: 2, SpellID: 19281, Cost: 55},
+		{Rank: 3, SpellID: 19282, Cost: 90},
+		{Rank: 4, SpellID: 19283, Cost: 130},
+		{Rank: 5, SpellID: 19284, Cost: 180},
+		{Rank: 6, SpellID: 19285, Cost: 240},
+		{Rank: 7, SpellID: 25470, Cost: 295},
+	},
+	HolyConcentration: shared.RankTable{
+		{Rank: 1, SpellID: 34753},
+		{Rank: 2, SpellID: 34859},
+		{Rank: 3, SpellID: 34860},
+	},
+	HolyFire: shared.RankTable{
+		{Rank: 1, SpellID: 14914, Cost: 85, Direct: &shared.Amount{Min: 84, Max: 104, Coef: 0.8569999933242798}, Periodic: &shared.Periodic{Tick: 6, Coef: 0.032999999821186066}},
+		{Rank: 2, SpellID: 15262, Cost: 95, Direct: &shared.Amount{Min: 106, Max: 131, Coef: 0.8569999933242798}, Periodic: &shared.Periodic{Tick: 8, Coef: 0.032999999821186066}},
+		{Rank: 3, SpellID: 15263, Cost: 125, Direct: &shared.Amount{Min: 144, Max: 178, Coef: 0.8569999933242798}, Periodic: &shared.Periodic{Tick: 11, Coef: 0.032999999821186066}},
+		{Rank: 4, SpellID: 15264, Cost: 145, Direct: &shared.Amount{Min: 178, Max: 223, Coef: 0.8569999933242798}, Periodic: &shared.Periodic{Tick: 13, Coef: 0.032999999821186066}},
+		{Rank: 5, SpellID: 15265, Cost: 170, Direct: &shared.Amount{Min: 219, Max: 273, Coef: 0.8569999933242798}, Periodic: &shared.Periodic{Tick: 17, Coef: 0.032999999821186066}},
+		{Rank: 6, SpellID: 15266, Cost: 200, Direct: &shared.Amount{Min: 271, Max: 340, Coef: 0.8569999933242798}, Periodic: &shared.Periodic{Tick: 20, Coef: 0.032999999821186066}},
+		{Rank: 7, SpellID: 15267, Cost: 230, Direct: &shared.Amount{Min: 323, Max: 406, Coef: 0.8569999933242798}, Periodic: &shared.Periodic{Tick: 25, Coef: 0.032999999821186066}},
+		{Rank: 8, SpellID: 15261, Cost: 255, Direct: &shared.Amount{Min: 375, Max: 470, Coef: 0.8569999933242798}, Periodic: &shared.Periodic{Tick: 29, Coef: 0.032999999821186066}},
+		{Rank: 9, SpellID: 25384, Cost: 290, Direct: &shared.Amount{Min: 426, Max: 537, Coef: 0.8569999933242798}, Periodic: &shared.Periodic{Tick: 33, Coef: 0.032999999821186066}},
+	},
+	HolyNova: shared.RankTable{
+		{Rank: 1, SpellID: 15237, Cost: 185, Direct: &shared.Amount{Min: 29, Max: 34, Coef: 0.16099999845027924}},
+		{Rank: 2, SpellID: 15430, Cost: 290, Direct: &shared.Amount{Min: 52, Max: 61, Coef: 0.16099999845027924}},
+		{Rank: 3, SpellID: 15431, Cost: 400, Direct: &shared.Amount{Min: 79, Max: 92, Coef: 0.16099999845027924}},
+		{Rank: 4, SpellID: 27799, Cost: 520, Direct: &shared.Amount{Min: 110, Max: 127, Coef: 0.16099999845027924}},
+		{Rank: 5, SpellID: 27800, Cost: 635, Direct: &shared.Amount{Min: 146, Max: 168, Coef: 0.16099999845027924}},
+		{Rank: 6, SpellID: 27801, Cost: 750, Direct: &shared.Amount{Min: 188, Max: 217, Coef: 0.16099999845027924}},
+		{Rank: 7, SpellID: 25331, Cost: 875, Direct: &shared.Amount{Min: 244, Max: 283, Coef: 0.16099999845027924}},
+	},
+	HolyReach: shared.RankTable{
+		{Rank: 1, SpellID: 27789, Direct: &shared.Amount{Min: 10, Max: 10, Coef: 0}},
+		{Rank: 2, SpellID: 27790, Direct: &shared.Amount{Min: 20, Max: 20, Coef: 0}},
+	},
+	ImprovedDivineSpirit: shared.RankTable{
+		{Rank: 1, SpellID: 33174, Direct: &shared.Amount{Min: 5, Max: 5, Coef: 0}},
+		{Rank: 2, SpellID: 33182, Direct: &shared.Amount{Min: 10, Max: 10, Coef: 0}},
+	},
+	ImprovedFade: shared.RankTable{
+		{Rank: 1, SpellID: 15274},
+		{Rank: 2, SpellID: 15311},
+	},
+	ImprovedMindBlast: shared.RankTable{
+		{Rank: 1, SpellID: 15273},
+		{Rank: 2, SpellID: 15312},
+		{Rank: 3, SpellID: 15313},
+		{Rank: 4, SpellID: 15314},
+		{Rank: 5, SpellID: 15316},
+	},
+	ImprovedPsychicScream: shared.RankTable{
+		{Rank: 1, SpellID: 15392},
+		{Rank: 2, SpellID: 15448},
+	},
+	ImprovedShadowWordPain: shared.RankTable{
+		{Rank: 1, SpellID: 15275, Direct: &shared.Amount{Min: 3000, Max: 3000, Coef: 0}},
+		{Rank: 2, SpellID: 15317, Direct: &shared.Amount{Min: 6000, Max: 6000, Coef: 0}},
+	},
+	ImprovedVampiricEmbrace: shared.RankTable{
+		{Rank: 1, SpellID: 27839, Direct: &shared.Amount{Min: 5, Max: 5, Coef: 0}},
+		{Rank: 2, SpellID: 27840, Direct: &shared.Amount{Min: 10, Max: 10, Coef: 0}},
+	},
+	InnerFire: shared.RankTable{
+		{Rank: 1, SpellID: 588, Cost: 30, Direct: &shared.Amount{Min: 315, Max: 315, Coef: 0}},
+		{Rank: 2, SpellID: 7128, Cost: 65, Direct: &shared.Amount{Min: 495, Max: 495, Coef: 0}},
+		{Rank: 3, SpellID: 602, Cost: 105, Direct: &shared.Amount{Min: 720, Max: 720, Coef: 0}},
+		{Rank: 4, SpellID: 1006, Cost: 165, Direct: &shared.Amount{Min: 945, Max: 945, Coef: 0}},
+		{Rank: 5, SpellID: 10951, Cost: 235, Direct: &shared.Amount{Min: 1170, Max: 1170, Coef: 0}},
+		{Rank: 6, SpellID: 10952, Cost: 315, Direct: &shared.Amount{Min: 1395, Max: 1395, Coef: 0}},
+		{Rank: 7, SpellID: 25431, Cost: 375, Direct: &shared.Amount{Min: 1580, Max: 1580, Coef: 0}},
+	},
+	LesserHeal: shared.RankTable{
+		{Rank: 1, SpellID: 2050, Cost: 30, Heal: &shared.Amount{Min: 47, Max: 58, Coef: 0.12300000339746475}},
+		{Rank: 2, SpellID: 2052, Cost: 45, Heal: &shared.Amount{Min: 76, Max: 91, Coef: 0.2290000021457672}},
+		{Rank: 3, SpellID: 2053, Cost: 75, Heal: &shared.Amount{Min: 143, Max: 165, Coef: 0.44600000977516174}},
+	},
+	Lightwell: shared.RankTable{
+		{Rank: 1, SpellID: 724, Cost: 225},
+		{Rank: 2, SpellID: 27870, Cost: 295},
+		{Rank: 3, SpellID: 27871, Cost: 365},
+		{Rank: 4, SpellID: 28275, Cost: 445},
+	},
+	LightwellRenew: shared.RankTable{
+		{Rank: 1, SpellID: 7001, Direct: &shared.Amount{Min: 267, Max: 267, Coef: 0}},
+		{Rank: 2, SpellID: 27873, Direct: &shared.Amount{Min: 388, Max: 388, Coef: 0}},
+		{Rank: 3, SpellID: 27874, Direct: &shared.Amount{Min: 533, Max: 533, Coef: 0}},
+		{Rank: 4, SpellID: 28276, Direct: &shared.Amount{Min: 787, Max: 787, Coef: 0}},
+	},
+	ManaBurn: shared.RankTable{
+		{Rank: 1, SpellID: 8129, Cost: 95},
+		{Rank: 2, SpellID: 8131, Cost: 140},
+		{Rank: 3, SpellID: 10874, Cost: 185},
+		{Rank: 4, SpellID: 10875, Cost: 225},
+		{Rank: 5, SpellID: 10876, Cost: 270},
+		{Rank: 6, SpellID: 25379, Cost: 300},
+		{Rank: 7, SpellID: 25380, Cost: 355},
+	},
+	Martyrdom: shared.RankTable{
+		{Rank: 1, SpellID: 14531},
+		{Rank: 2, SpellID: 14774},
+	},
 	MindBlast: shared.RankTable{
 		{Rank: 1, SpellID: 8092, Cost: 50, Direct: &shared.Amount{Min: 42, Max: 46, Coef: 0.2680000066757202}},
 		{Rank: 2, SpellID: 8102, Cost: 80, Direct: &shared.Amount{Min: 76, Max: 83, Coef: 0.36399999260902405}},
@@ -30,6 +334,11 @@ var genRanks = generatedRanks{
 		{Rank: 10, SpellID: 25372, Cost: 380, Direct: &shared.Amount{Min: 571, Max: 602, Coef: 0.42899999022483826}},
 		{Rank: 11, SpellID: 25375, Cost: 450, Direct: &shared.Amount{Min: 711, Max: 752, Coef: 0.42899999022483826}},
 	},
+	MindControl: shared.RankTable{
+		{Rank: 1, SpellID: 605, Cost: 350, Direct: &shared.Amount{Min: 44, Max: 44, Coef: 0}},
+		{Rank: 2, SpellID: 10911, Cost: 550, Direct: &shared.Amount{Min: 59, Max: 59, Coef: 0}},
+		{Rank: 3, SpellID: 10912, Cost: 750, Direct: &shared.Amount{Min: 74, Max: 74, Coef: 0}},
+	},
 	MindFlay: shared.RankTable{
 		{Rank: 1, SpellID: 15407, Cost: 45, Periodic: &shared.Periodic{Tick: 25, Coef: 0.1899999976158142}},
 		{Rank: 2, SpellID: 17311, Cost: 70, Periodic: &shared.Periodic{Tick: 42, Coef: 0.1899999976158142}},
@@ -38,6 +347,144 @@ var genRanks = generatedRanks{
 		{Rank: 5, SpellID: 17314, Cost: 165, Periodic: &shared.Periodic{Tick: 110, Coef: 0.1899999976158142}},
 		{Rank: 6, SpellID: 18807, Cost: 205, Periodic: &shared.Periodic{Tick: 142, Coef: 0.1899999976158142}},
 		{Rank: 7, SpellID: 25387, Cost: 230, Periodic: &shared.Periodic{Tick: 176, Coef: 0.1899999976158142}},
+	},
+	MindSoothe: shared.RankTable{
+		{Rank: 1, SpellID: 453, Cost: 50},
+		{Rank: 2, SpellID: 8192, Cost: 70},
+		{Rank: 3, SpellID: 10953, Cost: 90},
+		{Rank: 4, SpellID: 25596, Cost: 120},
+	},
+	MindVision: shared.RankTable{
+		{Rank: 1, SpellID: 2096, Cost: 65},
+		{Rank: 2, SpellID: 10909, Cost: 150},
+	},
+	PowerWordFortitude: shared.RankTable{
+		{Rank: 1, SpellID: 1243, Cost: 20, Direct: &shared.Amount{Min: 3, Max: 3, Coef: 0}},
+		{Rank: 2, SpellID: 1244, Cost: 70, Direct: &shared.Amount{Min: 8, Max: 8, Coef: 0}},
+		{Rank: 3, SpellID: 1245, Cost: 200, Direct: &shared.Amount{Min: 20, Max: 20, Coef: 0}},
+		{Rank: 4, SpellID: 2791, Cost: 300, Direct: &shared.Amount{Min: 32, Max: 32, Coef: 0}},
+		{Rank: 5, SpellID: 10937, Cost: 450, Direct: &shared.Amount{Min: 43, Max: 43, Coef: 0}},
+		{Rank: 6, SpellID: 10938, Cost: 600, Direct: &shared.Amount{Min: 54, Max: 54, Coef: 0}},
+		{Rank: 7, SpellID: 25389, Cost: 700, Direct: &shared.Amount{Min: 79, Max: 79, Coef: 0}},
+	},
+	PowerWordShield: shared.RankTable{
+		{Rank: 1, SpellID: 17, Cost: 45, Direct: &shared.Amount{Min: 48, Max: 48, Coef: 0}},
+		{Rank: 2, SpellID: 592, Cost: 80, Direct: &shared.Amount{Min: 94, Max: 94, Coef: 0}},
+		{Rank: 3, SpellID: 600, Cost: 130, Direct: &shared.Amount{Min: 166, Max: 166, Coef: 0}},
+		{Rank: 4, SpellID: 3747, Cost: 175, Direct: &shared.Amount{Min: 244, Max: 244, Coef: 0}},
+		{Rank: 5, SpellID: 6065, Cost: 210, Direct: &shared.Amount{Min: 312, Max: 313, Coef: 0}},
+		{Rank: 6, SpellID: 6066, Cost: 250, Direct: &shared.Amount{Min: 394, Max: 394, Coef: 0}},
+		{Rank: 7, SpellID: 10898, Cost: 300, Direct: &shared.Amount{Min: 499, Max: 499, Coef: 0}},
+		{Rank: 8, SpellID: 10899, Cost: 355, Direct: &shared.Amount{Min: 622, Max: 622, Coef: 0}},
+		{Rank: 9, SpellID: 10900, Cost: 425, Direct: &shared.Amount{Min: 782, Max: 783, Coef: 0}},
+		{Rank: 10, SpellID: 10901, Cost: 500, Direct: &shared.Amount{Min: 963, Max: 964, Coef: 0}},
+		{Rank: 11, SpellID: 25217, Cost: 540, Direct: &shared.Amount{Min: 1143, Max: 1144, Coef: 0}},
+		{Rank: 12, SpellID: 25218, Cost: 600, Direct: &shared.Amount{Min: 1265, Max: 1265, Coef: 0}},
+	},
+	PrayerOfFortitude: shared.RankTable{
+		{Rank: 1, SpellID: 21562, Cost: 1200, Direct: &shared.Amount{Min: 43, Max: 43, Coef: 0}},
+		{Rank: 2, SpellID: 21564, Cost: 1500, Direct: &shared.Amount{Min: 54, Max: 54, Coef: 0}},
+		{Rank: 3, SpellID: 25392, Cost: 1800, Direct: &shared.Amount{Min: 79, Max: 79, Coef: 0}},
+	},
+	PrayerOfHealing: shared.RankTable{
+		{Rank: 1, SpellID: 596, Cost: 410, Heal: &shared.Amount{Min: 312, Max: 333, Coef: 0.42899999022483826}},
+		{Rank: 2, SpellID: 996, Cost: 560, Heal: &shared.Amount{Min: 458, Max: 487, Coef: 0.42899999022483826}},
+		{Rank: 3, SpellID: 10960, Cost: 770, Heal: &shared.Amount{Min: 675, Max: 713, Coef: 0.42899999022483826}},
+		{Rank: 4, SpellID: 10961, Cost: 1030, Heal: &shared.Amount{Min: 960, Max: 1013, Coef: 0.42899999022483826}},
+		{Rank: 5, SpellID: 25316, Cost: 1070, Heal: &shared.Amount{Min: 1019, Max: 1076, Coef: 0.42899999022483826}},
+		{Rank: 6, SpellID: 25308, Cost: 1255, Heal: &shared.Amount{Min: 1251, Max: 1322, Coef: 0.42899999022483826}},
+	},
+	PrayerOfShadowProtection: shared.RankTable{
+		{Rank: 1, SpellID: 27683, Cost: 1300, Direct: &shared.Amount{Min: 60, Max: 60, Coef: 0}},
+		{Rank: 2, SpellID: 39374, Cost: 1620, Direct: &shared.Amount{Min: 70, Max: 70, Coef: 0}},
+	},
+	PrayerOfSpirit: shared.RankTable{
+		{Rank: 1, SpellID: 27681, Cost: 1500, Direct: &shared.Amount{Min: 40, Max: 40, Coef: 0}},
+		{Rank: 2, SpellID: 32999, Cost: 1800, Direct: &shared.Amount{Min: 50, Max: 50, Coef: 0}},
+	},
+	PsychicScream: shared.RankTable{
+		{Rank: 1, SpellID: 8122, Cost: 100, Direct: &shared.Amount{Min: 25, Max: 25, Coef: 1}},
+		{Rank: 2, SpellID: 8124, Cost: 140, Direct: &shared.Amount{Min: 25, Max: 25, Coef: 1}},
+		{Rank: 3, SpellID: 10888, Cost: 180, Direct: &shared.Amount{Min: 25, Max: 25, Coef: 1}},
+		{Rank: 4, SpellID: 10890, Cost: 210, Direct: &shared.Amount{Min: 25, Max: 25, Coef: 1}},
+	},
+	ReflectiveShield: shared.RankTable{
+		{Rank: 1, SpellID: 33201, Direct: &shared.Amount{Min: 10, Max: 10, Coef: 0}},
+		{Rank: 2, SpellID: 33202, Direct: &shared.Amount{Min: 20, Max: 20, Coef: 0}},
+		{Rank: 3, SpellID: 33203, Direct: &shared.Amount{Min: 30, Max: 30, Coef: 0}},
+		{Rank: 4, SpellID: 33204, Direct: &shared.Amount{Min: 40, Max: 40, Coef: 0}},
+		{Rank: 5, SpellID: 33205, Direct: &shared.Amount{Min: 50, Max: 50, Coef: 0}},
+	},
+	Renew: shared.RankTable{
+		{Rank: 1, SpellID: 139, Cost: 30, Direct: &shared.Amount{Min: 9, Max: 9, Coef: 0.10999999940395355}},
+		{Rank: 2, SpellID: 6074, Cost: 65, Direct: &shared.Amount{Min: 20, Max: 20, Coef: 0.1550000011920929}},
+		{Rank: 3, SpellID: 6075, Cost: 105, Direct: &shared.Amount{Min: 35, Max: 35, Coef: 0.20000000298023224}},
+		{Rank: 4, SpellID: 6076, Cost: 140, Direct: &shared.Amount{Min: 49, Max: 49, Coef: 0.20000000298023224}},
+		{Rank: 5, SpellID: 6077, Cost: 170, Direct: &shared.Amount{Min: 63, Max: 63, Coef: 0.20000000298023224}},
+		{Rank: 6, SpellID: 6078, Cost: 205, Direct: &shared.Amount{Min: 80, Max: 80, Coef: 0.20000000298023224}},
+		{Rank: 7, SpellID: 10927, Cost: 250, Direct: &shared.Amount{Min: 102, Max: 102, Coef: 0.20000000298023224}},
+		{Rank: 8, SpellID: 10928, Cost: 305, Direct: &shared.Amount{Min: 130, Max: 130, Coef: 0.20000000298023224}},
+		{Rank: 9, SpellID: 10929, Cost: 365, Direct: &shared.Amount{Min: 162, Max: 162, Coef: 0.20000000298023224}},
+		{Rank: 10, SpellID: 25315, Cost: 410, Direct: &shared.Amount{Min: 194, Max: 194, Coef: 0.20000000298023224}},
+		{Rank: 11, SpellID: 25221, Cost: 430, Direct: &shared.Amount{Min: 202, Max: 202, Coef: 0.20000000298023224}},
+		{Rank: 12, SpellID: 25222, Cost: 450, Direct: &shared.Amount{Min: 222, Max: 222, Coef: 0.20000000298023224}},
+	},
+	Resurrection: shared.RankTable{
+		{Rank: 1, SpellID: 2006},
+		{Rank: 2, SpellID: 2010},
+		{Rank: 3, SpellID: 10880},
+		{Rank: 4, SpellID: 10881},
+		{Rank: 5, SpellID: 20770},
+		{Rank: 6, SpellID: 25435},
+	},
+	ShackleUndead: shared.RankTable{
+		{Rank: 1, SpellID: 9484, Cost: 90},
+		{Rank: 2, SpellID: 9485, Cost: 120},
+		{Rank: 3, SpellID: 10955, Cost: 150},
+	},
+	ShadowAffinity: shared.RankTable{
+		{Rank: 1, SpellID: 15318},
+		{Rank: 2, SpellID: 15272},
+		{Rank: 3, SpellID: 15320},
+	},
+	ShadowFocus: shared.RankTable{
+		{Rank: 1, SpellID: 15260, Direct: &shared.Amount{Min: 2, Max: 2, Coef: 0}},
+		{Rank: 2, SpellID: 15327, Direct: &shared.Amount{Min: 4, Max: 4, Coef: 0}},
+		{Rank: 3, SpellID: 15328, Direct: &shared.Amount{Min: 6, Max: 6, Coef: 0}},
+		{Rank: 4, SpellID: 15329, Direct: &shared.Amount{Min: 8, Max: 8, Coef: 0}},
+		{Rank: 5, SpellID: 15330, Direct: &shared.Amount{Min: 10, Max: 10, Coef: 0}},
+	},
+	ShadowPower: shared.RankTable{
+		{Rank: 1, SpellID: 33221, Direct: &shared.Amount{Min: 3, Max: 3, Coef: 0}},
+		{Rank: 2, SpellID: 33222, Direct: &shared.Amount{Min: 6, Max: 6, Coef: 0}},
+		{Rank: 3, SpellID: 33223, Direct: &shared.Amount{Min: 9, Max: 9, Coef: 0}},
+		{Rank: 4, SpellID: 33224, Direct: &shared.Amount{Min: 12, Max: 12, Coef: 0}},
+		{Rank: 5, SpellID: 33225, Direct: &shared.Amount{Min: 15, Max: 15, Coef: 0}},
+	},
+	ShadowProtection: shared.RankTable{
+		{Rank: 1, SpellID: 976, Cost: 250, Direct: &shared.Amount{Min: 30, Max: 30, Coef: 0}},
+		{Rank: 2, SpellID: 10957, Cost: 450, Direct: &shared.Amount{Min: 45, Max: 45, Coef: 0}},
+		{Rank: 3, SpellID: 10958, Cost: 650, Direct: &shared.Amount{Min: 60, Max: 60, Coef: 0}},
+		{Rank: 4, SpellID: 25433, Cost: 810, Direct: &shared.Amount{Min: 70, Max: 70, Coef: 0}},
+	},
+	ShadowReach: shared.RankTable{
+		{Rank: 1, SpellID: 17322, Direct: &shared.Amount{Min: 10, Max: 10, Coef: 1}},
+		{Rank: 2, SpellID: 17323, Direct: &shared.Amount{Min: 20, Max: 20, Coef: 1}},
+	},
+	ShadowResilience: shared.RankTable{
+		{Rank: 1, SpellID: 14910},
+		{Rank: 2, SpellID: 33371},
+	},
+	ShadowWeaving: shared.RankTable{
+		{Rank: 1, SpellID: 15257, Direct: &shared.Amount{Min: 20, Max: 20, Coef: 0}},
+		{Rank: 2, SpellID: 15331, Direct: &shared.Amount{Min: 40, Max: 40, Coef: 0}},
+		{Rank: 3, SpellID: 15332, Direct: &shared.Amount{Min: 60, Max: 60, Coef: 0}},
+		{Rank: 4, SpellID: 15333, Direct: &shared.Amount{Min: 80, Max: 80, Coef: 0}},
+		{Rank: 5, SpellID: 15334, Direct: &shared.Amount{Min: 100, Max: 100, Coef: 0}},
+	},
+	ShadowWordDeath: shared.RankTable{
+		{Rank: 1, SpellID: 32379, Cost: 243, Direct: &shared.Amount{Min: 450, Max: 522, Coef: 0.42899999022483826}},
+		{Rank: 2, SpellID: 32996, Cost: 309, Direct: &shared.Amount{Min: 572, Max: 664, Coef: 0.42899999022483826}},
 	},
 	ShadowWordPain: shared.RankTable{
 		{Rank: 1, SpellID: 589, Cost: 25, Periodic: &shared.Periodic{Tick: 5, Coef: 0.07320000231266022}},
@@ -51,9 +498,14 @@ var genRanks = generatedRanks{
 		{Rank: 9, SpellID: 25367, Cost: 510, Periodic: &shared.Periodic{Tick: 167, Coef: 0.18299999833106995}},
 		{Rank: 10, SpellID: 25368, Cost: 575, Periodic: &shared.Periodic{Tick: 206, Coef: 0.18299999833106995}},
 	},
-	ShadowWordDeath: shared.RankTable{
-		{Rank: 1, SpellID: 32379, Cost: 243, Direct: &shared.Amount{Min: 450, Max: 522, Coef: 0.42899999022483826}},
-		{Rank: 2, SpellID: 32996, Cost: 309, Direct: &shared.Amount{Min: 572, Max: 664, Coef: 0.42899999022483826}},
+	Shadowguard: shared.RankTable{
+		{Rank: 1, SpellID: 18137, Cost: 50, Direct: &shared.Amount{Min: 20, Max: 20, Coef: 0.2669999897480011}},
+		{Rank: 2, SpellID: 19308, Cost: 85, Direct: &shared.Amount{Min: 35, Max: 35, Coef: 0.2669999897480011}},
+		{Rank: 3, SpellID: 19309, Cost: 120, Direct: &shared.Amount{Min: 51, Max: 51, Coef: 0.2669999897480011}},
+		{Rank: 4, SpellID: 19310, Cost: 160, Direct: &shared.Amount{Min: 70, Max: 70, Coef: 0.2669999897480011}},
+		{Rank: 5, SpellID: 19311, Cost: 200, Direct: &shared.Amount{Min: 90, Max: 90, Coef: 0.2669999897480011}},
+		{Rank: 6, SpellID: 19312, Cost: 250, Direct: &shared.Amount{Min: 116, Max: 116, Coef: 0.2669999897480011}},
+		{Rank: 7, SpellID: 25477, Cost: 270, Direct: &shared.Amount{Min: 130, Max: 130, Coef: 0.2669999897480011}},
 	},
 	Smite: shared.RankTable{
 		{Rank: 1, SpellID: 585, Cost: 20, Direct: &shared.Amount{Min: 15, Max: 20, Coef: 0.12300000339746475}},
@@ -67,23 +519,19 @@ var genRanks = generatedRanks{
 		{Rank: 9, SpellID: 25363, Cost: 300, Direct: &shared.Amount{Min: 422, Max: 470, Coef: 0.7139999866485596}},
 		{Rank: 10, SpellID: 25364, Cost: 385, Direct: &shared.Amount{Min: 549, Max: 616, Coef: 0.7139999866485596}},
 	},
-	DevouringPlague: shared.RankTable{
-		{Rank: 1, SpellID: 2944, Cost: 215, Periodic: &shared.Periodic{Tick: 19, Coef: 0.10000000149011612}},
-		{Rank: 2, SpellID: 19276, Cost: 350, Periodic: &shared.Periodic{Tick: 34, Coef: 0.10000000149011612}},
-		{Rank: 3, SpellID: 19277, Cost: 495, Periodic: &shared.Periodic{Tick: 50, Coef: 0.10000000149011612}},
-		{Rank: 4, SpellID: 19278, Cost: 645, Periodic: &shared.Periodic{Tick: 68, Coef: 0.10000000149011612}},
-		{Rank: 5, SpellID: 19279, Cost: 810, Periodic: &shared.Periodic{Tick: 89, Coef: 0.10000000149011612}},
-		{Rank: 6, SpellID: 19280, Cost: 985, Periodic: &shared.Periodic{Tick: 113, Coef: 0.10000000149011612}},
-		{Rank: 7, SpellID: 25467, Cost: 1145, Periodic: &shared.Periodic{Tick: 152, Coef: 0.10000000149011612}},
+	SpellWarding: shared.RankTable{
+		{Rank: 1, SpellID: 27900},
+		{Rank: 2, SpellID: 27901},
+		{Rank: 3, SpellID: 27902},
+		{Rank: 4, SpellID: 27903},
+		{Rank: 5, SpellID: 27904},
 	},
-	HolyNova: shared.RankTable{
-		{Rank: 1, SpellID: 15237, Cost: 185, Direct: &shared.Amount{Min: 29, Max: 34, Coef: 0.16099999845027924}},
-		{Rank: 2, SpellID: 15430, Cost: 290, Direct: &shared.Amount{Min: 52, Max: 61, Coef: 0.16099999845027924}},
-		{Rank: 3, SpellID: 15431, Cost: 400, Direct: &shared.Amount{Min: 79, Max: 92, Coef: 0.16099999845027924}},
-		{Rank: 4, SpellID: 27799, Cost: 520, Direct: &shared.Amount{Min: 110, Max: 127, Coef: 0.16099999845027924}},
-		{Rank: 5, SpellID: 27800, Cost: 635, Direct: &shared.Amount{Min: 146, Max: 168, Coef: 0.16099999845027924}},
-		{Rank: 6, SpellID: 27801, Cost: 750, Direct: &shared.Amount{Min: 188, Max: 217, Coef: 0.16099999845027924}},
-		{Rank: 7, SpellID: 25331, Cost: 875, Direct: &shared.Amount{Min: 244, Max: 283, Coef: 0.16099999845027924}},
+	SpiritTap: shared.RankTable{
+		{Rank: 1, SpellID: 15270},
+		{Rank: 2, SpellID: 15335},
+		{Rank: 3, SpellID: 15336},
+		{Rank: 4, SpellID: 15337},
+		{Rank: 5, SpellID: 15338},
 	},
 	Starshards: shared.RankTable{
 		{Rank: 1, SpellID: 10797, Periodic: &shared.Periodic{Tick: 12, Coef: 0.16699999570846558}},
@@ -94,6 +542,15 @@ var genRanks = generatedRanks{
 		{Rank: 6, SpellID: 19304, Periodic: &shared.Periodic{Tick: 105, Coef: 0.16699999570846558}},
 		{Rank: 7, SpellID: 19305, Periodic: &shared.Periodic{Tick: 130, Coef: 0.16699999570846558}},
 		{Rank: 8, SpellID: 25446, Periodic: &shared.Periodic{Tick: 157, Coef: 0.16699999570846558}},
+	},
+	TouchOfWeakness: shared.RankTable{
+		{Rank: 1, SpellID: 2652, Cost: 25, Direct: &shared.Amount{Min: 8, Max: 8, Coef: 0.06700000166893005}},
+		{Rank: 2, SpellID: 19261, Cost: 45, Direct: &shared.Amount{Min: 15, Max: 15, Coef: 0.10700000077486038}},
+		{Rank: 3, SpellID: 19262, Cost: 75, Direct: &shared.Amount{Min: 24, Max: 24, Coef: 0.10700000077486038}},
+		{Rank: 4, SpellID: 19264, Cost: 105, Direct: &shared.Amount{Min: 35, Max: 35, Coef: 0.10700000077486038}},
+		{Rank: 5, SpellID: 19265, Cost: 145, Direct: &shared.Amount{Min: 48, Max: 48, Coef: 0.10700000077486038}},
+		{Rank: 6, SpellID: 19266, Cost: 195, Direct: &shared.Amount{Min: 64, Max: 64, Coef: 0.10700000077486038}},
+		{Rank: 7, SpellID: 25461, Cost: 235, Direct: &shared.Amount{Min: 80, Max: 80, Coef: 0.10700000077486038}},
 	},
 	VampiricTouch: shared.RankTable{
 		{Rank: 1, SpellID: 34914, Cost: 325, Periodic: &shared.Periodic{Tick: 90, Coef: 0.20000000298023224}},
