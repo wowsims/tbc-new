@@ -8,6 +8,10 @@ import (
 // What a rank is worth, discriminated by shape rather than by a struct that carries every field and
 // leaves the caller to guess which are meaningful. A talent's flat number has no Min and Max to
 // misread, and only a periodic value has a tick schedule.
+//
+// The interface carries only what every shape can answer. Period and Ticks are reached by asserting
+// to SpellRankPeriodic, rather than through a method the other two would have to answer with zeroes -
+// which would put the guesswork back, one level up.
 type SpellRankValue interface {
 	// The amount, as a range. A flat value and a periodic tick report the same number twice, so a
 	// caller that just wants to roll does not have to know which shape it was handed.
@@ -15,9 +19,6 @@ type SpellRankValue interface {
 
 	// Spell power, then attack power.
 	Coefficients() (float64, float64)
-
-	// Tick length and count, both zero unless the value is periodic.
-	Schedule() (time.Duration, int32)
 
 	isSpellRankValue()
 }
@@ -54,10 +55,6 @@ func (v SpellRankPeriodic) Amount() (float64, float64) { return v.Tick, v.Tick }
 func (v SpellRankFlat) Coefficients() (float64, float64)     { return v.Coef, v.APCoef }
 func (v SpellRankRange) Coefficients() (float64, float64)    { return v.Coef, v.APCoef }
 func (v SpellRankPeriodic) Coefficients() (float64, float64) { return v.Coef, v.APCoef }
-
-func (v SpellRankFlat) Schedule() (time.Duration, int32)     { return 0, 0 }
-func (v SpellRankRange) Schedule() (time.Duration, int32)    { return 0, 0 }
-func (v SpellRankPeriodic) Schedule() (time.Duration, int32) { return v.Period, v.Ticks }
 
 // Convenience for the common reads, so a factory that knows its spell's shape is not forced through
 // a two-value return.
