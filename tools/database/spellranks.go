@@ -31,6 +31,7 @@ type RankEffect struct {
 	DieSides     int32
 	PointsPerLvl float64
 	Coefficient  float64
+	APCoef       float64
 	OwnerSpellID int32
 }
 
@@ -96,7 +97,7 @@ func LoadRankSpell(db *sql.DB, spellID int32) (RankSpell, error) {
 func RankEffectsOf(db *sql.DB, spellID int32) ([]RankEffect, error) {
 	rows, err := db.Query(`
 		SELECT EffectIndex, Effect, EffectAura, EffectBasePoints, EffectDieSides,
-		       EffectRealPointsPerLevel, EffectBonusCoefficient
+		       EffectRealPointsPerLevel, EffectBonusCoefficient, BonusCoefficientFromAP
 		FROM SpellEffect WHERE SpellID = ? ORDER BY EffectIndex`, spellID)
 	if err != nil {
 		return nil, err
@@ -106,7 +107,7 @@ func RankEffectsOf(db *sql.DB, spellID int32) ([]RankEffect, error) {
 	var out []RankEffect
 	for rows.Next() {
 		e := RankEffect{OwnerSpellID: spellID}
-		if err := rows.Scan(&e.Index, &e.Effect, &e.Aura, &e.BasePoints, &e.DieSides, &e.PointsPerLvl, &e.Coefficient); err != nil {
+		if err := rows.Scan(&e.Index, &e.Effect, &e.Aura, &e.BasePoints, &e.DieSides, &e.PointsPerLvl, &e.Coefficient, &e.APCoef); err != nil {
 			return nil, err
 		}
 		out = append(out, e)

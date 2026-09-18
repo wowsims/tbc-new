@@ -27,9 +27,10 @@ type generatedRow struct {
 }
 
 type generatedAmount struct {
-	Min  float64
-	Max  float64
-	Coef float64
+	Min    float64
+	Max    float64
+	Coef   float64
+	APCoef float64
 }
 
 type rankCandidate struct {
@@ -291,7 +292,7 @@ func buildRow(db *sql.DB, rank int32, spellID int32, mask int) (generatedRow, er
 
 	amountOf := func(e RankEffect) *generatedAmount {
 		min, max := DeriveRankAmount(e, spell.SpellLevel, spell.MaxLevel)
-		return &generatedAmount{Min: min, Max: max, Coef: e.Coefficient}
+		return &generatedAmount{Min: min, Max: max, Coef: e.Coefficient, APCoef: e.APCoef}
 	}
 
 	for _, e := range candidates {
@@ -425,8 +426,13 @@ func formatRow(row generatedRow) string {
 		parts = append(parts, "Heal: "+formatAmount(*row.Heal))
 	}
 	if row.Periodic != nil {
-		parts = append(parts, fmt.Sprintf("Periodic: &shared.Periodic{Tick: %s, Coef: %s}",
-			num(row.Periodic.Min), num(row.Periodic.Coef)))
+		if row.Periodic.APCoef > 0 {
+			parts = append(parts, fmt.Sprintf("Periodic: &shared.Periodic{Tick: %s, Coef: %s, APCoef: %s}",
+				num(row.Periodic.Min), num(row.Periodic.Coef), num(row.Periodic.APCoef)))
+		} else {
+			parts = append(parts, fmt.Sprintf("Periodic: &shared.Periodic{Tick: %s, Coef: %s}",
+				num(row.Periodic.Min), num(row.Periodic.Coef)))
+		}
 	}
 	if row.Energize > 0 {
 		parts = append(parts, fmt.Sprintf("Energize: %s", num(row.Energize)))
@@ -435,6 +441,10 @@ func formatRow(row generatedRow) string {
 }
 
 func formatAmount(a generatedAmount) string {
+	if a.APCoef > 0 {
+		return fmt.Sprintf("&shared.Amount{Min: %s, Max: %s, Coef: %s, APCoef: %s}",
+			num(a.Min), num(a.Max), num(a.Coef), num(a.APCoef))
+	}
 	return fmt.Sprintf("&shared.Amount{Min: %s, Max: %s, Coef: %s}", num(a.Min), num(a.Max), num(a.Coef))
 }
 

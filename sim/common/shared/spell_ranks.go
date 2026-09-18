@@ -3,14 +3,16 @@ package shared
 import "fmt"
 
 type Amount struct {
-	Min  float64
-	Max  float64
-	Coef float64
+	Min    float64
+	Max    float64
+	Coef   float64
+	APCoef float64
 }
 
 type Periodic struct {
-	Tick float64
-	Coef float64
+	Tick   float64
+	Coef   float64
+	APCoef float64
 }
 
 // One rank of a spell, as the client database describes it.
@@ -92,3 +94,50 @@ func (t RankedTable[T]) RegisterAll(factory func(T)) {
 }
 
 type RankTable = RankedTable[RankRow]
+
+// Attack power scaling has to be supplied by hand. This build's client data carries a nonzero
+// BonusCoefficientFromAP on exactly one effect out of 38357 - for everything else the coefficient lives
+// in server script, which is why melee spells in this sim still hardcode theirs (sim/druid/rip.go:52
+// reads 990 + 0.18*ap).
+//
+// Functions rather than methods because RankTable is an alias for an instantiated generic, which Go
+// will not let us hang methods on.
+//
+// Both return a copy, down to the Amount and Periodic each row points at, so the generated table keeps
+// whatever the database said. Both panic if the generated value is already nonzero: a coefficient that
+// appears upstream should be noticed rather than silently shadowed by the hand-written one.
+func WithAPCoef(table RankTable, coef float64) RankTable {
+	out := make(RankTable, len(table))
+	for i, row := range table {
+		if row.Direct == nil {
+			panic(fmt.Sprintf("spell %d rank %d has no direct amount to give an AP coefficient", row.SpellID, row.Rank))
+		}
+		if row.Direct.APCoef != 0 {
+			panic(fmt.Sprintf("spell %d rank %d already has AP coefficient %v from the client DB", row.SpellID, row.Rank, row.Direct.APCoef))
+		}
+
+		direct := *row.Direct
+		direct.APCoef = coef
+		out[i] = row
+		out[i].Direct = &direct
+	}
+	return out
+}
+
+func WithPeriodicAPCoef(table RankTable, coef float64) RankTable {
+	out := make(RankTable, len(table))
+	for i, row := range table {
+		if row.Periodic == nil {
+			panic(fmt.Sprintf("spell %d rank %d has no periodic amount to give an AP coefficient", row.SpellID, row.Rank))
+		}
+		if row.Periodic.APCoef != 0 {
+			panic(fmt.Sprintf("spell %d rank %d already has AP coefficient %v from the client DB", row.SpellID, row.Rank, row.Periodic.APCoef))
+		}
+
+		periodic := *row.Periodic
+		periodic.APCoef = coef
+		out[i] = row
+		out[i].Periodic = &periodic
+	}
+	return out
+}
