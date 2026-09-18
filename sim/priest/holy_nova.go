@@ -29,14 +29,14 @@ func (priest *Priest) registerHolyNovaSpell(rank shared.SpellRank) {
 
 		DamageMultiplier:         1,
 		DamageMultiplierAdditive: 1,
-		BonusCoefficient:         rank.Direct.Coef,
+		BonusCoefficient:         shared.SpellRankCoef(rank.Direct),
 		ThreatMultiplier:         0,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := priest.CalcAndRollDamageRange(sim, rank.Direct.Min, rank.Direct.Max)
+			baseDamage := priest.CalcAndRollDamageRange(sim, shared.SpellRankMin(rank.Direct), shared.SpellRankMax(rank.Direct))
 			spell.CalcAndDealAoeDamage(sim, baseDamage, spell.OutcomeMagicHitAndCrit)
 
-			baseHeal := priest.CalcAndRollDamageRange(sim, rank.Direct.Min, rank.Direct.Max)
+			baseHeal := priest.CalcAndRollDamageRange(sim, shared.SpellRankMin(rank.Direct), shared.SpellRankMax(rank.Direct))
 			spell.CalcAndDealHealing(sim, spell.Unit, baseHeal, spell.OutcomeHealing)
 		},
 	})

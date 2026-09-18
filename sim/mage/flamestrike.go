@@ -47,7 +47,7 @@ func (mage *Mage) registerFlamestrike(rankConfig shared.SpellRank) {
 			BonusCoefficient: flameStrikeDotCoefficient,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.Snapshot(target, rankConfig.Periodic.Tick)
+				dot.Snapshot(target, shared.SpellRankMin(rankConfig.Periodic))
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				for _, aoeTarget := range sim.Encounter.ActiveTargetUnits {
@@ -57,7 +57,7 @@ func (mage *Mage) registerFlamestrike(rankConfig shared.SpellRank) {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			baseDamage := mage.CalcAndRollDamageRange(sim, rankConfig.Direct.Min, rankConfig.Direct.Max)
+			baseDamage := mage.CalcAndRollDamageRange(sim, shared.SpellRankMin(rankConfig.Direct), shared.SpellRankMax(rankConfig.Direct))
 			spell.CalcAndDealAoeDamage(sim, baseDamage, spell.OutcomeMagicHitAndCrit)
 			spell.AOEDot().Apply(sim)
 		},

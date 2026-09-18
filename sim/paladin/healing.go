@@ -22,9 +22,9 @@ var HolyLightRankMap = genRanks.HolyLight
 func (paladin *Paladin) registerHolyLight(rankConfig shared.SpellRank) {
 	spellID := rankConfig.SpellID
 	cost := rankConfig.Cost
-	minHealing := rankConfig.Heal.Min
-	maxHealing := rankConfig.Heal.Max
-	coefficient := rankConfig.Heal.Coef
+	minHealing := shared.SpellRankMin(rankConfig.Heal)
+	maxHealing := shared.SpellRankMax(rankConfig.Heal)
+	coefficient := shared.SpellRankCoef(rankConfig.Heal)
 
 	paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: spellID},
@@ -67,9 +67,9 @@ var FlashOfLightRankMap = genRanks.FlashOfLight
 func (paladin *Paladin) registerFlashOfLight(rankConfig shared.SpellRank) {
 	spellID := rankConfig.SpellID
 	cost := rankConfig.Cost
-	minHealing := rankConfig.Heal.Min
-	maxHealing := rankConfig.Heal.Max
-	coefficient := rankConfig.Heal.Coef
+	minHealing := shared.SpellRankMin(rankConfig.Heal)
+	maxHealing := shared.SpellRankMax(rankConfig.Heal)
+	coefficient := shared.SpellRankCoef(rankConfig.Heal)
 
 	paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: spellID},
@@ -112,7 +112,7 @@ var LayOnHandsRankMap = genRanks.LayOnHands
 // and restores mana to the target. Causes Forbearance for 1 min.
 func (paladin *Paladin) registerLayOnHands(rankConfig shared.SpellRank) {
 	spellID := rankConfig.SpellID
-	manaRestore := rankConfig.Energize
+	manaRestore := shared.SpellRankMin(rankConfig.Energize)
 
 	cd := core.Cooldown{
 		Timer:    paladin.NewTimer(),

@@ -189,26 +189,26 @@ func compareRow(t *testing.T, db *sql.DB, fam calibFamily, row shared.SpellRank)
 	// sibling spell (Holy Shock's damage, Lay on Hands' energize) shows itself.
 	coef := 0.0
 	if row.Direct != nil {
-		out = append(out, matchPair(base, "Direct.Min", "Direct.Max", row.Direct.Min, row.Direct.Max,
+		out = append(out, matchPair(base, "Direct.Min", "Direct.Max", shared.SpellRankMin(row.Direct), shared.SpellRankMax(row.Direct),
 			directCandidates(candidates), spell)...)
-		coef = row.Direct.Coef
+		coef = shared.SpellRankCoef(row.Direct)
 	}
 
 	if row.Heal != nil {
-		out = append(out, matchPair(base, "Heal.Min", "Heal.Max", row.Heal.Min, row.Heal.Max,
+		out = append(out, matchPair(base, "Heal.Min", "Heal.Max", shared.SpellRankMin(row.Heal), shared.SpellRankMax(row.Heal),
 			directCandidates(candidates), spell)...)
-		coef = row.Heal.Coef
+		coef = shared.SpellRankCoef(row.Heal)
 	}
 
 	if row.Periodic != nil {
-		out = append(out, matchTick(base, row.Periodic.Tick, periodicCandidates(candidates), spell))
-		if row.Periodic.Coef > 0 {
-			coef = row.Periodic.Coef
+		out = append(out, matchTick(base, shared.SpellRankMin(row.Periodic), periodicCandidates(candidates), spell))
+		if shared.SpellRankCoef(row.Periodic) > 0 {
+			coef = shared.SpellRankCoef(row.Periodic)
 		}
 	}
 
-	if row.Energize > 0 {
-		out = append(out, matchPair(base, "Energize", "", row.Energize, 0,
+	if row.Energize != nil {
+		out = append(out, matchPair(base, "Energize", "", shared.SpellRankMin(row.Energize), 0,
 			directCandidates(candidates), spell)...)
 	}
 

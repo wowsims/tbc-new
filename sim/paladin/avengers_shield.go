@@ -55,10 +55,10 @@ func (paladin *Paladin) registerAvengersShield(rankConfig shared.SpellRank) {
 			},
 		},
 
-		BonusCoefficient: rankConfig.Direct.Coef,
+		BonusCoefficient: shared.SpellRankCoef(rankConfig.Direct),
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			damage := sim.Roll(rankConfig.Direct.Min, rankConfig.Direct.Max)
+			damage := sim.Roll(shared.SpellRankMin(rankConfig.Direct), shared.SpellRankMax(rankConfig.Direct))
 			results := spell.CalcCleaveDamage(sim, target, 3, damage, spell.OutcomeRangedHitAndCrit)
 			spell.WaitTravelTime(sim, func(sim *core.Simulation) {
 				for _, result := range results {

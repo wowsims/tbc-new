@@ -23,8 +23,8 @@ var ConsecrationRankMap = genRanks.Consecration
 func (paladin *Paladin) registerConsecration(rankConfig shared.SpellRank) {
 	spellID := rankConfig.SpellID
 	cost := rankConfig.Cost
-	minDamage := rankConfig.Periodic.Tick
-	coefficient := rankConfig.Periodic.Coef
+	minDamage := shared.SpellRankMin(rankConfig.Periodic)
+	coefficient := shared.SpellRankCoef(rankConfig.Periodic)
 
 	paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: spellID},

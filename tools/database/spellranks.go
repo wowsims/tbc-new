@@ -32,6 +32,7 @@ type RankEffect struct {
 	PointsPerLvl float64
 	Coefficient  float64
 	APCoef       float64
+	AuraPeriod   int32
 	OwnerSpellID int32
 }
 
@@ -40,7 +41,21 @@ type RankSpell struct {
 	SpellLevel int32
 	MaxLevel   int32
 	ManaCost   sql.NullInt64
+	DurationMs int32
+	CastTimeMs int32
 	Effects    []RankEffect
+}
+
+// SpellCastTimes resolves SpellMisc.CastingTimeIndex and is absent from this build's database - the
+// table is not in generator-settings.json's extraction list, so cast times stay zero until it is added
+// and `make db` re-run against a client.
+func castTimesAvailable(db *sql.DB) bool {
+	var n int
+	if err := db.QueryRow(
+		`SELECT count(*) FROM sqlite_master WHERE type = 'table' AND name = 'SpellCastTimes'`).Scan(&n); err != nil {
+		return false
+	}
+	return n > 0
 }
 
 // The calibrated derivation rule, shared by the generator and the calibration gate so the two cannot
@@ -90,6 +105,19 @@ func LoadRankSpell(db *sql.DB, spellID int32) (RankSpell, error) {
 		return s, fmt.Errorf("levels for spell %d: %w", spellID, err)
 	}
 
+	// Duration and its period are what a DoT's NumberOfTicks and TickLength are derived from.
+	_ = db.QueryRow(`
+		SELECT COALESCE(d.Duration, 0)
+		FROM SpellMisc m LEFT JOIN SpellDuration d ON d.ID = m.DurationIndex
+		WHERE m.SpellID = ?`, spellID).Scan(&s.DurationMs)
+
+	if castTimesAvailable(db) {
+		_ = db.QueryRow(`
+			SELECT COALESCE(ct.Base, 0)
+			FROM SpellMisc m JOIN SpellCastTimes ct ON ct.ID = m.CastingTimeIndex
+			WHERE m.SpellID = ?`, spellID).Scan(&s.CastTimeMs)
+	}
+
 	s.Effects, err = RankEffectsOf(db, spellID)
 	return s, err
 }
@@ -97,7 +125,7 @@ func LoadRankSpell(db *sql.DB, spellID int32) (RankSpell, error) {
 func RankEffectsOf(db *sql.DB, spellID int32) ([]RankEffect, error) {
 	rows, err := db.Query(`
 		SELECT EffectIndex, Effect, EffectAura, EffectBasePoints, EffectDieSides,
-		       EffectRealPointsPerLevel, EffectBonusCoefficient, BonusCoefficientFromAP
+		       EffectRealPointsPerLevel, EffectBonusCoefficient, BonusCoefficientFromAP, EffectAuraPeriod
 		FROM SpellEffect WHERE SpellID = ? ORDER BY EffectIndex`, spellID)
 	if err != nil {
 		return nil, err
@@ -107,7 +135,7 @@ func RankEffectsOf(db *sql.DB, spellID int32) ([]RankEffect, error) {
 	var out []RankEffect
 	for rows.Next() {
 		e := RankEffect{OwnerSpellID: spellID}
-		if err := rows.Scan(&e.Index, &e.Effect, &e.Aura, &e.BasePoints, &e.DieSides, &e.PointsPerLvl, &e.Coefficient, &e.APCoef); err != nil {
+		if err := rows.Scan(&e.Index, &e.Effect, &e.Aura, &e.BasePoints, &e.DieSides, &e.PointsPerLvl, &e.Coefficient, &e.APCoef, &e.AuraPeriod); err != nil {
 			return nil, err
 		}
 		out = append(out, e)

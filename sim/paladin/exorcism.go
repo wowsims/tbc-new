@@ -24,9 +24,9 @@ func (paladin *Paladin) getExorcismTimer() *core.Timer {
 func (paladin *Paladin) registerExorcism(rankConfig shared.SpellRank) {
 	spellID := rankConfig.SpellID
 	cost := rankConfig.Cost
-	minDamage := rankConfig.Direct.Min
-	maxDamage := rankConfig.Direct.Max
-	coefficient := rankConfig.Direct.Coef
+	minDamage := shared.SpellRankMin(rankConfig.Direct)
+	maxDamage := shared.SpellRankMax(rankConfig.Direct)
+	coefficient := shared.SpellRankCoef(rankConfig.Direct)
 
 	paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: spellID},

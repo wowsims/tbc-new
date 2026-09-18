@@ -23,7 +23,7 @@ func (shaman *Shaman) newLightningBoltSpellConfig(config shared.SpellRank, isEle
 		Rank:                config.Rank,
 		IsElementalOverload: isElementalOverload,
 		BaseFlatCost:        config.Cost,
-		BonusCoefficient:    config.Direct.Coef,
+		BonusCoefficient:    shared.SpellRankCoef(config.Direct),
 		BaseCastTime:        time.Millisecond * 2500,
 	}
 	spellConfig := shaman.newElectricSpellConfig(shamConfig)
@@ -32,7 +32,7 @@ func (shaman *Shaman) newLightningBoltSpellConfig(config shared.SpellRank, isEle
 	spellConfig.MissileSpeed = 20
 
 	spellConfig.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		baseDamage := shaman.CalcAndRollDamageRange(sim, config.Direct.Min, config.Direct.Max)
+		baseDamage := shaman.CalcAndRollDamageRange(sim, shared.SpellRankMin(config.Direct), shared.SpellRankMax(config.Direct))
 		result := spell.CalcDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
 
 		spell.WaitTravelTime(sim, func(sim *core.Simulation) {

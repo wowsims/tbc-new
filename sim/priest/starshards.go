@@ -48,10 +48,10 @@ func (priest *Priest) registerStarshardsSpell(rank shared.SpellRank, cdTimer *co
 			NumberOfTicks:       5,
 			TickLength:          3 * time.Second,
 			AffectedByCastSpeed: false,
-			BonusCoefficient:    rank.Periodic.Coef,
+			BonusCoefficient:    shared.SpellRankCoef(rank.Periodic),
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.Snapshot(target, rank.Periodic.Tick)
+				dot.Snapshot(target, shared.SpellRankMin(rank.Periodic))
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
@@ -71,7 +71,7 @@ func (priest *Priest) registerStarshardsSpell(rank shared.SpellRank, cdTimer *co
 				dot := spell.Dot(target)
 				return dot.CalcSnapshotDamage(sim, target, spell.OutcomeExpectedMagicHit)
 			}
-			return spell.CalcPeriodicDamage(sim, target, rank.Periodic.Tick, spell.OutcomeExpectedMagicHit)
+			return spell.CalcPeriodicDamage(sim, target, shared.SpellRankMin(rank.Periodic), spell.OutcomeExpectedMagicHit)
 		},
 	})
 }

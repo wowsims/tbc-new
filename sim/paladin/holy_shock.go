@@ -24,9 +24,9 @@ var HolyShockRankMap = genRanks.HolyShock
 func (paladin *Paladin) registerHolyShock(rankConfig shared.SpellRank) {
 	spellID := rankConfig.SpellID
 	cost := rankConfig.Cost
-	minDamage := rankConfig.Direct.Min
-	maxDamage := rankConfig.Direct.Max
-	coefficient := rankConfig.Direct.Coef
+	minDamage := shared.SpellRankMin(rankConfig.Direct)
+	maxDamage := shared.SpellRankMax(rankConfig.Direct)
+	coefficient := shared.SpellRankCoef(rankConfig.Direct)
 
 	// Holy Shock heals for 1.267x the damage component of the spell.
 	healingCoeff := 1.267

@@ -30,12 +30,12 @@ func (druid *Druid) registerStarfireSpell(rankConfig shared.SpellRank) {
 			},
 		},
 
-		BonusCoefficient: rankConfig.Direct.Coef,
+		BonusCoefficient: shared.SpellRankCoef(rankConfig.Direct),
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := druid.CalcAndRollDamageRange(sim, rankConfig.Direct.Min, rankConfig.Direct.Max)
+			baseDamage := druid.CalcAndRollDamageRange(sim, shared.SpellRankMin(rankConfig.Direct), shared.SpellRankMax(rankConfig.Direct))
 			spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
 		},
 	})

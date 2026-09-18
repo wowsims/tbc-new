@@ -26,8 +26,8 @@ var HolyShieldRankMap = genRanks.HolyShield
 func (paladin *Paladin) registerHolyShield(rankConfig shared.SpellRank) {
 	spellID := rankConfig.SpellID
 	cost := rankConfig.Cost
-	value := rankConfig.Direct.Min
-	coefficient := rankConfig.Direct.Coef
+	value := shared.SpellRankMin(rankConfig.Direct)
+	coefficient := shared.SpellRankCoef(rankConfig.Direct)
 
 	actionID := core.ActionID{SpellID: spellID}
 

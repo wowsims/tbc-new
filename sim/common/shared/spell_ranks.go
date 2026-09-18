@@ -1,19 +1,104 @@
 package shared
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
-type SpellRankAmount struct {
+// What a rank is worth, discriminated by shape rather than by a struct that carries every field and
+// leaves the caller to guess which are meaningful. A talent's flat number has no Min and Max to
+// misread, and only a periodic value has a tick schedule.
+type SpellRankValue interface {
+	// The amount, as a range. A flat value and a periodic tick report the same number twice, so a
+	// caller that just wants to roll does not have to know which shape it was handed.
+	Amount() (float64, float64)
+
+	// Spell power, then attack power.
+	Coefficients() (float64, float64)
+
+	// Tick length and count, both zero unless the value is periodic.
+	Schedule() (time.Duration, int32)
+
+	isSpellRankValue()
+}
+
+// A single number: a mana restore, a talent's value, damage the client does not roll.
+type SpellRankFlat struct {
+	Value  float64
+	Coef   float64
+	APCoef float64
+}
+
+// Damage or healing rolled between two ends.
+type SpellRankRange struct {
 	Min    float64
 	Max    float64
 	Coef   float64
 	APCoef float64
 }
 
+// A tick, and the schedule it lands on. Ticks is Duration/Period as the client states them, which is
+// how every hand-written NumberOfTicks in the sim was arrived at.
 type SpellRankPeriodic struct {
 	Tick   float64
 	Coef   float64
 	APCoef float64
+	Period time.Duration
+	Ticks  int32
 }
+
+func (v SpellRankFlat) Amount() (float64, float64)     { return v.Value, v.Value }
+func (v SpellRankRange) Amount() (float64, float64)    { return v.Min, v.Max }
+func (v SpellRankPeriodic) Amount() (float64, float64) { return v.Tick, v.Tick }
+
+func (v SpellRankFlat) Coefficients() (float64, float64)     { return v.Coef, v.APCoef }
+func (v SpellRankRange) Coefficients() (float64, float64)    { return v.Coef, v.APCoef }
+func (v SpellRankPeriodic) Coefficients() (float64, float64) { return v.Coef, v.APCoef }
+
+func (v SpellRankFlat) Schedule() (time.Duration, int32)     { return 0, 0 }
+func (v SpellRankRange) Schedule() (time.Duration, int32)    { return 0, 0 }
+func (v SpellRankPeriodic) Schedule() (time.Duration, int32) { return v.Period, v.Ticks }
+
+// Convenience for the common reads, so a factory that knows its spell's shape is not forced through
+// a two-value return.
+//
+// A nil value reads as zero rather than panicking: a rank can legitimately carry nothing in a role
+// its ladder otherwise uses, as Lay on Hands rank 1 does by restoring no mana where ranks 2-4 do.
+func SpellRankCoef(v SpellRankValue) float64 {
+	if v == nil {
+		return 0
+	}
+	c, _ := v.Coefficients()
+	return c
+}
+
+func SpellRankAPCoef(v SpellRankValue) float64 {
+	if v == nil {
+		return 0
+	}
+	_, ap := v.Coefficients()
+	return ap
+}
+
+func SpellRankMin(v SpellRankValue) float64 {
+	if v == nil {
+		return 0
+	}
+	min, _ := v.Amount()
+	return min
+}
+
+func SpellRankMax(v SpellRankValue) float64 {
+	if v == nil {
+		return 0
+	}
+	_, max := v.Amount()
+	return max
+}
+
+func (v SpellRankFlat) isSpellRankValue()     {}
+func (v SpellRankRange) isSpellRankValue()    {}
+func (v SpellRankPeriodic) isSpellRankValue() {}
 
 // One rank of a spell, as the client database describes it.
 //
@@ -22,14 +107,19 @@ type SpellRankPeriodic struct {
 // for Consecration, a heal for Holy Light and a mana restore for Lay on Hands, and nothing at the call
 // site said which.
 type SpellRank struct {
-	Rank     int32
-	SpellID  int32
-	Cost     int32
-	CostPct  float64
-	Direct   *SpellRankAmount
-	Heal     *SpellRankAmount
-	Periodic *SpellRankPeriodic
-	Energize float64
+	Rank    int32
+	SpellID int32
+	Cost    int32
+	CostPct float64
+
+	// Zero until SpellCastTimes is extracted; the table is absent from this build's database, so the
+	// generator has nothing to read. Cast times genuinely differ per rank - Fireball's ranks point at
+	// casting-time indices 16, 14 and 22 - so a downrank cannot be registered faithfully without it.
+	CastTime time.Duration
+	Direct   SpellRankValue
+	Heal     SpellRankValue
+	Periodic SpellRankValue
+	Energize SpellRankValue
 
 	FlatThreatBonus float64
 }
@@ -100,26 +190,14 @@ type SpellRankTable = SpellRankTableOf[SpellRank]
 // in server script, which is why melee spells in this sim still hardcode theirs (sim/druid/rip.go:52
 // reads 990 + 0.18*ap).
 //
-// Functions rather than methods because SpellRankTable is an alias for an instantiated generic, which Go
-// will not let us hang methods on.
-//
-// Both return a copy, down to the SpellRankAmount and SpellRankPeriodic each row points at, so the generated table keeps
-// whatever the database said. Both panic if the generated value is already nonzero: a coefficient that
-// appears upstream should be noticed rather than silently shadowed by the hand-written one.
+// Returns a copy, so the generated table keeps whatever the database said, and panics if that table
+// already carries a coefficient: a value appearing upstream should be noticed rather than silently
+// shadowed by the hand-written one.
 func WithSpellRankAPCoef(table SpellRankTable, coef float64) SpellRankTable {
 	out := make(SpellRankTable, len(table))
 	for i, row := range table {
-		if row.Direct == nil {
-			panic(fmt.Sprintf("spell %d rank %d has no direct amount to give an AP coefficient", row.SpellID, row.Rank))
-		}
-		if row.Direct.APCoef != 0 {
-			panic(fmt.Sprintf("spell %d rank %d already has AP coefficient %v from the client DB", row.SpellID, row.Rank, row.Direct.APCoef))
-		}
-
-		direct := *row.Direct
-		direct.APCoef = coef
 		out[i] = row
-		out[i].Direct = &direct
+		out[i].Direct = withAPCoef(row.Direct, coef, row.SpellID, row.Rank)
 	}
 	return out
 }
@@ -127,17 +205,30 @@ func WithSpellRankAPCoef(table SpellRankTable, coef float64) SpellRankTable {
 func WithSpellRankPeriodicAPCoef(table SpellRankTable, coef float64) SpellRankTable {
 	out := make(SpellRankTable, len(table))
 	for i, row := range table {
-		if row.Periodic == nil {
-			panic(fmt.Sprintf("spell %d rank %d has no periodic amount to give an AP coefficient", row.SpellID, row.Rank))
-		}
-		if row.Periodic.APCoef != 0 {
-			panic(fmt.Sprintf("spell %d rank %d already has AP coefficient %v from the client DB", row.SpellID, row.Rank, row.Periodic.APCoef))
-		}
-
-		periodic := *row.Periodic
-		periodic.APCoef = coef
 		out[i] = row
-		out[i].Periodic = &periodic
+		out[i].Periodic = withAPCoef(row.Periodic, coef, row.SpellID, row.Rank)
 	}
 	return out
+}
+
+func withAPCoef(value SpellRankValue, coef float64, spellID, rank int32) SpellRankValue {
+	if value == nil {
+		panic(fmt.Sprintf("spell %d rank %d has no value to give an AP coefficient", spellID, rank))
+	}
+	if _, existing := value.Coefficients(); existing != 0 {
+		panic(fmt.Sprintf("spell %d rank %d already has AP coefficient %v from the client DB", spellID, rank, existing))
+	}
+
+	switch v := value.(type) {
+	case SpellRankFlat:
+		v.APCoef = coef
+		return v
+	case SpellRankRange:
+		v.APCoef = coef
+		return v
+	case SpellRankPeriodic:
+		v.APCoef = coef
+		return v
+	}
+	panic(fmt.Sprintf("spell %d rank %d has an unknown value shape %T", spellID, rank, value))
 }
