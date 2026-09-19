@@ -38,60 +38,55 @@ const (
 	classDruid   = 1024
 )
 
-type calibFamily struct {
+type rankFamily struct {
 	Name     string
-	File     string
 	ClassBit int
 	Table    shared.SpellRankTable
 }
 
 // The two shaman tables were inline anonymous literals until they were hoisted to package vars so this
 // gate could read them.
-var calibFamilies = []calibFamily{
-	{"Consecration", "sim/paladin/consecration.go", classPaladin, paladin.ConsecrationRankMap},
-	{"Hammer of Wrath", "sim/paladin/hammer_of_wrath.go", classPaladin, paladin.HammerOfWrathRankMap},
-	{"Holy Wrath", "sim/paladin/holy_wrath.go", classPaladin, paladin.HolyWrathRankMap},
-	{"Exorcism", "sim/paladin/exorcism.go", classPaladin, paladin.ExorcismRankMap},
-	{"Holy Light", "sim/paladin/healing.go", classPaladin, paladin.HolyLightRankMap},
-	{"Flash of Light", "sim/paladin/healing.go", classPaladin, paladin.FlashOfLightRankMap},
-	{"Lay on Hands", "sim/paladin/healing.go", classPaladin, paladin.LayOnHandsRankMap},
-	{"Holy Shield", "sim/paladin/holy_shield.go", classPaladin, paladin.HolyShieldRankMap},
-	{"Holy Shock", "sim/paladin/holy_shock.go", classPaladin, paladin.HolyShockRankMap},
-	{"Avenger's Shield", "sim/paladin/avengers_shield.go", classPaladin, paladin.AvengersShieldRankMap},
+var rankFamilies = []rankFamily{
+	{"Consecration", classPaladin, paladin.ConsecrationRankMap},
+	{"Hammer of Wrath", classPaladin, paladin.HammerOfWrathRankMap},
+	{"Holy Wrath", classPaladin, paladin.HolyWrathRankMap},
+	{"Exorcism", classPaladin, paladin.ExorcismRankMap},
+	{"Holy Light", classPaladin, paladin.HolyLightRankMap},
+	{"Flash of Light", classPaladin, paladin.FlashOfLightRankMap},
+	{"Lay on Hands", classPaladin, paladin.LayOnHandsRankMap},
+	{"Holy Shield", classPaladin, paladin.HolyShieldRankMap},
+	{"Holy Shock", classPaladin, paladin.HolyShockRankMap},
+	{"Avenger's Shield", classPaladin, paladin.AvengersShieldRankMap},
 
-	{"Mind Blast", "sim/priest/mind_blast.go", classPriest, priest.MindBlastRankMap},
-	{"Mind Flay", "sim/priest/mind_flay.go", classPriest, priest.MindFlayRankMap},
-	{"Shadow Word: Pain", "sim/priest/shadow_word_pain.go", classPriest, priest.ShadowWordPainRankMap},
-	{"Shadow Word: Death", "sim/priest/shadow_word_death.go", classPriest, priest.ShadowWordDeathRankMap},
-	{"Smite", "sim/priest/smite.go", classPriest, priest.SmiteRankMap},
-	{"Devouring Plague", "sim/priest/devouring_plague.go", classPriest, priest.DevouringPlagueRankMap},
-	{"Holy Nova", "sim/priest/holy_nova.go", classPriest, priest.HolyNovaRankMap},
-	{"Starshards", "sim/priest/starshards.go", classPriest, priest.StarshardsRankMap},
-	{"Vampiric Touch", "sim/priest/vampiric_touch.go", classPriest, priest.VampiricTouchRankMap},
+	{"Mind Blast", classPriest, priest.MindBlastRankMap},
+	{"Mind Flay", classPriest, priest.MindFlayRankMap},
+	{"Shadow Word: Pain", classPriest, priest.ShadowWordPainRankMap},
+	{"Shadow Word: Death", classPriest, priest.ShadowWordDeathRankMap},
+	{"Smite", classPriest, priest.SmiteRankMap},
+	{"Devouring Plague", classPriest, priest.DevouringPlagueRankMap},
+	{"Holy Nova", classPriest, priest.HolyNovaRankMap},
+	{"Starshards", classPriest, priest.StarshardsRankMap},
+	{"Vampiric Touch", classPriest, priest.VampiricTouchRankMap},
 
-	{"Lightning Bolt", "sim/shaman/lightning_bolt.go", classShaman, shaman.LightningBoltRankMap},
-	{"Chain Lightning", "sim/shaman/chain_lightning.go", classShaman, shaman.ChainLightningRankMap},
+	{"Lightning Bolt", classShaman, shaman.LightningBoltRankMap},
+	{"Chain Lightning", classShaman, shaman.ChainLightningRankMap},
 
-	{"Flamestrike", "sim/mage/flamestrike.go", classMage, mage.FlameStrikeRankMap},
-	{"Starfire", "sim/druid/starfire.go", classDruid, druid.StarfireRankMap},
+	{"Flamestrike", classMage, mage.FlameStrikeRankMap},
+	{"Starfire", classDruid, druid.StarfireRankMap},
 }
 
-// Literal rounding in the hand tables: 0.429 stands in for 0.428999990224838, a 2.3e-8 difference.
-// Deliberately far tighter than the gap between a rounded literal and a genuinely different number -
-// Mind Blast's 0.42857 (3/7) against the DB's 0.429 is 4.3e-4 and has to surface as a residual, not be
-// waved through as precision.
+// One value in the committed table against the same value re-derived from the database.
 type comparison struct {
-	Family  string
-	File    string
-	Rank    int32
-	SpellID int32
-	Field   string
-	Hand    float64
-	Derived float64
-	Source  string
+	Family    string
+	Rank      int32
+	SpellID   int32
+	Field     string
+	Generated float64
+	Derived   float64
+	Source    string
 }
 
-func (c comparison) ok() bool { return c.Hand == c.Derived }
+func (c comparison) ok() bool { return c.Generated == c.Derived }
 
 func TestGeneratedRankTablesMatchTheDatabase(t *testing.T) {
 	DatabasePath = "wowsims.db"
@@ -107,7 +102,7 @@ func TestGeneratedRankTablesMatchTheDatabase(t *testing.T) {
 	db := helper.db
 
 	var all []comparison
-	for _, fam := range calibFamilies {
+	for _, fam := range rankFamilies {
 		for _, row := range fam.Table {
 			all = append(all, compareRow(t, db, fam, row)...)
 		}
@@ -124,11 +119,11 @@ func TestGeneratedRankTablesMatchTheDatabase(t *testing.T) {
 	for _, c := range mismatched {
 		t.Errorf("%s rank %d (spell %d) %s: table says %v, the database derives %v (%s)\n"+
 			"    regenerate with `go run ./tools/database/gen_spellranks`, or fix DeriveRankAmount",
-			c.Family, c.Rank, c.SpellID, c.Field, c.Hand, c.Derived, c.Source)
+			c.Family, c.Rank, c.SpellID, c.Field, c.Generated, c.Derived, c.Source)
 	}
 }
 
-func compareRow(t *testing.T, db *sql.DB, fam calibFamily, row shared.SpellRank) []comparison {
+func compareRow(t *testing.T, db *sql.DB, fam rankFamily, row shared.SpellRank) []comparison {
 	t.Helper()
 
 	spell, candidates, err := RankCandidates(db, row.SpellID, fam.ClassBit)
@@ -136,13 +131,13 @@ func compareRow(t *testing.T, db *sql.DB, fam calibFamily, row shared.SpellRank)
 		t.Fatalf("%s rank %d: %v", fam.Name, row.Rank, err)
 	}
 
-	base := comparison{Family: fam.Name, File: fam.File, Rank: row.Rank, SpellID: row.SpellID}
+	base := comparison{Family: fam.Name, Rank: row.Rank, SpellID: row.SpellID}
 	var out []comparison
 
 	if row.Cost > 0 || spell.ManaCost.Valid {
 		c := base
 		c.Field = "Cost"
-		c.Hand = float64(row.Cost)
+		c.Generated = float64(row.Cost)
 		c.Source = "SpellPower.ManaCost"
 		if spell.ManaCost.Valid {
 			c.Derived = float64(NormalizePowerCost(int32(spell.ManaCost.Int64), spell.PowerType))
@@ -185,19 +180,13 @@ func compareRow(t *testing.T, db *sql.DB, fam calibFamily, row shared.SpellRank)
 	return out
 }
 
+// Holy Shield's per-block damage lives on an aura effect (EffectAura 43) rather than on a damage
+// effect, and the generator files it under Direct all the same, so any aura effect is a candidate too.
 func directCandidates(effects []RankEffect) []RankEffect {
 	var out []RankEffect
 	for _, e := range effects {
-		switch e.Effect {
-		case effSchoolDamage, effHeal, effEnergize:
+		if e.Effect == effSchoolDamage || e.Effect == effHeal || e.Effect == effEnergize || e.Aura != 0 {
 			out = append(out, e)
-		default:
-			// Holy Shield's block damage lives on an aura effect (EffectAura 43) rather than a damage
-			// effect, and Consecration's per-tick damage is the periodic one. Both are still "the number
-			// the hand table wrote into MinDamage".
-			if e.Aura != 0 {
-				out = append(out, e)
-			}
 		}
 	}
 	return out
@@ -206,7 +195,7 @@ func directCandidates(effects []RankEffect) []RankEffect {
 func periodicCandidates(effects []RankEffect) []RankEffect {
 	var out []RankEffect
 	for _, e := range effects {
-		if e.Aura == effAuraPeriodic {
+		if IsPeriodicAura(e.Aura) {
 			out = append(out, e)
 		}
 	}
@@ -216,67 +205,67 @@ func periodicCandidates(effects []RankEffect) []RankEffect {
 	return out
 }
 
-func matchPair(base comparison, minField, maxField string, handMin, handMax float64, cands []RankEffect, spell RankSpell) []comparison {
+func matchPair(base comparison, minField, maxField string, genMin, genMax float64, cands []RankEffect, spell RankSpell) []comparison {
 	bestMin, bestMax, bestSrc, found := 0.0, 0.0, "no candidate effect", false
 	for _, e := range cands {
 		dMin, dMax := DeriveRankAmount(e, spell.SpellLevel, spell.MaxLevel)
 		src := fmt.Sprintf("spell %d effect %d (Effect=%d, Aura=%d)", e.OwnerSpellID, e.Index, e.Effect, e.Aura)
-		if dMin == handMin && (handMax == 0 || dMax == handMax) {
-			out := []comparison{finishWith(base, minField, handMin, dMin, src)}
-			if handMax > 0 {
-				out = append(out, finishWith(base, maxField, handMax, dMax, src))
+		if dMin == genMin && (genMax == 0 || dMax == genMax) {
+			out := []comparison{finishWith(base, minField, genMin, dMin, src)}
+			if genMax > 0 {
+				out = append(out, finishWith(base, maxField, genMax, dMax, src))
 			}
 			return out
 		}
 		// Closest candidate, so a residual reports a near-miss rather than "no match".
-		if !found || math.Abs(dMin-handMin) < math.Abs(bestMin-handMin) {
+		if !found || math.Abs(dMin-genMin) < math.Abs(bestMin-genMin) {
 			bestMin, bestMax, bestSrc, found = dMin, dMax, src, true
 		}
 	}
 
-	out := []comparison{finishWith(base, minField, handMin, bestMin, bestSrc)}
-	if handMax > 0 {
-		out = append(out, finishWith(base, maxField, handMax, bestMax, bestSrc))
+	out := []comparison{finishWith(base, minField, genMin, bestMin, bestSrc)}
+	if genMax > 0 {
+		out = append(out, finishWith(base, maxField, genMax, bestMax, bestSrc))
 	}
 	return out
 }
 
-func matchTick(base comparison, handTick float64, cands []RankEffect, spell RankSpell) comparison {
+func matchTick(base comparison, genTick float64, cands []RankEffect, spell RankSpell) comparison {
 	bestTick, bestSrc := 0.0, "no periodic effect"
 	for _, e := range cands {
 		dMin, _ := DeriveRankAmount(e, spell.SpellLevel, spell.MaxLevel)
 		src := fmt.Sprintf("spell %d effect %d (periodic)", e.OwnerSpellID, e.Index)
-		if dMin == handTick {
-			return finishWith(base, "DotTickDamage", handTick, dMin, src)
+		if dMin == genTick {
+			return finishWith(base, "DotTickDamage", genTick, dMin, src)
 		}
-		if bestSrc == "no periodic effect" || math.Abs(dMin-handTick) < math.Abs(bestTick-handTick) {
+		if bestSrc == "no periodic effect" || math.Abs(dMin-genTick) < math.Abs(bestTick-genTick) {
 			bestTick, bestSrc = dMin, src
 		}
 	}
-	return finishWith(base, "DotTickDamage", handTick, bestTick, bestSrc)
+	return finishWith(base, "DotTickDamage", genTick, bestTick, bestSrc)
 }
 
-func matchCoefficient(base comparison, handCoef float64, cands []RankEffect) comparison {
+func matchCoefficient(base comparison, genCoef float64, cands []RankEffect) comparison {
 	best, bestSrc := 0.0, "no candidate effect"
 	for _, e := range cands {
 		if e.Coefficient <= 0 {
 			continue
 		}
 		src := fmt.Sprintf("spell %d effect %d", e.OwnerSpellID, e.Index)
-		if e.Coefficient == handCoef {
-			return finishWith(base, "Coefficient", handCoef, e.Coefficient, src)
+		if e.Coefficient == genCoef {
+			return finishWith(base, "Coefficient", genCoef, e.Coefficient, src)
 		}
-		if bestSrc == "no candidate effect" || math.Abs(e.Coefficient-handCoef) < math.Abs(best-handCoef) {
+		if bestSrc == "no candidate effect" || math.Abs(e.Coefficient-genCoef) < math.Abs(best-genCoef) {
 			best, bestSrc = e.Coefficient, src
 		}
 	}
-	return finishWith(base, "Coefficient", handCoef, best, bestSrc)
+	return finishWith(base, "Coefficient", genCoef, best, bestSrc)
 }
 
-func finishWith(base comparison, field string, hand, derived float64, source string) comparison {
+func finishWith(base comparison, field string, generated, derived float64, source string) comparison {
 	c := base
 	c.Field = field
-	c.Hand = hand
+	c.Generated = generated
 	c.Derived = derived
 	c.Source = source
 	return c
