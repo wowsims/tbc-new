@@ -51,8 +51,6 @@ func (war *Warrior) registerProtectionTalents() {
 	war.registerDevastate()
 }
 
-var tacticalMasteryThreat = genRanks.TacticalMastery.EffectAt(1)
-
 func (war *Warrior) registerTacticalMastery() {
 	if war.Talents.TacticalMastery == 0 {
 		return
@@ -71,7 +69,7 @@ func (war *Warrior) registerTacticalMastery() {
 				// Both threat effects are A_ADD_PCT_MODIFIER/SPELLMOD_THREAT, one masked to Mortal
 				// Strike and one to Bloodthirst, so Effect cannot tell them apart. They carry the
 				// same 21/42/63.
-				FloatValue: tacticalMasteryThreat.FractionAt(war.Talents.TacticalMastery),
+				FloatValue: genRanks.TacticalMastery.EffectAt(1).FractionAt(war.Talents.TacticalMastery),
 			})
 	})
 }

@@ -147,9 +147,10 @@ func (hunter *Hunter) registerAnimalHandler() {
 		return
 	}
 
+	hitPercent := genRanks.AnimalHandler.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_ALL_EFFECTS).ValueAt(hunter.Talents.AnimalHandler)
 	hunter.Pet.AddStats(stats.Stats{
-		stats.PhysicalHitPercent: genRanks.AnimalHandler.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_ALL_EFFECTS).ValueAt(hunter.Talents.AnimalHandler),
-		stats.SpellHitPercent:    genRanks.AnimalHandler.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_ALL_EFFECTS).ValueAt(hunter.Talents.AnimalHandler),
+		stats.PhysicalHitPercent: hitPercent,
+		stats.SpellHitPercent:    hitPercent,
 	})
 }
 

@@ -146,15 +146,17 @@ func (rogue *Rogue) registerMaceSpecialization() {
 		return
 	}
 
+	critDamage := genRanks.MaceSpecialization.Effect(shared.A_MOD_CRIT_DAMAGE_BONUS, 1).FractionAt(rogue.Talents.MaceSpecialization)
+
 	mhMod := rogue.AddDynamicMod(core.SpellModConfig{
 		Kind:       core.SpellMod_CritMultiplier_Pct,
 		ProcMask:   core.ProcMaskMeleeMH,
-		FloatValue: genRanks.MaceSpecialization.Effect(shared.A_MOD_CRIT_DAMAGE_BONUS, 1).FractionAt(rogue.Talents.MaceSpecialization),
+		FloatValue: critDamage,
 	})
 	ohMod := rogue.AddDynamicMod(core.SpellModConfig{
 		Kind:       core.SpellMod_CritMultiplier_Pct,
 		ProcMask:   core.ProcMaskMeleeOH,
-		FloatValue: genRanks.MaceSpecialization.Effect(shared.A_MOD_CRIT_DAMAGE_BONUS, 1).FractionAt(rogue.Talents.MaceSpecialization),
+		FloatValue: critDamage,
 	})
 
 	if rogue.GetMHWeapon() != nil && rogue.GetMHWeapon().WeaponType == proto.WeaponType_WeaponTypeMace {

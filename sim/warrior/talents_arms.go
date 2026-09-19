@@ -255,28 +255,30 @@ func (war *Warrior) registerPoleaxeSpecialization() {
 		return handItem != nil && (handItem.WeaponType == proto.WeaponType_WeaponTypeAxe || handItem.WeaponType == proto.WeaponType_WeaponTypePolearm)
 	}
 
+	critPercent := genRanks.PoleaxeSpecialization.ValueAt(war.Talents.PoleaxeSpecialization)
+
 	mhCritMod := war.AddDynamicMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
 		ProcMask:   core.ProcMaskMeleeMH,
-		FloatValue: genRanks.PoleaxeSpecialization.ValueAt(war.Talents.PoleaxeSpecialization),
+		FloatValue: critPercent,
 	})
 
 	ohCritMod := war.AddDynamicMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
 		ProcMask:   core.ProcMaskMeleeOH,
-		FloatValue: genRanks.PoleaxeSpecialization.ValueAt(war.Talents.PoleaxeSpecialization),
+		FloatValue: critPercent,
 	})
 
 	mainhandWWOhCritMod := war.AddDynamicMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
 		ClassMask:  SpellMaskWhirlwindOh,
-		FloatValue: genRanks.PoleaxeSpecialization.ValueAt(war.Talents.PoleaxeSpecialization),
+		FloatValue: critPercent,
 	})
 
 	offhandWWOhCritMod := war.AddDynamicMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
 		ClassMask:  SpellMaskWhirlwindOh,
-		FloatValue: -genRanks.PoleaxeSpecialization.ValueAt(war.Talents.PoleaxeSpecialization),
+		FloatValue: -critPercent,
 	})
 
 	handleEquippedWeapons := func() {
