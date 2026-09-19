@@ -259,21 +259,19 @@ func resolveLadder(db *sql.DB, byRank map[int32][]rankCandidate, mask int) (map[
 			ids[c.SpellID] = true
 		}
 
+		if len(ids) == 1 {
+			ladder[rank] = chosen[0].SpellID
+			continue
+		}
+
 		// Holy Shock is one name over three spells per rank: a dummy the player casts, plus a damage
 		// and a heal spell the client never exposes. Only the castable one carries a SpellPower row,
 		// and it is the one the sim registers, so that is the tie-break.
-		if len(ids) > 1 {
-			castable, err := castableOf(db, ids)
-			if err != nil {
-				return nil, err
-			}
-			if castable != 0 {
-				ladder[rank] = castable
-				continue
-			}
+		castable, err := castableOf(db, ids)
+		if err != nil {
+			return nil, err
 		}
-
-		if len(ids) > 1 {
+		if castable == 0 {
 			var list []string
 			for id := range ids {
 				list = append(list, strconv.Itoa(int(id)))
@@ -281,7 +279,7 @@ func resolveLadder(db *sql.DB, byRank map[int32][]rankCandidate, mask int) (map[
 			sort.Strings(list)
 			return nil, fmt.Errorf("rank %d is ambiguous between spells %s", rank, strings.Join(list, ", "))
 		}
-		ladder[rank] = chosen[0].SpellID
+		ladder[rank] = castable
 	}
 
 	maxRank := int32(0)
