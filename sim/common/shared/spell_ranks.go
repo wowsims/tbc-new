@@ -145,11 +145,9 @@ type SpellRank struct {
 	Periodic     SpellRankValue
 	Energize     SpellRankValue
 
-	// Every effect the client states, in index order.
-	//
-	// The role fields above describe one effect each, which is all a castable spell needs. A talent
-	// routinely carries two or three that the sim reads separately: Improved Righteous Fury raises
-	// threat on aura 108 and cuts damage taken on aura 107, and only one of them can be Direct.
+	// Every effect the client states, in index order. A role field above holds one each, which is not
+	// enough for a talent: Improved Righteous Fury raises threat on one effect and cuts damage taken
+	// on another, and only one of them can be Direct.
 	Effects []SpellRankEffect
 
 	FlatThreatBonus float64
@@ -178,11 +176,8 @@ type SpellRankEffect struct {
 	Value float64
 }
 
-// The one effect with this aura and misc value.
-//
-// Panics when there is no such effect, and panics when there are two: 186 ranked spells in this build
-// carry a duplicate pair, and silently returning the first is how a caller ends up reading the wrong
-// half of a talent. Reach for Effects by index when the pair cannot tell them apart.
+// Panics when no effect matches, and when two do - 186 ranked spells carry a duplicate aura/misc
+// pair. Index into Effects where the pair cannot tell them apart.
 func (r SpellRank) Effect(aura SpellRankAura, misc int32) SpellRankEffect {
 	found := -1
 	for i, e := range r.Effects {

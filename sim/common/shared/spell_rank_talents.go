@@ -2,13 +2,9 @@ package shared
 
 import "fmt"
 
-// Which part of a spell a modifier aura changes: the Misc value of an effect whose Aura is
-// A_ADD_PCT_MODIFIER or A_ADD_FLAT_MODIFIER. Untyped, because Misc means something different under
-// every other aura and a type here would imply these names apply there too.
-//
-// Hand-written, unlike the A_ and E_ constants, because the client ships no name list for them. Each
-// is read off the talents that use it, named in the trailing comment so the next reader can audit it
-// rather than trust it. Only the values the tables carry are named.
+// The Misc value of an A_ADD_PCT_MODIFIER or A_ADD_FLAT_MODIFIER effect: which part of the spell it
+// changes. Untyped - Misc is a stat under A_MOD_TOTAL_STAT_PERCENTAGE, a school mask under
+// A_MOD_DAMAGE_DONE. Hand-written; the client ships no name list, so each carries its evidence.
 const (
 	SPELLMOD_DAMAGE             = 0  // Fire Power, Piercing Ice, Contagion
 	SPELLMOD_DURATION           = 1  // Permafrost, Improved Gouge, Brutal Impact
@@ -37,8 +33,7 @@ const (
 	SPELLMOD_RESIST_DISPEL_CHANCE  = 28 // Vile Poisons, Sanctified Seals
 )
 
-// Reads the ladder by points spent. Rank 0 means untaken and answers 0, where ByRank would panic:
-// a spell is registered at a rank it has, a talent is read at whatever the player put in it.
+// Reads the ladder by points spent. Rank 0 is untaken and answers 0, where ByRank would panic.
 func (t SpellRankTableOf[T]) ValueAt(rank int32) float64 {
 	return ladderValue(t, rank, nil)
 }
@@ -48,8 +43,7 @@ func (t SpellRankTableOf[T]) FractionAt(rank int32) float64 {
 	return t.ValueAt(rank) / 100
 }
 
-// What a damage or cost multiplier takes. The sign comes from the data: Improved Righteous Fury
-// states its reduction as -2/-4/-6, so rank 3 gives 0.94 without the caller knowing to subtract.
+// The sign comes from the data: Improved Righteous Fury states -2/-4/-6, so rank 3 gives 0.94.
 func (t SpellRankTableOf[T]) MultiplierAt(rank int32) float64 {
 	return 1 + t.FractionAt(rank)
 }
