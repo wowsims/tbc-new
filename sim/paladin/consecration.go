@@ -23,8 +23,8 @@ func (paladin *Paladin) registerConsecration(rankConfig shared.SpellRank) {
 
 	spellID := rankConfig.SpellID
 	cost := rankConfig.Cost
-	minDamage := shared.SpellRankMin(rankConfig.Periodic)
-	coefficient := rankConfig.Periodic.BonusCoefficient()
+	minDamage := tick.Tick
+	coefficient := tick.Coef
 
 	paladin.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: spellID},

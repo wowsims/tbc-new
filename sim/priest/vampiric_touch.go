@@ -57,10 +57,10 @@ func (priest *Priest) registerVampiricTouchSpell(rank shared.SpellRank) {
 			NumberOfTicks:       tick.NumberOfTicks,
 			TickLength:          tick.TickLength,
 			AffectedByCastSpeed: false,
-			BonusCoefficient:    rank.Periodic.BonusCoefficient(),
+			BonusCoefficient:    tick.Coef,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.Snapshot(target, shared.SpellRankMin(rank.Periodic))
+				dot.Snapshot(target, tick.Tick)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)
@@ -79,7 +79,7 @@ func (priest *Priest) registerVampiricTouchSpell(rank shared.SpellRank) {
 				dot := spell.Dot(target)
 				return dot.CalcSnapshotDamage(sim, target, spell.OutcomeExpectedMagicHit)
 			}
-			return spell.CalcPeriodicDamage(sim, target, shared.SpellRankMin(rank.Periodic), spell.OutcomeExpectedMagicHit)
+			return spell.CalcPeriodicDamage(sim, target, tick.Tick, spell.OutcomeExpectedMagicHit)
 		},
 	})
 }

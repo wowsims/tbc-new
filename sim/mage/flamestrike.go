@@ -47,7 +47,7 @@ func (mage *Mage) registerFlamestrike(rankConfig shared.SpellRank) {
 			BonusCoefficient: flameStrikeDotCoefficient,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.Snapshot(target, shared.SpellRankMin(rankConfig.Periodic))
+				dot.Snapshot(target, tick.Tick)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				for _, aoeTarget := range sim.Encounter.ActiveTargetUnits {

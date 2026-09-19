@@ -34,7 +34,7 @@ func (hunter *Hunter) registerSerpentStingSpell() {
 			NumberOfTicks: serpentStingTick.NumberOfTicks,
 			TickLength:    serpentStingTick.TickLength,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				baseDmg := dot.Spell.RangedAttackPower(target)*0.02 + serpentStingRank.Periodic.Damage(sim)
+				baseDmg := dot.Spell.RangedAttackPower(target)*0.02 + serpentStingTick.Damage(sim)
 				dot.Snapshot(target, baseDmg)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
