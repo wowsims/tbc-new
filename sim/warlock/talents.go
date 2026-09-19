@@ -305,7 +305,7 @@ func (warlock *Warlock) applyFelStamina() {
 		return
 	}
 
-	warlock.MultiplyStat(stats.Health, 1.0+0.01*float64(warlock.Talents.FelStamina))
+	warlock.MultiplyStat(stats.Health, 1.0+genRanks.FelStamina.Effect(shared.A_MOD_INCREASE_HEALTH_PERCENT, 0).FractionAt(warlock.Talents.FelStamina))
 	for _, pet := range warlock.Pets {
 		pet.MultiplyStat(stats.Health, 1+(0.05)*float64(warlock.Talents.FelStamina))
 	}

@@ -1,6 +1,7 @@
 package warrior
 
 import (
+	"github.com/wowsims/tbc/sim/common/shared"
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
@@ -75,13 +76,13 @@ func (war *Warrior) registerDefiance() {
 		return
 	}
 
-	war.AddStat(stats.ExpertiseRating, 2*float64(war.Talents.Defiance)*core.ExpertisePerQuarterPercentReduction)
+	war.AddStat(stats.ExpertiseRating, genRanks.Defiance.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_ALL_EFFECTS).ValueAt(war.Talents.Defiance)*core.ExpertisePerQuarterPercentReduction)
 	war.OnSpellRegistered(func(spell *core.Spell) {
 		if !spell.Matches(SpellMaskDefensiveStance) {
 			return
 		}
 		spell.RelatedSelfBuff.
-			AttachMultiplicativePseudoStatBuff(&war.PseudoStats.ThreatMultiplier, 1+0.05*float64(war.Talents.Defiance))
+			AttachMultiplicativePseudoStatBuff(&war.PseudoStats.ThreatMultiplier, genRanks.Defiance.Effect(shared.A_MOD_THREAT, 127).MultiplierAt(war.Talents.Defiance))
 	})
 }
 
@@ -101,7 +102,7 @@ func (war *Warrior) registerAnticipation() {
 			AttachSpellMod(core.SpellModConfig{
 				ClassMask:  SpellMaskMortalStrike | SpellMaskBloodthirst,
 				Kind:       core.SpellMod_ThreatMultiplier_Pct,
-				FloatValue: 0.05 * float64(war.Talents.Defiance),
+				FloatValue: genRanks.Defiance.Effect(shared.A_MOD_THREAT, 127).FractionAt(war.Talents.Defiance),
 			})
 	})
 }
@@ -111,7 +112,7 @@ func (war *Warrior) registerShieldSpecialization() {
 		return
 	}
 
-	war.AddStat(stats.BlockPercent, 0.01*float64(war.Talents.ShieldSpecialization))
+	war.AddStat(stats.BlockPercent, genRanks.ShieldSpecialization.Effect(shared.A_MOD_BLOCK_PERCENT, 0).FractionAt(war.Talents.ShieldSpecialization))
 
 	rageMetrics := war.NewRageMetrics(core.ActionID{SpellID: 23602})
 
@@ -411,8 +412,8 @@ func (war *Warrior) registerVitality() {
 		return
 	}
 
-	war.MultiplyStat(stats.Stamina, 1+0.01*float64(war.Talents.Vitality))
-	war.MultiplyStat(stats.Strength, 1+0.02*float64(war.Talents.Vitality))
+	war.MultiplyStat(stats.Stamina, genRanks.Vitality.Effect(shared.A_MOD_TOTAL_STAT_PERCENTAGE, 2).MultiplierAt(war.Talents.Vitality))
+	war.MultiplyStat(stats.Strength, genRanks.Vitality.Effect(shared.A_MOD_TOTAL_STAT_PERCENTAGE, 0).MultiplierAt(war.Talents.Vitality))
 }
 
 func (war *Warrior) registerDevastate() {

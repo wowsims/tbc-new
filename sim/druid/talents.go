@@ -79,7 +79,7 @@ func (druid *Druid) applyPredatoryInstincts() {
 	druid.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_CritMultiplier_Pct,
 		School:     core.SpellSchoolPhysical,
-		FloatValue: 0.02 * float64(druid.Talents.PredatoryInstincts),
+		FloatValue: genRanks.PredatoryInstincts.Effect(shared.A_MOD_CRIT_DAMAGE_BONUS, 1).FractionAt(druid.Talents.PredatoryInstincts),
 	})
 }
 
@@ -301,7 +301,7 @@ func (druid *Druid) applyIntensity() {
 	}
 
 	// Allows 10% per rank of mana regeneration to continue while casting
-	druid.PseudoStats.SpiritRegenRateCasting += 0.10 * float64(druid.Talents.Intensity)
+	druid.PseudoStats.SpiritRegenRateCasting += genRanks.Intensity.Effect(shared.A_MOD_MANA_REGEN_INTERRUPT, 0).FractionAt(druid.Talents.Intensity)
 	druid.UpdateManaRegenRates()
 
 	// Enrage instantly generates additional rage per rank (4/7/10)
@@ -345,7 +345,7 @@ func (druid *Druid) applyNaturalist() {
 		return
 	}
 
-	druid.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexPhysical] *= 1 + 0.02*float64(druid.Talents.Naturalist)
+	druid.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexPhysical] *= genRanks.Naturalist.Effect(shared.A_MOD_DAMAGE_PERCENT_DONE, 1).MultiplierAt(druid.Talents.Naturalist)
 }
 
 func (druid *Druid) applyHeartOfTheWild() {
@@ -356,7 +356,7 @@ func (druid *Druid) applyHeartOfTheWild() {
 	// +4% Intellect per rank (all forms, always active).
 	// The Cat/Bear form-specific bonuses (+2% AP, +4% Stamina) are handled
 	// dynamically in RegisterCatFormAura / RegisterBearFormAura.
-	druid.MultiplyStat(stats.Intellect, 1+0.04*float64(druid.Talents.HeartOfTheWild))
+	druid.MultiplyStat(stats.Intellect, genRanks.HeartOfTheWild.Effect(shared.A_MOD_TOTAL_STAT_PERCENTAGE, 3).MultiplierAt(druid.Talents.HeartOfTheWild))
 }
 
 func (druid *Druid) applySurvivalOfTheFittest() {
@@ -452,7 +452,7 @@ func (druid *Druid) applyFeralAggression() {
 	druid.AddStaticMod(core.SpellModConfig{
 		ClassMask:  DruidSpellFerociousBite,
 		Kind:       core.SpellMod_DamageDone_Flat,
-		FloatValue: 0.03 * float64(druid.Talents.FeralAggression),
+		FloatValue: genRanks.FeralAggression.Effect(shared.A_ADD_PCT_MODIFIER, shared.SPELLMOD_DAMAGE).FractionAt(druid.Talents.FeralAggression),
 	})
 }
 

@@ -1,6 +1,7 @@
 package rogue
 
 import (
+	"github.com/wowsims/tbc/sim/common/shared"
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
@@ -148,12 +149,12 @@ func (rogue *Rogue) registerMaceSpecialization() {
 	mhMod := rogue.AddDynamicMod(core.SpellModConfig{
 		Kind:       core.SpellMod_CritMultiplier_Pct,
 		ProcMask:   core.ProcMaskMeleeMH,
-		FloatValue: 0.01 * float64(rogue.Talents.MaceSpecialization),
+		FloatValue: genRanks.MaceSpecialization.Effect(shared.A_MOD_CRIT_DAMAGE_BONUS, 1).FractionAt(rogue.Talents.MaceSpecialization),
 	})
 	ohMod := rogue.AddDynamicMod(core.SpellModConfig{
 		Kind:       core.SpellMod_CritMultiplier_Pct,
 		ProcMask:   core.ProcMaskMeleeOH,
-		FloatValue: 0.01 * float64(rogue.Talents.MaceSpecialization),
+		FloatValue: genRanks.MaceSpecialization.Effect(shared.A_MOD_CRIT_DAMAGE_BONUS, 1).FractionAt(rogue.Talents.MaceSpecialization),
 	})
 
 	if rogue.GetMHWeapon() != nil && rogue.GetMHWeapon().WeaponType == proto.WeaponType_WeaponTypeMace {
@@ -345,8 +346,8 @@ func (rogue *Rogue) registerVitality() {
 		return
 	}
 
-	rogue.MultiplyStat(stats.Agility, 1+0.01*float64(rogue.Talents.Vitality))
-	rogue.MultiplyStat(stats.Stamina, 1+0.02*float64(rogue.Talents.Vitality))
+	rogue.MultiplyStat(stats.Agility, genRanks.Vitality.Effect(shared.A_MOD_TOTAL_STAT_PERCENTAGE, 1).MultiplierAt(rogue.Talents.Vitality))
+	rogue.MultiplyStat(stats.Stamina, genRanks.Vitality.Effect(shared.A_MOD_TOTAL_STAT_PERCENTAGE, 2).MultiplierAt(rogue.Talents.Vitality))
 }
 
 func (rogue *Rogue) registerAdrenalineRush() {

@@ -1,6 +1,7 @@
 package rogue
 
 import (
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
 
@@ -22,7 +23,7 @@ func (rogue *Rogue) registerExposeArmorSpell() {
 
 		EnergyCost: core.EnergyCostOptions{
 			Cost:          exposeArmorRank.Cost,
-			Refund:        0.4 * float64(rogue.Talents.QuickRecovery),
+			Refund:        genRanks.QuickRecovery.Effect(shared.A_DUMMY, 0).FractionAt(rogue.Talents.QuickRecovery),
 			RefundMetrics: rogue.EnergyRefundMetrics,
 		},
 		Cast: core.CastConfig{

@@ -68,7 +68,7 @@ func (hunter *Hunter) registerImprovedAspectOfTheHawk() {
 		return
 	}
 
-	bonus := 1.0 + 0.03*float64(hunter.Talents.ImprovedAspectOfTheHawk)
+	bonus := 1.0 + genRanks.ImprovedAspectOfTheHawk.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_ALL_EFFECTS).FractionAt(hunter.Talents.ImprovedAspectOfTheHawk)
 
 	quickShots := hunter.RegisterAura(core.Aura{
 		Label:    "Quick Shots",
@@ -102,11 +102,11 @@ func (hunter *Hunter) registerEnduranceTraining() {
 	}
 
 	hunter.Pet.StatDependencyManager.EnableDynamicStatDep(
-		hunter.Pet.NewDynamicMultiplyStat(stats.Health, 1+0.02*float64(hunter.Talents.EnduranceTraining)),
+		hunter.Pet.NewDynamicMultiplyStat(stats.Health, genRanks.EnduranceTraining.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_ALL_EFFECTS).MultiplierAt(hunter.Talents.EnduranceTraining)),
 	)
 
 	hunter.StatDependencyManager.EnableDynamicStatDep(
-		hunter.NewDynamicMultiplyStat(stats.Health, 1+0.01*float64(hunter.Talents.EnduranceTraining)),
+		hunter.NewDynamicMultiplyStat(stats.Health, genRanks.EnduranceTraining.Effect(shared.A_MOD_INCREASE_HEALTH_PERCENT, 0).MultiplierAt(hunter.Talents.EnduranceTraining)),
 	)
 }
 
@@ -115,11 +115,11 @@ func (hunter *Hunter) registerFocusedFire() {
 		return
 	}
 
-	hunter.PseudoStats.DamageDealtMultiplier *= 1.0 + 0.01*float64(hunter.Talents.FocusedFire)
+	hunter.PseudoStats.DamageDealtMultiplier *= 1.0 + genRanks.FocusedFire.Effect(shared.A_NONE, 0).FractionAt(hunter.Talents.FocusedFire)
 	hunter.Pet.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
 		ClassMask:  HunterSpellKillCommandPet,
-		FloatValue: 10.0 * float64(hunter.Talents.FocusedFire),
+		FloatValue: genRanks.FocusedFire.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_CRITICAL_CHANCE).ValueAt(hunter.Talents.FocusedFire),
 	})
 }
 
@@ -148,8 +148,8 @@ func (hunter *Hunter) registerAnimalHandler() {
 	}
 
 	hunter.Pet.AddStats(stats.Stats{
-		stats.PhysicalHitPercent: 2 * float64(hunter.Talents.AnimalHandler),
-		stats.SpellHitPercent:    2 * float64(hunter.Talents.AnimalHandler),
+		stats.PhysicalHitPercent: genRanks.AnimalHandler.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_ALL_EFFECTS).ValueAt(hunter.Talents.AnimalHandler),
+		stats.SpellHitPercent:    genRanks.AnimalHandler.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_ALL_EFFECTS).ValueAt(hunter.Talents.AnimalHandler),
 	})
 }
 
@@ -410,8 +410,8 @@ func (hunter *Hunter) registerCombatExperience() {
 		return
 	}
 
-	hunter.MultiplyStat(stats.Agility, 1+0.01*float64(hunter.Talents.CombatExperience))
-	hunter.MultiplyStat(stats.Intellect, 1+0.03*float64(hunter.Talents.CombatExperience))
+	hunter.MultiplyStat(stats.Agility, genRanks.CombatExperience.Effect(shared.A_MOD_TOTAL_STAT_PERCENTAGE, 1).MultiplierAt(hunter.Talents.CombatExperience))
+	hunter.MultiplyStat(stats.Intellect, genRanks.CombatExperience.Effect(shared.A_MOD_TOTAL_STAT_PERCENTAGE, 3).MultiplierAt(hunter.Talents.CombatExperience))
 }
 
 func (hunter *Hunter) registerRangedWeaponSpecialization() {
@@ -442,7 +442,7 @@ func (hunter *Hunter) registerImprovedBarrage() {
 	hunter.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
 		ClassMask:  HunterSpellMultiShot,
-		FloatValue: 4 * float64(hunter.Talents.ImprovedBarrage),
+		FloatValue: genRanks.ImprovedBarrage.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_CRITICAL_CHANCE).ValueAt(hunter.Talents.ImprovedBarrage),
 	})
 }
 

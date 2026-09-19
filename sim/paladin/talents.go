@@ -360,7 +360,7 @@ func (paladin *Paladin) applyPurifyingPower() {
 	})
 	paladin.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
-		FloatValue: 10 * float64(paladin.Talents.PurifyingPower),
+		FloatValue: genRanks.PurifyingPower.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_CRITICAL_CHANCE).ValueAt(paladin.Talents.PurifyingPower),
 		ClassMask:  SpellMaskExorcism | SpellMaskHolyWrath,
 	})
 }
@@ -548,7 +548,7 @@ func (paladin *Paladin) applyReckoning() {
 
 // Sacred Duty - Increases your total Stamina by 3/6% and reduces the cooldown of your Divine Shield and Divine Protection by 30/60 sec
 func (paladin *Paladin) applySacredDuty() {
-	bonus := 1.0 + 0.03*float64(paladin.Talents.SacredDuty)
+	bonus := 1.0 + genRanks.SacredDuty.Effect(shared.A_MOD_TOTAL_STAT_PERCENTAGE, 2).FractionAt(paladin.Talents.SacredDuty)
 	paladin.MultiplyStat(stats.Stamina, bonus)
 	// TODO: Implement cooldown reduction
 }
@@ -567,7 +567,7 @@ func (paladin *Paladin) applyImprovedHolyShield() {
 	paladin.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
 		ClassMask:  SpellMaskHolyShieldProc,
-		FloatValue: 0.1 * float64(paladin.Talents.ImprovedHolyShield),
+		FloatValue: genRanks.ImprovedHolyShield.Effect(shared.A_ADD_PCT_MODIFIER, shared.SPELLMOD_DAMAGE).FractionAt(paladin.Talents.ImprovedHolyShield),
 	})
 }
 
@@ -576,7 +576,7 @@ func (paladin *Paladin) applyCombatExpertise() {
 	expertiseBonus := float64(paladin.Talents.CombatExpertise)
 	paladin.AddStat(stats.ExpertiseRating, expertiseBonus*core.ExpertisePerQuarterPercentReduction)
 
-	staminaBonus := 1.0 + 0.02*float64(paladin.Talents.CombatExpertise)
+	staminaBonus := 1.0 + genRanks.CombatExpertise.Effect(shared.A_MOD_TOTAL_STAT_PERCENTAGE, 2).FractionAt(paladin.Talents.CombatExpertise)
 	paladin.MultiplyStat(stats.Stamina, staminaBonus)
 }
 
@@ -733,7 +733,7 @@ func (paladin *Paladin) applyDivinePurposeTalent() {
 
 // Fanaticism - Increases the critical strike chance of all Judgements capable of a critical hit by 3/6/9/12/15% and reduces threat caused by all actions by 6/12/18/24/30%
 func (paladin *Paladin) applyFanaticism() {
-	critChance := 3 * float64(paladin.Talents.Fanaticism)
+	critChance := genRanks.Fanaticism.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_CRITICAL_CHANCE).ValueAt(paladin.Talents.Fanaticism)
 	threatReduc := -.06 * float64(paladin.Talents.Fanaticism)
 
 	paladin.AddStaticMod(core.SpellModConfig{

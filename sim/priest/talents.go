@@ -68,7 +68,7 @@ func (priest *Priest) applyFocusedPower() {
 	// +2% hit per rank (2 ranks = 4%)
 	priest.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusHit_Percent,
-		FloatValue: 2.0 * float64(priest.Talents.FocusedPower),
+		FloatValue: genRanks.FocusedPower.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_RESIST_MISS_CHANCE).ValueAt(priest.Talents.FocusedPower),
 		ClassMask:  PriestSpellSmite | PriestSpellMindBlast,
 	})
 }
@@ -317,7 +317,7 @@ func (priest *Priest) applyDarkness() {
 
 	priest.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
-		FloatValue: 0.02 * float64(priest.Talents.Darkness),
+		FloatValue: genRanks.Darkness.Effect(shared.A_ADD_PCT_MODIFIER, shared.SPELLMOD_DOT).FractionAt(priest.Talents.Darkness),
 		ClassMask:  PriestShadowSpells,
 	})
 }

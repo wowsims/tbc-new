@@ -206,9 +206,9 @@ func (shaman *Shaman) applyElementalPrecision() {
 		return
 	}
 
-	shaman.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexFire] += 2 * float64(shaman.Talents.ElementalPrecision)
-	shaman.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexFrost] += 2 * float64(shaman.Talents.ElementalPrecision)
-	shaman.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexNature] += 2 * float64(shaman.Talents.ElementalPrecision)
+	shaman.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexFire] += genRanks.ElementalPrecision.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_RESIST_MISS_CHANCE).ValueAt(shaman.Talents.ElementalPrecision)
+	shaman.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexFrost] += genRanks.ElementalPrecision.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_RESIST_MISS_CHANCE).ValueAt(shaman.Talents.ElementalPrecision)
+	shaman.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexNature] += genRanks.ElementalPrecision.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_RESIST_MISS_CHANCE).ValueAt(shaman.Talents.ElementalPrecision)
 
 	shaman.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_ThreatMultiplier_Pct,

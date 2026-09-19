@@ -232,13 +232,13 @@ func (mage *Mage) registerEmpoweredArcaneMissiles() {
 
 	mage.AddStaticMod(core.SpellModConfig{
 		ClassMask:  MageSpellArcaneMissilesTick,
-		FloatValue: .03 * float64(mage.Talents.EmpoweredArcaneMissiles),
+		FloatValue: genRanks.EmpoweredArcaneMissiles.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_BONUS_MULTIPLIER).FractionAt(mage.Talents.EmpoweredArcaneMissiles),
 		Kind:       core.SpellMod_BonusCoeffecient_Flat,
 	})
 
 	mage.AddStaticMod(core.SpellModConfig{
 		ClassMask:  MageSpellArcaneMissilesCast,
-		FloatValue: .02 * float64(mage.Talents.EmpoweredArcaneMissiles),
+		FloatValue: genRanks.EmpoweredArcaneMissiles.Effect(shared.A_ADD_PCT_MODIFIER, shared.SPELLMOD_COST).FractionAt(mage.Talents.EmpoweredArcaneMissiles),
 		Kind:       core.SpellMod_PowerCost_Pct_Add,
 	})
 }
@@ -524,7 +524,7 @@ func (mage *Mage) registerElementalPrecision() {
 	if mage.Talents.ElementalPrecision == 0 {
 		return
 	}
-	percent := 1 * float64(mage.Talents.ElementalPrecision)
+	percent := genRanks.ElementalPrecision.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_RESIST_MISS_CHANCE).ValueAt(mage.Talents.ElementalPrecision)
 	mage.AddStaticMod(core.SpellModConfig{
 		School:     core.SpellSchoolFrostfire,
 		FloatValue: -percent / 100,
@@ -666,13 +666,13 @@ func (mage *Mage) registerEmpoweredFrostbolt() {
 
 	mage.AddStaticMod(core.SpellModConfig{
 		ClassMask:  MageSpellFireball,
-		FloatValue: .02 * float64(mage.Talents.EmpoweredFrostbolt),
+		FloatValue: genRanks.EmpoweredFrostbolt.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_BONUS_MULTIPLIER).FractionAt(mage.Talents.EmpoweredFrostbolt),
 		Kind:       core.SpellMod_BonusCoeffecient_Flat,
 	})
 
 	mage.AddStaticMod(core.SpellModConfig{
 		ClassMask:  MageSpellFrostbolt,
-		FloatValue: .01 * float64(mage.Talents.EmpoweredFrostbolt),
+		FloatValue: genRanks.EmpoweredFrostbolt.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_CRITICAL_CHANCE).FractionAt(mage.Talents.EmpoweredFrostbolt),
 		Kind:       core.SpellMod_BonusCrit_Percent,
 	})
 }

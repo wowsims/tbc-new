@@ -1,6 +1,7 @@
 package warrior
 
 import (
+	"github.com/wowsims/tbc/sim/common/shared"
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
@@ -567,7 +568,7 @@ func (war *Warrior) registerImprovedMortalStrike() {
 	war.AddStaticMod(core.SpellModConfig{
 		ClassMask:  SpellMaskMortalStrike,
 		Kind:       core.SpellMod_DamageDone_Flat,
-		FloatValue: 0.01 * float64(war.Talents.ImprovedMortalStrike),
+		FloatValue: genRanks.ImprovedMortalStrike.Effect(shared.A_ADD_PCT_MODIFIER, shared.SPELLMOD_DAMAGE).FractionAt(war.Talents.ImprovedMortalStrike),
 	})
 }
 

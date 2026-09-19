@@ -162,7 +162,7 @@ func (rogue *Rogue) registerSerratedBlades() {
 	rogue.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
 		ClassMask:  RogueSpellRupture,
-		FloatValue: 0.1 * float64(rogue.Talents.SerratedBlades),
+		FloatValue: genRanks.SerratedBlades.Effect(shared.A_ADD_PCT_MODIFIER, shared.SPELLMOD_DOT).FractionAt(rogue.Talents.SerratedBlades),
 	})
 }
 
@@ -379,11 +379,11 @@ func (rogue *Rogue) registerSinisterCalling() {
 		return
 	}
 
-	rogue.MultiplyStat(stats.Agility, 1+0.03*float64(rogue.Talents.SinisterCalling))
+	rogue.MultiplyStat(stats.Agility, genRanks.SinisterCalling.Effect(shared.A_MOD_TOTAL_STAT_PERCENTAGE, 1).MultiplierAt(rogue.Talents.SinisterCalling))
 	rogue.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
 		ClassMask:  RogueSpellHemorrhage | RogueSpellBackstab,
-		FloatValue: 0.01 * float64(rogue.Talents.SinisterCalling),
+		FloatValue: genRanks.SinisterCalling.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_EFFECT2).FractionAt(rogue.Talents.SinisterCalling),
 	})
 }
 
