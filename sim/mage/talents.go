@@ -378,7 +378,7 @@ func (mage *Mage) registerImprovedFlamestrike() {
 
 	mage.AddStaticMod(core.SpellModConfig{
 		ClassMask:  MageSpellFlamestrike,
-		FloatValue: genRanks.ImprovedFlamestrike.FractionAt(mage.Talents.ImprovedFlamestrike),
+		FloatValue: genRanks.ImprovedFlamestrike.ValueAt(mage.Talents.ImprovedFlamestrike),
 		Kind:       core.SpellMod_BonusCrit_Percent,
 	})
 }
@@ -665,14 +665,14 @@ func (mage *Mage) registerEmpoweredFrostbolt() {
 	}
 
 	mage.AddStaticMod(core.SpellModConfig{
-		ClassMask:  MageSpellFireball,
+		ClassMask:  MageSpellFrostbolt,
 		FloatValue: genRanks.EmpoweredFrostbolt.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_BONUS_MULTIPLIER).FractionAt(mage.Talents.EmpoweredFrostbolt),
 		Kind:       core.SpellMod_BonusCoeffecient_Flat,
 	})
 
 	mage.AddStaticMod(core.SpellModConfig{
 		ClassMask:  MageSpellFrostbolt,
-		FloatValue: genRanks.EmpoweredFrostbolt.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_CRITICAL_CHANCE).FractionAt(mage.Talents.EmpoweredFrostbolt),
+		FloatValue: genRanks.EmpoweredFrostbolt.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_CRITICAL_CHANCE).ValueAt(mage.Talents.EmpoweredFrostbolt),
 		Kind:       core.SpellMod_BonusCrit_Percent,
 	})
 }
