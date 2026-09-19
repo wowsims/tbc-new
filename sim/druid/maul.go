@@ -1,6 +1,7 @@
 package druid
 
 import (
+	"github.com/wowsims/tbc/sim/common/shared"
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
@@ -46,7 +47,7 @@ func (druid *Druid) registerMaulSpell() {
 		},
 
 		ExpectedInitialDamage: func(sim *core.Simulation, target *core.Unit, spell *core.Spell, _ bool) *core.SpellResult {
-			baseDamage := maulRank.Direct.Damage(sim) + druid.IdolMaulBonus + spell.Unit.AutoAttacks.MH().CalculateAverageWeaponDamage(spell.MeleeAttackPower(target))
+			baseDamage := shared.SpellRankMin(maulRank.Direct) + druid.IdolMaulBonus + spell.Unit.AutoAttacks.MH().CalculateAverageWeaponDamage(spell.MeleeAttackPower(target))
 			return spell.CalcDamage(sim, target, baseDamage, spell.OutcomeExpectedMeleeWeaponSpecialHitAndCrit)
 		},
 	})

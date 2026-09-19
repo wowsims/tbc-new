@@ -68,7 +68,7 @@ func (mage *Mage) registerPyroblastSpell() {
 			TickLength:       pyroblastTick.TickLength,
 			BonusCoefficient: pyroblastDotCoefficient,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.Snapshot(target, 89)
+				dot.Snapshot(target, pyroblastTick.Tick)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"math"
+	"sync"
 )
 
 const RankLevel = 70
@@ -76,16 +77,31 @@ type RankSpell struct {
 	Effects      []RankEffect
 }
 
-// SpellCastTimes resolves SpellMisc.CastingTimeIndex and is absent from this build's database - the
-// table is not in generator-settings.json's extraction list, so cast times stay zero until it is added
-// and `make db` re-run against a client.
+// SpellCastTimes resolves SpellMisc.CastingTimeIndex and is absent from a database extracted before it
+// was added to generator-settings.json. Only the generator insists on it - the calibration gate
+// compares amounts and coefficients, neither of which needs a cast time.
+// Answered once per database rather than once per row: LoadRankSpell runs 3327 times and the schema
+// cannot change underneath it.
+var castTimesOnce sync.Once
+var castTimesPresent bool
+
 func castTimesAvailable(db *sql.DB) bool {
-	var n int
-	if err := db.QueryRow(
-		`SELECT count(*) FROM sqlite_master WHERE type = 'table' AND name = 'SpellCastTimes'`).Scan(&n); err != nil {
-		return false
+	castTimesOnce.Do(func() {
+		var n int
+		if err := db.QueryRow(
+			`SELECT count(*) FROM sqlite_master WHERE type = 'table' AND name = 'SpellCastTimes'`).Scan(&n); err == nil {
+			castTimesPresent = n > 0
+		}
+	})
+	return castTimesPresent
+}
+
+func RequireSpellCastTimes(db *sql.DB) error {
+	if castTimesAvailable(db) {
+		return nil
 	}
-	return n > 0
+	return errors.New("the client database has no SpellCastTimes table, so every generated cast time would " +
+		"be zero - add \"SpellCastTimes\" to tools/database/generator-settings.json and re-run `make db`")
 }
 
 // The calibrated rule, shared with the calibration gate. Scored 86/87 against the hand tables.
@@ -133,35 +149,58 @@ func LoadRankSpell(db *sql.DB, spellID int32) (RankSpell, error) {
 	}
 
 	// Duration and its period are what a DoT's NumberOfTicks and TickLength are derived from.
-	_ = db.QueryRow(`
+	if err := scanOptional(db, `
 		SELECT COALESCE(d.Duration, 0)
 		FROM SpellMisc m LEFT JOIN SpellDuration d ON d.ID = m.DurationIndex
-		WHERE m.SpellID = ?`, spellID).Scan(&s.DurationMs)
+		WHERE m.SpellID = ?`, spellID, &s.DurationMs); err != nil {
+		return s, fmt.Errorf("duration for spell %d: %w", spellID, err)
+	}
 
 	// Cooldown takes the longer of the two: Fire Blast and Cone of Cold use the shared
 	// CategoryRecoveryTime, everything else its own RecoveryTime.
-	_ = db.QueryRow(`
+	if err := scanOptional(db, `
 		SELECT COALESCE(max(RecoveryTime, CategoryRecoveryTime), 0), COALESCE(StartRecoveryTime, 0)
-		FROM SpellCooldowns WHERE SpellID = ?`, spellID).Scan(&s.CooldownMs, &s.GCDMs)
+		FROM SpellCooldowns WHERE SpellID = ?`, spellID, &s.CooldownMs, &s.GCDMs); err != nil {
+		return s, fmt.Errorf("cooldown for spell %d: %w", spellID, err)
+	}
 
 	// RangeMin is nonzero on only 212 spells in this build - the dead zone on a charge, and a handful
 	// of ranged abilities - but where it exists core gates the cast on it exactly as it does MaxRange.
-	_ = db.QueryRow(`
+	if err := scanOptional(db, `
 		SELECT COALESCE(r.RangeMin_1, 0), COALESCE(r.RangeMax_1, 0)
 		FROM SpellMisc m JOIN SpellRange r ON r.ID = m.RangeIndex
-		WHERE m.SpellID = ?`, spellID).Scan(&s.MinRange, &s.MaxRange)
+		WHERE m.SpellID = ?`, spellID, &s.MinRange, &s.MaxRange); err != nil {
+		return s, fmt.Errorf("range for spell %d: %w", spellID, err)
+	}
 
-	_ = db.QueryRow(`SELECT COALESCE(Speed, 0) FROM SpellMisc WHERE SpellID = ?`, spellID).Scan(&s.MissileSpeed)
+	if err := scanOptional(db,
+		`SELECT COALESCE(Speed, 0) FROM SpellMisc WHERE SpellID = ?`, spellID, &s.MissileSpeed); err != nil {
+		return s, fmt.Errorf("missile speed for spell %d: %w", spellID, err)
+	}
 
 	if castTimesAvailable(db) {
-		_ = db.QueryRow(`
+		if err := scanOptional(db, `
 			SELECT COALESCE(ct.Base, 0)
 			FROM SpellMisc m JOIN SpellCastTimes ct ON ct.ID = m.CastingTimeIndex
-			WHERE m.SpellID = ?`, spellID).Scan(&s.CastTimeMs)
+			WHERE m.SpellID = ?`, spellID, &s.CastTimeMs); err != nil {
+			return s, fmt.Errorf("cast time for spell %d: %w", spellID, err)
+		}
 	}
 
 	s.Effects, err = RankEffectsOf(db, spellID)
 	return s, err
+}
+
+// A spell with no row in one of the optional tables is ordinary - most spells have no cooldown - and
+// leaves the destination at its zero, which is what core reads as "ungated". Any other error means the
+// schema moved, and silently zeroing a cast time or a range on that is the failure this loader exists
+// to avoid.
+func scanOptional(db *sql.DB, query string, spellID int32, dest ...any) error {
+	err := db.QueryRow(query, spellID).Scan(dest...)
+	if errors.Is(err, sql.ErrNoRows) {
+		return nil
+	}
+	return err
 }
 
 func RankEffectsOf(db *sql.DB, spellID int32) ([]RankEffect, error) {

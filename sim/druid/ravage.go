@@ -1,6 +1,7 @@
 package druid
 
 import (
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
 
@@ -66,7 +67,7 @@ func (druid *Druid) registerRavageSpell() {
 				spell.BonusCritPercent += highHpCritPercentBonus
 			}
 
-			baseDamage := ravageRank.Direct.Damage(sim) + spell.Unit.AutoAttacks.MH().CalculateAverageWeaponDamage(spell.MeleeAttackPower(target))
+			baseDamage := shared.SpellRankMin(ravageRank.Direct) + spell.Unit.AutoAttacks.MH().CalculateAverageWeaponDamage(spell.MeleeAttackPower(target))
 			result := spell.CalcDamage(sim, target, baseDamage, spell.OutcomeExpectedMeleeWeaponSpecialHitAndCrit)
 
 			if sim.IsExecutePhase90() {

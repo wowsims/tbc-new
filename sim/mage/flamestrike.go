@@ -2,8 +2,6 @@ package mage
 
 import (
 	"fmt"
-	"time"
-
 	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
@@ -31,7 +29,7 @@ func (mage *Mage) registerFlamestrike(rankConfig shared.SpellRank) {
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD:      rankConfig.GCD,
-				CastTime: time.Second * 3,
+				CastTime: rankConfig.CastTime,
 			},
 		},
 

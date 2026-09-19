@@ -37,7 +37,7 @@ func (mage *Mage) registerFireballSpell() {
 			NumberOfTicks: fireballTick.NumberOfTicks,
 			TickLength:    fireballTick.TickLength,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.Snapshot(target, 21)
+				dot.Snapshot(target, fireballTick.Tick)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)

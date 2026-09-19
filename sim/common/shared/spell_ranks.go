@@ -110,7 +110,6 @@ type SpellRank struct {
 	Rank    int32
 	SpellID int32
 	Cost    int32
-	CostPct float64
 
 	// Cast times differ per rank - Fireball is 1.5s at rank 1 and 3.5s at rank 13 - so a downrank
 	// cannot be registered faithfully without them.

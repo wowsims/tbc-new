@@ -12,38 +12,36 @@ var flameShockRank = genRanks.FlameShock.BySpellID(25457)
 var frostShockRank = genRanks.FrostShock.BySpellID(25464)
 
 // Shared logic for all shocks.
-func (shaman *Shaman) newShockSpellConfig(spellID int32, spellSchool core.SpellSchool, baseFlatCost int32, shockTimer *core.Timer, bonusCoefficient float64, gcd time.Duration, cooldown time.Duration, maxRange float64) core.SpellConfig {
-	actionID := core.ActionID{SpellID: spellID}
-
+func (shaman *Shaman) newShockSpellConfig(rank shared.SpellRank, spellSchool core.SpellSchool, shockTimer *core.Timer) core.SpellConfig {
 	return core.SpellConfig{
-		ActionID:    actionID,
+		ActionID:    core.ActionID{SpellID: rank.SpellID},
 		SpellSchool: spellSchool,
 		DefenseType: core.DefenseTypeMagic,
 		ProcMask:    core.ProcMaskSpellDamage,
 		Flags:       SpellFlagShamanSpell | SpellFlagShock | core.SpellFlagAPL | SpellFlagInstant,
-		MaxRange:    maxRange,
+		MaxRange:    rank.MaxRange,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: baseFlatCost,
+			FlatCost: rank.Cost,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: gcd,
+				GCD: rank.GCD,
 			},
 			CD: core.Cooldown{
 				Timer:    shockTimer,
-				Duration: cooldown,
+				Duration: rank.Cooldown,
 			},
 		},
 
 		DamageMultiplier: 1,
-		BonusCoefficient: bonusCoefficient,
+		BonusCoefficient: rank.Direct.BonusCoefficient(),
 		ThreatMultiplier: 1,
 	}
 }
 
 func (shaman *Shaman) registerEarthShockSpell(shockTimer *core.Timer) {
-	config := shaman.newShockSpellConfig(earthShockRank.SpellID, core.SpellSchoolNature, earthShockRank.Cost, shockTimer, earthShockRank.Direct.BonusCoefficient(), earthShockRank.GCD, earthShockRank.Cooldown, earthShockRank.MaxRange)
+	config := shaman.newShockSpellConfig(earthShockRank, core.SpellSchoolNature, shockTimer)
 	config.ClassSpellMask = SpellMaskEarthShock
 	config.Flags |= core.SpellFlagBinary
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
@@ -57,7 +55,7 @@ func (shaman *Shaman) registerEarthShockSpell(shockTimer *core.Timer) {
 func (shaman *Shaman) registerFlameShockSpell(shockTimer *core.Timer) {
 	tick := flameShockRank.Periodic.(shared.SpellRankPeriodic)
 
-	config := shaman.newShockSpellConfig(flameShockRank.SpellID, core.SpellSchoolFire, flameShockRank.Cost, shockTimer, flameShockRank.Direct.BonusCoefficient(), flameShockRank.GCD, flameShockRank.Cooldown, flameShockRank.MaxRange)
+	config := shaman.newShockSpellConfig(flameShockRank, core.SpellSchoolFire, shockTimer)
 	config.ClassSpellMask = SpellMaskFlameShockDirect
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 		baseDamage := flameShockRank.Direct.Damage(sim)
@@ -112,7 +110,7 @@ func (shaman *Shaman) registerFlameShockSpell(shockTimer *core.Timer) {
 }
 
 func (shaman *Shaman) registerFrostShockSpell(shockTimer *core.Timer) {
-	config := shaman.newShockSpellConfig(frostShockRank.SpellID, core.SpellSchoolFrost, frostShockRank.Cost, shockTimer, frostShockRank.Direct.BonusCoefficient(), frostShockRank.GCD, frostShockRank.Cooldown, frostShockRank.MaxRange)
+	config := shaman.newShockSpellConfig(frostShockRank, core.SpellSchoolFrost, shockTimer)
 	config.ClassSpellMask = SpellMaskFrostShock
 	config.Flags |= core.SpellFlagBinary
 	config.ThreatMultiplier *= 2
