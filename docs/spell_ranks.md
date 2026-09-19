@@ -131,9 +131,8 @@ irf.Effects[1].Value                              //  -6  the same effect, by in
 
 The aura and effect names are generated into `sim/common/shared/spell_rank_enums_auto_gen.go`, mirrored
 from `tools/database/dbc/enums.go` and holding only the values the tables use, so the two cannot drift.
-`Misc` stays a plain int: what it selects depends on the aura - a modified spell property for
-`A_ADD_PCT_MODIFIER`, a stat for `A_MOD_TOTAL_STAT_PERCENTAGE`, a school mask for `A_MOD_DAMAGE_DONE` -
-so there is no single enum to name it with.
+`Misc` stays a plain int, because what it selects depends on the aura - see
+[The Misc value](#the-misc-value).
 
 Name the effect by aura rather than reading `Direct` whenever a spell has more than one. Which effect
 lands in `Direct` is the generator's choice, not a promise, so a caller that depends on it breaks
