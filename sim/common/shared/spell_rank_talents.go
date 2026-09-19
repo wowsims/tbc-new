@@ -48,6 +48,20 @@ func (t SpellRankTableOf[T]) MultiplierAt(rank int32) float64 {
 	return 1 + t.FractionAt(rank)
 }
 
+// For the case Effect cannot serve: two effects sharing an aura and misc value, as Tactical Mastery's
+// two threat modifiers do. The index is the client's EffectIndex, not the slice position.
+func (t SpellRankTableOf[T]) EffectAt(index int32) SpellRankEffectLadder[T] {
+	pick := func(row SpellRank) float64 {
+		for _, e := range row.Effects {
+			if e.Index == index {
+				return e.Value
+			}
+		}
+		panic(fmt.Sprintf("spell %d rank %d has no effect at index %d", row.SpellID, row.Rank, index))
+	}
+	return SpellRankEffectLadder[T]{table: t, pick: pick}
+}
+
 func (t SpellRankTableOf[T]) Effect(aura SpellRankAura, misc int32) SpellRankEffectLadder[T] {
 	pick := func(row SpellRank) float64 { return row.Effect(aura, misc).Value }
 	return SpellRankEffectLadder[T]{table: t, pick: pick}

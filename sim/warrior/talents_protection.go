@@ -51,6 +51,8 @@ func (war *Warrior) registerProtectionTalents() {
 	war.registerDevastate()
 }
 
+var tacticalMasteryThreat = genRanks.TacticalMastery.EffectAt(1)
+
 func (war *Warrior) registerTacticalMastery() {
 	if war.Talents.TacticalMastery == 0 {
 		return
@@ -64,9 +66,12 @@ func (war *Warrior) registerTacticalMastery() {
 
 		spell.RelatedSelfBuff.
 			AttachSpellMod(core.SpellModConfig{
-				ClassMask:  SpellMaskMortalStrike | SpellMaskBloodthirst,
-				Kind:       core.SpellMod_ThreatMultiplier_Pct,
-				FloatValue: 0.21 * float64(war.Talents.TacticalMastery),
+				ClassMask: SpellMaskMortalStrike | SpellMaskBloodthirst,
+				Kind:      core.SpellMod_ThreatMultiplier_Pct,
+				// Both threat effects are A_ADD_PCT_MODIFIER/SPELLMOD_THREAT, one masked to Mortal
+				// Strike and one to Bloodthirst, so Effect cannot tell them apart. They carry the
+				// same 21/42/63.
+				FloatValue: tacticalMasteryThreat.FractionAt(war.Talents.TacticalMastery),
 			})
 	})
 }
@@ -92,19 +97,6 @@ func (war *Warrior) registerAnticipation() {
 	}
 
 	war.AddStat(stats.DefenseRating, genRanks.Anticipation.ValueAt(war.Talents.Anticipation)*core.DefenseRatingPerDefenseLevel)
-
-	war.OnSpellRegistered(func(spell *core.Spell) {
-		if !spell.Matches(SpellMaskDefensiveStance) {
-			return
-		}
-
-		spell.RelatedSelfBuff.
-			AttachSpellMod(core.SpellModConfig{
-				ClassMask:  SpellMaskMortalStrike | SpellMaskBloodthirst,
-				Kind:       core.SpellMod_ThreatMultiplier_Pct,
-				FloatValue: genRanks.Defiance.Effect(shared.A_MOD_THREAT, 127).FractionAt(war.Talents.Defiance),
-			})
-	})
 }
 
 func (war *Warrior) registerShieldSpecialization() {
