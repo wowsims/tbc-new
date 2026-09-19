@@ -253,7 +253,7 @@ lines and emits a table for every spell in them whose subtext reads `Rank N`. A 
 its own; if one you expect is missing, look at the `// Not generated:` comment at the head of the class
 file, which names every family that could not be resolved and why.
 
-`go test ./tools/database/ -run SpellRankCalibration` re-derives every value from the database and
+`go test ./tools/database/ -run GeneratedRankTables` re-derives every value from the database and
 compares it to the committed tables, so a hand-edited or stale generated file fails the build. It skips
 when `wowsims.db` is absent.
 

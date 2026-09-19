@@ -1,12 +1,16 @@
 package database
 
-// Calibration gate for the spell-rank derivation rule.
+// Regeneration check for the generated rank tables.
 //
-// The rule that derives a rank's numbers has to keep reproducing what the sim registers, and every row
-// it does not reproduce has to be classified as either "the rule is wrong" or "the hand row is wrong".
-// knownResiduals below is that record: an unexplained residual fails the build.
+// It re-derives every row of the families below straight from the client database and asserts the
+// committed table says the same thing. It began as a calibration gate, proving the derivation rule
+// against 141 hand-transcribed rows; those rows are gone, so both sides now come from one database
+// and the residual bookkeeping that classified a disagreement went with them.
 //
-// Run:  go test ./tools/database/ -run SpellRankCalibration
+// What it still catches: a generated file edited by hand, one left stale after the client data moved,
+// and any change to DeriveRankAmount that moves a number.
+//
+// Run:  go test --tags=with_db ./tools/database/ -run GeneratedRankTables
 //
 // Skips when tools/database/wowsims.db is absent - it is gitignored and only produced by `make db`
 // from a local WoW install, so CI and a fresh clone legitimately have no client data.
@@ -72,26 +76,10 @@ var calibFamilies = []calibFamily{
 	{"Starfire", "sim/druid/starfire.go", classDruid, druid.StarfireRankMap},
 }
 
-type knownResidual struct {
-	SpellID int32
-	Field   string
-	Verdict string
-	Note    string
-}
-
-// Empty, and that is the point: every disagreement the gate ever found - Exorcism rank 5, Holy Shock
-// rank 3, Mind Blast's and Mind Flay's coefficients - was resolved in favour of the client DB, so the
-// tables now agree with it by construction. What the gate still catches is a generated file edited by
-// hand, or one left stale after the client data moved. A residual that cannot be explained here fails
-// the build.
-var knownResiduals []knownResidual
-
 // Literal rounding in the hand tables: 0.429 stands in for 0.428999990224838, a 2.3e-8 difference.
 // Deliberately far tighter than the gap between a rounded literal and a genuinely different number -
 // Mind Blast's 0.42857 (3/7) against the DB's 0.429 is 4.3e-4 and has to surface as a residual, not be
 // waved through as precision.
-const coefRoundingTolerance = 1e-5
-
 type comparison struct {
 	Family  string
 	File    string
@@ -101,22 +89,11 @@ type comparison struct {
 	Hand    float64
 	Derived float64
 	Source  string
-	Status  string
-	Note    string
 }
 
-func (c comparison) ok() bool { return c.Status == "MATCH" || c.Status == "KNOWN" }
+func (c comparison) ok() bool { return c.Hand == c.Derived }
 
-func classify(spellID int32, field string) (string, string, bool) {
-	for _, k := range knownResiduals {
-		if k.SpellID == spellID && k.Field == field {
-			return "KNOWN", k.Verdict + ": " + k.Note, true
-		}
-	}
-	return "", "", false
-}
-
-func TestSpellRankCalibration(t *testing.T) {
+func TestGeneratedRankTablesMatchTheDatabase(t *testing.T) {
 	DatabasePath = "wowsims.db"
 	if _, err := os.Stat(DatabasePath); err != nil {
 		t.Skipf("no client database at %s - run `make db` from a local WoW install to enable this gate", DatabasePath)
@@ -136,28 +113,17 @@ func TestSpellRankCalibration(t *testing.T) {
 		}
 	}
 
-	var residuals []comparison
+	var mismatched []comparison
 	for _, c := range all {
 		if !c.ok() {
-			residuals = append(residuals, c)
+			mismatched = append(mismatched, c)
 		}
 	}
+	t.Logf("%d comparisons, %d mismatched", len(all), len(mismatched))
 
-	matched := 0
-	known := 0
-	for _, c := range all {
-		switch c.Status {
-		case "MATCH":
-			matched++
-		case "KNOWN":
-			known++
-		}
-	}
-	t.Logf("%d comparisons: %d match, %d known-and-explained, %d unexplained", len(all), matched, known, len(residuals))
-
-	for _, c := range residuals {
-		t.Errorf("unexplained residual %s rank %d (spell %d) %s: hand %v, DB-derived %v (%s)\n"+
-			"    classify it in knownResiduals with evidence, or fix the rule",
+	for _, c := range mismatched {
+		t.Errorf("%s rank %d (spell %d) %s: table says %v, the database derives %v (%s)\n"+
+			"    regenerate with `go run ./tools/database/gen_spellranks`, or fix DeriveRankAmount",
 			c.Family, c.Rank, c.SpellID, c.Field, c.Hand, c.Derived, c.Source)
 	}
 }
@@ -179,9 +145,9 @@ func compareRow(t *testing.T, db *sql.DB, fam calibFamily, row shared.SpellRank)
 		c.Hand = float64(row.Cost)
 		c.Source = "SpellPower.ManaCost"
 		if spell.ManaCost.Valid {
-			c.Derived = float64(spell.ManaCost.Int64)
+			c.Derived = float64(NormalizePowerCost(int32(spell.ManaCost.Int64), spell.PowerType))
 		}
-		out = append(out, finish(c))
+		out = append(out, c)
 	}
 
 	// Reporting which effect reproduced each value is the point, not a nicety: it is the evidence the
@@ -297,8 +263,8 @@ func matchCoefficient(base comparison, handCoef float64, cands []RankEffect) com
 			continue
 		}
 		src := fmt.Sprintf("spell %d effect %d", e.OwnerSpellID, e.Index)
-		if math.Abs(e.Coefficient-handCoef) <= coefRoundingTolerance {
-			return finishWith(base, "Coefficient", handCoef, e.Coefficient, src+" (literal rounding)")
+		if e.Coefficient == handCoef {
+			return finishWith(base, "Coefficient", handCoef, e.Coefficient, src)
 		}
 		if bestSrc == "no candidate effect" || math.Abs(e.Coefficient-handCoef) < math.Abs(best-handCoef) {
 			best, bestSrc = e.Coefficient, src
@@ -313,24 +279,5 @@ func finishWith(base comparison, field string, hand, derived float64, source str
 	c.Hand = hand
 	c.Derived = derived
 	c.Source = source
-	return finish(c)
-}
-
-func finish(c comparison) comparison {
-	if c.Hand == c.Derived {
-		c.Status = "MATCH"
-		return c
-	}
-	if c.Field == "Coefficient" && math.Abs(c.Hand-c.Derived) <= coefRoundingTolerance {
-		c.Status = "MATCH"
-		c.Note = "literal rounding"
-		return c
-	}
-	if status, note, ok := classify(c.SpellID, c.Field); ok {
-		c.Status = status
-		c.Note = note
-		return c
-	}
-	c.Status = "RESIDUAL"
 	return c
 }

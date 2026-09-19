@@ -19,7 +19,7 @@ Not in scope: item and enchant data (gen_db proper), talent trees (already gener
 
 - sim/common/shared/spell_ranks.go — hand-written. SpellRank, the SpellRankValue union, the table accessors. The only hand-written piece of the pipeline.
 - sim/<class>/spell_ranks_auto_gen.go — generated, checked in, one `genRanks` global per class with a field per family.
-- tools/database/spellranks.go — the derivation rule and the row loader, shared by the generator and the calibration gate so the two cannot drift.
+- tools/database/spellranks.go — the derivation rule and the row loader, shared by the generator and the regeneration check so the two cannot drift.
 - tools/database/gen_spell_ranks.go — ladder discovery, role assignment, rendering.
 - tools/database/gen_spellranks/ — the standalone binary. Not a mode of gen_db: gen_db imports the sim and the sim reads these tables, so a stale generated file stopped the generator that would fix it from compiling.
 - docs/spell_ranks.md — the usage guide, with worked examples.
@@ -51,7 +51,7 @@ Role fields: Direct, Heal, Periodic, Energize. Each is one effect. A rank can ca
 
 ```
 go run ./tools/database/gen_spellranks     # then the diff must be empty on a second run
-go test --tags=with_db ./tools/database/   # the calibration gate
+go test --tags=with_db ./tools/database/   # the regeneration check
 ```
 
 Needs tools/database/wowsims.db, which is gitignored and built by `make db` from a local WoW client. The gate skips when it is absent, so CI and a fresh clone are unaffected.

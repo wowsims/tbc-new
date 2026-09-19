@@ -78,7 +78,7 @@ type RankSpell struct {
 }
 
 // SpellCastTimes resolves SpellMisc.CastingTimeIndex and is absent from a database extracted before it
-// was added to generator-settings.json. Only the generator insists on it - the calibration gate
+// was added to generator-settings.json. Only the generator insists on it - the regeneration check
 // compares amounts and coefficients, neither of which needs a cast time.
 // Answered once per database rather than once per row: LoadRankSpell runs 3327 times and the schema
 // cannot change underneath it.
@@ -104,7 +104,7 @@ func RequireSpellCastTimes(db *sql.DB) error {
 		"be zero - add \"SpellCastTimes\" to tools/database/generator-settings.json and re-run `make db`")
 }
 
-// The calibrated rule, shared with the calibration gate. Scored 86/87 against the hand tables.
+// The calibrated rule, shared with the regeneration check. Scored 86/87 against the hand tables.
 //
 // float32 is load-bearing: EffectRealPointsPerLevel is a float32 widened into the DB
 // (3.79999995231628), and multiplying in float64 breaks 6 rows. Reproduces the tooltip, which is not
