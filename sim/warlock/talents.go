@@ -191,7 +191,7 @@ func (warlock *Warlock) applyEmpoweredCorruption() {
 
 	warlock.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DotBonusCoeffecient_Flat,
-		FloatValue: (0.12 * float64(warlock.Talents.EmpoweredCorruption)) / 6,
+		FloatValue: genRanks.EmpoweredCorruption.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_BONUS_MULTIPLIER).FractionAt(warlock.Talents.EmpoweredCorruption),
 		ClassMask:  WarlockSpellCorruption,
 	})
 }

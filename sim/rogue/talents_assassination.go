@@ -100,7 +100,7 @@ func (rogue *Rogue) registerPuncturingWounds() {
 	rogue.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
 		ClassMask:  RogueSpellMutilateHit,
-		FloatValue: 5.0 * float64(rogue.Talents.PuncturingWounds),
+		FloatValue: genRanks.PuncturingWounds.EffectAt(1).ValueAt(rogue.Talents.PuncturingWounds),
 	})
 }
 

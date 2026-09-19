@@ -272,7 +272,7 @@ func (mage *Mage) registerImprovedFireball() {
 
 	mage.AddStaticMod(core.SpellModConfig{
 		ClassMask: MageSpellFireball,
-		TimeValue: time.Millisecond * time.Duration(-100*float64(mage.Talents.ImprovedFireball)),
+		TimeValue: time.Millisecond * time.Duration(genRanks.ImprovedFireball.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_CASTING_TIME).ValueAt(mage.Talents.ImprovedFireball)),
 		Kind:      core.SpellMod_CastTime_Flat,
 	})
 }
@@ -354,7 +354,7 @@ func (mage *Mage) registerImprovedFireBlast() {
 
 	mage.AddStaticMod(core.SpellModConfig{
 		ClassMask: MageSpellFireBlast,
-		TimeValue: time.Millisecond * time.Duration(-500*float64(mage.Talents.ImprovedFireBlast)),
+		TimeValue: time.Millisecond * time.Duration(genRanks.ImprovedFireBlast.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_COOLDOWN).ValueAt(mage.Talents.ImprovedFireBlast)),
 		Kind:      core.SpellMod_Cooldown_Flat,
 	})
 }
@@ -515,7 +515,7 @@ func (mage *Mage) registerImprovedFrostbolt() {
 
 	mage.AddStaticMod(core.SpellModConfig{
 		ClassMask: MageSpellFrostbolt,
-		TimeValue: time.Millisecond * time.Duration(-100*float64(mage.Talents.ImprovedFrostbolt)),
+		TimeValue: time.Millisecond * time.Duration(genRanks.ImprovedFrostbolt.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_CASTING_TIME).ValueAt(mage.Talents.ImprovedFrostbolt)),
 		Kind:      core.SpellMod_CastTime_Flat,
 	})
 }

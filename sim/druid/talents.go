@@ -99,7 +99,7 @@ func (druid *Druid) applyWrathOfCenarius() {
 	druid.AddStaticMod(core.SpellModConfig{
 		ClassMask:  DruidSpellWrath,
 		Kind:       core.SpellMod_BonusCoeffecient_Flat,
-		FloatValue: 0.02 * float64(druid.Talents.WrathOfCenarius),
+		FloatValue: genRanks.WrathOfCenarius.EffectAt(1).FractionAt(druid.Talents.WrathOfCenarius),
 	})
 
 	druid.AddStaticMod(core.SpellModConfig{

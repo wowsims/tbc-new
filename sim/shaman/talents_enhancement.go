@@ -168,7 +168,7 @@ func (shaman *Shaman) applyImprovedWeaponTotems() {
 	}
 	shaman.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
-		FloatValue: 0.06 * float64(shaman.Talents.ImprovedWeaponTotems),
+		FloatValue: genRanks.ImprovedWeaponTotems.EffectAt(1).FractionAt(shaman.Talents.ImprovedWeaponTotems),
 		ClassMask:  SpellMaskFlametongueTotem,
 	})
 	// WF bonus in totems.go
