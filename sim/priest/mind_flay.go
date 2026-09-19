@@ -2,8 +2,6 @@ package priest
 
 import (
 	"fmt"
-	"time"
-
 	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
@@ -11,6 +9,8 @@ import (
 var MindFlayRankMap = genRanks.MindFlay
 
 func (priest *Priest) registerMindFlaySpell(rank shared.SpellRank) {
+	tick := rank.Periodic.(shared.SpellRankPeriodic)
+
 	priest.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: rank.SpellID},
 		SpellSchool:    core.SpellSchoolShadow,
@@ -27,7 +27,7 @@ func (priest *Priest) registerMindFlaySpell(rank shared.SpellRank) {
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: rank.GCD,
 			},
 		},
 
@@ -39,8 +39,8 @@ func (priest *Priest) registerMindFlaySpell(rank shared.SpellRank) {
 			Aura: core.Aura{
 				Label: fmt.Sprintf("MindFlay-%d", rank.Rank),
 			},
-			NumberOfTicks:        3,
-			TickLength:           time.Second,
+			NumberOfTicks:        tick.NumberOfTicks,
+			TickLength:           tick.TickLength,
 			AffectedByCastSpeed:  true,
 			HasteReducesDuration: true,
 			BonusCoefficient:     rank.Periodic.BonusCoefficient(),

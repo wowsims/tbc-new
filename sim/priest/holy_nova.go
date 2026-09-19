@@ -23,7 +23,7 @@ func (priest *Priest) registerHolyNovaSpell(rank shared.SpellRank) {
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: rank.GCD,
 			},
 		},
 

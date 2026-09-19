@@ -45,7 +45,7 @@ func (paladin *Paladin) registerHolyLight(rankConfig shared.SpellRank) {
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD:      core.GCDDefault,
+				GCD:      rankConfig.GCD,
 				CastTime: rankConfig.CastTime,
 			},
 		},

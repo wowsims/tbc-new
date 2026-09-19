@@ -2,8 +2,6 @@ package priest
 
 import (
 	"fmt"
-	"time"
-
 	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
@@ -13,6 +11,7 @@ import (
 var StarshardsRankMap = genRanks.Starshards
 
 func (priest *Priest) registerStarshardsSpell(rank shared.SpellRank, cdTimer *core.Timer) {
+	tick := rank.Periodic.(shared.SpellRankPeriodic)
 
 	priest.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: rank.SpellID},
@@ -30,7 +29,7 @@ func (priest *Priest) registerStarshardsSpell(rank shared.SpellRank, cdTimer *co
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: rank.GCD,
 			},
 			CD: core.Cooldown{
 				Timer:    cdTimer,
@@ -46,8 +45,8 @@ func (priest *Priest) registerStarshardsSpell(rank shared.SpellRank, cdTimer *co
 			Aura: core.Aura{
 				Label: fmt.Sprintf("Starshards-%d", rank.Rank),
 			},
-			NumberOfTicks:       5,
-			TickLength:          3 * time.Second,
+			NumberOfTicks:       tick.NumberOfTicks,
+			TickLength:          tick.TickLength,
 			AffectedByCastSpeed: false,
 			BonusCoefficient:    rank.Periodic.BonusCoefficient(),
 

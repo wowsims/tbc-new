@@ -2,8 +2,6 @@ package priest
 
 import (
 	"fmt"
-	"time"
-
 	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
@@ -11,6 +9,8 @@ import (
 var VampiricTouchRankMap = genRanks.VampiricTouch
 
 func (priest *Priest) registerVampiricTouchSpell(rank shared.SpellRank) {
+	tick := rank.Periodic.(shared.SpellRankPeriodic)
+
 	manaMetrics := priest.NewManaMetrics(core.ActionID{SpellID: rank.SpellID}.WithTag(1))
 
 	priest.RegisterSpell(core.SpellConfig{
@@ -29,7 +29,7 @@ func (priest *Priest) registerVampiricTouchSpell(rank shared.SpellRank) {
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD:      core.GCDDefault,
+				GCD:      rank.GCD,
 				CastTime: rank.CastTime,
 			},
 		},
@@ -54,8 +54,8 @@ func (priest *Priest) registerVampiricTouchSpell(rank shared.SpellRank) {
 					})
 				},
 			},
-			NumberOfTicks:       5,
-			TickLength:          3 * time.Second,
+			NumberOfTicks:       tick.NumberOfTicks,
+			TickLength:          tick.TickLength,
 			AffectedByCastSpeed: false,
 			BonusCoefficient:    rank.Periodic.BonusCoefficient(),
 

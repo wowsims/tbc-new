@@ -24,7 +24,7 @@ func (priest *Priest) registerShadowWordDeathSpell(rank shared.SpellRank, cdTime
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: rank.GCD,
 			},
 			CD: core.Cooldown{
 				Timer:    cdTimer,

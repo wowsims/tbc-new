@@ -1,8 +1,6 @@
 package paladin
 
 import (
-	"time"
-
 	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
@@ -21,6 +19,8 @@ var ConsecrationRankMap = genRanks.Consecration
 //
 // Consecrates the land beneath the Paladin, doing X Holy damage over 8 sec to enemies who enter the area.
 func (paladin *Paladin) registerConsecration(rankConfig shared.SpellRank) {
+	tick := rankConfig.Periodic.(shared.SpellRankPeriodic)
+
 	spellID := rankConfig.SpellID
 	cost := rankConfig.Cost
 	minDamage := shared.SpellRankMin(rankConfig.Periodic)
@@ -45,7 +45,7 @@ func (paladin *Paladin) registerConsecration(rankConfig shared.SpellRank) {
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: rankConfig.GCD,
 			},
 			CD: core.Cooldown{
 				Timer:    paladin.getConsecrationTimer(),
@@ -59,8 +59,8 @@ func (paladin *Paladin) registerConsecration(rankConfig shared.SpellRank) {
 				ActionID: core.ActionID{SpellID: spellID},
 				Label:    "Consecration" + paladin.Label + " " + rankConfig.GetRankLabel(),
 			},
-			NumberOfTicks:    7,
-			TickLength:       time.Second * 1,
+			NumberOfTicks:    7, // the table says 8; the sim adds an immediate tick below
+			TickLength:       tick.TickLength,
 			BonusCoefficient: coefficient,
 			OnTick: func(sim *core.Simulation, _ *core.Unit, dot *core.Dot) {
 				dot.Spell.CalcAndDealPeriodicAoeDamage(sim, minDamage, dot.OutcomeTickMagicHit)

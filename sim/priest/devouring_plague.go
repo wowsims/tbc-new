@@ -2,8 +2,6 @@ package priest
 
 import (
 	"fmt"
-	"time"
-
 	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
@@ -14,6 +12,8 @@ import (
 var DevouringPlagueRankMap = genRanks.DevouringPlague
 
 func (priest *Priest) registerDevouringPlagueSpell(rank shared.SpellRank, cdTimer *core.Timer) {
+	tick := rank.Periodic.(shared.SpellRankPeriodic)
+
 	healthMetrics := priest.NewHealthMetrics(core.ActionID{SpellID: rank.SpellID}.WithTag(1))
 
 	priest.RegisterSpell(core.SpellConfig{
@@ -32,7 +32,7 @@ func (priest *Priest) registerDevouringPlagueSpell(rank shared.SpellRank, cdTime
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: rank.GCD,
 			},
 			CD: core.Cooldown{
 				Timer:    cdTimer,
@@ -59,8 +59,8 @@ func (priest *Priest) registerDevouringPlagueSpell(rank shared.SpellRank, cdTime
 					})
 				},
 			},
-			NumberOfTicks:       8,
-			TickLength:          3 * time.Second,
+			NumberOfTicks:       tick.NumberOfTicks,
+			TickLength:          tick.TickLength,
 			AffectedByCastSpeed: false,
 			BonusCoefficient:    rank.Periodic.BonusCoefficient(),
 

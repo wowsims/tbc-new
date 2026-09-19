@@ -23,7 +23,7 @@ func (priest *Priest) registerMindBlastSpell(rank shared.SpellRank, cdTimer *cor
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD:      core.GCDDefault,
+				GCD:      rank.GCD,
 				CastTime: rank.CastTime,
 			},
 			CD: core.Cooldown{

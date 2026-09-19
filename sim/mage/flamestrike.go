@@ -11,6 +11,8 @@ import (
 var FlameStrikeRankMap = genRanks.Flamestrike.Ranks(7, 6)
 
 func (mage *Mage) registerFlamestrike(rankConfig shared.SpellRank) {
+	tick := rankConfig.Periodic.(shared.SpellRankPeriodic)
+
 	flameStrikeCoefficient := 0.23600000143 // Per https://wago.tools/db2/SpellEffect?build=2.5.5.65295&filter%5BSpellID%5D=exact%253A2120 Field: "BonusCoefficient"
 	flameStrikeDotCoefficient := 0.02999999933
 
@@ -28,7 +30,7 @@ func (mage *Mage) registerFlamestrike(rankConfig shared.SpellRank) {
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD:      core.GCDDefault,
+				GCD:      rankConfig.GCD,
 				CastTime: time.Second * 3,
 			},
 		},
@@ -42,8 +44,8 @@ func (mage *Mage) registerFlamestrike(rankConfig shared.SpellRank) {
 			Aura: core.Aura{
 				Label: fmt.Sprintf("Flamestrike DoT %s", rankConfig.GetRankLabel()),
 			},
-			NumberOfTicks:    4,
-			TickLength:       time.Second * 2,
+			NumberOfTicks:    tick.NumberOfTicks,
+			TickLength:       tick.TickLength,
 			BonusCoefficient: flameStrikeDotCoefficient,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {

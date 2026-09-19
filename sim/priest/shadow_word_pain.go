@@ -2,8 +2,6 @@ package priest
 
 import (
 	"fmt"
-	"time"
-
 	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
@@ -11,6 +9,8 @@ import (
 var ShadowWordPainRankMap = genRanks.ShadowWordPain
 
 func (priest *Priest) registerShadowWordPainSpell(rank shared.SpellRank) {
+	tick := rank.Periodic.(shared.SpellRankPeriodic)
+
 	priest.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: rank.SpellID},
 		SpellSchool:    core.SpellSchoolShadow,
@@ -27,7 +27,7 @@ func (priest *Priest) registerShadowWordPainSpell(rank shared.SpellRank) {
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: rank.GCD,
 			},
 		},
 
@@ -39,8 +39,8 @@ func (priest *Priest) registerShadowWordPainSpell(rank shared.SpellRank) {
 			Aura: core.Aura{
 				Label: fmt.Sprintf("ShadowWordPain-%d", rank.Rank),
 			},
-			NumberOfTicks:       6,
-			TickLength:          3 * time.Second,
+			NumberOfTicks:       tick.NumberOfTicks,
+			TickLength:          tick.TickLength,
 			AffectedByCastSpeed: false, // DoT ticks not haste-affected in TBC
 			BonusCoefficient:    rank.Periodic.BonusCoefficient(),
 
