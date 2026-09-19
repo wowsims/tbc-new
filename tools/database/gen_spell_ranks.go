@@ -439,16 +439,18 @@ func GenerateSpellRankFiles(helper *DBHelper) error {
 		rendered[pkg] = out
 	}
 
+	// Rendered before any write too: it holds exactly the names the class files above turned out to
+	// reference, and a class file naming a constant this file does not declare breaks the sim - and
+	// with it gen_db, which imports the sim.
+	enums, err := namer.render()
+	if err != nil {
+		return err
+	}
+
 	for pkg, out := range rendered {
 		if err := os.WriteFile(fmt.Sprintf("sim/%s/spell_ranks_auto_gen.go", pkg), out, 0644); err != nil {
 			return err
 		}
-	}
-
-	// Written last: it holds exactly the names the class files above turned out to reference.
-	enums, err := namer.render()
-	if err != nil {
-		return err
 	}
 	return os.WriteFile("sim/common/shared/spell_rank_enums_auto_gen.go", enums, 0644)
 }

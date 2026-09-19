@@ -1,7 +1,6 @@
 package druid
 
 import (
-	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/stats"
 )
@@ -217,9 +216,12 @@ func (druid *Druid) RegisterBearFormAura() {
 	feralApDep := druid.NewDynamicStatDependency(stats.FeralAttackPower, stats.AttackPower, 1)
 	stamDep := druid.NewDynamicMultiplyStat(stats.Stamina, 1.25)
 	// Talent: Heart of the Wild — +4% Stamina per rank while in Bear form.
+	// Stays a literal: the talent states no Stamina effect. Its two effects are +4%/rank Intellect
+	// (A_MOD_TOTAL_STAT_PERCENTAGE misc 3) and an E_DUMMY worth 2/rank for the Cat attack power, so
+	// reading either here would be picking the effect by which number matches.
 	var hotWBearStamDep *stats.StatDependency
 	if druid.Talents.HeartOfTheWild > 0 {
-		hotWBearStamDep = druid.NewDynamicMultiplyStat(stats.Stamina, genRanks.HeartOfTheWild.Effect(shared.A_MOD_TOTAL_STAT_PERCENTAGE, 3).MultiplierAt(druid.Talents.HeartOfTheWild))
+		hotWBearStamDep = druid.NewDynamicMultiplyStat(stats.Stamina, 1+0.04*float64(druid.Talents.HeartOfTheWild))
 	}
 
 	clawWeapon := druid.GetBearWeapon()

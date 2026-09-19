@@ -1,9 +1,9 @@
 package priest
 
 import (
-	"github.com/wowsims/tbc/sim/common/shared"
 	"time"
 
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/stats"
 )

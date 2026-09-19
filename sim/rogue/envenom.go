@@ -1,9 +1,9 @@
 package rogue
 
 import (
-	"github.com/wowsims/tbc/sim/common/shared"
 	"time"
 
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
 

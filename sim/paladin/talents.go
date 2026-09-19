@@ -1,10 +1,10 @@
 package paladin
 
 import (
-	"github.com/wowsims/tbc/sim/common/shared"
 	"slices"
 	"time"
 
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
@@ -478,11 +478,13 @@ func (paladin *Paladin) applyImprovedRighteousFury() {
 			return
 		}
 
-		// The client states this as a negative percentage per rank: -2 / -4 / -6.
-		reduction := genRanks.ImprovedRighteousFury.ByRank(paladin.Talents.ImprovedRighteousFury).Effect(shared.A_ADD_FLAT_MODIFIER, 12).Value
+		// The client states this as a negative percentage per rank: -2 / -4 / -6, so MultiplierAt
+		// gives 0.98 / 0.96 / 0.94 and the minus is never written here.
 		spell.RelatedSelfBuff.AttachMultiplicativePseudoStatBuff(
 			&paladin.PseudoStats.DamageTakenMultiplier,
-			1+reduction/100,
+			genRanks.ImprovedRighteousFury.
+				Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_EFFECT2).
+				MultiplierAt(paladin.Talents.ImprovedRighteousFury),
 		)
 	})
 }

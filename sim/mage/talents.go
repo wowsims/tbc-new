@@ -1,10 +1,10 @@
 package mage
 
 import (
-	"github.com/wowsims/tbc/sim/common/shared"
 	"math"
 	"time"
 
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/stats"
 )

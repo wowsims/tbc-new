@@ -1,10 +1,10 @@
 package rogue
 
 import (
-	"github.com/wowsims/tbc/sim/common/shared"
 	"slices"
 	"time"
 
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
@@ -214,7 +214,7 @@ func (rogue *Rogue) registerMasterPoisoner() {
 	rogue.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusHit_Percent,
 		ClassMask:  RogueSpellPoisons,
-		FloatValue: genRanks.MasterPoisoner.ValueAt(rogue.Talents.MasterPoisoner),
+		FloatValue: genRanks.MasterPoisoner.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_RESIST_MISS_CHANCE).ValueAt(rogue.Talents.MasterPoisoner),
 	})
 }
 

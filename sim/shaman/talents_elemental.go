@@ -1,9 +1,9 @@
 package shaman
 
 import (
-	"github.com/wowsims/tbc/sim/common/shared"
 	"time"
 
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/stats"
 )
@@ -206,9 +206,10 @@ func (shaman *Shaman) applyElementalPrecision() {
 		return
 	}
 
-	shaman.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexFire] += genRanks.ElementalPrecision.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_RESIST_MISS_CHANCE).ValueAt(shaman.Talents.ElementalPrecision)
-	shaman.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexFrost] += genRanks.ElementalPrecision.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_RESIST_MISS_CHANCE).ValueAt(shaman.Talents.ElementalPrecision)
-	shaman.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexNature] += genRanks.ElementalPrecision.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_RESIST_MISS_CHANCE).ValueAt(shaman.Talents.ElementalPrecision)
+	hitPercent := genRanks.ElementalPrecision.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_RESIST_MISS_CHANCE).ValueAt(shaman.Talents.ElementalPrecision)
+	shaman.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexFire] += hitPercent
+	shaman.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexFrost] += hitPercent
+	shaman.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexNature] += hitPercent
 
 	shaman.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_ThreatMultiplier_Pct,

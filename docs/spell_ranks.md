@@ -6,6 +6,7 @@ hand-transcribed literals.
 
 - [Using a rank](#using-a-rank)
 - [The value shapes](#the-value-shapes)
+- [Reaching a single effect](#reaching-a-single-effect)
 - [Talents](#talents)
 - [Worked examples](#worked-examples)
 - [Attack power](#attack-power)

@@ -1,10 +1,10 @@
 package hunter
 
 import (
-	"github.com/wowsims/tbc/sim/common/shared"
 	"slices"
 	"time"
 
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"

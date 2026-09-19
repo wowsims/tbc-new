@@ -173,21 +173,27 @@ type SpellRankEffect struct {
 	// The client's own number, in the client's own units. A percentage is an integer here - Improved
 	// Righteous Fury's threat bonus reads 16, not 0.16 - and the conversion stays at the call site,
 	// because whether a value is a percentage depends on the aura rather than on the field.
+	//
+	// Where the effect rolls - a damage effect with die sides - this is the low end only. Read the
+	// role field for the range: Arcane Blast rank 1 reads 668 here against Direct's 668-772.
 	Value float64
 }
 
 // Panics when no effect matches, and when two do - 186 ranked spells carry a duplicate aura/misc
 // pair. Index into Effects where the pair cannot tell them apart.
 func (r SpellRank) Effect(aura SpellRankAura, misc int32) SpellRankEffect {
-	found := -1
+	found, matches := -1, 0
 	for i, e := range r.Effects {
 		if e.Aura == aura && e.Misc == misc {
-			if found >= 0 {
-				panic(fmt.Sprintf("spell %d rank %d has %d effects with aura %d misc %d - index them instead",
-					r.SpellID, r.Rank, 2, aura, misc))
+			matches++
+			if found < 0 {
+				found = i
 			}
-			found = i
 		}
+	}
+	if matches > 1 {
+		panic(fmt.Sprintf("spell %d rank %d has %d effects with aura %d misc %d - index them instead",
+			r.SpellID, r.Rank, matches, aura, misc))
 	}
 	if found < 0 {
 		panic(fmt.Sprintf("spell %d rank %d has no effect with aura %d misc %d, in %d effects",

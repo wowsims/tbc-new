@@ -15,12 +15,13 @@ func (paladin *Paladin) registerRighteousFury() {
 
 	// Base RF = 60% threat, which Improved Righteous Fury raises by the talent's own per-rank
 	// percentage: 16 / 33 / 50, so 69.6% / 79.8% / 90%.
-	threatBonus := 0.6
-	if rank := paladin.Talents.ImprovedRighteousFury; rank > 0 {
-		// Named by aura rather than read out of Direct: the talent's other effect cuts damage taken,
-		// and which of the two lands in Direct is the generator's choice, not a promise.
-		threatBonus *= 1 + genRanks.ImprovedRighteousFury.ByRank(rank).Effect(shared.A_ADD_PCT_MODIFIER, 8).Value/100
-	}
+	//
+	// Named by aura rather than read out of Direct: the talent's other effect cuts damage taken,
+	// and which of the two lands in Direct is the generator's choice, not a promise. MultiplierAt
+	// answers 1 at rank 0, so an untaken talent leaves the base 60% alone.
+	threatBonus := 0.6 * genRanks.ImprovedRighteousFury.
+		Effect(shared.A_ADD_PCT_MODIFIER, shared.SPELLMOD_ALL_EFFECTS).
+		MultiplierAt(paladin.Talents.ImprovedRighteousFury)
 
 	rfAura := paladin.RegisterAura(core.Aura{
 		Label:    "Righteous Fury",
