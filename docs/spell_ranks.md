@@ -47,7 +47,7 @@ A rank's value is discriminated by shape, so a variant only carries fields that 
 ```go
 shared.SpellRankFlat     {Value, Coef, APCoef}                          // a mana restore, a talent's number
 shared.SpellRankRange    {Min, Max, Coef, APCoef}                       // damage or healing the client rolls
-shared.SpellRankPeriodic {Tick, TickLength, NumberOfTicks, Coef, APCoef}  // a tick and its schedule
+shared.SpellRankPeriodic {Tick, TickMax, TickLength, NumberOfTicks, Coef, APCoef} // a tick and its schedule
 ```
 
 They sit on the four roles a rank can carry, any of which may be nil:
@@ -66,7 +66,7 @@ rolled:
 
 ```go
 baseDamage := rank.Direct.Damage(sim)     // instead of CalcAndRollDamageRange(sim, min, max)
-tickDamage := rank.Periodic.Damage(sim)   // a tick is already the answer, so nothing is rolled
+tickDamage := rank.Periodic.Damage(sim)   // a tick is the answer unless the client rolls it
 ```
 
 The coefficients are methods, named for the `core.SpellConfig` fields they feed:
@@ -105,7 +105,7 @@ A rank also carries what the client knows about casting it:
 
 |                               |                                                                                                                                            |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `Cost`, `CostPct`             | in the units the sim uses - see the rage trap below                                                                                        |
+| `Cost`                        | in the units the sim uses - see the rage trap below                                                                                        |
 | `CastTime`, `GCD`, `Cooldown` | zero for a channel, whose duration carries it                                                                                              |
 | `MinRange`, `MaxRange`        | `core` gates the cast on both; zero means ungated. `MinRange` is the dead zone on a charge, and is nonzero on only 212 spells in the build |
 | `MissileSpeed`                | yards per second, which `core` turns into the delay before the damage lands. Zero is an instant hit                                        |
@@ -231,12 +231,10 @@ later client build fails loudly instead of quietly mis-scaling.
 | `WithSpellRankAPCoefs(t, map)`         | per rank, on `Direct`          |
 | `WithSpellRankPeriodicAPCoefs(t, map)` | per rank, on `Periodic`        |
 
-All four return a copy and panic if the role is nil on any rank, so check the generated table first -
-`genRanks.Mangle`, for instance, is the _learn-spell_ entry (`Effect = 36`) and carries no value at
-all.
-
-Both return a copy, so the generated table keeps what the database said, and both panic if that table
-already carries a coefficient - a value that appears upstream should be noticed, not silently shadowed.
+All four return a copy, so the generated table keeps what the database said. All four panic if the role
+is nil on any rank - check the generated table first, `genRanks.Mangle` is the _learn-spell_ entry
+(`Effect = 36`) and carries no value at all - and if the table already carries a coefficient, because a
+value that appears upstream should be noticed, not silently shadowed.
 
 ## Regenerating
 

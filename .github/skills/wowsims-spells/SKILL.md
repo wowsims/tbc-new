@@ -43,7 +43,7 @@ ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 },
 ```
 
-A rank's value is discriminated by shape — SpellRankFlat, SpellRankRange, SpellRankPeriodic — behind a sealed interface, so a flat number has no Max to misread and only a periodic value carries a tick schedule. `Damage(sim)` rolls a range and returns a flat amount or a tick unchanged; `Range()` gives both ends.
+A rank's value is discriminated by shape — SpellRankFlat, SpellRankRange, SpellRankPeriodic — behind a sealed interface, so a flat number has no Max to misread and only a periodic value carries a tick schedule. `Damage(sim)` rolls where the client rolls and returns the amount unchanged where it does not; `Range()` gives both ends.
 
 Role fields: Direct, Heal, Periodic, Energize. Each is one effect. A rank can carry nothing in a role — Lay on Hands rank 1 restores no mana where ranks 2-4 do — so the `SpellRankMin/Max/Coef/APCoef` helpers read nil as zero where a direct field access would panic.
 
