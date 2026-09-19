@@ -42,8 +42,8 @@ func (druid *Druid) registerRipSpell() {
 			Aura: core.Aura{
 				Label: "Rip",
 			},
-			NumberOfTicks: ripTick.Ticks,
-			TickLength:    ripTick.Period,
+			NumberOfTicks: ripTick.NumberOfTicks,
+			TickLength:    ripTick.TickLength,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				cp := druid.ComboPoints()

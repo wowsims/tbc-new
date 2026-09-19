@@ -39,8 +39,8 @@ func (druid *Druid) registerRakeSpell() {
 				Label:    "Rake",
 				Duration: time.Second * 9,
 			},
-			NumberOfTicks: rakeTick.Ticks,
-			TickLength:    rakeTick.Period,
+			NumberOfTicks: rakeTick.NumberOfTicks,
+			TickLength:    rakeTick.TickLength,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.SnapshotPhysical(target, rakeTick.Tick+0.02*dot.Spell.MeleeAttackPower(target))

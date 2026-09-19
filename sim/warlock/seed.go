@@ -11,7 +11,7 @@ var seedTick = seedRank.Periodic.(shared.SpellRankPeriodic)
 var seedTickCoeff = seedTick.Coef
 var seedPopCoeff = 0.214
 var seedExplosionCoeff = 0.143
-var seedTriggerBaseDamage = seedTick.Tick * float64(seedTick.Ticks)
+var seedTriggerBaseDamage = seedTick.Tick * float64(seedTick.NumberOfTicks)
 
 func (warlock *Warlock) registerSeed() {
 	warlock.SeedOfCorruptionBonusDamage = 0
@@ -109,8 +109,8 @@ func (warlock *Warlock) registerSeed() {
 				},
 			},
 
-			NumberOfTicks:    seedTick.Ticks,
-			TickLength:       seedTick.Period,
+			NumberOfTicks:    seedTick.NumberOfTicks,
+			TickLength:       seedTick.TickLength,
 			BonusCoefficient: seedTickCoeff,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {

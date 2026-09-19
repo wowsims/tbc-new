@@ -12,7 +12,7 @@ var corruptionTick = corruptionRank.Periodic.(shared.SpellRankPeriodic)
 var corruptionCoeff = corruptionTick.Coef
 
 func (warlock *Warlock) registerCorruption() *core.Spell {
-	tickCount := corruptionTick.Ticks
+	tickCount := corruptionTick.NumberOfTicks
 	warlock.CorruptionTickBaseDamage = corruptionTick.Tick
 
 	warlock.Corruption = warlock.RegisterSpell(core.SpellConfig{
@@ -48,7 +48,7 @@ func (warlock *Warlock) registerCorruption() *core.Spell {
 				Tag:   "Affliction",
 			},
 			NumberOfTicks:    tickCount,
-			TickLength:       corruptionTick.Period,
+			TickLength:       corruptionTick.TickLength,
 			BonusCoefficient: corruptionCoeff,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, warlock.CorruptionTickBaseDamage)
@@ -64,7 +64,7 @@ func (warlock *Warlock) registerCorruption() *core.Spell {
 				result.Damage /= dot.TickPeriod().Seconds()
 				return result
 			} else {
-				result := spell.CalcPeriodicDamage(sim, target, corruptionTick.Tick*float64(corruptionTick.Ticks), spell.OutcomeExpectedMagicHit)
+				result := spell.CalcPeriodicDamage(sim, target, corruptionTick.Tick*float64(corruptionTick.NumberOfTicks), spell.OutcomeExpectedMagicHit)
 				result.Damage /= dot.CalcTickPeriod().Round(time.Millisecond).Seconds()
 				return result
 			}

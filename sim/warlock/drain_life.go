@@ -37,8 +37,8 @@ func (warlock *Warlock) registerDrainLife() {
 
 		Dot: core.DotConfig{
 			Aura:                 core.Aura{Label: "Drain Life"},
-			NumberOfTicks:        drainLifeTick.Ticks,
-			TickLength:           drainLifeTick.Period,
+			NumberOfTicks:        drainLifeTick.NumberOfTicks,
+			TickLength:           drainLifeTick.TickLength,
 			AffectedByCastSpeed:  true,
 			HasteReducesDuration: true,
 			BonusCoefficient:     drainLifeCoeff,

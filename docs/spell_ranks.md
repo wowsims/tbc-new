@@ -47,7 +47,7 @@ A rank's value is discriminated by shape, so a variant only carries fields that 
 ```go
 shared.SpellRankFlat     {Value, Coef, APCoef}                          // a mana restore, a talent's number
 shared.SpellRankRange    {Min, Max, Coef, APCoef}                       // damage or healing the client rolls
-shared.SpellRankPeriodic {Tick, Period, Ticks, Coef, APCoef}            // a tick and the schedule it lands on
+shared.SpellRankPeriodic {Tick, TickLength, NumberOfTicks, Coef, APCoef}  // a tick and its schedule
 ```
 
 They sit on the four roles a rank can carry, any of which may be nil:
@@ -97,8 +97,8 @@ Tick length and count live only on the periodic shape, so assert for them:
 
 ```go
 p := rank.Periodic.(shared.SpellRankPeriodic)
-p.Period   // time.Duration
-p.Ticks    // Duration / Period, as the client states them
+p.TickLength     // time.Duration, feeds core.DotConfig.TickLength
+p.NumberOfTicks  // duration over the tick length, feeds core.DotConfig.NumberOfTicks
 ```
 
 A rank also carries what the client knows about casting it:
@@ -158,8 +158,8 @@ func (priest *Priest) registerShadowWordPain() {
 
 		Dot: core.DotConfig{
 			Aura:             core.Aura{Label: "ShadowWordPain-" + swpRanks.GetRankLabel()},
-			NumberOfTicks:    tick.Ticks,
-			TickLength:       tick.Period,
+			NumberOfTicks:    tick.NumberOfTicks,
+			TickLength:       tick.TickLength,
 			BonusCoefficient: tick.Coef,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, tick.Tick)

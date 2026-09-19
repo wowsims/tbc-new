@@ -43,8 +43,8 @@ func (druid *Druid) registerLacerateSpell() {
 				MaxStacks: 5,
 				Duration:  time.Second * 15,
 			},
-			NumberOfTicks: lacerateTick.Ticks,
-			TickLength:    lacerateTick.Period,
+			NumberOfTicks: lacerateTick.NumberOfTicks,
+			TickLength:    lacerateTick.TickLength,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				perStack := tickDamageBase + druid.IdolLacerateBonus + druid.LacerateTickBonus + 0.01*dot.Spell.MeleeAttackPower(target)

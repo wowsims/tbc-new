@@ -48,7 +48,7 @@ func (rogue *Rogue) registerRupture() {
 				Tag:   RogueBleedTag,
 			},
 			NumberOfTicks: 0, // Set dynamically
-			TickLength:    tick.Period,
+			TickLength:    tick.TickLength,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.SnapshotPhysical(target, rogue.ruptureDamage(target, rogue.ComboPoints(), tick.Tick, 11))
@@ -63,7 +63,7 @@ func (rogue *Rogue) registerRupture() {
 			result := spell.CalcOutcome(sim, target, spell.OutcomeMeleeSpecialHit)
 			if result.Landed() {
 				dot := spell.Dot(target)
-				dot.BaseTickCount = tick.Ticks + rogue.ComboPoints()
+				dot.BaseTickCount = tick.NumberOfTicks + rogue.ComboPoints()
 				dot.Apply(sim)
 				rogue.ApplyFinisher(sim, spell)
 				spell.DealOutcome(sim, result)

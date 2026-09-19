@@ -36,8 +36,8 @@ func (warlock *Warlock) registerHellfire() *core.Spell {
 			},
 
 			IsAOE:                true,
-			TickLength:           hellfireTick.Period,
-			NumberOfTicks:        hellfireTick.Ticks,
+			TickLength:           hellfireTick.TickLength,
+			NumberOfTicks:        hellfireTick.NumberOfTicks,
 			HasteReducesDuration: true,
 			AffectedByCastSpeed:  true,
 			BonusCoefficient:     hellFireCoeff,

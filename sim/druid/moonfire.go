@@ -29,8 +29,8 @@ func (druid *Druid) registerMoonfireDoTSpell() {
 			Aura: core.Aura{
 				Label: "Moonfire",
 			},
-			NumberOfTicks:       moonfireTick.Ticks,
-			TickLength:          moonfireTick.Period,
+			NumberOfTicks:       moonfireTick.NumberOfTicks,
+			TickLength:          moonfireTick.TickLength,
 			AffectedByCastSpeed: false,
 			BonusCoefficient:    moonfireTick.Coef,
 

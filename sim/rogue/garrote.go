@@ -41,8 +41,8 @@ func (rogue *Rogue) registerGarrote() {
 				Label: "Garrote",
 				Tag:   RogueBleedTag,
 			},
-			NumberOfTicks: tick.Ticks,
-			TickLength:    tick.Period,
+			NumberOfTicks: tick.NumberOfTicks,
+			TickLength:    tick.TickLength,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.SnapshotPhysical(target, tick.Tick+dot.Spell.MeleeAttackPower(target)*0.03)
 			},

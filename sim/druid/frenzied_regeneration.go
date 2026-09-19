@@ -48,8 +48,8 @@ func (druid *Druid) registerFrenziedRegenerationSpell() {
 			druid.FrenziedRegenerationAura.Activate(sim)
 			// Converts up to 10 rage per second into 25 health per rage, for 10 sec.
 			core.StartPeriodicAction(sim, core.PeriodicActionOptions{
-				Period:   frenziedRegenerationTick.Period,
-				NumTicks: int(frenziedRegenerationTick.Ticks),
+				Period:   frenziedRegenerationTick.TickLength,
+				NumTicks: int(frenziedRegenerationTick.NumberOfTicks),
 				Priority: core.ActionPriorityDOT,
 				OnAction: func(sim *core.Simulation) {
 					rage := min(druid.CurrentRage(), 10)

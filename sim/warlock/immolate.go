@@ -14,7 +14,7 @@ var immolateDotCoeff = immolateTick.Coef
 
 func (warlock *Warlock) registerImmolate() {
 	actionID := core.ActionID{SpellID: 27215}
-	tickCount := immolateTick.Ticks
+	tickCount := immolateTick.NumberOfTicks
 	warlock.ImmolateTickBaseDamage = immolateTick.Tick
 
 	warlock.Immolate = warlock.RegisterSpell(core.SpellConfig{
@@ -64,7 +64,7 @@ func (warlock *Warlock) registerImmolate() {
 				Label: "Immolate (DoT)",
 			},
 			NumberOfTicks:    tickCount,
-			TickLength:       immolateTick.Period,
+			TickLength:       immolateTick.TickLength,
 			BonusCoefficient: immolateDotCoeff,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, warlock.ImmolateTickBaseDamage)
@@ -81,7 +81,7 @@ func (warlock *Warlock) registerImmolate() {
 				result.Damage /= dot.TickPeriod().Seconds()
 				return result
 			} else {
-				result := spell.CalcPeriodicDamage(sim, target, immolateTick.Tick*float64(immolateTick.Ticks), spell.OutcomeExpectedMagicHit)
+				result := spell.CalcPeriodicDamage(sim, target, immolateTick.Tick*float64(immolateTick.NumberOfTicks), spell.OutcomeExpectedMagicHit)
 				result.Damage /= dot.CalcTickPeriod().Round(time.Millisecond).Seconds()
 				return result
 			}

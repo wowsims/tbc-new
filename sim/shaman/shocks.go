@@ -83,8 +83,8 @@ func (shaman *Shaman) registerFlameShockSpell(shockTimer *core.Timer) {
 			Aura: core.Aura{
 				Label: "Flame Shock",
 			},
-			NumberOfTicks:    tick.Ticks,
-			TickLength:       tick.Period,
+			NumberOfTicks:    tick.NumberOfTicks,
+			TickLength:       tick.TickLength,
 			BonusCoefficient: tick.Coef,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, tick.Tick)

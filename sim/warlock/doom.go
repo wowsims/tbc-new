@@ -52,8 +52,8 @@ func (warlock *Warlock) registerCurseOfDoom() {
 				Label: "Doom",
 				Tag:   "Affliction",
 			},
-			NumberOfTicks:            doomTick.Ticks,
-			TickLength:               doomTick.Period,
+			NumberOfTicks:            doomTick.NumberOfTicks,
+			TickLength:               doomTick.TickLength,
 			BonusCoefficient:         doomCoeff,
 			PeriodicDamageMultiplier: 1,
 

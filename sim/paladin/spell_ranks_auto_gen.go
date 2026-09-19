@@ -186,7 +186,7 @@ var genRanks = generatedRanks{
 		{Rank: 7, SpellID: 27142, Cost: 150, GCD: 1500 * time.Millisecond, MaxRange: 30, Direct: shared.SpellRankFlat{Value: 41, Coef: 0}},
 	},
 	BloodCorruption: shared.SpellRankTable{
-		{Rank: 1, SpellID: 356110, MaxRange: 100, Periodic: shared.SpellRankPeriodic{Tick: 30, Coef: 0.03400000184774399, Period: 3000 * time.Millisecond, Ticks: 5}},
+		{Rank: 1, SpellID: 356110, MaxRange: 100, Periodic: shared.SpellRankPeriodic{Tick: 30, Coef: 0.03400000184774399, TickLength: 3000 * time.Millisecond, NumberOfTicks: 5}},
 	},
 	CombatExpertise: shared.SpellRankTable{
 		{Rank: 1, SpellID: 31858, Direct: shared.SpellRankFlat{Value: 2, Coef: 0}},
@@ -196,12 +196,12 @@ var genRanks = generatedRanks{
 		{Rank: 5, SpellID: 31862, Direct: shared.SpellRankFlat{Value: 5, Coef: 0}},
 	},
 	Consecration: shared.SpellRankTable{
-		{Rank: 1, SpellID: 26573, Cost: 120, GCD: 1500 * time.Millisecond, Cooldown: 8000 * time.Millisecond, Periodic: shared.SpellRankPeriodic{Tick: 8, Coef: 0.11900000274181366, Period: 1000 * time.Millisecond, Ticks: 8}},
-		{Rank: 2, SpellID: 20116, Cost: 205, GCD: 1500 * time.Millisecond, Cooldown: 8000 * time.Millisecond, Periodic: shared.SpellRankPeriodic{Tick: 15, Coef: 0.11900000274181366, Period: 1000 * time.Millisecond, Ticks: 8}},
-		{Rank: 3, SpellID: 20922, Cost: 290, GCD: 1500 * time.Millisecond, Cooldown: 8000 * time.Millisecond, Periodic: shared.SpellRankPeriodic{Tick: 24, Coef: 0.11900000274181366, Period: 1000 * time.Millisecond, Ticks: 8}},
-		{Rank: 4, SpellID: 20923, Cost: 390, GCD: 1500 * time.Millisecond, Cooldown: 8000 * time.Millisecond, Periodic: shared.SpellRankPeriodic{Tick: 35, Coef: 0.11900000274181366, Period: 1000 * time.Millisecond, Ticks: 8}},
-		{Rank: 5, SpellID: 20924, Cost: 505, GCD: 1500 * time.Millisecond, Cooldown: 8000 * time.Millisecond, Periodic: shared.SpellRankPeriodic{Tick: 48, Coef: 0.11900000274181366, Period: 1000 * time.Millisecond, Ticks: 8}},
-		{Rank: 6, SpellID: 27173, Cost: 660, GCD: 1500 * time.Millisecond, Cooldown: 8000 * time.Millisecond, Periodic: shared.SpellRankPeriodic{Tick: 64, Coef: 0.11900000274181366, Period: 1000 * time.Millisecond, Ticks: 8}},
+		{Rank: 1, SpellID: 26573, Cost: 120, GCD: 1500 * time.Millisecond, Cooldown: 8000 * time.Millisecond, Periodic: shared.SpellRankPeriodic{Tick: 8, Coef: 0.11900000274181366, TickLength: 1000 * time.Millisecond, NumberOfTicks: 8}},
+		{Rank: 2, SpellID: 20116, Cost: 205, GCD: 1500 * time.Millisecond, Cooldown: 8000 * time.Millisecond, Periodic: shared.SpellRankPeriodic{Tick: 15, Coef: 0.11900000274181366, TickLength: 1000 * time.Millisecond, NumberOfTicks: 8}},
+		{Rank: 3, SpellID: 20922, Cost: 290, GCD: 1500 * time.Millisecond, Cooldown: 8000 * time.Millisecond, Periodic: shared.SpellRankPeriodic{Tick: 24, Coef: 0.11900000274181366, TickLength: 1000 * time.Millisecond, NumberOfTicks: 8}},
+		{Rank: 4, SpellID: 20923, Cost: 390, GCD: 1500 * time.Millisecond, Cooldown: 8000 * time.Millisecond, Periodic: shared.SpellRankPeriodic{Tick: 35, Coef: 0.11900000274181366, TickLength: 1000 * time.Millisecond, NumberOfTicks: 8}},
+		{Rank: 5, SpellID: 20924, Cost: 505, GCD: 1500 * time.Millisecond, Cooldown: 8000 * time.Millisecond, Periodic: shared.SpellRankPeriodic{Tick: 48, Coef: 0.11900000274181366, TickLength: 1000 * time.Millisecond, NumberOfTicks: 8}},
+		{Rank: 6, SpellID: 27173, Cost: 660, GCD: 1500 * time.Millisecond, Cooldown: 8000 * time.Millisecond, Periodic: shared.SpellRankPeriodic{Tick: 64, Coef: 0.11900000274181366, TickLength: 1000 * time.Millisecond, NumberOfTicks: 8}},
 	},
 	Conviction: shared.SpellRankTable{
 		{Rank: 1, SpellID: 20117},
@@ -357,7 +357,7 @@ var genRanks = generatedRanks{
 		{Rank: 5, SpellID: 33072, Cost: 650, GCD: 1500 * time.Millisecond, Cooldown: 15000 * time.Millisecond, MaxRange: 20, Direct: shared.SpellRankRange{Min: 721, Max: 779, Coef: 0.42899999022483826}, Heal: shared.SpellRankRange{Min: 913, Max: 987, Coef: 0.42899999022483826}},
 	},
 	HolyVengeance: shared.SpellRankTable{
-		{Rank: 1, SpellID: 31803, MaxRange: 100, Periodic: shared.SpellRankPeriodic{Tick: 30, Coef: 0.03400000184774399, Period: 3000 * time.Millisecond, Ticks: 5}},
+		{Rank: 1, SpellID: 31803, MaxRange: 100, Periodic: shared.SpellRankPeriodic{Tick: 30, Coef: 0.03400000184774399, TickLength: 3000 * time.Millisecond, NumberOfTicks: 5}},
 	},
 	HolyWrath: shared.SpellRankTable{
 		{Rank: 1, SpellID: 2812, Cost: 550, CastTime: 2000 * time.Millisecond, GCD: 1500 * time.Millisecond, Cooldown: 60000 * time.Millisecond, MissileSpeed: 20, Direct: shared.SpellRankRange{Min: 368, Max: 435, Coef: 0.28600001335144043}},

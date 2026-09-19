@@ -35,8 +35,8 @@ func (druid *Druid) registerInsectSwarmSpell() {
 				Label: "Insect Swarm",
 			},
 
-			NumberOfTicks:       insectSwarmTick.Ticks,
-			TickLength:          insectSwarmTick.Period,
+			NumberOfTicks:       insectSwarmTick.NumberOfTicks,
+			TickLength:          insectSwarmTick.TickLength,
 			AffectedByCastSpeed: false,
 			BonusCoefficient:    insectSwarmTick.Coef,
 

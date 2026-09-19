@@ -40,8 +40,8 @@ func (war *Warrior) registerRend() {
 			Aura: core.Aura{
 				Label: "Rend",
 			},
-			NumberOfTicks: tick.Ticks,
-			TickLength:    tick.Period,
+			NumberOfTicks: tick.NumberOfTicks,
+			TickLength:    tick.TickLength,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.SnapshotBaseDamage = tick.Tick + war.AutoAttacks.MH().CalculateAverageWeaponDamage(dot.Spell.MeleeAttackPower(target))*0.00743
 				dot.SnapshotAttackerMultiplier = dot.Spell.AttackerDamageMultiplier(dot.Spell.Unit.AttackTables[target.UnitIndex], true)

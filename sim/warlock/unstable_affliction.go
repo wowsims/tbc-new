@@ -44,8 +44,8 @@ func (warlock *Warlock) registerUnstableAffliction() {
 				Tag:      "Affliction",
 				ActionID: core.ActionID{SpellID: 30108},
 			},
-			NumberOfTicks:    uaTick.Ticks,
-			TickLength:       uaTick.Period,
+			NumberOfTicks:    uaTick.NumberOfTicks,
+			TickLength:       uaTick.TickLength,
 			BonusCoefficient: uaCoeff,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
@@ -63,7 +63,7 @@ func (warlock *Warlock) registerUnstableAffliction() {
 				result.Damage /= dot.TickPeriod().Seconds()
 				return result
 			} else {
-				result := spell.CalcPeriodicDamage(sim, target, uaTick.Tick*float64(uaTick.Ticks), spell.OutcomeExpectedMagicHit)
+				result := spell.CalcPeriodicDamage(sim, target, uaTick.Tick*float64(uaTick.NumberOfTicks), spell.OutcomeExpectedMagicHit)
 				result.Damage /= dot.CalcTickPeriod().Round(time.Millisecond).Seconds()
 				return result
 			}

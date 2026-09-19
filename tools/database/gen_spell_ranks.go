@@ -537,9 +537,9 @@ func formatValue(a generatedAmount) string {
 
 	switch {
 	case a.PeriodMs > 0:
-		out := fmt.Sprintf("shared.SpellRankPeriodic{Tick: %s, %s, Period: %s", num(a.Min), tail, millis(a.PeriodMs))
+		out := fmt.Sprintf("shared.SpellRankPeriodic{Tick: %s, %s, TickLength: %s", num(a.Min), tail, millis(a.PeriodMs))
 		if a.Ticks > 0 {
-			out += fmt.Sprintf(", Ticks: %d", a.Ticks)
+			out += fmt.Sprintf(", NumberOfTicks: %d", a.Ticks)
 		}
 		return out + "}"
 	case a.Max > a.Min:

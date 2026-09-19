@@ -7,9 +7,9 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
-// A rank's value, by shape. Only a periodic value has a tick schedule, so Period and Ticks are
-// reached by asserting to SpellRankPeriodic rather than through a method Flat and Range would
-// answer with zeroes.
+// A rank's value, by shape. Only a periodic value has a tick schedule, so TickLength and
+// NumberOfTicks are reached by asserting to SpellRankPeriodic rather than through a method Flat and
+// Range would answer with zeroes.
 type SpellRankValue interface {
 	// Returns the damage range of the spell.
 	// Min/Max are the same if the spell only has a single value.
@@ -48,8 +48,10 @@ type SpellRankPeriodic struct {
 	Tick   float64
 	Coef   float64
 	APCoef float64
-	Period time.Duration
-	Ticks  int32
+
+	// Named for the core.DotConfig fields they feed.
+	TickLength    time.Duration
+	NumberOfTicks int32
 }
 
 func (v SpellRankFlat) Range() (float64, float64)     { return v.Value, v.Value }

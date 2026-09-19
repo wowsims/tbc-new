@@ -53,8 +53,8 @@ func (warlock *Warlock) registerCurseOfAgony() {
 				Tag:   "Affliction",
 			},
 
-			TickLength:               agonyTick.Period,
-			NumberOfTicks:            agonyTick.Ticks,
+			TickLength:               agonyTick.TickLength,
+			NumberOfTicks:            agonyTick.NumberOfTicks,
 			PeriodicDamageMultiplier: 1,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
