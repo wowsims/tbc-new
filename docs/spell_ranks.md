@@ -6,6 +6,7 @@ hand-transcribed literals.
 
 - [Using a rank](#using-a-rank)
 - [The value shapes](#the-value-shapes)
+- [Talents](#talents)
 - [Worked examples](#worked-examples)
 - [Attack power](#attack-power)
 - [Regenerating](#regenerating)
@@ -145,6 +146,63 @@ talent. Index into `Effects` where the pair cannot tell them apart.
 threat bonus reads `16`, not `0.16` - so the `/100` stays at the call site. It is deliberately not
 folded into the generator the way the rage `/10` is: whether a value is a percentage depends on the
 aura, so a blanket rule would be wrong for some rows and invisible when it was.
+
+## Talents
+
+A talent is read by the points spent in it, not registered at a rank it has, so the ladder has its own
+three readers. All of them answer the identity at rank 0 - an untaken talent - where `ByRank` would
+panic:
+
+```go
+genRanks.Moonfury.FractionAt(rank)        // 0.10 at 5/5 - the client's 10, over 100
+genRanks.NaturesReach.ValueAt(rank)       // 20 at 2/2  - the client's number as it stands
+genRanks.LivingSpirit.MultiplierAt(rank)  // 1.15 at 5/5 - 1 + the fraction
+```
+
+That replaces the `<literal> * float64(x.Talents.Y)` idiom, and with it the `if rank > 0` guard the
+caller would otherwise need.
+
+**`MultiplierAt` takes its sign from the data.** Improved Righteous Fury states its damage reduction as
+-2 / -4 / -6, so rank 3 gives 0.94 and nobody writes the minus. Where the sim's parameter runs the other
+way - `AddReducedCritTakenPercent` wants a positive amount for a reduction the client states negative -
+negate at the call site so the disagreement is visible.
+
+**Ladders are not always the per-point literal times the rank.** Most are: of 125 percent talents, 122
+scale linearly, so `0.02 * rank` was already right and the table only adds provenance. The ones that do
+not are the reason to read it - Improved Righteous Fury is 16 / 33 / 50, not 16 / 32 / 48, and shaman
+Elemental Weapons is 7 / 14 / 20, not 7 / 14 / 21.
+
+### Picking the effect
+
+A talent with one effect per rank needs nothing further. One with several does, and `ValueAt` panics
+rather than guess:
+
+```go
+genRanks.ImprovedRighteousFury.
+    Effect(shared.A_ADD_PCT_MODIFIER, shared.SPELLMOD_ALL_EFFECTS).MultiplierAt(rank)   // 1.50 threat
+genRanks.ImprovedRighteousFury.
+    Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_EFFECT2).MultiplierAt(rank)      // 0.94 taken
+```
+
+**Do not pick the effect by which one matches the number.** Survival of the Fittest states +1/2/3% to
+all stats and -1/-2/-3% crit taken; both ladders fit, and an automatic pass attached the stat effect to
+the crit-taken call site. What the call site does decides it, and the mod's `Kind` usually says:
+Improved Moonfire's two mods are `SpellMod_DamageDone_Flat` and `SpellMod_BonusCrit_Percent`, so one
+takes `SPELLMOD_DAMAGE` and the other `SPELLMOD_CRITICAL_CHANCE`.
+
+Where a talent modifies damage and its DoT with the same ladder, the sim has one mod against the
+client's two. Either aura reads the same number; `SPELLMOD_DAMAGE` is the convention here.
+
+### The Misc value
+
+`Misc` says what an effect applies to, and what it means depends on the aura: a modified spell property
+under `A_ADD_PCT_MODIFIER` and `A_ADD_FLAT_MODIFIER`, a stat under `A_MOD_TOTAL_STAT_PERCENTAGE`, a
+school mask under `A_MOD_DAMAGE_DONE`. There is no single enum for it, so it stays an int.
+
+For the two modifier auras the `SPELLMOD_*` constants name it. Those are hand-written in
+`sim/common/shared/spell_rank_talents.go`, not mirrored from the client, which ships no name list for
+them - each carries the talents it was read off, and the four resting on one or two talents each are
+marked as thinner. Audit the comment before trusting the name.
 
 ## Worked examples
 
