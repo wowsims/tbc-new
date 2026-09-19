@@ -88,7 +88,7 @@ func (priest *Priest) applyMentalStrength() {
 		return
 	}
 	// +2% mana per rank
-	priest.MultiplyStat(stats.Mana, 1.0+0.02*float64(priest.Talents.MentalStrength))
+	priest.MultiplyStat(stats.Mana, 1.0+genRanks.MentalStrength.FractionAt(priest.Talents.MentalStrength))
 }
 
 func (priest *Priest) applySpiritualGuidance() {
@@ -293,7 +293,7 @@ func (priest *Priest) applyMeditation() {
 		return
 	}
 
-	priest.PseudoStats.SpiritRegenRateCasting += 0.10 * float64(priest.Talents.Meditation)
+	priest.PseudoStats.SpiritRegenRateCasting += genRanks.Meditation.FractionAt(priest.Talents.Meditation)
 	priest.UpdateManaRegenRates()
 }
 
@@ -326,7 +326,7 @@ func (priest *Priest) applyShadowFocus() {
 		return
 	}
 
-	priest.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexShadow] += 2 * float64(priest.Talents.ShadowFocus)
+	priest.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexShadow] += genRanks.ShadowFocus.ValueAt(priest.Talents.ShadowFocus)
 
 }
 
@@ -375,7 +375,7 @@ func (priest *Priest) applyShadowPower() {
 
 	priest.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
-		FloatValue: 3.0 * float64(priest.Talents.ShadowPower),
+		FloatValue: genRanks.ShadowPower.ValueAt(priest.Talents.ShadowPower),
 		ClassMask:  PriestSpellMindBlast | PriestSpellShadowWordDeath,
 	})
 }
@@ -393,7 +393,7 @@ func (priest *Priest) applyShadowWeaving() {
 		ClassSpellMask:   PriestShadowSpells,
 		Callback:         core.CallbackOnSpellHitDealt,
 		Outcome:          core.OutcomeLanded,
-		ProcChance:       0.20 * float64(priest.Talents.ShadowWeaving),
+		ProcChance:       genRanks.ShadowWeaving.FractionAt(priest.Talents.ShadowWeaving),
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			swAuras.Get(result.Target).Activate(sim)
 			swAuras.Get(result.Target).AddStack(sim)
@@ -485,7 +485,7 @@ func (priest *Priest) applyVampiricEmbrace() {
 		return
 	}
 
-	healPct := 0.15 + 0.05*float64(priest.Talents.ImprovedVampiricEmbrace)
+	healPct := 0.15 + genRanks.ImprovedVampiricEmbrace.FractionAt(priest.Talents.ImprovedVampiricEmbrace)
 	healthMetrics := priest.NewHealthMetrics(core.ActionID{SpellID: 15286})
 
 	veDebuffAuras := priest.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {

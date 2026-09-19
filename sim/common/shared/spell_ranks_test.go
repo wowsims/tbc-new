@@ -1,6 +1,9 @@
 package shared
 
-import "testing"
+import (
+	"math"
+	"testing"
+)
 
 // Attack power coefficients are hand-supplied, so the guards around them are the only thing standing
 // between a typo and a spell that silently scales off nothing.
@@ -94,4 +97,55 @@ func TestEffectAmbiguousPanics(t *testing.T) {
 		}
 	}()
 	rank.Effect(A_MOD_DAMAGE_PERCENT_DONE, 0)
+}
+
+func talentLadder() SpellRankTable {
+	return SpellRankTable{
+		{Rank: 1, SpellID: 20468, Effects: []SpellRankEffect{
+			{Index: 0, Effect: E_APPLY_AURA, Aura: A_ADD_PCT_MODIFIER, Misc: SPELLMOD_ALL_EFFECTS, Value: 16},
+			{Index: 1, Effect: E_APPLY_AURA, Aura: A_ADD_FLAT_MODIFIER, Misc: SPELLMOD_EFFECT2, Value: -2}}},
+		{Rank: 2, SpellID: 20469, Effects: []SpellRankEffect{
+			{Index: 0, Effect: E_APPLY_AURA, Aura: A_ADD_PCT_MODIFIER, Misc: SPELLMOD_ALL_EFFECTS, Value: 33},
+			{Index: 1, Effect: E_APPLY_AURA, Aura: A_ADD_FLAT_MODIFIER, Misc: SPELLMOD_EFFECT2, Value: -4}}},
+		{Rank: 3, SpellID: 20470, Effects: []SpellRankEffect{
+			{Index: 0, Effect: E_APPLY_AURA, Aura: A_ADD_PCT_MODIFIER, Misc: SPELLMOD_ALL_EFFECTS, Value: 50},
+			{Index: 1, Effect: E_APPLY_AURA, Aura: A_ADD_FLAT_MODIFIER, Misc: SPELLMOD_EFFECT2, Value: -6}}},
+	}
+}
+
+// An untaken talent is rank 0, which ByRank would panic on.
+func TestLadderUntakenTalentIsZero(t *testing.T) {
+	table := talentLadder()
+	if got := table.Effect(A_ADD_PCT_MODIFIER, SPELLMOD_ALL_EFFECTS).ValueAt(0); got != 0 {
+		t.Errorf("rank 0 value: want 0, got %v", got)
+	}
+	if got := table.Effect(A_ADD_FLAT_MODIFIER, SPELLMOD_EFFECT2).MultiplierAt(0); got != 1 {
+		t.Errorf("rank 0 multiplier: want 1, got %v", got)
+	}
+}
+
+// The ladder is 16/33/50, not 16/32/48, which is what a per-point literal would give.
+func TestLadderIsNotPerPointTimesRank(t *testing.T) {
+	threat := talentLadder().Effect(A_ADD_PCT_MODIFIER, SPELLMOD_ALL_EFFECTS)
+	for rank, want := range map[int32]float64{1: 1.16, 2: 1.33, 3: 1.50} {
+		if got := threat.MultiplierAt(rank); math.Abs(got-want) > 1e-9 {
+			t.Errorf("rank %d: want %v, got %v", rank, want, got)
+		}
+	}
+}
+
+// The client states the reduction negative, so the caller never writes the minus.
+func TestLadderMultiplierTakesItsSignFromTheData(t *testing.T) {
+	if got := talentLadder().Effect(A_ADD_FLAT_MODIFIER, SPELLMOD_EFFECT2).MultiplierAt(3); math.Abs(got-0.94) > 1e-9 {
+		t.Errorf("want 0.94, got %v", got)
+	}
+}
+
+func TestLadderUnnamedEffectOnMultiEffectTalentPanics(t *testing.T) {
+	defer func() {
+		if recover() == nil {
+			t.Error("expected a panic for an unnamed read of a two-effect talent")
+		}
+	}()
+	talentLadder().ValueAt(3)
 }

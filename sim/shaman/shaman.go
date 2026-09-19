@@ -178,7 +178,7 @@ func (shaman *Shaman) GetOverloadChance() float64 {
 	if shaman.Talents.LightningOverload == 0 {
 		return 0.0
 	}
-	return 0.04 * float64(shaman.Talents.LightningOverload)
+	return genRanks.LightningOverload.FractionAt(shaman.Talents.LightningOverload)
 }
 
 const (

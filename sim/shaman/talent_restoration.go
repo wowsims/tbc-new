@@ -79,7 +79,7 @@ func (shaman *Shaman) applyTidalMastery() {
 	}
 	shaman.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
-		FloatValue: 1 * float64(shaman.Talents.TidalMastery),
+		FloatValue: genRanks.TidalMastery.ValueAt(shaman.Talents.TidalMastery),
 		ClassMask:  SpellMaskChainLightning | SpellMaskLightningBolt | SpellMaskLightningShield | SpellMaskOverload,
 	})
 }

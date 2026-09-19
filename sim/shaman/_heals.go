@@ -44,7 +44,7 @@ func (shaman *Shaman) registerHealingSurgeSpell() {
 		ManaCost: core.ManaCostOptions{
 			BaseCost: 0.15,
 			Multiplier: 1 *
-				(1 - .01*float64(shaman.Talents.TidalFocus)),
+				(genRanks.TidalFocus.MultiplierAt(shaman.Talents.TidalFocus)),
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
@@ -105,7 +105,7 @@ func (shaman *Shaman) registerRiptideSpell() {
 		ManaCost: core.ManaCostOptions{
 			BaseCost: 0.18,
 			Multiplier: 1 *
-				(1 - .01*float64(shaman.Talents.TidalFocus)),
+				(genRanks.TidalFocus.MultiplierAt(shaman.Talents.TidalFocus)),
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
@@ -196,7 +196,7 @@ func (shaman *Shaman) registerHealingWaveSpell() {
 		ManaCost: core.ManaCostOptions{
 			BaseCost: 0.15,
 			Multiplier: 1 *
-				(1 - .01*float64(shaman.Talents.TidalFocus)),
+				(genRanks.TidalFocus.MultiplierAt(shaman.Talents.TidalFocus)),
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
@@ -323,7 +323,7 @@ func (shaman *Shaman) registerChainHealSpell() {
 		ManaCost: core.ManaCostOptions{
 			FlatCost: 0.19*shaman.BaseMana - manaDiscount,
 			Multiplier: 1 *
-				(1 - .01*float64(shaman.Talents.TidalFocus)),
+				(genRanks.TidalFocus.MultiplierAt(shaman.Talents.TidalFocus)),
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
@@ -332,7 +332,7 @@ func (shaman *Shaman) registerChainHealSpell() {
 			},
 		},
 		BonusCritRating:  core.CritRatingPerCritChance,
-		DamageMultiplier: 1 + 0.1*float64(shaman.Talents.ImprovedChainHeal),
+		DamageMultiplier: genRanks.ImprovedChainHeal.MultiplierAt(shaman.Talents.ImprovedChainHeal),
 		CritMultiplier:   shaman.DefaultCritMultiplier(),
 		ThreatMultiplier: 1,
 

@@ -75,5 +75,5 @@ func (rogue *Rogue) registerSliceAndDice() {
 
 func (rogue *Rogue) getSliceDuration(comboPoints int32) time.Duration {
 	duration := rogue.sliceAndDiceDurations[comboPoints]
-	return time.Duration(float64(duration+rogue.SliceAndDiceBonusDuration) * (1 + 0.15*float64(rogue.Talents.ImprovedSliceAndDice)))
+	return time.Duration(float64(duration+rogue.SliceAndDiceBonusDuration) * (genRanks.ImprovedSliceAndDice.MultiplierAt(rogue.Talents.ImprovedSliceAndDice)))
 }

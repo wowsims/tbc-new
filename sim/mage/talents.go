@@ -109,7 +109,7 @@ func (mage *Mage) registerArcaneFocus() {
 		return
 	}
 
-	mage.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexArcane] += 2 * float64(mage.Talents.ArcaneFocus)
+	mage.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexArcane] += genRanks.ArcaneFocus.ValueAt(mage.Talents.ArcaneFocus)
 }
 
 func (mage *Mage) registerArcaneConcentration() {
@@ -183,7 +183,7 @@ func (mage *Mage) registerArcaneImpact() {
 
 	mage.AddStaticMod(core.SpellModConfig{
 		ClassMask:  MageSpellArcaneBlast | MageSpellArcaneExplosion,
-		FloatValue: 2 * float64(mage.Talents.ArcaneImpact),
+		FloatValue: genRanks.ArcaneImpact.ValueAt(mage.Talents.ArcaneImpact),
 		Kind:       core.SpellMod_BonusCrit_Percent,
 	})
 }
@@ -249,7 +249,7 @@ func (mage *Mage) registerSpellPower() {
 
 	mage.AddStaticMod(core.SpellModConfig{
 		ClassMask:  MageSpellsAll,
-		FloatValue: .25 * float64(mage.Talents.SpellPower),
+		FloatValue: genRanks.SpellPower.FractionAt(mage.Talents.SpellPower),
 		Kind:       core.SpellMod_CritMultiplier_Flat,
 	})
 }
@@ -259,7 +259,7 @@ func (mage *Mage) registerMindMastery() {
 		return
 	}
 
-	mage.AddStatDependency(stats.Intellect, stats.SpellDamage, .05*float64(mage.Talents.MindMastery))
+	mage.AddStatDependency(stats.Intellect, stats.SpellDamage, genRanks.MindMastery.FractionAt(mage.Talents.MindMastery))
 }
 
 // ------ FIRE TALENTS ------
@@ -365,7 +365,7 @@ func (mage *Mage) registerIncineration() {
 
 	mage.AddStaticMod(core.SpellModConfig{
 		ClassMask:  MageSpellFireBlast | MageSpellScorch,
-		FloatValue: 2 * float64(mage.Talents.Incineration),
+		FloatValue: genRanks.Incineration.ValueAt(mage.Talents.Incineration),
 		Kind:       core.SpellMod_BonusCrit_Percent,
 	})
 }
@@ -377,7 +377,7 @@ func (mage *Mage) registerImprovedFlamestrike() {
 
 	mage.AddStaticMod(core.SpellModConfig{
 		ClassMask:  MageSpellFlamestrike,
-		FloatValue: .05 * float64(mage.Talents.ImprovedFlamestrike),
+		FloatValue: genRanks.ImprovedFlamestrike.FractionAt(mage.Talents.ImprovedFlamestrike),
 		Kind:       core.SpellMod_BonusCrit_Percent,
 	})
 }
@@ -399,7 +399,7 @@ func (mage *Mage) registerMasterOfElements() {
 		return
 	}
 
-	refundCoeff := 0.1 * float64(mage.Talents.MasterOfElements)
+	refundCoeff := genRanks.MasterOfElements.FractionAt(mage.Talents.MasterOfElements)
 	manaMetrics := mage.NewManaMetrics(core.ActionID{SpellID: 29076})
 
 	mage.MakeProcTriggerAura(core.ProcTrigger{
@@ -435,7 +435,7 @@ func (mage *Mage) registerCriticalMass() {
 
 	mage.AddStaticMod(core.SpellModConfig{
 		SpellFlag:  core.SpellFlag(core.SpellSchoolFire),
-		FloatValue: 2 * float64(mage.Talents.CriticalMass),
+		FloatValue: genRanks.CriticalMass.ValueAt(mage.Talents.CriticalMass),
 		Kind:       core.SpellMod_BonusCrit_Percent,
 	})
 }
@@ -500,7 +500,7 @@ func (mage *Mage) registerEmpoweredFireball() {
 
 	mage.AddStaticMod(core.SpellModConfig{
 		ClassMask:  MageSpellFireball,
-		FloatValue: .03 * float64(mage.Talents.EmpoweredFireball),
+		FloatValue: genRanks.EmpoweredFireball.FractionAt(mage.Talents.EmpoweredFireball),
 		Kind:       core.SpellMod_BonusCoeffecient_Flat,
 	})
 }
@@ -543,7 +543,7 @@ func (mage *Mage) registerIceShards() {
 
 	mage.AddStaticMod(core.SpellModConfig{
 		School:     core.SpellSchoolFrost,
-		FloatValue: .2 * float64(mage.Talents.IceShards),
+		FloatValue: genRanks.IceShards.FractionAt(mage.Talents.IceShards),
 		Kind:       core.SpellMod_CritMultiplier_Flat,
 	})
 }
@@ -610,7 +610,7 @@ func (mage *Mage) registerIceFloes() {
 
 	mage.AddStaticMod(core.SpellModConfig{
 		ClassMask:  MageSpellColdSnap | MageSpellConeOfCold | MageSpellIceBarrier | MageSpellIceBlock,
-		FloatValue: 1 - .1*float64(mage.Talents.IceFloes),
+		FloatValue: genRanks.IceFloes.MultiplierAt(mage.Talents.IceFloes),
 		Kind:       core.SpellMod_Cooldown_Multiplier,
 	})
 }

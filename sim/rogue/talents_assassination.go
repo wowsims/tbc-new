@@ -58,7 +58,7 @@ func (rogue *Rogue) registerImprovedEviscerate() {
 	rogue.AddStaticMod(core.SpellModConfig{
 		ClassMask:  RogueSpellEviscerate,
 		Kind:       core.SpellMod_DamageDone_Flat,
-		FloatValue: .05 * float64(rogue.Talents.ImprovedEviscerate),
+		FloatValue: genRanks.ImprovedEviscerate.FractionAt(rogue.Talents.ImprovedEviscerate),
 	})
 }
 
@@ -75,7 +75,7 @@ func (rogue *Rogue) registerMurder() {
 		return
 	}
 
-	var multiplier float64 = 1.0 + (0.01 * float64(rogue.Talents.Murder))
+	var multiplier float64 = 1.0 + (genRanks.Murder.FractionAt(rogue.Talents.Murder))
 	rogue.Env.RegisterPostFinalizeEffect(func() {
 		for _, at := range rogue.AttackTables {
 			if slices.Contains([]proto.MobType{proto.MobType_MobTypeHumanoid, proto.MobType_MobTypeGiant, proto.MobType_MobTypeBeast, proto.MobType_MobTypeDragonkin}, at.Defender.MobType) {
@@ -125,7 +125,7 @@ func (rogue *Rogue) registerLethality() {
 	rogue.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_CritMultiplier_Flat,
 		ClassMask:  RogueSpellLethality,
-		FloatValue: 0.06 * float64(rogue.Talents.Lethality),
+		FloatValue: genRanks.Lethality.FractionAt(rogue.Talents.Lethality),
 	})
 }
 
@@ -213,7 +213,7 @@ func (rogue *Rogue) registerMasterPoisoner() {
 	rogue.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusHit_Percent,
 		ClassMask:  RogueSpellPoisons,
-		FloatValue: 5.0 * float64(rogue.Talents.MasterPoisoner),
+		FloatValue: genRanks.MasterPoisoner.ValueAt(rogue.Talents.MasterPoisoner),
 	})
 }
 

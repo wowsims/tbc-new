@@ -8,7 +8,7 @@ func (warlock *Warlock) registerLifeTap() {
 	actionID := core.ActionID{SpellID: 27222}
 	manaMetrics := warlock.NewManaMetrics(actionID)
 	healthCost := 582.0
-	baseRestore := healthCost * (1.0 + 0.1*float64(warlock.Talents.ImprovedLifeTap))
+	baseRestore := healthCost * (1.0 + genRanks.ImprovedLifeTap.FractionAt(warlock.Talents.ImprovedLifeTap))
 
 	petRestore := 0.3333 * float64(warlock.Talents.ManaFeed)
 	var petManaMetrics []*core.ResourceMetrics

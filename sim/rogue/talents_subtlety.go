@@ -136,7 +136,7 @@ func (rogue *Rogue) registerImprovedAmbush() {
 	rogue.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
 		ClassMask:  RogueSpellAmbush,
-		FloatValue: 15 * float64(rogue.Talents.ImprovedAmbush),
+		FloatValue: genRanks.ImprovedAmbush.ValueAt(rogue.Talents.ImprovedAmbush),
 	})
 }
 
@@ -302,7 +302,7 @@ func (rogue *Rogue) registerDeadliness() {
 		return
 	}
 
-	rogue.MultiplyStat(stats.AttackPower, 1+0.02*float64(rogue.Talents.Deadliness))
+	rogue.MultiplyStat(stats.AttackPower, genRanks.Deadliness.MultiplierAt(rogue.Talents.Deadliness))
 }
 
 func (rogue *Rogue) registerPremeditation() {

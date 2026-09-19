@@ -54,7 +54,7 @@ func (war *Warrior) registerCruelty() {
 		return
 	}
 
-	war.AddStat(stats.PhysicalCritPercent, 1*float64(war.Talents.Cruelty))
+	war.AddStat(stats.PhysicalCritPercent, genRanks.Cruelty.ValueAt(war.Talents.Cruelty))
 }
 
 func (war *Warrior) registerUnbridledWrath() {
@@ -84,7 +84,7 @@ func (war *Warrior) registerDualWieldSpecialization() {
 	war.AddStaticMod(core.SpellModConfig{
 		ProcMask:   core.ProcMaskMeleeOH,
 		Kind:       core.SpellMod_DamageDone_Pct,
-		FloatValue: 0.05 * float64(war.Talents.DualWieldSpecialization),
+		FloatValue: genRanks.DualWieldSpecialization.FractionAt(war.Talents.DualWieldSpecialization),
 	})
 }
 
@@ -324,7 +324,7 @@ func (war *Warrior) registerPrecision() {
 		return
 	}
 
-	war.AddStat(stats.PhysicalHitPercent, 1*float64(war.Talents.Precision))
+	war.AddStat(stats.PhysicalHitPercent, genRanks.Precision.ValueAt(war.Talents.Precision))
 }
 
 func (war *Warrior) registerBloodthirst() {

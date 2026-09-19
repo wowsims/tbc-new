@@ -70,7 +70,7 @@ func (war *Warrior) registerDeflection() {
 		return
 	}
 
-	war.PseudoStats.BaseParryChance += 0.01 * float64(war.Talents.Deflection)
+	war.PseudoStats.BaseParryChance += genRanks.Deflection.FractionAt(war.Talents.Deflection)
 }
 
 func (war *Warrior) registerImprovedRend() {
@@ -81,7 +81,7 @@ func (war *Warrior) registerImprovedRend() {
 	war.AddStaticMod(core.SpellModConfig{
 		ClassMask:  SpellMaskRend,
 		Kind:       core.SpellMod_DamageDone_Flat,
-		FloatValue: 0.25 * float64(war.Talents.ImprovedRend),
+		FloatValue: genRanks.ImprovedRend.FractionAt(war.Talents.ImprovedRend),
 	})
 }
 
@@ -127,7 +127,7 @@ func (war *Warrior) registerImprovedOverpower() {
 	})).AttachSpellMod(core.SpellModConfig{
 		ClassMask:  SpellMaskOverpower,
 		Kind:       core.SpellMod_BonusCrit_Percent,
-		FloatValue: 25 * float64(war.Talents.ImprovedOverpower),
+		FloatValue: genRanks.ImprovedOverpower.ValueAt(war.Talents.ImprovedOverpower),
 	})
 }
 
@@ -241,7 +241,7 @@ func (war *Warrior) registerImpale() {
 	war.AddStaticMod(core.SpellModConfig{
 		ClassMask:  SpellMaskDamageSpells,
 		Kind:       core.SpellMod_CritMultiplier_Flat,
-		FloatValue: 0.1 * float64(war.Talents.Impale),
+		FloatValue: genRanks.Impale.FractionAt(war.Talents.Impale),
 	})
 }
 
@@ -257,25 +257,25 @@ func (war *Warrior) registerPoleaxeSpecialization() {
 	mhCritMod := war.AddDynamicMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
 		ProcMask:   core.ProcMaskMeleeMH,
-		FloatValue: 1 * float64(war.Talents.PoleaxeSpecialization),
+		FloatValue: genRanks.PoleaxeSpecialization.ValueAt(war.Talents.PoleaxeSpecialization),
 	})
 
 	ohCritMod := war.AddDynamicMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
 		ProcMask:   core.ProcMaskMeleeOH,
-		FloatValue: 1 * float64(war.Talents.PoleaxeSpecialization),
+		FloatValue: genRanks.PoleaxeSpecialization.ValueAt(war.Talents.PoleaxeSpecialization),
 	})
 
 	mainhandWWOhCritMod := war.AddDynamicMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
 		ClassMask:  SpellMaskWhirlwindOh,
-		FloatValue: 1 * float64(war.Talents.PoleaxeSpecialization),
+		FloatValue: genRanks.PoleaxeSpecialization.ValueAt(war.Talents.PoleaxeSpecialization),
 	})
 
 	offhandWWOhCritMod := war.AddDynamicMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
 		ClassMask:  SpellMaskWhirlwindOh,
-		FloatValue: -1 * float64(war.Talents.PoleaxeSpecialization),
+		FloatValue: -genRanks.PoleaxeSpecialization.ValueAt(war.Talents.PoleaxeSpecialization),
 	})
 
 	handleEquippedWeapons := func() {

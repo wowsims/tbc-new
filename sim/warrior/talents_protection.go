@@ -90,7 +90,7 @@ func (war *Warrior) registerAnticipation() {
 		return
 	}
 
-	war.AddStat(stats.DefenseRating, 4*float64(war.Talents.Anticipation)*core.DefenseRatingPerDefenseLevel)
+	war.AddStat(stats.DefenseRating, genRanks.Anticipation.ValueAt(war.Talents.Anticipation)*core.DefenseRatingPerDefenseLevel)
 
 	war.OnSpellRegistered(func(spell *core.Spell) {
 		if !spell.Matches(SpellMaskDefensiveStance) {
@@ -132,7 +132,7 @@ func (war *Warrior) registerToughness() {
 		return
 	}
 
-	war.MultiplyStat(stats.Armor, 1+0.02*float64(war.Talents.Toughness))
+	war.MultiplyStat(stats.Armor, genRanks.Toughness.MultiplierAt(war.Talents.Toughness))
 }
 
 func (war *Warrior) registerLastStand() {
@@ -280,7 +280,7 @@ func (war *Warrior) registerShieldMastery() {
 		return
 	}
 
-	war.PseudoStats.BlockValueMultiplier *= 1 + 0.1*float64(war.Talents.ShieldMastery)
+	war.PseudoStats.BlockValueMultiplier *= genRanks.ShieldMastery.MultiplierAt(war.Talents.ShieldMastery)
 }
 
 func (war *Warrior) registerOneHandedWeaponSpecialization() {
@@ -291,7 +291,7 @@ func (war *Warrior) registerOneHandedWeaponSpecialization() {
 	weaponMod := war.AddDynamicMod(core.SpellModConfig{
 		School:     core.SpellSchoolPhysical,
 		Kind:       core.SpellMod_DamageDone_Pct,
-		FloatValue: 0.02 * float64(war.Talents.OneHandedWeaponSpecialization),
+		FloatValue: genRanks.OneHandedWeaponSpecialization.FractionAt(war.Talents.OneHandedWeaponSpecialization),
 	})
 
 	hasOneHandEquipped := func() bool {
@@ -320,7 +320,7 @@ func (war *Warrior) registerOneHandedWeaponSpecialization() {
 }
 
 func (war *Warrior) registerImprovedDefensiveStance() {
-	impDefStanceMultiplier := 1 - 0.02*float64(war.Talents.ImprovedDefensiveStance)
+	impDefStanceMultiplier := genRanks.ImprovedDefensiveStance.MultiplierAt(war.Talents.ImprovedDefensiveStance)
 
 	war.AddStaticMod(core.SpellModConfig{
 		ClassMask: SpellMaskDefensiveStance,

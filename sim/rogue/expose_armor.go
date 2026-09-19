@@ -59,7 +59,7 @@ func (rogue *Rogue) registerExposeArmorSpell() {
 }
 
 func (rogue *Rogue) GetExposeArmorValue() float64 {
-	return 410.0 * float64(rogue.ComboPoints()) * (1 + 0.25*float64(rogue.Talents.ImprovedExposeArmor))
+	return 410.0 * float64(rogue.ComboPoints()) * (genRanks.ImprovedExposeArmor.MultiplierAt(rogue.Talents.ImprovedExposeArmor))
 }
 
 func (rogue *Rogue) CanApplyExposeArmorAura(target *core.Unit) bool {

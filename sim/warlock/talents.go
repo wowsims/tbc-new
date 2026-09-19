@@ -78,7 +78,7 @@ func (warlock *Warlock) applySuppression() {
 
 	warlock.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusHit_Percent,
-		FloatValue: 2.0 * float64(warlock.Talents.Suppression),
+		FloatValue: genRanks.Suppression.ValueAt(warlock.Talents.Suppression),
 		ClassMask:  WarlockAfflictionSpells,
 	})
 }
@@ -144,7 +144,7 @@ func (warlock *Warlock) applyImprovedCurseOfAgony() {
 
 	warlock.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DotDamageDone_Pct,
-		FloatValue: 0.05 * float64(warlock.Talents.ImprovedCurseOfAgony),
+		FloatValue: genRanks.ImprovedCurseOfAgony.FractionAt(warlock.Talents.ImprovedCurseOfAgony),
 		ClassMask:  WarlockSpellCurseOfAgony,
 	})
 
@@ -260,7 +260,7 @@ func (warlock *Warlock) appyImprovedImp() {
 
 	warlock.Imp.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
-		FloatValue: 0.1 * float64(warlock.Talents.ImprovedImp),
+		FloatValue: genRanks.ImprovedImp.FractionAt(warlock.Talents.ImprovedImp),
 		ClassMask:  WarlockSpellImpFireBolt,
 	})
 }
@@ -318,13 +318,13 @@ func (warlock *Warlock) applyUnholyPower() {
 
 	for _, pet := range warlock.Pets {
 		if pet != &warlock.Imp.Pet {
-			pet.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexPhysical] *= 1.0 + 0.04*float64(warlock.Talents.UnholyPower)
+			pet.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexPhysical] *= 1.0 + genRanks.UnholyPower.FractionAt(warlock.Talents.UnholyPower)
 		}
 	}
 
 	warlock.Imp.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
-		FloatValue: 0.04 * float64(warlock.Talents.UnholyPower),
+		FloatValue: genRanks.UnholyPower.FractionAt(warlock.Talents.UnholyPower),
 		ClassMask:  WarlockSpellImpFireBolt,
 	})
 }
@@ -472,7 +472,7 @@ func (warlock *Warlock) updateDemonicKnowledge(sim *core.Simulation) {
 		return
 	}
 
-	coeff := 0.04 * float64(warlock.Talents.DemonicKnowledge)
+	coeff := genRanks.DemonicKnowledge.FractionAt(warlock.Talents.DemonicKnowledge)
 	bonus := coeff * (warlock.ActivePet.GetStat(stats.Stamina) + warlock.ActivePet.GetStat(stats.Intellect))
 
 	warlock.DemonicKnowledgeBonus = bonus
@@ -623,7 +623,7 @@ func (warlock *Warlock) applyImprovedImmolate() {
 
 	warlock.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
-		FloatValue: 0.05 * float64(warlock.Talents.ImprovedImmolate),
+		FloatValue: genRanks.ImprovedImmolate.FractionAt(warlock.Talents.ImprovedImmolate),
 		ClassMask:  WarlockSpellImmolate,
 	})
 }
@@ -697,7 +697,7 @@ func (warlock *Warlock) applyShadowAndFlame() {
 
 	warlock.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCoeffecient_Flat,
-		FloatValue: 0.04 * float64(warlock.Talents.ShadowAndFlame),
+		FloatValue: genRanks.ShadowAndFlame.FractionAt(warlock.Talents.ShadowAndFlame),
 		ClassMask:  WarlockSpellShadowBolt | WarlockSpellIncinerate,
 	})
 }

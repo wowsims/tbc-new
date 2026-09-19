@@ -33,7 +33,7 @@ func (shaman *Shaman) applyCallOfFlame() {
 	}
 	shaman.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
-		FloatValue: 0.05 * float64(shaman.Talents.CallOfFlame),
+		FloatValue: genRanks.CallOfFlame.FractionAt(shaman.Talents.CallOfFlame),
 		ClassMask:  SpellMaskFireTotem,
 	})
 }
@@ -43,7 +43,7 @@ func (shaman *Shaman) applyCallOfThunder() {
 	}
 	shaman.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
-		FloatValue: 1 * float64(shaman.Talents.CallOfThunder),
+		FloatValue: genRanks.CallOfThunder.ValueAt(shaman.Talents.CallOfThunder),
 		ClassMask:  SpellMaskLightningBolt | SpellMaskChainLightning | SpellMaskOverload,
 	})
 }

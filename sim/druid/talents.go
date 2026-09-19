@@ -246,7 +246,7 @@ func (druid *Druid) applyVengeance() {
 	druid.AddStaticMod(core.SpellModConfig{
 		ClassMask:  DruidSpellWrath | DruidSpellStarfire | DruidSpellMoonfire,
 		Kind:       core.SpellMod_CritMultiplier_Flat,
-		FloatValue: 0.2 * float64(druid.Talents.Vengeance),
+		FloatValue: genRanks.Vengeance.FractionAt(druid.Talents.Vengeance),
 	})
 }
 
@@ -410,7 +410,7 @@ func (druid *Druid) applyFuror() {
 		return
 	}
 
-	druid.FurorProcChance = 0.2 * float64(druid.Talents.Furor)
+	druid.FurorProcChance = genRanks.Furor.FractionAt(druid.Talents.Furor)
 }
 
 func (druid *Druid) applyFerocity() {
@@ -578,7 +578,7 @@ func (druid *Druid) applyLivingSpirit() {
 	}
 
 	// Increases total Spirit by 5/10/15% per rank.
-	druid.MultiplyStat(stats.Spirit, 1+0.05*float64(druid.Talents.LivingSpirit))
+	druid.MultiplyStat(stats.Spirit, genRanks.LivingSpirit.MultiplierAt(druid.Talents.LivingSpirit))
 }
 
 func (druid *Druid) applyNaturalPerfection() {

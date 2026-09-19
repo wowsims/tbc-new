@@ -346,7 +346,7 @@ func (paladin *Paladin) applyImprovedBlessingOfWisdom() {
 func (paladin *Paladin) applySanctifiedLight() {
 	paladin.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
-		FloatValue: 2 * float64(paladin.Talents.SanctifiedLight),
+		FloatValue: genRanks.SanctifiedLight.ValueAt(paladin.Talents.SanctifiedLight),
 		ClassMask:  SpellMaskHolyLight | SpellMaskHolyShock,
 	})
 }
@@ -423,7 +423,7 @@ func (paladin *Paladin) applyRedoubt() {
 
 // Shield Specialization - Increases the amount of damage absorbed by your shield by 10/20/30%
 func (paladin *Paladin) applyShieldSpecialization() {
-	paladin.PseudoStats.BlockValueMultiplier *= 1 + 0.1*float64(paladin.Talents.ShieldSpecialization)
+	paladin.PseudoStats.BlockValueMultiplier *= genRanks.ShieldSpecialization.MultiplierAt(paladin.Talents.ShieldSpecialization)
 }
 
 // Ardent Defender - When you have less than 35% health, all damage taken is reduced by 6/12/18/24/30%
@@ -466,7 +466,7 @@ func (paladin *Paladin) applyPrecision() {
 
 // Toughness - Increases your armor value from items by 2/4/6/8/10%
 func (paladin *Paladin) applyToughness() {
-	paladin.MultiplyStat(stats.Armor, 1+0.02*float64(paladin.Talents.Toughness))
+	paladin.MultiplyStat(stats.Armor, genRanks.Toughness.MultiplierAt(paladin.Talents.Toughness))
 }
 
 // Improved Righteous Fury - While Righteous Fury is active, all damage taken is reduced by 2/4/6%
@@ -495,7 +495,7 @@ func (paladin *Paladin) applyAnticipation() {
 
 // Spell Warding - All spell damage taken is reduced by 2/4%
 func (paladin *Paladin) applySpellWarding() {
-	reduction := 1 - 0.02*float64(paladin.Talents.SpellWarding)
+	reduction := genRanks.SpellWarding.MultiplierAt(paladin.Talents.SpellWarding)
 	for i := range paladin.PseudoStats.SchoolDamageTakenMultiplier {
 		if i == int(stats.SchoolIndexPhysical) || i == int(stats.SchoolIndexNone) {
 			continue
@@ -557,7 +557,7 @@ func (paladin *Paladin) applySacredDuty() {
 func (paladin *Paladin) applyOneHandedWeaponSpecialization() {
 	paladin.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Pct,
-		FloatValue: 0.01 * float64(paladin.Talents.OneHandedWeaponSpecialization),
+		FloatValue: genRanks.OneHandedWeaponSpecialization.FractionAt(paladin.Talents.OneHandedWeaponSpecialization),
 	})
 }
 
@@ -609,7 +609,7 @@ func (paladin *Paladin) applyImprovedJudgement() {
 
 // Deflection - Increases your Parry chance by 1/2/3/4/5%
 func (paladin *Paladin) applyDeflection() {
-	paladin.PseudoStats.BaseParryChance += 0.01 * float64(paladin.Talents.Deflection)
+	paladin.PseudoStats.BaseParryChance += genRanks.Deflection.FractionAt(paladin.Talents.Deflection)
 }
 
 // Conviction - Increases your chance to get a critical strike with melee attacks by 1/2/3/4/5%
@@ -627,7 +627,7 @@ func (paladin *Paladin) applyCrusade() {
 	paladin.Env.RegisterPostFinalizeEffect(func() {
 		for _, at := range paladin.AttackTables {
 			if slices.Contains([]proto.MobType{proto.MobType_MobTypeDemon, proto.MobType_MobTypeHumanoid, proto.MobType_MobTypeUndead, proto.MobType_MobTypeElemental}, at.Defender.MobType) {
-				at.DamageDealtMultiplier *= 1 + .01*float64(paladin.Talents.Crusade)
+				at.DamageDealtMultiplier *= genRanks.Crusade.MultiplierAt(paladin.Talents.Crusade)
 			}
 		}
 	})
@@ -638,7 +638,7 @@ func (paladin *Paladin) applyTwoHandedWeaponSpecialization() {
 	weaponMod := paladin.AddDynamicMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Pct,
 		ProcMask:   core.ProcMaskMelee,
-		FloatValue: 0.02 * float64(paladin.Talents.TwoHandedWeaponSpecialization),
+		FloatValue: genRanks.TwoHandedWeaponSpecialization.FractionAt(paladin.Talents.TwoHandedWeaponSpecialization),
 	})
 
 	if paladin.GetMainHandType() == proto.HandType_HandTypeTwoHand {

@@ -31,7 +31,7 @@ func (shaman *Shaman) applyAncestralKnowledge() {
 	if shaman.Talents.AncestralKnowledge == 0 {
 		return
 	}
-	shaman.MultiplyStat(stats.Mana, 1+(0.01*float64(shaman.Talents.AncestralKnowledge)))
+	shaman.MultiplyStat(stats.Mana, 1+(genRanks.AncestralKnowledge.FractionAt(shaman.Talents.AncestralKnowledge)))
 }
 
 func (shaman *Shaman) applyDualWield() {
@@ -45,7 +45,7 @@ func (shaman *Shaman) applyDualWieldSpecialization() {
 	if shaman.Talents.DualWieldSpecialization == 0 {
 		return
 	}
-	value := 2 * float64(shaman.Talents.DualWieldSpecialization)
+	value := genRanks.DualWieldSpecialization.ValueAt(shaman.Talents.DualWieldSpecialization)
 	buffed := false
 	DWaura := shaman.RegisterAura(core.Aura{
 		Label:      "Dual Wield Specialization",
@@ -156,7 +156,7 @@ func (shaman *Shaman) applyImprovedLightningShield() {
 	}
 	shaman.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
-		FloatValue: 0.05 * float64(shaman.Talents.ImprovedLightningShield),
+		FloatValue: genRanks.ImprovedLightningShield.FractionAt(shaman.Talents.ImprovedLightningShield),
 		ClassMask:  SpellMaskLightningShield,
 	})
 }
@@ -285,7 +285,7 @@ func (shaman *Shaman) applyThunderingStrikes() {
 	}
 	shaman.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
-		FloatValue: 1 * float64(shaman.Talents.ThunderingStrikes),
+		FloatValue: genRanks.ThunderingStrikes.ValueAt(shaman.Talents.ThunderingStrikes),
 		ProcMask:   core.ProcMaskMelee,
 	})
 }
@@ -316,7 +316,7 @@ func (shaman *Shaman) applyWeaponMastery() {
 	}
 	shaman.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Pct,
-		FloatValue: 0.02 * float64(shaman.Talents.WeaponMastery),
+		FloatValue: genRanks.WeaponMastery.FractionAt(shaman.Talents.WeaponMastery),
 		ProcMask:   core.ProcMaskMelee,
 	})
 }
