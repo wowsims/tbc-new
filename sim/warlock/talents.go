@@ -176,7 +176,7 @@ func (warlock *Warlock) applyNightfall() {
 	warlock.MakeProcTriggerAura(core.ProcTrigger{
 		Name:           "Nightfall",
 		ClassSpellMask: WarlockSpellCorruption | WarlockSpellDrainLife,
-		ProcChance:     0.02 * float64(warlock.Talents.Nightfall),
+		ProcChance:     genRanks.Nightfall.ProcChanceAt(warlock.Talents.Nightfall),
 		Callback:       core.CallbackOnPeriodicDamageDealt,
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			warlock.NightfallProcAura.Activate(sim)
@@ -684,7 +684,7 @@ func (warlock *Warlock) applySoulLeech() {
 		Name:           "Soul Leech",
 		ClassSpellMask: WarlockSoulLeechSpells,
 		Callback:       core.CallbackOnSpellHitDealt,
-		ProcChance:     0.10 * float64(warlock.Talents.SoulLeech),
+		ProcChance:     genRanks.SoulLeech.ProcChanceAt(warlock.Talents.SoulLeech),
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			warlock.GainHealth(sim, result.Damage*0.2*warlock.PseudoStats.SelfHealingMultiplier, healthMetric)
 		},

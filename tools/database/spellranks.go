@@ -75,7 +75,12 @@ type RankSpell struct {
 	// How fast the projectile flies, in yards per second, which core turns into the delay between
 	// the cast landing and the damage arriving. Zero for a spell that hits the instant it is cast.
 	MissileSpeed float64
-	Effects      []RankEffect
+
+	// SpellAuraOptions.ProcChance, as a percentage. 100 means the aura fires on its own condition
+	// rather than on a roll, which is how Flurry and Enrage read.
+	ProcChance int32
+
+	Effects []RankEffect
 }
 
 // SpellCastTimes resolves SpellMisc.CastingTimeIndex and is absent from a database extracted before it
@@ -177,6 +182,11 @@ func LoadRankSpell(db *sql.DB, spellID int32) (RankSpell, error) {
 	if err := scanOptional(db,
 		`SELECT COALESCE(Speed, 0) FROM SpellMisc WHERE SpellID = ?`, spellID, &s.MissileSpeed); err != nil {
 		return s, fmt.Errorf("missile speed for spell %d: %w", spellID, err)
+	}
+
+	if err := scanOptional(db,
+		`SELECT COALESCE(ProcChance, 0) FROM SpellAuraOptions WHERE SpellID = ?`, spellID, &s.ProcChance); err != nil {
+		return s, fmt.Errorf("proc chance for spell %d: %w", spellID, err)
 	}
 
 	if castTimesAvailable(db) {

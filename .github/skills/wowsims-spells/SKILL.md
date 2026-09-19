@@ -102,6 +102,7 @@ Needs tools/database/wowsims.db, which is gitignored and built by `make db` from
 - **Never pick a talent's effect by which one matches the number.** Survival of the Fittest states +1/2/3% to all stats and -1/-2/-3% crit taken; both ladders fit, and an automatic pass attached the stat effect to the crit-taken call site. What the call site does decides it, and the mod's `Kind` usually says so — Improved Moonfire's two mods are `SpellMod_DamageDone_Flat` and `SpellMod_BonusCrit_Percent`.
 - **A per-point literal is usually right, so migrating one buys provenance, not accuracy.** Of 125 percent talents, 122 scale linearly. The ones that do not are why the table is worth reading: Improved Righteous Fury is 16/33/50, not 16/32/48, and shaman Elemental Weapons is 7/14/20, not 7/14/21.
 - **The `SPELLMOD_*` names are read off the talents that use them**, not mirrored from the client, which ships no list. Each carries its evidence in a trailing comment and the four thinnest are marked; audit before trusting.
+- **A proc chance of 100 is not always a 100% roll.** `SpellAuraOptions.ProcChance` reads 100 for Flurry and Enrage because they fire on a crit rather than a chance; the number the sim wants is elsewhere.
 - **`rtk`-wrapped `go test` exits 0 with failing tests.** Read the summary line, not the exit code.
 
 ## When a sim number disagrees with the client

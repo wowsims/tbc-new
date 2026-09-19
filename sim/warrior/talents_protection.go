@@ -110,7 +110,7 @@ func (war *Warrior) registerShieldSpecialization() {
 
 	war.MakeProcTriggerAura(core.ProcTrigger{
 		Name:               "Shield Specialization",
-		ProcChance:         0.2 * float64(war.Talents.ShieldSpecialization),
+		ProcChance:         genRanks.ShieldSpecialization.ProcChanceAt(war.Talents.ShieldSpecialization),
 		TriggerImmediately: true,
 		Outcome:            core.OutcomeBlock,
 		Callback:           core.CallbackOnSpellHitTaken,

@@ -167,7 +167,7 @@ func (mage *Mage) registerArcaneConcentration() {
 				return
 			}
 
-			procChance := 0.02 * float64(mage.Talents.ArcaneConcentration)
+			procChance := genRanks.ArcaneConcentration.ProcChanceAt(mage.Talents.ArcaneConcentration)
 			if sim.Proc(procChance, "Arcane Concentration") {
 				proccedAt = sim.CurrentTime
 				proccedSpell = spell
@@ -621,7 +621,7 @@ func (mage *Mage) registerWinterChill() {
 		return
 	}
 
-	procChance := 0.20 * float64(mage.Talents.WintersChill)
+	procChance := genRanks.WintersChill.ProcChanceAt(mage.Talents.WintersChill)
 
 	wcAuras := mage.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {
 		return core.WintersChillAura(target, 0)

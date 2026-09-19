@@ -195,7 +195,7 @@ func (rogue *Rogue) registerSealFate() {
 	rogue.MakeProcTriggerAura(core.ProcTrigger{
 		Name:       "Seal Fate Trigger",
 		ActionID:   core.ActionID{SpellID: 14195},
-		ProcChance: 0.2 * float64(rogue.Talents.SealFate),
+		ProcChance: genRanks.SealFate.ProcChanceAt(rogue.Talents.SealFate),
 		Callback:   core.CallbackOnSpellHitDealt,
 		Outcome:    core.OutcomeCrit,
 		SpellFlags: SpellFlagBuilder,

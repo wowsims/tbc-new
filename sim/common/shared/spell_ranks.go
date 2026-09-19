@@ -140,10 +140,15 @@ type SpellRank struct {
 	// Yards per second the projectile travels, which core turns into the delay before the damage
 	// lands. Zero is an instant hit.
 	MissileSpeed float64
-	Direct       SpellRankValue
-	Heal         SpellRankValue
-	Periodic     SpellRankValue
-	Energize     SpellRankValue
+
+	// The client's proc chance as a percentage: Seal Fate reads 20/40/60/80/100. A 100 means the
+	// aura fires on its own condition rather than on a roll, as Flurry's does on a crit, so it is
+	// not always the number a ProcTrigger wants.
+	ProcChance int32
+	Direct     SpellRankValue
+	Heal       SpellRankValue
+	Periodic   SpellRankValue
+	Energize   SpellRankValue
 
 	// Every effect the client states, in index order. A role field above holds one each, which is not
 	// enough for a talent: Improved Righteous Fury raises threat on one effect and cuts damage taken

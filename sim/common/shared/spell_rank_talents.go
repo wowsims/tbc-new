@@ -48,6 +48,19 @@ func (t SpellRankTableOf[T]) MultiplierAt(rank int32) float64 {
 	return 1 + t.FractionAt(rank)
 }
 
+// The client's proc chance as a fraction, which is the form a ProcTrigger takes. Rank 0 is untaken
+// and answers 0.
+func (t SpellRankTableOf[T]) ProcChanceAt(rank int32) float64 {
+	if rank <= 0 {
+		return 0
+	}
+	row, ok := any(t.ByRank(rank)).(SpellRank)
+	if !ok {
+		panic(fmt.Sprintf("rank %d is not a SpellRank, so it carries no proc chance", rank))
+	}
+	return float64(row.ProcChance) / 100
+}
+
 // For the case Effect cannot serve: two effects sharing an aura and misc value, as Tactical Mastery's
 // two threat modifiers do. The index is the client's EffectIndex, not the slice position.
 func (t SpellRankTableOf[T]) EffectAt(index int32) SpellRankEffectLadder[T] {

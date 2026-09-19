@@ -194,6 +194,19 @@ takes `SPELLMOD_DAMAGE` and the other `SPELLMOD_CRITICAL_CHANCE`.
 Where a talent modifies damage and its DoT with the same ladder, the sim has one mod against the
 client's two. Either aura reads the same number; `SPELLMOD_DAMAGE` is the convention here.
 
+### Proc chances
+
+`SpellAuraOptions.ProcChance` is a separate source from the effects, and `ProcChanceAt` reads it as the
+fraction a `ProcTrigger` takes:
+
+```go
+ProcChance: genRanks.SealFate.ProcChanceAt(rogue.Talents.SealFate)   // 0.20 at 1/5, 1.00 at 5/5
+```
+
+**A 100 does not always mean a 100% roll.** Flurry and Enrage read 100 because they fire on their own
+condition - a crit - rather than on a chance, and the number the sim wants for those is somewhere else
+entirely. Check what the talent actually does before wiring it.
+
 ### The Misc value
 
 `Misc` says what an effect applies to, and what it means depends on the aura: a modified spell property

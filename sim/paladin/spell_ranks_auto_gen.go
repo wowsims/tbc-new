@@ -119,16 +119,16 @@ var genRanks = generatedRanks{
 		{Rank: 5, SpellID: 20100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_SKILL_TALENT, Misc: 95, Value: 20}}, Direct: shared.SpellRankFlat{Value: 20, Coef: 0}},
 	},
 	ArdentDefender: shared.SpellRankTable{
-		{Rank: 1, SpellID: 31850, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_PERCENT_TAKEN, Misc: 127, Value: -6}}},
-		{Rank: 2, SpellID: 31851, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_PERCENT_TAKEN, Misc: 127, Value: -12}}},
-		{Rank: 3, SpellID: 31852, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_PERCENT_TAKEN, Misc: 127, Value: -18}}},
-		{Rank: 4, SpellID: 31853, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_PERCENT_TAKEN, Misc: 127, Value: -24}}},
-		{Rank: 5, SpellID: 31854, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_PERCENT_TAKEN, Misc: 127, Value: -30}}},
+		{Rank: 1, SpellID: 31850, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_PERCENT_TAKEN, Misc: 127, Value: -6}}},
+		{Rank: 2, SpellID: 31851, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_PERCENT_TAKEN, Misc: 127, Value: -12}}},
+		{Rank: 3, SpellID: 31852, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_PERCENT_TAKEN, Misc: 127, Value: -18}}},
+		{Rank: 4, SpellID: 31853, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_PERCENT_TAKEN, Misc: 127, Value: -24}}},
+		{Rank: 5, SpellID: 31854, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_PERCENT_TAKEN, Misc: 127, Value: -30}}},
 	},
 	AvengersShield: shared.SpellRankTable{
-		{Rank: 1, SpellID: 31935, Cost: 500, CastTime: 1000 * time.Millisecond, GCD: 1000 * time.Millisecond, Cooldown: 30000 * time.Millisecond, MaxRange: 30, MissileSpeed: 35, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_SCHOOL_DAMAGE, Aura: shared.A_NONE, Misc: 0, Value: 270}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DECREASE_SPEED, Misc: 0, Value: -50}}, Direct: shared.SpellRankRange{Min: 270, Max: 330, Coef: 0.19300000369548798}},
-		{Rank: 2, SpellID: 32699, Cost: 615, CastTime: 1000 * time.Millisecond, GCD: 1000 * time.Millisecond, Cooldown: 30000 * time.Millisecond, MaxRange: 30, MissileSpeed: 35, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_SCHOOL_DAMAGE, Aura: shared.A_NONE, Misc: 0, Value: 370}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DECREASE_SPEED, Misc: 0, Value: -50}}, Direct: shared.SpellRankRange{Min: 370, Max: 452, Coef: 0.19300000369548798}},
-		{Rank: 3, SpellID: 32700, Cost: 780, CastTime: 1000 * time.Millisecond, GCD: 1000 * time.Millisecond, Cooldown: 30000 * time.Millisecond, MaxRange: 30, MissileSpeed: 35, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_SCHOOL_DAMAGE, Aura: shared.A_NONE, Misc: 0, Value: 494}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DECREASE_SPEED, Misc: 0, Value: -50}}, Direct: shared.SpellRankRange{Min: 494, Max: 602, Coef: 0.19300000369548798}},
+		{Rank: 1, SpellID: 31935, Cost: 500, CastTime: 1000 * time.Millisecond, GCD: 1000 * time.Millisecond, Cooldown: 30000 * time.Millisecond, MaxRange: 30, MissileSpeed: 35, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_SCHOOL_DAMAGE, Aura: shared.A_NONE, Misc: 0, Value: 270}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DECREASE_SPEED, Misc: 0, Value: -50}}, Direct: shared.SpellRankRange{Min: 270, Max: 330, Coef: 0.19300000369548798}},
+		{Rank: 2, SpellID: 32699, Cost: 615, CastTime: 1000 * time.Millisecond, GCD: 1000 * time.Millisecond, Cooldown: 30000 * time.Millisecond, MaxRange: 30, MissileSpeed: 35, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_SCHOOL_DAMAGE, Aura: shared.A_NONE, Misc: 0, Value: 370}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DECREASE_SPEED, Misc: 0, Value: -50}}, Direct: shared.SpellRankRange{Min: 370, Max: 452, Coef: 0.19300000369548798}},
+		{Rank: 3, SpellID: 32700, Cost: 780, CastTime: 1000 * time.Millisecond, GCD: 1000 * time.Millisecond, Cooldown: 30000 * time.Millisecond, MaxRange: 30, MissileSpeed: 35, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_SCHOOL_DAMAGE, Aura: shared.A_NONE, Misc: 0, Value: 494}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DECREASE_SPEED, Misc: 0, Value: -50}}, Direct: shared.SpellRankRange{Min: 494, Max: 602, Coef: 0.19300000369548798}},
 	},
 	Benediction: shared.SpellRankTable{
 		{Rank: 1, SpellID: 20101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_PCT_MODIFIER, Misc: 14, Value: -3}}},
@@ -138,9 +138,9 @@ var genRanks = generatedRanks{
 		{Rank: 5, SpellID: 20105, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_PCT_MODIFIER, Misc: 14, Value: -15}}},
 	},
 	BlessedLife: shared.SpellRankTable{
-		{Rank: 1, SpellID: 31828, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}}},
-		{Rank: 2, SpellID: 31829, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}}},
-		{Rank: 3, SpellID: 31830, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}}},
+		{Rank: 1, SpellID: 31828, ProcChance: 4, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}}},
+		{Rank: 2, SpellID: 31829, ProcChance: 7, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}}},
+		{Rank: 3, SpellID: 31830, ProcChance: 10, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}}},
 	},
 	BlessingOfLight: shared.SpellRankTable{
 		{Rank: 1, SpellID: 19977, Cost: 85, GCD: 1500 * time.Millisecond, MaxRange: 30, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 210}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 60}}, Direct: shared.SpellRankFlat{Value: 210, Coef: 0}},
@@ -166,15 +166,15 @@ var genRanks = generatedRanks{
 	BlessingOfSacrifice: shared.SpellRankTable{
 		{Rank: 1, SpellID: 6940, Cost: 80, GCD: 1500 * time.Millisecond, Cooldown: 30000 * time.Millisecond, MaxRange: 30, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_SPLIT_DAMAGE_FLAT, Misc: 127, Value: 45}}, Direct: shared.SpellRankFlat{Value: 45, Coef: 0}},
 		{Rank: 2, SpellID: 20729, Cost: 100, GCD: 1500 * time.Millisecond, Cooldown: 30000 * time.Millisecond, MaxRange: 30, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_SPLIT_DAMAGE_FLAT, Misc: 127, Value: 55}}, Direct: shared.SpellRankFlat{Value: 55, Coef: 0}},
-		{Rank: 3, SpellID: 27147, Cost: 115, GCD: 1500 * time.Millisecond, Cooldown: 30000 * time.Millisecond, MaxRange: 30, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_SPLIT_DAMAGE_FLAT, Misc: 127, Value: 81}}, Direct: shared.SpellRankFlat{Value: 81, Coef: 0}},
-		{Rank: 4, SpellID: 27148, Cost: 135, GCD: 1500 * time.Millisecond, Cooldown: 30000 * time.Millisecond, MaxRange: 30, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_SPLIT_DAMAGE_FLAT, Misc: 127, Value: 104}}, Direct: shared.SpellRankFlat{Value: 104, Coef: 0}},
+		{Rank: 3, SpellID: 27147, Cost: 115, GCD: 1500 * time.Millisecond, Cooldown: 30000 * time.Millisecond, MaxRange: 30, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_SPLIT_DAMAGE_FLAT, Misc: 127, Value: 81}}, Direct: shared.SpellRankFlat{Value: 81, Coef: 0}},
+		{Rank: 4, SpellID: 27148, Cost: 135, GCD: 1500 * time.Millisecond, Cooldown: 30000 * time.Millisecond, MaxRange: 30, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_SPLIT_DAMAGE_FLAT, Misc: 127, Value: 104}}, Direct: shared.SpellRankFlat{Value: 104, Coef: 0}},
 	},
 	BlessingOfSanctuary: shared.SpellRankTable{
-		{Rank: 1, SpellID: 20911, Cost: 60, GCD: 1500 * time.Millisecond, MaxRange: 30, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_TAKEN, Misc: -1, Value: -10}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_DAMAGE, Misc: 0, Value: 14}}, Direct: shared.SpellRankFlat{Value: 14, Coef: 0}},
-		{Rank: 2, SpellID: 20912, Cost: 85, GCD: 1500 * time.Millisecond, MaxRange: 30, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_TAKEN, Misc: -1, Value: -14}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_DAMAGE, Misc: 0, Value: 21}}, Direct: shared.SpellRankFlat{Value: 21, Coef: 0}},
-		{Rank: 3, SpellID: 20913, Cost: 110, GCD: 1500 * time.Millisecond, MaxRange: 30, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_TAKEN, Misc: -1, Value: -19}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_DAMAGE, Misc: 0, Value: 28}}, Direct: shared.SpellRankFlat{Value: 28, Coef: 0}},
-		{Rank: 4, SpellID: 20914, Cost: 135, GCD: 1500 * time.Millisecond, MaxRange: 30, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_TAKEN, Misc: -1, Value: -24}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_DAMAGE, Misc: 0, Value: 35}}, Direct: shared.SpellRankFlat{Value: 35, Coef: 0}},
-		{Rank: 5, SpellID: 27168, Cost: 180, GCD: 1500 * time.Millisecond, MaxRange: 30, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_TAKEN, Misc: -1, Value: -80}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_DAMAGE, Misc: 0, Value: 46}}, Direct: shared.SpellRankFlat{Value: 46, Coef: 0}},
+		{Rank: 1, SpellID: 20911, Cost: 60, GCD: 1500 * time.Millisecond, MaxRange: 30, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_TAKEN, Misc: -1, Value: -10}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_DAMAGE, Misc: 0, Value: 14}}, Direct: shared.SpellRankFlat{Value: 14, Coef: 0}},
+		{Rank: 2, SpellID: 20912, Cost: 85, GCD: 1500 * time.Millisecond, MaxRange: 30, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_TAKEN, Misc: -1, Value: -14}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_DAMAGE, Misc: 0, Value: 21}}, Direct: shared.SpellRankFlat{Value: 21, Coef: 0}},
+		{Rank: 3, SpellID: 20913, Cost: 110, GCD: 1500 * time.Millisecond, MaxRange: 30, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_TAKEN, Misc: -1, Value: -19}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_DAMAGE, Misc: 0, Value: 28}}, Direct: shared.SpellRankFlat{Value: 28, Coef: 0}},
+		{Rank: 4, SpellID: 20914, Cost: 135, GCD: 1500 * time.Millisecond, MaxRange: 30, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_TAKEN, Misc: -1, Value: -24}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_DAMAGE, Misc: 0, Value: 35}}, Direct: shared.SpellRankFlat{Value: 35, Coef: 0}},
+		{Rank: 5, SpellID: 27168, Cost: 180, GCD: 1500 * time.Millisecond, MaxRange: 30, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_TAKEN, Misc: -1, Value: -80}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_DAMAGE, Misc: 0, Value: 46}}, Direct: shared.SpellRankFlat{Value: 46, Coef: 0}},
 	},
 	BlessingOfWisdom: shared.SpellRankTable{
 		{Rank: 1, SpellID: 19742, Cost: 30, GCD: 1500 * time.Millisecond, MaxRange: 30, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_POWER_REGEN, Misc: 0, Value: 10}}, Direct: shared.SpellRankFlat{Value: 10, Coef: 0}},
@@ -189,11 +189,11 @@ var genRanks = generatedRanks{
 		{Rank: 1, SpellID: 356110, MaxRange: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PERIODIC_DAMAGE, Misc: 0, Value: 30}}, Periodic: shared.SpellRankPeriodic{Tick: 30, Coef: 0.03400000184774399, TickLength: 3000 * time.Millisecond, NumberOfTicks: 5}},
 	},
 	CombatExpertise: shared.SpellRankTable{
-		{Rank: 1, SpellID: 31858, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_EXPERTISE, Misc: 0, Value: 1}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_TOTAL_STAT_PERCENTAGE, Misc: 2, Value: 2}}, Direct: shared.SpellRankFlat{Value: 2, Coef: 0}},
-		{Rank: 2, SpellID: 31859, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_EXPERTISE, Misc: 0, Value: 2}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_TOTAL_STAT_PERCENTAGE, Misc: 2, Value: 4}}, Direct: shared.SpellRankFlat{Value: 2, Coef: 0}},
-		{Rank: 3, SpellID: 31860, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_EXPERTISE, Misc: 0, Value: 3}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_TOTAL_STAT_PERCENTAGE, Misc: 2, Value: 6}}, Direct: shared.SpellRankFlat{Value: 3, Coef: 0}},
-		{Rank: 4, SpellID: 31861, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_EXPERTISE, Misc: 0, Value: 4}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_TOTAL_STAT_PERCENTAGE, Misc: 2, Value: 8}}, Direct: shared.SpellRankFlat{Value: 4, Coef: 0}},
-		{Rank: 5, SpellID: 31862, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_EXPERTISE, Misc: 0, Value: 5}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_TOTAL_STAT_PERCENTAGE, Misc: 2, Value: 10}}, Direct: shared.SpellRankFlat{Value: 5, Coef: 0}},
+		{Rank: 1, SpellID: 31858, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_EXPERTISE, Misc: 0, Value: 1}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_TOTAL_STAT_PERCENTAGE, Misc: 2, Value: 2}}, Direct: shared.SpellRankFlat{Value: 2, Coef: 0}},
+		{Rank: 2, SpellID: 31859, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_EXPERTISE, Misc: 0, Value: 2}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_TOTAL_STAT_PERCENTAGE, Misc: 2, Value: 4}}, Direct: shared.SpellRankFlat{Value: 2, Coef: 0}},
+		{Rank: 3, SpellID: 31860, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_EXPERTISE, Misc: 0, Value: 3}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_TOTAL_STAT_PERCENTAGE, Misc: 2, Value: 6}}, Direct: shared.SpellRankFlat{Value: 3, Coef: 0}},
+		{Rank: 4, SpellID: 31861, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_EXPERTISE, Misc: 0, Value: 4}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_TOTAL_STAT_PERCENTAGE, Misc: 2, Value: 8}}, Direct: shared.SpellRankFlat{Value: 4, Coef: 0}},
+		{Rank: 5, SpellID: 31862, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_EXPERTISE, Misc: 0, Value: 5}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_TOTAL_STAT_PERCENTAGE, Misc: 2, Value: 10}}, Direct: shared.SpellRankFlat{Value: 5, Coef: 0}},
 	},
 	Consecration: shared.SpellRankTable{
 		{Rank: 1, SpellID: 26573, Cost: 120, GCD: 1500 * time.Millisecond, Cooldown: 8000 * time.Millisecond, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_PERSISTENT_AREA_AURA, Aura: shared.A_PERIODIC_DAMAGE, Misc: 0, Value: 8}}, Periodic: shared.SpellRankPeriodic{Tick: 8, Coef: 0.11900000274181366, TickLength: 1000 * time.Millisecond, NumberOfTicks: 8}},
@@ -211,9 +211,9 @@ var genRanks = generatedRanks{
 		{Rank: 5, SpellID: 20121, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_WEAPON_CRIT_PERCENT, Misc: 0, Value: 5}}, Direct: shared.SpellRankFlat{Value: 5, Coef: 0}},
 	},
 	Crusade: shared.SpellRankTable{
-		{Rank: 1, SpellID: 31866, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_DONE_VERSUS, Misc: 108, Value: 1}}},
-		{Rank: 2, SpellID: 31867, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_DONE_VERSUS, Misc: 108, Value: 2}}, Direct: shared.SpellRankFlat{Value: 2, Coef: 1}},
-		{Rank: 3, SpellID: 31868, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_DONE_VERSUS, Misc: 108, Value: 3}}, Direct: shared.SpellRankFlat{Value: 3, Coef: 1}},
+		{Rank: 1, SpellID: 31866, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_DONE_VERSUS, Misc: 108, Value: 1}}},
+		{Rank: 2, SpellID: 31867, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_DONE_VERSUS, Misc: 108, Value: 2}}, Direct: shared.SpellRankFlat{Value: 2, Coef: 1}},
+		{Rank: 3, SpellID: 31868, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_DONE_VERSUS, Misc: 108, Value: 3}}, Direct: shared.SpellRankFlat{Value: 3, Coef: 1}},
 	},
 	Deflection: shared.SpellRankTable{
 		{Rank: 1, SpellID: 20060, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_PARRY_PERCENT, Misc: 0, Value: 1}}},
@@ -238,8 +238,8 @@ var genRanks = generatedRanks{
 	},
 	DivinePurpose: shared.SpellRankTable{
 		{Rank: 1, SpellID: 31871, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_ATTACKER_MELEE_CRIT_DAMAGE, Misc: 0, Value: -4}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_ATTACKER_RANGED_CRIT_DAMAGE, Misc: 127, Value: -4}}},
-		{Rank: 2, SpellID: 31872, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_ATTACKER_MELEE_CRIT_DAMAGE, Misc: 0, Value: -7}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_ATTACKER_RANGED_CRIT_DAMAGE, Misc: 127, Value: -7}}},
-		{Rank: 3, SpellID: 31873, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_ATTACKER_MELEE_CRIT_DAMAGE, Misc: 0, Value: -10}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_ATTACKER_RANGED_CRIT_DAMAGE, Misc: 127, Value: -10}}},
+		{Rank: 2, SpellID: 31872, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_ATTACKER_MELEE_CRIT_DAMAGE, Misc: 0, Value: -7}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_ATTACKER_RANGED_CRIT_DAMAGE, Misc: 127, Value: -7}}},
+		{Rank: 3, SpellID: 31873, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_ATTACKER_MELEE_CRIT_DAMAGE, Misc: 0, Value: -10}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_ATTACKER_RANGED_CRIT_DAMAGE, Misc: 127, Value: -10}}},
 	},
 	DivineShield: shared.SpellRankTable{
 		{Rank: 1, SpellID: 642, Cost: 75, GCD: 1500 * time.Millisecond, Cooldown: 300000 * time.Millisecond, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_SCHOOL_IMMUNITY, Misc: 1, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_MELEE_HASTE, Misc: 0, Value: -100}, {Index: 2, Effect: shared.E_APPLY_AURA, Aura: shared.A_SCHOOL_IMMUNITY, Misc: 126, Value: 1}}},
@@ -252,7 +252,7 @@ var genRanks = generatedRanks{
 		{Rank: 4, SpellID: 10312, Cost: 200, GCD: 1500 * time.Millisecond, Cooldown: 15000 * time.Millisecond, MaxRange: 30, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_SCHOOL_DAMAGE, Aura: shared.A_NONE, Misc: 0, Value: 316}}, Direct: shared.SpellRankRange{Min: 316, Max: 354, Coef: 0.42899999022483826}},
 		{Rank: 5, SpellID: 10313, Cost: 240, GCD: 1500 * time.Millisecond, Cooldown: 15000 * time.Millisecond, MaxRange: 30, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_SCHOOL_DAMAGE, Aura: shared.A_NONE, Misc: 0, Value: 407}}, Direct: shared.SpellRankRange{Min: 407, Max: 453, Coef: 0.42899999022483826}},
 		{Rank: 6, SpellID: 10314, Cost: 295, GCD: 1500 * time.Millisecond, Cooldown: 15000 * time.Millisecond, MaxRange: 30, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_SCHOOL_DAMAGE, Aura: shared.A_NONE, Misc: 0, Value: 521}}, Direct: shared.SpellRankRange{Min: 521, Max: 579, Coef: 0.42899999022483826}},
-		{Rank: 7, SpellID: 27138, Cost: 340, GCD: 1500 * time.Millisecond, Cooldown: 15000 * time.Millisecond, MaxRange: 30, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_SCHOOL_DAMAGE, Aura: shared.A_NONE, Misc: 0, Value: 626}}, Direct: shared.SpellRankRange{Min: 626, Max: 698, Coef: 0.42899999022483826}},
+		{Rank: 7, SpellID: 27138, Cost: 340, GCD: 1500 * time.Millisecond, Cooldown: 15000 * time.Millisecond, MaxRange: 30, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_SCHOOL_DAMAGE, Aura: shared.A_NONE, Misc: 0, Value: 626}}, Direct: shared.SpellRankRange{Min: 626, Max: 698, Coef: 0.42899999022483826}},
 	},
 	Fanaticism: shared.SpellRankTable{
 		{Rank: 1, SpellID: 31879, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_FLAT_MODIFIER, Misc: 7, Value: 3}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_THREAT, Misc: 127, Value: -6}}, Direct: shared.SpellRankFlat{Value: 3, Coef: 1}},
@@ -284,7 +284,7 @@ var genRanks = generatedRanks{
 	},
 	GreaterBlessingOfLight: shared.SpellRankTable{
 		{Rank: 1, SpellID: 25890, Cost: 260, GCD: 1500 * time.Millisecond, MaxRange: 40, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 400}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 115}}, Direct: shared.SpellRankFlat{Value: 400, Coef: 0}},
-		{Rank: 2, SpellID: 27145, Cost: 360, GCD: 1500 * time.Millisecond, MaxRange: 40, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 580}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 185}}, Direct: shared.SpellRankFlat{Value: 580, Coef: 0}},
+		{Rank: 2, SpellID: 27145, Cost: 360, GCD: 1500 * time.Millisecond, MaxRange: 40, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 580}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 185}}, Direct: shared.SpellRankFlat{Value: 580, Coef: 0}},
 	},
 	GreaterBlessingOfMight: shared.SpellRankTable{
 		{Rank: 1, SpellID: 25782, Cost: 220, GCD: 1500 * time.Millisecond, MaxRange: 40, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_ATTACK_POWER, Misc: 0, Value: 155}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_RANGED_ATTACK_POWER, Misc: 0, Value: 155}}, Direct: shared.SpellRankFlat{Value: 155, Coef: 1}},
@@ -292,8 +292,8 @@ var genRanks = generatedRanks{
 		{Rank: 3, SpellID: 27141, Cost: 295, GCD: 1500 * time.Millisecond, MaxRange: 40, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_ATTACK_POWER, Misc: 0, Value: 220}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_RANGED_ATTACK_POWER, Misc: 0, Value: 220}}, Direct: shared.SpellRankFlat{Value: 220, Coef: 1}},
 	},
 	GreaterBlessingOfSanctuary: shared.SpellRankTable{
-		{Rank: 1, SpellID: 25899, Cost: 270, GCD: 1500 * time.Millisecond, MaxRange: 40, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_TAKEN, Misc: -1, Value: -24}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_DAMAGE, Misc: 0, Value: 35}}, Direct: shared.SpellRankFlat{Value: 35, Coef: 0}},
-		{Rank: 2, SpellID: 27169, Cost: 360, GCD: 1500 * time.Millisecond, MaxRange: 40, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_TAKEN, Misc: -1, Value: -80}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_DAMAGE, Misc: 0, Value: 46}}, Direct: shared.SpellRankFlat{Value: 46, Coef: 0}},
+		{Rank: 1, SpellID: 25899, Cost: 270, GCD: 1500 * time.Millisecond, MaxRange: 40, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_TAKEN, Misc: -1, Value: -24}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_DAMAGE, Misc: 0, Value: 35}}, Direct: shared.SpellRankFlat{Value: 35, Coef: 0}},
+		{Rank: 2, SpellID: 27169, Cost: 360, GCD: 1500 * time.Millisecond, MaxRange: 40, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_TAKEN, Misc: -1, Value: -80}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_DAMAGE, Misc: 0, Value: 46}}, Direct: shared.SpellRankFlat{Value: 46, Coef: 0}},
 	},
 	GreaterBlessingOfWisdom: shared.SpellRankTable{
 		{Rank: 1, SpellID: 25894, Cost: 230, GCD: 1500 * time.Millisecond, MaxRange: 40, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_POWER_REGEN, Misc: 0, Value: 30}}, Direct: shared.SpellRankFlat{Value: 30, Coef: 0}},
@@ -305,23 +305,23 @@ var genRanks = generatedRanks{
 		{Rank: 2, SpellID: 20175, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_FLAT_MODIFIER, Misc: 11, Value: -120000}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_FLAT_MODIFIER, Misc: 1, Value: 4000}}, Direct: shared.SpellRankFlat{Value: 4000, Coef: 1}},
 	},
 	HammerOfJustice: shared.SpellRankTable{
-		{Rank: 1, SpellID: 853, Cost: 30, GCD: 1500 * time.Millisecond, Cooldown: 60000 * time.Millisecond, MaxRange: 10, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_STUN, Misc: 0, Value: 0}}},
-		{Rank: 2, SpellID: 5588, Cost: 50, GCD: 1500 * time.Millisecond, Cooldown: 60000 * time.Millisecond, MaxRange: 10, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_STUN, Misc: 0, Value: 0}}},
-		{Rank: 3, SpellID: 5589, Cost: 75, GCD: 1500 * time.Millisecond, Cooldown: 60000 * time.Millisecond, MaxRange: 10, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_STUN, Misc: 0, Value: 0}}},
-		{Rank: 4, SpellID: 10308, Cost: 100, GCD: 1500 * time.Millisecond, Cooldown: 60000 * time.Millisecond, MaxRange: 10, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_STUN, Misc: 0, Value: 0}}},
+		{Rank: 1, SpellID: 853, Cost: 30, GCD: 1500 * time.Millisecond, Cooldown: 60000 * time.Millisecond, MaxRange: 10, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_STUN, Misc: 0, Value: 0}}},
+		{Rank: 2, SpellID: 5588, Cost: 50, GCD: 1500 * time.Millisecond, Cooldown: 60000 * time.Millisecond, MaxRange: 10, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_STUN, Misc: 0, Value: 0}}},
+		{Rank: 3, SpellID: 5589, Cost: 75, GCD: 1500 * time.Millisecond, Cooldown: 60000 * time.Millisecond, MaxRange: 10, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_STUN, Misc: 0, Value: 0}}},
+		{Rank: 4, SpellID: 10308, Cost: 100, GCD: 1500 * time.Millisecond, Cooldown: 60000 * time.Millisecond, MaxRange: 10, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_STUN, Misc: 0, Value: 0}}},
 	},
 	HammerOfWrath: shared.SpellRankTable{
 		{Rank: 1, SpellID: 24275, Cost: 235, CastTime: 500 * time.Millisecond, GCD: 500 * time.Millisecond, Cooldown: 6000 * time.Millisecond, MaxRange: 30, MissileSpeed: 35, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_SCHOOL_DAMAGE, Aura: shared.A_NONE, Misc: 0, Value: 316}}, Direct: shared.SpellRankRange{Min: 316, Max: 348, Coef: 0.42899999022483826}},
 		{Rank: 2, SpellID: 24274, Cost: 290, CastTime: 500 * time.Millisecond, GCD: 500 * time.Millisecond, Cooldown: 6000 * time.Millisecond, MaxRange: 30, MissileSpeed: 35, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_SCHOOL_DAMAGE, Aura: shared.A_NONE, Misc: 0, Value: 412}}, Direct: shared.SpellRankRange{Min: 412, Max: 455, Coef: 0.42899999022483826}},
 		{Rank: 3, SpellID: 24239, Cost: 340, CastTime: 500 * time.Millisecond, GCD: 500 * time.Millisecond, Cooldown: 6000 * time.Millisecond, MaxRange: 30, MissileSpeed: 35, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_SCHOOL_DAMAGE, Aura: shared.A_NONE, Misc: 0, Value: 519}}, Direct: shared.SpellRankRange{Min: 519, Max: 572, Coef: 0.42899999022483826}},
-		{Rank: 4, SpellID: 27180, Cost: 440, CastTime: 500 * time.Millisecond, GCD: 500 * time.Millisecond, Cooldown: 6000 * time.Millisecond, MaxRange: 30, MissileSpeed: 35, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_SCHOOL_DAMAGE, Aura: shared.A_NONE, Misc: 0, Value: 672}}, Direct: shared.SpellRankRange{Min: 672, Max: 742, Coef: 0.42899999022483826}},
+		{Rank: 4, SpellID: 27180, Cost: 440, CastTime: 500 * time.Millisecond, GCD: 500 * time.Millisecond, Cooldown: 6000 * time.Millisecond, MaxRange: 30, MissileSpeed: 35, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_SCHOOL_DAMAGE, Aura: shared.A_NONE, Misc: 0, Value: 672}}, Direct: shared.SpellRankRange{Min: 672, Max: 742, Coef: 0.42899999022483826}},
 	},
 	HolyGuidance: shared.SpellRankTable{
-		{Rank: 1, SpellID: 31837, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_SPELL_DAMAGE_OF_STAT_PERCENT, Misc: 126, Value: 7}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_SPELL_HEALING_OF_STAT_PERCENT, Misc: 3, Value: 7}}, Direct: shared.SpellRankFlat{Value: 7, Coef: 0}},
-		{Rank: 2, SpellID: 31838, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_SPELL_DAMAGE_OF_STAT_PERCENT, Misc: 126, Value: 14}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_SPELL_HEALING_OF_STAT_PERCENT, Misc: 3, Value: 14}}, Direct: shared.SpellRankFlat{Value: 14, Coef: 0}},
-		{Rank: 3, SpellID: 31839, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_SPELL_DAMAGE_OF_STAT_PERCENT, Misc: 126, Value: 21}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_SPELL_HEALING_OF_STAT_PERCENT, Misc: 3, Value: 21}}, Direct: shared.SpellRankFlat{Value: 21, Coef: 0}},
-		{Rank: 4, SpellID: 31840, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_SPELL_DAMAGE_OF_STAT_PERCENT, Misc: 126, Value: 28}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_SPELL_HEALING_OF_STAT_PERCENT, Misc: 3, Value: 28}}, Direct: shared.SpellRankFlat{Value: 28, Coef: 0}},
-		{Rank: 5, SpellID: 31841, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_SPELL_DAMAGE_OF_STAT_PERCENT, Misc: 126, Value: 35}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_SPELL_HEALING_OF_STAT_PERCENT, Misc: 3, Value: 35}}, Direct: shared.SpellRankFlat{Value: 35, Coef: 0}},
+		{Rank: 1, SpellID: 31837, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_SPELL_DAMAGE_OF_STAT_PERCENT, Misc: 126, Value: 7}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_SPELL_HEALING_OF_STAT_PERCENT, Misc: 3, Value: 7}}, Direct: shared.SpellRankFlat{Value: 7, Coef: 0}},
+		{Rank: 2, SpellID: 31838, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_SPELL_DAMAGE_OF_STAT_PERCENT, Misc: 126, Value: 14}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_SPELL_HEALING_OF_STAT_PERCENT, Misc: 3, Value: 14}}, Direct: shared.SpellRankFlat{Value: 14, Coef: 0}},
+		{Rank: 3, SpellID: 31839, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_SPELL_DAMAGE_OF_STAT_PERCENT, Misc: 126, Value: 21}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_SPELL_HEALING_OF_STAT_PERCENT, Misc: 3, Value: 21}}, Direct: shared.SpellRankFlat{Value: 21, Coef: 0}},
+		{Rank: 4, SpellID: 31840, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_SPELL_DAMAGE_OF_STAT_PERCENT, Misc: 126, Value: 28}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_SPELL_HEALING_OF_STAT_PERCENT, Misc: 3, Value: 28}}, Direct: shared.SpellRankFlat{Value: 28, Coef: 0}},
+		{Rank: 5, SpellID: 31841, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_SPELL_DAMAGE_OF_STAT_PERCENT, Misc: 126, Value: 35}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_SPELL_HEALING_OF_STAT_PERCENT, Misc: 3, Value: 35}}, Direct: shared.SpellRankFlat{Value: 35, Coef: 0}},
 	},
 	HolyLight: shared.SpellRankTable{
 		{Rank: 1, SpellID: 635, Cost: 35, CastTime: 2500 * time.Millisecond, GCD: 1500 * time.Millisecond, MaxRange: 40, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_HEAL, Aura: shared.A_NONE, Misc: 0, Value: 42}}, Heal: shared.SpellRankRange{Min: 42, Max: 51, Coef: 0.20499999821186066}},
@@ -344,17 +344,17 @@ var genRanks = generatedRanks{
 		{Rank: 5, SpellID: 25829, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_SPELL_CRIT_CHANCE_SCHOOL, Misc: 2, Value: 5}}, Direct: shared.SpellRankFlat{Value: 5, Coef: 1}},
 	},
 	HolyShield: shared.SpellRankTable{
-		{Rank: 1, SpellID: 20925, Cost: 135, GCD: 1500 * time.Millisecond, Cooldown: 10000 * time.Millisecond, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_BLOCK_PERCENT, Misc: 0, Value: 30}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_DAMAGE, Misc: 0, Value: 59}, {Index: 2, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_RATING, Misc: 16, Value: 1}}, Direct: shared.SpellRankFlat{Value: 59, Coef: 0.05000000074505806}},
-		{Rank: 2, SpellID: 20927, Cost: 175, GCD: 1500 * time.Millisecond, Cooldown: 10000 * time.Millisecond, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_BLOCK_PERCENT, Misc: 0, Value: 30}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_DAMAGE, Misc: 0, Value: 86}, {Index: 2, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_RATING, Misc: 16, Value: 1}}, Direct: shared.SpellRankFlat{Value: 86, Coef: 0.05000000074505806}},
-		{Rank: 3, SpellID: 20928, Cost: 215, GCD: 1500 * time.Millisecond, Cooldown: 10000 * time.Millisecond, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_BLOCK_PERCENT, Misc: 0, Value: 30}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_DAMAGE, Misc: 0, Value: 117}, {Index: 2, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_RATING, Misc: 16, Value: 1}}, Direct: shared.SpellRankFlat{Value: 117, Coef: 0.05000000074505806}},
-		{Rank: 4, SpellID: 27179, Cost: 280, GCD: 1500 * time.Millisecond, Cooldown: 10000 * time.Millisecond, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_BLOCK_PERCENT, Misc: 0, Value: 30}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_DAMAGE, Misc: 0, Value: 155}, {Index: 2, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_RATING, Misc: 16, Value: 1}}, Direct: shared.SpellRankFlat{Value: 155, Coef: 0.05000000074505806}},
+		{Rank: 1, SpellID: 20925, Cost: 135, GCD: 1500 * time.Millisecond, Cooldown: 10000 * time.Millisecond, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_BLOCK_PERCENT, Misc: 0, Value: 30}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_DAMAGE, Misc: 0, Value: 59}, {Index: 2, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_RATING, Misc: 16, Value: 1}}, Direct: shared.SpellRankFlat{Value: 59, Coef: 0.05000000074505806}},
+		{Rank: 2, SpellID: 20927, Cost: 175, GCD: 1500 * time.Millisecond, Cooldown: 10000 * time.Millisecond, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_BLOCK_PERCENT, Misc: 0, Value: 30}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_DAMAGE, Misc: 0, Value: 86}, {Index: 2, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_RATING, Misc: 16, Value: 1}}, Direct: shared.SpellRankFlat{Value: 86, Coef: 0.05000000074505806}},
+		{Rank: 3, SpellID: 20928, Cost: 215, GCD: 1500 * time.Millisecond, Cooldown: 10000 * time.Millisecond, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_BLOCK_PERCENT, Misc: 0, Value: 30}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_DAMAGE, Misc: 0, Value: 117}, {Index: 2, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_RATING, Misc: 16, Value: 1}}, Direct: shared.SpellRankFlat{Value: 117, Coef: 0.05000000074505806}},
+		{Rank: 4, SpellID: 27179, Cost: 280, GCD: 1500 * time.Millisecond, Cooldown: 10000 * time.Millisecond, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_BLOCK_PERCENT, Misc: 0, Value: 30}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_DAMAGE, Misc: 0, Value: 155}, {Index: 2, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_RATING, Misc: 16, Value: 1}}, Direct: shared.SpellRankFlat{Value: 155, Coef: 0.05000000074505806}},
 	},
 	HolyShock: shared.SpellRankTable{
 		{Rank: 1, SpellID: 20473, Cost: 335, GCD: 1500 * time.Millisecond, Cooldown: 15000 * time.Millisecond, MaxRange: 20, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_DUMMY, Aura: shared.A_NONE, Misc: 0, Value: 1}}, Direct: shared.SpellRankRange{Min: 277, Max: 299, Coef: 0.42899999022483826}, Heal: shared.SpellRankRange{Min: 351, Max: 379, Coef: 0.42899999022483826}},
 		{Rank: 2, SpellID: 20929, Cost: 410, GCD: 1500 * time.Millisecond, Cooldown: 15000 * time.Millisecond, MaxRange: 20, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_DUMMY, Aura: shared.A_NONE, Misc: 0, Value: 1}}, Direct: shared.SpellRankRange{Min: 379, Max: 409, Coef: 0.42899999022483826}, Heal: shared.SpellRankRange{Min: 480, Max: 518, Coef: 0.42899999022483826}},
 		{Rank: 3, SpellID: 20930, Cost: 485, GCD: 1500 * time.Millisecond, Cooldown: 15000 * time.Millisecond, MaxRange: 20, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_DUMMY, Aura: shared.A_NONE, Misc: 0, Value: 1}}, Direct: shared.SpellRankRange{Min: 496, Max: 536, Coef: 0.42899999022483826}, Heal: shared.SpellRankRange{Min: 628, Max: 680, Coef: 0.42899999022483826}},
-		{Rank: 4, SpellID: 27174, Cost: 575, GCD: 1500 * time.Millisecond, Cooldown: 15000 * time.Millisecond, MaxRange: 20, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_DUMMY, Aura: shared.A_NONE, Misc: 0, Value: 1}}, Direct: shared.SpellRankRange{Min: 614, Max: 664, Coef: 0.42899999022483826}, Heal: shared.SpellRankRange{Min: 777, Max: 841, Coef: 0.42899999022483826}},
-		{Rank: 5, SpellID: 33072, Cost: 650, GCD: 1500 * time.Millisecond, Cooldown: 15000 * time.Millisecond, MaxRange: 20, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_DUMMY, Aura: shared.A_NONE, Misc: 0, Value: 1}}, Direct: shared.SpellRankRange{Min: 721, Max: 779, Coef: 0.42899999022483826}, Heal: shared.SpellRankRange{Min: 913, Max: 987, Coef: 0.42899999022483826}},
+		{Rank: 4, SpellID: 27174, Cost: 575, GCD: 1500 * time.Millisecond, Cooldown: 15000 * time.Millisecond, MaxRange: 20, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_DUMMY, Aura: shared.A_NONE, Misc: 0, Value: 1}}, Direct: shared.SpellRankRange{Min: 614, Max: 664, Coef: 0.42899999022483826}, Heal: shared.SpellRankRange{Min: 777, Max: 841, Coef: 0.42899999022483826}},
+		{Rank: 5, SpellID: 33072, Cost: 650, GCD: 1500 * time.Millisecond, Cooldown: 15000 * time.Millisecond, MaxRange: 20, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_DUMMY, Aura: shared.A_NONE, Misc: 0, Value: 1}}, Direct: shared.SpellRankRange{Min: 721, Max: 779, Coef: 0.42899999022483826}, Heal: shared.SpellRankRange{Min: 913, Max: 987, Coef: 0.42899999022483826}},
 	},
 	HolyVengeance: shared.SpellRankTable{
 		{Rank: 1, SpellID: 31803, MaxRange: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PERIODIC_DAMAGE, Misc: 0, Value: 30}}, Periodic: shared.SpellRankPeriodic{Tick: 30, Coef: 0.03400000184774399, TickLength: 3000 * time.Millisecond, NumberOfTicks: 5}},
@@ -362,7 +362,7 @@ var genRanks = generatedRanks{
 	HolyWrath: shared.SpellRankTable{
 		{Rank: 1, SpellID: 2812, Cost: 550, CastTime: 2000 * time.Millisecond, GCD: 1500 * time.Millisecond, Cooldown: 60000 * time.Millisecond, MissileSpeed: 20, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_SCHOOL_DAMAGE, Aura: shared.A_NONE, Misc: 0, Value: 368}}, Direct: shared.SpellRankRange{Min: 368, Max: 435, Coef: 0.28600001335144043}},
 		{Rank: 2, SpellID: 10318, Cost: 685, CastTime: 2000 * time.Millisecond, GCD: 1500 * time.Millisecond, Cooldown: 60000 * time.Millisecond, MissileSpeed: 20, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_SCHOOL_DAMAGE, Aura: shared.A_NONE, Misc: 0, Value: 497}}, Direct: shared.SpellRankRange{Min: 497, Max: 584, Coef: 0.28600001335144043}},
-		{Rank: 3, SpellID: 27139, Cost: 825, CastTime: 2000 * time.Millisecond, GCD: 1500 * time.Millisecond, Cooldown: 60000 * time.Millisecond, MissileSpeed: 20, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_SCHOOL_DAMAGE, Aura: shared.A_NONE, Misc: 0, Value: 637}}, Direct: shared.SpellRankRange{Min: 637, Max: 748, Coef: 0.28600001335144043}},
+		{Rank: 3, SpellID: 27139, Cost: 825, CastTime: 2000 * time.Millisecond, GCD: 1500 * time.Millisecond, Cooldown: 60000 * time.Millisecond, MissileSpeed: 20, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_SCHOOL_DAMAGE, Aura: shared.A_NONE, Misc: 0, Value: 637}}, Direct: shared.SpellRankRange{Min: 637, Max: 748, Coef: 0.28600001335144043}},
 	},
 	ImprovedBlessingOfMight: shared.SpellRankTable{
 		{Rank: 1, SpellID: 20042, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_PCT_MODIFIER, Misc: 8, Value: 4}}, Direct: shared.SpellRankFlat{Value: 4, Coef: 1}},
@@ -389,8 +389,8 @@ var genRanks = generatedRanks{
 		{Rank: 3, SpellID: 20489, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_FLAT_MODIFIER, Misc: 11, Value: -15000}}},
 	},
 	ImprovedHolyShield: shared.SpellRankTable{
-		{Rank: 1, SpellID: 41021, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_PCT_MODIFIER, Misc: 0, Value: 10}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_FLAT_MODIFIER, Misc: 4, Value: 2}}, Direct: shared.SpellRankFlat{Value: 10, Coef: 0}},
-		{Rank: 2, SpellID: 41026, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_PCT_MODIFIER, Misc: 0, Value: 20}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_FLAT_MODIFIER, Misc: 4, Value: 4}}, Direct: shared.SpellRankFlat{Value: 20, Coef: 0}},
+		{Rank: 1, SpellID: 41021, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_PCT_MODIFIER, Misc: 0, Value: 10}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_FLAT_MODIFIER, Misc: 4, Value: 2}}, Direct: shared.SpellRankFlat{Value: 10, Coef: 0}},
+		{Rank: 2, SpellID: 41026, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_PCT_MODIFIER, Misc: 0, Value: 20}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_FLAT_MODIFIER, Misc: 4, Value: 4}}, Direct: shared.SpellRankFlat{Value: 20, Coef: 0}},
 	},
 	ImprovedJudgement: shared.SpellRankTable{
 		{Rank: 1, SpellID: 25956, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_FLAT_MODIFIER, Misc: 11, Value: -1000}}},
@@ -406,8 +406,8 @@ var genRanks = generatedRanks{
 		{Rank: 3, SpellID: 20470, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_PCT_MODIFIER, Misc: 8, Value: 50}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_FLAT_MODIFIER, Misc: 12, Value: -6}}, Direct: shared.SpellRankFlat{Value: 50, Coef: 1}},
 	},
 	ImprovedSanctityAura: shared.SpellRankTable{
-		{Rank: 1, SpellID: 31869, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_FLAT_MODIFIER, Misc: 12, Value: 1}}},
-		{Rank: 2, SpellID: 31870, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_FLAT_MODIFIER, Misc: 12, Value: 2}}, Direct: shared.SpellRankFlat{Value: 2, Coef: 1}},
+		{Rank: 1, SpellID: 31869, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_FLAT_MODIFIER, Misc: 12, Value: 1}}},
+		{Rank: 2, SpellID: 31870, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_FLAT_MODIFIER, Misc: 12, Value: 2}}, Direct: shared.SpellRankFlat{Value: 2, Coef: 1}},
 	},
 	ImprovedSealOfTheCrusader: shared.SpellRankTable{
 		{Rank: 1, SpellID: 20335, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_FLAT_MODIFIER, Misc: 12, Value: 1}}},
@@ -418,18 +418,18 @@ var genRanks = generatedRanks{
 		{Rank: 1, SpellID: 31898, MaxRange: 50000, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_SCHOOL_DAMAGE, Aura: shared.A_NONE, Misc: 0, Value: 331}}, Direct: shared.SpellRankRange{Min: 331, Max: 362, Coef: 0.42899999022483826}},
 	},
 	JudgementOfCorruption: shared.SpellRankTable{
-		{Rank: 1, SpellID: 356112, MaxRange: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_SCHOOL_DAMAGE, Aura: shared.A_NONE, Misc: 0, Value: 120}}, Direct: shared.SpellRankFlat{Value: 120, Coef: 0.42899999022483826}},
+		{Rank: 1, SpellID: 356112, MaxRange: 100, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_SCHOOL_DAMAGE, Aura: shared.A_NONE, Misc: 0, Value: 120}}, Direct: shared.SpellRankFlat{Value: 120, Coef: 0.42899999022483826}},
 	},
 	JudgementOfJustice: shared.SpellRankTable{
 		{Rank: 1, SpellID: 20184, MaxRange: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PREVENTS_FLEEING, Misc: 0, Value: 0}}},
 		{Rank: 2, SpellID: 31896, MaxRange: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PREVENTS_FLEEING, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_USE_NORMAL_MOVEMENT_SPEED, Misc: 0, Value: 7}}, Direct: shared.SpellRankFlat{Value: 7, Coef: 0}},
 	},
 	JudgementOfLight: shared.SpellRankTable{
-		{Rank: 1, SpellID: 20185, MaxRange: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}}},
-		{Rank: 2, SpellID: 20344, MaxRange: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}}},
-		{Rank: 3, SpellID: 20345, MaxRange: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}}},
-		{Rank: 4, SpellID: 20346, MaxRange: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}}},
-		{Rank: 5, SpellID: 27162, MaxRange: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}}},
+		{Rank: 1, SpellID: 20185, MaxRange: 100, ProcChance: 50, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}}},
+		{Rank: 2, SpellID: 20344, MaxRange: 100, ProcChance: 50, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}}},
+		{Rank: 3, SpellID: 20345, MaxRange: 100, ProcChance: 50, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}}},
+		{Rank: 4, SpellID: 20346, MaxRange: 100, ProcChance: 50, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}}},
+		{Rank: 5, SpellID: 27162, MaxRange: 100, ProcChance: 50, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}}},
 	},
 	JudgementOfRighteousness: shared.SpellRankTable{
 		{Rank: 1, SpellID: 20187, MaxRange: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_SCHOOL_DAMAGE, Aura: shared.A_NONE, Misc: 0, Value: 25}, {Index: 1, Effect: shared.E_DUMMY, Aura: shared.A_NONE, Misc: 0, Value: 216}}, Direct: shared.SpellRankRange{Min: 25, Max: 26, Coef: 0.20900000631809235}},
@@ -443,13 +443,13 @@ var genRanks = generatedRanks{
 		{Rank: 9, SpellID: 27157, MaxRange: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_SCHOOL_DAMAGE, Aura: shared.A_NONE, Misc: 0, Value: 225}, {Index: 2, Effect: shared.E_DUMMY, Aura: shared.A_NONE, Misc: 0, Value: 2666}}, Direct: shared.SpellRankRange{Min: 225, Max: 246, Coef: 0.7279999852180481}},
 	},
 	JudgementOfVengeance: shared.SpellRankTable{
-		{Rank: 1, SpellID: 31804, MaxRange: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_SCHOOL_DAMAGE, Aura: shared.A_NONE, Misc: 0, Value: 120}}, Direct: shared.SpellRankFlat{Value: 120, Coef: 0.42899999022483826}},
+		{Rank: 1, SpellID: 31804, MaxRange: 100, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_SCHOOL_DAMAGE, Aura: shared.A_NONE, Misc: 0, Value: 120}}, Direct: shared.SpellRankFlat{Value: 120, Coef: 0.42899999022483826}},
 	},
 	JudgementOfWisdom: shared.SpellRankTable{
-		{Rank: 1, SpellID: 20186, MaxRange: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}}},
-		{Rank: 2, SpellID: 20354, MaxRange: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}}},
-		{Rank: 3, SpellID: 20355, MaxRange: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}}},
-		{Rank: 4, SpellID: 27164, MaxRange: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}}},
+		{Rank: 1, SpellID: 20186, MaxRange: 100, ProcChance: 50, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}}},
+		{Rank: 2, SpellID: 20354, MaxRange: 100, ProcChance: 50, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}}},
+		{Rank: 3, SpellID: 20355, MaxRange: 100, ProcChance: 50, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}}},
+		{Rank: 4, SpellID: 27164, MaxRange: 100, ProcChance: 50, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}}},
 	},
 	JudgementOfTheCrusader: shared.SpellRankTable{
 		{Rank: 1, SpellID: 21183, MaxRange: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_TAKEN, Misc: 2, Value: 23}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_ATTACKER_SPELL_AND_WEAPON_CRIT_CHANCE, Misc: 0, Value: 0}}, Direct: shared.SpellRankFlat{Value: 23, Coef: 0}},
@@ -464,12 +464,12 @@ var genRanks = generatedRanks{
 		{Rank: 1, SpellID: 633, GCD: 1500 * time.Millisecond, Cooldown: 3600000 * time.Millisecond, MaxRange: 40, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_HEAL_MAX_HEALTH, Aura: shared.A_NONE, Misc: 0, Value: 0}}},
 		{Rank: 2, SpellID: 2800, GCD: 1500 * time.Millisecond, Cooldown: 3600000 * time.Millisecond, MaxRange: 40, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_HEAL_MAX_HEALTH, Aura: shared.A_NONE, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_ENERGIZE, Aura: shared.A_NONE, Misc: 0, Value: 250}}, Energize: shared.SpellRankFlat{Value: 250, Coef: 0}},
 		{Rank: 3, SpellID: 10310, GCD: 1500 * time.Millisecond, Cooldown: 3600000 * time.Millisecond, MaxRange: 40, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_HEAL_MAX_HEALTH, Aura: shared.A_NONE, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_ENERGIZE, Aura: shared.A_NONE, Misc: 0, Value: 550}}, Energize: shared.SpellRankFlat{Value: 550, Coef: 0}},
-		{Rank: 4, SpellID: 27154, GCD: 1500 * time.Millisecond, Cooldown: 3600000 * time.Millisecond, MaxRange: 40, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_HEAL_MAX_HEALTH, Aura: shared.A_NONE, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_ENERGIZE, Aura: shared.A_NONE, Misc: 0, Value: 900}}, Energize: shared.SpellRankFlat{Value: 900, Coef: 0}},
+		{Rank: 4, SpellID: 27154, GCD: 1500 * time.Millisecond, Cooldown: 3600000 * time.Millisecond, MaxRange: 40, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_HEAL_MAX_HEALTH, Aura: shared.A_NONE, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_ENERGIZE, Aura: shared.A_NONE, Misc: 0, Value: 900}}, Energize: shared.SpellRankFlat{Value: 900, Coef: 0}},
 	},
 	LightsGrace: shared.SpellRankTable{
-		{Rank: 1, SpellID: 31833, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}}},
-		{Rank: 2, SpellID: 31835, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}}},
-		{Rank: 3, SpellID: 31836, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}}},
+		{Rank: 1, SpellID: 31833, ProcChance: 33, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}}},
+		{Rank: 2, SpellID: 31835, ProcChance: 66, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}}},
+		{Rank: 3, SpellID: 31836, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}}},
 	},
 	OneHandedWeaponSpecialization: shared.SpellRankTable{
 		{Rank: 1, SpellID: 20196, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_PERCENT_DONE, Misc: 127, Value: 1}}},
@@ -484,13 +484,13 @@ var genRanks = generatedRanks{
 		{Rank: 3, SpellID: 20193, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_HIT_CHANCE, Misc: 0, Value: 3}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_SPELL_HIT_CHANCE, Misc: 0, Value: 3}}, Direct: shared.SpellRankFlat{Value: 3, Coef: 1}},
 	},
 	PureOfHeart: shared.SpellRankTable{
-		{Rank: 1, SpellID: 31822, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: 568, Misc: 2, Value: 5}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: 568, Misc: 3, Value: 5}}, Direct: shared.SpellRankFlat{Value: 5, Coef: 0}},
-		{Rank: 2, SpellID: 31823, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: 568, Misc: 2, Value: 10}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: 568, Misc: 3, Value: 10}}, Direct: shared.SpellRankFlat{Value: 10, Coef: 0}},
+		{Rank: 1, SpellID: 31822, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: 568, Misc: 2, Value: 5}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: 568, Misc: 3, Value: 5}}, Direct: shared.SpellRankFlat{Value: 5, Coef: 0}},
+		{Rank: 2, SpellID: 31823, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: 568, Misc: 2, Value: 10}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: 568, Misc: 3, Value: 10}}, Direct: shared.SpellRankFlat{Value: 10, Coef: 0}},
 		{Rank: 3, SpellID: 31824, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: 568, Misc: 2, Value: 16}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: 568, Misc: 3, Value: 16}}, Direct: shared.SpellRankFlat{Value: 16, Coef: 0}},
 	},
 	PurifyingPower: shared.SpellRankTable{
-		{Rank: 1, SpellID: 31825, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_PCT_MODIFIER, Misc: 14, Value: -5}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_FLAT_MODIFIER, Misc: 7, Value: 10}}, Direct: shared.SpellRankFlat{Value: 10, Coef: 0}},
-		{Rank: 2, SpellID: 31826, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_PCT_MODIFIER, Misc: 14, Value: -10}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_FLAT_MODIFIER, Misc: 7, Value: 20}}, Direct: shared.SpellRankFlat{Value: 20, Coef: 0}},
+		{Rank: 1, SpellID: 31825, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_PCT_MODIFIER, Misc: 14, Value: -5}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_FLAT_MODIFIER, Misc: 7, Value: 10}}, Direct: shared.SpellRankFlat{Value: 10, Coef: 0}},
+		{Rank: 2, SpellID: 31826, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_PCT_MODIFIER, Misc: 14, Value: -10}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_FLAT_MODIFIER, Misc: 7, Value: 20}}, Direct: shared.SpellRankFlat{Value: 20, Coef: 0}},
 	},
 	PursuitOfJustice: shared.SpellRankTable{
 		{Rank: 1, SpellID: 26022, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_INCREASE_SPEED, Misc: 0, Value: 5}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_MOUNTED_SPEED_NOT_STACK, Misc: 0, Value: 5}, {Index: 2, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_FLIGHT_SPEED_NOT_STACK, Misc: 12, Value: 5}, {Index: 3, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_ATTACKER_SPELL_HIT_CHANCE, Misc: 126, Value: -1}}, Direct: shared.SpellRankFlat{Value: 5, Coef: 1}},
@@ -498,11 +498,11 @@ var genRanks = generatedRanks{
 		{Rank: 3, SpellID: 44414, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_INCREASE_SPEED, Misc: 0, Value: 15}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_MOUNTED_SPEED_NOT_STACK, Misc: 0, Value: 15}, {Index: 2, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_FLIGHT_SPEED_NOT_STACK, Misc: 12, Value: 15}, {Index: 3, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_ATTACKER_SPELL_HIT_CHANCE, Misc: 126, Value: -3}}, Direct: shared.SpellRankFlat{Value: 15, Coef: 1}},
 	},
 	Reckoning: shared.SpellRankTable{
-		{Rank: 1, SpellID: 20177, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 1}}},
-		{Rank: 2, SpellID: 20179, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 1}}},
-		{Rank: 3, SpellID: 20181, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 1}}},
-		{Rank: 4, SpellID: 20180, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 1}}},
-		{Rank: 5, SpellID: 20182, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 1}}},
+		{Rank: 1, SpellID: 20177, ProcChance: 2, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 1}}},
+		{Rank: 2, SpellID: 20179, ProcChance: 4, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 1}}},
+		{Rank: 3, SpellID: 20181, ProcChance: 6, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 1}}},
+		{Rank: 4, SpellID: 20180, ProcChance: 8, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 1}}},
+		{Rank: 5, SpellID: 20182, ProcChance: 10, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 1}}},
 	},
 	Redemption: shared.SpellRankTable{
 		{Rank: 1, SpellID: 7328, CastTime: 10000 * time.Millisecond, GCD: 1500 * time.Millisecond, MaxRange: 30, Effects: []shared.SpellRankEffect{{Index: 0, Effect: 329, Aura: shared.A_NONE, Misc: 120, Value: 65}}},
@@ -512,11 +512,11 @@ var genRanks = generatedRanks{
 		{Rank: 5, SpellID: 20773, CastTime: 10000 * time.Millisecond, GCD: 1500 * time.Millisecond, MaxRange: 30, Effects: []shared.SpellRankEffect{{Index: 0, Effect: 329, Aura: shared.A_NONE, Misc: 800, Value: 600}}},
 	},
 	Redoubt: shared.SpellRankTable{
-		{Rank: 1, SpellID: 20127, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 1}}},
-		{Rank: 2, SpellID: 20130, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 1}}},
-		{Rank: 3, SpellID: 20135, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 1}}},
-		{Rank: 4, SpellID: 20136, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 1}}},
-		{Rank: 5, SpellID: 20137, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 1}}},
+		{Rank: 1, SpellID: 20127, ProcChance: 10, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 1}}},
+		{Rank: 2, SpellID: 20130, ProcChance: 10, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 1}}},
+		{Rank: 3, SpellID: 20135, ProcChance: 10, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 1}}},
+		{Rank: 4, SpellID: 20136, ProcChance: 10, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 1}}},
+		{Rank: 5, SpellID: 20137, ProcChance: 10, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 1}}},
 	},
 	RetributionAura: shared.SpellRankTable{
 		{Rank: 1, SpellID: 7294, GCD: 1500 * time.Millisecond, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AREA_AURA_PARTY, Aura: shared.A_DAMAGE_SHIELD, Misc: 0, Value: 5}}, Direct: shared.SpellRankFlat{Value: 5, Coef: 0}},
@@ -527,13 +527,13 @@ var genRanks = generatedRanks{
 		{Rank: 6, SpellID: 27150, GCD: 1500 * time.Millisecond, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AREA_AURA_PARTY, Aura: shared.A_DAMAGE_SHIELD, Misc: 0, Value: 26}}, Direct: shared.SpellRankFlat{Value: 26, Coef: 0}},
 	},
 	SacredDuty: shared.SpellRankTable{
-		{Rank: 1, SpellID: 31848, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_FLAT_MODIFIER, Misc: 11, Value: -30000}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_PCT_MODIFIER, Misc: 8, Value: -50}, {Index: 2, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_TOTAL_STAT_PERCENTAGE, Misc: 2, Value: 3}}, Direct: shared.SpellRankFlat{Value: 3, Coef: 0}},
-		{Rank: 2, SpellID: 31849, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_FLAT_MODIFIER, Misc: 11, Value: -60000}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_PCT_MODIFIER, Misc: 8, Value: -100}, {Index: 2, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_TOTAL_STAT_PERCENTAGE, Misc: 2, Value: 6}}, Direct: shared.SpellRankFlat{Value: 6, Coef: 0}},
+		{Rank: 1, SpellID: 31848, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_FLAT_MODIFIER, Misc: 11, Value: -30000}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_PCT_MODIFIER, Misc: 8, Value: -50}, {Index: 2, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_TOTAL_STAT_PERCENTAGE, Misc: 2, Value: 3}}, Direct: shared.SpellRankFlat{Value: 3, Coef: 0}},
+		{Rank: 2, SpellID: 31849, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_FLAT_MODIFIER, Misc: 11, Value: -60000}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_PCT_MODIFIER, Misc: 8, Value: -100}, {Index: 2, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_TOTAL_STAT_PERCENTAGE, Misc: 2, Value: 6}}, Direct: shared.SpellRankFlat{Value: 6, Coef: 0}},
 	},
 	SanctifiedJudgement: shared.SpellRankTable{
-		{Rank: 1, SpellID: 31876, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 33}}, Direct: shared.SpellRankFlat{Value: 33, Coef: 1}},
-		{Rank: 2, SpellID: 31877, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 66}}, Direct: shared.SpellRankFlat{Value: 66, Coef: 1}},
-		{Rank: 3, SpellID: 31878, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 100}}, Direct: shared.SpellRankFlat{Value: 100, Coef: 1}},
+		{Rank: 1, SpellID: 31876, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 33}}, Direct: shared.SpellRankFlat{Value: 33, Coef: 1}},
+		{Rank: 2, SpellID: 31877, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 66}}, Direct: shared.SpellRankFlat{Value: 66, Coef: 1}},
+		{Rank: 3, SpellID: 31878, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 100}}, Direct: shared.SpellRankFlat{Value: 100, Coef: 1}},
 	},
 	SanctifiedLight: shared.SpellRankTable{
 		{Rank: 1, SpellID: 20359, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_FLAT_MODIFIER, Misc: 7, Value: 2}}, Direct: shared.SpellRankFlat{Value: 2, Coef: 1}},
@@ -546,38 +546,38 @@ var genRanks = generatedRanks{
 		{Rank: 3, SpellID: 35397, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_SPELL_CRIT_CHANCE, Misc: 0, Value: 3}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_FLAT_MODIFIER, Misc: 28, Value: 100}, {Index: 2, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_WEAPON_CRIT_PERCENT, Misc: 0, Value: 3}}, Direct: shared.SpellRankFlat{Value: 3, Coef: 1}},
 	},
 	SealOfBlood: shared.SpellRankTable{
-		{Rank: 1, SpellID: 31892, Cost: 210, GCD: 1500 * time.Millisecond, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 40}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 31898}, {Index: 2, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 10}}, Direct: shared.SpellRankFlat{Value: 40, Coef: 0}},
+		{Rank: 1, SpellID: 31892, Cost: 210, GCD: 1500 * time.Millisecond, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 40}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 31898}, {Index: 2, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 10}}, Direct: shared.SpellRankFlat{Value: 40, Coef: 0}},
 	},
 	SealOfCommand: shared.SpellRankTable{
-		{Rank: 1, SpellID: 20375, Cost: 65, GCD: 1500 * time.Millisecond, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 20425}}, Direct: shared.SpellRankFlat{Value: 20425, Coef: 0}},
-		{Rank: 2, SpellID: 20915, Cost: 110, GCD: 1500 * time.Millisecond, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 20962}}, Direct: shared.SpellRankFlat{Value: 20962, Coef: 0}},
-		{Rank: 3, SpellID: 20918, Cost: 140, GCD: 1500 * time.Millisecond, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 20961}}, Direct: shared.SpellRankFlat{Value: 20961, Coef: 0}},
-		{Rank: 4, SpellID: 20919, Cost: 180, GCD: 1500 * time.Millisecond, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 20967}}, Direct: shared.SpellRankFlat{Value: 20967, Coef: 0}},
-		{Rank: 5, SpellID: 20920, Cost: 210, GCD: 1500 * time.Millisecond, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 20968}}, Direct: shared.SpellRankFlat{Value: 20968, Coef: 0}},
-		{Rank: 6, SpellID: 27170, Cost: 280, GCD: 1500 * time.Millisecond, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 27172}}, Direct: shared.SpellRankFlat{Value: 27172, Coef: 0}},
+		{Rank: 1, SpellID: 20375, Cost: 65, GCD: 1500 * time.Millisecond, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 20425}}, Direct: shared.SpellRankFlat{Value: 20425, Coef: 0}},
+		{Rank: 2, SpellID: 20915, Cost: 110, GCD: 1500 * time.Millisecond, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 20962}}, Direct: shared.SpellRankFlat{Value: 20962, Coef: 0}},
+		{Rank: 3, SpellID: 20918, Cost: 140, GCD: 1500 * time.Millisecond, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 20961}}, Direct: shared.SpellRankFlat{Value: 20961, Coef: 0}},
+		{Rank: 4, SpellID: 20919, Cost: 180, GCD: 1500 * time.Millisecond, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 20967}}, Direct: shared.SpellRankFlat{Value: 20967, Coef: 0}},
+		{Rank: 5, SpellID: 20920, Cost: 210, GCD: 1500 * time.Millisecond, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 20968}}, Direct: shared.SpellRankFlat{Value: 20968, Coef: 0}},
+		{Rank: 6, SpellID: 27170, Cost: 280, GCD: 1500 * time.Millisecond, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 27172}}, Direct: shared.SpellRankFlat{Value: 27172, Coef: 0}},
 	},
 	SealOfCorruption: shared.SpellRankTable{
-		{Rank: 1, SpellID: 348704, Cost: 250, GCD: 1500 * time.Millisecond, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 356113}}, Direct: shared.SpellRankFlat{Value: 356113, Coef: 0}},
+		{Rank: 1, SpellID: 348704, Cost: 250, GCD: 1500 * time.Millisecond, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 356113}}, Direct: shared.SpellRankFlat{Value: 356113, Coef: 0}},
 	},
 	SealOfJustice: shared.SpellRankTable{
-		{Rank: 1, SpellID: 20164, GCD: 1500 * time.Millisecond, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 20184}}, Direct: shared.SpellRankFlat{Value: 20184, Coef: 0}},
-		{Rank: 2, SpellID: 31895, GCD: 1500 * time.Millisecond, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 31896}}, Direct: shared.SpellRankFlat{Value: 31896, Coef: 0}},
+		{Rank: 1, SpellID: 20164, GCD: 1500 * time.Millisecond, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 20184}}, Direct: shared.SpellRankFlat{Value: 20184, Coef: 0}},
+		{Rank: 2, SpellID: 31895, GCD: 1500 * time.Millisecond, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 31896}}, Direct: shared.SpellRankFlat{Value: 31896, Coef: 0}},
 	},
 	SealOfLight: shared.SpellRankTable{
-		{Rank: 1, SpellID: 20165, Cost: 110, GCD: 1500 * time.Millisecond, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 20185}}, Direct: shared.SpellRankFlat{Value: 20185, Coef: 0}},
-		{Rank: 2, SpellID: 20347, Cost: 140, GCD: 1500 * time.Millisecond, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 20344}}, Direct: shared.SpellRankFlat{Value: 20344, Coef: 0}},
-		{Rank: 3, SpellID: 20348, Cost: 180, GCD: 1500 * time.Millisecond, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 20345}}, Direct: shared.SpellRankFlat{Value: 20345, Coef: 0}},
-		{Rank: 4, SpellID: 20349, Cost: 210, GCD: 1500 * time.Millisecond, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 20346}}, Direct: shared.SpellRankFlat{Value: 20346, Coef: 0}},
-		{Rank: 5, SpellID: 27160, Cost: 280, GCD: 1500 * time.Millisecond, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 27162}}, Direct: shared.SpellRankFlat{Value: 27162, Coef: 0}},
+		{Rank: 1, SpellID: 20165, Cost: 110, GCD: 1500 * time.Millisecond, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 20185}}, Direct: shared.SpellRankFlat{Value: 20185, Coef: 0}},
+		{Rank: 2, SpellID: 20347, Cost: 140, GCD: 1500 * time.Millisecond, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 20344}}, Direct: shared.SpellRankFlat{Value: 20344, Coef: 0}},
+		{Rank: 3, SpellID: 20348, Cost: 180, GCD: 1500 * time.Millisecond, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 20345}}, Direct: shared.SpellRankFlat{Value: 20345, Coef: 0}},
+		{Rank: 4, SpellID: 20349, Cost: 210, GCD: 1500 * time.Millisecond, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 20346}}, Direct: shared.SpellRankFlat{Value: 20346, Coef: 0}},
+		{Rank: 5, SpellID: 27160, Cost: 280, GCD: 1500 * time.Millisecond, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 27162}}, Direct: shared.SpellRankFlat{Value: 27162, Coef: 0}},
 	},
 	SealOfVengeance: shared.SpellRankTable{
-		{Rank: 1, SpellID: 31801, Cost: 250, GCD: 1500 * time.Millisecond, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 31804}}, Direct: shared.SpellRankFlat{Value: 31804, Coef: 0}},
+		{Rank: 1, SpellID: 31801, Cost: 250, GCD: 1500 * time.Millisecond, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 31804}}, Direct: shared.SpellRankFlat{Value: 31804, Coef: 0}},
 	},
 	SealOfWisdom: shared.SpellRankTable{
-		{Rank: 1, SpellID: 20166, Cost: 135, GCD: 1500 * time.Millisecond, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 20186}}, Direct: shared.SpellRankFlat{Value: 20186, Coef: 0}},
-		{Rank: 2, SpellID: 20356, Cost: 170, GCD: 1500 * time.Millisecond, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 20354}}, Direct: shared.SpellRankFlat{Value: 20354, Coef: 0}},
-		{Rank: 3, SpellID: 20357, Cost: 200, GCD: 1500 * time.Millisecond, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 20355}}, Direct: shared.SpellRankFlat{Value: 20355, Coef: 0}},
-		{Rank: 4, SpellID: 27166, Cost: 270, GCD: 1500 * time.Millisecond, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 27164}}, Direct: shared.SpellRankFlat{Value: 27164, Coef: 0}},
+		{Rank: 1, SpellID: 20166, Cost: 135, GCD: 1500 * time.Millisecond, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 20186}}, Direct: shared.SpellRankFlat{Value: 20186, Coef: 0}},
+		{Rank: 2, SpellID: 20356, Cost: 170, GCD: 1500 * time.Millisecond, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 20354}}, Direct: shared.SpellRankFlat{Value: 20354, Coef: 0}},
+		{Rank: 3, SpellID: 20357, Cost: 200, GCD: 1500 * time.Millisecond, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 20355}}, Direct: shared.SpellRankFlat{Value: 20355, Coef: 0}},
+		{Rank: 4, SpellID: 27166, Cost: 270, GCD: 1500 * time.Millisecond, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 27164}}, Direct: shared.SpellRankFlat{Value: 27164, Coef: 0}},
 	},
 	SealOfTheCrusader: shared.SpellRankTable{
 		{Rank: 1, SpellID: 21082, Cost: 25, GCD: 1500 * time.Millisecond, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_ATTACK_POWER, Misc: 0, Value: 40}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 21183}, {Index: 2, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_ATTACKSPEED, Misc: 0, Value: 40}}, Direct: shared.SpellRankRange{Min: 40, Max: 41, Coef: 0}},
@@ -589,7 +589,7 @@ var genRanks = generatedRanks{
 		{Rank: 7, SpellID: 27158, Cost: 210, GCD: 1500 * time.Millisecond, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_ATTACK_POWER, Misc: 0, Value: 494}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 27159}, {Index: 2, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_ATTACKSPEED, Misc: 0, Value: 40}}, Direct: shared.SpellRankRange{Min: 494, Max: 495, Coef: 0}},
 	},
 	SealOfTheMartyr: shared.SpellRankTable{
-		{Rank: 1, SpellID: 348700, Cost: 210, GCD: 1500 * time.Millisecond, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 40}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 348703}, {Index: 2, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 10}}, Direct: shared.SpellRankFlat{Value: 40, Coef: 0}},
+		{Rank: 1, SpellID: 348700, Cost: 210, GCD: 1500 * time.Millisecond, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 40}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 348703}, {Index: 2, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 10}}, Direct: shared.SpellRankFlat{Value: 40, Coef: 0}},
 	},
 	ShadowResistanceAura: shared.SpellRankTable{
 		{Rank: 1, SpellID: 19876, GCD: 1500 * time.Millisecond, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AREA_AURA_PARTY, Aura: shared.A_MOD_RESISTANCE_EXCLUSIVE, Misc: 32, Value: 30}}, Direct: shared.SpellRankFlat{Value: 30, Coef: 0}},
@@ -603,16 +603,16 @@ var genRanks = generatedRanks{
 		{Rank: 3, SpellID: 20150, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_SHIELD_BLOCKVALUE_PCT2, Misc: 0, Value: 30}}, Direct: shared.SpellRankFlat{Value: 30, Coef: 0}},
 	},
 	SpellWarding: shared.SpellRankTable{
-		{Rank: 1, SpellID: 31846, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_PERCENT_TAKEN, Misc: 126, Value: -2}}},
-		{Rank: 2, SpellID: 31847, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_PERCENT_TAKEN, Misc: 126, Value: -4}}},
+		{Rank: 1, SpellID: 31846, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_PERCENT_TAKEN, Misc: 126, Value: -2}}},
+		{Rank: 2, SpellID: 31847, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_PERCENT_TAKEN, Misc: 126, Value: -4}}},
 	},
 	SpiritualAttunement: shared.SpellRankTable{
-		{Rank: 1, SpellID: 31785, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 8}}, Direct: shared.SpellRankFlat{Value: 8, Coef: 0}},
-		{Rank: 2, SpellID: 33776, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 10}}, Direct: shared.SpellRankFlat{Value: 10, Coef: 0}},
+		{Rank: 1, SpellID: 31785, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 8}}, Direct: shared.SpellRankFlat{Value: 8, Coef: 0}},
+		{Rank: 2, SpellID: 33776, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_DUMMY, Misc: 0, Value: 10}}, Direct: shared.SpellRankFlat{Value: 10, Coef: 0}},
 	},
 	Stoicism: shared.SpellRankTable{
-		{Rank: 1, SpellID: 31844, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_MECHANIC_RESISTANCE, Misc: 12, Value: 5}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_FLAT_MODIFIER, Misc: 28, Value: 15}}, Direct: shared.SpellRankFlat{Value: 5, Coef: 0}},
-		{Rank: 2, SpellID: 31845, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_MECHANIC_RESISTANCE, Misc: 12, Value: 10}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_FLAT_MODIFIER, Misc: 28, Value: 30}}, Direct: shared.SpellRankFlat{Value: 10, Coef: 0}},
+		{Rank: 1, SpellID: 31844, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_MECHANIC_RESISTANCE, Misc: 12, Value: 5}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_FLAT_MODIFIER, Misc: 28, Value: 15}}, Direct: shared.SpellRankFlat{Value: 5, Coef: 0}},
+		{Rank: 2, SpellID: 31845, ProcChance: 101, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_MECHANIC_RESISTANCE, Misc: 12, Value: 10}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_ADD_FLAT_MODIFIER, Misc: 28, Value: 30}}, Direct: shared.SpellRankFlat{Value: 10, Coef: 0}},
 	},
 	Toughness: shared.SpellRankTable{
 		{Rank: 1, SpellID: 20143, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_BASE_RESISTANCE_PCT, Misc: 1, Value: 2}}, Direct: shared.SpellRankFlat{Value: 2, Coef: 0}},
@@ -622,11 +622,11 @@ var genRanks = generatedRanks{
 		{Rank: 5, SpellID: 20147, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_BASE_RESISTANCE_PCT, Misc: 1, Value: 10}}, Direct: shared.SpellRankFlat{Value: 10, Coef: 0}},
 	},
 	TurnEvil: shared.SpellRankTable{
-		{Rank: 1, SpellID: 10326, Cost: 75, CastTime: 1500 * time.Millisecond, GCD: 1500 * time.Millisecond, Cooldown: 30000 * time.Millisecond, MaxRange: 20, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_FEAR, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_INCREASE_SPEED, Misc: 0, Value: 25}}, Direct: shared.SpellRankFlat{Value: 25, Coef: 0}},
+		{Rank: 1, SpellID: 10326, Cost: 75, CastTime: 1500 * time.Millisecond, GCD: 1500 * time.Millisecond, Cooldown: 30000 * time.Millisecond, MaxRange: 20, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_FEAR, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_INCREASE_SPEED, Misc: 0, Value: 25}}, Direct: shared.SpellRankFlat{Value: 25, Coef: 0}},
 	},
 	TurnUndead: shared.SpellRankTable{
-		{Rank: 1, SpellID: 2878, Cost: 35, CastTime: 1500 * time.Millisecond, GCD: 1500 * time.Millisecond, Cooldown: 30000 * time.Millisecond, MaxRange: 20, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_FEAR, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_INCREASE_SPEED, Misc: 0, Value: 25}}, Direct: shared.SpellRankFlat{Value: 25, Coef: 0}},
-		{Rank: 2, SpellID: 5627, Cost: 50, CastTime: 1500 * time.Millisecond, GCD: 1500 * time.Millisecond, Cooldown: 30000 * time.Millisecond, MaxRange: 20, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_FEAR, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_INCREASE_SPEED, Misc: 0, Value: 25}}, Direct: shared.SpellRankFlat{Value: 25, Coef: 0}},
+		{Rank: 1, SpellID: 2878, Cost: 35, CastTime: 1500 * time.Millisecond, GCD: 1500 * time.Millisecond, Cooldown: 30000 * time.Millisecond, MaxRange: 20, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_FEAR, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_INCREASE_SPEED, Misc: 0, Value: 25}}, Direct: shared.SpellRankFlat{Value: 25, Coef: 0}},
+		{Rank: 2, SpellID: 5627, Cost: 50, CastTime: 1500 * time.Millisecond, GCD: 1500 * time.Millisecond, Cooldown: 30000 * time.Millisecond, MaxRange: 20, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_FEAR, Misc: 0, Value: 0}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_INCREASE_SPEED, Misc: 0, Value: 25}}, Direct: shared.SpellRankFlat{Value: 25, Coef: 0}},
 	},
 	TwoHandedWeaponSpecialization: shared.SpellRankTable{
 		{Rank: 1, SpellID: 20111, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_DAMAGE_PERCENT_DONE, Misc: 1, Value: 2}}, Direct: shared.SpellRankFlat{Value: 2, Coef: 0}},
@@ -638,10 +638,10 @@ var genRanks = generatedRanks{
 		{Rank: 2, SpellID: 25836, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_MECHANIC_RESISTANCE, Misc: 5, Value: 10}, {Index: 1, Effect: shared.E_APPLY_AURA, Aura: shared.A_MOD_MECHANIC_RESISTANCE, Misc: 2, Value: 10}}, Direct: shared.SpellRankFlat{Value: 10, Coef: 1}},
 	},
 	Vengeance: shared.SpellRankTable{
-		{Rank: 1, SpellID: 20049, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 1}}},
-		{Rank: 2, SpellID: 20056, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 1}}},
-		{Rank: 3, SpellID: 20057, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 1}}},
-		{Rank: 4, SpellID: 20058, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 1}}},
-		{Rank: 5, SpellID: 20059, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 1}}},
+		{Rank: 1, SpellID: 20049, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 1}}},
+		{Rank: 2, SpellID: 20056, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 1}}},
+		{Rank: 3, SpellID: 20057, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 1}}},
+		{Rank: 4, SpellID: 20058, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 1}}},
+		{Rank: 5, SpellID: 20059, ProcChance: 100, Effects: []shared.SpellRankEffect{{Index: 0, Effect: shared.E_APPLY_AURA, Aura: shared.A_PROC_TRIGGER_SPELL, Misc: 0, Value: 1}}},
 	},
 }

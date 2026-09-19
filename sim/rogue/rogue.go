@@ -117,7 +117,7 @@ func (rogue *Rogue) ApplyFinisher(sim *core.Simulation, spell *core.Spell) {
 	}
 
 	// Ruthlessness
-	if rogue.Talents.Ruthlessness > 0 && sim.Proc(0.2*float64(rogue.Talents.Ruthlessness), "Ruthlessness") {
+	if rogue.Talents.Ruthlessness > 0 && sim.Proc(genRanks.Ruthlessness.ProcChanceAt(rogue.Talents.Ruthlessness), "Ruthlessness") {
 		rogue.AddComboPoints(sim, 1, rogue.ruthlessnessMetrics)
 	}
 }

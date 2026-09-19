@@ -406,7 +406,7 @@ func (war *Warrior) registerSwordSpecialization() {
 	}
 
 	var swordSpecializationSpell *core.Spell
-	procChance := 0.01 * float64(war.Talents.SwordSpecialization)
+	procChance := genRanks.SwordSpecialization.ProcChanceAt(war.Talents.SwordSpecialization)
 
 	newSwordSpecializationDPM := func() *core.DynamicProcManager {
 		return war.NewFixedProcChanceManager(

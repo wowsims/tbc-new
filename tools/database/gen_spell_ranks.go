@@ -26,6 +26,7 @@ type generatedRow struct {
 	MinRange     float64
 	MaxRange     float64
 	MissileSpeed float64
+	ProcChance   int32
 	Effects      []generatedEffect
 	Direct       *generatedAmount
 	Heal         *generatedAmount
@@ -337,6 +338,7 @@ func buildRow(db *sql.DB, rank int32, spellID int32, mask int) (generatedRow, er
 		Rank: rank, SpellID: spellID,
 		CastTimeMs: spell.CastTimeMs, GCDMs: spell.GCDMs, CooldownMs: spell.CooldownMs,
 		MinRange: spell.MinRange, MaxRange: spell.MaxRange, MissileSpeed: spell.MissileSpeed,
+		ProcChance: spell.ProcChance,
 	}
 	if spell.ManaCost.Valid {
 		row.Cost = NormalizePowerCost(int32(spell.ManaCost.Int64), spell.PowerType)
@@ -541,6 +543,9 @@ func formatRow(row generatedRow, namer *rankEnumNamer) string {
 	}
 	if row.MissileSpeed > 0 {
 		parts = append(parts, fmt.Sprintf("MissileSpeed: %s", num(row.MissileSpeed)))
+	}
+	if row.ProcChance > 0 {
+		parts = append(parts, fmt.Sprintf("ProcChance: %d", row.ProcChance))
 	}
 	if len(row.Effects) > 0 {
 		var es []string
