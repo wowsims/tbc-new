@@ -43,13 +43,16 @@ func (warlock *Warlock) registerHellfire() *core.Spell {
 			BonusCoefficient:     hellFireCoeff,
 
 			OnTick: func(sim *core.Simulation, _ *core.Unit, dot *core.Dot) {
-				resultSlice := dot.Spell.CalcPeriodicAoeDamage(sim, hellfireTick.Tick, dot.Spell.OutcomeTickMagicHitNoHitCounter)
+				// Rolled once: the warlock burns exactly what it deals.
+				tickDamage := hellfireTick.Damage(sim)
+
+				resultSlice := dot.Spell.CalcPeriodicAoeDamage(sim, tickDamage, dot.Spell.OutcomeTickMagicHitNoHitCounter)
 				if resultSlice[0].Damage > warlock.CurrentHealth() {
 					dot.Deactivate(sim)
 				}
 
 				dot.Spell.DealBatchedPeriodicDamage(sim)
-				warlock.RemoveHealth(sim, hellfireTick.Tick)
+				warlock.RemoveHealth(sim, tickDamage)
 
 			},
 		},

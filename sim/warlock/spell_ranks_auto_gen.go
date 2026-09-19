@@ -377,7 +377,7 @@ var genRanks = generatedRanks{
 		{Rank: 1, SpellID: 1949, Cost: 645, GCD: 1500 * time.Millisecond, Periodic: shared.SpellRankPeriodic{Tick: 87, Coef: 0.0949999988079071, TickLength: 1000 * time.Millisecond, NumberOfTicks: 15}},
 		{Rank: 2, SpellID: 11683, Cost: 975, GCD: 1500 * time.Millisecond, Periodic: shared.SpellRankPeriodic{Tick: 144, Coef: 0.0949999988079071, TickLength: 1000 * time.Millisecond, NumberOfTicks: 15}},
 		{Rank: 3, SpellID: 11684, Cost: 1300, GCD: 1500 * time.Millisecond, Periodic: shared.SpellRankPeriodic{Tick: 215, Coef: 0.0949999988079071, TickLength: 1000 * time.Millisecond, NumberOfTicks: 15}},
-		{Rank: 4, SpellID: 27213, Cost: 1665, GCD: 1500 * time.Millisecond, Periodic: shared.SpellRankPeriodic{Tick: 307, Coef: 0.0949999988079071, TickLength: 1000 * time.Millisecond, NumberOfTicks: 15}},
+		{Rank: 4, SpellID: 27213, Cost: 1665, GCD: 1500 * time.Millisecond, Periodic: shared.SpellRankPeriodic{Tick: 307, TickMax: 308, Coef: 0.0949999988079071, TickLength: 1000 * time.Millisecond, NumberOfTicks: 15}},
 	},
 	HellfireEffect: shared.SpellRankTable{
 		{Rank: 1, SpellID: 5857, Direct: shared.SpellRankFlat{Value: 87, Coef: 0.14300000667572021}},

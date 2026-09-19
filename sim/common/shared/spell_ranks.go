@@ -45,7 +45,12 @@ type SpellRankRange struct {
 
 // DoT
 type SpellRankPeriodic struct {
-	Tick   float64
+	Tick float64
+
+	// The high end where the client rolls the tick, which one spell in 293 does - Hellfire ticks
+	// 307-308. Zero on the rest, meaning Tick is the whole answer.
+	TickMax float64
+
 	Coef   float64
 	APCoef float64
 
@@ -54,13 +59,23 @@ type SpellRankPeriodic struct {
 	NumberOfTicks int32
 }
 
-func (v SpellRankFlat) Range() (float64, float64)     { return v.Value, v.Value }
-func (v SpellRankRange) Range() (float64, float64)    { return v.Min, v.Max }
-func (v SpellRankPeriodic) Range() (float64, float64) { return v.Tick, v.Tick }
+func (v SpellRankFlat) Range() (float64, float64)  { return v.Value, v.Value }
+func (v SpellRankRange) Range() (float64, float64) { return v.Min, v.Max }
+func (v SpellRankPeriodic) Range() (float64, float64) {
+	if v.TickMax > v.Tick {
+		return v.Tick, v.TickMax
+	}
+	return v.Tick, v.Tick
+}
 
-func (v SpellRankFlat) Damage(_ *core.Simulation) float64     { return v.Value }
-func (v SpellRankRange) Damage(sim *core.Simulation) float64  { return sim.Roll(v.Min, v.Max) }
-func (v SpellRankPeriodic) Damage(_ *core.Simulation) float64 { return v.Tick }
+func (v SpellRankFlat) Damage(_ *core.Simulation) float64    { return v.Value }
+func (v SpellRankRange) Damage(sim *core.Simulation) float64 { return sim.Roll(v.Min, v.Max) }
+func (v SpellRankPeriodic) Damage(sim *core.Simulation) float64 {
+	if v.TickMax > v.Tick {
+		return sim.Roll(v.Tick, v.TickMax)
+	}
+	return v.Tick
+}
 
 func (v SpellRankFlat) BonusCoefficient() float64     { return v.Coef }
 func (v SpellRankRange) BonusCoefficient() float64    { return v.Coef }
