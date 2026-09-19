@@ -218,7 +218,7 @@ func (war *Warrior) registerTwoHandedWeaponSpecialization() {
 		ClassMask:  SpellMaskDirectDamageSpells,
 		School:     core.SpellSchoolPhysical,
 		Kind:       core.SpellMod_DamageDone_Pct,
-		FloatValue: 0.02 * float64(war.Talents.TwoHandedWeaponSpecialization),
+		FloatValue: genRanks.TwoHandedWeaponSpecialization.Effect(shared.A_MOD_DAMAGE_PERCENT_DONE, 1).FractionAt(war.Talents.TwoHandedWeaponSpecialization),
 	})
 
 	if war.GetMainHandType() == proto.HandType_HandTypeTwoHand {
