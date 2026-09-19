@@ -76,7 +76,7 @@ func (rogue *Rogue) registerMurder() {
 		return
 	}
 
-	var multiplier float64 = 1.0 + (genRanks.Murder.FractionAt(rogue.Talents.Murder))
+	var multiplier float64 = genRanks.Murder.MultiplierAt(rogue.Talents.Murder)
 	rogue.Env.RegisterPostFinalizeEffect(func() {
 		for _, at := range rogue.AttackTables {
 			if slices.Contains([]proto.MobType{proto.MobType_MobTypeHumanoid, proto.MobType_MobTypeGiant, proto.MobType_MobTypeBeast, proto.MobType_MobTypeDragonkin}, at.Defender.MobType) {

@@ -32,7 +32,7 @@ func (shaman *Shaman) applyAncestralKnowledge() {
 	if shaman.Talents.AncestralKnowledge == 0 {
 		return
 	}
-	shaman.MultiplyStat(stats.Mana, 1+(genRanks.AncestralKnowledge.FractionAt(shaman.Talents.AncestralKnowledge)))
+	shaman.MultiplyStat(stats.Mana, genRanks.AncestralKnowledge.MultiplierAt(shaman.Talents.AncestralKnowledge))
 }
 
 func (shaman *Shaman) applyDualWield() {

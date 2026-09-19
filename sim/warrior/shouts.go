@@ -57,7 +57,7 @@ var battleShoutRank = genRanks.BattleShout.BySpellID(2048)
 var commandingShoutRank = genRanks.CommandingShout.BySpellID(469)
 
 func (warrior *Warrior) registerShouts() {
-	commandingPresenceMultiplier := 1.0 + genRanks.CommandingPresence.FractionAt(warrior.Talents.CommandingPresence)
+	commandingPresenceMultiplier := genRanks.CommandingPresence.MultiplierAt(warrior.Talents.CommandingPresence)
 
 	warrior.registerDemoralizingShout()
 

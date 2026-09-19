@@ -305,7 +305,7 @@ func (warlock *Warlock) applyFelStamina() {
 		return
 	}
 
-	warlock.MultiplyStat(stats.Health, 1.0+genRanks.FelStamina.Effect(shared.A_MOD_INCREASE_HEALTH_PERCENT, 0).FractionAt(warlock.Talents.FelStamina))
+	warlock.MultiplyStat(stats.Health, genRanks.FelStamina.Effect(shared.A_MOD_INCREASE_HEALTH_PERCENT, 0).MultiplierAt(warlock.Talents.FelStamina))
 	for _, pet := range warlock.Pets {
 		pet.MultiplyStat(stats.Health, 1+(0.05)*float64(warlock.Talents.FelStamina))
 	}
@@ -319,7 +319,7 @@ func (warlock *Warlock) applyUnholyPower() {
 
 	for _, pet := range warlock.Pets {
 		if pet != &warlock.Imp.Pet {
-			pet.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexPhysical] *= 1.0 + genRanks.UnholyPower.FractionAt(warlock.Talents.UnholyPower)
+			pet.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexPhysical] *= genRanks.UnholyPower.MultiplierAt(warlock.Talents.UnholyPower)
 		}
 	}
 

@@ -89,7 +89,7 @@ func (priest *Priest) applyMentalStrength() {
 		return
 	}
 	// +2% mana per rank
-	priest.MultiplyStat(stats.Mana, 1.0+genRanks.MentalStrength.FractionAt(priest.Talents.MentalStrength))
+	priest.MultiplyStat(stats.Mana, genRanks.MentalStrength.MultiplierAt(priest.Talents.MentalStrength))
 }
 
 func (priest *Priest) applySpiritualGuidance() {

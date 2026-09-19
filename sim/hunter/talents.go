@@ -68,7 +68,7 @@ func (hunter *Hunter) registerImprovedAspectOfTheHawk() {
 		return
 	}
 
-	bonus := 1.0 + genRanks.ImprovedAspectOfTheHawk.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_ALL_EFFECTS).FractionAt(hunter.Talents.ImprovedAspectOfTheHawk)
+	bonus := genRanks.ImprovedAspectOfTheHawk.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_ALL_EFFECTS).MultiplierAt(hunter.Talents.ImprovedAspectOfTheHawk)
 
 	quickShots := hunter.RegisterAura(core.Aura{
 		Label:    "Quick Shots",
@@ -115,7 +115,7 @@ func (hunter *Hunter) registerFocusedFire() {
 		return
 	}
 
-	hunter.PseudoStats.DamageDealtMultiplier *= 1.0 + genRanks.FocusedFire.Effect(shared.A_NONE, 0).FractionAt(hunter.Talents.FocusedFire)
+	hunter.PseudoStats.DamageDealtMultiplier *= genRanks.FocusedFire.Effect(shared.A_NONE, 0).MultiplierAt(hunter.Talents.FocusedFire)
 	hunter.Pet.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
 		ClassMask:  HunterSpellKillCommandPet,
@@ -128,7 +128,7 @@ func (hunter *Hunter) registerUnleashedFury() {
 		return
 	}
 
-	hunter.Pet.PseudoStats.DamageDealtMultiplier *= 1.0 + genRanks.UnleashedFury.FractionAt(hunter.Talents.UnleashedFury)
+	hunter.Pet.PseudoStats.DamageDealtMultiplier *= genRanks.UnleashedFury.MultiplierAt(hunter.Talents.UnleashedFury)
 }
 
 func (hunter *Hunter) registerFerocity() {
@@ -459,8 +459,8 @@ func (hunter *Hunter) registerSlaying() {
 		return
 	}
 
-	var beastMultiplier float64 = 1.0 + genRanks.MonsterSlaying.Effect(shared.A_MOD_DAMAGE_DONE_VERSUS, 19).FractionAt(hunter.Talents.MonsterSlaying)
-	var humanoidMultiplier float64 = 1.0 + genRanks.HumanoidSlaying.Effect(shared.A_MOD_DAMAGE_DONE_VERSUS, 64).FractionAt(hunter.Talents.HumanoidSlaying)
+	var beastMultiplier float64 = genRanks.MonsterSlaying.Effect(shared.A_MOD_DAMAGE_DONE_VERSUS, 19).MultiplierAt(hunter.Talents.MonsterSlaying)
+	var humanoidMultiplier float64 = genRanks.HumanoidSlaying.Effect(shared.A_MOD_DAMAGE_DONE_VERSUS, 64).MultiplierAt(hunter.Talents.HumanoidSlaying)
 	hunter.Env.RegisterPostFinalizeEffect(func() {
 		for _, at := range hunter.AttackTables {
 			if at.Defender.MobType == proto.MobType_MobTypeHumanoid {

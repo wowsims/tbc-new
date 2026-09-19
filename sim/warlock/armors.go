@@ -17,7 +17,7 @@ func (warlock *Warlock) registerArmors() {
 	demonArmorSRBonus := 18.0
 
 	if warlock.Talents.DemonicAegis > 0 {
-		bonusMultiplier := 1.0 + (genRanks.DemonicAegis.FractionAt(warlock.Talents.DemonicAegis))
+		bonusMultiplier := genRanks.DemonicAegis.MultiplierAt(warlock.Talents.DemonicAegis)
 
 		felArmorBonus *= bonusMultiplier
 		felArmorHealingBonus *= bonusMultiplier

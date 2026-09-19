@@ -550,7 +550,7 @@ func (paladin *Paladin) applyReckoning() {
 
 // Sacred Duty - Increases your total Stamina by 3/6% and reduces the cooldown of your Divine Shield and Divine Protection by 30/60 sec
 func (paladin *Paladin) applySacredDuty() {
-	bonus := 1.0 + genRanks.SacredDuty.Effect(shared.A_MOD_TOTAL_STAT_PERCENTAGE, 2).FractionAt(paladin.Talents.SacredDuty)
+	bonus := genRanks.SacredDuty.Effect(shared.A_MOD_TOTAL_STAT_PERCENTAGE, 2).MultiplierAt(paladin.Talents.SacredDuty)
 	paladin.MultiplyStat(stats.Stamina, bonus)
 	// TODO: Implement cooldown reduction
 }
@@ -578,7 +578,7 @@ func (paladin *Paladin) applyCombatExpertise() {
 	expertiseBonus := float64(paladin.Talents.CombatExpertise)
 	paladin.AddStat(stats.ExpertiseRating, expertiseBonus*core.ExpertisePerQuarterPercentReduction)
 
-	staminaBonus := 1.0 + genRanks.CombatExpertise.Effect(shared.A_MOD_TOTAL_STAT_PERCENTAGE, 2).FractionAt(paladin.Talents.CombatExpertise)
+	staminaBonus := genRanks.CombatExpertise.Effect(shared.A_MOD_TOTAL_STAT_PERCENTAGE, 2).MultiplierAt(paladin.Talents.CombatExpertise)
 	paladin.MultiplyStat(stats.Stamina, staminaBonus)
 }
 
