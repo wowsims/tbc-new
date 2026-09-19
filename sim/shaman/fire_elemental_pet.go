@@ -1,6 +1,7 @@
 package shaman
 
 import (
+	"github.com/wowsims/tbc/sim/common/shared"
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
@@ -132,7 +133,7 @@ func (shaman *Shaman) fireElementalBaseStats() stats.Stats {
 func (shaman *Shaman) fireElementalStatInheritance() core.PetStatInheritance {
 	return func(ownerStats stats.Stats) stats.Stats {
 		power := ownerStats[stats.SpellDamage] + ownerStats[stats.NatureDamage] -
-			ownerStats[stats.AttackPower]*0.1*float64(shaman.Talents.MentalQuickness) // remove Spell Damage that comes from Mental Quickness
+			ownerStats[stats.AttackPower]*genRanks.MentalQuickness.Effect(shared.A_MOD_SPELL_DAMAGE_OF_ATTACK_POWER, 126).FractionAt(shaman.Talents.MentalQuickness) // remove Spell Damage that comes from Mental Quickness
 
 		return stats.Stats{
 			stats.Stamina:     ownerStats[stats.Stamina] * 0.30,

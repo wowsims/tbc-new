@@ -1,6 +1,7 @@
 package priest
 
 import (
+	"github.com/wowsims/tbc/sim/common/shared"
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
@@ -14,13 +15,13 @@ func (priest *Priest) applyForceOfWill() {
 	// +1% damage per rank
 	priest.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
-		FloatValue: 0.01 * float64(priest.Talents.ForceOfWill),
+		FloatValue: genRanks.ForceOfWill.Effect(shared.A_ADD_PCT_MODIFIER, shared.SPELLMOD_DAMAGE).FractionAt(priest.Talents.ForceOfWill),
 		ClassMask:  PriestSpellsAll,
 	})
 	// +1% crit per rank
 	priest.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
-		FloatValue: 1.0 * float64(priest.Talents.ForceOfWill),
+		FloatValue: genRanks.ForceOfWill.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_CRITICAL_CHANCE).ValueAt(priest.Talents.ForceOfWill),
 		ClassMask:  PriestSpellsAll,
 	})
 }
@@ -96,7 +97,7 @@ func (priest *Priest) applySpiritualGuidance() {
 		return
 	}
 	// 5% of Spirit added to spell damage per rank
-	coeff := 0.05 * float64(priest.Talents.SpiritualGuidance)
+	coeff := genRanks.SpiritualGuidance.Effect(shared.A_MOD_SPELL_DAMAGE_OF_STAT_PERCENT, 126).FractionAt(priest.Talents.SpiritualGuidance)
 	priest.AddStatDependency(stats.Spirit, stats.SpellDamage, coeff) // Only scaling damage for now since no healing sim....yet!
 }
 
@@ -119,7 +120,7 @@ func (priest *Priest) applySearingLight() {
 	// +5% damage per rank
 	priest.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
-		FloatValue: 0.05 * float64(priest.Talents.SearingLight),
+		FloatValue: genRanks.SearingLight.Effect(shared.A_ADD_PCT_MODIFIER, shared.SPELLMOD_DAMAGE).FractionAt(priest.Talents.SearingLight),
 		ClassMask:  PriestSpellSmite | PriestSpellHolyFire,
 	})
 }

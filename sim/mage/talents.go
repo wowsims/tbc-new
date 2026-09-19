@@ -1,6 +1,7 @@
 package mage
 
 import (
+	"github.com/wowsims/tbc/sim/common/shared"
 	"math"
 	"time"
 
@@ -212,13 +213,13 @@ func (mage *Mage) registerArcaneInstability() {
 
 	mage.AddStaticMod(core.SpellModConfig{
 		ClassMask:  MageSpellsAll,
-		FloatValue: 1 * float64(mage.Talents.ArcaneInstability),
+		FloatValue: genRanks.ArcaneInstability.Effect(shared.A_MOD_SPELL_CRIT_CHANCE_SCHOOL, 126).ValueAt(mage.Talents.ArcaneInstability),
 		Kind:       core.SpellMod_BonusCrit_Percent,
 	})
 
 	mage.AddStaticMod(core.SpellModConfig{
 		ClassMask:  MageSpellsAll,
-		FloatValue: 0.01 * float64(mage.Talents.ArcaneInstability),
+		FloatValue: genRanks.ArcaneInstability.Effect(shared.A_MOD_DAMAGE_PERCENT_DONE, 126).FractionAt(mage.Talents.ArcaneInstability),
 		Kind:       core.SpellMod_DamageDone_Pct,
 	})
 
@@ -423,7 +424,7 @@ func (mage *Mage) registerPlayingWithFire() {
 
 	mage.AddStaticMod(core.SpellModConfig{
 		ClassMask:  MageSpellsAll,
-		FloatValue: .01 * float64(mage.Talents.PlayingWithFire),
+		FloatValue: genRanks.PlayingWithFire.Effect(shared.A_MOD_DAMAGE_PERCENT_DONE, 126).FractionAt(mage.Talents.PlayingWithFire),
 		Kind:       core.SpellMod_DamageDone_Pct,
 	})
 }
@@ -447,7 +448,7 @@ func (mage *Mage) registerFirePower() {
 
 	mage.AddStaticMod(core.SpellModConfig{
 		School:     core.SpellSchoolFire,
-		FloatValue: .02 * float64(mage.Talents.FirePower),
+		FloatValue: genRanks.FirePower.Effect(shared.A_ADD_PCT_MODIFIER, shared.SPELLMOD_DAMAGE).FractionAt(mage.Talents.FirePower),
 		Kind:       core.SpellMod_DamageDone_Flat,
 	})
 }
@@ -567,7 +568,7 @@ func (mage *Mage) registerPiercingIce() {
 
 	mage.AddStaticMod(core.SpellModConfig{
 		ClassMask:  MageSpellFrost,
-		FloatValue: .02 * float64(mage.Talents.PiercingIce),
+		FloatValue: genRanks.PiercingIce.Effect(shared.A_ADD_PCT_MODIFIER, shared.SPELLMOD_DAMAGE).FractionAt(mage.Talents.PiercingIce),
 		Kind:       core.SpellMod_DamageDone_Flat,
 	})
 }
@@ -653,7 +654,7 @@ func (mage *Mage) registerArcticWinds() {
 
 	mage.AddStaticMod(core.SpellModConfig{
 		ClassMask:  MageSpellFrost,
-		FloatValue: .01 * float64(mage.Talents.ArcticWinds),
+		FloatValue: genRanks.ArcticWinds.Effect(shared.A_MOD_DAMAGE_PERCENT_DONE, 16).FractionAt(mage.Talents.ArcticWinds),
 		Kind:       core.SpellMod_DamageDone_Pct,
 	})
 }

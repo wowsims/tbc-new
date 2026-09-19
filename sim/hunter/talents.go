@@ -1,6 +1,7 @@
 package hunter
 
 import (
+	"github.com/wowsims/tbc/sim/common/shared"
 	"slices"
 	"time"
 
@@ -237,7 +238,7 @@ func (hunter *Hunter) registerSerpentsSwiftness() {
 		return
 	}
 
-	hunter.PseudoStats.RangedSpeedMultiplier *= 1 + 0.04*float64(hunter.Talents.SerpentsSwiftness)
+	hunter.PseudoStats.RangedSpeedMultiplier *= genRanks.SerpentsSwiftness.Effect(shared.A_MOD_RANGED_HASTE, 0).MultiplierAt(hunter.Talents.SerpentsSwiftness)
 	hunter.Pet.PseudoStats.MeleeSpeedMultiplier *= 1 + 0.04*float64(hunter.Talents.SerpentsSwiftness)
 }
 
@@ -376,7 +377,7 @@ func (hunter *Hunter) registerImprovedStings() {
 	hunter.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
 		ClassMask:  HunterSpellSerpentSting,
-		FloatValue: 0.06 * float64(hunter.Talents.ImprovedStings),
+		FloatValue: genRanks.ImprovedStings.Effect(shared.A_ADD_PCT_MODIFIER, shared.SPELLMOD_DOT).FractionAt(hunter.Talents.ImprovedStings),
 	})
 }
 
@@ -400,7 +401,7 @@ func (hunter *Hunter) registerBarrage() {
 	hunter.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
 		ClassMask:  HunterSpellMultiShot | HunterSpellVolley,
-		FloatValue: 0.04 * float64(hunter.Talents.Barrage),
+		FloatValue: genRanks.Barrage.Effect(shared.A_ADD_PCT_MODIFIER, shared.SPELLMOD_DAMAGE).FractionAt(hunter.Talents.Barrage),
 	})
 }
 
@@ -458,8 +459,8 @@ func (hunter *Hunter) registerSlaying() {
 		return
 	}
 
-	var beastMultiplier float64 = 1.0 + 0.01*float64(hunter.Talents.MonsterSlaying)
-	var humanoidMultiplier float64 = 1.0 + 0.01*float64(hunter.Talents.HumanoidSlaying)
+	var beastMultiplier float64 = 1.0 + genRanks.MonsterSlaying.Effect(shared.A_MOD_DAMAGE_DONE_VERSUS, 19).FractionAt(hunter.Talents.MonsterSlaying)
+	var humanoidMultiplier float64 = 1.0 + genRanks.HumanoidSlaying.Effect(shared.A_MOD_DAMAGE_DONE_VERSUS, 64).FractionAt(hunter.Talents.HumanoidSlaying)
 	hunter.Env.RegisterPostFinalizeEffect(func() {
 		for _, at := range hunter.AttackTables {
 			if at.Defender.MobType == proto.MobType_MobTypeHumanoid {
@@ -534,8 +535,8 @@ func (hunter *Hunter) registerSurvivalInstincts() {
 		return
 	}
 
-	hunter.MultiplyStat(stats.AttackPower, 1+0.02*float64(hunter.Talents.SurvivalInstincts))
-	hunter.MultiplyStat(stats.RangedAttackPower, 1+0.02*float64(hunter.Talents.SurvivalInstincts))
+	hunter.MultiplyStat(stats.AttackPower, genRanks.SurvivalInstincts.Effect(shared.A_MOD_ATTACK_POWER_PCT, 0).MultiplierAt(hunter.Talents.SurvivalInstincts))
+	hunter.MultiplyStat(stats.RangedAttackPower, genRanks.SurvivalInstincts.Effect(shared.A_MOD_RANGED_ATTACK_POWER_PCT, 0).MultiplierAt(hunter.Talents.SurvivalInstincts))
 }
 
 func (hunter *Hunter) registerKillerInstinct() {

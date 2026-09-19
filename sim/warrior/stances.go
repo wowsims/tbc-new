@@ -1,6 +1,7 @@
 package warrior
 
 import (
+	"github.com/wowsims/tbc/sim/common/shared"
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
@@ -105,7 +106,7 @@ func (warrior *Warrior) registerDefensiveStanceAura() *core.Aura {
 
 func (warrior *Warrior) registerBerserkerStanceAura() *core.Aura {
 	actionId := core.ActionID{SpellID: 2458}
-	threatMultiplier := 0.8 - 0.02*float64(warrior.Talents.ImprovedBerserkerStance)
+	threatMultiplier := 0.8 + genRanks.ImprovedBerserkerStance.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_EFFECT3).FractionAt(warrior.Talents.ImprovedBerserkerStance)
 
 	aura := warrior.RegisterAura(core.Aura{
 		Label:      "Berserker Stance",

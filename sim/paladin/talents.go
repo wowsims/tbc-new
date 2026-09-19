@@ -376,7 +376,7 @@ func (paladin *Paladin) applyHolyPowerTalent() {
 
 // Holy Guidance - Increases your spell damage and healing by 7/14/21/28/35% of your total Intellect
 func (paladin *Paladin) applyHolyGuidance() {
-	paladin.AddStatDependency(stats.Intellect, stats.SpellDamage, 0.07*float64(paladin.Talents.HolyGuidance))
+	paladin.AddStatDependency(stats.Intellect, stats.SpellDamage, genRanks.HolyGuidance.Effect(shared.A_MOD_SPELL_DAMAGE_OF_STAT_PERCENT, 126).FractionAt(paladin.Talents.HolyGuidance))
 }
 
 // ==================

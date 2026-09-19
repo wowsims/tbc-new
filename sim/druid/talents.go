@@ -1,6 +1,7 @@
 package druid
 
 import (
+	"github.com/wowsims/tbc/sim/common/shared"
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
@@ -157,7 +158,7 @@ func (druid *Druid) applyMoonfury() {
 	druid.AddStaticMod(core.SpellModConfig{
 		ClassMask:  DruidSpellWrath | DruidSpellStarfire | DruidSpellMoonfire,
 		Kind:       core.SpellMod_DamageDone_Flat,
-		FloatValue: 0.02 * float64(druid.Talents.Moonfury),
+		FloatValue: genRanks.Moonfury.Effect(shared.A_ADD_PCT_MODIFIER, shared.SPELLMOD_DAMAGE).FractionAt(druid.Talents.Moonfury),
 	})
 }
 
@@ -316,14 +317,14 @@ func (druid *Druid) applyImprovedMoonfire() {
 	druid.AddStaticMod(core.SpellModConfig{
 		ClassMask:  DruidSpellMoonfire,
 		Kind:       core.SpellMod_DamageDone_Flat,
-		FloatValue: 0.05 * float64(druid.Talents.ImprovedMoonfire),
+		FloatValue: genRanks.ImprovedMoonfire.Effect(shared.A_ADD_PCT_MODIFIER, shared.SPELLMOD_DAMAGE).FractionAt(druid.Talents.ImprovedMoonfire),
 	})
 
 	// 5% per point chance to crit with Moonfire
 	druid.AddStaticMod(core.SpellModConfig{
 		ClassMask:  DruidSpellMoonfire,
 		Kind:       core.SpellMod_BonusCrit_Percent,
-		FloatValue: 5 * float64(druid.Talents.ImprovedMoonfire),
+		FloatValue: genRanks.ImprovedMoonfire.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_CRITICAL_CHANCE).ValueAt(druid.Talents.ImprovedMoonfire),
 	})
 }
 
@@ -363,11 +364,11 @@ func (druid *Druid) applySurvivalOfTheFittest() {
 		return
 	}
 
-	mult := 1 + 0.01*float64(druid.Talents.SurvivalOfTheFittest)
+	mult := genRanks.SurvivalOfTheFittest.Effect(shared.A_MOD_TOTAL_STAT_PERCENTAGE, -1).MultiplierAt(druid.Talents.SurvivalOfTheFittest)
 	for _, s := range []stats.Stat{stats.Stamina, stats.Strength, stats.Agility, stats.Intellect, stats.Spirit} {
 		druid.MultiplyStat(s, mult)
 	}
-	druid.AddReducedCritTakenPercent(0.01 * float64(druid.Talents.SurvivalOfTheFittest))
+	druid.AddReducedCritTakenPercent(-genRanks.SurvivalOfTheFittest.Effect(shared.A_MOD_ATTACKER_MELEE_CRIT_CHANCE, 0).FractionAt(druid.Talents.SurvivalOfTheFittest))
 }
 
 func (druid *Druid) applySharpenedClaws() {
@@ -439,7 +440,7 @@ func (druid *Druid) applySavageFury() {
 	druid.AddStaticMod(core.SpellModConfig{
 		ClassMask:  DruidSpellMangleCat | DruidSpellRake,
 		Kind:       core.SpellMod_DamageDone_Flat,
-		FloatValue: 0.1 * float64(druid.Talents.SavageFury),
+		FloatValue: genRanks.SavageFury.Effect(shared.A_ADD_PCT_MODIFIER, shared.SPELLMOD_DAMAGE).FractionAt(druid.Talents.SavageFury),
 	})
 }
 
@@ -556,7 +557,7 @@ func (druid *Druid) applyFeralInstincts() {
 	}
 
 	// Increases threat caused in Dire Bear Form by 5/10/15% per rank.
-	druid.BearFormAura.AttachMultiplicativePseudoStatBuff(&druid.PseudoStats.ThreatMultiplier, 1+0.05*float64(druid.Talents.FeralInstinct))
+	druid.BearFormAura.AttachMultiplicativePseudoStatBuff(&druid.PseudoStats.ThreatMultiplier, genRanks.FeralInstinct.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_ALL_EFFECTS).MultiplierAt(druid.Talents.FeralInstinct))
 }
 
 func (druid *Druid) applySubtlety() {

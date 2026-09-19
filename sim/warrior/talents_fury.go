@@ -1,6 +1,7 @@
 package warrior
 
 import (
+	"github.com/wowsims/tbc/sim/common/shared"
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
@@ -389,7 +390,7 @@ func (war *Warrior) registerImprovedBerserkerStance() {
 		return
 	}
 
-	apDep := war.NewDynamicMultiplyStat(stats.AttackPower, 1+0.02*float64(war.Talents.ImprovedBerserkerStance))
+	apDep := war.NewDynamicMultiplyStat(stats.AttackPower, genRanks.ImprovedBerserkerStance.Effect(shared.A_MOD_ATTACK_POWER_PCT, 0).MultiplierAt(war.Talents.ImprovedBerserkerStance))
 	aura := war.RegisterAura(core.Aura{
 		Label:      "Improved Berserker Stance",
 		Duration:   core.NeverExpires,

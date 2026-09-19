@@ -1,6 +1,7 @@
 package rogue
 
 import (
+	"github.com/wowsims/tbc/sim/common/shared"
 	"slices"
 	"time"
 
@@ -137,7 +138,7 @@ func (rogue *Rogue) registerVilePoisons() {
 	rogue.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
 		ClassMask:  RogueSpellPoisons,
-		FloatValue: 0.04 * float64(rogue.Talents.VilePoisons),
+		FloatValue: genRanks.VilePoisons.Effect(shared.A_ADD_PCT_MODIFIER, shared.SPELLMOD_DAMAGE).FractionAt(rogue.Talents.VilePoisons),
 	})
 }
 

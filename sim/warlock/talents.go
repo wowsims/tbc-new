@@ -1,6 +1,7 @@
 package warlock
 
 import (
+	"github.com/wowsims/tbc/sim/common/shared"
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
@@ -220,7 +221,7 @@ func (warlock *Warlock) applyShadowMastery() {
 
 	warlock.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
-		FloatValue: 0.02 * float64(warlock.Talents.ShadowMastery),
+		FloatValue: genRanks.ShadowMastery.Effect(shared.A_ADD_PCT_MODIFIER, shared.SPELLMOD_DAMAGE).FractionAt(warlock.Talents.ShadowMastery),
 		ClassMask:  WarlockShadowDamage,
 	})
 }
@@ -232,7 +233,7 @@ func (warlock *Warlock) applyContagion() {
 
 	warlock.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
-		FloatValue: 0.01 * float64(warlock.Talents.Contagion),
+		FloatValue: genRanks.Contagion.Effect(shared.A_ADD_PCT_MODIFIER, shared.SPELLMOD_DOT).FractionAt(warlock.Talents.Contagion),
 		ClassMask:  WarlockContagionSpells,
 	})
 }
@@ -647,13 +648,13 @@ func (warlock *Warlock) applyEmberstorm() {
 
 	warlock.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
-		FloatValue: 0.02 * float64(warlock.Talents.Emberstorm),
+		FloatValue: genRanks.Emberstorm.Effect(shared.A_ADD_PCT_MODIFIER, shared.SPELLMOD_DAMAGE).FractionAt(warlock.Talents.Emberstorm),
 		ClassMask:  WarlockFireDamage,
 	})
 
 	warlock.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_CastTime_Pct,
-		FloatValue: -0.02 * float64(warlock.Talents.Emberstorm),
+		FloatValue: genRanks.Emberstorm.Effect(shared.A_ADD_PCT_MODIFIER, shared.SPELLMOD_CASTING_TIME).FractionAt(warlock.Talents.Emberstorm),
 		ClassMask:  WarlockSpellIncinerate,
 	})
 }

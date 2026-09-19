@@ -1,6 +1,7 @@
 package shaman
 
 import (
+	"github.com/wowsims/tbc/sim/common/shared"
 	"time"
 
 	"github.com/wowsims/tbc/sim/core"
@@ -185,7 +186,7 @@ func (shaman *Shaman) applyMentalQuickness() {
 	core.MakePermanent(shaman.RegisterAura(core.Aura{
 		Label:      "Mental Quickness",
 		BuildPhase: core.CharacterBuildPhaseTalents,
-	})).AttachStatDependency(shaman.NewDynamicStatDependency(stats.AttackPower, stats.SpellDamage, 0.1*float64(shaman.Talents.MentalQuickness)))
+	})).AttachStatDependency(shaman.NewDynamicStatDependency(stats.AttackPower, stats.SpellDamage, genRanks.MentalQuickness.Effect(shared.A_MOD_SPELL_DAMAGE_OF_ATTACK_POWER, 126).FractionAt(shaman.Talents.MentalQuickness)))
 }
 
 func (shaman *Shaman) applyShamanisticFocus() {
