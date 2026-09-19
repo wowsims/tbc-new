@@ -269,16 +269,10 @@ func applyAPCoef(table SpellRankTable, coefOf func(SpellRank) float64, role apRo
 	out := make(SpellRankTable, len(table))
 	for i, row := range table {
 		out[i] = row
-		value := row.Direct
 		if role == apPeriodic {
-			value = row.Periodic
-		}
-
-		updated := withAPCoef(value, coefOf(row), row.SpellID, row.Rank)
-		if role == apPeriodic {
-			out[i].Periodic = updated
+			out[i].Periodic = withAPCoef(row.Periodic, coefOf(row), row.SpellID, row.Rank)
 		} else {
-			out[i].Direct = updated
+			out[i].Direct = withAPCoef(row.Direct, coefOf(row), row.SpellID, row.Rank)
 		}
 	}
 	return out
