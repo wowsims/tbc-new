@@ -89,11 +89,8 @@ func fieldNameOf(spellName string) string {
 	return name
 }
 
-// Every spell family a class can learn that has more than one rank.
-//
-// Driven entirely off the client data - the class's own skill lines, every spell in them whose subtext
-// reads "Rank N", grouped by name - so nothing here is hand-maintained and a family the sim has not
-// implemented yet still gets a table, ready for whoever wants it.
+// Every multi-rank family a class can learn: its own skill lines, every spell whose subtext reads
+// "Rank N", grouped by name. Nothing hand-maintained.
 func discoverLadders(db *sql.DB, class dbc.DbcClass) ([]rankLadder, []string, error) {
 	mask := classMaskOf(class)
 
@@ -183,12 +180,9 @@ func discoverLadders(db *sql.DB, class dbc.DbcClass) ([]rankLadder, []string, er
 	return ladders, skipped, nil
 }
 
-// The skill lines only this class appears in.
-//
-// Most are exclusive - "Fire" carries the mage bit and nothing else - but 11 are shared, and "Holy"
-// holding both the paladin and the priest bit is how paladin Holy Shock first reached the priest file.
-// Inside an exclusive line a ClassMask-0 spell can only be this class's, which is what makes a pure
-// talent ladder like Ignite - every rank ClassMask 0 - attributable at all.
+// The skill lines only this class appears in. 11 are shared: "Holy" carries both the paladin and the
+// priest bit, which is how paladin Holy Shock reached the priest file. Inside an exclusive line a
+// ClassMask-0 spell must be this class's, which is what makes Ignite attributable.
 func exclusiveSkillLines(db *sql.DB, mask int) (map[int32]bool, error) {
 	rows, err := db.Query(`
 		SELECT SkillLine, group_concat(DISTINCT ClassMask)
@@ -233,13 +227,10 @@ func claimedByClass(byRank map[int32][]rankCandidate, mask int, exclusive map[in
 	return false
 }
 
-// Picks one spell per rank number.
-//
-// Two candidates can share a name and a rank. Lightning Bolt's Elemental Overload twins (45284-45293)
-// share the name, the skill line and the spell class set, and even have SkillLineAbility rows; they are
-// separated only by carrying ClassMask 0 where the real ladder carries the class bit. So the class bit
-// wins wherever it exists, and a ClassMask-0 candidate is accepted only when no real one was found -
-// which is what makes talent ranks like Holy Shield 1-3 resolvable.
+// Picks one spell per rank. Lightning Bolt's Elemental Overload twins (45284-45293) share the name,
+// skill line and class set, differing only by ClassMask 0. So the class bit wins where it exists, and
+// a ClassMask-0 candidate is taken only when no real one was found - that is how Holy Shield 1-3
+// resolve.
 func resolveLadder(db *sql.DB, byRank map[int32][]rankCandidate, mask int) (map[int32]int32, error) {
 	ladder := map[int32]int32{}
 

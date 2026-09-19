@@ -7,13 +7,9 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
-// What a rank is worth, discriminated by shape rather than by a struct that carries every field and
-// leaves the caller to guess which are meaningful. A talent's flat number has no Min and Max to
-// misread, and only a periodic value has a tick schedule.
-//
-// The interface carries only what every shape can answer. Period and Ticks are reached by asserting
-// to SpellRankPeriodic, rather than through a method the other two would have to answer with zeroes -
-// which would put the guesswork back, one level up.
+// A rank's value, by shape. Only a periodic value has a tick schedule, so Period and Ticks are
+// reached by asserting to SpellRankPeriodic rather than through a method Flat and Range would
+// answer with zeroes.
 type SpellRankValue interface {
 	// Returns the damage range of the spell.
 	// Min/Max are the same if the spell only has a single value.
@@ -72,11 +68,7 @@ func (v SpellRankFlat) APBonusCoefficient() float64     { return v.APCoef }
 func (v SpellRankRange) APBonusCoefficient() float64    { return v.APCoef }
 func (v SpellRankPeriodic) APBonusCoefficient() float64 { return v.APCoef }
 
-// Convenience for the common reads, so a factory that knows its spell's shape is not forced through
-// a two-value return.
-//
-// A nil value reads as zero rather than panicking: a rank can legitimately carry nothing in a role
-// its ladder otherwise uses, as Lay on Hands rank 1 does by restoring no mana where ranks 2-4 do.
+// Nil reads as zero: Lay on Hands rank 1 restores no mana where ranks 2-4 do.
 func SpellRankCoef(v SpellRankValue) float64 {
 	if v == nil {
 		return 0
@@ -206,17 +198,9 @@ func (t SpellRankTableOf[T]) RegisterAll(factory func(T)) {
 
 type SpellRankTable = SpellRankTableOf[SpellRank]
 
-// Attack power scaling has to be supplied by hand. This build's client data carries a nonzero
-// BonusCoefficientFromAP on exactly one effect out of 38357 - for everything else the coefficient lives
-// in server script, which is why melee spells in this sim still hardcode theirs (sim/druid/rip.go:52
-// reads 990 + 0.18*ap).
-//
-// The single-value forms give every rank the same coefficient. The plural forms take one per rank, the
-// way the spell power coefficient already varies per rank because each row carries its own.
-//
-// All of them return a copy, so the generated table keeps whatever the database said, and all panic if
-// that table already carries a coefficient: a value appearing upstream should be noticed rather than
-// silently shadowed by the hand-written one.
+// Attack power is hand-supplied: one effect in 38357 carries a nonzero BonusCoefficientFromAP, so
+// melee spells hardcode theirs (sim/druid/rip.go:52 reads 990 + 0.18*ap). All forms return a copy and
+// panic if the table already carries one.
 func WithSpellRankAPCoef(table SpellRankTable, coef float64) SpellRankTable {
 	return applyAPCoef(table, func(SpellRank) float64 { return coef }, apDirect)
 }

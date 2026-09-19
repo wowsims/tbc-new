@@ -9,10 +9,7 @@ import (
 
 const RankLevel = 70
 
-// The client stores rage in tenths - Heroic Strike costs 150, not 15 - because the server tracks a
-// 0-1000 bar where the UI shows 0-100. Mana, energy and focus are stated as the player sees them, so
-// rage is the one power type a cost has to be divided through. Confirmed on every warrior and bear
-// ability in this build: each one is exactly ten times the sim's hand-written cost.
+// Rage is stored in tenths: Heroic Strike costs 150, not 15. Mana, energy and focus are not.
 const powerTypeRage = 1
 
 func NormalizePowerCost(cost int32, powerType int32) int32 {
@@ -91,15 +88,11 @@ func castTimesAvailable(db *sql.DB) bool {
 	return n > 0
 }
 
-// The calibrated derivation rule, shared by the generator and the calibration gate so the two cannot
-// drift apart. Scored 86/87 against the hand-written tables; the one residual is a hand-row bug.
+// The calibrated rule, shared with the calibration gate. Scored 86/87 against the hand tables.
 //
-// float32 throughout is load-bearing, not incidental: EffectRealPointsPerLevel is a float32 widened into
-// the DB (3.79999995231628), and doing the multiply in float64 breaks 6 rows that float32 gets right.
-//
-// This reproduces the tooltip values, which is not the same claim as reproducing the server: the TBC
-// server roll is plausibly trunc(base)+1 .. trunc(base)+dieSides, one lower on max for a fractional
-// base. Kept as one named function so that can be changed deliberately rather than by accident.
+// float32 is load-bearing: EffectRealPointsPerLevel is a float32 widened into the DB
+// (3.79999995231628), and multiplying in float64 breaks 6 rows. Reproduces the tooltip, which is not
+// the same as reproducing the server roll.
 func DeriveRankAmount(e RankEffect, spellLevel, maxLevel int32) (min float64, max float64) {
 	cap := maxLevel
 	if cap <= 0 {
@@ -145,10 +138,8 @@ func LoadRankSpell(db *sql.DB, spellID int32) (RankSpell, error) {
 		FROM SpellMisc m LEFT JOIN SpellDuration d ON d.ID = m.DurationIndex
 		WHERE m.SpellID = ?`, spellID).Scan(&s.DurationMs)
 
-	// The GCD, the cooldown and the range are all reachable from tables already extracted. Cooldown
-	// takes whichever of the two recovery times is longer: RecoveryTime is the spell's own, while
-	// CategoryRecoveryTime is the shared category one that Fire Blast and Cone of Cold actually use,
-	// and Cast.CD in the sim models whichever applies.
+	// Cooldown takes the longer of the two: Fire Blast and Cone of Cold use the shared
+	// CategoryRecoveryTime, everything else its own RecoveryTime.
 	_ = db.QueryRow(`
 		SELECT COALESCE(max(RecoveryTime, CategoryRecoveryTime), 0), COALESCE(StartRecoveryTime, 0)
 		FROM SpellCooldowns WHERE SpellID = ?`, spellID).Scan(&s.CooldownMs, &s.GCDMs)
