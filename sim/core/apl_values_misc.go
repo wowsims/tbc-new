@@ -25,7 +25,7 @@ func (rot *APLRotation) newValueMultipleCdUsages(config *proto.APLValueMultipleC
 		return nil
 	}
 
-	if baseSpell == nil || baseSpell.RelatedSelfBuff == nil {
+	if config.BaseSpellId != nil && (baseSpell == nil || baseSpell.RelatedSelfBuff == nil) {
 		if baseSpell == nil {
 			rot.ValidationMessage(proto.LogLevel_Warning, "%s is not known. Only using offset to delay CD usage.", ProtoToActionID(config.BaseSpellId))
 		} else {

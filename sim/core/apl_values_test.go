@@ -42,3 +42,13 @@ func TestValueConst(t *testing.T) {
 		t.Fatalf("Unexpected coerced duration value %s", coercedDurVal.GetDuration(sim))
 	}
 }
+
+func TestCastSpellWithoutSpellID(t *testing.T) {
+	rot := &APLRotation{
+		unit: &Unit{},
+	}
+
+	if action := rot.newActionCastSpell(&proto.APLActionCastSpell{}); action != nil {
+		t.Fatalf("Expected no action for a cast without a spell, got %v", action)
+	}
+}
