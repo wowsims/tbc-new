@@ -321,17 +321,18 @@ var isFlooredGameStat = func() [SimStatsLen]bool {
 
 // Rounds attributes down to integers, matching how the game stores them.
 // Must be applied after stat dependencies are resolved.
-func (stats *Stats) FloorGameStatsInPlace() {
-	for _, k := range flooredGameStats {
-		stats[k] = math.Floor(stats[k])
-	}
-}
-
 func (stats Stats) FloorGameStats() Stats {
 	for _, k := range flooredGameStats {
 		stats[k] = math.Floor(stats[k])
 	}
 	return stats
+}
+
+// FloorGameStatsInPlace is FloorGameStats without copying the array.
+func (stats *Stats) FloorGameStatsInPlace() {
+	for _, k := range flooredGameStats {
+		stats[k] = math.Floor(stats[k])
+	}
 }
 
 func (stats Stats) Multiply(multiplier float64) Stats {
