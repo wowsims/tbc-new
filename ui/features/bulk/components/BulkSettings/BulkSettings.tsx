@@ -19,6 +19,7 @@ import { frozenItemSlot } from '../../model/picker_groups';
 import { runBulkBatch } from '../../model/run';
 import { canRunBatch } from '../../model/selectors';
 import { setBulkFrozenItem, setBulkFrozenWeaponSlot, setBulkUseLegacyBulkSim } from '../../model/settings';
+import { BulkStatConstraints } from '../BulkStatConstraints';
 import { CombinationsCount } from './CombinationsCount';
 import { FreezeWeaponTypes } from './FreezeWeaponTypes';
 
@@ -109,6 +110,7 @@ export const BulkSettings = () => {
 									}}
 								/>
 							</div>
+							<BulkStatConstraints />
 						</AccordionItem>
 						{host.reforger && (
 							<AccordionItem

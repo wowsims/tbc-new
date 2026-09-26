@@ -34,15 +34,22 @@ type bulkSimReforgeCandidateCacheKey struct {
 // of running their own: candidate de-duplication happens after this pre-pass, so duplicate gear
 // sets do reach the optimizer, and a single solve can take seconds. gear is written before done
 // is closed, so a waiter that has received from done reads it safely.
+// The outcome of one solve: the gear, or nil when it failed; infeasible when no gem choice
+// from the pool meets the batch's stat constraints for that gear.
+type bulkSimReforgeSolve struct {
+	gear       *proto.EquipmentSpec
+	infeasible bool
+}
+
 type bulkSimReforgeInFlightSolve struct {
-	done chan struct{}
-	gear *proto.EquipmentSpec
+	done  chan struct{}
+	solve bulkSimReforgeSolve
 }
 
 type bulkSimReforgeOptimizer struct {
 	templateRequest    *proto.ReforgeOptimizeRequest
 	templateRaid       *proto.Raid
-	optimizedGearByKey map[bulkSimReforgeCandidateCacheKey]*proto.EquipmentSpec
+	optimizedGearByKey map[bulkSimReforgeCandidateCacheKey]bulkSimReforgeSolve
 	inFlightByKey      map[bulkSimReforgeCandidateCacheKey]*bulkSimReforgeInFlightSolve
 	cacheMu            sync.RWMutex
 }
@@ -374,11 +381,13 @@ func newBulkSimReforgeOptimizer(request *proto.BulkSimRequest) *bulkSimReforgeOp
 		templateRequest.Settings = &proto.ReforgeSettings{}
 	}
 	templateRequest.Mode = proto.ReforgeOptimizeMode_ReforgeOptimizeModeBulk
+	// The batch's stat constraints become rows of every candidate's model.
+	templateRequest.StatConstraints = request.GetBulkSettings().GetStatConstraints()
 	templateRaid := googleProto.Clone(request.GetBaseRequest().GetRaid()).(*proto.Raid)
 	return &bulkSimReforgeOptimizer{
 		templateRequest:    templateRequest,
 		templateRaid:       templateRaid,
-		optimizedGearByKey: make(map[bulkSimReforgeCandidateCacheKey]*proto.EquipmentSpec),
+		optimizedGearByKey: make(map[bulkSimReforgeCandidateCacheKey]bulkSimReforgeSolve),
 		inFlightByKey:      make(map[bulkSimReforgeCandidateCacheKey]*bulkSimReforgeInFlightSolve),
 	}
 }
@@ -398,7 +407,14 @@ func warmBulkSimReforgeDatabase(request *proto.BulkSimRequest) {
 func optimizeBulkSimReforgeCandidateTask(optimizer *bulkSimReforgeOptimizer, _ *proto.ReforgeOptimizeRequest, candidate *proto.BulkGearCandidate, signals simsignals.Signals) (duration time.Duration, completed bool, optimized bool) {
 	startedAt := time.Now()
 	gearKey := bulkSimReforgeGearKey(candidate.Gear)
-	optimizedGear := optimizer.optimizeWithKey(candidate.Gear, gearKey, signals)
+	solve := optimizer.optimizeWithKey(candidate.Gear, gearKey, signals)
+	// No gem choice from the pool meets the stat constraints. That says nothing about the gems the
+	// candidate already has, so it keeps them, like a failed solve, and the final-stats check in
+	// the bulk sim decides. It is not logged: with a constraint, that can be most candidates.
+	if solve.infeasible {
+		return time.Since(startedAt), true, false
+	}
+	optimizedGear := solve.gear
 	if optimizedGear == nil {
 		if signals.Abort.IsTriggered() {
 			return time.Since(startedAt), false, false
@@ -436,66 +452,75 @@ func emitBulkSimReforgeProgress(progress chan *proto.ProgressMetrics, completed 
 	}
 }
 
-func (optimizer *bulkSimReforgeOptimizer) optimizeWithKey(gear *proto.EquipmentSpec, gearKey bulkSimReforgeGearHash, signals simsignals.Signals) *proto.EquipmentSpec {
+func cloneSolve(solve bulkSimReforgeSolve) bulkSimReforgeSolve {
+	return bulkSimReforgeSolve{gear: cloneEquipmentSpecOrNil(solve.gear), infeasible: solve.infeasible}
+}
+
+func (optimizer *bulkSimReforgeOptimizer) optimizeWithKey(gear *proto.EquipmentSpec, gearKey bulkSimReforgeGearHash, signals simsignals.Signals) bulkSimReforgeSolve {
 	key := bulkSimReforgeCandidateCacheKey{gearKey: gearKey}
 	optimizer.cacheMu.RLock()
-	cachedGear, cached := optimizer.optimizedGearByKey[key]
+	cachedSolve, cached := optimizer.optimizedGearByKey[key]
 	optimizer.cacheMu.RUnlock()
 	if cached {
 		// Clone on the hit path too: the caller assigns the result to candidate.Gear, so
 		// handing out the cache's own pointer would let any later in-place edit of one
 		// candidate's gear corrupt the entry every other candidate with the same gear reads.
-		return cloneEquipmentSpecOrNil(cachedGear)
+		return cloneSolve(cachedSolve)
 	}
 
 	optimizer.cacheMu.Lock()
 	// Re-check under the write lock: another worker may have finished, or started, in the
 	// window since the read lock was dropped.
-	if cachedGear, cached := optimizer.optimizedGearByKey[key]; cached {
+	if cachedSolve, cached := optimizer.optimizedGearByKey[key]; cached {
 		optimizer.cacheMu.Unlock()
-		return cloneEquipmentSpecOrNil(cachedGear)
+		return cloneSolve(cachedSolve)
 	}
 	if running := optimizer.inFlightByKey[key]; running != nil {
 		optimizer.cacheMu.Unlock()
 		<-running.done
-		return cloneEquipmentSpecOrNil(running.gear)
+		return cloneSolve(running.solve)
 	}
 	inFlight := &bulkSimReforgeInFlightSolve{done: make(chan struct{})}
 	optimizer.inFlightByKey[key] = inFlight
 	optimizer.cacheMu.Unlock()
 
-	optimizedGear := optimizer.runReforgeOptimize(gear, key, signals)
+	solve := optimizer.runReforgeOptimize(gear, key, signals)
 
 	// Publish to the waiters before dropping the map entry. Closing first means a worker that
 	// took the entry just before this point still gets the result, and one arriving just after
 	// finds the cache entry runReforgeOptimize wrote - so no window reopens a duplicate solve.
-	inFlight.gear = optimizedGear
+	inFlight.solve = solve
 	close(inFlight.done)
 	optimizer.cacheMu.Lock()
 	delete(optimizer.inFlightByKey, key)
 	optimizer.cacheMu.Unlock()
 
-	return cloneEquipmentSpecOrNil(optimizedGear)
+	return cloneSolve(solve)
 }
 
-func (optimizer *bulkSimReforgeOptimizer) runReforgeOptimize(gear *proto.EquipmentSpec, key bulkSimReforgeCandidateCacheKey, signals simsignals.Signals) *proto.EquipmentSpec {
+func (optimizer *bulkSimReforgeOptimizer) runReforgeOptimize(gear *proto.EquipmentSpec, key bulkSimReforgeCandidateCacheKey, signals simsignals.Signals) bulkSimReforgeSolve {
 	reforgeRequest := optimizer.optimizeRequest(gear)
 	if reforgeRequest == nil {
-		return nil
+		return bulkSimReforgeSolve{}
 	}
 
 	result := reforgeoptimizer.OptimizeAsync(reforgeRequest, signals)
+	if result.GetInfeasibleStatConstraints() {
+		solve := bulkSimReforgeSolve{infeasible: true}
+		optimizer.storeCachedSolve(key, solve)
+		return solve
+	}
 	if result.GetError() != nil {
 		if result.GetError().GetType() == proto.ErrorOutcomeType_ErrorOutcomeAborted {
-			return nil
+			return bulkSimReforgeSolve{}
 		}
 		log.Printf("[Bulk Sim] Reforge optimization failed: %s", result.GetError().GetMessage())
-		optimizer.storeCachedGear(key, nil)
-		return nil
+		optimizer.storeCachedSolve(key, bulkSimReforgeSolve{})
+		return bulkSimReforgeSolve{}
 	}
-	optimizedGear := result.GetOptimizedGear()
-	optimizer.storeCachedGear(key, optimizedGear)
-	return optimizedGear
+	solve := bulkSimReforgeSolve{gear: result.GetOptimizedGear()}
+	optimizer.storeCachedSolve(key, solve)
+	return solve
 }
 
 func (optimizer *bulkSimReforgeOptimizer) optimizeRequest(gear *proto.EquipmentSpec) *proto.ReforgeOptimizeRequest {
@@ -514,10 +539,10 @@ func (optimizer *bulkSimReforgeOptimizer) optimizeRequest(gear *proto.EquipmentS
 	return reforgeRequest
 }
 
-func (optimizer *bulkSimReforgeOptimizer) storeCachedGear(key bulkSimReforgeCandidateCacheKey, gear *proto.EquipmentSpec) {
+func (optimizer *bulkSimReforgeOptimizer) storeCachedSolve(key bulkSimReforgeCandidateCacheKey, solve bulkSimReforgeSolve) {
 	optimizer.cacheMu.Lock()
 	defer optimizer.cacheMu.Unlock()
-	optimizer.optimizedGearByKey[key] = cloneEquipmentSpecOrNil(gear)
+	optimizer.optimizedGearByKey[key] = cloneSolve(solve)
 }
 
 func cloneEquipmentSpecOrNil(gear *proto.EquipmentSpec) *proto.EquipmentSpec {

@@ -58,6 +58,15 @@ func OptimizeAsync(request *proto.ReforgeOptimizeRequest, signals simsignals.Sig
 			}
 			return optimizeAborted()
 		}
+		if errors.Is(err, errStatConstraintsInfeasible) {
+			if debug {
+				log.Printf("[reforgeOptimize:%d] stat constraints infeasible after %s", requestID, time.Since(solveStartedAt))
+			}
+			return &proto.ReforgeOptimizeResult{
+				InfeasibleStatConstraints: true,
+				Error:                     &proto.ErrorOutcome{Message: err.Error()},
+			}
+		}
 		gear := request.GetRaid().GetParties()[0].GetPlayers()[0].GetEquipment()
 		gearJSON, _ := protojson.Marshal(gear)
 		log.Printf("[reforgeOptimize:%d] HiGHS failed after %s: %s gear=%s", requestID, time.Since(solveStartedAt), err.Error(), gearJSON)
@@ -124,6 +133,10 @@ type reforgeOptimizer struct {
 	baseStats         core.UnitStats
 	// capBaseStats adds the raid's debuffs on top of baseStats; caps are evaluated against it.
 	capBaseStats core.UnitStats
+
+	// The keys of the rows the stat constraints added to the model. Used to tell whether an
+	// infeasible model is the constraints' doing.
+	statConstraintRowKeys map[string]bool
 }
 
 // newReforgeOptimizer builds the optimizer context from the request: strips gems for the
@@ -177,7 +190,7 @@ func newReforgeOptimizer(request *proto.ReforgeOptimizeRequest, signals simsigna
 		baseStrippedGear:  baseStrippedGear,
 		originalEquipment: &originalEquipment,
 		baseStats:         baseStats,
-		capBaseStats:      addUnitStats(baseStats, buildDebuffUnitStats(request.Raid)),
+		capBaseStats:      addUnitStats(baseStats, buildDebuffUnitStats(request.Raid, baseStats)),
 	}, nil
 }
 
@@ -199,6 +212,15 @@ func (o *reforgeOptimizer) optimizeReforges() (*proto.EquipmentSpec, float64, er
 	variables := o.buildYalpsVariables(equipment, weights, reforgeCaps, reforgeSoftCaps)
 	constraints := o.buildYalpsConstraints(equipment)
 	addStructuralConstraints(variables, constraints)
+	statConstraintRows, err := o.statConstraintRows(variables)
+	if err != nil {
+		return nil, 0, err
+	}
+	o.statConstraintRowKeys = make(map[string]bool, len(statConstraintRows))
+	for key, row := range statConstraintRows {
+		constraints.set(key, row)
+		o.statConstraintRowKeys[key] = true
+	}
 
 	timeoutSeconds := optimizerTimeout.Seconds()
 	if o.request.GetMode() == proto.ReforgeOptimizeMode_ReforgeOptimizeModeBulk {

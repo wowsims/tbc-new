@@ -1,4 +1,4 @@
-import { BulkSettings, DistributionMetrics, ProgressMetrics } from '@generated/proto/api';
+import { BulkSettings, BulkSimStage, DistributionMetrics, ProgressMetrics } from '@generated/proto/api';
 import i18n from '@i18n/config';
 import { BulkSimReforgeCacheProgress } from '@sim/bulk/reforge_cache';
 import { BulkSimProgressConfig, TopGearResult } from '@sim/bulk/types';
@@ -13,6 +13,7 @@ export interface CoreBulkSimContext {
 	runWithBulkAbort: <T>(promise: Promise<T>, signal: AbortSignal) => Promise<T>;
 	setSimProgress: (progress: ProgressMetrics, config: BulkSimProgressConfig) => void;
 	setCacheRestoreProgress?: (progress: BulkSimReforgeCacheProgress) => void;
+	setConstraintsProgress?: (checked: number, total: number) => void;
 	debugOptimisationRound: (message: string, data?: unknown) => void;
 }
 
@@ -22,7 +23,13 @@ export async function runCoreBulkSim(
 	signal: AbortSignal,
 	reforgeConfig?: ReforgeOptimizeConfig,
 	bulkSettings?: BulkSettings,
-): Promise<{ referenceDpsMetrics: DistributionMetrics; topGearResults: TopGearResult[]; metrics: Record<string, string | number> }> {
+): Promise<{
+	referenceDpsMetrics: DistributionMetrics;
+	topGearResults: TopGearResult[];
+	// Candidates dropped for failing a stat constraint, before any of them were simmed.
+	skippedByConstraints: number;
+	metrics: Record<string, string | number>;
+}> {
 	context.throwIfBulkAborted(signal);
 	context.debugOptimisationRound('core bulk sim started', {
 		gearSets: gearSets.length,
@@ -31,6 +38,10 @@ export async function runCoreBulkSim(
 	let currentProgressStage: ProgressMetrics['bulkStage'] | undefined;
 	let currentProgressStageStartedAt = new Date().getTime();
 	const updateProgress = (progress: ProgressMetrics) => {
+		if (progress.bulkStage === BulkSimStage.BulkSimStageConstraints) {
+			context.setConstraintsProgress?.(progress.completedSims, progress.totalSims);
+			return;
+		}
 		if (progress.totalIterations <= 0) return;
 		if (progress.bulkStage !== currentProgressStage) {
 			currentProgressStage = progress.bulkStage;
@@ -82,6 +93,7 @@ export async function runCoreBulkSim(
 	return {
 		referenceDpsMetrics: result.baseline.dpsMetrics,
 		topGearResults,
+		skippedByConstraints: result.skippedByConstraints,
 		metrics: getCoreBulkSimTrackingMetrics(result),
 	};
 }

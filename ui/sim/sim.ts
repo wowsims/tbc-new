@@ -7,6 +7,7 @@ import {
 	BulkSettings,
 	BulkSimRequest,
 	BulkSimResult,
+	BulkStatConstraint,
 	ComputeStatsRequest,
 	ErrorOutcome,
 	ErrorOutcomeType,
@@ -423,6 +424,11 @@ export class Sim {
 
 			const baselineGear = prepareGear(this.raid.getActivePlayers()[0].getGear());
 			const bulkReforgeRequest = reforgeConfig ? this.makeBulkSimReforgeRequest(reforgeConfig) : undefined;
+			if (bulkReforgeRequest && bulkSettings) {
+				// The stat constraints are rows of the gem optimizer's model, so they belong to
+				// its request and to the cache key derived from it.
+				bulkReforgeRequest.statConstraints = bulkSettings.statConstraints.map(constraint => BulkStatConstraint.clone(constraint));
+			}
 			if (!this.getFixedRngSeed()) {
 				// Derive the seed from the run's content instead of Math.random(): the same
 				// setup then reproduces bit-identical results (the whole pipeline is

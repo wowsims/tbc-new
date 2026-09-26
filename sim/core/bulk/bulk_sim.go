@@ -89,9 +89,17 @@ func runBulkSim(request *proto.BulkSimRequest, progress chan *proto.ProgressMetr
 		topResults = BulkSimDefaultTopResults
 	}
 
+	// Stat constraints run here, after the optimizer pre-pass has gemmed the
+	// candidates, so they see the same final stats a surviving gear set shows.
+	candidates, skippedByConstraints, constraintErr := filterBulkSimCandidatesByConstraints(request, candidates, progress, signals)
+	if constraintErr != nil {
+		return &proto.BulkSimResult{Error: constraintErr, OptimizedCandidates: request.GetOptimizedCandidates()}
+	}
+
 	result := &proto.BulkSimResult{
-		Timings:             &proto.BulkSimTimings{},
-		OptimizedCandidates: request.GetOptimizedCandidates(),
+		Timings:              &proto.BulkSimTimings{},
+		OptimizedCandidates:  request.GetOptimizedCandidates(),
+		SkippedByConstraints: int32(skippedByConstraints),
 	}
 	baselineGear := GetBulkSimBaselineGear(request)
 

@@ -14,7 +14,7 @@ const (
 	QuiverHasteCategory        = "QuiverHaste"
 )
 
-var TalentTreeSizes = [3]int{21, 20, 24}
+var TalentTreeSizes = core.HunterTalentTreeSizes
 
 type Hunter struct {
 	core.Character

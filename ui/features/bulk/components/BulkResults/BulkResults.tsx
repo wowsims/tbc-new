@@ -1,4 +1,5 @@
 import i18n from '@i18n/config';
+import { Icon } from '@ui-kit/Icon';
 
 import { useBulkState } from '../../hooks/useBulkState';
 import { BulkResultRow } from './BulkResultRow';
@@ -15,6 +16,12 @@ export const BulkResults = () => {
 	const iterations = results.iterations;
 	return (
 		<>
+			{results.skippedByConstraints > 0 && (
+				<div className="mb-6 text-sm text-muted" data-testid="bulk-results-constraints-note">
+					<Icon name="filter" className="mr-1" />
+					{i18n.t('bulk_tab.results.skipped_by_constraints', { skipped: results.skippedByConstraints, total: results.combinations })}
+				</div>
+			)}
 			{results.chains.map((chain, chainIdx) =>
 				chain.length > 1 ? (
 					<div

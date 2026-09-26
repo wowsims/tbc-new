@@ -5,7 +5,7 @@ import { queue } from 'async';
 import { SimSignals } from '../../sim_signal_manager';
 import { formatDurationSeconds } from '../../utils/format';
 import { WorkerPool, WorkerProgressCallback } from '../../workers/worker_pool';
-import { optimizeReforgeGear, reforgeGearKey } from '../reforge_optimizer';
+import { optimizeReforgeGear, reforgeGearKey, ReforgeGearSolve } from '../reforge_optimizer';
 import { makeBulkSimStageProgressEmitter } from './progress';
 import { BulkSimReforgeCandidateTask } from './types';
 
@@ -16,10 +16,14 @@ export const optimizeReforgeCandidates = async (
 	signals: SimSignals,
 	onReforgeCandidateOptimized?: (candidate: BulkGearCandidate, optimizedGear: EquipmentSpec) => void | Promise<void>,
 ): Promise<{ request: BulkSimRequest; aborted: boolean }> => {
-	const reforgeRequest = request.reforgeRequest;
-	if (!reforgeRequest || !request.baseRequest?.raid) {
+	if (!request.reforgeRequest || !request.baseRequest?.raid) {
 		return { request, aborted: false };
 	}
+	// The batch's stat constraints become rows of every candidate's model.
+	const reforgeRequest = ReforgeOptimizeRequest.create({
+		...request.reforgeRequest,
+		statConstraints: request.bulkSettings?.statConstraints ?? [],
+	});
 
 	const candidates = request.candidates.filter(candidate => candidate.gear);
 	const optimizedCandidates: BulkGearCandidate[] = request.optimizedCandidates;
@@ -46,16 +50,23 @@ export const optimizeReforgeCandidates = async (
 		if (!candidate.gear) return;
 
 		// Retry without gems: a gem-inclusive model can be infeasible where the
-		// reforge-only one is not.
+		// reforge-only one is not. Not when the stat constraints are what made it
+		// infeasible: no gem choice meets them, so the candidate is ruled out.
 		const gearKey = reforgeGearKey(candidate.gear);
-		let optimizedGear = await gearCache.optimize(candidate.gear, gearKey, includeGems);
-		if (!optimizedGear && !signals.abort.isTriggered() && includeGems) {
-			optimizedGear = await gearCache.optimize(candidate.gear, gearKey, false);
+		let solve = await gearCache.optimize(candidate.gear, gearKey, includeGems);
+		if (!solve.gear && !solve.infeasibleStatConstraints && !signals.abort.isTriggered() && includeGems) {
+			solve = await gearCache.optimize(candidate.gear, gearKey, false);
 		}
+		let optimizedGear = solve.gear;
 		const optimizedSuccessfully = !!optimizedGear;
 		if (!optimizedGear) {
 			if (signals.abort.isTriggered()) return;
-			console.warn(`[Bulk Sim] Reforge optimization failed for candidate ${candidate.index}; using original gear`);
+			// No gem choice from the pool meets the stat constraints: that says nothing about the
+			// gems the candidate already has, so it keeps them, like a failed solve, and the
+			// final-stats check decides. Not logged: with a constraint, that can be most candidates.
+			if (!solve.infeasibleStatConstraints) {
+				console.warn(`[Bulk Sim] Reforge optimization failed for candidate ${candidate.index}; using original gear`);
+			}
 			optimizedGear = candidate.gear;
 		}
 
@@ -105,8 +116,13 @@ const dedupeBulkSimReforgeCandidates = (request: BulkSimRequest, candidates: Bul
 };
 
 type BulkSimReforgeGearCache = {
-	optimize: (gear: EquipmentSpec, gearKey: string, includeGems: boolean) => Promise<EquipmentSpec | null>;
+	optimize: (gear: EquipmentSpec, gearKey: string, includeGems: boolean) => Promise<ReforgeGearSolve>;
 };
+
+const cloneSolve = (solve: ReforgeGearSolve): ReforgeGearSolve => ({
+	gear: solve.gear ? EquipmentSpec.clone(solve.gear) : null,
+	infeasibleStatConstraints: solve.infeasibleStatConstraints,
+});
 
 // Memoizes solves by gear key, and lets a second caller await an in-flight solve for the same
 // key instead of starting a duplicate one. Every hand-out is cloned so a caller mutating the
@@ -117,26 +133,26 @@ const makeBulkSimReforgeGearCache = (
 	workerPool: WorkerPool,
 	signals: SimSignals,
 ): BulkSimReforgeGearCache => {
-	const optimizedGearByKey = new Map<string, EquipmentSpec | null>();
-	const inFlightOptimizedGearByKey = new Map<string, Promise<EquipmentSpec | null>>();
+	const optimizedGearByKey = new Map<string, ReforgeGearSolve>();
+	const inFlightOptimizedGearByKey = new Map<string, Promise<ReforgeGearSolve>>();
+	const failed: ReforgeGearSolve = { gear: null, infeasibleStatConstraints: false };
 
 	return {
-		optimize: async (gear: EquipmentSpec, gearKey: string, includeGems: boolean): Promise<EquipmentSpec | null> => {
+		optimize: async (gear: EquipmentSpec, gearKey: string, includeGems: boolean): Promise<ReforgeGearSolve> => {
 			const cacheKey = `${gearKey}:${includeGems ? 1 : 0}`;
-			if (optimizedGearByKey.has(cacheKey)) {
-				const cachedGear = optimizedGearByKey.get(cacheKey);
-				return cachedGear ? EquipmentSpec.clone(cachedGear) : null;
+			const cachedSolve = optimizedGearByKey.get(cacheKey);
+			if (cachedSolve) {
+				return cloneSolve(cachedSolve);
 			}
-			const inFlightGear = inFlightOptimizedGearByKey.get(cacheKey);
-			if (inFlightGear) {
-				const optimizedGear = await inFlightGear;
-				return optimizedGear ? EquipmentSpec.clone(optimizedGear) : null;
+			const inFlightSolve = inFlightOptimizedGearByKey.get(cacheKey);
+			if (inFlightSolve) {
+				return cloneSolve(await inFlightSolve);
 			}
 
 			const baseRaid = request.baseRequest?.raid;
 			if (!baseRaid) {
-				optimizedGearByKey.set(cacheKey, null);
-				return null;
+				optimizedGearByKey.set(cacheKey, failed);
+				return failed;
 			}
 
 			const optimizePromise = optimizeReforgeGear(
@@ -150,9 +166,9 @@ const makeBulkSimReforgeGearCache = (
 			);
 			inFlightOptimizedGearByKey.set(cacheKey, optimizePromise);
 			try {
-				const optimizedGear = await optimizePromise;
-				optimizedGearByKey.set(cacheKey, optimizedGear ? EquipmentSpec.clone(optimizedGear) : null);
-				return optimizedGear;
+				const solve = await optimizePromise;
+				optimizedGearByKey.set(cacheKey, cloneSolve(solve));
+				return solve;
 			} finally {
 				inFlightOptimizedGearByKey.delete(cacheKey);
 			}

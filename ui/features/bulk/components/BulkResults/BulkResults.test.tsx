@@ -17,14 +17,14 @@ const RUN_ITERATIONS = 30000;
 
 const result = (avg: number) => ({ gear: {}, dpsMetrics: { avg, stdev: 1 } }) as unknown as TopGearResult;
 
-const mount = () => {
+const mount = (skippedByConstraints = 0) => {
 	const store = createSimStore();
 	const player = { sim: { store, getIterations: () => 100 }, storeKey: STORE_KEY } as unknown as Player<any>;
 	seedBulkSettings(player);
 	const baseline = result(1000);
 	patchBulkState(player, {
 		started: true,
-		results: { chains: [[result(1100)], [baseline]], originalGearResults: baseline, iterations: RUN_ITERATIONS },
+		results: { chains: [[result(1100)], [baseline]], originalGearResults: baseline, iterations: RUN_ITERATIONS, skippedByConstraints, combinations: 8 },
 	});
 	const host = { player, sim: player.sim } as never;
 	return render(
@@ -41,5 +41,10 @@ describe('BulkResults', () => {
 
 		expect(rows).toHaveLength(2);
 		expect(rows.map(row => row.getAttribute('data-iterations'))).toEqual([String(RUN_ITERATIONS), String(RUN_ITERATIONS)]);
+	});
+
+	it('says how many combinations the stat constraints skipped, and nothing when none were', () => {
+		expect(mount().queryByTestId('bulk-results-constraints-note')).toBeNull();
+		expect(mount(3).getByTestId('bulk-results-constraints-note')).not.toBeNull();
 	});
 });

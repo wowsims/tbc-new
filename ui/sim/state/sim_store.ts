@@ -5,7 +5,7 @@
 //
 // Slices are added here as each facade is converted; a slice absent from this
 // file still lives in its class.
-import type { PlayerStats } from '@generated/proto/api';
+import type { BulkStatConstraint, PlayerStats } from '@generated/proto/api';
 import {
 	ConsumesSpec,
 	Debuffs,
@@ -204,6 +204,8 @@ export interface BulkSlice {
 	items: ReadonlyArray<ItemSpec | null>;
 	pickerGroups: ReadonlyMap<BulkSimItemSlot, readonly BulkPickerEntry[]>;
 	useLegacyBulkSim: boolean;
+	// Only combinations whose final stats satisfy every constraint are simmed.
+	statConstraints: ReadonlyArray<BulkStatConstraint>;
 	frozenItems: ReadonlyMap<BulkSimItemSlot, EquippedItem | null>;
 	frozenWeaponSlot: ItemSlot.ItemSlotMainHand | ItemSlot.ItemSlotOffHand | undefined;
 	weaponTypeFilters: ReadonlyMap<ItemSlot.ItemSlotMainHand | ItemSlot.ItemSlotOffHand, WeaponType[]>;

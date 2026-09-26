@@ -425,6 +425,8 @@ enum BulkSimStage {
 	BulkSimStageHigh = 5;
 	BulkSimStageFinalist = 6;
 	BulkSimStageComplete = 7;
+	// Stat constraint check, between gem optimization and the low stage.
+	BulkSimStageConstraints = 8;
 }
 
 message BulkSimRequest {
@@ -454,6 +456,9 @@ message ReforgeOptimizeRequest {
 	repeated StatCapConfig soft_caps = 7;
 	repeated ReforgeGemOption gem_options = 8;
 	bool debug = 9;
+	// Batch stat constraints (BulkSettings.stat_constraints) the chosen gems must satisfy,
+	// as rows of the model. Empty for Suggest Gems.
+	repeated BulkStatConstraint stat_constraints = 10;
 }
 
 message ReforgeOptimizeResult {
@@ -462,6 +467,8 @@ message ReforgeOptimizeResult {
 	double score = 3;
 	int32 passes_done = 4;
 	ErrorOutcome error = 5;
+	// No gem choice satisfies the request's stat_constraints; error is set as well.
+	bool infeasible_stat_constraints = 6;
 }
 
 message ReforgeSettings {
@@ -750,6 +757,28 @@ message BulkSettings {
 	int32 freeze_weapon_slot = 10;
 	repeated WeaponType freeze_mainhand_weapon_slots = 11;
 	repeated WeaponType freeze_offhand_weapon_slots = 12;
+
+	// Only combinations whose final stats satisfy every constraint are simmed.
+	repeated BulkStatConstraint stat_constraints = 14;
+}
+
+enum BulkStatConstraintOp {
+	BulkStatConstraintOpGreaterThan = 0;
+	BulkStatConstraintOpGreaterThanOrEqual = 1;
+	BulkStatConstraintOpEqual = 2;
+	BulkStatConstraintOpLessThanOrEqual = 3;
+	BulkStatConstraintOpLessThan = 4;
+}
+
+// A batch sim stat constraint, e.g. Fire Resistance > 175 or
+// Reduced Crit Taken >= 5.6. Evaluated against the character's final stats.
+message BulkStatConstraint {
+	oneof unit_stat {
+		Stat stat = 1;
+		PseudoStat pseudo_stat = 4;
+	}
+	BulkStatConstraintOp op = 2;
+	double value = 3;
 }
 
 message BulkGearCandidate {
@@ -764,6 +793,8 @@ message BulkSimResult {
 	repeated BulkSimStageMetrics stage_metrics = 4;
 	BulkSimTimings timings = 5;
 	ErrorOutcome error = 6;
+	// Candidates dropped before simming for failing a BulkSettings.stat_constraints entry.
+	int32 skipped_by_constraints = 7;
 }
 
 message BulkGearResult {

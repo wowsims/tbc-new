@@ -3329,6 +3329,31 @@
 							},
 							"additionalProperties": false,
 							"required": ["mainhand_label", "offhand_label", "tooltip"]
+						},
+						"stat_constraints": {
+							"type": "object",
+							"properties": {
+								"label": {
+									"type": "string"
+								},
+								"tooltip": {
+									"type": "string"
+								},
+								"empty": {
+									"type": "string"
+								},
+								"add": {
+									"type": "string"
+								},
+								"remove": {
+									"type": "string"
+								},
+								"crit_reduction_hint": {
+									"type": "string"
+								}
+							},
+							"additionalProperties": false,
+							"required": ["label", "tooltip", "empty", "add", "remove", "crit_reduction_hint"]
 						}
 					},
 					"additionalProperties": false,
@@ -3341,7 +3366,8 @@
 						"freeze_ring",
 						"freeze_trinket",
 						"freeze_weapon",
-						"freeze_weapon_types"
+						"freeze_weapon_types",
+						"stat_constraints"
 					]
 				},
 				"progress": {
@@ -3357,6 +3383,9 @@
 							"type": "string"
 						},
 						"reforging_iteration_rounds": {
+							"type": "string"
+						},
+						"checking_constraints": {
 							"type": "string"
 						},
 						"baseline_round": {
@@ -3390,6 +3419,7 @@
 					"additionalProperties": false,
 					"required": [
 						"total_combinations",
+						"checking_constraints",
 						"restoring_reforges_from_cache",
 						"building_candidate_gear_sets",
 						"reforging_iteration_rounds",
@@ -3466,10 +3496,13 @@
 						},
 						"tied_group": {
 							"type": "string"
+						},
+						"skipped_by_constraints": {
+							"type": "string"
 						}
 					},
 					"additionalProperties": false,
-					"required": ["run_simulation", "equip_button", "gear_equipped", "current_gear", "margin_of_error", "tied_group"]
+					"required": ["run_simulation", "equip_button", "gear_equipped", "current_gear", "margin_of_error", "tied_group", "skipped_by_constraints"]
 				},
 				"import_modal": {
 					"type": "object",

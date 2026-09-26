@@ -56,6 +56,13 @@ argument-hint: 'Describe the TBC Bulk Sim candidate flow, staging/finalist behav
 - Keep full optimized candidate outputs for cache writing so every input key can be persisted.
 - Spec lookup goes through core.PlayerProtoToSpecSafe; eligible-slot logic through core.EligibleSlotsForItem / core.ItemTypeToSlotsMap (single source, shared with item swap); entry-point validation via newGeneratorFromRequest.
 
+## Stat Constraints
+
+- BulkSettings.stat_constraints (Stat or PseudoStat, op, value) restrict which candidates are simmed; the picker is ui/features/bulk/components/BulkStatConstraints and pure evaluation lives in ui/sim/bulk/stat_constraints.ts.
+- They are rows of the gem optimizer's model: ReforgeOptimizeRequest.stat_constraints (copied from BulkSettings by sim/web/bulk.go and ui/sim/wasm/bulk_sim/reforge.ts; also set by sim.ts so the reforge cache key covers them) become gap-to-base bounds in sim/core/reforge_optimizer/stat_constraints.go. A stat no variable moves is decided on the base stats. An infeasible model (blamed on the constraints only when the model without their rows is feasible) sets ReforgeOptimizeResult.infeasible_stat_constraints; the pre-pass then keeps the candidate's own gear, as for any failed solve, without logging it, and the browser skips its retry without gems.
+- The gate stays the final stats: sim/core/bulk/constraints.go and ui/sim/wasm/bulk_sim/constraints.ts run ComputeStats on every remaining candidate after the pre-pass (progress stage BulkSimStageConstraints) and drop failures, so optimizer-off runs and cache-restored gear are covered. BulkSimResult.skipped_by_constraints counts the candidates it drops; the tab shows it above the results.
+- Constraint rows have their own keys (`StatConstraint_<stat>`, with the stat's coefficients copied under them), so a cap on the same stat still adds its refinement row and zeroes the stat's value past the cap, and a soft cap does not overwrite the constraint.
+
 ## Settings Boundaries
 
 - BulkSettings controls bulk-tab constraints.

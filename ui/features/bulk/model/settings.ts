@@ -1,4 +1,4 @@
-import { BulkSettings } from '@generated/proto/api';
+import { BulkSettings, BulkStatConstraint } from '@generated/proto/api';
 import { ItemSlot, ItemSpec, WeaponType } from '@generated/proto/common';
 import { BULK_SIM_ITEM_SLOT_TO_ITEM_SLOT_PAIRS, BulkSimItemSlot } from '@sim/bulk/utils';
 import type { Player } from '@sim/player/player';
@@ -20,6 +20,7 @@ export const createBulkSettingsProto = (player: Player<any>): BulkSettings => {
 	return BulkSettings.create({
 		items: current.items.flatMap(spec => (spec ? [ItemSpec.clone(spec)] : [])),
 		useLegacyBulkSim: current.useLegacyBulkSim,
+		statConstraints: current.statConstraints.map(constraint => BulkStatConstraint.clone(constraint)),
 		iterationsPerCombo: player.sim.getIterations(),
 		freezeRingSlot: bulkFrozenItemSlot(player, BulkSimItemSlot.ItemSlotFinger),
 		freezeTrinketSlot: bulkFrozenItemSlot(player, BulkSimItemSlot.ItemSlotTrinket),
@@ -30,6 +31,17 @@ export const createBulkSettingsProto = (player: Player<any>): BulkSettings => {
 };
 
 export const setBulkUseLegacyBulkSim = (player: Player<any>, newValue: boolean) => patchBulkState(player, { useLegacyBulkSim: newValue }, ['settings']);
+
+// A change that alters nothing must not emit: every settings emit refreshes the combination
+// count, which disables Simulate while it loads, so a no-op emit on blur would swallow a click.
+export const setBulkStatConstraints = (player: Player<any>, constraints: ReadonlyArray<BulkStatConstraint>) => {
+	const current = bulkState(player).statConstraints;
+	if (current.length === constraints.length && current.every((constraint, idx) => BulkStatConstraint.equals(constraint, constraints[idx]))) {
+		return;
+	}
+
+	patchBulkState(player, { statConstraints: constraints.map(constraint => BulkStatConstraint.clone(constraint)) }, ['settings']);
+};
 
 export const setBulkFrozenItem = (player: Player<any>, bulkSlot: BulkFrozenSlot, item: EquippedItem | null) => {
 	const frozenItems = bulkState(player).frozenItems;

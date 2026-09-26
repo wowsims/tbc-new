@@ -35,6 +35,13 @@ export const candidateGearProgress = ({
 	return { stage, title, current: completed, total, secondsRemaining };
 };
 
+export const constraintsProgress = (checked: number, total: number): BulkProgress => ({
+	stage: 'constraints',
+	title: i18n.t('bulk_tab.progress.checking_constraints'),
+	current: checked,
+	total,
+});
+
 /** Null where there is no update to report: an unusable estimate leaves the last frame up. */
 export const simProgress = (progress: ProgressMetrics, config: BulkSimProgressConfig, simStart: number, now: number): BulkProgress | null => {
 	const stageCurrentRound = config.stageCurrentRound ?? config.currentRound;

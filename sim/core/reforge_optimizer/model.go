@@ -288,10 +288,14 @@ func (o *reforgeOptimizer) buildGemOptions(preCapEPs core.UnitStats, reforgeCaps
 		var included []gemData
 		foundUncappedJCGem := false
 		foundUncappedNormalGem := false
+		constrainedKeys := o.constrainedStatKeys()
 		for _, candidate := range filtered {
 			cappedStatKeys := getCappedStatKeys(candidate.coeffs, reforgeCaps, softCaps)
 
-			if (!candidate.isJC || !foundUncappedJCGem) && (len(cappedStatKeys) == 0 || !foundUncappedNormalGem) {
+			// A gem that moves a stat constraint's stat stays even when a better-scoring gem exists:
+			// meeting the constraint may take exactly the gems the scores would prune.
+			if gemMovesConstrainedStat(candidate, constrainedKeys) ||
+				((!candidate.isJC || !foundUncappedJCGem) && (len(cappedStatKeys) == 0 || !foundUncappedNormalGem)) {
 				included = append(included, candidate)
 			}
 

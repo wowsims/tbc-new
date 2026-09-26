@@ -30,6 +30,9 @@ export interface BulkResults {
 	originalGearResults: TopGearResult;
 	/** Frozen at run end: the tie brackets were built with it, so the per-row margins have to agree. */
 	iterations: number;
+	/** Combinations dropped for failing a stat constraint, out of `combinations` in the run. */
+	skippedByConstraints: number;
+	combinations: number;
 }
 
 export interface BulkSimRoundConfig {

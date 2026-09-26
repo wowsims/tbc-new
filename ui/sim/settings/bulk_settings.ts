@@ -16,6 +16,7 @@ const initialBulkSlice = (): BulkSlice => ({
 	items: [],
 	pickerGroups: new Map(),
 	useLegacyBulkSim: false,
+	statConstraints: [],
 	frozenItems: new Map([
 		[BulkSimItemSlot.ItemSlotFinger, null],
 		[BulkSimItemSlot.ItemSlotTrinket, null],

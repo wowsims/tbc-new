@@ -946,6 +946,14 @@
 				"mainhand_label": "Freeze MH weapon type",
 				"offhand_label": "Freeze OH weapon type",
 				"tooltip": "Leave all unchecked to allow any weapon type for this slot."
+			},
+			"stat_constraints": {
+				"label": "Stat constraints",
+				"tooltip": "Only combinations whose final stats (as shown in the Stats panel) satisfy every row will be simulated.",
+				"empty": "No constraints. All combinations will be simulated.",
+				"add": "Add constraint",
+				"remove": "Remove constraint",
+				"crit_reduction_hint": "Defense, resilience and talents combined; 5.6% or more is crit immune against a level 73 boss"
 			}
 		},
 		"progress": {
@@ -953,6 +961,7 @@
 			"restoring_reforges_from_cache": "Restoring gemmed gear sets from cache",
 			"building_candidate_gear_sets": "Building candidate gear sets",
 			"reforging_iteration_rounds": "Optimizing gems",
+			"checking_constraints": "Checking stat constraints",
 			"baseline_round": "Running baseline round",
 			"refining_rounds": "Running refining rounds",
 			"low_iteration_rounds": "Running low iteration rounds",
@@ -982,7 +991,8 @@
 			"gear_equipped": "Batch gear equipped!",
 			"current_gear": "Current Gear",
 			"margin_of_error": "95% confidence interval of the mean DPS. Rankings closer than this can change between runs.",
-			"tied_group": "Statistically tied — the order within this group can change between runs"
+			"tied_group": "Statistically tied — the order within this group can change between runs",
+			"skipped_by_constraints": "{{skipped}} of {{total}} combinations skipped for failing a stat constraint."
 		},
 		"import_modal": {
 			"title": "Bag Item Import",

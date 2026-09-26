@@ -16,6 +16,7 @@ import { WorkerPool, WorkerProgressCallback } from '../../workers/worker_pool';
 import { BulkSimCandidateTransport, runSingleBulkSimCandidate } from './batch';
 import { ConcurrentBulkSimStageCarryOver, newBulkSimStageCarryOver } from './carry_over';
 import { BULK_SIM_DEFAULT_TOP_RESULTS } from './constants_auto_gen';
+import { filterBulkSimCandidatesByConstraints } from './constraints';
 import { shouldUseLegacyBulkSim } from './estimate';
 import { bulkSimCandidateResultToProto } from './merge';
 import { formatBulkSimStageSummary } from './progress';
@@ -81,6 +82,13 @@ export const runConcurrentBulkSim = async (
 		.map((candidate: BulkGearCandidate) => ({ index: candidate.index, gear: candidate.gear! }));
 	const topResults = request.topResults > 0 ? request.topResults : BULK_SIM_DEFAULT_TOP_RESULTS;
 	const result = BulkSimResult.create({ timings: BulkSimTimings.create() });
+
+	// Stat constraints run here, after the optimizer pre-pass has gemmed the candidates, so
+	// they see the same final stats a surviving gear set shows.
+	const constraintResult = await filterBulkSimCandidatesByConstraints(request, candidates, workerPool, onProgress, signals);
+	if (constraintResult.error) return makeAndSendBulkSimError(constraintResult.error, onProgress, request.optimizedCandidates);
+	candidates = constraintResult.candidates;
+	result.skippedByConstraints = constraintResult.skipped;
 
 	if (candidates.length == 0) {
 		const baseline = await runSingleBulkSimCandidate(
