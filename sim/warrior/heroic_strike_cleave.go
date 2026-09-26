@@ -35,14 +35,12 @@ func (war *Warrior) registerHeroicStrike() {
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			baseDamage := heroicStrikeBaseDamage + war.MHWeaponDamage(sim, spell.MeleeAttackPower(target))
-			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeWeaponSpecialHitAndCrit)
+			result := spell.CalcDamage(sim, target, baseDamage, spell.OutcomeMeleeWeaponSpecialHitAndCrit)
+			war.consumeQueue(sim)
+			spell.DealDamage(sim, result)
 
 			if !result.Landed() {
 				spell.IssueRefund(sim)
-			}
-
-			if war.curQueueAura != nil {
-				war.curQueueAura.Deactivate(sim)
 			}
 		},
 	})
@@ -80,14 +78,20 @@ func (war *Warrior) registerCleave() {
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			baseDamage := flatDamage + war.MHWeaponDamage(sim, spell.MeleeAttackPower(target))
 			spell.CalcCleaveDamage(sim, target, maxTargets, baseDamage, spell.OutcomeMeleeWeaponSpecialHitAndCrit)
+			war.consumeQueue(sim)
 			spell.DealBatchedAoeDamage(sim)
-
-			if war.curQueueAura != nil {
-				war.curQueueAura.Deactivate(sim)
-			}
 		},
 	})
 	war.makeQueueSpellsAndAura(spell)
+}
+
+// The queue lifts the dual-wield miss penalty, so it ends after the hit roll. It ends before the
+// damage is dealt: an extra main-hand swing procced by that damage must not become another queued
+// Heroic Strike or Cleave.
+func (war *Warrior) consumeQueue(sim *core.Simulation) {
+	if war.curQueueAura != nil {
+		war.curQueueAura.Deactivate(sim)
+	}
 }
 
 func (war *Warrior) makeQueueSpellsAndAura(srcSpell *core.Spell) *core.Spell {
