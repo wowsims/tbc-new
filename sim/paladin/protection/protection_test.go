@@ -32,6 +32,14 @@ func setValueVariable(apl *proto.APLRotation, name string, val string) {
 }
 
 func TestProtection(t *testing.T) {
+	core.RunTestSuite(t, t.Name(), core.FullCharacterTestSuiteGenerator([]core.CharacterSuiteConfig{protectionSuite()}))
+}
+
+func BenchmarkProtection(b *testing.B) {
+	core.CharacterBenchmark(b, protectionSuite())
+}
+
+func protectionSuite() core.CharacterSuiteConfig {
 	// Set all boolean options to true to test everything
 	apl := core.GetAplRotation("../../../ui/specs/paladin/protection/apls", "default")
 	setValueVariable(apl.Rotation, "Prioritize Holy Shield", "true")
@@ -39,45 +47,43 @@ func TestProtection(t *testing.T) {
 	setValueVariable(apl.Rotation, "Use Avenger's Shield", "true")
 	setValueVariable(apl.Rotation, "Use Hammer of Wrath", "true")
 
-	core.RunTestSuite(t, t.Name(), core.FullCharacterTestSuiteGenerator([]core.CharacterSuiteConfig{
-		{
-			Class:            proto.Class_ClassPaladin,
-			Race:             proto.Race_RaceBloodElf,
-			OtherRaces:       []proto.Race{proto.Race_RaceHuman},
-			GearSet:          core.GetGearSet("../../../ui/specs/paladin/protection/gear_sets", "p2"),
-			Talents:          DefaultProtectionTalents,
-			Consumables:      DefaultConsumables,
-			SpecOptions:      core.SpecOptionsCombo{Label: "Protection", SpecOptions: DefaultOptions},
-			StartingDistance: 5,
-			Profession1:      proto.Profession_Engineering,
-			Profession2:      proto.Profession_Enchanting,
+	return core.CharacterSuiteConfig{
+		Class:            proto.Class_ClassPaladin,
+		Race:             proto.Race_RaceBloodElf,
+		OtherRaces:       []proto.Race{proto.Race_RaceHuman},
+		GearSet:          core.GetGearSet("../../../ui/specs/paladin/protection/gear_sets", "p2"),
+		Talents:          DefaultProtectionTalents,
+		Consumables:      DefaultConsumables,
+		SpecOptions:      core.SpecOptionsCombo{Label: "Protection", SpecOptions: DefaultOptions},
+		StartingDistance: 5,
+		Profession1:      proto.Profession_Engineering,
+		Profession2:      proto.Profession_Enchanting,
 
-			Rotation: apl,
+		Rotation: apl,
 
-			IndividualBuffs: core.FullTankIndividualBuffs,
+		IndividualBuffs: core.FullTankIndividualBuffs,
 
-			IsTank:          true,
-			InFrontOfTarget: true,
+		IsTank:          true,
+		InFrontOfTarget: true,
 
-			ItemFilter: core.ItemFilter{
-				ArmorType: proto.ArmorType_ArmorTypePlate,
-				WeaponTypes: []proto.WeaponType{
-					proto.WeaponType_WeaponTypeAxe,
-					proto.WeaponType_WeaponTypeSword,
-					proto.WeaponType_WeaponTypeMace,
-					proto.WeaponType_WeaponTypeShield,
-				},
-				HandTypes: []proto.HandType{
-					proto.HandType_HandTypeMainHand,
-					proto.HandType_HandTypeOffHand,
-					proto.HandType_HandTypeOneHand,
-				},
-				RangedWeaponTypes: []proto.RangedWeaponType{
-					proto.RangedWeaponType_RangedWeaponTypeLibram,
-				},
+		ItemFilter: core.ItemFilter{
+			ArmorType: proto.ArmorType_ArmorTypePlate,
+			WeaponTypes: []proto.WeaponType{
+				proto.WeaponType_WeaponTypeAxe,
+				proto.WeaponType_WeaponTypeSword,
+				proto.WeaponType_WeaponTypeMace,
+				proto.WeaponType_WeaponTypeShield,
+			},
+			HandTypes: []proto.HandType{
+				proto.HandType_HandTypeMainHand,
+				proto.HandType_HandTypeOffHand,
+				proto.HandType_HandTypeOneHand,
+			},
+			RangedWeaponTypes: []proto.RangedWeaponType{
+				proto.RangedWeaponType_RangedWeaponTypeLibram,
 			},
 		},
-	}))
+	}
 }
 
 var DefaultOptions = &proto.Player_ProtectionPaladin{
