@@ -137,8 +137,8 @@ func (procAura *Aura) AttachProcTriggerCallback(unit *Unit, config ProcTrigger) 
 			return
 		}
 
-		// Reuse deferred-proc records (PendingAction + result snapshot) instead of
-		// allocating a closure and a cloned SpellResult for every proc.
+		// Deferred-proc records (PendingAction + result snapshot) come from a
+		// per-trigger free list and return to it when they fire or are cleaned up.
 		var dp *deferredProc
 		if n := len(freeDeferred); n > 0 {
 			dp = freeDeferred[n-1]
