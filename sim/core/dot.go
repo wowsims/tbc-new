@@ -40,7 +40,6 @@ type Dot struct {
 	onSnapshot OnSnapshot
 	onTick     OnTick
 	tickAction *PendingAction
-	tickPA     *PendingAction
 
 	tickPeriod     time.Duration // hasted time between each tick, rounded to full ms
 	BaseTickLength time.Duration // time between each tick
@@ -330,12 +329,11 @@ func newDot(config Dot) *Dot {
 	dot.Duration = dot.tickPeriod * time.Duration(dot.BaseTickCount)
 
 	dot.ApplyOnGain(func(aura *Aura, sim *Simulation) {
-		if dot.tickPA == nil {
-			dot.tickPA = &PendingAction{OnAction: dot.periodicTick}
+		dot.tickAction = &PendingAction{
+			NextActionAt: sim.CurrentTime + dot.tickPeriod,
+			// Priority:     ActionPriorityDOT,
+			OnAction: dot.periodicTick,
 		}
-		dot.tickAction = dot.tickPA
-		dot.tickAction.NextActionAt = sim.CurrentTime + dot.tickPeriod
-		dot.tickAction.CleanUp = nil
 		sim.AddPendingAction(dot.tickAction)
 		if dot.isChanneled {
 			dot.Spell.Unit.ChanneledDot = dot
