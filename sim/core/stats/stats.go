@@ -328,6 +328,13 @@ func (stats Stats) FloorGameStats() Stats {
 	return stats
 }
 
+// FloorGameStatsInPlace is FloorGameStats without copying the array.
+func (stats *Stats) FloorGameStatsInPlace() {
+	for _, k := range flooredGameStats {
+		stats[k] = math.Floor(stats[k])
+	}
+}
+
 func (stats Stats) Multiply(multiplier float64) Stats {
 	for k := range stats {
 		stats[k] *= multiplier

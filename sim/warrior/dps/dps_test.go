@@ -15,55 +15,68 @@ func init() {
 }
 
 func TestDpsWarrior(t *testing.T) {
-	core.RunTestSuite(t, t.Name(), core.FullCharacterTestSuiteGenerator([]core.CharacterSuiteConfig{
-		{
-			Class:      proto.Class_ClassWarrior,
-			Race:       proto.Race_RaceOrc,
-			OtherRaces: []proto.Race{proto.Race_RaceHuman},
-			GearSet:    core.GetGearSet("../../../ui/specs/warrior/dps/gear_sets", "p1_fury"),
-			OtherGearSets: []core.GearSetCombo{
-				core.GetGearSet("../../../ui/specs/warrior/dps/gear_sets", "p1_arms"),
-				core.GetGearSet("../../../ui/specs/warrior/dps/gear_sets", "p2_fury"),
-				core.GetGearSet("../../../ui/specs/warrior/dps/gear_sets", "p2_arms"),
-				core.GetGearSet("../../../ui/specs/warrior/dps/gear_sets", "p3_fury"),
-				core.GetGearSet("../../../ui/specs/warrior/dps/gear_sets", "p3_arms"),
-				core.GetGearSet("../../../ui/specs/warrior/dps/gear_sets", "p4_fury"),
-				core.GetGearSet("../../../ui/specs/warrior/dps/gear_sets", "p4_arms"),
-				core.GetGearSet("../../../ui/specs/warrior/dps/gear_sets", "p5_fury"),
-				core.GetGearSet("../../../ui/specs/warrior/dps/gear_sets", "p5_arms"),
-			},
-			Talents: DefaultFuryTalents,
-			OtherTalentSets: []core.TalentsCombo{
-				{Label: "Arms", Talents: DefaultArmsTalents},
-			},
-			Consumables:      DefaultConsumables,
-			SpecOptions:      core.SpecOptionsCombo{Label: "Fury", SpecOptions: DefaultOptions},
-			StartingDistance: 25,
-			Profession1:      proto.Profession_Engineering,
-			Profession2:      proto.Profession_Blacksmithing,
+	core.RunTestSuite(t, t.Name(), core.FullCharacterTestSuiteGenerator([]core.CharacterSuiteConfig{dpsWarriorSuite()}))
+}
 
-			Rotation: core.GetAplRotation("../../../ui/specs/warrior/dps/apls", "fury"),
-			OtherRotations: []core.RotationCombo{
-				core.GetAplRotation("../../../ui/specs/warrior/dps/apls", "arms"),
-			},
+func BenchmarkDpsWarrior(b *testing.B) {
+	fury := dpsWarriorSuite()
+	arms := fury
+	arms.GearSet = core.GetGearSet("../../../ui/specs/warrior/dps/gear_sets", "p1_arms")
+	arms.Talents = DefaultArmsTalents
+	arms.Rotation = core.GetAplRotation("../../../ui/specs/warrior/dps/apls", "arms")
 
-			ItemFilter: core.ItemFilter{
-				ArmorType: proto.ArmorType_ArmorTypeLeather,
-				WeaponTypes: []proto.WeaponType{
-					proto.WeaponType_WeaponTypeFist,
-					proto.WeaponType_WeaponTypeMace,
-					proto.WeaponType_WeaponTypeSword,
-					proto.WeaponType_WeaponTypeAxe,
-				},
-				HandTypes: []proto.HandType{
-					proto.HandType_HandTypeMainHand,
-					proto.HandType_HandTypeOffHand,
-					proto.HandType_HandTypeOneHand,
-					proto.HandType_HandTypeTwoHand,
-				},
+	b.Run("Fury", func(b *testing.B) { core.CharacterBenchmark(b, fury) })
+	b.Run("Arms", func(b *testing.B) { core.CharacterBenchmark(b, arms) })
+}
+
+func dpsWarriorSuite() core.CharacterSuiteConfig {
+	return core.CharacterSuiteConfig{
+		Class:      proto.Class_ClassWarrior,
+		Race:       proto.Race_RaceOrc,
+		OtherRaces: []proto.Race{proto.Race_RaceHuman},
+		GearSet:    core.GetGearSet("../../../ui/specs/warrior/dps/gear_sets", "p1_fury"),
+		OtherGearSets: []core.GearSetCombo{
+			core.GetGearSet("../../../ui/specs/warrior/dps/gear_sets", "p1_arms"),
+			core.GetGearSet("../../../ui/specs/warrior/dps/gear_sets", "p2_fury"),
+			core.GetGearSet("../../../ui/specs/warrior/dps/gear_sets", "p2_arms"),
+			core.GetGearSet("../../../ui/specs/warrior/dps/gear_sets", "p3_fury"),
+			core.GetGearSet("../../../ui/specs/warrior/dps/gear_sets", "p3_arms"),
+			core.GetGearSet("../../../ui/specs/warrior/dps/gear_sets", "p4_fury"),
+			core.GetGearSet("../../../ui/specs/warrior/dps/gear_sets", "p4_arms"),
+			core.GetGearSet("../../../ui/specs/warrior/dps/gear_sets", "p5_fury"),
+			core.GetGearSet("../../../ui/specs/warrior/dps/gear_sets", "p5_arms"),
+		},
+		Talents: DefaultFuryTalents,
+		OtherTalentSets: []core.TalentsCombo{
+			{Label: "Arms", Talents: DefaultArmsTalents},
+		},
+		Consumables:      DefaultConsumables,
+		SpecOptions:      core.SpecOptionsCombo{Label: "Fury", SpecOptions: DefaultOptions},
+		StartingDistance: 25,
+		Profession1:      proto.Profession_Engineering,
+		Profession2:      proto.Profession_Blacksmithing,
+
+		Rotation: core.GetAplRotation("../../../ui/specs/warrior/dps/apls", "fury"),
+		OtherRotations: []core.RotationCombo{
+			core.GetAplRotation("../../../ui/specs/warrior/dps/apls", "arms"),
+		},
+
+		ItemFilter: core.ItemFilter{
+			ArmorType: proto.ArmorType_ArmorTypeLeather,
+			WeaponTypes: []proto.WeaponType{
+				proto.WeaponType_WeaponTypeFist,
+				proto.WeaponType_WeaponTypeMace,
+				proto.WeaponType_WeaponTypeSword,
+				proto.WeaponType_WeaponTypeAxe,
+			},
+			HandTypes: []proto.HandType{
+				proto.HandType_HandTypeMainHand,
+				proto.HandType_HandTypeOffHand,
+				proto.HandType_HandTypeOneHand,
+				proto.HandType_HandTypeTwoHand,
 			},
 		},
-	}))
+	}
 }
 
 var DefaultOptions = &proto.Player_DpsWarrior{
