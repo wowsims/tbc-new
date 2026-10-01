@@ -149,8 +149,14 @@ func (o *reforgeOptimizer) applyPositiveReforgeStats(coeffs map[string]float64, 
 // (Intellect -> SpellCrit%, Agility -> PhysicalCrit%/Dodge%, the haste speed multiplier) counts
 // toward the caps. The racial stat multipliers live in the dependency manager, so rawStats must be
 // passed through unscaled.
+// Expose Weakness is a debuff on the target, not a dependency, so the attack power the sheet
+// credits a hunter's own agility through it is added here.
 func (o *reforgeOptimizer) resolveCapCoeffs(rawDelta stats.Stats) map[string]float64 {
 	resolved := resolveStatDelta(o.statDeps, o.baseStats, rawUnitStatsFromStats(rawDelta))
+	if ap := o.exposeWeaknessAPPerAgility * resolved.Stats[stats.Agility]; ap != 0 {
+		resolved.Stats[stats.AttackPower] += ap
+		resolved.Stats[stats.RangedAttackPower] += ap
+	}
 	coeffs := map[string]float64{}
 	eachUnitStat(resolved, func(unitStat stats.UnitStat, value float64) {
 		if value != 0 {
@@ -288,10 +294,14 @@ func (o *reforgeOptimizer) buildGemOptions(preCapEPs core.UnitStats, reforgeCaps
 		var included []gemData
 		foundUncappedJCGem := false
 		foundUncappedNormalGem := false
+		constrainedKeys := o.constrainedStatKeys()
 		for _, candidate := range filtered {
 			cappedStatKeys := getCappedStatKeys(candidate.coeffs, reforgeCaps, softCaps)
 
-			if (!candidate.isJC || !foundUncappedJCGem) && (len(cappedStatKeys) == 0 || !foundUncappedNormalGem) {
+			// A gem that moves a stat constraint's stat stays even when a better-scoring gem exists:
+			// meeting the constraint may take exactly the gems the scores would prune.
+			if gemMovesConstrainedStat(candidate, constrainedKeys) ||
+				((!candidate.isJC || !foundUncappedJCGem) && (len(cappedStatKeys) == 0 || !foundUncappedNormalGem)) {
 				included = append(included, candidate)
 			}
 

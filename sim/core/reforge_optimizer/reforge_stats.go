@@ -127,7 +127,27 @@ func resolveStatDelta(sdm *stats.StatDependencyManager, baseStats core.UnitStats
 	delta = setUnitStat(delta, stats.UnitStatFromPseudoStat(proto.PseudoStat_PseudoStatMeleeCritPercent), delta.Stats[stats.PhysicalCritPercent])
 	delta = setUnitStat(delta, stats.UnitStatFromPseudoStat(proto.PseudoStat_PseudoStatRangedCritPercent), delta.Stats[stats.PhysicalCritPercent]+delta.Stats[stats.RangedCritPercent])
 	delta = setUnitStat(delta, stats.UnitStatFromPseudoStat(proto.PseudoStat_PseudoStatSpellCritPercent), delta.Stats[stats.SpellCritPercent])
-	delta = setUnitStat(delta, stats.UnitStatFromPseudoStat(proto.PseudoStat_PseudoStatBlockPercent), delta.Stats[stats.BlockPercent])
+
+	// Crit reduction, dodge, parry and block are not stat dependencies: the character sheet
+	// derives them from the ratings (Character.GetPseudoStatsProto), in percent. Defense adds to
+	// all four, and the sheet floors it to whole defense points, so this linear form is within one
+	// point (MissDodgeParryBlockCritChancePerDefense) of the sheet; see defenseFloorMargin.
+	// Dodge rating is read after the dependencies, so the agility share of dodge is included.
+	defensePercent := delta.Stats[stats.DefenseRating] / core.DefenseRatingPerDefenseLevel * core.MissDodgeParryBlockCritChancePerDefense
+	delta = setUnitStat(delta, stats.UnitStatFromPseudoStat(proto.PseudoStat_PseudoStatReducedCritTakenPercent),
+		defensePercent+delta.Stats[stats.ResilienceRating]/core.ResilienceRatingPerCritReductionChance)
+	delta = setUnitStat(delta, stats.UnitStatFromPseudoStat(proto.PseudoStat_PseudoStatDodgePercent),
+		defensePercent+delta.Stats[stats.DodgeRating]/core.DodgeRatingPerDodgePercent)
+	// The sheet reports 0 parry for a character that cannot parry.
+	if getUnitStat(baseStats, stats.UnitStatFromPseudoStat(proto.PseudoStat_PseudoStatParryPercent)) > 0 {
+		delta = setUnitStat(delta, stats.UnitStatFromPseudoStat(proto.PseudoStat_PseudoStatParryPercent),
+			defensePercent+delta.Stats[stats.ParryRating]/core.ParryRatingPerParryPercent)
+	}
+	// Likewise 0 block for a character that cannot block. The BlockPercent stat is a fraction.
+	if getUnitStat(baseStats, stats.UnitStatFromPseudoStat(proto.PseudoStat_PseudoStatBlockPercent)) > 0 {
+		delta = setUnitStat(delta, stats.UnitStatFromPseudoStat(proto.PseudoStat_PseudoStatBlockPercent),
+			defensePercent+delta.Stats[stats.BlockPercent]*100+delta.Stats[stats.BlockRating]/core.BlockRatingPerBlockPercent)
+	}
 
 	// Haste% pseudo-stats: read speed multipliers from baseStats.PseudoStats, which
 	// GetPseudoStatsProto populates as MeleeSpeedMultiplier×AttackSpeedMultiplier etc.

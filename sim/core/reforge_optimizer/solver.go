@@ -104,6 +104,9 @@ func (o *reforgeOptimizer) solveModel(
 	if math.IsNaN(solution.result) || math.IsInf(solution.result, 1) {
 		switch solution.status {
 		case "infeasible":
+			if o.statConstraintsCauseInfeasibility(model, maxSeconds) {
+				return nil, 0, errStatConstraintsInfeasible
+			}
 			return nil, 0, errors.New("The specified stat caps are impossible to achieve. Consider changing any upper bound stat caps to lower bounds instead.")
 		case "timedout":
 			return nil, 0, errors.New("Solver timed out before finding a feasible solution.")

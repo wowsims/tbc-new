@@ -13,6 +13,7 @@ import {
 	createBulkSettingsProto,
 	setBulkFrozenItem,
 	setBulkFrozenWeaponSlot,
+	setBulkStatConstraints,
 	setBulkUseLegacyBulkSim,
 	setBulkWeaponTypeFilter,
 } from './settings';
@@ -40,6 +41,7 @@ const loadSettings = (player: Player<any>) => {
 		setBulkWeaponTypeFilter(player, ItemSlot.ItemSlotMainHand, settings.freezeMainhandWeaponSlots);
 		setBulkWeaponTypeFilter(player, ItemSlot.ItemSlotOffHand, settings.freezeOffhandWeaponSlots);
 		setBulkUseLegacyBulkSim(player, settings.useLegacyBulkSim);
+		setBulkStatConstraints(player, settings.statConstraints);
 	}
 };
 

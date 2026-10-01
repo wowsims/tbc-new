@@ -43,6 +43,9 @@ export function cacheRelevantReforgeRequest(reforgeRequest: ReforgeOptimizeReque
 	configForHash.debug = false;
 	configForHash.mode = ReforgeOptimizeMode.ReforgeOptimizeModeSingle;
 	configForHash.gemOptions = configForHash.gemOptions.sort((a, b) => a.id - b.id);
+	// Every stat constraint stays in the key, resistances included. A resistance constraint the gems
+	// cannot move still decides whether the solve is infeasible, and an infeasible candidate keeps
+	// its own gems, which the gear key does not see.
 	return configForHash;
 }
 

@@ -79,6 +79,22 @@ func RegisterHunter() {
 			player.Spec = playerSpec
 		},
 	)
+	core.RegisterCharacterSheetExposeWeakness(proto.Class_ClassHunter, takesExposeWeakness)
+}
+
+// Whether a hunter's talent string takes Expose Weakness. The character sheet credits such a
+// hunter their own agility for the debuff.
+func takesExposeWeakness(talentsString string) (taken bool) {
+	// A malformed string is the sim's problem to report, not the sheet's: it just credits the
+	// configured value.
+	defer func() {
+		if recover() != nil {
+			taken = false
+		}
+	}()
+	talents := &proto.HunterTalents{}
+	core.FillTalentsProto(talents.ProtoReflect(), talentsString, TalentTreeSizes)
+	return talents.ExposeWeakness > 0
 }
 
 func NewHunter(character *core.Character, options *proto.Player, hunterOptions *proto.HunterOptions, raid *proto.Raid) *Hunter {

@@ -18,25 +18,19 @@ type reforgeSoftCap struct {
 	capType     proto.StatCapType
 }
 
-// buildDebuffUnitStats returns the pseudo-stat contributions from raid debuffs that the
-// UI adds to the character-sheet display. These debuffs (e.g. Improved Faerie Fire, Improved
-// Seal of the Crusader) lower the target's effective miss/crit chance rather than raising
-// the player's stats, so they are absent from FinalStats. Soft-cap breakpoints configured
-// by the user are based on the UI display values (which include the debuff contribution),
-// so we add these offsets to the base stats before computing the gap to each cap.
-func buildDebuffUnitStats(raid *proto.Raid) core.UnitStats {
+// buildDebuffUnitStats returns what the UI adds to the character-sheet display for the raid's
+// debuffs (core.CharacterSheetDebuffStats). These debuffs (e.g. Improved Faerie Fire, Improved
+// Seal of the Crusader) lower the target's defences rather than raising the player's stats, so
+// they are absent from FinalStats. Caps, soft-cap breakpoints and batch stat constraints are
+// based on the UI display values, so we add these offsets to the base stats before computing
+// the gap to each of them.
+func buildDebuffUnitStats(raid *proto.Raid, baseStats core.UnitStats) core.UnitStats {
 	debuffs := raid.GetDebuffs()
-	result := core.NewUnitStats()
-	if debuffs.GetFaerieFire() == proto.TristateEffect_TristateEffectImproved {
-		result = setUnitStat(result, stats.UnitStatFromPseudoStat(proto.PseudoStat_PseudoStatMeleeHitPercent), 3)
-		result = setUnitStat(result, stats.UnitStatFromPseudoStat(proto.PseudoStat_PseudoStatRangedHitPercent), 3)
+	var player *proto.Player
+	if parties := raid.GetParties(); len(parties) > 0 && len(parties[0].GetPlayers()) > 0 {
+		player = parties[0].GetPlayers()[0]
 	}
-	if debuffs.GetImprovedSealOfTheCrusader() != proto.TristateEffect_TristateEffectMissing {
-		result = setUnitStat(result, stats.UnitStatFromPseudoStat(proto.PseudoStat_PseudoStatMeleeCritPercent), 3)
-		result = setUnitStat(result, stats.UnitStatFromPseudoStat(proto.PseudoStat_PseudoStatRangedCritPercent), 3)
-		result = setUnitStat(result, stats.UnitStatFromPseudoStat(proto.PseudoStat_PseudoStatSpellCritPercent), 3)
-	}
-	return result
+	return core.CharacterSheetDebuffStats(debuffs, core.CharacterSheetExposeWeaknessAgility(debuffs, player, baseStats.Stats[stats.Agility]))
 }
 
 // ---------------------------------------------------------------------------

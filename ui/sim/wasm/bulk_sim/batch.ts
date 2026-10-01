@@ -25,8 +25,9 @@ const makeBulkSimRequestForCandidate = (
 	scratch?: RaidSimRequest,
 ): RaidSimRequest => {
 	// The scratch request avoids one full clone of the raid + rotation + merged SimDatabase
-	// per candidate. Reuse is safe because the caller mutates and serializes it within one
-	// synchronous window (worker requests encode to binary before the first await).
+	// per candidate. Reuse is safe because every field a candidate changes is set here and the
+	// caller serializes it within one synchronous window (worker requests encode to binary
+	// before the first await).
 	const simRequest = scratch ?? RaidSimRequest.clone(request.baseRequest!);
 	simRequest.requestId = request.requestId;
 	simRequest.simOptions!.iterations = iterations;
@@ -39,9 +40,13 @@ const makeBulkSimRequestForCandidate = (
 	const player = simRequest.raid!.parties[0].players[0];
 	player.equipment = candidate.gear;
 	// Keep weapon stone imbues in sync with this candidate's weapon types, mirroring the
-	// frontend auto-switch so bulk combos use the correct stone (or none).
-	if (player.consumables && candidate.gear) {
-		player.consumables = Database.getSync().lookupEquipmentSpec(candidate.gear).adjustImbues(player.consumables);
+	// frontend auto-switch so bulk combos use the correct stone (or none). Adjusted from the
+	// base character's: the rule drops a stone for a hand without a sharp or blunt weapon and
+	// has nothing to restore it from, so adjusting a reused request's would carry a dropped
+	// stone over to every candidate after it.
+	const baseConsumables = request.baseRequest!.raid!.parties[0].players[0].consumables;
+	if (baseConsumables && candidate.gear) {
+		player.consumables = Database.getSync().lookupEquipmentSpec(candidate.gear).adjustImbues(baseConsumables);
 	}
 	return simRequest;
 };

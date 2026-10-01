@@ -1,4 +1,4 @@
-import { ItemSlot } from '@generated/proto/common';
+import { Class, ItemSlot } from '@generated/proto/common';
 import { BulkSimItemSlot } from '@sim/bulk/constants_auto_gen';
 import { SimHostProvider } from '@sim/context/SimHostContext';
 import type { Player } from '@sim/player/player';
@@ -31,7 +31,7 @@ const mount = (reforger: unknown = null) => {
 	const store = createSimStore();
 	const gear = { getEquippedItem: (slot: ItemSlot) => (slot === ItemSlot.ItemSlotFinger1 ? RING : null) };
 	seedKeyed(store, 'players', STORE_KEY, { gear, v: zeroVersions(PLAYER_FIELDS) } as never);
-	const player = { sim: { store, isNative: false }, storeKey: STORE_KEY, getGear: () => gear } as unknown as Player<any>;
+	const player = { sim: { store, isNative: false }, storeKey: STORE_KEY, getGear: () => gear, getClass: () => Class.ClassWarrior } as unknown as Player<any>;
 	seedBulkSettings(player);
 	const host = { player, sim: player.sim, reforger, reforgeOptions: null, getStorageKey: (key: string) => `test-${key}` } as never;
 	const { container } = render(
@@ -80,6 +80,12 @@ describe('BulkSettings', () => {
 
 		expect(bulkState(player).frozenWeaponSlot).toBe(ItemSlot.ItemSlotMainHand);
 		expect(weapon.value).toBe(String(ItemSlot.ItemSlotMainHand));
+	});
+
+	it('offers the stat constraints in the batch options group', () => {
+		const { container } = mount();
+
+		expect(container.querySelector('[data-testid="bulk-stat-constraints"]')).not.toBeNull();
 	});
 
 	it('opens only the batch options group before anything is stored', () => {

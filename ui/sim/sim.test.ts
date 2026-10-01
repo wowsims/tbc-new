@@ -1,5 +1,5 @@
-import { ErrorOutcome, ErrorOutcomeType, RaidSimRequest, RaidSimResult } from '@generated/proto/api';
-import { Profession } from '@generated/proto/common';
+import { BulkSettings, BulkStatConstraintOp, ErrorOutcome, ErrorOutcomeType, RaidSimRequest, RaidSimResult } from '@generated/proto/api';
+import { EquipmentSpec, Profession, Stat } from '@generated/proto/common';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { Gear } from './proto/gear';
@@ -276,5 +276,51 @@ describe('Sim.updateCharacterStats', () => {
 		await stale;
 
 		expect(crashes).toEqual([]);
+	});
+});
+
+// A batch with no fixed seed derives one from its content, so the same setup reproduces its results
+// and any change to it draws a fresh sample. The browser is handed its gear sets rather than the
+// settings that produce them, so there the number of gear sets has to feed the seed, with or
+// without stat constraints in the settings it is sent.
+describe('Sim.runBulkSim content seed', () => {
+	const makeBulkGear = () =>
+		({
+			withoutEnchanting: () => makeBulkGear(),
+			asSpec: () => EquipmentSpec.create(),
+		}) as unknown as Gear;
+
+	// The seed is recorded before the batch is dispatched, which this test does not set up.
+	const seedFor = async (gearSetCount: number, bulkSettings?: BulkSettings) => {
+		const sim = makeSim();
+		mocks.isWasm.mockResolvedValue(true);
+		vi.spyOn(sim.raid, 'getActivePlayers').mockReturnValue([{ getGear: makeBulkGear }] as any);
+		vi.spyOn(console, 'error').mockImplementation(() => {});
+		await sim.runBulkSim(Array.from({ length: gearSetCount }, makeBulkGear), () => {}, undefined, bulkSettings).catch(() => {});
+		return sim.getLastUsedRngSeed();
+	};
+
+	const constraintsOnly = BulkSettings.create({
+		statConstraints: [
+			{ unitStat: { oneofKind: 'stat', stat: Stat.StatFireResistance }, op: BulkStatConstraintOp.BulkStatConstraintOpGreaterThanOrEqual, value: 150 },
+		],
+	});
+
+	it('reproduces the seed for the same setup', async () => {
+		expect(await seedFor(3, constraintsOnly)).toBe(await seedFor(3, constraintsOnly));
+	});
+
+	it('draws a new seed when the number of gear sets changes, without stat constraints', async () => {
+		expect(await seedFor(3)).not.toBe(await seedFor(6));
+	});
+
+	it('draws a new seed when the number of gear sets changes, with stat constraints', async () => {
+		expect(await seedFor(3, constraintsOnly)).not.toBe(await seedFor(6, constraintsOnly));
+	});
+
+	it('draws a new seed when a stat constraint changes', async () => {
+		const stricter = BulkSettings.clone(constraintsOnly);
+		stricter.statConstraints[0].value = 175;
+		expect(await seedFor(3, constraintsOnly)).not.toBe(await seedFor(3, stricter));
 	});
 });

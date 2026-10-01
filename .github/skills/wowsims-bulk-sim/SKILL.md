@@ -56,6 +56,13 @@ argument-hint: 'Describe the TBC Bulk Sim candidate flow, staging/finalist behav
 - Keep full optimized candidate outputs for cache writing so every input key can be persisted.
 - Spec lookup goes through core.PlayerProtoToSpecSafe; eligible-slot logic through core.EligibleSlotsForItem / core.ItemTypeToSlotsMap (single source, shared with item swap); entry-point validation via newGeneratorFromRequest.
 
+## Stat Constraints
+
+- BulkSettings.stat_constraints (Stat or PseudoStat, op, value) restrict which candidates are simmed; the picker is ui/features/bulk/components/BulkStatConstraints and pure evaluation lives in ui/sim/bulk/stat_constraints.ts.
+- They are rows of the gem optimizer's model: ReforgeOptimizeRequest.stat_constraints (set by sim.ts, so the solver and the reforge cache key read the same copy; sim/web/bulk.go and ui/sim/wasm/bulk_sim/reforge.ts fall back to BulkSettings only for a request that set none. The cache key covers every one of them, including those that cannot become rows: such a constraint still decides whether a solve is infeasible, and so whether a candidate keeps its own gems; see cacheRelevantReforgeRequest) become gap-to-base bounds in sim/core/reforge_optimizer/stat_constraints.go. A stat no variable moves is decided on the base stats. An infeasible model (blamed on the constraints only when the model without their rows is feasible) sets ReforgeOptimizeResult.infeasible_stat_constraints; the pre-pass then keeps the candidate's own gear, as for any failed solve, without logging it, and the browser skips its retry without gems.
+- The gate stays the final stats: sim/core/bulk/constraints.go and ui/sim/wasm/bulk_sim/constraints.ts run ComputeStats on every remaining candidate after the pre-pass (progress stage BulkSimStageConstraints) and drop failures, so optimizer-off runs and cache-restored gear are covered. BulkSimResult.skipped_by_constraints counts the candidates it drops, out of checked_by_constraints it examined (duplicates and the baseline are removed before the check, so this is not the combination count); the tab shows both above the results.
+- Constraint rows have their own keys (`StatConstraint_<stat>`, with the stat's coefficients copied under them), so a cap on the same stat still adds its refinement row and zeroes the stat's value past the cap, and a soft cap does not overwrite the constraint.
+
 ## Settings Boundaries
 
 - BulkSettings controls bulk-tab constraints.

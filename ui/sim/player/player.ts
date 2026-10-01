@@ -74,6 +74,7 @@ import { playerTalentStringToProto } from '../talents/factory';
 import { omitDeep, stringComparator } from '../utils/collections';
 import { sum } from '../utils/math';
 import { WorkerProgressCallback } from '../workers/worker_pool';
+import { characterSheetDebuffStats, characterSheetExposeWeaknessAgility } from './debuff_stats';
 import { PlayerClass } from './player_class';
 import { PlayerSpec } from './player_spec';
 import { PlayerSpecs } from './specs';
@@ -782,43 +783,9 @@ export class Player<SpecType extends Spec> {
 	// The raid debuffs that the character sheet attributes as their own stage. Not one of the
 	// server's cumulative stat stages, so it is derived here and fed to computeStatAttribution.
 	getDebuffStats(): Stats {
-		let debuffStats = new Stats();
 		const debuffs = this.sim.raid.getDebuffs();
-
-		if (debuffs.faerieFire == TristateEffect.TristateEffectImproved) {
-			debuffStats = debuffStats.addPseudoStat(PseudoStat.PseudoStatMeleeHitPercent, 3);
-			debuffStats = debuffStats.addPseudoStat(PseudoStat.PseudoStatRangedHitPercent, 3);
-		}
-
-		if (debuffs.improvedSealOfTheCrusader) {
-			debuffStats = debuffStats.addPseudoStat(PseudoStat.PseudoStatMeleeCritPercent, 3);
-			debuffStats = debuffStats.addPseudoStat(PseudoStat.PseudoStatRangedCritPercent, 3);
-			debuffStats = debuffStats.addPseudoStat(PseudoStat.PseudoStatSpellCritPercent, 3);
-		}
-
-		if (debuffs.exposeWeaknessUptime && debuffs.exposeWeaknessHunterAgility) {
-			let agi = debuffs.exposeWeaknessHunterAgility;
-
-			if (this.isSpec(Spec.SpecHunter)) {
-				const hunter = this as unknown as Player<Spec.SpecHunter>;
-				if (hunter.getTalents().exposeWeakness > 0) {
-					agi = hunter.getCurrentStats().finalStats?.stats[Stat.StatAgility] ?? agi;
-				}
-			}
-
-			debuffStats = debuffStats.addStat(Stat.StatAttackPower, agi * 0.25);
-			debuffStats = debuffStats.addStat(Stat.StatRangedAttackPower, agi * 0.25);
-		}
-
-		if (debuffs.huntersMark != TristateEffect.TristateEffectMissing) {
-			debuffStats = debuffStats.addStat(Stat.StatRangedAttackPower, 440);
-
-			if (debuffs.huntersMark == TristateEffect.TristateEffectImproved) {
-				debuffStats = debuffStats.addStat(Stat.StatAttackPower, 110);
-			}
-		}
-
-		return debuffStats;
+		const ownAgility = this.getCurrentStats().finalStats?.stats[Stat.StatAgility] ?? 0;
+		return characterSheetDebuffStats(debuffs, characterSheetExposeWeaknessAgility(debuffs, this.getClass(), this.getTalentsString(), ownAgility));
 	}
 
 	getCritImmunityInfo() {
