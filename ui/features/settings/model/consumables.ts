@@ -1,7 +1,6 @@
 import { Class, ConsumesSpec, Drums, ItemSlot, Profession, Race, Spec, Stat, TristateEffect } from '@generated/proto/common';
 import { Consumable } from '@generated/proto/db';
 import i18n from '@i18n/config';
-import { CURRENT_PHASE, Phase } from '@sim/constants/other';
 import { Player } from '@sim/player/player';
 import { ActionId } from '@sim/proto/action_id';
 import type { ConsumableOption } from '@sim/settings/conjured';
@@ -279,37 +278,13 @@ export const makeOHImbueInput = makeConsumeInputFactory({
 //                               	DRUMS
 ///////////////////////////////////////////////////////////////////////////
 
-export const DrumsBattle = {
-	...(CURRENT_PHASE >= Phase.Phase4
-		? { actionId: ActionId.fromItemId(185848), value: Drums.GreaterDrumsOfBattle }
-		: {
-				actionId: ActionId.fromItemId(29529),
-				value: Drums.LesserDrumsOfBattle,
-			}),
-};
-
-export const DrumsRestoration = {
-	...(CURRENT_PHASE >= Phase.Phase4
-		? { actionId: ActionId.fromItemId(185850), value: Drums.GreaterDrumsOfRestoration }
-		: {
-				actionId: ActionId.fromItemId(29531),
-				value: Drums.LesserDrumsOfRestoration,
-			}),
-};
-
-export const DrumsWar = {
-	...(CURRENT_PHASE >= Phase.Phase4
-		? { actionId: ActionId.fromItemId(185852), value: Drums.GreaterDrumsOfWar }
-		: {
-				actionId: ActionId.fromItemId(29528),
-				value: Drums.LesserDrumsOfWar,
-			}),
-};
-
 export const DRUMS_CONFIG = [
-	{ config: DrumsBattle, stats: [] },
-	{ config: DrumsRestoration, stats: [Stat.StatMana] },
-	{ config: DrumsWar, stats: [Stat.StatAttackPower, Stat.StatSpellDamage] },
+	{ config: { actionId: ActionId.fromItemId(185848), value: Drums.GreaterDrumsOfBattle }, stats: [] },
+	{ config: { actionId: ActionId.fromItemId(29529), value: Drums.LesserDrumsOfBattle }, stats: [] },
+	{ config: { actionId: ActionId.fromItemId(185850), value: Drums.GreaterDrumsOfRestoration }, stats: [Stat.StatMana] },
+	{ config: { actionId: ActionId.fromItemId(29531), value: Drums.LesserDrumsOfRestoration }, stats: [Stat.StatMana] },
+	{ config: { actionId: ActionId.fromItemId(185852), value: Drums.GreaterDrumsOfWar }, stats: [Stat.StatAttackPower, Stat.StatSpellDamage] },
+	{ config: { actionId: ActionId.fromItemId(29528), value: Drums.LesserDrumsOfWar }, stats: [Stat.StatAttackPower, Stat.StatSpellDamage] },
 ] as ConsumableStatOption<number>[];
 
 export const makeDrumsInput = makeConsumeInputFactory({
