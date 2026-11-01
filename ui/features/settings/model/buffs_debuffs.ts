@@ -18,7 +18,7 @@ import {
 } from '@ui-kit/icon_inputs';
 import * as InputHelpers from '@ui-kit/input_helpers';
 
-import { DrumsBattle, DrumsRestoration, DrumsWar } from './consumables';
+import { DRUMS_CONFIG } from './consumables';
 import { IconPickerStatOption, RenderableStatOptions } from './stat_options';
 
 ///////////////////////////////////////////////////////////////////////////
@@ -249,14 +249,14 @@ export const WindfuryTotem = makeTristatePartyBuffInput({
 	label: 'Windfury Totem',
 });
 
-// The drums party buff is a mutually-exclusive swatch pick (none / battle / war /
-// restoration) over the shared `PartyBuffs.drums` field, not a boolean toggle, so it
-// is composed directly rather than through `makeEnumValuePartyBuffInput` (which only
-// wraps a single on/off value).
+// The drums party buff is a mutually-exclusive swatch pick (none / Greater or Lesser
+// battle / restoration / war) over the shared `PartyBuffs.drums` field, not a boolean
+// toggle, so it is composed directly rather than through `makeEnumValuePartyBuffInput`
+// (which only wraps a single on/off value).
 export const DrumsBuff: InputHelpers.TypedIconEnumPickerConfig<Player<any>, Drums> = {
 	type: 'iconEnum',
 	label: 'Drums',
-	values: [{ color: 'gray', value: Drums.DrumsUnknown }, DrumsBattle, DrumsWar, DrumsRestoration],
+	values: [{ color: 'gray', value: Drums.DrumsUnknown }, ...DRUMS_CONFIG.map(option => option.config)],
 	zeroValue: Drums.DrumsUnknown,
 	equals: (a: Drums, b: Drums) => a === b,
 	storeField: 'raid:partyBuffs',
